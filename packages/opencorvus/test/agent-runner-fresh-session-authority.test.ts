@@ -371,7 +371,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
         })
         expect(
           await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
-        ).toBe("already_delivered")
+        ).toBe("delivered")
         expect(
           await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
         ).toBe("already_delivered")

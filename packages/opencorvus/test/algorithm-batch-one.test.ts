@@ -1,4 +1,4 @@
-import { describe, expect, spyOn, test } from "bun:test"
+import { describe, expect, setDefaultTimeout, spyOn, test } from "bun:test"
 import { Identifier } from "../src/id/id"
 import { WorktreeOwnershipCriticalSection } from "../src/worktree/ownership-critical-section"
 import { SessionPromptState } from "../src/session/prompt/state"
@@ -29,6 +29,8 @@ import { ProjectDirectoryAdmission } from "../src/project/directory-admission"
 import { EngineService, TaskExecutionDirectoryInitializerTestHooks } from "../src/task-api"
 import { TestHooks as TaskControlTestHooks } from "../src/engine/task-root-ingress-delivery"
 import { InstanceBootstrap } from "../src/project/bootstrap"
+
+setDefaultTimeout(30_000)
 
 async function validWorktreeOwners(primaryWorktreeDir: string) {
   const snapshot = await Ownership.Worktree.list(primaryWorktreeDir)

@@ -3,16 +3,16 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { exactEngineArtifactLocator } from "../../src/artifact-catalog"
 import { recordEngineArtifact } from "../../src/engine/artifact"
-import { EngineTaskTable } from "../../src/engine/engine.sql"
+import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
 import { ProjectRuntimePaths } from "../../src/project/runtime-paths"
 import { Server } from "../../src/server/server"
 import { Session } from "../../src/session"
-import { Database } from "../../src/storage/db"
 import { createTaskArtifactStoreExecution } from "../../src/task-artifact/store"
 import { createToolExecutionSurface } from "../../src/tool/execution-surface"
 import type { TaskToolExecutionScope } from "../../src/tool/task-tool-execution-scope"
+import { persistEstablishedTask } from "../fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 type TaskFixture = {
@@ -29,27 +29,37 @@ async function createTask(directory: string, title: string): Promise<TaskFixture
   return Instance.provide({
     directory,
     fn: async () => {
-      const session = await Session.create({ kind: "root", title })
       const taskID = Identifier.ascending("task")
       const now = Date.now()
-      Database.use((db) =>
-        db
-          .insert(EngineTaskTable)
-          .values({
-            id: taskID,
-            project_id: Instance.project.id,
-            session_id: session.id,
-            source: "test",
-            product_pillar: "code",
-            title,
-            request: title,
-            priority: "normal",
-            time_started: now,
-            time_created: now,
-            time_updated: now,
-          })
-          .run(),
-      )
+      const packageRevision = {
+        scope: "built_in" as const,
+        projectID: null,
+        namespace: "builtin",
+        id: "base",
+        version: "2026.08.31.1",
+        packageDigest: "c".repeat(64),
+      }
+      const session = Session.prepareRootNext({ kind: "root", directory, title })
+      persistEstablishedTask({
+        taskID,
+        rootSession: session,
+        now,
+        title,
+        request: title,
+        source: "test",
+        productPillar: "code",
+        metadata: { actor: "user" },
+        projectID: Instance.project.id,
+        packageRevision,
+        executionCapsuleBinding: await prepareTaskProcessBinding({
+          mode: "native",
+          taskID,
+          projectID: Instance.project.id,
+          rootDirectory: directory,
+          packageRevisionSHA256: packageRevision.packageDigest,
+          timeCreated: now,
+        }),
+      })
       return {
         taskID,
         scope: Object.freeze({

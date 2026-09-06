@@ -485,10 +485,18 @@ function acquireEntryTurnWithin(
 }
 
 /** Claim a tail turn synchronously if this entry is fully idle: no queued or
- *  running turns, no leases, no parked teardown. Cache convergence uses this
- *  to dispose only entries that nobody is touching. */
+ *  running turns, no leases, no parked teardown, and no registered background
+ *  admission. Cache convergence uses this to dispose only entries that nobody
+ *  is touching. */
 function tryClaimIdleEntryTurn(entry: CacheEntry): TurnRelease | undefined {
-  if (entry.exclusive.depth > 0 || entry.activeLeases.size > 0 || entry.teardownParks.size > 0) return undefined
+  if (
+    entry.exclusive.depth > 0 ||
+    entry.activeLeases.size > 0 ||
+    entry.teardownParks.size > 0 ||
+    entry.backgroundWork.size > 0
+  ) {
+    return undefined
+  }
   entry.exclusive.depth += 1
   let finish!: () => void
   const turn = new Promise<void>((resolve) => {
@@ -820,6 +828,10 @@ async function refreshContextInTurn(
   const next = await Project.fromDirectory(current.directory)
   const refreshInitializers = initializers(entry, init)
   try {
+    // Initializers may have registered recovery work that is still waiting for
+    // this refresh turn to release the entry. Cancel that queued ownership
+    // before its State disposer awaits the same recovery promise.
+    cancelInstanceBackgroundWork(entry, "instance refresh")
     await provideLeaseContext(lease, current, () => State.dispose(current.directory))
   } catch (error) {
     const owner = retainRollbackOwner(entry, current, error)

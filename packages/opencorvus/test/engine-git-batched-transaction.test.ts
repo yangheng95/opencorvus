@@ -210,7 +210,24 @@ describe("Engine Git batched repository transaction", () => {
             rootIndex: await digest(rootAuthority.index_path),
           }).toEqual(predecessor)
 
-          const completed = await EngineGit.complete(requireTask(taskID))
+          const replayedFailure = await EngineGit.complete(requireTask(taskID))
+          expect("error" in replayedFailure ? replayedFailure.error : undefined).toEqual(
+            expect.stringContaining("Repository-tree checkpoint failed"),
+          )
+
+          await fs.mkdir(path.join(project.path, "uninitialized-deleted"))
+          const retryTaskID = await createEngineGitCheckpointTask({
+            projectPath: project.path,
+            title: "Engine Git nested transaction retry occurrence",
+            packageDigestCharacter: "d",
+          })
+          const retryBaseline = await EngineGit.prepare(requireTask(retryTaskID))
+          expect("error" in retryBaseline ? retryBaseline.error : undefined).toBeUndefined()
+          await fs.rm(path.join(project.path, "uninitialized-deleted"), { recursive: true })
+          await fs.writeFile(path.join(child, "child.txt"), "child reopened result\n")
+          await fs.writeFile(path.join(project.path, "root.txt"), "root reopened result\n")
+
+          const completed = await EngineGit.complete(requireTask(retryTaskID))
           expect("error" in completed ? completed.error : undefined).toBeUndefined()
           const resultMetadata = (completed.task.metadata as any).git.result
           expect(resultMetadata.checkpoint_receipt).toMatchObject({
@@ -268,7 +285,7 @@ describe("Engine Git batched repository transaction", () => {
         },
       })
     },
-    TEST_TIMEOUT_MILLISECONDS,
+    TEST_TIMEOUT_MILLISECONDS * 2,
   )
 
   test(

@@ -1,6 +1,7 @@
 import { afterEach, expect, test } from "bun:test"
 import { Bus } from "@/bus"
 import { createRightSidebarConversationSession, RIGHT_SIDEBAR_CONVERSATION_SOURCE } from "@/chat/session"
+import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import {
   SessionConnectedEvent,
   SessionConversationConnectionSnapshot,
@@ -19,6 +20,7 @@ import { executionLifecycleOrderKey, sessionLifecycleOrderKey } from "@/session/
 import { SessionEventStreamTestHooks } from "@/server/routes/session"
 import { Database } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { persistEstablishedTask } from "../fixture/engine-task"
 
 afterEach(async () => {
   SessionEventStreamTestHooks.afterConversationSnapshotRead = undefined
@@ -470,6 +472,41 @@ test("Session reconnect selects the globally newest lifecycle across Session and
       const emittedAt = Date.now()
       const olderID = Identifier.ascending("protocol_event")
       const newerID = Identifier.ascending("protocol_event")
+      const taskID = Identifier.ascending("task")
+      const taskCreatedAt = emittedAt - 1
+      const packageRevision = {
+        scope: "built_in" as const,
+        projectID: null,
+        namespace: "builtin",
+        id: "base",
+        version: "2026.08.31.1",
+        packageDigest: "c".repeat(64),
+      }
+      const taskRoot = Session.prepareRootNext({
+        kind: "root",
+        directory: project.path,
+        title: "Lifecycle ordering Task aggregate",
+      })
+      persistEstablishedTask({
+        taskID,
+        rootSession: taskRoot,
+        now: taskCreatedAt,
+        title: "Lifecycle ordering Task aggregate",
+        request: "Provide a real Task authority for the Task lifecycle fact",
+        source: "test",
+        productPillar: "code",
+        metadata: { actor: "user" },
+        projectID: Instance.project.id,
+        packageRevision,
+        executionCapsuleBinding: await prepareTaskProcessBinding({
+          mode: "native",
+          taskID,
+          projectID: Instance.project.id,
+          rootDirectory: project.path,
+          packageRevisionSHA256: packageRevision.packageDigest,
+          timeCreated: taskCreatedAt,
+        }),
+      })
       const orderKey = executionLifecycleOrderKey(work.id, input.id)
       await ProtocolStore.appendEvent({
         id: olderID,
@@ -489,12 +526,12 @@ test("Session reconnect selects the globally newest lifecycle across Session and
         kind: "event",
         type: "agent.execution.lifecycle",
         aggregate: "task",
-        aggregate_id: Identifier.ascending("task"),
+        aggregate_id: taskID,
         session_id: work.id,
         source: "test.session-lifecycle-order",
         emitted_at: emittedAt,
         order_key: orderKey,
-        seq: 1,
+        seq: 5,
         payload: { inputMessageID: input.id, status: { type: "terminal", reason: "completed" } },
       })
 

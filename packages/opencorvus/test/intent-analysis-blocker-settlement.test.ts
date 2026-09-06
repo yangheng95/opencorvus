@@ -102,43 +102,9 @@ async function createFixture(title: string) {
     }),
   })
 
-  const userMessage = await Session.updateMessage({
-    id: Identifier.ascending("message"),
-    sessionID: root.id,
-    role: "user",
-    author: "user",
-    time: { created: now },
-    agent: "orchestrator",
-    model: { providerID: "test", modelID: "test-model" },
-  })
-  const orchestratorMessage = await Session.updateMessage({
-    id: Identifier.ascending("message"),
-    sessionID: root.id,
-    role: "assistant",
-    author: "orchestrator",
-    parentID: userMessage.id,
-    time: { created: now + 1 },
-    agent: "orchestrator",
-    providerID: "test",
-    modelID: "test-model",
-    path: { cwd: Instance.directory, root: Instance.directory },
-    cost: 0,
-    tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-  })
+  const orchestratorMessageID = Identifier.ascending("message")
+  const toolPartID = Identifier.ascending("part")
   const callID = Identifier.ascending("call")
-  const toolPart = await Session.updatePart({
-    id: Identifier.ascending("part"),
-    sessionID: root.id,
-    messageID: orchestratorMessage.id,
-    type: "tool",
-    callID,
-    tool: "dispatch_agent",
-    state: {
-      status: "running",
-      input: { dispatch: { target: projectedIntentAnalyst.identity.agentID } },
-      time: { start: now + 1 },
-    },
-  })
 
   const worker = await Session.create({ kind: "intent-analysis", parentID: root.id, title: `${title} worker` })
   const workerInput = await Session.updateMessage({
@@ -172,6 +138,25 @@ async function createFixture(title: string) {
     tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
     finish: "stop",
   })
+  const dispatchID = Identifier.ascending("artifact")
+  const childSessionID = Identifier.deterministic("session", `intent-analysis-dispatch\0${dispatchID}`)
+  recordTestDispatchLineage({
+    origin: createDispatchLineageOrigin({
+      dispatchID,
+      taskID,
+      orchestratorSessionID: root.id,
+      orchestratorMessageID,
+      toolPartID,
+      toolCallID: callID,
+      targetAgentID: projectedIntentAnalyst.identity.agentID,
+      projectedWorkerIdentity: projectedIntentAnalyst.identity,
+      workScope: { kind: "task" },
+      workflowBinding,
+      workflowNodeID: "intent",
+      adapterInput: { reason: "Resolve scope", attachment_refs: [] },
+    }),
+    childSessionID: worker.id,
+  })
   WorkerTurnDescriptor.create({
     sessionID: worker.id,
     payload: {
@@ -187,11 +172,24 @@ async function createFixture(title: string) {
         user_message_id: workerInput.id,
         control_text_parts: [{ part_id: controlPart.id, text_sha256: taskRequestSHA256(controlPart.text) }],
       },
+      dispatchTurn: {
+        kind: "initial",
+        current_dispatch_id: dispatchID,
+        workflow_binding: workflowBinding,
+        workflow_node_id: "intent",
+        workflow_occurrence_id: dispatchID,
+        delivery_slice_revision_ids: [],
+        evidence_locators: [],
+        task_authority: {
+          task_id: taskID,
+          root_session_id: root.id,
+          request_sha256: taskRequestSHA256(requireTask(taskID).request),
+          initial_control_text_parts: [],
+        },
+      },
     },
   })
 
-  const dispatchID = Identifier.ascending("artifact")
-  const childSessionID = Identifier.deterministic("session", `intent-analysis-dispatch\0${dispatchID}`)
   const signal = new AbortController().signal
   const context: DispatchAdapterExecutionContext = {
     agentID: projectedIntentAnalyst.identity.agentID,
@@ -230,30 +228,13 @@ async function createFixture(title: string) {
       toolCallId: callID,
       opencorvus: {
         sessionID: root.id,
-        messageID: orchestratorMessage.id,
+        messageID: orchestratorMessageID,
         toolCallID: callID,
-        toolPartID: toolPart.id,
+        toolPartID,
         visibleToolName: "dispatch_agent",
       },
     },
   }
-  recordTestDispatchLineage({
-    origin: createDispatchLineageOrigin({
-      dispatchID,
-      taskID,
-      orchestratorSessionID: root.id,
-      orchestratorMessageID: orchestratorMessage.id,
-      toolPartID: toolPart.id,
-      toolCallID: callID,
-      targetAgentID: projectedIntentAnalyst.identity.agentID,
-      projectedWorkerIdentity: projectedIntentAnalyst.identity,
-      workScope: { kind: "task" },
-      workflowBinding,
-      workflowNodeID: "intent",
-      adapterInput: { reason: "Resolve scope", attachment_refs: [] },
-    }),
-    childSessionID: worker.id,
-  })
   return { taskID, root, worker, workerFinal, context }
 }
 

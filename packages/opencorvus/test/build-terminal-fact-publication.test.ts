@@ -150,6 +150,23 @@ async function createProductionFixture(projectPath: string, title: string, agent
       initial_control_text_parts: [],
     },
   }
+  const lineage = recordTestDispatchLineage({
+    origin: createDispatchLineageOrigin({
+      dispatchID,
+      taskID,
+      orchestratorSessionID: root.id,
+      orchestratorMessageID: Identifier.ascending("message"),
+      toolPartID: Identifier.ascending("part"),
+      toolCallID: Identifier.ascending("call"),
+      targetAgentID: projectedAgent.identity.agentID,
+      projectedWorkerIdentity: projectedAgent.identity,
+      workScope: { kind: "task" },
+      workflowBinding: workflow,
+      workflowNodeID: agentID,
+      adapterInput: { goal_ids: [], reason: "Publish terminal fact" },
+    }),
+    childSessionID,
+  })
   const dispatchSignal = new AbortController().signal
   const context: DispatchAdapterExecutionContext = {
     agentID: projectedAgent.identity.agentID,
@@ -164,24 +181,11 @@ async function createProductionFixture(projectPath: string, title: string, agent
       adapterInput: { goal_ids: [], reason: "Publish terminal fact" },
       signal: dispatchSignal,
       observeSession() {},
-      commitSession(sessionID) {
-        return recordTestDispatchLineage({
-          origin: createDispatchLineageOrigin({
-            dispatchID,
-            taskID,
-            orchestratorSessionID: root.id,
-            orchestratorMessageID: Identifier.ascending("message"),
-            toolPartID: Identifier.ascending("part"),
-            toolCallID: Identifier.ascending("call"),
-            targetAgentID: projectedAgent.identity.agentID,
-            projectedWorkerIdentity: projectedAgent.identity,
-            workScope: { kind: "task" },
-            workflowBinding: workflow,
-            workflowNodeID: agentID,
-            adapterInput: { goal_ids: [], reason: "Publish terminal fact" },
-          }),
-          childSessionID: sessionID,
-        })
+      commitSession(sessionID, descriptor) {
+        if (sessionID !== childSessionID || descriptor.payload.dispatchTurn?.current_dispatch_id !== dispatchID) {
+          throw new Error(`Build fixture dispatch authority drift for ${dispatchID}`)
+        }
+        return { artifactID: lineage.artifactID }
       },
       releaseAdmission() {},
     },

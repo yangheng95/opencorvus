@@ -92,7 +92,7 @@ describe("Dynamic Expert Squad package", () => {
     expect(source.manifest).toMatchObject({
       namespace: "builtin",
       id: "dynamic",
-      version: "2026.08.30.3",
+      version: "2026.09.05.1",
       product_pillars: ["code", "work"],
       capability_projection: {
         agents: {
@@ -118,7 +118,7 @@ describe("Dynamic Expert Squad package", () => {
         })
         expect(receipt).toMatchObject({
           operation: "installed",
-          after: { installationScope: "project", namespace: "builtin", id: "dynamic", version: "2026.08.30.3" },
+          after: { installationScope: "project", namespace: "builtin", id: "dynamic", version: "2026.09.05.1" },
         })
 
         const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {

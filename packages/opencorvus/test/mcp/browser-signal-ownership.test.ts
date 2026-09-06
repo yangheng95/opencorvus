@@ -232,13 +232,13 @@ describe("Browser composition roots settle active isolated Sessions after a real
             outcome,
             phase: "cleanup-settled",
             profiles: 0,
+            ...(outcome === "page-close-failure" ? { error: "injected-page-close-failure" } : {}),
           }),
         )
         expect(result.exitCode).toBe(outcome === "success" ? expectedSignalExit : 1)
         expect(result.output).toContain(
           mode === "http" ? "[browser-mcp] HTTP server listening on" : "[browser-mcp] Live View available at",
         )
-        if (outcome === "page-close-failure") expect(result.output).toContain("injected-page-close-failure")
       })
     }
   }

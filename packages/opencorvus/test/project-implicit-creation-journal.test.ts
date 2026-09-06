@@ -11,6 +11,10 @@ import { Filesystem } from "../src/util/filesystem"
 import { Project } from "../src/project/project"
 import { ProjectDirectoryAdmissionTable } from "../src/project/project.sql"
 import { Database } from "../src/storage/db"
+import {
+  observeRuntimeProcessOccurrence,
+  type RuntimeProcessOccurrenceInfo,
+} from "../src/runtime/process-occurrence"
 import { resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
@@ -37,11 +41,29 @@ async function collectChild(child: ReturnType<typeof startChild>) {
   const [exitCode, stdout] = await Promise.all([child.exited, new Response(child.stdout).text()])
   const stderr = await new Response(child.stderr).text()
   const last = stdout.trim().split(/\r?\n/).at(-1)
-  return { exitCode, value: exitCode === 0 && last ? JSON.parse(last) : undefined, stderr }
+  const value = exitCode === 0 && last ? JSON.parse(last) : undefined
+  return { exitCode, value, stderr }
 }
 
 async function runChild(env: NodeJS.ProcessEnv, args: string[]) {
-  return collectChild(startChild(env, args))
+  const result = await collectChild(startChild(env, args))
+  if (args[0] === "create-cut" || args[0]?.startsWith("prepare-")) {
+    const home = env.OPENCORVUS_HOME
+    if (!home) throw new Error("Child recovery fixture requires OPENCORVUS_HOME")
+    const occurrences = await new DurablePublicationStore(path.join(home, "data", "durable-publications")).listOpen(
+      "implicit-project-creation",
+    )
+    for (const occurrence of occurrences) {
+      const owner = (occurrence.intent.payload as { owner?: RuntimeProcessOccurrenceInfo }).owner
+      if (!owner) continue
+      const deadline = Date.now() + 5_000
+      while (observeRuntimeProcessOccurrence(owner) !== "dead_or_reused") {
+        if (Date.now() >= deadline) throw new Error(`Timed out waiting for child process ${owner.pid} to exit`)
+        await Bun.sleep(5)
+      }
+    }
+  }
+  return result
 }
 
 async function waitForFile(target: string) {

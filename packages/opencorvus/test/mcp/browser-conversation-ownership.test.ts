@@ -38,8 +38,8 @@ describe("a Conversation owns the Browser runtime it creates", () => {
             inventory_revision: "5".repeat(64),
           }
         })
-        const exact = spyOn(MCP, "scopedTool").mockImplementation(async (input) => {
-          const runtimeName = MCP.runtimeToolName(input.key, input.toolName) as keyof typeof browserTools
+        const exact = spyOn(MCP, "exactScopedCatalogTool").mockImplementation(async (input) => {
+          const runtimeName = input.binding.runtime_name as keyof typeof browserTools
           return Object.assign(browserTools[runtimeName], { __runtimeName: runtimeName })
         })
         const originalAuthority = MCP.toolAuthorityBinding

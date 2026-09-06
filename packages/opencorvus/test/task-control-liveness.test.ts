@@ -615,6 +615,23 @@ describe("Task-control driver", () => {
     driver.dispose()
   })
 
+  test("keeps a reducer-proven time transition ahead of no-progress backoff", async () => {
+    const timers: number[] = []
+    const driver = new TaskControlDriver({
+      scan: async () => ({ activated: 0, noProgress: true, wakeAt: 50 }),
+      initialBackoffMilliseconds: 1_000,
+      maximumBackoffMilliseconds: 4_000,
+      now: () => 0,
+      setTimer: (_fn, delay) => {
+        timers.push(delay)
+        return { cancel() {} }
+      },
+    })
+    await driver.request("task-semantic-deadline")
+    expect({ timers, wakeAt: driver.snapshot()[0]?.wakeAt }).toEqual({ timers: [50], wakeAt: 50 })
+    driver.dispose()
+  })
+
   test("paces an unsettled fixpoint under backoff instead of re-arming at the minimum delay", async () => {
     const timers: number[] = []
     let clock = 0

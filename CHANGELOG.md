@@ -4,6 +4,22 @@
 
 ## 未发布
 
+## 0.0.62beta - 2026-09-05
+
+本版本在 `0.0.61-beta` 的不可变发布基础上同步最新源码，修复干净环境的发布前检查，并重新发布完整桌面端、命令行、更新清单和公开网站。数据库继续采用当前 pre-release schema epoch：不新增历史 migration 或兼容 reader，不兼容的旧数据库需要显式重置。
+
+### Changed
+
+- 已知的精确能力引用可以直接分组 reveal；未知能力仍通过 Search-native 目录发现，所有授权、冻结输入和 receipt replay 约束保持不变。
+- Light 专家团在不可变 package 内容中声明完整的调度、报告读取、完成、方法 Skill 与文件读取 locator；清单仍是唯一授权来源，提示词引用不会新增 grant。
+- 发布工作流在原生矩阵编译前取得唯一 tag/draft owner，失败重跑只恢复同一 workflow-run/source 的发布身份，不会创建或接管另一运行的草稿。
+
+### Fixed
+
+- 修复 Dynamic 专家团内容与 revision 记录漂移，确保 canonical generator 在干净 runner 上保持零差异。
+- 修复 Architect 与跨进程 workflow-node 测试夹具未建立真实 Task-root ingress、Orchestrator Tool occurrence 和 dispatch-lineage 顺序的问题，使 CI 验证当前数据库约束而不是旧的宽松夹具。
+- 修复网站 package-tool 源码 export 解析、公开工具事实、下载页面缓存验证器和 immutable Squad 路径匹配；普通刷新会读取当前发布版本，同时内容寻址资源继续使用长期 immutable 缓存。
+
 ## 0.0.61beta - 2026-09-05
 
 本版本从最后一个公开版本 `0.0.54-beta` 继续发布，包含下方未公开候选的全部改动，并完成其后的调度架构收敛、Search-native 能力迁移与 Light 专家团验收。桌面端、命令行、更新清单和公开网站都绑定到同一份 `0.0.61-beta` 源码；产品版本只允许 `major.minor.patch` 三段数字以及可选的 `beta` 标签，不再接受 `beta.1` 一类第四段编号。

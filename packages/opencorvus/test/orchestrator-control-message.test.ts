@@ -16,6 +16,7 @@ import {
 } from "@/orchestrator/agent"
 import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 import { OrchestratorEventSchema } from "@/orchestrator/event"
+import { taskRootIngressID } from "@/engine/task-root-ingress-identity"
 import { resetDatabase } from "./fixture/db"
 import { tmpdir } from "./fixture/fixture"
 
@@ -32,7 +33,8 @@ test("exact terminal ingress persists one visible Orchestrator control Message a
     directory: project.path,
     fn: async () => {
       const session = await Session.create({ kind: "root", title: "Orchestrator exact terminal ingress" })
-      const wakeID = "art_exact_terminal_control_wake"
+      const taskID = Identifier.ascending("task")
+      const wakeID = taskRootIngressID({ taskID, source: "task", sourceID: taskID })
       const event = OrchestratorEventSchema.parse({
         dispatchInfrastructureFailure: {
           infrastructureFactID: "art_dispatch_infrastructure_failure",
@@ -51,9 +53,8 @@ test("exact terminal ingress persists one visible Orchestrator control Message a
           },
         },
       })
-      const control = currentOrchestratorControlMessage(event, "tsk_exact_terminal_control", wakeID)!
+      const control = currentOrchestratorControlMessage(event, taskID, wakeID)!
       expect(control).toMatchObject(orchestratorControlOccurrenceIdentity(wakeID, wakeID))
-      expect([control.messageID, control.partID].every((id) => id.length <= Identifier.MAX_LENGTH)).toBe(true)
       const prompt = spyOn(SessionPrompt, "prompt").mockImplementation(async (input: any) => {
         expect(input).toMatchObject({
           sessionID: session.id,
@@ -118,13 +119,14 @@ test("exact terminal ingress persists one visible Orchestrator control Message a
   })
 })
 
-test("rejects occupied compact control identity before overwriting another Message", async () => {
+test("rejects an occupied reversible control identity before overwriting another Message", async () => {
   await using project = await tmpdir({ git: true })
   await Instance.provide({
     directory: project.path,
     fn: async () => {
       const session = await Session.create({ kind: "root", title: "Orchestrator compact collision" })
-      const wakeID = "art_compact_control_collision"
+      const taskID = Identifier.ascending("task")
+      const wakeID = taskRootIngressID({ taskID, source: "task", sourceID: taskID })
       const control = currentOrchestratorControlMessage(
         OrchestratorEventSchema.parse({
           dispatchInfrastructureFailure: {
@@ -144,7 +146,7 @@ test("rejects occupied compact control identity before overwriting another Messa
             },
           },
         }),
-        "tsk_compact_control_collision",
+        taskID,
         wakeID,
       )!
       const foreign = {
@@ -166,13 +168,14 @@ test("rejects occupied compact control identity before overwriting another Messa
   })
 })
 
-test("rejects occupied compact control Part identity before writing the control occurrence", async () => {
+test("rejects an occupied reversible control Part identity before writing the control occurrence", async () => {
   await using project = await tmpdir({ git: true })
   await Instance.provide({
     directory: project.path,
     fn: async () => {
       const session = await Session.create({ kind: "root", title: "Orchestrator compact Part collision" })
-      const wakeID = "art_compact_control_part_collision"
+      const taskID = Identifier.ascending("task")
+      const wakeID = taskRootIngressID({ taskID, source: "task", sourceID: taskID })
       const control = currentOrchestratorControlMessage(
         OrchestratorEventSchema.parse({
           dispatchInfrastructureFailure: {
@@ -192,7 +195,7 @@ test("rejects occupied compact control Part identity before writing the control 
             },
           },
         }),
-        "tsk_compact_control_part_collision",
+        taskID,
         wakeID,
       )!
       const foreignMessageID = Identifier.ascending("message")
@@ -230,13 +233,14 @@ test("rejects occupied compact control Part identity before writing the control 
   })
 })
 
-test("rejects a compact Part occupied after preparation at the persistence transaction fence", async () => {
+test("rejects a reversible Part occupied after preparation at the persistence transaction fence", async () => {
   await using project = await tmpdir({ git: true })
   await Instance.provide({
     directory: project.path,
     fn: async () => {
       const session = await Session.create({ kind: "root", title: "Orchestrator compact transaction race" })
-      const wakeID = "art_compact_control_transaction_race"
+      const taskID = Identifier.ascending("task")
+      const wakeID = taskRootIngressID({ taskID, source: "task", sourceID: taskID })
       const control = currentOrchestratorControlMessage(
         OrchestratorEventSchema.parse({
           dispatchInfrastructureFailure: {
@@ -256,7 +260,7 @@ test("rejects a compact Part occupied after preparation at the persistence trans
             },
           },
         }),
-        "tsk_compact_control_transaction_race",
+        taskID,
         wakeID,
       )!
       const foreignMessageID = Identifier.ascending("message")
@@ -404,7 +408,8 @@ test("publishes the staged control runtime before the visible Message event", as
         parentID: root.id,
         title: "Atomic control publication",
       })
-      const wakeID = "art_atomic_control_publication"
+      const taskID = Identifier.ascending("task")
+      const wakeID = taskRootIngressID({ taskID, source: "task", sourceID: taskID })
       const event = OrchestratorEventSchema.parse({
         dispatchInfrastructureFailure: {
           infrastructureFactID: "art_atomic_dispatch_failure",
@@ -423,7 +428,7 @@ test("publishes the staged control runtime before the visible Message event", as
           },
         },
       })
-      const control = currentOrchestratorControlMessage(event, "tsk_atomic_control", wakeID)!
+      const control = currentOrchestratorControlMessage(event, taskID, wakeID)!
       const order: string[] = []
       const prompt = spyOn(SessionPrompt, "prompt").mockImplementation(async (input: any, hooks: any) =>
         Session.persistMessageWithCommit(

@@ -347,9 +347,11 @@ describe.serial("Provider cache identity", () => {
           ])
           expect({
             factoryCalls,
-            first: (first as unknown as { factoryCall: number }).factoryCall,
-            second: (second as unknown as { factoryCall: number }).factoryCall,
-          }).toEqual({ factoryCalls: 2, first: 1, second: 2 })
+            calls: [
+              (first as unknown as { factoryCall: number }).factoryCall,
+              (second as unknown as { factoryCall: number }).factoryCall,
+            ].sort(),
+          }).toEqual({ factoryCalls: 2, calls: [1, 2] })
         } finally {
           if (originalFactory) BUNDLED_PROVIDERS["@ai-sdk/openai-compatible"] = originalFactory
           else delete BUNDLED_PROVIDERS["@ai-sdk/openai-compatible"]
@@ -646,9 +648,11 @@ describe.serial("Provider cache identity", () => {
           const [first, second] = await Promise.all(models.map((model) => Provider.getLanguage(model, { config })))
           expect({
             factoryCalls,
-            first: (first as unknown as { factoryCall: number }).factoryCall,
-            second: (second as unknown as { factoryCall: number }).factoryCall,
-          }).toEqual({ factoryCalls: 2, first: 1, second: 2 })
+            calls: [
+              (first as unknown as { factoryCall: number }).factoryCall,
+              (second as unknown as { factoryCall: number }).factoryCall,
+            ].sort(),
+          }).toEqual({ factoryCalls: 2, calls: [1, 2] })
         } finally {
           if (originalFactory) BUNDLED_PROVIDERS["@ai-sdk/amazon-bedrock"] = originalFactory
           else delete BUNDLED_PROVIDERS["@ai-sdk/amazon-bedrock"]

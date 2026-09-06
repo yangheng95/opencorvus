@@ -7,6 +7,8 @@ import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { Database, eq } from "../src/storage/db"
 import { EngineArtifactTable, EngineInteractionRequestTable, EngineTaskTable } from "../src/engine/engine.sql"
+import { createDispatchLineageOrigin } from "../src/engine/dispatch-lineage"
+import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { terminalTask } from "../src/engine/state"
 import { requireTask } from "../src/engine/store"
@@ -14,7 +16,6 @@ import {
   requireCurrentTerminalLifecycleReference,
   resolveTerminalLifecycleReference,
 } from "../src/engine/terminal-lifecycle-reference"
-import { recordEngineArtifact } from "../src/engine/artifact"
 import { collectTaskRunEvidence } from "../src/tool/task-run-evidence-host"
 import { createExpertSquadPackageHost } from "../src/tool/expert-squad-package-host"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
@@ -63,6 +64,7 @@ import {
   executionCapsuleSourceTreeDigest,
   executionCapsuleSourceTreeSnapshot,
 } from "../src/execution-capsule/tree-digest"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 
 function executePublishEvolutionArtifact(
   args: Record<string, unknown> & { artifact_type: string; payload: unknown },
@@ -711,7 +713,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
   })
 
   test("publishes and consumes exact typed predecessor evidence through the package ABI", async () => {
-    const project = await sharedProject()
+    await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
@@ -1298,7 +1300,20 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           const trial = await Instance.provide({
             directory: trialWorktree.directory,
             fn: async () => {
-              const trialSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Frozen baseline Trial" })
+              const trialPackageRevision = {
+                scope: "project" as const,
+                projectID: Instance.project.id,
+                namespace: "acme",
+                id: "target",
+                version: revision.version,
+                packageDigest: revision.package_digest,
+              }
+              const trialSession = Session.prepareRootNext({
+                kind: "root",
+                directory: Instance.directory,
+                title: "Frozen baseline Trial",
+                metadata: { configOverlay: { prompt_profile: { active: trialPackageRevision.id } } },
+              })
               const trialTaskID = Identifier.ascending("task")
               const trialStarted = started + 10
               const trialCompleted = trialStarted + 1
@@ -1313,14 +1328,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 priority: "normal",
                 metadata: { actor: "user" },
                 projectID: Instance.project.id,
-                packageRevision: {
-                  scope: "project",
-                  projectID: Instance.project.id,
-                  namespace: "acme",
-                  id: "target",
-                  version: revision.version,
-                  packageDigest: revision.package_digest,
-                },
+                packageRevision: trialPackageRevision,
                 creationExpectedPackageDigest: revision.package_digest,
                 executionCapsuleBinding: await taskProcessBinding(
                   trialTaskID,
@@ -1372,25 +1380,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 ],
               })
               await trialArtifactExecution.close()
-              recordEngineArtifact({
-                taskID: trialTaskID,
-                kind: "dispatch_lineage",
-                label: "Frozen baseline Trial workflow binding",
-                payload: {
-                  adapter_input: {},
-                  workflow_binding: {
-                    kind: "direct",
-                    package_revision: {
-                      scope: "project",
-                      project_id: Instance.project.id,
-                      namespace: "acme",
-                      id: "target",
-                      version: revision.version,
-                      package_digest: revision.package_digest,
-                    },
-                  },
-                },
-              })
               const trialUser = await Session.updateMessage({
                 id: Identifier.ascending("message"),
                 sessionID: trialSession.id,
@@ -1403,9 +1392,38 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               // Producer Messages live on a child worker Session; a root
               // Session carries the operator's user Messages only.
               const trialWorkerSession = await Session.create({
-                kind: "assistant",
+                kind: "delegated-worker",
                 parentID: trialSession.id,
                 title: "Frozen baseline Trial worker",
+              })
+              const trialDispatchID = Identifier.ascending("artifact")
+              recordTestDispatchLineage({
+                origin: createDispatchLineageOrigin({
+                  dispatchID: trialDispatchID,
+                  taskID: trialTaskID,
+                  orchestratorSessionID: trialSession.id,
+                  orchestratorMessageID: Identifier.ascending("message"),
+                  toolPartID: Identifier.ascending("part"),
+                  toolCallID: Identifier.ascending("call"),
+                  targetAgentID: "target-worker",
+                  projectedWorkerIdentity: {
+                    agentID: "target-worker",
+                    baseRole: "delegated-worker",
+                    sessionKind: "delegated-worker",
+                    dispatchAdapterID: "delegated_worker",
+                    runtimeTemplateABIVersion: 1,
+                    dispatchAdapterABIVersion: 1,
+                    projectionHash: "1".repeat(64),
+                  },
+                  workScope: { kind: "task" },
+                  workflowBinding: selectedWorkflowBinding({
+                    projection: { packageRevision: trialPackageRevision, virtualWorkflows: {} },
+                    workflowID: null,
+                  }),
+                  workflowNodeID: null,
+                  adapterInput: { reason: "Execute the frozen baseline Trial" },
+                }),
+                childSessionID: trialWorkerSession.id,
               })
               const trialAssistant = await Session.updateMessage({
                 id: Identifier.ascending("message"),
@@ -1967,19 +1985,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               ],
             },
           }
-          for (const [locator, purpose] of [
-            [importedOpportunityLocator, "Exact imported opportunity for Campaign correlation"],
-            [importedAttributionLocator, "Exact imported attribution for Campaign correlation"],
-          ] as const) {
-            const read = await host.engineArtifacts.read({
-              locator,
-              byte_offset: 0,
-              max_bytes: 65_536,
-              delivery: "inline",
-            })
-            expect(read.chunk.complete).toBe(true)
-            await host.engineArtifacts.select({ locator, purpose })
-          }
           ;(importedScope.owner as { agentID: string }).agentID = "evolution-observer"
           const unrelatedOpportunity = JSON.parse(
             await executePublishEvolutionArtifact(
@@ -2021,17 +2026,32 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           expect((mismatchedPairError as Error).message).toBe(
             "campaign failure-attribution must directly identify its exact opportunity source",
           )
-          const importedPairCampaign = JSON.parse(
-            await executePublishEvolutionArtifact(
-              {
-                artifact_type: "evolution-lab/campaign-spec",
-                payload: importedCampaignInput,
-                resource_set: rehydrated.resource_set,
-                source_artifact_locators: [importedOpportunityLocator, importedAttributionLocator],
-              },
-              { host } as never,
-            ),
-          ) as { locator: EngineArtifactLocator }
+          const importedPairCampaign = await withTaskScopedPluginToolHost(importedScope, async (publicationHost) => {
+            for (const [locator, purpose] of [
+              [importedOpportunityLocator, "Exact imported opportunity for Campaign correlation"],
+              [importedAttributionLocator, "Exact imported attribution for Campaign correlation"],
+            ] as const) {
+              const read = await publicationHost.engineArtifacts.read({
+                locator,
+                byte_offset: 0,
+                max_bytes: 65_536,
+                delivery: "inline",
+              })
+              expect(read.chunk.complete).toBe(true)
+              await publicationHost.engineArtifacts.select({ locator, purpose })
+            }
+            return JSON.parse(
+              await executePublishEvolutionArtifact(
+                {
+                  artifact_type: "evolution-lab/campaign-spec",
+                  payload: importedCampaignInput,
+                  resource_set: rehydrated.resource_set,
+                  source_artifact_locators: [importedOpportunityLocator, importedAttributionLocator],
+                },
+                { host: publicationHost } as never,
+              ),
+            ) as { locator: EngineArtifactLocator }
+          })
           const importedPairCampaignRead = await host.engineArtifacts.read({
             locator: importedPairCampaign.locator,
             byte_offset: 0,
@@ -2225,7 +2245,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           package_digest: loaded.packageDigest,
           namespace: "builtin",
           id: "evolution-lab",
-          version: "2026.08.18.1",
+          version: loaded.manifest.version,
           resource_set: { tree: "package" },
           package_root: `expert-squad-evolution-candidates/${taskID}/builtin/evolution-lab`,
         })
@@ -2282,9 +2302,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           `${await readFile(candidateReadme, "utf8")}\nCandidate instruction refinement.\n`,
         )
         const candidateManifest = path.join(candidateDirectory, "expert-squad.jsonc")
+        const candidateVersion = loaded.manifest.version.replace(/(\d+)$/, (ordinal) => String(Number(ordinal) + 1))
         await writeFile(
           candidateManifest,
-          (await readFile(candidateManifest, "utf8")).replace('"version": "2026.08.18.1"', '"version": "2026.08.18.2"'),
+          (await readFile(candidateManifest, "utf8")).replace(
+            `"version": "${loaded.manifest.version}"`,
+            `"version": "${candidateVersion}"`,
+          ),
         )
         const candidatePublication = await candidateExecution.publish(candidateStage, {
           snapshot_kind: "catalog",
@@ -2336,7 +2360,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         expect(validatedCandidate).toMatchObject({
           namespace: "builtin",
           id: "evolution-lab",
-          version: "2026.08.18.2",
+          version: candidateVersion,
           package_digest: comparison.candidate_digest,
           resource_set: candidateResourceSet,
         })
@@ -2809,7 +2833,20 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Evolution evidence fixture" })
+        const basePackageRevision = {
+          scope: "built_in" as const,
+          projectID: null,
+          namespace: "builtin",
+          id: "base",
+          version: "2026.08.06.1",
+          packageDigest: "a".repeat(64),
+        }
+        const session = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Evolution evidence fixture",
+          metadata: { configOverlay: { prompt_profile: { active: basePackageRevision.id } } },
+        })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         persistTask({
@@ -2823,14 +2860,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "user" },
           projectID: Instance.project.id,
-          packageRevision: {
-            scope: "built_in",
-            projectID: null,
-            namespace: "builtin",
-            id: "base",
-            version: "2026.08.06.1",
-            packageDigest: "a".repeat(64),
-          },
+          packageRevision: basePackageRevision,
           creationExpectedPackageDigest: "a".repeat(64),
           executionCapsuleBinding: await taskProcessBinding(taskID, "a".repeat(64), started - 1),
         })
@@ -2871,25 +2901,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           files: [{ tree: "evidence", path: "result.txt", media_type: "text/plain" }],
         })
         await taskArtifactExecution.close()
-        recordEngineArtifact({
-          taskID,
-          kind: "dispatch_lineage",
-          label: "Direct target Trial workflow binding",
-          payload: {
-            adapter_input: {},
-            workflow_binding: {
-              kind: "direct",
-              package_revision: {
-                scope: "built_in",
-                project_id: null,
-                namespace: "builtin",
-                id: "base",
-                version: "2026.08.06.1",
-                package_digest: "a".repeat(64),
-              },
-            },
-          },
-        })
         const message = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: session.id,
@@ -2909,9 +2920,39 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         // The worker's Message belongs to a child Session; the root Session
         // carries the operator's user Message only.
         const evidenceWorkerSession = await Session.create({
-          kind: "assistant",
+          kind: "delegated-worker",
           parentID: session.id,
           title: "Terminal occurrence worker",
+        })
+        const evidenceDispatchID = Identifier.ascending("artifact")
+        const evidenceCreatorMessageID = Identifier.ascending("message")
+        recordTestDispatchLineage({
+          origin: createDispatchLineageOrigin({
+            dispatchID: evidenceDispatchID,
+            taskID,
+            orchestratorSessionID: session.id,
+            orchestratorMessageID: evidenceCreatorMessageID,
+            toolPartID: Identifier.ascending("part"),
+            toolCallID: Identifier.ascending("call"),
+            targetAgentID: "base-developer",
+            projectedWorkerIdentity: {
+              agentID: "base-developer",
+              baseRole: "delegated-worker",
+              sessionKind: "delegated-worker",
+              dispatchAdapterID: "delegated_worker",
+              runtimeTemplateABIVersion: 1,
+              dispatchAdapterABIVersion: 1,
+              projectionHash: "b".repeat(64),
+            },
+            workScope: { kind: "task" },
+            workflowBinding: selectedWorkflowBinding({
+              projection: { packageRevision: basePackageRevision, virtualWorkflows: {} },
+              workflowID: null,
+            }),
+            workflowNodeID: null,
+            adapterInput: { reason: "Collect the exact terminal occurrence" },
+          }),
+          childSessionID: evidenceWorkerSession.id,
         })
         const assistant = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -2989,8 +3030,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           lifecycle,
           completion_decision_artifact_id: null,
         })
-        expect(evidence.messages).toHaveLength(2)
-        expect(evidence.messages[0]).toMatchObject({
+        expect(evidence.messages).toHaveLength(3)
+        expect(evidence.messages.find((candidate) => candidate.locator.message_id === evidenceCreatorMessageID)).toMatchObject({
+          role: "assistant",
+          agent: "orchestrator",
+          parts: [{ type: "tool", tool: { name: "dispatch_agent" } }],
+        })
+        expect(evidence.messages.find((candidate) => candidate.locator.message_id === message.id)).toMatchObject({
           locator: { session_id: session.id, message_id: message.id },
           role: "user",
           agent: "user",
@@ -2998,7 +3044,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             parts: [{ data: { type: "text", text: "selected exact body" } }],
           },
         })
-        expect(evidence.messages[1]).toMatchObject({
+        expect(evidence.messages.find((candidate) => candidate.locator.message_id === assistant.id)).toMatchObject({
           locator: { session_id: evidenceWorkerSession.id, message_id: assistant.id },
           role: "assistant",
           agent: "worker",

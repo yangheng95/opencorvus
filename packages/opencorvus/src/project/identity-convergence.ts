@@ -10,12 +10,18 @@ import { AttachmentStore } from "@/storage/attachment-store"
 import { AutomationProjectTargetTable, AutomationRunTable, AutomationTable } from "@/scheduler/automation.sql"
 import { BusPublicationOutboxTable } from "@/bus/bus.sql"
 import { ChannelIngressAcceptedTable } from "@/channel/channel.sql"
-import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
+import {
+  EngineArtifactTable,
+  EngineTaskRootIngressTable,
+  EngineTaskTable,
+  EngineTaskWaitRegistrationTable,
+} from "@/engine/engine.sql"
 import { EventJobFireTable, EventJobTable, EventOccurrenceTable } from "@/scheduler/event.sql"
 import { MemoryChunkTable, MemoryFileTable } from "@/memory/memory.sql"
 import { PermissionLedgerTable, PermissionPolicyTable } from "@/permission/permission.sql"
 import { QuickNoteTable } from "@/quicknote/quicknote.sql"
-import { SessionPromptOwnerTable, SessionTable } from "@/session/session.sql"
+import { SessionPromptOwnerTable, SessionTable, WorkerTurnDescriptorTable } from "@/session/session.sql"
+import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { WorkspaceLifecycleAdmissionTable, WorkspaceTable } from "@/workspace/workspace.sql"
 import { ProjectRuntimePaths } from "./runtime-paths"
 import { ProjectTable } from "./project.sql"
@@ -83,16 +89,36 @@ export namespace ProjectIdentityConvergence {
     mutableDomain("workspace", WorkspaceTable),
   ]
 
+  const IMMUTABLE_DOMAIN_MAPPINGS = [
+    { name: "bus_publication_outbox", label: "durable publication outbox", table: BusPublicationOutboxTable },
+    { name: "channel_ingress_accepted", label: "immutable Channel ingress facts", table: ChannelIngressAcceptedTable },
+    { name: "permission_ledger", label: "append-only permission ledger", table: PermissionLedgerTable },
+    { name: "automation", label: "immutable Automation definitions", table: AutomationTable },
+    {
+      name: "automation_project_target",
+      label: "immutable Automation Project targets",
+      table: AutomationProjectTargetTable,
+    },
+    { name: "engine_task_root_ingress", label: "immutable Task-root ingress facts", table: EngineTaskRootIngressTable },
+    {
+      name: "engine_task_wait_registration",
+      label: "immutable Task wait registrations",
+      table: EngineTaskWaitRegistrationTable,
+    },
+    { name: "event_job", label: "immutable Event definitions", table: EventJobTable },
+    { name: "event_occurrence", label: "immutable Event occurrences", table: EventOccurrenceTable },
+    { name: "protocol_event", label: "append-only Protocol events", table: ProtocolEventTable },
+    { name: "session_prompt_owner", label: "durable Session prompt ownership", table: SessionPromptOwnerTable },
+    {
+      name: "worker_turn_descriptor",
+      label: "immutable Worker Turn descriptors",
+      table: WorkerTurnDescriptorTable,
+    },
+  ] as const satisfies readonly { name: string; label: string; table: ProjectReferenceTable }[]
+
   export const PROJECT_REFERENCE_CONTRACTS = [
     ...MUTABLE_DOMAIN_MAPPINGS.map((mapping) => ({ table: mapping.name, settlement: "migrate" as const })),
-    { table: "bus_publication_outbox", settlement: "preserve" as const },
-    { table: "channel_ingress_accepted", settlement: "preserve" as const },
-    { table: "permission_ledger", settlement: "preserve" as const },
-    { table: "automation", settlement: "preserve" as const },
-    { table: "automation_project_target", settlement: "preserve" as const },
-    { table: "event_job", settlement: "preserve" as const },
-    { table: "event_occurrence", settlement: "preserve" as const },
-    { table: "session_prompt_owner", settlement: "preserve" as const },
+    ...IMMUTABLE_DOMAIN_MAPPINGS.map((mapping) => ({ table: mapping.name, settlement: "preserve" as const })),
     { table: "project_maintenance_fence", settlement: "maintenance_fence" as const },
     { table: "workspace_lifecycle_admission", settlement: "block" as const },
   ]
@@ -127,46 +153,6 @@ export namespace ProjectIdentityConvergence {
     duplicateProjectIDs: string[]
     db: Database.TxOrDb
   }) {
-    const blockers = [
-      {
-        domain: "immutable Channel ingress facts",
-        count: referencedRows(input.db, ChannelIngressAcceptedTable, input.duplicateProjectIDs),
-      },
-      {
-        domain: "append-only permission ledger",
-        count: referencedRows(input.db, PermissionLedgerTable, input.duplicateProjectIDs),
-      },
-      {
-        domain: "durable publication outbox",
-        count: referencedRows(input.db, BusPublicationOutboxTable, input.duplicateProjectIDs),
-      },
-      {
-        domain: "immutable Automation definitions",
-        count:
-          referencedRows(input.db, AutomationTable, input.duplicateProjectIDs) +
-          referencedRows(input.db, AutomationProjectTargetTable, input.duplicateProjectIDs),
-      },
-      {
-        domain: "immutable Event definitions",
-        count: referencedRows(input.db, EventJobTable, input.duplicateProjectIDs),
-      },
-      {
-        domain: "immutable Event occurrences",
-        count: referencedRows(input.db, EventOccurrenceTable, input.duplicateProjectIDs),
-      },
-      {
-        domain: "durable Session prompt ownership",
-        count: referencedRows(input.db, SessionPromptOwnerTable, input.duplicateProjectIDs),
-      },
-    ]
-    for (const blocker of blockers) {
-      if (blocker.count === 0) continue
-      conflict({
-        ...input,
-        message: `${blocker.domain} contains ${blocker.count} immutable fact(s) for duplicate Project identity`,
-      })
-    }
-
     const duplicateTasks = input.db
       .select({ id: EngineTaskTable.id, projectID: EngineTaskTable.project_id })
       .from(EngineTaskTable)
@@ -197,6 +183,15 @@ export namespace ProjectIdentityConvergence {
       conflict({
         ...input,
         message: `Task ${task.id} has immutable Artifact files for Project ${task.projectID}`,
+      })
+    }
+
+    for (const mapping of IMMUTABLE_DOMAIN_MAPPINGS) {
+      const count = referencedRows(input.db, mapping.table, input.duplicateProjectIDs)
+      if (count === 0) continue
+      conflict({
+        ...input,
+        message: `${mapping.label} contains ${count} immutable fact(s) for duplicate Project identity`,
       })
     }
   }

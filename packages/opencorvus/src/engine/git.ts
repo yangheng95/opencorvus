@@ -1705,7 +1705,12 @@ export namespace EngineGit {
     task: TaskRow,
     admission?: Readonly<{ executionEpoch: number; effect: (db: Database.TxOrDb) => void }>,
   ) {
-    if (baseline(task)) return { task: projectGitTask(task) }
+    const persistedBaseline = baseline(task)
+    if (persistedBaseline) {
+      return "error" in persistedBaseline
+        ? { task: projectGitTask(task), error: String(persistedBaseline.error) }
+        : { task: projectGitTask(task) }
+    }
     const processBinding = readTaskProcessBinding(task.id)
     const initialTreeSHA256 =
       processBinding.protocol === TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL
@@ -1790,7 +1795,12 @@ export namespace EngineGit {
     task: TaskRow,
     admission?: Readonly<{ executionEpoch: number; effect: (db: Database.TxOrDb) => void }>,
   ) {
-    if (result(task)) return { task: projectGitTask(task) }
+    const persistedResult = result(task)
+    if (persistedResult) {
+      return "error" in persistedResult
+        ? { task: projectGitTask(task), error: String(persistedResult.error) }
+        : { task: projectGitTask(task) }
+    }
     const operationKey = checkpointOperationKey(task.id, "result", admission?.executionEpoch)
     let admitted: ReturnType<typeof beginCheckpointRequest>
     try {

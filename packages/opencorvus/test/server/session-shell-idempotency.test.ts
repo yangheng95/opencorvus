@@ -344,6 +344,103 @@ describe("public Session shell identity", () => {
     }
   }, 90_000)
 
+  test("a different Message race against an exact-live standby owner settles with BusyError", async () => {
+    const processRoot = process.env.OPENCORVUS_TEST_PROCESS_ROOT
+    if (!processRoot) throw new Error("Session shell standby race test requires the repository test runtime")
+    await using project = await memoryProject()
+    const runtime = await createManagedTemporaryDirectory(processRoot, "session-shell-standby-runtime-")
+    const barrier = await createManagedTemporaryDirectory(processRoot, "session-shell-standby-barrier-")
+    const worker = path.join(import.meta.dir, "..", "fixture", "session-message-pair-process-worker.ts")
+    const environment = { ...process.env, OPENCORVUS_HOME: runtime }
+    const children: ReturnType<typeof Bun.spawn>[] = []
+    const spawn = (
+      mode: "init" | "route-after-owner-snapshot" | "standby",
+      sessionID = "-",
+      messageID = "-",
+      label = "-",
+      command = "-",
+    ) => {
+      const child = Bun.spawn(
+        [
+          process.execPath,
+          `--config=${path.join(import.meta.dir, "..", "empty-bunfig.toml")}`,
+          worker,
+          mode,
+          project.path,
+          barrier,
+          sessionID,
+          messageID,
+          label,
+          command,
+        ],
+        { cwd: path.join(import.meta.dir, "..", ".."), env: environment, stdout: "pipe", stderr: "pipe" },
+      )
+      children.push(child)
+      return child
+    }
+    const read = async (child: ReturnType<typeof spawn>) => {
+      const [exitCode, stdout, stderr] = await Promise.all([
+        child.exited,
+        new Response(child.stdout).text(),
+        new Response(child.stderr).text(),
+      ])
+      expect(exitCode, stderr).toBe(0)
+      return JSON.parse(stdout.trim()) as Record<string, unknown>
+    }
+    const waitFor = async (name: string) => {
+      const target = path.join(barrier, name)
+      const deadline = Date.now() + 30_000
+      while (!(await stat(target).catch(() => undefined))) {
+        if (Date.now() >= deadline) throw new Error(`Session shell standby worker did not reach ${name}`)
+        await Bun.sleep(5)
+      }
+    }
+
+    try {
+      const initialized = await read(spawn("init"))
+      const sessionID = String(initialized.sessionID)
+      const waiter = spawn(
+        "route-after-owner-snapshot",
+        sessionID,
+        Identifier.ascending("message"),
+        "waiter",
+        "echo uncorrelated",
+      )
+      const waiterOutcome = read(waiter)
+      await waitFor("waiter.ready")
+      await writeFile(path.join(barrier, "release"), "release")
+      await Promise.race([
+        waitFor("waiter.snapshot"),
+        waiterOutcome.then((result) => {
+          throw new Error(`Session shell waiter settled before its owner snapshot: ${JSON.stringify(result)}`)
+        }),
+      ])
+      const standby = spawn("standby", sessionID, "-", "standby")
+      await waitFor("standby.ready")
+      const startedAt = Date.now()
+      await writeFile(path.join(barrier, "waiter.continue"), "continue")
+      const result = await waiterOutcome
+      const elapsed = Date.now() - startedAt
+      await writeFile(path.join(barrier, "standby.release"), "release")
+
+      expect({ result, settledWithinMilliseconds: elapsed < 10_000 }).toEqual({
+        result: {
+          status: 409,
+          errorName: "PublicSessionExecutionBusyError",
+        },
+        settledWithinMilliseconds: true,
+      })
+      expect(await read(standby)).toEqual({ result: "released", label: "standby" })
+    } finally {
+      for (const child of children) {
+        child.kill()
+        await child.exited
+      }
+      await removeManagedDirectoryTree(barrier)
+      await removeManagedDirectoryTree(runtime)
+    }
+  }, 60_000)
+
   test("a pre-admission hard exit closes the gated wrapper under the exact owner occurrence", async () => {
     await using project = await memoryProject()
     const effectFile = path.join(project.path, "gated-shell-hard-crash-effect.txt")

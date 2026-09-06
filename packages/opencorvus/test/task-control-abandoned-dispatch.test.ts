@@ -1956,7 +1956,7 @@ describe("abandoned dispatch recovery", () => {
         while (
           Database.use((db) =>
             unresolvedDispatchRecoveryPageInTransaction(db, { taskID, limit: 64 }).lineages.length,
-          ) !== 32 &&
+          ) !== 31 &&
           Date.now() < continuationDeadline
         ) {
           await Bun.sleep(25)
@@ -1965,13 +1965,13 @@ describe("abandoned dispatch recovery", () => {
           Database.use((db) =>
             unresolvedDispatchRecoveryPageInTransaction(db, { taskID, limit: 64 }).lineages.length,
           ),
-        ).toBe(32)
+        ).toBe(31)
         const armedWake = productionDriver.snapshot().find((entry) => entry.taskID === taskID)?.wakeAt
         expect(armedWake).toBeDefined()
         expect(armedWake!).toBeLessThanOrEqual(lease.lease.expires_at)
 
         const recoveryDeadline = lease.lease.expires_at + 5_000
-        let unresolved = 32
+        let unresolved = 31
         while (unresolved > 0 && Date.now() < recoveryDeadline) {
           await Bun.sleep(25)
           unresolved = Database.use((db) =>

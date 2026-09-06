@@ -44,7 +44,7 @@ export const generatedExpertSquadRevisions: Readonly<
   "deep-research": { version: "2026.09.02.1", contentDigest: "9e9b17ecf1d50407d0ba156b711d789b935234fcfa3e618ec962c16c61b0f316" },
   "digital-accessibility-assurance": { version: "2026.08.30.2", contentDigest: "712245ac520dbddafa723941c6bc5af504c559ff1c4e6c773f6866364a00926d" },
   "digital-forensics-incident-investigation": { version: "2026.08.30.2", contentDigest: "8d4ecb8b16e89935e9b224f08b79ed7c7ad3ba58a36c2373f255fa21e89da032" },
-  "dynamic": { version: "2026.08.30.3", contentDigest: "d900391cc772d370d805d2cc0744ed00afec3b313c8e840b0626bd14cbb8ea44" },
+  "dynamic": { version: "2026.09.05.1", contentDigest: "24db3907f8c98150448e7531c5e8d303d820e9cba5fcc3d83a36eadd4e5cc088" },
   "ecommerce-merchandising": { version: "2026.08.30.2", contentDigest: "3601103f301b23c3d12701c67632b80663718d4f9cee3d0a570bcc491f690ac3" },
   "education-program-design": { version: "2026.08.30.2", contentDigest: "acd488c744c0ee0739cd54897bbbf7d373369e12fc37e9f9e2a8e6670a761c46" },
   "emergency-management-continuity": { version: "2026.08.30.2", contentDigest: "7db28a1a9fa5fd1dd7c8be8c2b0c28de83eedf91146b36d10038dc832d8f4aa8" },

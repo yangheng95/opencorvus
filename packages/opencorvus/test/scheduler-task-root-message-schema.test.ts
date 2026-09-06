@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, spyOn, test } from "bun:test"
+import { afterAll, afterEach, beforeAll, describe, expect, spyOn, test } from "bun:test"
 import path from "node:path"
 import { Config } from "@/config/config"
 import { EngineTaskTable } from "@/engine/engine.sql"
@@ -50,6 +50,16 @@ import { MessageTable, PartTable, SessionControlRecordTable } from "@/session/se
 import { SessionWake } from "@/session/wake"
 import { Database, and, eq, sql } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+
+let recoveryProject: Awaited<ReturnType<typeof memoryProject>>
+
+beforeAll(async () => {
+  recoveryProject = await memoryProject("scheduler-task-root-recovery")
+})
+
+afterAll(async () => {
+  await recoveryProject?.[Symbol.asyncDispose]()
+})
 
 async function establishMissionTask(projectPath: string, title: string) {
   await Config.updateProjectPatch({
@@ -1099,7 +1109,7 @@ describe("scheduler Task-root Message protocol", () => {
           error: new Error("Wait for the current FIFO head"),
           visibleAt: futureAt,
         })
-        enqueue(
+        const behindFutureHead = enqueue(
           recipients[0]!.taskID,
           recipients[0]!.rootSessionID,
           `scheduler-behind-future-head-${Identifier.uuid4First8()}`,
@@ -1264,12 +1274,31 @@ describe("scheduler Task-root Message protocol", () => {
           leasedDueAt: futureAt + 60_001,
           outcomes: Array.from({ length: 65 }, () => ({ status: "delivered", attempt: 1, lastError: null })),
         })
+        deadLetterSchedulerDelivery({
+          inboxID: futureHead.inboxID,
+          ownerID: "scheduler-future-head-takeover",
+          error: new Error("Settle the simulated future FIFO head"),
+        })
+        const behindOwnerID = "scheduler-behind-future-head-owner"
+        const behindClaim = claimNextSchedulerDelivery({
+          actor: "task",
+          actorID: recipients[0]!.taskID,
+          ownerID: behindOwnerID,
+          leaseMilliseconds: 60_000,
+          now: futureAt + 1,
+        })
+        expect(behindClaim?.id).toBe(behindFutureHead.inboxID)
+        deadLetterSchedulerDelivery({
+          inboxID: behindFutureHead.inboxID,
+          ownerID: behindOwnerID,
+          error: new Error("Settle the simulated FIFO successor"),
+        })
       },
     })
   }, 120_000)
 
   test("resumes an errored scheduler wake only inside its enqueue-time Mission occurrence", async () => {
-    await using project = await memoryProject()
+    const project = recoveryProject
     const fixture = await Instance.provide({
       directory: project.path,
       init: InstanceBootstrap,

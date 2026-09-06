@@ -189,7 +189,7 @@ test("SessionLoop binds each accepted user message to its streaming execution oc
               }),
             ),
           )
-          expect(boundPayloads.map((payload) => payload.schema_version)).toEqual([2, 2, 2])
+          expect(boundPayloads.map((payload) => payload.schema_version)).toEqual([3, 3, 3])
           expect(boundPayloads.map((payload) => payload.context.caller)).toEqual([
             "conversation",
             "conversation",

@@ -186,6 +186,10 @@ export namespace SessionPromptOwner {
     }
   }
 
+  export function activeExecution(sessionID: string): ReturnType<typeof activeExecutionInTransaction> {
+    return Database.use((db) => activeExecutionInTransaction(db, sessionID))
+  }
+
   export function observation(authority: Authority): "exact_live" | "dead_or_reused" | "unknown_live" {
     return observeRuntimeProcessOccurrence({
       pid: authority.owner_pid,

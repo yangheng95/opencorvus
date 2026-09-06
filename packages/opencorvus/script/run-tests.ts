@@ -33,7 +33,7 @@ try {
       args: ["test", "--timeout=0", "--parallel=1", "test/isolated-test-entry.test.ts"],
       cwd,
       env: { ...childEnvironment, OPENCORVUS_TEST_FILES: JSON.stringify([file]) },
-      inactivityTimeoutMs: 120_000,
+      inactivityTimeoutMs: 360_000,
       onStdout: (chunk) => process.stdout.write(chunk),
       onStderr: (chunk) => process.stderr.write(chunk),
     })

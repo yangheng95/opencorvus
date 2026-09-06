@@ -16,12 +16,13 @@ describe("message source persistence", () => {
       directory: project.path,
       fn: async () => {
         const session = await Session.create({ kind: "root", title: "Source persistence contract" })
+        const created = Date.now()
         const message = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: session.id,
           role: "assistant",
           author: "build",
-          time: { created: Date.now(), completed: Date.now() },
+          time: { created },
           parentID: Identifier.ascending("message"),
           modelID: "source-test",
           providerID: "test",
@@ -29,7 +30,6 @@ describe("message source persistence", () => {
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          finish: "stop",
         })
         const sources = [
           urlSource({ url: "https://example.com/source#fragment", title: "Web source", provider: "exa" }),
@@ -42,6 +42,7 @@ describe("message source persistence", () => {
         ]
         const first = await persistMessageSources({ sessionID: session.id, messageID: message.id, sources })
         const second = await persistMessageSources({ sessionID: session.id, messageID: message.id, sources })
+        await Session.updateMessage({ ...message, time: { created, completed: created + 1 }, finish: "stop" })
         const persisted = (await MessageStore.parts(message.id)).filter((part) => part.type.startsWith("source-"))
         expect({
           createdTypes: first.map((part) => part.type),

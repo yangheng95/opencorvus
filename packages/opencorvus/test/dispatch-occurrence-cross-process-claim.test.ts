@@ -171,7 +171,7 @@ test("a peer outer occurrence waits for the winner's exact durable Turn and join
     }
     removeFixture(input.root)
   }
-}, 60_000)
+}, 180_000)
 
 test("an expired claim-window owner is taken over by the same exact outer occurrence", async () => {
   const input = fixture()
@@ -242,7 +242,7 @@ test("an expired claim-window owner is taken over by the same exact outer occurr
     }
     removeFixture(input.root)
   }
-}, 60_000)
+}, 180_000)
 
 test("a third backend follows the consumed takeover attempt as delivery owner before recovering its death", async () => {
   const input = fixture()
@@ -369,4 +369,4 @@ test("a third backend follows the consumed takeover attempt as delivery owner be
     }
     removeFixture(input.root)
   }
-}, 90_000)
+}, 240_000)

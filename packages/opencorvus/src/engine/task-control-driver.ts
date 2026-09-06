@@ -504,7 +504,7 @@ export class TaskControlDriver {
           entry.inputRevision = this.readInputRevision(taskID, entry)
           result = await this.scan(taskID, { pass, ...(runWithActivationOwner ? { runWithActivationOwner } : {}) })
         } catch (error) {
-          wakeAt = this.penalize(entry)
+          wakeAt = minDefined(wakeAt, this.penalize(entry))
           log.error("Task-control scan faulted; re-armed under backoff", {
             taskID,
             pass,
@@ -526,7 +526,7 @@ export class TaskControlDriver {
         wakeAt = minDefined(wakeAt, result.wakeAt)
         if (result.noProgress) {
           if (pass + 1 < this.maxPasses && this.inputChangedAfterScan(taskID, entry)) continue
-          wakeAt = this.penalize(entry)
+          wakeAt = minDefined(wakeAt, this.penalize(entry, result.wakeAt))
           log.warn("Task-control scan made no reducible progress; paced under backoff", {
             taskID,
             pass,
@@ -539,7 +539,7 @@ export class TaskControlDriver {
           // A fixpoint that will not settle is a non-decreasing measure, which
           // is the same liveness fault as a scan that cannot reduce. Pacing it
           // at the minimum delay would run `maxPasses` full scans every 25ms.
-          wakeAt = this.penalize(entry)
+          wakeAt = minDefined(wakeAt, this.penalize(entry, result.wakeAt))
           log.warn("Task-control fixpoint did not settle; paced under backoff", {
             taskID,
             passes: this.maxPasses,
@@ -558,12 +558,21 @@ export class TaskControlDriver {
   }
 
   /** Count one liveness fault against this Task and return the instant it may
-   * next be scanned. */
-  private penalize(entry: Entry): number {
+   * next be scanned. A reducer-proven time transition remains an independent
+   * liveness obligation: fault pacing may not postpone a lease expiry or
+   * other instant at which the durable projection can change. */
+  private penalize(entry: Entry, semanticWakeAt?: number): number {
     entry.failures += 1
-    entry.lastFaultAt = this.now()
+    const now = this.now()
+    entry.lastFaultAt = now
     const exponent = Math.min(entry.failures - 1, 30)
-    entry.retryNotBefore = this.now() + Math.min(this.initialBackoff * 2 ** exponent, this.maximumBackoff)
+    const backoffWakeAt = now + Math.min(this.initialBackoff * 2 ** exponent, this.maximumBackoff)
+    // A future transition is independent of the non-reducing state and must
+    // still be observed on time. A transition at or before this scan is the
+    // readiness that just failed to reduce, so letting it bypass backoff would
+    // turn the same unresolved fact into a hot loop.
+    entry.retryNotBefore =
+      semanticWakeAt !== undefined && semanticWakeAt > now ? Math.min(backoffWakeAt, semanticWakeAt) : backoffWakeAt
     return entry.retryNotBefore
   }
 

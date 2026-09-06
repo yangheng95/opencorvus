@@ -1,11 +1,14 @@
 import { Config } from "@/config/config"
+import { EngineTaskRootIngressTable } from "@/engine/engine.sql"
 import { joinProcessLivenessLease } from "@/engine/process-liveness"
+import { acquireTaskRootIngressLease } from "@/engine/task-root-fact-store"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Identifier } from "@/id/id"
 import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
 import { createOrchestratorTools, OrchestratorToolsTestHooks } from "@/orchestrator/tools"
+import { currentOrchestratorControlMessage } from "@/orchestrator/agent"
 import { Provider } from "@/provider/provider"
 import { Instance } from "@/project/instance"
 import { sendSchedulerMessage } from "@/protocol/scheduler-message"
@@ -14,7 +17,7 @@ import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deplo
 import { Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
 import { SessionProcessor } from "@/session/processor"
-import { Database } from "@/storage/db"
+import { Database, eq } from "@/storage/db"
 import fs from "node:fs"
 import path from "node:path"
 import { persistEstablishedTask } from "../fixture/engine-task"
@@ -31,7 +34,8 @@ declareNativeTaskProcessDeployment()
 
 const TASK_ID = Identifier.deterministic("task", "cross-process-workflow-node-admission")
 const ROOT_SESSION_ID = Identifier.deterministic("session", "cross-process-workflow-node-root")
-const USER_MESSAGE_ID = Identifier.deterministic("message", "cross-process-workflow-node-user")
+const ORCHESTRATOR_SESSION_ID = Identifier.deterministic("session", "cross-process-workflow-node-orchestrator")
+const ASSISTANT_MESSAGE_ID = Identifier.deterministic("message", "cross-process-workflow-node-assistant")
 const config = Config.Info.parse({
   model: "workflow-node-test-provider/workflow-node-test-model",
   prompt_profile: { active: "base" },
@@ -81,7 +85,7 @@ SessionProcessor.create = ((input: Parameters<typeof SessionProcessor.create>[0]
 
 function occurrenceIDs(suffix: "winner" | "peer") {
   return {
-    assistantMessageID: Identifier.deterministic("message", `workflow-node-admission-${suffix}`),
+    assistantMessageID: ASSISTANT_MESSAGE_ID,
     toolPartID: Identifier.deterministic("part", `workflow-node-admission-${suffix}`),
     toolCallID: Identifier.deterministic("call", `workflow-node-admission-${suffix}`),
   }
@@ -148,7 +152,7 @@ async function run() {
         const root = Session.prepareRootNext({
           id: ROOT_SESSION_ID,
           kind: "root",
-          directory: projectPath,
+          directory: Instance.directory,
           title: "Cross-process workflow node admission",
           metadata: {
             configOverlay: {
@@ -173,47 +177,97 @@ async function run() {
             mode: "native",
             taskID: TASK_ID,
             projectID: Instance.project.id,
-            rootDirectory: projectPath,
+            rootDirectory: Instance.directory,
             packageRevisionSHA256: scheduler.packageRevision.packageDigest,
             timeCreated: now,
           }),
         })
+        const ingress = Database.use((db) =>
+          db
+            .select()
+            .from(EngineTaskRootIngressTable)
+            .where(eq(EngineTaskRootIngressTable.task_id, TASK_ID))
+            .orderBy(EngineTaskRootIngressTable.sequence, EngineTaskRootIngressTable.id)
+            .get(),
+        )
+        if (!ingress) throw new Error(`Cross-process workflow-node Task ${TASK_ID} has no creation ingress`)
+        const activation = acquireTaskRootIngressLease({
+          ingressID: ingress.id,
+          ownerOccurrenceID: `workflow-node-seed:${TASK_ID}`,
+          now: now + 1,
+          leaseMilliseconds: 120_000,
+          assertControlOwnerInTransaction: () => undefined,
+        })
+        if (!activation.acquired) {
+          throw new Error(`Cross-process workflow-node Task ${TASK_ID} could not acquire its ingress`)
+        }
+        const orchestrator = await Session.createNext({
+          id: ORCHESTRATOR_SESSION_ID,
+          kind: "orchestrator",
+          parentID: root.id,
+          directory: Instance.directory,
+          title: "Cross-process workflow node orchestrator",
+        })
+        const control = currentOrchestratorControlMessage(
+          { taskCreation: { taskID: TASK_ID } },
+          TASK_ID,
+          ingress.id,
+          ingress.id,
+        )
+        if (!control) throw new Error(`Cross-process workflow-node Task ${TASK_ID} has no control Message`)
         await Session.updateMessage({
-          id: USER_MESSAGE_ID,
-          sessionID: root.id,
+          id: control.messageID,
+          sessionID: orchestrator.id,
           role: "user",
-          author: "user",
+          author: "orchestrator",
           agent: "orchestrator",
           model: { providerID: "test", modelID: "test-model" },
+          extra: control.extra,
           time: { created: now + 1 },
+        })
+        await Session.updatePart({
+          id: control.partID,
+          sessionID: orchestrator.id,
+          messageID: control.messageID,
+          type: "text",
+          text: control.text,
+          kind: "control",
+          source: "system",
+        })
+        await Session.updateMessage({
+          id: ASSISTANT_MESSAGE_ID,
+          parentID: control.messageID,
+          acceptedInputMessageIDs: [control.messageID],
+          sessionID: orchestrator.id,
+          role: "assistant",
+          author: "orchestrator",
+          agent: "orchestrator",
+          providerID: "test",
+          modelID: "test-model",
+          path: { cwd: projectPath, root: projectPath },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          activationID: activation.activationID,
+          time: { created: now + 2 },
         })
         for (const [index, suffix] of (["winner", "peer"] as const).entries()) {
           const ids = occurrenceIDs(suffix)
-          await Session.updateMessage({
-            id: ids.assistantMessageID,
-            parentID: USER_MESSAGE_ID,
-            sessionID: root.id,
-            role: "assistant",
-            author: "orchestrator",
-            agent: "orchestrator",
-            providerID: "test",
-            modelID: "test-model",
-            path: { cwd: projectPath, root: projectPath },
-            cost: 0,
-            tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-            time: { created: now + 2 + index * 2 },
-          })
           await Session.updatePart({
             id: ids.toolPartID,
-            sessionID: root.id,
+            sessionID: orchestrator.id,
             messageID: ids.assistantMessageID,
             type: "tool",
             callID: ids.toolCallID,
             tool: "dispatch_agent",
-            state: { status: "running", input, time: { start: now + 3 + index * 2 } },
+            state: { status: "running", input, time: { start: now + 3 + index } },
           })
         }
-        return { mode, taskID: TASK_ID, rootSessionID: ROOT_SESSION_ID }
+        return {
+          mode,
+          taskID: TASK_ID,
+          rootSessionID: ROOT_SESSION_ID,
+          orchestratorSessionID: ORCHESTRATOR_SESSION_ID,
+        }
       }
 
       const suffix = mode === "execute-blocked" ? "winner" : "peer"
@@ -236,7 +290,7 @@ async function run() {
             : undefined
         const surface = createOrchestratorTools({
           taskID: TASK_ID,
-          agentSessionID: ROOT_SESSION_ID,
+          agentSessionID: ORCHESTRATOR_SESSION_ID,
           sendSchedulerMessage,
           dispatchAgents: [worker],
         })
@@ -247,21 +301,24 @@ async function run() {
         const outcome = (await tool.execute(input, {
           toolCallId: ids.toolCallID,
           opencorvus: {
-            sessionID: ROOT_SESSION_ID,
+            sessionID: ORCHESTRATOR_SESSION_ID,
             messageID: ids.assistantMessageID,
             toolCallID: ids.toolCallID,
             toolPartID: ids.toolPartID,
             visibleToolName: "dispatch_agent",
           },
         })) as Record<string, unknown>
-        const existing = await MessageStore.get({ sessionID: ROOT_SESSION_ID, messageID: ids.assistantMessageID })
+        const existing = await MessageStore.get({
+          sessionID: ORCHESTRATOR_SESSION_ID,
+          messageID: ids.assistantMessageID,
+        })
         const part = existing.parts.find((candidate) => candidate.id === ids.toolPartID)
         if (!part || part.type !== "tool" || part.state.status !== "running") {
           throw new Error(`Production dispatch_agent outer occurrence is ${part?.type === "tool" ? part.state.status : "missing"}`)
         }
         await Session.updatePart({
           id: ids.toolPartID,
-          sessionID: ROOT_SESSION_ID,
+          sessionID: ORCHESTRATOR_SESSION_ID,
           messageID: ids.assistantMessageID,
           type: "tool",
           callID: ids.toolCallID,

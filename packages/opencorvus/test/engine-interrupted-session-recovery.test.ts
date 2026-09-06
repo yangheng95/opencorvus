@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
+import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { EngineControlActivationLeaseTable, EngineTaskTable } from "@/engine/engine.sql"
 import { findTask } from "@/engine/store"
@@ -24,11 +25,13 @@ import { Database, eq } from "@/storage/db"
 import { publishTaskAgentCancellationStatusesAfterSettlement } from "@/engine/task-agent-lifecycle"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { Identifier } from "@/id/id"
-import { controlTextSHA256 } from "@/orchestrator/dispatch-turn-projection"
+import { controlTextSHA256, taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
+import { selectedWorkflowBinding } from "@/engine/workflow-binding"
 import { listTaskConversationAgentSessions } from "@/orchestrator/task-event"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 
 const packageRevision = {
   scope: "built_in" as const,
@@ -280,6 +283,7 @@ describe("interrupted prepared Worker Turn recovery", () => {
           kind: "root",
           directory: Instance.directory,
           title: "Interrupted recovery root",
+          metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
         })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
@@ -325,18 +329,41 @@ describe("interrupted prepared Worker Turn recovery", () => {
           type: "text",
           text: "Execute the prepared recovery turn",
         })
+        const identity = {
+          agentID: "recovery-worker",
+          baseRole: "delegated-worker" as const,
+          sessionKind: "delegated-worker" as const,
+          dispatchAdapterID: "delegated_worker",
+          runtimeTemplateABIVersion: 1,
+          dispatchAdapterABIVersion: 1,
+          projectionHash: "b".repeat(64),
+        }
+        const workflowBinding = selectedWorkflowBinding({
+          projection: { packageRevision, virtualWorkflows: {} },
+          workflowID: null,
+        })
+        const dispatchID = Identifier.ascending("artifact")
+        recordTestDispatchLineage({
+          origin: createDispatchLineageOrigin({
+            dispatchID,
+            taskID,
+            orchestratorSessionID: root.id,
+            orchestratorMessageID: Identifier.ascending("message"),
+            toolPartID: Identifier.ascending("part"),
+            toolCallID: Identifier.ascending("call"),
+            targetAgentID: identity.agentID,
+            projectedWorkerIdentity: identity,
+            workScope: { kind: "task" },
+            workflowBinding,
+            workflowNodeID: null,
+            adapterInput: { reason: "Recover the exact prepared Worker Turn" },
+          }),
+          childSessionID: worker.id,
+        })
         const descriptor = WorkerTurnDescriptor.create({
           sessionID: worker.id,
           payload: {
-            identity: {
-              agentID: "recovery-worker",
-              baseRole: "delegated-worker",
-              sessionKind: "delegated-worker",
-              dispatchAdapterID: "delegated_worker",
-              runtimeTemplateABIVersion: 1,
-              dispatchAdapterABIVersion: 1,
-              projectionHash: "b".repeat(64),
-            },
+            identity,
             expertSquadID: packageRevision.id,
             packageRevision,
             model: { selection: "explicit", providerID: "test", modelID: "recovery-model" },
@@ -347,6 +374,21 @@ describe("interrupted prepared Worker Turn recovery", () => {
             messageAuthority: {
               user_message_id: message.id,
               control_text_parts: [{ part_id: part.id, text_sha256: controlTextSHA256(part.text) }],
+            },
+            dispatchTurn: {
+              kind: "initial",
+              current_dispatch_id: dispatchID,
+              workflow_binding: workflowBinding,
+              workflow_node_id: null,
+              workflow_occurrence_id: dispatchID,
+              delivery_slice_revision_ids: [],
+              evidence_locators: [],
+              task_authority: {
+                task_id: taskID,
+                root_session_id: root.id,
+                request_sha256: taskRequestSHA256(findTask(taskID)!.request),
+                initial_control_text_parts: [],
+              },
             },
           },
         })
@@ -393,6 +435,24 @@ describe("interrupted prepared Worker Turn recovery", () => {
           type: "text",
           text: "Execute the continuation occurrence",
         })
+        const continuationDispatchID = Identifier.ascending("artifact")
+        recordTestDispatchLineage({
+          origin: createDispatchLineageOrigin({
+            dispatchID: continuationDispatchID,
+            taskID,
+            orchestratorSessionID: root.id,
+            orchestratorMessageID: Identifier.ascending("message"),
+            toolPartID: Identifier.ascending("part"),
+            toolCallID: Identifier.ascending("call"),
+            targetAgentID: identity.agentID,
+            projectedWorkerIdentity: identity,
+            workScope: { kind: "task" },
+            workflowBinding,
+            workflowNodeID: null,
+            adapterInput: { reason: "Recover the exact continuation Worker Turn" },
+          }),
+          childSessionID: worker.id,
+        })
         WorkerTurnDescriptor.create({
           sessionID: worker.id,
           payload: {
@@ -402,6 +462,11 @@ describe("interrupted prepared Worker Turn recovery", () => {
               control_text_parts: [
                 { part_id: continuationPart.id, text_sha256: controlTextSHA256(continuationPart.text) },
               ],
+            },
+            dispatchTurn: {
+              ...descriptor.payload.dispatchTurn!,
+              current_dispatch_id: continuationDispatchID,
+              workflow_occurrence_id: continuationDispatchID,
             },
           },
         })

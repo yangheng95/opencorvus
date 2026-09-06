@@ -597,6 +597,7 @@ describe("built-in interface review workflow authority", () => {
           "artifact_search",
           "artifact_select",
           "artifact_snapshot",
+          "capability_search",
           "publish_interactive_artifact",
           "bash",
           "glob",

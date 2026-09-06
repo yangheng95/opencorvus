@@ -25,6 +25,7 @@ import { SessionPrompt } from "../../session/prompt"
 import { SessionLoop } from "../../session/loop"
 import { SessionShell } from "../../session/shell-exec"
 import { SessionPromptState } from "../../session/prompt/state"
+import { SessionPromptOwner } from "../../session/prompt/owner"
 import { Instance } from "@/project/instance"
 import { provideInitializedProjectExecution } from "@/project/independent-project-owner"
 import { clearRewindCursorForSession } from "@/engine/rewind"
@@ -259,10 +260,25 @@ const PublicSessionPromptIdentityConflictError = NamedError.create(
   }),
 )
 
+const PublicSessionExecutionBusyError = NamedError.create(
+  "PublicSessionExecutionBusyError",
+  z.object({
+    sessionID: z.string(),
+    messageID: z.string(),
+    message: z.string(),
+  }),
+)
+
 const publicSessionExecutionOperations = new Map<
   string,
   { fingerprint: string; operation: Promise<Message.WithParts> }
 >()
+
+const PUBLIC_SESSION_CLAIM_CONVERGENCE_MILLISECONDS = 5_000
+
+export const PublicSessionExecutionTestHooks: {
+  afterInitialOwnerRead?: (input: { sessionID: string; messageID: string }) => void | Promise<void>
+} = {}
 
 function publicSessionExecutionFingerprint(body: unknown): string {
   return createHash("sha256").update(JSON.stringify(body)).digest("hex")
@@ -315,6 +331,8 @@ async function executePublicSessionExecution(input: {
     return active.operation
   }
   const operation = (async () => {
+    const ownerBeforeExecution = SessionPromptOwner.current(sessionID)
+    await PublicSessionExecutionTestHooks.afterInitialOwnerRead?.({ sessionID, messageID })
     const existing = await MessageStore.get({ sessionID, messageID }).catch((error) => {
       if (NotFoundError.isInstance(error as Error)) return undefined
       throw error
@@ -323,6 +341,39 @@ async function executePublicSessionExecution(input: {
     try {
       return await input.execute()
     } catch (error) {
+      if (error instanceof Session.BusyError) {
+        if (!ownerBeforeExecution) {
+          const peerOwner = SessionPromptOwner.current(sessionID)
+          if (peerOwner) {
+            const deadline = Date.now() + PUBLIC_SESSION_CLAIM_CONVERGENCE_MILLISECONDS
+            while (true) {
+              const claimed = await MessageStore.get({ sessionID, messageID }).catch((cause) => {
+                if (NotFoundError.isInstance(cause as Error)) return undefined
+                throw cause
+              })
+              if (claimed) return convergeExisting(claimed)
+              const current = SessionPromptOwner.current(sessionID)
+              if (
+                !current ||
+                current.generation !== peerOwner.generation ||
+                SessionPromptOwner.observation(current) === "dead_or_reused"
+              ) {
+                break
+              }
+              const active = SessionPromptOwner.activeExecution(sessionID)
+              if (active) break
+              const remaining = deadline - Date.now()
+              if (remaining <= 0) break
+              await Bun.sleep(Math.min(25, remaining))
+            }
+          }
+        }
+        throw new PublicSessionExecutionBusyError({
+          sessionID,
+          messageID,
+          message: `Session ${sessionID} is busy with another execution`,
+        })
+      }
       if (!(error instanceof Session.MessageOccurrenceClaimConflictError)) throw error
       if (error.existingSessionID !== sessionID) {
         throw new PublicSessionPromptIdentityConflictError({
@@ -1991,7 +2042,8 @@ export const SessionRoutes = lazy(() =>
           },
           ...errors(400, 404),
           409: namedErrorResponse(
-            "Message identity is already bound to another public Session prompt",
+            "Session execution is busy, or the message identity is already bound to another public Session prompt",
+            "PublicSessionExecutionBusyError",
             "PublicSessionPromptIdentityConflictError",
           ),
           503: AuthReadUnavailableResponse,
@@ -2038,6 +2090,7 @@ export const SessionRoutes = lazy(() =>
           409: namedErrorResponse(
             "Mission authority conflict, or the message identity is already bound to another public Session execution",
             "MissionSessionAuthorityError",
+            "PublicSessionExecutionBusyError",
             "PublicSessionPromptIdentityConflictError",
           ),
         },
@@ -2097,6 +2150,7 @@ export const SessionRoutes = lazy(() =>
           409: namedErrorResponse(
             "Mission authority conflict, or the message identity is already bound to another public Session execution",
             "MissionSessionAuthorityError",
+            "PublicSessionExecutionBusyError",
             "PublicSessionPromptIdentityConflictError",
           ),
         },

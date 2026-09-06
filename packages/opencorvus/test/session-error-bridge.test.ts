@@ -4,6 +4,8 @@ import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { Bus } from "@/bus"
 import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
+import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
+import { expertSquadPackageRevisionBinding } from "@/engine/expert-squad-package-revision-binding"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
@@ -17,10 +19,12 @@ import { ProtocolStore } from "@/protocol/store"
 import { Session } from "@/session"
 import { SessionEvents } from "@/session/events"
 import { Message } from "@/session/message"
-import { controlTextSHA256 } from "@/orchestrator/dispatch-turn-projection"
+import { controlTextSHA256, taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
 import { sessionLifecycleOrderKey } from "@/session/status"
 import { publishSessionStatus } from "@/session/status-publication"
+import { EngineService } from "@/task-api"
 import { Worktree } from "@/worktree"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 const packageRevision = {
@@ -210,15 +214,21 @@ test("persists one projected worker error from its managed worktree with exact r
         })
         projectID = Instance.project.id
         taskID = Identifier.ascending("task")
-        const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Managed worker error root" })
+        const root = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Managed worker error root",
+          metadata: { configOverlay: { prompt_profile: { active: resolvedPackageRevision.id } } },
+        })
         rootSessionID = root.id
         const now = Date.now()
+        const taskRequest = "Persist one exact worktree provider error"
         persistTask({
           taskID,
           rootSession: root,
           now,
           title: "Managed worker error",
-          request: "Persist one exact worktree provider error",
+          request: taskRequest,
           productPillar: "code",
           source: "test",
           priority: "normal",
@@ -276,6 +286,28 @@ test("persists one projected worker error from its managed worktree with exact r
             },
           ],
         })
+        const dispatchID = Identifier.ascending("artifact")
+        const workflowBinding = {
+          kind: "direct" as const,
+          package_revision: expertSquadPackageRevisionBinding(resolvedPackageRevision),
+        }
+        recordTestDispatchLineage({
+          origin: createDispatchLineageOrigin({
+            dispatchID,
+            taskID,
+            orchestratorSessionID: root.id,
+            orchestratorMessageID: Identifier.ascending("message"),
+            toolPartID: Identifier.ascending("part"),
+            toolCallID: Identifier.ascending("call"),
+            targetAgentID: projection.workerCapability.identity.agentID,
+            projectedWorkerIdentity: projection.workerCapability.identity,
+            workScope: { kind: "task" },
+            workflowBinding,
+            workflowNodeID: null,
+            adapterInput: { reason: controlText },
+          }),
+          childSessionID: worker.id,
+        })
         WorkerTurnDescriptor.create({
           sessionID: worker.id,
           payload: {
@@ -290,6 +322,21 @@ test("persists one projected worker error from its managed worktree with exact r
             messageAuthority: {
               user_message_id: inputMessageID,
               control_text_parts: [{ part_id: inputPartID, text_sha256: controlTextSHA256(controlText) }],
+            },
+            dispatchTurn: {
+              kind: "initial",
+              current_dispatch_id: dispatchID,
+              workflow_binding: workflowBinding,
+              workflow_node_id: null,
+              workflow_occurrence_id: dispatchID,
+              delivery_slice_revision_ids: [],
+              evidence_locators: [],
+              task_authority: {
+                task_id: taskID,
+                root_session_id: root.id,
+                request_sha256: taskRequestSHA256(taskRequest),
+                initial_control_text_parts: [],
+              },
             },
           },
         })
@@ -330,6 +377,7 @@ test("persists one projected worker error from its managed worktree with exact r
       await Instance.provide({
         directory: project.path,
         fn: async () => {
+          await EngineService.deleteSession(workerSessionID, { projectID })
           await Worktree.releaseManagedWorktreeSessionOwner({
             projectID,
             primaryWorktreeDir: Instance.project.worktree,

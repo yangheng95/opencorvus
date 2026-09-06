@@ -129,24 +129,7 @@ async function createTask(title: string) {
     tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
     finish: "stop",
   })
-  WorkerTurnDescriptor.create({
-    sessionID: child.id,
-    payload: {
-      identity: projectedArchitect.identity,
-      expertSquadID: packageRevision.id,
-      packageRevision,
-      model: { selection: "explicit", providerID: "test", modelID: "test-model" },
-      prompt: { systemMode: "complete", systemSha256: "c".repeat(64) },
-      tools: { enabled: [], stageOwned: [], stageMaterializers: {} },
-      output: { format: "text", resultMode: "reply" },
-      lifecycle: { taskID, workScope: { kind: "task" } },
-      messageAuthority: {
-        user_message_id: parent.id,
-        control_text_parts: [{ part_id: controlPart.id, text_sha256: taskRequestSHA256(controlPart.text) }],
-      },
-    },
-  })
-  return { taskID, root, child, final }
+  return { taskID, root, child, parent, controlPart, final }
 }
 
 function requirementSetLocator(taskID: string) {
@@ -231,13 +214,14 @@ function seedProjection(input: {
   )
 }
 
-function recordArchitectLineage(input: { taskID: string; rootSessionID: string; childSessionID: string }) {
+function recordArchitectLineage(input: { fixture: Awaited<ReturnType<typeof createTask>> }) {
+  const { fixture } = input
   const dispatchID = Identifier.ascending("artifact")
   recordTestDispatchLineage({
     origin: createDispatchLineageOrigin({
       dispatchID,
-      taskID: input.taskID,
-      orchestratorSessionID: input.rootSessionID,
+      taskID: fixture.taskID,
+      orchestratorSessionID: fixture.root.id,
       orchestratorMessageID: Identifier.ascending("message"),
       toolPartID: Identifier.ascending("part"),
       toolCallID: Identifier.ascending("call"),
@@ -248,7 +232,41 @@ function recordArchitectLineage(input: { taskID: string; rootSessionID: string; 
       workflowNodeID: "architecture",
       adapterInput: { reason: "Create the accepted architecture" },
     }),
-    childSessionID: input.childSessionID,
+    childSessionID: fixture.child.id,
+  })
+  WorkerTurnDescriptor.create({
+    sessionID: fixture.child.id,
+    payload: {
+      identity: projectedArchitect.identity,
+      expertSquadID: packageRevision.id,
+      packageRevision,
+      model: { selection: "explicit", providerID: "test", modelID: "test-model" },
+      prompt: { systemMode: "complete", systemSha256: "c".repeat(64) },
+      tools: { enabled: [], stageOwned: [], stageMaterializers: {} },
+      output: { format: "text", resultMode: "reply" },
+      lifecycle: { taskID: fixture.taskID, workScope: { kind: "task" } },
+      messageAuthority: {
+        user_message_id: fixture.parent.id,
+        control_text_parts: [
+          { part_id: fixture.controlPart.id, text_sha256: taskRequestSHA256(fixture.controlPart.text) },
+        ],
+      },
+      dispatchTurn: {
+        kind: "initial",
+        current_dispatch_id: dispatchID,
+        workflow_binding: workflowBinding,
+        workflow_node_id: "architecture",
+        workflow_occurrence_id: dispatchID,
+        delivery_slice_revision_ids: [],
+        evidence_locators: [],
+        task_authority: {
+          task_id: fixture.taskID,
+          root_session_id: fixture.root.id,
+          request_sha256: taskRequestSHA256(requireTask(fixture.taskID).request),
+          initial_control_text_parts: [],
+        },
+      },
+    },
   })
   return dispatchID
 }
@@ -258,11 +276,7 @@ async function dispatchArchitect(input: {
   result: ReturnType<typeof emptyArchitectResult>
   beforeReturn?: () => void
 }) {
-  const dispatchID = recordArchitectLineage({
-    taskID: input.fixture.taskID,
-    rootSessionID: input.fixture.root.id,
-    childSessionID: input.fixture.child.id,
-  })
+  const dispatchID = recordArchitectLineage({ fixture: input.fixture })
   const dispatcher = createArchitectStageDispatcher({
     taskID: input.fixture.taskID,
     parentSessionID: input.fixture.root.id,

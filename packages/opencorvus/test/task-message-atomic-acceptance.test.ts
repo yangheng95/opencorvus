@@ -4,6 +4,7 @@ import { BusPublicationOutboxTable } from "../src/bus/bus.sql"
 import { EngineTaskRootIngressTable, EngineTaskTable } from "../src/engine/engine.sql"
 import { rewindTask, taskRewindCursor } from "../src/engine/rewind"
 import { taskLifecycleProjection } from "../src/engine/task-lifecycle"
+import { taskRootIngressDispositionInTransaction } from "../src/engine/task-root-ingress-disposition"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { Config } from "../src/config/config"
@@ -85,6 +86,26 @@ describe("Task operator message acceptance is one transaction", () => {
           })
         })
         await Database.awaitEffectIdle(5_000)
+        const initialIngresses = Database.use((db) =>
+          db
+            .select({ id: EngineTaskRootIngressTable.id })
+            .from(EngineTaskRootIngressTable)
+            .where(eq(EngineTaskRootIngressTable.task_id, taskID))
+            .all(),
+        )
+        const initialIngressDeadline = Date.now() + 5_000
+        while (
+          !Database.use((db) =>
+            initialIngresses.every((ingress) =>
+              Boolean(taskRootIngressDispositionInTransaction(db, { taskID, ingressID: ingress.id })),
+            ),
+          )
+        ) {
+          if (Date.now() >= initialIngressDeadline) {
+            throw new Error(`Timed out waiting for Task ${taskID} initial ingress disposition`)
+          }
+          await Bun.sleep(5)
+        }
 
         const footprint = async () => {
           const currentTask = Database.use((db) =>

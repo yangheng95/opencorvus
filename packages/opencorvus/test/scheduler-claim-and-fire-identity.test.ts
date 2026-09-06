@@ -1,4 +1,4 @@
-import { afterAll, describe, expect, spyOn, test } from "bun:test"
+import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { randomUUID } from "node:crypto"
 import { acquireControlLease, currentControlLeaseInTransaction } from "../src/engine/control-lease"
 import {
@@ -54,7 +54,7 @@ import {
 } from "@/storage/mysql-transfer"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 
-afterAll(resetMemoryDatabase)
+afterEach(resetMemoryDatabase)
 
 async function openMissionOccurrence(
   mission: Awaited<ReturnType<typeof ensureMissionSession>>,

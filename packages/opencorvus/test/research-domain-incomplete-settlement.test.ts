@@ -141,6 +141,23 @@ async function createTask(mode: Mode) {
   })
   const dispatchID = Identifier.ascending("artifact")
   const binding = workflow(mode)
+  recordTestDispatchLineage({
+    origin: createDispatchLineageOrigin({
+      dispatchID,
+      taskID,
+      orchestratorSessionID: root.id,
+      orchestratorMessageID: Identifier.ascending("message"),
+      toolPartID: Identifier.ascending("part"),
+      toolCallID: Identifier.ascending("call"),
+      targetAgentID: agentID(mode),
+      projectedWorkerIdentity: projectedIdentity(mode),
+      workScope: { kind: "task" },
+      workflowBinding: binding,
+      workflowNodeID: "research",
+      adapterInput: { reason: "Produce research evidence" },
+    }),
+    childSessionID: child.id,
+  })
   WorkerTurnDescriptor.create({
     sessionID: child.id,
     payload: {
@@ -172,23 +189,6 @@ async function createTask(mode: Mode) {
         },
       },
     },
-  })
-  recordTestDispatchLineage({
-    origin: createDispatchLineageOrigin({
-      dispatchID,
-      taskID,
-      orchestratorSessionID: root.id,
-      orchestratorMessageID: Identifier.ascending("message"),
-      toolPartID: Identifier.ascending("part"),
-      toolCallID: Identifier.ascending("call"),
-      targetAgentID: agentID(mode),
-      projectedWorkerIdentity: projectedIdentity(mode),
-      workScope: { kind: "task" },
-      workflowBinding: binding,
-      workflowNodeID: "research",
-      adapterInput: { reason: "Produce research evidence" },
-    }),
-    childSessionID: child.id,
   })
   return { taskID, root, child, final, dispatchID, binding }
 }

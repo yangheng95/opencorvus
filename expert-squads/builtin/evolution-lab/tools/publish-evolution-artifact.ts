@@ -556,7 +556,9 @@ export default tool({
       const recollected = await context.host.taskRuns.collect({
         taskID: bundle.task.id,
         terminalOccurrence: bundle.terminal_occurrence,
-        selectedMessageLocators: bundle.messages.map((message) => message.locator),
+        selectedMessageLocators: bundle.messages
+          .filter((message) => message.body !== undefined)
+          .map((message) => message.locator),
       })
       if (canonicalTaskRunEvidenceJSON(recollected) !== text)
         throw new EvolutionArtifactIntegrityError(

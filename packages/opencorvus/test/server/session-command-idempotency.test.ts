@@ -4,6 +4,7 @@ import path from "node:path"
 import { readFile } from "node:fs/promises"
 import { Config } from "../../src/config/config"
 import { Identifier } from "../../src/id/id"
+import { ComputerMCPBuiltin } from "../../src/mcp/computer/builtin"
 import { Instance } from "../../src/project/instance"
 import { Provider, type Provider as ProviderType } from "../../src/provider/provider"
 import { serverErrorResponse } from "../../src/server/error-handler"
@@ -49,6 +50,9 @@ describe("public Session command identity", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
+        await Config.updateProjectPatch({
+          mcp: { [ComputerMCPBuiltin.ServerName]: { ...ComputerMCPBuiltin.localConfig(), enabled: false } },
+        })
         const effectFile = path.join(project.path, "command-substitution-effect.txt").replaceAll("\\", "/")
         await Config.updateProjectPatch({
           command: {
@@ -147,6 +151,9 @@ describe("public Session command identity", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
+        await Config.updateProjectPatch({
+          mcp: { [ComputerMCPBuiltin.ServerName]: { ...ComputerMCPBuiltin.localConfig(), enabled: false } },
+        })
         const session = await Session.create({ kind: "assistant", title: "Init replay identity" })
         const messageID = Identifier.ascending("message")
         let physicalTurns = 0

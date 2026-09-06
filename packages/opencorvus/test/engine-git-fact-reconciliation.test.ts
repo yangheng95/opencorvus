@@ -94,4 +94,38 @@ describe("Engine Git immutable checkpoint facts", () => {
       },
     })
   }, 60_000)
+
+  test("a settled baseline failure replays its exact error instead of projecting success", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const taskID = await createEngineGitCheckpointTask({
+          projectPath: project.path,
+          title: "Settled baseline failure",
+        })
+        const operationKey = "baseline:1"
+        const requestID = Identifier.deterministic("artifact", `git-checkpoint\0${taskID}\0${operationKey}`)
+        Database.transaction((db) => {
+          db.insert(EngineGitCheckpointRequestTable).values({
+            id: requestID,
+            task_id: taskID,
+            stage: "baseline",
+            operation_key: operationKey,
+            input: {},
+            time_created: 1,
+          }).run()
+          db.insert(EngineGitCheckpointOutcomeTable).values({
+            request_id: requestID,
+            result: { error: "baseline checkpoint failed" },
+            time_created: 2,
+          }).run()
+        })
+
+        const replay = await EngineGit.prepare(requireTask(taskID))
+        expect(replay.error).toBe("baseline checkpoint failed")
+        expect((replay.task.metadata as any).git.baseline).toBeUndefined()
+      },
+    })
+  }, 60_000)
 })

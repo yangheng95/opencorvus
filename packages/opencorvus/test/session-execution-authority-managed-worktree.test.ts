@@ -11,6 +11,7 @@ import { Instance } from "@/project/instance"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
 import { Session } from "@/session"
 import { materializeUserMessage, preparedUserMessageFromPreflight } from "@/session/prompt/parts"
+import { EngineService } from "@/task-api"
 import { Tool } from "@/tool/tool"
 import { WriteTool } from "@/tool/write"
 import { Worktree } from "@/worktree"
@@ -42,11 +43,6 @@ test("uses the exact managed-worktree Session directory for pending, durable, an
       projectID = Instance.project.id
       taskID = Identifier.ascending("task")
       const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Managed authority Task root" })
-      const orchestrator = await Session.create({
-        kind: "orchestrator",
-        parentID: root.id,
-        title: "Managed authority Orchestrator",
-      })
       const now = Date.now()
       persistTask({
         taskID,
@@ -66,6 +62,11 @@ test("uses the exact managed-worktree Session directory for pending, durable, an
           packageRevisionSHA256: packageRevision.packageDigest,
           timeCreated: now,
         }),
+      })
+      const orchestrator = await Session.create({
+        kind: "orchestrator",
+        parentID: root.id,
+        title: "Managed authority Orchestrator",
       })
 
       workerSessionID = Identifier.descending("session")
@@ -170,6 +171,7 @@ test("uses the exact managed-worktree Session directory for pending, durable, an
   await Instance.provide({
     directory: project.path,
     fn: async () => {
+      await EngineService.deleteSession(workerSessionID, { projectID })
       await Worktree.releaseManagedWorktreeSessionOwner({
         projectID,
         primaryWorktreeDir: Instance.project.worktree,

@@ -2,6 +2,8 @@
 
 Current scheduling razor remediation: [`2026-09-05-scheduling-razor-remediation.md`](records/2026-09/2026-09-05-scheduling-razor-remediation.md).
 
+Current application and website release preparation: [`0.0.62-beta`](records/2026-09/2026-09-05-v0.0.62-beta-release.md).
+
 Current scheduling razor re-audit: [`2026-09-05-scheduling-razor-reaudit.md`](records/2026-09/2026-09-05-scheduling-razor-reaudit.md).
 
 Current technical direction audit and remediation: [`2026-09-05-technical-direction-remediation.md`](records/2026-09/2026-09-05-technical-direction-remediation.md).

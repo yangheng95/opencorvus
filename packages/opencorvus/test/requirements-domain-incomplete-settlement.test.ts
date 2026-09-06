@@ -145,6 +145,23 @@ async function fixture(title: string) {
       initial_control_text_parts: [],
     },
   }
+  recordTestDispatchLineage({
+    origin: createDispatchLineageOrigin({
+      dispatchID,
+      taskID,
+      orchestratorSessionID: root.id,
+      orchestratorMessageID: Identifier.ascending("message"),
+      toolPartID: Identifier.ascending("part"),
+      toolCallID: Identifier.ascending("call"),
+      targetAgentID: identity.agentID,
+      projectedWorkerIdentity: identity,
+      workScope: { kind: "task" },
+      workflowBinding,
+      workflowNodeID: "requirements",
+      adapterInput: { reason: "Extract exact requirements" },
+    }),
+    childSessionID: worker.id,
+  })
   WorkerTurnDescriptor.create({
     sessionID: worker.id,
     payload: {
@@ -162,23 +179,6 @@ async function fixture(title: string) {
       },
       dispatchTurn: turn,
     },
-  })
-  recordTestDispatchLineage({
-    origin: createDispatchLineageOrigin({
-      dispatchID,
-      taskID,
-      orchestratorSessionID: root.id,
-      orchestratorMessageID: Identifier.ascending("message"),
-      toolPartID: Identifier.ascending("part"),
-      toolCallID: Identifier.ascending("call"),
-      targetAgentID: identity.agentID,
-      projectedWorkerIdentity: identity,
-      workScope: { kind: "task" },
-      workflowBinding,
-      workflowNodeID: "requirements",
-      adapterInput: { reason: "Extract exact requirements" },
-    }),
-    childSessionID: worker.id,
   })
   return { taskID, root, worker, final, dispatchID, turn }
 }

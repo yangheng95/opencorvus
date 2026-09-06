@@ -1,5 +1,9 @@
 import { afterEach, expect, test } from "bun:test"
 import { EngineTaskTable } from "@/engine/engine.sql"
+import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
+import { requireTask } from "@/engine/store"
+import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
+import type { SelectedWorkflowBinding } from "@/engine/workflow-binding"
 import { taskExecutionProjectionForTask } from "@/orchestrator/task-event"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
@@ -12,8 +16,10 @@ import { MessageStore } from "@/session/message-store"
 import { Database, eq } from "@/storage/db"
 import { timelineOrderKey } from "@/timeline/order"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
-import { controlTextSHA256 } from "@/orchestrator/dispatch-turn-projection"
+import { controlTextSHA256, taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -153,22 +159,58 @@ test("projects each reused Session lifecycle event from its exact occurrence des
     fn: async () => {
       const now = Date.now()
       const taskID = Identifier.ascending("task")
-      const root = await Session.create({ kind: "root", title: "Exact lifecycle occurrence root" })
-      const worker = await Session.create({ kind: "delegated-worker", parentID: root.id, title: "Reused worker Session" })
-      Database.transaction((db) => db.insert(EngineTaskTable).values({
-        id: taskID,
-        project_id: Instance.project.id,
-        session_id: root.id,
-        source: "test",
-        product_pillar: "code",
+      const packageRevision = {
+        scope: "built_in" as const,
+        projectID: null,
+        namespace: "test",
+        id: "test-package",
+        version: "1",
+        packageDigest: "a".repeat(64),
+      }
+      const workflowBinding: SelectedWorkflowBinding = {
+        kind: "direct",
+        package_revision: {
+          scope: "built_in",
+          project_id: null,
+          namespace: packageRevision.namespace,
+          id: packageRevision.id,
+          version: packageRevision.version,
+          package_digest: packageRevision.packageDigest,
+        },
+      }
+      const root = Session.prepareRootNext({
+        kind: "root",
+        directory: Instance.directory,
+        title: "Exact lifecycle occurrence root",
+        metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
+      })
+      persistTask({
+        taskID,
+        rootSession: root,
+        now,
         title: "Exact lifecycle occurrence",
         request: "Keep occurrence routing exact",
-        time_created: now,
-      }).run())
+        productPillar: "code",
+        source: "test",
+        priority: "normal",
+        metadata: {},
+        projectID: Instance.project.id,
+        packageRevision,
+        executionCapsuleBinding: await prepareTaskProcessBinding({
+          mode: "native",
+          taskID,
+          projectID: Instance.project.id,
+          rootDirectory: Instance.directory,
+          packageRevisionSHA256: packageRevision.packageDigest,
+          timeCreated: now,
+        }),
+      })
+      const worker = await Session.create({ kind: "delegated-worker", parentID: root.id, title: "Reused worker Session" })
       const descriptorPayload = (
         agentID: string,
         inputMessageID: string,
         control: { id: string; text: string },
+        dispatchID: string,
       ): WorkerTurnDescriptor.Payload => ({
         identity: {
           agentID,
@@ -180,14 +222,7 @@ test("projects each reused Session lifecycle event from its exact occurrence des
           projectionHash: (agentID === "occurrence-one" ? "1" : "2").repeat(64),
         },
         expertSquadID: "test-package",
-        packageRevision: {
-          scope: "built_in",
-          projectID: null,
-          namespace: "test",
-          id: "test-package",
-          version: "1",
-          packageDigest: "a".repeat(64),
-        },
+        packageRevision,
         model: { selection: "explicit", providerID: "test", modelID: "projection" },
         prompt: { systemMode: "complete", systemSha256: "b".repeat(64) },
         tools: { enabled: [], stageOwned: [], stageMaterializers: {} },
@@ -196,6 +231,21 @@ test("projects each reused Session lifecycle event from its exact occurrence des
         messageAuthority: {
           user_message_id: inputMessageID,
           control_text_parts: [{ part_id: control.id, text_sha256: controlTextSHA256(control.text) }],
+        },
+        dispatchTurn: {
+          kind: "initial",
+          current_dispatch_id: dispatchID,
+          workflow_binding: workflowBinding,
+          workflow_node_id: null,
+          workflow_occurrence_id: dispatchID,
+          delivery_slice_revision_ids: [],
+          evidence_locators: [],
+          task_authority: {
+            task_id: taskID,
+            root_session_id: root.id,
+            request_sha256: taskRequestSHA256(requireTask(taskID).request),
+            initial_control_text_parts: [],
+          },
         },
       })
       const appendOccurrence = async (agentID: string, offset: number) => {
@@ -217,7 +267,29 @@ test("projects each reused Session lifecycle event from its exact occurrence des
           kind: "control",
           source: "system",
         })
-        WorkerTurnDescriptor.create({ sessionID: worker.id, payload: descriptorPayload(agentID, message.id, control) })
+        const dispatchID = Identifier.ascending("artifact")
+        const identity = descriptorPayload(agentID, message.id, control, dispatchID).identity
+        recordTestDispatchLineage({
+          origin: createDispatchLineageOrigin({
+            dispatchID,
+            taskID,
+            orchestratorSessionID: root.id,
+            orchestratorMessageID: Identifier.ascending("message"),
+            toolPartID: Identifier.ascending("part"),
+            toolCallID: Identifier.ascending("call"),
+            targetAgentID: agentID,
+            projectedWorkerIdentity: identity,
+            workScope: { kind: "task" },
+            workflowBinding,
+            workflowNodeID: null,
+            adapterInput: { reason: `Execute ${agentID}` },
+          }),
+          childSessionID: worker.id,
+        })
+        WorkerTurnDescriptor.create({
+          sessionID: worker.id,
+          payload: descriptorPayload(agentID, message.id, control, dispatchID),
+        })
         return Database.transaction((db) => ProtocolStore.appendEventInTransaction({
           kind: "event",
           type: "agent.execution.lifecycle",

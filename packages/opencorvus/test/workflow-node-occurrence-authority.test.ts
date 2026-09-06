@@ -90,6 +90,7 @@ async function createBoundTask() {
 
 function origin(input: {
   taskID: string
+  rootSessionID: string
   dispatchID: string
   nodeID: string
   workflowOccurrenceID?: string
@@ -98,7 +99,7 @@ function origin(input: {
   return createDispatchLineageOrigin({
     dispatchID: input.dispatchID,
     taskID: input.taskID,
-    orchestratorSessionID: "orchestrator-session",
+    orchestratorSessionID: input.rootSessionID,
     orchestratorMessageID: `orchestrator-message-${input.dispatchID}`,
     toolPartID: `tool-part-${input.dispatchID}`,
     toolCallID: `tool-call-${input.dispatchID}`,
@@ -129,7 +130,12 @@ async function commitInitialSession(input: {
   const lineage = Database.transaction(() => {
     Session.persistPreparedNext(session)
     return recordTestDispatchLineage({
-      origin: origin({ taskID: input.taskID, dispatchID: input.dispatchID, nodeID: input.nodeID }),
+      origin: origin({
+        taskID: input.taskID,
+        rootSessionID: input.rootSessionID,
+        dispatchID: input.dispatchID,
+        nodeID: input.nodeID,
+      }),
       childSessionID: session.id,
     })
   })
@@ -163,6 +169,7 @@ describe("workflow node occurrence authority", () => {
         const continuation = recordTestDispatchLineage({
           origin: origin({
             taskID,
+            rootSessionID: root.id,
             dispatchID: continuationDispatchID,
             nodeID: "fundamentals",
             workflowOccurrenceID: initialDispatchID,
@@ -213,7 +220,12 @@ describe("workflow node occurrence authority", () => {
           Database.transaction(() => {
             Session.persistPreparedNext(secondChild)
             recordTestDispatchLineage({
-              origin: origin({ taskID, dispatchID: secondDispatchID, nodeID: "fundamentals" }),
+              origin: origin({
+                taskID,
+                rootSessionID: root.id,
+                dispatchID: secondDispatchID,
+                nodeID: "fundamentals",
+              }),
               childSessionID: secondChild.id,
             })
           })

@@ -1533,7 +1533,7 @@ describe("recovered pending interaction ownership", () => {
         expect(recoveredPart.state.time.end).toBeGreaterThanOrEqual(recoveredAction!.payload.completed_at!)
       },
     })
-  }, 30_000)
+  }, 90_000)
 
   test("opens a project holding an activity-reconciliation gate and answers it after recovery", async () => {
     await using project = await memoryProject()

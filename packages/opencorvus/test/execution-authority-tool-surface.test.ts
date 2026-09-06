@@ -102,9 +102,10 @@ describe("execution authority Tool surfaces", () => {
       mission: {
         global: [
           "skill_market",
-          ...conversationEffects,
+          ...conversationEffects.filter((toolID) => toolID !== "mission_state"),
           "mission_skill",
           ...MISSION_PANEL_LEAF_TOOL_IDS,
+          "mission_state",
           "scheduler_message",
           "wait",
         ],

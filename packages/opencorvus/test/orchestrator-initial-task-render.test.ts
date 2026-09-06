@@ -1,6 +1,5 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
 import { Orchestrator } from "@/orchestrator/agent"
-import { ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS, uniqueToolIDs } from "@/agent/tool-pool-data"
 import { Bus } from "@/bus"
 import {
   TestHooks as TaskControlTestHooks,
@@ -84,14 +83,6 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
       const retainAssistantOnToolContinuation: boolean[] = []
       const retainedDecisionGaps: boolean[] = []
       const decisionRepairPrompts: boolean[] = []
-      const canonicalOrchestratorToolIDs = uniqueToolIDs([
-        ...ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS,
-        // The production Base scheduler projection explicitly adds `read`;
-        // dispatch_agent/manage_task are already inherited from the role base.
-        "dispatch_agent",
-        "manage_task",
-        "read",
-      ]).sort()
       const providerToolRequests: Array<{ toolIDs: string[]; toolChoice: "auto" | "required" | "none" | object }> = []
       const promptSystemAudits: Array<{ countMatch: boolean; runtimeLabels: string[] }> = []
       const atomicCreatorCuts: Array<{ creatorID: string; controlIDs: string[] }> = []
@@ -265,8 +256,8 @@ test("a fresh typed Task ingress installs runtime authority before creator and c
           retainedDecisionGaps: [true],
           decisionRepairPrompts: [false, true],
           providerToolRequests: [
-            { toolIDs: canonicalOrchestratorToolIDs, toolChoice: "auto" },
-            { toolIDs: canonicalOrchestratorToolIDs, toolChoice: "auto" },
+            { toolIDs: ["capability_search"], toolChoice: "auto" },
+            { toolIDs: ["capability_search"], toolChoice: "auto" },
           ],
           promptSystemAudits: [
             {

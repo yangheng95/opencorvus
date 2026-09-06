@@ -24610,6 +24610,12 @@ export type SessionCommandErrors = {
         data: {
           [key: string]: unknown
         }
+        name: "PublicSessionExecutionBusyError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
         name: "PublicSessionPromptIdentityConflictError"
       }
 }
@@ -26236,14 +26242,21 @@ export type SessionPromptErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Message identity is already bound to another public Session prompt
+   * Session execution is busy, or the message identity is already bound to another public Session prompt
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "PublicSessionPromptIdentityConflictError"
-  }
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "PublicSessionExecutionBusyError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "PublicSessionPromptIdentityConflictError"
+      }
   /**
    * Saved Provider credentials could not be observed safely
    */
@@ -26686,6 +26699,12 @@ export type SessionShellErrors = {
           [key: string]: unknown
         }
         name: "MissionSessionAuthorityError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "PublicSessionExecutionBusyError"
       }
     | {
         data: {

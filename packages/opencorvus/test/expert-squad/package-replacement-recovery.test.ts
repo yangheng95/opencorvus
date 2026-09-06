@@ -4,6 +4,7 @@ import path from "node:path"
 import { payloadPackageSources } from "../../generated/expert-squad-payload"
 import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
 import { ExpertSquadPackageLocations } from "../../src/expert-squad/locations"
+import { ExpertSquadInstallLock } from "../../src/expert-squad/install-lock"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -98,9 +99,15 @@ describe("Expert Squad package replacement recovery", () => {
       }),
     )
 
-    await expect(ExpertSquadPackageManager.reconcilePendingPackageMutations(project.path)).rejects.toThrow(
-      /mutation journal discard does not equal/,
-    )
+    await expect(
+      ExpertSquadInstallLock.run(id, (lease) =>
+        ExpertSquadPackageManager.reconcilePendingPackageMutationUnderLease({
+          projectDirectory: project.path,
+          id,
+          lease,
+        }),
+      ),
+    ).rejects.toThrow(/mutation journal discard does not equal/)
     expect(await fs.readFile(sentinel, "utf8")).toBe("must survive tampered journal validation\n")
   })
 })

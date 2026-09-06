@@ -11,8 +11,9 @@ import { EngineControlActivationLeaseTable } from "@/engine/engine.sql"
 import { currentRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
 import { Config } from "@/config/config"
 import { Hono } from "hono"
-import { SessionRoutes } from "@/server/routes/session"
+import { PublicSessionExecutionTestHooks, SessionRoutes } from "@/server/routes/session"
 import { serverErrorResponse } from "@/server/error-handler"
+import { SessionPromptState } from "@/session/prompt/state"
 
 const [mode, projectDirectory, barrierDirectory, sessionID, messageID, label, command] = process.argv.slice(2)
 if (!mode || !projectDirectory || !barrierDirectory) {
@@ -79,13 +80,31 @@ async function run() {
           ).length,
         }
       }
-      if ((mode !== "claim" && mode !== "route") || !label) {
+      if (mode === "standby") {
+        const owner = SessionPromptState.start(sessionID, projectDirectory)
+        if (!owner) throw new Error(`Session ${sessionID} standby worker did not acquire the Prompt owner`)
+        await fs.writeFile(path.join(barrierDirectory, `${label}.ready`), "ready")
+        while (!(await fs.stat(path.join(barrierDirectory, `${label}.release`)).catch(() => undefined))) {
+          await Bun.sleep(5)
+        }
+        await SessionPromptState.release(sessionID, projectDirectory)
+        return { result: "released", label }
+      }
+      if ((mode !== "claim" && mode !== "route" && mode !== "route-after-owner-snapshot") || !label) {
         throw new Error(`Unknown Session Message pair worker mode: ${mode}`)
       }
 
+      if (mode === "route-after-owner-snapshot") {
+        PublicSessionExecutionTestHooks.afterInitialOwnerRead = async () => {
+          await fs.writeFile(path.join(barrierDirectory, `${label}.snapshot`), "snapshot")
+          while (!(await fs.stat(path.join(barrierDirectory, `${label}.continue`)).catch(() => undefined))) {
+            await Bun.sleep(5)
+          }
+        }
+      }
       await fs.writeFile(path.join(barrierDirectory, `${label}.ready`), "ready")
       while (!(await fs.stat(path.join(barrierDirectory, "release")).catch(() => undefined))) await Bun.sleep(5)
-      if (mode === "route") {
+      if (mode === "route" || mode === "route-after-owner-snapshot") {
         if (!command) throw new Error("Session route worker requires a shell command")
         const app = new Hono().route("/session", SessionRoutes())
         app.onError(serverErrorResponse)
@@ -99,6 +118,7 @@ async function run() {
         const body = (await response.json()) as any
         return {
           status: response.status,
+          errorName: body.name,
           assistantID: body.info?.id,
           finish: body.info?.finish,
           toolState: body.parts?.[0]?.state?.status,

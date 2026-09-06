@@ -47,6 +47,7 @@ async function finishWorker(started: ReturnType<typeof startWorker>, mode: Worke
     mode: WorkerMode
     taskID?: string
     rootSessionID?: string
+    orchestratorSessionID?: string
     outcome?: Record<string, unknown>
     outerStatus?: string
   }
@@ -83,6 +84,7 @@ test("two production outer occurrences admit one virtual workflow node before ph
   try {
     const seeded = await runWorker(worker, "seed", projectPath, home)
     if (!seeded.rootSessionID) throw new Error("Seed worker returned no root Session identity")
+    if (!seeded.orchestratorSessionID) throw new Error("Seed worker returned no orchestrator Session identity")
     blocked = startWorker(worker, "execute-blocked", projectPath, home, barrier)
     await waitForFile(path.join(barrier, "ready.json"), blocked)
     const winner = JSON.parse(fs.readFileSync(path.join(barrier, "ready.json"), "utf8")) as {
@@ -116,7 +118,7 @@ test("two production outer occurrences admit one virtual workflow node before ph
           .query<{ id: string; kind: string }, [string]>(
             "SELECT id, kind FROM session WHERE parent_id=? ORDER BY id",
           )
-          .all(seeded.rootSessionID),
+          .all(seeded.orchestratorSessionID),
         descriptors: sqlite.query<{ count: number }, []>("SELECT COUNT(*) AS count FROM worker_turn_descriptor").get()!.count,
       }).toMatchObject({
         peerOutcome: {
@@ -132,7 +134,10 @@ test("two production outer occurrences admit one virtual workflow node before ph
         },
         peerOuterStatus: "completed",
         lineage: [{ id: winner.lineageID, dispatchID: winner.dispatchID, childSessionID: winner.childSessionID }],
-        sessions: [{ id: seeded.rootSessionID, kind: "root", parentID: null }],
+        sessions: [
+          { id: seeded.rootSessionID, kind: "root", parentID: null },
+          { id: seeded.orchestratorSessionID, kind: "orchestrator", parentID: seeded.rootSessionID },
+        ],
         physicalWorkerSessions: [],
         descriptors: 0,
       })
@@ -160,7 +165,7 @@ test("two production outer occurrences admit one virtual workflow node before ph
           .query<{ id: string; kind: string }, [string]>(
             "SELECT id, kind FROM session WHERE parent_id=? ORDER BY id",
           )
-          .all(seeded.rootSessionID),
+          .all(seeded.orchestratorSessionID),
         descriptors: completed
           .query<{ session_id: string }, [string]>("SELECT session_id FROM worker_turn_descriptor WHERE session_id=?")
           .all(winner.childSessionID),
@@ -183,7 +188,8 @@ test("two production outer occurrences admit one virtual workflow node before ph
         lineages: [{ id: winner.lineageID }],
         sessions: [
           { id: seeded.rootSessionID, kind: "root", parentID: null },
-          { id: winner.childSessionID, kind: "explore", parentID: seeded.rootSessionID },
+          { id: seeded.orchestratorSessionID, kind: "orchestrator", parentID: seeded.rootSessionID },
+          { id: winner.childSessionID, kind: "explore", parentID: seeded.orchestratorSessionID },
         ],
         physicalWorkerSessions: [{ id: winner.childSessionID, kind: "explore" }],
         descriptors: [{ session_id: winner.childSessionID }],

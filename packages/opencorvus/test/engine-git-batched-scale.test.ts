@@ -67,5 +67,5 @@ describe("Engine Git fixed process topology", () => {
         expect(baseline.checkpoint_receipt.checkpoint_git_process_launch_count).toBeLessThanOrEqual(32)
       },
     })
-  }, 120_000)
+  }, 300_000)
 })

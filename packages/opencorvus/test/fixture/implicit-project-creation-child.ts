@@ -71,10 +71,12 @@ if (action === "create") {
 ) {
   const { Global } = await import("../../src/global")
   const { ImplicitProjectCreation } = await import("../../src/project/implicit-project-creation")
+  const { currentRuntimeProcessOccurrence } = await import("../../src/runtime/process-occurrence")
   const directory = path.join(Global.Path.data, "projects", "2026", "08", "28", randomUUID())
   const occurrenceID = await ImplicitProjectCreation.begin(directory)
+  const creationOwner = currentRuntimeProcessOccurrence()
   if (action === "prepare-intent") {
-    process.stdout.write(`${JSON.stringify({ directory, occurrenceID })}\n`)
+    process.stdout.write(`${JSON.stringify({ directory, occurrenceID, creationOwner })}\n`)
     process.exit(0)
   }
   await fs.mkdir(directory, { recursive: true })
@@ -113,7 +115,7 @@ if (action === "create") {
     })
     if (linked.exitCode !== 0) throw new Error(linked.stderr.toString())
   }
-  process.stdout.write(`${JSON.stringify({ directory, occurrenceID, gitDirectory, linkedDirectory })}\n`)
+  process.stdout.write(`${JSON.stringify({ directory, occurrenceID, gitDirectory, linkedDirectory, creationOwner })}\n`)
 } else if (
   action === "prepare-dead-and-owner" ||
   action === "prepare-sandbox-owned" ||
@@ -123,8 +125,10 @@ if (action === "create") {
   const { Global } = await import("../../src/global")
   const { Project } = await import("../../src/project/project")
   const { ImplicitProjectCreation } = await import("../../src/project/implicit-project-creation")
+  const { currentRuntimeProcessOccurrence } = await import("../../src/runtime/process-occurrence")
   const directory = path.join(Global.Path.data, "projects", "2026", "08", "28", randomUUID())
   const occurrenceID = await ImplicitProjectCreation.begin(directory)
+  const creationOwner = currentRuntimeProcessOccurrence()
   await fs.mkdir(directory, { recursive: true })
   await ImplicitProjectCreation.markDirectoryCreated(occurrenceID)
   const physicalRegisteredDirectory =
@@ -159,7 +163,7 @@ if (action === "create") {
     await Project.addSandbox(owner.project.id, registeredDirectory)
   }
   process.stdout.write(
-    `${JSON.stringify({ directory, registeredDirectory, physicalRegisteredDirectory, occurrenceID, ownerDirectory, ownerProjectID: owner.project.id })}\n`,
+    `${JSON.stringify({ directory, registeredDirectory, physicalRegisteredDirectory, occurrenceID, ownerDirectory, ownerProjectID: owner.project.id, creationOwner })}\n`,
   )
 } else if (action === "prepare-committed-fenced") {
   const { Global } = await import("../../src/global")
@@ -170,6 +174,7 @@ if (action === "create") {
   const { currentRuntimeProcessOccurrence } = await import("../../src/runtime/process-occurrence")
   const directory = path.join(Global.Path.data, "projects", "2026", "08", "28", randomUUID())
   const occurrenceID = await ImplicitProjectCreation.begin(directory)
+  const creationOwner = currentRuntimeProcessOccurrence()
   await fs.mkdir(directory, { recursive: true })
   await ImplicitProjectCreation.markDirectoryCreated(occurrenceID)
   const registered = await Project.fromDirectory(directory)
@@ -189,7 +194,7 @@ if (action === "create") {
       })
       .run(),
   )
-  process.stdout.write(`${JSON.stringify({ directory, occurrenceID, projectID: registered.project.id })}\n`)
+  process.stdout.write(`${JSON.stringify({ directory, occurrenceID, projectID: registered.project.id, creationOwner })}\n`)
 } else if (action === "hold-admission") {
   const [started, release] = requested
   if (!started || !release) throw new Error("hold-admission requires started and release")

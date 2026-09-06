@@ -222,7 +222,15 @@ export namespace EventService {
       clearTimeout(s.discoveryRetry)
       while (s.recoveryOperations.size > 0) await Promise.allSettled([...s.recoveryOperations])
       while (s.running.size > 0) await Promise.allSettled([...s.running.values()])
-      await s.discovery
+      // Instance teardown reaches State disposal only after every serving
+      // lease has drained. A discovery promise still present here is therefore
+      // waiting for admission behind this same lifecycle turn, not executing
+      // an Event effect. Its aborted Instance background owner will settle
+      // after the turn releases; awaiting it here would make each side wait on
+      // the other.
+      const queuedDiscovery = s.discovery
+      s.discovery = undefined
+      if (queuedDiscovery) void queuedDiscovery.catch(() => undefined)
       s.sessionWake = undefined
     },
     "event-service",

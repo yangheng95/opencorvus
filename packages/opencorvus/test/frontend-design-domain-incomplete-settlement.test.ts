@@ -103,6 +103,7 @@ async function createTask(input: { title: string }) {
 }
 
 async function workerTurn(input: { rootSessionID: string; taskID: string; outcome: "partial" | "complete" }) {
+  const dispatchID = Identifier.ascending("artifact")
   const session = await Session.create({
     kind: "frontend-design",
     parentID: input.rootSessionID,
@@ -139,6 +140,23 @@ async function workerTurn(input: { rootSessionID: string; taskID: string; outcom
     type: "text",
     text: "Produce the exact Frontend Design delivery Artifact",
   })
+  recordTestDispatchLineage({
+    origin: createDispatchLineageOrigin({
+      dispatchID,
+      taskID: input.taskID,
+      orchestratorSessionID: input.rootSessionID,
+      orchestratorMessageID: Identifier.ascending("message"),
+      toolPartID: Identifier.ascending("part"),
+      toolCallID: Identifier.ascending("call"),
+      targetAgentID: projectedFrontendDesigner.identity.agentID,
+      projectedWorkerIdentity: projectedFrontendDesigner.identity,
+      workScope: { kind: "task" },
+      workflowBinding,
+      workflowNodeID: "design",
+      adapterInput: { mode: "greenfield_original", reason: "Create the delivery design" },
+    }),
+    childSessionID: session.id,
+  })
   WorkerTurnDescriptor.create({
     sessionID: session.id,
     payload: {
@@ -154,11 +172,27 @@ async function workerTurn(input: { rootSessionID: string; taskID: string; outcom
         user_message_id: parent.id,
         control_text_parts: [{ part_id: messagePart.id, text_sha256: taskRequestSHA256(messagePart.text) }],
       },
+      dispatchTurn: {
+        kind: "initial",
+        current_dispatch_id: dispatchID,
+        workflow_binding: workflowBinding,
+        workflow_node_id: "design",
+        workflow_occurrence_id: dispatchID,
+        delivery_slice_revision_ids: [],
+        evidence_locators: [],
+        task_authority: {
+          task_id: input.taskID,
+          root_session_id: input.rootSessionID,
+          request_sha256: taskRequestSHA256(requireTask(input.taskID).request),
+          initial_control_text_parts: [],
+        },
+      },
     },
   })
   if (input.outcome === "partial") {
     return {
       outcome: "partial" as const,
+      dispatchID,
       sessionID: session.id,
       finalMessageID: final.id,
       specs: [],
@@ -189,6 +223,7 @@ async function workerTurn(input: { rootSessionID: string; taskID: string; outcom
   })
   return {
     outcome: "complete" as const,
+    dispatchID,
     sessionID: session.id,
     finalMessageID: final.id,
     specs: [],
@@ -309,24 +344,7 @@ describe("Frontend Design domain-incomplete settlement", () => {
       fn: async () => {
         const task = await createTask({ title: "Partial Frontend Design" })
         const analysis = await workerTurn({ rootSessionID: task.root.id, taskID: task.taskID, outcome: "partial" })
-        const context = executionContext(task.taskID)
-        recordTestDispatchLineage({
-          origin: createDispatchLineageOrigin({
-            dispatchID: context.dispatch.dispatchID,
-            taskID: task.taskID,
-            orchestratorSessionID: task.root.id,
-            orchestratorMessageID: Identifier.ascending("message"),
-            toolPartID: Identifier.ascending("part"),
-            toolCallID: Identifier.ascending("call"),
-            targetAgentID: projectedFrontendDesigner.identity.agentID,
-            projectedWorkerIdentity: projectedFrontendDesigner.identity,
-            workScope: { kind: "task" },
-            workflowBinding,
-            workflowNodeID: "design",
-            adapterInput: { mode: "greenfield_original", reason: "Create the delivery design" },
-          }),
-          childSessionID: analysis.sessionID,
-        })
+        const context = executionContext(task.taskID, analysis.dispatchID)
         const outcome = await executeFrontendDesign({
           ...task,
           analyze: async () => analysis,
@@ -392,9 +410,11 @@ describe("Frontend Design domain-incomplete settlement", () => {
       fn: async () => {
         const task = await createTask({ title: "Frontend Design persistence failure" })
         const analysis = await workerTurn({ rootSessionID: task.root.id, taskID: task.taskID, outcome: "partial" })
+        const context = executionContext(task.taskID, analysis.dispatchID)
         const outcome = await executeFrontendDesign({
           ...task,
           analyze: async () => analysis,
+          context,
           recordPartial: () => {
             throw new Error("artifact database unavailable")
           },
@@ -419,24 +439,7 @@ describe("Frontend Design domain-incomplete settlement", () => {
       fn: async () => {
         const task = await createTask({ title: "Complete Frontend Design" })
         const analysis = await workerTurn({ rootSessionID: task.root.id, taskID: task.taskID, outcome: "complete" })
-        const context = executionContext(task.taskID)
-        recordTestDispatchLineage({
-          origin: createDispatchLineageOrigin({
-            dispatchID: context.dispatch.dispatchID,
-            taskID: task.taskID,
-            orchestratorSessionID: task.root.id,
-            orchestratorMessageID: Identifier.ascending("message"),
-            toolPartID: Identifier.ascending("part"),
-            toolCallID: Identifier.ascending("call"),
-            targetAgentID: projectedFrontendDesigner.identity.agentID,
-            projectedWorkerIdentity: projectedFrontendDesigner.identity,
-            workScope: { kind: "task" },
-            workflowBinding,
-            workflowNodeID: "design",
-            adapterInput: { mode: "greenfield_original", reason: "Create the delivery design" },
-          }),
-          childSessionID: analysis.sessionID,
-        })
+        const context = executionContext(task.taskID, analysis.dispatchID)
         const outcome = await executeFrontendDesign({ ...task, analyze: async () => analysis, context })
         recordDispatchSettlement({
           taskID: task.taskID,
