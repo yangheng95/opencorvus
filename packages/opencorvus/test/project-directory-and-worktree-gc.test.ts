@@ -33,6 +33,7 @@ import {
   createProjectDeletionCleanupPlan,
   ProjectDeletionCleanupTestHooks,
   recoverProjectDeletionCleanup,
+  removeProjectDeletionCleanupPlan,
 } from "@/project/deletion-cleanup"
 import { ImplicitProject } from "@/project/implicit-project"
 import { Worktree } from "@/worktree"
@@ -859,6 +860,47 @@ describe("Project directory integrity", () => {
         )
         await fs.unlink(path.join(ProjectDeletionCleanupTestHooks.root(), manifest))
       }
+    }
+  }, 90_000)
+
+  test("binds an aliased anonymous cleanup source to its captured physical occurrence", async () => {
+    await using project = await memoryProject()
+    const alias = path.join(path.dirname(project.path), `${path.basename(project.path)}-anonymous-alias`)
+    const projectID = Identifier.ascending("project")
+    await fs.symlink(project.path, alias, process.platform === "win32" ? "junction" : "dir")
+    const anonymous = spyOn(ImplicitProject, "isAnonymousDirectory").mockImplementation(
+      (directory) => path.resolve(directory) === path.resolve(alias),
+    )
+    Database.use((db) =>
+      db
+        .insert(ProjectTable)
+        .values({
+          id: projectID,
+          generation: crypto.randomUUID(),
+          worktree: alias,
+          sandboxes: [],
+          time_created: Date.now(),
+          time_updated: Date.now(),
+        })
+        .run(),
+    )
+    let plan: Awaited<ReturnType<typeof createProjectDeletionCleanupPlan>> | undefined
+    try {
+      plan = await createProjectDeletionCleanupPlan({ projectID, directory: alias })
+      expect({
+        source: plan.manifest.targets[0]?.source,
+        registeredPhysicalPath: plan.manifest.registeredDirectories[0]?.physicalPath,
+        occurrenceKey: plan.manifest.targets[0]?.occurrence?.directoryKey,
+      }).toEqual({
+        source: path.resolve(alias),
+        registeredPhysicalPath: path.resolve(await fs.realpath(alias)),
+        occurrenceKey: await ProjectDirectoryAdmission.key(alias),
+      })
+    } finally {
+      if (plan) await removeProjectDeletionCleanupPlan(plan)
+      Database.use((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, projectID)).run())
+      anonymous.mockRestore()
+      await fs.unlink(alias).catch(() => undefined)
     }
   }, 90_000)
 

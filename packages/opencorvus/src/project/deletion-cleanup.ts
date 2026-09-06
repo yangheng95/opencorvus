@@ -198,6 +198,7 @@ function validateManifest(manifest: ProjectDeletionCleanupManifest): void {
           ? [path.resolve(ProjectRuntimePaths.projectRuntimeRoot(registeredDirectory.physicalPath))]
           : [],
       )
+  const expectedOccurrenceKeys = anonymous ? [registeredDirectories[0]!.physicalPath] : expectedSources
   for (let index = 0; index < expectedSources.length; index += 1) {
     for (let peer = 0; peer < index; peer += 1) {
       if (Filesystem.overlaps(expectedSources[index]!, expectedSources[peer]!)) {
@@ -220,7 +221,11 @@ function validateManifest(manifest: ProjectDeletionCleanupManifest): void {
     if (!samePath(target.quarantine, expected)) {
       throw new Error(`Project deletion cleanup target is not the exact quarantine for ${source}`)
     }
-    if (target.occurrence && !samePath(target.occurrence.directoryKey, source)) {
+    const expectedOccurrenceKey = expectedOccurrenceKeys[index]
+    if (
+      target.occurrence &&
+      (!expectedOccurrenceKey || !samePath(target.occurrence.directoryKey, expectedOccurrenceKey))
+    ) {
       throw new Error(`Project deletion cleanup target occurrence does not match its source: ${source}`)
     }
   })
