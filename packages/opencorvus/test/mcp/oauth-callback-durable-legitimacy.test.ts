@@ -8,6 +8,7 @@ import { McpOAuthProvider } from "@/mcp/oauth-provider"
 import { Filesystem } from "@/util/filesystem"
 import { auth } from "@modelcontextprotocol/sdk/client/auth.js"
 import { currentTestChildEnvironment } from "../fixture/current-test-child-environment"
+import { waitForJSONBarrier as waitForJson } from "../fixture/json-barrier"
 
 const worker = path.join(import.meta.dir, "../fixture/mcp-oauth-callback-broker-worker.ts")
 const stallingWorker = path.join(import.meta.dir, "../fixture/mcp-oauth-callback-stalling-broker-worker.ts")
@@ -21,18 +22,6 @@ afterEach(async () => {
 
 async function temporaryRoot(label: string) {
   return mkdtemp(path.join(Global.Path.temporary, `mcp-broker-${label}-`))
-}
-
-async function waitForJson<T>(filepath: string, timeout = 10_000): Promise<T> {
-  const deadline = Date.now() + timeout
-  while (Date.now() < deadline) {
-    try {
-      return JSON.parse(await readFile(filepath, "utf8")) as T
-    } catch {
-      await Bun.sleep(25)
-    }
-  }
-  throw new Error(`Timed out waiting for broker worker output ${filepath}`)
 }
 
 function spawnHolder(root: string, output: string) {

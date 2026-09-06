@@ -23,6 +23,7 @@ import { EngineService } from "@/task-api"
 import { Tool } from "@/tool/tool"
 import { WaitTool } from "@/tool/wait"
 import { persistEstablishedTask } from "./engine-task"
+import { publishJSONBarrier } from "./json-barrier"
 
 type Mode = "seed" | "due-blocked" | "operator" | "reconcile"
 
@@ -325,9 +326,9 @@ async function run() {
             if (!wakeID || !activationID || !event?.taskWaitWake) {
               throw new Error("Blocked Task wait worker claimed a non-wait ingress")
             }
-            fs.writeFileSync(
+            await publishJSONBarrier(
               path.join(barrierDirectory!, "due-owner-ready.json"),
-              JSON.stringify({ taskID, waitID: event.taskWaitWake.jobID, wakeID, activationID }),
+              { taskID, waitID: event.taskWaitWake.jobID, wakeID, activationID },
             )
             // Keep a referenced timer alive so the production renewal interval
             // can extend this lease until the parent really kills the process.

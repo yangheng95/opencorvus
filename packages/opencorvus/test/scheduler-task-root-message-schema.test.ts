@@ -1161,15 +1161,16 @@ describe("scheduler Task-root Message protocol", () => {
         let maximumActive = 0
         let starts = 0
         const releaseFirst = Promise.withResolvers<void>()
-        const lastPageStarted = Promise.withResolvers<void>()
+        const frontierProgress = { changed: Promise.withResolvers<void>() }
         using _capacity = SchedulerMessageTestHooks.installBeforeTaskMaterialization(async () => {
           starts += 1
           const start = starts
+          frontierProgress.changed.resolve()
+          frontierProgress.changed = Promise.withResolvers<void>()
           active += 1
           maximumActive = Math.max(maximumActive, active)
           if (start === 1) await releaseFirst.promise
           else {
-            if (start === 65) lastPageStarted.resolve()
             await new Promise<void>((resolve) => setTimeout(resolve, 5))
           }
           active -= 1
@@ -1183,12 +1184,19 @@ describe("scheduler Task-root Message protocol", () => {
           }
         }
         try {
-          await Promise.race([
-            lastPageStarted.promise,
-            new Promise<never>((_, reject) =>
-              setTimeout(() => reject(new Error(`Scheduler recipient frontier reached ${starts} recipients`)), 15_000),
-            ),
-          ])
+          while (starts < 65) {
+            const changed = frontierProgress.changed.promise
+            await new Promise<void>((resolve, reject) => {
+              const timer = setTimeout(
+                () => reject(new Error(`Scheduler recipient frontier stalled at ${starts} recipients`)),
+                15_000,
+              )
+              void changed.then(() => {
+                clearTimeout(timer)
+                resolve()
+              }, reject)
+            })
+          }
           // All three pages are discovered while the first recipient still
           // owns a permit. New input behind the consumed cursor uses a free slot.
           await waitForDelivery(pending[2]!.inboxID)

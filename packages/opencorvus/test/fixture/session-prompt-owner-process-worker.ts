@@ -12,6 +12,7 @@ import { SessionLoop } from "@/session/loop"
 import { Database } from "@/storage/db"
 import { observeRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
 import { Hono } from "hono"
+import { publishJSONBarrier } from "./json-barrier"
 
 const [mode, projectDirectory, barrierDirectory, sessionID, messageID, label, apiURL, text, hold, ownerObservation] =
   process.argv.slice(2)
@@ -210,7 +211,7 @@ async function run() {
               errorMessage: body.message ?? body.info?.error?.data?.message,
               errorData: body.data,
             }
-      await fs.writeFile(path.join(barrierDirectory, `${label}.response.json`), JSON.stringify(result))
+      await publishJSONBarrier(path.join(barrierDirectory, `${label}.response.json`), result)
       if (hold === "hold") {
         while (!(await fs.stat(path.join(barrierDirectory, `${label}.exit`)).catch(() => undefined))) {
           await Bun.sleep(10)

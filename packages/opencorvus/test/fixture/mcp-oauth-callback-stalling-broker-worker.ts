@@ -1,6 +1,7 @@
-import { readFile, writeFile } from "node:fs/promises"
+import { readFile } from "node:fs/promises"
 import { Global } from "../../src/global"
 import { McpOAuthCallback } from "../../src/mcp/oauth-callback"
+import { publishJSONBarrier } from "./json-barrier"
 
 const root = process.argv[2]
 const output = process.argv[3]
@@ -13,7 +14,7 @@ if (!root || !output || !stallTrigger || !stallStarted || !stallRecovered || !Nu
 }
 
 const binding = await Global.provideRoot(root, () => McpOAuthCallback.ensureRunning())
-await writeFile(output, JSON.stringify(binding), "utf8")
+await publishJSONBarrier(output, binding)
 
 let stalled = false
 setInterval(async () => {
@@ -24,9 +25,9 @@ setInterval(async () => {
     return
   }
   stalled = true
-  await writeFile(stallStarted, JSON.stringify({ started: true }), "utf8")
+  await publishJSONBarrier(stallStarted, { started: true })
   Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, stallDurationMs)
-  await writeFile(stallRecovered, JSON.stringify({ recovered: true }), "utf8")
+  await publishJSONBarrier(stallRecovered, { recovered: true })
 }, 25)
 
 setInterval(() => {}, 1_000)

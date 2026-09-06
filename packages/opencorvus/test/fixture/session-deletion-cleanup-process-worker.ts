@@ -10,6 +10,7 @@ import {
   SessionDeletionCleanupTestHooks,
   stageSessionDeletionCleanup,
 } from "@/session/deletion-cleanup"
+import { publishJSONBarrier } from "./json-barrier"
 
 const [mode, projectDirectory, barrierDirectory, sessionID] = process.argv.slice(2)
 if (!mode || !projectDirectory || !barrierDirectory) {
@@ -48,9 +49,9 @@ const result = await Instance.provide({
       const claim = claimSessionDeletionCleanup(plan)
       if (!claim.acquired) throw new Error(`Deletion occurrence is already owned by ${claim.ownerOccurrenceID}`)
       await stageSessionDeletionCleanup(plan)
-      await fs.writeFile(
+      await publishJSONBarrier(
         path.join(barrierDirectory, "owner-ready.json"),
-        JSON.stringify({ source: plan.manifest.targets[0]!.source, quarantine: plan.manifest.targets[0]!.quarantine }),
+        { source: plan.manifest.targets[0]!.source, quarantine: plan.manifest.targets[0]!.quarantine },
       )
       await new Promise(() => undefined)
     }

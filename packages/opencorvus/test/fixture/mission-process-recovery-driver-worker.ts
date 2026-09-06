@@ -17,6 +17,7 @@ import { Hono } from "hono"
 import { MissionRetentionTestHooks } from "@/mission/retention"
 import { PersistedProjectContext } from "@/server/persisted-project-context"
 import "@/task-api"
+import { publishJSONBarrier } from "./json-barrier"
 
 const [
   mode,
@@ -159,16 +160,16 @@ async function run() {
             })
           },
         })
-        await fs.writeFile(
+        await publishJSONBarrier(
           path.join(barrierDirectory, "owner-ready.json"),
-          JSON.stringify({ sessionID: mission.id, messageID: receipt.messageID }),
+          { sessionID: mission.id, messageID: receipt.messageID },
         )
         await waitFor("owner-exit")
         return { mode, sessionID: mission.id, messageID: receipt.messageID }
       }
       if (mode === "writeahead-blocked") {
         using _hook = MissionProcessRecoveryTestHooks.installAfterWriteAhead(async (input) => {
-          await fs.writeFile(path.join(barrierDirectory, "writeahead-ready.json"), JSON.stringify(input))
+          await publishJSONBarrier(path.join(barrierDirectory, "writeahead-ready.json"), input)
           await waitFor("writeahead-release")
         })
         const caller = new AbortController()
@@ -190,7 +191,7 @@ async function run() {
       }
       if (mode === "recovery-run") {
         const recovered = await recoverMissionProcessSession(mission.id)
-        await fs.writeFile(path.join(barrierDirectory, "recovery-ready.json"), JSON.stringify(recovered))
+        await publishJSONBarrier(path.join(barrierDirectory, "recovery-ready.json"), recovered)
         await waitFor("recovery-exit")
         await SessionPromptState.release(mission.id, mission.directory)
         return { mode, recovered }
@@ -233,7 +234,7 @@ async function run() {
         )
         if (abort.status !== 200) throw new Error(`Mission abort failed before delete: ${await abort.text()}`)
         using _deleteIntent = MissionRetentionTestHooks.installAfterDeleteIntentCommitted(async (intent) => {
-          await fs.writeFile(path.join(barrierDirectory, "delete-intent-ready.json"), JSON.stringify(intent))
+          await publishJSONBarrier(path.join(barrierDirectory, "delete-intent-ready.json"), intent)
           await waitFor("delete-intent-release")
         })
         const response = await PersistedProjectContext.provide({
@@ -254,9 +255,9 @@ async function run() {
       }
       if (mode === "host-driver") {
         const result = await recoverStartedTaskExecutions({ scopeProjectWorktree: projectDirectory })
-        await fs.writeFile(
+        await publishJSONBarrier(
           path.join(barrierDirectory, "driver-ready.json"),
-          JSON.stringify({ sessionID: mission.id, result }),
+          { sessionID: mission.id, result },
         )
         await waitFor("driver-exit")
         await SessionPromptState.release(mission.id, mission.directory)

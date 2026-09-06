@@ -1,6 +1,6 @@
-import { writeFile } from "node:fs/promises"
 import { Global } from "../../src/global"
 import { McpOAuthCallback } from "../../src/mcp/oauth-callback"
+import { publishJSONBarrier } from "./json-barrier"
 
 const [root, authKey, oauthState, correlationID, output] = process.argv.slice(2)
 if (!root || !authKey || !oauthState || !correlationID || !output) {
@@ -10,12 +10,9 @@ if (!root || !authKey || !oauthState || !correlationID || !output) {
 const settlement = await Global.provideRoot(root, () =>
   McpOAuthCallback.waitForCallbackSettlement(oauthState, authKey, correlationID),
 )
-await writeFile(
+await publishJSONBarrier(
   output,
-  JSON.stringify(
-    settlement.status === "fulfilled"
-      ? settlement
-      : { status: settlement.status, error: { message: settlement.error.message } },
-  ),
-  "utf8",
+  settlement.status === "fulfilled"
+    ? settlement
+    : { status: settlement.status, error: { message: settlement.error.message } },
 )

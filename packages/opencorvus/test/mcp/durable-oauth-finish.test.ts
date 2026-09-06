@@ -16,6 +16,7 @@ import { McpDebugCommand } from "@/cli/cmd/mcp"
 import { Filesystem } from "@/util/filesystem"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { currentTestChildEnvironment } from "../fixture/current-test-child-environment"
+import { waitForJSONBarrier as waitForJson } from "../fixture/json-barrier"
 
 afterEach(async () => {
   await McpOAuthCallback.stop()
@@ -29,18 +30,6 @@ const brokerWorker = path.join(import.meta.dir, "../fixture/mcp-oauth-callback-b
 const waiterWorker = path.join(import.meta.dir, "../fixture/mcp-oauth-callback-waiter-worker.ts")
 const finishingWorker = path.join(import.meta.dir, "../fixture/mcp-oauth-callback-finishing-worker.ts")
 const terminalWorker = path.join(import.meta.dir, "../fixture/mcp-oauth-callback-terminal-worker.ts")
-
-async function waitForJson<T>(filepath: string): Promise<T> {
-  const deadline = Date.now() + 10_000
-  while (Date.now() < deadline) {
-    try {
-      return JSON.parse(await Bun.file(filepath).text()) as T
-    } catch {
-      await Bun.sleep(25)
-    }
-  }
-  throw new Error(`Timed out waiting for callback broker binding ${filepath}`)
-}
 
 async function waitForBrokerBinding(filepath: string) {
   return waitForJson<{ redirectUrl: string; generation: string }>(filepath)

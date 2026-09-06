@@ -1,6 +1,6 @@
-import { writeFile } from "node:fs/promises"
 import { Global } from "../../src/global"
 import { McpAuth } from "../../src/mcp/auth"
+import { publishJSONBarrier } from "./json-barrier"
 
 const [root, authKey, oauthState, revision, output, leaseDuration] = process.argv.slice(2)
 if (!root || !authKey || !oauthState || !revision || !output || !leaseDuration) {
@@ -17,5 +17,5 @@ await Global.provideRoot(root, async () => {
   )
   if (!spent) throw new Error("Finishing worker could not spend the durable OAuth state")
 })
-await writeFile(output, JSON.stringify({ spent: true }), "utf8")
+await publishJSONBarrier(output, { spent: true })
 setInterval(() => {}, 1_000)

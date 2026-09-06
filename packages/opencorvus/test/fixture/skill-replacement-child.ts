@@ -14,6 +14,7 @@ const { Config } = await import("../../src/config/config")
 const { Global } = await import("../../src/global")
 const fs = await import("node:fs/promises")
 const path = await import("node:path")
+const { publishJSONBarrier } = await import("./json-barrier")
 
 const names = ["replacement-alpha", "replacement-beta"]
 
@@ -162,7 +163,7 @@ if (action === "setup") {
     const ready = path.join(runtimeRoot, "skill-replacement-cache-ready.json")
     const resume = path.join(runtimeRoot, "skill-replacement-cache-resume")
     const before = await installedSnapshot(project.worktree)
-    await fs.writeFile(ready, JSON.stringify(before), "utf8")
+    await publishJSONBarrier(ready, before)
     while (true) {
       const resumed = await fs.stat(resume).then(
         () => true,

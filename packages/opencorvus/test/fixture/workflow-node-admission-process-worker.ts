@@ -21,6 +21,7 @@ import { Database, eq } from "@/storage/db"
 import fs from "node:fs"
 import path from "node:path"
 import { persistEstablishedTask } from "../fixture/engine-task"
+import { publishJSONBarrier } from "./json-barrier"
 
 const [mode, projectPath, barrierPath] = process.argv.slice(2)
 if ((mode !== "seed" && mode !== "execute-blocked" && mode !== "execute-peer") || !projectPath) {
@@ -277,13 +278,13 @@ async function run() {
         using _claimBarrier =
           mode === "execute-blocked"
             ? OrchestratorToolsTestHooks.replaceAfterDispatchLineageClaim(async ({ lineage }) => {
-                fs.writeFileSync(
+                await publishJSONBarrier(
                   path.join(barrierPath!, "ready.json"),
-                  JSON.stringify({
+                  {
                     lineageID: lineage.artifactID,
                     dispatchID: lineage.dispatchID,
                     childSessionID: lineage.payload.child_session_id,
-                  }),
+                  },
                 )
                 await waitForBarrier("release")
               })

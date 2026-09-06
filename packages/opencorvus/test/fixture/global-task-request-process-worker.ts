@@ -8,6 +8,7 @@ import { GlobalTaskService } from "@/task-api/global-task-service"
 import { TaskCreationCommitTestHooks } from "@/task-api"
 import { GlobalCreationAllocationTable, ProjectTable } from "@/project/project.sql"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
+import { publishJSONBarrier } from "./json-barrier"
 
 const [mode, barrierDirectory, requestID] = process.argv.slice(2)
 if (!mode || !barrierDirectory || !requestID) {
@@ -104,7 +105,7 @@ async function run() {
   }
   if (mode === "cut") {
     using _cut = GlobalTaskService.TestHooks.replaceAfterAllocation(async ({ directory }) => {
-      await fs.writeFile(path.join(barrierDirectory, "allocation.ready.json"), JSON.stringify({ directory }))
+      await publishJSONBarrier(path.join(barrierDirectory, "allocation.ready.json"), { directory })
       await new Promise<never>(() => undefined)
     })
     await GlobalTaskService.create(input)

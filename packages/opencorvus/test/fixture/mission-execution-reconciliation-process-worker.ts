@@ -18,6 +18,7 @@ import { Session } from "@/session"
 import { SessionWake } from "@/session/wake"
 import { Database } from "@/storage/db"
 import { Hono } from "hono"
+import { publishJSONBarrier } from "./json-barrier"
 
 const [mode, projectDirectory, barrierDirectory, apiURL] = process.argv.slice(2)
 if (!mode || !projectDirectory || !barrierDirectory) {
@@ -113,14 +114,14 @@ async function run() {
       })
       if (mode === "close-blocked") {
         using _barrier = MissionExecutionClosureTestHooks.installAfterCloseLeaseAcquired(async (closure) => {
-          await fs.writeFile(
+          await publishJSONBarrier(
             path.join(barrierDirectory, "close-ready.json"),
-            JSON.stringify({
+            {
               sessionID: mission.id,
               closureEventID: closure.eventID,
               operationID: closure.operationID,
               requestID: closure.requestID,
-            }),
+            },
           )
           await waitFor("close-release")
         })
@@ -144,14 +145,14 @@ async function run() {
         using _bundleBarrier =
           mode === "wake-before-bundle"
             ? MissionExecutionClosureTestHooks.installBeforeOperatorWakeBundleCommit(async ({ admission }) => {
-                await fs.writeFile(
+                await publishJSONBarrier(
                   path.join(barrierDirectory, "wake-ready.json"),
-                  JSON.stringify({
+                  {
                     sessionID: mission.id,
                     messageID: admission.messageID,
                     closureEventID: admission.closureEventID,
                     operationID: admission.operationID,
-                  }),
+                  },
                 )
                 await waitFor("wake-release")
               })
@@ -163,9 +164,9 @@ async function run() {
                   (entry) => entry.info.role === "user",
                 )
                 if (!message) throw new Error("Mission wake barrier reached without its real user Message")
-                await fs.writeFile(
+                await publishJSONBarrier(
                   path.join(barrierDirectory, "wake-ready.json"),
-                  JSON.stringify({ sessionID: mission.id, messageID: message.info.id }),
+                  { sessionID: mission.id, messageID: message.info.id },
                 )
                 await waitFor("wake-release")
               })
@@ -191,13 +192,13 @@ async function run() {
         using _bundleBarrier =
           mode === "operator-idempotent-blocked"
             ? MissionExecutionClosureTestHooks.installBeforeOperatorWakeBundleCommit(async ({ admission }) => {
-                await fs.writeFile(
+                await publishJSONBarrier(
                   path.join(barrierDirectory, "operator-idempotent-ready.json"),
-                  JSON.stringify({
+                  {
                     sessionID: mission.id,
                     messageID: admission.messageID,
                     closureEventID: admission.closureEventID,
-                  }),
+                  },
                 )
                 await waitFor("operator-idempotent-release")
               })
@@ -234,9 +235,9 @@ async function run() {
             }),
           }),
         )
-        await fs.writeFile(
+        await publishJSONBarrier(
           path.join(barrierDirectory, "live-ready.json"),
-          JSON.stringify({ sessionID: mission.id, status: response.status, body: await response.json() }),
+          { sessionID: mission.id, status: response.status, body: await response.json() },
         )
         await waitFor("live-exit")
         return { mode, sessionID: mission.id, status: response.status }
