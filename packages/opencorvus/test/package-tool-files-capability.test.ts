@@ -64,8 +64,8 @@ export default tool({ description: "Read a source-compiled value", args: { value
         owner: "shared",
         sourcePath,
       })
-      expect(loadedUtilFiles.map((file) => path.normalize(file))).toEqual([
-        path.join(isolatedModules, "util", "src", "capability-ref.ts"),
+      expect(await Promise.all(loadedUtilFiles.map((file) => nativeFiles.realpath(file)))).toEqual([
+        await nativeFiles.realpath(path.join(isolatedModules, "util", "src", "capability-ref.ts")),
       ])
       const child = Bun.spawn(
         [
