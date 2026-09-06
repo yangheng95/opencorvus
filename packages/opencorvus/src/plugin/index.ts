@@ -348,7 +348,7 @@ export namespace Plugin {
         if (bytesSHA256(existing) !== artifact.revision) {
           throw new Error(`Plugin module content-addressed cache is corrupt at ${target}`)
         }
-        return target
+        return realpath(target)
       }
       const temporary = path.join(outdir, `.${artifact.revision}.${process.pid}.${randomUUID()}.tmp`)
       await writeFile(temporary, artifact.bytes, { flag: "wx" })
@@ -363,7 +363,7 @@ export namespace Plugin {
       } finally {
         await rm(temporary, { force: true })
       }
-      return target
+      return realpath(target)
     })()
     pluginModulePublications.set(artifact.revision, publication)
     try {

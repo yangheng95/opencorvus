@@ -1,9 +1,10 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { mkdtemp, mkdir, rm, symlink, writeFile } from "node:fs/promises"
+import { mkdtemp, mkdir, realpath, rm, symlink, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
 import { Plugin } from "../src/plugin"
+import { Global } from "../src/global"
 import { Instance } from "../src/project/instance"
 
 afterEach(async () => {
@@ -230,6 +231,35 @@ describe("Plugin materialization revision", () => {
       Plugin.TestHooks.afterModuleArtifactBuilt = undefined
       await Instance.disposeAll()
       await rm(root, { recursive: true, force: true })
+    }
+  })
+
+  test("loads one physical Plugin artifact through a filesystem-aliased runtime root", async () => {
+    const parent = await mkdtemp(path.join(tmpdir(), "opencorvus-plugin-runtime-alias-"))
+    try {
+      const physicalRuntime = path.join(parent, "physical-runtime")
+      const logicalRuntime = path.join(parent, "logical-runtime")
+      const project = path.join(parent, "project")
+      await Promise.all([mkdir(physicalRuntime), mkdir(project)])
+      await symlink(physicalRuntime, logicalRuntime, "junction")
+      const entry = path.join(project, "plugin.ts")
+      await writeFile(
+        entry,
+        [
+          "export default async function aliasedRuntimePlugin() {",
+          '  return { "tool.definition": async (_input, output) => { output.description = "physical-artifact" } }',
+          "}",
+        ].join("\n"),
+      )
+      await writeProjectPluginConfig(project, pathToFileURL(entry).href)
+
+      const loaded = await Global.provideRoot(logicalRuntime, () => loadedToolDefinition(project))
+
+      expect(loaded.description).toBe("physical-artifact")
+      expect(await realpath(logicalRuntime)).toBe(await realpath(physicalRuntime))
+    } finally {
+      await Instance.disposeAll()
+      await rm(parent, { recursive: true, force: true })
     }
   })
 
