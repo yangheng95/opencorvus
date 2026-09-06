@@ -203,6 +203,20 @@ describe("global Task request occurrence", () => {
         data: expect.objectContaining({ message: expect.stringContaining("immutable root configuration snapshot") }),
       }),
     )
+    const divergentDirectory = structuredClone(exportMysqlTransferSnapshot())
+    const contractRow = divergentDirectory.tables
+      .find((table) => table.name === "engine_task_creation_contract")
+      ?.rows.find((row) => row.task_id === first.task_id)
+    if (!contractRow) throw new Error("Global Task transfer omitted its creation contract")
+    const contract = JSON.parse(String(contractRow.contract)) as Record<string, any>
+    contract.resolved.directory = path.join(first.directory, "divergent")
+    contractRow.contract = JSON.stringify(contract)
+    expect(() => preflightMysqlTransferSnapshot(divergentDirectory)).toThrow(
+      expect.objectContaining({
+        name: "MysqlTransferValidationError",
+        data: expect.objectContaining({ message: expect.stringContaining("resolved creation snapshot") }),
+      }),
+    )
   }, 120_000)
 
   test("equivalent padded and unpadded attachment bytes share one Global Task request", async () => {

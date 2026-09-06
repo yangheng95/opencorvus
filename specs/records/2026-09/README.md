@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [0.0.63-beta release repair and publication](2026-09-06-v0.0.63-beta-release-repair.md)
+
 - [Scheduling razor remediation](2026-09-05-scheduling-razor-remediation.md)
 
 - [0.0.62-beta release preparation](2026-09-05-v0.0.62-beta-release.md)

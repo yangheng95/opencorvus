@@ -371,11 +371,12 @@ describe("explicit Project identity convergence", () => {
       insertTaskProcessBinding({
         db,
         payload: {
-          protocol: "task-native-process-binding-v1",
+          protocol: "task-native-process-binding-v2",
           task_id: taskID,
           project_id: duplicateProjectID,
           package_revision_sha256: "b".repeat(64),
           mode: "native",
+          logical_workspace_root: fixture.path,
           workspace_root: fixture.path,
           initial_tree_sha256: "c".repeat(64),
           time_created: now,

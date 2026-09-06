@@ -39,7 +39,7 @@ export function persistEstablishedTask(input: Omit<PersistTaskInput, "creationCo
   const sessionMetadata = (input.rootSession.metadata ?? {}) as Record<string, any>
   const snapshot = (sessionMetadata.taskConfigSnapshot ?? {}) as Record<string, any>
   const overlay = (sessionMetadata.configOverlay ?? {}) as Record<string, any>
-  const process = input.executionCapsuleBinding.protocol === "task-native-process-binding-v1"
+  const process = input.executionCapsuleBinding.protocol === "task-native-process-binding-v2"
     ? {
         protocol: input.executionCapsuleBinding.protocol,
         mode: input.executionCapsuleBinding.mode,

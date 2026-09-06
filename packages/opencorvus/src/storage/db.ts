@@ -15,10 +15,7 @@ import * as fsPromises from "fs/promises"
 import { randomUUID } from "crypto"
 import { ApplicationSchema, DatabaseAuthorityTable } from "./schema"
 import { SCHEMA_DDL } from "./ddl"
-import {
-  findSchemaDrift,
-  schemaObjectFingerprint,
-} from "./schema-contract"
+import { findSchemaDrift, schemaObjectFingerprint } from "./schema-contract"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Identifier } from "@/id/id"
 import {
@@ -30,6 +27,10 @@ import { EngineArtifactTable } from "@/engine/engine.sql"
 import { assertEngineArtifactPayloadIdentity } from "@/engine/artifact-catalog-metadata"
 import { GoalWorkloadArtifactSchema } from "@/goal-workload-analyst/types"
 import { validateGoalWorkloadArtifactRelationalIntegrity } from "@/goal-workload-analyst/relational-integrity"
+import {
+  TASK_PROCESS_BINDING_INVALID_INDEX,
+  TASK_PROCESS_BINDING_INVALID_SQL,
+} from "@/engine/task-process-binding-contract"
 
 export const NotFoundError = NamedError.create(
   "NotFoundError",
@@ -43,9 +44,7 @@ export const NotFoundError = NamedError.create(
  * localized or version-dependent English message text. */
 export function isSqliteUniqueConstraintError(error: unknown): boolean {
   return Boolean(
-    error &&
-      typeof error === "object" &&
-      (error as { code?: unknown }).code === "SQLITE_CONSTRAINT_UNIQUE",
+    error && typeof error === "object" && (error as { code?: unknown }).code === "SQLITE_CONSTRAINT_UNIQUE",
   )
 }
 
@@ -298,6 +297,30 @@ function assertCurrentDataIntegrity(
   db: SQLiteBunDatabase<typeof ApplicationSchema>,
   dbPath: string,
 ): void {
+  const invalidTaskProcessBinding = queryAllFinalized<{
+    id: string
+    protocol: string | null
+  }>(
+    sqlite,
+    `SELECT id,
+            CASE WHEN json_valid(payload) THEN json_extract(payload, '$.protocol') ELSE NULL END AS protocol
+     FROM engine_artifact INDEXED BY ${TASK_PROCESS_BINDING_INVALID_INDEX}
+     WHERE ${TASK_PROCESS_BINDING_INVALID_SQL}
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (invalidTaskProcessBinding) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains Task process binding ${invalidTaskProcessBinding.id} ` +
+        `with protocol ${invalidTaskProcessBinding.protocol ?? "<invalid>"} at ${dbPath}. ` +
+        "Its immutable process authority is invalid for the current database epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.taskProcessBindingEpoch",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
   const legacyProject = queryAllFinalized<{ id: string }>(
     sqlite,
     `SELECT id

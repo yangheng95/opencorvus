@@ -4,6 +4,16 @@
 
 ## 未发布
 
+## 0.0.63beta - 2026-09-06
+
+本版本替代已生成二进制但网站未完成激活的 `0.0.62-beta`。旧 tag 与 Release 保持不可变；本版本在新的 source identity 上重新执行完整原生矩阵、更新清单和网站发布。数据库继续只接受当前 pre-release schema epoch，不增加历史 migration、兼容 reader 或线上注册表绕行。
+
+### Fixed
+
+- 修复 Evolution Lab 内容变化后仍复用旧 package revision 的生成闭包：canonical generator 现在发布新的内部 revision，并同步 payload 与 revision registry；发布工作流在取得 tag/draft owner 前执行同一 fixed-point 检查，内容不同的 immutable revision 仍由网站数据库严格拒绝。
+- 修复 Worktree population 失败及命名 stale reclaim 在持有自身目录 acquisition 时调用移除、因而把自己误判为 active owner 的收敛矛盾；唯一精确 acquisition 现在原子转换为 removal ownership，并在移除后继续保护同一创建区间，真实 peer acquisition 仍优先阻止删除。
+- 修复 Task 创建与转储校验混用 root Session 逻辑目录、process binding 物理目录的问题，以及 macOS `/tmp` 与 `/private/tmp` 指向同一物理根时的 process-binding 冲突；接受快照、物理执行 authority 与后续 Project relocation 各自保持单一事实来源。
+
 ## 0.0.62beta - 2026-09-05
 
 本版本在 `0.0.61-beta` 的不可变发布基础上同步最新源码，修复干净环境的发布前检查，并重新发布完整桌面端、命令行、更新清单和公开网站。数据库继续采用当前 pre-release schema epoch：不新增历史 migration 或兼容 reader，不兼容的旧数据库需要显式重置。

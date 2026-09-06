@@ -8,6 +8,12 @@ import { importWebsiteRegistryPublication } from "../src/lib/website-registry-im
 import { WebsiteRegistryConflictError, WebsiteRegistryIntegrityError } from "../src/lib/website-registry-contract"
 import { canonicalWebsiteRegistryJSON } from "../src/lib/website-registry-contract"
 import { validateWebsiteRegistrySeed } from "../src/lib/website-registry-seed-validation"
+import { ExpertSquadRegistry } from "../../opencorvus/src/expert-squad/registry"
+import { payloadPackageSources } from "../../opencorvus/generated/expert-squad-payload"
+import { projectExpertSquadFacts } from "../src/lib/expert-squad-facts"
+import { projectPublicSquadRecord } from "../src/content/public-market"
+import { generateExpertSquadDistribution } from "../script/generate-expert-squad-distribution"
+import type { WebsiteRegistrySeed } from "../src/lib/website-registry-contract"
 
 const exists = (target: string) => access(target).then(() => true).catch(() => false)
 
@@ -16,6 +22,54 @@ const generatedRoot = path.join(webRoot, ".generated")
 const distributionRoot = path.join(webRoot, ".generated")
 let root = ""
 let registry: WebsiteRegistry
+
+async function singlePackagePublication(
+  source: ExpertSquadRegistry.EmbeddedPackageSource,
+  sourceRoot: string,
+): Promise<WebsiteRegistrySeed> {
+  const distribution = await generateExpertSquadDistribution(
+    path.join(sourceRoot, "expert-squads"),
+    path.join(sourceRoot, "distribution-metadata.ts"),
+    [],
+    { sources: [source], embeddedIdentities: new Set() },
+  )
+  const facts = projectExpertSquadFacts(ExpertSquadRegistry.loadEmbeddedPackageDeclaration(source))
+  const publicRecord = projectPublicSquadRecord(facts)
+  const archive = distribution.catalog.packages[0]!
+  const disposition = (() => {
+    if (archive.disposition === "embedded_already_available") return "embedded_already_available" as const
+    if (archive.disposition === "bundled_market_importable") return "bundled_market_importable" as const
+    throw new Error(`Unexpected distribution disposition: ${archive.disposition}`)
+  })()
+  const normalized = {
+    ...facts,
+    agents: [...publicRecord.agents],
+    workflows: publicRecord.workflows.map((workflow) => ({
+      ...workflow,
+      nodes: workflow.nodes.map((node) => ({ ...node, dependsOn: [...node.dependsOn] })),
+    })),
+    disposition,
+    archive: archive.archive,
+    locales: [
+      { locale: "en" as const, label: publicRecord.displayLabel.root, description: publicRecord.description.root, selectorSummary: publicRecord.selectorSummary.root },
+      { locale: "zh-CN" as const, label: publicRecord.displayLabel["zh-cn"], description: publicRecord.description["zh-cn"], selectorSummary: publicRecord.selectorSummary["zh-cn"] },
+    ],
+  }
+  return {
+    protocol: "opencorvus/website-registry-seed@1",
+    schemaVersion: 1,
+    catalog: {
+      path: distribution.catalogPath,
+      sha256: distribution.catalogSha256,
+      bytes: Buffer.byteLength(`${JSON.stringify(distribution.catalog, null, 2)}\n`),
+    },
+    resources: distribution.catalog.resources,
+    packages: [{
+      ...normalized,
+      factsSha256: createHash("sha256").update(canonicalWebsiteRegistryJSON(normalized)).digest("hex"),
+    }],
+  }
+}
 
 beforeAll(async () => {
   root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-website-registry-"))
@@ -42,6 +96,49 @@ test("rejects a seed whose disposition facts were swapped outside the signed cat
   }
   await expect(validateWebsiteRegistrySeed(tampered, distributionRoot)).rejects.toBeInstanceOf(WebsiteRegistryIntegrityError)
 })
+
+test("activates a new immutable Evolution Lab revision while retaining the prior revision", async () => {
+  const sequenceRoot = await mkdtemp(path.join(os.tmpdir(), "opencorvus-website-revision-sequence-"))
+  const sequenceRegistry = await WebsiteRegistry.open(path.join(sequenceRoot, "registry.sqlite3"), path.join(sequenceRoot, "data"))
+  try {
+    const current = structuredClone(payloadPackageSources.find((source) => source.id === "evolution-lab"))
+    if (!current) throw new Error("Evolution Lab payload source is missing")
+    const prior = structuredClone(current)
+    prior.files["expert-squad.jsonc"] = prior.files["expert-squad.jsonc"]
+      .replace('"version": "2026.09.06.1"', '"version": "2026.09.02.1"')
+    prior.files["README.md"] = `${prior.files["README.md"]}\nPrior immutable revision fixture.\n`
+
+    const priorRoot = path.join(sequenceRoot, "prior")
+    const currentRoot = path.join(sequenceRoot, "current")
+    const priorSeed = await singlePackagePublication(prior, priorRoot)
+    const currentSeed = await singlePackagePublication(current, currentRoot)
+    expect(priorSeed.packages[0]!.identity).toMatchObject({ id: "evolution-lab", version: "2026.09.02.1" })
+    expect(currentSeed.packages[0]!.identity).toMatchObject({ id: "evolution-lab", version: "2026.09.06.1" })
+    expect(priorSeed.packages[0]!.identity.digest).not.toBe(currentSeed.packages[0]!.identity.digest)
+
+    const priorPublication = await importWebsiteRegistryPublication(sequenceRegistry, priorSeed, priorRoot)
+    const currentPublication = await importWebsiteRegistryPublication(sequenceRegistry, currentSeed, currentRoot)
+    expect(currentPublication).not.toBe(priorPublication)
+    expect(sequenceRegistry.squad("builtin", "evolution-lab")?.identity).toEqual(currentSeed.packages[0]!.identity)
+    expect(sequenceRegistry.sqlite.query<{ version: string; package_digest: string }, []>(
+      "SELECT version,package_digest FROM squad_revision WHERE namespace='builtin' AND squad_id='evolution-lab' ORDER BY version",
+    ).all()).toEqual([
+      { version: "2026.09.02.1", package_digest: priorSeed.packages[0]!.identity.digest },
+      { version: "2026.09.06.1", package_digest: currentSeed.packages[0]!.identity.digest },
+    ])
+    expect(sequenceRegistry.archive(
+      "builtin",
+      "evolution-lab",
+      currentSeed.packages[0]!.identity.version,
+      currentSeed.packages[0]!.identity.digest,
+    )).toMatchObject({ sha256: currentSeed.packages[0]!.archive.sha256 })
+  } finally {
+    sequenceRegistry.close()
+    Bun.gc(true)
+    await Bun.sleep(100)
+    await rm(sequenceRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
+  }
+}, 30_000)
 
 test(
   "imports, queries, counts, verifies, backs up, restores, and protects one immutable publication",

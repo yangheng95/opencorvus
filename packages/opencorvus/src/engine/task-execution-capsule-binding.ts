@@ -1,5 +1,6 @@
 import z from "zod"
 import { and, eq } from "drizzle-orm"
+import { realpathSync } from "node:fs"
 import { realpath } from "node:fs/promises"
 import { Database } from "@/storage/db"
 import { Filesystem } from "@/util/filesystem"
@@ -41,6 +42,10 @@ export function configuredTaskProcessMode(): "native" | "capsule" {
   )
 }
 
+function physicalTaskRoot(directory: string): string {
+  return Filesystem.normalizePath(realpathSync.native(directory))
+}
+
 export async function prepareTaskProcessBinding(input: {
   mode: "native" | "capsule"
   taskID: string
@@ -49,7 +54,8 @@ export async function prepareTaskProcessBinding(input: {
   packageRevisionSHA256: string
   timeCreated: number
 }): Promise<TaskProcessBindingPayload> {
-  const root = Filesystem.normalizePath(await realpath(input.rootDirectory))
+  const logicalRoot = Filesystem.resolve(input.rootDirectory)
+  const root = physicalTaskRoot(input.rootDirectory)
   if (input.mode === "native") {
     return TaskNativeProcessBindingPayloadSchema.parse({
       protocol: TASK_NATIVE_PROCESS_BINDING_PROTOCOL,
@@ -57,6 +63,7 @@ export async function prepareTaskProcessBinding(input: {
       project_id: input.projectID,
       package_revision_sha256: input.packageRevisionSHA256,
       mode: "native",
+      logical_workspace_root: logicalRoot,
       workspace_root: root,
       initial_tree_sha256: await executionCapsuleSourceTreeDigest(root),
       time_created: input.timeCreated,
@@ -78,6 +85,7 @@ export async function prepareTaskProcessBinding(input: {
     package_revision_sha256: input.packageRevisionSHA256,
     runtime_descriptor_sha256: runtime.descriptorSHA256,
     runtime_identity_sha256: runtime.runtimeIdentitySHA256,
+    logical_workspace_root: logicalRoot,
     workspace: {
       root,
       initial_tree_sha256: await executionCapsuleSourceTreeDigest(root),
@@ -119,7 +127,8 @@ export function assertTaskProcessBindingCreation(input: {
     payload.project_id !== input.projectID ||
     payload.package_revision_sha256 !== input.packageRevisionSHA256 ||
     payload.time_created !== input.timeCreated ||
-    Filesystem.normalizePath(root) !== Filesystem.normalizePath(input.rootDirectory)
+    payload.logical_workspace_root !== Filesystem.resolve(input.rootDirectory) ||
+    physicalTaskRoot(root) !== physicalTaskRoot(input.rootDirectory)
   ) {
     throw new Error(`Task ${input.taskID} process binding conflicts with its creation transaction`)
   }

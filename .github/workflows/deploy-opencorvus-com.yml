@@ -135,6 +135,12 @@ jobs:
         env:
           HUSKY: "0"
 
+      - name: Verify generated repository fixed point
+        shell: bash
+        run: |
+          bun ./script/generate.ts
+          bun ./script/generated-artifacts.ts --check-clean-worktree
+
       - name: Build SDK dependency
         run: bun run --cwd packages/sdk/js build
 

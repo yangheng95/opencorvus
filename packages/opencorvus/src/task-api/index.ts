@@ -1623,7 +1623,7 @@ function taskCreatorCreationEnvelope(creator: ResolvedTaskCreationAuthority) {
 }
 
 function taskProcessCreationEnvelope(binding: TaskProcessBindingPayload) {
-  if (binding.protocol === "task-native-process-binding-v1") {
+  if (binding.protocol === "task-native-process-binding-v2") {
     return {
       protocol: binding.protocol,
       mode: binding.mode,

@@ -82,6 +82,12 @@ jobs:
           HUSKY: "0"
         run: bun install --frozen-lockfile --no-progress --ignore-scripts
 
+      - name: Verify generated repository fixed point
+        shell: bash
+        run: |
+          bun ./script/generate.ts
+          bun ./script/generated-artifacts.ts --check-clean-worktree
+
       # Reserve the same resumable owner before native compilation. A failed
       # platform retries inside this workflow run and reuses the owned draft.
       - name: Claim immutable release identity

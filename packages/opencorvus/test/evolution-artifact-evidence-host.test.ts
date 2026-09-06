@@ -1508,7 +1508,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           const collectorResourceSet = TaskArtifactResourceSetLocatorSchema.parse(collectorReceipt.resource_set)
           const trialProcessBinding = readTaskProcessBinding(trialTaskID)
           const trialInitialTreeSHA256 =
-            trialProcessBinding.protocol === "task-native-process-binding-v1"
+            trialProcessBinding.protocol === "task-native-process-binding-v2"
               ? trialProcessBinding.initial_tree_sha256
               : trialProcessBinding.workspace.initial_tree_sha256
           const runArtifactPayload = {

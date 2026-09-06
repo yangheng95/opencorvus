@@ -152,7 +152,7 @@ export async function collectTaskRunEvidence(input: {
         }
         const processBindingArtifact = processBindingArtifacts[0]!
         const processBinding = TaskProcessBindingPayloadSchema.parse(processBindingArtifact.payload)
-        const initialTreeSHA256 = processBinding.protocol === "task-native-process-binding-v1"
+        const initialTreeSHA256 = processBinding.protocol === "task-native-process-binding-v2"
           ? processBinding.initial_tree_sha256
           : processBinding.workspace.initial_tree_sha256
         const baselineCheckpoint = checkpointFact(task.id, gitMetadata.baseline, "baseline")

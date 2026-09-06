@@ -1,11 +1,17 @@
 import z from "zod"
 import { CheckConfig } from "./check-config"
 import { ExpertSquadPackageRevisionBindingSchema } from "./expert-squad-package-revision-binding"
+import {
+  TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL,
+  TASK_NATIVE_PROCESS_BINDING_PROTOCOL,
+} from "./task-process-binding-contract"
+export {
+  TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL,
+  TASK_NATIVE_PROCESS_BINDING_PROTOCOL,
+} from "./task-process-binding-contract"
 
 const SHA256 = z.string().regex(/^[a-f0-9]{64}$/)
 
-export const TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL = "task-execution-capsule-binding-v1" as const
-export const TASK_NATIVE_PROCESS_BINDING_PROTOCOL = "task-native-process-binding-v1" as const
 export const TASK_PACKAGE_REVISION_BINDING_PROTOCOL = "task-package-revision-binding-v1" as const
 
 export const TaskNativeProcessBindingPayloadSchema = z
@@ -15,6 +21,7 @@ export const TaskNativeProcessBindingPayloadSchema = z
     project_id: z.string().min(1),
     package_revision_sha256: SHA256,
     mode: z.literal("native"),
+    logical_workspace_root: z.string().min(1),
     workspace_root: z.string().min(1),
     initial_tree_sha256: SHA256,
     time_created: z.number().int().nonnegative(),
@@ -29,6 +36,7 @@ export const TaskExecutionCapsuleBindingPayloadSchema = z
     package_revision_sha256: SHA256,
     runtime_descriptor_sha256: SHA256,
     runtime_identity_sha256: SHA256,
+    logical_workspace_root: z.string().min(1),
     workspace: z
       .object({
         root: z.string().min(1),

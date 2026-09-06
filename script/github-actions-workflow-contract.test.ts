@@ -359,11 +359,17 @@ describe("GitHub Actions workflow contract", () => {
       env: { HUSKY: "0" },
       run: "bun install --frozen-lockfile --no-progress --ignore-scripts",
     })
+    expect(jobs.prepare?.steps?.find(({ name }) => name === "Verify generated repository fixed point")).toEqual({
+      name: "Verify generated repository fixed point",
+      shell: "bash",
+      run: "bun ./script/generate.ts\nbun ./script/generated-artifacts.ts --check-clean-worktree\n",
+    })
     const prepareStepNames = jobs.prepare?.steps?.map(({ name }) => name) ?? []
-    expect(prepareStepNames.slice(-5)).toEqual([
+    expect(prepareStepNames.slice(-6)).toEqual([
       "Verify version alignment",
       "Verify immutable release identity",
       "Verify frozen dependency graph",
+      "Verify generated repository fixed point",
       "Claim immutable release identity",
       "Claim draft publication owner",
     ])
@@ -485,6 +491,14 @@ describe("GitHub Actions workflow contract", () => {
     expect(freezeStep?.run).toContain('RELEASE_ID="${WEBSITE_SOURCE_SHA}-')
 
     const buildSteps = jobs.build?.steps ?? []
+    expect(buildSteps.find(({ name }) => name === "Verify generated repository fixed point")).toEqual({
+      name: "Verify generated repository fixed point",
+      shell: "bash",
+      run: "bun ./script/generate.ts\nbun ./script/generated-artifacts.ts --check-clean-worktree\n",
+    })
+    expect(buildSteps.findIndex(({ name }) => name === "Verify generated repository fixed point")).toBeLessThan(
+      buildSteps.findIndex(({ name }) => name === "Generate current public download manifest"),
+    )
     const manifestStep = buildSteps.find(({ name }) => name === "Generate current public download manifest")
     expect(manifestStep?.env).toEqual({
       GH_TOKEN: "${{ github.token }}",

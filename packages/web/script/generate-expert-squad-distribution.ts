@@ -101,8 +101,8 @@ export async function generateExpertSquadDistribution(
     protocol: "opencorvus/expert-squad-static-catalog@1",
     resources: {
       total: sources.length,
-      embeddedAlreadyAvailable: builtInPackageSources.length,
-      bundledMarketImportable: payloadPackageSources.length,
+      embeddedAlreadyAvailable: identities.filter((identity) => embeddedIdentities.has(identity)).length,
+      bundledMarketImportable: identities.filter((identity) => !embeddedIdentities.has(identity)).length,
     },
     packages: catalogEntries,
   }

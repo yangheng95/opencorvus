@@ -74,7 +74,7 @@ export function assertGlobalTaskAcceptedResolution(input: {
   }
   const process = record(resolved.process, "Global Task process binding")
   const expectedNative = resolution.process_mode === "native"
-  if ((process.protocol === "task-native-process-binding-v1") !== expectedNative) {
+  if ((process.protocol === "task-native-process-binding-v2") !== expectedNative) {
     throw new Error("Global Task process mode diverges from its frozen allocation resolution")
   }
   const effective = Config.mergeOverlay(seed, {

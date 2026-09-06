@@ -1431,6 +1431,7 @@ export namespace Worktree {
     plan?: ManagedRemovalPlan
     projectDeletionAdmission?: ProjectDeletionRegistryAdmission
     releaseSandboxOwnership?: boolean
+    ownershipAcquisition?: WorktreeOwnershipCriticalSection.Acquisition
   }): Promise<{
     directory: string
     removed: boolean
@@ -1576,6 +1577,7 @@ export namespace Worktree {
           immutableRemoval.authority.kind === "public" && immutableRemoval.authority.releaseSandboxOwnership
         const result = await WorktreeOwnershipCriticalSection.remove({
           directory: directoryIdentity.key,
+          acquisition: input.ownershipAcquisition,
           proveOwnerless: async () => {
             if (activePartial && !(await directoryNamespaceMissing(input.directory))) {
               throw new RetainedReclamationConflict(
@@ -1870,7 +1872,10 @@ export namespace Worktree {
    *  continuity across retries (new path → new system-prompt bytes → new
    *  1h system cache). Surfacing a hard error here is the contract: the
    *  operator sees that reclaim failed and can intervene. */
-  async function reclaimInfo(info: Info): Promise<Info> {
+  async function reclaimInfo(
+    info: Info,
+    ownershipAcquisition: WorktreeOwnershipCriticalSection.Acquisition,
+  ): Promise<Info> {
     const { name, branch, directory } = info
     const ref = `refs/heads/${branch}`
 
@@ -1894,7 +1899,7 @@ export namespace Worktree {
       // let it propagate: the caller must see the reclaim failure, not get
       // a silently renamed workspace.
       if (dirExists) {
-        await remove({ directory })
+        await removeWithAcquisition({ directory }, ownershipAcquisition)
       }
       // Branch may still be there if: (a) dir didn't exist but a dangling
       // branch ref was left over from a prior crash, or (b) the worktree was
@@ -1927,22 +1932,7 @@ export namespace Worktree {
     return Info.parse({ name, branch, directory })
   }
 
-  async function reclaimBase(root: string, base: string): Promise<Info> {
-    const name = base
-    return reclaimInfo(
-      Info.parse({
-        name,
-        branch: `opencorvus/${name}`,
-        directory: path.join(root, name),
-      }),
-    )
-  }
-
-  async function candidate(root: string, base?: string) {
-    // Deterministic path: caller asked for a specific base name. Reclaim stale
-    // artifacts under that name and reuse the path. No randomized fallback.
-    if (base) return reclaimBase(root, base)
-
+  async function candidate(root: string) {
     // Non-deterministic path: caller didn't name the workspace. Try a random
     // name; retry on conflict (collisions here are rare and non-deterministic,
     // so iterating is a genuine retry, not a fallback that masks a lifecycle
@@ -2241,12 +2231,13 @@ export namespace Worktree {
     projectID: string
     primaryDirectory: string
     cause: unknown
+    ownershipAcquisition: WorktreeOwnershipCriticalSection.Acquisition
   }): Promise<unknown> {
     return withGitLock(async () => {
       const cleanupErrors: unknown[] = []
 
       try {
-        await Worktree.remove({ directory: input.info.directory })
+        await removeWithAcquisition({ directory: input.info.directory }, input.ownershipAcquisition)
       } catch (error) {
         cleanupErrors.push(error)
       }
@@ -2453,7 +2444,7 @@ export namespace Worktree {
     try {
       // All git operations serialized to prevent concurrent corruption
       await Worktree.withGitLock(async () => {
-        if (base) info = await reclaimInfo(intendedInfo)
+        if (base) info = await reclaimInfo(intendedInfo, ownership)
         // CONTRACT: project opening always commits the baseline Git metadata
         // first (see engine/git-project-metadata.ts), so HEAD is non-empty by
         // the time any worktree is requested. If we still see no HEAD here,
@@ -2521,6 +2512,7 @@ export namespace Worktree {
             projectID,
             primaryDirectory: primaryDir,
             cause: error,
+            ownershipAcquisition: ownership,
           })
         : error
       publishCreateFailure(projectDirectory, info, failure)
@@ -2782,15 +2774,21 @@ export namespace Worktree {
     })
   }
 
-  export const remove = fn(RemoveInput, async (input) => {
+  async function removeWithAcquisition(
+    input: z.infer<typeof RemoveInput>,
+    ownershipAcquisition?: WorktreeOwnershipCriticalSection.Acquisition,
+  ) {
     const result = await removeManagedProjectWorktreeDirectory({
       projectID: Instance.project.id,
       directory: input.directory,
       releaseSandboxOwnership: true,
+      ownershipAcquisition,
     })
     if (!result.removed) throw new RemoveFailedError({ message: `Worktree is actively owned: ${input.directory}` })
     return true
-  })
+  }
+
+  export const remove = fn(RemoveInput, (input) => removeWithAcquisition(input))
 
   async function resolveResetPlanUnderGitLock(input: {
     directory: string

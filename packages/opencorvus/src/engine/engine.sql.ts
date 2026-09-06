@@ -5,6 +5,7 @@ import { SessionTable, ToolPartRequestTable } from "@/session/session.sql"
 import { Timestamps } from "@/storage/schema.sql"
 import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
 import type { SelectedWorkflowBinding } from "./workflow-binding"
+import { TASK_PROCESS_BINDING_INVALID_INDEX, TASK_PROCESS_BINDING_INVALID_SQL } from "./task-process-binding-contract"
 
 export type EngineBudget = {
   max_executor_groups?: number
@@ -363,11 +364,7 @@ export const EngineControlActivationLeaseGrantTable = sqliteTable(
   },
   (table) => [
     primaryKey({ columns: [table.lease_id, table.ordinal] }),
-    index("engine_control_activation_lease_grant_time_idx").on(
-      table.lease_id,
-      table.time_created,
-      table.ordinal,
-    ),
+    index("engine_control_activation_lease_grant_time_idx").on(table.lease_id, table.time_created, table.ordinal),
     check("engine_control_activation_lease_grant_positive_ordinal", sql`${table.ordinal}>0`),
     check("engine_control_activation_lease_grant_future_expiry", sql`${table.expires_at}>${table.time_created}`),
   ],
@@ -591,6 +588,7 @@ export const EngineArtifactTable = sqliteTable(
     uniqueIndex("engine_artifact_partition_authority_idx").on(table.id, table.task_id, table.kind),
     uniqueIndex("engine_artifact_catalog_revision_idx").on(table.catalog_revision),
     index("engine_artifact_task_kind_latest_idx").on(table.task_id, table.kind, table.time_created, table.id),
+    index(TASK_PROCESS_BINDING_INVALID_INDEX).on(table.id).where(sql.raw(TASK_PROCESS_BINDING_INVALID_SQL)),
     uniqueIndex("engine_dispatch_lineage_direct_tool_occurrence_idx")
       .on(
         table.task_id,
@@ -646,7 +644,9 @@ export const EngineArtifactTable = sqliteTable(
         sql<string>`json_extract(${table.payload}, '$.message_id')`,
         sql<string>`json_extract(${table.payload}, '$.tool_call_id')`,
       )
-      .where(sql`${table.kind} = 'agent_coordination_request' AND json_extract(${table.payload}, '$.origin') = 'worker_handoff'`),
+      .where(
+        sql`${table.kind} = 'agent_coordination_request' AND json_extract(${table.payload}, '$.origin') = 'worker_handoff'`,
+      ),
     uniqueIndex("engine_agent_coordination_worker_lineage_idx")
       .on(table.task_id, sql<string>`json_extract(${table.payload}, '$.dispatch_lineage_id')`)
       .where(
@@ -662,12 +662,7 @@ export const EngineArtifactTable = sqliteTable(
       )
       .where(sql`${table.kind} = 'agent_coordination_request'`),
     index("engine_agent_coordination_request_epoch_idx")
-      .on(
-        table.task_id,
-        sql<number>`json_extract(${table.payload}, '$.execution_epoch')`,
-        table.time_created,
-        table.id,
-      )
+      .on(table.task_id, sql<number>`json_extract(${table.payload}, '$.execution_epoch')`, table.time_created, table.id)
       .where(sql`${table.kind} = 'agent_coordination_request'`),
     uniqueIndex("engine_agent_coordination_frontier_winner_idx")
       .on(
@@ -686,12 +681,7 @@ export const EngineArtifactTable = sqliteTable(
       .on(table.task_id, sql<string>`json_extract(${table.payload}, '$.request_id')`, table.time_created, table.id)
       .where(sql`${table.kind} = 'agent_coordination_action'`),
     index("engine_agent_coordination_outcome_action_idx")
-      .on(
-        table.task_id,
-        sql<string>`json_extract(${table.payload}, '$.action_id')`,
-        table.time_created,
-        table.id,
-      )
+      .on(table.task_id, sql<string>`json_extract(${table.payload}, '$.action_id')`, table.time_created, table.id)
       .where(sql`${table.kind} = 'agent_coordination_action_outcome'`),
     index("engine_agent_coordination_outcome_request_idx")
       .on(

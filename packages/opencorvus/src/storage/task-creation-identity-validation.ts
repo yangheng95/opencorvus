@@ -73,7 +73,7 @@ function artifactPayloads(db: BunDatabase, taskID: string, kind: string): Row[] 
 }
 
 function processEnvelope(payload: TaskProcessBindingPayload) {
-  if (payload.protocol === "task-native-process-binding-v1") {
+  if (payload.protocol === "task-native-process-binding-v2") {
     return {
       protocol: payload.protocol,
       mode: payload.mode,
@@ -218,9 +218,6 @@ function validateTaskContracts(db: BunDatabase): void {
     }
     const packageFact = TaskPackageRevisionBindingPayloadSchema.parse(packageRows[0])
     const processFact = TaskProcessBindingPayloadSchema.parse(processRows[0])
-    const processDirectory = processFact.protocol === "task-native-process-binding-v1"
-      ? processFact.workspace_root
-      : processFact.workspace.root
     const bindingDrift = [
       packageFact.time_created !== item.task_time ? "package-time" : undefined,
       processFact.time_created !== item.task_time ? "process-time" : undefined,
@@ -285,7 +282,11 @@ function validateTaskContracts(db: BunDatabase): void {
       contract.resolved,
       {
         project_id: item.project_id,
-        directory: processDirectory,
+        // A Project promotion legitimately relocates the current Session. The
+        // immutable process authority freezes the first-accept logical path
+        // beside its physical root, so transfer never reconstructs it from a
+        // mutable Session projection or compares the contract to itself.
+        directory: processFact.logical_workspace_root,
         source: item.source,
         product_pillar: item.product_pillar,
         title: item.title,

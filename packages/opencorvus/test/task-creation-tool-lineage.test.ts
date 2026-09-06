@@ -140,7 +140,7 @@ describe("Task creation persisted Tool lineage", () => {
           package_revision: { id: "base", package_digest: "a".repeat(64) },
           creation_expected_package_digest: null,
           artifact_imports: [],
-          process: { protocol: "task-native-process-binding-v1", mode: "native", workspace_root: "C:/project" },
+          process: { protocol: "task-native-process-binding-v2", mode: "native", workspace_root: "C:/project" },
           creator,
         },
       })

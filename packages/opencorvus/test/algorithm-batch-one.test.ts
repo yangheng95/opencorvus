@@ -278,6 +278,35 @@ describe("worktree ownership critical section", () => {
     acquisition[Symbol.dispose]()
     expect(active).toEqual({ status: "owned" })
 
+    const creator = WorktreeOwnershipCriticalSection.acquire(directory)
+    const converted = await WorktreeOwnershipCriticalSection.remove({
+      directory,
+      acquisition: creator,
+      proveOwnerless: () => ownerlessProof,
+      remove: async () => "creator-removed",
+    })
+    expect(converted).toEqual({ status: "removed", value: "creator-removed" })
+    expect(
+      await WorktreeOwnershipCriticalSection.remove({
+        directory,
+        proveOwnerless: () => ownerlessProof,
+        remove: async () => "peer-removed",
+      }),
+    ).toEqual({ status: "owned" })
+    creator[Symbol.dispose]()
+
+    const first = WorktreeOwnershipCriticalSection.acquire(directory)
+    const peer = WorktreeOwnershipCriticalSection.acquire(directory)
+    const contended = await WorktreeOwnershipCriticalSection.remove({
+      directory,
+      acquisition: first,
+      proveOwnerless: () => ownerlessProof,
+      remove: async () => "removed",
+    })
+    first[Symbol.dispose]()
+    peer[Symbol.dispose]()
+    expect(contended).toEqual({ status: "owned" })
+
     const durable = await WorktreeOwnershipCriticalSection.remove({
       directory,
       proveOwnerless: () => WorktreeOwnershipCriticalSection.owned(),
@@ -304,6 +333,35 @@ describe("worktree ownership critical section", () => {
       }),
     ).rejects.toThrow("physical removal failed")
     expect(durableOwnerRecorded).toBe(true)
+  })
+
+  test("keeps one physical ownership key while an aliased child moves from absent to present", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-owner-alias-key-"))
+    const physical = path.join(root, "physical")
+    const alias = path.join(root, "alias")
+    const target = path.join(alias, "managed-worktree")
+    try {
+      await mkdir(physical)
+      await fs.symlink(physical, alias, process.platform === "win32" ? "junction" : "dir")
+      const acquisition = WorktreeOwnershipCriticalSection.acquire(target)
+      try {
+        await mkdir(path.join(physical, "managed-worktree"))
+        const observed = await Ownership.Worktree.observeIdentity(target, "observe-published-alias-child")
+        const proof = await ownerlessCriticalSectionProof(root, target)
+        expect(
+          await WorktreeOwnershipCriticalSection.remove({
+            directory: observed.key,
+            acquisition,
+            proveOwnerless: () => proof,
+            remove: async () => "removed",
+          }),
+        ).toEqual({ status: "removed", value: "removed" })
+      } finally {
+        acquisition[Symbol.dispose]()
+      }
+    } finally {
+      await rm(root, { recursive: true, force: true })
+    }
   })
 
   test("publishes durable ownership before a competing cross-process removal lease", async () => {

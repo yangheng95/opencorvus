@@ -44,7 +44,8 @@ await $`bun ./packages/sdk/js/script/build.ts`
 
 await $`bun ./packages/opencorvus/script/docs/render-api-md.ts`
 
-const prettier = Bun.spawn(["bun", "run", "prettier", "--ignore-unknown", "--write", ...prettierArtifactPaths], {
+const prettierBin = await Bun.resolve("prettier/bin/prettier.cjs", path.resolve(import.meta.dir, ".."))
+const prettier = Bun.spawn([process.execPath, prettierBin, "--ignore-unknown", "--write", ...prettierArtifactPaths], {
   stdout: "inherit",
   stderr: "inherit",
 })

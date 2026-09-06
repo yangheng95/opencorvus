@@ -23,14 +23,19 @@ import {
   mysqlSchemaFingerprint,
   preflightMysqlTransferSnapshot,
 } from "../../src/storage/mysql-transfer"
-import {
-  canonicalTaskCreationContract,
-  taskCreationContractFingerprint,
-} from "../../src/engine/task-creation-contract"
+import { canonicalTaskCreationContract, taskCreationContractFingerprint } from "../../src/engine/task-creation-contract"
 import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
 import { Session } from "../../src/session"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
+import {
+  TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL,
+  TaskExecutionCapsuleBindingPayloadSchema,
+} from "../../src/engine/task-creation-facts"
+import {
+  TASK_PROCESS_BINDING_INVALID_INDEX,
+  TASK_PROCESS_BINDING_INVALID_SQL,
+} from "../../src/engine/task-process-binding-contract"
 import { persistEstablishedTask } from "../fixture/engine-task"
 import { memoryProject } from "../fixture/memory"
 import { MemoryChunkTable, MemoryEmbeddingTable, MemoryFileTable } from "../../src/memory/memory.sql"
@@ -52,6 +57,7 @@ test("creates the complete pre-0.1.0 schema directly from the canonical DDL", ()
       "engine_browser_preview_target_identity",
       "engine_control_activation_lease",
       "engine_task_root_ingress",
+      TASK_PROCESS_BINDING_INVALID_INDEX,
       "event_job_fire",
       "permission_execution_result",
       "protocol_delivery_receipt",
@@ -181,10 +187,12 @@ test("accepted Task request, channel, and creation-contract claims are immutable
       request,
       resolved: {},
     })
-    sqlite.query(
-      `INSERT INTO engine_task_creation_contract(task_id,fingerprint,contract,time_created)
+    sqlite
+      .query(
+        `INSERT INTO engine_task_creation_contract(task_id,fingerprint,contract,time_created)
        VALUES(?,?,?,?)`,
-    ).run("claim-task", taskCreationContractFingerprint(request), JSON.stringify(contract), 1)
+      )
+      .run("claim-task", taskCreationContractFingerprint(request), JSON.stringify(contract), 1)
     sqlite.run(
       `INSERT INTO engine_channel_binding(
          id,task_id,platform,channel,thread,payload,time_created,time_updated
@@ -210,12 +218,16 @@ test("accepted Task request, channel, and creation-contract claims are immutable
       sqlite.query<{ request_id: string }, []>("SELECT request_id FROM engine_task WHERE id='claim-task'").get(),
     ).toEqual({ request_id: "claim-request" })
     expect(
-      sqlite.query<{ payload: string }, []>("SELECT payload FROM engine_channel_binding WHERE id='claim-channel'").get(),
+      sqlite
+        .query<{ payload: string }, []>("SELECT payload FROM engine_channel_binding WHERE id='claim-channel'")
+        .get(),
     ).toEqual({ payload: '{"revision":1}' })
 
     sqlite.run("DELETE FROM project WHERE id='claim-project'")
     expect(sqlite.query("SELECT id FROM engine_task WHERE id='claim-task'").get()).toBeNull()
-    expect(sqlite.query("SELECT task_id FROM engine_task_creation_contract WHERE task_id='claim-task'").get()).toBeNull()
+    expect(
+      sqlite.query("SELECT task_id FROM engine_task_creation_contract WHERE task_id='claim-task'").get(),
+    ).toBeNull()
     expect(sqlite.query("SELECT id FROM engine_channel_binding WHERE id='claim-channel'").get()).toBeNull()
   } finally {
     sqlite.close()
@@ -285,10 +297,12 @@ test("requires an explicit reset when any canonical fact table is missing", asyn
   try {
     rebuildTestDatabase()
     Database.rebuildSqlite((sqlite) => sqlite.run('DROP TABLE "permission_execution_result"'))
-    expect(() => Database.Client()).toThrow(expect.objectContaining<InstanceType<typeof DatabaseUnavailableError>>({
-      name: "DatabaseUnavailableError",
-      data: expect.objectContaining({ code: "SCHEMA_RESET_REQUIRED" }),
-    }))
+    expect(() => Database.Client()).toThrow(
+      expect.objectContaining<InstanceType<typeof DatabaseUnavailableError>>({
+        name: "DatabaseUnavailableError",
+        data: expect.objectContaining({ code: "SCHEMA_RESET_REQUIRED" }),
+      }),
+    )
   } finally {
     rebuildTestDatabase()
   }
@@ -299,10 +313,12 @@ test("requires an explicit reset instead of adding a missing Project fence", asy
   try {
     rebuildTestDatabase()
     Database.rebuildSqlite((sqlite) => sqlite.run('DROP TABLE "project_maintenance_fence"'))
-    expect(() => Database.Client()).toThrow(expect.objectContaining<InstanceType<typeof DatabaseUnavailableError>>({
-      name: "DatabaseUnavailableError",
-      data: expect.objectContaining({ code: "SCHEMA_RESET_REQUIRED" }),
-    }))
+    expect(() => Database.Client()).toThrow(
+      expect.objectContaining<InstanceType<typeof DatabaseUnavailableError>>({
+        name: "DatabaseUnavailableError",
+        data: expect.objectContaining({ code: "SCHEMA_RESET_REQUIRED" }),
+      }),
+    )
   } finally {
     rebuildTestDatabase()
   }
@@ -351,9 +367,7 @@ test("rejects cross-owned creation and unrelated schema drift before any mutatio
       )
       .all()
     const beforeProject = before
-      .query<{ id: string; worktree: string }, []>(
-        `SELECT id,worktree FROM project WHERE id='reset-boundary-project'`,
-      )
+      .query<{ id: string; worktree: string }, []>(`SELECT id,worktree FROM project WHERE id='reset-boundary-project'`)
       .get()
     before.close(false)
     let captured: unknown
@@ -380,9 +394,10 @@ test("rejects cross-owned creation and unrelated schema drift before any mutatio
           )
           .all(),
         project: after
-          .query<{ id: string; worktree: string }, []>(
-            `SELECT id,worktree FROM project WHERE id='reset-boundary-project'`,
-          )
+          .query<
+            { id: string; worktree: string },
+            []
+          >(`SELECT id,worktree FROM project WHERE id='reset-boundary-project'`)
           .get(),
       }).toEqual({ shape: beforeShape, project: beforeProject })
     } finally {
@@ -447,6 +462,284 @@ test("reopens a freshly reset database with the exact current schema", async () 
   }
 })
 
+async function persistProcessBindingEpochTask(mode: "native" | "capsule") {
+  const taskID = Identifier.ascending("task")
+  const now = Date.now()
+  const packageRevision = {
+    scope: "built_in" as const,
+    projectID: null,
+    namespace: "builtin",
+    id: "base",
+    version: "2026.08.31.1",
+    packageDigest: "a".repeat(64),
+  }
+  const native = await prepareTaskProcessBinding({
+    mode: "native",
+    taskID,
+    projectID: Instance.project.id,
+    rootDirectory: Instance.directory,
+    packageRevisionSHA256: packageRevision.packageDigest,
+    timeCreated: now,
+  })
+  if (native.protocol !== "task-native-process-binding-v2") throw new Error("Expected native binding fixture")
+  const executionCapsuleBinding =
+    mode === "native"
+      ? native
+      : TaskExecutionCapsuleBindingPayloadSchema.parse({
+          protocol: TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL,
+          task_id: taskID,
+          project_id: Instance.project.id,
+          package_revision_sha256: packageRevision.packageDigest,
+          runtime_descriptor_sha256: "b".repeat(64),
+          runtime_identity_sha256: "c".repeat(64),
+          logical_workspace_root: native.logical_workspace_root,
+          workspace: {
+            root: native.workspace_root,
+            initial_tree_sha256: native.initial_tree_sha256,
+            access: "read_write",
+          },
+          network: "none",
+          resources: {
+            memory_max_bytes: 1_073_741_824,
+            tasks_max: 128,
+            nofile_max: 1024,
+            tmpfs_max_bytes: 268_435_456,
+            cpu_quota_percent: 100,
+          },
+          time_created: now,
+        })
+  persistEstablishedTask({
+    taskID,
+    rootSession: Session.prepareRootNext({
+      kind: "root",
+      directory: Instance.directory,
+      title: `Task process-binding ${mode} epoch`,
+    }),
+    now,
+    title: `Task process-binding ${mode} epoch`,
+    request: `Prove the current ${mode} process-binding database epoch`,
+    productPillar: "code",
+    source: "test",
+    metadata: { actor: "user" },
+    projectID: Instance.project.id,
+    packageRevision,
+    executionCapsuleBinding,
+  })
+  return taskID
+}
+
+function rewriteProcessBindingPayload(input: {
+  databasePath: string
+  taskID: string
+  mutate: (payload: Record<string, unknown>) => void
+}) {
+  const sqlite = new BunDatabase(input.databasePath)
+  try {
+    const row = sqlite
+      .query<
+        {
+          id: string
+          task_id: string
+          kind: string
+          label: string
+          payload: string
+          time_created: number
+          time_updated: number
+        },
+        [string]
+      >(
+        `SELECT id,task_id,kind,label,payload,time_created,time_updated
+         FROM engine_artifact
+         WHERE task_id=? AND kind='task_execution_capsule_binding'`,
+      )
+      .get(input.taskID)
+    if (!row) throw new Error(`Task ${input.taskID} process binding was not persisted`)
+    const triggers = sqlite
+      .query<{ name: string; sql: string }, []>(
+        `SELECT name,sql FROM sqlite_schema
+         WHERE type='trigger' AND tbl_name IN ('engine_artifact','engine_artifact_version')
+         ORDER BY name`,
+      )
+      .all()
+    for (const trigger of triggers) sqlite.run(`DROP TRIGGER "${trigger.name}"`)
+    const payload = JSON.parse(row.payload) as Record<string, unknown>
+    input.mutate(payload)
+    const payloadText = JSON.stringify(payload)
+    const derived = deriveEngineArtifactCatalogMetadata({ kind: row.kind, payloadText })
+    const metadataSHA256 = engineArtifactCatalogMetadataSHA256({
+      artifact_id: row.id,
+      task_id: row.task_id,
+      kind: row.kind,
+      label_index: engineArtifactCatalogLabelIndex(row.label),
+      time_created: row.time_created,
+      time_updated: row.time_updated,
+      ...derived,
+    })
+    sqlite
+      .query(
+        `UPDATE engine_artifact SET
+           payload=?,payload_sha256=?,payload_bytes=?,payload_block_sha256s=?,payload_block_index_sha256=?,
+           catalog_artifact_type=?,catalog_schema_diagnostic=?,catalog_producer=?,catalog_import_source_task_id=?,
+           catalog_resource_count=?,catalog_resource_media_types=?,catalog_search_text=?,
+           catalog_search_text_truncated=?,catalog_metadata_sha256=?
+         WHERE id=?`,
+      )
+      .run(
+        payloadText,
+        derived.payload_sha256,
+        derived.payload_bytes,
+        JSON.stringify(derived.payload_block_sha256s),
+        derived.payload_block_index_sha256,
+        derived.catalog_artifact_type,
+        derived.catalog_schema_diagnostic,
+        derived.catalog_producer ? JSON.stringify(derived.catalog_producer) : null,
+        derived.catalog_import_source_task_id,
+        derived.catalog_resource_count,
+        JSON.stringify(derived.catalog_resource_media_types),
+        derived.catalog_search_text,
+        Number(derived.catalog_search_text_truncated),
+        metadataSHA256,
+        row.id,
+      )
+    for (const trigger of triggers) sqlite.run(trigger.sql)
+  } finally {
+    sqlite.close(true)
+  }
+}
+
+test("reopens production Native and Capsule v2 bindings through the indexed current epoch", async () => {
+  const { Database } = await import("../../src/storage/db")
+  try {
+    rebuildTestDatabase()
+    await using project = await memoryProject("task-process-binding-current-epoch")
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await persistProcessBindingEpochTask("native")
+        await persistProcessBindingEpochTask("capsule")
+        await Database.awaitEffectIdle(10_000)
+
+        Database.close()
+        expect(() => Database.Client()).not.toThrow()
+        Database.close()
+        expect(() => Database.Client()).not.toThrow()
+        Database.close()
+
+        const sqlite = new BunDatabase(Database.Path(), { readonly: true })
+        try {
+          const plan = sqlite
+            .query<{ detail: string }, []>(
+              `EXPLAIN QUERY PLAN
+               SELECT id
+               FROM engine_artifact INDEXED BY ${TASK_PROCESS_BINDING_INVALID_INDEX}
+               WHERE ${TASK_PROCESS_BINDING_INVALID_SQL}
+               ORDER BY id
+               LIMIT 1`,
+            )
+            .all()
+          expect(plan.map((row) => row.detail).join("\n")).toContain(TASK_PROCESS_BINDING_INVALID_INDEX)
+          expect(
+            sqlite
+              .query<
+                { count: number },
+                []
+              >(`SELECT count(*) AS count FROM engine_artifact WHERE kind='task_execution_capsule_binding'`)
+              .get()?.count,
+          ).toBe(2)
+        } finally {
+          sqlite.close(true)
+        }
+      },
+    })
+  } finally {
+    rebuildTestDatabase()
+  }
+})
+
+test("requires a reset for a v1 Task process binding", async () => {
+  const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
+  try {
+    rebuildTestDatabase()
+    await using project = await memoryProject("task-process-binding-epoch")
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const taskID = await persistProcessBindingEpochTask("native")
+        await Database.awaitEffectIdle(10_000)
+        Database.close()
+        rewriteProcessBindingPayload({
+          databasePath: Database.Path(),
+          taskID,
+          mutate(payload) {
+            payload.protocol = "task-native-process-binding-v1"
+            delete payload.logical_workspace_root
+          },
+        })
+
+        let observed: unknown
+        try {
+          Database.Client()
+        } catch (error) {
+          observed = error
+        }
+        expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
+          code: "DATA_RESET_REQUIRED",
+          operation: "Database.Client.dataIntegrity.taskProcessBindingEpoch",
+          message: expect.stringContaining("task-native-process-binding-v1"),
+        })
+      },
+    })
+  } finally {
+    rebuildTestDatabase()
+  }
+})
+
+test(
+  "requires a stable reset for structurally invalid recognized v2 Native and Capsule bindings",
+  { timeout: 15_000 },
+  async () => {
+    const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
+    for (const mode of ["native", "capsule"] as const) {
+      try {
+        rebuildTestDatabase()
+        await using project = await memoryProject(`invalid-${mode}-process-binding`)
+        await Instance.provide({
+          directory: project.path,
+          fn: async () => {
+            const taskID = await persistProcessBindingEpochTask(mode)
+            await Database.awaitEffectIdle(10_000)
+            Database.close()
+            rewriteProcessBindingPayload({
+              databasePath: Database.Path(),
+              taskID,
+              mutate(payload) {
+                if (mode === "native") delete payload.project_id
+                else delete payload.resources
+              },
+            })
+
+            let observed: unknown
+            try {
+              Database.Client()
+            } catch (error) {
+              observed = error
+            }
+            expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
+              code: "DATA_RESET_REQUIRED",
+              operation: "Database.Client.dataIntegrity.taskProcessBindingEpoch",
+              message: expect.stringContaining(
+                mode === "native" ? "task-native-process-binding-v2" : TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL,
+              ),
+            })
+          },
+        })
+      } finally {
+        rebuildTestDatabase()
+      }
+    }
+  },
+)
+
 test("round-trips one production-written current Task through the strict transfer contract", async () => {
   const { Database } = await import("../../src/storage/db")
   try {
@@ -492,49 +785,59 @@ test("round-trips one production-written current Task through the strict transfe
         })
         await Database.awaitEffectIdle(10_000)
         Database.use((db) => {
-          db.insert(MemoryFileTable).values({
-            id: "memfile_transfer_blob",
-            project_id: Instance.project.id,
-            title: "Transfer blob",
-            source: "agent",
-            kind: "note",
-            importance: 60,
-            confidence: 75,
-            time_created: now,
-            time_updated: now,
-          }).run()
-          db.insert(MemoryChunkTable).values({
-            id: "memchunk_transfer_blob",
-            file_id: "memfile_transfer_blob",
-            project_id: Instance.project.id,
-            content: "canonical base64",
-            token_count: 2,
-            time_created: now,
-            time_updated: now,
-          }).run()
-          db.insert(MemoryEmbeddingTable).values({
-            chunk_id: "memchunk_transfer_blob",
-            embedding: Buffer.from([0, 1, 2, 253, 254, 255]),
-            model: "test-embedding",
-            time_created: now,
-            time_updated: now,
-          }).run()
-          db.insert(MemoryChunkTable).values({
-            id: "memchunk_transfer_empty_blob",
-            file_id: "memfile_transfer_blob",
-            project_id: Instance.project.id,
-            content: "empty canonical base64",
-            token_count: 3,
-            time_created: now,
-            time_updated: now,
-          }).run()
-          db.insert(MemoryEmbeddingTable).values({
-            chunk_id: "memchunk_transfer_empty_blob",
-            embedding: Buffer.alloc(0),
-            model: "test-embedding",
-            time_created: now,
-            time_updated: now,
-          }).run()
+          db.insert(MemoryFileTable)
+            .values({
+              id: "memfile_transfer_blob",
+              project_id: Instance.project.id,
+              title: "Transfer blob",
+              source: "agent",
+              kind: "note",
+              importance: 60,
+              confidence: 75,
+              time_created: now,
+              time_updated: now,
+            })
+            .run()
+          db.insert(MemoryChunkTable)
+            .values({
+              id: "memchunk_transfer_blob",
+              file_id: "memfile_transfer_blob",
+              project_id: Instance.project.id,
+              content: "canonical base64",
+              token_count: 2,
+              time_created: now,
+              time_updated: now,
+            })
+            .run()
+          db.insert(MemoryEmbeddingTable)
+            .values({
+              chunk_id: "memchunk_transfer_blob",
+              embedding: Buffer.from([0, 1, 2, 253, 254, 255]),
+              model: "test-embedding",
+              time_created: now,
+              time_updated: now,
+            })
+            .run()
+          db.insert(MemoryChunkTable)
+            .values({
+              id: "memchunk_transfer_empty_blob",
+              file_id: "memfile_transfer_blob",
+              project_id: Instance.project.id,
+              content: "empty canonical base64",
+              token_count: 3,
+              time_created: now,
+              time_updated: now,
+            })
+            .run()
+          db.insert(MemoryEmbeddingTable)
+            .values({
+              chunk_id: "memchunk_transfer_empty_blob",
+              embedding: Buffer.alloc(0),
+              model: "test-embedding",
+              time_created: now,
+              time_updated: now,
+            })
+            .run()
         })
 
         const frontierBeforeImport = TaskControlTestHooks.currentProjectFrontierSlice()
@@ -639,9 +942,7 @@ test("round-trips one production-written current Task through the strict transfe
         )
 
         const incomplete = structuredClone(snapshot)
-        const incompleteContracts = incomplete.tables.find(
-          (table) => table.name === "engine_task_creation_contract",
-        )
+        const incompleteContracts = incomplete.tables.find((table) => table.name === "engine_task_creation_contract")
         if (!incompleteContracts) throw new Error("Transfer snapshot omitted the Task creation contract table")
         incompleteContracts.rows = []
         expect(() => preflightMysqlTransferSnapshot(incomplete)).toThrow(
@@ -755,7 +1056,10 @@ test("round-trips one production-written current Task through the strict transfe
         missingCreatorContract.resolved.creator = missingAuthority
         missingCreatorContractRow.contract = JSON.stringify(missingCreatorContract)
         missingCreatorContractRow.fingerprint = taskCreationContractFingerprint(missingCreatorContract.request)
-        missingCreatorTaskRow.metadata = JSON.stringify({ actor: "control_agent", actor_session_id: "ses_missing_creator" })
+        missingCreatorTaskRow.metadata = JSON.stringify({
+          actor: "control_agent",
+          actor_session_id: "ses_missing_creator",
+        })
         expect(() => preflightMysqlTransferSnapshot(missingCreatorSession)).toThrow(
           expect.objectContaining<MysqlTransferValidationError>({
             name: "MysqlTransferValidationError",
@@ -816,16 +1120,15 @@ test("round-trips one production-written current Task through the strict transfe
             { name: "engine_task_root_ingress", rows: 1 },
           ]),
         })
-        expect(TaskControlTestHooks.currentProjectFrontierSlice(preImportCursor).taskIDs).toContain(
-          taskID,
-        )
+        expect(TaskControlTestHooks.currentProjectFrontierSlice(preImportCursor).taskIDs).toContain(taskID)
         expect(
-          Database.use((db) =>
-            db
-              .select({ embedding: MemoryEmbeddingTable.embedding })
-              .from(MemoryEmbeddingTable)
-              .where(eq(MemoryEmbeddingTable.chunk_id, "memchunk_transfer_empty_blob"))
-              .get()?.embedding,
+          Database.use(
+            (db) =>
+              db
+                .select({ embedding: MemoryEmbeddingTable.embedding })
+                .from(MemoryEmbeddingTable)
+                .where(eq(MemoryEmbeddingTable.chunk_id, "memchunk_transfer_empty_blob"))
+                .get()?.embedding,
           ),
         ).toEqual(Buffer.alloc(0))
       },
