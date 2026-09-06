@@ -590,11 +590,11 @@ describe("Workspace durable lifecycle", () => {
       fn: async () => {
         await freezeMetadata(project.path)
         const first = await Workspace.create({
-          id: Identifier.ascending("workspace"),
+          id: "wrk_X_project_delete_partial",
           projectID: Instance.project.id,
         })
         const second = await Workspace.create({
-          id: Identifier.ascending("workspace"),
+          id: "wrk_c_project_delete_partial",
           projectID: Instance.project.id,
         })
         return [first, second]

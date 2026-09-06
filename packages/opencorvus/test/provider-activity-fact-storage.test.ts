@@ -1,4 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test"
+import { createManagedTemporaryDirectory, removeManagedDirectoryTree } from "@opencorvus-ai/util/runtime-directories"
+import { Database as BunDatabase } from "bun:sqlite"
+import fs from "node:fs/promises"
+import path from "node:path"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
@@ -7,7 +11,7 @@ import {
   settleAbandonedProviderActivity,
 } from "@/session/provider-activity-facts"
 import { ProviderActivityOutcomeTable, ProviderActivityRequestTable } from "@/session/session.sql"
-import { Database } from "@/storage/db"
+import { Database, eq } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
@@ -16,6 +20,124 @@ afterEach(async () => {
 })
 
 describe("Provider activity fact storage", () => {
+  test("reserves the cross-process writer before reading a Provider activity occurrence", async () => {
+    const processRoot = process.env.OPENCORVUS_TEST_PROCESS_ROOT
+    if (!processRoot) throw new Error("Cross-process Provider activity test requires the repository test runtime")
+    await using project = await memoryProject()
+    const barrier = await createManagedTemporaryDirectory(processRoot, "provider-activity-writer-")
+    let child: ReturnType<typeof Bun.spawn> | undefined
+    let lock: BunDatabase | undefined
+    let locked = false
+    try {
+      const facts = await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const session = await Session.create({ kind: "assistant", title: "Provider writer reservation" })
+          const now = Date.now()
+          const user = await Session.updateMessage({
+            id: Identifier.ascending("message"),
+            sessionID: session.id,
+            role: "user",
+            author: "user",
+            time: { created: now },
+            agent: "assistant",
+            model: { providerID: "provider-activity-cross-process", modelID: "writer-reservation" },
+          })
+          const assistant = await Session.updateMessage({
+            id: Identifier.ascending("message"),
+            sessionID: session.id,
+            parentID: user.id,
+            role: "assistant",
+            author: "assistant",
+            time: { created: now + 1 },
+            agent: "assistant",
+            providerID: "provider-activity-cross-process",
+            modelID: "writer-reservation",
+            path: { cwd: project.path, root: project.path },
+            cost: 0,
+            tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          })
+          return { session, assistant, activityID: Identifier.ascending("activity") }
+        },
+      })
+      const worker = path.join(import.meta.dir, "fixture", "provider-activity-writer-process-worker.ts")
+      child = Bun.spawn(
+        [
+          process.execPath,
+          `--config=${path.join(import.meta.dir, "empty-bunfig.toml")}`,
+          worker,
+          project.path,
+          barrier,
+          facts.session.id,
+          facts.assistant.id,
+          facts.activityID,
+        ],
+        { cwd: path.join(import.meta.dir, ".."), env: { ...process.env }, stdout: "pipe", stderr: "pipe" },
+      )
+      const waitForFile = async (name: string) => {
+        const deadline = Date.now() + 15_000
+        while (!(await fs.stat(path.join(barrier, name)).catch(() => undefined))) {
+          if (Date.now() >= deadline) throw new Error(`Provider activity worker did not publish ${name}`)
+          await Bun.sleep(10)
+        }
+      }
+      await waitForFile("ready")
+
+      lock = new BunDatabase(Database.Path())
+      lock.run("PRAGMA busy_timeout = 5000")
+      lock.run("BEGIN IMMEDIATE")
+      locked = true
+      await fs.writeFile(path.join(barrier, "start"), "start")
+      await waitForFile("attempting")
+      // The worker has entered the production writer while this independent
+      // connection owns SQLite's writer reservation. A deferred transaction
+      // can read here and then fail its upgrade; BEGIN IMMEDIATE waits instead.
+      await Bun.sleep(250)
+      lock.run("COMMIT")
+      locked = false
+
+      const [exitCode, stdout, stderr] = await Promise.all([
+        child.exited,
+        new Response(child.stdout).text(),
+        new Response(child.stderr).text(),
+      ])
+      expect(exitCode, stderr).toBe(0)
+      expect(JSON.parse(stdout.trim())).toEqual({ activityID: facts.activityID })
+      expect(
+        Database.use((db) => ({
+          request: db
+            .select()
+            .from(ProviderActivityRequestTable)
+            .where(eq(ProviderActivityRequestTable.id, facts.activityID))
+            .get(),
+          outcome: db
+            .select()
+            .from(ProviderActivityOutcomeTable)
+            .where(eq(ProviderActivityOutcomeTable.request_id, facts.activityID))
+            .get(),
+        })),
+      ).toEqual({
+        request: {
+          id: facts.activityID,
+          assistant_message_id: facts.assistant.id,
+          time_created: expect.any(Number),
+        },
+        outcome: {
+          id: expect.any(String),
+          request_id: facts.activityID,
+          data: { outcome: "done", attempt_count: 1 },
+          time_created: expect.any(Number),
+        },
+      })
+    } finally {
+      if (locked) lock?.run("ROLLBACK")
+      lock?.close(false)
+      if (child && child.exitCode === null) child.kill()
+      if (child) await child.exited
+      await removeManagedDirectoryTree(barrier)
+    }
+  }, 30_000)
+
   test("streams multiple Provider steps into one effect-bound assistant with fixed causal/model identity", async () => {
     await using project = await memoryProject()
     await Instance.provide({

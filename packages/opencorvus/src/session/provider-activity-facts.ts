@@ -14,7 +14,11 @@ export const PROVIDER_ACTIVITY_INTERRUPTION_ERROR_NAME = "ProcessExecutionInterr
 
 export function recordProviderActivityEvent(assistantMessageID: string, event: LLMActivityEvent): void {
   if (event.type !== "started" && event.type !== "terminal") return
-  Database.transaction((db) => {
+  // This is a cross-process write-ahead/terminal fact writer. Reserve the
+  // SQLite writer before reading the existing request or outcome so a peer
+  // writer cannot turn the later insert into a deferred read-to-write
+  // SQLITE_BUSY failure before Provider execution begins.
+  Database.immediateTransaction((db) => {
     if (event.type === "started") {
       assertTaskRootAssistantActivationFenceInTransaction(db, {
         assistantMessageID,

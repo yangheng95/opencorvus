@@ -28,6 +28,8 @@ export async function memoryProject(identitySeed?: string) {
     path: await fs.realpath(directory),
     async [Symbol.asyncDispose]() {
       await Instance.disposeAll()
+      const { ProcessSupervisor } = await import("../../src/shell/process-supervisor")
+      await ProcessSupervisor.disposeLiveProcessesUnder(directory)
       await removeManagedDirectoryTree(directory)
     },
   }

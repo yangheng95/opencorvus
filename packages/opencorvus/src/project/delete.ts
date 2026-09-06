@@ -15,6 +15,7 @@ import { Worktree } from "@/worktree"
 import { CANCEL_INGRESS_SETTLE_INACTIVITY_MS, EngineService } from "@/task-api"
 import { Database, eq } from "@/storage/db"
 import { Filesystem } from "@/util/filesystem"
+import { compareCanonicalStrings } from "@/util/canonical-digest"
 import type { TaskCancellationOrigin } from "@/engine/cancellation-origin"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { assertBuildObservationCleanupsCompleteInTransaction } from "@/engine/build-observation-cleanup"
@@ -236,7 +237,7 @@ async function settleProjectWorktreeChildren(
     workspaceEntriesByID.set(entry.workspaceID, entry)
   }
   const workspaceEntries = [...workspaceEntriesByID.values()].sort((left, right) =>
-    left.workspaceID.localeCompare(right.workspaceID),
+    compareCanonicalStrings(left.workspaceID, right.workspaceID),
   )
   const workspaceDirectories = [
     ...workspaceRows.map((row) => row.config.directory),
