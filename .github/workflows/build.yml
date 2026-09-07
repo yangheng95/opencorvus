@@ -82,6 +82,10 @@ jobs:
           HUSKY: "0"
         run: bun install --frozen-lockfile --no-progress --ignore-scripts
 
+      - name: Build generated Software Development Kit
+        shell: bash
+        run: bun run --cwd packages/sdk/js build
+
       - name: Verify generated repository fixed point
         shell: bash
         run: |

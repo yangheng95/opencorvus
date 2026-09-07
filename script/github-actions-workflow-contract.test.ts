@@ -359,16 +359,22 @@ describe("GitHub Actions workflow contract", () => {
       env: { HUSKY: "0" },
       run: "bun install --frozen-lockfile --no-progress --ignore-scripts",
     })
+    expect(jobs.prepare?.steps?.find(({ name }) => name === "Build generated Software Development Kit")).toEqual({
+      name: "Build generated Software Development Kit",
+      shell: "bash",
+      run: "bun run --cwd packages/sdk/js build",
+    })
     expect(jobs.prepare?.steps?.find(({ name }) => name === "Verify generated repository fixed point")).toEqual({
       name: "Verify generated repository fixed point",
       shell: "bash",
       run: "bun ./script/generate.ts\nbun ./script/generated-artifacts.ts --check-clean-worktree\n",
     })
     const prepareStepNames = jobs.prepare?.steps?.map(({ name }) => name) ?? []
-    expect(prepareStepNames.slice(-6)).toEqual([
+    expect(prepareStepNames.slice(-7)).toEqual([
       "Verify version alignment",
       "Verify immutable release identity",
       "Verify frozen dependency graph",
+      "Build generated Software Development Kit",
       "Verify generated repository fixed point",
       "Claim immutable release identity",
       "Claim draft publication owner",
