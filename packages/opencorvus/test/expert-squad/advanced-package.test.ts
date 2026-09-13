@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.18")
+    expect(loaded.manifest.version).toBe("2026.09.13.20")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -215,6 +215,9 @@ describe("built-in interface review workflow authority", () => {
       "a later empty or noisy title search does not invalidate positive evidence already read",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "Query each material source obligation independently",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "State each material source record already bound to an original obligation",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
@@ -235,6 +238,10 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "the original request and corresponding source surface",
     )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "requires a full title or phrase",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain("minimally constrained but discriminative")
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "do not invent a structured targeting control for an organic content action",
     )
