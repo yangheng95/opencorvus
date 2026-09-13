@@ -75,6 +75,9 @@ describe("scheduler message model harness", () => {
       "Each authoritative input starts with its authorized routine tools already callable",
       "Use the callable `scheduler_message` and `no_action` tools",
       "use the callable `scheduler_message` and `manage_task` tools",
+      "Final Tool parts and the paged causal Tool Message/Part inventory expose only bounded, structured-redacted metadata",
+      "use only the necessary returned `message_id` and `part_id` with `evidence_reads`",
+      "select `field=input`, `output`, or `failure`",
     ]
 
     expect(requiredOrchestratorGuidance.map((clause) => ORCHESTRATOR_CORE.includes(clause))).toEqual(

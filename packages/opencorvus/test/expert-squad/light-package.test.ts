@@ -891,10 +891,23 @@ describe("Light Expert Squad package", () => {
             items: { type: "string" },
           })
           expect(providerSchema.properties.message_ids.items.enum.toSorted()).toEqual(finalIDs.toSorted())
+          expect(providerSchema.properties.inventory_before).toBeDefined()
+          expect(providerSchema.properties.evidence_reads).toBeDefined()
           expect(await providerContract.validate?.({ message_ids: finalIDs })).toEqual({
             success: true,
             value: { message_ids: finalIDs },
           })
+          const oversizedEvidence = await providerContract.validate?.({
+            message_ids: finalIDs,
+            evidence_reads: [
+              { message_id: finalIDs[0], part_id: "part_a", field: "output", limit: 20_000 },
+              { message_id: finalIDs[0], part_id: "part_b", field: "output", limit: 20_000 },
+            ],
+          })
+          expect(oversizedEvidence?.success).toBe(false)
+          if (oversizedEvidence?.success === false) {
+            expect(oversizedEvidence.error.message).toContain("at most 30000 characters per call")
+          }
           const rejected = await providerContract.validate?.({ message_ids: ["msg_not_a_current_settlement"] })
           expect(rejected?.success).toBe(false)
           if (rejected?.success === false) {
@@ -928,6 +941,70 @@ describe("Light Expert Squad package", () => {
               expect.arrayContaining([expect.objectContaining({ tool_name: "read", status: "completed" })]),
             )
           }
+          expect(output.inventory_next_before).toEqual([])
+          const evidenceSelection = output.causal_tool_message_inventory
+            .filter((message: { session_id: string }) => message.session_id === dispatches[0]!.session_id)
+            .flatMap((message: { message_id: string; tool_facts: Array<{ part_id: string; tool_name: string }> }) =>
+              message.tool_facts.map((part) => ({ message_id: message.message_id, ...part })),
+            )
+            .find((part: { tool_name: string }) => part.tool_name === "read")
+          if (!evidenceSelection) throw new Error("Current worker occurrence has no causal read Tool Part")
+          const evidenceOutput = JSON.parse(
+            (await reader.execute!(
+              {
+                message_ids: finalIDs,
+                evidence_reads: [{
+                  message_id: evidenceSelection.message_id,
+                  part_id: evidenceSelection.part_id,
+                  field: "output",
+                  limit: 5,
+                }],
+              },
+              { toolCallId: "read_collection_evidence", messages: [] },
+            )) as string,
+          )
+          expect(evidenceOutput.evidence_reads).toEqual([
+            expect.objectContaining({
+              message_id: evidenceSelection.message_id,
+              part_id: evidenceSelection.part_id,
+              tool_name: "read",
+              status: "completed",
+              field: "output",
+              offset: 0,
+              end: 5,
+              content: expect.any(String),
+            }),
+          ])
+          expect(evidenceOutput.evidence_reads[0].content.length).toBe(5)
+          const inputEvidenceOutput = JSON.parse(
+            (await reader.execute!(
+              {
+                message_ids: finalIDs,
+                evidence_reads: [{
+                  message_id: evidenceSelection.message_id,
+                  part_id: evidenceSelection.part_id,
+                  field: "input",
+                }],
+              },
+              { toolCallId: "read_collection_evidence_input", messages: [] },
+            )) as string,
+          )
+          expect(JSON.parse(inputEvidenceOutput.evidence_reads[0].content)).toMatchObject({
+            filePath: expect.stringContaining("evidence-"),
+          })
+          await expect(
+            reader.execute!(
+              {
+                message_ids: finalIDs,
+                evidence_reads: [{
+                  message_id: "msg_not_a_causal_tool_message",
+                  part_id: evidenceSelection.part_id,
+                  field: "output",
+                }],
+              },
+              { toolCallId: "read_invalid_collection_evidence", messages: [] },
+            ),
+          ).rejects.toThrow("not present in the current causal inventory page")
 
           const directDecisionMessageID = Identifier.ascending("message")
           const laterNow = Date.now() + 1_000

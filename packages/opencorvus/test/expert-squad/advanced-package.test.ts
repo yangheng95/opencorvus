@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.20")
+    expect(loaded.manifest.version).toBe("2026.09.13.23")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -238,9 +238,7 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "the original request and corresponding source surface",
     )
-    expect(loaded.promptProfile.agents["base-tester"]).toContain(
-      "requires a full title or phrase",
-    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain("requires a full title or phrase")
     expect(loaded.promptProfile.agents["base-tester"]).toContain("minimally constrained but discriminative")
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "do not invent a structured targeting control for an organic content action",
@@ -255,6 +253,9 @@ describe("built-in interface review workflow authority", () => {
       "Load that exact Skill directly only when its contract is needed",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain("copy them verbatim into the Tester brief")
+    expect(loaded.promptProfile.agents.orchestrator).toContain("causal Tool Message and Part identities")
+    expect(loaded.promptProfile.agents.orchestrator).toContain("`evidence_reads`")
+    expect(loaded.promptProfile.agents.orchestrator).toContain("`inventory_next_before`")
     expect(loaded.promptProfile.agents.orchestrator).toContain("may prove a final-state obligation")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "present the original criteria neutrally and supply positive executor observations only as coordinates",

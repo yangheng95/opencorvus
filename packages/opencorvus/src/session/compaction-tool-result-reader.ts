@@ -27,7 +27,7 @@ export namespace CompactionToolResultReader {
     })
     .strict()
 
-  type CompletedToolPart = Message.ToolPart & {
+  export type CompletedToolPart = Message.ToolPart & {
     state: Extract<Message.ToolPart["state"], { status: "completed" }>
   }
 
@@ -54,7 +54,7 @@ export namespace CompactionToolResultReader {
     return outputPath
   }
 
-  async function authoritativeOutput(part: CompletedToolPart) {
+  export async function authoritativeOutput(part: CompletedToolPart) {
     const outputPath = materializedOutputPath(part)
     if (outputPath === undefined) {
       return { source: "message-part-output" as const, output: part.state.output }

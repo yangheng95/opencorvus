@@ -133,10 +133,24 @@ and declared workflows. This is the persisted settlement's participant report
 reference, not a latest-Message selection. The completed assistant-Message
 inventory retains each recorded `finish` reason because a completed Tool step
 is not by itself a terminal worker report. The exact Message reader exposes the
-same finish/completion facts without inferring success. Its sole current input
-is an ordered set of one to eight globally unique Message IDs. The reader
-projects the latest exact dispatch group as a Provider enum and validates the
-submitted ordered subset against that same immutable set. A `dispatch_agents`
+same finish/completion facts without inferring success. Its required input is
+an ordered set of one to eight globally unique current-final Message IDs. The
+first read also returns a bounded, redacted page of real Tool Message and Part
+identities from the same Session, the same accepted input parent and no later
+than each selected final in persisted `(time,id)` order. Older pages use the
+returned per-final `inventory_next_before` cursor. A caller may then supply up
+to eight exact `message_id+part_id` pairs from that page through
+`evidence_reads` with an explicit `input`, `output`, or `failure` field; the
+same reader returns a structured-redacted projection of that persisted Tool
+field in chunks whose requested total is at most 30000 characters, with
+`next_offset` until complete. Final-Message Tool parts use the same safe
+metadata projection rather than bypassing this chunk path. Materialized
+truncated outputs resolve through the same authoritative source primitive as
+compaction. Runtime
+validation rejects Messages from another Task, occurrence, Session, page, or
+later causal frontier. The reader projects
+the latest exact dispatch group as a Provider enum and validates the submitted
+ordered final subset against that same immutable set. A `dispatch_agents`
 group is bound by execution epoch, Orchestrator Message and outer Tool
 occurrence and has the same maximum of eight members as its collection; a
 direct group is the sibling `dispatch_agent` decision set owned by the same
@@ -147,9 +161,9 @@ the Tool schema. One collection fits one read; a larger legal direct fan-out is
 read in ordered chunks of at most eight. Its executor still resolves and
 verifies every persisted Session owner
 against the current Task, then returns the exact Message projections in caller
-order. It does not accept a second caller-supplied Session identity, select a
-latest Message, guess or correct an identifier, retry a rejected read, or retain
-a singular compatibility input. Fresh and reconstructed Task baseline/delta
+order. It does not accept a caller-supplied Session identity, select a latest
+Message, correct an identifier, retry a rejected read, or retain a
+singular compatibility input. Fresh and reconstructed Task baseline/delta
 views carry these facts through the existing single read path; a sibling's
 terminal wake never establishes another sibling's completion.
 

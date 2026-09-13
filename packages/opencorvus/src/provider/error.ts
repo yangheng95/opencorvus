@@ -1,20 +1,58 @@
 import { APICallError } from "ai"
 import { STATUS_CODES } from "http"
+import { createScanner, parseTree, type Node as JSONNode } from "jsonc-parser"
 import { iife } from "@/util/iife"
 
 export namespace ProviderError {
   const SENSITIVE_PROVIDER_HEADER_NAME =
     /(?:^|[-_])(?:authorization|proxy[-_]?authorization|cookie|set[-_]?cookie|password|passwd|secret|token|api[-_]?key|access[-_]?key|private[-_]?key|client[-_]?secret|credential|oauth|code|state)(?:[-_]|$)/i
 
+  const STRUCTURED_CREDENTIAL_FIELD_NAMES = new Set([
+    "authorization",
+    "proxyauthorization",
+    "cookie",
+    "setcookie",
+    "password",
+    "passwd",
+    "secret",
+    "token",
+    "apikey",
+    "accesstoken",
+    "refreshtoken",
+    "idtoken",
+    "accesskey",
+    "privatekey",
+    "clientsecret",
+    "credential",
+    "oauth",
+  ])
+
+  function isStructuredCredentialField(name: string): boolean {
+    return STRUCTURED_CREDENTIAL_FIELD_NAMES.has(name.replace(/[-_ ]/g, "").toLowerCase())
+  }
+
+  function isHeaderContainerField(name: string | undefined): boolean {
+    if (!name) return false
+    return new Set(["headers", "requestheaders", "responseheaders"]).has(name.replace(/[-_ ]/g, "").toLowerCase())
+  }
+
+  const SENSITIVE_COMMENT_FIELD_NAME =
+    /\b(?:authorization|password|passwd|secret|token|api[-_ ]?key|access[-_ ]?(?:key|token)|refresh[-_ ]?token|id[-_ ]?token|private[-_ ]?key|client[-_ ]?secret|credential|oauth)\b/i
+  // jsonc-parser exposes SyntaxKind as an ambient const enum, which cannot be
+  // imported under verbatimModuleSyntax. These are its stable scanner values.
+  const JSONC_LINE_COMMENT_TRIVIA = 12
+  const JSONC_BLOCK_COMMENT_TRIVIA = 13
+  const JSONC_EOF = 17
+
   export function redactSensitiveProviderText(input: string): string {
     return input
       .replace(/\*{4}[0-9A-Fa-f]{4,}\b/g, "****<redacted>")
       .replace(
-        /\b((?:authorization|proxy-authorization|cookie|set-cookie|x[-_][a-z0-9_-]*(?:token|secret|credential|oauth|code|state))["']?\s*[:=]\s*)"[^"\r\n]*"/gi,
+        /\b((?:authorization|proxy[-_ ]?authorization|cookie|set[-_ ]?cookie|x[-_][a-z0-9_-]*(?:token|secret|credential|oauth|code|state)|api[-_ ]?key|password|passwd|secret|token|access[-_ ]?(?:key|token)|refresh[-_ ]?token|id[-_ ]?token|private[-_ ]?key|client[-_ ]?secret|credential|oauth)["']?\s*[:=]\s*)"[^"\r\n]*"/gi,
         '$1"<redacted>"',
       )
       .replace(
-        /\b((?:authorization|proxy-authorization|cookie|set-cookie|x[-_][a-z0-9_-]*(?:token|secret|credential|oauth|code|state))["']?\s*[:=]\s*)'[^'\r\n]*'/gi,
+        /\b((?:authorization|proxy[-_ ]?authorization|cookie|set[-_ ]?cookie|x[-_][a-z0-9_-]*(?:token|secret|credential|oauth|code|state)|api[-_ ]?key|password|passwd|secret|token|access[-_ ]?(?:key|token)|refresh[-_ ]?token|id[-_ ]?token|private[-_ ]?key|client[-_ ]?secret|credential|oauth)["']?\s*[:=]\s*)'[^'\r\n]*'/gi,
         "$1'<redacted>'",
       )
       .replace(
@@ -26,6 +64,116 @@ export namespace ProviderError {
         "$1<redacted>",
       )
       .replace(/\b(bearer\s+)[A-Za-z0-9._~+/=-]+/gi, "$1<redacted>")
+  }
+
+  function redactSensitiveProviderValueAtField(input: unknown, parentField?: string): unknown {
+    if (typeof input === "string") return redactSensitiveProviderPayloadAtField(input, parentField)
+    if (Array.isArray(input)) return input.map((value) => redactSensitiveProviderValueAtField(value, parentField))
+    if (!input || typeof input !== "object") return input
+    return Object.fromEntries(
+      Object.entries(input as Record<string, unknown>).map(([name, value]) => [
+        name,
+        isStructuredCredentialField(name) ||
+        (isHeaderContainerField(parentField) && SENSITIVE_PROVIDER_HEADER_NAME.test(name))
+          ? "<redacted>"
+          : redactSensitiveProviderValueAtField(value, name),
+      ]),
+    )
+  }
+
+  export function redactSensitiveProviderValue(input: unknown): unknown {
+    return redactSensitiveProviderValueAtField(input)
+  }
+
+  type TextReplacement = { offset: number; length: number; text: string }
+
+  function jsonStringReplacement(node: JSONNode, value: string): TextReplacement {
+    return { offset: node.offset, length: node.length, text: JSON.stringify(value) }
+  }
+
+  function redactSensitiveJSONPayload(input: string, depth: number, rootContainerField?: string): string | undefined {
+    const errors: Array<{ error: number; offset: number; length: number }> = []
+    const root = parseTree(input, errors, { allowTrailingComma: true, disallowComments: false })
+    if (!root || errors.length > 0) return undefined
+    const replacements: TextReplacement[] = []
+    const scanner = createScanner(input, false)
+    for (let token = scanner.scan(); token !== JSONC_EOF; token = scanner.scan()) {
+      if (token !== JSONC_LINE_COMMENT_TRIVIA && token !== JSONC_BLOCK_COMMENT_TRIVIA) continue
+      const comment = input.slice(scanner.getTokenOffset(), scanner.getTokenOffset() + scanner.getTokenLength())
+      if (!SENSITIVE_COMMENT_FIELD_NAME.test(comment)) continue
+      replacements.push({
+        offset: scanner.getTokenOffset(),
+        length: scanner.getTokenLength(),
+        text: token === JSONC_LINE_COMMENT_TRIVIA ? "// <redacted>" : "/* <redacted> */",
+      })
+    }
+    const visit = (node: JSONNode, parentField?: string) => {
+      if (node.type === "object") {
+        for (const property of node.children ?? []) {
+          const [nameNode, valueNode] = property.children ?? []
+          if (!nameNode || !valueNode || typeof nameNode.value !== "string") continue
+          const name = nameNode.value
+          if (
+            isStructuredCredentialField(name) ||
+            (isHeaderContainerField(parentField) && SENSITIVE_PROVIDER_HEADER_NAME.test(name))
+          ) {
+            replacements.push(jsonStringReplacement(valueNode, "<redacted>"))
+            continue
+          }
+          visit(valueNode, name)
+        }
+        return
+      }
+      if (node.type === "array") {
+        for (const child of node.children ?? []) visit(child, parentField)
+        return
+      }
+      if (node.type !== "string" || typeof node.value !== "string") return
+      const looksLikeJSONContainer = /^\s*[\[{]/.test(node.value)
+      if (looksLikeJSONContainer && depth >= 8) {
+        replacements.push(jsonStringReplacement(node, "<redacted>"))
+        return
+      }
+      const nested = redactSensitiveJSONPayload(node.value, depth + 1, parentField)
+      const redacted = nested ?? redactSensitiveProviderText(node.value)
+      if (redacted !== node.value) replacements.push(jsonStringReplacement(node, redacted))
+    }
+    visit(root, rootContainerField)
+    if (replacements.length === 0) return input
+    const nonOverlapping = replacements
+      .filter(
+        (candidate, index) =>
+          !replacements.some(
+            (container, containerIndex) =>
+              containerIndex !== index &&
+              container.offset <= candidate.offset &&
+              container.offset + container.length >= candidate.offset + candidate.length &&
+              (container.offset < candidate.offset || container.length > candidate.length),
+          ),
+      )
+      .filter(
+        (candidate, index, all) =>
+          all.findIndex((other) => other.offset === candidate.offset && other.length === candidate.length) === index,
+      )
+    return nonOverlapping
+      .sort((left, right) => right.offset - left.offset)
+      .reduce(
+        (current, replacement) =>
+          current.slice(0, replacement.offset) +
+          replacement.text +
+          current.slice(replacement.offset + replacement.length),
+        input,
+      )
+  }
+
+  function redactSensitiveProviderPayloadAtField(input: string, parentField?: string): string {
+    const structured = redactSensitiveJSONPayload(input, 0, parentField)
+    if (structured !== undefined) return structured
+    return redactSensitiveProviderText(input)
+  }
+
+  export function redactSensitiveProviderPayload(input: string): string {
+    return redactSensitiveProviderPayloadAtField(input)
   }
 
   export function redactSensitiveProviderHeaders(
