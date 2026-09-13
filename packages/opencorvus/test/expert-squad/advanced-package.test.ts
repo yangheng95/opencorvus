@@ -191,19 +191,22 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.8")
+    expect(loaded.manifest.version).toBe("2026.09.13.9")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "must not add a durable report, evidence package, or coordination Artifact",
     )
-    expect(loaded.promptProfile.agents["base-developer"]).toContain("provides a Skill bound to a client")
-    expect(loaded.promptProfile.agents["base-developer"]).toContain("call the projected `skill` Tool")
+    expect(loaded.promptProfile.agents.orchestrator).toContain("dispatch both nodes with `goal_ids: []`")
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "do not search for a Skill whose exact name is already visible",
+    )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "selected workflow node explicitly declares that exact Artifact type",
     )
-    expect(loaded.promptProfile.agents["base-tester"]).toContain("provides a Skill bound to a client")
-    expect(loaded.promptProfile.agents["base-tester"]).toContain("call the projected `skill` Tool")
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "do not search for a Skill whose exact name is already visible",
+    )
     expect(loaded.promptProfile.agents["base-tester"]).toContain("Return one concise visible final message")
     expect(loaded.promptProfile.agents["base-tester"]).toContain("exact method, URL, and parameter shape")
     expect(loaded.promptProfile.agents["base-tester"]).toContain(

@@ -218,3 +218,13 @@
 - 第三层修复仍在prompt/context层：harness用可解析的可见`@skill("automationbench-api")` directive要求每个实际client worker调用真实`skill` Tool；Base Developer/Tester明确普通read/capability discovery不构成加载。child request只复制一次SYSTEM/USER业务块和一次directive，不复制Mission前言。
 - 首轮方案中“单Task不写Mission计划/验收/Artifact”与公共`mission-core`的持久化、验收和终态Artifact硬契约冲突，独立审查判为P1，已删除这些benchmark局部反向指令。Mission继续唯一公共契约；resume依据可由Mission从原请求与完整canonical evidence发现的新gap产生，不依赖child自报纠正，也不得以无新证据的已穷尽发现重复执行。
 - 语义验收仍以原始任务和API契约为准：Tester区分“文案面向某受众”和“实际发送/可见范围”。organic content的API没有独立targeting时不虚构结构化字段；原请求明确restricted delivery时也不能用公开文案替代。以上不跳过Tester、不读取checker、不中断模型、不加Host gate；官方外部checker继续决定strict/partial。
+
+### cbd35d88 真实单例与剩余十次调用
+
+- case1 run `4e3095cc-99cd-4856-a3c5-2a2e5122e84d` 在精确clean commit `cbd35d889d52`、Base2026.09.13.8、实际openai/gpt-5.6-luna下自然终止；strict=0、partial=0.8、606025ms、62次模型调用、37次API。相比6e7b的114次和1127209ms，调用下降45.6%、耗时下降46.2%，但仍比52次单例闸门多10次，且仍漏掉`webinar-register`，所以不准入case2。
+- 真实`skill` Tool由Developer和Tester分别调用，runtime_adherence=true、missing_skill_loads=[]。执行仅2个role phase、2次dispatch、1次create、create后没有mutation，证明Skill激活和恢复收敛根因已关闭；角色调用Developer17、Tester20、Orchestrator11、Mission12、memory2。
+- 剩余可归因调用不是网络：全部37次API成功。两个worker在已知精确directive时仍各先做2次capability_search再调用skill；Orchestrator仍违背Base包“no Goal”契约，调用add_goal、artifact_snapshot/read/select后才dispatch；Tester又搜索/读取并不存在的implementation Artifact。这些是同一Task原始输入和Host事实的重复包装，不是独立验证本身。
+- 质量根因保持稳定：Developer真实加载Skill后仍依次猜Zoom、Drive、Buffer和Calendar，没有查询Gmail；在“未找到报名链接/指南”时把未知解释为可省略并create。说明“按信息形态搜索”缺少明确的通用来源优先级，而不是Skill没有进入system context。
+- 第四层修复：对已知精确Skill directive直接调用`skill`，不得先capability_search/glob/read；Base `execution-verification`从原始Task输入直接以`goal_ids:[]`派Developer，不调用add_goal或把request snapshot成Artifact。原Task输入、dispatch lineage、visible worker result和Host Tool facts保持唯一事实源；Task确有用户/上游提供的Delivery Slice或Artifact时仍按公共契约消费。
+- AutomationBench来源路由使用通用记录类型而非case词：未命名的操作指令、审批、链接、禁用项和最近沟通先查message/email；时间与安排查calendar/event；正式长文查document/file；目标身份和最终状态查目标service。一个权威正向记录闭合对应事实即停；多个独立候选读取在一次bash中执行。Tester复用相同路由和已声明read contract，不搜索通用implementation report。
+- 预计去除worker前置搜索4次、Orchestrator Goal/快照4次、Tester Artifact发现至少2次，从62降至不高于52；来源路由同时减少API轮次并补齐Gmail链接。仍以真实模型结果为准，预测不作为验收。
