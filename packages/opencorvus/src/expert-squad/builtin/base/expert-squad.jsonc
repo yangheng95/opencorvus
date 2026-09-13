@@ -5,7 +5,7 @@
   "name": "Base",
   "label": "Base",
   "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
-  "version": "2026.09.13.35",
+  "version": "2026.09.13.38",
   "product_pillars": [
     "code",
     "work"
@@ -82,7 +82,7 @@
           "capability:tool:platform:tool-registry:websearch"
         ],
         "label": "Base Planner",
-        "description": "Resolves pre-mutation dynamic source prerequisites or allocates a justified parallel research and implementation partition.",
+        "description": "Resolves only pre-mutation dynamic source prerequisites, excluding destination identity, capability, representation, and readback, or allocates a justified parallel research and implementation partition.",
         "base_role": "delegated-worker",
         "prompt": "agents/base-planner/system.md"
       },
@@ -92,7 +92,7 @@
           "capability:capability_set:platform:tool-registry:build-base"
         ],
         "label": "Base Developer",
-        "description": "Owns executable discovery, planning, actual repository or external-state delivery, and self-checks.",
+        "description": "Owns destination discovery, actual repository or external-state delivery, complete mutation-receipt handoff, and self-checks.",
         "base_role": "build",
         "prompt": "agents/base-developer/system.md"
       },
@@ -102,7 +102,7 @@
           "capability:capability_set:platform:tool-registry:delegated-worker-base"
         ],
         "label": "Base Tester",
-        "description": "Independently verifies the settled implementation against the original request and the plan's acceptance criteria through the final diff, executable checks, and rendered evidence.",
+        "description": "Independently maps original requirements and source rules to the settled result, including raw Host-recorded mutation receipts when no correct same-record read exists.",
         "base_role": "delegated-worker",
         "prompt": "agents/base-tester/system.md"
       }
@@ -132,19 +132,19 @@
         "nodes": {
           "base-planner": {
             "agent_id": "base-planner",
-            "description": "Reads the current source authorities and publishes the exact facts and coordinates required before mutation.",
+            "description": "Reads only source-side rules and values required before mutation; destination identity, capability, representation, and readback remain Developer work.",
             "depends_on": []
           },
           "base-developer": {
             "agent_id": "base-developer",
-            "description": "Reads the source plan, performs the authorized mutation, and checks the implementation-owned result.",
+            "description": "Reads the source plan, owns destination discovery, performs the authorized mutation, and hands off the complete Host-recorded receipt.",
             "depends_on": [
               "base-planner"
             ]
           },
           "base-tester": {
             "agent_id": "base-tester",
-            "description": "Independently rereads the source and destination authorities and verifies the settled result.",
+            "description": "Independently maps source rules to the raw mutation receipt and any correct same-record destination read.",
             "depends_on": [
               "base-developer"
             ]

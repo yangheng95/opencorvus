@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.35")
+    expect(loaded.manifest.version).toBe("2026.09.13.38")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -267,6 +267,10 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "do not stop merely because the create interface has no separate targeting field",
     )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "Preserve every successful external mutation's exact Tool receipt",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain("do not copy the full response body")
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "do not search for a Skill whose exact name is already visible",
     )
@@ -312,6 +316,15 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "absence of a separate targeting field is not a failure",
     )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "A Host-recorded successful mutation Tool output",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "or definite later mutation, operation-outcome, or rollback evidence",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "only when the API contract defines that successful response as a synchronous commit",
+    )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "Never ask a worker to repeat a successful irreversible create",
     )
@@ -330,6 +343,15 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "A missing optional structured destination field is not a missing source fact",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "use `evidence_reads` to retrieve the complete non-secret output before dispatching Tester",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "A full successful mutation receipt is authoritative operation evidence",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "or definite later mutation, operation-outcome, or rollback evidence",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain("causal Tool Message and Part identities")
     expect(loaded.promptProfile.agents.orchestrator).toContain("`evidence_reads`")
@@ -375,8 +397,23 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.manifest.capability_projection.agents["base-planner"]).toMatchObject({
       base_role: "delegated-worker",
       description:
-        "Resolves pre-mutation dynamic source prerequisites or allocates a justified parallel research and implementation partition.",
+        "Resolves only pre-mutation dynamic source prerequisites, excluding destination identity, capability, representation, and readback, or allocates a justified parallel research and implementation partition.",
     })
+    expect(
+      loaded.manifest.capability_projection.virtual_workflows["source-planned-execution-verification"]?.nodes[
+        "base-planner"
+      ]?.description,
+    ).toContain("destination identity, capability, representation, and readback remain Developer work")
+    expect(
+      loaded.manifest.capability_projection.virtual_workflows["source-planned-execution-verification"]?.nodes[
+        "base-developer"
+      ]?.description,
+    ).toContain("complete Host-recorded receipt")
+    expect(
+      loaded.manifest.capability_projection.virtual_workflows["source-planned-execution-verification"]?.nodes[
+        "base-tester"
+      ]?.description,
+    ).toContain("raw mutation receipt")
     expect(agentCapabilityGrants(loaded.manifest, "base-planner").explicitBuiltInToolIDs).toEqual([
       "bash",
       "capability_search",
