@@ -5,7 +5,7 @@
   "name": "Base",
   "label": "Base",
   "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
-  "version": "2026.09.13.49",
+  "version": "2026.09.13.50",
   "product_pillars": [
     "code",
     "work"
@@ -128,11 +128,11 @@
       },
       "source-planned-execution-verification": {
         "label": "Source Planning, Execution, and Independent Verification",
-        "description": "Close material dynamic business-source prerequisites through a finite relevant-anchor worklist, execute each irreversible external mutation only when its own preconditions are closed, then independently verify the settled outcome.",
+        "description": "Close material dynamic business-source prerequisites through a recall-first minimal-anchor worklist, execute each irreversible external mutation only when its own preconditions are closed, then independently verify the settled outcome.",
         "nodes": {
           "base-planner": {
             "agent_id": "base-planner",
-            "description": "Closes source-side rules and values through a finite relevant-anchor worklist before mutation; invalid call shapes and untried simpler queries leave it incomplete, while destination identity, capability, representation, and readback remain Developer work.",
+            "description": "Closes source-side rules and values through a minimal source-anchor worklist before mutation; compound empty reads and untried later authoritative anchors leave an endpoint incomplete, while destination identity, capability, representation, and readback remain Developer work.",
             "depends_on": []
           },
           "base-developer": {
@@ -144,7 +144,7 @@
           },
           "base-tester": {
             "agent_id": "base-tester",
-            "description": "Independently challenges source coordinates with eligible later anchors and one contract-correct replacement for any known-invalid read, then maps source rules to the raw mutation receipt and any correct same-record destination read.",
+            "description": "Independently challenges source coordinates with minimal and later authoritative anchors on each candidate endpoint, then maps source rules to the raw mutation receipt and any correct same-record destination read.",
             "depends_on": [
               "base-developer"
             ]

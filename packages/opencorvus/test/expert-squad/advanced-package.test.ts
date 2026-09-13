@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.49")
+    expect(loaded.manifest.version).toBe("2026.09.13.50")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -227,7 +227,7 @@ describe("built-in interface review workflow authority", () => {
       "do not claim the fact or source is absent or hand it to Developer",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "preserve exact empty or typed-unavailable checked scope",
+      "preserve exact empty, excluded-candidate, or typed-unavailable checked scope",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "one focused query naming all known source services and actions",
@@ -254,11 +254,30 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "A first call-shape, argument-validation, or contract `TypeError` leaves the route incomplete",
     )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "begin candidate generation with one minimal discriminative source-owned entity",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "A newly admitted anchor invalidates an earlier no-applicable-match result",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain("`Checked source coordinates:`")
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "its non-secret typed status and candidate count or concise applicability result",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "never project credentials, authorization values, or secret-bearing URLs or parameters",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "It does not reopen a route or service closed by typed unavailability",
+    )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "blocks the synonymous abstract category is such a proven misclassification",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Continue the same Planner once for that exact correction while other closed operations proceed",
+      "names that exact endpoint and the minimal or newly admitted anchor read",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "do not ask for other products or source families while this same-endpoint correction is pending",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "the operator-authored request inside the original Task input is the complete delivery and acceptance subject",
@@ -273,7 +292,7 @@ describe("built-in interface review workflow authority", () => {
       loaded.manifest.capability_projection.virtual_workflows["source-planned-execution-verification"]?.nodes[
         "base-planner"
       ]?.description,
-    ).toContain("invalid call shapes and untried simpler queries leave it incomplete")
+    ).toContain("compound empty reads and untried later authoritative anchors leave an endpoint incomplete")
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "do not search for a Skill whose exact name is already visible",
     )
@@ -294,7 +313,7 @@ describe("built-in interface review workflow authority", () => {
       "Query each material source obligation independently",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "If an empty query combined optional business terms, remove those co-filters on the next read",
+      "An empty compound or full-phrase query must be replaced by the same endpoint's minimal anchor",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "When an exact destination identity filter is sufficient",
@@ -339,7 +358,7 @@ describe("built-in interface review workflow authority", () => {
       "Do not repeat endpoint discovery for a complete current coordinate",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
-      "Treat every empty query recorded in the plan as one failed fact-endpoint-anchor attempt",
+      "A compound/full-phrase empty query is an incomplete attempt until the same endpoint receives that minimal anchor",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "Dispatch Developer only for the independent mutations whose visible `Mutation preconditions:` entries are `closed`",
@@ -364,7 +383,10 @@ describe("built-in interface review workflow authority", () => {
       "the original request and corresponding source surface",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
-      "if an empty anchor is a full title or phrase, reduce it once",
+      "Use every admitted anchor once against each still-open candidate authority endpoint",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "retain a shared organization or account name when the request, current authority, or source contract establishes it as source-owned",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "When an exact destination identity filter is sufficient",
