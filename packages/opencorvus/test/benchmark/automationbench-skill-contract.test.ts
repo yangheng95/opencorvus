@@ -69,6 +69,12 @@ test("AutomationBench Mission request preserves public reconciliation and explic
 
   expect(request).toContain('@skill("automationbench-api")')
   expect(request).toContain("require the real `skill` Tool call before the first client call")
+  expect(request).toContain("already selected and held the exact Expert Squad")
+  expect(request).toContain("must not call capability discovery to rediscover or replace it")
+  expect(request).toContain("A projected worker that calls the benchmark client must load this Skill")
+  expect(request).toContain("Mission and a child Task Orchestrator")
+  expect(request).toContain("materially depends on client-contract content absent from visible evidence")
+  expect(request).toContain("load the exact named Skill directly without capability discovery")
   expect(request).toContain("new evidence-backed acceptance gap derived from the original request")
   expect(request).toContain("must not add a report, proof channel, independent storage field, or evidence duty")
   expect(request).toContain("independent verification does not require a second API projection for every fact")

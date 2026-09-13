@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.38")
+    expect(loaded.manifest.version).toBe("2026.09.13.40")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -204,6 +204,16 @@ describe("built-in interface review workflow authority", () => {
       "Do not search, read, or select that plan in the Orchestrator",
     )
     expect(loaded.selectorInstructions).toContain("Select `source-planned-execution-verification`")
+    expect(loaded.selectorInstructions).toContain("Dynamic values alone do not justify a Planner")
+    expect(loaded.selectorInstructions).toContain(
+      "A single external mutation whose source facts serve only that mutation normally uses `execution-verification`",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "Dynamic records, rules, identifiers, or exact values absent from the request do not by themselves justify a Planner",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "Source-planned overrides it only when those sources contain conflicting or precedence-bearing authority",
+    )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "own only the read-only dynamic business-source prerequisites",
     )
@@ -257,6 +267,9 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "the loaded client contract supports structured batching",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "use one combined endpoint-contract discovery for independent missing capabilities",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "permits one bounded discovery for that exact identity or missing read contract",
