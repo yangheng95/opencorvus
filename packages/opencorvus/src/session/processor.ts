@@ -19,6 +19,7 @@ import { PermissionAuthority } from "@/permission/authority"
 import {
   withLLMActivity,
   chunkHeartbeatKind,
+  reasoningDeltaHasSemanticContent,
   DefaultLLMActivityPolicy,
   LLMActivityError,
   type LLMActivityEvent,
@@ -633,7 +634,7 @@ export namespace SessionProcessor {
             const buffered = [...reasoningDeltaBuf]
             reasoningDeltaBuf.clear()
             for (const [partID, delta] of buffered) {
-              if (!delta.replace(/[\[\]\s]/g, "")) continue
+              if (!reasoningDeltaHasSemanticContent(delta)) continue
               const part = Object.values(reasoningMap).find((candidate) => candidate.id === partID)
               if (!part) continue
               await Session.updatePartDelta({

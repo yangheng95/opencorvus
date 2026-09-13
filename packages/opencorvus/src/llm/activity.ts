@@ -80,6 +80,13 @@ export type HeartbeatKind =
   | "step-finish"
   | "manual"
 
+/** Match the Session reasoning writer's incremental-publication boundary. Providers
+ * may stream bracket-only or whitespace-only reasoning frames; those bytes
+ * keep the transport alive but do not publish observable incremental progress. */
+export function reasoningDeltaHasSemanticContent(value: unknown): boolean {
+  return typeof value === "string" && value.replace(/[\[\]\s]/g, "").length > 0
+}
+
 /**
  * Map AI SDK fullStream chunks to semantic progress. Physical transport
  * arrival is reported separately as `first-byte`: unknown, empty, and no-op
@@ -106,7 +113,7 @@ export function chunkHeartbeatKind(chunk: Record<string, unknown>): HeartbeatKin
     case "reasoning-end":
       return nonEmpty("id") ? "reasoning-delta" : null
     case "reasoning-delta":
-      return nonEmpty("text") ? "reasoning-delta" : null
+      return reasoningDeltaHasSemanticContent(chunk.text) ? "reasoning-delta" : null
     case "tool-input-start":
       return nonEmpty("toolCallId", "id") && nonEmpty("toolName") ? "tool-input-start" : null
     case "tool-input-delta":

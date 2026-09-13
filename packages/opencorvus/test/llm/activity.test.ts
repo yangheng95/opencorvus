@@ -193,6 +193,39 @@ describe("LLM semantic activity", () => {
     })
   })
 
+  test("settles bracket-only reasoning framing through the semantic idle contract", async () => {
+    const events: LLMActivityEvent[] = []
+    let attempts = 0
+    await expect(
+      collectLLMText({
+        context: { sessionID: "session-reasoning-frame-idle", provider: "test", model: "reasoning-frame-idle" },
+        external: new AbortController().signal,
+        policy: {
+          ...policy,
+          idleMs: 20,
+        },
+        sink: (event) => events.push(event),
+        start: (run) => {
+          attempts += 1
+          return {
+            fullStream: (async function* () {
+              yield { type: "reasoning-start", id: "reasoning-frame" }
+              while (true) {
+                await Bun.sleep(5)
+                run.signal.throwIfAborted()
+                yield { type: "reasoning-delta", id: "reasoning-frame", text: " [ ] \n" }
+              }
+            })(),
+          }
+        },
+      }),
+    ).rejects.toMatchObject({ name: "LLMActivityError", cls: "idle", attempts: 1 })
+    expect({ attempts, retries: events.filter((event) => event.type === "retry") }).toMatchObject({
+      attempts: 2,
+      retries: [{ type: "retry", attempt: 1, cls: "idle" }],
+    })
+  })
+
   test("settles repeated first-byte stalls after its one retry budget", async () => {
     const events: LLMActivityEvent[] = []
     let attempts = 0
@@ -378,13 +411,15 @@ describe("LLM semantic activity", () => {
       chunkHeartbeatKind({ type: "start" }),
       chunkHeartbeatKind({ type: "tool-input-delta", toolCallId: "call-1", inputTextDelta: "" }),
       chunkHeartbeatKind({ type: "reasoning-delta", id: "reasoning-1", text: "" }),
+      chunkHeartbeatKind({ type: "reasoning-delta", id: "reasoning-1", text: " [ ] \n" }),
       chunkHeartbeatKind({ type: "unknown-provider-keepalive" }),
+      chunkHeartbeatKind({ type: "reasoning-delta", id: "reasoning-1", text: "[working]" }),
       chunkHeartbeatKind({
         type: "tool-input-delta",
         toolCallId: "call-1",
         inputTextDelta: '{"query":"NVDA"}',
       }),
       chunkHeartbeatKind({ type: "text-delta", id: "text-1", text: "NVIDIA" }),
-    ]).toEqual([null, null, null, null, "tool-input-delta", "text-delta"])
+    ]).toEqual([null, null, null, null, null, "reasoning-delta", "tool-input-delta", "text-delta"])
   })
 })
