@@ -177,6 +177,15 @@ test("a Mission recovers a committed side effect and first starts its independen
             const developer = lineage("base-developer")
             const tester = lineage("base-tester")
             const repair = readLatestTaskAcceptanceLedger(taskID)
+            if (repair) {
+              const definition = Array.isArray(options.tools)
+                ? options.tools.find((candidate) => candidate.name === "dispatch_agent")
+                : (options.tools as Record<string, unknown> | undefined)?.dispatch_agent
+              expect(JSON.stringify(definition)).toContain(
+                "put `acceptance_gap_id` and `criterion_ids` inside `dispatch.turn`",
+              )
+              expect(JSON.stringify(definition)).toContain("deliver-and-verify")
+            }
             const rows = Database.use((db) =>
               db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.task_id, taskID)).all(),
             )

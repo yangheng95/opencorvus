@@ -18,7 +18,7 @@ export const generatedExpertSquadRevisions: Readonly<
   "anti-money-laundering-compliance": { version: "2026.08.30.2", contentDigest: "7271d811b8db3cdbe5bf872e38e201dfc882e5f108dc471c58f8cc1c02524f6f" },
   "automotive-functional-safety": { version: "2026.08.30.2", contentDigest: "e8cdecee8fa08c72a5cbe54a28cf1c7a7c1e987a4bd189d79b02185fd6607952" },
   "aviation-maintenance-reliability": { version: "2026.08.30.2", contentDigest: "ce45f8d83914319c15f9cbd312df55e31608763d462bccb2fe0995d2141346e3" },
-  "base": { version: "2026.09.13.10", contentDigest: "3118f721e2ee97ebb39b1d016702e5d0b73ef9eda20b750d4a53871c050343ce" },
+  "base": { version: "2026.09.13.13", contentDigest: "8a3f4ddeb2ee8ffdb5e7bfc23afd8aefa958c851d62bdf08c76de77ed2f81b62" },
   "battery-safety-reliability": { version: "2026.08.30.2", contentDigest: "4a1dd0d156817115134f6e7beacfe8aaabe2955849d56abe67a836c95513ba88" },
   "biopharmaceutical-manufacturing-quality": { version: "2026.08.30.2", contentDigest: "bf77b76e741391357d2a2d9ee8cee1ae2756da819d025cc146f10e25add4cd9e" },
   "bridge-structural-integrity-assurance": { version: "2026.08.30.2", contentDigest: "1472c3ec62517f9886a15e2e46b939889332c58df214de5843ecb74878c28fd7" },

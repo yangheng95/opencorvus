@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.10")
+    expect(loaded.manifest.version).toBe("2026.09.13.13")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -214,6 +214,9 @@ describe("built-in interface review workflow authority", () => {
       "Do not repeat endpoint discovery for a complete current coordinate",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "does not require a second product projection for every satisfied fact",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "do not invent a structured targeting control for an organic content action",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
@@ -223,11 +226,18 @@ describe("built-in interface review workflow authority", () => {
       "Never ask a worker to repeat a successful irreversible create",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Do not call `capability_search` merely to confirm it before dispatch",
+      "Load that exact Skill directly only when its contract is needed",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "do not search the Artifact catalog for a report that the workflow did not create",
     )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "Do not continue Tester against the same exhausted read surface",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "Complete only when every original obligation is satisfied",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain("call the real `fail_task` decision")
     expect(workflowNodes(loaded, "execution-verification")).toEqual({
       "base-developer": [],
       "base-tester": ["base-developer"],

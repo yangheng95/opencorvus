@@ -102,7 +102,7 @@ describe("Expert Squad catalog index", () => {
     const inspection = await PromptProfileResolver.catalogInspection({ projectDirectory: project.path, id: "base" })
     expect(inspection).toMatchObject({
       id: "base",
-      version: "2026.09.13.10",
+      version: "2026.09.13.13",
       selector: {
         summary: expect.any(String),
         selection_guidance: expect.any(String),
@@ -359,7 +359,11 @@ describe("Expert Squad catalog index", () => {
         if (!search?.execute) throw new Error("Mission capability_search is unavailable")
         const result = await search.execute(
           { queries: [""], kinds: ["expert_squad"], exact_refs: [], deactivate_refs: [], limit: 5 },
-          { toolCallId: "call_hundred_held_capability_search", messages: [], abortSignal: new AbortController().signal },
+          {
+            toolCallId: "call_hundred_held_capability_search",
+            messages: [],
+            abortSignal: new AbortController().signal,
+          },
         )
         const output = JSON.parse(result.output) as {
           catalog_revision: string
@@ -370,8 +374,19 @@ describe("Expert Squad catalog index", () => {
           results: Array<Record<string, unknown>>
         }
         const mismatchedPillarResult = await search.execute(
-          { queries: [""], kinds: ["expert_squad"], product_pillar: "work", exact_refs: [], deactivate_refs: [], limit: 1 },
-          { toolCallId: "call_mismatched_pillar_capability_search", messages: [], abortSignal: new AbortController().signal },
+          {
+            queries: [""],
+            kinds: ["expert_squad"],
+            product_pillar: "work",
+            exact_refs: [],
+            deactivate_refs: [],
+            limit: 1,
+          },
+          {
+            toolCallId: "call_mismatched_pillar_capability_search",
+            messages: [],
+            abortSignal: new AbortController().signal,
+          },
         )
         const mismatchedPillarOutput = JSON.parse(mismatchedPillarResult.output) as {
           visible_expert_squad_count: number

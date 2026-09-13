@@ -43,6 +43,8 @@ describe("scheduler message model harness", () => {
       "complete with the retained Host-minted read references",
       "An unchanged accepted terminal Task is not queried or read again",
       "End the response only after that exact causal closure reaches its next durable stop",
+      "Do not turn a product field, proof channel, report, or verification surface",
+      "repeating an already exhausted read surface is not a repair action",
     ]
 
     expect(requiredMissionGuidance.map((clause) => MISSION_CORE.includes(clause))).toEqual(
@@ -62,6 +64,8 @@ describe("scheduler message model harness", () => {
       "It never closes, suspends, or supplies future progress for a non-terminal Task",
       "A scheduler reply or notification does not itself provide future Task progress",
       "A Mission acceptance resume always opened a new non-terminal repair occurrence",
+      "both fields belong inside `dispatch.turn`, beside `kind`",
+      "Do not repeat an already exhausted read surface",
       "send its correlated reply and make that lifecycle decision in the same wake",
       "bind that evidence with one `session` locator naming the current Orchestrator Session",
       "scheduler Protocol event IDs are not coordination-request evidence",

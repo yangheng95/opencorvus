@@ -105,6 +105,9 @@ test("runtime adherence finds benchmark clients in parsed Bash control structure
     "for id in 1 2; do python automationbench_tool.py list; done",
     "if true; then python automationbench_tool.py list; fi",
     "python \\\n automationbench_tool.py list",
+    `python3 automationbench_tool.py batch <<'JSON'
+[{"command":"search","query":"policy","top_k":5}]
+JSON`,
   ]
   for (const command of commands) {
     const audit = await auditDispatchedSkillCoverage({

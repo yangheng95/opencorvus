@@ -18,6 +18,19 @@ python3 automationbench_tool.py fetch POST "https://full.url/from/search" --body
 python3 automationbench_tool.py base64 "text that an endpoint explicitly requires encoded"
 ```
 
+For independent operations, prefer one structured batch instead of multiple quoted shell commands:
+
+```text
+python3 automationbench_tool.py batch <<'JSON'
+[
+  {"command":"search","query":"service action record","top_k":5},
+  {"command":"fetch","method":"GET","url":"https://full.url/from/search","params":{"key":"value"}}
+]
+JSON
+```
+
+`batch` accepts 1 through 20 independent `search`, read-only `fetch GET`, or `base64` operations and returns one ordered `results` array. `transport_status` and `transport_ok` describe only delivery through the local Unix bridge; the unchanged `body` is the official tool result and may contain a typed business/API error even when transport is HTTP 200. Inspect every body rather than treating transport success as operation success. A transport interruption marks the current operation `transport_outcome_unknown` and the untouched suffix `not_executed` without inventing a transport or official status. Never batch POST, PATCH, PUT, DELETE, or another mutation: execute each mutation as its own command so its receipt and outcome remain unambiguous. The bridge still executes and records every official operation separately. Keep dependent operations in later batches after the earlier result supplies their URL, identifier, or parameter.
+
 The client path and invocation are already defined above. Do not run `ls`, `glob`, project `read`, or capability discovery merely to confirm that the client exists. Begin with the exact client command needed for endpoint discovery or execution.
 
 `search` is an endpoint-contract directory: it tells you which URL, method, path parameters, query parameters, body fields, and response shape an API supports. It does not search the seeded business records. A zero-result `search` therefore proves only that the endpoint keywords did not match; it never proves that an email, spreadsheet, message, customer, ticket, or other business record is absent. Business existence and content are established only by calling a discovered list/get/search endpoint with `fetch`. `--top-k` accepts 1 through 20.
@@ -32,9 +45,9 @@ Route an unnamed source by the kind of record the business fact normally lives i
 
 Once a source-family query returns candidates whose subject, snippet, identity, or metadata matches the concrete Task entity, an original material constraint, an applicable shared policy, or an already discovered dependency, fetch only those matching candidates. Do not enumerate or fetch generic noise records to hunt for a better answer. Once a discovered list/get endpoint has returned the relevant records, do not search the endpoint directory again for that source family. For an unnamed advisory constraint that has no independent mutation field, one concrete-entity query plus one constraint-or-policy query bounds the attempted search when the relevant service is explicitly unavailable or both queries return no matching record. Record the exact checked scope and the constraint as unverifiable, then stop probing unrelated products or broad record inventories. This bounded attempt does not prove that the source is absent or waive a material fact; do not claim that the unknown constraint is satisfied.
 
-Each shell invocation creates a model round trip. Once endpoint contracts are known, put independent read-only client commands in one `bash` call, separated by newlines, so their complete outputs return together. Keep dependent calls sequential when a later URL or parameter needs an earlier result. Perform the smallest mutation set after the authoritative records are complete, then read only the exact changed record or collection needed to confirm the outcome. Never repeat broad endpoint discovery during final verification.
+Judge a record by its applicable content, identity, and recency rather than whether its title repeats an abstract request word such as “guidelines,” “policy,” or “instructions.” Once a current authoritative record supplies the ready-to-use content or constraints for the requested action, do not keep searching for a separately titled policy record unless the request explicitly names one. When the original request authorizes reasonable assumptions, a bounded absence of an unnamed advisory record may be reported as a limitation while the supported business action proceeds; never invent the missing rule or claim independent compliance evidence.
 
-Every command in a multi-command `bash` call must be independently valid shell syntax. Close each quoted URL and JSON argument before the newline; in particular, each `--params` or `--body` value must retain both of its surrounding single quotes. A malformed batch is an execution error even if a later retry succeeds.
+Each shell invocation creates a model round trip. Use the structured `batch` command for independent discovery and reads; do not concatenate multiple client commands with shell newlines. Perform the smallest mutation set after the authoritative records are complete, then batch only the exact changed-record and preservation reads needed to confirm the outcome. Never repeat broad endpoint discovery during final verification.
 
 For independent verification, derive expectations from the original request and the same authoritative records, then compare those exact fields with the final destination. Use only query parameters declared by the discovered endpoint contract. Preserve the exact method, URL, and parameter shape of a read that already returned the relevant destination record; an empty result from a different or documented non-reflecting projection is conflicting evidence, not proof that a successful action disappeared. Verify the changed record and any material preservation constraint. Do not rediscover the whole API catalog, inspect unrelated services, or replay the mutation.
 

@@ -459,7 +459,7 @@ export function createDispatchAgentTool(input: {
               .refine(
                 (criterionID) =>
                   input.acceptanceRepair!.revision.gap.criteria.some(
-                    (criterion) => criterion.criterion_id === criterionID,
+                    (criterion) => criterion.state === "open" && criterion.criterion_id === criterionID,
                   ),
                 "Criterion is not open in the current Mission acceptance gap.",
               ),
@@ -562,6 +562,12 @@ export function createDispatchAgentTool(input: {
       },
     },
   )
+  const acceptanceRepairGuidance = input.acceptanceRepair
+    ? ` Current acceptance repair: put \`acceptance_gap_id\` and \`criterion_ids\` inside \`dispatch.turn\`, beside \`kind\`; never put them beside \`dispatch.target\`. Use exactly \`acceptance_gap_id: ${JSON.stringify(input.acceptanceRepair.revision.gap.gap_id)}\` and select only from these open criterion IDs: ${input.acceptanceRepair.revision.gap.criteria
+        .filter((criterion) => criterion.state === "open")
+        .map((criterion) => JSON.stringify(criterion.criterion_id))
+        .join(", ")}.`
+    : ""
 
   const dispatchTool = tool({
     description:
@@ -569,7 +575,8 @@ export function createDispatchAgentTool(input: {
       "A Task has one immutable workflow binding: after the first virtual-workflow initial dispatch commits, every later initial dispatch must use a node from that same workflow; never switch to direct. Direct initial dispatches are only for a Task that has not selected a virtual workflow. " +
       "Every initial Turn must declare turn.use_worktree. Concurrent write-capable Task dispatches use managed worktrees when repository ownership requires isolation; read-only or proven-disjoint dispatches may use false. " +
       "A newly started worker returns accepted as soon as its durable lineage and Session exist; continue the root control Turn without waiting for that worker. A fast worker may instead return terminal_success, domain_incomplete, domain_blocked, partial, infrastructure_failure, or a coordination request. domain_incomplete carries the exact durable but incomplete domain Artifact and never opens workflow successors. domain_blocked carries the exact domain Artifact and unanswered blocker Question occurrence and also keeps successors closed. terminal_success is already terminal: never call wait for it; discover persisted domain facts through artifact_search, read each artifact_locator_ref completely, and select semantic sources with artifact_read_ref. " +
-      "This replaces separate visible worker-stage tools such as requirements, architect, build, visual_qa, integrity, fact_check, research, workload, intent analysis, and explore.",
+      "This replaces separate visible worker-stage tools such as requirements, architect, build, visual_qa, integrity, fact_check, research, workload, intent analysis, and explore." +
+      acceptanceRepairGuidance,
     inputSchema: providerInputSchema,
     outputSchema: DispatchOutcomeSchema,
     execute: async (toolInput, options) => {

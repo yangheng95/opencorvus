@@ -80,8 +80,8 @@ export function createBuildTool(dependencies: BuildToolDependencies) {
             {
               title: "Artifact Catalog Selection",
               body:
-                "Search the Task Artifact catalog yourself by exact name/kind, current or historical version, recency, and fuzzy relevance. " +
-                "Completely read every Artifact you use with artifact_read. No upstream participant selected or copied an Artifact body into this prompt; missing evidence must remain visible.",
+                "Use exact evidence locators and Artifact bodies already projected into this Turn. Search the Task Artifact catalog only when the original Task or current guidance names a durable Artifact, or when a specific missing Artifact is a required semantic input. " +
+                "Completely read every Artifact you use with artifact_read. An empty selection creates no catalog-search duty; do not search merely to confirm that no Artifact was supplied.",
             },
             {
               title: "Delivery Slice Subjects",
