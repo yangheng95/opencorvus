@@ -134,32 +134,30 @@ reference, not a latest-Message selection. The completed assistant-Message
 inventory retains each recorded `finish` reason because a completed Tool step
 is not by itself a terminal worker report. The exact Message reader exposes the
 same finish/completion facts without inferring success. Its required input is
-an ordered set of one to eight globally unique current-final Message IDs. The
+an ordered set of one to eight globally unique terminal dispatch-settlement
+Message IDs. A later dispatch does not revoke an earlier terminal worker
+Message whose evidence remains material. The
 first read also returns a bounded, redacted page of real Tool Message and Part
 identities from the same Session, the same accepted input parent and no later
 than each selected final in persisted `(time,id)` order. Older pages use the
 returned per-final `inventory_next_before` cursor. A caller may then supply up
-to eight exact `message_id+part_id` pairs from that page through
+to eight exact `message_id+part_id` pairs returned by that final's inventory
+in this or an earlier call through
 `evidence_reads` with an explicit `input`, `output`, or `failure` field; the
 same reader returns a structured-redacted projection of that persisted Tool
 field in chunks whose requested total is at most 30000 characters, with
 `next_offset` until complete. Final-Message Tool parts use the same safe
 metadata projection rather than bypassing this chunk path. Materialized
 truncated outputs resolve through the same authoritative source primitive as
-compaction. Runtime
-validation rejects Messages from another Task, occurrence, Session, page, or
-later causal frontier. The reader projects
-the latest exact dispatch group as a Provider enum and validates the submitted
-ordered final subset against that same immutable set. A `dispatch_agents`
-group is bound by execution epoch, Orchestrator Message and outer Tool
-occurrence and has the same maximum of eight members as its collection; a
-direct group is the sibling `dispatch_agent` decision set owned by the same
-execution epoch and assistant Message. Its Tool requests are read through the
-Message index and lineages through exact Tool-occurrence authority, rather than
-scanning Task history. Historical groups are neither scanned nor copied into
-the Tool schema. One collection fits one read; a larger legal direct fan-out is
-read in ordered chunks of at most eight. Its executor still resolves and
-verifies every persisted Session owner
+compaction. Runtime validation rejects non-settlement Messages and Messages
+from another Task, occurrence, Session, or later causal frontier. The reader
+does not enumerate an unbounded history in its Provider schema; it validates
+each submitted final ID against the Task's immutable dispatch settlements. A
+`dispatch_agents` collection has at most eight members, so all of its final
+Messages fit one read; a larger legal direct fan-out is read in caller-selected
+ordered chunks of at most eight. The reader neither reconstructs dispatch
+groups nor copies historical settlement identities into the Tool schema. Its
+executor resolves and verifies every persisted Session owner
 against the current Task, then returns the exact Message projections in caller
 order. It does not accept a caller-supplied Session identity, select a latest
 Message, correct an identifier, retry a rejected read, or retain a

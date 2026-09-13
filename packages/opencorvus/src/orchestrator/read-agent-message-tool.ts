@@ -1,4 +1,4 @@
-import { latestTaskDispatchGroupFinalMessageIDs } from "@/engine/dispatch-settlement"
+import { taskOwnsDispatchFinalMessage } from "@/engine/dispatch-settlement"
 import { taskIDForSession } from "@/engine/task-session-lineage"
 import { ProviderError } from "@/provider/error"
 import { Session } from "@/session"
@@ -162,30 +162,27 @@ export function createReadAgentMessageTool(input: { taskID: string }) {
         })
         .optional()
         .describe(
-          "Optional exact input, output, or failure chunks selected from the current causal inventory. Follow next_offset until null.",
+          "Optional exact input, output, or failure chunks selected from this final's causal inventory in this or an earlier call. Follow next_offset until null.",
         ),
     })
     .strict()
   const providerJSONSchema = z.toJSONSchema(inputSchema, { cycles: "ref", reused: "ref" }) as unknown as JSONSchema7
-  const currentFinalMessageIDs = latestTaskDispatchGroupFinalMessageIDs(input.taskID)
   const messageIDsProperty = providerJSONSchema.properties?.message_ids as JSONSchema7 | undefined
   if (messageIDsProperty) {
     messageIDsProperty.uniqueItems = true
-    if (currentFinalMessageIDs.length > 0) {
-      messageIDsProperty.items = { type: "string", enum: currentFinalMessageIDs }
-    }
   }
   const providerInputSchema = jsonSchema<z.infer<typeof inputSchema>>(providerJSONSchema, {
     validate(value) {
       const parsed = inputSchema.safeParse(value)
       if (!parsed.success) return { success: false, error: parsed.error }
-      const currentFinalMessageIDSet = new Set(currentFinalMessageIDs)
-      const unsupported = parsed.data.message_ids.filter((messageID) => !currentFinalMessageIDSet.has(messageID))
+      const unsupported = parsed.data.message_ids.filter(
+        (messageID) => !taskOwnsDispatchFinalMessage({ taskID: input.taskID, messageID }),
+      )
       if (unsupported.length > 0) {
         return {
           success: false,
           error: new Error(
-            `Message identities are not current terminal dispatch settlements for Task ${input.taskID}: ${unsupported.join(", ")}`,
+            `Message identities are not terminal dispatch settlement authorities for Task ${input.taskID}: ${unsupported.join(", ")}`,
           ),
         }
       }
@@ -197,7 +194,7 @@ export function createReadAgentMessageTool(input: { taskID: string }) {
         return {
           success: false,
           error: new Error(
-            `Inventory cursors do not name selected current terminal Messages for Task ${input.taskID}: ${unsupportedCursors.map((cursor) => cursor.final_message_id).join(", ")}`,
+            `Inventory cursors do not name selected terminal Messages for Task ${input.taskID}: ${unsupportedCursors.map((cursor) => cursor.final_message_id).join(", ")}`,
           ),
         }
       }
@@ -210,13 +207,16 @@ export function createReadAgentMessageTool(input: { taskID: string }) {
       description:
         "Read an ordered batch of exact persisted Agent messages and their tool parts by globally unique message refs from the Task description. " +
         "This is a read-only fact projection: it does not select a latest message, infer success, or materialize an artifact. " +
-        "For final worker reports, submit the current decision set's exact dispatch settlement final_message_id values in ordered chunks of at most eight; one collection always fits one call. " +
-        "The result includes a paged, redacted inventory of real Tool Messages from each final report's execution occurrence. When a material source or mutation fact is absent from the final text, use only the necessary returned message_id and part_id in evidence_reads, select field=input, output, or failure, and paginate with offset/limit until next_offset is null. A completed Tool step is not a final report.",
+        "For final worker reports, submit exact Task dispatch settlement final_message_id values in ordered chunks of at most eight, including an earlier settled worker whose evidence remains material after a later dispatch. " +
+        "The result includes a paged, redacted inventory of real Tool Messages from each final report's execution occurrence. When a material source or mutation fact is absent from the final text, use only a necessary message_id and part_id returned by that final's inventory in this or an earlier call, select field=input, output, or failure, and paginate with offset/limit until next_offset is null. A completed Tool step is not a final report.",
       inputSchema: providerInputSchema,
       execute: async (rawInput) => {
         const { message_ids, inventory_before, evidence_reads } = inputSchema.parse(rawInput)
         const finals = await Promise.all(
           message_ids.map(async (message_id) => {
+            if (!taskOwnsDispatchFinalMessage({ taskID: input.taskID, messageID: message_id })) {
+              throw new Error(`Message ${message_id} is not a terminal dispatch settlement for Task ${input.taskID}`)
+            }
             const session_id = Session.messageOccurrenceSessionID(message_id)
             if (!session_id) throw new Error(`Message ${message_id} is not persisted`)
             if (taskIDForSession(session_id) !== input.taskID) {
@@ -278,7 +278,7 @@ export function createReadAgentMessageTool(input: { taskID: string }) {
         )
         const causalToolMessageInventory: CausalToolMessage[] = []
         const inventoryNextBefore: Array<{ final_message_id: string; before_message_id: string }> = []
-        const visibleToolMessages = new Map<string, CausalToolMessage>()
+        const causalToolMessageSessions = new Map<string, string>()
         for (const final of finals) {
           const occurrenceMessages = (await Session.messages({ sessionID: final.session_id }))
             .filter(
@@ -302,6 +302,9 @@ export function createReadAgentMessageTool(input: { taskID: string }) {
             )
           }
           const inventoryPage = causalInventoryPage(occurrenceMessages, before)
+          for (const candidate of occurrenceMessages) {
+            causalToolMessageSessions.set(candidate.info.id, final.session_id)
+          }
           if (inventoryPage.next_before_message_id) {
             inventoryNextBefore.push({
               final_message_id: final.message_id,
@@ -330,16 +333,17 @@ export function createReadAgentMessageTool(input: { taskID: string }) {
               }),
             }
             causalToolMessageInventory.push(projected)
-            visibleToolMessages.set(candidate.info.id, projected)
           }
         }
         const evidenceReads = await Promise.all(
           (evidence_reads ?? []).map(async (read) => {
-            const inventory = visibleToolMessages.get(read.message_id)
-            if (!inventory) {
-              throw new Error(`Evidence Message ${read.message_id} is not present in the current causal inventory page`)
+            const sessionID = causalToolMessageSessions.get(read.message_id)
+            if (!sessionID) {
+              throw new Error(
+                `Evidence Message ${read.message_id} is not causal to the selected terminal dispatch Messages`,
+              )
             }
-            const message = await MessageStore.get({ sessionID: inventory.session_id, messageID: read.message_id })
+            const message = await MessageStore.get({ sessionID, messageID: read.message_id })
             const part = message.parts.find((candidate) => candidate.id === read.part_id)
             if (!part || part.type !== "tool") {
               throw new Error(`Evidence Part ${read.part_id} is not a Tool Part of Message ${read.message_id}`)

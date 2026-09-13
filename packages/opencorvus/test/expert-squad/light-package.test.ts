@@ -7,7 +7,7 @@ import { WorkerTurnDescriptor } from "../../src/agent/worker-turn-descriptor"
 import { Config } from "../../src/config/config"
 import { EffectiveConfig } from "../../src/config/effective"
 import { createDispatchLineageOrigin, listDispatchLineage } from "../../src/engine/dispatch-lineage"
-import { DispatchSettlementTestHooks, recordDispatchSettlement } from "../../src/engine/dispatch-settlement"
+import { recordDispatchSettlement } from "../../src/engine/dispatch-settlement"
 import { recordTestDispatchLineage } from "../fixture/dispatch-lineage"
 import { persistEstablishedTask } from "../fixture/engine-task"
 import { EngineTaskRootIngressTable } from "../../src/engine/engine.sql"
@@ -778,11 +778,6 @@ describe("Light Expert Squad package", () => {
           const lineages = listDispatchLineage(taskID)
           dispatchIDs = lineages.map((lineage) => lineage.dispatchID)
           expect(new Set(dispatchIDs).size).toBe(4)
-          expect(
-            Database.use((db) =>
-              DispatchSettlementTestHooks.collectionGroupQueryPlan(db, lineages[0]!.artifactID),
-            ).join("\n"),
-          ).toContain("engine_dispatch_lineage_collection_member_idx")
           expect(lineages.map((lineage) => lineage.payload.target_agent_id).sort()).toEqual([...targets].sort())
           expect(lineages.map((lineage) => lineage.payload.orchestrator_message_id)).toEqual(
             targets.map(() => orchestratorMessageID),
@@ -888,9 +883,7 @@ describe("Light Expert Squad package", () => {
             minItems: 1,
             maxItems: 8,
             uniqueItems: true,
-            items: { type: "string" },
           })
-          expect(providerSchema.properties.message_ids.items.enum.toSorted()).toEqual(finalIDs.toSorted())
           expect(providerSchema.properties.inventory_before).toBeDefined()
           expect(providerSchema.properties.evidence_reads).toBeDefined()
           expect(await providerContract.validate?.({ message_ids: finalIDs })).toEqual({
@@ -911,7 +904,7 @@ describe("Light Expert Squad package", () => {
           const rejected = await providerContract.validate?.({ message_ids: ["msg_not_a_current_settlement"] })
           expect(rejected?.success).toBe(false)
           if (rejected?.success === false) {
-            expect(rejected.error.message).toContain("not current terminal dispatch settlements")
+            expect(rejected.error.message).toContain("not terminal dispatch settlement authorities")
           }
           const output = JSON.parse(
             (await reader.execute!(
@@ -1004,7 +997,7 @@ describe("Light Expert Squad package", () => {
               },
               { toolCallId: "read_invalid_collection_evidence", messages: [] },
             ),
-          ).rejects.toThrow("not present in the current causal inventory page")
+          ).rejects.toThrow("not causal to the selected terminal dispatch Messages")
 
           const directDecisionMessageID = Identifier.ascending("message")
           const laterNow = Date.now() + 1_000
@@ -1059,16 +1052,51 @@ describe("Light Expert Squad package", () => {
             })
           }
           dispatchIDs.push(...laterDirectLineages.map(({ lineage }) => lineage.dispatchID))
-          const directPlans = Database.use((db) =>
-            DispatchSettlementTestHooks.directGroupQueryPlans(db, laterDirectLineages[0]!.lineage.artifactID),
+          const historicalReader = createReadAgentMessageTool({ taskID }).read_agent_message
+          const historicalContract = asSchema(historicalReader.inputSchema) as {
+            validate?: (
+              value: unknown,
+            ) => Promise<{ success: true; value: { message_ids: string[] } } | { success: false; error: Error }>
+          }
+          expect(await historicalContract.validate?.({ message_ids: [finalIDs[0]!, finalIDs[2]!] })).toEqual({
+            success: true,
+            value: { message_ids: [finalIDs[0]!, finalIDs[2]!] },
+          })
+          const historicalEvidenceSelection = output.causal_tool_message_inventory
+            .filter((message: { session_id: string }) => message.session_id === dispatches[2]!.session_id)
+            .flatMap((message: { message_id: string; tool_facts: Array<{ part_id: string; tool_name: string }> }) =>
+              message.tool_facts.map((part) => ({ message_id: message.message_id, ...part })),
+            )
+            .find((part: { tool_name: string }) => part.tool_name === "read")
+          if (!historicalEvidenceSelection) throw new Error("Historical worker occurrence has no causal read Tool Part")
+          const historicalEvidenceOutput = JSON.parse(
+            (await historicalReader.execute!(
+              {
+                message_ids: [finalIDs[0]!, finalIDs[2]!],
+                inventory_before: [{
+                  final_message_id: finalIDs[2]!,
+                  before_message_id: historicalEvidenceSelection.message_id,
+                }],
+                evidence_reads: [{
+                  message_id: historicalEvidenceSelection.message_id,
+                  part_id: historicalEvidenceSelection.part_id,
+                  field: "output",
+                  limit: 5,
+                }],
+              },
+              { toolCallId: "read_historical_collection_evidence", messages: [] },
+            )) as string,
           )
-          expect(directPlans.requests.join("\n")).toContain("tool_part_request_message_idx (message_id=?)")
-          expect(directPlans.lineages.join("\n")).toContain(
-            "engine_dispatch_lineage_direct_tool_occurrence_idx (task_id=? AND <expr>=? AND <expr>=?)",
-          )
-          const latestGroupSchema = asSchema(createReadAgentMessageTool({ taskID }).read_agent_message.inputSchema)
-            .jsonSchema as any
-          expect(latestGroupSchema.properties.message_ids.items.enum).toEqual(finalIDs.slice(0, 2))
+          expect(historicalEvidenceOutput.evidence_reads).toEqual([
+            expect.objectContaining({
+              message_id: historicalEvidenceSelection.message_id,
+              part_id: historicalEvidenceSelection.part_id,
+              tool_name: "read",
+              status: "completed",
+              field: "output",
+              content: expect.any(String),
+            }),
+          ])
         },
       })
 

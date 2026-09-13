@@ -76,7 +76,7 @@ describe("scheduler message model harness", () => {
       "Use the callable `scheduler_message` and `no_action` tools",
       "use the callable `scheduler_message` and `manage_task` tools",
       "Final Tool parts and the paged causal Tool Message/Part inventory expose only bounded, structured-redacted metadata",
-      "use only the necessary returned `message_id` and `part_id` with `evidence_reads`",
+      "use only a necessary `message_id` and `part_id` returned by that final's inventory in this or an earlier call with `evidence_reads`",
       "select `field=input`, `output`, or `failure`",
     ]
 

@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.23")
+    expect(loaded.manifest.version).toBe("2026.09.13.25")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -217,6 +217,7 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "Query each material source obligation independently",
     )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain("When an exact identity filter is sufficient")
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "State each material source record already bound to an original obligation",
     )
@@ -240,6 +241,7 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain("requires a full title or phrase")
     expect(loaded.promptProfile.agents["base-tester"]).toContain("minimally constrained but discriminative")
+    expect(loaded.promptProfile.agents["base-tester"]).toContain("When an exact identity filter is sufficient")
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "do not invent a structured targeting control for an organic content action",
     )
@@ -256,6 +258,12 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents.orchestrator).toContain("causal Tool Message and Part identities")
     expect(loaded.promptProfile.agents.orchestrator).toContain("`evidence_reads`")
     expect(loaded.promptProfile.agents.orchestrator).toContain("`inventory_next_before`")
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "does not require the same page cursor again",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "do not label that combined shape the uniquely required readback",
+    )
     expect(loaded.promptProfile.agents.orchestrator).toContain("may prove a final-state obligation")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "present the original criteria neutrally and supply positive executor observations only as coordinates",
