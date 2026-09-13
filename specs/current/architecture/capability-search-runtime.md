@@ -16,7 +16,12 @@ universal executable interface.
 3. The authoritative input Message is atomically bound to a content-addressed
    `CatalogViewSnapshotPayloadV3`. `HarnessProjection` binds the same snapshot
    ref/hash and cannot expand it.
-4. Revision zero exposes authorized routine tools directly. One guidance map in
+4. Revision zero exposes authorized routine tools directly. It also exposes the
+   production `skill` loader when the authoritative visible user input names an
+   exact Skill already granted to that Conversation or Task identity. The
+   loader ref and normalized definition are part of the same immutable
+   permanent base, active refs, digest, and payload accounting; loading the
+   Skill content remains an ordinary model Tool call. One guidance map in
    `capability/routine-tools.ts`, intersected with executable grants, model
    projection, permissions and Message switches, determines the routine base
    and its initial prompt instructions. Declared dispatch-stage interfaces also
@@ -37,7 +42,8 @@ universal executable interface.
 `TurnCapabilityProjectionV3` is a process-local derivation of the input-bound
 permanent refs and persisted extension receipts. Its active refs cover the exact
 currently callable capabilities. It is not a Session cache or a mutable Harness
-table. A new authoritative input starts at revision zero with its routine base;
+table. A new authoritative input starts at revision zero with its bound
+permanent base, including an eligible exact visible production Skill directive;
 v2 search receipts continue to record only dynamically activated extensions.
 
 ## Search and reveal contract
@@ -87,8 +93,9 @@ conflict.
 
 ## Provider budgets
 
-- Revision zero's permanent surface contains the authorized routine tools and
-  `capability_search`. Search itself is at most 4,000 normalized characters and
+- Revision zero's permanent surface contains the authorized routine tools,
+  `capability_search`, and any eligible exact production Skill loader named by
+  the authoritative visible input. Search itself is at most 4,000 normalized characters and
   1,000 estimated tokens. The conditional
   response encoder remains outside the Harness but is counted in the immutable
   Provider base and total payload budget.
@@ -117,8 +124,11 @@ JSON object or create another persistence contract.
 The reducer counts every real Provider-normalized permanent definition from
 revision zero in its total digest and size, while enforcing the extension
 allowance over extension definitions. Base Provider names are immutable reducer
-input; a reveal that tries to reuse one of those names is corrupt rather than a
-second definition owner.
+input. A later production Skill activation may share an already-bound `skill`
+loader name only when its exact normalized definition digest equals that frozen
+base definition; the receipt adds the Skill ref and materializer evidence
+without counting a duplicate Tool definition. Every other attempt to reuse a
+base name is corrupt rather than a second definition owner.
 
 ## Exact materialization owners
 
@@ -174,9 +184,17 @@ second definition owner.
   shared context/codebase, and every stage output owner expose real per-leaf
   constructors over their occurrence-local shared collector; a lazy function
   that first constructs a complete Tool record is not an exact factory.
-- Skill and Mission Skill loaders are absent at revision zero. Revealing one
-  exact Skill mounts only that Skill; supporting files remain exact loader
-  reads. Capability identity (`ref.local_ref`) and executable Skill `name` are
+- Skill and Mission Skill loaders are absent at revision zero unless the
+  authoritative visible input explicitly names an already projected production
+  Skill. That exact production loader is frozen into the permanent base without
+  a search receipt; its content is still loaded only by the model's visible
+  Tool call. A later exact Skill reveal expands that same loader through a
+  normal receipt, keeps the base definition and payload unchanged, and is
+  reconstructed and permission-checked from every active Skill ref. Revealing
+  one exact Skill mounts only that Skill; supporting files remain exact loader
+  reads. The loader's Provider definition is stable across an empty, denied, or
+  expanded compatible Skill set; current names and availability appear only in
+  its Tool result. Capability identity (`ref.local_ref`) and executable Skill `name` are
   distinct: initial reveal and receipt reconstruction resolve the exact frozen
   descriptor's `open_skill.name` or `open_mission_skill.name` before applying
   the existing mount eligibility checks. They never treat a package ref as a

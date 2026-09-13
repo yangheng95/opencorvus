@@ -894,7 +894,9 @@ describe("SessionLoop Tool execution authority integration", () => {
           sessionID: session.id,
           messageID: user.id,
           type: "text",
-          text: "Write the projected restart evidence file.",
+          text: '@skill("base-delivery-method") Write the projected restart evidence file.',
+          source: "user",
+          kind: "user_content",
         })
         const contextTools = {}
         const owner = MCP.createScopedConnectionOwner(
@@ -1006,6 +1008,46 @@ describe("SessionLoop Tool execution authority integration", () => {
           activeLocalRefs: ["write"],
           })
         ).tools
+        expect({
+          tool: tools.skill?.description,
+          skills: SessionLoop.skillSurfaceForResolvedTools(tools)?.skills.map((skill) => skill.name),
+        }).toEqual({
+          tool: expect.stringContaining("Current agent: base-developer"),
+          skills: ["base-delivery-method"],
+        })
+        const skillInput = { name: "base-delivery-method" }
+        let resolveSkillAsked!: (request: PermissionAuthority.Request) => void
+        const skillAsked = new Promise<PermissionAuthority.Request>((resolve) => (resolveSkillAsked = resolve))
+        const stopSkillAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) =>
+          resolveSkillAsked(properties),
+        )
+        const skillPending = tools.skill!
+          .execute!(skillInput, {
+            toolCallId: "call_projected_worker_explicit_skill",
+            messages: [],
+            abortSignal: abort,
+          })
+          .catch((error) => error)
+        const firstSkillOutcome = await Promise.race([
+          skillPending.then((value) => ({ kind: "result" as const, value })),
+          skillAsked.then((request) => ({ kind: "permission" as const, request })),
+        ])
+        if (firstSkillOutcome.kind === "permission") {
+          await PermissionAuthority.reply({
+            requestID: firstSkillOutcome.request.id,
+            decision: "allow_once",
+            actorID: "projected-worker-skill-test",
+          })
+        }
+        stopSkillAsked()
+        const loadedSkill = firstSkillOutcome.kind === "result" ? firstSkillOutcome.value : await skillPending
+        if (loadedSkill instanceof Error) throw loadedSkill
+        expect(loadedSkill.output).toContain("# Base delivery method")
+        await processor.completeRecoveredToolPart({
+          toolCallID: "call_projected_worker_explicit_skill",
+          toolInput: skillInput,
+          output: loadedSkill,
+        })
         let resolveAsked!: (request: PermissionAuthority.Request) => void
         const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
         const stopAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))

@@ -479,6 +479,37 @@ describe("built-in interface review workflow authority", () => {
         expect(basePlannerSurface.skills).toEqual(
           expect.arrayContaining([expect.objectContaining({ name: "authority-read-probe", enabled: true })]),
         )
+        const explicitlyActivatedBasePlannerSurface = await SkillMount.resolve({
+          identity: {
+            ...basePlannerTurn.workerCapability.identity,
+            expertSquadID: basePlannerTurn.workerCapability.expertSquadID,
+          },
+          runtime: basePlannerTurn.workerCapability.runtime,
+          scope: "session",
+          projectDirectory: project.path,
+          skillProjection: basePlannerTurn.skillProjection,
+          availableToolNames: basePlannerTurn.workerCapability.builtInToolIDs,
+          explicitSkillNames: ["base-delivery-method"],
+          activeSkillNames: ["authority-read-probe"],
+        })
+        expect(explicitlyActivatedBasePlannerSurface.skills.map((skill) => skill.name).sort()).toEqual([
+          "authority-read-probe",
+          "base-delivery-method",
+        ])
+        await expect(
+          SkillMount.resolve({
+            identity: {
+              ...basePlannerTurn.workerCapability.identity,
+              expertSquadID: basePlannerTurn.workerCapability.expertSquadID,
+            },
+            runtime: basePlannerTurn.workerCapability.runtime,
+            scope: "session",
+            projectDirectory: project.path,
+            skillProjection: basePlannerTurn.skillProjection,
+            availableToolNames: basePlannerTurn.workerCapability.builtInToolIDs,
+            explicitSkillNames: ["unprojected-skill"],
+          }),
+        ).rejects.toBeInstanceOf(SkillMount.ExplicitSkillProjectionError)
 
         const discovered = await SkillMount.matrix({ expertSquadID: "advanced" })
         expect(discovered.agents.find((agent) => agent.agent_id === "orchestrator")).toMatchObject({

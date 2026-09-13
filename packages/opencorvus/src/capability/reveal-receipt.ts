@@ -47,6 +47,7 @@ export type CapabilityRevealBaseDefinition = Readonly<{
   definitionDigest: string
   payloadChars: number
   payloadTokens: number
+  providerDefinitionDigests?: Readonly<Record<string, string>>
 }>
 
 export function capabilityRevealBaseDefinitions(
@@ -61,6 +62,9 @@ export function capabilityRevealBaseDefinitions(
   }
   return Object.freeze({
     providerNames: Object.freeze(names),
+    providerDefinitionDigests: Object.freeze(
+      Object.fromEntries(parsed.map((definition) => [definition.name, providerToolDefinitionDigest(definition)])),
+    ),
     definitionDigest: canonicalDigestSource(
       "capability-reveal-base-provider-tool-definitions-v2",
       parsed.map((definition) => ({
@@ -78,6 +82,10 @@ function parseBaseDefinition(value: CapabilityRevealBaseDefinition): CapabilityR
   if (!providerNamesResult.success) throw new Error("Capability reveal base Tool definition is invalid.")
   const providerNames = providerNamesResult.data
   const sortedProviderNames = [...providerNames].sort(compareCanonicalStrings)
+  const providerDefinitionDigests = value.providerDefinitionDigests
+  const providerDefinitionDigestEntries = providerDefinitionDigests
+    ? Object.entries(providerDefinitionDigests).sort(([left], [right]) => compareCanonicalStrings(left, right))
+    : undefined
   if (
     new Set(providerNames).size !== providerNames.length ||
     canonicalJSONValue(providerNames) !== canonicalJSONValue(sortedProviderNames) ||
@@ -85,13 +93,20 @@ function parseBaseDefinition(value: CapabilityRevealBaseDefinition): CapabilityR
     !Number.isSafeInteger(value.payloadChars) ||
     value.payloadChars < 0 ||
     !Number.isSafeInteger(value.payloadTokens) ||
-    value.payloadTokens < 0
+    value.payloadTokens < 0 ||
+    (providerDefinitionDigestEntries !== undefined &&
+      (canonicalJSONValue(providerDefinitionDigestEntries.map(([name]) => name)) !==
+        canonicalJSONValue(providerNames) ||
+        providerDefinitionDigestEntries.some(([, digest]) => !SHA256.test(digest))))
   ) {
     throw new Error("Capability reveal base Tool definition is invalid.")
   }
   return Object.freeze({
     ...value,
     providerNames: Object.freeze(providerNames),
+    ...(providerDefinitionDigestEntries
+      ? { providerDefinitionDigests: Object.freeze(Object.fromEntries(providerDefinitionDigestEntries)) }
+      : {}),
   })
 }
 
@@ -279,9 +294,12 @@ function activeDefinitionState(
   const byProviderName = new Map<string, ActivatedCapability>()
   for (const activation of active.values()) {
     if (baseProviderNames.has(activation.provider_name)) {
-      throw new CorruptCapabilityRevealError(
-        `Provider Tool name ${activation.provider_name} is already owned by the permanent base definition.`,
-      )
+      if (!matchesPermanentProductionSkillLoader(base, activation)) {
+        throw new CorruptCapabilityRevealError(
+          `Provider Tool name ${activation.provider_name} conflicts with the permanent base definition.`,
+        )
+      }
+      continue
     }
     const previous = byProviderName.get(activation.provider_name)
     if (
@@ -310,6 +328,19 @@ function activeDefinitionState(
     })),
   }).sha256
   return { definitions, payloadChars, payloadTokens, digest }
+}
+
+function matchesPermanentProductionSkillLoader(
+  base: CapabilityRevealBaseDefinition,
+  activation: ActivatedCapability,
+): boolean {
+  return (
+    activation.requested_ref.kind === "skill" &&
+    activation.executable_ref.kind === "tool" &&
+    activation.executable_ref.local_ref === "skill" &&
+    activation.provider_name === "skill" &&
+    base.providerDefinitionDigests?.skill === activation.definition_digest
+  )
 }
 
 export function createCapabilityRevealReceipt(input: Omit<CapabilityRevealReceiptV2, "schema_version">) {
@@ -519,9 +550,11 @@ export function reduceCapabilityRevealCandidate(input: {
   for (const ref of canonicalRefs(input.deactivateRefs)) active.delete(CapabilityRefCodec.encode(ref))
   for (const activation of canonicalActivations(input.activated)) {
     if (baseProviderNames.has(activation.provider_name)) {
-      throw new CapabilityRevealBaseDefinitionConflictError(
-        `Provider Tool name ${activation.provider_name} is already owned by the permanent base definition.`,
-      )
+      if (!matchesPermanentProductionSkillLoader(input.prior.baseDefinition, activation)) {
+        throw new CapabilityRevealBaseDefinitionConflictError(
+          `Provider Tool name ${activation.provider_name} conflicts with the permanent base definition.`,
+        )
+      }
     }
     active.set(CapabilityRefCodec.encode(activation.requested_ref), activation)
   }

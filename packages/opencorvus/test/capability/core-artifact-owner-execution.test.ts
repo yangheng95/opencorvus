@@ -4,7 +4,6 @@ import path from "node:path"
 import { HostAgentRegistry } from "../../src/agent/host-agent-registry"
 import { sessionRuntimeFromNativeAgent } from "../../src/agent/session-agent-runtime"
 import { Config } from "../../src/config/config"
-import { StaleCatalogOccurrenceError } from "../../src/capability/catalog-binding"
 import { configureTaskIngressRunner } from "../../src/engine/task-root-ingress-delivery"
 import { requireTask } from "../../src/engine/store"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
@@ -15,6 +14,7 @@ import { Instance } from "../../src/project/instance"
 import { sendSchedulerMessage } from "../../src/protocol/scheduler-message"
 import type { Provider } from "../../src/provider/provider"
 import { Session } from "../../src/session"
+import { SessionLoop } from "../../src/session/loop"
 import { SessionProcessor } from "../../src/session/processor"
 import { SessionRuntimeContractStore } from "../../src/session/runtime-contract"
 import { bindRuntimeToolFactories, createRuntimeToolOwner } from "../../src/session/runtime-tool-owner"
@@ -22,6 +22,7 @@ import { readTaskArtifactRef } from "../../src/task-artifact/store"
 import { EngineService } from "../../src/task-api"
 import { resolveTestCapabilityTools } from "../fixture/capability-occurrence"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { canonicalDigestSource } from "../../src/util/canonical-digest"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -137,6 +138,15 @@ for (const { projected, policy } of [true, false].flatMap((projected) =>
             time: { created: Date.now() },
             model: { providerID: model.providerID, modelID: model.id },
           })
+          await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: session.id,
+            messageID: user.id,
+            type: "text",
+            text: '@skill("base-delivery-method") Publish the exact sample file.',
+            source: "user",
+            kind: "user_content",
+          })
           const assistant = {
             id: Identifier.ascending("message"),
             parentID: user.id,
@@ -169,6 +179,26 @@ for (const { projected, policy } of [true, false].flatMap((projected) =>
             ...(policy === "tool-switch" ? { tools: { skill: false } } : {}),
           }
           const resolved = await resolveTestCapabilityTools(common)
+          if (policy === "allow" || policy === "skill-deny") {
+            expect(resolved.occurrence.payload.permanent_provider_base_definition.provider_names).toContain("skill")
+          }
+          if (policy === "allow") {
+            const baseDefinitionDigest =
+              resolved.occurrence.payload.permanent_provider_base_definition.definition_digest
+            const capabilityProjection = SessionLoop.capabilityProjectionForResolvedTools(resolved.tools)
+            expect({
+              revision: capabilityProjection?.revision,
+              activeSkillRef: capabilityProjection?.active_refs.find((ref) => ref.local_ref === "skill"),
+              activeDefinitionDigest: capabilityProjection?.active_definition_digest,
+            }).toEqual({
+              revision: 0,
+              activeSkillRef: resolved.occurrence.ref("skill"),
+              activeDefinitionDigest: canonicalDigestSource("active-provider-tool-definitions-v2", {
+                base_definition_digest: baseDefinitionDigest,
+                leaves: [],
+              }).sha256,
+            })
+          }
           expect(resolved.occurrence.ref("artifact_snapshot").owner_ref).toBe(
             projected ? "runtime-projection:orchestrator" : "tool-registry",
           )
@@ -215,11 +245,7 @@ for (const { projected, policy } of [true, false].flatMap((projected) =>
             ).rejects.toMatchObject({ code: "execution_not_granted" })
             return
           }
-          const revealed = await resolveTestCapabilityTools({
-            ...common,
-            messages: await Session.messages({ sessionID: session.id }),
-            activeLocalRefs: ["base/shared/method"],
-          })
+          const revealed = resolved
           const descriptor = revealed.occurrence.payload.descriptors.find(
             (entry) => entry.ref.kind === "skill" && entry.ref.local_ref === "base/shared/method",
           )
@@ -244,19 +270,6 @@ for (const { projected, policy } of [true, false].flatMap((projected) =>
             expect(loaded.output).toContain("# Base delivery method")
             await processor.completeRecoveredToolPart({ toolCallID, toolInput, output: loaded })
           }
-          await expect(resolveTestCapabilityTools({ ...common, tools: { skill: false } })).rejects.toBeInstanceOf(
-            StaleCatalogOccurrenceError,
-          )
-          await Session.setPermission({
-            sessionID: session.id,
-            permission: [{ permission: "skill", pattern: "base-delivery-method", action: "deny" }],
-          })
-          await expect(
-            resolveTestCapabilityTools({
-              ...common,
-              session: await Session.get(session.id),
-            }),
-          ).rejects.toBeInstanceOf(StaleCatalogOccurrenceError)
         } finally {
           await SessionRuntimeContractStore.dispose(session.id)
           await mcp.close()

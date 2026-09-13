@@ -5,6 +5,7 @@ import {
   CAPABILITY_REVEAL_RECEIPT_METADATA_KEY,
   ActivatedCapability,
   CapabilityRevealBaseDefinitionConflictError,
+  capabilityRevealBaseDefinitions,
   capabilityRevealMaterializationFingerprint,
   CorruptCapabilityRevealError,
   createCapabilityRevealReceipt,
@@ -260,7 +261,7 @@ describe("occurrence capability reveal receipts", () => {
       harnessProjectionHash,
       catalogSnapshotRef,
       catalogSnapshotHash,
-      baseDefinition: { ...baseDefinition, providerNames: ["read"] },
+      baseDefinition: capabilityRevealBaseDefinitions([definition]),
     })
     expect(() => reduceCapabilityRevealCandidate({ prior, deactivateRefs: [], activated: [activation] })).toThrow(
       CapabilityRevealBaseDefinitionConflictError,
@@ -268,6 +269,53 @@ describe("occurrence capability reveal receipts", () => {
     expect({ revision: prior.revision, activeRefs: [...prior.active.keys()] }).toEqual({
       revision: 0,
       activeRefs: [],
+    })
+  })
+
+  test("records an exact active ref when a reveal expands a matching permanent loader definition", () => {
+    const skillRef = capabilityRef({
+      kind: "skill",
+      source: "package",
+      owner_ref: "base",
+      local_ref: "base/shared/method",
+    })
+    const skillToolRef = capabilityRef({
+      kind: "tool",
+      source: "platform",
+      owner_ref: "tool-registry",
+      local_ref: "skill",
+    })
+    const skillDefinition = { ...definition, name: "skill", description: "Load one projected Skill." }
+    const skillActivation = ActivatedCapability.parse({
+      requested_ref: skillRef,
+      executable_ref: skillToolRef,
+      provider_name: "skill",
+      definition: skillDefinition,
+      definition_digest: providerToolDefinitionDigest(skillDefinition),
+      payload_chars: providerToolDefinitionChars(skillDefinition),
+      payload_tokens: providerToolDefinitionTokens(skillDefinition),
+      materializer_binding_digest: "6".repeat(64),
+    })
+    const matchingBase = capabilityRevealBaseDefinitions([skillDefinition])
+    const prior = foldCapabilityRevealReceipts({
+      occurrenceID,
+      parts: [],
+      harnessProjectionHash,
+      catalogSnapshotRef,
+      catalogSnapshotHash,
+      baseDefinition: matchingBase,
+    })
+    const candidate = reduceCapabilityRevealCandidate({ prior, deactivateRefs: [], activated: [skillActivation] })
+    expect({
+      refs: candidate.activeRefs,
+      definitions: candidate.definitions,
+      chars: candidate.payloadChars,
+      tokens: candidate.payloadTokens,
+    }).toEqual({
+      refs: [skillActivation.requested_ref],
+      definitions: [],
+      chars: matchingBase.payloadChars,
+      tokens: matchingBase.payloadTokens,
     })
   })
 

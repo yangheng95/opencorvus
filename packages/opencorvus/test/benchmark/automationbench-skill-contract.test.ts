@@ -19,6 +19,8 @@ test("AutomationBench Skill defines a bounded source-to-destination evidence loo
   expect(skill).toContain("Preserve the exact method, URL, and parameter shape")
   expect(skill).toContain("Never repeat a successful irreversible create")
   expect(skill).toContain("Recent operational instructions, approvals, links, exclusions, and warnings")
+  expect(skill).toContain("concrete entity, event, account, or record names from the Task")
+  expect(skill).toContain("make one concrete-entity query before declaring the source absent")
   expect(skill).toContain("Destination identity and final state start with the destination service")
 })
 

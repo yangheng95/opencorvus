@@ -21,8 +21,13 @@ import { SkillManager } from "./manager"
 import { SkillMountAgentIDSchema } from "./mount-config"
 import { skillDisabledReason, skillLoaderAvailable } from "./eligibility"
 import { taskPackageRevisionForSession } from "@/engine/task-package-projection"
+import { NamedError } from "@opencorvus-ai/util/error"
 
 export namespace SkillMount {
+  export const ExplicitSkillProjectionError = NamedError.create(
+    "ExplicitSkillProjectionError",
+    z.object({ message: z.string(), agentID: z.string(), skillName: z.string(), expertSquadID: z.string() }),
+  )
   export const DisabledReason = z.enum([
     "skill_tool_unavailable",
     "permission_denied",
@@ -228,6 +233,7 @@ export namespace SkillMount {
     projectDirectory: string
     skillProjection: PromptProfileResolver.ResolvedSkillProjection
     availableToolNames?: Iterable<string>
+    explicitSkillNames?: Iterable<string>
     activeSkillNames?: Iterable<string>
   }): Promise<ResolvedAgentSkillSurface> {
     if (input.identity.expertSquadID !== input.skillProjection.expertSquadID) {
@@ -263,7 +269,22 @@ export namespace SkillMount {
       availableToolNames,
     })
     const grants = grantMapForAgent(input.skillProjection, input.identity.agentID)
-    const activeSkillNames = input.activeSkillNames ? new Set(input.activeSkillNames) : undefined
+    const explicitSkillNames = new Set(input.explicitSkillNames ?? [])
+    const grantedSkillNames = new Set([...grants.values()].map((grant) => grant.skill.name))
+    for (const skillName of explicitSkillNames) {
+      if (grantedSkillNames.has(skillName)) continue
+      throw new ExplicitSkillProjectionError({
+        message: `Task agent ${input.identity.agentID} explicitly references unprojected Skill ${skillName} in Expert Squad ${input.skillProjection.expertSquadID}.`,
+        agentID: input.identity.agentID,
+        skillName,
+        expertSquadID: input.skillProjection.expertSquadID,
+      })
+    }
+    const activeSkillNames = input.activeSkillNames
+      ? new Set([...input.activeSkillNames, ...explicitSkillNames])
+      : explicitSkillNames.size > 0
+        ? explicitSkillNames
+        : undefined
     const skills = [...grants.values()]
       .filter((grant) => !activeSkillNames || activeSkillNames.has(grant.skill.name))
       .sort((left, right) => compareCanonicalStrings(left.ref, right.ref))
