@@ -25,6 +25,7 @@ test("AutomationBench Skill defines a bounded source-to-destination evidence loo
   expect(skill).toContain("fetch only those matching candidates")
   expect(skill).toContain("an applicable shared policy")
   expect(skill).toContain("A current authoritative operational record that gives concrete do/don't rules")
+  expect(skill).toContain("map the original obligation to the source record, the concrete rule")
   expect(skill).toContain("process, approval, and historical rules require their own corresponding execution evidence")
   expect(skill).toContain("a record references a required dependency")
   expect(skill).toContain("one concrete-entity query plus one constraint-or-policy query bounds the attempted search")
