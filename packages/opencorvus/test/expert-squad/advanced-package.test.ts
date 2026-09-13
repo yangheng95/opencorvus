@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.40")
+    expect(loaded.manifest.version).toBe("2026.09.13.41")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -204,15 +204,11 @@ describe("built-in interface review workflow authority", () => {
       "Do not search, read, or select that plan in the Orchestrator",
     )
     expect(loaded.selectorInstructions).toContain("Select `source-planned-execution-verification`")
-    expect(loaded.selectorInstructions).toContain("Dynamic values alone do not justify a Planner")
     expect(loaded.selectorInstructions).toContain(
-      "A single external mutation whose source facts serve only that mutation normally uses `execution-verification`",
+      "when an irreversible external mutation depends on a material current business record",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Dynamic records, rules, identifiers, or exact values absent from the request do not by themselves justify a Planner",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Source-planned overrides it only when those sources contain conflicting or precedence-bearing authority",
+      "dispatch Planner to close only those read-only source prerequisites before any mutation",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "own only the read-only dynamic business-source prerequisites",

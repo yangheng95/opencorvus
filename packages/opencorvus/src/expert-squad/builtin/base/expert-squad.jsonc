@@ -5,7 +5,7 @@
   "name": "Base",
   "label": "Base",
   "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
-  "version": "2026.09.13.40",
+  "version": "2026.09.13.41",
   "product_pillars": [
     "code",
     "work"
@@ -13,7 +13,7 @@
   "readme": "README.md",
   "selector": {
     "summary": "Use Base for one complete Task executed by one capable owner and independently verified against the actual outcome.",
-    "selection_guidance": "Choose execution-verification when one execution owner can resolve implementation details and current business-source facts within the same bounded delivery, including a single external mutation whose source facts serve only that mutation even when reads cross records or services, unless conflicting or precedence-bearing authority must be reconciled before mutation or the source investigation is independently substantial. Choose source-planned-execution-verification only when source resolution is a distinct handoff dependency because it spans conflicting or precedence-bearing authorities or an independently substantial source investigation. Choose the parallel research workflow only for a useful independent repository/web partition. Specialized or genuinely richer dependencies belong to their domain Squad or Advanced.",
+    "selection_guidance": "Choose execution-verification when delivery has no material dynamic business-source prerequisite before mutation, or when the operation is reversible and one execution owner can safely resolve ordinary current facts. Choose source-planned-execution-verification when an irreversible external mutation depends on a material current business record, rule, identifier, or exact value absent from the request. Choose the parallel research workflow only for a useful independent repository/web partition. Specialized or genuinely richer dependencies belong to their domain Squad or Advanced.",
     "instructions": "selector.md"
   },
   "capability_sets": {
@@ -128,7 +128,7 @@
       },
       "source-planned-execution-verification": {
         "label": "Source Planning, Execution, and Independent Verification",
-        "description": "Resolve a distinct conflicting-authority or independently substantial business-source dependency before mutation, execute from that source plan, then independently verify the settled outcome.",
+        "description": "Resolve material dynamic business-source prerequisites before an irreversible external mutation, execute from that source plan, then independently verify the settled outcome.",
         "nodes": {
           "base-planner": {
             "agent_id": "base-planner",
