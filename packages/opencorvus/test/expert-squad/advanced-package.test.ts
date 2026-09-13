@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.31")
+    expect(loaded.manifest.version).toBe("2026.09.13.33")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -205,11 +205,16 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.selectorInstructions).toContain("Select `source-planned-execution-verification`")
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "own the read-only dynamic business-source prerequisites",
+      "own only the read-only dynamic business-source prerequisites",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "original obligation mapped to each exact source record ID",
     )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "Do not discover the destination mutation, targeting, representation, or readback capability",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain("The first authoritative record that resolves a fact")
+    expect(loaded.promptProfile.agents["base-planner"]).toContain("`Source coordinates:` line")
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "do not search for a Skill whose exact name is already visible",
     )
@@ -237,6 +242,18 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "State each material source record already bound to an original obligation",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "do not perform endpoint-directory or capability discovery before trying it",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "put that literal value in the visible post, message, or content body",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "the loaded client contract supports structured batching",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "permits one bounded discovery for that exact identity or missing read contract",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "do not search for a Skill whose exact name is already visible",
@@ -268,6 +285,15 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "selected workflow node explicitly declares that exact Artifact type",
     )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "completely read the canonical `base/implementation-plan` as source coordinates",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "verify that value in the visible post, message, or content body",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "A hidden metadata value alone is insufficient",
+    )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "Never ask a worker to repeat a successful irreversible create",
     )
@@ -278,6 +304,9 @@ describe("built-in interface review workflow authority", () => {
       "when conflicting evidence leaves one material coordination or acceptance question",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain("copy them verbatim into the Tester brief")
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "tell Tester to completely read that same plan as source coordinates",
+    )
     expect(loaded.promptProfile.agents.orchestrator).toContain("causal Tool Message and Part identities")
     expect(loaded.promptProfile.agents.orchestrator).toContain("`evidence_reads`")
     expect(loaded.promptProfile.agents.orchestrator).toContain("`inventory_next_before`")
