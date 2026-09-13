@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.41")
+    expect(loaded.manifest.version).toBe("2026.09.13.45")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -214,18 +214,33 @@ describe("built-in interface review workflow authority", () => {
       "own only the read-only dynamic business-source prerequisites",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "original obligation mapped to each exact source record ID",
+      "Map closed obligations to exact source record IDs",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "Do not discover the destination identity, mutation, targeting, representation, or readback capability",
+      "Destination identity, capability, targeting, representation, mutation, and readback stay with Developer",
     )
-    expect(loaded.promptProfile.agents["base-planner"]).toContain("The first authoritative record that resolves a fact")
-    expect(loaded.promptProfile.agents["base-planner"]).toContain("`Source coordinates:` line")
+    expect(loaded.promptProfile.agents["base-planner"]).toContain("first authoritative record that resolves a fact closes it")
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "assign that item to Developer instead of adding it to the source ledger",
+      "Admit a later anchor only when an authoritative record identifies it as the requested entity's ID",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "concrete applicable rules for the exact requested action is a guideline source regardless of its title",
+      "do not claim the fact or source is absent or hand it to Developer",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "preserve exact empty or typed-unavailable checked scope",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "one focused query naming all known source services and actions",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "record `mutation_preconditions` per independent mutation from the original request",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain("`Mutation preconditions:`")
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "assign it to Developer instead of adding a source blocker",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "current operational record stating concrete rules for the requested action is a guideline source regardless of title",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "do not search for a Skill whose exact name is already visible",
@@ -268,10 +283,13 @@ describe("built-in interface review workflow authority", () => {
       "use one combined endpoint-contract discovery for independent missing capabilities",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "permits one bounded discovery for that exact identity or missing read contract",
+      "makes the source precondition blocked; report that exact change instead of starting broad source discovery",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "Treat each unresolved plan entry as a claim to classify against the original request",
+      "Execute only each independent mutation whose own `mutation_preconditions` entry is `closed`",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "without attempting that mutation or repeating the Planner's source discovery",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "do not stop merely because the create interface has no separate targeting field",
@@ -287,6 +305,21 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-tester"]).toContain("exact method, URL, and parameter shape")
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "Do not repeat endpoint discovery for a complete current coordinate",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "Treat every empty query recorded in the plan as one failed fact-endpoint-anchor attempt",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "Dispatch Developer only for the independent mutations whose visible `Mutation preconditions:` entries are `closed`",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "the original request or already observed authority proves the plan misclassified a destination fact",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "first complete and independently verify every closed operation",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "ignore incidental related entities",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "does not require a second product projection for every satisfied fact",

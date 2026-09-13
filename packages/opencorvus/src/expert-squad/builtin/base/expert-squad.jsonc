@@ -5,7 +5,7 @@
   "name": "Base",
   "label": "Base",
   "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
-  "version": "2026.09.13.41",
+  "version": "2026.09.13.45",
   "product_pillars": [
     "code",
     "work"
@@ -128,23 +128,23 @@
       },
       "source-planned-execution-verification": {
         "label": "Source Planning, Execution, and Independent Verification",
-        "description": "Resolve material dynamic business-source prerequisites before an irreversible external mutation, execute from that source plan, then independently verify the settled outcome.",
+        "description": "Close material dynamic business-source prerequisites through a finite relevant-anchor worklist, execute each irreversible external mutation only when its own preconditions are closed, then independently verify the settled outcome.",
         "nodes": {
           "base-planner": {
             "agent_id": "base-planner",
-            "description": "Reads only source-side rules and values required before mutation; destination identity, capability, representation, and readback remain Developer work.",
+            "description": "Closes source-side rules and values through a finite relevant-anchor worklist before mutation; destination identity, capability, representation, and readback remain Developer work.",
             "depends_on": []
           },
           "base-developer": {
             "agent_id": "base-developer",
-            "description": "Reads the source plan, owns destination discovery, performs the authorized mutation, and hands off the complete Host-recorded receipt.",
+            "description": "Reads per-operation source preconditions, owns destination discovery for closed operations, performs the authorized mutation, and hands off the complete Host-recorded receipt.",
             "depends_on": [
               "base-planner"
             ]
           },
           "base-tester": {
             "agent_id": "base-tester",
-            "description": "Independently maps source rules to the raw mutation receipt and any correct same-record destination read.",
+            "description": "Independently challenges source coordinates with eligible later anchors, then maps source rules to the raw mutation receipt and any correct same-record destination read.",
             "depends_on": [
               "base-developer"
             ]
