@@ -12,6 +12,8 @@ Execution attempts and dispatch lineage are immutable physical evidence identiti
 
 The original user outcome and current authoritative data define success. A plan, derived Task brief, or report is an allocation or verification claim and cannot reduce that outcome.
 
+An irreversible external create begins only after every material source fact is closed. A successful create receipt and its exact positive readback contract remain evidence when another query projection conflicts. Existing external state is repaired only through a discovered, authorized correction or compensating operation that the interface defines for that state; replaying the original create is not a repair.
+
 `execution-verification` is the ordinary workflow: Developer owns discovery, local planning, execution, and self-checks; Tester independently inspects the settled result. `planner-parallel-delivery` adds Planner and a repository/web Researcher only when a useful independent research partition exists. Its Planner allocates shared boundaries, Researcher and Developer run in parallel, and Tester follows Developer. Researcher has no shell or local client.
 
 The selected graph remains binding and each node has one Task lineage. Repairs continue the same capable worker; verification is renewed after any change to the checked surface. The Orchestrator owns Task completion from actual result evidence and an independent verdict. Neither workflow creates Goal, RequirementSet, ContractGraph, Delivery Slice, or workflow progress state.

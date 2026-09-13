@@ -194,4 +194,16 @@
 ### 首轮独立审查与静态验证
 
 - 8 项 benchmark Skill/adherence 测试、Base 包精确加载、catalog 版本/详情、内置拓扑、docs:check 与全仓 typecheck 通过。首次从仓库根同时传多个 test 文件时，Bun 还匹配了 ignored `tmp/gallery-project` 副本并触发其缺依赖/Windows supervisor 清理错误；改从 `packages/opencorvus` 使用 package 内精确路径后目标测试通过。该工具调用问题未作为产品失败，也未删除未知临时目录。
-- 独立只读审查确认 Base 仍保留 Tester、报告契约同步、版本与生成 revision 一致、无 Host gate 或 case 关键字；指出一次 route/resource 404 不应关闭整个 service。已将闭合范围修正为错误明确证明的 route、resource 或 capability，仅有 service-wide 证据时才关闭整个服务，并加入正向 Skill 契约断言。真实效率仍必须由下一次模型单例证明。
+- 独立只读审查确认 Base 仍保留 Tester、报告契约同步、版本与生成 revision 一致、无 Host gate 或 case 关键字；指出一次 route/resource 404 不应关闭整个 service。已将闭合范围修正为错误明确证明的 route、resource 或 capability，仅有 service-wide 证据时才关闭整个服务，并加入正向 Skill 契约断言。第二轮审查指出合法修复还可能是不可变系统的冲正/补偿记录，不能只允许update/delete；最终契约允许原请求授权且接口为当前状态明确定义的纠正或补偿操作，同时继续禁止把原create重放为修复。真实效率仍必须由下一次模型单例证明。
+
+### 283ef0fe 真实单例失败与第二层根因
+
+- 已推送 `283ef0fe4cea` 后建立新隔离 runner 和私有证据根。Windows partial-clone 从本地整仓 clone 时因无关历史 tree object 缺失失败；保留失败输出但未启动任务。随后从已验证干净的 867e42ed runner复制环境，并用只包含已推送增量的 Git bundle 前进到精确 `283ef0fe4cea`，清除复制来的 `__pycache__` 后确认 tracked status clean。证据根、provider source、Base output/control 为0700，auth/models/manifest为0600；隔离内8项Skill/adherence、Base精确加载和catalog版本测试通过。
+- case1 run `c7873397-74fe-4ff3-9431-e40ccd17adff` 自然终止，watchdog仅在child退出后终止batch coordinator，阻止case2准入。实际源码、bundle、Provider和模型身份通过：commit `283ef0fe4cea`、worktree clean、provider=openai、model=gpt-5.6-luna、preflight connected。
+- 官方结果：strict=0、partial=0.6、1065595ms、98次模型调用、77次官方API操作且全部Tool成功。角色调用Developer32、Tester30、Orchestrator20、Mission14、memory2；相比上一有效单例91次调用和partial0.8进一步退化。断言失败为缺少 `webinar-register` 和post count不等于1，世界中实际留下两个帖子。
+- 阶段归因：8个Developer/Tester phase、9次dispatch、29个精确重复操作；Developer两次create，其中第二次发生在首轮Tester之后。首阶段已证明批量shell有效，但只减少一部分模型边界；Orchestrator因相互矛盾的readback连续安排4轮Developer/Tester，吞掉全部收益。
+- 数据根因一：初始世界的允许服务为Gmail、Google Calendar和LinkedIn；正确注册链接及“不得公开presenter link”在Gmail webinar setup message，日期/描述在Calendar，页面在LinkedIn。该可见模型没有world dump，但合并的endpoint search已经返回email能力。Developer在Slack/Drive typed401后没有用未闭合的“注册链接/当前指南”事实驱动一次语义email搜索，反而把不可用当作可合理缺省并执行不可逆create。已有“精确字段清单”只有已找到字段，不能发现缺失的权威字段。
+- 数据根因二：LinkedIn create receipt成功，Developer用`author`参数的post collection读回两个记录；Tester随后加入`q=authors`等不同参数组合，接口返回空投影。Skill已经提示某些read projection不反映动作，但没有要求保持已证实可用的精确method/url/params，也没有定义成功receipt与矛盾空投影的证据优先级。Orchestrator把空投影当作create未发生，又派Developer“minimum action”，造成第二个不可逆create；后续继续在两种查询形状之间循环。
+- 第二层修复保持prompt/context层：对原请求要求的每类权威事实建立“已找到/仍缺失”，不可逆mutation前每项必须有正向记录或明确证明任务允许缺省；来源未命名时按信息形态做一次语义搜索，并在同一批只读调用中尝试搜索结果里的相关候选，找到第一条匹配权威记录即停。不得把typed unavailable本身解释为可省略业务要求。
+- 对已成功的不可逆create，保留exact receipt和第一次成功返回记录的method/url/params；验证复用相同契约形状，不添加未声明query参数。不同或已知非反映projection的空结果是冲突证据，不覆盖成功receipt/正向readback。只有原请求已授权、接口为当前状态明确定义的纠正或补偿操作能够修正已存在记录时才分派修复；不得用另一次create“修复”成功create。Tester仍独立读取和判断，Orchestrator仍可对可修复缺陷继续原lineage，这不是Host gate或次数上限。
+- 下一单例要求Developer首阶段命中Gmail权威setup message并在唯一create中保留registration link与presenter exclusion，Tester使用契约声明的精确post查询验证；不发生第二次create或重复phase。效率/质量闸门仍为自然终止、strict=1（当前已知缺陷均应关闭）、模型调用不高于52和全部基础设施审计通过。
