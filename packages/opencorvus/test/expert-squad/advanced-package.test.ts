@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.46")
+    expect(loaded.manifest.version).toBe("2026.09.13.49")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -248,9 +248,32 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "never close them while retaining a duplicate residual category blocker",
     )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "explicitly attributed `Original user input` or complete `SYSTEM`/`USER` business block",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "A first call-shape, argument-validation, or contract `TypeError` leaves the route incomplete",
+    )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "blocks the synonymous abstract category is such a proven misclassification",
     )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "Continue the same Planner once for that exact correction while other closed operations proceed",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "the operator-authored request inside the original Task input is the complete delivery and acceptance subject",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "Agent-authored delegation may refine only from that intent, current authority, an applicable public contract",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "make one contract-correct read instead of replaying it",
+    )
+    expect(
+      loaded.manifest.capability_projection.virtual_workflows["source-planned-execution-verification"]?.nodes[
+        "base-planner"
+      ]?.description,
+    ).toContain("invalid call shapes and untried simpler queries leave it incomplete")
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "do not search for a Skill whose exact name is already visible",
     )

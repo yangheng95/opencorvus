@@ -5,7 +5,7 @@
   "name": "Base",
   "label": "Base",
   "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
-  "version": "2026.09.13.46",
+  "version": "2026.09.13.49",
   "product_pillars": [
     "code",
     "work"
@@ -132,7 +132,7 @@
         "nodes": {
           "base-planner": {
             "agent_id": "base-planner",
-            "description": "Closes source-side rules and values through a finite relevant-anchor worklist before mutation; destination identity, capability, representation, and readback remain Developer work.",
+            "description": "Closes source-side rules and values through a finite relevant-anchor worklist before mutation; invalid call shapes and untried simpler queries leave it incomplete, while destination identity, capability, representation, and readback remain Developer work.",
             "depends_on": []
           },
           "base-developer": {
@@ -144,7 +144,7 @@
           },
           "base-tester": {
             "agent_id": "base-tester",
-            "description": "Independently challenges source coordinates with eligible later anchors, then maps source rules to the raw mutation receipt and any correct same-record destination read.",
+            "description": "Independently challenges source coordinates with eligible later anchors and one contract-correct replacement for any known-invalid read, then maps source rules to the raw mutation receipt and any correct same-record destination read.",
             "depends_on": [
               "base-developer"
             ]
