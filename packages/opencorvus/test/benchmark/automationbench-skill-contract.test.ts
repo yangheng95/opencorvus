@@ -21,6 +21,12 @@ test("AutomationBench Skill defines a bounded source-to-destination evidence loo
   expect(skill).toContain("Recent operational instructions, approvals, links, exclusions, and warnings")
   expect(skill).toContain("concrete entity, event, account, or record names from the Task")
   expect(skill).toContain("make one concrete-entity query before declaring the source absent")
+  expect(skill).toContain("Do not run `ls`, `glob`, project `read`, or capability discovery")
+  expect(skill).toContain("fetch only those matching candidates")
+  expect(skill).toContain("an applicable shared policy")
+  expect(skill).toContain("one concrete-entity query plus one constraint-or-policy query bounds the attempted search")
+  expect(skill).toContain("does not prove that the source is absent or waive a material fact")
+  expect(skill).toContain("Close each quoted URL and JSON argument before the newline")
   expect(skill).toContain("Destination identity and final state start with the destination service")
 })
 

@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.9")
+    expect(loaded.manifest.version).toBe("2026.09.13.10")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -204,11 +204,15 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "selected workflow node explicitly declares that exact Artifact type",
     )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain("compact reusable verification coordinates")
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "do not search for a Skill whose exact name is already visible",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain("Return one concise visible final message")
     expect(loaded.promptProfile.agents["base-tester"]).toContain("exact method, URL, and parameter shape")
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "Do not repeat endpoint discovery for a complete current coordinate",
+    )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "do not invent a structured targeting control for an organic content action",
     )
@@ -217,6 +221,12 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "Never ask a worker to repeat a successful irreversible create",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "Do not call `capability_search` merely to confirm it before dispatch",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "do not search the Artifact catalog for a report that the workflow did not create",
     )
     expect(workflowNodes(loaded, "execution-verification")).toEqual({
       "base-developer": [],
