@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.25")
+    expect(loaded.manifest.version).toBe("2026.09.13.27")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -217,7 +217,12 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "Query each material source obligation independently",
     )
-    expect(loaded.promptProfile.agents["base-developer"]).toContain("When an exact identity filter is sufficient")
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "If an empty query combined optional business terms, remove those co-filters on the next read",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "When an exact destination identity filter is sufficient",
+    )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "State each material source record already bound to an original obligation",
     )
@@ -239,9 +244,12 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "the original request and corresponding source surface",
     )
-    expect(loaded.promptProfile.agents["base-tester"]).toContain("requires a full title or phrase")
-    expect(loaded.promptProfile.agents["base-tester"]).toContain("minimally constrained but discriminative")
-    expect(loaded.promptProfile.agents["base-tester"]).toContain("When an exact identity filter is sufficient")
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "if an empty anchor is a full title or phrase, reduce it once",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "When an exact destination identity filter is sufficient",
+    )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "do not invent a structured targeting control for an organic content action",
     )
