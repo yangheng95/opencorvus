@@ -191,13 +191,22 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.27")
+    expect(loaded.manifest.version).toBe("2026.09.13.29")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "must not add a durable report, evidence package, or coordination Artifact",
     )
-    expect(loaded.promptProfile.agents.orchestrator).toContain("dispatch both nodes with `goal_ids: []`")
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "The source-planned workflow's declared `base/implementation-plan` is its only planning Artifact",
+    )
+    expect(loaded.selectorInstructions).toContain("Select `source-planned-execution-verification`")
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "own the read-only dynamic business-source prerequisites",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "original obligation mapped to each exact source record ID",
+    )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "do not search for a Skill whose exact name is already visible",
     )
@@ -293,6 +302,11 @@ describe("built-in interface review workflow authority", () => {
       "base-developer": [],
       "base-tester": ["base-developer"],
     })
+    expect(workflowNodes(loaded, "source-planned-execution-verification")).toEqual({
+      "base-planner": [],
+      "base-developer": ["base-planner"],
+      "base-tester": ["base-developer"],
+    })
     expect(workflowNodes(loaded, "planner-parallel-delivery")).toEqual({
       "base-planner": [],
       "base-researcher": ["base-planner"],
@@ -301,6 +315,8 @@ describe("built-in interface review workflow authority", () => {
     })
     expect(loaded.manifest.capability_projection.agents["base-planner"]).toMatchObject({
       base_role: "delegated-worker",
+      description:
+        "Resolves pre-mutation dynamic source prerequisites or allocates a justified parallel research and implementation partition.",
     })
     expect(agentCapabilityGrants(loaded.manifest, "base-planner").explicitBuiltInToolIDs).toEqual([
       "bash",

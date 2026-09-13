@@ -5,7 +5,7 @@
   "name": "Base",
   "label": "Base",
   "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
-  "version": "2026.09.13.27",
+  "version": "2026.09.13.29",
   "product_pillars": [
     "code",
     "work"
@@ -13,7 +13,7 @@
   "readme": "README.md",
   "selector": {
     "summary": "Use Base for one complete Task executed by one capable owner and independently verified against the actual outcome.",
-    "selection_guidance": "Choose execution-verification for ordinary delivery. Choose the parallel research workflow only for a useful independent repository/web partition. Specialized or genuinely richer dependencies belong to their domain Squad or Advanced.",
+    "selection_guidance": "Choose execution-verification when execution needs no undiscovered dynamic source facts. Choose source-planned-execution-verification when an external mutation depends on current business records, rules, identifiers, or values that the request does not provide. Choose the parallel research workflow only for a useful independent repository/web partition. Specialized or genuinely richer dependencies belong to their domain Squad or Advanced.",
     "instructions": "selector.md"
   },
   "capability_sets": {
@@ -82,7 +82,7 @@
           "capability:tool:platform:tool-registry:websearch"
         ],
         "label": "Base Planner",
-        "description": "Allocates shared inputs and ownership only for a justified parallel research and implementation partition.",
+        "description": "Resolves pre-mutation dynamic source prerequisites or allocates a justified parallel research and implementation partition.",
         "base_role": "delegated-worker",
         "prompt": "agents/base-planner/system.md"
       },
@@ -114,12 +114,37 @@
         "nodes": {
           "base-developer": {
             "agent_id": "base-developer",
-            "description": "Uses projected Skills and executable tools to discover dynamic sources and complete the requested delivery.",
+            "description": "Uses projected Skills and executable tools to complete delivery that has no undiscovered dynamic business-source prerequisite.",
             "depends_on": []
           },
           "base-tester": {
             "agent_id": "base-tester",
             "description": "Independently rereads dynamic sources and verifies the settled result criterion by criterion.",
+            "depends_on": [
+              "base-developer"
+            ]
+          }
+        }
+      },
+      "source-planned-execution-verification": {
+        "label": "Source Planning, Execution, and Independent Verification",
+        "description": "Resolve dynamic business-source prerequisites before mutation, execute from that bounded source plan, then independently verify the settled outcome.",
+        "nodes": {
+          "base-planner": {
+            "agent_id": "base-planner",
+            "description": "Reads the current source authorities and publishes the exact facts and coordinates required before mutation.",
+            "depends_on": []
+          },
+          "base-developer": {
+            "agent_id": "base-developer",
+            "description": "Reads the source plan, performs the authorized mutation, and checks the implementation-owned result.",
+            "depends_on": [
+              "base-planner"
+            ]
+          },
+          "base-tester": {
+            "agent_id": "base-tester",
+            "description": "Independently rereads the source and destination authorities and verifies the settled result.",
             "depends_on": [
               "base-developer"
             ]
