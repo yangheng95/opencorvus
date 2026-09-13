@@ -636,7 +636,17 @@ export function panelLeafActionSchemaForAgent(action: PanelActionID, agent: stri
   } else if (actor !== "panel_ui") {
     if (action === "create_task") {
       schema = schema.omit({ metadata: true, source: true }).extend({ checks: AgentTaskCheckConfig.optional() })
-      if (actor === "mission") schema = schema.required({ title: true, promptProfile: true })
+      if (actor === "mission") {
+        schema = schema.required({ title: true, promptProfile: true }).extend({
+          request: z
+            .string()
+            .min(1)
+            .max(32_000)
+            .describe(
+              "One or more non-empty task-relevant fragments copied verbatim and in order from authenticated real-user text in this Mission's authority history; join fragments only with a blank line. Do not add a heading, delegation note, requirements, or paraphrase; title, promptProfile, structured Artifact authorities, and accepted Delivery Slices carry allocation.",
+            ),
+        })
+      }
     } else if (action === "send_task_message") {
       schema = schema.omit({ source: true })
     } else if (action === "update_checks") {

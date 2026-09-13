@@ -28,6 +28,8 @@ import {
   preflightMysqlTransferSnapshot,
 } from "../src/storage/mysql-transfer"
 import { taskCreationContractFingerprint } from "../src/engine/task-creation-contract"
+import { buildPanelCreationFact, panelCreationTargetID } from "../src/engine/panel-creation-fact"
+import { createRightSidebarConversationSession } from "../src/chat/session"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -68,24 +70,35 @@ async function executeMissionPanelCreateTask(
   mission: Awaited<ReturnType<typeof ensureMissionSession>>,
   label: string,
   explicitRuntime = true,
+  source?: { author: string; extra: Record<string, unknown> },
 ) {
   const now = Date.now()
+  const params = panelTaskInput(label, explicitRuntime)
   const user = await Session.updateMessage({
     id: Identifier.ascending("message"),
     sessionID: mission.id,
     role: "user",
-    author: "user",
+    author: source?.author ?? "user",
     time: { created: now },
     agent: "mission",
     model: { providerID: "test", modelID: "mission-task-fence" },
+    ...(source ? { extra: source.extra } : {}),
   })
+  await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: mission.id,
+    messageID: user.id,
+    type: "text",
+    text: params.request,
+  })
+  const assistantNow = Date.now() + 1
   const assistant = await Session.updateMessage({
     id: Identifier.ascending("message"),
     sessionID: mission.id,
     role: "assistant",
     author: "mission",
     parentID: user.id,
-    time: { created: now + 1 },
+    time: { created: assistantNow },
     agent: "mission",
     providerID: "test",
     modelID: "mission-task-fence",
@@ -94,7 +107,6 @@ async function executeMissionPanelCreateTask(
     tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
   })
   const callID = `panel-create-${label}`
-  const params = panelTaskInput(label, explicitRuntime)
   const { action: _action, ...toolInput } = params
   await Session.updatePart({
     id: Identifier.ascending("part"),
@@ -106,7 +118,7 @@ async function executeMissionPanelCreateTask(
     state: {
       status: "running",
       input: toolInput,
-      time: { start: now + 1 },
+      time: { start: assistantNow },
     },
   })
   const panel = await PanelTool.init({ agentID: "mission" })
@@ -191,6 +203,96 @@ async function seedMissionChild(
 }
 
 describe("Mission Task creation exact opened occurrence", () => {
+  test("creates through the immutable Work-to-Mission caller occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      init: InstanceBootstrap,
+      fn: async () => {
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
+        const label = "work-caller-authority"
+        const request = panelTaskInput(label).request
+        const work = await createRightSidebarConversationSession("work")
+        const now = Date.now()
+        const caller = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: work.id,
+          role: "user",
+          author: "user",
+          time: { created: now },
+          agent: "work",
+          model: { providerID: "test", modelID: "mission-task-fence" },
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: work.id,
+          messageID: caller.id,
+          type: "text",
+          text: request,
+        })
+        const callerAssistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: work.id,
+          role: "assistant",
+          author: "work",
+          parentID: caller.id,
+          time: { created: Date.now() + 1 },
+          agent: "work",
+          providerID: "test",
+          modelID: "mission-task-fence",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        const wakePartID = Identifier.ascending("part")
+        const wakeCallID = `wake-${label}`
+        const wakeInput = { title: "Caller authority", request }
+        await Session.updatePart({
+          id: wakePartID,
+          sessionID: work.id,
+          messageID: callerAssistant.id,
+          type: "tool",
+          callID: wakeCallID,
+          tool: "panel_wake_mission",
+          state: { status: "running", input: wakeInput, time: { start: Date.now() + 1 } },
+        })
+        const missionID = panelCreationTargetID("wake_mission", wakePartID)
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "work",
+          heldExpertSquadIDs: ["base"],
+          creationMetadata: {
+            panelCreation: buildPanelCreationFact({
+              operation: "wake_mission",
+              toolPartID: wakePartID,
+              toolCallID: wakeCallID,
+              messageID: callerAssistant.id,
+              callerUserMessageID: caller.id,
+              params: wakeInput,
+            }),
+          },
+        })
+        const opened = await openMissionThroughRealWake({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.wake",
+          requestID: wakePartID,
+        })
+        if (opened.state !== "opened") throw new Error(`Mission ${missionID} did not open`)
+        const result = await executeMissionPanelCreateTask(mission, label, true, {
+          author: "work",
+          extra: { wake_reason: { source: "mission.operator", requestID: wakePartID } },
+        })
+        const taskID = JSON.parse(result.output).task_id as string
+        await Database.awaitEffectIdle(10_000)
+        expect(requireTask(taskID).request).toBe(request)
+        const snapshot = exportMysqlTransferSnapshot()
+        expect(preflightMysqlTransferSnapshot(snapshot)).toMatchObject({ schemaFingerprint: snapshot.schemaFingerprint })
+      },
+    })
+  })
+
   test("replays a committed panel.create_task target from the exact persisted Tool occurrence", async () => {
     await using project = await memoryProject()
     await Instance.provide({

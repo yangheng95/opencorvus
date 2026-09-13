@@ -372,7 +372,7 @@ test("a Mission recovers a committed side effect and first starts its independen
       const languageSpy = spyOn(Provider, "getLanguage").mockResolvedValue(language)
       try {
         const text =
-          "Complete the delivery and independently verify it, preserving any operation already committed across transport failure."
+          "Publish one durable operation receipt, preserve it across disconnection, and independently verify final delivery."
         await openMissionExecutionWithWake({
           missionID: mission.missionID,
           sessionID: mission.id,

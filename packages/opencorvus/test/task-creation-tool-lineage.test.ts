@@ -68,8 +68,8 @@ describe("Task creation persisted Tool lineage", () => {
       storedMetadata?: Record<string, unknown>
       contractToolInput?: Record<string, unknown>
       contractAttachments?: unknown[]
-      creator?: Partial<{ tool_part_id: string; message_id: string; tool_call_id: string; session_id: string }>
       contractRequest?: string
+      creator?: Partial<{ tool_part_id: string; message_id: string; tool_call_id: string; session_id: string }>
       omitRelationalToolPart?: boolean
       accepted?: boolean
     }) => {
@@ -122,7 +122,7 @@ describe("Task creation persisted Tool lineage", () => {
           creator,
         }),
       })
-      const contract = buildTaskCreationContractFact({
+      const buildContract = () => buildTaskCreationContractFact({
         request,
         resolved: {
           project_id: "project",
@@ -144,6 +144,11 @@ describe("Task creation persisted Tool lineage", () => {
           creator,
         },
       })
+      if (input.contractRequest) {
+        expect(buildContract).toThrow("Task creation caller and resolved request bytes diverge")
+        return
+      }
+      const contract = buildContract()
       const insert = () =>
         db
           .query(
@@ -173,10 +178,7 @@ describe("Task creation persisted Tool lineage", () => {
     attempt({ label: "message", creator: { message_id: "message-other" } })
     attempt({ label: "call", creator: { tool_call_id: "call-other" } })
     attempt({ label: "session", creator: { session_id: "session-other" } })
-    attempt({
-      label: "request",
-      contractRequest: "Changed request",
-    })
+    attempt({ label: "request", contractRequest: "Changed request" })
     attempt({
       label: "metadata",
       storedMetadata: { intent: "exact" },

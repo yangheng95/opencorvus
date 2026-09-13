@@ -73,7 +73,9 @@ test("AutomationBench Skill defines a bounded source-to-destination evidence loo
   expect(skill).toContain("Independently judging raw receipt fields is verification of operation evidence")
   expect(skill).toContain("or definite later mutation, operation-outcome, or rollback evidence")
   expect(skill).toContain("authoritative evidence of that operation's returned result at response time")
-  expect(skill).toContain("only when the discovered API contract defines the successful response as a synchronous commit")
+  expect(skill).toContain(
+    "only when the discovered API contract defines the successful response as a synchronous commit",
+  )
   expect(skill).toContain("Destination identity and final state start with the destination service")
 })
 
@@ -91,17 +93,26 @@ test("AutomationBench Mission request preserves public reconciliation and explic
   expect(request).toContain("require the real `skill` Tool call before the first client call")
   expect(request).toContain("A projected worker that calls the benchmark client must load this Skill")
   expect(request).toContain("Mission and a child Task Orchestrator")
-  expect(request).toContain("Mission-authored Task prose is attributed delegation, not user authority")
-  expect(request).toContain("required intermediate source record, destination representation field")
+  expect(request).toContain("For panel_create_task.request it copies the contiguous child-Task authority block")
+  expect(request).toContain("The Host validates byte provenance")
   expect(request).toContain("materially depends on client-contract content absent from visible evidence")
   expect(request).toContain("load the exact named Skill directly without capability discovery")
   expect(request).toContain("new evidence-backed acceptance gap derived from the original request")
   expect(request).toContain(
-    "must not turn an outcome into a required intermediate source record, destination representation field",
+    "without a heading, delegation note, paraphrase, source prerequisite, destination representation field",
   )
   expect(request).toContain("independent verification does not require a second API projection for every fact")
   expect(request).toContain("process, approval, historical, referenced-policy, incomplete-coverage")
   expect(request).toContain("already exhausted discovery are truthful limitations rather than reasons to repeat work")
   expect(request.match(/^SYSTEM:/gm)).toHaveLength(1)
   expect(request.match(/^USER:/gm)).toHaveLength(1)
+  const childRequest = request.slice(request.lastIndexOf("This is an AutomationBench API-mode evaluation"))
+  expect(childRequest).toBe(
+    [
+      "This is an AutomationBench API-mode evaluation. The simulated business end state is the only scored deliverable.",
+      'The visible directive `@skill("automationbench-api")` is mandatory for every child worker that uses the benchmark client: require the real `skill` Tool call before the first client call, then use only the project-local client for benchmark operations. Capability discovery or reading the Skill file does not load it.',
+      "SYSTEM:\nOperate safely. ",
+      "USER:\nPerform the business operation.",
+    ].join("\n\n"),
+  )
 })
