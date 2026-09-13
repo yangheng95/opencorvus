@@ -14,6 +14,34 @@ export {
 
 export const EXTERNAL_BENCHMARK_SCHEMA_VERSION = 1 as const
 
+export async function awaitBenchmarkOperationDeadline<T>(input: {
+  operation: Promise<T>
+  signal?: AbortSignal
+  timeoutMs: number
+  timeoutMessage: string
+}): Promise<T> {
+  if (input.signal?.aborted) {
+    void input.operation.catch(() => undefined)
+    throw input.signal.reason
+  }
+  let timeout: ReturnType<typeof setTimeout> | undefined
+  let abortListener: (() => void) | undefined
+  const aborted = new Promise<never>((_resolve, reject) => {
+    if (!input.signal) return
+    abortListener = () => reject(input.signal!.reason)
+    input.signal.addEventListener("abort", abortListener, { once: true })
+  })
+  const expired = new Promise<never>((_resolve, reject) => {
+    timeout = setTimeout(() => reject(new Error(input.timeoutMessage)), input.timeoutMs)
+  })
+  try {
+    return await Promise.race([input.operation, aborted, expired])
+  } finally {
+    if (timeout) clearTimeout(timeout)
+    if (abortListener) input.signal?.removeEventListener("abort", abortListener)
+  }
+}
+
 export class EmptySuccessfulJsonResponseError extends Error {
   constructor(readonly route: string) {
     super(`Successful JSON response for ${route} had an empty body`)

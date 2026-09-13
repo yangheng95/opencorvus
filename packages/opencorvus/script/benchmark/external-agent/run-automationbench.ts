@@ -49,6 +49,7 @@ import {
   failureObservationReceipt,
   installBenchmarkTerminationHandlers,
   parseRequiredJsonResponse,
+  awaitBenchmarkOperationDeadline,
   retryReadOnlyProjection,
   type ProviderUsageRow,
   type BenchmarkScheduledWake,
@@ -70,12 +71,11 @@ const CLEANUP_TIMEOUT_MS = BENCHMARK_RUNNER_CLEANUP_TIMEOUT_MS
 type Profile = "base" | "advanced"
 
 async function within<T>(promise: Promise<T>, timeoutMs: number, label: string) {
-  return Promise.race([
-    promise,
-    Bun.sleep(timeoutMs).then(() => {
-      throw new Error(`${label} exceeded ${timeoutMs}ms`)
-    }),
-  ])
+  return awaitBenchmarkOperationDeadline({
+    operation: promise,
+    timeoutMs,
+    timeoutMessage: `${label} exceeded ${timeoutMs}ms`,
+  })
 }
 
 type ActiveLease = {
@@ -410,16 +410,12 @@ async function startAutomationBenchBridge(
     let pending = ""
     let ready: Record<string, any> | undefined
     while (!ready) {
-      const next = await Promise.race([
-        reader.read(),
-        new Promise<never>((_resolve, reject) => {
-          if (signal.aborted) reject(signal.reason)
-          else signal.addEventListener("abort", () => reject(signal.reason), { once: true })
-        }),
-        Bun.sleep(input.inactivityMs).then(() => {
-          throw new Error(`AutomationBench bridge ready exceeded ${input.inactivityMs}ms`)
-        }),
-      ])
+      const next = await awaitBenchmarkOperationDeadline({
+        operation: reader.read(),
+        signal,
+        timeoutMs: input.inactivityMs,
+        timeoutMessage: `AutomationBench bridge ready exceeded ${input.inactivityMs}ms`,
+      })
       if (next.done) {
         const stderr = await new Response(process.stderr).text()
         throw new Error(`AutomationBench bridge exited before ready: ${stderr}`)
