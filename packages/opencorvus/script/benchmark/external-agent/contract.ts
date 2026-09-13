@@ -141,9 +141,10 @@ export function auditBatchReceiptRedaction(input: {
     input.redactionReceipt && typeof input.redactionReceipt === "object" && !Array.isArray(input.redactionReceipt)
       ? (input.redactionReceipt as Record<string, any>)
       : {}
-  const match = /^batch-(\d{2})-([a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12})-redaction-receipt\.json$/.exec(
-    input.redactionFileName,
-  )
+  const match =
+    /^batch-(\d{2})-([a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12})-redaction-receipt\.json$/.exec(
+      input.redactionFileName,
+    )
   let target: Record<string, any> = {}
   let targetText = ""
   try {
@@ -196,7 +197,9 @@ export function auditBatchReceiptRedaction(input: {
       : ["redaction_batch_identity"]),
     ...(redactedTailCount >= Number(receipt.changed_stderr_tails ?? 0) ? [] : ["redaction_tail_count"]),
     ...(exactLabelsRedacted ? [] : ["redaction_exact_labels_missing"]),
-    ...(ProviderError.redactSensitiveProviderText(targetText) === targetText ? [] : ["redaction_target_still_sensitive"]),
+    ...(ProviderError.redactSensitiveProviderText(targetText) === targetText
+      ? []
+      : ["redaction_target_still_sensitive"]),
   ]
   return {
     passed: violations.length === 0,
@@ -227,7 +230,9 @@ export function auditLegacyTraceEnvironmentAttestation(input: unknown) {
     ...(profiles.length > 0 ? [] : ["attestation_profile_files"]),
     ...profiles.flatMap((profile: any, index: number) =>
       typeof profile?.path === "string" &&
-      typeof profile?.mtime_ns === "number" && Number.isFinite(profile.mtime_ns) && profile.mtime_ns > 0 &&
+      typeof profile?.mtime_ns === "number" &&
+      Number.isFinite(profile.mtime_ns) &&
+      profile.mtime_ns > 0 &&
       Number.isSafeInteger(profile?.bytes) &&
       /^[a-f0-9]{64}$/.test(String(profile?.sha256 ?? "")) &&
       profile?.override_marker_present === false
@@ -235,7 +240,8 @@ export function auditLegacyTraceEnvironmentAttestation(input: unknown) {
         : [`attestation_profile_file:${index}`],
     ),
     ...runs.flatMap((runID: unknown, index: number) =>
-      typeof runID === "string" && /^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(runID)
+      typeof runID === "string" &&
+      /^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(runID)
         ? []
         : [`attestation_run_id:${index}`],
     ),
@@ -412,8 +418,7 @@ export function providerUsageMatchesModel(rows: ProviderUsageRow[], model: strin
   const modelID = model.slice(separator + 1)
   return {
     passed: rows.every(
-      (row) =>
-        row.provider_id === providerID && row.model_id === modelID && row.purpose !== "provider-connectivity",
+      (row) => row.provider_id === providerID && row.model_id === modelID && row.purpose !== "provider-connectivity",
     ),
     provider_id: providerID,
     model_id: modelID,
@@ -496,9 +501,11 @@ export function automationBenchHarnessRequest(prompt: unknown): string {
   return [
     "This is an AutomationBench API-mode evaluation. The simulated business end state is the only scored deliverable.",
     "Mission is the real intake coordinator for this run. Delegate the complete business workflow to child Task work owned by the held Expert Squad; Mission must not execute benchmark operations itself.",
-    "Every child Task request must retain the exact `This is an AutomationBench API-mode evaluation` statement and the complete SYSTEM/USER business-content block below.",
+    'The visible directive `@skill("automationbench-api")` is mandatory for every child worker that uses the benchmark client: copy it into that child Task request and require the real `skill` Tool call before the first client call. Capability discovery or reading the Skill file does not load it.',
+    "Every child Task request must retain the exact `This is an AutomationBench API-mode evaluation` statement and copy the complete SYSTEM/USER business-content block below exactly once. Do not copy this Mission coordination preamble into the child request.",
     "The SYSTEM/USER block is the sole semantic authority. Mission must assign every requested effect across the complete child-Task set. Within each child Task's assigned closure it may add ownership, lineage, dependencies, and evidence duties, but must not weaken, generalize, substitute, reinterpret, or omit an assigned operation, channel, target, value, format, or guard. The full block remains authority context and does not make one child duplicate effects explicitly assigned to a sibling Task.",
-    "Every child Task Agent that performs benchmark work must load the project Skill named `automationbench-api` before acting and use only its project-local client for benchmark operations.",
+    'Every child Task Agent that performs benchmark work must follow `@skill("automationbench-api")` and use only its project-local client for benchmark operations.',
+    "Reconcile a terminal child through the public Mission contract. Resume only for a new evidence-backed acceptance gap derived from the original request and completely read canonical evidence, with an authorized supported correction that can change the unmet business result. A child omission does not prevent Mission from identifying such a gap; unsupported extra requirements and already exhausted discovery are truthful limitations rather than reasons to repeat work.",
     "Do not ask the operator a question, do not modify product files, and do not replace benchmark operations with a prose report.",
     "OpenCorvus is the evaluated multi-Agent harness. Tool, model, Agent, retry, and concurrent call counts are measured without a stock single-model turn budget.",
     ...messages,
@@ -632,9 +639,7 @@ const SCORER_REPLAY_TOP_LEVEL_FIELDS = new Set([
 ])
 
 function scorerReplayRecord(value: unknown): Record<string, unknown> | undefined {
-  return value && typeof value === "object" && !Array.isArray(value)
-    ? (value as Record<string, unknown>)
-    : undefined
+  return value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : undefined
 }
 
 export function auditScorerReplayEvidence(input: { sealed: unknown; independent: unknown; exampleID: unknown }) {
@@ -762,9 +767,11 @@ export function auditMissionRunBinding(input: {
     bound_profile: item.board?.task?.packageRevisionBinding?.id ?? null,
     board_status: item.board?.task?.status ?? null,
     record_status:
-      input.missionRecord?.tasks?.find((task: any) => String(task.id) === String(item.task_id))?.lifecycleStatus ?? null,
+      input.missionRecord?.tasks?.find((task: any) => String(task.id) === String(item.task_id))?.lifecycleStatus ??
+      null,
     status_status:
-      input.missionStatus?.tasks?.find((task: any) => String(task.taskID) === String(item.task_id))?.lifecycleStatus ?? null,
+      input.missionStatus?.tasks?.find((task: any) => String(task.taskID) === String(item.task_id))?.lifecycleStatus ??
+      null,
   }))
   const exactTaskSet =
     JSON.stringify(resultTaskIDs) === JSON.stringify(recordTaskIDs) &&
@@ -911,9 +918,9 @@ export function auditMissionEvidenceLineage(input: {
       new Set(transcriptIDs).size === transcriptIDs.length &&
       JSON.stringify(transcriptIDs) === JSON.stringify(snapshotIDs) &&
       transcript.every((message) => {
-      const id = String(message.info?.id ?? "")
-      const sessionID = String(message.info?.sessionID ?? "")
-      return id.length > 0 && allowed.has(sessionID) && messageSessionByID.get(id) === sessionID
+        const id = String(message.info?.id ?? "")
+        const sessionID = String(message.info?.sessionID ?? "")
+        return id.length > 0 && allowed.has(sessionID) && messageSessionByID.get(id) === sessionID
       })
     )
   }
@@ -1052,12 +1059,12 @@ export function auditMissionEvidenceCollections(input: {
   const snapshotLedgerPresent =
     Array.isArray(snapshotRows.provider_usage_event) &&
     !(Array.isArray(input.snapshot?.missing_tables) && input.snapshot.missing_tables.includes("provider_usage_event"))
-  const snapshotLedger = (Array.isArray(snapshotRows.provider_usage_event)
-    ? snapshotRows.provider_usage_event
-    : [])
+  const snapshotLedger = (Array.isArray(snapshotRows.provider_usage_event) ? snapshotRows.provider_usage_event : [])
     .filter((row: any) => row.purpose !== "provider-connectivity")
-    .sort((left: any, right: any) =>
-      Number(left.occurred_at ?? 0) - Number(right.occurred_at ?? 0) || String(left.id).localeCompare(String(right.id)),
+    .sort(
+      (left: any, right: any) =>
+        Number(left.occurred_at ?? 0) - Number(right.occurred_at ?? 0) ||
+        String(left.id).localeCompare(String(right.id)),
     )
   const ledgerMatches =
     snapshotLedgerPresent &&
@@ -1165,9 +1172,7 @@ export type TaskInfrastructureIncident = {
 const TASK_INFRASTRUCTURE_ARTIFACT_KIND = "task-infrastructure-error"
 
 function infrastructureIncidentsFromSnapshot(snapshot: unknown): TaskInfrastructureIncident[] | undefined {
-  const rows = (snapshot as { rows?: Record<string, unknown> } | undefined)?.rows?.[
-    "engine_artifact"
-  ]
+  const rows = (snapshot as { rows?: Record<string, unknown> } | undefined)?.rows?.["engine_artifact"]
   if (!Array.isArray(rows)) return undefined
   const incidents: TaskInfrastructureIncident[] = []
   for (const row of rows as Array<Record<string, unknown>>) {
@@ -1456,8 +1461,7 @@ export function auditMissionQuiescence(input: {
     ...auditTerminalQuiescence(task.board),
   }))
   const exactTaskSet =
-    JSON.stringify(recordIDs) === JSON.stringify(statusIDs) &&
-    JSON.stringify(recordIDs) === JSON.stringify(boardIDs)
+    JSON.stringify(recordIDs) === JSON.stringify(statusIDs) && JSON.stringify(recordIDs) === JSON.stringify(boardIDs)
   const missionInactive =
     input.missionStatus?.status === "inactive" &&
     input.missionRecord?.interruptible === false &&
@@ -1762,10 +1766,7 @@ export function automationBenchBatchPlanIdentity(plan: any): AutomationBenchBatc
   }
 }
 
-export function automationBenchBatchPlanMatches(
-  plan: any,
-  expected: AutomationBenchBatchPlanIdentity,
-) {
+export function automationBenchBatchPlanMatches(plan: any, expected: AutomationBenchBatchPlanIdentity) {
   return JSON.stringify(automationBenchBatchPlanIdentity(plan)) === JSON.stringify(expected)
 }
 
@@ -1952,11 +1953,12 @@ export function automationBenchRestrictedShellAuthority(input: {
 }) {
   const sourceFile = automationBenchRestrictedShellSourceFile(input)
   const authority = sourceFile === "restricted-agent-shell-base.sh" ? "base" : sourceFile ? "extended" : null
-  const expectedSHA256 = authority === "base"
-    ? AUTOMATIONBENCH_BASE_RESTRICTED_SHELL_SHA256
-    : authority === "extended"
-      ? input.extendedSHA256
-      : undefined
+  const expectedSHA256 =
+    authority === "base"
+      ? AUTOMATIONBENCH_BASE_RESTRICTED_SHELL_SHA256
+      : authority === "extended"
+        ? input.extendedSHA256
+        : undefined
   const violations = [
     ...(authority ? [] : ["case_index_out_of_manifest"]),
     ...(expectedSHA256 && input.sealedSHA256 === expectedSHA256 ? [] : ["restricted_shell_authority_mismatch"]),
@@ -1992,10 +1994,7 @@ export function auditBatchEvidence(input: {
   if (!input.receipt) reasons.push("batch_receipt_missing")
   const planSchemaAudit = auditAutomationBenchBatchPlanSchema(input.plan)
   if (!planSchemaAudit.passed) reasons.push(planSchemaAudit.reason!)
-  if (
-    !["completed", "failed"].includes(receipt.status) ||
-    receipt.batch_run_id !== input.plan.batch_run_id
-  ) {
+  if (!["completed", "failed"].includes(receipt.status) || receipt.batch_run_id !== input.plan.batch_run_id) {
     reasons.push("batch_receipt_identity")
   }
   const expectedCases = (input.plan.cases ?? [])
@@ -2065,8 +2064,7 @@ export function auditBatchEvidence(input: {
                 case_index: caseIndex,
                 profile,
                 run_id: record.run_id,
-                exit_code:
-                  record.source_run_status === "scored" ? 0 : record.source_run_status === "invalid" ? 2 : 1,
+                exit_code: record.source_run_status === "scored" ? 0 : record.source_run_status === "invalid" ? 2 : 1,
                 run_status: record.source_run_status,
                 stderr_tail: "",
                 recovered_from_immutable_attempt: true,
@@ -2202,10 +2200,11 @@ export function auditBatchEvidence(input: {
   }
   for (const waveIndex of rolling ? [0] : waveIndexes) {
     const scoped = rolling ? intervals : intervals.filter((item) => item.waveIndex === waveIndex)
-    const events = scoped.flatMap((item) => [
-      { at: item.start, delta: 1 },
-      { at: item.end, delta: -1 },
-    ])
+    const events = scoped
+      .flatMap((item) => [
+        { at: item.start, delta: 1 },
+        { at: item.end, delta: -1 },
+      ])
       .sort((left, right) => left.at - right.at || left.delta - right.delta)
     let active = 0
     for (const event of events) {
@@ -2248,7 +2247,8 @@ export function auditBatchEvidence(input: {
       .map((item: any) => ({ case_index: item.case_index, profile: item.profile, run_id: item.run_id })),
   })
   reasons.push(...settlementAudit.violations)
-  const settledWithFailures = input.receipt && receipt.status === "failed" && settlementAudit.passed && reasons.length === 0
+  const settledWithFailures =
+    input.receipt && receipt.status === "failed" && settlementAudit.passed && reasons.length === 0
   if (settledWithFailures) {
     for (const runID of recoveredSealingRunIDs) eligibleRunIDs.add(runID)
   }
@@ -2390,9 +2390,7 @@ export function benchmarkInactivityDeadline(input: {
     return input.currentDeadline
   }
   const earliestFutureWake = input.scheduledWakes
-    .filter(
-      (wake) => wake.state === "scheduled" && Number.isFinite(wake.nextRun) && wake.nextRun > input.now,
-    )
+    .filter((wake) => wake.state === "scheduled" && Number.isFinite(wake.nextRun) && wake.nextRun > input.now)
     .sort((left, right) => left.nextRun - right.nextRun || left.id.localeCompare(right.id))[0]
   return earliestFutureWake
     ? Math.max(input.currentDeadline, earliestFutureWake.nextRun + input.inactivityMs)
@@ -2433,14 +2431,8 @@ export function benchmarkObservationPollDelay(input: {
     ? Math.max(0, input.consecutiveUnchanged)
     : 0
   const unchanged = input.immediate ? 0 : requestedUnchanged
-  const exponent = Math.min(
-    unchanged,
-    Math.log2(BENCHMARK_OBSERVATION_POLL_MAX_MS / BENCHMARK_OBSERVATION_POLL_MIN_MS),
-  )
-  const scheduled = Math.min(
-    BENCHMARK_OBSERVATION_POLL_MAX_MS,
-    BENCHMARK_OBSERVATION_POLL_MIN_MS * 2 ** exponent,
-  )
+  const exponent = Math.min(unchanged, Math.log2(BENCHMARK_OBSERVATION_POLL_MAX_MS / BENCHMARK_OBSERVATION_POLL_MIN_MS))
+  const scheduled = Math.min(BENCHMARK_OBSERVATION_POLL_MAX_MS, BENCHMARK_OBSERVATION_POLL_MIN_MS * 2 ** exponent)
   return Math.min(scheduled, Math.max(0, input.deadline - input.now))
 }
 
@@ -2515,10 +2507,7 @@ export async function readBenchmarkObserverLivenessStream(input: {
     const next = await Promise.race([
       reader.read(),
       new Promise<{ timeout: true }>((resolve) => {
-        timer = setTimeout(
-          () => resolve({ timeout: true }),
-          Math.max(0, livenessDeadline - Date.now()),
-        )
+        timer = setTimeout(() => resolve({ timeout: true }), Math.max(0, livenessDeadline - Date.now()))
       }),
     ]).finally(() => {
       if (timer) clearTimeout(timer)
@@ -3052,12 +3041,7 @@ export async function auditDispatchedSkillCoverage(input: {
       if (part.type !== "tool") continue
       const state = part.state && typeof part.state === "object" ? part.state : {}
       const toolInput = state.input && typeof state.input === "object" ? state.input : {}
-      if (
-        part.tool === "skill" &&
-        toolInput.name === skillName &&
-        state.status === "completed" &&
-        currentSessionID
-      ) {
+      if (part.tool === "skill" && toolInput.name === skillName && state.status === "completed" && currentSessionID) {
         successfulLoads.push({
           agent_id: agentID,
           session_id: currentSessionID,
@@ -3108,13 +3092,10 @@ export async function auditDispatchedSkillCoverage(input: {
   const missingLoads = [...clientOwnerSessions.values()]
     .filter(
       (owner) =>
-        !successfulLoads.some(
-          (load) => load.agent_id === owner.agent_id && load.session_id === owner.session_id,
-        ),
+        !successfulLoads.some((load) => load.agent_id === owner.agent_id && load.session_id === owner.session_id),
     )
     .sort(
-      (left, right) =>
-        left.agent_id.localeCompare(right.agent_id) || left.session_id.localeCompare(right.session_id),
+      (left, right) => left.agent_id.localeCompare(right.agent_id) || left.session_id.localeCompare(right.session_id),
     )
   const clientBeforeLoad = clientAttempts.filter((attempt) => mounted.has(attempt.agent_id) && !loadBefore(attempt))
   const unmountedClientAttempts = clientAttempts.filter((attempt) => !mounted.has(attempt.agent_id))
@@ -3143,8 +3124,7 @@ export async function auditDispatchedSkillCoverage(input: {
     dispatched_agents: dispatched,
     uncovered_agents: uncovered,
     dispatched_owner_sessions: [...ownerSessions.values()].sort(
-      (left, right) =>
-        left.agent_id.localeCompare(right.agent_id) || left.session_id.localeCompare(right.session_id),
+      (left, right) => left.agent_id.localeCompare(right.agent_id) || left.session_id.localeCompare(right.session_id),
     ),
     successful_skill_loads: successfulLoads,
     benchmark_client_attempts: clientAttempts,
@@ -3234,8 +3214,7 @@ export async function failureObservationReceipt(input: {
     status: "captured" as const,
     reason: "last_successful_public_observation",
     captured_at: input.capturedAt,
-    message_count:
-      (input.observation.missionTranscript?.length ?? 0) + input.observation.transcript.length,
+    message_count: (input.observation.missionTranscript?.length ?? 0) + input.observation.transcript.length,
     mission_message_count: input.observation.missionTranscript?.length ?? 0,
     task_message_count: input.observation.transcript.length,
     trace_event_count: input.observation.trace.length,
@@ -3428,7 +3407,8 @@ export function analyzePromptComposition(traceEvents: unknown[]) {
     divergent_tokens_est: totals.divergent,
     resent_prefix_tokens_est: totals.resent,
     physical_system_changes: totals.physicalSystemChanges,
-    stable_prefix_share: totals.stable + totals.divergent === 0 ? null : totals.stable / (totals.stable + totals.divergent),
+    stable_prefix_share:
+      totals.stable + totals.divergent === 0 ? null : totals.stable / (totals.stable + totals.divergent),
   }
 }
 
@@ -3503,9 +3483,7 @@ export function auditTaskBoundPromptCompositionCoverage(input: {
   )
   const taskSessionUsage = input.providerRows.filter(
     (row) =>
-      row.purpose === "session" &&
-      row.session_id !== input.missionSessionID &&
-      typeof row.session_id === "string",
+      row.purpose === "session" && row.session_id !== input.missionSessionID && typeof row.session_id === "string",
   )
   const untracedTaskUsage = taskSessionUsage.filter((row) => !traceSessionIDs.has(row.session_id!))
   const tracedTaskUsage = taskSessionUsage.filter((row) => traceSessionIDs.has(row.session_id!))
@@ -3514,16 +3492,17 @@ export function auditTaskBoundPromptCompositionCoverage(input: {
       (raw as Record<string, any>)?.kind === "llm_request" &&
       (raw as Record<string, any>)?.sessionID !== input.missionSessionID,
   )
-  const coverage = tracedTaskUsage.length > 0 || hasTaskRequestEvents
-    ? auditPromptCompositionCoverage(input.traceEvents, tracedTaskUsage)
-    : {
-        passed: true,
-        request_events: 0,
-        fingerprinted_events: 0,
-        session_usage_rows: 0,
-        request_attempts_without_usage: 0,
-        violations: [] as string[],
-      }
+  const coverage =
+    tracedTaskUsage.length > 0 || hasTaskRequestEvents
+      ? auditPromptCompositionCoverage(input.traceEvents, tracedTaskUsage)
+      : {
+          passed: true,
+          request_events: 0,
+          fingerprinted_events: 0,
+          session_usage_rows: 0,
+          request_attempts_without_usage: 0,
+          violations: [] as string[],
+        }
   const violations = [
     ...coverage.violations,
     ...untracedTaskUsage.map((row) => `task_usage_without_task_trace:${row.id}`),

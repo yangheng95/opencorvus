@@ -1,11 +1,9 @@
 import { expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
+import { automationBenchHarnessRequest } from "../../script/benchmark/external-agent/contract"
 
-const skillPath = path.join(
-  import.meta.dir,
-  "../../script/benchmark/external-agent/automationbench-api.SKILL.md",
-)
+const skillPath = path.join(import.meta.dir, "../../script/benchmark/external-agent/automationbench-api.SKILL.md")
 
 test("AutomationBench Skill defines a bounded source-to-destination evidence loop", async () => {
   const skill = await fs.readFile(skillPath, "utf8")
@@ -20,4 +18,22 @@ test("AutomationBench Skill defines a bounded source-to-destination evidence loo
   expect(skill).toContain("search once by the information shape and business terms")
   expect(skill).toContain("Preserve the exact method, URL, and parameter shape")
   expect(skill).toContain("Never repeat a successful irreversible create")
+})
+
+test("AutomationBench Mission request preserves public reconciliation and explicit Skill activation", () => {
+  const request = automationBenchHarnessRequest([
+    {
+      role: "system",
+      content:
+        "Operate safely. You have a budget of ~50 tool-using turns — favor parallel tool calls and avoid duplicate searches.",
+    },
+    { role: "user", content: "Perform the business operation." },
+  ])
+
+  expect(request).toContain('@skill("automationbench-api")')
+  expect(request).toContain("require the real `skill` Tool call before the first client call")
+  expect(request).toContain("new evidence-backed acceptance gap derived from the original request")
+  expect(request).toContain("unsupported extra requirements and already exhausted discovery")
+  expect(request.match(/^SYSTEM:/gm)).toHaveLength(1)
+  expect(request.match(/^USER:/gm)).toHaveLength(1)
 })

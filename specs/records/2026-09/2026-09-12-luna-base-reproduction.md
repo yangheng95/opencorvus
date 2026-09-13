@@ -207,3 +207,14 @@
 - 第二层修复保持prompt/context层：对原请求要求的每类权威事实建立“已找到/仍缺失”，不可逆mutation前每项必须有正向记录或明确证明任务允许缺省；来源未命名时按信息形态做一次语义搜索，并在同一批只读调用中尝试搜索结果里的相关候选，找到第一条匹配权威记录即停。不得把typed unavailable本身解释为可省略业务要求。
 - 对已成功的不可逆create，保留exact receipt和第一次成功返回记录的method/url/params；验证复用相同契约形状，不添加未声明query参数。不同或已知非反映projection的空结果是冲突证据，不覆盖成功receipt/正向readback。只有原请求已授权、接口为当前状态明确定义的纠正或补偿操作能够修正已存在记录时才分派修复；不得用另一次create“修复”成功create。Tester仍独立读取和判断，Orchestrator仍可对可修复缺陷继续原lineage，这不是Host gate或次数上限。
 - 下一单例要求Developer首阶段命中Gmail权威setup message并在唯一create中保留registration link与presenter exclusion，Tester使用契约声明的精确post查询验证；不发生第二次create或重复phase。效率/质量闸门仍为自然终止、strict=1（当前已知缺陷均应关闭）、模型调用不高于52和全部基础设施审计通过。
+
+### 6e7b35cb 真实单例失败与 Skill/Mission 根因
+
+- case1 run `fbf4c779-f614-4416-8e75-521c8270af3b` 在精确clean commit `6e7b35cbdd77`、Base2026.09.13.6、实际openai/gpt-5.6-luna下自然终止；watchdog仅在child退出后关闭后续准入。官方结果strict=0、partial=0.8、1127209ms、114次模型调用、52次官方API操作；唯一评分失败仍是文本缺少`webinar-register`，post count已恢复为1。
+- 调用分布发生结构性转移：Developer仅12次模型/11次API且只有一次create，证明禁止重复create和批量读取已关闭上一轮的8-phase循环；Tester却升至53次模型/41次API，Orchestrator21、Mission25、compaction1、memory2。总调用比98继续恶化，效率闸门失败，case2及以后没有准入。
+- 真实Skill审计为runtime_adherence=false：Developer/Tester都通过多次`capability_search`、`glob`和普通`read`打开Skill路径，没有调用平台`skill` Tool；6e7b单例中只有Developer被后续运行事实认作加载，Tester仍在missing_skill_load。Base两个runtime template实际均投影`skill` Tool，因此不是能力缺失，而是提示只没有把“load”绑定到真实Tool调用。普通read把内容降为工具结果，也产生每角色约5–7次额外发现往返。
+- Tester首轮已用直接`author`读取确认一个PUBLISHED/PUBLIC帖子，但把“customer support leaders”错误提升为必须存在的结构化targeting字段，并继续搜索Confluence、Drive、Notion、LinkedIn campaigns/ads等无关能力。Task首次自然完成后，Mission又读多个Artifact，将这两个被模型新造的“结构化targeting/Drive guidelines”条件登记为acceptance gap，三次构造失败后才成功resume；Tester第二轮再次做20余次发现、读取Artifact并违背Base普通报告契约发布`base/test-report`。Mission随后分页读取、更新mission_state并发布用户未要求的interactive artifact。一次真实Developer+一次独立Tester被放大为114次模型调用。
+- Mission child request还把完整AutomationBench Mission前言和SYSTEM/USER块重复复制，增加每轮上下文。根因是harness要求“retain完整block”却未要求只复制一次、排除Mission前言；也没有告诉Mission：单一连贯操作由一个含独立Tester的Squad闭合时无需另建Mission计划、第二套验收和结果Artifact。
+- 第三层修复仍在prompt/context层：harness用可解析的可见`@skill("automationbench-api")` directive要求每个实际client worker调用真实`skill` Tool；Base Developer/Tester明确普通read/capability discovery不构成加载。child request只复制一次SYSTEM/USER业务块和一次directive，不复制Mission前言。
+- 首轮方案中“单Task不写Mission计划/验收/Artifact”与公共`mission-core`的持久化、验收和终态Artifact硬契约冲突，独立审查判为P1，已删除这些benchmark局部反向指令。Mission继续唯一公共契约；resume依据可由Mission从原请求与完整canonical evidence发现的新gap产生，不依赖child自报纠正，也不得以无新证据的已穷尽发现重复执行。
+- 语义验收仍以原始任务和API契约为准：Tester区分“文案面向某受众”和“实际发送/可见范围”。organic content的API没有独立targeting时不虚构结构化字段；原请求明确restricted delivery时也不能用公开文案替代。以上不跳过Tester、不读取checker、不中断模型、不加Host gate；官方外部checker继续决定strict/partial。

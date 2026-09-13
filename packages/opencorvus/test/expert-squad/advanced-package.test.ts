@@ -105,7 +105,8 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.manifest.capability_projection.agents["source-investigator"]).toMatchObject({
       base_role: "delegated-worker",
-      description: "Performs read-only repository and projected-client authority investigation and records source-grounded evidence.",
+      description:
+        "Performs read-only repository and projected-client authority investigation and records source-grounded evidence.",
     })
     expect(agentCapabilityGrants(loaded.manifest, "source-investigator").explicitBuiltInToolIDs).toEqual([
       "bash",
@@ -136,21 +137,15 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["orchestrator"]).toContain(
       "exact current RequirementSet and Architect/Delivery Slice acceptance-spec Artifacts",
     )
-    expect(loaded.promptProfile.agents["test-engineer"]).toContain(
-      "criterion-by-criterion coverage",
-    )
-    expect(loaded.promptProfile.agents["system-integrity-reviewer"]).toContain(
-      "record passed, failed, or unresolved",
-    )
+    expect(loaded.promptProfile.agents["test-engineer"]).toContain("criterion-by-criterion coverage")
+    expect(loaded.promptProfile.agents["system-integrity-reviewer"]).toContain("record passed, failed, or unresolved")
     expect(loaded.promptProfile.agents["orchestrator"]).toContain(
       "compare the required operation with the current projected Agent and Tool inventory",
     )
     expect(loaded.promptProfile.agents["requirement-engineer"]).toContain(
       "A missing fact is discovery work, not automatically a rejection condition",
     )
-    expect(loaded.promptProfile.agents["requirement-engineer"]).toContain(
-      "finite authority-candidate ledger",
-    )
+    expect(loaded.promptProfile.agents["requirement-engineer"]).toContain("finite authority-candidate ledger")
     expect(loaded.promptProfile.agents["solution-architect"]).toContain("authority-field effect ledger")
     expect(loaded.promptProfile.agents["implementation-engineer"]).toContain(
       "Missing a dedicated field never authorizes a different surrogate mutation",
@@ -196,19 +191,24 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.6")
+    expect(loaded.manifest.version).toBe("2026.09.13.8")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "must not add a durable report, evidence package, or coordination Artifact",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain("provides a Skill bound to a client")
+    expect(loaded.promptProfile.agents["base-developer"]).toContain("call the projected `skill` Tool")
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "selected workflow node explicitly declares that exact Artifact type",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain("provides a Skill bound to a client")
+    expect(loaded.promptProfile.agents["base-tester"]).toContain("call the projected `skill` Tool")
     expect(loaded.promptProfile.agents["base-tester"]).toContain("Return one concise visible final message")
     expect(loaded.promptProfile.agents["base-tester"]).toContain("exact method, URL, and parameter shape")
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "do not invent a structured targeting control for an organic content action",
+    )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "selected workflow node explicitly declares that exact Artifact type",
     )
@@ -447,9 +447,7 @@ describe("built-in interface review workflow authority", () => {
         const baseScheduler = baseSkillProjection.projectedScheduler
         const baseSchedulerSurface = await SkillMount.resolve({
           identity: { ...baseScheduler.identity, expertSquadID: baseSkillProjection.expertSquadID },
-          runtime: sessionRuntimeFromNativeAgent(
-            await HostAgentRegistry.get("orchestrator", { config: baseConfig }),
-          ),
+          runtime: sessionRuntimeFromNativeAgent(await HostAgentRegistry.get("orchestrator", { config: baseConfig })),
           scope: "session",
           projectDirectory: project.path,
           skillProjection: baseSkillProjection,
@@ -463,9 +461,7 @@ describe("built-in interface review workflow authority", () => {
           config: baseConfig,
           agentID: "base-planner",
         })
-        expect(basePlannerTurn.workerCapability.builtInToolIDs).toEqual(
-          expect.arrayContaining(["bash", "skill"]),
-        )
+        expect(basePlannerTurn.workerCapability.builtInToolIDs).toEqual(expect.arrayContaining(["bash", "skill"]))
         const basePlannerSurface = await SkillMount.resolve({
           identity: {
             ...basePlannerTurn.workerCapability.identity,
