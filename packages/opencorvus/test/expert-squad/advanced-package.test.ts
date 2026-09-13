@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.33")
+    expect(loaded.manifest.version).toBe("2026.09.13.35")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -211,10 +211,16 @@ describe("built-in interface review workflow authority", () => {
       "original obligation mapped to each exact source record ID",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "Do not discover the destination mutation, targeting, representation, or readback capability",
+      "Do not discover the destination identity, mutation, targeting, representation, or readback capability",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain("The first authoritative record that resolves a fact")
     expect(loaded.promptProfile.agents["base-planner"]).toContain("`Source coordinates:` line")
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "assign that item to Developer instead of adding it to the source ledger",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "concrete applicable rules for the exact requested action is a guideline source regardless of its title",
+    )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "do not search for a Skill whose exact name is already visible",
     )
@@ -255,6 +261,12 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "permits one bounded discovery for that exact identity or missing read contract",
     )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "Treat each unresolved plan entry as a claim to classify against the original request",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "do not stop merely because the create interface has no separate targeting field",
+    )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "do not search for a Skill whose exact name is already visible",
     )
@@ -294,6 +306,12 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "A hidden metadata value alone is insufficient",
     )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "judge destination identity, capability, and representation through the actual destination interface",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "absence of a separate targeting field is not a failure",
+    )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "Never ask a worker to repeat a successful irreversible create",
     )
@@ -306,6 +324,12 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents.orchestrator).toContain("copy them verbatim into the Tester brief")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "tell Tester to completely read that same plan as source coordinates",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "the Planner brief may assign only source-side business facts",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "A missing optional structured destination field is not a missing source fact",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain("causal Tool Message and Part identities")
     expect(loaded.promptProfile.agents.orchestrator).toContain("`evidence_reads`")
