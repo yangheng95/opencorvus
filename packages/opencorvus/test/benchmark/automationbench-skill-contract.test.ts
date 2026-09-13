@@ -39,6 +39,8 @@ test("AutomationBench Skill defines a bounded source-to-destination evidence loo
   expect(skill).toContain("honor contract-declared mode, field projection, sorting, and pagination semantics")
   expect(skill).toContain("make one minimal exact-filter read")
   expect(skill).toContain("A current authoritative operational record that gives concrete do/don't rules")
+  expect(skill).toContain("Treat those abstract words as coverage labels, not separate facts")
+  expect(skill).toContain("retaining a duplicate missing-guidelines or missing-policy checklist item")
   expect(skill).toContain("map the original obligation to the source record, the concrete rule")
   expect(skill).toContain("process, approval, and historical rules require their own corresponding execution evidence")
   expect(skill).toContain("a record references a required dependency")

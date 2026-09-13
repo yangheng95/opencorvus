@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.45")
+    expect(loaded.manifest.version).toBe("2026.09.13.46")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -241,6 +241,15 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "current operational record stating concrete rules for the requested action is a guideline source regardless of title",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "as coverage labels, not separate source facts",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "never close them while retaining a duplicate residual category blocker",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "blocks the synonymous abstract category is such a proven misclassification",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "do not search for a Skill whose exact name is already visible",
