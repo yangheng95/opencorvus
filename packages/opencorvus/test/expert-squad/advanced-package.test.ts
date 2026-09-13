@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.29")
+    expect(loaded.manifest.version).toBe("2026.09.13.31")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -199,6 +199,9 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "The source-planned workflow's declared `base/implementation-plan` is its only planning Artifact",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "Do not search, read, or select that plan in the Orchestrator",
     )
     expect(loaded.selectorInstructions).toContain("Select `source-planned-execution-verification`")
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
@@ -269,7 +272,10 @@ describe("built-in interface review workflow authority", () => {
       "Never ask a worker to repeat a successful irreversible create",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Load that exact Skill directly only when its contract is needed",
+      "Before the first worker dispatch, do not search for, load, or inspect that Skill merely to confirm its name",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "when conflicting evidence leaves one material coordination or acceptance question",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain("copy them verbatim into the Tester brief")
     expect(loaded.promptProfile.agents.orchestrator).toContain("causal Tool Message and Part identities")
