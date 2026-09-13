@@ -22,8 +22,16 @@ python3 automationbench_tool.py base64 "text that an endpoint explicitly require
 
 Use the original business request and fetched business records to decide what work is needed. Replace URL path placeholders with the exact record identifiers; query parameters belong in `--params` and request fields in `--body`. The client passes their JSON strings to the official tools. Inspect returned values and typed errors before deciding the next action.
 
+Before the first mutation, write a compact working checklist from the original request with three columns: authoritative source, destination or action, and exact values that must survive the transfer (including every URL, identifier, date, audience, exclusion, and precedence rule). Use this checklist to close discovery and to verify the final state. Do not replace an exact source value with a paraphrase or an invented value.
+
+Start endpoint discovery with one focused search query that names the required services and actions together. Search again only for a capability that the first result omitted and the request or a fetched record actually requires. Do not probe alternative products, knowledge bases, or record systems merely because they might contain similar information. A typed unavailable response closes only the route, resource, or capability whose absence it explicitly proves. Close an entire service only when the response explicitly establishes service-wide unavailability.
+
+Each shell invocation creates a model round trip. Once endpoint contracts are known, put independent read-only client commands in one `bash` call, separated by newlines, so their complete outputs return together. Keep dependent calls sequential when a later URL or parameter needs an earlier result. Perform the smallest mutation set after the authoritative records are complete, then read only the exact changed record or collection needed to confirm the outcome. Never repeat broad endpoint discovery during final verification.
+
+For independent verification, derive expectations from the original request and the same authoritative records, then compare those exact fields with the final destination. Verify the changed record and any material preservation constraint. Do not rediscover the whole API catalog, inspect unrelated services, or replay the mutation.
+
 A successful response records an operation's result. Some simulated read endpoints expose seeded/query projections that do not reflect every recorded action. Keep the exact action receipt and any conflicting readback visible; neither the Skill nor a report declares the business goal satisfied. Resolve correctness from the actual request, relevant source records, supported API semantics, and the available observations. An unknown outcome is not permission to repeat an irreversible action.
 
-This Skill specifies the environment and tool transport. It does not prescribe a business search checklist, a planning graph, report artifacts, or a success verdict. Independent verification remains the selected Squad's responsibility.
+This Skill specifies the environment, tool transport, and efficient evidence loop. It does not prescribe case-specific answers, a planning graph, report artifacts, or a success verdict. Independent verification remains the selected Squad's responsibility.
 
 The client intentionally exposes no world dump, assertions, expected answer, or scoring endpoint. Do not inspect its config or implementation as a substitute for using the official tools.

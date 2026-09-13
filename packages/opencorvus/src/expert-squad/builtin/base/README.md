@@ -16,7 +16,7 @@ The original user outcome and current authoritative data define success. A plan,
 
 The selected graph remains binding and each node has one Task lineage. Repairs continue the same capable worker; verification is renewed after any change to the checked surface. The Orchestrator owns Task completion from actual result evidence and an independent verdict. Neither workflow creates Goal, RequirementSet, ContractGraph, Delivery Slice, or workflow progress state.
 
-Developer and Tester return concise visible participant results backed by Host Tool and execution facts. They publish `base/development-report` or `base/test-report` only when the user requested a durable report, the Task produced a reusable Artifact deliverable, or a completely read Artifact is a semantic source for the next participant. Ordinary repository and external-state work does not manufacture and rediscover generic reports. The research workflow still produces its plan and research report because those are its cross-worker semantic inputs.
+Developer and Tester return concise visible participant results backed by Host Tool and execution facts. They publish `base/development-report` or `base/test-report` only when the original user explicitly requested a durable report or Task Artifact, or the selected workflow node explicitly declares that exact Artifact type as a downstream semantic input. External business records, repository changes, Tool receipts, checks, and coordination summaries remain visible facts rather than generic reports. The research workflow still produces its plan and research report because those are its declared cross-worker semantic inputs.
 
 ## Artifact protocol
 

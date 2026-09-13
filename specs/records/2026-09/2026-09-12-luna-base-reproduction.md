@@ -167,3 +167,31 @@
 ### 纠偏配置实跑
 
 后续唯一活跃Base来源为 `/var/lib/opencorvus-benchmark/reproduction-20260912-outcome-first/base`，运行时commit3f9cb474、Base/SquadSDK2026.09.12.2；首5例batch6f1e14ec已启动。旧e03f首5例官方复算5/5有效、strict1/5，两例partial0；成本基线48次发布选择、540次Provider和737次Tool，原始及归档证据完整保留。具体修改、独立审查和未完成验收见[纠偏记录](2026-09-12-outcome-first-runtime-correction.md)。现阶段仍暂停第6例及以后，不把源码测试等同效率或质量目标通过。
+
+## 867e42ed 单例效率闸门与根因修复
+
+### Recall
+
+- 用户要求先解决全部问题，明确“先把冗余调用至少减半”，并要求从 OpenCorvus 底层理念纠偏；当前 Goal 固定以旧 Base 平均 105.23 次模型调用/例为基线，单例/小批平均必须不高于 52.615，且不得靠超时截断、删除 Tester、降低模型或评分、Host 路由 gate 达成。
+- 当前可发表源码候选为已推送提交 `867e42ed3a14`。隔离安装、Provider 凭据与 `models.json` 成对投影、实际 `openai/gpt-5.6-luna` 请求、SDK 构建、29 项聚焦测试和零模型 checker 均已通过。第一次批运行因新实验根目录权限为 0755 触发 shell isolation 拒绝，5 个失败均保留为基础设施证据；根目录修正为 0700 后重新运行。
+- 修正权限后的 case 1 `marketing.linkedin_company_update` 自然终止并通过完整运行审计与官方评分复算：strict=0、partial=0.8、889775ms、91 次模型调用、45 次官方 API 操作，全部 Tool 请求成功。它只因人为关闭后续批准入而不是 5 槽完整批次，未进入正式 leaderboard；原始 sealed candidate 保留不改写。
+- 与旧同例相比，partial 同为 0.8，模型调用从 87 增至 91，耗时从 708542ms 增至 889775ms。角色调用为 Developer 30、Tester 27、Orchestrator 16、Mission 16、memory 2；当前改动没有达到效率闸门，100 例扩跑继续停止。
+- 实际 API 序列显示 Developer 和 Tester分别执行 24/21 次操作。主要冗余是对 Slack、Drive、Notion、Airtable、Salesforce、Confluence 等未由任务或返回数据指向的替代来源逐个猜测，以及把可独立的只读发现拆成逐条 shell→模型往返。并非网络失败：45 个 Tool 操作全部成功；并非锁、队列或恢复失败：Task/Mission/Session occurrence、终态静止、lineage、restricted shell、Skill adherence 与 scorer replay 全通过。
+- 质量失败同样来自取证闭环：最终 LinkedIn 文本遗漏权威源中的 `webinar-register` 注册链接，Tester重复目录发现却没有逐字段比较源记录与已写记录。模型自述只作线索，官方断言和世界状态是结论。
+- Orchestrator dispatch 明确额外要求“durable evidence”，Developer/Tester随后各发布普通执行报告。现有提示虽称普通工作无需报告，但“Task produced a reusable Artifact deliverable”仍把外部业务记录错误纳入，且调度短 brief 没有明确禁止把协调报告增添为交付物。
+- 已读当前 Base Developer、Tester、Orchestrator、selector、method Skill、AutomationBench Skill、项目 seed 与 client；全仓搜索确认 Base 报告条件只在这组提示和 README 定义，workflow 拓扑仍由两节点 `execution-verification` 统一实现。当前独立 agent 反馈：无；实现和首轮真实验收后按仓库规则委托只读审查。
+
+### 问题深度与修改方案
+
+1. 直接触发点是环境 Skill 只解释命令语法和单次搜索语义，没有规定最小闭环；通用 Base 提示中的“combine/stop”无法让 Luna 判断何时停止猜测来源，也没有要求把源记录的每个精确 URL/标识映射进 mutation。
+2. 数据与控制流根因是每次项目 shell 调用都会结束当前模型步；把相互独立的 endpoint discovery 和只读 GET 拆开，会同时增加 shell 与 Provider 往返。外部业务记录不是 OpenCorvus Task Artifact，普通执行也不需要中间报告；宽泛发布条件又让两个 worker、Orchestrator和Mission多出 catalog/发布/消费轮次。
+3. 在唯一 AutomationBench Skill 中加入通用而非 case 关键字驱动的执行协议：先从原始请求列出权威源、目标和必保留字段；一次覆盖所需服务/动作的集中 endpoint 搜索；已知 endpoint 后在一个 bash Tool 调用中批量执行相互独立的只读 client 命令；只追踪任务或返回数据明确指向的来源；对不可用服务以 typed error 闭合；mutation 前逐字段保留 URL/ID/排除条件，mutation 后只读精确目标。
+4. Tester 使用同一权威源→目标字段矩阵，只读取决定成败的源和最终记录，不重新探索产品目录或替代知识库；仍保留独立观察和独立 verdict。Developer 仍负责真实执行与 self-check，组织拓扑不变。
+5. 收紧 Base Artifact 发布语义：只有原始用户明确要求持久化报告/Task Artifact，或已选 workflow 节点明确声明下游需要该 Artifact 类型时才发布。普通外部记录、代码改动、Tool receipt 和验证结论均通过真实状态与可见 participant result 交接。Orchestrator brief 不得增加“durable evidence/report”作为原请求以外的交付物。
+6. 影响面包含 Base 包提示、README、版本与生成 payload/相应正向契约测试，以及 benchmark Skill 内容哈希；不改 Tool schema、官方 bridge、评分器、锁/队列/恢复、Mission终态、原生 Luna 条件或 100 例清单。用提示、上下文和真实数据流纠正，不增加 Host gate、case 关键字、隐藏消息或 fallback。
+7. 验收先运行聚焦 package/benchmark 正向检查和构建，再用新隔离 commit 只执行 case 1 诊断闸门。要求自然完成、官方 partial 不低于当前 0.8且精确链接断言通过、基础设施审计全绿、总模型调用不高于52；否则继续读取 transcript 修复，不启动后四例。通过后才运行同一固定首5例配对批，平均不高于52.615后扩到100例。
+
+### 首轮独立审查与静态验证
+
+- 8 项 benchmark Skill/adherence 测试、Base 包精确加载、catalog 版本/详情、内置拓扑、docs:check 与全仓 typecheck 通过。首次从仓库根同时传多个 test 文件时，Bun 还匹配了 ignored `tmp/gallery-project` 副本并触发其缺依赖/Windows supervisor 清理错误；改从 `packages/opencorvus` 使用 package 内精确路径后目标测试通过。该工具调用问题未作为产品失败，也未删除未知临时目录。
+- 独立只读审查确认 Base 仍保留 Tester、报告契约同步、版本与生成 revision 一致、无 Host gate 或 case 关键字；指出一次 route/resource 404 不应关闭整个 service。已将闭合范围修正为错误明确证明的 route、resource 或 capability，仅有 service-wide 证据时才关闭整个服务，并加入正向 Skill 契约断言。真实效率仍必须由下一次模型单例证明。

@@ -196,12 +196,21 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.3")
+    expect(loaded.manifest.version).toBe("2026.09.13.4")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "must not add a durable report, evidence package, or coordination Artifact",
+    )
     expect(loaded.promptProfile.agents["base-developer"]).toContain("provides a Skill bound to a client")
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "selected workflow node explicitly declares that exact Artifact type",
+    )
     expect(loaded.promptProfile.agents["base-tester"]).toContain("provides a Skill bound to a client")
     expect(loaded.promptProfile.agents["base-tester"]).toContain("Return one concise visible final message")
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "selected workflow node explicitly declares that exact Artifact type",
+    )
     expect(workflowNodes(loaded, "execution-verification")).toEqual({
       "base-developer": [],
       "base-tester": ["base-developer"],
