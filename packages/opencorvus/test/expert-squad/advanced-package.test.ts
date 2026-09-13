@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.13")
+    expect(loaded.manifest.version).toBe("2026.09.13.15")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -204,7 +204,7 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "selected workflow node explicitly declares that exact Artifact type",
     )
-    expect(loaded.promptProfile.agents["base-developer"]).toContain("compact reusable verification coordinates")
+    expect(loaded.promptProfile.agents["base-developer"]).toContain("`Verification coordinates:` line")
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "do not search for a Skill whose exact name is already visible",
     )
@@ -215,6 +215,9 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "does not require a second product projection for every satisfied fact",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "the loaded client contract supports structured batching",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "do not invent a structured targeting control for an organic content action",
@@ -228,6 +231,7 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "Load that exact Skill directly only when its contract is needed",
     )
+    expect(loaded.promptProfile.agents.orchestrator).toContain("copy them verbatim into the Tester brief")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "do not search the Artifact catalog for a report that the workflow did not create",
     )

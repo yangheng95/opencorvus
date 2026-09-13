@@ -33,6 +33,9 @@ test("AutomationBench Skill defines a bounded source-to-destination evidence loo
   expect(skill).toContain("marks the current operation `transport_outcome_unknown`")
   expect(skill).toContain("Never batch POST, PATCH, PUT, DELETE")
   expect(skill).toContain("do not concatenate multiple client commands with shell newlines")
+  expect(skill).toContain("Discover the mutation contract and its final readback contract together")
+  expect(skill).toContain("After a mutation, prefer the pre-discovered contract and never repeat broad discovery")
+  expect(skill).toContain("the exact required read contract was genuinely absent")
   expect(skill).toContain("Destination identity and final state start with the destination service")
 })
 
