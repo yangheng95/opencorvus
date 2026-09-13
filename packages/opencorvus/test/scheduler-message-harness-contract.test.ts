@@ -45,6 +45,7 @@ describe("scheduler message model harness", () => {
       "End the response only after that exact causal closure reaches its next durable stop",
       "Do not turn a product field, proof channel, report, or verification surface",
       "repeating an already exhausted read surface is not a repair action",
+      "A current authoritative source rule plus a conforming observed final state can prove a final-state obligation",
     ]
 
     expect(requiredMissionGuidance.map((clause) => MISSION_CORE.includes(clause))).toEqual(
