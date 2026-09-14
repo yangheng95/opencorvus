@@ -43,3 +43,10 @@ the private `auth.json` plus `models.json` files at the paths declared by the Ag
 The job must use `opencorvus_agent:OpenCorvusAgent`; no Harbor source patch is required.
 `harbor run -c job-base-case2.yaml --print-config` validates the declarative job before
 Docker startup. `harbor view <jobs-dir>` serves Harbor's own local result viewer.
+
+The generated main image contains a committed Git workspace because Task creation requires
+a real Git project. The system safe-directory entry keeps root Server Git operations valid
+after the workspace is transferred to UID 60001. The verifier always seals the official
+world and score, but emits Harbor `reward.json` only when the Agent's durable disposition is
+`agent_settled`; an adapter timeout therefore remains an exception rather than a displayed
+business zero.

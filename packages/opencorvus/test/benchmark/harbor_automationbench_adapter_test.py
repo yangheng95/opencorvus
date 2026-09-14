@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import importlib.util
 import http.server
 import json
@@ -51,6 +52,14 @@ def load_agent():
     return module
 
 
+def load_scorer():
+    spec = importlib.util.spec_from_file_location("harbor_ab_scorer", ADAPTER / "score_harbor.py")
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 class HarborAutomationBenchAdapterTest(unittest.TestCase):
     def test_instruction_preserves_real_roles_and_one_authority_block(self) -> None:
         generator = load_generator()
@@ -88,17 +97,79 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
             self.assertIn(generator.UPSTREAM_COMMIT, bridge_dockerfile)
             self.assertIn("util-linux", dockerfile)
             self.assertIn("iptables", dockerfile)
+            self.assertIn('git -C /workspace commit -qm "Initialize Harbor task workspace"', dockerfile)
+            self.assertIn("git config --system --add safe.directory /workspace", dockerfile)
             self.assertIn('cap_add: ["SYS_ADMIN", "NET_ADMIN"]', (task / "environment" / "docker-compose.yaml").read_text(encoding="utf-8"))
             self.assertIn('upstream_example_id = "4014"', config)
             self.assertIn('"task_completed_correctly"', scorer)
             self.assertIn('"partial_credit"', scorer)
             self.assertTrue((task / "environment" / "runtime" / "automationbench_bridge.py").is_file())
 
+    def test_verifier_requires_agent_settlement_before_reward_projection(self) -> None:
+        scorer = load_scorer()
+        with tempfile.TemporaryDirectory(prefix="harbor-score-eligibility-") as directory:
+            path = Path(directory) / "attempt-disposition.json"
+            marker = Path(directory) / "agent-settlement.json"
+            revoked = Path(directory) / "agent-settlement-revoked.json"
+            path.write_text('{"status":"runtime_settled","score_eligible":false}\n', encoding="utf-8")
+            marker.write_text(
+                json.dumps(
+                    {
+                        "status": "agent_settled",
+                        "runtime_disposition_sha256": __import__("hashlib").sha256(path.read_bytes()).hexdigest(),
+                    }
+                ),
+                encoding="utf-8",
+            )
+            self.assertEqual(scorer.require_agent_settlement(path, marker, revoked)["status"], "agent_settled")
+            path.write_text('{"status":"invalid_bug","score_eligible":false}\n', encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "not score eligible: invalid_bug"):
+                scorer.require_agent_settlement(path, marker, revoked)
+            revoked.write_text(
+                '{"status":"revoked","reason":"late_publication"}\n', encoding="utf-8"
+            )
+            path.write_text('{"status":"runtime_settled","score_eligible":false}\n', encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "settlement was revoked: late_publication"):
+                scorer.require_agent_settlement(path, marker, revoked)
+
     def test_agent_installs_uid_scoped_egress_policy(self) -> None:
         source = (ADAPTER / "opencorvus_agent.py").read_text(encoding="utf-8")
         self.assertIn("iptables -C OUTPUT -m owner --uid-owner 60001 -j REJECT", source)
         self.assertIn("ip6tables -C OUTPUT -m owner --uid-owner 60001 -j REJECT", source)
         self.assertIn('"provider_uid\\\":0', source)
+        self.assertIn("setpriv --reuid=60001 --regid=60001 --clear-groups git -C /workspace", source)
+        self.assertIn("workspace-contract.json", source)
+
+    def test_agent_runtime_config_projects_mission_orchestration_only(self) -> None:
+        module = load_agent()
+        agent = object.__new__(module.OpenCorvusAgent)
+        agent._mount_path = "/opt/opencorvus"
+        config = agent._runtime_config()
+        self.assertEqual(config["skills"], {"paths": ["/opt/opencorvus/share"]})
+        self.assertEqual(
+            config["agent"]["mission"]["permission"],
+            {
+                "bash": "deny",
+                "publish_interactive_artifact": "deny",
+                "read": "deny",
+                "glob": "deny",
+                "search_code": "deny",
+                "list": "deny",
+                "edit": "deny",
+                "write": "deny",
+                "apply_patch": "deny",
+                "webfetch": "deny",
+                "websearch": "deny",
+                "external_code_search": "deny",
+                "question": "deny",
+                "todowrite": "deny",
+                "todoread": "deny",
+                "memory": "deny",
+                "schedule": "deny",
+                "planner": "deny",
+                "skill_market": "deny",
+            },
+        )
 
     def test_job_selects_public_custom_agent_and_one_case(self) -> None:
         import yaml
@@ -285,6 +356,67 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
         }
         self.assertTrue(helper.natural_terminal(observation))
 
+    def test_mission_capability_audit_accepts_complete_benchmark_boundary(self) -> None:
+        helper = load_runtime_helper()
+        rules = [
+            {"permission": capability, "pattern": "*", "action": "deny"}
+            for capability in helper.MISSION_DENIED_CAPABILITIES
+        ]
+        audit = helper.audit_mission_capability_boundary(
+            [{"name": "coding", "permission": []}, {"name": "mission", "permission": rules}]
+        )
+        self.assertTrue(audit["passed"])
+        self.assertEqual(audit["denied_capabilities"], list(helper.MISSION_DENIED_CAPABILITIES))
+        self.assertEqual(audit["missing_denials"], [])
+
+    def test_agent_settlement_is_published_after_runtime_audits(self) -> None:
+        helper = load_runtime_helper()
+        with tempfile.TemporaryDirectory(prefix="harbor-agent-settlement-") as directory:
+            old_logs = helper.LOGS
+            old_settlement = helper.AGENT_SETTLEMENT
+            old_revoked = helper.AGENT_SETTLEMENT_REVOKED
+            helper.LOGS = Path(directory)
+            helper.AGENT_SETTLEMENT = Path(directory) / "agent-settlement.json"
+            helper.AGENT_SETTLEMENT_REVOKED = Path(directory) / "agent-settlement-revoked.json"
+            try:
+                (helper.LOGS / "attempt-disposition.json").write_text(
+                    '{"status":"runtime_settled","score_eligible":false}\n', encoding="utf-8"
+                )
+                (helper.LOGS / "process-cleanup-audit.json").write_text(
+                    '{"survivors":[]}\n', encoding="utf-8"
+                )
+                (helper.LOGS / "credential-leak-audit.json").write_text(
+                    '{"passed":true}\n', encoding="utf-8"
+                )
+                self.assertEqual(helper.finalize_agent_settled(), 0)
+                settlement = json.loads(helper.AGENT_SETTLEMENT.read_text(encoding="utf-8"))
+                self.assertEqual(settlement["status"], "agent_settled")
+                self.assertEqual(len(settlement["runtime_disposition_sha256"]), 64)
+            finally:
+                helper.LOGS = old_logs
+                helper.AGENT_SETTLEMENT = old_settlement
+                helper.AGENT_SETTLEMENT_REVOKED = old_revoked
+
+    def test_agent_settlement_maps_incomplete_runtime_to_error(self) -> None:
+        helper = load_runtime_helper()
+        with tempfile.TemporaryDirectory(prefix="harbor-agent-incomplete-") as directory:
+            old_logs = helper.LOGS
+            old_settlement = helper.AGENT_SETTLEMENT
+            old_revoked = helper.AGENT_SETTLEMENT_REVOKED
+            helper.LOGS = Path(directory)
+            helper.AGENT_SETTLEMENT = Path(directory) / "agent-settlement.json"
+            helper.AGENT_SETTLEMENT_REVOKED = Path(directory) / "agent-settlement-revoked.json"
+            try:
+                (helper.LOGS / "attempt-disposition.json").write_text(
+                    '{"status":"invalid_bug","score_eligible":false}\n', encoding="utf-8"
+                )
+                with self.assertRaisesRegex(RuntimeError, "requires runtime_settled"):
+                    helper.finalize_agent_settled()
+            finally:
+                helper.LOGS = old_logs
+                helper.AGENT_SETTLEMENT = old_settlement
+                helper.AGENT_SETTLEMENT_REVOKED = old_revoked
+
     def test_helper_authenticates_every_server_request(self) -> None:
         helper = load_runtime_helper()
 
@@ -322,6 +454,83 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
             server.shutdown()
             server.server_close()
             thread.join(timeout=2)
+
+
+class HarborAgentSettlementOrderTest(unittest.IsolatedAsyncioTestCase):
+    class Environment:
+        async def upload_file(self, *_args, **_kwargs):
+            return None
+
+    def make_agent(self):
+        module = load_agent()
+        agent = object.__new__(module.OpenCorvusAgent)
+        agent._mount_path = "/opt/opencorvus"
+        agent._model = "openai/gpt-5.6-luna"
+        agent._profile = "base"
+        agent._workflow = "source-planned-execution-verification"
+        agent._inactivity_seconds = 600
+        agent.render_instruction = lambda instruction: instruction
+        return agent
+
+    async def test_primary_error_cleans_up_without_publishing_settlement(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="harbor-agent-run-error-") as directory:
+            agent = self.make_agent()
+            agent.logs_dir = Path(directory)
+            events: list[str] = []
+
+            async def execute(*_args, **_kwargs):
+                events.append("execute_error")
+                raise RuntimeError("agent execution failed")
+
+            async def cleanup(*_args, **_kwargs):
+                events.append("cleanup_capture")
+
+            async def finalize(*_args, **_kwargs):
+                events.append("finalize")
+
+            agent.exec_as_agent = execute
+            agent._cleanup_and_capture_runtime = cleanup
+            agent._finalize_agent_settlement = finalize
+            with self.assertRaisesRegex(RuntimeError, "agent execution failed"):
+                await agent.run("instruction", self.Environment(), object())
+            self.assertEqual(events, ["execute_error", "cleanup_capture"])
+
+    async def test_success_publishes_settlement_after_cleanup_and_capture(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="harbor-agent-run-success-") as directory:
+            agent = self.make_agent()
+            agent.logs_dir = Path(directory)
+            events: list[str] = []
+
+            async def execute(*_args, **_kwargs):
+                events.append("execute")
+
+            async def cleanup(*_args, **_kwargs):
+                events.append("cleanup_capture")
+
+            async def finalize(*_args, **_kwargs):
+                events.append("finalize")
+
+            agent.exec_as_agent = execute
+            agent._cleanup_and_capture_runtime = cleanup
+            agent._finalize_agent_settlement = finalize
+            await agent.run("instruction", self.Environment(), object())
+            self.assertEqual(events, ["execute", "cleanup_capture", "finalize"])
+
+    async def test_cancelled_settlement_publication_revokes_marker(self) -> None:
+        agent = self.make_agent()
+        calls: list[str] = []
+
+        async def exec_as_root(_environment, command, **_kwargs):
+            if "--revoke-agent-settlement" in command:
+                calls.append("revoke")
+                return None
+            calls.append("publish")
+            raise asyncio.CancelledError()
+
+        agent.exec_as_root = exec_as_root
+        with self.assertRaises(asyncio.CancelledError):
+            await agent._finalize_agent_settlement(self.Environment())
+        self.assertEqual(calls, ["publish", "revoke"])
 
 
 if __name__ == "__main__":

@@ -32,6 +32,29 @@ PROFILE = os.environ.get("OPENCORVUS_PROFILE", "base")
 MODEL = os.environ.get("OPENCORVUS_MODEL", "openai/gpt-5.6-luna")
 WORKFLOW = os.environ.get("OPENCORVUS_WORKFLOW", "source-planned-execution-verification")
 OWNERS = ("orchestrator", "base-planner", "base-developer", "base-tester")
+AGENT_SETTLEMENT = Path("/run/opencorvus-host/agent-settlement.json")
+AGENT_SETTLEMENT_REVOKED = Path("/run/opencorvus-host/agent-settlement-revoked.json")
+MISSION_DENIED_CAPABILITIES = (
+    "bash",
+    "publish_interactive_artifact",
+    "read",
+    "glob",
+    "search_code",
+    "list",
+    "edit",
+    "write",
+    "apply_patch",
+    "webfetch",
+    "websearch",
+    "external_code_search",
+    "question",
+    "todowrite",
+    "todoread",
+    "memory",
+    "schedule",
+    "planner",
+    "skill_market",
+)
 STOCK_BUDGET = "You have a budget of ~50 tool-using turns — favor parallel tool calls and avoid duplicate searches."
 
 
@@ -269,6 +292,27 @@ def audit_projection(matrix: dict[str, Any]) -> dict[str, Any]:
         "required_agents": list(OWNERS),
         "projection_hash": matrix.get("projection_hash"),
         "violations": violations,
+    }
+
+
+def audit_mission_capability_boundary(agents: list[dict[str, Any]]) -> dict[str, Any]:
+    mission = next((agent for agent in agents if agent.get("name") == "mission"), None)
+    rules = mission.get("permission") if isinstance(mission, dict) else None
+    denied: list[str] = []
+    for capability in MISSION_DENIED_CAPABILITIES:
+        action = "allow"
+        for rule in rules if isinstance(rules, list) else []:
+            if rule.get("permission") in {"*", capability} and rule.get("pattern") == "*":
+                action = str(rule.get("action") or "allow")
+        if action == "deny":
+            denied.append(capability)
+    missing = [capability for capability in MISSION_DENIED_CAPABILITIES if capability not in denied]
+    return {
+        "schema_version": 1,
+        "passed": not missing,
+        "mission_agent_present": mission is not None,
+        "denied_capabilities": denied,
+        "missing_denials": missing,
     }
 
 
@@ -831,7 +875,11 @@ def finalize_host_cancelled() -> int:
     write_json(LOGS / "provider-usage-audit.json", provider_usage_audit(rows))
     disposition_path = LOGS / "attempt-disposition.json"
     disposition = read_json_file(disposition_path) if disposition_path.is_file() else {}
-    if disposition.get("status") != "agent_settled":
+    if disposition.get("status") not in {"runtime_settled", "agent_settled"}:
+        write_json(
+            AGENT_SETTLEMENT_REVOKED,
+            {"schema_version": 1, "status": "revoked", "reason": "host_cancelled_before_agent_settlement"},
+        )
         write_json(
             disposition_path,
             {
@@ -847,16 +895,53 @@ def finalize_host_cancelled() -> int:
     return 0 if credential_audit["passed"] else 2
 
 
+def finalize_agent_settled() -> int:
+    disposition_path = LOGS / "attempt-disposition.json"
+    disposition = read_json_file(disposition_path) if disposition_path.is_file() else {}
+    if disposition.get("status") != "runtime_settled":
+        raise RuntimeError(
+            f"Agent settlement requires runtime_settled disposition, observed {disposition.get('status', 'missing')}"
+        )
+    cleanup = read_json_file(LOGS / "process-cleanup-audit.json")
+    credential = read_json_file(LOGS / "credential-leak-audit.json")
+    if cleanup.get("survivors") or credential.get("passed") is not True:
+        raise RuntimeError("Agent settlement audits are incomplete")
+    disposition_bytes = disposition_path.read_bytes()
+    write_json(
+        AGENT_SETTLEMENT,
+        {
+            "schema_version": 1,
+            "status": "agent_settled",
+            "runtime_disposition_sha256": hashlib.sha256(disposition_bytes).hexdigest(),
+        },
+    )
+    return 0
+
+
+def revoke_agent_settlement() -> int:
+    write_json(
+        AGENT_SETTLEMENT_REVOKED,
+        {"schema_version": 1, "status": "revoked", "reason": "agent_settlement_publication_uncertain"},
+    )
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--instruction-file")
     parser.add_argument("--cleanup-owned-processes", action="store_true")
     parser.add_argument("--finalize-host-cancelled", action="store_true")
+    parser.add_argument("--finalize-agent-settled", action="store_true")
+    parser.add_argument("--revoke-agent-settlement", action="store_true")
     args = parser.parse_args()
     if args.cleanup_owned_processes:
         return cleanup_owned_processes()
     if args.finalize_host_cancelled:
         return finalize_host_cancelled()
+    if args.finalize_agent_settled:
+        return finalize_agent_settled()
+    if args.revoke_agent_settlement:
+        return revoke_agent_settlement()
     if not args.instruction_file:
         parser.error("--instruction-file is required for a trial run")
     instruction = Path(args.instruction_file).read_text(encoding="utf-8")
@@ -909,6 +994,12 @@ def main() -> int:
         matrix, projection = mount_skill()
         write_json(LOGS / "skill-mount-matrix.json", matrix)
         write_json(LOGS / "skill-projection-audit.json", projection)
+        mission_boundary = audit_mission_capability_boundary(request_json("/agent"))
+        write_json(LOGS / "mission-capability-boundary.json", mission_boundary)
+        if not mission_boundary["passed"]:
+            raise RuntimeError(
+                f"Mission capability boundary failed: {mission_boundary['missing_denials']}"
+            )
         notice = (
             "\n\n[OpenCorvus harness notice]\n"
             "This is an official AutomationBench API-mode task. The project-local client is the "
@@ -998,9 +1089,9 @@ def main() -> int:
         LOGS / "attempt-disposition.json",
         {
             "schema_version": 1,
-            "status": "agent_settled",
+            "status": "runtime_settled",
             "score_eligible": False,
-            "official_verifier": "pending",
+            "agent_cleanup": "pending",
         },
     )
     seal_manifest(LOGS)

@@ -53,7 +53,14 @@ def _dockerfile(domain: str, task_name: str) -> str:
     return '''FROM python:3.13-slim
 RUN apt-get update && apt-get install -y --no-install-recommends git procps curl ca-certificates util-linux iptables && rm -rf /var/lib/apt/lists/*
 COPY runtime/automationbench_tool.py /opt/automationbench-harbor/automationbench_tool.py
-RUN chmod 755 /opt/automationbench-harbor/automationbench_tool.py && install -d -m 0755 /workspace /run/automationbench
+RUN chmod 755 /opt/automationbench-harbor/automationbench_tool.py && install -d -m 0755 /workspace /run/automationbench \
+    && git init -q /workspace \
+    && git -C /workspace config user.name "AutomationBench" \
+    && git -C /workspace config user.email "automationbench@example.invalid" \
+    && touch /workspace/.gitkeep \
+    && git -C /workspace add .gitkeep \
+    && git -C /workspace commit -qm "Initialize Harbor task workspace" \
+    && git config --system --add safe.directory /workspace
 USER root
 '''
 

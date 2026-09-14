@@ -56,6 +56,36 @@ class OpenCorvusAgent(BaseInstalledAgent):
     def get_version_command(self) -> str | None:
         return f"{shlex.quote(self._mount_path)}/opencorvus --version"
 
+    def _runtime_config(self) -> dict[str, object]:
+        return {
+            "skills": {"paths": [f"{self._mount_path}/share"]},
+            "agent": {
+                "mission": {
+                    "permission": {
+                        "bash": "deny",
+                        "publish_interactive_artifact": "deny",
+                        "read": "deny",
+                        "glob": "deny",
+                        "search_code": "deny",
+                        "list": "deny",
+                        "edit": "deny",
+                        "write": "deny",
+                        "apply_patch": "deny",
+                        "webfetch": "deny",
+                        "websearch": "deny",
+                        "external_code_search": "deny",
+                        "question": "deny",
+                        "todowrite": "deny",
+                        "todoread": "deny",
+                        "memory": "deny",
+                        "schedule": "deny",
+                        "planner": "deny",
+                        "skill_market": "deny",
+                    }
+                }
+            },
+        }
+
     def _verify_bundle(self) -> None:
         actual: set[str] = set()
         for directory, names, files in os.walk(self._bundle_path, followlinks=False):
@@ -154,6 +184,10 @@ class OpenCorvusAgent(BaseInstalledAgent):
                 "ip6tables -C OUTPUT -m owner --uid-owner 60001 -j REJECT; "
                 "printf '%s\n' '{\"schema_version\":1,\"agent_uid\":60001,\"ipv4\":\"owner_reject\",\"ipv6\":\"owner_reject\",\"provider_uid\":0}' "
                 "> /logs/agent/network-isolation.json; "
+                "test \"$(git -C /workspace rev-parse --is-inside-work-tree)\" = true; "
+                "test \"$(setpriv --reuid=60001 --regid=60001 --clear-groups git -C /workspace rev-parse --is-inside-work-tree)\" = true; "
+                "printf '%s\n' '{\"schema_version\":1,\"workspace\":\"/workspace\",\"git\":true,\"root_access\":true,\"agent_uid_access\":true}' "
+                "> /logs/agent/workspace-contract.json; "
                 "install -m 0600 /opt/opencorvus/bundle-manifest.json /logs/agent/source-receipt.json; "
                 f"{chown}"
                 f"{mount}/opencorvus --version"
@@ -172,19 +206,7 @@ class OpenCorvusAgent(BaseInstalledAgent):
         env = {
             "OPENCORVUS_HOME": "/tmp/opencorvus-automationbench-home",
             "OPENCORVUS_BIN": f"{self._mount_path}/opencorvus",
-            "OPENCORVUS_CONFIG_CONTENT": json.dumps(
-                {
-                    "skills": {"paths": [f"{self._mount_path}/share"]},
-                    "permission": {
-                        "external_directory": "deny",
-                        "webfetch": "deny",
-                        "websearch": "deny",
-                        "external_code_search": "deny",
-                        "question": "deny",
-                    },
-                },
-                separators=(",", ":"),
-            ),
+            "OPENCORVUS_CONFIG_CONTENT": json.dumps(self._runtime_config(), separators=(",", ":")),
             "OPENCORVUS_MODEL": self._model,
             "OPENCORVUS_PROFILE": self._profile,
             "OPENCORVUS_WORKFLOW": self._workflow,
@@ -224,6 +246,7 @@ class OpenCorvusAgent(BaseInstalledAgent):
             raise primary_error.with_traceback(primary_traceback)
         if resource_error is not None:
             raise resource_error
+        await self._finalize_agent_settlement(environment)
 
     async def _cleanup_and_capture_runtime(self, environment: BaseEnvironment) -> None:
         cleanup_error: BaseException | None = None
@@ -252,6 +275,31 @@ class OpenCorvusAgent(BaseInstalledAgent):
             raise cleanup_error
         if capture_error is not None:
             raise capture_error
+
+    async def _finalize_agent_settlement(self, environment: BaseEnvironment) -> None:
+        helper = f"{shlex.quote(self._mount_path)}/bin/run-opencorvus-automationbench.py"
+        try:
+            await self.exec_as_root(
+                environment,
+                command=(
+                    "set -eu; "
+                    f"OPENCORVUS_HOME=/tmp/opencorvus-automationbench-home {helper} --finalize-agent-settled"
+                ),
+                timeout_sec=60,
+            )
+        except BaseException:
+            revoke = asyncio.create_task(
+                self.exec_as_root(
+                    environment,
+                    command=(
+                        "set -eu; "
+                        f"OPENCORVUS_HOME=/tmp/opencorvus-automationbench-home {helper} --revoke-agent-settlement"
+                    ),
+                    timeout_sec=60,
+                )
+            )
+            await asyncio.shield(revoke)
+            raise
 
     async def _capture_runtime_evidence(self, environment: BaseEnvironment) -> None:
         self.logs_dir.mkdir(parents=True, exist_ok=True)
