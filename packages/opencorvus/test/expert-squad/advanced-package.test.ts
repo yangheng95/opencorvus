@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.14.5")
+    expect(loaded.manifest.version).toBe("2026.09.14.6")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -226,10 +226,13 @@ describe("built-in interface review workflow authority", () => {
       "`outcome_semantic`: the requested audience, content, status, destination identity, targeting, representation, mutation, or readback",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "Bind every current authoritative rule actually observed",
+      "a current observed rule that controls a concrete effect of the mutation",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "do not open a separate guideline-title search",
+      "only a lookup trigger: it is never a ledger fact, class, origin",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "Do not create a residual “broader,” “remaining,” or “complete” abstract-guidelines item",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "one focused query made from API-native service, record, list/search/get, and known identity-field nouns",
@@ -263,10 +266,10 @@ describe("built-in interface review workflow authority", () => {
       "never becomes a source obligation merely because a brief prefixes it with “source-side”",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "abstract category is not a second fact",
+      "An abstract user phrase such as current guidelines, policy, requirements, or instructions is only a lookup trigger",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "does not require proving that no other rule exists",
+      "Search beyond that record only when the original request names another exact source or document",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "A general instruction to make reasonable assumptions never waives an explicit approval",
@@ -294,7 +297,10 @@ describe("built-in interface review workflow authority", () => {
       "A typed-unavailable route remains closed unless new actionable evidence changes it",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "duplicates closed concrete coverage as an abstract blocker",
+      "remove the residual claim during reconciliation and dispatch the resolved operation to Developer",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "do not continue Planner for the same abstract scope",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "Name that endpoint, anchor, or classification in the continuation",
@@ -351,7 +357,7 @@ describe("built-in interface review workflow authority", () => {
       "put that literal value in the visible post, message, or content body",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "resolve every `execution_authority` condition the request or observed authority makes material and bind every observed `applicable_constraint`",
+      "`applicable_constraint` binds current observed rules to their exact controlled effects",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "the loaded client contract supports structured batching",
@@ -366,13 +372,16 @@ describe("built-in interface review workflow authority", () => {
       "return that exact source blocker without repeating the Planner's source discovery",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "do not mutate that dependent operation",
+      "report the exact inconsistency without mutating its dependent operation",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "continue every independent mutation whose real source prerequisites are resolved",
+      "Continue every independent mutation whose real source prerequisites are resolved",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "do not stop merely because the create interface has no separate targeting field",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "Ignore a source plan's ungrounded “broader” abstract residual",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "require every published description, request field, and response field about actor or owner to be mutually consistent",
@@ -420,7 +429,7 @@ describe("built-in interface review workflow authority", () => {
       "never waives an explicit approval, prohibition, eligibility, opt-out, retention",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "before dispatching the dependent operation",
+      "never waives an explicit approval, prohibition, eligibility, opt-out, retention, or other authority condition",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "Other independent mutations whose reconciled source obligations are resolved continue",
@@ -467,6 +476,9 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "absence of a separate targeting field is not a failure",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "An abstract guidelines/policy/requirements/instructions phrase is a lookup trigger",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "Account for every Host-recorded mutation receipt before judging the outcome",
