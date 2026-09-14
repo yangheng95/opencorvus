@@ -144,7 +144,7 @@ Record every stage in `frontier.md` with this shape:
    Depends on: <stage keys or none>
    Execution scope: <project, repository, directory, environment, or service boundary>
    Owned surfaces/resources: <files, interfaces, data, environments, or none>
-   Required inputs: <semantic Artifact roles or none>
+   Required inputs: <semantic inputs traceable to the original request, current authority, or a declared predecessor-output contract, including a future predecessor Artifact role; never a hypothesized taxonomy, destination field, proof channel, or representation>
    Deliverables: <final outputs>
    Acceptance: <observable positive evidence>
    Acceptance evidence: <pending or terminal result plus exact accepted ArtifactReadLocator values>
@@ -158,6 +158,7 @@ This stage graph is a planning ledger inside the existing Mission state, not a H
 Challenge the graph before dispatch:
 
 - Every requested scope partition and final acceptance claim is assigned to exactly one stage owner or preserved as an explicit unresolved authority boundary.
+- A requested audience, style, content, status, destination, or other outcome semantic remains an outcome for the Task to express through the actual interface. Mission does not turn it into a required source taxonomy, structured field, proof channel, or platform control unless the original request or observed authority names that dependency.
 - Every stage owner is one exact held Squad returned by bounded Mission search and, when needed, exact inspection.
 - No Task spans scope partitions positively owned by different held Squads; delivery-closure grouping was applied only after the complete scope ownership matrix was established.
 - Every dependency names a real consumed Artifact, decision, implementation, dataset, evidence set, or shared mutation.

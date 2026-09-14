@@ -18,6 +18,11 @@ test("projects scope-first Expert Squad Task partitioning", () => {
     "Use the Task title, selected Expert Squad, structured Artifact authorities, dependencies, and accepted Delivery Slice revisions",
     "the union of all Task assignments plus explicit unresolved boundaries must cover the complete request",
     "The original request may remain visible as authority context without making a child execute effects assigned to sibling Tasks",
+    "semantic inputs traceable to the original request, current authority, or a declared predecessor-output contract",
+    "including a future predecessor Artifact role",
+    "never a hypothesized taxonomy, destination field, proof channel, or representation",
+    "A requested audience, style, content, status, destination, or other outcome semantic remains an outcome for the Task to express through the actual interface",
+    "unless the original request or observed authority names that dependency",
   ]
 
   expect(requiredMissionClauses.map((clause) => MISSION_CORE.includes(clause))).toEqual(

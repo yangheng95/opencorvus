@@ -5,7 +5,7 @@
   "name": "Base",
   "label": "Base",
   "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
-  "version": "2026.09.13.50",
+  "version": "2026.09.14.2",
   "product_pillars": [
     "code",
     "work"
@@ -13,7 +13,7 @@
   "readme": "README.md",
   "selector": {
     "summary": "Use Base for one complete Task executed by one capable owner and independently verified against the actual outcome.",
-    "selection_guidance": "Choose execution-verification when delivery has no material dynamic business-source prerequisite before mutation, or when the operation is reversible and one execution owner can safely resolve ordinary current facts. Choose source-planned-execution-verification when an irreversible external mutation depends on a material current business record, rule, identifier, or exact value absent from the request. Choose the parallel research workflow only for a useful independent repository/web partition. Specialized or genuinely richer dependencies belong to their domain Squad or Advanced.",
+    "selection_guidance": "Choose execution-verification when delivery has no material dynamic business-source prerequisite before mutation, or when the operation is reversible and one execution owner can safely resolve ordinary current facts. Choose source-planned-execution-verification when an irreversible mutation depends on current source authority absent from the request; classify only traceable execution-authority conditions and applicable constraints, while destination outcome semantics remain with Developer. Choose the parallel research workflow only for a useful independent repository/web partition. Specialized or genuinely richer dependencies belong to their domain Squad or Advanced.",
     "instructions": "selector.md"
   },
   "capability_sets": {
@@ -82,7 +82,7 @@
           "capability:tool:platform:tool-registry:websearch"
         ],
         "label": "Base Planner",
-        "description": "Resolves only pre-mutation dynamic source prerequisites, excluding destination identity, capability, representation, and readback, or allocates a justified parallel research and implementation partition.",
+        "description": "Classifies and resolves only traceable pre-mutation execution authority and applicable source constraints, while leaving destination outcome semantics to Developer, or allocates a justified parallel research and implementation partition.",
         "base_role": "delegated-worker",
         "prompt": "agents/base-planner/system.md"
       },
@@ -128,23 +128,23 @@
       },
       "source-planned-execution-verification": {
         "label": "Source Planning, Execution, and Independent Verification",
-        "description": "Close material dynamic business-source prerequisites through a recall-first minimal-anchor worklist, execute each irreversible external mutation only when its own preconditions are closed, then independently verify the settled outcome.",
+        "description": "Classify traceable source authority and applicable constraints through a bounded minimal-anchor worklist, execute each irreversible mutation whose real prerequisites are resolved, then independently verify the classification and settled outcome.",
         "nodes": {
           "base-planner": {
             "agent_id": "base-planner",
-            "description": "Closes source-side rules and values through a minimal source-anchor worklist before mutation; compound empty reads and untried later authoritative anchors leave an endpoint incomplete, while destination identity, capability, representation, and readback remain Developer work.",
+            "description": "Separates execution-authority conditions, applicable constraints, and Developer-owned outcome semantics; resolves traceable source obligations through a bounded minimal-anchor worklist before mutation.",
             "depends_on": []
           },
           "base-developer": {
             "agent_id": "base-developer",
-            "description": "Reads per-operation source preconditions, owns destination discovery for closed operations, performs the authorized mutation, and hands off the complete Host-recorded receipt.",
+            "description": "Reconciles per-operation source classes with original authority, owns destination discovery for operations whose real prerequisites are resolved, performs the authorized mutation, and hands off the complete Host-recorded receipt.",
             "depends_on": [
               "base-planner"
             ]
           },
           "base-tester": {
             "agent_id": "base-tester",
-            "description": "Independently challenges source coordinates with minimal and later authoritative anchors on each candidate endpoint, then maps source rules to the raw mutation receipt and any correct same-record destination read.",
+            "description": "Independently checks source classifications and coordinates against original authority, then maps applicable rules and outcome semantics to the raw mutation receipt and any correct same-record destination read.",
             "depends_on": [
               "base-developer"
             ]

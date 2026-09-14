@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.13.50")
+    expect(loaded.manifest.version).toBe("2026.09.14.2")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -201,64 +201,75 @@ describe("built-in interface review workflow authority", () => {
       "The source-planned workflow's declared `base/implementation-plan` is its only planning Artifact",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Do not search, read, or select that plan in the Orchestrator",
+      "do not search, read, or select that plan in the Orchestrator",
     )
     expect(loaded.selectorInstructions).toContain("Select `source-planned-execution-verification`")
+    expect(loaded.readmeContent).toContain(
+      "after every `execution_authority` condition and every observed `applicable_constraint` material to that create are resolved",
+    )
     expect(loaded.selectorInstructions).toContain(
-      "when an irreversible external mutation depends on a material current business record",
+      "when an irreversible external mutation depends on current source authority absent from the original request",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "dispatch Planner to close only those read-only source prerequisites before any mutation",
+      "Planner brief may assign only source obligations traceable to an exact original-request clause",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "own only the read-only dynamic business-source prerequisites",
+      "own only read-only facts that the original request or an observed authority makes necessary",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "Map closed obligations to exact source record IDs",
+      "Map resolved obligations to exact source record IDs",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "Destination identity, capability, targeting, representation, mutation, and readback stay with Developer",
-    )
-    expect(loaded.promptProfile.agents["base-planner"]).toContain("first authoritative record that resolves a fact closes it")
-    expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "Admit a later anchor only when an authoritative record identifies it as the requested entity's ID",
+      "`outcome_semantic`: the requested audience, content, status, destination identity, targeting, representation, mutation, or readback",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "do not claim the fact or source is absent or hand it to Developer",
+      "Bind every current authoritative rule actually observed",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "preserve exact empty, excluded-candidate, or typed-unavailable checked scope",
+      "Admit a later anchor only when authority identifies it as the requested entity's ID",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "one focused query naming all known source services and actions",
+      "Agent-authored delegation alone cannot introduce an item",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "Preserve concise evidence for empty results, excluded candidates, corrected failures, conflicts, and unavailable routes",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "one focused query naming the known source services and actions",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "record `mutation_preconditions` per independent mutation from the original request",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain("`Mutation preconditions:`")
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "assign it to Developer instead of adding a source blocker",
+      "For every blocked or classification-disputed item, include its class",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "current operational record stating concrete rules for the requested action is a guideline source regardless of title",
+      "the concrete rule coverage already observed, and the exact unresolved fact",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "as coverage labels, not separate source facts",
+      "never becomes a source obligation merely because a brief prefixes it with “source-side”",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "never close them while retaining a duplicate residual category blocker",
+      "abstract category is a search scope, not a second fact",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "not a demand to prove that no other rule exists",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "A general instruction to make reasonable assumptions never waives an explicit approval",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "explicitly attributed `Original user input` or complete `SYSTEM`/`USER` business block",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "A first call-shape, argument-validation, or contract `TypeError` leaves the route incomplete",
+      "A first call-shape, argument-validation, or contract `TypeError` requires one contract-correct call",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "begin candidate generation with one minimal discriminative source-owned entity",
+      "begin with one minimal discriminative source-owned entity",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "A newly admitted anchor invalidates an earlier no-applicable-match result",
+      "try it on every still-open candidate endpoint for that obligation",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain("`Checked source coordinates:`")
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
@@ -268,16 +279,16 @@ describe("built-in interface review workflow authority", () => {
       "never project credentials, authorization values, or secret-bearing URLs or parameters",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "It does not reopen a route or service closed by typed unavailability",
+      "A typed-unavailable route remains closed unless new actionable evidence changes it",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "blocks the synonymous abstract category is such a proven misclassification",
+      "duplicates closed concrete coverage as an abstract blocker",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "names that exact endpoint and the minimal or newly admitted anchor read",
+      "Name that endpoint, anchor, or classification in the continuation",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "do not ask for other products or source families while this same-endpoint correction is pending",
+      "instead of asking for new products or broad source families",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "the operator-authored request inside the original Task input is the complete delivery and acceptance subject",
@@ -292,7 +303,7 @@ describe("built-in interface review workflow authority", () => {
       loaded.manifest.capability_projection.virtual_workflows["source-planned-execution-verification"]?.nodes[
         "base-planner"
       ]?.description,
-    ).toContain("compound empty reads and untried later authoritative anchors leave an endpoint incomplete")
+    ).toContain("Separates execution-authority conditions, applicable constraints, and Developer-owned outcome semantics")
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "do not search for a Skill whose exact name is already visible",
     )
@@ -310,7 +321,7 @@ describe("built-in interface review workflow authority", () => {
       "a later empty or noisy title search does not invalidate positive evidence already read",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "Query each material source obligation independently",
+      "Query each traceable source obligation independently",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "An empty compound or full-phrase query must be replaced by the same endpoint's minimal anchor",
@@ -328,19 +339,25 @@ describe("built-in interface review workflow authority", () => {
       "put that literal value in the visible post, message, or content body",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "resolve every `execution_authority` condition the request or observed authority makes material and bind every observed `applicable_constraint`",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "the loaded client contract supports structured batching",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "use one combined endpoint-contract discovery for independent missing capabilities",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "makes the source precondition blocked; report that exact change instead of starting broad source discovery",
+      "blocks that prerequisite; report the exact change instead of starting broad source discovery",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "Execute only each independent mutation whose own `mutation_preconditions` entry is `closed`",
+      "return that exact source blocker without repeating the Planner's source discovery",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "without attempting that mutation or repeating the Planner's source discovery",
+      "do not mutate that dependent operation",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "continue every independent mutation whose real source prerequisites are resolved",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "do not stop merely because the create interface has no separate targeting field",
@@ -361,13 +378,19 @@ describe("built-in interface review workflow authority", () => {
       "A compound/full-phrase empty query is an incomplete attempt until the same endpoint receives that minimal anchor",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Dispatch Developer only for the independent mutations whose visible `Mutation preconditions:` entries are `closed`",
+      "Dispatch Developer for each mutation whose reconciled source obligations are resolved",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "the original request or already observed authority proves the plan misclassified a destination fact",
+      "classifies an outcome semantic as a source obligation",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "first complete and independently verify every closed operation",
+      "never waives an explicit approval, prohibition, eligibility, opt-out, retention",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "before dispatching the dependent operation",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "Other independent mutations whose reconciled source obligations are resolved continue",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "ignore incidental related entities",
@@ -407,7 +430,7 @@ describe("built-in interface review workflow authority", () => {
       "A hidden metadata value alone is insufficient",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
-      "judge destination identity, capability, and representation through the actual destination interface",
+      "`outcome_semantic` is judged through the actual destination interface",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "absence of a separate targeting field is not a failure",
@@ -432,13 +455,13 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain("copy them verbatim into the Tester brief")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "tell Tester to completely read that same plan as source coordinates",
+      "tell Tester to completely read the same plan as source coordinates",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "the Planner brief may assign only source-side business facts",
+      "Planner brief may assign only source obligations traceable to an exact original-request clause",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "A missing optional structured destination field is not a missing source fact",
+      "Do not hypothesize a source taxonomy, policy field, proof channel, platform control",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "use `evidence_reads` to retrieve the complete non-secret output before dispatching Tester",
@@ -493,23 +516,23 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.manifest.capability_projection.agents["base-planner"]).toMatchObject({
       base_role: "delegated-worker",
       description:
-        "Resolves only pre-mutation dynamic source prerequisites, excluding destination identity, capability, representation, and readback, or allocates a justified parallel research and implementation partition.",
+        "Classifies and resolves only traceable pre-mutation execution authority and applicable source constraints, while leaving destination outcome semantics to Developer, or allocates a justified parallel research and implementation partition.",
     })
     expect(
       loaded.manifest.capability_projection.virtual_workflows["source-planned-execution-verification"]?.nodes[
         "base-planner"
       ]?.description,
-    ).toContain("destination identity, capability, representation, and readback remain Developer work")
+    ).toContain("Developer-owned outcome semantics")
     expect(
       loaded.manifest.capability_projection.virtual_workflows["source-planned-execution-verification"]?.nodes[
         "base-developer"
       ]?.description,
-    ).toContain("complete Host-recorded receipt")
+    ).toContain("Reconciles per-operation source classes with original authority")
     expect(
       loaded.manifest.capability_projection.virtual_workflows["source-planned-execution-verification"]?.nodes[
         "base-tester"
       ]?.description,
-    ).toContain("raw mutation receipt")
+    ).toContain("Independently checks source classifications and coordinates against original authority")
     expect(agentCapabilityGrants(loaded.manifest, "base-planner").explicitBuiltInToolIDs).toEqual([
       "bash",
       "capability_search",
