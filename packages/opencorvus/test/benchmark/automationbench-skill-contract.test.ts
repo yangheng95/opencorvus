@@ -9,6 +9,13 @@ test("AutomationBench Skill defines a bounded source-to-destination evidence loo
   const skill = await fs.readFile(skillPath, "utf8")
 
   expect(skill).toContain("authoritative source, destination or action, and exact values")
+  expect(skill).toContain("## Monotonic evidence frontier")
+  expect(skill).toContain("Every client operation must consume one pending transition")
+  expect(skill).toContain("When no pending transition remains, stop discovery and classify each item")
+  expect(skill).toContain("exhausted unresolved authority cannot authorize mutation")
+  expect(skill).toContain(
+    "make the first client invocation one structured `batch` with one search per independent missing capability",
+  )
   expect(skill).toContain("one focused query made only from API-native service, resource, action")
   expect(skill).toContain("Use the structured `batch` command for independent discovery and reads")
   expect(skill).toContain("compare those exact fields with the final destination")

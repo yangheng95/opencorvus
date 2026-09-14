@@ -86,7 +86,7 @@ export function createSkillLoaderTool(input: { id: SkillSurfaceToolID; family: S
     const compatible = mounted.filter((skill) => skill.enabled).map((skill) => skill.skill)
 
     const description = [
-      `Search for or load a ${input.label} that provides domain-specific instructions and workflows.`,
+      `Load an exact ${input.label} by name when that name is visible; otherwise search mounted Skills for domain-specific instructions and workflows.`,
       `Current agent: ${surface.agent}`,
       "Call without a name to search/list skill metadata. Call with an exact name to load the full skill instructions. Call with that name and a relative file path named by the instructions or sampled file list to load a supporting file.",
       "",
@@ -97,17 +97,17 @@ export function createSkillLoaderTool(input: { id: SkillSurfaceToolID; family: S
 
     const parameters = z
       .object({
-        query: z
-          .string()
-          .optional()
-          .describe(
-            "Fuzzy search terms for mounted skill title, description, required_tools, or SKILL.md content. Omit to list compatible skills.",
-          ),
         name: z
           .string()
           .optional()
           .describe(
             "Exact skill name to load. To load the root SKILL.md, provide name alone and omit file, offset, and limit. Omit name to search/list skills instead of loading full instructions.",
+          ),
+        query: z
+          .string()
+          .optional()
+          .describe(
+            "Fuzzy search terms used only when the needed Skill has no exact known name. A different already named Skill does not prevent searching for this unresolved capability. Omit to list compatible skills.",
           ),
         file: z
           .string()

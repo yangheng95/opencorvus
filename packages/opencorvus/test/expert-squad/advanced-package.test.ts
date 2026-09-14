@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.14.8")
+    expect(loaded.manifest.version).toBe("2026.09.14.11")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -216,6 +216,10 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "Planner brief may assign only source obligations traceable to an exact original-request clause",
     )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "compute the Planner's source frontier by subtracting every Developer-owned outcome semantic",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain("exactly one top-level `dispatch` object")
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "own only read-only facts that the original request or an observed authority makes necessary",
     )
@@ -235,7 +239,22 @@ describe("built-in interface review workflow authority", () => {
       "Do not create a residual “broader,” “remaining,” or “complete” abstract-guidelines item",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "one focused query made from API-native service, record, list/search/get, and known identity-field nouns",
+      "one monotonic source frontier containing unresolved `execution_authority`, observed `applicable_constraint`, and an explicit original-request lookup trigger",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "When the loaded client supports structured batching, make the first client invocation one read-only batch",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "The lookup trigger is pending retrieval work, never a ledger fact, invented rule, or open-world blocker",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "When no item or pending transition remains, serialize the concise plan as strict valid JSON, publish it once",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "already-identified finite eligible worklist and necessary attempts are complete",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "discovering a missing contract, consuming one untried eligible attempt, resolving or excluding returned candidates",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "Admit a later anchor only when authority identifies it as the requested entity's ID",
@@ -247,7 +266,7 @@ describe("built-in interface review workflow authority", () => {
       "Preserve concise evidence for empty results, excluded candidates, corrected failures, conflicts, and unavailable routes",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "request its largest contract-valid bounded result set up to 20",
+      "requests the largest contract-valid bounded result set up to 20",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "record `mutation_preconditions` per independent mutation from the original request",
@@ -317,6 +336,7 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "make one contract-correct read instead of replaying it",
     )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain("Maintain a monotonic verification frontier")
     expect(
       loaded.manifest.capability_projection.virtual_workflows["source-planned-execution-verification"]?.nodes[
         "base-planner"
@@ -324,6 +344,12 @@ describe("built-in interface review workflow authority", () => {
     ).toContain("Separates execution-authority conditions, applicable constraints, and Developer-owned outcome semantics")
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "Before any Skill lookup or client call, read the original Task input",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "locate the unique `base/implementation-plan` with one exact `artifact_types` query",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "An exhausted but unresolved authority prerequisite is a blocker",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "selected workflow node explicitly declares that exact Artifact type",
@@ -521,7 +547,7 @@ describe("built-in interface review workflow authority", () => {
       "Planner brief may assign only source obligations traceable to an exact original-request clause",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Do not hypothesize a source taxonomy, policy field, proof channel, platform control",
+      "Never hypothesize a source taxonomy, policy field, proof channel, platform control",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "use `evidence_reads` to retrieve each complete non-secret output before dispatching Tester",

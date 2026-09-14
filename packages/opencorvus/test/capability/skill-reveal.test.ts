@@ -127,6 +127,7 @@ describe("search-native Skill reveal", () => {
 
         const skill = initial.tools.skill
         if (!skill?.execute) throw new Error("Explicit Skill loader is unavailable in the permanent base")
+        expect(skill.description).toStartWith("Load an exact")
         expect(skill.description).toContain("exact Skill name is already visible in the request")
         const loaded = (await skill.execute(
           { name: "work-artifacts" },
