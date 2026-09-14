@@ -875,20 +875,6 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
         const streamSpy = spyOn(LLM, "stream").mockResolvedValue({
           fullStream: (async function* () {
             yield { type: "start" }
-            yield { type: "start-step" }
-            yield { type: "text-start", id: "tool-preamble" }
-            yield {
-              type: "text-delta",
-              id: "tool-preamble",
-              text: "I will inspect the tool evidence before writing the checkpoint.",
-            }
-            yield { type: "text-end", id: "tool-preamble" }
-            yield {
-              type: "finish-step",
-              finishReason: "tool-calls",
-              usage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
-            }
-            yield { type: "start-step" }
             yield { type: "reasoning-start", id: "reasoning-empty" }
             yield { type: "reasoning-delta", id: "reasoning-empty", text: "No visible continuation was emitted." }
             yield { type: "reasoning-end", id: "reasoning-empty" }

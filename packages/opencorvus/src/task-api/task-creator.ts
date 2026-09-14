@@ -15,6 +15,7 @@ import {
   MissionTaskRequestSourceError,
   missionTaskRequestAuthoritySources,
   missionTaskRequestHasAuthenticatedSource,
+  missionTaskRequestSourceDiagnostic,
   type TaskRequestSourceMessage,
 } from "@/engine/task-request-source"
 
@@ -396,9 +397,11 @@ export function assertMissionTaskRequestFromAuthenticatedUserHistoryInDatabase(
   ) {
     return
   }
+  const diagnostic = missionTaskRequestSourceDiagnostic({ request, sourceMessages })
+  const repair = ` The request has ${diagnostic.matchingPrefixBytes} initial matching bytes, ${diagnostic.authenticatedOrderedPrefixBytes} bytes in its longest complete authenticated ordered-fragment prefix, and ${diagnostic.laterAuthenticatedFragmentBytes} bytes of authenticated fragments later in the request. Recopy every assigned operation and constraint from the authenticated source verbatim, include no agent-authored text, and do not shorten or omit any source content.`
   throw new MissionTaskRequestSourceError({
     message:
-      "Mission panel_create_task.request must contain only ordered non-empty verbatim fragments from authenticated real-user authority history.",
+      "Mission panel_create_task.request must contain only ordered non-empty verbatim fragments from authenticated real-user authority history." + repair,
     missionSessionID: input.missionSessionID,
     creatorMessageID: input.creatorMessageID,
     acceptedUserMessageIDs: sourceMessages

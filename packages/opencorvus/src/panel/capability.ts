@@ -643,7 +643,7 @@ export function panelLeafActionSchemaForAgent(action: PanelActionID, agent: stri
             .min(1)
             .max(32_000)
             .describe(
-              "One or more non-empty task-relevant fragments copied verbatim and in order from authenticated real-user text in this Mission's authority history; join fragments only with a blank line. Do not add a heading, delegation note, requirements, or paraphrase; title, promptProfile, structured Artifact authorities, and accepted Delivery Slices carry allocation.",
+              "The complete original operations and constraints assigned to this Task, copied as one or more non-empty verbatim fragments in their original order from authenticated real-user text in this Mission's authority history; join fragments only with a blank line. Do not add a heading, delegation note, requirements, or paraphrase. After any source rejection, recopy every assigned operation and constraint verbatim, include no agent-authored text, and never shorten or omit source content to make validation pass. Title, promptProfile, structured Artifact authorities, and accepted Delivery Slices carry allocation.",
             ),
         })
       }

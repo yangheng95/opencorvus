@@ -1885,6 +1885,47 @@ export namespace SessionLoop {
     ].join("\n")
   }
 
+  function continuedUserInputSystem(input: {
+    step: number
+    lastFinished?: { info: { id: string; time: { created: number }; orderKey?: string } }
+    msgs: ReadonlyArray<{
+      info: { id: string; role: string; author?: string; time: { created: number }; orderKey?: string }
+      parts: ReadonlyArray<{ type: string; text?: string }>
+    }>
+  }): string | undefined {
+    if (input.step <= 1 || !input.lastFinished) return
+    const lastFinishedOrderKey = input.lastFinished.info.orderKey ?? timelineMessageOrderKey(input.lastFinished)
+    const hasLaterUserText = input.msgs.some(
+      (message) =>
+        message.info.role === "user" &&
+        message.info.author === "user" &&
+        compareTimelineOrderKeys(message.info.orderKey ?? timelineMessageOrderKey(message), lastFinishedOrderKey) > 0 &&
+        message.parts.some((part) => part.type === "text" && typeof part.text === "string" && part.text.trim().length > 0),
+    )
+    if (!hasLaterUserText) return
+    return "A real user message arrived after the last completed assistant response. Address that message as current input, then continue the active work."
+  }
+
+  async function providerInputProjection(input: {
+    system: readonly string[]
+    systemLabels: readonly string[]
+    dynamicContextText: string
+    msgs: Message.WithParts[]
+    model: Provider.Model
+  }): Promise<{ system: string[]; systemLabels: string[]; modelMessages: ModelMessage[] }> {
+    const system = [...input.system]
+    const systemLabels = [...input.systemLabels]
+    if (input.dynamicContextText) {
+      system.push(input.dynamicContextText)
+      systemLabels.push("session-state")
+    }
+    return {
+      system,
+      systemLabels,
+      modelMessages: await Message.toModelMessages(SessionCompaction.projectPrunedHistory(input.msgs), input.model),
+    }
+  }
+
   async function processTurn(input: {
     step: number
     sessionID: string
@@ -2203,23 +2244,11 @@ export namespace SessionLoop {
       })
     }
 
-    if (input.step > 1 && input.lastFinished) {
-      for (const msg of input.msgs) {
-        if (msg.info.role !== "user" || msg.info.id <= input.lastFinished.id) continue
-        for (const part of msg.parts) {
-          if (part.type !== "text") continue
-          if (!part.text.trim()) continue
-          part.text = [
-            "<system-reminder>",
-            "The user sent the following message:",
-            part.text,
-            "",
-            "Please address this message and continue with your tasks.",
-            "</system-reminder>",
-          ].join("\n")
-        }
-      }
-    }
+    const continuedUserSystem = continuedUserInputSystem({
+      step: input.step,
+      lastFinished: input.lastFinished ? { info: input.lastFinished } : undefined,
+      msgs: input.msgs,
+    })
 
     await Plugin.trigger("experimental.chat.messages.transform", {}, { messages: input.msgs })
 
@@ -2255,13 +2284,14 @@ export namespace SessionLoop {
         label: runtimeSystemLabels?.[index] ?? `runtime-system[${index}]`,
         text,
       })),
+      ...(continuedUserSystem ? [{ label: "continued-user-input", text: continuedUserSystem }] : []),
       ...messageProjectionSystem.map((text, index) => ({ label: `message-projection-system[${index}]`, text })),
     ]
-    const system = labeledSystem.map((part) => part.text)
-    const systemLabels = labeledSystem.map((part) => part.label)
+    const initialSystem = labeledSystem.map((part) => part.text)
+    const initialSystemLabels = labeledSystem.map((part) => part.label)
     if (isLastStep) {
-      system.push(MAX_STEPS)
-      systemLabels.push("max-steps")
+      initialSystem.push(MAX_STEPS)
+      initialSystemLabels.push("max-steps")
     }
     const needsTaskRootDecisionRepair =
       openTaskRootAssistant &&
@@ -2269,61 +2299,30 @@ export namespace SessionLoop {
       taskRootDecisionGapCount > 0 &&
       !taskRootAssistantHasDecisionReceipt(openTaskRootAssistant)
     if (needsTaskRootDecisionRepair && taskRootSemanticTurnLimit !== undefined) {
-      system.push(
+      initialSystem.push(
         taskRootDecisionRepairPrompt({
           attempt: Math.min(taskRootDecisionGapCount + 1, taskRootSemanticTurnLimit),
           limit: taskRootSemanticTurnLimit,
         }),
       )
-      systemLabels.push("task-root-decision-repair")
+      initialSystemLabels.push("task-root-decision-repair")
     }
 
-    // Live session-state blocks. These change between turns (the project MEMORY.MD
-    // document and its notices are re-read, and taskplan tracks progress). Until 2026-04
-    // they were pushed onto `system` after the cached entries (env, runtime context), but
-    // applyCaching only puts cache_control on the first 2 system messages —
-    // anything after lives inside the second cache breakpoint, which spans
-    // the rest of system + all messages. These blocks stay as runtime context
-    // for the current model turn; they are not persisted as conversation
-    // messages.
+    // Live session-state blocks are runtime system context for the current model
+    // turn. They never rewrite or masquerade as a persisted user Message.
     const dynamicContextText = await sessionStateContext({
       projectID: Instance.project.id,
       sessionID: input.sessionID,
       memoryToolAvailable: Object.prototype.hasOwnProperty.call(tools, "memory"),
     })
 
-    const baseModelMessages = await Message.toModelMessages(
-      SessionCompaction.projectPrunedHistory(input.msgs),
-      input.model,
-    )
-    if (dynamicContextText) {
-      // Prepend to the LAST user message's text content so the live state sits
-      // adjacent to the request the model is responding to. This keeps the
-      // earlier conversation history (and its system prefix) byte-stable for
-      // the prefix cache; only the last user message — which is part of the
-      // 5m tail breakpoint anyway — absorbs the per-turn delta.
-      for (let i = baseModelMessages.length - 1; i >= 0; i--) {
-        const msg = baseModelMessages[i]
-        if (msg.role !== "user") continue
-        if (typeof msg.content === "string") {
-          msg.content = `${dynamicContextText}\n\n${msg.content}`
-        } else if (Array.isArray(msg.content)) {
-          const firstTextIdx = msg.content.findIndex(
-            (p): p is { type: "text"; text: string } =>
-              typeof p === "object" && p !== null && (p as any).type === "text",
-          )
-          if (firstTextIdx >= 0) {
-            const part = msg.content[firstTextIdx] as { type: "text"; text: string }
-            msg.content[firstTextIdx] = { ...part, text: `${dynamicContextText}\n\n${part.text}` }
-          } else {
-            msg.content = [{ type: "text", text: dynamicContextText }, ...msg.content]
-          }
-        }
-        break
-      }
-    }
-
-    const modelMessages = baseModelMessages
+    const { system, systemLabels, modelMessages } = await providerInputProjection({
+      system: initialSystem,
+      systemLabels: initialSystemLabels,
+      dynamicContextText,
+      msgs: input.msgs,
+      model: input.model,
+    })
 
     const systemChars = system.reduce((sum, s) => sum + s.length, 0)
     const systemTokensEst = system.reduce((sum, s) => sum + Token.estimate(s), 0)
@@ -5796,6 +5795,8 @@ export namespace SessionLoop {
     executeCompactionControl,
     isSettledReplyToUserMessage,
     sessionStateContext,
+    continuedUserInputSystem,
+    providerInputProjection,
     waitForUserMessage,
     resolveToolExecutionAuthority,
     installStandbyObserver(observer: (sessionID: string) => void | Promise<void>): Disposable {

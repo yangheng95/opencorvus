@@ -113,6 +113,7 @@ test("AutomationBench Mission request preserves public reconciliation and explic
       'The visible directive `@skill("automationbench-api")` is mandatory for every child worker that uses the benchmark client: require the real `skill` Tool call before the first client call, then use only the project-local client for benchmark operations. Capability discovery or reading the Skill file does not load it.',
       "SYSTEM:\nOperate safely. ",
       "USER:\nPerform the business operation.",
+      "END OF AUTOMATIONBENCH CHILD TASK AUTHORITY.",
     ].join("\n\n"),
   )
 })

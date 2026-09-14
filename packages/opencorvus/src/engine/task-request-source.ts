@@ -171,16 +171,30 @@ export function missionTaskRequestHasAuthenticatedSource(input: {
   if (input.creatorRole !== "assistant" || input.creatorAuthor !== "mission" || input.request.trim().length === 0) {
     return false
   }
-  const sources = input.sourceMessages.flatMap((source) => {
+  const sources = missionTaskRequestSourceTexts(input.sourceMessages)
+  return missionTaskRequestMatchesSourceTexts(input.request, sources)
+}
+
+function missionTaskRequestSourceTexts(
+  sourceMessages: ReadonlyArray<{
+    info?: { role?: unknown; author?: unknown }
+    parts: ReadonlyArray<{ data: unknown }>
+  }>,
+): string[] {
+  return sourceMessages.flatMap((source) => {
     if (source.info?.role !== "user" || source.info.author !== "user") return []
     return source.parts.flatMap((part) => {
       const data = part.data as { type?: unknown; text?: unknown }
       return data.type === "text" && typeof data.text === "string" ? [data.text] : []
     })
   })
-  if (sources.some((source) => source.includes(input.request))) return true
+}
 
-  const fragments = input.request.split("\n\n")
+function missionTaskRequestMatchesSourceTexts(request: string, sources: readonly string[]): boolean {
+  if (request.trim().length === 0) return false
+  if (sources.some((source) => source.includes(request))) return true
+
+  const fragments = request.split("\n\n")
   if (fragments.length < 2 || fragments.some((fragment) => fragment.trim().length === 0)) return false
   let cursor = { source: 0, offset: 0 }
   for (const fragment of fragments) {
@@ -196,4 +210,56 @@ export function missionTaskRequestHasAuthenticatedSource(input: {
     cursor = matched
   }
   return true
+}
+
+/** Classify a source mismatch without accepting, exposing, or rewriting request content. */
+export function missionTaskRequestSourceDiagnostic(input: {
+  request: string
+  sourceMessages: ReadonlyArray<{
+    info?: { role?: unknown; author?: unknown }
+    parts: ReadonlyArray<{ data: unknown }>
+  }>
+}): {
+  matchingPrefixBytes: number
+  authenticatedOrderedPrefixBytes: number
+  laterAuthenticatedFragmentBytes: number
+} {
+  const sources = missionTaskRequestSourceTexts(input.sourceMessages)
+  let acceptedPrefixCharacters = 0
+  let separator = input.request.indexOf("\n\n")
+  while (separator >= 0) {
+    const candidate = input.request.slice(0, separator)
+    if (missionTaskRequestMatchesSourceTexts(candidate, sources)) {
+      acceptedPrefixCharacters = separator
+    }
+    separator = input.request.indexOf("\n\n", separator + 2)
+  }
+
+  const requestPoints = Array.from(input.request)
+  let matchingPrefixPointCount = 0
+  let upper = requestPoints.length
+  while (matchingPrefixPointCount < upper) {
+    const candidatePointCount = Math.ceil((matchingPrefixPointCount + upper) / 2)
+    const candidate = requestPoints.slice(0, candidatePointCount).join("")
+    if (sources.some((source) => source.includes(candidate))) {
+      matchingPrefixPointCount = candidatePointCount
+    } else {
+      upper = candidatePointCount - 1
+    }
+  }
+  const matchingPrefixCharacters = requestPoints.slice(0, matchingPrefixPointCount).join("").length
+
+  const laterFragments = input.request
+    .slice(Math.max(matchingPrefixCharacters, acceptedPrefixCharacters))
+    .split("\n\n")
+    .filter((fragment) => fragment.length > 0 && sources.some((source) => source.includes(fragment)))
+  const laterAuthenticatedFragmentBytes = laterFragments.reduce(
+    (total, fragment) => total + Buffer.byteLength(fragment),
+    0,
+  )
+  return {
+    matchingPrefixBytes: Buffer.byteLength(input.request.slice(0, matchingPrefixCharacters)),
+    authenticatedOrderedPrefixBytes: Buffer.byteLength(input.request.slice(0, acceptedPrefixCharacters)),
+    laterAuthenticatedFragmentBytes,
+  }
 }

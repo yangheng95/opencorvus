@@ -2,6 +2,7 @@ import { expect, test } from "bun:test"
 import {
   missionTaskRequestAuthoritySources,
   missionTaskRequestHasAuthenticatedSource,
+  missionTaskRequestSourceDiagnostic,
   type TaskRequestSourceMessage,
   type TaskRequestSourceSession,
 } from "@/engine/task-request-source"
@@ -52,6 +53,129 @@ test("accepts chronological fragments from authenticated user history", () => {
       ],
     }),
   ).toBe(true)
+})
+
+test("reports the exact authenticated prefix before an appended suffix", () => {
+  const source = "This complete authority block contains every assigned operation and constraint."
+  const suffix = "\n\nPlease address this message and continue with your tasks."
+  expect(
+    missionTaskRequestSourceDiagnostic({
+      request: source + suffix,
+      sourceMessages: [
+        {
+          info: { role: "user", author: "user" },
+          parts: [{ data: { type: "text", text: source } }],
+        },
+      ],
+    }),
+  ).toEqual({
+    matchingPrefixBytes: Buffer.byteLength(source),
+    authenticatedOrderedPrefixBytes: Buffer.byteLength(source),
+    laterAuthenticatedFragmentBytes: 0,
+  })
+})
+
+test("reports every authenticated ordered fragment before an appended suffix", () => {
+  const first = "Prepare the webinar post."
+  const second = "Use the corrected registration link."
+  const suffix = "\n\nPlease address this message and continue with your tasks."
+  const prefix = `${first}\n\n${second}`
+  expect(
+    missionTaskRequestSourceDiagnostic({
+      request: prefix + suffix,
+      sourceMessages: [
+        {
+          info: { role: "user", author: "user" },
+          parts: [{ data: { type: "text", text: first } }, { data: { type: "text", text: second } }],
+        },
+      ],
+    }),
+  ).toEqual({
+    matchingPrefixBytes: Buffer.byteLength(first),
+    authenticatedOrderedPrefixBytes: Buffer.byteLength(prefix),
+    laterAuthenticatedFragmentBytes: 0,
+  })
+})
+
+test("reports a short multibyte authenticated prefix at a complete Unicode boundary", () => {
+  const source = "中".repeat(24)
+  const suffix = "\n\ncontinue elsewhere"
+  expect(
+    missionTaskRequestSourceDiagnostic({
+      request: source + suffix,
+      sourceMessages: [
+        {
+          info: { role: "user", author: "user" },
+          parts: [{ data: { type: "text", text: source } }],
+        },
+      ],
+    }),
+  ).toEqual({
+    matchingPrefixBytes: Buffer.byteLength(source),
+    authenticatedOrderedPrefixBytes: Buffer.byteLength(source),
+    laterAuthenticatedFragmentBytes: 0,
+  })
+})
+
+test("reports an authenticated emoji prefix without splitting a surrogate pair", () => {
+  const source = `${"A".repeat(80)}😀`
+  const suffix = "\n\ncontinue elsewhere"
+  expect(
+    missionTaskRequestSourceDiagnostic({
+      request: source + suffix,
+      sourceMessages: [
+        {
+          info: { role: "user", author: "user" },
+          parts: [{ data: { type: "text", text: source } }],
+        },
+      ],
+    }),
+  ).toEqual({
+    matchingPrefixBytes: Buffer.byteLength(source),
+    authenticatedOrderedPrefixBytes: Buffer.byteLength(source),
+    laterAuthenticatedFragmentBytes: 0,
+  })
+})
+
+test("maps an internal transcription mismatch with later source content to a full verbatim recopy", () => {
+  const source = `${"A".repeat(80)}exclusion or rejection\n\nUSER:\nPublish the webinar post with every constraint.`
+  const request = `${"A".repeat(80)}exclusion/rejection\n\nUSER:\nPublish the webinar post with every constraint.\n\nContinue.`
+  expect(
+    missionTaskRequestSourceDiagnostic({
+      request,
+      sourceMessages: [
+        {
+          info: { role: "user", author: "user" },
+          parts: [{ data: { type: "text", text: source } }],
+        },
+      ],
+    }),
+  ).toEqual({
+    matchingPrefixBytes: Buffer.byteLength("A".repeat(80) + "exclusion"),
+    authenticatedOrderedPrefixBytes: 0,
+    laterAuthenticatedFragmentBytes: Buffer.byteLength("USER:\nPublish the webinar post with every constraint."),
+  })
+})
+
+test("reports a short authenticated constraint after foreign request text", () => {
+  const first = "A".repeat(80)
+  const finalConstraint = "禁止删除"
+  const request = `${first}\n\nForeign text\n\n${finalConstraint}`
+  expect(
+    missionTaskRequestSourceDiagnostic({
+      request,
+      sourceMessages: [
+        {
+          info: { role: "user", author: "user" },
+          parts: [{ data: { type: "text", text: first } }, { data: { type: "text", text: finalConstraint } }],
+        },
+      ],
+    }),
+  ).toEqual({
+    matchingPrefixBytes: Buffer.byteLength(first),
+    authenticatedOrderedPrefixBytes: Buffer.byteLength(first),
+    laterAuthenticatedFragmentBytes: Buffer.byteLength(finalConstraint),
+  })
 })
 
 test("resolves a Mission request through immutable Work and Chat handoff occurrences", () => {
@@ -265,8 +389,9 @@ test("uses canonical persisted order at an equal-timestamp creator boundary", ()
 test("Mission create_task exposes the verbatim request source contract", () => {
   const schema = panelLeafActionSchemaForAgent("create_task", "mission")
   const description = (schema as any).shape.request.description as string
-  expect(description).toContain("fragments copied verbatim and in order")
+  expect(description).toContain("complete original operations and constraints")
+  expect(description).toContain("recopy every assigned operation and constraint verbatim")
   expect(description).toContain(
-    "title, promptProfile, structured Artifact authorities, and accepted Delivery Slices carry allocation",
+    "Title, promptProfile, structured Artifact authorities, and accepted Delivery Slices carry allocation",
   )
 })
