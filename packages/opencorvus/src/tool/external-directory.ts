@@ -4,14 +4,29 @@ import { Tool } from "./tool"
 import { Instance } from "../project/instance"
 import { Session } from "../session"
 import { Filesystem } from "../util/filesystem"
-import { readTaskExecutionCapsuleBinding } from "@/engine/task-execution-capsule-binding"
-import { ExecutionCapsuleRuntimeUnavailableError } from "@/execution-capsule/runtime"
+import { readTaskProcessBinding, TASK_NATIVE_PROCESS_BINDING_PROTOCOL } from "@/engine/task-execution-capsule-binding"
 
 type Kind = "file" | "directory"
 
 type Options = {
   bypass?: boolean
   kind?: Kind
+}
+
+export class TaskProcessBoundaryError extends Error {
+  override readonly name = "TaskProcessBoundaryError"
+  readonly code = "TASK_PROCESS_BOUNDARY_VIOLATION" as const
+}
+
+export function assertResolvedTaskPathInWorkspace(input: {
+  taskID: string
+  candidate: string
+  root: string
+}) {
+  if (Filesystem.contains(input.root, input.candidate)) return
+  throw new TaskProcessBoundaryError(
+    `Task ${input.taskID} file target ${input.candidate} is outside exact process root ${input.root}`,
+  )
 }
 
 function isMissingPathError(error: unknown): error is NodeJS.ErrnoException {
@@ -63,14 +78,14 @@ export async function assertExternalDirectory(ctx: Tool.Context, target?: string
 
   const executionAuthority = Tool.requireExecutionAuthority(ctx)
   const taskID = executionAuthority.kind === "task" ? executionAuthority.taskID : undefined
-  const binding = taskID ? readTaskExecutionCapsuleBinding(taskID) : undefined
+  const binding = taskID ? readTaskProcessBinding(taskID) : undefined
   if (binding) {
     const candidate = await resolveThroughExistingAncestor(target)
-    const root = await realpath(binding.workspace.root)
-    if (Filesystem.contains(root, candidate)) return
-    throw new ExecutionCapsuleRuntimeUnavailableError(
-      `Task ${taskID} file target ${candidate} is outside exact Capsule root ${root}`,
+    const root = await realpath(
+      binding.protocol === TASK_NATIVE_PROCESS_BINDING_PROTOCOL ? binding.workspace_root : binding.workspace.root,
     )
+    assertResolvedTaskPathInWorkspace({ taskID: taskID!, candidate, root })
+    return
   }
 
   if (options?.bypass) return

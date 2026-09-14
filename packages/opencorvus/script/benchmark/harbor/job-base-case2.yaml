@@ -1,0 +1,21 @@
+agents:
+  - import_path: opencorvus_agent:OpenCorvusAgent
+    model_name: openai/gpt-5.6-luna
+    kwargs:
+      OPENCORVUS_VERSION: harbor-automationbench-v1
+      OPENCORVUS_MODEL: openai/gpt-5.6-luna
+      OPENCORVUS_PROFILE: base
+      OPENCORVUS_WORKFLOW: source-planned-execution-verification
+      OPENCORVUS_INACTIVITY_SECONDS: 600
+      OPENCORVUS_BUNDLE_PATH: /var/lib/opencorvus-benchmark/harbor-automationbench-v1/opencorvus-bundle
+      OPENCORVUS_AUTH_PATH: /var/lib/opencorvus-benchmark/harbor-automationbench-v1/provider/auth.json
+      OPENCORVUS_MODELS_PATH: /var/lib/opencorvus-benchmark/harbor-automationbench-v1/provider/models.json
+datasets:
+  - path: /var/lib/opencorvus-benchmark/harbor-automationbench-v1/tasks
+    task_names:
+      - finance-wave-freelance-invoice
+environment:
+  type: docker
+  delete: true
+n_concurrent_trials: 1
+job_name: automationbench-luna-base-case2-harbor-v1

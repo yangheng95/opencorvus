@@ -485,6 +485,7 @@ def main() -> None:
     parser.add_argument("--initial-world", type=Path, required=True)
     parser.add_argument("--final-world", type=Path, required=True)
     parser.add_argument("--tool-socket", type=Path, required=True)
+    parser.add_argument("--admin-socket", type=Path)
     parser.add_argument("--agent-uid", type=int, required=True)
     args = parser.parse_args()
     admin_token = sys.stdin.readline().strip()
@@ -501,16 +502,26 @@ def main() -> None:
     os.chmod(args.tool_socket, 0o600)
     tool_thread = threading.Thread(target=tool_server.serve_forever, kwargs={"poll_interval": 0.2}, daemon=True)
     tool_thread.start()
-    server = BridgeHTTPServer(
-        ("127.0.0.1", 0),
-        _handler(state, admin_token, "admin"),
-    )
-    port = int(server.server_address[1])
+    if args.admin_socket:
+        if args.admin_socket.exists():
+            raise RuntimeError("admin socket path already exists")
+        server = BridgeUnixHTTPServer(
+            str(args.admin_socket),
+            _handler(state, admin_token, "admin"),
+        )
+        os.chmod(args.admin_socket, 0o600)
+        admin_surface = {"admin_transport": "unix_socket_root_scoped"}
+    else:
+        server = BridgeHTTPServer(
+            ("127.0.0.1", 0),
+            _handler(state, admin_token, "admin"),
+        )
+        admin_surface = {"port": int(server.server_address[1]), "admin_transport": "tcp_loopback"}
     print(
         json.dumps(
             {
                 "event": "ready",
-                "port": port,
+                **admin_surface,
                 "domain": args.domain,
                 "task": args.task,
                 "example_id": state.row.get("example_id"),
@@ -531,6 +542,9 @@ def main() -> None:
         tool_server.shutdown()
         tool_server.server_close()
         args.tool_socket.unlink(missing_ok=True)
+        server.server_close()
+        if args.admin_socket:
+            args.admin_socket.unlink(missing_ok=True)
 
 
 if __name__ == "__main__":
