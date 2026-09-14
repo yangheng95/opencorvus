@@ -43,6 +43,14 @@ def load_runtime_helper():
     return module
 
 
+def load_agent():
+    spec = importlib.util.spec_from_file_location("harbor_ab_agent", ADAPTER / "opencorvus_agent.py")
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 class HarborAutomationBenchAdapterTest(unittest.TestCase):
     def test_instruction_preserves_real_roles_and_one_authority_block(self) -> None:
         generator = load_generator()
@@ -76,14 +84,21 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
             scorer = (task / "tests" / "score_harbor.py").read_text(encoding="utf-8")
             self.assertIn('name = "automationbench/finance-wave-freelance-invoice"', config)
             self.assertIn('user = "root"', config)
-            self.assertIn('network_mode = "allowlist"', config)
-            self.assertIn('network_mode = "no-network"', config)
+            self.assertEqual(config.count('network_mode = "public"'), 3)
             self.assertIn(generator.UPSTREAM_COMMIT, bridge_dockerfile)
             self.assertIn("util-linux", dockerfile)
+            self.assertIn("iptables", dockerfile)
+            self.assertIn('cap_add: ["SYS_ADMIN", "NET_ADMIN"]', (task / "environment" / "docker-compose.yaml").read_text(encoding="utf-8"))
             self.assertIn('upstream_example_id = "4014"', config)
             self.assertIn('"task_completed_correctly"', scorer)
             self.assertIn('"partial_credit"', scorer)
             self.assertTrue((task / "environment" / "runtime" / "automationbench_bridge.py").is_file())
+
+    def test_agent_installs_uid_scoped_egress_policy(self) -> None:
+        source = (ADAPTER / "opencorvus_agent.py").read_text(encoding="utf-8")
+        self.assertIn("iptables -C OUTPUT -m owner --uid-owner 60001 -j REJECT", source)
+        self.assertIn("ip6tables -C OUTPUT -m owner --uid-owner 60001 -j REJECT", source)
+        self.assertIn('"provider_uid\\\":0', source)
 
     def test_job_selects_public_custom_agent_and_one_case(self) -> None:
         import yaml
@@ -114,8 +129,13 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
         spec.loader.exec_module(module)
         with tempfile.TemporaryDirectory(prefix="harbor-bundle-") as directory:
             root = Path(directory)
-            binary = root / "linux-opencorvus"
-            binary.write_bytes(b"linux-binary")
+            runtime = root / "linux-runtime"
+            (runtime / "node_modules" / "native-package").mkdir(parents=True)
+            (runtime / "opencorvus").write_bytes(b"linux-binary")
+            (runtime / "package.json").write_text('{"name":"opencorvus-runtime"}\n', encoding="utf-8")
+            (runtime / "node_modules" / "native-package" / "package.json").write_text(
+                '{"name":"native-package"}\n', encoding="utf-8"
+            )
             source = root / "source"
             skill = source / "script" / "benchmark" / "external-agent"
             skill.mkdir(parents=True)
@@ -130,19 +150,91 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
                 ["git", "-C", str(source), "-c", "user.name=Test", "-c", "user.email=test@example.invalid", "commit", "-qm", "fixture"],
                 check=True,
             )
-            receipt = module.prepare(root / "bundle", binary, source)
+            receipt = module.prepare(root / "bundle", runtime, source)
             self.assertEqual(
                 [item["path"] for item in receipt["files"]],
                 [
                     "bin/restricted-agent-shell.sh",
                     "bin/run-opencorvus-automationbench.py",
+                    "node_modules/native-package/package.json",
                     "opencorvus",
+                    "package.json",
                     "share/automationbench-api/SKILL.md",
                 ],
             )
             self.assertTrue(all(len(item["sha256"]) == 64 for item in receipt["files"]))
             self.assertEqual(len(receipt["source_commit"]), 40)
             self.assertEqual(len(receipt["source_tree"]), 40)
+
+    def test_bundle_materializes_internal_runtime_links_before_hashing(self) -> None:
+        if not hasattr(Path, "symlink_to"):
+            self.skipTest("path symlinks unavailable")
+        spec = importlib.util.spec_from_file_location("harbor_bundle_links", ADAPTER / "prepare_opencorvus_bundle.py")
+        assert spec and spec.loader
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        with tempfile.TemporaryDirectory(prefix="harbor-bundle-link-") as directory:
+            root = Path(directory)
+            runtime = root / "runtime"
+            package = runtime / "packages" / "native"
+            package.mkdir(parents=True)
+            (runtime / "node_modules").mkdir()
+            (runtime / "opencorvus").write_bytes(b"binary")
+            (runtime / "package.json").write_text("{}\n", encoding="utf-8")
+            (package / "index.js").write_text("export default 1\n", encoding="utf-8")
+            link = runtime / "node_modules" / "native"
+            try:
+                link.symlink_to(package, target_is_directory=True)
+            except OSError as error:
+                self.skipTest(f"directory symlinks unavailable: {error}")
+            source = root / "source"
+            (source / "script" / "benchmark" / "harbor").mkdir(parents=True)
+            external = source / "script" / "benchmark" / "external-agent"
+            external.mkdir(parents=True)
+            (source / "script" / "benchmark" / "harbor" / "run_opencorvus_automationbench.py").write_text("pass\n", encoding="utf-8")
+            (external / "automationbench-api.SKILL.md").write_text("# Skill\n", encoding="utf-8")
+            (external / "restricted-agent-shell.sh").write_text("#!/bin/sh\n", encoding="utf-8")
+            subprocess.run(["git", "init", "-q", str(source)], check=True)
+            subprocess.run(["git", "-C", str(source), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(source), "-c", "user.name=Test", "-c", "user.email=test@example.invalid", "commit", "-qm", "fixture"], check=True)
+            receipt = module.prepare(root / "bundle", runtime, source)
+            copied = root / "bundle" / "node_modules" / "native" / "index.js"
+            self.assertTrue(copied.is_file())
+            self.assertFalse((root / "bundle" / "node_modules" / "native").is_symlink())
+            self.assertIn("node_modules/native/index.js", [row["path"] for row in receipt["files"]])
+
+    def test_agent_maps_bundle_link_to_integrity_error(self) -> None:
+        module = load_agent()
+        with tempfile.TemporaryDirectory(prefix="harbor-agent-bundle-link-") as directory:
+            root = Path(directory)
+            bundle = root / "bundle"
+            bundle.mkdir()
+            target = bundle / "target"
+            target.write_text("sealed\n", encoding="utf-8")
+            link = bundle / "linked"
+            try:
+                link.symlink_to(target)
+            except OSError as error:
+                self.skipTest(f"file symlinks unavailable: {error}")
+            data = target.read_bytes()
+            (bundle / "bundle-manifest.json").write_text(
+                json.dumps(
+                    {
+                        "files": [
+                            {
+                                "path": "target",
+                                "bytes": len(data),
+                                "sha256": __import__("hashlib").sha256(data).hexdigest(),
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            agent = object.__new__(module.OpenCorvusAgent)
+            agent._bundle_path = bundle
+            with self.assertRaisesRegex(ValueError, "contains a symbolic link: linked"):
+                agent._verify_bundle()
 
     def test_skill_audit_requires_load_only_for_real_client_callers(self) -> None:
         helper = load_runtime_helper()

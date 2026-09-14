@@ -51,7 +51,7 @@ def render_instruction(prompt: Any) -> str:
 
 def _dockerfile(domain: str, task_name: str) -> str:
     return '''FROM python:3.13-slim
-RUN apt-get update && apt-get install -y --no-install-recommends git procps curl ca-certificates util-linux && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends git procps curl ca-certificates util-linux iptables && rm -rf /var/lib/apt/lists/*
 COPY runtime/automationbench_tool.py /opt/automationbench-harbor/automationbench_tool.py
 RUN chmod 755 /opt/automationbench-harbor/automationbench_tool.py && install -d -m 0755 /workspace /run/automationbench
 USER root
@@ -72,7 +72,7 @@ def _compose(domain: str, task_name: str) -> str:
       context: .
       dockerfile: Dockerfile
     command: ["sleep", "infinity"]
-    cap_add: ["SYS_ADMIN"]
+    cap_add: ["SYS_ADMIN", "NET_ADMIN"]
     volumes:
       - benchmark-runtime:/run/automationbench
   bridge:
@@ -134,13 +134,12 @@ task_contract_sha256 = "{contract_sha256}"
 [agent]
 timeout_sec = 3600.0
 user = "root"
-network_mode = "allowlist"
-allowed_hosts = ["openai.com", "*.openai.com", "chatgpt.com", "*.chatgpt.com"]
+network_mode = "public"
 
 [verifier]
 timeout_sec = 120.0
 user = "root"
-network_mode = "no-network"
+network_mode = "public"
 
 [environment]
 build_timeout_sec = 1200.0

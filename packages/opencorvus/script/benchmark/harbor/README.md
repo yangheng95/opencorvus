@@ -13,6 +13,14 @@ The OpenCorvus Agent and runtime helper are derived from the reviewed Harbor ada
 world transport is a UID-scoped Unix socket. Only Harbor's root verifier can reach the
 admin scoring socket.
 
+Harbor's Docker environment on Windows does not implement its phase-level `allowlist`
+network mode. The task therefore gives the container public networking and applies one
+network-namespace policy during Agent installation: IPv4 and IPv6 output from the sole
+model-visible UID 60001 is rejected, while the root OpenCorvus Server retains Provider
+network access. Docker adds `NET_ADMIN` for that owner rule and retains `SYS_ADMIN` for
+the existing restricted-shell mount namespace. The generated trial evidence includes
+`network-isolation.json` after both rules have been read back successfully.
+
 Generate the first task with the pinned AutomationBench Python environment:
 
 ```sh
@@ -21,9 +29,12 @@ Generate the first task with the pinned AutomationBench Python environment:
   --domain finance --task wave_freelance_invoice
 ```
 
-Build the current Linux x64 OpenCorvus binary in a clean Linux checkout, then assemble
-the upload payload with `prepare_opencorvus_bundle.py --binary <binary> --output <bundle>`.
-The bundle manifest fixes the binary, runtime helper, and mounted Skill bytes. Pass the
+Build the current Linux x64 OpenCorvus release runtime in a clean Linux checkout, then
+assemble the upload payload with
+`prepare_opencorvus_bundle.py --runtime-dir <dist/runtime> --output <bundle>`. The complete
+runtime directory is required because the executable resolves its pinned native packages
+beside itself. The bundle manifest fixes the executable, runtime packages, helper, and
+mounted Skill bytes. Pass the
 current OpenCorvus `data/auth.json` and matching `data/models.json` as separate Agent
 kwargs; Harbor uploads them privately during `install()` and removes the incoming copies.
 

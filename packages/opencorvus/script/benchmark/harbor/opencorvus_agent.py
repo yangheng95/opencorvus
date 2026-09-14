@@ -5,7 +5,9 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
+import os
 import shlex
+import stat
 from pathlib import Path
 import tempfile
 from types import TracebackType
@@ -55,6 +57,19 @@ class OpenCorvusAgent(BaseInstalledAgent):
         return f"{shlex.quote(self._mount_path)}/opencorvus --version"
 
     def _verify_bundle(self) -> None:
+        actual: set[str] = set()
+        for directory, names, files in os.walk(self._bundle_path, followlinks=False):
+            for name in [*names, *files]:
+                path = Path(directory) / name
+                mode = path.lstat().st_mode
+                relative = path.relative_to(self._bundle_path).as_posix()
+                if stat.S_ISLNK(mode):
+                    raise ValueError(f"OpenCorvus bundle contains a symbolic link: {relative}")
+                if stat.S_ISREG(mode):
+                    if path.name != "bundle-manifest.json":
+                        actual.add(relative)
+                elif not stat.S_ISDIR(mode):
+                    raise ValueError(f"OpenCorvus bundle contains a special file: {relative}")
         manifest_path = self._bundle_path / "bundle-manifest.json"
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         rows = manifest.get("files") if isinstance(manifest, dict) else None
@@ -71,11 +86,6 @@ class OpenCorvusAgent(BaseInstalledAgent):
             if not isinstance(size, int) or len(data) != size or hashlib.sha256(data).hexdigest() != row.get("sha256"):
                 raise ValueError(f"OpenCorvus bundle identity mismatch: {relative}")
             recorded.add(relative)
-        actual = {
-            path.relative_to(self._bundle_path).as_posix()
-            for path in self._bundle_path.rglob("*")
-            if path.is_file() and path.name != "bundle-manifest.json"
-        }
         if actual != recorded:
             raise ValueError("OpenCorvus bundle manifest does not cover the exact file set")
 
@@ -135,6 +145,15 @@ class OpenCorvusAgent(BaseInstalledAgent):
                 "test -S /run/automationbench/tool.sock; test -S /run/automationbench/admin.sock; "
                 "install -d -m 0755 /logs/agent; "
                 "install -d -m 0700 /run/opencorvus-host; "
+                "command -v iptables >/dev/null; command -v ip6tables >/dev/null; "
+                "iptables -C OUTPUT -m owner --uid-owner 60001 -j REJECT 2>/dev/null || "
+                "iptables -A OUTPUT -m owner --uid-owner 60001 -j REJECT; "
+                "ip6tables -C OUTPUT -m owner --uid-owner 60001 -j REJECT 2>/dev/null || "
+                "ip6tables -A OUTPUT -m owner --uid-owner 60001 -j REJECT; "
+                "iptables -C OUTPUT -m owner --uid-owner 60001 -j REJECT; "
+                "ip6tables -C OUTPUT -m owner --uid-owner 60001 -j REJECT; "
+                "printf '%s\n' '{\"schema_version\":1,\"agent_uid\":60001,\"ipv4\":\"owner_reject\",\"ipv6\":\"owner_reject\",\"provider_uid\":0}' "
+                "> /logs/agent/network-isolation.json; "
                 "install -m 0600 /opt/opencorvus/bundle-manifest.json /logs/agent/source-receipt.json; "
                 f"{chown}"
                 f"{mount}/opencorvus --version"
