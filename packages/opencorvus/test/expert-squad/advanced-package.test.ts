@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.14.2")
+    expect(loaded.manifest.version).toBe("2026.09.14.5")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -201,11 +201,14 @@ describe("built-in interface review workflow authority", () => {
       "The source-planned workflow's declared `base/implementation-plan` is its only planning Artifact",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "do not search, read, or select that plan in the Orchestrator",
+      "That visible final is the Orchestrator coordination boundary",
     )
     expect(loaded.selectorInstructions).toContain("Select `source-planned-execution-verification`")
     expect(loaded.readmeContent).toContain(
       "after every `execution_authority` condition and every observed `applicable_constraint` material to that create are resolved",
+    )
+    expect(loaded.readmeContent).toContain(
+      "must give one consistent actor and requested-owner binding",
     )
     expect(loaded.selectorInstructions).toContain(
       "when an irreversible external mutation depends on current source authority absent from the original request",
@@ -226,6 +229,12 @@ describe("built-in interface review workflow authority", () => {
       "Bind every current authoritative rule actually observed",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "do not open a separate guideline-title search",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "one focused query made from API-native service, record, list/search/get, and known identity-field nouns",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "Admit a later anchor only when authority identifies it as the requested entity's ID",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
@@ -235,26 +244,29 @@ describe("built-in interface review workflow authority", () => {
       "Preserve concise evidence for empty results, excluded candidates, corrected failures, conflicts, and unavailable routes",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "one focused query naming the known source services and actions",
+      "request its largest contract-valid bounded result set up to 20",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "record `mutation_preconditions` per independent mutation from the original request",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain("`Mutation preconditions:`")
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "For every blocked or classification-disputed item, include its class",
+      "The visible final Message is the Orchestrator's required coordination projection",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "the concrete rule coverage already observed, and the exact unresolved fact",
+      "one compact entry per source obligation in this exact information order",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "observed concrete coverage | resolved value/rule or exact unresolved fact",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "never becomes a source obligation merely because a brief prefixes it with “source-side”",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "abstract category is a search scope, not a second fact",
+      "abstract category is not a second fact",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
-      "not a demand to prove that no other rule exists",
+      "does not require proving that no other rule exists",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "A general instruction to make reasonable assumptions never waives an explicit approval",
@@ -310,7 +322,7 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "selected workflow node explicitly declares that exact Artifact type",
     )
-    expect(loaded.promptProfile.agents["base-developer"]).toContain("`Verification coordinates:` line")
+    expect(loaded.promptProfile.agents["base-developer"]).toContain("`Verification coordinates:` section")
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "Treat a current authoritative operational record with concrete rules",
     )
@@ -363,9 +375,30 @@ describe("built-in interface review workflow authority", () => {
       "do not stop merely because the create interface has no separate targeting field",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "Preserve every successful external mutation's exact Tool receipt",
+      "require every published description, request field, and response field about actor or owner to be mutually consistent",
     )
-    expect(loaded.promptProfile.agents["base-developer"]).toContain("do not copy the full response body")
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "If it differs, do not create again",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "A response containing only an ID or acknowledgement remains valid",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "Make at most one bounded read-only discovery for a correction or rollback contract",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "Preserve every external mutation attempt's exact Tool receipt",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "Never omit an unintended committed mutation merely because a later mutation reached the requested target",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain("Do not copy response bodies")
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "every mutation attempt's receipt identity and classification",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "every prior committed side effect that remains unresolved",
+    )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "do not search for a Skill whose exact name is already visible",
     )
@@ -436,7 +469,10 @@ describe("built-in interface review workflow authority", () => {
       "absence of a separate targeting field is not a failure",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
-      "A Host-recorded successful mutation Tool output",
+      "Account for every Host-recorded mutation receipt before judging the outcome",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "a later correct mutation does not erase an earlier committed extra effect",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "or definite later mutation, operation-outcome, or rollback evidence",
@@ -449,6 +485,15 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "Before the first worker dispatch, do not search for, load, or inspect that Skill merely to confirm its name",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "Never pass a wake Artifact ID to `read_task_message`",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "do not call `artifact_search`, `artifact_read`, or `artifact_select` for `base/implementation-plan`",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "The sum of all `evidence_reads.limit` values in one call is at most 30000 characters",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "when conflicting evidence leaves one material coordination or acceptance question",
@@ -464,10 +509,16 @@ describe("built-in interface review workflow authority", () => {
       "Do not hypothesize a source taxonomy, policy field, proof channel, platform control",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "use `evidence_reads` to retrieve the complete non-secret output before dispatching Tester",
+      "use `evidence_reads` to retrieve each complete non-secret output before dispatching Tester",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "A full successful mutation receipt is authoritative operation evidence",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "inspect its causal inventory for every mutation command",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "never select only the final successful receipt",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "or definite later mutation, operation-outcome, or rollback evidence",

@@ -23,6 +23,13 @@ describe("read_agent_message causal evidence projection", () => {
   })
 
   test("redacts inventory inputs and chunks large evidence output with a continuation offset", () => {
+    expect(ReadAgentMessageTestHooks.evidenceOutputMaxCharsPerCall).toBe(30_000)
+    expect(ReadAgentMessageTestHooks.evidenceReadsDescription).toContain(
+      "The sum of every limit in one call must be at most 30000 characters",
+    )
+    expect(ReadAgentMessageTestHooks.evidenceReadsDescription).toContain(
+      "Copy returned message_id and part_id values exactly",
+    )
     const preview = ReadAgentMessageTestHooks.safeInputPreview({
       headers: { Authorization: "Bearer SYNTHETIC_REVIEW_CANARY" },
       request: "inspect source record",

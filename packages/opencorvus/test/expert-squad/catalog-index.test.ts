@@ -102,7 +102,7 @@ describe("Expert Squad catalog index", () => {
     const inspection = await PromptProfileResolver.catalogInspection({ projectDirectory: project.path, id: "base" })
     expect(inspection).toMatchObject({
       id: "base",
-      version: "2026.09.14.2",
+      version: "2026.09.14.5",
       selector: {
         summary: expect.any(String),
         selection_guidance: expect.any(String),

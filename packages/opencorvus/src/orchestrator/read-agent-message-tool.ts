@@ -14,6 +14,7 @@ const CAUSAL_TOOL_MESSAGE_INVENTORY_LIMIT_PER_FINAL = 16
 const TOOL_INPUT_PREVIEW_CHARS = 240
 const EVIDENCE_OUTPUT_DEFAULT_CHARS = 8_000
 const EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL = 30_000
+const EVIDENCE_READS_DESCRIPTION = `Optional exact input, output, or failure chunks selected from this final's causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. The sum of every limit in one call must be at most ${EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL} characters. Follow next_offset until null.`
 
 const MessageIDs = z
   .array(z.string().min(1))
@@ -114,6 +115,8 @@ export const ReadAgentMessageTestHooks = Object.freeze({
   evidenceOutputChunk,
   causalToolMessageInventoryLimitPerFinal: CAUSAL_TOOL_MESSAGE_INVENTORY_LIMIT_PER_FINAL,
   evidenceOutputDefaultChars: EVIDENCE_OUTPUT_DEFAULT_CHARS,
+  evidenceOutputMaxCharsPerCall: EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL,
+  evidenceReadsDescription: EVIDENCE_READS_DESCRIPTION,
 })
 
 export function createReadAgentMessageTool(input: { taskID: string }) {
@@ -161,9 +164,7 @@ export function createReadAgentMessageTool(input: { taskID: string }) {
           }
         })
         .optional()
-        .describe(
-          "Optional exact input, output, or failure chunks selected from this final's causal inventory in this or an earlier call. Follow next_offset until null.",
-        ),
+        .describe(EVIDENCE_READS_DESCRIPTION),
     })
     .strict()
   const providerJSONSchema = z.toJSONSchema(inputSchema, { cycles: "ref", reused: "ref" }) as unknown as JSONSchema7

@@ -23,6 +23,9 @@ test("projects scope-first Expert Squad Task partitioning", () => {
     "never a hypothesized taxonomy, destination field, proof channel, or representation",
     "A requested audience, style, content, status, destination, or other outcome semantic remains an outcome for the Task to express through the actual interface",
     "unless the original request or observed authority names that dependency",
+    "read the exact Orchestrator final and, when the workflow has one, the verifier final",
+    "final Messages that actually exist omit a decisive original criterion",
+    "Always read every Artifact or deliverable that the original request or stage acceptance contract makes a required acceptance input",
   ]
 
   expect(requiredMissionClauses.map((clause) => MISSION_CORE.includes(clause))).toEqual(
