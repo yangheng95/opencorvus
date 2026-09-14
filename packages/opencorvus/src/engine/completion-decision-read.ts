@@ -4,7 +4,6 @@ import {
   findTaskCompletionDecisionForTerminalTimeInTransaction,
   requireTaskCompletionDecisionArtifactInTransaction,
 } from "./completion-decision-facts"
-import { taskIDForSession } from "./task-session-lineage"
 
 export function findTaskCompletionDecisionForTerminalTime(input: {
   taskID: string
@@ -44,9 +43,6 @@ export async function requireTaskCompletionDecisionMessage(input: {
     throw new Error(
       `Task ${input.taskID} current completion decision does not name Session Message ${input.sessionID}/${input.messageID}`,
     )
-  }
-  if (taskIDForSession(input.sessionID) !== input.taskID) {
-    throw new Error(`Session Message ${input.sessionID}/${input.messageID} does not belong to Task ${input.taskID}`)
   }
   const message = await MessageStore.get({ sessionID: input.sessionID, messageID: input.messageID })
   if (message.info.time.created > decision.timeCreated) {

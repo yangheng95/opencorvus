@@ -100,6 +100,7 @@ import {
   TerminalLifecycleReferenceSchema,
 } from "@/engine/terminal-lifecycle-reference-schema"
 import { requireTaskCompletionDecisionMessage } from "@/engine/completion-decision-read"
+import { taskIDForSession } from "@/engine/task-session-lineage"
 import {
   PanelQueryTaskErrorRow,
   PanelQueryTaskOutput,
@@ -1256,6 +1257,9 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         const terminal = resolveTerminalLifecycleReference(taskID, currentReference)
         if (terminal.terminalStatus !== "completed") {
           throw new Error(`panel.read_task_message requires a completed Task occurrence: ${taskID}`)
+        }
+        if (taskIDForSession(sessionID) !== taskID) {
+          throw new Error(`Session Message ${sessionID}/${messageID} does not belong to Task ${taskID}`)
         }
         const { decision, message } = await requireTaskCompletionDecisionMessage({
           taskID,
