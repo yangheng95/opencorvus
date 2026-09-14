@@ -10,6 +10,8 @@ test("AutomationBench Skill defines a bounded source-to-destination evidence loo
 
   expect(skill).toContain("authoritative source, destination or action, and exact values")
   expect(skill).toContain("## Monotonic evidence frontier")
+  expect(skill).toContain("split every requested current source entity into the material values needed to form the result")
+  expect(skill).toContain("a partial record closes only the fields it contains")
   expect(skill).toContain("Every client operation must consume one pending transition")
   expect(skill).toContain("When no pending transition remains, stop discovery and classify each item")
   expect(skill).toContain("exhausted unresolved authority cannot authorize mutation")

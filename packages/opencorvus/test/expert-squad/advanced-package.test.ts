@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.14.11")
+    expect(loaded.manifest.version).toBe("2026.09.14.12")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -214,12 +214,24 @@ describe("built-in interface review workflow authority", () => {
       "when an irreversible external mutation depends on current source authority absent from the original request",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Planner brief may assign only source obligations traceable to an exact original-request clause",
+      "Planner brief may assign only those source values, source obligations traceable to an exact original-request clause",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "compute the Planner's source frontier by subtracting every Developer-owned outcome semantic",
+      "split every requested outcome into current source values and destination expression",
     )
-    expect(loaded.promptProfile.agents.orchestrator).toContain("exactly one top-level `dispatch` object")
+    expect(loaded.promptProfile.agents.orchestrator).toContain("`dispatch_agent` accepts exactly `{ dispatch }`")
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "For `manage_task`, follow the exact schema visible in the current Turn",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "deduplicate every evidence locator by its exact source-specific identity",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "material values needed to form the mutation—such as its name, schedule, URL, identifier, exclusion",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "first evidence actions to query exact `artifact_types: [\"base/implementation-plan\"]`",
+    )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "own only read-only facts that the original request or an observed authority makes necessary",
     )
@@ -346,7 +358,16 @@ describe("built-in interface review workflow authority", () => {
       "Before any Skill lookup or client call, read the original Task input",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "locate the unique `base/implementation-plan` with one exact `artifact_types` query",
+      "the first two evidence Tool calls are `artifact_search` with exact `artifact_types: [\"base/implementation-plan\"]`",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "do not repeat Planner endpoint-directory discovery or abstract-title searches",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "Re-read once each exact current dynamic value that directly controls the mutation",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "treat each omitted material source value as a plan/classification gap",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "An exhausted but unresolved authority prerequisite is a blocker",
@@ -544,7 +565,7 @@ describe("built-in interface review workflow authority", () => {
       "tell Tester to completely read the same plan as source coordinates",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Planner brief may assign only source obligations traceable to an exact original-request clause",
+      "Planner brief may assign only those source values, source obligations traceable to an exact original-request clause",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
       "Never hypothesize a source taxonomy, policy field, proof channel, platform control",
