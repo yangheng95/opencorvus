@@ -4731,6 +4731,37 @@ export class Control extends HeyApiClient {
             taskID: string
           }
         | {
+            action: "read_task_message"
+            /**
+             * UTF-8 byte offset within text_part_id; defaults to 0.
+             */
+            byte_offset?: number
+            /**
+             * Maximum UTF-8 bytes to return; defaults to 16,384.
+             */
+            max_bytes?: number
+            /**
+             * Exact Message ID named by the current Completion Decision.
+             */
+            messageID: string
+            /**
+             * Exact Session ID named by the current Completion Decision.
+             */
+            sessionID: string
+            /**
+             * Terminal source Task in the current Mission lineage.
+             */
+            taskID: string
+            /**
+             * Exact text Part ID returned by this Message inventory.
+             */
+            text_part_id?: string
+            /**
+             * Bounded text-Part inventory page; defaults to 1.
+             */
+            text_part_page?: number
+          }
+        | {
             action: "complete_mission"
             /**
              * Concise user-facing summary of the accepted Mission outcome.
