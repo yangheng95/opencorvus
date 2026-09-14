@@ -97,9 +97,7 @@ test("Mission reads exact participant text named by the current Task Completion 
         cost: 0,
         tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
       })
-      const workerText =
-        "Independent verification PASS: the requested record exists once in the final business state.\n" +
-        "持续有效约束与最终状态🙂\n".repeat(1_500)
+      const workerText = "Independent verification PASS".padEnd(29_999, "A")
       const workerTextPart = await Session.updatePart({
         id: Identifier.ascending("part"),
         sessionID: worker.id,
@@ -108,14 +106,14 @@ test("Mission reads exact participant text named by the current Task Completion 
         text: workerText,
       })
       const supplementalTextParts = []
-      for (let index = 0; index < 16; index += 1) {
+      for (let index = 0; index < 70; index += 1) {
         supplementalTextParts.push(
           await Session.updatePart({
             id: Identifier.ascending("part"),
             sessionID: worker.id,
             messageID: workerFinal.id,
             type: "text",
-            text: index === 0 ? "A\uFEFFB" : `Supplemental terminal evidence ${index + 1}.`,
+            text: index === 0 ? "中" : index === 1 ? "" : `Supplemental terminal evidence ${index + 1}.`,
           }),
         )
       }
@@ -175,9 +173,7 @@ test("Mission reads exact participant text named by the current Task Completion 
           orchestrator_message_id: decisionMessage.id,
           tool_call_id: decisionCallID,
           tool_part_id: decisionToolPart.id,
-          evidence_locators: [
-            { source: "session_message", session_id: worker.id, message_id: workerFinal.id },
-          ],
+          evidence_locators: [{ source: "session_message", session_id: worker.id, message_id: workerFinal.id }],
           deliverable_artifact_locators: [],
           accepted_delivery_slice_revision_ids: [],
           workflow_binding: {
@@ -308,118 +304,104 @@ test("Mission reads exact participant text named by the current Task Completion 
         return JSON.parse(result.output) as Record<string, any>
       }
 
-      const inventory = await executeRead(
-        { taskID, sessionID: worker.id, messageID: workerFinal.id },
-        "inventory-current-completion-message",
-      )
-      expect(inventory).toEqual(expect.objectContaining({
-        taskID,
-        terminal_lifecycle_reference: terminalReference,
-        completion_decision_artifact_id: prepared.artifactID,
-        mode: "text_part_inventory",
-        message: {
-          session_id: worker.id,
-          message_id: workerFinal.id,
-          role: "assistant",
-          author: "base-tester",
-          agent: "base-tester",
-          finish: "stop",
-          time_created: createdAt + 2,
-          time_completed: createdAt + 3,
+      const unicodeBoundary = await executeRead(
+        {
+          taskID,
+          messages: [{ sessionID: worker.id, messageID: workerFinal.id }],
+          max_bytes: 30_000,
         },
-        text_part_page: 1,
-        text_part_count: 17,
-        next_text_part_page: 2,
-        complete: false,
-      }))
-      expect(inventory.text_parts).toHaveLength(16)
-      expect(inventory.text_parts[0]).toEqual({
-        part_id: workerTextPart.id,
-        total_bytes: Buffer.byteLength(workerText),
-        sha256: createHash("sha256").update(workerText).digest("hex"),
-      })
-      const finalInventoryPage = await executeRead(
-        { taskID, sessionID: worker.id, messageID: workerFinal.id, text_part_page: 2 },
-        "inventory-current-completion-message-page",
+        "read-current-completion-message-unicode-boundary",
       )
-      expect(finalInventoryPage).toEqual(
+      expect(unicodeBoundary).toEqual(
         expect.objectContaining({
-          mode: "text_part_inventory",
-          text_part_page: 2,
-          text_part_count: 17,
-          text_parts: [expect.objectContaining({ part_id: supplementalTextParts.at(-1)!.id })],
-          next_text_part_page: null,
-          complete: true,
+          aggregate_bytes: 29_999,
+          aggregate_parts: 1,
+          complete: false,
+          next_messages: [
+            {
+              sessionID: worker.id,
+              messageID: workerFinal.id,
+              text_part_id: supplementalTextParts[0]!.id,
+              byte_offset: 0,
+            },
+          ],
         }),
       )
-      const bomPrefix = await executeRead(
-        {
-          taskID,
-          sessionID: worker.id,
-          messageID: workerFinal.id,
-          text_part_id: supplementalTextParts[0]!.id,
-          byte_offset: 0,
-          max_bytes: 1,
-        },
-        "read-bom-prefix",
-      )
-      const bomSuffix = await executeRead(
-        {
-          taskID,
-          sessionID: worker.id,
-          messageID: workerFinal.id,
-          text_part_id: supplementalTextParts[0]!.id,
-          byte_offset: bomPrefix.text_part.next_offset,
-          max_bytes: 4,
-        },
-        "read-bom-suffix",
-      )
-      expect({
-        first: bomPrefix.text_part.text,
-        firstNext: bomPrefix.text_part.next_offset,
-        second: bomSuffix.text_part.text,
-        secondNext: bomSuffix.text_part.next_offset,
-        reconstructed: bomPrefix.text_part.text + bomSuffix.text_part.text,
-      }).toEqual({ first: "A", firstNext: 1, second: "\uFEFFB", secondNext: null, reconstructed: "A\uFEFFB" })
 
-      let reconstructed = ""
-      let byteOffset = 0
-      for (;;) {
-        const chunk = await executeRead(
-          {
-            taskID,
-            sessionID: worker.id,
-            messageID: workerFinal.id,
-            text_part_id: workerTextPart.id,
-            byte_offset: byteOffset,
-            max_bytes: 4_097,
-          },
-          "read-current-completion-message-chunk",
-        )
-        expect(chunk).toEqual(
+      let pending = [
+        { sessionID: orchestrator.id, messageID: decisionMessage.id },
+        { sessionID: worker.id, messageID: workerFinal.id },
+      ]
+      const reconstructed = new Map<string, string>()
+      const observedAgents = new Set<string>()
+      for (let page = 0; ; page++) {
+        expect(page).toBeLessThan(10)
+        const batch = await executeRead({ taskID, messages: pending }, "read-current-completion-message-batch")
+        expect(batch).toEqual(
           expect.objectContaining({
             taskID,
             terminal_lifecycle_reference: terminalReference,
             completion_decision_artifact_id: prepared.artifactID,
-            mode: "text_part_chunk",
-            text_part: expect.objectContaining({
-              part_id: workerTextPart.id,
-              byte_start: byteOffset,
-              total_bytes: Buffer.byteLength(workerText),
-              sha256: createHash("sha256").update(workerText).digest("hex"),
-            }),
+            mode: "message_batch",
+            max_bytes: 30_000,
+            max_parts: 64,
           }),
         )
-        reconstructed += chunk.text_part.text
-        if (chunk.text_part.next_offset === null) {
-          expect(chunk.text_part.complete).toBe(true)
+        expect(batch.aggregate_bytes).toBeLessThanOrEqual(30_000)
+        expect(batch.aggregate_parts).toBeLessThanOrEqual(64)
+        for (const entry of batch.messages) {
+          observedAgents.add(entry.message.agent)
+          for (const part of entry.text_parts) {
+            expect(part.sha256).toBeString()
+            reconstructed.set(part.part_id, (reconstructed.get(part.part_id) ?? "") + part.text)
+          }
+        }
+        if (batch.complete) {
+          expect(batch.next_messages).toEqual([])
           break
         }
-        expect(chunk.text_part.complete).toBe(false)
-        byteOffset = chunk.text_part.next_offset
+        pending = batch.next_messages
       }
-      expect(reconstructed).toBe(workerText)
+      expect(observedAgents).toEqual(new Set(["orchestrator", "base-tester"]))
+      expect(reconstructed.get(workerTextPart.id)).toBe(workerText)
+      expect(reconstructed.get(supplementalTextParts[0]!.id)).toBe("中")
+      expect(supplementalTextParts.every((part) => reconstructed.has(part.id))).toBe(true)
 
+      await expect(
+        executeRead(
+          {
+            taskID,
+            messages: [
+              {
+                sessionID: worker.id,
+                messageID: workerFinal.id,
+                text_part_id: supplementalTextParts[1]!.id,
+                byte_offset: 100_000,
+              },
+            ],
+          },
+          "read-current-completion-message-invalid-offset",
+        ),
+      ).rejects.toThrow("byte_offset 100000 exceeds 0")
+      await expect(
+        executeRead(
+          {
+            taskID,
+            messages: [
+              { sessionID: worker.id, messageID: workerFinal.id },
+              {
+                sessionID: orchestrator.id,
+                messageID: decisionMessage.id,
+                text_part_id: "prt_nonexistent",
+                byte_offset: 0,
+              },
+            ],
+          },
+          "read-current-completion-message-invalid-later-part",
+        ),
+      ).rejects.toThrow(
+        `Message ${orchestrator.id}/${decisionMessage.id} does not contain text Part prt_nonexistent`,
+      )
       await expect(
         requireTaskCompletionDecisionMessage({
           taskID,
@@ -476,7 +458,7 @@ test("Mission reads exact participant text named by the current Task Completion 
         tool: readLeaf.id,
         state: {
           status: "running",
-          input: { taskID, sessionID: worker.id, messageID: workerFinal.id },
+          input: { taskID, messages: [{ sessionID: worker.id, messageID: workerFinal.id }] },
           time: { start: completedAt + 82 },
         },
       })
@@ -494,7 +476,7 @@ test("Mission reads exact participant text named by the current Task Completion 
       }
       await expect(
         readLeaf.tool.execute(
-          { taskID, sessionID: worker.id, messageID: workerFinal.id },
+          { taskID, messages: [{ sessionID: worker.id, messageID: workerFinal.id }] },
           otherContext,
         ),
       ).rejects.toThrow(`Cross-Task Artifact source ${taskID} is outside Mission ${otherMission.missionID} lineage`)
@@ -519,7 +501,7 @@ test("Mission reads exact participant text named by the current Task Completion 
       )
       await expect(
         executeRead(
-          { taskID, sessionID: worker.id, messageID: workerFinal.id },
+          { taskID, messages: [{ sessionID: worker.id, messageID: workerFinal.id }] },
           "read-after-terminal-occurrence-changed",
         ),
       ).rejects.toThrow(`panel.read_task_message terminal occurrence changed for Task ${taskID}`)

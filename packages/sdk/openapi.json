@@ -58220,50 +58220,58 @@
                         "const": "read_task_message",
                         "type": "string"
                       },
-                      "byte_offset": {
-                        "description": "UTF-8 byte offset within text_part_id; defaults to 0.",
-                        "maximum": 9007199254740991,
-                        "minimum": 0,
-                        "type": "integer"
-                      },
                       "max_bytes": {
-                        "description": "Maximum UTF-8 bytes to return; defaults to 16,384.",
-                        "maximum": 65536,
+                        "description": "Aggregate UTF-8 text byte window for this batch call; defaults to 30,000.",
+                        "maximum": 30000,
                         "minimum": 1,
                         "type": "integer"
                       },
-                      "messageID": {
-                        "description": "Exact Message ID named by the current Completion Decision.",
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "sessionID": {
-                        "description": "Exact Session ID named by the current Completion Decision.",
-                        "minLength": 1,
-                        "type": "string"
+                      "messages": {
+                        "description": "One to eight exact Completion Decision Message identities or Host-returned continuations, each Message listed once.",
+                        "items": {
+                          "properties": {
+                            "byte_offset": {
+                              "description": "Exact UTF-8 continuation offset returned in next_messages.",
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "messageID": {
+                              "description": "Exact Message ID named by the current Completion Decision.",
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "sessionID": {
+                              "description": "Exact Session ID named by the current Completion Decision.",
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "text_part_id": {
+                              "description": "Exact text Part ID returned in next_messages.",
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "sessionID",
+                            "messageID"
+                          ],
+                          "type": "object"
+                        },
+                        "maxItems": 8,
+                        "minItems": 1,
+                        "type": "array"
                       },
                       "taskID": {
                         "description": "Terminal source Task in the current Mission lineage.",
                         "minLength": 1,
                         "type": "string"
-                      },
-                      "text_part_id": {
-                        "description": "Exact text Part ID returned by this Message inventory.",
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "text_part_page": {
-                        "description": "Bounded text-Part inventory page; defaults to 1.",
-                        "maximum": 9007199254740991,
-                        "minimum": 1,
-                        "type": "integer"
                       }
                     },
                     "required": [
                       "action",
                       "taskID",
-                      "sessionID",
-                      "messageID"
+                      "messages"
                     ],
                     "type": "object"
                   },

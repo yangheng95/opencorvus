@@ -4733,33 +4733,34 @@ export class Control extends HeyApiClient {
         | {
             action: "read_task_message"
             /**
-             * UTF-8 byte offset within text_part_id; defaults to 0.
-             */
-            byte_offset?: number
-            /**
-             * Maximum UTF-8 bytes to return; defaults to 16,384.
+             * Aggregate UTF-8 text byte window for this batch call; defaults to 30,000.
              */
             max_bytes?: number
             /**
-             * Exact Message ID named by the current Completion Decision.
+             * One to eight exact Completion Decision Message identities or Host-returned continuations, each Message listed once.
              */
-            messageID: string
-            /**
-             * Exact Session ID named by the current Completion Decision.
-             */
-            sessionID: string
+            messages: Array<{
+              /**
+               * Exact UTF-8 continuation offset returned in next_messages.
+               */
+              byte_offset?: number
+              /**
+               * Exact Message ID named by the current Completion Decision.
+               */
+              messageID: string
+              /**
+               * Exact Session ID named by the current Completion Decision.
+               */
+              sessionID: string
+              /**
+               * Exact text Part ID returned in next_messages.
+               */
+              text_part_id?: string
+            }>
             /**
              * Terminal source Task in the current Mission lineage.
              */
             taskID: string
-            /**
-             * Exact text Part ID returned by this Message inventory.
-             */
-            text_part_id?: string
-            /**
-             * Bounded text-Part inventory page; defaults to 1.
-             */
-            text_part_page?: number
           }
         | {
             action: "complete_mission"

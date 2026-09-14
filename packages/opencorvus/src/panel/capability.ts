@@ -305,17 +305,37 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "read_task_message",
     description:
-      "Read the exact visible participant text of one Session Message named by the current terminal Task Completion Decision. First query the Task and read that Completion Decision Artifact; then copy one exact session_id/message_id pair from its orchestrator identity or session_message evidence locators. Omit text_part_id to enumerate a bounded text-Part page, following next_text_part_page until null. Then read each exact text_part_id through byte_offset/max_bytes windows until next_offset is null. This never selects a latest message, expands Task history, copies a conclusion, or exposes hidden reasoning and Tool payloads.",
+      "Read a bounded batch of exact visible participant Messages named by the current terminal Task Completion Decision. First query the Task and completely read that Completion Decision Artifact; then copy its exact orchestrator identity and decision-named session_message identities into one messages array. The Host atomically validates every identity and returns each real participant's agent identity plus visible text-Part byte windows under one aggregate UTF-8 byte and Part-count bound. When complete is false, pass next_messages unchanged to continue the same exact batch. This never selects latest Messages, expands Task history, synthesizes a conclusion, or exposes hidden reasoning and Tool payloads.",
     kind: "query",
     surfaces: ["panel"],
     params: {
       taskID: z.string().min(1).describe("Terminal source Task in the current Mission lineage."),
-      sessionID: z.string().min(1).describe("Exact Session ID named by the current Completion Decision."),
-      messageID: z.string().min(1).describe("Exact Message ID named by the current Completion Decision."),
-      text_part_page: z.coerce.number().int().min(1).optional().describe("Bounded text-Part inventory page; defaults to 1."),
-      text_part_id: z.string().min(1).optional().describe("Exact text Part ID returned by this Message inventory."),
-      byte_offset: z.coerce.number().int().min(0).optional().describe("UTF-8 byte offset within text_part_id; defaults to 0."),
-      max_bytes: z.coerce.number().int().min(1).max(65_536).optional().describe("Maximum UTF-8 bytes to return; defaults to 16,384."),
+      messages: z
+        .array(
+          z.object({
+            sessionID: z.string().min(1).describe("Exact Session ID named by the current Completion Decision."),
+            messageID: z.string().min(1).describe("Exact Message ID named by the current Completion Decision."),
+            text_part_id: z.string().min(1).optional().describe("Exact text Part ID returned in next_messages."),
+            byte_offset: z.coerce
+              .number()
+              .int()
+              .min(0)
+              .optional()
+              .describe("Exact UTF-8 continuation offset returned in next_messages."),
+          }),
+        )
+        .min(1)
+        .max(8)
+        .describe(
+          "One to eight exact Completion Decision Message identities or Host-returned continuations, each Message listed once.",
+        ),
+      max_bytes: z.coerce
+        .number()
+        .int()
+        .min(1)
+        .max(30_000)
+        .optional()
+        .describe("Aggregate UTF-8 text byte window for this batch call; defaults to 30,000."),
     },
   }),
   item({

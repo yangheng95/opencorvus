@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.14.6")
+    expect(loaded.manifest.version).toBe("2026.09.14.8")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -323,7 +323,7 @@ describe("built-in interface review workflow authority", () => {
       ]?.description,
     ).toContain("Separates execution-authority conditions, applicable constraints, and Developer-owned outcome semantics")
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
-      "do not search for a Skill whose exact name is already visible",
+      "Before any Skill lookup or client call, read the original Task input",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "selected workflow node explicitly declares that exact Artifact type",
@@ -387,6 +387,9 @@ describe("built-in interface review workflow authority", () => {
       "require every published description, request field, and response field about actor or owner to be mutually consistent",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "one API-native service/resource/action/owner-field query that excludes audience wording and business content",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "If it differs, do not create again",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
@@ -409,7 +412,7 @@ describe("built-in interface review workflow authority", () => {
       "every prior committed side effect that remains unresolved",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
-      "do not search for a Skill whose exact name is already visible",
+      "query for a Skill only when the Task input provides no exact name",
     )
     expect(loaded.promptProfile.agents["base-tester"]).toContain("Return one concise visible final message")
     expect(loaded.promptProfile.agents["base-tester"]).toContain("exact method, URL, and parameter shape")

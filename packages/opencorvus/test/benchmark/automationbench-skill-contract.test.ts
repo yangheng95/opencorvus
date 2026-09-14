@@ -49,13 +49,17 @@ test("AutomationBench Skill defines a bounded source-to-destination evidence loo
   expect(skill).toContain("honor contract-declared mode, field projection, sorting, and pagination semantics")
   expect(skill).toContain("make one minimal exact-filter read")
   expect(skill).toContain("A current authoritative operational record that gives concrete do/don't rules")
-  expect(skill).toContain("An abstract user reference to current guidelines, policy, requirements, or instructions is only a lookup trigger")
+  expect(skill).toContain(
+    "An abstract user reference to current guidelines, policy, requirements, or instructions is only a lookup trigger",
+  )
   expect(skill).toContain("do not create a residual broader/remaining/complete-guidelines item")
   expect(skill).toContain("A first client call-shape, argument-validation, or contract `TypeError` proves only")
   expect(skill).toContain("If the corrected contract-valid call returns the same external/interface failure")
   expect(skill).toContain("map the original obligation to that record, the concrete rule")
   expect(skill).toContain("process, approval, and historical rules require corresponding execution evidence")
-  expect(skill).toContain("observed authority identifies another dependency, uncovered scope, conflict, or precedence question")
+  expect(skill).toContain(
+    "observed authority identifies another dependency, uncovered scope, conflict, or precedence question",
+  )
   expect(skill).toContain("record the exact minimal-anchor and later eligible-anchor reads")
   expect(skill).toContain("their typed outcome or candidate count")
   expect(skill).toContain("does not prove that the source is absent or waive a material fact")
@@ -129,7 +133,9 @@ test("AutomationBench Mission request preserves public reconciliation and explic
       "END OF AUTOMATIONBENCH CHILD TASK AUTHORITY.",
     ].join("\n\n"),
   )
-  expect(request).toContain("then use panel_read_task_message for the exact orchestrator")
+  expect(request).toContain(
+    "split only a unique set larger than eight into consecutive bounded `panel_read_task_message.messages` batches",
+  )
   expect(request).toContain("stage-local statement that execution had not happened cannot establish a present omission")
   expect(request).toContain("recency alone does not make a participant claim true")
 })

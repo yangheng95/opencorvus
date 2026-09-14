@@ -39,7 +39,7 @@ const guidance: Readonly<Record<string, string>> = {
   panel_query_task: "Inspect a Task's current persisted state.",
   panel_query_task_artifacts: "Find the specified Task's artifact evidence.",
   panel_read_task_artifact: "Read the specified Task artifact for acceptance.",
-  panel_read_task_message: "Read exact terminal Task evidence text named by its Completion Decision.",
+  panel_read_task_message: "Read a bounded exact terminal Task evidence Message batch named by its Completion Decision.",
   panel_create_task: "Create a Task with the selected ownership and requested work.",
   panel_complete_mission: "Complete a Mission using its accepted Task evidence.",
 }

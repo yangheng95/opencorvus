@@ -59,7 +59,7 @@ import { taskIDForCreatorToolPart } from "@/engine/task-creation-contract"
 import { TaskCreationAcceptedTargetUnavailableError } from "@/engine/task-project-error"
 import { buildPanelCreationFact, PanelCreationFact, panelCreationTargetID } from "@/engine/panel-creation-fact"
 import { canonicalJSONValue } from "@/util/canonical-digest"
-import { utf8Chunk } from "@/artifact-catalog"
+import { UTF8ChunkBudgetError, utf8Chunk } from "@/artifact-catalog"
 
 import { ChannelId } from "@/channel/catalog"
 import { ControlPromptContext } from "@/control/prompt"
@@ -112,8 +112,8 @@ import {
 
 let missionWakeForTest: typeof SessionWake.wakeWithReceipt | undefined
 
-const PANEL_TASK_MESSAGE_TEXT_PART_PAGE_SIZE = 16
-const PANEL_TASK_MESSAGE_DEFAULT_MAX_BYTES = 16_384
+const PANEL_TASK_MESSAGE_BATCH_MAX_BYTES = 30_000
+const PANEL_TASK_MESSAGE_BATCH_MAX_PARTS = 64
 
 export const PanelToolTestHooks = {
   installMissionWakeExecutor(executor: typeof SessionWake.wakeWithReceipt): Disposable {
@@ -1229,15 +1229,11 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           throw new Error(`panel.read_task_message is only available to a real Mission.`)
         }
         const mission = await requireMissionSession(ctx.sessionID)
-        const {
-          taskID,
-          sessionID,
-          messageID,
-          text_part_page = 1,
-          text_part_id: textPartID,
-          byte_offset: byteOffset = 0,
-          max_bytes: maxBytes = PANEL_TASK_MESSAGE_DEFAULT_MAX_BYTES,
-        } = params
+        const { taskID, messages, max_bytes: maxBytes = PANEL_TASK_MESSAGE_BATCH_MAX_BYTES } = params
+        const messageKeys = messages.map((item) => `${item.sessionID}\u0000${item.messageID}`)
+        if (new Set(messageKeys).size !== messageKeys.length) {
+          throw new Error("panel.read_task_message requires each exact Message identity once")
+        }
         EngineService.requireMissionArtifactSource(taskID, {
           missionID: mission.missionID,
           sessionID: mission.id,
@@ -1258,83 +1254,113 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         if (terminal.terminalStatus !== "completed") {
           throw new Error(`panel.read_task_message requires a completed Task occurrence: ${taskID}`)
         }
-        if (taskIDForSession(sessionID) !== taskID) {
-          throw new Error(`Session Message ${sessionID}/${messageID} does not belong to Task ${taskID}`)
-        }
-        const { decision, message } = await requireTaskCompletionDecisionMessage({
-          taskID,
-          timeCompleted: terminal.timeCompleted,
-          sessionID,
-          messageID,
-        })
+        const resolved = await Promise.all(
+          messages.map(async ({ sessionID, messageID }) => {
+            if (taskIDForSession(sessionID) !== taskID) {
+              throw new Error(`Session Message ${sessionID}/${messageID} does not belong to Task ${taskID}`)
+            }
+            return requireTaskCompletionDecisionMessage({
+              taskID,
+              timeCompleted: terminal.timeCompleted,
+              sessionID,
+              messageID,
+            })
+          }),
+        )
         const settledReference = requireCurrentTerminalLifecycleReference(taskID)
         if (!sameTerminalLifecycleReference(settledReference, reviewedReference)) {
           throw new Error(
             `panel.read_task_message terminal occurrence changed while reading Task ${taskID}; query the current Task again`,
           )
         }
-        const messageIdentity = {
-          session_id: message.info.sessionID,
-          message_id: message.info.id,
-          role: message.info.role,
-          author: message.info.author,
-          agent: message.info.agent,
-          finish: message.info.role === "assistant" ? (message.info.finish ?? null) : null,
-          time_created: message.info.time.created,
-          time_completed: message.info.role === "assistant" ? (message.info.time.completed ?? null) : null,
+        const decisionID = resolved[0]!.decision.id
+        if (resolved.some((item) => item.decision.id !== decisionID)) {
+          throw new Error(`panel.read_task_message resolved inconsistent Completion Decisions for Task ${taskID}`)
         }
-        const textParts = message.parts.filter((part) => part.type === "text")
-        let messageRead: Record<string, unknown>
-        if (!textPartID) {
-          if (params.byte_offset !== undefined || params.max_bytes !== undefined) {
+        const preparedMessages = resolved.map(({ message }, messageIndex) => {
+          const requested = messages[messageIndex]!
+          const textParts = message.parts.filter((part) => part.type === "text")
+          const requestedPartIndex = requested.text_part_id
+            ? textParts.findIndex((part) => part.id === requested.text_part_id)
+            : 0
+          if (requested.text_part_id && requestedPartIndex < 0) {
             throw new Error(
-              "panel.read_task_message byte_offset and max_bytes require an exact text_part_id from the Message inventory",
+              `Message ${requested.sessionID}/${requested.messageID} does not contain text Part ${requested.text_part_id}`,
             )
           }
-          const start = (text_part_page - 1) * PANEL_TASK_MESSAGE_TEXT_PART_PAGE_SIZE
-          if (text_part_page > 1 && start >= textParts.length) {
+          if (requested.byte_offset !== undefined && !requested.text_part_id) {
             throw new Error(
-              `panel.read_task_message text_part_page ${text_part_page} exceeds the ${textParts.length} text Parts in Message ${messageID}`,
+              "panel.read_task_message byte_offset requires the exact text_part_id returned in next_messages",
             )
           }
-          const page = textParts.slice(start, start + PANEL_TASK_MESSAGE_TEXT_PART_PAGE_SIZE)
-          const nextPage = start + page.length < textParts.length ? text_part_page + 1 : null
-          messageRead = {
-            mode: "text_part_inventory",
-            message: messageIdentity,
-            text_part_page,
-            text_part_count: textParts.length,
-            text_parts: page.map((part) => {
-              const bytes = Buffer.from(part.text, "utf8")
-              return {
-                part_id: part.id,
-                total_bytes: bytes.byteLength,
-                sha256: createHash("sha256").update(bytes).digest("hex"),
+          const requestedByteOffset = requested.byte_offset ?? 0
+          if (requested.text_part_id) {
+            const bytes = Buffer.from(textParts[requestedPartIndex]!.text, "utf8")
+            utf8Chunk({
+              bytes,
+              offset: requestedByteOffset,
+              maxBytes: 4,
+              context: `panel.read_task_message ${requested.sessionID}/${requested.messageID}/${requested.text_part_id}`,
+            })
+          }
+          return { message, requested, textParts, requestedPartIndex, requestedByteOffset }
+        })
+        let aggregateBytes = 0
+        let aggregateParts = 0
+        const messageBatch: Array<Record<string, unknown>> = []
+        let nextMessages: Array<{
+          sessionID: string
+          messageID: string
+          text_part_id?: string
+          byte_offset?: number
+        }> = []
+        for (let messageIndex = 0; messageIndex < preparedMessages.length; messageIndex++) {
+          const { message, requested, textParts, requestedPartIndex, requestedByteOffset } =
+            preparedMessages[messageIndex]!
+          const outputParts: Array<Record<string, unknown>> = []
+          for (let partIndex = requestedPartIndex; partIndex < textParts.length; partIndex++) {
+            const part = textParts[partIndex]!
+            const bytes = Buffer.from(part.text, "utf8")
+            const byteOffset = partIndex === requestedPartIndex ? requestedByteOffset : 0
+            if (aggregateParts >= PANEL_TASK_MESSAGE_BATCH_MAX_PARTS || aggregateBytes >= maxBytes) {
+              nextMessages = [
+                {
+                  sessionID: requested.sessionID,
+                  messageID: requested.messageID,
+                  text_part_id: part.id,
+                  byte_offset: byteOffset,
+                },
+                ...messages.slice(messageIndex + 1),
+              ]
+              break
+            }
+            let chunk: { text: string; byteEnd: number }
+            try {
+              chunk = utf8Chunk({
+                bytes,
+                offset: byteOffset,
+                maxBytes: maxBytes - aggregateBytes,
+                context: `panel.read_task_message ${requested.sessionID}/${requested.messageID}/${part.id}`,
+              })
+            } catch (error) {
+              if (aggregateParts > 0 && error instanceof UTF8ChunkBudgetError) {
+                nextMessages = [
+                  {
+                    sessionID: requested.sessionID,
+                    messageID: requested.messageID,
+                    text_part_id: part.id,
+                    byte_offset: byteOffset,
+                  },
+                  ...messages.slice(messageIndex + 1),
+                ]
+                break
               }
-            }),
-            next_text_part_page: nextPage,
-            complete: nextPage === null,
-          }
-        } else {
-          if (text_part_page !== 1) {
-            throw new Error("panel.read_task_message text_part_page is only used when enumerating Message text Parts")
-          }
-          const part = textParts.find((candidate) => candidate.id === textPartID)
-          if (!part) {
-            throw new Error(`Message ${sessionID}/${messageID} does not contain text Part ${textPartID}`)
-          }
-          const bytes = Buffer.from(part.text, "utf8")
-          const chunk = utf8Chunk({
-            bytes,
-            offset: byteOffset,
-            maxBytes,
-            context: `panel.read_task_message ${sessionID}/${messageID}/${textPartID}`,
-          })
-          const complete = chunk.byteEnd === bytes.byteLength
-          messageRead = {
-            mode: "text_part_chunk",
-            message: messageIdentity,
-            text_part: {
+              throw error
+            }
+            const complete = chunk.byteEnd === bytes.byteLength
+            aggregateBytes += chunk.byteEnd - byteOffset
+            aggregateParts += 1
+            outputParts.push({
               part_id: part.id,
               byte_start: byteOffset,
               byte_end: chunk.byteEnd,
@@ -1343,16 +1369,49 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               complete,
               sha256: createHash("sha256").update(bytes).digest("hex"),
               text: chunk.text,
-            },
+            })
+            if (!complete) {
+              nextMessages = [
+                {
+                  sessionID: requested.sessionID,
+                  messageID: requested.messageID,
+                  text_part_id: part.id,
+                  byte_offset: chunk.byteEnd,
+                },
+                ...messages.slice(messageIndex + 1),
+              ]
+              break
+            }
           }
+          messageBatch.push({
+            message: {
+              session_id: message.info.sessionID,
+              message_id: message.info.id,
+              role: message.info.role,
+              author: message.info.author,
+              agent: message.info.agent,
+              finish: message.info.role === "assistant" ? (message.info.finish ?? null) : null,
+              time_created: message.info.time.created,
+              time_completed: message.info.role === "assistant" ? (message.info.time.completed ?? null) : null,
+            },
+            text_parts: outputParts,
+          })
+          if (nextMessages.length > 0) break
         }
         return {
-          title: "Task completion evidence Message",
+          title: "Task completion evidence Messages",
           output: JSON.stringify({
             taskID,
             terminal_lifecycle_reference: settledReference,
-            completion_decision_artifact_id: decision.id,
-            ...messageRead,
+            completion_decision_artifact_id: decisionID,
+            mode: "message_batch",
+            messages: messageBatch,
+            aggregate_bytes: aggregateBytes,
+            aggregate_parts: aggregateParts,
+            max_bytes: maxBytes,
+            max_parts: PANEL_TASK_MESSAGE_BATCH_MAX_PARTS,
+            next_messages: nextMessages,
+            complete: nextMessages.length === 0,
           }),
           metadata: { truncated: false },
         }
