@@ -5,7 +5,7 @@
   "name": "Base",
   "label": "Base",
   "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
-  "version": "2026.09.14.12",
+  "version": "2026.09.14.15",
   "product_pillars": [
     "code",
     "work"
@@ -13,7 +13,7 @@
   "readme": "README.md",
   "selector": {
     "summary": "Use Base for one complete Task executed by one capable owner and independently verified against the actual outcome.",
-    "selection_guidance": "Choose execution-verification when delivery has no material dynamic business-source prerequisite before mutation, or when the operation is reversible and one execution owner can safely resolve ordinary current facts. Choose source-planned-execution-verification when an irreversible mutation depends on current source authority absent from the request; classify only traceable execution-authority conditions and applicable constraints, while destination outcome semantics remain with Developer. Choose the parallel research workflow only for a useful independent repository/web partition. Specialized or genuinely richer dependencies belong to their domain Squad or Advanced.",
+    "selection_guidance": "Choose execution-verification when delivery has no material dynamic business-source prerequisite before mutation, or when the operation is reversible and one execution owner can safely resolve ordinary current facts. Choose source-planned-execution-verification when an irreversible mutation depends on current source authority absent from the request; classify only traceable execution-authority conditions and applicable constraints, while destination outcome semantics and contract-required execution dependencies remain with Developer. Choose the parallel research workflow only for a useful independent repository/web partition. Specialized or genuinely richer dependencies belong to their domain Squad or Advanced.",
     "instructions": "selector.md"
   },
   "capability_sets": {
@@ -82,7 +82,7 @@
           "capability:tool:platform:tool-registry:websearch"
         ],
         "label": "Base Planner",
-        "description": "Classifies and resolves only traceable pre-mutation execution authority and applicable source constraints, while leaving destination outcome semantics to Developer, or allocates a justified parallel research and implementation partition.",
+        "description": "Classifies and resolves only traceable pre-mutation execution authority and applicable source constraints, while leaving destination outcome semantics and contract-required execution dependencies to Developer, or allocates a justified parallel research and implementation partition.",
         "base_role": "delegated-worker",
         "prompt": "agents/base-planner/system.md"
       },
@@ -132,7 +132,7 @@
         "nodes": {
           "base-planner": {
             "agent_id": "base-planner",
-            "description": "Separates execution-authority conditions, applicable constraints, and Developer-owned outcome semantics; resolves traceable source obligations through a bounded minimal-anchor worklist before mutation.",
+            "description": "Separates execution-authority conditions, applicable constraints, and Developer-owned outcome semantics and destination execution dependencies; resolves traceable source obligations through a bounded minimal-anchor worklist before mutation.",
             "depends_on": []
           },
           "base-developer": {

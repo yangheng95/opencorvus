@@ -191,7 +191,7 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.14.12")
+    expect(loaded.manifest.version).toBe("2026.09.14.15")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
@@ -230,6 +230,16 @@ describe("built-in interface review workflow authority", () => {
       "material values needed to form the mutation—such as its name, schedule, URL, identifier, exclusion",
     )
     expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "This is a `destination_execution_dependency`, owned by Developer rather than Planner",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "never accept it as `execution_authority` or fail the Task before Developer evaluates the executable path",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain("one per-record obligation matrix")
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
+      "a notification or report cannot replace the authorized mutation",
+    )
+    expect(loaded.promptProfile.agents.orchestrator).toContain(
       "first evidence actions to query exact `artifact_types: [\"base/implementation-plan\"]`",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
@@ -240,6 +250,15 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "`outcome_semantic`: the requested audience, content, status, destination identity, targeting, representation, mutation, or readback",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "`destination_execution_dependency`: an object, reference, container, capability, or state transition",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "Do not query destination inventories or classify a missing destination dependency as source `execution_authority`",
+    )
+    expect(loaded.promptProfile.agents["base-planner"]).toContain(
+      "A terminal source state remains eligible for an action or template whose trigger exactly names that state",
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "a current observed rule that controls a concrete effect of the mutation",
@@ -366,6 +385,16 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "Re-read once each exact current dynamic value that directly controls the mutation",
     )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "Include the smallest such step in the authorized execution closure",
+    )
+    expect(loaded.promptProfile.agents["base-developer"]).toContain(
+      "Treat a processed marker as completing only the exact current operation",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain(
+      "do not fail merely because the requested operation required a minimal supporting destination record or state transition",
+    )
+    expect(loaded.promptProfile.agents["base-tester"]).toContain("Verify every column")
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "treat each omitted material source value as a plan/classification gap",
     )
@@ -629,7 +658,7 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.manifest.capability_projection.agents["base-planner"]).toMatchObject({
       base_role: "delegated-worker",
       description:
-        "Classifies and resolves only traceable pre-mutation execution authority and applicable source constraints, while leaving destination outcome semantics to Developer, or allocates a justified parallel research and implementation partition.",
+        "Classifies and resolves only traceable pre-mutation execution authority and applicable source constraints, while leaving destination outcome semantics and contract-required execution dependencies to Developer, or allocates a justified parallel research and implementation partition.",
     })
     expect(
       loaded.manifest.capability_projection.virtual_workflows["source-planned-execution-verification"]?.nodes[
