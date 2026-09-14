@@ -4741,7 +4741,7 @@ export class Control extends HeyApiClient {
              */
             messages: Array<{
               /**
-               * Exact UTF-8 continuation offset returned in next_messages.
+               * UTF-8 offset. Omit it or use 0 for an initial Message identity; a positive continuation offset requires the exact text_part_id returned in next_messages.
                */
               byte_offset?: number
               /**

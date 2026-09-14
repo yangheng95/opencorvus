@@ -321,7 +321,9 @@ export const PanelCapabilityRegistry = list(
               .int()
               .min(0)
               .optional()
-              .describe("Exact UTF-8 continuation offset returned in next_messages."),
+              .describe(
+                "UTF-8 offset. Omit it or use 0 for an initial Message identity; a positive continuation offset requires the exact text_part_id returned in next_messages.",
+              ),
           }),
         )
         .min(1)

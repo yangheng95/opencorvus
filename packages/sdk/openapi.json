@@ -58231,7 +58231,7 @@
                         "items": {
                           "properties": {
                             "byte_offset": {
-                              "description": "Exact UTF-8 continuation offset returned in next_messages.",
+                              "description": "UTF-8 offset. Omit it or use 0 for an initial Message identity; a positive continuation offset requires the exact text_part_id returned in next_messages.",
                               "maximum": 9007199254740991,
                               "minimum": 0,
                               "type": "integer"

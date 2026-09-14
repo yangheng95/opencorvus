@@ -1288,9 +1288,9 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               `Message ${requested.sessionID}/${requested.messageID} does not contain text Part ${requested.text_part_id}`,
             )
           }
-          if (requested.byte_offset !== undefined && !requested.text_part_id) {
+          if (requested.byte_offset !== undefined && requested.byte_offset !== 0 && !requested.text_part_id) {
             throw new Error(
-              "panel.read_task_message byte_offset requires the exact text_part_id returned in next_messages",
+              "panel.read_task_message a positive byte_offset requires the exact text_part_id returned in next_messages",
             )
           }
           const requestedByteOffset = requested.byte_offset ?? 0

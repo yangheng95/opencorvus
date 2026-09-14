@@ -329,8 +329,8 @@ test("Mission reads exact participant text named by the current Task Completion 
       )
 
       let pending = [
-        { sessionID: orchestrator.id, messageID: decisionMessage.id },
-        { sessionID: worker.id, messageID: workerFinal.id },
+        { sessionID: orchestrator.id, messageID: decisionMessage.id, byte_offset: 0 },
+        { sessionID: worker.id, messageID: workerFinal.id, byte_offset: 0 },
       ]
       const reconstructed = new Map<string, string>()
       const observedAgents = new Set<string>()
@@ -366,6 +366,16 @@ test("Mission reads exact participant text named by the current Task Completion 
       expect(reconstructed.get(workerTextPart.id)).toBe(workerText)
       expect(reconstructed.get(supplementalTextParts[0]!.id)).toBe("中")
       expect(supplementalTextParts.every((part) => reconstructed.has(part.id))).toBe(true)
+
+      await expect(
+        executeRead(
+          {
+            taskID,
+            messages: [{ sessionID: worker.id, messageID: workerFinal.id, byte_offset: 1 }],
+          },
+          "read-current-completion-message-positive-offset-without-part",
+        ),
+      ).rejects.toThrow("a positive byte_offset requires the exact text_part_id returned in next_messages")
 
       await expect(
         executeRead(
