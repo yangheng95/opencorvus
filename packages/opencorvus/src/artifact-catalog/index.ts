@@ -1347,14 +1347,14 @@ export async function searchTaskArtifacts(input: {
   }
 }
 
-function utf8Chunk(input: { bytes: Uint8Array; offset: number; maxBytes: number; context: string }): {
+export function utf8Chunk(input: { bytes: Uint8Array; offset: number; maxBytes: number; context: string }): {
   text: string
   byteEnd: number
 } {
   if (input.offset > input.bytes.byteLength) {
     throw new Error(`${input.context}: byte_offset ${input.offset} exceeds ${input.bytes.byteLength}`)
   }
-  const fatalDecoder = new TextDecoder("utf-8", { fatal: true })
+  const fatalDecoder = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true })
   if (input.offset === input.bytes.byteLength) {
     return { text: "", byteEnd: input.offset }
   }
@@ -1739,7 +1739,9 @@ function boundedEngineArtifactTextReadResult(input: {
   let text = ""
   while (relativeEnd >= relativeOffset) {
     try {
-      text = new TextDecoder("utf-8", { fatal: true }).decode(input.bytes.subarray(relativeOffset, relativeEnd))
+      text = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(
+        input.bytes.subarray(relativeOffset, relativeEnd),
+      )
       break
     } catch {
       relativeEnd -= 1

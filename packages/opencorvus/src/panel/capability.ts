@@ -276,7 +276,7 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "query_task_artifacts",
     description:
-      "Enumerate one terminal Task occurrence's canonical Artifact catalog through a bounded numbered page. A Session-bound model call first uses panel_query_task in the same physical Turn, while a stateless Panel or gateway request binds the current canonical terminal occurrence at request start. Start with page_number 1 and repeat with next_page_number until null; the Host owns both authorities, retains and authenticates opaque catalog cursors internally, and revalidates the occurrence. Empty entries are a valid result. Select the current Completion Decision plus every deliverable, report, review, or evidence item required by acceptance; package/runtime bindings and Task-root ingress dispositions remain control-plane audit facts unless a concrete acceptance contradiction requires them. Each selected entry returns a short Host-minted artifact_locator_ref for panel_read_task_artifact; the model never reconstructs its canonical locator or copies a terminal event ID.",
+      "Enumerate one terminal Task occurrence's canonical Artifact catalog through a bounded numbered page. A Session-bound model call first uses panel_query_task in the same physical Turn, while a stateless Panel or gateway request binds the current canonical terminal occurrence at request start. Start with page_number 1 and repeat with next_page_number until null; the Host owns both authorities, retains and authenticates opaque catalog cursors internally, and revalidates the occurrence. Empty entries are a valid result. Select and completely read the current Completion Decision first, then every deliverable, report, review, or evidence item required by acceptance. If the decision names material participant session_message evidence, read that exact text through panel_read_task_message. Package/runtime bindings and Task-root ingress dispositions remain control-plane audit facts unless a concrete acceptance contradiction requires them. Each selected Artifact entry returns a short Host-minted artifact_locator_ref for panel_read_task_artifact; the model never reconstructs its canonical locator or copies a terminal event ID.",
     kind: "query",
     surfaces: allProjectSurfaces,
     params: {
@@ -300,6 +300,22 @@ export const PanelCapabilityRegistry = list(
     params: {
       taskID: z.string().min(1).describe("Terminal source Task in the current Mission lineage."),
       ...ArtifactReadReferenceInputSchema.shape,
+    },
+  }),
+  item({
+    action: "read_task_message",
+    description:
+      "Read the exact visible participant text of one Session Message named by the current terminal Task Completion Decision. First query the Task and read that Completion Decision Artifact; then copy one exact session_id/message_id pair from its orchestrator identity or session_message evidence locators. Omit text_part_id to enumerate a bounded text-Part page, following next_text_part_page until null. Then read each exact text_part_id through byte_offset/max_bytes windows until next_offset is null. This never selects a latest message, expands Task history, copies a conclusion, or exposes hidden reasoning and Tool payloads.",
+    kind: "query",
+    surfaces: ["panel"],
+    params: {
+      taskID: z.string().min(1).describe("Terminal source Task in the current Mission lineage."),
+      sessionID: z.string().min(1).describe("Exact Session ID named by the current Completion Decision."),
+      messageID: z.string().min(1).describe("Exact Message ID named by the current Completion Decision."),
+      text_part_page: z.coerce.number().int().min(1).optional().describe("Bounded text-Part inventory page; defaults to 1."),
+      text_part_id: z.string().min(1).optional().describe("Exact text Part ID returned by this Message inventory."),
+      byte_offset: z.coerce.number().int().min(0).optional().describe("UTF-8 byte offset within text_part_id; defaults to 0."),
+      max_bytes: z.coerce.number().int().min(1).max(65_536).optional().describe("Maximum UTF-8 bytes to return; defaults to 16,384."),
     },
   }),
   item({

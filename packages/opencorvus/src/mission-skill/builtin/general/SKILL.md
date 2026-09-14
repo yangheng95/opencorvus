@@ -8,6 +8,7 @@ required_tools:
   - panel_query_task
   - panel_query_task_artifacts
   - panel_read_task_artifact
+  - panel_read_task_message
   - panel_complete_mission
   - panel_view_board
   - panel_view_plan

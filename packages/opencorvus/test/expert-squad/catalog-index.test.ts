@@ -343,6 +343,7 @@ describe("Expert Squad catalog index", () => {
           "panel_query_task",
           "panel_query_task_artifacts",
           "panel_read_task_artifact",
+          "panel_read_task_message",
           "publish_interactive_artifact",
           "question",
           "read",

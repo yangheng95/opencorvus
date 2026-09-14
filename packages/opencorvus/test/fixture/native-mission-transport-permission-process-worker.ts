@@ -12,6 +12,7 @@ import { Provider } from "@/provider/provider"
 import { Instance } from "@/project/instance"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
 import { Message, Session } from "@/session"
+import { PartTable } from "@/session/session.sql"
 import { LLM } from "@/session/llm"
 import { MessageStore } from "@/session/message-store"
 import { SessionProcessor } from "@/session/processor"
@@ -204,7 +205,6 @@ async function prepare(scenario: ProcessState["scenario"]) {
         ...(structuredOutput ? { reservedProviderTools: [structuredOutput] } : {}),
       })
       const tools = resolved.tools
-
       if (scenario === "catalog-v2" || scenario === "old-base") {
         const legacyPayload = { ...resolved.occurrence.payload } as Record<string, unknown>
         if (scenario === "catalog-v2") {
@@ -228,14 +228,22 @@ async function prepare(scenario: ProcessState["scenario"]) {
         const parent = await MessageStore.get({ sessionID: mission.id, messageID: user.id })
         const carrier = parent.parts.find((part) => part.type === "text")
         if (!carrier || carrier.type !== "text") throw new Error("Catalog V2 fixture has no input carrier.")
-        await Session.updatePart({
-          ...carrier,
-          metadata: {
-            ...(carrier.metadata ?? {}),
-            catalog_snapshot_ref: reference.url,
-            catalog_snapshot_hash: reference.sha,
-          },
-        })
+        Database.immediateTransaction((db) =>
+          db
+            .update(PartTable)
+            .set({
+              data: {
+                ...carrier,
+                metadata: {
+                  ...(carrier.metadata ?? {}),
+                  catalog_snapshot_ref: reference.url,
+                  catalog_snapshot_hash: reference.sha,
+                },
+              } as never,
+            })
+            .where(eq(PartTable.id, carrier.id))
+            .run(),
+        )
       }
       const schedulerMessage = tools.scheduler_message
       if (!schedulerMessage?.execute) throw new Error("Native Mission scheduler_message was not materialized.")

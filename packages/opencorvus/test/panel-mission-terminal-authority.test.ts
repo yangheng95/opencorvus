@@ -126,6 +126,14 @@ describe("Mission terminal Task authority", () => {
           agent: "mission",
           model: { providerID: "test", modelID: "mission-query-overlap" },
         })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: user.id,
+          type: "text",
+          text: "Inspect current Mission capabilities and create the requested Task.",
+          kind: "user_content",
+        })
         const assistant = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: mission.id,

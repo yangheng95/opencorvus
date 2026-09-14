@@ -116,4 +116,7 @@ test("AutomationBench Mission request preserves public reconciliation and explic
       "END OF AUTOMATIONBENCH CHILD TASK AUTHORITY.",
     ].join("\n\n"),
   )
+  expect(request).toContain("then use panel_read_task_message for the exact orchestrator")
+  expect(request).toContain("stage-local statement that execution had not happened cannot establish a present omission")
+  expect(request).toContain("recency alone does not make a participant claim true")
 })
