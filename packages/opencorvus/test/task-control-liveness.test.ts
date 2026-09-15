@@ -46,6 +46,7 @@ async function commitDecision(input: {
   wakeID: string
   activationID: string
   predecessorID: string
+  beforeAssistant?: (controlMessageID: string) => Promise<void>
 }) {
   const control = currentOrchestratorControlMessage(
     { note: input.wakeID },
@@ -77,6 +78,7 @@ async function commitDecision(input: {
       } satisfies Message.TextPart,
     ],
   })
+  await input.beforeAssistant?.(control.messageID)
   let assistant = await Session.updateMessage({
     id: Identifier.ascending("message"),
     sessionID: input.orchestratorSessionID,
@@ -322,7 +324,7 @@ describe("Task-control liveness", () => {
 })
 
 describe("Task-control compaction coexistence", () => {
-  test("a compaction summary under the control occurrence does not refuse the activation assistant", async () => {
+  test("resolves the activation assistant after a compaction summary under the control occurrence", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -371,46 +373,6 @@ describe("Task-control compaction coexistence", () => {
             // same control Message, and only then does the real activation
             // assistant append. The fence must refuse a second *turn*, not a
             // system-authored summary.
-            const control = currentOrchestratorControlMessage({ note: wakeID }, taskID, wakeID, predecessorID)
-            if (!control) throw new Error("Expected an Orchestrator control occurrence")
-            await Session.persistMessage({
-              info: {
-                id: control.messageID,
-                sessionID: orchestrator.id,
-                role: "user",
-                author: "orchestrator",
-                time: { created: Date.now() },
-                agent: "orchestrator",
-                model: { providerID: "openai", modelID: "gpt-5.6-terra" },
-                extra: control.extra,
-              },
-              parts: [
-                {
-                  id: control.partID,
-                  sessionID: orchestrator.id,
-                  messageID: control.messageID,
-                  type: "text",
-                  text: control.text,
-                  kind: "control",
-                  source: "system",
-                } satisfies Message.TextPart,
-              ],
-            })
-            await Session.updateMessage({
-              id: Identifier.ascending("message"),
-              sessionID: orchestrator.id,
-              parentID: control.messageID,
-              role: "assistant",
-              author: "compaction",
-              time: { created: Date.now(), completed: Date.now() },
-              agent: "compaction",
-              providerID: "openai",
-              modelID: "gpt-5.6-terra",
-              path: { cwd: project.path, root: project.path },
-              cost: 0,
-              tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-              finish: "stop",
-            })
             const decision = await commitDecision({
               projectPath: project.path,
               orchestratorSessionID: orchestrator.id,
@@ -418,6 +380,23 @@ describe("Task-control compaction coexistence", () => {
               wakeID,
               activationID,
               predecessorID,
+              beforeAssistant: async (controlMessageID) => {
+                await Session.updateMessage({
+                  id: Identifier.ascending("message"),
+                  sessionID: orchestrator.id,
+                  parentID: controlMessageID,
+                  role: "assistant",
+                  author: "compaction",
+                  time: { created: Date.now(), completed: Date.now() },
+                  agent: "compaction",
+                  providerID: "openai",
+                  modelID: "gpt-5.6-terra",
+                  path: { cwd: project.path, root: project.path },
+                  cost: 0,
+                  tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+                  finish: "stop",
+                })
+              },
             })
             expectedDecisionAssistant = decision.finalMessageID
             return decision
