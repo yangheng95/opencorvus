@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [v0.1.0-beta tested publication](2026-09-15-v0.1.0-beta-release.md)
+
 - [Global Work creation default-config repair](2026-09-15-global-config-defaults.md)
 
 - [Current branch Overlay 0.0.64 package](2026-09-15-overlay-current-branch-package.md)

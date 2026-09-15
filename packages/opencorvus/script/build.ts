@@ -410,6 +410,11 @@ for (const item of targets) {
       version: Script.version,
     })
   })
+  if (item.os === process.platform && item.arch === process.arch && !item.abi) {
+    await runTimedStage(`${name} first-run conversation check`, async () => {
+      await $`${process.execPath} ${path.join(repoRoot, "script/check-packaged-first-run.ts")} ${path.join(dir, "dist", name, artifactExecutableName(item.os))}`
+    })
+  }
   if (buildFlavor === "overlay-server") {
     await runTimedStage(`${name} payload SHA-256`, () => writeOverlayPayloadStamp(path.join(dir, "dist", name)))
   }

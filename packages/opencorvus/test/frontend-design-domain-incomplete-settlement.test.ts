@@ -118,6 +118,13 @@ async function workerTurn(input: { rootSessionID: string; taskID: string; outcom
     agent: projectedFrontendDesigner.identity.agentID,
     model: { providerID: "test", modelID: "test-model" },
   })
+  const messagePart = await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: session.id,
+    messageID: parent.id,
+    type: "text",
+    text: "Produce the exact Frontend Design delivery Artifact",
+  })
   const final = await Session.updateMessage({
     id: Identifier.ascending("message"),
     sessionID: session.id,
@@ -132,13 +139,6 @@ async function workerTurn(input: { rootSessionID: string; taskID: string; outcom
     cost: 0,
     tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
     finish: "stop",
-  })
-  const messagePart = await Session.updatePart({
-    id: Identifier.ascending("part"),
-    sessionID: session.id,
-    messageID: parent.id,
-    type: "text",
-    text: "Produce the exact Frontend Design delivery Artifact",
   })
   recordTestDispatchLineage({
     origin: createDispatchLineageOrigin({
@@ -327,6 +327,7 @@ async function executeFrontendDesign(input: {
   rootSessionID: string
   analyze: typeof FrontendDesignAgent.analyze
   recordPartial?: typeof recordPartialFrontendDesignFacts
+  context?: DispatchAdapterExecutionContext
 }) {
   const adapter = frontendDesignTool(input)
   if (!adapter.execute) throw new Error("frontend_design is missing its production executor")
