@@ -155,7 +155,7 @@ describe("SessionLoop Tool execution authority integration", () => {
               tools: Object.keys(input.tools),
               system: input.system.join("\n"),
             }).toEqual({
-              tools: ["capability_search", "panel_complete_mission", "panel_create_task", "panel_query_task", "panel_query_task_artifacts", "panel_read_task_artifact"],
+              tools: ["capability_search", "panel_complete_mission", "panel_create_task", "panel_query_task", "panel_query_task_artifacts", "panel_read_task_artifact", "panel_read_task_message"],
               system: expect.stringContaining("panel_create_task"),
             })
             const params = {
@@ -206,7 +206,7 @@ describe("SessionLoop Tool execution authority integration", () => {
             } as Awaited<ReturnType<typeof LLM.stream>>
           }
           if (providerStep === 2) {
-            expect(Object.keys(input.tools).sort()).toEqual(["capability_search", "panel_complete_mission", "panel_create_task", "panel_query_task", "panel_query_task_artifacts", "panel_read_task_artifact", "panel_view_tasks"])
+            expect(Object.keys(input.tools).sort()).toEqual(["capability_search", "panel_complete_mission", "panel_create_task", "panel_query_task", "panel_query_task_artifacts", "panel_read_task_artifact", "panel_read_task_message", "panel_view_tasks"])
             return {
               fullStream: (async function* () {
                 yield { type: "start" }
@@ -369,6 +369,14 @@ describe("SessionLoop Tool execution authority integration", () => {
           agent: "coding",
           time: { created: Date.now() },
           model: { providerID: model.providerID, modelID: model.id },
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: user.id,
+          type: "text",
+          text: "Keep the accepted dispatch decision across restart.",
+          kind: "user_content",
         })
         const assistant = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -579,6 +587,14 @@ describe("SessionLoop Tool execution authority integration", () => {
           agent: "coding",
           time: { created: Date.now() },
           model: { providerID: model.providerID, modelID: model.id },
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: user.id,
+          type: "text",
+          text: "Write the durable Tool activity evidence.",
+          kind: "user_content",
         })
         const assistant = await Session.updateMessage({
           id: Identifier.ascending("message"),

@@ -527,6 +527,15 @@ export const publicMarketZhTranslations01To35 = {
           "base-tester": "独立重读动态来源，并按每项标准验证已结算结果。",
         },
       },
+      "source-planned-execution-verification": {
+        label: "来源规划、执行与独立验证",
+        description: "通过有界的来源调查明确执行权限和适用约束，执行前提已满足的不可逆操作，再独立核对来源分类与最终结果。",
+        nodes: {
+          "base-planner": "区分执行权限条件、适用约束与开发方负责的结果语义，在操作前查清可追溯的来源要求。",
+          "base-developer": "依据原始要求核对各项操作的来源分类，完成前提已满足的授权操作，并交付完整的执行回执。",
+          "base-tester": "独立核对来源分类与定位信息，将适用规则和预期结果对应到原始执行回执及目标记录的读取结果。",
+        },
+      },
       "planner-parallel-delivery": {
         label: "规划师、并行 Worker 与验证",
         description: "一个 Planner 先固定任务分区，研究与实现 worker 随后在同一 frontier 并行工作，再由测试 worker 验证已结算的结果。",

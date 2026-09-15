@@ -3329,6 +3329,14 @@ describe("single Tool-result turn-control protocol", () => {
           agent: "coding",
           model: { providerID: model.providerID, modelID: model.id },
         })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: user.id,
+          type: "text",
+          text: "Preserve the host-owned wait control result.",
+          kind: "user_content",
+        })
         const assistant = await Session.updateMessage({
           id: Identifier.ascending("message"),
           parentID: user.id,
