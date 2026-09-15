@@ -43,7 +43,7 @@ describe("Generate Expert Squads expert squad", () => {
       schema_version: 2,
       namespace: "builtin",
       id: "squad-sdk",
-      version: "2026.08.30.4",
+      version: "2026.09.12.2",
       system_role: "expert_squad_generator",
     })
     expect(schedulerCapabilityGrants(loaded.manifest).explicitBuiltInToolIDs).toEqual([...schedulerTools].sort())
@@ -53,7 +53,7 @@ describe("Generate Expert Squads expert squad", () => {
     expect(workflows["sdk-authoring"]!.nodes).toEqual({
       "squad-sdk-planner": {
         agent_id: "squad-sdk-planner",
-        description: "Publishes the canonical package blueprint and flat Planner/parallel-worker topology.",
+        description: "Publishes the canonical package blueprint and smallest sufficient collaboration topology.",
         depends_on: [],
       },
       "source-analysis": {
