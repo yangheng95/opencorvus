@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Global Work creation default-config repair](2026-09-15-global-config-defaults.md)
+
 - [Current branch Overlay 0.0.64 package](2026-09-15-overlay-current-branch-package.md)
 
 - [Luna 与 Base 专家团的 AutomationBench 复刻](2026-09-12-luna-base-reproduction.md)

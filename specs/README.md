@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Global Work creation default-config repair](records/2026-09/2026-09-15-global-config-defaults.md).
+
 [Current branch Overlay 0.0.64 package](records/2026-09/2026-09-15-overlay-current-branch-package.md).
 
 Current Luna versus Luna + Base reproduction: [protocol and recovered evidence](records/2026-09/2026-09-12-luna-base-reproduction.md).
