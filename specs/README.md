@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Current branch Overlay 0.0.64 package](records/2026-09/2026-09-15-overlay-current-branch-package.md).
+
 Current Luna versus Luna + Base reproduction: [protocol and recovered evidence](records/2026-09/2026-09-12-luna-base-reproduction.md).
 
 Current correction: [outcome-first runtime and Base delivery](records/2026-09/2026-09-12-outcome-first-runtime-correction.md).
@@ -13,6 +15,10 @@ Current paper plan: [OpenCorvus academic research and writing plan](records/2026
 Current ICLR-format paper on evolving expert organizations: [manuscript, source map and evaluation protocol](artifacts/opencorvus-paper/manuscript/README.md).
 
 Paper template input: [ICLR 2027 official LaTeX package](artifacts/opencorvus-paper/templates/iclr2027/README.md).
+
+- [v0.0.64-beta binary publication](records/2026-09/2026-09-11-v0.0.64-beta-release.md).
+
+- [Compiled PoC paper website publication](records/2026-09/2026-09-11-website-poc-paper.md).
 
 Real-project case result: [Luna import repair, patch and acceptance evidence](artifacts/2026-09-10-import-case/RESULT.md).
 

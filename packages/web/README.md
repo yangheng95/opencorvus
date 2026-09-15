@@ -19,3 +19,5 @@ bun run --cwd packages/web check
 - Shared site configuration lives in `packages/web/config.mjs`.
 
 Do not recreate the retired `docs/product/**` tree; public product docs use this package as the single source.
+
+The compiled PoC paper is a self-contained static asset at `public/papers/opencorvus-poc.pdf`. Its localized homepage entry is `OcResearchPaper.astro` and is explicitly marked Under Construction. No LaTeX source or source-branch fetch is part of the website build.

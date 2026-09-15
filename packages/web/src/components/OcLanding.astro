@@ -4,6 +4,7 @@ import OcHeroBackdrop from "./OcHeroBackdrop.astro"
 import OcDemoVideo from "./OcDemoVideo.astro"
 import OcAutomationBench from "./OcAutomationBench.astro"
 import OcMissionCase from "./OcMissionCase.astro"
+import OcResearchPaper from "./OcResearchPaper.astro"
 import { landingCopy } from "../content/landing-copy"
 import { publicPath, type PublicLocale } from "../content/public-market"
 import config from "../../config.mjs"
@@ -329,6 +330,8 @@ const combinations = otherCompositions(locale)
       </p>
     </div>
   </section>
+
+  <OcResearchPaper {locale} />
 
   {/* ------------------------------------------------------------- 7 · why */}
   <section class="oc-section oc-anchor" id="why">

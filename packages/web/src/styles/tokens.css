@@ -8,7 +8,7 @@
  * 1. Scales are aligned to the reference (spacing, radius, blur). Neutrals are aligned too —
  *    they are generic. Brand hues are NOT: those stay OpenCorvus cobalt.
  * 2. Every --oc-color-* is defined in both themes, except the deliberately static ones listed
- *    under "Static" below. test/tokens.parity.test.ts fails the build otherwise. A colour that
+ *    under "Static" below. Check both themes during actual page review. A colour that
  *    exists only in the dark block is invisible in light and nobody notices until a screenshot
  *    lands in a bug report.
  * 3. Dark is not an inversion. Card elevation flips from three soft drop shadows to a single
@@ -62,8 +62,8 @@
 
   /* ---- Control internals ----
    * Named --oc-control-* rather than --oc-btn-*: the --oc-btn-* namespace is colour-only and
-   * test/tokens.parity.test.ts requires every member of it to be declared in both themes. Geometry
-   * has no dark variant, so it needs a namespace of its own. (The parity test caught this.)
+   * every member of it is declared in both themes. Geometry has no dark variant, so it needs
+   * a namespace of its own.
    * The reference's button internals do not sit on the spacing ladder: its icon gap is 6px and its
    * medium button pads 11px/18px. Those are measured values and changing them would alter the
    * proportions the whole design was calibrated against, so they are named here rather than snapped

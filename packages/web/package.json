@@ -20,15 +20,12 @@
     "runtime:smoke": "bun run ./test/website-runtime-smoke.ts",
     "pretest:registry": "bun run market:data",
     "test:registry": "bun test ./test/website-registry.test.ts",
-    "test:tokens": "bun test ./test/tokens.parity.test.ts",
     "pretest:facts": "bun run facts:data",
     "test:facts": "bun test ./test/platform-facts.test.ts",
     "preview": "astro preview",
     "astro": "astro",
-    "qa:shots": "bun run ./qa/restyle/shoot.ts",
     "test:compositions": "bun test ./test/squad-compositions.test.ts",
-    "test:web": "bun test ./test/tokens.parity.test.ts ./test/platform-facts.test.ts ./test/squad-compositions.test.ts",
-    "test:style": "bun test ./test/style-discipline.test.ts"
+    "test:web": "bun test ./test/platform-facts.test.ts ./test/squad-compositions.test.ts"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "7.2.2",

@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Current branch Overlay 0.0.64 package](2026-09-15-overlay-current-branch-package.md)
+
 - [Luna 与 Base 专家团的 AutomationBench 复刻](2026-09-12-luna-base-reproduction.md)
 - [以实际结果为中心的运行时纠偏](2026-09-12-outcome-first-runtime-correction.md)
 - [Benchmark 运行时可靠性：当前源码、流式步骤与完整恢复验收](2026-09-12-benchmark-runtime-readiness.md)
@@ -9,6 +11,10 @@
 - [OpenCorvus 专家组织论文：专业化、跨任务演化与严格实验设计](../../artifacts/opencorvus-paper/manuscript/README.md)
 
 - [ICLR 2027 官方 LaTeX 模板下载](../../artifacts/opencorvus-paper/templates/iclr2027/README.md)
+
+- [v0.0.64-beta binary publication](2026-09-11-v0.0.64-beta-release.md).
+
+- [Compiled PoC paper website publication](2026-09-11-website-poc-paper.md).
 
 - [Expert Squad discovery diagnostic overflow](2026-09-08-discovery-diagnostic-overflow.md)
 

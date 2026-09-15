@@ -1,0 +1,97 @@
+---
+import type { PublicLocale } from "../content/public-market"
+
+const { locale } = Astro.props as { locale: PublicLocale }
+const zh = locale === "zh-cn"
+const publicBase = import.meta.env.BASE_URL.replace(/\/$/, "")
+const paperHref = `${publicBase}/papers/opencorvus-poc.pdf`
+const copy = zh
+  ? {
+      eyebrow: "研究论文",
+      description:
+        "一篇关于可复用专家组织、领域专业化与经验驱动更新的概念验证工作稿。包含初步 AutomationBench 结果，研究与实验仍在完善中。",
+      metadata: "英文 PDF · 16 页 · 2026 年 9 月 11 日",
+      read: "阅读 PoC 论文（PDF）",
+      newTab: "在新标签页打开",
+    }
+  : {
+      eyebrow: "Research paper",
+      description:
+        "A proof-of-concept working paper on reusable expert organizations, domain specialization, and experience-driven updates. Includes preliminary AutomationBench results; the research and experiments are still in progress.",
+      metadata: "English PDF · 16 pages · 11 September 2026",
+      read: "Read the PoC paper (PDF)",
+      newTab: "Opens in a new tab",
+    }
+---
+
+<section class="oc-section-tight oc-anchor" id="research" aria-labelledby="research-title">
+  <div class="oc-container">
+    <div class="oc-card oc-paper">
+      <div class="oc-paper-summary">
+        <p class="oc-eyebrow">{copy.eyebrow}</p>
+        <h2 class="oc-paper-title" id="research-title" lang="en">
+          OpenCorvus: Evolving Expert Organizations for Professional Work
+        </h2>
+        <p class="oc-text-body oc-text-description">{copy.description}</p>
+      </div>
+      <div class="oc-paper-access">
+        <p class="oc-paper-status">PoC Version <span aria-hidden="true">·</span> Under Construction</p>
+        <p class="oc-text-xs oc-text-secondary">{copy.metadata}</p>
+        <a class="oc-btn oc-btn-primary oc-btn-m" href={paperHref} type="application/pdf" target="_blank" rel="noopener">
+          {copy.read}
+          <span aria-hidden="true">↗</span>
+        </a>
+        <p class="oc-text-xs oc-text-description">{copy.newTab}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .oc-paper {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--oc-space-7);
+    padding: var(--oc-space-7);
+  }
+
+  .oc-paper-summary,
+  .oc-paper-access {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--oc-space-4);
+  }
+
+  .oc-paper-title {
+    font-family: var(--oc-font-display);
+    font-size: clamp(24px, 2.4vw, 32px);
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.025em;
+  }
+
+  .oc-paper-status {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--oc-space-2);
+    padding: var(--oc-space-2) var(--oc-space-3);
+    border: 1px solid var(--oc-color-border-subtle);
+    border-radius: var(--oc-radius-sm);
+    background: var(--oc-color-bg-surface-5);
+    color: var(--oc-color-text-primary);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 800px) {
+    .oc-paper {
+      grid-template-columns: minmax(0, 1fr);
+      padding: var(--oc-space-5);
+      gap: var(--oc-space-5);
+    }
+  }
+</style>
