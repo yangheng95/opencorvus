@@ -6,6 +6,7 @@ import { Database, eq } from "@/storage/db"
 import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
 import { requireTask, sessionIDsForTask } from "@/engine/store"
 import { taskLifecycleProjection } from "@/engine/task-lifecycle"
+import { noActionTaskObservation } from "@/orchestrator/no-action-tool"
 import { TestHooks as Ingress, waitForIngressDeliveryHooksForTest } from "@/engine/task-root-ingress-delivery"
 import { Orchestrator } from "@/orchestrator/agent"
 import { readLatestTaskAcceptanceLedger } from "@/mission/acceptance-ledger"
@@ -175,7 +176,7 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
             rootStep++
             taskID ||= Database.use((db) => db.select().from(EngineTaskTable).get())!.id
             if (taskLifecycleProjection(taskID).status !== "active")
-              return call("no_action", { reason: "The terminal Task receipt is reconciled." })
+              return call("no_action", { observed_task: noActionTaskObservation(taskLifecycleProjection(taskID)), reason: "The terminal Task receipt is reconciled." })
             const developer = lineage("base-developer")
             const tester = lineage("base-tester")
             const repair = readLatestTaskAcceptanceLedger(taskID)
@@ -232,7 +233,7 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
                 deliverable_artifact_locators: [],
                 accepted_delivery_slice_revision_ids: [],
               })
-            return call("no_action", { reason: "The exact lifecycle receipt has already been reconciled." })
+            return call("no_action", { observed_task: noActionTaskObservation(taskLifecycleProjection(taskID)), reason: "The exact lifecycle receipt has already been reconciled." })
           }
           if (system.includes("# Base Developer")) {
             const step = developerStep++

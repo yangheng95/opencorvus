@@ -371,7 +371,7 @@ describe("Mission acceptance baseline readiness", () => {
     }).toMatchObject({
       kind: "initial", obligation: "gap-builder-r2", consumes: true,
       collectionTurn: { kind: "initial", acceptance_gap_id: "gap-builder-r2", criterion_ids: [criterion.criterion_id] },
-      prompt: expect.stringContaining("Initial workflow node with acceptance obligation"),
+      prompt: expect.stringContaining("- gap_id: gap-builder-r2"),
     })
   })
 
@@ -428,12 +428,15 @@ describe("Mission acceptance baseline readiness", () => {
       id: "tsk_acceptance",
       title: "Acceptance repair",
       status: "active",
+      execution_lifecycle: { taskID: "tsk_acceptance", epoch: 1, openedEventID: "pev_open", openedAt: 1, status: "active" },
       source: "mission",
       request: "Repair the failed criterion",
       goals: [],
       budget: { max_executor_groups: 4 },
     } satisfies TaskDesc
-    const current = { ...baseline, status: "failed" } satisfies TaskDesc
+    const current = { ...baseline, status: "failed", execution_lifecycle: {
+      ...baseline.execution_lifecycle, status: "failed", terminalEventID: "pev_failed", terminalAt: 2,
+    } } satisfies TaskDesc
     const first = renderTaskProjectionContext(undefined, baseline)
     const second = renderTaskProjectionContext(first.baseline, current)
     expect({

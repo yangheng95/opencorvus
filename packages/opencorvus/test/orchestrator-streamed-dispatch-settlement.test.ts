@@ -17,7 +17,11 @@ import {
 } from "@/engine/task-root-ingress-delivery"
 import { EngineGit } from "@/engine/git"
 import { requireTask } from "@/engine/store"
+import { EngineTaskTable } from "@/engine/engine.sql"
+import { taskLifecycleProjection } from "@/engine/task-lifecycle"
+import { noActionTaskObservation } from "@/orchestrator/no-action-tool"
 import { Identifier } from "@/id/id"
+
 import { Orchestrator } from "@/orchestrator/agent"
 import { OrchestratorToolsTestHooks } from "@/orchestrator/tools"
 import { orchestratorCommittedDecisionInParts } from "@/orchestrator/decision-tool-names"
@@ -34,6 +38,11 @@ import { Database, eq, inArray, sql } from "@/storage/db"
 import { ApplicationSchemaSQLTestHooks } from "@/storage/ddl"
 import { EngineService } from "@/task-api"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+
+function observedTask() {
+  const task = Database.use((db) => db.select().from(EngineTaskTable).get())!
+  return noActionTaskObservation(taskLifecycleProjection(task.id))
+}
 
 const model = { providerID: "streamed-dispatch", modelID: "settlement" }
 
@@ -215,7 +224,7 @@ test(`${dispatchToolName}: ` + (attachmentRecovery ? "streamed invalid attachmen
                     type: "tool-call",
                     toolCallId: `call_lifecycle_reconciled_${rootProviderRequests}`,
                     toolName: "no_action",
-                    input: JSON.stringify({ reason: "The worker lifecycle fact has no newly ready frontier." }),
+                    input: JSON.stringify({ observed_task: observedTask(), reason: "Reconcile the controlled test ingress against its current Task facts." }),
                   },
                   { type: "finish", finishReason: { unified: "tool-calls", raw: "tool_calls" }, usage },
                 ],
@@ -615,6 +624,7 @@ for (const secondFails of [false, true]) {
                         }
                         controller.enqueue(
                           toolCall("call_stagger_c", "no_action", {
+                            observed_task: observedTask(),
                             reason: "Reconcile the observed dispatch outcomes in this exact ingress.",
                           }),
                         )
@@ -633,6 +643,7 @@ for (const secondFails of [false, true]) {
                     chunks: [
                       { type: "stream-start", warnings: [] },
                       toolCall(`call_stagger_lifecycle_${Identifier.ascending("call")}`, "no_action", {
+                        observed_task: observedTask(),
                         reason: "The current lifecycle fact has been reconciled.",
                       }),
                       finish,

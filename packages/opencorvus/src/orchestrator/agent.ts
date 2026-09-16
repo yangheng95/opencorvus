@@ -84,7 +84,7 @@ import { Database, NotFoundError, eq } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { recordTaskInfrastructureError } from "@/engine/persist"
 import { taskRootIngressSourceKind, type TaskRootIngressSourceKind } from "@/engine/task-root-ingress-source"
-import { describeProcessRecoveryFact, describeTask, renderTaskDescription, type TaskDesc } from "@/engine/describe"
+import { describeProcessRecoveryFact, describeTask, renderTaskDescription, renderTaskExecutionFact, type TaskDesc } from "@/engine/describe"
 import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
@@ -594,6 +594,10 @@ export namespace Orchestrator {
             projection.push({ label: "runtime:orchestrator-attachment-inventory", text: inventoryText })
           }
         }
+        projection.push({
+          label: "runtime:orchestrator-current-task-execution",
+          text: renderTaskExecutionFact(liveTaskProjection.execution_lifecycle),
+        })
         if (terminalConversation) {
           projection.push({
             label: "runtime:orchestrator-terminal-conversation",

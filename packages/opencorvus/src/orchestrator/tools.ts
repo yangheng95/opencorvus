@@ -1544,7 +1544,7 @@ export function createOrchestratorTools(input: {
     read_context: () => createReadContextTool({ taskID }).read_context,
     read_agent_message: () => createReadAgentMessageTool({ taskID }).read_agent_message,
     no_action: () =>
-      createNoActionTool({ activeAcceptanceGapID: activeAcceptanceRepair?.revision.gap.gap_id }).no_action,
+      createNoActionTool({ taskID, activeAcceptanceGapID: activeAcceptanceRepair?.revision.gap.gap_id }).no_action,
 
     respond_agent_coordination: () => bindToolExecutionMode(
       tool({

@@ -18,6 +18,7 @@ import z from "zod"
 import { createDecisionLog, type DecisionEntry } from "@/decision-log"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 import { deriveTaskStatus } from "./task-status"
+import { taskLifecycleProjection, type TaskLifecycleProjection } from "./task-lifecycle"
 import { ToolFailureCause, renderToolFailureCause } from "@/session/tool-failure-cause"
 import { SessionStatus } from "@/session/status"
 import { Database, and, asc, desc, eq, isNotNull, or, sql } from "@/storage/db"
@@ -352,6 +353,7 @@ export interface TaskDesc {
   id: string
   title: string
   status: string
+  execution_lifecycle: TaskLifecycleProjection
   source: string
   request: string
   error?: string
@@ -945,14 +947,16 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
   const completedToolCallRefs = listCompletedToolCallRefs(task)
   const agentMessageRefs = listAgentMessageRefs(task)
   const taskScheduledWaits = describeTaskScheduledWaits(task.id)
+  const lifecycle = taskLifecycleProjection(task.id)
 
   return {
     id: task.id,
     title: task.title,
-    status: deriveTaskStatus(task),
+    status: deriveTaskStatus({ lifecycle_status: lifecycle.status }),
+    execution_lifecycle: lifecycle,
     source: task.source,
     request: task.request,
-    error: task.error ?? undefined,
+    error: lifecycle.terminalError,
     clarifications: clarificationTranscriptSection(task.id) || undefined,
     goals,
     ...(workflowExecution ? { workflow_execution: workflowExecution } : {}),
@@ -1171,14 +1175,20 @@ function renderOrphanedCompletedToolCallRefs(input: {
   return lines
 }
 
-/**
- * Render a TaskDesc as markdown suitable for direct injection into the
- * orchestrator's system prompt. LLM reads this instead of querying piecemeal.
- */
+/** Render canonical Task identity alongside the current ingress, independently of worker lifecycle facts. */
+export function renderTaskExecutionFact(lifecycle: TaskLifecycleProjection): string {
+  return `CURRENT TASK LIFECYCLE FACT: task_id=${lifecycle.taskID}; execution_epoch=${lifecycle.epoch}; ` +
+    `task_status=${lifecycle.status}; opened_event_id=${lifecycle.openedEventID}; ` +
+    `terminal_event_id=${JSON.stringify(lifecycle.terminalEventID ?? null)}. ` +
+    "This is the current Task occurrence, distinct from every worker Session lifecycle and every historical Task occurrence."
+}
+
+/** Render a TaskDesc as markdown for the Orchestrator system context. */
 export function renderTaskDescription(desc: TaskDesc): string {
   const lines: string[] = []
   lines.push(`## Task: ${desc.title} (${desc.status})`)
   lines.push(`Task source: ${desc.source}`)
+  lines.push(renderTaskExecutionFact(desc.execution_lifecycle))
   lines.push(renderUserRequestSection({ heading: "## Request", request: desc.request, taskID: desc.id }))
   if (desc.current_process_prompt_owners && desc.current_process_prompt_owners.length > 0) {
     lines.push("## Current-process prompt owners")
