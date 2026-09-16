@@ -282,6 +282,15 @@ function projectConversationActivityRows(
 }
 
 export namespace MessageStore {
+  /** Queued input remains actionable even when a later assistant belongs to the prior Turn. */
+  export function hasPendingInput(sessionID: string): boolean {
+    return Database.use((db) => db.select({ id: MessageTable.id }).from(MessageTable).where(and(
+      eq(MessageTable.session_id, sessionID),
+      sql`json_extract(${MessageTable.data}, '$.role') = 'user'`,
+      sql`json_extract(${MessageTable.data}, '$.pendingDelivery') = 1`,
+    )).limit(1).get() !== undefined)
+  }
+
   export async function earliestInSession(input: { sessionID: string; limit: number }): Promise<Message.WithParts[]> {
     const rows = Database.use((db) =>
       db

@@ -11,6 +11,7 @@ import { SessionStatus } from "../../src/session/status"
 import { SessionPromptState } from "../../src/session/prompt/state"
 import { SessionLoop } from "../../src/session/loop"
 import { Message } from "../../src/session/message"
+import { MessageStore } from "../../src/session/message-store"
 import { timelineMessageOrderKey } from "../../src/timeline/order"
 import { ProjectGitLock } from "../../src/worktree/git-lock"
 import { ProjectRuntimePaths } from "../../src/project/runtime-paths"
@@ -47,6 +48,39 @@ function providerModel(): ProviderType.Model {
 afterEach(async () => {
   await Instance.disposeAll()
   await resetDatabase()
+})
+
+test("Session standby wakes for queued input older than the prior Turn final assistant", async () => {
+  await using project = await tmpdir({ git: true })
+  await Instance.provide({ directory: project.path, fn: async () => {
+    const session = await Session.create({ kind: "assistant", title: "Mid-Turn queued wake" })
+    const other = await Session.create({ kind: "assistant", title: "Independent queued wake" })
+    const now = Date.now()
+    const queue = async (sessionID: string, time: number) => {
+      const id = Identifier.ascending("message")
+      await Session.persistMessage({ info: { id, sessionID, role: "user", author: "user",
+        time: { created: time }, pendingDelivery: true, agent: "chat", model }, parts: [] })
+      return id
+    }
+    await queue(other.id, now)
+    expect([MessageStore.hasPendingInput(session.id), MessageStore.hasPendingInput(other.id)]).toEqual([false, true])
+    const queuedID = await queue(session.id, now + 1)
+    const final: Message.Assistant = { id: Identifier.ascending("message"), sessionID: session.id,
+      role: "assistant", author: "chat", parentID: Identifier.ascending("message"),
+      time: { created: now + 2, completed: now + 3 }, agent: "chat", providerID: model.providerID,
+      modelID: model.modelID, path: { cwd: project.path, root: project.path }, cost: 0,
+      tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } }, finish: "stop" }
+    await Session.persistMessage({ info: final, parts: [] })
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 2_000)
+    try {
+      await SessionLoop.TestHooks.waitForUserMessage(session.id, controller.signal, timelineMessageOrderKey({ info: final }))
+      expect({ awakened: !controller.signal.aborted, pending: MessageStore.hasPendingInput(session.id) })
+        .toEqual({ awakened: true, pending: true })
+      const stored = await MessageStore.get({ sessionID: session.id, messageID: queuedID })
+      expect(stored.info).toMatchObject({ id: queuedID, pendingDelivery: true })
+    } finally { clearTimeout(timeout); controller.abort() }
+  } })
 })
 
 test("SessionLoop binds each accepted user message to its streaming execution occurrence", async () => {
@@ -267,3 +301,46 @@ test("Session standby wakes from a later durable Message whose deterministic ID 
     },
   })
 })
+
+test("a queued mid-Turn input receives its own reply after the prior multi-step Turn settles", async () => {
+  await using project = await tmpdir({ git: true })
+  await Instance.provide({ directory: project.path, fn: async () => {
+    const session = await Session.create({ kind: "assistant", title: "Queued Turn boundary" })
+    const queuedID = Identifier.ascending("message")
+    let queuedReply: Promise<Message.WithParts> | undefined
+    const parents: string[] = []
+    const provider = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
+    const processor = spyOn(SessionProcessor, "create").mockImplementation((input: any) => ({
+      message: input.assistantMessage,
+      partFromToolCall() { return undefined },
+      async process() {
+        const assistant = input.assistantMessage
+        parents.push(assistant.parentID)
+        if (parents.length === 1) {
+          queuedReply = SessionPrompt.prompt({ sessionID: session.id, messageID: queuedID,
+            author: "user", agent: "chat", model, parts: [{ type: "text", text: "queued while prior tools execute" }] })
+          void queuedReply.catch(() => undefined)
+          const deadline = Date.now() + 5_000
+          while (!MessageStore.hasPendingInput(session.id)) {
+            if (Date.now() >= deadline) throw new Error("Queued input did not persist")
+            await Bun.sleep(10)
+          }
+        }
+        await Session.updatePart({ id: Identifier.ascending("part"), sessionID: session.id,
+          messageID: assistant.id, type: "text", text: `accepted ${assistant.parentID}` })
+        assistant.finish = parents.length === 1 ? "tool-calls" : "stop"
+        assistant.time.completed = Date.now()
+        await Session.updateMessage(assistant)
+        return parents.length < 3 ? "continue" : "stop"
+      },
+    }) as any)
+    try {
+      const first = await SessionPrompt.prompt({ sessionID: session.id, author: "user", agent: "chat", model,
+        parts: [{ type: "text", text: "complete the initial multi-step Turn" }] })
+      const second = await Promise.race([queuedReply!, Bun.sleep(5_000).then(() => { throw new Error("Queued Turn was stranded") })])
+      expect(parents).toEqual([first.info.parentID!, first.info.parentID!, queuedID])
+      expect(second.info).toMatchObject({ role: "assistant", parentID: queuedID, acceptedInputMessageIDs: [queuedID], finish: "stop" })
+      await SessionPrompt.waitForFinish(session.id, project.path)
+    } finally { processor.mockRestore(); provider.mockRestore(); await SessionPromptState.release(session.id, project.path) }
+  } })
+}, 30_000)

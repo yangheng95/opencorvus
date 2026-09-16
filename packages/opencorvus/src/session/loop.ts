@@ -3613,6 +3613,7 @@ export namespace SessionLoop {
         try {
           if (
             shouldRunRuntimeContractTurn(sessionID) ||
+            (options?.ignoredActionableControlID === undefined && MessageStore.hasPendingInput(sessionID)) ||
             SessionControl.pending(sessionID).some(
               (control) => isActionableSessionControl(control) && control.id !== options?.ignoredActionableControlID,
             )

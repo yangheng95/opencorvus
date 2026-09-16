@@ -410,6 +410,8 @@ describe("LLM semantic activity", () => {
     expect([
       chunkHeartbeatKind({ type: "start" }),
       chunkHeartbeatKind({ type: "tool-input-delta", toolCallId: "call-1", inputTextDelta: "" }),
+      chunkHeartbeatKind({ type: "tool-input-delta", toolCallId: "call-1", inputTextDelta: " \t\n" }),
+      chunkHeartbeatKind({ type: "text-delta", id: "text-1", text: " \t\n" }),
       chunkHeartbeatKind({ type: "reasoning-delta", id: "reasoning-1", text: "" }),
       chunkHeartbeatKind({ type: "reasoning-delta", id: "reasoning-1", text: " [ ] \n" }),
       chunkHeartbeatKind({ type: "unknown-provider-keepalive" }),
@@ -420,6 +422,6 @@ describe("LLM semantic activity", () => {
         inputTextDelta: '{"query":"NVDA"}',
       }),
       chunkHeartbeatKind({ type: "text-delta", id: "text-1", text: "NVIDIA" }),
-    ]).toEqual([null, null, null, null, null, "reasoning-delta", "tool-input-delta", "text-delta"])
+    ]).toEqual([null, null, null, null, null, null, null, "reasoning-delta", "tool-input-delta", "text-delta"])
   })
 })

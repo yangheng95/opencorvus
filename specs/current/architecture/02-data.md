@@ -282,7 +282,10 @@ Session/Trace 是持久化历史与身份容器；Turn/Attempt 是一次模型�
 tool instance、callback 与 Promise 仍只属于当前进程。`session_prompt_owner` 不复制
 这些资源，只用 generation 加 PID、process-instance identity 与 occurrence identity
 证明哪个物理进程可以产生 Provider/Tool effect。它在 standby 期间继续存在，并持续
-观察 durable user Message、runtime wake 与 `session_control_record`；进程内事件只用于
+观察 durable user Message、runtime wake 与 `session_control_record`。普通待机还必须查询同一 Session
+尚有 `pendingDelivery` 的输入；执行中入队的消息可能早于该 Turn 的最终 assistant，不能仅凭最终
+assistant 的 timeline cursor 跳过它。该检查只唤醒现有循环，由原有原子 acceptance 消费输入；
+等待精确 compaction lease 的分支仍遵循该控制的唤醒/到期边界。进程内事件只用于
 降低唤醒延迟。reply peer 通过 accepted input Message identity 加入，summary peer 先按
 本次 exact Session control ID 加入其 consumed/failed 终态；consumed terminal 必须与
 该 control durable payload 中的 exact summary Message ID 绑定在同一个 immediate transaction。

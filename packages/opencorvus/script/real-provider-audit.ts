@@ -8,7 +8,7 @@ export class RealProviderAudit implements Disposable {
   exhausted = false
   readonly #wrapped: typeof fetch
 
-  constructor(readonly modelID: string, readonly maxRequests: number) {
+  constructor(readonly modelID: string, readonly maxRequests: number, readonly onUpdate?: () => void) {
     assert(Number.isSafeInteger(maxRequests) && maxRequests >= 0, "Request budget must be a nonnegative integer")
     this.#wrapped = Object.assign(async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = input instanceof Request ? input.url : String(input)
@@ -23,15 +23,17 @@ export class RealProviderAudit implements Disposable {
             assert.equal(parsed.stream, true, "Every real Provider request must stream")
             if (this.requests.length >= maxRequests) {
               this.exhausted = true
+              this.onUpdate?.()
               throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
             }
             entry = { model: parsed.model, streaming: true }
             this.requests.push(entry)
+            this.onUpdate?.()
           }
         }
       }
       const response = await this.nativeFetch(input, init)
-      if (entry) entry.status = response.status
+      if (entry) { entry.status = response.status; this.onUpdate?.() }
       return response
     }, this.nativeFetch) as typeof fetch
     globalThis.fetch = this.#wrapped

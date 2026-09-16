@@ -95,6 +95,8 @@ export function reasoningDeltaHasSemanticContent(value: unknown): boolean {
 export function chunkHeartbeatKind(chunk: Record<string, unknown>): HeartbeatKind | null {
   const nonEmpty = (...keys: string[]) =>
     keys.some((key) => typeof chunk[key] === "string" && (chunk[key] as string).length > 0)
+  const content = (...keys: string[]) =>
+    keys.some((key) => typeof chunk[key] === "string" && (chunk[key] as string).trim().length > 0)
   switch (chunk?.type) {
     case "start":
       return null
@@ -108,7 +110,7 @@ export function chunkHeartbeatKind(chunk: Record<string, unknown>): HeartbeatKin
     case "text-end":
       return nonEmpty("id") ? "text-delta" : null
     case "text-delta":
-      return nonEmpty("text") ? "text-delta" : null
+      return content("text") ? "text-delta" : null
     case "reasoning-start":
     case "reasoning-end":
       return nonEmpty("id") ? "reasoning-delta" : null
@@ -117,7 +119,7 @@ export function chunkHeartbeatKind(chunk: Record<string, unknown>): HeartbeatKin
     case "tool-input-start":
       return nonEmpty("toolCallId", "id") && nonEmpty("toolName") ? "tool-input-start" : null
     case "tool-input-delta":
-      return nonEmpty("toolCallId", "id") && nonEmpty("inputTextDelta", "delta") ? "tool-input-delta" : null
+      return nonEmpty("toolCallId", "id") && content("inputTextDelta", "delta") ? "tool-input-delta" : null
     case "tool-input-end":
       return nonEmpty("toolCallId", "id") ? "tool-input-end" : null
     case "tool-call":

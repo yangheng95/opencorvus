@@ -5,12 +5,14 @@ test("the last authorized streaming request completes before the next is refused
   const original = globalThis.fetch
   globalThis.fetch = Object.assign(async () => new Response("ok", { status: 200 }), original) as typeof fetch
   try {
-    using audit = new RealProviderAudit("authorized-model", 1)
+    const observed: number[] = []
+    using audit = new RealProviderAudit("authorized-model", 1, () => observed.push(1))
     const request = () => fetch("https://provider.invalid/responses", { method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true }) })
     expect((await request()).status).toBe(200)
     expect({ exhausted: audit.exhausted, requests: audit.requests }).toEqual({ exhausted: false, requests: [{ model: "authorized-model", streaming: true, status: 200 }] })
     await expect(request()).rejects.toThrow("E2E_REQUEST_BUDGET_EXHAUSTED")
     expect({ exhausted: audit.exhausted, count: audit.requests.length }).toEqual({ exhausted: true, count: 1 })
+    expect(observed).toEqual([1, 1, 1])
   } finally { globalThis.fetch = original }
 })
 
