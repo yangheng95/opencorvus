@@ -58,8 +58,8 @@ export function isolatedTestChildEnvironment(
     const parsedHome = path.parse(homeRoot)
     child.HOMEDRIVE = parsedHome.root.replace(/[\\/]$/, "")
     child.HOMEPATH = homeRoot.slice(parsedHome.root.length - 1)
-    child.APPDATA = path.join(runtime.processRoot, "appdata", "roaming")
-    child.LOCALAPPDATA = path.join(runtime.processRoot, "appdata", "local")
+    child.APPDATA = path.join(homeRoot, "AppData", "Roaming")
+    child.LOCALAPPDATA = path.join(homeRoot, "AppData", "Local")
   }
   return child
 }
@@ -95,8 +95,7 @@ async function inheritedOwnerRoot(): Promise<string | undefined> {
   if (!isStrictDescendant(actualOsTempRoot, resolved)) return undefined
   try {
     const marker = JSON.parse(await fsPromises.readFile(path.join(resolved, OWNER_MARKER), "utf8")) as unknown
-    const markerKeys =
-      marker && typeof marker === "object" && !Array.isArray(marker) ? Object.keys(marker).sort() : []
+    const markerKeys = marker && typeof marker === "object" && !Array.isArray(marker) ? Object.keys(marker).sort() : []
     if (
       !marker ||
       typeof marker !== "object" ||
@@ -132,7 +131,17 @@ export async function bootstrapIsolatedTestRuntime(role: "runner" | "test"): Pro
   const runtimeRoot = path.join(processRoot, "runtime-root")
   const temporaryRoot = path.join(runtimeRoot, "tmp")
   const homeRoot = path.join(processRoot, "home")
-  await Promise.all([fsPromises.mkdir(temporaryRoot, { recursive: true }), fsPromises.mkdir(homeRoot, { recursive: true })])
+  await Promise.all([
+    fsPromises.mkdir(temporaryRoot, { recursive: true }),
+    fsPromises.mkdir(homeRoot, { recursive: true }),
+  ])
+  if (process.platform === "win32") {
+    // Windows known-folder resolution expands USERPROFILE independently of
+    // APPDATA/LOCALAPPDATA and requires those directories to exist at startup.
+    await Promise.all(
+      ["Local", "Roaming"].map((name) => fsPromises.mkdir(path.join(homeRoot, "AppData", name), { recursive: true })),
+    )
+  }
 
   process.env[OWNER_ROOT] = ownerRoot
   process.env[OWNER_PID] = String(ownerPID)
@@ -151,13 +160,16 @@ export async function bootstrapIsolatedTestRuntime(role: "runner" | "test"): Pro
   process.env[MANAGED_CONFIG_DIRECTORY] = path.join(processRoot, "managed-config")
   for (const key of USER_CONFIGURATION_ENVIRONMENT_KEYS) delete process.env[key]
   if (role === "test") {
-    Object.assign(process.env, isolatedTestChildEnvironment({
-      ownerRoot,
-      processRoot,
-      runtimeRoot,
-      temporaryRoot,
-      ownsOwnerRoot,
-    }))
+    Object.assign(
+      process.env,
+      isolatedTestChildEnvironment({
+        ownerRoot,
+        processRoot,
+        runtimeRoot,
+        temporaryRoot,
+        ownsOwnerRoot,
+      }),
+    )
   }
   const runtime = Object.freeze({ ownerRoot, processRoot, runtimeRoot, temporaryRoot, ownsOwnerRoot })
   cleanupAuthorities.set(runtime, { osTempRoot, target: ownsOwnerRoot ? ownerRoot : processRoot })

@@ -1,5 +1,5 @@
 The frontend-design runtime template turns scheduler-provided product, interface, reference, or design evidence into a bounded frontend handoff that projected consumers can implement, review, and verify.
-Every agent owns its file mutations: if you modify project files, commit your own changes before finishing; if your role is read-only or only emits structured records, do not claim file changes.
+Own and commit changes to ordinary project source or documentation. Task-managed design evidence, skeletons, screenshots, and structured records are persisted through their assigned Artifact and runtime mechanisms; they are not Git deliverables. Keep `.opencorvus/.r/` and other Host-owned runtime state untracked, including when an assigned design output is a file there; never force-add ignored runtime output to satisfy a commit instruction. If your role is read-only or only emits structured records, do not claim project file changes.
 
 Build the frontend handoff incrementally through the `update_frontend_*` tools. These tools record inspectable facts and remain writable for the whole Turn. The Host snapshots their current contents when the Turn ends. Missing, contradictory, or invalid fields remain visible completeness findings; they do not require a terminal submit call and do not erase the visible assistant message.
 
