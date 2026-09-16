@@ -4,6 +4,7 @@ import path from "node:path"
 import { createHash } from "node:crypto"
 import { execFileSync } from "node:child_process"
 import { bootstrapIsolatedTestRuntime, applyIsolatedTestUserEnvironment } from "@opencorvus-ai/util/test-runtime-environment"
+import { RealProviderAudit } from "./real-provider-audit"
 import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 
 // This checker executes real streaming Provider calls and production HTTP routes.
@@ -43,11 +44,10 @@ let server: { url: URL; stop(force?: boolean): Promise<void> } | undefined
 let disposeInstances: (() => Promise<void>) | undefined
 let closeDatabase: (() => void) | undefined
 let disposeProcesses: ((directory: string) => Promise<void>) | undefined
-let sourceOrigin: string | undefined
 let lastActivity = Date.now()
-const requests: Array<{ model: string; streaming: boolean; status?: number }> = []
-let requestBudgetExhausted = false
-const nativeFetch = globalThis.fetch
+const audit = new RealProviderAudit(modelID, maxRequests)
+const requests = audit.requests
+const nativeFetch = audit.nativeFetch
 const errorText = (error: unknown) => {
   let text = error instanceof Error ? `${error.name}: ${error.message}` : String(error)
   for (const value of secrets) text = text.replaceAll(value, "[REDACTED]")
@@ -61,6 +61,7 @@ try {
   result.sourceDiffSHA256 = createHash("sha256").update(sourceDiff).digest("hex")
   await fs.writeFile(path.join(root, "source.patch"), sourceDiff)
   result.checkerSHA256 = createHash("sha256").update(await fs.readFile(import.meta.filename)).digest("hex")
+  result.auditSHA256 = createHash("sha256").update(await fs.readFile(path.join(import.meta.dir, "real-provider-audit.ts"))).digest("hex")
   await fs.mkdir(path.join(home, "data"), { recursive: true })
   await fs.mkdir(project, { recursive: true })
   const auth = JSON.parse(await fs.readFile(source, "utf8"))
@@ -85,31 +86,6 @@ try {
   process.env.OPENCORVUS_CONFIG_CONTENT = JSON.stringify({ model, small_model: model, permission_mode: "full_access" })
   if (supervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = supervisor
 
-  globalThis.fetch = Object.assign(async (input: RequestInfo | URL, init?: RequestInit) => {
-    const url = input instanceof Request ? input.url : String(input)
-    let entry: (typeof requests)[number] | undefined
-    if (new URL(url).origin !== sourceOrigin) {
-      const body = typeof init?.body === "string" ? init.body : input instanceof Request ? await input.clone().text() : undefined
-      if (body) {
-        let parsed: any
-        try { parsed = JSON.parse(body) } catch {}
-        if (parsed?.model) {
-          assert.equal(parsed.model, modelID, "Actual outgoing request model differs from authorized model")
-          assert.equal(parsed.stream, true, "Every real Provider request must stream")
-          if (requests.length >= maxRequests) {
-            requestBudgetExhausted = true
-            throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
-          }
-          entry = { model: parsed.model, streaming: parsed.stream }
-          requests.push(entry)
-        }
-      }
-    }
-    const response = await nativeFetch(input, init)
-    if (entry) entry.status = response.status
-    return response
-  }, nativeFetch) as typeof fetch
-
   const [{ Instance }, { Database, sql }, { Provider }, { Log }, startup, recovery, { SessionStatus }, { ProcessSupervisor }, { MessageStore }] = await Promise.all([
     import("@/project/instance"), import("@/storage/db"), import("@/provider/provider"), import("@/util/log"),
     import("@/cli/server-runtime"), import("@/engine/host-recovery"), import("@/session/status"), import("@/shell/process-supervisor"), import("@/session/message-store"),
@@ -129,7 +105,7 @@ try {
     disposeInstances,
   }))
   server = prepared.server
-  sourceOrigin = server.url.origin
+  audit.localOrigins.add(server.url.origin)
   result.serverURL = server.url.toString()
   console.log(`[dispatch-e2e] isolated server=${server.url} result=${resultPath}`)
   const request = async (route: string, body?: unknown, directory = project) => {
@@ -145,26 +121,7 @@ try {
     return await response.json() as any
   }
   result.phase = "provider_preflight"
-  const chat = await request("/global/chat/start", { requestID: crypto.randomUUID(), text: "Reply with OK.", model })
-  result.preflightSessionID = chat.session.id
-  let preflightSignature = ""
-  lastActivity = Date.now()
-  while (true) {
-    const messages = await request(`/session/${chat.session.id}/message`, undefined, chat.session.directory)
-    const assistant = messages.find((entry: any) => entry.info.role === "assistant" && entry.info.parentID === chat.messageID)
-    const next = JSON.stringify({ messages, activity: SessionStatus.getActivity(chat.session.id) })
-    if (next !== preflightSignature) { preflightSignature = next; lastActivity = Date.now() }
-    if (requestBudgetExhausted) throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
-    if (assistant?.info.error) throw new Error(`PROVIDER_PREFLIGHT: ${JSON.stringify(assistant.info.error)}`)
-    if (assistant?.info.time.completed) {
-      assert(assistant.parts.some((part: any) => part.type === "text" && part.text.trim()), "Credential preflight must receive a persisted streamed reply")
-      assert(requests.some((entry) => entry.status === 200), "Actual outgoing model request must be observed")
-      result.preflight = { credential: "usable", catalog: "projected", actualModel: modelID, streaming: true }
-      break
-    }
-    if (Date.now() - lastActivity > inactivityMs) throw new Error("PROVIDER_PREFLIGHT_INACTIVITY")
-    await Bun.sleep(500)
-  }
+  result.preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs, activity: SessionStatus.getActivity })
   result.phase = "task_execution"
   const created = await request("/task?init-git=true", {
     title: "Advanced local bookshop delivery acceptance",
@@ -208,7 +165,7 @@ try {
     result.requests = requests
     await fs.writeFile(resultPath, JSON.stringify(result, null, 2) + "\n")
     if (failed.length) throw new Error(`DISPATCH_INFRASTRUCTURE_FAILURE: ${JSON.stringify(failed)}`)
-    if (requestBudgetExhausted) throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
+    if (audit.exhausted) throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
     if (board.task.status === "completed") {
       assert(children.length > 0 && children.every((child) => child.sessionExists), "Completed delivery requires real worker Sessions")
       const facts = Database.use((db) => ({
@@ -250,7 +207,7 @@ try {
     await Bun.sleep(500)
   }
 } catch (error) {
-  result.status = requestBudgetExhausted ? "budget_exhausted" : "failed"
+  result.status = audit.exhausted ? "budget_exhausted" : "failed"
   result.error = errorText(error)
   process.exitCode = 1
 } finally {
@@ -258,7 +215,7 @@ try {
   for (const run of [() => disposeProcesses?.(project), () => server?.stop(true), () => disposeInstances?.(), () => closeDatabase?.()]) {
     try { await run() } catch (error) { cleanup.push(errorText(error)) }
   }
-  globalThis.fetch = nativeFetch
+  audit[Symbol.dispose]()
   for (const name of ["auth.json", "models.json"]) {
     try { await fs.rm(path.join(home, "data", name), { force: true }) } catch (error) { cleanup.push(errorText(error)) }
   }
