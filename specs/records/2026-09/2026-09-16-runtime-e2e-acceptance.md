@@ -3,9 +3,9 @@
 ## Recall
 
 - User: "专业一些好吗，先端到端测试，确保所有case覆盖到且能正常工作，否则benchmark就是个大型笑话". Stop treating unit tests, first-run conversation creation or benchmark scores as evidence for untested execution paths. Build an explicit coverage inventory, reproduce failures through real entry points, repair causes and rerun affected cases before the full matrix.
-- User approved isolated use of the configured Provider credentials and openai/gpt-5.6-luna for the first reproduction. No batch cost ceiling was supplied; the full paid matrix remains pending that missing scope. Authorization does not include restarting the user's application, modifying the stalled Task, new public releases or unbounded benchmark batches.
-- Current source89003f8a; only pre-existing untracked script/video/. Existing main worktree remains the authorized delivery source. Read AGENTS.md, benchmark-debug-template SKILL.md, dispatch-preparation-stall record, prior benchmark-runtime-readiness Recall, current Task control architecture, adapter registry and existing real-provider checkers.
-- Known incident: single dispatch loses its visible Tool name before analyze_intent validation; a completed transport result containing infrastructure_failure is counted as a decision; Host stops the Turn; descriptor-less admission is excluded from accepted-worker recovery. No production fix has yet been made.
+- User approved isolated use of configured Provider credentials and openai/gpt-5.6-luna, then explicitly required “修完为止”. Continue necessary individually bounded repair/verification runs; no unbounded score benchmark. Preserve the installed application, original stalled Task and database. Earlier v0.1.0-beta publication already completed from immutable d1f974e5; current fixes are not published and that tag must not be overwritten.
+- Current committed source49f65cb1 is on current branch and main/upstream; ongoing checker/prompt edits are separately recorded below. Preserve pre-existing untracked script/video/. Existing main worktree remains the authorized delivery source. Read AGENTS.md, benchmark-debug-template SKILL.md, dispatch-preparation-stall record, prior benchmark-runtime-readiness Recall, current Task control architecture, adapter registry and existing real-provider checkers.
+- Known incident: single dispatch loses its visible Tool name before analyze_intent validation; a completed transport result containing infrastructure_failure is counted as a decision; Host stops the Turn; descriptor-less admission is excluded from accepted-worker recovery. This original baseline was repaired in2f4b4640/66a5328a; subsequent shared queue, semantic idle, foreground process lifetime and Mission convergence fixes and their evidence are recorded below.
 - Existing checker findings: mission-e2e explicitly does intake without dispatch and reads an obsolete Part storage shape; dynamic-expert-squad-e2e pins an obsolete package revision and has a total elapsed-time cutoff; existing scripts are not a complete acceptance matrix. Do not run a stale checker or use its failure as product evidence. No UI automated tests will be created or run.
 - Independent feedback: prior read-only review confirmed the incident causal chain; implementation/acceptance review is pending. No additional agent delegation is authorized except the required read-only review.
 
@@ -40,7 +40,7 @@ The implementation will map these obligations to concrete case IDs/checkers and 
 1. Add a focused real-provider public-entry checker, preserve a red baseline before product changes, and validate the checker itself.
 2. Complete the shared identity and pre-acceptance failure audit, then implement the root corrections with positive regression tests.
 3. Repeat the baseline and applicable controlled boundary cases; independently review and repair all valid findings.
-4. Obtain the remaining full-matrix spend bound, execute every concrete case, inspect real pages/artifacts manually, and record gaps as gaps. Do not restart score benchmarks or publish a new binary while required cases remain failed, blocked or not run.
+4. Continue individually bounded real verification under the user’s repair-to-completion instruction, execute every concrete case, inspect real pages/artifacts manually, and record gaps as gaps. Do not restart score benchmarks or publish a new binary while required cases remain failed, blocked or not run.
 
 
 ## Red baseline and repair boundary (2026-09-16)
@@ -65,11 +65,11 @@ A controlled pass is never a real-Provider or UI pass. This ledger deliberately 
 | Case ID | Target | Current evidence |
 |---|---|---|
 | ENTRY-CHAT | global.chat.start -> streamed persisted reply | Real preflight passed in red baseline |
-| ENTRY-TASK | direct Task -> Advanced initial dispatch | Real red baseline failed; corrected-source rerun pending |
-| ENTRY-WORK | global Work/Mission -> Task -> worker | Not run; existing duplex checker needs current validation |
+| ENTRY-TASK | direct Task -> Advanced initial dispatch | Corrected real runs dispatch actual workers; full Advanced xjWLnr delivery still running |
+| ENTRY-WORK | global Work/Mission -> Task -> worker | Work intake and two-Task execution proven; strict duplex kAuK2l failed immediate acknowledgement; PkWzEU rerun pending |
 | ENTRY-REPLAY | duplicate public request identity and existing project | Not run |
-| ADAPTER-delegated_worker | Base planner accepted descriptor and worker final | Controlled streamed test passed; real Provider pending |
-| ADAPTER-analyze_intent | Advanced interpreter accepted descriptor and worker final | Controlled streamed test passed; real Provider rerun pending |
+| ADAPTER-delegated_worker | Base planner accepted descriptor and worker final | Controlled streamed passed; real native Base Zx8dgU Task completed; Dynamic collection run pending |
+| ADAPTER-analyze_intent | Advanced interpreter accepted descriptor and worker final | Real xjWLnr worker settled; final workflow acceptance pending |
 | ADAPTER-requirements | requirements output Artifact and progression | Not run |
 | ADAPTER-architect | architecture output Artifact and progression | Not run |
 | ADAPTER-frontend_design | design output Artifact and progression | Not run |
@@ -79,25 +79,25 @@ A controlled pass is never a real-Provider or UI pass. This ledger deliberately 
 | ADAPTER-workload_analysis | workload Artifact and progression | Not run |
 | ADAPTER-fact_check | fact-check Artifact and progression | Not run |
 | ADAPTER-build | implemented output and worker terminal | Not run |
-| ADAPTER-explore | exploration output and worker terminal | Not run |
+| ADAPTER-explore | exploration output and worker terminal | Native Zx8dgU passed exact compiled worker read/final report and Task restart |
 | ADAPTER-integrity | integrity output and worker terminal | Not run |
 | DISPATCH-SINGLE | real visible Tool identity -> child descriptor | Controlled Base/Advanced tests passed |
-| DISPATCH-COLLECTION | member identity/checkpoint replay/failure/cancellation | Six focused controlled tests passed; real Provider pending |
+| DISPATCH-COLLECTION | member identity/checkpoint replay/failure/cancellation | Controlled collection/streamed tests passed; real Dynamic Ig3uBg passed11requests including concurrent read/join/final completion |
 | DISPATCH-INTERLEAVING | late failed sibling vs accepted sibling; all failed | Two controlled streamed tests passed |
-| FAILURE-PREPARATION | typed infrastructure result -> next model decision -> durable reopen | Controlled streamed test passed; orphan continuation remains unresolved |
+| FAILURE-PREPARATION | typed infrastructure result -> next model decision -> durable reopen | Controlled streamed single/collection failure + orphan reserve/recovery/lease tests passed; see phase2 |
 | FAILURE-RESULT | single/all-failed/mixed collection -> semantic decision effect | Focused contracts passed; full streamed collection fault cases pending |
 | FAILURE-CORRUPTION | missing/malformed completed output -> explicit contract error | Focused contract tests passed |
 | FAILURE-PROVIDER-DELIVERY | stream interruption, Tool/delivery failures | Not run |
 | LIFECYCLE-TERMINAL | success/domain incomplete/blocked/cancel/late/reopen | Full matrix not run |
-| LIFECYCLE-QUESTION | actual question/answer -> continuation | Not run |
-| RECOVERY-ADMISSION | restart before child/descriptor, same/peer process | Unresolved descriptor-less recovery contract; not accepted |
-| RECOVERY-WORKER-DELIVERY | restart after acceptance / pending delivery | Focused existing checks running; real Provider pending |
+| LIFECYCLE-QUESTION | actual question/answer -> continuation | Controlled real process-cut reply recovery passed; actual model asking/continuing still pending |
+| RECOVERY-ADMISSION | restart before child/descriptor, same/peer process | Controlled real process-cut/lease-fence and immutable recovery tests passed after66a5328a |
+| RECOVERY-WORKER-DELIVERY | restart after acceptance / pending delivery | Real Task-control B8YIQ5 passed restart/FIFO/cancel/second restart; native Zx8dgU terminal restart passed |
 | ISOLATION | concurrent Tasks/Sessions/projects | Full matrix not run |
 | DELIVERY-ARTIFACT | exact workflow/settlement/delivery and usable webpage | Not run |
-| DELIVERY-VISUAL | real development UI and artifact rendered inspection | Not run |
-| DELIVERY-NATIVE | corrected binary fresh launch/restart/install | Not run |
+| DELIVERY-VISUAL | real development UI and artifact rendered inspection | Earlier o3Z9gE bookshop manually passed desktop cart/search/filter checks; Task itself failed. Current xjWLnr visual acceptance pending |
+| DELIVERY-NATIVE | corrected binary fresh launch/restart/install | a2dd3a89 two Windows archives first-run/restart passed;67f2d0ac native real Provider Zx8dgU passed. Latest Overlay/old-schema upgrade not accepted |
 
-The current checker is a first reproduction and terminal-evidence collector, not the completed full-matrix runner. It now explicitly leaves delivery/artifact/visual obligations pending even if a Task reaches completed. It cannot authorize benchmark scoring or release readiness.
+This ledger combines separate real and controlled checkers; it is not a completed full-matrix pass. Each result retains its own source identity, and older evidence is not relabelled as current. It now explicitly leaves delivery/artifact/visual obligations pending even if a Task reaches completed. It cannot authorize benchmark scoring or release readiness.
 
 ## Validation and remaining work
 
@@ -312,3 +312,34 @@ Impact: initial and recovered Panel creations across Mission/right-sidebar/Task 
 Pre-push validation found a tooling defect while native packaging refreshed generated files: packages/opencorvus/tsconfig.json overrides exclude without excluding dist, so its default **/* input enumerated JavaScript bundle assets that packaging then replaced (TS6053). Keep generated dist outside the source typecheck; preserve every existing source/declaration input and rerun normal hooks after packaging settles. This fixes the checker scope rather than bypassing the hook or treating generated-output races as a product pass. a2dd3a89 remains unpushed until that normal check succeeds.
 
 Task-publication continuation passes9 tests73 assertions across Panel authority, real streamed recovery and generic cross-process startup creation recovery. The streamed test proves an actual same-parent completed reply after the creation receipt. Source typecheck/docs/diff check passed; independent read-only review found no unresolved scoped findings. Real duplex publication-continuation rerun is pending.
+
+
+## Dynamic parallel frontier functional acceptance runner
+
+The existing dynamic-expert-squad-e2e scenario already contains two independent local evidence files and actual paired worker/final-message/overlap checks; it can cover real collection fan-out/join without writing the three blocked scenario input files. Do not run its stale benchmark shell: it hardcodes builtin/dynamic2026.08.30.3, limits total wall time, lacks isolated user HOME/outbound model audit, erases successful evidence and treats absent token fields as0. It also gates correctness on a historical token-reduction score; that is not the requested functional E2E acceptance.
+
+Keep the two-file input and exact real dispatch/read/result/concurrency contract. Bind the generated current dynamic manifest to the installed revision/digest rather than a dated manifest assertion. Reuse isolated runtime bootstrap, paired auth/models, real streaming Chat preflight, exact outgoing Luna audit with128 cumulative-request resource bound, retained source/checker/audit identity,180-second semantic inactivity including Session stream activity, known-credential redaction and unconditional owned cleanup. Preserve failures and successes; copied credentials alone are removed. Unknown usage is an explicit evidence error, not0. Report actual usage without requiring a benchmark reduction score or claiming benchmark readiness. No UI automation or user process control. Independent review follows checker validation before interpreting real results.
+
+Dynamic functional mode retains actual pre-frontier Tool names as evidence but removes the old zero-Tool-before-frontier optimization gate: current capability discovery is a valid production step and no historical token-minimization baseline defines functional correctness. Worker ownership, exact collection input, complete observations, final-message consumption, immutable identities and actual concurrent Provider intervals remain mandatory.
+
+Independent Dynamic review found two valid checker defects before its real run: current collections have one visible outer Tool and typed output.members, not synthetic child Tool parts; final reduction also must independently honor a budget exhausted during late verification/cleanup. Replace child-Part counting with canonical collection input/member schemas and exact indexed collection lineage, descriptor, Session and worker-final bindings. Keep complete paired member results in evidence. Include audit.exhausted independently in final status. The obsolete synthetic child representation will not be restored.
+
+## Duplex acknowledgement obligation after successful coordination
+
+kAuK2l completed both Tasks, all12exact scheduler envelopes,3correlated replies, FIFO/order checks, final interactive Artifact, exact retained acceptance reads and durable Mission completion. Zero failed Tool occurrences and cleanup passed. The direct A_DONE reply msg_g0VVOYX02007bZRJL9c2 accepts the correct input msg_hotkhhbbk1YIiaNEfsQP but says “nonce-bearing” instead of the user-requested literal; the later terminal reply includes the literal. This is an observed missed immediate response requirement, not a scheduler stall or evidence-correlation error. Retain this run as failed.
+
+Read Mission prompt, shared participant-language policy, checker correlation, persisted user request and all replies. User authority was present; no evidence currently proves transport/context loss. Likely prompt competition: bounded notification instructions say end immediately if authored state is unchanged, while the user can require a visible acknowledgement without a state mutation; operator wording also emphasizes describing work rather than internal identifiers. Shared wording already exempts requested identifiers, so no Host routing or fake acknowledgement is justified. Clarify the bounded-notification causal closure itself: before finishing, satisfy response obligations activated by that input, including user-specified exact values, without extra state writes; this remains natural model-authored output. Replace the earlier narrow nonce bullet with this one general requirement at the actual early-stop instruction. Applies all Mission notifications/requests, terminal and nonterminal, with no schema or data change. Re-run the strict unchanged real duplex checker; a local prompt edit alone is not acceptance. Independent review after validation.
+
+## Shared Session delay continuation admission
+
+PkWzEU real duplex exposed repeated automation retries: delay atm_hLlcWZutSrQzoMXtUbgI first admitted msg_g0VVOdDgF00ZmDigLPnH for msg_automation_79b98d9a57c1a358e9d2579b3c28a542. That assistant completed with finish=tool-calls. The next assistant step for the same accepted input batch tried to insert a second due_accepted settlement tied to its new Message ID; the unique settlement correctly retained the first admission, but application comparison required the new ID and threw a conflict. Automation then retried the same wake. This is a shared continuation/ownership defect, not a Mission prompt or nonce issue.
+
+Horizontal audit: both SessionLoop catalog-binding paths call the same admission reducer for every assistant step. All native Session/Mission/worker delayed wakes converge there; Task-root wait uses separate epoch-bound engine_task_wait_registration/settlement and is not this path. Automation recurring definitions are excluded by the delay query. Exact Session-scoped current definitions, immutable Fire/run provenance, control leases, terminal tombstones, restart/retry and batch ownership were read in session-delay-admission, automation-projection/service, Session.beginAssistantReplyWithCommit, current DDL and task-wait-fire-identity tests. Existing due tests admitted only one assistant then released the wake executor, so they missed the second tool step while Automation still owned the live execution. Multiple simultaneous delays can share a Session batch; each must keep its first exact Fire/batch settlement. Existing ordinary-input-versus-live-due exclusion stays unchanged; scheduler notification classification is outside this proven defect.
+
+Repair within the single reducer: when an existing immutable due_accepted settlement matches this exact Fire and accepted input batch, treat it as already admitted and permit the same occurrence's subsequent assistant step/recovery. Retain the original assistant_message_id; do not append a new settlement, change data, or require an expired Automation lease to re-admit an already accepted occurrence. A different Fire/batch/disposition remains a conflict. First admission still requires the current live Automation owner and exact persisted provenance. DDL already enforces the first assistant's same-Session/batch lineage and immutability, so no schema change or fallback is needed. Add positive same-input second-step/replay-after-lease coverage and explicit mismatched-batch error contract; run actual due-claim and Task/Session wait tests plus fresh strict real duplex. Independent review follows validation.
+
+Dynamic o4MBCj12requests completed the Task with exact worker reads, but its retained checker used obsolete read_agent_message.message_id instead of current message_ids batch. Persisted prt_g0VVOd2fa00iRGVlIApK contains both exact final IDs; update the checker to the current batch contract, then rerun without relabelling the original failed receipt. Functional coverage is not a token score.
+
+Validation checkpoint: Dynamic Ig3uBg passed11audited streaming Luna requests, exact two accepted collection members/worker reads, real Provider interval overlap, exact batched final-message reads, completion references/facts and credential cleanup. Its original source SHA/diff/checker hashes remain in the retained result; no benchmark score claimed. Session delay/Task wait/cross-process race/scheduler claim suites passed40tests146assertions after correcting the new mismatched-batch fixture parent to its required tail input. Separate Question crash/reply recovery, permission hydration and Task runtime isolation passed6tests38assertions. Dynamic/audit contracts passed7tests19assertions; standalone checker typecheck and docs passed. Independent read-only review found no unresolved scoped code findings. Fresh real duplex HgST6o and full Advanced xjWLnr remain running.
+
+Manual inspection of xjWLnr implementation worker worktree through isolated http://127.0.0.1:49874/index.html: actual rendered desktop screenshot is coherent; add ¥58 book ->1/58, increment ->2/116, decrement ->1/58, remove ->0/0, local checkout feedback confirms no real transaction. Category button “小说02” remains on all6books; screenshot and source show renderBooks filter exists but no category click binding. This intermediate generated delivery has an observed functional defect and is not accepted. The autonomous workflow is still testing it; retain this observation and assess whether its own verifier catches/repairs it. No generated file was manually changed, no UI automation test was run, and no user process was touched.

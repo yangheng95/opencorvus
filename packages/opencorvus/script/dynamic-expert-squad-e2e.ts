@@ -1,4 +1,11 @@
-import { randomBytes } from "node:crypto"
+import { createHash, randomBytes } from "node:crypto"
+import { execFileSync } from "node:child_process"
+import { RealProviderAudit, CredentialRedactor } from "./real-provider-audit"
+import {
+  bootstrapIsolatedTestRuntime,
+  applyIsolatedTestUserEnvironment,
+} from "@opencorvus-ai/util/test-runtime-environment"
+import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
@@ -8,20 +15,14 @@ import {
   requireCrossSessionProviderExecutionOverlap,
   requireSingleAttemptProviderActivities,
 } from "./dynamic-e2e-contract"
-import { capabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
 
 const ALLOW_REAL_PROVIDER = "DYNAMIC_EXPERT_SQUAD_E2E_ALLOW_REAL_PROVIDER"
 const AUTH_SOURCE = "DYNAMIC_EXPERT_SQUAD_E2E_AUTH_SOURCE"
 const MODELS_SOURCE = "DYNAMIC_EXPERT_SQUAD_E2E_MODELS_SOURCE"
 const MODEL = "DYNAMIC_EXPERT_SQUAD_E2E_MODEL"
 const RESULT = "DYNAMIC_EXPERT_SQUAD_E2E_RESULT"
-const FAILED_BASELINE_TOKENS = 1_972_934
-const MAX_TASK_TOKENS = 750_000
-const MAX_ORCHESTRATOR_TOKENS = 350_000
-const MIN_REDUCTION = 0.6
 const POLL_MS = 500
-const INACTIVITY_MS = 240_000
-const TOTAL_TIMEOUT_MS = 900_000
+const INACTIVITY_MS = 180_000
 
 if (process.env[ALLOW_REAL_PROVIDER] !== "1") {
   throw new Error(`${ALLOW_REAL_PROVIDER}=1 is required because this checker performs real streaming model calls.`)
@@ -35,24 +36,34 @@ if (modelSeparator <= 0 || modelSeparator === model.length - 1) {
 }
 const providerID = model.slice(0, modelSeparator)
 const modelID = model.slice(modelSeparator + 1)
+const maxRequests = Number(process.env.DYNAMIC_EXPERT_SQUAD_E2E_MAX_REQUESTS ?? "128")
+if (!Number.isSafeInteger(maxRequests) || maxRequests <= 0) throw new Error("Request budget must be a positive integer")
+const supervisor = prepareTestProcessSupervisor()
+const isolated = await bootstrapIsolatedTestRuntime("runner")
+applyIsolatedTestUserEnvironment(isolated)
+if (supervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = supervisor
+using audit = new RealProviderAudit(modelID, maxRequests)
+const redactor = new CredentialRedactor()
+redactor.collect(process.env)
 const runID = randomBytes(8).toString("hex")
 const root = await fs.mkdtemp(path.join(os.tmpdir(), `opencorvus-dynamic-e2e-${runID}-`))
 const runtimeRoot = path.join(root, "runtime")
 const projectDirectory = path.join(root, "project")
 const resultPath = process.env[RESULT]?.trim()
   ? path.resolve(process.env[RESULT]!.trim())
-  : path.join(os.tmpdir(), `opencorvus-dynamic-e2e-${runID}.json`)
+  : path.join(root, "result.json")
 const startedAt = Date.now()
 const runtime: {
   server?: { stop(force?: boolean): Promise<void> }
   Database?: { close(): void }
   Instance?: { disposeAll(): Promise<void> }
-  ProcessSupervisor?: { disposeLiveProcessesUnder(directory: string): Promise<void> }
+  ProcessSupervisor?: { disposeLiveProcessesUnder(directory: string): Promise<unknown> }
 } = {}
 let primaryFailure: unknown
+let result: JsonObject = { status: "running", model, maxRequests, evidenceRoot: root }
 
 type JsonObject = Record<string, any>
-type TranscriptMessage = { info: JsonObject; parts: JsonObject[] }
+type TranscriptMessage = { info: JsonObject & { id: string; sessionID: string; role: string }; parts: JsonObject[] }
 
 function requiredGeneratedDynamicPackage() {
   const source = payloadPackageSources.find((entry) => entry.namespace === "builtin" && entry.id === "dynamic")
@@ -60,29 +71,8 @@ function requiredGeneratedDynamicPackage() {
   const manifestText = source.files["expert-squad.jsonc"]
   if (typeof manifestText !== "string") throw new Error("Generated builtin/dynamic payload has no manifest bytes.")
   const manifest = Bun.JSONC.parse(manifestText) as JsonObject
-  const schedulerCapabilityRefs = [
-    CapabilityRefCodec.encode(
-      capabilityRef({
-        kind: "capability_set",
-        source: "platform",
-        owner_ref: "tool-registry",
-        local_ref: "scheduler-transport",
-      }),
-    ),
-    ...["dispatch_agents", "manage_task", "no_action", "read_task_message", "read_agent_message", "skill"].map(
-      (localRef) =>
-      CapabilityRefCodec.encode(
-        capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: localRef }),
-      ),
-    ),
-  ]
-    .sort()
-  if (
-    manifest.version !== "2026.08.30.3" ||
-    manifest.schema_version !== 2 ||
-    JSON.stringify(manifest.capability_projection?.scheduler?.capability_refs) !== JSON.stringify(schedulerCapabilityRefs)
-  ) {
-    throw new Error(`Generated builtin/dynamic payload is stale: ${JSON.stringify(manifest)}`)
+  if (manifest.id !== "dynamic" || manifest.schema_version !== 2 || typeof manifest.version !== "string") {
+    throw new Error("Generated Dynamic manifest violates the current package identity contract")
   }
   return manifest
 }
@@ -105,11 +95,7 @@ async function initializeProject() {
       "# Dynamic frontier real-provider E2E\n\nTwo independent evidence files must be read by sibling Sessions.\n",
       "utf8",
     ),
-    fs.writeFile(
-      path.join(projectDirectory, "evidence", "orion.txt"),
-      "ORION_CODE=17\nORION_COLOR=amber\n",
-      "utf8",
-    ),
+    fs.writeFile(path.join(projectDirectory, "evidence", "orion.txt"), "ORION_CODE=17\nORION_COLOR=amber\n", "utf8"),
     fs.writeFile(
       path.join(projectDirectory, "evidence", "nebula.txt"),
       "NEBULA_CODE=29\nNEBULA_COLOR=violet\n",
@@ -139,6 +125,7 @@ async function copyProviderAuthority() {
   }
   const dataDirectory = path.join(runtimeRoot, "data")
   await fs.mkdir(dataDirectory, { recursive: true })
+  redactor.collect(JSON.parse(await fs.readFile(source, "utf8")))
   await Promise.all([
     fs.copyFile(source, path.join(dataDirectory, "auth.json")),
     fs.copyFile(catalogSource, path.join(dataDirectory, "models.json")),
@@ -146,6 +133,35 @@ async function copyProviderAuthority() {
 }
 
 try {
+  const repositoryRoot = execFileSync("git", ["rev-parse", "--show-toplevel"], { encoding: "utf8" }).trim()
+  const patch = execFileSync(
+    "git",
+    [
+      "diff",
+      "HEAD",
+      "--",
+      "packages/opencorvus/src",
+      "packages/opencorvus/script",
+      "packages/opencorvus/native",
+      "expert-squads",
+    ],
+    { cwd: repositoryRoot },
+  )
+  result = {
+    ...result,
+    sourceSHA: execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8" }).trim(),
+    sourceDiffSHA256: createHash("sha256").update(patch).digest("hex"),
+    checkerSHA256: createHash("sha256")
+      .update(await fs.readFile(import.meta.filename))
+      .digest("hex"),
+    auditSHA256: createHash("sha256")
+      .update(await fs.readFile(path.join(import.meta.dir, "real-provider-audit.ts")))
+      .digest("hex"),
+    runtime: { executable: process.execPath, bun: Bun.version },
+  }
+  await fs.writeFile(path.join(root, "source.patch"), patch)
+  await fs.writeFile(path.join(root, "run.json"), JSON.stringify(result, null, 2))
+  process.stdout.write(`[dynamic-e2e] evidence=${resultPath}\n`)
   for (const key of [
     "OPENCORVUS_API_KEY",
     "OPENCORVUS_CONFIG",
@@ -159,7 +175,6 @@ try {
   process.env.OPENCORVUS_TEST_HOME = runtimeRoot
   process.env.OPENCORVUS_TEST_PROCESS_ROOT = root
   process.env.OPENCORVUS_CONFIG_CONTENT = JSON.stringify({
-    permission: "allow",
     permission_mode: "full_access",
     model,
     small_model: model,
@@ -178,9 +193,15 @@ try {
     { MessageTable, ProviderActivityOutcomeTable, ProviderActivityRequestTable },
     { ProcessSupervisor },
     { WorkerTurnDescriptor },
-    { findDispatchLineageBySession },
+    { findDispatchLineageByCollectionMember },
+    {
+      PersistedDispatchAgentsInputSchema,
+      PersistedDispatchCollectionMemberInputSchema,
+      DispatchCollectionMemberResultSchema,
+    },
     { ProtocolStore },
     { completedReplyToUserMessage },
+    { SessionStatus },
   ] = await Promise.all([
     import("@/cli/server-runtime"),
     import("@/engine/host-recovery"),
@@ -190,8 +211,10 @@ try {
     import("@/shell/process-supervisor"),
     import("@/agent/worker-turn-descriptor"),
     import("@/engine/dispatch-lineage"),
+    import("@/engine/dispatch-collection-contract"),
     import("@/protocol/store"),
     import("@/session/completed-reply"),
+    import("@/session/status"),
   ])
   runtime.Database = Database
   runtime.Instance = Instance
@@ -200,131 +223,140 @@ try {
   const prepared = await requireRecoveredServerRuntime(
     await listenWithRecoveredServerRuntime({
       options: { hostname: "127.0.0.1", port: 0, randomPort: true },
-      recover: async () => assertStartedTaskProjectRecoverySucceeded(await recoverStartedTaskExecutions()),
+      recover: async () => {
+        assertStartedTaskProjectRecoverySucceeded(await recoverStartedTaskExecutions())
+      },
       disposeInstances: () => Instance.disposeAll(),
     }),
   )
   const server = prepared.server
   runtime.server = server
   const base = server.url.toString().replace(/\/$/, "")
+  audit.localOrigins.add(server.url.origin)
+  result.serverURL = base
 
-async function request(route: string, init: RequestInit = {}) {
-  const url = new URL(route, base)
-  if (!url.searchParams.has("directory")) url.searchParams.set("directory", projectDirectory)
-  const headers = new Headers(init.headers)
-  headers.set("x-opencorvus-directory", projectDirectory)
-  headers.set("x-opencorvus-request-id", crypto.randomUUID())
-  return await fetch(url, { ...init, headers })
-}
-
-async function requestJSON<T = JsonObject>(route: string, init: RequestInit = {}): Promise<T> {
-  const response = await request(route, init)
-  const body = await response.text()
-  if (!response.ok) throw new Error(`${init.method ?? "GET"} ${route} failed ${response.status}: ${body}`)
-  return body ? (JSON.parse(body) as T) : (undefined as T)
-}
-
-function toolParts(transcript: TranscriptMessage[]) {
-  return transcript.flatMap((message) =>
-    message.parts.flatMap((part) =>
-      part.type === "tool"
-        ? [{ messageID: String(message.info.id), sessionID: String(message.info.sessionID), agent: String(message.info.agent), part }]
-        : [],
-    ),
-  )
-}
-
-function tokenValue(value: unknown): number {
-  return typeof value === "number" && Number.isFinite(value) ? value : 0
-}
-
-function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
-  const messages = transcript.filter(
-    (message) => message.info.role === "assistant" && typeof message.info.providerID === "string",
-  )
-  const messageIDs = new Set(messages.map((message) => String(message.info.id)))
-  const requests = Database.use((db) => db.select().from(ProviderActivityRequestTable).all())
-  const outcomes = Database.use((db) => db.select().from(ProviderActivityOutcomeTable).all())
-  const taskRequests = requests.filter((request) => messageIDs.has(request.assistant_message_id))
-  const taskRequestIDs = new Set(taskRequests.map((request) => request.id))
-  const taskOutcomes = outcomes.filter((outcome) => taskRequestIDs.has(outcome.request_id))
-  const taskOutcomeByRequest = new Map(taskOutcomes.map((outcome) => [outcome.request_id, outcome.data]))
-  requireSingleAttemptProviderActivities({ requests: taskRequests, outcomes: taskOutcomes })
-  const byAgent: Record<
-    string,
-    { calls: number; input: number; output: number; reasoning: number; cacheRead: number; cacheWrite: number; total: number }
-  > = {}
-  for (const message of messages) {
-    if (message.info.providerID !== providerID || message.info.modelID !== modelID) {
-      throw new Error(
-        `Task assistant ${String(message.info.id)} used ${String(message.info.providerID)}/${String(message.info.modelID)}, expected ${model}.`,
-      )
-    }
-    const agent = String(message.info.agent || "unknown")
-    const current = (byAgent[agent] ??= {
-      calls: 0,
-      input: 0,
-      output: 0,
-      reasoning: 0,
-      cacheRead: 0,
-      cacheWrite: 0,
-      total: 0,
-    })
-    const tokens = message.info.tokens ?? {}
-    current.input += tokenValue(tokens.input)
-    current.output += tokenValue(tokens.output)
-    current.reasoning += tokenValue(tokens.reasoning)
-    current.cacheRead += tokenValue(tokens.cache?.read)
-    current.cacheWrite += tokenValue(tokens.cache?.write)
-    current.total += tokenValue(tokens.total)
+  async function request(route: string, init: RequestInit = {}) {
+    const url = new URL(route, base)
+    if (!url.searchParams.has("directory")) url.searchParams.set("directory", projectDirectory)
+    const headers = new Headers(init.headers)
+    headers.set("x-opencorvus-directory", projectDirectory)
+    headers.set("x-opencorvus-request-id", crypto.randomUUID())
+    return await fetch(url, { ...init, headers, signal: AbortSignal.timeout(30_000) })
   }
-  for (const providerRequest of taskRequests) {
-    const message = messages.find((candidate) => candidate.info.id === providerRequest.assistant_message_id)
-    if (!message) throw new Error(`Provider request ${providerRequest.id} lost its Task assistant Message.`)
-    byAgent[String(message.info.agent || "unknown")]!.calls += 1
-    const outcome = taskOutcomeByRequest.get(providerRequest.id)
-    if (!outcome || outcome.outcome !== "done") {
-      throw new Error(`Task Provider activity ${providerRequest.id} settled as ${JSON.stringify(outcome)}.`)
-    }
+
+  async function requestJSON<T = JsonObject>(route: string, init: RequestInit = {}): Promise<T> {
+    const response = await request(route, init)
+    const body = await response.text()
+    if (!response.ok) throw new Error(`${init.method ?? "GET"} ${route} failed ${response.status}: ${body}`)
+    return body ? (JSON.parse(body) as T) : (undefined as T)
   }
-  const total = Object.values(byAgent).reduce(
-    (sum, usage) => ({
-      calls: sum.calls + usage.calls,
-      input: sum.input + usage.input,
-      output: sum.output + usage.output,
-      reasoning: sum.reasoning + usage.reasoning,
-      cacheRead: sum.cacheRead + usage.cacheRead,
-      cacheWrite: sum.cacheWrite + usage.cacheWrite,
-      total: sum.total + usage.total,
-    }),
-    { calls: 0, input: 0, output: 0, reasoning: 0, cacheRead: 0, cacheWrite: 0, total: 0 },
-  )
-  return { byAgent, total, requests: taskRequests, outcomes: taskOutcomes }
-}
+
+  function toolParts(transcript: TranscriptMessage[]) {
+    return transcript.flatMap((message) =>
+      message.parts.flatMap((part) =>
+        part.type === "tool"
+          ? [
+              {
+                messageID: String(message.info.id),
+                sessionID: String(message.info.sessionID),
+                agent: String(message.info.agent),
+                part,
+              },
+            ]
+          : [],
+      ),
+    )
+  }
+
+  function tokenValue(value: unknown): number {
+    if (typeof value !== "number" || !Number.isFinite(value) || value < 0)
+      throw new Error("Provider usage evidence is unavailable or invalid")
+    return value
+  }
+
+  function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
+    const messages = transcript.filter(
+      (message) => message.info.role === "assistant" && typeof message.info.providerID === "string",
+    )
+    const messageIDs = new Set(messages.map((message) => String(message.info.id)))
+    const requests = Database.use((db) => db.select().from(ProviderActivityRequestTable).all())
+    const outcomes = Database.use((db) => db.select().from(ProviderActivityOutcomeTable).all())
+    const taskRequests = requests.filter((request) => messageIDs.has(request.assistant_message_id))
+    const taskRequestIDs = new Set(taskRequests.map((request) => request.id))
+    const taskOutcomes = outcomes.filter((outcome) => taskRequestIDs.has(outcome.request_id))
+    const taskOutcomeByRequest = new Map(taskOutcomes.map((outcome) => [outcome.request_id, outcome.data]))
+    requireSingleAttemptProviderActivities({ requests: taskRequests, outcomes: taskOutcomes })
+    const byAgent: Record<
+      string,
+      {
+        calls: number
+        input: number
+        output: number
+        reasoning: number
+        cacheRead: number
+        cacheWrite: number
+        total: number
+      }
+    > = {}
+    for (const message of messages) {
+      if (message.info.providerID !== providerID || message.info.modelID !== modelID) {
+        throw new Error(
+          `Task assistant ${String(message.info.id)} used ${String(message.info.providerID)}/${String(message.info.modelID)}, expected ${model}.`,
+        )
+      }
+      const agent = String(message.info.agent || "unknown")
+      const current = (byAgent[agent] ??= {
+        calls: 0,
+        input: 0,
+        output: 0,
+        reasoning: 0,
+        cacheRead: 0,
+        cacheWrite: 0,
+        total: 0,
+      })
+      const tokens = message.info.tokens ?? {}
+      current.input += tokenValue(tokens.input)
+      current.output += tokenValue(tokens.output)
+      current.reasoning += tokenValue(tokens.reasoning)
+      current.cacheRead += tokenValue(tokens.cache?.read)
+      current.cacheWrite += tokenValue(tokens.cache?.write)
+      current.total += tokenValue(tokens.total)
+    }
+    for (const providerRequest of taskRequests) {
+      const message = messages.find((candidate) => candidate.info.id === providerRequest.assistant_message_id)
+      if (!message) throw new Error(`Provider request ${providerRequest.id} lost its Task assistant Message.`)
+      byAgent[String(message.info.agent || "unknown")]!.calls += 1
+      const outcome = taskOutcomeByRequest.get(providerRequest.id)
+      if (!outcome || outcome.outcome !== "done") {
+        throw new Error(`Task Provider activity ${providerRequest.id} settled as ${JSON.stringify(outcome)}.`)
+      }
+    }
+    const total = Object.values(byAgent).reduce(
+      (sum, usage) => ({
+        calls: sum.calls + usage.calls,
+        input: sum.input + usage.input,
+        output: sum.output + usage.output,
+        reasoning: sum.reasoning + usage.reasoning,
+        cacheRead: sum.cacheRead + usage.cacheRead,
+        cacheWrite: sum.cacheWrite + usage.cacheWrite,
+        total: sum.total + usage.total,
+      }),
+      { calls: 0, input: 0, output: 0, reasoning: 0, cacheRead: 0, cacheWrite: 0, total: 0 },
+    )
+    return { byAgent, total, requests: taskRequests, outcomes: taskOutcomes }
+  }
 
   const providerCatalog = await requestJSON("/provider")
   const provider = (providerCatalog.all as JsonObject[]).find((entry) => entry.id === providerID)
   const projectedModelIDs = Object.keys(provider?.models ?? {})
-  const providerTestResponse = await request(`/provider/${encodeURIComponent(providerID)}/test`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ modelID }),
+  if (!projectedModelIDs.includes(modelID))
+    throw new Error("Authorized model is missing from the isolated catalog projection")
+  result.preflight = await audit.preflight({
+    serverURL: server.url,
+    model,
+    inactivityMs: INACTIVITY_MS,
+    activity: SessionStatus.getActivity,
   })
-  const providerTest = (await providerTestResponse.json()) as JsonObject
-  if (
-    !providerTestResponse.ok ||
-    providerTest.ok !== true ||
-    providerTest.status !== "connected" ||
-    !projectedModelIDs.includes(modelID)
-  ) {
-    throw new Error(
-      `Provider/model preflight failed: ${JSON.stringify({
-        providerTest,
-        providerProjected: Boolean(provider),
-        requestedModelProjected: projectedModelIDs.includes(modelID),
-      })}`,
-    )
-  }
   process.stdout.write(`[dynamic-e2e] provider=${model} connected\n`)
 
   const install = await requestJSON("/expert-squad/install-payload", {
@@ -345,9 +377,13 @@ function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
     "Use Dynamic to solve this focused read-only case with exactly two independent dynamic-generalist members in the first frontier and no Builder.",
     "Name one member orion-reader; it owns only evidence/orion.txt and must report both exact key/value lines with the file locator.",
     "Name the other member nebula-reader; it owns only evidence/nebula.txt and must report both exact key/value lines with the file locator.",
+    "Each member must use the read Tool to observe its assigned file and preserve the file unchanged.",
     "In the same dispatch_agents call, submit aligned team rows named orion-reader and nebula-reader with empty depends_on arrays, then submit both dispatches together. Do not inspect either evidence file in the Orchestrator and do not call read_task_message for this already-visible creator request.",
     "After both real Sessions finish, read their exact final messages, report ORION_CODE, ORION_COLOR, NEBULA_CODE, NEBULA_COLOR, and CODE_SUM=46, then complete the Task. Do not ask the operator a question and do not add review, synthesis, or repair members.",
   ].join("\n")
+  result.request = requestText
+  result.scenarioSHA256 = createHash("sha256").update(requestText).digest("hex")
+  await fs.mkdir(path.dirname(resultPath), { recursive: true })
   const created = await requestJSON<{ task_id: string }>("/task?init-git=true", {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -361,14 +397,15 @@ function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
     }),
   })
   const taskID = created.task_id
+  result.taskID = taskID
   process.stdout.write(`[dynamic-e2e] task=${taskID} package=${installed.packageDigest}\n`)
 
   let board: JsonObject = {}
   let transcript: TranscriptMessage[] = []
   let lastSignature = ""
   let inactivityDeadline = Date.now() + INACTIVITY_MS
-  const totalDeadline = Date.now() + TOTAL_TIMEOUT_MS
-  while (Date.now() < totalDeadline && Date.now() < inactivityDeadline) {
+  while (Date.now() < inactivityDeadline) {
+    if (audit.exhausted) throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
     ;[board, transcript] = await Promise.all([
       requestJSON(`/task/${taskID}/board`),
       requestJSON<TranscriptMessage[]>(`/task/${taskID}/transcript`),
@@ -381,14 +418,28 @@ function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
       status: board.task?.status,
       messages: transcript.map((message) => [message.info.id, message.info.time?.completed]),
       tools: tools.map((entry) => [entry.part.id, entry.part.tool, entry.part.state?.status]),
+      activity: [...new Set(transcript.map((message) => String(message.info.sessionID)))].map((id) => ({
+        id,
+        activity: SessionStatus.getActivity(id),
+        status: SessionStatus.get(id),
+      })),
     })
     if (signature !== lastSignature) {
       lastSignature = signature
       inactivityDeadline = Date.now() + INACTIVITY_MS
-      process.stdout.write(
-        `[dynamic-e2e] status=${String(board.task?.status)} messages=${transcript.length} tools=${tools.length}\n`,
-      )
     }
+    await fs.writeFile(
+      resultPath,
+      JSON.stringify(
+        {
+          ...result,
+          requests: audit.requests,
+          observation: { taskStatus: board.task?.status, messages: transcript.length, tools: tools.length },
+        },
+        null,
+        2,
+      ),
+    )
     if (["completed", "failed", "cancelled"].includes(String(board.task?.status))) break
     await Bun.sleep(POLL_MS)
   }
@@ -398,23 +449,35 @@ function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
 
   const tools = toolParts(transcript)
   const outer = tools.filter(
-    (entry) => entry.agent === "orchestrator" && entry.part.tool === "dispatch_agents" && entry.part.state?.status === "completed",
-  )
-  if (outer.length !== 1) throw new Error(`Expected one completed dispatch_agents frontier, observed ${outer.length}.`)
-  const childDispatches = tools.filter(
     (entry) =>
-      entry.messageID === outer[0]!.messageID &&
-      entry.part.tool === "dispatch_agent" &&
+      entry.agent === "orchestrator" &&
+      entry.part.tool === "dispatch_agents" &&
       entry.part.state?.status === "completed",
   )
-  if (childDispatches.length !== 2) {
-    throw new Error(`Expected two completed child dispatch_agent occurrences, observed ${childDispatches.length}.`)
+  if (outer.length !== 1) throw new Error(`Expected one completed dispatch_agents frontier, observed ${outer.length}.`)
+  const collectionInput = PersistedDispatchAgentsInputSchema.parse(outer[0]!.part.state.input)
+  const dispatches = PersistedDispatchCollectionMemberInputSchema.array().length(2).parse(collectionInput.dispatches)
+  const collectionOutput = JSON.parse(String(outer[0]!.part.state.output))
+  const members = DispatchCollectionMemberResultSchema.array()
+    .length(2)
+    .parse(collectionOutput.members)
+    .sort((a, b) => a.member_index - b.member_index)
+  if (
+    collectionInput.dispatches.length !== 2 ||
+    members.some(
+      (member, index) =>
+        member.member_index !== index ||
+        member.name !== collectionInput.team[index]?.name ||
+        member.target !== dispatches[index]?.dispatch.target,
+    )
+  ) {
+    throw new Error("Collection members do not match the exact two-member visible frontier")
   }
-  const targetIDs = childDispatches.map((entry) => entry.part.state.input?.dispatch?.target)
+  const targetIDs = dispatches.map((entry) => entry.dispatch.target)
   if (JSON.stringify(targetIDs) !== JSON.stringify(["dynamic-generalist", "dynamic-generalist"])) {
     throw new Error(`Dynamic frontier used unexpected targets: ${JSON.stringify(targetIDs)}`)
   }
-  const team = outer[0]!.part.state.input?.team
+  const team = collectionInput.team
   if (!Array.isArray(team) || team.length !== 2) {
     throw new Error(`Visible frontier Tool input has an invalid structured team: ${JSON.stringify(team)}`)
   }
@@ -433,7 +496,9 @@ function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
       ["nebula-reader", "dynamic-generalist", []],
     ])
   ) {
-    throw new Error(`Visible frontier structured team is not the requested ready set: ${JSON.stringify(teamProjection)}`)
+    throw new Error(
+      `Visible frontier structured team is not the requested ready set: ${JSON.stringify(teamProjection)}`,
+    )
   }
   for (const member of teamProjection) {
     for (const field of ["responsibility", "boundary", "expected_result"] as const) {
@@ -450,26 +515,73 @@ function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
       tokenValue(entry.part.state?.time?.start) < outerStarted &&
       entry.part.tool !== "dispatch_agents",
   )
-  if (earlierOrchestratorTools.length > 0) {
-    throw new Error(
-      `Orchestrator used Tools before the first frontier even though the creator request was already visible: ${earlierOrchestratorTools.map((entry) => entry.part.tool).join(", ")}`,
-    )
-  }
 
-  const childReceipts = childDispatches.map((entry) => JSON.parse(String(entry.part.state.output)) as JsonObject)
-  if (childReceipts.some((receipt) => receipt.kind !== "accepted" || typeof receipt.session_id !== "string")) {
-    throw new Error(`Dynamic child receipts are not accepted Session identities: ${JSON.stringify(childReceipts)}`)
-  }
+  const childReceipts = members.map((member) => {
+    if (member.status !== "completed" || member.outcome.kind !== "accepted") {
+      throw new Error(`Collection member ${member.member_index} did not return an accepted worker`)
+    }
+    return member.outcome
+  })
   const childSessionIDs = childReceipts.map((receipt) => String(receipt.session_id))
   if (new Set(childSessionIDs).size !== 2) throw new Error("Dynamic frontier did not create two distinct Sessions.")
-  const finalWorkerMessages = await Promise.all(
-    childReceipts.map(async (receipt) => {
-      const sessionID = String(receipt.session_id)
-      const lineage = findDispatchLineageBySession({ taskID, sessionID })
-      if (!lineage || lineage.artifactID !== receipt.dispatch_lineage_id) {
-        throw new Error(
-          `Worker Session ${sessionID} accepted receipt does not match its immutable dispatch lineage.`,
+  const workerReads = await Promise.all(
+    [
+      { file: "evidence/orion.txt", content: "ORION_CODE=17\nORION_COLOR=amber\n" },
+      { file: "evidence/nebula.txt", content: "NEBULA_CODE=29\nNEBULA_COLOR=violet\n" },
+    ].map(async (expected, memberIndex) => {
+      const expectedPath = await fs.realpath(path.join(projectDirectory, expected.file))
+      if ((await fs.readFile(expectedPath, "utf8")) !== expected.content) {
+        throw new Error(`Read-only evidence changed: ${expected.file}`)
+      }
+      const reads: string[] = []
+      for (const entry of tools) {
+        if (
+          entry.part.tool !== "read" ||
+          entry.part.state?.status !== "completed" ||
+          typeof entry.part.state.input?.filePath !== "string"
         )
+          continue
+        const resolved = path.resolve(projectDirectory, entry.part.state.input.filePath)
+        const actualPath = await fs.realpath(resolved).catch(() => undefined)
+        if (actualPath !== expectedPath) continue
+        if (entry.sessionID !== childSessionIDs[memberIndex]) {
+          throw new Error(`Evidence ${expected.file} was read by Session ${entry.sessionID} outside its assigned owner`)
+        }
+        if (
+          expected.content
+            .trim()
+            .split("\n")
+            .every((line) => String(entry.part.state.output).includes(line))
+        ) {
+          reads.push(entry.part.id)
+        }
+      }
+      if (reads.length === 0)
+        throw new Error(`Worker ${childSessionIDs[memberIndex]} has no exact read result for ${expected.file}`)
+      return {
+        file: expected.file,
+        sessionID: childSessionIDs[memberIndex],
+        readToolPartIDs: reads,
+        contentSHA256: createHash("sha256").update(expected.content).digest("hex"),
+      }
+    }),
+  )
+  const finalWorkerMessages = await Promise.all(
+    childReceipts.map(async (receipt, memberIndex) => {
+      const sessionID = String(receipt.session_id)
+      const lineage = findDispatchLineageByCollectionMember({
+        taskID,
+        toolPartID: outer[0]!.part.id,
+        toolCallID: outer[0]!.part.callID,
+        memberIndex,
+        memberCount: members.length,
+      })
+      if (
+        !lineage ||
+        lineage.artifactID !== receipt.dispatch_lineage_id ||
+        lineage.payload.child_session_id !== sessionID
+      ) {
+        throw new Error(`Worker Session ${sessionID} accepted receipt does not match its immutable dispatch lineage.`)
       }
       const descriptor = WorkerTurnDescriptor.findForDispatch({
         sessionID,
@@ -502,15 +614,15 @@ function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
       entry.agent === "orchestrator" &&
       entry.part.tool === "read_agent_message" &&
       entry.part.state?.status === "completed" &&
-      [...finalWorkerRefs.values()].some((message) => message.info.id === entry.part.state.input?.message_id),
+      Array.isArray(entry.part.state.input?.message_ids) &&
+      [...finalWorkerRefs.values()].some((message) => entry.part.state.input.message_ids.includes(message.info.id)),
   )
   const readRefs = new Set(
-    exactMessageReads.map((entry) => {
-      const message = [...finalWorkerRefs.values()].find(
-        (candidate) => candidate.info.id === entry.part.state.input?.message_id,
-      )
-      return `${message!.info.sessionID}:${message!.info.id}`
-    }),
+    exactMessageReads.flatMap((entry) =>
+      [...finalWorkerRefs.values()]
+        .filter((message) => entry.part.state.input.message_ids.includes(message.info.id))
+        .map((message) => `${message.info.sessionID}:${message.info.id}`),
+    ),
   )
   if (readRefs.size !== finalWorkerRefs.size) {
     throw new Error(
@@ -560,7 +672,9 @@ function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
       message.info.extra?.task_root_message?.kind === "operator_steer",
   )
   if (operatorCorrections.length > 0) {
-    throw new Error(`Dynamic E2E required operator correction: ${operatorCorrections.map((message) => message.info.id)}`)
+    throw new Error(
+      `Dynamic E2E required operator correction: ${operatorCorrections.map((message) => message.info.id)}`,
+    )
   }
 
   const usage = usageFromTaskTranscript(transcript)
@@ -570,22 +684,9 @@ function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
     requests: usage.requests,
     outcomes: usage.outcomes,
   })
-  const orchestratorUsage = usage.byAgent.orchestrator
-  if (!orchestratorUsage) throw new Error("Dynamic E2E has no Orchestrator Provider usage.")
-  const reduction = 1 - usage.total.total / FAILED_BASELINE_TOKENS
-  if (usage.total.total > MAX_TASK_TOKENS) {
-    throw new Error(`Dynamic Task token budget exceeded: ${usage.total.total} > ${MAX_TASK_TOKENS}.`)
-  }
-  if (orchestratorUsage.total > MAX_ORCHESTRATOR_TOKENS) {
-    throw new Error(
-      `Dynamic Orchestrator token budget exceeded: ${orchestratorUsage.total} > ${MAX_ORCHESTRATOR_TOKENS}.`,
-    )
-  }
-  if (reduction < MIN_REDUCTION) {
-    throw new Error(`Dynamic token reduction ${(reduction * 100).toFixed(2)}% is below ${MIN_REDUCTION * 100}%.`)
-  }
-
-  const result = {
+  result = {
+    ...result,
+    status: "passed",
     ok: true,
     runID,
     model,
@@ -604,16 +705,15 @@ function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
     },
     frontier: {
       outerToolPartID: outer[0]!.part.id,
-      childToolPartIDs: childDispatches.map((entry) => entry.part.id),
+      members,
       childSessionIDs,
+      workerReads,
       targets: targetIDs,
       exactWorkerFinalMessageReads: exactMessageReads.map((entry) => entry.part.id),
       completionEvidenceRefs: [...completionEvidenceRefs],
       operatorCorrections: 0,
       structuredTeam: teamProjection,
       orchestratorToolsBeforeFrontier: earlierOrchestratorTools.map((entry) => entry.part.tool),
-      orchestratorNonControlToolsBeforeFrontier: 0,
-      orchestratorSkillLoadsBeforeFrontier: 0,
     },
     facts: {
       orionCode: 17,
@@ -623,23 +723,15 @@ function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
       codeSum: 46,
     },
     usage: {
-      baselineTotalTokens: FAILED_BASELINE_TOKENS,
-      thresholds: {
-        maxTaskTokens: MAX_TASK_TOKENS,
-        maxOrchestratorTokens: MAX_ORCHESTRATOR_TOKENS,
-        minimumReduction: MIN_REDUCTION,
-      },
-      reduction,
       byAgent: usage.byAgent,
       total: usage.total,
     },
   }
   await fs.mkdir(path.dirname(resultPath), { recursive: true })
   await fs.writeFile(resultPath, `${JSON.stringify(result, null, 2)}\n`, "utf8")
-  process.stdout.write(`[dynamic-e2e] PASS result=${resultPath} tokens=${usage.total.total}\n`)
+  process.stdout.write(`[dynamic-e2e] functional checks passed; cleanup pending, tokens=${usage.total.total}\n`)
 } catch (error) {
   primaryFailure = error
-  process.stderr.write(`[dynamic-e2e] failure=${error instanceof Error ? error.stack ?? error.message : String(error)}\n`)
 } finally {
   const cleanupFailures: unknown[] = []
   try {
@@ -647,14 +739,11 @@ function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
   } catch (error) {
     cleanupFailures.push(error)
   }
-  try {
-    await runtime.server?.stop(true)
-  } catch (error) {
-    cleanupFailures.push(error)
+  for (const cleanup of [() => runtime.server?.stop(true), () => runtime.Instance?.disposeAll()]) {
     try {
-      await runtime.Instance?.disposeAll()
-    } catch (disposeError) {
-      cleanupFailures.push(disposeError)
+      await cleanup()
+    } catch (error) {
+      cleanupFailures.push(error)
     }
   }
   try {
@@ -662,25 +751,37 @@ function usageFromTaskTranscript(transcript: TranscriptMessage[]) {
   } catch (error) {
     cleanupFailures.push(error)
   }
+  try {
+    redactor.collect(JSON.parse(await fs.readFile(path.join(runtimeRoot, "data/auth.json"), "utf8")))
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") cleanupFailures.push(error)
+  }
+  const credentialErrors: unknown[] = []
   for (const file of [path.join(runtimeRoot, "data", "auth.json"), path.join(runtimeRoot, "data", "models.json")]) {
     try {
       await fs.rm(file, { force: true })
     } catch (error) {
-      cleanupFailures.push(error)
+      credentialErrors.push(error)
     }
   }
-  if (!primaryFailure) {
-    try {
-      await fs.rm(root, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 })
-    } catch (error) {
-      cleanupFailures.push(error)
-    }
-  } else {
-    process.stderr.write(`[dynamic-e2e] retained failure root=${root}\n`)
+  cleanupFailures.push(...credentialErrors)
+  result.requests = audit.requests
+  result.credentialCleanup = credentialErrors.length ? "failed" : "passed"
+  result.cleanupErrors = cleanupFailures.map(String)
+  if (primaryFailure || cleanupFailures.length || audit.exhausted) {
+    result.status = audit.exhausted ? "budget_exhausted" : "failed"
+    result.error =
+      primaryFailure instanceof Error
+        ? primaryFailure.message
+        : primaryFailure
+          ? String(primaryFailure)
+          : audit.exhausted
+            ? "E2E_REQUEST_BUDGET_EXHAUSTED"
+            : "Owned runtime cleanup failed"
   }
-  if (primaryFailure && cleanupFailures.length > 0) {
-    throw new AggregateError([primaryFailure, ...cleanupFailures], "Dynamic E2E failed during cleanup")
-  }
-  if (primaryFailure) throw primaryFailure
-  if (cleanupFailures.length > 0) throw new AggregateError(cleanupFailures, "Dynamic E2E cleanup failed")
+  result.ok = result.status === "passed"
+  await fs.mkdir(path.dirname(resultPath), { recursive: true })
+  await fs.writeFile(resultPath, redactor.redact(JSON.stringify(result, null, 2)) + "\n", "utf8")
+  process.stdout.write(`[dynamic-e2e] ${result.status} evidence=${resultPath}\n`)
+  if (result.status !== "passed") process.exitCode = 1
 }
