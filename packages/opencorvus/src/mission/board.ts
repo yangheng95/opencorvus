@@ -4,6 +4,11 @@ import { Database, and, desc, eq } from "@/storage/db"
 import { MessageTable, ToolPartRequestTable as PartTable } from "@/session/session.sql"
 import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import { Message } from "@/session/message"
+import { SessionWakeReason } from "@/session/wake-reason"
+import { listMissionTasks } from "@/engine/store"
+import { deriveTaskStatus } from "@/engine/task-status"
+import { terminalLifecycleReferenceMatchesTaskRow } from "@/engine/terminal-lifecycle-reference"
+import { AutomationFireTable, AutomationTable } from "@/scheduler/automation.sql"
 import { resolveMissionArtifactReadAcceptancesBeforeCompletion } from "@/agent/artifact-read-facts"
 import type { MissionSession } from "./session"
 import {
@@ -75,7 +80,23 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
       .orderBy(desc(MessageTable.time_created), desc(MessageTable.id))
       .all(),
   )
-  const latestUser = messages.find((message) => message.data.role === "user")
+  const latestUser = messages.find((message) => {
+    if (message.data.role !== "user") return false
+    if (message.data.author === "user") return true
+    const extra = (message.data as { extra?: { wake_reason?: unknown } }).extra
+    const wake = SessionWakeReason.safeParse(extra?.wake_reason)
+    if (wake.success && wake.data.source === "scheduler.automation") {
+      const reason = wake.data
+      const delay = Database.use((db) => db.select({ id: AutomationFireTable.id }).from(AutomationFireTable)
+        .innerJoin(AutomationTable, eq(AutomationTable.id, AutomationFireTable.automation_revision_id))
+        .where(and(eq(AutomationFireTable.id, reason.fireID), eq(AutomationTable.definition_id, reason.jobID),
+          eq(AutomationTable.kind, "delay"), eq(AutomationTable.session_id, session.id),
+          eq(AutomationTable.project_id, session.projectID))).get())
+      return delay === undefined
+    }
+    return wake.success && ["mission.operator", "conversation.handoff", "api.chat"].includes(wake.data.source)
+  })
+  const currentTasks = listMissionTasks({ projectID: session.projectID, missionID: session.missionID, sessionID: session.id })
   const parts = Database.use((db) =>
     db
       .select({
@@ -113,6 +134,13 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
     }
     const receipt = MissionCompletionReceipt.safeParse(decoded)
     if (!receipt.success) continue
+    const acceptedIDs = new Set(receipt.data.task_acceptances.map((acceptance) => acceptance.task_id))
+    if (acceptedIDs.size !== receipt.data.task_acceptances.length || acceptedIDs.size !== currentTasks.length ||
+      currentTasks.some((task) => {
+        const acceptance = receipt.data.task_acceptances.find((entry) => entry.task_id === task.id)
+        return !acceptance || deriveTaskStatus(task) !== "completed" ||
+          !terminalLifecycleReferenceMatchesTaskRow(acceptance.terminal_lifecycle_reference, task)
+      })) continue
     const receiptInputAcceptances = receipt.data.task_acceptances.map(
       ({ terminal_lifecycle_reference: _reference, ...acceptance }) => acceptance,
     )

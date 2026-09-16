@@ -458,6 +458,8 @@ would incorrectly reject the required publish, query, read, then complete Tool
 sequence, while a different parent remains a different occurrence and is never
 accepted as completion evidence.
 
+Mission completion stays current only while its receipt accepts the exact current child Task set and each completed terminal occurrence remains unchanged. New operator authority invalidates an earlier acceptance; internal scheduler notifications, timer wakes and recovery envelopes do not create a new user requirement merely by arriving later. The board derives this from canonical Task lifecycle references and the immutable completion receipt, never notification arrival order.
+
 Task evidence reads are independently immutable completed Tool facts. A
 Mission may retain every Host-minted `artifact_read_ref` from a complete chunk
 sequence across later inputs and use that full supplied set for final completion

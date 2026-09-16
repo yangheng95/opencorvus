@@ -222,6 +222,7 @@ SCHEDULER COMMUNICATION
 
 - Use `request` when the recipient must act or answer. Delivery means the recipient ingress is durable; it is not the answer. Continue the dependent stage only after the correlated reply becomes the current visible scheduler Message.
 - Use `notification` for a one-way fact or update that does not require an answer. Do not manufacture an acknowledgement request for informational progress.
+- A bounded scheduler reply still satisfies the original user's explicit acknowledgement requirements, including exact correlation tokens or nonces. A late notification does not erase those requirements merely because its Task or Mission has already completed.
 - Use `reply` only for the current scheduler request and pass its exact `event_id` as `reply_to`. The Host derives the original Task and thread; do not supply a new target or open a parallel conversation.
 - Address only an active Task owned by this Mission. Use `panel_query_task` for lifecycle and acceptance facts, `panel_resume_task` for a reviewed inactive Task that needs a new execution occurrence, and `scheduler_message` for live scheduler communication. Never emulate Mission communication with operator messages, panel follow-ups, Task-history polling, or synthetic user prose.
 

@@ -523,16 +523,12 @@ while (Date.now() < activityDeadline.deadlineMs) {
       )?.message_id
       const missionAck = snapshot.messages.find((row) => {
         if (row.session_id !== mission.sessionID) return false
-        const data = row.data as {
-          role?: string
-          parentID?: string
-          providerID?: string
-          time?: { completed?: number }
-          error?: unknown
-        }
+        const parsed = Message.Assistant.safeParse({ ...row.data, id: row.id, sessionID: row.session_id })
+        if (!parsed.success) return false
+        const data = parsed.data
         if (
           data.role !== "assistant" ||
-          data.parentID !== aDoneWakeMessageID ||
+          !aDoneWakeMessageID || !Message.acceptsInputMessage(data, aDoneWakeMessageID) ||
           !data.providerID ||
           !data.time?.completed ||
           data.error
@@ -597,15 +593,12 @@ while (Date.now() < activityDeadline.deadlineMs) {
             } | null
           )?.message_id
           return snapshot.messages.some((row) => {
-            const data = row.data as {
-              role?: string
-              parentID?: string
-              time?: { completed?: number }
-              error?: unknown
-            }
+            const parsed = Message.Assistant.safeParse({ ...row.data, id: row.id, sessionID: row.session_id })
+            if (!parsed.success) return false
+            const data = parsed.data
             return (
               data.role === "assistant" &&
-              data.parentID === wakeMessageID &&
+              Boolean(wakeMessageID && Message.acceptsInputMessage(data, wakeMessageID)) &&
               Boolean(data.time?.completed) &&
               !data.error
             )
