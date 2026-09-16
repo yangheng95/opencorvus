@@ -2104,24 +2104,21 @@ export function dispatchTaskLoopInBackground(input: DispatchTaskLoopInput, opera
   completionHooks.add(completion)
 }
 
-/** Re-scan for an already-persisted ingress. It accepts no event, so it can
- * never meet the infrastructure-failure budget gate. */
+/** Acknowledge durable ingress, then request its existing project-owned scan.
+ * HTTP and scheduler acceptance must not await the model Turn they enable. */
 export async function dispatchPersistedTaskLoop(
   taskID: string,
-  expectedWakeID?: string,
-  options?: { runWithActivationOwner?: <T>(run: () => Promise<T>) => Promise<T> },
+  expectedWakeID: string,
 ): Promise<"accepted" | "ignored"> {
-  if (expectedWakeID) {
-    const exists = Database.use((db) =>
-      db
-        .select({ id: EngineTaskRootIngressTable.id })
-        .from(EngineTaskRootIngressTable)
-        .where(and(eq(EngineTaskRootIngressTable.task_id, taskID), eq(EngineTaskRootIngressTable.id, expectedWakeID)))
-        .get(),
-    )
-    if (!exists) throw new Error(`Task ${taskID} has no persisted ingress ${expectedWakeID}`)
-  }
-  await reconcileTaskControlPlane(taskID, options)
+  if (!currentProjectOwnsTask(taskID)) return "ignored"
+  const exists = Database.use((db) =>
+    db.select({ id: EngineTaskRootIngressTable.id })
+      .from(EngineTaskRootIngressTable)
+      .where(and(eq(EngineTaskRootIngressTable.task_id, taskID), eq(EngineTaskRootIngressTable.id, expectedWakeID)))
+      .get(),
+  )
+  if (!exists) throw new Error(`Task ${taskID} has no persisted ingress ${expectedWakeID}`)
+  requestTaskControlScanInBackground(taskID, "persisted-ingress-accepted")
   return "accepted"
 }
 

@@ -2,6 +2,7 @@ import { afterEach, describe, expect, test } from "bun:test"
 import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
 import { TaskControlDriver } from "@/engine/task-control-driver"
 import {
+  dispatchPersistedTaskLoop,
   reconcileTaskControlPlane,
   readTaskRootIngressEvidence,
   TestHooks as TaskControlTestHooks,
@@ -121,6 +122,44 @@ async function commitDecision(input: {
 }
 
 describe("Task-control liveness", () => {
+  test("acknowledges durable ingress while its independent activation is leased, then resolves", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const taskID = Identifier.ascending("task")
+      const root = await Session.create({ kind: "root", title: "Acceptance latency" })
+      const orchestrator = await Session.create({ kind: "orchestrator", parentID: root.id })
+      const now = Date.now()
+      const ingress = Database.immediateTransaction((db) => {
+        db.insert(EngineTaskTable).values({ id: taskID, project_id: Instance.project.id, session_id: root.id,
+          source: "test", product_pillar: "code", title: "Acceptance latency", request: "Answer a status question", time_created: now }).run()
+        appendTaskOpenedInTransaction({ db, taskID, sessionID: root.id, now, source: "test.acceptance" })
+        return acceptTaskRootIngressInTransaction(db, { taskID, executionEpoch: 1, source: "inline", sourceID: "acceptance-latency",
+          inlinePayload: { note: "Answer a status question" }, semanticTurnLimit: 3, activationLimit: 4, now })
+      })
+      let release!: () => void
+      const held = new Promise<void>((resolve) => { release = resolve })
+      using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async ({ wakeID, activationID, predecessorID }) => {
+        await held
+        if (!wakeID || !activationID || !predecessorID) throw new Error("Expected canonical activation")
+        return commitDecision({ projectPath: project.path, orchestratorSessionID: orchestrator.id, taskID, wakeID, activationID, predecessorID })
+      } })
+      let timeout: ReturnType<typeof setTimeout> | undefined
+      try {
+        const receipt = await Promise.race([
+          dispatchPersistedTaskLoop(taskID, ingress.id),
+          new Promise<never>((_, reject) => { timeout = setTimeout(() => reject(new Error("Durable acceptance waited for the held model Turn")), 2_000) }),
+        ])
+        await waitUntil(() => projectTaskRootIngress(ingress.id, Date.now(), readTaskRootIngressEvidence).state === "leased", "independent activation")
+        expect({ receipt, state: projectTaskRootIngress(ingress.id, Date.now(), readTaskRootIngressEvidence).state }).toEqual({ receipt: "accepted", state: "leased" })
+      } finally {
+        clearTimeout(timeout)
+        release()
+      }
+      await waitUntil(() => projectTaskRootIngress(ingress.id, Date.now(), readTaskRootIngressEvidence).state === "resolved", "accepted ingress settlement")
+      expect(projectTaskRootIngress(ingress.id, Date.now(), readTaskRootIngressEvidence).state).toBe("resolved")
+    } })
+  })
+
   test("settles a real ingress at its retained lease deadline after a later scan fault", async () => {
     await using project = await memoryProject()
     await Instance.provide({

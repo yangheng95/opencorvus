@@ -590,6 +590,10 @@ Browser Node sidecar 的唯一脚本输入协议是 `argv[2]` 中的 base64 JSON
 render、acceptance walkthrough、Browser webpage extract/render/runtime-state 与 Browser
 Preview evidence/region/layout/scroll render 均消费这两个参数，不读取平行环境变量、空值
 fallback 或从用户项目解析运行依赖。
+截图输出与 source/reference 的语义来自显式字段和 DesignResourceManifest，不通过文件名中的
+preview、render、source 等词推断。截图路径必须位于当前 Task 的 visual-html-skeleton
+目录且为支持的 raster 扩展名；真实路径、解码结果、renderer provenance 和 fresh-render
+SHA256 校验提供字节证据。capture 输出不得与显式 source_reference_artifact 指向同一文件。
 `capture_frontend_visual_evidence` 仅对 sidecar transport/toolchain 失败返回稳定 error code、
 signature 与 `retry_once_after_concrete_correction` disposition。Frontend Design Agent 仅能在
 一次具体修正后重试；相同 signature 再现时保留当前 facts、记录 blocker 并自然结束 Turn，
