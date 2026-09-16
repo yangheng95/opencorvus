@@ -2115,7 +2115,8 @@ export namespace PromptProfileResolver {
         const materialized = await materializeMcpToolResult({
           projectID: scope.projectID,
           result,
-          serverName: input.providerName,
+          serverName,
+          sourceToolPartID: scope.toolPartID,
         })
         const truncated = await Truncate.output(
           materialized.text,

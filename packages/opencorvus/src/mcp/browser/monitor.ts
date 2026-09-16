@@ -9,7 +9,7 @@ export const browserMcpMonitorSelectionJson = (sessionId: string): string =>
   JSON.stringify(sessionId).replace(/[<>&\u2028\u2029]/g, (char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, "0")}`)
 
 // 截图端点：/monitor/screenshot/:sessionId
-// 每个 session 同时只允许一个 CDP captureScreenshot，并发请求返回明确错误
+// 每个 session 同时只允许一个截图请求，并发请求返回明确错误
 const screenshotInFlight = new Map<string, boolean>()
 
 const writeMonitorScreenshotError = (res: ServerResponse, status: number, message: string) => {

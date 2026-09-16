@@ -1,4 +1,6 @@
-type Page = any
+type Page = {
+  screenshot(options: { type: "png"; scale: "css"; timeout?: number }): Promise<Buffer>
+}
 
 export type BrowserMcpScreenshot = {
   data: string
@@ -38,30 +40,15 @@ export const captureBrowserMcpViewportScreenshot = async (
   page: Page,
   options: { timeoutMs?: number } = {},
 ): Promise<BrowserMcpScreenshot> => {
-  const cdp = await page.context().newCDPSession(page)
+  let buffer: Buffer
   try {
-    const capture = cdp.send("Page.captureScreenshot", { format: "png" }) as Promise<{ data: string }>
-    const { data } =
-      options.timeoutMs === undefined
-        ? await capture
-        : await Promise.race([
-            capture,
-            new Promise<never>((_, reject) =>
-              setTimeout(
-                () =>
-                  reject(
-                    new BrowserMcpScreenshotTimeoutError(
-                      `screenshot capture inactive for ${options.timeoutMs}ms`,
-                    ),
-                  ),
-                options.timeoutMs,
-              ),
-            ),
-          ])
-    const buffer = Buffer.from(data, "base64")
-    const { width, height } = pngDimensionsStrict(buffer)
-    return { data, buffer, width, height }
-  } finally {
-    await cdp.detach().catch(() => undefined)
+    buffer = await page.screenshot({ type: "png", scale: "css", timeout: options.timeoutMs })
+  } catch (error) {
+    if (error instanceof Error && error.name === "TimeoutError") {
+      throw new BrowserMcpScreenshotTimeoutError(error.message)
+    }
+    throw error
   }
+  const { width, height } = pngDimensionsStrict(buffer)
+  return { data: buffer.toString("base64"), buffer, width, height }
 }
