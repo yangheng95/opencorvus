@@ -16,7 +16,8 @@ assert(process.env.RUNTIME_DISPATCH_E2E_AUTH_SOURCE, "An explicit auth source is
 const model = "openai/gpt-5.6-luna"
 const modelID = "gpt-5.6-luna"
 const inactivityMs = 180_000
-const maxRequests = 16
+const maxRequests = Number(process.env.RUNTIME_DISPATCH_E2E_MAX_REQUESTS ?? "256")
+assert(Number.isSafeInteger(maxRequests) && maxRequests > 0, "Request budget must be a positive integer")
 const supervisor = prepareTestProcessSupervisor()
 const isolated = await bootstrapIsolatedTestRuntime("runner")
 applyIsolatedTestUserEnvironment(isolated)
@@ -75,6 +76,7 @@ try {
   await fs.copyFile(source, path.join(home, "data", "auth.json"))
   await fs.copyFile(path.join(path.dirname(source), "models.json"), path.join(home, "data", "models.json"))
   await fs.writeFile(path.join(project, "README.md"), "# Isolated bookshop demonstration\nOnly local fictional demo data; no publication, accounts or purchases.\n")
+  await fs.writeFile(path.join(project, "AGENTS.md"), "# Acceptance constraints\nUse fictional local demo data. Do not publish, create accounts, or perform purchases. Do not create or run UI automation tests, browser fixtures, DOM/component assertions, screenshot baselines, or pixel diffs. Validate UI through real page interactions and rendered inspection. Backend contract tests, builds, and type checks are allowed.\n")
   for (const key of ["OPENCORVUS_CONFIG", "OPENCORVUS_CONFIG_DIR", "OPENCORVUS_TEST_MANAGED_CONFIG_DIR", "OPENCORVUS_API_KEY"]) delete process.env[key]
   process.env.OPENCORVUS_HOME = home
   process.env.OPENCORVUS_TEST_HOME = home

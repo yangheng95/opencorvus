@@ -1179,7 +1179,7 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
   } else {
     parts = [{ type: "text", text: userText }]
   }
-  if (dispatchTurn?.kind === "initial" && dispatchTurn.acceptance_repair) {
+  if (dispatchTurn?.kind === "initial" && (dispatchTurn.acceptance_repair || dispatchTurn.preparation_recovery)) {
     const obligation = renderDispatchContinuationTurn({ turn: dispatchTurn, guidance: "" })
     if (obligation) parts.push({ type: "text", text: obligation })
   }

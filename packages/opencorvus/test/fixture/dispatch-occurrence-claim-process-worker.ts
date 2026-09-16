@@ -1,4 +1,8 @@
 import { Config } from "@/config/config"
+import { DispatchOutcome } from "@/agent/dispatch-outcome"
+import { DispatchAgentToolTestHooks } from "@/orchestrator/dispatch-agent-tool"
+import { findDispatchLineageByDispatchID } from "@/engine/dispatch-lineage"
+import { selectedWorkflowBinding } from "@/engine/workflow-binding"
 import { joinProcessLivenessLease } from "@/engine/process-liveness"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { EngineTaskRootIngressTable } from "@/engine/engine.sql"
@@ -33,6 +37,7 @@ if (
     mode !== "execute-replay" &&
     mode !== "execute-takeover" &&
     mode !== "execute-takeover-held" &&
+    mode !== "execute-stale-preparation" &&
     mode !== "scan") ||
   !projectPath
 ) {
@@ -293,6 +298,24 @@ async function run() {
           sendSchedulerMessage,
           dispatchAgents: [worker],
         })
+        if (mode === "execute-stale-preparation") {
+          const handle = await DispatchAgentToolTestHooks.openLineage(surface.tools.dispatch_agent!)({
+            taskID: TASK_ID, targetAgentID: worker.identity.agentID, projectedAgent: worker, workScope: { kind: "task" },
+            deliverySliceRevisionIDs: [], workflowBinding: selectedWorkflowBinding({ projection: { packageRevision: scheduler.packageRevision, virtualWorkflows: scheduler.virtualWorkflows }, workflowID: null }), workflowNodeID: null,
+            adapterInput: input.dispatches[0].dispatch.turn.input,
+            toolOptions: { toolCallId: TOOL_CALL_ID, opencorvus: { sessionID: ORCHESTRATOR_SESSION_ID, messageID: ASSISTANT_MESSAGE_ID, toolCallID: TOOL_CALL_ID, toolPartID: TOOL_PART_ID, visibleToolName: "dispatch_agents", collectionMember: { index: 0, count: 1 } } },
+          })
+          if (handle.replayOutcome) throw new Error("Expected new preparation admission")
+          const lineage = findDispatchLineageByDispatchID({ taskID: TASK_ID, dispatchID: handle.dispatchID })!
+          await publishJSONBarrier(path.join(barrierPath!, "ready.json"), { ownerOccurrenceID: currentRuntimeOccurrenceID(), lineageID: lineage.artifactID, dispatchID: handle.dispatchID, childSessionID: handle.newSessionID })
+          await waitForBarrierFile("fail-preparation")
+          try {
+            handle.settlePreparationFailure(DispatchOutcome.infrastructureFailure({ operation: "stale_preparation", message: "Late owner failure", recoveryAuthority: { occurrence_status: "occurrence_committed", dispatch_id: handle.dispatchID, dispatch_lineage_id: lineage.artifactID } }))
+            throw new Error("Stale preparation unexpectedly settled")
+          } catch (error) {
+            return { mode, fenceError: error instanceof Error ? error.name : String(error) }
+          } finally { handle.releaseAdmission() }
+        }
         const frontier = surface.tools.dispatch_agents as {
           execute?: (frontierInput: unknown, options: unknown) => Promise<unknown>
         }

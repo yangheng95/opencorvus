@@ -70,7 +70,8 @@ import {
   type DispatchAdmissionOwner,
 } from "@/engine/dispatch-lineage"
 import type { DispatchLineageRow } from "@/engine/dispatch-lineage-facts"
-import { findDispatchSettlementByDispatchID } from "@/engine/dispatch-settlement"
+import { findDispatchSettlementByDispatchID, settleDispatchOrReturnExisting } from "@/engine/dispatch-settlement"
+import { assertControlLeaseInTransaction } from "@/engine/control-lease"
 import { abortChildExecutionForSession } from "@/engine/execution-abort"
 import { clarificationTranscriptSection } from "@/engine/helpers"
 import { Event as EngineEvent } from "@/engine/model"
@@ -105,7 +106,7 @@ import { sessionLifecycleOrderKey, SessionStatus } from "@/session/status"
 import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
 import { bindToolDecisionDeclaration, bindToolExecutionMode } from "@/tool/execution-mode"
 import { and, Database, eq, NotFoundError } from "@/storage/db"
-import { MessageTable, PartTable } from "@/session/session.sql"
+import { MessageTable, PartTable, ToolPartRequestTable } from "@/session/session.sql"
 import { timelineOrderKey } from "@/timeline/order"
 import { READ_TOOL_DESCRIPTION, ReadTool, ReadToolParameters } from "@/tool/read"
 import { BrowserPreviewCaptureTool, BrowserPreviewCaptureToolStaticDefinition } from "@/tool/browser-preview-capture"
@@ -2477,6 +2478,8 @@ export function createOrchestratorTools(input: {
       let exactWorkflowOccurrenceID: string | undefined
       let exactDeliverySliceRevisionIDs = deliverySliceRevisionIDs
       let existingSessionID: string | undefined
+      let preparedSessionID: string | undefined
+      let preparedUseWorktree: boolean | undefined
       let exactAdapterInput = { ...adapterInput }
       if (coordinationActionID) {
         const action = findAgentCoordinationAction({ taskID: ownershipTaskID, actionID: coordinationActionID })
@@ -2561,7 +2564,25 @@ export function createOrchestratorTools(input: {
         exactWorkflowNodeID = sourceLineage.payload.workflow_node_id
         exactWorkflowOccurrenceID = sourceLineage.payload.workflow_occurrence_id
         exactDeliverySliceRevisionIDs = sourceLineage.payload.delivery_slice_revision_ids
-        existingSessionID = sourceLineage.payload.child_session_id
+        const sourceSessionID = sourceLineage.payload.child_session_id
+        if (WorkerTurnDescriptor.latestForSession(sourceSessionID)) {
+          existingSessionID = sourceSessionID
+        } else {
+          const settlement = findDispatchSettlementByDispatchID({ taskID: ownershipTaskID, dispatchID: sourceLineage.dispatchID })
+          if (settlement?.payload.outcome.kind !== "infrastructure_failure" || settlement.payload.outcome.session_id) {
+            throw new Error(`Dispatch ${sourceLineage.dispatchID} has no accepted worker or settled preparation failure`)
+          }
+          const initial = findDispatchLineageByDispatchID({ taskID: ownershipTaskID, dispatchID: sourceLineage.payload.workflow_occurrence_id })
+          if (!initial) throw new Error(`Dispatch ${sourceLineage.dispatchID} has no initial placement authority`)
+          const request = Database.use((db) => db.select().from(ToolPartRequestTable).where(eq(ToolPartRequestTable.id, initial.payload.tool_part_id)).get())
+          const outer = request?.data.input as { dispatch?: { turn?: { kind?: string; use_worktree?: boolean } }; dispatches?: Array<{ dispatch?: { turn?: { kind?: string; use_worktree?: boolean } } }> } | undefined
+          const original = initial.payload.tool_name === "dispatch_agents"
+            ? outer?.dispatches?.[initial.payload.collection_member_index!]?.dispatch
+            : outer?.dispatch
+          if (original?.turn?.kind !== "initial") throw new Error(`Dispatch ${initial.dispatchID} has no initial Tool placement input`)
+          preparedSessionID = sourceSessionID
+          preparedUseWorktree = original.turn.use_worktree ?? false
+        }
         exactAdapterInput = { ...sourceLineage.payload.adapter_input }
         sourceDispatchLineageArtifactID = sourceLineage.artifactID
       } else if (!exactWorkflowBinding || exactWorkflowNodeID === undefined) {
@@ -2681,6 +2702,7 @@ export function createOrchestratorTools(input: {
           : {
               kind: "initial",
               current_dispatch_id: origin.dispatchID,
+              ...(preparedSessionID ? { preparation_recovery: { source_dispatch_id: sourceDispatchID, guidance: continuationGuidance } } : {}),
               workflow_binding: origin.workflowBinding,
               workflow_node_id: origin.workflowNodeID,
               workflow_occurrence_id: origin.workflowOccurrenceID,
@@ -2692,7 +2714,7 @@ export function createOrchestratorTools(input: {
       )
       if (signal?.aborted) throw new Error(`dispatch_agent ${targetAgentID} aborted before lineage preparation`)
       const claimedSessionID =
-        existingSessionID ?? Identifier.deterministic("session", `dispatch-worker-session\0${origin.dispatchID}`)
+        existingSessionID ?? preparedSessionID ?? Identifier.deterministic("session", `dispatch-worker-session\0${origin.dispatchID}`)
       let recordedLineage: ReturnType<typeof recordDispatchLineage> | undefined
       let admission: ReturnType<typeof claimDispatchLineage>["admission"]
       let admissionHold: ReturnType<typeof holdDispatchAdmission> | undefined
@@ -2805,11 +2827,23 @@ export function createOrchestratorTools(input: {
         deliverySliceRevisionIDs: [...(origin.deliverySliceRevisionIDs ?? [])],
         existingSessionID,
         ...(existingSessionID ? {} : { newSessionID: claimedSessionID }),
+        ...(preparedUseWorktree !== undefined ? { preparedUseWorktree } : {}),
         turn,
         adapterInput: Object.freeze({ ...exactAdapterInput }),
         signal: admissionHold.signal,
         ...(existingSessionID ? { continuationGuidance } : {}),
         observeSession,
+        settlePreparationFailure(outcome) {
+          if (outcome.kind !== "infrastructure_failure" || outcome.session_id) throw new Error("Preparation settlement requires an infrastructure failure before worker acceptance")
+          const settled = Database.immediateTransaction((db) => {
+            assertControlLeaseInTransaction(db, { target: "dispatch_admission", targetID: recordedLineage!.artifactID, leaseID: admission!.leaseID, ownerOccurrenceID: admission!.ownerOccurrenceID, now: Date.now() })
+            const settled = settleDispatchOrReturnExisting({ taskID: ownershipTaskID, dispatchID: origin.dispatchID, outcome })
+            if (!releaseDispatchAdmission(admission!)) throw new Error(`Preparation settlement failed to consume admission ${admission!.leaseID}`)
+            return settled.payload.outcome
+          })
+          closeAdmissionHold()
+          return settled
+        },
         commitSession(sessionID: string, descriptor: WorkerTurnDescriptor.Info) {
           observeSession(sessionID)
           const persistedDescriptor = WorkerTurnDescriptor.get({ id: descriptor.id, sessionID })

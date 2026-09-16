@@ -1,6 +1,10 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
 import { MockLanguageModelV3, simulateReadableStream } from "ai/test"
 import { capabilityRef } from "@opencorvus-ai/util/capability-ref"
+import { findDispatchSettlementByDispatchID, assertTaskDispatchesSettledInTransaction } from "@/engine/dispatch-settlement"
+import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
+import { ExpertSquadPackageManager } from "@/expert-squad/manager"
+import path from "node:path"
 import { IntentAnalysisAgent } from "@/intent-analysis/agent"
 import { Auth } from "@/auth"
 import { Bus } from "@/bus"
@@ -25,7 +29,8 @@ import type { Provider as ProviderType } from "@/provider/provider"
 import { Session } from "@/session"
 import { SessionPrompt } from "@/session/prompt"
 import { MessageTable, ProviderActivityRequestTable } from "@/session/session.sql"
-import { Database, eq, inArray } from "@/storage/db"
+import { Database, eq, inArray, sql } from "@/storage/db"
+import { ApplicationSchemaSQLTestHooks } from "@/storage/ddl"
 import { EngineService } from "@/task-api"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -65,15 +70,22 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-for (const scenario of ["base", "advanced", "advanced-preparation-failure"] as const) {
-const preparationFails = scenario === "advanced-preparation-failure"
-const profile = scenario === "base" ? "base" : "advanced"
-test(preparationFails ? "streamed preparation failure permits the next model decision and durable re-read" : `${scenario} streamed dispatch commits a real child descriptor through the visible Tool boundary`, async () => {
+for (const collection of [false, true]) {
+for (const scenario of ["base", "advanced", "advanced-preparation-failure", "advanced-preparation-recovery"] as const) {
+if (collection && scenario === "advanced") continue
+const dispatchToolName = collection ? "dispatch_agents" : "dispatch_agent"
+const encodeDispatch = (request: any) => JSON.stringify(collection ? { team: [{ name: "worker", target: request.dispatch.target, responsibility: "Interpret one exact request", boundary: "Read-only Task evidence", expected_result: "Durable worker output", depends_on: [] }], dispatches: [request] } : request)
+const recoveryCase = scenario === "advanced-preparation-recovery"
+const preparationFails = scenario === "advanced-preparation-failure" || recoveryCase
+const profile = collection ? "light" : scenario === "base" ? "base" : "advanced"
+const targetID = collection ? "light-planner" : profile === "base" ? "base-planner" : "request-interpreter"
+test(`${dispatchToolName}: ` + (recoveryCase ? "streamed failed preparation continues the reserved worker and settles every dispatch" : preparationFails ? "streamed preparation failure permits the next model decision and durable re-read" : `${scenario} streamed dispatch commits a real child descriptor through the visible Tool boundary`), async () => {
   using _durableDrain = Bus.TestHooks.suppressAutomaticDurableDrain()
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
     fn: async () => {
+      if (collection) await ExpertSquadPackageManager.importDirectory({ projectDirectory: project.path, sourceDirectory: path.resolve(import.meta.dir, "../../../expert-squads/builtin/light"), installationScope: "project" })
       await Config.updateProjectPatch({ prompt_profile: { active: profile } })
       using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
         runner: async (input) =>
@@ -88,6 +100,8 @@ test(preparationFails ? "streamed preparation failure permits the next model dec
       })
 
 
+      let failedDispatchID: string | undefined
+      let capabilityProviderRequests = 0
       let rootProviderRequests = 0
       let workerProviderRequests = 0
       let releaseWorker!: () => void
@@ -101,7 +115,16 @@ test(preparationFails ? "streamed preparation failure permits the next model dec
           const toolNames = Array.isArray(options.tools)
             ? options.tools.map((item) => item.name)
             : Object.keys(options.tools ?? {})
-          if (toolNames.includes("dispatch_agent") && rootProviderRequests === 0) {
+          if (collection && toolNames.length === 1 && toolNames[0] === "capability_search" && (rootProviderRequests === 0 || workerProviderRequests > 0)) {
+            capabilityProviderRequests++
+            const names = [dispatchToolName, "no_action"]
+            return { stream: simulateReadableStream({ chunks: [
+              { type: "stream-start", warnings: [] },
+              { type: "tool-call", toolCallId: `reveal_${capabilityProviderRequests}`, toolName: "capability_search", input: JSON.stringify({ queries: names, exact_refs: names.map((local_ref) => capabilityRef({ kind: "tool", source: "platform", owner_ref: "runtime-projection:orchestrator", local_ref })), deactivate_refs: [], limit: 5 }) },
+              { type: "finish", finishReason: { unified: "tool-calls", raw: "tool_calls" }, usage },
+            ] }) }
+          }
+          if (toolNames.includes(dispatchToolName) && rootProviderRequests === 0) {
             rootProviderRequests++
             return {
               stream: simulateReadableStream({
@@ -117,17 +140,17 @@ test(preparationFails ? "streamed preparation failure permits the next model dec
                   {
                     type: "tool-call",
                     toolCallId: "call_streamed_dispatch",
-                    toolName: "dispatch_agent",
-                    input: JSON.stringify({
+                    toolName: dispatchToolName,
+                    input: encodeDispatch({
                       dispatch: {
-                        target: profile === "base" ? "base-planner" : "request-interpreter",
+                        target: targetID,
                         work_scope: { kind: "task" },
                         turn: {
                           kind: "initial",
-                          workflow_subject: {
+                          workflow_subject: collection ? { kind: "direct" } : {
                             kind: "virtual_workflow",
                             workflow_id: profile === "base" ? "planner-parallel-delivery" : "greenfield-interface-delivery",
-                            node_id: profile === "base" ? "base-planner" : "request-interpreter",
+                            node_id: targetID,
                           },
                           use_worktree: false,
                           input: profile === "advanced" ? { reason: "Interpret the fictional local webpage request.", attachment_refs: [] } : {
@@ -143,6 +166,17 @@ test(preparationFails ? "streamed preparation failure permits the next model dec
                 ],
               }),
             }
+          }
+          if (recoveryCase && failedDispatchID && rootProviderRequests === 1 && toolNames.includes(dispatchToolName)) {
+            rootProviderRequests++
+            return { stream: simulateReadableStream({ chunks: [
+              { type: "stream-start", warnings: [] },
+              { type: "tool-call", toolCallId: "call_recover_preparation", toolName: dispatchToolName, input: encodeDispatch({ dispatch: {
+                target: targetID, work_scope: { kind: "task" },
+                turn: { kind: "continuation", authority: { kind: "prior_dispatch", continuation_dispatch_id: failedDispatchID }, guidance: "The transient preparation fault is repaired; execute the exact reserved occurrence.", evidence_locators: [] },
+              } }) },
+              { type: "finish", finishReason: { unified: "tool-calls", raw: "tool_calls" }, usage },
+            ] }) }
           }
           if (toolNames.includes("no_action")) {
             rootProviderRequests++
@@ -196,8 +230,17 @@ test(preparationFails ? "streamed preparation failure permits the next model dec
       const gitPrepareSpy = spyOn(EngineGit, "prepare").mockImplementation(async (task) => ({ task }))
       const gitCompleteSpy = spyOn(EngineGit, "complete").mockImplementation(async (task) => ({ task }))
 
+      const workerAdapter: any = collection ? DelegatedWorkerAgent : IntentAnalysisAgent
+      const method = collection ? "run" : "analyze"
+      const originalAnalyze = workerAdapter[method]
       const preparationSpy = preparationFails
-        ? spyOn(IntentAnalysisAgent, "analyze").mockRejectedValue(new Error("Injected preparation failure before child creation"))
+        ? spyOn(workerAdapter, method).mockImplementation(async (input: any) => {
+            if (!failedDispatchID) {
+              failedDispatchID = input.dispatchTurn!.current_dispatch_id
+              throw new Error("Injected preparation failure before child creation")
+            }
+            return originalAnalyze(input)
+          })
         : undefined
       try {
         const taskID = await EngineService.createTask(
@@ -230,27 +273,31 @@ test(preparationFails ? "streamed preparation failure permits the next model dec
                 .where(inArray(ProviderActivityRequestTable.assistant_message_id, assistantIDs))
                 .all(),
         )
-        const toolParts = messages.flatMap((message) => message.parts).filter((part) => part.type === "tool")
+        const toolParts = messages.flatMap((message) => message.parts).filter((part) => part.type === "tool" && part.tool !== "capability_search")
+        for (const part of toolParts) {
+          if (part.tool === dispatchToolName && part.state.status === "error") throw new Error(JSON.stringify(part.state.failure))
+        }
         expect({
           taskError: task.error,
           rootProviderRequests,
           providerFacts,
-          dispatchReceipts: toolParts.filter((part) => part.tool === "dispatch_agent").map((part) => part.state.status),
+          dispatchReceipts: toolParts.filter((part) => part.tool === dispatchToolName).map((part) => part.state.status),
           calls: toolParts.map((part) => part.tool),
           ingress: taskRootIngressDebugProjection(taskID).map((entry) => entry.projection.state),
         }).toEqual({
           taskError: null,
           rootProviderRequests: preparationFails ? 2 : 1,
-          providerFacts: Array.from({ length: preparationFails ? 2 : 1 }, () => ({ id: expect.any(String), messageID: assistantIDs[0] })),
-          dispatchReceipts: ["completed"],
-          calls: preparationFails ? ["dispatch_agent", "no_action"] : ["dispatch_agent"],
+          providerFacts: Array.from({ length: (preparationFails ? 2 : 1) + capabilityProviderRequests }, () => ({ id: expect.any(String), messageID: assistantIDs[0] })),
+          dispatchReceipts: recoveryCase ? ["completed", "completed"] : ["completed"],
+          calls: recoveryCase ? [dispatchToolName, dispatchToolName] : preparationFails ? [dispatchToolName, "no_action"] : [dispatchToolName],
           ingress: ["resolved"],
         })
-        const receipt = toolParts.find((part) => part.tool === "dispatch_agent")!
+        const receipt = toolParts.filter((part) => part.tool === dispatchToolName).at(-1)!
         if (receipt.state.status !== "completed") throw new Error("Expected completed dispatch receipt")
-        const accepted = JSON.parse(receipt.state.output)
-        if (preparationFails) {
-          expect(accepted).toMatchObject({ kind: "infrastructure_failure", operation: "analyze_intent_adapter", message: "Injected preparation failure before child creation" })
+        const value = JSON.parse(receipt.state.output)
+        const accepted = collection ? value.members[0].outcome : value
+        if (preparationFails && !recoveryCase) {
+          expect(accepted).toMatchObject({ kind: "infrastructure_failure", operation: collection ? "delegated_worker_adapter" : "analyze_intent_adapter" })
           expect(orchestratorCommittedDecisionInParts(toolParts)).toBe("no_action")
           await Database.awaitEffectIdle(30_000)
           Database.close()
@@ -262,8 +309,23 @@ test(preparationFails ? "streamed preparation failure permits the next model dec
         }
         expect(accepted.kind).toBe("accepted")
         expect((await Session.get(accepted.session_id)).parentID).toBe(orchestrator.id)
+        if (collection) {
+          const classify = (output: unknown) => Database.use((db) => db.get<{ accepted: number }>(sql`
+            WITH input_task(task_id) AS (VALUES (${taskID})),
+              request AS (SELECT id,data FROM tool_part_request WHERE id=${receipt.id}),
+              outcome(data) AS (VALUES (${JSON.stringify({ outcome: "completed", output: JSON.stringify(output) })}))
+            SELECT ${sql.raw(ApplicationSchemaSQLTestHooks.dispatchDecisionReceipt())} AS accepted FROM request,outcome`))!.accepted
+          expect([
+            classify(value),
+            classify({ members: [...value.members, { status: "completed", outcome: { kind: "accepted" } }] }),
+            classify({ members: { one: value.members[0] } }),
+            classify({ members: [...value.members, { member_index: 1, name: "bad", target: targetID, status: "failed", failure: {} }] }),
+            classify({ members: [...value.members, "malformed"] }),
+            classify({ members: [...value.members, { member_index: 1, name: "bad", target: targetID, status: "completed", outcome: "malformed" }] }),
+          ]).toEqual([1, 0, 0, 0, 0, 0])
+        }
         expect(WorkerTurnDescriptor.latestForSession(accepted.session_id)?.payload.identity.agentID).toBe(
-          profile === "base" ? "base-planner" : "request-interpreter",
+          targetID,
         )
         releaseWorker()
         for (const child of await Session.children(orchestrator.id)) {
@@ -273,9 +335,18 @@ test(preparationFails ? "streamed preparation failure permits the next model dec
         await SessionPrompt.waitForFinish(orchestrator.id, project.path)
         await Database.awaitEffectIdle(30_000)
         expect({ rootProviderRequests, workerProviderRequests }).toEqual({
-          rootProviderRequests: 2,
+          rootProviderRequests: recoveryCase ? 3 : 2,
           workerProviderRequests: 1,
         })
+        if (recoveryCase) {
+          const preparationSettlement = findDispatchSettlementByDispatchID({ taskID, dispatchID: failedDispatchID! })!
+          expect(preparationSettlement.payload.outcome).toMatchObject({ kind: "infrastructure_failure", operation: collection ? "delegated_worker_adapter" : "analyze_intent_adapter" })
+          expect(preparationSettlement.payload.session_id).toBe(accepted.session_id)
+          expect(WorkerTurnDescriptor.latestForSession(accepted.session_id)?.payload.dispatchTurn).toMatchObject({ workflow_occurrence_id: failedDispatchID, preparation_recovery: { source_dispatch_id: failedDispatchID, guidance: "The transient preparation fault is repaired; execute the exact reserved occurrence." } })
+          const workerMessages = await Session.messages({ sessionID: accepted.session_id })
+          expect(workerMessages.filter((entry) => entry.info.role === "user").flatMap((entry) => entry.parts).filter((part) => part.type === "text").map((part) => part.type === "text" ? part.text : "").join("\n")).toContain("The transient preparation fault is repaired; execute the exact reserved occurrence.")
+          expect(Database.use((db) => { assertTaskDispatchesSettledInTransaction(db, taskID); return "settled" })).toBe("settled")
+        }
       } finally {
         preparationSpy?.mockRestore()
         releaseWorker()
@@ -292,6 +363,8 @@ test(preparationFails ? "streamed preparation failure permits the next model dec
   await Instance.disposeAll()
   await Database.awaitEffectIdle(30_000)
 }, 60_000)
+}
+
 }
 
 // Fault injection stops only an exact production dispatch admission. Tool

@@ -3,6 +3,7 @@ import { DispatchOutcomeSchema, type DispatchOutcome } from "@/agent/dispatch-ou
 import { insertEngineArtifact } from "@/engine/artifact"
 import { EngineArtifactTable, type EngineMetadata } from "@/engine/engine.sql"
 import { Identifier } from "@/id/id"
+import { WorkerTurnDescriptorTable } from "@/session/session.sql"
 import { and, asc, eq, sql, Database } from "@/storage/db"
 import z from "zod"
 import { findDispatchLineageByDispatchID } from "./dispatch-lineage"
@@ -12,7 +13,7 @@ const FinalDispatchOutcomeSchema = DispatchOutcomeSchema.superRefine((outcome, c
     context.addIssue({ code: "custom", message: "A dispatch settlement must be final" })
     return
   }
-  if (!("session_id" in outcome)) {
+  if (outcome.kind !== "infrastructure_failure" && !("session_id" in outcome)) {
     context.addIssue({ code: "custom", message: "A dispatch settlement must name its durable Session" })
   }
   if (
@@ -27,6 +28,7 @@ export interface DispatchSettlementPayload extends EngineMetadata {
   task_id: string
   dispatch_lineage_id: string
   dispatch_id: string
+  /** Reserved lineage identity; a preparation failure may precede this Session. */
   session_id: string
   outcome: Exclude<DispatchOutcome, { kind: "accepted" }>
   time_created: number
@@ -158,9 +160,15 @@ export function recordDispatchSettlement(input: {
   if (input.outcome.kind === "accepted") throw new Error(`Dispatch ${input.dispatchID} accepted outcome is not final`)
   const lineage = findDispatchLineageByDispatchID({ taskID: input.taskID, dispatchID: input.dispatchID })
   if (!lineage) throw new Error(`Dispatch ${input.dispatchID} has no durable lineage`)
-  const sessionID = input.outcome.session_id
-  if (!sessionID || sessionID !== lineage.payload.child_session_id) {
+  const sessionID = input.outcome.session_id ?? lineage.payload.child_session_id
+  if (sessionID !== lineage.payload.child_session_id) {
     throw new Error(`Dispatch ${input.dispatchID} outcome Session does not match its durable lineage`)
+  }
+  if (!input.outcome.session_id) {
+    if (input.outcome.kind !== "infrastructure_failure") throw new Error("Only preparation failure may omit a worker Session")
+    const accepted = Database.use((db) => db.select({ id: WorkerTurnDescriptorTable.id }).from(WorkerTurnDescriptorTable)
+      .where(and(eq(WorkerTurnDescriptorTable.session_id, sessionID), sql`json_extract(${WorkerTurnDescriptorTable.payload}, '$.dispatchTurn.current_dispatch_id') = ${input.dispatchID}`)).get())
+    if (accepted) throw new Error(`Dispatch ${input.dispatchID} has an accepted worker descriptor; its failure must name the Session`)
   }
   if (input.outcome.kind === "coordination" && input.outcome.dispatch_lineage_id !== lineage.artifactID) {
     throw new Error(`Dispatch ${input.dispatchID} coordination outcome lineage identity drift`)

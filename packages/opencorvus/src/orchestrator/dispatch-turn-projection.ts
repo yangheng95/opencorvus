@@ -105,6 +105,7 @@ export function acceptanceRepairEvidenceLocators(repair: AcceptanceRepairDispatc
 export const DispatchTurnSchema = z.discriminatedUnion("kind", [
   DispatchTurnBaseSchema.extend({
     kind: z.literal("initial"),
+    preparation_recovery: z.object({ source_dispatch_id: z.string().min(1), guidance: z.string().min(1) }).strict().optional(),
     acceptance_repair: AcceptanceRepairObligationSchema.safeExtend({ checkpoint_required: z.literal(false) }).optional(),
   }).strict(),
   DispatchTurnBaseSchema.extend({
@@ -130,12 +131,12 @@ export function renderDispatchContinuationTurn(input: {
   evidenceLocators?: readonly EvidenceLocator[]
 }): string | undefined {
   const turn = DispatchTurnSchema.parse(input.turn)
-  if (turn.kind === "initial" && !turn.acceptance_repair) return undefined
-  const guidance = input.guidance.trim()
+  if (turn.kind === "initial" && !turn.acceptance_repair && !turn.preparation_recovery) return undefined
+  const guidance = (turn.kind === "initial" && turn.preparation_recovery ? turn.preparation_recovery.guidance : input.guidance).trim()
   const evidenceLocators = EvidenceLocatorListSchema.parse(input.evidenceLocators ?? turn.evidence_locators)
   const authority = turn.task_authority
   return [
-    turn.kind === "initial" ? "# Initial workflow node with acceptance obligation" : "# Incremental continuation",
+    turn.kind === "initial" ? "# Initial workflow node authority" : "# Incremental continuation",
     "",
     turn.kind === "initial"
       ? "Execute this previously unstarted node of the Task workflow. Apply the original Task request and the current acceptance obligation below."
@@ -144,6 +145,7 @@ export function renderDispatchContinuationTurn(input: {
     "## Dispatch lineage",
     "",
     `- current_dispatch_id: ${turn.current_dispatch_id}`,
+    ...(turn.kind === "initial" && turn.preparation_recovery ? [`- preparation_source_dispatch_id: ${turn.preparation_recovery.source_dispatch_id}`] : []),
     ...(turn.kind === "continuation"
       ? [`- source_dispatch_id: ${turn.source_dispatch_id}`, `- child_session_id: ${turn.child_session_id}`]
       : []),

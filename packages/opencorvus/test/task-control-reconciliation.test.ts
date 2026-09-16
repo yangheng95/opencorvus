@@ -399,7 +399,7 @@ describe("Task-control reconciliation", () => {
             .where(eq(EngineControlActivationLeaseTable.id, fixture.lease.activationID))
             .run(),
         )
-        const completedTool = async (tool: string, input: Record<string, unknown>) => {
+        const completedTool = async (tool: string, input: Record<string, unknown>, output = "completed") => {
           const request = await Session.updatePart({
             id: Identifier.ascending("part"),
             sessionID: fixture.orchestrator.id,
@@ -414,7 +414,7 @@ describe("Task-control reconciliation", () => {
             state: {
               status: "completed",
               input,
-              output: "completed",
+              output,
               title: tool,
               metadata: {},
               time: { start: request.state.time.start, end: Date.now() },
@@ -425,8 +425,9 @@ describe("Task-control reconciliation", () => {
         const ordinary = await completedTool("read_task_message", {})
         const question = await completedTool("question", { questions: [{ question: "Continue?" }] })
         const mutation = await completedTool("manage_task", { action: "add_goal", goal: { title: "More" } })
-        const firstDispatch = await completedTool("dispatch_agent", { agent: "base-researcher" })
-        const secondDispatch = await completedTool("dispatch_agent", { agent: "base-developer" })
+        const decision = await completedTool("no_action", { reason: "The explicit status request is reconciled." })
+        const malformedSingle = await completedTool("dispatch_agent", {}, JSON.stringify({ kind: "accepted" }))
+        const malformedCollection = await completedTool("dispatch_agents", {}, JSON.stringify({ members: [{ status: "completed", outcome: { kind: "accepted" } }] }))
         const assistant = (await Session.messages({ sessionID: fixture.orchestrator.id })).find(
           (message) => message.info.id === fixture.assistantID,
         )
@@ -487,7 +488,7 @@ describe("Task-control reconciliation", () => {
               timeCreated: Date.now(),
             }),
           )
-        for (const invalidEvidence of [["missing_tool_part"], [ordinary], [question], [mutation], [firstDispatch]]) {
+        for (const invalidEvidence of [["missing_tool_part"], [ordinary], [question], [mutation], [malformedSingle], [malformedCollection]]) {
           expect(() => insertDisposition(invalidEvidence)).toThrow(
             "engine_artifact: Task-root ingress disposition requires exact immutable release evidence",
           )
@@ -509,19 +510,19 @@ describe("Task-control reconciliation", () => {
           },
         ]) {
           expect(() =>
-            insertDisposition([firstDispatch, secondDispatch], { decisionOccurrence: invalidOccurrence }),
+            insertDisposition([decision], { decisionOccurrence: invalidOccurrence }),
           ).toThrow("engine_artifact: Task-root ingress disposition requires exact immutable release evidence")
         }
-        expect(() => insertDisposition([firstDispatch, secondDispatch], { timeCreated: 1.5 })).toThrow(
+        expect(() => insertDisposition([decision], { timeCreated: 1.5 })).toThrow(
           "engine_artifact: Task-root ingress disposition requires exact immutable release evidence",
         )
         expect(() =>
-          insertDisposition([firstDispatch, secondDispatch], {
+          insertDisposition([decision], {
             timeCreated: Number.MAX_SAFE_INTEGER + 1,
           }),
         ).toThrow("engine_artifact: Task-root ingress disposition requires exact immutable release evidence")
         expect(() =>
-          insertDisposition([firstDispatch, secondDispatch], {
+          insertDisposition([decision], {
             executionEpoch: Number.MAX_SAFE_INTEGER + 1,
           }),
         ).toThrow("engine_artifact: Task-root ingress disposition requires exact immutable release evidence")
@@ -531,15 +532,11 @@ describe("Task-control reconciliation", () => {
           `${fixture.ingress.id}\r\n`,
           fixture.ingress.id.replace("_h", "__"),
         ]) {
-          expect(() => insertDisposition([firstDispatch, secondDispatch], { ingressID })).toThrow(
+          expect(() => insertDisposition([decision], { ingressID })).toThrow(
             "engine_artifact: Task-root ingress disposition requires exact immutable release evidence",
           )
         }
-        expect(() =>
-          insertDisposition([firstDispatch, secondDispatch], {
-            timeCreated: Number.MAX_SAFE_INTEGER,
-          }),
-        ).not.toThrow()
+        insertDisposition([decision], { timeCreated: Number.MAX_SAFE_INTEGER })
         const disposition = Database.use((db) =>
           db
             .select({ id: EngineArtifactTable.id })
@@ -922,95 +919,6 @@ describe("Task-control reconciliation", () => {
     })
   })
 
-  test("replays a Delivery Slice mutation followed by a dispatch fan-out as the scheduling decision", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const fixture = await createExpiredDecisionGapFixture({
-          projectPath: project.path,
-          semanticTurnLimit: 3,
-          label: "goal-mutation-then-dispatch",
-        })
-        Database.use((db) =>
-          db
-            .update(EngineControlActivationLeaseTable)
-            .set({ expires_at: Date.now() + 60_000 })
-            .where(eq(EngineControlActivationLeaseTable.id, fixture.lease.activationID))
-            .run(),
-        )
-        const persistCompletedTool = async (tool: string, input: Record<string, unknown>, output: unknown) => {
-          const request = await Session.updatePart({
-            id: Identifier.ascending("part"),
-            sessionID: fixture.orchestrator.id,
-            messageID: fixture.assistantID,
-            type: "tool",
-            callID: `call_${tool}_${Identifier.ascending("part")}`,
-            tool,
-            state: { status: "running", input, time: { start: Date.now() } },
-          })
-          await Session.updatePart({
-            ...request,
-            state: {
-              status: "completed",
-              input,
-              output: JSON.stringify(output),
-              title: tool,
-              metadata: {},
-              time: { start: request.state.time.start, end: Date.now() },
-            },
-          })
-          return request.id
-        }
-        await persistCompletedTool(
-          "manage_task",
-          { goal: { title: "New delivery scope" }, reason: "accepted evidence" },
-          {
-            status: "applied",
-          },
-        )
-        const dispatchIDs = await Promise.all([
-          persistCompletedTool(
-            "dispatch_agent",
-            { dispatch: { target: "implementation-engineer" } },
-            { kind: "accepted" },
-          ),
-          persistCompletedTool("dispatch_agent", { dispatch: { target: "workload-reviewer" } }, { kind: "accepted" }),
-        ])
-        const assistant = (await Session.messages({ sessionID: fixture.orchestrator.id })).find(
-          (message) => message.info.id === fixture.assistantID,
-        )
-        if (!assistant || assistant.info.role !== "assistant")
-          throw new Error("Expected persisted Orchestrator assistant")
-        await Session.updateMessage({
-          ...assistant.info,
-          finish: "tool-calls",
-          time: { ...assistant.info.time, completed: Date.now() },
-        })
-
-        // Re-open the same SQLite facts before reconciliation: no process-local
-        // Tool coordinator state participates in the durable decision replay.
-        Database.close()
-        Database.Client()
-        const reconciled = await reconcileTaskControlPlane(fixture.taskID)
-        const evidence = Database.use((db) => readTaskRootIngressEvidence(db, fixture.ingress))
-        const expectedDispatchIDs = dispatchIDs.toSorted((left, right) => left.localeCompare(right))
-
-        expect({
-          reconciled,
-          decisions: evidence.decisions
-            .toSorted((left, right) => left.id.localeCompare(right.id))
-            .map((decision) => ({ id: decision.id, command: decision.command })),
-          projection: projectTaskRootIngress(fixture.ingress.id, Date.now(), readTaskRootIngressEvidence),
-        }).toEqual({
-          reconciled: 0,
-          decisions: expectedDispatchIDs.map((id) => ({ id, command: "dispatch_agent" })),
-          projection: { state: "resolved", decisionIDs: expectedDispatchIDs },
-        })
-      },
-    })
-  })
-
   test("resolves a visible no-action answer once and advances the FIFO to the next ingress", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -1337,139 +1245,6 @@ describe("Task-control reconciliation", () => {
           activations: leases.map((lease) => lease.id),
           leaseIDs: leases.map((lease) => lease.id),
           projection: { state: "resolved", decisionIDs: [expect.any(String)] },
-        })
-      },
-    })
-  })
-
-  test("advances the FIFO after one assistant Turn atomically dispatches parallel agents", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const taskID = Identifier.ascending("task")
-        const root = await Session.create({ kind: "root", title: "Parallel decision root" })
-        const orchestrator = await Session.create({
-          kind: "orchestrator",
-          parentID: root.id,
-          title: "Parallel decision scheduler",
-        })
-        const now = Date.now()
-        const [first, second] = Database.immediateTransaction((db) => {
-          db.insert(EngineTaskTable)
-            .values({
-              id: taskID,
-              project_id: Instance.project.id,
-              session_id: root.id,
-              source: "test",
-              product_pillar: "code",
-              title: "Parallel decision convergence",
-              request: "Dispatch sibling agents, then advance the FIFO",
-              time_created: now,
-            })
-            .run()
-          appendTaskOpenedInTransaction({ db, taskID, sessionID: root.id, now, source: "test.parallel-decision" })
-          return ["first", "second"].map((sourceID, index) =>
-            acceptTaskRootIngressInTransaction(db, {
-              taskID,
-              executionEpoch: 1,
-              source: "inline",
-              sourceID,
-              inlinePayload: { note: `ingress ${index + 1}` },
-              semanticTurnLimit: 2,
-              activationLimit: 2,
-              now: now + index + 1,
-            }),
-          )
-        })
-
-        const activatedIngresses: string[] = []
-        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
-          runner: async ({ event, wakeID, activationID, predecessorID }) => {
-            if (!event || !wakeID || !activationID || !predecessorID)
-              throw new Error("Missing exact activation identity")
-            activatedIngresses.push(wakeID)
-            const control = currentOrchestratorControlMessage(event, taskID, wakeID, predecessorID)
-            if (!control) throw new Error("Expected an Orchestrator control occurrence")
-            await Session.persistMessage({
-              info: {
-                id: control.messageID,
-                sessionID: orchestrator.id,
-                role: "user",
-                author: "orchestrator",
-                time: { created: Date.now() },
-                agent: "orchestrator",
-                model: { providerID: "openai", modelID: "gpt-5.6-terra" },
-                extra: control.extra,
-              },
-              parts: [
-                {
-                  id: control.partID,
-                  sessionID: orchestrator.id,
-                  messageID: control.messageID,
-                  type: "text",
-                  text: control.text,
-                  kind: "control",
-                  source: "system",
-                } satisfies Message.TextPart,
-              ],
-            })
-            let assistant = await Session.updateMessage({
-              id: Identifier.ascending("message"),
-              sessionID: orchestrator.id,
-              parentID: control.messageID,
-              role: "assistant",
-              author: "orchestrator",
-              time: { created: Date.now() },
-              agent: "orchestrator",
-              providerID: "openai",
-              modelID: "gpt-5.6-terra",
-              path: { cwd: project.path, root: project.path },
-              cost: 0,
-              tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-              finish: "tool-calls",
-              activationID,
-            })
-            const commands = wakeID === first.id ? ["one", "two", "three"] : ["next"]
-            for (const name of commands) {
-              const request = await Session.updatePart({
-                id: Identifier.ascending("part"),
-                sessionID: orchestrator.id,
-                messageID: assistant.id,
-                type: "tool",
-                callID: `call_dispatch_${name}`,
-                tool: "dispatch_agent",
-                state: { status: "running", input: { agent: name }, time: { start: Date.now() } },
-              })
-              await Session.updatePart({
-                ...request,
-                state: {
-                  status: "completed",
-                  input: { agent: name },
-                  output: `dispatched ${name}`,
-                  title: "Dispatch Agent",
-                  metadata: {},
-                  time: { start: request.state.time.start, end: Date.now() },
-                },
-              })
-            }
-            assistant = await Session.updateMessage({
-              ...assistant,
-              time: { ...assistant.time, completed: Date.now() },
-            })
-            return { finalMessageID: assistant.id }
-          },
-        })
-
-        expect(await reconcileTaskControlPlane(taskID)).toBe(2)
-        expect({
-          activatedIngresses,
-          first: projectTaskRootIngress(first.id, Date.now(), readTaskRootIngressEvidence),
-          second: projectTaskRootIngress(second.id, Date.now(), readTaskRootIngressEvidence),
-        }).toEqual({
-          activatedIngresses: [first.id, second.id],
-          first: { state: "resolved", decisionIDs: [expect.any(String), expect.any(String), expect.any(String)] },
-          second: { state: "resolved", decisionIDs: [expect.any(String)] },
         })
       },
     })

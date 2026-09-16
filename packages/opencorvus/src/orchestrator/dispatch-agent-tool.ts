@@ -65,6 +65,8 @@ type DispatchAgentLineageHandleBase = {
   readonly existingSessionID?: string
   /** Preallocated identity for a new worker Session, claimed before any physical effect. */
   readonly newSessionID?: string
+  /** Placement retained from the initial invocation when resuming failed preparation. */
+  readonly preparedUseWorktree?: boolean
   readonly adapterInput: Readonly<Record<string, unknown>>
   /** Combined caller and fenced admission cancellation for the physical effect. */
   readonly signal: AbortSignal
@@ -81,6 +83,7 @@ export type LiveDispatchAgentLineageHandle = DispatchAgentLineageHandleBase & {
   readonly replayOutcome?: never
   /** Exact visible user-Turn authority and immutable workflow occurrence for this dispatch. */
   readonly turn: DispatchTurn
+  settlePreparationFailure(outcome: DispatchOutcomeResult): DispatchOutcomeResult
 }
 
 export type DispatchAgentLineageHandle =
@@ -712,7 +715,7 @@ export function createDispatchAgentTool(input: {
         const useWorktree = dispatch.existingSessionID
           ? path.resolve((await Session.get(dispatch.existingSessionID)).directory) !==
             path.resolve(taskPrimaryProjectRoot(input.taskID))
-          : (initialTurn?.use_worktree ?? false)
+          : (dispatch.preparedUseWorktree ?? initialTurn?.use_worktree ?? false)
         const executorTargetInput = structuredClone(dispatch.adapterInput)
         const frozenTargetInput = DispatchAdapterContractRegistry.withDeliverySliceRevisionIDs(
           projectedAgent.identity.dispatchAdapterID,
@@ -760,6 +763,7 @@ export function createDispatchAgentTool(input: {
             return committed
           },
           releaseAdmission: () => dispatch.releaseAdmission(),
+          settlePreparationFailure: (outcome) => dispatch.settlePreparationFailure(outcome),
         }
         if (dispatch.existingSessionID) {
           childSessionID = dispatch.existingSessionID
@@ -780,7 +784,8 @@ export function createDispatchAgentTool(input: {
           const parsed = DispatchAdapterContractRegistry.outputSchema(projectedAgent.identity.dispatchAdapterID).parse(
             outcome,
           )
-          if (parsed.kind !== "accepted" && (parsed.kind !== "infrastructure_failure" || parsed.session_id)) {
+          if (parsed.kind !== "accepted") {
+            if (parsed.kind === "infrastructure_failure" && !parsed.session_id) return dispatch.settlePreparationFailure(parsed)
             return settleDispatchOrReturnExisting({
               taskID: input.taskID,
               dispatchID: dispatch.dispatchID,
@@ -1004,7 +1009,7 @@ export function createDispatchAgentTool(input: {
           },
         })
       } catch (error) {
-        openedDispatch?.releaseAdmission()
+        try {
         if (error instanceof TaskWorkflowBindingConflictError) {
           return DispatchOutcome.infrastructureFailure({
             operation: "workflow_binding_initial_claim",
@@ -1075,12 +1080,17 @@ export function createDispatchAgentTool(input: {
           throw error
         }
         if (!dispatchID) throw error
-        return DispatchOutcome.infrastructureFailure({
+        const failure = DispatchOutcome.infrastructureFailure({
           operation: `${projectedAgent.identity.dispatchAdapterID}_adapter`,
           message: error instanceof Error ? error.message : String(error),
           sessionID: childSessionID,
           recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID: input.taskID, dispatchID }),
         })
+        if (!childSessionID && openedDispatch && !openedDispatch.replayOutcome) return openedDispatch.settlePreparationFailure(failure)
+        return settleDispatchOrReturnExisting({ taskID: input.taskID, dispatchID, outcome: failure }).payload.outcome
+        } finally {
+          openedDispatch?.releaseAdmission()
+        }
       }
     },
   })

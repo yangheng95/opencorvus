@@ -380,7 +380,18 @@ Lease renewal is a liveness and resource concern, never a safety one: every dura
 
 Worker completion is delivered by the dispatching runtime's own in-process owner. A dispatch is accepted only after its deterministic child Session and exact Worker Turn descriptor are durable. Before that boundary, the immutable lineage is a write-ahead request owned by the generic `dispatch_admission` lease: a live owner renews it, and after owner death one successor takes the expired lease and resumes the same occurrence from persisted input. Task-control never synthesizes acceptance or abandonment from lineage alone. After the descriptor-backed accepted boundary, an owner that dies leaves no ready ingress, no lease, and no timer — a stall no ingress projection can express, because the missing fact is the worker's outcome. Every scan therefore reconciles only descriptor-backed lineages whose delivery owner is gone: a worker whose lifecycle is already terminal has its lost delivery replayed idempotently, and an accepted worker with no terminal lifecycle has its interruption recorded as an infrastructure outcome and admitted as an ordinary ingress.
 
-The same scan closes the opposite gap. A dispatch is settled before its outcome is handed to the Orchestrator, so a failure in between leaves a settled lineage — invisible to abandonment recovery, which looks for unsettled work — that woke nothing. Every ingress reduces to `resolved`, no timer is owed, and the Task rests permanently behind a database that looks healthy. A settled lineage with no ingress carrying its outcome is therefore replayed, keyed to the settlement artifact so the replay collapses through the ingress source index.
+A preparation failure before worker acceptance is a final dispatch settlement.
+Its settlement retains the lineage's reserved Session identity, while the
+infrastructure outcome omits `session_id` because that attempt accepted no worker.
+The exact admission owner writes this fact and releases its lease in one immediate
+transaction. A stale owner cannot settle a peer's attempt, and a settled preparation
+failure prevents later acceptance of a descriptor for that dispatch. An explicit
+prior-dispatch continuation retains the original workflow occurrence, reserved
+child identity and placement. When no worker descriptor exists yet, it performs
+the first worker Turn with the original Task authority and the real Orchestrator's
+recovery guidance; otherwise it uses the ordinary incremental continuation.
+
+The same scan closes the opposite gap for accepted workers. A dispatch is settled before its outcome is handed to the Orchestrator, so a failure in between leaves a settled lineage — invisible to abandonment recovery, which looks for unsettled work — that woke nothing. Every ingress reduces to `resolved`, no timer is owed, and the Task rests permanently behind a database that looks healthy. A descriptor-backed settled lineage with no ingress carrying its outcome is therefore replayed, keyed to the settlement artifact so the replay collapses through the ingress source index. Pre-acceptance failures reach the Orchestrator through the original visible Tool receipt.
 
 `dispatch_agents` completion is reduced at the collection boundary rather than
 delivered once per member. The exact Task epoch, orchestrator Message, Tool

@@ -6,6 +6,7 @@ import { tmpdir } from "node:os"
 import path from "node:path"
 
 type WorkerMode =
+  | "execute-stale-preparation"
   | "seed"
   | "execute-blocked"
   | "execute-replay"
@@ -54,12 +55,39 @@ async function finishWorker(started: ReturnType<typeof startWorker>, mode: Worke
     .find((value) => value?.mode === mode)
   if (!result) throw new Error(`Dispatch occurrence ${mode} worker returned no result: ${stdout}`)
   return result as {
+    fenceError?: string
     mode: WorkerMode
     memberOutcome?: { kind?: string; session_id?: string; infrastructure_error?: { artifact_id?: string } }
     outerOutput?: string
     outerStatus?: string
   }
 }
+
+test("a stale preparation owner receives the lease-fence error after peer acceptance", async () => {
+  const input = fixture()
+  const worker = path.join(import.meta.dir, "fixture", "dispatch-occurrence-claim-process-worker.ts")
+  let stale: ReturnType<typeof startWorker> | undefined
+  try {
+    await runWorker(worker, "seed", input.projectPath, input.home)
+    stale = startWorker(worker, "execute-stale-preparation", input.projectPath, input.home, input.barrier)
+    await waitForFile(path.join(input.barrier, "ready.json"), stale)
+    const claim = JSON.parse(fs.readFileSync(path.join(input.barrier, "ready.json"), "utf8"))
+    const db = new SQLite(input.databasePath)
+    try { db.run("UPDATE engine_control_activation_lease SET expires_at=? WHERE target='dispatch_admission' AND target_id=?", [Date.now() - 1, claim.lineageID]) } finally { db.close() }
+    const peer = await runWorker(worker, "execute-takeover", input.projectPath, input.home)
+    fs.writeFileSync(path.join(input.barrier, "fail-preparation"), "ready")
+    const failed = await finishWorker(stale, "execute-stale-preparation")
+    const verified = new SQLite(input.databasePath, { readonly: true })
+    try {
+      expect({ peer: peer.memberOutcome?.kind, error: failed.fenceError, descriptors: verified.query("SELECT count(*) AS count FROM worker_turn_descriptor WHERE session_id=?").get(claim.childSessionID) })
+        .toEqual({ peer: "accepted", error: "ControlLeaseFenceLostError", descriptors: { count: 1 } })
+      expect(peer.memberOutcome?.session_id).toBe(claim.childSessionID)
+    } finally { verified.close() }
+  } finally {
+    if (stale && stale.child.exitCode === null) { stale.child.kill(); await stale.child.exited }
+    removeFixture(input.root)
+  }
+}, 180_000)
 
 async function runWorker(worker: string, mode: WorkerMode, projectPath: string, home: string, barrier?: string) {
   return finishWorker(startWorker(worker, mode, projectPath, home, barrier), mode)
