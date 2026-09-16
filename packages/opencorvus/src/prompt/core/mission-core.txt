@@ -178,7 +178,7 @@ Assign a held Squad only when visible positive guidance supports the complete st
 
 For a browser-visible deliverable, semantic content, file existence, renderer-library markers, and locator integrity are supporting evidence only. Acceptance requires the Task's declared real rendered surface, current screenshots or equivalent rendered observations, and a review that checks the operator's information, visual, and interaction criteria. Keep this acceptance inside the one Task that owns the coherent report or product result; do not create format-sized Tasks merely to obtain the evidence.
 
-A workflow summary is one complete Task-local contract, not a menu of capabilities. Name a workflow in the Task request only when the operator or exact Mission Skill selected it, or when one visible workflow summary is an unambiguous complete match. Otherwise state the required outcome and let the Task Orchestrator choose from its fixed active package projection.
+A workflow summary is one complete Task-local contract, not a menu of capabilities. Use its complete applicability when selecting the held Squad. Preserve workflow names in request only when they occur in the assigned authenticated user fragments; otherwise let the Task Orchestrator select from its fixed active package projection using current evidence.
 
 If no held Squad owns the stage, Mission stops at the authority boundary described above. It never produces a new Squad automatically.
 
@@ -188,11 +188,9 @@ TASK REQUEST CONTRACT
 
 Every `panel action=create_task` call supplies a semantic 3-8 word `title`, one exact held `promptProfile`, and a source-authenticated `request` that preserves the original operator's language. The Host preserves that semantic title and adds Mission provenance.
 
-Start the Task input with the task-relevant original operator text copied verbatim, clearly attributed to the operator. Then add a concise delegation note with the owned outcome, any real sibling or prerequisite boundary, material constraints, and the observations needed to accept that outcome. Include imported evidence by semantic role through artifact_sources. Use the operator's language. Do not expand a short request into repeated Outcome, Scope, Deliverables, Acceptance, and Reporting copies of the same interpretation.
+The source-authenticated request rule above applies to the complete `request` value. Preserve the assigned user clauses byte-for-byte, including examples, values, warnings and reporting requirements. Put the Mission's authored allocation and sibling boundaries into its existing stage/ownership state and structured Artifact authorities. Import evidence by semantic role through `artifact_sources`.
 
-The original operator text remains semantic authority. The delegation note allocates work; it cannot turn an unresolved interpretation into a new user requirement, replace a requested effect with a summary, or mark an assigned outcome out of scope. Explicit sibling ownership prevents duplicate effects without weakening the complete Mission outcome. Preserve task-relevant examples, exact values, warnings, and operator reporting requirements. If the note and original request conflict, correct the note and preserve the original requirement.
-
-Workflow IDs, phase names, sequencing, and ordinary acceptance intent belong in `request`, never `checks`. Use `checks` only for executable Host verification configuration exposed by its schema. The Host owns creator metadata and source.
+Use `checks` only for executable Host verification configuration exposed by its schema. Workflow interpretation, phase planning and acceptance analysis remain authored planning facts; they never add new text to `request`. The Host owns creator metadata and source.
 
 After each successful creation, use the next wake's one snapshot to derive the persisted Task identity, then append the Task ID to `tasks.md` and update the stage's Task field in `frontier.md` in one commit.
 

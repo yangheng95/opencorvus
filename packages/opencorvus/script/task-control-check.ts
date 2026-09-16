@@ -750,37 +750,10 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     if (cancellationTerminalWithinMs >= 15_000) {
       throw new Error(`Cancellation terminal convergence took ${cancellationTerminalWithinMs}ms across restart`)
     }
-    process.stdout.write(`[task-control phase] ${phase} awaiting terminal settlements\n`)
-    let settlementActivityKey: string | undefined
-    const settlements = await waitForPolling(
-      "post-terminal checkpoint and auxiliary settlement",
-      async () => {
-        const artifacts = (await board()).artifacts.filter((artifact) =>
-          ["task_checkpoint_settlement", "task_auxiliary_settlement"].includes(artifact.kind),
-        )
-        settlementActivityKey = artifacts
-          .map(
-            (artifact) =>
-              `${artifact.id}:${["completed", "failed"].includes(artifact.label) ? artifact.label : "active"}`,
-          )
-          .sort()
-          .join("|")
-        if (artifacts.length !== 2 || artifacts.some((artifact) => !["completed", "failed"].includes(artifact.label))) {
-          return undefined
-        }
-        for (const artifact of artifacts) {
-          if (
-            artifact.payload?.cancellation_request_event_id !== checkpoint.cancellationRequestEventID ||
-            artifact.payload?.time_requested !== checkpoint.cancellationRequestEventEmittedAt
-          ) {
-            throw new Error(`Settlement ${artifact.id} lost cancellation request identity or request time`)
-          }
-        }
-        return artifacts
-      },
-      INACTIVITY_MS,
-      async () => settlementActivityKey,
-    )
+    const dispatchSettlements = (await board()).artifacts.filter((artifact) => artifact.kind === "dispatch_settlement")
+    const promptOwners = await Instance.provide({ directory: projectDirectory, fn: async () => listOwnedPromptSessionsForTask(taskID) })
+    const startedIncomplete = await Instance.provide({ directory: projectDirectory, fn: async () => listStartedIncompleteTaskIDs({ projectID: Instance.project.id }) })
+    if (promptOwners.length || startedIncomplete.includes(taskID)) throw new Error("Cancelled Task must have a settled physical execution frontier")
     const duplicate = await cancel("task-control-cancel-duplicate")
     if (duplicate.requestEventID !== checkpoint.cancellationRequestEventID) {
       throw new Error("Duplicate cancellation did not reuse the canonical request occurrence")
@@ -842,8 +815,8 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
         cancellationObservedAfterTerminalMs,
         cancellationTerminalEvents: terminalEvents.length,
         ingressDispositions,
-        checkpointSettlement: settlements.find((artifact) => artifact.kind === "task_checkpoint_settlement"),
-        auxiliarySettlement: settlements.find((artifact) => artifact.kind === "task_auxiliary_settlement"),
+        dispatchSettlements,
+        physicalExecutionFrontier: { status: "settled", promptOwners, startedIncomplete },
         processMetrics,
         restartPhases: ["pending_ingress", "pending_cancellation"],
       })}\n`,

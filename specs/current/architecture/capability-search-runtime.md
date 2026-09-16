@@ -124,11 +124,15 @@ JSON object or create another persistence contract.
 The reducer counts every real Provider-normalized permanent definition from
 revision zero in its total digest and size, while enforcing the extension
 allowance over extension definitions. Base Provider names are immutable reducer
-input. A later production Skill activation may share an already-bound `skill`
-loader name only when its exact normalized definition digest equals that frozen
-base definition; the receipt adds the Skill ref and materializer evidence
-without counting a duplicate Tool definition. Every other attempt to reuse a
-base name is corrupt rather than a second definition owner.
+input. A later authorized capability activation may reuse a permanent Registry
+Tool only when its executable ref is the exact platform/tool-registry leaf for
+that Provider name and its complete normalized definition digest equals the
+frozen base digest. This covers Skill loading and Expert Squad Task creation
+through the same rule. The receipt adds the requested ref and materializer
+evidence without counting a duplicate Tool definition. A different executable
+authority or definition remains a typed conflict; persisted receipt folding
+enforces the identical rule.
+
 
 ## Exact materialization owners
 

@@ -446,7 +446,7 @@ export function createDispatchAgentTool(input: {
     z
       .object({
         kind: z.literal("prior_dispatch"),
-        continuation_dispatch_id: z.string().min(1),
+        continuation_dispatch_id: z.string().min(1).describe("Exact dispatch ID of this worker Session’s latest accepted physical Turn. After a continuation, use its current dispatch ID; the original logical workflow occurrence ID is not the current Turn. If no worker Turn was accepted, use the exact settled pre-child preparation-failure dispatch ID to recover the reserved worker. Stale accepted-Turn source identities are rejected; the Host never substitutes a newer source."),
       })
       .strict(),
   ])

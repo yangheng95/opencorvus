@@ -9,8 +9,8 @@ import { Tool } from "./tool"
 const Parameters = z
   .object({
     kind: z.enum(["request", "reply", "notification"]),
-    task_id: z.string().min(1).optional(),
-    reply_to: z.string().startsWith("pev").optional(),
+    task_id: z.string().min(1).optional().describe("Required for request or notification. Omit for reply: reply_to determines the original sender."),
+    reply_to: z.string().startsWith("pev").optional().describe("Required only for reply: copy the exact received request event_id and omit task_id. Omit reply_to for request or notification."),
     subject: z.string().min(1).max(500),
     message: z.string().min(1),
   })
@@ -44,7 +44,7 @@ async function exactToolPart(ctx: Tool.Context) {
 
 export const SchedulerMessageTool = Tool.define("scheduler_message", {
   description:
-    "Send one durable scheduler message. Use request for a question/directive to an owned Task, reply with the exact request event_id, and notification for a one-way update. This is the only Mission-to-Task scheduler communication path; replies preserve the original thread automatically.",
+    "Send one durable scheduler message. Use request for a question/directive to an owned Task, reply with the exact request event_id, and notification for a one-way update. This is the only Mission-to-Task scheduler communication path; replies preserve the original thread automatically. A reply contains kind, reply_to, subject and message only; omit task_id because the exact request supplies its destination.",
   parameters: Parameters,
   async execute(input, ctx) {
     const mission = await requireMissionSession(ctx.sessionID)

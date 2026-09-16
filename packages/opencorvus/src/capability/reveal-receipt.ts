@@ -294,7 +294,7 @@ function activeDefinitionState(
   const byProviderName = new Map<string, ActivatedCapability>()
   for (const activation of active.values()) {
     if (baseProviderNames.has(activation.provider_name)) {
-      if (!matchesPermanentProductionSkillLoader(base, activation)) {
+      if (!matchesPermanentRegistryTool(base, activation)) {
         throw new CorruptCapabilityRevealError(
           `Provider Tool name ${activation.provider_name} conflicts with the permanent base definition.`,
         )
@@ -330,16 +330,16 @@ function activeDefinitionState(
   return { definitions, payloadChars, payloadTokens, digest }
 }
 
-function matchesPermanentProductionSkillLoader(
+function matchesPermanentRegistryTool(
   base: CapabilityRevealBaseDefinition,
   activation: ActivatedCapability,
 ): boolean {
   return (
-    activation.requested_ref.kind === "skill" &&
     activation.executable_ref.kind === "tool" &&
-    activation.executable_ref.local_ref === "skill" &&
-    activation.provider_name === "skill" &&
-    base.providerDefinitionDigests?.skill === activation.definition_digest
+    activation.executable_ref.source === "platform" &&
+    activation.executable_ref.owner_ref === "tool-registry" &&
+    activation.executable_ref.local_ref === activation.provider_name &&
+    base.providerDefinitionDigests?.[activation.provider_name] === activation.definition_digest
   )
 }
 
@@ -550,7 +550,7 @@ export function reduceCapabilityRevealCandidate(input: {
   for (const ref of canonicalRefs(input.deactivateRefs)) active.delete(CapabilityRefCodec.encode(ref))
   for (const activation of canonicalActivations(input.activated)) {
     if (baseProviderNames.has(activation.provider_name)) {
-      if (!matchesPermanentProductionSkillLoader(input.prior.baseDefinition, activation)) {
+      if (!matchesPermanentRegistryTool(input.prior.baseDefinition, activation)) {
         throw new CapabilityRevealBaseDefinitionConflictError(
           `Provider Tool name ${activation.provider_name} conflicts with the permanent base definition.`,
         )

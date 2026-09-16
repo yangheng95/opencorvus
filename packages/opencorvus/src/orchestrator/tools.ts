@@ -1114,7 +1114,7 @@ export function createOrchestratorTools(input: {
   const toolFactories = {
     scheduler_message: () => tool({
       description:
-        "Send one durable scheduler message. Use request for a question/directive, reply with the exact request event_id, and notification for a one-way update. The target may be this Task's owning Mission or a sibling Task owned by the same Mission. Replies preserve the original route and thread automatically.",
+        "Send one durable scheduler message. Use request for a question/directive, reply with the exact request event_id, and notification for a one-way update. The target may be this Task's owning Mission or a sibling Task owned by the same Mission. Replies preserve the original route and thread automatically. A reply contains kind, reply_to, subject and message only; omit target because the exact request supplies its destination.",
       inputSchema: z
         .object({
           kind: z.enum(["request", "reply", "notification"]),
@@ -1123,8 +1123,8 @@ export function createOrchestratorTools(input: {
               z.object({ kind: z.literal("mission") }).strict(),
               z.object({ kind: z.literal("task"), task_id: z.string().min(1) }).strict(),
             ])
-            .optional(),
-          reply_to: z.string().startsWith("pev").optional(),
+            .optional().describe("Required for request or notification. Omit for reply: reply_to determines the original sender."),
+          reply_to: z.string().startsWith("pev").optional().describe("Required only for reply: copy the exact received request event_id and omit target. Omit reply_to for request or notification."),
           subject: z.string().min(1).max(500),
           message: z.string().min(1),
         })
@@ -2544,6 +2544,10 @@ export function createOrchestratorTools(input: {
           // once, and every retry repeats the same failure.
           const continuable = listDispatchLineage(ownershipTaskID)
             .filter((row) => row.payload.target_agent_id === targetAgentID)
+            .filter((row) => {
+              const latest = WorkerTurnDescriptor.latestForSession(row.payload.child_session_id)?.payload.dispatchTurn
+              return !latest || latest.current_dispatch_id === row.dispatchID
+            })
             .map((row) => row.dispatchID)
           throw new Error(
             `dispatch_agent continuation source ${continuationDispatchID} does not exist in Task ${ownershipTaskID}. ` +
@@ -2565,7 +2569,11 @@ export function createOrchestratorTools(input: {
         exactWorkflowOccurrenceID = sourceLineage.payload.workflow_occurrence_id
         exactDeliverySliceRevisionIDs = sourceLineage.payload.delivery_slice_revision_ids
         const sourceSessionID = sourceLineage.payload.child_session_id
-        if (WorkerTurnDescriptor.latestForSession(sourceSessionID)) {
+        const latestTurn = WorkerTurnDescriptor.latestForSession(sourceSessionID)?.payload.dispatchTurn
+        if (latestTurn) {
+          if (latestTurn.current_dispatch_id !== continuationDispatchID) {
+            throw new Error(`dispatch_agent continuation source ${continuationDispatchID} is stale for Session ${sourceSessionID}; exact current dispatch is ${latestTurn.current_dispatch_id}. Use that current dispatch identity explicitly for the successor Turn.`)
+          }
           existingSessionID = sourceSessionID
         } else {
           const settlement = findDispatchSettlementByDispatchID({ taskID: ownershipTaskID, dispatchID: sourceLineage.dispatchID })

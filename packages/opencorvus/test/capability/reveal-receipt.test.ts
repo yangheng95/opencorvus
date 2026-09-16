@@ -254,14 +254,14 @@ describe("occurrence capability reveal receipts", () => {
     })
   })
 
-  test("reports a typed conflict when a reveal reuses a permanent base Provider name", () => {
+  test("reports a typed conflict when a reveal changes a permanent base Provider definition", () => {
     const prior = foldCapabilityRevealReceipts({
       occurrenceID,
       parts: [],
       harnessProjectionHash,
       catalogSnapshotRef,
       catalogSnapshotHash,
-      baseDefinition: capabilityRevealBaseDefinitions([definition]),
+      baseDefinition: capabilityRevealBaseDefinitions([{ ...definition, description: "A different permanent contract" }]),
     })
     expect(() => reduceCapabilityRevealCandidate({ prior, deactivateRefs: [], activated: [activation] })).toThrow(
       CapabilityRevealBaseDefinitionConflictError,
@@ -270,6 +270,15 @@ describe("occurrence capability reveal receipts", () => {
       revision: 0,
       activeRefs: [],
     })
+  })
+
+  test("reuses an exact permanent Registry Tool and rejects a same-name foreign executable", () => {
+    const matchingBase = capabilityRevealBaseDefinitions([definition])
+    const prior = foldCapabilityRevealReceipts({ occurrenceID, parts: [], harnessProjectionHash, catalogSnapshotRef, catalogSnapshotHash, baseDefinition: matchingBase })
+    const candidate = reduceCapabilityRevealCandidate({ prior, deactivateRefs: [], activated: [activation] })
+    expect({ refs: candidate.activeRefs, definitions: candidate.definitions, chars: candidate.payloadChars }).toEqual({ refs: [requestedRef], definitions: [], chars: matchingBase.payloadChars })
+    const foreign = ActivatedCapability.parse({ ...activation, executable_ref: capabilityRef({ kind: "tool", source: "platform", owner_ref: "runtime-projection:other", local_ref: "read" }) })
+    expect(() => reduceCapabilityRevealCandidate({ prior, deactivateRefs: [], activated: [foreign] })).toThrow(CapabilityRevealBaseDefinitionConflictError)
   })
 
   test("records an exact active ref when a reveal expands a matching permanent loader definition", () => {

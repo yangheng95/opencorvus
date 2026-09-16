@@ -39,7 +39,7 @@ afterEach(async () => {
 
 // Only the model transport is scripted. Mission admission, tools, worker
 // adapters, checkpoints, messages, claims, delivery and acceptance are real.
-test("a Mission recovers a committed side effect and first starts its independent verifier", async () => {
+test("a Mission recovers a committed side effect, corrects a stale continuation and starts its independent verifier", async () => {
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
@@ -87,6 +87,8 @@ test("a Mission recovers a committed side effect and first starts its independen
       let testerStep = 0
       let rootStep = 0
       let sequence = 0
+      let staleSourceAttempted = false
+      let sourceCorrected = false
       const calls: string[] = []
       const failures: string[] = []
       let selectedRef = ""
@@ -125,7 +127,7 @@ test("a Mission recovers a committed side effect and first starts its independen
           .filter((r) => r.target_agent_id === agent)
           .sort((a, b) => a.time_created - b.time_created)
           .at(-1)
-      const dispatch = (agent: string, repair: boolean) => {
+      const dispatch = (agent: string, repair: boolean, sourceOverride?: string) => {
         const previous = lineage(agent)
         const obligation = repair ? { acceptance_gap_id: "gap-delivery", criterion_ids: ["deliver-and-verify"] } : {}
         return call("dispatch_agent", {
@@ -135,7 +137,7 @@ test("a Mission recovers a committed side effect and first starts its independen
             turn: previous
               ? {
                   kind: "continuation",
-                  authority: { kind: "prior_dispatch", continuation_dispatch_id: previous.dispatch_id },
+                  authority: { kind: "prior_dispatch", continuation_dispatch_id: sourceOverride ?? previous.dispatch_id },
                   guidance: "Preserve the committed operation, finish delivery, and verify the final result.",
                   evidence_locators: [],
                   ...obligation,
@@ -201,8 +203,26 @@ test("a Mission recovers a committed side effect and first starts its independen
                 error: "The transport ended after a committed operation; independent verification is still owed.",
               })
             if (repair && !developer.continuation_of_dispatch_id) return dispatch("base-developer", true)
-            if (repair && outcome(developer.dispatch_id)?.kind === "terminal_success" && !tester)
+            if (repair && outcome(developer.dispatch_id)?.kind === "terminal_success" && !tester) {
+              if (!staleSourceAttempted) {
+                staleSourceAttempted = true
+                const initial = rows.filter((row) => row.kind === "dispatch_lineage")
+                  .map((row) => row.payload as DispatchLineagePayload)
+                  .find((row) => row.target_agent_id === "base-developer" && !row.continuation_of_dispatch_id)!
+                return dispatch("base-developer", true, initial.dispatch_id)
+              }
+              if (!sourceCorrected) {
+                const rootSession = (await Session.children(requireTask(taskID).session_id!)).find((row) => row.kind === "orchestrator")!
+                const errors = (await Session.messages({ sessionID: rootSession.id })).flatMap((message) => message.parts)
+                  .filter((part) => part.type === "tool" && part.tool === "dispatch_agent" && part.state.status === "error")
+                expect(errors.map((part) => part.type === "tool" && part.state.status === "error" ? part.state.failure.message : "")).toEqual([
+                  expect.stringContaining(`exact current dispatch is ${developer.dispatch_id}`),
+                ])
+                sourceCorrected = true
+                return dispatch("base-developer", true)
+              }
               return dispatch("base-tester", true)
+            }
             if (tester && outcome(tester.dispatch_id)?.kind === "terminal_success")
               return call("manage_task", {
                 action: "complete_task",
@@ -489,7 +509,7 @@ test("a Mission recovers a committed side effect and first starts its independen
         expect({ taskID, calls, failures, rootStep, developerStep, testerStep }).toMatchObject({
           taskID: expect.any(String),
           failures: [],
-          developerStep: 3,
+          developerStep: 4,
           testerStep: 2,
         })
         expect(taskLifecycleProjection(taskID)).toMatchObject({ status: "completed", epoch: 2 })
@@ -499,6 +519,7 @@ test("a Mission recovers a committed side effect and first starts its independen
         )
         expect(descriptors.map((d) => ({ agent: d.agent, turn: (d.payload as any).dispatchTurn.kind }))).toEqual([
           { agent: "base-developer", turn: "initial" },
+          { agent: "base-developer", turn: "continuation" },
           { agent: "base-developer", turn: "continuation" },
           { agent: "base-tester", turn: "initial" },
         ])

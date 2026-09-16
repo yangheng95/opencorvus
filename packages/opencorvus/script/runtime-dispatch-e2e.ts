@@ -1,4 +1,5 @@
 import assert from "node:assert/strict"
+import { RuntimeE2EScenarioSchema, scenarioFixturePath } from "./runtime-e2e-scenario"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { createHash } from "node:crypto"
@@ -14,6 +15,12 @@ if (process.env.RUNTIME_DISPATCH_E2E_ALLOW_REAL_PROVIDER !== "1") {
 }
 const source = path.resolve(process.env.RUNTIME_DISPATCH_E2E_AUTH_SOURCE || "")
 assert(process.env.RUNTIME_DISPATCH_E2E_AUTH_SOURCE, "An explicit auth source is required")
+const scenarioText = process.env.RUNTIME_DISPATCH_E2E_SCENARIO
+  ? await fs.readFile(path.resolve(process.env.RUNTIME_DISPATCH_E2E_SCENARIO), "utf8") : undefined
+const scenario = RuntimeE2EScenarioSchema.parse(scenarioText ? JSON.parse(scenarioText) : {
+  caseID: "advanced-web-intake", title: "Advanced local bookshop delivery acceptance", promptProfile: "advanced",
+  request: "帮我创建一个图书销售电商网页，使用虚构图书和价格，仅在当前项目生成本地演示，不进行真实交易、注册账号或对外发布。完成实现后请验证页面和交互并交付可打开的结果。",
+})
 const model = "openai/gpt-5.6-luna"
 const modelID = "gpt-5.6-luna"
 const inactivityMs = 180_000
@@ -29,7 +36,9 @@ const resultPath = path.join(root, "result.json")
 const secrets: string[] = []
 const result: Record<string, unknown> = {
   schema: "opencorvus/runtime-dispatch-e2e@1",
-  caseID: "advanced-web-intake",
+  caseID: scenario.caseID,
+  scenario,
+  scenarioSHA256: createHash("sha256").update(JSON.stringify(scenario)).digest("hex"),
   evidenceClass: "real-provider-http-end-to-end",
   model,
   inactivityMs,
@@ -61,6 +70,7 @@ try {
   result.sourceDiffSHA256 = createHash("sha256").update(sourceDiff).digest("hex")
   await fs.writeFile(path.join(root, "source.patch"), sourceDiff)
   result.checkerSHA256 = createHash("sha256").update(await fs.readFile(import.meta.filename)).digest("hex")
+  result.scenarioParserSHA256 = createHash("sha256").update(await fs.readFile(path.join(import.meta.dir, "runtime-e2e-scenario.ts"))).digest("hex")
   result.auditSHA256 = createHash("sha256").update(await fs.readFile(path.join(import.meta.dir, "real-provider-audit.ts"))).digest("hex")
   await fs.mkdir(path.join(home, "data"), { recursive: true })
   await fs.mkdir(project, { recursive: true })
@@ -78,6 +88,14 @@ try {
   await fs.copyFile(path.join(path.dirname(source), "models.json"), path.join(home, "data", "models.json"))
   await fs.writeFile(path.join(project, "README.md"), "# Isolated bookshop demonstration\nOnly local fictional demo data; no publication, accounts or purchases.\n")
   await fs.writeFile(path.join(project, "AGENTS.md"), "# Acceptance constraints\nUse fictional local demo data. Do not publish, create accounts, or perform purchases. Do not create or run UI automation tests, browser fixtures, DOM/component assertions, screenshot baselines, or pixel diffs. Validate UI through real page interactions and rendered inspection. Backend contract tests, builds, and type checks are allowed.\n")
+  const fixtureFiles: Array<{ path: string; sha256: string }> = []
+  for (const [relative, content] of Object.entries(scenario.files)) {
+    const target = scenarioFixturePath(project, relative)
+    await fs.mkdir(path.dirname(target), { recursive: true })
+    await fs.writeFile(target, content)
+    fixtureFiles.push({ path: relative, sha256: createHash("sha256").update(content).digest("hex") })
+  }
+  result.fixtureFiles = fixtureFiles
   for (const key of ["OPENCORVUS_CONFIG", "OPENCORVUS_CONFIG_DIR", "OPENCORVUS_TEST_MANAGED_CONFIG_DIR", "OPENCORVUS_API_KEY"]) delete process.env[key]
   process.env.OPENCORVUS_HOME = home
   process.env.OPENCORVUS_TEST_HOME = home
@@ -124,9 +142,8 @@ try {
   result.preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs, activity: SessionStatus.getActivity })
   result.phase = "task_execution"
   const created = await request("/task?init-git=true", {
-    title: "Advanced local bookshop delivery acceptance",
-    request: "帮我创建一个图书销售电商网页，使用虚构图书和价格，仅在当前项目生成本地演示，不进行真实交易、注册账号或对外发布。完成实现后请验证页面和交互并交付可打开的结果。",
-    source: "runtime-dispatch-e2e", productPillar: "code", promptProfile: "advanced", model,
+    title: scenario.title, request: scenario.request,
+    source: "runtime-dispatch-e2e", productPillar: "code", promptProfile: scenario.promptProfile, model,
   })
   const taskID = created.task_id
   assert.equal(typeof taskID, "string")
@@ -194,6 +211,9 @@ try {
         assert(final.info.role === "assistant" && final.info.time.completed && final.parts.length > 0, "Worker final output must be durable and inspectable")
         settled.push({ dispatchID: child.dispatchID, descriptorID: descriptor.id, settlementID: settlement.id, finalMessageID: final.info.id, kind: outcome.kind })
       }
+      const adapters = [...new Set(facts.descriptors.map((row) => parsed(row).identity.dispatchAdapterID))]
+      result.adapterEvidence = adapters
+      for (const expected of scenario.requiredAdapters) assert(adapters.includes(expected), `Required adapter ${expected} must have a real persisted worker descriptor`)
       result.workerEvidence = settled
       result.artifactInventory = facts.artifacts.map((row) => ({ id: row.id, kind: row.kind }))
       result.acceptance = { dispatch: "passed", workerSettlement: settled.length === children.length ? "passed" : "pending_coordination_review", delivery: "pending", artifacts: "pending", visual: "pending", nativePackage: "not_run" }
