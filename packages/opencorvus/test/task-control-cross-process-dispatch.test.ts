@@ -20,7 +20,9 @@ import { requireTask } from "../src/engine/store"
 import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
 import { taskRequestSHA256 } from "../src/orchestrator/dispatch-turn-projection"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
-import { reconcileTaskControlPlane, TestHooks as TaskControlTestHooks } from "../src/engine/task-root-ingress-delivery"
+import { reconcileSettledDispatchDelivery, reconcileTaskControlPlane, TestHooks as TaskControlTestHooks } from "../src/engine/task-root-ingress-delivery"
+import { taskLifecycleProjection } from "../src/engine/task-lifecycle"
+import { detachDispatchExecution, waitForDetachedDispatchPipelinesForTest } from "../src/orchestrator/dispatch-agent-tool"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
 import { Identifier } from "../src/id/id"
 import { BrowserMCPBuiltin } from "../src/mcp/browser/builtin"
@@ -204,6 +206,53 @@ function recoveryIngressCount(taskID: string) {
 }
 
 describe("cross-process dispatch abandonment", () => {
+  test("settles detached delivery against the exact cancelling Task occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const fixture = await seedPeerOwnedDispatch(project.path)
+        const { taskID, dispatchID, child, lineage } = fixture
+        const outcome = DispatchOutcome.partial({
+          sessionID: child.id,
+          finalMessageID: Identifier.ascending("message"),
+          failedOperation: "persist_domain_artifact",
+        })
+        const settlement = settleDispatchOrReturnExisting({ taskID, dispatchID, outcome })
+        const cancellation = await ProtocolStore.appendEvent({
+          kind: "event",
+          type: "task.cancellation.requested",
+          aggregate: "task",
+          aggregate_id: taskID,
+          task_id: null,
+          session_id: requireTask(taskID).session_id!,
+          source: "test.detached-cancellation",
+          payload: { execution_epoch: 1, actor: "user", surface: "api", reason: "Cancel active worker" },
+        })
+        // Exercise the real transaction-local delivery before supervising it,
+        // so the red baseline exposes the precise admission error.
+        expect(await reconcileSettledDispatchDelivery({ taskID, dispatchID, sessionID: child.id })).toBe("already_delivered")
+        let finish!: () => void
+        const execution = new Promise<void>((resolve) => { finish = resolve })
+        const deliveries: string[] = []
+        expect(await detachDispatchExecution({
+          execute: async () => { await execution; return outcome },
+          runDetached: (run) => run(),
+          runDetachedRecovery: (run) => run(),
+          committedLineage: Promise.resolve({ sessionID: child.id, artifactID: lineage.artifactID }),
+          deliver: async () => { deliveries.push(await reconcileSettledDispatchDelivery({ taskID, dispatchID, sessionID: child.id })) },
+          onDeliveryFailure: ({ error }) => { throw error },
+          onPipelineOwnerCleanupFailure: ({ error }) => { throw error },
+        })).toMatchObject({ kind: "accepted", session_id: child.id, dispatch_lineage_id: lineage.artifactID })
+        finish()
+        await waitForDetachedDispatchPipelinesForTest()
+        expect(deliveries).toEqual(["already_delivered"])
+        expect(taskLifecycleProjection(taskID)).toMatchObject({ epoch: 1, status: "cancelling", requestEventID: cancellation.id })
+        expect(findDispatchSettlementByDispatchID({ taskID, dispatchID })).toEqual(settlement)
+      },
+    })
+  })
+
   test("leaves a peer backend's dispatch alone while that peer's liveness lease is current", async () => {
     await using project = await memoryProject()
     await Instance.provide({

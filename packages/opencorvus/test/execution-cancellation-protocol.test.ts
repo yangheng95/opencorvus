@@ -6,6 +6,27 @@ import {
 } from "@/session/prompt/cancellation"
 import { TaskCancellationOrigin } from "@/engine/cancellation-origin"
 import { SessionWake } from "@/session/wake"
+import { projectedAdapterError } from "@/orchestrator/projected-adapter-error"
+
+test("preserves the exact projected adapter cancellation and wraps ordinary execution errors", () => {
+  const cancellation = new ExecutionCancellationError({
+    source: "session_prompt",
+    message: "Cancel worker",
+    sessionID: "ses_projected_cancel",
+    origin: createExecutionCancellationOrigin({
+      actor: "user", source: "task.cancel", surface: "api", reason: "Cancel worker",
+      taskID: "tsk_projected_cancel", targetSessionID: "ses_projected_cancel",
+    }),
+  })
+  for (const adapter of ["delegated_worker", "integrity", "build"] as const) {
+    expect(projectedAdapterError("worker", adapter, cancellation)).toBe(cancellation)
+    const failure = new Error("Provider stream failed")
+    expect(projectedAdapterError("worker", adapter, failure)).toMatchObject({
+      message: `Projected agent "worker" failed via adapter "${adapter}": Provider stream failed`,
+      cause: failure,
+    })
+  }
+})
 
 test("classifies typed runtime shutdown cancellation as an expected wake settlement", () => {
   const cancellation = new ExecutionCancellationError({

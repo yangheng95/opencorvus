@@ -382,6 +382,18 @@ Lease renewal is a liveness and resource concern, never a safety one: every dura
 
 Worker completion is delivered by the dispatching runtime's own in-process owner. A dispatch is accepted only after its deterministic child Session and exact Worker Turn descriptor are durable. Before that boundary, the immutable lineage is a write-ahead request owned by the generic `dispatch_admission` lease: a live owner renews it, and after owner death one successor takes the expired lease and resumes the same occurrence from persisted input. Task-control never synthesizes acceptance or abandonment from lineage alone. After the descriptor-backed accepted boundary, an owner that dies leaves no ready ingress, no lease, and no timer — a stall no ingress projection can express, because the missing fact is the worker's outcome. Every scan therefore reconciles only descriptor-backed lineages whose delivery owner is gone: a worker whose lifecycle is already terminal has its lost delivery replayed idempotently, and an accepted worker with no terminal lifecycle has its interruption recorded as an infrastructure outcome and admitted as an ordinary ingress.
 
+Descriptor-backed delivery admits ordinary ingress only for the current active
+Task epoch. Its bounded recovery classifier reads the same immutable cancellation
+request boundary as lifecycle admission, so an already cancelling epoch settles
+its detached delivery without requesting another Orchestrator input. Exact worker
+outcomes remain durable; cancellation convergence continues through its dedicated
+Task-control source. A Session-only abort on an active Task still follows the
+normal failure-delivery contract.
+
+Typed execution cancellation retains its exact identity and provenance across
+projected adapter error boundaries; ordinary execution failures retain adapter
+context through their error cause.
+
 A preparation failure before worker acceptance is a final dispatch settlement.
 Its settlement retains the lineage's reserved Session identity, while the
 infrastructure outcome omits `session_id` because that attempt accepted no worker.

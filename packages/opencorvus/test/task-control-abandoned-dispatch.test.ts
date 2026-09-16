@@ -1699,7 +1699,7 @@ describe("abandoned dispatch recovery", () => {
             { stage: "execution-occurrences", rowCount: 1 },
           ],
           occurrenceFacts: [
-            { taskID, executionEpoch: 1, currentEpoch: 258, terminal: 1, deleted: 0 },
+            { taskID, executionEpoch: 1, currentEpoch: 258, terminal: 1, boundaryRequested: 0, deleted: 0 },
           ],
           taskLocalDue: 0,
           projectDue: false,
