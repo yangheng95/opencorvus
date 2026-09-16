@@ -56,6 +56,8 @@ export namespace ProcessSupervisor {
     taskCancellationRole?: TaskCancellationRole
     signal?: AbortSignal
     deadlineAt?: number
+    /** Foreground commands reclaim their owned descendants when the root command exits. */
+    terminateChildrenOnRootExit?: boolean
   }
 
   export interface CommandSpawnOptions {
@@ -71,6 +73,7 @@ export namespace ProcessSupervisor {
     deadlineAt?: number
     /** Launch a replacement process outside the current supervisor's native cleanup job. */
     detached?: boolean
+    terminateChildrenOnRootExit?: boolean
   }
 
   export type TaskProcessIdentity = Readonly<{ taskID: string; cwd: string }>
@@ -642,6 +645,7 @@ export namespace ProcessSupervisor {
   type DurableWindowsRequest = {
     kind: "shell" | "command"
     detached?: boolean
+    terminate_children_on_root_exit?: boolean
     request_id: string
     ready_file: string
     launch_failed_file: string
@@ -669,12 +673,16 @@ export namespace ProcessSupervisor {
       "request_id",
       "runtime_occurrence_id",
       "settled_file",
+      ...(Object.hasOwn(request, "terminate_children_on_root_exit") ? ["terminate_children_on_root_exit"] : []),
       ...(kind === "shell" ? ["command", "shell"] : kind === "command" ? ["args", "detached", "executable"] : []),
     ].filter((key) => key !== "cwd" || Object.hasOwn(request, "cwd"))
     const keys = Object.keys(request).sort()
     required.sort()
     if (kind !== "shell" && kind !== "command") {
       throw new Error(`Windows supervisor request has unsupported kind: ${requestDir}`)
+    }
+    if (Object.hasOwn(request, "terminate_children_on_root_exit") && typeof request.terminate_children_on_root_exit !== "boolean") {
+      throw new Error(`Windows supervisor request has invalid foreground lifetime: ${requestDir}`)
     }
     if (keys.length !== required.length || keys.some((key, index) => key !== required[index])) {
       throw new Error(`Windows supervisor request has unexpected fields: ${requestDir}`)
@@ -978,6 +986,7 @@ process.stdin.resume()
       taskCancellationRole: opts.taskCancellationRole,
       signal: opts.signal,
       deadlineAt: opts.deadlineAt,
+      terminateChildrenOnRootExit: opts.terminateChildrenOnRootExit,
     }
   }
 
@@ -1022,6 +1031,7 @@ process.stdin.resume()
       })
       return await initializedChildHandle(proc, `Detached command process '${opts.executable}'`, {
         cleanupProcessGroup: false,
+        terminateChildrenOnRootExit: opts.terminateChildrenOnRootExit,
         gracefulTerminationMs: opts.gracefulTerminationMs,
       })
     }
@@ -1364,7 +1374,7 @@ process.stdin.resume()
   async function initializedChildHandle(
     proc: ChildProcess,
     label: string,
-    opts: { cleanupProcessGroup: boolean; gracefulTerminationMs?: number },
+    opts: { cleanupProcessGroup: boolean; gracefulTerminationMs?: number; terminateChildrenOnRootExit?: boolean },
   ): Promise<Handle> {
     if (!proc.pid) throw await childSpawnFailure(proc, label)
     return childHandle(proc, opts)
@@ -1380,6 +1390,7 @@ process.stdin.resume()
     })
     return await initializedChildHandle(proc, `Shell process '${opts.command}'`, {
       cleanupProcessGroup: true,
+      terminateChildrenOnRootExit: opts.terminateChildrenOnRootExit,
       gracefulTerminationMs: opts.gracefulTerminationMs,
     })
   }
@@ -1394,6 +1405,7 @@ process.stdin.resume()
     })
     return await initializedChildHandle(proc, `Command process '${opts.executable}'`, {
       cleanupProcessGroup: true,
+      terminateChildrenOnRootExit: opts.terminateChildrenOnRootExit,
       gracefulTerminationMs: opts.gracefulTerminationMs,
     })
   }
@@ -1406,6 +1418,7 @@ process.stdin.resume()
       signal: opts.signal,
       request: (readyPath, requestID) => ({
         kind: "shell",
+        ...(opts.terminateChildrenOnRootExit ? { terminate_children_on_root_exit: true } : {}),
         command: opts.command,
         shell: opts.shell,
         cwd: opts.cwd,
@@ -1425,6 +1438,7 @@ process.stdin.resume()
       signal: opts.signal,
       request: (readyPath, requestID) => ({
         kind: "command",
+        ...(opts.terminateChildrenOnRootExit ? { terminate_children_on_root_exit: true } : {}),
         executable,
         args: opts.args,
         detached: opts.detached ?? false,
@@ -1461,6 +1475,7 @@ process.stdin.resume()
     const settledPath = path.join(requestDir, "settled.json")
     const requestID = randomUUID()
     const runtimeOwner = currentRuntimeProcessOccurrence()
+    let terminateChildrenOnRootExit = false
     try {
       const request = {
         ...opts.request(readyPath, requestID),
@@ -1471,6 +1486,7 @@ process.stdin.resume()
         owner_process_instance_id: runtimeOwner.processInstanceID,
         runtime_occurrence_id: runtimeOwner.occurrenceID,
       }
+      terminateChildrenOnRootExit = (request as Record<string, unknown>).terminate_children_on_root_exit === true
       windowsRequestObserver?.(request)
       await fs.writeFile(requestPath, JSON.stringify(request), "utf8")
     } catch (error) {
@@ -1637,6 +1653,7 @@ process.stdin.resume()
         startupDetails,
         outputFailures: () => outputFailures,
         signal: opts.signal,
+        terminateChildrenOnRootExit,
       })
       readyTargetPID = pid
     } catch (error) {
@@ -1782,7 +1799,7 @@ process.stdin.resume()
 
   function childHandle(
     proc: ChildProcess,
-    opts: { cleanupProcessGroup: boolean; gracefulTerminationMs?: number },
+    opts: { cleanupProcessGroup: boolean; gracefulTerminationMs?: number; terminateChildrenOnRootExit?: boolean },
   ): Handle {
     if (!proc.pid) throw new Error("Process supervisor child has no pid")
     let disposal: Promise<void> | undefined
@@ -1798,7 +1815,10 @@ process.stdin.resume()
         controlFailures.push(error)
       })
     })
-    const exited = terminalFact.then(({ exitCode, signal }) => exitCode ?? (signal ? 1 : 0))
+    const exited = terminalFact.then(async ({ exitCode, signal }) => {
+      if (opts.terminateChildrenOnRootExit) await terminate()
+      return exitCode ?? (signal ? 1 : 0)
+    })
     const outputSettled = new Promise<void>((resolve, reject) => {
       proc.once("close", () => {
         if (controlFailures.length === 1) reject(controlFailures[0])
@@ -1983,6 +2003,7 @@ process.stdin.resume()
     helper_pid: number
     target_pid: number
     target_process_instance_id: string
+    terminate_children_on_root_exit?: boolean
     runtime_occurrence_id: string
   }
 
@@ -2105,11 +2126,15 @@ process.stdin.resume()
       "runtime_occurrence_id",
       "target_pid",
       "target_process_instance_id",
+      ...(Object.hasOwn(marker, "terminate_children_on_root_exit") ? ["terminate_children_on_root_exit"] : []),
     ]
     if (keys.length !== expectedKeys.length || keys.some((key, index) => key !== expectedKeys[index])) {
       throw new Error("Windows process supervisor ready marker has unexpected fields")
     }
     if (marker.protocol !== 2) throw new Error("Windows process supervisor ready marker has invalid protocol")
+    if (Object.hasOwn(marker, "terminate_children_on_root_exit") && typeof marker.terminate_children_on_root_exit !== "boolean") {
+      throw new Error("Windows process supervisor ready marker has invalid foreground capability")
+    }
     if (marker.request_id !== input.requestID) {
       throw new Error("Windows process supervisor ready marker request identity does not match")
     }
@@ -2186,6 +2211,7 @@ process.stdin.resume()
     startupDetails: () => string
     outputFailures: () => readonly Error[]
     signal?: AbortSignal
+    terminateChildrenOnRootExit: boolean
   }): Promise<number> {
     const startupIdentity = `request_id=${input.requestID} helper_pid=${input.helperPID} helper_path=${input.helperPath} ready_path=${input.readyPath}`
     let exitCode: number | undefined
@@ -2203,12 +2229,16 @@ process.stdin.resume()
     const readReadyMarker = async () => {
       try {
         const text = await fs.readFile(input.readyPath, "utf8")
-        return parseWindowsReadyMarker({
+        const marker = parseWindowsReadyMarker({
           text,
           requestID: input.requestID,
           runtimeOccurrenceID: input.runtimeOccurrenceID,
           helperPID: input.helperPID,
         })
+        if ((marker.terminate_children_on_root_exit === true) !== input.terminateChildrenOnRootExit) {
+          throw new Error("Windows process supervisor did not acknowledge the requested foreground capability")
+        }
+        return marker
       } catch (error) {
         if (errorCode(error) === "ENOENT") return undefined
         throw error

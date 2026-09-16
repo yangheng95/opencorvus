@@ -131,6 +131,7 @@ const [
   { EngineTaskTable },
   {
     missionTaskDuplexFinalEvidenceState,
+    missionTaskDuplexCompletionExecution,
     missionTaskDuplexActivityKey,
     observeMissionTaskDuplexActivity,
     projectMissionTaskDuplexControlStateInTransaction,
@@ -272,10 +273,6 @@ while (Date.now() < activityDeadline.deadlineMs) {
       artifacts,
       usage,
       sessions,
-      missionExecution: {
-        inputMessageID: SessionStatus.executionOccurrence(mission.sessionID)?.inputMessageID,
-        status: SessionStatus.get(mission.sessionID),
-      },
       toolHealth: missionTaskDuplexToolHealth(toolParts),
     }
   })
@@ -647,7 +644,8 @@ while (Date.now() < activityDeadline.deadlineMs) {
               : {}),
           }
         }),
-        execution: snapshot.missionExecution,
+        execution: missionTaskDuplexCompletionExecution(mission.sessionID,
+          completionMessageData?.role === "assistant" ? completionMessageData.parentID : undefined),
         nonce,
         artifacts: snapshot.artifacts.map((artifact) => {
           const message = snapshot.messages.find((candidate) => candidate.id === artifact.message_id)

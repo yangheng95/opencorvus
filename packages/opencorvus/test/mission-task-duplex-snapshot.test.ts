@@ -6,8 +6,9 @@ import { Instance } from "@/project/instance"
 import { ProtocolDeliveryReceiptTable, ProtocolInboxTable } from "@/protocol/protocol.sql"
 import { ProtocolStore } from "@/protocol/store"
 import { Session } from "@/session"
+import { ensureMissionSession } from "@/mission/session"
 import { Message } from "@/session/message"
-import { SessionStatus } from "@/session/status"
+import { SessionStatus, executionLifecycleOrderKey } from "@/session/status"
 import {
   MessageTable,
   PartTable,
@@ -18,6 +19,7 @@ import {
 import { Database } from "@/storage/db"
 import {
   missionTaskDuplexFinalEvidenceState,
+  missionTaskDuplexCompletionExecution,
   missionTaskDuplexActivityKey,
   missionTaskDuplexProgressKey,
   missionTaskDuplexToolHealth,
@@ -35,6 +37,29 @@ afterEach(async () => {
 })
 
 describe("Mission Task duplex snapshot", () => {
+  test("completion reads its exact persisted occurrence after a later input begins", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const session = await ensureMissionSession({ missionID: "historical-completion", defaultCwd: project.path,
+        productPillar: "work", heldExpertSquadIDs: ["base"] })
+      const now = Date.now()
+      const inputs = []
+      for (const [index, status] of [{ type: "idle" }, { type: "streaming" }].entries()) {
+        const input = await Session.updateMessage({ id: Identifier.ascending("message"), sessionID: session.id,
+          role: "user", author: "user", time: { created: now + index }, agent: "mission",
+          model: { providerID: "openai", modelID: "gpt-5.6-luna" } })
+        inputs.push(input.id)
+        await ProtocolStore.appendEvent({ kind: "event", type: "agent.execution.lifecycle", aggregate: "session",
+          aggregate_id: session.id, source: "test.duplex", emitted_at: now + index,
+          order_key: executionLifecycleOrderKey(session.id, input.id), payload: { inputMessageID: input.id, status } })
+      }
+      expect(inputs.map((id) => missionTaskDuplexCompletionExecution(session.id, id))).toEqual([
+        { inputMessageID: inputs[0], status: { type: "idle" } },
+        { inputMessageID: inputs[1], status: { type: "streaming" } },
+      ])
+    } })
+  })
+
   test("accepts one causal terminal reconciliation per Task and reports repeated-read trajectory mismatch", () => {
     const part = (tool: string, input: Record<string, unknown>, start: number, output = "{}") => ({
       id: `${tool}:${start}`, sessionID: "mission", tool, state: { status: "completed", input, output, time: { start, end: start + 1 } },

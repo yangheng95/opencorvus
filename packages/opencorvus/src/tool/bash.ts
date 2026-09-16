@@ -383,7 +383,7 @@ export const BashTool = Tool.define("bash", async () => {
         childEnv,
       })
       log.info("spawning shell", spawnDiagnostics)
-      const processOptions = { command: localEnvironment.command, shell, env: childEnv }
+      const processOptions = { command: localEnvironment.command, shell, env: childEnv, terminateChildrenOnRootExit: !params.background }
       const executionAuthority = Tool.requireExecutionAuthority(ctx)
       const supervisor = await (executionAuthority.kind === "task"
         ? ProcessSupervisor.spawnTaskShell({ taskID: executionAuthority.taskID, cwd }, processOptions)

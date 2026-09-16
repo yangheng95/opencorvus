@@ -82,6 +82,14 @@ use `ProcessSupervisor`'s durable occurrence/helper identity fence. A detached B
 that ownership explicitly and unrefs only after successful spawn. PTY, Execution Capsule and process-occurrence probes
 remain below this facade as platform adapters; they are not an alternate public command capability.
 
+Foreground shell owners explicitly set `terminateChildrenOnRootExit`. Once the root command exits, its supervised
+descendants are reclaimed before the exact physical settlement receipt is published, retaining the root exit code.
+This prevents foreground cleanup from waiting on a descendant that cleanup itself must stop. Background launchers
+and other owned-tree services retain their full-tree lifetime. The single native request codec defaults to owned-tree
+when its optional foreground Boolean is absent; a present value must be Boolean. Foreground shell and command writers,
+including gated shell admission, emit true and require its explicit acknowledgement in the exact ready marker.
+Ordinary/background requests retain their canonical fields and remain eligible for exact-occurrence recovery.
+
 `public-package-release.ts` is the sole util → SDK → Plugin release orchestrator. It builds and stages each package,
 removes workspace-only export conditions, resolves `workspace:`/`catalog:` versions, inspects each packed manifest, and
 publishes only those exact archives in dependency order. Its Windows helper is built from the locked Cargo graph. Both

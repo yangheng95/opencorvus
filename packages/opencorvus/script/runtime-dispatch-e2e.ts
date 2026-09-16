@@ -19,7 +19,7 @@ const scenarioText = process.env.RUNTIME_DISPATCH_E2E_SCENARIO
   ? await fs.readFile(path.resolve(process.env.RUNTIME_DISPATCH_E2E_SCENARIO), "utf8") : undefined
 const scenario = RuntimeE2EScenarioSchema.parse(scenarioText ? JSON.parse(scenarioText) : {
   caseID: "advanced-web-intake", title: "Advanced local bookshop delivery acceptance", promptProfile: "advanced",
-  request: "帮我创建一个图书销售电商网页，使用虚构图书和价格，仅在当前项目生成本地演示，不进行真实交易、注册账号或对外发布。完成实现后请验证页面和交互并交付可打开的结果。",
+  request: "帮我创建一个图书销售电商网页，使用虚构图书和价格，仅在当前项目生成本地演示，不进行真实交易、注册账号或对外发布。完成实现后请验证页面和交互并交付可打开的结果。只验收桌面端，使用真实浏览器交互、截图和视觉复核；不要编写或运行任何UI自动化测试，不需要额外的移动端验收。",
 })
 const model = "openai/gpt-5.6-luna"
 const modelID = "gpt-5.6-luna"

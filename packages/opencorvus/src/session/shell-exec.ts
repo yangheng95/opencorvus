@@ -509,6 +509,7 @@ export namespace SessionShell {
         const commandEnvironment = { ...process.env, ...shellEnv.env, ...localEnvironment.variables }
         const processOptions = {
           command: supervisedCommand,
+          terminateChildrenOnRootExit: true,
           shell: shellBin,
           owner: `session-shell:${input.sessionID}:${msg.id}`,
           env: sanitizeShellEnvironment(process.env, {
