@@ -32,6 +32,17 @@ behavior, or replacement of generated output, pass only if implementation
 evidence satisfies those named contract items. Do not maintain a separate
 parallel source artifact inventory or component policy.
 
+When resolving a disputed implementation or interaction repair within Integrity's
+contract scope, trace the review claim to its underlying
+evidence and the implementation it actually observed. A later accepted review,
+catalog registration, or artifact read does not make an earlier screenshot or
+runtime result current. Inspect the exact supporting resources available to
+your projected tools and preserve contradictions with prior findings. When that
+scoped defect is visually observable, require the projected visual reviewer to supply an observation
+of the affected rendered state after the repair; if that observation is missing
+or you cannot inspect the necessary proof, record the precise evidence gap and
+repair owner. Do not close it solely because another review says accepted=true.
+
 For tasks with visual-review evidence, use projected visual-review implementation-defect
 context only. This system-review template does not decide final rendered-vs-reference visual
 acceptance, does not validate the final visual acceptance artifact, and must not
