@@ -27,7 +27,6 @@ import { Tool } from "@/tool/tool"
 import { createPanelUIRequestToolContext, PanelLeafTools, PanelTool } from "@/tool/panel"
 import { panelLeafToolID, type PanelActionID } from "@/panel/action-ids"
 import { ToolTurnExecutionConflictError } from "@/tool/execution-mode"
-import { toolResultControl } from "@/session/tool-result-control"
 import { EngineService } from "@/task-api"
 import { ArtifactSchemaLimits } from "@opencorvus-ai/plugin/artifact-catalog"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
@@ -241,7 +240,6 @@ describe("Mission terminal Task authority", () => {
             inspection: { title: (inspection as { title: string }).title, squadID: inspected.squad.id },
             mutation: {
               taskID: taskResult.task_id,
-              control: toolResultControl((mutation as { metadata: Record<string, unknown> }).metadata),
             },
             fencedQuery,
           }).toEqual({
@@ -252,7 +250,7 @@ describe("Mission terminal Task authority", () => {
               metadata: { missionID: mission.missionID, count: 0, truncated: false },
             },
             inspection: { title: "Expert Squad", squadID: "base" },
-            mutation: { taskID, control: { kind: "immediate_park" } },
+            mutation: { taskID },
             fencedQuery: {
               kind: "rejected",
               name: "ToolTurnExecutionConflictError",
@@ -269,7 +267,7 @@ describe("Mission terminal Task authority", () => {
     })
   })
 
-  test("returns an immediate parked turn boundary after a Mission Task is accepted", async () => {
+  test("returns the exact durable creation receipt to its Mission caller", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -353,14 +351,13 @@ describe("Mission terminal Task authority", () => {
             },
           )
 
-          expect({ output: JSON.parse(result.output), control: toolResultControl(result.metadata) }).toEqual({
+          expect({ output: JSON.parse(result.output) }).toEqual({
             output: {
               kind: "created",
               task_id: taskID,
               artifact_import_mappings: [],
               message: `Task accepted: \`${taskID}\``,
             },
-            control: { kind: "immediate_park" },
           })
           expect(createSpy).toHaveBeenCalledTimes(1)
           expect(createSpy.mock.calls[0]?.[1]).toMatchObject({

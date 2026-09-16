@@ -14,5 +14,5 @@
       "@squads/*": ["../../expert-squads/builtin/*"]
     }
   },
-  "exclude": ["script/**/*", "test/**/*", "src/skill/builtin/**/*"]
+  "exclude": ["script/**/*", "test/**/*", "src/skill/builtin/**/*", "dist/**/*"]
 }

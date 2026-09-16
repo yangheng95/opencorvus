@@ -50,7 +50,6 @@ import { MulticaExpertSquadImport } from "@/expert-squad/multica-import"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Instance } from "@/project/instance"
 import { AttachmentStore } from "@/storage/attachment-store"
-import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
 import { assertPublicSessionOperationAuthority } from "@/mission/public-session-authority"
 import { Identifier } from "@/id/id"
 import { Database, NotFoundError, and, eq, sql } from "@/storage/db"
@@ -683,7 +682,6 @@ type RecoveredPanelCreationResult = {
 function recoveredUnavailablePanelCreationResult(input: {
   operation: "create_task" | "wake_mission" | "wake_work"
   targetID: string
-  callerKind?: Session.Info["kind"]
 }): RecoveredPanelCreationResult {
   return {
     title: "Accepted target unavailable",
@@ -693,10 +691,7 @@ function recoveredUnavailablePanelCreationResult(input: {
       target_id: input.targetID,
       message: `The accepted ${input.operation} target ${input.targetID} is no longer available.`,
     }),
-    metadata:
-      input.operation === "create_task" && input.callerKind === "mission"
-        ? withImmediateParkToolResultControl({ truncated: false })
-        : { truncated: false },
+    metadata: { truncated: false },
   }
 }
 
@@ -758,15 +753,12 @@ export async function recoverPanelCreationToolPart(input: {
       taskID = taskIDForCreatorToolPart(input.part.id)
     } catch (error) {
       if (!TaskCreationAcceptedTargetUnavailableError.isInstance(error)) throw error
-      const caller = await Session.get(input.sessionID)
       return recoveredUnavailablePanelCreationResult({
         operation: "create_task",
         targetID: error.data.taskID,
-        callerKind: caller.kind,
       })
     }
     if (!taskID) return undefined
-    const caller = await Session.get(input.sessionID)
     return {
       title: "Task created",
       output: JSON.stringify({
@@ -775,8 +767,7 @@ export async function recoverPanelCreationToolPart(input: {
         artifact_import_mappings: EngineService.getCrossTaskArtifactImportMappings(taskID),
         message: `Task accepted: \`${taskID}\``,
       }),
-      metadata:
-        caller.kind === "mission" ? withImmediateParkToolResultControl({ truncated: false }) : { truncated: false },
+      metadata: { truncated: false },
     }
   }
   const callerSession = await Session.get(input.sessionID)
@@ -1602,7 +1593,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
             artifact_import_mappings: EngineService.getCrossTaskArtifactImportMappings(taskID),
             message: `Task accepted: \`${taskID}\``,
           }),
-          metadata: actor === "mission" ? withImmediateParkToolResultControl({}) : {},
+          metadata: {},
         }
       }
       case "wake_mission": {

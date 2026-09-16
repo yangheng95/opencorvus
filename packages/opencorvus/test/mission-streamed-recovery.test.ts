@@ -300,6 +300,7 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
             for (const p of m.parts)
               if (p.type === "tool" && p.state.status === "error") failures.push(JSON.stringify(p.state))
           if (failures.length) throw new Error(failures.join("\n"))
+          taskID ||= outputs("panel_create_task").at(-1)?.task_id ?? ""
           const step = missionStep++
           if (step > 0 && taskID && taskLifecycleProjection(taskID).status === "active") {
             missionStep--
@@ -320,7 +321,6 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
                 "Publish one durable operation receipt, preserve it across disconnection, and independently verify final delivery.",
               promptProfile: "base",
             })
-          taskID ||= outputs("panel_create_task").at(-1)?.task_id ?? ""
           if (!taskID)
             throw new Error(`Created Task identity unavailable: ${JSON.stringify(outputs("panel_create_task"))}`)
           if (step === 1 || step === 5) return call("panel_query_task", { taskIDs: [taskID] })
@@ -486,6 +486,13 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
           readProjection(`/task/${taskID}/transcript`),
         ])
         const missionRecord = missionRecords.find((item: any) => item.missionID === mission.missionID)
+        const creationMessage = missionTranscript.find((message: any) => message.parts.some((part: any) =>
+          part.type === "tool" && part.tool === "panel_create_task" && part.state.status === "completed"))
+        const postCreationReply = missionTranscript.find((message: any) => message.info.role === "assistant" &&
+          message.info.parentID === creationMessage?.info.parentID && message.info.finish === "stop" &&
+          message.parts.some((part: any) => part.type === "text" && part.text.startsWith("The Task is still running;")))
+        expect(postCreationReply?.info).toMatchObject({ role: "assistant", parentID: creationMessage.info.parentID,
+          time: { completed: expect.any(Number) }, finish: "stop" })
         expect(
           auditMissionOutcome({
             missionRecord,

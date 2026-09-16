@@ -79,7 +79,7 @@ const nonGatewaySharedSurfaces = SharedChannelSurface.options.filter((surface) =
 const AgentTaskCheckConfig = CheckConfig.omit({ named: true })
   .strict()
   .describe(
-    "Executable Host verification configuration. Workflow IDs, phase names, sequencing, planning metadata, and evidence do not belong here; keep those as authored intent in request.",
+    "Executable Host verification configuration. Workflow IDs, phase names, sequencing, planning metadata, and evidence do not belong here.",
   )
 
 type Shape = z.ZodRawShape
