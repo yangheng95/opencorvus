@@ -18,6 +18,7 @@ import {
   assertProjectedWorkerContinuationCompatible,
   sameProjectedWorkerIdentity,
 } from "@/agent/projected-worker-identity"
+import { requirePromptAttachments } from "@/agent/prompt-projection"
 import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { Bus } from "@/bus"
@@ -2682,6 +2683,9 @@ export function createOrchestratorTools(input: {
         adapterInput: exactAdapterInput,
       })
       const task = await assertTaskRootSessionLineageForConfig(requireTask(ownershipTaskID))
+      if (Object.hasOwn(exactAdapterInput, "attachment_refs")) {
+        requirePromptAttachments(task.attachments ?? undefined, z.array(z.string().min(1)).parse(exactAdapterInput.attachment_refs))
+      }
       const authority = await taskAuthorityAnchor({ task, existingSessionID })
       const selectedEvidence = [
         ...new Map(

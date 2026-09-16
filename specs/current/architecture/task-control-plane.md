@@ -394,6 +394,8 @@ Typed execution cancellation retains its exact identity and provenance across
 projected adapter error boundaries; ordinary execution failures retain adapter
 context through their error cause.
 
+Initial and continuation dispatch preparation validate every explicit `attachment_refs` selection against that Task's canonical attachment URLs or SHA-256 references before claiming a new immutable lineage. The shared selector raises `PromptAttachmentReferenceError` for missing references; participant Message and Artifact identities are never reinterpreted as attachments. A corrected initial Tool call can therefore claim the workflow occurrence with valid input. Exact settled replay retains its original receipt; already committed invalid historical inputs are not rewritten. Integrity fact projection uses the same strict selection primitive.
+
 A preparation failure before worker acceptance is a final dispatch settlement.
 Its settlement retains the lineage's reserved Session identity, while the
 infrastructure outcome omits `session_id` because that attempt accepted no worker.
