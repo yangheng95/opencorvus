@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import path from "node:path"
 import { z } from "zod"
+import { DispatchAdapterContractRegistry } from "../src/agent/dispatch-adapter-contract"
 import type { DispatchSettlementPayload } from "../src/engine/dispatch-settlement"
 
 export const RuntimeE2EScenarioSchema = z.object({
@@ -28,4 +29,17 @@ export function scenarioFixturePath(project: string, relative: string): string {
   const scoped = path.relative(project, target)
   assert(scoped && !scoped.startsWith("..") && !path.isAbsolute(scoped), "Scenario fixture must stay inside its isolated project")
   return target
+}
+
+/** Execution inventory only; domain artifacts, visual inspection and release acceptance are separate. */
+export function runtimeAdapterCoverage(observations: ReadonlyArray<{ adapterID: string; outcomeKind?: string }>) {
+  for (const observation of observations) {
+    assert(DispatchAdapterContractRegistry.isID(observation.adapterID), `Unknown dispatch adapter ${observation.adapterID}`)
+  }
+  return DispatchAdapterContractRegistry.ids.map((adapterID) => {
+    const matching = observations.filter((item) => item.adapterID === adapterID)
+    const status = matching.some((item) => item.outcomeKind === "terminal_success")
+      ? "terminal_success" : matching.length ? "observed_without_success" : "not_observed"
+    return { adapterID, status }
+  })
 }

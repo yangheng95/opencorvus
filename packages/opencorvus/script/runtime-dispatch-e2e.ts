@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { RuntimeE2EScenarioSchema, scenarioFixturePath, runtimeDispatchSettlementFailures } from "./runtime-e2e-scenario"
+import { RuntimeE2EScenarioSchema, scenarioFixturePath, runtimeDispatchSettlementFailures, runtimeAdapterCoverage } from "./runtime-e2e-scenario"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { createHash } from "node:crypto"
@@ -19,6 +19,7 @@ const scenarioText = process.env.RUNTIME_DISPATCH_E2E_SCENARIO
   ? await fs.readFile(path.resolve(process.env.RUNTIME_DISPATCH_E2E_SCENARIO), "utf8") : undefined
 const scenario = RuntimeE2EScenarioSchema.parse(scenarioText ? JSON.parse(scenarioText) : {
   caseID: "advanced-web-intake", title: "Advanced local bookshop delivery acceptance", promptProfile: "advanced",
+  requiredAdapters: ["delegated_worker", "analyze_intent", "requirements", "architect", "frontend_design", "workload_analysis", "build", "visual_qa"],
   request: "帮我创建一个图书销售电商网页，使用虚构图书和价格，仅在当前项目生成本地演示，不进行真实交易、注册账号或对外发布。完成实现后请验证页面和交互并交付可打开的结果。只验收桌面端，使用真实浏览器交互、截图和视觉复核；不要编写或运行任何UI自动化测试，不需要额外的移动端验收。",
 })
 const model = "openai/gpt-5.6-luna"
@@ -221,7 +222,15 @@ try {
       }
       const adapters = [...new Set(facts.descriptors.map((row) => parsed(row).identity.dispatchAdapterID))]
       result.adapterEvidence = adapters
-      for (const expected of scenario.requiredAdapters) assert(adapters.includes(expected), `Required adapter ${expected} must have a real persisted worker descriptor`)
+      const adapterCoverage = runtimeAdapterCoverage(facts.descriptors.map((row) => ({
+        adapterID: parsed(row).identity.dispatchAdapterID,
+        outcomeKind: settled.find((item) => item.descriptorID === row.id)?.kind,
+      })))
+      result.adapterCoverage = adapterCoverage
+      for (const expected of scenario.requiredAdapters) {
+        assert(adapterCoverage.some((row) => row.adapterID === expected && row.status === "terminal_success"),
+          `Required adapter ${expected} must have an exact descriptor and verified terminal_success settlement`)
+      }
       result.workerEvidence = settled
       result.artifactInventory = facts.artifacts.map((row) => ({ id: row.id, kind: row.kind }))
       result.acceptance = { dispatch: "passed", workerSettlement: settled.length === children.length ? "passed" : "pending_coordination_review", delivery: "pending", artifacts: "pending", visual: "pending", nativePackage: "not_run" }

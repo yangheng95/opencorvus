@@ -402,7 +402,11 @@ describe("SessionLoop Tool execution authority integration", () => {
           state: {
             status: "completed",
             input: { agent: "base-developer" },
-            output: "dispatched",
+            output: JSON.stringify({
+              kind: "accepted",
+              session_id: Identifier.ascending("session"),
+              dispatch_lineage_id: Identifier.ascending("artifact"),
+            }),
             title: "Accepted dispatch",
             metadata: {},
             time: { start: Date.now(), end: Date.now() + 1 },
