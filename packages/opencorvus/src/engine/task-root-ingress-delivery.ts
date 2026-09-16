@@ -672,8 +672,8 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
         })
       }
       if (outcome?.data.outcome !== "completed" || !isOrchestratorDecisionToolName(part.tool)) continue
-      const effect = orchestratorDecisionToolCompletionEffect({ tool: part.tool, stateInput: part.state.input })
-      if (effect === "satisfies_current_epoch" || effect === "inspect_dispatch_outcome") {
+      const effect = orchestratorDecisionToolCompletionEffect({ tool: part.tool, stateInput: part.state.input, stateOutput: part.state.status === "completed" ? part.state.output : undefined })
+      if (effect === "satisfies_current_epoch") {
         decisions.push({ id: part.id, assistantMessageID: assistant.id, command: part.tool })
       }
     }

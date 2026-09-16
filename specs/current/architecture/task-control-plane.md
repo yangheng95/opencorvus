@@ -123,6 +123,16 @@ There is no persisted ingress disposition, delivery result, semantic attempt, ac
 
 ## Decision-gap continuation
 
+A completed Tool transport receipt is not sufficient dispatch acceptance. The live
+decision coordinator, reopened assistant Message reader and ingress reducer use
+the same typed output contract. An `infrastructure_failure` requires a subsequent
+model decision. A collection contributes its dispatch decision when at least one
+member has a valid non-infrastructure outcome; an all-failed collection requires
+follow-up. In-flight reservations still serialize incompatible decisions and
+preserve independently accepted siblings. A malformed completed receipt is a
+contract error. The shared projected Tool boundary propagates the provider-visible
+Tool name so adapter validation checks the real persisted outer invocation.
+
 Session Message causality is allocated by the Session persistence boundary, not by caller wall-clock order. A new Message obtains SQLite's writer reservation before reading its exact Session frontier and persists `time.created = max(requested_created, latest_session_created + 1)`; existing Message creation time remains immutable. Moving a real Task-root participant Message into its Orchestrator Session obtains the same writer reservation before allocating that target Session's next frontier. Message events, timeline order keys and child Parts use the persisted frontier, and a Part cannot precede its parent Message. The frontier is scoped to one Session, so concurrent projects and Sessions do not share a global sequence.
 
 A fresh typed Task occurrence requires both the real task-creator Message and its deterministic Orchestrator control Message. The Session prompt writer prepares them under one runtime-contract write claim and commits both bundles in one immediate transaction before arming the runtime wake. Observers therefore see either the complete creator/control cut or neither participant; replay validates the existing deterministic control identity and never synthesizes or reorders a Message after visibility.

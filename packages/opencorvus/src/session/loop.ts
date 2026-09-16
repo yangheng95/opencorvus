@@ -392,6 +392,7 @@ export namespace SessionLoop {
           const decision = declaration
             ? {
                 command: declaration.command,
+                ...(declaration.completionCommits ? { completionCommits: (result: unknown) => declaration.completionCommits!(args, result) } : {}),
                 // A declaration that cannot classify its own input is not a
                 // committed decision; the call will fail on its own terms.
                 commits: (() => {
@@ -5696,6 +5697,7 @@ export namespace SessionLoop {
               ...(options && typeof options === "object" ? (options as Record<string, unknown>) : {}),
               opencorvus: {
                 ...invocationIdentity,
+                visibleToolName: name,
                 invocationAuthority,
               },
             }),

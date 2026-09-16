@@ -1,6 +1,7 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
 import { MockLanguageModelV3, simulateReadableStream } from "ai/test"
 import { capabilityRef } from "@opencorvus-ai/util/capability-ref"
+import { IntentAnalysisAgent } from "@/intent-analysis/agent"
 import { Auth } from "@/auth"
 import { Bus } from "@/bus"
 import { Config } from "@/config/config"
@@ -64,13 +65,16 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-test("a streamed dispatch decision settles from one Task-root Provider request", async () => {
+for (const scenario of ["base", "advanced", "advanced-preparation-failure"] as const) {
+const preparationFails = scenario === "advanced-preparation-failure"
+const profile = scenario === "base" ? "base" : "advanced"
+test(preparationFails ? "streamed preparation failure permits the next model decision and durable re-read" : `${scenario} streamed dispatch commits a real child descriptor through the visible Tool boundary`, async () => {
   using _durableDrain = Bus.TestHooks.suppressAutomaticDurableDrain()
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
     fn: async () => {
-      await Config.updateProjectPatch({ prompt_profile: { active: "base" } })
+      await Config.updateProjectPatch({ prompt_profile: { active: profile } })
       using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
         runner: async (input) =>
           await Orchestrator.processTask(
@@ -116,17 +120,17 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
                     toolName: "dispatch_agent",
                     input: JSON.stringify({
                       dispatch: {
-                        target: "base-planner",
+                        target: profile === "base" ? "base-planner" : "request-interpreter",
                         work_scope: { kind: "task" },
                         turn: {
                           kind: "initial",
                           workflow_subject: {
                             kind: "virtual_workflow",
-                            workflow_id: "planner-parallel-delivery",
-                            node_id: "base-planner",
+                            workflow_id: profile === "base" ? "planner-parallel-delivery" : "greenfield-interface-delivery",
+                            node_id: profile === "base" ? "base-planner" : "request-interpreter",
                           },
                           use_worktree: false,
-                          input: {
+                          input: profile === "advanced" ? { reason: "Interpret the fictional local webpage request.", attachment_refs: [] } : {
                             goal_ids: [],
                             instruction: "Record one durable streamed dispatch receipt.",
                             reason: "The Task requires its first package-owned workflow occurrence.",
@@ -192,6 +196,9 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
       const gitPrepareSpy = spyOn(EngineGit, "prepare").mockImplementation(async (task) => ({ task }))
       const gitCompleteSpy = spyOn(EngineGit, "complete").mockImplementation(async (task) => ({ task }))
 
+      const preparationSpy = preparationFails
+        ? spyOn(IntentAnalysisAgent, "analyze").mockRejectedValue(new Error("Injected preparation failure before child creation"))
+        : undefined
       try {
         const taskID = await EngineService.createTask(
           {
@@ -200,7 +207,7 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
             request: "Produce one streamed dispatch and durable receipt",
             productPillar: "work",
             model: `${model.providerID}/${model.modelID}`,
-            promptProfile: "base",
+            promptProfile: profile,
           },
           { actor: "user" },
         )
@@ -233,14 +240,31 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
           ingress: taskRootIngressDebugProjection(taskID).map((entry) => entry.projection.state),
         }).toEqual({
           taskError: null,
-          rootProviderRequests: 1,
-          providerFacts: [
-            { id: expect.any(String), messageID: assistantIDs[0] },
-          ],
+          rootProviderRequests: preparationFails ? 2 : 1,
+          providerFacts: Array.from({ length: preparationFails ? 2 : 1 }, () => ({ id: expect.any(String), messageID: assistantIDs[0] })),
           dispatchReceipts: ["completed"],
-          calls: ["dispatch_agent"],
+          calls: preparationFails ? ["dispatch_agent", "no_action"] : ["dispatch_agent"],
           ingress: ["resolved"],
         })
+        const receipt = toolParts.find((part) => part.tool === "dispatch_agent")!
+        if (receipt.state.status !== "completed") throw new Error("Expected completed dispatch receipt")
+        const accepted = JSON.parse(receipt.state.output)
+        if (preparationFails) {
+          expect(accepted).toMatchObject({ kind: "infrastructure_failure", operation: "analyze_intent_adapter", message: "Injected preparation failure before child creation" })
+          expect(orchestratorCommittedDecisionInParts(toolParts)).toBe("no_action")
+          await Database.awaitEffectIdle(30_000)
+          Database.close()
+          Database.Client()
+          const reopened = await MessageStore.get({ sessionID: orchestrator.id, messageID: assistantIDs[0]! })
+          expect({ decision: orchestratorCommittedDecisionInParts(reopened.parts), projection: taskRootIngressDebugProjection(taskID)[0]!.projection.state })
+            .toEqual({ decision: "no_action", projection: "resolved" })
+          return
+        }
+        expect(accepted.kind).toBe("accepted")
+        expect((await Session.get(accepted.session_id)).parentID).toBe(orchestrator.id)
+        expect(WorkerTurnDescriptor.latestForSession(accepted.session_id)?.payload.identity.agentID).toBe(
+          profile === "base" ? "base-planner" : "request-interpreter",
+        )
         releaseWorker()
         for (const child of await Session.children(orchestrator.id)) {
           await SessionPrompt.waitForFinish(child.id, project.path)
@@ -253,6 +277,7 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
           workerProviderRequests: 1,
         })
       } finally {
+        preparationSpy?.mockRestore()
         releaseWorker()
         gitCompleteSpy.mockRestore()
         gitPrepareSpy.mockRestore()
@@ -267,6 +292,7 @@ test("a streamed dispatch decision settles from one Task-root Provider request",
   await Instance.disposeAll()
   await Database.awaitEffectIdle(30_000)
 }, 60_000)
+}
 
 // Fault injection stops only an exact production dispatch admission. Tool
 // declarations, streaming Tool execution, SessionLoop coordination, Tool Part

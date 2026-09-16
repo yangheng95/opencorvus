@@ -176,7 +176,7 @@ import {
 } from "./tool-execution-context"
 import { createVisualQaStageDispatcher } from "./visual-qa-stage"
 import { createWorkloadAnalysisTool } from "./workload-analysis-tool"
-import { ORCHESTRATOR_DECISION_TOOL_NAMES, orchestratorDecisionToolCompletionEffect } from "./decision-tool-names"
+import { ORCHESTRATOR_DECISION_TOOL_NAMES, orchestratorDecisionToolCompletionEffect, orchestratorDecisionToolResultCommits } from "./decision-tool-names"
 import { sameSelectedWorkflowBinding, workflowProjectionFromProjectedAgents } from "@/engine/workflow-binding"
 import {
   currentTaskAcceptanceRepair,
@@ -3014,6 +3014,7 @@ export function createOrchestratorTools(input: {
     // the combination while it is still only a call.
     bindToolDecisionDeclaration(decisionTool as object, {
       command: decisionToolName,
+      completionCommits: (args, result) => orchestratorDecisionToolResultCommits(decisionToolName, args, result),
       commits: (args) => {
         try {
           return (

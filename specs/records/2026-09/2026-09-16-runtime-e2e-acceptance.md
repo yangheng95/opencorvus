@@ -1,0 +1,110 @@
+# Runtime end-to-end acceptance before benchmark
+
+## Recall
+
+- User: "专业一些好吗，先端到端测试，确保所有case覆盖到且能正常工作，否则benchmark就是个大型笑话". Stop treating unit tests, first-run conversation creation or benchmark scores as evidence for untested execution paths. Build an explicit coverage inventory, reproduce failures through real entry points, repair causes and rerun affected cases before the full matrix.
+- User approved isolated use of the configured Provider credentials and openai/gpt-5.6-luna for the first reproduction. No batch cost ceiling was supplied; the full paid matrix remains pending that missing scope. Authorization does not include restarting the user's application, modifying the stalled Task, new public releases or unbounded benchmark batches.
+- Current source89003f8a; only pre-existing untracked script/video/. Existing main worktree remains the authorized delivery source. Read AGENTS.md, benchmark-debug-template SKILL.md, dispatch-preparation-stall record, prior benchmark-runtime-readiness Recall, current Task control architecture, adapter registry and existing real-provider checkers.
+- Known incident: single dispatch loses its visible Tool name before analyze_intent validation; a completed transport result containing infrastructure_failure is counted as a decision; Host stops the Turn; descriptor-less admission is excluded from accepted-worker recovery. No production fix has yet been made.
+- Existing checker findings: mission-e2e explicitly does intake without dispatch and reads an obsolete Part storage shape; dynamic-expert-squad-e2e pins an obsolete package revision and has a total elapsed-time cutoff; existing scripts are not a complete acceptance matrix. Do not run a stale checker or use its failure as product evidence. No UI automated tests will be created or run.
+- Independent feedback: prior read-only review confirmed the incident causal chain; implementation/acceptance review is pending. No additional agent delegation is authorized except the required read-only review.
+
+## Evidence contract and acceptance
+
+Each enumerated case needs a source SHA, scenario/input, executable/runtime identity, isolated runtime root, exact model projection and actual outbound model, Provider-request counts, semantic activity, public API receipts, persistent Task/Mission/Session/Tool/dispatch facts, checker result and cleanup result. Missing data is unknown, never zero. Controlled fault tests, real-model API end-to-end runs, native-package runs and manual UI acceptance are distinct evidence classes.
+
+Timeouts measure180 seconds of meaningful inactivity, including real streaming progress; leases, polling and heartbeat alone do not reset the clock. A separate request-count/spend budget is a resource bound and reports budget_exhausted, not product timeout. First reproduction is capped at16 model requests including preflight. Every call streams. Failures retain database/logs and bounded evidence, while copied credentials are removed after owned runtime cleanup. Credentials and raw auth headers never enter results, logs or Git.
+
+Use the existing isolated-runtime environment, production server startup/recovery, Provider/model resolver and API entry points. The first fixture is a local bookshop demonstration request using Advanced, structurally equivalent to the incident's greenfield website path; no external publication or real purchases. Before submitting it, validate paired auth/model catalog and a minimal real streaming Provider request. Expected success is actual child acceptance, authoritative worker output, correct workflow progression and terminal Task with inspectable deliverables, not an HTTP202 or a lineage row alone. An earlier positive contradiction (resolved root + completed infrastructure failure + absent child) fails immediately with retained evidence.
+
+## Required coverage inventory
+
+Status starts pending; no historical green result fills a current missing case.
+
+| Area | Required cases | Evidence needed |
+|---|---|---|
+| Public intake | fresh Chat, Work/Mission, direct Task; existing project; duplicate request identity | Real API + persisted ownership; manual development UI |
+| Adapters | delegated_worker, requirements, architect, frontend_design, frontend_research, deep_research, visual_qa, workload_analysis, analyze_intent, fact_check, build, explore, integrity | Every current registry ID maps to an executed case; real boundary and explicit output contract |
+| Dispatch | single/collection; serial/fan-out/join; direct/workflow; initial/continuation | Real visible Tool identity, exact child and descriptor, settlement and delivery |
+| Failures | before lineage, after lineage/before child, after child/before descriptor, after acceptance, Provider error/stream interruption, Tool failure, delivery failure | Deterministic injected boundary coverage + real model healthy execution; typed durable result and next action |
+| Lifecycle | success, domain incomplete/blocked, operator question/answer, cancel, late outcome, terminal reopen | Exact occurrences and permitted terminal convergence |
+| Recovery | process interruption at admission/worker/delivery; same/peer restart; duplicate wake; pending permission | Owned process tests with retained facts and normal production recovery |
+| Isolation | concurrent Tasks, Sessions and projects; same IDs from another project rejected by exact authority | Independent roots/identities and positive scoped result/error contracts |
+| Delivery | actual local webpage/artifact, download/open, native binary fresh/restart | Real artifact checker and manual rendered inspection; installation separate from archive checks |
+| Model/cost | credentials + catalog + actual model identity; stream activity; known/unknown cost | No zero substitution; no batch without authorized scope |
+
+The implementation will map these obligations to concrete case IDs/checkers and publish pass/fail/blocked/not-run counts. "All cases" means all entries of this versioned matrix and all current adapter IDs; it is not a claim about every possible user input. New registry or public-entry changes must make a missing case visible.
+
+## Execution sequence
+
+1. Add a focused real-provider public-entry checker, preserve a red baseline before product changes, and validate the checker itself.
+2. Complete the shared identity and pre-acceptance failure audit, then implement the root corrections with positive regression tests.
+3. Repeat the baseline and applicable controlled boundary cases; independently review and repair all valid findings.
+4. Obtain the remaining full-matrix spend bound, execute every concrete case, inspect real pages/artifacts manually, and record gaps as gaps. Do not restart score benchmarks or publish a new binary while required cases remain failed, blocked or not run.
+
+
+## Red baseline and repair boundary (2026-09-16)
+
+- Production-source real Provider run: `opencorvus-test-run-YDolcw/runner-40060-ZHQthJ/dispatch-e2e-tq6W8s/result.json` (Windows local temporary evidence). Chat preflight passed using the canonical `/global/chat/start` path; outgoing model `gpt-5.6-luna`, streaming, HTTP200. Task `tsk_g00VVN1p4G00RLktciUc` failed with exactly the incident's analyze_intent visible Tool identity mismatch, after9 requests including preflight. Copied credentials were removed. Earlier raw-AI preflight attempts were checker defects (HTTP400 store requirement), not product verdicts; the raw path has been removed.
+- Direct trigger: SessionLoop's shared projected Tool wrapper constructs invocation identity without visibleToolName. The adapter validates the durable outer request as its internal adapter name. Collection and recovered coordination callers explicitly propagate the visible name, explaining why their local tests missed the single-dispatch path.
+- Repair1: propagate the actual provider-visible name at the shared wrapper. Positive streamed integration coverage must use Advanced's request-interpreter, not only Base delegated_worker, and inspect accepted child descriptor/worker execution. This is a shared Tool context change across Task/Mission/standalone/projected callers, with no protocol/schema or stored-data migration.
+- Separate unresolved shared issues: completion reduction and execution coordinator currently equate resolved Tool transport with a dispatch decision; descriptor-less write-ahead lineages can be advertised as committed occurrences and continuation then selects an absent Session. Identity repair alone does not prove preparation-failure/restart recovery. These remain mandatory failed/pending matrix cases until independently repaired and checked.
+- Historical tests directly supplied visibleToolName or used delegated_worker, masking the production wrapper omission. Existing tests, docs and delivered package acceptance must be updated to reflect real coverage; no native-package or UI acceptance is claimed from source HTTP runs.
+- Product scope risk: source patch affects every projected Tool context but only adds already-supported provenance. No user process or original Task will be changed. Full matrix paid execution is waiting for a cost bound; controlled regression work can continue.
+
+### Shared decision repair design
+
+All call sites of orchestratorDecisionToolCompletionEffect and ToolDecisionDeclaration were searched. The shared reducer must classify persisted output as well as input; the live coordinator must reserve a potential decision during execution and commit that reservation only when the same output contract confirms it. A completed infrastructure_failure requires follow-up decision; a collection commits when at least one member has an accepted/terminal worker outcome, otherwise it also requires follow-up. Mixed collections retain their real accepted dispatch decision and later worker delivery wakes; failures stay in the visible collection receipt. No automatic business retry or synthetic message is added. Parse the existing DispatchOutcome and collection-member schemas, rather than infer error semantics from wording. Unreadable output is a contract error.
+
+Shared entry review: Task-created and Mission-created roots converge through the same SessionLoop and ingress reduction; native/projected Session Tools share coordination but only declared Orchestrator decisions participate. Reopened assistant Messages seed from the same persisted result function. In-flight parallel admissions retain sibling ownership, exclusive controls keep their existing sealing rules, and project/session ownership validation is unchanged. Focused tests will verify successful admission, failed result followed by a real decision, sibling interleavings, collection outcomes and persisted re-read. Descriptor-less occurrence recovery remains a separate unresolved obligation and is not claimed fixed by this result interpretation change.
+
+## Executable coverage ledger
+
+A controlled pass is never a real-Provider or UI pass. This ledger deliberately keeps the unimplemented checkers visible.
+
+| Case ID | Target | Current evidence |
+|---|---|---|
+| ENTRY-CHAT | global.chat.start -> streamed persisted reply | Real preflight passed in red baseline |
+| ENTRY-TASK | direct Task -> Advanced initial dispatch | Real red baseline failed; corrected-source rerun pending |
+| ENTRY-WORK | global Work/Mission -> Task -> worker | Not run; existing duplex checker needs current validation |
+| ENTRY-REPLAY | duplicate public request identity and existing project | Not run |
+| ADAPTER-delegated_worker | Base planner accepted descriptor and worker final | Controlled streamed test passed; real Provider pending |
+| ADAPTER-analyze_intent | Advanced interpreter accepted descriptor and worker final | Controlled streamed test passed; real Provider rerun pending |
+| ADAPTER-requirements | requirements output Artifact and progression | Not run |
+| ADAPTER-architect | architecture output Artifact and progression | Not run |
+| ADAPTER-frontend_design | design output Artifact and progression | Not run |
+| ADAPTER-frontend_research | research output Artifact and progression | Not run |
+| ADAPTER-deep_research | research output Artifact and progression | Not run |
+| ADAPTER-visual_qa | rendered output and manual visual review | Not run |
+| ADAPTER-workload_analysis | workload Artifact and progression | Not run |
+| ADAPTER-fact_check | fact-check Artifact and progression | Not run |
+| ADAPTER-build | implemented output and worker terminal | Not run |
+| ADAPTER-explore | exploration output and worker terminal | Not run |
+| ADAPTER-integrity | integrity output and worker terminal | Not run |
+| DISPATCH-SINGLE | real visible Tool identity -> child descriptor | Controlled Base/Advanced tests passed |
+| DISPATCH-COLLECTION | member identity/checkpoint replay/failure/cancellation | Six focused controlled tests passed; real Provider pending |
+| DISPATCH-INTERLEAVING | late failed sibling vs accepted sibling; all failed | Two controlled streamed tests passed |
+| FAILURE-PREPARATION | typed infrastructure result -> next model decision -> durable reopen | Controlled streamed test passed; orphan continuation remains unresolved |
+| FAILURE-RESULT | single/all-failed/mixed collection -> semantic decision effect | Focused contracts passed; full streamed collection fault cases pending |
+| FAILURE-CORRUPTION | missing/malformed completed output -> explicit contract error | Focused contract tests passed |
+| FAILURE-PROVIDER-DELIVERY | stream interruption, Tool/delivery failures | Not run |
+| LIFECYCLE-TERMINAL | success/domain incomplete/blocked/cancel/late/reopen | Full matrix not run |
+| LIFECYCLE-QUESTION | actual question/answer -> continuation | Not run |
+| RECOVERY-ADMISSION | restart before child/descriptor, same/peer process | Unresolved descriptor-less recovery contract; not accepted |
+| RECOVERY-WORKER-DELIVERY | restart after acceptance / pending delivery | Focused existing checks running; real Provider pending |
+| ISOLATION | concurrent Tasks/Sessions/projects | Full matrix not run |
+| DELIVERY-ARTIFACT | exact workflow/settlement/delivery and usable webpage | Not run |
+| DELIVERY-VISUAL | real development UI and artifact rendered inspection | Not run |
+| DELIVERY-NATIVE | corrected binary fresh launch/restart/install | Not run |
+
+The current checker is a first reproduction and terminal-evidence collector, not the completed full-matrix runner. It now explicitly leaves delivery/artifact/visual obligations pending even if a Task reaches completed. It cannot authorize benchmark scoring or release readiness.
+
+## Validation and remaining work
+
+- Corrected-source real reproduction: `opencorvus-test-run-J87X6j/runner-36000-2iSULo/dispatch-e2e-gApXwA/result.json`, Task `tsk_g00VVN54pg00h2AYV210`, reached a real request-interpreter child `ses_hEfHd6ljNk1WgR2hxp4l`. It stopped at the16-request resource bound, with Task still active: **budget_exhausted, not pass**. Cleanup passed and copied credentials were removed. No further paid batch has started.
+- That run revealed the initial source diff hash was empty because the checker ran from the package directory. The checker now anchors Git calls at repository root and stores source.patch. The raw result is preserved; `source-supplement.json`/`source-supplement.patch` record the unchanged production diff afterward with SHA256 `064be79bd0e93726002076bdd65e4664bf593bcf18c3ad394175c37d70c8da6f`. It is supplemental evidence, not a retroactively corrected original receipt.
+- Focused current checks:31 tests passed across tool-decision-coordination, orchestrator-streamed-dispatch-settlement, dispatch-agents-tool and orchestrator-tool-surface-contract;53 tests passed across task-control-liveness, task-control-integrity-blocked, task-control-abandoned-dispatch, task-control-cross-process-dispatch and dispatch-occurrence-recovery-authority. These84 tests are controlled contracts/integration, not84 real-model end-to-end cases. Product source typecheck and docs:check passed. The checker also receives a separate temporary TypeScript include because normal package typecheck excludes script/; that focused check passed before the final provenance/coordination amendments and is being rerun.
+- Independent review `review_runtime_e2e` found and prompted fixes for canonical collection result reads, last-request budget handling, malformed receipt semantics, overbroad success wording, source provenance, package-relative Git hashing and coordination outcomes without final_message_id. Final re-review pending.
+- Descriptor-less preparation recovery is still a real blocker: immutable initial lineage reserves the workflow occurrence, occurrence authority calls it committed, continuation demands a durable Session/descriptor, and Task closure demands settlement even for a pre-child claim. This requires a coherent admission/settlement/recovery contract change with restart and cross-process proofs; the present patch does not claim to repair existing orphaned Tasks.
+- Still unmet: complete real-Provider matrix, full streamed collection fault matrix, orphan admission recovery, artifact/delivery/visual validation and corrected native-package acceptance. Full paid matrix awaits the requested cumulative cost bound. No release or score benchmark is justified by the current results.
+- Final scoped review: no new blocking defects in this stage's patch; reviewer explicitly approved a partial checkpoint only. Final standalone checker TypeScript check passed (temporary config included script plus src declaration files); temporary config removed. Broader acceptance remains unmet exactly as listed above.

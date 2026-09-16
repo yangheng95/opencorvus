@@ -15,6 +15,7 @@ import { ToolPartProgressTable } from "@/session/session.sql"
 import { Database, asc, eq } from "@/storage/db"
 import { toolFailureCauseFromUnknown } from "@/session/tool-failure-cause"
 import { bindToolDecisionDeclaration } from "@/tool/execution-mode"
+import { orchestratorDecisionToolResultCommits } from "./decision-tool-names"
 import { jsonSchema, tool } from "ai"
 import type { JSONSchema7 } from "@ai-sdk/provider"
 import { isDeepStrictEqual } from "node:util"
@@ -310,6 +311,7 @@ function createDispatchAgentsToolWithRuntime(
   return bindToolDecisionDeclaration(collectionTool, {
     command: "dispatch_agents",
     commits: () => true,
+    completionCommits: (args, result) => orchestratorDecisionToolResultCommits("dispatch_agents", args, result),
   })
 }
 
