@@ -1,5 +1,6 @@
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
+import { ControlLeaseFenceLostError } from "@/engine/control-lease"
 import { jsonSchema, tool } from "ai"
 import type { JSONSchema7 } from "@ai-sdk/provider"
 import z from "zod"
@@ -1010,6 +1011,7 @@ export function createDispatchAgentTool(input: {
         })
       } catch (error) {
         try {
+        if (error instanceof ControlLeaseFenceLostError) throw error
         if (error instanceof TaskWorkflowBindingConflictError) {
           return DispatchOutcome.infrastructureFailure({
             operation: "workflow_binding_initial_claim",

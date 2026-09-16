@@ -71,7 +71,10 @@ import {
 } from "@/engine/dispatch-lineage"
 import type { DispatchLineageRow } from "@/engine/dispatch-lineage-facts"
 import { findDispatchSettlementByDispatchID, settleDispatchOrReturnExisting } from "@/engine/dispatch-settlement"
-import { assertControlLeaseInTransaction } from "@/engine/control-lease"
+import { assertControlLeaseInTransaction, ControlLeaseFenceLostError } from "@/engine/control-lease"
+import { recordTaskInfrastructureErrorInTransaction } from "@/engine/persist"
+import { exactEngineArtifactLocator } from "@/artifact-catalog"
+import { isExecutionCancellationError } from "@/session/prompt/cancellation"
 import { abortChildExecutionForSession } from "@/engine/execution-abort"
 import { clarificationTranscriptSection } from "@/engine/helpers"
 import { Event as EngineEvent } from "@/engine/model"
@@ -2726,6 +2729,39 @@ export function createOrchestratorTools(input: {
       let recordedLineage: ReturnType<typeof recordDispatchLineage> | undefined
       let admission: ReturnType<typeof claimDispatchLineage>["admission"]
       let admissionHold: ReturnType<typeof holdDispatchAdmission> | undefined
+      let admissionClosed = false
+      const closeAdmissionHold = () => {
+        if (admissionClosed) return
+        admissionClosed = true
+        admissionHold?.[Symbol.dispose]()
+      }
+      const releaseAdmission = () => {
+        if (admissionClosed) return
+        closeAdmissionHold()
+        releaseDispatchAdmissionOnError(admission!)
+      }
+      const settlePreparationFailure = (outcome: z.infer<typeof DispatchOutcomeSchema>) => {
+        if (outcome.kind !== "infrastructure_failure" || outcome.session_id) throw new Error("Preparation settlement requires an infrastructure failure before worker acceptance")
+        const settled = Database.immediateTransaction((db) => {
+          assertControlLeaseInTransaction(db, { target: "dispatch_admission", targetID: recordedLineage!.artifactID, leaseID: admission!.leaseID, ownerOccurrenceID: admission!.ownerOccurrenceID, now: Date.now() })
+          const infrastructureError = outcome.infrastructure_error ?? exactEngineArtifactLocator({
+            taskID: ownershipTaskID,
+            artifactID: recordTaskInfrastructureErrorInTransaction(db, {
+              taskID: ownershipTaskID,
+              component: "dispatch-agent",
+              operation: outcome.operation,
+              reason: outcome.message,
+              errorName: outcome.error_name,
+              context: { dispatchID: origin.dispatchID, dispatchLineageID: recordedLineage!.artifactID },
+            }),
+          })
+          const settled = settleDispatchOrReturnExisting({ taskID: ownershipTaskID, dispatchID: origin.dispatchID, outcome: { ...outcome, infrastructure_error: infrastructureError } })
+          if (!releaseDispatchAdmission(admission!)) throw new Error(`Preparation settlement failed to consume admission ${admission!.leaseID}`)
+          return settled.payload.outcome
+        })
+        closeAdmissionHold()
+        return settled
+      }
       let waitMilliseconds = 10
       for (;;) {
         signal?.throwIfAborted()
@@ -2741,42 +2777,53 @@ export function createOrchestratorTools(input: {
               projectedAgent,
               workScope,
             })
+            const committedDuringPreparation = readDispatchLineageReplay({
+              taskID: ownershipTaskID,
+              lineage: claim.lineage,
+            })
+            if (committedDuringPreparation) {
+              if (committedDuringPreparation.descriptor) {
+                commitAcceptedDispatchLineage(claim.lineage, admission)
+              } else if (!releaseDispatchAdmission(admission)) {
+                throw new Error(`Dispatch terminal replay could not consume admission ${admission.leaseID}`)
+              }
+              admissionHold[Symbol.dispose]()
+              return {
+                dispatchID: claim.lineage.dispatchID,
+                deliverySliceRevisionIDs: [...claim.lineage.payload.delivery_slice_revision_ids],
+                ...(committedDuringPreparation.descriptor
+                  ? { existingSessionID: claim.lineage.payload.child_session_id }
+                  : {}),
+                ...(committedDuringPreparation.turn ? { turn: committedDuringPreparation.turn } : {}),
+                adapterInput: Object.freeze({ ...claim.lineage.payload.adapter_input }),
+                signal: replayDispatchSignal,
+                replayOutcome: committedDuringPreparation.outcome,
+                observeSession(sessionID: string) {
+                  if (sessionID !== claim.lineage.payload.child_session_id) {
+                    throw new Error(`dispatch_agent replay Session identity drift for ${claim.lineage.dispatchID}`)
+                  }
+                },
+                commitSession() {
+                  return { artifactID: claim.lineage.artifactID }
+                },
+                releaseAdmission() {},
+              }
+            }
           } catch (error) {
-            admissionHold[Symbol.dispose]()
-            releaseDispatchAdmissionOnError(admission)
+            try {
+              if (isExecutionCancellationError(error) || error instanceof ControlLeaseFenceLostError) throw error
+              signal?.throwIfAborted()
+              admissionHold.signal.throwIfAborted()
+              settlePreparationFailure(DispatchOutcome.infrastructureFailure({
+                operation: "prepare-dispatch-admission",
+                message: error instanceof Error ? error.message : String(error),
+                errorName: error instanceof Error ? error.name : undefined,
+                recoveryAuthority: { occurrence_status: "occurrence_committed", dispatch_id: origin.dispatchID, dispatch_lineage_id: claim.lineage.artifactID },
+              }))
+            } finally {
+              releaseAdmission()
+            }
             throw error
-          }
-          const committedDuringPreparation = readDispatchLineageReplay({
-            taskID: ownershipTaskID,
-            lineage: claim.lineage,
-          })
-          if (committedDuringPreparation) {
-            if (committedDuringPreparation.descriptor) {
-              commitAcceptedDispatchLineage(claim.lineage, admission)
-            } else if (!releaseDispatchAdmission(admission)) {
-              throw new Error(`Dispatch terminal replay could not consume admission ${admission.leaseID}`)
-            }
-            admissionHold[Symbol.dispose]()
-            return {
-              dispatchID: claim.lineage.dispatchID,
-              deliverySliceRevisionIDs: [...claim.lineage.payload.delivery_slice_revision_ids],
-              ...(committedDuringPreparation.descriptor
-                ? { existingSessionID: claim.lineage.payload.child_session_id }
-                : {}),
-              ...(committedDuringPreparation.turn ? { turn: committedDuringPreparation.turn } : {}),
-              adapterInput: Object.freeze({ ...claim.lineage.payload.adapter_input }),
-              signal: replayDispatchSignal,
-              replayOutcome: committedDuringPreparation.outcome,
-              observeSession(sessionID: string) {
-                if (sessionID !== claim.lineage.payload.child_session_id) {
-                  throw new Error(`dispatch_agent replay Session identity drift for ${claim.lineage.dispatchID}`)
-                }
-              },
-              commitSession() {
-                return { artifactID: claim.lineage.artifactID }
-              },
-              releaseAdmission() {},
-            }
           }
           break
         }
@@ -2812,17 +2859,6 @@ export function createOrchestratorTools(input: {
       if (!admission || !admissionHold || !recordedLineage) {
         throw new Error(`dispatch_agent ${targetAgentID} failed to acquire its exact admission owner`)
       }
-      let admissionClosed = false
-      const closeAdmissionHold = () => {
-        if (admissionClosed) return
-        admissionClosed = true
-        admissionHold?.[Symbol.dispose]()
-      }
-      const releaseAdmission = () => {
-        if (admissionClosed) return
-        closeAdmissionHold()
-        releaseDispatchAdmissionOnError(admission!)
-      }
       const observeSession = (sessionID: string) => {
         if (recordedLineage && recordedLineage.payload.child_session_id !== sessionID) {
           throw new Error(
@@ -2841,17 +2877,7 @@ export function createOrchestratorTools(input: {
         signal: admissionHold.signal,
         ...(existingSessionID ? { continuationGuidance } : {}),
         observeSession,
-        settlePreparationFailure(outcome) {
-          if (outcome.kind !== "infrastructure_failure" || outcome.session_id) throw new Error("Preparation settlement requires an infrastructure failure before worker acceptance")
-          const settled = Database.immediateTransaction((db) => {
-            assertControlLeaseInTransaction(db, { target: "dispatch_admission", targetID: recordedLineage!.artifactID, leaseID: admission!.leaseID, ownerOccurrenceID: admission!.ownerOccurrenceID, now: Date.now() })
-            const settled = settleDispatchOrReturnExisting({ taskID: ownershipTaskID, dispatchID: origin.dispatchID, outcome })
-            if (!releaseDispatchAdmission(admission!)) throw new Error(`Preparation settlement failed to consume admission ${admission!.leaseID}`)
-            return settled.payload.outcome
-          })
-          closeAdmissionHold()
-          return settled
-        },
+        settlePreparationFailure,
         commitSession(sessionID: string, descriptor: WorkerTurnDescriptor.Info) {
           observeSession(sessionID)
           const persistedDescriptor = WorkerTurnDescriptor.get({ id: descriptor.id, sessionID })

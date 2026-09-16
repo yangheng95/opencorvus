@@ -370,18 +370,22 @@ test(`${dispatchToolName}: ` + (recoveryCase ? "streamed failed preparation cont
 // Fault injection stops only an exact production dispatch admission. Tool
 // declarations, streaming Tool execution, SessionLoop coordination, Tool Part
 // persistence and Task ingress reduction all remain the production path.
+for (const collection of [false, true]) {
 for (const secondFails of [false, true]) {
+  const dispatchToolName = collection ? "dispatch_agents" : "dispatch_agent"
+  const profile = collection ? "light" : "base"
   test(
-    secondFails
+    `${dispatchToolName}: ` + (secondFails
       ? "streamed failed dispatch siblings release their claims before an exclusive no_action receipt"
-      : "streamed dispatch success survives a late sibling failure and persists the exclusive decision conflict",
+      : "streamed dispatch success survives a late sibling failure and persists the exclusive decision conflict"),
     async () => {
       using _durableDrain = Bus.TestHooks.suppressAutomaticDurableDrain()
       await using project = await memoryProject()
       await Instance.provide({
         directory: project.path,
         fn: async () => {
-          await Config.updateProjectPatch({ prompt_profile: { active: "base" } })
+          if (collection) await ExpertSquadPackageManager.importDirectory({ projectDirectory: project.path, sourceDirectory: path.resolve(import.meta.dir, "../../../expert-squads/builtin/light"), installationScope: "project" })
+          await Config.updateProjectPatch({ prompt_profile: { active: profile } })
           using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
             runner: async (input) => ({
               finalMessageID: await Orchestrator.processTask(
@@ -399,6 +403,7 @@ for (const secondFails of [false, true]) {
           const firstFailure = Promise.withResolvers<void>()
           const secondFailure = Promise.withResolvers<void>()
           const workerFinish = Promise.withResolvers<void>()
+          let workerFinished = false
           const order: string[] = []
           let rootSessionID = ""
           let secondDispatch: { dispatchID: string; childSessionID: string } | undefined
@@ -417,11 +422,17 @@ for (const secondFails of [false, true]) {
               }
               await Bun.sleep(10)
             }
-            throw new Error(`Timed out waiting for persisted ${callID}:${status}`)
+            const observed = rootSessionID ? (await Session.messages({ sessionID: rootSessionID })).flatMap((message) => message.parts)
+              .filter((part) => part.type === "tool")
+              .map((part) => part.type === "tool" ? { callID: part.callID, status: part.state.status,
+                detail: part.state.status === "error" ? part.state.failure : part.state.status === "completed" ? part.state.output.slice(0, 800) : undefined } : undefined) : []
+            throw new Error(`Timed out waiting for persisted ${callID}:${status}; order=${JSON.stringify(order)}; observed=${JSON.stringify(observed)}`)
           }
           using _dispatchAdmission = OrchestratorToolsTestHooks.replaceAfterDispatchLineageClaim(
             async ({ lineage }) => {
-              const callID = lineage.payload.tool_call_id
+              const callID = collection && lineage.payload.tool_call_id === "call_stagger_collection"
+                ? lineage.payload.collection_member_index === 0 ? "call_stagger_a" : "call_stagger_b"
+                : lineage.payload.tool_call_id
               if (callID !== "call_stagger_a" && callID !== "call_stagger_b") return
               rootSessionID = lineage.payload.orchestrator_session_id
               order.push(`${callID}:claimed`)
@@ -447,7 +458,7 @@ for (const secondFails of [false, true]) {
           })
           const dispatchInput = (name: string) => ({
             dispatch: {
-              target: "base-planner",
+              target: collection ? "light-planner" : "base-planner",
               work_scope: { kind: "task" },
               turn: {
                 kind: "initial",
@@ -473,8 +484,9 @@ for (const secondFails of [false, true]) {
               const toolNames = Array.isArray(options.tools)
                 ? options.tools.map((tool) => tool.name)
                 : Object.keys(options.tools ?? {})
-              if (toolNames.length === 1 && toolNames[0] === "capability_search") {
-                const names = dispatchStreamStarted ? ["no_action"] : ["dispatch_agent", "no_action"]
+              if (toolNames.length === 1 && toolNames[0] === "capability_search" &&
+                (!collection || !dispatchStreamStarted || secondFails || workerFinished)) {
+                const names = dispatchStreamStarted ? ["no_action"] : [dispatchToolName, "no_action"]
                 return {
                   stream: simulateReadableStream({
                     chunks: [
@@ -497,28 +509,54 @@ for (const secondFails of [false, true]) {
                   }),
                 }
               }
-              if (toolNames.includes("dispatch_agent") && !dispatchStreamStarted) {
+              if (toolNames.includes(dispatchToolName) && !dispatchStreamStarted) {
                 dispatchStreamStarted = true
                 return {
                   stream: new ReadableStream({
                     async start(controller) {
                       try {
                         controller.enqueue({ type: "stream-start", warnings: [] })
-                        controller.enqueue(toolCall("call_stagger_a", "dispatch_agent", dispatchInput("A")))
-                        await firstClaimed.promise
-                        controller.enqueue(toolCall("call_stagger_b", "dispatch_agent", dispatchInput("B")))
+                        if (collection) {
+                          controller.enqueue(toolCall("call_stagger_collection", dispatchToolName, {
+                            team: ["A", "B"].map((name) => ({
+                              name, target: "light-planner", responsibility: `Evidence partition ${name}`,
+                              boundary: "Read-only Task evidence", expected_result: "Durable worker output", depends_on: [],
+                            })),
+                            dispatches: [dispatchInput("A"), dispatchInput("B")],
+                          }))
+                          await firstClaimed.promise
+                        } else {
+                          controller.enqueue(toolCall("call_stagger_a", dispatchToolName, dispatchInput("A")))
+                          await firstClaimed.promise
+                          controller.enqueue(toolCall("call_stagger_b", dispatchToolName, dispatchInput("B")))
+                        }
                         await secondClaimed.promise
                         if (!secondFails) {
-                          await waitForPart("call_stagger_b", "completed")
-                          order.push("call_stagger_b:durable_completed")
+                          if (collection) {
+                            const deadline = Date.now() + 15_000
+                            while (!WorkerTurnDescriptor.findForDispatch({ sessionID: secondDispatch!.childSessionID, dispatchID: secondDispatch!.dispatchID })) {
+                              if (Date.now() >= deadline) throw new Error("Collection survivor descriptor was not committed")
+                              await Bun.sleep(10)
+                            }
+                            order.push("call_stagger_b:descriptor_committed")
+                          } else {
+                            await waitForPart("call_stagger_b", "completed")
+                            order.push("call_stagger_b:durable_completed")
+                          }
                         }
                         firstFailure.resolve()
-                        await waitForPart("call_stagger_a", "error")
-                        order.push("call_stagger_a:durable_error")
-                        if (secondFails) {
+                        if (collection) {
                           secondFailure.resolve()
-                          await waitForPart("call_stagger_b", "error")
-                          order.push("call_stagger_b:durable_error")
+                          await waitForPart("call_stagger_collection", "completed")
+                          order.push("collection:durable_completed")
+                        } else {
+                          await waitForPart("call_stagger_a", "error")
+                          order.push("call_stagger_a:durable_error")
+                          if (secondFails) {
+                            secondFailure.resolve()
+                            await waitForPart("call_stagger_b", "error")
+                            order.push("call_stagger_b:durable_error")
+                          }
                         }
                         controller.enqueue(
                           toolCall("call_stagger_c", "no_action", {
@@ -587,16 +625,18 @@ for (const secondFails of [false, true]) {
                 request: "Analyze two independent read-only evidence partitions",
                 productPillar: "work",
                 model: `${model.providerID}/${model.modelID}`,
-                promptProfile: "base",
+                promptProfile: profile,
               },
               { actor: "user" },
             )
             await waitForIngressDeliveryHooksForTest()
             const finalPart = await waitForPart("call_stagger_c", secondFails ? "completed" : "error")
             const assistant = await MessageStore.get({ sessionID: rootSessionID, messageID: rootAssistantID })
-            const expectedDecision = secondFails ? "no_action" : "dispatch_agent"
+            const expectedDecision = secondFails ? "no_action" : dispatchToolName
             expect(order).toEqual(
-              secondFails
+              collection
+                ? ["call_stagger_a:claimed", "call_stagger_b:claimed", ...(!secondFails ? ["call_stagger_b:descriptor_committed"] : []), "collection:durable_completed"]
+                : secondFails
                 ? [
                     "call_stagger_a:claimed",
                     "call_stagger_b:claimed",
@@ -620,11 +660,23 @@ for (const secondFails of [false, true]) {
                     part.tool !== "capability_search",
                 )
                 .map((part) => (part.type === "tool" ? { callID: part.callID, status: part.state.status } : undefined)),
-            ).toEqual([
+            ).toEqual(collection ? [
+              { callID: "call_stagger_collection", status: "completed" },
+              { callID: "call_stagger_c", status: secondFails ? "completed" : "error" },
+            ] : [
               { callID: "call_stagger_a", status: "error" },
               { callID: "call_stagger_b", status: secondFails ? "error" : "completed" },
               { callID: "call_stagger_c", status: secondFails ? "completed" : "error" },
             ])
+            if (collection) {
+              const part = await waitForPart("call_stagger_collection", "completed")
+              if (part.state.status !== "completed") throw new Error("Expected the completed collection receipt")
+              const members = JSON.parse(part.state.output).members
+              expect(members.map((member: any) => ({ index: member.member_index, status: member.status, kind: member.outcome.kind }))).toEqual([
+                { index: 0, status: "completed", kind: "infrastructure_failure" },
+                { index: 1, status: "completed", kind: secondFails ? "infrastructure_failure" : "accepted" },
+              ])
+            }
             if (finalPart.state.status === "error") {
               expect(finalPart.state.failure.name).toBe("ToolTurnExecutionConflictError")
             } else if (finalPart.state.status === "completed") {
@@ -639,6 +691,7 @@ for (const secondFails of [false, true]) {
             }
             const ingress = taskRootIngressDebugProjection(taskID)[0]!
             expect(ingress.projection.state).toBe("resolved")
+            workerFinished = true
             workerFinish.resolve()
             for (const child of await Session.children(rootSessionID)) {
               await SessionPrompt.waitForFinish(child.id, project.path)
@@ -657,6 +710,7 @@ for (const secondFails of [false, true]) {
           } finally {
             firstFailure.resolve()
             secondFailure.resolve()
+            workerFinished = true
             workerFinish.resolve()
             gitCompleteSpy.mockRestore()
             gitPrepareSpy.mockRestore()
@@ -673,4 +727,5 @@ for (const secondFails of [false, true]) {
     },
     90_000,
   )
+}
 }

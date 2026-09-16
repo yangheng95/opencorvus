@@ -38,6 +38,8 @@ if (
     mode !== "execute-takeover" &&
     mode !== "execute-takeover-held" &&
     mode !== "execute-stale-preparation" &&
+    mode !== "execute-stale-opener" &&
+    mode !== "execute-takeover-preparing" &&
     mode !== "scan") ||
   !projectPath
 ) {
@@ -45,7 +47,7 @@ if (
     "Dispatch occurrence worker requires seed|execute-blocked|execute-replay|execute-takeover|execute-takeover-held|scan and project path",
   )
 }
-if ((mode === "execute-blocked" || mode === "execute-takeover-held") && !barrierPath) {
+if ((mode === "execute-blocked" || mode === "execute-takeover-held" || mode === "execute-stale-opener" || mode === "execute-takeover-preparing") && !barrierPath) {
   throw new Error("Blocked or held dispatch occurrence worker requires a barrier path")
 }
 
@@ -278,10 +280,10 @@ async function run() {
           return { mode }
         }
         using _claimBarrier =
-          mode === "execute-blocked"
+          mode === "execute-blocked" || mode === "execute-stale-opener" || mode === "execute-takeover-preparing"
             ? OrchestratorToolsTestHooks.replaceAfterDispatchLineageClaim(async ({ lineage }) => {
                 await publishJSONBarrier(
-                  path.join(barrierPath!, "ready.json"),
+                  path.join(barrierPath!, mode === "execute-takeover-preparing" ? "peer-ready.json" : "ready.json"),
                   {
                     ownerOccurrenceID: currentRuntimeOccurrenceID(),
                     lineageID: lineage.artifactID,
@@ -289,7 +291,8 @@ async function run() {
                     childSessionID: lineage.payload.child_session_id,
                   },
                 )
-                await waitForBarrierFile("materialize")
+                await waitForBarrierFile(mode === "execute-stale-opener" ? "fail-preparation" : mode === "execute-takeover-preparing" ? "peer-materialize" : "materialize")
+                if (mode === "execute-stale-opener") throw new Error("Late opener failure after peer takeover")
               })
             : undefined
         const surface = createOrchestratorTools({
@@ -320,7 +323,9 @@ async function run() {
           execute?: (frontierInput: unknown, options: unknown) => Promise<unknown>
         }
         if (!frontier.execute) throw new Error("Production dispatch_agents has no executor")
-        const result = (await frontier.execute(input, {
+        let result: { title: string; output: string; metadata: Record<string, unknown> }
+        try {
+        result = (await frontier.execute(input, {
           toolCallId: TOOL_CALL_ID,
           opencorvus: {
             sessionID: ORCHESTRATOR_SESSION_ID,
@@ -329,14 +334,18 @@ async function run() {
             toolPartID: TOOL_PART_ID,
             visibleToolName: "dispatch_agents",
           },
-        })) as { title: string; output: string; metadata: Record<string, unknown> }
+        })) as typeof result
+        } catch (error) {
+          if (mode === "execute-stale-opener") return { mode, fenceError: error instanceof Error ? error.name : String(error) }
+          throw error
+        }
         const existing = await MessageStore.get({ sessionID: ORCHESTRATOR_SESSION_ID, messageID: ASSISTANT_MESSAGE_ID })
         const part = existing.parts.find((candidate) => candidate.id === TOOL_PART_ID)
         if (!part || part.type !== "tool") {
           throw new Error("Production dispatch_agents outer occurrence is missing")
         }
         const ownsOuterOutcome =
-          mode === "execute-blocked" || mode === "execute-takeover" || mode === "execute-takeover-held"
+          mode === "execute-blocked" || mode === "execute-takeover" || mode === "execute-takeover-held" || mode === "execute-takeover-preparing"
         if (part.state.status === "running" && ownsOuterOutcome) {
           await Session.updatePart({
             id: TOOL_PART_ID,

@@ -7,6 +7,8 @@ import path from "node:path"
 
 type WorkerMode =
   | "execute-stale-preparation"
+  | "execute-stale-opener"
+  | "execute-takeover-preparing"
   | "seed"
   | "execute-blocked"
   | "execute-replay"
@@ -85,6 +87,41 @@ test("a stale preparation owner receives the lease-fence error after peer accept
     } finally { verified.close() }
   } finally {
     if (stale && stale.child.exitCode === null) { stale.child.kill(); await stale.child.exited }
+    removeFixture(input.root)
+  }
+}, 180_000)
+
+test("a stale collection opener preserves a peer's preparing admission and exact accepted worker", async () => {
+  const input = fixture()
+  const worker = path.join(import.meta.dir, "fixture", "dispatch-occurrence-claim-process-worker.ts")
+  let stale: ReturnType<typeof startWorker> | undefined
+  let peer: ReturnType<typeof startWorker> | undefined
+  try {
+    await runWorker(worker, "seed", input.projectPath, input.home)
+    stale = startWorker(worker, "execute-stale-opener", input.projectPath, input.home, input.barrier)
+    await waitForFile(path.join(input.barrier, "ready.json"), stale)
+    const claim = JSON.parse(fs.readFileSync(path.join(input.barrier, "ready.json"), "utf8"))
+    const db = new SQLite(input.databasePath)
+    try { db.run("UPDATE engine_control_activation_lease SET expires_at=? WHERE target='dispatch_admission' AND target_id=?", [Date.now() - 1, claim.lineageID]) } finally { db.close() }
+    peer = startWorker(worker, "execute-takeover-preparing", input.projectPath, input.home, input.barrier)
+    await waitForFile(path.join(input.barrier, "peer-ready.json"), peer)
+    const preparing = JSON.parse(fs.readFileSync(path.join(input.barrier, "peer-ready.json"), "utf8"))
+    fs.writeFileSync(path.join(input.barrier, "fail-preparation"), "ready")
+    const failed = await finishWorker(stale, "execute-stale-opener")
+    const verify = new SQLite(input.databasePath, { readonly: true })
+    try {
+      expect({ error: failed.fenceError, owner: verify.query("SELECT owner_occurrence_id FROM engine_control_activation_lease WHERE target='dispatch_admission' AND target_id=? ORDER BY time_activated DESC,id DESC LIMIT 1").get(claim.lineageID) })
+        .toEqual({ error: "ControlLeaseFenceLostError", owner: { owner_occurrence_id: preparing.ownerOccurrenceID } })
+    } finally { verify.close() }
+    fs.writeFileSync(path.join(input.barrier, "peer-materialize"), "ready")
+    const accepted = await finishWorker(peer, "execute-takeover-preparing")
+    expect(accepted.memberOutcome).toMatchObject({ kind: "accepted", session_id: claim.childSessionID, dispatch_lineage_id: claim.lineageID })
+    const final = new SQLite(input.databasePath, { readonly: true })
+    try {
+      expect(final.query("SELECT session_id FROM worker_turn_descriptor WHERE session_id=?").all(claim.childSessionID)).toEqual([{ session_id: claim.childSessionID }])
+    } finally { final.close() }
+  } finally {
+    for (const owned of [stale, peer]) if (owned && owned.child.exitCode === null) { owned.child.kill(); await owned.child.exited }
     removeFixture(input.root)
   }
 }, 180_000)
