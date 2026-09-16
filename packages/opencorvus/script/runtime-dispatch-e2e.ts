@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { RuntimeE2EScenarioSchema, scenarioFixturePath } from "./runtime-e2e-scenario"
+import { RuntimeE2EScenarioSchema, scenarioFixturePath, runtimeDispatchSettlementFailures } from "./runtime-e2e-scenario"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { createHash } from "node:crypto"
@@ -104,9 +104,10 @@ try {
   process.env.OPENCORVUS_CONFIG_CONTENT = JSON.stringify({ model, small_model: model, permission_mode: "full_access" })
   if (supervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = supervisor
 
-  const [{ Instance }, { Database, sql }, { Provider }, { Log }, startup, recovery, { SessionStatus }, { ProcessSupervisor }, { MessageStore }] = await Promise.all([
+  const [{ Instance }, { Database, sql }, { Provider }, { Log }, startup, recovery, { SessionStatus }, { ProcessSupervisor }, { MessageStore }, { parseDispatchSettlementPayload }] = await Promise.all([
     import("@/project/instance"), import("@/storage/db"), import("@/provider/provider"), import("@/util/log"),
     import("@/cli/server-runtime"), import("@/engine/host-recovery"), import("@/session/status"), import("@/shell/process-supervisor"), import("@/session/message-store"),
+    import("@/engine/dispatch-settlement"),
   ])
   disposeInstances = () => Instance.disposeAll()
   closeDatabase = () => Database.close()
@@ -157,13 +158,14 @@ try {
     const snapshot = Database.use((db) => ({
       sessions: db.all(sql`SELECT id,kind,time_updated FROM session WHERE project_id=(SELECT project_id FROM engine_task WHERE id=${taskID})`) as any[],
       lineages: db.all(sql`SELECT id,payload FROM engine_artifact WHERE task_id=${taskID} AND kind='dispatch_lineage'`) as any[],
+      settlements: db.all(sql`SELECT id,payload FROM engine_artifact WHERE task_id=${taskID} AND kind='dispatch_settlement'`) as Array<{ id: string; payload: unknown }>,
       outcomes: db.all(sql`SELECT r.id,r.message_id,r.data AS request,o.data AS outcome,p.result FROM tool_part_request r JOIN message m ON m.id=r.message_id JOIN session s ON s.id=m.session_id LEFT JOIN tool_part_outcome o ON o.request_part_id=r.id LEFT JOIN permission_execution_result p ON p.attempt_id=json_extract(o.data,'$.resultAttemptID') WHERE s.project_id=(SELECT project_id FROM engine_task WHERE id=${taskID})`) as any[],
     }))
     const messages = await Promise.all([...new Set(snapshot.outcomes.map((row) => row.message_id))].map(async (messageID) => {
       const owner = Database.use((db) => db.get(sql`SELECT session_id FROM message WHERE id=${messageID}`)) as { session_id: string }
       return MessageStore.get({ sessionID: owner.session_id, messageID })
     }))
-    const failed = messages.flatMap((message) => message.parts.flatMap((part) => {
+    const failedTools = messages.flatMap((message) => message.parts.flatMap((part) => {
       if (part.type !== "tool" || part.state.status !== "completed" || !["dispatch_agent", "dispatch_agents"].includes(part.tool)) return []
       const value = JSON.parse(part.state.output)
       if (part.tool === "dispatch_agent") return value.kind === "infrastructure_failure" ? [{ toolPartID: part.id, ...value }] : []
@@ -171,6 +173,12 @@ try {
         ? [{ toolPartID: part.id, memberIndex: member.member_index, failure: member.failure }]
         : member.outcome.kind === "infrastructure_failure" ? [{ toolPartID: part.id, memberIndex: member.member_index, ...member.outcome }] : [])
     }))
+    const settlements = snapshot.settlements.map((row) => {
+      const payload = parseDispatchSettlementPayload(typeof row.payload === "string" ? JSON.parse(row.payload) : row.payload, row.id)
+      assert.equal(payload.task_id, taskID, "Settlement must belong to the observed Task")
+      return { id: row.id, payload }
+    })
+    const failed = [...failedTools, ...runtimeDispatchSettlementFailures(settlements)]
     const children = snapshot.lineages.map((row) => {
       const payload = typeof row.payload === "string" ? JSON.parse(row.payload) : row.payload
       return { lineageID: row.id, dispatchID: payload.dispatch_id, agent: payload.target_agent_id, sessionID: payload.child_session_id, sessionExists: snapshot.sessions.some((session) => session.id === payload.child_session_id) }

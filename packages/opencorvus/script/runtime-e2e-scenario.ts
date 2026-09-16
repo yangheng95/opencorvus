@@ -1,12 +1,19 @@
 import assert from "node:assert/strict"
 import path from "node:path"
 import { z } from "zod"
+import type { DispatchSettlementPayload } from "../src/engine/dispatch-settlement"
 
 export const RuntimeE2EScenarioSchema = z.object({
   caseID: z.string().min(1), title: z.string().min(1), request: z.string().min(1),
   promptProfile: z.string().min(1), requiredAdapters: z.array(z.string().min(1)).default([]),
   files: z.record(z.string(), z.string()).default({}),
 }).strict()
+
+export function runtimeDispatchSettlementFailures(rows: ReadonlyArray<{ id: string; payload: DispatchSettlementPayload }>) {
+  return rows.flatMap(({ id, payload }) => payload.outcome.kind === "infrastructure_failure"
+    ? [{ settlementID: id, dispatchID: payload.dispatch_id, ...payload.outcome }]
+    : [])
+}
 
 /** Portable fixture names must retain the same file identity on Windows. */
 export function scenarioFixturePath(project: string, relative: string): string {

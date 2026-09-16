@@ -603,6 +603,8 @@ const VisualQaProblemDomRegionMaterializerInput = z
     taskID: z.string().min(1),
     projectRoot: z.string().min(1),
     projectID: z.string().min(1).optional(),
+    referenceParityRequired: z.boolean().optional(),
+    requiredReferenceRegions: z.array(z.string().min(1)).optional(),
   })
   .strict()
 
@@ -765,7 +767,7 @@ export function createVisualQaOutputTools(
     register_visual_qa_problem_dom_region: () =>
       context.taskID && context.projectRoot
         ? materializeVisualQaProblemDomRegionTool(
-            { taskID: context.taskID, projectRoot: context.projectRoot, projectID: context.projectID },
+            { ...context, taskID: context.taskID, projectRoot: context.projectRoot },
             (row) => upsertByID(collector.problem_dom_regions, row),
           )
         : tool({

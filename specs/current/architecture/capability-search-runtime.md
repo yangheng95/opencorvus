@@ -267,6 +267,13 @@ use exact leaves.
 
 ## Recovery and integrity
 
+Effectful stage materializers bind the same normalized JSON input that their
+input digest covers. Optional object properties with undefined values are
+omitted at this one boundary, before both in-memory ownership and persistence;
+array entries and other values must be valid JSON. Initial exact reveal and
+recovered reveal therefore fingerprint the same binding without weakening the
+canonical digest or project/worktree authority checks.
+
 Every Provider step re-reads and hashes the input-bound Catalog before
 materializing definitions. Persisted receipt definitions and exact materializer
 digests must match on the next step. Permission continuation reconstructs the
