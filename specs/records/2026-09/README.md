@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Dispatch preparation stall investigation](2026-09-16-dispatch-preparation-stall.md)
+
 - [v0.1.0-beta tested publication](2026-09-15-v0.1.0-beta-release.md)
 
 - [Global Work creation default-config repair](2026-09-15-global-config-defaults.md)

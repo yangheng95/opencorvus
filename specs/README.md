@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Dispatch preparation stall investigation](records/2026-09/2026-09-16-dispatch-preparation-stall.md).
+
 [v0.1.0-beta tested publication](records/2026-09/2026-09-15-v0.1.0-beta-release.md).
 
 [Global Work creation default-config repair](records/2026-09/2026-09-15-global-config-defaults.md).
