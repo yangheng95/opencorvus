@@ -140,10 +140,9 @@ try {
       "diff",
       "HEAD",
       "--",
-      "packages/opencorvus/src",
-      "packages/opencorvus/script",
-      "packages/opencorvus/native",
+      "packages",
       "expert-squads",
+      "script",
     ],
     { cwd: repositoryRoot },
   )

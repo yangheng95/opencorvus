@@ -321,7 +321,7 @@ async function runDriver() {
     await copyAuthorityFile(authSource, path.join(runtimeRoot, "runtime", "data", "auth.json"))
     await copyAuthorityFile(path.join(path.dirname(path.resolve(authSource)), "models.json"), path.join(runtimeRoot, "runtime", "data", "models.json"))
     const repositoryRoot = execFileSync("git", ["rev-parse", "--show-toplevel"], { encoding: "utf8" }).trim()
-    await fs.writeFile(path.join(runtimeRoot, "source.patch"), execFileSync("git", ["diff", "HEAD", "--", "packages/opencorvus/src", "packages/opencorvus/script"], { cwd: repositoryRoot }))
+    await fs.writeFile(path.join(runtimeRoot, "source.patch"), execFileSync("git", ["diff", "HEAD", "--", "packages", "expert-squads", "script"], { cwd: repositoryRoot }))
     await fs.writeFile(path.join(runtimeRoot, "run.json"), JSON.stringify({ maxRequests, budgetScope: "all-phases-cumulative", sourceSHA: execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8" }).trim(), model: process.env[MODEL], runtime: { executable: process.execPath, bun: Bun.version }, checkerSHA256: createHash("sha256").update(await fs.readFile(import.meta.filename)).digest("hex"), auditSHA256: createHash("sha256").update(await fs.readFile(path.join(import.meta.dir, "real-provider-audit.ts"))).digest("hex") }, null, 2))
     process.stdout.write(`[task-control evidence] root=${runtimeRoot}\n`)
     for (const phase of ["seed-ingress", "seed-cancellation", "verify"]) {

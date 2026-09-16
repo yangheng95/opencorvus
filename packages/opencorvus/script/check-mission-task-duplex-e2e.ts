@@ -105,7 +105,7 @@ process.env.OPENCORVUS_TASK_PROCESS_MODE = "native"
 
 try {
 const repositoryRoot = execFileSync("git", ["rev-parse", "--show-toplevel"], { encoding: "utf8" }).trim()
-const patch = execFileSync("git", ["diff", "HEAD", "--", "packages/opencorvus/src", "packages/opencorvus/script"], { cwd: repositoryRoot })
+const patch = execFileSync("git", ["diff", "HEAD", "--", "packages", "expert-squads", "script"], { cwd: repositoryRoot })
 await fs.writeFile(path.join(root, "source.patch"), patch)
 provenance = { sourceSHA: execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8" }).trim(), sourceDiffSHA256: createHash("sha256").update(patch).digest("hex"), checkerSHA256: createHash("sha256").update(await fs.readFile(import.meta.filename)).digest("hex"), auditSHA256: createHash("sha256").update(await fs.readFile(path.join(import.meta.dir, "real-provider-audit.ts"))).digest("hex"), runtime: { executable: process.execPath, bun: Bun.version } }
 await fs.writeFile(path.join(root, "run.json"), JSON.stringify({ ...provenance, model, maxRequests, root }, null, 2))

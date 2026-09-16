@@ -66,7 +66,7 @@ const errorText = (error: unknown) => {
 try {
   const repositoryRoot = execFileSync("git", ["rev-parse", "--show-toplevel"], { encoding: "utf8" }).trim()
   result.sourceSHA = execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8" }).trim()
-  const sourceDiff = execFileSync("git", ["diff", "HEAD", "--", "packages/opencorvus/src"], { cwd: repositoryRoot })
+  const sourceDiff = execFileSync("git", ["diff", "HEAD", "--", "packages", "expert-squads", "script"], { cwd: repositoryRoot })
   result.sourceDiffSHA256 = createHash("sha256").update(sourceDiff).digest("hex")
   await fs.writeFile(path.join(root, "source.patch"), sourceDiff)
   result.checkerSHA256 = createHash("sha256").update(await fs.readFile(import.meta.filename)).digest("hex")
