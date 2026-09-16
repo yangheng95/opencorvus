@@ -71,15 +71,16 @@ afterEach(async () => {
 })
 
 for (const collection of [false, true]) {
-for (const scenario of ["base", "advanced", "advanced-preparation-failure", "advanced-preparation-recovery"] as const) {
+for (const scenario of ["base", "advanced", "advanced-preparation-failure", "advanced-preparation-recovery", "advanced-authority-recovery"] as const) {
 if (collection && scenario === "advanced") continue
 const dispatchToolName = collection ? "dispatch_agents" : "dispatch_agent"
 const encodeDispatch = (request: any) => JSON.stringify(collection ? { team: [{ name: "worker", target: request.dispatch.target, responsibility: "Interpret one exact request", boundary: "Read-only Task evidence", expected_result: "Durable worker output", depends_on: [] }], dispatches: [request] } : request)
-const recoveryCase = scenario === "advanced-preparation-recovery"
+const authorityFailure = scenario === "advanced-authority-recovery"
+const recoveryCase = scenario === "advanced-preparation-recovery" || authorityFailure
 const preparationFails = scenario === "advanced-preparation-failure" || recoveryCase
 const profile = collection ? "light" : scenario === "base" ? "base" : "advanced"
 const targetID = collection ? "light-planner" : profile === "base" ? "base-planner" : "request-interpreter"
-test(`${dispatchToolName}: ` + (recoveryCase ? "streamed failed preparation continues the reserved worker and settles every dispatch" : preparationFails ? "streamed preparation failure permits the next model decision and durable re-read" : `${scenario} streamed dispatch commits a real child descriptor through the visible Tool boundary`), async () => {
+test(`${dispatchToolName}: ` + (authorityFailure ? "streamed authority transaction rollback recovers the same reserved Session" : recoveryCase ? "streamed failed preparation continues the reserved worker and settles every dispatch" : preparationFails ? "streamed preparation failure permits the next model decision and durable re-read" : `${scenario} streamed dispatch commits a real child descriptor through the visible Tool boundary`), async () => {
   using _durableDrain = Bus.TestHooks.suppressAutomaticDurableDrain()
   await using project = await memoryProject()
   await Instance.provide({
@@ -237,11 +238,23 @@ test(`${dispatchToolName}: ` + (recoveryCase ? "streamed failed preparation cont
         ? spyOn(workerAdapter, method).mockImplementation(async (input: any) => {
             if (!failedDispatchID) {
               failedDispatchID = input.dispatchTurn!.current_dispatch_id
-              throw new Error("Injected preparation failure before child creation")
+              if (!authorityFailure) throw new Error("Injected preparation failure before child creation")
             }
             return originalAnalyze(input)
           })
         : undefined
+      let authoritySessionID: string | undefined
+      let authorityInsertedRow: { id: string } | undefined
+      const authorityFailureMessage = "Injected authority failure after Session insertion before descriptor preparation"
+      const originalPrepare = WorkerTurnDescriptor.prepare
+      const authoritySpy = authorityFailure ? spyOn(WorkerTurnDescriptor, "prepare").mockImplementation((input) => {
+        if (!authoritySessionID && input.payload.identity.agentID === targetID) {
+          authoritySessionID = input.sessionID
+          authorityInsertedRow = Database.use((db) => db.get<{ id: string }>(sql`SELECT id FROM session WHERE id=${input.sessionID}`))
+          throw new Error(authorityFailureMessage)
+        }
+        return originalPrepare(input)
+      }) : undefined
       try {
         const taskID = await EngineService.createTask(
           {
@@ -338,10 +351,14 @@ test(`${dispatchToolName}: ` + (recoveryCase ? "streamed failed preparation cont
           rootProviderRequests: recoveryCase ? 3 : 2,
           workerProviderRequests: 1,
         })
+        if (authorityFailure) expect({ sessionID: authoritySessionID, inserted: authorityInsertedRow }).toEqual({ sessionID: accepted.session_id, inserted: { id: accepted.session_id } })
         if (recoveryCase) {
           const preparationSettlement = findDispatchSettlementByDispatchID({ taskID, dispatchID: failedDispatchID! })!
           expect(preparationSettlement.payload.outcome).toMatchObject({ kind: "infrastructure_failure", operation: collection ? "delegated_worker_adapter" : "analyze_intent_adapter" })
           expect(preparationSettlement.payload.session_id).toBe(accepted.session_id)
+          if (authorityFailure) expect(preparationSettlement.payload.outcome).toMatchObject({
+            message: collection ? `Projected agent "${targetID}" failed via adapter "delegated_worker": ${authorityFailureMessage}` : authorityFailureMessage,
+          })
           expect(WorkerTurnDescriptor.latestForSession(accepted.session_id)?.payload.dispatchTurn).toMatchObject({ workflow_occurrence_id: failedDispatchID, preparation_recovery: { source_dispatch_id: failedDispatchID, guidance: "The transient preparation fault is repaired; execute the exact reserved occurrence." } })
           const workerMessages = await Session.messages({ sessionID: accepted.session_id })
           expect(workerMessages.filter((entry) => entry.info.role === "user").flatMap((entry) => entry.parts).filter((part) => part.type === "text").map((part) => part.type === "text" ? part.text : "").join("\n")).toContain("The transient preparation fault is repaired; execute the exact reserved occurrence.")
@@ -349,6 +366,7 @@ test(`${dispatchToolName}: ` + (recoveryCase ? "streamed failed preparation cont
         }
       } finally {
         preparationSpy?.mockRestore()
+        authoritySpy?.mockRestore()
         releaseWorker()
         gitCompleteSpy.mockRestore()
         gitPrepareSpy.mockRestore()
