@@ -742,7 +742,11 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
       async () => ((await board()).task.status === "cancelled" ? true : undefined),
       15_000,
     )
-    const cancellationTerminalWithinMs = Date.now() - (checkpoint.cancellationRequestedAt ?? Date.now())
+    const cancellationTerminal = ProtocolStore.listTaskEvents(taskID).find((event) => event.type === "task.cancelled")
+    if (!cancellationTerminal || checkpoint.cancellationRequestEventEmittedAt === undefined) throw new Error("Cancellation timing requires exact request and terminal events")
+    const cancellationTerminalWithinMs = cancellationTerminal.time.emitted - checkpoint.cancellationRequestEventEmittedAt
+    const cancellationObservedAfterTerminalMs = Date.now() - cancellationTerminal.time.emitted
+    if (cancellationTerminalWithinMs < 0) throw new Error("Cancellation terminal precedes its request")
     if (cancellationTerminalWithinMs >= 15_000) {
       throw new Error(`Cancellation terminal convergence took ${cancellationTerminalWithinMs}ms across restart`)
     }
@@ -835,6 +839,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
         cancellationRequestEventEmittedAt: checkpoint.cancellationRequestEventEmittedAt,
         cancellationAcceptedWithinMs: checkpoint.cancellationAcceptedWithinMs,
         cancellationTerminalWithinMs,
+        cancellationObservedAfterTerminalMs,
         cancellationTerminalEvents: terminalEvents.length,
         ingressDispositions,
         checkpointSettlement: settlements.find((artifact) => artifact.kind === "task_checkpoint_settlement"),

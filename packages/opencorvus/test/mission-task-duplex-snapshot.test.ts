@@ -258,7 +258,6 @@ describe("Mission Task duplex snapshot", () => {
           activityKey: initialKey,
           observedAtMs: now + 3,
           inactivityWindowMs: 3_000,
-          absoluteDeadlineMs: 10_000,
         })
         expect(initial.deadlineMs).toBe(4_003)
 
@@ -267,7 +266,6 @@ describe("Mission Task duplex snapshot", () => {
           activityKey: activityKey(),
           observedAtMs: now + 1_000,
           inactivityWindowMs: 3_000,
-          absoluteDeadlineMs: 10_000,
         })
         expect(stable).toEqual(initial)
 
@@ -289,18 +287,16 @@ describe("Mission Task duplex snapshot", () => {
           activityKey: progressKey,
           observedAtMs: now + 2_600,
           inactivityWindowMs: 3_000,
-          absoluteDeadlineMs: 10_000,
         })
         expect(renewed.deadlineMs).toBe(6_600)
 
-        const capped = observeMissionTaskDuplexActivity({
+        const continued = observeMissionTaskDuplexActivity({
           previous: renewed,
           activityKey: `${progressKey}:terminal`,
           observedAtMs: 9_000,
           inactivityWindowMs: 3_000,
-          absoluteDeadlineMs: 10_000,
         })
-        expect(capped.deadlineMs).toBe(10_000)
+        expect(continued.deadlineMs).toBe(12_000)
       },
     })
   })

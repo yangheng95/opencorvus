@@ -501,13 +501,11 @@ export function observeMissionTaskDuplexActivity(input: {
   activityKey: string
   observedAtMs: number
   inactivityWindowMs: number
-  absoluteDeadlineMs: number
 }): MissionTaskDuplexActivityDeadline {
   if (input.activityKey.length === 0) throw new Error("Mission Task duplex activity key must not be empty")
   for (const [label, value] of [
     ["observation time", input.observedAtMs],
     ["inactivity window", input.inactivityWindowMs],
-    ["absolute deadline", input.absoluteDeadlineMs],
   ] as const) {
     if (!Number.isSafeInteger(value) || value < 0) {
       throw new Error(`Mission Task duplex ${label} must be a non-negative safe integer`)
@@ -523,7 +521,7 @@ export function observeMissionTaskDuplexActivity(input: {
   }
   return {
     activityKey: input.activityKey,
-    deadlineMs: Math.min(input.absoluteDeadlineMs, renewedDeadline),
+    deadlineMs: renewedDeadline,
   }
 }
 
