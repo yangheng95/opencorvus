@@ -144,7 +144,7 @@ try {
         }
         taskDirectory = created[0]!.directory
         await fs.writeFile(path.join(taskDirectory, "fixture.txt"), "LOCAL-NATIVE-CHECK: 17\n")
-        const accepted = await request(`/task?directory=${encodeURIComponent(taskDirectory)}&init-git=true`, 202, { method: "POST", headers: { "content-type": "application/json", "x-opencorvus-request-id": crypto.randomUUID() }, body: JSON.stringify({ title: "Native worker acceptance", request: "Use the appropriate read-only worker to inspect fixture.txt and report its exact LOCAL-NATIVE-CHECK value. Do not modify files. Read the real worker result and complete this Task.", productPillar: "code", promptProfile: "base", model, source: "native-real-acceptance" }) })
+        const accepted = await request(`/task?directory=${encodeURIComponent(taskDirectory)}&init-git=true`, 202, { method: "POST", headers: { "content-type": "application/json", "x-opencorvus-request-id": crypto.randomUUID() }, body: JSON.stringify({ title: "Native worker acceptance", request: "Have the appropriate read-only worker directly inspect the local fixture.txt in this Task directory using the read Tool, then report its exact LOCAL-NATIVE-CHECK value. Do not modify files. Read the real worker result and complete this Task.", productPillar: "code", promptProfile: "base", model, source: "native-real-acceptance" }) })
         taskID = accepted.task_id
         result.taskID = taskID
         result.taskDirectory = taskDirectory

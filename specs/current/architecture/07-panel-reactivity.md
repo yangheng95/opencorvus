@@ -200,6 +200,12 @@ transport request and rebind the API context before hydration, but they do not
 filter the global result. Every item carries the joined Project worktree, which
 is the sole grouping key and the directory used for explicit Task navigation.
 
+A durable event may invalidate both projections: Task completion/failure and
+interaction requests emit each applicable Mailbox and Work Ledger notification.
+Neither projection consumes the other's invalidation. Every global stream
+connection, including reconnect, rehydrates both canonical projections because
+this notification stream does not replay changes from a disconnected interval.
+
 Mailbox read/read-all/archive/restore/delete actions append
 `mailbox.acknowledged` protocol events. Delete is a terminal projection action:
 the exact source message leaves both active and archived views and their counts,
