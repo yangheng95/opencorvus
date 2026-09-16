@@ -18,6 +18,11 @@ All runtime files whose lifecycle is controlled by that Task must be descendants
 
 Its tool output, managed Git worktree, and ownership markers live there. The canonical event body is Task-wide and lives at `trace.jsonl` directly under the Task root; `trace/` holds its index and bounded payload blobs, while the project index maps Session IDs back to the owning Task. Task-wide artifacts (including immutable read materializations), evidence, research, documents, intent, logs, and acceptance state remain direct or named descendants of the Task root.
 
+Frontend Design projects the physical authoring directory and capture binding
+from the same primary Task-root path. File tools use that absolute skeleton
+directory even inside a Session worktree; capture and structured Artifact
+locators remain relative to the declared frontend-design artifact root.
+
 ## Non-Task namespaces
 
 - `missions/<mission-id>/` contains only Mission-owned durable coordination notes.

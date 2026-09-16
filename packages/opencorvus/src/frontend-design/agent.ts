@@ -24,8 +24,7 @@ import { Log } from "@/util/log"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 import { Instance } from "@/project/instance"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
-import { ProjectRuntimePaths } from "@/project/runtime-paths"
-import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
+import path from "node:path"
 import { createStageToolMaterializerBinding } from "@/agent/stage-tool-materializer"
 import type { VisualSpec } from "./types"
 import {
@@ -117,7 +116,7 @@ export namespace FrontendDesignAgent {
     input: AnalyzeInput,
   ): Promise<(Result & { sessionID: string }) | PartialResult | AgentCoordinationHandoffResult> {
     const projection = projectFrontendDesignInput(input)
-    const frontendRuntimePaths = frontendDesignPathsForTask(input.taskID)
+    const frontendRuntimePaths = projection.artifactPaths
     const captureFactoryInput = {
       mode: input.mode,
       artifactRoot: frontendRuntimePaths.absoluteDir,
@@ -241,14 +240,11 @@ async function buildPromptParts(input: FrontendDesignPromptProjection, agentID: 
 }
 
 function buildUserPrompt(input: FrontendDesignPromptProjection, agentID: string): string {
-  const visualSkeletonRef = ProjectRuntimePaths.taskRelative(
-    input.taskID,
-    "frontend-design",
-    "visual-html-skeleton",
-  )
+  const visualSkeletonRef = path.join(input.artifactPaths.absoluteDir, "visual-html-skeleton").replaceAll("\\", "/")
   const sections = [
     `# Delegation\n\nProjected agent "${agentID}" is asked through the frontend_design adapter to produce the high-fidelity visual HTML skeleton contract, frontend template, fillable modules, material inventory, visual/data contracts, known transcription problems, and projected-consumer handoff notes for this task. Read the exact DesignResourceManifest locator before assigning intent, authority, or relationships to neutral file refs; never infer semantics from MIME, filename, order, or task wording.`,
     `# Dispatch instruction\n\n${input.instruction}`,
+    `# Task Artifact Directory\n\nPhysical authoring directory: \`${visualSkeletonRef}\`. Use this absolute directory for file operations even when your Session tools run in a separate Git worktree. This is the same Task-owned directory read by the capture tool. Capture inputs and structured Artifact refs are relative to \`${input.artifactPaths.absoluteDir.replaceAll("\\", "/")}\`: for example, rendered_entrypoint=\`visual-html-skeleton/index.html\` and screenshot_artifact=\`visual-html-skeleton/evidence/desktop.png\`. Write the skeleton directly to this canonical directory; keep it untracked as Task runtime evidence.`,
     renderUserRequestSection({
       heading: "# Task",
       title: input.taskTitle,
@@ -288,13 +284,6 @@ function buildUserPrompt(input: FrontendDesignPromptProjection, agentID: string)
   }
 
   return sections.join("\n\n")
-}
-
-function frontendDesignPathsForTask(taskID: string): ReturnType<typeof ProjectRuntimePaths.frontendDesignPaths> {
-  return ProjectRuntimePaths.frontendDesignPaths(
-    taskPrimaryProjectRoot(taskID, { activeProjectID: Instance.project.id }),
-    taskID,
-  )
 }
 
 function buildUserPromptForTest(
