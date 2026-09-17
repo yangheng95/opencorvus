@@ -24,6 +24,41 @@ import { withKeyedLock } from "@/util/lock"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 describe("runtime execution settlement authority", () => {
+  test("fences and cancels Task activation before Session prompt settlement, then admits rollback", async () => {
+    const execution = RuntimeExecutionSettlement.reserve("task_control_activation", "root-before-shutdown")
+    execution.onCancel(() => execution.settle())
+    let boundary: unknown
+    const settled = await Server.settleCurrentProcessExecution("root admission shutdown", {
+      disposeInstances: async () => {},
+      onRuntimeCancellationRequested() {
+        let admission: unknown
+        try {
+          const late = RuntimeExecutionSettlement.reserve("task_control_activation", "root-during-shutdown")
+          late.settle()
+          admission = "admitted"
+        } catch (error) {
+          admission = error
+        }
+        boundary = { aborted: execution.signal.aborted, reason: execution.signal.reason, admission }
+      },
+    })
+    try {
+      expect(boundary).toEqual({
+        aborted: true,
+        reason: expect.objectContaining({ message: "root admission shutdown" }),
+        admission: expect.objectContaining({
+          name: "RuntimeExecutionAdmissionClosedError",
+          kind: "task_control_activation",
+        }),
+      })
+    } finally {
+      await settled.releaseHandoff(false)
+    }
+    const successor = RuntimeExecutionSettlement.reserve("task_control_activation", "root-after-rollback")
+    expect(successor.label).toBe("root-after-rollback")
+    successor.settle()
+  })
+
   test("returns shutdown cancellation and admits a successor after owner release", async () => {
     const locks = new Map<string, Promise<unknown>>()
     let releaseOwner!: () => void

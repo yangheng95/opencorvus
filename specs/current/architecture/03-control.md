@@ -112,6 +112,12 @@ retain their existing cancellation or conversation-input authority. All physical
 owned Prompts, including terminal cleanup tails and non-Task Sessions, still receive
 cancellation and are awaited before runtime ownership is released. One terminal
 Task therefore does not reject an active sibling's durable shutdown handoff.
+Task-control activation admission closes and its owned activation signals are
+cancelled in the initial runtime fence, before Session Prompt admission closes.
+Terminal publications still drain before the final activation idle wait. This
+prevents a shutdown-induced prompt refusal from becoming a Task failure and
+retains the existing durable ingress for recovery. A rolled-back handoff reopens
+the same activation authority and reconciles the captured project frontiers.
 
 Task 的 execution epoch（执行轮次）、reopen（重新打开）准入、终态输入、native wait 和
 dispatch continuation 的唯一当前契约见 [Task control plane](task-control-plane.md)。
