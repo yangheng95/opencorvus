@@ -613,7 +613,8 @@ broker identity，不描述 OAuth flow。第一个 backend 绑定该 port，peer
 重绑同一 port。peer probe/takeover 在每个 runtime 内 single-flight；identity handoff 会先停止旧 local server，再替换
 runtime handle。listener 已 `unref`，因此复用它的 backend 正常存活时 callback 可达，而一次性 CLI 不会因 listener
 悬挂。proof timeout、连接失败或 response body 读取失败是 `unreachable`，不是身份否定：若旧 port 仍被占用，peer 明确拒绝破坏性轮换；
-收到完整 HTTP response 后，非 2xx、JSON/shape 解析失败或 generation/proof/HMAC 认证失败都把 owner 判为 `foreign`、选择新 port/generation 并结算旧 generation 的
+探测在接收 headers 和读取 body 后都核对同一个取消信号；已经超时/取消的请求即使返回成功状态或空 body，仍属于 `unreachable`，不能成为轮换身份的证据。
+收到未取消的完整 HTTP response 后，非 2xx、JSON/shape 解析失败或 generation/proof/HMAC 认证失败都把 owner 判为 `foreign`、选择新 port/generation 并结算旧 generation 的
 pending flow。broker identity 或 generation settlement 的 atomic rename 若返回不确定结果，owner 重读 exact identity/flow facts；
 一次 `unreachable` takeover refusal 不 retire 当前 peer monitor；只有 replacement 已成功 bind、publish identity 并结算 generation，
 或显式 stop，才替换/退役原 runtime。短暂 stall 恢复后 monitor 继续验证同一 owner，owner 随后退出仍自动接管同一 URI。

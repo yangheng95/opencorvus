@@ -251,6 +251,53 @@ describe("the durable MCP OAuth callback broker", () => {
     }
   }, 15_000)
 
+  test.each(["headers", "body"] as const)(
+    "a cancelled %s probe preserves the live broker identity",
+    async (stage) => {
+      const root = await temporaryRoot(`cancelled-${stage}`)
+      const output = path.join(root, "owner.json")
+      const owner = spawnHolder(root, output)
+      const nativeFetch = globalThis.fetch
+      let transport: ReturnType<typeof spyOn> | undefined
+      try {
+        const binding = await waitForJson<{ redirectUrl: string; generation: string }>(output)
+        transport = spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
+          const url = new URL(input instanceof Request ? input.url : String(input))
+          if (url.pathname !== "/mcp/oauth/broker-proof") return nativeFetch(input, init)
+          const signal = init?.signal
+          if (!signal) throw new Error("Broker proof requires its cancellation signal")
+          const cancelled = signal.aborted
+            ? Promise.resolve()
+            : new Promise<void>((resolve) => signal.addEventListener("abort", () => resolve(), { once: true }))
+          const response = new Response("", { status: 200 })
+          if (stage === "headers") await cancelled
+          else
+            response.text = async () => {
+              await cancelled
+              return ""
+            }
+          return response
+        })
+        const refusal = await Global.provideRoot(root, () => McpOAuthCallback.ensureRunning()).catch((error) => error)
+        transport.mockRestore()
+        transport = undefined
+        expect({
+          refusal: refusal instanceof Error ? refusal.message : refusal,
+          recovered: await Global.provideRoot(root, () => McpOAuthCallback.ensureRunning()),
+        }).toEqual({
+          refusal: `MCP OAuth callback broker on port ${new URL(binding.redirectUrl).port} is temporarily unreachable but still owns the port; refusing destructive identity rotation`,
+          recovered: binding,
+        })
+      } finally {
+        transport?.mockRestore()
+        await McpOAuthCallback.stop()
+        await stopChild(owner)
+        await rm(root, { recursive: true, force: true })
+      }
+    },
+    15_000,
+  )
+
   test("a peer monitor survives an unreachable owner stall and later takes over automatically", async () => {
     const root = await temporaryRoot("monitor-stall-takeover")
     const ownerOutput = path.join(root, "owner.json")
