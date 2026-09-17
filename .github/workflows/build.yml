@@ -213,6 +213,16 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+      - name: Retain failed native first-run diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: first-run-diagnostics-overlay-${{ matrix.platform }}
+          path: .scratch/package-runtime/tmp/opencorvus-first-run-*/
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 7
+
   # CLI means command-line interface; each row packages only its native host.
   package-cli:
     name: cli (${{ matrix.platform }})
@@ -315,6 +325,16 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+      - name: Retain failed native first-run diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: first-run-diagnostics-cli-${{ matrix.platform }}
+          path: .scratch/package-runtime/tmp/opencorvus-first-run-*/
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 7
+
   publish-release-assets:
     name: publish release assets
     needs:
@@ -348,6 +368,7 @@ jobs:
 
       - uses: actions/download-artifact@v8
         with:
+          pattern: "{cli,overlay}-*"
           path: /tmp/release-assets
 
       - name: Verify upload release identity

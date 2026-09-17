@@ -39,6 +39,35 @@ async function readWorkflow(file: string): Promise<Workflow> {
 }
 
 describe("GitHub Actions workflow contract", () => {
+  test("retains first-run evidence at the packaging runtime and stages the two package families", async () => {
+    const release = await readWorkflow("build.yml")
+    const build = await readWorkflow("build-check.yml")
+    const evidence = [
+      build.jobs?.["build-critical"],
+      release.jobs?.["package-overlay"],
+      release.jobs?.["package-cli"],
+    ].map((job) => job?.steps?.find((step) => step.name === "Retain failed native first-run diagnostics"))
+    expect(evidence.map((step) => ({ if: step?.if, uses: step?.uses, with: step?.with }))).toEqual(
+      ["failed-native-first-run", "first-run-diagnostics-overlay-${{ matrix.platform }}", "first-run-diagnostics-cli-${{ matrix.platform }}"]
+        .map((name) => ({
+          if: "failure()",
+          uses: "actions/upload-artifact@v7",
+          with: {
+            name,
+            path: ".scratch/package-runtime/tmp/opencorvus-first-run-*/",
+            "include-hidden-files": true,
+            "if-no-files-found": "ignore",
+            "retention-days": 7,
+          },
+        })),
+    )
+    expect(release.jobs?.["publish-release-assets"]?.steps
+      ?.filter((step) => step.uses === "actions/download-artifact@v8").map((step) => step.with))
+      .toEqual([
+        { pattern: "{cli,overlay}-*", path: "/tmp/release-assets" },
+      ])
+  })
+
   test("uses the current checkout action across every active workflow", async () => {
     const workflowFiles = (await fs.readdir(workflowRoot)).filter((file) => file.endsWith(".yml")).sort()
     const checkoutReferences: Array<{ file: string; job: string; uses: string }> = []
@@ -569,12 +598,7 @@ describe("GitHub Actions workflow contract", () => {
     // compiler, and published nothing: `-y` stops neither a debconf prompt nor
     // the runner's own unattended-upgrades holding the lock.
     const boundedApt = (run: string) => ({ "timeout-minutes": 15, env: { DEBIAN_FRONTEND: "noninteractive" }, run })
-    // Retries and a short per-request timeout because the x64 runner's Ubuntu
-    // mirror served packages at a flat thirty seconds each during v0.0.47-beta,
-    // regardless of size — a stalled connection, not bandwidth. Failing that
-    // request fast and retrying beats waiting out every package in the tree.
-    const aptOptions = "-o DPkg::Lock::Timeout=300 -o Acquire::Retries=5 -o Acquire::http::Timeout=20"
-    const aptRipgrep = `sudo apt-get ${aptOptions} update\nsudo apt-get ${aptOptions} install -y ripgrep\n`
+    const aptRipgrep = "sudo bash script/install-ubuntu-packages.sh ripgrep\n"
     expect(
       buildJobs["build-critical"]?.steps?.find(({ name }) => name === "Install critical build runtime dependencies"),
     ).toEqual({
