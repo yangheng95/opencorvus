@@ -60,6 +60,16 @@ async function audits(): Promise<Array<{ pid: number; executable: string; model:
   return Promise.all(names.filter((name) => /^provider-\d+\.json$/.test(name)).map(async (name) => JSON.parse(await fs.readFile(path.join(auditRoot, name), "utf8"))))
 }
 try {
+  const pluginProbes = await Promise.all(["first", "second"].map(async (name) => {
+    const entry = path.join(root, `plugin-${name}.mjs`)
+    await fs.writeFile(entry, [
+      'import fs from "node:fs/promises"',
+      'import path from "node:path"',
+      `export default async function () { await fs.writeFile(path.join(${JSON.stringify(root)}, ${JSON.stringify(`plugin-${name}-`)} + process.pid + '.json'), JSON.stringify({ name: ${JSON.stringify(name)}, pid: process.pid })); return {} }`,
+    ].join("\n"))
+    return pathToFileURL(entry).href
+  }))
+  process.env.OPENCORVUS_CONFIG_CONTENT = JSON.stringify({ plugin: pluginProbes })
   if (realProvider) {
     result.binarySHA256 = createHash("sha256").update(await fs.readFile(executable)).digest("hex")
     result.auditPluginSHA256 = createHash("sha256").update(await fs.readFile(auditPlugin)).digest("hex")
@@ -74,7 +84,7 @@ try {
     await fs.copyFile(modelSource, path.join(root, "runtime/data/models.json"))
     Object.assign(process.env, { OPENCORVUS_NATIVE_REAL_PROVIDER: "1", OPENCORVUS_NATIVE_AUDIT_ROOT: auditRoot,
       OPENCORVUS_NATIVE_AUDIT_MODEL: "gpt-5.6-luna", OPENCORVUS_NATIVE_AUDIT_MAX_REQUESTS: String(maxRequests),
-      OPENCORVUS_CONFIG_CONTENT: JSON.stringify({ model, small_model: model, permission_mode: "full_access", plugin: [pathToFileURL(auditPlugin).href] }) })
+      OPENCORVUS_CONFIG_CONTENT: JSON.stringify({ model, small_model: model, permission_mode: "full_access", plugin: [...pluginProbes, pathToFileURL(auditPlugin).href] }) })
     console.log(`[native-real] evidence=${resultPath}`)
   }
   const { createOpenCorvusServer } = await import("../packages/sdk/js/src/server")
@@ -119,6 +129,14 @@ try {
         assert.ok(relative && !relative.startsWith("..") && !path.isAbsolute(relative), "Project belongs to test runtime")
         created.push(session)
       }
+      const probeNames = await fs.readdir(root)
+      const receipts = await Promise.all(probeNames.filter((name) => /^plugin-(first|second)-\d+\.json$/.test(name)).map(async (name) => JSON.parse(await fs.readFile(path.join(root, name), "utf8"))))
+      const probeProcesses = [...new Set(receipts.map((receipt) => receipt.pid))]
+      assert.equal(probeProcesses.length, occurrence + 1, "Each physical native start must load the local plugins")
+      for (const pid of probeProcesses) {
+        assert.deepEqual(receipts.filter((receipt) => receipt.pid === pid).map((receipt) => receipt.name).sort(), ["first", "second"], "Both sequentially published native plugin factories must execute")
+      }
+      result.pluginLoading = { status: "passed", physicalProcesses: probeProcesses.length }
       if (realProvider && occurrence === 0) {
         const providers = await request(`/provider?directory=${encodeURIComponent(created[0]!.directory)}`, 200)
         const projected = providers.all.find((provider: any) => provider.id === "openai")?.models?.["gpt-5.6-luna"]
