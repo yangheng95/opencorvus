@@ -226,8 +226,10 @@ export function SubagentConversationPanel(props: {
     flushLiveProjection.schedule()
   })
   const displayedConversation = createMemo(() => {
+    const target = requestKey()
     const base = conversation()
-    return base ? projectSubagentConversationLive(base, liveProjection()) : undefined
+    if (!target || !base || base.targetKey !== target) return undefined
+    return projectSubagentConversationLive(base, liveProjection())
   })
   const transcriptRefresh = createSubagentTranscriptRefreshController(() => refetch())
   createEffect(() => {

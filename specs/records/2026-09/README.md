@@ -1,5 +1,9 @@
 # 2026-09 Records
 
+- [Sub-agent dock session switching](2026-09-18-subagent-dock-session-switch.md)
+
+- [Attachment-store authority marker removal](2026-09-18-attachment-store-authority-removal.md)
+
 - [v0.1.1-beta publication](2026-09-17-v0.1.1-beta-release.md)
 
 - [Runtime end-to-end acceptance before benchmark](2026-09-16-runtime-e2e-acceptance.md)

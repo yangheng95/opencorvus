@@ -1,6 +1,5 @@
 import crypto, { randomUUID } from "node:crypto"
 import {
-  acquireProcessLock,
   CROSS_PROCESS_LOCK_RETRY,
   SHARED_JSON_FACT_QUEUE_TIMEOUT_MS,
   withProcessLock,
@@ -29,7 +28,6 @@ import { DecisionLogTable } from "@/decision-log/schema"
 import { Log } from "@/util/log"
 import { requireRuntimePackage } from "@/runtime/package-require"
 import { withKeyedLock } from "@/util/lock"
-import { Filesystem } from "@/util/filesystem"
 import { projectInteractionRowInTransaction } from "@/engine/store"
 import { ATTACHMENT_ROUTE_PREFIX, attachmentNameFromUrl } from "./attachment-reference"
 
@@ -106,14 +104,14 @@ function mimeFromPath(absPath: string): string {
 }
 
 function storageDir(projectDir: string): string {
-  return ProjectRuntimePaths.attachmentBlobRoot(projectDir)
+  const databasePath = path.resolve(Database.Path())
+  const pathIdentity = process.platform === "win32" ? databasePath.toLowerCase() : databasePath
+  const databaseNamespace = crypto.createHash("sha256").update(pathIdentity).digest("hex")
+  return path.join(ProjectRuntimePaths.attachmentBlobRoot(projectDir), databaseNamespace)
 }
 
 const log = Log.create({ service: "attachment-store" })
 const publicationLocks = new Map<string, Promise<unknown>>()
-const authorityLocks = new Map<string, Promise<unknown>>()
-const AUTHORITY_LOCK_WAIT_MS = 30_000
-const AUTHORITY_LOCK_RETRY_MS = 25
 
 async function withAttachmentPairLock<T>(abs: string, operation: () => Promise<T>): Promise<T> {
   return withKeyedLock(
@@ -122,24 +120,6 @@ async function withAttachmentPairLock<T>(abs: string, operation: () => Promise<T
     () => withProcessLock(abs, { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY }, operation),
     SHARED_JSON_FACT_QUEUE_TIMEOUT_MS,
   )
-}
-
-async function withAuthorityFileLock<T>(filePath: string, operation: () => Promise<T>): Promise<T> {
-  const release = await acquireProcessLock(filePath, {
-    realpath: false,
-    retries: {
-      retries: Math.ceil(AUTHORITY_LOCK_WAIT_MS / AUTHORITY_LOCK_RETRY_MS),
-      factor: 1,
-      minTimeout: AUTHORITY_LOCK_RETRY_MS,
-      maxTimeout: AUTHORITY_LOCK_RETRY_MS,
-      randomize: false,
-    },
-  })
-  try {
-    return await operation()
-  } finally {
-    await release()
-  }
 }
 
 export namespace AttachmentStore {
@@ -165,88 +145,6 @@ export namespace AttachmentStore {
     source?: string
   }
 
-  export type Authority = {
-    schema_version: 1
-    project_id: string
-    worktree: string
-    database_instance_id: string
-  }
-
-  export class AuthorityError extends Error {
-    override readonly name = "AttachmentStoreAuthorityError"
-
-    constructor(message: string) {
-      super(message)
-    }
-  }
-
-  function authorityPath(projectDir: string): string {
-    return path.join(storageDir(projectDir), ".authority.json")
-  }
-
-  function currentAuthority(projectID: string, projectDir: string): Authority {
-    return {
-      schema_version: 1,
-      project_id: projectID,
-      worktree: path.resolve(projectDir),
-      database_instance_id: Database.Identity(),
-    }
-  }
-
-  function parseAuthority(input: string, filePath: string): Authority {
-    let value: unknown
-    try {
-      value = JSON.parse(input)
-    } catch (error) {
-      throw new AuthorityError(
-        `Attachment store authority is not valid JSON at ${filePath}: ${error instanceof Error ? error.message : String(error)}`,
-      )
-    }
-    if (!value || typeof value !== "object") {
-      throw new AuthorityError(`Attachment store authority is malformed at ${filePath}`)
-    }
-    const record = value as Record<string, unknown>
-    if (
-      record.schema_version !== 1 ||
-      typeof record.project_id !== "string" ||
-      typeof record.worktree !== "string" ||
-      typeof record.database_instance_id !== "string" ||
-      !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(record.database_instance_id)
-    ) {
-      throw new AuthorityError(`Attachment store authority is malformed at ${filePath}`)
-    }
-    return {
-      schema_version: 1,
-      project_id: record.project_id,
-      worktree: record.worktree,
-      database_instance_id: record.database_instance_id,
-    }
-  }
-
-  function assertAuthority(actual: Authority, expected: Authority, filePath: string): Authority {
-    if (
-      actual.project_id !== expected.project_id ||
-      path.resolve(actual.worktree) !== expected.worktree ||
-      actual.database_instance_id !== expected.database_instance_id
-    ) {
-      throw new AuthorityError(
-        `Attachment store ${filePath} belongs to another database authority for project ${expected.project_id}`,
-      )
-    }
-    return actual
-  }
-
-  /** Observe an existing attachment authority without claiming or rewriting it. */
-  export async function observeAuthority(projectDir: string): Promise<Authority | undefined> {
-    const filePath = authorityPath(projectDir)
-    try {
-      return parseAuthority(await fs.readFile(filePath, "utf8"), filePath)
-    } catch (error) {
-      if (hasNodeErrorCode(error, "ENOENT")) return undefined
-      throw error
-    }
-  }
-
   /**
    * Fail closed when durable JSON/text facts still name a Project occurrence.
    * This is the same retain-surface authority used by attachment garbage
@@ -254,55 +152,6 @@ export namespace AttachmentStore {
    */
   export function hasProjectIdentityReference(projectID: string): boolean {
     return collectReferencedShas().has(projectID)
-  }
-
-  async function storeOwnedByDatabase(projectID: string): Promise<boolean> {
-    const files = await listOnDisk(projectID)
-    const referenced = collectReferencedShas(projectID).get(projectID) ?? new Set<string>()
-    return files.every((file) => referenced.has(file.sha))
-  }
-
-  /**
-   * Bind one physical attachment directory to its sole durable database.
-   * A pre-marker directory can be claimed only by a database that already
-   * references every one of its blobs; an empty directory can be claimed
-   * by the first writer. This prevents an isolated database from treating a
-   * shared project directory's live attachments as its own orphans.
-   */
-  export async function claimAuthority(projectID: string): Promise<Authority> {
-    const project = Project.get(projectID)
-    if (!project) throw new Error(`AttachmentStore.claimAuthority: unknown project ${projectID}`)
-    const dir = storageDir(project.worktree)
-    const filePath = authorityPath(project.worktree)
-    const expected = currentAuthority(projectID, project.worktree)
-    await fs.mkdir(dir, { recursive: true })
-    return await withKeyedLock(authorityLocks, filePath, () =>
-      withAuthorityFileLock(filePath, async () => {
-        try {
-          const actual = parseAuthority(await fs.readFile(filePath, "utf8"), filePath)
-          try {
-            return assertAuthority(actual, expected, filePath)
-          } catch (error) {
-            if (!(error instanceof AuthorityError)) throw error
-            if (!(await storeOwnedByDatabase(projectID))) throw error
-            await Filesystem.writeAtomic(filePath, JSON.stringify(expected, null, 2))
-            return expected
-          }
-        } catch (error) {
-          if (!hasNodeErrorCode(error, "ENOENT")) throw error
-        }
-        if (!(await storeOwnedByDatabase(projectID))) {
-          throw new AuthorityError(`Attachment store ${filePath} contains blobs that the current database does not own`)
-        }
-        try {
-          await fs.writeFile(filePath, JSON.stringify(expected, null, 2), { flag: "wx" })
-          return expected
-        } catch (error) {
-          if (!hasNodeErrorCode(error, "EEXIST")) throw error
-          return assertAuthority(parseAuthority(await fs.readFile(filePath, "utf8"), filePath), expected, filePath)
-        }
-      }),
-    )
   }
 
   function metadataPath(abs: string): string {
@@ -471,7 +320,8 @@ export namespace AttachmentStore {
   }
 
   /**
-   * Persist an attachment under `<project.worktree>/.opencorvus/.r/project/attachments/<sha>.<ext>`.
+   * Persist an attachment under
+   * `<project.worktree>/.opencorvus/.r/project/attachments/<database-path-digest>/<sha>.<ext>`.
    * Content-addressed: identical payloads deduplicate to the same file. Returns
    * a reference carrying the HTTP URL that AttachmentRoutes serves.
    *
@@ -486,7 +336,6 @@ export namespace AttachmentStore {
     if (!mime) throw new Error("AttachmentStore.write requires a non-empty mime type")
     const project = Project.get(projectID)
     if (!project) throw new Error(`AttachmentStore.write: unknown project ${projectID}`)
-    await claimAuthority(projectID)
     const sha = crypto.createHash("sha256").update(data).digest("hex")
     const ext = extensionFor(mime, filename)
     const name = `${sha}.${ext}`
@@ -1430,7 +1279,6 @@ export namespace AttachmentStore {
     retries: Array<{ blob: string; metadata: string; code: "EBUSY" | "EPERM" }>
     failures: Array<{ blob: string; metadata: string; phase: "blob" | "metadata"; error: string }>
   }> {
-    await claimAuthority(projectID)
     const files = await listOnDisk(projectID)
     if (files.length === 0) {
       return { deleted: 0, bytesFreed: 0, skippedYoung: 0, kept: 0, retries: [], failures: [] }

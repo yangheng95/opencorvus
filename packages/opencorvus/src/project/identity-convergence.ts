@@ -263,21 +263,6 @@ export namespace ProjectIdentityConvergence {
     const observedRows = Database.use((db) => db.select().from(ProjectTable).all())
     const observedMatches = await physicalMatches(observedRows, worktree)
     const observedProjectIDs = observedMatches.map((row) => row.id).sort()
-    const attachmentAuthority = await AttachmentStore.observeAuthority(worktree)
-    if (
-      attachmentAuthority &&
-      (attachmentAuthority.project_id !== canonicalProjectID ||
-        attachmentAuthority.database_instance_id !== Database.Identity() ||
-        !(await Project.sameFilesystemLocation(attachmentAuthority.worktree, worktree)))
-    ) {
-      conflict({
-        worktree,
-        canonicalProjectID,
-        projectIDs:
-          observedProjectIDs.length >= 2 ? observedProjectIDs : [canonicalProjectID, attachmentAuthority.project_id],
-        message: `Attachment store authority does not belong to canonical Project ${canonicalProjectID}`,
-      })
-    }
 
     try {
       return Database.immediateTransaction((db) => {

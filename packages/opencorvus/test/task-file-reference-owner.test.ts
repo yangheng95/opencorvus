@@ -13,11 +13,82 @@ import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { Database } from "@/storage/db"
+import { exportMysqlTransferSnapshot, importMysqlTransferSnapshot } from "@/storage/mysql-transfer"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
   await Instance.disposeAll()
   await resetMemoryDatabase()
+})
+
+test("publishes attachments after rebuilding the database for an existing project runtime", async () => {
+  await using project = await memoryProject("attachment-database-rebuild")
+  const first = await Instance.provide({
+    directory: project.path,
+    fn: () => AttachmentStore.write(Instance.project.id, Buffer.from("first database"), "text/plain", "first.txt"),
+  })
+  const firstLocation = AttachmentStore.nameFromUrl(first.url)!
+  expect(await AttachmentStore.read(firstLocation.projectID, firstLocation.name)).toEqual(Buffer.from("first database"))
+
+  await Instance.disposeAll()
+  await resetMemoryDatabase()
+
+  const second = await Instance.provide({
+    directory: project.path,
+    fn: () =>
+      AttachmentStore.write(Instance.project.id, Buffer.from("rebuilt database"), "text/plain", "rebuilt.txt"),
+  })
+  const secondLocation = AttachmentStore.nameFromUrl(second.url)!
+  expect(await AttachmentStore.read(secondLocation.projectID, secondLocation.name)).toEqual(
+    Buffer.from("rebuilt database"),
+  )
+})
+
+test("reads a persisted attachment after restoring the database at the same path", async () => {
+  await using project = await memoryProject("attachment-transfer-restore")
+  const prepared = await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "Attachment transfer restore" })
+      const message = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        sessionID: session.id,
+        role: "user",
+        author: "user",
+        time: { created: Date.now() },
+        agent: "work",
+        model: { providerID: "test", modelID: "attachment-transfer" },
+      })
+      const reference = await AttachmentStore.write(
+        Instance.project.id,
+        Buffer.from("transfer attachment"),
+        "text/plain",
+        "transfer.txt",
+      )
+      await Session.updatePart({
+        id: Identifier.ascending("part"),
+        sessionID: session.id,
+        messageID: message.id,
+        type: "file",
+        mime: reference.mime,
+        filename: reference.filename,
+        url: reference.url,
+        presentation: "attachment-index",
+      })
+      return { reference, snapshot: exportMysqlTransferSnapshot() }
+    },
+  })
+
+  await Instance.disposeAll()
+  expect(importMysqlTransferSnapshot(prepared.snapshot)).toMatchObject({ ok: true })
+
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const location = AttachmentStore.nameFromUrl(prepared.reference.url)!
+      expect(await AttachmentStore.read(location.projectID, location.name)).toEqual(Buffer.from("transfer attachment"))
+    },
+  })
 })
 
 test("persists canonical Task file references through their Engine owner", async () => {
