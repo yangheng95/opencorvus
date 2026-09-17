@@ -13,9 +13,8 @@
 //     is string[] so moving a child between parents is two targeted writes.
 //   - Unknown event types throw. No fallback per project rule 1.
 //
-// Behavioural fixture: for the P0 trace, the tree produced here must match the
-// checked-in snapshot byte-for-byte. The equivalence test in
-// `test/new-writer-equivalence.test.ts` enforces this.
+// Verify rendered projection changes through real page interaction and visual
+// inspection of the corresponding canonical message/lifecycle evidence.
 
 import { batch, createEffect } from "solid-js"
 import { produce } from "solid-js/store"
@@ -128,33 +127,31 @@ function assistantMessageErrorReason(info: any): string | undefined {
   throw new Error(`assistant message ${String(info.id || "")} has an error without a displayable reason`)
 }
 
-function applyAssistantMessageSettlement(cardID: string, info: any): void {
+function assistantMessageSettlement(info: any): ProjectedSessionStatus | undefined {
   if (!messageInfoIsAssistant(info)) return
   const completedAt = Number(info?.time?.completed)
   if (assistantMessageWasAborted(info)) {
-    applyProjectedSessionStatus(cardID, {
+    return {
       cardStatus: "completed",
       terminalReason: "aborted",
       ...(completedAt > 0 ? { timeCompleted: completedAt } : {}),
-    })
-    return
+    }
   }
   const errorReason = assistantMessageErrorReason(info)
   if (errorReason) {
-    applyProjectedSessionStatus(cardID, {
+    return {
       cardStatus: "error",
       terminalReason: "error",
       errorReason,
       ...(completedAt > 0 ? { timeCompleted: completedAt } : {}),
-    })
-    return
+    }
   }
   if (completedAt > 0) {
-    applyProjectedSessionStatus(cardID, {
+    return {
       cardStatus: "completed",
       terminalReason: "completed",
       timeCompleted: completedAt,
-    })
+    }
   }
 }
 
@@ -284,7 +281,11 @@ interface SessionInfo {
    * occurrence. This is independent from the card that renders the input
    * user message itself. */
   occurrenceCardIDs: Map<string, string>
-  occurrenceIdentities: Map<string, { agentID: string; stage: string }>
+  occurrenceIdentities: Map<string, {
+    agentID: string
+    stage: string
+    lifecycle?: ProjectedSessionStatus
+  }>
   activeOccurrenceInputMessageID?: string
   activeOccurrenceOrderKey?: string
   /** The message turn currently receiving session-level events
@@ -329,7 +330,7 @@ interface MessageInfo {
   orderKey: string
   time: number
   serverTimeConfirmed: boolean
-  completed: boolean
+  settlement?: ProjectedSessionStatus
   delegatedContext: boolean
 }
 
@@ -1031,7 +1032,6 @@ function handleMessageUpdated(event: any): void {
   }
   pendingPartFirstMessages.delete(id)
   const timeCreated = existingMessage?.serverTimeConfirmed ? existingMessage.time : incomingTimeCreated
-  const completed = Number.isFinite(info?.time?.completed) && Number(info.time.completed) > 0
 
   // Channel-driven stage. Bridge stamps it on every event; an absent
   // channel is a bridge bug, not a case we silently accommodate.
@@ -1054,7 +1054,7 @@ function handleMessageUpdated(event: any): void {
     orderKey,
     time: timeCreated,
     serverTimeConfirmed: true,
-    completed,
+    settlement: assistantMessageSettlement(info),
     delegatedContext: isDelegatedContextMessage(origin),
   }
   const runtimeStage = deriveRuntimeSessionStage(origin.channel)
@@ -1086,7 +1086,7 @@ function handleMessageUpdated(event: any): void {
     stampServerTime: true,
     occurrenceInputMessageID: role === "user" ? id : String(info?.parentID || "") || undefined,
   })
-  applyAssistantMessageSettlement(messageCardID, info)
+  if (nextMessageInfo.settlement) applyProjectedSessionStatus(messageCardID, nextMessageInfo.settlement)
   const needsIntegrityHierarchyRebuild = stage === "integrity" && Boolean(parentSessionID || session.parentSessionID)
 
   // Regroup ordinary cards from the authoritative message timeline; doing
@@ -1289,7 +1289,6 @@ function ensurePartProjection(part: any, opts: { routeMeta?: PartEventRouteMeta 
       orderKey: route.orderKey,
       time: messageTime,
       serverTimeConfirmed: false,
-      completed: false,
       delegatedContext: isDelegatedContextMessage(route),
       pendingPartFirst: true,
     })
@@ -1729,12 +1728,14 @@ function handleSessionStatus(event: any): void {
     "session",
   )
   const projected = projectSessionStatus(event)
+  const info = ensureLifecycleSessionProjection(event, sessionID)
+  const identity = info?.occurrenceIdentities.get(inputMessageID)
+  if (identity) identity.lifecycle = projected
   if (projected.terminalReason) {
     const reviewID = `integrity:${sessionID}`
     runningReviews.delete(reviewID)
     terminalReviewOrderKeys.set(reviewID, lifecycleOrderKey)
   }
-  const info = ensureLifecycleSessionProjection(event, sessionID)
   const occurrenceOwnerCardID = info?.occurrenceCardIDs.get(inputMessageID)
   if (info) advanceActiveOccurrence(info, inputMessageID, lifecycleOrderKey, occurrenceOwnerCardID)
   if (
@@ -1864,7 +1865,7 @@ function ensureLifecycleSessionProjection(event: any, sessionID: string): Sessio
   if (occurrenceIdentity && (occurrenceIdentity.agentID !== agentID || occurrenceIdentity.stage !== stage)) {
     throw new Error(`tree-writer: lifecycle occurrence ${inputMessageID} identity changed`)
   }
-  session.occurrenceIdentities.set(inputMessageID, { agentID, stage })
+  if (!occurrenceIdentity) session.occurrenceIdentities.set(inputMessageID, { agentID, stage })
   return session
 }
 
@@ -2776,6 +2777,9 @@ function projectedCardIsUnchanged(
     orderKey: string
     time: number
     status: CardStatus
+    timeCompleted: number | undefined
+    terminalReason: CardTerminalReason | undefined
+    errorReason: string | undefined
     collapsedContextMessageIDs: string[]
   },
   parts: readonly any[],
@@ -2791,7 +2795,10 @@ function projectedCardIsUnchanged(
     current.title !== fields.title ||
     current.orderKey !== fields.orderKey ||
     current.time !== fields.time ||
-    current.status !== fields.status
+    current.status !== fields.status ||
+    current.timeCompleted !== fields.timeCompleted ||
+    current.terminalReason !== fields.terminalReason ||
+    current.errorReason !== fields.errorReason
   ) {
     return false
   }
@@ -2956,10 +2963,19 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
     const first = segment.messages[0]
     if (!first) continue
     const existing = cardTreeStore.cards[segment.cardID]
+    const latest = segment.messages.at(-1)!
+    const occurrenceInput = latest.role === "user" ? latest.id : latest.parentMessageID
+    const lifecycle = segment.session.occurrenceCardIDs.get(occurrenceInput) === segment.cardID
+      ? segment.session.occurrenceIdentities.get(occurrenceInput)?.lifecycle
+      : undefined
+    const settlement = lifecycle?.terminalReason ? lifecycle : latest.settlement ?? lifecycle
+    const hasCurrentAssistant = latest.role === "assistant" && latest.serverTimeConfirmed
     const active = activeBySession.get(first.sessionID)?.cardID === segment.cardID
     const status: CardStatus = (() => {
       if (isUserStage(segment.stage)) return "completed"
+      if (settlement) return settlement.cardStatus
       if (active) {
+        if (hasCurrentAssistant) return "running"
         if (existing?.status === "error") return "error"
         if (existing?.terminalReason) return existing.status ?? "completed"
         return "running"
@@ -2977,6 +2993,9 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void 
       orderKey: first.orderKey,
       time: first.time,
       status,
+      timeCompleted: latest.settlement?.timeCompleted ?? settlement?.timeCompleted ?? (hasCurrentAssistant ? undefined : existing?.timeCompleted),
+      terminalReason: settlement?.terminalReason ?? (hasCurrentAssistant ? undefined : existing?.terminalReason),
+      errorReason: settlement?.errorReason ?? (hasCurrentAssistant ? undefined : existing?.errorReason),
       collapsedContextMessageIDs: segment.messages
         .filter((message) => message.delegatedContext)
         .map((message) => message.id),
@@ -3308,7 +3327,6 @@ export function commitPreparedConversationView(prepared: PreparedConversationVie
     if (transcriptOrderKey && transcriptOrderKey !== meta.orderKey) {
       throw new Error(`hydrateConversationView: message ${messageID} orderKey drift between transcript and view`)
     }
-    const completed = Number.isFinite(info?.time?.completed) && Number(info.time.completed) > 0
     const stage = meta.stage
     const displayRole = displayRoleForResolvedRole(rawResolvedRole)
     const runtimeStage = deriveRuntimeSessionStage(origin.channel)
@@ -3334,7 +3352,7 @@ export function commitPreparedConversationView(prepared: PreparedConversationVie
       orderKey: meta.orderKey,
       time: timeCreated,
       serverTimeConfirmed: true,
-      completed,
+      settlement: assistantMessageSettlement(info),
       delegatedContext: isDelegatedContextMessage(origin),
     })
     session.messageIDs.add(messageID)
@@ -3384,12 +3402,6 @@ export function commitPreparedConversationView(prepared: PreparedConversationVie
     if (messageInfoIsAssistant(info)) {
       if (!session) throw new Error(`message ${messageID} missing session projection for model metadata`)
       projectModelOntoCard(session, messageID, modelProjectionFromInfo(info))
-    }
-    if (messageInfoIsAssistant(info)) {
-      if (!session) throw new Error(`message ${messageID} missing session projection for settlement metadata`)
-      const cardID = session.messageCardIDs.get(messageID)
-      if (!cardID) throw new Error(`message ${messageID} missing card projection for settlement metadata`)
-      applyAssistantMessageSettlement(cardID, info)
     }
   }
   rebuildCardHierarchy()

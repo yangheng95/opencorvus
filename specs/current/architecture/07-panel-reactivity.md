@@ -187,6 +187,18 @@ Main-session input and explicitly sourced direct human replies remain
 user-owned. The shared transport-protocol ownership projection is the single
 source for server conversation views and Overlay live/hydrated rendering.
 
+Assistant settlement (status, terminal reason, error and completion time) stays
+with its exact Message projection. Adjacent-card regrouping derives settlement
+from the segment's latest Message, so changing card ownership cannot turn a
+settled assistant back into a running timer. An executing successor assistant
+clears the preceding assistant's terminal display metadata. Lifecycle-only
+cards retain their execution-occurrence projection until a real Message owns
+the card; Task lifecycle is never inferred from a visual card's timer.
+An occurrence lifecycle can supply terminal status before Message settlement;
+it applies only to that occurrence's owner card. Once the last Message has a
+completion timestamp, that timestamp bounds the segment's duration, so a later
+physical runtime shutdown cannot extend already completed work.
+
 ## Failure Contract
 
 - Missing or drifted `agentID`, `sessionID`, `messageID`, Slice revision, parent,
