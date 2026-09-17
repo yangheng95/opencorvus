@@ -120,20 +120,45 @@ function windowsProcessInstanceID(pid: number): string | undefined {
   }
 }
 
+function readProcessInstanceID(pid: number): string | undefined {
+  if (process.platform === "linux") {
+    const stat = fs.readFileSync(`/proc/${pid}/stat`, "utf8")
+    return linuxProcessInstanceIDFromStat(stat)
+  }
+  if (process.platform === "win32") return windowsProcessInstanceID(pid)
+  const value = execFileSync("ps", ["-o", "lstart=", "-p", String(pid)], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+    maxBuffer: 4096,
+  }).trim()
+  return posixProcessInstanceIDFromStart(os.platform(), value)
+}
+
 function processInstanceID(pid: number): string | undefined {
   try {
-    if (process.platform === "linux") {
-      const stat = fs.readFileSync(`/proc/${pid}/stat`, "utf8")
-      return linuxProcessInstanceIDFromStat(stat)
-    }
-    if (process.platform === "win32") return windowsProcessInstanceID(pid)
-    const value = execFileSync("ps", ["-o", "lstart=", "-p", String(pid)], {
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    }).trim()
-    return posixProcessInstanceIDFromStart(os.platform(), value)
+    return readProcessInstanceID(pid)
   } catch {
     return undefined
+  }
+}
+
+export class RuntimeProcessIdentityError extends Error {
+  constructor(readonly pid: number, readonly platform: string, cause: unknown) {
+    super(
+      `Cannot establish runtime process-instance identity for PID ${pid} on ${platform}: ${cause instanceof Error ? cause.message : String(cause)}`,
+      { cause },
+    )
+    this.name = "RuntimeProcessIdentityError"
+  }
+}
+
+function requireProcessInstanceID(pid: number): string {
+  try {
+    const identity = readProcessInstanceID(pid)
+    if (!identity) throw new Error("Platform process reader returned no start identity")
+    return identity
+  } catch (cause) {
+    throw new RuntimeProcessIdentityError(pid, process.platform, cause)
   }
 }
 
@@ -141,6 +166,7 @@ export namespace ProcessInstanceIDTestHooks {
   export const windows = windowsProcessInstanceIDFromFiletime
   export const linux = linuxProcessInstanceIDFromStat
   export const posix = posixProcessInstanceIDFromStart
+  export const require = requireProcessInstanceID
 }
 
 let occurrenceOverrideForTest: string | undefined
@@ -170,8 +196,7 @@ export function replaceRuntimeOccurrenceIDForTest(value: string | undefined): st
  * recovery. It is independent of every database path and listener. */
 export function currentRuntimeProcessOccurrence(): RuntimeProcessOccurrenceInfo {
   if (!runtimeProcessOccurrence) {
-    const instanceID = processInstanceID(process.pid)
-    if (!instanceID) throw new Error(`Cannot establish runtime process-instance identity for PID ${process.pid}`)
+    const instanceID = requireProcessInstanceID(process.pid)
     runtimeProcessOccurrence = {
       pid: process.pid,
       processInstanceID: instanceID,

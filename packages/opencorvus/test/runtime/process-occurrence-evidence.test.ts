@@ -4,10 +4,29 @@ import path from "node:path"
 import { Global } from "@/global"
 import {
   ProcessOccurrenceEvidenceError,
+  ProcessInstanceIDTestHooks,
+  RuntimeProcessIdentityError,
+  currentRuntimeProcessOccurrence,
+  observeRuntimeProcessOccurrence,
   validateProcessPhysicalEvidence,
 } from "@/runtime/process-occurrence"
 
 const cleanupRoots: string[] = []
+
+test("required process identity retains exact live identity and a failed query cause", () => {
+  const own = currentRuntimeProcessOccurrence()
+  expect({ identity: ProcessInstanceIDTestHooks.require(process.pid), observation: observeRuntimeProcessOccurrence(own) })
+    .toEqual({ identity: own.processInstanceID, observation: "exact_live" })
+  let failure: unknown
+  try { ProcessInstanceIDTestHooks.require(2_147_483_647) } catch (error) { failure = error }
+  expect(failure).toBeInstanceOf(RuntimeProcessIdentityError)
+  expect(failure).toMatchObject({
+    pid: 2_147_483_647,
+    platform: process.platform,
+    name: "RuntimeProcessIdentityError",
+    cause: expect.any(Error),
+  })
+})
 
 afterEach(async () => {
   await Promise.all(cleanupRoots.splice(0).map((directory) => fs.rm(directory, { recursive: true, force: true })))

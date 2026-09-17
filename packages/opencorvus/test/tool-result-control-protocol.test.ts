@@ -100,6 +100,7 @@ import { createHarnessGrantSet } from "../src/capability/harness-projection"
 import { harnessGrantedRefs } from "../src/capability/harness-projection"
 import { resolveTestCapabilityTools } from "./fixture/capability-occurrence"
 import { createRuntimeToolOwner } from "../src/session/runtime-tool-owner"
+import { noActionTaskObservation } from "../src/orchestrator/no-action-tool"
 import { testRuntimeToolFactories } from "./fixture/runtime-tool-owner"
 
 const model = {
@@ -789,8 +790,12 @@ describe("single Tool-result turn-control protocol", () => {
         })
         const projected = fixture.tools.no_action
         if (!projected?.execute) throw new Error("Production scheduler projection omitted no_action")
+        const input = {
+          reason: "Lifecycle evidence is reconciled.",
+          observed_task: noActionTaskObservation(taskLifecycleProjection(fixture.taskID)),
+        }
         const result = await projected.execute(
-          { reason: "Lifecycle evidence is reconciled." },
+          input,
           { toolCallId: "call_projected_no_action", messages: [], abortSignal: fixture.abort },
         )
         expect({
@@ -801,7 +806,7 @@ describe("single Tool-result turn-control protocol", () => {
           toolNames: expect.arrayContaining(["no_action"]),
           result: {
             title: "Current Ingress Reconciled",
-            output: "Lifecycle evidence is reconciled.",
+            output: JSON.stringify(input),
             metadata: expect.any(Object),
           },
           control: { kind: "immediate_park" },

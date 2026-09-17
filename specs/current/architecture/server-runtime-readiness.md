@@ -33,6 +33,11 @@ Wake settlement classifies the exact rejected abort reason carried by its runtim
 
 Multiple backends may share one SQLite database. Physical process occurrences, Project maintenance fences, Task activation leases, idempotent recovery facts, and SQLite transactions coordinate ownership; listener readiness neither acquires nor recreates a database-path-wide host lock.
 
+A required current-process identity query preserves its platform-reader cause in
+`RuntimeProcessIdentityError`; POSIX command output is bounded to4096bytes. A
+failed query of another owner's identity still yields unknown-live when that
+process is alive, and never grants takeover on the strength of a failed query.
+
 File logging uses one asynchronous Pino destination per process generation. The
 existing lifecycle mutex serializes initialization, flush and close; cached
 loggers resolve the current generation. A completed file flush joins writes

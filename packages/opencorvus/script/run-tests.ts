@@ -33,7 +33,7 @@ try {
       // Bun 1.3.14 still applies its expired-entry subprocess auto-killer when
       // the zero timeout sentinel is used. Keep a finite per-test ownership
       // window; cases that legitimately need longer declare their own budget.
-      args: ["test", "--timeout=60000", "--parallel=1", "test/isolated-test-entry.test.ts"],
+      args: ["test", "--timeout=60000", "--parallel=1", isolatedEntry],
       cwd,
       env: { ...childEnvironment, OPENCORVUS_TEST_FILES: JSON.stringify([file]) },
       inactivityTimeoutMs: 360_000,
