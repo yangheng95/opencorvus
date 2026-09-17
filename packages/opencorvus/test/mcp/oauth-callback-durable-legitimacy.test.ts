@@ -6,6 +6,7 @@ import { McpAuth } from "@/mcp/auth"
 import { McpOAuthCallback } from "@/mcp/oauth-callback"
 import { McpOAuthProvider } from "@/mcp/oauth-provider"
 import { Filesystem } from "@/util/filesystem"
+import { Log } from "@/util/log"
 import { auth } from "@modelcontextprotocol/sdk/client/auth.js"
 import { currentTestChildEnvironment } from "../fixture/current-test-child-environment"
 import { waitForJSONBarrier as waitForJson } from "../fixture/json-barrier"
@@ -285,8 +286,12 @@ describe("the durable MCP OAuth callback broker", () => {
       expect(await Global.provideRoot(root, () => McpOAuthCallback.ensureRunning())).toEqual(binding)
     } catch (error) {
       await stopChild(owner)
+      const parentLog = await Log.flush()
+        .then(() => Log.read({ lines: 80 }))
+        .then((result) => result.lines.join("\n").slice(-16_384))
+        .catch((logError) => `Parent log unavailable: ${String(logError)}`)
       throw new Error(
-        `Owner-stall checker failed (child exit ${owner.exitCode}).\nstdout:\n${(await stdout).slice(-16_384)}\nstderr:\n${(await stderr).slice(-16_384)}`,
+        `Owner-stall checker failed (child exit ${owner.exitCode}).\nstdout:\n${(await stdout).slice(-16_384)}\nstderr:\n${(await stderr).slice(-16_384)}\nparent log:\n${parentLog}`,
         { cause: error },
       )
     } finally {

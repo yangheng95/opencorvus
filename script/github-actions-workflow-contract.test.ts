@@ -14,6 +14,7 @@ type WorkflowStep = {
 }
 
 type WorkflowJob = {
+  name?: string
   concurrency?: Record<string, unknown>
   if?: string
   needs?: string | string[]
@@ -566,7 +567,27 @@ describe("GitHub Actions workflow contract", () => {
 
     expect(Object.keys(jobs).sort()).toEqual(["channel-runtime-unit", "overlay-unit", "required", "unit"])
     expect(Object.keys(buildJobs).sort()).toEqual(["build-critical", "required", "version-sync"])
-    expect(unitWorkflow.on).toEqual({ push: { branches: ["**"] }, pull_request: null, workflow_dispatch: null })
+    expect(unitWorkflow.on).toEqual({
+      push: { branches: ["**"] },
+      pull_request: null,
+      workflow_dispatch: {
+        inputs: {
+          test_files: {
+            description: "Optional newline-separated paths relative to packages/opencorvus; empty runs the complete suite",
+            type: "string",
+            required: false,
+            default: "",
+          },
+        },
+      },
+    })
+    expect(jobs.unit?.name).toBe("${{ inputs.test_files != '' && 'selected unit' || 'unit' }} (${{ matrix.settings.name }})")
+    expect(jobs.required?.name).toBe("${{ inputs.test_files != '' && 'selected test matrix' || 'test (linux)' }}")
+    const selectedStep = jobs.unit?.steps?.find(({ name }) => name === "Run unit tests")
+    expect(selectedStep?.env).toEqual({ SELECTED_TEST_FILES: "${{ inputs.test_files || '' }}" })
+    expect(selectedStep?.run).toBe(
+      'SELECTED=()\nwhile IFS= read -r file || [[ -n "$file" ]]; do\n  if [[ -n "$file" ]]; then SELECTED+=("$file"); fi\ndone <<< "$SELECTED_TEST_FILES"\nbunx turbo run test --filter=opencorvus -- "${SELECTED[@]}"\n',
+    )
     expect(buildWorkflow.on).toEqual({ push: { branches: ["**"] }, pull_request: null, workflow_dispatch: null })
     expect(releaseWorkflow.on).toEqual({
       push: { tags: ["v*"] },

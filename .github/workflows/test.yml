@@ -1,13 +1,20 @@
 name: unit test
+run-name: ${{ inputs.test_files != '' && 'Selected unit tests' || 'Complete unit tests' }}
 
 on:
   push:
     branches: ["**"]
   pull_request:
   workflow_dispatch:
+    inputs:
+      test_files:
+        description: "Optional newline-separated paths relative to packages/opencorvus; empty runs the complete suite"
+        type: string
+        required: false
+        default: ""
 jobs:
   unit:
-    name: unit (${{ matrix.settings.name }})
+    name: ${{ inputs.test_files != '' && 'selected unit' || 'unit' }} (${{ matrix.settings.name }})
     strategy:
       fail-fast: false
       matrix:
@@ -65,7 +72,14 @@ jobs:
           bun packages/opencorvus/script/prepare-test-process-supervisor.ts
 
       - name: Run unit tests
-        run: bunx turbo run test --filter=opencorvus
+        env:
+          SELECTED_TEST_FILES: ${{ inputs.test_files || '' }}
+        run: |
+          SELECTED=()
+          while IFS= read -r file || [[ -n "$file" ]]; do
+            if [[ -n "$file" ]]; then SELECTED+=("$file"); fi
+          done <<< "$SELECTED_TEST_FILES"
+          bunx turbo run test --filter=opencorvus -- "${SELECTED[@]}"
 
   channel-runtime-unit:
     name: channel-runtime-unit
@@ -106,7 +120,7 @@ jobs:
         run: bun run test
 
   required:
-    name: test (linux)
+    name: ${{ inputs.test_files != '' && 'selected test matrix' || 'test (linux)' }}
     runs-on: ubuntu-latest
     needs:
       - unit
