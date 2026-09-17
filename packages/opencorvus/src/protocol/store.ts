@@ -458,6 +458,17 @@ function pruneLiveReplayEvents(taskID: string, predicate: (event: EventView) => 
 }
 
 function pruneClosedLiveDeltas(taskID: string, event: EventView) {
+  const part = event.payload?.part as { type?: string; state?: { status?: string } } | undefined
+  if (event.type === "message.part.updated" && part?.type === "tool" && part.state?.status === "pending") {
+    // Each input draft publication is a complete transport snapshot. Keeping
+    // its predecessors wastes the bounded replay window and revives stale raw
+    // input on reconnect; the newest snapshot contains the entire current draft.
+    const key = eventLiveReplayKey(event)
+    pruneLiveReplayEvents(taskID, (candidate) =>
+      candidate.type === "message.part.updated" && eventLiveReplayKey(candidate) === key,
+    )
+    return
+  }
   if (event.type === "message.part.updated" && partUpdatedClosed(event.payload)) {
     const closedKey = eventLiveReplayKey(event)
     pruneLiveReplayEvents(

@@ -50,6 +50,7 @@ import { Instance } from "@/project/instance"
 import { persistMessageSources } from "./source-persistence"
 import { normalizeToolResult } from "./tool-result-normalization"
 import { canonicalJSONValue } from "@/util/canonical-digest"
+import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
 
 export namespace SessionProcessor {
   const DOOM_LOOP_THRESHOLD = 3
@@ -223,6 +224,29 @@ export namespace SessionProcessor {
         release()
         if (toolPartLocks.get(toolCallID) === current) toolPartLocks.delete(toolCallID)
       }
+    }
+
+    // A Provider input draft is live transport, not an admitted Tool request.
+    // Publish a complete snapshot so a new subscriber can render it without
+    // reconstructing an unpersisted Part from orphan incremental deltas.
+    const publishToolInputDraft = async (part: Message.ToolPart) => {
+      if (part.state.status !== "pending") return
+      await Bus.publish(Message.Event.PartUpdated, {
+        orderKey: timelineMessageOrderKey({ info: input.assistantMessage }),
+        part: {
+          ...part,
+          orderKey: timelinePartOrderKey({
+            id: part.id,
+            timeCreated: Math.max(input.assistantMessage.time.created, part.state.time.start),
+          }),
+        },
+      })
+    }
+    const retireToolInputDraft = async (part: Message.ToolPart | undefined) => {
+      if (part?.state.status !== "pending") return
+      await Bus.publish(Message.Event.PartRemoved, {
+        sessionID: part.sessionID, messageID: part.messageID, partID: part.id, partType: "tool",
+      })
     }
 
     // Resolve the part that already represents `toolCallID` on this assistant
@@ -413,16 +437,12 @@ export namespace SessionProcessor {
         await lifecycle.cancel(part.callID, part.state.input as Record<string, unknown>, reason)
         mcpAppCalls.delete(part.callID)
       }
-      await removeAttemptPart({
-        sessionID: part.sessionID,
-        messageID: part.messageID,
-        partID: part.id,
-      })
+      await retireToolInputDraft(part)
       delete toolcalls[part.callID]
     }
 
     const discardPendingToolInputDrafts = async (reason: string): Promise<void> => {
-      const drafts = (await openToolParts()).filter((part) => part.state.status === "pending")
+      const drafts = Object.values(toolcalls).filter((part) => part.state.status === "pending")
       for (const draft of drafts) await discardToolInputDraft(draft, reason)
     }
 
@@ -547,6 +567,7 @@ export namespace SessionProcessor {
             return existing
           }
           const start = existing ? toolStartTime(existing) : Date.now()
+          await retireToolInputDraft(existing)
           const part = await Session.updatePart({
             ...(existing ?? {
               id: Identifier.ascending("part"),
@@ -630,6 +651,43 @@ export namespace SessionProcessor {
           let currentText: Message.TextPart | undefined
           let currentTextStreamID: string | undefined
           let reasoningMap: Record<string, Message.ReasoningPart> = {}
+          let toolInputFlushTimer: ReturnType<typeof setTimeout> | undefined
+          let toolInputFlushOperation: Promise<void> | undefined
+          let toolInputFlushError: unknown
+          let toolInputDirty = false
+          const flushToolInputs = async () => {
+            for (const callID of Object.keys(toolcalls)) {
+              await withToolPartLock(callID, async () => {
+                const part = toolcalls[callID]
+                if (part?.state.status === "pending") await publishToolInputDraft(part)
+              })
+            }
+          }
+          const scheduleToolInputFlush = () => {
+            toolInputDirty = true
+            if (toolInputFlushTimer || toolInputFlushOperation) return
+            toolInputFlushTimer = setTimeout(() => {
+              toolInputFlushTimer = undefined
+              toolInputDirty = false
+              const operation = flushToolInputs().catch((error) => { toolInputFlushError = error })
+              toolInputFlushOperation = operation
+              void operation.finally(() => {
+                if (toolInputFlushOperation === operation) toolInputFlushOperation = undefined
+                if (toolInputDirty && toolInputFlushError === undefined) scheduleToolInputFlush()
+              })
+            }, 200)
+          }
+          const settleToolInputFlush = async () => {
+            if (toolInputFlushTimer) clearTimeout(toolInputFlushTimer)
+            toolInputFlushTimer = undefined
+            await toolInputFlushOperation
+            // An in-flight publication may have scheduled its trailing dirty
+            // snapshot while we were awaiting it. This attempt now owns closure.
+            if (toolInputFlushTimer) clearTimeout(toolInputFlushTimer)
+            toolInputFlushTimer = undefined
+            toolInputDirty = false
+            if (toolInputFlushError !== undefined) throw toolInputFlushError
+          }
           const flushReasoningDeltas = async () => {
             const buffered = [...reasoningDeltaBuf]
             reasoningDeltaBuf.clear()
@@ -736,6 +794,8 @@ export namespace SessionProcessor {
               const scope = attemptScopes.get(failedAttempt)
               if (!scope) return
               await settleReasoningFlush(false)
+              await settleToolInputFlush()
+              await discardPendingToolInputDrafts("Provider activity retried before validated Tool input")
               const createdPartIDs = [...scope.createdPartIDs]
               if (scope.toolExecutionStarted) {
                 throw new ProcessorUnsafeRetryError(failedAttempt, createdPartIDs, cause)
@@ -930,7 +990,7 @@ export namespace SessionProcessor {
                         await mcpAppLifecycle.start(toolCallID)
                         mcpAppCalls.set(toolCallID, mcpAppLifecycle)
                       }
-                      const part = await withToolPartLock(toolCallID, async () => {
+                      await withToolPartLock(toolCallID, async () => {
                         const existing = await priorToolPart(toolCallID)
                         const committed = preserveCompletedCapabilitySearch(existing, value.toolName)
                         if (committed) return committed
@@ -949,11 +1009,11 @@ export namespace SessionProcessor {
                             time: { start },
                           },
                         })
-                        if (!existing) trackCreatedPart(run.attempt, (part as Message.ToolPart).id)
                         trackToolCall(run.attempt, toolCallID)
+                        toolcalls[toolCallID] = part as Message.ToolPart
+                        await publishToolInputDraft(part as Message.ToolPart)
                         return part
                       })
-                      toolcalls[toolCallID] = part as Message.ToolPart
                       semanticChunkAccepted = true
                       break
                     }
@@ -975,14 +1035,7 @@ export namespace SessionProcessor {
                       const match = toolcalls[toolCallID]
                       if (match && match.state.status === "pending") {
                         ;(match.state as any).raw += delta
-                        await Session.updatePartDelta({
-                          sessionID: match.sessionID,
-                          messageID: match.messageID,
-                          partID: match.id,
-                          partType: "tool",
-                          field: "raw",
-                          delta,
-                        })
+                        scheduleToolInputFlush()
                         const lifecycle = mcpAppCalls.get(toolCallID)
                         if (lifecycle) {
                           const partial = await parsePartialJson((match.state as { raw: string }).raw)
@@ -1022,6 +1075,7 @@ export namespace SessionProcessor {
                           persistedToolInput,
                         )
                         if (committed) return committed
+                        await retireToolInputDraft(match)
                         const part = await Session.updatePart({
                           ...(match ?? {
                             id: Identifier.ascending("part"),
@@ -1043,9 +1097,9 @@ export namespace SessionProcessor {
                         })
                         if (!match) trackCreatedPart(run.attempt, (part as Message.ToolPart).id)
                         trackToolCall(run.attempt, value.toolCallId)
+                        toolcalls[value.toolCallId] = part as Message.ToolPart
                         return part
                       })
-                      toolcalls[value.toolCallId] = part as Message.ToolPart
                       const mcpAppLifecycle = mcpAppToolLifecycles.get(value.toolName)
                       if (mcpAppLifecycle) {
                         await mcpAppLifecycle.input(value.toolCallId, value.input as Record<string, unknown>)
@@ -1365,6 +1419,7 @@ export namespace SessionProcessor {
                   if (needsCompaction) break
                   if (parkAfterToolResult) break
                 }
+                await settleToolInputFlush()
               },
               (event: LLMActivityEvent) => {
                 recordProviderActivityEvent(input.assistantMessage.id, event)
@@ -1419,7 +1474,12 @@ export namespace SessionProcessor {
             // ContextOverflowError as a special-case compaction trigger;
             // anything else terminates the processor turn with the error
             // attached to the assistant message.
-            const original = e instanceof LLMActivityError ? (e.cause ?? e) : e
+            let original = e instanceof LLMActivityError ? (e.cause ?? e) : e
+            try {
+              await settleToolInputFlush()
+            } catch (flushError) {
+              original = new AggregateError([original, flushError], "Provider and Tool input transport failed")
+            }
             await Promise.allSettled(
               [...mcpAppCalls].map(([toolCallID, lifecycle]) =>
                 lifecycle.cancel(

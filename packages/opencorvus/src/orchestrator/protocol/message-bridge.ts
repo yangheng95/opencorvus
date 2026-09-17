@@ -411,14 +411,23 @@ function partOrderKeysForEvent(properties: Record<string, unknown>): { messageOr
     }
   })
   if (!rows.message) throw new Error(`bridge: message ${messageID} missing persisted row while enriching part event`)
-  if (!rows.part) throw new Error(`bridge: part ${partID} missing persisted row while enriching event`)
+  const state = part.state as Record<string, unknown> | undefined
+  const pending = part.type === "tool" && state?.status === "pending"
+  const draftStart = (state?.time as { start?: unknown } | undefined)?.start
+  if (pending && (rows.part || typeof draftStart !== "number" || !Number.isFinite(draftStart))) {
+    throw new Error(`bridge: pending Tool input ${partID} has invalid transport ownership`)
+  }
+  if (!pending && !rows.part) throw new Error(`bridge: part ${partID} missing persisted row while enriching event`)
   const messageOrderKey = timelineMessageOrderKey({
     info: {
       id: messageID,
       time: { created: rows.message.timeCreated },
     },
   })
-  const partOrderKey = timelinePartOrderKey({ id: partID, timeCreated: rows.part.timeCreated })
+  const partOrderKey = timelinePartOrderKey({
+    id: partID,
+    timeCreated: pending ? Math.max(rows.message.timeCreated, draftStart as number) : rows.part!.timeCreated,
+  })
   const provided = part.orderKey
   if (typeof provided === "string" && provided.length > 0 && provided !== partOrderKey) {
     throw new Error(`bridge: part ${partID} orderKey drift between payload and persisted row`)

@@ -27,6 +27,19 @@ persisted tail; reconnect resumes the bounded Task live sequence in its exact
 process epoch. Replay expiry or an epoch change first replaces the canonical
 persisted tail and only then opens a new stream. There is no parallel timestamp
 watermark poll or coarse `task.messages.changed` projection.
+
+Unvalidated Provider Tool input is ephemeral transport, owned by the processor's
+current call draft rather than a SQLite Tool request. The producer publishes
+coalesced, self-contained `message.part.updated` snapshots with `status=pending`,
+the actual Tool name/raw input and the owning Message/Session identity. The live
+bridge derives draft ordering from its observed start and the persisted parent
+Message. Raw input must not arrive as an orphan Part delta. The bounded replay
+cache keeps the latest complete pending snapshot for each call. At validation,
+the producer removes the draft projection before publishing the real persisted
+Tool Part with its canonical admission ordering. Cancellation, retry and an
+unfinished stream remove the draft; they do not fabricate a Tool execution fact.
+The existing conversation writer and pending Tool renderer consume these events.
+
 Standalone session hydration also carries the current `Question` pending
 snapshot for the selected session tree. The backend stamps each request with
 the same interaction `orderKey` used by the live `question.asked` bridge, and

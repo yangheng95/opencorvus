@@ -226,13 +226,15 @@ export async function promptSessionMessage(input: {
     setConnectionStatus("online")
     setChatRequest(request)
     if (mission) {
+      const model = input.model ? `${input.model.providerID}/${input.model.modelID}` : currentOpenCorvusModel()
+      input.onDispatch?.()
       return await wakeMission({
         missionID: mission.missionID,
         directory: mission.directory,
         productPillar: mission.productPillar,
         text: input.text,
         attachments: input.attachments,
-        model: input.model ? `${input.model.providerID}/${input.model.modelID}` : currentOpenCorvusModel(),
+        model,
         signal: controller.signal,
       })
     }

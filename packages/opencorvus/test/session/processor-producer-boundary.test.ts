@@ -19,6 +19,12 @@ import { ProviderActivityOutcomeTable } from "@/session/session.sql"
 import { Database } from "@/storage/db"
 import { Snapshot } from "@/snapshot"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { Bus } from "@/bus"
+import { Message } from "@/session/message"
+import { MessageStore } from "@/session/message-store"
+import { LLM } from "@/session/llm"
+import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
+import { ProtocolStore } from "@/protocol/store"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -167,6 +173,150 @@ test("a producer-side committed operation yields unsafe retry when its consumer 
       provider.mockRestore()
       engine.mockRestore()
       backoff.mockRestore()
+    }
+  })
+}, 30_000)
+
+for (const boundary of ["complete", "cancel"] as const) {
+  test(`pending Tool input publishes its real partial snapshot before ${boundary}`, async () => {
+    await processorFixture(async ({ controller, processor, process, sessionID }) => {
+      const entered = Promise.withResolvers<void>()
+      const release = Promise.withResolvers<void>()
+      const events: Array<{ type: string; part?: Message.ToolPart; partID?: string }> = []
+      ensureTaskMessageProtocolBridge()
+      const visible: unknown[] = []
+      const stopProtocol = ProtocolStore.subscribeEvents((event) => {
+        visible.push(event.payload)
+      }, { sessionID })
+      const stopUpdated = Bus.subscribe(Message.Event.PartUpdated, ({ properties }) => {
+        if (properties.part.sessionID === sessionID && properties.part.type === "tool") {
+          events.push({ type: "updated", part: structuredClone(properties.part) })
+        }
+      })
+      const stopRemoved = Bus.subscribe(Message.Event.PartRemoved, ({ properties }) => {
+        if (properties.sessionID === sessionID) events.push({ type: "removed", partID: properties.partID })
+      })
+      const stream = spyOn(LLM, "stream").mockImplementation(async (input) => ({
+        fullStream: (async function* () {
+          yield { type: "start" }
+          yield { type: "tool-input-start", id: "partial-input", toolName: "echo" }
+          yield { type: "tool-input-delta", id: "partial-input", delta: '{"value":"visible' }
+          yield { type: "tool-input-start", id: "parallel-input", toolName: "echo" }
+          yield { type: "tool-input-delta", id: "parallel-input", delta: '{"value":"second' }
+          entered.resolve()
+          await release.promise
+          input.abort.throwIfAborted()
+          yield { type: "tool-input-delta", id: "partial-input", delta: '"}' }
+          yield { type: "tool-input-end", id: "partial-input" }
+          // The SDK execution callback may admit input before fullStream's
+          // consumer receives tool-call; both paths share one per-call lock.
+          await processor.ensureToolPart("partial-input", "echo", { value: "visible" })
+          yield { type: "tool-call", toolCallId: "partial-input", toolName: "echo", input: { value: "visible" } }
+          yield {
+            type: "tool-result", toolCallId: "partial-input", toolName: "echo", input: { value: "visible" },
+            output: { title: "Echo", output: "visible", metadata: {} },
+          }
+          yield { type: "tool-input-delta", id: "parallel-input", delta: '"}' }
+          yield { type: "tool-call", toolCallId: "parallel-input", toolName: "echo", input: { value: "second" } }
+          yield {
+            type: "tool-result", toolCallId: "parallel-input", toolName: "echo", input: { value: "second" },
+            output: { title: "Echo", output: "second", metadata: {} },
+          }
+          yield { type: "finish", finishReason: "tool-calls", totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 } }
+        })(),
+      }) as Awaited<ReturnType<typeof LLM.stream>>)
+      const running = process({})
+      try {
+        await entered.promise
+        await Bun.sleep(350)
+        expect(events).toContainEqual({
+          type: "updated",
+          part: expect.objectContaining({
+            sessionID, messageID: processor.message.id, tool: "echo", callID: "partial-input",
+            orderKey: expect.any(String), state: expect.objectContaining({ status: "pending", raw: '{"value":"visible' }),
+          }),
+        })
+        expect(visible).toContainEqual(expect.objectContaining({
+          part: expect.objectContaining({ tool: "echo", state: expect.objectContaining({ status: "pending", raw: '{"value":"visible' }) }),
+        }))
+        expect(events).toContainEqual({ type: "updated", part: expect.objectContaining({
+          callID: "parallel-input", state: expect.objectContaining({ status: "pending", raw: '{"value":"second' }),
+        }) })
+        if (boundary === "cancel") controller.abort(new DOMException("Cancel partial Tool input", "AbortError"))
+        release.resolve()
+        await running
+        const pending = events.find((event) => event.part?.state.status === "pending")!.part!
+        expect(events).toContainEqual({ type: "removed", partID: pending.id })
+        const parallel = events.find((event) => event.part?.callID === "parallel-input")!.part!
+        expect(events).toContainEqual({ type: "removed", partID: parallel.id })
+        if (boundary === "complete") {
+          const completed = (await MessageStore.parts(processor.message.id)).find((part) => part.type === "tool")
+          expect(completed).toMatchObject({ id: pending.id, type: "tool", state: { status: "completed", input: { value: "visible" }, output: "visible" } })
+          expect(await MessageStore.parts(processor.message.id)).toContainEqual(expect.objectContaining({
+            id: parallel.id, state: expect.objectContaining({ status: "completed", input: { value: "second" }, output: "second" }),
+          }))
+          expect(events.findIndex((event) => event.type === "removed")).toBeLessThan(
+            events.findIndex((event) => event.part?.state.status === "running"),
+          )
+        } else {
+          expect(processor.message.error).toMatchObject({ name: "MessageAbortedError" })
+        }
+      } finally {
+        release.resolve()
+        controller.abort()
+        await running
+        stopUpdated()
+        stopRemoved()
+        stopProtocol()
+        stream.mockRestore()
+      }
+    })
+  }, 30_000)
+}
+
+test("a delta received during slow draft publication produces a complete latest snapshot", async () => {
+  await processorFixture(async ({ controller, process, sessionID }) => {
+    const publishing = Promise.withResolvers<void>()
+    const subscriberRelease = Promise.withResolvers<void>()
+    const lastDelta = Promise.withResolvers<void>()
+    const providerRelease = Promise.withResolvers<void>()
+    const latest = Promise.withResolvers<void>()
+    const rawValues: string[] = []
+    const stop = Bus.subscribe(Message.Event.PartUpdated, async ({ properties: { part } }) => {
+      if (part.sessionID !== sessionID || part.type !== "tool" || part.state.status !== "pending") return
+      rawValues.push(part.state.raw)
+      if (part.state.raw === '{"value":"first') {
+        publishing.resolve()
+        await subscriberRelease.promise
+      }
+      if (part.state.raw === '{"value":"first-last') latest.resolve()
+    })
+    const stream = spyOn(LLM, "stream").mockImplementation(async (input) => ({
+      fullStream: (async function* () {
+        yield { type: "start" }
+        yield { type: "tool-input-start", id: "slow-publication", toolName: "echo" }
+        yield { type: "tool-input-delta", id: "slow-publication", delta: '{"value":"first' }
+        await publishing.promise
+        yield { type: "tool-input-delta", id: "slow-publication", delta: "-last" }
+        lastDelta.resolve()
+        await providerRelease.promise
+        input.abort.throwIfAborted()
+      })(),
+    }) as Awaited<ReturnType<typeof LLM.stream>>)
+    const running = process({})
+    try {
+      await lastDelta.promise
+      subscriberRelease.resolve()
+      await Promise.race([latest.promise, Bun.sleep(1_000)])
+      expect(rawValues).toContain('{"value":"first-last')
+    } finally {
+      subscriberRelease.resolve()
+      publishing.resolve()
+      controller.abort(new DOMException("End partial input test", "AbortError"))
+      providerRelease.resolve()
+      await running
+      stop()
+      stream.mockRestore()
     }
   })
 }, 30_000)
