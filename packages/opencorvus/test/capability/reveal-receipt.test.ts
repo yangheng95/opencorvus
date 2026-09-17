@@ -9,6 +9,7 @@ import {
   capabilityRevealMaterializationFingerprint,
   CorruptCapabilityRevealError,
   createCapabilityRevealReceipt,
+  createTurnCapabilityProjection,
   foldCapabilityRevealReceipts,
   providerToolDefinitionChars,
   providerToolDefinitionDigest,
@@ -279,6 +280,20 @@ describe("occurrence capability reveal receipts", () => {
     expect({ refs: candidate.activeRefs, definitions: candidate.definitions, chars: candidate.payloadChars }).toEqual({ refs: [requestedRef], definitions: [], chars: matchingBase.payloadChars })
     const foreign = ActivatedCapability.parse({ ...activation, executable_ref: capabilityRef({ kind: "tool", source: "platform", owner_ref: "runtime-projection:other", local_ref: "read" }) })
     expect(() => reduceCapabilityRevealCandidate({ prior, deactivateRefs: [], activated: [foreign] })).toThrow(CapabilityRevealBaseDefinitionConflictError)
+  })
+
+  test("projects permanent and revealed references as one canonical capability set", () => {
+    const discoveryRef = capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: "capability_search" })
+    const matchingBase = capabilityRevealBaseDefinitions([definition])
+    const prior = foldCapabilityRevealReceipts({ occurrenceID, parts: [], harnessProjectionHash, catalogSnapshotRef, catalogSnapshotHash, baseDefinition: matchingBase })
+    const candidate = reduceCapabilityRevealCandidate({ prior, deactivateRefs: [], activated: [activation] })
+    const state = { ...prior, ...candidate, revision: 1 }
+    const input = { occurrenceID, harnessProjectionHash, catalogSnapshotRef, catalogSnapshotHash, permanentRefs: [requestedRef, discoveryRef], state }
+    const projection = createTurnCapabilityProjection(input)
+    expect({ refs: projection.active_refs, chars: projection.active_payload_chars, tokens: projection.active_payload_tokens }).toEqual({ refs: [discoveryRef, requestedRef], chars: matchingBase.payloadChars, tokens: matchingBase.payloadTokens })
+    expect(createTurnCapabilityProjection({ ...input, permanentRefs: [discoveryRef, requestedRef] })).toEqual(projection)
+    const deactivated = reduceCapabilityRevealCandidate({ prior: state, deactivateRefs: [requestedRef], activated: [] })
+    expect(createTurnCapabilityProjection({ ...input, state: { ...state, ...deactivated, revision: 2 } }).active_refs).toEqual([discoveryRef, requestedRef])
   })
 
   test("records an exact active ref when a reveal expands a matching permanent loader definition", () => {

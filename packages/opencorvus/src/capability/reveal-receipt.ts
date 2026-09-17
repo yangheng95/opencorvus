@@ -390,6 +390,9 @@ export function createTurnCapabilityProjection(input: {
   permanentRefs: readonly CapabilityRef[]
   state: CapabilityRevealState
 }): TurnCapabilityProjectionV3 {
+  const permanentRefs = canonicalRefs(input.permanentRefs)
+  const permanentKeys = new Set(permanentRefs.map(CapabilityRefCodec.encode))
+  const revealedRefs = canonicalRefs([...input.state.active.values()].map((activation) => activation.requested_ref))
   const value = {
     schema_version: 3 as const,
     occurrence_id: input.occurrenceID,
@@ -398,8 +401,8 @@ export function createTurnCapabilityProjection(input: {
     catalog_snapshot_ref: input.catalogSnapshotRef,
     catalog_snapshot_hash: input.catalogSnapshotHash,
     active_refs: canonicalRefs([
-      ...input.permanentRefs,
-      ...[...input.state.active.values()].map((activation) => activation.requested_ref),
+      ...permanentRefs,
+      ...revealedRefs.filter((ref) => !permanentKeys.has(CapabilityRefCodec.encode(ref))),
     ]),
     active_definition_digest: input.state.definitionDigest,
     active_payload_chars: input.state.payloadChars,

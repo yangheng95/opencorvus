@@ -383,6 +383,22 @@ describe("native Mission transport base", () => {
     } })
   }, 60_000)
 
+  test("reconstructs Mission tools after re-revealing the permanent Task query capability", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const occurrence = await createMissionOccurrence(project.path, "mission-permanent-query-reveal")
+      const initial = await resolveTestCapabilityTools(occurrence.common)
+      const queryRef = capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: "panel_query_task" })
+      const result = await initial.tools.capability_search!.execute!(
+        { queries: [""], kinds: ["tool"], exact_refs: [queryRef], deactivate_refs: [], limit: 1 },
+        { toolCallId: "reveal-permanent-task-query", messages: [], abortSignal: new AbortController().signal },
+      ) as { metadata: Record<string, any> }
+      expect(result.metadata.opencorvus_capability_reveal_v2.active_refs).toEqual([queryRef])
+      const replayed = await resolveTestCapabilityTools(occurrence.common)
+      expect(Object.keys(replayed.tools).sort()).toEqual(missionRoutineNames)
+    } })
+  }, 60_000)
+
   test("keeps exact native transport leaves through one reveal and deactivate cycle", async () => {
     await using project = await memoryProject()
     await Instance.provide({

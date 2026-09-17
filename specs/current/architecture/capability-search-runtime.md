@@ -42,7 +42,11 @@ universal executable interface.
 `TurnCapabilityProjectionV3` is a process-local derivation of the input-bound
 permanent refs and persisted extension receipts. Its active refs cover the exact
 currently callable capabilities. It is not a Session cache or a mutable Harness
-table. A new authoritative input starts at revision zero with its bound
+table. References form a canonical set union: a matching permanent Registry
+Tool may also have a valid reveal receipt and appears once in the projection.
+Deactivating that reveal preserves its permanent availability. Definition and
+executable-identity conflict validation still applies before projection.
+A new authoritative input starts at revision zero with its bound
 permanent base, including an eligible exact visible production Skill directive;
 v2 search receipts continue to record only dynamically activated extensions.
 
