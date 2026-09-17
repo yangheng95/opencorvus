@@ -27,6 +27,7 @@ try {
     throw new Error("test/isolated-test-entry.test.ts is the internal test host and cannot select itself")
   }
   const childEnvironment = isolatedTestChildEnvironment(runnerRuntime)
+  const failedFiles: string[] = []
   for (const file of files) {
     const result = await runHostCommandWithInactivity({
       executable: process.execPath,
@@ -46,9 +47,10 @@ try {
     if (result.exitCode !== 0) {
       console.error(`OpenCorvus test file failed (exit=${result.exitCode}): ${file}`)
       process.exitCode = result.exitCode
-      break
+      failedFiles.push(file)
     }
   }
+  if (failedFiles.length) console.error(`OpenCorvus failed test files (${failedFiles.length}):\n${failedFiles.join("\n")}`)
 } finally {
   await removeIsolatedTestRuntime(runnerRuntime)
 }

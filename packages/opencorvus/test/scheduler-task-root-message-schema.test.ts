@@ -2,7 +2,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, spyOn, test } from "b
 import path from "node:path"
 import { Config } from "@/config/config"
 import { EngineTaskTable } from "@/engine/engine.sql"
-import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
+import { TestHooks as TaskControlTestHooks, waitForIngressDeliveryHooksForTest } from "@/engine/task-root-ingress-delivery"
 import { acceptTaskRootIngressInTransaction, acquireTaskRootIngressLease } from "@/engine/task-root-fact-store"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import { Identifier } from "@/id/id"
@@ -830,6 +830,7 @@ describe("scheduler Task-root Message protocol", () => {
           releaseFirst.resolve()
         }
         await drainSchedulerMessagesForProject()
+        await waitForIngressDeliveryHooksForTest()
         const delivery = requireSchedulerDelivery(receipt.inboxID)
         if (delivery.status !== "delivered") {
           throw new Error(`Scheduler delivery did not settle: ${JSON.stringify(delivery)}`)
