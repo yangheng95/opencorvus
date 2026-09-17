@@ -104,7 +104,7 @@ A controlled pass is never a real-Provider or UI pass. This ledger deliberately 
 | DELIVERY-INSTALLER | install and launch final signed distribution | not_run | Current repaired source has not entered a new signed installer/release run. Local portable build and embedded-backend test do not prove installation. |
 | DELIVERY-UPGRADE | explicitly authorized reset/rebuild retaining Provider configuration and project source | passed | Authorized canonical reset retained paired Provider config/project source. Final8b2281e0 native fresh Mission/file verification and normal client restart passed on that actual local home. Earlier wrong-cwd reset and739stall remain failures. This is not a data-preserving upgrade. |
 
-This ledger combines separate real and controlled checkers; it is not a completed full-matrix pass. Each result retains its own source identity, and older evidence is not relabelled as current. Remaining obligations include the three explicit no-rescue liveness/recovery cases and the final signed installer; a Task reaching completed alone does not prove any of them. It cannot authorize benchmark scoring or release readiness.
+This ledger combines separate real and controlled checkers; it is not a completed full-matrix pass. Each result retains its own source identity, and older evidence is not relabelled as current. Remaining failed/not-run obligations are LIVENESS-TOOL-INPUT and the final signed installer. The two other no-rescue decision/recovery cases now have the scoped evidence named above; a Task reaching completed alone does not prove those obligations. The ledger cannot authorize benchmark scoring or release readiness.
 
 ## Initial validation checkpoint (superseded by later records)
 
