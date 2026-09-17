@@ -268,7 +268,13 @@ try {
     console.log(`[native-real] ${result.status} evidence=${resultPath}`)
     if (result.status !== "passed") process.exitCode = 1
   } else {
+    if (failure) {
+      result.status = "failed"
+      result.error = failure instanceof Error ? failure.message : String(failure)
+      await fs.writeFile(resultPath, redactor.redact(JSON.stringify(result, null, 2)))
+      console.error(`[native-first-run] failed evidence=${resultPath}`)
+      throw failure
+    }
     await fs.rm(root, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 })
-    if (failure) throw failure
   }
 }

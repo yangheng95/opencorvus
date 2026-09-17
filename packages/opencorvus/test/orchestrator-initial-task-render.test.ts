@@ -318,6 +318,7 @@ async function assertInitialTaskRender(streamCase: "normal" | "helper-and-primar
                 "runtime:orchestrator-live-task-baseline",
                 "runtime:orchestrator-live-task-delta",
                 "runtime:orchestrator-current-ingress",
+                "runtime:orchestrator-current-task-execution",
               ],
             },
             {
@@ -328,6 +329,7 @@ async function assertInitialTaskRender(streamCase: "normal" | "helper-and-primar
                 "runtime:orchestrator-live-task-baseline",
                 "runtime:orchestrator-live-task-delta",
                 "runtime:orchestrator-current-ingress",
+                "runtime:orchestrator-current-task-execution",
               ],
             },
           ],

@@ -11,7 +11,7 @@ const dialect = new SQLiteSyncDialect()
 // Both immutable release-evidence checks must classify the actual dispatch
 // result, including deferred Permission receipts, just like the live reducer.
 function dispatchDecisionReceiptSQL(request: string, outcome: string): string {
-  const output = `(CASE WHEN json_type(${outcome}.data, '$.resultAttemptID') = 'text' THEN (
+  const outputExpression = `(CASE WHEN json_type(${outcome}.data, '$.resultAttemptID') = 'text' THEN (
     SELECT CASE WHEN json_extract(receipt.result, '$.kind') = 'json' THEN
       CASE WHEN json_type(receipt.result, '$.value.output') = 'text' THEN json_extract(receipt.result, '$.value.output')
         WHEN json_type(receipt.result, '$.value.text') = 'text' THEN json_extract(receipt.result, '$.value.text')
@@ -20,6 +20,9 @@ function dispatchDecisionReceiptSQL(request: string, outcome: string): string {
     FROM permission_execution_result receipt
     WHERE receipt.attempt_id = json_extract(${outcome}.data, '$.resultAttemptID')
   ) ELSE json_extract(${outcome}.data, '$.output') END)`
+  // Bind the receipt once: recursively embedding this CASE into every JSON
+  // predicate exceeds the fixed parser stack of system SQLite on macOS.
+  const output = "dispatch_output.value"
   const witness = (value: string, member?: string) => `EXISTS (
     SELECT 1 FROM engine_artifact lineage
     WHERE lineage.task_id = NEW.task_id AND lineage.kind = 'dispatch_lineage'
@@ -82,21 +85,30 @@ function dispatchDecisionReceiptSQL(request: string, outcome: string): string {
   const memberShape = `(CASE WHEN member.type='object' THEN (json_type(member.value)='object' AND (SELECT COUNT(*) FROM json_each(member.value))=5
     AND json_type(member.value,'$.member_index')='integer' AND json_extract(member.value,'$.member_index') BETWEEN 0 AND 9007199254740991
     AND ${stringField("member.value", "name")} AND ${stringField("member.value", "target")}
-    AND ((json_extract(member.value,'$.status')='completed' AND CASE WHEN json_type(member.value,'$.outcome')='object' THEN (${witness(memberOutcome, "member.value")} OR ${matchingSettlement} OR ${uncommittedFailure}) ELSE 0 END)
+    AND ((json_extract(member.value,'$.status')='completed' AND CASE WHEN json_type(member.value,'$.outcome')='object' THEN (member.witnessed OR member.settled OR member.uncommitted_failure) ELSE 0 END)
       OR (json_extract(member.value,'$.status')='failed' AND json_type(member.value,'$.failure')='object'
         AND ${["kind", "name", "message", "originSite"].map((key) => stringField("member.value", `failure.${key}`)).join(" AND ")}
         AND json_extract(member.value,'$.failure.classification') IN ('tool-input-invalid','tool-execution','llm-activity','processor-contract')
         AND (json_type(member.value,'$.failure.data') IS NULL OR json_type(member.value,'$.failure.data')='object')))) ELSE 0 END)`
-  return `(CASE WHEN json_valid(${output}) THEN CASE json_extract(${request}.data, '$.tool')
+  return `(WITH dispatch_output AS (SELECT ${outputExpression} AS value),
+    dispatch_members AS (
+      SELECT member.value, member.type,
+        CASE WHEN member.type='object' THEN CASE WHEN json_type(member.value,'$.outcome')='object' THEN ${witness(memberOutcome, "member.value")} ELSE 0 END ELSE 0 END AS witnessed,
+        CASE WHEN member.type='object' THEN CASE WHEN json_type(member.value,'$.outcome')='object' THEN ${matchingSettlement} ELSE 0 END ELSE 0 END AS settled,
+        CASE WHEN member.type='object' THEN CASE WHEN json_type(member.value,'$.outcome')='object' THEN ${uncommittedFailure} ELSE 0 END ELSE 0 END AS uncommitted_failure
+      FROM dispatch_output, json_each(CASE WHEN json_valid(${output}) THEN ${output} ELSE '{}' END,'$.members') member
+    ),
+    dispatch_member_shapes AS (SELECT ${memberShape} AS valid FROM dispatch_members member)
+    SELECT CASE WHEN json_valid(${output}) THEN CASE json_extract(${request}.data, '$.tool')
     WHEN 'dispatch_agent' THEN ${witness(output)}
     WHEN 'dispatch_agents' THEN CASE WHEN json_type(${output},'$.members')='array'
-      AND NOT EXISTS (SELECT 1 FROM json_each(${output},'$.members') member WHERE NOT COALESCE(${memberShape},0))
+      AND NOT EXISTS (SELECT 1 FROM dispatch_member_shapes WHERE NOT COALESCE(valid,0))
       THEN EXISTS (
-        SELECT 1 FROM json_each(${output}, '$.members') member
+        SELECT 1 FROM dispatch_members member
         WHERE json_extract(member.value, '$.status') = 'completed'
           AND json_extract(member.value, '$.name') = json_extract(${request}.data, '$.input.team[' || json_extract(member.value, '$.member_index') || '].name')
-          AND ${witness(memberOutcome, "member.value")}
-      ) ELSE 0 END ELSE 0 END ELSE 0 END)`
+          AND member.witnessed
+      ) ELSE 0 END ELSE 0 END ELSE 0 END FROM dispatch_output)`
 }
 
 export const ApplicationSchemaSQLTestHooks = Object.freeze({
@@ -1789,6 +1801,13 @@ BEFORE INSERT ON engine_artifact
 FOR EACH ROW
 WHEN NEW.kind = 'task_root_ingress_disposition'
   AND NOT (
+    WITH dispatch_receipts AS (
+      SELECT request.id, ${dispatchDecisionReceiptSQL("request", "outcome")} AS accepted
+      FROM tool_part_request request
+      JOIN tool_part_outcome outcome ON outcome.request_part_id = request.id
+      WHERE request.message_id = json_extract(NEW.payload, '$.decision_occurrence.assistant_message_id')
+    )
+    SELECT
     json_type(NEW.payload) = 'object'
     AND (SELECT COUNT(*) FROM json_each(NEW.payload)) = CASE
       WHEN json_extract(NEW.payload, '$.disposition') = 'resolved' THEN 7
@@ -1878,7 +1897,7 @@ WHEN NEW.kind = 'task_root_ingress_disposition'
               AND activation.id = json_extract(NEW.payload, '$.decision_occurrence.activation_id')
               AND (
                 json_extract(request.data, '$.tool') IN ('no_action','wait')
-                OR ${dispatchDecisionReceiptSQL("request", "outcome")}
+                OR (SELECT accepted FROM dispatch_receipts WHERE id = request.id)
                 OR (
                   json_extract(request.data, '$.tool') = 'manage_task'
                   AND json_extract(request.data, '$.input.action') NOT IN ('add_goal','modify_goal','delete_goal')
@@ -1960,7 +1979,7 @@ WHEN NEW.kind = 'task_root_ingress_disposition'
             AND json_extract(candidate_outcome.data, '$.outcome') = 'completed'
             AND (
               json_extract(candidate.data, '$.tool') IN ('no_action','wait')
-              OR ${dispatchDecisionReceiptSQL("candidate", "candidate_outcome")}
+              OR (SELECT accepted FROM dispatch_receipts WHERE id = candidate.id)
               OR (
                 json_extract(candidate.data, '$.tool') = 'manage_task'
                 AND json_extract(candidate.data, '$.input.action') NOT IN ('add_goal','modify_goal','delete_goal')

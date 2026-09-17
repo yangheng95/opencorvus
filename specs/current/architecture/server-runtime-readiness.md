@@ -1,5 +1,12 @@
 # Server runtime readiness
 
+Managed SDK startup accepts only the occurrence-bound readiness receipt. On
+timeout, abort, failed receipt or early exit, it settles the owned process and
+drains its pipes before attaching the byte-bounded diagnostic tail to the
+primary error. Output does not determine readiness. Failed credential-free
+packaged first-run checks retain their isolated runtime and result path for
+diagnosis; successful checks remove that owned temporary runtime.
+
 The server runtime has two ordered recovery phases and one listener:
 
 1. Bounded process-local integrity recovery observes the current physical process occurrence, settles orphaned supervised requests and isolated workspaces, reconciles Project deletion artifacts and maintenance fences, and initializes global automation scheduling.

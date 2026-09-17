@@ -84,6 +84,7 @@ describe("createOpenCorvusServer", () => {
       [
         'const fs = require("node:fs")',
         "fs.writeFileSync(process.env.OPENCORVUS_FAKE_PID_FILE, String(process.pid))",
+        'process.stderr.write("startup-stage=waiting-for-runtime")',
         "setInterval(() => {}, 10_000)",
         "",
       ].join("\n"),
@@ -99,6 +100,7 @@ describe("createOpenCorvusServer", () => {
       pid = await waitForPidFile(pidFile, 2_000)
 
       await expect(startup).rejects.toThrow("Timeout waiting for server to start after 1000ms")
+      await expect(startup).rejects.toThrow("Server output: startup-stage=waiting-for-runtime")
       expect(await waitForPidExit(pid, 2_000)).toBe(true)
     } finally {
       await killIfAlive(pid)

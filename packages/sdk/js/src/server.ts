@@ -112,6 +112,15 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
       const cleanupStartup = () => {
         receiptObservation.abort()
       }
+      const withDiagnostics = (error: Error) => {
+        const diagnostic = diagnostics.snapshot()
+        if (diagnostic.text.trim()) {
+          error.message += diagnostic.truncated
+            ? `\nServer output (truncated=true, retained_bytes=${diagnostic.retainedBytes}): ${diagnostic.text}`
+            : `\nServer output: ${diagnostic.text}`
+        }
+        return error
+      }
       const failStartupAfterCleanup = (error: Error) => {
         if (state !== "pending") return
         state = "stopping_failure"
@@ -119,13 +128,13 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
         void stopProcess().then(
           () => {
             state = "failed"
-            reject(error)
+            reject(withDiagnostics(error))
           },
           () => {
             state = "failed"
             // The outer startup owner joins this memoized cleanup exactly once
             // and constructs the ordered primary+cleanup failure contract.
-            reject(error)
+            reject(withDiagnostics(error))
           },
         )
       }
@@ -192,14 +201,7 @@ export async function createOpenCorvusServer(options?: ServerOptions): Promise<O
             failStartupAfterCleanup(new Error("Aborted"))
             return
           }
-          const diagnostic = diagnostics.snapshot()
-          let msg = `Server exited with code ${terminal.exitCode}`
-          if (diagnostic.text.trim()) {
-            msg += diagnostic.truncated
-              ? `\nServer output (truncated=true, retained_bytes=${diagnostic.retainedBytes}): ${diagnostic.text}`
-              : `\nServer output: ${diagnostic.text}`
-          }
-          failStartupAfterCleanup(new Error(msg))
+          failStartupAfterCleanup(new Error(`Server exited with code ${terminal.exitCode}`))
         },
         (error) => failStartupAfterCleanup(error instanceof Error ? error : new Error(String(error))),
       )

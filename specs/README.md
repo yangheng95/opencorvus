@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[v0.1.1-beta publication](records/2026-09/2026-09-17-v0.1.1-beta-release.md).
+
 [Runtime end-to-end acceptance before benchmark](records/2026-09/2026-09-16-runtime-e2e-acceptance.md).
 
 [Dispatch preparation stall investigation](records/2026-09/2026-09-16-dispatch-preparation-stall.md).

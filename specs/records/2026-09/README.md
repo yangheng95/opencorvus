@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [v0.1.1-beta publication](2026-09-17-v0.1.1-beta-release.md)
+
 - [Runtime end-to-end acceptance before benchmark](2026-09-16-runtime-e2e-acceptance.md)
 
 - [Dispatch preparation stall investigation](2026-09-16-dispatch-preparation-stall.md)
