@@ -1029,17 +1029,9 @@ async function bootstrapContext(ctx: Context, entry: CacheEntry, inits: readonly
     }
   })
   const { AttachmentStore } = await import("@/storage/attachment-store")
-  try {
-    await ProjectOpenLifecycle.stage("attachment-store.sweep", lifecycleContext, () =>
-      AttachmentStore.sweep(ctx.project.id),
-    )
-  } catch (error) {
-    if (!(error instanceof AttachmentStore.AuthorityError)) throw error
-    Log.Default.warn("attachment store authority isolated from project runtime", {
-      ...lifecycleContext,
-      error: error.message,
-    })
-  }
+  await ProjectOpenLifecycle.stage("attachment-store.sweep", lifecycleContext, () =>
+    AttachmentStore.sweep(ctx.project.id),
+  )
   await ProjectOpenLifecycle.stage("instance.init", lifecycleContext, async () => {
     for (const init of inits) await runContextInit(entry, init)
   })

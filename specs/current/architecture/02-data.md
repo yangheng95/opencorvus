@@ -523,20 +523,16 @@ sandbox ownership。Workspace/public delete 与 Project delete 仍必须持有�
 `intent="task_input"`、`source="user-upload"`；MIME（Multipurpose Internet Mail
 Extensions，多用途互联网邮件扩展类型）、文件名和扩展名都不能推导领域语义。
 `AttachmentStore` 只负责 canonical bytes 与 metadata sidecar，也不拥有领域语义。
-每个物理 project attachment 目录还必须由 `.authority.json` 绑定到唯一
-`project_id`、解析后的 worktree 和 Database 内部持久实例 ID。该实例 ID 在结构严格匹配的
-current-schema 普通 reopen 中保持不变，在同一路径显式 reset、删除重建或 fresh rebuild 后变化；
-不匹配的旧 schema 或未知 drift 只返回 `SCHEMA_RESET_REQUIRED`，不会猜测 refresh、重写该身份
-或选择 migration。
-它是本机物理 Database metadata，不进入 MySQL transfer schema 或 snapshot；import
-目标在业务数据恢复后生成自己的新实例 ID。
-首次绑定时，空目录可由当前 Database 认领；已有 blobs 的旧目录只有在全部 blobs 都被
-当前 Database 引用时才能认领。后续 write 与 sweep 必须匹配该 authority，否则返回明确的
-`AttachmentStoreAuthorityError`，不能把另一份隔离 Database 看不到的 live blobs
-判成 orphan 并删除。空的物理 store 可以把旧 marker 原子替换为当前 Database authority；
-非空 foreign store 仍保持关闭。Project bootstrap 的 sweep 会记录该 typed authority failure，
-但不能据此终止不读取或修改附件的 Project runtime、Composer catalog 或文本消息流。
-这是存储所有权与数据完整性约束，不参与 Agent 流程调度。
+物理 attachment 目录不保存第二份 Database authority，也不创建 `.authority.json`。
+Project identity、附件引用和可回收集合只来自当前 Database；`Project.worktree` 是物理位置的唯一
+来源。attachment bytes 位于 `attachments/<database-path-digest>/` 命名空间；同一路径的普通 reopen、
+fresh rebuild 和 transfer restore 继续解析同一 bytes，不同 SQLite 路径即使指向同一 Project 目录也不
+共享 sweep 集合。该目录段只用于物理隔离，不是可变 marker、锁或平行 authority 文件。write 继续使用
+每个 content-addressed blob/metadata pair 的跨进程锁、临时 staging、哈希、长度与 canonical
+reference 校验；sweep 清理当前命名空间中未引用且超过 grace period 的 blob 及其 sidecar（若存在）。
+显式 `db reset` 必须同时删除 SQLite DB/WAL/SHM 与传入 Project 的 `.opencorvus/.r`；它不靠
+项目文件中的数据库身份阻止或修复不完整的 operator reset。Project identity convergence 只使用
+canonical Database rows、嵌入引用和现有 durable owner 检查，不读取文件系统 marker 作为平行事实源。
 
 Overlay 手动文件、文件夹、拖放、粘贴和 host attach 的唯一入口先把 raw bytes 写入
 project-scoped `POST /attachment`，composer 只保留返回的

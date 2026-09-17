@@ -398,36 +398,6 @@ describe("explicit Project identity convergence", () => {
     })
   })
 
-  test("an attachment-store authority owned by the duplicate Project is preserved", async () => {
-    await using fixture = await memoryProject()
-    const canonicalProjectID = `project_${crypto.randomUUID()}`
-    const duplicateProjectID = `project_${crypto.randomUUID()}`
-    insertProject({ id: canonicalProjectID, worktree: fixture.path })
-    insertProject({ id: duplicateProjectID, worktree: fixture.path })
-    const attachmentRoot = ProjectRuntimePaths.attachmentBlobRoot(fixture.path)
-    const authority = {
-      schema_version: 1,
-      project_id: duplicateProjectID,
-      worktree: fixture.path,
-      database_instance_id: Database.Identity(),
-    }
-    await fs.mkdir(attachmentRoot, { recursive: true })
-    await fs.writeFile(`${attachmentRoot}/.authority.json`, JSON.stringify(authority, null, 2))
-    let conflict: unknown
-    try {
-      await convergeProjectIdentity({ worktree: fixture.path, canonicalProjectID })
-    } catch (cause) {
-      conflict = cause
-    }
-    expect({
-      message: ProjectIdentityConvergence.ConflictError.isInstance(conflict) ? conflict.data.message : undefined,
-      authority: JSON.parse(await fs.readFile(`${attachmentRoot}/.authority.json`, "utf8")),
-    }).toEqual({
-      message: `Attachment store authority does not belong to canonical Project ${canonicalProjectID}`,
-      authority,
-    })
-  })
-
   test("an embedded attachment identity is reported as a typed preservation conflict", async () => {
     await using fixture = await memoryProject()
     const canonicalProjectID = `project_${crypto.randomUUID()}`
