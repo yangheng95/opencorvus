@@ -1,6 +1,5 @@
-import fs from "node:fs"
-import path from "node:path"
 import { RealProviderAudit } from "./real-provider-audit"
+import { createAuditSnapshotPublisher } from "./audit-snapshot"
 
 // Explicit isolated-test instrumentation. No request bodies, headers or credentials are retained.
 const identity = Symbol.for("opencorvus.native-provider-audit")
@@ -13,12 +12,10 @@ export default async function nativeProviderAudit(input: { serverUrl: URL }) {
   const model = process.env.OPENCORVUS_NATIVE_AUDIT_MODEL
   if (!root || !model) throw new Error("Native Provider audit requires an owned evidence root and exact model")
   if (!processState[identity]) {
-    fs.mkdirSync(root, { recursive: true })
-    const file = path.join(root, `provider-${process.pid}.json`)
+    const publish = createAuditSnapshotPublisher(root, "provider")
     const persist = () => {
-      fs.writeFileSync(`${file}.tmp`, JSON.stringify({ pid: process.pid, executable: process.execPath, model,
-        requests: audit.requests, exhausted: audit.exhausted, observedAt: new Date().toISOString() }))
-      fs.renameSync(`${file}.tmp`, file)
+      publish({ pid: process.pid, executable: process.execPath, model,
+        requests: audit.requests, exhausted: audit.exhausted, observedAt: new Date().toISOString() })
     }
     const audit = new RealProviderAudit(model, Number(process.env.OPENCORVUS_NATIVE_AUDIT_MAX_REQUESTS), persist)
     processState[identity] = { audit, persist }

@@ -5,6 +5,7 @@ import { createHash } from "node:crypto"
 import { fileURLToPath, pathToFileURL } from "node:url"
 import { setTimeout as sleep } from "node:timers/promises"
 import { CredentialRedactor } from "../packages/opencorvus/script/real-provider-audit"
+import { latestAuditSnapshotFiles } from "../packages/opencorvus/script/audit-snapshot"
 import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
@@ -56,8 +57,8 @@ let failure: unknown
 let taskID: string | undefined
 let taskDirectory: string | undefined
 async function audits(): Promise<Array<{ pid: number; executable: string; model: string; requests: Array<{ model: string; streaming: boolean; status?: number }>; exhausted: boolean }>> {
-  const names = await fs.readdir(auditRoot).catch((error) => { if (error.code === "ENOENT") return []; throw error })
-  return Promise.all(names.filter((name) => /^provider-\d+\.json$/.test(name)).map(async (name) => JSON.parse(await fs.readFile(path.join(auditRoot, name), "utf8"))))
+  const files = await latestAuditSnapshotFiles(auditRoot, "provider")
+  return Promise.all(files.map(async (file) => JSON.parse(await fs.readFile(file, "utf8"))))
 }
 try {
   const pluginProbes = await Promise.all(["first", "second"].map(async (name) => {
@@ -74,6 +75,7 @@ try {
     result.binarySHA256 = createHash("sha256").update(await fs.readFile(executable)).digest("hex")
     result.auditPluginSHA256 = createHash("sha256").update(await fs.readFile(auditPlugin)).digest("hex")
     result.auditHelperSHA256 = createHash("sha256").update(await fs.readFile(path.join(path.dirname(auditPlugin), "real-provider-audit.ts"))).digest("hex")
+    result.auditSnapshotHelperSHA256 = createHash("sha256").update(await fs.readFile(path.join(path.dirname(auditPlugin), "audit-snapshot.ts"))).digest("hex")
     const auth = JSON.parse(await fs.readFile(authSource!, "utf8"))
     redactor.collect(auth)
     const modelSource = path.join(path.dirname(authSource!), "models.json")

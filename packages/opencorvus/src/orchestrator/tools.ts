@@ -2612,10 +2612,7 @@ export function createOrchestratorTools(input: {
             `Acceptance gap ${activeAcceptanceRepair.revision.gap.gap_id} requires the current acceptance obligation and exact dispatch authority.`,
           )
         }
-        if (!existingSessionID && (exactWorkflowBinding?.kind !== "virtual_workflow" ||
-            !sameSelectedWorkflowBinding(exactWorkflowBinding, activeAcceptanceRepair.workflowBinding))) {
-          throw new Error("Initial acceptance repair must belong to the Task's selected virtual workflow.")
-        }
+        if (!exactWorkflowBinding) throw new Error("Acceptance repair dispatch requires an exact workflow subject.")
         if (
           acceptanceRepair.gap_id !== activeAcceptanceRepair.revision.gap.gap_id ||
           acceptanceRepair.ledger_revision_artifact_id !== activeAcceptanceRepair.artifactID ||
@@ -2634,7 +2631,7 @@ export function createOrchestratorTools(input: {
           }
           if (
             !dispatchConsumesAcceptanceCriterion({
-              binding: activeAcceptanceRepair.workflowBinding,
+              binding: exactWorkflowBinding,
               responsibility: criterion.responsibility,
               candidateWorkflowNodeID: exactWorkflowNodeID,
               sourceDispatchLineageArtifactID,
@@ -2646,6 +2643,14 @@ export function createOrchestratorTools(input: {
             )
           }
           selectedCriteria.push(criterion)
+        }
+        if (!existingSessionID) {
+          const initialization = selectedCriteria.every((criterion) => criterion.responsibility.kind === "task_initialization")
+          const selectedBinding = activeAcceptanceRepair.workflowBinding
+          if ((selectedBinding && !sameSelectedWorkflowBinding(exactWorkflowBinding, selectedBinding)) ||
+              (!initialization && (!selectedBinding || exactWorkflowBinding.kind !== "virtual_workflow"))) {
+            throw new Error("Initial acceptance repair must preserve its selected workflow or recover a validated Task initialization failure.")
+          }
         }
         canonicalAcceptanceRepair = {
           gap_id: acceptanceRepair.gap_id,

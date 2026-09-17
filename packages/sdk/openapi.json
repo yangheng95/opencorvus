@@ -59119,6 +59119,34 @@
                                         {
                                           "additionalProperties": false,
                                           "properties": {
+                                            "failure_reference": {
+                                              "additionalProperties": false,
+                                              "description": "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
+                                              "properties": {
+                                                "terminalEventID": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "terminalEventID"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "kind": {
+                                              "const": "task_initialization",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "failure_reference"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
                                             "kind": {
                                               "const": "workflow_node",
                                               "type": "string"
@@ -59301,6 +59329,34 @@
                                         {
                                           "additionalProperties": false,
                                           "properties": {
+                                            "failure_reference": {
+                                              "additionalProperties": false,
+                                              "description": "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
+                                              "properties": {
+                                                "terminalEventID": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "terminalEventID"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "kind": {
+                                              "const": "task_initialization",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "failure_reference"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
                                             "kind": {
                                               "const": "workflow_node",
                                               "type": "string"
@@ -59478,6 +59534,34 @@
                                     },
                                     "responsibility": {
                                       "oneOf": [
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "failure_reference": {
+                                              "additionalProperties": false,
+                                              "description": "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
+                                              "properties": {
+                                                "terminalEventID": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "terminalEventID"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "kind": {
+                                              "const": "task_initialization",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "failure_reference"
+                                          ],
+                                          "type": "object"
+                                        },
                                         {
                                           "additionalProperties": false,
                                           "properties": {

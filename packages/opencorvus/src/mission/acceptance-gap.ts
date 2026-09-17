@@ -33,6 +33,14 @@ export const MissionAcceptanceCriterionDisposition = z.enum(["failed", "unresolv
 export const MissionAcceptanceCriterionResponsibilitySchema = z.discriminatedUnion("kind", [
   z
     .object({
+      kind: z.literal("task_initialization"),
+      failure_reference: TerminalLifecycleReferenceSchema.describe(
+        "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
+      ),
+    })
+    .strict(),
+  z
+    .object({
       kind: z.literal("workflow_node"),
       workflow_id: z.string().trim().min(1).max(160),
       workflow_node_id: z.string().trim().min(1).max(160),
@@ -355,6 +363,9 @@ export function acceptanceGapEvidenceLocators(gap: MissionAcceptanceGap): Artifa
 }
 
 function responsibilityText(responsibility: MissionAcceptanceCriterionResponsibility): string {
+  if (responsibility.kind === "task_initialization") {
+    return `Task initialization after failed occurrence ${responsibility.failure_reference.terminalEventID}`
+  }
   return responsibility.kind === "workflow_node"
     ? `${responsibility.workflow_id}/${responsibility.workflow_node_id}`
     : `${responsibility.package_revision.namespace}/${responsibility.package_revision.id}@${responsibility.package_revision.version} agent=${responsibility.agent_id} lineage=${responsibility.dispatch_lineage_id}`

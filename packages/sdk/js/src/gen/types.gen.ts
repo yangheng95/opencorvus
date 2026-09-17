@@ -16528,6 +16528,15 @@ export type GatewayControlActionData = {
                 resolution_evidence_read_refs: Array<string>
                 responsibility:
                   | {
+                      /**
+                       * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.
+                       */
+                      failure_reference: {
+                        terminalEventID: string
+                      }
+                      kind: "task_initialization"
+                    }
+                  | {
                       kind: "workflow_node"
                       workflow_id: string
                       workflow_node_id: string
@@ -16557,6 +16566,15 @@ export type GatewayControlActionData = {
                 resolution_evidence_read_refs: Array<string>
                 responsibility:
                   | {
+                      /**
+                       * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.
+                       */
+                      failure_reference: {
+                        terminalEventID: string
+                      }
+                      kind: "task_initialization"
+                    }
+                  | {
                       kind: "workflow_node"
                       workflow_id: string
                       workflow_node_id: string
@@ -16585,6 +16603,15 @@ export type GatewayControlActionData = {
                 repair_evidence_read_refs: Array<string>
                 resolution_evidence_read_refs: Array<string>
                 responsibility:
+                  | {
+                      /**
+                       * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.
+                       */
+                      failure_reference: {
+                        terminalEventID: string
+                      }
+                      kind: "task_initialization"
+                    }
                   | {
                       kind: "workflow_node"
                       workflow_id: string
