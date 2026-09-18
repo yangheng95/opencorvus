@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Windows terminated-process liveness recovery](2026-09-18-windows-terminated-process-liveness.md)
+
 - [Sub-agent dock session switching](2026-09-18-subagent-dock-session-switch.md)
 
 - [Attachment-store authority marker removal](2026-09-18-attachment-store-authority-removal.md)

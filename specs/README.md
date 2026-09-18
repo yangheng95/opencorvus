@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Windows terminated-process liveness recovery](records/2026-09/2026-09-18-windows-terminated-process-liveness.md).
+
 [Sub-agent dock session switching](records/2026-09/2026-09-18-subagent-dock-session-switch.md).
 
 [Attachment-store authority marker removal](records/2026-09/2026-09-18-attachment-store-authority-removal.md).
