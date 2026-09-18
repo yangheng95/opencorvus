@@ -71,15 +71,18 @@ cp -R ./skills/opencorvus ~/.hermes/skills/developer-tools/opencorvus
 hermes skills list
 ```
 
-Windows PowerShell：
+Windows PowerShell（Skill root 在 `%LOCALAPPDATA%` 下，不是主目录）：
 
 ```powershell
-New-Item -ItemType Directory -Force "$HOME\.hermes\skills\developer-tools" | Out-Null
-Copy-Item -Recurse -Force ".\skills\opencorvus" "$HOME\.hermes\skills\developer-tools\opencorvus"
+New-Item -ItemType Directory -Force "$env:LOCALAPPDATA\hermes\skills\developer-tools" | Out-Null
+Copy-Item -Recurse -Force ".\skills\opencorvus" "$env:LOCALAPPDATA\hermes\skills\developer-tools\opencorvus"
 hermes skills list
 ```
 
-Hermes 会递归发现 `~/.hermes/skills` 下的 Skill；`developer-tools` 目录只是让分类清晰。手动复制后
+Hermes 会递归发现其安装 Skill root 下的 Skill：Linux/macOS 是 `~/.hermes/skills`，Windows 是
+`%LOCALAPPDATA%\hermes\skills`（已在 Hermes Agent v0.21.3 上验证）。复制到错误的 root 不会报错，
+只会让 `hermes skills list` 末行停留在 `0 local`，Skill 静默不可用——请以该行计数确认发现成功。
+`developer-tools` 目录只是让分类清晰。手动复制后
 启动新会话或执行 `/reset`。`--now` 只适用于支持该参数的 `hermes skills install` 流程。
 
 ### 其他 Agent Skills 宿主

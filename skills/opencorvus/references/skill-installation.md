@@ -17,7 +17,15 @@ The `agents/openai.yaml` file is optional host metadata. Hermes Agent and OpenCl
 
 ## Hermes Agent
 
-Hermes discovers skills below `~/.hermes/skills/`, including grouped subdirectories. From an OpenCorvus checkout, copy the complete package into a category directory:
+Hermes discovers skills below its installation skills root, including grouped subdirectories. The
+root is platform-dependent, so resolve it before copying rather than assuming `~/.hermes`:
+
+- Windows: `%LOCALAPPDATA%\hermes\skills` (verified against Hermes Agent v0.21.3);
+- Linux and macOS: `~/.hermes/skills`.
+
+Confirm the real root on the target machine before copying — `hermes skills list` reports the counts
+that prove which one is live. From an OpenCorvus checkout, copy the complete package into a category
+directory:
 
 ```bash
 mkdir -p ~/.hermes/skills/developer-tools
@@ -25,12 +33,20 @@ cp -R ./skills/opencorvus ~/.hermes/skills/developer-tools/opencorvus
 hermes skills list
 ```
 
-On PowerShell:
+On Windows PowerShell:
 
 ```powershell
-New-Item -ItemType Directory -Force "$HOME\.hermes\skills\developer-tools" | Out-Null
-Copy-Item -Recurse -Force ".\skills\opencorvus" "$HOME\.hermes\skills\developer-tools\opencorvus"
+New-Item -ItemType Directory -Force "$env:LOCALAPPDATA\hermes\skills\developer-tools" | Out-Null
+Copy-Item -Recurse -Force ".\skills\opencorvus" "$env:LOCALAPPDATA\hermes\skills\developer-tools\opencorvus"
 hermes skills list
+```
+
+Verify discovery from the trailing summary line, not from the command succeeding. A copy into the
+wrong root leaves `0 local` and the skill silently unavailable; a correct copy increments the local
+count:
+
+```text
+0 hub-installed, 51 builtin, 1 local — 52 enabled, 0 disabled
 ```
 
 Start a new session, use `/reset`, or install with the Hermes `--now` option when using a supported Uniform Resource Locator (URL) install. Invoke the skill with:

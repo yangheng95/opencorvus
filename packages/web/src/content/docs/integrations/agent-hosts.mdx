@@ -80,13 +80,16 @@ cp -R ./skills/opencorvus ~/.hermes/skills/developer-tools/opencorvus
 hermes skills list
 ```
 
-On Windows PowerShell:
+On Windows PowerShell, the skills root is under `%LOCALAPPDATA%`, not the home directory:
 
 ```powershell
-New-Item -ItemType Directory -Force "$HOME\.hermes\skills\developer-tools" | Out-Null
-Copy-Item -Recurse -Force ".\skills\opencorvus" "$HOME\.hermes\skills\developer-tools\opencorvus"
+New-Item -ItemType Directory -Force "$env:LOCALAPPDATA\hermes\skills\developer-tools" | Out-Null
+Copy-Item -Recurse -Force ".\skills\opencorvus" "$env:LOCALAPPDATA\hermes\skills\developer-tools\opencorvus"
 hermes skills list
 ```
+
+Read the trailing summary line of `hermes skills list` to confirm discovery. A copy into the wrong
+root leaves `0 local` and the skill silently unavailable.
 
 Hermes discovers Skills recursively under `~/.hermes/skills`; the `developer-tools` directory just
 keeps the categories legible. After a manual copy, start a new session or run `/reset`. `--now`

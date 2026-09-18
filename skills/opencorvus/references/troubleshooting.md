@@ -56,7 +56,7 @@ An HTTP `401` indicates missing or incorrect authentication. A connection refusa
 ## Task failed or appears stuck
 
 1. Read the board, interactions, conversation, and trace surfaces relevant to the Task.
-2. Check for an unanswered permission or question interaction.
+2. Check for an unanswered permission or question interaction with `opencorvus question list` and `opencorvus permission list`, then answer it as documented in [interactions.md](interactions.md). A Task waiting on an operator decision is blocked, not stuck.
 3. Identify the direct failing tool, provider, session, or evidence dependency.
 4. Send precise follow-up input when the Task can continue with new information.
 5. After resolving the cause, send ordinary follow-up input through `/task/<task_id>/message` with `text` and `source`. Check the response and Task state; accepted input can reopen a terminal Task.
