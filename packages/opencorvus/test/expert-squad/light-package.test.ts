@@ -118,13 +118,27 @@ function providerModel(): ProviderType.Model {
   } as ProviderType.Model
 }
 
-async function requireWithin<T>(promise: Promise<T>, label: string): Promise<T> {
-  return await Promise.race([
-    promise,
-    Bun.sleep(10_000).then(() => {
-      throw new Error(`Timed out waiting for ${label}`)
-    }),
-  ])
+async function requireWithin<T>(promise: Promise<T>, label: string, progress?: () => string): Promise<T> {
+  let observed = progress?.()
+  for (;;) {
+    let timer: ReturnType<typeof setTimeout> | undefined
+    try {
+      const result = await Promise.race([
+        promise.then((value) => ({ settled: true as const, value })),
+        new Promise<{ settled: false }>((resolve) => {
+          timer = setTimeout(() => resolve({ settled: false }), 10_000)
+        }),
+      ])
+      if (result.settled) return result.value
+      const current = progress?.()
+      if (!progress || current === observed) {
+        throw new Error(`No progress for ten seconds waiting for ${label}; worker phases: ${current ?? "unavailable"}`)
+      }
+      observed = current
+    } finally {
+      clearTimeout(timer)
+    }
+  }
 }
 
 afterEach(async () => {
@@ -471,6 +485,8 @@ describe("Light Expert Squad package", () => {
 
           let processorStarts = 0
           const workerToolBudgets = new Map<string, ReturnType<typeof SessionLoop.estimateToolPayload>>()
+          const workerPhases = new Map<string, string>()
+          const workerProgress = () => JSON.stringify([...workerPhases.entries()].sort(([a], [b]) => a.localeCompare(b)))
           let resolveAllStarted!: () => void
           let resolveAllFinished!: () => void
           let rejectAllStarted!: (reason: unknown) => void
@@ -497,6 +513,7 @@ describe("Light Expert Squad package", () => {
                 tools: Parameters<typeof SessionLoop.estimateToolPayload>[0]
               }) {
                 try {
+                  workerPhases.set(assistant.sessionID, "processor-entered")
                   if (Object.hasOwn(agentRoles, streamInput.agentID)) {
                     workerToolBudgets.set(streamInput.agentID, SessionLoop.estimateToolPayload(streamInput.tools))
                     const common = {
@@ -510,6 +527,7 @@ describe("Light Expert Squad package", () => {
                       messages: await Session.messages({ sessionID: assistant.sessionID }),
                     }
                     const revealed = await resolveTestCapabilityTools(common)
+                    workerPhases.set(assistant.sessionID, "initial-tools-ready")
                     expect(Object.keys(revealed.tools).sort()).toEqual(["artifact_publish", "artifact_read", "artifact_search", "artifact_select", "artifact_snapshot", "capability_search", "external_code_search", "glob", "publish_interactive_artifact", "read", "search_code", "webfetch", "websearch"])
                     const authoredWorker = await PromptProfileResolver.resolveWorkerCapability({
                       projectDirectory: project.path, config, packageRevision, agentID: streamInput.agentID,
@@ -531,6 +549,7 @@ describe("Light Expert Squad package", () => {
                       active_refs: revealInput.exact_refs,
                     })
                     await processor.completeRecoveredToolPart({ toolCallID: revealID, toolInput: revealInput, output: opened })
+                    workerPhases.set(assistant.sessionID, "skill-reveal-persisted")
                     const replayed = await revealed.tools.capability_search!.execute!(revealInput, revealContext) as
                       Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
                     expect(replayed.output).toBe(opened.output)
@@ -556,6 +575,7 @@ describe("Light Expert Squad package", () => {
                       toolInput: { name: skill.behavior.name },
                       output: loaded,
                     })
+                    workerPhases.set(assistant.sessionID, "skill-loaded")
                     const readable = await resolveTestCapabilityTools(common)
                     const filePath = path.join(project.path, `evidence-${assistant.id}.txt`)
                     const evidence = `EXACT_SOURCE=${assistant.sessionID}`
@@ -567,6 +587,7 @@ describe("Light Expert Squad package", () => {
                     }) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
                     expect(contents.output).toContain(evidence)
                     await processor.completeRecoveredToolPart({ toolCallID: readID, toolInput: readInput, output: contents })
+                    workerPhases.set(assistant.sessionID, "evidence-read")
                   }
                   processorStarts++
                   if (processorStarts === 4) resolveAllStarted()
@@ -581,6 +602,7 @@ describe("Light Expert Squad package", () => {
                   assistant.finish = "stop"
                   assistant.time.completed = Date.now()
                   await Session.updateMessage(assistant)
+                  workerPhases.set(assistant.sessionID, "terminal-written")
                   processorFinishes++
                   if (processorFinishes === 4) resolveAllFinished()
                   return "stop"
@@ -748,7 +770,7 @@ describe("Light Expert Squad package", () => {
             (member: { status: string; outcome?: { kind: string; session_id?: string } }) => member.outcome,
           ) as Array<{ kind: string; session_id?: string }>
           expect(receipts.map((receipt) => receipt.kind)).toEqual(["accepted", "accepted", "accepted", "accepted"])
-          await requireWithin(allStarted, "four overlapping Light worker processors")
+          await requireWithin(allStarted, "four overlapping Light worker processors", workerProgress)
           if (failAfterStarted) throw injectedFailure
           childSessionIDs = receipts.map((receipt) => {
             if (receipt.kind !== "accepted") throw new Error(`Expected accepted dispatch, got ${receipt.kind}`)
@@ -816,7 +838,7 @@ describe("Light Expert Squad package", () => {
 
           if (!releaseWorkers) throw new Error("Light worker release callback was not initialized")
           releaseWorkers()
-          await requireWithin(allFinished, "four completed Light worker processors")
+          await requireWithin(allFinished, "four completed Light worker processors", workerProgress)
           await requireWithin(waitForDetachedDispatchPipelinesForTest(), "detached Light dispatch pipelines")
           await requireWithin(waitForIngressDeliveryHooksForTest(), "Light lifecycle ingress deliveries")
           const collectionDecisions = Database.use((db) =>
