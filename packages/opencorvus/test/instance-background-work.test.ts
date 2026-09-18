@@ -1,5 +1,6 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import { Instance, runInstanceBackgroundWork } from "@/project/instance"
+import { Scheduler } from "@/scheduler"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterAll(resetMemoryDatabase)
@@ -13,6 +14,45 @@ async function waitFor(predicate: () => boolean, timeoutMs = 5_000): Promise<voi
 }
 
 describe("instance background work", () => {
+  test("global disposal cancels scheduled owners across projects before draining their leases", async () => {
+    await using first = await memoryProject("scheduled-disposal-first")
+    await using second = await memoryProject("scheduled-disposal-second")
+    const projects = [first, second]
+    const entered = projects.map(() => Promise.withResolvers<void>())
+    const cancelled = projects.map(() => Promise.withResolvers<void>())
+    const release = Promise.withResolvers<void>()
+    const observed: string[] = []
+    Scheduler.register({
+      id: "test.instance-scheduler-disposal",
+      interval: 60_000,
+      runAtStart: true,
+      run: async (signal) => {
+        await Promise.all(projects.map((project, index) => Instance.provide({
+          directory: project.path,
+          fn: async () => {
+            signal.addEventListener("abort", () => cancelled[index]!.resolve(), { once: true })
+            if (signal.aborted) cancelled[index]!.resolve()
+            entered[index]!.resolve()
+            await Promise.race([cancelled[index]!.promise, release.promise])
+            observed.push(`${index}:${signal.aborted ? "cancelled" : "released"}:${Instance.project.id}`)
+          },
+        })))
+      },
+    })
+    await Promise.all(entered.map((entry) => entry.promise))
+    const disposal = Instance.disposeAll()
+    try {
+      await waitFor(() => observed.length === projects.length)
+    } finally {
+      release.resolve()
+      await disposal
+    }
+    expect(observed.sort()).toEqual([expect.stringMatching(/^0:cancelled:/), expect.stringMatching(/^1:cancelled:/)])
+    expect(await Instance.provide({ directory: first.path, fn: () => Instance.project.id })).toBe(
+      observed.find((entry) => entry.startsWith("0:"))!.split(":")[2]!,
+    )
+  }, 30_000)
+
   test.each(["abort listener", "draining owner"])(
     "settles nested background registration from a %s after teardown closes admission",
     async (source) => {

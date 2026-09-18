@@ -2,7 +2,7 @@ import type { Argv } from "yargs"
 import { EOL } from "os"
 import { cmd } from "./cmd"
 import { UI } from "../ui"
-import { attach, withAttachOptions } from "./attach"
+import { attach, printAttachedResult, withAttachOptions } from "./attach"
 
 /**
  * Mission and Expert Squad orchestration for hosts that drive a running server
@@ -148,10 +148,14 @@ export const MissionCreateCommand = cmd({
         expertSquadIDs: args.squad,
       }),
     )
-    UI.println(`Created Mission draft ${mission.missionID} (${mission.productPillar})`)
+    printAttachedResult(
+      args.format,
+      mission,
+      `Created Mission draft ${mission.missionID} (${mission.productPillar})`,
+      `Dispatch it with: opencorvus mission dispatch ${mission.missionID}`,
+    )
     // The draft holds the prompt but invokes nothing; without this the caller
     // can reasonably believe work has started.
-    UI.println(`Dispatch it with: opencorvus mission dispatch ${mission.missionID}`)
   },
 })
 
@@ -176,8 +180,12 @@ export const MissionDispatchCommand = cmd({
         requestID: args.requestId,
       }),
     )
-    UI.println(`Dispatched Mission ${result.missionID} (session ${result.sessionID})`)
-    UI.println("Acceptance is not completion — poll `opencorvus mission status` for Mission and Task state.")
+    printAttachedResult(
+      args.format,
+      result,
+      `Dispatched Mission ${result.missionID} (session ${result.sessionID})`,
+      "Acceptance is not completion — poll `opencorvus mission status` for Mission and Task state.",
+    )
   },
 })
 
@@ -221,8 +229,12 @@ export const MissionSendCommand = cmd({
       }),
     )
     const verb = result.created ? "Started" : "Resumed"
-    UI.println(`${verb} Mission ${result.missionID} (session ${result.sessionID})`)
-    UI.println("Acceptance is not completion — poll `opencorvus mission status` for Mission and Task state.")
+    printAttachedResult(
+      args.format,
+      result,
+      `${verb} Mission ${result.missionID} (session ${result.sessionID})`,
+      "Acceptance is not completion — poll `opencorvus mission status` for Mission and Task state.",
+    )
   },
 })
 
@@ -268,7 +280,7 @@ export const MissionAbortCommand = cmd({
       }),
   handler: async (args) => {
     const server = attach(args)
-    await server.result(
+    const result = await server.result(
       "mission abort",
       server.client.mission.abort({
         missionID: args.missionID,
@@ -276,6 +288,6 @@ export const MissionAbortCommand = cmd({
         surface: "api",
       }),
     )
-    UI.println(`Aborted Mission ${args.missionID}`)
+    printAttachedResult(args.format, result, `Aborted Mission ${args.missionID}`)
   },
 })

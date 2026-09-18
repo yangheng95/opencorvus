@@ -2,7 +2,7 @@ import type { Argv } from "yargs"
 import { EOL } from "os"
 import { cmd } from "./cmd"
 import { UI } from "../ui"
-import { attach, withAttachOptions } from "./attach"
+import { attach, printAttachedResult, withAttachOptions } from "./attach"
 
 /**
  * Task lifecycle for hosts that drive a running server over HTTP.
@@ -112,9 +112,13 @@ export const TaskCreateCommand = cmd({
         requestID: args.requestId,
       }),
     )
-    UI.println(`Accepted Task ${accepted.task_id} in ${accepted.directory}`)
+    printAttachedResult(
+      args.format,
+      accepted,
+      `Accepted Task ${accepted.task_id} in ${accepted.directory}`,
+      "Acceptance is not completion — poll `opencorvus task status` for lifecycle state.",
+    )
     // HTTP 202 means the Task was admitted, not that any work happened.
-    UI.println("Acceptance is not completion — poll `opencorvus task status` for lifecycle state.")
   },
 })
 
@@ -197,8 +201,12 @@ export const TaskMessageCommand = cmd({
     // `not_woken` is a normal outcome, not a transport failure — the Task was
     // already awake, or declined to reopen. Reporting it as success would
     // misrepresent what happened.
-    UI.println(`wake_status: ${result.wake_status}`)
-    if (result.message) UI.println(result.message)
+    printAttachedResult(
+      args.format,
+      result,
+      `wake_status: ${result.wake_status}`,
+      ...(result.message ? [result.message] : []),
+    )
   },
 })
 
@@ -215,10 +223,10 @@ export const TaskCancelCommand = cmd({
       }),
   handler: async (args) => {
     const server = attach(args)
-    await server.result(
+    const result = await server.result(
       "task cancel",
       server.client.task.cancel({ taskID: args.taskID, reason: args.reason, surface: "api" }),
     )
-    UI.println(`Cancelled Task ${args.taskID}`)
+    printAttachedResult(args.format, result, `Task ${args.taskID}: ${result.status}`)
   },
 })

@@ -7,6 +7,7 @@ import { routeRequiresProjectDirectory } from "./route-policy.js"
 export { OpenCorvusClient }
 
 export type OpenCorvusClientConfig = Config & {
+  /** Project path on the server, transmitted exactly regardless of the client's operating system. */
   directory?: string
   username?: string
   password?: string
@@ -21,17 +22,6 @@ function basicAuthorization(username: string, password: string) {
 
 function headerBag(headers: Config["headers"]) {
   return new Headers(headers as HeadersInit | undefined)
-}
-
-function normalizeDirectory(directory: string) {
-  let dir = directory
-  // Normalize MINGW/MSYS-style paths (/c/foo/bar -> C:\foo\bar) on Windows.
-  // These paths cause path.resolve to produce incorrect results (e.g. C:\c\foo\bar).
-  if (typeof process !== "undefined" && process.platform === "win32") {
-    const m = dir.match(/^\/([a-zA-Z])(\/.*)?$/)
-    if (m?.[1]) dir = `${m[1].toUpperCase()}:${(m[2] || "\\").replace(/\//g, "\\")}`
-  }
-  return dir
 }
 
 function withDirectoryQuery(request: Request, directory: string) {
@@ -62,7 +52,7 @@ export function createOpenCorvusClient(input?: OpenCorvusClientConfig) {
     }) as typeof fetch)
   config = {
     ...config,
-    fetch: directory ? directoryScopedFetch(fetcher, normalizeDirectory(directory)) : fetcher,
+    fetch: directory ? directoryScopedFetch(fetcher, directory) : fetcher,
   }
 
   if (password) {

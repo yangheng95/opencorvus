@@ -2,7 +2,7 @@ import type { Argv } from "yargs"
 import { EOL } from "os"
 import { cmd } from "./cmd"
 import { UI } from "../ui"
-import { attach, withAttachOptions } from "./attach"
+import { attach, printAttachedResult, withAttachOptions } from "./attach"
 import { PermissionDecision } from "../../permission/decision"
 
 /**
@@ -92,7 +92,11 @@ export const PermissionReplyCommand = cmd({
         actorID: args.actor,
       }),
     )
-    UI.println(`Committed ${resolution.decision} for ${resolution.request.toolName} (${resolution.request.id})`)
+    printAttachedResult(
+      args.format,
+      resolution,
+      `Committed ${resolution.decision} for ${resolution.request.toolName} (${resolution.request.id})`,
+    )
   },
 })
 
@@ -133,7 +137,7 @@ export const PermissionRevokeCommand = cmd({
     }),
   handler: async (args) => {
     const server = attach(args)
-    await server.result("permission revoke", server.client.permission.revoke({ grantID: args.grantID }))
-    UI.println(`Revoked permission grant ${args.grantID}`)
+    const result = await server.result("permission revoke", server.client.permission.revoke({ grantID: args.grantID }))
+    printAttachedResult(args.format, result, `Revoked permission grant ${args.grantID}`)
   },
 })

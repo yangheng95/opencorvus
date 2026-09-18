@@ -90,6 +90,10 @@ opencorvus task list --dir /absolute/path/to/project
 opencorvus task status "$TASK_ID" --dir /absolute/path/to/project
 ```
 
+When Ledger returns `nextCursor`, pass its `updated`, `pinned` and `rowKey` values as
+`--cursor-updated`, `--cursor-pinned` and `--cursor-row-key` to the same `ledger list` or
+`ledger archive` command. Continue until `nextCursor` is null.
+
 A row marked with pending interactions is blocked on an operator decision, not progressing. Confirm
 and answer it:
 

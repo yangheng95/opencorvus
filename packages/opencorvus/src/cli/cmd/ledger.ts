@@ -22,6 +22,9 @@ const listOptions = <T>(yargs: Argv<T>) =>
   withAttachOptions(yargs)
     .option("search", { type: "string", describe: "filter rows by title" })
     .option("limit", { type: "number", describe: "maximum rows to return (1-200)" })
+    .option("cursor-updated", { type: "number", describe: "nextCursor.updated from the preceding page" })
+    .option("cursor-pinned", { type: "boolean", describe: "nextCursor.pinned from the preceding page" })
+    .option("cursor-row-key", { type: "string", describe: "nextCursor.rowKey from the preceding page" })
 
 export const LedgerListCommand = cmd({
   command: "list",
@@ -32,7 +35,13 @@ export const LedgerListCommand = cmd({
     const server = attach(args)
     const ledger = await server.result(
       "work ledger list",
-      server.client.workLedger.list({ search: args.search, limit: args.limit }),
+      server.client.workLedger.list({
+        search: args.search,
+        limit: args.limit,
+        cursorUpdated: args.cursorUpdated,
+        cursorPinned: args.cursorPinned === undefined ? undefined : args.cursorPinned ? "true" : "false",
+        cursorRowKey: args.cursorRowKey,
+      }),
     )
 
     if (args.format === "json") {
@@ -49,7 +58,9 @@ export const LedgerListCommand = cmd({
     if (ledger.nextCursor) {
       // The projection is cursor-paged; a truncated page must not be reported
       // as the whole ledger.
-      lines.push(`${EOL}more rows available — pass --limit or page with the JSON cursor`)
+      lines.push(
+        `${EOL}nextCursor: ${JSON.stringify(ledger.nextCursor)} — continue with --cursor-updated, --cursor-pinned and --cursor-row-key`,
+      )
     }
     console.log(lines.join(EOL))
   },
@@ -63,7 +74,13 @@ export const LedgerArchiveCommand = cmd({
     const server = attach(args)
     const ledger = await server.result(
       "work ledger archive",
-      server.client.workLedger.listArchived({ search: args.search, limit: args.limit }),
+      server.client.workLedger.listArchived({
+        search: args.search,
+        limit: args.limit,
+        cursorUpdated: args.cursorUpdated,
+        cursorPinned: args.cursorPinned === undefined ? undefined : args.cursorPinned ? "true" : "false",
+        cursorRowKey: args.cursorRowKey,
+      }),
     )
 
     if (args.format === "json") {
@@ -77,6 +94,10 @@ export const LedgerArchiveCommand = cmd({
     }
 
     console.log(ledger.rows.flatMap((row) => renderLedgerRow(row)).join(EOL))
+    if (ledger.nextCursor)
+      console.log(
+        `nextCursor: ${JSON.stringify(ledger.nextCursor)} — continue with --cursor-updated, --cursor-pinned and --cursor-row-key`,
+      )
   },
 })
 

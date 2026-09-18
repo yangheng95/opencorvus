@@ -31,14 +31,13 @@ curl --user opencorvus -H "x-opencorvus-directory: $PROJECT_DIR" "$OPENCORVUS_UR
 
 ## Answer a question
 
-Each pending request carries an ordered `questions` array. Supply one `--answer` per question, in
-order, using the exact `value` of the chosen option. Comma-separate the values for a question marked
-`multiple`.
+Each pending request carries an ordered `questions` array. Supply `--answers` as a JSON array of
+answer arrays in that order, using exact option values or authorized custom text. JSON preserves
+commas and whitespace inside a value; include multiple values for a question marked `multiple`.
 
 ```bash
 opencorvus question reply "$REQUEST_ID" --dir "$PROJECT_DIR" \
-  --answer use-existing-migration \
-  --answer postgres,redis
+  --answers '[["use-existing-migration"],["postgres","redis"]]'
 ```
 
 Reject only when the assistant should proceed without an operator choice:
@@ -48,9 +47,8 @@ opencorvus question reject "$REQUEST_ID" --dir "$PROJECT_DIR"
 ```
 
 Equivalent HTTP posts `{"answers": [["use-existing-migration"], ["postgres", "redis"]]}` to
-`/question/<request_id>/reply`. The server validates answer arity and option membership against the
-stored request; a rejected body means the answer did not match the question, not that the route
-failed.
+`/question/<request_id>/reply`. The API validates the nested string-array shape. Match the pending
+request's question order, selection rules and exact option values before submitting.
 
 ## Decide a permission request
 

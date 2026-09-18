@@ -32,6 +32,7 @@ import path from "path"
 import { fileURLToPath } from "url"
 import { generateOpencorvusGeneratedBuildArtifacts } from "../../opencorvus/script/generate-build-artifacts"
 import { writeOverlayPayloadStamp } from "../../opencorvus/script/build-overlay-payload-stamp"
+import { findLockedBuildBinaries } from "./build-binary-lock"
 import { finalizeWorkArtifactPackage } from "../../opencorvus/script/finalize-work-artifact-package"
 
 import {
@@ -123,31 +124,13 @@ function lockedBuildBinaries() {
   return [path.join(release, overlayFile), path.join(release, "deps", `${overlayFile.replace(/-/g, "_")}`)]
 }
 
-// A running image cannot be opened for write on Windows. Probe rather than
-// enumerate processes so the check stays honest about the exact condition
-// cargo will hit, and works the same when some other handle holds the file.
-async function fileIsLocked(file: string) {
-  if (!(await exists(file))) return false
-  try {
-    const handle = await fs.open(file, "r+")
-    await handle.close()
-    return false
-  } catch (error) {
-    const code = (error as NodeJS.ErrnoException)?.code ?? ""
-    return ["EBUSY", "EPERM", "EACCES", "ETXTBSY"].includes(code)
-  }
-}
-
 /**
  * Fail before the expensive Vite/SDK/cargo pipeline when a previous overlay
  * still holds its binary. Without this the build burns ~12 minutes and then
  * dies inside cargo with a bare `LNK1104` that names no cause and no remedy.
  */
 async function assertOverlayBinaryWritable() {
-  const locked: string[] = []
-  for (const file of lockedBuildBinaries()) {
-    if (await fileIsLocked(file)) locked.push(file)
-  }
+  const locked = await findLockedBuildBinaries(lockedBuildBinaries())
   if (locked.length === 0) return
 
   throw new Error(

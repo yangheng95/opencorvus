@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { BusPublicationOutboxTable } from "@/bus/bus.sql"
-import { EngineInteractionOutcomeTable, EngineInteractionRequestTable } from "@/engine/engine.sql"
+import { EngineInteractionRequestTable } from "@/engine/engine.sql"
+import { insertEngineInteractionRequest, resolveEngineInteractionRequest } from "@/engine/interaction-request"
 import { projectInteractionRowInTransaction } from "@/engine/store"
 import { writeTaskUpdateInTransaction } from "@/engine/state"
 import {
@@ -88,10 +89,9 @@ describe("Task-root fact persistence", () => {
       directory: project.path,
       fn: async () => {
         const taskID = Identifier.ascending("task")
-        const interactionID = Identifier.ascending("interaction")
         const root = await Session.create({ kind: "root", title: "Interaction root" })
         const now = Date.now()
-        Database.transaction((db) => {
+        const interactionID = Database.transaction((db) => {
           db.insert(EngineTaskTable).values({
             id: taskID,
             project_id: Instance.project.id,
@@ -102,40 +102,50 @@ describe("Task-root fact persistence", () => {
             request: "Answer exactly once",
             time_created: now,
           }).run()
-          db.insert(EngineInteractionRequestTable).values({
-            id: interactionID,
-            task_id: taskID,
-            session_id: root.id,
-            external_id: "question-1",
-            request_type: "question",
+          return insertEngineInteractionRequest(db, {
+            taskID,
+            sessionID: root.id,
+            externalID: "question-1",
+            requestType: "question",
             title: "Question",
             body: "Choose",
             payload: {},
-            time_created: now + 1,
-          }).run()
+            timeCreated: now + 1,
+            eventSource: "test",
+            eventSummary: "Choose exactly once",
+          })
         })
 
         expect(Database.use((db) => projectInteractionRowInTransaction(db, db.select().from(EngineInteractionRequestTable).get()!))).toMatchObject({
           id: interactionID,
+          task_id: taskID,
+          session_id: root.id,
           status: "pending",
           response: null,
           time_resolved: null,
           time_updated: now + 1,
         })
 
-        Database.transaction((db) => db.insert(EngineInteractionOutcomeTable).values({
-          id: Identifier.deterministic("interaction", `interaction-outcome\0${interactionID}`),
-          interaction_id: interactionID,
-          outcome: "answered",
+        Database.transaction((db) => resolveEngineInteractionRequest(db, {
+          row: projectInteractionRowInTransaction(db, db.select().from(EngineInteractionRequestTable).get()!),
+          status: "answered",
           response: { answer: "yes" },
-          time_created: now + 2,
-        }).run())
+          timeResolved: now + 2,
+          eventSource: "test",
+        }))
         expect(Database.use((db) => projectInteractionRowInTransaction(db, db.select().from(EngineInteractionRequestTable).get()!))).toMatchObject({
           status: "answered",
           response: { answer: "yes" },
           time_resolved: now + 2,
           time_updated: now + 2,
         })
+        expect(Database.use((db) => db.select().from(ProtocolEventTable)
+          .where(eq(ProtocolEventTable.interaction_id, interactionID)).all())
+          .map((event) => ({ type: event.type, owner: event.aggregate_id, aggregate: event.aggregate_type })))
+          .toEqual([
+            { type: "interaction.requested", owner: taskID, aggregate: "task" },
+            { type: "interaction.resolved", owner: taskID, aggregate: "task" },
+          ])
       },
     })
   })

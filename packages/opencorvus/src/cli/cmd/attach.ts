@@ -5,6 +5,7 @@ import { createOpenCorvusClient, type OpenCorvusClient } from "@opencorvus-ai/sd
 import { NamedError } from "@opencorvus-ai/util/error"
 import { DEFAULT_SERVER_URL } from "../../server/defaults"
 import { Flag } from "../../flag/flag"
+import { UI } from "../ui"
 
 /**
  * A failure reaching or being answered by a running server. Typed so the CLI
@@ -64,7 +65,14 @@ export function attachBaseUrl(explicit?: string): string {
 
 export function attachDirectory(explicit?: string): string {
   const candidate = explicit?.trim()
-  return candidate ? path.resolve(candidate) : process.cwd()
+  if (!candidate) return process.cwd()
+  if (path.posix.isAbsolute(candidate) || path.win32.isAbsolute(candidate)) return candidate
+  return path.resolve(candidate)
+}
+
+export function printAttachedResult(format: string, result: unknown, ...lines: string[]): void {
+  if (format === "json") console.log(JSON.stringify(result, null, 2))
+  else for (const line of lines) UI.println(line)
 }
 
 export type AttachSession = {

@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Release unit test repair](2026-09-19-release-unit-test-repair.md)
+
 - [Expert capability preservation](2026-09-19-expert-capability-preservation.md)
 
 - [Interaction ownership after Project deletion](2026-09-18-interaction-owner-after-project-deletion.md)

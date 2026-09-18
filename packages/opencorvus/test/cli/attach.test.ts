@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test"
-import { AttachError, attachBaseUrl, attach } from "../../src/cli/cmd/attach"
+import { AttachError, attachBaseUrl, attachDirectory, attach } from "../../src/cli/cmd/attach"
 import { parseQuestionAnswers } from "../../src/cli/cmd/question"
 
 const originalUrl = process.env["OPENCORVUS_URL"]
@@ -56,13 +56,11 @@ test("attach reports an unreachable server without an HTTP status", async () => 
     (error: unknown) => error,
   )
 
-  expect(AttachError.isInstance(thrown) && thrown.data).toMatchObject({
+  expect(AttachError.isInstance(thrown) && thrown.data).toEqual({
     operation: "question list",
+    baseUrl: "http://127.0.0.1:7979",
     detail: "Unable to connect",
   })
-  // No status at all — the CLI renders the "is a server running there?" hint
-  // off this absence, so it must not be filled in with a synthesized code.
-  expect(AttachError.isInstance(thrown) && thrown.data.status).toBeUndefined()
 })
 
 test("attach drops an empty error body instead of rendering it as detail", async () => {
@@ -74,15 +72,26 @@ test("attach drops an empty error body instead of rendering it as detail", async
       (error: unknown) => error,
     )
 
-  expect(AttachError.isInstance(thrown) && thrown.data.detail).toBeUndefined()
+  expect(AttachError.isInstance(thrown) && thrown.data).toEqual({
+    operation: "permission list",
+    baseUrl: "http://127.0.0.1:7979",
+    status: 502,
+    detail: undefined,
+  })
 })
 
-test("question answers map one flag per question and comma-split multi-select values", () => {
-  expect(parseQuestionAnswers(["yes"])).toEqual([["yes"]])
-  expect(parseQuestionAnswers(["yes", "a, b ,c"])).toEqual([["yes"], ["a", "b", "c"]])
+test("question JSON answers preserve exact custom text and multi-select values", () => {
+  expect(parseQuestionAnswers('[["yes"],["a,b"," c "]]')).toEqual([["yes"], ["a,b", " c "]])
+  expect(parseQuestionAnswers('[["Use alpha, then beta"]]')).toEqual([["Use alpha, then beta"]])
 })
 
-test("question answers reject an empty selection rather than sending an empty array", () => {
-  expect(() => parseQuestionAnswers([])).toThrow("at least one --answer")
-  expect(() => parseQuestionAnswers(["ok", " , "])).toThrow("--answer #2 is empty")
+test("invalid answer JSON and element types produce parser/schema errors", () => {
+  expect(() => parseQuestionAnswers("[invalid")).toThrow(SyntaxError)
+  expect(() => parseQuestionAnswers("[[1]]")).toThrow("expected string")
+})
+
+test("server directory preserves POSIX, drive and UNC absolute paths", () => {
+  for (const directory of ["/srv/project", "C:\\projects\\repo", "\\\\server\\share\\repo"]) {
+    expect(attachDirectory(directory)).toBe(directory)
+  }
 })

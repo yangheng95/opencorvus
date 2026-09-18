@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Release unit test repair](records/2026-09/2026-09-19-release-unit-test-repair.md).
+
 [Expert capability preservation](records/2026-09/2026-09-19-expert-capability-preservation.md).
 
 [Interaction ownership after Project deletion](records/2026-09/2026-09-18-interaction-owner-after-project-deletion.md).

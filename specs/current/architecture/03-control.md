@@ -209,6 +209,12 @@ channel 等 project-scoped State 的唯一缓存与释放 owner。Server 在 pro
 而不会阻断后续 idle candidate。参数只限定 idle process resources，不删除或
 改写 Project、Task、Session、Artifact 或 message 历史，也不按内存阈值重启进程。
 
+全局 `Instance.disposeAll` 先取消已捕获 Project 的后台工作并结算全局 Scheduler，
+再等待各 Project lease 释放和执行 `State.dispose`。定时任务可能持有 Project lease
+直到收到 Scheduler 取消信号，也可能等待 Project 后台工作；这两类 owner 必须先取消、
+后排空，避免全局清理反向等待自己的取消步骤。Server 的进程终态协议仍负责更广的
+Session/Task 终态事实与数据库交接，此顺序不替代该协议。
+
 ## control —— 外部控制账号与真实 Session 消息
 
 **代码**：`src/control/`

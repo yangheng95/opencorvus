@@ -2,7 +2,8 @@ import type { Argv } from "yargs"
 import { EOL } from "os"
 import { cmd } from "./cmd"
 import { UI } from "../ui"
-import { attach, withAttachOptions } from "./attach"
+import { attach, printAttachedResult, withAttachOptions } from "./attach"
+import { Answer } from "../../question/types"
 
 /**
  * Operator-facing question interactions for hosts that drive a running server
@@ -75,20 +76,19 @@ export const QuestionReplyCommand = cmd({
         type: "string",
         demandOption: true,
       })
-      .option("answer", {
-        alias: ["a"],
+      .option("answers", {
         type: "string",
-        array: true,
-        describe:
-          "one answer per question, in order; repeat the flag for multiple questions and " +
-          "comma-separate the values selected for a multiple-choice question",
+        describe: 'JSON array of answer arrays in question order, for example [["yes"],["postgres","redis"]]',
         demandOption: true,
       }),
   handler: async (args) => {
-    const answers = parseQuestionAnswers(args.answer)
+    const answers = parseQuestionAnswers(args.answers)
     const server = attach(args)
-    await server.result("question reply", server.client.question.reply({ requestID: args.requestID, answers }))
-    UI.println(`Answered question ${args.requestID} with ${answers.length} answer(s)`)
+    const result = await server.result(
+      "question reply",
+      server.client.question.reply({ requestID: args.requestID, answers }),
+    )
+    printAttachedResult(args.format, result, `Answered question ${args.requestID} with ${answers.length} answer(s)`)
   },
 })
 
@@ -103,27 +103,12 @@ export const QuestionRejectCommand = cmd({
     }),
   handler: async (args) => {
     const server = attach(args)
-    await server.result("question reject", server.client.question.reject({ requestID: args.requestID }))
-    UI.println(`Rejected question ${args.requestID}`)
+    const result = await server.result("question reject", server.client.question.reject({ requestID: args.requestID }))
+    printAttachedResult(args.format, result, `Rejected question ${args.requestID}`)
   },
 })
 
-/**
- * `--answer a --answer b,c` answers question 0 with ["a"] and question 1 with
- * ["b", "c"]. The route validates arity and option membership against the
- * stored request, so this only has to produce the exact operator selection.
- */
-export function parseQuestionAnswers(raw: readonly string[] | undefined): string[][] {
-  const values = raw ?? []
-  if (values.length === 0) throw new Error("question reply requires at least one --answer")
-  return values.map((value, index) => {
-    const selected = value
-      .split(",")
-      .map((entry) => entry.trim())
-      .filter((entry) => entry.length > 0)
-    if (selected.length === 0) {
-      throw new Error(`--answer #${index + 1} is empty; expected one or more comma-separated option values`)
-    }
-    return selected
-  })
+/** Preserve exact option values and custom text through the server's answer schema. */
+export function parseQuestionAnswers(raw: string): string[][] {
+  return Answer.array().parse(JSON.parse(raw))
 }
