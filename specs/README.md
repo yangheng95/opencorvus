@@ -2102,6 +2102,8 @@ Latest streaming Conversation stable-hover ownership repair: [`2026-08-04-stream
 
 Latest sub-agent live transcript source contract repair: [`2026-09-18-subagent-live-origin-source.md`](records/2026-09/2026-09-18-subagent-live-origin-source.md).
 
+Latest sub-agent dock visual refresh: [`2026-09-18-subagent-dock-visual-refresh.md`](records/2026-09/2026-09-18-subagent-dock-visual-refresh.md).
+
 Latest Overlay runtime efficiency root repair: [`2026-07-30-overlay-runtime-efficiency-root-repair.md`](records/2026-07/2026-07-30-overlay-runtime-efficiency-root-repair.md).
 
 Latest Conversation virtualizer source-switch lifecycle repair: [`2026-07-30-conversation-virtualizer-source-switch-lifecycle.md`](records/2026-07/2026-07-30-conversation-virtualizer-source-switch-lifecycle.md).

@@ -3,6 +3,10 @@ import { createMemo, For, Show, type JSX } from "solid-js"
 import { renderMarkdown } from "../utils/markdown"
 import { createStreamingTextPartModel } from "./text-part-model"
 
+function isStandaloneSourceFileMarkup(html: string): boolean {
+  return /^&lt;source-file\b[\s\S]*\/&gt;$/.test(html.trim())
+}
+
 /**
  * Incremental streaming markdown renderer.
  * Splits text at double-newline block boundaries. Completed blocks are
@@ -30,7 +34,14 @@ export function StreamingMarkdownPart(props: {
 
   return (
     <div class={props.className || "msg-text"}>
-      <For each={frozenHtml()}>{(html) => <div class="md-frozen-block" innerHTML={html} />}</For>
+      <For each={frozenHtml()}>
+        {(html) => (
+          <div
+            class={isStandaloneSourceFileMarkup(html) ? "md-frozen-block md-frozen-block--source-file" : "md-frozen-block"}
+            innerHTML={html}
+          />
+        )}
+      </For>
       <Show when={activeText()}>
         <div class={props.activeTextClassName || "md-active-text"}>{activeText()}</div>
       </Show>

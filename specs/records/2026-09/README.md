@@ -33,6 +33,7 @@
 - [OpenCorvus 学术论文写作计划](2026-09-10-opencorvus-paper-plan.md)
 
 - [Sub-agent live transcript source contract repair](2026-09-18-subagent-live-origin-source.md).
+- [Sub-agent dock visual refresh](2026-09-18-subagent-dock-visual-refresh.md).
 - [OpenCorvus 专家组织论文：专业化、跨任务演化与严格实验设计](../../artifacts/opencorvus-paper/manuscript/README.md)
 
 - [ICLR 2027 官方 LaTeX 模板下载](../../artifacts/opencorvus-paper/templates/iclr2027/README.md)
