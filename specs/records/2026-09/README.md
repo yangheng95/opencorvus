@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Deleted Project UI convergence](2026-09-18-deleted-project-ui-convergence.md)
+
 - [Project deletion with worker descriptors](2026-09-18-project-delete-worker-descriptor.md)
 
 - [Windows terminated-process liveness recovery](2026-09-18-windows-terminated-process-liveness.md)

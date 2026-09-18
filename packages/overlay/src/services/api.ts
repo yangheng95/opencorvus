@@ -135,6 +135,24 @@ export class ApiError extends Error {
   }
 }
 
+type ApiErrorListener = (error: ApiError) => void
+const apiErrorListeners = new Set<ApiErrorListener>()
+
+export function onApiError(listener: ApiErrorListener): () => void {
+  apiErrorListeners.add(listener)
+  return () => apiErrorListeners.delete(listener)
+}
+
+function publishApiError(error: ApiError): void {
+  for (const listener of apiErrorListeners) {
+    try {
+      listener(error)
+    } catch (listenerError) {
+      console.error("[api] error listener failed", listenerError)
+    }
+  }
+}
+
 function formatApiErrorMessage(status: number, path: string, body: unknown): string {
   const detail = pickServerErrorDetail(body)
   return detail ? `API ${status} ${path}: ${detail}` : `API ${status} ${path}`
@@ -194,7 +212,11 @@ export async function apiJson<T = any>(path: string, init?: ApiJsonInit): Promis
     timeoutMilliseconds: init?.timeoutMilliseconds,
     responseKind: "json",
   })
-  if (!res.ok) throw new ApiError(res.status, path, res.body)
+  if (!res.ok) {
+    const error = new ApiError(res.status, path, res.body)
+    publishApiError(error)
+    throw error
+  }
   return res.body
 }
 

@@ -146,7 +146,7 @@ import {
   resolveGlobalComposerSubmissionContext,
   supersedePendingWorkspaceSelection,
   deleteProjectState,
-  leaveDeletedProject,
+  leaveUnavailableProject,
   openGlobalChatLauncher,
   openDirectory,
   openPathInSelectedEditor,
@@ -713,7 +713,7 @@ async function deleteWorkLedgerProject(directory: string): Promise<void> {
       : `project:delete:already-absent:${projectDirectory}`
   runPostCommitUiEffect({ id: `${diagnosticID}:close`, title: "Project deletion committed" }, () => {
     if (activeDirectory().trim() === projectDirectory) {
-      void leaveDeletedProject(projectDirectory).catch((error) => {
+      void leaveUnavailableProject(projectDirectory).catch((error) => {
         reportError({
           id: `${diagnosticID}:directory-free-workspace`,
           title: "Project deletion committed but workspace transition failed",
