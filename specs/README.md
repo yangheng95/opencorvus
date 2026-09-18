@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Deleted Project UI convergence](records/2026-09/2026-09-18-deleted-project-ui-convergence.md).
+
 [Project deletion with worker descriptors](records/2026-09/2026-09-18-project-delete-worker-descriptor.md).
 
 [Windows terminated-process liveness recovery](records/2026-09/2026-09-18-windows-terminated-process-liveness.md).

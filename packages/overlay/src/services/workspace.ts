@@ -279,15 +279,47 @@ export async function openGlobalChatLauncher(): Promise<void> {
   setTimeout(() => document.querySelector<HTMLTextAreaElement>("#solidChatComposer textarea")?.focus(), 0)
 }
 
+export function isMissingProjectDirectoryError(error: unknown, directory: string): boolean {
+  if (!(error instanceof ApiError) || error.status !== 400) return false
+  const body = error.body
+  if (!body || typeof body !== "object" || Array.isArray(body)) return false
+  const envelope = body as Record<string, unknown>
+  const data = envelope.data
+  if (envelope.name !== "ProjectDirectoryIntegrityError" || !data || typeof data !== "object" || Array.isArray(data)) {
+    return false
+  }
+  const detail = data as Record<string, unknown>
+  if (detail.reason !== "missing" || typeof detail.directory !== "string") return false
+  return projectDirectoryKey(detail.directory) === projectDirectoryKey(directory)
+}
+
 /**
- * Leave a Project whose backend deletion already committed. Unlike the
- * explicit Close Project command, this does not allocate a replacement.
+ * Leave a Project that no longer exists in the backend or on disk. Both an
+ * in-app deletion and startup recovery use this single state transition so a
+ * removed Project cannot remain the persisted API request context.
  */
-export async function leaveDeletedProject(directory: string): Promise<void> {
-  const deletedDirectory = directory.trim()
-  if (!deletedDirectory || activeDirectory().trim() !== deletedDirectory) return
-  const savedDirectory = settingsStore.savedDirectory.trim() === deletedDirectory ? "" : settingsStore.savedDirectory
-  enterDirectoryFreeWorkspace(savedDirectory)
+export async function leaveUnavailableProject(directory: string): Promise<void> {
+  const unavailableDirectory = directory.trim()
+  if (!unavailableDirectory) return
+  const unavailableKey = projectDirectoryKey(unavailableDirectory)
+  const ownsRuntimeDirectory = projectDirectoryKey(activeDirectory()) === unavailableKey
+  const ownsPersistedDirectory = projectDirectoryKey(settingsStore.directory) === unavailableKey
+  if (!ownsRuntimeDirectory && !ownsPersistedDirectory) return
+  const savedDirectory =
+    projectDirectoryKey(settingsStore.savedDirectory) === unavailableKey ? "" : settingsStore.savedDirectory
+  if (ownsRuntimeDirectory) {
+    enterDirectoryFreeWorkspace(savedDirectory)
+  } else {
+    // A selected Task or Session can temporarily own another live Project
+    // while settings still retain this removed directory. Clear only the
+    // persisted restore context so the unrelated live selection is preserved.
+    setSettingsStore({
+      directory: "",
+      savedDirectory,
+      workspaceTaskID: "",
+      workspaceDirectory: "",
+    })
+  }
   await saveSettings()
 }
 
