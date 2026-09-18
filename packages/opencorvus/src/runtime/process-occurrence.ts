@@ -58,6 +58,9 @@ export type RuntimeProcessOccurrenceObserver = (
 let runtimeProcessOccurrence: RuntimeProcessOccurrenceInfo | undefined
 
 const DOTNET_EPOCH_OFFSET_TICKS = 504_911_232_000_000_000n
+const WINDOWS_PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
+const WINDOWS_SYNCHRONIZE = 0x00100000
+const WINDOWS_WAIT_TIMEOUT = 0x00000102
 
 function windowsProcessInstanceIDFromFiletime(filetimeTicks: bigint): string {
   return `win32:${filetimeTicks + DOTNET_EPOCH_OFFSET_TICKS}`
@@ -94,9 +97,14 @@ function windowsProcessInstanceID(pid: number): string | undefined {
       args: [FFIType.ptr, FFIType.ptr, FFIType.ptr, FFIType.ptr, FFIType.ptr],
       returns: FFIType.u32,
     },
+    WaitForSingleObject: { args: [FFIType.ptr, FFIType.u32], returns: FFIType.u32 },
     CloseHandle: { args: [FFIType.ptr], returns: FFIType.u32 },
   })
-  const processHandle = kernel32.symbols.OpenProcess(0x1000, 0, pid)
+  const processHandle = kernel32.symbols.OpenProcess(
+    WINDOWS_PROCESS_QUERY_LIMITED_INFORMATION | WINDOWS_SYNCHRONIZE,
+    0,
+    pid,
+  )
   if (!processHandle) {
     kernel32.close()
     return undefined
@@ -113,7 +121,8 @@ function windowsProcessInstanceID(pid: number): string | undefined {
       ptr(kernelTime),
       ptr(userTime),
     )
-    return succeeded ? windowsProcessInstanceIDFromFiletime(creationTime.readBigUInt64LE()) : undefined
+    if (!succeeded || kernel32.symbols.WaitForSingleObject(processHandle, 0) !== WINDOWS_WAIT_TIMEOUT) return undefined
+    return windowsProcessInstanceIDFromFiletime(creationTime.readBigUInt64LE())
   } finally {
     kernel32.symbols.CloseHandle(processHandle)
     kernel32.close()
