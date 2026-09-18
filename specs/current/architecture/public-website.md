@@ -41,4 +41,15 @@ This document is the current authority for the `opencorvus.com` runtime, Expert 
 - Exact archive responses are counted only after the persistent file passes SHA-256/size verification and immediately before a `200` response begins. The value means archive responses, never users, installations, activations, or popularity.
 - The detail-page action reports preparing, completed, and failed states through an accessible live region. Download does not install or activate a Squad.
 - Public and documentation footers read one 30-day estimated participating-browser total from the same `registry.sqlite3` authority. The numeric Registry schema version remains `1`; the one-time schema-fingerprint upgrade stops the writer, snapshots the old v1 file, rebuilds signed Market facts plus empty visitor/counter state in a same-directory sibling, and atomically replaces the same database path. It has no version 2, compatibility reader, fallback or second database. Reading sets no cookie. A browser enters the estimate only after explicit activation; the service stores only a SHA-256 digest of a random host-only token, never Internet Protocol (IP), User-Agent, path history or fingerprint inputs. Participation can be withdrawn idempotently, bounded cleanup runs inside the existing backup command before snapshots, and the visible copy never calls the estimate people, accounts or devices.
-- OcHeader navigation links to Long-horizon, Start, the PoC paper section, Expert Squads and Docs. The header and footer paper links reach the localized landing-page status section; its PDF is a self-contained static website asset at `/papers/opencorvus-poc.pdf`, marked PoC Version / Under Construction. Website builds and downloads do not depend on the manuscript source branch. The separate Starlight documentation header/sidebar keep their documentation-specific hierarchy.
+- OcHeader navigation links to the coordination pain section, Start, the real case, Expert Squads and Docs. The footer paper link reaches the localized landing-page research entry; its PDF is a self-contained static website asset at `/papers/opencorvus-poc.pdf`, marked PoC Version / Under Construction. Website builds and downloads do not depend on the manuscript source branch. The separate Starlight documentation header/sidebar keep their documentation-specific hierarchy.
+
+## Product entry points
+
+- Both homepage locales render one bilingual pain-first story from `landing-copy.ts`: long-running
+  work, complex handoffs, independent review and correction. The stage map is an explicit
+  collaboration illustration, not a runtime projection or performance measurement.
+- The tank-game case links to localized documentation and selected, sanitized evidence excerpts.
+  The current story states human intervention and unresolved fidelity/test-evidence limits.
+- `OcDownload.astro` owns the existing manifest-bound download control. Promotional SVGs and the
+  social preview are generated through `brand:assets` from shared homepage copy. Historical media
+  remain addressable where retained records link to them; there is one current homepage story.

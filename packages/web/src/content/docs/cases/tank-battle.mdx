@@ -1,0 +1,59 @@
+---
+title: "One tank game, a full coordination loop"
+description: "How one browser-game request moved through research, design, implementation, review and two correction rounds."
+---
+
+A user asked: **“Create a browser-based tank battle game that recreates the full original experience.”**
+The record dates to 18 September 2026. One software-delivery squad owned the task.
+
+This case illustrates coordination and revision. It is not a cost comparison, success-rate benchmark,
+or proof of exact original-game fidelity.
+
+## What happened
+
+| Work | What it produced or checked |
+| --- | --- |
+| Intent, requirements and source research | 19 acceptance requirements; a reference version, gameplay rules and scope boundaries |
+| Architecture, workload and interface design | Module/data contracts, an impact assessment, pixel layout and interface states |
+| Implementation and integration | A browser game with terrain, enemies, power-ups, scoring, two-player play and construction mode |
+| Independent testing | Game rules, data and playable flows |
+| Interface-integrity review | Real browser observations, screenshots and interaction evidence |
+| System-integrity review | Whether the delivery and evidence supported the requirements |
+| Orchestrator | Connected the work, collected artifacts and recorded delivery limits |
+
+These responsibilities overlapped as dependencies allowed. This table is a logical account,
+not a measured concurrency chart.
+
+## Two rounds of correction
+
+**Scoring and results.** Review led back to implementation to repair cumulative scoring across stages
+and results presentation. The closing record describes rechecking the score after advancing a stage.
+
+**Stage data.** The operator required original-style maps from a public, non-ROM source.
+The implementation replaced 35 maps and enemy rosters, recorded their provenance, then returned
+the data for independent checking. This intervention is part of the case.
+
+![Retained two-player game screenshot](/media/tank-battle-case.png)
+
+The image is a retained screenshot of the delivered game, not the OpenCorvus interface or a new acceptance run.
+
+## What remains uncertain
+
+The closing narrative says 242 tests passed. A retained report says 241 passed and one failed;
+its revision relative to the final delivery has not been reconciled. We do not advertise a full pass.
+
+The maps are traced to public remake data, not independently proven equivalent to the original game's
+read-only memory (ROM) data. Partial terrain cells, individual enemy order and later-loop composition
+have documented simplifications. Some live-play evidence, including the high-score screen and actual
+shovel pickup, was missing. A completed task state does not remove those limits.
+
+## Inspect the evidence
+
+[Selected source excerpts and file fingerprints](https://github.com/yangheng95/opencorvus/blob/main/specs/artifacts/2026-09-19-task-coordination/source-excerpts.json)
+contain the requirement breakdown, Mission repair notes, observed role names and retained test totals.
+These selected local records are not a complete public transcript; fingerprints identify the
+inspected bytes without making the private originals publicly available.
+
+To try a similar workflow, [configure OpenCorvus](../../start/quickstart/),
+then select a [software-delivery squad](../../market/builtin/advanced/) and give it a bounded goal
+with explicit acceptance criteria. The runtime and provider must remain available.

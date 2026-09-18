@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="720" viewBox="0 0 1440 720" role="img" aria-labelledby="title desc">
+    <title id="title">Who takes the next step?</title><desc id="desc">Find an issue → Revise → Review again. Workflow depends on the task and selected squad. Not a live product screen.</desc>
+    <defs><marker id="arrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0 0 5 2.5 0 5" fill="#8eaaff"/></marker></defs>
+    <rect width="1440" height="720" fill="#111b2d" rx="18"/>
+    <g font-family="Arial, Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+      <text x="52" y="57" fill="#dce7fa" font-size="23" font-weight="700">OpenCorvus</text>
+      <text x="1384" y="55" text-anchor="end" fill="#a7bbdc" font-size="14">LONG-RUNNING. COMPLEX. DEMANDING.</text>
+      <text x="52" y="145" fill="white" font-size="54" font-weight="700">Big tasks. Fewer handoffs on your plate.</text>
+      <text x="52" y="192" fill="#acbed9" font-size="21">Research, design, implementation and review. Connected through the task.</text>
+      <rect x="52" y="237" width="1334" height="61" rx="9" fill="#1b2f4e" stroke="#486899"/>
+      <text x="82" y="275" fill="#eef5ff" font-size="22" font-weight="700">OpenCorvus orchestrator</text>
+      <text x="1355" y="274" text-anchor="end" fill="#b8ccec" font-size="18">Assign · Connect · Follow through</text>
+      <path d="M179 298 v39" stroke="#547199"/><path d="M449 298 v39" stroke="#547199"/><path d="M719 298 v39" stroke="#547199"/><path d="M989 298 v39" stroke="#547199"/><path d="M1259 298 v39" stroke="#547199"/>
+      <g transform="translate(52 338)">
+      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
+      <text x="20" y="36" fill="#9bb8ed" font-size="15">01</text>
+      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">Understand</text>
+      <text x="20" y="102" fill="#b9c9de" font-size="16">Requirements</text><text x="20" y="124" fill="#b9c9de" font-size="16">Research</text>
+      <text x="20" y="185" fill="#9bd8c6" font-size="15">Scope &amp; evidence</text>
+    </g><path d="M307 423 h14" stroke="#8eaaff" stroke-width="2" marker-end="url(#arrow)"/><g transform="translate(322 338)">
+      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
+      <text x="20" y="36" fill="#9bb8ed" font-size="15">02</text>
+      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">Design</text>
+      <text x="20" y="102" fill="#b9c9de" font-size="16">Architecture</text><text x="20" y="124" fill="#b9c9de" font-size="16">Interface design</text>
+      <text x="20" y="185" fill="#9bd8c6" font-size="15">Plan &amp; contracts</text>
+    </g><path d="M577 423 h14" stroke="#8eaaff" stroke-width="2" marker-end="url(#arrow)"/><g transform="translate(592 338)">
+      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
+      <text x="20" y="36" fill="#9bb8ed" font-size="15">03</text>
+      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">Implement</text>
+      <text x="20" y="102" fill="#b9c9de" font-size="16">Implementation</text>
+      <text x="20" y="185" fill="#9bd8c6" font-size="15">Working artifacts</text>
+    </g><path d="M847 423 h14" stroke="#8eaaff" stroke-width="2" marker-end="url(#arrow)"/><g transform="translate(862 338)">
+      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
+      <text x="20" y="36" fill="#9bb8ed" font-size="15">04</text>
+      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">Review</text>
+      <text x="20" y="102" fill="#b9c9de" font-size="16">Testing</text><text x="20" y="124" fill="#b9c9de" font-size="16">Visual review</text><text x="20" y="146" fill="#b9c9de" font-size="16">Integrity review</text>
+      <text x="20" y="185" fill="#9bd8c6" font-size="15">Evidence &amp; findings</text>
+    </g><path d="M1117 423 h14" stroke="#8eaaff" stroke-width="2" marker-end="url(#arrow)"/><g transform="translate(1132 338)">
+      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
+      <text x="20" y="36" fill="#9bb8ed" font-size="15">05</text>
+      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">Deliver</text>
+      <text x="20" y="102" fill="#b9c9de" font-size="16">Orchestrator</text>
+      <text x="20" y="185" fill="#9bd8c6" font-size="15">Results &amp; limits</text>
+    </g>
+      <path d="M988 545 V605 H718 V552" fill="none" stroke="#e6b775" stroke-width="3"/>
+      <path d="m709 561 9-10 9 10" fill="none" stroke="#e6b775" stroke-width="3"/>
+      <rect x="776" y="582" width="570" height="43" rx="6" fill="#392f28"/>
+      <text x="800" y="610" fill="#f1c58d" font-size="20">Find an issue → Revise → Review again</text>
+      <text x="52" y="679" fill="#a9b9d1" font-size="16">Workflow depends on the task and selected squad. Not a live product screen.</text>
+    </g>
+  </svg>

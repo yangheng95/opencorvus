@@ -2,7 +2,6 @@
 // The Starlight layout does not load the public site's token sheet — only OcLayout does — so the
 // component brings its own. Astro deduplicates the import where both are already on the page.
 import "../styles/tokens.css"
-import { landingCopy } from "../content/landing-copy"
 import type { PublicLocale } from "../content/public-market"
 import {
   featuredComposition,
@@ -13,7 +12,7 @@ import {
 /**
  * The published Expert Squad combinations, rendered inside documentation.
  *
- * Same source as the landing page's composition section — editorial chain from
+ * Editorial chain from
  * `content/squad-compositions.ts`, squad and role counts generated from the shipped catalog. Two
  * places showing the same chain from two hand-written copies is exactly how the doc ends up one
  * squad behind the page.
@@ -26,7 +25,15 @@ type Props = {
 }
 
 const { locale, variant } = Astro.props
-const copy = landingCopy[locale].compose
+const copy = locale === "zh-cn" ? {
+  squadsUnit: "支专家团", rolesUnit: "个具名角色", requirementsLabel: "Mission 要求",
+  missionPromptLabel: "示例 Mission", stageHeading: "阶段", squadHeading: "专家团",
+  rolesHeading: "角色", handoffHeading: "交出什么", moreLabel: "其它组合",
+} : {
+  squadsUnit: "squads", rolesUnit: "named roles", requirementsLabel: "Mission requirements",
+  missionPromptLabel: "Example Mission", stageHeading: "Stage", squadHeading: "Squad",
+  rolesHeading: "Roles", handoffHeading: "Hands on", moreLabel: "Other combinations",
+}
 const study = variant === "paper" ? selfPaperComposition(locale) : featuredComposition(locale)
 const others = otherCompositions(locale)
 ---
