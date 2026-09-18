@@ -34,6 +34,7 @@
 
 - [Sub-agent live transcript source contract repair](2026-09-18-subagent-live-origin-source.md).
 - [Sub-agent dock visual refresh](2026-09-18-subagent-dock-visual-refresh.md).
+- [Handoff and no-action conversation presentation](2026-09-19-handoff-no-action-presentation.md).
 - [OpenCorvus 专家组织论文：专业化、跨任务演化与严格实验设计](../../artifacts/opencorvus-paper/manuscript/README.md)
 
 - [ICLR 2027 官方 LaTeX 模板下载](../../artifacts/opencorvus-paper/templates/iclr2027/README.md)

@@ -2104,6 +2104,8 @@ Latest sub-agent live transcript source contract repair: [`2026-09-18-subagent-l
 
 Latest sub-agent dock visual refresh: [`2026-09-18-subagent-dock-visual-refresh.md`](records/2026-09/2026-09-18-subagent-dock-visual-refresh.md).
 
+Latest Handoff and no-action conversation presentation: [`2026-09-19-handoff-no-action-presentation.md`](records/2026-09/2026-09-19-handoff-no-action-presentation.md).
+
 Latest Overlay runtime efficiency root repair: [`2026-07-30-overlay-runtime-efficiency-root-repair.md`](records/2026-07/2026-07-30-overlay-runtime-efficiency-root-repair.md).
 
 Latest Conversation virtualizer source-switch lifecycle repair: [`2026-07-30-conversation-virtualizer-source-switch-lifecycle.md`](records/2026-07/2026-07-30-conversation-virtualizer-source-switch-lifecycle.md).
