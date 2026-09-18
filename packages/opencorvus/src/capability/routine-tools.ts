@@ -1,8 +1,9 @@
 import type { CapabilityRef } from "@opencorvus-ai/util/capability-ref"
 import { harnessGrantedRefs, type HarnessGrantSet, type HarnessProjection } from "./harness-projection"
 
-// This describes routine use, not permission. Every entry is intersected with
-// the current owner's exact executable grants and the visible Provider surface.
+// Native assistants use this map to choose their routine surface. Task roles
+// already declare their platform tool surface through the Expert Squad grants;
+// for those roles this map supplies guidance, not a second capability filter.
 const guidance: Readonly<Record<string, string>> = {
   capability_search: "Discover and load specialist or extension capabilities that are not already callable.",
   read: "Read project files and exact file ranges.",
@@ -49,6 +50,7 @@ export function routineToolRefs(input: {
   visibleToolIDs: readonly string[]
 }): CapabilityRef[] {
   const visible = new Set(input.visibleToolIDs)
+  const taskRole = input.harness.context.kind === "task_agent" || input.harness.context.kind === "task_scheduler"
   return harnessGrantedRefs(input.harness, "execute").filter(
     (ref) =>
       ref.kind === "tool" &&
@@ -56,7 +58,9 @@ export function routineToolRefs(input: {
       visible.has(ref.local_ref) &&
       (ref.owner_ref.startsWith("dispatch-stage:") ||
         ((ref.owner_ref === "tool-registry" || ref.owner_ref.startsWith("runtime-projection:")) &&
-          Object.hasOwn(guidance, ref.local_ref))),
+          ref.local_ref !== "skill" &&
+          ref.local_ref !== "mission_skill" &&
+          (taskRole || Object.hasOwn(guidance, ref.local_ref)))),
   )
 }
 
@@ -67,7 +71,7 @@ export function routineToolPrompt(refs: readonly CapabilityRef[]): string {
     "The following tools are already callable for this role. Use them directly; do not search for or reveal them first. Their tool definitions provide the exact input contracts. Use capability_search only when a needed specialist or extension capability is not already callable.",
     ...refs.map(
       (ref) =>
-        `- ${ref.local_ref}: ${guidance[ref.local_ref] ?? "Use this declared stage tool according to the current worker contract."}`,
+        `- ${ref.local_ref}: ${guidance[ref.local_ref] ?? "Use this declared role tool according to its exact definition and current contract."}`,
     ),
   ].join("\n")
 }

@@ -21,10 +21,13 @@ universal executable interface.
    exact Skill already granted to that Conversation or Task identity. The
    loader ref and normalized definition are part of the same immutable
    permanent base, active refs, digest, and payload accounting; loading the
-   Skill content remains an ordinary model Tool call. One guidance map in
-   `capability/routine-tools.ts`, intersected with executable grants, model
-   projection, permissions and Message switches, determines the routine base
-   and its initial prompt instructions. Declared dispatch-stage interfaces also
+   Skill content remains an ordinary model Tool call. For Task workers and
+   schedulers, their granted platform Registry and runtime-projected tools form
+   the routine base; the specialized Skill loaders retain exact selection.
+   `capability/routine-tools.ts` intersects those grants with model projection,
+   permissions and Message switches. Its guidance map describes their use and
+   selects the narrower native Conversation/Mission routine surface, rather
+   than imposing another Task role allowlist. Declared dispatch-stage interfaces also
    belong to their worker's base. `capability_search` discovers and loads
    specialist and extension capabilities that are not already callable.
    A caller-requested JSON-schema response can additionally use the existing

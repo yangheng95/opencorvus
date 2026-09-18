@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Expert capability preservation](2026-09-19-expert-capability-preservation.md)
+
 - [Interaction ownership after Project deletion](2026-09-18-interaction-owner-after-project-deletion.md)
 
 - [Deleted Project UI convergence](2026-09-18-deleted-project-ui-convergence.md)

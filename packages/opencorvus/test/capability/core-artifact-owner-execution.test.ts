@@ -179,6 +179,9 @@ for (const { projected, policy } of [true, false].flatMap((projected) =>
             ...(policy === "tool-switch" ? { tools: { skill: false } } : {}),
           }
           const resolved = await resolveTestCapabilityTools(common)
+          expect(typeof resolved.tools.evolve_expert_squad_from_feedback?.execute).toBe("function")
+          expect(resolved.occurrence.payload.permanent_provider_base_definition.provider_names)
+            .toContain("evolve_expert_squad_from_feedback")
           if (policy === "allow" || policy === "skill-deny") {
             expect(resolved.occurrence.payload.permanent_provider_base_definition.provider_names).toContain("skill")
           }
@@ -261,6 +264,7 @@ for (const { projected, policy } of [true, false].flatMap((projected) =>
                     messages: await Session.messages({ sessionID: session.id }),
                   })
             const toolCallID = `call_scheduler_skill_${projected}_${phase}`
+            expect(typeof current.tools.evolve_expert_squad_from_feedback?.execute).toBe("function")
             const loaded = (await current.tools.skill!.execute!(toolInput, {
               toolCallId: toolCallID,
               messages: [],
