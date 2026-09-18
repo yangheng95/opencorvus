@@ -3,8 +3,25 @@ import { Config } from "../config/config"
 import { MCP } from "../mcp"
 import { Provider } from "../provider/provider"
 import { UI } from "./ui"
+import { AttachError } from "./cmd/attach"
 
 export function FormatError(input: unknown) {
+  if (AttachError.isInstance(input)) {
+    const { operation, baseUrl, status, detail } = input.data
+    return [
+      `${operation} failed against ${baseUrl}${status ? ` (HTTP ${status})` : ""}`,
+      ...(detail ? [detail] : []),
+      // The fetch client reports an unreachable host as a synthesized 5xx, so
+      // an absent status is not the only shape a "nothing is listening" failure
+      // takes. Offer the same recovery for both.
+      ...(status === undefined || status >= 502
+        ? [`Is a server running there? Start one with \`opencorvus serve\`, or pass --url.`]
+        : []),
+      ...(status === 401
+        ? [`Set OPENCORVUS_SERVER_PASSWORD (and OPENCORVUS_SERVER_USERNAME if it is not "opencorvus").`]
+        : []),
+    ].join("\n")
+  }
   if (MCP.Failed.isInstance(input))
     return `MCP server "${input.data.name}" failed. Note, opencorvus does not support MCP authentication yet.`
   if (Provider.ModelNotFoundError.isInstance(input)) {

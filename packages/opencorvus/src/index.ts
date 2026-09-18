@@ -28,6 +28,11 @@ import { EOL } from "os"
 import { PrCommand } from "./cli/cmd/pr"
 import { SessionCommand } from "./cli/cmd/session"
 import { DbCommand } from "./cli/cmd/db"
+import { MissionCommand } from "./cli/cmd/mission"
+import { PermissionCommand } from "./cli/cmd/permission"
+import { QuestionCommand } from "./cli/cmd/question"
+import { TaskCommand } from "./cli/cmd/task"
+import { LedgerCommand } from "./cli/cmd/ledger"
 import { Capability } from "./platform/capability"
 import { installProcessErrorLogging } from "./util/process-error-logging"
 import { errorDiagnostic } from "./util/error-diagnostics"
@@ -107,6 +112,11 @@ let cli = yargs(hideBin(process.argv))
   .command(PrCommand)
   .command(SessionCommand)
   .command(DbCommand)
+  .command(MissionCommand)
+  .command(TaskCommand)
+  .command(LedgerCommand)
+  .command(PermissionCommand)
+  .command(QuestionCommand)
 
 cli = cli
   .fail((msg, err) => {
