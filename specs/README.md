@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Interaction ownership after Project deletion](records/2026-09/2026-09-18-interaction-owner-after-project-deletion.md).
+
 [Deleted Project UI convergence](records/2026-09/2026-09-18-deleted-project-ui-convergence.md).
 
 [Project deletion with worker descriptors](records/2026-09/2026-09-18-project-delete-worker-descriptor.md).

@@ -469,11 +469,14 @@ export const EngineInteractionRequestTable = sqliteTable(
   "engine_interaction_request",
   {
     id: text().primaryKey(),
-    task_id: text().references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    /** Immutable Task correlation. Interaction audit facts outlive the mutable
+     * Task projection and therefore must not cascade with Project deletion. */
+    task_id: text(),
     /** Exact owner locator for externally accepted interaction input. */
     source_kind: text({ enum: ["bus_question", "permission_request"] }),
     source_id: text(),
-    session_id: text().references(() => SessionTable.id, { onDelete: "set null" }),
+    /** Immutable Session correlation for inline requests. */
+    session_id: text(),
     external_id: text(),
     request_type: text().$type<EngineInteractionType>(),
     title: text(),

@@ -34,6 +34,7 @@ import { createOrchestratorTools } from "@/orchestrator/tools"
 import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { Identifier } from "@/id/id"
+import { BusPublicationOutboxTable } from "@/bus/bus.sql"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { Message } from "@/session/message"
@@ -176,6 +177,67 @@ async function createExpiredDecisionGapFixture(input: {
 }
 
 describe("Task-control reconciliation", () => {
+  test("reduces a source-backed Question through its immutable Task owner event", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const fixture = await createExpiredDecisionGapFixture({
+          projectPath: project.path,
+          semanticTurnLimit: 2,
+          label: "source-backed-question",
+        })
+        const occurrenceID = `bus-occurrence:${Identifier.ascending("artifact")}`
+        const questionID = Identifier.ascending("question")
+        const interactionID = Database.immediateTransaction((db) => {
+          const timeCreated = Date.now()
+          db.insert(BusPublicationOutboxTable)
+            .values({
+              occurrence_id: occurrenceID,
+              project_id: Instance.project.id,
+              directory: project.path,
+              event_type: "question.asked",
+              properties: {
+                id: questionID,
+                sessionID: fixture.orchestrator.id,
+                questions: [{ header: "Recovery", question: "Choose the recovery action", options: [] }],
+                tool: { messageID: fixture.assistantID, callID: "call_source_backed_question" },
+                timeCreated,
+              },
+              time_created: timeCreated,
+            })
+            .run()
+          return insertEngineInteractionRequest(db, {
+            taskID: fixture.taskID,
+            sessionID: fixture.orchestrator.id,
+            externalID: questionID,
+            requestType: "question",
+            title: "Recovery",
+            body: "Choose the recovery action",
+            payload: {
+              questions: [{ header: "Recovery", question: "Choose the recovery action", options: [] }],
+              tool: { messageID: fixture.assistantID, callID: "call_source_backed_question" },
+            },
+            eventSource: "test.source-backed-question",
+            eventSummary: "Recovery",
+            timeCreated,
+            source: { kind: "bus_question", id: occurrenceID },
+          })
+        })
+
+        const evidence = Database.use((db) => readTaskRootIngressEvidence(db, fixture.ingress))
+        expect({ interactions: evidence.interactions, projection: projectTaskRootIngress(
+          fixture.ingress.id,
+          Date.now(),
+          readTaskRootIngressEvidence,
+        ) }).toMatchObject({
+          interactions: [{ id: interactionID, assistantMessageID: fixture.assistantID }],
+          projection: { state: "waiting", interactionID },
+        })
+      },
+    })
+  })
+
   test("pages only current Project control candidates across retained terminal Task history", async () => {
     await using project = await memoryProject()
     await Instance.provide({
