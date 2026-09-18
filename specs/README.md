@@ -2100,6 +2100,8 @@ Latest running Conversation action-flicker repair: [`2026-08-03-running-conversa
 
 Latest streaming Conversation stable-hover ownership repair: [`2026-08-04-streaming-conversation-stable-hover-owner.md`](records/2026-08/2026-08-04-streaming-conversation-stable-hover-owner.md).
 
+Latest sub-agent live transcript source contract repair: [`2026-09-18-subagent-live-origin-source.md`](records/2026-09/2026-09-18-subagent-live-origin-source.md).
+
 Latest Overlay runtime efficiency root repair: [`2026-07-30-overlay-runtime-efficiency-root-repair.md`](records/2026-07/2026-07-30-overlay-runtime-efficiency-root-repair.md).
 
 Latest Conversation virtualizer source-switch lifecycle repair: [`2026-07-30-conversation-virtualizer-source-switch-lifecycle.md`](records/2026-07/2026-07-30-conversation-virtualizer-source-switch-lifecycle.md).
