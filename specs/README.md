@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Project deletion with worker descriptors](records/2026-09/2026-09-18-project-delete-worker-descriptor.md).
+
 [Windows terminated-process liveness recovery](records/2026-09/2026-09-18-windows-terminated-process-liveness.md).
 
 [Sub-agent dock session switching](records/2026-09/2026-09-18-subagent-dock-session-switch.md).
