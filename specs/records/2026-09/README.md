@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [v0.1.2-beta publication](2026-09-18-v0.1.2-beta-release.md)
+
 - [Interaction ownership after Project deletion](2026-09-18-interaction-owner-after-project-deletion.md)
 
 - [Deleted Project UI convergence](2026-09-18-deleted-project-ui-convergence.md)

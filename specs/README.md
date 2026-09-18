@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[v0.1.2-beta publication](records/2026-09/2026-09-18-v0.1.2-beta-release.md).
+
 [Interaction ownership after Project deletion](records/2026-09/2026-09-18-interaction-owner-after-project-deletion.md).
 
 [Deleted Project UI convergence](records/2026-09/2026-09-18-deleted-project-ui-convergence.md).
