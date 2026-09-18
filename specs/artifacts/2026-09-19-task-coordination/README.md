@@ -1,6 +1,6 @@
 # Task coordination: tank-game case and public materials
 
-This is the evidence entry for the September 2026 pain-first README and homepage.
+This is the evidence entry for the September 2026 product-led README and homepage.
 The implementation plan and verification record are [here](../../records/2026-09/2026-09-19-outcome-first-marketing.md).
 
 ## What the case establishes
@@ -49,6 +49,28 @@ A hash identifies the inspected bytes; it does not make unavailable originals in
 
 ## Visual review
 
+### Current product-led revision
+
+The user rejected the first pain-led layout and explicitly required a graph, not a stage list.
+The replacement uses a shared SVG renderer with individual role nodes and directed edges:
+three initial roles join at architecture; design and workload review branch; implementation
+branches into testing and interface review; reviews join at delivery. Two dashed edges return
+to implementation. These summarize review-led corrections; they do not identify an exclusive
+initiator for each repair or purport to replay every event.
+
+The solid-edge abstraction follows the Advanced `greenfield-interface-delivery` dependency
+contract in `packages/opencorvus/src/expert-squad/builtin/advanced/expert-squad.jsonc`;
+the observed role inventory and two correction topics come from `source-excerpts.json`.
+The delivery node represents the orchestrator's collection of independent outputs.
+
+The page now uses a short product claim, one dominant graph and progressive feature chapters.
+References studied: [Apple MacBook Pro](https://www.apple.com/macbook-pro/) and
+[Apple Intelligence](https://www.apple.com/apple-intelligence/). No Apple copy or assets are reused.
+Current screenshots use the `product-` prefix. The previous captures below document the rejected
+iteration and are retained only as historical review evidence.
+
+### Earlier iteration
+
 Desktop viewport screenshots are retained here from real-browser inspection at 1280×720.
 The page is reviewed manually, including stage disclosures, download menu, locale and theme controls.
 No UI automated test, assertion suite or screenshot baseline is introduced.
@@ -63,21 +85,37 @@ The unknown-architecture Safari/Firefox branch was reviewed in source, not direc
 those browsers. The actual menu, outside-click, Enter and Escape paths were inspected in the
 available browser. The independent reviewer found no unresolved issue after the correction.
 
-## Reusable short copy
+## Product-led revision visual evidence
+
+All `product-*` screenshots are real isolated localhost browser captures at 1280x720,
+manually viewed during this revision:
+
+- `product-hero-zh.png`, `product-hero-en.png`: concise product-first opening.
+- `product-graph-zh.png`, `product-graph-en.png`: actual directed graph with branch/join/repair edges and visible evidence qualifier.
+- `product-chapter-zh.png`: capability chapter and illustrative artifacts.
+- `product-download-en.png`: adaptive installer disclosure within the viewport.
+- `product-dark-en.png`: final dark-theme title contrast.
+- `product-case-en.png`, `product-evidence-en.png`: real case deliverable, recorded quantities, correction themes and evidence limitations.
+- `product-start-en.png`: setup action and operational boundaries.
+
+The rebuilt public `og.png` was also opened and visually reviewed after adding the
+shared graph's evidence qualifier. These images supersede the earlier iteration's
+visual acceptance evidence, while the earlier files remain a historical record.
+
+## Reusable short copy (current)
 
 **中文**
 
-长程任务最耗精力的，往往是催下一步、给不同专家搬上下文、检查“完成”是否真的可用。
-OpenCorvus 组织调研、实现和独立复核，把发现的问题带回实现，再把产物与证据交给你。
-坦克大战案例中，一句需求展开为 19 项验收要求，并经历计分修复与 35 关数据替换两轮回流。
-查看案例及限制，再用一个你能检查结果的任务试试。开源，可自托管。
+复杂任务，协同推进。OpenCorvus 是面向长程、复杂任务的多智能体调度系统。
+调研、设计、实现与独立复核，按职责分工，以产物衔接。
+坦克大战案例展开为 19 项验收要求，并经历计分修复与 35 关数据替换两轮回流。
+查看执行图与案例证据。开源，可自托管。
 
 **English**
 
-Long tasks leave you chasing the next step, briefing specialists and checking what “done” means.
-OpenCorvus coordinates research, implementation and independent review, sending findings back
-for correction and bringing together artifacts and evidence. In the tank-game case, one request
-became 19 acceptance requirements and two correction rounds: scoring, then 35 stages of source data.
-Read the case and its limits, then try a bounded task whose result you can inspect. Open source and self-hostable.
+Complex work. Coordinated. OpenCorvus brings specialist agents together for long-running,
+demanding tasks. Research, design, implementation and independent review connect through artifacts.
+The tank-game case involved 19 acceptance requirements and two correction rounds: scoring,
+then 35 stages of source data. Explore the execution graph and its evidence. Open source and self-hostable.
 
 These drafts are not posted to external channels by this task.

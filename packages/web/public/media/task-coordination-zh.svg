@@ -1,51 +1,92 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="720" viewBox="0 0 1440 720" role="img" aria-labelledby="title desc">
-    <title id="title">从目标到交付，谁来接下一步？</title><desc id="desc">发现问题 → 返回实现 → 再复核. 按任务与所选专家团组织；本图不是实时运行界面。</desc>
-    <defs><marker id="arrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0 0 5 2.5 0 5" fill="#8eaaff"/></marker></defs>
-    <rect width="1440" height="720" fill="#111b2d" rx="18"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-labelledby="share-title">
+    <title id="share-title">OpenCorvus — 复杂任务，协同推进</title>
+    <rect width="1440" height="960" fill="#f7f9fd"/>
     <g font-family="Arial, Microsoft YaHei, Noto Sans CJK SC, sans-serif">
-      <text x="52" y="57" fill="#dce7fa" font-size="23" font-weight="700">OpenCorvus</text>
-      <text x="1384" y="55" text-anchor="end" fill="#a7bbdc" font-size="14">长程 · 复杂 · 重型任务调度</text>
-      <text x="52" y="145" fill="white" font-size="48" font-weight="700">任务很复杂。别把协调也留给自己。</text>
-      <text x="52" y="192" fill="#acbed9" font-size="21">调研、设计、实现、复核与返工，在同一任务里衔接。</text>
-      <rect x="52" y="237" width="1334" height="61" rx="9" fill="#1b2f4e" stroke="#486899"/>
-      <text x="82" y="275" fill="#eef5ff" font-size="22" font-weight="700">OpenCorvus 编排器</text>
-      <text x="1355" y="274" text-anchor="end" fill="#b8ccec" font-size="18">分派 · 衔接 · 跟进 · 汇总</text>
-      <path d="M179 298 v39" stroke="#547199"/><path d="M449 298 v39" stroke="#547199"/><path d="M719 298 v39" stroke="#547199"/><path d="M989 298 v39" stroke="#547199"/><path d="M1259 298 v39" stroke="#547199"/>
-      <g transform="translate(52 338)">
-      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
-      <text x="20" y="36" fill="#9bb8ed" font-size="15">01</text>
-      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">澄清与调研</text>
-      <text x="20" y="102" fill="#b9c9de" font-size="16">需求工程</text><text x="20" y="124" fill="#b9c9de" font-size="16">来源调研</text>
-      <text x="20" y="185" fill="#9bd8c6" font-size="15">需求与证据</text>
-    </g><path d="M307 423 h14" stroke="#8eaaff" stroke-width="2" marker-end="url(#arrow)"/><g transform="translate(322 338)">
-      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
-      <text x="20" y="36" fill="#9bb8ed" font-size="15">02</text>
-      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">方案与分工</text>
-      <text x="20" y="102" fill="#b9c9de" font-size="16">架构设计</text><text x="20" y="124" fill="#b9c9de" font-size="16">界面设计</text>
-      <text x="20" y="185" fill="#9bd8c6" font-size="15">方案与契约</text>
-    </g><path d="M577 423 h14" stroke="#8eaaff" stroke-width="2" marker-end="url(#arrow)"/><g transform="translate(592 338)">
-      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
-      <text x="20" y="36" fill="#9bb8ed" font-size="15">03</text>
-      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">实现与集成</text>
-      <text x="20" y="102" fill="#b9c9de" font-size="16">实现工程师</text>
-      <text x="20" y="185" fill="#9bd8c6" font-size="15">可运行的产物</text>
-    </g><path d="M847 423 h14" stroke="#8eaaff" stroke-width="2" marker-end="url(#arrow)"/><g transform="translate(862 338)">
-      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
-      <text x="20" y="36" fill="#9bb8ed" font-size="15">04</text>
-      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">独立复核</text>
-      <text x="20" y="102" fill="#b9c9de" font-size="16">测试</text><text x="20" y="124" fill="#b9c9de" font-size="16">界面复核</text><text x="20" y="146" fill="#b9c9de" font-size="16">系统审查</text>
-      <text x="20" y="185" fill="#9bd8c6" font-size="15">证据与发现</text>
-    </g><path d="M1117 423 h14" stroke="#8eaaff" stroke-width="2" marker-end="url(#arrow)"/><g transform="translate(1132 338)">
-      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
-      <text x="20" y="36" fill="#9bb8ed" font-size="15">05</text>
-      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">交付收敛</text>
-      <text x="20" y="102" fill="#b9c9de" font-size="16">编排器汇总</text>
-      <text x="20" y="185" fill="#9bd8c6" font-size="15">结果与已知限制</text>
+      <text x="72" y="70" fill="#253044" font-size="23" font-weight="600">OpenCorvus</text>
+      <text x="72" y="170" fill="#253044" font-size="62" font-weight="700" letter-spacing="-2">复杂任务。协同推进。</text>
+      <text x="72" y="225" fill="#69778f" font-size="24">面向长程、复杂任务的多智能体调度系统。</text>
+      <text x="72" y="910" fill="#69778f" font-size="15">角色与修正主题来自任务记录，连线采用工作流示意；返工起点不代表事件归因。非原始界面或精确时序。</text>
     </g>
-      <path d="M988 545 V605 H718 V552" fill="none" stroke="#e6b775" stroke-width="3"/>
-      <path d="m709 561 9-10 9 10" fill="none" stroke="#e6b775" stroke-width="3"/>
-      <rect x="776" y="582" width="570" height="43" rx="6" fill="#392f28"/>
-      <text x="800" y="610" fill="#f1c58d" font-size="20">发现问题 → 返回实现 → 再复核</text>
-      <text x="52" y="679" fill="#a9b9d1" font-size="16">按任务与所选专家团组织；本图不是实时运行界面。</text>
+    <g transform="translate(75 280)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 590" width="1290" height="590" role="img" aria-labelledby="share-title share-desc">
+    <title id="share-title">从一个目标，展开一场协作。</title>
+    <desc id="share-desc">意图、需求与调研汇合至架构；架构分派界面设计与工作量复核；设计进入实现；实现分支到测试和界面复核；系统审查与界面复核汇合交付。两条琥珀色返工边从复核返回实现。</desc>
+    <defs>
+      <marker id="share-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 9 5 1 9" fill="none" stroke="#8193ba" stroke-width="1.5"/></marker>
+      <marker id="share-repair" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 9 5 1 9" fill="none" stroke="#ba8649" stroke-width="1.5"/></marker>
+      <radialGradient id="share-wash"><stop stop-color="#dfe7ff" stop-opacity=".7"/><stop offset="1" stop-color="#f7f9fd" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="1290" height="590" rx="24" fill="#f7f9fd"/>
+    <ellipse cx="750" cy="290" rx="350" ry="260" fill="url(#share-wash)"/>
+    <g font-family="Arial, Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+      <text x="37" y="42" font-size="13" fill="#68778f" letter-spacing="1">坦克大战 · 执行关系</text>
+      <text x="1254" y="42" text-anchor="end" font-size="12" fill="#68778f">角色与修正主题据任务记录；连线为工作流示意，返工起点不代表事件归因。</text>
+      <g fill="none" stroke="#8193ba" stroke-width="1.7"><path data-from="intent" data-to="architecture" d="M198 145 C228 145 220 265 250 265" marker-end="url(#share-arrow)"/><path data-from="requirements" data-to="architecture" d="M198 265 H250" marker-end="url(#share-arrow)"/><path data-from="research" data-to="architecture" d="M198 385 C228 385 220 265 250 265" marker-end="url(#share-arrow)"/><path data-from="architecture" data-to="workload" d="M412 265 C442 265 434 125 464 125" marker-end="url(#share-arrow)"/><path data-from="architecture" data-to="design" d="M412 265 C442 265 434 305 464 305" marker-end="url(#share-arrow)"/><path data-from="design" data-to="implementation" d="M626 305 H678" marker-end="url(#share-arrow)"/><path data-from="implementation" data-to="test" d="M840 305 C871 305 861 185 892 185" marker-end="url(#share-arrow)"/><path data-from="implementation" data-to="interface-review" d="M840 305 C871 305 861 395 892 395" marker-end="url(#share-arrow)"/><path data-from="test" data-to="system-review" d="M1054 185 H1106" marker-end="url(#share-arrow)"/><path data-from="workload" data-to="system-review" d="M626 125 H649 Q665 125 665 109 V80 Q665 64 681 64 H1164 Q1180 64 1180 80 V154" marker-end="url(#share-arrow)"/><path data-from="implementation" data-to="system-review" d="M759 274 V254 Q759 238 775 238 H1124 Q1140 238 1140 222 V216" marker-end="url(#share-arrow)"/><path data-from="system-review" data-to="delivery" d="M1220 216 V364" marker-end="url(#share-arrow)"/><path data-from="interface-review" data-to="delivery" d="M1054 395 H1106" marker-end="url(#share-arrow)"/></g>
+      <g fill="none" stroke="#ba8649" stroke-width="1.7" stroke-dasharray="5 4">
+        <path data-from="interface-review" data-to="implementation" d="M973 426 V470 Q973 485 958 485 H790 Q775 485 775 470 V336" marker-end="url(#share-repair)"/>
+        <path data-from="system-review" data-to="implementation" d="M1106 199 H1094 Q1080 199 1080 213 V530 Q1080 545 1065 545 H747 Q732 545 732 530 V336" marker-end="url(#share-repair)"/>
+      </g>
+      <g data-node="intent" transform="translate(36 114)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">意图解析</text>
+
+    </g><g data-node="requirements" transform="translate(36 234)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">需求工程</text>
+
+    </g><g data-node="research" transform="translate(36 354)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">来源调研</text>
+
+    </g><g data-node="architecture" transform="translate(250 234)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">架构设计</text>
+
+    </g><g data-node="workload" transform="translate(464 94)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">工作量复核</text>
+
+    </g><g data-node="design" transform="translate(464 274)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">界面设计</text>
+
+    </g><g data-node="implementation" transform="translate(678 274)">
+      <rect width="162" height="62" rx="14" fill="#365bed" stroke="#365bed"/>
+      <circle cx="18" cy="31" r="3" fill="#cdd7ff"/>
+      <text x="87.5" y="26" text-anchor="middle" fill="white" font-size="17" font-weight="600">实现工程师</text>
+      <text x="87.5" y="45" text-anchor="middle" fill="#d6dfff" font-size="11">实现与集成</text>
+    </g><g data-node="test" transform="translate(892 154)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">测试</text>
+
+    </g><g data-node="interface-review" transform="translate(892 364)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">界面复核</text>
+
+    </g><g data-node="system-review" transform="translate(1106 154)">
+      <rect width="148" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="80.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">系统审查</text>
+
+    </g><g data-node="delivery" transform="translate(1106 364)">
+      <rect width="148" height="62" rx="14" fill="#ecf6f1" stroke="#a8caba"/>
+      <circle cx="18" cy="31" r="3" fill="#348062"/>
+      <text x="80.5" y="26" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">交付汇总</text>
+      <text x="80.5" y="45" text-anchor="middle" fill="#628674" font-size="11">编排器</text>
     </g>
+      <rect x="802" y="469" width="240" height="31" rx="15" fill="#fff8ed"/>
+      <text x="922" y="490" text-anchor="middle" font-size="12" fill="#92602c">01  计分与结算修正</text>
+      <rect x="802" y="529" width="250" height="31" rx="15" fill="#fff8ed"/>
+      <text x="927" y="550" text-anchor="middle" font-size="12" fill="#92602c">02  35 关数据替换</text>
+      <text x="38" y="541" font-size="12" fill="#748299">实线：工作衔接</text>
+      <text x="38" y="562" font-size="12" fill="#92602c">虚线：复核后的修正回流</text>
+    </g>
+  </svg></g>
   </svg>

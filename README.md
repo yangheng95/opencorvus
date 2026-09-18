@@ -2,11 +2,11 @@
   <img src="assets/readme-head.png" alt="OpenCorvus" width="280" />
 </p>
 
-<h1 align="center">Big tasks. Fewer handoffs on your plate.</h1>
+<h1 align="center">Complex work. Coordinated.</h1>
 
 <p align="center">
-  Open-source orchestration for <strong>long-running, complex, demanding AI work.</strong><br/>
-  Set the goal. Connect the specialists. Inspect the delivery.
+  <strong>Multi-agent orchestration for long-running, demanding work.</strong><br/>
+  Open source. Self-hostable.
 </p>
 
 <p align="center">
@@ -19,31 +19,30 @@
 
 ---
 
-A big task leaves you doing the work around the work: asking an agent to continue,
-briefing the next specialist, connecting unfinished pieces and checking what “done” means.
+OpenCorvus brings research, design, implementation and independent review into a coordinated task.
+Specialists work with explicit responsibilities and dependencies. Their artifacts connect the stages;
+review findings return for correction.
 
-**OpenCorvus coordinates that process.** It organizes specialist work around your goal,
-connects outputs across stages, and supports independent review and correction before
-you inspect the delivery. You can follow the work, provide a missing decision, or ask
-for another change in the same task.
+[![Directed graph: research branches join at architecture, implementation branches into review, and two repair edges return to implementation](packages/web/public/media/task-coordination-en.svg)](https://opencorvus.com/#execution)
 
-[![OpenCorvus collaboration map: understand, design, implement, independently review and deliver, with a return path for corrections](packages/web/public/media/task-coordination-en.svg)](https://opencorvus.com/#case)
+_Roles and repair themes come from task records; edges illustrate the workflow. Repair origins do not attribute events. This is not the product interface or exact timing._
 
-_Collaboration diagram, not a live product screen or measured concurrency chart.
-The workflow depends on the task and selected squad._
+## Different expertise. Connected work.
 
-## When the work gets complicated
+An **Expert Squad** packages specialist roles, tools and workflows. A **Mission** coordinates tasks
+and squads around a shared goal. Choose the workflow your deliverable needs, from focused software
+work to [cross-specialty projects](https://opencorvus.com/concepts/squad-composition/).
 
-| What lands on your plate                                                    | What OpenCorvus helps coordinate                                                                                  |
-| --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| A long run needs another nudge, and context is spread across conversations. | Goals, stages and artifacts stay with the task, with visible progress and follow-up in context.                   |
-| Several specialists produce pieces that do not fit.                         | Responsibilities, dependencies and artifact handoffs connect the work. Different squads can own different stages. |
-| The agent reports success, but you cannot tell what was checked.            | Squads with independent review produce findings and verification evidence; problems return for correction.        |
-| A new decision changes the work halfway through.                            | Add the decision to the same task and continue from its recorded context.                                         |
+## The work continues. So does the context.
 
-An **Expert Squad** is a reusable package of specialist roles, tools and workflows.
-A **Mission** coordinates work across tasks and squads. Choose a squad whose workflow
-includes the review your deliverable needs; not every squad includes every review role.
+Goals, stages and artifacts stay with the task. Add a decision midway through, or ask for changes
+after delivery, in the same task. Execution requires an online runtime and a reachable model provider.
+
+## Built. Then examined.
+
+Squads with independent review bring separate roles to implementation and evidence. Findings return
+for correction, then review continues. Deliverables retain their known limits; a completed status
+alone does not establish their accuracy.
 
 ## A real task: build a tank-battle browser game
 
@@ -65,14 +64,6 @@ the other replaced maps and enemy rosters after an operator decision about sourc
 This case includes human intervention. It does not establish exact original-game fidelity,
 cost savings or a general success rate. A retained test report differs from the closing narrative,
 and some live-play evidence remains incomplete. The case records those limits.
-
-## Bring a task with a result you can check
-
-- **Software delivery:** research requirements, implement, inspect real interactions and repair findings.
-- **Evidence-based research:** collect sources, analyze disagreements and independently check citations.
-- **Cross-specialty projects:** connect research, analysis and delivery through [squad composition](https://opencorvus.com/concepts/squad-composition/).
-
-These are workflow examples, not guarantees of completion.
 
 ## Start with your own project
 

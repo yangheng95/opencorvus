@@ -1,6 +1,28 @@
 # Long-running, complex-task product story
 
+## Revision Recall — product-led presentation
+
+- User rejected the previous result as “土味宣传” and then directed: “你可以学习苹果怎么营销”. This continues the authorized README/homepage/material rebuild; publication remains unapproved.
+- Reference study: opened and visually inspected Apple's MacBook Pro and Apple Intelligence pages on 2026-09-19. Sources: https://www.apple.com/macbook-pro/ and https://www.apple.com/apple-intelligence/. Observed short product claims, dominant product imagery, progressive feature chapters, concrete applications and sourced performance notes. Borrow communication principles, not copy, branding or product assets.
+- Root cause of the rejected version: negative pain headlines and three equal cards dominated the product; a five-row disclosure was a manual rather than a compelling depiction of coordination. The textual simplification did not address the visual hierarchy.
+- New acceptance: product-first centered opening, short precise promise, a large task-record-based execution scene, progressive capability chapters, real game/result detail, and concise setup. Remove guilt/complaint copy in both README locales and all generated promotional assets. Preserve visible case limitations, download behavior, keyboard/reduced-motion access, locale/theme controls and all existing destinations.
+- Impact: landing-copy, OcLanding, the code-native execution visual and shared artwork generator, README introductions, header labels and current product-entry documentation. No engine, scheduler, protocol, model or API behavior changes. The old Mission-composer screenshot is v0.0.42beta and empty; inspected and excluded as unsuitable proof of actual current coordination. No new runtime screenshot is fabricated.
+- Plan: replace the current layout (one implementation), author a labeled reconstruction from recorded roles and repair loops, focus three capability chapters on tangible outcomes, regenerate SVG/share imagery, manually inspect isolated desktop pages in both languages/themes, build/check, independent read-only review, commit/fetch/merge/push current branch. Do not refresh or operate the user's currently open preview tab; use new isolated tabs.
+- Prior independent feedback: first delivery review found the download bubbling defect; it was fixed and re-reviewed. This revision's independent feedback: 无（待实现和首轮验收后审查）。
+- Evidence boundaries remain unchanged: 19 requirements, 35 source-traced stages, two recorded revision rounds; no quantified cost/speed/concurrency/success claim. Known test-report discrepancy and original-game fidelity limits remain accessible with the case.
+- Explicit user correction during revision: “我让你画的图，是 graph，别拿列表冒充 graph”. Acceptance now explicitly requires individual role nodes, directed dependency/handoff edges, branching, joining and visible review-to-implementation cycles. A row of steps, accordion, timeline or card list does not meet this requirement. Render the same node/edge model in the website and share assets; label the abstraction instead of inventing precise execution timings.
+
 ## Recall
+
+### Revision verification
+
+- Replaced the stage list with one shared directed SVG graph: 11 role nodes, branching and joining handoffs, and two dashed repair cycles. Website, README exports and social image use the same renderer.
+- Rebuilt both locale openings and capability chapters around the product and concrete artifacts. Preserved case limitations and installer manifest authority; menu placement now responds to available viewport space.
+- Final website build passed (119 indexed pages and packaged runtime); Astro check passed (81 files, 0 errors, 0 warnings, 21 existing hints). Documentation and architecture-index checks passed; whitespace check passed.
+- Manually inspected isolated 1280x720 browser views: Chinese light hero/graph, English light hero/download menu, English dark hero/graph/case/evidence/start, and capability chapter. Exercised locale/theme, graph/case/start anchors, download disclosure and Escape. No UI automated tests.
+- Independent reviewer confirmed graph edges match the declared Advanced workflow and identified P2 evidence attribution: illustrative edges were insufficiently distinguished from historical records. Fixed the shared graph legend (therefore also social image), both README captions and both page captions. Roles/repair themes are recorded; links are workflow illustrations, with repair origins explicitly not event attribution. Follow-up independent review requested.
+- New evidence screenshots are indexed in the artifact README. Previous iteration screenshots remain historical and do not prove this revision. Production deployment remains outside this delivery.
+- Follow-up independent read-only review passed with no unresolved findings; reviewer inspected the seven added final views and regenerated social image, confirmed the evidence qualifier, graph connections, download behavior and clean whitespace check.
 
 - User request: “现在的 github readme 和网站的宣传物料性价比极低，我授权你推翻重做，从用户的痛点出发，长程/复杂/重型任务调度”. The preceding request reconstructed a real tank-game delivery and its two revision loops.
 - Acceptance: replace both language READMEs and both homepage locales with a coherent pain-first story; explain coordination across research, implementation, handoff, independent review and repair; show a traceable case; preserve usable download/docs/catalog routes; deliver reusable promotional imagery; visually inspect real desktop pages and interactions; build/check documentation, independently review, commit and push the authorized current branch.

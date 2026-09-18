@@ -1,51 +1,92 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="720" viewBox="0 0 1440 720" role="img" aria-labelledby="title desc">
-    <title id="title">Who takes the next step?</title><desc id="desc">Find an issue → Revise → Review again. Workflow depends on the task and selected squad. Not a live product screen.</desc>
-    <defs><marker id="arrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0 0 5 2.5 0 5" fill="#8eaaff"/></marker></defs>
-    <rect width="1440" height="720" fill="#111b2d" rx="18"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-labelledby="share-title">
+    <title id="share-title">OpenCorvus — Complex work. Coordinated.</title>
+    <rect width="1440" height="960" fill="#f7f9fd"/>
     <g font-family="Arial, Microsoft YaHei, Noto Sans CJK SC, sans-serif">
-      <text x="52" y="57" fill="#dce7fa" font-size="23" font-weight="700">OpenCorvus</text>
-      <text x="1384" y="55" text-anchor="end" fill="#a7bbdc" font-size="14">LONG-RUNNING. COMPLEX. DEMANDING.</text>
-      <text x="52" y="145" fill="white" font-size="54" font-weight="700">Big tasks. Fewer handoffs on your plate.</text>
-      <text x="52" y="192" fill="#acbed9" font-size="21">Research, design, implementation and review. Connected through the task.</text>
-      <rect x="52" y="237" width="1334" height="61" rx="9" fill="#1b2f4e" stroke="#486899"/>
-      <text x="82" y="275" fill="#eef5ff" font-size="22" font-weight="700">OpenCorvus orchestrator</text>
-      <text x="1355" y="274" text-anchor="end" fill="#b8ccec" font-size="18">Assign · Connect · Follow through</text>
-      <path d="M179 298 v39" stroke="#547199"/><path d="M449 298 v39" stroke="#547199"/><path d="M719 298 v39" stroke="#547199"/><path d="M989 298 v39" stroke="#547199"/><path d="M1259 298 v39" stroke="#547199"/>
-      <g transform="translate(52 338)">
-      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
-      <text x="20" y="36" fill="#9bb8ed" font-size="15">01</text>
-      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">Understand</text>
-      <text x="20" y="102" fill="#b9c9de" font-size="16">Requirements</text><text x="20" y="124" fill="#b9c9de" font-size="16">Research</text>
-      <text x="20" y="185" fill="#9bd8c6" font-size="15">Scope &amp; evidence</text>
-    </g><path d="M307 423 h14" stroke="#8eaaff" stroke-width="2" marker-end="url(#arrow)"/><g transform="translate(322 338)">
-      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
-      <text x="20" y="36" fill="#9bb8ed" font-size="15">02</text>
-      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">Design</text>
-      <text x="20" y="102" fill="#b9c9de" font-size="16">Architecture</text><text x="20" y="124" fill="#b9c9de" font-size="16">Interface design</text>
-      <text x="20" y="185" fill="#9bd8c6" font-size="15">Plan &amp; contracts</text>
-    </g><path d="M577 423 h14" stroke="#8eaaff" stroke-width="2" marker-end="url(#arrow)"/><g transform="translate(592 338)">
-      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
-      <text x="20" y="36" fill="#9bb8ed" font-size="15">03</text>
-      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">Implement</text>
-      <text x="20" y="102" fill="#b9c9de" font-size="16">Implementation</text>
-      <text x="20" y="185" fill="#9bd8c6" font-size="15">Working artifacts</text>
-    </g><path d="M847 423 h14" stroke="#8eaaff" stroke-width="2" marker-end="url(#arrow)"/><g transform="translate(862 338)">
-      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
-      <text x="20" y="36" fill="#9bb8ed" font-size="15">04</text>
-      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">Review</text>
-      <text x="20" y="102" fill="#b9c9de" font-size="16">Testing</text><text x="20" y="124" fill="#b9c9de" font-size="16">Visual review</text><text x="20" y="146" fill="#b9c9de" font-size="16">Integrity review</text>
-      <text x="20" y="185" fill="#9bd8c6" font-size="15">Evidence &amp; findings</text>
-    </g><path d="M1117 423 h14" stroke="#8eaaff" stroke-width="2" marker-end="url(#arrow)"/><g transform="translate(1132 338)">
-      <rect width="254" height="205" rx="12" fill="#19263a" stroke="#48628a"/>
-      <text x="20" y="36" fill="#9bb8ed" font-size="15">05</text>
-      <text x="20" y="73" fill="#fff" font-size="24" font-weight="700">Deliver</text>
-      <text x="20" y="102" fill="#b9c9de" font-size="16">Orchestrator</text>
-      <text x="20" y="185" fill="#9bd8c6" font-size="15">Results &amp; limits</text>
+      <text x="72" y="70" fill="#253044" font-size="23" font-weight="600">OpenCorvus</text>
+      <text x="72" y="170" fill="#253044" font-size="62" font-weight="700" letter-spacing="-2">Complex work. Coordinated.</text>
+      <text x="72" y="225" fill="#69778f" font-size="24">Multi-agent orchestration for long-running, demanding work.</text>
+      <text x="72" y="910" fill="#69778f" font-size="15">Recorded roles and repairs; illustrative workflow edges. Repair origins are not event attribution. Not the product interface or exact timing.</text>
     </g>
-      <path d="M988 545 V605 H718 V552" fill="none" stroke="#e6b775" stroke-width="3"/>
-      <path d="m709 561 9-10 9 10" fill="none" stroke="#e6b775" stroke-width="3"/>
-      <rect x="776" y="582" width="570" height="43" rx="6" fill="#392f28"/>
-      <text x="800" y="610" fill="#f1c58d" font-size="20">Find an issue → Revise → Review again</text>
-      <text x="52" y="679" fill="#a9b9d1" font-size="16">Workflow depends on the task and selected squad. Not a live product screen.</text>
+    <g transform="translate(75 280)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 590" width="1290" height="590" role="img" aria-labelledby="share-title share-desc">
+    <title id="share-title">One goal. A coordinated effort.</title>
+    <desc id="share-desc">Intent, requirements and research join at architecture, then branch into design and workload review. Implementation branches into testing and interface review. System and interface reviews join at delivery. Two amber repair edges return to implementation.</desc>
+    <defs>
+      <marker id="share-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 9 5 1 9" fill="none" stroke="#8193ba" stroke-width="1.5"/></marker>
+      <marker id="share-repair" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 9 5 1 9" fill="none" stroke="#ba8649" stroke-width="1.5"/></marker>
+      <radialGradient id="share-wash"><stop stop-color="#dfe7ff" stop-opacity=".7"/><stop offset="1" stop-color="#f7f9fd" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="1290" height="590" rx="24" fill="#f7f9fd"/>
+    <ellipse cx="750" cy="290" rx="350" ry="260" fill="url(#share-wash)"/>
+    <g font-family="Arial, Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+      <text x="37" y="42" font-size="13" fill="#68778f" letter-spacing="1">TANK BATTLE · EXECUTION MAP</text>
+      <text x="1254" y="42" text-anchor="end" font-size="12" fill="#68778f">Roles and repairs from task records. Workflow edges are illustrative; repair origins are not event attribution.</text>
+      <g fill="none" stroke="#8193ba" stroke-width="1.7"><path data-from="intent" data-to="architecture" d="M198 145 C228 145 220 265 250 265" marker-end="url(#share-arrow)"/><path data-from="requirements" data-to="architecture" d="M198 265 H250" marker-end="url(#share-arrow)"/><path data-from="research" data-to="architecture" d="M198 385 C228 385 220 265 250 265" marker-end="url(#share-arrow)"/><path data-from="architecture" data-to="workload" d="M412 265 C442 265 434 125 464 125" marker-end="url(#share-arrow)"/><path data-from="architecture" data-to="design" d="M412 265 C442 265 434 305 464 305" marker-end="url(#share-arrow)"/><path data-from="design" data-to="implementation" d="M626 305 H678" marker-end="url(#share-arrow)"/><path data-from="implementation" data-to="test" d="M840 305 C871 305 861 185 892 185" marker-end="url(#share-arrow)"/><path data-from="implementation" data-to="interface-review" d="M840 305 C871 305 861 395 892 395" marker-end="url(#share-arrow)"/><path data-from="test" data-to="system-review" d="M1054 185 H1106" marker-end="url(#share-arrow)"/><path data-from="workload" data-to="system-review" d="M626 125 H649 Q665 125 665 109 V80 Q665 64 681 64 H1164 Q1180 64 1180 80 V154" marker-end="url(#share-arrow)"/><path data-from="implementation" data-to="system-review" d="M759 274 V254 Q759 238 775 238 H1124 Q1140 238 1140 222 V216" marker-end="url(#share-arrow)"/><path data-from="system-review" data-to="delivery" d="M1220 216 V364" marker-end="url(#share-arrow)"/><path data-from="interface-review" data-to="delivery" d="M1054 395 H1106" marker-end="url(#share-arrow)"/></g>
+      <g fill="none" stroke="#ba8649" stroke-width="1.7" stroke-dasharray="5 4">
+        <path data-from="interface-review" data-to="implementation" d="M973 426 V470 Q973 485 958 485 H790 Q775 485 775 470 V336" marker-end="url(#share-repair)"/>
+        <path data-from="system-review" data-to="implementation" d="M1106 199 H1094 Q1080 199 1080 213 V530 Q1080 545 1065 545 H747 Q732 545 732 530 V336" marker-end="url(#share-repair)"/>
+      </g>
+      <g data-node="intent" transform="translate(36 114)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="14" font-weight="600">Intent analysis</text>
+
+    </g><g data-node="requirements" transform="translate(36 234)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="14" font-weight="600">Requirements</text>
+
+    </g><g data-node="research" transform="translate(36 354)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="14" font-weight="600">Source research</text>
+
+    </g><g data-node="architecture" transform="translate(250 234)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="14" font-weight="600">Architecture</text>
+
+    </g><g data-node="workload" transform="translate(464 94)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="14" font-weight="600">Workload review</text>
+
+    </g><g data-node="design" transform="translate(464 274)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="14" font-weight="600">Interface design</text>
+
+    </g><g data-node="implementation" transform="translate(678 274)">
+      <rect width="162" height="62" rx="14" fill="#365bed" stroke="#365bed"/>
+      <circle cx="18" cy="31" r="3" fill="#cdd7ff"/>
+      <text x="87.5" y="26" text-anchor="middle" fill="white" font-size="14" font-weight="600">Implementation</text>
+      <text x="87.5" y="45" text-anchor="middle" fill="#d6dfff" font-size="11">Build &amp; integrate</text>
+    </g><g data-node="test" transform="translate(892 154)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="14" font-weight="600">Testing</text>
+
+    </g><g data-node="interface-review" transform="translate(892 364)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="14" font-weight="600">Visual review</text>
+
+    </g><g data-node="system-review" transform="translate(1106 154)">
+      <rect width="148" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="80.5" y="37" text-anchor="middle" fill="#273247" font-size="14" font-weight="600">Integrity review</text>
+
+    </g><g data-node="delivery" transform="translate(1106 364)">
+      <rect width="148" height="62" rx="14" fill="#ecf6f1" stroke="#a8caba"/>
+      <circle cx="18" cy="31" r="3" fill="#348062"/>
+      <text x="80.5" y="26" text-anchor="middle" fill="#273247" font-size="14" font-weight="600">Delivery</text>
+      <text x="80.5" y="45" text-anchor="middle" fill="#628674" font-size="11">Orchestrator</text>
     </g>
+      <rect x="802" y="469" width="240" height="31" rx="15" fill="#fff8ed"/>
+      <text x="922" y="490" text-anchor="middle" font-size="12" fill="#92602c">01  Scoring &amp; results repair</text>
+      <rect x="802" y="529" width="250" height="31" rx="15" fill="#fff8ed"/>
+      <text x="927" y="550" text-anchor="middle" font-size="12" fill="#92602c">02  Replace 35 stages of data</text>
+      <text x="38" y="541" font-size="12" fill="#748299">Solid: work handoff</text>
+      <text x="38" y="562" font-size="12" fill="#92602c">Dashed: correction after review</text>
+    </g>
+  </svg></g>
   </svg>

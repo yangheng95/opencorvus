@@ -25,12 +25,14 @@ The compiled PoC paper is a self-contained static asset at `public/papers/openco
 ## Product story
 
 The English and Chinese homepages share `src/content/landing-copy.ts` and `OcLanding.astro`.
-The story leads with coordination pain, a stage-disclosure diagram, the evidence-bounded tank-game
-case and a short setup path. Download targets still come from the release manifest through
+The story leads with a concise product claim and a directed execution graph, then progressively
+explains specialization, continuity and review through the evidence-bounded tank-game case.
+Download targets still come from the release manifest through
 `OcDownload.astro`. Documentation composition examples retain their own shared catalog projection.
 
-`script/coordination-artwork.ts` uses the homepage copy to render bilingual workflow SVGs and the
-social preview through the existing `brand:assets` command. These are illustrations, not product
+`src/lib/execution-graph.ts` owns the role nodes, directed handoff edges and correction loops shared
+by the homepage and `script/coordination-artwork.ts`. The latter renders bilingual workflow SVGs and
+the social preview through the existing `brand:assets` command. These are illustrations, not product
 screenshots. The case's game screenshot is retained original evidence. See
 [the evidence bundle](../../specs/artifacts/2026-09-19-task-coordination/README.md).
 

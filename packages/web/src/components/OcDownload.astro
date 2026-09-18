@@ -19,7 +19,7 @@ const downloads = readDownloadManifest()
               data-oc-download-primary
             >
               <span data-oc-download-label>
-                {copy.hero.download.label}{downloads?.version && ` · ${downloads.version}`}
+                {copy.hero.download.label}
               </span>
             </a>
 
@@ -304,19 +304,31 @@ const downloads = readDownloadManifest()
       if (!match) return
 
       const verb = downloadRoot.dataset.downloadVerb ?? ""
-      const version = match.dataset.ocDownloadVersion ?? downloadRoot.dataset.downloadVersion ?? ""
-      const format = match.dataset.ocDownloadFormat ?? ""
       const fileName = match.dataset.ocDownloadFile ?? ""
       primary.href = match.href
       primary.download = fileName
       primary.title = fileName
       primary.dataset.ocDownloadReady = "true"
-      label.textContent = `${verb} ${PLATFORM_LABEL[target.platform] ?? target.platform} · ${architecture} · ${format} · ${version}`.trim()
+      label.textContent = `${verb} ${PLATFORM_LABEL[target.platform] ?? target.platform}`.trim()
       match.dataset.detected = "true"
     })()
 
     // A disclosure stays open until it is clicked again, which is wrong for a menu.
     if (menu) {
+      const panel = menu.querySelector<HTMLElement>(".oc-download-panel")
+      const placeMenu = () => {
+        if (!menu.open || !panel) return
+        const bounds = downloadRoot.getBoundingClientRect()
+        const above = Math.max(0, bounds.top - 80)
+        const below = Math.max(0, window.innerHeight - bounds.bottom - 16)
+        const upward = above >= below
+        panel.style.maxHeight = `${Math.min(420, upward ? above : below)}px`
+        panel.style.top = upward ? "auto" : "calc(100% + 8px)"
+        panel.style.bottom = upward ? "calc(100% + 8px)" : "auto"
+      }
+      menu.addEventListener("toggle", placeMenu)
+      window.addEventListener("resize", placeMenu)
+      window.addEventListener("scroll", placeMenu, { passive: true })
       document.addEventListener("click", (event) => {
         if (menu.open && event.target instanceof Node && !downloadRoot.contains(event.target)) menu.open = false
       })
