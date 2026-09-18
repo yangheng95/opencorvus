@@ -35,6 +35,7 @@ const expectedRoutineToolIDs = [
   "cancel_subagent",
   "capability_search",
   "dispatch_agent",
+  "evolve_expert_squad_from_feedback",
   "manage_task",
   "no_action",
   "publish_interactive_artifact",

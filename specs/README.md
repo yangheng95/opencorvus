@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[v0.1.3 stable release](records/2026-09/2026-09-19-v0.1.3-release.md).
+
 [Release unit test repair](records/2026-09/2026-09-19-release-unit-test-repair.md).
 
 [Expert capability preservation](records/2026-09/2026-09-19-expert-capability-preservation.md).

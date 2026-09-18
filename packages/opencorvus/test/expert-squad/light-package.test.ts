@@ -510,7 +510,7 @@ describe("Light Expert Squad package", () => {
                       messages: await Session.messages({ sessionID: assistant.sessionID }),
                     }
                     const revealed = await resolveTestCapabilityTools(common)
-                    expect(Object.keys(revealed.tools).sort()).toEqual(["artifact_publish", "artifact_read", "artifact_search", "artifact_select", "artifact_snapshot", "capability_search", "glob", "publish_interactive_artifact", "read", "search_code"])
+                    expect(Object.keys(revealed.tools).sort()).toEqual(["artifact_publish", "artifact_read", "artifact_search", "artifact_select", "artifact_snapshot", "capability_search", "external_code_search", "glob", "publish_interactive_artifact", "read", "search_code", "webfetch", "websearch"])
                     const authoredWorker = await PromptProfileResolver.resolveWorkerCapability({
                       projectDirectory: project.path, config, packageRevision, agentID: streamInput.agentID,
                     })
@@ -542,7 +542,7 @@ describe("Light Expert Squad package", () => {
                     }
                     expect(skill.behavior.name).toBe("light-advisory-method")
                     const reconstructed = await resolveTestCapabilityTools(common)
-                    expect(Object.keys(reconstructed.tools).sort()).toEqual(["artifact_publish", "artifact_read", "artifact_search", "artifact_select", "artifact_snapshot", "capability_search", "glob", "publish_interactive_artifact", "read", "search_code", "skill"])
+                    expect(Object.keys(reconstructed.tools).sort()).toEqual(["artifact_publish", "artifact_read", "artifact_search", "artifact_select", "artifact_snapshot", "capability_search", "external_code_search", "glob", "publish_interactive_artifact", "read", "search_code", "skill", "webfetch", "websearch"])
                     const loaded = await reconstructed.tools.skill!.execute!(
                       { name: skill.behavior.name },
                       { toolCallId: `call_load_light_method_${assistant.id}`, messages: [], abortSignal: input.abort },

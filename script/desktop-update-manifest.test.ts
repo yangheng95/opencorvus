@@ -6,7 +6,7 @@ import { desktopUpdateChannel, desktopUpdateChannelTag, desktopUpdateEndpoint } 
 import { generateDesktopUpdateManifest } from "./generate-desktop-update-manifest"
 
 describe("desktop update publication contract", () => {
-  test("checked-in desktop client uses the published trust root and synchronized beta endpoint", async () => {
+  test("checked-in desktop client uses the published trust root and synchronized release-channel endpoint", async () => {
     const tauriConfig = JSON.parse(
       await fs.readFile(path.resolve("packages/overlay/src-tauri/tauri.conf.json"), "utf8"),
     ) as { version: string; plugins: { updater: { pubkey: string; endpoints: string[]; windows: { installMode: string } } } }

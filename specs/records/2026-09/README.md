@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [v0.1.3 stable release](2026-09-19-v0.1.3-release.md)
+
 - [Release unit test repair](2026-09-19-release-unit-test-repair.md)
 
 - [Expert capability preservation](2026-09-19-expert-capability-preservation.md)
