@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Interaction ownership after Project deletion](2026-09-18-interaction-owner-after-project-deletion.md)
+
 - [Deleted Project UI convergence](2026-09-18-deleted-project-ui-convergence.md)
 
 - [Project deletion with worker descriptors](2026-09-18-project-delete-worker-descriptor.md)

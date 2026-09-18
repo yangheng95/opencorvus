@@ -14,6 +14,7 @@ import {
   EngineArtifactTable,
   EngineInteractionOutcomeTable,
   EngineInteractionRequestTable,
+  EngineTaskTable,
   EngineTaskRootIngressTable,
 } from "@/engine/engine.sql"
 import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
@@ -41,6 +42,7 @@ import { PermissionAuthority } from "@/permission/authority"
 import { Instance } from "@/project/instance"
 import { Question } from "@/question"
 import { Session } from "@/session"
+import { SessionTable } from "@/session/session.sql"
 import { SessionLoop } from "@/session/loop"
 import { Database } from "@/storage/db"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
@@ -149,6 +151,17 @@ describe("recovered pending interaction ownership", () => {
           }))
         const before = footprint()
 
+        expect(() =>
+          Database.transaction((db) =>
+            insertEngineInteractionRequest(db, {
+              ...requestInput,
+              sessionID: "ses_missing_interaction_owner",
+              externalID: `${externalID}-missing-session`,
+            }),
+          ),
+        ).toThrow("Interaction Session ses_missing_interaction_owner does not exist")
+        expect(footprint()).toEqual(before)
+
         Database.use((db) =>
           db.run(
             sql.raw(`
@@ -218,6 +231,39 @@ describe("recovered pending interaction ownership", () => {
         })
       },
     })
+  }, 30_000)
+
+  test("projects a source-backed Question from its immutable Task owner event after mutable owners are deleted", async () => {
+    await using project = await memoryProject()
+    const created = await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        EngineService.init()
+        const { root, taskID } = await createTaskFixture("retained Question owner")
+        const questionID = Identifier.ascending("question")
+        void Question.ask({
+          sessionID: root.id,
+          requestID: questionID,
+          questions: [{ header: "Retention", question: "Retain the exact Task owner", options: [] }],
+          expireOnDeadline: false,
+        })
+        const interaction = await waitForInteraction(questionID)
+        return { rootSessionID: root.id, taskID, questionID, interactionID: interaction.id }
+      },
+    })
+
+    Database.immediateTransaction((db) => {
+      db.delete(EngineTaskTable).where(eq(EngineTaskTable.id, created.taskID)).run()
+      db.delete(SessionTable).where(eq(SessionTable.id, created.rootSessionID)).run()
+    })
+
+    expect(findInteractionByExternal(created.questionID)).toMatchObject({
+      id: created.interactionID,
+      task_id: created.taskID,
+      session_id: created.rootSessionID,
+      status: "pending",
+    })
+    expect(pendingInteractionCounts().get(created.taskID)).toBe(1)
   }, 30_000)
 
   test("restores the exact ordinary durable Question and retains a durable Permission after restart", async () => {

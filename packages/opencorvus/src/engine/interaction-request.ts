@@ -3,10 +3,12 @@ import { Database, and, eq } from "@/storage/db"
 import {
   EngineInteractionRequestTable,
   EngineInteractionOutcomeTable,
+  EngineTaskTable,
   type EngineInteractionStatus,
   type EngineInteractionType,
   type EngineMetadata,
 } from "./engine.sql"
+import { SessionTable } from "@/session/session.sql"
 import { Event } from "./model"
 import { EngineProtocol } from "./protocol"
 import type { InteractionRow } from "./store"
@@ -29,6 +31,32 @@ export function insertEngineInteractionRequest(
   db: Database.TxOrDb,
   input: InsertEngineInteractionRequestInput,
 ): string {
+  let sessionID: string | null | undefined = input.sessionID
+  const visited = new Set<string>()
+  let ownsSession = false
+  while (sessionID) {
+    if (visited.has(sessionID)) throw new Error(`Interaction Session lineage contains a cycle at ${sessionID}`)
+    visited.add(sessionID)
+    const task = db
+      .select({ id: EngineTaskTable.id })
+      .from(EngineTaskTable)
+      .where(and(eq(EngineTaskTable.id, input.taskID), eq(EngineTaskTable.session_id, sessionID)))
+      .get()
+    if (task) {
+      ownsSession = true
+      break
+    }
+    const session = db
+      .select({ parentID: SessionTable.parent_id })
+      .from(SessionTable)
+      .where(eq(SessionTable.id, sessionID))
+      .get()
+    if (!session) throw new Error(`Interaction Session ${input.sessionID} does not exist`)
+    sessionID = session.parentID
+  }
+  if (!ownsSession) {
+    throw new Error(`Interaction Session ${input.sessionID} does not belong to Task ${input.taskID}`)
+  }
   const id = Identifier.ascending("interaction")
   const timeCreated = input.timeCreated ?? Date.now()
   db.insert(EngineInteractionRequestTable)

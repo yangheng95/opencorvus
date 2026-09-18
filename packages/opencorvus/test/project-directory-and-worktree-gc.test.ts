@@ -23,7 +23,10 @@ import {
 } from "@/engine/engine.sql"
 import { PermissionLedgerTable, PermissionPolicyTable } from "@/permission/permission.sql"
 import { DecisionLogTable } from "@/decision-log/schema"
+import { BusPublicationOutboxTable } from "@/bus/bus.sql"
 import { EngineService } from "@/task-api"
+import { insertEngineInteractionRequest } from "@/engine/interaction-request"
+import { findInteraction } from "@/engine/store"
 import { Identifier } from "@/id/id"
 import { ProjectDirectoryAdmissionTable, ProjectMaintenanceFenceTable, ProjectTable } from "@/project/project.sql"
 import { deleteProject } from "@/project/delete"
@@ -344,6 +347,8 @@ describe("Project directory integrity", () => {
     await fs.mkdir(configRoot, { recursive: true })
     await fs.writeFile(path.join(configRoot, "user-config.json"), '{"preserved":true}\n')
     const taskID = Identifier.ascending("task")
+    let interactionID = ""
+    let questionInteractionID = ""
     await Instance.provide({
       directory: project.path,
       fn: async () => {
@@ -365,6 +370,52 @@ describe("Project directory integrity", () => {
             .run(),
         )
         appendFixtureTaskLifecycle({ taskID, sessionID: session.id, now, terminal: true })
+        interactionID = Database.transaction((db) =>
+          insertEngineInteractionRequest(db, {
+            taskID,
+            sessionID: session.id,
+            externalID: `project-delete-inline-${taskID}`,
+            requestType: "question",
+            title: "Retained deletion audit interaction",
+            body: "Preserve the exact owner after deleting mutable Project projections.",
+            payload: { questions: [] },
+            eventSource: "test.project-delete",
+            eventSummary: "Retained deletion audit interaction",
+            timeCreated: now,
+          }),
+        )
+        questionInteractionID = Database.transaction((db) => {
+          const occurrenceID = `bus-occurrence:${Identifier.ascending("artifact")}`
+          const questionID = Identifier.ascending("question")
+          db.insert(BusPublicationOutboxTable)
+            .values({
+              occurrence_id: occurrenceID,
+              project_id: registered.project.id,
+              directory: project.path,
+              event_type: "question.asked",
+              properties: {
+                id: questionID,
+                sessionID: session.id,
+                questions: [{ header: "Deletion", question: "Retain the source-backed owner", options: [] }],
+                timeCreated: now,
+              },
+              time_created: now,
+            })
+            .run()
+          return insertEngineInteractionRequest(db, {
+            taskID,
+            sessionID: session.id,
+            externalID: questionID,
+            requestType: "question",
+            title: "Deletion",
+            body: "Retain the source-backed owner",
+            payload: { questions: [] },
+            eventSource: "test.project-delete-question",
+            eventSummary: "Retained source-backed deletion interaction",
+            timeCreated: now,
+            source: { kind: "bus_question", id: occurrenceID },
+          })
+        })
       },
     })
     const result = await deleteProject(registered.project, {
@@ -378,6 +429,7 @@ describe("Project directory integrity", () => {
       () => "present" as const,
       (error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? ("missing" as const) : Promise.reject(error)),
     )
+    Database.close()
 
     expect({
       result,
@@ -385,6 +437,8 @@ describe("Project directory integrity", () => {
       userConfig: await fs.readFile(path.join(configRoot, "user-config.json"), "utf8"),
       projects: Project.list().length,
       tasks: Database.use((db) => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).all().length),
+      interaction: findInteraction(interactionID),
+      questionInteraction: findInteraction(questionInteractionID),
     }).toEqual({
       result: {
         ok: true,
@@ -398,6 +452,16 @@ describe("Project directory integrity", () => {
       userConfig: '{"preserved":true}\n',
       projects: 0,
       tasks: 0,
+      interaction: expect.objectContaining({
+        id: interactionID,
+        task_id: taskID,
+        status: "pending",
+      }),
+      questionInteraction: expect.objectContaining({
+        id: questionInteractionID,
+        task_id: taskID,
+        status: "pending",
+      }),
     })
   }, 90_000)
 
@@ -922,6 +986,7 @@ describe("Project directory integrity", () => {
     const dispatchID = Identifier.ascending("artifact")
     let lineageArtifactID!: string
     let policySessionID!: string
+    let permissionInteractionID!: string
     await Instance.provide({
       directory: project.path,
       fn: async () => {
@@ -1123,9 +1188,10 @@ describe("Project directory integrity", () => {
               time_created: now,
             })
             .run()
+          const permissionSourceID = Identifier.ascending("permission")
           db.insert(PermissionLedgerTable)
             .values({
-              id: Identifier.ascending("permission"),
+              id: permissionSourceID,
               request_id: permissionRequestID,
               project_id: projectID,
               session_id: root.id,
@@ -1146,6 +1212,19 @@ describe("Project directory integrity", () => {
               time_created: now,
             })
             .run()
+          permissionInteractionID = insertEngineInteractionRequest(db, {
+            taskID,
+            sessionID: root.id,
+            externalID: permissionRequestID,
+            requestType: "permission",
+            title: "Permission: bash",
+            body: "Permission evidence that outlives its Session",
+            payload: { choices: ["deny"] },
+            eventSource: "test.project-delete-permission",
+            eventSummary: "Permission requested: bash",
+            timeCreated: now,
+            source: { kind: "permission_request", id: permissionSourceID },
+          })
           // Settled evidence: an undecided request would leave the Project with
           // a live permission waiter, which is a different deletion path.
           db.insert(PermissionLedgerTable)
@@ -1256,11 +1335,13 @@ describe("Project directory integrity", () => {
       requestID: "request_delete_project_permission_evidence",
       reason: "Delete Project carrying immutable permission evidence",
     })
+    Database.close()
 
     expect({
       evidenceHeldWhileProjectLives,
       result,
       projects: Project.list().length,
+      permissionInteraction: findInteraction(permissionInteractionID),
       remaining: Database.use((db) => ({
         tasks: db.select().from(EngineTaskTable).where(eq(EngineTaskTable.project_id, projectID)).all().length,
         sessions: db.select().from(SessionTable).where(eq(SessionTable.project_id, projectID)).all().length,
@@ -1291,7 +1372,19 @@ describe("Project directory integrity", () => {
         residue: [],
       },
       projects: 0,
-      remaining: { tasks: 0, sessions: 0, descriptors: 0, lineages: 0, policies: 0, ledger: ["denied", "requested"] },
+      permissionInteraction: expect.objectContaining({
+        id: permissionInteractionID,
+        task_id: taskID,
+        status: "rejected",
+      }),
+      remaining: {
+        tasks: 0,
+        sessions: 0,
+        descriptors: 0,
+        lineages: 0,
+        policies: 0,
+        ledger: ["denied", "requested"],
+      },
     })
   }, 90_000)
 
