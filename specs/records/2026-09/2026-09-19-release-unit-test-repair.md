@@ -3,6 +3,7 @@
 ## Recall
 
 - User request: resolve unit test failures in the GitHub release process.
+- Follow-up authorization: after three-system verification, merge and push all reviewed repairs into main, explicitly including the prior capability, CLI, build, Skill documentation and version changes.
 - Acceptance: reproduce the hosted failures using the repository runner, repair the actual cause, pass affected and adjacent backend checkers, complete independent read-only review, and deliver a scoped commit. Hosted success must be verified before claiming the GitHub failure resolved.
 - Constraints: no UI automation, skipped checks, softened production ownership, user process changes, new branch/worktree or history rewrite. Preserve untracked script/video/. Follow current package scripts and immutable interaction/scheduler contracts.
 - Read: test.yml, run-tests.ts, isolated entry/preload/memory fixture, Interaction request/projector and all writer references, scheduler-claim-and-fire-identity checker, AutomationService, Scheduler, Instance disposal, current data/control architecture and the interaction ownership repair record.
@@ -49,4 +50,12 @@ Second review traced foreign-directory corruption one layer further: the SDK's W
 - CLI attach/attached-commands/ledger-render: 9 + 14 + 4 passed. Transport fixtures validate mutation receipts, lossless answers, cursor parameters and cancelling prose; a separate real isolated Server.App check creates a Mission draft through the CLI and reads it back. No model, live user service or external mutation is used.
 - Overlay repository runner, build-binary-lock: 2 passed on Windows, including a real temporary exclusive file lock and preserved writable output bytes. This is a filesystem/build-tool contract, not UI automation or visual acceptance.
 - Full root typecheck passed (8 workspace tasks), including SDK imports, AI runtime and Expert Squad types. version:check reports 0.1.2-beta aligned; docs:check, architecture-index and diff whitespace checks passed.
-- Initial independent review identified the six outgoing-CLI/build issues recorded above; the second review caught the SDK directory rewrite. All were repaired and the final independent review reported no unresolved findings, including an independent actual HTTP check of `/a/project`. Hosted confirmation and final delivery details remain pending.
+- Initial independent review identified the six outgoing-CLI/build issues recorded above; the second review caught the SDK directory rewrite. All were repaired and the final independent review reported no unresolved findings, including an independent actual HTTP check of `/a/project`.
+
+### Delivery candidate
+
+Implementation commit `171ae127d3feaffba38e825feb188749af277f0c` was pushed to `origin/codex/paper-preliminary-results` after fetching and merging its upstream (already current). The outgoing set contains this repair, the previously reviewed capability repair `96982e4f` and the four explicitly authorized/reviewed host-tooling/version commits `1cffbf64`, `3c8cbecd`, `bd867d32`, `e7ccbd83`. Push hooks passed typecheck, routes, docs, control-lease owners, architecture, package/release/module topology and secret scan. Unrelated `script/video/` remains untracked and unchanged.
+
+Hosted build check [35370836838](https://github.com/yangheng95/opencorvus/actions/runs/35370836838) and typecheck [35370836683](https://github.com/yangheng95/opencorvus/actions/runs/35370836683) passed on that exact commit. The thirteen-file focused matrix is [35370893148](https://github.com/yangheng95/opencorvus/actions/runs/35370893148); the automatic full suite is a separate run [35370836675](https://github.com/yangheng95/opencorvus/actions/runs/35370836675). Focused results must not be described as a completed full suite. No tag or Release was created and main was not changed.
+
+The focused Linux, macOS and Windows jobs, plus Channel Runtime and Overlay unit jobs, all passed. This satisfies the user's condition for integrating the complete reviewed repair set into main. The automatic full suite remains a separate unfinished check; no full-suite success is claimed. The main integration preserves its already-published UI changes and uses a normal merge, without rewriting either history.
