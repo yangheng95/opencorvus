@@ -1077,8 +1077,13 @@
   min-width: 0;
   justify-content: flex-start;
   text-align: left;
-  font-size: var(--ui-font-body);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-normal);
+}
+
+.msg-delegated-context > .oc-button[data-ui="delegated-context-toggle"]:is(:hover, :focus-visible),
+.msg-delegated-context[data-expanded="true"] > .oc-button[data-ui="delegated-context-toggle"] {
+  --oc-button-color: var(--text-soft);
 }
 
 .msg-delegated-context__icon,
@@ -1097,7 +1102,7 @@
   flex: none;
   overflow: hidden;
   color: inherit;
-  font-weight: var(--ui-font-weight-strong);
+  font-weight: var(--ui-font-weight-body);
   line-height: inherit;
   text-overflow: ellipsis;
   white-space: nowrap;

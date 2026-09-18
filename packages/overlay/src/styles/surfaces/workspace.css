@@ -660,6 +660,22 @@ body[data-resizing="true"] .pane-resizer::after {
   background: var(--ui-list-selected-hover-bg);
 }
 
+.right-dock-tab-shell[data-panel="subagent"] .right-dock-tab.oc-tab {
+  border-bottom: calc(2px * var(--ui-scale)) solid transparent;
+  border-radius: var(--oc-radius-soft) var(--oc-radius-soft) 0 0;
+}
+
+.right-dock-tab-shell[data-panel="subagent"] .right-dock-tab.oc-tab[data-selected] {
+  --oc-tab-bg: transparent;
+
+  border-bottom-color: var(--accent);
+  background: transparent;
+}
+
+.right-dock-tab-shell[data-panel="subagent"] .right-dock-tab.oc-tab[data-selected]:hover {
+  background: var(--hover-wash);
+}
+
 .right-dock-tab.oc-tab:not([data-selected]):is(:hover, :focus-visible) {
   background: var(--ui-list-hover-bg);
 }

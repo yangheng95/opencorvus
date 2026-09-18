@@ -4,6 +4,20 @@
 
 ## 未发布
 
+## 0.1.2beta - 2026-09-18
+
+### Fixed
+
+- 修复 Project 删除后遗留的 Question、Permission 与内联交互失去 Task 归属并使 Work Ledger 整体返回 500；Task-root reducer、删除、重启恢复与交互写入现在使用同一不可变归属契约。
+- 修复带 worker descriptor 的 Project 无法删除，以及删除后 Overlay 继续使用失效目录请求 Provider 和 Work Ledger 的问题。
+- 修复 Windows 已终止进程仍被判定为活动 owner，阻塞运行时恢复与清理的问题。
+- 修复 Side Dock 切换子 agent 后仍显示旧子会话的问题。
+- 移除附件目录的数据库 authority marker；附件归属由当前数据库和 Project 事实直接校验，不再因重建数据库留下跨库锁。
+
+### Upgrade and known limitations
+
+- 本版数据库结构指纹发生变化。旧 beta 任务数据库会返回 `SCHEMA_RESET_REQUIRED`，需要显式重置后使用；这是预发布数据边界，不是保留任务数据的原地迁移。Provider 配置存放在独立配置面，应在重置时保留。
+
 ## 0.1.1beta - 2026-09-17
 
 ### Fixed

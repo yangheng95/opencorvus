@@ -229,9 +229,20 @@ function liveMessageFromInfo(
   const role = String(info.role || "")
   const author = String(info.author || "")
   const channel = String(info.channel || "")
-  const source = String(info.originSource || "")
+  // The message bridge represents an absent origin marker as an empty string.
+  // The persisted conversation view accepts that value too; only the field's
+  // type is required for live messages.
+  const source = info.originSource
   const time = Number((info.time as Record<string, unknown> | undefined)?.created || 0)
-  if (ownerSessionID !== sessionID || !agentID || !role || !author || !channel || !source || !(time > 0)) {
+  if (
+    ownerSessionID !== sessionID ||
+    !agentID ||
+    !role ||
+    !author ||
+    !channel ||
+    typeof source !== "string" ||
+    !(time > 0)
+  ) {
     throw new Error(`subagent conversation ${sessionID} live message ${messageID} has incomplete identity`)
   }
   return {

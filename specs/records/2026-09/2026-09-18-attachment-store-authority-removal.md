@@ -24,4 +24,4 @@ Focused validation passed:
 - Overlay/backend production build and credential-free first run: 4 created-state and 2 persisted-state checks;
 - package typechecks, documentation checks and diff whitespace checks.
 
-The final combined-change checks passed. Final independent read-only review reported no findings; the delivery commit remains before completion.
+The final combined-change checks passed and final independent read-only review reported no findings. Commit `b9cf0a83` was merged to `main` by `15ceda1f`. After stopping the stale pre-fix process tree, the last marker under both observed `%LOCALAPPDATA%/opencorvus` case variants was removed. The current build was then started: `/global/health` returned HTTP 200, the extracted sidecar SHA-256 exactly matched the newly built backend, and a fresh recursive check found no `.authority.json` file.

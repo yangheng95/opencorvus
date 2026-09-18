@@ -243,6 +243,46 @@ test("a new live child message projects before the persisted transcript refreshe
   expect(projected.messages[0]?.parts[0]?.text).toBe("Working now")
 })
 
+test("a live child message with an empty origin source projects the selected transcript", () => {
+  const base = {
+    targetKey: "task/task-one/session/child-session",
+    sessionID: "child-session",
+    messages: [],
+    lastLiveSequence: 0,
+    liveEpoch: 1,
+    transcriptMode: "snapshot" as const,
+    removedMessageIDs: [],
+  }
+  const live = observeSubagentConversationLiveEvent(createSubagentConversationLiveProjection("child-session"), {
+    type: "message.updated",
+    payload: {
+      info: {
+        id: "message-without-origin-marker",
+        sessionID: "child-session",
+        agentID: "interface-designer",
+        role: "assistant",
+        author: "interface-designer",
+        channel: "frontend-design",
+        originSource: "",
+        orderKey: orderKey(301, "message-without-origin-marker"),
+        time: { created: 301 },
+      },
+    },
+  })
+
+  const projected = projectSubagentConversationLive(base, live)
+  expect(projected.messages[0]).toMatchObject({
+    messageID: "message-without-origin-marker",
+    sessionID: "child-session",
+    agentID: "interface-designer",
+    stage: "frontend-design",
+  })
+  expect(projectSubagentConversationCard(projected, "running")).toMatchObject({
+    sessionID: "child-session",
+    agentID: "interface-designer",
+  })
+})
+
 test("standalone child transcript is rooted at the selected session", async () => {
   const requests: TransportRequest[] = []
   __setHostTransportForTest(transport(requests, payload()))

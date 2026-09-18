@@ -31,6 +31,13 @@ function sourceDirectory(): string {
 }
 
 function sourceLabel(source: ConversationSourcePart): string {
+  if (source.type === "source-file") {
+    const title = source.title?.trim() || ""
+    if (title && !/[\\/]/.test(title)) return title
+    const filePath = source.filename?.trim() || source.path || title
+    const filename = filePath.split(/[\\/]/).filter(Boolean).at(-1)
+    if (filename) return filename
+  }
   if (source.title?.trim()) return source.title.trim()
   if (source.type === "source-url" && source.url) {
     try {
@@ -39,7 +46,6 @@ function sourceLabel(source: ConversationSourcePart): string {
       return source.url
     }
   }
-  if (source.type === "source-file" && source.path) return shortRelativePath(source.path, sourceDirectory())
   return source.filename || source.mediaType || t("chat.source_document")
 }
 
@@ -111,7 +117,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number }) {
           >
             <span class="msg-source-chip__index">{props.index + 1}</span>
             <Icon name={icon()} size="compact" />
-            <span class="msg-source-chip__label">{detail()}</span>
+            <span class="msg-source-chip__label">{label()}</span>
           </Tooltip.Trigger>
         </Match>
         <Match when={true}>

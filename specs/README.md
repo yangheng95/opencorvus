@@ -4,6 +4,8 @@
 
 [Expert capability preservation](records/2026-09/2026-09-19-expert-capability-preservation.md).
 
+[v0.1.2-beta publication](records/2026-09/2026-09-18-v0.1.2-beta-release.md).
+
 [Interaction ownership after Project deletion](records/2026-09/2026-09-18-interaction-owner-after-project-deletion.md).
 
 [Deleted Project UI convergence](records/2026-09/2026-09-18-deleted-project-ui-convergence.md).
@@ -2101,6 +2103,12 @@ Latest Hexin private endpoint resolution: [`2026-07-31-hexin-endpoint-resolution
 Latest running Conversation action-flicker repair: [`2026-08-03-running-conversation-action-flicker-repair.md`](records/2026-08/2026-08-03-running-conversation-action-flicker-repair.md).
 
 Latest streaming Conversation stable-hover ownership repair: [`2026-08-04-streaming-conversation-stable-hover-owner.md`](records/2026-08/2026-08-04-streaming-conversation-stable-hover-owner.md).
+
+Latest sub-agent live transcript source contract repair: [`2026-09-18-subagent-live-origin-source.md`](records/2026-09/2026-09-18-subagent-live-origin-source.md).
+
+Latest sub-agent dock visual refresh: [`2026-09-18-subagent-dock-visual-refresh.md`](records/2026-09/2026-09-18-subagent-dock-visual-refresh.md).
+
+Latest Handoff and no-action conversation presentation: [`2026-09-19-handoff-no-action-presentation.md`](records/2026-09/2026-09-19-handoff-no-action-presentation.md).
 
 Latest Overlay runtime efficiency root repair: [`2026-07-30-overlay-runtime-efficiency-root-repair.md`](records/2026-07/2026-07-30-overlay-runtime-efficiency-root-repair.md).
 
