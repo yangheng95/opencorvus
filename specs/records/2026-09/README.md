@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Mission attachment request projection](2026-09-19-mission-attachment-request-projection.md).
+
 - [v0.1.3 stable release](2026-09-19-v0.1.3-release.md)
 
 - [Release unit test repair](2026-09-19-release-unit-test-repair.md)

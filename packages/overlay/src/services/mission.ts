@@ -246,7 +246,15 @@ export async function wakeMission(input: MissionWakeInput): Promise<MissionWakeR
     ...(input.missionID ? { missionID: input.missionID } : {}),
     ...(input.model ? { model: input.model } : {}),
     ...(input.expertSquadIDs !== undefined ? { expertSquadIDs: input.expertSquadIDs } : {}),
-    ...(input.attachments?.length ? { attachments: input.attachments } : {}),
+    ...(input.attachments?.length
+      ? {
+          attachments: input.attachments.map((attachment) => ({
+            mime: attachment.mime,
+            ...("data" in attachment ? { data: attachment.data } : { url: attachment.url }),
+            ...(attachment.filename !== undefined ? { filename: attachment.filename } : {}),
+          })),
+        }
+      : {}),
   } satisfies MissionWakeBody
   const params = new URLSearchParams({ directory })
   return await apiJson<MissionWakeResponse>(

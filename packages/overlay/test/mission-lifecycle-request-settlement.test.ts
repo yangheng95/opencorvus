@@ -70,3 +70,52 @@ test("Mission wake, draft creation, and draft dispatch settle on the authoritati
     { method: "POST", path: "mission/mission_board_acceptance/dispatch", timeoutMilliseconds: null },
   ])
 })
+
+test.each([undefined, "mission_attachment_follow_up"])(
+  "Mission wake projects uploaded attachments into its request contract (missionID=%s)",
+  async (missionID) => {
+    const requests: TransportRequest[] = []
+    __setHostTransportForTest(recordingTransport(requests))
+    const file = {
+      kind: "file" as const,
+      sha: "a".repeat(64),
+      size: 42,
+      url: `/attachment/project-alpha/${"a".repeat(64)}.txt`,
+      mime: "text/plain",
+      filename: "证据.txt",
+    }
+    const folder = {
+      kind: "folder" as const,
+      sha: "b".repeat(64),
+      size: 84,
+      path: "D:/project/design",
+      url: `/attachment/project-alpha/${"b".repeat(64)}.json`,
+      mime: "application/vnd.opencorvus.directory-reference+json",
+      filename: "design",
+    }
+    const inline = { mime: "text/plain", data: "aGVsbG8=" }
+    await wakeMission({
+      directory: "D:/project",
+      missionID,
+      text: "Read the attached evidence",
+      productPillar: "work",
+      attachments: [file, folder, inline],
+    })
+
+    expect(requests).toHaveLength(1)
+    expect(requests[0]).toMatchObject({ path: "mission/wake", method: "POST", query: { directory: "D:/project" } })
+    expect(requests[0].body).toEqual({
+      kind: "json",
+      value: {
+        text: "Read the attached evidence",
+        productPillar: "work",
+        ...(missionID ? { missionID } : {}),
+        attachments: [
+          { url: file.url, mime: file.mime, filename: file.filename },
+          { url: folder.url, mime: folder.mime, filename: folder.filename },
+          inline,
+        ],
+      },
+    })
+  },
+)
