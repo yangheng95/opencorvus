@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[v0.1.6 stable release](records/2026-09/2026-09-19-v0.1.6-release.md).
+
 - [Mission attachment request projection](records/2026-09/2026-09-19-mission-attachment-request-projection.md).
 
 [OAuth flow re-entry and v0.1.5 binary release](records/2026-09/2026-09-19-v0.1.5-oauth-release.md).
