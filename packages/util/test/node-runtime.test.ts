@@ -15,13 +15,37 @@ describe("shared Node sidecar paths", () => {
     expect(() => nodeBinaryPackageName("win32", "arm64")).toThrow("does not support win32-arm64")
   })
 
-  test("computes one packaged sidecar directory and executable", () => {
-    const paths = packagedNodeRuntimePaths({ execPath: "C:\\app\\opencorvus.exe", platform: "win32" })
-    expect(paths).toEqual({
-      directory: path.join("C:\\app", "browser-mcp-node"),
-      nodeExecutable: path.join("C:\\app", "browser-mcp-node", "node.exe"),
+  test("computes host-side package paths with each platform's executable name", () => {
+    const packageDirectory = path.resolve("app with spaces")
+    // The files live on the test host; platform selects the target basename.
+    for (const [platform, executable, node] of [
+      ["win32", "opencorvus.exe", "node.exe"],
+      ["linux", "opencorvus", "node"],
+      ["darwin", "opencorvus", "node"],
+    ] as const) {
+      expect(nodeExecutableName(platform)).toBe(node)
+      for (const directoryName of [undefined, "custom-node"]) {
+        expect(
+          packagedNodeRuntimePaths({ execPath: path.join(packageDirectory, executable), platform, directoryName }),
+        ).toEqual({
+          directory: path.join(packageDirectory, directoryName ?? "browser-mcp-node"),
+          nodeExecutable: path.join(packageDirectory, directoryName ?? "browser-mcp-node", node),
+        })
+      }
+    }
+  })
+
+  test("resolves the default sidecar beside the running native executable", () => {
+    const directory = path.join(path.dirname(process.execPath), "browser-mcp-node")
+    expect(packagedNodeRuntimePaths()).toEqual({
+      directory,
+      nodeExecutable: path.join(directory, process.platform === "win32" ? "node.exe" : "node"),
     })
-    expect(nodeExecutableName("linux")).toBe("node")
-    expect(isBunExecutable("C:\\tools\\bun.exe")).toBe(true)
+  })
+
+  test("recognizes Bun executable basenames in host-native paths", () => {
+    for (const name of ["bun", "bun.exe", "BUN.EXE"]) {
+      expect(isBunExecutable(path.resolve("tools with spaces", name))).toBe(true)
+    }
   })
 })
