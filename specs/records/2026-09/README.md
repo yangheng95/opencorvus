@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [CI consolidation and Windows test cleanup](2026-09-19-ci-consolidation-test-cleanup.md)
+
 - [Linux installer job split](2026-09-19-linux-installer-job-split.md)
 
 - [v0.1.6 stable release](2026-09-19-v0.1.6-release.md)

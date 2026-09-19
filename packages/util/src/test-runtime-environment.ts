@@ -2,6 +2,7 @@ import fsPromises from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import { randomUUID } from "node:crypto"
+import { removeManagedDirectoryTree } from "./runtime-directories.js"
 
 const OWNER_ROOT = "OPENCORVUS_TEST_OWNER_ROOT"
 const OWNER_PID = "OPENCORVUS_TEST_OWNER_PID"
@@ -28,7 +29,6 @@ const USER_CONFIGURATION_ENVIRONMENT_KEYS = [
   "OPENCORVUS_RESTART_HANDOFF",
 ] as const
 const MANAGED_CONFIG_DIRECTORY = "OPENCORVUS_TEST_MANAGED_CONFIG_DIR"
-const RETRYABLE_DIRECTORY_REMOVE_CODES = new Set(["EBUSY", "EPERM", "ENOTEMPTY"])
 
 export type IsolatedTestRuntime = {
   ownerRoot: string
@@ -181,16 +181,6 @@ export async function removeIsolatedTestRuntime(runtime: IsolatedTestRuntime): P
   if (!authority || !isStrictDescendant(authority.osTempRoot, authority.target)) {
     throw new Error("Isolated test runtime cleanup target has no current OS-temporary-directory authority")
   }
-  const deadline = Date.now() + 5_000
-  while (true) {
-    try {
-      await fsPromises.rm(authority.target, { recursive: true, force: true })
-      break
-    } catch (error) {
-      const code = error instanceof Error ? (error as NodeJS.ErrnoException).code : undefined
-      if (!code || !RETRYABLE_DIRECTORY_REMOVE_CODES.has(code) || Date.now() >= deadline) throw error
-      await new Promise((resolve) => setTimeout(resolve, 100))
-    }
-  }
+  await removeManagedDirectoryTree(authority.target)
   cleanupAuthorities.delete(runtime)
 }

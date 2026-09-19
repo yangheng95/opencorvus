@@ -28,7 +28,10 @@ try {
   }
   const childEnvironment = isolatedTestChildEnvironment(runnerRuntime)
   const failedFiles: string[] = []
-  for (const file of files) {
+  for (const [index, file] of files.entries()) {
+    const label = path.relative(cwd, file).split(path.sep).join("/")
+    const started = performance.now()
+    console.log(`[${index + 1}/${files.length}] START ${label}`)
     const result = await runHostCommandWithInactivity({
       executable: process.execPath,
       // Bun 1.3.14 still applies its expired-entry subprocess auto-killer when
@@ -42,6 +45,10 @@ try {
       onStderr: (chunk) => process.stderr.write(chunk),
     })
 
+    const duration = ((performance.now() - started) / 1000).toFixed(2)
+    console.log(
+      `[${index + 1}/${files.length}] DONE ${label} exit=${result.exitCode ?? "unknown"} duration=${duration}s`,
+    )
     if (result.failure) throw new Error(`${file}: ${result.failure.message}`)
     if (result.exitCode === undefined) throw new Error(`OpenCorvus test process exited without a result for ${file}`)
     if (result.exitCode !== 0) {
@@ -50,7 +57,8 @@ try {
       failedFiles.push(file)
     }
   }
-  if (failedFiles.length) console.error(`OpenCorvus failed test files (${failedFiles.length}):\n${failedFiles.join("\n")}`)
+  if (failedFiles.length)
+    console.error(`OpenCorvus failed test files (${failedFiles.length}):\n${failedFiles.join("\n")}`)
 } finally {
   await removeIsolatedTestRuntime(runnerRuntime)
 }

@@ -2,6 +2,7 @@ import fs from "node:fs"
 import fsPromises from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
+import { manual, manualSync } from "rimraf"
 import { resolveOpenCorvusRuntimePaths, type OpenCorvusRuntimePaths } from "./runtime-paths.js"
 
 const OWNED_RUNTIME_DIRECTORIES: ReadonlyArray<keyof OpenCorvusRuntimePaths> = [
@@ -66,9 +67,25 @@ export function createOpenCorvusTemporaryDirectorySync(prefix: string) {
 }
 
 export async function removeManagedDirectoryTree(directory: string) {
-  await fsPromises.rm(path.resolve(directory), { recursive: true, force: true, maxRetries: 10, retryDelay: 25 })
+  // Use the same portable walker on every host. Bun 1.3.14's native recursive
+  // rm maps Windows delete-pending child handles to EFAULT (oven-sh/bun#39710).
+  // Retrying/ignoring that error or switching to rmSync retains the faulty walk.
+  const target = path.resolve(directory)
+  const deadline = Date.now() + 5_000
+  while (true) {
+    try {
+      await manual(target, { glob: false, preserveRoot: true })
+      return
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException)?.code
+      // The portable walk exposes real Windows contention codes. Keep retries
+      // bounded, as with fs.rm's documented retry contract; other errors surface.
+      if (!code || !["EBUSY", "EPERM", "ENOTEMPTY"].includes(code) || Date.now() >= deadline) throw error
+      await new Promise((resolve) => setTimeout(resolve, 25))
+    }
+  }
 }
 
 export function removeManagedDirectoryTreeSync(directory: string) {
-  fs.rmSync(path.resolve(directory), { recursive: true, force: true, maxRetries: 10, retryDelay: 25 })
+  manualSync(path.resolve(directory), { glob: false, preserveRoot: true })
 }

@@ -1,9 +1,9 @@
-name: unit test
-run-name: ${{ inputs.test_files != '' && 'Selected unit tests' || 'Complete unit tests' }}
+name: CI
+run-name: ${{ inputs.test_files != '' && 'CI — selected unit tests' || 'CI' }}
 
 on:
   push:
-    branches: ["**"]
+    branches: [main]
   pull_request:
   workflow_dispatch:
     inputs:
@@ -12,9 +12,113 @@ on:
         type: string
         required: false
         default: ""
+
+permissions:
+  contents: read
+
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      scope: ${{ steps.scope.outputs.scope }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Bun
+        uses: ./.github/actions/setup-bun
+        with:
+          install_dependencies: "false"
+
+      - name: Classify exact change range
+        id: scope
+        env:
+          CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: bun ./script/ci-scope.ts
+
+  verify:
+    name: verify
+    needs: changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      scope: ${{ needs.changes.outputs.scope }}
+    # A documentation update must not cancel a still-running code validation.
+    concurrency:
+      group: ci-verify-${{ needs.changes.outputs.scope }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Bun
+        uses: ./.github/actions/setup-bun
+        with:
+          prepare_sdk: "true"
+
+      - name: Scan tracked sources for credentials
+        run: bun run script/secret-scan.ts
+
+      - name: Audit locked dependencies
+        run: bun audit
+
+      - name: Verify documentation
+        run: |
+          bun run docs:check
+          bun run check:architecture-index
+
+      - name: Verify versions and generated fixed point
+        if: needs.changes.outputs.scope == 'code'
+        run: |
+          bun ./script/sync-version.ts --check
+          bun ./script/generate.ts
+          bun ./script/generated-artifacts.ts --check-clean-worktree
+
+      - name: Run typecheck
+        if: needs.changes.outputs.scope == 'code'
+        run: bun run typecheck
+
+      - name: Verify CI and release workflow contracts
+        if: needs.changes.outputs.scope == 'code'
+        run: bun test ./script/ci-scope.test.ts ./script/github-actions-workflow-contract.test.ts
+
+      - name: Install critical build runtime dependencies
+        if: needs.changes.outputs.scope == 'code'
+        timeout-minutes: 15
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo bash script/install-ubuntu-packages.sh ripgrep
+
+      - name: Run critical builds
+        if: needs.changes.outputs.scope == 'code'
+        run: bun run --cwd packages/opencorvus build --single --skip-install
+
+      - name: Retain failed native first-run diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: failed-native-first-run
+          path: .scratch/package-runtime/tmp/opencorvus-first-run-*/
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 7
+
   unit:
     name: ${{ inputs.test_files != '' && 'selected unit' || 'unit' }} (${{ matrix.settings.name }})
+    needs: verify
+    if: needs.verify.outputs.scope == 'code'
+    timeout-minutes: 180
+    concurrency:
+      group: ci-unit-${{ matrix.settings.name }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}
+      cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:
@@ -71,6 +175,9 @@ jobs:
           ./script/install-windows-ripgrep.ps1
           bun packages/opencorvus/script/prepare-test-process-supervisor.ts
 
+      - name: Run utility filesystem tests
+        run: bun run --cwd packages/util test
+
       - name: Run unit tests
         env:
           SELECTED_TEST_FILES: ${{ inputs.test_files || '' }}
@@ -79,11 +186,17 @@ jobs:
           while IFS= read -r file || [[ -n "$file" ]]; do
             if [[ -n "$file" ]]; then SELECTED+=("$file"); fi
           done <<< "$SELECTED_TEST_FILES"
-          bunx turbo run test --filter=opencorvus -- "${SELECTED[@]}"
+          bunx turbo run test --filter=opencorvus --log-order=stream -- "${SELECTED[@]}"
 
-  channel-runtime-unit:
-    name: channel-runtime-unit
+  services:
+    name: service tests
+    needs: verify
+    if: needs.verify.outputs.scope == 'code'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: ci-services-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -98,41 +211,56 @@ jobs:
       - name: Run channel runtime tests
         run: bun run --cwd packages/channel-runtime test
 
-  overlay-unit:
-    name: overlay-unit
+      - name: Run overlay unit tests
+        working-directory: packages/overlay
+        run: bun run test
+
+  dependency-review:
+    name: dependency review
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
+    timeout-minutes: 10
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           persist-credentials: false
-
-      - name: Setup Bun
-        uses: ./.github/actions/setup-bun
-        with:
-          prepare_sdk: "true"
-
-      - name: Run overlay unit tests
-        working-directory: packages/overlay
-        run: bun run test
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@v4
 
   required:
-    name: ${{ inputs.test_files != '' && 'selected test matrix' || 'test (linux)' }}
+    name: ${{ inputs.test_files != '' && 'Selected CI passed' || 'CI passed' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     needs:
+      - verify
       - unit
-      - channel-runtime-unit
-      - overlay-unit
+      - services
+      - dependency-review
     if: always()
     steps:
-      - name: Verify upstream test jobs passed
+      - name: Verify applicable checks passed
+        env:
+          VERIFY: ${{ needs.verify.result }}
+          SCOPE: ${{ needs.verify.outputs.scope }}
+          UNIT: ${{ needs.unit.result }}
+          SERVICES: ${{ needs.services.result }}
+          DEPENDENCY_REVIEW: ${{ needs.dependency-review.result }}
         run: |
-          echo "unit=${{ needs.unit.result }}"
-          echo "channel-runtime-unit=${{ needs['channel-runtime-unit'].result }}"
-          echo "overlay-unit=${{ needs['overlay-unit'].result }}"
-          test "${{ needs.unit.result }}" = "success"
-          test "${{ needs['channel-runtime-unit'].result }}" = "success"
-          test "${{ needs['overlay-unit'].result }}" = "success"
+          test "$VERIFY" = success
+          case "$SCOPE" in
+            code)
+              test "$UNIT" = success
+              test "$SERVICES" = success
+              ;;
+            docs)
+              test "$UNIT" = skipped
+              test "$SERVICES" = skipped
+              ;;
+            *) exit 1 ;;
+          esac
+          if [ "$GITHUB_EVENT_NAME" = pull_request ]; then
+            test "$DEPENDENCY_REVIEW" = success
+          else
+            test "$DEPENDENCY_REVIEW" = skipped
+          fi

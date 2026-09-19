@@ -3,7 +3,9 @@ name: codeql
 on:
   push:
     branches: [main]
+    paths-ignore: ["docs/**/*.md", "specs/**/*.md", "*.md"]
   pull_request:
+    paths-ignore: ["docs/**/*.md", "specs/**/*.md", "*.md"]
   schedule:
     - cron: "17 2 * * 2"
   workflow_dispatch:
@@ -12,10 +14,15 @@ permissions:
   contents: read
   security-events: write
 
+concurrency:
+  group: codeql-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   analyze:
     name: analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:

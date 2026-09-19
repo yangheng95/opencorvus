@@ -29,6 +29,7 @@
   "dependencies": {
     "@types/node": "catalog:",
     "proper-lockfile": "4.1.2",
+    "rimraf": "5.0.10",
     "zod": "catalog:"
   },
   "devDependencies": {

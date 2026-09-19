@@ -43,6 +43,115 @@ async function readWorkflow(file: string): Promise<Workflow> {
 }
 
 describe("GitHub Actions workflow contract", () => {
+  test("executes the required CI checker for full, documentation, failed and cancelled outcomes", async () => {
+    const workflow = await readWorkflow("test.yml")
+    const checker = workflow.jobs?.required?.steps?.find(({ name }) => name === "Verify applicable checks passed")?.run
+    expect(typeof checker).toBe("string")
+    const bash = process.platform === "win32" ? "C:/Program Files/Git/usr/bin/bash.exe" : "bash"
+    for (const input of [
+      {
+        scope: "code",
+        unit: "success",
+        services: "success",
+        verify: "success",
+        event: "push",
+        review: "skipped",
+        exit: 0,
+      },
+      {
+        scope: "docs",
+        unit: "skipped",
+        services: "skipped",
+        verify: "success",
+        event: "pull_request",
+        review: "success",
+        exit: 0,
+      },
+      {
+        scope: "code",
+        unit: "failure",
+        services: "success",
+        verify: "success",
+        event: "push",
+        review: "skipped",
+        exit: 1,
+      },
+      {
+        scope: "code",
+        unit: "cancelled",
+        services: "success",
+        verify: "success",
+        event: "push",
+        review: "skipped",
+        exit: 1,
+      },
+      {
+        scope: "docs",
+        unit: "skipped",
+        services: "skipped",
+        verify: "failure",
+        event: "push",
+        review: "skipped",
+        exit: 1,
+      },
+      {
+        scope: "docs",
+        unit: "skipped",
+        services: "skipped",
+        verify: "success",
+        event: "pull_request",
+        review: "failure",
+        exit: 1,
+      },
+    ]) {
+      const result = Bun.spawnSync([bash, "-e", "-c", checker!], {
+        env: {
+          ...process.env,
+          VERIFY: input.verify,
+          SCOPE: input.scope,
+          UNIT: input.unit,
+          SERVICES: input.services,
+          GITHUB_EVENT_NAME: input.event,
+          DEPENDENCY_REVIEW: input.review,
+        },
+      })
+      expect(result.exitCode).toBe(input.exit)
+    }
+  })
+
+  test("retains every ordinary verification once and limits CodeQL by source and ref", async () => {
+    const ci = await readWorkflow("test.yml")
+    const steps = ci.jobs?.verify?.steps ?? []
+    expect(steps.map(({ run }) => run).filter(Boolean)).toEqual([
+      "bun run script/secret-scan.ts",
+      "bun audit",
+      "bun run docs:check\nbun run check:architecture-index\n",
+      "bun ./script/sync-version.ts --check\nbun ./script/generate.ts\nbun ./script/generated-artifacts.ts --check-clean-worktree\n",
+      "bun run typecheck",
+      "bun test ./script/ci-scope.test.ts ./script/github-actions-workflow-contract.test.ts",
+      "sudo bash script/install-ubuntu-packages.sh ripgrep\n",
+      "bun run --cwd packages/opencorvus build --single --skip-install",
+    ])
+    expect(ci.jobs?.unit?.steps?.find(({ name }) => name === "Run utility filesystem tests")?.run).toBe(
+      "bun run --cwd packages/util test",
+    )
+    expect(ci.jobs?.services?.steps?.map(({ run }) => run).filter(Boolean)).toEqual([
+      "bun run --cwd packages/channel-runtime test",
+      "bun run test",
+    ])
+    const codeql = await readWorkflow("codeql.yml")
+    expect(codeql.on).toEqual({
+      push: { branches: ["main"], "paths-ignore": ["docs/**/*.md", "specs/**/*.md", "*.md"] },
+      pull_request: { "paths-ignore": ["docs/**/*.md", "specs/**/*.md", "*.md"] },
+      schedule: [{ cron: "17 2 * * 2" }],
+      workflow_dispatch: null,
+    })
+    expect(codeql.concurrency).toEqual({
+      group: "codeql-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}",
+      "cancel-in-progress": true,
+    })
+  })
+
   test("shares one native overlay workflow with independent Linux format jobs and complete assembly", async () => {
     const release = await readWorkflow("build.yml")
     const debug = await readWorkflow("build-overlays.yml")
@@ -90,9 +199,9 @@ describe("GitHub Actions workflow contract", () => {
 
   test("retains first-run evidence at the packaging runtime and stages the two package families", async () => {
     const release = await readWorkflow("build.yml")
-    const build = await readWorkflow("build-check.yml")
+    const build = await readWorkflow("test.yml")
     const overlay = await readWorkflow("package-overlay.yml")
-    const evidence = [build.jobs?.["build-critical"], overlay.jobs?.build, release.jobs?.["package-cli"]].map((job) =>
+    const evidence = [build.jobs?.verify, overlay.jobs?.build, release.jobs?.["package-cli"]].map((job) =>
       job?.steps?.find((step) => step.name === "Retain failed native first-run diagnostics"),
     )
     expect(evidence.map((step) => ({ if: step?.if, uses: step?.uses, with: step?.with }))).toEqual(
@@ -134,8 +243,6 @@ describe("GitHub Actions workflow contract", () => {
     }
 
     expect(checkoutReferences).toEqual([
-      { file: "build-check.yml", job: "version-sync", uses: "actions/checkout@v6" },
-      { file: "build-check.yml", job: "build-critical", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "prepare", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "package-cli", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "publish-release-assets", uses: "actions/checkout@v6" },
@@ -151,16 +258,14 @@ describe("GitHub Actions workflow contract", () => {
         job: "build",
         uses: "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
       },
-      { file: "generate.yml", job: "verify", uses: "actions/checkout@v6" },
       { file: "package-overlay.yml", job: "build", uses: "actions/checkout@v6" },
       { file: "package-overlay.yml", job: "bundle-linux", uses: "actions/checkout@v6" },
       { file: "package-overlay.yml", job: "assemble-linux", uses: "actions/checkout@v6" },
-      { file: "security.yml", job: "repository", uses: "actions/checkout@v6" },
-      { file: "security.yml", job: "dependency-review", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "changes", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "verify", uses: "actions/checkout@v6" },
       { file: "test.yml", job: "unit", uses: "actions/checkout@v6" },
-      { file: "test.yml", job: "channel-runtime-unit", uses: "actions/checkout@v6" },
-      { file: "test.yml", job: "overlay-unit", uses: "actions/checkout@v6" },
-      { file: "typecheck.yml", job: "typecheck", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "services", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "dependency-review", uses: "actions/checkout@v6" },
     ])
   })
 
@@ -608,18 +713,15 @@ describe("GitHub Actions workflow contract", () => {
     expect(buildSteps.indexOf(manifestStep!)).toBeLessThan(buildSteps.findIndex(({ name }) => name === "Check website"))
   })
 
-  test("separates unit, build, and website workflows with their required preparation", async () => {
+  test("consolidates ordinary CI while preserving native, release and website boundaries", async () => {
     const unitWorkflow = await readWorkflow("test.yml")
     const jobs = unitWorkflow.jobs ?? {}
-    const buildWorkflow = await readWorkflow("build-check.yml")
-    const buildJobs = buildWorkflow.jobs ?? {}
     const releaseWorkflow = await readWorkflow("build.yml")
     const websiteWorkflow = await readWorkflow("deploy-opencorvus-com.yml")
 
-    expect(Object.keys(jobs).sort()).toEqual(["channel-runtime-unit", "overlay-unit", "required", "unit"])
-    expect(Object.keys(buildJobs).sort()).toEqual(["build-critical", "required", "version-sync"])
+    expect(Object.keys(jobs).sort()).toEqual(["changes", "dependency-review", "required", "services", "unit", "verify"])
     expect(unitWorkflow.on).toEqual({
-      push: { branches: ["**"] },
+      push: { branches: ["main"] },
       pull_request: null,
       workflow_dispatch: {
         inputs: {
@@ -636,13 +738,39 @@ describe("GitHub Actions workflow contract", () => {
     expect(jobs.unit?.name).toBe(
       "${{ inputs.test_files != '' && 'selected unit' || 'unit' }} (${{ matrix.settings.name }})",
     )
-    expect(jobs.required?.name).toBe("${{ inputs.test_files != '' && 'selected test matrix' || 'test (linux)' }}")
+    expect(jobs.required?.name).toBe("${{ inputs.test_files != '' && 'Selected CI passed' || 'CI passed' }}")
+    expect(jobs.required?.needs).toEqual(["verify", "unit", "services", "dependency-review"])
+    expect(jobs.verify?.concurrency).toEqual({
+      group:
+        "ci-verify-${{ needs.changes.outputs.scope }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}",
+      "cancel-in-progress": true,
+    })
+    for (const [job, group] of [
+      ["unit", "ci-unit-${{ matrix.settings.name }}"],
+      ["services", "ci-services"],
+    ]) {
+      expect(jobs[job!]?.concurrency).toEqual({
+        group: `${group}-` + "${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}",
+        "cancel-in-progress": true,
+      })
+    }
+    expect(jobs.unit?.needs).toBe("verify")
+    expect(jobs.unit?.if).toBe("needs.verify.outputs.scope == 'code'")
+    expect(jobs.unit?.strategy).toEqual({
+      "fail-fast": false,
+      matrix: {
+        settings: [
+          { name: "linux", host: "ubuntu-latest" },
+          { name: "macos", host: "macos-latest" },
+          { name: "windows", host: "windows-latest" },
+        ],
+      },
+    })
     const selectedStep = jobs.unit?.steps?.find(({ name }) => name === "Run unit tests")
     expect(selectedStep?.env).toEqual({ SELECTED_TEST_FILES: "${{ inputs.test_files || '' }}" })
     expect(selectedStep?.run).toBe(
-      'SELECTED=()\nwhile IFS= read -r file || [[ -n "$file" ]]; do\n  if [[ -n "$file" ]]; then SELECTED+=("$file"); fi\ndone <<< "$SELECTED_TEST_FILES"\nbunx turbo run test --filter=opencorvus -- "${SELECTED[@]}"\n',
+      'SELECTED=()\nwhile IFS= read -r file || [[ -n "$file" ]]; do\n  if [[ -n "$file" ]]; then SELECTED+=("$file"); fi\ndone <<< "$SELECTED_TEST_FILES"\nbunx turbo run test --filter=opencorvus --log-order=stream -- "${SELECTED[@]}"\n',
     )
-    expect(buildWorkflow.on).toEqual({ push: { branches: ["**"] }, pull_request: null, workflow_dispatch: null })
     expect(releaseWorkflow.on).toEqual({
       push: { tags: ["v*"] },
       workflow_dispatch: {
@@ -668,7 +796,7 @@ describe("GitHub Actions workflow contract", () => {
       paths: expect.any(Array),
     })
 
-    for (const job of ["channel-runtime-unit", "overlay-unit"]) {
+    for (const job of ["verify", "services"]) {
       expect(jobs[job]?.steps?.find(({ uses }) => uses === "./.github/actions/setup-bun")?.with).toEqual({
         prepare_sdk: "true",
       })
@@ -679,10 +807,9 @@ describe("GitHub Actions workflow contract", () => {
     // the runner's own unattended-upgrades holding the lock.
     const boundedApt = (run: string) => ({ "timeout-minutes": 15, env: { DEBIAN_FRONTEND: "noninteractive" }, run })
     const aptRipgrep = "sudo bash script/install-ubuntu-packages.sh ripgrep\n"
-    expect(
-      buildJobs["build-critical"]?.steps?.find(({ name }) => name === "Install critical build runtime dependencies"),
-    ).toEqual({
+    expect(jobs.verify?.steps?.find(({ name }) => name === "Install critical build runtime dependencies")).toEqual({
       name: "Install critical build runtime dependencies",
+      if: "needs.changes.outputs.scope == 'code'",
       ...boundedApt(aptRipgrep),
     })
     const unitSteps = jobs.unit?.steps ?? []
@@ -721,11 +848,9 @@ describe("GitHub Actions workflow contract", () => {
   })
 
   test("bootstraps every generator consumer and preserves the preload-owned unit process", async () => {
-    for (const file of ["generate.yml", "typecheck.yml"]) {
+    for (const file of ["test.yml"]) {
       const workflow = await readWorkflow(file)
-      const setup = Object.values(workflow.jobs ?? {})
-        .flatMap((job) => job.steps ?? [])
-        .find(({ uses }) => uses === "./.github/actions/setup-bun")
+      const setup = (workflow.jobs?.verify?.steps ?? []).find(({ uses }) => uses === "./.github/actions/setup-bun")
       expect(setup?.with).toEqual({ prepare_sdk: "true" })
     }
 

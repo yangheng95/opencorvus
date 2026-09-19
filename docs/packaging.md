@@ -194,6 +194,31 @@ curl -fsS http://127.0.0.1:7878/ui/ | grep -i '<!doctype html'
 docker rm -f opencorvus-smoke
 ```
 
+## Continuous integration and publication
+
+The `CI` workflow (`.github/workflows/test.yml`) is the ordinary main-push and
+pull-request entry point. It owns version alignment, generated-artifact fixed
+point, documentation, types, credential/dependency checks, the Linux critical
+binary build, three-platform isolated backend/utility tests and service tests.
+CodeQL remains separate for its security permissions and weekly scan. Canonical
+native publication, manual Overlay debugging and website deployment keep their
+existing boundaries; a CI push does not dispatch a native Release.
+
+Root Markdown and Markdown under `docs/` or `specs/` use documentation checks
+and security auditing without native tests/builds. Markdown elsewhere (including
+expert-squad payloads) still selects full code validation. Renames consider both
+source and destination. New code checks supersede earlier checks on the same
+ref/platform; documentation updates do not cancel code checks. Manual validation
+has its own concurrency identity.
+
+For a focused hosted reproduction, manually dispatch `test.yml` with newline-
+separated package-relative `test_files`. An empty value runs the complete suite;
+selected runs are explicitly named `Selected CI passed`, not full acceptance.
+Backend logs stream each file's START/DONE, exit code and duration. File process
+isolation, finite inactivity supervision and all three host platforms remain
+part of the test contract. Native packaging still requires every installer
+format, including RPM, before the release completeness checker permits publication.
+
 ## Linux Binary Smoke Expectations
 
 A current Linux single-binary package is valid when the built executable:
