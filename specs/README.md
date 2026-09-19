@@ -1,6 +1,6 @@
 # Specs Storage Index
 
-[Pain-first README and website rebuild](records/2026-09/2026-09-19-outcome-first-marketing.md).
+[README, website and blog content organization](records/2026-09/2026-09-19-outcome-first-marketing.md).
 
 [v0.1.3 stable release](records/2026-09/2026-09-19-v0.1.3-release.md).
 

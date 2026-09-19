@@ -10,11 +10,11 @@ import {
  * Render-ready view of the published Expert Squad combinations.
  *
  * Joins the editorial declaration (`squad-compositions.ts` — which squads, stage names, handoffs)
- * with the counts generated from the shipped catalog. The landing page and the composition doc both
+ * with the counts generated from the shipped catalog. Blog articles and the composition doc both
  * read this, so a chain shown in one place cannot disagree with the other.
  *
- * Static by construction, like `landing-featured-squads.ts`: the landing page is prerendered and
- * cannot import the bun:sqlite registry.
+ * Static by construction: blog and documentation pages can consume this without importing
+ * the bun:sqlite registry.
  */
 
 export type CompositionStepView = {

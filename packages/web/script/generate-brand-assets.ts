@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "node:fs"
+import { copyFileSync, readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import sharp from "sharp"
 import { coordinationDiagram } from "./coordination-artwork"
@@ -131,6 +131,7 @@ export async function generateWebsiteBrandAssets(): Promise<void> {
     throw new Error("Canonical OpenCorvus brand logo is not an SVG document")
   }
   writeFileSync(websiteFaviconPath, canonicalLogo)
+  copyFileSync(join(webRoot, "..", "..", "assets", "agent-teams-workflow.png"), join(publicRoot, "media", "agent-teams-workflow.png"))
   await writeOpenGraphCard()
   await writeManifestIcons()
   writeWebManifest()

@@ -7,7 +7,7 @@ import config from "../../config.mjs"
 type Props = {
   locale: PublicLocale
   /** Which surface is rendering us. Anchors resolve to the landing page when it is not "home". */
-  current: "home" | "market" | "squad"
+  current: "home" | "market" | "squad" | "blog"
   languageHref: string
 }
 
@@ -20,11 +20,11 @@ const docsHref = publicPath(locale, "/start/quickstart/")
 // On the landing page these stay bare fragments so the browser does a same-document scroll. Off it,
 // they have to carry the path or they resolve against the current URL and go nowhere.
 const anchorBase = current === "home" ? "" : home
-// Keep the public paper entry tied to its PoC status on the landing page.
+// Detailed cases and research now live in the blog.
 const anchors = [
   { href: `${anchorBase}#horizon`, label: zh ? "长程" : "Long-horizon" },
   { href: `${anchorBase}#start`, label: zh ? "开始" : "Start" },
-  { href: `${anchorBase}#research`, label: zh ? "论文" : "Paper" },
+  { href: publicPath(locale, "/blog/"), label: zh ? "博客" : "Blog" },
 ]
 
 const copy = {

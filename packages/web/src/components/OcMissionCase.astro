@@ -593,3 +593,24 @@ const { study, caseLabel, copy } = Astro.props
     }
   }
 </style>
+
+<script>
+  /* ----------------------------------------------- Mission scale disclosure */
+
+  const reducedMissionMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
+  document.querySelectorAll<HTMLDetailsElement>("[data-oc-mission-scale]").forEach((scale) => {
+    let burstTimer = 0
+    scale.addEventListener("toggle", () => {
+      window.clearTimeout(burstTimer)
+      delete scale.dataset.burst
+      if (!scale.open || reducedMissionMotion.matches) return
+      // Restarting on a new frame lets repeated opens replay one finite burst without leaving an
+      // ambient animation running around eighteen paragraphs of actual work.
+      requestAnimationFrame(() => {
+        scale.dataset.burst = "true"
+        burstTimer = window.setTimeout(() => delete scale.dataset.burst, 950)
+      })
+    })
+  })
+
+</script>

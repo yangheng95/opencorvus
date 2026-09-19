@@ -41,12 +41,12 @@ This document is the current authority for the `opencorvus.com` runtime, Expert 
 - Exact archive responses are counted only after the persistent file passes SHA-256/size verification and immediately before a `200` response begins. The value means archive responses, never users, installations, activations, or popularity.
 - The detail-page action reports preparing, completed, and failed states through an accessible live region. Download does not install or activate a Squad.
 - Public and documentation footers read one 30-day estimated participating-browser total from the same `registry.sqlite3` authority. The numeric Registry schema version remains `1`; the one-time schema-fingerprint upgrade stops the writer, snapshots the old v1 file, rebuilds signed Market facts plus empty visitor/counter state in a same-directory sibling, and atomically replaces the same database path. It has no version 2, compatibility reader, fallback or second database. Reading sets no cookie. A browser enters the estimate only after explicit activation; the service stores only a SHA-256 digest of a random host-only token, never Internet Protocol (IP), User-Agent, path history or fingerprint inputs. Participation can be withdrawn idempotently, bounded cleanup runs inside the existing backup command before snapshots, and the visible copy never calls the estimate people, accounts or devices.
-- OcHeader navigation links to Long-horizon, Start, Paper, Expert Squads and Docs. The footer paper link reaches the localized landing-page research entry; its PDF is a self-contained static website asset at `/papers/opencorvus-poc.pdf`, marked as a proof of concept and work in progress. Website builds and downloads do not depend on the manuscript source branch. The separate Starlight documentation header/sidebar keep their documentation-specific hierarchy.
+- OcHeader navigation links to Long-horizon, Start, Blog, Expert Squads and Docs. The footer paper link reaches the localized blog research entry; its PDF is a self-contained static website asset at `/papers/opencorvus-poc.pdf`, marked as a proof of concept and work in progress. Website builds and downloads do not depend on the manuscript source branch. The separate Starlight documentation header/sidebar keep their documentation-specific hierarchy.
 
 ## Product entry points
 
-- Both homepage locales render the established hero/terminal, demo, benchmark, long-horizon,
-  composition, evolution, research, features, catalog and setup sections from `landing-copy.ts`.
+- Both homepage locales retain the established hero/terminal, demo and long-horizon visuals,
+  followed by the graph, concise start and blog entry. `landing-copy.ts` supplies shared visual copy.
   A supporting tank-game graph follows long-horizon. `execution-graph.ts` and `execution-copy.ts`
   own its nodes, labels, branching, joins and correction loops, shared with README artwork.
   Roles and repair themes are recorded; workflow edges are illustrative and repair origins do
@@ -55,6 +55,10 @@ This document is the current authority for the `opencorvus.com` runtime, Expert 
   The current story states human intervention and unresolved fidelity/test-evidence limits.
 - `OcLanding.astro` owns the manifest-bound download control, including viewport-aware placement
   and the full-control outside-click boundary. `brand:assets` produces supporting bilingual SVGs
-  and the original logo/gradient social preview. Featured squads are a generated static projection
-  of canonical catalog facts, used by the prerendered homepage without importing the Registry.
-  Homepage and documentation composition views share the same copy and catalog projection.
+  and the original logo/gradient social preview. Blog and documentation composition views share
+  the same copy and catalog projection. The unused homepage featured-squad projection is removed.
+- Detailed editorial content has one Markdown source in `src/content/blog/{root,zh-cn}`. The
+  build-time `blog` collection validates locale, key, category, order and optional visual kind.
+  `/blog/` and `/zh-cn/blog/` group cases, mechanisms, research and practice; article routes
+  are statically generated and counterpart language links use the same key. Blog content does
+  not participate in Registry publication or change its persistence/API contract.

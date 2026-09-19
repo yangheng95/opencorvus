@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content"
+import OcLayout from "./OcLayout.astro"
+import { publicPath, type PublicLocale } from "../content/public-market"
+const { locale } = Astro.props as { locale: PublicLocale }
+const zh = locale === "zh-cn"
+const posts = (await getCollection("blog", ({ data }) => data.locale === locale)).sort((a, b) => a.data.order - b.data.order)
+const categories = [
+  { id: "cases", title: zh ? "案例" : "Cases" },
+  { id: "mechanisms", title: zh ? "机制" : "Mechanisms" },
+  { id: "research", title: zh ? "研究" : "Research" },
+  { id: "practice", title: zh ? "实践" : "Practice" },
+]
+---
+<OcLayout {locale} current="blog" title={zh ? "博客 · OpenCorvus" : "Blog · OpenCorvus"}
+  description={zh ? "长程任务的案例、机制、研究与实践。" : "Cases, mechanisms, research and practice for long-running work."}
+  languageHref={publicPath(zh ? "root" : "zh-cn", "/blog/")}>
+  <div class="oc-container blog-index">
+    <header>
+      <p class="oc-eyebrow">OpenCorvus</p>
+      <h1 class="oc-text-hero">{zh ? "博客" : "Blog"}</h1>
+      <p class="oc-text-body oc-text-description">{zh ? "从一次交付，到背后的工作方式。" : "From a delivery to the way it works."}</p>
+      <nav aria-label={zh ? "文章分类" : "Article categories"}>
+        {categories.map((category) => <a class="oc-link" href={`#${category.id}`}>{category.title}</a>)}
+      </nav>
+    </header>
+    {categories.map((category) => <section id={category.id} class="oc-anchor">
+      <h2 class="oc-text-subtitle">{category.title}</h2>
+      <div class="post-grid">
+        {posts.filter((post) => post.data.category === category.id).map((post) => <a class="oc-card post" href={publicPath(locale, `/blog/${post.data.key}/`)}>
+          <h3 class="oc-text-title">{post.data.title}</h3>
+          <p class="oc-text-caption oc-text-description">{post.data.description}</p>
+          <span class="oc-link">{zh ? "阅读全文" : "Read article"} ↗</span>
+        </a>)}
+      </div>
+    </section>)}
+  </div>
+</OcLayout>
+<style>
+  .blog-index { padding-block: var(--oc-space-9); }
+  header { padding-block: var(--oc-space-7); max-width: 760px; }
+  header p { margin-block: var(--oc-space-4); }
+  nav { display: flex; flex-wrap: wrap; gap: var(--oc-space-5); margin-top: var(--oc-space-6); }
+  section { margin-top: var(--oc-space-9); }
+  .post-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--oc-space-4); margin-top: var(--oc-space-4); }
+  .post { display: block; padding: var(--oc-space-6); color: inherit; text-decoration: none; }
+  .post p { margin-block: var(--oc-space-4); }
+  @media (max-width: 700px) { .post-grid { grid-template-columns: 1fr; } }
+</style>

@@ -50,7 +50,38 @@ A hash identifies the inspected bytes; it does not make unavailable originals in
 
 ## Visual review
 
-### Current incremental revision
+### Current concise homepage and blog
+
+The user asked to keep the essentials and organize the rest as blog articles. The current
+homepage retains hero/terminal, demo, three long-horizon cards, the directed graph, concise
+setup and further reading. Both READMEs retain attribution/license and link to the new blog.
+
+Eight paired English/Chinese themes now live in the static blog: import-preview case,
+squad composition, long-horizon harness, squad evolution, AutomationBench, research paper,
+choosing/boundaries and deployment/integrations. Detailed visuals retain their original
+components; the workflow disclosure owns its script and the benchmark bar renders statically.
+
+Actual 1280x720 browser evidence on an isolated development server at localhost:4398:
+
+- `blog-index-zh-dark.png`, `blog-index-en-light.png`: categorized article index.
+- `blog-article-zh.png`, `blog-article-en-light.png`: article typography and counterpart locale switch.
+- `blog-composition-zh.png`: expanded workflow details after relocation.
+- `blog-benchmark-en.png`: actual visible strict-pass result bar.
+- `blog-harness-image-en.png`: original workflow illustration served as a local image.
+- `blog-research-en.png`, `blog-paper-en.png`: paper introduction and working-paper entry.
+- `blog-toc-en.png`: the long practical article's expanded heading directory.
+- `blog-home-hero-zh.png`, `blog-home-download-zh.png`, `blog-home-start-en.png`: preserved hero/menu and concise landing-page ending.
+
+All captures were manually viewed. Existing 4397 was not restarted: its old development
+process returned an empty collection after the schema change. A separate foreground Astro
+development process used the CLI's documented alongside-server option on 4398. No UI tests.
+
+Independent review found and corrected the migrated GitHub HTML image URL, a benchmark-bar
+dependency on homepage animation, and an overbroad local-model networking claim. Article
+image bytes now derive from the canonical repository asset; local inference is explicitly
+distinguished from browser/tool/integration networking.
+
+### Previous incremental revision
 
 The user requested improvement on the original materials, superseding both replacement designs.
 The original hero/terminal, narrated demo, benchmark, long-horizon, composition, evolution,

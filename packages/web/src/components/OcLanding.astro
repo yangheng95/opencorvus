@@ -2,29 +2,18 @@
 import OcLayout from "./OcLayout.astro"
 import OcHeroBackdrop from "./OcHeroBackdrop.astro"
 import OcDemoVideo from "./OcDemoVideo.astro"
-import OcAutomationBench from "./OcAutomationBench.astro"
-import OcMissionCase from "./OcMissionCase.astro"
-import OcResearchPaper from "./OcResearchPaper.astro"
 import { executionGraph } from "../lib/execution-graph"
 import { executionCopy } from "../content/execution-copy"
 import { landingCopy } from "../content/landing-copy"
 import { publicPath, type PublicLocale } from "../content/public-market"
 import config from "../../config.mjs"
-import type { FeaturedSquad } from "../lib/landing-featured-squads"
-import {
-  featuredComposition,
-  otherCompositions,
-  selfPaperComposition,
-} from "../lib/landing-compositions"
 import { readDownloadManifest, formatBytes } from "../lib/landing-downloads"
 
 type Props = {
   locale: PublicLocale
-  /** Featured squads, already trimmed by the page. Empty renders the section without cards. */
-  featured?: FeaturedSquad[]
 }
 
-const { locale, featured = [] } = Astro.props
+const { locale } = Astro.props
 const zh = locale === "zh-cn"
 const copy = landingCopy[locale]
 const languageHref = zh ? publicPath("root") : publicPath("zh-cn")
@@ -32,20 +21,8 @@ const languageHref = zh ? publicPath("root") : publicPath("zh-cn")
 /** Copy holds bare hrefs; anything site-local has to be run through the locale-aware base. */
 const resolve = (href: string) => (href.startsWith("/") ? publicPath(locale, href) : href)
 
-/** Chinese passes the same string for both forms, so this is a no-op there by construction. */
-const plural = (count: number, one: string, other: string) => (count === 1 ? one : other)
-
-const marketHref = publicPath(locale, "/market/")
-const compositionHref = publicPath(locale, "/concepts/squad-composition/")
-const evolutionHref = publicPath(locale, "/expert-squads/evolution/")
 const downloads = readDownloadManifest()
 
-// The case study and the shorter chains beside it. Counts come from the generated catalog facts;
-// see lib/landing-compositions.ts.
-const caseStudy = featuredComposition(locale)
-const paperStudy = selfPaperComposition(locale)
-const detailedCases = [caseStudy, paperStudy]
-const combinations = otherCompositions(locale)
 
 ---
 
@@ -216,9 +193,6 @@ const combinations = otherCompositions(locale)
   */}
   <OcDemoVideo {locale} />
 
-  {/* ----------------------------------------------------- 3 · benchmark */}
-  <OcAutomationBench copy={copy.benchmark} />
-
   {/* -------------------------------------------------- 4 · long-horizon */}
   {/*
     Named failures before named mechanisms. Borrowed from LongHorizon-Harness, which opens on
@@ -267,325 +241,26 @@ const combinations = otherCompositions(locale)
     </div>
   </section>
 
-  {/*
-    The case study is the argument for combining squads, so it is shown as a real chain rather than
-    described: every stage names the squad that owns it, how many roles that squad declares, and
-    what it hands the next one. The numbers are generated from the shipped catalog — see
-    content/squad-compositions.ts for why they are not typed into copy.
-  */}
-  <section class="oc-section-tight oc-anchor" id="compose">
-    <div class="oc-container">
-      <p class="oc-eyebrow oc-reveal">{copy.compose.eyebrow}</p>
-      <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal">{copy.compose.title}</h2>
-      <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.compose.lead}</p>
-
-      {
-        detailedCases.map((study, caseIndex) => (
-          <OcMissionCase
-            {study}
-            caseLabel={caseIndex === 0 ? copy.compose.caseLabel : copy.compose.paperCaseLabel}
-            copy={copy.compose}
-          />
-        ))
-      }
-
-      <p class="oc-eyebrow oc-combo-label oc-reveal">{copy.compose.moreLabel}</p>
-      <ul class="oc-combo-grid">
-        {
-          combinations.map((combination, index) => (
-            <li class="oc-card oc-combo oc-reveal" style={`transition-delay: ${(index % 3) * 70}ms`}>
-              <h3 class="oc-text-subtitle oc-cjk-spacing">{combination.title}</h3>
-              <p class="oc-text-caption oc-text-description">{combination.lead}</p>
-              <ul class="oc-combo-chain">
-                {combination.steps.map((step) => (
-                  <li>
-                    <a class="oc-link" href={step.href}>
-                      {step.squadLabel}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              <p class="oc-text-xs oc-text-description oc-combo-total">
-                {combination.squadCount} {copy.compose.squadsUnit} · {combination.roleCount}{" "}
-                {copy.compose.rolesUnit}
-              </p>
-            </li>
-          ))
-        }
-      </ul>
-
-      <p class="oc-compose-cta oc-reveal">
-        <a class="oc-btn oc-btn-secondary oc-btn-m" href={compositionHref}>{copy.compose.cta}</a>
-      </p>
-    </div>
-  </section>
-
-  {/* ------------------------------------------------------ 6 · evolution */}
-  <section class="oc-section-tight oc-anchor" id="evolve">
-    <div class="oc-container">
-      <p class="oc-eyebrow oc-reveal">{copy.evolve.eyebrow}</p>
-      <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal">{copy.evolve.title}</h2>
-      <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.evolve.lead}</p>
-
-      <ul class="oc-evolve-grid">
-        {
-          copy.evolve.paths.map((path, index) => (
-            <li class="oc-card-raised oc-evolve oc-reveal" style={`transition-delay: ${index * 70}ms`}>
-              <h3 class="oc-text-subtitle oc-cjk-spacing">{path.title}</h3>
-              <p class="oc-text-body oc-text-description">{path.body}</p>
-            </li>
-          ))
-        }
-      </ul>
-
-      {/*
-        The boundary is stated in the section, not in a footnote: a page that says "squads evolve"
-        and leaves the reader to discover elsewhere that nothing installs without them is a page
-        that mis-sold the feature.
-      */}
-      <p class="oc-text-body oc-text-secondary oc-evolve-boundary oc-reveal">{copy.evolve.boundary}</p>
-      <p class="oc-compose-cta oc-reveal">
-        <a class="oc-btn oc-btn-secondary oc-btn-m" href={evolutionHref}>{copy.evolve.cta}</a>
-      </p>
-    </div>
-  </section>
-
-  <OcResearchPaper {locale} />
-
-  {/* ------------------------------------------------------------- 7 · why */}
-  <section class="oc-section oc-anchor" id="why">
-    <div class="oc-container">
-      <p class="oc-eyebrow oc-reveal">{copy.why.eyebrow}</p>
-      <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal">{copy.why.title}</h2>
-      <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.why.lead}</p>
-
-      <ul class="oc-pillar-grid">
-        {
-          copy.why.pillars.map((pillar, index) => (
-            <li class="oc-card-raised oc-pillar oc-reveal" style={`transition-delay: ${index * 70}ms`}>
-              <h3 class="oc-text-subtitle oc-cjk-spacing">{pillar.title}</h3>
-              <p class="oc-text-body oc-text-description">{pillar.body}</p>
-              <p class="oc-pillar-evidence">
-                <span class="oc-pillar-evidence-value">{pillar.evidenceValue}</span>
-                <span class="oc-text-xs oc-text-description">{pillar.evidenceLabel}</span>
-              </p>
-            </li>
-          ))
-        }
-      </ul>
-
-      {/*
-        Placed under the pillars because "how is this different from X" is the question the pillars
-        raise. Every cell is a checkable fact about a shipped capability, with the source linked —
-        a comparison that argues instead of informs is one a reader has to discount.
-      */}
-      <div class="oc-compare oc-reveal">
-        <div class="oc-compare-head">
-          <h3 class="oc-text-subtitle oc-cjk-spacing">{copy.why.compare.title}</h3>
-          <p class="oc-text-caption oc-text-description">{copy.why.compare.lead}</p>
-        </div>
-
-        <div class="oc-compare-scroll">
-          <table class="oc-compare-table">
-            <thead>
-              <tr>
-                <th scope="col"><span class="oc-visually-hidden">{copy.why.compare.title}</span></th>
-                {
-                  copy.why.compare.columns.map((column) => (
-                    <th scope="col" class={column.self ? "oc-compare-us" : undefined}>
-                      {column.href ? (
-                        <a class="oc-link" href={column.href} rel="noopener nofollow">
-                          {column.label}
-                        </a>
-                      ) : (
-                        column.label
-                      )}
-                    </th>
-                  ))
-                }
-              </tr>
-            </thead>
-            <tbody>
-              {
-                copy.why.compare.rows.map((row) => (
-                  <tr>
-                    <th scope="row">{row.axis}</th>
-                    {
-                      row.cells.map((cell, index) => (
-                        <td
-                          class={copy.why.compare.columns[index]?.self ? "oc-compare-us" : undefined}
-                          data-label={copy.why.compare.columns[index]?.label}
-                        >
-                          {cell}
-                        </td>
-                      ))
-                    }
-                  </tr>
-                ))
-              }
-            </tbody>
-          </table>
-        </div>
-
-        {/*
-          Stated plainly rather than buried: one of these is open source too and traces runs just as
-          well. A comparison table that only ever wins is one a reader stops believing.
-        */}
-        <p class="oc-text-caption oc-text-secondary oc-compare-fairness">{copy.why.compare.fairness}</p>
-        <p class="oc-text-xs oc-text-description oc-compare-note">{copy.why.compare.note}</p>
-      </div>
-    </div>
-  </section>
-
-  {/* --------------------------------------------------------- 8 · squads */}
-  {/*
-    A funnel, not a second market. Six static cards and a link out. The filtering, search and
-    segment browsing all live on /market/ — duplicating them here would mean two implementations
-    of the same behaviour drifting apart. Plan §4.1.
-  */}
-  <section class="oc-section-tight oc-anchor" id="squads">
-    <div class="oc-container">
-      <p class="oc-eyebrow oc-reveal">{copy.squads.eyebrow}</p>
-      <div class="oc-squads-head oc-reveal">
-        <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title">{copy.squads.title}</h2>
-        <a class="oc-btn oc-btn-secondary oc-btn-m" href={marketHref}>{copy.squads.cta}</a>
-      </div>
-      <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.squads.lead}</p>
-
-      {
-        featured.length > 0 && (
-          <ul class="oc-squad-grid">
-            {featured.map((squad, index) => (
-              <li class="oc-card oc-squad-card oc-reveal" style={`transition-delay: ${(index % 3) * 70}ms`}>
-                <a href={squad.href}>
-                  <h3 class="oc-text-title oc-cjk-spacing">{squad.label}</h3>
-                  <p class="oc-text-caption oc-text-description oc-squad-body">{squad.description}</p>
-                  <p class="oc-text-xs oc-text-description oc-squad-meta">
-                    <span>{squad.agentCount} {plural(squad.agentCount, copy.squads.agentLabel, copy.squads.agentsLabel)}</span>
-                    <span aria-hidden="true">·</span>
-                    <span>
-                      {squad.workflowCount}{" "}
-                      {plural(squad.workflowCount, copy.squads.workflowLabel, copy.squads.workflowsLabel)}
-                    </span>
-                  </p>
-                </a>
-              </li>
-            ))}
-          </ul>
-        )
-      }
-    </div>
-  </section>
-
-  {/* ---------------------------------------------------------- 9 · start */}
   <section class="oc-section oc-anchor" id="start">
     <div class="oc-container">
-      <p class="oc-eyebrow oc-reveal">{copy.start.eyebrow}</p>
-      <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal">{copy.start.title}</h2>
-      <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.start.lead}</p>
-
-      <div class="oc-start-grid">
-        <div class="oc-card-raised oc-reveal">
-          <h3 class="oc-text-subtitle oc-cjk-spacing">{copy.start.cliTitle}</h3>
-          <p class="oc-text-caption oc-text-description oc-start-body">{copy.start.cliBody}</p>
-          {/*
-            The command lives in the copy module so it stays reviewable next to the prose, and the
-            copy button reads the same string. An earlier draft advertised `npx opencorvus@latest`,
-            which the project does not publish — the install paths are a desktop installer or this
-            source build. Keep both in step with README.md.
-          */}
-          <div class="oc-code">
-            <code>{copy.start.cliCommand}</code>
-            <button class="oc-copy-btn" type="button" data-oc-copy={copy.start.cliCommand} data-copied={copy.start.copied}>
-              {copy.start.copy}
-            </button>
-          </div>
-        </div>
-
-        {/*
-          The installer download moved into the hero, so this card no longer duplicates it — and
-          must not, because it also carried a second [data-oc-download-primary], which would have
-          fought the hero control for the same selector.
-        */}
-        <div class="oc-card-raised oc-reveal" style="transition-delay: 70ms">
-          <h3 class="oc-text-subtitle oc-cjk-spacing">{copy.start.desktopTitle}</h3>
-          <p class="oc-text-caption oc-text-description oc-start-body">{copy.start.desktopBody}</p>
-          <div class="oc-code">
-            <code>{copy.start.serveCommand}</code>
-            <button class="oc-copy-btn" type="button" data-oc-copy={copy.start.serveCommand} data-copied={copy.start.copied}>
-              {copy.start.copy}
-            </button>
-          </div>
-          <div class="oc-btn-group oc-start-actions">
-            <a class="oc-btn oc-btn-secondary oc-btn-m" href={publicPath(locale, "/start/quickstart/")}>
-              {copy.start.desktopCta}
-            </a>
-          </div>
-        </div>
+      <p class="oc-eyebrow">{zh ? "开始" : "Get started"}</p>
+      <h2 class="oc-text-h1 oc-cjk-spacing">{zh ? "从一项真实任务开始" : "Start with one real task"}</h2>
+      <p class="oc-text-body oc-text-description oc-section-lead">{zh ? "配置模型，选择项目与专家团，写清目标和验收要求。" : "Configure a model, choose a project and squad, and define the goal and acceptance criteria."}</p>
+      <div class="oc-btn-group oc-reading-links">
+        <a class="oc-btn oc-btn-primary oc-btn-m" href={publicPath(locale, "/start/quickstart/")}>{zh ? "快速开始" : "Quickstart"}</a>
+        <a class="oc-btn oc-btn-secondary oc-btn-m" href={publicPath(locale, "/market/")}>{zh ? "选择专家团" : "Explore squads"}</a>
       </div>
-
-      <div class="oc-trust oc-reveal">
-        <p class="oc-eyebrow">{copy.start.trustTitle}</p>
-        <ul class="oc-trust-list">
-          {
-            copy.start.trust.map((item) => (
-              <li>
-                <span class="oc-text-title oc-cjk-spacing">{item.title}</span>
-                <span class="oc-text-caption oc-text-description">{item.body}</span>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
+      <p class="oc-text-xs oc-text-description oc-reading-links">{zh ? "运行需要在线服务及可访问的模型；重要权限与发布决定由你掌握。" : "Work requires an online runtime and reachable model. Important permissions and publishing decisions remain yours."}</p>
     </div>
   </section>
-
-  {/* ----------------------------------------------------------- 10 · faq */}
-  {/*
-    Native <details>. An accordion is the one place a section can hold six answers without costing
-    six answers' worth of scroll, and the disclosure widget browsers already ship is keyboard
-    accessible, findable by in-page search when open, and needs no JavaScript at all.
-  */}
-  <section class="oc-section-tight oc-anchor" id="faq">
-    <div class="oc-container oc-faq">
-      <div class="oc-faq-head">
-        <p class="oc-eyebrow oc-reveal">{copy.faq.eyebrow}</p>
-        <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal">{copy.faq.title}</h2>
-        <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.faq.lead}</p>
-      </div>
-
-      <div class="oc-faq-list">
-        {
-          copy.faq.items.map((item, index) => (
-            <details class="oc-faq-item oc-reveal" style={`transition-delay: ${Math.min(index, 4) * 50}ms`} open={index === 0}>
-              <summary>
-                <span class="oc-text-title oc-cjk-spacing">{item.q}</span>
-                <span class="oc-faq-marker" aria-hidden="true"></span>
-              </summary>
-              <p class="oc-text-body oc-text-description">{item.a}</p>
-            </details>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  {/* ---------------------------------------------------------- 11 · join */}
-  <section class="oc-section-tight oc-anchor" id="join">
+  <section class="oc-section-tight" id="reading">
     <div class="oc-container">
-      <div class="oc-cta-block oc-join oc-reveal">
-        <p class="oc-eyebrow">{copy.join.eyebrow}</p>
-        <h2 class="oc-text-h1 oc-cjk-spacing">{copy.join.title}</h2>
-        <p class="oc-text-body oc-text-secondary oc-join-lead">{copy.join.lead}</p>
-        <div class="oc-btn-group">
-          {
-            copy.join.ctas.map((cta) => (
-              <a class={`oc-btn oc-btn-${cta.variant} oc-btn-m`} href={resolve(cta.href)}>
-                {cta.label}
-              </a>
-            ))
-          }
-        </div>
+      <p class="oc-eyebrow">{zh ? "深入阅读" : "Further reading"}</p>
+      <h2 class="oc-text-subtitle">{zh ? "案例与机制，放在博客里慢慢展开。" : "Explore the cases and mechanisms in the blog."}</h2>
+      <div class="oc-btn-group oc-reading-links">
+        <a class="oc-link" href={publicPath(locale, "/blog/squad-composition/")}>{zh ? "多专家团协作" : "Squad coordination"} ↗</a>
+        <a class="oc-link" href={publicPath(locale, "/blog/automationbench/")}>AutomationBench ↗</a>
+        <a class="oc-link" href={publicPath(locale, "/blog/")}>{zh ? "全部文章" : "All articles"} ↗</a>
       </div>
     </div>
   </section>
@@ -912,20 +587,6 @@ const combinations = otherCompositions(locale)
     gap: var(--oc-space-2);
   }
 
-  .oc-pillar-evidence-value {
-    font-family: var(--oc-font-display);
-    font-size: 28px;
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    color: var(--oc-color-text-primary);
-  }
-
-  /* ------------------------------------------------------ long-horizon */
-
-  /* The `why` pillars end on a single token — "MIT", "119" — which the display face carries at 28px.
-     These end on a short phrase instead, so they take the body face; the same rule above them keeps
-     the two grids reading as one system. */
   .oc-break-evidence-value {
     font-family: var(--oc-font-display);
     font-size: 17px;
@@ -935,399 +596,7 @@ const combinations = otherCompositions(locale)
     color: var(--oc-color-text-primary);
   }
 
-  /* Detailed Mission visualization styles live beside their markup in OcMissionCase.astro. */
-  .oc-combo-label {
-    margin-top: var(--oc-space-8);
-  }
-
-  .oc-combo-grid {
-    list-style: none;
-    margin: var(--oc-space-4) 0 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-    gap: var(--oc-space-4);
-  }
-
-  .oc-combo {
-    display: flex;
-    flex-direction: column;
-    gap: var(--oc-space-3);
-    padding: var(--oc-space-5);
-  }
-
-  /* Squad names separated by a rendered arrow, so the row reads as a handoff order rather than a
-     tag cloud. The separator is generated, which keeps it out of the copy and out of selection. */
-  .oc-combo-chain {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--oc-space-1);
-    font-size: 15px;
-    line-height: 1.4;
-  }
-
-  /* One squad per line with a generated arrow. Laid out inline the arrows land wherever the text
-     happens to wrap, and a handoff order that reads left-to-right on one row and mid-sentence on
-     the next has stopped being an order. */
-  .oc-combo-chain li + li::before {
-    content: "→";
-    margin-right: var(--oc-space-2);
-    color: var(--oc-color-text-description);
-  }
-
-  .oc-combo-total {
-    margin: auto 0 0;
-    padding-top: var(--oc-space-3);
-    border-top: 1px solid var(--oc-color-border-subtle);
-  }
-
-  .oc-compose-cta {
-    margin: var(--oc-space-7) 0 0;
-  }
-
-  /* -------------------------------------------------------- evolution */
-
-  .oc-evolve-grid {
-    list-style: none;
-    margin: var(--oc-space-8) 0 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-    gap: var(--oc-space-4);
-  }
-
-  .oc-evolve {
-    display: flex;
-    flex-direction: column;
-    gap: var(--oc-space-3);
-  }
-
-  .oc-evolve-boundary {
-    margin: var(--oc-space-6) 0 0;
-    max-width: 60ch;
-  }
-
-  /* ---------------------------------------------------------- compare */
-
-  .oc-compare {
-    margin-top: var(--oc-space-8);
-    padding-top: var(--oc-space-6);
-    border-top: 1px solid var(--oc-color-border-subtle);
-  }
-
-  .oc-compare-head {
-    display: flex;
-    flex-direction: column;
-    gap: var(--oc-space-2);
-    max-width: 56ch;
-    margin-bottom: var(--oc-space-5);
-  }
-
-  .oc-compare-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 15px;
-    text-align: left;
-  }
-
-  .oc-compare-table th,
-  .oc-compare-table td {
-    padding: var(--oc-space-3) var(--oc-space-4);
-    border-bottom: 1px solid var(--oc-color-border-subtle);
-    vertical-align: top;
-    font-weight: 400;
-  }
-
-  .oc-compare-table thead th {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--oc-color-text-description);
-    border-bottom-color: var(--oc-color-border-default);
-  }
-
-  .oc-compare-table tbody th {
-    width: 1%;
-    white-space: nowrap;
-    color: var(--oc-color-text-description);
-  }
-
-  .oc-compare-table td {
-    color: var(--oc-color-text-secondary);
-  }
-
-  /* Our column is the one a reader is here to evaluate, so it gets the emphasis and a tint. The
-     other column stays neutral — a comparison that visually punishes the alternative reads as
-     advertising and gets discounted accordingly. */
-  .oc-compare-table .oc-compare-us {
-    color: var(--oc-color-text-primary);
-    background: var(--oc-color-bg-surface-3);
-  }
-
-  .oc-compare-table thead .oc-compare-us {
-    color: var(--oc-color-text-primary);
-    font-weight: 500;
-  }
-
-  /* Five rows of prose across four columns will not fit a phone; let the table scroll inside its
-     own box rather than pushing the page sideways. */
-  .oc-compare-scroll {
-    overflow-x: auto;
-  }
-
-  .oc-compare-fairness {
-    margin-top: var(--oc-space-5);
-    max-width: 62ch;
-    padding-left: var(--oc-space-4);
-    border-left: 2px solid var(--oc-color-border-default);
-  }
-
-  .oc-compare-note {
-    margin-top: var(--oc-space-3);
-  }
-
-  .oc-visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  @media (max-width: 599px) {
-    /* Three columns of prose do not fit a phone. Each row becomes a labelled pair instead. */
-    .oc-compare-table,
-    .oc-compare-table tbody,
-    .oc-compare-table tr,
-    .oc-compare-table td,
-    .oc-compare-table tbody th {
-      display: block;
-      width: auto;
-    }
-
-    .oc-compare-table thead {
-      display: none;
-    }
-
-    .oc-compare-table tr {
-      padding-block: var(--oc-space-3);
-      border-bottom: 1px solid var(--oc-color-border-subtle);
-    }
-
-    .oc-compare-table tbody th {
-      padding: 0 0 var(--oc-space-2);
-      font-size: 13px;
-    }
-
-    .oc-compare-table td {
-      padding: var(--oc-space-2) var(--oc-space-3);
-      border-bottom: 0;
-      border-radius: var(--oc-radius-sm);
-    }
-
-    .oc-compare-table td::before {
-      content: attr(data-label);
-    }
-  }
-
-  /* ----------------------------------------------------------- squads */
-
-  .oc-squads-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--oc-space-4);
-  }
-
-  .oc-squad-grid {
-    list-style: none;
-    margin: var(--oc-space-7) 0 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-    gap: var(--oc-space-4);
-  }
-
-  .oc-squad-card {
-    padding: 0;
-    transition:
-      border-color 0.2s ease,
-      transform 0.3s ease;
-  }
-
-  .oc-squad-card:hover {
-    border-color: var(--oc-color-border-hover);
-    transform: translateY(-2px);
-  }
-
-  .oc-squad-card a {
-    display: flex;
-    flex-direction: column;
-    gap: var(--oc-space-2);
-    padding: var(--oc-space-5);
-    color: inherit;
-    text-decoration: none;
-    height: 100%;
-  }
-
-  .oc-squad-body {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    overflow: hidden;
-  }
-
-  .oc-squad-meta {
-    margin-top: auto;
-    padding-top: var(--oc-space-3);
-    display: flex;
-    gap: var(--oc-space-2);
-  }
-
-  /* ------------------------------------------------------------ start */
-
-  .oc-start-grid {
-    margin-top: var(--oc-space-7);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-    gap: var(--oc-space-4);
-  }
-
-  .oc-start-body {
-    margin-block: var(--oc-space-3) var(--oc-space-4);
-  }
-
-  .oc-start-actions {
-    margin-top: var(--oc-space-4);
-  }
-
-  .oc-trust {
-    margin-top: var(--oc-space-8);
-    padding-top: var(--oc-space-6);
-    border-top: 1px solid var(--oc-color-border-subtle);
-  }
-
-  .oc-trust-list {
-    list-style: none;
-    margin: var(--oc-space-4) 0 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
-    gap: var(--oc-space-5);
-  }
-
-  .oc-trust-list li {
-    display: flex;
-    flex-direction: column;
-    gap: var(--oc-space-1);
-  }
-
-  /* -------------------------------------------------------------- faq */
-
-  .oc-faq {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--oc-space-6);
-    align-items: start;
-  }
-
-  @media (min-width: 1024px) {
-    .oc-faq {
-      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-      gap: var(--oc-space-9);
-    }
-
-    /* The heading column is short and the list is long; pinning it keeps the two visually paired
-       instead of leaving the heading stranded at the top. */
-    .oc-faq-head {
-      position: sticky;
-      top: 128px;
-    }
-  }
-
-  .oc-faq-list {
-    display: flex;
-    flex-direction: column;
-    border-top: 1px solid var(--oc-color-border-subtle);
-  }
-
-  .oc-faq-item {
-    border-bottom: 1px solid var(--oc-color-border-subtle);
-  }
-
-  .oc-faq-item summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--oc-space-4);
-    padding-block: var(--oc-space-5);
-    cursor: pointer;
-    list-style: none;
-    transition: color 0.2s ease;
-  }
-
-  /* Safari still paints its own triangle unless this pseudo-element is cleared. */
-  .oc-faq-item summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .oc-faq-item summary:hover {
-    color: var(--oc-color-brand);
-  }
-
-  /* A plus that becomes a minus. Two spans would need JS to stay in sync with the open state; one
-     element with a rotating cross-bar reads the same and follows `[open]` for free. */
-  .oc-faq-marker {
-    position: relative;
-    flex-shrink: 0;
-    width: 16px;
-    height: 16px;
-  }
-
-  .oc-faq-marker::before,
-  .oc-faq-marker::after {
-    content: "";
-    position: absolute;
-    inset: 50% 0 auto 0;
-    height: 1.5px;
-    background: currentColor;
-    transition: transform 0.25s ease;
-  }
-
-  .oc-faq-marker::after {
-    transform: rotate(90deg);
-  }
-
-  .oc-faq-item[open] .oc-faq-marker::after {
-    transform: rotate(0deg);
-  }
-
-  .oc-faq-item > p {
-    padding-bottom: var(--oc-space-5);
-    max-width: 62ch;
-  }
-
-  /* ------------------------------------------------------------- join */
-
-  .oc-join {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--oc-space-4);
-    text-align: center;
-    padding-block: var(--oc-space-9);
-  }
-
-  .oc-join-lead {
-    max-width: 46ch;
-  }
+  .oc-reading-links { margin-top: var(--oc-space-5); }
 </style>
 
 <script>
@@ -1353,24 +622,6 @@ const combinations = otherCompositions(locale)
       revealTargets.forEach((element) => observer.observe(element))
     }
   }
-
-  /* ----------------------------------------------- Mission scale disclosure */
-
-  const reducedMissionMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
-  document.querySelectorAll<HTMLDetailsElement>("[data-oc-mission-scale]").forEach((scale) => {
-    let burstTimer = 0
-    scale.addEventListener("toggle", () => {
-      window.clearTimeout(burstTimer)
-      delete scale.dataset.burst
-      if (!scale.open || reducedMissionMotion.matches) return
-      // Restarting on a new frame lets repeated opens replay one finite burst without leaving an
-      // ambient animation running around eighteen paragraphs of actual work.
-      requestAnimationFrame(() => {
-        scale.dataset.burst = "true"
-        burstTimer = window.setTimeout(() => delete scale.dataset.burst, 950)
-      })
-    })
-  })
 
   /* ------------------------------------------------------------- tab groups */
 
@@ -1492,24 +743,6 @@ const combinations = otherCompositions(locale)
       observer.observe(terminal)
     }
   }
-
-  /* ------------------------------------------------------- copy buttons */
-
-  document.querySelectorAll<HTMLElement>("[data-oc-copy]").forEach((button) => {
-    button.addEventListener("click", async () => {
-      const text = button.dataset.ocCopy ?? ""
-      try {
-        await navigator.clipboard.writeText(text)
-      } catch {
-        return
-      }
-      const original = button.textContent
-      button.textContent = button.dataset.copied ?? "Copied"
-      window.setTimeout(() => {
-        button.textContent = original
-      }, 1600)
-    })
-  })
 
   /* --------------------------------------------------- platform detect */
 
