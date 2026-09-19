@@ -1,0 +1,75 @@
+---
+/** Locale selects a complete narrated master: screen copy, voice and subtitles stay in agreement. */
+import { landingCopy } from "../content/landing-copy"
+import type { PublicLocale } from "../content/public-market"
+
+type Props = { locale: PublicLocale }
+
+const { locale } = Astro.props
+const copy = landingCopy[locale].demo
+const base = import.meta.env.BASE_URL.replace(/\/$/, "")
+const mediaLocale = locale === "zh-cn" ? "zh-CN" : "en-US"
+const videoSrc = `${base}/media/opencorvus-delivery-v1-${mediaLocale}.mp4`
+const posterSrc = `${base}/media/opencorvus-delivery-v1-${mediaLocale}-poster.jpg`
+---
+
+<section class="oc-demo oc-anchor" id="demo" aria-labelledby="oc-demo-title">
+  <div class="oc-container">
+    <div class="oc-demo-head">
+      <p class="oc-eyebrow oc-reveal">{copy.eyebrow}</p>
+      <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal" id="oc-demo-title">{copy.title}</h2>
+      <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{copy.lead}</p>
+    </div>
+
+    <figure class="oc-demo-figure oc-reveal">
+      {/* The poster paints without JavaScript; the reader explicitly starts this narrated story. */}
+      <video
+        class="oc-demo-video"
+        src={videoSrc}
+        poster={posterSrc}
+        width="1920"
+        height="1080"
+        preload="metadata"
+        playsinline
+        controls
+        lang={mediaLocale}
+        aria-label={copy.label}></video>
+      <figcaption class="oc-text-xs oc-text-description oc-demo-caption">{copy.caption}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .oc-demo {
+    padding-block: var(--oc-space-9);
+  }
+
+  .oc-demo-head {
+    text-align: center;
+  }
+
+  .oc-demo-figure {
+    margin: 0;
+    margin-top: var(--oc-space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--oc-space-3);
+  }
+
+  /* The recording already carries the app's own window chrome, so the frame is a hairline and a
+     radius rather than a padded mat — a second bezel around the first reads as a mistake. */
+  .oc-demo-video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--oc-radius-card);
+    border: 1px solid var(--oc-color-border-subtle);
+    background: var(--oc-color-bg-overlay);
+    box-shadow: var(--oc-shadow-card);
+  }
+
+  .oc-demo-caption {
+    text-align: center;
+  }
+</style>

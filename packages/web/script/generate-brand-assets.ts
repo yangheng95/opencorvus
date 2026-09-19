@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import sharp from "sharp"
-import { coordinationDiagram, socialCard } from "./coordination-artwork"
+import { coordinationDiagram } from "./coordination-artwork"
 
 /**
  * Website brand assets, derived from the one canonical logo.
@@ -19,9 +19,58 @@ export const canonicalBrandLogoPath = join(webRoot, "..", "overlay", "src", "ope
 export const websiteFaviconPath = join(webRoot, "public", "favicon.svg")
 const publicRoot = join(webRoot, "public")
 
-const MANIFEST_PAGE_COLOR = "#f9f8f8"
+/** Kept in step with tokens.css. A card that does not match the site reads as someone else's link. */
+const CARD = {
+  width: 1200,
+  height: 630,
+  page: "#f9f8f8",
+  ink: "#1e232c",
+  muted: "rgba(0,0,0,0.65)",
+  brand: "#2946d3",
+} as const
 
-const TAGLINE = "Orchestration for long-running, complex AI work"
+const WORDMARK = "OpenCorvus"
+const TAGLINE = "Expert squads for long-running, complex work"
+const KICKER = "Open source · MIT · Self-hosted"
+
+/**
+ * The hero's substrate, flattened. Text is left to the rasterizer's default sans on purpose: the
+ * build host is not guaranteed to have Montserrat installed, and a card that renders in a fallback
+ * face is fine where one that renders in tofu is not.
+ */
+function cardBackground(): Buffer {
+  return Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${CARD.width}" height="${CARD.height}">
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#f7f5f1"/>
+      <stop offset="46%" stop-color="#f9f8f8"/>
+      <stop offset="100%" stop-color="#eef0f7"/>
+    </linearGradient>
+    <radialGradient id="bloomA" cx="0.18" cy="0.22" r="0.55">
+      <stop offset="0%" stop-color="#2946d3" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#2946d3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bloomB" cx="0.84" cy="0.18" r="0.5">
+      <stop offset="0%" stop-color="#e04b22" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#e04b22" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bloomC" cx="0.76" cy="0.86" r="0.6">
+      <stop offset="0%" stop-color="#7896ff" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#7896ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#base)"/>
+  <rect width="100%" height="100%" fill="url(#bloomA)"/>
+  <rect width="100%" height="100%" fill="url(#bloomB)"/>
+  <rect width="100%" height="100%" fill="url(#bloomC)"/>
+  <g font-family="Segoe UI, Helvetica Neue, Arial, sans-serif">
+    <text x="96" y="322" font-size="76" font-weight="700" fill="${CARD.ink}" letter-spacing="-1.5">${WORDMARK}</text>
+    <text x="96" y="394" font-size="34" font-weight="400" fill="${CARD.muted}">${TAGLINE}</text>
+    <text x="96" y="536" font-size="22" font-weight="500" fill="${CARD.brand}" letter-spacing="1.2">${KICKER}</text>
+  </g>
+  <rect x="96" y="430" width="132" height="3" rx="1.5" fill="${CARD.brand}" opacity="0.85"/>
+</svg>`)
+}
 
 async function renderLogo(size: number): Promise<Buffer> {
   // density scales the SVG before rasterizing; without it a 1000x1000 viewBox renders soft.
@@ -33,7 +82,11 @@ async function renderLogo(size: number): Promise<Buffer> {
 }
 
 async function writeOpenGraphCard(): Promise<void> {
-  await sharp(socialCard()).png().toFile(join(publicRoot, "og.png"))
+  const logo = await renderLogo(96)
+  await sharp(cardBackground())
+    .composite([{ input: logo, top: 96, left: 96 }])
+    .png()
+    .toFile(join(publicRoot, "og.png"))
   writeFileSync(join(publicRoot, "media", "task-coordination-en.svg"), coordinationDiagram("root"))
   writeFileSync(join(publicRoot, "media", "task-coordination-zh.svg"), coordinationDiagram("zh-cn"))
 }
@@ -61,8 +114,8 @@ function writeWebManifest(): void {
     description: TAGLINE,
     start_url: "/",
     display: "standalone",
-    background_color: MANIFEST_PAGE_COLOR,
-    theme_color: MANIFEST_PAGE_COLOR,
+    background_color: CARD.page,
+    theme_color: CARD.page,
     icons: [
       { src: "/web-app-manifest-192x192.png", sizes: "192x192", type: "image/png", purpose: "any" },
       { src: "/web-app-manifest-512x512.png", sizes: "512x512", type: "image/png", purpose: "any" },

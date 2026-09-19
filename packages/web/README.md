@@ -20,19 +20,21 @@ bun run --cwd packages/web check
 
 Do not recreate the retired `docs/product/**` tree; public product docs use this package as the single source.
 
-The compiled PoC paper is a self-contained static asset at `public/papers/opencorvus-poc.pdf`. Its localized homepage research link is in `OcLanding.astro` and is explicitly marked as work in progress. No LaTeX source or source-branch fetch is part of the website build.
+The compiled PoC paper is a self-contained static asset at `public/papers/opencorvus-poc.pdf`. Its localized homepage research link is in `OcResearchPaper.astro` and is explicitly marked as work in progress. No LaTeX source or source-branch fetch is part of the website build.
 
 ## Product story
 
 The English and Chinese homepages share `src/content/landing-copy.ts` and `OcLanding.astro`.
-The story leads with a concise product claim and a directed execution graph, then progressively
-explains specialization, continuity and review through the evidence-bounded tank-game case.
-Download targets still come from the release manifest through
-`OcDownload.astro`. Documentation composition examples retain their own shared catalog projection.
+The original hero/terminal, demo, benchmark, long-horizon, composition, evolution, research,
+catalog and setup sections retain their order and visual system. A supporting tank-game graph
+follows the long-horizon section. Download targets come from the release manifest through
+`OcLanding.astro`; its outside-click boundary and viewport-aware menu placement are retained.
+Homepage and documentation composition examples share copy and the same catalog projection.
 
 `src/lib/execution-graph.ts` owns the role nodes, directed handoff edges and correction loops shared
-by the homepage and `script/coordination-artwork.ts`. The latter renders bilingual workflow SVGs and
-the social preview through the existing `brand:assets` command. These are illustrations, not product
+by the homepage and `script/coordination-artwork.ts`, with labels in `execution-copy.ts`.
+The latter renders bilingual workflow SVGs through `brand:assets`. The social preview retains
+the original logo and gradient design. The graphs are illustrations, not product
 screenshots. The case's game screenshot is retained original evidence. See
 [the evidence bundle](../../specs/artifacts/2026-09-19-task-coordination/README.md).
 

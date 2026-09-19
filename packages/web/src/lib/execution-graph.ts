@@ -1,4 +1,4 @@
-import { landingCopy } from "../content/landing-copy"
+import { executionCopy } from "../content/execution-copy"
 import type { PublicLocale } from "../content/public-market"
 
 const esc = (value: string) =>
@@ -43,7 +43,7 @@ const edges = [
 ] as const
 
 export function executionGraph(locale: PublicLocale, id = "execution"): string {
-  const c = landingCopy[locale]
+  const c = executionCopy[locale]
   const zh = locale === "zh-cn"
   const normal = edges
     .map((edge) => `<path data-from="${edge.from}" data-to="${edge.to}" d="${edge.d}" marker-end="url(#${id}-arrow)"/>`)
@@ -53,7 +53,7 @@ export function executionGraph(locale: PublicLocale, id = "execution"): string {
       const width = "width" in node ? node.width : 162
       const active = node.id === "implementation"
       const end = node.id === "delivery"
-      const label = end ? (zh ? "交付汇总" : "Delivery") : c.map.stages[node.stage].roles[node.role]
+      const label = end ? (zh ? "交付汇总" : "Delivery") : c.roles[node.stage][node.role]!
       const sub = active ? (zh ? "实现与集成" : "Build & integrate") : end ? (zh ? "编排器" : "Orchestrator") : ""
       return `<g data-node="${node.id}" transform="translate(${node.x} ${node.y})">
       <rect width="${width}" height="62" rx="14" fill="${active ? "#365bed" : end ? "#ecf6f1" : "#ffffff"}" stroke="${active ? "#365bed" : end ? "#a8caba" : "#dbe0e9"}"/>
@@ -64,7 +64,7 @@ export function executionGraph(locale: PublicLocale, id = "execution"): string {
     })
     .join("")
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 590" width="1290" height="590" role="img" aria-labelledby="${id}-title ${id}-desc">
-    <title id="${id}-title">${esc(c.map.label)}</title>
+    <title id="${id}-title">${esc(c.label)}</title>
     <desc id="${id}-desc">${esc(zh ? "意图、需求与调研汇合至架构；架构分派界面设计与工作量复核；设计进入实现；实现分支到测试和界面复核；系统审查与界面复核汇合交付。两条琥珀色返工边从复核返回实现。" : "Intent, requirements and research join at architecture, then branch into design and workload review. Implementation branches into testing and interface review. System and interface reviews join at delivery. Two amber repair edges return to implementation.")}</desc>
     <defs>
       <marker id="${id}-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 9 5 1 9" fill="none" stroke="#8193ba" stroke-width="1.5"/></marker>
@@ -74,7 +74,7 @@ export function executionGraph(locale: PublicLocale, id = "execution"): string {
     <rect width="1290" height="590" rx="24" fill="#f7f9fd"/>
     <ellipse cx="750" cy="290" rx="350" ry="260" fill="url(#${id}-wash)"/>
     <g font-family="Arial, Microsoft YaHei, Noto Sans CJK SC, sans-serif">
-      <text x="37" y="42" font-size="13" fill="#68778f" letter-spacing="1">${esc(c.map.badge)}</text>
+      <text x="37" y="42" font-size="13" fill="#68778f" letter-spacing="1">${esc(c.badge)}</text>
       <text x="1254" y="42" text-anchor="end" font-size="12" fill="#68778f">${esc(zh ? "角色与修正主题据任务记录；连线为工作流示意，返工起点不代表事件归因。" : "Roles and repairs from task records. Workflow edges are illustrative; repair origins are not event attribution.")}</text>
       <g fill="none" stroke="#8193ba" stroke-width="1.7">${normal}</g>
       <g fill="none" stroke="#ba8649" stroke-width="1.7" stroke-dasharray="5 4">

@@ -1,0 +1,414 @@
+---
+import type { LandingCopy } from "../content/landing-copy"
+import { automationBenchmarkFacts as facts } from "../content/landing-benchmark"
+
+type Props = {
+  copy: LandingCopy["benchmark"]
+}
+
+const { copy } = Astro.props
+const percent = (value: number) => `${value.toFixed(2)}%`
+const project = (value: string) => value
+  .replaceAll("{cases}", String(facts.evaluatedCases))
+  .replaceAll("{baseline}", percent(facts.baselineStrictPassRate))
+  .replaceAll("{current}", percent(facts.missionStrictPassRate))
+---
+
+<section class="oc-section-tight oc-anchor oc-benchmark" id="benchmark">
+  <div class="oc-container">
+    <p class="oc-eyebrow oc-reveal">{copy.eyebrow}</p>
+    <h2 class="oc-text-h1 oc-cjk-spacing oc-section-title oc-reveal">{project(copy.title)}</h2>
+    <p class="oc-text-body oc-text-description oc-section-lead oc-reveal">{project(copy.lead)}</p>
+
+    <div class="oc-benchmark-panel oc-reveal">
+      <header class="oc-benchmark-meta">
+        <div>
+          <p class="oc-benchmark-kicker">{facts.benchmark} · {copy.strictMetric}</p>
+          <h3 class="oc-text-subtitle oc-cjk-spacing">{facts.system}</h3>
+        </div>
+        <span class="oc-benchmark-model">{facts.model}</span>
+      </header>
+
+      <div class="oc-benchmark-result">
+        <div class="oc-benchmark-score oc-benchmark-score-baseline">
+          <span class="oc-text-xs oc-text-description">{copy.baselineLabel}</span>
+          <strong>{percent(facts.baselineStrictPassRate)}</strong>
+          <span class="oc-text-caption oc-text-description">{copy.baselineDetail}</span>
+        </div>
+
+        <div class="oc-benchmark-change" aria-hidden="true">
+          <span class="oc-benchmark-change-line"></span>
+          <span class="oc-benchmark-change-value">+{facts.percentagePointLift.toFixed(2)} pp</span>
+          <span class="oc-benchmark-change-arrow">→</span>
+        </div>
+
+        <div class="oc-benchmark-score oc-benchmark-score-current">
+          <span class="oc-text-xs">{copy.currentLabel}</span>
+          <strong>{percent(facts.missionStrictPassRate)}</strong>
+          <span class="oc-text-caption">{project(copy.currentDetail)}</span>
+        </div>
+      </div>
+
+      <div
+        class="oc-benchmark-track"
+        role="img"
+        aria-label={project(copy.trackLabel)}
+      >
+        <span class="oc-benchmark-track-current" style={`--oc-benchmark-width: ${facts.missionStrictPassRate}%`}></span>
+        <span class="oc-benchmark-track-baseline" style={`--oc-benchmark-left: ${facts.baselineStrictPassRate}%`}></span>
+      </div>
+
+      <dl class="oc-benchmark-facts">
+        <div>
+          <dt>{copy.casesLabel}</dt>
+          <dd>{facts.evaluatedCases}</dd>
+          <dd class="oc-benchmark-fact-detail">{copy.casesDetail}</dd>
+        </div>
+        <div>
+          <dt>{copy.deltaLabel}</dt>
+          <dd>+{facts.percentagePointLift.toFixed(2)} <small>pp</small></dd>
+          <dd class="oc-benchmark-fact-detail">{copy.deltaDetail}</dd>
+        </div>
+        <div>
+          <dt>{copy.multiplierLabel}</dt>
+          <dd>{facts.relativeLift.toFixed(2)}×</dd>
+          <dd class="oc-benchmark-fact-detail">{copy.multiplierDetail}</dd>
+        </div>
+      </dl>
+
+      <div class="oc-benchmark-reference">
+        <div class="oc-benchmark-reference-head">
+          <div>
+            <p class="oc-eyebrow">{copy.referenceEyebrow}</p>
+            <h4 class="oc-text-title oc-cjk-spacing">{copy.referenceTitle}</h4>
+          </div>
+          <span>{copy.notRanking}</span>
+        </div>
+        <ul>
+          {facts.officialReferences.map((reference) => (
+            <li>
+              <span class="oc-benchmark-reference-model">{reference.model}</span>
+              <span class="oc-benchmark-reference-bar" aria-hidden="true">
+                <span style={`--oc-reference-width: ${reference.strictPassRate}%`}></span>
+              </span>
+              <strong>{percent(reference.strictPassRate)}</strong>
+            </li>
+          ))}
+        </ul>
+        <p class="oc-text-xs oc-text-description oc-benchmark-note">{project(copy.note)}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .oc-benchmark-panel {
+    position: relative;
+    margin-top: var(--oc-space-7);
+    padding: var(--oc-space-6);
+    overflow: hidden;
+    border: 1px solid var(--oc-color-border-default);
+    border-radius: var(--oc-radius-card);
+    background: var(--oc-color-bg-overlay);
+    box-shadow: var(--oc-shadow-card);
+  }
+
+  .oc-benchmark-panel::before {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 3px;
+    background: var(--oc-color-brand);
+    content: "";
+  }
+
+  .oc-benchmark-meta,
+  .oc-benchmark-reference-head {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--oc-space-4);
+    align-items: flex-start;
+  }
+
+  .oc-benchmark-meta h3,
+  .oc-benchmark-reference-head h4,
+  .oc-benchmark-kicker,
+  .oc-benchmark-reference-head p {
+    margin: 0;
+  }
+
+  .oc-benchmark-kicker {
+    margin-bottom: var(--oc-space-2);
+    color: var(--oc-color-brand);
+    font-family: var(--oc-font-mono);
+    font-size: 13px;
+    font-weight: 650;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .oc-benchmark-model,
+  .oc-benchmark-reference-head > span {
+    flex: none;
+    padding: var(--oc-space-2) var(--oc-space-3);
+    border: 1px solid var(--oc-color-border-default);
+    border-radius: var(--oc-radius-pill);
+    color: var(--oc-color-text-secondary);
+    background: var(--oc-color-bg-surface-3);
+    font-family: var(--oc-font-mono);
+    font-size: 13px;
+  }
+
+  .oc-benchmark-result {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(130px, 0.65fr) minmax(0, 1fr);
+    gap: var(--oc-space-4);
+    align-items: stretch;
+    margin-top: var(--oc-space-6);
+  }
+
+  .oc-benchmark-score {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--oc-space-5);
+    border-radius: var(--oc-radius-panel);
+  }
+
+  .oc-benchmark-score strong {
+    margin-block: var(--oc-space-2);
+    font-family: var(--oc-font-display);
+    font-size: clamp(2.7rem, 6vw, 5.6rem);
+    font-weight: 730;
+    letter-spacing: -0.06em;
+    line-height: 0.94;
+  }
+
+  .oc-benchmark-score-baseline {
+    border: 1px solid var(--oc-color-border-subtle);
+    background: var(--oc-color-bg-surface-3);
+  }
+
+  .oc-benchmark-score-baseline strong {
+    color: var(--oc-color-text-secondary);
+  }
+
+  .oc-benchmark-score-current {
+    border: 1px solid var(--oc-color-brand);
+    color: var(--oc-color-bg-page);
+    background: var(--oc-color-bg-contrast);
+  }
+
+  .oc-benchmark-score-current span {
+    color: currentColor;
+    opacity: 0.78;
+  }
+
+  .oc-benchmark-change {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 1fr auto 1fr;
+    gap: var(--oc-space-2);
+    align-items: center;
+    color: var(--oc-color-brand);
+  }
+
+  .oc-benchmark-change-line {
+    grid-column: 1 / -1;
+    align-self: end;
+    height: 1px;
+    background: var(--oc-color-border-strong);
+  }
+
+  .oc-benchmark-change-value {
+    font-family: var(--oc-font-mono);
+    font-size: 19px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .oc-benchmark-change-arrow {
+    font-size: 1.65rem;
+    line-height: 1;
+  }
+
+  .oc-benchmark-track {
+    position: relative;
+    height: var(--oc-space-3);
+    margin-top: var(--oc-space-5);
+    overflow: hidden;
+    border-radius: var(--oc-radius-pill);
+    background: var(--oc-color-bg-surface-5);
+  }
+
+  .oc-benchmark-track-current {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--oc-benchmark-width);
+    border-radius: inherit;
+    background: var(--oc-color-brand);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .oc-benchmark-panel[data-revealed="true"] .oc-benchmark-track-current {
+    animation: oc-benchmark-grow 850ms cubic-bezier(0.2, 0.75, 0.25, 1) 180ms forwards;
+  }
+
+  .oc-benchmark-track-baseline {
+    position: absolute;
+    top: 50%;
+    left: var(--oc-benchmark-left);
+    width: 3px;
+    height: var(--oc-space-5);
+    border-radius: var(--oc-radius-pill);
+    background: var(--oc-color-accent);
+    transform: translate(-50%, -50%);
+  }
+
+  .oc-benchmark-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--oc-space-3);
+    margin: var(--oc-space-4) 0 0;
+  }
+
+  .oc-benchmark-facts > div {
+    padding: var(--oc-space-4);
+    border: 1px solid var(--oc-color-border-subtle);
+    border-radius: var(--oc-radius-panel);
+    background: var(--oc-color-bg-surface-3);
+  }
+
+  .oc-benchmark-facts dt,
+  .oc-benchmark-fact-detail {
+    margin: 0;
+    color: var(--oc-color-text-description);
+    font-size: 13px;
+  }
+
+  .oc-benchmark-facts dd:not(.oc-benchmark-fact-detail) {
+    margin: var(--oc-space-2) 0;
+    color: var(--oc-color-text-primary);
+    font-family: var(--oc-font-display);
+    font-size: clamp(1.65rem, 3vw, 2.45rem);
+    font-weight: 720;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .oc-benchmark-facts small {
+    font-family: var(--oc-font-mono);
+    font-size: 15px;
+    letter-spacing: 0;
+  }
+
+  .oc-benchmark-reference {
+    margin-top: var(--oc-space-6);
+    padding-top: var(--oc-space-5);
+    border-top: 1px solid var(--oc-color-border-subtle);
+  }
+
+  .oc-benchmark-reference ul {
+    display: grid;
+    gap: var(--oc-space-3);
+    margin: var(--oc-space-4) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .oc-benchmark-reference li {
+    display: grid;
+    grid-template-columns: minmax(170px, 0.75fr) minmax(180px, 1.4fr) 5rem;
+    gap: var(--oc-space-4);
+    align-items: center;
+  }
+
+  .oc-benchmark-reference-model {
+    color: var(--oc-color-text-secondary);
+    font-size: 15px;
+  }
+
+  .oc-benchmark-reference-bar {
+    height: var(--oc-space-2);
+    overflow: hidden;
+    border-radius: var(--oc-radius-pill);
+    background: var(--oc-color-bg-surface-5);
+  }
+
+  .oc-benchmark-reference-bar > span {
+    display: block;
+    width: var(--oc-reference-width);
+    height: 100%;
+    border-radius: inherit;
+    background: var(--oc-color-brand-light);
+  }
+
+  .oc-benchmark-reference li strong {
+    color: var(--oc-color-text-primary);
+    font-family: var(--oc-font-mono);
+    font-size: 15px;
+    text-align: right;
+  }
+
+  .oc-benchmark-note {
+    margin: var(--oc-space-4) 0 0;
+  }
+
+  @keyframes oc-benchmark-grow {
+    to { transform: scaleX(1); }
+  }
+
+  @media (max-width: 760px) {
+    .oc-benchmark-panel {
+      padding: var(--oc-space-5);
+    }
+
+    .oc-benchmark-result {
+      grid-template-columns: 1fr;
+    }
+
+    .oc-benchmark-change {
+      grid-template-columns: auto 1fr auto;
+      grid-template-rows: auto;
+    }
+
+    .oc-benchmark-change-line {
+      grid-column: auto;
+      align-self: center;
+    }
+
+    .oc-benchmark-facts {
+      grid-template-columns: 1fr;
+    }
+
+    .oc-benchmark-reference li {
+      grid-template-columns: minmax(0, 1fr) 4.5rem;
+      gap: var(--oc-space-2) var(--oc-space-3);
+    }
+
+    .oc-benchmark-reference-bar {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .oc-benchmark-meta,
+    .oc-benchmark-reference-head {
+      flex-direction: column;
+    }
+
+    .oc-benchmark-model,
+    .oc-benchmark-reference-head > span {
+      white-space: normal;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oc-benchmark-panel[data-revealed="true"] .oc-benchmark-track-current {
+      animation: none;
+      transform: none;
+    }
+  }
+</style>
