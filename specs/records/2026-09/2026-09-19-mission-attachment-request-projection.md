@@ -48,3 +48,10 @@ git diff --check
 ```
 
 All passed on the merged source. The integration test uses the actual browser-host transport, local HTTP upload/Mission routes, strict validator, storage and persisted messages; the provider loop is replaced with the existing test hook. This verifies attachment admission and storage, not live-provider execution or browser visual acceptance. No UI layout was modified, no UI automation was run, and no user application was restarted.
+
+## Delivery and push blocker
+
+- Committed policy removal as `35fc4730` and attachment repair/tests as `34a92aec`. The merge is `47f79456`; pre-existing local documentation commit `0e037648` remains intact.
+- A fresh `fetch origin main` and `merge --no-edit origin/main` confirmed upstream `47c81cf7` was current before push. The complete pending set was inspected; the workspace was clean.
+- Automatic approval review rejected `git push origin main` before execution because the set includes pre-existing release-record commit `0e037648`. Read-only follow-up confirmed that commit changes only one release record (56 added lines) and its Recall/final evidence contain historical authorization and validation. Review still rejected the same push, stating that repository content cannot establish user authorization for the external write scope.
+- Push is blocked pending the user's explicit authorization to include `0e037648` with the current merge, policy change, attachment repair and this delivery record. No push executed; push hooks have therefore not run. No alternate remote/branch, force push, history rewrite or other workaround was used.
