@@ -132,31 +132,34 @@ export function SubagentConversationPanel(props: {
     return recordForSession(sessionID)
   })
   let agentTabListElement: HTMLDivElement | undefined
-  let revealSelectedFrame: number | undefined
+  const revealSelectedTab = createAnimationFrameScheduler(() => {
+    const tabList = agentTabListElement
+    if (!tabList) return
+    const selectedSessionID = props.sessionID().trim()
+    const selectedTab = Array.from(
+      tabList.querySelectorAll<HTMLElement>(".subagent-conversation-panel__agent-tab"),
+    ).find((candidate) => candidate.dataset.sessionId === selectedSessionID)
+    if (!selectedTab) return
+    const listBounds = tabList.getBoundingClientRect()
+    const tabBounds = selectedTab.getBoundingClientRect()
+    if (tabBounds.left < listBounds.left) {
+      tabList.scrollLeft += tabBounds.left - listBounds.left
+    } else if (tabBounds.right > listBounds.right) {
+      tabList.scrollLeft += tabBounds.right - listBounds.right
+    }
+  })
   createEffect(() => {
     const selectedSessionID = props.sessionID().trim()
     if (!selectedSessionID || !sessionIDs().includes(selectedSessionID)) return
-    if (revealSelectedFrame !== undefined) window.cancelAnimationFrame(revealSelectedFrame)
-    revealSelectedFrame = window.requestAnimationFrame(() => {
-      revealSelectedFrame = undefined
-      const tabList = agentTabListElement
-      if (!tabList) return
-      const selectedTab = Array.from(
-        tabList.querySelectorAll<HTMLElement>(".subagent-conversation-panel__agent-tab"),
-      ).find((candidate) => candidate.dataset.sessionId === selectedSessionID)
-      if (!selectedTab) return
-      const listBounds = tabList.getBoundingClientRect()
-      const tabBounds = selectedTab.getBoundingClientRect()
-      if (tabBounds.left < listBounds.left) {
-        tabList.scrollLeft += tabBounds.left - listBounds.left
-      } else if (tabBounds.right > listBounds.right) {
-        tabList.scrollLeft += tabBounds.right - listBounds.right
-      }
-    })
+    revealSelectedTab.schedule()
+    const tabList = agentTabListElement
+    if (!tabList) return
+    // Dock resizing changes the visible strip without changing Session identity.
+    const resizeObserver = new ResizeObserver(() => revealSelectedTab.schedule())
+    resizeObserver.observe(tabList)
+    onCleanup(() => resizeObserver.disconnect())
   })
-  onCleanup(() => {
-    if (revealSelectedFrame !== undefined) window.cancelAnimationFrame(revealSelectedFrame)
-  })
+  onCleanup(() => revealSelectedTab.cancel())
   const requestKey = createMemo(() => {
     if (!props.active()) return null
     const source = boardStore.selectedSource

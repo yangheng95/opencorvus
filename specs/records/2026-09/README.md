@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Sub-agent dock stability and visual hierarchy](2026-09-19-subagent-dock-stability.md)
+
 - [README, website and blog content organization](2026-09-19-outcome-first-marketing.md)
 
 - [v0.1.3 stable release](2026-09-19-v0.1.3-release.md)

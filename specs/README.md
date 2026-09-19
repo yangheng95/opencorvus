@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Sub-agent dock stability and visual hierarchy](records/2026-09/2026-09-19-subagent-dock-stability.md).
+
 [README, website and blog content organization](records/2026-09/2026-09-19-outcome-first-marketing.md).
 
 [v0.1.3 stable release](records/2026-09/2026-09-19-v0.1.3-release.md).

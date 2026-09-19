@@ -79,6 +79,11 @@ The main progress grid, inner Agent selector, and Right Dock transcript remain
 presentations of one backend session/message stream rather than parallel
 frontend Agent lists or message stores.
 
+ConversationCard owns its bubble/card branch through a non-keyed boolean
+condition. A new selected-child transcript projection updates the mounted
+renderer through reactive props; object replacement is not a reason to
+recreate the entire bubble and its streaming Markdown controllers.
+
 Both the main Conversation and selected Agent transcript use the same explicit
 content-change follow controller. A canonical transcript revision and the
 controller's one native `ResizeObserver` over its current direct content boxes
@@ -92,7 +97,7 @@ masquerade as manual upward scrolling regardless of event order. Reaching the
 bottom re-arms follow mode.
 
 Selected-Agent visibility is owned only by the horizontal Agent tab strip.
-The strip reacts to the selected Session identity and ordered Session-ID set,
+The strip reacts to its viewport size, selected Session identity and ordered Session-ID set,
 then changes its own `scrollLeft` just enough to reveal that tab. Live activity,
 status, target-message, and timestamp updates must not call
 `Element.scrollIntoView()` or write any ancestor's vertical scroll position,
