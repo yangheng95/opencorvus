@@ -236,9 +236,7 @@ describe.serial("Provider OAuth flow occurrence", () => {
     )
 
     const first = await ProviderAuth.authorize({ providerID: PROVIDER, method: 0, scope: "global" })
-    await expect(ProviderAuth.authorize({ providerID: PROVIDER, method: 0, scope: "global" })).rejects.toThrow(
-      ProviderOAuthFlowStore.ExchangeActiveError,
-    )
+    expect(await ProviderAuth.authorize({ providerID: PROVIDER, method: 0, scope: "global" })).toEqual(first)
     expect(await ProviderOAuthFlowStore.get(first.flowID)).toMatchObject({
       state: "pending",
       exchangeOwnerID: expect.any(String),
@@ -555,13 +553,16 @@ describe.serial("Provider OAuth flow occurrence", () => {
         expired: expect.objectContaining({ state: "failed" }),
         replacement: expect.objectContaining({ state: "pending", exchangeOwnerID: expect.any(String) }),
       })
-      await phase("replacement callback completes", ProviderAuth.callback({
-        providerID: PROVIDER,
-        method: 0,
-        code: "replacement",
-        flowID: replacement.flowID,
-        scope: "global",
-      }))
+      await phase(
+        "replacement callback completes",
+        ProviderAuth.callback({
+          providerID: PROVIDER,
+          method: 0,
+          code: "replacement",
+          flowID: replacement.flowID,
+          scope: "global",
+        }),
+      )
     } finally {
       releaseDisposal()
     }
@@ -1661,3 +1662,100 @@ describe.serial("Provider OAuth flow occurrence", () => {
     }
   }, 30_000)
 })
+
+for (const scope of ["global", "project"] as const) {
+  test(`${scope} pending cancellation releases the exact executor and permits a fresh authorization`, async () => {
+    let disposed = 0
+    const hooks = oauthHook({
+      onCallback: async () => ({ type: "success", key: "cancel-successor" }),
+      onDispose: () => {
+        disposed++
+      },
+    })
+    using _hooks =
+      scope === "global"
+        ? ProviderAuth.TestHooks.installGlobalAuthHooksForTest(hooks)
+        : ProviderAuth.TestHooks.installProjectAuthHooksForTest(hooks)
+    const first = await ProviderAuth.authorize({ providerID: PROVIDER, method: 0, scope })
+    const input = { providerID: PROVIDER, method: 0, scope, flowID: first.flowID }
+    expect(await ProviderAuth.cancel(input)).toEqual({ ok: true })
+    expect(await ProviderAuth.cancel(input)).toEqual({ ok: true })
+    expect({ disposed, flow: await ProviderOAuthFlowStore.get(first.flowID) }).toEqual({
+      disposed: 1,
+      flow: expect.objectContaining({ state: "failed" }),
+    })
+    const next = await ProviderAuth.authorize({ providerID: PROVIDER, method: 1, scope })
+    await ProviderAuth.callback({ providerID: PROVIDER, method: 1, scope, flowID: next.flowID, code: "new" })
+    expect((await ProviderOAuthFlowStore.get(next.flowID))?.state).toBe("consumed")
+    expect(await Auth.get(PROVIDER)).toEqual({ type: "api", key: "cancel-successor" })
+  })
+
+  test(`${scope} auto re-entry observes one active exchange while cancellation returns its typed conflict`, async () => {
+    let calls = 0
+    let prepared = 0
+    let disposed = 0
+    const started = Promise.withResolvers<void>()
+    const release = Promise.withResolvers<void>()
+    const hooks = [
+      {
+        auth: {
+          provider: PROVIDER,
+          methods: [
+            {
+              type: "oauth",
+              label: "Auto",
+              authorize: async () => {
+                prepared++
+                return {
+                  url: "https://auth.example.test/auto",
+                  instructions: "Continue",
+                  method: "auto",
+                  dispose: async () => {
+                    disposed++
+                  },
+                  callback: async () => {
+                    calls++
+                    started.resolve()
+                    await release.promise
+                    return { type: "success", key: "auto-shared" }
+                  },
+                }
+              },
+            },
+          ],
+        },
+      },
+    ] as never
+    using _hooks =
+      scope === "global"
+        ? ProviderAuth.TestHooks.installGlobalAuthHooksForTest(hooks)
+        : ProviderAuth.TestHooks.installProjectAuthHooksForTest(hooks)
+    const first = await ProviderAuth.authorize({ providerID: PROVIDER, method: 0, scope })
+    const input = { providerID: PROVIDER, method: 0, scope, flowID: first.flowID }
+    const completion = ProviderAuth.callback(input)
+    await started.promise
+    try {
+      expect(await ProviderAuth.authorize({ providerID: PROVIDER, method: 0, scope })).toEqual(first)
+      await expect(ProviderAuth.cancel(input)).rejects.toThrow(ProviderOAuthFlowStore.ExchangeActiveError)
+      const observer = ProviderAuth.callback(input)
+      release.resolve()
+      await Promise.all([completion, observer])
+      expect({
+        calls,
+        prepared,
+        disposed,
+        flow: await ProviderOAuthFlowStore.get(first.flowID),
+        credential: await Auth.get(PROVIDER),
+      }).toEqual({
+        calls: 1,
+        prepared: 1,
+        disposed: 1,
+        flow: expect.objectContaining({ state: "consumed" }),
+        credential: { type: "api", key: "auto-shared" },
+      })
+    } finally {
+      release.resolve()
+      await completion
+    }
+  })
+}

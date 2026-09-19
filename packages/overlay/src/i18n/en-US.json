@@ -379,6 +379,8 @@
   "provider.search.placeholder": "Search visible provider details...",
   "provider.search.count": "{{shown}} / {{total}} shown",
   "provider.search.no_results": "No providers match \"{{query}}\".",
+  "provider.auth.in_progress": "Another authorization is already in progress. Complete it in the browser, or wait for it to expire before trying again.",
+  "llm.auth_open_failed": "Could not open the authorization page. Please try again.",
   "provider.auth.failed": "Authentication failed: {{reason}}",
   "provider.test.button": "Test",
   "provider.test.button_title": "Send a minimal test request to verify the API key + model are reachable.",

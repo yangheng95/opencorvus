@@ -379,6 +379,8 @@
   "provider.search.placeholder": "搜索页面中显示的 Provider 信息...",
   "provider.search.count": "显示 {{shown}} / {{total}}",
   "provider.search.no_results": "没有匹配 \"{{query}}\" 的 Provider。",
+  "provider.auth.in_progress": "已有另一个授权流程正在进行。请在浏览器中完成授权，或等待该流程过期后重试。",
+  "llm.auth_open_failed": "无法打开授权页面，请重试。",
   "provider.auth.failed": "认证失败：{{reason}}",
   "provider.test.button": "测试",
   "provider.test.button_title": "发送最小测试请求验证 API key 与模型可用性。",

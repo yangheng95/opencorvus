@@ -259,6 +259,8 @@ import type {
   GlobalProvidersOauthAuthorizeResponses,
   GlobalProvidersOauthCallbackErrors,
   GlobalProvidersOauthCallbackResponses,
+  GlobalProvidersOauthCancelErrors,
+  GlobalProvidersOauthCancelResponses,
   GlobalProvidersRefreshResponses,
   GlobalProvidersRemoveErrors,
   GlobalProvidersRemoveResponses,
@@ -421,6 +423,8 @@ import type {
   ProviderOauthAuthorizeResponses,
   ProviderOauthCallbackErrors,
   ProviderOauthCallbackResponses,
+  ProviderOauthCancelErrors,
+  ProviderOauthCancelResponses,
   ProviderRefreshResponses,
   ProviderRemoveErrors,
   ProviderRemoveResponses,
@@ -6397,6 +6401,47 @@ export class Oauth extends HeyApiClient {
       },
     })
   }
+
+  /**
+   * Cancel pending Provider authorization
+   *
+   * Release the exact pending OAuth occurrence before credential exchange starts.
+   */
+  public cancel<ThrowOnError extends boolean = false>(
+    parameters: {
+      providerID: string
+      flowID: string
+      method: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "providerID" },
+            { in: "body", key: "flowID" },
+            { in: "body", key: "method" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<
+      GlobalProvidersOauthCancelResponses,
+      GlobalProvidersOauthCancelErrors,
+      ThrowOnError
+    >({
+      url: "/global/providers/{providerID}/oauth/cancel",
+      ...options,
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
+    })
+  }
 }
 
 export class Providers extends HeyApiClient {
@@ -10903,6 +10948,47 @@ export class Oauth2 extends HeyApiClient {
         ...params.headers,
       },
     })
+  }
+
+  /**
+   * Cancel pending Provider authorization
+   *
+   * Release the exact pending OAuth occurrence before credential exchange starts.
+   */
+  public cancel<ThrowOnError extends boolean = false>(
+    parameters: {
+      providerID: string
+      directory?: string
+      flowID: string
+      method: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "providerID" },
+            { in: "query", key: "directory" },
+            { in: "body", key: "flowID" },
+            { in: "body", key: "method" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<ProviderOauthCancelResponses, ProviderOauthCancelErrors, ThrowOnError>(
+      {
+        url: "/provider/{providerID}/oauth/cancel",
+        ...options,
+        ...params,
+        headers: {
+          "Content-Type": "application/json",
+          ...options?.headers,
+          ...params.headers,
+        },
+      },
+    )
   }
 }
 

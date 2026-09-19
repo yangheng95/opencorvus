@@ -101,7 +101,10 @@ export async function handlePluginAuth(
         message: "Paste the authorization code here: ",
         validate: (x) => (x && x.length > 0 ? undefined : "Required"),
       })
-      if (promptRuntime.isCancel(code)) throw new UI.CancelledError()
+      if (promptRuntime.isCancel(code)) {
+        await ProviderAuth.cancel({ providerID: provider, method: index, flowID: authorization.flowID })
+        throw new UI.CancelledError()
+      }
       await ProviderAuth.callback({
         providerID: provider,
         method: index,

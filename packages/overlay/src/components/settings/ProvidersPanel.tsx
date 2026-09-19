@@ -335,7 +335,12 @@ export default function ProvidersPanel() {
         })
       }
     } catch (e) {
-      setFormError(t("provider.auth.failed", { reason: describeFailure(e) }))
+      const body = e instanceof ApiError ? e.body : undefined
+      setFormError(
+        body && typeof body === "object" && "name" in body && body.name === "ProviderAuthOAuthExchangeActiveError"
+          ? t("provider.auth.in_progress")
+          : t("provider.auth.failed", { reason: describeFailure(e) }),
+      )
     } finally {
       setAuthing((prev) => {
         const next = new Set(prev)
