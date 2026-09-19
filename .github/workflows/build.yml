@@ -12,6 +12,10 @@ on:
       expected_source_sha:
         description: "Exact commit SHA already reviewed and pushed for this release."
         required: true
+      deploy_website:
+        description: "Deploy the public website after publishing native binaries."
+        type: boolean
+        default: false
 
 concurrency:
   group: opencorvus-release-publication
@@ -508,7 +512,7 @@ jobs:
         run: bun ./script/settle-desktop-update-channel.ts
 
       - name: Dispatch public download page deployment
-        if: ${{ steps.update-channel.outputs.promoted == 'true' }}
+        if: ${{ inputs.deploy_website && steps.update-channel.outputs.promoted == 'true' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ needs.prepare.outputs.version }}

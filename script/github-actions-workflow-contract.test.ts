@@ -265,7 +265,7 @@ describe("GitHub Actions workflow contract", () => {
     const dispatch = publicationSteps.find(
       (step: { name?: string }) => step.name === "Dispatch public download page deployment",
     )
-    expect(dispatch.if).toBe("${{ steps.update-channel.outputs.promoted == 'true' }}")
+    expect(dispatch.if).toBe("${{ inputs.deploy_website && steps.update-channel.outputs.promoted == 'true' }}")
     expect(dispatch.env?.SOURCE_SHA).toBe("${{ needs.prepare.outputs.source-sha }}")
     expect(dispatch.run).toContain("client_payload[source_sha]=$SOURCE_SHA")
   })
@@ -285,6 +285,11 @@ describe("GitHub Actions workflow contract", () => {
           expected_source_sha: {
             description: "Exact commit SHA already reviewed and pushed for this release.",
             required: true,
+          },
+          deploy_website: {
+            description: "Deploy the public website after publishing native binaries.",
+            type: "boolean",
+            default: false,
           },
         },
       },
@@ -468,7 +473,7 @@ describe("GitHub Actions workflow contract", () => {
       jobs["publish-release"]?.steps?.find(({ name }) => name === "Dispatch public download page deployment"),
     ).toEqual({
       name: "Dispatch public download page deployment",
-      if: "${{ steps.update-channel.outputs.promoted == 'true' }}",
+      if: "${{ inputs.deploy_website && steps.update-channel.outputs.promoted == 'true' }}",
       env: {
         GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
         VERSION: "${{ needs.prepare.outputs.version }}",
@@ -600,6 +605,11 @@ describe("GitHub Actions workflow contract", () => {
           expected_source_sha: {
             description: "Exact commit SHA already reviewed and pushed for this release.",
             required: true,
+          },
+          deploy_website: {
+            description: "Deploy the public website after publishing native binaries.",
+            type: "boolean",
+            default: false,
           },
         },
       },
