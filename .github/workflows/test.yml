@@ -40,6 +40,30 @@ jobs:
           CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: bun ./script/ci-scope.ts
 
+  # The remote advisory service must not serialize local verification and tests.
+  # Its real result still participates in the final required check.
+  audit:
+    name: dependency audit
+    needs: changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: ci-audit-${{ needs.changes.outputs.scope }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Setup Bun
+        uses: ./.github/actions/setup-bun
+        with:
+          install_dependencies: "false"
+
+      - name: Audit locked dependencies
+        run: bun audit
+
   verify:
     name: verify
     needs: changes
@@ -65,9 +89,6 @@ jobs:
 
       - name: Scan tracked sources for credentials
         run: bun run script/secret-scan.ts
-
-      - name: Audit locked dependencies
-        run: bun audit
 
       - name: Verify documentation
         run: |
@@ -235,6 +256,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs:
+      - audit
       - verify
       - unit
       - services
@@ -243,12 +265,14 @@ jobs:
     steps:
       - name: Verify applicable checks passed
         env:
+          AUDIT: ${{ needs.audit.result }}
           VERIFY: ${{ needs.verify.result }}
           SCOPE: ${{ needs.verify.outputs.scope }}
           UNIT: ${{ needs.unit.result }}
           SERVICES: ${{ needs.services.result }}
           DEPENDENCY_REVIEW: ${{ needs.dependency-review.result }}
         run: |
+          test "$AUDIT" = success
           test "$VERIFY" = success
           case "$SCOPE" in
             code)

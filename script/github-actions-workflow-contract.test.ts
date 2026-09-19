@@ -104,18 +104,21 @@ describe("GitHub Actions workflow contract", () => {
         exit: 1,
       },
     ]) {
-      const result = Bun.spawnSync([bash, "-e", "-c", checker!], {
-        env: {
-          ...process.env,
-          VERIFY: input.verify,
-          SCOPE: input.scope,
-          UNIT: input.unit,
-          SERVICES: input.services,
-          GITHUB_EVENT_NAME: input.event,
-          DEPENDENCY_REVIEW: input.review,
-        },
-      })
-      expect(result.exitCode).toBe(input.exit)
+      for (const audit of ["success", "failure", "cancelled", "skipped"]) {
+        const result = Bun.spawnSync([bash, "-e", "-c", checker!], {
+          env: {
+            ...process.env,
+            AUDIT: audit,
+            VERIFY: input.verify,
+            SCOPE: input.scope,
+            UNIT: input.unit,
+            SERVICES: input.services,
+            GITHUB_EVENT_NAME: input.event,
+            DEPENDENCY_REVIEW: input.review,
+          },
+        })
+        expect(result.exitCode).toBe(audit === "success" ? input.exit : 1)
+      }
     }
   })
 
@@ -124,7 +127,6 @@ describe("GitHub Actions workflow contract", () => {
     const steps = ci.jobs?.verify?.steps ?? []
     expect(steps.map(({ run }) => run).filter(Boolean)).toEqual([
       "bun run script/secret-scan.ts",
-      "bun audit",
       "bun run docs:check\nbun run check:architecture-index\n",
       "bun ./script/sync-version.ts --check\nbun ./script/generate.ts\nbun ./script/generated-artifacts.ts --check-clean-worktree\n",
       "bun run typecheck",
@@ -132,6 +134,22 @@ describe("GitHub Actions workflow contract", () => {
       "sudo bash script/install-ubuntu-packages.sh ripgrep\n",
       "bun run --cwd packages/opencorvus build --single --skip-install",
     ])
+    expect(ci.jobs?.audit?.steps).toEqual([
+      {
+        name: "Checkout repository",
+        uses: "actions/checkout@v6",
+        with: { "persist-credentials": false },
+      },
+      {
+        name: "Setup Bun",
+        uses: "./.github/actions/setup-bun",
+        with: { install_dependencies: "false" },
+      },
+      { name: "Audit locked dependencies", run: "bun audit" },
+    ])
+    expect(ci.jobs?.required?.steps?.find(({ name }) => name === "Verify applicable checks passed")?.env?.AUDIT).toBe(
+      "${{ needs.audit.result }}",
+    )
     expect(ci.jobs?.unit?.steps?.find(({ name }) => name === "Run utility filesystem tests")?.run).toBe(
       "bun run --cwd packages/util test",
     )
@@ -265,6 +283,7 @@ describe("GitHub Actions workflow contract", () => {
       { file: "package-overlay.yml", job: "bundle-linux", uses: "actions/checkout@v6" },
       { file: "package-overlay.yml", job: "assemble-linux", uses: "actions/checkout@v6" },
       { file: "test.yml", job: "changes", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "audit", uses: "actions/checkout@v6" },
       { file: "test.yml", job: "verify", uses: "actions/checkout@v6" },
       { file: "test.yml", job: "unit", uses: "actions/checkout@v6" },
       { file: "test.yml", job: "services", uses: "actions/checkout@v6" },
@@ -722,7 +741,15 @@ describe("GitHub Actions workflow contract", () => {
     const releaseWorkflow = await readWorkflow("build.yml")
     const websiteWorkflow = await readWorkflow("deploy-opencorvus-com.yml")
 
-    expect(Object.keys(jobs).sort()).toEqual(["changes", "dependency-review", "required", "services", "unit", "verify"])
+    expect(Object.keys(jobs).sort()).toEqual([
+      "audit",
+      "changes",
+      "dependency-review",
+      "required",
+      "services",
+      "unit",
+      "verify",
+    ])
     expect(unitWorkflow.on).toEqual({
       push: { branches: ["main"] },
       pull_request: null,
@@ -742,12 +769,16 @@ describe("GitHub Actions workflow contract", () => {
       "${{ inputs.test_files != '' && 'selected unit' || 'unit' }} (${{ matrix.settings.name }})",
     )
     expect(jobs.required?.name).toBe("${{ inputs.test_files != '' && 'Selected CI passed' || 'CI passed' }}")
-    expect(jobs.required?.needs).toEqual(["verify", "unit", "services", "dependency-review"])
-    expect(jobs.verify?.concurrency).toEqual({
-      group:
-        "ci-verify-${{ needs.changes.outputs.scope }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}",
-      "cancel-in-progress": true,
-    })
+    expect(jobs.required?.needs).toEqual(["audit", "verify", "unit", "services", "dependency-review"])
+    for (const job of ["audit", "verify"]) {
+      expect(jobs[job]?.needs).toBe("changes")
+      expect(jobs[job]?.concurrency).toEqual({
+        group:
+          `ci-${job}-` +
+          "${{ needs.changes.outputs.scope }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}",
+        "cancel-in-progress": true,
+      })
+    }
     for (const [job, group] of [
       ["unit", "ci-unit-${{ matrix.settings.name }}"],
       ["services", "ci-services"],
@@ -758,6 +789,7 @@ describe("GitHub Actions workflow contract", () => {
       })
     }
     expect(jobs.unit?.needs).toBe("verify")
+    expect(jobs.services?.needs).toBe("verify")
     expect(jobs.unit?.if).toBe("needs.verify.outputs.scope == 'code'")
     expect(jobs.unit?.strategy).toEqual({
       "fail-fast": false,
