@@ -38,7 +38,7 @@ binary, the Tauri overlay desktop app, release CI, and local smoke packaging.
 | Script                                      | Role                                                                                                                                                            |
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `packages/overlay/script/build-overlay.ts`  | Developer-facing full overlay build. Runs i18n check, Vite build, SDK rebuild, `opencorvus --overlay-server` build, then `tauri build --no-bundle`.             |
-| `packages/overlay/script/build.ts`          | Release overlay build. Builds the overlay-server sidecar, builds Vite, cleans stale resources, and runs `tauri build --bundles` for platform installer outputs. |
+| `packages/overlay/script/build.ts`          | Release overlay phases: compile the embedded backend/frontend and Tauri executable, then bundle installers. `--no-bundle` compiles only; Linux `--bundle <deb|rpm|appimage>` consumes the retained executable without compiling. |
 | `packages/overlay/script/build-docker.ts`   | Linux overlay Docker builder. Requires prebuilt `opencorvus-overlay-server-linux-*` payloads and produces portable overlay directories.                         |
 | `packages/overlay/script/artifact-names.ts` | Single naming helper for overlay package, executable, and overlay-server sidecar names.                                                                         |
 | `packages/overlay/src-tauri/build.rs`       | Rust build script that archives the overlay-server payload as `embedded_sidecar.tar.gz` and emits an `include_bytes!` module.                                   |
@@ -57,7 +57,7 @@ It currently has these jobs:
 
 The canonical release publishes both portable CLI archives and Tauri GUI installers:
 
-- `package-overlay` invokes `package:gui-installer-matrix`, which owns SDK preparation, Vite and Overlay server compilation, native Tauri bundles, staging, naming, and validation.
+- `package-overlay` calls the shared `.github/workflows/package-overlay.yml` once per native host. The debug-only `build-overlays.yml` uses that same implementation (`linux_only=true` selects just the two Linux hosts). The matrix script owns SDK preparation, compilation, staging, naming and validation.
 - `script/check-release-assets.ts overlay --require-bundle --require-updater` verifies each staged executable, installer set, selected updater artifact, and updater signature before upload.
 - `package-cli` invokes `package:binary-matrix`, which owns native CLI compilation, complete runtime staging, smoke execution, archive creation, and archive verification.
 - `script/package-linux-binary.ts` remains the remote/container overlay-server bundle with embedded UI under `dist/binary/*`; it is not the public terminal CLI archive.
@@ -67,6 +67,22 @@ The canonical release publishes both portable CLI archives and Tauri GUI install
   GitHub Releases is the single binary distribution authority.
 
 ### CI transfer artifacts and public release assets
+
+Linux compilation runs once per architecture using `package:gui-installer-matrix --build-only`.
+It retains the `package-input` executable in a permission-preserving tar archive, and three
+independent native jobs consume that exact immutable Actions artifact ID to bundle DEB,
+RPM and AppImage in parallel. Each job has its own timer, a 90-minute bound and a retained
+format archive. RPM therefore does not hold up production of the other formats. This
+split isolates the slow stage; it does not change RPM compression or promise faster RPM.
+
+After all three formats succeed, assembly restores their archives and invokes
+`package:gui-installer-matrix --skip-build`, including the existing complete installer
+and updater-signature checker. The internal `gui-input-*` and `gui-bundle-*` artifacts
+are not release upload inputs. The final artifact remains `overlay-<platform>`.
+Use GitHub's failed-job retry on the inner format job to reuse the successful compile
+and other format artifacts; re-running the complete parent native workflow is a full
+rebuild. Transfers expire after seven days for release builds or three days for debug
+builds. Once expired, the native row must be rebuilt. Never mix artifacts from other runs.
 
 Each `package-overlay` and `package-cli` row uploads its whole validated staging directory as one
 short-lived GitHub Actions artifact. Its displayed byte count is the aggregate

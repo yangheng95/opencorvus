@@ -15,6 +15,9 @@ type WorkflowStep = {
 
 type WorkflowJob = {
   name?: string
+  uses?: string
+  with?: Record<string, unknown>
+  secrets?: Record<string, string>
   concurrency?: Record<string, unknown>
   if?: string
   needs?: string | string[]
@@ -40,33 +43,81 @@ async function readWorkflow(file: string): Promise<Workflow> {
 }
 
 describe("GitHub Actions workflow contract", () => {
+  test("shares one native overlay workflow with independent Linux format jobs and complete assembly", async () => {
+    const release = await readWorkflow("build.yml")
+    const debug = await readWorkflow("build-overlays.yml")
+    const overlay = await readWorkflow("package-overlay.yml")
+    expect([release.jobs?.["package-overlay"]?.uses, debug.jobs?.["build-overlay"]?.uses]).toEqual([
+      "./.github/workflows/package-overlay.yml",
+      "./.github/workflows/package-overlay.yml",
+    ])
+    const jobs = overlay.jobs!
+    expect(jobs["bundle-linux"]?.needs).toBe("build")
+    expect(jobs["bundle-linux"]?.strategy).toEqual({ "fail-fast": false, matrix: { kind: ["deb", "rpm", "appimage"] } })
+    expect(jobs.build?.outputs).toEqual({ "input-artifact-id": "${{ steps.input-upload.outputs.artifact-id }}" })
+    expect(jobs.build?.steps?.find(({ name }) => name === "Compile Linux installer input")?.run).toContain(
+      "package:gui-installer-matrix --build-only",
+    )
+    for (const job of ["bundle-linux", "assemble-linux"]) {
+      expect(jobs[job]?.steps?.find(({ uses }) => uses === "actions/download-artifact@v8")?.with).toEqual({
+        "artifact-ids": "${{ needs.build.outputs.input-artifact-id }}",
+        path: ".scratch/gui-input",
+        "merge-multiple": true,
+      })
+    }
+    expect(jobs["bundle-linux"]?.steps?.find(({ name }) => name === "Bundle one Linux format")?.run).toContain(
+      'script/build.ts --bundle "$BUNDLE_KIND"',
+    )
+    expect(jobs["bundle-linux"]?.steps?.find(({ uses }) => uses === "actions/upload-artifact@v7")?.with).toEqual({
+      name: "gui-bundle-${{ inputs.platform }}-${{ matrix.kind }}",
+      path: "gui-bundle-${{ matrix.kind }}.tar",
+      "if-no-files-found": "error",
+      "compression-level": 0,
+      overwrite: true,
+      "retention-days": "${{ inputs.retention-days }}",
+    })
+    expect(jobs["assemble-linux"]?.needs).toEqual(["build", "bundle-linux"])
+    expect(
+      jobs["assemble-linux"]?.steps?.find(({ name }) => name === "Assemble and validate complete installer row")?.run,
+    ).toContain("package:gui-installer-matrix --skip-build")
+    expect(jobs["assemble-linux"]?.steps?.find(({ uses }) => uses === "actions/upload-artifact@v7")?.with?.name).toBe(
+      "overlay-${{ inputs.platform }}",
+    )
+    expect(jobs.build?.steps?.find(({ name }) => name === "Verify version alignment")?.run).toBe(
+      'bun ./script/sync-version.ts ${VERSION:+"$VERSION"} --check',
+    )
+  })
+
   test("retains first-run evidence at the packaging runtime and stages the two package families", async () => {
     const release = await readWorkflow("build.yml")
     const build = await readWorkflow("build-check.yml")
-    const evidence = [
-      build.jobs?.["build-critical"],
-      release.jobs?.["package-overlay"],
-      release.jobs?.["package-cli"],
-    ].map((job) => job?.steps?.find((step) => step.name === "Retain failed native first-run diagnostics"))
-    expect(evidence.map((step) => ({ if: step?.if, uses: step?.uses, with: step?.with }))).toEqual(
-      ["failed-native-first-run", "first-run-diagnostics-overlay-${{ matrix.platform }}", "first-run-diagnostics-cli-${{ matrix.platform }}"]
-        .map((name) => ({
-          if: "failure()",
-          uses: "actions/upload-artifact@v7",
-          with: {
-            name,
-            path: ".scratch/package-runtime/tmp/opencorvus-first-run-*/",
-            "include-hidden-files": true,
-            "if-no-files-found": "ignore",
-            "retention-days": 7,
-          },
-        })),
+    const overlay = await readWorkflow("package-overlay.yml")
+    const evidence = [build.jobs?.["build-critical"], overlay.jobs?.build, release.jobs?.["package-cli"]].map((job) =>
+      job?.steps?.find((step) => step.name === "Retain failed native first-run diagnostics"),
     )
-    expect(release.jobs?.["publish-release-assets"]?.steps
-      ?.filter((step) => step.uses === "actions/download-artifact@v8").map((step) => step.with))
-      .toEqual([
-        { pattern: "{cli,overlay}-*", path: "/tmp/release-assets" },
-      ])
+    expect(evidence.map((step) => ({ if: step?.if, uses: step?.uses, with: step?.with }))).toEqual(
+      [
+        "failed-native-first-run",
+        "first-run-diagnostics-overlay-${{ inputs.platform }}",
+        "first-run-diagnostics-cli-${{ matrix.platform }}",
+      ].map((name, index) => ({
+        if: "failure()",
+        uses: "actions/upload-artifact@v7",
+        with: {
+          name,
+          path: ".scratch/package-runtime/tmp/opencorvus-first-run-*/",
+          "include-hidden-files": true,
+          "if-no-files-found": "ignore",
+          "retention-days": index === 1 ? "${{ inputs.retention-days }}" : 7,
+          ...(index === 1 ? { overwrite: true } : {}),
+        },
+      })),
+    )
+    expect(
+      release.jobs?.["publish-release-assets"]?.steps
+        ?.filter((step) => step.uses === "actions/download-artifact@v8")
+        .map((step) => step.with),
+    ).toEqual([{ pattern: "{cli,overlay}-*", path: "/tmp/release-assets" }])
   })
 
   test("uses the current checkout action across every active workflow", async () => {
@@ -85,9 +136,7 @@ describe("GitHub Actions workflow contract", () => {
     expect(checkoutReferences).toEqual([
       { file: "build-check.yml", job: "version-sync", uses: "actions/checkout@v6" },
       { file: "build-check.yml", job: "build-critical", uses: "actions/checkout@v6" },
-      { file: "build-overlays.yml", job: "build-overlay", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "prepare", uses: "actions/checkout@v6" },
-      { file: "build.yml", job: "package-overlay", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "package-cli", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "publish-release-assets", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "publish-release", uses: "actions/checkout@v6" },
@@ -103,6 +152,9 @@ describe("GitHub Actions workflow contract", () => {
         uses: "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
       },
       { file: "generate.yml", job: "verify", uses: "actions/checkout@v6" },
+      { file: "package-overlay.yml", job: "build", uses: "actions/checkout@v6" },
+      { file: "package-overlay.yml", job: "bundle-linux", uses: "actions/checkout@v6" },
+      { file: "package-overlay.yml", job: "assemble-linux", uses: "actions/checkout@v6" },
       { file: "security.yml", job: "repository", uses: "actions/checkout@v6" },
       { file: "security.yml", job: "dependency-review", uses: "actions/checkout@v6" },
       { file: "test.yml", job: "unit", uses: "actions/checkout@v6" },
@@ -181,7 +233,9 @@ describe("GitHub Actions workflow contract", () => {
     const prepareSteps = workflow.jobs?.prepare?.steps ?? []
     const assetSteps = workflow.jobs?.["publish-release-assets"]?.steps ?? []
     const claim = prepareSteps.find((step: { name?: string }) => step.name === "Claim immutable release identity")
-    const claimPublication = prepareSteps.find((step: { name?: string }) => step.name === "Claim draft publication owner")
+    const claimPublication = prepareSteps.find(
+      (step: { name?: string }) => step.name === "Claim draft publication owner",
+    )
     const verifyUpload = assetSteps.find((step: { name?: string }) => step.name === "Verify upload release identity")
     const verifyUploadPublication = assetSteps.find(
       (step: { name?: string }) => step.name === "Verify draft publication owner",
@@ -220,10 +274,7 @@ describe("GitHub Actions workflow contract", () => {
       IDENTITY_MODE: "verify-publication",
     })
     expect(prepareSteps.indexOf(claim!)).toBeLessThan(prepareSteps.indexOf(claimPublication!))
-    expect(["package-overlay", "package-cli"].map((job) => workflow.jobs?.[job]?.needs)).toEqual([
-      "prepare",
-      "prepare",
-    ])
+    expect(["package-overlay", "package-cli"].map((job) => workflow.jobs?.[job]?.needs)).toEqual(["prepare", "prepare"])
     expect(assetSteps.indexOf(verifyUpload!)).toBeLessThan(assetSteps.indexOf(verifyUploadPublication!))
     expect(assetSteps.indexOf(verifyUploadPublication!)).toBeLessThan(assetSteps.indexOf(stage!))
     expect(stage, "build.yml lost its Release upload step").toBeDefined()
@@ -321,32 +372,29 @@ describe("GitHub Actions workflow contract", () => {
     expect(workArtifactQualification?.run).toContain("--profile office.presentation@1 \\")
     expect(workArtifactQualification?.run).toContain('--package-root "$bundle" | tee "$evidence"')
     expect(workArtifactQualification?.run).toContain('test "$verified" -gt 0')
-    for (const job of ["package-overlay", "package-cli"]) {
+    for (const job of ["package-cli"]) {
       expect(jobs[job]?.steps?.find(({ name }) => name?.startsWith("Install Windows"))).toEqual({
-        name:
-          job === "package-overlay"
-            ? "Install Windows overlay runtime dependencies"
-            : "Install Windows CLI runtime dependencies",
+        name: "Install Windows CLI runtime dependencies",
         if: "runner.os == 'Windows'",
         shell: "pwsh",
         run: "./script/install-windows-ripgrep.ps1",
       })
     }
-    const overlayWorkflow = await readWorkflow("build-overlays.yml")
+    const overlayWorkflow = await readWorkflow("package-overlay.yml")
+    const runtimeAction = Bun.YAML.parse(
+      await Bun.file(path.join(workflowRoot, "../actions/setup-overlay-runtime/action.yml")).text(),
+    ) as { runs: { steps: WorkflowStep[] } }
     expect(
-      overlayWorkflow.jobs?.["build-overlay"]?.steps?.find(
-        ({ name }) => name === "Install Windows runtime dependencies",
-      ),
+      runtimeAction.runs.steps.find(({ name }) => name === "Install Windows overlay runtime dependencies"),
     ).toEqual({
-      name: "Install Windows runtime dependencies",
+      name: "Install Windows overlay runtime dependencies",
       if: "runner.os == 'Windows'",
       shell: "pwsh",
       run: "./script/install-windows-ripgrep.ps1",
     })
-    expect(
-      overlayWorkflow.jobs?.["build-overlay"]?.steps?.find(({ name }) => name === "Package GUI installers")?.env,
-    ).toEqual({
-      OPENCORVUS_VERSION: "${{ steps.version.outputs.version }}",
+    expect(overlayWorkflow.jobs?.build?.steps?.find(({ name }) => name === "Package GUI installers")?.env).toEqual({
+      OPENCORVUS_VERSION: "${{ inputs.version }}",
+      OPENCORVUS_CHANNEL: "latest",
       TAURI_SIGNING_PRIVATE_KEY: "${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}",
       TAURI_SIGNING_PRIVATE_KEY_PASSWORD: "${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}",
     })
@@ -415,7 +463,7 @@ describe("GitHub Actions workflow contract", () => {
       "Claim draft publication owner",
     ])
     expect(
-      ["prepare", "package-overlay", "package-cli"].flatMap((job) =>
+      ["prepare", "package-cli"].flatMap((job) =>
         (jobs[job]?.steps ?? [])
           .filter(({ name }) => name === "Verify version alignment")
           .map(({ name, run }) => ({ job, name, run })),
@@ -427,23 +475,21 @@ describe("GitHub Actions workflow contract", () => {
         run: 'bun ./script/sync-version.ts "${{ steps.meta.outputs.version }}" --check',
       },
       {
-        job: "package-overlay",
-        name: "Verify version alignment",
-        run: 'bun ./script/sync-version.ts "${{ needs.prepare.outputs.version }}" --check',
-      },
-      {
         job: "package-cli",
         name: "Verify version alignment",
         run: 'bun ./script/sync-version.ts "${{ needs.prepare.outputs.version }}" --check',
       },
     ])
-    expect(
-      jobs.prepare?.steps?.find(({ name }) => name === "Claim draft publication owner")?.env
-        ?.PRERELEASE,
-    ).toBe("${{ steps.meta.outputs.prerelease }}")
-    expect(jobs["package-overlay"]?.steps?.find(({ name }) => name === "Package GUI installers")?.env).toEqual({
-      OPENCORVUS_VERSION: "${{ needs.prepare.outputs.version }}",
-      OPENCORVUS_CHANNEL: "latest",
+    expect(jobs.prepare?.steps?.find(({ name }) => name === "Claim draft publication owner")?.env?.PRERELEASE).toBe(
+      "${{ steps.meta.outputs.prerelease }}",
+    )
+    expect(jobs["package-overlay"]?.with).toEqual({
+      platform: "${{ matrix.platform }}",
+      runner: "${{ matrix.runner }}",
+      version: "${{ needs.prepare.outputs.version }}",
+      "retention-days": 7,
+    })
+    expect(jobs["package-overlay"]?.secrets).toEqual({
       TAURI_SIGNING_PRIVATE_KEY: "${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}",
       TAURI_SIGNING_PRIVATE_KEY_PASSWORD: "${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}",
     })
@@ -578,7 +624,8 @@ describe("GitHub Actions workflow contract", () => {
       workflow_dispatch: {
         inputs: {
           test_files: {
-            description: "Optional newline-separated paths relative to packages/opencorvus; empty runs the complete suite",
+            description:
+              "Optional newline-separated paths relative to packages/opencorvus; empty runs the complete suite",
             type: "string",
             required: false,
             default: "",
@@ -586,7 +633,9 @@ describe("GitHub Actions workflow contract", () => {
         },
       },
     })
-    expect(jobs.unit?.name).toBe("${{ inputs.test_files != '' && 'selected unit' || 'unit' }} (${{ matrix.settings.name }})")
+    expect(jobs.unit?.name).toBe(
+      "${{ inputs.test_files != '' && 'selected unit' || 'unit' }} (${{ matrix.settings.name }})",
+    )
     expect(jobs.required?.name).toBe("${{ inputs.test_files != '' && 'selected test matrix' || 'test (linux)' }}")
     const selectedStep = jobs.unit?.steps?.find(({ name }) => name === "Run unit tests")
     expect(selectedStep?.env).toEqual({ SELECTED_TEST_FILES: "${{ inputs.test_files || '' }}" })

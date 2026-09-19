@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Linux installer job split](records/2026-09/2026-09-19-linux-installer-job-split.md).
+
 [v0.1.6 stable release](records/2026-09/2026-09-19-v0.1.6-release.md).
 
 - [Mission attachment request projection](records/2026-09/2026-09-19-mission-attachment-request-projection.md).

@@ -1,0 +1,23 @@
+name: Setup overlay runtime
+description: Install the native dependencies shared by overlay compilation and bundling.
+runs:
+  using: composite
+  steps:
+    - name: Install Linux system dependencies
+      if: runner.os == 'Linux'
+      shell: bash
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo bash script/install-ubuntu-packages.sh \
+          libwebkit2gtk-4.1-dev libssl-dev libgtk-3-dev \
+          libayatana-appindicator3-dev librsvg2-dev ripgrep xdg-utils
+        rg --version
+    - name: Install macOS overlay runtime dependencies
+      if: runner.os == 'macOS'
+      shell: bash
+      run: brew install ripgrep
+    - name: Install Windows overlay runtime dependencies
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: ./script/install-windows-ripgrep.ps1

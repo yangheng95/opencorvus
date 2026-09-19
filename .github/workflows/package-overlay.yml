@@ -1,0 +1,193 @@
+name: package-overlay
+
+# One native implementation shared by canonical releases and manual debug builds.
+on:
+  workflow_call:
+    inputs:
+      platform:
+        type: string
+        required: true
+      runner:
+        type: string
+        required: true
+      version:
+        type: string
+        default: ""
+      retention-days:
+        type: number
+        default: 7
+    secrets:
+      TAURI_SIGNING_PRIVATE_KEY:
+        required: true
+      TAURI_SIGNING_PRIVATE_KEY_PASSWORD:
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: compile (${{ inputs.platform }})
+    runs-on: ${{ inputs.runner }}
+    outputs:
+      input-artifact-id: ${{ steps.input-upload.outputs.artifact-id }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-bun
+      - name: Verify version alignment
+        env:
+          VERSION: ${{ inputs.version }}
+        run: bun ./script/sync-version.ts ${VERSION:+"$VERSION"} --check
+      - uses: ./.github/actions/setup-overlay-runtime
+        timeout-minutes: 15
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: packages/overlay/src-tauri -> target
+      - name: Compile Linux installer input
+        if: startsWith(inputs.platform, 'linux-')
+        env:
+          OPENCORVUS_VERSION: ${{ inputs.version }}
+          OPENCORVUS_CHANNEL: latest
+        run: |
+          bun run package:gui-installer-matrix --build-only
+          tar -cf gui-input.tar -C packages/overlay/src-tauri/target/release package-input
+      - name: Retain compiled Linux input
+        if: startsWith(inputs.platform, 'linux-')
+        id: input-upload
+        uses: actions/upload-artifact@v7
+        with:
+          name: gui-input-${{ inputs.platform }}
+          path: gui-input.tar
+          if-no-files-found: error
+          compression-level: 0
+          overwrite: true
+          retention-days: ${{ inputs.retention-days }}
+      - name: Package GUI installers
+        if: ${{ !startsWith(inputs.platform, 'linux-') }}
+        env:
+          OPENCORVUS_VERSION: ${{ inputs.version }}
+          OPENCORVUS_CHANNEL: latest
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: bun run package:gui-installer-matrix
+      - name: Upload overlay artifact
+        if: ${{ !startsWith(inputs.platform, 'linux-') }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: overlay-${{ inputs.platform }}
+          path: packages/overlay/dist-artifacts/${{ inputs.platform }}
+          if-no-files-found: error
+          overwrite: true
+          retention-days: ${{ inputs.retention-days }}
+      - name: Retain failed native first-run diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: first-run-diagnostics-overlay-${{ inputs.platform }}
+          path: .scratch/package-runtime/tmp/opencorvus-first-run-*/
+          include-hidden-files: true
+          if-no-files-found: ignore
+          overwrite: true
+          retention-days: ${{ inputs.retention-days }}
+
+  bundle-linux:
+    name: ${{ matrix.kind }} (${{ inputs.platform }})
+    if: startsWith(inputs.platform, 'linux-')
+    needs: build
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        kind: [deb, rpm, appimage]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/setup-overlay-runtime
+        timeout-minutes: 15
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/download-artifact@v8
+        with:
+          artifact-ids: ${{ needs.build.outputs.input-artifact-id }}
+          path: .scratch/gui-input
+          merge-multiple: true
+      - name: Restore compiled installer input
+        run: |
+          mkdir -p packages/overlay/src-tauri/target/release
+          tar -xf .scratch/gui-input/gui-input.tar -C packages/overlay/src-tauri/target/release
+      - name: Bundle one Linux format
+        env:
+          CI: "true"
+          BUNDLE_KIND: ${{ matrix.kind }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          bun run --cwd packages/overlay script/build.ts --bundle "$BUNDLE_KIND"
+          cd packages/overlay/src-tauri/target/release
+          # Keep final files/signatures, not the expanded AppDir or package trees.
+          test -n "$(find "bundle/$BUNDLE_KIND" -maxdepth 1 -type f -print -quit)"
+          find "bundle/$BUNDLE_KIND" -maxdepth 1 -type f -print0 |
+            tar --null -T - -cf "$GITHUB_WORKSPACE/gui-bundle-$BUNDLE_KIND.tar"
+      - name: Retain completed Linux format
+        uses: actions/upload-artifact@v7
+        with:
+          name: gui-bundle-${{ inputs.platform }}-${{ matrix.kind }}
+          path: gui-bundle-${{ matrix.kind }}.tar
+          if-no-files-found: error
+          compression-level: 0
+          overwrite: true
+          retention-days: ${{ inputs.retention-days }}
+
+  assemble-linux:
+    name: validate installers (${{ inputs.platform }})
+    if: startsWith(inputs.platform, 'linux-')
+    needs: [build, bundle-linux]
+    runs-on: ${{ inputs.runner }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-bun
+      - uses: actions/download-artifact@v8
+        with:
+          artifact-ids: ${{ needs.build.outputs.input-artifact-id }}
+          path: .scratch/gui-input
+          merge-multiple: true
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: gui-bundle-${{ inputs.platform }}-*
+          path: .scratch/gui-bundles
+          merge-multiple: true
+      - name: Assemble and validate complete installer row
+        env:
+          OPENCORVUS_VERSION: ${{ inputs.version }}
+        run: |
+          mkdir -p packages/overlay/src-tauri/target/release
+          tar -xf .scratch/gui-input/gui-input.tar -C packages/overlay/src-tauri/target/release
+          for kind in deb rpm appimage; do
+            tar -xf ".scratch/gui-bundles/gui-bundle-$kind.tar" -C packages/overlay/src-tauri/target/release
+          done
+          bun run package:gui-installer-matrix --skip-build
+      - name: Upload overlay artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: overlay-${{ inputs.platform }}
+          path: packages/overlay/dist-artifacts/${{ inputs.platform }}
+          if-no-files-found: error
+          compression-level: 0
+          overwrite: true
+          retention-days: ${{ inputs.retention-days }}

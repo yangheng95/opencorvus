@@ -58,6 +58,12 @@ service failures later in the run still require retry. The release inventory
 uses one request per bounded page and remains the sole draft lookup authority.
 
 `build-overlays.yml` is debug-only and is not the canonical release path.
+Both workflows call `package-overlay.yml`. Linux rows compile once, then generate
+DEB, RPM and AppImage in independently retryable parallel jobs. Their retained
+compile/format artifacts feed a complete-row validation job; public publication
+still requires every format, signature and native platform. Retry the failed inner
+format job within the same run to reuse the successful compilation. See the
+[transfer and retry contract](docs/packaging.md#ci-transfer-artifacts-and-public-release-assets).
 
 Native publication and the desktop update channel are the default scope.
 Website deployment requires the manual `deploy_website=true` input; tag pushes

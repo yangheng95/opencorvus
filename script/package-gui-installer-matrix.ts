@@ -18,12 +18,12 @@ export interface GuiInstallerMatrixRow {
   id: string
   hostPlatform: NodeJS.Platform
   hostArch: NodeJS.Architecture
-  bundleKinds: readonly string[]
   skipReason: string
 }
 
 export interface PackageGuiInstallerMatrixOptions {
   skipBuild?: boolean
+  buildOnly?: boolean
   platform?: NodeJS.Platform
   arch?: NodeJS.Architecture
   env?: NodeJS.ProcessEnv
@@ -31,7 +31,7 @@ export interface PackageGuiInstallerMatrixOptions {
 
 export interface GuiInstallerMatrixResult {
   row: GuiInstallerMatrixRow
-  status: "packaged" | "skipped"
+  status: "compiled" | "packaged" | "skipped"
   artifacts: string[]
   reason?: string
 }
@@ -42,13 +42,13 @@ export function guiInstallerBuildEnvironment(env: NodeJS.ProcessEnv, version: st
   return { ...env, ...GUI_INSTALLER_AUTOMATION_ENV, OPENCORVUS_VERSION: version }
 }
 
-export function guiInstallerBuildCommands(repoRoot: string): PublicRuntimePackageBuildCommand[] {
+export function guiInstallerBuildCommands(repoRoot: string, buildOnly = false): PublicRuntimePackageBuildCommand[] {
   return [
     ...publicRuntimePackageBuildCommands(repoRoot),
     {
       label: "Overlay release build",
       cwd: path.join(repoRoot, "packages", "overlay"),
-      argv: ["bun", "run", "script/build.ts"],
+      argv: ["bun", "run", "script/build.ts", ...(buildOnly ? ["--no-bundle"] : [])],
     },
   ]
 }
@@ -58,41 +58,39 @@ export const GUI_INSTALLER_MATRIX: readonly GuiInstallerMatrixRow[] = [
     id: "linux-x64",
     hostPlatform: "linux",
     hostArch: "x64",
-    bundleKinds: ["deb", "rpm", "appimage"],
     skipReason: "requires a native Linux x64 runner",
   },
   {
     id: "linux-arm64",
     hostPlatform: "linux",
     hostArch: "arm64",
-    bundleKinds: ["deb", "rpm", "appimage"],
     skipReason: "requires a native Linux ARM64 runner",
   },
   {
     id: "darwin-x64",
     hostPlatform: "darwin",
     hostArch: "x64",
-    bundleKinds: ["app", "dmg"],
     skipReason: "requires a native macOS x64 runner",
   },
   {
     id: "darwin-arm64",
     hostPlatform: "darwin",
     hostArch: "arm64",
-    bundleKinds: ["app", "dmg"],
     skipReason: "requires a native macOS ARM64 runner",
   },
   {
     id: "windows-x64",
     hostPlatform: "win32",
     hostArch: "x64",
-    bundleKinds: ["msi", "nsis"],
     skipReason: "requires a native Windows x64 runner",
   },
 ] as const
 
 export function parseGuiInstallerMatrixArgs(argv: readonly string[]): PackageGuiInstallerMatrixOptions {
-  return { skipBuild: argv.includes("--skip-build") }
+  if (argv.length === 0) return {}
+  if (argv.length === 1 && argv[0] === "--skip-build") return { skipBuild: true }
+  if (argv.length === 1 && argv[0] === "--build-only") return { buildOnly: true }
+  throw new Error("Usage: package-gui-installer-matrix.ts [--build-only | --skip-build]")
 }
 
 export function supportedGuiInstallerRows(
@@ -203,6 +201,7 @@ export async function packageGuiInstallerMatrix(
   repoRoot: string,
   options: PackageGuiInstallerMatrixOptions = {},
 ): Promise<GuiInstallerMatrixResult[]> {
+  if (options.skipBuild && options.buildOnly) throw new Error("Choose either build-only or skip-build")
   const platform = options.platform ?? process.platform
   const arch = options.arch ?? process.arch
   const env = options.env ?? process.env
@@ -220,11 +219,15 @@ export async function packageGuiInstallerMatrix(
       continue
     }
     if (!options.skipBuild) {
-      for (const command of guiInstallerBuildCommands(repoRoot)) {
+      for (const command of guiInstallerBuildCommands(repoRoot, options.buildOnly)) {
         await runTimedStage(command.label, async () => {
           await $`${command.argv}`.cwd(command.cwd).env(buildEnv)
         })
       }
+    }
+    if (options.buildOnly) {
+      results.push({ row, status: "compiled", artifacts: [guiInstallerStagePaths(repoRoot, row).executable] })
+      continue
     }
     const artifacts = await runTimedStage("Installer staging", () => stageGuiInstallerArtifacts(repoRoot, row, version))
     await runTimedStage("Installer validation", () => validateGuiInstallerArtifacts(repoRoot, row, version))
@@ -242,7 +245,7 @@ async function main() {
       console.log(`  skip ${result.row.id}: ${result.reason}`)
       continue
     }
-    console.log(`  packaged ${result.row.id}:`)
+    console.log(`  ${result.status} ${result.row.id}:`)
     for (const artifact of result.artifacts) console.log(`    ${path.relative(repoRoot, artifact)}`)
   }
 }

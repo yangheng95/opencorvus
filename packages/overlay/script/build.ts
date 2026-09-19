@@ -8,6 +8,7 @@ import { copyReleaseFile } from "../../../script/copy-release-file"
 import { runTimedStage } from "../../../script/timed-stage"
 import { writeOverlayPayloadStamp } from "../../opencorvus/script/build-overlay-payload-stamp"
 import { finalizeWorkArtifactPackage } from "../../opencorvus/script/finalize-work-artifact-package"
+import { parseOverlayReleaseBuildArgs } from "./release-build-options"
 
 import {
   overlayArchFromNode,
@@ -35,6 +36,7 @@ const distServerDir = path.join(opencorvus, "dist", serverDistName)
 const distServer = path.join(distServerDir, serverFile)
 const packagingSnapshot = path.join(release, "package-input", overlayFile)
 const stagedResources = path.join(tauri, "resources")
+const options = parseOverlayReleaseBuildArgs(process.argv.slice(2))
 
 async function exists(file: string) {
   return fs
@@ -95,44 +97,6 @@ async function cleanBuildResidue() {
   )
 }
 
-await runTimedStage("Overlay Vite build", async () => {
-  await $`bun run build:vite`.cwd(dir)
-})
-
-await runTimedStage("Embedded backend build", async () => {
-  await $`bun run build --overlay-server`.cwd(opencorvus)
-})
-
-if (!(await exists(distServer))) {
-  throw new Error(`Bundled opencorvus binary not found at ${distServer}`)
-}
-await finalizeWorkArtifactPackage({
-  root: distServerDir,
-  target: {
-    os: hostPlatform === "windows" ? "win32" : hostPlatform,
-    arch: hostArch,
-  },
-})
-await writeOverlayPayloadStamp(distServerDir)
-
-await cleanBuildResidue()
-
-// `tauri build` alone leaves Tauri 2.x without an explicit bundle list
-// and the build silently produces only the bare executable — no
-// .app/.dmg on macOS, no .msi/-setup.exe on Windows, no
-// .deb/.rpm/.AppImage on Linux. Even with bundle.active=true and
-// targets="all" in tauri.conf.json, the CLI's --config deep-merge
-// (we pass {bundle:{resources:[]}}) interacts poorly enough that the
-// bundle pipeline gets skipped. The `--bundles` flag opts in
-// unconditionally, but Tauri 2.x rejects the keyword `all`; valid
-// values are platform-specific (`app dmg` on macOS, `msi nsis` on
-// Windows, `deb rpm appimage` on Linux), so we pass the host's full
-// default set explicitly.
-function bundleTargets(): string[] {
-  if (process.platform === "darwin") return ["app", "dmg"]
-  if (process.platform === "win32") return ["msi", "nsis"]
-  return ["deb", "rpm", "appimage"]
-}
 const tauriEnvironment = {
   ...process.env,
   CARGO_TARGET_DIR: target,
@@ -140,17 +104,48 @@ const tauriEnvironment = {
   PATH: await cargoPath(),
 }
 
-await runTimedStage("Tauri executable build", async () => {
-  await $`tauri build --no-bundle ${tauriArgs()}`.cwd(dir).env(tauriEnvironment)
-})
+if (options.compile) {
+  await runTimedStage("Overlay Vite build", async () => {
+    await $`bun run build:vite`.cwd(dir)
+  })
 
-const builtOverlay = path.join(release, overlayFile)
-if (!(await exists(builtOverlay))) {
-  throw new Error(`Overlay binary not found at ${builtOverlay}`)
+  await runTimedStage("Embedded backend build", async () => {
+    await $`bun run build --overlay-server`.cwd(opencorvus)
+  })
+
+  if (!(await exists(distServer))) {
+    throw new Error(`Bundled opencorvus binary not found at ${distServer}`)
+  }
+  await finalizeWorkArtifactPackage({
+    root: distServerDir,
+    target: {
+      os: hostPlatform === "windows" ? "win32" : hostPlatform,
+      arch: hostArch,
+    },
+  })
+  await writeOverlayPayloadStamp(distServerDir)
+
+  await cleanBuildResidue()
+
+  await runTimedStage("Tauri executable build", async () => {
+    await $`tauri build --no-bundle ${tauriArgs()}`.cwd(dir).env(tauriEnvironment)
+  })
+
+  const builtOverlay = path.join(release, overlayFile)
+  if (!(await exists(builtOverlay))) {
+    throw new Error(`Overlay binary not found at ${builtOverlay}`)
+  }
+
+  await copyReleaseFile(builtOverlay, packagingSnapshot)
 }
 
-await copyReleaseFile(builtOverlay, packagingSnapshot)
-
-await runTimedStage("Tauri installer bundle", async () => {
-  await $`tauri bundle --bundles ${bundleTargets()} ${tauriArgs()}`.cwd(dir).env(tauriEnvironment)
-})
+// The same bundle phase serves local full builds and independent Linux CI jobs.
+// Keep the paired macOS/Windows invocation; Linux formats each get their own timer.
+const groups = process.platform === "linux" ? options.bundles.map((kind) => [kind]) : [options.bundles]
+for (const bundles of groups.filter((group) => group.length > 0)) {
+  if (!(await exists(packagingSnapshot))) throw new Error(`Missing compiled installer input: ${packagingSnapshot}`)
+  if (process.platform === "linux") await copyReleaseFile(packagingSnapshot, path.join(release, overlayFile))
+  await runTimedStage(`Tauri installer bundle (${bundles.join(", ")})`, async () => {
+    await $`tauri bundle --bundles ${bundles} ${tauriArgs()}`.cwd(dir).env(tauriEnvironment)
+  })
+}
