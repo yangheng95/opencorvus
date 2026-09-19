@@ -14777,6 +14777,168 @@ export type ExpertSquadReleasePayloadResponses = {
 export type ExpertSquadReleasePayloadResponse =
   ExpertSquadReleasePayloadResponses[keyof ExpertSquadReleasePayloadResponses]
 
+export type ExpertSquadRepairBundledData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/expert-squad/repair-bundled"
+}
+
+export type ExpertSquadRepairBundledErrors = {
+  /**
+   * Expert squad bundled repair rejected
+   */
+  400: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "ExpertSquadPackageError"
+  }
+}
+
+export type ExpertSquadRepairBundledError = ExpertSquadRepairBundledErrors[keyof ExpertSquadRepairBundledErrors]
+
+export type ExpertSquadRepairBundledResponses = {
+  /**
+   * Completed replacements and per-installation failures
+   */
+  200: {
+    failures: Array<{
+      id: string
+      installationScope: "project" | "global"
+      message: string
+    }>
+    repaired: Array<
+      | {
+          after: {
+            id: string
+            installationScope: "project" | "global"
+            namespace: string
+            /**
+             * Canonical digest of the package bytes present at targetRoot after the operation.
+             */
+            packageDigest: string
+            projectDirectory: string | null
+            targetRoot: string
+            /**
+             * Manifest version of the package bytes present at targetRoot after the operation.
+             */
+            version: string | null
+          }
+          before: null
+          operation: "installed"
+        }
+      | {
+          after: {
+            id: string
+            installationScope: "project" | "global"
+            namespace: string
+            /**
+             * Canonical digest of the package bytes present at targetRoot after the operation.
+             */
+            packageDigest: string
+            projectDirectory: string | null
+            targetRoot: string
+            /**
+             * Manifest version of the package bytes present at targetRoot after the operation.
+             */
+            version: string | null
+          }
+          before: {
+            id: string
+            installationScope: "project" | "global"
+            namespace: string
+            /**
+             * Canonical digest of the package bytes present at targetRoot after the operation.
+             */
+            packageDigest: string
+            projectDirectory: string | null
+            targetRoot: string
+            /**
+             * Manifest version of the package bytes present at targetRoot after the operation.
+             */
+            version: string | null
+          }
+          operation: "unchanged"
+        }
+      | {
+          after: {
+            id: string
+            installationScope: "project" | "global"
+            namespace: string
+            /**
+             * Canonical digest of the package bytes present at targetRoot after the operation.
+             */
+            packageDigest: string
+            projectDirectory: string | null
+            targetRoot: string
+            /**
+             * Manifest version of the package bytes present at targetRoot after the operation.
+             */
+            version: string | null
+          }
+          before: {
+            id: string
+            installationScope: "project" | "global"
+            namespace: string
+            /**
+             * Canonical digest of the package bytes present at targetRoot after the operation.
+             */
+            packageDigest: string
+            projectDirectory: string | null
+            targetRoot: string
+            /**
+             * Manifest version of the package bytes present at targetRoot after the operation.
+             */
+            version: string | null
+          }
+          operation: "replaced"
+        }
+      | {
+          after: {
+            id: string
+            installationScope: "project" | "global"
+            namespace: string
+            /**
+             * Canonical digest of the package bytes present at targetRoot after the operation.
+             */
+            packageDigest: string
+            projectDirectory: string | null
+            targetRoot: string
+            /**
+             * Manifest version of the package bytes present at targetRoot after the operation.
+             */
+            version: string | null
+          }
+          before: {
+            id: string
+            installationScope: "project" | "global"
+            namespace: string
+            /**
+             * Canonical digest of the package bytes present at targetRoot after the operation.
+             */
+            packageDigest: string
+            projectDirectory: string | null
+            targetRoot: string
+            /**
+             * Manifest version of the package bytes present at targetRoot after the operation.
+             */
+            version: string | null
+          }
+          operation: "restored"
+        }
+    >
+  }
+}
+
+export type ExpertSquadRepairBundledResponse =
+  ExpertSquadRepairBundledResponses[keyof ExpertSquadRepairBundledResponses]
+
 export type ExpertSquadSearchData = {
   body?: never
   path?: never

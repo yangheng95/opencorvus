@@ -22,6 +22,7 @@ import type {
   ExpertSquadReleasePayloadResponse,
   ExpertSquadUpdateData,
   ExpertSquadUpdateResponse,
+  ExpertSquadRepairBundledResponse,
   ExpertSquadSearchResponse,
   ExpertSquadInventoryStatusResponse,
   ExpertSquadDiagnosticsResponse,
@@ -29,7 +30,7 @@ import type {
   ExpertSquadSettingsDetailResponse,
 } from "@opencorvus-ai/sdk"
 import { appStore } from "../store/app"
-import { apiJson } from "./api"
+import { apiJson, serverSettledRequest } from "./api"
 import { patchSessionConfig, updateConfig, type SessionConfigResponse } from "./config"
 
 export type ExpertSquadCatalog = ExpertSquadCatalogResponse
@@ -58,6 +59,13 @@ export type ExpertSquadMarketItem = ExpertSquadMarketDetailResponse
 export type ExpertSquadMarketInstallResult = ExpertSquadInstallPayloadResponse
 export type ExpertSquadUpdateSource = NonNullable<ExpertSquadUpdateData["body"]>["source"]
 export type ExpertSquadUpdateResult = ExpertSquadUpdateResponse
+
+export async function repairObsoleteBundledExpertSquads(directory: string): Promise<ExpertSquadRepairBundledResponse> {
+  return apiJson<ExpertSquadRepairBundledResponse>(
+    directoryScopedPath("expert-squad/repair-bundled", directory, "repairObsoleteBundledExpertSquads"),
+    serverSettledRequest({ method: "POST", body: JSON.stringify({}) }),
+  )
+}
 export type ExpertSquadEvolutionHistory = ExpertSquadEvolutionHistoryResponse
 export type ExpertSquadEvolutionHistoryRecord = ExpertSquadEvolutionHistory["records"][number]
 export type ExpertSquadEvolutionHistoryCandidate = ExpertSquadEvolutionHistoryRecord["candidates"][number]

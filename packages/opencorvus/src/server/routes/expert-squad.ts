@@ -1,8 +1,5 @@
 import { ExpertSquadPackageManager } from "@/expert-squad/manager"
-import {
-  authorizeEvolutionPackageMutation,
-  executeEvolutionPackageMutation,
-} from "@/expert-squad/evolution-mutation"
+import { authorizeEvolutionPackageMutation, executeEvolutionPackageMutation } from "@/expert-squad/evolution-mutation"
 import {
   EvolutionHistoryAuthorityError,
   readEvolutionCampaignDetail,
@@ -75,7 +72,10 @@ export const ExpertSquadPackageError = NamedError.create(
 const ImportFolderInput = z
   .object({
     sourceDirectory: z.string().min(1),
-    expectedCurrentPackageDigest: z.string().regex(/^[a-f0-9]{64}$/).optional(),
+    expectedCurrentPackageDigest: z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .optional(),
     installationScope: ExpertSquadPackageLocations.InstallationScopeSchema,
   })
   .strict()
@@ -90,7 +90,10 @@ const ImportFileInput = z
   .object({
     archiveBase64: z.string().min(1),
     filename: z.string().min(1).optional(),
-    expectedCurrentPackageDigest: z.string().regex(/^[a-f0-9]{64}$/).optional(),
+    expectedCurrentPackageDigest: z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .optional(),
     installationScope: ExpertSquadPackageLocations.InstallationScopeSchema,
   })
   .strict()
@@ -149,27 +152,35 @@ const MulticaPreviewInput = z
   })
   .strict()
 
-const InstalledPackageRevision = z.object({
-  installationScope: ExpertSquadPackageLocations.InstallationScopeSchema,
-  projectDirectory: z.string().nullable(),
-  namespace: z.string(),
-  id: z.string(),
-  version: z
-    .string()
-    .nullable()
-    .describe("Manifest version of the package bytes present at targetRoot after the operation."),
-  packageDigest: z
-    .string()
-    .regex(/^[a-f0-9]{64}$/)
-    .describe("Canonical digest of the package bytes present at targetRoot after the operation."),
-  targetRoot: z.string(),
-}).strict()
+const InstalledPackageRevision = z
+  .object({
+    installationScope: ExpertSquadPackageLocations.InstallationScopeSchema,
+    projectDirectory: z.string().nullable(),
+    namespace: z.string(),
+    id: z.string(),
+    version: z
+      .string()
+      .nullable()
+      .describe("Manifest version of the package bytes present at targetRoot after the operation."),
+    packageDigest: z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .describe("Canonical digest of the package bytes present at targetRoot after the operation."),
+    targetRoot: z.string(),
+  })
+  .strict()
 
 const PackageMutationReceipt = z.discriminatedUnion("operation", [
   z.object({ operation: z.literal("installed"), before: z.null(), after: InstalledPackageRevision }).strict(),
-  z.object({ operation: z.literal("unchanged"), before: InstalledPackageRevision, after: InstalledPackageRevision }).strict(),
-  z.object({ operation: z.literal("replaced"), before: InstalledPackageRevision, after: InstalledPackageRevision }).strict(),
-  z.object({ operation: z.literal("restored"), before: InstalledPackageRevision, after: InstalledPackageRevision }).strict(),
+  z
+    .object({ operation: z.literal("unchanged"), before: InstalledPackageRevision, after: InstalledPackageRevision })
+    .strict(),
+  z
+    .object({ operation: z.literal("replaced"), before: InstalledPackageRevision, after: InstalledPackageRevision })
+    .strict(),
+  z
+    .object({ operation: z.literal("restored"), before: InstalledPackageRevision, after: InstalledPackageRevision })
+    .strict(),
 ])
 
 const ReleasePayloadResult = z.object({
@@ -194,7 +205,10 @@ const PayloadMarketItem = z
     label: z.string(),
     description: z.string().optional(),
     version: z.string(),
-    product_pillars: z.array(z.enum(["code", "work"])).min(1).max(2),
+    product_pillars: z
+      .array(z.enum(["code", "work"]))
+      .min(1)
+      .max(2),
     package_digest: z.string().regex(/^[a-f0-9]{64}$/),
     selector_summary: z.string(),
     agents: z.array(PayloadMarketAgent),
@@ -222,7 +236,10 @@ const PayloadMarketIndexItem = z
     label: z.string().min(1).max(160),
     description: z.string().min(1).max(1_000).optional(),
     version: z.string().min(1).max(80),
-    product_pillars: z.array(z.enum(["code", "work"])).min(1).max(2),
+    product_pillars: z
+      .array(z.enum(["code", "work"]))
+      .min(1)
+      .max(2),
     installation_scopes: z.array(ExpertSquadPackageLocations.InstallationScopeSchema).max(2),
   })
   .strict()
@@ -388,9 +405,9 @@ async function replacePackageReferences(input: {
       ? [{ directory: input.projectDirectory, localOverride: false }]
       : await Promise.all(
           registeredProjects.map(async (project) => {
-            const localOverride = (
-              await ExpertSquadRegistry.discoverInstalledPackageIdentities(project.worktree)
-            ).some((identity) => identity.id === input.id && identity.location === "project")
+            const localOverride = (await ExpertSquadRegistry.discoverInstalledPackageIdentities(project.worktree)).some(
+              (identity) => identity.id === input.id && identity.location === "project",
+            )
             return { directory: project.worktree, localOverride }
           }),
         )
@@ -508,8 +525,7 @@ export function ExpertSquadRoutes() {
       "/inventory-status",
       describeRoute({
         summary: "Get expert-squad inventory status",
-        description:
-          "Returns declaration and diagnostic counts without package bodies or unbounded diagnostic arrays.",
+        description: "Returns declaration and diagnostic counts without package bodies or unbounded diagnostic arrays.",
         operationId: "expertSquad.inventoryStatus",
         responses: {
           200: {
@@ -874,6 +890,47 @@ export function ExpertSquadRoutes() {
               projectDirectory: Instance.project.worktree,
               id: input.id,
               installationScope: input.installationScope,
+            }),
+          ),
+        )
+      },
+    )
+    .post(
+      "/repair-bundled",
+      describeRoute({
+        summary: "Replace obsolete bundled Expert Squad installations",
+        description:
+          "Replaces older-schema bundled installations in project and global scope with the validated application payload. Preserves prior bytes by digest and returns exact receipts for the client reminder; current-schema and third-party installations retain their contents.",
+        operationId: "expertSquad.repairBundled",
+        responses: {
+          200: {
+            description: "Completed replacements and per-installation failures",
+            content: {
+              "application/json": {
+                schema: resolver(
+                  z.object({
+                    repaired: z.array(PackageMutationReceipt),
+                    failures: z.array(
+                      z.object({
+                        id: ExpertSquadIDSchema,
+                        installationScope: ExpertSquadPackageLocations.InstallationScopeSchema,
+                        message: z.string(),
+                      }),
+                    ),
+                  }),
+                ),
+              },
+            },
+          },
+          400: namedErrorResponse("Expert squad bundled repair rejected", "ExpertSquadPackageError"),
+        },
+      }),
+      async (c) => {
+        await assertEmptyJsonBody(c.req)
+        return c.json(
+          await packageRoute(() =>
+            ExpertSquadPackageManager.repairObsoleteBundledPackages({
+              projectDirectory: Instance.project.worktree,
             }),
           ),
         )

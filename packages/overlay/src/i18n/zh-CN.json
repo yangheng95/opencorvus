@@ -1129,6 +1129,8 @@
   "expert_squad.none": "暂无可用专家团",
   "expert_squad.catalog_failed": "加载 {{directory}} 的专家团失败：{{error}}",
   "expert_squad.catalog_issue": "专家团包 {{owner}} 已被局部隔离：{{error}}",
+  "expert_squad.obsolete_replaced_title": "专家团包修复提醒",
+  "expert_squad.obsolete_replaced_body": "旧格式的内置专家团已直接替换为应用当前版本：\n\n{{packages}}\n\n旧文件已按内容哈希备份到应用数据目录的 expert-squad-package-revisions 中。当前激活选择保持不变；旧包中的自定义修改保存在备份里。",
   "expert_squad.project_override_warning": "项目级 package {{id}} 在当前项目中覆盖了用户全局安装。",
   "expert_squad.action_failed": "{{directory}} 的专家团操作失败：{{error}}",
   "expert_squad.preview_empty": "当前指导内容为空。",

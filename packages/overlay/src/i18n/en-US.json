@@ -1129,6 +1129,8 @@
   "expert_squad.none": "No Expert Squads available",
   "expert_squad.catalog_failed": "Failed to load Expert Squads for {{directory}}: {{error}}",
   "expert_squad.catalog_issue": "Expert Squad package {{owner}} was isolated: {{error}}",
+  "expert_squad.obsolete_replaced_title": "Expert Squad package repair",
+  "expert_squad.obsolete_replaced_body": "Obsolete bundled packages were replaced with the current application versions:\n\n{{packages}}\n\nPrevious files were saved by their content hash under expert-squad-package-revisions in the application data directory. Active selections are unchanged. Customizations in the replaced packages are now in that backup.",
   "expert_squad.project_override_warning": "Project package {{id}} overrides the user-global installation in this project.",
   "expert_squad.action_failed": "Expert Squad action failed for {{directory}}: {{error}}",
   "expert_squad.preview_empty": "This guidance is empty.",

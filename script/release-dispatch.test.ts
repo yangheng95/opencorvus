@@ -86,6 +86,28 @@ exec /mingw64/bin/git "$@"
   return { root, remote, checkout, commands, log }
 }
 
+function dispatch(input: Awaited<ReturnType<typeof fixture>>, env: Record<string, string> = {}) {
+  // Windows process launch can restore the host PATH. Set this fixture's
+  // command resolution inside Bash, where these POSIX paths are authoritative.
+  return run(
+    gitBash,
+    [
+      "-c",
+      'export PATH="$RELEASE_CONTRACT_PATH"; exec bash "$@"',
+      "release-contract",
+      bashPath(path.join(repositoryRoot, "script", "release")),
+      "0.0.57-beta",
+    ],
+    input.checkout,
+    {
+      ...env,
+      GH_ARGUMENT_LOG: bashPath(input.log),
+      REAL_GIT_REMOTE: bashPath(input.remote),
+      RELEASE_CONTRACT_PATH: `${bashPath(input.commands)}:/mingw64/bin:/usr/bin`,
+    },
+  )
+}
+
 afterAll(async () => {
   await Promise.all(temporaryRoots.map((root) => fs.rm(root, { recursive: true, force: true })))
 })
@@ -94,17 +116,7 @@ describe("release dispatcher", () => {
   test("dispatches the exact checked remote merge ref and repository despite GH_REPO", async () => {
     const input = await fixture()
     const head = run("git", ["rev-parse", "HEAD"], input.checkout).stdout.toString().trim()
-    const result = run(
-      gitBash,
-      [bashPath(path.join(repositoryRoot, "script", "release")), "0.0.57-beta"],
-      input.checkout,
-      {
-        GH_ARGUMENT_LOG: bashPath(input.log),
-        GH_REPO: "attacker/other",
-        REAL_GIT_REMOTE: bashPath(input.remote),
-        PATH: `${bashPath(input.commands)}:/mingw64/bin:/usr/bin`,
-      },
-    )
+    const result = dispatch(input, { GH_REPO: "attacker/other" })
     expect(result.exitCode, result.stderr.toString()).toBe(0)
     expect(result.stdout.toString()).toContain(
       `Dispatching build.yml for v0.0.57-beta from owner/repository:release-source@${head}`,
@@ -137,17 +149,10 @@ describe("release dispatcher", () => {
     assertSucceeded(run("git", ["commit", "-m", "advance remote"], remoteCheckout))
     assertSucceeded(run("git", ["push", "origin", "HEAD:release-source"], remoteCheckout))
 
-    const result = run(
-      gitBash,
-      [bashPath(path.join(repositoryRoot, "script", "release")), "0.0.57-beta"],
-      input.checkout,
-      {
-        GH_ARGUMENT_LOG: bashPath(input.log),
-        REAL_GIT_REMOTE: bashPath(input.remote),
-        PATH: `${bashPath(input.commands)}:/mingw64/bin:/usr/bin`,
-      },
-    )
+    const result = dispatch(input)
     expect(result.exitCode, result.stderr.toString()).toBe(1)
-    expect(result.stdout.toString()).toContain("Release dispatch requires HEAD to equal origin/release-source")
+    expect(result.stdout.toString(), result.stderr.toString()).toContain(
+      "Release dispatch requires HEAD to equal origin/release-source",
+    )
   }, 20_000)
 })

@@ -415,7 +415,7 @@ export namespace ExpertSquadPackageManager {
     try {
       return {
         kind: "package",
-        packageDigest: (await ExpertSquadRegistry.loadCatalogPackage(root, { canonicalFolder: false })).packageDigest,
+        packageDigest: await ExpertSquadRegistry.packageDigest(root),
       }
     } catch (error) {
       if (packageInspectionProvesIncomplete(error)) return { kind: "partial" }
@@ -684,10 +684,13 @@ export namespace ExpertSquadPackageManager {
       }
     | undefined
   > {
-    const identities = await ExpertSquadRegistry.discoverInstalledPackageIdentities(input.projectDirectory, {
+    const identities = await ExpertSquadRegistry.discoverAvailableIdentities(input.projectDirectory, {
+      view: "installations",
       reconcileEvolutionMutations: false,
     })
-    const existing = identities.find(
+    const issue = identities.issues.find((issue) => issue.id === input.id)
+    if (issue) throw new Error(issue.message)
+    const existing = identities.items.find(
       (identity) => identity.id === input.id && identity.location === input.targetLocation.kind,
     )
     if (!existing) return
@@ -968,7 +971,7 @@ export namespace ExpertSquadPackageManager {
   function installedRevision(input: {
     projectDirectory: string
     installationScope: ExpertSquadPackageLocations.InstallationScope
-    loaded: ExpertSquadRegistry.LoadedPackage
+    loaded: Pick<InstalledPackageRevision, "namespace" | "id" | "version" | "packageDigest">
     targetRoot: string
   }): InstalledPackageRevision {
     return {
@@ -1042,7 +1045,9 @@ export namespace ExpertSquadPackageManager {
         throw new Error(`Expert squad target exists and is not a directory: ${target}`)
       }
       const existing = !!targetState
-      const beforeLoaded = existing ? await ExpertSquadRegistry.loadPackage(target) : undefined
+      const beforeLoaded = existing
+        ? await ExpertSquadRegistry.readInstalledPackageRevision(target, { preserveSnapshot: true })
+        : undefined
       const before = beforeLoaded
         ? installedRevision({
             projectDirectory: input.projectDirectory,
@@ -1439,7 +1444,8 @@ export namespace ExpertSquadPackageManager {
         ...capabilities.builtInToolIDs,
         ...capabilities.defaultToolRefs,
         ...capabilities.packageToolRefs,
-      ]) tools.add(ref)
+      ])
+        tools.add(ref)
       for (const ref of [
         ...capabilities.defaultMcpServerRefs,
         ...capabilities.packageMcpServerRefs,
@@ -1449,7 +1455,8 @@ export namespace ExpertSquadPackageManager {
         ...capabilities.packageMcpPromptRefs,
         ...capabilities.defaultMcpResourceRefs,
         ...capabilities.packageMcpResourceRefs,
-      ]) mcp.add(ref)
+      ])
+        mcp.add(ref)
     }
     return { skillCount: skills.size, toolCount: tools.size, mcpCount: mcp.size }
   }
@@ -1462,11 +1469,10 @@ export namespace ExpertSquadPackageManager {
 
   async function marketInstallationScopes(projectDirectory: string) {
     const scopes = new Map<string, ExpertSquadPackageLocations.InstallationScope[]>()
-    const inventory = await ExpertSquadRegistry.discoverAvailable(projectDirectory)
-    for (const declaration of inventory.installations) {
-      if (!declaration.installationScope) continue
+    const inventory = await ExpertSquadRegistry.discoverAvailableIdentities(projectDirectory, { view: "installations" })
+    for (const declaration of inventory.items) {
       const current = scopes.get(declaration.id) ?? []
-      current.push(declaration.installationScope)
+      current.push(declaration.location)
       scopes.set(declaration.id, current)
     }
     const scopeOrder: Record<ExpertSquadPackageLocations.InstallationScope, number> = { project: 0, global: 1 }
@@ -1705,12 +1711,19 @@ export namespace ExpertSquadPackageManager {
     const installations = (
       await Promise.all(
         (["project", "global"] as const).map(async (scope): Promise<MarketExistingPackage | undefined> => {
-          const installed = await ExpertSquadRegistry.loadInstalledCatalogPackage({
+          const root = ExpertSquadRegistry.installedPackageRoot({
             projectDirectory: input.projectDirectory,
             installationScope: scope,
             namespace: loaded.namespace,
             id: loaded.id,
           })
+          const state = await lstat(root).catch((error: NodeJS.ErrnoException) => {
+            if (error.code === "ENOENT") return undefined
+            throw error
+          })
+          if (!state) return undefined
+          if (!state.isDirectory() || state.isSymbolicLink()) throw new Error(`Invalid installed package root: ${root}`)
+          const installed = await ExpertSquadRegistry.readInstalledPackageRevision(root)
           return installed
             ? {
                 installationScope: scope,
@@ -1808,6 +1821,69 @@ export namespace ExpertSquadPackageManager {
       expectedVersion: archive.version,
     })
     return { receipt: result, source: input.source }
+  }
+
+  const obsoleteRepairsInFlight = new Map<string, Promise<PackageMutationReceipt | undefined>>()
+
+  export async function repairObsoleteBundledPackages(input: { projectDirectory: string }) {
+    const repaired: PackageMutationReceipt[] = []
+    const failures: Array<{ id: string; installationScope: "project" | "global"; message: string }> = []
+    const inventory = await ExpertSquadRegistry.discoverAvailableIdentities(input.projectDirectory, {
+      view: "installations",
+    })
+    for (const identity of inventory.items) {
+      const source = payloadPackageSources.find(
+        (source) => source.namespace === identity.namespace && source.id === identity.id,
+      )
+      if (!source) continue
+      const current = ExpertSquadRegistry.SCHEMA_VERSION
+      if (
+        identity.schemaVersion === null ||
+        !Number.isInteger(identity.schemaVersion) ||
+        identity.schemaVersion < 1 ||
+        identity.schemaVersion >= current
+      )
+        continue
+      try {
+        const key = Filesystem.normalizePath(identity.root)
+        let pending = obsoleteRepairsInFlight.get(key)
+        if (!pending) {
+          pending = (async () => {
+            const before = await ExpertSquadRegistry.readInstalledPackageRevision(identity.root)
+            // Recheck the captured manifest, not just the earlier inventory observation.
+            if (
+              before.schemaVersion === null ||
+              !Number.isInteger(before.schemaVersion) ||
+              before.schemaVersion < 1 ||
+              before.schemaVersion >= current
+            )
+              return
+            const result = await updatePackage({
+              projectDirectory: input.projectDirectory,
+              id: identity.id,
+              installationScope: identity.location,
+              source: "builtin",
+              expectedCurrentPackageDigest: before.packageDigest,
+            })
+            return result.receipt
+          })()
+          obsoleteRepairsInFlight.set(key, pending)
+        }
+        try {
+          const receipt = await pending
+          if (receipt) repaired.push(receipt)
+        } finally {
+          if (obsoleteRepairsInFlight.get(key) === pending) obsoleteRepairsInFlight.delete(key)
+        }
+      } catch (error) {
+        failures.push({
+          id: identity.id,
+          installationScope: identity.location,
+          message: error instanceof Error ? error.message : String(error),
+        })
+      }
+    }
+    return { repaired, failures }
   }
 
   export async function restorePackageRevisionWithReceipt(input: {

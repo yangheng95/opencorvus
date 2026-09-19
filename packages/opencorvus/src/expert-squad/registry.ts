@@ -15,6 +15,7 @@ import {
   type ExpertSquadGenerationMetadata,
 } from "@/expert-squad/installation-metadata"
 import { ExpertSquadVersionSchema } from "@/expert-squad/version"
+import { EXPERT_SQUAD_SCHEMA_VERSION } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
 import {
   materializeExpertSquadCapabilities,
   type MaterializedExpertSquadCapabilities,
@@ -78,6 +79,7 @@ export namespace ExpertSquadRegistry {
   }
 
   export const ManifestSchema = ExpertSquadManifestV2Schema
+  export const SCHEMA_VERSION = EXPERT_SQUAD_SCHEMA_VERSION
 
   export type Manifest = ExpertSquadManifestV2
 
@@ -128,6 +130,7 @@ export namespace ExpertSquadRegistry {
     readonly namespace: string
     readonly id: string
     readonly version: string | null
+    readonly schemaVersion: number | null
     readonly root: string
     readonly manifestPath: string
     readonly location: ExpertSquadPackageLocations.Location["kind"]
@@ -387,7 +390,19 @@ export namespace ExpertSquadRegistry {
   }
 
   export function parseManifestText(text: string, source: string): Manifest {
-    return ManifestSchema.parse(parseJsoncText(text, source))
+    return parseManifest(parseJsoncText(text, source))
+  }
+
+  function parseManifest(raw: unknown): Manifest {
+    if (raw && typeof raw === "object" && "schema_version" in raw) {
+      const expected = SCHEMA_VERSION
+      if (raw.schema_version !== expected) {
+        throw new Error(
+          `Unsupported Expert Squad schema version ${String(raw.schema_version)}; expected ${expected}. Replace this installed package with its current version.`,
+        )
+      }
+    }
+    return ManifestSchema.parse(raw)
   }
 
   function parseReadmeText(text: string, context: string): string {
@@ -712,11 +727,7 @@ export namespace ExpertSquadRegistry {
       } catch (error) {
         const code = (error as NodeJS.ErrnoException).code
         const competingPublication =
-          code === "EEXIST" ||
-          code === "ENOTEMPTY" ||
-          code === "EPERM" ||
-          code === "EACCES" ||
-          code === "EBUSY"
+          code === "EEXIST" || code === "ENOTEMPTY" || code === "EPERM" || code === "EACCES" || code === "EBUSY"
         if (!competingPublication || !(await publishedSnapshotMatches(target, snapshot.digest))) throw error
         await rm(staging, { recursive: true, force: true })
       }
@@ -732,6 +743,28 @@ export namespace ExpertSquadRegistry {
 
   async function materializePackageSnapshot(sourceRoot: string): Promise<Readonly<{ root: string; digest: string }>> {
     return materializeCapturedPackageSnapshot(await capturePackageTree(sourceRoot))
+  }
+
+  /** Provisioning inspects installed bytes, not executable capability declarations. */
+  export async function readInstalledPackageRevision(root: string, options: { preserveSnapshot?: boolean } = {}) {
+    const snapshot = await capturePackageTree(root)
+    const manifestFile = snapshot.files.find((file) => file.relativePath === MANIFEST)
+    if (!manifestFile) throw new Error(`Installed Expert Squad is missing ${MANIFEST}: ${root}`)
+    const raw = parseJsoncText(manifestFile.bytes.toString("utf8"), path.join(root, MANIFEST))
+    const identity = InstalledIdentity.parse(raw)
+    if (identity.id !== path.basename(root) || identity.namespace !== path.basename(path.dirname(root))) {
+      throw new Error(`Installed Expert Squad identity does not match its canonical folder: ${root}`)
+    }
+    const version = ExpertSquadVersionSchema.safeParse(identity.version)
+    if (options.preserveSnapshot) await materializeCapturedPackageSnapshot(snapshot)
+    return {
+      namespace: identity.namespace,
+      id: identity.id,
+      version: version.success ? version.data : null,
+      schemaVersion: typeof identity.schema_version === "number" ? identity.schema_version : null,
+      packageDigest: snapshot.digest,
+      root,
+    }
   }
 
   export async function materializeEmbeddedPackageSnapshot(
@@ -1592,7 +1625,7 @@ export namespace ExpertSquadRegistry {
     await validatePackageRoot(normalizedRoot)
     const manifestPath = path.join(normalizedRoot, MANIFEST)
     const rawManifest = "rawManifest" in options ? options.rawManifest : await readJsoncFile(manifestPath)
-    const manifest = ManifestSchema.parse(rawManifest)
+    const manifest = parseManifest(rawManifest)
     validatePromptProfileManifest(manifest)
 
     const folderID = path.basename(normalizedRoot)
@@ -2107,6 +2140,7 @@ export namespace ExpertSquadRegistry {
           namespace: identity.namespace,
           id: identity.id,
           version: version.success ? version.data : null,
+          schemaVersion: typeof identity.schema_version === "number" ? identity.schema_version : null,
           root: packageRoot,
           manifestPath,
           location: location.kind,
@@ -2206,6 +2240,7 @@ export namespace ExpertSquadRegistry {
             namespace: identity.namespace,
             id: identity.id,
             version: version.success ? version.data : null,
+            schemaVersion: typeof identity.schema_version === "number" ? identity.schema_version : null,
             root: packageRoot,
             manifestPath,
             location: location.kind,
@@ -2307,10 +2342,15 @@ export namespace ExpertSquadRegistry {
 
   export async function discoverAvailableIdentities(
     projectDirectory: string,
+    options: { view?: "effective" | "installations"; reconcileEvolutionMutations?: boolean } = {},
   ): Promise<DiscoveryResult<InstalledPackageIdentity>> {
     const { ExpertSquadPackageManager } = await import("./manager")
-    await ExpertSquadPackageManager.reconcilePendingPackageMutations(projectDirectory)
-    return discoverEffectiveIdentities(projectDirectory).then((result) => result.effective)
+    if (options.reconcileEvolutionMutations !== false)
+      await ExpertSquadPackageManager.reconcilePendingPackageMutations(projectDirectory)
+    const result = await discoverEffectiveIdentities(projectDirectory)
+    return options.view === "installations"
+      ? { items: result.installations, issues: result.effective.issues }
+      : result.effective
   }
 
   export async function discoverGlobalAvailableIdentities(): Promise<DiscoveryResult<InstalledPackageIdentity>> {

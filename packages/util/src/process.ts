@@ -527,7 +527,14 @@ async function runProcess(facade: ProcessFacade, request: ProcessRunRequest): Pr
     inputWriter?.cancel()
     const [stdoutBytes, stderrBytes] = await Promise.all([stdout, stderr])
     if (inputFailure) throw inputFailure
-    const result = { receipt, stdout: stdoutBytes, stderr: stderrBytes }
+    // Physical exit can precede the last buffered output chunk. Completed-run
+    // policy is evaluated after both streams drain, without rewriting the
+    // handle's physical terminal receipt or an earlier cancellation reason.
+    const result: ProcessRunResult = {
+      receipt: outputLimitReached && receipt.reason === "exited" ? { ...receipt, reason: "output_limit" } : receipt,
+      stdout: stdoutBytes,
+      stderr: stderrBytes,
+    }
     const controlledError = reasonError(result, request)
     if (controlledError) throw controlledError
     if (receipt.exitCode === 0 || request.nothrow) return result

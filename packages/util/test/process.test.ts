@@ -7,6 +7,8 @@ import {
   createProcessFacade,
   ProcessAbortedError,
   ProcessDeadlineExceededError,
+  ProcessOutputLimitError,
+  type ProcessByteSource,
   type ProcessSpawnedHandle,
 } from "../src/process"
 import { NodeProcess, nodeProcessByteSource } from "../src/process-node"
@@ -83,6 +85,83 @@ describe("structured process facade", () => {
         timeoutMs: 500,
       }),
     ).rejects.toBeInstanceOf(ProcessDeadlineExceededError)
+  })
+
+  test("settles late combined output limits independently for concurrent process occurrences", async () => {
+    const lateDrain = createProcessFacade(async (request) => {
+      const handle = await NodeProcess.spawn({ ...request, signal: request.controlSignal })
+      const afterExit = (source: ProcessByteSource | null): ProcessByteSource => ({
+        async *[Symbol.asyncIterator]() {
+          if (!source) throw new Error("Expected a real child output stream")
+          for await (const chunk of source) {
+            await handle.terminal
+            yield chunk
+          }
+        },
+      })
+      return { ...handle, stdout: afterExit(handle.stdout), stderr: afterExit(handle.stderr) }
+    })
+    const outcomes = await Promise.allSettled(
+      [512, 513, 4096].map((bytes, index) =>
+        lateDrain.run({
+          command: {
+            executable: process.execPath,
+            args: [
+              "-e",
+              `process.stdout.write('x'.repeat(${bytes})); process.stderr.write('y'.repeat(512)); setTimeout(() => {}, 50)`,
+            ],
+          },
+          occurrenceID: `late-output-${index}`,
+          maxOutputBytes: 1024,
+          nothrow: true,
+          timeoutMs: 5000,
+        }),
+      ),
+    )
+    expect(outcomes[0]?.status).toBe("fulfilled")
+    if (outcomes[0]?.status !== "fulfilled") throw new Error("Expected exact-budget success")
+    expect(outcomes[0].value.receipt).toMatchObject({ occurrenceID: "late-output-0", reason: "exited" })
+    expect(outcomes[0].value.stdout.byteLength + outcomes[0].value.stderr.byteLength).toBe(1024)
+    for (const [index, outcome] of outcomes.entries()) {
+      if (index === 0) continue
+      expect(outcome.status).toBe("rejected")
+      if (outcome.status !== "rejected") throw new Error("Expected output limit rejection")
+      expect(outcome.reason).toBeInstanceOf(ProcessOutputLimitError)
+      const result = (outcome.reason as ProcessOutputLimitError).result
+      expect(result.receipt).toMatchObject({
+        occurrenceID: `late-output-${index}`,
+        reason: "output_limit",
+        exitCode: 0,
+      })
+      expect(result.stdout.byteLength + result.stderr.byteLength).toBe(1024)
+    }
+    const next = await NodeProcess.run({
+      command: { executable: process.execPath, args: ["-e", "process.stdout.write('next')"] },
+      occurrenceID: "after-late-output",
+      maxOutputBytes: 4,
+    })
+    expect({ reason: next.receipt.reason, output: new TextDecoder().decode(next.stdout) }).toEqual({
+      reason: "exited",
+      output: "next",
+    })
+    const deadline = await lateDrain
+      .run({
+        command: {
+          executable: process.execPath,
+          args: ["-e", "process.stdout.write('x'.repeat(4096)); setInterval(() => {}, 1000)"],
+        },
+        occurrenceID: "late-output-after-deadline",
+        maxOutputBytes: 1024,
+        timeoutMs: 1000,
+      })
+      .catch((error: unknown) => error)
+    expect(deadline).toBeInstanceOf(ProcessDeadlineExceededError)
+    const deadlineResult = (deadline as ProcessDeadlineExceededError).result!
+    expect(deadlineResult.receipt).toMatchObject({
+      occurrenceID: "late-output-after-deadline",
+      reason: "deadline_exceeded",
+    })
+    expect(deadlineResult.stdout.byteLength).toBe(1024)
   })
 
   test("a Windows admission deadline settles its identity probe before the next owned occurrence", async () => {

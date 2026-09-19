@@ -11,6 +11,12 @@ import { Instance } from "../../src/project/instance"
 
 const suffix = (length: number) => `\n[truncated; original length: ${length} characters]`
 
+test("obsolete manifests report the current schema and replacement action", () => {
+  expect(() => ExpertSquadRegistry.parseManifestText('{"schema_version":1}', "obsolete")).toThrow(
+    "Unsupported Expert Squad schema version 1; expected 2. Replace this installed package with its current version.",
+  )
+})
+
 async function installBroken(root: string, id: string) {
   const directory = path.join(root, "diagnostic-test", id)
   await mkdir(directory, { recursive: true })
@@ -18,7 +24,7 @@ async function installBroken(root: string, id: string) {
     namespace: "diagnostic-test",
     id,
     version: "2026.09.08.1",
-    schema_version: 1,
+    schema_version: 2,
     capability_projection: {
       scheduler: {},
       agents: Object.fromEntries(Array.from({ length: 40 }, (_, i) => [`worker-${i}`, {}])),

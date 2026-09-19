@@ -11,6 +11,7 @@ function decodedCapabilityRef(value: string) {
 }
 
 export const EXPERT_SQUAD_ID_PATTERN = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/
+export const EXPERT_SQUAD_SCHEMA_VERSION = 2
 export const EXPERT_SQUAD_VERSION_PATTERN = /^(\d{4})\.(\d{2})\.(\d{2})\.([1-9]\d*)$/
 
 const RESERVED_DYNAMIC_AGENT_IDS = new Set(["orchestrator", "shared", "universal-build"])
@@ -210,7 +211,7 @@ export const ExpertSquadCapabilityProjectionSchema: z.ZodType<ExpertSquadCapabil
 
 export const ExpertSquadManifestV2Schema: z.ZodType<ExpertSquadManifestV2> = z
   .object({
-    schema_version: z.literal(2),
+    schema_version: z.literal(EXPERT_SQUAD_SCHEMA_VERSION),
     namespace: ExpertSquadNamespaceSchema,
     id: ExpertSquadIDSchema,
     name: z.string().trim().min(1).optional(),
@@ -238,10 +239,9 @@ export const ExpertSquadManifestV2Schema: z.ZodType<ExpertSquadManifestV2> = z
     const referencedPackageSets = new Set<string>()
     const projections = [
       ["scheduler", manifest.capability_projection.scheduler],
-      ...Object.entries(manifest.capability_projection.agents).map(([agentID, projection]) => [
-        `agents.${agentID}`,
-        projection,
-      ] as const),
+      ...Object.entries(manifest.capability_projection.agents).map(
+        ([agentID, projection]) => [`agents.${agentID}`, projection] as const,
+      ),
     ] as const
     for (const [projectionPath, projection] of projections) {
       for (const [index, encoded] of projection.capability_refs.entries()) {
@@ -316,7 +316,7 @@ export interface ExpertSquadCapabilityProjection {
   virtual_workflows: ExpertSquadVirtualWorkflows
 }
 export interface ExpertSquadManifestV2 {
-  schema_version: 2
+  schema_version: typeof EXPERT_SQUAD_SCHEMA_VERSION
   namespace: string
   id: string
   name?: string

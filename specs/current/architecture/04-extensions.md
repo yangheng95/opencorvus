@@ -437,6 +437,14 @@ export、uninstall 和普通 runtime routes 执行完整 bootstrap，但 bootstr
 自动覆盖、默认受管更新、旧 schema 兼容或 source fallback；显式安装与替换只走
 `ExpertSquadPackageManager` 的严格原子 compare-and-swap 与持久 replacement-intent 恢复实现。
 
+Installed Expert Squads 在读取 runtime catalog 前调用 identity-only `POST /expert-squad/repair-bundled`，
+直接替换有当前 bundled namespace/id 来源且 manifest 数字 schema version 低于当前版本的安装，然后依据真实
+receipt 弹出版本、安装 scope 与备份提醒。它不是普通 bootstrap 的隐式写入，也不是通用自动升级：当前 schema
+下的用户修改、第三方来源、未来/未知版本和有歧义的身份不属于自动修复目标。旧安装只按 canonical identity
+与原始树 digest 检查，替换前将原文件保存到现有 content-addressed revision store；incoming payload 仍必须
+通过完整当前 schema 与运行资源校验。持久 replacement-intent 的恢复按精确树 digest 识别旧备份，不把旧
+manifest 的格式拒绝误判为文件清理了一半。没有旧格式执行器、字段转换层或第二套安装来源。
+
 ### Built-in Skills —— inventory 与运行投影分离
 
 普通内置 Skill 的可审查准源位于 `packages/opencorvus/src/skill/builtin/**`，构建前由

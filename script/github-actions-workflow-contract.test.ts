@@ -135,6 +135,9 @@ describe("GitHub Actions workflow contract", () => {
     expect(ci.jobs?.unit?.steps?.find(({ name }) => name === "Run utility filesystem tests")?.run).toBe(
       "bun run --cwd packages/util test",
     )
+    expect(ci.jobs?.unit?.steps?.find(({ uses }) => uses === "./.github/actions/setup-bun")?.with).toEqual({
+      prepare_sdk: "true",
+    })
     expect(ci.jobs?.services?.steps?.map(({ run }) => run).filter(Boolean)).toEqual([
       "bun run --cwd packages/channel-runtime test",
       "bun run test",

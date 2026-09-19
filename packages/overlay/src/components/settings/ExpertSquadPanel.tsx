@@ -10,6 +10,7 @@ import {
   clearExpertSquadUninstallReceipt,
   exportExpertSquadArchive,
   updateExpertSquadPackage,
+  repairObsoleteBundledExpertSquads,
   uninstallExpertSquadPackage,
   expertSquadUninstallReceipt,
   loadExpertSquadCatalog,
@@ -503,6 +504,30 @@ export default function ExpertSquadPanel() {
     if (currentScopeIdentity() === expectedScopeIdentity) setCatalogError("")
     const sequence = ++loadSequence
     try {
+      const repair = await repairObsoleteBundledExpertSquads(scope.directory)
+      if (repair.repaired.length || repair.failures.length) {
+        const packages = repair.repaired
+          .map(
+            ({ before, after }) =>
+              `${after.id} (${t(after.installationScope === "project" ? "expert_squad.package_project" : "expert_squad.package_global")}): ${before?.version ?? t("expert_squad.version_unknown")} → ${after.version}`,
+          )
+          .join("\n")
+        const failures = repair.failures
+          .map((item) => `${item.id} (${item.installationScope}): ${item.message}`)
+          .join("\n")
+        void showAppDialog({
+          title: t("expert_squad.obsolete_replaced_title"),
+          message: [packages && t("expert_squad.obsolete_replaced_body", { packages }), failures]
+            .filter(Boolean)
+            .join("\n\n"),
+          cancel: false,
+        })
+        if (repair.repaired.length)
+          void refreshMarket(undefined, scope, expectedScopeIdentity).catch((error) => {
+            if (currentScopeIdentity() === expectedScopeIdentity) setActionError(String(error))
+          })
+      }
+      if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
       const [next, entries, status, diagnostics] = await Promise.all([
         loadExpertSquadCatalog(scope),
         searchExpertSquads({ directory: scope.directory, view: "installations", limit: 20 }),

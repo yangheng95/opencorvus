@@ -33,6 +33,13 @@ describe("Project route context authority", () => {
     })
   })
 
+  test("provisions obsolete packages through identity-only routes", () => {
+    expect([
+      projectRouteContextKind("/expert-squad/market/detail", "GET"),
+      projectRouteContextKind("/expert-squad/repair-bundled", "POST"),
+    ]).toEqual(["identity", "identity"])
+  })
+
   test("gives project-owned routes on globally-served routers the same runtime authority as their siblings", () => {
     expect({
       taskPin: projectRouteContextKind("/work-ledger/item/task/tsk_1/pin", "PATCH"),

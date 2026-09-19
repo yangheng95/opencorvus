@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [v0.1.7 package repair and stable release](2026-09-20-v0.1.7-release.md)
+
 - [CI consolidation and Windows test cleanup](2026-09-19-ci-consolidation-test-cleanup.md)
 
 - [Linux installer job split](2026-09-19-linux-installer-job-split.md)

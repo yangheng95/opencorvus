@@ -162,6 +162,8 @@ import type {
   ExpertSquadMulticaSquadsResponses,
   ExpertSquadReleasePayloadErrors,
   ExpertSquadReleasePayloadResponses,
+  ExpertSquadRepairBundledErrors,
+  ExpertSquadRepairBundledResponses,
   ExpertSquadSearchErrors,
   ExpertSquadSearchResponses,
   ExpertSquadSettingsDetailErrors,
@@ -3820,6 +3822,29 @@ export class ExpertSquad extends HeyApiClient {
       ThrowOnError
     >({
       url: "/expert-squad/release-payload",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Replace obsolete bundled Expert Squad installations
+   *
+   * Replaces older-schema bundled installations in project and global scope with the validated application payload. Preserves prior bytes by digest and returns exact receipts for the client reminder; current-schema and third-party installations retain their contents.
+   */
+  public repairBundled<ThrowOnError extends boolean = false>(
+    parameters?: {
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
+    return (options?.client ?? this.client).post<
+      ExpertSquadRepairBundledResponses,
+      ExpertSquadRepairBundledErrors,
+      ThrowOnError
+    >({
+      url: "/expert-squad/repair-bundled",
       ...options,
       ...params,
     })

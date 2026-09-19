@@ -312,6 +312,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/expert-squad/multica/preview` | Preview a Multica squad import Body: `mapping`, `squadID`; Errors: `ExpertSquadPackageError`. | `expertSquad.multicaPreview` |
 | GET | `/expert-squad/multica/squads` | List Multica squads with expert-squad installation status Errors: `ExpertSquadPackageError`. | `expertSquad.multicaSquads` |
 | POST | `/expert-squad/release-payload` | Release bundled expert-squad packages Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.releasePayload` |
+| POST | `/expert-squad/repair-bundled` | Replace obsolete bundled Expert Squad installations Errors: `ExpertSquadPackageError`. | `expertSquad.repairBundled` |
 | GET | `/expert-squad/search` | Search expert-squad declarations Errors: `BadRequestError`, `UnknownError`. | `expertSquad.search` |
 | GET | `/expert-squad/settings/detail` | Load one full expert-squad settings declaration Errors: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.settingsDetail` |
 | POST | `/expert-squad/uninstall` | Uninstall an expert squad package Body: `id`, `installationScope`, `replacementID`; Errors: `AuthReadError`, `ExpertSquadPackageError`. | `expertSquad.uninstall` |
