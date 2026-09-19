@@ -38,3 +38,9 @@ Implementation complete locally. Working tree was clean at start (`73cc4ce6`). B
 - `bun run typecheck`: eight package tasks passed; seven reused matching cache entries, changed Overlay checked afresh. `bun run docs:check`: passed (341 operations, 25 groups). `git diff --check`: passed.
 - Downloaded checksum-verified actionlint 1.7.12: the new reusable workflow and debug caller pass. The canonical release file reports only two pre-existing unsupported `concurrency.queue` keys; the untouched HEAD version reports the identical diagnostics. GitHub has already accepted those existing keys in the successfully completed v0.1.6 workflow. Preserve the live queue policy; this local tool's schema does not validate that newer feature.
 - Native Linux cross-job execution remains pending until the debug workflow runs from the pushed source. No source/tag change to v0.1.6 has been made.
+
+## Native validation handoff
+
+Implementation commit `47c1f21cb434a825ba172d4306e3c468b9716038` was fetched/merged against unchanged origin/main and normally pushed after every pre-push hook passed (types, API/docs, architecture, package/module/release topology and zero secret-scan hits). The only pending commit was this authorized split.
+
+Dispatched the existing debug-only workflow with `linux_only=true`: [run 35451476289](https://github.com/yangheng95/opencorvus/actions/runs/35451476289), verified head SHA exactly `47c1f21cb434a825ba172d4306e3c468b9716038`. This does not create, edit or republish a Release. Still pending: both compile jobs, six native format jobs, two assembly/checker jobs and actual artifact-transfer evidence. On completion compare format timings and verify each assembly produces its canonical complete `overlay-linux-*` row. On failure inspect exact logs and fix the packaging implementation, not the published v0.1.6 source/tag. Preserve successful format/input artifacts and use same-run failed-job retries when the source is unchanged.
