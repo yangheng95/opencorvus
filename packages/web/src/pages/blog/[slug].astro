@@ -1,0 +1,9 @@
+---
+import { getCollection } from "astro:content"
+import OcBlogArticle from "../../components/OcBlogArticle.astro"
+export async function getStaticPaths() {
+  return (await getCollection("blog", ({ data }) => data.locale === "root")).map((post) => ({ params: { slug: post.data.key }, props: { post } }))
+}
+const { post } = Astro.props
+---
+<OcBlogArticle {post} />

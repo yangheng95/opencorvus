@@ -1,0 +1,79 @@
+---
+import { galleryCases } from "../content/case-gallery"
+import { caseGalleryGraph } from "../lib/case-gallery-graph"
+import { publicPath, type PublicLocale } from "../content/public-market"
+const { locale } = Astro.props as { locale: PublicLocale }
+const zh = locale === "zh-cn"
+const cases = galleryCases(locale)
+const base = import.meta.env.BASE_URL.replace(/\/$/, "")
+---
+<section class="oc-section oc-anchor" id="gallery" data-case-gallery>
+  <div class="oc-container">
+    <p class="oc-eyebrow">Case Gallery</p>
+    <h2 class="oc-text-h1 oc-cjk-spacing">{zh ? "任务输入与执行结果" : "Task inputs and outcomes"}</h2>
+    <div class="case-tabs" role="tablist" aria-label={zh ? "选择案例" : "Choose a case"}>
+      {cases.map((entry,index)=><button type="button" role="tab" id={`tab-${entry.id}`} aria-controls={`case-${entry.id}`} aria-selected={index===0 ? "true" : "false"} tabindex={index===0 ? 0 : -1} data-case-tab={entry.id}>
+        <span>{entry.title}</span><small>{entry.model}</small>
+      </button>)}
+    </div>
+    {cases.map((entry,index)=><article id={`case-${entry.id}`} role="tabpanel" aria-labelledby={`tab-${entry.id}`} tabindex="0" data-case-panel={entry.id} data-active={index===0 ? "true" : "false"}>
+      <div class="case-top">
+        <div class="case-query">
+          <p class="oc-eyebrow">{entry.inputLabel}</p>
+          <blockquote>{entry.query}</blockquote>
+        </div>
+        <aside class="case-meta">
+          <p class="oc-eyebrow">{zh ? "调用模型" : "Model"}</p>
+          <p class="oc-text-subtitle">{entry.model}</p>
+          <p class="oc-eyebrow outputs-label">{zh ? "产物与记录" : "Outputs & records"}</p>
+          <ul>{entry.outputs.map((item)=><li>{item}</li>)}</ul>
+          {entry.image && <img src={`${base}${entry.image}`} alt={zh ? "案例交付的坦克大战游戏画面" : "The delivered tank game"} width="720" height="624" loading="lazy" />}
+          <a class="oc-link" href={entry.evidence.startsWith("/") ? `${base}${entry.evidence}` : entry.evidence}>{entry.evidenceLabel} ↗</a>
+        </aside>
+      </div>
+      <div class="case-graph-head"><h3 class="oc-text-title">{zh ? "任务分解与协作关系" : "Task decomposition and coordination"}</h3></div>
+      <div class="case-graph"><Fragment set:html={caseGalleryGraph(entry.id,locale)} /></div>
+    </article>)}
+    <p class="case-more"><a class="oc-link" href={publicPath(locale,"/blog/")}>{zh ? "案例详解与研究记录" : "Case details and research notes"} ↗</a></p>
+  </div>
+</section>
+<style>
+  .case-tabs { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--oc-space-4); margin-block:var(--oc-space-6); }
+  .case-tabs button { text-align:left; padding:var(--oc-space-5); border:1px solid var(--oc-color-border-default); border-radius:var(--oc-radius-panel); background:var(--oc-color-bg-surface-raised); color:var(--oc-color-text-primary); cursor:pointer; font:inherit; }
+  .case-tabs button[aria-selected="true"] { border-color:var(--oc-color-brand); box-shadow:inset 0 0 0 1px var(--oc-color-brand); }
+  .case-tabs span,.case-tabs small { display:block; }
+  .case-tabs span { font-weight:600; }
+  .case-tabs small { margin-top:var(--oc-space-2); color:var(--oc-color-text-description); }
+  [data-gallery-ready] [data-case-panel][data-active="false"] { display:none; }
+  article { border:1px solid var(--oc-color-border-default); border-radius:var(--oc-radius-card); padding:var(--oc-space-6); }
+  .case-top { display:grid; grid-template-columns:minmax(0,1fr) 275px; gap:var(--oc-space-6); }
+  blockquote { margin:var(--oc-space-4) 0; white-space:pre-wrap; font-size:16px; line-height:1.8; }
+  .case-meta { padding-left:var(--oc-space-5); border-left:1px solid var(--oc-color-border-default); }
+  .case-meta p { margin-bottom:var(--oc-space-3); }
+  .outputs-label { margin-top:var(--oc-space-6); }
+  .case-meta ul { padding-left:var(--oc-space-4); font-size:14px; line-height:1.8; }
+  .case-meta img { display:block; width:100%; height:auto; max-height:230px; object-fit:contain; margin-block:var(--oc-space-4); border-radius:var(--oc-radius-sm); background:#000; }
+  .case-graph-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:var(--oc-space-3); margin-block:var(--oc-space-6) var(--oc-space-3); }
+  .case-graph { overflow-x:auto; }
+  .case-graph :global(svg) { display:block; width:100%; min-width:840px; height:auto; }
+  .case-more { margin-top:var(--oc-space-4); }
+  @media(max-width:760px) { .case-top { grid-template-columns:1fr; } .case-meta { border-left:0; padding-left:0; } .case-tabs { grid-template-columns:1fr; } }
+</style>
+<script>
+  document.querySelectorAll<HTMLElement>("[data-case-gallery]").forEach((gallery)=>{
+    const tabs=[...gallery.querySelectorAll<HTMLButtonElement>("[data-case-tab]")]
+    const panels=[...gallery.querySelectorAll<HTMLElement>("[data-case-panel]")]
+    const activate=(id:string)=>{
+      for(const tab of tabs){const active=tab.dataset.caseTab===id;tab.setAttribute("aria-selected",String(active));tab.tabIndex=active?0:-1}
+      for(const panel of panels)panel.dataset.active=String(panel.dataset.casePanel===id)
+    }
+    tabs.forEach((tab,index)=>{
+      tab.addEventListener("click",()=>activate(tab.dataset.caseTab!))
+      tab.addEventListener("keydown",(event)=>{
+        const next=event.key==="ArrowRight"?(index+1)%tabs.length:event.key==="ArrowLeft"?(index+tabs.length-1)%tabs.length:event.key==="Home"?0:event.key==="End"?tabs.length-1:-1
+        if(next<0)return;event.preventDefault();tabs[next].focus();tabs[next].click()
+      })
+    })
+    activate(tabs[0].dataset.caseTab!);gallery.dataset.galleryReady="true"
+  })
+</script>

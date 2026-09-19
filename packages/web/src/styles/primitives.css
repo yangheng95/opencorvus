@@ -436,7 +436,7 @@
   inset: -1px;
   z-index: -1;
   border-radius: inherit;
-  background: var(--oc-color-bg-surface-raised);
+  background: color-mix(in srgb, var(--oc-color-bg-page) 88%, transparent);
   -webkit-backdrop-filter: blur(var(--oc-blur-glass));
   backdrop-filter: blur(var(--oc-blur-glass));
   border: 1px solid var(--oc-color-border-default);

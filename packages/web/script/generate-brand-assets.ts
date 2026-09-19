@@ -1,6 +1,7 @@
-import { readFileSync, writeFileSync } from "node:fs"
+import { copyFileSync, readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import sharp from "sharp"
+import { coordinationDiagram } from "./coordination-artwork"
 
 /**
  * Website brand assets, derived from the one canonical logo.
@@ -29,7 +30,7 @@ const CARD = {
 } as const
 
 const WORDMARK = "OpenCorvus"
-const TAGLINE = "Automate the workflow you repeat every day"
+const TAGLINE = "Expert squads for long-running, complex work"
 const KICKER = "Open source · MIT · Self-hosted"
 
 /**
@@ -86,6 +87,8 @@ async function writeOpenGraphCard(): Promise<void> {
     .composite([{ input: logo, top: 96, left: 96 }])
     .png()
     .toFile(join(publicRoot, "og.png"))
+  writeFileSync(join(publicRoot, "media", "task-coordination-en.svg"), coordinationDiagram("root"))
+  writeFileSync(join(publicRoot, "media", "task-coordination-zh.svg"), coordinationDiagram("zh-cn"))
 }
 
 async function writeManifestIcons(): Promise<void> {
@@ -128,6 +131,7 @@ export async function generateWebsiteBrandAssets(): Promise<void> {
     throw new Error("Canonical OpenCorvus brand logo is not an SVG document")
   }
   writeFileSync(websiteFaviconPath, canonicalLogo)
+  copyFileSync(join(webRoot, "..", "..", "assets", "agent-teams-workflow.png"), join(publicRoot, "media", "agent-teams-workflow.png"))
   await writeOpenGraphCard()
   await writeManifestIcons()
   writeWebManifest()

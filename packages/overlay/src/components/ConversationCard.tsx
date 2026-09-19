@@ -8,15 +8,17 @@ import { ChatBubble } from "./ChatBubble"
 
 export function ConversationCard(props: { node: CardNode; depth: number; collapsible?: boolean }) {
   const label = () => t("chat.thinking")
-  const ordinaryCard = () =>
-    renderAsBubble(props.node) ? (
-      <ChatBubble node={props.node} depth={props.depth} collapsible={props.collapsible} />
-    ) : (
-      <Card node={props.node} depth={props.depth} />
-    )
-
   return (
-    <Show when={renderAsPendingAgent(props.node)} fallback={ordinaryCard()}>
+    <Show
+      when={renderAsPendingAgent(props.node)}
+      fallback={
+        // Keep branch identity separate from the changing transcript object.
+        // A plain conditional here recreates the bubble on every live projection.
+        <Show when={renderAsBubble(props.node)} fallback={<Card node={props.node} depth={props.depth} />}>
+          <ChatBubble node={props.node} depth={props.depth} collapsible={props.collapsible} />
+        </Show>
+      }
+    >
       <div
         class="conversation-thinking"
         data-card-id={props.node.id}

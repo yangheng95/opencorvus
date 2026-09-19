@@ -14,6 +14,7 @@ import crypto from "node:crypto"
 type OAuthExecutor = {
   result: AuthOAuthResult
   ownerID: string
+  completion?: Promise<void>
   stopRenewal(): void
   dispose(): Promise<void>
 }
@@ -221,15 +222,51 @@ export namespace ProviderAuth {
       const credentialProviderID = method.credentialProvider ?? input.providerID
       const observed = await Auth.observe(credentialProviderID)
       const ownerID = crypto.randomUUID()
-      const flow = await ProviderOAuthFlowStore.open({
-        providerID: input.providerID,
-        credentialProviderID,
-        expectedCredentialGeneration: observed.generation,
-        ownerID,
-        scope,
-        method: input.method,
-        inputsDigest: ProviderOAuthFlowStore.digestInputs(input.inputs),
-      })
+      const inputsDigest = ProviderOAuthFlowStore.digestInputs(input.inputs)
+      let flow: ProviderOAuthFlowStore.Flow
+      try {
+        flow = await ProviderOAuthFlowStore.open({
+          providerID: input.providerID,
+          credentialProviderID,
+          expectedCredentialGeneration: observed.generation,
+          ownerID,
+          scope,
+          method: input.method,
+          inputsDigest,
+        })
+      } catch (error) {
+        if (!(error instanceof ProviderOAuthFlowStore.ExchangeActiveError)) throw error
+        const active = await ProviderOAuthFlowStore.get(error.data.flowID)
+        const executor = active && currentState.executors.get(active.id)
+        if (
+          !active ||
+          !executor ||
+          active.operation !== "authorization" ||
+          active.providerID !== input.providerID ||
+          active.scope !== scope ||
+          active.method !== input.method ||
+          active.credentialProviderID !== credentialProviderID ||
+          active.inputsDigest !== inputsDigest ||
+          active.expectedCredentialGeneration !== observed.generation ||
+          active.exchangeOwnerID !== executor.ownerID ||
+          ProviderOAuthFlowStore.ownerLeaseExpiresAt(active) <= Date.now() ||
+          (active.state !== "pending" &&
+            !(
+              executor.result.method === "auto" &&
+              executor.completion &&
+              (active.state === "exchanging" || active.state === "credential_ready")
+            ))
+        )
+          throw error
+        // Re-enter the same owned occurrence; never start another plugin flow
+        // or replay its credential exchange merely because a view reopened.
+        return {
+          url: executor.result.url,
+          method: executor.result.method,
+          instructions: executor.result.instructions,
+          flowID: active.id,
+        }
+      }
       let executor: OAuthExecutor | undefined
       const stopRenewal = renewPendingOwner(flow.id, ownerID, async () => {
         const current = await ProviderOAuthFlowStore.get(flow.id)
@@ -320,9 +357,6 @@ export namespace ProviderAuth {
       const scope = input.scope ?? "project"
       const flow = await ProviderOAuthFlowStore.get(input.flowID)
       if (!flow || flow.state === "superseded") throw new OauthMissing({ providerID: input.providerID })
-      if (flow.state !== "pending") {
-        throw new OauthFlowAlreadySettled({ providerID: input.providerID, flowID: flow.id, state: flow.state })
-      }
       if (flow.providerID !== input.providerID || flow.scope !== scope || flow.method !== input.method) {
         // The code in hand was produced by a different flow than the one the
         // caller believes it is finishing. Refusing here is what binds the
@@ -338,6 +372,15 @@ export namespace ProviderAuth {
       // same occurrence finds it gone.
       const executors = await state(scope).then((s) => s.executors)
       const match = executors.get(flow.id)
+      if (
+        match?.result.method === "auto" &&
+        match.completion &&
+        ["pending", "exchanging", "credential_ready"].includes(flow.state)
+      )
+        return match.completion
+      if (flow.state !== "pending") {
+        throw new OauthFlowAlreadySettled({ providerID: input.providerID, flowID: flow.id, state: flow.state })
+      }
       if (!match) {
         // The occurrence is durable but its executor lived in a process that
         // is gone — or another caller is finishing it right now. Either way
@@ -347,64 +390,128 @@ export namespace ProviderAuth {
       if (match.result.method === "code" && !input.code) {
         throw new OauthCodeMissing({ providerID: input.providerID })
       }
-      let exchangeClaimed = false
-      let exchangeFailure: unknown
-      try {
-        await ProviderCredentialExchange.authorization({
-          flowID: flow.id,
-          ownerID: match.ownerID,
-          providerID: input.providerID,
-          credentialProviderID: flow.credentialProviderID,
-          claimed: async (mode) => {
-            match.stopRenewal()
-            if (mode === "exchange") {
-              exchangeClaimed = true
-              return
-            }
+      const complete = async () => {
+        let exchangeClaimed = false
+        let exchangeFailure: unknown
+        try {
+          await ProviderCredentialExchange.authorization({
+            flowID: flow.id,
+            ownerID: match.ownerID,
+            providerID: input.providerID,
+            credentialProviderID: flow.credentialProviderID,
+            claimed: async (mode) => {
+              match.stopRenewal()
+              if (mode === "exchange") {
+                exchangeClaimed = true
+                return
+              }
+              await match.dispose()
+              if (executors.get(flow.id) === match) executors.delete(flow.id)
+            },
+            exchange: async () => {
+              const result =
+                match.result.method === "code"
+                  ? await match.result.callback(input.code!)
+                  : await match.result.callback()
+              if (result.type !== "success") throw new OauthCallbackFailed({})
+
+              let credential: Auth.Info
+              if ("key" in result) {
+                credential = { type: "api", key: result.key, metadata: result.metadata }
+              } else {
+                credential = {
+                  type: "oauth",
+                  access: result.access,
+                  refresh: result.refresh,
+                  expires: result.expires,
+                  ...(result.accountId ? { accountId: result.accountId } : {}),
+                  ...(result.enterpriseUrl ? { enterpriseUrl: result.enterpriseUrl } : {}),
+                }
+              }
+              return credential
+            },
+          })
+        } catch (error) {
+          exchangeFailure = error
+        }
+        let disposeFailure: unknown
+        if (exchangeClaimed) {
+          try {
             await match.dispose()
             if (executors.get(flow.id) === match) executors.delete(flow.id)
-          },
-          exchange: async () => {
-            const result =
-              match.result.method === "code" ? await match.result.callback(input.code!) : await match.result.callback()
-            if (result.type !== "success") throw new OauthCallbackFailed({})
-
-            let credential: Auth.Info
-            if ("key" in result) {
-              credential = { type: "api", key: result.key, metadata: result.metadata }
-            } else {
-              credential = {
-                type: "oauth",
-                access: result.access,
-                refresh: result.refresh,
-                expires: result.expires,
-                ...(result.accountId ? { accountId: result.accountId } : {}),
-                ...(result.enterpriseUrl ? { enterpriseUrl: result.enterpriseUrl } : {}),
-              }
-            }
-            return credential
-          },
-        })
-      } catch (error) {
-        exchangeFailure = error
-      }
-      let disposeFailure: unknown
-      if (exchangeClaimed) {
-        try {
-          await match.dispose()
-          if (executors.get(flow.id) === match) executors.delete(flow.id)
-        } catch (error) {
-          disposeFailure = error
+          } catch (error) {
+            disposeFailure = error
+          }
         }
+        if (exchangeFailure && disposeFailure) {
+          throw new AggregateError(
+            [exchangeFailure, disposeFailure],
+            `Provider OAuth callback ${flow.id} failed and could not dispose`,
+          )
+        }
+        if (exchangeFailure) throw exchangeFailure
+        if (disposeFailure) throw disposeFailure
       }
-      if (exchangeFailure && disposeFailure) {
-        throw new AggregateError(
-          [exchangeFailure, disposeFailure],
-          `Provider OAuth callback ${flow.id} failed and could not dispose`,
-        )
+      const completion = complete().finally(() => {
+        if (match.completion === completion) match.completion = undefined
+      })
+      if (match.result.method === "auto") match.completion = completion
+      return completion
+    },
+  )
+
+  export const Cancellation = z.object({ ok: z.literal(true) }).meta({ ref: "ProviderAuthCancellation" })
+
+  export const cancel = fn(
+    z.object({
+      providerID: z.string(),
+      method: z.number(),
+      flowID: ProviderOAuthFlowStore.FlowID,
+      scope: Scope.optional(),
+    }),
+    async (input): Promise<z.infer<typeof Cancellation>> => {
+      const scope = input.scope ?? "project"
+      const flow = await ProviderOAuthFlowStore.get(input.flowID)
+      if (!flow) throw new OauthMissing({ providerID: input.providerID })
+      if (flow.providerID !== input.providerID || flow.scope !== scope || flow.method !== input.method) {
+        throw new OauthFlowMismatch({
+          providerID: input.providerID,
+          flowID: flow.id,
+          expectedMethod: flow.method,
+          method: input.method,
+        })
       }
-      if (exchangeFailure) throw exchangeFailure
-      if (disposeFailure) throw disposeFailure
+      const executors = await state(scope).then((s) => s.executors)
+      const executor = executors.get(flow.id)
+      let current = flow
+      if (flow.state === "pending") {
+        if (!executor || flow.exchangeOwnerID !== executor.ownerID) {
+          throw new OauthFlowNotExecutable({ providerID: input.providerID, flowID: flow.id })
+        }
+        current =
+          (await ProviderOAuthFlowStore.failPending({
+            id: flow.id,
+            ownerID: executor.ownerID,
+            error: "Provider OAuth authorization cancelled by its caller",
+          })) ??
+          (await ProviderOAuthFlowStore.settleExpiredPending({ id: flow.id, ownerID: executor.ownerID })) ??
+          (await ProviderOAuthFlowStore.get(flow.id)) ??
+          flow
+      }
+      if (["pending", "exchanging", "credential_ready"].includes(current.state)) {
+        throw new ProviderOAuthFlowStore.ExchangeActiveError({
+          providerID: input.providerID,
+          scope: current.scope,
+          flowID: current.id,
+          leaseExpiresAt: ProviderOAuthFlowStore.ownerLeaseExpiresAt(current),
+        })
+      }
+      if (executor) {
+        executor.stopRenewal()
+        await executor.dispose()
+        if (executors.get(flow.id) === executor) executors.delete(flow.id)
+      }
+      return { ok: true }
     },
   )
 

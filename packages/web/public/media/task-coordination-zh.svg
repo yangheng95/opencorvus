@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-labelledby="share-title">
+    <title id="share-title">坦克大战 · 执行关系</title>
+    <rect width="1440" height="960" fill="#f7f9fd"/>
+    <g font-family="Arial, Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+      <text x="72" y="70" fill="#253044" font-size="23" font-weight="600">OpenCorvus</text>
+      <text x="72" y="170" fill="#253044" font-size="54" font-weight="700">坦克大战：从调研到交付</text>
+      <text x="72" y="225" fill="#69778f" font-size="24">19 项验收要求 · 35 关来源数据 · 两轮修正</text>
+      <text x="72" y="910" fill="#69778f" font-size="15">角色与修正主题来自任务记录，连线采用工作流示意；返工起点不代表事件归因。非原始界面或精确时序。</text>
+    </g>
+    <g transform="translate(75 280)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 590" width="1290" height="590" role="img" aria-labelledby="share-title share-desc">
+    <title id="share-title">从一个目标，展开一场协作。</title>
+    <desc id="share-desc">意图、需求与调研汇合至架构；架构分派界面设计与工作量复核；设计进入实现；实现分支到测试和界面复核；系统审查与界面复核汇合交付。复核反馈汇合后返回实现，包含计分修正与关卡数据替换。</desc>
+    <defs>
+      <marker id="share-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 9 5 1 9" fill="none" stroke="#8193ba" stroke-width="1.5"/></marker>
+      <marker id="share-repair" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 9 5 1 9" fill="none" stroke="#ba8649" stroke-width="1.5"/></marker>
+      <radialGradient id="share-wash"><stop stop-color="#dfe7ff" stop-opacity=".7"/><stop offset="1" stop-color="#f7f9fd" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="1290" height="590" rx="24" fill="#f7f9fd"/>
+    <ellipse cx="750" cy="290" rx="350" ry="260" fill="url(#share-wash)"/>
+    <g font-family="Arial, Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+      <text x="37" y="42" font-size="13" fill="#68778f" letter-spacing="1">坦克大战 · 执行关系</text>
+      <g fill="none" stroke="#8193ba" stroke-width="1.7"><path data-from="intent" data-to="architecture" d="M198 145 C228 145 220 265 250 265" marker-end="url(#share-arrow)"/><path data-from="requirements" data-to="architecture" d="M198 265 H250" marker-end="url(#share-arrow)"/><path data-from="research" data-to="architecture" d="M198 385 C228 385 220 265 250 265" marker-end="url(#share-arrow)"/><path data-from="architecture" data-to="workload" d="M412 265 C442 265 434 125 464 125" marker-end="url(#share-arrow)"/><path data-from="architecture" data-to="design" d="M412 265 C442 265 434 305 464 305" marker-end="url(#share-arrow)"/><path data-from="design" data-to="implementation" d="M626 305 H678" marker-end="url(#share-arrow)"/><path data-from="implementation" data-to="test" d="M840 305 C871 305 861 185 892 185" marker-end="url(#share-arrow)"/><path data-from="implementation" data-to="interface-review" d="M840 305 C871 305 861 395 892 395" marker-end="url(#share-arrow)"/><path data-from="test" data-to="system-review" d="M1054 185 H1106" marker-end="url(#share-arrow)"/><path data-from="workload" data-to="system-review" d="M626 125 H649 Q665 125 665 109 V80 Q665 64 681 64 H1164 Q1180 64 1180 80 V154" marker-end="url(#share-arrow)"/><path data-from="implementation" data-to="system-review" d="M759 274 V254 Q759 238 775 238 H1124 Q1140 238 1140 222 V216" marker-end="url(#share-arrow)"/><path data-from="system-review" data-to="delivery" d="M1220 216 V364" marker-end="url(#share-arrow)"/><path data-from="interface-review" data-to="delivery" d="M1054 395 H1106" marker-end="url(#share-arrow)"/></g>
+      <g fill="none" stroke="#ba8649" stroke-width="1.7" stroke-dasharray="5 4">
+        <path data-from="interface-review" data-to="review-feedback" d="M973 426 V460 Q973 480 993 480 H1050" marker-end="url(#share-repair)"/>
+        <path data-from="system-review" data-to="review-feedback" d="M1106 199 H1094 Q1080 199 1080 213 V460" marker-end="url(#share-repair)"/>
+        <path data-from="review-feedback" data-to="implementation" d="M1140 510 V540 Q1140 555 1125 555 H747 Q732 555 732 540 V336" marker-end="url(#share-repair)"/>
+      </g>
+      <g data-node="intent" transform="translate(36 114)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">意图解析</text>
+
+    </g><g data-node="requirements" transform="translate(36 234)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">需求工程</text>
+
+    </g><g data-node="research" transform="translate(36 354)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">来源调研</text>
+
+    </g><g data-node="architecture" transform="translate(250 234)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">架构设计</text>
+
+    </g><g data-node="workload" transform="translate(464 94)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">工作量复核</text>
+
+    </g><g data-node="design" transform="translate(464 274)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">界面设计</text>
+
+    </g><g data-node="implementation" transform="translate(678 274)">
+      <rect width="162" height="62" rx="14" fill="#365bed" stroke="#365bed"/>
+      <circle cx="18" cy="31" r="3" fill="#cdd7ff"/>
+      <text x="87.5" y="26" text-anchor="middle" fill="white" font-size="17" font-weight="600">实现工程师</text>
+      <text x="87.5" y="45" text-anchor="middle" fill="#d6dfff" font-size="11">实现与集成</text>
+    </g><g data-node="test" transform="translate(892 154)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">测试</text>
+
+    </g><g data-node="interface-review" transform="translate(892 364)">
+      <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="87.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">界面复核</text>
+
+    </g><g data-node="system-review" transform="translate(1106 154)">
+      <rect width="148" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
+      <circle cx="18" cy="31" r="3" fill="#8894aa"/>
+      <text x="80.5" y="37" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">系统审查</text>
+
+    </g><g data-node="delivery" transform="translate(1106 364)">
+      <rect width="148" height="62" rx="14" fill="#ecf6f1" stroke="#a8caba"/>
+      <circle cx="18" cy="31" r="3" fill="#348062"/>
+      <text x="80.5" y="26" text-anchor="middle" fill="#273247" font-size="17" font-weight="600">交付汇总</text>
+      <text x="80.5" y="45" text-anchor="middle" fill="#628674" font-size="11">编排器</text>
+    </g>
+      <g data-node="review-feedback">
+        <rect x="1050" y="460" width="190" height="50" rx="14" fill="#fff8ed" stroke="#ba8649"/>
+        <text x="1145" y="491" text-anchor="middle" font-size="15" fill="#92602c">复核反馈</text>
+      </g>
+      <text x="870" y="512" text-anchor="middle" font-size="12" fill="#92602c">01  计分与结算修正</text>
+      <text x="870" y="537" text-anchor="middle" font-size="12" fill="#92602c">02  35 关数据替换</text>
+      <text x="38" y="541" font-size="12" fill="#748299">实线：工作衔接</text>
+      <text x="38" y="562" font-size="12" fill="#92602c">虚线：复核后的修正回流</text>
+    </g>
+  </svg></g>
+  </svg>

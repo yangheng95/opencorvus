@@ -4059,6 +4059,10 @@ export type ProviderAuthAuthorization = {
   url: string
 }
 
+export type ProviderAuthCancellation = {
+  ok: true
+}
+
 export type ProviderAuthError = {
   data: {
     message: string
@@ -18600,6 +18604,52 @@ export type GlobalProvidersOauthCallbackResponses = {
 export type GlobalProvidersOauthCallbackResponse =
   GlobalProvidersOauthCallbackResponses[keyof GlobalProvidersOauthCallbackResponses]
 
+export type GlobalProvidersOauthCancelData = {
+  body: {
+    flowID: string
+    method: number
+  }
+  path: {
+    providerID: string
+  }
+  query?: never
+  url: "/global/providers/{providerID}/oauth/cancel"
+}
+
+export type GlobalProvidersOauthCancelErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Provider OAuth exchange is already active
+   */
+  409:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthOAuthExchangeActiveError"
+      }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type GlobalProvidersOauthCancelError = GlobalProvidersOauthCancelErrors[keyof GlobalProvidersOauthCancelErrors]
+
+export type GlobalProvidersOauthCancelResponses = {
+  /**
+   * Pending authorization released
+   */
+  200: ProviderAuthCancellation
+}
+
+export type GlobalProvidersOauthCancelResponse =
+  GlobalProvidersOauthCancelResponses[keyof GlobalProvidersOauthCancelResponses]
+
 export type GlobalProvidersTestData = {
   body?: {
     modelID?: string
@@ -23582,6 +23632,56 @@ export type ProviderOauthCallbackResponses = {
 }
 
 export type ProviderOauthCallbackResponse = ProviderOauthCallbackResponses[keyof ProviderOauthCallbackResponses]
+
+export type ProviderOauthCancelData = {
+  body: {
+    flowID: string
+    method: number
+  }
+  path: {
+    providerID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/provider/{providerID}/oauth/cancel"
+}
+
+export type ProviderOauthCancelErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Provider OAuth exchange is already active
+   */
+  409:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProviderAuthOAuthExchangeActiveError"
+      }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type ProviderOauthCancelError = ProviderOauthCancelErrors[keyof ProviderOauthCancelErrors]
+
+export type ProviderOauthCancelResponses = {
+  /**
+   * Pending authorization released
+   */
+  200: ProviderAuthCancellation
+}
+
+export type ProviderOauthCancelResponse = ProviderOauthCancelResponses[keyof ProviderOauthCancelResponses]
 
 export type ProviderTestData = {
   body?: {

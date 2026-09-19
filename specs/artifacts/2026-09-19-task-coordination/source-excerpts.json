@@ -1,0 +1,44 @@
+{
+  "scope": "Selected local records inspected 2026-09-19; sanitized excerpts, not a complete public transcript or fresh execution.",
+  "sourceSha256": {
+    "decision-log.md": "0db3b546090cc55ab8d070ca1bb5310f41ece82c6c2ab13c6077b2d2d1d671fd",
+    "mission-state.json": "3c69e971f20781c2f02499c5399016873a5c33c09f365566ed807f5886e9e00d",
+    "trace.jsonl": "7c1da4a03b7ca260e1ac0ea412887d83b12c093eb946c2f0e4f36edd344e2e77",
+    "vitest-report.json": "c27819eb1ac3ecaae5574dfd8cf20297ab4713975b8d4067b4c944dfd562bee4",
+    "project-README.md": "9cda27e1d8441cd615758f86a33a004a758371cd6d42d5c0ef5abe92800cddd5",
+    "play-2p.png": "0436b63879fe01d27616ea6bd6e2e7d0ceb70ae0090d8a0c28c74929fccc8483"
+  },
+  "requirementsExcerpt": "将\"还原全部原版游戏体验\"分解为 REQ-1..REQ-19：可运行交付、13×13 地形、35 关结构与循环、4 类敌坦编成、生成节奏与同屏上限、敌方 AI、闪现坦克与道具掉落、6 种道具效果、玩家升级与死亡重置、生命与失败判定、基地判定、单双人同屏、计分与结算、操作键位、像素视听、开始/选关/暂停、结束与高分、建造模式、碰撞与子弹规则\n_Why: \"全部原版体验\"是模糊质量词，按模板要求不得直接作为需求或隐含不写；已逐项分解为可观察、可证伪的验收条件，故不再登记 maturity_scope_pending 澄清项。_\n<sub>2026-09-18T15:16:47.867Z</sub>",
+  "missionRepairExcerpt": "- 交付方在任务内部经历了两轮修正：第一轮修复真实游玩路径上不可达的计分与结算呈现缺陷；第二轮按操作者裁定把 35 关地图与逐关编成换成公开非 ROM 来源的数据。Mission 未介入其内部修复，因为修复边界完全落在该团队职权内。\n- 接受判定基于产物本身而非自述：交付结论、独立验收清单、独立测试报告、界面与渲染复核、系统完整性审查均被完整读取；两轮系统完整性审查的最终结论为「无阻断性发现」，上一轮的两条阻断项由评审方自行取证确认解除。\n- 未因以下事实拒绝验收：与原版 ROM 的逐格等价性不可验证、象限级破损未表达、后期 AI 分工在正常配置下不可隔离观测、两项实拍证据缺失。这些是该任务已如实登记且有替代证据的有界缺口，均未使三条验收标准失效。\n- 最终成果说明按可读性选择结构化文档呈现，而非图表：本 Mission 只有一个阶段、无阶段间依赖边，图形化拓扑无法提供额外信息。",
+  "observedAgentNames": [
+    "implementation-engineer",
+    "interface-designer",
+    "interface-integrity-reviewer",
+    "memory",
+    "orchestrator",
+    "request-interpreter",
+    "requirement-engineer",
+    "solution-architect",
+    "source-investigator",
+    "system-integrity-reviewer",
+    "test-engineer",
+    "workload-reviewer"
+  ],
+  "retainedTestReport": {
+    "numTotalTests": 242,
+    "numPassedTests": 241,
+    "numFailedTests": 1,
+    "success": false
+  },
+  "interpretation": "Closing narrative claims all 242 tests passed, while retained report shows 241 passed and 1 failed. Revision identity is not reconciled. No all-tests-passed claim is made.",
+  "galleryInput": {
+    "originalQuery": "帮我创建一个坦克大战的网页游戏，要求还原全部的原版游戏体验",
+    "model": {
+      "providerID": "deepseek",
+      "modelID": "deepseek-v4-flash"
+    },
+    "source": "Task request and trace model metadata; request independently matched read-only task storage.",
+    "requestSha256": "88922b3e80c76ab637d9c97cf63de4aab8cf898d287bc2287916c7fb650ba7db",
+    "traceSha256": "edfac8e4819099f7cb7f3e9a5f8e11bebcfc705e5faa51dc03914260184c16b8"
+  }
+}

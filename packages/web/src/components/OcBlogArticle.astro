@@ -1,0 +1,60 @@
+---
+import { render, type CollectionEntry } from "astro:content"
+import OcLayout from "./OcLayout.astro"
+import OcAutomationBench from "./OcAutomationBench.astro"
+import OcMissionCase from "./OcMissionCase.astro"
+import OcResearchPaper from "./OcResearchPaper.astro"
+import { landingCopy } from "../content/landing-copy"
+import { featuredComposition, selfPaperComposition } from "../lib/landing-compositions"
+import { publicPath } from "../content/public-market"
+const { post } = Astro.props as { post: CollectionEntry<"blog"> }
+const { Content, headings } = await render(post)
+const { locale, key, title, description, visual } = post.data
+const zh = locale === "zh-cn"
+const copy = landingCopy[locale]
+---
+<OcLayout {locale} current="blog" title={`${title} · OpenCorvus`} {description}
+  languageHref={publicPath(zh ? "root" : "zh-cn", `/blog/${key}/`)}>
+  <article class="oc-container blog-article">
+    <header class="article-intro">
+      <a class="oc-link" href={publicPath(locale, "/blog/")}>← {zh ? "博客" : "Blog"}</a>
+      <h1 class="oc-text-h1">{title}</h1>
+      <p class="oc-text-body oc-text-description">{description}</p>
+    </header>
+    {headings.filter((h) => h.depth === 2).length > 1 && <details class="article-toc">
+      <summary>{zh ? "文章目录" : "In this article"}</summary>
+      <ul>{headings.filter((h) => h.depth === 2).map((h) => <li><a class="oc-link" href={`#${h.slug}`}>{h.text}</a></li>)}</ul>
+    </details>}
+    <div class="article-prose"><Content /></div>
+    <div class="article-visual">
+      {visual === "benchmark" && <OcAutomationBench copy={copy.benchmark} />}
+      {visual === "composition" && <OcMissionCase study={featuredComposition(locale)} caseLabel={copy.compose.caseLabel} copy={copy.compose} />}
+      {visual === "research" && <><OcResearchPaper {locale} /><OcMissionCase study={selfPaperComposition(locale)} caseLabel={copy.compose.paperCaseLabel} copy={copy.compose} /></>}
+    </div>
+    <footer class="article-end"><a class="oc-link" href={publicPath(locale, "/blog/")}>{zh ? "浏览更多文章" : "More articles"} →</a></footer>
+  </article>
+</OcLayout>
+<style>
+  .blog-article { padding-block: var(--oc-space-9); }
+  .article-intro { padding-top: var(--oc-space-8); }
+  .article-intro, .article-prose, .article-toc, .article-end { max-width: 800px; margin-inline: auto; }
+  h1 { margin-block: var(--oc-space-5); }
+  .article-toc { padding: var(--oc-space-5); background: var(--oc-color-bg-surface-raised); border-radius: var(--oc-radius-panel); margin-block: var(--oc-space-6); }
+  .article-toc summary { cursor: pointer; }
+  .article-prose { margin-top: var(--oc-space-7); font-size: 17px; line-height: 1.85; overflow-wrap: anywhere; }
+  .article-prose :global(h2), .article-prose :global(h3) { margin-top: var(--oc-space-7); line-height: 1.4; scroll-margin-top: 90px; }
+  .article-prose :global(p), .article-prose :global(ul), .article-prose :global(ol) { margin-block: var(--oc-space-4); }
+  .article-prose :global(a) { color: var(--oc-color-text-link); text-decoration: underline; text-underline-offset: 3px; }
+  .article-prose :global(h2 a), .article-prose :global(h3 a) { color: inherit; text-decoration: none; }
+  .article-prose :global(h2 a:hover), .article-prose :global(h3 a:hover) { text-decoration: underline; }
+  .article-prose :global(img) { display: block; max-width: 100%; height: auto; }
+  .article-prose :global(pre) { padding: var(--oc-space-5); overflow-x: auto; border-radius: var(--oc-radius-sm); font-size: 14px; }
+  .article-prose :global(table) { display: block; overflow-x: auto; border-collapse: collapse; font-size: 14px; }
+  .article-prose :global(th), .article-prose :global(td) { padding: var(--oc-space-3); border-bottom: 1px solid var(--oc-color-border-default); text-align: left; vertical-align: top; }
+  .article-prose :global(th) { white-space: nowrap; }
+  .article-prose :global(blockquote) { margin-inline: 0; padding-left: var(--oc-space-5); border-left: 2px solid var(--oc-color-border-default); color: var(--oc-color-text-description); }
+  .article-visual { margin-top: var(--oc-space-7); }
+  .article-visual :global(.oc-reveal) { opacity: 1; transform: none; filter: none; }
+  .article-visual :global(.oc-container) { width: 100%; }
+  .article-end { margin-top: var(--oc-space-9); padding-block: var(--oc-space-6); border-top: 1px solid var(--oc-color-border-default); }
+</style>

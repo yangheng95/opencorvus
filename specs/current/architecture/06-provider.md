@@ -298,7 +298,7 @@ Project `MEMORY.MD` Organizer 是固定身份中的显式例外：配置 schema 
 
 `ProviderAuth` 是 plugin 认证 method 执行的唯一 owner；`ProviderCredentialExchange` 是所有远端 Provider
 credential exchange 与 credential commit 的唯一 owner。HTTP project/global route、Overlay 和
-`opencorvus auth login` 都只通过它的 `execute`、`authorize` 和 `callback` 进入；`execute` 只接受 API
+`opencorvus auth login` 都只通过它的 `execute`、`authorize`、`callback` 和 `cancel` 进入；`execute` 只接受 API
 credential method，OAuth 只能通过 `authorize` 开始。CLI 只负责 method/prompt
 呈现和输入收集，不得直接调用 plugin `authorize` / OAuth callback closure，也不得解释 callback result 后自行
 写 `Auth`。CLI 在当前 Project `Instance` 中使用 project scope，因而保留 installed project plugin catalog；它
@@ -309,6 +309,12 @@ Auth generation，并由 `ProviderOAuthFlowStore` 在任何 loopback server、br
 exact flow occurrence。pending executor 自身持有 Provider-wide renewable owner；同 source 或 target 的另一授权/refresh
 在其存活期间得到 typed 409，不能替换 executor 或让其资源失去结算路径。plugin executor 创建成功后才以 `flowID`
 绑定；callback 必须携带该 exact `flowID` 和 owner，不存在按 provider/scope 查找 current flow 的后备路径。
+同一进程再次 authorize 遇到 durable conflict 时，仅在 provider/credential target、scope、method、inputs digest、
+Auth generation 和有效 owner 全部一致时返回同一个 executor/flowID。pending code/auto 可以继续；已经开始的 auto
+callback 由 executor 持有单一 completion Promise，重入观察同一次 exchange。code exchange、外部进程 owner 和
+终态不能重放。`cancel` 携带 exact flowID/method/scope，只能通过 failPending 原子结算 pending；exchange 先赢得
+claim 时仍返回 typed 409。已终态取消可幂等回收 executor。CLI/Overlay 取消 code prompt 时必须调用 cancel；
+Overlay 打开外部页面失败时也须回收 pending，不能静默遗留续租。
 `pending` authorization 的有效 lease 为进程 lease 与 `timeCreated + PENDING_AUTHORIZATION_TIMEOUT_MS` 的较早者；
 总期限为五分钟，续租只能维持存活证明，不能延长该期限。所有 admission、claim、renewal 和 recovery 使用同一
 `ownerLeaseExpiresAt` 定义。后台 renewal observer 或后续 admission/callback 将到期 occurrence 结算为 `failed`，

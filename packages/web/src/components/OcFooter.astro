@@ -52,7 +52,8 @@ const columns = [
       { label: copy.docs, href: publicPath(locale, "/start/quickstart/") },
       { label: copy.quickstart, href: publicPath(locale, "/start/install/") },
       { label: copy.cli, href: publicPath(locale, "/reference/cli/") },
-      { label: copy.paper, href: `${publicPath(locale)}#research` },
+      { label: zh ? "博客" : "Blog", href: publicPath(locale, "/blog/") },
+      { label: copy.paper, href: publicPath(locale, "/blog/research/") },
     ],
   },
   {

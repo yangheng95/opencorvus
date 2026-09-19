@@ -738,6 +738,33 @@ export const GlobalRoutes = lazy(() =>
       },
     )
     .post(
+      "/providers/:providerID/oauth/cancel",
+      describeRoute({
+        summary: "Cancel pending Provider authorization",
+        description: "Release the exact pending OAuth occurrence before credential exchange starts.",
+        operationId: "global.providers.oauth.cancel",
+        responses: {
+          200: {
+            description: "Pending authorization released",
+            content: { "application/json": { schema: resolver(ProviderAuth.Cancellation) } },
+          },
+          ...errors(400),
+          409: badRequestOrNamedErrorResponse(
+            "Provider OAuth exchange is already active",
+            "ProviderAuthOAuthExchangeActiveError",
+          ),
+          503: AuthReadUnavailableResponse,
+        },
+      }),
+      validator("param", z.object({ providerID: z.string() })),
+      validator("json", z.object({ method: z.number(), flowID: ProviderOAuthFlowStore.FlowID })),
+      async (c) => {
+        const { providerID } = c.req.valid("param")
+        const { method, flowID } = c.req.valid("json")
+        return c.json(await ProviderAuth.cancel({ providerID, method, flowID, scope: "global" }))
+      },
+    )
+    .post(
       "/providers/:providerID/oauth/callback",
       describeRoute({
         summary: "Complete global Provider subscription authorization",

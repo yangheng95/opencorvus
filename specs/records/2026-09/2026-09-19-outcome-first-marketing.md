@@ -1,0 +1,173 @@
+# Long-running, complex-task product story
+
+## Current Recall — query/model/graph gallery
+
+- User confirmed the DeBERTa model as GPT-5.6 Sol. Model attribution is user-supplied; the public repository remains the artifact reference.
+- User requires formal public materials with no development annotations. Public captions distinguish task requirements and collaboration relations without editorial placeholders or production-process comments; investigation details remain here.
+
+- User explicitly rejected the film during work: “不对，垃圾营销，还不如把输入的 query，调用的模型和执行图做成 gallery 有意义，让人知道复杂 query 都接得住”. Stop video production and replace the homepage's video presentation with inspectable cases, not another narrative campaign.
+- Acceptance: prominent task input, actual model provenance, genuine directed graph and inspectable outputs; preserve the site's design and concise structure. Never generalize a case into a universal success claim. Distinguish verbatim requests from retained briefs, runtime evidence from workflow illustrations, and unknown model identity from a verified model.
+- Investigation: tank original request verified against intent/request.md and read-only engine_task.request; its execution trace contains 771 model metadata observations, all deepseek/deepseek-v4-flash (metadata observations are not call count). Actual Budget record verifies openai/gpt-5.6-luna and repair/review outcomes but retained input is a qualified brief, not a preserved original prompt. DeBERTa has a public artifact package and preserved task requirements, but the source brief explicitly cannot establish runtime model identity. Asked the user which additional original complex queries/tasks to feature while implementing independently.
+- Plan: use a single localized case-data source with explicit provenance; replace video and duplicate tank graph with a selectable gallery whose detail shows input, model, directed dependencies/corrections and outputs/evidence. Reuse the existing tank graph; other case diagrams show only documented stage relationships or are labeled plan illustrations. Preserve privacy and evidence caveats. Read-only independent review after build/manual screenshots, then scoped commit/fetch/merge/push; no production deployment.
+- Cancelled film: its uncommitted activation and asset inventory were restored from HEAD after reviewing the diff; generated film/source inputs were moved to .scratch/rejected-tank-case-film within the verified workspace. They are not website assets or current deliverables. Existing unrelated script/video/ remains untouched. The prior video Recall below is superseded, not an ongoing instruction.
+- Impact: presentation, case data, gallery interaction and source evidence only. No scheduling/runtime/database modifications or credentials. Read-only SQLite used query_only for the specified case. No UI automated tests. Risks: calling reconstructed briefs original queries, model attribution from titles, list-shaped pseudo-graphs, duplicate evidence and misleading completed-state claims. Independent feedback: 无（实施前）。
+
+## Current Recall — real tank-task short film
+
+- User rejected the current video and asked for a new script; approved the proposed roughly 60-second Chinese documentary-style story with “可以的”. Produce the Chinese version: game opening, 19 requirements, role graph, scoring repair loop, operator-directed 35-stage replacement, inspectable delivery and short product close. Preserve website visual identity. Do not publish production.
+- Read: current video component/copy, prior reproducible video renderer and narration workflow, retained sanitized tank-task source excerpts, local delivered project package/serve configuration and existing media. Existing untracked script/video/ is unrelated and remains untouched. Native ffmpeg/ffprobe, Pillow and edge-tts are available; no new paid model call or credential use is needed.
+- Diagnosis: the old film repeats illustrated cards and broad workflow claims rather than showing a concrete task. Use actual delivered-game footage and real record excerpts with a labeled directed graph. Do not simulate an OpenCorvus chat/UI or replay unrecorded historical actions. Recorded test discrepancy and original-fidelity limits remain linked; no full-test-pass or performance claim.
+- Plan: capture the delivered game through an isolated browser/server, retain timestamps and provenance; prepare exact scene/narration/subtitle inputs; reuse the existing public-script speech service and local rendering toolchain, with restrained movement, progressive graph and pauses. Render a 1920x1080 Chinese master/poster/subtitles, inspect physical frames and actual playback, independently review, then replace only the Chinese website video/caption and commit/fetch/merge/push current branch. No UI automated tests or changes to the original game source/user process.
+- Evidence boundaries: gameplay is newly recorded from the retained deliverable, not footage of the September 18 agent run. Role/repair themes derive from source-excerpts.json; workflow edges are illustrative, not measured concurrency or event attribution. Human decision is visible in the story. Chinese first; English version is outside this approval's initial cut.
+- Independent feedback: 无（本轮实施前；交付后只读审查）。 Acceptance requires actual capture, readable node/edge graph and excerpts, synchronized complete narration/subtitles, media decode/playback, scoped integration, checks and review. Capture or audio limitations must be reported rather than silently represented as verified.
+
+## Current Recall — concise entry points and an organized blog
+
+- User: “裁剪一下现在的内容，只留精华部分，其余作为博客组织”. Preserve the current visual system and strongest evidence while shortening both READMEs and landing pages. Move substantial explanations into readable, categorized bilingual blog articles, not a hidden archive or deleted material.
+- Acceptance: homepage keeps hero, demo, three essential long-horizon capabilities, directed case graph, concise start and blog entry. README keeps identity, practical value, case/evidence, minimal setup, further reading, contribution/attribution/license. Blog provides categorized index, readable article pages, language counterpart links and actual migrated content. Retain source/evidence limitations and downloads.
+- Diagnosis: restored homepage has twelve large sections and README exceeds five hundred lines. Introductory, research and operational reading compete on a single surface. Root cause is information density, not the visual identity. Splitting by reading intent addresses this without another redesign.
+- Read/search: current README headings, landing/copy/components, Header/Footer/Layout, content collections, static page routing, generated squad facts, existing docs and current public-website architecture. No existing blog route/collection found. Astro official content-collections guide checked: https://docs.astro.build/en/guides/content-collections/ . Use the installed content collection loader/render/static-route tools; no CMS/service/dependency addition.
+- Plan: add a build-time bilingual blog collection and shared index/article layout in current design; migrate existing detailed copy into mechanisms, composition, evolution, research/benchmark, deployment/integration and choice/boundary articles; move original complex presentation components to their articles; shorten entry points and update all owned navigation/references; remove orphan presentation styles and generated homepage teaser projection; build/check, real browser review, independent read-only review, commit/fetch/merge/outgoing-audit/push current branch.
+- Contracts/risks: blog is static and does not alter Registry/API/scheduler/provider/persisted data. Existing docs remain the operational reference; articles link to them. Do not invent benchmark comparability, concurrency, completion or original-fidelity claims. Remove redundant copies after relocation and distinguish planned research delivery from an achieved result. No UI automated tests. Untracked script/video/ is unrelated. No production deployment or new branch/worktree.
+- Independent feedback: 无（实施前；本轮完成后委托只读审查）。 Validate imports and actual blog rendering, language switching, graph, old complex disclosure, preserved download interactions and readable typography; build alone does not prove visual acceptance.
+
+### Concision and blog delivery evidence
+
+- README line counts are now 134 English / 132 Chinese. Homepage retains six essential sections in the existing visual system. Eight editorial themes have paired locale articles (16 Markdown sources, two category indexes); builds produce 137 HTML pages. Removed unused featured-squad generation and retired homepage-only copy/styles after moving detailed material.
+- Initial build correctly rejected an invalid leftover visual tag and colliding reserved `slug` fields. Removed the tag and used locale-scoped entry IDs with a separate shared `key` for routes. Build then passed, including all 18 new blog routes. Astro check: 94 files, zero errors/warnings, 21 existing hints.
+- The existing 4397 development daemon retained an empty blog collection after the schema change. Did not restart the user's preview. Used Astro's documented `--ignore-lock` alongside-server behavior in foreground mode on 4398 (the installed CLI source exposes ASTRO_DEV_BACKGROUND for suppressing automatic background-agent mode). Fresh development pages show all eight localized articles. No parallel product/config implementation was added.
+- Real browser/manual screenshots cover both index locales/themes, article prose, counterpart language switching, expanded workflow details, expanded article contents, original image loading, visible benchmark bar, paper entry, original homepage hero/download menu/Escape and shorter setup section. Evidence indexed in the existing artifact README. No UI automated tests.
+- Independent read-only review found three P2 migration defects: a GitHub blob HTML URL used as an image, an invisible benchmark bar relying on the former homepage observer, and an inherited overbroad local-model networking guarantee. Corrected all three, manually rechecked actual pages, and retained exact uncertainty around benchmark samples and 16-page paper versus 30-page task requirements. Static example role totals were removed in favor of the live catalog definition and existing generated case component.
+- Documentation/architecture index checks pass. Follow-up independent review and final build/check follow these corrections. No production deployment is included.
+- Final build passed (137 HTML pages and packaged runtime); catalog composition test passed (1 test, 10 assertions), docs/architecture/whitespace checks passed. Follow-up independent review inspected all 13 new screenshots, confirmed all three P2 fixes and reported no unresolved findings. Current preview is localhost:4398; the user's existing 4397 process was preserved.
+
+## Current Recall — improve the original materials incrementally
+
+- User correction: “在我原来的宣传物料上改进，不要步子迈太大”; new instruction: “重新改readme和网站”. This supersedes the replacement layouts below. The original baseline is commit f0d1063a, immediately before our two marketing commits.
+- Acceptance: retain original README sections, media, badges, technical depth and website section order, hero/terminal, visual tokens, demo, benchmark, composition, research, evolution, catalog and setup. Make small, specific opening-copy improvements for long-running complex work; add the real directed graph as supporting evidence near long-horizon content. No production deployment.
+- Diagnosis: the two previous revisions replaced the user's established information architecture and visual identity with a new campaign. The root cause was treating authorization to improve the positioning as freedom to replace all product evidence. Another visual overhaul would repeat that error. Restore the scoped original presentation files, then apply a small delta against that baseline.
+- Read/search: original and current READMEs, landing component/copy and import consumers, generated featured-squad projection, brand generator, download handler, current public-website architecture, previous verification/review. The changed presentation paths have no local user modifications; only untracked script/video/ is unrelated. Later release commits do not alter these scoped paths.
+- Impact: presentation-only files and their required original components/static catalog projection. Restore original brand card with a corrected long-horizon tagline. Preserve the Bun development-mode and compiler tmp exclusion fixes, canonical current downloads and download menu event/placement repairs. Retain case documents/evidence and one graph renderer. Remove replacement-only dead component/data; no scheduler, provider, API, persisted-data or security contracts change. Existing UI automation is prohibited; none is required for acceptance.
+- Plan: restore exact scoped original files, retain functional fixes, edit only introductory copy and insert a compact graph/evidence section; update current docs; build/check; manually inspect bilingual desktop pages, graph, old composition and download/theme interactions in an isolated tab; independent read-only review; commit, fetch/merge/review outgoing set and push current branch. No new worktree/branch, no operation of the user's existing tab.
+- Independent agent feedback: 无（本轮实施前；previous reviewers assessed the now-rejected layout only）。 Risks: restored dependencies, stale generation inputs, long bilingual graph captions, old download bug, and retained historical claims. Verify imports/build and real page screenshots; distinguish graph edges from case event history.
+
+### Incremental revision results
+
+- Original presentation restored from the scoped clean f0d1063a files, with original media, section order, navigation and generated squad facts. Net content delta is one opening statement per README, accurate current tool count (70), supporting case graph, hero title/description, and stage-list wording corrected to workflow details.
+- Removed the replacement-only OcDownload component; retained its functional outside-click and adaptive-position fixes in the original single download implementation. Preserved Bun dev runtime and tmp compiler exclusion.
+- Initial Astro check exposed loss of correlated tuple indexing when extracting graph labels; fixed the static index assertion for the declared node/role table. Rerun: 90 files, 0 errors, 0 warnings, 21 existing hints. Full build passed (119 indexed pages and packaged runtime). Catalog composition contract passed (1 test, 10 assertions); docs:check and architecture-index passed.
+- Manually inspected isolated real desktop screenshots in both languages and themes, graph, menu/Escape, original composition disclosure, paper and demo entry. Detected white navigation text losing contrast when the new light graph passed under the dark glass header; changed only its background tint to the existing page-color token at 88%, preserving shape/layout/blur. Re-inspected over the graph; navigation is readable. Final build rerun after the fix.
+- Independent read-only review confirmed original restored component hashes, small net delta, graph evidence boundary and functionality; requested two documentation corrections, both applied. Follow-up review covers the single header tint fix and updated evidence record. Screenshot index lives in the existing artifact README; no UI automated tests.
+- Final independent review passed with no unresolved findings after inspecting the header tint, corrected documents and four additional screenshots. Commit scope excludes untracked script/video/. Production publication is not authorized by this revision.
+
+## Revision Recall — product-led presentation
+
+- User rejected the previous result as “土味宣传” and then directed: “你可以学习苹果怎么营销”. This continues the authorized README/homepage/material rebuild; publication remains unapproved.
+- Reference study: opened and visually inspected Apple's MacBook Pro and Apple Intelligence pages on 2026-09-19. Sources: https://www.apple.com/macbook-pro/ and https://www.apple.com/apple-intelligence/. Observed short product claims, dominant product imagery, progressive feature chapters, concrete applications and sourced performance notes. Borrow communication principles, not copy, branding or product assets.
+- Root cause of the rejected version: negative pain headlines and three equal cards dominated the product; a five-row disclosure was a manual rather than a compelling depiction of coordination. The textual simplification did not address the visual hierarchy.
+- New acceptance: product-first centered opening, short precise promise, a large task-record-based execution scene, progressive capability chapters, real game/result detail, and concise setup. Remove guilt/complaint copy in both README locales and all generated promotional assets. Preserve visible case limitations, download behavior, keyboard/reduced-motion access, locale/theme controls and all existing destinations.
+- Impact: landing-copy, OcLanding, the code-native execution visual and shared artwork generator, README introductions, header labels and current product-entry documentation. No engine, scheduler, protocol, model or API behavior changes. The old Mission-composer screenshot is v0.0.42beta and empty; inspected and excluded as unsuitable proof of actual current coordination. No new runtime screenshot is fabricated.
+- Plan: replace the current layout (one implementation), author a labeled reconstruction from recorded roles and repair loops, focus three capability chapters on tangible outcomes, regenerate SVG/share imagery, manually inspect isolated desktop pages in both languages/themes, build/check, independent read-only review, commit/fetch/merge/push current branch. Do not refresh or operate the user's currently open preview tab; use new isolated tabs.
+- Prior independent feedback: first delivery review found the download bubbling defect; it was fixed and re-reviewed. This revision's independent feedback: 无（待实现和首轮验收后审查）。
+- Evidence boundaries remain unchanged: 19 requirements, 35 source-traced stages, two recorded revision rounds; no quantified cost/speed/concurrency/success claim. Known test-report discrepancy and original-game fidelity limits remain accessible with the case.
+- Explicit user correction during revision: “我让你画的图，是 graph，别拿列表冒充 graph”. Acceptance now explicitly requires individual role nodes, directed dependency/handoff edges, branching, joining and visible review-to-implementation cycles. A row of steps, accordion, timeline or card list does not meet this requirement. Render the same node/edge model in the website and share assets; label the abstraction instead of inventing precise execution timings.
+
+## Recall
+
+### Revision verification
+
+- Replaced the stage list with one shared directed SVG graph: 11 role nodes, branching and joining handoffs, and two dashed repair cycles. Website, README exports and social image use the same renderer.
+- Rebuilt both locale openings and capability chapters around the product and concrete artifacts. Preserved case limitations and installer manifest authority; menu placement now responds to available viewport space.
+- Final website build passed (119 indexed pages and packaged runtime); Astro check passed (81 files, 0 errors, 0 warnings, 21 existing hints). Documentation and architecture-index checks passed; whitespace check passed.
+- Manually inspected isolated 1280x720 browser views: Chinese light hero/graph, English light hero/download menu, English dark hero/graph/case/evidence/start, and capability chapter. Exercised locale/theme, graph/case/start anchors, download disclosure and Escape. No UI automated tests.
+- Independent reviewer confirmed graph edges match the declared Advanced workflow and identified P2 evidence attribution: illustrative edges were insufficiently distinguished from historical records. Fixed the shared graph legend (therefore also social image), both README captions and both page captions. Roles/repair themes are recorded; links are workflow illustrations, with repair origins explicitly not event attribution. Follow-up independent review requested.
+- New evidence screenshots are indexed in the artifact README. Previous iteration screenshots remain historical and do not prove this revision. Production deployment remains outside this delivery.
+- Follow-up independent read-only review passed with no unresolved findings; reviewer inspected the seven added final views and regenerated social image, confirmed the evidence qualifier, graph connections, download behavior and clean whitespace check.
+
+- User request: “现在的 github readme 和网站的宣传物料性价比极低，我授权你推翻重做，从用户的痛点出发，长程/复杂/重型任务调度”. The preceding request reconstructed a real tank-game delivery and its two revision loops.
+- Acceptance: replace both language READMEs and both homepage locales with a coherent pain-first story; explain coordination across research, implementation, handoff, independent review and repair; show a traceable case; preserve usable download/docs/catalog routes; deliver reusable promotional imagery; visually inspect real desktop pages and interactions; build/check documentation, independently review, commit and push the authorized current branch.
+- Constraints: no fabricated speedup, cost savings, parallelism or success statistics; no claim of exact original-game fidelity; a configured model and online runtime are prerequisites. No UI automated tests. No changes to the running user's app or unrelated `script/video/`. No new branch/worktree. Website production deployment is a separate publication boundary.
+- Read: root AGENTS, both READMEs, web package/scripts/layout/header/footer/landing/copy/composition components, current public-website architecture, task-control-plane and long-horizon docs, founder-operations history, local tank-game Mission/decision/trace records in the user-supplied project.
+- Searches: landing-copy consumers, homepage components and route definitions, build/download manifest contracts, public media, current architecture and monthly history. Public site is existing Astro, not a Sites project; app `/ui` does not host this website, so isolated Astro development mode is appropriate.
+- Independent agent feedback: 无（implementation has not started; delivery review follows verification）。
+
+## Diagnosis and impact before editing
+
+- Observable problem: README has over 500 lines, with runtime internals before installation. Homepage stacks an animated terminal, illustrative video, benchmark, long-horizon cards, composition cases, research paper, evolution/comparison and further CTAs. The reader must infer practical value from mechanisms and inventory.
+- Trigger: the user explicitly rejects the current value-to-attention ratio and authorizes a full presentation replacement.
+- Root cause: information architecture mixes an adoption page, runtime reference and research catalog. Repeated copy and conceptual cases compete with a demonstrated delivery. Earlier first-result edits added sections without removing this competition.
+- Data/control flow: local bilingual `landing-copy.ts` feeds `OcLanding`; composition documentation also consumes its compose labels. Keep composition labels once with their documentation consumer when removing homepage-only copy/components. Existing manifest owns release URLs; use it directly, no hand-written installer versions.
+- Public contracts: keep `/`, `/zh-cn/`, download, catalog, documentation, locale/theme controls and research PDF reachable. No runtime, scheduling, protocol, provider or API changes are planned. No scheduling anomaly investigation is in scope; a historical test-report discrepancy is an evidence limitation, not a newly diagnosed scheduler defect.
+- Evidence: task decision log decomposes REQ-1..19; Mission notes record two repairs; trace names research, requirements, architecture, workload, design, implementation, test and integrity-review roles. A saved Vitest report says 241/242 while the closing narrative says 242/242. Do not advertise a pass count. Diagram shows collaboration, not measured simultaneous execution or speedup.
+- Delivery risks: stale anchors after section removal, dead homepage-only modules, theme legibility, diagram density, language overflow, inflated claims, and private identifiers in case material. Preserve credits/license/contribution access. Record only sanitized case excerpts with digests, no credentials or raw prompts/trace payloads.
+- Existing tests: searched web test inventory; no homepage UI test file was found. Do not run page assertion scripts as visual acceptance. Existing service/API tests are outside this presentation-only change.
+
+## Implementation plan
+
+1. Establish one bilingual homepage story: stop managing every handoff; long/complex/heavy work, a visible coordination map, pain-to-outcome explanations, real tank-game case with repair loops, practical starting instructions and boundaries.
+2. Replace the verbose README introductions with concise positioning, workflow image, evidence-backed case, installation and docs. Keep attribution and licensing.
+3. Replace homepage-specific components and dead promotional paths; retain reusable documentation composition and paper assets, release-manifest authority and shared layout.
+4. Add sanitized case source/evidence and bilingual reusable diagram/share assets under the established artifact/public-media paths. Update spec indexes and relevant architecture/package notes.
+5. Run website check/build, declared docs checks; open isolated localhost pages, inspect screenshots in English/Chinese and themes, exercise diagram, locale, navigation/download disclosures. No UI tests or assertions.
+6. Independent read-only review of full diff/evidence; fix valid findings and re-review. Commit, fetch/merge upstream, inspect all outgoing commits, push if authorized-set requirements hold. Do not deploy production implicitly.
+
+## Verification and delivery
+
+- Implemented bilingual pain-first homepages, concise READMEs, native expandable workflow map,
+  manifest-bound download component, a real case and source excerpts, editable bilingual SVGs and a new social card.
+- Retired homepage-only shader/video/benchmark/large composition/paper components and the unused
+  featured-squad generator projection. Historical referenced media and composition documentation remain available.
+- Initial website build passed. `docs:check` passed (339 operations, 25 groups). Focused non-UI
+  composition/download-manifest tests passed (3 tests, 90 assertions).
+- The first Astro check picked up untracked `tmp/measure.ts`, an obsolete one-off copy counter.
+  Scoped `tmp/` out of the web compiler; preserved the local file. Rerun: 80 files, 0 errors,
+  0 warnings, 21 pre-existing hints. This is a presentation tooling boundary, not a runtime migration.
+- Real browser observation exposed a Node-started Astro error overlay on the existing `bun:sqlite`
+  endpoint. Root cause: `dev`/`start` used Astro's Node shebang although the Registry runtime is Bun.
+  Changed those existing script entries to `bun --bun astro dev`; the same routes now render and
+  the view-count endpoint returns data. No production runtime or user app was restarted.
+- The preview manifest was v0.0.53-beta. Anonymous GitHub API access was rate-limited; synced the
+  canonical already-published website `/downloads/latest.json` (18 assets, v0.1.2-beta) instead.
+  No new release was created or inferred from the in-progress v0.1.3 source version. Production
+  deployment retains its existing GitHub-release manifest generator.
+- Browser: isolated localhost:4397; actual 1280x720 desktop. Checked Chinese/English, light/dark,
+  stage expansion with exclusive collapse, download menu, Escape, case anchor/detail, start anchor,
+  and Advanced squad navigation. Corrected the dropdown to open upward after its lower placement
+  clipped the first viewport. Saved viewport screenshots under the artifact bundle. Full-page
+  stitching in the browser capture duplicated sections, so that defective capture was discarded;
+  no image editing or screenshot comparison was used.
+- Viewed both SVG diagram renders and generated social PNG. Post-correction Astro check passed (80 files, 0 errors); independent re-review found no unresolved findings. Production publication has not been performed.
+
+
+### Independent review and correction
+
+The read-only reviewer inspected the full related diff, new files, evidence and eight page screenshots.
+One P2 finding: the extracted download control inherited an event-bubbling defect. When architecture
+could not be identified, the primary click opened the disclosure but the document outside-click
+handler immediately closed it because the primary sits outside the details element. Corrected the
+outside boundary to the whole download control. Known-platform menu interactions are rechecked in
+the real browser; no unknown-platform browser or simulated UI fixture is claimed.
+
+The review found no other blocking issue. New ignored specs/evidence must be force-added by exact
+path. The unrelated v0.1.3 release record and script/video remain excluded. Push to main triggers
+website production deployment by deploy-opencorvus-com.yml; that publication needs explicit approval
+after the reviewed version is concrete. Only current-branch push is automatic for this task.
+
+
+### Final review status
+
+- Read-only second review: no unresolved findings; corrected download event boundary accepted.
+- Download regression: real menu opening, outside click, Enter and Escape all observed; the new
+  dark-theme menu capture is `zh-download-reviewed.png`. No unknown-platform browser claim.
+- Canonical `bun run --cwd packages/web dev --host 127.0.0.1 --port 4397` launched successfully
+  under Bun (task-owned process); the Registry-backed Advanced page rendered through it.
+- Final Astro check: 80 files, 0 errors, 0 warnings, 21 existing hints. Documentation and architecture
+  indexes pass. Whitespace check passes. Final website build and runtime packaging passed (119 indexed HTML pages).
+- The current branch is `codex/paper-preliminary-results`; main is checked out in another worktree.
+  No other worktree, running user app, release or website publication was changed by this task.
+
+## Gallery verification
+
+Build passed (137 HTML pages and packaged runtime). Astro check: 96 files, zero errors/warnings, 21 existing hints. Documentation and architecture checks passed. Real isolated localhost:4398 browser review covered Chinese task inputs and both directed graphs, model/artifact presentation, click/Left-arrow case switching and English dark appearance. No UI automated tests. Historical video component and unused copy removed; retained archival media unchanged.
+
+Independent review identified unsupported repair-to-reviewer attribution and stale architecture text. Replaced separate repair origins with a shared review-feedback node, corrected the architecture section and named the research artifact ACL-style paper. Final real screenshots were reviewed; independent follow-up reported no unresolved findings. Rebuilt successfully after fixes.

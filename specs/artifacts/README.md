@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Task coordination case and promotional material](2026-09-19-task-coordination/README.md): selected source excerpts, bilingual diagram/share material and visual review evidence.
+
 Selected current operating deliverables; this is not an exhaustive inventory of historical artifacts.
 
 - [Luna versus Luna + Base reproduction](opencorvus-paper/experiments/luna-base-2026-09-12/README.md): frozen sample and independently recomputed historical scores; new paired runs pending.

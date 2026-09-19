@@ -9,6 +9,7 @@ import { ProviderAuth } from "@/provider/auth"
 import { ProviderOAuthFlowStore } from "@/provider/oauth-flow-store"
 import { ProviderCredentialExchange } from "@/provider/credential-exchange"
 import { Server } from "@/server/server"
+import { ProviderRoutes } from "@/server/routes/provider"
 
 const PROVIDER = "cli-flow-provider"
 const CREDENTIAL_PROVIDER = "cli-flow-credential-provider"
@@ -500,5 +501,105 @@ test("concurrent global OAuth callbacks publish one success and one typed settle
       },
     ],
     credential: { type: "api", key: "winner-key" },
+  })
+})
+
+for (const scope of ["global", "project"] as const) {
+  test(`${scope} OAuth HTTP cancellation settles a resumed pending occurrence`, async () => {
+    let disposals = 0
+    const hooks: Hooks[] = [
+      {
+        auth: {
+          provider: PROVIDER,
+          methods: [
+            {
+              type: "oauth",
+              label: "Cancel",
+              authorize: async () => ({
+                url: "https://auth.example.test/cancel",
+                instructions: "Cancel this login",
+                method: "code" as const,
+                dispose: async () => {
+                  disposals++
+                },
+                callback: async () => ({ type: "success" as const, key: "issued" }),
+              }),
+            },
+          ],
+        },
+      },
+    ]
+    using _hooks =
+      scope === "global"
+        ? ProviderAuth.TestHooks.installGlobalAuthHooksForTest(hooks)
+        : ProviderAuth.TestHooks.installProjectAuthHooksForTest(hooks)
+    const prefix = scope === "global" ? `/global/providers/${PROVIDER}` : `/${PROVIDER}`
+    const request = (action: string, body: object) =>
+      (scope === "global" ? Server.App() : ProviderRoutes()).request(`${prefix}/oauth/${action}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      })
+    const first = await request("authorize", { method: 0 })
+    const authorization = (await first.json()) as { flowID: string }
+    expect({ status: first.status, body: structuredClone(authorization) }).toMatchObject({
+      status: 200,
+      body: { flowID: expect.any(String) },
+    })
+    const resumed = await request("authorize", { method: 0 })
+    expect({ status: resumed.status, body: await resumed.json() }).toEqual({ status: 200, body: authorization })
+    const cancelled = await request("cancel", { method: 0, flowID: authorization.flowID })
+    expect({
+      status: cancelled.status,
+      body: await cancelled.json(),
+      disposals,
+      flow: await ProviderOAuthFlowStore.get(authorization.flowID),
+    }).toEqual({
+      status: 200,
+      body: { ok: true },
+      disposals: 1,
+      flow: expect.objectContaining({ state: "failed" }),
+    })
+  })
+}
+
+test("CLI code-prompt cancellation releases its pending authorization", async () => {
+  let flowID = ""
+  let disposed = 0
+  const hooks: Hooks[] = [
+    {
+      auth: {
+        provider: PROVIDER,
+        methods: [
+          {
+            type: "oauth",
+            label: "Cancel",
+            authorize: async () => ({
+              url: "https://auth.example.test/cancel",
+              instructions: "Cancel",
+              method: "code" as const,
+              dispose: async () => {
+                disposed++
+              },
+              callback: async () => ({ type: "success" as const, key: "issued" }),
+            }),
+          },
+        ],
+      },
+    },
+  ]
+  using _hooks = ProviderAuth.TestHooks.installProjectAuthHooksForTest(hooks)
+  const runtime = {
+    ...(promptRuntime({ events: [] }) as object),
+    text: async () => {
+      flowID = (await ProviderOAuthFlowStore.TestHooks.pendingFor(PROVIDER, "project"))!.id
+      return Symbol.for("cancel")
+    },
+    isCancel: (value: unknown) => typeof value === "symbol",
+  } as never
+  await expect(handlePluginAuth({ auth: hooks[0]!.auth! }, PROVIDER, runtime)).rejects.toThrow()
+  expect({ disposed, flow: await ProviderOAuthFlowStore.get(flowID) }).toEqual({
+    disposed: 1,
+    flow: expect.objectContaining({ state: "failed" }),
   })
 })

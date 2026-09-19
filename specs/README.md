@@ -2,6 +2,14 @@
 
 - [Mission attachment request projection](records/2026-09/2026-09-19-mission-attachment-request-projection.md).
 
+[OAuth flow re-entry and v0.1.5 binary release](records/2026-09/2026-09-19-v0.1.5-oauth-release.md).
+
+[v0.1.4 binary-only release](records/2026-09/2026-09-19-v0.1.4-release.md).
+
+[Sub-agent dock stability and visual hierarchy](records/2026-09/2026-09-19-subagent-dock-stability.md).
+
+[README, website and blog content organization](records/2026-09/2026-09-19-outcome-first-marketing.md).
+
 [v0.1.3 stable release](records/2026-09/2026-09-19-v0.1.3-release.md).
 
 [Release unit test repair](records/2026-09/2026-09-19-release-unit-test-repair.md).

@@ -2048,20 +2048,20 @@
 
 .subagent-conversation-panel__agent-selector {
   width: 100%;
-  height: calc(50px * var(--ui-scale));
-  min-height: calc(50px * var(--ui-scale));
+  height: calc(42px * var(--ui-scale));
+  min-height: calc(42px * var(--ui-scale));
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   min-width: 0;
   padding-inline: var(--ui-gap-sm);
   border-bottom: var(--oc-border-width) solid var(--divider-soft);
-  background: color-mix(in srgb, var(--surface) 88%, var(--chat-canvas));
+  background: var(--chat-canvas);
 }
 
 .subagent-conversation-panel__agent-tabs.oc-tabs {
-  --oc-tabs-height: calc(38px * var(--ui-scale));
-  --oc-tabs-gap: calc(2px * var(--ui-scale));
+  --oc-tabs-height: calc(28px * var(--ui-scale));
+  --oc-tabs-gap: var(--ui-gap-xs);
   --oc-tabs-padding-x: var(--ui-gap-xs);
 
   flex: 1 1 auto;
@@ -2070,35 +2070,37 @@
   justify-content: flex-start;
   overflow-x: auto;
   overflow-y: hidden;
-  padding-block: var(--ui-gap-sm) 0;
+  padding-block: var(--ui-gap-xs);
   scroll-padding-inline: var(--oc-tabs-padding-x);
   scrollbar-width: none;
 }
 
 .subagent-conversation-panel__agent-tab.oc-tab {
-  --chat-avatar-inline-size: calc(18px * var(--ui-scale));
+  --chat-avatar-inline-size: calc(16px * var(--ui-scale));
   --chat-avatar-ring-outset: calc(1px * var(--ui-scale));
   --oc-tab-bg: transparent;
-  --oc-tab-active-bg: var(--selected-wash);
+  --oc-tab-active-bg: var(--ui-list-selected-bg);
+  --oc-tabs-height: calc(28px * var(--ui-scale));
 
   min-width: 0;
-  max-width: calc(240px * var(--ui-scale));
+  max-width: calc(170px * var(--ui-scale));
   flex: 0 0 auto;
   justify-content: flex-start;
   gap: var(--ui-gap-sm);
-  padding-inline: var(--ui-gap-lg);
-  border: 0;
-  border-bottom: calc(2px * var(--ui-scale)) solid transparent;
-  border-radius: var(--oc-radius-soft) var(--oc-radius-soft) 0 0;
-  font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
+  padding-inline: var(--ui-gap-sm);
+  border: var(--oc-border-width) solid transparent;
+  border-radius: var(--oc-radius-soft);
+  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
   letter-spacing: var(--ui-letter-spacing-normal);
   text-transform: none;
 }
 
 .subagent-conversation-panel__agent-tab.oc-tab[data-selected] {
   --oc-tab-color: var(--text-strong);
+  --oc-tab-bg: var(--oc-tab-active-bg);
 
-  border-bottom-color: var(--accent);
+  max-width: calc(240px * var(--ui-scale));
+  border-color: color-mix(in srgb, var(--accent) 26%, transparent);
   font-weight: var(--ui-font-weight-medium);
 }
 
@@ -2120,7 +2122,7 @@
 
 .subagent-conversation-panel__agent-menu-trigger.oc-button {
   flex: 0 0 auto;
-  min-width: calc(38px * var(--ui-scale));
+  min-width: calc(28px * var(--ui-scale));
   margin-left: var(--ui-gap-xs);
   padding-inline: var(--ui-gap-sm);
   border-radius: var(--oc-radius-soft);
@@ -2175,7 +2177,7 @@
   flex-direction: column;
   gap: 0;
   overflow-y: auto;
-  padding: var(--ui-gap-2xl) clamp(var(--ui-gap-lg), 4vw, calc(40px * var(--ui-scale)));
+  padding: var(--ui-gap-lg) clamp(var(--ui-gap-lg), 2vw, var(--ui-gap-2xl));
   scrollbar-gutter: stable;
   overscroll-behavior: contain;
 }
@@ -2202,10 +2204,10 @@
 
 .subagent-conversation-panel__scroll .chat-bubble__identity-row {
   position: sticky;
-  top: calc(-1 * var(--ui-gap-2xl));
+  top: calc(-1 * var(--ui-gap-lg));
   z-index: 2;
-  min-height: calc(44px * var(--ui-scale));
-  margin-bottom: var(--ui-gap-xl);
+  min-height: calc(36px * var(--ui-scale));
+  margin-bottom: var(--ui-gap-md);
   padding-block: var(--ui-gap-sm);
   border-bottom: var(--oc-border-width) solid var(--divider-soft);
   background: var(--chat-canvas);

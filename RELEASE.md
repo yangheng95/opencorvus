@@ -59,6 +59,10 @@ uses one request per bounded page and remains the sole draft lookup authority.
 
 `build-overlays.yml` is debug-only and is not the canonical release path.
 
+Native publication and the desktop update channel are the default scope.
+Website deployment requires the manual `deploy_website=true` input; tag pushes
+and the local release command publish native binaries without deploying the website.
+
 Generated binaries are never committed to a distribution branch. GitHub rejects
 individual Git objects larger than 100 MB, while current native installers and
 portable runtimes exceed that boundary. GitHub Releases is the single binary

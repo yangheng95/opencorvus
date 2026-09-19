@@ -630,7 +630,24 @@ export async function authorizeProvider(
   const authLink = callbacks.externalUrlNeedsUserGesture
     ? { url: authorization.url, label: t("llm.auth_open_page") }
     : undefined
-  if (!authLink) await callbacks.nativeOpen(authorization.url)
+  const cancel = () =>
+    apiJson(providerAuthPath(providerID, "oauth/cancel", options), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ method: match.index, flowID: authorization.flowID }),
+    })
+  if (!authLink) {
+    try {
+      if ((await callbacks.nativeOpen(authorization.url)) === false) throw new Error(t("llm.auth_open_failed"))
+    } catch (error) {
+      try {
+        await cancel()
+      } catch (cleanupError) {
+        throw new AggregateError([error, cleanupError], "Could not open authorization and release its pending flow")
+      }
+      throw error
+    }
+  }
 
   if (authorization.method === "code") {
     const code = await callbacks.nativePrompt(
@@ -645,6 +662,7 @@ export async function authorizeProvider(
       },
     )
     if (code == null) {
+      await cancel()
       callbacks.onAuthCancelled(providerID)
       return false
     }
