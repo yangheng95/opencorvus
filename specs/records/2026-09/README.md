@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Mission append recovery after Browser MCP disconnect](2026-09-20-mission-append-browser-mcp-recovery.md)
+
 - [v0.1.7 package repair and stable release](2026-09-20-v0.1.7-release.md)
 
 - [CI consolidation and Windows test cleanup](2026-09-19-ci-consolidation-test-cleanup.md)

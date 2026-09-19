@@ -703,7 +703,33 @@ export namespace MCP {
                 const detail = "error" in status ? `: ${status.error}` : `: ${status.status}`
                 throw new Error(`Scoped MCP server ${input.key} did not connect${detail}`)
               }
-              return result.mcpConnection
+              const connection = result.mcpConnection
+              connection.client.onclose = () => {
+                if (intentionalConnectionClosures.has(connection)) return
+                if (entries.get(ownerKey) !== candidate) return
+                entries.delete(ownerKey)
+                publishCatalogStatus(ownerKey, { status: "disconnected" })
+                const projectState = ownerState.projectState
+                if (!projectState) {
+                  cleanupPending.add(connection)
+                  return
+                }
+                queueConnectionCleanup(projectState, connection.key, connection)
+                void settleConnectionCleanup(projectState, connection.key, connection).catch((error) => {
+                  log.warn("Scoped MCP unexpected-close cleanup failed", {
+                    ownerID: normalizedID,
+                    key: connection.key,
+                    type: connection.type,
+                    error: errorMessage(error),
+                  })
+                })
+                log.warn("Scoped MCP transport closed unexpectedly", {
+                  ownerID: normalizedID,
+                  key: connection.key,
+                  type: connection.type,
+                })
+              }
+              return connection
             })
             .catch((error) => {
               if (entries.get(ownerKey) === candidate) entries.delete(ownerKey)

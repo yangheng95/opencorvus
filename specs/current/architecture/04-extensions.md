@@ -778,7 +778,11 @@ Browser Preview WebView。
 都接纳 Browser 后才创建 owner。Browser 的 Page、Cookie 和 storage 状态位于该 owner 持有的 Browser MCP 进程中，
 Conversation disposal 会 await 该 owner 的 close 回执再完成，因此不需要在 Browser 内另建 Session tag、host 侧
 销毁路由或 Project 共享的影子 owner。Computer takeover 只替换同 Conversation 的 Computer adapter owner；它不会
-关闭 Browser owner，Browser 状态持续到 Conversation disposal。
+关闭 Browser owner，Browser 状态持续到 Conversation disposal。所有 scoped MCP owner 都把底层 transport 的真实
+unexpected-close 事件作为缓存连接失效的唯一事实：只淘汰同一 owner key 下仍匹配的精确 connection occurrence，
+发布 disconnected 状态并收敛该旧连接的 cleanup；后续独立 inventory/Tool occurrence 通过同一 owner 和同一配置
+建立新连接。不得按错误文案猜测失活、不得重放可能已有副作用的 Tool call，也不得在 Session、Mission 或 Browser
+层增加另一份重连状态。
 
 ### Computer Use
 
