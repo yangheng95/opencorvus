@@ -2,6 +2,8 @@
 
 Selected current operating deliverables; this is not an exhaustive inventory of historical artifacts.
 
+- [Luna versus Luna + Base reproduction](opencorvus-paper/experiments/luna-base-2026-09-12/README.md): frozen sample and independently recomputed historical scores; new paired runs pending.
+
 - [2026-09-10 real import repair result](2026-09-10-import-case/RESULT.md): Luna patch, actual failed/passed page acceptance, independent review and intervention boundaries; includes original fictional inputs.
 
 - [Real import case channel copy](2026-09-10-import-case/SOCIAL.md): prepared LinkedIn and Xiaohongshu posts; not submitted.

@@ -5,7 +5,7 @@
   "name": "Generate Expert Squads",
   "label": "Generate Expert Squads",
   "description": "Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.",
-  "version": "2026.08.30.4",
+  "version": "2026.09.12.2",
   "product_pillars": [
     "code",
     "work"
@@ -81,7 +81,7 @@
           "capability:capability_set:platform:tool-registry:delegated-worker-base"
         ],
         "label": "Generate Expert Squads Planner",
-        "description": "Publishes the package boundary, flat Planner/parallel-worker topology, resource closure, and acceptance allocation.",
+        "description": "Publishes the package boundary, smallest sufficient collaboration topology, resource closure, and acceptance allocation.",
         "base_role": "delegated-worker",
         "prompt": "agents/squad-sdk-planner/system.md"
       }
@@ -93,7 +93,7 @@
         "nodes": {
           "squad-sdk-planner": {
             "agent_id": "squad-sdk-planner",
-            "description": "Publishes the canonical package blueprint and flat Planner/parallel-worker topology.",
+            "description": "Publishes the canonical package blueprint and smallest sufficient collaboration topology.",
             "depends_on": []
           },
           "source-analysis": {

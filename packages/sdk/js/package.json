@@ -1,12 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@opencorvus-ai/sdk",
-  "version": "0.0.64-beta",
+  "version": "0.1.3",
   "type": "module",
   "license": "MIT",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "bun ../../opencorvus/script/run-with-inactivity.ts --inactivity-ms 120000 -- bun test --timeout=0 test",
+    "test": "bun ../../opencorvus/script/run-with-inactivity.ts --inactivity-ms 120000 -- bun test --timeout=0 ./test",
     "build": "bun ./script/build.ts",
     "prepack": "bun run build",
     "prepublishOnly": "bun run build"

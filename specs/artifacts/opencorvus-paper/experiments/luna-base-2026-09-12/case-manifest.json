@@ -1,0 +1,926 @@
+{
+  "schema_version": 1,
+  "benchmark": "AutomationBench",
+  "distribution_version": "1.0.6",
+  "source_revision": "4a8e1061254004d9dac807054eed33fad7d1ff14",
+  "package_tree_sha256": "cc7a63f9444814c7029e325dacbdf1c2e870430d08aaf8d4ecf5c0e44fe829d4",
+  "task_contract_schema": "automationbench.task-contract.v1",
+  "split": "public",
+  "selection": {
+    "algorithm": "first 100 cases in the pre-existing immutable 600-case order; no outcome filtering",
+    "source_manifest_sha256": "939a5f0340fdf2a24d7981632bbb76e266903fe06218e0307dc5052788b4420c",
+    "dataset_index_sha256": "3f98894f1fa871dd27516c549e028d5651104d41a44b8f02a5cd00da39e11f37",
+    "count": 100,
+    "domain_counts": {
+      "marketing": 15,
+      "finance": 13,
+      "support": 15,
+      "sales": 20,
+      "operations": 21,
+      "hr": 16
+    },
+    "exposure": "historically exposed reproduction set, not held-out"
+  },
+  "cases": [
+    {
+      "domain": "marketing",
+      "task": "marketing.linkedin_company_update",
+      "example_id": 1207,
+      "task_contract_sha256": "2e11a42ea582c94e1051b2ba0ee4ba0e2c867aa0297a7ca7219d692e29fffbd0",
+      "selection_rank_sha256": "00244611678791c3e4d5f041275a7711f866acbca5508b8c1bbb590a1aca0972",
+      "case_index": 1,
+      "batch_index": 1
+    },
+    {
+      "domain": "finance",
+      "task": "finance.wave_freelance_invoice",
+      "example_id": 4014,
+      "task_contract_sha256": "0a3653b8a06156c391a33e80fca84ca5ab091d15e0b53f241740712372276908",
+      "selection_rank_sha256": "004b44339af4ad32365acc89f99f3d00297c4e2380911d844f537d24ead35f05",
+      "case_index": 2,
+      "batch_index": 1
+    },
+    {
+      "domain": "support",
+      "task": "support.helpcrunch_trial_nurture",
+      "example_id": 1549,
+      "task_contract_sha256": "c6afd11443724b7f51cdadd7b3a1d86d17d0e1a7b06960a9340d597c66589974",
+      "selection_rank_sha256": "0101cc7b8919f18d4893f481731dbc14b70679a5bfba5de165088a42bf38e229",
+      "case_index": 3,
+      "batch_index": 1
+    },
+    {
+      "domain": "support",
+      "task": "support.helpscout_auto_categorization",
+      "example_id": 1515,
+      "task_contract_sha256": "e5ba203c6d55627b6552ca5a1dbeb5bf3ef1a86a6c07175f7e76073ecfec181b",
+      "selection_rank_sha256": "01339656cfc2ccd43e3f78d360cc8ca86aafaa1ab9bdde868f61c5a9bfa97da4",
+      "case_index": 4,
+      "batch_index": 1
+    },
+    {
+      "domain": "marketing",
+      "task": "marketing.campaign_handoff",
+      "example_id": 1077,
+      "task_contract_sha256": "f9403918e7d6f78448bffbd747c16e572c9d314bd3f13c3c17c1c67ed766c86a",
+      "selection_rank_sha256": "01c464cf4e500bb511dc69b32a40a571e3e2759c9c22bc83b3c1d6cbec1463c0",
+      "case_index": 5,
+      "batch_index": 1
+    },
+    {
+      "domain": "sales",
+      "task": "sales.implicit_rules",
+      "example_id": 513,
+      "task_contract_sha256": "b7a60460989f6d5d00de8c148eb8ec1abb1f1566763605f6f5c3bad31c5127ee",
+      "selection_rank_sha256": "020387547a9b9d691e3bf49f019d5d0efb26e6444158fd6ef165a5478215fe73",
+      "case_index": 6,
+      "batch_index": 2
+    },
+    {
+      "domain": "operations",
+      "task": "operations.fire_suppression_testing",
+      "example_id": 1392,
+      "task_contract_sha256": "de6f6386ac6be2ac157c1c7c760af73ea9e620268e64dbc194a422fad4a0fe09",
+      "selection_rank_sha256": "023eabc1b2d06a693795e8cbd067234215288021187d293b17f0fc8f4398df57",
+      "case_index": 7,
+      "batch_index": 2
+    },
+    {
+      "domain": "marketing",
+      "task": "marketing.editorial_calendar",
+      "example_id": 1084,
+      "task_contract_sha256": "acf54ad8af6ceb2c6a8f9d25e18ee4003bf6f1e2cb278bf66d9e392303c7ed47",
+      "selection_rank_sha256": "0248dfd302ac9283c25233ac3518b84da6832c88c6b64ff3912128a3ca9eb3ea",
+      "case_index": 8,
+      "batch_index": 2
+    },
+    {
+      "domain": "finance",
+      "task": "finance.intercompany_transfer",
+      "example_id": 4032,
+      "task_contract_sha256": "e0cfaa460af5193ee61665a5bc6eca1fe4192c828e9707477404b9437d43da99",
+      "selection_rank_sha256": "02823286fada50d170bc0803a0c2585174be4c5a58eb2982612b3e6ea493f45a",
+      "case_index": 9,
+      "batch_index": 2
+    },
+    {
+      "domain": "marketing",
+      "task": "marketing.customer_feedback_aggregation",
+      "example_id": 1139,
+      "task_contract_sha256": "89989738d798c4ae993202960fa5bbf2f492aaed25f79e1d6a79eeadb49caeb1",
+      "selection_rank_sha256": "028a2e5d55555a81afb46886a39d6f906097fd6e26c61d8b9165db111f9356a9",
+      "case_index": 10,
+      "batch_index": 2
+    },
+    {
+      "domain": "marketing",
+      "task": "marketing.seo_competitor_gap",
+      "example_id": 1082,
+      "task_contract_sha256": "ea2cbffd28ffccad86bc396ae81832634348eadc124b249931bf1f195af9978a",
+      "selection_rank_sha256": "03421409290b21e68435ee5545f7cb2db7f59d5b9db0d80df212efbe9b6662b3",
+      "case_index": 11,
+      "batch_index": 3
+    },
+    {
+      "domain": "sales",
+      "task": "sales.chatgpt_lead_summary_generator",
+      "example_id": 1134,
+      "task_contract_sha256": "90ddc0531c3321f794ff99fbbc4acb7b8ea1538fe7bd879d77fb530f589d20ff",
+      "selection_rank_sha256": "03f0ef6ffaf8c1b9c7f0d7d919eb786a8b6446b4fc7191328c1c8506381a19d5",
+      "case_index": 12,
+      "batch_index": 3
+    },
+    {
+      "domain": "operations",
+      "task": "operations.inventory_enrichment",
+      "example_id": 1325,
+      "task_contract_sha256": "d8696c9bb0a0799390d1dd16827ad59f55327cdb18e22669111ccde573382cb7",
+      "selection_rank_sha256": "0491a3911de3092b23afd5b0cbd7c3ba83bd7e35987d13e649868f8dd4bb25bd",
+      "case_index": 13,
+      "batch_index": 3
+    },
+    {
+      "domain": "support",
+      "task": "support.hiver_team_performance",
+      "example_id": 1456,
+      "task_contract_sha256": "342a99299d0cb2f5247701312aedabea15477cc1990a1659fb9a5b7a51cf1128",
+      "selection_rank_sha256": "068ec5b7e0bcba60892e3bffc6259aea50db863acd8a2a353b66bc8d82711d09",
+      "case_index": 14,
+      "batch_index": 3
+    },
+    {
+      "domain": "hr",
+      "task": "hr.recruitment_dedup_alert",
+      "example_id": 5069,
+      "task_contract_sha256": "cfa0234f192a70f582d56602924b90950d58dc40b37ac2fa2b5883bc3db03113",
+      "selection_rank_sha256": "06bd66533112230bbd770e23169ce8639565dbbf72943569ed37bdd38a1bcf68",
+      "case_index": 15,
+      "batch_index": 3
+    },
+    {
+      "domain": "marketing",
+      "task": "marketing.news_digest_dedup",
+      "example_id": 1176,
+      "task_contract_sha256": "cd34b49b592c173103e39da47558a2b60671f1ed45a869de9161192dbec6e4d9",
+      "selection_rank_sha256": "06cfab84b4fbedf03edba03e074e975aecbf3929d02b125572526e691ceae1e6",
+      "case_index": 16,
+      "batch_index": 4
+    },
+    {
+      "domain": "finance",
+      "task": "finance.cost_center_allocation",
+      "example_id": 4055,
+      "task_contract_sha256": "e576b1323a17453adc73d1eefad6c0a0ee6d8159c2acbdb0abc49c9d6b3702d5",
+      "selection_rank_sha256": "06ddc6fc03b0ff10af23831e0acab9c327610626f90231dfb561efd312aebb73",
+      "case_index": 17,
+      "batch_index": 4
+    },
+    {
+      "domain": "marketing",
+      "task": "marketing.community_engagement",
+      "example_id": 1066,
+      "task_contract_sha256": "93743c711b7d5792f864796a09e8594db368375d3c8d6650df50b3b2343776d9",
+      "selection_rank_sha256": "07404f9dfb288c1c50e89d16885c87a7709b71448c1ac779c7e039981a3f3a3c",
+      "case_index": 18,
+      "batch_index": 4
+    },
+    {
+      "domain": "support",
+      "task": "support.helpscout_customer_merge",
+      "example_id": 1511,
+      "task_contract_sha256": "33e83acf8158dcf1634ee91dcd878456d969f564813edd2c2687fb025e3514c0",
+      "selection_rank_sha256": "0794b9a2cacd435bbe8308f82f5b708ff570b7fc21dae492caa184678b164a19",
+      "case_index": 19,
+      "batch_index": 4
+    },
+    {
+      "domain": "sales",
+      "task": "sales.competitive_displacement_outreach",
+      "example_id": 1114,
+      "task_contract_sha256": "17b3866aa82347efb5552296905a7af9b86aae399ea64758de63bc0e61080fd9",
+      "selection_rank_sha256": "07964b379a61aeaf2ee026472d76507f37969d639a356c600fd1595ebdcf9866",
+      "case_index": 20,
+      "batch_index": 4
+    },
+    {
+      "domain": "finance",
+      "task": "finance.invoice_email_extract",
+      "example_id": 4001,
+      "task_contract_sha256": "046d01893815b2908b5df84a12ad3bea892b8fd61e95a5394a7881e94593f14b",
+      "selection_rank_sha256": "079990faba663de3d1475cb05f302bbe975f1add85e1b2c3ed971c672ac9fb33",
+      "case_index": 21,
+      "batch_index": 5
+    },
+    {
+      "domain": "sales",
+      "task": "sales.vendor_review_prep",
+      "example_id": 1205,
+      "task_contract_sha256": "d4f59c7b089071633f90194c7f59923f8cd72b2a6093397c0775cf155adb8366",
+      "selection_rank_sha256": "08118d3e5f4df1b761836777569907cd304c0f3b66fce3b19be6326122ca722f",
+      "case_index": 22,
+      "batch_index": 5
+    },
+    {
+      "domain": "hr",
+      "task": "hr.calendly_exit_interviews",
+      "example_id": 5049,
+      "task_contract_sha256": "b0b763460003dd9a8015ad6e32b7f98b7578947832d2970e333f36f9601d39ca",
+      "selection_rank_sha256": "08647a8cb31c077d21ab1984d7b672ea67dd4ba99ee0facb52bbb05f53a848cf",
+      "case_index": 23,
+      "batch_index": 5
+    },
+    {
+      "domain": "support",
+      "task": "support.zendesk_weekend_handoff",
+      "example_id": 1488,
+      "task_contract_sha256": "ff77c3dbf87c9a9454e3a3f9610943b821cad2c17494c482e32576f15bf2cf4a",
+      "selection_rank_sha256": "09225284a0d321d6c65443322e2f82842299a200b96847d88519f380548b19e6",
+      "case_index": 24,
+      "batch_index": 5
+    },
+    {
+      "domain": "sales",
+      "task": "sales.zoom_customer_health",
+      "example_id": 838,
+      "task_contract_sha256": "e1a2b0f837e5ab47b71d5d68a6ecf3e284478927eab58e79aec17614bc74fad2",
+      "selection_rank_sha256": "0a2e6243322a6c1d7127e070448b30e9761c989543e78f4ef6a5cc385190b6b0",
+      "case_index": 25,
+      "batch_index": 5
+    },
+    {
+      "domain": "marketing",
+      "task": "marketing.hashtag_performance",
+      "example_id": 1104,
+      "task_contract_sha256": "039e77330b3d65a278c7f7f1fb645e7d4596e58bcc9f5bed87308c0b22763a8c",
+      "selection_rank_sha256": "0b170a43bb8e9c1d3959bb40af273d0b6670e13986263c43efeb359d4fc1b520",
+      "case_index": 26,
+      "batch_index": 6
+    },
+    {
+      "domain": "hr",
+      "task": "hr.benefits_enrollment_audit",
+      "example_id": 5102,
+      "task_contract_sha256": "8b280725661c940630317120f71c84b77730f676697639ad78c0b1b73961191e",
+      "selection_rank_sha256": "0bb79f9f80c4f4e419c90beb1c99ff53fd0b5913045088f3abe576eb670f6696",
+      "case_index": 27,
+      "batch_index": 6
+    },
+    {
+      "domain": "sales",
+      "task": "sales.overdue_followup_flag",
+      "example_id": 1206,
+      "task_contract_sha256": "2eba36909d436cb3a0d76c321a9442b77658423c90f090c79c9f6a80e721c8e0",
+      "selection_rank_sha256": "0bc2f8e49134f54700f33ddf9ee083384468ea2bc28ca178e670f1e51fc34d6d",
+      "case_index": 28,
+      "batch_index": 6
+    },
+    {
+      "domain": "marketing",
+      "task": "marketing.social_contest",
+      "example_id": 1063,
+      "task_contract_sha256": "034b28f2c93778c8703ff8ceca6e25930500587125e0d8d5749cdf41ad3aa1f0",
+      "selection_rank_sha256": "0d12603a800e1d8fbf5eafa13d38335e118ddcc78cdcf38efc333f2ce07f3959",
+      "case_index": 29,
+      "batch_index": 6
+    },
+    {
+      "domain": "operations",
+      "task": "operations.buffer_engagement_optimization",
+      "example_id": 1320,
+      "task_contract_sha256": "8ea3cd6169ad7773935c0423c8f5b366cd2a98f2c253f87e52cd23f94e0373e4",
+      "selection_rank_sha256": "0df08b113638fc0ee895cfd64c962e4cb42ce82d848fe9b5014ebdc17004894d",
+      "case_index": 30,
+      "batch_index": 6
+    },
+    {
+      "domain": "support",
+      "task": "support.helpscout_hubspot_deal_alerts",
+      "example_id": 1468,
+      "task_contract_sha256": "8b29b9ddf121b7702b19e1303997359aa97f6cabf73e1fabacdbfbf8d47f55ce",
+      "selection_rank_sha256": "0e65ef92d0e7c28ac28e50e0219620473b6c0b40a1ccf715c4d85154e93a192e",
+      "case_index": 31,
+      "batch_index": 7
+    },
+    {
+      "domain": "support",
+      "task": "support.helpscout_response_audit",
+      "example_id": 1509,
+      "task_contract_sha256": "eb9a7b6374c787ace24f366ad7b77182a08ccba34b8e8e10df2976ff73d03f53",
+      "selection_rank_sha256": "0f683aa384b45dfc720697f0c86f33127c84f14df4493598b751b64dc7205437",
+      "case_index": 32,
+      "batch_index": 7
+    },
+    {
+      "domain": "sales",
+      "task": "sales.calendly_meeting_prep",
+      "example_id": 811,
+      "task_contract_sha256": "26795069fe62b3630f16ab8288c982c0882a9055548b0843a284025951883dd3",
+      "selection_rank_sha256": "100c899355d2f4b3f9f9ba57b97539e70596ceeb887c1b722ff23ff0ddbce08c",
+      "case_index": 33,
+      "batch_index": 7
+    },
+    {
+      "domain": "sales",
+      "task": "sales.linkedin_event_promotion",
+      "example_id": 816,
+      "task_contract_sha256": "2d0bcd42417c16ef34e4ccc95a1112fbe34a55620ab968bab1899cb5669bf260",
+      "selection_rank_sha256": "1018e2eb013b8bee4908808a4f14ac92205b2edc58be2a22f05108410550b7c1",
+      "case_index": 34,
+      "batch_index": 7
+    },
+    {
+      "domain": "operations",
+      "task": "operations.purchase_order_three_way_match",
+      "example_id": 1341,
+      "task_contract_sha256": "b838719009e1bcce58e65830de40ecc4468c31ab104d7681eff4c16a21512be5",
+      "selection_rank_sha256": "11064d12b0eae451e2b3d720b9a67889f9f7b5759948faf648d7567c97b7d989",
+      "case_index": 35,
+      "batch_index": 7
+    },
+    {
+      "domain": "support",
+      "task": "support.hiver_cross_team_handoff",
+      "example_id": 1553,
+      "task_contract_sha256": "e1709114d05653036ee9edb4325dc900f3d3b169f8ea07bd4b9d6a9939c6fe9b",
+      "selection_rank_sha256": "11163bbd46a7e48ae919e1194523d5c5da9f517b68efd8125d9b8f3b3e0b3f41",
+      "case_index": 36,
+      "batch_index": 8
+    },
+    {
+      "domain": "sales",
+      "task": "sales.update_contact_phone",
+      "example_id": 1,
+      "task_contract_sha256": "092285b8c5ee18ac8b2e14f9709d1cbe37f385603a213d50171ae1faa12cd37b",
+      "selection_rank_sha256": "1118a1ab6cb5574eafe2ff610e6b759bdfdae4484cf3a54cef4382d1193d05e4",
+      "case_index": 37,
+      "batch_index": 8
+    },
+    {
+      "domain": "operations",
+      "task": "operations.access_request_validation",
+      "example_id": 1323,
+      "task_contract_sha256": "8ca7277b7215f2e9a2ca5e72e0eef2cf4a4e8281ea19a9a9b5824ffa43082446",
+      "selection_rank_sha256": "124e77494adb5474faf82a0a3d30e56a3cc308f8d0777e3de0c41c0bdc2faa11",
+      "case_index": 38,
+      "batch_index": 8
+    },
+    {
+      "domain": "finance",
+      "task": "finance.qb_bill_payment_batch",
+      "example_id": 4061,
+      "task_contract_sha256": "19a10a6014e049439d352346a3c91792672c448a736f103948f29b67398b2eae",
+      "selection_rank_sha256": "1268e548739434cb86b9c503ef4a89236a552c8e4c444a8d6432847dd7c87d74",
+      "case_index": 39,
+      "batch_index": 8
+    },
+    {
+      "domain": "finance",
+      "task": "finance.grant_expense_tracking",
+      "example_id": 4052,
+      "task_contract_sha256": "a6842fa316b9a5a93323659ac6502b33891868c0cce0fef3718d2706e3452584",
+      "selection_rank_sha256": "145140b9b2ed8eb7610fa7a51802e5c8b5ab40b8cb0146fc28637d3e9c609601",
+      "case_index": 40,
+      "batch_index": 8
+    },
+    {
+      "domain": "operations",
+      "task": "operations.safety_certification_gap_analysis",
+      "example_id": 1332,
+      "task_contract_sha256": "f68eb9667f089f0a45c767ad2b8d8ef9c50a77dc47e865138f902ae6334f6e48",
+      "selection_rank_sha256": "14ccba0479cea902809b3a761f2692294a18f991cc96f81bd6564b3b8d3aeaae",
+      "case_index": 41,
+      "batch_index": 9
+    },
+    {
+      "domain": "finance",
+      "task": "finance.wave_expense_categorization",
+      "example_id": 4086,
+      "task_contract_sha256": "3d246750595fe5b0de630de534f27652a2d4de865930705417661c667500d383",
+      "selection_rank_sha256": "16b8b6a860c91ce1f2750b1279ef8a611919b1d43a65a5850261258ceb7296c5",
+      "case_index": 42,
+      "batch_index": 9
+    },
+    {
+      "domain": "finance",
+      "task": "finance.payroll_variance_check",
+      "example_id": 4029,
+      "task_contract_sha256": "581dced05f27571caea0e93f9b7f60e698296d7add13aff19e2bcd0c19eb6e9c",
+      "selection_rank_sha256": "1786b97a4b6ea1aeb0e1aa10c388ef40adcc6572c26909ebec65e4172556b373",
+      "case_index": 43,
+      "batch_index": 9
+    },
+    {
+      "domain": "hr",
+      "task": "hr.calendly_manager_office_hours",
+      "example_id": 5098,
+      "task_contract_sha256": "9f77833f5a657db9d261fc93e69bce1a4e487d402acf0ad8e7ac66ef354313ab",
+      "selection_rank_sha256": "179a07613230862a2897869d331c3e9aef5d575052f62b1d229e277b70cab461",
+      "case_index": 44,
+      "batch_index": 9
+    },
+    {
+      "domain": "operations",
+      "task": "operations.linkedin_job_change",
+      "example_id": 1299,
+      "task_contract_sha256": "aa8c3c5f83619d74d07e31935d6436e0dfcd3e216909806a500fabde9ab34611",
+      "selection_rank_sha256": "17a22cde6179dd66f6f4f7182052144d1085918235408ed0c23b6fa208e990cf",
+      "case_index": 45,
+      "batch_index": 9
+    },
+    {
+      "domain": "operations",
+      "task": "operations.server_capacity_threshold_alerts",
+      "example_id": 1334,
+      "task_contract_sha256": "5224df0b07facec256a505910944ead7181a8c551639f0981f32f33e31e181e4",
+      "selection_rank_sha256": "1823ebea8ab0dcc0d9599c47ca6ad417f974c3b890848b01d282aa6ebcc2c9f5",
+      "case_index": 46,
+      "batch_index": 10
+    },
+    {
+      "domain": "hr",
+      "task": "hr.exit_interview_scheduling",
+      "example_id": 5108,
+      "task_contract_sha256": "32ff9afcdd87b9e20c2855e7060b6034485ff9842eff643dec5b473db3935412",
+      "selection_rank_sha256": "1a4a493c8521551716738067d9797207075244c18c1be10d7085412249271872",
+      "case_index": 47,
+      "batch_index": 10
+    },
+    {
+      "domain": "hr",
+      "task": "hr.twilio_emergency_notification",
+      "example_id": 5080,
+      "task_contract_sha256": "bf3364ddd82006e645f87c96a4cb3ac67ff58701c4a40479002e9a50f25b23a3",
+      "selection_rank_sha256": "1b967e30cbf7d3c0213db53081698d7ed1461cde5ca4b7727f29ac117cc8e644",
+      "case_index": 48,
+      "batch_index": 10
+    },
+    {
+      "domain": "hr",
+      "task": "hr.return_from_leave",
+      "example_id": 5075,
+      "task_contract_sha256": "88f1dfc1e84053806da5cee801044278d0ac20689f63231f764fb68699f51db0",
+      "selection_rank_sha256": "1d20265b472e4bbddd5ce2d222613426c231b803bd98e28f80c5de5b698cb575",
+      "case_index": 49,
+      "batch_index": 10
+    },
+    {
+      "domain": "hr",
+      "task": "hr.expense_policy_violation",
+      "example_id": 5037,
+      "task_contract_sha256": "733bbd2d1cede2738bfd69390aaa949bca15ee92ba7ee54ce794ab491250370b",
+      "selection_rank_sha256": "1e1d75913e17b12ca4e8b27beb7b8c3a112adaae87df5553fde42f9e8671bf5f",
+      "case_index": 50,
+      "batch_index": 10
+    },
+    {
+      "domain": "sales",
+      "task": "sales.calendly_no_show_followup",
+      "example_id": 704,
+      "task_contract_sha256": "9306c0aaf8a32e2239a2acb05515320521c55714a68c004cc077579df12bd8c4",
+      "selection_rank_sha256": "111c8ce85f5006e296776e0c659a2f19f504898a3ba903d0b9738bf28c6a4feb",
+      "case_index": 51,
+      "batch_index": 11
+    },
+    {
+      "domain": "sales",
+      "task": "sales.slack_channel_for_new_account",
+      "example_id": 609,
+      "task_contract_sha256": "50e59aa8afe46f77fd245275d2a4f849d35872791578d85a3927a16d9a7623ab",
+      "selection_rank_sha256": "1158259bf4e4ebeda18fc287f1dd68a8e5ab0409b8db592d11fb240ce535c578",
+      "case_index": 52,
+      "batch_index": 11
+    },
+    {
+      "domain": "support",
+      "task": "support.gorgias_channel_consolidation",
+      "example_id": 1521,
+      "task_contract_sha256": "94973730051ca393156a8064aedfca7f58e630548564e929b60d4758c7633c9e",
+      "selection_rank_sha256": "11607e237e605a5a800895fcbf2d524c418a9037ff04ca7147189f577d300dd5",
+      "case_index": 53,
+      "batch_index": 11
+    },
+    {
+      "domain": "sales",
+      "task": "sales.sheets_multi_channel_campaign_router",
+      "example_id": 1130,
+      "task_contract_sha256": "f299ff48648b4a3d6695559a75142a8be35f78a56b67ece69ee4327cd3373042",
+      "selection_rank_sha256": "12f55d6035546e622d5e8acf4538177fc493dc69283bc6ddad45c6e25e9b59fb",
+      "case_index": 54,
+      "batch_index": 11
+    },
+    {
+      "domain": "support",
+      "task": "support.reamaze_multi_channel_dedup",
+      "example_id": 1584,
+      "task_contract_sha256": "e77e63d18f56bedc2cb6d989bff23d3f6d428c219e231052ab9ab5b34e6ea523",
+      "selection_rank_sha256": "1333aceb0adb3e4581a8b203cc86b791552dcb0a288603a8312f58c5886d9085",
+      "case_index": 55,
+      "batch_index": 11
+    },
+    {
+      "domain": "sales",
+      "task": "sales.historical_win_loss_recap",
+      "example_id": 1204,
+      "task_contract_sha256": "1de3f37a1085538197d1ac566a7d098c50d881cbedf633a6c5089ae48e1d085c",
+      "selection_rank_sha256": "1681088587b6fedef05f8b6c62a2bb73b8913c49b0f3ae5bac3b3b82750d40fa",
+      "case_index": 56,
+      "batch_index": 12
+    },
+    {
+      "domain": "support",
+      "task": "support.zendesk_data_quality",
+      "example_id": 1489,
+      "task_contract_sha256": "21a1da78e7a844e0df096339ed1136a1ca084a6e8f38a786f4072c24c1507756",
+      "selection_rank_sha256": "168e66911594497c372c8ecec4caa1313f0a963890bb5cf1d7154320d014816d",
+      "case_index": 57,
+      "batch_index": 12
+    },
+    {
+      "domain": "sales",
+      "task": "sales.calendly_availability_based_routing",
+      "example_id": 1148,
+      "task_contract_sha256": "832e34e2f1d4a4ea6c07a21e731cd73094f6de125ab8f1bb496309245e20cdb9",
+      "selection_rank_sha256": "18042d145ac4722342dcc9e4e25a2cb6fffd5c21a09db428d4f4c0c659505820",
+      "case_index": 58,
+      "batch_index": 12
+    },
+    {
+      "domain": "operations",
+      "task": "operations.asana_slack_sheets_audit",
+      "example_id": 1235,
+      "task_contract_sha256": "adb2690fd3e11e4e7fd6de942967f7a55beb2202056397374690ad0a52419047",
+      "selection_rank_sha256": "187193bc69aa8e2425c7393872d55845b2286039552c0c2ccf3bc787dd8a44d3",
+      "case_index": 59,
+      "batch_index": 12
+    },
+    {
+      "domain": "finance",
+      "task": "finance.multicurrency_invoice",
+      "example_id": 4017,
+      "task_contract_sha256": "d521dcaefbf13eda74526ffb9281d53cead08b86173aebdbf66c2160a975b530",
+      "selection_rank_sha256": "197a35c26e7dee955c623799e9a589f629ec3303cae62bcca5650f021ad01118",
+      "case_index": 60,
+      "batch_index": 12
+    },
+    {
+      "domain": "marketing",
+      "task": "marketing.content_syndication",
+      "example_id": 1041,
+      "task_contract_sha256": "d9e70decb59ad479dc3a13432c20964c470816d1441ce571cf20d982fb67efdc",
+      "selection_rank_sha256": "19a261a830abd52c213dc31c59abc3a9062e672ae2443e84167a817e956d16e3",
+      "case_index": 61,
+      "batch_index": 13
+    },
+    {
+      "domain": "operations",
+      "task": "operations.temporary_worker_placement",
+      "example_id": 1378,
+      "task_contract_sha256": "7c5c72bbb8df2489dd04af668f556796520bb31a50b903c86be733a719292bd8",
+      "selection_rank_sha256": "1a7f90f5a4e41c003b01fb0384f8cd5dd71f864112e8cec6a6785acf0a1809f7",
+      "case_index": 62,
+      "batch_index": 13
+    },
+    {
+      "domain": "support",
+      "task": "support.zoho_freshdesk_escalation",
+      "example_id": 1418,
+      "task_contract_sha256": "115afcb08b0c4057687cd538e5571ceb4fa9490cfe21ee9900619893b0929499",
+      "selection_rank_sha256": "1c813fef3729f8109c501974ccebd4a9561ed982870319a6402a10783d826985",
+      "case_index": 63,
+      "batch_index": 13
+    },
+    {
+      "domain": "operations",
+      "task": "operations.procurement_card_reconciliation",
+      "example_id": 1385,
+      "task_contract_sha256": "ae299179557afc873182d9106146d671bebecbbac8f20697a15ad5cfaa88c111",
+      "selection_rank_sha256": "1c8b6aa12b5c7006b50ad7ab8318af854a6cb36dd303e8228245049c945ba232",
+      "case_index": 64,
+      "batch_index": 13
+    },
+    {
+      "domain": "sales",
+      "task": "sales.advance_opportunity_stage",
+      "example_id": 2,
+      "task_contract_sha256": "864ffdbb153ba551399b74a879a43ca12fe8bc62fc115ce5127d466a6cfb478e",
+      "selection_rank_sha256": "1cccaed2fdf8e38b317f910e54dacd35897c64bd368c79cbe99858b857219122",
+      "case_index": 65,
+      "batch_index": 13
+    },
+    {
+      "domain": "marketing",
+      "task": "marketing.analyst_mention_tracking",
+      "example_id": 1136,
+      "task_contract_sha256": "4d40ce5abc20d9700d175309cdb223d8da7451d24d77cfc1776d5b1e46ea92eb",
+      "selection_rank_sha256": "1ce961481b6c2cbf42d9074fe75f2cbeb1d0e7b408cae0fa5276c36a35cdfc70",
+      "case_index": 66,
+      "batch_index": 14
+    },
+    {
+      "domain": "support",
+      "task": "support.zoho_desk_customer_journey",
+      "example_id": 1587,
+      "task_contract_sha256": "0066d6bdb80282560ba4350fb3abe265f912ed12da4cfba34b158493b6b6c846",
+      "selection_rank_sha256": "1e3000557c9515a82ece44b8c8fa34816a7ad41df97091dd59d6d5e906eb42ce",
+      "case_index": 67,
+      "batch_index": 14
+    },
+    {
+      "domain": "sales",
+      "task": "sales.add_contact_to_campaign",
+      "example_id": 4,
+      "task_contract_sha256": "21e7f9624586a4db64ffe3db327feed36b680508fe2c6f2c1700a7155476a1d5",
+      "selection_rank_sha256": "1e606cdf2836552c28f53b436a882185fb521b1d7df966e4ebdb69c4de4289c6",
+      "case_index": 68,
+      "batch_index": 14
+    },
+    {
+      "domain": "sales",
+      "task": "sales.event_followup_outreach",
+      "example_id": 1112,
+      "task_contract_sha256": "52f4630ff44f81bd43781fc84f9dce267ca00862600bb97a6d4f6554df776aac",
+      "selection_rank_sha256": "1f07ad20f1d13a05caf3ff941131cc6dde8207e2df93082cc53487a535621d36",
+      "case_index": 69,
+      "batch_index": 14
+    },
+    {
+      "domain": "operations",
+      "task": "operations.sheets_asana_approved_request",
+      "example_id": 1223,
+      "task_contract_sha256": "66d81bd2c7ea9e8226ddfc651ec4f6cac139bb121acb9555ca4063921be95723",
+      "selection_rank_sha256": "1f6bc5176d4bec253045f73e7a236bbe2651bd3c22874e898932161f478d16fe",
+      "case_index": 70,
+      "batch_index": 14
+    },
+    {
+      "domain": "support",
+      "task": "support.reamaze_campaign_tracking",
+      "example_id": 1533,
+      "task_contract_sha256": "70d10c3290f8dd4df8cb4c61a328cf1bf2d6074e024f4004872efac62476b375",
+      "selection_rank_sha256": "1f80ac626076f387bbe9baedec324d7edcb063e8c72b9b7e446247135baca67b",
+      "case_index": 71,
+      "batch_index": 15
+    },
+    {
+      "domain": "hr",
+      "task": "hr.monday_onboarding_pipeline",
+      "example_id": 5042,
+      "task_contract_sha256": "b73a7b27a8e2d4eb87dff56f86cab644898607354f7a87f15ec2c522179c9abf",
+      "selection_rank_sha256": "2097c859347f05a2c8085d55ec6df8cce32efa2aa9794f118e4658fb834583ec",
+      "case_index": 72,
+      "batch_index": 15
+    },
+    {
+      "domain": "marketing",
+      "task": "marketing.landing_page_alert",
+      "example_id": 1023,
+      "task_contract_sha256": "8129adc7c818b126e19f220d9fb130a2e7bee62bcbb9564315984f54b66cb35e",
+      "selection_rank_sha256": "21dc3da708dc4055ade01459e0fa2d3391aac20036f3406c9374a5ec750025ff",
+      "case_index": 73,
+      "batch_index": 15
+    },
+    {
+      "domain": "hr",
+      "task": "hr.visa_expiry_tracking",
+      "example_id": 5031,
+      "task_contract_sha256": "01509db41daab3d98958584064d63fcfa175f05dd81eb6f7deed58fdf914605a",
+      "selection_rank_sha256": "221a66ef8d2b48fc210969acb6a96898258544998036d9c194de839a3cda469c",
+      "case_index": 74,
+      "batch_index": 15
+    },
+    {
+      "domain": "hr",
+      "task": "hr.employee_request_routing",
+      "example_id": 5096,
+      "task_contract_sha256": "7d79e35bc260add42a591318be12766a4210659c070881073032f6b7a59cee88",
+      "selection_rank_sha256": "23703ff99d616569e8999e730164f0e9e4e7c710e7f7094e86fd9050f40fe711",
+      "case_index": 75,
+      "batch_index": 15
+    },
+    {
+      "domain": "sales",
+      "task": "sales.cross_platform_account_health_score",
+      "example_id": 1132,
+      "task_contract_sha256": "96c4e85a506bfda8b20a7326dcc148be1ae5a36a412efed67fb68ad98523fc7f",
+      "selection_rank_sha256": "244ce42f2d0b28694a5e88ee1c58e83dcee34dff384331101696c834d14450d2",
+      "case_index": 76,
+      "batch_index": 16
+    },
+    {
+      "domain": "support",
+      "task": "support.gorgias_defect_tracking",
+      "example_id": 1518,
+      "task_contract_sha256": "6be05cbe14ffb4d9d3bac38a0b8a34e3fbe209824d294d563ebe20299e855559",
+      "selection_rank_sha256": "24a29de7f04f9d1381e9473f90d3c574c370ff1668cde4537ca65046d5bd8533",
+      "case_index": 77,
+      "batch_index": 16
+    },
+    {
+      "domain": "operations",
+      "task": "operations.airtable_gmail_visitor_followup",
+      "example_id": 1232,
+      "task_contract_sha256": "770d4a6a9a935a40582ac0cc6ea96bd00afabcaf2c581c188a3706013d78f6d9",
+      "selection_rank_sha256": "24e362e89a6d1604f847f30c348b03a1639555c7eeb91f1afef66cb270666ed8",
+      "case_index": 78,
+      "batch_index": 16
+    },
+    {
+      "domain": "marketing",
+      "task": "marketing.product_launch_channel_plan",
+      "example_id": 1610,
+      "task_contract_sha256": "18f7e4e915dc97e7c5eedf4d7c881a0c15218bf24c10fb39b59de69f12968ff4",
+      "selection_rank_sha256": "252131b38af5f5c99f3c1a21a1b6be2310fda7f20cd02df137ee7566c9cee7f0",
+      "case_index": 79,
+      "batch_index": 16
+    },
+    {
+      "domain": "hr",
+      "task": "hr.visa_expiration_monitoring",
+      "example_id": 5118,
+      "task_contract_sha256": "5efe40ead6df67904977bd17f1ad9bc25cb4eb870c7ec319fdbb915655d2c7a3",
+      "selection_rank_sha256": "253f90ec31a5a88fad47561088c1a81b87bcb01222ad061b65365c5a02d9fa51",
+      "case_index": 80,
+      "batch_index": 16
+    },
+    {
+      "domain": "operations",
+      "task": "operations.hazmat_shipping_compliance",
+      "example_id": 1386,
+      "task_contract_sha256": "d9b2354f42760da056873a96cb750e62d6ce29dbd339b2d7ff96df99d226c5d1",
+      "selection_rank_sha256": "2584737ebd9bc9f42fc6921e9304e6cbb599bdf327edc40fe13ee780a526e9fb",
+      "case_index": 81,
+      "batch_index": 17
+    },
+    {
+      "domain": "operations",
+      "task": "operations.chatgpt_feedback_analysis",
+      "example_id": 1283,
+      "task_contract_sha256": "65e0448404d6958c8657ca51c61a8b1a23ee07e863873d8445be3a6db2639455",
+      "selection_rank_sha256": "26cbf7f711b4c7d9ed51cc9448a9d82fac960fc5c78f4381833b5fb060080886",
+      "case_index": 82,
+      "batch_index": 17
+    },
+    {
+      "domain": "hr",
+      "task": "hr.payroll_bonus_processing",
+      "example_id": 5081,
+      "task_contract_sha256": "8a157464b32f4ab81f3fb0d4dfe449a181a21cb8166a57da670fc6898d298853",
+      "selection_rank_sha256": "26ec372a7e8ffea6cf86d044204799aef6a8fb2a5712924f598a39328dab8e00",
+      "case_index": 83,
+      "batch_index": 17
+    },
+    {
+      "domain": "operations",
+      "task": "operations.compressed_gas_cylinder_tracking",
+      "example_id": 1394,
+      "task_contract_sha256": "4668caeb23002f8d60d6dc7d60f8184bbdfd930d08f7548a96281998f773f32f",
+      "selection_rank_sha256": "2741483dfba3403a46a2daed1986b6c7ff96276a2c9d804b91b7f9ac7dca51a3",
+      "case_index": 84,
+      "batch_index": 17
+    },
+    {
+      "domain": "operations",
+      "task": "operations.office_supply_budget_monitoring",
+      "example_id": 1395,
+      "task_contract_sha256": "e40b4e9cdec558d5edf5d93a43a2c9957d978b86c67afe3d9f9e453d7510090f",
+      "selection_rank_sha256": "2763b388a782bff9903132117edf9bda41547bec7f35983a28f3ab1336303ccd",
+      "case_index": 85,
+      "batch_index": 17
+    },
+    {
+      "domain": "operations",
+      "task": "operations.docusign_annual_review",
+      "example_id": 1280,
+      "task_contract_sha256": "c061b5b820032a086e7234aca1c7180373e02532d603ef6d14b39f52dbca39b0",
+      "selection_rank_sha256": "276a0651e4fdfe9878e96b60e04db1609493f75fa293a5d01684925d011f8dc2",
+      "case_index": 86,
+      "batch_index": 18
+    },
+    {
+      "domain": "finance",
+      "task": "finance.invoice_file_organization",
+      "example_id": 4028,
+      "task_contract_sha256": "546d3b3f24140e06ec16cb5ace5cbde42b381f4328bee7468627e6b1eb33358e",
+      "selection_rank_sha256": "27a0fa2ac7bcd0ee88922acb02ae5026210e801f1ce836d126876914376e1364",
+      "case_index": 87,
+      "batch_index": 18
+    },
+    {
+      "domain": "hr",
+      "task": "hr.contractor_renewal",
+      "example_id": 5121,
+      "task_contract_sha256": "8d367c30c71878bdcb63d70b9ec7498c0b761736b8205145bf60db471717a8f0",
+      "selection_rank_sha256": "27a98185069a4840698913e5d6abe8c90587c1dfc4ae369d52edc79e99901bdb",
+      "case_index": 88,
+      "batch_index": 18
+    },
+    {
+      "domain": "sales",
+      "task": "sales.sheets_reconciliation",
+      "example_id": 520,
+      "task_contract_sha256": "a6f1c200cc4afc45da177c058f555e08e4540bd74ccc63d4b714d60355f705dd",
+      "selection_rank_sha256": "2858213bbc613da53c2866762d92700e5181991d450c6e31325cda9150c01d39",
+      "case_index": 89,
+      "batch_index": 18
+    },
+    {
+      "domain": "hr",
+      "task": "hr.pto_reconciliation",
+      "example_id": 5111,
+      "task_contract_sha256": "eb3e5144f855f025f040009987b3763c33c6c5e11bbe06a6d7d1c14e16ab85b4",
+      "selection_rank_sha256": "2884f98f7e07005a4911423ade3bf4b379735bb91659041e63cf6e6a37da3908",
+      "case_index": 90,
+      "batch_index": 18
+    },
+    {
+      "domain": "operations",
+      "task": "operations.drive_notion_archive",
+      "example_id": 1205,
+      "task_contract_sha256": "24d9e3aa2f397b9114d3bdd0a1edb9d551330873a26d1fa10cca8b1c5b27eb54",
+      "selection_rank_sha256": "2977522f03f4735fa948ba4d23b0f5f2d0267c1d8b0150cb74940e5271943643",
+      "case_index": 91,
+      "batch_index": 19
+    },
+    {
+      "domain": "sales",
+      "task": "sales.docusign_sequential_signing",
+      "example_id": 837,
+      "task_contract_sha256": "1b61d7f66a9d80acb44d0366478d24580daf4b0dfc93ba7fe2c5b84261d0d224",
+      "selection_rank_sha256": "299da0a475baa4f7f44bb0a59bd334d6355b6d0bda937b5b7413ef96ea754da8",
+      "case_index": 92,
+      "batch_index": 19
+    },
+    {
+      "domain": "operations",
+      "task": "operations.contract_renewal_pipeline",
+      "example_id": 1353,
+      "task_contract_sha256": "e012530cb2bc212526a443ee9f8aad403b09bbe7367c442b37deee513bd0a2bb",
+      "selection_rank_sha256": "29b5790114f330f1040135283108163521baf10712ce4d0788f07c6b1332c36d",
+      "case_index": 93,
+      "batch_index": 19
+    },
+    {
+      "domain": "marketing",
+      "task": "marketing.vendor_management",
+      "example_id": 1080,
+      "task_contract_sha256": "2868fd6d74fbe2dd8e2c68ba345b1e0bc69e06e0b9e574aae450a7c71d9f1e1c",
+      "selection_rank_sha256": "29edca4601ec441e4c4183183a0f5938a25ed39a4d87513393f1bd3fe8a3b707",
+      "case_index": 94,
+      "batch_index": 19
+    },
+    {
+      "domain": "operations",
+      "task": "operations.contractor_onboarding_workflow",
+      "example_id": 1331,
+      "task_contract_sha256": "ac8aaaa7ed3890bd3f264042b672712eea5d55d69cdd33424d03a851a0981235",
+      "selection_rank_sha256": "2a42cf58c4940355ae51a2e6520bc6872ecafd8ad0b218b1392b3af831edaa83",
+      "case_index": 95,
+      "batch_index": 19
+    },
+    {
+      "domain": "hr",
+      "task": "hr.salary_adjustment_processing",
+      "example_id": 5101,
+      "task_contract_sha256": "9183b05dcecb9248435372b7a0ce00a47b575d0a9d8166dc05066aecb16627ae",
+      "selection_rank_sha256": "2a86de50818b0edbb5fe6cc58d027ab25aa8521378a17e1ed6722f14c622cccb",
+      "case_index": 96,
+      "batch_index": 20
+    },
+    {
+      "domain": "finance",
+      "task": "finance.quarterly_tax_estimate",
+      "example_id": 4087,
+      "task_contract_sha256": "e8b2c88b308b5220e7fd6d2809ae0582c78ede7a47a059edc4fcec6ff28e479e",
+      "selection_rank_sha256": "2b3c41c336ffdb9319a66370fb25314757d7ad1fd16fa82530da023c213fe868",
+      "case_index": 97,
+      "batch_index": 20
+    },
+    {
+      "domain": "finance",
+      "task": "finance.expense_anomaly_detection",
+      "example_id": 4002,
+      "task_contract_sha256": "b40e86464c3da1be2b2da3ba817d208ff8e6e6b23e7b8b23c2265f96080eb61f",
+      "selection_rank_sha256": "2be93eab425fb76f8915cf9d3244dfdb1c1a8b832d01e68647bf89a69102d4e0",
+      "case_index": 98,
+      "batch_index": 20
+    },
+    {
+      "domain": "marketing",
+      "task": "marketing.voice_of_customer",
+      "example_id": 1095,
+      "task_contract_sha256": "1369a0b0c7f14934f498bd932e9798bd84f14985519d22ee038f1dedf6fe336d",
+      "selection_rank_sha256": "2c56c22083d96f0e18b771d370a2b94f4536f757efcb69d7f67f4433aaa59cd2",
+      "case_index": 99,
+      "batch_index": 20
+    },
+    {
+      "domain": "finance",
+      "task": "finance.wave_product_catalog",
+      "example_id": 4038,
+      "task_contract_sha256": "757fed1987ec31f2db2ee6e8dcb0a1351e77ae6281ac427261d3b462d7b250a6",
+      "selection_rank_sha256": "2d5197589adbb29c912f57c12a4bf3bdb5848267fdc0e34427c5d9fec26d6650",
+      "case_index": 100,
+      "batch_index": 20
+    }
+  ]
+}

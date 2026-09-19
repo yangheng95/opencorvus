@@ -5,9 +5,11 @@ import {
   CAPABILITY_REVEAL_RECEIPT_METADATA_KEY,
   ActivatedCapability,
   CapabilityRevealBaseDefinitionConflictError,
+  capabilityRevealBaseDefinitions,
   capabilityRevealMaterializationFingerprint,
   CorruptCapabilityRevealError,
   createCapabilityRevealReceipt,
+  createTurnCapabilityProjection,
   foldCapabilityRevealReceipts,
   providerToolDefinitionChars,
   providerToolDefinitionDigest,
@@ -253,14 +255,14 @@ describe("occurrence capability reveal receipts", () => {
     })
   })
 
-  test("reports a typed conflict when a reveal reuses a permanent base Provider name", () => {
+  test("reports a typed conflict when a reveal changes a permanent base Provider definition", () => {
     const prior = foldCapabilityRevealReceipts({
       occurrenceID,
       parts: [],
       harnessProjectionHash,
       catalogSnapshotRef,
       catalogSnapshotHash,
-      baseDefinition: { ...baseDefinition, providerNames: ["read"] },
+      baseDefinition: capabilityRevealBaseDefinitions([{ ...definition, description: "A different permanent contract" }]),
     })
     expect(() => reduceCapabilityRevealCandidate({ prior, deactivateRefs: [], activated: [activation] })).toThrow(
       CapabilityRevealBaseDefinitionConflictError,
@@ -268,6 +270,76 @@ describe("occurrence capability reveal receipts", () => {
     expect({ revision: prior.revision, activeRefs: [...prior.active.keys()] }).toEqual({
       revision: 0,
       activeRefs: [],
+    })
+  })
+
+  test("reuses an exact permanent Registry Tool and rejects a same-name foreign executable", () => {
+    const matchingBase = capabilityRevealBaseDefinitions([definition])
+    const prior = foldCapabilityRevealReceipts({ occurrenceID, parts: [], harnessProjectionHash, catalogSnapshotRef, catalogSnapshotHash, baseDefinition: matchingBase })
+    const candidate = reduceCapabilityRevealCandidate({ prior, deactivateRefs: [], activated: [activation] })
+    expect({ refs: candidate.activeRefs, definitions: candidate.definitions, chars: candidate.payloadChars }).toEqual({ refs: [requestedRef], definitions: [], chars: matchingBase.payloadChars })
+    const foreign = ActivatedCapability.parse({ ...activation, executable_ref: capabilityRef({ kind: "tool", source: "platform", owner_ref: "runtime-projection:other", local_ref: "read" }) })
+    expect(() => reduceCapabilityRevealCandidate({ prior, deactivateRefs: [], activated: [foreign] })).toThrow(CapabilityRevealBaseDefinitionConflictError)
+  })
+
+  test("projects permanent and revealed references as one canonical capability set", () => {
+    const discoveryRef = capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: "capability_search" })
+    const matchingBase = capabilityRevealBaseDefinitions([definition])
+    const prior = foldCapabilityRevealReceipts({ occurrenceID, parts: [], harnessProjectionHash, catalogSnapshotRef, catalogSnapshotHash, baseDefinition: matchingBase })
+    const candidate = reduceCapabilityRevealCandidate({ prior, deactivateRefs: [], activated: [activation] })
+    const state = { ...prior, ...candidate, revision: 1 }
+    const input = { occurrenceID, harnessProjectionHash, catalogSnapshotRef, catalogSnapshotHash, permanentRefs: [requestedRef, discoveryRef], state }
+    const projection = createTurnCapabilityProjection(input)
+    expect({ refs: projection.active_refs, chars: projection.active_payload_chars, tokens: projection.active_payload_tokens }).toEqual({ refs: [discoveryRef, requestedRef], chars: matchingBase.payloadChars, tokens: matchingBase.payloadTokens })
+    expect(createTurnCapabilityProjection({ ...input, permanentRefs: [discoveryRef, requestedRef] })).toEqual(projection)
+    const deactivated = reduceCapabilityRevealCandidate({ prior: state, deactivateRefs: [requestedRef], activated: [] })
+    expect(createTurnCapabilityProjection({ ...input, state: { ...state, ...deactivated, revision: 2 } }).active_refs).toEqual([discoveryRef, requestedRef])
+  })
+
+  test("records an exact active ref when a reveal expands a matching permanent loader definition", () => {
+    const skillRef = capabilityRef({
+      kind: "skill",
+      source: "package",
+      owner_ref: "base",
+      local_ref: "base/shared/method",
+    })
+    const skillToolRef = capabilityRef({
+      kind: "tool",
+      source: "platform",
+      owner_ref: "tool-registry",
+      local_ref: "skill",
+    })
+    const skillDefinition = { ...definition, name: "skill", description: "Load one projected Skill." }
+    const skillActivation = ActivatedCapability.parse({
+      requested_ref: skillRef,
+      executable_ref: skillToolRef,
+      provider_name: "skill",
+      definition: skillDefinition,
+      definition_digest: providerToolDefinitionDigest(skillDefinition),
+      payload_chars: providerToolDefinitionChars(skillDefinition),
+      payload_tokens: providerToolDefinitionTokens(skillDefinition),
+      materializer_binding_digest: "6".repeat(64),
+    })
+    const matchingBase = capabilityRevealBaseDefinitions([skillDefinition])
+    const prior = foldCapabilityRevealReceipts({
+      occurrenceID,
+      parts: [],
+      harnessProjectionHash,
+      catalogSnapshotRef,
+      catalogSnapshotHash,
+      baseDefinition: matchingBase,
+    })
+    const candidate = reduceCapabilityRevealCandidate({ prior, deactivateRefs: [], activated: [skillActivation] })
+    expect({
+      refs: candidate.activeRefs,
+      definitions: candidate.definitions,
+      chars: candidate.payloadChars,
+      tokens: candidate.payloadTokens,
+    }).toEqual({
+      refs: [skillActivation.requested_ref],
+      definitions: [],
+      chars: matchingBase.payloadChars,
+      tokens: matchingBase.payloadTokens,
     })
   })
 

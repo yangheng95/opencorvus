@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto"
+import { PersistedDispatchCollectionMemberInputSchema } from "@/engine/dispatch-collection-contract"
 import { afterEach, describe, expect, test } from "bun:test"
 import {
   materializeMissionAcceptanceGap,
@@ -14,6 +15,8 @@ import {
   affectedAcceptanceWorkflowNodes,
   dispatchConsumesAcceptanceCriterion,
   readLatestTaskAcceptanceLedger,
+  currentTaskAcceptanceRepair,
+  MissionAcceptanceGapIntegrityError,
   validateTaskAcceptanceLedgerTransition,
   workflowNodeConsumesAcceptanceCriterion,
   type TaskAcceptanceLedgerProjection,
@@ -47,6 +50,8 @@ import { SessionControl } from "@/session/control"
 import { Database, eq } from "@/storage/db"
 import { EngineService } from "@/task-api"
 import { canonicalJSONValue } from "@/util/canonical-digest"
+import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
+import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { persistEstablishedTask } from "./fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -334,6 +339,46 @@ describe("Mission acceptance baseline readiness", () => {
     }).toEqual({ admitted: responsibility, exact: true, foreign: false })
   })
 
+  test("projects current acceptance obligations onto a previously unstarted downstream verifier", () => {
+    const criterion = openCriterion({ observation: [secondLocator] })
+    const turn = DispatchTurnSchema.parse({
+      kind: "initial",
+      current_dispatch_id: "dispatch_tester_first",
+      workflow_binding: workflowBinding,
+      workflow_node_id: "tester",
+      workflow_occurrence_id: "occ_tester",
+      delivery_slice_revision_ids: [],
+      evidence_locators: [secondLocator],
+      task_authority: {
+        task_id: "tsk_acceptance", root_session_id: "ses_task_root", request_sha256: "c".repeat(64),
+        initial_user_message_id: "msg_task_request",
+        initial_control_text_parts: [{ part_id: "prt_task_request", text_sha256: "d".repeat(64) }],
+      },
+      acceptance_repair: {
+        gap_id: "gap-builder-r2", ledger_revision_artifact_id: "art_acceptance_ledger_r2",
+        execution_epoch: 3, criteria: [criterion], checkpoint_required: false,
+      },
+    })
+    const collection = PersistedDispatchCollectionMemberInputSchema.parse({ dispatch: {
+      target: "tester", work_scope: { kind: "task" }, turn: {
+        kind: "initial", workflow_subject: { kind: "virtual_workflow", workflow_id: "repair", node_id: "tester" },
+        use_worktree: false, input: { instruction: "Verify the repaired outcome." },
+        acceptance_gap_id: "gap-builder-r2", criterion_ids: [criterion.criterion_id],
+      },
+    } })
+    expect({
+      kind: turn.kind, obligation: turn.acceptance_repair?.gap_id,
+      collectionTurn: collection.dispatch.turn,
+      consumes: dispatchConsumesAcceptanceCriterion({ binding: workflowBinding, responsibility: criterion.responsibility,
+        candidateWorkflowNodeID: "tester", sourceDispatchLineageArtifactID: undefined, targetAgentID: "tester" }),
+      prompt: renderDispatchContinuationTurn({ turn, guidance: "Verify the repaired outcome." }),
+    }).toMatchObject({
+      kind: "initial", obligation: "gap-builder-r2", consumes: true,
+      collectionTurn: { kind: "initial", acceptance_gap_id: "gap-builder-r2", criterion_ids: [criterion.criterion_id] },
+      prompt: expect.stringContaining("- gap_id: gap-builder-r2"),
+    })
+  })
+
   test("renders an open criterion continuation and applies the exact canonical Task delta", () => {
     const criterion = openCriterion({ observation: [secondLocator] })
     const turn = DispatchTurnSchema.parse({
@@ -387,12 +432,15 @@ describe("Mission acceptance baseline readiness", () => {
       id: "tsk_acceptance",
       title: "Acceptance repair",
       status: "active",
+      execution_lifecycle: { taskID: "tsk_acceptance", epoch: 1, openedEventID: "pev_open", openedAt: 1, status: "active" },
       source: "mission",
       request: "Repair the failed criterion",
       goals: [],
       budget: { max_executor_groups: 4 },
     } satisfies TaskDesc
-    const current = { ...baseline, status: "failed" } satisfies TaskDesc
+    const current = { ...baseline, status: "failed", execution_lifecycle: {
+      ...baseline.execution_lifecycle, status: "failed", terminalEventID: "pev_failed", terminalAt: 2,
+    } } satisfies TaskDesc
     const first = renderTaskProjectionContext(undefined, baseline)
     const second = renderTaskProjectionContext(first.baseline, current)
     expect({
@@ -461,7 +509,38 @@ describe("Mission acceptance baseline readiness", () => {
     })
   })
 
-  test("atomically opens the next epoch with its Mission Message and v2 ledger revision", async () => {
+  test("initialization responsibility follows the original failed boundary across workflow selection", () => {
+    const responsibility = { kind: "task_initialization" as const, failure_reference: terminal }
+    const initial = gap([openCriterion({ responsibility })])
+    const checked = validateTaskAcceptanceLedgerTransition({
+      taskID: "tsk_initialization", gap: initial, previous: undefined, workflowBinding: undefined,
+      initializationFailureByEventID: () => ({ taskID: "tsk_initialization", executionEpoch: 1 }),
+    })
+    expect(checked.criteria[0]!.responsibility).toEqual(responsibility)
+    const prior = ledgerProjection(initial.criteria)
+    const next = { ...gap([openCriterion({ responsibility, actionSequence: 2 })]), reviewed_terminal_lifecycle_reference: { terminalEventID: "pev_later_failure" } }
+    const carried = validateTaskAcceptanceLedgerTransition({ taskID: "tsk_initialization", gap: next, previous: prior, workflowBinding,
+      initializationFailureByEventID: () => ({ taskID: "tsk_initialization", executionEpoch: 1 }),
+    })
+    expect(carried.criteria[0]!.responsibility).toEqual(responsibility)
+    expect([...affectedAcceptanceWorkflowNodes(workflowBinding, checked)]).toEqual(["planner", "builder", "tester", "publisher"])
+    expect(dispatchConsumesAcceptanceCriterion({ binding: workflowBinding, responsibility, candidateWorkflowNodeID: "planner", sourceDispatchLineageArtifactID: undefined, targetAgentID: "planner" })).toBe(true)
+    expect(dispatchConsumesAcceptanceCriterion({ binding: { kind: "direct", package_revision: packageRevision }, responsibility, candidateWorkflowNodeID: null, sourceDispatchLineageArtifactID: undefined, targetAgentID: "builder" })).toBe(true)
+  })
+
+  test.each(["unknown", "foreign", "stale"] as const)("initialization reference %s produces the precise integrity error", (scope) => {
+    const responsibility = { kind: "task_initialization" as const, failure_reference: scope === "stale" ? { terminalEventID: "pev_old" } : terminal }
+    let error: unknown
+    try {
+      validateTaskAcceptanceLedgerTransition({ taskID: "tsk_initialization", gap: gap([openCriterion({ responsibility })]), previous: undefined, workflowBinding: undefined,
+        initializationFailureByEventID: () => scope === "unknown" ? undefined : { taskID: scope === "foreign" ? "tsk_foreign" : "tsk_initialization", executionEpoch: 1 },
+      })
+    } catch (caught) { error = caught }
+    expect(error).toBeInstanceOf(MissionAcceptanceGapIntegrityError)
+    expect(error).toMatchObject({ code: "mission_acceptance_gap_integrity", taskID: "tsk_initialization" })
+  })
+
+  test.each(["workflow", "initialization", "completed", "dispatched"] as const)("%s terminal occurrence produces its exact Mission acceptance-resume contract", async (scope) => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -521,13 +600,24 @@ describe("Mission acceptance baseline readiness", () => {
           },
           nodes: [{ node_id: "builder", agent_id: "base", depends_on: [] }],
         }
-        recordEngineArtifact({
+        if (scope === "workflow") recordEngineArtifact({
           taskID,
           kind: "task_completion_decision",
           label: "accepted-terminal-binding",
           payload: { workflow_binding: boundWorkflow },
           timeCreated: now + 1,
         })
+        if (scope === "dispatched") {
+          const dispatchID = Identifier.ascending("artifact")
+          const origin = createDispatchLineageOrigin({ taskID, dispatchID, orchestratorSessionID: rootSession.id,
+            orchestratorMessageID: Identifier.ascending("message"), toolPartID: Identifier.ascending("part"),
+            toolCallID: "call_initialization_existing_dispatch", targetAgentID: "base",
+            projectedWorkerIdentity: { agentID: "base", baseRole: "delegated-worker", sessionKind: "delegated-worker", dispatchAdapterID: "delegated_worker", runtimeTemplateABIVersion: 1, dispatchAdapterABIVersion: 1, projectionHash: "b".repeat(64) },
+            workScope: { kind: "task" }, workflowBinding: boundWorkflow, workflowNodeID: "builder", workflowOccurrenceID: dispatchID,
+            adapterInput: { instruction: "Produce the receipt" },
+          })
+          recordTestDispatchLineage({ origin, childSessionID: Identifier.ascending("session") })
+        }
         const evidenceArtifactID = recordEngineArtifact({
           taskID,
           kind: "expert_output",
@@ -546,7 +636,7 @@ describe("Mission acceptance baseline readiness", () => {
         }
         await terminalTask(
           requireTask(taskID),
-          { status: "failed", error: "Initial receipt was incomplete", time_started: now, time_completed: now + 3 },
+          { status: scope === "completed" ? "completed" : "failed", error: scope === "completed" ? null : "Initial receipt was incomplete", time_started: now, time_completed: now + 3 },
           "Initial delivery failed acceptance",
         )
         const terminalReference = requireCurrentTerminalLifecycleReference(taskID)
@@ -557,7 +647,10 @@ describe("Mission acceptance baseline readiness", () => {
             {
               ...openCriterion({
                 observation: [evidenceLocator as typeof firstLocator],
-                responsibility: {
+                responsibility: scope !== "workflow" ? {
+                  kind: "task_initialization" as const,
+                  failure_reference: terminalReference,
+                } : {
                   kind: "workflow_node" as const,
                   workflow_id: boundWorkflow.workflow_id,
                   workflow_node_id: "builder",
@@ -568,7 +661,7 @@ describe("Mission acceptance baseline readiness", () => {
           ],
         }
         using _ingressRunner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
-        const result = await EngineService.resumeMissionTask({
+        const resume = () => EngineService.resumeMissionTask({
           taskID,
           importer: {
             missionID: mission.missionID,
@@ -582,7 +675,15 @@ describe("Mission acceptance baseline readiness", () => {
           completeEvidenceLocators: [evidenceLocator],
           toolPartID: "prt_acceptance_resume",
         })
+        if (scope === "completed" || scope === "dispatched") {
+          await expect(resume()).rejects.toMatchObject({ name: "MissionAcceptanceGapIntegrityError", code: "mission_acceptance_gap_integrity", taskID })
+          expect(taskLifecycleProjection(taskID)).toMatchObject({ status: scope === "completed" ? "completed" : "failed", epoch: 1, terminalEventID: terminalReference.terminalEventID })
+          return
+        }
+        const result = await resume()
         const ledger = readLatestTaskAcceptanceLedger(taskID)
+        const activeRepair = currentTaskAcceptanceRepair(taskID)
+        expect(activeRepair).toMatchObject({ executionEpoch: 2, artifactID: ledger!.artifactID, revision: { gap: acceptanceGap } })
         const messages = await Session.messages({ sessionID: rootSession.id })
         const repairMessage = messages.find((message) => message.info.id === result.message_id)
         expect({

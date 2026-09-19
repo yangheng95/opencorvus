@@ -16,10 +16,18 @@ universal executable interface.
 3. The authoritative input Message is atomically bound to a content-addressed
    `CatalogViewSnapshotPayloadV3`. `HarnessProjection` binds the same snapshot
    ref/hash and cannot expand it.
-4. Revision zero exposes authorized routine tools directly. One guidance map in
-   `capability/routine-tools.ts`, intersected with executable grants, model
-   projection, permissions and Message switches, determines the routine base
-   and its initial prompt instructions. Declared dispatch-stage interfaces also
+4. Revision zero exposes authorized routine tools directly. It also exposes the
+   production `skill` loader when the authoritative visible user input names an
+   exact Skill already granted to that Conversation or Task identity. The
+   loader ref and normalized definition are part of the same immutable
+   permanent base, active refs, digest, and payload accounting; loading the
+   Skill content remains an ordinary model Tool call. For Task workers and
+   schedulers, their granted platform Registry and runtime-projected tools form
+   the routine base; the specialized Skill loaders retain exact selection.
+   `capability/routine-tools.ts` intersects those grants with model projection,
+   permissions and Message switches. Its guidance map describes their use and
+   selects the narrower native Conversation/Mission routine surface, rather
+   than imposing another Task role allowlist. Declared dispatch-stage interfaces also
    belong to their worker's base. `capability_search` discovers and loads
    specialist and extension capabilities that are not already callable.
    A caller-requested JSON-schema response can additionally use the existing
@@ -37,7 +45,12 @@ universal executable interface.
 `TurnCapabilityProjectionV3` is a process-local derivation of the input-bound
 permanent refs and persisted extension receipts. Its active refs cover the exact
 currently callable capabilities. It is not a Session cache or a mutable Harness
-table. A new authoritative input starts at revision zero with its routine base;
+table. References form a canonical set union: a matching permanent Registry
+Tool may also have a valid reveal receipt and appears once in the projection.
+Deactivating that reveal preserves its permanent availability. Definition and
+executable-identity conflict validation still applies before projection.
+A new authoritative input starts at revision zero with its bound
+permanent base, including an eligible exact visible production Skill directive;
 v2 search receipts continue to record only dynamically activated extensions.
 
 ## Search and reveal contract
@@ -87,8 +100,9 @@ conflict.
 
 ## Provider budgets
 
-- Revision zero's permanent surface contains the authorized routine tools and
-  `capability_search`. Search itself is at most 4,000 normalized characters and
+- Revision zero's permanent surface contains the authorized routine tools,
+  `capability_search`, and any eligible exact production Skill loader named by
+  the authoritative visible input. Search itself is at most 4,000 normalized characters and
   1,000 estimated tokens. The conditional
   response encoder remains outside the Harness but is counted in the immutable
   Provider base and total payload budget.
@@ -117,8 +131,15 @@ JSON object or create another persistence contract.
 The reducer counts every real Provider-normalized permanent definition from
 revision zero in its total digest and size, while enforcing the extension
 allowance over extension definitions. Base Provider names are immutable reducer
-input; a reveal that tries to reuse one of those names is corrupt rather than a
-second definition owner.
+input. A later authorized capability activation may reuse a permanent Registry
+Tool only when its executable ref is the exact platform/tool-registry leaf for
+that Provider name and its complete normalized definition digest equals the
+frozen base digest. This covers Skill loading and Expert Squad Task creation
+through the same rule. The receipt adds the requested ref and materializer
+evidence without counting a duplicate Tool definition. A different executable
+authority or definition remains a typed conflict; persisted receipt folding
+enforces the identical rule.
+
 
 ## Exact materialization owners
 
@@ -174,15 +195,34 @@ second definition owner.
   shared context/codebase, and every stage output owner expose real per-leaf
   constructors over their occurrence-local shared collector; a lazy function
   that first constructs a complete Tool record is not an exact factory.
-- Skill and Mission Skill loaders are absent at revision zero. Revealing one
-  exact Skill mounts only that Skill; supporting files remain exact loader
-  reads. Capability identity (`ref.local_ref`) and executable Skill `name` are
+- Skill and Mission Skill loaders are absent at revision zero unless the
+  authoritative visible input explicitly names an already projected production
+  Skill. That exact production loader is frozen into the permanent base without
+  a search receipt; its content is still loaded only by the model's visible
+  Tool call. A later exact Skill reveal expands that same loader through a
+  normal receipt, keeps the base definition and payload unchanged, and is
+  reconstructed and permission-checked from every active Skill ref. Revealing
+  one exact Skill mounts only that Skill; supporting files remain exact loader
+  reads. The loader's Provider definition is stable across an empty, denied, or
+  expanded compatible Skill set; current names and availability appear only in
+  its Tool result. Capability identity (`ref.local_ref`) and executable Skill `name` are
   distinct: initial reveal and receipt reconstruction resolve the exact frozen
   descriptor's `open_skill.name` or `open_mission_skill.name` before applying
   the existing mount eligibility checks. They never treat a package ref as a
   loader-name alias or consult a replacement live catalog. Selecting another
   Skill rebuilds the loader from the selected identities even when that loader
   already exists; its existence does not imply the new Skill is active.
+  Projected loader availability comes from the same resolved Skill surface for
+  schedulers and workers. A scheduler's runtime-owned loader placeholder is
+  finalized by the specialized Registry loader; the Registry-only subset of
+  Tool grants cannot stand in for the role's complete projected authority.
+  Every loader finalization applies the current Message Tool switches and merged
+  Agent/Session capability rules to both loader visibility and required tools.
+  The same merged rules govern exact Skill eligibility. A newly selected denied
+  Skill returns `CapabilityRevealAuthorizationError` with `execution_not_granted`;
+  a previously recorded activation that current policy cannot reconstruct retires
+  through `StaleCatalogOccurrenceError`. Finalization cannot restore a disabled
+  loader from its broader Harness grants.
 - A direct Conversation or Mission publishes callable MCP children only from
   its exact Host Session owner. The project/config inventory remains status and
   metadata authority; it is not a second executable owner for the same
@@ -233,6 +273,13 @@ metadata for an explicitly assigned owner, while Provider projection and calls
 use exact leaves.
 
 ## Recovery and integrity
+
+Effectful stage materializers bind the same normalized JSON input that their
+input digest covers. Optional object properties with undefined values are
+omitted at this one boundary, before both in-memory ownership and persistence;
+array entries and other values must be valid JSON. Initial exact reveal and
+recovered reveal therefore fingerprint the same binding without weakening the
+canonical digest or project/worktree authority checks.
 
 Every Provider step re-reads and hashes the input-bound Catalog before
 materializing definitions. Persisted receipt definitions and exact materializer

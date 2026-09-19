@@ -1347,14 +1347,25 @@ export async function searchTaskArtifacts(input: {
   }
 }
 
-function utf8Chunk(input: { bytes: Uint8Array; offset: number; maxBytes: number; context: string }): {
+export class UTF8ChunkBudgetError extends Error {
+  readonly code = "utf8_chunk_budget_too_small"
+
+  constructor(input: { context: string; maxBytes: number; offset: number }) {
+    super(
+      `${input.context}: max_bytes ${input.maxBytes} cannot contain the complete UTF-8 code point at byte_offset ${input.offset}`,
+    )
+    this.name = "UTF8ChunkBudgetError"
+  }
+}
+
+export function utf8Chunk(input: { bytes: Uint8Array; offset: number; maxBytes: number; context: string }): {
   text: string
   byteEnd: number
 } {
   if (input.offset > input.bytes.byteLength) {
     throw new Error(`${input.context}: byte_offset ${input.offset} exceeds ${input.bytes.byteLength}`)
   }
-  const fatalDecoder = new TextDecoder("utf-8", { fatal: true })
+  const fatalDecoder = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true })
   if (input.offset === input.bytes.byteLength) {
     return { text: "", byteEnd: input.offset }
   }
@@ -1374,9 +1385,7 @@ function utf8Chunk(input: { bytes: Uint8Array; offset: number; maxBytes: number;
       end--
     }
   }
-  throw new Error(
-    `${input.context}: max_bytes ${input.maxBytes} cannot contain the complete UTF-8 code point at byte_offset ${input.offset}`,
-  )
+  throw new UTF8ChunkBudgetError({ context: input.context, maxBytes: input.maxBytes, offset: input.offset })
 }
 
 function textReadResult(input: {
@@ -1739,7 +1748,9 @@ function boundedEngineArtifactTextReadResult(input: {
   let text = ""
   while (relativeEnd >= relativeOffset) {
     try {
-      text = new TextDecoder("utf-8", { fatal: true }).decode(input.bytes.subarray(relativeOffset, relativeEnd))
+      text = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(
+        input.bytes.subarray(relativeOffset, relativeEnd),
+      )
       break
     } catch {
       relativeEnd -= 1

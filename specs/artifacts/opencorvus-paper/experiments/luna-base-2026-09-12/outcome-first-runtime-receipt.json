@@ -1,0 +1,21 @@
+{
+  "runtime_commit": "3f9cb474b577f6e313492ed48b5b4bbf1bfa4f1f",
+  "runtime_tree": "975415012f91fe8bf3534429ea87eafa2b64a4b3",
+  "parent_commit": "e03f1fd678295421ac0a37c1b4b6fed8a22c6cc6",
+  "delta_file": "outcome-first-runtime.patch",
+  "delta_sha256": "fffaa66226690460734bc1bd6ccdafcc4d3e13cbb0140812b8b220f8a77185f1",
+  "delta_bytes": 268627,
+  "base_version": "2026.09.12.2",
+  "squad_sdk_version": "2026.09.12.2",
+  "model": "openai/gpt-5.6-luna",
+  "case_indices": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "inactivity_ms": 600000,
+  "concurrency": 2,
+  "status": "source_frozen_preflight_passed_real_retest_pending"
+}

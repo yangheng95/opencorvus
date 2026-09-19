@@ -458,6 +458,14 @@ would incorrectly reject the required publish, query, read, then complete Tool
 sequence, while a different parent remains a different occurrence and is never
 accepted as completion evidence.
 
+Mission completion stays current only while its receipt accepts the exact current child Task set and each completed terminal occurrence remains unchanged. New operator authority invalidates an earlier acceptance; internal scheduler notifications, proven one-shot delay wakes and recovery envelopes do not create a new user requirement merely by arriving later. A real scheduled Automation job remains fresh execution authority. The board derives this from canonical Task lifecycle references and the immutable completion receipt, never notification arrival order.
+
+Task creation publishes an exact durable child identity and retains exclusive mutation admission. Its Tool receipt
+does not automatically finish the caller's physical Turn: the Mission may still owe another ready creation, a
+stage binding or a correlated reply. Initial creation, replay and accepted-target-unavailable recovery follow the
+same result contract. The real caller finishes or explicitly waits after satisfying its current responsibilities;
+the Host does not synthesize a follow-up wake or force a workflow step after publication.
+
 Task evidence reads are independently immutable completed Tool facts. A
 Mission may retain every Host-minted `artifact_read_ref` from a complete chunk
 sequence across later inputs and use that full supplied set for final completion

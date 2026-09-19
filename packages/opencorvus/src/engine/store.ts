@@ -621,6 +621,19 @@ export function findInteractionByExternal(externalID: string) {
 }
 
 export function projectInteractionRowInTransaction(db: Database.TxOrDb, row: PersistedInteractionRow): InteractionRow {
+  const ownerEvents = db
+    .select({ aggregateType: ProtocolEventTable.aggregate_type, aggregateID: ProtocolEventTable.aggregate_id })
+    .from(ProtocolEventTable)
+    .where(and(eq(ProtocolEventTable.type, "interaction.requested"), eq(ProtocolEventTable.interaction_id, row.id)))
+    .limit(2)
+    .all()
+  if (ownerEvents.length !== 1 || ownerEvents[0]?.aggregateType !== "task") {
+    throw new Error(`Interaction ${row.id} has no exact immutable Task owner event`)
+  }
+  const taskID = ownerEvents[0].aggregateID
+  if (row.task_id !== null && row.task_id !== taskID) {
+    throw new Error(`Interaction ${row.id} Task correlation changed from its immutable owner event`)
+  }
   const source = row.source_kind === "bus_question" && row.source_id
     ? db.select().from(BusPublicationOutboxTable).where(eq(BusPublicationOutboxTable.occurrence_id, row.source_id)).get()
     : undefined
@@ -689,16 +702,6 @@ export function projectInteractionRowInTransaction(db: Database.TxOrDb, row: Per
   if (!request?.sessionID || !request.externalID || !request.requestType || !request.title || request.body === null || !request.payload || !request.timeCreated) {
     throw new Error(`Interaction ${row.id} has incomplete immutable request authority`)
   }
-  let taskID = row.task_id ?? permission?.task_id ?? undefined
-  let ancestorSessionID: string | null | undefined = request.sessionID
-  const visited = new Set<string>()
-  while (!taskID && ancestorSessionID) {
-    if (visited.has(ancestorSessionID)) throw new Error(`Interaction ${row.id} Session lineage contains a cycle`)
-    visited.add(ancestorSessionID)
-    taskID = db.select({ id: EngineTaskTable.id }).from(EngineTaskTable).where(eq(EngineTaskTable.session_id, ancestorSessionID)).get()?.id
-    if (!taskID) ancestorSessionID = db.select({ parentID: SessionTable.parent_id }).from(SessionTable).where(eq(SessionTable.id, ancestorSessionID)).get()?.parentID
-  }
-  if (!taskID) throw new Error(`Interaction ${row.id} has no immutable Task owner`)
   const exactTaskID = taskID
   const outcome = db.select().from(EngineInteractionOutcomeTable)
     .where(eq(EngineInteractionOutcomeTable.interaction_id, row.id)).get()

@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "case_indices": [
+    1,
+    2
+  ],
+  "runtime_commit": "e03f1fd678295421ac0a37c1b4b6fed8a22c6cc6",
+  "metric": "Standalone selections in generic-publishing Sessions, excluding references consumed by other Tools; counts unused selections too.",
+  "limitation": "This measures a specific transport overhead, not all calls or overall speedup. Independent verification remains required.",
+  "cases": [
+    {
+      "case_index": 1,
+      "run_id": "3aa4e29b-b0f4-460f-9da2-16fbe2c09027",
+      "domain": "marketing",
+      "task": "marketing.linkedin_company_update",
+      "task_contract_sha256": "2e11a42ea582c94e1051b2ba0ee4ba0e2c867aa0297a7ca7219d692e29fffbd0",
+      "runtime_commit": "e03f1fd678295421ac0a37c1b4b6fed8a22c6cc6",
+      "duration_ms": 1980210,
+      "strict": 0,
+      "partial": 0,
+      "recorded_official_replay": true,
+      "provider_requests": 113,
+      "transcript_sha256": "936744c56b5bf21b0b85845e46f8ce0f4673df00dc50c50e765a11e65fbb5034",
+      "tool_calls": 168,
+      "calls_by_tool": {
+        "artifact_publish": 7,
+        "artifact_read": 30,
+        "artifact_search": 18,
+        "artifact_select": 23,
+        "artifact_snapshot": 1,
+        "bash": 62,
+        "dispatch_agent": 6,
+        "glob": 2,
+        "manage_task": 1,
+        "read": 8,
+        "search_code": 1,
+        "skill": 9
+      },
+      "publication_selection_calls": 13,
+      "publication_selection_part_ids": [
+        "prt_g0VUzH5BL00TYPWmeG1j",
+        "prt_g0VUzH5C5001YgZT3BkA",
+        "prt_g0VUzH5CH0071KgsjZJe",
+        "prt_g0VUzHlJh00RcuNsArRK",
+        "prt_g0VUzJAzh00n6Ww4SaHL",
+        "prt_g0VUzJB0000FcFIs7Qq1",
+        "prt_g0VUzJB0A00s09npRcuO",
+        "prt_g0VUzJB0J00kV5TnHiqz",
+        "prt_g0VUzJz1F00By37JOE2F",
+        "prt_g0VUzK03e00Rf2a9DJGU",
+        "prt_g0VUzK1q100cXN1srDFx",
+        "prt_g0VUzKkFI00hb2lLPFu7",
+        "prt_g0VUzKkGR00rJNXdKplG"
+      ],
+      "publisher_selections_used_by_other_consumers": 0,
+      "direct_read_source_publications": 0,
+      "failed_tool_calls": 5
+    },
+    {
+      "case_index": 2,
+      "run_id": "fadd5d34-0bc9-41e4-b037-12328c57ec8d",
+      "domain": "finance",
+      "task": "finance.wave_freelance_invoice",
+      "task_contract_sha256": "0a3653b8a06156c391a33e80fca84ca5ab091d15e0b53f241740712372276908",
+      "runtime_commit": "e03f1fd678295421ac0a37c1b4b6fed8a22c6cc6",
+      "duration_ms": 1196924,
+      "strict": 0,
+      "partial": 0.5,
+      "recorded_official_replay": true,
+      "provider_requests": 103,
+      "transcript_sha256": "6aaf2f7943413cbb646fcfc63c9cbd0c847a40f4b4de2eec833bd88b52677a7f",
+      "tool_calls": 109,
+      "calls_by_tool": {
+        "artifact_publish": 5,
+        "artifact_read": 9,
+        "artifact_search": 9,
+        "artifact_select": 9,
+        "artifact_snapshot": 1,
+        "bash": 55,
+        "dispatch_agent": 3,
+        "glob": 2,
+        "manage_task": 1,
+        "read": 6,
+        "skill": 9
+      },
+      "publication_selection_calls": 4,
+      "publication_selection_part_ids": [
+        "prt_g0VUzHa6i00z06xTeXDd",
+        "prt_g0VUzJYIq00FALe7FXd2",
+        "prt_g0VUzJYJa006Ic2Uact1",
+        "prt_g0VUzJYJp00WzxGOjsUR"
+      ],
+      "publisher_selections_used_by_other_consumers": 0,
+      "direct_read_source_publications": 0,
+      "failed_tool_calls": 3
+    }
+  ],
+  "publication_selection_calls": 17,
+  "provider_requests": 216,
+  "tool_calls": 277
+}

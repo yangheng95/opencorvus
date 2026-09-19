@@ -828,7 +828,7 @@ describe("Dynamic Expert Squad package", () => {
                 abortSignal: new AbortController().signal,
               },
             ),
-          ).rejects.toThrow(`Message ${foreignFinalID} does not belong to Task ${taskID}`)
+          ).rejects.toThrow(`Message ${foreignFinalID} is not a terminal dispatch settlement for Task ${taskID}`)
         },
       })
     } finally {

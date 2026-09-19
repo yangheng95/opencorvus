@@ -9,6 +9,7 @@ import { dispatchLineageRow, type DispatchLineageRow } from "./dispatch-lineage-
 import { parseDispatchSettlementPayload, type DispatchSettlementRow } from "./dispatch-settlement"
 import { EngineArtifactTable, EngineTaskRootIngressTable, type EngineMetadata } from "./engine.sql"
 import { Identifier } from "@/id/id"
+import { TASK_BOUNDARY_REQUEST_EVENT_TYPES } from "./task-lifecycle"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { Database, and, asc, desc, eq, gt, or, sql } from "@/storage/db"
 import {
@@ -35,6 +36,7 @@ type DispatchRecoveryExecutionOccurrenceFact = {
   executionEpoch: number
   currentEpoch: number | null
   terminal: number
+  boundaryRequested: number
   deleted: number
 }
 
@@ -660,6 +662,14 @@ function dispatchRecoveryExecutionOccurrenceQuery(
       ) AS terminal,
       EXISTS (
         SELECT 1
+        FROM protocol_event AS boundary
+        WHERE boundary.aggregate_type='task'
+          AND boundary.aggregate_id=requested.task_id
+          AND boundary.type IN (${sql.join(TASK_BOUNDARY_REQUEST_EVENT_TYPES.map((type) => sql`${type}`), sql`, `)})
+          AND json_extract(boundary.payload, '$.execution_epoch')=requested.execution_epoch
+      ) AS boundaryRequested,
+      EXISTS (
+        SELECT 1
         FROM protocol_event AS deleted
         WHERE deleted.aggregate_type='task'
           AND deleted.aggregate_id=requested.task_id
@@ -797,6 +807,7 @@ export function dispatchRecoveryCandidatesInTransaction(
       !occurrence ||
       occurrence.deleted === 1 ||
       occurrence.currentEpoch !== lineage.payload.execution_epoch ||
+      occurrence.boundaryRequested === 1 ||
       occurrence.terminal === 1
     ) {
       excluded.add(key)

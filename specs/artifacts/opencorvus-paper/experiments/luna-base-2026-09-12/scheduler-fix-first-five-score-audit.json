@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "runtime_commit": "e03f1fd678295421ac0a37c1b4b6fed8a22c6cc6",
+  "checker_sha256": "7a7b47eaac0b816f82be36fe74837bbac385fe9c50f8d5629a2c06af95737a0d",
+  "scope": "Independent sealed-file, case/source identity and official scoring replay; catalog runtime eligibility remains its own audit.",
+  "cases": [
+    {
+      "case_index": 1,
+      "run_id": "3aa4e29b-b0f4-460f-9da2-16fbe2c09027",
+      "task": "marketing.linkedin_company_update",
+      "runtime_commit": "e03f1fd678295421ac0a37c1b4b6fed8a22c6cc6",
+      "manifest_sha256": "87c6860bd09af77184eb9e85135d2fce688b8c701108cb43ce0a2f84b8faf3e1",
+      "seal": {
+        "passed": true,
+        "files_checked": 22,
+        "violations": []
+      },
+      "identity_passed": true,
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 1207,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 50,
+        "replayed_non_stateful_calls": 29,
+        "skipped_non_stateful_calls": 0
+      },
+      "strict": 0,
+      "partial": 0,
+      "duration_ms": 1980210,
+      "leaderboard_member": true
+    },
+    {
+      "case_index": 2,
+      "run_id": "fadd5d34-0bc9-41e4-b037-12328c57ec8d",
+      "task": "finance.wave_freelance_invoice",
+      "runtime_commit": "e03f1fd678295421ac0a37c1b4b6fed8a22c6cc6",
+      "manifest_sha256": "5e3955aaae617b2949290de8a3a2b9328141dfaac7c14b14f0aad8eba1319bff",
+      "seal": {
+        "passed": true,
+        "files_checked": 22,
+        "violations": []
+      },
+      "identity_passed": true,
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 4014,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 27,
+        "replayed_non_stateful_calls": 26,
+        "skipped_non_stateful_calls": 0
+      },
+      "strict": 0,
+      "partial": 0.5,
+      "duration_ms": 1196924,
+      "leaderboard_member": true
+    },
+    {
+      "case_index": 3,
+      "run_id": "6b332182-7962-4349-94f9-8ac9dfdccc31",
+      "task": "support.helpcrunch_trial_nurture",
+      "runtime_commit": "e03f1fd678295421ac0a37c1b4b6fed8a22c6cc6",
+      "manifest_sha256": "0838d30c7687597b7e451c62a9d35573c44f253c23621bca40b27cd4daeac78e",
+      "seal": {
+        "passed": true,
+        "files_checked": 22,
+        "violations": []
+      },
+      "identity_passed": true,
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 1549,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 58,
+        "replayed_non_stateful_calls": 18,
+        "skipped_non_stateful_calls": 8
+      },
+      "strict": 1,
+      "partial": 1,
+      "duration_ms": 1291572,
+      "leaderboard_member": true
+    },
+    {
+      "case_index": 4,
+      "run_id": "59ad9c53-ae4d-461d-ab44-3bb8f47cfb9e",
+      "task": "support.helpscout_auto_categorization",
+      "runtime_commit": "e03f1fd678295421ac0a37c1b4b6fed8a22c6cc6",
+      "manifest_sha256": "451dfbec050fb01f2ef8633448f1a59a1f344a90dc22b7c268f9b9658c54ef39",
+      "seal": {
+        "passed": true,
+        "files_checked": 22,
+        "violations": []
+      },
+      "identity_passed": true,
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 1515,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 21,
+        "replayed_non_stateful_calls": 13,
+        "skipped_non_stateful_calls": 0
+      },
+      "strict": 0,
+      "partial": 0,
+      "duration_ms": 1023553,
+      "leaderboard_member": true
+    },
+    {
+      "case_index": 5,
+      "run_id": "27dfb46f-15ee-457e-8f27-a116db31b5ce",
+      "task": "marketing.campaign_handoff",
+      "runtime_commit": "e03f1fd678295421ac0a37c1b4b6fed8a22c6cc6",
+      "manifest_sha256": "3aca4ee34c1d63ceff50be12c7b336e0d43a8c78a969cf79e41370144784e33e",
+      "seal": {
+        "passed": true,
+        "files_checked": 22,
+        "violations": []
+      },
+      "identity_passed": true,
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 1077,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 83,
+        "replayed_non_stateful_calls": 20,
+        "skipped_non_stateful_calls": 13
+      },
+      "strict": 0,
+      "partial": 0.8181818181818182,
+      "duration_ms": 2329839,
+      "leaderboard_member": true
+    }
+  ]
+}

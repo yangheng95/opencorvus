@@ -1,11 +1,15 @@
+import { orchestratorControlOccurrenceIdentity } from "../src/orchestrator/control-message-identity"
+import { execFileSync } from "node:child_process"
+import { createHash } from "node:crypto"
+import { CredentialRedactor, RealProviderAudit } from "./real-provider-audit"
 import fs from "node:fs/promises"
+import { writeFileSync } from "node:fs"
 import os from "node:os"
 import path from "node:path"
 import {
   applyIsolatedTestUserEnvironment,
   bootstrapIsolatedTestRuntime,
   isolatedTestChildEnvironment,
-  removeIsolatedTestRuntime,
   type IsolatedTestRuntime,
 } from "@opencorvus-ai/util/test-runtime-environment"
 import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
@@ -24,12 +28,14 @@ const CHECKPOINT_FILE = "task-control-checkpoint.json"
 
 function checkerInlineConfig(): string {
   const configured = process.env.OPENCORVUS_CONFIG_CONTENT?.trim()
-  if (!configured) return JSON.stringify({ permission_mode: "full_access" })
+  const model = process.env[MODEL]?.trim()
+  if (!model) throw new Error(`${MODEL} must explicitly select the authorized model`)
+  if (!configured) return JSON.stringify({ permission_mode: "full_access", model, small_model: model })
   const parsed = JSON.parse(configured) as unknown
   if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
     throw new Error("OPENCORVUS_CONFIG_CONTENT must be a JSON object for the Task-control checker")
   }
-  return JSON.stringify({ ...(parsed as Record<string, unknown>), permission_mode: "full_access" })
+  return JSON.stringify({ ...(parsed as Record<string, unknown>), permission_mode: "full_access", model, small_model: model })
 }
 
 type StreamEvent = {
@@ -47,7 +53,7 @@ type TaskRootIngress = {
   sequence: number
   activations: Array<{ activationID: string; activatedAt: number }>
   decisions: Array<{ receiptID: string; command: string }>
-  projection: { state: string }
+  projection: { state: string; boundary?: string }
 }
 type Board = {
   task: { status: string; cancellation?: { requestEventID?: string } }
@@ -220,6 +226,8 @@ async function runPhaseProcess(
   phase: string,
   runtimeRoot: string,
   isolatedRuntime: IsolatedTestRuntime,
+  remainingBudget: number,
+  redactor: CredentialRedactor,
 ): Promise<string> {
   const openCorvusRuntimeRoot = path.join(runtimeRoot, "runtime")
   const child = Bun.spawn([process.execPath, import.meta.path], {
@@ -232,6 +240,7 @@ async function runPhaseProcess(
       [TASK_PROCESS_MODE]: "native",
       [RUNTIME_ROOT]: runtimeRoot,
       [PHASE]: phase,
+      TASK_CONTROL_CHECK_MAX_REQUESTS: String(remainingBudget),
     },
     stdout: "pipe",
     stderr: "pipe",
@@ -243,7 +252,7 @@ async function runPhaseProcess(
     const lines = (mirroredStdoutRemainder + text).split(/\r?\n/)
     mirroredStdoutRemainder = lines.pop() ?? ""
     for (const line of lines) {
-      if (line.startsWith("[task-control")) process.stdout.write(`${line}\n`)
+      if (line.startsWith("[task-control")) process.stdout.write(`[task-control activity] ${phase} received progress\n`)
     }
   }
   const collect = async (
@@ -268,6 +277,11 @@ async function runPhaseProcess(
   ]
   const exitCode = await child.exited
   await Promise.all(readers)
+  redactor.collect(JSON.parse(await fs.readFile(path.join(openCorvusRuntimeRoot, "data", "auth.json"), "utf8")))
+  stdout = redactor.redact(stdout)
+  stderr = redactor.redact(stderr)
+  await fs.writeFile(path.join(runtimeRoot, `${phase}.stdout.log`), stdout)
+  await fs.writeFile(path.join(runtimeRoot, `${phase}.stderr.log`), stderr)
   if (exitCode !== 0) {
     const output = [`[task-control ${phase} stdout]`, stdout, `[task-control ${phase} stderr]`, stderr].join("\n")
     const evidenceMarker = output.lastIndexOf("[task-control failure evidence]")
@@ -288,6 +302,11 @@ async function runPhaseProcess(
 }
 
 async function runDriver() {
+  const maxRequests = Number(process.env.TASK_CONTROL_CHECK_MAX_REQUESTS ?? "256")
+  if (!Number.isSafeInteger(maxRequests) || maxRequests <= 0) throw new Error("Total request budget must be a positive integer")
+  let remainingBudget = maxRequests
+  const redactor = new CredentialRedactor()
+  redactor.collect(process.env)
   const testProcessSupervisor = prepareTestProcessSupervisor()
   const isolatedRuntime = await bootstrapIsolatedTestRuntime("runner")
   applyIsolatedTestUserEnvironment(isolatedRuntime)
@@ -296,39 +315,49 @@ async function runDriver() {
   let primaryFailure: unknown
   try {
     await initRepository(path.join(runtimeRoot, "project"))
-    await copyAuthorityFile(process.env[AUTH_SOURCE], path.join(runtimeRoot, "runtime", "data", "auth.json"))
-    await runPhaseProcess("seed-ingress", runtimeRoot, isolatedRuntime)
-    await runPhaseProcess("seed-cancellation", runtimeRoot, isolatedRuntime)
-    await runPhaseProcess("verify", runtimeRoot, isolatedRuntime)
+    const authSource = process.env[AUTH_SOURCE]?.trim()
+    if (!authSource) throw new Error(`${AUTH_SOURCE} must explicitly name the authorized credential file`)
+    redactor.collect(JSON.parse(await fs.readFile(authSource, "utf8")))
+    await copyAuthorityFile(authSource, path.join(runtimeRoot, "runtime", "data", "auth.json"))
+    await copyAuthorityFile(path.join(path.dirname(path.resolve(authSource)), "models.json"), path.join(runtimeRoot, "runtime", "data", "models.json"))
+    const repositoryRoot = execFileSync("git", ["rev-parse", "--show-toplevel"], { encoding: "utf8" }).trim()
+    await fs.writeFile(path.join(runtimeRoot, "source.patch"), execFileSync("git", ["diff", "HEAD", "--", "packages", "expert-squads", "script"], { cwd: repositoryRoot }))
+    await fs.writeFile(path.join(runtimeRoot, "run.json"), JSON.stringify({ maxRequests, budgetScope: "all-phases-cumulative", sourceSHA: execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8" }).trim(), model: process.env[MODEL], runtime: { executable: process.execPath, bun: Bun.version }, checkerSHA256: createHash("sha256").update(await fs.readFile(import.meta.filename)).digest("hex"), auditSHA256: createHash("sha256").update(await fs.readFile(path.join(import.meta.dir, "real-provider-audit.ts"))).digest("hex") }, null, 2))
+    process.stdout.write(`[task-control evidence] root=${runtimeRoot}\n`)
+    for (const phase of ["seed-ingress", "seed-cancellation", "verify"]) {
+      await runPhaseProcess(phase, runtimeRoot, isolatedRuntime, remainingBudget, redactor)
+      const receipt = JSON.parse(await fs.readFile(path.join(runtimeRoot, `${phase}.audit.json`), "utf8"))
+      if (!Array.isArray(receipt.requests) || receipt.requests.length > remainingBudget) throw new Error("Invalid phase request accounting")
+      remainingBudget -= receipt.requests.length
+    }
   } catch (error) {
     primaryFailure = error
   } finally {
     let cleanupFailure: unknown
     const validatedRoot = assertTemporaryRoot(runtimeRoot)
-    for (let attempt = 1; attempt <= 5; attempt++) {
-      try {
-        await fs.rm(validatedRoot, { recursive: true, force: true, maxRetries: 2, retryDelay: 100 })
-        cleanupFailure = undefined
-        break
-      } catch (error) {
-        cleanupFailure = error
-        if (attempt < 5) await Bun.sleep(attempt * 100)
-      }
+    for (const name of ["auth.json", "models.json"]) {
+      try { await fs.rm(path.join(validatedRoot, "runtime", "data", name), { force: true }) } catch (error) { cleanupFailure = error }
     }
-    let isolationCleanupFailure: unknown
-    try {
-      await removeIsolatedTestRuntime(isolatedRuntime)
-    } catch (error) {
-      isolationCleanupFailure = error
+    const phaseAudits = await Promise.all(["seed-ingress", "seed-cancellation", "verify"].map(async (phase) => {
+      try { return JSON.parse(await fs.readFile(path.join(validatedRoot, `${phase}.audit.json`), "utf8")) }
+      catch (error) { return { phase, status: "unavailable", error: error instanceof Error ? error.message : String(error) } }
+    }))
+    const budgetExhausted = phaseAudits.some((audit) => audit?.status === "budget_exhausted")
+    if (!primaryFailure && phaseAudits.some((audit) => audit.status !== "passed")) {
+      primaryFailure = new Error(budgetExhausted ? "E2E_REQUEST_BUDGET_EXHAUSTED" : "Task-control phase audit is incomplete")
     }
-    const cleanupFailures = [cleanupFailure, isolationCleanupFailure].filter((value) => value !== undefined)
+    await fs.writeFile(path.join(validatedRoot, "driver-result.json"), redactor.redact(JSON.stringify({ maxRequests, budgetScope: "all-phases-cumulative", observedRequests: phaseAudits.reduce((sum, audit) => sum + (Array.isArray(audit.requests) ? audit.requests.length : 0), 0), accountingComplete: phaseAudits.every((audit) => Array.isArray(audit.requests)), status: budgetExhausted ? "budget_exhausted" : primaryFailure ? "failed" : "passed", error: primaryFailure instanceof Error ? primaryFailure.message : primaryFailure === undefined ? undefined : String(primaryFailure), credentialCleanup: cleanupFailure ? "failed" : "passed", phases: phaseAudits }, null, 2)))
+    process.stdout.write(`[task-control evidence] retained=${validatedRoot}\n`)
+    // runtimeRoot is nested under the isolation owner after TEMP is rebound.
+    // Retain that owner as evidence too; deleting it would erase this run.
+    const cleanupFailures = [cleanupFailure].filter((value) => value !== undefined)
     if (primaryFailure && cleanupFailures.length > 0) {
       throw new AggregateError(
-        [primaryFailure, ...cleanupFailures],
+        [primaryFailure, ...cleanupFailures].map((error) => new Error(redactor.redact(error instanceof Error ? error.message : String(error)))),
         "Task-control checker failed and cleanup left residue",
       )
     }
-    if (primaryFailure) throw primaryFailure
+    if (primaryFailure) throw new Error(redactor.redact(primaryFailure instanceof Error ? primaryFailure.message : String(primaryFailure)))
     if (cleanupFailures.length === 1) throw cleanupFailures[0]
     if (cleanupFailures.length > 1)
       throw new AggregateError(cleanupFailures, "Task-control checker cleanup left residue")
@@ -336,6 +365,7 @@ async function runDriver() {
 }
 
 async function runServerPhase(phase: string, runtimeRoot: string) {
+  if (!["seed-ingress", "seed-cancellation", "verify"].includes(phase)) throw new Error("Unknown Task-control checker phase")
   const projectDirectory = path.join(runtimeRoot, "project")
   const checkpointPath = path.join(runtimeRoot, CHECKPOINT_FILE)
   const openCorvusRuntimeRoot = path.join(runtimeRoot, "runtime")
@@ -345,7 +375,13 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
   process.env[TASK_PROCESS_MODE] = "native"
   if (process.env[CONFIG_SOURCE]?.trim()) process.env.OPENCORVUS_CONFIG = path.resolve(process.env[CONFIG_SOURCE]!)
 
+  const selectedModel = process.env[MODEL]!.trim()
+  const separator = selectedModel.indexOf("/")
+  if (separator <= 0) throw new Error("Authorized model must name Provider/model")
+  using audit = new RealProviderAudit(selectedModel.slice(separator + 1), Number(process.env.TASK_CONTROL_CHECK_MAX_REQUESTS ?? "256"))
   const [
+    { Provider },
+    { SessionStatus },
     { listenWithRecoveredServerRuntime, requireRecoveredServerRuntime },
     { assertStartedTaskProjectRecoverySucceeded, recoverStartedTaskExecutions },
     { Database },
@@ -356,6 +392,8 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     { listOwnedPromptSessionsForTask },
     { listStartedIncompleteTaskIDs },
   ] = await Promise.all([
+    import("@/provider/provider"),
+    import("@/session/status"),
     import("@/cli/server-runtime"),
     import("@/engine/host-recovery"),
     import("@/storage/db"),
@@ -366,6 +404,10 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     import("@/engine/runtime"),
     import("@/engine/store"),
   ])
+  await Instance.provide({ directory: projectDirectory, fn: async () => {
+    const projected = await Provider.getModel(selectedModel.slice(0, separator), selectedModel.slice(separator + 1))
+    if (projected.api.id !== audit.modelID) throw new Error("Authorized model is not projected to the exact requested API model")
+  } })
   const preparedServer = await requireRecoveredServerRuntime(
     await listenWithRecoveredServerRuntime({
       options: { hostname: "127.0.0.1", port: 0, randomPort: true },
@@ -377,6 +419,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
   )
   process.stdout.write(`[task-control phase] ${phase} production recovery ready\n`)
   const server = preparedServer.server
+  audit.localOrigins.add(server.url.origin)
   const base = server.url.toString().replace(/\/$/, "")
   const abortStream = new AbortController()
   let taskID = ""
@@ -456,6 +499,8 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
 
   try {
     if (phase === "seed-ingress") {
+      const preflight = await audit.preflight({ serverURL: server.url, model: selectedModel, inactivityMs: INACTIVITY_MS, activity: SessionStatus.getActivity })
+      await fs.writeFile(path.join(runtimeRoot, "provider-preflight.json"), JSON.stringify(preflight, null, 2))
       const lifecycleAccepted = await createTask({
         title: "Real terminal lifecycle convergence",
         request: [
@@ -486,7 +531,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
           if (!lifecycle) return undefined
           const ingresses = await debugProjection()
           const wake = ingresses.find(
-            (ingress) => ingress.sourceID === lifecycle.id && ingress.projection.state === "resolved",
+            (ingress) => ingress.sourceID === lifecycle.id && (ingress.projection.state === "resolved" || (ingress.projection.state === "terminal_inapplicable" && ingress.projection.boundary === "closed")),
           )
           if (!wake) return undefined
           if (current.task.status !== "completed") {
@@ -511,6 +556,19 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
           }
           const completed = ProtocolStore.listTaskEvents(taskID).find((event) => event.type === "task.completed")
           if (!completed || completed.time.emitted < lifecycle.time.emitted) return undefined
+          const finalMessageID = (lifecycle.payload?.status as { final_message_id?: string } | undefined)?.final_message_id
+          const decision = current.artifacts.find((artifact) => artifact.kind === "task_completion_decision" &&
+            Array.isArray(artifact.payload?.evidence_locators) && artifact.payload.evidence_locators.some((locator: any) =>
+              locator.source === "session_message" && locator.session_id === childSessionID && locator.message_id === finalMessageID))
+          if (!decision || !finalMessageID) throw new Error("Task completion requires the exact terminal worker Message evidence")
+          const rootMessages = await Session.messages({ sessionID: String(decision.payload!.orchestrator_session_id) })
+          const completionMessage = rootMessages.find((message) => message.info.id === decision.payload!.orchestrator_message_id)
+          const parentID = completionMessage?.info.role === "assistant" ? completionMessage.info.parentID : undefined
+          const parent = rootMessages.find((message) => message.info.id === parentID)
+          const identity = parent?.info.role === "user" ? parent.info.extra?.orchestrator_control_ingress as { ingress_id?: string; predecessor_id?: string } | undefined : undefined
+          if (identity?.ingress_id !== wake.ingressID || !identity.predecessor_id || parent?.info.id !== orchestratorControlOccurrenceIdentity(wake.ingressID, identity.predecessor_id).messageID) {
+            throw new Error("Task completion must belong to the exact terminal lifecycle control wake")
+          }
           return {
             taskID,
             childSessionID,
@@ -601,6 +659,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
       }
       await fs.writeFile(checkpointPath, JSON.stringify(checkpoint), "utf8")
       void progressRunning
+      writeFileSync(path.join(runtimeRoot, `${phase}.audit.json`), JSON.stringify({ phase, status: audit.exhausted ? "budget_exhausted" : "passed", requests: audit.requests }, null, 2))
       process.exit(0)
     }
 
@@ -672,6 +731,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
         }),
         "utf8",
       )
+      writeFileSync(path.join(runtimeRoot, `${phase}.audit.json`), JSON.stringify({ phase, status: audit.exhausted ? "budget_exhausted" : "passed", requests: audit.requests }, null, 2))
       process.exit(0)
     }
 
@@ -682,41 +742,18 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
       async () => ((await board()).task.status === "cancelled" ? true : undefined),
       15_000,
     )
-    const cancellationTerminalWithinMs = Date.now() - (checkpoint.cancellationRequestedAt ?? Date.now())
+    const cancellationTerminal = ProtocolStore.listTaskEvents(taskID).find((event) => event.type === "task.cancelled")
+    if (!cancellationTerminal || checkpoint.cancellationRequestEventEmittedAt === undefined) throw new Error("Cancellation timing requires exact request and terminal events")
+    const cancellationTerminalWithinMs = cancellationTerminal.time.emitted - checkpoint.cancellationRequestEventEmittedAt
+    const cancellationObservedAfterTerminalMs = Date.now() - cancellationTerminal.time.emitted
+    if (cancellationTerminalWithinMs < 0) throw new Error("Cancellation terminal precedes its request")
     if (cancellationTerminalWithinMs >= 15_000) {
       throw new Error(`Cancellation terminal convergence took ${cancellationTerminalWithinMs}ms across restart`)
     }
-    process.stdout.write(`[task-control phase] ${phase} awaiting terminal settlements\n`)
-    let settlementActivityKey: string | undefined
-    const settlements = await waitForPolling(
-      "post-terminal checkpoint and auxiliary settlement",
-      async () => {
-        const artifacts = (await board()).artifacts.filter((artifact) =>
-          ["task_checkpoint_settlement", "task_auxiliary_settlement"].includes(artifact.kind),
-        )
-        settlementActivityKey = artifacts
-          .map(
-            (artifact) =>
-              `${artifact.id}:${["completed", "failed"].includes(artifact.label) ? artifact.label : "active"}`,
-          )
-          .sort()
-          .join("|")
-        if (artifacts.length !== 2 || artifacts.some((artifact) => !["completed", "failed"].includes(artifact.label))) {
-          return undefined
-        }
-        for (const artifact of artifacts) {
-          if (
-            artifact.payload?.cancellation_request_event_id !== checkpoint.cancellationRequestEventID ||
-            artifact.payload?.time_requested !== checkpoint.cancellationRequestEventEmittedAt
-          ) {
-            throw new Error(`Settlement ${artifact.id} lost cancellation request identity or request time`)
-          }
-        }
-        return artifacts
-      },
-      INACTIVITY_MS,
-      async () => settlementActivityKey,
-    )
+    const dispatchSettlements = (await board()).artifacts.filter((artifact) => artifact.kind === "dispatch_settlement")
+    const promptOwners = await Instance.provide({ directory: projectDirectory, fn: async () => listOwnedPromptSessionsForTask(taskID) })
+    const startedIncomplete = await Instance.provide({ directory: projectDirectory, fn: async () => listStartedIncompleteTaskIDs({ projectID: Instance.project.id }) })
+    if (promptOwners.length || startedIncomplete.includes(taskID)) throw new Error("Cancelled Task must have a settled physical execution frontier")
     const duplicate = await cancel("task-control-cancel-duplicate")
     if (duplicate.requestEventID !== checkpoint.cancellationRequestEventID) {
       throw new Error("Duplicate cancellation did not reuse the canonical request occurrence")
@@ -730,11 +767,9 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
       )
     }
     const finalBoard = await board()
-    const ingressDispositions = finalBoard.artifacts
-      .filter((artifact) => artifact.kind === "task_root_ingress")
-      .map((artifact) => ({ id: artifact.id, label: artifact.label }))
+    const ingressDispositions = (await debugProjection()).map((ingress) => ({ id: ingress.ingressID, label: ingress.projection.state }))
     const unsettledIngresses = ingressDispositions.filter(
-      (ingress) => !["drained", "delivery_failed", "terminal_inapplicable"].includes(ingress.label),
+      (ingress) => !["resolved", "terminal_inapplicable"].includes(ingress.label),
     )
     if (unsettledIngresses.length > 0) {
       throw new Error(`Cancellation left nonterminal ingress: ${JSON.stringify(unsettledIngresses)}`)
@@ -777,10 +812,11 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
         cancellationRequestEventEmittedAt: checkpoint.cancellationRequestEventEmittedAt,
         cancellationAcceptedWithinMs: checkpoint.cancellationAcceptedWithinMs,
         cancellationTerminalWithinMs,
+        cancellationObservedAfterTerminalMs,
         cancellationTerminalEvents: terminalEvents.length,
         ingressDispositions,
-        checkpointSettlement: settlements.find((artifact) => artifact.kind === "task_checkpoint_settlement"),
-        auxiliarySettlement: settlements.find((artifact) => artifact.kind === "task_auxiliary_settlement"),
+        dispatchSettlements,
+        physicalExecutionFrontier: { status: "settled", promptOwners, startedIncomplete },
         processMetrics,
         restartPhases: ["pending_ingress", "pending_cancellation"],
       })}\n`,
@@ -886,6 +922,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     } catch (error) {
       cleanupFailures.push(error)
     }
+    await fs.writeFile(path.join(runtimeRoot, `${phase}.audit.json`), JSON.stringify({ phase, status: audit.exhausted ? "budget_exhausted" : primaryFailure ? "failed" : "passed", requests: audit.requests }, null, 2))
     if (primaryFailure && cleanupFailures.length > 0) {
       throw new AggregateError([primaryFailure, ...cleanupFailures], "Task-control phase failed during cleanup")
     }

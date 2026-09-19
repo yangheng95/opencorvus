@@ -79,7 +79,7 @@ const nonGatewaySharedSurfaces = SharedChannelSurface.options.filter((surface) =
 const AgentTaskCheckConfig = CheckConfig.omit({ named: true })
   .strict()
   .describe(
-    "Executable Host verification configuration. Workflow IDs, phase names, sequencing, planning metadata, and evidence do not belong here; keep those as authored intent in request.",
+    "Executable Host verification configuration. Workflow IDs, phase names, sequencing, planning metadata, and evidence do not belong here.",
   )
 
 type Shape = z.ZodRawShape
@@ -276,7 +276,7 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "query_task_artifacts",
     description:
-      "Enumerate one terminal Task occurrence's canonical Artifact catalog through a bounded numbered page. A Session-bound model call first uses panel_query_task in the same physical Turn, while a stateless Panel or gateway request binds the current canonical terminal occurrence at request start. Start with page_number 1 and repeat with next_page_number until null; the Host owns both authorities, retains and authenticates opaque catalog cursors internally, and revalidates the occurrence. Empty entries are a valid result. Select the current Completion Decision plus every deliverable, report, review, or evidence item required by acceptance; package/runtime bindings and Task-root ingress dispositions remain control-plane audit facts unless a concrete acceptance contradiction requires them. Each selected entry returns a short Host-minted artifact_locator_ref for panel_read_task_artifact; the model never reconstructs its canonical locator or copies a terminal event ID.",
+      "Enumerate one terminal Task occurrence's canonical Artifact catalog through a bounded numbered page. A Session-bound model call first uses panel_query_task in the same physical Turn, while a stateless Panel or gateway request binds the current canonical terminal occurrence at request start. Start with page_number 1 and repeat with next_page_number until null; the Host owns both authorities, retains and authenticates opaque catalog cursors internally, and revalidates the occurrence. Empty entries are a valid result. Select and completely read the current Completion Decision first, then every deliverable, report, review, or evidence item required by acceptance. If the decision names material participant session_message evidence, read that exact text through panel_read_task_message. Package/runtime bindings and Task-root ingress dispositions remain control-plane audit facts unless a concrete acceptance contradiction requires them. Each selected Artifact entry returns a short Host-minted artifact_locator_ref for panel_read_task_artifact; the model never reconstructs its canonical locator or copies a terminal event ID.",
     kind: "query",
     surfaces: allProjectSurfaces,
     params: {
@@ -300,6 +300,44 @@ export const PanelCapabilityRegistry = list(
     params: {
       taskID: z.string().min(1).describe("Terminal source Task in the current Mission lineage."),
       ...ArtifactReadReferenceInputSchema.shape,
+    },
+  }),
+  item({
+    action: "read_task_message",
+    description:
+      "Read a bounded batch of exact visible participant Messages named by the current terminal Task Completion Decision. First query the Task and completely read that Completion Decision Artifact; then copy its exact orchestrator identity and decision-named session_message identities into one messages array. The Host atomically validates every identity and returns each real participant's agent identity plus visible text-Part byte windows under one aggregate UTF-8 byte and Part-count bound. When complete is false, pass next_messages unchanged to continue the same exact batch. This never selects latest Messages, expands Task history, synthesizes a conclusion, or exposes hidden reasoning and Tool payloads.",
+    kind: "query",
+    surfaces: ["panel"],
+    params: {
+      taskID: z.string().min(1).describe("Terminal source Task in the current Mission lineage."),
+      messages: z
+        .array(
+          z.object({
+            sessionID: z.string().min(1).describe("Exact Session ID named by the current Completion Decision."),
+            messageID: z.string().min(1).describe("Exact Message ID named by the current Completion Decision."),
+            text_part_id: z.string().min(1).optional().describe("Exact text Part ID returned in next_messages."),
+            byte_offset: z.coerce
+              .number()
+              .int()
+              .min(0)
+              .optional()
+              .describe(
+                "UTF-8 offset. Omit it or use 0 for an initial Message identity; a positive continuation offset requires the exact text_part_id returned in next_messages.",
+              ),
+          }),
+        )
+        .min(1)
+        .max(8)
+        .describe(
+          "One to eight exact Completion Decision Message identities or Host-returned continuations, each Message listed once.",
+        ),
+      max_bytes: z.coerce
+        .number()
+        .int()
+        .min(1)
+        .max(30_000)
+        .optional()
+        .describe("Aggregate UTF-8 text byte window for this batch call; defaults to 30,000."),
     },
   }),
   item({
@@ -636,7 +674,17 @@ export function panelLeafActionSchemaForAgent(action: PanelActionID, agent: stri
   } else if (actor !== "panel_ui") {
     if (action === "create_task") {
       schema = schema.omit({ metadata: true, source: true }).extend({ checks: AgentTaskCheckConfig.optional() })
-      if (actor === "mission") schema = schema.required({ title: true, promptProfile: true })
+      if (actor === "mission") {
+        schema = schema.required({ title: true, promptProfile: true }).extend({
+          request: z
+            .string()
+            .min(1)
+            .max(32_000)
+            .describe(
+              "The complete original operations and constraints assigned to this Task, copied as one or more non-empty verbatim fragments in their original order from authenticated real-user text in this Mission's authority history; join fragments only with a blank line. Do not add a heading, delegation note, requirements, or paraphrase. After any source rejection, recopy every assigned operation and constraint verbatim, include no agent-authored text, and never shorten or omit source content to make validation pass. Title, promptProfile, structured Artifact authorities, and accepted Delivery Slices carry allocation.",
+            ),
+        })
+      }
     } else if (action === "send_task_message") {
       schema = schema.omit({ source: true })
     } else if (action === "update_checks") {

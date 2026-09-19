@@ -9,8 +9,15 @@ import { MissionVisibleExpertSquadIDs } from "@/mission/schema"
 import { createHash } from "node:crypto"
 import { currentMissionExecutionClosure, type MissionExecutionClosure } from "@/mission/execution-closure"
 import { Database } from "@/storage/db"
-import { MessageTable, ToolPartRequestTable } from "@/session/session.sql"
+import { MessageTable, PartTable, SessionTable, ToolPartRequestTable } from "@/session/session.sql"
 import { and, eq } from "drizzle-orm"
+import {
+  MissionTaskRequestSourceError,
+  missionTaskRequestAuthoritySources,
+  missionTaskRequestHasAuthenticatedSource,
+  missionTaskRequestSourceDiagnostic,
+  type TaskRequestSourceMessage,
+} from "@/engine/task-request-source"
 
 export const MissionTaskCreationOpenedOccurrence = z
   .object({
@@ -290,7 +297,117 @@ export async function resolveTaskCreator(rawCreator: z.input<typeof TaskCreator>
   const heldExpertSquadIDs = MissionVisibleExpertSquadIDs.parse(
     (mission as Record<string, unknown>).visibleExpertSquadIDs,
   )
+  if (toolInput && creator.messageID) {
+    assertMissionTaskRequestFromAuthenticatedUserHistory({
+      missionSessionID: creator.sessionID,
+      creatorMessageID: creator.messageID,
+      request: toolInput.request,
+    })
+  }
   return ResolvedTaskCreator.parse({ ...creator, missionID, heldExpertSquadIDs, ...(toolInput ? { toolInput } : {}) })
+}
+
+/**
+ * Mission may allocate a user's request to a Task, but it cannot author a
+ * second semantic request at the creation boundary. The check is byte-level
+ * provenance only: the Host neither interprets nor rewrites business text.
+ */
+export function assertMissionTaskRequestFromAuthenticatedUserHistory(input: {
+  missionSessionID: string
+  creatorMessageID: string
+  request: unknown
+}): void {
+  Database.use((db) => assertMissionTaskRequestFromAuthenticatedUserHistoryInDatabase(db, input))
+}
+
+export function assertMissionTaskRequestFromAuthenticatedUserHistoryInDatabase(
+  db: Database.TxOrDb,
+  input: {
+    missionSessionID: string
+    creatorMessageID: string
+    request: unknown
+  },
+): void {
+  const request = typeof input.request === "string" ? input.request : ""
+  const creator = db
+    .select({ data: MessageTable.data })
+    .from(MessageTable)
+    .where(and(eq(MessageTable.id, input.creatorMessageID), eq(MessageTable.session_id, input.missionSessionID)))
+    .get()
+  const info = creator?.data as { role?: unknown; author?: unknown }
+  const readMessage = (messageID: string): TaskRequestSourceMessage | undefined => {
+    const message = db
+      .select({ id: MessageTable.id, sessionID: MessageTable.session_id, data: MessageTable.data, timeCreated: MessageTable.time_created })
+      .from(MessageTable)
+      .where(eq(MessageTable.id, messageID))
+      .get()
+    if (!message) return undefined
+    return {
+      messageID: message.id,
+      sessionID: message.sessionID,
+      timeCreated: message.timeCreated,
+      info: message.data,
+      parts: db
+        .select({ id: PartTable.id, timeCreated: PartTable.time_created, data: PartTable.data })
+        .from(PartTable)
+        .where(eq(PartTable.message_id, message.id))
+        .orderBy(PartTable.time_created, PartTable.id)
+        .all(),
+    }
+  }
+  const sourceMessages = missionTaskRequestAuthoritySources({
+    missionSessionID: input.missionSessionID,
+    creatorMessageID: input.creatorMessageID,
+    store: {
+      session(sessionID) {
+        const session = db
+          .select({
+            sessionID: SessionTable.id,
+            projectID: SessionTable.project_id,
+            kind: SessionTable.kind,
+            metadata: SessionTable.metadata,
+          })
+          .from(SessionTable)
+          .where(eq(SessionTable.id, sessionID))
+          .get()
+        return session
+      },
+      message: readMessage,
+      messages(sessionID) {
+        return db
+          .select({ id: MessageTable.id })
+          .from(MessageTable)
+          .where(eq(MessageTable.session_id, sessionID))
+          .orderBy(MessageTable.time_created, MessageTable.id)
+          .all()
+          .flatMap((message) => {
+            const value = readMessage(message.id)
+            return value ? [value] : []
+          })
+      },
+    },
+  })
+  if (
+    missionTaskRequestHasAuthenticatedSource({
+      creatorRole: info?.role,
+      creatorAuthor: info?.author,
+      request,
+      sourceMessages,
+    })
+  ) {
+    return
+  }
+  const diagnostic = missionTaskRequestSourceDiagnostic({ request, sourceMessages })
+  const repair = ` The request has ${diagnostic.matchingPrefixBytes} initial matching bytes, ${diagnostic.authenticatedOrderedPrefixBytes} bytes in its longest complete authenticated ordered-fragment prefix, and ${diagnostic.laterAuthenticatedFragmentBytes} bytes of authenticated fragments later in the request. Recopy every assigned operation and constraint from the authenticated source verbatim, include no agent-authored text, and do not shorten or omit any source content.`
+  throw new MissionTaskRequestSourceError({
+    message:
+      "Mission panel_create_task.request must contain only ordered non-empty verbatim fragments from authenticated real-user authority history." + repair,
+    missionSessionID: input.missionSessionID,
+    creatorMessageID: input.creatorMessageID,
+    acceptedUserMessageIDs: sourceMessages
+      .filter((source) => source.info?.role === "user" && source.info.author === "user")
+      .map((source) => source.messageID),
+  })
 }
 
 export function assertTaskCreatorExpertSquadAuthority(input: {

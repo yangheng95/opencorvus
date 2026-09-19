@@ -12,18 +12,14 @@ const manifestPaths = [
 
 type RequiredStructure = "flat_planner_parallel_workers" | "parallel_workers_join" | "dependency_dag"
 
-/**
- * Pin the declared shape of the workflows whose structure is a product decision rather than an
- * author's preference. Both Base workflows are `dependency_dag`s on purpose: the executable
- * workflow keeps Planner -> Developer -> Tester, while the research workflow additionally shares
- * the Planner's frontier with a capability-matched Researcher. In both graphs verification observes
- * a settled result instead of racing the mutation it is supposed to check.
- */
+/** Preserve the declared settled-state verification dependency. Base's ordinary
+ * graph has one executor and verifier; the research graph adds justified planning
+ * and parallel research without changing the verification boundary. */
 const requiredWorkflowStructures = new Map<string, Map<string, RequiredStructure>>([
   [
     "base",
     new Map([
-      ["planner-execution-verification", "dependency_dag"],
+      ["execution-verification", "dependency_dag"],
       ["planner-parallel-delivery", "dependency_dag"],
     ]),
   ],

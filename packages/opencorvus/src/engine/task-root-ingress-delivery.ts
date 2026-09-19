@@ -492,26 +492,21 @@ function interactionFacts(
   assistantIDs: Set<string>,
 ): InteractionFact[] {
   const ingressID = ingress.id
-  const rootSessionID = db
-    .select({ sessionID: EngineTaskTable.session_id })
-    .from(EngineTaskTable)
-    .where(eq(EngineTaskTable.id, ingress.task_id))
-    .get()?.sessionID
   return (
     db
-      .select()
+      .select({ interaction: EngineInteractionRequestTable })
       .from(EngineInteractionRequestTable)
-      // Direct rows carry the Task they gate. Source-owned rows (a Question, a
-      // permission request) hold no Task by schema, and the orchestrator
-      // `question` Tool arrives as one of those — but it always carries the
-      // asking Session, and only rows asked from this Task's root Session tree
-      // can name an assistant this evidence read accepts. Enumerating every
-      // other Task's questions here made each reduction O(all interactions).
-      .where(
-        sql`${EngineInteractionRequestTable.task_id} = ${ingress.task_id} OR (${EngineInteractionRequestTable.task_id} IS NULL AND ${EngineInteractionRequestTable.session_id} IN (SELECT ${SessionTable.id} FROM ${SessionTable} WHERE ${SessionTable.parent_id} = ${rootSessionID ?? ""} OR ${SessionTable.id} = ${rootSessionID ?? ""}))`,
+      .innerJoin(
+        ProtocolEventTable,
+        and(
+          eq(ProtocolEventTable.type, "interaction.requested"),
+          eq(ProtocolEventTable.aggregate_type, "task"),
+          eq(ProtocolEventTable.aggregate_id, ingress.task_id),
+          eq(ProtocolEventTable.interaction_id, EngineInteractionRequestTable.id),
+        ),
       )
       .all()
-      .map((row) => projectInteractionRowInTransaction(db, row))
+      .map((row) => projectInteractionRowInTransaction(db, row.interaction))
       .flatMap((row) => {
         const payload = row.payload as {
           tool?: { messageID?: string }
@@ -672,8 +667,8 @@ export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, i
         })
       }
       if (outcome?.data.outcome !== "completed" || !isOrchestratorDecisionToolName(part.tool)) continue
-      const effect = orchestratorDecisionToolCompletionEffect({ tool: part.tool, stateInput: part.state.input })
-      if (effect === "satisfies_current_epoch" || effect === "inspect_dispatch_outcome") {
+      const effect = orchestratorDecisionToolCompletionEffect({ tool: part.tool, stateInput: part.state.input, stateOutput: part.state.status === "completed" ? part.state.output : undefined })
+      if (effect === "satisfies_current_epoch") {
         decisions.push({ id: part.id, assistantMessageID: assistant.id, command: part.tool })
       }
     }
@@ -2104,24 +2099,21 @@ export function dispatchTaskLoopInBackground(input: DispatchTaskLoopInput, opera
   completionHooks.add(completion)
 }
 
-/** Re-scan for an already-persisted ingress. It accepts no event, so it can
- * never meet the infrastructure-failure budget gate. */
+/** Acknowledge durable ingress, then request its existing project-owned scan.
+ * HTTP and scheduler acceptance must not await the model Turn they enable. */
 export async function dispatchPersistedTaskLoop(
   taskID: string,
-  expectedWakeID?: string,
-  options?: { runWithActivationOwner?: <T>(run: () => Promise<T>) => Promise<T> },
+  expectedWakeID: string,
 ): Promise<"accepted" | "ignored"> {
-  if (expectedWakeID) {
-    const exists = Database.use((db) =>
-      db
-        .select({ id: EngineTaskRootIngressTable.id })
-        .from(EngineTaskRootIngressTable)
-        .where(and(eq(EngineTaskRootIngressTable.task_id, taskID), eq(EngineTaskRootIngressTable.id, expectedWakeID)))
-        .get(),
-    )
-    if (!exists) throw new Error(`Task ${taskID} has no persisted ingress ${expectedWakeID}`)
-  }
-  await reconcileTaskControlPlane(taskID, options)
+  if (!currentProjectOwnsTask(taskID)) return "ignored"
+  const exists = Database.use((db) =>
+    db.select({ id: EngineTaskRootIngressTable.id })
+      .from(EngineTaskRootIngressTable)
+      .where(and(eq(EngineTaskRootIngressTable.task_id, taskID), eq(EngineTaskRootIngressTable.id, expectedWakeID)))
+      .get(),
+  )
+  if (!exists) throw new Error(`Task ${taskID} has no persisted ingress ${expectedWakeID}`)
+  requestTaskControlScanInBackground(taskID, "persisted-ingress-accepted")
   return "accepted"
 }
 

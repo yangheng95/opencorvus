@@ -84,7 +84,7 @@ import { Database, NotFoundError, eq } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { recordTaskInfrastructureError } from "@/engine/persist"
 import { taskRootIngressSourceKind, type TaskRootIngressSourceKind } from "@/engine/task-root-ingress-source"
-import { describeProcessRecoveryFact, describeTask, renderTaskDescription, type TaskDesc } from "@/engine/describe"
+import { describeProcessRecoveryFact, describeTask, renderTaskDescription, renderTaskExecutionFact, type TaskDesc } from "@/engine/describe"
 import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
@@ -594,6 +594,10 @@ export namespace Orchestrator {
             projection.push({ label: "runtime:orchestrator-attachment-inventory", text: inventoryText })
           }
         }
+        projection.push({
+          label: "runtime:orchestrator-current-task-execution",
+          text: renderTaskExecutionFact(liveTaskProjection.execution_lifecycle),
+        })
         if (terminalConversation) {
           projection.push({
             label: "runtime:orchestrator-terminal-conversation",
@@ -1256,7 +1260,7 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
         `message_id=${resume.messageID}; reviewed_terminal_event=${resume.reviewedTerminalLifecycleReference.terminalEventID}; ` +
         `acceptance_ledger_revision_artifact_id=${resume.acceptanceLedgerRevisionArtifactID}; ` +
         `acceptance_gap=${JSON.stringify(resume.acceptanceGap)}. ` +
-        `This exact Mission-authored acceptance gap opened a new non-terminal execution occurrence for the same Task. Use the real Message and canonical ledger identified above. Preserve every listed acceptance and dispatch only continuation obligations for the named responsible workflow nodes and their affected verification closure. Because this acceptance resume opened a non-terminal repair occurrence, no_action alone cannot settle it: consume this gap through a scoped continuation, or make the evidence-backed complete/fail lifecycle decision when current evidence proves closure or irreducible force majeure. The Host does not prescribe a worker, verdict, or completion outcome.`,
+        `This exact Mission-authored acceptance gap opened a new non-terminal execution occurrence for the same Task. Use the real Message and canonical ledger identified above. Preserve every listed acceptance. Continue existing responsible or verifying nodes in their original lineage; a required node of the same selected virtual workflow that has never committed an occurrence uses its initial Turn. Every such Turn names the current gap and its scoped criteria. Because this acceptance resume opened a non-terminal repair occurrence, no_action alone cannot settle it: consume this gap through the corresponding initial or continuation Turn, or make the evidence-backed complete/fail lifecycle decision when current evidence proves closure or irreducible force majeure. The Host does not prescribe a worker, verdict, or completion outcome.`,
       renderCurrentOccurrenceDecisionObligation(),
     )
   }

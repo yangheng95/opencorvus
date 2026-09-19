@@ -1,0 +1,60 @@
+{
+  "tool_mode": "built-in image_gen",
+  "documented_model": "gpt-image-2",
+  "model_selection": "Tool exposes no model parameter; user explicitly authorized built-in Image 2. No claim of an exact backend snapshot.",
+  "user_authorization": "2026-09-10: 你先用image2画",
+  "references": [
+    {
+      "title": "AFlow, Figure 3, PDF page 5",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2025/file/5492ecbce4439401798dcd2c90be94cd-Paper-Conference.pdf"
+    },
+    {
+      "title": "GEPA v2, Figure 3, PDF page 5",
+      "url": "https://arxiv.org/pdf/2507.19457v2"
+    }
+  ],
+  "figures": [
+    {
+      "asset": "architecture.png",
+      "prompt": "Original color computer-science research figure, publication quality technical typography. Landscape 1536x1024 pixels. Pure white canvas, thin navy rules, restrained flat blue teal amber purple vermilion fills. Crisp precise architecture plate, no decorative graphics, icons, gradients or shadows. CRUCIAL: every label is LARGE, at least 28 pixels high; headings 38px. It will print only 5.5 inches wide. Use only the short exact labels below, no added small explanatory text. This is a detailed scientific system architecture, not a cartoon or slide.\n\nTOP HALF: heading \"(a) Research Studio package\". Top right \"Digest h\".\nOne blue band \"Orchestrator\". Five dashed lines down to five equally sized expert modules, with exactly four short one-way arrows connecting neighboring expert modules left to right.\nExpert heading labels and colors: blue \"Planner\", teal \"Researcher\", amber \"Analyst\", purple \"Fact checker\", vermilion \"Writer\".\nEach expert has one large inner output label, wrap over two lines where needed: \"Research charter\", \"Source bundle\", \"Canonical results\", \"Review verdict\", \"Report model\".\nTwo wide shared resource bands below all five roles: \"Procedures and references\"; \"Capability bindings and package files\". No arrows on bands. Thin rectangular package boundary encloses everything in this panel.\n\nBOTTOM HALF: heading \"(b) Alternative workflows\". Subtitle \"Same package digest h\".\nThree generous horizontal lanes; LEFT label of each lane on its own line ABOVE its sequence so the chain has full canvas width and all roles have the same large readable type.\nLane 1 label \"Full research\", below it five colored modules \"Planner\" → \"Researcher\" → \"Analyst\" → \"Fact checker\" → \"Writer\".\nLane 2 label \"Evidence synthesis\", below it three colored modules \"Analyst\" → \"Fact checker\" → \"Writer\".\nLane 3 label \"Direct writing\", below it one colored module \"Writer\".\nEach role keeps its panel-a color. No arrows between lanes. No output boxes or footer; captions outside the image explain task-local outputs. Make bottom lanes genuinely large and spacious. Show the specified text only, uniformly readable.",
+      "review": "Fresh-review regeneration enlarges all labels for normal PDF-width reading. Redundant small annotations removed; core organization, hypothesis and independent-test topology retained. Original generation preserved; selected image visually inspected.",
+      "sha256": "3952d0d05cb16ec74a81c9e87c3431b5b176ece79a9de37dc1f7270d98525c6d",
+      "pixels": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    {
+      "asset": "specialization.png",
+      "prompt": "Create an original scientific methods figure for an academic multi-agent systems paper. Landscape 1536x1024, immaculate WHITE background, restrained flat blue/teal/purple/amber categories, precise thin navy rules. Typography is the priority: ALL text at least 30px, headings 38px; readable when printed 5.5 inches wide. Use only the labels specified. No small footnotes, decorative icons, cartoons, gradients, shadows, or 3D.\n\nTOP 42%: heading \"(a) Domain specialization\". Three equal-width ruled modules with large text, two arrows between MODULES only:\n\"Domain resources\": four rows \"Source hierarchy\", \"Computation procedure\", \"Claim criteria\", \"Report schema\".\n\"Professional roles\": four rows \"Researcher: collect\", \"Analyst: compute\", \"Fact checker: verify\", \"Writer: render\".\n\"Artifact contract\": four rows \"Claim identity\", \"Result revision\", \"Table coordinate\", \"Review reference\".\nAn arrow from domain module to role module and from role module to contract module; no row-to-row arrows.\n\nLOWER 58%: heading \"(b) Reordering an existing procedure\".\nThree columns: LEFT width25%, CENTRAL width43%, RIGHT width25%, joined by one-way arrows LEFT→CENTRAL→RIGHT.\nLEFT: \"Illustrative mismatch\". Two large document fields, explicitly \"Accepted result r2\" and \"Report cites r1\", with their revision identifiers highlighted dark red. Below \"Failure hypothesis\". No tiny pseudo-text.\nCENTRAL: header \"Candidate rewrite\". A top strip \"Same evidence obligations\". Below heading \"At claim construction\", then four large numbered, left-aligned rows:\n\"1  Open accepted result\"\n\"2  Resolve review\"\n\"3  Bind table coordinate\"\n\"4  Write value and limits\"\nRows wrap naturally if needed, large type remains consistent.\nRIGHT: header \"Testable effects\". Two stacked cells:\nteal \"Fewer mismatches?\"\namber \"More checking cost?\"\nBottom full-width strip \"Fixed roles, dependencies, capabilities, and executable files\".\nThe case is a schematic hypothesis, no reported outcome, plot or numerical performance. Professional dense mechanism plate with consistent alignment and strong readable text hierarchy.",
+      "review": "Fresh-review regeneration enlarges all labels for normal PDF-width reading. Redundant small annotations removed; core organization, hypothesis and independent-test topology retained. Original generation preserved; selected image visually inspected.",
+      "sha256": "63943f715d0b00b335f0e77ee0b9783254a54768828a7fe3437f6fba2e5a49ff",
+      "pixels": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    {
+      "asset": "evolution.png",
+      "prompt": "Original color computer-science methods figure. 1536x1024 landscape, pure WHITE page, thin navy rules, flat pale blue teal purple amber modules. Publication typography, every label at least 30px and headings 38px; no tiny labels. Short exact text only, no decoration, icons, gradients or shadows.\n\nLEFT 64% panel \"(a) Development search\": a precise 2x2 loop, four equally sized ruled modules with large text.\nTOP LEFT module \"Execution evidence\", four text rows \"Task and revision\", \"Trajectory\", \"Scores and cost\", \"Review\".\nTOP RIGHT \"Candidate construction\", rows \"Failure hypothesis\", \"Text revision\", \"Validity + eligibility\".\nBOTTOM RIGHT \"Matched trials\", actual small table with column headings \"Case\", \"Parent\", \"Candidate\"; two rows \"x1 | run | run\" and \"x2 | run | run\". These are placeholders, not results.\nBOTTOM LEFT \"Comparison and retention\", rows \"Keep parent\", \"Select candidate\", \"Revision + evidence\".\nExactly four directional edges form clockwise loop: evidence→candidate→trials→comparison→evidence. Place arrowheads carefully. No extra diagonal edges.\n\nRIGHT 33% panel \"(b) Independent tests\" separated by thin vertical dashed rule.\nUpper block \"Freeze selected revision\".\nTwo separate downward arrows to two side-by-side large blocks below: \"Unseen tasks\" and \"Retention tasks\" (labels can wrap into two lines).\nBelow, large centered \"Fixed task budgets\" and \"No test feedback\".\n\nExport edge STARTS at bottom center of Comparison and retention. Runs down BELOW all four development modules, then right along empty corridor, then UP near the left edge of test panel and right into Freeze selected revision. It never enters or crosses Candidate construction. Label corridor \"End search\".\nBOTTOM FULL-WIDTH panel \"(c) Total resources\", three LARGE lines:\n\"Candidate construction + rejected attempts\"\n\"+ trials + review + future execution\"\n\"Repeat full searches for method-level inference\"\nNo performance numbers, outcome charts or extra tiny explanatory wording. Dense professional research mechanism, clear arrow routing and legible hierarchy.",
+      "review": "Fresh-review regeneration enlarges all labels for normal PDF-width reading. Redundant small annotations removed; core organization, hypothesis and independent-test topology retained. Original generation preserved; selected image visually inspected.",
+      "sha256": "a0a9792621309a715f14b902b29a05ec1edb7bea6570c612544d19505ce35da1",
+      "pixels": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    }
+  ],
+  "iteration_log": [
+    "Initial image generations were visually inspected.",
+    "Local-path image editing failed for both CODEX_HOME and workspace paths with Windows sandbox helper ACL error; no API or credential fallback was used.",
+    "New complete figure generations used corrected full prompts. Dark-background evolution variants were rejected after visual review.",
+    "No third-party figures were supplied as generation inputs or copied into final assets.",
+    "Rejected an export-arrow variant whose edge passed through candidate construction. Selected final uses a separate bottom corridor.",
+    "Independent source review corrected Figure 2 from Added procedure to Candidate rewrite; existing per-claim mappings and report-model validation were already present."
+  ],
+  "fresh_review_round": "2026-09-10: independent reviewer identified 5–6pt-equivalent labels. Three new Image 2 generations replace the previously accepted assets. Final prompts and hashes above identify the sole current figures."
+}

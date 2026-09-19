@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "started_at_utc": "2026-09-12T16:16:25.749007+00:00",
+  "runtime_revision": "134d34336cdb19c90d96ac49640c0746556a3f0f",
+  "root": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source",
+  "model": "openai/gpt-5.6-luna",
+  "case_indexes": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "base_coordinator_pid": 42216,
+  "native_supervisor_pid": 42217,
+  "viewer_pid": 42218,
+  "viewer_url": "http://localhost:8768/ui",
+  "base_command": [
+    "/root/.bun/bin/bun",
+    "/var/lib/opencorvus-benchmark/opencorvus-runner/packages/opencorvus/script/benchmark/external-agent/run-automationbench-batch.ts",
+    "--python",
+    "/var/lib/opencorvus-benchmark/evaluator-venv/bin/python",
+    "--source-data",
+    "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/provider-source",
+    "--output",
+    "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/base",
+    "--control-root",
+    "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/base-control",
+    "--restricted-shell",
+    "/var/lib/opencorvus-benchmark/restricted-agent-shell-base",
+    "--case-set",
+    "/var/lib/opencorvus-benchmark/opencorvus-runner/specs/artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/case-manifest.json",
+    "--batch-index",
+    "1",
+    "--model",
+    "openai/gpt-5.6-luna",
+    "--profiles",
+    "base",
+    "--queue-concurrency",
+    "2",
+    "--inactivity-ms",
+    "600000"
+  ],
+  "native_command_common": [
+    "/root/.bun/bin/bun",
+    "/var/lib/opencorvus-benchmark/opencorvus-runner/script/benchmark/run-native-automationbench.ts",
+    "--runtime",
+    "/var/lib/opencorvus-benchmark/opencorvus-runner",
+    "--runtime-revision",
+    "134d34336cdb19c90d96ac49640c0746556a3f0f",
+    "--runtime-home",
+    "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/native-home",
+    "--python",
+    "/var/lib/opencorvus-benchmark/evaluator-venv/bin/python",
+    "--harness",
+    "/var/lib/opencorvus-benchmark/opencorvus-runner/packages/opencorvus/script/benchmark/external-agent",
+    "--manifest",
+    "/var/lib/opencorvus-benchmark/opencorvus-runner/specs/artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/case-manifest.json",
+    "--reasoning-effort",
+    "medium"
+  ],
+  "native_concurrency": 1,
+  "base_concurrency": 2,
+  "inactivity_ms": 600000,
+  "provider_preflight": {
+    "source_commit": "134d34336cdb19c90d96ac49640c0746556a3f0f",
+    "verified_at_utc": "2026-09-12T16:15:30.157Z",
+    "credential_type": "oauth",
+    "projected_model": "gpt-5.6-luna",
+    "projected_request_model": "gpt-5.6-luna",
+    "observed_requests": [
+      {
+        "model": "gpt-5.6-luna",
+        "status": 200
+      }
+    ],
+    "result": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "status": "connected",
+        "providerID": "openai",
+        "modelID": "gpt-5.6-luna",
+        "message": "Provider is reachable."
+      }
+    }
+  },
+  "base_batch_run_id": "c78ebbca-bb73-42d8-95dd-8370dfe7f957",
+  "execution_identity": {
+    "commit": "134d34336cdb19c90d96ac49640c0746556a3f0f",
+    "benchmark_bundle_sha256": "5a5fb338dc4e4fe0267779e6ca618929949ffe6d2ebb9e8d11d17d0d8bffe0e9",
+    "case_set_manifest_sha256": "43ca54925db11d7dc6d9c5b80bbd32aed9b6c93ea92a2d1b8225a0858036ff42"
+  },
+  "native_first_run_id": "3e27fb9b-0a39-4fc1-b5b9-bab27eef51ad",
+  "base_initial_runs": [
+    {
+      "run_id": "f6494719-626a-4c19-896c-b2ccddd2811a",
+      "case_id": "marketing:marketing.linkedin_company_update"
+    },
+    {
+      "run_id": "26c90986-febf-483c-a1a1-0dc7e7c5db4f",
+      "case_id": "finance:finance.wave_freelance_invoice"
+    }
+  ],
+  "launch_artifacts_sha256": {
+    "provider-preflight.ts": "b6d7a02505e1bfa612c6860319ba4a1f836ab4c54f91a8ceea010aa88f5ee8fb",
+    "provider-preflight.json": "ab5e9bb3041be178f997be0368f5ab386426540e7d2330aa11bd41814e7a5d52",
+    "native-first-five.py": "16ed32a681794f2e04492d07186925260f693b60fd1a0695fd3c728958f44276",
+    "launch-receipt.json": "51fc62a1b200d9a6f908ac789f57c0e69ded9b6c75ed68017063cf40e1597dc2"
+  },
+  "verified_scope": "Real streaming provider preflight and first-five launch; no completed paired claim"
+}

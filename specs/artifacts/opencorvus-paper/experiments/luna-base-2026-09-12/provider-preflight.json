@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "body": {
+    "ok": true,
+    "status": "connected",
+    "providerID": "openai",
+    "modelID": "gpt-5.6-luna",
+    "message": "Provider is reachable."
+  }
+}

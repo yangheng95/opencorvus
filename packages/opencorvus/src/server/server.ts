@@ -250,6 +250,7 @@ export namespace Server {
     let reconcileTaskControl: (() => Promise<void>) | undefined
     try {
       runtimeExecutionGate.closeAdmission([
+        "task_control_activation",
         "scheduler_event_fire",
         "scheduler_automation_fire",
         "session_wake_loop",
@@ -258,6 +259,7 @@ export namespace Server {
       ])
       runtimeExecutionGate.requestCancellation(
         [
+          "task_control_activation",
           "scheduler_event_fire",
           "scheduler_automation_fire",
           "session_wake_loop",
@@ -343,8 +345,6 @@ export namespace Server {
           ? undefined
           : () =>
               taskRootIngressDelivery.reconcileTaskControlAfterRuntimeRollback(taskControlDirectories)
-      runtimeExecutionGate.closeAdmission(["task_control_activation"])
-      runtimeExecutionGate.requestCancellation(["task_control_activation"], new Error(reason))
       await runtimeExecutionGate.waitForIdle(["task_control_activation"], settlementInactivityTimeoutMilliseconds)
       const { awaitTaskMessageProtocolBridgeIdle } = await import("../orchestrator/protocol/message-bridge")
       await Database.awaitEffectIdle(settlementInactivityTimeoutMilliseconds)

@@ -1,0 +1,6 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": { "noEmit": true },
+  "include": ["external-agent/**/*.ts", "../../src/**/*.d.ts"],
+  "exclude": []
+}

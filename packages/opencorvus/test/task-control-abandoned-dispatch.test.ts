@@ -3,7 +3,7 @@ import { Config } from "../src/config/config"
 import { WorkerTurnDescriptor } from "../src/agent/worker-turn-descriptor"
 import { createDispatchLineageOrigin } from "../src/engine/dispatch-lineage"
 import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
-import { findDispatchSettlementByDispatchID } from "../src/engine/dispatch-settlement"
+import { findDispatchSettlementByDispatchID, recordDispatchSettlement } from "../src/engine/dispatch-settlement"
 import {
   EngineArtifactTable,
   EngineControlActivationLeaseTable,
@@ -1139,7 +1139,7 @@ describe("abandoned dispatch recovery", () => {
           inputMessageID: string
         }>
         for (const memberIndex of [0, 2, 3]) {
-          const child = await Session.create({
+          const child = memberIndex === 2 ? { id: Identifier.ascending("session") } : await Session.create({
             kind: worker.identity.sessionKind,
             parentID: orchestrator.id,
             title: `Collection member ${memberIndex}`,
@@ -1188,8 +1188,21 @@ describe("abandoned dispatch recovery", () => {
             }),
           ),
         ).toEqual({ kind: "pending" })
+        const preparationFactID = recordTaskInfrastructureError({
+          taskID, component: "dispatch-agent", operation: "prepare-dispatch-admission",
+          reason: "injected failure after lineage and before descriptor",
+          context: { dispatchID: failedAfterLineage.dispatchID },
+        })
+        recordDispatchSettlement({
+          taskID, dispatchID: failedAfterLineage.dispatchID,
+          outcome: DispatchOutcome.infrastructureFailure({
+            operation: "prepare-dispatch-admission", message: "injected failure after lineage and before descriptor",
+            recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID, dispatchID: failedAfterLineage.dispatchID }),
+            infrastructureError: exactEngineArtifactLocator({ taskID, artifactID: preparationFactID }),
+          }),
+        })
         expect(
-          DispatchAgentsToolTestHooks.settleCommittedMemberExecutionFailure({
+          DispatchAgentsToolTestHooks.readMemberSettlementAfterFailure({
             outer: {
               orchestratorSessionID: orchestrator.id,
               orchestratorMessageID,
@@ -1203,7 +1216,6 @@ describe("abandoned dispatch recovery", () => {
               target: worker.identity.agentID,
             },
             memberCount: 4,
-            error: new Error("injected failure after lineage and before descriptor"),
           }),
         ).toMatchObject({
           kind: "infrastructure_failure",
@@ -1699,7 +1711,7 @@ describe("abandoned dispatch recovery", () => {
             { stage: "execution-occurrences", rowCount: 1 },
           ],
           occurrenceFacts: [
-            { taskID, executionEpoch: 1, currentEpoch: 258, terminal: 1, deleted: 0 },
+            { taskID, executionEpoch: 1, currentEpoch: 258, terminal: 1, boundaryRequested: 0, deleted: 0 },
           ],
           taskLocalDue: 0,
           projectDue: false,

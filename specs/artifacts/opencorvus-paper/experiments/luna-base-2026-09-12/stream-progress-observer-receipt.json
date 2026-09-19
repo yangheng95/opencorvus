@@ -1,0 +1,17 @@
+{
+  "base_revision": "3f9cb474b577f6e313492ed48b5b4bbf1bfa4f1f",
+  "revision": "470d129dc2bf8baddf30367e764280fe41eabe7b",
+  "tree": "1eda45a78787e395ff2d11a3a270bc008e75dc47",
+  "patch": "stream-progress-observer.patch",
+  "patch_bytes": 23823,
+  "patch_sha256": "c04998573302fdc4787c00ecfd83834ce1e4cc1b393f9172dae053ade3b5741d",
+  "new_model_runs": 0,
+  "benchmark_admission": "paused",
+  "independent_review": "No unresolved findings for stream observer correction; experimental condition verification remains incomplete.",
+  "checks": {
+    "frozen_processor_and_observer": "6 passed, 14 assertions",
+    "main_cross_process_recovery_processor": "12 passed, 44 assertions",
+    "frozen_stream_activity_group": "23 passed before final occurrence assertions",
+    "docs_check": "passed"
+  }
+}

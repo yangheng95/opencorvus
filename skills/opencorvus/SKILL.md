@@ -9,20 +9,23 @@ Treat skill installation and OpenCorvus installation as separate operations. Rea
 
 ## Execute the request
 
-1. Determine the requested outcome: install the skill, install OpenCorvus, configure credentials or models, run one local prompt, operate the headless service, manage a Task, or diagnose a failure.
+1. Determine the requested outcome: install the skill, install OpenCorvus, configure credentials or models, run one local prompt, operate the headless service, manage a Task or Mission, answer a pending interaction, or diagnose a failure.
 2. Inspect the operating system, shell, current directory, existing `opencorvus` and `bun` commands, repository checkout, configuration, and relevant running process. Do not ask for facts that can be observed safely.
 3. Read only the references needed for the outcome:
    - [skill-installation.md](references/skill-installation.md): install and invoke this skill in Hermes Agent or OpenClaw.
    - [opencorvus-installation.md](references/opencorvus-installation.md): clone, build, authenticate, select a model, and verify OpenCorvus.
    - [operations.md](references/operations.md): run the command-line interface (CLI), start the service, monitor work, and stop it safely.
    - [http-api.md](references/http-api.md): use the Hypertext Transfer Protocol application programming interface (HTTP API), Basic authentication, Task routes, and Server-Sent Events (SSE).
+   - [interactions.md](references/interactions.md): answer the questions and permission requests that pause running work.
+   - [missions.md](references/missions.md): select an Expert Squad and run, observe, and stop a Mission.
    - [troubleshooting.md](references/troubleshooting.md): diagnose installation, provider, server, project, Task, and event-stream failures.
    - [sources.md](references/sources.md): verify claims against first-party documentation and current repository contracts.
 4. Prefer the repository's current, documented source-build path. Do not invent npm, Homebrew, winget, Docker, or curl-pipe installation commands. If the user supplies a packaged release, read its release instructions before using it.
 5. Explain any machine-changing command immediately before execution. Never print, persist in a prompt, or commit a secret. Use the host's secret facility or process environment.
 6. Keep the OpenCorvus process, project directory, and Task identity explicit. A Task belongs to one project directory; send that exact directory on project-scoped API requests.
-7. Verify the result at the layer changed. Installation requires `doctor`; provider configuration requires `auth list` and `models`; service startup requires a reachable `/ui/`; Task submission requires HTTP `202`, a captured `task_id`, and observable Task events or board state.
-8. Report the exact commands run, observed evidence, remaining warnings, server address, project directory, and Task identifier. Do not call a Task complete merely because a process or agent stopped.
+7. Verify the result at the layer changed. Installation requires `doctor`; provider configuration requires `auth list` and `models`; service startup requires a reachable `/ui/`; Task submission requires HTTP `202`, a captured `task_id`, and observable Task events or board state; Mission dispatch requires a captured `missionID` and an observed status snapshot.
+8. While work runs, poll for pending questions and permission requests alongside Task state. An unanswered question expires at its automatic deadline and the assistant continues on its own assumption, so silence changes the result.
+9. Report the exact commands run, observed evidence, remaining warnings, server address, project directory, and Task or Mission identifier. Do not call work complete merely because a process or agent stopped.
 
 ## Safety and authority
 

@@ -3,6 +3,7 @@ import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import which from "which"
+import { FrontendRenderReviewCaptureToolInputSchema } from "../src/frontend-design/schema"
 import { runHostBrowserNodeSidecar } from "../src/browser/runtime/node-executor"
 import {
   FrontendVisualEvidencePageValidationError,
@@ -18,6 +19,53 @@ afterEach(async () => {
 })
 
 describe("Frontend visual sidecar contract", () => {
+  test("capture schema preserves neutral raster paths as explicit output authority", () => {
+    for (const name of ["desktop-1440x900.png", "original.png", "reference.png"]) {
+      const screenshot = `visual-html-skeleton/${name}`
+      const input = FrontendRenderReviewCaptureToolInputSchema.parse({
+        kind: "render_review", id: "desktop", rendered_entrypoint: "visual-html-skeleton/index.html",
+        screenshot_artifact: screenshot, viewport: { width: 1440, height: 900 },
+        capture_mode: "viewport", review_status: "reviewed_with_blocking_debt", review_summary: "Awaiting rendered inspection",
+      })
+      expect(input.screenshot_artifact).toBe(screenshot)
+    }
+  })
+
+  test("capture reports an exact source and output alias as a path contract error", async () => {
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-capture-alias-"))
+    temporaryDirectories.push(directory)
+    await fs.mkdir(path.join(directory, "visual-html-skeleton"))
+    await fs.writeFile(path.join(directory, "visual-html-skeleton/index.html"), "<!doctype html><title>source</title>")
+    await fs.writeFile(path.join(directory, "visual-html-skeleton/desktop.png"), Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aF9sAAAAASUVORK5CYII=", "base64"))
+    const capture = materializeFrontendCaptureVisualEvidenceTool({ mode: "reference_parity", artifactRoot: directory, workspaceRoot: directory, taskID: "capture-alias" })
+    const result = await capture.execute?.({
+      kind: "reference_comparison", id: "alias", rendered_entrypoint: "visual-html-skeleton/index.html",
+      screenshot_artifact: "visual-html-skeleton/desktop.png", source_reference_artifact: "visual-html-skeleton/desktop.png",
+      diff_artifact: "", viewport: { width: 1440, height: 900, label: "desktop" }, location_hash: "",
+      capture_mode: "viewport", review_status: "reviewed_with_blocking_debt", review_summary: "Awaiting inspection",
+    }, { toolCallId: "alias", messages: [] } as any)
+    expect(result).toBe("Error: screenshot_artifact must have a distinct path from the declared source_reference_artifact.")
+  })
+
+  test("capture returns the Task containment error for an external output junction", async () => {
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-capture-path-"))
+    temporaryDirectories.push(directory)
+    const artifactRoot = path.join(directory, "task")
+    const skeleton = path.join(artifactRoot, "visual-html-skeleton")
+    const outside = path.join(directory, "outside")
+    await fs.mkdir(skeleton, { recursive: true })
+    await fs.mkdir(outside)
+    await fs.writeFile(path.join(skeleton, "index.html"), "<!doctype html><title>source</title>")
+    await fs.symlink(outside, path.join(skeleton, "output"), "junction")
+    const capture = materializeFrontendCaptureVisualEvidenceTool({ mode: "greenfield_original", artifactRoot, workspaceRoot: directory, taskID: "capture-path" })
+    const result = await capture.execute?.({
+      kind: "render_review", id: "path", rendered_entrypoint: "visual-html-skeleton/index.html",
+      screenshot_artifact: "visual-html-skeleton/output/new/desktop.png", viewport: { width: 1440, height: 900, label: "desktop" }, location_hash: "",
+      capture_mode: "viewport", review_status: "reviewed_with_blocking_debt", review_summary: "Awaiting inspection",
+    }, { toolCallId: "path", messages: [] } as any)
+    expect(result).toBe("Error: screenshot_artifact output parent must resolve inside the Task visual-html-skeleton root.")
+  })
+
   test("delivers the sole payload and Playwright module authorities through argv", async () => {
     const directory = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-frontend-sidecar-"))
     temporaryDirectories.push(directory)
@@ -88,7 +136,7 @@ process.stdout.write(JSON.stringify({ payload, playwrightAuthority: chromium.aut
         kind: "render_review",
         id: "render-review-fixture",
         rendered_entrypoint: "visual-html-skeleton/index.html",
-        screenshot_artifact: "visual-html-skeleton/preview/fixture.png",
+        screenshot_artifact: "visual-html-skeleton/desktop-1440x900.png",
         viewport: { width: 1440, height: 900, label: "desktop-1440x900" },
         location_hash: "",
         capture_mode: "full_page",

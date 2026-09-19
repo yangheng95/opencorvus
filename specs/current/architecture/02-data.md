@@ -282,7 +282,10 @@ Session/Trace 是持久化历史与身份容器；Turn/Attempt 是一次模型�
 tool instance、callback 与 Promise 仍只属于当前进程。`session_prompt_owner` 不复制
 这些资源，只用 generation 加 PID、process-instance identity 与 occurrence identity
 证明哪个物理进程可以产生 Provider/Tool effect。它在 standby 期间继续存在，并持续
-观察 durable user Message、runtime wake 与 `session_control_record`；进程内事件只用于
+观察 durable user Message、runtime wake 与 `session_control_record`。普通待机还必须查询同一 Session
+尚有 `pendingDelivery` 的输入；执行中入队的消息可能早于该 Turn 的最终 assistant，不能仅凭最终
+assistant 的 timeline cursor 跳过它。该检查只唤醒现有循环，由原有原子 acceptance 消费输入；
+等待精确 compaction lease 的分支仍遵循该控制的唤醒/到期边界。进程内事件只用于
 降低唤醒延迟。reply peer 通过 accepted input Message identity 加入，summary peer 先按
 本次 exact Session control ID 加入其 consumed/failed 终态；consumed terminal 必须与
 该 control durable payload 中的 exact summary Message ID 绑定在同一个 immediate transaction。
@@ -292,6 +295,10 @@ tool instance、callback 与 Promise 仍只属于当前进程。`session_prompt_
 该 receipt 投影，不按 source 或 wall-clock 猜测。只有 OS 证明原 occurrence `dead_or_reused` 后才原子替换并
 终态化废弃 assistant。服务重启只销毁 Runtime，不能使 Session、message、descriptor
 或 durable coordination request 失效。
+Windows 进程对象即使在退出后仍可能因外部 query handle 而保持可查询；只有持有 `SYNCHRONIZE` 权限的
+process handle 经零时长 `WaitForSingleObject` 返回 `WAIT_TIMEOUT`，才可结合匹配的 creation FILETIME 证明
+`exact_live`。已 signaled 的 process object 必须投影为 `dead_or_reused`；`GetProcessTimes` 在未退出时的 exit
+FILETIME 内容未定义，不能作为存活或死亡判据。否则 peer Prompt 会永久等待已经退出但 kernel object 尚未释放的 owner。
 
 跨进程调度准入不能读取进程内 `SessionStatus` 作为共享 busy 权威。一个 Session 的当前
 共享执行事实是同一数据库快照中 `session_prompt_owner` 的精确进程 occurrence 仍为
@@ -418,7 +425,7 @@ foreign attachment 来“修复”。Attachment bytes 的物理池在
 | `protocol_event` · `protocol_inbox` · `protocol_stream_chunk` | `protocol/protocol.sql.ts`   | 可观测协议事件与流分片                          |
 | `automation` · `automation_definition_tombstone` · `automation_fire` · `automation_fire_frontier` · `automation_fire_attempt` · `automation_fire_attempt_receipt` · `automation_run` · `automation_run_receipt` · `automation_delay_settlement` · `event_job` · `event_job_definition_tombstone` · `event_occurrence` · `event_job_fire` · `event_job_fire_receipt` | `scheduler/*.sql.ts` | 定时、逻辑 Fire、唯一物理交付 frontier、物理尝试、目标执行、Session admission 与事件触发 |
 
-Scheduler 表按事实 owner 分层写入：Automation service 拥有 definition revision、tombstone、Fire、attempt、run 与 receipt；Session assistant-admission transaction 可以追加唯一的 `automation_delay_settlement`，并在同一事务追加该 one-shot delay 的 superseded run receipt 与 definition tombstone。两者共用同一个 transaction-local fact reducer，后者不是第二个 Automation service。Assistant admission 通过 `(session_id, kind, status, definition_id, revision)` frontier index 只查询调用方给出的 Session 集合中的 latest active delay，并按同一有界 definition page 批量读取 lease、Fire、run/receipt 与 attempt summary；它不扫描其他 Project 或全局 Automation。Active definition revision 在接收时发布一个 revision/due-bound scheduled Fire，并把它写入唯一的 `automation_fire_frontier` 物理交付权威。Claim 与 lease renewal 在同一 writer transaction 把 `available_at` 推进到 lease expiry；retry 推进到 receipt deadline；scheduled terminal settlement 原子发布 successor 并替换 frontier，manual terminal 恢复已发布的 scheduled Fire，pause/tombstone 与 one-shot terminal 删除 frontier。Global poll 只从 `(available_at, definition_id, fire_id)` index 读取一个 64-row due page；retained terminal Fire、future retry、旧 definition 与 live lease history都不参与物理扫描。Exact claim 在 immediate writer 中重验 current revision、frontier、Fire 与 lease；完整 immutable history 只在显式 history API 中归约。Strict transfer 对 active/paused definition 与 frontier presence、revision/Fire relation和 deadline 下界执行同一 current-schema约束。Event service 在一个 immediate writer snapshot 内以 active Project 的 `definition_id` cursor 分页读取 current definition，为匹配 Fire 分配 definition-local immutable queue position，因此 definition/tombstone、one-shot terminal 与 Fire acceptance 只有一个串行顺序。terminal receipt 复制该受 DDL 约束的 queue relation并且只能连续推进 FIFO frontier；head 查询先从 partial terminal index seek 最新位置，再从 Fire index seek精确 successor。accept、startup recovery、claim、handoff 与 lease recovery 共用该 reducer，retained terminal history 不进入物理调度集合；lease timer 醒来时重读 definition frontier，所以 terminal commit 后的 owner crash 不会丢失 successor handoff。Event 与 Automation 的完整 immutable history 都只在显式 history API 中归约。Tool、server route 和 engine 层只能通过这些领域入口创建、更新或删除 scheduler definition。Task wait 不使用 Automation 表，而是 `engine_task_wait_registration` 加可选 `engine_task_wait_settlement` 的 epoch-bound Task-control 事实。
+Scheduler 表按事实 owner 分层写入：Automation service 拥有 definition revision、tombstone、Fire、attempt、run 与 receipt；Session assistant-admission transaction 可以追加唯一的 `automation_delay_settlement`，并在同一事务追加该 one-shot delay 的 superseded run receipt 与 definition tombstone。两者共用同一个 transaction-local fact reducer，后者不是第二个 Automation service。 `due_accepted` 绑定一个精确 Fire 与 accepted input batch 的首次 assistant admission；同一 batch 的后续 Tool step 或重启续行复用该不可变接收事实，保留首次 assistant Message ID。后续步不重新竞争 Automation 接收 lease，也不创建第二个 settlement；不同 Fire、batch 或 disposition 仍属于接收冲突。Assistant admission 通过 `(session_id, kind, status, definition_id, revision)` frontier index 只查询调用方给出的 Session 集合中的 latest active delay，并按同一有界 definition page 批量读取 lease、Fire、run/receipt 与 attempt summary；它不扫描其他 Project 或全局 Automation。Active definition revision 在接收时发布一个 revision/due-bound scheduled Fire，并把它写入唯一的 `automation_fire_frontier` 物理交付权威。Claim 与 lease renewal 在同一 writer transaction 把 `available_at` 推进到 lease expiry；retry 推进到 receipt deadline；scheduled terminal settlement 原子发布 successor 并替换 frontier，manual terminal 恢复已发布的 scheduled Fire，pause/tombstone 与 one-shot terminal 删除 frontier。Global poll 只从 `(available_at, definition_id, fire_id)` index 读取一个 64-row due page；retained terminal Fire、future retry、旧 definition 与 live lease history都不参与物理扫描。Exact claim 在 immediate writer 中重验 current revision、frontier、Fire 与 lease；完整 immutable history 只在显式 history API 中归约。Strict transfer 对 active/paused definition 与 frontier presence、revision/Fire relation和 deadline 下界执行同一 current-schema约束。Event service 在一个 immediate writer snapshot 内以 active Project 的 `definition_id` cursor 分页读取 current definition，为匹配 Fire 分配 definition-local immutable queue position，因此 definition/tombstone、one-shot terminal 与 Fire acceptance 只有一个串行顺序。terminal receipt 复制该受 DDL 约束的 queue relation并且只能连续推进 FIFO frontier；head 查询先从 partial terminal index seek 最新位置，再从 Fire index seek精确 successor。accept、startup recovery、claim、handoff 与 lease recovery 共用该 reducer，retained terminal history 不进入物理调度集合；lease timer 醒来时重读 definition frontier，所以 terminal commit 后的 owner crash 不会丢失 successor handoff。Event 与 Automation 的完整 immutable history 都只在显式 history API 中归约。Tool、server route 和 engine 层只能通过这些领域入口创建、更新或删除 scheduler definition。Task wait 不使用 Automation 表，而是 `engine_task_wait_registration` 加可选 `engine_task_wait_settlement` 的 epoch-bound Task-control 事实。
 
 Automation physical attempt 在同一 writer transaction 冻结 exact lease ID、lease-grant ordinal 与 admission-time expiry；三者必须精确匹配 acquisition/renewal 时追加的 immutable `engine_control_activation_lease_grant`，attempt 对 lease/grant 的 retained foreign key 防止历史权限成为 orphan。后续 lease release 或 renewal 不改写既有 grant。Live admission 以 `(time_activated DESC, id DESC)` 选择 current lease，并冻结当时 latest grant ordinal；strict transfer 拒绝 attempt 前已经被 later ordinal 取代的旧 grant，同时保留 attempt 后追加 renewal 的合法历史，不把先前合法 attempt 按 later same-millisecond lease 重新解释。
 
@@ -520,20 +527,16 @@ sandbox ownership。Workspace/public delete 与 Project delete 仍必须持有�
 `intent="task_input"`、`source="user-upload"`；MIME（Multipurpose Internet Mail
 Extensions，多用途互联网邮件扩展类型）、文件名和扩展名都不能推导领域语义。
 `AttachmentStore` 只负责 canonical bytes 与 metadata sidecar，也不拥有领域语义。
-每个物理 project attachment 目录还必须由 `.authority.json` 绑定到唯一
-`project_id`、解析后的 worktree 和 Database 内部持久实例 ID。该实例 ID 在结构严格匹配的
-current-schema 普通 reopen 中保持不变，在同一路径显式 reset、删除重建或 fresh rebuild 后变化；
-不匹配的旧 schema 或未知 drift 只返回 `SCHEMA_RESET_REQUIRED`，不会猜测 refresh、重写该身份
-或选择 migration。
-它是本机物理 Database metadata，不进入 MySQL transfer schema 或 snapshot；import
-目标在业务数据恢复后生成自己的新实例 ID。
-首次绑定时，空目录可由当前 Database 认领；已有 blobs 的旧目录只有在全部 blobs 都被
-当前 Database 引用时才能认领。后续 write 与 sweep 必须匹配该 authority，否则返回明确的
-`AttachmentStoreAuthorityError`，不能把另一份隔离 Database 看不到的 live blobs
-判成 orphan 并删除。空的物理 store 可以把旧 marker 原子替换为当前 Database authority；
-非空 foreign store 仍保持关闭。Project bootstrap 的 sweep 会记录该 typed authority failure，
-但不能据此终止不读取或修改附件的 Project runtime、Composer catalog 或文本消息流。
-这是存储所有权与数据完整性约束，不参与 Agent 流程调度。
+物理 attachment 目录不保存第二份 Database authority，也不创建 `.authority.json`。
+Project identity、附件引用和可回收集合只来自当前 Database；`Project.worktree` 是物理位置的唯一
+来源。attachment bytes 位于 `attachments/<database-path-digest>/` 命名空间；同一路径的普通 reopen、
+fresh rebuild 和 transfer restore 继续解析同一 bytes，不同 SQLite 路径即使指向同一 Project 目录也不
+共享 sweep 集合。该目录段只用于物理隔离，不是可变 marker、锁或平行 authority 文件。write 继续使用
+每个 content-addressed blob/metadata pair 的跨进程锁、临时 staging、哈希、长度与 canonical
+reference 校验；sweep 清理当前命名空间中未引用且超过 grace period 的 blob 及其 sidecar（若存在）。
+显式 `db reset` 必须同时删除 SQLite DB/WAL/SHM 与传入 Project 的 `.opencorvus/.r`；它不靠
+项目文件中的数据库身份阻止或修复不完整的 operator reset。Project identity convergence 只使用
+canonical Database rows、嵌入引用和现有 durable owner 检查，不读取文件系统 marker 作为平行事实源。
 
 Overlay 手动文件、文件夹、拖放、粘贴和 host attach 的唯一入口先把 raw bytes 写入
 project-scoped `POST /attachment`，composer 只保留返回的
@@ -590,6 +593,10 @@ Browser Node sidecar 的唯一脚本输入协议是 `argv[2]` 中的 base64 JSON
 render、acceptance walkthrough、Browser webpage extract/render/runtime-state 与 Browser
 Preview evidence/region/layout/scroll render 均消费这两个参数，不读取平行环境变量、空值
 fallback 或从用户项目解析运行依赖。
+截图输出与 source/reference 的语义来自显式字段和 DesignResourceManifest，不通过文件名中的
+preview、render、source 等词推断。截图路径必须位于当前 Task 的 visual-html-skeleton
+目录且为支持的 raster 扩展名；真实路径、解码结果、renderer provenance 和 fresh-render
+SHA256 校验提供字节证据。capture 输出不得与显式 source_reference_artifact 指向同一文件。
 `capture_frontend_visual_evidence` 仅对 sidecar transport/toolchain 失败返回稳定 error code、
 signature 与 `retry_once_after_concrete_correction` disposition。Frontend Design Agent 仅能在
 一次具体修正后重试；相同 signature 再现时保留当前 facts、记录 blocker 并自然结束 Turn，

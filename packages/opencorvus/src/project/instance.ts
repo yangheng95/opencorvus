@@ -1029,17 +1029,9 @@ async function bootstrapContext(ctx: Context, entry: CacheEntry, inits: readonly
     }
   })
   const { AttachmentStore } = await import("@/storage/attachment-store")
-  try {
-    await ProjectOpenLifecycle.stage("attachment-store.sweep", lifecycleContext, () =>
-      AttachmentStore.sweep(ctx.project.id),
-    )
-  } catch (error) {
-    if (!(error instanceof AttachmentStore.AuthorityError)) throw error
-    Log.Default.warn("attachment store authority isolated from project runtime", {
-      ...lifecycleContext,
-      error: error.message,
-    })
-  }
+  await ProjectOpenLifecycle.stage("attachment-store.sweep", lifecycleContext, () =>
+    AttachmentStore.sweep(ctx.project.id),
+  )
   await ProjectOpenLifecycle.stage("instance.init", lifecycleContext, async () => {
     for (const init of inits) await runContextInit(entry, init)
   })
@@ -2007,8 +1999,12 @@ export const Instance: InstanceApi = {
       const entries = [...cache.entries()]
       const { Scheduler } = await import("@/scheduler")
       const errors: unknown[] = []
+      // Scheduled tasks can retain Project leases until their cancellation
+      // settles. Cancel both owner classes before draining either: a scheduled
+      // task may itself be waiting for instance-owned background work.
+      for (const [, entry] of entries) cancelInstanceBackgroundWork(entry, "global instance disposal")
+      await Scheduler.disposeGlobal()
       for (const [key, entry] of entries) {
-        cancelInstanceBackgroundWork(entry, "global instance disposal")
         await Promise.all([...entry.activeLeases].map((lease) => lease.closedSignal))
         let release = await acquireEntryTurn(entry)
         // A lease admitted between the settlement wait and the turn grant is
@@ -2077,11 +2073,6 @@ export const Instance: InstanceApi = {
             release()
           }
         }
-      }
-      try {
-        await Scheduler.disposeGlobal()
-      } catch (error) {
-        errors.push(error)
       }
       if (errors.length > 0) throw new AggregateError(errors, "One or more instances failed to dispose")
     }).finally(() => {

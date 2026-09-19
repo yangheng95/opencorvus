@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from "bun:test"
+import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import {
   EngineArtifactEnvelopeSchema,
   ArtifactReadLocatorSchema,
@@ -6,17 +6,14 @@ import {
   mintArtifactReadReference,
   mintArtifactSelectionReference,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import { publishExpertArtifact } from "@/artifact-catalog"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import {
-  ArtifactReferenceAmbiguityError,
   ArtifactReferenceResolutionError,
   completeArtifactReadsBeforePublication,
   resolveArtifactLocatorReferenceBeforeRead,
   resolveArtifactReadReferenceBeforeSelection,
-  resolveArtifactSelectionReferencesBeforePublication,
   selectedArtifactLocatorsBeforePublication,
 } from "@/agent/artifact-read-facts"
 import { Identifier } from "@/id/id"
@@ -27,6 +24,7 @@ import { MessageStore } from "@/session/message-store"
 import { Database, eq } from "@/storage/db"
 import { createToolExecutionSurface } from "@/tool/execution-surface"
 import { ArtifactPublishTool, ArtifactReadTool, ArtifactSelectTool } from "@/tool/artifact-catalog"
+import * as TaskToolScope from "@/tool/task-tool-execution-scope"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
@@ -179,7 +177,7 @@ describe("provider Artifact references", () => {
         label: "Diagnostic",
         payload_json: '{"status":"complete"}',
         resource_set: null,
-        source_selection_refs: [selectionRef],
+        source_read_refs: [readRef],
       }),
     ).toEqual({
       artifact_type: "equity-research/diagnostic",
@@ -187,7 +185,7 @@ describe("provider Artifact references", () => {
       label: "Diagnostic",
       payload_json: '{"status":"complete"}',
       resource_set: null,
-      source_selection_refs: [selectionRef],
+      source_read_refs: [readRef],
     })
   })
 
@@ -264,7 +262,7 @@ describe("provider Artifact references", () => {
     })
   })
 
-  test("resolves paginated read and explicit selection references to one canonical publication locator", async () => {
+  test("publishes paginated read references as canonical sources and retains independent selection facts", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -329,6 +327,7 @@ describe("provider Artifact references", () => {
         })
         const locatorRef = mintArtifactLocatorReference()
         const readRef = mintArtifactReadReference()
+        const finalReadRef = mintArtifactReadReference()
         const purpose = "frozen diagnostic input"
         const selection = { locator, purpose }
         const selectionRef = mintArtifactSelectionReference()
@@ -419,7 +418,7 @@ describe("provider Artifact references", () => {
             locator,
             artifact_transport_version: 2,
             artifact_locator_ref: locatorRef,
-            artifact_read_ref: readRef,
+            artifact_read_ref: finalReadRef,
             media_type: "text/markdown",
             byte_start: 4,
             byte_end: 8,
@@ -431,6 +430,60 @@ describe("provider Artifact references", () => {
             attachment: false,
           },
         })
+
+        const directMessage = await assistantMessage({
+          sessionID: session.id, parentID: user.id, created: now + 7, projectPath: project.path,
+        })
+        const publishTool = await ArtifactPublishTool.init()
+        const directArgs = publishTool.parameters.parse({
+          artifact_type: "reference-squad/direct-result", schema_version: 1, label: "Direct read source",
+          payload_json: '{"status":"complete"}', resource_set: null, source_read_refs: [readRef, finalReadRef],
+        })
+        const directPart = await Session.updatePart({
+          id: Identifier.ascending("part"), sessionID: session.id, messageID: directMessage.id,
+          type: "tool", tool: "artifact_publish", callID: "call_publish_read_reference",
+          state: { status: "running", input: directArgs, time: { start: now + 7 } },
+        })
+        const directScope: TaskToolScope.TaskToolExecutionScope = {
+          kind: "task", projectID: Instance.project.id, projectDirectory: project.path, taskID,
+          taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, taskID), sessionID: session.id,
+          messageID: directMessage.id, toolCallID: "call_publish_read_reference", toolPartID: directPart.id,
+          executionSurface: createToolExecutionSurface({ toolIDs: ["artifact_publish"], permission: [] }),
+          owner: { kind: "projected-worker", expertSquadID: "reference-squad", packageRevision,
+            agentID: "reference-worker", projectionHash: "9".repeat(64),
+            workerTurnDescriptorID: Identifier.ascending("artifact"), workerTurnDescriptorHash: "8".repeat(64) },
+        }
+        // Isolate only the already-covered worker authorization boundary. The
+        // actual Tool, persisted read resolver and canonical publication run.
+        {
+          using owner = spyOn(TaskToolScope, "resolveCoreProjectedWorkerToolExecutionScope").mockResolvedValue(directScope)
+          const directResult = await publishTool.execute(directArgs, {
+            sessionID: session.id, messageID: directMessage.id, callID: directScope.toolCallID,
+            agent: "reference-worker", abort: new AbortController().signal, messages: [],
+            executionSurface: directScope.executionSurface, metadata() {},
+            extra: { projectID: Instance.project.id, toolPartID: directPart.id },
+          })
+          const direct = JSON.parse(directResult.output)
+          const row = Database.use((db) => db.select({ payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable).where(eq(EngineArtifactTable.id, direct.locator.artifact_id)).get())
+          expect(EngineArtifactEnvelopeSchema.parse(row?.payload)).toMatchObject({
+            payload: { status: "complete" }, source_artifact_locators: [locator],
+            observed_artifact_locators: [locator],
+          })
+          const missingArgs = { ...directArgs, source_read_refs: [mintArtifactReadReference()] }
+          const missingPart = await Session.updatePart({
+            id: Identifier.ascending("part"), sessionID: session.id, messageID: directMessage.id,
+            type: "tool", tool: "artifact_publish", callID: "call_publish_missing_read",
+            state: { status: "running", input: missingArgs, time: { start: now + 7 } },
+          })
+          owner.mockResolvedValue({ ...directScope, toolCallID: "call_publish_missing_read", toolPartID: missingPart.id })
+          await expect(publishTool.execute(missingArgs, {
+            sessionID: session.id, messageID: directMessage.id, callID: "call_publish_missing_read",
+            agent: "reference-worker", abort: new AbortController().signal, messages: [],
+            executionSurface: directScope.executionSurface, metadata() {},
+            extra: { projectID: Instance.project.id, toolPartID: missingPart.id },
+          })).rejects.toBeInstanceOf(ArtifactReferenceResolutionError)
+        }
 
         const selectMessage = await assistantMessage({
           sessionID: session.id,
@@ -496,67 +549,6 @@ describe("provider Artifact references", () => {
             toolPartID: publishBoundary.id,
           }),
         ).toEqual([locator])
-        const sourceLocators = resolveArtifactSelectionReferencesBeforePublication({
-          sessionID: session.id,
-          assistantMessageID: publishMessage.id,
-          toolPartID: publishBoundary.id,
-          references: [selectionRef, duplicateSelectionRef],
-        })
-        expect(sourceLocators).toEqual([locator])
-        const observedLocators = completeArtifactReadsBeforePublication({
-          sessionID: session.id,
-          assistantMessageID: publishMessage.id,
-          toolPartID: publishBoundary.id,
-        })
-        const published = await publishExpertArtifact({
-          scope: {
-            kind: "task",
-            projectID: Instance.project.id,
-            projectDirectory: project.path,
-            taskID,
-            taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, taskID),
-            sessionID: session.id,
-            messageID: publishMessage.id,
-            toolCallID: "call_publish_short_reference",
-            toolPartID: Identifier.ascending("part"),
-            executionSurface: createToolExecutionSurface({ toolIDs: ["artifact_publish"], permission: [] }),
-            owner: {
-              kind: "projected-worker",
-              expertSquadID: "reference-squad",
-              packageRevision,
-              agentID: "reference-worker",
-              projectionHash: "9".repeat(64),
-              workerTurnDescriptorID: Identifier.ascending("artifact"),
-              workerTurnDescriptorHash: "8".repeat(64),
-            },
-          },
-          artifact: {
-            artifact_type: "reference-squad/result",
-            schema_version: 1,
-            label: "Reference result",
-            payload: { status: "complete" },
-            resources: [],
-            source_artifact_locators: sourceLocators,
-            idempotent: true,
-          },
-          observedArtifactLocators: observedLocators,
-          selectedArtifactLocators: sourceLocators,
-        })
-        const stored = Database.use((db) =>
-          db
-            .select({ payload: EngineArtifactTable.payload })
-            .from(EngineArtifactTable)
-            .where(eq(EngineArtifactTable.id, published.locator.artifact_id))
-            .get(),
-        )
-        const envelope = EngineArtifactEnvelopeSchema.parse(stored?.payload)
-        expect(envelope.source_artifact_locators).toEqual([locator])
-        expect(envelope.source_artifact_locators[0]!.source).toBe("task_artifact_resource")
-        if (envelope.source_artifact_locators[0]!.source !== "task_artifact_resource") {
-          throw new Error("Expected canonical task_artifact_resource provenance")
-        }
-        expect(envelope.source_artifact_locators[0]!.ref.snapshot.manifest_sha256.length).toBe(64)
-
         const legacyLocator = ArtifactReadLocatorSchema.parse({
           source: "engine_artifact",
           artifact_id: "art_legacy_provider_fact",
@@ -632,118 +624,4 @@ describe("provider Artifact references", () => {
     })
   })
 
-  test("rejects one selection token bound to different canonical provenance", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const session = await Session.create({ kind: "assistant", title: "Selection collision" })
-        const now = Date.now()
-        const user = await Session.updateMessage({
-          id: Identifier.ascending("message"),
-          sessionID: session.id,
-          role: "user",
-          author: "user",
-          time: { created: now },
-          agent: "worker",
-          model: { providerID: "openai", modelID: "gpt-5.6-terra" },
-        })
-        const collision = mintArtifactSelectionReference()
-        for (const [index, locator] of [
-          {
-            source: "engine_artifact" as const,
-            artifact_id: "art_collision_first",
-            catalog_revision: 1,
-            expected_sha256: "1".repeat(64),
-          },
-          {
-            source: "engine_artifact" as const,
-            artifact_id: "art_collision_second",
-            catalog_revision: 2,
-            expected_sha256: "2".repeat(64),
-          },
-        ].entries()) {
-          const locatorRef = mintArtifactLocatorReference()
-          const readRef = mintArtifactReadReference()
-          const readMessage = await assistantMessage({
-            sessionID: session.id,
-            parentID: user.id,
-            created: now + 1 + index * 4,
-            projectPath: project.path,
-          })
-          await completedToolPart({
-            sessionID: session.id,
-            messageID: readMessage.id,
-            created: now + 1 + index * 4,
-            tool: "artifact_read",
-            toolInput: {
-              artifact_transport_version: 2,
-              artifact_locator_ref: locatorRef,
-              byte_offset: 0,
-              max_bytes: 4,
-              delivery: "inline",
-            },
-            output: {
-              artifact_transport_version: 2,
-              artifact_locator_ref: locatorRef,
-              artifact_read_ref: readRef,
-              locator,
-              media_type: "application/json",
-              byte_start: 0,
-              byte_end: 4,
-              next_offset: null,
-              total_bytes: 4,
-              complete: true,
-              sha256: locator.expected_sha256,
-              text: "null",
-              attachment: false,
-            },
-          })
-          const selectMessage = await assistantMessage({
-            sessionID: session.id,
-            parentID: user.id,
-            created: now + 3 + index * 4,
-            projectPath: project.path,
-          })
-          await completedToolPart({
-            sessionID: session.id,
-            messageID: selectMessage.id,
-            created: now + 3 + index * 4,
-            tool: "artifact_select",
-            toolInput: { artifact_transport_version: 2, artifact_read_ref: readRef, purpose: `source ${index}` },
-            output: {
-              artifact_transport_version: 2,
-              selection: { locator, purpose: `source ${index}` },
-              artifact_selection_ref: collision,
-            },
-          })
-        }
-        const publishMessage = await assistantMessage({
-          sessionID: session.id,
-          parentID: user.id,
-          created: now + 10,
-          projectPath: project.path,
-        })
-        const publishBoundary = await actionBoundary({
-          sessionID: session.id,
-          messageID: publishMessage.id,
-          created: now + 10,
-          tool: "artifact_publish",
-        })
-        let failure: unknown
-        try {
-          resolveArtifactSelectionReferencesBeforePublication({
-            sessionID: session.id,
-            assistantMessageID: publishMessage.id,
-            toolPartID: publishBoundary.id,
-            references: [collision],
-          })
-        } catch (cause) {
-          failure = cause
-        }
-        expect(failure).toBeInstanceOf(ArtifactReferenceAmbiguityError)
-        expect((failure as ArtifactReferenceAmbiguityError).code).toBe("ARTIFACT_REFERENCE_AMBIGUOUS")
-      },
-    })
-  })
 })

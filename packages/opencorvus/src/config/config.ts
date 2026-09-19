@@ -1840,7 +1840,9 @@ export namespace Config {
     const filepath = await ConfigPaths.assertCanonicalDirectory(Global.Path.config, ["config.json"])
     while (true) {
       const snapshot = await readSourceSnapshot(filepath)
-      const config = await loadSourceSnapshot(snapshot)
+      // File layers stay sparse; published global configuration is effective Info,
+      // including schema defaults when the canonical file is absent or blank.
+      const config = Info.parse(await loadSourceSnapshot(snapshot))
       if (await sourceRevisionsAreCurrent([snapshot.revision])) return { config, revision: snapshot.revision }
     }
   }

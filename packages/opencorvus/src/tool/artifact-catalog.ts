@@ -3,6 +3,7 @@ import {
   ArtifactJSONValueSchema,
   ArtifactReadInputSchema,
   ArtifactReadReferenceInputSchema,
+  ArtifactReadReferenceSchema,
   ArtifactSelectReferenceInputSchema,
   ArtifactSelectReferenceOutputSchema,
   ArtifactSelectOutputSchema,
@@ -10,10 +11,12 @@ import {
   ArtifactSearchInputSchema,
   ArtifactSearchReferenceTransportPageSchema,
   EngineArtifactPublishInputSchema,
+  artifactReadLocatorKey,
   mintArtifactLocatorReference,
   mintArtifactReadReference,
   mintArtifactSelectionReference,
   type ArtifactReadInput,
+  type ArtifactReadLocator,
   type ArtifactReadReferenceInput,
   type ArtifactSelectReferenceInput,
   type ArtifactSearchInput,
@@ -44,8 +47,6 @@ import {
   completeArtifactReadsBeforePublication,
   resolveArtifactLocatorReferenceBeforeRead,
   resolveArtifactReadReferenceBeforeSelection,
-  resolveArtifactSelectionReferencesBeforePublication,
-  selectedArtifactLocatorsBeforePublication,
 } from "@/agent/artifact-read-facts"
 
 const ARTIFACT_SEARCH_DESCRIPTION =
@@ -80,8 +81,9 @@ const ARTIFACT_PUBLISH_DESCRIPTION =
   "The Host derives Task, Session, Agent, active Expert Squad, projection, message, and tool-call provenance; " +
   "the model cannot supply or override them. artifact_type must begin with the active Expert Squad ID followed " +
   "by '/'. Package-owned strict ABI namespaces such as evolution-lab/ must use their package-owned typed publisher " +
-  "and are rejected here. source_selection_refs is optional and defaults to [] when the output has no semantic Artifact source. Every supplied selection " +
-  "must have been completely read earlier in this physical Turn. resource_set is required; pass null when there are no files. A supplied filesystem resource set must be an exact " +
+  "and are rejected here. source_read_refs explicitly selects already-read Artifacts as semantic sources for this output; " +
+  "pass the artifact_read_ref values directly, without a separate artifact_select call. It defaults to [] when there are no semantic sources. " +
+  "Every supplied reference must have been completely read earlier in this physical Turn. resource_set is required; pass null when there are no files. A supplied filesystem resource set must be an exact " +
   "current-Task ref and is verified before commit. " +
   "An exact retry of the same Task-scoped publication atomically reuses the canonical publication; changed JSON, resource set, or sources remain distinct. " +
   "Use this for durable inter-Agent evidence; the visible final message remains narrative and is not Artifact transport."
@@ -181,11 +183,11 @@ const ArtifactPublishToolInputSchema = EngineArtifactPublishInputSchema.omit({
   idempotent: true,
 })
   .extend({
-    source_selection_refs: z
-      .array(ArtifactSelectReferenceOutputSchema.shape.artifact_selection_ref)
+    source_read_refs: z
+      .array(ArtifactReadReferenceSchema)
       .max(ArtifactSchemaLimits.publishResources)
       .default([])
-      .describe("Explicit semantic sources returned by prior artifact_select calls in this Session Turn."),
+      .describe("Explicitly select these prior complete artifact_read references as semantic sources for this publication."),
     resource_set: TaskArtifactResourceSetLocatorSchema.nullable().describe(
       "Exact current-Task immutable resource set, expanded by the Host in canonical UTF-8 byte path order; use null when the Artifact has no files.",
     ),
@@ -199,12 +201,12 @@ const ArtifactPublishToolInputSchema = EngineArtifactPublishInputSchema.omit({
   .strict()
   .superRefine((value, context) => {
     const seen = new Set<string>()
-    for (const [index, reference] of value.source_selection_refs.entries()) {
+    for (const [index, reference] of value.source_read_refs.entries()) {
       if (seen.has(reference)) {
         context.addIssue({
           code: "custom",
-          path: ["source_selection_refs", index],
-          message: "source_selection_refs must contain unique persisted selections",
+          path: ["source_read_refs", index],
+          message: "source_read_refs must contain unique read references",
         })
       }
       seen.add(reference)
@@ -598,7 +600,7 @@ export const ArtifactPublishTool = Tool.define("artifact_publish", {
   async execute(args, ctx) {
     assertGenericArtifactPublisherAuthority(args.artifact_type)
     const scope = await resolveArtifactWorkerScope(ctx)
-    const { payload_json, resource_set, source_selection_refs, ...metadata } = args
+    const { payload_json, resource_set, source_read_refs, ...metadata } = args
     const resources = resource_set
       ? await readTaskArtifactResourceSet({
           projectID: scope.projectID,
@@ -607,12 +609,19 @@ export const ArtifactPublishTool = Tool.define("artifact_publish", {
           resourceSet: resource_set,
         })
       : []
-    const sourceArtifactLocators = resolveArtifactSelectionReferencesBeforePublication({
-      sessionID: scope.sessionID,
-      assistantMessageID: scope.messageID,
-      toolPartID: scope.toolPartID,
-      references: source_selection_refs,
-    })
+    const sourceByLocator = new Map<string, ArtifactReadLocator>()
+    for (const reference of source_read_refs) {
+      const locator = resolveArtifactReadReferenceBeforeSelection({
+        sessionID: scope.sessionID,
+        assistantMessageID: scope.messageID,
+        toolPartID: scope.toolPartID,
+        reference,
+      })
+      sourceByLocator.set(artifactReadLocatorKey(locator), locator)
+    }
+    const sourceArtifactLocators = [...sourceByLocator.entries()]
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([, locator]) => locator)
     const artifact = EngineArtifactPublishInputSchema.parse({
       ...metadata,
       payload: parseArtifactPublishJSON(payload_json),
@@ -629,11 +638,7 @@ export const ArtifactPublishTool = Tool.define("artifact_publish", {
       scope,
       artifact,
       observedArtifactLocators,
-      selectedArtifactLocators: selectedArtifactLocatorsBeforePublication({
-        sessionID: scope.sessionID,
-        assistantMessageID: scope.messageID,
-        toolPartID: scope.toolPartID,
-      }),
+      selectedArtifactLocators: sourceArtifactLocators,
     })
     return {
       title: `Published ${args.artifact_type}`,

@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "updated_at_utc": "2026-09-12T18:43:50.579912+00:00",
+  "runtime_directory": "/var/lib/opencorvus-benchmark/opencorvus-runner",
+  "previous_commit": "00ccc5e09f1bee33b1ced2aaa3fd974585312f86",
+  "current_commit": "51b780ee715aba2d80e30eaf5a89bae1ed62f3cb",
+  "worktree_clean": true,
+  "active_benchmark_leases": [],
+  "active_benchmark_processes": [],
+  "viewer_source_unchanged": true,
+  "model_calls_during_update": 0,
+  "checks": {
+    "commands": [
+      [
+        "/root/.bun/bin/bun",
+        "test",
+        "--timeout",
+        "120000",
+        "test/capability/core-artifact-owner-execution.test.ts",
+        "test/capability/skill-reveal.test.ts"
+      ],
+      [
+        "/root/.bun/bin/bun",
+        "test",
+        "--timeout",
+        "120000",
+        "test/capability/native-mission-transport-base.test.ts",
+        "--test-name-pattern",
+        "loads the exact Mission Skill behavior|narrows the permanent transport base"
+      ],
+      [
+        "/root/.bun/bin/bun",
+        "test",
+        "--timeout",
+        "120000",
+        "test/expert-squad/light-package.test.ts",
+        "--test-name-pattern",
+        "settles four overlapping Light dispatches"
+      ]
+    ],
+    "passed": 14,
+    "assertions": 239,
+    "log_path": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/skill-owner-audit/installed-runtime-checks.log",
+    "log_sha256": "bde49449939b7958fe4969fbb714527d1ba4a09ee69adf86c60ab0b64997b2c2"
+  }
+}

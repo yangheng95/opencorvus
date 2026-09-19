@@ -13,8 +13,37 @@ import net from "node:net"
 import { pathToFileURL } from "node:url"
 import { currentRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
 import { Global } from "@/global"
+import { Shell } from "@/shell/shell"
 
 describe("ProcessSupervisor control-plane authority", () => {
+  test("foreground shell reclaims its child tree and returns the root command exit", async () => {
+    const handle = await ProcessSupervisor.spawnHostShell({ command: "sleep 30 & exit 7", shell: Shell.acceptable(),
+      terminateChildrenOnRootExit: true, owner: "foreground-root-exit-contract" })
+    try {
+      const code = await Promise.race([handle.exited, Bun.sleep(5_000).then(() => { throw new Error("Foreground root exit waited for its live child") })])
+      await handle.settled
+      expect({ code, physicallySettled: true }).toEqual({ code: 7, physicallySettled: true })
+    } finally { await ProcessSupervisor.disposeAndWaitForExit(handle, "foreground root exit contract") }
+  }, 60_000)
+
+  test("background shell retains its owned child tree until explicit disposal", async () => {
+    if (process.platform !== "win32") return
+    const owner = "background-root-exit-contract"
+    const handle = await ProcessSupervisor.spawnHostShell({ command: "sleep 30 & exit 7", shell: Shell.acceptable(),
+      terminateChildrenOnRootExit: false, owner })
+    try {
+      await Bun.sleep(250)
+      expect(ProcessSupervisor.metricsSnapshot().owners[owner]?.count).toBe(1)
+      expect(await ProcessSupervisor.disposeAndWaitForExit(handle, "background root exit contract")).toBe(7)
+    } finally { await ProcessSupervisor.disposeAndWaitForExit(handle, "background root exit contract cleanup") }
+  }, 60_000)
+
+  test("Shell.run returns the foreground root exit after child cleanup", async () => {
+    const result = await Shell.runHost("sleep 30 & exit 7", { timeoutMs: 5_000 })
+    expect({ code: result.exitCode, timedOut: result.timedOut, aborted: result.aborted })
+      .toEqual({ code: 7, timedOut: false, aborted: false })
+  }, 60_000)
+
   test("reclaims a descendant listener after the exact Windows owner process dies", async () => {
     if (process.platform !== "win32") return
     const reservation = net.createServer()

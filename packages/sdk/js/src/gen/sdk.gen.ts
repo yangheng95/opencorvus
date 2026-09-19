@@ -4731,6 +4731,38 @@ export class Control extends HeyApiClient {
             taskID: string
           }
         | {
+            action: "read_task_message"
+            /**
+             * Aggregate UTF-8 text byte window for this batch call; defaults to 30,000.
+             */
+            max_bytes?: number
+            /**
+             * One to eight exact Completion Decision Message identities or Host-returned continuations, each Message listed once.
+             */
+            messages: Array<{
+              /**
+               * UTF-8 offset. Omit it or use 0 for an initial Message identity; a positive continuation offset requires the exact text_part_id returned in next_messages.
+               */
+              byte_offset?: number
+              /**
+               * Exact Message ID named by the current Completion Decision.
+               */
+              messageID: string
+              /**
+               * Exact Session ID named by the current Completion Decision.
+               */
+              sessionID: string
+              /**
+               * Exact text Part ID returned in next_messages.
+               */
+              text_part_id?: string
+            }>
+            /**
+             * Terminal source Task in the current Mission lineage.
+             */
+            taskID: string
+          }
+        | {
             action: "complete_mission"
             /**
              * Concise user-facing summary of the accepted Mission outcome.
@@ -5045,6 +5077,15 @@ export class Control extends HeyApiClient {
                     resolution_evidence_read_refs: Array<string>
                     responsibility:
                       | {
+                          /**
+                           * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.
+                           */
+                          failure_reference: {
+                            terminalEventID: string
+                          }
+                          kind: "task_initialization"
+                        }
+                      | {
                           kind: "workflow_node"
                           workflow_id: string
                           workflow_node_id: string
@@ -5074,6 +5115,15 @@ export class Control extends HeyApiClient {
                     resolution_evidence_read_refs: Array<string>
                     responsibility:
                       | {
+                          /**
+                           * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.
+                           */
+                          failure_reference: {
+                            terminalEventID: string
+                          }
+                          kind: "task_initialization"
+                        }
+                      | {
                           kind: "workflow_node"
                           workflow_id: string
                           workflow_node_id: string
@@ -5102,6 +5152,15 @@ export class Control extends HeyApiClient {
                     repair_evidence_read_refs: Array<string>
                     resolution_evidence_read_refs: Array<string>
                     responsibility:
+                      | {
+                          /**
+                           * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.
+                           */
+                          failure_reference: {
+                            terminalEventID: string
+                          }
+                          kind: "task_initialization"
+                        }
                       | {
                           kind: "workflow_node"
                           workflow_id: string

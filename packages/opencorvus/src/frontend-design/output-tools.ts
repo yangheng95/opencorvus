@@ -14,6 +14,8 @@ import { BrowserRuntime } from "@/browser/runtime"
 import { runTaskBrowserNodeSidecar } from "@/browser/runtime/node-executor"
 import { requireRuntimePackage } from "@/runtime/package-require"
 import {
+  RenderedSkeletonPreviewArtifactSchema,
+  VisualValidationDiffArtifactSchema,
   ColorSchema,
   ComponentSchema,
   CompetitorReferenceEvidenceSchema,
@@ -1343,13 +1345,13 @@ function validateRenderedScreenshotEvidenceMetadata(
       `${label} rendered_entrypoint must name a source-editable HTML file`,
     )
   }
-  if (!isRenderedVisualSkeletonArtifactRelativePath(screenshot.relativePath)) {
+  if (!RenderedSkeletonPreviewArtifactSchema.safeParse(screenshot.relativePath).success) {
     return visualEvidenceFailure(
       "screenshot_artifact_not_rendered_preview",
       `${label} screenshot_artifact must be a rendered screenshot/preview artifact, not source/reference evidence`,
     )
   }
-  if (diff && !isRenderedVisualSkeletonArtifactRelativePath(diff.relativePath)) {
+  if (diff && !VisualValidationDiffArtifactSchema.safeParse(diff.relativePath).success) {
     return visualEvidenceFailure(
       "diff_artifact_not_rendered_preview",
       `${label} diff_artifact must be a rendered visual diff/comparison artifact`,
@@ -1481,16 +1483,6 @@ async function validateRenderedScreenshotEvidenceForSnapshot(
   return { ok: true }
 }
 
-function isRenderedVisualSkeletonArtifactRelativePath(relativePath: string): boolean {
-  const normalizedPath = normalizeReportPath(relativePath).toLowerCase()
-  const basename = normalizedPath.split("/").pop() ?? normalizedPath
-  if (/(?:^|[-_.])(reference|source|original)(?:[-_.]|$)/i.test(basename)) return false
-  return (
-    /(?:^|\/)(?:screenshots?|previews?|renders?|visual-diffs?|diffs?)(?:\/|$)/i.test(normalizedPath) ||
-    /(?:screenshot|preview|render|visual-diff|diff)/i.test(basename)
-  )
-}
-
 function resolveEvidenceArtifactPath(
   options: { artifactRoot: string; artifactRootRelative?: string },
   artifactPath: string,
@@ -1541,6 +1533,28 @@ function verifyEvidenceFile(
   if (!realRelativePath || realRelativePath.startsWith("..") || path.isAbsolute(realRelativePath)) return undefined
   if (expectedRoot && !isPathInsideExpectedEvidenceRoot(realRelativePath, expectedRoot)) return undefined
   return fileReal
+}
+
+/** Resolve the nearest existing output parent before mkdir/write can follow a junction. */
+function verifiedEvidenceOutputPath(artifactRoot: string, outputPath: string): string | undefined {
+  const rootReal = fs.realpathSync(artifactRoot)
+  let parent = path.dirname(outputPath)
+  const missing: string[] = []
+  for (;;) {
+    try {
+      const parentReal = fs.realpathSync(parent)
+      const target = path.join(parentReal, ...missing.reverse(), path.basename(outputPath))
+      const relative = normalizeReportPath(path.relative(rootReal, target))
+      return relative && !relative.startsWith("..") && !path.isAbsolute(relative) &&
+        isPathInsideExpectedEvidenceRoot(relative, "visual-html-skeleton") ? target : undefined
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") return undefined
+      const ancestor = path.dirname(parent)
+      if (ancestor === parent) return undefined
+      missing.push(path.basename(parent))
+      parent = ancestor
+    }
+  }
 }
 
 function isReadableFile(file: string): boolean {
@@ -1848,9 +1862,11 @@ export function materializeFrontendCaptureVisualEvidenceTool(
     if (!entrypoint || !entrypoint.relativePath.endsWith(".html")) {
       return "Error: rendered_entrypoint must resolve to an HTML file under the task visual-html-skeleton artifact root."
     }
-    if (!screenshot || !isRenderedVisualSkeletonArtifactRelativePath(screenshot.relativePath)) {
+    if (!screenshot || !RenderedSkeletonPreviewArtifactSchema.safeParse(screenshot.relativePath).success) {
       return "Error: screenshot_artifact must resolve to a rendered screenshot path under the task visual-html-skeleton artifact root."
     }
+    const outputPath = verifiedEvidenceOutputPath(artifactRoot, screenshot.absolutePath)
+    if (!outputPath) return "Error: screenshot_artifact output parent must resolve inside the Task visual-html-skeleton root."
     const verifiedEntrypoint = verifyEvidenceFile(artifactRoot, entrypoint, "visual-html-skeleton")
     if (!verifiedEntrypoint) {
       return "Error: rendered_entrypoint is not a readable file under the real visual-html-skeleton artifact root."
@@ -1861,6 +1877,12 @@ export function materializeFrontendCaptureVisualEvidenceTool(
       verifiedSourceReference = sourceReference ? verifyEvidenceFile(artifactRoot, sourceReference) : undefined
       if (!verifiedSourceReference || !(await isDecodedRasterImageFile(verifiedSourceReference))) {
         return "Error: source_reference_artifact must resolve to a readable raster image under the real task artifact root."
+      }
+    }
+    if (verifiedSourceReference) {
+      const existingScreenshot = verifyEvidenceFile(artifactRoot, screenshot, "visual-html-skeleton")
+      if (existingScreenshot === verifiedSourceReference || path.resolve(outputPath) === path.resolve(verifiedSourceReference)) {
+        return "Error: screenshot_artifact must have a distinct path from the declared source_reference_artifact."
       }
     }
     let rendered: Buffer
@@ -1878,7 +1900,10 @@ export function materializeFrontendCaptureVisualEvidenceTool(
       }
       return frontendVisualEvidenceToolchainFailureResult(error)
     }
-    await Filesystem.writeAtomic(screenshot.absolutePath, rendered)
+    if (verifiedEvidenceOutputPath(artifactRoot, screenshot.absolutePath) !== outputPath) {
+      return "Error: screenshot_artifact output parent changed during rendering."
+    }
+    await Filesystem.writeAtomic(outputPath, rendered)
     const screenshotSha256 = createHash("sha256").update(rendered).digest("hex")
     const base = {
       id: input.id,

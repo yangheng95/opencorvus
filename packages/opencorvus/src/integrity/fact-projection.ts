@@ -1,3 +1,4 @@
+import { requirePromptAttachments } from "@/agent/prompt-projection"
 import { parseAcceptanceSpecs, renderSpecsAsText } from "@/acceptance/types"
 import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
 import {
@@ -127,20 +128,7 @@ export function projectIntegrityEvidenceFacts(
   const diffs = buildHostObservations.flatMap((observation) => observation.diffs)
   const hostObservationLocators = buildHostObservationVersions.map(({ locator }) => locator)
 
-  const taskAttachments = viewTask(task).attachments ?? []
-  const attachments = unique(input.attachmentRefs).flatMap((attachmentRef) => {
-    const attachment = taskAttachments.find(
-      (candidate) => candidate.url === attachmentRef || candidate.sha === attachmentRef,
-    )
-    return attachment ? [attachment] : []
-  })
-  const missingAttachmentRefs = input.attachmentRefs.filter(
-    (attachmentRef) =>
-      !attachments.some((attachment) => attachment.url === attachmentRef || attachment.sha === attachmentRef),
-  )
-  if (missingAttachmentRefs.length > 0) {
-    throw new Error(`Integrity selected missing attachment refs: ${missingAttachmentRefs.join(", ")}`)
-  }
+  const attachments = requirePromptAttachments(viewTask(task).attachments, input.attachmentRefs)
 
   const contextSections = [
     `Exact Goal refs selected for this review: ${input.goalIDs.map((goalID) => `goal:${goalID}`).join(", ") || "(none)"}.`,

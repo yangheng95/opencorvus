@@ -73,10 +73,7 @@ export function settleSessionDelaysAtAssistantAcceptanceInTransaction(
             sql`json_extract(${MessageTable.data}, '$.role')='user'`,
             sql`json_extract(${MessageTable.data}, '$.pendingDelivery')=1`,
             sql`json_extract(${MessageTable.data}, '$.extra.wake_reason.source')='scheduler.automation'`,
-            inArray(
-              sql<string>`json_extract(${MessageTable.data}, '$.extra.wake_reason.jobID')`,
-              definitionIDs,
-            ),
+            inArray(sql<string>`json_extract(${MessageTable.data}, '$.extra.wake_reason.jobID')`, definitionIDs),
           ),
         )
         .all()
@@ -99,14 +96,31 @@ export function settleSessionDelaysAtAssistantAcceptanceInTransaction(
       )
     })
     if (acceptedDue) {
+      const wake = acceptedDue.wake
+      if (!wake || wake.source !== "scheduler.automation") {
+        throw new Error(`Session delay ${delay.definition_id} accepted wake lost its exact provenance`)
+      }
+      const admitted = db
+        .select()
+        .from(AutomationDelaySettlementTable)
+        .where(eq(AutomationDelaySettlementTable.definition_id, delay.definition_id))
+        .get()
+      if (admitted) {
+        if (
+          admitted.disposition !== "due_accepted" ||
+          admitted.fire_id !== wake.fireID ||
+          JSON.stringify(admitted.accepted_input_message_ids) !== JSON.stringify(input.acceptedInputMessageIDs)
+        ) {
+          throw new Error(`Session delay ${delay.definition_id} already has a conflicting assistant admission`)
+        }
+        // The immutable settlement owns input admission, not every assistant
+        // Tool step. Continuing/recovering this exact batch retains its first owner.
+        continue
+      }
       if (!lease || lease.expires_at <= input.now) {
         throw new Error(
           `Session delay ${delay.definition_id} due wake lost its Automation owner before assistant ${input.assistantMessageID} acceptance`,
         )
-      }
-      const wake = acceptedDue.wake
-      if (!wake || wake.source !== "scheduler.automation") {
-        throw new Error(`Session delay ${delay.definition_id} accepted wake lost its exact provenance`)
       }
       db.insert(AutomationDelaySettlementTable)
         .values({
@@ -148,9 +162,7 @@ export function settleSessionDelaysAtAssistantAcceptanceInTransaction(
     }
     const unacceptedWake = pendingWakes.some(
       (wake) =>
-        wake.source === "scheduler.automation" &&
-        wake.jobID === delay.definition_id &&
-        fireIDs.includes(wake.fireID),
+        wake.source === "scheduler.automation" && wake.jobID === delay.definition_id && fireIDs.includes(wake.fireID),
     )
     if (unacceptedWake) {
       throw new Error(

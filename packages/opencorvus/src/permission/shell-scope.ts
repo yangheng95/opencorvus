@@ -68,6 +68,21 @@ function unwrapEnv(tokens: string[]): { executable: string; arguments: string[] 
     : { executable: "env", arguments: tokens.slice(1) }
 }
 
+export async function shellCommandInvocations(command: string): Promise<Array<{ executable: string; arguments: string[] }>> {
+  const syntax = await parser().then((value) => value.parse(command))
+  if (!syntax) throw new Error("Permission shell scope parser returned no syntax tree")
+  try {
+    if (syntax.rootNode.hasError) throw new Error("Permission shell scope requires a syntactically valid command")
+    return syntax.rootNode.descendantsOfType("command").flatMap((node) => {
+      if (!node) return []
+      const tokens = commandTokens(node)
+      return tokens.length > 0 ? [unwrapEnv(tokens)] : []
+    })
+  } finally {
+    syntax.delete()
+  }
+}
+
 function endpoint(value: string): string | undefined {
   try {
     const parsed = new URL(value)

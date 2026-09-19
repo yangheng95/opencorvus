@@ -77,7 +77,7 @@ test("Work Ledger and Mailbox notifications share one app-lifetime physical stre
   )
 
   expect(mailboxRefreshes).toBe(2)
-  expect(workLedgerEvents).toEqual(["work-ledger.changed"])
+  expect(workLedgerEvents).toEqual(["work-ledger.changed", "work-ledger.connected"])
   unsubscribeFailingMailbox()
   unsubscribeMailbox()
   expect(closes).toBe(0)

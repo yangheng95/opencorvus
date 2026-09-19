@@ -1,0 +1,48 @@
+\section{Preliminary Evaluation}\label{sec:evaluation}
+We report an initial AutomationBench evaluation of OpenCorvus Mission Base with GPT-5.6 Luna. The retained experiment summary records 100 evaluated workflows and a strict pass rate of 34\%. This result characterizes an execution configuration of OpenCorvus. It provides an empirical starting point for studying expert organizations; the available experiment does not isolate domain specialization or experience-driven revision.
+
+\subsection{Benchmark and evaluated system}
+AutomationBench tests business workflows that operate across simulated applications, including customer records, email, calendars, and business documents \citep{automationbench}. Its public task collection spans sales, marketing, operations, support, finance, and human resources. The environment supplies a task request and application state; the agent discovers and calls APIs to carry out the requested changes. Evaluation inspects application state rather than the fluency or apparent completeness of the final response. The benchmark's official private leaderboard uses a separate task collection, so local aggregates require their own sample identity before comparison with those scores.
+
+The evaluated system is recorded as \emph{OpenCorvus Mission Base}, with model identifier \code{openai/gpt-5.6-luna}. Mission Base executes work through a coordinated agent harness. The result is therefore a system measurement that combines the model, organization, prompts, tools, and runtime behavior. It is not a measurement of model weights in isolation. The run summary identifies 100 evaluated cases, but the accompanying case manifest, domain composition, and exact execution revision are unavailable in the current result bundle.
+
+A historical repository branch contains a dedicated AutomationBench batch coordinator, a single-trial runner, and a bridge to the official API tools and scorer. The inspected historical harness targets AutomationBench 1.0.6 at source revision \code{4a8e1061254004d9dac807054eed33fad7d1ff14} \citep{automationbenchcode}. It supports the official \code{api_search}, \code{api_fetch}, and \code{base64_encode} tools, isolated task worlds, and per-run evidence. These files document the inspected historical harness's execution path. Their existence does not identify which exact harness revision and environment produced the reported 100-case aggregate; that association requires the original execution records.
+
+\paragraph{Metric.}
+The reported metric is the strict task pass rate: the fraction of evaluated workflows satisfying the benchmark's scored acceptance conditions. In the inspected official implementation, \code{partial_credit} first evaluates the final world relative to the prescribed initial state and the assertion-exclusion rules; \code{task_completed_correctly} then returns one exactly when the resulting partial credit equals one. Initially satisfied assertions, explicitly unscored checks, and broken guards have distinct handling. Recomputing strict success therefore requires the original world states, assertion definitions, and scorer version. The 34\% value below is the retained run summary's strict metric; it has not been independently recomputed from those underlying records for this manuscript. Partial credit and task-lifecycle completion are not substituted for it.
+
+\subsection{Observed aggregate result}
+Table~\ref{tab:pilot-results} reports the available aggregate. The 100-case denominator and 34\% strict pass rate imply 34 successful workflows and 66 workflows that did not satisfy the full strict criterion. The latter count does not specify how many tasks were partially completed, ended in agent failure, exceeded a resource allowance, or encountered infrastructure problems.
+
+\begin{table}[!htb]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}lYYY@{}}
+\toprule
+Recorded configuration & Evaluated tasks & Strictly successful tasks & Strict pass rate \\
+\midrule
+OpenCorvus Mission Base + Luna & 100 & 34 & 34.00\% \\
+Original Luna reference & Unavailable & Unavailable & 8.07\% \\
+\bottomrule
+\end{tabularx}
+\caption{Available preliminary result and historical reference. The Mission Base row is the retained 100-case experiment summary, confirmed by the project operator. The 8.07\% value was recorded as an original Luna baseline, but its task membership and execution conditions have not been matched to the Mission Base run. It is included as historical context, not as a paired control.}
+\label{tab:pilot-results}
+\end{table}
+
+The observed system result indicates successful completion on a subset of the evaluated workflows and substantial remaining failure under a strict business-outcome criterion. It also illustrates why an execution harness should be assessed by effects in the environment: completion reports alone cannot establish that required records and actions are correct. The aggregate identifies a useful starting configuration for subsequent analysis, while the 66 non-passing cases motivate examination of their trajectories before selecting an improvement mechanism.
+
+The reference percentage of 8.07\% was retained alongside the Mission Base result. Its denominator, task identities, model snapshot, tool interface, and inference allowance have not been recovered. The two percentages consequently provide descriptive context but do not identify a matched treatment effect. We do not use their numerical difference to estimate the causal benefit of collaboration or to size a follow-up experiment. No comparison with an official private leaderboard row is inferred from this local result.
+
+\subsection{Scope and limitations}
+\paragraph{Evidence completeness.}
+The available evidence consists of the operator-confirmed aggregate and its dated repository record. The manuscript's source map identifies that record and the inspected execution scripts separately. It does not contain the original per-case outcomes, initial/final worlds, complete trajectories, or a verified mapping from the 100 cases to an immutable task manifest. Consequently, the reported aggregate is not independently auditable at the task level from the current manuscript artifact. Recovering those records would permit rescoring and analysis of failure causes without repeating eligible completed executions.
+
+\paragraph{Sampling and uncertainty.}
+The selection procedure, domain balance, and relationship to prior development tasks are unknown for the recorded sample. The 34\% result describes this reported run; it does not establish performance on all 600 public tasks, the private task collection, or a random population of enterprise workflows. We do not report a population confidence interval, a significance test, or an assumption of 100 independent task draws. The experiment also does not estimate variability across searches or repeated executions. Reusing a baseline record in several comparisons would preserve its original execution identity and statistical dependence.
+
+\paragraph{Attribution and ablations.}
+This result concerns Mission Base, not a measured parent--candidate organization revision. There is no matched single-agent/team comparison, fixed-generic/fixed-specialized comparison, or retained-update ablation in the available evidence. The result therefore cannot separate improvements due to procedural knowledge, agent coordination, model behavior, or extra inference. It does not establish the empirical benefit of EEO's update rule, superiority to procedural memory or other search policies, or preservation of previously useful capabilities. Figure~\ref{fig:evolution} describes the evidence separation required for such a comparison; it is not a reconstruction of this preliminary run.
+
+\paragraph{Resources and external validity.}
+The retained summary does not supply a verified aggregate of model calls, input and output tokens, elapsed time, tool calls, or human interventions. Quality--cost and search-amortization claims therefore remain unmeasured. A simulator also captures only part of deployment behavior: real service availability, authentication, rate limits, and organizational procedures can differ. These limitations leave the preliminary result useful as a concrete recorded observation, while preventing its interpretation as a production reliability guarantee.
+
+The next evidential step is a small, explicit comparison of one fixed parent configuration and one selected procedural change on tasks separate from those used to construct the change. Each unique configuration--task pair should be executed once, with eligible existing results reused and their original identities retained. Per-task outcomes, score transitions, and actual resource use would determine which experiment to expand. The present result supports that focused investigation; it does not supply its outcome.

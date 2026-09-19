@@ -1,0 +1,72 @@
+diff --git a/packages/opencorvus/src/expert-squad/builtin/base/agents/orchestrator/system.md b/packages/opencorvus/src/expert-squad/builtin/base/agents/orchestrator/system.md
+index be0238b6..17065f96 100644
+--- a/packages/opencorvus/src/expert-squad/builtin/base/agents/orchestrator/system.md
++++ b/packages/opencorvus/src/expert-squad/builtin/base/agents/orchestrator/system.md
+@@ -2,7 +2,7 @@
+ 
+ Deliver the user's complete outcome with the smallest sufficient team. The original request and current authoritative data define success; a delegated brief, plan, worker report, or internal PASS is a claim about that outcome. Resolve any gap against the original authority before accepting the Task.
+ 
+-Bind `execution-verification` for ordinary delivery: dispatch `base-developer` directly, then `base-tester` after the Developer settles. The Developer owns discovery, local planning, execution, and self-checks. Select `planner-parallel-delivery` only when a concrete, independent repository/web research partition can usefully run beside implementation: dispatch Planner, then Researcher and Developer together, then Tester after Developer. Every selected node remains mandatory. Researcher has no shell, local client, or project Skill execution; allocate work from the actual projected capabilities.
++Bind `execution-verification` for ordinary delivery: dispatch `base-developer` as the first node with `workflow_subject.kind=virtual_workflow`, `workflow_id=execution-verification`, and `node_id=base-developer`; then dispatch `base-tester` as the second node of that same workflow after the Developer settles. Independent verification is owned by the Tester; Developer self-checks do not fulfill that node. The Developer owns discovery, local planning, execution, and self-checks. Select `planner-parallel-delivery` only when a concrete, independent repository/web research partition can usefully run beside implementation: dispatch Planner, then Researcher and Developer together, then Tester after Developer. Every selected node remains mandatory. Researcher has no shell, local client, or project Skill execution; allocate work from the actual projected capabilities.
+ 
+ Keep dispatches short: state the owned result, constraints, and any specific missing evidence. Let each worker use the original Task input and canonical Artifacts already available to it. Load a method Skill only when its content is needed for your current decision. Do not repeat worker discovery, rewrite its entire plan, or request acknowledgements merely to advance the conversation.
+ 
+diff --git a/packages/opencorvus/src/expert-squad/builtin/base/expert-squad.jsonc b/packages/opencorvus/src/expert-squad/builtin/base/expert-squad.jsonc
+index 4d49e911..2f8709cf 100644
+--- a/packages/opencorvus/src/expert-squad/builtin/base/expert-squad.jsonc
++++ b/packages/opencorvus/src/expert-squad/builtin/base/expert-squad.jsonc
+@@ -5,7 +5,7 @@
+   "name": "Base",
+   "label": "Base",
+   "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
+-  "version": "2026.09.12.2",
++  "version": "2026.09.12.3",
+   "product_pillars": [
+     "code",
+     "work"
+diff --git a/packages/opencorvus/test/expert-squad/advanced-package.test.ts b/packages/opencorvus/test/expert-squad/advanced-package.test.ts
+index bf9fda8b..f9666d78 100644
+--- a/packages/opencorvus/test/expert-squad/advanced-package.test.ts
++++ b/packages/opencorvus/test/expert-squad/advanced-package.test.ts
+@@ -188,9 +188,10 @@ describe("built-in interface review workflow authority", () => {
+     )
+   })
+ 
+-  test("projects direct execution followed by independent verification and a separate research graph", async () => {
++  test("projects workflow execution followed by independent verification and a separate research graph", async () => {
+     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
+-    expect(loaded.manifest.version).toBe("2026.09.12.2")
++    expect(loaded.manifest.version).toBe("2026.09.12.3")
++    expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
+     expect(workflowNodes(loaded, "execution-verification")).toEqual({
+       "base-developer": [],
+       "base-tester": ["base-developer"],
+diff --git a/packages/opencorvus/test/expert-squad/catalog-index.test.ts b/packages/opencorvus/test/expert-squad/catalog-index.test.ts
+index d3ecfda3..825653d6 100644
+--- a/packages/opencorvus/test/expert-squad/catalog-index.test.ts
++++ b/packages/opencorvus/test/expert-squad/catalog-index.test.ts
+@@ -109,13 +109,13 @@ describe("Expert Squad catalog index", () => {
+     const inspection = await PromptProfileResolver.catalogInspection({ projectDirectory: project.path, id: "base" })
+     expect(inspection).toMatchObject({
+       id: "base",
+-      version: "2026.08.22.4",
++      version: "2026.09.12.3",
+       selector: {
+         summary: expect.any(String),
+         selection_guidance: expect.any(String),
+       },
+       workflows: [
+-        { id: "planner-execution-verification", node_count: 3 },
++        { id: "execution-verification", node_count: 2 },
+         { id: "planner-parallel-delivery", node_count: 4 },
+       ],
+       workflow_count: 2,
+@@ -135,7 +135,7 @@ describe("Expert Squad catalog index", () => {
+     expect(detail?.name).toBe("Base")
+     expect(detail?.source).toEqual({ kind: "built_in" })
+     expect(detail?.readme.content).toContain("# Base")
+-    expect(detail?.selector.instructions).toContain("# Base Expert Squad")
++    expect(detail?.selector.instructions).toContain("# Selecting Base")
+     expect(detail?.capability_projection.scheduler.base_role).toBe("orchestrator")
+     expect(
+       Object.fromEntries(

@@ -64,6 +64,9 @@ export function assertCurrentTaskCreationContract(value: unknown): Record<string
   ) {
     throw new Error("Task creation request and resolved creator authority diverge")
   }
+  if ((request.input as Record<string, unknown>).request !== resolved.request) {
+    throw new Error("Task creation caller and resolved request bytes diverge")
+  }
   return contract
 }
 

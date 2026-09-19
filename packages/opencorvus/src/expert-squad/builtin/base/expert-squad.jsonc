@@ -4,16 +4,16 @@
   "id": "base",
   "name": "Base",
   "label": "Base",
-  "description": "Built-in Planner-first Expert Squad for compact capability-matched delivery and independent verification of the settled result.",
-  "version": "2026.08.30.2",
+  "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
+  "version": "2026.09.14.15",
   "product_pillars": [
     "code",
     "work"
   ],
   "readme": "README.md",
   "selector": {
-    "summary": "Use Base for one compact Task planned once, executed by capability-matched owners, then independently verified against the settled result.",
-    "selection_guidance": "Select Base when one Planner can partition the complete Task into capability-matched implementation and acceptance ownership. Use the research workflow only for a complete independent read/web partition; use the execution workflow when source discovery requires a project Skill, command, client, or mutating browser. Select Advanced or a domain Squad when evidence dependencies require a richer graph.",
+    "summary": "Use Base for one complete Task executed by one capable owner and independently verified against the actual outcome.",
+    "selection_guidance": "Choose execution-verification when delivery has no material dynamic business-source prerequisite before mutation, or when the operation is reversible and one execution owner can safely resolve ordinary current facts. Choose source-planned-execution-verification when an irreversible mutation depends on current source authority absent from the request; classify only traceable execution-authority conditions and applicable constraints, while destination outcome semantics and contract-required execution dependencies remain with Developer. Choose the parallel research workflow only for a useful independent repository/web partition. Specialized or genuinely richer dependencies belong to their domain Squad or Advanced.",
     "instructions": "selector.md"
   },
   "capability_sets": {
@@ -82,7 +82,7 @@
           "capability:tool:platform:tool-registry:websearch"
         ],
         "label": "Base Planner",
-        "description": "Publishes one capability-matched Task implementation plan after read-only current-authority discovery, without mutating external state, editing product files, or creating Goal-derived planning facts.",
+        "description": "Classifies and resolves only traceable pre-mutation execution authority and applicable source constraints, while leaving destination outcome semantics and contract-required execution dependencies to Developer, or allocates a justified parallel research and implementation partition.",
         "base_role": "delegated-worker",
         "prompt": "agents/base-planner/system.md"
       },
@@ -92,7 +92,7 @@
           "capability:capability_set:platform:tool-registry:build-base"
         ],
         "label": "Base Developer",
-        "description": "Consumes the selected Base implementation plan, changes the repository, performs implementation-owned checks, and publishes the development report.",
+        "description": "Owns destination discovery, actual repository or external-state delivery, complete mutation-receipt handoff, and self-checks.",
         "base_role": "build",
         "prompt": "agents/base-developer/system.md"
       },
@@ -102,31 +102,49 @@
           "capability:capability_set:platform:tool-registry:delegated-worker-base"
         ],
         "label": "Base Tester",
-        "description": "Independently verifies the settled implementation against the original request and the plan's acceptance criteria through the final diff, executable checks, and rendered evidence, and publishes the canonical test report.",
+        "description": "Independently maps original requirements and source rules to the settled result, including raw Host-recorded mutation receipts when no correct same-record read exists.",
         "base_role": "delegated-worker",
         "prompt": "agents/base-tester/system.md"
       }
     },
     "virtual_workflows": {
-      "planner-execution-verification": {
-        "label": "Planner, Execution, and Verification",
-        "description": "Plan once, execute source discovery and delivery with a command-capable owner, then independently verify the settled result.",
+      "execution-verification": {
+        "label": "Execution and Independent Verification",
+        "description": "One capable owner discovers, plans, executes, and checks the result; an independent Tester verifies the settled outcome.",
+        "nodes": {
+          "base-developer": {
+            "agent_id": "base-developer",
+            "description": "Uses projected Skills and executable tools to resolve bounded source facts, plan, execute, and self-check one compact delivery.",
+            "depends_on": []
+          },
+          "base-tester": {
+            "agent_id": "base-tester",
+            "description": "Independently rereads dynamic sources and verifies the settled result criterion by criterion.",
+            "depends_on": [
+              "base-developer"
+            ]
+          }
+        }
+      },
+      "source-planned-execution-verification": {
+        "label": "Source Planning, Execution, and Independent Verification",
+        "description": "Classify traceable source authority and applicable constraints through a bounded minimal-anchor worklist, execute each irreversible mutation whose real prerequisites are resolved, then independently verify the classification and settled outcome.",
         "nodes": {
           "base-planner": {
             "agent_id": "base-planner",
-            "description": "Publishes the complete Task-element inventory, discovery obligations, capability allocation, and acceptance contract.",
+            "description": "Separates execution-authority conditions, applicable constraints, and Developer-owned outcome semantics and destination execution dependencies; resolves traceable source obligations through a bounded minimal-anchor worklist before mutation.",
             "depends_on": []
           },
           "base-developer": {
             "agent_id": "base-developer",
-            "description": "Uses projected Skills and executable tools to discover dynamic sources and complete the requested delivery.",
+            "description": "Reconciles per-operation source classes with original authority, owns destination discovery for operations whose real prerequisites are resolved, performs the authorized mutation, and hands off the complete Host-recorded receipt.",
             "depends_on": [
               "base-planner"
             ]
           },
           "base-tester": {
             "agent_id": "base-tester",
-            "description": "Independently rereads dynamic sources and verifies the settled result criterion by criterion.",
+            "description": "Independently checks source classifications and coordinates against original authority, then maps applicable rules and outcome semantics to the raw mutation receipt and any correct same-record destination read.",
             "depends_on": [
               "base-developer"
             ]

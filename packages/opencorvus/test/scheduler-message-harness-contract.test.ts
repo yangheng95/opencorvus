@@ -23,7 +23,8 @@ describe("scheduler message model harness", () => {
       "Send the correlated reply, then end the response immediately so the Session can accept the next durable inbox",
       "end the response immediately so the Session can accept the next durable inbox",
       "complete only that exact fact's causal closure in this response",
-      "call them in that causal order, without copying any terminal event ID",
+      "deduplicate the current-decision Orchestrator identity with every decision-named `session_message` identity",
+      "continue only from returned `next_messages` while `complete=false`",
       "the Host binds the exact persisted query row",
       "execute every newly ready consumer dispatch or exact-Task recovery made due by that fact",
       "If accepting that exact Task makes final Mission completion due, expand this causal closure only to completion",
@@ -37,12 +38,17 @@ describe("scheduler message model harness", () => {
       "Mission state records only authored stage graph, ownership, acceptance judgment, dependency frontier, force-majeure blocker, next-wake action, and operator-visible outcome",
       "If none of those authored facts changes, do not call `mission_state`",
       "include every exact authored file thereby made stale in one `mission_state` commit",
-      "use the callable `panel_query_task`, `panel_query_task_artifacts`, and `panel_read_task_artifact` tools",
+      "call `panel_query_task`, enumerate and read the current Completion Decision plus every acceptance Artifact required by the original request or stage contract",
+      "An earlier plan's stage-local statement that execution had not happened cannot establish a present omission",
+      "Persistent user constraints, authoritative source facts, and contradictions not resolved by later concrete evidence still require independent judgment",
       "call the already-callable `publish_interactive_artifact` in the final assistant turn",
       "After publication succeeds, call the already-callable `panel_complete_mission`",
       "complete with the retained Host-minted read references",
       "An unchanged accepted terminal Task is not queried or read again",
       "End the response only after that exact causal closure reaches its next durable stop",
+      "Do not turn a product field, proof channel, report, or verification surface",
+      "repeating an already exhausted read surface is not a repair action",
+      "A current authoritative source rule plus a conforming observed final state can prove a final-state obligation",
     ]
 
     expect(requiredMissionGuidance.map((clause) => MISSION_CORE.includes(clause))).toEqual(
@@ -62,6 +68,8 @@ describe("scheduler message model harness", () => {
       "It never closes, suspends, or supplies future progress for a non-terminal Task",
       "A scheduler reply or notification does not itself provide future Task progress",
       "A Mission acceptance resume always opened a new non-terminal repair occurrence",
+      "both fields belong inside `dispatch.turn`, beside `kind`",
+      "Do not repeat an already exhausted read surface",
       "send its correlated reply and make that lifecycle decision in the same wake",
       "bind that evidence with one `session` locator naming the current Orchestrator Session",
       "scheduler Protocol event IDs are not coordination-request evidence",
@@ -70,6 +78,9 @@ describe("scheduler message model harness", () => {
       "Each authoritative input starts with its authorized routine tools already callable",
       "Use the callable `scheduler_message` and `no_action` tools",
       "use the callable `scheduler_message` and `manage_task` tools",
+      "Final Tool parts and the paged causal Tool Message/Part inventory expose only bounded, structured-redacted metadata",
+      "use only a necessary `message_id` and `part_id` returned by that final's inventory in this or an earlier call with `evidence_reads`",
+      "select `field=input`, `output`, or `failure`",
     ]
 
     expect(requiredOrchestratorGuidance.map((clause) => ORCHESTRATOR_CORE.includes(clause))).toEqual(

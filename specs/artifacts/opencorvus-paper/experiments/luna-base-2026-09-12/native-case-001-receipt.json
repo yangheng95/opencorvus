@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "kind": "first_new_native_case_acceptance",
+  "source_directory": "/var/lib/opencorvus-benchmark/reproduction-20260912/native/case-001-attempt-1",
+  "case_index": 1,
+  "run_id": "7b65e085-edc2-42c4-af2d-b266e294a2ba",
+  "model": "openai/gpt-5.6-luna",
+  "request_models": [
+    "gpt-5.6-luna"
+  ],
+  "reasoning_effort": "medium",
+  "runtime_revision": "17bc3f63fc2ed0e2d4953e50811ee106882fd8fe",
+  "manifest_sha256": "43ca54925db11d7dc6d9c5b80bbd32aed9b6c93ea92a2d1b8225a0858036ff42",
+  "duration_ms": 133417,
+  "response_steps": 23,
+  "tool_attempts": 46,
+  "strict": 1,
+  "partial": 1,
+  "usage": {
+    "inputTokens": 365061,
+    "inputTokenDetails": {
+      "noCacheTokens": 273413,
+      "cacheReadTokens": 91648
+    },
+    "outputTokens": 3278,
+    "outputTokenDetails": {
+      "textTokens": 2620,
+      "reasoningTokens": 658
+    },
+    "totalTokens": 368339,
+    "reasoningTokens": 658,
+    "cachedInputTokens": 91648
+  },
+  "official_replay": {
+    "schema_version": 1,
+    "passed": true,
+    "example_id": 1207,
+    "checks": {
+      "partial_credit": true,
+      "task_completed_correctly": true,
+      "assertion_results": true,
+      "end_state_sha256": true,
+      "scorer_world_stable": true,
+      "tool_attempts": true,
+      "tool_succeeded": true,
+      "tool_failed": true,
+      "world_transition_chain": true
+    },
+    "stateful_calls_verified_by_hash_chain": 35,
+    "replayed_non_stateful_calls": 11,
+    "skipped_non_stateful_calls": 0
+  },
+  "credential_scan_passed": true,
+  "files": [
+    {
+      "path": "input.json",
+      "bytes": 5805,
+      "sha256": "c598b2ce407cb36e03c9c0393ace6e187559018fe21729afb43a5369fa354772"
+    },
+    {
+      "path": "replay-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "result.json",
+      "bytes": 3155,
+      "sha256": "9587d1a1d71b0555fa6067ccccd14f3b6ae2abf1a8ce330c493b18f08820c573"
+    },
+    {
+      "path": "run-start.json",
+      "bytes": 212,
+      "sha256": "64d0032710cafd70723c5c606927b82b7c90742293631ba3b4b71b2b827bec78"
+    },
+    {
+      "path": "steps.jsonl",
+      "bytes": 2105279,
+      "sha256": "d66d3e7e676358deffc7c64301b40c2e47c3426bcb3c176ad7e3755350760497"
+    },
+    {
+      "path": "stream.jsonl",
+      "bytes": 2283221,
+      "sha256": "772dda6be6ac060d821deb043363d2672c7199781ee0c9b7110fdff5660502f6"
+    },
+    {
+      "path": "tool-results.jsonl",
+      "bytes": 110769,
+      "sha256": "a6d5c27f9eab66bade855c0566e877f202facfe9906e4e49ec4184e0537d89db"
+    },
+    {
+      "path": "world/automationbench-events.jsonl",
+      "bytes": 23507,
+      "sha256": "d11b3455c32a2e93b45310b241a0623499046850f9aa89cb43d47760671f0884"
+    },
+    {
+      "path": "world/automationbench-final-world.json",
+      "bytes": 18646,
+      "sha256": "0d39ef8211cf7348bc36f933e9b57b77b46998eb06b34c25c816093469cb4354"
+    },
+    {
+      "path": "world/automationbench-initial-world.json",
+      "bytes": 17560,
+      "sha256": "9c7da44be8b4b11b14999b4175a362616fa574f6a8450f3bc2c31680fec4c92e"
+    },
+    {
+      "path": "world/official-score.json",
+      "bytes": 1883,
+      "sha256": "efbef7d80d5db04e9202efd791c85f6fa912ecd0e3c1a284a759379ac75f09ac"
+    }
+  ],
+  "limitations": [
+    "Single-case chain validation, not the paired 100-case aggregate",
+    "Base paired outcome is not yet available"
+  ]
+}

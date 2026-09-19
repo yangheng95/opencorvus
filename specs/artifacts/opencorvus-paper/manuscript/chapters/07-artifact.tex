@@ -1,0 +1,41 @@
+\section{Implementation Mapping and Reproduction}\label{sec:implementation}
+\paragraph{Source boundary.}
+The inspected implementation is \oc{} revision \code{bd2d6bd18eda} \citep{ocsource}. The accompanying source map records the full revision identifier, exact files, and symbols. Source inspection establishes declared representations and checked code paths; it does not supply task-success measurements. Historical project claims are not substituted for controlled executions.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}lYY@{}}
+\toprule
+Method component & Implementation anchor & Scope \\
+\midrule
+Organization & \code{research-studio/expert-squad.jsonc} & Five expert roles, declared capabilities, procedural resources, and report workflow. \\
+Task binding & \code{task-package-revision-binding.ts} & Exact package revision recorded for a task. \\
+Candidate space & \code{expert-squad-evolution-integrity.ts} & Declared path, graph, inherited-reference, and frozen-file checks. \\
+Candidate publication & \code{publish-evolution-artifact.ts} & Identities and differences derived from validated parent/candidate resource sets. \\
+Trial specification & \code{expert-squad-evolution-artifact.ts} & Cases, repetitions, scorer and environment identities, partitions, and budgets. \\
+Comparison & Evolution Lab \code{comparison.ts} & Matched evidence, score differences, uncertainty summaries, and recommendation. \\
+Retained history & \code{expert-squad-evolution-history.ts} & Exact revision and comparison-context identity checks. \\
+\bottomrule
+\end{tabularx}
+\caption{Source correspondence for the EEO method. Full repository-relative paths are in the distributed source map.}
+\label{tab:implementation}
+\end{table}
+
+
+
+\paragraph{Generator and validator.}
+The candidate-author prompt and Evolution Lab README specify mutation of eligible text resources and enumerated descriptive manifest fields, with fixed role structure, workflow dependencies, capability allocations, and resource paths. The production integrity comparator accepts a broader manifest-edit space and checks its structural consistency. Equation~\ref{eq:mutation} denotes the proposal distribution under the narrower prompt policy; the EEO--text study additionally checks realized diffs for arm eligibility. Equations~\ref{eq:capability}--\ref{eq:frozen} describe the implemented acceptance relation. The function's returned mutable-path list is the parent's text closure, whereas the comparison itself uses the union of parent and candidate closures. This distinction matters when a candidate adds a declared text resource.
+
+\paragraph{Operational comparison statistics.}
+The implementation computes per-scorer paired means, medians, sample variances, and approximate Student-$t$ intervals by pooling case--repetition slots. It does not adjust the standard error for task or source clusters. When slots share such dependence, even a single-scorer interval is an operational search summary rather than a calibrated population interval. It uses tabulated quantiles up to 30 degrees of freedom and a normal approximation beyond that. With fewer than two paired values, a serialized point interval is accompanied by an internal insufficiency condition and cannot support a confidence claim. The aggregate interval combines scaled scorer half-widths in quadrature. Correlated scorers evaluated on the same runs need not satisfy the independence approximation underlying that aggregation. The operational recommendation therefore does not provide the confirmatory guarantee of Equation~\ref{eq:bound}. The preliminary result reports the strict task-level metric without applying these operational intervals as population confidence statements.
+
+\paragraph{Retention semantics.}
+The comparison returns inconclusive when required comparison evidence or required visual review is unavailable, or when reviewed findings identify reward hacking. Its selection rule requires a positive aggregate lower endpoint, no identified scorer regression, and no increase in candidate failures. These are operational criteria; retention-set performance is an additional research outcome. A feedback-authored package revision follows an explicit user-acceptance path without an empirical comparison. Version activation is a deployment operation and cannot substitute for evidence that the organization learned.
+
+\paragraph{Execution evidence.}
+Persistent ownership and revision-specific artifact records support the source attribution required by Equation~\ref{eq:experience}. Publication provenance can combine eligible preceding action or turn evidence with evidence from the current tool invocation. A declared-source read record does not by itself establish that every semantically necessary source was declared, nor that the artifact's claims are correct. Review must identify the exact output revision being assessed. These boundaries motivate independent domain checkers without turning runtime bookkeeping into the main research contribution.
+
+\paragraph{Minimum result bundle.}
+A reproducible campaign contains the parent and every candidate package; development and test partition manifests; all trial slots including failed and rejected attempts; model, workspace, tool, permission, and scorer identities; per-task scores and costs; official per-assertion decisions and initial/final states; independent review instructions and verdicts; and the final selection record. Credentials and private source content are excluded from the public bundle, with access restrictions and reproducible substitutes documented where necessary. Exact sample counts, budget values, and execution commands belong to the frozen campaign record. This paragraph specifies the evidence required for a reproducible future campaign; it does not assert that this full bundle exists for the reported 100-case run.
+
+\paragraph{Figure and manuscript reproduction.}
+The three figures are original color raster assets generated from the accompanying prompt set and included by small LaTeX wrappers. Their structures, trial cells, and worked example represent declared responsibilities and information flow, not measured performance. The figure record identifies the generation mode, visual references, selected-file hashes, and review decisions. The underlying images contain rasterized labels, so wording changes require regenerating the relevant asset and visually checking it again. The manuscript uses the official ICLR 2027 style files without modifying the downloaded originals. Build instructions, reference verification, and final PDF checks accompany the source.

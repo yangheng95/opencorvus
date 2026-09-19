@@ -337,8 +337,10 @@ export namespace Plugin {
     const active = pluginModulePublications.get(artifact.revision)
     if (active) return active
     const publication = (async () => {
-      const outdir = path.join(Global.Path.cache, "plugin-modules", "bundle-v1")
-      const target = path.join(outdir, `${artifact.revision}.mjs`)
+      // Compiled Bun caches directory entries after an import. Publish each new
+      // immutable revision in its own directory before resolving that directory.
+      const outdir = path.join(Global.Path.cache, "plugin-modules", "bundle-v1", artifact.revision)
+      const target = path.join(outdir, "index.mjs")
       await mkdir(outdir, { recursive: true })
       const existing = await readFile(target).catch((error: NodeJS.ErrnoException) => {
         if (error.code === "ENOENT") return undefined

@@ -1,0 +1,519 @@
+{
+  "schema_version": 1,
+  "condition": {
+    "workflow": "execution-verification",
+    "executor": "base-developer",
+    "verifier": "base-tester"
+  },
+  "cases": [
+    {
+      "case_index": 1,
+      "run_id": "f6494719-626a-4c19-896c-b2ccddd2811a",
+      "source_status": "invalid",
+      "runtime_commit": "134d34336cdb19c90d96ac49640c0746556a3f0f",
+      "condition_satisfied": true,
+      "tasks": [
+        {
+          "task_id": "tsk_g00VV1W7RH007gSQK6tk",
+          "satisfied": true,
+          "issues": [],
+          "initial_dispatches": [
+            {
+              "target": "base-developer",
+              "subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "execution-verification",
+                "node_id": "base-developer"
+              },
+              "part_id": "prt_g0VV1WH9Y00JYgzMWAZO",
+              "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+              "receipt_kind": "accepted",
+              "lineage_id": "art_g0VV1WIDV00kUHgKtElg",
+              "producer_session_id": "ses_-zUUyTsM6zzDtd7tWb0T",
+              "producer_message_id": "msg_hNj5cqI5PR8RkBqDJd93",
+              "call_id": "call_GdKwskTsPKmr0hqZG9acEdLL",
+              "final_message_id": null,
+              "tool_name": "dispatch_agent",
+              "collection_member_index": null,
+              "collection_member_count": null
+            },
+            {
+              "target": "base-tester",
+              "subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "execution-verification",
+                "node_id": "base-tester"
+              },
+              "part_id": "prt_g0VV1XOER00lrVShjFSH",
+              "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+              "receipt_kind": "accepted",
+              "lineage_id": "art_g0VV1XPCA008AUpdPk2G",
+              "producer_session_id": "ses_-zUUyTsM6zzDtd7tWb0T",
+              "producer_message_id": "msg_hfPTeVMsLBrX8xQqOUEn",
+              "call_id": "call_riKMwYC6zMILbdp77eK8j2a4",
+              "final_message_id": null,
+              "tool_name": "dispatch_agent",
+              "collection_member_index": null,
+              "collection_member_count": null
+            }
+          ],
+          "occurrences": [
+            {
+              "agent": "base-developer",
+              "sessionID": "ses_hIIYdaz6FJD5nUvcgFCV",
+              "inputMessageID": "msg_g0VV1WIIh00F6OmaTShd",
+              "preparedAt": 1789229894095,
+              "latest": {
+                "eventID": "pev_g0VV1XCKH002hCTsTioh",
+                "sequence": 78,
+                "status": {
+                  "type": "terminal",
+                  "reason": "completed"
+                },
+                "emittedAt": 1789230109440
+              }
+            },
+            {
+              "agent": "base-tester",
+              "sessionID": "ses_hAYs1R1oef6jL2BQPAtl",
+              "inputMessageID": "msg_g0VV1XPIc00p2evEoTMT",
+              "preparedAt": 1789230159320,
+              "latest": {
+                "eventID": "pev_g0VV1Ya3d00DNwpBJa3R",
+                "sequence": 171,
+                "status": {
+                  "type": "terminal",
+                  "reason": "completed"
+                },
+                "emittedAt": 1789230438993
+              }
+            }
+          ]
+        }
+      ],
+      "recorded_metrics": null,
+      "manifest_sha256": "eb13e4b8de77fc13f3293492bf08823f8c71bbd59ab7f1c4c6588101b034d416",
+      "input_sha256": {
+        "result.json": "e2db16c77e3044cd70e78f9efc60e25fe6b005a8f8a16c8d11ff902bd77c1228",
+        "terminal-board.json": "db4553b1efa8d83ab3b5ca1b05c03ba8e9f3a48f110fbb033576a866a101aea8",
+        "task-transcripts.json": "55b143f72809b3d8b307fe63a9444a4cf9c3431553a254f52261a0a1d7407886",
+        "run-start.json": "d67758959c8371eae3e362051c3d85936d0f642ccf323142b7f97364ee46b4d8",
+        "runtime-database-snapshot.json": "b8fa11b2bbaea8832e08666ebb0d2de6d9715491978cf3a20173b665dd209bcf"
+      }
+    },
+    {
+      "case_index": 2,
+      "run_id": "26c90986-febf-483c-a1a1-0dc7e7c5db4f",
+      "source_status": "invalid",
+      "runtime_commit": "134d34336cdb19c90d96ac49640c0746556a3f0f",
+      "condition_satisfied": true,
+      "tasks": [
+        {
+          "task_id": "tsk_g00VV1WDap00ovDJJae2",
+          "satisfied": true,
+          "issues": [],
+          "initial_dispatches": [
+            {
+              "target": "base-developer",
+              "subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "execution-verification",
+                "node_id": "base-developer"
+              },
+              "part_id": "prt_g0VV1WKN800pfqdquoqQ",
+              "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+              "receipt_kind": "accepted",
+              "lineage_id": "art_g0VV1WLM9008O7hfQfkE",
+              "producer_session_id": "ses_-zUUyTmCUzzxWiDOx6bx",
+              "producer_message_id": "msg_h235Jqt4u6Gw1BiJynai",
+              "call_id": "call_ezqm3es8GoWf4CCGdUPRp3NF",
+              "final_message_id": null,
+              "tool_name": "dispatch_agent",
+              "collection_member_index": null,
+              "collection_member_count": null
+            },
+            {
+              "target": "base-tester",
+              "subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "execution-verification",
+                "node_id": "base-tester"
+              },
+              "part_id": "prt_g0VV1Xm6h00akPPF5Bnt",
+              "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+              "receipt_kind": "accepted",
+              "lineage_id": "art_g0VV1XnGk00alDWtTabs",
+              "producer_session_id": "ses_-zUUyTmCUzzxWiDOx6bx",
+              "producer_message_id": "msg_h3rAnWsvmzqxaaXzkxkG",
+              "call_id": "call_HwEOZtCudjqMtNeTH6uxHPSy",
+              "final_message_id": null,
+              "tool_name": "dispatch_agent",
+              "collection_member_index": null,
+              "collection_member_count": null
+            }
+          ],
+          "occurrences": [
+            {
+              "agent": "base-developer",
+              "sessionID": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+              "inputMessageID": "msg_g0VV1WLQm0035PbwWapr",
+              "preparedAt": 1789229906130,
+              "latest": {
+                "eventID": "pev_g0VV1XaTI0060tlNyZF5",
+                "sequence": 86,
+                "status": {
+                  "type": "terminal",
+                  "reason": "completed"
+                },
+                "emittedAt": 1789230202256
+              }
+            },
+            {
+              "agent": "base-tester",
+              "sessionID": "ses_hJ3OZanTxqD93j1uqKOC",
+              "inputMessageID": "msg_g0VV1XnIX00AAMb07VJm",
+              "preparedAt": 1789230251574,
+              "latest": {
+                "eventID": "pev_g0VV1YirU00vJOWLfUvY",
+                "sequence": 165,
+                "status": {
+                  "type": "terminal",
+                  "reason": "completed"
+                },
+                "emittedAt": 1789230472836
+              }
+            }
+          ]
+        }
+      ],
+      "recorded_metrics": null,
+      "manifest_sha256": "f1ab9f2eb2282a4357772691bd787c7e5cd1ffea4f0ef855ed2cb2bddc4ab3dd",
+      "input_sha256": {
+        "result.json": "d2b44cccf4d72b3c890aeb9c41e108450cbb221f3193626aead8ad5ad7c9d8c6",
+        "terminal-board.json": "e989db49472641d87c7adc8d56232176b20494c0e18726cc3ea23d51ce7c1029",
+        "task-transcripts.json": "382f70a93dfdeb59814f3c4ea0ac9a4cab1528b319d32f6b766e489e640818ad",
+        "run-start.json": "12bd28e71f5fa683a2e4ed9a4ab5f17690c668a78ec8a4a0451b95537c8a1466",
+        "runtime-database-snapshot.json": "ce54c664b81b520aa546f3db17d76d710166696f0f1eb813c32065ef98ba6034"
+      }
+    },
+    {
+      "case_index": 3,
+      "run_id": "bafd304d-0f02-486d-8520-eb1cf08723ad",
+      "source_status": "invalid",
+      "runtime_commit": "134d34336cdb19c90d96ac49640c0746556a3f0f",
+      "condition_satisfied": true,
+      "tasks": [
+        {
+          "task_id": "tsk_g00VV1c9KR00hywn1tJl",
+          "satisfied": true,
+          "issues": [],
+          "initial_dispatches": [
+            {
+              "target": "base-developer",
+              "subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "execution-verification",
+                "node_id": "base-developer"
+              },
+              "part_id": "prt_g0VV1cUOB001kq7iqYbq",
+              "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+              "receipt_kind": "accepted",
+              "lineage_id": "art_g0VV1cXM100UqYlt2KOO",
+              "producer_session_id": "ses_-zUUyNqTszzOMUD4SmvH",
+              "producer_message_id": "msg_h4i5ZadoVdS28c99eOsJ",
+              "call_id": "call_Eo0ZZcVbHqsfmIZ6Rr4IbtJv",
+              "final_message_id": null,
+              "tool_name": "dispatch_agent",
+              "collection_member_index": null,
+              "collection_member_count": null
+            },
+            {
+              "target": "base-tester",
+              "subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "execution-verification",
+                "node_id": "base-tester"
+              },
+              "part_id": "prt_g0VV1dg6H00v52NwcV5e",
+              "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+              "receipt_kind": "accepted",
+              "lineage_id": "art_g0VV1dip800hXWD1sP8E",
+              "producer_session_id": "ses_-zUUyNqTszzOMUD4SmvH",
+              "producer_message_id": "msg_hK1eomkSG1gD88Rtg1y6",
+              "call_id": "call_4c3g0EqBIJhHSxkV0pOZI3MQ",
+              "final_message_id": null,
+              "tool_name": "dispatch_agent",
+              "collection_member_index": null,
+              "collection_member_count": null
+            }
+          ],
+          "occurrences": [
+            {
+              "agent": "base-developer",
+              "sessionID": "ses_hJzW8Zzrg7NLSikcaNou",
+              "inputMessageID": "msg_g0VV1cXS000UZiaTuN55",
+              "preparedAt": 1789231382303,
+              "latest": {
+                "eventID": "pev_g0VV1dRzi000u1A1Idqp",
+                "sequence": 81,
+                "status": {
+                  "type": "terminal",
+                  "reason": "completed"
+                },
+                "emittedAt": 1789231599637
+              }
+            },
+            {
+              "agent": "base-tester",
+              "sessionID": "ses_h9cJAYNqXeIUMjyxG3LM",
+              "inputMessageID": "msg_g0VV1diqw00nD26sqCYV",
+              "preparedAt": 1789231664457,
+              "latest": {
+                "eventID": "pev_g0VV1esAA00dVgmLumOB",
+                "sequence": 166,
+                "status": {
+                  "type": "terminal",
+                  "reason": "completed"
+                },
+                "emittedAt": 1789231938557
+              }
+            }
+          ]
+        }
+      ],
+      "recorded_metrics": null,
+      "manifest_sha256": "5f2eddf4d37251ae314244f3bdf08a201594d6277095e4fa6f91c23b48f3d3e4",
+      "input_sha256": {
+        "result.json": "579ed44b6c0a62d72d1a7f00f7f8823f985bea0e265e1bd9c23e60a25d1e8b0d",
+        "terminal-board.json": "16f8a7181b9185bb81d1fda226b8d917c3c74285165c7d93f321c0f65174d492",
+        "task-transcripts.json": "2be1c71df3cb6fa14919b74b34bcb9c461fbad90fbed83c92757f1e07af1a36b",
+        "run-start.json": "729da96c62e8ee228690e45100089aea45df949ea2ea824b7059e03a2711ac24",
+        "runtime-database-snapshot.json": "f2cc4b29229a8f46ae94c180fa2e6f624e4688d0665e4ce92be0864e32da879d"
+      }
+    },
+    {
+      "case_index": 4,
+      "run_id": "8991ace3-64bb-4a52-8a1a-cded3e571fcb",
+      "source_status": "invalid",
+      "runtime_commit": "134d34336cdb19c90d96ac49640c0746556a3f0f",
+      "condition_satisfied": true,
+      "tasks": [
+        {
+          "task_id": "tsk_g00VV1cEzp00BvZ9fLbl",
+          "satisfied": true,
+          "issues": [],
+          "initial_dispatches": [
+            {
+              "target": "base-developer",
+              "subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "execution-verification",
+                "node_id": "base-developer"
+              },
+              "part_id": "prt_g0VV1cKxk00TA1SuTN7D",
+              "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+              "receipt_kind": "accepted",
+              "lineage_id": "art_g0VV1cLx900bFtUB7a3i",
+              "producer_session_id": "ses_-zUUyNko6zz3GcLtmtXi",
+              "producer_message_id": "msg_h3FXcNDNtHLw1IP9UwYD",
+              "call_id": "call_FwenRXP50qc3Bx6POfctYdhk",
+              "final_message_id": null,
+              "tool_name": "dispatch_agent",
+              "collection_member_index": null,
+              "collection_member_count": null
+            },
+            {
+              "target": "base-tester",
+              "subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "execution-verification",
+                "node_id": "base-tester"
+              },
+              "part_id": "prt_g0VV1dTZJ00UDdS6vDgD",
+              "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+              "receipt_kind": "accepted",
+              "lineage_id": "art_g0VV1dW3u00bycGw65O8",
+              "producer_session_id": "ses_-zUUyNko6zz3GcLtmtXi",
+              "producer_message_id": "msg_hhtWe3713eVD1bDDicfm",
+              "call_id": "call_unWvm4709QvKJQHFRw9PeCYl",
+              "final_message_id": null,
+              "tool_name": "dispatch_agent",
+              "collection_member_index": null,
+              "collection_member_count": null
+            }
+          ],
+          "occurrences": [
+            {
+              "agent": "base-developer",
+              "sessionID": "ses_hP7Qk8fDmH6qsFiYSBca",
+              "inputMessageID": "msg_g0VV1cM1500XuuQAWlZQ",
+              "preparedAt": 1789231338348,
+              "latest": {
+                "eventID": "pev_g0VV1dFcd00yPnWLNx2B",
+                "sequence": 72,
+                "status": {
+                  "type": "terminal",
+                  "reason": "completed"
+                },
+                "emittedAt": 1789231552078
+              }
+            },
+            {
+              "agent": "base-tester",
+              "sessionID": "ses_hLjgWwaNkEG7GjLsf9bM",
+              "inputMessageID": "msg_g0VV1dW5w00DBBa0CA31",
+              "preparedAt": 1789231615415,
+              "latest": {
+                "eventID": "pev_g0VV1e84p00yMuXt7CZY",
+                "sequence": 125,
+                "status": {
+                  "type": "terminal",
+                  "reason": "completed"
+                },
+                "emittedAt": 1789231761403
+              }
+            }
+          ]
+        }
+      ],
+      "recorded_metrics": null,
+      "manifest_sha256": "f149fcaf8e1eb6f30eb910b838ccc3ebe9048d788d337bc877d62a3e2e5bdbf2",
+      "input_sha256": {
+        "result.json": "c5843863673db449b01581f9519a45659c3bdfabf6eacfc2179e2064a279ab77",
+        "terminal-board.json": "5069c832d1ebd5ff0e1de82bc849a2186cb523490277effaea6074d1e74bd065",
+        "task-transcripts.json": "d8d52505b582181ee5e8de0e1b70ea0ff22f6c135750555dc0d27a4dfdf1b7b4",
+        "run-start.json": "78bd947c560e6b36a19fa5f08e4d39ad30e0c491b0b680069d24d91fceb4b3ff",
+        "runtime-database-snapshot.json": "45c46dfc22b0a985d72fad6d10a4dcce2297092cf3277151807094761627e083"
+      }
+    },
+    {
+      "case_index": 5,
+      "run_id": "6a2b7c47-0fc0-4545-a8ec-c6e9e0619125",
+      "source_status": "invalid",
+      "runtime_commit": "134d34336cdb19c90d96ac49640c0746556a3f0f",
+      "condition_satisfied": true,
+      "tasks": [
+        {
+          "task_id": "tsk_g00VV1ho3v00acHv720G",
+          "satisfied": true,
+          "issues": [],
+          "initial_dispatches": [
+            {
+              "target": "base-developer",
+              "subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "execution-verification",
+                "node_id": "base-developer"
+              },
+              "part_id": "prt_g0VV1huRG005TbkB9yKM",
+              "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+              "receipt_kind": "accepted",
+              "lineage_id": "art_g0VV1hvSv00cLdm8930V",
+              "producer_session_id": "ses_-zUUyIBk3zz4Eg4RMirn",
+              "producer_message_id": "msg_hWlsNigRghbpUtTjyeRL",
+              "call_id": "call_bZDzv1sqSMTZHwfBIfhhTvlE",
+              "final_message_id": null,
+              "tool_name": "dispatch_agent",
+              "collection_member_index": null,
+              "collection_member_count": null
+            },
+            {
+              "target": "base-tester",
+              "subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "execution-verification",
+                "node_id": "base-tester"
+              },
+              "part_id": "prt_g0VV1jt3E00Gx2znG6cK",
+              "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+              "receipt_kind": "accepted",
+              "lineage_id": "art_g0VV1juMS002YmJ009Ey",
+              "producer_session_id": "ses_-zUUyIBk3zz4Eg4RMirn",
+              "producer_message_id": "msg_hWbNOnBZnYKJ1FH1bggL",
+              "call_id": "call_IsOn5O0isymNNR9yzHnu4kNQ",
+              "final_message_id": null,
+              "tool_name": "dispatch_agent",
+              "collection_member_index": null,
+              "collection_member_count": null
+            }
+          ],
+          "occurrences": [
+            {
+              "agent": "base-developer",
+              "sessionID": "ses_h3vgwy32JBwVPsJxk1bf",
+              "inputMessageID": "msg_g0VV1hvWh00In6E3P4c6",
+              "preparedAt": 1789232666485,
+              "latest": {
+                "eventID": "pev_g0VV1jkZN00N2TxhQSOd",
+                "sequence": 122,
+                "status": {
+                  "type": "terminal",
+                  "reason": "completed"
+                },
+                "emittedAt": 1789233101008
+              }
+            },
+            {
+              "agent": "base-tester",
+              "sessionID": "ses_hwZS8nfdpWHCRETjcH52",
+              "inputMessageID": "msg_g0VV1juQO00bPzvm8BP0",
+              "preparedAt": 1789233138909,
+              "latest": {
+                "eventID": "pev_g0VV1l1Md00o1E5vxvDN",
+                "sequence": 210,
+                "status": {
+                  "type": "terminal",
+                  "reason": "completed"
+                },
+                "emittedAt": 1789233403895
+              }
+            },
+            {
+              "agent": "base-developer",
+              "sessionID": "ses_h3vgwy32JBwVPsJxk1bf",
+              "inputMessageID": "msg_g0VV1lCRT00fuRe44G4T",
+              "preparedAt": 1789233446495,
+              "latest": {
+                "eventID": "pev_g0VV1lgDZ00vbzJQTbAY",
+                "sequence": 252,
+                "status": {
+                  "type": "terminal",
+                  "reason": "completed"
+                },
+                "emittedAt": 1789233560937
+              }
+            },
+            {
+              "agent": "base-tester",
+              "sessionID": "ses_hwZS8nfdpWHCRETjcH52",
+              "inputMessageID": "msg_g0VV1lqdM00qgQs1xLu9",
+              "preparedAt": 1789233600991,
+              "latest": {
+                "eventID": "pev_g0VV1mNlG001UvlSSc7L",
+                "sequence": 298,
+                "status": {
+                  "type": "terminal",
+                  "reason": "completed"
+                },
+                "emittedAt": 1789233728317
+              }
+            }
+          ]
+        }
+      ],
+      "recorded_metrics": null,
+      "manifest_sha256": "0207a49da019626d14fcaf5c9d0151b471fdc3a8632d6e9eb0ce21c838b7cf94",
+      "input_sha256": {
+        "result.json": "5ec65152231362b561e8be58427281d3e15a643c44f2de5d5d51786886bafe8f",
+        "terminal-board.json": "c98f364b614a35d68f26857fb3eaa71016a47c38754d561894874e2594a33156",
+        "task-transcripts.json": "80d780bc53848fc8c2ec140f3a3d51ff4361296dd63cbafdafc382d1706bdd07",
+        "run-start.json": "24edc978d4f1cc042db0c416fed0533a5aa33d930371aa1407dca7926b527ee7",
+        "runtime-database-snapshot.json": "8438c7c76f7e93cdfa92168f8310931df072e73f83ee8e7f638e2cc028fb56fd"
+      }
+    }
+  ],
+  "case_manifest_sha256": "43ca54925db11d7dc6d9c5b80bbd32aed9b6c93ea92a2d1b8225a0858036ff42",
+  "sample_count": 5,
+  "condition_satisfied_count": 5,
+  "scope": "Execution-condition audit only; recorded scores retained, no official score replay performed."
+}

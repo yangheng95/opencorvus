@@ -3,6 +3,8 @@ import type { Tool as AITool } from "ai"
 import z from "zod"
 import type { AgentDispatchAdapterID } from "./dispatch-adapter-contract"
 
+const StageToolMaterializerInput = z.record(z.string(), z.json())
+
 export const StageToolMaterializerBindingSchema = z
   .object({
     id: z.enum([
@@ -13,11 +15,15 @@ export const StageToolMaterializerBindingSchema = z
       "frontend-design.capture-visual-evidence",
     ]),
     revision: z.literal(1),
-    input: z.record(z.string(), z.unknown()),
+    input: StageToolMaterializerInput,
     inputSha256: z.string().regex(/^[a-f0-9]{64}$/),
   })
   .strict()
 export type StageToolMaterializerBinding = z.infer<typeof StageToolMaterializerBindingSchema>
+type StageToolMaterializerBindingInput = {
+  id: StageToolMaterializerBinding["id"]
+  input: Record<string, unknown>
+}
 
 const bindingSymbol = Symbol("opencorvus.stage-tool-materializer-binding")
 const internalSymbol = Symbol("opencorvus.internal-stage-tool-binding")
@@ -38,24 +44,33 @@ export function internalStageToolBindingOf(tool: object | undefined): InternalSt
   return tool && (tool as { [internalSymbol]?: InternalStageToolBinding })[internalSymbol]
 }
 
-function stable(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(stable)
+function stable(value: unknown, active = new Set<object>()): unknown {
   if (!value || typeof value !== "object") return value
-  return Object.fromEntries(
-    Object.entries(value as Record<string, unknown>)
-      .filter(([, item]) => item !== undefined)
-      .sort(([left], [right]) => left.localeCompare(right))
-      .map(([key, item]) => [key, stable(item)]),
-  )
+  const prototype = Object.getPrototypeOf(value)
+  if (active.has(value) || (!Array.isArray(value) && prototype !== Object.prototype && prototype !== null)) {
+    throw new TypeError("Stage Tool materializer input must be acyclic plain JSON data")
+  }
+  active.add(value)
+  try {
+    if (Array.isArray(value)) return value.map((item) => stable(item, active))
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>)
+        .filter(([, item]) => item !== undefined)
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([key, item]) => [key, stable(item, active)]),
+    )
+  } finally {
+    active.delete(value)
+  }
 }
 
 export function stageToolMaterializerInputSha256(input: Record<string, unknown>): string {
-  return createHash("sha256").update(JSON.stringify(stable(input))).digest("hex")
+  return createHash("sha256").update(JSON.stringify(StageToolMaterializerInput.parse(stable(input)))).digest("hex")
 }
 
 export function bindStageToolMaterializer<T extends object>(
   tool: T,
-  binding: Omit<StageToolMaterializerBinding, "revision" | "inputSha256">,
+  binding: StageToolMaterializerBindingInput,
 ): T {
   const parsed = createStageToolMaterializerBinding(binding)
   Object.defineProperty(tool, bindingSymbol, {
@@ -68,12 +83,15 @@ export function bindStageToolMaterializer<T extends object>(
 }
 
 export function createStageToolMaterializerBinding(
-  binding: Omit<StageToolMaterializerBinding, "revision" | "inputSha256">,
+  binding: StageToolMaterializerBindingInput,
 ): StageToolMaterializerBinding {
+  // Optional object fields have the same absent representation in memory and on the JSON wire.
+  const input = StageToolMaterializerInput.parse(stable(binding.input))
   const parsed = StageToolMaterializerBindingSchema.parse({
     ...binding,
+    input,
     revision: 1,
-    inputSha256: stageToolMaterializerInputSha256(binding.input),
+    inputSha256: stageToolMaterializerInputSha256(input),
   })
   return Object.freeze({ ...parsed, input: Object.freeze({ ...parsed.input }) })
 }

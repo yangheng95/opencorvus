@@ -14,6 +14,7 @@ import { Instance } from "../../src/project/instance"
 import { sendSchedulerMessage } from "../../src/protocol/scheduler-message"
 import type { Provider } from "../../src/provider/provider"
 import { Session } from "../../src/session"
+import { SessionLoop } from "../../src/session/loop"
 import { SessionProcessor } from "../../src/session/processor"
 import { SessionRuntimeContractStore } from "../../src/session/runtime-contract"
 import { bindRuntimeToolFactories, createRuntimeToolOwner } from "../../src/session/runtime-tool-owner"
@@ -21,19 +22,23 @@ import { readTaskArtifactRef } from "../../src/task-artifact/store"
 import { EngineService } from "../../src/task-api"
 import { resolveTestCapabilityTools } from "../fixture/capability-occurrence"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { canonicalDigestSource } from "../../src/util/canonical-digest"
 
 afterEach(async () => {
   await Instance.disposeAll()
   await resetMemoryDatabase()
 })
 
-for (const projected of [true, false]) {
-  test(`publishes immutable snapshot bytes on the first step through the ${projected ? "projected" : "registry"} Core owner`, async () => {
+for (const { projected, policy } of [true, false].flatMap((projected) =>
+  (["allow", "tool-switch", "session-deny", "skill-deny"] as const).map((policy) => ({ projected, policy })),
+)) {
+  test(`executes snapshots and exact scheduler Skills through the ${projected ? "projected" : "registry"} Core owner (${policy})`, async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         await fs.writeFile(path.join(project.path, "sample.txt"), "verified snapshot\n")
+        await Config.updateProjectPatch({ prompt_profile: { active: "base" } })
         const config = await Config.get()
         const { schedulerCapability: capability, skillProjection } =
           await PromptProfileResolver.resolveSchedulerTurnProjection({ projectDirectory: project.path, config })
@@ -54,8 +59,20 @@ for (const projected of [true, false]) {
           parentID: requireTask(taskID).session_id!,
           title: "Core artifact owner",
         })
+        if (policy === "session-deny" || policy === "skill-deny") {
+          await Session.setPermission({
+            sessionID: session.id,
+            permission: [
+              {
+                permission: "skill",
+                pattern: policy === "skill-deny" ? "base-delivery-method" : "*",
+                action: "deny",
+              },
+            ],
+          })
+        }
         const projectedToolIDs = capability.builtInToolIDs.filter(
-          (id) => id !== "capability_search" && (projected || id !== "artifact_snapshot"),
+          (id) => id !== "capability_search" && (projected || !["artifact_snapshot", "skill"].includes(id)),
         )
         const mcp = MCP.createScopedConnectionOwner(`core-artifact-owner-${session.id}`)
         try {
@@ -121,6 +138,15 @@ for (const projected of [true, false]) {
             time: { created: Date.now() },
             model: { providerID: model.providerID, modelID: model.id },
           })
+          await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: session.id,
+            messageID: user.id,
+            type: "text",
+            text: '@skill("base-delivery-method") Publish the exact sample file.',
+            source: "user",
+            kind: "user_content",
+          })
           const assistant = {
             id: Identifier.ascending("message"),
             parentID: user.id,
@@ -141,7 +167,7 @@ for (const projected of [true, false]) {
             model,
             abort: new AbortController().signal,
           })
-          const resolved = await resolveTestCapabilityTools({
+          const common = {
             config,
             model,
             session: await Session.get(session.id),
@@ -150,14 +176,44 @@ for (const projected of [true, false]) {
             agent: sessionRuntimeFromNativeAgent(await HostAgentRegistry.get("orchestrator", { config })),
             agentID: "orchestrator",
             messages: await Session.messages({ sessionID: session.id }),
-          })
+            ...(policy === "tool-switch" ? { tools: { skill: false } } : {}),
+          }
+          const resolved = await resolveTestCapabilityTools(common)
+          expect(typeof resolved.tools.evolve_expert_squad_from_feedback?.execute).toBe("function")
+          expect(resolved.occurrence.payload.permanent_provider_base_definition.provider_names)
+            .toContain("evolve_expert_squad_from_feedback")
+          if (policy === "allow" || policy === "skill-deny") {
+            expect(resolved.occurrence.payload.permanent_provider_base_definition.provider_names).toContain("skill")
+          }
+          if (policy === "allow") {
+            const baseDefinitionDigest =
+              resolved.occurrence.payload.permanent_provider_base_definition.definition_digest
+            const capabilityProjection = SessionLoop.capabilityProjectionForResolvedTools(resolved.tools)
+            expect({
+              revision: capabilityProjection?.revision,
+              activeSkillRef: capabilityProjection?.active_refs.find((ref) => ref.local_ref === "skill"),
+              activeDefinitionDigest: capabilityProjection?.active_definition_digest,
+            }).toEqual({
+              revision: 0,
+              activeSkillRef: resolved.occurrence.ref("skill"),
+              activeDefinitionDigest: canonicalDigestSource("active-provider-tool-definitions-v2", {
+                base_definition_digest: baseDefinitionDigest,
+                leaves: [],
+              }).sha256,
+            })
+          }
           expect(resolved.occurrence.ref("artifact_snapshot").owner_ref).toBe(
             projected ? "runtime-projection:orchestrator" : "tool-registry",
           )
           const result = (await resolved.tools.artifact_snapshot!.execute!(
             { files: [{ path: "sample.txt", media_type: "text/plain" }] },
             { toolCallId: `call_snapshot_${projected}`, messages: [], abortSignal: new AbortController().signal },
-          )) as { output: string }
+          )) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+          await processor.completeRecoveredToolPart({
+            toolCallID: `call_snapshot_${projected}`,
+            toolInput: { files: [{ path: "sample.txt", media_type: "text/plain" }] },
+            output: result,
+          })
           const output = JSON.parse(result.output)
           expect(output.resource_count).toBe(1)
           expect(
@@ -178,6 +234,46 @@ for (const projected of [true, false]) {
               }),
             ).toString("utf8"),
           ).toBe("verified snapshot\n")
+
+          expect(resolved.occurrence.ref("skill").owner_ref).toBe(
+            projected ? "runtime-projection:orchestrator" : "tool-registry",
+          )
+          if (policy !== "allow") {
+            await expect(
+              resolveTestCapabilityTools({
+                ...common,
+                messages: await Session.messages({ sessionID: session.id }),
+                activeLocalRefs: ["base/shared/method"],
+              }),
+            ).rejects.toMatchObject({ code: "execution_not_granted" })
+            return
+          }
+          const revealed = resolved
+          const descriptor = revealed.occurrence.payload.descriptors.find(
+            (entry) => entry.ref.kind === "skill" && entry.ref.local_ref === "base/shared/method",
+          )
+          if (descriptor?.behavior.kind !== "open_skill") throw new Error("Missing Base method behavior")
+          expect(descriptor.behavior.name).toBe("base-delivery-method")
+          const toolInput = { name: descriptor.behavior.name }
+          for (const phase of ["revealed", "reconstructed"]) {
+            const current =
+              phase === "revealed"
+                ? revealed
+                : await resolveTestCapabilityTools({
+                    ...common,
+                    messages: await Session.messages({ sessionID: session.id }),
+                  })
+            const toolCallID = `call_scheduler_skill_${projected}_${phase}`
+            expect(typeof current.tools.evolve_expert_squad_from_feedback?.execute).toBe("function")
+            const loaded = (await current.tools.skill!.execute!(toolInput, {
+              toolCallId: toolCallID,
+              messages: [],
+              abortSignal: new AbortController().signal,
+            })) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+            expect(loaded.metadata).toMatchObject({ name: "base-delivery-method", agent: "orchestrator" })
+            expect(loaded.output).toContain("# Base delivery method")
+            await processor.completeRecoveredToolPart({ toolCallID, toolInput, output: loaded })
+          }
         } finally {
           await SessionRuntimeContractStore.dispose(session.id)
           await mcp.close()

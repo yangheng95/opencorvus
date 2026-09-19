@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "analysis": "luna_base_quality_and_cost_root_cause",
+  "execution_policy": {
+    "model_requests_started": 0,
+    "source_evidence_mutated": false,
+    "base_scored_cases": [1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15],
+    "paired_scored_cases": [1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15]
+  },
+  "paired_outcomes": {
+    "cases": 12,
+    "base_strict": 2,
+    "native_strict": 1,
+    "base_partial_mean": 0.6578895,
+    "native_partial_mean": 0.5665118,
+    "base_mean_duration_ms": 892788.5,
+    "native_mean_duration_ms": 140474.25,
+    "duration_ratio_base_over_native": 6.3555,
+    "base_model_calls": 1257,
+    "native_response_steps": 212,
+    "interaction_ratio_base_over_native": 5.9292
+  },
+  "base_role_attribution": {
+    "cases": 13,
+    "model_calls": 1368,
+    "model_calls_by_agent": {
+      "base-developer": 461,
+      "base-tester": 373,
+      "orchestrator": 312,
+      "mission": 196,
+      "memory": 26
+    },
+    "orchestrator_and_mission_share": 0.371345,
+    "official_api_events": 696,
+    "official_api_events_by_agent": {
+      "base-developer": 463,
+      "base-tester": 233
+    },
+    "business_mutations_by_agent": {
+      "base-developer": 128,
+      "base-tester": 4
+    },
+    "role_phases": 42,
+    "two_phase_baseline": 26,
+    "dispatch_calls": 48,
+    "duplicated_exact_api_operations": 108,
+    "mutations_after_first_tester": 42,
+    "mutations_after_first_tester_by_agent": {
+      "base-developer": 38,
+      "base-tester": 4
+    },
+    "cross_role_endpoint_rewrites": 1,
+    "unassigned_api_events": 0,
+    "skill_runtime_adherence_cases": 0
+  },
+  "coordination_tools": {
+    "orchestrator": {
+      "artifact_search": 71,
+      "artifact_read": 53,
+      "artifact_select": 51,
+      "dispatch_agent": 48,
+      "read_agent_message": 43,
+      "capability_search": 22,
+      "manage_task": 13
+    },
+    "base-developer": {
+      "bash": 338,
+      "capability_search": 37,
+      "artifact_publish": 22,
+      "skill": 10
+    },
+    "base-tester": {
+      "bash": 209,
+      "artifact_search": 33,
+      "artifact_publish": 26,
+      "capability_search": 21,
+      "artifact_read": 20,
+      "skill": 1
+    }
+  },
+  "diagnosis": [
+    "The paired sample does not show a global Base score regression, but its small partial-score gain costs 6.36 times the elapsed time and 5.93 times the model interactions.",
+    "The main amplification is orchestration: mandatory generic development and test reports are published, searched, read, and selected even though participant messages and Host Tool facts already carry the current execution result.",
+    "Independent verification finds real omissions, but six cases enter repeated Developer and Tester phases; internal PASS does not reliably predict the official strict score.",
+    "The runtime adherence checker incorrectly required mounted agents with no benchmark-client call to load the Skill. Actual client callers still need to load the named Skill before their first call, including calls through interpreter flags or absolute script paths.",
+    "Tester is not broadly corrupting state: it made four business mutations across 13 cases. The dominant defect is expensive discovery and repair coordination with weak stopping criteria."
+  ],
+  "immutable_analysis": {
+    "tool": "script/benchmark/analyze_base_stage_effects.py",
+    "tool_sha256": "136aa31ad7326d5974c76568f7cd67628b30dfef9eae33abd8c7ce524ee38da0",
+    "full_output": "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100/base-stage-effects.json",
+    "full_output_sha256": "d4c1e87f474a32d7316dd3b2d5e541e996f807bcb580facb8edf399e80fa065e"
+  },
+  "limitations": [
+    "No intermediate WorldState snapshots were retained at every role boundary, so exact Developer-only and post-repair official scores cannot be reconstructed without changing evidence.",
+    "Prompt and checker corrections are zero-model verified. Their live score and redundant-call reduction remain unmeasured until a newly authorized controlled run."
+  ]
+}

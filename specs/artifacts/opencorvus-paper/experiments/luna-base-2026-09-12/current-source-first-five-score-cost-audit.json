@@ -1,0 +1,1282 @@
+{
+  "schema_version": 1,
+  "kind": "posthoc_official_diagnostic_score_and_cost_audit",
+  "audited_at_utc": "2026-09-12T17:42:08.880853+00:00",
+  "execution_runtime_commit": "134d34336cdb19c90d96ac49640c0746556a3f0f",
+  "auditor_commit": "00ccc5e09f1bee33b1ced2aaa3fd974585312f86",
+  "case_manifest_sha256": "43ca54925db11d7dc6d9c5b80bbd32aed9b6c93ea92a2d1b8225a0858036ff42",
+  "official_package_tree_sha256": "cc7a63f9444814c7029e325dacbdf1c2e870430d08aaf8d4ecf5c0e44fe829d4",
+  "checker_sha256": "7a7b47eaac0b816f82be36fe74837bbac385fe9c50f8d5629a2c06af95737a0d",
+  "scope": "Post-hoc verification of immutable diagnostic scores and actual execution records; original invalid classifications and catalog eligibility remain unchanged.",
+  "summary": {
+    "sample_count": 5,
+    "original_scored_eligible_count": 0,
+    "official_diagnostic_strict_passed": 2,
+    "mean_diagnostic_partial": 0.8202614379084967,
+    "provider_activity_requests": 499,
+    "metered_provider_calls": 509,
+    "task_tool_calls": 414,
+    "all_tool_calls": 482,
+    "world_tool_calls": 285,
+    "publication_selection_calls": 0,
+    "mean_duration_ms": 1519494,
+    "mean_mission_acceptance_duration_ms": 904922,
+    "mean_last_session_outcome_duration_ms": 911464.8,
+    "metered_total_tokens": 22652852,
+    "current_completion_evidence_passed": 5,
+    "execution_condition_satisfied_count": 5,
+    "explicit_skill_tool_load_adherence_passed_count": 0
+  },
+  "comparisons": {
+    "baseline_runtime_commit": "e03f1fd678295421ac0a37c1b4b6fed8a22c6cc6",
+    "baseline_report_sha256": "24e3aaef41b0c0affc7d336d96aba5063a3c4d4bc70b532fc9ef78a3e821f714",
+    "baseline_provider_activity_requests": 540,
+    "provider_activity_request_reduction": 0.07592592592592595,
+    "baseline_task_tool_calls": 737,
+    "task_tool_call_reduction": 0.43826322930800543,
+    "baseline_publication_selection_calls": 48,
+    "publication_selection_reduction": 1.0,
+    "native_audit_sha256": "0115741569e32a912895562f2db023380f069fbf5fb1f3e8a66e66c58c16de36",
+    "native_summary": {
+      "attempted": 5,
+      "scored": 5,
+      "strict_passed": 1,
+      "strict_rate": 0.2,
+      "mean_partial": 0.74989898989899,
+      "total_response_steps": 83,
+      "total_tool_calls": 169,
+      "mean_duration_ms": 121726.8,
+      "total_duration_ms": 608634
+    },
+    "broad_redundant_call_reduction_verified": false,
+    "baseline_mean_duration_ms": 1564419.6,
+    "recorded_total_duration_reduction": 0.028717103774460573
+  },
+  "cases": [
+    {
+      "case_index": 1,
+      "run_id": "f6494719-626a-4c19-896c-b2ccddd2811a",
+      "domain": "marketing",
+      "task": "marketing.linkedin_company_update",
+      "source_directory": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/base/marketing-marketing-linkedin_company_update-base/2026-09-12T16-16-26.307Z-f6494719-626a-4c19-896c-b2ccddd2811a",
+      "source_status": "invalid",
+      "original_failed_audits": [
+        "mission_outcome_audit"
+      ],
+      "diagnostic_strict": 1,
+      "diagnostic_partial": 1,
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 1207,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 33,
+        "replayed_non_stateful_calls": 20,
+        "skipped_non_stateful_calls": 0
+      },
+      "seal": {
+        "passed": true,
+        "files_checked": 22,
+        "violations": []
+      },
+      "manifest_sha256": "eb13e4b8de77fc13f3293492bf08823f8c71bbd59ab7f1c4c6588101b034d416",
+      "sealed_files": [
+        {
+          "path": "automationbench-events.jsonl",
+          "bytes": 24394,
+          "sha256": "f19100a24acefdf4cb2c1d1709bdd0daa5812f3b8b94d6b5d8140dc79edcda2f"
+        },
+        {
+          "path": "automationbench-final-world.json",
+          "bytes": 18588,
+          "sha256": "4217fc44231293fe8f409e469875c06443924f534c1b59f2b81751d96b81a741"
+        },
+        {
+          "path": "automationbench-initial-world.json",
+          "bytes": 17560,
+          "sha256": "cc8b47b737a1ef04b08e8eb9638fa3e9a7ec540c299e83599b45459b97d85896"
+        },
+        {
+          "path": "mission-receipt.json",
+          "bytes": 5060,
+          "sha256": "f6eba61ea2bb5fe50e210ac5b966ca92ea2715bcd9dfdaa32c6a47cac7b49cba"
+        },
+        {
+          "path": "mission-transcript.json",
+          "bytes": 118979,
+          "sha256": "e93a3ffcf10d22c2cad53d02fdce279b0293c8d0d6360e1c1af8f9d3a57489f8"
+        },
+        {
+          "path": "opencorvus-interactions.json",
+          "bytes": 3,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        },
+        {
+          "path": "opencorvus-trace.json",
+          "bytes": 771503,
+          "sha256": "837b42a3b41b0f2f16c60d6bae0c14e4d4083fc1a74a3530f3e67e1150e860b3"
+        },
+        {
+          "path": "opencorvus-transcript.json",
+          "bytes": 998116,
+          "sha256": "94435d257083dcc5f355c2b37973fa0b1e8541f77cf48696742dc14fc74a6919"
+        },
+        {
+          "path": "protected-root-isolation-audit.json",
+          "bytes": 561,
+          "sha256": "89cbe01719c8a9488ea959fd80fc87be6fd7866bbae42aa82f12646be1ffbf6e"
+        },
+        {
+          "path": "provider-usage-ledger.json",
+          "bytes": 43916,
+          "sha256": "ac634d434b9d184e3f00e47d44c7d3c53eab09fb97438371aa13dedda44d1c66"
+        },
+        {
+          "path": "result.json",
+          "bytes": 36806,
+          "sha256": "e2db16c77e3044cd70e78f9efc60e25fe6b005a8f8a16c8d11ff902bd77c1228"
+        },
+        {
+          "path": "run-start.json",
+          "bytes": 711,
+          "sha256": "d67758959c8371eae3e362051c3d85936d0f642ccf323142b7f97364ee46b4d8"
+        },
+        {
+          "path": "runtime-database-snapshot.json",
+          "bytes": 1625647,
+          "sha256": "b8fa11b2bbaea8832e08666ebb0d2de6d9715491978cf3a20173b665dd209bcf"
+        },
+        {
+          "path": "sandbox-isolation-audit.json",
+          "bytes": 444,
+          "sha256": "b8fde77acec9adc41cadd0e0a09e2b30568ecc006a6d9124616d1871a1e226e5"
+        },
+        {
+          "path": "scheduled-wake-observations.json",
+          "bytes": 269,
+          "sha256": "e3d5b7e2c9a8de97d0c255cfdb54f6f6fd51d0b340fc7b05d5ed3b9cb5bb4713"
+        },
+        {
+          "path": "scorer-replay-audit.json",
+          "bytes": 479,
+          "sha256": "0afd440a2a5b75ef0f2d3855e8c91aefa594df6d727182efc2ad4eac48374273"
+        },
+        {
+          "path": "skill-projection.json",
+          "bytes": 78017,
+          "sha256": "bfe5d9fabda2da779bcb001079665b65e3f8ad03cc56f801a49b41841fd43ab6"
+        },
+        {
+          "path": "task-interactions.json",
+          "bytes": 78,
+          "sha256": "7b7e15047c2f867b954a73eaf5634318258a25bbf45701a96c0badf7e407a898"
+        },
+        {
+          "path": "task-transcripts.json",
+          "bytes": 1039773,
+          "sha256": "55b143f72809b3d8b307fe63a9444a4cf9c3431553a254f52261a0a1d7407886"
+        },
+        {
+          "path": "terminal-board.json",
+          "bytes": 149503,
+          "sha256": "db4553b1efa8d83ab3b5ca1b05c03ba8e9f3a48f110fbb033576a866a101aea8"
+        },
+        {
+          "path": "trajectory.json",
+          "bytes": 24034,
+          "sha256": "38298be09c0c942d6dd7d6f091c5fca49b023e255a54d583a7a645a0868fa858"
+        },
+        {
+          "path": "trajectory.svg",
+          "bytes": 22226,
+          "sha256": "eb747ad5fbdc6d1d01c05e11639d2a5727d2b5a918cc5e881a32478635ec0047"
+        }
+      ],
+      "duration_ms": 1397830,
+      "mission_acceptance_duration_ms": 784335,
+      "last_session_outcome_duration_ms": 789490,
+      "post_acceptance_until_sealed_ms": 613495,
+      "provider_activity_requests": 93,
+      "requests_by_agent": {
+        "base-developer": 28,
+        "base-tester": 35,
+        "mission": 13,
+        "orchestrator": 17
+      },
+      "metered_provider_calls": 95,
+      "metered_total_tokens": 4053286,
+      "metered_calls_by_agent": {
+        "base-developer": 28,
+        "base-tester": 35,
+        "memory": 2,
+        "mission": 13,
+        "orchestrator": 17
+      },
+      "task_tool_measurement": {
+        "tool_calls": 78,
+        "calls_by_tool": {
+          "artifact_publish": 4,
+          "artifact_read": 4,
+          "artifact_search": 5,
+          "artifact_select": 3,
+          "artifact_snapshot": 1,
+          "bash": 46,
+          "capability_search": 5,
+          "dispatch_agent": 3,
+          "glob": 2,
+          "manage_task": 1,
+          "read": 1,
+          "read_agent_message": 2,
+          "skill": 1
+        },
+        "publication_selection_calls": 0,
+        "publication_selection_part_ids": [],
+        "publisher_selections_used_by_other_consumers": 0,
+        "direct_read_source_publications": 1,
+        "failed_tool_calls": 3
+      },
+      "all_tool_measurement": {
+        "tool_calls": 90,
+        "calls_by_tool": {
+          "artifact_publish": 4,
+          "artifact_read": 4,
+          "artifact_search": 5,
+          "artifact_select": 3,
+          "artifact_snapshot": 1,
+          "bash": 46,
+          "capability_search": 6,
+          "dispatch_agent": 3,
+          "glob": 2,
+          "manage_task": 1,
+          "mission_state": 3,
+          "panel_complete_mission": 1,
+          "panel_create_task": 1,
+          "panel_query_task": 1,
+          "panel_query_task_artifacts": 1,
+          "panel_read_task_artifact": 3,
+          "publish_interactive_artifact": 1,
+          "read": 1,
+          "read_agent_message": 2,
+          "skill": 1
+        },
+        "publication_selection_calls": 0,
+        "publication_selection_part_ids": [],
+        "publisher_selections_used_by_other_consumers": 0,
+        "direct_read_source_publications": 1,
+        "failed_tool_calls": 3
+      },
+      "world_tool_calls": 53,
+      "failed_business_assertions": [],
+      "execution_condition_satisfied": true,
+      "current_runtime_audits_passed": true,
+      "skill_tool_load_adherence": {
+        "passed": false,
+        "missing_explicit_skill_load_agents": [
+          "base-tester",
+          "orchestrator"
+        ],
+        "client_before_explicit_skill_load_count": 23
+      }
+    },
+    {
+      "case_index": 2,
+      "run_id": "26c90986-febf-483c-a1a1-0dc7e7c5db4f",
+      "domain": "finance",
+      "task": "finance.wave_freelance_invoice",
+      "source_directory": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/base/finance-finance-wave_freelance_invoice-base/2026-09-12T16-16-26.322Z-26c90986-febf-483c-a1a1-0dc7e7c5db4f",
+      "source_status": "invalid",
+      "original_failed_audits": [
+        "mission_outcome_audit"
+      ],
+      "diagnostic_strict": 0,
+      "diagnostic_partial": 0.5,
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 4014,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 26,
+        "replayed_non_stateful_calls": 15,
+        "skipped_non_stateful_calls": 0
+      },
+      "seal": {
+        "passed": true,
+        "files_checked": 22,
+        "violations": []
+      },
+      "manifest_sha256": "f1ab9f2eb2282a4357772691bd787c7e5cd1ffea4f0ef855ed2cb2bddc4ab3dd",
+      "sealed_files": [
+        {
+          "path": "automationbench-events.jsonl",
+          "bytes": 23712,
+          "sha256": "a68de6bc00826376116c707361716a206c1ccb135e1fa86791e64d5f4e99576c"
+        },
+        {
+          "path": "automationbench-final-world.json",
+          "bytes": 7725,
+          "sha256": "504a150fd8b62c8d801238b2c5251e0df09e919e695f92590baa4906ddd09e58"
+        },
+        {
+          "path": "automationbench-initial-world.json",
+          "bytes": 6395,
+          "sha256": "0afe77cb9cf55d0d15544714c9b0abf532db5e2940a9715c3f3a2ec787695d73"
+        },
+        {
+          "path": "mission-receipt.json",
+          "bytes": 5380,
+          "sha256": "e78625b66e8a93bf34cc47f0bb422d4dd4f6c179a8eda95cf6fe46e523a2b144"
+        },
+        {
+          "path": "mission-transcript.json",
+          "bytes": 130590,
+          "sha256": "d8348a04a5683405840892ca9c909d5f06c5a1f0276f4146f6a5a9983d0f664d"
+        },
+        {
+          "path": "opencorvus-interactions.json",
+          "bytes": 3,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        },
+        {
+          "path": "opencorvus-trace.json",
+          "bytes": 744196,
+          "sha256": "303b6e4e9afb8b2bf2a4997568108f6b3959ea7e706b3117610de0b25d2c1996"
+        },
+        {
+          "path": "opencorvus-transcript.json",
+          "bytes": 1074051,
+          "sha256": "431d1b2ce63868a6ff098500603fcef8ed2f2366401878149219d294755f4274"
+        },
+        {
+          "path": "protected-root-isolation-audit.json",
+          "bytes": 561,
+          "sha256": "89cbe01719c8a9488ea959fd80fc87be6fd7866bbae42aa82f12646be1ffbf6e"
+        },
+        {
+          "path": "provider-usage-ledger.json",
+          "bytes": 43007,
+          "sha256": "fea3e3b3fc933cdfc74002abbabda8b605e21b7f641258e386b1f8c4a6f5d1a1"
+        },
+        {
+          "path": "result.json",
+          "bytes": 32946,
+          "sha256": "d2b44cccf4d72b3c890aeb9c41e108450cbb221f3193626aead8ad5ad7c9d8c6"
+        },
+        {
+          "path": "run-start.json",
+          "bytes": 701,
+          "sha256": "12bd28e71f5fa683a2e4ed9a4ab5f17690c668a78ec8a4a0451b95537c8a1466"
+        },
+        {
+          "path": "runtime-database-snapshot.json",
+          "bytes": 1613225,
+          "sha256": "ce54c664b81b520aa546f3db17d76d710166696f0f1eb813c32065ef98ba6034"
+        },
+        {
+          "path": "sandbox-isolation-audit.json",
+          "bytes": 444,
+          "sha256": "18aba69d39001c52a3a8504887eb48f68e15be13d1c6846640fa4dbc1b721e98"
+        },
+        {
+          "path": "scheduled-wake-observations.json",
+          "bytes": 269,
+          "sha256": "a9a53b6397aef213855a2ec364f1e1d293dbb2ba3b470c179bef39baf01cb09a"
+        },
+        {
+          "path": "scorer-replay-audit.json",
+          "bytes": 479,
+          "sha256": "667dc4f6deeaf40e42805663e189fcfa902eed741314d8b3dd82af80107100b5"
+        },
+        {
+          "path": "skill-projection.json",
+          "bytes": 74654,
+          "sha256": "1aeb0cf849a97358a1c923279dc98d8c15de1f57c2c57039d16aa319567b4e8f"
+        },
+        {
+          "path": "task-interactions.json",
+          "bytes": 78,
+          "sha256": "7ee4282858afe6f9c80ca18c78c946011d9df1e189de2a346adb230b83c12714"
+        },
+        {
+          "path": "task-transcripts.json",
+          "bytes": 1115044,
+          "sha256": "382f70a93dfdeb59814f3c4ea0ac9a4cab1528b319d32f6b766e489e640818ad"
+        },
+        {
+          "path": "terminal-board.json",
+          "bytes": 154933,
+          "sha256": "e989db49472641d87c7adc8d56232176b20494c0e18726cc3ea23d51ce7c1029"
+        },
+        {
+          "path": "trajectory.json",
+          "bytes": 21954,
+          "sha256": "7da4e113ab976e78c99c3f3048a4c2b5358610f8aa99edadcc5c937e88dbe998"
+        },
+        {
+          "path": "trajectory.svg",
+          "bytes": 20445,
+          "sha256": "27a5779af264d87e94c80b1e1de8d858b7009bb2ac3b32c7d4bd257c2abce95c"
+        }
+      ],
+      "duration_ms": 1446082,
+      "mission_acceptance_duration_ms": 832259,
+      "last_session_outcome_duration_ms": 839006,
+      "post_acceptance_until_sealed_ms": 613823,
+      "provider_activity_requests": 91,
+      "requests_by_agent": {
+        "base-developer": 35,
+        "base-tester": 29,
+        "mission": 14,
+        "orchestrator": 13
+      },
+      "metered_provider_calls": 93,
+      "metered_total_tokens": 4293811,
+      "metered_calls_by_agent": {
+        "base-developer": 35,
+        "base-tester": 29,
+        "memory": 2,
+        "mission": 14,
+        "orchestrator": 13
+      },
+      "task_tool_measurement": {
+        "tool_calls": 75,
+        "calls_by_tool": {
+          "artifact_publish": 3,
+          "artifact_read": 3,
+          "artifact_search": 5,
+          "artifact_select": 2,
+          "bash": 43,
+          "capability_search": 5,
+          "dispatch_agent": 3,
+          "glob": 2,
+          "manage_task": 1,
+          "read": 3,
+          "read_agent_message": 2,
+          "search_code": 2,
+          "skill": 1
+        },
+        "publication_selection_calls": 0,
+        "publication_selection_part_ids": [],
+        "publisher_selections_used_by_other_consumers": 0,
+        "direct_read_source_publications": 0,
+        "failed_tool_calls": 3
+      },
+      "all_tool_measurement": {
+        "tool_calls": 88,
+        "calls_by_tool": {
+          "artifact_publish": 3,
+          "artifact_read": 3,
+          "artifact_search": 5,
+          "artifact_select": 2,
+          "bash": 43,
+          "capability_search": 6,
+          "dispatch_agent": 3,
+          "glob": 2,
+          "manage_task": 1,
+          "mission_state": 4,
+          "panel_complete_mission": 1,
+          "panel_create_task": 1,
+          "panel_query_task": 1,
+          "panel_query_task_artifacts": 1,
+          "panel_read_task_artifact": 3,
+          "publish_interactive_artifact": 1,
+          "read": 3,
+          "read_agent_message": 2,
+          "search_code": 2,
+          "skill": 1
+        },
+        "publication_selection_calls": 0,
+        "publication_selection_part_ids": [],
+        "publisher_selections_used_by_other_consumers": 0,
+        "direct_read_source_publications": 0,
+        "failed_tool_calls": 3
+      },
+      "world_tool_calls": 41,
+      "failed_business_assertions": [
+        {
+          "type": "gmail_message_sent_to_with_body_contains",
+          "excluded": false
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_contains",
+          "excluded": false
+        }
+      ],
+      "execution_condition_satisfied": true,
+      "current_runtime_audits_passed": true,
+      "skill_tool_load_adherence": {
+        "passed": false,
+        "missing_explicit_skill_load_agents": [
+          "base-tester",
+          "orchestrator"
+        ],
+        "client_before_explicit_skill_load_count": 13
+      }
+    },
+    {
+      "case_index": 3,
+      "run_id": "bafd304d-0f02-486d-8520-eb1cf08723ad",
+      "domain": "support",
+      "task": "support.helpcrunch_trial_nurture",
+      "source_directory": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/base/support-support-helpcrunch_trial_nurture-base/2026-09-12T16-39-58.945Z-bafd304d-0f02-486d-8520-eb1cf08723ad",
+      "source_status": "invalid",
+      "original_failed_audits": [
+        "mission_outcome_audit"
+      ],
+      "diagnostic_strict": 0,
+      "diagnostic_partial": 0.7777777777777778,
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 1549,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 39,
+        "replayed_non_stateful_calls": 12,
+        "skipped_non_stateful_calls": 0
+      },
+      "seal": {
+        "passed": true,
+        "files_checked": 22,
+        "violations": []
+      },
+      "manifest_sha256": "5f2eddf4d37251ae314244f3bdf08a201594d6277095e4fa6f91c23b48f3d3e4",
+      "sealed_files": [
+        {
+          "path": "automationbench-events.jsonl",
+          "bytes": 27294,
+          "sha256": "5a725ea0398588522ab2a0ed584b3e8141d01a9cbbd70fe6c635307f8ab26147"
+        },
+        {
+          "path": "automationbench-final-world.json",
+          "bytes": 19701,
+          "sha256": "bcf1bde6cce2703576280a8275217ee2c87ec578bb3959a621ae2cac710e14a1"
+        },
+        {
+          "path": "automationbench-initial-world.json",
+          "bytes": 13831,
+          "sha256": "9dfde9222712a8539a8719930b65946bc5508ec15b1fe12d3bef3f4704917de6"
+        },
+        {
+          "path": "mission-receipt.json",
+          "bytes": 5143,
+          "sha256": "a577973b6e1894debf79e6ee42b67d5f9db539fa3ad580ed73982cdc70ae3cd7"
+        },
+        {
+          "path": "mission-transcript.json",
+          "bytes": 162845,
+          "sha256": "4cf19106c5de9c4527478434a24cc3ad94134d7cdb169c15755e9b20e9473695"
+        },
+        {
+          "path": "opencorvus-interactions.json",
+          "bytes": 3,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        },
+        {
+          "path": "opencorvus-trace.json",
+          "bytes": 725581,
+          "sha256": "87043dde228d09bc6a1453591c989b3cad8fea85843402ea049c3bfb78c0c2f2"
+        },
+        {
+          "path": "opencorvus-transcript.json",
+          "bytes": 920299,
+          "sha256": "da80fbb1b25156794389e513392c3ac62e37ff7c77a47fc7c84be13473ca7019"
+        },
+        {
+          "path": "protected-root-isolation-audit.json",
+          "bytes": 561,
+          "sha256": "89cbe01719c8a9488ea959fd80fc87be6fd7866bbae42aa82f12646be1ffbf6e"
+        },
+        {
+          "path": "provider-usage-ledger.json",
+          "bytes": 44358,
+          "sha256": "320ef413305dd5ed2e07fed015a64c2877030dd0c12d149ec6c3bcfb70f4ee58"
+        },
+        {
+          "path": "result.json",
+          "bytes": 37447,
+          "sha256": "579ed44b6c0a62d72d1a7f00f7f8823f985bea0e265e1bd9c23e60a25d1e8b0d"
+        },
+        {
+          "path": "run-start.json",
+          "bytes": 705,
+          "sha256": "729da96c62e8ee228690e45100089aea45df949ea2ea824b7059e03a2711ac24"
+        },
+        {
+          "path": "runtime-database-snapshot.json",
+          "bytes": 1568511,
+          "sha256": "f2cc4b29229a8f46ae94c180fa2e6f624e4688d0665e4ce92be0864e32da879d"
+        },
+        {
+          "path": "sandbox-isolation-audit.json",
+          "bytes": 444,
+          "sha256": "ae5838657823b934bdefc013c5372233c6e6d5a87d4f7966a4ee3573a67191f1"
+        },
+        {
+          "path": "scheduled-wake-observations.json",
+          "bytes": 269,
+          "sha256": "28d90f6a1118f3cc1c09178ff13315abcf81b63478881005e8ab78ccd0e9860e"
+        },
+        {
+          "path": "scorer-replay-audit.json",
+          "bytes": 479,
+          "sha256": "43a26446845899a7f8d6530b141b3965dd965b1463f49c4a50f0a8ee8939a14a"
+        },
+        {
+          "path": "skill-projection.json",
+          "bytes": 74612,
+          "sha256": "aa5063465237948d5112f575283dde3672366e4a04da00459c694990dc3badbf"
+        },
+        {
+          "path": "task-interactions.json",
+          "bytes": 78,
+          "sha256": "180138054d3d448b2e08947e902115858be882ec647ecb22a0089f953f821c40"
+        },
+        {
+          "path": "task-transcripts.json",
+          "bytes": 960400,
+          "sha256": "2be1c71df3cb6fa14919b74b34bcb9c461fbad90fbed83c92757f1e07af1a36b"
+        },
+        {
+          "path": "terminal-board.json",
+          "bytes": 157032,
+          "sha256": "16f8a7181b9185bb81d1fda226b8d917c3c74285165c7d93f321c0f65174d492"
+        },
+        {
+          "path": "trajectory.json",
+          "bytes": 23912,
+          "sha256": "ff9cf146d11eba97d860a4d60d2716133f39d0dcd949c48bbadc2ecc9a722c4a"
+        },
+        {
+          "path": "trajectory.svg",
+          "bytes": 22274,
+          "sha256": "15aaaafda0ecd9b2580490c3eef32e1d7a1416df6afd124971682836e026ea74"
+        }
+      ],
+      "duration_ms": 1525648,
+      "mission_acceptance_duration_ms": 908357,
+      "last_session_outcome_duration_ms": 915796,
+      "post_acceptance_until_sealed_ms": 617291,
+      "provider_activity_requests": 94,
+      "requests_by_agent": {
+        "base-developer": 22,
+        "base-tester": 31,
+        "mission": 16,
+        "orchestrator": 25
+      },
+      "metered_provider_calls": 96,
+      "metered_total_tokens": 3922471,
+      "metered_calls_by_agent": {
+        "base-developer": 22,
+        "base-tester": 31,
+        "memory": 2,
+        "mission": 16,
+        "orchestrator": 25
+      },
+      "task_tool_measurement": {
+        "tool_calls": 76,
+        "calls_by_tool": {
+          "artifact_publish": 3,
+          "artifact_read": 8,
+          "artifact_search": 7,
+          "artifact_select": 5,
+          "artifact_snapshot": 2,
+          "bash": 30,
+          "capability_search": 9,
+          "dispatch_agent": 2,
+          "glob": 3,
+          "manage_task": 1,
+          "read": 3,
+          "read_agent_message": 2,
+          "read_task_message": 1
+        },
+        "publication_selection_calls": 0,
+        "publication_selection_part_ids": [],
+        "publisher_selections_used_by_other_consumers": 0,
+        "direct_read_source_publications": 1,
+        "failed_tool_calls": 3
+      },
+      "all_tool_measurement": {
+        "tool_calls": 91,
+        "calls_by_tool": {
+          "artifact_publish": 3,
+          "artifact_read": 8,
+          "artifact_search": 7,
+          "artifact_select": 5,
+          "artifact_snapshot": 2,
+          "bash": 30,
+          "capability_search": 10,
+          "dispatch_agent": 2,
+          "glob": 3,
+          "manage_task": 1,
+          "mission_state": 3,
+          "panel_complete_mission": 2,
+          "panel_create_task": 2,
+          "panel_query_task": 1,
+          "panel_query_task_artifacts": 2,
+          "panel_read_task_artifact": 3,
+          "publish_interactive_artifact": 1,
+          "read": 3,
+          "read_agent_message": 2,
+          "read_task_message": 1
+        },
+        "publication_selection_calls": 0,
+        "publication_selection_part_ids": [],
+        "publisher_selections_used_by_other_consumers": 0,
+        "direct_read_source_publications": 1,
+        "failed_tool_calls": 5
+      },
+      "world_tool_calls": 51,
+      "failed_business_assertions": [
+        {
+          "type": "gmail_message_sent_to",
+          "excluded": false
+        },
+        {
+          "type": "gmail_message_sent_to",
+          "excluded": false
+        },
+        {
+          "type": "gmail_email_body_contains",
+          "excluded": false
+        },
+        {
+          "type": "gmail_email_body_contains",
+          "excluded": false
+        }
+      ],
+      "execution_condition_satisfied": true,
+      "current_runtime_audits_passed": true,
+      "skill_tool_load_adherence": {
+        "passed": false,
+        "missing_explicit_skill_load_agents": [
+          "base-developer",
+          "base-tester",
+          "orchestrator"
+        ],
+        "client_before_explicit_skill_load_count": 25
+      }
+    },
+    {
+      "case_index": 4,
+      "run_id": "8991ace3-64bb-4a52-8a1a-cded3e571fcb",
+      "domain": "support",
+      "task": "support.helpscout_auto_categorization",
+      "source_directory": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/base/support-support-helpscout_auto_categorization-base/2026-09-12T16-40-50.603Z-8991ace3-64bb-4a52-8a1a-cded3e571fcb",
+      "source_status": "invalid",
+      "original_failed_audits": [
+        "mission_outcome_audit"
+      ],
+      "diagnostic_strict": 0,
+      "diagnostic_partial": 0.8235294117647058,
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 1515,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 36,
+        "replayed_non_stateful_calls": 13,
+        "skipped_non_stateful_calls": 0
+      },
+      "seal": {
+        "passed": true,
+        "files_checked": 22,
+        "violations": []
+      },
+      "manifest_sha256": "f149fcaf8e1eb6f30eb910b838ccc3ebe9048d788d337bc877d62a3e2e5bdbf2",
+      "sealed_files": [
+        {
+          "path": "automationbench-events.jsonl",
+          "bytes": 23336,
+          "sha256": "51f4276ce4c208a45f86142fbfed51ca131285c0b301e2879930b84e48677cef"
+        },
+        {
+          "path": "automationbench-final-world.json",
+          "bytes": 13850,
+          "sha256": "7a5ce53269317b7db9c996de861b1997aa23f63e61fb9023adee238325c68ac6"
+        },
+        {
+          "path": "automationbench-initial-world.json",
+          "bytes": 13113,
+          "sha256": "385e32460144d5b9542ec40dc6413f079cdd4acbdd531adf8e4015b69bcac9a0"
+        },
+        {
+          "path": "mission-receipt.json",
+          "bytes": 5085,
+          "sha256": "fb2b48a73511fca8959497aa54013238a904a396dc40acedbde5aeb27b938156"
+        },
+        {
+          "path": "mission-transcript.json",
+          "bytes": 138829,
+          "sha256": "0f4ca03ae3279fd69309371448b2f577475b34307ecc3c164429151b3fea5c3d"
+        },
+        {
+          "path": "opencorvus-interactions.json",
+          "bytes": 3,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        },
+        {
+          "path": "opencorvus-trace.json",
+          "bytes": 452514,
+          "sha256": "1c0e933bd624238e8335747511b80caf01ce96c80befa07ad560eec8b1bba043"
+        },
+        {
+          "path": "opencorvus-transcript.json",
+          "bytes": 698602,
+          "sha256": "3f77b51f393ded5bb2b005f0be5c37d55fb3624d4d4cc7f8a540c38731ae7eec"
+        },
+        {
+          "path": "protected-root-isolation-audit.json",
+          "bytes": 561,
+          "sha256": "89cbe01719c8a9488ea959fd80fc87be6fd7866bbae42aa82f12646be1ffbf6e"
+        },
+        {
+          "path": "provider-usage-ledger.json",
+          "bytes": 33754,
+          "sha256": "e3e37a1b960fead252c09b84af2bc4e5a959ac91e2a14cb2d74a9517f06a6c96"
+        },
+        {
+          "path": "result.json",
+          "bytes": 37642,
+          "sha256": "c5843863673db449b01581f9519a45659c3bdfabf6eacfc2179e2064a279ab77"
+        },
+        {
+          "path": "run-start.json",
+          "bytes": 715,
+          "sha256": "78bd947c560e6b36a19fa5f08e4d39ad30e0c491b0b680069d24d91fceb4b3ff"
+        },
+        {
+          "path": "runtime-database-snapshot.json",
+          "bytes": 1270276,
+          "sha256": "45c46dfc22b0a985d72fad6d10a4dcce2297092cf3277151807094761627e083"
+        },
+        {
+          "path": "sandbox-isolation-audit.json",
+          "bytes": 444,
+          "sha256": "1e70da41fb5afa86b98abcf0c659121ad6cb613337edeb802d50706761f7c252"
+        },
+        {
+          "path": "scheduled-wake-observations.json",
+          "bytes": 269,
+          "sha256": "cf62e1eae28337e74ef1e8cf9920812780684623de251333dd12f0fb46c8f5b5"
+        },
+        {
+          "path": "scorer-replay-audit.json",
+          "bytes": 479,
+          "sha256": "9dde6da03992238ff60c2c5ea3a29c1373a9bec32855adfecc669f3c48e9c386"
+        },
+        {
+          "path": "skill-projection.json",
+          "bytes": 74678,
+          "sha256": "86e71e0b77dc4a11d96ba55539a258cc049f9088260094eb6bad224ae42bbaab"
+        },
+        {
+          "path": "task-interactions.json",
+          "bytes": 78,
+          "sha256": "96ff1dd24f090e1289eac393f0affef6c41758d01818c3991a4c4810d95ef8c9"
+        },
+        {
+          "path": "task-transcripts.json",
+          "bytes": 730099,
+          "sha256": "d8d52505b582181ee5e8de0e1b70ea0ff22f6c135750555dc0d27a4dfdf1b7b4"
+        },
+        {
+          "path": "terminal-board.json",
+          "bytes": 126736,
+          "sha256": "5069c832d1ebd5ff0e1de82bc849a2186cb523490277effaea6074d1e74bd065"
+        },
+        {
+          "path": "trajectory.json",
+          "bytes": 20044,
+          "sha256": "1242929ee52c6c225d9d0355b8e3167ffd3df286c56f74330028285b47fb2e73"
+        },
+        {
+          "path": "trajectory.svg",
+          "bytes": 19004,
+          "sha256": "be745e2fe53d95ac3d1097f902efb85f51b535f9f05af71c4b0301c642d4f194"
+        }
+      ],
+      "duration_ms": 1280773,
+      "mission_acceptance_duration_ms": 667817,
+      "last_session_outcome_duration_ms": 673831,
+      "post_acceptance_until_sealed_ms": 612956,
+      "provider_activity_requests": 71,
+      "requests_by_agent": {
+        "base-developer": 27,
+        "base-tester": 16,
+        "mission": 14,
+        "orchestrator": 14
+      },
+      "metered_provider_calls": 73,
+      "metered_total_tokens": 2638328,
+      "metered_calls_by_agent": {
+        "base-developer": 27,
+        "base-tester": 16,
+        "memory": 2,
+        "mission": 14,
+        "orchestrator": 14
+      },
+      "task_tool_measurement": {
+        "tool_calls": 55,
+        "calls_by_tool": {
+          "artifact_publish": 2,
+          "artifact_read": 2,
+          "artifact_search": 4,
+          "artifact_select": 2,
+          "bash": 25,
+          "capability_search": 10,
+          "dispatch_agent": 2,
+          "glob": 2,
+          "manage_task": 1,
+          "read": 3,
+          "read_agent_message": 2
+        },
+        "publication_selection_calls": 0,
+        "publication_selection_part_ids": [],
+        "publisher_selections_used_by_other_consumers": 0,
+        "direct_read_source_publications": 0,
+        "failed_tool_calls": 1
+      },
+      "all_tool_measurement": {
+        "tool_calls": 68,
+        "calls_by_tool": {
+          "artifact_publish": 2,
+          "artifact_read": 2,
+          "artifact_search": 4,
+          "artifact_select": 2,
+          "bash": 25,
+          "capability_search": 11,
+          "dispatch_agent": 2,
+          "glob": 2,
+          "manage_task": 1,
+          "mission_state": 4,
+          "panel_complete_mission": 1,
+          "panel_create_task": 1,
+          "panel_query_task": 1,
+          "panel_query_task_artifacts": 1,
+          "panel_read_task_artifact": 3,
+          "publish_interactive_artifact": 1,
+          "read": 3,
+          "read_agent_message": 2
+        },
+        "publication_selection_calls": 0,
+        "publication_selection_part_ids": [],
+        "publisher_selections_used_by_other_consumers": 0,
+        "direct_read_source_publications": 0,
+        "failed_tool_calls": 1
+      },
+      "world_tool_calls": 49,
+      "failed_business_assertions": [
+        {
+          "type": "helpscout_conversation_has_note",
+          "excluded": false
+        },
+        {
+          "type": "helpscout_conversation_has_note",
+          "excluded": false
+        },
+        {
+          "type": "slack_message_sent_to_channel",
+          "excluded": false
+        }
+      ],
+      "execution_condition_satisfied": true,
+      "current_runtime_audits_passed": true,
+      "skill_tool_load_adherence": {
+        "passed": false,
+        "missing_explicit_skill_load_agents": [
+          "base-developer",
+          "base-tester",
+          "orchestrator"
+        ],
+        "client_before_explicit_skill_load_count": 25
+      }
+    },
+    {
+      "case_index": 5,
+      "run_id": "6a2b7c47-0fc0-4545-a8ec-c6e9e0619125",
+      "domain": "marketing",
+      "task": "marketing.campaign_handoff",
+      "source_directory": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/base/marketing-marketing-campaign_handoff-base/2026-09-12T17-02-29.462Z-6a2b7c47-0fc0-4545-a8ec-c6e9e0619125",
+      "source_status": "invalid",
+      "original_failed_audits": [
+        "mission_outcome_audit"
+      ],
+      "diagnostic_strict": 1,
+      "diagnostic_partial": 1,
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 1077,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 64,
+        "replayed_non_stateful_calls": 21,
+        "skipped_non_stateful_calls": 6
+      },
+      "seal": {
+        "passed": true,
+        "files_checked": 22,
+        "violations": []
+      },
+      "manifest_sha256": "0207a49da019626d14fcaf5c9d0151b471fdc3a8632d6e9eb0ce21c838b7cf94",
+      "sealed_files": [
+        {
+          "path": "automationbench-events.jsonl",
+          "bytes": 45616,
+          "sha256": "7e0d4ad4899500ea0f504ebb26e51423b68383f5ff77f52286b3135be9f68401"
+        },
+        {
+          "path": "automationbench-final-world.json",
+          "bytes": 31888,
+          "sha256": "5efce8e418ad01f8b3754689c2cae36ab4d5eda1d37f5cfd093d2f99b84ea3d1"
+        },
+        {
+          "path": "automationbench-initial-world.json",
+          "bytes": 24819,
+          "sha256": "9e16db026c211cad568a645b6866884c82683938f117cfcf2cbde5b696a1dc8f"
+        },
+        {
+          "path": "mission-receipt.json",
+          "bytes": 5313,
+          "sha256": "a6cd5ccb23efa5ab14ffcf9ddae48ef65dffc46b6051b0a4040a5084046872a6"
+        },
+        {
+          "path": "mission-transcript.json",
+          "bytes": 166583,
+          "sha256": "4578ce567693873d9b66bb96b14996b2883cf848f8fe4dbcad66da63fbe394e7"
+        },
+        {
+          "path": "opencorvus-interactions.json",
+          "bytes": 3,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        },
+        {
+          "path": "opencorvus-trace.json",
+          "bytes": 1971509,
+          "sha256": "803d3621a922eafb3efdb1ac222f343693f5c61c7692ae73359dfcf5942c5ba8"
+        },
+        {
+          "path": "opencorvus-transcript.json",
+          "bytes": 1420512,
+          "sha256": "49a768d15348a11790337cf9416fd09bdd2d0d00a0acf2d9a40c96f7df7f6998"
+        },
+        {
+          "path": "protected-root-isolation-audit.json",
+          "bytes": 561,
+          "sha256": "89cbe01719c8a9488ea959fd80fc87be6fd7866bbae42aa82f12646be1ffbf6e"
+        },
+        {
+          "path": "provider-usage-ledger.json",
+          "bytes": 70362,
+          "sha256": "e61cc533c313f0c478f2b4cd9417f7123f12e9e3efb65216bbb37ed62f864a92"
+        },
+        {
+          "path": "result.json",
+          "bytes": 52551,
+          "sha256": "5ec65152231362b561e8be58427281d3e15a643c44f2de5d5d51786886bafe8f"
+        },
+        {
+          "path": "run-start.json",
+          "bytes": 697,
+          "sha256": "24edc978d4f1cc042db0c416fed0533a5aa33d930371aa1407dca7926b527ee7"
+        },
+        {
+          "path": "runtime-database-snapshot.json",
+          "bytes": 2661405,
+          "sha256": "8438c7c76f7e93cdfa92168f8310931df072e73f83ee8e7f638e2cc028fb56fd"
+        },
+        {
+          "path": "sandbox-isolation-audit.json",
+          "bytes": 444,
+          "sha256": "743146710dd54e415c1c2a378d92983fb33a93f86107335ea462aff226f0c31f"
+        },
+        {
+          "path": "scheduled-wake-observations.json",
+          "bytes": 269,
+          "sha256": "c8b93dfcb4cbe0fc2a51ad7fe09ab3444ca91a6f8e07ce0670084f933059da61"
+        },
+        {
+          "path": "scorer-replay-audit.json",
+          "bytes": 479,
+          "sha256": "5800f288875c021530992fbd62927d3d64270437577afb84b636ba85c67d464e"
+        },
+        {
+          "path": "skill-projection.json",
+          "bytes": 89246,
+          "sha256": "f3358e922f1b06eed7071471fda140d9e118afd2f92ff75e5ee444d829e7b131"
+        },
+        {
+          "path": "task-interactions.json",
+          "bytes": 78,
+          "sha256": "81a51e77485e63abe8689013c6f036b7752fedb0c9b08ff3bcfe0819fcd55808"
+        },
+        {
+          "path": "task-transcripts.json",
+          "bytes": 1491073,
+          "sha256": "80d780bc53848fc8c2ec140f3a3d51ff4361296dd63cbafdafc382d1706bdd07"
+        },
+        {
+          "path": "terminal-board.json",
+          "bytes": 247584,
+          "sha256": "c98f364b614a35d68f26857fb3eaa71016a47c38754d561894874e2594a33156"
+        },
+        {
+          "path": "trajectory.json",
+          "bytes": 39465,
+          "sha256": "df4bf6e5fa25f02acb58dc90c7e01be5f4ece32ee3febe2cfeae01727859d848"
+        },
+        {
+          "path": "trajectory.svg",
+          "bytes": 34464,
+          "sha256": "6d321c1769e84f0ecc146536db7a27408dfbb565004c0c08cafeda99c9a25ade"
+        }
+      ],
+      "duration_ms": 1947137,
+      "mission_acceptance_duration_ms": 1331842,
+      "last_session_outcome_duration_ms": 1339201,
+      "post_acceptance_until_sealed_ms": 615295,
+      "provider_activity_requests": 150,
+      "requests_by_agent": {
+        "base-developer": 65,
+        "base-tester": 47,
+        "mission": 16,
+        "orchestrator": 22
+      },
+      "metered_provider_calls": 152,
+      "metered_total_tokens": 7744956,
+      "metered_calls_by_agent": {
+        "base-developer": 65,
+        "base-tester": 47,
+        "memory": 2,
+        "mission": 16,
+        "orchestrator": 22
+      },
+      "task_tool_measurement": {
+        "tool_calls": 130,
+        "calls_by_tool": {
+          "artifact_publish": 4,
+          "artifact_read": 5,
+          "artifact_search": 5,
+          "artifact_select": 4,
+          "bash": 86,
+          "capability_search": 8,
+          "dispatch_agent": 5,
+          "glob": 2,
+          "manage_task": 1,
+          "read": 2,
+          "read_agent_message": 4,
+          "send_mailbox_message": 2,
+          "skill": 2
+        },
+        "publication_selection_calls": 0,
+        "publication_selection_part_ids": [],
+        "publisher_selections_used_by_other_consumers": 0,
+        "direct_read_source_publications": 1,
+        "failed_tool_calls": 7
+      },
+      "all_tool_measurement": {
+        "tool_calls": 145,
+        "calls_by_tool": {
+          "artifact_publish": 4,
+          "artifact_read": 5,
+          "artifact_search": 5,
+          "artifact_select": 4,
+          "bash": 86,
+          "capability_search": 9,
+          "dispatch_agent": 5,
+          "glob": 2,
+          "manage_task": 1,
+          "mission_state": 4,
+          "panel_complete_mission": 1,
+          "panel_create_task": 2,
+          "panel_query_task": 1,
+          "panel_query_task_artifacts": 2,
+          "panel_read_task_artifact": 3,
+          "publish_interactive_artifact": 1,
+          "read": 2,
+          "read_agent_message": 4,
+          "send_mailbox_message": 2,
+          "skill": 2
+        },
+        "publication_selection_calls": 0,
+        "publication_selection_part_ids": [],
+        "publisher_selections_used_by_other_consumers": 0,
+        "direct_read_source_publications": 1,
+        "failed_tool_calls": 8
+      },
+      "world_tool_calls": 91,
+      "failed_business_assertions": [],
+      "execution_condition_satisfied": true,
+      "current_runtime_audits_passed": true,
+      "skill_tool_load_adherence": {
+        "passed": false,
+        "missing_explicit_skill_load_agents": [
+          "base-tester",
+          "orchestrator"
+        ],
+        "client_before_explicit_skill_load_count": 33
+      }
+    }
+  ],
+  "limitations": [
+    "Five historically exposed cases do not establish the 100-case result",
+    "Provider-activity requests are the same session-only metric used by the baseline; metered calls additionally include helper usage",
+    "Task Tool totals match the baseline measurement scope; all Tool totals also include Mission",
+    "OpenCorvus Tool parts and official API events are different counting layers: one bash Tool can carry multiple API requests, so the totals cannot be subtracted",
+    "Observed Mission acceptance and last-session-outcome times are milestones, not a measured corrected-harness end-to-end time",
+    "Publication-selection reduction is one transport metric and does not establish that all redundant calls halved",
+    "Official diagnostic scores are independently replayed; original scored eligibility remains zero",
+    "Provider cost metadata of zero is not evidence of zero monetary cost",
+    "The separate skill-load adherence metric recognizes explicit skill Tool calls only and reports 0/5; transcripts also contain direct reads of the SKILL.md file, so this does not establish absence of method content."
+  ],
+  "condition_report_sha256": "4ac918ffeed3f09aa607e840ee11b0e27ee959da17152add311f870b388d1475",
+  "runtime_audit_report_sha256": "b560a6bd395c7c381d0b575118b0042cd5c437c2bab243ab76b404a08c2036c4"
+}

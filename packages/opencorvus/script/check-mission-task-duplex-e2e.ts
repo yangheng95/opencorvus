@@ -1,4 +1,8 @@
-import { randomBytes } from "node:crypto"
+import { execFileSync } from "node:child_process"
+import { RealProviderAudit, CredentialRedactor } from "./real-provider-audit"
+import { bootstrapIsolatedTestRuntime, applyIsolatedTestUserEnvironment } from "@opencorvus-ai/util/test-runtime-environment"
+import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
+import { createHash, randomBytes } from "node:crypto"
 import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
@@ -14,14 +18,28 @@ const AUTH_SOURCE = "MISSION_TASK_DUPLEX_E2E_AUTH_SOURCE"
 const MODEL = "MISSION_TASK_DUPLEX_E2E_MODEL"
 const RESULT = "MISSION_TASK_DUPLEX_E2E_RESULT"
 const INACTIVITY_MS = 180_000
-const MAX_RUN_MS = 900_000
 
 if (process.env[ALLOW_REAL_PROVIDER] !== "1") {
   throw new Error(`${ALLOW_REAL_PROVIDER}=1 is required because this checker performs real streaming model calls.`)
 }
 const authoritySource = process.env[AUTH_SOURCE]?.trim()
 if (!authoritySource) throw new Error(`${AUTH_SOURCE} must name an existing auth.json authority file.`)
-const model = process.env[MODEL]?.trim() || "deepseek/deepseek-chat"
+const model = process.env[MODEL]?.trim()
+if (!model || !model.includes("/")) throw new Error(`${MODEL} must explicitly select the authorized Provider/model`)
+const maxRequests = Number(process.env.MISSION_TASK_DUPLEX_E2E_MAX_REQUESTS ?? "512")
+if (!Number.isSafeInteger(maxRequests) || maxRequests <= 0) throw new Error("Request budget must be a positive integer")
+const supervisor = prepareTestProcessSupervisor()
+const isolated = await bootstrapIsolatedTestRuntime("runner")
+applyIsolatedTestUserEnvironment(isolated)
+if (supervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = supervisor
+using audit = new RealProviderAudit(model.slice(model.indexOf("/") + 1), maxRequests)
+const redactor = new CredentialRedactor()
+redactor.collect(process.env)
+let runFailure: unknown
+let cleanupRuntime: (() => Promise<void>) | undefined
+let stopServer: (() => Promise<void>) | undefined
+let preflight: unknown
+let provenance: Record<string, unknown> = {}
 const nonce = `DUPLEX-${randomBytes(5).toString("hex")}`
 const root = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-mission-task-duplex-e2e-"))
 const runtimeRoot = path.join(root, "runtime")
@@ -59,6 +77,7 @@ async function copyAuthority() {
   if (!stat.isFile()) throw new Error(`${AUTH_SOURCE} is not a file: ${source}`)
   const dataDirectory = path.join(runtimeRoot, "data")
   await fs.mkdir(dataDirectory, { recursive: true })
+  redactor.collect(JSON.parse(await fs.readFile(source, "utf8")))
   await fs.copyFile(source, path.join(dataDirectory, "auth.json"))
 
   const catalogSource = path.join(path.dirname(source), "models.json")
@@ -81,9 +100,16 @@ for (const key of [
 process.env.OPENCORVUS_HOME = runtimeRoot
 process.env.OPENCORVUS_TEST_HOME = runtimeRoot
 process.env.OPENCORVUS_TEST_PROCESS_ROOT = root
-process.env.OPENCORVUS_CONFIG_CONTENT = JSON.stringify({ permission: "allow", model, small_model: model })
+process.env.OPENCORVUS_CONFIG_CONTENT = JSON.stringify({ permission_mode: "full_access", model, small_model: model })
 process.env.OPENCORVUS_TASK_PROCESS_MODE = "native"
 
+try {
+const repositoryRoot = execFileSync("git", ["rev-parse", "--show-toplevel"], { encoding: "utf8" }).trim()
+const patch = execFileSync("git", ["diff", "HEAD", "--", "packages", "expert-squads", "script"], { cwd: repositoryRoot })
+await fs.writeFile(path.join(root, "source.patch"), patch)
+provenance = { sourceSHA: execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8" }).trim(), sourceDiffSHA256: createHash("sha256").update(patch).digest("hex"), checkerSHA256: createHash("sha256").update(await fs.readFile(import.meta.filename)).digest("hex"), auditSHA256: createHash("sha256").update(await fs.readFile(path.join(import.meta.dir, "real-provider-audit.ts"))).digest("hex"), runtime: { executable: process.execPath, bun: Bun.version } }
+await fs.writeFile(path.join(root, "run.json"), JSON.stringify({ ...provenance, model, maxRequests, root }, null, 2))
+process.stdout.write(`[duplex-e2e] evidence=${resultPath}\n`)
 await initializeProject()
 await copyAuthority()
 
@@ -105,6 +131,7 @@ const [
   { EngineTaskTable },
   {
     missionTaskDuplexFinalEvidenceState,
+    missionTaskDuplexCompletionExecution,
     missionTaskDuplexActivityKey,
     observeMissionTaskDuplexActivity,
     projectMissionTaskDuplexControlStateInTransaction,
@@ -137,18 +164,31 @@ const [
   import("@/session/message"),
 ])
 
+cleanupRuntime = async () => {
+  const errors: unknown[] = []
+  for (const operation of [() => ProcessSupervisor.disposeLiveProcessesUnder(projectDirectory), () => stopServer?.(), () => Instance.disposeAll(), () => Database.close()]) {
+    try { await operation() } catch (error) { errors.push(error) }
+  }
+  if (errors.length) throw new AggregateError(errors, "Duplex owned runtime cleanup failed")
+}
+const { Provider } = await import("@/provider/provider")
+await Instance.provide({ directory: projectDirectory, fn: async () => {
+  const projected = await Provider.getModel(model.slice(0, model.indexOf("/")), audit.modelID)
+  if (projected.api.id !== audit.modelID) throw new Error("Authorized model projection differs from actual API model")
+} })
 const prepared = await requireRecoveredServerRuntime(await listenWithRecoveredServerRuntime({
   options: { hostname: "127.0.0.1", port: 0, randomPort: true },
   recover: async () => { assertStartedTaskProjectRecoverySucceeded(await recoverStartedTaskExecutions()) },
   disposeInstances: () => Instance.disposeAll(),
 }))
 const server = prepared.server
+stopServer = () => server.stop(true)
+audit.localOrigins.add(server.url.origin)
 const base = server.url.toString().replace(/\/$/, "")
 const missionURL = new URL(`${base}/mission/wake`)
 missionURL.searchParams.set("directory", projectDirectory)
 
-let primaryFailure: unknown
-try {
+preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs: INACTIVITY_MS, activity: SessionStatus.getActivity })
 const missionPrompt = [
   `Prove autonomous direct coordination between one Mission and two child Task schedulers. The acceptance nonce is ${nonce}.`,
   "Launch exactly two active child Tasks, first titled 'Duplex responder B' and then 'Duplex initiator A'. Do not create another Task.",
@@ -173,12 +213,10 @@ let lastActivityKey = ""
 let lastProgressKey = ""
 let lastAcceptanceKey = ""
 const startedAt = Date.now()
-const absoluteDeadline = startedAt + MAX_RUN_MS
 let activityDeadline = observeMissionTaskDuplexActivity({
   activityKey: "runtime-start",
   observedAtMs: startedAt,
   inactivityWindowMs: INACTIVITY_MS,
-  absoluteDeadlineMs: absoluteDeadline,
 })
 let terminal = false
 let lastAcceptanceState: Record<string, unknown> = {}
@@ -203,7 +241,8 @@ let evidence:
       toolPartCount: number
     }
   | undefined
-while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline) {
+while (Date.now() < activityDeadline.deadlineMs) {
+  if (audit.exhausted) throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
   const snapshot = Database.use((db) => {
     const persistedTasks = db.select().from(EngineTaskTable).all()
     const events = db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.type, "scheduler.message")).all()
@@ -234,10 +273,6 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
       artifacts,
       usage,
       sessions,
-      missionExecution: {
-        inputMessageID: SessionStatus.executionOccurrence(mission.sessionID)?.inputMessageID,
-        status: SessionStatus.get(mission.sessionID),
-      },
       toolHealth: missionTaskDuplexToolHealth(toolParts),
     }
   })
@@ -254,13 +289,12 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
   })
   activityDeadline = observeMissionTaskDuplexActivity({
     previous: activityDeadline,
-    activityKey,
+    activityKey: JSON.stringify({ durable: activityKey, sessions: snapshot.sessions.map((session) => ({ id: session.id, activity: SessionStatus.getActivity(session.id) })) }),
     observedAtMs: Date.now(),
     inactivityWindowMs: INACTIVITY_MS,
-    absoluteDeadlineMs: absoluteDeadline,
-  })
+    })
   if (activityDeadline.activityKey !== lastActivityKey) {
-    lastActivityKey = activityKey
+    lastActivityKey = activityDeadline.activityKey
     process.stdout.write(`[duplex-e2e] activity=${activityKey}\n`)
   }
   const progressKey = missionTaskDuplexProgressKey({
@@ -486,16 +520,12 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
       )?.message_id
       const missionAck = snapshot.messages.find((row) => {
         if (row.session_id !== mission.sessionID) return false
-        const data = row.data as {
-          role?: string
-          parentID?: string
-          providerID?: string
-          time?: { completed?: number }
-          error?: unknown
-        }
+        const parsed = Message.Assistant.safeParse({ ...row.data, id: row.id, sessionID: row.session_id })
+        if (!parsed.success) return false
+        const data = parsed.data
         if (
           data.role !== "assistant" ||
-          data.parentID !== aDoneWakeMessageID ||
+          !aDoneWakeMessageID || !Message.acceptsInputMessage(data, aDoneWakeMessageID) ||
           !data.providerID ||
           !data.time?.completed ||
           data.error
@@ -560,15 +590,12 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
             } | null
           )?.message_id
           return snapshot.messages.some((row) => {
-            const data = row.data as {
-              role?: string
-              parentID?: string
-              time?: { completed?: number }
-              error?: unknown
-            }
+            const parsed = Message.Assistant.safeParse({ ...row.data, id: row.id, sessionID: row.session_id })
+            if (!parsed.success) return false
+            const data = parsed.data
             return (
               data.role === "assistant" &&
-              data.parentID === wakeMessageID &&
+              Boolean(wakeMessageID && Message.acceptsInputMessage(data, wakeMessageID)) &&
               Boolean(data.time?.completed) &&
               !data.error
             )
@@ -617,7 +644,8 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
               : {}),
           }
         }),
-        execution: snapshot.missionExecution,
+        execution: missionTaskDuplexCompletionExecution(mission.sessionID,
+          completionMessageData?.role === "assistant" ? completionMessageData.parentID : undefined),
         nonce,
         artifacts: snapshot.artifacts.map((artifact) => {
           const message = snapshot.messages.find((candidate) => candidate.id === artifact.message_id)
@@ -825,49 +853,28 @@ while (Date.now() < activityDeadline.deadlineMs && Date.now() < absoluteDeadline
     })),
   }
   await fs.mkdir(path.dirname(resultPath), { recursive: true })
-  await fs.writeFile(resultPath, `${JSON.stringify(result, null, 2)}\n`, "utf8")
+  await fs.writeFile(resultPath, redactor.redact(`${JSON.stringify(result, null, 2)}\n`), "utf8")
   process.stdout.write(`[duplex-e2e] PASS evidence=${resultPath}\n`)
 } catch (error) {
-  primaryFailure = error
-  process.stderr.write(`[duplex-e2e] failure=${error instanceof Error ? error.stack ?? error.message : String(error)}\n`)
+  runFailure = error
 } finally {
-  const cleanupFailures: unknown[] = []
-  process.stdout.write("[duplex-e2e] cleanup=processes:start\n")
-  try {
-    await ProcessSupervisor.disposeLiveProcessesUnder(projectDirectory)
-  } catch (error) {
-    cleanupFailures.push(error)
+  const cleanupErrors: string[] = []
+  try { await cleanupRuntime?.() } catch (error) { cleanupErrors.push(String(error)) }
+  try { redactor.collect(JSON.parse(await fs.readFile(path.join(runtimeRoot, "data", "auth.json"), "utf8"))) }
+  catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") cleanupErrors.push(String(error)) }
+  for (const name of ["auth.json", "models.json"]) {
+    try { await fs.rm(path.join(runtimeRoot, "data", name), { force: true }) }
+    catch (error) { cleanupErrors.push(String(error)) }
   }
-  process.stdout.write("[duplex-e2e] cleanup=processes:done server:start\n")
-  try {
-    await server.stop(true)
-  } catch (error) {
-    cleanupFailures.push(error)
-    try {
-      await Instance.disposeAll()
-    } catch (disposeError) {
-      cleanupFailures.push(disposeError)
-    }
-  }
-  process.stdout.write("[duplex-e2e] cleanup=server:done database:start\n")
-  try {
-    Database.close()
-  } catch (error) {
-    cleanupFailures.push(error)
-  }
-  process.stdout.write("[duplex-e2e] cleanup=database:done\n")
-  if (!primaryFailure && cleanupFailures.length === 0) {
-    try {
-      await fs.rm(root, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 })
-    } catch (error) {
-      cleanupFailures.push(error)
-    }
-  } else {
-    process.stderr.write(`[duplex-e2e] retained failure root=${root}\n`)
-  }
-  if (primaryFailure && cleanupFailures.length) {
-    throw new AggregateError([primaryFailure, ...cleanupFailures], "Duplex E2E failed during cleanup")
-  }
-  if (primaryFailure) throw primaryFailure
-  if (cleanupFailures.length) throw new AggregateError(cleanupFailures, "Duplex E2E cleanup failed")
+  let existing: Record<string, unknown> = {}
+  try { existing = JSON.parse(await fs.readFile(resultPath, "utf8")) }
+  catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") cleanupErrors.push(String(error)) }
+  const result = { ...existing, ...provenance, model, maxRequests, preflight, requests: audit.requests,
+    status: audit.exhausted ? "budget_exhausted" : runFailure || cleanupErrors.length ? "failed" : "passed",
+    error: runFailure instanceof Error ? runFailure.message : runFailure === undefined ? undefined : String(runFailure),
+    credentialCleanup: cleanupErrors.length ? "failed" : "passed", cleanupErrors, evidenceRoot: root }
+  await fs.mkdir(path.dirname(resultPath), { recursive: true })
+  await fs.writeFile(resultPath, redactor.redact(JSON.stringify(result, null, 2)))
+  process.stdout.write(`[duplex-e2e] ${result.status} evidence=${resultPath}\n`)
+  if (result.status !== "passed") process.exitCode = 1
 }

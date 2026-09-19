@@ -18,15 +18,7 @@ file.
 
 ## Agents, tools, and extensions
 
-- [01 — Agent contracts](01-agents.md)
 - [04 — Extension ownership, package projection, and lifecycle](04-extensions.md)
-- [08 — Agent tool adapter](08-agent-tool-adapter.md)
-- [11 — Agent object-oriented protocol](11-agent-oop-protocol.md)
-- [13 — Agent communication matrix](13-agent-communication-matrix.md)
-- [14 — Agent runtime mode](14-agent-runtime-mode.md)
-- [15 — Agent facts and turns](15-agent-facts-and-turns.md)
-- [16 — Unified teardown](16-unified-teardown.md)
-- [18 — Scheduled automations](18-scheduled-automations.md)
 - [17 — Code and Work agent platform](17-code-work-agent-platform.md)
 - [Search-native capability runtime](capability-search-runtime.md)
 
@@ -40,13 +32,9 @@ file.
 
 - [07 — Overlay panels and Task evidence](07-panel.md)
 - [07-panel-reactivity — Overlay reactive projection](07-panel-reactivity.md)
-- [12 — Overlay card system](12-overlay-card-system.md)
 - [Overlay typography](overlay-typography.md)
 - [Public website and Registry](public-website.md)
 
 ## Boundaries, verification, and principles
 
-- [09 — Verification evidence](09-verification-evidence.md)
-- [10 — Worktree lifecycle](10-worktree-lifecycle.md)
 - [Security, permission, and metric-evaluator boundaries](security-permission.md)
-- [99 — Principles](99-principles.md)

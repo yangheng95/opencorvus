@@ -33,7 +33,7 @@
     },
     "packages/channel-config": {
       "name": "@opencorvus-ai/channel-config",
-      "version": "0.0.64-beta",
+      "version": "0.1.3",
       "dependencies": {
         "zod": "catalog:",
       },
@@ -44,7 +44,7 @@
     },
     "packages/channel-runtime": {
       "name": "@opencorvus-ai/channel-runtime",
-      "version": "0.0.64-beta",
+      "version": "0.1.3",
       "dependencies": {
         "@opencorvus-ai/channel-config": "workspace:*",
         "@opencorvus-ai/sdk": "workspace:*",
@@ -72,7 +72,7 @@
     },
     "packages/opencorvus": {
       "name": "opencorvus",
-      "version": "0.0.64-beta",
+      "version": "0.1.3",
       "bin": {
         "opencorvus": "./bin/opencorvus",
       },
@@ -195,7 +195,7 @@
     },
     "packages/overlay": {
       "name": "@opencorvus-ai/overlay",
-      "version": "0.0.64-beta",
+      "version": "0.1.3",
       "dependencies": {
         "@codemirror/autocomplete": "^6.20.3",
         "@codemirror/commands": "^6.10.4",
@@ -260,7 +260,7 @@
     },
     "packages/plugin": {
       "name": "@opencorvus-ai/plugin",
-      "version": "0.0.64-beta",
+      "version": "0.1.3",
       "dependencies": {
         "@opencorvus-ai/sdk": "workspace:*",
         "@opencorvus-ai/util": "workspace:*",
@@ -284,7 +284,7 @@
     },
     "packages/sdk/js": {
       "name": "@opencorvus-ai/sdk",
-      "version": "0.0.64-beta",
+      "version": "0.1.3",
       "dependencies": {
         "@opencorvus-ai/util": "workspace:*",
         "zod": "catalog:",
@@ -299,7 +299,7 @@
     },
     "packages/transport-protocol": {
       "name": "@opencorvus-ai/transport-protocol",
-      "version": "0.0.64-beta",
+      "version": "0.1.3",
       "dependencies": {
         "@opencorvus-ai/util": "workspace:*",
         "zod": "catalog:",
@@ -311,7 +311,7 @@
     },
     "packages/util": {
       "name": "@opencorvus-ai/util",
-      "version": "0.0.64-beta",
+      "version": "0.1.3",
       "dependencies": {
         "@types/node": "catalog:",
         "proper-lockfile": "4.1.2",
@@ -380,6 +380,7 @@
     "baseline-browser-mapping": "2.11.0",
     "brace-expansion": "5.0.9",
     "browserslist": "4.28.7",
+    "devalue": "5.9.2",
     "dompurify": "3.4.13",
     "esbuild": "0.28.1",
     "fast-uri": "4.1.3",
@@ -2396,7 +2397,7 @@
 
     "detect-node-es": ["detect-node-es@1.1.0", "", {}, "sha512-ypdmJU/TbBby2Dxibuv7ZLW3Bs1QEmM7nHjEANfohJLvE0XVujisn1qPJcZxg+qDucsr+bP6fLD1rPS3AhJ7EQ=="],
 
-    "devalue": ["devalue@5.8.1", "", {}, "sha512-4CXDYRBGqN+57wVJkuXBYmpAVUSg3L6JAQa/DFqm238G73E1wuyc/JhGQJzN7vUf/CMphYau2zXbfWzDR5aTEw=="],
+    "devalue": ["devalue@5.9.2", "", {}, "sha512-po4PAY5c53tw5XMocSnf8A/5OHhbbUftpr93aEN6BBoAdntUmK7vu7wOATqvt7cXO7m1Cl4gMVn6p7n6n4mj0w=="],
 
     "devlop": ["devlop@1.1.0", "", { "dependencies": { "dequal": "^2.0.0" } }, "sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA=="],
 

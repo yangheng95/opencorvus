@@ -1,0 +1,220 @@
+{
+  "schema_version": 1,
+  "kind": "current_mission_completion_protocol_audit",
+  "verified_at_utc": "2026-09-12T16:43:43.528350+00:00",
+  "execution_runtime_commit": "134d34336cdb19c90d96ac49640c0746556a3f0f",
+  "audit_source_path": "packages/opencorvus/script/benchmark/external-agent/contract.ts",
+  "audit_source_sha256": "4490add2014071c1966bd2787ee3202566d1a2da4432a49d41810993ff4f5a1a",
+  "cases": [
+    {
+      "case_index": 1,
+      "run_id": "f6494719-626a-4c19-896c-b2ccddd2811a",
+      "observation_path": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/active-terminal-observation-42308.json",
+      "observation_sha256": "c06490634ab7ace4d7a7a5fed55131ef54ba488cd79f0a000cf16386777c6312",
+      "before": {
+        "outcome": {
+          "passed": false,
+          "scored_terminal": false,
+          "mission_completed": true,
+          "explicit_complete_mission": false,
+          "completion_receipt_matches": false,
+          "mission_transcript_session_ids": [
+            "ses_-zUUyU6ogzzQuxF2NY55"
+          ],
+          "mission_assistant_settled": true,
+          "mission_assistant_replies_to_latest_user": true,
+          "mission_assistant_healthy": true,
+          "mission_status": "inactive",
+          "child_task_count": 1,
+          "child_tasks": [
+            {
+              "task_id": "tsk_g00VV1W7RH007gSQK6tk",
+              "passed": true,
+              "scored_terminal": true,
+              "lifecycle_status": "completed",
+              "explicit_fail_task": false,
+              "infrastructure_failures": [],
+              "outcome": "completed"
+            }
+          ],
+          "status_task_ids": [
+            "tsk_g00VV1W7RH007gSQK6tk"
+          ]
+        },
+        "quiescence": {
+          "passed": true,
+          "mission_status": "inactive",
+          "mission_completed": true,
+          "task_count": 1,
+          "task_audits": [
+            {
+              "task_id": "tsk_g00VV1W7RH007gSQK6tk",
+              "passed": true,
+              "lifecycle_status": "completed",
+              "occurrence_count": 5,
+              "unsettled_occurrences": []
+            }
+          ]
+        }
+      },
+      "after": {
+        "outcome": {
+          "passed": true,
+          "scored_terminal": true,
+          "mission_completed": true,
+          "explicit_complete_mission": true,
+          "completion_receipt_matches": true,
+          "mission_transcript_session_ids": [
+            "ses_-zUUyU6ogzzQuxF2NY55"
+          ],
+          "mission_assistant_settled": true,
+          "mission_assistant_replies_to_latest_user": true,
+          "mission_assistant_healthy": true,
+          "mission_status": "inactive",
+          "child_task_count": 1,
+          "child_tasks": [
+            {
+              "task_id": "tsk_g00VV1W7RH007gSQK6tk",
+              "passed": true,
+              "scored_terminal": true,
+              "lifecycle_status": "completed",
+              "explicit_fail_task": false,
+              "infrastructure_failures": [],
+              "outcome": "completed"
+            }
+          ],
+          "status_task_ids": [
+            "tsk_g00VV1W7RH007gSQK6tk"
+          ]
+        },
+        "quiescence": {
+          "passed": true,
+          "mission_status": "inactive",
+          "mission_completed": true,
+          "task_count": 1,
+          "task_audits": [
+            {
+              "task_id": "tsk_g00VV1W7RH007gSQK6tk",
+              "passed": true,
+              "lifecycle_status": "completed",
+              "occurrence_count": 5,
+              "unsettled_occurrences": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_index": 2,
+      "run_id": "26c90986-febf-483c-a1a1-0dc7e7c5db4f",
+      "observation_path": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/active-terminal-observation-42309.json",
+      "observation_sha256": "c1e35c46a4bbc0a2ae2d90ef4b4546ea0b630c4a07e87659ffe9ed1eea945b99",
+      "before": {
+        "outcome": {
+          "passed": false,
+          "scored_terminal": false,
+          "mission_completed": true,
+          "explicit_complete_mission": false,
+          "completion_receipt_matches": false,
+          "mission_transcript_session_ids": [
+            "ses_-zUUyU6aIzzGb53CsSjN"
+          ],
+          "mission_assistant_settled": true,
+          "mission_assistant_replies_to_latest_user": true,
+          "mission_assistant_healthy": true,
+          "mission_status": "inactive",
+          "child_task_count": 1,
+          "child_tasks": [
+            {
+              "task_id": "tsk_g00VV1WDap00ovDJJae2",
+              "passed": true,
+              "scored_terminal": true,
+              "lifecycle_status": "completed",
+              "explicit_fail_task": false,
+              "infrastructure_failures": [],
+              "outcome": "completed"
+            }
+          ],
+          "status_task_ids": [
+            "tsk_g00VV1WDap00ovDJJae2"
+          ]
+        },
+        "quiescence": {
+          "passed": true,
+          "mission_status": "inactive",
+          "mission_completed": true,
+          "task_count": 1,
+          "task_audits": [
+            {
+              "task_id": "tsk_g00VV1WDap00ovDJJae2",
+              "passed": true,
+              "lifecycle_status": "completed",
+              "occurrence_count": 5,
+              "unsettled_occurrences": []
+            }
+          ]
+        }
+      },
+      "after": {
+        "outcome": {
+          "passed": true,
+          "scored_terminal": true,
+          "mission_completed": true,
+          "explicit_complete_mission": true,
+          "completion_receipt_matches": true,
+          "mission_transcript_session_ids": [
+            "ses_-zUUyU6aIzzGb53CsSjN"
+          ],
+          "mission_assistant_settled": true,
+          "mission_assistant_replies_to_latest_user": true,
+          "mission_assistant_healthy": true,
+          "mission_status": "inactive",
+          "child_task_count": 1,
+          "child_tasks": [
+            {
+              "task_id": "tsk_g00VV1WDap00ovDJJae2",
+              "passed": true,
+              "scored_terminal": true,
+              "lifecycle_status": "completed",
+              "explicit_fail_task": false,
+              "infrastructure_failures": [],
+              "outcome": "completed"
+            }
+          ],
+          "status_task_ids": [
+            "tsk_g00VV1WDap00ovDJJae2"
+          ]
+        },
+        "quiescence": {
+          "passed": true,
+          "mission_status": "inactive",
+          "mission_completed": true,
+          "task_count": 1,
+          "task_audits": [
+            {
+              "task_id": "tsk_g00VV1WDap00ovDJJae2",
+              "passed": true,
+              "lifecycle_status": "completed",
+              "occurrence_count": 5,
+              "unsettled_occurrences": []
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "verification": {
+    "focused_tests": 4,
+    "assertions": 21,
+    "duration_seconds": 44.09,
+    "full_streamed_recovery_ms": 41326.63,
+    "provider_transport_in_full_recovery_test": "fault injection",
+    "real_model_observations": 2,
+    "extra_model_calls": 0
+  },
+  "limitations": [
+    "This validates Mission completion evidence, not official business scores or the full batch",
+    "Original 134d runtime and its sealed result classifications are preserved",
+    "The active installation is unchanged; subsequent audited runs must use the corrected committed harness"
+  ]
+}

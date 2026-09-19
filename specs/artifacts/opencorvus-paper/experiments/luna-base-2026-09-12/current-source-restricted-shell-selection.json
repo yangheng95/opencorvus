@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "execution_commit": "51b780ee715aba2d80e30eaf5a89bae1ed62f3cb",
+  "implementation_base_commit": "75f48ef37eeefdbca23b62bc9872c28dd5950a15",
+  "implementation_deployed": false,
+  "active_coordinator_changed": false,
+  "viewer_changed": false,
+  "case_ranges": [
+    {
+      "first_case": 1,
+      "last_case": 50,
+      "source_file": "restricted-agent-shell-base.sh",
+      "source_sha256": "32ed4bd67d0c51d4acc8f86c7fbc1c47b7fc68aa75d5bc0d69728f658e3893b0",
+      "installed_probe_uid": 60050,
+      "installed_uid": 0,
+      "installed_mode": "755"
+    },
+    {
+      "first_case": 51,
+      "last_case": 100,
+      "source_file": "restricted-agent-shell.sh",
+      "source_sha256": "ac14f4540c68d48cdc744a1d0b607243a28cbe82fd76a662b03847b49ec0d063",
+      "installed_probe_uid": 60051,
+      "installed_uid": 0,
+      "installed_mode": "755"
+    }
+  ],
+  "implementation_source_sha256": {
+    "contract.ts": "0a41f4a8c50bd2ff27b9c5fb9f73c70907b3a80ce38ea7637b911dd216ac946b",
+    "run-automationbench-batch.ts": "3cd2fb5464925963eb5af3680483affd82d62cda24bed61a68a965debc9c4d0a",
+    "catalog-automationbench-evidence.ts": "e6f7600781b2ceb89c163ccabdec24a7d0194226f7b7e130e36c6fc0f0084f08",
+    "verify-automationbench-evidence.ts": "508ad5397f93a817140dbf981d736a7ef5766ca64d1b1551b9bc7b585b9878d7",
+    "restricted-shell-evidence.ts": "e55b4839713cb9cfb2a7a9ce696ce3fab9de52576ee9456cda6f9d5d52c1d3b1",
+    "source-evidence.ts": "402e3570de7db4caa81f3801039a8b9512bd2cb81f8543aea915b260a9366d64"
+  },
+  "checks": {
+    "typescript_case_authority": { "passed": 17, "assertions": 17 },
+    "python_manifest_identity": { "passed": 6 },
+    "benchmark_typescript": {
+      "passed": true,
+      "project": "packages/opencorvus/script/benchmark/tsconfig.json"
+    },
+    "installed_wrapper_probes": {
+      "passed": true,
+      "output_sha256": {
+        "base": "843e11d034dda586c81d0634b91853f548e1b83d53b298b62e5549fe667ca1ef",
+        "extended": "be2d09519f3780a1708fc8fd1726e43430d091b0b44fa3590ae3246296fa645f"
+      }
+    },
+    "isolated_catalog": {
+      "passed": true,
+      "attempts": 5,
+      "eligible": 0,
+      "stdout": "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100/restricted-shell-authority-audit/catalog.stdout.json",
+      "stderr": "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100/restricted-shell-authority-audit/catalog.stderr.log",
+      "stdout_sha256": "2b8464048eb67b2baada78d95d64b64dfea4c2018d2bda9c3f00d719630cd0cb",
+      "stderr_bytes": 0
+    },
+    "isolated_verifier": {
+      "passed": true,
+      "mode": "development",
+      "attempts": 5,
+      "eligible": 0,
+      "paper_files": 24,
+      "stdout": "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100/restricted-shell-authority-audit/verify.stdout.json",
+      "stderr": "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100/restricted-shell-authority-audit/verify.stderr.log",
+      "stdout_sha256": "dd1b380e91af0638525da11bd5cc946733fb348b0a36f4acbcfb92b684845f71",
+      "stderr_bytes": 0
+    }
+  },
+  "limitations": [
+    "The active 51b coordinator still passes the base wrapper to every case.",
+    "No code or wrapper was hot-patched into the active installation.",
+    "The coordinator must be replaced without concurrent catalog writers before case 51.",
+    "This check made no model request and does not change any sealed result."
+  ],
+  "checker_arguments": [
+    "--root", "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100/restricted-shell-authority-audit/evidence",
+    "--source-data", "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100/provider-source",
+    "--python", "/var/lib/opencorvus-benchmark/evaluator-venv/bin/python",
+    "--base-restricted-shell", "/var/lib/opencorvus-benchmark/restricted-agent-shell-base",
+    "--extended-restricted-shell", "/var/lib/opencorvus-benchmark/restricted-agent-shell",
+    "--model", "openai/gpt-5.6-luna",
+    "--profiles", "base",
+    "--case-set", "/mnt/d/myhexin-local/opencorvus/specs/artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/case-manifest.json"
+  ]
+}

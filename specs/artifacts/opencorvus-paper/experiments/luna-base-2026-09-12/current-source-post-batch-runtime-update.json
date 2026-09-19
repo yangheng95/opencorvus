@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "updated_at_utc": "2026-09-12T17:46:34.996234+00:00",
+  "runtime_directory": "/var/lib/opencorvus-benchmark/opencorvus-runner",
+  "previous_commit": "134d34336cdb19c90d96ac49640c0746556a3f0f",
+  "current_commit": "00ccc5e09f1bee33b1ced2aaa3fd974585312f86",
+  "active_benchmark_leases": [],
+  "coordinator_exited": true,
+  "active_benchmark_processes": [],
+  "worktree_clean": true,
+  "viewer_source_unchanged": true,
+  "model_calls_during_update": 0,
+  "completed_batch_root": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source",
+  "completed_batch_run_id": "c78ebbca-bb73-42d8-95dd-8370dfe7f957",
+  "updated_runtime_checks": {
+    "bun_passed": 4,
+    "bun_failed": 0,
+    "bun_assertions": 21,
+    "python_passed": 25,
+    "evidence_log_path": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/full-five-audit/updated-runtime-checks.log",
+    "evidence_log_sha256": "b6f1d2888a714572aa6187580d6903c1b82e93d56523b60c732ccc6bcd1a26cd"
+  }
+}

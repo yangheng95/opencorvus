@@ -2,7 +2,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, spyOn, test } from "b
 import path from "node:path"
 import { Config } from "@/config/config"
 import { EngineTaskTable } from "@/engine/engine.sql"
-import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
+import { TestHooks as TaskControlTestHooks, waitForIngressDeliveryHooksForTest } from "@/engine/task-root-ingress-delivery"
 import { acceptTaskRootIngressInTransaction, acquireTaskRootIngressLease } from "@/engine/task-root-fact-store"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import { Identifier } from "@/id/id"
@@ -815,15 +815,28 @@ describe("scheduler Task-root Message protocol", () => {
           sourceMessageID: sourceMessage.id,
           sourcePartID: sourcePart.id,
         })
-        await Bun.sleep(50)
-        expect(materializationStarts).toBe(1)
-        releaseFirst.resolve()
-        const [receipt, peerReceipt] = await Promise.all([receiptPending, peerReceiptPending])
+        let receipt: Awaited<typeof receiptPending>
+        let peerReceipt: Awaited<typeof peerReceiptPending>
+        try {
+          ;[receipt, peerReceipt] = await Promise.race([
+            Promise.all([receiptPending, peerReceiptPending]),
+            Bun.sleep(2_000).then(() => {
+              throw new Error("Scheduler send receipt waited for recipient execution")
+            }),
+          ])
+          expect([receipt.status, peerReceipt.status]).toEqual(["pending", "pending"])
+          expect(materializationStarts).toBe(1)
+        } finally {
+          releaseFirst.resolve()
+        }
         await drainSchedulerMessagesForProject()
+        await waitForIngressDeliveryHooksForTest()
         const delivery = requireSchedulerDelivery(receipt.inboxID)
         if (delivery.status !== "delivered") {
           throw new Error(`Scheduler delivery did not settle: ${JSON.stringify(delivery)}`)
         }
+        if (delivery.deliveryResult?.kind !== "task_ingress") throw new Error("Expected Task ingress delivery receipt")
+        const messageID = delivery.deliveryResult.message_id
         const expectedReference = {
           eventID: receipt.eventID,
           inboxID: receipt.inboxID,
@@ -832,19 +845,18 @@ describe("scheduler Task-root Message protocol", () => {
           targetTaskExecutionEpoch: 1,
         }
         const persisted = Database.use((db) =>
-          db
-            .select({ data: MessageTable.data })
-            .from(MessageTable)
-            .where(eq(MessageTable.id, receipt.messageID!))
-            .get(),
+          db.select({ data: MessageTable.data }).from(MessageTable).where(eq(MessageTable.id, messageID)).get(),
         )
-        expect(receipt).toMatchObject({
+        expect(delivery).toMatchObject({
           status: "delivered",
-          messageID: expect.any(String),
-          ingressID: expect.any(String),
+          deliveryResult: { kind: "task_ingress", message_id: messageID, ingress_id: expect.any(String) },
         })
         expect(persisted).toBeDefined()
-        expect({ materializationStarts, peerStatus: peerReceipt.status, observedWakeCount: observedWakes.length }).toEqual({
+        expect({
+          materializationStarts,
+          peerStatus: requireSchedulerDelivery(peerReceipt.inboxID).status,
+          observedWakeCount: observedWakes.length,
+        }).toEqual({
           materializationStarts: 2,
           peerStatus: "delivered",
           observedWakeCount: 2,
@@ -852,9 +864,9 @@ describe("scheduler Task-root Message protocol", () => {
         const provenance = TaskRootMessageProvenance.parse(
           (persisted?.data as { extra?: { task_root_message?: unknown } } | undefined)?.extra?.task_root_message,
         )
-        const wake = observedWakes.map((value) => OrchestratorEventSchema.parse(value)).find(
-          (value) => value.rootMessage?.schedulerDelivery?.inboxID === receipt.inboxID,
-        )
+        const wake = observedWakes
+          .map((value) => OrchestratorEventSchema.parse(value))
+          .find((value) => value.rootMessage?.schedulerDelivery?.inboxID === receipt.inboxID)
         if (!wake) throw new Error("Scheduler delivery wake was not observed")
 
         expect(provenance).toEqual({
@@ -865,7 +877,7 @@ describe("scheduler Task-root Message protocol", () => {
           schedulerDelivery: expectedReference,
         })
         expect(wake.rootMessage).toEqual({
-          messageID: receipt.messageID,
+          messageID,
           kind: "mission",
           schedulerDelivery: expectedReference,
         })

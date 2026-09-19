@@ -1,0 +1,603 @@
+{
+  "schema_version": 1,
+  "kind": "current_source_native_first_five_audit",
+  "audited_at_utc": "2026-09-12T16:31:33.090509+00:00",
+  "runtime_revision": "134d34336cdb19c90d96ac49640c0746556a3f0f",
+  "manifest_sha256": "43ca54925db11d7dc6d9c5b80bbd32aed9b6c93ea92a2d1b8225a0858036ff42",
+  "model": "openai/gpt-5.6-luna",
+  "reasoning_effort": "medium",
+  "max_response_steps": 50,
+  "inactivity_ms": 600000,
+  "checker_path": "/var/lib/opencorvus-benchmark/opencorvus-runner/packages/opencorvus/script/benchmark/external-agent/verify_automationbench_replay.py",
+  "checker_sha256": "7a7b47eaac0b816f82be36fe74837bbac385fe9c50f8d5629a2c06af95737a0d",
+  "fixed_case_indexes": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "summary": {
+    "attempted": 5,
+    "scored": 5,
+    "strict_passed": 1,
+    "strict_rate": 0.2,
+    "mean_partial": 0.74989898989899,
+    "total_response_steps": 83,
+    "total_tool_calls": 169,
+    "mean_duration_ms": 121726.8,
+    "total_duration_ms": 608634
+  },
+  "cases": [
+    {
+      "case_index": 1,
+      "case": {
+        "domain": "marketing",
+        "task": "marketing.linkedin_company_update",
+        "example_id": 1207,
+        "task_contract_sha256": "2e11a42ea582c94e1051b2ba0ee4ba0e2c867aa0297a7ca7219d692e29fffbd0",
+        "selection_rank_sha256": "00244611678791c3e4d5f041275a7711f866acbca5508b8c1bbb590a1aca0972",
+        "case_index": 1,
+        "batch_index": 1
+      },
+      "run_id": "3e27fb9b-0a39-4fc1-b5b9-bab27eef51ad",
+      "source_directory": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/native/case-001-attempt-1",
+      "strict": 0,
+      "partial": 0.8,
+      "duration_ms": 97318,
+      "response_steps": 18,
+      "tool_calls": 27,
+      "request_models": [
+        "gpt-5.6-luna"
+      ],
+      "usage": {
+        "inputTokens": 237878,
+        "inputTokenDetails": {
+          "noCacheTokens": 169270,
+          "cacheReadTokens": 68608
+        },
+        "outputTokens": 2108,
+        "outputTokenDetails": {
+          "textTokens": 1558,
+          "reasoningTokens": 550
+        },
+        "totalTokens": 239986,
+        "reasoningTokens": 550,
+        "cachedInputTokens": 68608
+      },
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 1207,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 17,
+        "replayed_non_stateful_calls": 10,
+        "skipped_non_stateful_calls": 0
+      },
+      "files": [
+        {
+          "path": "input.json",
+          "bytes": 5805,
+          "sha256": "94670d6401208b6f488f96947526b1a3d2d5898475a3ef85dd52df0bd3adb705"
+        },
+        {
+          "path": "replay-stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "result.json",
+          "bytes": 3158,
+          "sha256": "ff129e7d404b77b47f6737a90521dc9ee6feba3f27e339d057d4b1576393cde3"
+        },
+        {
+          "path": "run-start.json",
+          "bytes": 212,
+          "sha256": "941bde93eaa562dacfc271142d57aa0cd02a75b8c439b8dd7904126bac7f73f7"
+        },
+        {
+          "path": "steps.jsonl",
+          "bytes": 1382755,
+          "sha256": "c60df7051b820942ec053e7ef3af31b3c44d56617bbff9786768ffd8ff1f3801"
+        },
+        {
+          "path": "stream.jsonl",
+          "bytes": 1539948,
+          "sha256": "c6931b9867942324e0d92d835b617391d4500a195b0a190b7e2c176d2c4a8271"
+        },
+        {
+          "path": "tool-results.jsonl",
+          "bytes": 85963,
+          "sha256": "6f99fb8d7470afc86df645e9096b3072cbd4cad5e1128c1661280101392c7fe0"
+        },
+        {
+          "path": "world/automationbench-events.jsonl",
+          "bytes": 13425,
+          "sha256": "0100c44299d6483caaa0efab83478df022fb013a027879370cce3a985eb2a9e0"
+        },
+        {
+          "path": "world/automationbench-final-world.json",
+          "bytes": 18644,
+          "sha256": "5c3b9d2d902f67d878941635c79761297e9d8ecc849839522530c612a9089051"
+        },
+        {
+          "path": "world/automationbench-initial-world.json",
+          "bytes": 17560,
+          "sha256": "3f905405268ffcb210c1786266028c791a3c7ddb210fdfc206accd80a75aaced"
+        },
+        {
+          "path": "world/official-score.json",
+          "bytes": 1884,
+          "sha256": "24e36327efd1e758b188c994668221a8ad5aa11e298086bfb40ac1e034b3dcbe"
+        }
+      ]
+    },
+    {
+      "case_index": 2,
+      "case": {
+        "domain": "finance",
+        "task": "finance.wave_freelance_invoice",
+        "example_id": 4014,
+        "task_contract_sha256": "0a3653b8a06156c391a33e80fca84ca5ab091d15e0b53f241740712372276908",
+        "selection_rank_sha256": "004b44339af4ad32365acc89f99f3d00297c4e2380911d844f537d24ead35f05",
+        "case_index": 2,
+        "batch_index": 1
+      },
+      "run_id": "3de74d4c-d65e-4390-9388-bc7ca52879c6",
+      "source_directory": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/native/case-002-attempt-1",
+      "strict": 0,
+      "partial": 0.5,
+      "duration_ms": 105016,
+      "response_steps": 15,
+      "tool_calls": 30,
+      "request_models": [
+        "gpt-5.6-luna"
+      ],
+      "usage": {
+        "inputTokens": 283154,
+        "inputTokenDetails": {
+          "noCacheTokens": 237586,
+          "cacheReadTokens": 45568
+        },
+        "outputTokens": 2773,
+        "outputTokenDetails": {
+          "textTokens": 2252,
+          "reasoningTokens": 521
+        },
+        "totalTokens": 285927,
+        "reasoningTokens": 521,
+        "cachedInputTokens": 45568
+      },
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 4014,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 16,
+        "replayed_non_stateful_calls": 14,
+        "skipped_non_stateful_calls": 0
+      },
+      "files": [
+        {
+          "path": "input.json",
+          "bytes": 6121,
+          "sha256": "f10a57188064bd06a6be793afa34f58615b059e915b20cac36b602cc1e29ef9f"
+        },
+        {
+          "path": "replay-stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "result.json",
+          "bytes": 2985,
+          "sha256": "16b006ac77b86ece380d406a008ddce6310e3375f3bb65507b67e1750741b650"
+        },
+        {
+          "path": "run-start.json",
+          "bytes": 212,
+          "sha256": "6115f1e1836b3248990d40fcbafb470306f074230afa554138f9a0c5af07e14b"
+        },
+        {
+          "path": "steps.jsonl",
+          "bytes": 1491226,
+          "sha256": "ae762034b0f38306f405ab299ef34031e350f64f5cfa5b47e26b80395771400a"
+        },
+        {
+          "path": "stream.jsonl",
+          "bytes": 1608929,
+          "sha256": "0a7e09fd0ef3c852112faaf585ab0ba5f0634e1e1b342074454524cebdd8a018"
+        },
+        {
+          "path": "tool-results.jsonl",
+          "bytes": 103801,
+          "sha256": "8e6fdf1ac612236db4eeecdf4d9d8ec26b4f4a6a417510ff2cc11de7febd88e3"
+        },
+        {
+          "path": "world/automationbench-events.jsonl",
+          "bytes": 16199,
+          "sha256": "cb5065880e8cd181a3088e45af49821f1a1f255aa3f4abe70b5efea0e8c9a229"
+        },
+        {
+          "path": "world/automationbench-final-world.json",
+          "bytes": 7888,
+          "sha256": "5bb280d37dd116b41bf949bb9cb48dcbbabf34116d5870c3eb52b64c1d21769f"
+        },
+        {
+          "path": "world/automationbench-initial-world.json",
+          "bytes": 6395,
+          "sha256": "d23d466ad36b2d7e13cc898a19ab5f46ef74bd2052bc8fb815a61d7b586b4713"
+        },
+        {
+          "path": "world/official-score.json",
+          "bytes": 1721,
+          "sha256": "4603041d8d79696a74bed096758624d268d7ba76758092abc5de3847b6fe77fa"
+        }
+      ]
+    },
+    {
+      "case_index": 3,
+      "case": {
+        "domain": "support",
+        "task": "support.helpcrunch_trial_nurture",
+        "example_id": 1549,
+        "task_contract_sha256": "c6afd11443724b7f51cdadd7b3a1d86d17d0e1a7b06960a9340d597c66589974",
+        "selection_rank_sha256": "0101cc7b8919f18d4893f481731dbc14b70679a5bfba5de165088a42bf38e229",
+        "case_index": 3,
+        "batch_index": 1
+      },
+      "run_id": "a0689f17-b1af-4076-a12a-89f2612a1e45",
+      "source_directory": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/native/case-003-attempt-1",
+      "strict": 1,
+      "partial": 1,
+      "duration_ms": 174844,
+      "response_steps": 19,
+      "tool_calls": 51,
+      "request_models": [
+        "gpt-5.6-luna"
+      ],
+      "usage": {
+        "inputTokens": 233383,
+        "inputTokenDetails": {
+          "noCacheTokens": 188327,
+          "cacheReadTokens": 45056
+        },
+        "outputTokens": 6641,
+        "outputTokenDetails": {
+          "textTokens": 5318,
+          "reasoningTokens": 1323
+        },
+        "totalTokens": 240024,
+        "reasoningTokens": 1323,
+        "cachedInputTokens": 45056
+      },
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 1549,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 29,
+        "replayed_non_stateful_calls": 10,
+        "skipped_non_stateful_calls": 12
+      },
+      "files": [
+        {
+          "path": "input.json",
+          "bytes": 5885,
+          "sha256": "b43328c27ed9311a0003ab292660bdcdfaedd355a0fb8d6196e6a5fff7abb574"
+        },
+        {
+          "path": "replay-stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "result.json",
+          "bytes": 7515,
+          "sha256": "61f789325cb18544cb99bc41d32de45ca4ce2881003d84743a4530a148038639"
+        },
+        {
+          "path": "run-start.json",
+          "bytes": 212,
+          "sha256": "f4ce830a47b6cb698ca3eab90006a334b3b1030ff5c8871a02e7f63f51cb9bfb"
+        },
+        {
+          "path": "steps.jsonl",
+          "bytes": 1301915,
+          "sha256": "b1d74d40bdb3307acfb41735bb49b5c14156d3d1b72dbeccd502d7dd422b5575"
+        },
+        {
+          "path": "stream.jsonl",
+          "bytes": 1473914,
+          "sha256": "b699ffe9b1bf29aa68af4a66c4dd40a91c990623a46cf1307e399275f21b654e"
+        },
+        {
+          "path": "tool-results.jsonl",
+          "bytes": 77306,
+          "sha256": "e11c5b35e68cb9f2034e8b762cb28463c1a0d56f2c9325a7515370c0db179f09"
+        },
+        {
+          "path": "world/automationbench-events.jsonl",
+          "bytes": 27002,
+          "sha256": "f3dc68a12ea11e51d5042afc0d2d970b7b93ae532cac1f72e8da6d29223eb27f"
+        },
+        {
+          "path": "world/automationbench-final-world.json",
+          "bytes": 20892,
+          "sha256": "9588d7dead81974a51ab58b86b27919f3b67693c8d38e8b9ffce35b278c27fd3"
+        },
+        {
+          "path": "world/automationbench-initial-world.json",
+          "bytes": 13831,
+          "sha256": "39b425466b85f91e3b943922cdca2410756e87ee987a3455a9b88d7b2bf8a3c5"
+        },
+        {
+          "path": "world/official-score.json",
+          "bytes": 5866,
+          "sha256": "8d4ff399af734fe55d2f372afdad25ca68fdbf289be6583ac5fa2f09c4503272"
+        }
+      ]
+    },
+    {
+      "case_index": 4,
+      "case": {
+        "domain": "support",
+        "task": "support.helpscout_auto_categorization",
+        "example_id": 1515,
+        "task_contract_sha256": "e5ba203c6d55627b6552ca5a1dbeb5bf3ef1a86a6c07175f7e76073ecfec181b",
+        "selection_rank_sha256": "01339656cfc2ccd43e3f78d360cc8ca86aafaa1ab9bdde868f61c5a9bfa97da4",
+        "case_index": 4,
+        "batch_index": 1
+      },
+      "run_id": "b7d253d5-0433-40fd-8ce5-a49c1e65f301",
+      "source_directory": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/native/case-004-attempt-1",
+      "strict": 0,
+      "partial": 0.7222222222222222,
+      "duration_ms": 80814,
+      "response_steps": 16,
+      "tool_calls": 21,
+      "request_models": [
+        "gpt-5.6-luna"
+      ],
+      "usage": {
+        "inputTokens": 114844,
+        "inputTokenDetails": {
+          "noCacheTokens": 107676,
+          "cacheReadTokens": 7168
+        },
+        "outputTokens": 1896,
+        "outputTokenDetails": {
+          "textTokens": 1378,
+          "reasoningTokens": 518
+        },
+        "totalTokens": 116740,
+        "reasoningTokens": 518,
+        "cachedInputTokens": 7168
+      },
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 1515,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 16,
+        "replayed_non_stateful_calls": 5,
+        "skipped_non_stateful_calls": 0
+      },
+      "files": [
+        {
+          "path": "input.json",
+          "bytes": 5832,
+          "sha256": "da4d51416f4168a067bab632f1a1563fd19dbdbdef7a2796134dce6eaed33dc4"
+        },
+        {
+          "path": "replay-stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "result.json",
+          "bytes": 8504,
+          "sha256": "e6c93091e2d2f8ee76c67525a655192cdfa77d0ed84a5e45a243a3dd92f06118"
+        },
+        {
+          "path": "run-start.json",
+          "bytes": 212,
+          "sha256": "b5519578ebd85db2c8b220714e76129e02a29b15a22b16b433a43865f7361f3d"
+        },
+        {
+          "path": "steps.jsonl",
+          "bytes": 741477,
+          "sha256": "a6c937324cfb51ed64685caff06e8023f45e94742cc0c84529cc44485467f557"
+        },
+        {
+          "path": "stream.jsonl",
+          "bytes": 905094,
+          "sha256": "3b234a8ce5839d2631a68226f1718d3faf1da28fda4c97015b9ba184b4d45adf"
+        },
+        {
+          "path": "tool-results.jsonl",
+          "bytes": 55439,
+          "sha256": "e8cd888fd20d16b261d3376349eefa534d206eb082a98bb74217dbf5a5b6c9cb"
+        },
+        {
+          "path": "world/automationbench-events.jsonl",
+          "bytes": 11370,
+          "sha256": "8d217e63010acac77a6ef5557502b6da567f8240ae8ad7829e5c751984ca87d2"
+        },
+        {
+          "path": "world/automationbench-final-world.json",
+          "bytes": 14065,
+          "sha256": "092dc8a24a62f26ac704763dbe7dd7a6b49b1ef81846718572d3b2295514c112"
+        },
+        {
+          "path": "world/automationbench-initial-world.json",
+          "bytes": 13113,
+          "sha256": "743908c767629b6dd83341b76d49fa4fc21401ab3800e73d0930f06d703df41a"
+        },
+        {
+          "path": "world/official-score.json",
+          "bytes": 6811,
+          "sha256": "020fc836a145725599199c775fd7a1802b6a2689c5bdf1363aecf17d57742adf"
+        }
+      ]
+    },
+    {
+      "case_index": 5,
+      "case": {
+        "domain": "marketing",
+        "task": "marketing.campaign_handoff",
+        "example_id": 1077,
+        "task_contract_sha256": "f9403918e7d6f78448bffbd747c16e572c9d314bd3f13c3c17c1c67ed766c86a",
+        "selection_rank_sha256": "01c464cf4e500bb511dc69b32a40a571e3e2759c9c22bc83b3c1d6cbec1463c0",
+        "case_index": 5,
+        "batch_index": 1
+      },
+      "run_id": "9e0318b2-6404-4f32-91c7-deac5d32fc50",
+      "source_directory": "/var/lib/opencorvus-benchmark/reproduction-20260913-current-source/native/case-005-attempt-1",
+      "strict": 0,
+      "partial": 0.7272727272727273,
+      "duration_ms": 150642,
+      "response_steps": 15,
+      "tool_calls": 40,
+      "request_models": [
+        "gpt-5.6-luna"
+      ],
+      "usage": {
+        "inputTokens": 185099,
+        "inputTokenDetails": {
+          "noCacheTokens": 167691,
+          "cacheReadTokens": 17408
+        },
+        "outputTokens": 5780,
+        "outputTokenDetails": {
+          "textTokens": 4248,
+          "reasoningTokens": 1532
+        },
+        "totalTokens": 190879,
+        "reasoningTokens": 1532,
+        "cachedInputTokens": 17408
+      },
+      "official_replay": {
+        "schema_version": 1,
+        "passed": true,
+        "example_id": 1077,
+        "checks": {
+          "partial_credit": true,
+          "task_completed_correctly": true,
+          "assertion_results": true,
+          "end_state_sha256": true,
+          "scorer_world_stable": true,
+          "tool_attempts": true,
+          "tool_succeeded": true,
+          "tool_failed": true,
+          "world_transition_chain": true
+        },
+        "stateful_calls_verified_by_hash_chain": 25,
+        "replayed_non_stateful_calls": 10,
+        "skipped_non_stateful_calls": 5
+      },
+      "files": [
+        {
+          "path": "input.json",
+          "bytes": 6051,
+          "sha256": "979aabf148a9474df9e842f775b991176e107be1f4aa8674404ffca93f0839fa"
+        },
+        {
+          "path": "replay-stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "result.json",
+          "bytes": 5076,
+          "sha256": "330a748d5f6aa26379ee0a3122c5920f47b0417c71f15bb066e319aa298c2cdd"
+        },
+        {
+          "path": "run-start.json",
+          "bytes": 212,
+          "sha256": "3cfe5c73dfb08ffe9958d301a861714f935a9f0bcd9a18bc9bd777daba93b6a7"
+        },
+        {
+          "path": "steps.jsonl",
+          "bytes": 1076374,
+          "sha256": "6b8eeb1e6f8ef6f7b32d97c24a790717c53ee62489ba08c8477a748ecd168da1"
+        },
+        {
+          "path": "stream.jsonl",
+          "bytes": 1219100,
+          "sha256": "db0f5cc77b45d3a094af5701f29ab47db39d97fb5372b0400f60c2c02af56d1c"
+        },
+        {
+          "path": "tool-results.jsonl",
+          "bytes": 77708,
+          "sha256": "47435a18fdb2785c1675ac5df44790d2bfee76f27dc6dfa6b08acff8cc9c2d44"
+        },
+        {
+          "path": "world/automationbench-events.jsonl",
+          "bytes": 22354,
+          "sha256": "5be95c6a528c2047d795e268e334baf9525f18d9bb0d628eaf213554aabc9f17"
+        },
+        {
+          "path": "world/automationbench-final-world.json",
+          "bytes": 32115,
+          "sha256": "2be8c0cee64a8531d67aaf7194ec3f045028b853196e99520664a8bb73f905d8"
+        },
+        {
+          "path": "world/automationbench-initial-world.json",
+          "bytes": 24819,
+          "sha256": "d2257218e1ba41045fcfbe2bed392034bea1610184191fa1e4c1daa2e2685f4e"
+        },
+        {
+          "path": "world/official-score.json",
+          "bytes": 3644,
+          "sha256": "a83d1f3437f1f219eed075b8b0b03718f0e7435707cfd68157379d6e24d4343f"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Five historically exposed cases, not the full 100-case comparison",
+    "Base paired results and redundant-call reduction remain pending",
+    "Current network success does not establish the historical TLS error origin"
+  ]
+}

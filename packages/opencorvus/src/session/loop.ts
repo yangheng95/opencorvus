@@ -144,6 +144,7 @@ import {
 import { RuntimeCapabilityCatalog } from "@/tool/capability-runtime-catalog"
 import {
   CAPABILITY_REVEAL_OWNER_EXTRA_KEY,
+  CapabilityRevealAuthorizationError,
   capabilityRevealOccurrenceParts,
   createCapabilityRevealOwner,
   exactOccurrenceCapabilityDescriptor,
@@ -247,7 +248,7 @@ function taskRootDecisionRepairPrompt(input: { attempt: number; limit: number })
   ].join("\n")
 }
 
-function visibleChatSkillNames(messages: readonly Message.WithParts[]): string[] {
+export function visibleChatSkillNames(messages: readonly Message.WithParts[]): string[] {
   const currentUserMessage = messages.findLast((message) => message.info.role === "user")
   if (!currentUserMessage) return []
   const names = new Set<string>()
@@ -302,6 +303,7 @@ export namespace SessionLoop {
     (availableToolNames: Iterable<string>) => Promise<ResolvedSkillSurface | undefined>
   >()
   const resolvedProviderToolNameOwners = new WeakMap<Record<string, AITool>, Map<string, ProviderToolNameOwner>>()
+  const resolvedTurnCapabilityProjections = new WeakMap<Record<string, AITool>, TurnCapabilityProjectionV3>()
   const resolvedToolExecutionSurfaces = new WeakMap<
     Record<string, AITool>,
     {
@@ -325,6 +327,10 @@ export namespace SessionLoop {
 
   export function skillSurfaceForResolvedTools(tools: Record<string, AITool>) {
     return resolvedToolSkillSurfaces.get(tools)
+  }
+
+  export function capabilityProjectionForResolvedTools(tools: Record<string, AITool>) {
+    return resolvedTurnCapabilityProjections.get(tools)
   }
 
   export function executionCoordinatorForResolvedTools(tools: Record<string, AITool>) {
@@ -386,6 +392,7 @@ export namespace SessionLoop {
           const decision = declaration
             ? {
                 command: declaration.command,
+                ...(declaration.completionCommits ? { completionCommits: (result: unknown) => declaration.completionCommits!(args, result) } : {}),
                 // A declaration that cannot classify its own input is not a
                 // committed decision; the call will fail on its own terms.
                 commits: (() => {
@@ -1042,12 +1049,75 @@ export namespace SessionLoop {
     return prepared
   }
 
+  async function resolveProductionSkillTool(input: {
+    agent: SessionAgentRuntime
+    agentID: string
+    config: Config.Info
+    runtimeContract?: RuntimeContract
+    availableToolNames: Iterable<string>
+    explicitSkillNames?: Iterable<string>
+    activeSkillNames?: Iterable<string>
+  }) {
+    const skillRuntime = input.agent
+    let surface: Extract<ResolvedSkillSurface, { family: "production" }> | undefined
+    const runtimeIdentity = input.runtimeContract?.identity
+    if (runtimeIdentity) {
+      const { SkillMount } = await import("@/skill/mounts")
+      const skillProjection = input.runtimeContract?.skillProjection
+      if (!skillProjection) {
+        throw new Error(`Projected skill owner ${runtimeIdentity.agentID} is missing its turn-owned skill projection.`)
+      }
+      const projectDirectory = input.runtimeContract?.projectDirectory
+      if (!projectDirectory) {
+        throw new Error(`Projected skill owner ${runtimeIdentity.agentID} is missing its project directory.`)
+      }
+      surface = await SkillMount.resolve({
+        identity: runtimeIdentity,
+        runtime: skillRuntime,
+        scope: "session",
+        projectDirectory,
+        skillProjection,
+        availableToolNames: input.availableToolNames,
+        explicitSkillNames: input.explicitSkillNames,
+        activeSkillNames: input.activeSkillNames,
+      })
+    } else if (ConversationCapability.isAgentID(input.agentID)) {
+      surface = await ConversationCapability.resolveSkillSurface({
+        agentID: input.agentID,
+        config: input.config,
+        runtime: skillRuntime,
+        scope: "session",
+        availableToolNames: input.availableToolNames,
+        explicitSkillNames: input.explicitSkillNames,
+        activeSkillNames: input.activeSkillNames,
+      })
+    }
+    if (!surface) return undefined
+    const skillTool = await SkillTool.init({ config: input.config, skillSurface: surface })
+    const output = {
+      description: skillTool.description,
+      parameters: skillTool.parameters,
+    }
+    await Plugin.trigger("tool.definition", { toolID: SkillTool.id }, output)
+    return {
+      surface,
+      tool: {
+        id: SkillTool.id,
+        ...skillTool,
+        description: output.description,
+        parameters: output.parameters,
+      },
+    }
+  }
+
   export async function resolvePermanentProviderBaseDefinition(input: {
     model: Provider.Model
     agent: SessionAgentRuntime
     agentID: string
     config: Config.Info
     toolRefs: readonly CapabilityRef[]
+    availableToolNames: readonly string[]
+    explicitSkillNames?: readonly string[]
     runtimeContract?: RuntimeContract
     artifactSnapshotSource?: "current_task_project" | "merged_primary_commit"
     reservedProviderTools?: readonly { name: string; owner: ProviderToolNameOwner; tool: AITool }[]
@@ -1073,7 +1143,9 @@ export namespace SessionLoop {
       input.agent,
       input.agentID,
       input.config,
-      input.toolRefs.filter((ref) => ref.owner_ref === "tool-registry").map((ref) => ref.local_ref),
+      input.toolRefs
+        .filter((ref) => ref.owner_ref === "tool-registry" && ref.local_ref !== SkillTool.id)
+        .map((ref) => ref.local_ref),
       { artifactSnapshotSource: input.artifactSnapshotSource },
     )
     const definitions = registryItems.map((item) => {
@@ -1091,7 +1163,9 @@ export namespace SessionLoop {
         }),
       )
     })
-    for (const ref of input.toolRefs.filter((ref) => ref.owner_ref !== "tool-registry")) {
+    for (const ref of input.toolRefs.filter(
+      (ref) => ref.owner_ref !== "tool-registry" && ref.local_ref !== SkillTool.id,
+    )) {
       const owned = await sessionRuntimeToolOwner(input.runtimeContract)?.exact(ref.local_ref)
       if (!owned) throw new StaleCatalogOccurrenceError([`permanent_provider_tool.${ref.local_ref}`])
       definitions.push(
@@ -1119,7 +1193,56 @@ export namespace SessionLoop {
         ),
       )
     }
+    const explicitSkillNames = input.explicitSkillNames ?? []
+    if (explicitSkillNames.length > 0 && input.toolRefs.some((ref) => ref.local_ref === SkillTool.id)) {
+      const resolved = await resolveProductionSkillTool({
+        agent: input.agent,
+        agentID: input.agentID,
+        config: input.config,
+        runtimeContract: input.runtimeContract,
+        availableToolNames: input.availableToolNames,
+        explicitSkillNames,
+        activeSkillNames: [],
+      })
+      if (!resolved?.surface.tool_available) {
+        throw new Error(`Explicit Skill loader for ${input.agentID} is absent from its permitted occurrence surface.`)
+      }
+      const definition = normalizedProviderToolDefinition(
+        SkillTool.id,
+        prepareProviderTool({
+          name: SkillTool.id,
+          source: "registry",
+          model: input.model,
+          tool: tool({ description: resolved.tool.description, inputSchema: resolved.tool.parameters as never }),
+        }),
+      )
+      definitions.push(definition)
+    }
     return capabilityRevealBaseDefinitions(definitions)
+  }
+
+  export function occurrencePermanentToolRefs(input: {
+    harness: HarnessGrantSet | HarnessProjection
+    visibleToolIDs: Iterable<string>
+    explicitSkillNames: readonly string[]
+    productionSkillContext: boolean
+  }): CapabilityRef[] {
+    const visibleToolIDs = [...new Set(input.visibleToolIDs)]
+    const permanent = routineToolRefs({ harness: input.harness, visibleToolIDs })
+    if (
+      !input.productionSkillContext ||
+      input.explicitSkillNames.length === 0 ||
+      !visibleToolIDs.includes(SkillTool.id)
+    ) {
+      return permanent
+    }
+    const loaderRefs = harnessGrantedRefs(input.harness, "execute").filter(
+      (ref) => ref.kind === "tool" && ref.local_ref === SkillTool.id,
+    )
+    if (loaderRefs.length !== 1) {
+      throw new Error(`Explicit Skill occurrence requires one exact loader grant; found ${loaderRefs.length}.`)
+    }
+    return [...permanent, loaderRefs[0]!]
   }
 
   async function materializeProviderToolExecutionInput(input: {
@@ -1763,6 +1886,47 @@ export namespace SessionLoop {
     ].join("\n")
   }
 
+  function continuedUserInputSystem(input: {
+    step: number
+    lastFinished?: { info: { id: string; time: { created: number }; orderKey?: string } }
+    msgs: ReadonlyArray<{
+      info: { id: string; role: string; author?: string; time: { created: number }; orderKey?: string }
+      parts: ReadonlyArray<{ type: string; text?: string }>
+    }>
+  }): string | undefined {
+    if (input.step <= 1 || !input.lastFinished) return
+    const lastFinishedOrderKey = input.lastFinished.info.orderKey ?? timelineMessageOrderKey(input.lastFinished)
+    const hasLaterUserText = input.msgs.some(
+      (message) =>
+        message.info.role === "user" &&
+        message.info.author === "user" &&
+        compareTimelineOrderKeys(message.info.orderKey ?? timelineMessageOrderKey(message), lastFinishedOrderKey) > 0 &&
+        message.parts.some((part) => part.type === "text" && typeof part.text === "string" && part.text.trim().length > 0),
+    )
+    if (!hasLaterUserText) return
+    return "A real user message arrived after the last completed assistant response. Address that message as current input, then continue the active work."
+  }
+
+  async function providerInputProjection(input: {
+    system: readonly string[]
+    systemLabels: readonly string[]
+    dynamicContextText: string
+    msgs: Message.WithParts[]
+    model: Provider.Model
+  }): Promise<{ system: string[]; systemLabels: string[]; modelMessages: ModelMessage[] }> {
+    const system = [...input.system]
+    const systemLabels = [...input.systemLabels]
+    if (input.dynamicContextText) {
+      system.push(input.dynamicContextText)
+      systemLabels.push("session-state")
+    }
+    return {
+      system,
+      systemLabels,
+      modelMessages: await Message.toModelMessages(SessionCompaction.projectPrunedHistory(input.msgs), input.model),
+    }
+  }
+
   async function processTurn(input: {
     step: number
     sessionID: string
@@ -1990,13 +2154,21 @@ export namespace SessionLoop {
           `Open assistant ${assistantMessage.id} has no Catalog binding on input ${input.lastUser.id}.`,
         )
       }
-      const permanentToolRefs = routineToolRefs({ harness: occurrenceGrants, visibleToolIDs: policyProviderToolIDs })
+      const explicitSkillNames = visibleChatSkillNames(input.msgs)
+      const permanentToolRefs = occurrencePermanentToolRefs({
+        harness: occurrenceGrants,
+        visibleToolIDs: policyProviderToolIDs,
+        explicitSkillNames,
+        productionSkillContext: runtimeContract?.identity !== undefined || ConversationCapability.isAgentID(agentID),
+      })
       const permanentProviderBaseDefinition = await resolvePermanentProviderBaseDefinition({
         model: input.model,
-        agent,
+        agent: { ...agent, permission: CapabilityRules.merge(agent.permission, input.session.permission) },
         agentID,
         config,
         toolRefs: permanentToolRefs,
+        availableToolNames: policyProviderToolIDs,
+        explicitSkillNames,
         runtimeContract,
         artifactSnapshotSource: runtimeContract
           ? artifactSnapshotSourceForRuntimeContract(runtimeContract)
@@ -2073,23 +2245,11 @@ export namespace SessionLoop {
       })
     }
 
-    if (input.step > 1 && input.lastFinished) {
-      for (const msg of input.msgs) {
-        if (msg.info.role !== "user" || msg.info.id <= input.lastFinished.id) continue
-        for (const part of msg.parts) {
-          if (part.type !== "text") continue
-          if (!part.text.trim()) continue
-          part.text = [
-            "<system-reminder>",
-            "The user sent the following message:",
-            part.text,
-            "",
-            "Please address this message and continue with your tasks.",
-            "</system-reminder>",
-          ].join("\n")
-        }
-      }
-    }
+    const continuedUserSystem = continuedUserInputSystem({
+      step: input.step,
+      lastFinished: input.lastFinished ? { info: input.lastFinished } : undefined,
+      msgs: input.msgs,
+    })
 
     await Plugin.trigger("experimental.chat.messages.transform", {}, { messages: input.msgs })
 
@@ -2125,13 +2285,14 @@ export namespace SessionLoop {
         label: runtimeSystemLabels?.[index] ?? `runtime-system[${index}]`,
         text,
       })),
+      ...(continuedUserSystem ? [{ label: "continued-user-input", text: continuedUserSystem }] : []),
       ...messageProjectionSystem.map((text, index) => ({ label: `message-projection-system[${index}]`, text })),
     ]
-    const system = labeledSystem.map((part) => part.text)
-    const systemLabels = labeledSystem.map((part) => part.label)
+    const initialSystem = labeledSystem.map((part) => part.text)
+    const initialSystemLabels = labeledSystem.map((part) => part.label)
     if (isLastStep) {
-      system.push(MAX_STEPS)
-      systemLabels.push("max-steps")
+      initialSystem.push(MAX_STEPS)
+      initialSystemLabels.push("max-steps")
     }
     const needsTaskRootDecisionRepair =
       openTaskRootAssistant &&
@@ -2139,61 +2300,30 @@ export namespace SessionLoop {
       taskRootDecisionGapCount > 0 &&
       !taskRootAssistantHasDecisionReceipt(openTaskRootAssistant)
     if (needsTaskRootDecisionRepair && taskRootSemanticTurnLimit !== undefined) {
-      system.push(
+      initialSystem.push(
         taskRootDecisionRepairPrompt({
           attempt: Math.min(taskRootDecisionGapCount + 1, taskRootSemanticTurnLimit),
           limit: taskRootSemanticTurnLimit,
         }),
       )
-      systemLabels.push("task-root-decision-repair")
+      initialSystemLabels.push("task-root-decision-repair")
     }
 
-    // Live session-state blocks. These change between turns (the project MEMORY.MD
-    // document and its notices are re-read, and taskplan tracks progress). Until 2026-04
-    // they were pushed onto `system` after the cached entries (env, runtime context), but
-    // applyCaching only puts cache_control on the first 2 system messages —
-    // anything after lives inside the second cache breakpoint, which spans
-    // the rest of system + all messages. These blocks stay as runtime context
-    // for the current model turn; they are not persisted as conversation
-    // messages.
+    // Live session-state blocks are runtime system context for the current model
+    // turn. They never rewrite or masquerade as a persisted user Message.
     const dynamicContextText = await sessionStateContext({
       projectID: Instance.project.id,
       sessionID: input.sessionID,
       memoryToolAvailable: Object.prototype.hasOwnProperty.call(tools, "memory"),
     })
 
-    const baseModelMessages = await Message.toModelMessages(
-      SessionCompaction.projectPrunedHistory(input.msgs),
-      input.model,
-    )
-    if (dynamicContextText) {
-      // Prepend to the LAST user message's text content so the live state sits
-      // adjacent to the request the model is responding to. This keeps the
-      // earlier conversation history (and its system prefix) byte-stable for
-      // the prefix cache; only the last user message — which is part of the
-      // 5m tail breakpoint anyway — absorbs the per-turn delta.
-      for (let i = baseModelMessages.length - 1; i >= 0; i--) {
-        const msg = baseModelMessages[i]
-        if (msg.role !== "user") continue
-        if (typeof msg.content === "string") {
-          msg.content = `${dynamicContextText}\n\n${msg.content}`
-        } else if (Array.isArray(msg.content)) {
-          const firstTextIdx = msg.content.findIndex(
-            (p): p is { type: "text"; text: string } =>
-              typeof p === "object" && p !== null && (p as any).type === "text",
-          )
-          if (firstTextIdx >= 0) {
-            const part = msg.content[firstTextIdx] as { type: "text"; text: string }
-            msg.content[firstTextIdx] = { ...part, text: `${dynamicContextText}\n\n${part.text}` }
-          } else {
-            msg.content = [{ type: "text", text: dynamicContextText }, ...msg.content]
-          }
-        }
-        break
-      }
-    }
-
-    const modelMessages = baseModelMessages
+    const { system, systemLabels, modelMessages } = await providerInputProjection({
+      system: initialSystem,
+      systemLabels: initialSystemLabels,
+      dynamicContextText,
+      msgs: input.msgs,
+      model: input.model,
+    })
 
     const systemChars = system.reduce((sum, s) => sum + s.length, 0)
     const systemTokensEst = system.reduce((sum, s) => sum + Token.estimate(s), 0)
@@ -3483,6 +3613,7 @@ export namespace SessionLoop {
         try {
           if (
             shouldRunRuntimeContractTurn(sessionID) ||
+            (options?.ignoredActionableControlID === undefined && MessageStore.hasPendingInput(sessionID)) ||
             SessionControl.pending(sessionID).some(
               (control) => isActionableSessionControl(control) && control.id !== options?.ignoredActionableControlID,
             )
@@ -3927,19 +4058,24 @@ export namespace SessionLoop {
         .filter((ref) => ref.kind === "tool" && ref.owner_ref === "tool-registry")
         .map((ref) => ref.local_ref),
     )
-    const permanentRefs = routineToolRefs({
+    const visibleOccurrenceToolIDs = visibleExecutionToolIDs({
+      toolIDs: [
+        ...projectableRegistryIDs,
+        ...executableRefs.filter((ref) => ref.owner_ref !== "tool-registry").map((ref) => ref.local_ref),
+      ],
+      permission: executionPermission,
+      switches: input.tools,
+    })
+    const explicitProductionSkillNames = visibleChatSkillNames(input.messages)
+    const permanentRefs = occurrencePermanentToolRefs({
       harness: executionHarnessProjection,
-      visibleToolIDs: visibleExecutionToolIDs({
-        toolIDs: [
-          ...projectableRegistryIDs,
-          ...executableRefs.filter((ref) => ref.owner_ref !== "tool-registry").map((ref) => ref.local_ref),
-        ],
-        permission: executionPermission,
-        switches: input.tools,
-      }),
+      visibleToolIDs: visibleOccurrenceToolIDs,
+      explicitSkillNames: explicitProductionSkillNames,
+      productionSkillContext:
+        runtimeContract?.identity !== undefined || ConversationCapability.isAgentID(input.agentID),
     })
     const baseRegistryToolIDs = permanentRefs
-      .filter((ref) => ref.owner_ref === "tool-registry")
+      .filter((ref) => ref.owner_ref === "tool-registry" && ref.local_ref !== SkillTool.id)
       .map((ref) => ref.local_ref)
     const baseRegistryExecutionGrantIDs = new Set(
       harnessGrantedRefs(executionHarnessProjection, "execute")
@@ -3994,7 +4130,9 @@ export namespace SessionLoop {
       occurrenceID: input.occurrenceID,
     })
     const routineProjectedDefinitions: ReturnType<typeof normalizedProviderToolDefinition>[] = []
-    for (const ref of permanentRefs.filter((ref) => ref.owner_ref !== "tool-registry")) {
+    for (const ref of permanentRefs.filter(
+      (ref) => ref.owner_ref !== "tool-registry" && ref.local_ref !== SkillTool.id,
+    )) {
       const owned = await runtimeToolOwner?.exact(ref.local_ref)
       if (!owned) throw new StaleCatalogOccurrenceError([`permanent_provider_tool.${ref.local_ref}`])
       extras[ref.local_ref] = owned
@@ -4010,10 +4148,35 @@ export namespace SessionLoop {
         ),
       )
     }
+    const explicitSkillDefinition = permanentRefs.some((ref) => ref.local_ref === SkillTool.id)
+      ? await resolveProductionSkillTool({
+          agent: { ...input.agent, permission: executionPermission },
+          agentID: input.agentID,
+          config: input.config,
+          runtimeContract,
+          availableToolNames: visibleOccurrenceToolIDs,
+          explicitSkillNames: explicitProductionSkillNames,
+        })
+      : undefined
+    const explicitSkillNormalizedDefinition = explicitSkillDefinition
+      ? normalizedProviderToolDefinition(
+          SkillTool.id,
+          prepareProviderTool({
+            name: SkillTool.id,
+            source: "registry",
+            model: input.model,
+            tool: tool({
+              description: explicitSkillDefinition.tool.description,
+              inputSchema: explicitSkillDefinition.tool.parameters as never,
+            }),
+          }),
+        )
+      : undefined
     const searchBaseDefinition = capabilityRevealBaseDefinitions([
       searchDefinition,
       ...routineRegistryTools.map(({ toolID, tool }) => normalizedProviderToolDefinition(toolID, tool)),
       ...routineProjectedDefinitions,
+      ...(explicitSkillNormalizedDefinition ? [explicitSkillNormalizedDefinition] : []),
       ...(input.reservedProviderTools ?? []).map((reservation) =>
         normalizedProviderToolDefinition(reservation.name, reservation.tool),
       ),
@@ -4042,6 +4205,7 @@ export namespace SessionLoop {
       state: revealState,
       permanentRefs,
     })
+    resolvedTurnCapabilityProjections.set(tools, turnCapabilityProjection)
     const activeProviderNames = new Set(revealState.definitions.map((activation) => activation.provider_name))
     for (const providerName of searchBaseDefinition.providerNames) activeProviderNames.add(providerName)
     const exactSkillName = (ref: CapabilityRef): string => {
@@ -4420,14 +4584,24 @@ export namespace SessionLoop {
       availableToolNames: Iterable<string>,
       activation?: { productionSkillNames?: readonly string[]; missionSkillNames?: readonly string[] },
     ) => {
-      const { SkillMount } = await import("@/skill/mounts")
-      const providerToolNameSet = new Set(availableToolNames)
+      const providerToolNameSet = new Set(
+        visibleExecutionToolIDs({
+          toolIDs: [...availableToolNames],
+          permission: executionPermission,
+          switches: input.tools,
+        }),
+      )
       const eligibilityToolNameSet = new Set(
-        harnessGrantedRefs(executionHarnessProjection, "execute")
-          .filter((ref) => ref.kind === "tool" || ref.kind === "mcp_tool")
-          .map((ref) => ref.local_ref),
+        visibleExecutionToolIDs({
+          toolIDs: harnessGrantedRefs(executionHarnessProjection, "execute")
+            .filter((ref) => ref.kind === "tool" || ref.kind === "mcp_tool")
+            .map((ref) => ref.local_ref),
+          permission: executionPermission,
+          switches: input.tools,
+        }),
       )
       for (const name of providerToolNameSet) eligibilityToolNameSet.add(name)
+      const skillRuntime = { ...input.agent, permission: executionPermission }
       const runtimeIdentity = runtimeContract?.identity
       if (!runtimeIdentity) {
         const nativeMissionSurface = input.agentID === "mission" && input.session.kind === "mission"
@@ -4436,7 +4610,7 @@ export namespace SessionLoop {
           const surface = await MissionSkillRuntime.resolve({
             agentID: input.agentID,
             sessionKind: input.session.kind,
-            runtime: input.agent,
+            runtime: skillRuntime,
             scope: "session",
             availableToolNames: eligibilityToolNameSet,
             activeSkillNames: activation?.missionSkillNames ?? activeMissionSkillNames,
@@ -4464,93 +4638,36 @@ export namespace SessionLoop {
           })
           return surface
         }
-        delete tools[MissionSkillTool.id]
-        if (ConversationCapability.isAgentID(input.agentID)) {
-          const surface = await ConversationCapability.resolveSkillSurface({
-            agentID: input.agentID,
-            config: input.config,
-            runtime: input.agent,
-            scope: "session",
-            availableToolNames: eligibilityToolNameSet,
-            explicitSkillNames: visibleChatSkillNames(input.messages),
-            activeSkillNames: activation?.productionSkillNames ?? activeProductionSkillNames,
-          })
-          resolvedToolSkillSurfaces.set(tools, surface)
-          const exposeSkillTool = surface.tool_available && providerToolNameSet.has(SkillTool.id)
-          if (!exposeSkillTool) {
-            delete tools[SkillTool.id]
-            return surface
-          }
-          const skillTool = await SkillTool.init({ config: input.config, skillSurface: surface })
-          const output = {
-            description: skillTool.description,
-            parameters: skillTool.parameters,
-          }
-          await Plugin.trigger("tool.definition", { toolID: SkillTool.id }, output)
-          bindRegistryTool({
-            id: SkillTool.id,
-            ...skillTool,
-            description: output.description,
-            parameters: output.parameters,
-          })
-          return surface
-        }
+      }
+      delete tools[MissionSkillTool.id]
+      const resolved = await resolveProductionSkillTool({
+        agent: skillRuntime,
+        agentID: input.agentID,
+        config: input.config,
+        runtimeContract,
+        availableToolNames: eligibilityToolNameSet,
+        explicitSkillNames: explicitProductionSkillNames,
+        activeSkillNames: activation?.productionSkillNames ?? activeProductionSkillNames,
+      })
+      if (!resolved) {
         delete tools[SkillTool.id]
         resolvedToolSkillSurfaces.delete(tools)
         return undefined
       }
-      delete tools[MissionSkillTool.id]
-      if (!projectedRegistryToolIDs) {
-        throw new Error(
-          `Projected skill owner ${runtimeIdentity.agentID} session ${input.session.id} is missing projectedRegistryToolIDs.`,
-        )
-      }
-      const exposeSkillTool = projectedRegistryToolIDs.has(SkillTool.id) && providerToolNameSet.has(SkillTool.id)
-      if (!exposeSkillTool) delete tools[SkillTool.id]
-      const skillProjection = runtimeContract.skillProjection
-      if (!skillProjection) {
-        throw new Error(
-          `Projected skill owner ${runtimeIdentity.agentID} session ${input.session.id} is missing its turn-owned skill projection.`,
-        )
-      }
-      const projectDirectory = runtimeContract.projectDirectory
-      if (!projectDirectory) {
-        throw new Error(
-          `Projected skill owner ${runtimeIdentity.agentID} session ${input.session.id} is missing its project directory.`,
-        )
-      }
-      const surface = await SkillMount.resolve({
-        identity: runtimeIdentity,
-        runtime: input.agent,
-        scope: "session",
-        projectDirectory,
-        skillProjection,
-        availableToolNames: eligibilityToolNameSet,
-        activeSkillNames: activation?.productionSkillNames ?? activeProductionSkillNames,
-      })
+      const { surface, tool: resolvedSkillTool } = resolved
       resolvedToolSkillSurfaces.set(tools, surface)
+      const exposeSkillTool = surface.tool_available && providerToolNameSet.has(SkillTool.id)
+      if (!exposeSkillTool) delete tools[SkillTool.id]
       if (exposeSkillTool) {
-        const skillTool = await SkillTool.init({ config: input.config, skillSurface: surface })
-        const output = {
-          description: skillTool.description,
-          parameters: skillTool.parameters,
-        }
-        await Plugin.trigger("tool.definition", { toolID: SkillTool.id }, output)
-        bindRegistryTool(
-          {
-            id: SkillTool.id,
-            ...skillTool,
-            description: output.description,
-            parameters: output.parameters,
-          },
-          { declaredRuntimeFinalization: true },
-        )
+        bindRegistryTool(resolvedSkillTool, runtimeIdentity ? { declaredRuntimeFinalization: true } : {})
       }
       return surface
     }
     resolvedToolSkillFinalizers.set(tools, finalizeSkillSurface)
     const initialToolNames = new Set(Object.keys(tools))
-    if (activeProductionSkillNames.length > 0) initialToolNames.add(SkillTool.id)
+    if (activeProductionSkillNames.length > 0 || permanentRefs.some((ref) => ref.local_ref === SkillTool.id)) {
+      initialToolNames.add(SkillTool.id)
+    }
     if (activeMissionSkillNames.length > 0) initialToolNames.add(MissionSkillTool.id)
     await finalizeSkillSurface(initialToolNames)
     const materializedCandidates = { ...tools }
@@ -4574,11 +4691,18 @@ export namespace SessionLoop {
       if (requestedRef.kind === "skill" || requestedRef.kind === "mission_skill") {
         const candidateNames = new Set(Object.keys(tools))
         candidateNames.add(providerName)
-        await finalizeSkillSurface(candidateNames, {
+        const selectedName = exactSkillName(requestedRef)
+        const surface = await finalizeSkillSurface(candidateNames, {
           ...(requestedRef.kind === "skill"
-            ? { productionSkillNames: [...new Set([...activeProductionSkillNames, exactSkillName(requestedRef)])] }
-            : { missionSkillNames: [...new Set([...activeMissionSkillNames, exactSkillName(requestedRef)])] }),
+            ? { productionSkillNames: [...new Set([...activeProductionSkillNames, selectedName])] }
+            : { missionSkillNames: [...new Set([...activeMissionSkillNames, selectedName])] }),
         })
+        if (!surface?.tool_available || !surface.skills.some((skill) => skill.name === selectedName && skill.enabled)) {
+          throw new CapabilityRevealAuthorizationError(
+            "execution_not_granted",
+            `Current execution projection does not permit Skill ${selectedName} through ${providerName}.`,
+          )
+        }
         executable = tools[providerName]
         source = toolSources.get(providerName)
         if (executable) materializedCandidates[providerName] = executable
@@ -4707,8 +4831,15 @@ export namespace SessionLoop {
       },
       materialize: materializeRevealCandidate,
     })
-    for (const activation of revealState.definitions) {
-      const materialized = await materializeRevealCandidate(activation.requested_ref, activation.executable_ref)
+    for (const activation of revealState.active.values()) {
+      const materialized = await materializeRevealCandidate(activation.requested_ref, activation.executable_ref).catch(
+        (error) => {
+          if (error instanceof CapabilityRevealAuthorizationError) {
+            throw new StaleCatalogOccurrenceError([`receipt.${activation.provider_name}.execution_policy`])
+          }
+          throw error
+        },
+      )
       const definition = normalizedProviderToolDefinition(materialized.providerName, materialized.tool)
       const mismatches = [
         ...(providerToolDefinitionDigest(definition) !== activation.definition_digest
@@ -5567,6 +5698,7 @@ export namespace SessionLoop {
               ...(options && typeof options === "object" ? (options as Record<string, unknown>) : {}),
               opencorvus: {
                 ...invocationIdentity,
+                visibleToolName: name,
                 invocationAuthority,
               },
             }),
@@ -5666,6 +5798,8 @@ export namespace SessionLoop {
     executeCompactionControl,
     isSettledReplyToUserMessage,
     sessionStateContext,
+    continuedUserInputSystem,
+    providerInputProjection,
     waitForUserMessage,
     resolveToolExecutionAuthority,
     installStandbyObserver(observer: (sessionID: string) => void | Promise<void>): Disposable {

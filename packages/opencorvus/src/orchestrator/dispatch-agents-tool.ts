@@ -1,13 +1,10 @@
 import { DispatchOutcome, DispatchOutcomeSchema } from "@/agent/dispatch-outcome"
-import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import {
   findDispatchLineageByCollectionMember,
-  resolveDispatchOccurrenceAuthority,
 } from "@/engine/dispatch-lineage"
-import { findDispatchSettlementByDispatchID, recordDispatchSettlement } from "@/engine/dispatch-settlement"
-import { recordTaskInfrastructureErrorInTransaction } from "@/engine/persist"
+import { findDispatchSettlementByDispatchID } from "@/engine/dispatch-settlement"
+import { ControlLeaseFenceLostError } from "@/engine/control-lease"
 import { taskIDForSession } from "@/engine/task-session-lineage"
-import { Identifier } from "@/id/id"
 import { MessageStore } from "@/session/message-store"
 import { Session } from "@/session"
 import { isExecutionCancellationError } from "@/session/prompt/cancellation"
@@ -15,6 +12,7 @@ import { ToolPartProgressTable } from "@/session/session.sql"
 import { Database, asc, eq } from "@/storage/db"
 import { toolFailureCauseFromUnknown } from "@/session/tool-failure-cause"
 import { bindToolDecisionDeclaration } from "@/tool/execution-mode"
+import { orchestratorDecisionToolResultCommits } from "./decision-tool-names"
 import { jsonSchema, tool } from "ai"
 import type { JSONSchema7 } from "@ai-sdk/provider"
 import { isDeepStrictEqual } from "node:util"
@@ -63,15 +61,14 @@ function persistedMemberProgress(outerToolPartID: string): DispatchCollectionMem
 
 const productionRuntime: DispatchAgentsRuntime = {}
 
-function settleCommittedMemberExecutionFailure(input: {
+function readMemberSettlementAfterFailure(input: {
   outer: ReturnType<typeof requireOrchestratorToolExecutionContext>
   member: { index: number; name: string; target: string }
   memberCount: number
-  error: unknown
 }): DispatchOutcome | undefined {
   const taskID = taskIDForSession(input.outer.orchestratorSessionID)
   if (!taskID) return undefined
-  return Database.immediateTransaction((db) => {
+  return Database.immediateTransaction(() => {
     const lineage = findDispatchLineageByCollectionMember({
       taskID,
       toolPartID: input.outer.toolPartID,
@@ -85,39 +82,7 @@ function settleCommittedMemberExecutionFailure(input: {
         `dispatch_agents committed member ${input.member.index} target ${lineage.payload.target_agent_id} does not match ${input.member.target}`,
       )
     }
-    const existing = findDispatchSettlementByDispatchID({ taskID, dispatchID: lineage.dispatchID })
-    if (existing) return existing.payload.outcome
-    const message = input.error instanceof Error ? input.error.message : String(input.error)
-    const errorName = input.error instanceof Error ? input.error.name : "DispatchCollectionMemberExecutionError"
-    const infrastructureFactID = recordTaskInfrastructureErrorInTransaction(db, {
-      id: Identifier.deterministic(
-        "artifact",
-        `dispatch-collection-member-execution-failure-v1\0${taskID}\0${lineage.dispatchID}`,
-      ),
-      taskID,
-      component: "dispatch-agents",
-      operation: "settle-committed-member-execution",
-      reason: message,
-      errorName,
-      sessionID: lineage.payload.child_session_id,
-      context: {
-        dispatchID: lineage.dispatchID,
-        outerToolPartID: input.outer.toolPartID,
-        memberIndex: input.member.index,
-        name: input.member.name,
-        target: input.member.target,
-      },
-    })
-    const outcome = DispatchOutcome.infrastructureFailure({
-      operation: "settle-committed-member-execution",
-      message,
-      errorName,
-      sessionID: lineage.payload.child_session_id,
-      recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID, dispatchID: lineage.dispatchID }),
-      infrastructureError: exactEngineArtifactLocator({ taskID, artifactID: infrastructureFactID }),
-    })
-    recordDispatchSettlement({ taskID, dispatchID: lineage.dispatchID, outcome })
-    return outcome
+    return findDispatchSettlementByDispatchID({ taskID, dispatchID: lineage.dispatchID })?.payload.outcome
   })
 }
 
@@ -253,12 +218,11 @@ function createDispatchAgentsToolWithRuntime(
               outcome,
             }
           } catch (error) {
-            if (isExecutionCancellationError(error) || callerSignal?.aborted) throw error
-            const committedOutcome = settleCommittedMemberExecutionFailure({
+            if (isExecutionCancellationError(error) || error instanceof ControlLeaseFenceLostError || callerSignal?.aborted) throw error
+            const committedOutcome = readMemberSettlementAfterFailure({
               outer,
               member,
               memberCount: members.length,
-              error,
             })
             result = committedOutcome
               ? {
@@ -310,6 +274,7 @@ function createDispatchAgentsToolWithRuntime(
   return bindToolDecisionDeclaration(collectionTool, {
     command: "dispatch_agents",
     commits: () => true,
+    completionCommits: (args, result) => orchestratorDecisionToolResultCommits("dispatch_agents", args, result),
   })
 }
 
@@ -325,5 +290,5 @@ export const DispatchAgentsToolTestHooks = Object.freeze({
   create(dispatchAgentTool: DispatchAgentTool, input: DispatchAgentsRuntime, childInputSchema: z.ZodType) {
     return createDispatchAgentsToolWithRuntime(dispatchAgentTool, input, childInputSchema)
   },
-  settleCommittedMemberExecutionFailure,
+  readMemberSettlementAfterFailure,
 })

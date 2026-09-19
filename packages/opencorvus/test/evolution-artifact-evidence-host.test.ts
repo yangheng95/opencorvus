@@ -6,7 +6,8 @@ import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { Database, eq } from "../src/storage/db"
-import { EngineArtifactTable, EngineInteractionRequestTable, EngineTaskTable } from "../src/engine/engine.sql"
+import { EngineArtifactTable, EngineTaskTable } from "../src/engine/engine.sql"
+import { insertEngineInteractionRequest } from "../src/engine/interaction-request"
 import { createDispatchLineageOrigin } from "../src/engine/dispatch-lineage"
 import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
@@ -3434,25 +3435,21 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         })
         const nonterminalBaseline = await EngineGit.prepare(requireTask(taskID))
         if (nonterminalBaseline.error) throw new Error(nonterminalBaseline.error)
-        const interactionID = Identifier.ascending("interaction")
         const activityTime = started + 100_000
-        Database.use((db) => {
-          db.insert(EngineInteractionRequestTable)
-            .values({
-              id: interactionID,
-              task_id: taskID,
-              session_id: session.id,
-              external_id: "question-1",
-              request_type: "question",
-              status: "pending",
-              title: "Choose dataset",
-              body: "Which frozen dataset should this campaign use?",
-              payload: {},
-              time_created: activityTime,
-              time_updated: activityTime,
-            })
-            .run()
-        })
+        const interactionID = Database.transaction((db) =>
+          insertEngineInteractionRequest(db, {
+            taskID,
+            sessionID: session.id,
+            externalID: "question-1",
+            requestType: "question",
+            title: "Choose dataset",
+            body: "Which frozen dataset should this campaign use?",
+            payload: {},
+            timeCreated: activityTime,
+            eventSource: "test",
+            eventSummary: "Choose the frozen Trial dataset",
+          }),
+        )
 
         const awaiting = await collectTaskRunEvidence({
           projectID: Instance.project.id,

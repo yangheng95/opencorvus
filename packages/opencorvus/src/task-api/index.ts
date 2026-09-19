@@ -1672,11 +1672,7 @@ export namespace EngineService {
     inboxID: string
     ownerID: string
     message: string
-  }): Promise<{
-    messageID: string
-    ingressID: string
-    wakeStatus: DispatchTaskLoopResult
-  }> {
+  }): Promise<void> {
     const delivery = requireSchedulerDelivery(input.inboxID)
     if (delivery.status !== "leased" || delivery.leaseOwner !== input.ownerID) {
       throw new Error(`Scheduler Task delivery ${input.inboxID} is not leased by ${input.ownerID}.`)
@@ -1791,12 +1787,7 @@ export namespace EngineService {
       },
     )
     if (!ingressID) throw new Error(`Scheduler Task delivery ${delivery.id} did not commit its ingress.`)
-    const dispatch = await dispatchPersistedTaskLoop(task.id, ingressID)
-    return {
-      messageID: bundle.info.id,
-      ingressID,
-      wakeStatus: dispatch,
-    }
+    await dispatchPersistedTaskLoop(task.id, ingressID)
   }
 
   export async function createTask(

@@ -16,7 +16,6 @@ import {
   decodeSchedulerEndpoint,
   encodeSchedulerEndpoint,
   enqueueSchedulerMessageInTransaction,
-  findSchedulerDelivery,
   listPendingSchedulerProjectIDs,
   listPendingSchedulerRecipientIDs,
   listUnansweredSchedulerSessionWakes,
@@ -102,7 +101,7 @@ export async function sendSchedulerMessage(input: {
   sourceMessageID?: string
   sourcePartID?: string
   sourceTerminalEventID?: string
-}): Promise<SchedulerDeliveryReceipt & { messageID?: string; ingressID?: string; wakeStatus?: string }> {
+}): Promise<SchedulerDeliveryReceipt> {
   const source = SchedulerEndpoint.parse(input.source)
   let target: SchedulerEndpoint
   let correlationID: string
@@ -152,36 +151,9 @@ export async function sendSchedulerMessage(input: {
     Database.effect(() => signalSchedulerMessageDrain())
     return persisted
   })
-  if (target.kind === "task_scheduler") {
-    const signal = drainState().lifecycle.signal
-    recipientExecutionPermits.resize(await globalExecutionCapacity("scheduler_message"))
-    const wakeStatus =
-      receipt.status !== "delivered" && receipt.status !== "dead_letter"
-        ? await recipientExecutionPermits.run(() => drainTaskRecipient(target.task_id, receipt.inboxID, signal), signal)
-        : undefined
-    const delivered = requireSchedulerDelivery(receipt.inboxID)
-    if (delivered.deliveryResult?.kind === "task_ingress") {
-      return {
-        ...receipt,
-        status: delivered.status,
-        messageID: delivered.deliveryResult.message_id,
-        ingressID: delivered.deliveryResult.ingress_id,
-        ...(wakeStatus ? { wakeStatus } : {}),
-      }
-    }
-    return { ...receipt, status: delivered.status }
-  }
-  requestSchedulerMessageDrain()
-  const current = findSchedulerDelivery(receipt.inboxID)
-  if (current?.deliveryResult?.kind === "task_ingress") {
-    return {
-      ...receipt,
-      status: current.status,
-      messageID: current.deliveryResult.message_id,
-      ingressID: current.deliveryResult.ingress_id,
-    }
-  }
-  return { ...receipt, status: current?.status ?? receipt.status }
+  // A sender can itself be the recipient's awaited participant. Only durable
+  // enqueue belongs to this Tool call; the delivery owner settles execution.
+  return receipt
 }
 
 async function sourceMessageText(delivery: ReturnType<typeof requireSchedulerDelivery>): Promise<string> {
@@ -347,12 +319,7 @@ async function drainMissionRecipient(sessionID: string, signal: AbortSignal): Pr
   }
 }
 
-async function drainTaskRecipient(
-  taskID: string,
-  awaitedInboxID?: string,
-  signal?: AbortSignal,
-): Promise<string | undefined> {
-  let awaitedWakeStatus: string | undefined
+async function drainTaskRecipient(taskID: string, signal?: AbortSignal): Promise<void> {
   while (true) {
     signal?.throwIfAborted()
     const ownerID = `scheduler-message:${process.pid}:${randomUUID()}`
@@ -362,7 +329,7 @@ async function drainTaskRecipient(
       ownerID,
       leaseMilliseconds: DELIVERY_LEASE_MS,
     })
-    if (!claimed) return awaitedWakeStatus
+    if (!claimed) return
     try {
       const delivery = requireSchedulerDelivery(claimed.id)
       if (delivery.target.kind !== "task_scheduler" || delivery.target.task_id !== taskID) {
@@ -370,12 +337,11 @@ async function drainTaskRecipient(
       }
       const message = await sourceMessageText(delivery)
       await beforeTaskMaterializationForTest?.({ inboxID: delivery.id, signal })
-      const result = await requireTaskDeliveryMaterializer()({
+      await requireTaskDeliveryMaterializer()({
         inboxID: delivery.id,
         ownerID,
         message,
       })
-      if (delivery.id === awaitedInboxID) awaitedWakeStatus = result.wakeStatus
     } catch (error) {
       const current = requireSchedulerDelivery(claimed.id)
       if (current.status !== "leased" || current.leaseOwner !== ownerID) continue
@@ -394,7 +360,7 @@ async function drainTaskRecipient(
         error,
         visibleAt: Date.now() + delay,
       })
-      return awaitedWakeStatus
+      return
     }
   }
 }
@@ -609,7 +575,7 @@ async function drainSchedulerRecipientFrontier(input: {
       recipientExecutionPermits
         .run(async () => {
           if (item.kind === "session") return drainMissionRecipient(item.actorID, input.signal)
-          if (item.kind === "task") return drainTaskRecipient(item.actorID, undefined, input.signal)
+          if (item.kind === "task") return drainTaskRecipient(item.actorID, input.signal)
           const { wake } = item
           const closure = currentMissionExecutionClosure(wake.sessionID)
           if (closure?.state === "closing" || closure?.state === "closed") return

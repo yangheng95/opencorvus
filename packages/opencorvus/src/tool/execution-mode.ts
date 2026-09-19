@@ -23,8 +23,10 @@ export function toolExecutionModeOf(tool: object, args?: unknown): ToolExecution
  */
 export type ToolDecisionDeclaration = {
   command: string
-  /** Whether this call, if it completes, commits a decision for the turn. */
+  /** Whether this call reserves a possible decision while it executes. */
   commits: (args: unknown) => boolean
+  /** Resolve a potential decision from its actual successful Tool result. */
+  completionCommits?: (args: unknown, result: unknown) => boolean
 }
 
 const decisionByTool = new WeakMap<object, ToolDecisionDeclaration>()
@@ -118,7 +120,7 @@ export class ToolTurnExecutionCoordinator {
   async run<T>(
     mode: ToolExecutionMode,
     execute: () => Promise<T>,
-    decision?: { command: string; commits: boolean },
+    decision?: { command: string; commits: boolean; completionCommits?: (result: T) => boolean },
   ): Promise<T> {
     if (this.#sealed) {
       throw new ToolTurnExecutionConflictError("The assistant turn already committed an exclusive Tool result")
@@ -132,8 +134,8 @@ export class ToolTurnExecutionCoordinator {
     const releaseDecisionOnFailure = () => {
       if (admission) this.#pendingDecisions.delete(admission)
     }
-    const commitDecision = () => {
-      if (decision?.commits) this.#decisionCommand = decision.command
+    const commitDecision = (result: T) => {
+      if (decision?.commits && (!decision.completionCommits || decision.completionCommits(result))) this.#decisionCommand = decision.command
       releaseDecisionOnFailure()
     }
     if (mode === "ordinary") {
@@ -152,7 +154,7 @@ export class ToolTurnExecutionCoordinator {
               "A Tool that returns turn control must declare turn_control_exclusive execution",
             )
           }
-          commitDecision()
+          commitDecision(result)
           return result
         } catch (error) {
           if (error instanceof InvalidToolResultControlError && error.committedControl) this.#sealed = true
@@ -181,7 +183,7 @@ export class ToolTurnExecutionCoordinator {
         const result = await execute()
         const metadata = result && typeof result === "object" ? (result as { metadata?: unknown }).metadata : undefined
         if (toolResultControl(metadata)) this.#sealed = true
-        commitDecision()
+        commitDecision(result)
         return result
       } catch (error) {
         if (error instanceof InvalidToolResultControlError && error.committedControl) this.#sealed = true

@@ -6,8 +6,8 @@ export const generatedFeaturedSquads = [
     "identity": {
       "namespace": "builtin",
       "id": "advanced",
-      "version": "2026.08.22.6",
-      "digest": "bdc6db2afdab074f962343d66efeb834b59199abef93b227bdf8fd17f83b0427"
+      "version": "2026.09.12.1",
+      "digest": "d282f09aeede890d88fe945ade39249225d0932ffac795fdeb01ebe14c85948c"
     },
     "displayLabel": {
       "root": "Advanced",
@@ -28,8 +28,8 @@ export const generatedFeaturedSquads = [
     "identity": {
       "namespace": "builtin",
       "id": "evolution-lab",
-      "version": "2026.08.19.1",
-      "digest": "294cd20d06abbedb81ce87949cfc59459106559ceee5f363f92de34ff63ef93e"
+      "version": "2026.09.06.1",
+      "digest": "46be60cd24ec9a476e157275f540dfe3536a5744c86139a8387864c689a55a8c"
     },
     "displayLabel": {
       "root": "Evolution Lab",
@@ -50,8 +50,8 @@ export const generatedFeaturedSquads = [
     "identity": {
       "namespace": "builtin",
       "id": "frontend-innovate",
-      "version": "2026.08.13.1",
-      "digest": "4466ac0cbef31b7c13d018d837d7fd26bab4d8b0c16a280ce99305c00b929245"
+      "version": "2026.08.30.2",
+      "digest": "b5a0273ecd137e3df5c8a17a053b0a038e781d00e2661aef2318b67643b3bbe6"
     },
     "displayLabel": {
       "root": "Frontend Innovate",
@@ -71,8 +71,8 @@ export const generatedFeaturedSquads = [
     "identity": {
       "namespace": "builtin",
       "id": "academic-paper-review",
-      "version": "2026.08.13.1",
-      "digest": "c2bdbec244e687adf67a1c03e425d4408605b9a069a51d489948c6f95ded805c"
+      "version": "2026.08.30.2",
+      "digest": "48eecad837a7720cf1988e4b1b1799fb82fd2bd04927621414c436b85a488ab3"
     },
     "displayLabel": {
       "root": "Academic Paper Review",
@@ -92,8 +92,8 @@ export const generatedFeaturedSquads = [
     "identity": {
       "namespace": "builtin",
       "id": "frontend-replica",
-      "version": "2026.08.13.1",
-      "digest": "3be05221a063acf5d7f9882a1a06abf94444b49dda1f43eb2b18d846e57036a6"
+      "version": "2026.08.30.2",
+      "digest": "d267dd5904ca041bb60d12a1e97795a99d4a67e983ec2d4fbc5708537dfd9e5d"
     },
     "displayLabel": {
       "root": "Frontend Replica",
@@ -113,8 +113,8 @@ export const generatedFeaturedSquads = [
     "identity": {
       "namespace": "builtin",
       "id": "omnichannel-distribution",
-      "version": "2026.08.19.1",
-      "digest": "d47aa7e9bbdbd6ae0d3259f30bdcd61c0c20147543e86e5fe5a834f83b9bb8e2"
+      "version": "2026.08.30.2",
+      "digest": "5c2e3a4153f2ac1f61620c95d358eb0b9e016da42b115f1781f7415612864112"
     },
     "displayLabel": {
       "root": "Omnichannel Distribution",

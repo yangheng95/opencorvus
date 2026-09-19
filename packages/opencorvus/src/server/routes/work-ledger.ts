@@ -378,8 +378,8 @@ export function WorkLedgerRoutes() {
             bind((event) => {
               if (isMailboxChangeEventType(event.type, event.payload)) {
                 writeWorkLedgerEventData(writeData, mailboxNotificationEvent(event))
-                return
               }
+              // A durable event can invalidate both projections (for example Task completion).
               if (!isTaskListProjectionEventType(event.type)) return
               const taskEvent = taskListProtocolEvent(event)
               writeWorkLedgerEventData(writeData, {

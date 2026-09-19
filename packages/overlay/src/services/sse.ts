@@ -14,7 +14,6 @@
 import {
   WorkLedgerActionEvent,
   WorkLedgerEvent,
-  type WorkLedgerActionEvent as WorkLedgerStreamEvent,
 } from "@opencorvus-ai/transport-protocol"
 import { messageStore, setSseStatus, type SseConnectionStatus } from "../store/messages"
 import { boardStore, activeTaskID, type BoardSource } from "../store/board"
@@ -545,7 +544,7 @@ export function stopSSE() {
 // ── Unified Work Ledger change stream ──
 let workLedgerHandle: StreamHandle | null = null
 let workLedgerRetryTimer: any = null
-export type { WorkLedgerStreamEvent }
+export type WorkLedgerStreamEvent = Exclude<WorkLedgerEvent, { type: "mailbox.changed" | "work-ledger.heartbeat" }>
 
 export function parseWorkLedgerStreamEvent(value: unknown): WorkLedgerStreamEvent {
   return WorkLedgerActionEvent.parse(value)
@@ -606,7 +605,6 @@ export function startWorkLedgerSSE() {
         }
         if (parsed.data.type === "work-ledger.connected") {
           dispatchMailboxRefresh()
-          return
         }
         if (parsed.data.type === "work-ledger.heartbeat") return
         const workLedgerEvent: WorkLedgerStreamEvent = parsed.data

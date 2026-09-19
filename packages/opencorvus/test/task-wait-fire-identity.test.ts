@@ -1060,8 +1060,12 @@ describe("Session one-shot delay admission", () => {
           (db) => db.select().from(AutomationTable).where(eq(AutomationTable.definition_id, delay.id)).get()!,
         )
         const fireID = Database.use(
-          (db) => db.select({ id: AutomationFireTable.id }).from(AutomationFireTable)
-            .where(eq(AutomationFireTable.automation_revision_id, definition.id)).get()!.id,
+          (db) =>
+            db
+              .select({ id: AutomationFireTable.id })
+              .from(AutomationFireTable)
+              .where(eq(AutomationFireTable.automation_revision_id, definition.id))
+              .get()!.id,
         )
         Database.immediateTransaction((db) => {
           db.insert(AutomationRunTable)
@@ -1102,7 +1106,54 @@ describe("Session one-shot delay admission", () => {
           },
           time: { created: now + 1 },
         })
-        await beginAssistantWithDelayAdmission(assistantAccepting(session.id, wake.id, now + 2))
+        const first = assistantAccepting(session.id, wake.id, now + 2)
+        await beginAssistantWithDelayAdmission(first)
+        const next = assistantAccepting(session.id, wake.id, now + 3)
+        await beginAssistantWithDelayAdmission(next)
+        const recovered = assistantAccepting(session.id, wake.id, now + 60_001)
+        await beginAssistantWithDelayAdmission(recovered)
+        expect((await MessageStore.get({ sessionID: session.id, messageID: next.id })).info).toMatchObject({
+          id: next.id,
+          acceptedInputMessageIDs: [wake.id],
+          parentID: wake.id,
+        })
+        expect((await MessageStore.get({ sessionID: session.id, messageID: recovered.id })).info).toMatchObject({
+          id: recovered.id,
+          acceptedInputMessageIDs: [wake.id],
+          parentID: wake.id,
+        })
+        const other = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "user",
+          agent: "primary",
+          model: { providerID: "test", modelID: "session-delay" },
+          time: { created: now + 60_002 },
+        })
+        const conflicting = assistantAccepting(session.id, wake.id, now + 60_003)
+        conflicting.acceptedInputMessageIDs = [wake.id, other.id]
+        conflicting.parentID = other.id
+        await expect(beginAssistantWithDelayAdmission(conflicting)).rejects.toThrow(
+          `Session delay ${delay.id} already has a conflicting assistant admission`,
+        )
+        expect(
+          Database.use((db) =>
+            db
+              .select()
+              .from(AutomationDelaySettlementTable)
+              .where(eq(AutomationDelaySettlementTable.definition_id, delay.id))
+              .all(),
+          ),
+        ).toMatchObject([
+          {
+            definition_id: delay.id,
+            disposition: "due_accepted",
+            assistant_message_id: first.id,
+            accepted_input_message_ids: [wake.id],
+            fire_id: fireID,
+          },
+        ])
         expect(
           Database.use((db) =>
             db.select().from(AutomationTable).where(eq(AutomationTable.definition_id, delay.id)).get(),

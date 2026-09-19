@@ -167,14 +167,14 @@ type ScreenshotPixelSummary = ModelImagePixelSummary
 export const screenshotPixelSummary = modelImagePixelSummary
 
 // 图片响应：content 放 image 类型（模型可视化）+ 像素摘要文本（防止模型压缩图片后坐标失准），structuredContent 放 base64 数据（script.ts 可编程访问）
-const okImage = (base64: string, width: number, height: number) => {
+const okImage = (base64: string, width: number, height: number, source: { url: string; viewport: { width: number; height: number } }) => {
   const pixelSummary = screenshotPixelSummary(width, height)
   return {
     content: [
       { type: "image" as const, data: base64, mimeType: "image/png" as const },
       { type: "text" as const, text: pixelSummary.text },
     ],
-    structuredContent: { data: base64, mimeType: "image/png", width, height, pixelSummary },
+    structuredContent: { data: base64, mimeType: "image/png", width, height, pixelSummary, ...source },
   }
 }
 
@@ -1029,6 +1029,8 @@ export const registerTools = (server: McpServer, options: BrowserMcpToolOptions)
       },
       outputSchema: {
         data: z.string().describe("base64 编码的 PNG 图片数据"),
+        url: z.string(),
+        viewport: z.object({ width: z.number(), height: z.number() }),
         mimeType: z.string().describe("MIME 类型，固定为 image/png"),
         width: z.number().describe("截图原始宽度（像素）"),
         height: z.number().describe("截图原始高度（像素）"),
@@ -1047,22 +1049,22 @@ export const registerTools = (server: McpServer, options: BrowserMcpToolOptions)
       }
       try {
         if (selector) {
-          const buf = await page.locator(selector).screenshot({ timeout: 10_000 })
+          const buf = await page.locator(selector).screenshot({ timeout: 10_000, scale: "css" })
           const { width, height } = pngDimensionsStrict(buf)
-          return okImage(buf.toString("base64"), width, height)
+          return okImage(buf.toString("base64"), width, height, { url: page.url(), viewport: session.viewport })
         }
         if (clip) {
-          const buf = await page.screenshot({ clip })
+          const buf = await page.screenshot({ clip, scale: "css" })
           const { width, height } = pngDimensionsStrict(buf)
-          return okImage(buf.toString("base64"), width, height)
+          return okImage(buf.toString("base64"), width, height, { url: page.url(), viewport: session.viewport })
         }
         if (fullPage) {
-          const buf = await page.screenshot({ fullPage: true })
+          const buf = await page.screenshot({ fullPage: true, scale: "css" })
           const { width, height } = pngDimensionsStrict(buf)
-          return okImage(buf.toString("base64"), width, height)
+          return okImage(buf.toString("base64"), width, height, { url: page.url(), viewport: session.viewport })
         }
         const { data, width, height } = await captureBrowserMcpViewportScreenshot(page)
-        return okImage(data, width, height)
+        return okImage(data, width, height, { url: page.url(), viewport: session.viewport })
       } finally {
         if (shouldHide) {
           await page.evaluate(() => {

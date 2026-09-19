@@ -27,6 +27,19 @@ persisted tail; reconnect resumes the bounded Task live sequence in its exact
 process epoch. Replay expiry or an epoch change first replaces the canonical
 persisted tail and only then opens a new stream. There is no parallel timestamp
 watermark poll or coarse `task.messages.changed` projection.
+
+Unvalidated Provider Tool input is ephemeral transport, owned by the processor's
+current call draft rather than a SQLite Tool request. The producer publishes
+coalesced, self-contained `message.part.updated` snapshots with `status=pending`,
+the actual Tool name/raw input and the owning Message/Session identity. The live
+bridge derives draft ordering from its observed start and the persisted parent
+Message. Raw input must not arrive as an orphan Part delta. The bounded replay
+cache keeps the latest complete pending snapshot for each call. At validation,
+the producer removes the draft projection before publishing the real persisted
+Tool Part with its canonical admission ordering. Cancellation, retry and an
+unfinished stream remove the draft; they do not fabricate a Tool execution fact.
+The existing conversation writer and pending Tool renderer consume these events.
+
 Standalone session hydration also carries the current `Question` pending
 snapshot for the selected session tree. The backend stamps each request with
 the same interaction `orderKey` used by the live `question.asked` bridge, and
@@ -174,6 +187,18 @@ Main-session input and explicitly sourced direct human replies remain
 user-owned. The shared transport-protocol ownership projection is the single
 source for server conversation views and Overlay live/hydrated rendering.
 
+Assistant settlement (status, terminal reason, error and completion time) stays
+with its exact Message projection. Adjacent-card regrouping derives settlement
+from the segment's latest Message, so changing card ownership cannot turn a
+settled assistant back into a running timer. An executing successor assistant
+clears the preceding assistant's terminal display metadata. Lifecycle-only
+cards retain their execution-occurrence projection until a real Message owns
+the card; Task lifecycle is never inferred from a visual card's timer.
+An occurrence lifecycle can supply terminal status before Message settlement;
+it applies only to that occurrence's owner card. Once the last Message has a
+completion timestamp, that timestamp bounds the segment's duration, so a later
+physical runtime shutdown cannot extend already completed work.
+
 ## Failure Contract
 
 - Missing or drifted `agentID`, `sessionID`, `messageID`, Slice revision, parent,
@@ -199,6 +224,12 @@ source. Project directory changes abort the previous
 transport request and rebind the API context before hydration, but they do not
 filter the global result. Every item carries the joined Project worktree, which
 is the sole grouping key and the directory used for explicit Task navigation.
+
+A durable event may invalidate both projections: Task completion/failure and
+interaction requests emit each applicable Mailbox and Work Ledger notification.
+Neither projection consumes the other's invalidation. Every global stream
+connection, including reconnect, rehydrates both canonical projections because
+this notification stream does not replay changes from a disconnected interval.
 
 Mailbox read/read-all/archive/restore/delete actions append
 `mailbox.acknowledged` protocol events. Delete is a terminal projection action:

@@ -27,13 +27,14 @@ try {
     throw new Error("test/isolated-test-entry.test.ts is the internal test host and cannot select itself")
   }
   const childEnvironment = isolatedTestChildEnvironment(runnerRuntime)
+  const failedFiles: string[] = []
   for (const file of files) {
     const result = await runHostCommandWithInactivity({
       executable: process.execPath,
       // Bun 1.3.14 still applies its expired-entry subprocess auto-killer when
       // the zero timeout sentinel is used. Keep a finite per-test ownership
       // window; cases that legitimately need longer declare their own budget.
-      args: ["test", "--timeout=60000", "--parallel=1", "test/isolated-test-entry.test.ts"],
+      args: ["test", "--timeout=60000", "--parallel=1", isolatedEntry],
       cwd,
       env: { ...childEnvironment, OPENCORVUS_TEST_FILES: JSON.stringify([file]) },
       inactivityTimeoutMs: 360_000,
@@ -46,9 +47,10 @@ try {
     if (result.exitCode !== 0) {
       console.error(`OpenCorvus test file failed (exit=${result.exitCode}): ${file}`)
       process.exitCode = result.exitCode
-      break
+      failedFiles.push(file)
     }
   }
+  if (failedFiles.length) console.error(`OpenCorvus failed test files (${failedFiles.length}):\n${failedFiles.join("\n")}`)
 } finally {
   await removeIsolatedTestRuntime(runnerRuntime)
 }

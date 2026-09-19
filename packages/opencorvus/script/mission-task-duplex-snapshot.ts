@@ -3,6 +3,7 @@ import { projectTaskRowsInTransaction } from "@/engine/store"
 import { PublishableInteractiveArtifactPayload } from "@/interactive-artifact/schema"
 import { projectProtocolDeliveryInTransaction } from "@/protocol/delivery-projection"
 import { ProtocolInboxTable } from "@/protocol/protocol.sql"
+import { ProtocolStore } from "@/protocol/store"
 import {
   MessageTable,
   PartTable,
@@ -14,7 +15,13 @@ import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import type { Database } from "@/storage/db"
 import { PanelArtifactReadReferenceFactSchema } from "@/agent/artifact-provenance-facts"
 import { MissionCompletionInput } from "@/mission/completion"
-import type { SessionStatus } from "@/session/status"
+import { SessionStatus } from "@/session/status"
+
+export function missionTaskDuplexCompletionExecution(sessionID: string, inputMessageID?: string) {
+  if (!inputMessageID) return {}
+  const event = ProtocolStore.latestSessionOccurrenceEvent(sessionID, "agent.execution.lifecycle", inputMessageID)
+  return { inputMessageID, status: event ? SessionStatus.Info.parse(event.payload?.status) : undefined }
+}
 
 // This bounded protocol case produces one small Completion Decision per Task.
 // Its acceptance trajectory is stricter than the general paged Artifact API.
@@ -269,7 +276,7 @@ export function missionTaskDuplexFinalEvidenceState(input: {
     finish?: string
     error?: unknown
   }[]
-  execution: { inputMessageID?: string; status: SessionStatus.Info }
+  execution: { inputMessageID?: string; status?: SessionStatus.Info }
   nonce: string
   artifacts: readonly {
     id: string
@@ -308,12 +315,12 @@ export function missionTaskDuplexFinalEvidenceState(input: {
       : []
   const executionFailed =
     sameExecution &&
-    input.execution.status.type === "terminal" &&
+    input.execution.status?.type === "terminal" &&
     (input.execution.status.reason === "error" || input.execution.status.reason === "aborted")
   const executionSettled =
     sameExecution &&
-    (input.execution.status.type === "idle" ||
-      (input.execution.status.type === "terminal" && input.execution.status.reason === "completed"))
+    (input.execution.status?.type === "idle" ||
+      (input.execution.status?.type === "terminal" && input.execution.status.reason === "completed"))
   const replyFailed = failedReplyIDs.length > 0 || executionFailed
   const replySettled = Boolean(
     completionReply &&
@@ -501,13 +508,11 @@ export function observeMissionTaskDuplexActivity(input: {
   activityKey: string
   observedAtMs: number
   inactivityWindowMs: number
-  absoluteDeadlineMs: number
 }): MissionTaskDuplexActivityDeadline {
   if (input.activityKey.length === 0) throw new Error("Mission Task duplex activity key must not be empty")
   for (const [label, value] of [
     ["observation time", input.observedAtMs],
     ["inactivity window", input.inactivityWindowMs],
-    ["absolute deadline", input.absoluteDeadlineMs],
   ] as const) {
     if (!Number.isSafeInteger(value) || value < 0) {
       throw new Error(`Mission Task duplex ${label} must be a non-negative safe integer`)
@@ -523,7 +528,7 @@ export function observeMissionTaskDuplexActivity(input: {
   }
   return {
     activityKey: input.activityKey,
-    deadlineMs: Math.min(input.absoluteDeadlineMs, renewedDeadline),
+    deadlineMs: renewedDeadline,
   }
 }
 

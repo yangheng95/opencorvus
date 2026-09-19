@@ -188,7 +188,8 @@ describe("prompt composition fingerprint", () => {
       const task: TaskDesc = {
         id: "tsk_cache_stability",
         title: "Cache-stable owner projection",
-        status: "in_progress",
+        status: "active",
+        execution_lifecycle: { taskID: "tsk_cache_stability", epoch: 1, openedEventID: "pev_open", openedAt: 1, status: "active" },
         source: "operator",
         request: "Keep semantic prompt-owner state stable.",
         goals: [],

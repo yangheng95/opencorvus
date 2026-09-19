@@ -1,5 +1,51 @@
 # Specs Storage Index
 
+[v0.1.3 stable release](records/2026-09/2026-09-19-v0.1.3-release.md).
+
+[Release unit test repair](records/2026-09/2026-09-19-release-unit-test-repair.md).
+
+[Expert capability preservation](records/2026-09/2026-09-19-expert-capability-preservation.md).
+
+[v0.1.2-beta publication](records/2026-09/2026-09-18-v0.1.2-beta-release.md).
+
+[Interaction ownership after Project deletion](records/2026-09/2026-09-18-interaction-owner-after-project-deletion.md).
+
+[Deleted Project UI convergence](records/2026-09/2026-09-18-deleted-project-ui-convergence.md).
+
+[Project deletion with worker descriptors](records/2026-09/2026-09-18-project-delete-worker-descriptor.md).
+
+[Windows terminated-process liveness recovery](records/2026-09/2026-09-18-windows-terminated-process-liveness.md).
+
+[Sub-agent dock session switching](records/2026-09/2026-09-18-subagent-dock-session-switch.md).
+
+[Attachment-store authority marker removal](records/2026-09/2026-09-18-attachment-store-authority-removal.md).
+
+[v0.1.1-beta publication](records/2026-09/2026-09-17-v0.1.1-beta-release.md).
+
+[Runtime end-to-end acceptance before benchmark](records/2026-09/2026-09-16-runtime-e2e-acceptance.md).
+
+[Dispatch preparation stall investigation](records/2026-09/2026-09-16-dispatch-preparation-stall.md).
+
+[v0.1.0-beta tested publication](records/2026-09/2026-09-15-v0.1.0-beta-release.md).
+
+[Global Work creation default-config repair](records/2026-09/2026-09-15-global-config-defaults.md).
+
+[Current branch Overlay 0.0.64 package](records/2026-09/2026-09-15-overlay-current-branch-package.md).
+
+Current Luna versus Luna + Base reproduction: [protocol and recovered evidence](records/2026-09/2026-09-12-luna-base-reproduction.md).
+
+Current correction: [outcome-first runtime and Base delivery](records/2026-09/2026-09-12-outcome-first-runtime-correction.md).
+
+The [fixed 100-case Luna comparison](artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-full-100-launch.json) is frozen after further infrastructure defects; model execution is stopped and only the 8769 read-only viewer remains. The prior [five-case diagnostic report](artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-first-five-diagnostic.md) remains separate. The [manifest audit](artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-full-100-manifest-audit.json), [restricted-shell selection receipt](artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-restricted-shell-selection.json), [batch-settlement audit](artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-batch-settlement-audit.json), and [Base quality/cost root-cause audit](artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-base-quality-root-cause.json) document the corrected evidence authority and the workflow amplification. The current repair also closes post-SIGTERM spawn admission and replaces the ad hoc native Python loop with a repository-owned coordinator. No full-cohort or redundant-call claim is established.
+
+Local live comparison: [results page and viewer instructions](artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/README.md#local-results-page).
+
+Current paper plan: [OpenCorvus academic research and writing plan](records/2026-09/2026-09-10-opencorvus-paper-plan.md).
+
+Current ICLR-format paper on evolving expert organizations: [manuscript, source map and evaluation protocol](artifacts/opencorvus-paper/manuscript/README.md).
+
+Paper template input: [ICLR 2027 official LaTeX package](artifacts/opencorvus-paper/templates/iclr2027/README.md).
+
 - [v0.0.64-beta binary publication](records/2026-09/2026-09-11-v0.0.64-beta-release.md).
 
 - [Compiled PoC paper website publication](records/2026-09/2026-09-11-website-poc-paper.md).
@@ -2059,6 +2105,12 @@ Latest Hexin private endpoint resolution: [`2026-07-31-hexin-endpoint-resolution
 Latest running Conversation action-flicker repair: [`2026-08-03-running-conversation-action-flicker-repair.md`](records/2026-08/2026-08-03-running-conversation-action-flicker-repair.md).
 
 Latest streaming Conversation stable-hover ownership repair: [`2026-08-04-streaming-conversation-stable-hover-owner.md`](records/2026-08/2026-08-04-streaming-conversation-stable-hover-owner.md).
+
+Latest sub-agent live transcript source contract repair: [`2026-09-18-subagent-live-origin-source.md`](records/2026-09/2026-09-18-subagent-live-origin-source.md).
+
+Latest sub-agent dock visual refresh: [`2026-09-18-subagent-dock-visual-refresh.md`](records/2026-09/2026-09-18-subagent-dock-visual-refresh.md).
+
+Latest Handoff and no-action conversation presentation: [`2026-09-19-handoff-no-action-presentation.md`](records/2026-09/2026-09-19-handoff-no-action-presentation.md).
 
 Latest Overlay runtime efficiency root repair: [`2026-07-30-overlay-runtime-efficiency-root-repair.md`](records/2026-07/2026-07-30-overlay-runtime-efficiency-root-repair.md).
 

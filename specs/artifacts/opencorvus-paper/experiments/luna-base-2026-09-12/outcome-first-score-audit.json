@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "audit_kind": "historical_seal_identity_and_official_score_recomputation",
+  "original_root": "/var/lib/opencorvus-benchmark/reproduction-20260912-outcome-first/base",
+  "original_catalog_sha256": "0fe0879e47ac09e0766fd587c27fbb79ddbacc80ae3680d1cf308ecc4b30f7e3",
+  "case_manifest_sha256": "43ca54925db11d7dc6d9c5b80bbd32aed9b6c93ea92a2d1b8225a0858036ff42",
+  "official_package_tree_sha256": "cc7a63f9444814c7029e325dacbdf1c2e870430d08aaf8d4ecf5c0e44fe829d4",
+  "harness_revision": "84a0919412616bbd76213ee1715a7e8b8a54f5ac",
+  "checker_sha256": "7a7b47eaac0b816f82be36fe74837bbac385fe9c50f8d5629a2c06af95737a0d",
+  "bridge_sha256": "e9bede1fa990c3cb12a96d03f18eeb3de1c70f26efc0c90265fce407d1cd45ca",
+  "attempts_recorded": 5,
+  "candidates_checked": 4,
+  "score_audits_passed": 4,
+  "recorded_leaderboard_rows_verified": 0,
+  "recorded_leaderboard_strict_passes_verified": 0,
+  "source_commit_counts": {
+    "3f9cb474b577f6e313492ed48b5b4bbf1bfa4f1f": 4
+  },
+  "failed_case_indices": [],
+  "limitations": [
+    "No new model execution",
+    "Does not revalidate full runtime eligibility or raw Provider identity",
+    "Stateful tool calls verified by retained hash chain, not re-executed",
+    "Historical mixed source revisions",
+    "Historical native Luna comparison identity remains unknown"
+  ]
+}

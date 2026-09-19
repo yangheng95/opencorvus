@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { Config } from "../../src/config/config"
+import { StaleCatalogOccurrenceError } from "../../src/capability/catalog-binding"
 import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
 import { Session } from "../../src/session"
@@ -53,6 +54,15 @@ describe("search-native Skill reveal", () => {
           time: { created: Date.now() },
           model: { providerID: model.providerID, modelID: model.id },
         })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: user.id,
+          type: "text",
+          text: '@skill("work-artifacts") Prepare the report.',
+          source: "user",
+          kind: "user_content",
+        })
         const assistant = {
           id: Identifier.ascending("message"),
           parentID: user.id,
@@ -100,6 +110,7 @@ describe("search-native Skill reveal", () => {
           "todoread",
           "todowrite",
           "write",
+          "skill",
         ]
         expect(Object.keys(initial.tools)).toEqual(routineNames)
         const loaderRef = initial.occurrence.ref("skill")
@@ -114,14 +125,10 @@ describe("search-native Skill reveal", () => {
           ),
         ).rejects.toThrow("not discoverable")
 
-        const { tools } = await resolveTestCapabilityTools({
-          ...common,
-          messages: await Session.messages({ sessionID: session.id }),
-          activeLocalRefs: ["work-artifacts"],
-        })
-        expect(Object.keys(tools).sort()).toEqual([...routineNames, "skill"].sort())
-        const skill = tools.skill
-        if (!skill?.execute) throw new Error("Exact Skill loader is unavailable after reveal")
+        const skill = initial.tools.skill
+        if (!skill?.execute) throw new Error("Explicit Skill loader is unavailable in the permanent base")
+        expect(skill.description).toStartWith("Load an exact")
+        expect(skill.description).toContain("exact Skill name is already visible in the request")
         const loaded = (await skill.execute(
           { name: "work-artifacts" },
           { toolCallId: "call_load_exact_work_artifacts", messages: [], abortSignal: new AbortController().signal },
@@ -132,7 +139,11 @@ describe("search-native Skill reveal", () => {
           toolInput: { name: "work-artifacts" },
           output: loaded,
         })
-        const expanded = await resolveTestCapabilityTools({ ...common, activeLocalRefs: ["research-report"] })
+        const expanded = await resolveTestCapabilityTools({
+          ...common,
+          messages: await Session.messages({ sessionID: session.id }),
+          activeLocalRefs: ["research-report"],
+        })
         const expandedList = (await expanded.tools.skill!.execute!(
           {},
           { toolCallId: "call_list_expanded_skills", messages: [], abortSignal: new AbortController().signal },
@@ -154,6 +165,95 @@ describe("search-native Skill reveal", () => {
           toolCallID: "call_load_reconstructed_report",
           toolInput: { name: "research-report" },
           output: report,
+        })
+        await expect(resolveTestCapabilityTools({ ...common, tools: { skill: false } })).rejects.toBeInstanceOf(
+          StaleCatalogOccurrenceError,
+        )
+        await Session.setPermission({
+          sessionID: session.id,
+          permission: [{ permission: "skill", pattern: "research-report", action: "deny" }],
+        })
+        await expect(
+          resolveTestCapabilityTools({
+            ...common,
+            session: await Session.get(session.id),
+          }),
+        ).rejects.toBeInstanceOf(StaleCatalogOccurrenceError)
+
+        const deniedSession = await Session.create({ kind: "assistant", title: "Denied explicit Skill reveal" })
+        await Session.setPermission({
+          sessionID: deniedSession.id,
+          permission: [{ permission: "skill", pattern: "work-artifacts", action: "deny" }],
+        })
+        const deniedUser = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: deniedSession.id,
+          role: "user",
+          author: "work",
+          agent: "work",
+          time: { created: Date.now() },
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: deniedSession.id,
+          messageID: deniedUser.id,
+          type: "text",
+          text: '@skill("work-artifacts") Find another applicable Skill.',
+          source: "user",
+          kind: "user_content",
+        })
+        const deniedAssistant = {
+          ...assistant,
+          id: Identifier.ascending("message"),
+          parentID: deniedUser.id,
+          sessionID: deniedSession.id,
+        }
+        const deniedProcessor = SessionProcessor.create({
+          assistantMessage: deniedAssistant,
+          sessionID: deniedSession.id,
+          model,
+          abort: new AbortController().signal,
+        })
+        const deniedCommon = {
+          ...common,
+          session: await Session.get(deniedSession.id),
+          assistant: deniedAssistant,
+          processor: deniedProcessor,
+          messages: await Session.messages({ sessionID: deniedSession.id }),
+        }
+        const deniedInitial = await resolveTestCapabilityTools(deniedCommon)
+        const deniedList = (await deniedInitial.tools.skill!.execute!(
+          {},
+          { toolCallId: "call_list_denied_explicit_skill", messages: [], abortSignal: new AbortController().signal },
+        )) as Parameters<typeof deniedProcessor.completeRecoveredToolPart>[0]["output"] & {
+          metadata: { names: string[] }
+        }
+        expect({ description: deniedInitial.tools.skill!.description, names: deniedList.metadata.names }).toEqual({
+          description: expect.stringContaining("Current agent: work"),
+          names: [],
+        })
+        await deniedProcessor.completeRecoveredToolPart({
+          toolCallID: "call_list_denied_explicit_skill",
+          toolInput: {},
+          output: deniedList,
+        })
+        const allowedExpansion = await resolveTestCapabilityTools({
+          ...deniedCommon,
+          messages: await Session.messages({ sessionID: deniedSession.id }),
+          activeLocalRefs: ["research-report"],
+        })
+        const allowedList = (await allowedExpansion.tools.skill!.execute!(
+          {},
+          { toolCallId: "call_list_allowed_expansion", messages: [], abortSignal: new AbortController().signal },
+        )) as Parameters<typeof deniedProcessor.completeRecoveredToolPart>[0]["output"] & {
+          metadata: { names: string[] }
+        }
+        expect(allowedList.metadata.names).toEqual(["research-report"])
+        await deniedProcessor.completeRecoveredToolPart({
+          toolCallID: "call_list_allowed_expansion",
+          toolInput: {},
+          output: allowedList,
         })
       },
     })

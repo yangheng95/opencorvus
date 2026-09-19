@@ -93,7 +93,7 @@ describe("SessionProcessor semantic LLM activity retry", () => {
               yield { type: "start" }
               yield { type: "tool-input-start", id: "call_abandoned", toolName: "write" }
               while (!streamInput.abort.aborted) {
-                yield { type: "tool-input-delta", id: "call_abandoned", delta: "" }
+                yield { type: "tool-input-delta", id: "call_abandoned", delta: " \t\n" }
               }
             })()
             return {
@@ -117,7 +117,7 @@ describe("SessionProcessor semantic LLM activity retry", () => {
               yield { type: "text-delta", id: "second-idle-draft", text: "Abandoned before a second idle." }
               while (!streamInput.abort.aborted) {
                 await new Promise((resolve) => setTimeout(resolve, 25))
-                yield { type: "start" }
+                yield { type: "text-delta", id: "second-idle-draft", text: " \t\n" }
               }
             })()
             return {
@@ -245,8 +245,7 @@ describe("SessionProcessor semantic LLM activity retry", () => {
               yield { type: "start" }
               yield { type: "tool-input-start", id: "call_abandoned", toolName: "write" }
               yield { type: "text-start", id: "text_owned_by_the_attempt" }
-              const stopAt = Date.now() + 600
-              while (Date.now() < stopAt && !streamInput.abort.aborted) {
+              while (!streamInput.abort.aborted) {
                 await new Promise((resolve) => setTimeout(resolve, 25))
                 yield { type: "tool-input-end", id: "call_abandoned" }
                 yield {

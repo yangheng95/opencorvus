@@ -30,6 +30,7 @@ export function isCardBodyMessagePart(part: any): boolean {
 
 export function messagePartHasDisplayContent(part: any): boolean {
   if (!isCardBodyMessagePart(part)) return false
+  if (isNoActionDecisionToolPart(part)) return false
   const type = messagePartType(part)
   // Reasoning remains in the protocol/store for runtime evidence but is not
   // user-facing message-card content.
@@ -43,6 +44,12 @@ export function isCollapsedExecutionMessagePart(part: any): boolean {
   const type = messagePartType(part)
   if (type === "patch") return Array.isArray(part?.files) && part.files.length > 0
   return type === "tool"
+}
+
+/** A non-mutating Orchestrator decision receipt remains in persisted history
+ * and diagnostics, but does not occupy the participant-facing conversation. */
+export function isNoActionDecisionToolPart(part: any): boolean {
+  return messagePartType(part) === "tool" && part?.tool === "no_action"
 }
 
 /** Visible message content that forms a narrative section outside execution details. */

@@ -4,6 +4,7 @@
  * Full overlay build script — single command for the complete pipeline.
  *
  * Steps:
+ *   0. Preflight — refuse to start while a running overlay locks its binary
  *   1. build:vite — bundle main.tsx + CSS + HTML → dist-vite/
  *   2. Remove stale opencorvus binary — force rebuild on every overlay build
  *   3. Generate OpenCorvus build artifacts consumed while rebuilding the SDK
@@ -17,10 +18,12 @@
  *   bun run build:overlay --skip-tauri                   # UI only (step 1)
  *   bun run build:overlay --skip-dist-copy               # keep target/release only for an installer bundle
  *
- * Note: the caller is responsible for stopping any running overlay process
- * before invoking this script. On Windows, Cargo's linker will fail with
- * LNK1104 on `target/release/deps/opencorvus_overlay.exe` if a live overlay
- * still holds the hardlinked release binary open.
+ * Stop any running overlay before invoking this script. Cargo links into
+ * `target/release/deps/opencorvus_overlay.exe` and hardlinks that out to
+ * `target/release/opencorvus-overlay.exe`; a live overlay keeps the mapped
+ * image locked, and on Windows the linker then fails with LNK1104. Step 0
+ * detects this up front rather than letting it surface minutes later as a
+ * linker error that names no cause.
  */
 
 import { $ } from "bun"
@@ -29,6 +32,7 @@ import path from "path"
 import { fileURLToPath } from "url"
 import { generateOpencorvusGeneratedBuildArtifacts } from "../../opencorvus/script/generate-build-artifacts"
 import { writeOverlayPayloadStamp } from "../../opencorvus/script/build-overlay-payload-stamp"
+import { findLockedBuildBinaries } from "./build-binary-lock"
 import { finalizeWorkArtifactPackage } from "../../opencorvus/script/finalize-work-artifact-package"
 
 import {
@@ -111,6 +115,37 @@ async function exists(file: string) {
     .catch(() => false)
 }
 
+// Cargo links the binary into `deps/<crate_name>.exe` (underscores) and
+// hardlinks it out to `release/<bin-name>.exe` (hyphens). A running overlay
+// keeps the mapped image locked, and Windows refuses to overwrite it — the
+// `deps/` copy is the one the linker writes, so deleting only the hyphenated
+// hardlink leaves the real blocker in place.
+function lockedBuildBinaries() {
+  return [path.join(release, overlayFile), path.join(release, "deps", `${overlayFile.replace(/-/g, "_")}`)]
+}
+
+/**
+ * Fail before the expensive Vite/SDK/cargo pipeline when a previous overlay
+ * still holds its binary. Without this the build burns ~12 minutes and then
+ * dies inside cargo with a bare `LNK1104` that names no cause and no remedy.
+ */
+async function assertOverlayBinaryWritable() {
+  const locked = await findLockedBuildBinaries(lockedBuildBinaries())
+  if (locked.length === 0) return
+
+  throw new Error(
+    [
+      "Overlay binary is locked by a running process — close the overlay before building.",
+      ...locked.map((file) => `  locked: ${file}`),
+      "",
+      isWindows
+        ? 'Find the owner with:  powershell -NoProfile -Command "Get-Process opencorvus-overlay"'
+        : "Find the owner with:  pgrep -af opencorvus-overlay",
+      "Cargo would otherwise fail much later with LINK : fatal error LNK1104.",
+    ].join("\n"),
+  )
+}
+
 // fs.copyFile fails with EPERM on Windows when the destination already exists
 // with the ReadOnly attribute (left behind by a prior extracted/archived copy).
 // Unlink the dest first — same `force: true` removal convention used for the
@@ -138,6 +173,14 @@ function tauriArgs() {
       bundle: { resources: [] },
     }),
   ]
+}
+
+// ── Step 0: preflight ──
+//
+// Checked before any expensive work so a locked binary costs a second, not a
+// full Vite + SDK + cargo cycle. Skipped for --skip-tauri, which never links.
+if (!skipTauri) {
+  await assertOverlayBinaryWritable()
 }
 
 // ── Step 1: build:vite ──
@@ -198,25 +241,39 @@ await finalizeWorkArtifactPackage({
 })
 await writeOverlayPayloadStamp(distServerDir)
 
-// Clean previous build artifacts that may be locked by Windows
+// Clean previous build artifacts that may be locked by Windows. Both the
+// hyphenated hardlink and the `deps/` image cargo actually writes are removed;
+// clearing only the former leaves the linker's real target in place.
 const builtOverlay = path.join(release, overlayFile)
-try {
-  await fs.rm(builtOverlay, { force: true })
-} catch {
-  // File locked — try rename then delete (Windows file locking workaround)
-  const stale = builtOverlay + ".old"
-  await fs.rm(stale, { force: true }).catch(() => undefined)
+for (const stale of lockedBuildBinaries()) {
   try {
-    await fs.rename(builtOverlay, stale)
-    await fs.rm(stale, { force: true }).catch(() => undefined)
+    await fs.rm(stale, { force: true })
+    continue
   } catch {
-    // Last resort: PowerShell force removal
-    if (isWindows) {
-      console.log("Binary locked, attempting PowerShell removal...")
-      await $`powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Force -LiteralPath $args[0] -ErrorAction SilentlyContinue" ${builtOverlay}`
-        .quiet()
-        .nothrow()
+    // File locked — try rename then delete (Windows file locking workaround)
+    const moved = stale + ".old"
+    await fs.rm(moved, { force: true }).catch(() => undefined)
+    try {
+      await fs.rename(stale, moved)
+      await fs.rm(moved, { force: true }).catch(() => undefined)
+      continue
+    } catch {
+      // Last resort: PowerShell force removal
+      if (isWindows) {
+        console.log(`Binary locked, attempting PowerShell removal: ${stale}`)
+        await $`powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Remove-Item -Force -LiteralPath $args[0] -ErrorAction SilentlyContinue" ${stale}`
+          .quiet()
+          .nothrow()
+      }
     }
+  }
+  // Every removal path above swallows its own failure, so verify rather than
+  // assume. An unremoved binary means cargo is about to die with LNK1104.
+  if (await exists(stale)) {
+    throw new Error(
+      `Could not remove locked build artifact before linking: ${stale}\n` +
+        `Close any running overlay and retry; cargo cannot overwrite a mapped image.`,
+    )
   }
 }
 

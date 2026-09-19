@@ -1927,7 +1927,7 @@ export namespace Session {
       if (!message) return undefined
       assertSessionDeletionAdmissionInTransaction(db, message.sessionID)
       if (jsonEquivalent(existing.data, input.data)) return { id: existing.id }
-      assertAcceptedIngressMessageMutable(db, existing.message_id)
+      assertTaskRootMessageMutable(db, existing.message_id)
       const current = existing.data as { type?: string }
       const next = input.data as { type?: string }
       if (!(["text", "reasoning"].includes(current.type ?? "") && current.type === next.type)) {
@@ -2226,7 +2226,7 @@ export namespace Session {
       }
       if (existingToolRequest) throw new HostProcessingFaultError(`Part identity ${id} is occupied by an immutable Tool request fact`)
       const parentData = message.data as { role?: string }
-      if (parentData.role === "user") assertAcceptedIngressMessageMutable(db, messageID)
+      if (parentData.role === "user") assertTaskRootMessageMutable(db, messageID)
       const canonicalOrderKey = timelinePartOrderKey({ id, timeCreated: existingPart?.timeCreated ?? time })
       assertProvidedPartOrderKey(canonicalOrderKey)
       outputPart = {
@@ -2538,18 +2538,21 @@ export { SessionStatus } from "./status"
     const data = row?.data as { activationID?: unknown } | undefined
     if (typeof data?.activationID === "string" && data.activationID) return true
     return Boolean(db.select({ id: MessageTable.id }).from(MessageTable)
-      .where(sql`json_extract(${MessageTable.data}, '$.role') = 'assistant' AND json_extract(${MessageTable.data}, '$.parentID') = ${messageID}`).get())
+      .where(sql`
+        json_extract(${MessageTable.data}, '$.role') = 'assistant'
+        AND (
+          json_extract(${MessageTable.data}, '$.parentID') = ${messageID}
+          OR EXISTS (
+            SELECT 1
+            FROM json_each(json_extract(${MessageTable.data}, '$.acceptedInputMessageIDs')) AS accepted
+            WHERE accepted.value = ${messageID}
+          )
+        )
+      `).get())
   }
 
   function assertTaskRootMessageMutable(db: Database.TxOrDb, messageID: string): void {
     if (taskRootMessageIsImmutable(db, messageID)) {
       throw new Error(`Task-root causal Message ${messageID} is immutable`)
-    }
-  }
-
-
-  function assertAcceptedIngressMessageMutable(db: Database.TxOrDb, messageID: string): void {
-    if (acceptedIngressMessage(db, messageID) || protocolCausalMessage(db, messageID)) {
-      throw new Error(`Accepted ingress Message ${messageID} is immutable`)
     }
   }

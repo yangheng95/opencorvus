@@ -29,7 +29,6 @@ import {
   completeArtifactReadsBeforePublicationInTransaction,
   completedToolOutputValuesBeforeActionInTransaction,
   resolveArtifactReadReferenceBeforeSelectionInTransaction,
-  resolveArtifactSelectionReferencesBeforePublicationInTransaction,
   resolveMissionArtifactReadAcceptancesBeforeCompletionInTransaction,
   resolvePanelArtifactReadReferencesBeforeActionInTransaction,
   selectedArtifactLocatorsBeforePublicationInTransaction,
@@ -275,15 +274,6 @@ export function selectedArtifactLocatorsBeforePublication(input: {
   toolPartID: string
 }): ArtifactReadLocator[] {
   return Database.use((db) => selectedArtifactLocatorsBeforePublicationInTransaction(db, input))
-}
-
-export function resolveArtifactSelectionReferencesBeforePublication(input: {
-  sessionID: string
-  assistantMessageID: string
-  toolPartID: string
-  references: readonly string[]
-}): ArtifactReadLocator[] {
-  return Database.use((db) => resolveArtifactSelectionReferencesBeforePublicationInTransaction(db, input))
 }
 
 /**

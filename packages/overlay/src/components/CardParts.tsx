@@ -10,6 +10,7 @@ import { t } from "../utils/i18n"
 import {
   isCollapsedExecutionMessagePart,
   isCardRenderableMessagePartType,
+  isNoActionDecisionToolPart,
   executionDisclosureKey,
   partitionMessagePartRenderRuns,
   type MessagePartRenderRun,
@@ -292,14 +293,15 @@ function DelegatedContextParts(props: PartCollectionProps & { messageID: string 
 /** Render a card without splitting transcript ownership. Context delegation
  * changes only the default disclosure state of the matching message runs. */
 export function CardParts(props: PartCollectionProps & { collapsedContextMessageIDs?: string[] }) {
+  const displayParts = createMemo(() => props.parts.filter((part) => !isNoActionDecisionToolPart(part)))
   const runs = createMemo(() =>
     partitionCardMessageRuns(
-      props.parts,
+      displayParts(),
       props.collapsedContextMessageIDs || [],
       (props.turnArtifacts || []).map((summary) => summary.messageID),
     ),
   )
-  const streamingTextPart = createMemo(() => trailingLiveTextPart(props.parts, props.streaming))
+  const streamingTextPart = createMemo(() => trailingLiveTextPart(displayParts(), props.streaming))
   return (
     <Index each={runs()}>
       {(run) => (

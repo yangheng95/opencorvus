@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "kind": "real_official_world_and_replay_smoke",
+  "model_calls": 0,
+  "benchmark_result": false,
+  "replay": {
+    "schema_version": 1,
+    "passed": true,
+    "example_id": 3001,
+    "checks": {
+      "partial_credit": true,
+      "task_completed_correctly": true,
+      "assertion_results": true,
+      "end_state_sha256": true,
+      "scorer_world_stable": true,
+      "tool_attempts": true,
+      "tool_succeeded": true,
+      "tool_failed": true,
+      "world_transition_chain": true
+    },
+    "stateful_calls_verified_by_hash_chain": 0,
+    "replayed_non_stateful_calls": 1,
+    "skipped_non_stateful_calls": 1
+  }
+}

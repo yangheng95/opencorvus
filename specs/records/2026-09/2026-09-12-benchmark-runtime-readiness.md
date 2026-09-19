@@ -1,0 +1,300 @@
+# Benchmark 前的运行时可靠性验收
+
+## Recall
+
+- 用户要求：“又出现了无效执行，bench前确保解决了锁有问题”。按停止带着已知问题继续benchmark处理，锁问题需要证据确认，不能凭无效状态命名根因。暂停一切新批次/重跑/扩跑，先修复并验收全部当前已知运行问题。
+- 承接[纠偏记录](2026-09-12-outcome-first-runtime-correction.md)。论文分支HEAD为0fb9406c，当前WSL冻结runner为3f9cb474，outcome-first batch6f1e14ec首5例已全部开始，4/5仍在运行；不修改活动runner源码、不动用户进程。第6例及以后本来就未准入，本次进一步禁止新配置模型benchmark。
+- 已知失败：case3 run336d4240在600秒无“公开观测”变化后无效；case1虽完成评分却采用direct绑定且没有独立Tester，不满足本轮实验条件，不能用于声称两角色配置有效。case2有真实Tester。前述通过率与调用优化结论继续待验。
+- 验收：确定性复现并验证同一流式进展在运行时和benchmark观察器中的一致性；验证有workflow声明的包使用真实节点绑定、直接包正常direct；覆盖Task/Mission/Session轮次、关闭/失败/取消、重试/重启、并发与项目隔离；官方验收必须核对实际实验条件，独立只读审查全部有效发现关闭。锁/Provider错误不能凭最终timeout归类。未完成项明确保留，不启动新模型benchmark来替代前置验证。
+- 已读：两份先前Recall、benchmark技能、失败观测/消息/原始事件/Provider请求与结局/运行日志/关系快照、当前和冻结Session processor、LLM activity、stream activity、workflow-binding、dispatch工具、benchmarkActivitySignature。独立agent反馈：无；首轮实现验证后委托。
+
+## 问题分析与实施边界
+
+1. 失败的直接触发是run-automationbench的benchmarkActivitySignature在600秒未变，最后Provider请求act_g0VUzlK5c仍未结束，随后由Server.stop统一外部中止。失败前Session活动时间1789204532786距采样约250ms、pause_depth=0、无待交互、HTTP读投影持续成功；不存在已证明的SQLite死锁。19个Provider请求最后一个只在清理时aborted。请求前两次Tool description里出现长段畸形生成文本，但它不是根因结论。
+2. 观察器签名只计公开消息text长度、状态、Tool时间和trace事件，不计正在形成但未成为公开完整Tool的输入流。Runtime的语义活动监视器与观察器采用不同进展口径，存在活跃流被误杀的确定性风险；需要复现明确判定，而不是直接放宽600秒或把进程/lease心跳当业务进展。未知：该请求的完整原始流未被现密封采样保留，不能倒推每个字节的内容或模型病理生成原因。
+3. 第二项明确契约漏洞：selectedWorkflowBinding(workflowID=null)对有非空workflow的包仍返回direct，dispatch工具暴露direct，case1实际以direct派发Developer并workflow_id=null结束。此前包投影测试只确认声明图，没有核对实际绑定能绕过声明。更深影响：workflowProjectionFromProjectedAgents还拿一个虚构direct binding比较包revision；修复公共选择器时必须同步用已有package revision身份比较，避免影响全部workflow调用方。
+4. 修复思路：以现有语义进展owner给benchmark提供精确会话归属、可检验的进展信息，保留完全无进展时的原600秒超时及终态静止审计；不拿observer轮询/租约续期当进展。绑定层与工具schema仅接受实际manifest允许的subject，模型仍自由选择合法图、节点和调度，Host不自动选择/推进业务流程。评分资格核对真实workflow与必要参与者；业务零分不变，条件违规与评分有效性分开。
+5. 全仓调用审计及测试需覆盖公开schema、绑定构造、包revision比较、Task完成、恢复事实/晚到输入、直接包及有图包、生产和冻结运行器。根因未完成验证前不修改相关实现。新准入保持暂停，已有4/5运行仅保留本轮原始证据，不作为新配置批准。
+
+## 独立审查后的方案修正
+
+- 全5例已自然结束，active leases为空；新模型实验仍暂停。独立审查指出整包禁止direct会封死平台universal-build及既有direct Task恢复，该方案已完整撤回。direct本身是合法公共契约；本轮两角色实验条件与原始官方评分必须分别核对，不能靠host禁止合法调用改变系统。
+- 冻结processor既有测试出现1次失败，原样独立及组合复跑均通过。代码对比确认text流归属处理与主仓一致，没有证据可称新的生产流归属bug。测试却让错误流在600ms自行结束，事件循环延迟可能使测试在idle回调前自然成功；改为持续到真实abort，依靠30秒测试上限暴露故障，保留2次attempt及恢复答案的正向契约。
+- 冻结测试进一步接入真实SessionProcessor→SessionStatus.getActivity→benchmark签名：合法pending Tool input片段必须推进deadline，随后无归属片段必须由真实idle机制重试。此为零模型运行时集成检查，不能声称外部Provider端到端或官方checker已通过。
+- 尚未完成：原始异常流内容不可追溯；实际两角色条件的独立核对与新运行真实Provider验收；所有已知问题关闭之前继续暂停新benchmark。不得以单次绿色测试或延长超时宣布整体就绪。
+
+## 已验证交付与未完成项
+
+- 观察器修复冻结提交 `470d129dc2bf8baddf30367e764280fe41eabe7b`；相对3f9完整补丁及SHA-256见[receipt](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/stream-progress-observer-receipt.json)。未启动新模型请求。
+- 独立复核无未解决的本次修复问题。冻结processor与observer集成6项/14断言通过，包含真实pending input进展、idle重试恢复、同Session持久化新input轮次及不同Session隔离。主仓跨进程租约、终态恢复、processor12项/44断言通过。冻结benchmark TypeScript类型检查通过，docs:check通过。
+- 保持原600秒阈值、终态静止审计、公共direct及既有Task绑定契约。没有证据将原始无效执行归因于锁死；原Provider完整流缺失限制了该次事件的追溯。
+- **新benchmark准入仍暂停**。本次没有完成全部真实实验条件验收，也没有外部Provider端到端通过证据；第1例没有独立Tester的问题仍待通过实验要求、真实参与者与官方原始评分的独立核对解决。原始历史数据不改写。不得将本次局部修复表述为全部问题已解决或100例实验已就绪。
+
+## 11:00 工作流选择语义修正方案
+
+Recall补充：第5例82abc8df与第1例一样，原始dispatch.workflow_subject=direct，只有Developer消息并以workflow_id=null完成；第2/4例使用execution-verification并出现Tester，case4还有真实修复后复验。继续暂停新模型benchmark。
+
+已读主仓Base selector、Orchestrator system、公共Orchestrator core、版本生成器、包投影与catalog测试；全仓查找execution-verification调用与版本约束。Base system中“bind execution-verification”紧接“dispatch base-developer directly”，与工具的direct subject词义冲突；selector虽然要求绑定图，但旧包提示在派发动作处留下歧义。此是可验证提示缺陷，不足以证明两例模型选择的唯一成因。共享绑定层已证明direct是合法平台能力，不能再次修改该公共契约。
+
+实施仅澄清Base的现有声明：Developer作为execution-verification首节点，明确workflow_subject的graph/node身份；Tester是独立的第二节点而非Developer自检。保持普通图、角色、工具、模型、评分、超时与恢复事实不变。按唯一版本生成器更新Base版本和payload，现有包投影/catelog正向测试更新版本。冻结runner投影同一包源码并归档精确增量。独立只读review后提交；零模型投影验收不等于模型遵守率，仍不启动benchmark。独立反馈在实施前为无（前次绑定方案已由review否决并撤回）。
+
+
+实现验证：主仓包投影/catelog20项142断言通过，冻结同组20项134断言通过。Base为2026.09.12.3；版本生成器的旧baseline落后于此前已发布的6包版本，本轮刷新其既有source事实并显式将Base从.2升到.3，其他包source不变。payload生成无差异（内嵌包由其source加载）。冻结manifest使用原schema，只投影版本；初次拷贝主仓新schema的本轮错误已撤回，最终diff确认唯一manifest变化为版本。冻结catalog旧.08版本、旧3节点、旧selector标题断言已修正。docs:check通过。
+
+[Base节点表述补丁](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/base-workflow-subject-clarification.patch)记录相对470d的4文件完整增量。没有新模型运行；此为声明歧义修正和零模型加载验收，不是两角色真实遵守率或官方评分实效验收。新benchmark继续暂停。
+
+独立只读复核通过：主仓20/142、冻结20/134独立复跑；6条版本摘要复算匹配；冻结补丁逐字节一致，无未解决的本次改动发现。冻结提交84a0919412616bbd76213ee1715a7e8b8a54f5ac，父470d129d；补丁5783bytes，SHA-256 790b1a62b5cc6ffaa011349bf9166b981c56564c0a5a10a392dbb4dc9888d8e0。模型遵守及实效仍未验证。
+
+## 实际执行条件审计（继续修复）
+
+Recall：用户要求继续修复所有问题；继续处理已知验收漏洞，先不扩跑。已读冻结auditMissionRunBinding、automationBenchRunValidity、真实terminal-board.executionProjection、task-transcripts、失败快照、主仓密封输入计量与dashboard。配置审计只核对Base包身份，不核对实际角色与依赖执行，导致direct仍被视作双角色实效证据；这不是公共direct执行本身非法。此前仅口头指出第1/5例不满足，缺少可重复的正向条件checker。
+
+实施：新增离线条件审计工具，复用现有密封字节检查，按明确预注册的执行者/验证者/工作流参数读取同Task真实dispatch与执行轮次事件；验证独立会话、执行者最新轮次成功后验证者才开始且成功完成（覆盖repair后的再次验证），公开缺失/不一致原因。输入哈希、run身份、重复case、固定样本集合均校验。官方分数保持原值；固定分母保留所有失败，不因条件违规删除样本或把条件符合当业务得分。直接包公共契约、业务提示、运行时流程无改动。聚焦正向测试包括完整双角色、缺失验证、过早/过期验证、错误终态、密封篡改错误；对现首5例运行真实只读checker，独立review后提交。
+
+此工具验证执行条件与已有证据，不能替代官方世界checker，也不能证明任务业务质量；原始流缺失不要求虚构恢复。下一步以清晰条件报告和已修运行时为基础评估受控复验资格。
+
+
+条件checker实现：既有密封输入读取参数化复用；固定manifest核对病例hash/身份，snapshot的message、dispatch_lineage、dispatch_settlement和workflow node occurrence验证每轮真实执行，涵盖continuation前驱、独立会话、完成绑定及terminal_success的精确final。三轮独立review发现的伪造/遗漏轮次、错误前驱、未关联final、病例改标、时间逆序均已纳入修复与测试。当前18条件+5计量+2恢复共25项通过；实际完整首5例条件通过2/5，全部分母保留。
+
+官方复算初因当前root没有旧600例manifest路径失败；增加显式--manifest参数，保持原命令默认路径语义，避免复制输入到证据目录。使用当前冻结100例manifest进入真实checker，4个完成candidate全部复算一致。分数与条件报告存档于[实验README](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/README.md#outcome-first-evidence-revalidation)。当前仍未进行新模型运行，源runner84a09194干净；评分复算不证明业务质量已修好。
+
+
+受控真实复验的准入边界：共享调度send死锁修复e03f、语义进展观察器470d、Base节点表述84a均已有各自聚焦测试与独立审查；本轮条件checker对真实原始首5例及官方4个score完成复核。当前剩余的不确定性是模型是否遵守声明及真实质量/调用改善，不能用更多静态测试证明，也不能把不存在的旧原始流恢复当永久阻塞。仅在本轮checker所有有效独立发现关闭后，恢复同一冻结首5例的受控诊断复验：同Luna、官方任务/评分、600秒无活动、并发2，单独输出到reproduction-20260912-readiness；保留3f9全部结果、不择优重试、不扩到6–100。此复验用于检验已修路径，任何无效执行/条件违规继续按根因修复，不把开始运行表述成验收完成。先成对投影已授权auth/models并核验实际gpt-5.6-luna，所有日志禁止凭据内容；旧UI和进程不动，长运行由现有定时任务检查。新模型启动前须记录独立审查结论，未通过则不启动。
+
+
+最终独立审查无未解决的有效发现，25项聚焦测试通过；原伪造continuation、跨workflow、伪造final、错误权限和病例改标复现均被明确拒绝，合法prior_dispatch与coordination_action保持。2026-09-12 12:11 UTC按上述边界启动受控首5例诊断，source84a09194、Base.3；成对auth/models投影及真实流式预检HTTP200、实际请求gpt-5.6-luna确认。batch3ab2a1e3-a714-4dad-90bc-e3547468d7f5，并发2，root /var/lib/opencorvus-benchmark/reproduction-20260912-readiness/base；Windows自建host416，viewer19012，独立结果页http://localhost:8767/ui。原8765/8766不动。首2run已落盘：case1 7191cee0-b511-4bca-8d68-f12097ddef01；case2 f406c3f6-4269-4a77-b29e-73faf8406405。6–100与任何追加批次继续暂停；未宣称全部问题修好，后续按score、condition、调用和耗时四项真实结果决定下一步。
+
+
+## Readiness批次再次无效：证书中断及未创建验证节点的恢复死结
+
+Recall：用户反馈“还是无效执行”。当前首2run7191cee0/f406c3f6 result虽然scored，但catalog invalid_bug，raw audit显示mission_scheduler_delivery_unanswered与2项task infrastructure error；耗时35.1/26.8分钟，不能称已修好。3/4仍活动，禁止改活动runner源码；暂停任何追加批次。两例原始successful initial dispatch均为execution-verification/base-developer，说明这次不是direct选择问题。
+
+证据链：12:15 UTC两路同时出现unknown certificate verification error和socket closed；Wave在Tool开始后socket中断触发ProcessorUnsafeRetryError，这是防重复副作用的安全边界，不允许删除。build terminal publication把任何Build错误标成collect-git-workspace，此名称不能当作Git故障证据。随后Mission开启验收修复；公共dispatch工具只在continuation schema暴露gap/criteria，runtime又无条件拒绝active gap时initial。Tester此前没有occurrence，所以不能continuation；正确initial又被拒绝，造成反复错误与未答复。主仓tools.openLineage同时要求existingSessionID与sourceDispatchLineageArtifactID；descriptor和worker checkpoint也只覆盖continuation，须一起修改，不能仅删一个if。当前curl到chatgpt.com完成TLS后返回HTTP403，无证据证明当前系统证书链持续坏；旧连接根因仍未知，询问用户同期网络变化，禁止关闭TLS验证。
+
+实施边界：保持已有节点原谱系续跑；允许同一immutable virtual workflow中尚未提交的合法节点首次执行并消费当前验收义务，仍由现有claim/依赖/并发校验控制唯一occurrence。direct责任仍要求精确旧lineage，不能借gap建立新direct身份。统一initial/continuation的gap选择字段、descriptor义务、证据locators与checkpoint；renderer以实际首次/续跑语义公开展示。涵盖dispatch_agent、dispatch_agents持久化集合、Task/Mission epoch、所有worker adapters、新Session与已有Session、恢复、正常终态，公共契约文档同步。聚焦正向测试以真实工具schema/dispatch路径复现旧initial被拒绝，再验证合法首个Verifier携带义务；已有恢复/并发测试重跑。独立只读审查后范围提交；活动冻结runner待本批自然结束后才投影，不启动新模型来代替前置验证。
+
+旧规则的原因：验收repair被假设总发生在所有节点已有执行后，没覆盖上游Provider错误使Task提前结束、下游Verifier尚未创建的路径。此前只有正常成功路径与同worker续跑测试，所以误把initial+gap排除为非法。此修正不承诺网络故障已消除。
+
+
+独立审查纠正了两处首轮遗漏：动态Mission恢复提示与no_action错误仍要求continuation，已同步；新Session若照搬continuation的compaction checkpoint会因只有首user而空历史失败。最终首次Turn由其首个真实输入+WorkerTurnDescriptor绑定原始请求与验收义务，initial schema固定checkpoint_required=false；continuation仍固定true，既有compaction不变。两者都在Provider前校验ledger gap/epoch；没有合成历史或丢弃验收责任。参数化真实fresh worker测试（普通/带义务两种）进入真实Session、输入、descriptor、lineage提交及SessionPrompt循环，mock仅在Provider/Processor边界，首模型处理检查同时收到原始请求与gap，最终真实完成消息保持。该组连同acceptance共10项49断言通过；此前collection/跨进程/acceptance15项27断言通过。此是零模型执行路径证据，不是外部Provider验收；证书故障仍未知，冻结runner仍未改。
+
+
+用户进一步纠偏：不能再把同一故障家族拆成报错、提示、检查器的逐个补丁，而要证明故障后整个任务仍有合法收敛路径。当前核心不变量：执行attempt失败不取消未完成业务/验证义务；不重复已有副作用；已提交节点保留谱系；未创建的必要节点保留首次启动入口；验证必须覆盖最后一次修改；每次scheduler请求有对应处理和终态证据。当前已修复与已证明的范围是义务在首次/续跑两条执行路径中的合法承载；完整“连接中断→执行者恢复→首次Verifier→真实验收→Task/Mission收敛”的单一场景仍未完成，不得用17项局部/共享测试代替该证明。因此不投影活动runner、不再启动新模型批次。
+
+最终共同schema按初始/续跑分别固定checkpoint_required=false/true，duplicate-criteria refinement共享；实际全量产品typecheck曾捕获safeExtend literal覆盖TS2322，已修复并重新通过完整typecheck。独立审查关闭动态提示遗漏、空历史压缩阻断与类型约束问题；核心组合17项65断言通过，最终fresh+acceptance重验10项49断言。当前无凭据的curl/Bun TLS请求均可完成（403/404是HTTP层），只说明当前连通，不能反证12:15UTC的证书失败。证书来源及完整故障链验收继续待查；没有关闭TLS校验，没有移除Tool后unsafe retry保护。
+
+## 执行源码漂移纠正与完整恢复验收
+
+Recall：用户要求实际修复，停止只解释。最新 readiness 首5例全部结束，活动租约为空；主分支38c12ae1，冻结runner84a09194，均已检查Git状态。用户要求原生Luna与Luna+Base同任务对照、冗余调用至少减半；当前继续暂停新模型批次，先完成零模型故障恢复链。旧产物和分数保留，不能用新代码改写旧结果。独立反馈：本阶段实施前无；完成首轮验证后按仓库要求只读委托。
+
+深度分析：case4 b40c9f35的Tester续跑art_g0VV0vt0I00y8V0vbmRH以art_g0VV0tpbj00jiQDeeEaG为前驱，持久化谱系合法；报错却将同一个vt作为预期前驱，说明已提交的同次派发被再次执行。当前生产tools.ts已有readDispatchLineageReplay和committedDuringPreparation，优先复用精确Task/dispatch/Session的descriptor或settlement；冻结84a完全缺少这个实现。生产修复34ab15e9及后续不可变occurrence修复没有进入实验，之前逐个backport而非以当前产品为被测对象，制造了长期双源。严格前驱校验本身在保护谱系，放宽它会允许再次创建输入和descriptor，不修这个if。
+
+影响面与实施：恢复受影响的是共享dispatch单例、集合、串并行、Mission下Task及独立Task、新旧Session、运行中与终态重放，不能局限Tester。先将实际使用的AutomationBench外部运行器依赖闭包纳入当前论文分支原工具目录，与当前生产源码一起构建和取Git身份，保留官方固定任务、评分器、隔离、流式调用和600秒语义无活动阈值。无关WorkBuddy和固定模型启动脚本不引入。现有只读dashboard不变。本轮不维护第二套运行时src；旧冻结提交作为历史证据保留，后续执行目标只允许当前完整提交。根据当前公共API修正harness，不引入旧协议兼容层。
+
+验收：当前源码类型检查、真实桥接/评分器及非UI聚焦检查；用真实流式工具执行与持久化控制路径，模型边界注入故障，验证已有副作用、精确派发重放、原Session续跑、未创建Verifier首次执行、最后修改后验证及Task/Mission收敛。不以分散schema测试代替该单一恢复链。所有有效review发现处理后提交并推送。TLS原始证书来源仍未知，当前HTTP连通只证明当前时刻；不关闭证书校验或unsafe-retry保护。旧runner没有活动任务，源码同步仍须逐文件差异可审查并保留原历史，禁止整仓粗暴回退。
+
+完整流式检查新复现：当前Mission的真实panel_query_task_artifacts返回“Artifact provenance requires a persisted Provider step boundary”。SDK在生成Tool调用时已并发执行工具；processor却在另一路fullStream消费者处理start-step时才先await Snapshot.track、再写step-start。ensureToolPart先落盘会让Tool的时间/ID早于步骤，后续读取即使等步骤写完仍违反前驱关系。影响全部Session工具，尤其快速流、修复后的证据读取；此前schema测试和有网络延迟的真实请求没有确定性覆盖该竞争。
+
+实施采用当前锁定AI SDK 6.0.172的prepareStep，在Provider调用前await现有Snapshot.track和step-start持久化，消费者不再重复写步骤。它只提交真实请求的步骤事实，不选工具或业务流程。不能用experimental_onStepStart：本地SDK notify会吞回调异常，持久化失败仍会调用Provider；prepareStep的失败会中止请求。全仓无既有prepareStep调用；LLM.stream统一透传一个公共钩子，processor保留当前attempt的清理/跟踪及取消校验，覆盖Task/Mission/worker、重试及多步骤。已核对本地SDK实现及[官方事件说明](https://ai-sdk.dev/docs/ai-sdk-core/event-listeners)。独立review须覆盖该新增生产差异和快速流完整恢复检查。
+
+独立审查又以真实SDK探针确认消费者暂停在start-step时本地execute已完成。不可重试标记现放在每个attempt的实际工具execute入口，沿用copyToolCoordinationBindings保留原工具的协调权威；消费者保留Provider侧工具结果的观测。准备回调在Snapshot返回后检查取消，attempt退出先等待在途准备完成，再交给现有清理。零模型完整Mission链已通过11断言（约33秒），工具副作用先于消费且idle中断的检查已通过；没有外部Provider请求。
+
+真实快照检查新增发现：旧harness缓存SQLite statement，Windows在db.close后删除隔离数据库仍出现EBUSY；显式列校验也发现automation.task_id已删除，SQLite双引号查询原本会把未知列当文字，静态类型检查无法识别。已删除旧列。全仓查到db.ts和schema-contract.ts重复的queryAllFinalized；将该已存在primitive统一提取为无运行时初始化副作用的storage叶模块，db、schema、mysql-transfer、快照和usage读取共用并在关闭连接前逐条finalize。不从harness顶层导入完整db.ts，以免隔离环境设定前加载全局状态。该调整须重新通过当前schema checker、完整恢复快照和隔离数据库清理。
+
+验证收敛：主运行时组合25项120断言通过（82.34秒），包括单一完整Mission故障恢复、准备中取消、producer先提交副作用而consumer未读到时的unsafe retry、真实快照、数据库清理与schema重开/transfer。独立agent另跑4文件19项98断言全部通过（61.06秒）；2项执行身份与18项Python条件测试也独立通过。两个执行入口强制显式case-set，批次计划与单例分别验证同一commit/bundle/manifest。原始100例manifest不改动。旧静态报告截图显示固定50和历史榜单，未作为当前结果页面交付，已删去这轮新引入的报告及其专用刷新/只写状态，现有8765–8767页面不动。
+
+检查脚本曾错误等待常驻Mission Session owner退出，实际执行轮次和Task调度已结束；最终改用SessionStatus的精确input/owner执行轮次结算，断言idle和scheduler delivery审计通过，再按process.shutdown释放隔离测试的常驻会话。没有把长驻会话误报成新的生产死锁。全程无外部模型调用；目前仍不能声称TLS原始根因已闭合、真实模型批次有效或冗余调用已减半。
+
+2026-09-13 安装收敛：修复提交b463c413已推送，pre-push全部检查通过。检查3个历史批次租约均为空、旧runner Git干净且无进程以其目录为cwd后，将原安装移入retired/opencorvus-runner-84a09194；同一opencorvus-runner路径从当前论文分支完整重新安装，不再维护旧runtime backport。干净检出最初因SDK的dist未构建无法加载manifest-v2，已完成现有SDK标准build，构建后源码无差异。Linux8项21断言通过，完整Mission恢复22.3秒，真实bridge/官方scorer replay通过；[完整安装回执](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-installation.json)记录提交、树、manifest和日志digest。没有新模型调用，旧页面不刷新/重启。
+
+## 2026-09-13 当前源码首五例对照启动
+
+Recall：用户明确“继续bench”。承接已完成的共享恢复修复与独立审查，当前主仓和干净WSL运行器均为134d34336cdb19c90d96ac49640c0746556a3f0f（相对b463仅安装文档）。原要求仍为同一100例原生Luna与Luna+Base对照、冗余调用至少减半；本轮先启动同源码前五例两组，实际有效性与官方评分查明后再扩展。已读上述Recall、安装回执、复刻协议、两个执行器、Provider连接测试、批次身份与隔离代码及结果页读取契约。全仓搜索确认新batch必须显式指定100例manifest，原临时launcher绑定旧84a与50例，不再调用。没有活动模型进程，旧3个viewer保持运行。独立agent反馈：上轮代码和安装审查已通过，本轮启动记录尚无反馈。
+
+执行方案：新证据根为/var/lib/opencorvus-benchmark/reproduction-20260913-current-source。已授权私有auth/models成对复制到隔离预检home，以当前Provider公开入口核对精确openai/gpt-5.6-luna和真实流式连接；成功后将成对资料投影到本轮两个条件。原生条件使用同checkout的官方prompt/API工具循环，medium、50 response steps；Base使用真实Mission/Base，既有角色推理配置、并发2；两者均保持600秒真实无活动窗口。原生同样重跑五例以避免混合SDK/Provider源码，旧配置不替换、不挑高分。Base计划、单例、manifest使用同一源码身份，启动后冻结该安装不再改源码。新只读结果服务使用未占用端口，真实页面截图复核；不运行UI自动化测试。共享故障再次出现先保留证据并修根因，不能用历史TLS来源未知替代当前连接验收，也不声称已经消除网络中断。启动、真实请求模型、进展和终态以持久化证据核对，并由现有定时任务续查，不持续监听日志。
+
+00:16北京时间实际启动：当前Provider公开流式预检connected，传输层捕获的实际请求gpt-5.6-luna、HTTP200，与成对投影一致。Base batch c78ebbca-bb73-42d8-95dd-8370dfe7f957已提交五个slot计划，首两个run f6494719/26c90986活动；原生首个run 3e27fb9b已进入官方工具循环，首16个完成step的实际请求模型均匹配。完整参数与摘要见[启动回执](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-benchmark-launch.json)。新8768真实页面与截图已核对，显示原生1例、Base2例运行中，尚无配对评分；旧页面不动。运行时安装继续固定134d，不随本次文档提交移动。
+
+启动交付独立只读复核通过：活动源码干净，实际进程参数、bundle、100例manifest、首五例计划、流式预检与文档一致，无未解决发现。docs:check与差异检查通过；本轮只有启动记录和结果页入口文档变更，未修改生产代码。后续结果由现有定时任务每5分钟进行一次有界快照和真实checker核对。
+
+### 首五例原生条件完成复核
+
+Recall：按“继续bench”的既有授权进行首次定时检查；当前134d安装仍干净、Base前两例活动，不能修改活动源码或扩跑6–100。原生5例均已自然结束并在各自运行器内通过官方replay；现在以同一官方checker独立再执行5次复算，核对固定manifest、run/input/result身份、实际请求模型、medium和50步参数及源码文件摘要，保存原始文件字节摘要和逐例调用/耗时。输入是本轮native五个独立目录，输出为新增审计JSON；没有生产或UI改动，不新调模型。已读上述Recall、启动回执、native runner与原生首例历史回执；独立反馈：本次完成审计前无，产物生成后只读复核。初读结果为strict1/5，所有病例保留；Base有真实Developer/Tester与持续已完成Provider事件，目前未发现失败终态，最终有效性和减半指标仍待成对结果。
+
+五次独立官方replay均通过，逐例部分得分0.8、0.5、1、0.722222、0.727273，strict1/5；实际请求全部为gpt-5.6-luna，来源与参数均匹配。共83个response step、169次Tool，平均121726.8ms。每例11个原始证据文件摘要及官方checker各项结果存入[本轮原生五例审计](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-native-first-five-audit.json)，完整复算输出保留在新证据根native-first-five-audit。未启动额外模型或6–100。
+
+### 当前完成协议的 benchmark 验收遗漏
+
+Recall：定时检查发现Base两例已在真实panel_complete_mission提交完成、Task及所有执行轮次终态，但数分钟仍无评分。立即按共享验收机制审计，不归因网络或模型。活动安装不修改，当前已提交的五例计划保留取证，不追加批次。已读生产mission/board.ts、mission/completion.ts、panel工具、全部harness工具语义比较、run/catalog/verify调用及完整恢复测试。全仓搜索确认旧panel+operation.action只残留于共享auditMissionOutcome；manage_task、skill、bash与生产接口一致，Task轮次静止检查实据通过。独立反馈：原生完成审计已通过，此故障修复前无。
+
+可观察事实：两份实际公开Mission/Task/Session投影保存于本轮根active-terminal-observation-42308/42309.json。原harness函数在同一输入上均输出mission_completed=true、assistant_healthy=true、子Task scored_terminal=true、quiescence.passed=true，但explicit_complete_mission=false和completion_receipt_matches=false。真实工具名称是panel_complete_mission，旧checker只扫描panel及嵌套operation.action，因此waitForTerminal直到600秒无活动才返回，后续catalog/verify又共享同一错误分类。生产公开Mission投影已经核验真实回执和证据；模型已停止活动，不是锁或常驻Session未退出。
+
+根因及旧验收遗漏：harness移植只覆盖类型、数据表和流式执行，any形状使旧工具分派协议能通过类型检查；完整恢复测试虽然执行真实panel_complete_mission，结束在产品投影和数据库快照，没有进入harness终态checker。横向审计还发现checker将整段Mission历史的完成调用要求为一次，而生产仅认可最新用户输入之后的当前完成事实，重启保留历史/再次开启同Mission会被旧完成污染。影响所有使用该共享checker的Base/Advanced、单例/批次/离线复算及Mission重新执行；原生单agent不使用此函数，官方世界评分器不变。
+
+方案：用当前MissionCompletionInput/Receipt公开schema解析panel_complete_mission的真实输入输出，保留精确Mission/Session/Message/Tool/Task/终态证据身份匹配；按最新用户输入划定当前执行轮次，删除旧panel嵌套解析，不引入兼容分支或放宽回执校验。加入当前成功、重新打开后成功及明确失配结果的聚焦正向契约检查；将真实Mission流式恢复测试最后的公开路由输出送入同一个auditMissionOutcome与auditMissionQuiescence，以实际恢复→产品投影→benchmark验收贯通作为验收。真实已保存投影也必须重跑同checker并从false转为严格匹配true。旧原始结果保留，后续核对需要记录评分执行源码与修正后的审计源码，不能把重算归为新的模型实验或无条件把invalid改成pass。当前尚未宣布无效分类修好、全五例有效或调用减半达成。
+
+实现首验：4项21断言通过（44.09秒），完整真实恢复→公开路由→benchmark outcome/quiescence用41.3秒完成。两份真实模型公开投影用新checker复算均为scored_terminal=true、completion_receipt_matches=true、quiescence=true；原checker在完全相同字节上前两项false。新增[修正回执](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-completion-audit-correction.json)记录投影和审计源码哈希、前后完整判定；不是重新运行模型，也不修改旧result或catalog。等待独立只读审查，活动五例计划自然收尾，其余新批次不启动。
+
+独立只读复审通过：审查者复跑4项21断言并独立核对两份真实公开投影及新checker，未解决发现为0；原生55个文件、5次replay输出和汇总也已独立复核。harness及新增测试的TypeScript检查、docs:check、diff检查通过。原134d前两例已自然密封为invalid，唯一未通过的OpenCorvus审计为旧mission_outcome_audit；其官方replay通过、diagnostic部分得分1和0.5。这些是保留的诊断分数，不改写原sealed审计或计入正式配对。当前catalog/verify仍要求新算audit与sealed记录精确一致，没有为了接纳旧无效结果而放宽该约束。原批次第3/4例按原计划运行，活动安装仍不改动。
+
+### 条件审计的 write-ahead 谱系契约
+
+Recall：继续运营中，原生五例已独立复核，Base已有1/2/4密封、3随后结束、5活动，不动134d运行器和旧记录。先对已密封1/2/4运行现有真实条件checker以提前发现问题，输出interim-condition-001-002-004.json。三例均因canonical_occurrence_lineage_mismatch被判不符合，但原始dispatch全部明确绑定execution-verification两个节点，独立Verifier已在Developer完成后执行。独立agent反馈：本次修复前无。
+
+直接触发是审计器拒绝preparedAt大于lineage.time_created；当前共享生产协议恰是先提交write-ahead lineage（预写派发谱系），再创建用户输入，最后提交Worker Turn Descriptor（工作轮次描述符），preparedAt取descriptor.time.created。三例六个轮次均满足lineage < input < descriptor，间隔124–400ms；不是谱系被改写。第四例新密封也同样满足。旧测试把lineage、input与preparedAt全部设成相等，反向比较因此仍绿；移植移除了旧node occurrence表却未纠正时间契约。已读dispatch-lineage.ts的claim/record先行提交、dispatch-lineage-facts.ts、task-event.ts的执行投影、完整审计器/测试及当前架构。
+
+横向审计：时间关系影响共享initial/continuation、单例/集合、重启恢复后同Session新输入，任务/项目身份已有独立匹配不能放宽。审计器还只读取dispatch_agent，而生产dispatch_agents是同一真实outer Tool的有序成员，按collection_member_index/count绑定相同派发协议；当前实验要求仅声明工作流和两角色，并未限制用哪个合法工具。该遗漏会错误拒绝合法集合，须同步修复，不能新增旧协议兼容或合成子Tool。成员的输入、结果、团队身份及谱系index/count必须精确对应，终态重放也采用同一提取函数。
+
+实施：明确核对lineage.time_created <= durable user.time_created <= descriptor preparedAt，分离身份错误和时间错误；修正fixture为非相等的真实因果顺序，增加晚到谱系的明确错误契约。统一单派发与集合真实成员读取，涵盖initial、continuation、terminal_success重放和错位成员。保持原始世界得分、封存字节、模型/提示和运行时不变。聚焦Python测试与已密封真实条件checker共同验收，独立只读审查后提交；完整五例结果出来后再给总条件率与正式诊断复核，不以已完成子集外推全批。
+
+首轮验证：22项Python检查通过；单例与集合的初始、coordination continuation、terminal_success重放均通过，错位成员和反向因果输入产生明确错误。原1/2/4三例初审0/3的同一密封数据经修正后全部通过，随后已密封第3例同样通过；[前四例条件审计](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-first-four-condition-audit.json)保留原source_status=invalid和完整输入哈希，condition_satisfied=4/4。未重新调用模型，未改变旧目录/得分或活动运行器。等待独立只读复核；第五例尚在运行。
+
+独立首审复现了续跑回执身份缺口：审计已验证continuation输入authority和canonical settlement，却未把该次Tool成员输出的session/lineage/final绑定回同一轮次；替换回执为foreign-session/foreign-lineage仍被接受，单例和集合都有。同步补入每一完成轮次的真实输出核对：accepted必须匹配该Session与lineage artifact；terminal_success必须匹配同一canonical final/settlement。初始派发原有验收保留，新增续跑两种回执的明确错误测试，再交独立复审。
+
+首审另复现canonical user.time_created=NaN绕过两个大于比较的问题。统一时间值检查用于执行事件、lineage、用户输入、所选final及settlement：必须是有限的正数并在JavaScript安全数值范围内；保留各字段明确错误码。真实四例八条时间链已由审查者独立核对，均为严格lineage<input<prepared；20个输入文件与四份manifest哈希及新报告一致。
+
+最终独立复审通过：25项Python检查通过，续跑外来回执与NaN输入的原复现均得到明确错误；审查者重新核对真实四例，最终checker报告逐字节一致，全部符合条件且保留原invalid。两项有效发现均已关闭。仅条件审计代码/测试/记录变更，无模型、运行时或UI改动；第五例仍按原计划运行，完整业务分数、效率和配对验收待其结束后处理。
+
+### 首五例完整诊断复核与安装同步
+
+Recall：17:35 UTC定时快照确认Base五例全部自然封存、active leases为空、coordinator退出。五例原始status均invalid且唯一未通过的OpenCorvus审计均为已经修复的mission_outcome_audit；禁止改旧目录、分类或为获得更高分重新调用模型。原生五例已独立复核无需重复。当前主仓00ccc5e0已验证、独立审查和推送；WSL仍134d。验收仍为完整5例同清单的世界评分、真实双角色条件、总调用/耗时与冗余指标，不能把一个发布选择指标当全部调用减半。独立反馈：本次全批产物生成前无。
+
+实施方案：使用现有check_seal、measurement_inputs、measure及官方replay函数，对全部五个封存目录核对完整文件集、case/run/source/manifest和官方package/task契约；明确选择每例原sealed diagnostic_metrics作为待复算分数，绝不构造scored候选或覆盖metrics=null。新报告分别记录原invalid、当前Mission完成/静止审计、独立执行条件、官方诊断分数、实际Provider/Tool账本和从启动到真实Mission完成与到最终封存的两个耗时。采用同一measure定义与已审查e03f五例基线比较发布选择和总调用，同时说明条件/实现共同变化以及10分钟检查器空等。完整原始字节先验真再生成新报告，待独立审查后提交。复核完成并确认没有活动bench进程后，将同一WSL安装完整快进到已审查提交，不碰viewer源码或用户进程；之后再根据质量和效率事实决定后续改进与100例推进。
+
+全批首验：110个封存文件/完整文件集、五次独立官方replay均通过；当前完成/静止/来源/集合/基础设施/提示组成/trace/Skill封存检查均通过，双角色执行条件5/5符合。原始eligible仍0/5，官方诊断strict2/5、mean partial0.820261，对照原生1/5、0.749899。Provider activity请求499（原基线540，下降7.59%），Task Tool414（737，下降43.83%），加Mission工具482，官方世界调用285；计量Provider509，含10次memory helper；发布专用选择48降至0。平均到最后会话Provider结算911464.8ms，原始封存1519494ms；前者不是新修复代码的端到端实测。显式skill工具加载指标0/5仍保留；Task记录中实际存在read读取SKILL.md，故不能把该指标直接解释为未读取环境方法，也不能宣称所有遵守度均通过。
+
+完整数据与限制见[五例诊断报告](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-first-five-diagnostic.md)。确认所有bench子进程/coordinator结束和租约为空后，WSL从134d完整快进至00ccc5e0，工作区干净，viewer源码无差异、进程不动。安装后Linux真实流式恢复到checker四项21断言、Python25项通过，见报告链接的安装回执。没有新增模型请求，未扩跑6–100；整体冗余减半尚未达成，下一步需依据完整调用与原始需求传播定位剩余质量/效率问题。
+
+后续只读调查线索（尚未形成根因结论或实施方案）：case2–4真实panel_create_task输入及Task首条用户上下文仍保留业务USER内容，delegatedWorkerContextSections通过renderUserRequestSection完整投影task.request；不能凭短dispatch摘要断言业务要求被runtime截断。case4 Tester在分类源发现上只尝试了Drive列表查询，仍未重新取得ss_categories，未完成规则独立核对；其余HelpScout会话/邮箱与Slack历史读回另有记录。Orchestrator的manage_task完成输入明确接受了这个限制并依赖Developer报告，需追查上下文、来源发现和验收判断。case3/4真实capability_search均得到“Capability default/skill/automationbench-api resolves to skill, which is absent from the materialized owner surface.”；须核对能力目录与SessionLoop.finalizeSkillSurface的实际投影，不能把这两个明确工具错误等同于显式skill加载计数器的0/5或网络错误。case1–3另有四次artifact_publish的payload_json解析错误，case5有六次多出空格的workdir导致ENOENT；这些是可定位的接口使用开销，但总量不足以解释499个会话请求。下一阶段应从真实工具定义、完整上下文和实际来源读取证据确定共享修复，不能继续堆提示、放宽验收或把某一类错误消除声称为整体减半。本轮没有基于这些线索修改生产代码。
+
+完整交付独立只读复审通过：审查者核对110个封存文件与完整集合、五份官方replay输出，独立重算五例分数/成本/时间/条件并实际调用当前50项共享runtime审计，均与报告一致；干净安装00ccc5e0、空租约及验证日志哈希一致。已关闭README历史状态残留、OpenCorvus工具part与官方API事件层级表述、case4分类源核对范围三项文档发现，最终未解决发现为0。docs:check与diff检查通过；本轮仅报告/证据记录，未新增模型或生产修改。
+
+### 调度器 Skill 加载器的授权来源纠偏
+
+Recall：继续运营100例Luna对照与论文，先修复已记录的真实工具错误；本轮起点227654a8，上轮全部五例已独立复核，无须再算分或调用模型。工作区只有无关script/video与特殊字符未跟踪项。当前目标是原生、Mission、Task调度器/工作者共享发现→精确加载→后续步骤重建的正确契约，不能以修复两个报错宣称499个请求减半。已读当前capability-search-runtime架构、SessionLoop工具与Skill finalizer、SkillMount、能力目录/授权/reveal回执、schedulerHarnessGrants、工具名authority、真实核心owner与native Skill测试及f205fa05历史。全仓搜索确认生产finalizer单一实现，目录的open_skill指向专用Registry loader；调度器则以runtime-projection:orchestrator声明同名占位工具，现有declaredRuntimeFinalization允许专用loader完成该占位工具。独立反馈：本轮实施前无；上轮只读证据审查已确认case3/4原始错误。
+
+深度分析：case3/4精确Skill ref通过已冻结目录与Harness授权后，到materializeRevealCandidate才因skill不在最终工具表报错。projectedRegistryToolIDs只统计tool-registry的工具授权，但finalizeSkillSurface把它作为所有projected角色的skill显现条件，误把拥有合法runtime工具的scheduler当成未授权；随后将已经构造的占位工具删除。SkillMount.resolve已有唯一完整判定：当前角色projectedToolIDs、运行权限、所需工具、项目目录及当前激活Skill；应以其tool_available与当前Provider工具名集合决定显现，而非重复建立Registry来源子集规则。原生Conversation与Mission分支已使用这个判定，worker通常来自Registry，所以旧原生/worker加载测试通过并没有覆盖scheduler。f205fa05修了Skill ref与name区分及多Skill重建，没有消除owner分类错误。尚待真实零模型复现验证本因果链。
+
+影响面与实施方案：先扩展真实Core owner测试，在projected与Registry两种scheduler工具来源下执行精确Skill reveal、读取真实Skill内容、保存可见Tool回执并重建后再次读取，证明修复前的具体失败。确认后只将projected finalizer显现条件收敛到现有SkillMount结果，保留冻结目录、精确Skill授权、权限缩减、占位工具最终化及回执摘要；不改变公共输入/返回schema、持久化数据、模型提示或业务流程。发现新相同问题则补充分析后再改，禁止绕过权限。横向复核原生Conversation、原生Mission、Task scheduler、projected worker及共享后续步骤/新输入重建；正常与错误均由同一个工具执行边界记录，终态不改。该问题没有队列/锁/调度状态变更，旧批次终态、重试、网络和官方评分均不适用；跨项目仍由原Task/Session不可变运行合同与SkillMount目录约束隔离，不新增状态或缓存。
+
+验收与交付：聚焦Core owner新增路径、native Skill和Mission Skill现有真实工具路径、已有Light worker精确加载路径，类型/文档/差异检查；首验后独立只读审查并处理全部有效发现。完成范围提交与fetch/merge/upstream集合复核后push，再在无活动bench进程前提下完整同步同一安装并运行Linux聚焦检查。旧证据不修改，剩余质量/调用效率与100例仍开放，不用这组零模型检查冒充新业务benchmark。
+
+修复前真实复现：同一Core owner集成用例仅改变skill/snapshot工具的合法owner，projected scheduler在base/shared/method精确reveal时得到与两例bench完全相同的“resolves to skill, which is absent from the materialized owner surface”；Registry scheduler正常完成加载与回执重建。2项中1失败/1通过、15断言、8.42秒。直接触发与代码假设吻合，未请求Provider。
+
+修复首验：仅将projected分支改为与原生分支相同的surface.tool_available + 当前Provider工具名判定，删除错误的Registry来源子集条件。真实Core两种owner及native Skill重建3项28断言通过；Mission Skill重建1项3断言通过；Light已安装角色/Skill投影1项22断言和四个重叠Worker派发的正常/注入失败两条路径2项162断言通过，后两项实际进入各Worker精确Skill读取、可见回执和重建。合计7项215断言。生产typecheck、docs:check和diff检查通过，无外部模型调用；等待独立只读复核。
+
+独立审查扩展：审查者对同一真实工具入口注入tools:{skill:false}或持久化Session的skill deny后，两种owner仍能reveal/load/reconstruction。对照生产调用还发现test/fixture/capability-occurrence.ts将Catalog.snapshot.permission固定为[]、遗漏toolSwitches且executionToolIDs未经过完整缩减；因此先修该已证实的验收夹具差异，再按与生产一致的目录实参重验，未完成这一步不能宣称生产权限问题已证实。生产finalizer本身读取input.agent.permission而未合并Session规则，且会从全部Harness工具重新补入被缩减的loader/依赖工具，这些仍需同入口证据核实。后续实现必须复用现有visibleExecutionToolIDs与CapabilityRules合并规则；精确加载拒绝沿用当前错误契约，后续回执重建继续保护不可变输入边界，禁止增设平行权限策略。
+
+扩展根因确认与方案：修正fixture后，审查者对projected owner的初始tools:false/Session deny、已有reveal后两种缩减均再次实际读取到Base内容并写成功回执；Registry对照相同。主agent新增当前消息禁用后的旧receipt重建断言，两种owner均得到不应有的成功解析（0通过/2失败、22断言）。这不是旧fixture造成的假象：初始applyToolExecutionPolicy之后，Skill finalizer重新补入工具而未再次应用同一策略，且只使用Agent权限，丢了Session层。实施以visibleExecutionToolIDs缩减当前Provider集合和可用依赖集合，三个Skill分支传入既有Agent+Session合并权限；在精确Skill物化时依据同一resolved surface拒绝不可用loader或Skill，使用已有CapabilityRevealAuthorizationError/execution_not_granted。已有receipt在当前策略下无法合法重建时转为已有StaleCatalogOccurrenceError，走当前终态路径；不扩张旧授权或静默构建空loader。范围只涉及Skill及Mission Skill，其他工具执行器不改。新增初次禁用与已激活后缩减的明确错误契约，并重跑此前所有实际角色路径与相关夹具调用者。
+
+权限修复后首验：Core两个owner各覆盖允许、首次消息禁用、Session整体禁用、精确Skill名称禁用；允许路径完成读取后再验证消息/名称缩减产生明确stale。加原生Skill重建与缩减共9项70断言通过；Mission Skill正常重建、消息禁用及Session禁用1项5断言通过；两个Light并行派发路径2项162断言通过。合计12项237断言，生产typecheck、docs:check、diff检查通过。输入目录绑定夹具已与生产使用同一缩减参数；没有恢复旧兼容协议或增加模型调用。待独立复审确认全部有效发现闭合。
+
+最终独立复审通过：审查者独立运行12项77断言，另对两个owner在已加载后新增全局Session deny的原复现再次验证，均得到明确拒绝；允许加载正常、旧receipt缩减走StaleCatalogOccurrenceError。共享权限发现已关闭，未解决发现为0。主agent另验Mission永久工具表的消息/权限缩减2项2断言通过。交付仅包括共享Skill物化/重建、生产对齐夹具、聚焦正向契约及文档，无模型、业务得分或预算变更。
+
+安装验收：51b780ee已通过完整pre-push检查并推送。确认租约为空、无bench进程、viewer源码不变后，同一WSL安装从00ccc完整快进至51b780ee715aba2d80e30eaf5a89bae1ed62f3cb；安装干净。Linux真实工具链14项239断言通过，已从完整日志重新解析数量与校验哈希，见[Skill修复安装回执](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-skill-runtime-installation.json)。模型调用0，旧数据/页面保持原状态。
+
+### 冻结修复版本的完整100例对照
+
+Recall：用户要求“继续bench”并完成同一固定100例原生Luna与Luna+Base对照、论文与冗余减半目标。前五例已经完成质量/效率诊断；基础设施错误已修复并独立审查、安装验收。现转入完整固定100例，不能把试点低分当成无限重跑练习题的理由。原134d五例保留为已曝光的诊断试点，新完整队列两组均绑定同一51b780ee；重新覆盖1–5属于预声明完整新版本队列的一部分，不覆盖旧结果或按高分选择。已读两组执行器/原launcher、batch-index多批次及错误收敛契约、原生step限制、官方桥接与当前安装证据。实施前独立反馈：修复代码审查已通过，本次启动记录尚无。
+
+计划：新根/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100。两组各执行case1–100，原固定清单SHA43ca54925db11d7dc6d9c5b80bbd32aed9b6c93ea92a2d1b8225a0858036ff42不改；Base使用原coordinator明确batch-index 1–20、并发2，native原执行器顺序并发1、medium和50 response steps，全部仍600秒真实无活动。先把已授权auth/models成对投影，分别核验凭据可用、精确模型目录和真实流式请求gpt-5.6-luna，再启动。源码安装在队列期间固定，不对活动进程热修。有效业务低分/失败保留且继续；新共享基础设施问题按真实checker证据调查，不把模型自述或最后错误当根因。
+
+验收指标：固定分母100上的完成/有效率、官方strict与partial、全部Provider/工具调用、token及实际端到端时间；区分OpenCorvus工具part和官方API事件，保留全部尝试与失败，不把未运行项包装为已完成。冗余减半仍独立核算，不能把局部Skill修复称为达标。结果是整体harness条件比较，原生50步与Base组织预算/工具接口、历史样本曝光都是明确局限。新只读viewer用独立端口，真实页面截图复核，旧8765–8768不动。长任务由既有luna-base定时任务有界检查；启动证据与安装回执完成后独立只读审查、范围提交和push。
+
+02:47北京时间实际启动：真实流式预检HTTP200，精确请求gpt-5.6-luna；成对资料已投影到隔离source/native home。Base 20份计划完整覆盖固定case1–100，源码51b780ee、bundle013220dd8b05c54ad31c74102d31d0a5d65a5ec77c82fb72f3552ed482ac470a及原manifest一致；实际首两个run a5f52972/36c04560同时运行，coordinator52668；native supervisor52669依次执行100例，首例eac8abaf以16步、93419ms完成并通过内置官方replay，实际请求全部gpt-5.6-luna。新8769页面和截图已真实复核（截图时native1/Base2运行中、尚无配对评分），旧服务不动。[完整启动回执](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-full-100-launch.json)保留20份计划哈希、启动脚本哈希及初始观察。尚未对完整队列作分数/效率结论。
+
+启动复审捕获原生队列暂停：case2/db1f8898完成8个步骤后，Provider fetch在收到HTTP响应前抛出ECONNRESET/socket closed，记录unscored_infrastructure_failure；native supervisor按原stop-on-failure规则退出，case3–100未启动。源码run-native-automationbench.ts显式maxRetries=0，错误路径关闭本单例world进程，没有保存可恢复的最终世界；因此不能把整个case2从头重跑冒充原执行续接，也不能声称网络/TLS根因已经确定。该次是传输失败表象，不是Skill修复回归的证据；Base两例当时继续活动。已检查原生SDK入口、world串行调用、50步/评分边界与失败清理、native-run-contract及产品流式入口；原生是独立基线执行器，未经过产品SessionProcessor的恢复路径。
+
+处理方案：保持冻结51b的执行策略和旧case2失败原位，不改活动安装或重跑已有病例；恢复相互独立、尚未启动的case3–100，沿用原CLI、模型、预算、世界初始化及逐例失败停止规则。新增一次有身份/范围/源脚本哈希的运营续接回执，原launcher和暂停progress保存为历史证据；当前唯一活动supervisor只处理未开始项。完整队列统计仍以100为固定分母，明确报告原生无Provider请求重试这一配置与基础设施失败，不能把可评分子集的比例当100例成功率。原生请求恢复机制改进应在独立分析/实际故障注入与审查后用于后续明确版本，不能在本轮中途静默改变条件。本次运营续接不等同于已修复原生Provider重连。
+
+已按上述方案续接：确认原supervisor退出、case1/2终态匹配、case3–100目录均未创建后，以相同CLI启动supervisor55075处理3–100；原launcher未覆盖，暂停progress另存，既有两例字节不改。[续接回执](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-full-100-native-resume.json)记录源/新launcher及暂停progress哈希、保留病例和新范围。没有重跑失败的case2，没有改变Provider重试策略。
+
+### 当前100例清单验收的单一权威
+
+Recall：用户追问“都无效了？”；最新快照原生3例已评分/1例断连/1运行，Base前两例在网页无效、另两例运行。读取原始sealed result确认Base1/2均scored、scorer replay=true、Mission scored_terminal=true，部分分0.8/0.5；catalog却把两例归为benchmark_identity_failed。当前任务要求修根因，不改业务分数或用重跑换标签。源码/安装51b，活动队列与用户8769页不热改。已读catalog、verify、run/coordinator、case-set authority、wrapper authority和freeze selector；全仓仅catalog/verify调用清单authority。独立反馈：启动审查确认20计划/100字段完全一致；本次校验修复前无。
+
+直接原因与旧遗漏：automationBenchCaseSetAuthority按case_index<=50强制选择仓库旧50例manifest的b7019f摘要，而实际新run、批次计划、CLI和源文件一致绑定100例43ca5摘要。真实函数输入已存新根case-set-authority-observation.json，返回case_set_authority_mismatch。该逻辑服务旧50例追加扩集，不能用于新完整100例。两套CLI又重复加载/导出base与extended清单；verify进一步重跑旧quota/append选样生成器并比较完整JSON，而本轮是已授权原600例顺序前100、元数据不同。先前试点被更前面的完成协议错误拒绝，使这一层从未验收；类型检查和20个计划身份相等并不能证明最终catalog接受它们。
+
+范围与方案：清单authority只接受当前显式选定manifest的数量、字节摘要、规范化摘要；所有case_index1–count同一来源。catalog与verify删除隐式旧50清单回退和双清单导出，保留精确case/模型/源码/任务契约/数据集身份、sealed文件和官方复算。现有freeze脚本新增对给定冻结清单的真实官方数据集身份验真入口，校验包、数据集索引、每个唯一case及顺序编号，不擅自用另一选样算法替换用户清单。边界1/50/51/100、错误范围/摘要与真实100例清单、已封存两例必须进入同一checker验证；测试不能只验计划数学。正式写入活动目录前仍须解决旧coordinator会用旧代码重建它的问题，禁止两个writer互相覆盖或放宽校验直接显示scored。未完成部署与网页复核不能宣称页面已修复。
+
+横向发现：受限shell另外按50例分界选择UID范围60001–60050的base脚本与60001–60600的extended脚本；当前coordinator把--restricted-shell-base同一路径用于所有100例，进入51之后会失败。这是另一个必须在进入该范围前处理的启动配置/公共契约问题，不能因前两例正常运行忽略。当前先修已证实的清单验收；不改变活动shell、源版本或已完成证据，后续统一补齐运行器与coordinator的全范围预检/部署方案。原生socket重连仍未修复，不把清单修复外推为全部基础设施可靠。
+
+
+清单首验完成：真实官方包验证100条selected identities通过，manifest43ca与dataset index3f988保持。从活动root仅复制已经封存的case1/2/3/4/6，共115文件，逐文件校验摘要；在独立manifest-authority-audit/evidence运行完整catalog及verify（development模式）通过。case1/2/4/6的raw evidence与官方重放通过，恢复sealed_candidate；case3仍为mission_outcome_mismatch。正式eligible仍为0，因为当前批次没有completed receipt；不伪造回执把待验收说成严格通过。副本验证不改原result与原始batch receipt，也未部署到8769。
+
+公共入口复核：catalog与verify同coordinator/run一样强制显式--case-set；唯一生产caller coordinator已传参。source-evidence的bundle移除隐式50清单（当前manifest已有独立摘要），纳入启动会实际执行的shared verifier、catalog和verify源文件，以保证此验收修复有自己的可核对代码身份。原有Python生成模式保留为显式选样工具，verify模式只核对选定数据，不替换选样规则；验证输出禁止覆盖输入manifest。
+
+case3进一步证据：Worker真实trace最后一次请求同时提供bash和skill，之前成功发现并激活automationbench-api；未实际调用Skill或任何官方API。Worker宣称必须再建Expert Squad子Task并以coordination_request交回，scheduler选择respond_agent_coordination(decision=fail_task)，任务failed，Mission最终inactive。其已封存直接用户输入包含完整业务要求及执行责任，没有该自述的禁止直接执行条件；仅凭模型自述无法确定提示来源或工具缺失。该问题与原清单误判不同，仍须从system prompt的实际组成/角色边界及终态checker接受的失败协议继续追查，不能把激活后已提供Skill误判为51b加载回归，也不能直接归咎模型。
+
+
+独立审查发现本轮删除旧选样器比较后canonicalJSON仅剩定义/自身递归，已删除该无消费helper；其余清单公共契约检查未见新的明确缺陷。审查者独立重验8个TS/6个Python测试、官方100身份、115文件与原封存字节、原生续接脚本/暂停progress哈希均匹配。修正后的完整日志和[审计回执](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-full-100-manifest-audit.json)用于最终复审，真实页面截图仍显示旧coordinator分类，未把隔离验证包装为部署完成。
+
+### 100例受限Shell选择的启动契约
+
+Recall：活动51b队列继续运行，最近有界快照为原生26例终态、Base8例终态和2例活动；尚未到case51。当前coordinator把单个`--restricted-shell`传给所有100例，而run与证据authority明确要求case1–50使用仅允许UID 60001–60050的base wrapper、case51–100使用允许至60600的extended wrapper。若不在case51前收敛，后半队列会在Agent shell隔离预检失败。已读batch coordinator、single runner、catalog、verify、两个wrapper和全部authority调用；全仓生产调用只有coordinator进入catalog与single runner。独立反馈：本阶段实施前无。
+
+深度分析：直接触发点是coordinator在参数解析时只保存一个shell路径，runTrial与refreshCatalog无条件复用；single runner随后按case身份计算唯一expected wrapper，故传入base路径的case51必然被拒绝。这不是网络、模型、Task/Mission恢复或评分问题。影响所有跨50边界的batch组合、并发slot、重启后采用旧候选的新batch和最终证据复核；各trial仍以case_index形成唯一UID，不改变项目隔离、正常/失败终态、重试或恢复。旧Base结果已按case1–50正确封存，不能更写。两个wrapper是两个不重叠case范围的显式权威，不是运行时fallback。
+
+实施方案：batch、catalog与verify均强制接收base和extended两个root-owned wrapper路径；启动时同时核对它们分别与仓库冻结源字节一致、root持有且不可组写。coordinator对每个FrozenCase复用既有`automationBenchRestrictedShellSourceFile`唯一选择，再传给single runner；catalog只接收二者用于审核已封存的混合范围记录。删除单一`--restricted-shell`入口，不保留兼容别名。聚焦正向测试覆盖1/50/51/100的唯一选择；case范围已由同一入口更早的manifest批次校验保证，不重复引入第二个范围错误契约。benchmark专用typecheck、真实两个wrapper预检和现有manifest隔离副本catalog/verify共同验收。独立只读审查后范围提交与push。活动51b安装和8769不热改；代码完成不等于已部署，后续须在不破坏已封存结果、没有并行writer的条件下切换coordinator。
+
+实现首验：batch入口强制接收两个wrapper并按既有case authority选择；catalog/verify同时验证两个路径的冻结字节、root owner、普通用户不可写和文件类型。边界1/50/51/100的12项TypeScript断言、6项Python清单测试、benchmark专用typecheck通过。WSL安装中的两个wrapper分别以UID60050/60051执行真实namespace探针并返回对应UID，路径均root:755；隔离证据副本的完整catalog和verify继续通过（5 attempts、4 sealed candidates、1 real invalid、0 completed-batch eligible）。[选择回执](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-restricted-shell-selection.json)保留源码与探针摘要。没有模型请求、原结果改写、活动安装或页面变更；等待独立只读复核。
+
+独立首审复现共享selector会把undefined、NaN、字符串、布尔值与小数错误落入extended分支；原因是`strictInteger`得到NaN后两个范围比较均为false。这些输入被coordinator更前面的完整manifest校验挡住，现有运行没有因此污染；但公共authority自身可在摘要匹配时错误通过。已在唯一source selector增加safe-integer约束，并覆盖五种错误输入的既有`case_index_out_of_manifest`与`restricted_shell_authority_mismatch`契约。需重跑全部本轮验收并交回独立复审。
+
+重复的双wrapper字节/owner/mode校验已收敛为`restricted-shell-evidence.ts`单一实现，并进入benchmark source bundle；catalog与verify只消费该结果。修正后17项TypeScript、6项Python、benchmark typecheck再次通过；双路径完整catalog/verify重新执行，stdout摘要仍为2b8464/dd1b38且stderr均为空。新回执明确记录真实命令参数、输出路径和最终源码摘要，并将case51+的模型证据标为未覆盖，等待独立最终复核。
+
+独立最终复审通过：17项TypeScript/17断言、6项Python、benchmark typecheck均独立通过；五种非法身份全部明确拒绝，合法/交换/重复wrapper路径均符合契约。审查者核对6份源码摘要、双路径checker输出、2份UID探针摘要及115个封存文件，未解决发现为0。此结论只覆盖代码和隔离验收；活动安装、coordinator、8769与case51+模型执行仍未切换。
+
+### 批次结算与单例得分资格解耦
+
+Recall：最近有界快照原生39例终态（1次基础设施失败），Base11例终态（1严格通过、1真实invalid）和2例活动；旧catalog仍显示0 eligible。活动batch1/2已写failed receipt：batch1因case3真实invalid而失败，batch2的已评分结果则因旧manifest checker没有生成eligible claims而失败。当前用户看到的“都无效”由清单误判与批次连坐共同造成。已读coordinator的batchOutcomes/writeBatchReceipt、auditBatchEvidence、candidate/leaderboard收敛、final verifier、profile summary及viewer projection；当前无独立反馈。
+
+深度分析：batch receipt同时承担两种不同事实：五个计划slot是否都形成可核对终态，以及其中哪些run自身通过原始证据与官方评分。旧`complete`要求每个run均`exit=0/status=scored`且eligible恰好5个；audit又要求completed receipt的eligible集合覆盖全部slot。一个真实invalid因此让整个receipt failed，四个自身合法run永远只能停在candidate。旧manifest bug还能令全为scored的batch2同样failed。该设计把实验固定分母中的失败样本误作批次结构损坏，并使成功样本的可见性依赖兄弟结果，违背单例证据资格。影响全部batch、正常/失败终态、重启后preexisting adoption、串并行、最终100例覆盖、成本与耗时统计；不涉及模型业务决策、Provider重试或项目隔离。
+
+实施方案：保持receipt只有一个当前schema，`completed`改为“每个计划slot均由当前已封存attempt或明确preexisting eligible run结算”；`eligible`仍只列单例raw evidence通过者，可少于5。coordinator用精确slot集合而非全成功判定completed。audit分别验证settled coverage与eligible claims；对旧`failed` receipt，只有全部slot均有精确plan-bound terminal attempt且无结构/身份/并发错误时，派生`settled_from_failed_receipt`，并从已经重算的raw eligibility恢复其中合法run，原receipt字节保持不变。catalog/独立verify接受completed或settled_from_failed_receipt作为批次结算证据。final模式要求每个profile的100个case均有唯一终态attempt与全部batch已结算，而不是要求100个都进leaderboard。profile strict/partial固定以目标case数为分母，调用、token和耗时计入全部终态attempt；进行中coverage单独显示。viewer仍从真实leaderboard/attempt投影，不直接读取raw scored绕过checker。
+
+验收：新增聚焦正向契约覆盖四个valid加一个invalid的全slot结算、preexisting+新attempt结算、缺少终态的明确`settled_case_coverage`错误、旧failed receipt派生结算并只恢复valid子集；重跑candidate冲突/receipt审计相关检查。用活动root的只读副本纳入batch1/2真实receipt与全部对应sealed attempts，完整catalog/verify须使batch1四个、batch2五个合法run进入leaderboard，同时case3保持invalid；固定分母摘要需为1/100 strict而非1/valid。独立只读review后提交与push。活动51b/coordinator/8769不热改，部署切换仍另行授权。
+
+实现首验：coordinator现以五个slot的terminal launched与preexisting eligible并集判定settled；invalid或基础设施失败有终态便完成批次，coordinator_failed/无run identity仍明确拒绝。audit对旧failed receipt仅在五个slot全部绑定同plan终态且结构/身份/并发均通过时派生`settled_from_failed_receipt`，恢复的eligible仍逐例依赖raw evidence。catalog与独立verify接受两种settled状态；final模式按全部终态attempt验证100例覆盖，得分以100为固定分母，成本聚合全部终态attempt。5项新结算契约连同17项既有身份契约共22项22断言通过，benchmark typecheck通过。
+
+真实副本验收：从活动root复制原batch1/2 immutable receipts及case1–10全部sealed目录，完整catalog输出10 attempts/9 eligible，独立verify输出development/10/9/44且双stderr为空。batch1恢复case1/2/4/5、保留case3 invalid；batch2恢复case6–10。两批derived status均`settled_from_failed_receipt`，原receipt仍failed且字节不变。summary按固定100分母为strict1/100、partial0.055697；全部10个终态attempt的1019 model calls、540官方API attempts和9524655ms均计入成本。[结算审计回执](../../artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/current-source-batch-settlement-audit.json)记录源码、快照和checker输出摘要。活动安装与页面未改，等待独立审查。
+
+### 冻结执行与终止后的调度准入
+
+Recall：用户明确要求停止继续跑分，先解决所有基础设施问题；尤其当前 Base 展示结果低于原生 Luna 时，不再用更多模型调用掩盖问题。已停止原生 Luna supervisor 与 Base coordinator 的全部执行子树，保留 8769 只读页面和全部证据。停止前页面已有原生 case1–57 评分、case2 传输失败、case58 在途；Base case1–17 已形成终态目录、case18 在途。用户要求后的验收边界改为零模型：只允许源码、聚焦测试、旧证据只读 catalog/verify 与独立审查，未经新的明确指令不恢复执行。已读当前 coordinator、共享 bounded-concurrency/stop/termination primitive、single runner、native runner、活动进程树和外置 native supervisor。独立反馈：本阶段实施前无。
+
+可观察现象：Base coordinator PID 52668 与 native Python supervisor PID 55075 收到 SIGTERM 后均未退出。更严重的是，Base 当时已有一个在途 slot 和一个已结束 slot，却在 SIGTERM 后又启动了 case18 run 89e4297e；最终必须对已确认的执行树使用 SIGKILL。8769 viewer PID 52670 未受影响。停止后复核没有任何以本轮 root 为参数的非 viewer 进程。这个事实排除了“只是页面状态旧”或“只是网络慢”：调度器在停止请求之后仍具备新的 spawn 权限。
+
+控制流根因：队列 mapper 只在进入回调时检查 termination flag，随后 await `ensureBatchAuthorization`，而 `runTrial` 在真正 `Bun.spawn` 前不再检查。终止信号可以落在这个 await 边界内，使早先的准入决定过期并在停止后启动新模型进程。`shouldStart` 只能阻止尚未进入 mapper 的条目，不能关闭已进入 mapper 但尚未 spawn 的条目。现有 stop controller 会终止已登记的 trial child，但无法终止尚未登记的未来 spawn。外置 native supervisor 是一次性 Python 串行脚本，没有仓库内的调度/终止/封存契约；它不能继续作为正式对照执行入口。
+
+实施方案：建立一个共享、单事实源的 benchmark admission gate（准入闸），信号请求同步且不可逆地关闭准入；所有 await 前检查只作早发现，真正 spawn 前必须再次用同一 gate 原子检查。coordinator 的 `shouldStart`、receipt signal 和 catalog 终止例外也读取同一状态，禁止影子布尔值。聚焦正向测试模拟“已进入 mapper→授权 await→SIGTERM→授权完成”的真实竞争，明确验证 mapper 以精确终止错误结算且没有 spawn。原生完整队列不再使用外置 Python supervisor；正式重跑前需要仓库内唯一 native batch coordinator，复用同一 gate、进程停止和终态收敛契约，并通过零模型故障注入。本轮先完成已证实 Base 竞争修复及批次/成本/身份链路，不能因为历史 supervisor 已停止就声称原生恢复入口合格。
+
+风险与验收：SIGTERM 仍允许已在途 runner 进行有界封存，但停止发生后启动计数必须保持不变；所有未启动 slot 必须明确进入 receipt 的未结算状态，不得伪装为失败模型结果。真实旧证据的 catalog/verify 必须同时保留 valid、invalid、failed 与 interrupted 的区别，固定分母100，不让失败成本归零。活动51b已冻结，不热改、不重启、不继续模型执行。
+
+实现首验：共享 `process-lifecycle.ts` 现在是 coordinator、single runner 和 native runner 的唯一信号/停止 primitive 来源。Base coordinator 在真正 `Bun.spawn` 前使用同一个不可逆 admission gate 再验，测试确定性复现授权 await 中收到 SIGTERM 的竞争并确认启动集合为空。Linux 真实进程探针收到 SIGTERM 后以 exit0 输出精确 `{signal:"SIGTERM", admission_open:false}`；Windows 不支持 Bun 的同等信号投递，因此仓库测试在 Windows 明确跳过该平台事件，逻辑竞态测试仍执行。
+
+原生路径已删除“正式运行依赖外置 Python for-loop”的交付前提：新增仓库内 native batch coordinator，持有输出根单 writer lock，显式选择固定病例，采用同一 admission/child stop 契约，原子发布 progress；`scored` 与 `unscored_infrastructure_failure` 都是固定队列中的终态，单例失败不再阻断其余独立病例。重启只采用真实Git HEAD且干净runtime上的精确终态：run/start/input、模型、清单、推理与步数参数、控制器/runner/checker源码摘要均匹配；scored必须带score并实际重新进入指定官方replay checker，输出与保存回执精确一致；failure必须保存阶段和错误，执行阶段失败还须存在同源input。遇到半截目录明确报`native_case_unsealed`，不从头覆盖或把它冒充恢复。原生single runner收到SIGINT/SIGTERM后abort当前流、清理world、写入带signal和阶段的基础设施失败终态再退出。一个scored与一个基础设施失败的零模型真实coordinator检查重新执行checker后得到completed、完整settlement；38项聚焦测试通过，另有Windows不支持的真实SIGTERM用Linux探针通过，两套严格TypeScript检查通过。尚未恢复任何模型执行。
+
+独立审查继续补出并关闭四个同族缺口：批次结算现在要求每个terminal的cohort audit通过，并把plan execution identity与attempt source的commit、bundle及manifest逐项绑定；failed/blocked_preflight退出码必须是整数1，不能用缺失/null/字符串绕过；Provider usage每一行必须有完整非负token/cost字段及明确billing状态，缺字段标为成本不完整而非0；catalog锁改为共享admission感知的单次尝试轮询，终止请求会打断等待并停止全部活动child，终止后不再启动收尾catalog。最终15例旧证据再次通过完整catalog/独立verify：15 attempts、13 eligible、53 paper files、双stderr为空；三份原failed receipt原字节不改，case3/case13仍分别为invalid/failure。
+
+8769 数据源切换：用户指出页面仍全部无效后，确认页面继续读取活动root中冻结51b最后写入的旧catalog。此时模型执行树已全部停止且没有并行writer，使用已审查源码对原Base root进行一次原位证据复算，不启动模型、不改result/failure/receipt。catalog输出18 attempts/13 eligible；真实页面另开隔离浏览器实际渲染确认顶部Base为13/100、strict2/13，case1/2/4–12/14/15展示分数，case3与case13保持无效，case16/17待验收，case18已中断。viewer进程未重启，原生侧未修改。
+
+### Base 质量与成本根因审计
+
+Recall：用户认为当前效果不可接受，要求查明问题。模型执行继续冻结，本阶段只使用已封存 Base 1–15、原生 Luna 1–15、任务 transcript、官方 API event ledger、Provider usage 和真实 scorer；不启动新模型、不修改旧结果。验收不是解释平均分，而是逐层证明业务分、角色增量、调用放大和耗时由哪些真实控制流产生，并给出可执行的根因修复。已读 benchmark-debug-template、本记录、两组执行器、Base execution-verification 声明、Skill投影/运行遵守审计、官方bridge/replay及任务transcript。全仓初搜覆盖 Base/Tester/Developer、预算、Skill与工作流定义。独立反馈：本阶段调查前无。
+
+首轮事实：13个有效Base病例只有2个strict，平均每例105.23次模型调用和14.93分钟；原生相同任务通常8–31个response step和0.7–4.1分钟。Base的1368次模型调用中Developer 461、Tester 373、Orchestrator 312、Mission 196、memory 26，纯Mission/Orchestrator已占37.1%。13例共有696次官方API attempt，完整角色归属见下文。所有13例`runtime_adherence_passed=false`：真正调用客户端的Developer或Tester存在未先加载automationbench-api Skill的情况，旧检查器还把未调用客户端的Orchestrator误记为缺失加载。真实transcript显示Tester完成后Orchestrator再次派发Developer，随后可继续Tester，形成业务修改—验收—修复循环；这不是单纯网络慢。
+
+当前不能仅凭调用数量断言Tester有害。下一步在不改证据的前提下按真实Tool时间把每个官方API event归属到Developer/Tester阶段，用官方WorldState和原rubric对每个阶段边界重新评分，比较Developer首次交付、Tester操作后和最终结果；同时统计每例派发轮次、能力搜索/Skill加载、非业务协调调用、API读写类型与失败率。若Tester只读检查提升质量但成本过高，修复工作流信息流和终止条件；若Tester发生重复写入并降低世界状态，修Tester权限/工具定义和验证契约；若Developer首次结果已差，则修任务上下文与执行提示。禁止用Host路由替模型选流程，也不靠硬超时或删Tester凑速度。
+
+修复验收先采用零模型历史反事实与当前Prompt/工具投影正向测试：明确每个角色可见且必须加载的Skill、Tester的验证输出如何回流、何时结束或仅对明确缺口发起一次修复；证明同一Task不会无新缺口地循环派发，公共Task/Mission恢复与其他专家团不受损。完成代码和独立审查后，是否启动小规模真实复验另行由用户决定；未经新指令不恢复当前100例队列。
+
+完整归属审计把696个官方API事件全部按真实bash Tool时间映射到角色：Developer 463、Tester 233，未归属0。Tester仅4次业务写入，主要做读取；因此“Tester重复写坏世界”不是共享主因。13例却形成42个角色阶段和48次dispatch，6例发生二到三轮Developer→Tester；首次进入Tester后还有38次Developer写入和4次Tester写入。108个API操作是逐字相同的重复请求。最差case9进行了三轮开发/验证、140次模型调用、118次API和40次完全重复操作；这些修复处理了真实审批、汇率和通知缺口，却最终仅partial0.667。case8的Tester也发现Developer漏掉的近期发布表并触发真实修复，但最终partial仍从原生0.5降至0。说明验证有时找到真问题，却没有形成与其约6倍调用成本相称的官方质量增益。
+
+在双方均有有效分数的12例上，Base strict为2、原生为1，partial均值0.65789对0.56651；不能称Base质量全面更差。决定性失败是效率：Base平均耗时892788.5ms、原生140474.25ms，慢6.36倍；Base 1257次模型调用对原生212个response step，放大5.93倍，未达到“冗余至少减半”。Base 1368次模型调用中Orchestrator+Mission占508次（37.1%）。transcript聚合显示Orchestrator为消费Worker报告调用artifact_search71、artifact_read53、artifact_select51、read_agent_message43，并执行dispatch48；Developer/Tester又分别artifact_publish22/26。当前Base包强制每次初始和修复轮次发布通用development/test Artifact，再由Orchestrator通过三步目录协议重新消费，而Task participant最终消息和Host Tool事实已经携带同一次执行的结果。这是主要结构性重复。
+
+Skill遵守审计还把所有产生过assistant消息的已挂载Agent都要求加载Skill，导致完全不调用benchmark客户端的Orchestrator也永远记missing_skill_load；这是检查器定义错误。真正调用客户端但未先load的Developer/Tester仍是Prompt遵守缺陷。旧事件没有保存每个角色边界的WorldState快照；按事件重新执行current api_fetch在case9中无法复现当时sequence19的World hash，因此不能伪造Developer-only反事实分数。当前可证明的是调用归属、阶段、重复操作、真实最终分和角色报告，不能声称每次修复的精确分数增量。
+
+实施收敛：Base仍保留Developer和独立Tester，不用Host gate删角色或限制业务Tool。Developer/Tester在任务或环境明确提供与客户端绑定的Skill时必须先load；仅命名本地client而没有提供Skill时仍使用真实接口，不制造不存在的Skill前置条件。先完整发现请求点名的权威源，再进行业务写入。普通外部状态和仓库交付以自然可见的最终participant消息、Host Tool结果和Tester独立观察作为证据；只有用户请求持久化报告、任务真正产出可复用Artifact或现有权威Artifact是语义输入时才发布/读取Artifact。Orchestrator优先用read_agent_message取得Worker当前结论，不为例行报告执行catalog search/read/select；返工必须绑定Tester指出的原始请求具体缺口和最小变更面，修复后继续同一Tester lineage。Skill checker仅要求实际客户端调用者在调用前加载，不要求未调用客户端的挂载Agent做仪式性load，并识别解释器flags与绝对脚本路径。官方分数的immutable seal继续绑定receipt/result的完整原始coverage和稳定投影/派发完整性字段；运行adherence从原transcript按当前诊断规则重算，诊断定义升级不会追溯把旧合法分数改成invalid。聚焦正向测试验证新包Prompt、client使用前load、非客户端Orchestrator的正确adherence、旧seal保持有效、版本与生成payload；旧证据分析器保留全部归属数字。无模型复验仍不能证明新Prompt的真实得分与调用减半，后续小样本须用户另行恢复授权。
+
+独立审查补充关闭client识别边界：检查器不再维护第二套Shell分词，而是复用生产`tree-sitter-bash`抽象语法树，覆盖for/if控制结构、续行、解释器flags、绝对路径和引号，并只把Python实际脚本位置识别为client。无法解析的失败Bash命令记录为明确`bash_parse_incomplete`运行诊断；它使adherence不完整，但不会抛错中断评分、catalog、verify或失败证据封存。

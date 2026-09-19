@@ -16,7 +16,7 @@ import type {
 } from "../store/card-tree"
 import { toolNameKey, displayToolDetail, isAgentDispatchTool } from "./tool"
 import { extractTodos, summarizeTodos, type TodoSummary } from "./todos"
-import { isBoundaryMessagePart, isCardBodyMessagePart } from "./message-part"
+import { isBoundaryMessagePart, isCardBodyMessagePart, isNoActionDecisionToolPart } from "./message-part"
 import { normalizeAgentRole } from "./message"
 import { timelineOrderKeyTime } from "./timeline-order"
 
@@ -269,7 +269,7 @@ interface LatestHit {
 const PREVIEW_SUPPRESS_TOOLS = new Set(["structuredoutput", "structured_output"])
 
 function toolHitText(part: any): string {
-  if (!part || part.type !== "tool") return ""
+  if (!part || part.type !== "tool" || isNoActionDecisionToolPart(part)) return ""
   const name = String(part.tool || "").trim()
   if (!name) return ""
   const key = toolNameKey(name)
@@ -413,7 +413,7 @@ function isSkillTool(key: string): boolean {
 }
 
 function bumpCountsForPart(part: any, counts: ActivityCounts): void {
-  if (!part) return
+  if (!part || isNoActionDecisionToolPart(part)) return
   if (part.type === "text" || part.type === "reasoning") {
     if (String(part.text || "").trim()) counts.messages++
     return

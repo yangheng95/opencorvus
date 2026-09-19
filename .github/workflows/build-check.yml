@@ -52,6 +52,16 @@ jobs:
       - name: Run critical builds
         run: bun run --cwd packages/opencorvus build --single --skip-install
 
+      - name: Retain failed native first-run diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: failed-native-first-run
+          path: .scratch/package-runtime/tmp/opencorvus-first-run-*/
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 7
+
   required:
     name: build check (linux)
     runs-on: ubuntu-latest

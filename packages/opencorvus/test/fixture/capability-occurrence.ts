@@ -6,14 +6,13 @@ import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
 import type { Provider } from "../../src/provider/provider"
 import { Message, Session } from "../../src/session"
-import { SessionLoop } from "../../src/session/loop"
+import { SessionLoop, visibleChatSkillNames } from "../../src/session/loop"
 import { MessageStore } from "../../src/session/message-store"
 import type { SessionProcessor } from "../../src/session/processor"
 import { SessionRuntimeContractStore } from "../../src/session/runtime-contract"
 import type { SessionAgentRuntime } from "../../src/agent/session-agent-runtime"
 import { RuntimeCapabilityCatalog } from "../../src/tool/capability-runtime-catalog"
 import { ToolRegistry } from "../../src/tool/registry"
-import { routineToolRefs } from "../../src/capability/routine-tools"
 import { CapabilityRules } from "../../src/capability/rules"
 import { visibleExecutionToolIDs } from "../../src/tool/execution-surface"
 import type { ProviderToolNameOwner } from "../../src/tool/provider-name-authority"
@@ -28,6 +27,7 @@ export async function bindTestCapabilityOccurrence(input: {
   assistant: Message.Assistant
   agent: SessionAgentRuntime
   agentID: string
+  messages: Message.WithParts[]
   includeMcpTools?: boolean
   tools?: Record<string, boolean>
   reservedProviderTools?: readonly { name: string; owner: ProviderToolNameOwner; tool: AITool }[]
@@ -63,12 +63,17 @@ export async function bindTestCapabilityOccurrence(input: {
     input.config,
     registryIDs,
   )
-  const executionToolIDs = [
-    ...projectableRegistryIDs,
-    ...executableRefs
-      .filter((ref) => ref.kind === "mcp_tool" || (ref.kind === "tool" && ref.owner_ref !== "tool-registry"))
-      .map((ref) => ref.local_ref),
-  ]
+  const permission = CapabilityRules.merge(input.agent.permission, input.session.permission)
+  const executionToolIDs = visibleExecutionToolIDs({
+    toolIDs: [
+      ...projectableRegistryIDs,
+      ...executableRefs
+        .filter((ref) => ref.kind === "mcp_tool" || (ref.kind === "tool" && ref.owner_ref !== "tool-registry"))
+        .map((ref) => ref.local_ref),
+    ],
+    permission,
+    switches: input.tools,
+  })
   const materializationScope = await CatalogOccurrenceBinding.materializationScope({
     model: input.model,
     config: input.config,
@@ -83,20 +88,22 @@ export async function bindTestCapabilityOccurrence(input: {
     payload = await CatalogOccurrenceBinding.read({ projectID: Instance.project.id, binding })
     await Session.beginAssistantReply(occurrenceAssistant)
   } else {
-    const permanentRefs = routineToolRefs({
+    const explicitSkillNames = visibleChatSkillNames(input.messages)
+    const permanentRefs = SessionLoop.occurrencePermanentToolRefs({
       harness: grants,
-      visibleToolIDs: visibleExecutionToolIDs({
-        toolIDs: executionToolIDs,
-        permission: CapabilityRules.merge(input.agent.permission, input.session.permission),
-        switches: input.tools,
-      }),
+      visibleToolIDs: executionToolIDs,
+      explicitSkillNames,
+      productionSkillContext:
+        runtimeContract?.identity !== undefined || input.agentID === "chat" || input.agentID === "work",
     })
     const permanentProviderBaseDefinition = await SessionLoop.resolvePermanentProviderBaseDefinition({
       model: input.model,
-      agent: input.agent,
+      agent: { ...input.agent, permission },
       agentID: input.agentID,
       config: input.config,
       toolRefs: permanentRefs,
+      availableToolNames: executionToolIDs,
+      explicitSkillNames,
       runtimeContract: SessionRuntimeContractStore.get(input.session.id),
       reservedProviderTools: input.reservedProviderTools,
     })
@@ -106,7 +113,8 @@ export async function bindTestCapabilityOccurrence(input: {
       agentID: input.agentID,
       executionToolIDs,
       harnessGrants: grants,
-      permission: [],
+      permission,
+      toolSwitches: input.tools,
     })
     payload = CatalogOccurrenceBinding.payload({
       snapshot: catalog.snapshot,

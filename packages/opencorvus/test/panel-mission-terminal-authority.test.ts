@@ -20,12 +20,13 @@ import { PanelQueryTaskOutput } from "@/panel/task-query"
 import { Instance } from "@/project/instance"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Session } from "@/session"
+import { Database } from "@/storage/db"
+import { AutomationFireTable, AutomationTable } from "@/scheduler/automation.sql"
 import { SessionProcessor } from "@/session/processor"
 import { Tool } from "@/tool/tool"
 import { createPanelUIRequestToolContext, PanelLeafTools, PanelTool } from "@/tool/panel"
 import { panelLeafToolID, type PanelActionID } from "@/panel/action-ids"
 import { ToolTurnExecutionConflictError } from "@/tool/execution-mode"
-import { toolResultControl } from "@/session/tool-result-control"
 import { EngineService } from "@/task-api"
 import { ArtifactSchemaLimits } from "@opencorvus-ai/plugin/artifact-catalog"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
@@ -125,6 +126,14 @@ describe("Mission terminal Task authority", () => {
           time: { created: now },
           agent: "mission",
           model: { providerID: "test", modelID: "mission-query-overlap" },
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: user.id,
+          type: "text",
+          text: "Inspect current Mission capabilities and create the requested Task.",
+          kind: "user_content",
         })
         const assistant = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -231,7 +240,6 @@ describe("Mission terminal Task authority", () => {
             inspection: { title: (inspection as { title: string }).title, squadID: inspected.squad.id },
             mutation: {
               taskID: taskResult.task_id,
-              control: toolResultControl((mutation as { metadata: Record<string, unknown> }).metadata),
             },
             fencedQuery,
           }).toEqual({
@@ -242,7 +250,7 @@ describe("Mission terminal Task authority", () => {
               metadata: { missionID: mission.missionID, count: 0, truncated: false },
             },
             inspection: { title: "Expert Squad", squadID: "base" },
-            mutation: { taskID, control: { kind: "immediate_park" } },
+            mutation: { taskID },
             fencedQuery: {
               kind: "rejected",
               name: "ToolTurnExecutionConflictError",
@@ -259,7 +267,7 @@ describe("Mission terminal Task authority", () => {
     })
   })
 
-  test("returns an immediate parked turn boundary after a Mission Task is accepted", async () => {
+  test("returns the exact durable creation receipt to its Mission caller", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -343,14 +351,13 @@ describe("Mission terminal Task authority", () => {
             },
           )
 
-          expect({ output: JSON.parse(result.output), control: toolResultControl(result.metadata) }).toEqual({
+          expect({ output: JSON.parse(result.output) }).toEqual({
             output: {
               kind: "created",
               task_id: taskID,
               artifact_import_mappings: [],
               message: `Task accepted: \`${taskID}\``,
             },
-            control: { kind: "immediate_park" },
           })
           expect(createSpy).toHaveBeenCalledTimes(1)
           expect(createSpy.mock.calls[0]?.[1]).toMatchObject({
@@ -741,6 +748,52 @@ describe("Mission terminal Task authority", () => {
     })
   }, 30_000)
 
+  test.each(["operator", "scheduled"] as const)("a new %s request opens the next bounded Mission acceptance", async (origin) => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const mission = await ensureMissionSession({ missionID: "bounded-operator-reopen", defaultCwd: project.path,
+        productPillar: "work", heldExpertSquadIDs: ["base"] })
+      const now = Date.now()
+      const user = await Session.updateMessage({ id: Identifier.ascending("message"), sessionID: mission.id,
+        role: "user", author: "user", time: { created: now }, agent: "mission",
+        model: { providerID: "openai", modelID: "gpt-5.6-terra" } })
+      const assistant = await Session.updateMessage({ id: Identifier.ascending("message"), sessionID: mission.id,
+        role: "assistant", author: "mission", parentID: user.id, time: { created: now + 1 }, agent: "mission",
+        providerID: "openai", modelID: "gpt-5.6-terra", path: { cwd: project.path, root: project.path }, cost: 0,
+        tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } } })
+      const leaf = await panelLeaf("complete_mission")
+      const partID = Identifier.ascending("part")
+      const callID = "bounded-completion"
+      const args = { summary: "Bounded coordination accepted", task_acceptances: [] }
+      await Session.updatePart({ id: Identifier.ascending("part"), sessionID: mission.id, messageID: assistant.id, type: "step-start" })
+      await Session.updatePart({ id: partID, sessionID: mission.id, messageID: assistant.id, type: "tool",
+        tool: leaf.id, callID, state: { status: "running", input: args, time: { start: now + 1 } } })
+      const output = await leaf.tool.execute(args, { sessionID: mission.id, messageID: assistant.id,
+        callID, agent: "mission", abort: new AbortController().signal, messages: [],
+        executionSurface: Tool.executionSurface([leaf.id], []), extra: { surface: "panel" }, metadata() {}, async ask() {} })
+      await Session.updatePart({ id: partID, sessionID: mission.id, messageID: assistant.id, type: "tool", tool: leaf.id,
+        callID, state: { status: "completed", input: args, output: output.output, title: output.title,
+          metadata: output.metadata, time: { start: now + 1, end: now + 2 } } })
+      const facts = { interruptible: false, pendingInteractions: 0, taskLifecycleStatuses: [] }
+      expect(missionBoardProjection(mission, facts)).toMatchObject({ lane: "completed", completion: { toolPartID: partID } })
+      const { orderKey: _priorOrder, ...newInput } = user
+      if (origin === "scheduled") {
+        Database.immediateTransaction((db) => {
+          db.insert(AutomationTable).values({ id: "recurring-job", definition_id: "recurring-job", revision: 1,
+            project_id: mission.projectID, session_id: mission.id, name: "daily check", kind: "recurring",
+            scope: "session", recurrence: "FREQ=DAILY", prompt: "Run the next authorized check" }).run()
+          db.insert(AutomationFireTable).values({ id: "next-scheduled-fire", automation_revision_id: "recurring-job",
+            scheduled_due_at: now + 3, origin: "scheduled", time_created: now + 3 }).run()
+        })
+      }
+      await Session.updateMessage({ ...newInput, id: Identifier.ascending("message"), time: { created: now + 3 },
+        author: origin === "operator" ? "user" : "orchestrator",
+        ...(origin === "scheduled" ? { extra: { wake_reason: { source: "scheduler.automation", jobID: "recurring-job",
+          jobName: "daily check", fireID: "next-scheduled-fire", scope: "session", recurrence: "FREQ=DAILY" } } } : {}) })
+      expect(missionBoardProjection(mission, facts).lane).toBe("backlog")
+    } })
+  })
+
   test("completes a Mission from canonical terminal reads retained across Mission inputs", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -1080,13 +1133,33 @@ describe("Mission terminal Task authority", () => {
           }),
         ).toMatchObject({ lane: "completed", completion: { summary: "Accepted terminal evidence" } })
 
+        Database.immediateTransaction((db) => {
+          db.insert(AutomationTable).values({ id: "delay", definition_id: "delay", revision: 1,
+            project_id: mission.projectID, session_id: mission.id, name: "session wait", kind: "delay",
+            prompt: "Observe the pending result", due_at: now + 8 }).run()
+          db.insert(AutomationFireTable).values({ id: "delayed-fire", automation_revision_id: "delay",
+            scheduled_due_at: now + 8, origin: "scheduled", time_created: now + 8 }).run()
+        })
+        await Session.updateMessage({
+          id: Identifier.ascending("message"), sessionID: mission.id, role: "user", author: "orchestrator",
+          time: { created: now + 8 }, agent: "mission", model: { providerID: "openai", modelID: "gpt-5.6-terra" },
+          extra: { wake_reason: { source: "scheduler.automation", jobID: "delay", jobName: "session wait",
+            fireID: "delayed-fire", scope: "session", recurrence: null } }, pendingDelivery: true,
+        })
+        expect(missionBoardProjection(mission, { interruptible: false, pendingInteractions: 0,
+          taskLifecycleStatuses: ["completed"] })).toMatchObject({ lane: "completed", completion: { toolPartID: completionPartID } })
+
         await updateTask(requireTask(taskID), { status: "active" }, "Task resumed")
+        expect(missionBoardProjection(mission, { interruptible: false, pendingInteractions: 0,
+          taskLifecycleStatuses: ["active"] }).lane).toBe("running")
         await terminalTask(
           requireTask(taskID),
           { status: "completed", time_completed: now + 8 },
           "New terminal occurrence",
         )
         const currentReference = requireCurrentTerminalLifecycleReference(taskID)
+        expect(missionBoardProjection(mission, { interruptible: false, pendingInteractions: 0,
+          taskLifecycleStatuses: ["completed"] }).lane).toBe("review")
         expect({
           accepted: receipt.task_acceptances[0]!.terminal_lifecycle_reference,
           current: currentReference,

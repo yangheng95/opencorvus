@@ -1,0 +1,339 @@
+diff --git a/packages/opencorvus/src/protocol/scheduler-message.ts b/packages/opencorvus/src/protocol/scheduler-message.ts
+index 7b85b964..254dba12 100644
+--- a/packages/opencorvus/src/protocol/scheduler-message.ts
++++ b/packages/opencorvus/src/protocol/scheduler-message.ts
+@@ -31,7 +31,7 @@ import {
+   type SchedulerDeliveryReceipt,
+ } from "./delivery"
+ import { SchedulerEndpoint, SchedulerMessagePayload, type SchedulerMessageKind } from "./schema"
+-import { installSchedulerMessageDrainSignal } from "./scheduler-drain-signal"
++import { installSchedulerMessageDrainSignal, signalSchedulerMessageDrain } from "./scheduler-drain-signal"
+ import { RuntimeExecutionAdmissionClosedError } from "@/runtime/execution-settlement"
+ import {
+   admitMissionExecutionWake,
+@@ -48,7 +48,6 @@ const log = Log.create({ service: "scheduler-message-delivery" })
+ type RecipientDrainOwner = {
+   revision: number
+   promise: Promise<void>
+-  taskWakeStatuses: Map<string, string>
+ }
+ const recipientDrainOwners = new Map<string, RecipientDrainOwner>()
+ let beforeMissionMaterializationForTest: (() => void | Promise<void>) | undefined
+@@ -72,7 +71,7 @@ export async function sendSchedulerMessage(input: {
+   sourceMessageID?: string
+   sourcePartID?: string
+   sourceTerminalEventID?: string
+-}): Promise<SchedulerDeliveryReceipt & { messageID?: string; ingressID?: string; wakeStatus?: string }> {
++}): Promise<SchedulerDeliveryReceipt> {
+   const source = SchedulerEndpoint.parse(input.source)
+   let target: SchedulerEndpoint
+   let correlationID: string
+@@ -119,39 +118,12 @@ export async function sendSchedulerMessage(input: {
+       threadID,
+       replyTo: input.replyTo,
+     })
++    Database.effect(() => signalSchedulerMessageDrain())
+     return persisted
+   })
+-  const targetProject = Project.get(target.project_id)
+-  if (!targetProject) throw new Error(`Scheduler target Project ${target.project_id} is not available for delivery.`)
+-  const recipient: SchedulerRecipient =
+-    target.kind === "task_scheduler"
+-      ? { actor: "task", actorID: target.task_id }
+-      : { actor: "session", actorID: target.session_id }
+-  const wakeStatus =
+-    receipt.status !== "delivered" && receipt.status !== "dead_letter"
+-      ? (
+-          await requestSchedulerRecipientDrain({
+-            projectID: target.project_id,
+-            directory: targetProject.worktree,
+-            recipient,
+-            awaitedInboxID: receipt.inboxID,
+-          })
+-        ).wakeStatus
+-      : undefined
+-  const current = requireSchedulerDelivery(receipt.inboxID)
+-  if (current.deliveryResult?.kind === "task_ingress") {
+-    return {
+-      ...receipt,
+-      status: current.status,
+-      messageID: current.deliveryResult.message_id,
+-      ingressID: current.deliveryResult.ingress_id,
+-      ...(wakeStatus ? { wakeStatus } : {}),
+-    }
+-  }
+-  if (current.deliveryResult?.kind === "session_wake") {
+-    return { ...receipt, status: current.status, messageID: current.deliveryResult.message_id }
+-  }
+-  return { ...receipt, status: current.status }
++  // The sender may be the participant that the recipient is awaiting. Return
++  // the committed enqueue receipt; the delivery owner settles execution.
++  return receipt
+ }
+ 
+ async function sourceMessageText(delivery: ReturnType<typeof requireSchedulerDelivery>): Promise<string> {
+@@ -305,10 +277,7 @@ async function drainMissionRecipient(sessionID: string): Promise<void> {
+   }
+ }
+ 
+-async function drainTaskRecipient(
+-  taskID: string,
+-  onWakeStatus: (inboxID: string, wakeStatus: string) => void,
+-): Promise<void> {
++async function drainTaskRecipient(taskID: string): Promise<void> {
+   while (true) {
+     const ownerID = `scheduler-message:${process.pid}:${randomUUID()}`
+     const claimed = claimNextSchedulerDelivery({
+@@ -324,12 +293,11 @@ async function drainTaskRecipient(
+         throw new Error(`Scheduler inbox ${claimed.id} target does not match recipient Task.`)
+       }
+       const message = await sourceMessageText(delivery)
+-      const result = await EngineService.materializeClaimedSchedulerMessageToTask({
++      await EngineService.materializeClaimedSchedulerMessageToTask({
+         inboxID: delivery.id,
+         ownerID,
+         message,
+       })
+-      onWakeStatus(delivery.id, result.wakeStatus)
+     } catch (error) {
+       const current = requireSchedulerDelivery(claimed.id)
+       if (current.status !== "leased" || current.leaseOwner !== ownerID) continue
+@@ -387,12 +355,11 @@ function requestSchedulerRecipientDrain(input: {
+   projectID: string
+   directory: string
+   recipient: SchedulerRecipient
+-  awaitedInboxID?: string
+-}): Promise<{ wakeStatus?: string }> {
++}): Promise<void> {
+   const key = schedulerRecipientDrainKey(input.projectID, input.recipient)
+   let owner = recipientDrainOwners.get(key)
+   if (!owner) {
+-    owner = { revision: 1, promise: Promise.resolve(), taskWakeStatuses: new Map() }
++    owner = { revision: 1, promise: Promise.resolve() }
+     recipientDrainOwners.set(key, owner)
+     const exactOwner = owner
+     exactOwner.promise = (async () => {
+@@ -401,9 +368,7 @@ function requestSchedulerRecipientDrain(input: {
+         if (input.recipient.actor === "session") {
+           await drainMissionRecipientWakes(input.projectID, input.recipient.actorID, input.directory)
+         } else {
+-          await drainTaskRecipient(input.recipient.actorID, (inboxID, wakeStatus) => {
+-            exactOwner.taskWakeStatuses.set(inboxID, wakeStatus)
+-          })
++          await drainTaskRecipient(input.recipient.actorID)
+         }
+         await beforeRecipientRevisionCheckForTest?.({
+           key,
+@@ -423,10 +388,7 @@ function requestSchedulerRecipientDrain(input: {
+     owner.revision += 1
+   }
+   const exactOwner = owner
+-  return exactOwner.promise.then(() => {
+-    const wakeStatus = input.awaitedInboxID ? exactOwner.taskWakeStatuses.get(input.awaitedInboxID) : undefined
+-    return wakeStatus ? { wakeStatus } : {}
+-  })
++  return exactOwner.promise
+ }
+ 
+ export async function drainSchedulerMessagesForCurrentProject(input?: {
+diff --git a/packages/opencorvus/src/task-api/index.ts b/packages/opencorvus/src/task-api/index.ts
+index c6715f36..146ced0f 100644
+--- a/packages/opencorvus/src/task-api/index.ts
++++ b/packages/opencorvus/src/task-api/index.ts
+@@ -1405,11 +1405,7 @@ export namespace EngineService {
+     inboxID: string
+     ownerID: string
+     message: string
+-  }): Promise<{
+-    messageID: string
+-    ingressID: string
+-    wakeStatus: DispatchTaskLoopResult
+-  }> {
++  }): Promise<void> {
+     const delivery = requireSchedulerDelivery(input.inboxID)
+     if (delivery.status !== "leased" || delivery.leaseOwner !== input.ownerID) {
+       throw new Error(`Scheduler Task delivery ${input.inboxID} is not leased by ${input.ownerID}.`)
+@@ -1524,12 +1520,7 @@ export namespace EngineService {
+       },
+     )
+     if (!ingressID) throw new Error(`Scheduler Task delivery ${delivery.id} did not commit its ingress.`)
+-    const dispatch = await dispatchPersistedTaskLoop(task.id, ingressID)
+-    return {
+-      messageID: bundle.info.id,
+-      ingressID,
+-      wakeStatus: dispatch,
+-    }
++    await dispatchPersistedTaskLoop(task.id, ingressID)
+   }
+ 
+   export async function createTask(raw: z.input<typeof CreateTaskInput>, rawCreator: z.input<typeof TaskCreator>) {
+diff --git a/packages/opencorvus/test/protocol-scheduler-message-delivery.test.ts b/packages/opencorvus/test/protocol-scheduler-message-delivery.test.ts
+index 3b7566e0..771420aa 100644
+--- a/packages/opencorvus/test/protocol-scheduler-message-delivery.test.ts
++++ b/packages/opencorvus/test/protocol-scheduler-message-delivery.test.ts
+@@ -329,6 +329,7 @@ describe("Protocol immutable lifecycle delivery fact", () => {
+             subject: "Materialize before close",
+             sourceTerminalEventID: terminal.id,
+           })
++          await drainSchedulerMessagesForCurrentProject()
+           expect(requireSchedulerDelivery(receipt.inboxID)).toMatchObject({
+             status: "delivered",
+             deliveryResult: { kind: "session_wake" },
+@@ -588,18 +589,21 @@ describe("Protocol immutable lifecycle delivery fact", () => {
+             subject: "Direct Mission send after recipient-local boundary",
+             sourceTerminalEventID: terminal.id,
+           })
++          await drainSchedulerMessagesForCurrentProject()
+           const afterBoundaryDelivery = requireSchedulerDelivery(afterBoundary.inboxID)
++          if (afterBoundaryDelivery.deliveryResult?.kind !== "session_wake") throw new Error("Expected Mission wake delivery")
++          const afterBoundaryMessageID = afterBoundaryDelivery.deliveryResult.message_id
+           expect({
+             afterBoundary,
+             afterBoundaryDelivery,
+             unanswered: listUnansweredSchedulerSessionWakes(Instance.project.id),
+           }).toMatchObject({
+-            afterBoundary: { status: "delivered", messageID: expect.any(String) },
++            afterBoundary: { status: "pending", eventID: expect.any(String), inboxID: expect.any(String) },
+             afterBoundaryDelivery: {
+               status: "delivered",
+-              deliveryResult: { kind: "session_wake", message_id: afterBoundary.messageID },
++              deliveryResult: { kind: "session_wake", message_id: afterBoundaryMessageID },
+             },
+-            unanswered: [{ inboxID: afterBoundary.inboxID, sessionID: mission.id, messageID: afterBoundary.messageID }],
++            unanswered: [{ inboxID: afterBoundary.inboxID, sessionID: mission.id, messageID: afterBoundaryMessageID }],
+           })
+         } finally {
+           prompt.mockRestore()
+@@ -983,6 +987,18 @@ describe("Protocol immutable lifecycle delivery fact", () => {
+               })}`,
+             )
+           }
++          const sendReceipt = await Promise.race([
++            sendSchedulerMessage({
++              invocationID: `fair-a-3-${Identifier.uuid4First8()}`,
++              kind: "notification",
++              source: taskEndpoint(taskA),
++              target: missionAEndpoint,
++              subject: "Mission A third admitted while its first wake is active",
++              sourceTerminalEventID: terminalA.id,
++            }),
++            Bun.sleep(2_000).then(() => { throw new Error("Scheduler send receipt waited for recipient execution") }),
++          ])
++          expect(sendReceipt.status).toBe("pending")
+           const siblingDeadline = Date.now() + 5_000
+           while (
+             (requireSchedulerDelivery(receipts.missionB.inboxID).status !== "delivered" ||
+@@ -1020,7 +1036,7 @@ describe("Protocol immutable lifecycle delivery fact", () => {
+           missionASecond: "delivered",
+           missionB: "delivered",
+           taskC: "delivered",
+-          missionAStarts: 2,
++          missionAStarts: 3,
+           missionBStarts: 1,
+         })
+       },
+diff --git a/packages/opencorvus/test/scheduler-task-root-message-schema.test.ts b/packages/opencorvus/test/scheduler-task-root-message-schema.test.ts
+index 2197810c..4e5f0236 100644
+--- a/packages/opencorvus/test/scheduler-task-root-message-schema.test.ts
++++ b/packages/opencorvus/test/scheduler-task-root-message-schema.test.ts
+@@ -247,13 +247,25 @@ describe("scheduler Task-root Message protocol", () => {
+             .all().length,
+           runnerOccurrences: observedWakes.length,
+         }))
+-        releaseFirst()
+-        const [receipt, secondReceipt] = await Promise.all([firstSend, secondSend])
++        let receipt: Awaited<typeof firstSend>
++        let secondReceipt: Awaited<typeof secondSend>
++        try {
++          ;[receipt, secondReceipt] = await Promise.race([
++            Promise.all([firstSend, secondSend]),
++            Bun.sleep(2_000).then(() => { throw new Error("Scheduler send receipt waited for recipient execution") }),
++          ])
++          expect([receipt.status, secondReceipt.status]).toEqual(["pending", "pending"])
++        } finally {
++          releaseFirst()
++        }
++        await drainSchedulerMessagesForCurrentProject()
+         expect(gatedSnapshot).toEqual({ inboxes: 2, terminalReceipts: 1, runnerOccurrences: 1 })
+         const delivery = requireSchedulerDelivery(receipt.inboxID)
+         if (delivery.status !== "delivered") {
+           throw new Error(`Scheduler delivery did not settle: ${JSON.stringify(delivery)}`)
+         }
++        if (delivery.deliveryResult?.kind !== "task_ingress") throw new Error("Expected Task ingress delivery")
++        const messageID = delivery.deliveryResult.message_id
+         const expectedReference = {
+           eventID: receipt.eventID,
+           inboxID: receipt.inboxID,
+@@ -265,13 +277,12 @@ describe("scheduler Task-root Message protocol", () => {
+           db
+             .select({ data: MessageTable.data })
+             .from(MessageTable)
+-            .where(eq(MessageTable.id, receipt.messageID!))
++            .where(eq(MessageTable.id, messageID))
+             .get(),
+         )
+-        expect(receipt).toMatchObject({
++        expect(delivery).toMatchObject({
+           status: "delivered",
+-          messageID: expect.any(String),
+-          ingressID: expect.any(String),
++          deliveryResult: { kind: "task_ingress", message_id: messageID, ingress_id: expect.any(String) },
+         })
+         expect(persisted).toBeDefined()
+         expect(observedWakes).toHaveLength(1)
+@@ -288,7 +299,7 @@ describe("scheduler Task-root Message protocol", () => {
+           schedulerDelivery: expectedReference,
+         })
+         expect(wake.rootMessage).toEqual({
+-          messageID: receipt.messageID,
++          messageID: messageID,
+           kind: "mission",
+           schedulerDelivery: expectedReference,
+         })
+@@ -296,8 +307,9 @@ describe("scheduler Task-root Message protocol", () => {
+           requireSchedulerDelivery(receipt.inboxID).event.sequence,
+           requireSchedulerDelivery(secondReceipt.inboxID).event.sequence,
+         ]
+-        expect({ secondReceipt }).toMatchObject({
+-          secondReceipt: { status: "delivered", messageID: expect.any(String), ingressID: expect.any(String) },
++        expect(requireSchedulerDelivery(secondReceipt.inboxID)).toMatchObject({
++          status: "delivered",
++          deliveryResult: { kind: "task_ingress", message_id: expect.any(String), ingress_id: expect.any(String) },
+         })
+         expect(deliveryOrder[1]).toBe(deliveryOrder[0]! + 1)
+ 
+@@ -353,18 +365,28 @@ describe("scheduler Task-root Message protocol", () => {
+           sourcePartID: sourcePart.id,
+         })
+         const siblingReceipt = await siblingSend
+-        expect(siblingReceipt).toMatchObject({ status: "delivered", messageID: expect.any(String) })
+-        releaseRevisionCut()
++        try {
++          const siblingDeadline = Date.now() + 5_000
++          while (requireSchedulerDelivery(siblingReceipt.inboxID).status !== "delivered" && Date.now() < siblingDeadline) {
++            await Bun.sleep(10)
++          }
++          expect(requireSchedulerDelivery(siblingReceipt.inboxID)).toMatchObject({
++            status: "delivered", deliveryResult: { kind: "task_ingress", message_id: expect.any(String) },
++          })
++        } finally {
++          releaseRevisionCut()
++        }
+         const [thirdReceipt, fourthReceipt] = await Promise.all([
+           thirdSend,
+           fourthSend,
+           signalDiscoveryDrain,
+           recoveryDiscoveryDrain,
+         ])
+-        expect({ thirdReceipt, fourthReceipt }).toMatchObject({
+-          thirdReceipt: { status: "delivered", messageID: expect.any(String) },
+-          fourthReceipt: { status: "delivered", messageID: expect.any(String) },
+-        })
++        for (const queued of [thirdReceipt, fourthReceipt]) {
++          expect(requireSchedulerDelivery(queued.inboxID)).toMatchObject({
++            status: "delivered", deliveryResult: { kind: "task_ingress", message_id: expect.any(String) },
++          })
++        }
+         expect(observedRevisions.at(-1)).toBeGreaterThanOrEqual(revisionAtCut + 3)
+       },
+     })

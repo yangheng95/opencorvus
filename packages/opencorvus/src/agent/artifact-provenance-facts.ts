@@ -888,47 +888,6 @@ export function selectedArtifactLocatorsBeforePublicationInTransaction(
   return [...selected.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([, locator]) => locator)
 }
 
-export function resolveArtifactSelectionReferencesBeforePublicationInTransaction(
-  db: Database.TxOrDb,
-  input: {
-    sessionID: string
-    assistantMessageID: string
-    toolPartID: string
-    references: readonly string[]
-  },
-): ArtifactReadLocator[] {
-  const scope = assistantActionFactScopeInTransaction(db, input.sessionID, input.assistantMessageID, input.toolPartID)
-  const facts = selectedArtifactFactsForSessionInTransaction(db, input.sessionID, {
-    turnParentMessageID: scope.turnParentMessageID,
-    before: scope.before,
-  })
-  const byReference = new Map<string, ArtifactReadLocator>()
-  for (const fact of facts) {
-    for (const reference of fact.references) {
-      const prior = byReference.get(reference)
-      if (prior && artifactReadLocatorKey(prior) !== artifactReadLocatorKey(fact.locator)) {
-        throw new ArtifactReferenceAmbiguityError(
-          reference,
-          `Artifact selection reference is ambiguous in Session ${input.sessionID}`,
-        )
-      }
-      byReference.set(reference, fact.locator)
-    }
-  }
-  const resolved = new Map<string, ArtifactReadLocator>()
-  for (const reference of input.references) {
-    const locator = byReference.get(reference)
-    if (!locator) {
-      throw new ArtifactReferenceResolutionError(
-        reference,
-        `Artifact selection reference is not a prior persisted selection in Session ${input.sessionID}`,
-      )
-    }
-    resolved.set(artifactReadLocatorKey(locator), locator)
-  }
-  return [...resolved.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([, locator]) => locator)
-}
-
 export function artifactProvenanceForSessionInTransaction(
   db: Database.TxOrDb,
   sessionID: string,

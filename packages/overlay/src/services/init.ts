@@ -8,7 +8,7 @@
 // - Restore last workspace
 // - Set up a periodic reconnect loop
 
-import { configure as configureApi } from "./api"
+import { configure as configureApi, onApiError } from "./api"
 import { checkConnection as checkServerConnection, startConnectionMonitor, stopConnectionMonitor } from "./connection"
 import { startWorkLedgerSSE, stopSSE, stopWorkLedgerSSE } from "./sse"
 import { loadAllLocales, setLocale } from "../utils/i18n"
@@ -23,13 +23,18 @@ import {
 import { boardStore, setBoardStore, loadTasks, clearTasksForMissingDirectory, activeTaskID } from "../store/board"
 import { loadMeta } from "./meta"
 import { loadExtensions } from "./extensions"
-import { ensureWorkspaceDirectory } from "./workspace"
-import { ensureDefaultDirectory } from "./workspace"
+import {
+  activeDirectory,
+  ensureDefaultDirectory,
+  ensureWorkspaceDirectory,
+  isMissingProjectDirectoryError,
+  leaveUnavailableProject,
+} from "./workspace"
 import { workspaceRestoreDirectory } from "../store/settings"
 import { selectTask } from "./task"
 import { currentTaskDeepLink, taskDeepLinkFromSearch } from "./task-deep-link"
 import { CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS, loadConfigInfo } from "./config-load"
-import { initializeActiveDirectoryGit } from "../utils/git"
+import { initializeProjectDirectoryGit } from "./project-git"
 import { setAppStore, type ProjectLoadIssue } from "../store/app"
 import { AppLog } from "../utils/log"
 import { refreshProjectMemory } from "./project-memory"
@@ -58,9 +63,26 @@ export interface InitOptions {
 }
 
 let initLifecycleGeneration = 0
+let stopMissingProjectDirectoryRecovery: (() => void) | undefined
 
 function isCurrentInitLifecycle(generation: number): boolean {
   return generation === initLifecycleGeneration
+}
+
+function startMissingProjectDirectoryRecovery(): void {
+  stopMissingProjectDirectoryRecovery?.()
+  stopMissingProjectDirectoryRecovery = onApiError((error) => {
+    const directory = [activeDirectory(), settingsStore.directory]
+      .map((candidate) => candidate.trim())
+      .find((candidate) => candidate && isMissingProjectDirectoryError(error, candidate))
+    if (!directory) return
+    void recoverMissingActiveDirectory(error, directory).catch((recoveryError) => {
+      AppLog.error("project-load", "Failed to leave unavailable Project", {
+        directory,
+        error: recoveryError instanceof Error ? recoveryError.message : String(recoveryError),
+      })
+    })
+  })
 }
 
 /**
@@ -86,6 +108,15 @@ interface InitialDataResult {
   reconcileCapabilities?: () => Promise<void>
 }
 
+async function recoverMissingActiveDirectory(error: unknown, directory: string): Promise<boolean> {
+  if (!isMissingProjectDirectoryError(error, directory)) return false
+  AppLog.warn("project-load", "Active Project directory disappeared; entering directory-free workspace", {
+    directory,
+  })
+  await leaveUnavailableProject(directory)
+  return true
+}
+
 async function loadInitialData(
   lifecycleGeneration: number,
   resolveInitialDirectory: () => Promise<boolean>,
@@ -106,8 +137,25 @@ async function loadInitialData(
   // Git must exist before the first project-scoped load can establish an
   // Instance/project_id. Initializing later can force an identity refresh
   // behind a live Chat or Mission lease and block conversation hydration.
-  if (settingsStore.initGit) await initializeActiveDirectoryGit()
+  if (settingsStore.initGit) {
+    try {
+      await initializeProjectDirectoryGit(directory)
+    } catch (error) {
+      if (await recoverMissingActiveDirectory(error, directory)) return { loaded: false }
+      throw error
+    }
+  }
   const [tasksResult, metaResult] = await Promise.allSettled([loadTasks(), loadMeta()])
+  const unavailableDirectoryFailure = [tasksResult, metaResult].find(
+    (result): result is PromiseRejectedResult =>
+      result.status === "rejected" && isMissingProjectDirectoryError(result.reason, directory),
+  )
+  if (
+    unavailableDirectoryFailure &&
+    (await recoverMissingActiveDirectory(unavailableDirectoryFailure.reason, directory))
+  ) {
+    return { loaded: false }
+  }
   void refreshProjectMemory().catch((error) =>
     AppLog.warn("project-memory", "Project MEMORY.MD status refresh failed", { error: String(error) }),
   )
@@ -197,6 +245,7 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
   // 1. Load settings into the Solid store
   await loadSettings()
   if (!isCurrentInitLifecycle(lifecycleGeneration)) return
+  startMissingProjectDirectoryRecovery()
   await onSettingsLoaded?.()
   if (!isCurrentInitLifecycle(lifecycleGeneration)) return
 
@@ -266,6 +315,8 @@ export function createInitialDirectoryResolver(
  */
 export function teardownApp(): void {
   initLifecycleGeneration += 1
+  stopMissingProjectDirectoryRecovery?.()
+  stopMissingProjectDirectoryRecovery = undefined
   stopConnectionMonitor()
   stopSSE()
   stopWorkLedgerSSE()

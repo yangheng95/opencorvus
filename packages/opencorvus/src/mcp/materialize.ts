@@ -49,6 +49,8 @@ export async function materializeMcpToolResult(input: {
   projectID: string
   result: CallToolResult & { metadata?: unknown }
   imageFilename?: string
+  /** Canonical request Part of this real invocation, exposed with screenshot evidence. */
+  sourceToolPartID?: string
   /**
    * The MCP server this result came from.
    *
@@ -119,6 +121,12 @@ export async function materializeMcpToolResult(input: {
     input.serverName === BrowserMCPBuiltin.ServerName
       ? browserObservationMetadata((input.result as { structuredContent?: unknown }).structuredContent, attachments)
       : undefined
+
+  if (browser && input.sourceToolPartID) {
+    textParts.unshift(JSON.stringify({
+      browser_screenshot_source: { sourceToolPartID: input.sourceToolPartID, ...browser },
+    }))
+  }
 
   return {
     text: textParts.join("\n\n"),

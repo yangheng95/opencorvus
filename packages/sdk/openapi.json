@@ -58217,6 +58217,68 @@
                     "additionalProperties": false,
                     "properties": {
                       "action": {
+                        "const": "read_task_message",
+                        "type": "string"
+                      },
+                      "max_bytes": {
+                        "description": "Aggregate UTF-8 text byte window for this batch call; defaults to 30,000.",
+                        "maximum": 30000,
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      "messages": {
+                        "description": "One to eight exact Completion Decision Message identities or Host-returned continuations, each Message listed once.",
+                        "items": {
+                          "properties": {
+                            "byte_offset": {
+                              "description": "UTF-8 offset. Omit it or use 0 for an initial Message identity; a positive continuation offset requires the exact text_part_id returned in next_messages.",
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "messageID": {
+                              "description": "Exact Message ID named by the current Completion Decision.",
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "sessionID": {
+                              "description": "Exact Session ID named by the current Completion Decision.",
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "text_part_id": {
+                              "description": "Exact text Part ID returned in next_messages.",
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "sessionID",
+                            "messageID"
+                          ],
+                          "type": "object"
+                        },
+                        "maxItems": 8,
+                        "minItems": 1,
+                        "type": "array"
+                      },
+                      "taskID": {
+                        "description": "Terminal source Task in the current Mission lineage.",
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "action",
+                      "taskID",
+                      "messages"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "action": {
                         "const": "complete_mission",
                         "type": "string"
                       },
@@ -59057,6 +59119,34 @@
                                         {
                                           "additionalProperties": false,
                                           "properties": {
+                                            "failure_reference": {
+                                              "additionalProperties": false,
+                                              "description": "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
+                                              "properties": {
+                                                "terminalEventID": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "terminalEventID"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "kind": {
+                                              "const": "task_initialization",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "failure_reference"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
                                             "kind": {
                                               "const": "workflow_node",
                                               "type": "string"
@@ -59239,6 +59329,34 @@
                                         {
                                           "additionalProperties": false,
                                           "properties": {
+                                            "failure_reference": {
+                                              "additionalProperties": false,
+                                              "description": "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
+                                              "properties": {
+                                                "terminalEventID": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "terminalEventID"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "kind": {
+                                              "const": "task_initialization",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "failure_reference"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
                                             "kind": {
                                               "const": "workflow_node",
                                               "type": "string"
@@ -59416,6 +59534,34 @@
                                     },
                                     "responsibility": {
                                       "oneOf": [
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "failure_reference": {
+                                              "additionalProperties": false,
+                                              "description": "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
+                                              "properties": {
+                                                "terminalEventID": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "terminalEventID"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "kind": {
+                                              "const": "task_initialization",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "failure_reference"
+                                          ],
+                                          "type": "object"
+                                        },
                                         {
                                           "additionalProperties": false,
                                           "properties": {

@@ -18,6 +18,7 @@ import {
   assertProjectedWorkerContinuationCompatible,
   sameProjectedWorkerIdentity,
 } from "@/agent/projected-worker-identity"
+import { requirePromptAttachments } from "@/agent/prompt-projection"
 import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { Bus } from "@/bus"
@@ -70,7 +71,11 @@ import {
   type DispatchAdmissionOwner,
 } from "@/engine/dispatch-lineage"
 import type { DispatchLineageRow } from "@/engine/dispatch-lineage-facts"
-import { findDispatchSettlementByDispatchID } from "@/engine/dispatch-settlement"
+import { findDispatchSettlementByDispatchID, settleDispatchOrReturnExisting } from "@/engine/dispatch-settlement"
+import { assertControlLeaseInTransaction, ControlLeaseFenceLostError } from "@/engine/control-lease"
+import { recordTaskInfrastructureErrorInTransaction } from "@/engine/persist"
+import { exactEngineArtifactLocator } from "@/artifact-catalog"
+import { isExecutionCancellationError } from "@/session/prompt/cancellation"
 import { abortChildExecutionForSession } from "@/engine/execution-abort"
 import { clarificationTranscriptSection } from "@/engine/helpers"
 import { Event as EngineEvent } from "@/engine/model"
@@ -105,7 +110,7 @@ import { sessionLifecycleOrderKey, SessionStatus } from "@/session/status"
 import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
 import { bindToolDecisionDeclaration, bindToolExecutionMode } from "@/tool/execution-mode"
 import { and, Database, eq, NotFoundError } from "@/storage/db"
-import { MessageTable, PartTable } from "@/session/session.sql"
+import { MessageTable, PartTable, ToolPartRequestTable } from "@/session/session.sql"
 import { timelineOrderKey } from "@/timeline/order"
 import { READ_TOOL_DESCRIPTION, ReadTool, ReadToolParameters } from "@/tool/read"
 import { BrowserPreviewCaptureTool, BrowserPreviewCaptureToolStaticDefinition } from "@/tool/browser-preview-capture"
@@ -176,7 +181,7 @@ import {
 } from "./tool-execution-context"
 import { createVisualQaStageDispatcher } from "./visual-qa-stage"
 import { createWorkloadAnalysisTool } from "./workload-analysis-tool"
-import { ORCHESTRATOR_DECISION_TOOL_NAMES, orchestratorDecisionToolCompletionEffect } from "./decision-tool-names"
+import { ORCHESTRATOR_DECISION_TOOL_NAMES, orchestratorDecisionToolCompletionEffect, orchestratorDecisionToolResultCommits } from "./decision-tool-names"
 import { sameSelectedWorkflowBinding, workflowProjectionFromProjectedAgents } from "@/engine/workflow-binding"
 import {
   currentTaskAcceptanceRepair,
@@ -1113,7 +1118,7 @@ export function createOrchestratorTools(input: {
   const toolFactories = {
     scheduler_message: () => tool({
       description:
-        "Send one durable scheduler message. Use request for a question/directive, reply with the exact request event_id, and notification for a one-way update. The target may be this Task's owning Mission or a sibling Task owned by the same Mission. Replies preserve the original route and thread automatically.",
+        "Send one durable scheduler message. Use request for a question/directive, reply with the exact request event_id, and notification for a one-way update. The target may be this Task's owning Mission or a sibling Task owned by the same Mission. Replies preserve the original route and thread automatically. A reply contains kind, reply_to, subject and message only; omit target because the exact request supplies its destination.",
       inputSchema: z
         .object({
           kind: z.enum(["request", "reply", "notification"]),
@@ -1122,8 +1127,8 @@ export function createOrchestratorTools(input: {
               z.object({ kind: z.literal("mission") }).strict(),
               z.object({ kind: z.literal("task"), task_id: z.string().min(1) }).strict(),
             ])
-            .optional(),
-          reply_to: z.string().startsWith("pev").optional(),
+            .optional().describe("Required for request or notification. Omit for reply: reply_to determines the original sender."),
+          reply_to: z.string().startsWith("pev").optional().describe("Required only for reply: copy the exact received request event_id and omit target. Omit reply_to for request or notification."),
           subject: z.string().min(1).max(500),
           message: z.string().min(1),
         })
@@ -1539,7 +1544,7 @@ export function createOrchestratorTools(input: {
     read_context: () => createReadContextTool({ taskID }).read_context,
     read_agent_message: () => createReadAgentMessageTool({ taskID }).read_agent_message,
     no_action: () =>
-      createNoActionTool({ activeAcceptanceGapID: activeAcceptanceRepair?.revision.gap.gap_id }).no_action,
+      createNoActionTool({ taskID, activeAcceptanceGapID: activeAcceptanceRepair?.revision.gap.gap_id }).no_action,
 
     respond_agent_coordination: () => bindToolExecutionMode(
       tool({
@@ -2477,6 +2482,8 @@ export function createOrchestratorTools(input: {
       let exactWorkflowOccurrenceID: string | undefined
       let exactDeliverySliceRevisionIDs = deliverySliceRevisionIDs
       let existingSessionID: string | undefined
+      let preparedSessionID: string | undefined
+      let preparedUseWorktree: boolean | undefined
       let exactAdapterInput = { ...adapterInput }
       if (coordinationActionID) {
         const action = findAgentCoordinationAction({ taskID: ownershipTaskID, actionID: coordinationActionID })
@@ -2541,6 +2548,10 @@ export function createOrchestratorTools(input: {
           // once, and every retry repeats the same failure.
           const continuable = listDispatchLineage(ownershipTaskID)
             .filter((row) => row.payload.target_agent_id === targetAgentID)
+            .filter((row) => {
+              const latest = WorkerTurnDescriptor.latestForSession(row.payload.child_session_id)?.payload.dispatchTurn
+              return !latest || latest.current_dispatch_id === row.dispatchID
+            })
             .map((row) => row.dispatchID)
           throw new Error(
             `dispatch_agent continuation source ${continuationDispatchID} does not exist in Task ${ownershipTaskID}. ` +
@@ -2561,7 +2572,29 @@ export function createOrchestratorTools(input: {
         exactWorkflowNodeID = sourceLineage.payload.workflow_node_id
         exactWorkflowOccurrenceID = sourceLineage.payload.workflow_occurrence_id
         exactDeliverySliceRevisionIDs = sourceLineage.payload.delivery_slice_revision_ids
-        existingSessionID = sourceLineage.payload.child_session_id
+        const sourceSessionID = sourceLineage.payload.child_session_id
+        const latestTurn = WorkerTurnDescriptor.latestForSession(sourceSessionID)?.payload.dispatchTurn
+        if (latestTurn) {
+          if (latestTurn.current_dispatch_id !== continuationDispatchID) {
+            throw new Error(`dispatch_agent continuation source ${continuationDispatchID} is stale for Session ${sourceSessionID}; exact current dispatch is ${latestTurn.current_dispatch_id}. Use that current dispatch identity explicitly for the successor Turn.`)
+          }
+          existingSessionID = sourceSessionID
+        } else {
+          const settlement = findDispatchSettlementByDispatchID({ taskID: ownershipTaskID, dispatchID: sourceLineage.dispatchID })
+          if (settlement?.payload.outcome.kind !== "infrastructure_failure" || settlement.payload.outcome.session_id) {
+            throw new Error(`Dispatch ${sourceLineage.dispatchID} has no accepted worker or settled preparation failure`)
+          }
+          const initial = findDispatchLineageByDispatchID({ taskID: ownershipTaskID, dispatchID: sourceLineage.payload.workflow_occurrence_id })
+          if (!initial) throw new Error(`Dispatch ${sourceLineage.dispatchID} has no initial placement authority`)
+          const request = Database.use((db) => db.select().from(ToolPartRequestTable).where(eq(ToolPartRequestTable.id, initial.payload.tool_part_id)).get())
+          const outer = request?.data.input as { dispatch?: { turn?: { kind?: string; use_worktree?: boolean } }; dispatches?: Array<{ dispatch?: { turn?: { kind?: string; use_worktree?: boolean } } }> } | undefined
+          const original = initial.payload.tool_name === "dispatch_agents"
+            ? outer?.dispatches?.[initial.payload.collection_member_index!]?.dispatch
+            : outer?.dispatch
+          if (original?.turn?.kind !== "initial") throw new Error(`Dispatch ${initial.dispatchID} has no initial Tool placement input`)
+          preparedSessionID = sourceSessionID
+          preparedUseWorktree = original.turn.use_worktree ?? false
+        }
         exactAdapterInput = { ...sourceLineage.payload.adapter_input }
         sourceDispatchLineageArtifactID = sourceLineage.artifactID
       } else if (!exactWorkflowBinding || exactWorkflowNodeID === undefined) {
@@ -2574,11 +2607,12 @@ export function createOrchestratorTools(input: {
       let canonicalAcceptanceRepair: AcceptanceRepairDispatch | undefined
       let acceptanceEvidenceLocators: EvidenceLocator[] = []
       if (activeAcceptanceRepair) {
-        if (!existingSessionID || !sourceDispatchLineageArtifactID || !acceptanceRepair) {
+        if (!acceptanceRepair || (existingSessionID && !sourceDispatchLineageArtifactID)) {
           throw new Error(
-            `Acceptance gap ${activeAcceptanceRepair.revision.gap.gap_id} requires an existing dispatch-lineage continuation.`,
+            `Acceptance gap ${activeAcceptanceRepair.revision.gap.gap_id} requires the current acceptance obligation and exact dispatch authority.`,
           )
         }
+        if (!exactWorkflowBinding) throw new Error("Acceptance repair dispatch requires an exact workflow subject.")
         if (
           acceptanceRepair.gap_id !== activeAcceptanceRepair.revision.gap.gap_id ||
           acceptanceRepair.ledger_revision_artifact_id !== activeAcceptanceRepair.artifactID ||
@@ -2597,7 +2631,7 @@ export function createOrchestratorTools(input: {
           }
           if (
             !dispatchConsumesAcceptanceCriterion({
-              binding: activeAcceptanceRepair.workflowBinding,
+              binding: exactWorkflowBinding,
               responsibility: criterion.responsibility,
               candidateWorkflowNodeID: exactWorkflowNodeID,
               sourceDispatchLineageArtifactID,
@@ -2609,6 +2643,14 @@ export function createOrchestratorTools(input: {
             )
           }
           selectedCriteria.push(criterion)
+        }
+        if (!existingSessionID) {
+          const initialization = selectedCriteria.every((criterion) => criterion.responsibility.kind === "task_initialization")
+          const selectedBinding = activeAcceptanceRepair.workflowBinding
+          if ((selectedBinding && !sameSelectedWorkflowBinding(exactWorkflowBinding, selectedBinding)) ||
+              (!initialization && (!selectedBinding || exactWorkflowBinding.kind !== "virtual_workflow"))) {
+            throw new Error("Initial acceptance repair must preserve its selected workflow or recover a validated Task initialization failure.")
+          }
         }
         canonicalAcceptanceRepair = {
           gap_id: acceptanceRepair.gap_id,
@@ -2646,6 +2688,9 @@ export function createOrchestratorTools(input: {
         adapterInput: exactAdapterInput,
       })
       const task = await assertTaskRootSessionLineageForConfig(requireTask(ownershipTaskID))
+      if (Object.hasOwn(exactAdapterInput, "attachment_refs")) {
+        requirePromptAttachments(task.attachments ?? undefined, z.array(z.string().min(1)).parse(exactAdapterInput.attachment_refs))
+      }
       const authority = await taskAuthorityAnchor({ task, existingSessionID })
       const selectedEvidence = [
         ...new Map(
@@ -2677,20 +2722,55 @@ export function createOrchestratorTools(input: {
           : {
               kind: "initial",
               current_dispatch_id: origin.dispatchID,
+              ...(preparedSessionID ? { preparation_recovery: { source_dispatch_id: sourceDispatchID, guidance: continuationGuidance } } : {}),
               workflow_binding: origin.workflowBinding,
               workflow_node_id: origin.workflowNodeID,
               workflow_occurrence_id: origin.workflowOccurrenceID,
               delivery_slice_revision_ids: origin.deliverySliceRevisionIDs ?? [],
-              evidence_locators: [],
+              evidence_locators: exactEvidenceLocators,
               task_authority: authority,
+              ...(canonicalAcceptanceRepair ? { acceptance_repair: { ...canonicalAcceptanceRepair, checkpoint_required: false } } : {}),
             },
       )
       if (signal?.aborted) throw new Error(`dispatch_agent ${targetAgentID} aborted before lineage preparation`)
       const claimedSessionID =
-        existingSessionID ?? Identifier.deterministic("session", `dispatch-worker-session\0${origin.dispatchID}`)
+        existingSessionID ?? preparedSessionID ?? Identifier.deterministic("session", `dispatch-worker-session\0${origin.dispatchID}`)
       let recordedLineage: ReturnType<typeof recordDispatchLineage> | undefined
       let admission: ReturnType<typeof claimDispatchLineage>["admission"]
       let admissionHold: ReturnType<typeof holdDispatchAdmission> | undefined
+      let admissionClosed = false
+      const closeAdmissionHold = () => {
+        if (admissionClosed) return
+        admissionClosed = true
+        admissionHold?.[Symbol.dispose]()
+      }
+      const releaseAdmission = () => {
+        if (admissionClosed) return
+        closeAdmissionHold()
+        releaseDispatchAdmissionOnError(admission!)
+      }
+      const settlePreparationFailure = (outcome: z.infer<typeof DispatchOutcomeSchema>) => {
+        if (outcome.kind !== "infrastructure_failure" || outcome.session_id) throw new Error("Preparation settlement requires an infrastructure failure before worker acceptance")
+        const settled = Database.immediateTransaction((db) => {
+          assertControlLeaseInTransaction(db, { target: "dispatch_admission", targetID: recordedLineage!.artifactID, leaseID: admission!.leaseID, ownerOccurrenceID: admission!.ownerOccurrenceID, now: Date.now() })
+          const infrastructureError = outcome.infrastructure_error ?? exactEngineArtifactLocator({
+            taskID: ownershipTaskID,
+            artifactID: recordTaskInfrastructureErrorInTransaction(db, {
+              taskID: ownershipTaskID,
+              component: "dispatch-agent",
+              operation: outcome.operation,
+              reason: outcome.message,
+              errorName: outcome.error_name,
+              context: { dispatchID: origin.dispatchID, dispatchLineageID: recordedLineage!.artifactID },
+            }),
+          })
+          const settled = settleDispatchOrReturnExisting({ taskID: ownershipTaskID, dispatchID: origin.dispatchID, outcome: { ...outcome, infrastructure_error: infrastructureError } })
+          if (!releaseDispatchAdmission(admission!)) throw new Error(`Preparation settlement failed to consume admission ${admission!.leaseID}`)
+          return settled.payload.outcome
+        })
+        closeAdmissionHold()
+        return settled
+      }
       let waitMilliseconds = 10
       for (;;) {
         signal?.throwIfAborted()
@@ -2706,42 +2786,53 @@ export function createOrchestratorTools(input: {
               projectedAgent,
               workScope,
             })
+            const committedDuringPreparation = readDispatchLineageReplay({
+              taskID: ownershipTaskID,
+              lineage: claim.lineage,
+            })
+            if (committedDuringPreparation) {
+              if (committedDuringPreparation.descriptor) {
+                commitAcceptedDispatchLineage(claim.lineage, admission)
+              } else if (!releaseDispatchAdmission(admission)) {
+                throw new Error(`Dispatch terminal replay could not consume admission ${admission.leaseID}`)
+              }
+              admissionHold[Symbol.dispose]()
+              return {
+                dispatchID: claim.lineage.dispatchID,
+                deliverySliceRevisionIDs: [...claim.lineage.payload.delivery_slice_revision_ids],
+                ...(committedDuringPreparation.descriptor
+                  ? { existingSessionID: claim.lineage.payload.child_session_id }
+                  : {}),
+                ...(committedDuringPreparation.turn ? { turn: committedDuringPreparation.turn } : {}),
+                adapterInput: Object.freeze({ ...claim.lineage.payload.adapter_input }),
+                signal: replayDispatchSignal,
+                replayOutcome: committedDuringPreparation.outcome,
+                observeSession(sessionID: string) {
+                  if (sessionID !== claim.lineage.payload.child_session_id) {
+                    throw new Error(`dispatch_agent replay Session identity drift for ${claim.lineage.dispatchID}`)
+                  }
+                },
+                commitSession() {
+                  return { artifactID: claim.lineage.artifactID }
+                },
+                releaseAdmission() {},
+              }
+            }
           } catch (error) {
-            admissionHold[Symbol.dispose]()
-            releaseDispatchAdmissionOnError(admission)
+            try {
+              if (isExecutionCancellationError(error) || error instanceof ControlLeaseFenceLostError) throw error
+              signal?.throwIfAborted()
+              admissionHold.signal.throwIfAborted()
+              settlePreparationFailure(DispatchOutcome.infrastructureFailure({
+                operation: "prepare-dispatch-admission",
+                message: error instanceof Error ? error.message : String(error),
+                errorName: error instanceof Error ? error.name : undefined,
+                recoveryAuthority: { occurrence_status: "occurrence_committed", dispatch_id: origin.dispatchID, dispatch_lineage_id: claim.lineage.artifactID },
+              }))
+            } finally {
+              releaseAdmission()
+            }
             throw error
-          }
-          const committedDuringPreparation = readDispatchLineageReplay({
-            taskID: ownershipTaskID,
-            lineage: claim.lineage,
-          })
-          if (committedDuringPreparation) {
-            if (committedDuringPreparation.descriptor) {
-              commitAcceptedDispatchLineage(claim.lineage, admission)
-            } else if (!releaseDispatchAdmission(admission)) {
-              throw new Error(`Dispatch terminal replay could not consume admission ${admission.leaseID}`)
-            }
-            admissionHold[Symbol.dispose]()
-            return {
-              dispatchID: claim.lineage.dispatchID,
-              deliverySliceRevisionIDs: [...claim.lineage.payload.delivery_slice_revision_ids],
-              ...(committedDuringPreparation.descriptor
-                ? { existingSessionID: claim.lineage.payload.child_session_id }
-                : {}),
-              ...(committedDuringPreparation.turn ? { turn: committedDuringPreparation.turn } : {}),
-              adapterInput: Object.freeze({ ...claim.lineage.payload.adapter_input }),
-              signal: replayDispatchSignal,
-              replayOutcome: committedDuringPreparation.outcome,
-              observeSession(sessionID: string) {
-                if (sessionID !== claim.lineage.payload.child_session_id) {
-                  throw new Error(`dispatch_agent replay Session identity drift for ${claim.lineage.dispatchID}`)
-                }
-              },
-              commitSession() {
-                return { artifactID: claim.lineage.artifactID }
-              },
-              releaseAdmission() {},
-            }
           }
           break
         }
@@ -2777,17 +2868,6 @@ export function createOrchestratorTools(input: {
       if (!admission || !admissionHold || !recordedLineage) {
         throw new Error(`dispatch_agent ${targetAgentID} failed to acquire its exact admission owner`)
       }
-      let admissionClosed = false
-      const closeAdmissionHold = () => {
-        if (admissionClosed) return
-        admissionClosed = true
-        admissionHold?.[Symbol.dispose]()
-      }
-      const releaseAdmission = () => {
-        if (admissionClosed) return
-        closeAdmissionHold()
-        releaseDispatchAdmissionOnError(admission!)
-      }
       const observeSession = (sessionID: string) => {
         if (recordedLineage && recordedLineage.payload.child_session_id !== sessionID) {
           throw new Error(
@@ -2800,11 +2880,13 @@ export function createOrchestratorTools(input: {
         deliverySliceRevisionIDs: [...(origin.deliverySliceRevisionIDs ?? [])],
         existingSessionID,
         ...(existingSessionID ? {} : { newSessionID: claimedSessionID }),
+        ...(preparedUseWorktree !== undefined ? { preparedUseWorktree } : {}),
         turn,
         adapterInput: Object.freeze({ ...exactAdapterInput }),
         signal: admissionHold.signal,
         ...(existingSessionID ? { continuationGuidance } : {}),
         observeSession,
+        settlePreparationFailure,
         commitSession(sessionID: string, descriptor: WorkerTurnDescriptor.Info) {
           observeSession(sessionID)
           const persistedDescriptor = WorkerTurnDescriptor.get({ id: descriptor.id, sessionID })
@@ -3009,6 +3091,7 @@ export function createOrchestratorTools(input: {
     // the combination while it is still only a call.
     bindToolDecisionDeclaration(decisionTool as object, {
       command: decisionToolName,
+      completionCommits: (args, result) => orchestratorDecisionToolResultCommits(decisionToolName, args, result),
       commits: (args) => {
         try {
           return (

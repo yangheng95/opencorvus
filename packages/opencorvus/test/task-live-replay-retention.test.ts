@@ -53,3 +53,35 @@ test("live replay retention expires a resuming cursor but never a fresh subscrib
   expect(fresh.expired).toBe(false)
   expect(fresh.expired ? [] : fresh.events.map((event) => event.liveSequence)).toEqual([4])
 })
+
+test("pending Tool snapshots replay the latest input per call and retire at real admission", () => {
+  const taskID = "tsk_pending_input_replay"
+  const snapshot = (id: string, raw: string) => ProtocolStore.dispatchEphemeral({
+    type: "message.part.updated", aggregate: "task", taskID, sessionID: "ses_input_replay",
+    source: "test.input-transport", orderKey: "message/input-replay",
+    payload: { part: {
+      id, sessionID: "ses_input_replay", messageID: "msg_input_replay", type: "tool", tool: "echo",
+      state: { status: "pending", raw },
+    } },
+  })
+  snapshot("prt_first", '{"value":"a')
+  snapshot("prt_second", '{"value":"b')
+  snapshot("prt_first", '{"value":"actual latest')
+  const replay = ProtocolStore.listTaskLiveEventsAfter(taskID, 0)
+  expect(replay).toMatchObject({ expired: false })
+  if (replay.expired) throw new Error("Fresh draft replay expired")
+  expect(replay.events.map((event) => event.payload?.part)).toEqual([
+    expect.objectContaining({ id: "prt_second", state: { status: "pending", raw: '{"value":"b' } }),
+    expect.objectContaining({ id: "prt_first", state: { status: "pending", raw: '{"value":"actual latest' } }),
+  ])
+  ProtocolStore.dispatchEphemeral({
+    type: "message.part.removed", aggregate: "task", taskID, sessionID: "ses_input_replay",
+    source: "test.input-transport", orderKey: "message/input-replay",
+    payload: { sessionID: "ses_input_replay", messageID: "msg_input_replay", partID: "prt_first", partType: "tool" },
+  })
+  const retired = ProtocolStore.listTaskLiveEventsAfter(taskID, 0)
+  expect(retired).toMatchObject({ expired: false })
+  if (retired.expired) throw new Error("Fresh draft retirement replay expired")
+  expect(retired.events.map((event) => event.type)).toEqual(["message.part.updated", "message.part.removed"])
+  expect(retired.events[0]!.payload?.part).toMatchObject({ id: "prt_second", state: { status: "pending" } })
+})

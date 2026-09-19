@@ -3,6 +3,7 @@ import z from "zod"
 import {
   orchestratorCommittedDecisionInParts,
   orchestratorDecisionToolCompletionEffect,
+  orchestratorDecisionToolResultCommits,
 } from "@/orchestrator/decision-tool-names"
 import { SessionLoop } from "@/session/loop"
 import {
@@ -41,6 +42,50 @@ const providerModel = {
  * Provider step that resolves the Tool surface.
  */
 describe("assistant-turn decision coordination", () => {
+  const failure = {
+    kind: "infrastructure_failure", operation: "adapter_prepare", message: "Preparation failed",
+    recovery_authority: { occurrence_status: "occurrence_not_committed" },
+  }
+
+  for (const tool of ["dispatch_agent", "dispatch_agents"] as const) {
+    test(`${tool} infrastructure completion permits a follow-up decision on live and reopened surfaces`, async () => {
+      const result = tool === "dispatch_agent" ? failure : { members: [
+        { member_index: 0, name: "worker", target: "worker", status: "completed", outcome: failure },
+      ] }
+      const coordinator = new ToolTurnExecutionCoordinator()
+      const returned = await coordinator.run("ordinary", async () => result, {
+        command: tool, commits: true,
+        completionCommits: (value) => orchestratorDecisionToolResultCommits(tool, {}, value),
+      })
+      expect(returned).toEqual(result)
+      expect(orchestratorDecisionToolCompletionEffect({ tool, stateInput: {}, stateOutput: JSON.stringify(result) }))
+        .toBe("requires_followup_decision")
+      expect(await attempt(coordinator, "no_action")).toBe("committed")
+      const persisted = [{ type: "tool", tool, state: { status: "completed", input: {}, output: JSON.stringify(result) } }]
+      const reopened = new ToolTurnExecutionCoordinator({ committedDecision: orchestratorCommittedDecisionInParts(persisted) })
+      expect(await attempt(reopened, "no_action")).toBe("committed")
+      expect(orchestratorCommittedDecisionInParts([...persisted, completedToolPart("no_action")])).toBe("no_action")
+    })
+  }
+
+  test("a mixed collection retains the accepted member's decision", () => {
+    expect(orchestratorDecisionToolCompletionEffect({
+      tool: "dispatch_agents", stateInput: {}, stateOutput: JSON.stringify({ members: [
+        { member_index: 0, name: "failed", target: "worker", status: "completed", outcome: failure },
+        { member_index: 1, name: "accepted", target: "worker", status: "completed", outcome: { kind: "accepted", session_id: "ses_child", dispatch_lineage_id: "art_lineage" } },
+      ] }),
+    })).toBe("satisfies_current_epoch")
+  })
+
+  test("malformed completed dispatch receipts expose their contract errors", () => {
+    expect(() => orchestratorCommittedDecisionInParts([
+      { type: "tool", tool: "dispatch_agent", state: { status: "completed", input: {} } },
+    ])).toThrow("Completed dispatch_agent receipt is missing its durable output")
+    expect(() => orchestratorCommittedDecisionInParts([
+      { type: "tool", tool: "dispatch_agent", state: { status: "completed", input: {}, output: "invalid JSON" } },
+    ])).toThrow(SyntaxError)
+  })
+
   async function attempt(coordinator: ToolTurnExecutionCoordinator, command: string, commits = true) {
     try {
       await coordinator.run("ordinary", async () => `${command}:ok`, { command, commits })
@@ -110,7 +155,9 @@ describe("assistant-turn decision coordination", () => {
   const completedToolPart = (tool: string, input: unknown = {}) => ({
     type: "tool",
     tool,
-    state: { status: "completed", input },
+    state: { status: "completed", input, output: JSON.stringify(tool === "dispatch_agents"
+      ? { members: [{ member_index: 0, name: "worker", target: "worker", status: "completed", outcome: { kind: "accepted", session_id: "ses_worker", dispatch_lineage_id: "art_lineage" } }] }
+      : { kind: "accepted", session_id: "ses_worker", dispatch_lineage_id: "art_lineage" }) },
   })
 
   test("carries the turn's decision across the Provider step that resolves a new surface", async () => {
@@ -145,19 +192,6 @@ describe("assistant-turn decision coordination", () => {
   })
 
   test("reads a committed decision out of recorded Tool parts the way the reduction does", () => {
-    expect(orchestratorCommittedDecisionInParts([])).toBeUndefined()
-    expect(orchestratorCommittedDecisionInParts([{ type: "text" } as any])).toBeUndefined()
-    // Still running, so nothing is committed yet.
-    expect(
-      orchestratorCommittedDecisionInParts([{ type: "tool", tool: "dispatch_agent", state: { status: "running" } }]),
-    ).toBeUndefined()
-    // Owes the next decision, so it claims nothing.
-    expect(orchestratorCommittedDecisionInParts([completedToolPart("question", { question: "?" })])).toBeUndefined()
-    expect(
-      orchestratorCommittedDecisionInParts([completedToolPart("manage_task", { action: "add_goal" })]),
-    ).toBeUndefined()
-    // Unclassifiable recorded input is a call that failed on its own terms.
-    expect(orchestratorCommittedDecisionInParts([completedToolPart("respond_agent_coordination", {})])).toBeUndefined()
     expect(orchestratorCommittedDecisionInParts([completedToolPart("no_action")])).toBe("no_action")
     expect(
       orchestratorCommittedDecisionInParts([

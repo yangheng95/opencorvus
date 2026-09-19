@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "frozen_at": "2026-09-13T05:08:00+08:00",
+  "reason": "User required all benchmark execution to stop until infrastructure defects are repaired",
+  "execution_root": "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100",
+  "execution_commit": "51b780ee715aba2d80e30eaf5a89bae1ed62f3cb",
+  "model_execution": {
+    "base_coordinator_pid": 52668,
+    "native_supervisor_pid": 55075,
+    "stopped": true,
+    "remaining_non_viewer_processes": 0
+  },
+  "termination_observation": {
+    "sigterm_did_not_settle_parent_processes": true,
+    "base_spawned_after_sigterm": {
+      "case_index": 18,
+      "run_id": "89e4297e-4eaf-4386-be9f-9b7a63a5c6b3"
+    },
+    "confirmed_execution_tree_required_sigkill": true
+  },
+  "viewer": {
+    "pid": 52670,
+    "url": "http://localhost:8769/ui",
+    "retained": true,
+    "snapshot_generated_at": 1789246734913
+  },
+  "viewer_catalog_transition": {
+    "updated_at": 1789267597445,
+    "model_execution_performed": false,
+    "attempts": 18,
+    "eligible_scored": 13,
+    "strict_passes": 2,
+    "viewer_invalid_including_interrupted": 3,
+    "awaiting_batch_settlement": 2,
+    "interrupted": 1,
+    "rendered_page_verified": true
+  },
+  "frozen_visible_state": {
+    "native": {
+      "scored": 56,
+      "strict_passes": 12,
+      "invalid_or_interrupted": 2,
+      "pending": 42
+    },
+    "base_old_catalog_projection": {
+      "scored": 0,
+      "invalid_or_interrupted": 18,
+      "pending": 82
+    }
+  },
+  "interpretation": [
+    "The frozen initial Base projection used the old catalog semantics; the retained viewer now reads the corrected catalog.",
+    "The corrected catalog exposes 13 eligible scores; real invalid, failure, awaiting, and interrupted states remain distinct.",
+    "No model benchmark may resume without a new explicit user instruction."
+  ]
+}

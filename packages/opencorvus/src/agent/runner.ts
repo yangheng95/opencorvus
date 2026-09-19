@@ -130,6 +130,7 @@ import { coordinationHandoffPrompt } from "@/prompt/fragments/coordination-hando
 import { requireTask } from "@/engine/store"
 import {
   DispatchTurnSchema,
+  renderDispatchContinuationTurn,
   controlTextSHA256,
   taskRequestSHA256,
   type DispatchTurn,
@@ -1178,6 +1179,10 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
   } else {
     parts = [{ type: "text", text: userText }]
   }
+  if (dispatchTurn?.kind === "initial" && (dispatchTurn.acceptance_repair || dispatchTurn.preparation_recovery)) {
+    const obligation = renderDispatchContinuationTurn({ turn: dispatchTurn, guidance: "" })
+    if (obligation) parts.push({ type: "text", text: obligation })
+  }
   // Capability gate for low-level provider-bound callers that still pass
   // explicit file parts. Task-worker agent context should normally use
   // link/index refs, but the runner must still refuse media parts that the
@@ -1756,7 +1761,7 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
         registerLifecycle(await input.onSessionCreated(session))
       }
       const persistedUserMessage = await persistedUserMessageCompletion.complete()
-      if (descriptorDispatchTurn?.kind === "continuation" && descriptorDispatchTurn.acceptance_repair) {
+      if (descriptorDispatchTurn?.acceptance_repair) {
         const repair = descriptorDispatchTurn.acceptance_repair
         const ledger = readTaskAcceptanceLedgerArtifact(input.taskID, repair.ledger_revision_artifact_id)
         if (
@@ -1765,22 +1770,24 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
         ) {
           throw new AgentRunError(kind, `acceptance repair checkpoint does not match its ledger revision`)
         }
-        const checkpointSource = await MessageStore.get({
-          sessionID: session.id,
-          messageID: descriptor.payload.messageAuthority.user_message_id,
-        })
-        if (checkpointSource.info.role !== "user") {
-          throw new AgentRunError(kind, `acceptance repair checkpoint source must be a user Message`)
+        if (repair.checkpoint_required) {
+          const checkpointSource = await MessageStore.get({
+            sessionID: session.id,
+            messageID: descriptor.payload.messageAuthority.user_message_id,
+          })
+          if (checkpointSource.info.role !== "user") {
+            throw new AgentRunError(kind, `acceptance repair checkpoint source must be a user Message`)
+          }
+          await createAcceptanceEpochCheckpoint({
+            sessionID: session.id,
+            source: checkpointSource.info,
+            taskID: input.taskID,
+            ledgerRevisionArtifactID: ledger.artifactID,
+            gap: ledger.revision.gap,
+            executionEpoch: repair.execution_epoch,
+            workflowNodeID: descriptorDispatchTurn.workflow_node_id,
+          })
         }
-        await createAcceptanceEpochCheckpoint({
-          sessionID: session.id,
-          source: checkpointSource.info,
-          taskID: input.taskID,
-          ledgerRevisionArtifactID: ledger.artifactID,
-          gap: ledger.revision.gap,
-          executionEpoch: repair.execution_epoch,
-          workflowNodeID: descriptorDispatchTurn.workflow_node_id,
-        })
       }
       if (input.signal?.aborted) {
         throw new AgentRunError(kind, "aborted before runtime-ready notification")

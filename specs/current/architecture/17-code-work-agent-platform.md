@@ -660,7 +660,13 @@ The concrete context rules are:
   with an exact pillar and profile; it never mounts the package's domain Tools.
 - A Task scheduler receives the active package scheduler projection plus its
   platform scheduler base Tools. A Task Agent receives only the exact active
-  package Agent projection constrained by its runtime-template upper bound.
+  package Agent projection constrained by its runtime-template upper bound. A
+  visible exact Skill directive may expose the existing `skill` loader on that
+  turn only when the named production Skill is already granted to that exact
+  scheduler or Agent projection. The Skill mount owner revalidates the package,
+  Agent identity, projection hash, project directory, Tool availability, and
+  permission before exposing it; the directive does not load content or add a
+  capability grant.
 - Selector Skills are discovery material for Task ownership. Production Skills
   are execution material granted to exact projected scheduler/Agent identities.
   They are never merged as one universal Skill pool.

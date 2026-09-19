@@ -1,4 +1,7 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
+import { recordEngineArtifact } from "@/engine/artifact"
+import { exactEngineArtifactLocator } from "@/artifact-catalog"
+import { DispatchTurnSchema } from "@/orchestrator/dispatch-turn-projection"
 import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
 import {
@@ -74,7 +77,7 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-test("fresh delegated worker commits Session, input authority, lineage, and occurrence before provider processing", async () => {
+test.each([false, true])("fresh worker commits input and reaches provider processing with acceptance obligation=%s", async (withRepair) => {
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
@@ -187,7 +190,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
 
       const dispatchID = Identifier.ascending("artifact")
       const freshSessionID = Identifier.deterministic("session", `fresh-runner-authority\0${dispatchID}`)
-      const turn = {
+      const baseTurn = {
         kind: "initial" as const,
         current_dispatch_id: dispatchID,
         workflow_binding: workflowBinding,
@@ -201,6 +204,25 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
           request_sha256: taskRequestSHA256(taskRequest),
           initial_control_text_parts: [],
         },
+      }
+      let turn = DispatchTurnSchema.parse(baseTurn)
+      if (withRepair) {
+        const evidenceID = recordEngineArtifact({ taskID, kind: "expert_output", label: "reviewed source",
+          payload: { result: "requires verification" }, timeCreated: now })
+        const criterion = {
+          criterion_id: "verify-charter", state: "open", disposition: "unresolved", finding: "Verify the charter.",
+          responsibility: { kind: "workflow_node", workflow_id: "planner-parallel-delivery", workflow_node_id: "base-planner" },
+          observation_evidence_locators: [exactEngineArtifactLocator({ taskID, artifactID: evidenceID })],
+          repair_evidence_locators: [], resolution_evidence_locators: [], invalidating_evidence_locators: [], irreducible_blocker_evidence_locators: [],
+          repair_action: { operation: "verify", target: "charter", expected_evidence_kind: "verified-charter", parameters: {}, identity_sha256: "a".repeat(64) },
+        }
+        const gap = { gap_id: "gap-first-worker", reviewed_terminal_lifecycle_reference: { terminalEventID: "pev_reviewed" }, criteria: [criterion] }
+        const ledgerID = recordEngineArtifact({ taskID, kind: "task_acceptance_ledger", label: "current acceptance obligation",
+          payload: { protocol: "task-acceptance-ledger-v2", revision: 1, task_id: taskID, execution_epoch: 1,
+            previous_revision_artifact_id: null, gap, time_recorded: now }, timeCreated: now })
+        turn = DispatchTurnSchema.parse({ ...baseTurn, evidence_locators: criterion.observation_evidence_locators,
+          acceptance_repair: { gap_id: gap.gap_id, ledger_revision_artifact_id: ledgerID, execution_epoch: 1,
+            criteria: [criterion], checkpoint_required: false } })
       }
       const origin = createDispatchLineageOrigin({
         dispatchID,
@@ -220,7 +242,6 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
       const lineage = recordTestDispatchLineage({ origin, childSessionID: freshSessionID })
 
       let processorStarts = 0
-      let firstAssistantMessageID: string | undefined
       let canonicalFinalMessageID: string | undefined
       let committedSessionID: string | undefined
       let lineageArtifactID: string | undefined
@@ -235,9 +256,14 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
             return undefined
           },
           async process() {
+            if (withRepair) {
+              const source = await MessageStore.get({ sessionID: assistant.sessionID, messageID: assistant.parentID })
+              const text = source.parts.filter((part) => part.type === "text").map((part) => part.text).join("\n")
+              expect(text).toContain(taskRequest)
+              expect(text).toContain("gap-first-worker")
+            }
             const firstStep = processorStarts === 1
-            if (firstStep) firstAssistantMessageID = assistant.id
-            else canonicalFinalMessageID = assistant.id
+            if (!firstStep) canonicalFinalMessageID = assistant.id
             await Session.updatePart({
               id: Identifier.ascending("part"),
               sessionID: assistant.sessionID,
@@ -317,7 +343,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
               messages: [
                 {
                   info: { id: descriptor?.payload.messageAuthority.user_message_id, role: "user" },
-                  parts: [{ type: "text" }],
+                  parts: [{ type: "text" }, ...(withRepair ? [{ type: "text", text: expect.stringContaining("gap-first-worker") }] : [])],
                 },
               ],
               descriptor: {
@@ -338,7 +364,6 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
 
         expect(result).toEqual({ sessionID: committedSessionID, finalMessageID: canonicalFinalMessageID })
         expect(processorStarts).toBe(2)
-        expect(result.finalMessageID).not.toBe(firstAssistantMessageID)
         expect(await MessageStore.get({ sessionID: committedSessionID!, messageID: result.finalMessageID })).toMatchObject({
           info: { id: canonicalFinalMessageID, parentID: expect.any(String), finish: "stop" },
           parts: [{ type: "text", text: "canonical charter complete" }],

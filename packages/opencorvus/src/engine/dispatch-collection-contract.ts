@@ -20,6 +20,24 @@ const DispatchCollectionTeamMemberSchema = z
   })
   .strict()
 
+const acceptanceRepairSelectionShape = {
+  acceptance_gap_id: z.string().min(1).optional(),
+  criterion_ids: z.array(z.string().min(1)).min(1).max(64).optional(),
+}
+
+function validateAcceptanceRepairSelection(
+  turn: { acceptance_gap_id?: string; criterion_ids?: string[] },
+  context: z.RefinementCtx,
+) {
+  if ((turn.acceptance_gap_id === undefined) !== (turn.criterion_ids === undefined)) {
+    context.addIssue({
+      code: "custom",
+      path: [turn.acceptance_gap_id === undefined ? "acceptance_gap_id" : "criterion_ids"],
+      message: "acceptance gap and criteria must be supplied together",
+    })
+  }
+}
+
 const DispatchCollectionContinuationTurnSchema = z
   .object({
     kind: z.literal("continuation"),
@@ -29,19 +47,10 @@ const DispatchCollectionContinuationTurnSchema = z
     ]),
     guidance: z.string().trim().min(1),
     evidence_locators: EvidenceLocatorInputListSchema.default([]),
-    acceptance_gap_id: z.string().min(1).optional(),
-    criterion_ids: z.array(z.string().min(1)).min(1).max(64).optional(),
+    ...acceptanceRepairSelectionShape,
   })
   .strict()
-  .superRefine((turn, context) => {
-    if ((turn.acceptance_gap_id === undefined) !== (turn.criterion_ids === undefined)) {
-      context.addIssue({
-        code: "custom",
-        path: [turn.acceptance_gap_id === undefined ? "acceptance_gap_id" : "criterion_ids"],
-        message: "acceptance gap and criteria must be supplied together",
-      })
-    }
-  })
+  .superRefine(validateAcceptanceRepairSelection)
 
 export const PersistedDispatchCollectionMemberInputSchema = z
   .object({
@@ -56,8 +65,10 @@ export const PersistedDispatchCollectionMemberInputSchema = z
               workflow_subject: DispatchWorkflowSubjectSchema,
               use_worktree: z.boolean(),
               input: z.record(z.string(), z.unknown()),
+              ...acceptanceRepairSelectionShape,
             })
-            .strict(),
+            .strict()
+            .superRefine(validateAcceptanceRepairSelection),
           DispatchCollectionContinuationTurnSchema,
         ]),
       })

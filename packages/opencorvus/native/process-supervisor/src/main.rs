@@ -47,6 +47,8 @@ mod windows_helper {
     enum Request {
         Shell {
             command: String,
+            #[serde(default)]
+            terminate_children_on_root_exit: bool,
             shell: String,
             cwd: Option<String>,
             cancel_file: String,
@@ -60,6 +62,8 @@ mod windows_helper {
         },
         Command {
             executable: String,
+            #[serde(default)]
+            terminate_children_on_root_exit: bool,
             args: Vec<String>,
             #[serde(default)]
             detached: bool,
@@ -77,6 +81,7 @@ mod windows_helper {
 
     struct LaunchRequest {
         application: String,
+        terminate_children_on_root_exit: bool,
         command_line: String,
         cwd: Option<String>,
         cancel_file: String,
@@ -107,6 +112,8 @@ mod windows_helper {
         target_pid: u32,
         target_process_instance_id: &'a str,
         runtime_occurrence_id: &'a str,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        terminate_children_on_root_exit: Option<bool>,
     }
 
     #[derive(Serialize)]
@@ -403,6 +410,7 @@ mod windows_helper {
         match request {
             Request::Shell {
                 command,
+                terminate_children_on_root_exit,
                 shell,
                 cwd,
                 cancel_file,
@@ -422,6 +430,7 @@ mod windows_helper {
                     .join(" ");
                 LaunchRequest {
                     application: shell,
+                    terminate_children_on_root_exit,
                     command_line,
                     cwd,
                     cancel_file,
@@ -437,6 +446,7 @@ mod windows_helper {
             }
             Request::Command {
                 executable,
+                terminate_children_on_root_exit,
                 args,
                 detached,
                 cwd,
@@ -456,6 +466,7 @@ mod windows_helper {
                     .join(" ");
                 LaunchRequest {
                     application: executable,
+                    terminate_children_on_root_exit,
                     command_line,
                     cwd,
                     cancel_file,
@@ -618,6 +629,7 @@ mod windows_helper {
             &request.runtime_occurrence_id,
             target.pid,
             &target_instance_id,
+            request.terminate_children_on_root_exit,
         ) {
             return Err(settle_target_after_failure(error, &request, &target));
         }
@@ -666,6 +678,9 @@ mod windows_helper {
             ));
         }
         if let Some(job) = target.job.as_ref() {
+            if request.terminate_children_on_root_exit {
+                terminate_job_once(job.0, &mut cancellation_applied)?;
+            }
             if let Err(error) = wait_for_job_active_process_zero(
                 job.0,
                 &request.cancel_file,
@@ -727,6 +742,7 @@ mod windows_helper {
         runtime_occurrence_id: &str,
         target_pid: u32,
         target_process_instance_id: &str,
+        terminate_children_on_root_exit: bool,
     ) -> Result<(), String> {
         let helper_pid = unsafe { GetCurrentProcessId() };
         let temporary_file = format!("{ready_file}.{helper_pid}.tmp");
@@ -737,6 +753,7 @@ mod windows_helper {
             target_pid,
             target_process_instance_id,
             runtime_occurrence_id,
+            terminate_children_on_root_exit: terminate_children_on_root_exit.then_some(true),
         };
         let mut file = fs::File::create(&temporary_file)
             .map_err(|error| format!("create ready marker failed: {error}"))?;
@@ -975,6 +992,7 @@ mod windows_helper {
             let executable = env::current_exe().expect("resolve current test executable");
             let request = LaunchRequest {
                 application: executable.to_string_lossy().into_owned(),
+                terminate_children_on_root_exit: false,
                 command_line: quote_arg(&executable.to_string_lossy()),
                 cwd: None,
                 cancel_file: String::new(),
@@ -1013,6 +1031,7 @@ mod windows_helper {
             let command = env::var("COMSPEC").expect("resolve Windows command interpreter");
             let root_request = LaunchRequest {
                 application: command.clone(),
+                terminate_children_on_root_exit: false,
                 command_line: format!("{} /d /s /c exit 7", quote_arg(&command)),
                 cwd: None,
                 cancel_file: String::new(),
@@ -1027,6 +1046,7 @@ mod windows_helper {
             };
             let descendant_request = LaunchRequest {
                 application: command.clone(),
+                terminate_children_on_root_exit: false,
                 command_line: format!("{} /d /s /c ping 127.0.0.1 -n 2 >NUL", quote_arg(&command)),
                 cwd: None,
                 cancel_file: String::new(),

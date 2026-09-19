@@ -2,7 +2,7 @@ import { Provider } from "@/provider/provider"
 import { ProviderLLM } from "@/provider/llm"
 import { Log } from "@/util/log"
 import { Bus } from "@/bus"
-import type { ModelMessage, StopCondition, Tool, ToolSet } from "ai"
+import type { ModelMessage, PrepareStepFunction, StopCondition, Tool, ToolSet } from "ai"
 // Use the wrapped streamText from @/llm/api — its Proxy returns
 // `abortableIterable(fullStream, composed)`, which is the only thing that
 // rescues a Bun-fetch-backed reader.read() from parking forever when the
@@ -63,6 +63,8 @@ export namespace LLM {
      */
     toolChoice?: "auto" | "required" | "none" | { type: "tool"; toolName: string }
     stream?: TextHooks
+    /** Persist the Session step boundary before the SDK starts its Provider request. */
+    prepareStep?: PrepareStepFunction<ToolSet>
     runtimeSystemMode?: "complete"
   }
 
@@ -303,6 +305,7 @@ export namespace LLM {
     }
 
     const result = streamText({
+      prepareStep: input.prepareStep,
       onError(event) {
         void input.stream?.onError?.(event)
         const error = Message.fromError(event.error, { providerID: input.model.providerID })

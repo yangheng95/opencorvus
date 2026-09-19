@@ -1,6 +1,9 @@
 import type { PromptAttachmentRef } from "@/agent/prompt-projection"
 import type { ProjectedAgentWorkScope } from "@/agent/projected-agent-work-scope"
 import { requireTask } from "@/engine/store"
+import { Instance } from "@/project/instance"
+import { ProjectRuntimePaths } from "@/project/runtime-paths"
+import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import type { FrontendDesignMode } from "./schema"
 
 export interface FrontendDesignInputRefs {
@@ -19,6 +22,7 @@ export interface FrontendDesignPromptProjection {
   taskRequest: string
   attachments: PromptAttachmentRef[]
   observationSections: string[]
+  artifactPaths: ReturnType<typeof ProjectRuntimePaths.frontendDesignPaths>
 }
 
 /**
@@ -28,6 +32,10 @@ export interface FrontendDesignPromptProjection {
  */
 export function projectFrontendDesignInput(input: FrontendDesignInputRefs): FrontendDesignPromptProjection {
   const task = requireTask(input.taskID)
+  const artifactPaths = ProjectRuntimePaths.frontendDesignPaths(
+    taskPrimaryProjectRoot(input.taskID, { activeProjectID: Instance.project.id }),
+    input.taskID,
+  )
   const observationSections: string[] = []
   observationSections.push(
     [
@@ -46,5 +54,6 @@ export function projectFrontendDesignInput(input: FrontendDesignInputRefs): Fron
     taskRequest: task.request,
     attachments: input.attachments,
     observationSections,
+    artifactPaths,
   }
 }

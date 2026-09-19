@@ -1,5 +1,6 @@
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
+import { ControlLeaseFenceLostError } from "@/engine/control-lease"
 import { jsonSchema, tool } from "ai"
 import type { JSONSchema7 } from "@ai-sdk/provider"
 import z from "zod"
@@ -65,6 +66,8 @@ type DispatchAgentLineageHandleBase = {
   readonly existingSessionID?: string
   /** Preallocated identity for a new worker Session, claimed before any physical effect. */
   readonly newSessionID?: string
+  /** Placement retained from the initial invocation when resuming failed preparation. */
+  readonly preparedUseWorktree?: boolean
   readonly adapterInput: Readonly<Record<string, unknown>>
   /** Combined caller and fenced admission cancellation for the physical effect. */
   readonly signal: AbortSignal
@@ -81,6 +84,7 @@ export type LiveDispatchAgentLineageHandle = DispatchAgentLineageHandleBase & {
   readonly replayOutcome?: never
   /** Exact visible user-Turn authority and immutable workflow occurrence for this dispatch. */
   readonly turn: DispatchTurn
+  settlePreparationFailure(outcome: DispatchOutcomeResult): DispatchOutcomeResult
 }
 
 export type DispatchAgentLineageHandle =
@@ -443,10 +447,32 @@ export function createDispatchAgentTool(input: {
     z
       .object({
         kind: z.literal("prior_dispatch"),
-        continuation_dispatch_id: z.string().min(1),
+        continuation_dispatch_id: z.string().min(1).describe("Exact dispatch ID of this worker Session’s latest accepted physical Turn. After a continuation, use its current dispatch ID; the original logical workflow occurrence ID is not the current Turn. If no worker Turn was accepted, use the exact settled pre-child preparation-failure dispatch ID to recover the reserved worker. Stale accepted-Turn source identities are rejected; the Host never substitutes a newer source."),
       })
       .strict(),
   ])
+  const acceptanceRepairShape = input.acceptanceRepair
+    ? {
+        acceptance_gap_id: z
+          .literal(input.acceptanceRepair.revision.gap.gap_id)
+          .describe("Exact current Mission acceptance gap consumed by this worker Turn."),
+        criterion_ids: z
+          .array(
+            z
+              .string()
+              .refine(
+                (criterionID) =>
+                  input.acceptanceRepair!.revision.gap.criteria.some(
+                    (criterion) => criterion.state === "open" && criterion.criterion_id === criterionID,
+                  ),
+                "Criterion is not open in the current Mission acceptance gap.",
+              ),
+          )
+          .min(1)
+          .max(64)
+          .describe("Only current gap criteria this worker Turn must consume."),
+      }
+    : {}
   const continuationTurnSchema = z
     .object({
       kind: z.literal("continuation"),
@@ -459,28 +485,7 @@ export function createDispatchAgentTool(input: {
       evidence_locators: EvidenceLocatorInputListSchema.default([]).describe(
         "Exact new durable evidence identities selected for this successor Turn. Name each Artifact by its exact revision or snapshot path only; the Host reads the digest, byte count, and media type itself, so never restate a content digest here. A session_message locator must be Task-owned and pair the Message with its actual producing Session; for a Mission acceptance-repair Task-root message, use the Task root Session authority and never missionSessionID.",
       ),
-      ...(input.acceptanceRepair
-        ? {
-            acceptance_gap_id: z
-              .literal(input.acceptanceRepair.revision.gap.gap_id)
-              .describe("Exact current Mission acceptance gap consumed by this continuation."),
-            criterion_ids: z
-              .array(
-                z
-                  .string()
-                  .refine(
-                    (criterionID) =>
-                      input.acceptanceRepair!.revision.gap.criteria.some(
-                        (criterion) => criterion.criterion_id === criterionID,
-                      ),
-                    "Criterion is not open in the current Mission acceptance gap.",
-                  ),
-              )
-              .min(1)
-              .max(64)
-              .describe("Only current gap criteria this worker continuation must consume."),
-          }
-        : {}),
+      ...acceptanceRepairShape,
     })
     .strict()
     .describe("Exact persisted continuation Turn authority and new guidance.")
@@ -524,6 +529,7 @@ export function createDispatchAgentTool(input: {
           kind: z.literal("initial"),
           workflow_subject: workflowSubjectSchema,
           use_worktree: useWorktreeSchema,
+          ...acceptanceRepairShape,
           input: publicAdapterInputSchema.describe(
             `Exact immutable ${agentID} adapter input for the initial worker Turn.`,
           ),
@@ -560,14 +566,21 @@ export function createDispatchAgentTool(input: {
       },
     },
   )
+  const acceptanceRepairGuidance = input.acceptanceRepair
+    ? ` Current acceptance repair: put \`acceptance_gap_id\` and \`criterion_ids\` inside \`dispatch.turn\`, beside \`kind\`; never put them beside \`dispatch.target\`. Use exactly \`acceptance_gap_id: ${JSON.stringify(input.acceptanceRepair.revision.gap.gap_id)}\` and select only from these open criterion IDs: ${input.acceptanceRepair.revision.gap.criteria
+        .filter((criterion) => criterion.state === "open")
+        .map((criterion) => JSON.stringify(criterion.criterion_id))
+        .join(", ")}.`
+    : ""
 
   const dispatchTool = tool({
     description:
       "Single scheduler agent dispatch tool. In dispatch, use target to select an exact projected worker identity. Use turn.kind=initial with workflow_subject and target-specific turn.input for a first node occurrence. Use turn.kind=continuation with one explicit lineage authority, guidance, and evidence_locators only for a successor Turn. " +
       "A Task has one immutable workflow binding: after the first virtual-workflow initial dispatch commits, every later initial dispatch must use a node from that same workflow; never switch to direct. Direct initial dispatches are only for a Task that has not selected a virtual workflow. " +
-      "Every call must declare use_worktree. Concurrent write-capable Task dispatches use managed worktrees when repository ownership requires isolation; read-only or proven-disjoint dispatches may use false. " +
+      "Every initial Turn must declare turn.use_worktree. Concurrent write-capable Task dispatches use managed worktrees when repository ownership requires isolation; read-only or proven-disjoint dispatches may use false. " +
       "A newly started worker returns accepted as soon as its durable lineage and Session exist; continue the root control Turn without waiting for that worker. A fast worker may instead return terminal_success, domain_incomplete, domain_blocked, partial, infrastructure_failure, or a coordination request. domain_incomplete carries the exact durable but incomplete domain Artifact and never opens workflow successors. domain_blocked carries the exact domain Artifact and unanswered blocker Question occurrence and also keeps successors closed. terminal_success is already terminal: never call wait for it; discover persisted domain facts through artifact_search, read each artifact_locator_ref completely, and select semantic sources with artifact_read_ref. " +
-      "This replaces separate visible worker-stage tools such as requirements, architect, build, visual_qa, integrity, fact_check, research, workload, intent analysis, and explore.",
+      "This replaces separate visible worker-stage tools such as requirements, architect, build, visual_qa, integrity, fact_check, research, workload, intent analysis, and explore." +
+      acceptanceRepairGuidance,
     inputSchema: providerInputSchema,
     outputSchema: DispatchOutcomeSchema,
     execute: async (toolInput, options) => {
@@ -580,6 +593,8 @@ export function createDispatchAgentTool(input: {
                 kind: "initial"
                 workflow_subject: unknown
                 use_worktree: boolean
+                acceptance_gap_id?: string
+                criterion_ids?: string[]
                 input: Record<string, unknown>
               }
             | {
@@ -608,22 +623,17 @@ export function createDispatchAgentTool(input: {
       const continuationGuidance = continuationTurn?.guidance
       const continuationEvidenceLocators = continuationTurn?.evidence_locators
       const acceptanceRepair = input.acceptanceRepair
-        ? continuationTurn?.acceptance_gap_id && continuationTurn.criterion_ids
+        ? turn.acceptance_gap_id && turn.criterion_ids
           ? {
-              gap_id: continuationTurn.acceptance_gap_id,
+              gap_id: turn.acceptance_gap_id,
               ledger_revision_artifact_id: input.acceptanceRepair.artifactID,
               execution_epoch: input.acceptanceRepair.executionEpoch,
-              criterion_ids: continuationTurn.criterion_ids,
+              criterion_ids: turn.criterion_ids,
             }
           : undefined
         : undefined
       if (input.acceptanceRepair && !acceptanceRepair) {
-        throw new Error(`dispatch_agent acceptance-repair continuation is missing its current gap or criteria.`)
-      }
-      if (input.acceptanceRepair && initialTurn) {
-        throw new Error(
-          `dispatch_agent must continue an existing workflow occurrence while acceptance gap ${input.acceptanceRepair.revision.gap.gap_id} is active.`,
-        )
+        throw new Error(`dispatch_agent acceptance-repair Turn is missing its current gap or criteria.`)
       }
       const workflowSubject = initialTurn?.workflow_subject
       const targetInput = initialTurn?.input ?? {}
@@ -706,7 +716,7 @@ export function createDispatchAgentTool(input: {
         const useWorktree = dispatch.existingSessionID
           ? path.resolve((await Session.get(dispatch.existingSessionID)).directory) !==
             path.resolve(taskPrimaryProjectRoot(input.taskID))
-          : (initialTurn?.use_worktree ?? false)
+          : (dispatch.preparedUseWorktree ?? initialTurn?.use_worktree ?? false)
         const executorTargetInput = structuredClone(dispatch.adapterInput)
         const frozenTargetInput = DispatchAdapterContractRegistry.withDeliverySliceRevisionIDs(
           projectedAgent.identity.dispatchAdapterID,
@@ -754,6 +764,7 @@ export function createDispatchAgentTool(input: {
             return committed
           },
           releaseAdmission: () => dispatch.releaseAdmission(),
+          settlePreparationFailure: (outcome) => dispatch.settlePreparationFailure(outcome),
         }
         if (dispatch.existingSessionID) {
           childSessionID = dispatch.existingSessionID
@@ -774,7 +785,8 @@ export function createDispatchAgentTool(input: {
           const parsed = DispatchAdapterContractRegistry.outputSchema(projectedAgent.identity.dispatchAdapterID).parse(
             outcome,
           )
-          if (parsed.kind !== "accepted" && (parsed.kind !== "infrastructure_failure" || parsed.session_id)) {
+          if (parsed.kind !== "accepted") {
+            if (parsed.kind === "infrastructure_failure" && !parsed.session_id) return dispatch.settlePreparationFailure(parsed)
             return settleDispatchOrReturnExisting({
               taskID: input.taskID,
               dispatchID: dispatch.dispatchID,
@@ -998,7 +1010,8 @@ export function createDispatchAgentTool(input: {
           },
         })
       } catch (error) {
-        openedDispatch?.releaseAdmission()
+        try {
+        if (error instanceof ControlLeaseFenceLostError) throw error
         if (error instanceof TaskWorkflowBindingConflictError) {
           return DispatchOutcome.infrastructureFailure({
             operation: "workflow_binding_initial_claim",
@@ -1069,12 +1082,17 @@ export function createDispatchAgentTool(input: {
           throw error
         }
         if (!dispatchID) throw error
-        return DispatchOutcome.infrastructureFailure({
+        const failure = DispatchOutcome.infrastructureFailure({
           operation: `${projectedAgent.identity.dispatchAdapterID}_adapter`,
           message: error instanceof Error ? error.message : String(error),
           sessionID: childSessionID,
           recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID: input.taskID, dispatchID }),
         })
+        if (!childSessionID && openedDispatch && !openedDispatch.replayOutcome) return openedDispatch.settlePreparationFailure(failure)
+        return settleDispatchOrReturnExisting({ taskID: input.taskID, dispatchID, outcome: failure }).payload.outcome
+        } finally {
+          openedDispatch?.releaseAdmission()
+        }
       }
     },
   })

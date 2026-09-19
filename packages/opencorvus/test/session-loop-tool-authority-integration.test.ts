@@ -155,7 +155,7 @@ describe("SessionLoop Tool execution authority integration", () => {
               tools: Object.keys(input.tools),
               system: input.system.join("\n"),
             }).toEqual({
-              tools: ["capability_search", "panel_complete_mission", "panel_create_task", "panel_query_task", "panel_query_task_artifacts", "panel_read_task_artifact"],
+              tools: ["capability_search", "panel_complete_mission", "panel_create_task", "panel_query_task", "panel_query_task_artifacts", "panel_read_task_artifact", "panel_read_task_message"],
               system: expect.stringContaining("panel_create_task"),
             })
             const params = {
@@ -206,7 +206,7 @@ describe("SessionLoop Tool execution authority integration", () => {
             } as Awaited<ReturnType<typeof LLM.stream>>
           }
           if (providerStep === 2) {
-            expect(Object.keys(input.tools).sort()).toEqual(["capability_search", "panel_complete_mission", "panel_create_task", "panel_query_task", "panel_query_task_artifacts", "panel_read_task_artifact", "panel_view_tasks"])
+            expect(Object.keys(input.tools).sort()).toEqual(["capability_search", "panel_complete_mission", "panel_create_task", "panel_query_task", "panel_query_task_artifacts", "panel_read_task_artifact", "panel_read_task_message", "panel_view_tasks"])
             return {
               fullStream: (async function* () {
                 yield { type: "start" }
@@ -370,6 +370,14 @@ describe("SessionLoop Tool execution authority integration", () => {
           time: { created: Date.now() },
           model: { providerID: model.providerID, modelID: model.id },
         })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: user.id,
+          type: "text",
+          text: "Keep the accepted dispatch decision across restart.",
+          kind: "user_content",
+        })
         const assistant = await Session.updateMessage({
           id: Identifier.ascending("message"),
           parentID: user.id,
@@ -394,7 +402,11 @@ describe("SessionLoop Tool execution authority integration", () => {
           state: {
             status: "completed",
             input: { agent: "base-developer" },
-            output: "dispatched",
+            output: JSON.stringify({
+              kind: "accepted",
+              session_id: Identifier.ascending("session"),
+              dispatch_lineage_id: Identifier.ascending("artifact"),
+            }),
             title: "Accepted dispatch",
             metadata: {},
             time: { start: Date.now(), end: Date.now() + 1 },
@@ -579,6 +591,14 @@ describe("SessionLoop Tool execution authority integration", () => {
           agent: "coding",
           time: { created: Date.now() },
           model: { providerID: model.providerID, modelID: model.id },
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: user.id,
+          type: "text",
+          text: "Write the durable Tool activity evidence.",
+          kind: "user_content",
         })
         const assistant = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -894,7 +914,9 @@ describe("SessionLoop Tool execution authority integration", () => {
           sessionID: session.id,
           messageID: user.id,
           type: "text",
-          text: "Write the projected restart evidence file.",
+          text: '@skill("base-delivery-method") Write the projected restart evidence file.',
+          source: "user",
+          kind: "user_content",
         })
         const contextTools = {}
         const owner = MCP.createScopedConnectionOwner(
@@ -1006,6 +1028,46 @@ describe("SessionLoop Tool execution authority integration", () => {
           activeLocalRefs: ["write"],
           })
         ).tools
+        expect({
+          tool: tools.skill?.description,
+          skills: SessionLoop.skillSurfaceForResolvedTools(tools)?.skills.map((skill) => skill.name),
+        }).toEqual({
+          tool: expect.stringContaining("Current agent: base-developer"),
+          skills: ["base-delivery-method"],
+        })
+        const skillInput = { name: "base-delivery-method" }
+        let resolveSkillAsked!: (request: PermissionAuthority.Request) => void
+        const skillAsked = new Promise<PermissionAuthority.Request>((resolve) => (resolveSkillAsked = resolve))
+        const stopSkillAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) =>
+          resolveSkillAsked(properties),
+        )
+        const skillPending = tools.skill!
+          .execute!(skillInput, {
+            toolCallId: "call_projected_worker_explicit_skill",
+            messages: [],
+            abortSignal: abort,
+          })
+          .catch((error) => error)
+        const firstSkillOutcome = await Promise.race([
+          skillPending.then((value) => ({ kind: "result" as const, value })),
+          skillAsked.then((request) => ({ kind: "permission" as const, request })),
+        ])
+        if (firstSkillOutcome.kind === "permission") {
+          await PermissionAuthority.reply({
+            requestID: firstSkillOutcome.request.id,
+            decision: "allow_once",
+            actorID: "projected-worker-skill-test",
+          })
+        }
+        stopSkillAsked()
+        const loadedSkill = firstSkillOutcome.kind === "result" ? firstSkillOutcome.value : await skillPending
+        if (loadedSkill instanceof Error) throw loadedSkill
+        expect(loadedSkill.output).toContain("# Base delivery method")
+        await processor.completeRecoveredToolPart({
+          toolCallID: "call_projected_worker_explicit_skill",
+          toolInput: skillInput,
+          output: loadedSkill,
+        })
         let resolveAsked!: (request: PermissionAuthority.Request) => void
         const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolveAsked = resolve))
         const stopAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) => resolveAsked(properties))

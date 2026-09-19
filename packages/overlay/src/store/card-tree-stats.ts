@@ -53,6 +53,7 @@ import {
   type ScreenshotBrowserItem,
 } from "../utils/screenshot-browser"
 import { aggregateUsageAcrossSessions, type UsageAggregate } from "../utils/format-usage"
+import { isNoActionDecisionToolPart } from "../utils/message-part"
 import {
   cardTreeStore,
   registerCardTreeOrderStatsHandler,
@@ -81,7 +82,7 @@ function isSkillTool(key: string): boolean {
 }
 
 function bumpForPart(part: any, counts: ActivityCounts): void {
-  if (!part) return
+  if (!part || isNoActionDecisionToolPart(part)) return
   if (part.type === "text" || part.type === "reasoning") {
     if (String(part.text || "").trim()) counts.messages += 1
     return
@@ -109,7 +110,7 @@ function partText(part: any): string {
 }
 
 function toolHitText(part: any): string {
-  if (!part || part.type !== "tool") return ""
+  if (!part || part.type !== "tool" || isNoActionDecisionToolPart(part)) return ""
   const name = String(part.tool || "").trim()
   if (!name) return ""
   const key = toolNameKey(name)

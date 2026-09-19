@@ -419,32 +419,68 @@ export namespace McpOAuthCallback {
   async function probeBroker(identity: BrokerIdentity): Promise<"verified" | "foreign" | "unreachable"> {
     await beforeBrokerProbeForTest?.()
     const challenge = crypto.randomUUID()
+    const signal = AbortSignal.timeout(750)
     let response: Response
     try {
       response = await fetch(
         `http://127.0.0.1:${identity.port}${BROKER_PROOF_PATH}?challenge=${encodeURIComponent(challenge)}`,
-        { headers: { Connection: "close" }, signal: AbortSignal.timeout(750) },
+        { headers: { Connection: "close" }, signal },
       )
     } catch {
       return "unreachable"
     }
-    if (!response.ok) return "foreign"
+    // A cancelled fetch can still yield headers or an empty body in the host
+    // runtime. Only a completed probe can establish a foreign identity.
+    if (signal.aborted) return "unreachable"
+    if (!response.ok) {
+      log.debug("oauth callback broker proof rejected", {
+        port: identity.port,
+        reason: "http_status",
+        status: response.status,
+        aborted: signal.aborted,
+      })
+      return "foreign"
+    }
     let payload: string
     try {
       payload = await response.text()
     } catch {
       return "unreachable"
     }
+    if (signal.aborted) return "unreachable"
     let body: { generation?: unknown; proof?: unknown }
     try {
       body = JSON.parse(payload) as { generation?: unknown; proof?: unknown }
     } catch {
+      log.debug("oauth callback broker proof rejected", {
+        port: identity.port,
+        reason: "json",
+        characters: payload.length,
+        aborted: signal.aborted,
+      })
       return "foreign"
     }
-    if (body.generation !== identity.generation || typeof body.proof !== "string") return "foreign"
+    if (body.generation !== identity.generation || typeof body.proof !== "string") {
+      log.debug("oauth callback broker proof rejected", {
+        port: identity.port,
+        reason: "identity_shape",
+        generationMatches: body.generation === identity.generation,
+        proofType: typeof body.proof,
+        aborted: signal.aborted,
+      })
+      return "foreign"
+    }
     const expected = Buffer.from(brokerProof(identity, challenge), "hex")
     const received = Buffer.from(body.proof, "hex")
-    return expected.length === received.length && timingSafeEqual(expected, received) ? "verified" : "foreign"
+    const verified = expected.length === received.length && timingSafeEqual(expected, received)
+    if (!verified)
+      log.debug("oauth callback broker proof rejected", {
+        port: identity.port,
+        reason: "authentication",
+        proofBytes: received.length,
+        aborted: signal.aborted,
+      })
+    return verified ? "verified" : "foreign"
   }
 
   function newBrokerIdentity(port: number): BrokerBindingRequest {

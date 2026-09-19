@@ -1,31 +1,10 @@
+import { queryAllFinalized } from "./sqlite-statement"
 import { Database as BunDatabase } from "bun:sqlite"
 import { createHash } from "node:crypto"
 import { SCHEMA_DDL } from "./ddl"
 
 type SchemaObjectShape = Map<string, string>
 
-function queryAllFinalized<TResult>(sqlite: BunDatabase, sql: string): TResult[] {
-  const statement = sqlite.query<TResult, []>(sql)
-  let rows: TResult[] | undefined
-  let operationFailure: unknown
-  try {
-    rows = statement.all()
-  } catch (error) {
-    operationFailure = error
-  }
-  try {
-    statement.finalize()
-  } catch (finalizeFailure) {
-    if (operationFailure !== undefined) {
-      throw new AggregateError([operationFailure, finalizeFailure], "SQLite schema query and finalization both failed", {
-        cause: operationFailure,
-      })
-    }
-    throw finalizeFailure
-  }
-  if (operationFailure !== undefined) throw operationFailure
-  return rows as TResult[]
-}
 
 export function readSchemaObjectShape(sqlite: BunDatabase): SchemaObjectShape {
   return new Map(

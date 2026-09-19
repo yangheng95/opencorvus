@@ -995,6 +995,12 @@ export function commitDispatchLineageSession(
         `Dispatch ${lineage.dispatchID} cannot materialize workflow occurrence without its exact durable Turn descriptor`,
       )
     }
+    const preparationFailure = db.select({ id: EngineArtifactTable.id }).from(EngineArtifactTable)
+      .where(and(eq(EngineArtifactTable.task_id, lineage.taskID), eq(EngineArtifactTable.kind, "dispatch_settlement"),
+        sql`json_extract(${EngineArtifactTable.payload}, '$.dispatch_id') = ${lineage.dispatchID}`,
+        sql`json_extract(${EngineArtifactTable.payload}, '$.outcome.kind') = 'infrastructure_failure'`,
+        sql`json_type(${EngineArtifactTable.payload}, '$.outcome.session_id') IS NULL`)).get()
+    if (preparationFailure) throw new Error(`Dispatch ${lineage.dispatchID} preparation already settled before worker acceptance`)
     onAccepted?.(db)
     if (admission) {
       const released = releaseControlLeaseInTransaction(db, {

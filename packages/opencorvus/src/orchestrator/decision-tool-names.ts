@@ -1,8 +1,11 @@
 /**
  * Visible Orchestrator tools that commit the outcome of one scheduler decision
- * epoch. Keep this dependency-free so durable ingress settlement can validate
- * persisted Tool facts without importing the Orchestrator tool factory.
+ * epoch. Durable ingress settlement uses the same output contracts as live
+ * execution, without importing the Orchestrator tool factory.
  */
+import { DispatchOutcomeSchema } from "@/agent/dispatch-outcome"
+import { DispatchCollectionMemberResultSchema } from "@/engine/dispatch-collection-contract"
+import { normalizeToolResult } from "@/session/tool-result-normalization"
 export const ORCHESTRATOR_DECISION_TOOL_NAMES = [
   "dispatch_agent",
   "dispatch_agents",
@@ -35,8 +38,18 @@ export function isOrchestratorDecisionToolName(value: string): value is Orchestr
 export function orchestratorDecisionToolCompletionEffect(input: {
   tool: OrchestratorDecisionToolName
   stateInput: unknown
+  stateOutput?: string
 }): OrchestratorDecisionToolCompletionEffect {
-  if (input.tool === "dispatch_agent" || input.tool === "dispatch_agents") return "inspect_dispatch_outcome"
+  if (input.tool === "dispatch_agent" || input.tool === "dispatch_agents") {
+    if (input.stateOutput === undefined) return "inspect_dispatch_outcome"
+    const output = JSON.parse(input.stateOutput)
+    const committed = input.tool === "dispatch_agent"
+      ? DispatchOutcomeSchema.parse(output).kind !== "infrastructure_failure"
+      : DispatchCollectionMemberResultSchema.array().parse(output.members).some(
+          (member) => member.status === "completed" && member.outcome.kind !== "infrastructure_failure",
+        )
+    return committed ? "satisfies_current_epoch" : "requires_followup_decision"
+  }
   if (input.tool === "question") return "requires_followup_decision"
   if (input.tool === "manage_task") {
     const taskInput = input.stateInput && typeof input.stateInput === "object" && !Array.isArray(input.stateInput)
@@ -70,29 +83,35 @@ export function orchestratorDecisionToolCompletionEffect(input: {
 }
 import { isAgentCoordinationDecision } from "@/engine/agent-coordination-decision"
 
+export function orchestratorDecisionToolResultCommits(tool: OrchestratorDecisionToolName, args: unknown, result: unknown): boolean {
+  return orchestratorDecisionToolCompletionEffect({
+    tool,
+    stateInput: args,
+    stateOutput: normalizeToolResult(result).output,
+  }) === "satisfies_current_epoch"
+}
+
 /**
  * The decision a recorded assistant turn has already committed, if any.
  *
  * A decision is durable evidence, not process memory: the reduction derives its
  * decision facts from exactly these Tool parts, so anything that has to know
  * what a turn already decided — across a Provider step, or across a restart —
- * must read them the same way rather than remember. A declaration that cannot
- * classify its own recorded input is not a committed decision; the call it
- * describes failed on its own terms.
+ * must read them the same way rather than remember. Invalid completed receipts
+ * expose the same contract error on the live and durable readers.
  */
 export function orchestratorCommittedDecisionInParts(
-  parts: ReadonlyArray<{ type: string; tool?: string; state?: { status?: string; input?: unknown } }>,
+  parts: ReadonlyArray<{ type: string; tool?: string; state?: { status?: string; input?: unknown; output?: string } }>,
 ): OrchestratorDecisionToolName | undefined {
   for (const part of parts) {
     if (part.type !== "tool" || part.state?.status !== "completed") continue
     const tool = part.tool
     if (typeof tool !== "string" || !isOrchestratorDecisionToolName(tool)) continue
-    try {
-      const effect = orchestratorDecisionToolCompletionEffect({ tool, stateInput: part.state.input })
-      if (effect === "requires_followup_decision") continue
-    } catch {
-      continue
+    if ((tool === "dispatch_agent" || tool === "dispatch_agents") && part.state.output === undefined) {
+      throw new Error(`Completed ${tool} receipt is missing its durable output`)
     }
+    const effect = orchestratorDecisionToolCompletionEffect({ tool, stateInput: part.state.input, stateOutput: part.state.output })
+    if (effect !== "satisfies_current_epoch") continue
     return tool
   }
   return undefined

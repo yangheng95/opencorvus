@@ -157,7 +157,9 @@ export namespace ConversationCapability {
       const activeSkillNames = input.activeSkillNames
         ? unique([...input.activeSkillNames], `${input.agentID} active Skill names`)
         : undefined
-      const effectiveSkillNames = activeSkillNames ?? [...new Set([...selected.skill_refs, ...explicitSkillNames])]
+      const effectiveSkillNames = activeSkillNames
+        ? [...new Set([...activeSkillNames, ...explicitSkillNames])]
+        : [...new Set([...selected.skill_refs, ...explicitSkillNames])]
       const skills = effectiveSkillNames.map((ref) => {
         const skill = installedByName.get(ref)
         if (!skill) {
@@ -302,5 +304,4 @@ export namespace ConversationCapability {
     await apply()
     return settings(agentID)
   }
-
 }

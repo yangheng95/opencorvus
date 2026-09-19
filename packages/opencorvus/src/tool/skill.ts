@@ -85,32 +85,29 @@ export function createSkillLoaderTool(input: { id: SkillSurfaceToolID; family: S
     const mounted = surface.skills
     const compatible = mounted.filter((skill) => skill.enabled).map((skill) => skill.skill)
 
-    const description =
-      compatible.length === 0
-        ? `Search for or load a ${input.label} that provides domain-specific instructions and workflows. No skills are currently available.`
-        : [
-            `Search for or load a ${input.label} that provides domain-specific instructions and workflows.`,
-            `Current agent: ${surface.agent}`,
-            "Call without a name to search/list skill metadata. Call with an exact name to load the full skill instructions. Call with that name and a relative file path named by the instructions or sampled file list to load a supporting file.",
-            "",
-            "Use search before planning when the task may match a specialized workflow. Search is fuzzy across mounted skill names, declared aliases, titles, descriptions, required tool hints, and SKILL.md contents.",
-            "",
-            `Search output returns up to ${DEFAULT_SKILL_SEARCH_RESULT_LIMIT} names, descriptions, required tool hints, and locations only. Loading by name returns a \`<skill_content name="...">\` block with the full SKILL.md body and sampled bundled file paths. Read those paths through this tool's \`file\` parameter, never through the project \`read\` tool.`,
-          ].join("\n")
+    const description = [
+      `Load an exact ${input.label} by name when that name is visible; otherwise search mounted Skills for domain-specific instructions and workflows.`,
+      `Current agent: ${surface.agent}`,
+      "Call without a name to search/list skill metadata. Call with an exact name to load the full skill instructions. Call with that name and a relative file path named by the instructions or sampled file list to load a supporting file.",
+      "",
+      "When the exact Skill name is already visible in the request, call this Tool with that name directly. Otherwise use search before planning when the task may match a specialized workflow. Search is fuzzy across mounted skill names, declared aliases, titles, descriptions, required tool hints, and SKILL.md contents.",
+      "",
+      `Search output returns up to ${DEFAULT_SKILL_SEARCH_RESULT_LIMIT} names, descriptions, required tool hints, and locations only. Loading by name returns a \`<skill_content name="...">\` block with the full SKILL.md body and sampled bundled file paths. Read those paths through this tool's \`file\` parameter, never through the project \`read\` tool.`,
+    ].join("\n")
 
     const parameters = z
       .object({
-        query: z
-          .string()
-          .optional()
-          .describe(
-            "Fuzzy search terms for mounted skill title, description, required_tools, or SKILL.md content. Omit to list compatible skills.",
-          ),
         name: z
           .string()
           .optional()
           .describe(
             "Exact skill name to load. To load the root SKILL.md, provide name alone and omit file, offset, and limit. Omit name to search/list skills instead of loading full instructions.",
+          ),
+        query: z
+          .string()
+          .optional()
+          .describe(
+            "Fuzzy search terms used only when the needed Skill has no exact known name. A different already named Skill does not prevent searching for this unresolved capability. Omit to list compatible skills.",
           ),
         file: z
           .string()

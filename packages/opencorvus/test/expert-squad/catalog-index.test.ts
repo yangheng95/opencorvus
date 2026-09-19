@@ -102,16 +102,17 @@ describe("Expert Squad catalog index", () => {
     const inspection = await PromptProfileResolver.catalogInspection({ projectDirectory: project.path, id: "base" })
     expect(inspection).toMatchObject({
       id: "base",
-      version: "2026.08.30.2",
+      version: "2026.09.14.15",
       selector: {
         summary: expect.any(String),
         selection_guidance: expect.any(String),
       },
       workflows: [
-        { id: "planner-execution-verification", node_count: 3 },
+        { id: "execution-verification", node_count: 2 },
         { id: "planner-parallel-delivery", node_count: 4 },
+        { id: "source-planned-execution-verification", node_count: 3 },
       ],
-      workflow_count: 2,
+      workflow_count: 3,
       next_workflow_cursor: null,
     })
   })
@@ -128,7 +129,7 @@ describe("Expert Squad catalog index", () => {
     expect(detail?.name).toBe("Base")
     expect(detail?.source).toEqual({ kind: "built_in" })
     expect(detail?.readme.content).toContain("# Base")
-    expect(detail?.selector.instructions).toContain("# Base Expert Squad")
+    expect(detail?.selector.instructions).toContain("# Selecting Base")
     expect(detail?.capability_projection.scheduler.base_role).toBe("orchestrator")
     expect(
       Object.fromEntries(
@@ -342,6 +343,7 @@ describe("Expert Squad catalog index", () => {
           "panel_query_task",
           "panel_query_task_artifacts",
           "panel_read_task_artifact",
+          "panel_read_task_message",
           "publish_interactive_artifact",
           "question",
           "read",
@@ -359,7 +361,11 @@ describe("Expert Squad catalog index", () => {
         if (!search?.execute) throw new Error("Mission capability_search is unavailable")
         const result = await search.execute(
           { queries: [""], kinds: ["expert_squad"], exact_refs: [], deactivate_refs: [], limit: 5 },
-          { toolCallId: "call_hundred_held_capability_search", messages: [], abortSignal: new AbortController().signal },
+          {
+            toolCallId: "call_hundred_held_capability_search",
+            messages: [],
+            abortSignal: new AbortController().signal,
+          },
         )
         const output = JSON.parse(result.output) as {
           catalog_revision: string
@@ -370,8 +376,19 @@ describe("Expert Squad catalog index", () => {
           results: Array<Record<string, unknown>>
         }
         const mismatchedPillarResult = await search.execute(
-          { queries: [""], kinds: ["expert_squad"], product_pillar: "work", exact_refs: [], deactivate_refs: [], limit: 1 },
-          { toolCallId: "call_mismatched_pillar_capability_search", messages: [], abortSignal: new AbortController().signal },
+          {
+            queries: [""],
+            kinds: ["expert_squad"],
+            product_pillar: "work",
+            exact_refs: [],
+            deactivate_refs: [],
+            limit: 1,
+          },
+          {
+            toolCallId: "call_mismatched_pillar_capability_search",
+            messages: [],
+            abortSignal: new AbortController().signal,
+          },
         )
         const mismatchedPillarOutput = JSON.parse(mismatchedPillarResult.output) as {
           visible_expert_squad_count: number
@@ -752,7 +769,7 @@ describe("Expert Squad catalog index", () => {
         const marketDetail = await request("market/detail?id=deep-research")
         expect(active).toMatchObject({ active: { effective: "base" }, default: "base" })
         expect(page).toMatchObject({ entries: expect.any(Array) })
-        expect(inspection).toMatchObject({ id: "base", workflow_count: 2, next_workflow_cursor: null })
+        expect(inspection).toMatchObject({ id: "base", workflow_count: 3, next_workflow_cursor: null })
         expect(status).toMatchObject({
           effective_count: (page as { total_count: number }).total_count,
           issue_count: 0,

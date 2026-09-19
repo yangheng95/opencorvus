@@ -112,6 +112,12 @@ retain their existing cancellation or conversation-input authority. All physical
 owned Prompts, including terminal cleanup tails and non-Task Sessions, still receive
 cancellation and are awaited before runtime ownership is released. One terminal
 Task therefore does not reject an active sibling's durable shutdown handoff.
+Task-control activation admission closes and its owned activation signals are
+cancelled in the initial runtime fence, before Session Prompt admission closes.
+Terminal publications still drain before the final activation idle wait. This
+prevents a shutdown-induced prompt refusal from becoming a Task failure and
+retains the existing durable ingress for recovery. A rolled-back handoff reopens
+the same activation authority and reconciles the captured project frontiers.
 
 Task 的 execution epoch（执行轮次）、reopen（重新打开）准入、终态输入、native wait 和
 dispatch continuation 的唯一当前契约见 [Task control plane](task-control-plane.md)。
@@ -202,6 +208,12 @@ channel 等 project-scoped State 的唯一缓存与释放 owner。Server 在 pro
 `OPENCORVUS_PROJECT_RUNTIME_DISPOSAL_TIMEOUT_MS` 会保留真实 lease、异步完成并报告目录级失败，
 而不会阻断后续 idle candidate。参数只限定 idle process resources，不删除或
 改写 Project、Task、Session、Artifact 或 message 历史，也不按内存阈值重启进程。
+
+全局 `Instance.disposeAll` 先取消已捕获 Project 的后台工作并结算全局 Scheduler，
+再等待各 Project lease 释放和执行 `State.dispose`。定时任务可能持有 Project lease
+直到收到 Scheduler 取消信号，也可能等待 Project 后台工作；这两类 owner 必须先取消、
+后排空，避免全局清理反向等待自己的取消步骤。Server 的进程终态协议仍负责更广的
+Session/Task 终态事实与数据库交接，此顺序不替代该协议。
 
 ## control —— 外部控制账号与真实 Session 消息
 

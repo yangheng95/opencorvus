@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "audit_kind": "historical_seal_identity_and_official_score_recomputation",
+  "original_root": "/var/lib/opencorvus-benchmark/evidence-luna-mission-base-v20260822-r3",
+  "original_catalog_sha256": "15cdf2ced388f23f6edc70b10716d8ebe83745ace171873a61f20ae151899f39",
+  "case_manifest_sha256": "939a5f0340fdf2a24d7981632bbb76e266903fe06218e0307dc5052788b4420c",
+  "official_package_tree_sha256": "cc7a63f9444814c7029e325dacbdf1c2e870430d08aaf8d4ecf5c0e44fe829d4",
+  "harness_revision": "17bc3f63fc2ed0e2d4953e50811ee106882fd8fe",
+  "checker_sha256": "660ae8021beccd4dd2730e903c69bac10c31ee81c5ce7f587c91111c34c7d099",
+  "bridge_sha256": "ae74e24efe48c373ee8682b932c49fb2e8cb3268914d6cb064477a825d01d59e",
+  "attempts_recorded": 141,
+  "candidates_checked": 102,
+  "score_audits_passed": 102,
+  "recorded_leaderboard_rows_verified": 95,
+  "recorded_leaderboard_strict_passes_verified": 27.0,
+  "source_commit_counts": {
+    "88adc685514bea8e661ec44cc594ace659c1cf3c": 9,
+    "ffb985feda1f615fc548f949a2f953d762113fcc": 5,
+    "064d232e604c1c5491ca1dec34dfa65a2c665fcc": 10,
+    "ea3e860e95c42bfe9df63dca18e28b881716d176": 19,
+    "8157d87f87fc40fd5ad013b5be546185257be0ca": 7,
+    "f97a6c6b06696828fa790ff92cf69370963d532c": 5,
+    "7885de8c1f377a4e528282ff46517cd8edc294f1": 7,
+    "eebf5565d6fe8dd92a955f8d74ae0e4c63c09b73": 3,
+    "f095922ab847d7df7e5b8268c8d191ae3b11133a": 8,
+    "08f8f4c9830ac5cf3d8f6e58e3565f0c3c1c1eca": 2,
+    "041418589aa77e97973e16885766abf7161cefc2": 9,
+    "74956a2ebf5964c35373f06c8fecaa27e302da89": 5,
+    "eda297e174877e2a11d06c9b915d99a8d80de96b": 5,
+    "20b3df440fe401f2c31fb5b35fde1e2cdcc721d0": 4,
+    "e8cdd1be4d280399bbb953562000b430f4e59fe7": 4
+  },
+  "failed_case_indices": [],
+  "limitations": [
+    "No new model execution",
+    "Does not revalidate full runtime eligibility or raw Provider identity",
+    "Stateful tool calls verified by retained hash chain, not re-executed",
+    "Historical mixed source revisions",
+    "Historical native Luna comparison identity remains unknown"
+  ]
+}

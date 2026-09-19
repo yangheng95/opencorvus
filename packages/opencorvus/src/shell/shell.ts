@@ -105,6 +105,7 @@ export namespace Shell {
       const guardEnv = await awaitWithAbort(PidGuard.env(shell), controller.signal)
       supervisor = await spawnShell({
         command,
+        terminateChildrenOnRootExit: true,
         shell,
         cwd: opts.cwd,
         env: { ...process.env, ...opts.env, ...guardEnv },

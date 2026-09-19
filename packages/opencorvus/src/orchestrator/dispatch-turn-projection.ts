@@ -72,13 +72,12 @@ const DispatchTurnBaseSchema = z.object({
   task_authority: TaskAuthorityAnchorSchema,
 })
 
-export const AcceptanceRepairDispatchSchema = z
+const AcceptanceRepairObligationSchema = z
   .object({
     gap_id: z.string().min(1),
     ledger_revision_artifact_id: Identifier.schema("artifact"),
     execution_epoch: z.number().int().positive(),
     criteria: z.array(MissionAcceptanceOpenCriterionSchema).min(1).max(64),
-    checkpoint_required: z.literal(true),
   })
   .strict()
   .superRefine((repair, context) => {
@@ -94,6 +93,7 @@ export const AcceptanceRepairDispatchSchema = z
       ids.add(criterion.criterion_id)
     }
   })
+export const AcceptanceRepairDispatchSchema = AcceptanceRepairObligationSchema.safeExtend({ checkpoint_required: z.literal(true) })
 export type AcceptanceRepairDispatch = z.infer<typeof AcceptanceRepairDispatchSchema>
 
 export function acceptanceRepairEvidenceLocators(repair: AcceptanceRepairDispatch): EvidenceLocator[] {
@@ -103,7 +103,11 @@ export function acceptanceRepairEvidenceLocators(repair: AcceptanceRepairDispatc
 }
 
 export const DispatchTurnSchema = z.discriminatedUnion("kind", [
-  DispatchTurnBaseSchema.extend({ kind: z.literal("initial") }).strict(),
+  DispatchTurnBaseSchema.extend({
+    kind: z.literal("initial"),
+    preparation_recovery: z.object({ source_dispatch_id: z.string().min(1), guidance: z.string().min(1) }).strict().optional(),
+    acceptance_repair: AcceptanceRepairObligationSchema.safeExtend({ checkpoint_required: z.literal(false) }).optional(),
+  }).strict(),
   DispatchTurnBaseSchema.extend({
     kind: z.literal("continuation"),
     source_dispatch_id: z.string().min(1),
@@ -127,20 +131,24 @@ export function renderDispatchContinuationTurn(input: {
   evidenceLocators?: readonly EvidenceLocator[]
 }): string | undefined {
   const turn = DispatchTurnSchema.parse(input.turn)
-  if (turn.kind === "initial") return undefined
-  const guidance = input.guidance.trim()
+  if (turn.kind === "initial" && !turn.acceptance_repair && !turn.preparation_recovery) return undefined
+  const guidance = (turn.kind === "initial" && turn.preparation_recovery ? turn.preparation_recovery.guidance : input.guidance).trim()
   const evidenceLocators = EvidenceLocatorListSchema.parse(input.evidenceLocators ?? turn.evidence_locators)
   const authority = turn.task_authority
   return [
-    "# Incremental continuation",
+    turn.kind === "initial" ? "# Initial workflow node authority" : "# Incremental continuation",
     "",
-    "Continue the existing physical worker Session and its original Task contract. This Turn contains only current guidance and immutable locators; do not reinterpret it as a new Task or repeat the complete request.",
+    turn.kind === "initial"
+      ? "Execute this previously unstarted node of the Task workflow. Apply the original Task request and the current acceptance obligation below."
+      : "Continue the existing physical worker Session and its original Task contract. This Turn contains only current guidance and immutable locators; do not reinterpret it as a new Task or repeat the complete request.",
     "",
     "## Dispatch lineage",
     "",
     `- current_dispatch_id: ${turn.current_dispatch_id}`,
-    `- source_dispatch_id: ${turn.source_dispatch_id}`,
-    `- child_session_id: ${turn.child_session_id}`,
+    ...(turn.kind === "initial" && turn.preparation_recovery ? [`- preparation_source_dispatch_id: ${turn.preparation_recovery.source_dispatch_id}`] : []),
+    ...(turn.kind === "continuation"
+      ? [`- source_dispatch_id: ${turn.source_dispatch_id}`, `- child_session_id: ${turn.child_session_id}`]
+      : []),
     `- workflow_node_id: ${turn.workflow_node_id ?? "(direct)"}`,
     `- workflow_occurrence_id: ${turn.workflow_occurrence_id}`,
     `- delivery_slice_revision_ids: ${turn.delivery_slice_revision_ids.join(", ") || "(none)"}`,
@@ -182,7 +190,7 @@ export function renderDispatchContinuationTurn(input: {
     "",
     "## Current guidance",
     "",
-    guidance || "Continue from the latest visible worker result and current Task evidence.",
+    guidance || (turn.kind === "initial" ? "Execute this workflow node against the original Task request and current acceptance obligation." : "Continue from the latest visible worker result and current Task evidence."),
     "",
     "## Artifact evidence",
     "",

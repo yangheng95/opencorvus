@@ -20,10 +20,6 @@ function artifactBasename(input: string): string {
   return normalized.slice(normalized.lastIndexOf("/") + 1).toLowerCase()
 }
 
-function isReferenceNamedArtifact(input: string): boolean {
-  return /\breference(?:-[a-z0-9_-]+)?\.png$/i.test(artifactBasename(input))
-}
-
 function isTemporaryCaptureArtifact(input: string): boolean {
   const normalized = normalizedArtifactPath(input).toLowerCase()
   return normalized.includes("/opencorvus-capture/") || normalized.startsWith("opencorvus-capture/")
@@ -45,19 +41,6 @@ function isLocalPreviewUrl(input: string): boolean {
   }
 }
 
-function isRenderedPreviewArtifact(input: string): boolean {
-  const normalized = normalizedArtifactPath(input).toLowerCase()
-  const base = artifactBasename(input)
-  if (isTemporaryCaptureArtifact(input)) return true
-  if (isLocalPreviewUrl(input)) return true
-  if (!normalized.includes("visual-html-skeleton/")) return false
-  if (!/\.(?:png|jpe?g|webp|json)$/i.test(base)) return false
-  if (/(?:^|\/)(?:screenshots?|previews?|captures?|renders?|diffs?|visual-diffs?)(?:\/|$)/i.test(normalized)) {
-    return true
-  }
-  return /\b(?:screenshot|preview|capture|diff|render|visual-diff)\b/i.test(normalized)
-}
-
 function isVisualHtmlSkeletonArtifact(input: string): boolean {
   const normalized = normalizedArtifactPath(input).toLowerCase()
   return (
@@ -67,36 +50,26 @@ function isVisualHtmlSkeletonArtifact(input: string): boolean {
   )
 }
 
-const SourceReferenceStringSchema = z.string().min(1).refine((value) => !isRenderedPreviewArtifact(value), {
-  message:
-    "source/reference artifacts must cite source evidence; rendered skeleton previews belong in visual_validation_evidence.screenshot_artifact",
-})
-
+// Semantic roles come from explicit fields and the DesignResourceManifest.
+const SourceReferenceStringSchema = z.string().min(1)
 const SourceReferenceListSchema = z.array(SourceReferenceStringSchema)
+const FrontendProjectEntrypointStringSchema = z.string().min(1)
 
-const FrontendProjectEntrypointStringSchema = z.string().min(1).refine((value) => !isRenderedPreviewArtifact(value), {
-  message:
-    "frontend_project.entrypoints must name source-editable entry files; rendered screenshots/diffs belong in visual_validation_evidence",
-})
-
-const RenderedSkeletonPreviewArtifactSchema = z
+export const RenderedSkeletonPreviewArtifactSchema = z
   .string()
   .min(1)
   .refine(isVisualHtmlSkeletonArtifact, {
     message: "screenshot_artifact must point to a task-scoped visual-html-skeleton artifact",
   })
-  .refine((value) => !isReferenceNamedArtifact(value), {
-    message: "screenshot_artifact must be a rendered skeleton preview, not a source reference image",
-  })
   .refine((value) => !isTemporaryCaptureArtifact(value) && !isLocalPreviewUrl(value), {
     message:
       "screenshot_artifact must point to a task-scoped visual-html-skeleton artifact, not temporary or localhost preview output",
   })
-  .refine(isRenderedPreviewArtifact, {
-    message: "screenshot_artifact must point to a rendered screenshot/preview under visual-html-skeleton",
+  .refine(isRasterScreenshotArtifact, {
+    message: "screenshot_artifact must name a PNG, JPEG, or WebP file under visual-html-skeleton",
   })
 
-const VisualValidationDiffArtifactSchema = z
+export const VisualValidationDiffArtifactSchema = z
   .string()
   .refine((value) => value === "" || isVisualHtmlSkeletonArtifact(value), {
     message: "diff_artifact must point to a task-scoped visual-html-skeleton artifact",
@@ -104,6 +77,9 @@ const VisualValidationDiffArtifactSchema = z
   .refine((value) => value === "" || (!isTemporaryCaptureArtifact(value) && !isLocalPreviewUrl(value)), {
     message:
       "diff_artifact must point to a task-scoped visual-html-skeleton artifact, not temporary or localhost preview output",
+  })
+  .refine((value) => value === "" || isRasterScreenshotArtifact(value) || /\.json$/i.test(value), {
+    message: "diff_artifact must name a raster image or JSON comparison file",
   })
   .default("")
 

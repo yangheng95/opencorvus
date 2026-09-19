@@ -96,6 +96,7 @@ export function requireDispatchAdapterExecutionContext(input: unknown): Dispatch
 export function dispatchAdapterContinuationPrompt(
   context: DispatchAdapterExecutionContext,
 ): string | undefined {
+  if (context.dispatch.turn.kind === "initial") return undefined
   return renderDispatchContinuationTurn({
     turn: context.dispatch.turn,
     guidance: context.dispatch.continuationGuidance ?? "",

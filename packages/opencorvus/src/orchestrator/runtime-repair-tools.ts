@@ -106,6 +106,7 @@ export function createRuntimeRepairTools(input: {
         const shell = await Shell.acceptable()
         const supervisor = await ProcessSupervisor.spawnTaskShell({ taskID: input.taskID, cwd }, {
           command,
+          terminateChildrenOnRootExit: true,
           shell,
           env: { ...process.env },
         })

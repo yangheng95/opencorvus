@@ -1,0 +1,3827 @@
+{
+  "execution_runtime_commit": "134d34336cdb19c90d96ac49640c0746556a3f0f",
+  "auditor_commit": "00ccc5e09f1bee33b1ced2aaa3fd974585312f86",
+  "scope": "Current functional audits over original sealed runtime evidence, not original catalog eligibility",
+  "cases": [
+    {
+      "case_index": 1,
+      "run_id": "f6494719-626a-4c19-896c-b2ccddd2811a",
+      "source_status": "invalid",
+      "passed": true,
+      "failures": [],
+      "checks": {
+        "binding": {
+          "passed": true,
+          "requested_squads": [
+            "base"
+          ],
+          "held_squads": [
+            "base"
+          ],
+          "task_ids": [
+            "tsk_g00VV1W7RH007gSQK6tk"
+          ],
+          "task_bindings": [
+            {
+              "task_id": "tsk_g00VV1W7RH007gSQK6tk",
+              "source": "mission",
+              "bound_profile": "base",
+              "board_status": "completed",
+              "record_status": "completed",
+              "status_status": "completed"
+            }
+          ]
+        },
+        "completion": {
+          "passed": true,
+          "scored_terminal": true,
+          "mission_completed": true,
+          "explicit_complete_mission": true,
+          "completion_receipt_matches": true,
+          "mission_transcript_session_ids": [
+            "ses_-zUUyU6ogzzQuxF2NY55"
+          ],
+          "mission_assistant_settled": true,
+          "mission_assistant_replies_to_latest_user": true,
+          "mission_assistant_healthy": true,
+          "mission_status": "inactive",
+          "child_task_count": 1,
+          "child_tasks": [
+            {
+              "task_id": "tsk_g00VV1W7RH007gSQK6tk",
+              "passed": true,
+              "scored_terminal": true,
+              "lifecycle_status": "completed",
+              "explicit_fail_task": false,
+              "infrastructure_failures": [],
+              "outcome": "completed"
+            }
+          ],
+          "status_task_ids": [
+            "tsk_g00VV1W7RH007gSQK6tk"
+          ]
+        },
+        "quiescence": {
+          "passed": true,
+          "mission_status": "inactive",
+          "mission_completed": true,
+          "task_count": 1,
+          "task_audits": [
+            {
+              "task_id": "tsk_g00VV1W7RH007gSQK6tk",
+              "passed": true,
+              "lifecycle_status": "completed",
+              "occurrence_count": 5,
+              "unsettled_occurrences": []
+            }
+          ]
+        },
+        "lineage": {
+          "passed": true,
+          "mission_session_valid": true,
+          "task_rows_valid": true,
+          "owned_task_ids": [
+            "tsk_g00VV1W7RH007gSQK6tk"
+          ],
+          "owned_task_set_matches": true,
+          "task_transcript_ids": [
+            "tsk_g00VV1W7RH007gSQK6tk"
+          ],
+          "task_transcript_flatten_matches": true,
+          "mission_messages_valid": true,
+          "task_messages_valid": true,
+          "mission_scheduler_inbox_ids": [
+            "pib_hhuNcmfqOzCYlhz2nyCw"
+          ],
+          "pending_mission_scheduler_inbox_ids": [],
+          "dead_letter_mission_scheduler_inbox_ids": [],
+          "invalid_terminal_mission_scheduler_inbox_ids": [],
+          "unanswered_mission_scheduler_inbox_ids": [],
+          "violations": []
+        },
+        "collections": {
+          "passed": true,
+          "interactions_match": true,
+          "provider_ledger_snapshot_matches": true,
+          "provider_ledger_session_lineage_matches": true,
+          "task_provider_usage_trace_coverage_matches": true,
+          "traced_task_session_ids": [
+            "ses_-zUUyTsM6zzDtd7tWb0T",
+            "ses_hAYs1R1oef6jL2BQPAtl",
+            "ses_hIIYdaz6FJD5nUvcgFCV"
+          ],
+          "allowed_session_ids": [
+            "ses_-zUUyTsM6zzDtd7tWb0T",
+            "ses_-zUUyTsXSzzLIbKJgMHk",
+            "ses_-zUUyU6ogzzQuxF2NY55",
+            "ses_hAYs1R1oef6jL2BQPAtl",
+            "ses_hIIYdaz6FJD5nUvcgFCV"
+          ],
+          "violations": []
+        },
+        "infrastructure": {
+          "passed": true,
+          "incidents": [],
+          "counts_by_reason": {},
+          "sources": {
+            "runtime_database_snapshot": 0,
+            "terminal_board": 0
+          },
+          "missing_sources": [],
+          "sources_agree": true,
+          "violations": []
+        },
+        "prompt": {
+          "passed": true,
+          "scope": "task_bound_agent_trace",
+          "mission_session_id": "ses_-zUUyU6ogzzQuxF2NY55",
+          "mission_usage_rows": 15,
+          "task_usage_rows": 80,
+          "traced_task_session_ids": [
+            "ses_-zUUyTsM6zzDtd7tWb0T",
+            "ses_hAYs1R1oef6jL2BQPAtl",
+            "ses_hIIYdaz6FJD5nUvcgFCV"
+          ],
+          "request_events": 80,
+          "fingerprinted_events": 80,
+          "session_usage_rows": 80,
+          "request_attempts_without_usage": 0,
+          "violations": []
+        },
+        "traceScope": {
+          "passed": true,
+          "mode": "complete_post_quiescence",
+          "complete_task_trace": {
+            "schema_version": 1,
+            "kind": "complete_post_quiescence_task_trace",
+            "passed": true,
+            "task_ids": [
+              "tsk_g00VV1W7RH007gSQK6tk"
+            ],
+            "tasks": [
+              {
+                "task_id": "tsk_g00VV1W7RH007gSQK6tk",
+                "event_count": 85,
+                "events_sha256": "8cc8e7e0ec0df80cf388da088bf117d0fba53076219bc2e5c6ab8c32c64952e4"
+              }
+            ],
+            "violations": []
+          },
+          "legacy_compact_jsonl_bytes": 421741,
+          "violations": []
+        },
+        "skillSeal": {
+          "passed": true,
+          "projection": {
+            "passed": true,
+            "skill_name": "automationbench-api",
+            "skill_ref": "default/skill/automationbench-api",
+            "profile": "base",
+            "required_agents": [
+              "orchestrator",
+              "base-developer",
+              "base-planner",
+              "base-tester"
+            ],
+            "projection_hash": "e57ee461ad2b2d6a02f8242c10a263757fef8f619d2ad7885b188edbd7f0ad57",
+            "mounted_agents": [
+              "base-developer",
+              "base-planner",
+              "base-tester",
+              "orchestrator"
+            ],
+            "unmountable_agents": [
+              {
+                "agent_id": "base-researcher",
+                "base_role": "explore",
+                "reason": "profile_role_not_skill_owner"
+              },
+              {
+                "agent_id": "universal-build",
+                "base_role": "build",
+                "reason": "profile_role_not_skill_owner"
+              }
+            ],
+            "violations": []
+          },
+          "coverage": {
+            "passed": true,
+            "runtime_adherence_passed": false,
+            "dispatched_agents": [
+              "base-developer",
+              "base-tester",
+              "orchestrator"
+            ],
+            "uncovered_agents": [],
+            "dispatched_owner_sessions": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl"
+              },
+              {
+                "agent_id": "orchestrator",
+                "session_id": "ses_-zUUyTsM6zzDtd7tWb0T"
+              }
+            ],
+            "successful_skill_loads": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 6,
+                "part_index": 2
+              }
+            ],
+            "benchmark_client_attempts": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 8,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 9,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 10,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 11,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 12,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 13,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 14,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 15,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 16,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 17,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 18,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 19,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 20,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 21,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 22,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 23,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 24,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 25,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 26,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 27,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 28,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hIIYdaz6FJD5nUvcgFCV",
+                "message_index": 29,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 43,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 44,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 45,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 46,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 47,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 48,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 49,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 50,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 51,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 52,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 53,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 54,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 55,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 56,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 57,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 58,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 59,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 60,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 61,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 62,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 63,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 64,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 65,
+                "part_index": 1,
+                "status": "completed"
+              }
+            ],
+            "missing_skill_loads": [
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl"
+              },
+              {
+                "agent_id": "orchestrator",
+                "session_id": "ses_-zUUyTsM6zzDtd7tWb0T"
+              }
+            ],
+            "client_before_skill_load": [
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 43,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 44,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 45,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 46,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 47,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 48,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 49,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 50,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 51,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 52,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 53,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 54,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 55,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 56,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 57,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 58,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 59,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 60,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 61,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 62,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 63,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 64,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hAYs1R1oef6jL2BQPAtl",
+                "message_index": 65,
+                "part_index": 1,
+                "status": "completed"
+              }
+            ],
+            "unmounted_client_attempts": [],
+            "violations": [],
+            "runtime_adherence_violations": [
+              "missing_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl",
+              "missing_skill_load:orchestrator:ses_-zUUyTsM6zzDtd7tWb0T",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:43:2",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:44:2",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:45:2",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:46:3",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:47:1",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:48:1",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:49:1",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:50:1",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:51:1",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:52:2",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:53:1",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:54:2",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:55:2",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:56:2",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:57:1",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:58:2",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:59:2",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:60:2",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:61:2",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:62:2",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:63:2",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:64:1",
+              "client_before_skill_load:base-tester:ses_hAYs1R1oef6jL2BQPAtl:65:1"
+            ]
+          },
+          "violations": []
+        },
+        "replay": {
+          "passed": true,
+          "violations": []
+        }
+      }
+    },
+    {
+      "case_index": 2,
+      "run_id": "26c90986-febf-483c-a1a1-0dc7e7c5db4f",
+      "source_status": "invalid",
+      "passed": true,
+      "failures": [],
+      "checks": {
+        "binding": {
+          "passed": true,
+          "requested_squads": [
+            "base"
+          ],
+          "held_squads": [
+            "base"
+          ],
+          "task_ids": [
+            "tsk_g00VV1WDap00ovDJJae2"
+          ],
+          "task_bindings": [
+            {
+              "task_id": "tsk_g00VV1WDap00ovDJJae2",
+              "source": "mission",
+              "bound_profile": "base",
+              "board_status": "completed",
+              "record_status": "completed",
+              "status_status": "completed"
+            }
+          ]
+        },
+        "completion": {
+          "passed": true,
+          "scored_terminal": true,
+          "mission_completed": true,
+          "explicit_complete_mission": true,
+          "completion_receipt_matches": true,
+          "mission_transcript_session_ids": [
+            "ses_-zUUyU6aIzzGb53CsSjN"
+          ],
+          "mission_assistant_settled": true,
+          "mission_assistant_replies_to_latest_user": true,
+          "mission_assistant_healthy": true,
+          "mission_status": "inactive",
+          "child_task_count": 1,
+          "child_tasks": [
+            {
+              "task_id": "tsk_g00VV1WDap00ovDJJae2",
+              "passed": true,
+              "scored_terminal": true,
+              "lifecycle_status": "completed",
+              "explicit_fail_task": false,
+              "infrastructure_failures": [],
+              "outcome": "completed"
+            }
+          ],
+          "status_task_ids": [
+            "tsk_g00VV1WDap00ovDJJae2"
+          ]
+        },
+        "quiescence": {
+          "passed": true,
+          "mission_status": "inactive",
+          "mission_completed": true,
+          "task_count": 1,
+          "task_audits": [
+            {
+              "task_id": "tsk_g00VV1WDap00ovDJJae2",
+              "passed": true,
+              "lifecycle_status": "completed",
+              "occurrence_count": 5,
+              "unsettled_occurrences": []
+            }
+          ]
+        },
+        "lineage": {
+          "passed": true,
+          "mission_session_valid": true,
+          "task_rows_valid": true,
+          "owned_task_ids": [
+            "tsk_g00VV1WDap00ovDJJae2"
+          ],
+          "owned_task_set_matches": true,
+          "task_transcript_ids": [
+            "tsk_g00VV1WDap00ovDJJae2"
+          ],
+          "task_transcript_flatten_matches": true,
+          "mission_messages_valid": true,
+          "task_messages_valid": true,
+          "mission_scheduler_inbox_ids": [
+            "pib_hdKspnMLpzCiWF6zrImN"
+          ],
+          "pending_mission_scheduler_inbox_ids": [],
+          "dead_letter_mission_scheduler_inbox_ids": [],
+          "invalid_terminal_mission_scheduler_inbox_ids": [],
+          "unanswered_mission_scheduler_inbox_ids": [],
+          "violations": []
+        },
+        "collections": {
+          "passed": true,
+          "interactions_match": true,
+          "provider_ledger_snapshot_matches": true,
+          "provider_ledger_session_lineage_matches": true,
+          "task_provider_usage_trace_coverage_matches": true,
+          "traced_task_session_ids": [
+            "ses_-zUUyTmCUzzxWiDOx6bx",
+            "ses_hJ3OZanTxqD93j1uqKOC",
+            "ses_hZ6hMEoEhmPdZkUsjIJ4"
+          ],
+          "allowed_session_ids": [
+            "ses_-zUUyTmCUzzxWiDOx6bx",
+            "ses_-zUUyTmNVzzFYu6jOJIN",
+            "ses_-zUUyU6aIzzGb53CsSjN",
+            "ses_hJ3OZanTxqD93j1uqKOC",
+            "ses_hZ6hMEoEhmPdZkUsjIJ4"
+          ],
+          "violations": []
+        },
+        "infrastructure": {
+          "passed": true,
+          "incidents": [],
+          "counts_by_reason": {},
+          "sources": {
+            "runtime_database_snapshot": 0,
+            "terminal_board": 0
+          },
+          "missing_sources": [],
+          "sources_agree": true,
+          "violations": []
+        },
+        "prompt": {
+          "passed": true,
+          "scope": "task_bound_agent_trace",
+          "mission_session_id": "ses_-zUUyU6aIzzGb53CsSjN",
+          "mission_usage_rows": 16,
+          "task_usage_rows": 77,
+          "traced_task_session_ids": [
+            "ses_-zUUyTmCUzzxWiDOx6bx",
+            "ses_hJ3OZanTxqD93j1uqKOC",
+            "ses_hZ6hMEoEhmPdZkUsjIJ4"
+          ],
+          "request_events": 77,
+          "fingerprinted_events": 77,
+          "session_usage_rows": 77,
+          "request_attempts_without_usage": 0,
+          "violations": []
+        },
+        "traceScope": {
+          "passed": true,
+          "mode": "complete_post_quiescence",
+          "complete_task_trace": {
+            "schema_version": 1,
+            "kind": "complete_post_quiescence_task_trace",
+            "passed": true,
+            "task_ids": [
+              "tsk_g00VV1WDap00ovDJJae2"
+            ],
+            "tasks": [
+              {
+                "task_id": "tsk_g00VV1WDap00ovDJJae2",
+                "event_count": 82,
+                "events_sha256": "b8646fc582b1ef19482bda43f30990f3a846806d3c8a3fba9f4f6b6bdc49e3e9"
+              }
+            ],
+            "violations": []
+          },
+          "legacy_compact_jsonl_bytes": 406741,
+          "violations": []
+        },
+        "skillSeal": {
+          "passed": true,
+          "projection": {
+            "passed": true,
+            "skill_name": "automationbench-api",
+            "skill_ref": "default/skill/automationbench-api",
+            "profile": "base",
+            "required_agents": [
+              "orchestrator",
+              "base-developer",
+              "base-planner",
+              "base-tester"
+            ],
+            "projection_hash": "e57ee461ad2b2d6a02f8242c10a263757fef8f619d2ad7885b188edbd7f0ad57",
+            "mounted_agents": [
+              "base-developer",
+              "base-planner",
+              "base-tester",
+              "orchestrator"
+            ],
+            "unmountable_agents": [
+              {
+                "agent_id": "base-researcher",
+                "base_role": "explore",
+                "reason": "profile_role_not_skill_owner"
+              },
+              {
+                "agent_id": "universal-build",
+                "base_role": "build",
+                "reason": "profile_role_not_skill_owner"
+              }
+            ],
+            "violations": []
+          },
+          "coverage": {
+            "passed": true,
+            "runtime_adherence_passed": false,
+            "dispatched_agents": [
+              "base-developer",
+              "base-tester",
+              "orchestrator"
+            ],
+            "uncovered_agents": [],
+            "dispatched_owner_sessions": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC"
+              },
+              {
+                "agent_id": "orchestrator",
+                "session_id": "ses_-zUUyTmCUzzxWiDOx6bx"
+              }
+            ],
+            "successful_skill_loads": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 6,
+                "part_index": 2
+              }
+            ],
+            "benchmark_client_attempts": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 8,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 9,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 10,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 11,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 12,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 13,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 14,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 15,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 16,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 17,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 18,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 19,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 20,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 21,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 22,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 23,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 24,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 25,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 26,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 27,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 28,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 29,
+                "part_index": 2,
+                "status": "error"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 30,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 31,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 32,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 33,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 34,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 35,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hZ6hMEoEhmPdZkUsjIJ4",
+                "message_index": 36,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 51,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 52,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 57,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 58,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 59,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 60,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 61,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 62,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 63,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 64,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 65,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 66,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 67,
+                "part_index": 2,
+                "status": "completed"
+              }
+            ],
+            "missing_skill_loads": [
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC"
+              },
+              {
+                "agent_id": "orchestrator",
+                "session_id": "ses_-zUUyTmCUzzxWiDOx6bx"
+              }
+            ],
+            "client_before_skill_load": [
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 51,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 52,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 57,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 58,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 59,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 60,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 61,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 62,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 63,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 64,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 65,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 66,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hJ3OZanTxqD93j1uqKOC",
+                "message_index": 67,
+                "part_index": 2,
+                "status": "completed"
+              }
+            ],
+            "unmounted_client_attempts": [],
+            "violations": [],
+            "runtime_adherence_violations": [
+              "missing_skill_load:base-tester:ses_hJ3OZanTxqD93j1uqKOC",
+              "missing_skill_load:orchestrator:ses_-zUUyTmCUzzxWiDOx6bx",
+              "client_before_skill_load:base-tester:ses_hJ3OZanTxqD93j1uqKOC:51:2",
+              "client_before_skill_load:base-tester:ses_hJ3OZanTxqD93j1uqKOC:52:2",
+              "client_before_skill_load:base-tester:ses_hJ3OZanTxqD93j1uqKOC:57:2",
+              "client_before_skill_load:base-tester:ses_hJ3OZanTxqD93j1uqKOC:58:2",
+              "client_before_skill_load:base-tester:ses_hJ3OZanTxqD93j1uqKOC:59:2",
+              "client_before_skill_load:base-tester:ses_hJ3OZanTxqD93j1uqKOC:60:1",
+              "client_before_skill_load:base-tester:ses_hJ3OZanTxqD93j1uqKOC:61:2",
+              "client_before_skill_load:base-tester:ses_hJ3OZanTxqD93j1uqKOC:62:2",
+              "client_before_skill_load:base-tester:ses_hJ3OZanTxqD93j1uqKOC:63:2",
+              "client_before_skill_load:base-tester:ses_hJ3OZanTxqD93j1uqKOC:64:1",
+              "client_before_skill_load:base-tester:ses_hJ3OZanTxqD93j1uqKOC:65:3",
+              "client_before_skill_load:base-tester:ses_hJ3OZanTxqD93j1uqKOC:66:1",
+              "client_before_skill_load:base-tester:ses_hJ3OZanTxqD93j1uqKOC:67:2"
+            ]
+          },
+          "violations": []
+        },
+        "replay": {
+          "passed": true,
+          "violations": []
+        }
+      }
+    },
+    {
+      "case_index": 3,
+      "run_id": "bafd304d-0f02-486d-8520-eb1cf08723ad",
+      "source_status": "invalid",
+      "passed": true,
+      "failures": [],
+      "checks": {
+        "binding": {
+          "passed": true,
+          "requested_squads": [
+            "base"
+          ],
+          "held_squads": [
+            "base"
+          ],
+          "task_ids": [
+            "tsk_g00VV1c9KR00hywn1tJl"
+          ],
+          "task_bindings": [
+            {
+              "task_id": "tsk_g00VV1c9KR00hywn1tJl",
+              "source": "mission",
+              "bound_profile": "base",
+              "board_status": "completed",
+              "record_status": "completed",
+              "status_status": "completed"
+            }
+          ]
+        },
+        "completion": {
+          "passed": true,
+          "scored_terminal": true,
+          "mission_completed": true,
+          "explicit_complete_mission": true,
+          "completion_receipt_matches": true,
+          "mission_transcript_session_ids": [
+            "ses_-zUUyOBBCzzHE2hB42Yv"
+          ],
+          "mission_assistant_settled": true,
+          "mission_assistant_replies_to_latest_user": true,
+          "mission_assistant_healthy": true,
+          "mission_status": "inactive",
+          "child_task_count": 1,
+          "child_tasks": [
+            {
+              "task_id": "tsk_g00VV1c9KR00hywn1tJl",
+              "passed": true,
+              "scored_terminal": true,
+              "lifecycle_status": "completed",
+              "explicit_fail_task": false,
+              "infrastructure_failures": [],
+              "outcome": "completed"
+            }
+          ],
+          "status_task_ids": [
+            "tsk_g00VV1c9KR00hywn1tJl"
+          ]
+        },
+        "quiescence": {
+          "passed": true,
+          "mission_status": "inactive",
+          "mission_completed": true,
+          "task_count": 1,
+          "task_audits": [
+            {
+              "task_id": "tsk_g00VV1c9KR00hywn1tJl",
+              "passed": true,
+              "lifecycle_status": "completed",
+              "occurrence_count": 5,
+              "unsettled_occurrences": []
+            }
+          ]
+        },
+        "lineage": {
+          "passed": true,
+          "mission_session_valid": true,
+          "task_rows_valid": true,
+          "owned_task_ids": [
+            "tsk_g00VV1c9KR00hywn1tJl"
+          ],
+          "owned_task_set_matches": true,
+          "task_transcript_ids": [
+            "tsk_g00VV1c9KR00hywn1tJl"
+          ],
+          "task_transcript_flatten_matches": true,
+          "mission_messages_valid": true,
+          "task_messages_valid": true,
+          "mission_scheduler_inbox_ids": [
+            "pib_hhyIwOt1fhi9B6CfcRoy"
+          ],
+          "pending_mission_scheduler_inbox_ids": [],
+          "dead_letter_mission_scheduler_inbox_ids": [],
+          "invalid_terminal_mission_scheduler_inbox_ids": [],
+          "unanswered_mission_scheduler_inbox_ids": [],
+          "violations": []
+        },
+        "collections": {
+          "passed": true,
+          "interactions_match": true,
+          "provider_ledger_snapshot_matches": true,
+          "provider_ledger_session_lineage_matches": true,
+          "task_provider_usage_trace_coverage_matches": true,
+          "traced_task_session_ids": [
+            "ses_-zUUyNqTszzOMUD4SmvH",
+            "ses_h9cJAYNqXeIUMjyxG3LM",
+            "ses_hJzW8Zzrg7NLSikcaNou"
+          ],
+          "allowed_session_ids": [
+            "ses_-zUUyNqTszzOMUD4SmvH",
+            "ses_-zUUyNqe8zz89k8ps8HC",
+            "ses_-zUUyOBBCzzHE2hB42Yv",
+            "ses_h9cJAYNqXeIUMjyxG3LM",
+            "ses_hJzW8Zzrg7NLSikcaNou"
+          ],
+          "violations": []
+        },
+        "infrastructure": {
+          "passed": true,
+          "incidents": [],
+          "counts_by_reason": {},
+          "sources": {
+            "runtime_database_snapshot": 0,
+            "terminal_board": 0
+          },
+          "missing_sources": [],
+          "sources_agree": true,
+          "violations": []
+        },
+        "prompt": {
+          "passed": true,
+          "scope": "task_bound_agent_trace",
+          "mission_session_id": "ses_-zUUyOBBCzzHE2hB42Yv",
+          "mission_usage_rows": 18,
+          "task_usage_rows": 78,
+          "traced_task_session_ids": [
+            "ses_-zUUyNqTszzOMUD4SmvH",
+            "ses_h9cJAYNqXeIUMjyxG3LM",
+            "ses_hJzW8Zzrg7NLSikcaNou"
+          ],
+          "request_events": 78,
+          "fingerprinted_events": 78,
+          "session_usage_rows": 78,
+          "request_attempts_without_usage": 0,
+          "violations": []
+        },
+        "traceScope": {
+          "passed": true,
+          "mode": "complete_post_quiescence",
+          "complete_task_trace": {
+            "schema_version": 1,
+            "kind": "complete_post_quiescence_task_trace",
+            "passed": true,
+            "task_ids": [
+              "tsk_g00VV1c9KR00hywn1tJl"
+            ],
+            "tasks": [
+              {
+                "task_id": "tsk_g00VV1c9KR00hywn1tJl",
+                "event_count": 83,
+                "events_sha256": "e8a82bdd5d4311e61b89ed42f8a28d106cc57818d24ee277b5cce427dc441bec"
+              }
+            ],
+            "violations": []
+          },
+          "legacy_compact_jsonl_bytes": 398017,
+          "violations": []
+        },
+        "skillSeal": {
+          "passed": true,
+          "projection": {
+            "passed": true,
+            "skill_name": "automationbench-api",
+            "skill_ref": "default/skill/automationbench-api",
+            "profile": "base",
+            "required_agents": [
+              "orchestrator",
+              "base-developer",
+              "base-planner",
+              "base-tester"
+            ],
+            "projection_hash": "e57ee461ad2b2d6a02f8242c10a263757fef8f619d2ad7885b188edbd7f0ad57",
+            "mounted_agents": [
+              "base-developer",
+              "base-planner",
+              "base-tester",
+              "orchestrator"
+            ],
+            "unmountable_agents": [
+              {
+                "agent_id": "base-researcher",
+                "base_role": "explore",
+                "reason": "profile_role_not_skill_owner"
+              },
+              {
+                "agent_id": "universal-build",
+                "base_role": "build",
+                "reason": "profile_role_not_skill_owner"
+              }
+            ],
+            "violations": []
+          },
+          "coverage": {
+            "passed": true,
+            "runtime_adherence_passed": false,
+            "dispatched_agents": [
+              "base-developer",
+              "base-tester",
+              "orchestrator"
+            ],
+            "uncovered_agents": [],
+            "dispatched_owner_sessions": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM"
+              },
+              {
+                "agent_id": "orchestrator",
+                "session_id": "ses_-zUUyNqTszzOMUD4SmvH"
+              }
+            ],
+            "successful_skill_loads": [],
+            "benchmark_client_attempts": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 9,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 10,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 11,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 12,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 13,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 14,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 15,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 16,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 17,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 18,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 19,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 42,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 43,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 44,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 45,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 46,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 47,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 48,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 49,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 50,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 51,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 52,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 53,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 54,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 55,
+                "part_index": 2,
+                "status": "completed"
+              }
+            ],
+            "missing_skill_loads": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM"
+              },
+              {
+                "agent_id": "orchestrator",
+                "session_id": "ses_-zUUyNqTszzOMUD4SmvH"
+              }
+            ],
+            "client_before_skill_load": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 9,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 10,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 11,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 12,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 13,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 14,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 15,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 16,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 17,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 18,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hJzW8Zzrg7NLSikcaNou",
+                "message_index": 19,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 42,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 43,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 44,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 45,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 46,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 47,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 48,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 49,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 50,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 51,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 52,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 53,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 54,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_h9cJAYNqXeIUMjyxG3LM",
+                "message_index": 55,
+                "part_index": 2,
+                "status": "completed"
+              }
+            ],
+            "unmounted_client_attempts": [],
+            "violations": [],
+            "runtime_adherence_violations": [
+              "missing_skill_load:base-developer:ses_hJzW8Zzrg7NLSikcaNou",
+              "missing_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM",
+              "missing_skill_load:orchestrator:ses_-zUUyNqTszzOMUD4SmvH",
+              "client_before_skill_load:base-developer:ses_hJzW8Zzrg7NLSikcaNou:9:3",
+              "client_before_skill_load:base-developer:ses_hJzW8Zzrg7NLSikcaNou:10:2",
+              "client_before_skill_load:base-developer:ses_hJzW8Zzrg7NLSikcaNou:11:2",
+              "client_before_skill_load:base-developer:ses_hJzW8Zzrg7NLSikcaNou:12:2",
+              "client_before_skill_load:base-developer:ses_hJzW8Zzrg7NLSikcaNou:13:2",
+              "client_before_skill_load:base-developer:ses_hJzW8Zzrg7NLSikcaNou:14:2",
+              "client_before_skill_load:base-developer:ses_hJzW8Zzrg7NLSikcaNou:15:2",
+              "client_before_skill_load:base-developer:ses_hJzW8Zzrg7NLSikcaNou:16:2",
+              "client_before_skill_load:base-developer:ses_hJzW8Zzrg7NLSikcaNou:17:2",
+              "client_before_skill_load:base-developer:ses_hJzW8Zzrg7NLSikcaNou:18:3",
+              "client_before_skill_load:base-developer:ses_hJzW8Zzrg7NLSikcaNou:19:2",
+              "client_before_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM:42:3",
+              "client_before_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM:43:2",
+              "client_before_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM:44:2",
+              "client_before_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM:45:2",
+              "client_before_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM:46:1",
+              "client_before_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM:47:1",
+              "client_before_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM:48:2",
+              "client_before_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM:49:2",
+              "client_before_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM:50:2",
+              "client_before_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM:51:2",
+              "client_before_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM:52:2",
+              "client_before_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM:53:2",
+              "client_before_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM:54:2",
+              "client_before_skill_load:base-tester:ses_h9cJAYNqXeIUMjyxG3LM:55:2"
+            ]
+          },
+          "violations": []
+        },
+        "replay": {
+          "passed": true,
+          "violations": []
+        }
+      }
+    },
+    {
+      "case_index": 4,
+      "run_id": "8991ace3-64bb-4a52-8a1a-cded3e571fcb",
+      "source_status": "invalid",
+      "passed": true,
+      "failures": [],
+      "checks": {
+        "binding": {
+          "passed": true,
+          "requested_squads": [
+            "base"
+          ],
+          "held_squads": [
+            "base"
+          ],
+          "task_ids": [
+            "tsk_g00VV1cEzp00BvZ9fLbl"
+          ],
+          "task_bindings": [
+            {
+              "task_id": "tsk_g00VV1cEzp00BvZ9fLbl",
+              "source": "mission",
+              "bound_profile": "base",
+              "board_status": "completed",
+              "record_status": "completed",
+              "status_status": "completed"
+            }
+          ]
+        },
+        "completion": {
+          "passed": true,
+          "scored_terminal": true,
+          "mission_completed": true,
+          "explicit_complete_mission": true,
+          "completion_receipt_matches": true,
+          "mission_transcript_session_ids": [
+            "ses_-zUUyNyMmzznpQWxTeiu"
+          ],
+          "mission_assistant_settled": true,
+          "mission_assistant_replies_to_latest_user": true,
+          "mission_assistant_healthy": true,
+          "mission_status": "inactive",
+          "child_task_count": 1,
+          "child_tasks": [
+            {
+              "task_id": "tsk_g00VV1cEzp00BvZ9fLbl",
+              "passed": true,
+              "scored_terminal": true,
+              "lifecycle_status": "completed",
+              "explicit_fail_task": false,
+              "infrastructure_failures": [],
+              "outcome": "completed"
+            }
+          ],
+          "status_task_ids": [
+            "tsk_g00VV1cEzp00BvZ9fLbl"
+          ]
+        },
+        "quiescence": {
+          "passed": true,
+          "mission_status": "inactive",
+          "mission_completed": true,
+          "task_count": 1,
+          "task_audits": [
+            {
+              "task_id": "tsk_g00VV1cEzp00BvZ9fLbl",
+              "passed": true,
+              "lifecycle_status": "completed",
+              "occurrence_count": 5,
+              "unsettled_occurrences": []
+            }
+          ]
+        },
+        "lineage": {
+          "passed": true,
+          "mission_session_valid": true,
+          "task_rows_valid": true,
+          "owned_task_ids": [
+            "tsk_g00VV1cEzp00BvZ9fLbl"
+          ],
+          "owned_task_set_matches": true,
+          "task_transcript_ids": [
+            "tsk_g00VV1cEzp00BvZ9fLbl"
+          ],
+          "task_transcript_flatten_matches": true,
+          "mission_messages_valid": true,
+          "task_messages_valid": true,
+          "mission_scheduler_inbox_ids": [
+            "pib_hEA5UKZJKNOFFg1Hk38a"
+          ],
+          "pending_mission_scheduler_inbox_ids": [],
+          "dead_letter_mission_scheduler_inbox_ids": [],
+          "invalid_terminal_mission_scheduler_inbox_ids": [],
+          "unanswered_mission_scheduler_inbox_ids": [],
+          "violations": []
+        },
+        "collections": {
+          "passed": true,
+          "interactions_match": true,
+          "provider_ledger_snapshot_matches": true,
+          "provider_ledger_session_lineage_matches": true,
+          "task_provider_usage_trace_coverage_matches": true,
+          "traced_task_session_ids": [
+            "ses_-zUUyNko6zz3GcLtmtXi",
+            "ses_hLjgWwaNkEG7GjLsf9bM",
+            "ses_hP7Qk8fDmH6qsFiYSBca"
+          ],
+          "allowed_session_ids": [
+            "ses_-zUUyNko6zz3GcLtmtXi",
+            "ses_-zUUyNkyazz4LfSgggGG",
+            "ses_-zUUyNyMmzznpQWxTeiu",
+            "ses_hLjgWwaNkEG7GjLsf9bM",
+            "ses_hP7Qk8fDmH6qsFiYSBca"
+          ],
+          "violations": []
+        },
+        "infrastructure": {
+          "passed": true,
+          "incidents": [],
+          "counts_by_reason": {},
+          "sources": {
+            "runtime_database_snapshot": 0,
+            "terminal_board": 0
+          },
+          "missing_sources": [],
+          "sources_agree": true,
+          "violations": []
+        },
+        "prompt": {
+          "passed": true,
+          "scope": "task_bound_agent_trace",
+          "mission_session_id": "ses_-zUUyNyMmzznpQWxTeiu",
+          "mission_usage_rows": 16,
+          "task_usage_rows": 57,
+          "traced_task_session_ids": [
+            "ses_-zUUyNko6zz3GcLtmtXi",
+            "ses_hLjgWwaNkEG7GjLsf9bM",
+            "ses_hP7Qk8fDmH6qsFiYSBca"
+          ],
+          "request_events": 57,
+          "fingerprinted_events": 57,
+          "session_usage_rows": 57,
+          "request_attempts_without_usage": 0,
+          "violations": []
+        },
+        "traceScope": {
+          "passed": true,
+          "mode": "complete_post_quiescence",
+          "complete_task_trace": {
+            "schema_version": 1,
+            "kind": "complete_post_quiescence_task_trace",
+            "passed": true,
+            "task_ids": [
+              "tsk_g00VV1cEzp00BvZ9fLbl"
+            ],
+            "tasks": [
+              {
+                "task_id": "tsk_g00VV1cEzp00BvZ9fLbl",
+                "event_count": 62,
+                "events_sha256": "7ba69aa1f108e1759728ba577a0bb09a42abd69c175fb392519a8e8adcbc0b53"
+              }
+            ],
+            "violations": []
+          },
+          "legacy_compact_jsonl_bytes": 250033,
+          "violations": []
+        },
+        "skillSeal": {
+          "passed": true,
+          "projection": {
+            "passed": true,
+            "skill_name": "automationbench-api",
+            "skill_ref": "default/skill/automationbench-api",
+            "profile": "base",
+            "required_agents": [
+              "orchestrator",
+              "base-developer",
+              "base-planner",
+              "base-tester"
+            ],
+            "projection_hash": "e57ee461ad2b2d6a02f8242c10a263757fef8f619d2ad7885b188edbd7f0ad57",
+            "mounted_agents": [
+              "base-developer",
+              "base-planner",
+              "base-tester",
+              "orchestrator"
+            ],
+            "unmountable_agents": [
+              {
+                "agent_id": "base-researcher",
+                "base_role": "explore",
+                "reason": "profile_role_not_skill_owner"
+              },
+              {
+                "agent_id": "universal-build",
+                "base_role": "build",
+                "reason": "profile_role_not_skill_owner"
+              }
+            ],
+            "violations": []
+          },
+          "coverage": {
+            "passed": true,
+            "runtime_adherence_passed": false,
+            "dispatched_agents": [
+              "base-developer",
+              "base-tester",
+              "orchestrator"
+            ],
+            "uncovered_agents": [],
+            "dispatched_owner_sessions": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM"
+              },
+              {
+                "agent_id": "orchestrator",
+                "session_id": "ses_-zUUyNko6zz3GcLtmtXi"
+              }
+            ],
+            "successful_skill_loads": [],
+            "benchmark_client_attempts": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 11,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 12,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 13,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 14,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 15,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 16,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 17,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 18,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 19,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 20,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 21,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 22,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 23,
+                "part_index": 4,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 24,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 25,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 26,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 27,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 28,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+                "message_index": 40,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+                "message_index": 41,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+                "message_index": 42,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+                "message_index": 43,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+                "message_index": 44,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+                "message_index": 46,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+                "message_index": 47,
+                "part_index": 4,
+                "status": "completed"
+              }
+            ],
+            "missing_skill_loads": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM"
+              },
+              {
+                "agent_id": "orchestrator",
+                "session_id": "ses_-zUUyNko6zz3GcLtmtXi"
+              }
+            ],
+            "client_before_skill_load": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 11,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 12,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 13,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 14,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 15,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 16,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 17,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 18,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 19,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 20,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 21,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 22,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 23,
+                "part_index": 4,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 24,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 25,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 26,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 27,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_hP7Qk8fDmH6qsFiYSBca",
+                "message_index": 28,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+                "message_index": 40,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+                "message_index": 41,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+                "message_index": 42,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+                "message_index": 43,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+                "message_index": 44,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+                "message_index": 46,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hLjgWwaNkEG7GjLsf9bM",
+                "message_index": 47,
+                "part_index": 4,
+                "status": "completed"
+              }
+            ],
+            "unmounted_client_attempts": [],
+            "violations": [],
+            "runtime_adherence_violations": [
+              "missing_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca",
+              "missing_skill_load:base-tester:ses_hLjgWwaNkEG7GjLsf9bM",
+              "missing_skill_load:orchestrator:ses_-zUUyNko6zz3GcLtmtXi",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:11:3",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:12:2",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:13:2",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:14:2",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:15:2",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:16:2",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:17:2",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:18:2",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:19:2",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:20:2",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:21:2",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:22:2",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:23:4",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:24:2",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:25:2",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:26:2",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:27:3",
+              "client_before_skill_load:base-developer:ses_hP7Qk8fDmH6qsFiYSBca:28:2",
+              "client_before_skill_load:base-tester:ses_hLjgWwaNkEG7GjLsf9bM:40:3",
+              "client_before_skill_load:base-tester:ses_hLjgWwaNkEG7GjLsf9bM:41:2",
+              "client_before_skill_load:base-tester:ses_hLjgWwaNkEG7GjLsf9bM:42:2",
+              "client_before_skill_load:base-tester:ses_hLjgWwaNkEG7GjLsf9bM:43:2",
+              "client_before_skill_load:base-tester:ses_hLjgWwaNkEG7GjLsf9bM:44:2",
+              "client_before_skill_load:base-tester:ses_hLjgWwaNkEG7GjLsf9bM:46:2",
+              "client_before_skill_load:base-tester:ses_hLjgWwaNkEG7GjLsf9bM:47:4"
+            ]
+          },
+          "violations": []
+        },
+        "replay": {
+          "passed": true,
+          "violations": []
+        }
+      }
+    },
+    {
+      "case_index": 5,
+      "run_id": "6a2b7c47-0fc0-4545-a8ec-c6e9e0619125",
+      "source_status": "invalid",
+      "passed": true,
+      "failures": [],
+      "checks": {
+        "binding": {
+          "passed": true,
+          "requested_squads": [
+            "base"
+          ],
+          "held_squads": [
+            "base"
+          ],
+          "task_ids": [
+            "tsk_g00VV1ho3v00acHv720G"
+          ],
+          "task_bindings": [
+            {
+              "task_id": "tsk_g00VV1ho3v00acHv720G",
+              "source": "mission",
+              "bound_profile": "base",
+              "board_status": "completed",
+              "record_status": "completed",
+              "status_status": "completed"
+            }
+          ]
+        },
+        "completion": {
+          "passed": true,
+          "scored_terminal": true,
+          "mission_completed": true,
+          "explicit_complete_mission": true,
+          "completion_receipt_matches": true,
+          "mission_transcript_session_ids": [
+            "ses_-zUUyIWJ0zzR7V30acXJ"
+          ],
+          "mission_assistant_settled": true,
+          "mission_assistant_replies_to_latest_user": true,
+          "mission_assistant_healthy": true,
+          "mission_status": "inactive",
+          "child_task_count": 1,
+          "child_tasks": [
+            {
+              "task_id": "tsk_g00VV1ho3v00acHv720G",
+              "passed": true,
+              "scored_terminal": true,
+              "lifecycle_status": "completed",
+              "explicit_fail_task": false,
+              "infrastructure_failures": [],
+              "outcome": "completed"
+            }
+          ],
+          "status_task_ids": [
+            "tsk_g00VV1ho3v00acHv720G"
+          ]
+        },
+        "quiescence": {
+          "passed": true,
+          "mission_status": "inactive",
+          "mission_completed": true,
+          "task_count": 1,
+          "task_audits": [
+            {
+              "task_id": "tsk_g00VV1ho3v00acHv720G",
+              "passed": true,
+              "lifecycle_status": "completed",
+              "occurrence_count": 9,
+              "unsettled_occurrences": []
+            }
+          ]
+        },
+        "lineage": {
+          "passed": true,
+          "mission_session_valid": true,
+          "task_rows_valid": true,
+          "owned_task_ids": [
+            "tsk_g00VV1ho3v00acHv720G"
+          ],
+          "owned_task_set_matches": true,
+          "task_transcript_ids": [
+            "tsk_g00VV1ho3v00acHv720G"
+          ],
+          "task_transcript_flatten_matches": true,
+          "mission_messages_valid": true,
+          "task_messages_valid": true,
+          "mission_scheduler_inbox_ids": [
+            "pib_hHf9ZqWDcpeg86SSclpk"
+          ],
+          "pending_mission_scheduler_inbox_ids": [],
+          "dead_letter_mission_scheduler_inbox_ids": [],
+          "invalid_terminal_mission_scheduler_inbox_ids": [],
+          "unanswered_mission_scheduler_inbox_ids": [],
+          "violations": []
+        },
+        "collections": {
+          "passed": true,
+          "interactions_match": true,
+          "provider_ledger_snapshot_matches": true,
+          "provider_ledger_session_lineage_matches": true,
+          "task_provider_usage_trace_coverage_matches": true,
+          "traced_task_session_ids": [
+            "ses_-zUUyIBk3zz4Eg4RMirn",
+            "ses_h3vgwy32JBwVPsJxk1bf",
+            "ses_hwZS8nfdpWHCRETjcH52"
+          ],
+          "allowed_session_ids": [
+            "ses_-zUUyIBk3zz4Eg4RMirn",
+            "ses_-zUUyIBuYzznnSJKsVk1",
+            "ses_-zUUyIWJ0zzR7V30acXJ",
+            "ses_h3vgwy32JBwVPsJxk1bf",
+            "ses_hwZS8nfdpWHCRETjcH52"
+          ],
+          "violations": []
+        },
+        "infrastructure": {
+          "passed": true,
+          "incidents": [],
+          "counts_by_reason": {},
+          "sources": {
+            "runtime_database_snapshot": 0,
+            "terminal_board": 0
+          },
+          "missing_sources": [],
+          "sources_agree": true,
+          "violations": []
+        },
+        "prompt": {
+          "passed": true,
+          "scope": "task_bound_agent_trace",
+          "mission_session_id": "ses_-zUUyIWJ0zzR7V30acXJ",
+          "mission_usage_rows": 18,
+          "task_usage_rows": 134,
+          "traced_task_session_ids": [
+            "ses_-zUUyIBk3zz4Eg4RMirn",
+            "ses_h3vgwy32JBwVPsJxk1bf",
+            "ses_hwZS8nfdpWHCRETjcH52"
+          ],
+          "request_events": 134,
+          "fingerprinted_events": 134,
+          "session_usage_rows": 134,
+          "request_attempts_without_usage": 0,
+          "violations": []
+        },
+        "traceScope": {
+          "passed": true,
+          "mode": "complete_post_quiescence",
+          "complete_task_trace": {
+            "schema_version": 1,
+            "kind": "complete_post_quiescence_task_trace",
+            "passed": true,
+            "task_ids": [
+              "tsk_g00VV1ho3v00acHv720G"
+            ],
+            "tasks": [
+              {
+                "task_id": "tsk_g00VV1ho3v00acHv720G",
+                "event_count": 143,
+                "events_sha256": "9b7d9d4e618d0faf9048111e6342228f40d8b88f26c4faf0ee909de6602f523e"
+              }
+            ],
+            "violations": []
+          },
+          "legacy_compact_jsonl_bytes": 1061349,
+          "violations": []
+        },
+        "skillSeal": {
+          "passed": true,
+          "projection": {
+            "passed": true,
+            "skill_name": "automationbench-api",
+            "skill_ref": "default/skill/automationbench-api",
+            "profile": "base",
+            "required_agents": [
+              "orchestrator",
+              "base-developer",
+              "base-planner",
+              "base-tester"
+            ],
+            "projection_hash": "e57ee461ad2b2d6a02f8242c10a263757fef8f619d2ad7885b188edbd7f0ad57",
+            "mounted_agents": [
+              "base-developer",
+              "base-planner",
+              "base-tester",
+              "orchestrator"
+            ],
+            "unmountable_agents": [
+              {
+                "agent_id": "base-researcher",
+                "base_role": "explore",
+                "reason": "profile_role_not_skill_owner"
+              },
+              {
+                "agent_id": "universal-build",
+                "base_role": "build",
+                "reason": "profile_role_not_skill_owner"
+              }
+            ],
+            "violations": []
+          },
+          "coverage": {
+            "passed": true,
+            "runtime_adherence_passed": false,
+            "dispatched_agents": [
+              "base-developer",
+              "base-tester",
+              "orchestrator"
+            ],
+            "uncovered_agents": [],
+            "dispatched_owner_sessions": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52"
+              },
+              {
+                "agent_id": "orchestrator",
+                "session_id": "ses_-zUUyIBk3zz4Eg4RMirn"
+              }
+            ],
+            "successful_skill_loads": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 6,
+                "part_index": 2
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 99,
+                "part_index": 1
+              }
+            ],
+            "benchmark_client_attempts": [
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 7,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 8,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 9,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 10,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 11,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 12,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 13,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 14,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 15,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 16,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 17,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 18,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 19,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 20,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 21,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 22,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 23,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 24,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 25,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 26,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 27,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 28,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 29,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 30,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 31,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 32,
+                "part_index": 4,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 33,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 34,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 35,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 36,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 37,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 38,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 39,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 40,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 41,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 42,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 43,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 44,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 45,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 46,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 47,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 48,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 49,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 50,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 51,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 52,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 53,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 54,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 68,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 69,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 70,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 71,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 72,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 73,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 74,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 75,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 76,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 77,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 78,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 79,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 80,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 81,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 82,
+                "part_index": 2,
+                "status": "error"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 83,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 84,
+                "part_index": 2,
+                "status": "error"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 85,
+                "part_index": 2,
+                "status": "error"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 86,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 87,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 88,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 89,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 90,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 102,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 103,
+                "part_index": 4,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 104,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 105,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-developer",
+                "session_id": "ses_h3vgwy32JBwVPsJxk1bf",
+                "message_index": 106,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 112,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 113,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 114,
+                "part_index": 2,
+                "status": "error"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 115,
+                "part_index": 2,
+                "status": "error"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 116,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 117,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 118,
+                "part_index": 1,
+                "status": "error"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 119,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 120,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 121,
+                "part_index": 2,
+                "status": "completed"
+              }
+            ],
+            "missing_skill_loads": [
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52"
+              },
+              {
+                "agent_id": "orchestrator",
+                "session_id": "ses_-zUUyIBk3zz4Eg4RMirn"
+              }
+            ],
+            "client_before_skill_load": [
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 68,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 69,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 70,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 71,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 72,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 73,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 74,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 75,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 76,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 77,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 78,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 79,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 80,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 81,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 82,
+                "part_index": 2,
+                "status": "error"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 83,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 84,
+                "part_index": 2,
+                "status": "error"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 85,
+                "part_index": 2,
+                "status": "error"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 86,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 87,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 88,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 89,
+                "part_index": 1,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 90,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 112,
+                "part_index": 3,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 113,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 114,
+                "part_index": 2,
+                "status": "error"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 115,
+                "part_index": 2,
+                "status": "error"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 116,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 117,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 118,
+                "part_index": 1,
+                "status": "error"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 119,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 120,
+                "part_index": 2,
+                "status": "completed"
+              },
+              {
+                "agent_id": "base-tester",
+                "session_id": "ses_hwZS8nfdpWHCRETjcH52",
+                "message_index": 121,
+                "part_index": 2,
+                "status": "completed"
+              }
+            ],
+            "unmounted_client_attempts": [],
+            "violations": [],
+            "runtime_adherence_violations": [
+              "missing_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52",
+              "missing_skill_load:orchestrator:ses_-zUUyIBk3zz4Eg4RMirn",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:68:3",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:69:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:70:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:71:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:72:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:73:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:74:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:75:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:76:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:77:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:78:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:79:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:80:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:81:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:82:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:83:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:84:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:85:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:86:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:87:1",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:88:1",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:89:1",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:90:3",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:112:3",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:113:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:114:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:115:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:116:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:117:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:118:1",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:119:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:120:2",
+              "client_before_skill_load:base-tester:ses_hwZS8nfdpWHCRETjcH52:121:2"
+            ]
+          },
+          "violations": []
+        },
+        "replay": {
+          "passed": true,
+          "violations": []
+        }
+      }
+    }
+  ]
+}

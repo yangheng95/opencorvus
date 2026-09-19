@@ -1,0 +1,50 @@
+\PassOptionsToPackage{hyphens}{url}
+\documentclass{article}
+\makeatletter
+\def\input@path{{../templates/iclr2027/source/iclr2027/}}
+\makeatother
+\usepackage{iclr2027_conference,times}
+\usepackage[T1]{fontenc}
+\usepackage{microtype,amsmath,amssymb,amsthm}
+\usepackage{booktabs,tabularx,array,enumitem,flafter}
+\usepackage{graphicx,etoolbox}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\urlstyle{same}
+\setlength{\emergencystretch}{2em}
+\newtheorem{proposition}{Proposition}
+\newcommand{\oc}{OpenCorvus}
+\newcommand{\code}[1]{\texttt{\nolinkurl{#1}}}
+\newcommand{\yes}{\mathsf{S}}
+\newcommand{\no}{\mathsf{R}}
+\newcommand{\unk}{\mathsf{U}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\title{\raggedright OpenCorvus: Evolving Expert Organizations for Professional Work}
+\author{Author identities to be supplied before submission}
+% Internal draft status only; official files, geometry and type sizes remain unchanged.
+\makeatletter
+\patchcmd{\@maketitle}{Anonymous authors}{Author identities pending}{}{\errmessage{Draft author status patch failed}}
+\patchcmd{\@maketitle}{Paper under double-blind review}{Working manuscript with preliminary results}{}{\errmessage{Draft review status patch failed}}
+\makeatother
+\begin{document}
+\maketitle
+\lhead{Working manuscript, 11 September 2026; not submitted}
+\begin{abstract}
+Professional agent systems must carry specialized procedures across assignments and improve those procedures without losing the ability to identify what was executed and evaluated. We introduce Evolving Expert Organizations (EEOs), a framework that makes a reusable expert organization the unit of specialization and revision. Implemented in OpenCorvus, an organization packages role instructions, collaboration graphs, capability allocations, domain resources, and exact version identity. Domain specialization binds this structure to professional procedures and output contracts. An outer improvement process attributes failures from task evidence, constructs candidate revisions, and compares them with their parent under matched execution conditions. We define the admissible organizational update space and instantiate it with experience-driven procedural text revision while preserving executable resources and inherited capability references. Task-local execution remains bound to its original revision, and retained updates apply to subsequent work. Our analysis connects organizational improvement to search-cost amortization and independent evaluation after selection. A preliminary AutomationBench run of OpenCorvus Mission Base with GPT-5.6 Luna is recorded at 34\% strict pass over 100 workflows. This aggregate characterizes the execution harness; incomplete case-level provenance and the absence of matched ablations limit attribution to organizational mechanisms. The framework provides a concrete basis for investigating how professional agent organizations accumulate useful procedures across tasks.
+\end{abstract}
+\input{chapters/01-introduction}
+\input{chapters/02-model}
+\input{chapters/03-design}
+\input{chapters/04-analysis}
+\input{chapters/05-evaluation}
+\input{chapters/06-discussion}
+\section*{AI use statement}
+This manuscript was drafted and revised with a language-model assistant in Codex. A separate model instance provided critical review. Assistance included source inspection, literature retrieval, mathematical checks, and PDF preparation. The three original method figures were generated with the built-in image-generation tool, documented as GPT Image 2, and inspected for text and scientific consistency. The tool does not expose an exact backend snapshot; the prompts and selected assets accompany the manuscript. These activities are not empirical validation. Human author identities and submission responsibility remain to be confirmed.
+\bibliographystyle{../templates/iclr2027/source/iclr2027/iclr2027_conference}
+\begingroup\raggedright
+\bibliography{references}
+\endgroup
+\appendix
+\clearpage
+\input{chapters/07-artifact}
+\end{document}

@@ -1,5 +1,12 @@
 # Server runtime readiness
 
+Managed SDK startup accepts only the occurrence-bound readiness receipt. On
+timeout, abort, failed receipt or early exit, it settles the owned process and
+drains its pipes before attaching the byte-bounded diagnostic tail to the
+primary error. Output does not determine readiness. Failed credential-free
+packaged first-run checks retain their isolated runtime and result path for
+diagnosis; successful checks remove that owned temporary runtime.
+
 The server runtime has two ordered recovery phases and one listener:
 
 1. Bounded process-local integrity recovery observes the current physical process occurrence, settles orphaned supervised requests and isolated workspaces, reconciles Project deletion artifacts and maintenance fences, and initializes global automation scheduling.
@@ -25,6 +32,11 @@ Application recovery failure never becomes a false success. The Promise rejects 
 Wake settlement classifies the exact rejected abort reason carried by its runtime reservation, or a typed execution cancellation, as expected cancellation at info severity. An unrelated error remains a failure; matching shutdown text is not cancellation authority. This logging classification never changes the durable wake receipt or retry policy.
 
 Multiple backends may share one SQLite database. Physical process occurrences, Project maintenance fences, Task activation leases, idempotent recovery facts, and SQLite transactions coordinate ownership; listener readiness neither acquires nor recreates a database-path-wide host lock.
+
+A required current-process identity query preserves its platform-reader cause in
+`RuntimeProcessIdentityError`; POSIX command output is bounded to4096bytes. A
+failed query of another owner's identity still yields unknown-live when that
+process is alive, and never grants takeover on the strength of a failed query.
 
 File logging uses one asynchronous Pino destination per process generation. The
 existing lifecycle mutex serializes initialization, flush and close; cached

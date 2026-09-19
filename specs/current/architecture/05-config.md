@@ -141,6 +141,9 @@ Event 和 Provider 的活跃 effect 数。Project source 在 commit 前按 canon
 字段，不能覆盖或影子化全局策略；这些数值不拥有 occurrence、FIFO、重试、租约或业务终态。
 
 `Config.get()`、`Config.getGlobal()` 与本进程 Project/global writer 共享一个 generation
+边界。`Config.global()` 与 `Config.getGlobal()` 发布前按 `Config.Info` 补齐默认值；canonical
+global 文件缺失或只有空白时，与空对象文件得到相同的默认配置。缺失或空白的底层文件层保持稀疏，
+不向文件写入默认值，也不让缺失的文件层覆盖上层已配置值。上述接口共享同一个 generation
 read/write owner；writer 从 candidate、canonical replace、cache reset、runtime projection 到事件确认均在
 同一 write generation 内。写 generation 中自然产生的嵌套读取会被登记并在释放前排空；继承 context 但在
 generation 结束后才运行的读取必须重新取得 owner；嵌套 mutation 以

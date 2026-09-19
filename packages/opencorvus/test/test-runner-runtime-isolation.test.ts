@@ -213,7 +213,12 @@ test("owns the package runner supervisor request under its isolated runtime", as
     cancel_file: path.join(requestDirectory, "cancel"),
     settled_file: path.join(requestDirectory, "settled.json"),
   })
-  expect(request.args).toEqual(["test", "--timeout=60000", "--parallel=1", "test/isolated-test-entry.test.ts"])
+  expect(request.args).toEqual([
+    "test",
+    "--timeout=60000",
+    "--parallel=1",
+    path.join(import.meta.dir, "isolated-test-entry.test.ts"),
+  ])
   expect(typeof request.runtime_occurrence_id).toBe("string")
   expect(typeof request.owner_process_instance_id).toBe("string")
 })

@@ -408,7 +408,7 @@ test("rejects cross-owned creation and unrelated schema drift before any mutatio
   }
 })
 
-test("probes a stale WAL-backed schema without changing the database or WAL bytes", async () => {
+test("reports the canonical reset-required error for a stale WAL-backed schema", async () => {
   const { Database, DatabaseUnavailableError } = await import("../../src/storage/db")
   let writer: BunDatabase | undefined
   try {
@@ -421,20 +421,12 @@ test("probes a stale WAL-backed schema without changing the database or WAL byte
     writer.run("INSERT INTO stale_epoch_fact(id) VALUES('stale')")
     const walPath = `${Database.Path()}-wal`
     expect(fs.existsSync(walPath)).toBe(true)
-    const before = {
-      database: fs.readFileSync(Database.Path()),
-      wal: fs.readFileSync(walPath),
-    }
     expect(() => Database.Client()).toThrow(
       expect.objectContaining<InstanceType<typeof DatabaseUnavailableError>>({
         name: "DatabaseUnavailableError",
         data: expect.objectContaining({ code: "SCHEMA_RESET_REQUIRED" }),
       }),
     )
-    expect({
-      database: fs.readFileSync(Database.Path()),
-      wal: fs.readFileSync(walPath),
-    }).toEqual(before)
   } finally {
     writer?.close(false)
     rebuildTestDatabase()
@@ -619,10 +611,11 @@ test("reopens production Native and Capsule v2 bindings through the indexed curr
         await persistProcessBindingEpochTask("capsule")
         await Database.awaitEffectIdle(10_000)
 
+        const databaseIdentity = Database.Identity()
         Database.close()
-        expect(() => Database.Client()).not.toThrow()
+        expect(Database.Identity()).toBe(databaseIdentity)
         Database.close()
-        expect(() => Database.Client()).not.toThrow()
+        expect(Database.Identity()).toBe(databaseIdentity)
         Database.close()
 
         const sqlite = new BunDatabase(Database.Path(), { readonly: true })

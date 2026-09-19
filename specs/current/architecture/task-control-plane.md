@@ -45,6 +45,16 @@ and different winners return a typed identity conflict. Database uniqueness choo
 owns business identity or spans reconciliation/Provider work. A narrow process lock may serialize only physical publication
 of the already-allocated directory.
 
+Durable operator-message, scheduler-delivery and Mission acceptance-resume receipts acknowledge the committed ingress, not completion of its model Turn. `dispatchPersistedTaskLoop` validates current-project ownership and the exact accepted ingress, then requests the existing detached project-owned scan. The reconciler, FIFO leases, replay and restart sweep remain the sole execution authority; request lifetime cannot own or block the enabled Turn.
+
+## Outcome and delegated input
+
+The original operator outcome and relevant authoritative facts define semantic success. A real Mission `panel_create_task` occurrence may put only one or more ordered verbatim fragments from authenticated real-user authority history into `engine_task.request`; separate fragments use one blank line and must retain every original operation and constraint assigned to that Task. The Host verifies byte provenance across direct Mission user Messages and any immutable right-sidebar caller lineage at creation and during storage/transfer validation. A failed provenance check may report byte counts for the initial direct match, the longest complete accepted ordered-fragment prefix, and later exact source fragments. Those counts only locate divergence; the repair contract always requires a complete verbatim recopy of every assigned operation and constraint with no agent-authored text. The Host never recommends deleting unmatched content because it may contain a mistyped or short safety constraint. The diagnostic never accepts, exposes, extracts, rewrites, or semantically judges the request. Once an assistant accepts a user Message, every Part in the complete `acceptedInputMessageIDs` batch is immutable, including non-parent batch members, so later writes cannot change the authority that reply consumed. Task title, selected Squad, dependencies, structured Artifact authorities and accepted Delivery Slice revisions carry allocation without being mixed into the user request. Task input rendering therefore presents original user text rather than a combined user/delegation string. A plan or report remains a claim to inspect against the outcome. This is message-source integrity, not a permission, lifecycle writer, hidden message, synthetic message, or Host business-decision gate.
+
+The Provider projection preserves every real-user TextPart verbatim. Guidance that a later user message is current input and live project-memory/task-plan context are labeled runtime system parts; neither is inserted into a user Message. This keeps the Provider-visible participant text byte-identical to the persisted authority used by Task request provenance checks.
+
+A completed Task's `task_completion_decision` remains an identity and evidence index; it does not copy the Orchestrator's narrative judgment or materialize an acceptance aggregate. A Mission first binds the current terminal occurrence through `panel_query_task`, reads the exact current Completion Decision Artifact, deduplicates its exact Orchestrator identity with decision-named `session_message` locators, and splits only a unique set larger than eight into consecutive `panel_read_task_message` batches. The Host atomically validates every identity in each batch and returns real visible text-Part windows with persisted Message/Part and agent identities, UTF-8 offsets, lengths, digests, and text under aggregate bounds of 30000 text bytes and 64 Parts per call. An initial Message identity may omit `byte_offset` or explicitly use zero; a positive offset is a continuation and must carry the exact Host-returned `text_part_id`. Short finals complete in one call; longer or many-Part evidence returns exact `next_messages`, which is the only continuation input and is passed unchanged until `complete=true`. It preserves real participant content while excluding reasoning and Tool payloads; it does not retain the old inventory/chunk protocol, synthesize an acceptance aggregate, select latest Messages, or enumerate Task history. Task lineage, Mission ownership, active Project, current terminal time, the single Completion Decision, and its locator set are revalidated on every continuation. An earlier planning Artifact's stage-local statement that execution had not happened does not establish a present omission after concrete later execution and verification evidence resolves it. Persistent user constraints, authoritative source facts, and contradictions not resolved by later concrete evidence remain acceptance inputs; recency alone does not establish truth.
+
 ## Task lifecycle and execution epoch
 
 `protocol_event` is the sole Task lifecycle authority. Task aggregate identity is stored once as `(aggregate_type='task', aggregate_id=task_id)`; `protocol_event.task_id` is `NULL` for Task aggregate events and is reserved for correlation from non-Task aggregates.
@@ -67,11 +77,11 @@ One epoch has one open boundary, at most one cancellation request boundary, and 
 
 A late activation, decision, or effect request carries its exact epoch and is rejected after a newer epoch opens. An already-requested external effect may still append or reconcile its exact outcome after cancellation, because discarding an unknown outcome would permit duplicate side effects.
 
-Exactly two authorities may open the next occurrence. An explicit operator Message opens completed, failed, or cancelled Tasks. A Mission acceptance resume opens only a completed or failed Mission-owned Task, and must bind the exact current terminal lifecycle reference, current acceptance-ledger revision, completely read evidence, immutable workflow nodes, and one visible Mission-authored structured repair Message. Both append `epoch + 1`; the prior occurrence stays intact as an immutable fact at its old epoch. There is no separate retry or replan control. Scheduler delivery, agent coordination, recovery, and late Tool/Provider outcomes must match an existing occurrence and can never obtain reopen authority. Asking a question rather than requesting work needs no mode of its own: the Orchestrator judges a status-only operator Message as conversation ingress and answers it with a `no_action` decision receipt.
+Exactly two authorities may open the next occurrence. An explicit operator Message opens completed, failed, or cancelled Tasks. A Mission acceptance resume opens only a completed or failed Mission-owned Task, and must bind the exact current terminal lifecycle reference, current acceptance-ledger revision, completely read evidence, exact acceptance responsibility, and one visible Mission-authored structured repair Message. Both append `epoch + 1`; the prior occurrence stays intact as an immutable fact at its old epoch. There is no separate retry or replan control. Scheduler delivery, agent coordination, recovery, and late Tool/Provider outcomes must match an existing occurrence and can never obtain reopen authority. Asking a question rather than requesting work needs no mode of its own: the Orchestrator judges a status-only operator Message as conversation ingress and answers it with a `no_action` decision receipt.
 
-Mission acceptance obligation is an append-only `task_acceptance_ledger` Artifact lineage, not another lifecycle. Each revision points to the prior revision, names the newly opened epoch, stores one typed state (`open`, `accepted`, or `blocked`) per criterion with canonical evidence locators, and never copies Task/Session status or Artifact bodies. Every state carries all five append-only evidence arrays: observation, attempted-repair, resolution, invalidating, and irreducible-blocker locators never move between roles. `open -> open` requires a new locator or a changed canonical structured repair-action hash; `open -> accepted` requires new resolution evidence; `open -> blocked` requires new irreducible-blocker evidence; `accepted -> open` retains resolution evidence in that role and requires `stale_evidence` plus new invalidating evidence. Accepted and blocked states otherwise retain exact immutable facts. The structured repair action is the single authority for its expected evidence kind and canonical identity hash. Responsibility is either an immutable virtual-workflow node or an exact direct-dispatch package revision, Agent, and `dispatch_lineage` Artifact; only the responsible node/downstream verifier or exact direct lineage continuation can consume it.
+Mission acceptance obligation is an append-only `task_acceptance_ledger` Artifact lineage, not another lifecycle. Each revision points to the prior revision, names the newly opened epoch, stores one typed state (`open`, `accepted`, or `blocked`) per criterion with canonical evidence locators, and never copies Task/Session status or Artifact bodies. Every state carries all five append-only evidence arrays: observation, attempted-repair, resolution, invalidating, and irreducible-blocker locators never move between roles. `open -> open` requires a new locator or a changed canonical structured repair-action hash; `open -> accepted` requires new resolution evidence; `open -> blocked` requires new irreducible-blocker evidence; `accepted -> open` retains resolution evidence in that role and requires `stale_evidence` plus new invalidating evidence. Accepted and blocked states otherwise retain exact immutable facts. The structured repair action is the single authority for its expected evidence kind and canonical identity hash. Responsibility identifies an immutable virtual-workflow node, an exact direct-dispatch package revision/Agent/`dispatch_lineage` Artifact, or `task_initialization` bound to a real failed terminal event of the same Task before any dispatch at or before that execution epoch. A new initialization criterion binds the currently reviewed failure; later ledger revisions retain its original reference. Workflow and direct criteria are consumed only by their responsible node/downstream verifier or exact lineage continuation. Initialization responsibility covers the subsequent actual execution graph and its verification, without inventing a workflow or dispatch that did not happen.
 
-The Task-root Orchestrator and every acceptance-repair worker continuation retain their physical Session lineage. Before the next Provider request, each consumes the current attempt of a logical compaction checkpoint keyed by Task, epoch, ledger revision, gap, and Session. Every failed attempt remains immutable and recovery creates a new deterministic attempt; the durable control reduction points to the pending attempt or latest consumed control and its exact summary Message binding. The checkpoint preserves Task authority, workflow/dispatch identity, criterion states, and canonical locators. It copies no Artifact body. A continuation must name the current gap and open criterion subset, reuse an existing dispatch occurrence, and target the responsible workflow node/downstream verifier or the exact responsible direct dispatch lineage.
+The Task-root Orchestrator and every acceptance-repair worker continuation retain their physical Session lineage. Before the next Provider request, each consumes the current attempt of a logical compaction checkpoint keyed by Task, epoch, ledger revision, gap, and Session. Every failed attempt remains immutable and recovery creates a new deterministic attempt; the durable control reduction points to the pending attempt or latest consumed control and its exact summary Message binding. The checkpoint preserves Task authority, workflow/dispatch identity, criterion states, and canonical locators. It copies no Artifact body. Every repair Turn names the current gap and open criterion subset. An existing worker continues its original dispatch occurrence. A downstream node of the same immutable virtual workflow that has never committed an occurrence may start its initial Turn after normal dependency admission; its first durable input and WorkerTurnDescriptor bind the original request, acceptance ledger revision, evidence locators, and criterion responsibility before Provider processing. `checkpoint_required=false` is fixed by the initial Turn schema because there is no prior history to compact; continuation fixes it to true and consumes the existing compaction checkpoint. Both paths validate the referenced ledger gap and epoch. Direct-dispatch responsibility still requires the exact responsible existing lineage. A validated initialization gap permits an as-yet-unselected workflow: its first actual initial Turn uses the normal fixed-Squad workflow selection and binds the current acceptance obligation. Once selected, the same immutable workflow constraints apply. Initial repair includes the original adapter request plus the acceptance obligation; it never receives a continuation prompt in place of that request.
 
 Deletion is the boundary that does fence a reopen, per the retention rule below; the reopen transaction checks it directly rather than relying on the ingress acceptance that refuses a moment later.
 
@@ -115,6 +125,16 @@ There is no persisted ingress disposition, delivery result, semantic attempt, ac
 
 ## Decision-gap continuation
 
+A completed Tool transport receipt is not sufficient dispatch acceptance. The live
+decision coordinator, reopened assistant Message reader and ingress reducer use
+the same typed output contract. An `infrastructure_failure` requires a subsequent
+model decision. A collection contributes its dispatch decision when at least one
+member has a valid non-infrastructure outcome; an all-failed collection requires
+follow-up. In-flight reservations still serialize incompatible decisions and
+preserve independently accepted siblings. A malformed completed receipt is a
+contract error. The shared projected Tool boundary propagates the provider-visible
+Tool name so adapter validation checks the real persisted outer invocation.
+
 Session Message causality is allocated by the Session persistence boundary, not by caller wall-clock order. A new Message obtains SQLite's writer reservation before reading its exact Session frontier and persists `time.created = max(requested_created, latest_session_created + 1)`; existing Message creation time remains immutable. Moving a real Task-root participant Message into its Orchestrator Session obtains the same writer reservation before allocating that target Session's next frontier. Message events, timeline order keys and child Parts use the persisted frontier, and a Part cannot precede its parent Message. The frontier is scoped to one Session, so concurrent projects and Sessions do not share a global sequence.
 
 A fresh typed Task occurrence requires both the real task-creator Message and its deterministic Orchestrator control Message. The Session prompt writer prepares them under one runtime-contract write claim and commits both bundles in one immediate transaction before arming the runtime wake. Observers therefore see either the complete creator/control cut or neither participant; replay validates the existing deterministic control identity and never synthesizes or reorders a Message after visibility.
@@ -129,23 +149,35 @@ and declared workflows. This is the persisted settlement's participant report
 reference, not a latest-Message selection. The completed assistant-Message
 inventory retains each recorded `finish` reason because a completed Tool step
 is not by itself a terminal worker report. The exact Message reader exposes the
-same finish/completion facts without inferring success. Its sole current input
-is an ordered set of one to eight globally unique Message IDs. The reader
-projects the latest exact dispatch group as a Provider enum and validates the
-submitted ordered subset against that same immutable set. A `dispatch_agents`
-group is bound by execution epoch, Orchestrator Message and outer Tool
-occurrence and has the same maximum of eight members as its collection; a
-direct group is the sibling `dispatch_agent` decision set owned by the same
-execution epoch and assistant Message. Its Tool requests are read through the
-Message index and lineages through exact Tool-occurrence authority, rather than
-scanning Task history. Historical groups are neither scanned nor copied into
-the Tool schema. One collection fits one read; a larger legal direct fan-out is
-read in ordered chunks of at most eight. Its executor still resolves and
-verifies every persisted Session owner
+same finish/completion facts without inferring success. Its required input is
+an ordered set of one to eight globally unique terminal dispatch-settlement
+Message IDs. A later dispatch does not revoke an earlier terminal worker
+Message whose evidence remains material. The
+first read also returns a bounded, redacted page of real Tool Message and Part
+identities from the same Session, the same accepted input parent and no later
+than each selected final in persisted `(time,id)` order. Older pages use the
+returned per-final `inventory_next_before` cursor. A caller may then supply up
+to eight exact `message_id+part_id` pairs returned by that final's inventory
+in this or an earlier call through
+`evidence_reads` with an explicit `input`, `output`, or `failure` field; the
+same reader returns a structured-redacted projection of that persisted Tool
+field in chunks whose requested total is at most 30000 characters, with
+`next_offset` until complete. Final-Message Tool parts use the same safe
+metadata projection rather than bypassing this chunk path. Materialized
+truncated outputs resolve through the same authoritative source primitive as
+compaction. Runtime validation rejects non-settlement Messages and Messages
+from another Task, occurrence, Session, or later causal frontier. The reader
+does not enumerate an unbounded history in its Provider schema; it validates
+each submitted final ID against the Task's immutable dispatch settlements. A
+`dispatch_agents` collection has at most eight members, so all of its final
+Messages fit one read; a larger legal direct fan-out is read in caller-selected
+ordered chunks of at most eight. The reader neither reconstructs dispatch
+groups nor copies historical settlement identities into the Tool schema. Its
+executor resolves and verifies every persisted Session owner
 against the current Task, then returns the exact Message projections in caller
-order. It does not accept a second caller-supplied Session identity, select a
-latest Message, guess or correct an identifier, retry a rejected read, or retain
-a singular compatibility input. Fresh and reconstructed Task baseline/delta
+order. It does not accept a caller-supplied Session identity, select a latest
+Message, correct an identifier, retry a rejected read, or retain a
+singular compatibility input. Fresh and reconstructed Task baseline/delta
 views carry these facts through the existing single read path; a sibling's
 terminal wake never establishes another sibling's completion.
 
@@ -164,6 +196,8 @@ An operating-system process loss remains a real physical-attempt boundary, not a
 
 The Orchestrator inactivity observer is part of the physical prompt owner, not detached diagnostic work. Prompt settlement clears future polls and joins any observation tick already reading the Session tree before project ownership may be released. An in-flight observer therefore cannot reopen or read a disposed project after the owning prompt has completed.
 
+Provider transport activity and Session semantic activity are separate authorities. Response headers and every streamed byte renew only the Provider fetch transport monitor. The Session LLM activity monitor starts at the first accepted upstream event and renews only for a chunk that publishes observable incremental progress: text or reasoning content, a Tool input/result transition, or a step boundary. Reasoning framing made only of whitespace or square brackets does not trigger the canonical writer's periodic reasoning-delta publication and therefore cannot continuously renew semantic idle; `chunkHeartbeatKind` and that incremental writer share the same content predicate. Reasoning-end may still persist the complete accumulated Part. The same semantic mapping is used by normal Session processing and standalone streamed LLM helpers. Retry owns a fresh physical attempt under the existing total and class budgets, while the logical Provider activity keeps one request and one terminal outcome receipt across those attempts.
+
 An accepted Tool call pauses Provider chunk-idle observation, but not without a finite inactivity contract: `assistant.activity.session_tool_idle_ms` bounds the interval since the latest durable Tool progress. Each changed live metadata payload appends an immutable `tool_part_progress` fact under the exact request Part; the latest fact is projected into the visible running Tool Part and renews only that Session's pause window after commit. Bash maintains its real cumulative output byte count incrementally and samples a fixed 4 KiB preview only when a real chunk crosses five seconds since the prior sample or adds 64 KiB since it; progress therefore remains monotone after preview truncation without rescanning history, an unbounded fact rate, or a timer heartbeat. An in-memory sample, duplicate payload, failed append, timer, filesystem mutation, or another Session's progress cannot renew it. The terminal Tool outcome supersedes the live projection and closes further progress appends, while Tool result/error resumes the same prompt owner's ordinary chunk-idle observer. Foreground timeouts and background leases remain properties of the Tool and its process supervisor, so Provider inactivity does not become a second absolute Tool-runtime limit; if a Provider boundary fails after an effect began, the existing unsafe-retry fence still prevents replay.
 
 Artifact locator/read/selection references remain capability-like facts scoped to the exact control parent and physical Turn. The exact current Tool Part identifies its persisted Provider step, whose `step-start` Part is the exclusive causal read boundary: only completed producer Parts from prior Provider steps are visible, so same-step parallel siblings cannot leak forward regardless of execution order. Same-activation repair therefore preserves prior-step references naturally. A later independent ingress or genuinely new physical Turn must search/read/select again; the Host never broadens a reference to compensate for a scheduler retry.
@@ -174,7 +208,9 @@ Lifecycle cancellation or a terminal Task decision fences every new Provider/Too
 
 A completed exclusive Tool outcome whose metadata carries the typed `immediate_park` control is itself the durable reply boundary for that assistant Turn, even though the Provider finish reason remains `tool-calls`. Session completion and recovery reduce that persisted outcome control; they do not infer reply completion from prose or require a synthetic follow-up assistant message.
 
-`no_action({reason})` is the sole non-mutating Orchestrator decision. Its completed assistant-owned Tool request/outcome resolves only the current ingress and uses `immediate_park` to close the physical Turn. It creates no timer, Automation, Interaction, worker action, Task lifecycle fact, future wake, or durable waiting state. A lifecycle ingress with no newly ready frontier and a status/diagnosis reply both use this receipt after the visible reasoning or answer. Scheduled `wait` remains a distinct decision that names an external event and carries a defensible duration. Under Task authority it registers one epoch-bound native Task wait whose due materialization is an exact Task ingress; under conversation authority it creates one Session-delay Automation. It is never child polling or an alias for `no_action`.
+`no_action({reason, observed_task})` is the sole non-mutating Orchestrator decision. Its completed assistant-owned Tool request/outcome resolves only the current ingress and uses `immediate_park` to close the physical Turn. It creates no timer, Automation, Interaction, worker action, Task lifecycle fact, future wake, or durable waiting state. The model declares the current Task epoch, status, opened event and nullable terminal event in `observed_task`; the Tool validates those facts against the canonical reducer and returns `TaskLifecycleObservationConflictError` with the actual observation on mismatch. Matching active, cancelling and terminal observations are valid: this integrity check does not judge whether no_action is semantically sufficient or prescribe the next Tool. Conversation-only status/diagnosis replies and reconciled lifecycle ingress with independently continuing authority use this receipt after the visible answer. Execution work whose current epoch still needs closure remains the model's lifecycle decision. Scheduled `wait` remains a distinct decision that names an external event and carries a defensible duration. Under Task authority it registers one epoch-bound native Task wait whose due materialization is an exact Task ingress; under conversation authority it creates one Session-delay Automation. It is never child polling or an alias for `no_action`.
+
+The live Orchestrator Task description includes `execution_lifecycle` from the canonical Task lifecycle reducer: current epoch, exact opened event, status, and any current-epoch request or terminal event. Its display status and terminal error derive from that same projection. Full baseline, incremental delta, and markdown context retain this identity for distinguishing old completion from current reopened execution work. This is a read projection, not another stored lifecycle or a Host decision rule.
 
 ## Physical leases
 
@@ -229,6 +265,8 @@ dead_letter(error_name, message)
 ```
 
 Delivery `status`, owner, lease expiry, attempt count, visibility, last error, result, update time, and completion time are projections. The receipt does not repeat these as independent columns.
+
+`sendSchedulerMessage` returns the durable enqueue receipt for requests, replies, and notifications in every direction. The sender's Tool does not join recipient materialization, activation, or execution completion: the recipient may itself need that sender to finish its current Tool before it can consume a correlated reply. The enqueue transaction signals the existing delivery owner; inbox scanning and restart recovery retain ownership of eventual delivery and settlement. Callers use the envelope and inbox identities to inspect later delivery facts, and never treat the enqueue receipt as business completion.
 
 Scheduler messages freeze exact source and target Task execution epochs. Materialization revalidates the target epoch before committing a real Message, Task ingress, Session control, or terminal receipt. The source body is reread from its exact Message/Part or terminal-event locator and never copied into a second authority.
 
@@ -346,7 +384,32 @@ Lease renewal is a liveness and resource concern, never a safety one: every dura
 
 Worker completion is delivered by the dispatching runtime's own in-process owner. A dispatch is accepted only after its deterministic child Session and exact Worker Turn descriptor are durable. Before that boundary, the immutable lineage is a write-ahead request owned by the generic `dispatch_admission` lease: a live owner renews it, and after owner death one successor takes the expired lease and resumes the same occurrence from persisted input. Task-control never synthesizes acceptance or abandonment from lineage alone. After the descriptor-backed accepted boundary, an owner that dies leaves no ready ingress, no lease, and no timer — a stall no ingress projection can express, because the missing fact is the worker's outcome. Every scan therefore reconciles only descriptor-backed lineages whose delivery owner is gone: a worker whose lifecycle is already terminal has its lost delivery replayed idempotently, and an accepted worker with no terminal lifecycle has its interruption recorded as an infrastructure outcome and admitted as an ordinary ingress.
 
-The same scan closes the opposite gap. A dispatch is settled before its outcome is handed to the Orchestrator, so a failure in between leaves a settled lineage — invisible to abandonment recovery, which looks for unsettled work — that woke nothing. Every ingress reduces to `resolved`, no timer is owed, and the Task rests permanently behind a database that looks healthy. A settled lineage with no ingress carrying its outcome is therefore replayed, keyed to the settlement artifact so the replay collapses through the ingress source index.
+Descriptor-backed delivery admits ordinary ingress only for the current active
+Task epoch. Its bounded recovery classifier reads the same immutable cancellation
+request boundary as lifecycle admission, so an already cancelling epoch settles
+its detached delivery without requesting another Orchestrator input. Exact worker
+outcomes remain durable; cancellation convergence continues through its dedicated
+Task-control source. A Session-only abort on an active Task still follows the
+normal failure-delivery contract.
+
+Typed execution cancellation retains its exact identity and provenance across
+projected adapter error boundaries; ordinary execution failures retain adapter
+context through their error cause.
+
+Initial and continuation dispatch preparation validate every explicit `attachment_refs` selection against that Task's canonical attachment URLs or SHA-256 references before claiming a new immutable lineage. The shared selector raises `PromptAttachmentReferenceError` for missing references; participant Message and Artifact identities are never reinterpreted as attachments. A corrected initial Tool call can therefore claim the workflow occurrence with valid input. Exact settled replay retains its original receipt; already committed invalid historical inputs are not rewritten. Integrity fact projection uses the same strict selection primitive.
+
+A preparation failure before worker acceptance is a final dispatch settlement.
+Its settlement retains the lineage's reserved Session identity, while the
+infrastructure outcome omits `session_id` because that attempt accepted no worker.
+The exact admission owner writes this fact and releases its lease in one immediate
+transaction. A stale owner cannot settle a peer's attempt, and a settled preparation
+failure prevents later acceptance of a descriptor for that dispatch. An explicit
+prior-dispatch continuation retains the original workflow occurrence, reserved
+child identity and placement. When no worker descriptor exists yet, it performs
+the first worker Turn with the original Task authority and the real Orchestrator's
+recovery guidance; otherwise it uses the ordinary incremental continuation.
+
+The same scan closes the opposite gap for accepted workers. A dispatch is settled before its outcome is handed to the Orchestrator, so a failure in between leaves a settled lineage — invisible to abandonment recovery, which looks for unsettled work — that woke nothing. Every ingress reduces to `resolved`, no timer is owed, and the Task rests permanently behind a database that looks healthy. A descriptor-backed settled lineage with no ingress carrying its outcome is therefore replayed, keyed to the settlement artifact so the replay collapses through the ingress source index. Pre-acceptance failures reach the Orchestrator through the original visible Tool receipt.
 
 `dispatch_agents` completion is reduced at the collection boundary rather than
 delivered once per member. The exact Task epoch, orchestrator Message, Tool

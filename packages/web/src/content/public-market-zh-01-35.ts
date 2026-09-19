@@ -498,8 +498,8 @@ export const publicMarketZhTranslations01To35 = {
   },
   "builtin/base": {
     label: "Base",
-    description: "Base 是 Advanced 的紧凑替代：一个规划师先建立完整契约，再由具备命令能力的执行方交付并由测试方独立验收；需要时也可采用研究与实现并行的分区图。",
-    selectorSummary: "适用于可由一个 Planner 规划、一个执行责任方交付并由独立 Tester 验收，或可安全划分为研究与实现分区的一项完整 Task。",
+    description: "Base 由执行方完成发现、规划和实际交付，再由独立测试方检查结果；有独立研究需要时才增加规划与并行研究。",
+    selectorSummary: "适用于一个执行责任方完成、独立 Tester 验收的一项完整 Task；真实独立研究可选用并行研究图。",
     agents: {
       "base-researcher": {
         label: "Base 研究员",
@@ -507,25 +507,33 @@ export const publicMarketZhTranslations01To35 = {
       },
       "base-planner": {
         label: "Base 规划师",
-        description: "调查当前边界并发布完整 Task 计划，为三个 worker 分配互不重叠的路径、输入和验收责任。",
+        description: "仅在需要并行研究时规划共享输入与责任，分配独立研究、执行和验证工作。",
       },
       "base-developer": {
         label: "Base 开发工程师",
-        description: "只消费 Base 计划，完成产品与生成输出分区、实现方检查和适用的真实页面证据。",
+        description: "完成发现、规划、产品或外部状态交付、自检及适用的真实页面证据。",
       },
       "base-tester": {
         label: "Base 测试工程师",
-        description: "在实现结算后，依据原始请求与 Base 计划完成分配的正向测试、checker 与独立验证并发布规范报告。",
+        description: "在实现结算后，依据原始请求和权威数据独立检查实际结果，记录具体差距与证据。",
       },
     },
     workflows: {
-      "planner-execution-verification": {
-        label: "规划、执行与验证",
-        description: "由 Planner 一次性规划，具备命令能力的责任方完成来源发现与交付，再独立验证已结算结果。",
+      "execution-verification": {
+        label: "执行与独立验证",
+        description: "执行责任方完成发现、规划与交付，再独立验证实际结果。",
         nodes: {
-          "base-planner": "发布完整 Task 要素清单、发现义务、能力分配与验收契约。",
           "base-developer": "使用投影的 Skill 与可执行工具发现动态来源并完成请求的交付。",
           "base-tester": "独立重读动态来源，并按每项标准验证已结算结果。",
+        },
+      },
+      "source-planned-execution-verification": {
+        label: "来源规划、执行与独立验证",
+        description: "通过有界的来源调查明确执行权限和适用约束，执行前提已满足的不可逆操作，再独立核对来源分类与最终结果。",
+        nodes: {
+          "base-planner": "区分执行权限条件、适用约束与开发方负责的结果语义，在操作前查清可追溯的来源要求。",
+          "base-developer": "依据原始要求核对各项操作的来源分类，完成前提已满足的授权操作，并交付完整的执行回执。",
+          "base-tester": "独立核对来源分类与定位信息，将适用规则和预期结果对应到原始执行回执及目标记录的读取结果。",
         },
       },
       "planner-parallel-delivery": {

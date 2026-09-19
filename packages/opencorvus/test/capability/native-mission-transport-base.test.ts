@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
+import { capabilityRef } from "@opencorvus-ai/util/capability-ref"
 import path from "node:path"
 import fs from "node:fs/promises"
 import { PrimaryAssistantRegistry } from "../../src/agent/primary-assistant-registry"
@@ -38,6 +39,7 @@ const missionRoutineNames = [
   "panel_query_task",
   "panel_query_task_artifacts",
   "panel_read_task_artifact",
+  "panel_read_task_message",
   "publish_interactive_artifact",
   "question",
   "read",
@@ -282,6 +284,18 @@ describe("native Mission transport base", () => {
           toolInput,
           output,
         })
+        await expect(resolveTestCapabilityTools({
+          ...common,
+          tools: { mission_skill: false },
+        })).rejects.toBeInstanceOf(StaleCatalogOccurrenceError)
+        await Session.setPermission({
+          sessionID: common.session.id,
+          permission: [{ permission: "mission_skill", pattern: "*", action: "deny" }],
+        })
+        await expect(resolveTestCapabilityTools({
+          ...common,
+          session: await Session.get(common.session.id),
+        })).rejects.toBeInstanceOf(StaleCatalogOccurrenceError)
       },
     })
   }, 30_000)
@@ -354,6 +368,35 @@ describe("native Mission transport base", () => {
         )
       },
     })
+  }, 60_000)
+
+  test("reveals an Expert Squad through its exact permanent Task creation Tool and replays that receipt", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const occurrence = await createMissionOccurrence(project.path, "mission-native-squad-reveal")
+      const initial = await resolveTestCapabilityTools(occurrence.common)
+      const squad = capabilityRef({ kind: "expert_squad", source: "platform", owner_ref: "expert-squad-registry", local_ref: "base" })
+      const result = await initial.tools.capability_search!.execute!({ queries: [""], kinds: ["expert_squad"], exact_refs: [squad], deactivate_refs: [], limit: 1 }, { toolCallId: "reveal-held-base", messages: [], abortSignal: new AbortController().signal }) as { metadata: Record<string, any> }
+      expect(result.metadata.opencorvus_capability_reveal_v2.activated).toMatchObject([{ requested_ref: squad, provider_name: "panel_create_task" }])
+      const replayed = await resolveTestCapabilityTools(occurrence.common)
+      expect(Object.keys(replayed.tools).sort()).toEqual(missionRoutineNames)
+    } })
+  }, 60_000)
+
+  test("reconstructs Mission tools after re-revealing the permanent Task query capability", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const occurrence = await createMissionOccurrence(project.path, "mission-permanent-query-reveal")
+      const initial = await resolveTestCapabilityTools(occurrence.common)
+      const queryRef = capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref: "panel_query_task" })
+      const result = await initial.tools.capability_search!.execute!(
+        { queries: [""], kinds: ["tool"], exact_refs: [queryRef], deactivate_refs: [], limit: 1 },
+        { toolCallId: "reveal-permanent-task-query", messages: [], abortSignal: new AbortController().signal },
+      ) as { metadata: Record<string, any> }
+      expect(result.metadata.opencorvus_capability_reveal_v2.active_refs).toEqual([queryRef])
+      const replayed = await resolveTestCapabilityTools(occurrence.common)
+      expect(Object.keys(replayed.tools).sort()).toEqual(missionRoutineNames)
+    } })
   }, 60_000)
 
   test("keeps exact native transport leaves through one reveal and deactivate cycle", async () => {

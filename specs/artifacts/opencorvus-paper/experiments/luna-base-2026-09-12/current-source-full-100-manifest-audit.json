@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "verified_at": 1789241868177,
+  "execution_commit": "51b780ee715aba2d80e30eaf5a89bae1ed62f3cb",
+  "source_root": "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100/base",
+  "audit_root": "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100/manifest-authority-audit",
+  "audit_code_sha256": {
+    "contract.ts": "8d4dd231ca8130bd3fe0b6ca6ee9c98db962ee7c55a202332b8b1ed8049469a2",
+    "catalog-automationbench-evidence.ts": "de28e5a78e7389a30aad6b1180ecc9e51db53b5172cdecf0c14a0753cc973f5c",
+    "verify-automationbench-evidence.ts": "521e26f5e2dad13ae48a8393ee38952e266d87262faa17216e0c0ce3973340bc",
+    "verify-selected-case-set.ts": "0e91de945659934c59f7889a7209ef1caff1d43ce416ef95923a669c2a2c83aa",
+    "freeze_automationbench_case_set.py": "8fa7d379c3c2a204e9261113f2089a71f55bed0e752499b51007084fc4072b50"
+  },
+  "snapshot_sha256": "c5635dbcf20f58c05c771d5f3cf9df927779b85e2d1e78dfbe307c37475f0291",
+  "sealed_files_verified": 115,
+  "checks": [
+    {
+      "name": "official-manifest",
+      "exit_code": 0,
+      "command": [
+        "/var/lib/opencorvus-benchmark/evaluator-venv/bin/python",
+        "-B",
+        "/mnt/d/myhexin-local/opencorvus/packages/opencorvus/script/benchmark/external-agent/freeze_automationbench_case_set.py",
+        "--verify-manifest",
+        "/mnt/d/myhexin-local/opencorvus/specs/artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/case-manifest.json"
+      ],
+      "output": {
+        "passed": true,
+        "violations": [],
+        "case_count": 100,
+        "dataset_index_sha256": "3f98894f1fa871dd27516c549e028d5651104d41a44b8f02a5cd00da39e11f37",
+        "manifest_sha256": "43ca54925db11d7dc6d9c5b80bbd32aed9b6c93ea92a2d1b8225a0858036ff42"
+      },
+      "stdout_sha256": "dc1992ad54f91225c3f0189585d5f220268c2fcb16f918fb1684b9fd323f4665"
+    },
+    {
+      "name": "catalog",
+      "exit_code": 0,
+      "command": [
+        "/root/.bun/bin/bun",
+        "/mnt/d/myhexin-local/opencorvus/packages/opencorvus/script/benchmark/external-agent/catalog-automationbench-evidence.ts",
+        "--root",
+        "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100/manifest-authority-audit/evidence",
+        "--source-data",
+        "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100/provider-source",
+        "--python",
+        "/var/lib/opencorvus-benchmark/evaluator-venv/bin/python",
+        "--restricted-shell",
+        "/var/lib/opencorvus-benchmark/restricted-agent-shell-base",
+        "--model",
+        "openai/gpt-5.6-luna",
+        "--profiles",
+        "base",
+        "--case-set",
+        "/mnt/d/myhexin-local/opencorvus/specs/artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/case-manifest.json"
+      ],
+      "output": {
+        "root": "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100/manifest-authority-audit/evidence",
+        "attempts": 5,
+        "eligible": 0
+      },
+      "stdout_sha256": "a93bc10c400dcf763902117bd8f168473f4a7b6269282da6c8a8f9ad7d28a0a9"
+    },
+    {
+      "name": "verify",
+      "exit_code": 0,
+      "command": [
+        "/root/.bun/bin/bun",
+        "/mnt/d/myhexin-local/opencorvus/packages/opencorvus/script/benchmark/external-agent/verify-automationbench-evidence.ts",
+        "--root",
+        "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100/manifest-authority-audit/evidence",
+        "--source-data",
+        "/var/lib/opencorvus-benchmark/reproduction-20260913-luna-base-100/provider-source",
+        "--python",
+        "/var/lib/opencorvus-benchmark/evaluator-venv/bin/python",
+        "--restricted-shell",
+        "/var/lib/opencorvus-benchmark/restricted-agent-shell-base",
+        "--model",
+        "openai/gpt-5.6-luna",
+        "--profiles",
+        "base",
+        "--case-set",
+        "/mnt/d/myhexin-local/opencorvus/specs/artifacts/opencorvus-paper/experiments/luna-base-2026-09-12/case-manifest.json"
+      ],
+      "output": {
+        "ok": true,
+        "mode": "development",
+        "attempts": 5,
+        "eligible": 0,
+        "paper_files": 24
+      },
+      "stdout_sha256": "dd1b380e91af0638525da11bd5cc946733fb348b0a36f4acbcfb92b684845f71"
+    }
+  ],
+  "attempts": [
+    {
+      "case_index": 1,
+      "run_id": "a5f52972-4f61-4b45-9816-38054ac5544e",
+      "evidence_status": "sealed_candidate",
+      "reason": "awaiting_completed_batch",
+      "raw_evidence_passed": true,
+      "raw_eligible": true,
+      "leaderboard_eligible": false,
+      "metrics": {
+        "partial_credit": 0.8,
+        "task_completed_correctly": 0
+      }
+    },
+    {
+      "case_index": 2,
+      "run_id": "36c04560-9047-4975-acdb-d212541929de",
+      "evidence_status": "sealed_candidate",
+      "reason": "awaiting_completed_batch",
+      "raw_evidence_passed": true,
+      "raw_eligible": true,
+      "leaderboard_eligible": false,
+      "metrics": {
+        "partial_credit": 0.5,
+        "task_completed_correctly": 0
+      }
+    },
+    {
+      "case_index": 3,
+      "run_id": "541d7791-9f0b-4b06-ae6b-ff13d9dd39d4",
+      "evidence_status": "invalid_evidence",
+      "reason": "mission_outcome_mismatch",
+      "raw_evidence_passed": false,
+      "raw_eligible": false,
+      "leaderboard_eligible": false,
+      "metrics": null
+    },
+    {
+      "case_index": 4,
+      "run_id": "7fc1ede9-07bf-43b0-86aa-a10e1ab406ad",
+      "evidence_status": "sealed_candidate",
+      "reason": "awaiting_completed_batch",
+      "raw_evidence_passed": true,
+      "raw_eligible": true,
+      "leaderboard_eligible": false,
+      "metrics": {
+        "partial_credit": 0.631578947368421,
+        "task_completed_correctly": 0
+      }
+    },
+    {
+      "case_index": 6,
+      "run_id": "48e992da-454b-4aad-a79d-fad98bcfe430",
+      "evidence_status": "sealed_candidate",
+      "reason": "awaiting_completed_batch",
+      "raw_evidence_passed": true,
+      "raw_eligible": true,
+      "leaderboard_eligible": false,
+      "metrics": {
+        "partial_credit": 0.14285714285714285,
+        "task_completed_correctly": 0
+      }
+    }
+  ],
+  "limitations": [
+    "Isolated copy audit; the active 51b coordinator and port 8769 remain unchanged.",
+    "No completed batch receipt, therefore final eligible is zero; four scored cases are sealed candidates.",
+    "Case 3 remains invalid: Mission did not complete.",
+    "Native case 2 has a separate transport failure; no reconnect fix or new model execution in this audit.",
+    "Current Base shell launch configuration must be corrected before case 51."
+  ]
+}

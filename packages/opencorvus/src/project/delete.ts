@@ -379,11 +379,13 @@ function deleteProjectRows(
       projectID,
       reason: `Project ${projectID} generation ${admission.snapshot.generation} was deleted`,
     })
-    // Retire Task-owned facts before the Project's remaining cascade branches.
-    // Dispatch lineage is the workflow occurrence authority and follows its
-    // owning Task, so no parallel Session-owned occurrence row participates in
-    // deletion ordering.
+    // Task creation contracts can retain Session-owned Tool requests, so retire
+    // Task-owned facts first. Then remove the Session tree before deleting its
+    // Project: some immutable Session-owned facts also carry a direct Project
+    // foreign key, and their delete guards reject the Project cascade while
+    // the owning Session still exists.
     db.delete(EngineTaskTable).where(eq(EngineTaskTable.project_id, projectID)).run()
+    db.delete(SessionTable).where(eq(SessionTable.project_id, projectID)).run()
     db.delete(ProjectTable).where(eq(ProjectTable.id, admission.projectID)).run()
   })
 }
