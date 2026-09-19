@@ -1,6 +1,9 @@
-import { mkdtemp, readFile, rm, watch } from "node:fs/promises"
+import { unwatchFile, watchFile } from "node:fs"
+import { mkdtemp, readFile, rm } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import path from "node:path"
+
+const STARTUP_RECEIPT_STAT_INTERVAL_MS = 50
 
 /**
  * The framed machine startup fact a managed server publishes for its launcher.
@@ -83,22 +86,57 @@ export async function createStartupReceiptChannel(occurrenceID: string): Promise
     path: file,
     read,
     async wait(signal) {
-      const events = watch(directory, { signal })[Symbol.asyncIterator]()
-      try {
-        // Arm the watcher before every read. A publisher can atomically rename
-        // the receipt at any time, so reading first would leave a lost-event
-        // window between the read and watcher registration.
-        let nextEvent = events.next()
-        while (true) {
-          const published = await read()
-          if (published) return published
-          const event = await nextEvent
-          if (event.done) throw new Error("Server startup receipt watcher closed before publication")
-          nextEvent = events.next()
+      return new Promise<StartupReceipt>((resolve, reject) => {
+        let settled = false
+        let reading = false
+        let changed = false
+        // Observe the authoritative file itself. Directory notifications may
+        // coalesce the temporary write and final rename before the receipt is
+        // readable. Stat observation remains live until this launch settles.
+        const observe = () => void check()
+        const watcher = watchFile(file, { interval: STARTUP_RECEIPT_STAT_INTERVAL_MS }, observe)
+        const cleanup = () => {
+          signal.removeEventListener("abort", abort)
+          watcher.removeListener("error", fail)
+          unwatchFile(file, observe)
         }
-      } finally {
-        await events.return?.()
-      }
+        const fail = (error: unknown) => {
+          if (settled) return
+          settled = true
+          cleanup()
+          reject(error)
+        }
+        const abort = () => fail(signal.reason ?? new DOMException("The operation was aborted", "AbortError"))
+        async function check() {
+          if (settled) return
+          if (reading) {
+            changed = true
+            return
+          }
+          reading = true
+          try {
+            do {
+              changed = false
+              const published = await read()
+              if (settled) return
+              if (published) {
+                settled = true
+                cleanup()
+                resolve(published)
+                return
+              }
+            } while (changed)
+          } catch (error) {
+            fail(error)
+          } finally {
+            reading = false
+          }
+        }
+        watcher.on("error", fail)
+        signal.addEventListener("abort", abort, { once: true })
+        if (signal.aborted) abort()
+        else void check()
+      })
     },
     async dispose() {
       await rm(directory, { recursive: true, force: true })

@@ -7,6 +7,13 @@ primary error. Output does not determine readiness. Failed credential-free
 packaged first-run checks retain their isolated runtime and result path for
 diagnosis; successful checks remove that owned temporary runtime.
 
+The SDK observes the exact receipt file through one bounded-lifetime stat
+watcher. Directory notifications are not readiness authority: an atomic
+publisher's temporary-file event can arrive before the final rename, and
+runtime event coalescing can omit that final notification. Observation stops
+on the validated receipt, failure, or caller cancellation; each launch keeps
+its own directory and occurrence identity. Startup deadlines remain unchanged.
+
 The server runtime has two ordered recovery phases and one listener:
 
 1. Bounded process-local integrity recovery observes the current physical process occurrence, settles orphaned supervised requests and isolated workspaces, reconciles Project deletion artifacts and maintenance fences, and initializes global automation scheduling.
