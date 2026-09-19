@@ -1,5 +1,26 @@
 # Long-running, complex-task product story
 
+## Current Recall — query/model/graph gallery
+
+- User confirmed the DeBERTa model as GPT-5.6 Sol. Model attribution is user-supplied; the public repository remains the artifact reference.
+- User requires formal public materials with no development annotations. Public captions distinguish task requirements and collaboration relations without editorial placeholders or production-process comments; investigation details remain here.
+
+- User explicitly rejected the film during work: “不对，垃圾营销，还不如把输入的 query，调用的模型和执行图做成 gallery 有意义，让人知道复杂 query 都接得住”. Stop video production and replace the homepage's video presentation with inspectable cases, not another narrative campaign.
+- Acceptance: prominent task input, actual model provenance, genuine directed graph and inspectable outputs; preserve the site's design and concise structure. Never generalize a case into a universal success claim. Distinguish verbatim requests from retained briefs, runtime evidence from workflow illustrations, and unknown model identity from a verified model.
+- Investigation: tank original request verified against intent/request.md and read-only engine_task.request; its execution trace contains 771 model metadata observations, all deepseek/deepseek-v4-flash (metadata observations are not call count). Actual Budget record verifies openai/gpt-5.6-luna and repair/review outcomes but retained input is a qualified brief, not a preserved original prompt. DeBERTa has a public artifact package and preserved task requirements, but the source brief explicitly cannot establish runtime model identity. Asked the user which additional original complex queries/tasks to feature while implementing independently.
+- Plan: use a single localized case-data source with explicit provenance; replace video and duplicate tank graph with a selectable gallery whose detail shows input, model, directed dependencies/corrections and outputs/evidence. Reuse the existing tank graph; other case diagrams show only documented stage relationships or are labeled plan illustrations. Preserve privacy and evidence caveats. Read-only independent review after build/manual screenshots, then scoped commit/fetch/merge/push; no production deployment.
+- Cancelled film: its uncommitted activation and asset inventory were restored from HEAD after reviewing the diff; generated film/source inputs were moved to .scratch/rejected-tank-case-film within the verified workspace. They are not website assets or current deliverables. Existing unrelated script/video/ remains untouched. The prior video Recall below is superseded, not an ongoing instruction.
+- Impact: presentation, case data, gallery interaction and source evidence only. No scheduling/runtime/database modifications or credentials. Read-only SQLite used query_only for the specified case. No UI automated tests. Risks: calling reconstructed briefs original queries, model attribution from titles, list-shaped pseudo-graphs, duplicate evidence and misleading completed-state claims. Independent feedback: 无（实施前）。
+
+## Current Recall — real tank-task short film
+
+- User rejected the current video and asked for a new script; approved the proposed roughly 60-second Chinese documentary-style story with “可以的”. Produce the Chinese version: game opening, 19 requirements, role graph, scoring repair loop, operator-directed 35-stage replacement, inspectable delivery and short product close. Preserve website visual identity. Do not publish production.
+- Read: current video component/copy, prior reproducible video renderer and narration workflow, retained sanitized tank-task source excerpts, local delivered project package/serve configuration and existing media. Existing untracked script/video/ is unrelated and remains untouched. Native ffmpeg/ffprobe, Pillow and edge-tts are available; no new paid model call or credential use is needed.
+- Diagnosis: the old film repeats illustrated cards and broad workflow claims rather than showing a concrete task. Use actual delivered-game footage and real record excerpts with a labeled directed graph. Do not simulate an OpenCorvus chat/UI or replay unrecorded historical actions. Recorded test discrepancy and original-fidelity limits remain linked; no full-test-pass or performance claim.
+- Plan: capture the delivered game through an isolated browser/server, retain timestamps and provenance; prepare exact scene/narration/subtitle inputs; reuse the existing public-script speech service and local rendering toolchain, with restrained movement, progressive graph and pauses. Render a 1920x1080 Chinese master/poster/subtitles, inspect physical frames and actual playback, independently review, then replace only the Chinese website video/caption and commit/fetch/merge/push current branch. No UI automated tests or changes to the original game source/user process.
+- Evidence boundaries: gameplay is newly recorded from the retained deliverable, not footage of the September 18 agent run. Role/repair themes derive from source-excerpts.json; workflow edges are illustrative, not measured concurrency or event attribution. Human decision is visible in the story. Chinese first; English version is outside this approval's initial cut.
+- Independent feedback: 无（本轮实施前；交付后只读审查）。 Acceptance requires actual capture, readable node/edge graph and excerpts, synchronized complete narration/subtitles, media decode/playback, scoped integration, checks and review. Capture or audio limitations must be reported rather than silently represented as verified.
+
 ## Current Recall — concise entry points and an organized blog
 
 - User: “裁剪一下现在的内容，只留精华部分，其余作为博客组织”. Preserve the current visual system and strongest evidence while shortening both READMEs and landing pages. Move substantial explanations into readable, categorized bilingual blog articles, not a hidden archive or deleted material.
@@ -144,3 +165,9 @@ after the reviewed version is concrete. Only current-branch push is automatic fo
   indexes pass. Whitespace check passes. Final website build and runtime packaging passed (119 indexed HTML pages).
 - The current branch is `codex/paper-preliminary-results`; main is checked out in another worktree.
   No other worktree, running user app, release or website publication was changed by this task.
+
+## Gallery verification
+
+Build passed (137 HTML pages and packaged runtime). Astro check: 96 files, zero errors/warnings, 21 existing hints. Documentation and architecture checks passed. Real isolated localhost:4398 browser review covered Chinese task inputs and both directed graphs, model/artifact presentation, click/Left-arrow case switching and English dark appearance. No UI automated tests. Historical video component and unused copy removed; retained archival media unchanged.
+
+Independent review identified unsupported repair-to-reviewer attribution and stale architecture text. Replaced separate repair origins with a shared review-feedback node, corrected the architecture section and named the research artifact ACL-style paper. Final real screenshots were reviewed; independent follow-up reported no unresolved findings. Rebuilt successfully after fixes.

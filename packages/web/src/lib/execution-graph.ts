@@ -65,7 +65,7 @@ export function executionGraph(locale: PublicLocale, id = "execution"): string {
     .join("")
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 590" width="1290" height="590" role="img" aria-labelledby="${id}-title ${id}-desc">
     <title id="${id}-title">${esc(c.label)}</title>
-    <desc id="${id}-desc">${esc(zh ? "意图、需求与调研汇合至架构；架构分派界面设计与工作量复核；设计进入实现；实现分支到测试和界面复核；系统审查与界面复核汇合交付。两条琥珀色返工边从复核返回实现。" : "Intent, requirements and research join at architecture, then branch into design and workload review. Implementation branches into testing and interface review. System and interface reviews join at delivery. Two amber repair edges return to implementation.")}</desc>
+    <desc id="${id}-desc">${esc(zh ? "意图、需求与调研汇合至架构；架构分派界面设计与工作量复核；设计进入实现；实现分支到测试和界面复核；系统审查与界面复核汇合交付。复核反馈汇合后返回实现，包含计分修正与关卡数据替换。" : "Intent, requirements and research join at architecture, then branch into design and workload review. Implementation branches into testing and interface review. System and interface reviews join at delivery. Review feedback joins before returning to implementation for scoring repair and stage-data replacement.")}</desc>
     <defs>
       <marker id="${id}-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 9 5 1 9" fill="none" stroke="#8193ba" stroke-width="1.5"/></marker>
       <marker id="${id}-repair" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 9 5 1 9" fill="none" stroke="#ba8649" stroke-width="1.5"/></marker>
@@ -75,17 +75,19 @@ export function executionGraph(locale: PublicLocale, id = "execution"): string {
     <ellipse cx="750" cy="290" rx="350" ry="260" fill="url(#${id}-wash)"/>
     <g font-family="Arial, Microsoft YaHei, Noto Sans CJK SC, sans-serif">
       <text x="37" y="42" font-size="13" fill="#68778f" letter-spacing="1">${esc(c.badge)}</text>
-      <text x="1254" y="42" text-anchor="end" font-size="12" fill="#68778f">${esc(zh ? "角色与修正主题据任务记录；连线为工作流示意，返工起点不代表事件归因。" : "Roles and repairs from task records. Workflow edges are illustrative; repair origins are not event attribution.")}</text>
       <g fill="none" stroke="#8193ba" stroke-width="1.7">${normal}</g>
       <g fill="none" stroke="#ba8649" stroke-width="1.7" stroke-dasharray="5 4">
-        <path data-from="interface-review" data-to="implementation" d="M973 426 V470 Q973 485 958 485 H790 Q775 485 775 470 V336" marker-end="url(#${id}-repair)"/>
-        <path data-from="system-review" data-to="implementation" d="M1106 199 H1094 Q1080 199 1080 213 V530 Q1080 545 1065 545 H747 Q732 545 732 530 V336" marker-end="url(#${id}-repair)"/>
+        <path data-from="interface-review" data-to="review-feedback" d="M973 426 V460 Q973 480 993 480 H1050" marker-end="url(#${id}-repair)"/>
+        <path data-from="system-review" data-to="review-feedback" d="M1106 199 H1094 Q1080 199 1080 213 V460" marker-end="url(#${id}-repair)"/>
+        <path data-from="review-feedback" data-to="implementation" d="M1140 510 V540 Q1140 555 1125 555 H747 Q732 555 732 540 V336" marker-end="url(#${id}-repair)"/>
       </g>
       ${roles}
-      <rect x="802" y="469" width="240" height="31" rx="15" fill="#fff8ed"/>
-      <text x="922" y="490" text-anchor="middle" font-size="12" fill="#92602c">${esc(zh ? "01  计分与结算修正" : "01  Scoring & results repair")}</text>
-      <rect x="802" y="529" width="250" height="31" rx="15" fill="#fff8ed"/>
-      <text x="927" y="550" text-anchor="middle" font-size="12" fill="#92602c">${esc(zh ? "02  35 关数据替换" : "02  Replace 35 stages of data")}</text>
+      <g data-node="review-feedback">
+        <rect x="1050" y="460" width="190" height="50" rx="14" fill="#fff8ed" stroke="#ba8649"/>
+        <text x="1145" y="491" text-anchor="middle" font-size="15" fill="#92602c">${esc(zh ? "复核反馈" : "Review feedback")}</text>
+      </g>
+      <text x="870" y="512" text-anchor="middle" font-size="12" fill="#92602c">${esc(zh ? "01  计分与结算修正" : "01  Scoring & results repair")}</text>
+      <text x="870" y="537" text-anchor="middle" font-size="12" fill="#92602c">${esc(zh ? "02  35 关数据替换" : "02  Replace 35 stages of data")}</text>
       <text x="38" y="541" font-size="12" fill="#748299">${esc(zh ? "实线：工作衔接" : "Solid: work handoff")}</text>
       <text x="38" y="562" font-size="12" fill="#92602c">${esc(zh ? "虚线：复核后的修正回流" : "Dashed: correction after review")}</text>
     </g>

@@ -22,6 +22,7 @@ const docsHref = publicPath(locale, "/start/quickstart/")
 const anchorBase = current === "home" ? "" : home
 // Detailed cases and research now live in the blog.
 const anchors = [
+  { href: `${anchorBase}#gallery`, label: zh ? "案例" : "Cases" },
   { href: `${anchorBase}#horizon`, label: zh ? "长程" : "Long-horizon" },
   { href: `${anchorBase}#start`, label: zh ? "开始" : "Start" },
   { href: publicPath(locale, "/blog/"), label: zh ? "博客" : "Blog" },

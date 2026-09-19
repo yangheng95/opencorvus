@@ -45,9 +45,9 @@ This document is the current authority for the `opencorvus.com` runtime, Expert 
 
 ## Product entry points
 
-- Both homepage locales retain the established hero/terminal, demo and long-horizon visuals,
-  followed by the graph, concise start and blog entry. `landing-copy.ts` supplies shared visual copy.
-  A supporting tank-game graph follows long-horizon. `execution-graph.ts` and `execution-copy.ts`
+- Both homepage locales retain the established hero/terminal and long-horizon visuals,
+  with the case gallery beneath the hero, followed by concise start and blog entry. `landing-copy.ts` supplies shared visual copy.
+  The gallery contains the tank-game collaboration graph. `execution-graph.ts` and `execution-copy.ts`
   own its nodes, labels, branching, joins and correction loops, shared with README artwork.
   Roles and repair themes are recorded; workflow edges are illustrative and repair origins do
   not attribute events. It is not a runtime projection or measured execution timeline.
@@ -62,3 +62,5 @@ This document is the current authority for the `opencorvus.com` runtime, Expert 
   `/blog/` and `/zh-cn/blog/` group cases, mechanisms, research and practice; article routes
   are statically generated and counterpart language links use the same key. Blog content does
   not participate in Registry publication or change its persistence/API contract.
+
+The homepage uses `OcCaseGallery.astro` for task inputs, model identities, directed collaboration diagrams and artifact links. Case data lives in `src/content/case-gallery.ts`; graph rendering lives in `src/lib/case-gallery-graph.ts`, reusing the shared tank renderer. The gallery replaces the homepage video and duplicate standalone tank graph.

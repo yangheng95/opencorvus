@@ -26,7 +26,7 @@ The compiled PoC paper is a self-contained static asset at `public/papers/openco
 ## Product story
 
 The English and Chinese homepages share `src/content/landing-copy.ts` and `OcLanding.astro`.
-The original hero/terminal, demo, long-horizon cards and supporting tank-game graph retain
+The original hero/terminal and long-horizon cards retain
 their visual system. A concise start section and blog links complete the homepage.
 Detailed composition, benchmark, evolution, research, integration and FAQ material lives in
 the categorized bilingual blog. Download targets come from the release manifest through
@@ -54,3 +54,5 @@ screenshots. The case's game screenshot is retained original evidence. See
 The development entry runs Astro under Bun, because the on-demand Registry and view-count routes
 import `bun:sqlite`. Node can build the static site but cannot serve those development routes.
 `tmp/` is excluded from Astro typechecking; tracked source/scripts and tests remain in scope.
+
+The homepage case gallery replaces the video and standalone case graph. `src/content/case-gallery.ts` supplies localized task inputs, models and artifact links; `src/lib/case-gallery-graph.ts` renders requirement dependencies and reuses the tank collaboration graph. Historical video files are archival assets.

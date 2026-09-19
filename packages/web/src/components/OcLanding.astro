@@ -1,9 +1,7 @@
 ---
 import OcLayout from "./OcLayout.astro"
 import OcHeroBackdrop from "./OcHeroBackdrop.astro"
-import OcDemoVideo from "./OcDemoVideo.astro"
-import { executionGraph } from "../lib/execution-graph"
-import { executionCopy } from "../content/execution-copy"
+import OcCaseGallery from "./OcCaseGallery.astro"
 import { landingCopy } from "../content/landing-copy"
 import { publicPath, type PublicLocale } from "../content/public-market"
 import config from "../../config.mjs"
@@ -185,13 +183,8 @@ const downloads = readDownloadManifest()
     </div>
   </section>
 
-  {/* ----------------------------------------------------------- 2 · demo */}
-  {/*
-    Directly under the hero because "what is it actually like to use" is the question the hero
-    raises, and because a recording of one real run is the strongest evidence on the page — it
-    belongs where a reader is still deciding whether to keep scrolling.
-  */}
-  <OcDemoVideo {locale} />
+  {/* Task inputs, models and coordination graphs. */}
+  <OcCaseGallery {locale} />
 
   {/* -------------------------------------------------- 4 · long-horizon */}
   {/*
@@ -223,24 +216,6 @@ const downloads = readDownloadManifest()
     </div>
   </section>
 
-  {/* ---------------------------------------------------- 5 · composition */}
-  <section class="oc-section-tight oc-anchor" id="execution">
-    <div class="oc-container">
-      <p class="oc-eyebrow">{zh ? "一次真实任务 · 坦克大战" : "A real task · Tank battle"}</p>
-      <h2 class="oc-text-subtitle oc-cjk-spacing">{zh ? "调研、实现、复核，如何衔接。" : "How research, implementation and review connect."}</h2>
-      <p class="oc-text-body oc-text-description oc-section-lead">
-        {zh ? "19 项验收要求，两轮修正：跨关计分与结算修复，以及 35 关来源数据替换。下图展开这次任务涉及的角色与工作衔接。" : "19 acceptance requirements and two correction rounds: cross-stage scoring and results, then source data for 35 stages. The graph connects the roles involved in this task."}
-      </p>
-      <div class="oc-execution-graph"><Fragment set:html={executionGraph(locale)} /></div>
-      <p class="oc-text-xs oc-text-description">{executionCopy[locale].disclaimer}</p>
-      <p class="oc-text-caption oc-text-description">
-        {zh ? "含人工决策；测试报告差异及还原程度限制见案例记录。" : "Includes an operator decision; test-report differences and fidelity limits are documented in the case."}
-        {" "}<a class="oc-link" href={publicPath(locale, "/cases/tank-battle/")}>{zh ? "查看案例与证据" : "Case and evidence"} ↗</a>
-        {" · "}<a class="oc-link" href={`/media/task-coordination-${zh ? "zh" : "en"}.svg`} target="_blank" rel="noopener">{zh ? "打开完整执行图" : "Open full graph"} ↗</a>
-      </p>
-    </div>
-  </section>
-
   <section class="oc-section oc-anchor" id="start">
     <div class="oc-container">
       <p class="oc-eyebrow">{zh ? "开始" : "Get started"}</p>
@@ -267,8 +242,6 @@ const downloads = readDownloadManifest()
 </OcLayout>
 
 <style>
-  .oc-execution-graph { margin-block: var(--oc-space-6); overflow-x: auto; }
-  .oc-execution-graph :global(svg) { display: block; width: 100%; min-width: 840px; height: auto; }
   /* -------------------------------------------------------------- hero */
 
   .oc-hero {

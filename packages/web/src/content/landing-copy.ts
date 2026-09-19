@@ -42,22 +42,6 @@ export type LandingCopy = {
     readonly terminalLabel: string
     readonly terminals: readonly { readonly id: string; readonly label: string; readonly lines: readonly string[] }[]
   }
-  /**
-   * The recorded run under the hero. It replaced a twenty-frame screenshot carousel: the frames
-   * each proved one renderer, but a reader had to assemble the run from stills, and the strongest
-   * thing about the product — that one prompt carries all the way to a finished file — was the one
-   * thing twenty separate pictures could not show.
-   *
-   * `label` is the player's accessible name and `caption` is provenance, so both sit outside the
-   * body budget for the same reason alt text does. The title and lead are inside it.
-   */
-  readonly demo: {
-    readonly eyebrow: string
-    readonly title: string
-    readonly lead: string
-    readonly label: string
-    readonly caption: string
-  }
   readonly benchmark: {
     readonly eyebrow: string
     readonly title: string
@@ -182,13 +166,6 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
           ],
         },
       ],
-    },
-    demo: {
-      eyebrow: "产品故事",
-      title: "你定目标，审关键结果",
-      lead: "从用户反馈到可演示的新版本，看看目标、专家团协作和验收如何串起一段完整工作。",
-      label: "OpenCorvus 从目标到交付：中文产品流程示意",
-      caption: "简体中文 · 约 1 分半 · 旁白与字幕 · 产品流程示意，非任务实录",
     },
     benchmark: {
       eyebrow: "实测结果",
@@ -319,13 +296,6 @@ export const landingCopy: Record<PublicLocale, LandingCopy> = {
           ],
         },
       ],
-    },
-    demo: {
-      eyebrow: "Product story",
-      title: "Set the goal. Review the key results.",
-      lead: "From user feedback to a version you can demo: see how goals, specialist handoffs and acceptance connect a complete workflow.",
-      label: "OpenCorvus from goal to delivery: illustrated workflow in English",
-      caption: "English · under 2 minutes · narrated with captions · illustrated workflow, not a recorded run",
     },
     benchmark: {
       eyebrow: "Measured result",

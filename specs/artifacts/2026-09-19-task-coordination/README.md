@@ -173,3 +173,15 @@ The tank-game case involved 19 acceptance requirements and two correction rounds
 then 35 stages of source data. Explore the execution graph and its evidence. Open source and self-hostable.
 
 These drafts are not posted to external channels by this task.
+
+## Case gallery verification
+
+The gallery replaces the homepage film. Tank input/model provenance is retained in `source-excerpts.json`; the research model GPT-5.6 Sol was confirmed by the user. Research requirements come from the canonical squad composition brief, rather than a verbatim prompt or execution trace. Public material uses formal case labels without production annotations.
+
+- [Chinese task input](gallery-zh-query.png)
+- [Chinese research graph, initial review](gallery-zh-graph.png)
+- [Tank input and model](gallery-tank-query.png)
+- [Final tank collaboration graph, English dark appearance](gallery-tank-graph.png)
+- [English dark appearance](gallery-en-dark.png)
+
+- [English research graph](gallery-en-graph.png)

@@ -46,7 +46,9 @@ OpenCorvus is an open-source harness for long, complex agent tasks. It brings mo
 - **Retain progress:** task state and context support continued work and recovery after interruption.
 - **Check the result:** tool calls, artifacts and review evidence stay in the work record.
 
-## A real task
+## Task gallery
+
+[Explore task inputs, models and coordination graphs](https://opencorvus.com/#gallery): CUDA training and a research paper with **GPT-5.6 Sol**, and a tank game with **DeepSeek V4 Flash**.
 
 The tank-game case involved 19 acceptance requirements, source data for 35 stages and two correction rounds.
 

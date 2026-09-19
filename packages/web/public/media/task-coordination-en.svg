@@ -9,7 +9,7 @@
     </g>
     <g transform="translate(75 280)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 590" width="1290" height="590" role="img" aria-labelledby="share-title share-desc">
     <title id="share-title">One goal. A coordinated effort.</title>
-    <desc id="share-desc">Intent, requirements and research join at architecture, then branch into design and workload review. Implementation branches into testing and interface review. System and interface reviews join at delivery. Two amber repair edges return to implementation.</desc>
+    <desc id="share-desc">Intent, requirements and research join at architecture, then branch into design and workload review. Implementation branches into testing and interface review. System and interface reviews join at delivery. Review feedback joins before returning to implementation for scoring repair and stage-data replacement.</desc>
     <defs>
       <marker id="share-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 9 5 1 9" fill="none" stroke="#8193ba" stroke-width="1.5"/></marker>
       <marker id="share-repair" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 9 5 1 9" fill="none" stroke="#ba8649" stroke-width="1.5"/></marker>
@@ -19,11 +19,11 @@
     <ellipse cx="750" cy="290" rx="350" ry="260" fill="url(#share-wash)"/>
     <g font-family="Arial, Microsoft YaHei, Noto Sans CJK SC, sans-serif">
       <text x="37" y="42" font-size="13" fill="#68778f" letter-spacing="1">TANK BATTLE · EXECUTION MAP</text>
-      <text x="1254" y="42" text-anchor="end" font-size="12" fill="#68778f">Roles and repairs from task records. Workflow edges are illustrative; repair origins are not event attribution.</text>
       <g fill="none" stroke="#8193ba" stroke-width="1.7"><path data-from="intent" data-to="architecture" d="M198 145 C228 145 220 265 250 265" marker-end="url(#share-arrow)"/><path data-from="requirements" data-to="architecture" d="M198 265 H250" marker-end="url(#share-arrow)"/><path data-from="research" data-to="architecture" d="M198 385 C228 385 220 265 250 265" marker-end="url(#share-arrow)"/><path data-from="architecture" data-to="workload" d="M412 265 C442 265 434 125 464 125" marker-end="url(#share-arrow)"/><path data-from="architecture" data-to="design" d="M412 265 C442 265 434 305 464 305" marker-end="url(#share-arrow)"/><path data-from="design" data-to="implementation" d="M626 305 H678" marker-end="url(#share-arrow)"/><path data-from="implementation" data-to="test" d="M840 305 C871 305 861 185 892 185" marker-end="url(#share-arrow)"/><path data-from="implementation" data-to="interface-review" d="M840 305 C871 305 861 395 892 395" marker-end="url(#share-arrow)"/><path data-from="test" data-to="system-review" d="M1054 185 H1106" marker-end="url(#share-arrow)"/><path data-from="workload" data-to="system-review" d="M626 125 H649 Q665 125 665 109 V80 Q665 64 681 64 H1164 Q1180 64 1180 80 V154" marker-end="url(#share-arrow)"/><path data-from="implementation" data-to="system-review" d="M759 274 V254 Q759 238 775 238 H1124 Q1140 238 1140 222 V216" marker-end="url(#share-arrow)"/><path data-from="system-review" data-to="delivery" d="M1220 216 V364" marker-end="url(#share-arrow)"/><path data-from="interface-review" data-to="delivery" d="M1054 395 H1106" marker-end="url(#share-arrow)"/></g>
       <g fill="none" stroke="#ba8649" stroke-width="1.7" stroke-dasharray="5 4">
-        <path data-from="interface-review" data-to="implementation" d="M973 426 V470 Q973 485 958 485 H790 Q775 485 775 470 V336" marker-end="url(#share-repair)"/>
-        <path data-from="system-review" data-to="implementation" d="M1106 199 H1094 Q1080 199 1080 213 V530 Q1080 545 1065 545 H747 Q732 545 732 530 V336" marker-end="url(#share-repair)"/>
+        <path data-from="interface-review" data-to="review-feedback" d="M973 426 V460 Q973 480 993 480 H1050" marker-end="url(#share-repair)"/>
+        <path data-from="system-review" data-to="review-feedback" d="M1106 199 H1094 Q1080 199 1080 213 V460" marker-end="url(#share-repair)"/>
+        <path data-from="review-feedback" data-to="implementation" d="M1140 510 V540 Q1140 555 1125 555 H747 Q732 555 732 540 V336" marker-end="url(#share-repair)"/>
       </g>
       <g data-node="intent" transform="translate(36 114)">
       <rect width="162" height="62" rx="14" fill="#ffffff" stroke="#dbe0e9"/>
@@ -81,10 +81,12 @@
       <text x="80.5" y="26" text-anchor="middle" fill="#273247" font-size="14" font-weight="600">Delivery</text>
       <text x="80.5" y="45" text-anchor="middle" fill="#628674" font-size="11">Orchestrator</text>
     </g>
-      <rect x="802" y="469" width="240" height="31" rx="15" fill="#fff8ed"/>
-      <text x="922" y="490" text-anchor="middle" font-size="12" fill="#92602c">01  Scoring &amp; results repair</text>
-      <rect x="802" y="529" width="250" height="31" rx="15" fill="#fff8ed"/>
-      <text x="927" y="550" text-anchor="middle" font-size="12" fill="#92602c">02  Replace 35 stages of data</text>
+      <g data-node="review-feedback">
+        <rect x="1050" y="460" width="190" height="50" rx="14" fill="#fff8ed" stroke="#ba8649"/>
+        <text x="1145" y="491" text-anchor="middle" font-size="15" fill="#92602c">Review feedback</text>
+      </g>
+      <text x="870" y="512" text-anchor="middle" font-size="12" fill="#92602c">01  Scoring &amp; results repair</text>
+      <text x="870" y="537" text-anchor="middle" font-size="12" fill="#92602c">02  Replace 35 stages of data</text>
       <text x="38" y="541" font-size="12" fill="#748299">Solid: work handoff</text>
       <text x="38" y="562" font-size="12" fill="#92602c">Dashed: correction after review</text>
     </g>
