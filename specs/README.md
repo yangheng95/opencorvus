@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[v0.1.9 main-branch fixes, native and website release](records/2026-09/2026-09-20-v0.1.9-release.md).
+
 [Browser interaction and evidence publication repair](records/2026-09/2026-09-20-browser-acceptance-publication-repair.md).
 
 [Meaningful verification and repeated-repair evidence](records/2026-09/2026-09-20-meaningful-verification.md).

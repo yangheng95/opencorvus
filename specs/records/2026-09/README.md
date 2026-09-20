@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [v0.1.9 main-branch fixes, native and website release](2026-09-20-v0.1.9-release.md)
+
 - [Browser interaction and evidence publication repair](2026-09-20-browser-acceptance-publication-repair.md)
 
 - [Meaningful verification and repeated-repair evidence](2026-09-20-meaningful-verification.md)
