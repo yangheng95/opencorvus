@@ -37,6 +37,12 @@ import { MessageTable, ProviderActivityRequestTable } from "@/session/session.sq
 import { Database, eq, inArray, sql } from "@/storage/db"
 import { ApplicationSchemaSQLTestHooks } from "@/storage/ddl"
 import { EngineService } from "@/task-api"
+import { listDispatchLineage } from "@/engine/dispatch-lineage"
+import { waitForDetachedDispatchPipelinesForTest } from "@/orchestrator/dispatch-agent-tool"
+import { controlTextSHA256, renderDispatchContinuationTurn } from "@/orchestrator/dispatch-turn-projection"
+import { attachmentPromptSection } from "@/agent/prompt-projection"
+import { AttachmentStore } from "@/storage/attachment-store"
+import { appendTaskAttachment } from "@/engine/task-file-reference"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 function observedTask() {
@@ -79,6 +85,334 @@ afterEach(async () => {
   await Instance.disposeAll()
   await resetMemoryDatabase()
 })
+
+for (const collection of [false, true]) {
+  test(`${collection ? "dispatch_agents" : "dispatch_agent"}: attachment continuation recovers the accepted Turn through streamed execution`, async () => {
+    using _drain = Bus.TestHooks.suppressAutomaticDurableDrain()
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const dispatchToolName = collection ? "dispatch_agents" : "dispatch_agent"
+        const profile = collection ? "light" : "base"
+        const target = collection ? "light-planner" : "base-planner"
+        if (collection)
+          await ExpertSquadPackageManager.importDirectory({
+            projectDirectory: project.path,
+            sourceDirectory: path.resolve(import.meta.dir, "../../../expert-squads/builtin/light"),
+            installationScope: "project",
+          })
+        await Config.updateProjectPatch({ prompt_profile: { active: profile } })
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
+          runner: async (input) => ({
+            finalMessageID: await Orchestrator.processTask(
+              input.taskID,
+              input.event,
+              input.signal,
+              input.wakeID,
+              input.activationID,
+              input.predecessorID,
+            ),
+          }),
+        })
+        const encode = (turn: unknown) => {
+          const request = { dispatch: { target, work_scope: { kind: "task" }, turn } }
+          return collection
+            ? {
+                team: [
+                  {
+                    name: "planner",
+                    target,
+                    responsibility: "Read the request",
+                    boundary: "Read-only",
+                    expected_result: "Requirement handoff",
+                    depends_on: [],
+                  },
+                ],
+                dispatches: [request],
+              }
+            : request
+        }
+        let phase = 0
+        let serial = 0
+        let failedDispatchID: string | undefined
+        const workerPrompts: unknown[] = []
+        const guidance =
+          "Continue the exact requirements with the original attachment and preserve pending browser acceptance."
+        const toolStream = (toolName: string, input: unknown) => ({
+          stream: simulateReadableStream({
+            chunks: [
+              { type: "stream-start", warnings: [] },
+              { type: "tool-call", toolCallId: `continuation_${++serial}`, toolName, input: JSON.stringify(input) },
+              { type: "finish", finishReason: { unified: "tool-calls", raw: "tool_calls" }, usage },
+            ],
+          }),
+        })
+        const language = new MockLanguageModelV3({
+          provider: model.providerID,
+          modelId: model.modelID,
+          async doStream(options) {
+            const names = Array.isArray(options.tools)
+              ? options.tools.map((item) => item.name)
+              : Object.keys(options.tools ?? {})
+            const expectingWorker =
+              (phase === 1 && workerPrompts.length === 0) || (phase === 3 && workerPrompts.length === 1)
+            if (
+              collection &&
+              !expectingWorker &&
+              names.includes("capability_search") &&
+              !names.includes(dispatchToolName)
+            ) {
+              return toolStream("capability_search", {
+                queries: [dispatchToolName, "no_action"],
+                exact_refs: [dispatchToolName, "no_action"].map((local_ref) =>
+                  capabilityRef({
+                    kind: "tool",
+                    source: "platform",
+                    owner_ref: "runtime-projection:orchestrator",
+                    local_ref,
+                  }),
+                ),
+                deactivate_refs: [],
+                limit: 5,
+              })
+            }
+            if (names.includes(dispatchToolName)) {
+              const task = Database.use((db) => db.select().from(EngineTaskTable).get())!
+              if (phase === 0) {
+                phase = 1
+                return toolStream(
+                  dispatchToolName,
+                  encode({
+                    kind: "initial",
+                    workflow_subject: collection
+                      ? { kind: "direct" }
+                      : { kind: "virtual_workflow", workflow_id: "planner-parallel-delivery", node_id: target },
+                    use_worktree: false,
+                    input: {
+                      goal_ids: [],
+                      instruction: "Read the original source and define the requirement.",
+                      reason: "Prepare a typed handoff.",
+                    },
+                  }),
+                )
+              }
+              const initial = listDispatchLineage(task.id)[0]!
+              if (
+                phase === 1 &&
+                findDispatchSettlementByDispatchID({ taskID: task.id, dispatchID: initial.dispatchID })
+              ) {
+                const followup = await AttachmentStore.write(
+                  Instance.project.id,
+                  Buffer.from("Follow-up: keyboard input must work."),
+                  "text/plain",
+                  "followup.txt",
+                )
+                await appendTaskAttachment(task.id, { ...followup, intent: "task_input", source: "user-upload" })
+                phase = 2
+                return toolStream(
+                  dispatchToolName,
+                  encode({
+                    kind: "continuation",
+                    authority: { kind: "prior_dispatch", continuation_dispatch_id: initial.dispatchID },
+                    guidance,
+                    evidence_locators: [],
+                  }),
+                )
+              }
+              if (phase === 2 && failedDispatchID) {
+                const failure = findDispatchSettlementByDispatchID({ taskID: task.id, dispatchID: failedDispatchID })!
+                  .payload.outcome
+                expect(failure).toMatchObject({
+                  kind: "infrastructure_failure",
+                  message: `Projected agent "${target}" failed via adapter "delegated_worker": Injected continuation preparation failure`,
+                  worker_turn: { current_dispatch_id: initial.dispatchID },
+                  recovery_authority: { dispatch_id: failedDispatchID },
+                })
+                if (failure.kind !== "infrastructure_failure" || !failure.worker_turn?.current_dispatch_id)
+                  throw new Error("Recovery must expose accepted Turn authority")
+                phase = 3
+                return toolStream(
+                  dispatchToolName,
+                  encode({
+                    kind: "continuation",
+                    authority: {
+                      kind: "prior_dispatch",
+                      continuation_dispatch_id: failure.worker_turn.current_dispatch_id,
+                    },
+                    guidance,
+                    evidence_locators: [],
+                  }),
+                )
+              }
+              return toolStream("no_action", {
+                observed_task: observedTask(),
+                reason: "The current dispatch is already executing or settled.",
+              })
+            }
+            workerPrompts.push(options.prompt)
+            return {
+              stream: simulateReadableStream({
+                chunks: [
+                  { type: "stream-start", warnings: [] },
+                  { type: "text-start", id: "worker" },
+                  {
+                    type: "text-delta",
+                    id: "worker",
+                    delta: "Requirements defined; real browser acceptance remains downstream work.",
+                  },
+                  { type: "text-end", id: "worker" },
+                  { type: "finish", finishReason: { unified: "stop", raw: "stop" }, usage },
+                ],
+              }),
+            }
+          },
+        })
+        const resolvedModel = providerModel()
+        const modelSpy = spyOn(Provider, "getModel").mockResolvedValue(resolvedModel)
+        const languageSpy = spyOn(Provider, "getLanguage").mockResolvedValue(language)
+        const providerSpy = spyOn(Provider, "getProvider").mockResolvedValue({
+          id: model.providerID,
+          name: "Continuation test",
+          source: "custom",
+          env: [],
+          options: {},
+          models: { [resolvedModel.id]: resolvedModel },
+        } as never)
+        const authSpy = spyOn(Auth, "get").mockResolvedValue(undefined)
+        const gitPrepareSpy = spyOn(EngineGit, "prepare").mockImplementation(async (task) => ({ task }))
+        const gitCompleteSpy = spyOn(EngineGit, "complete").mockImplementation(async (task) => ({ task }))
+        const prepare = WorkerTurnDescriptor.prepare
+        const fault = spyOn(WorkerTurnDescriptor, "prepare").mockImplementation((input) => {
+          if (input.payload.dispatchTurn?.kind === "continuation" && !failedDispatchID) {
+            failedDispatchID = input.payload.dispatchTurn.current_dispatch_id
+            throw new Error("Injected continuation preparation failure")
+          }
+          return prepare(input)
+        })
+        try {
+          const taskID = await EngineService.createTask(
+            {
+              requestID: `attachment-continuation-${Identifier.ascending("artifact")}`,
+              title: "Attachment continuation",
+              request: "Define the game and preserve real browser verification as future acceptance.",
+              productPillar: "work",
+              model: `${model.providerID}/${model.modelID}`,
+              promptProfile: profile,
+              attachments: [
+                {
+                  mime: "text/markdown",
+                  filename: "original-prd.md",
+                  data: Buffer.from(
+                    "# Original PRD\nThe timer lasts exactly 17 seconds.\nVerify play using real browser interaction.",
+                  ).toString("base64"),
+                },
+              ],
+            },
+            { actor: "user" },
+          )
+          for (let i = 0; i < 4; i++) {
+            await waitForIngressDeliveryHooksForTest()
+            await waitForDetachedDispatchPipelinesForTest()
+          }
+          await Database.awaitEffectIdle(30_000)
+          const lineages = listDispatchLineage(taskID)
+          if (phase !== 3)
+            throw new Error(
+              JSON.stringify({
+                phase,
+                failedDispatchID,
+                settlements: lineages.map(
+                  (row) => findDispatchSettlementByDispatchID({ taskID, dispatchID: row.dispatchID })?.payload,
+                ),
+              }),
+            )
+          expect({ phase, workers: workerPrompts.length, dispatches: lineages.length }).toEqual({
+            phase: 3,
+            workers: 2,
+            dispatches: 3,
+          })
+          const latest = lineages.at(-1)!
+          const descriptor = WorkerTurnDescriptor.latestForSession(latest.payload.child_session_id)!
+          expect(descriptor.payload.dispatchTurn).toMatchObject({
+            kind: "continuation",
+            current_dispatch_id: latest.dispatchID,
+            source_dispatch_id: lineages[0]!.dispatchID,
+            workflow_occurrence_id: lineages[0]!.dispatchID,
+          })
+          expect(lineages.map((row) => row.payload.child_session_id)).toEqual([
+            descriptor.sessionID,
+            descriptor.sessionID,
+            descriptor.sessionID,
+          ])
+          const message = await MessageStore.get({
+            sessionID: descriptor.sessionID,
+            messageID: descriptor.payload.messageAuthority.user_message_id,
+          })
+          const expectedText = [
+            renderDispatchContinuationTurn({ turn: descriptor.payload.dispatchTurn!, guidance }),
+            attachmentPromptSection(requireTask(taskID).attachments ?? undefined),
+          ].join("\n\n")
+          expect(requireTask(taskID).attachments?.map((attachment) => attachment.filename)).toEqual([
+            "original-prd.md",
+            "followup.txt",
+          ])
+          expect(
+            message.parts.map((part) => ({ type: part.type, text: part.type === "text" ? part.text : undefined })),
+          ).toEqual([{ type: "text", text: expectedText }])
+          expect(descriptor.payload.messageAuthority.control_text_parts).toEqual([
+            { part_id: message.parts[0]!.id, text_sha256: controlTextSHA256(expectedText) },
+          ])
+          expect(JSON.stringify(workerPrompts[1])).toContain(JSON.stringify(expectedText).slice(1, -1))
+          const failure = findDispatchSettlementByDispatchID({ taskID, dispatchID: failedDispatchID! })!
+          expect(failure.payload.outcome).toEqual({
+            kind: "infrastructure_failure",
+            operation: "delegated_worker_adapter",
+            message: `Projected agent "${target}" failed via adapter "delegated_worker": Injected continuation preparation failure`,
+            recovery_authority: {
+              occurrence_status: "occurrence_committed",
+              dispatch_id: failedDispatchID,
+              dispatch_lineage_id: lineages[1]!.artifactID,
+            },
+            infrastructure_error: {
+              source: "engine_artifact",
+              artifact_id: expect.any(String),
+              catalog_revision: expect.any(Number),
+              expected_sha256: expect.any(String),
+            },
+            worker_turn: {
+              descriptor_id: expect.any(String),
+              descriptor_hash: expect.any(String),
+              input_message_id: expect.any(String),
+              current_dispatch_id: lineages[0]!.dispatchID,
+            },
+          })
+          expect(
+            findDispatchSettlementByDispatchID({ taskID, dispatchID: latest.dispatchID })!.payload.outcome,
+          ).toMatchObject({ kind: "terminal_success", session_id: descriptor.sessionID })
+          expect(
+            Database.use((db) => {
+              assertTaskDispatchesSettledInTransaction(db, taskID)
+              return "settled"
+            }),
+          ).toBe("settled")
+          Database.close()
+          Database.Client()
+          expect(findDispatchSettlementByDispatchID({ taskID, dispatchID: failedDispatchID! })).toEqual(failure)
+          expect(WorkerTurnDescriptor.latestForSession(descriptor.sessionID)).toEqual(descriptor)
+        } finally {
+          fault.mockRestore()
+          gitCompleteSpy.mockRestore()
+          gitPrepareSpy.mockRestore()
+          authSpy.mockRestore()
+          providerSpy.mockRestore()
+          languageSpy.mockRestore()
+          modelSpy.mockRestore()
+        }
+      },
+    })
+  }, 60_000)
+}
 
 for (const collection of [false, true]) {
 for (const scenario of ["base", "advanced", "advanced-preparation-failure", "advanced-preparation-recovery", "advanced-authority-recovery"] as const) {

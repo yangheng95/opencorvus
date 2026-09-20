@@ -130,7 +130,8 @@ export function createRequirementsOutputToolFactory(options: RequirementsOutputT
       description:
         "Finalize the typed Requirements coverage declaration exactly once after registering every requirement and decision. " +
         "Bind the current request SHA-256, exact registered REQ-N identities, exact selected source Artifact locators, and every unresolved item. " +
-        "Declare complete only when no unresolved coverage remains.",
+        "Declare complete only when no unresolved requirement-definition coverage remains. " +
+        "This does not accept the delivered product: preserve future implementation, browser, screenshot and external verification obligations in requirements and decisions with their owners and observation methods. Pending downstream evidence alone is not unresolved requirement coverage.",
       inputSchema: RequirementCoverageDeclarationSchema,
       execute: async (raw) => {
         if (collector.finalization) return "Error: Requirements coverage was already finalized for this Turn"

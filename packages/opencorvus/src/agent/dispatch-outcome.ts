@@ -110,7 +110,11 @@ export const DispatchInfrastructureFailureOutcomeSchema = z
         "Typed contract or validation issues supplied by the thrown error. Absence means no exact structured issue evidence was available.",
       ),
     infrastructure_error: EngineArtifactLocatorSchema.optional(),
-    worker_turn: WorkerTurnSettlementEvidenceSchema.optional(),
+    worker_turn: WorkerTurnSettlementEvidenceSchema.optional().describe(
+      "Accepted physical worker Turn at failure settlement. Use current_dispatch_id as explicit continuation authority. " +
+      "It can precede recovery_authority.dispatch_id when the failed continuation never committed a Turn. " +
+      "Without an accepted Turn, the settled preparation-failure dispatch identifies the reserved worker to recover.",
+    ),
   })
   .strict()
   .describe(

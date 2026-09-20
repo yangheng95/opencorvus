@@ -23,13 +23,11 @@ describe("projected worker continuation execution compatibility", () => {
       projectionHash: "b".repeat(64),
     }
 
-    expect(() =>
-      assertProjectedWorkerContinuationCompatible({
-        previous,
-        current,
-        subject: "dispatch continuation",
-      }),
-    ).not.toThrow()
+    assertProjectedWorkerContinuationCompatible({
+      previous,
+      current,
+      subject: "dispatch continuation",
+    })
     expect(sameProjectedWorkerIdentity(previous, current)).toBe(false)
   })
 

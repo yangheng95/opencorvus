@@ -1,5 +1,6 @@
 import { isDeepStrictEqual } from "node:util"
 import { DispatchOutcomeSchema, type DispatchOutcome } from "@/agent/dispatch-outcome"
+import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { insertEngineArtifact } from "@/engine/artifact"
 import { EngineArtifactTable, type EngineMetadata } from "@/engine/engine.sql"
 import { Identifier } from "@/id/id"
@@ -230,6 +231,29 @@ export function settleDispatchOrReturnExisting(input: {
   return Database.immediateTransaction(() => {
     const existing = findDispatchSettlementByDispatchID({ taskID: input.taskID, dispatchID: input.dispatchID })
     if (existing) return existing
+    if (input.outcome.kind === "infrastructure_failure" && !input.outcome.worker_turn) {
+      const lineage = findDispatchLineageByDispatchID(input)
+      const descriptor = lineage && WorkerTurnDescriptor.latestForSession(lineage.payload.child_session_id)
+      if (descriptor?.payload.dispatchTurn) {
+        if (descriptor.payload.lifecycle.taskID !== input.taskID) {
+          throw new Error(`Dispatch ${input.dispatchID} recovery descriptor belongs to another Task`)
+        }
+        // Failed lineage is accounting authority, not proof that its Turn was
+        // accepted. Snapshot the actual accepted Turn for explicit recovery.
+        return recordDispatchSettlement({
+          ...input,
+          outcome: {
+            ...input.outcome,
+            worker_turn: {
+              descriptor_id: descriptor.id,
+              descriptor_hash: descriptor.hash,
+              input_message_id: descriptor.payload.messageAuthority.user_message_id,
+              current_dispatch_id: descriptor.payload.dispatchTurn.current_dispatch_id,
+            },
+          },
+        })
+      }
+    }
     return recordDispatchSettlement(input)
   })
 }

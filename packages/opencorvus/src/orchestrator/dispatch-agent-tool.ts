@@ -447,7 +447,7 @@ export function createDispatchAgentTool(input: {
     z
       .object({
         kind: z.literal("prior_dispatch"),
-        continuation_dispatch_id: z.string().min(1).describe("Exact dispatch ID of this worker Session’s latest accepted physical Turn. After a continuation, use its current dispatch ID; the original logical workflow occurrence ID is not the current Turn. If no worker Turn was accepted, use the exact settled pre-child preparation-failure dispatch ID to recover the reserved worker. Stale accepted-Turn source identities are rejected; the Host never substitutes a newer source."),
+        continuation_dispatch_id: z.string().min(1).describe("Exact dispatch ID of this worker Session’s latest accepted physical Turn. On infrastructure failure use worker_turn.current_dispatch_id when supplied, not the failed recovery_authority.dispatch_id. After an accepted continuation, use its current dispatch ID; the original logical workflow occurrence ID is not the current Turn. If no worker Turn was accepted, use the exact settled preparation-failure dispatch ID to recover the reserved worker. Stale accepted-Turn source identities are rejected; the Host never substitutes a newer source."),
       })
       .strict(),
   ])
@@ -1082,13 +1082,15 @@ export function createDispatchAgentTool(input: {
           throw error
         }
         if (!dispatchID) throw error
+        const acceptedTurn = childSessionID && WorkerTurnDescriptor.latestForSession(childSessionID)
+        const currentTurnAccepted = acceptedTurn && acceptedTurn.payload.dispatchTurn?.current_dispatch_id === dispatchID
         const failure = DispatchOutcome.infrastructureFailure({
           operation: `${projectedAgent.identity.dispatchAdapterID}_adapter`,
           message: error instanceof Error ? error.message : String(error),
-          sessionID: childSessionID,
+          sessionID: currentTurnAccepted ? childSessionID : undefined,
           recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID: input.taskID, dispatchID }),
         })
-        if (!childSessionID && openedDispatch && !openedDispatch.replayOutcome) return openedDispatch.settlePreparationFailure(failure)
+        if (!currentTurnAccepted && openedDispatch && !openedDispatch.replayOutcome) return openedDispatch.settlePreparationFailure(failure)
         return settleDispatchOrReturnExisting({ taskID: input.taskID, dispatchID, outcome: failure }).payload.outcome
         } finally {
           openedDispatch?.releaseAdmission()

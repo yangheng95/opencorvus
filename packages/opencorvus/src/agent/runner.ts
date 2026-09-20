@@ -1161,7 +1161,14 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
   const systemPromptHash = textSHA256(systemPrompt)
 
   // ── 3. Build user prompt parts ───────────────────────────────────────
-  const continuationText = input.continuationPrompt?.trim()
+  const continuationGuidance = input.continuationPrompt?.trim()
+  // Materialization, the visible Part and its authority digest must consume
+  // the same text, including attachments added since the preceding Turn.
+  const continuationText = continuationGuidance
+    ? [continuationGuidance, attachmentPromptSection(requireTask(input.taskID).attachments ?? undefined)]
+        .filter(Boolean)
+        .join("\n\n")
+    : undefined
   if (existingSessionID && !continuationText) {
     throw new AgentRunError(kind, `existing session ${existingSessionID} requires an incremental continuation prompt`)
   }
@@ -1175,8 +1182,6 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
   let parts: SessionPromptInput["parts"]
   if (continuationText) {
     parts = [{ type: "text", text: continuationText }]
-    const attachments = attachmentPromptSection(requireTask(input.taskID).attachments ?? undefined)
-    if (attachments) parts.push({ type: "text", text: attachments })
   } else if (input.buildUserParts) {
     parts = await input.buildUserParts()
   } else {

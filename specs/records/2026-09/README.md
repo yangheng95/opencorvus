@@ -2,6 +2,8 @@
 
 - [Browser Preview runtime and PRD execution fidelity](2026-09-20-browser-preview-prd-execution-fidelity.md)
 
+- [Worker continuation attachments and recovery identity](2026-09-20-worker-continuation-attachment-recovery.md)
+
 - [Mission append recovery after Browser MCP disconnect](2026-09-20-mission-append-browser-mcp-recovery.md)
 
 - [v0.1.7 package repair and stable release](2026-09-20-v0.1.7-release.md)

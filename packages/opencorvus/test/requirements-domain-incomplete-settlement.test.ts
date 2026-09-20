@@ -572,6 +572,57 @@ describe("Requirements domain-incomplete settlement", () => {
     })
   }, 30_000)
 
+  test("defined future implementation and external verification obligations complete requirement coverage", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const task = await fixture("Requirement definitions before product acceptance")
+        const output = createRequirementsOutputToolFactory()
+        const obligations = [
+          {
+            description: "Implement the game from the original PRD.",
+            acceptance: "Implementation owner supplies a runnable build with the specified game rules.",
+          },
+          {
+            description: "Verify gameplay through real browser input.",
+            acceptance: "Visual reviewer supplies real mouse and keyboard traces and screenshots of the built game.",
+          },
+          {
+            description: "Conduct a study with twelve adult first-time players.",
+            acceptance:
+              "External study owner supplies twelve participant observations; final acceptance remains pending until that evidence exists.",
+          },
+        ].map((item, index) => ({ ...requirement, ...item, id: `REQ-${index + 1}` }))
+        for (const item of obligations)
+          await output.materializeExact("register_requirement")!.execute!(item, {} as never)
+        await output.materializeExact("finalize_requirements")!.execute!(
+          { ...completeDeclaration(task), requirement_ids: obligations.map((item) => item.id) },
+          {} as never,
+        )
+        const collector = output.getCollector()
+        const result = await run({
+          task,
+          requirements: collector.requirements,
+          decisions: collector.decisions,
+          finalization: collector.finalization,
+        })
+        expect(result).toMatchObject({
+          outcome: { kind: "terminal_success" },
+          artifacts: [
+            {
+              payload: {
+                requirements: obligations,
+                coverage_receipt: { status: "complete", unresolved: [], issues: [] },
+              },
+            },
+          ],
+          workflow: { frontier_node_ids: ["architecture"] },
+        })
+      },
+    })
+  }, 30_000)
+
   test("durable read and selection facts are the only source and evidence authority", async () => {
     await using project = await memoryProject()
     await Instance.provide({

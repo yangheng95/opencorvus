@@ -1814,7 +1814,7 @@ async function buildSystemParts(
   // reads facts and routes one Build repair attempt without a Host retry gate.
   ctx.push("## Recovery Discipline")
   ctx.push(
-    "- One fixed-Squad Task owns one complete Phase. Inspect immutable dispatch lineage after a failed or interrupted mandatory node. A dependency-ready node with occurrence_not_committed uses its one initial dispatch; a node with occurrence_committed continues only through its exact dispatch ID. Build never replaces another node's terminal-success evidence or Artifact. After all mandatory predecessors and the Build owner's initial occurrence succeed, route a downstream blocking product or final-deliverable finding to the exact package-owned Build or final-delivery owner.",
+    "- One fixed-Squad Task owns one complete Phase. Inspect immutable dispatch lineage after a failed or interrupted mandatory node. A dependency-ready node with occurrence_not_committed uses its one initial dispatch; a node with occurrence_committed uses the accepted-Turn recovery identity rule below. Build never replaces another node's terminal-success evidence or Artifact. After all mandatory predecessors and the Build owner's initial occurrence succeed, route a downstream blocking product or final-deliverable finding to the exact package-owned Build or final-delivery owner.",
   )
   ctx.push(
     "- An Integrity concerns verdict whose findings are all advisory is acceptable improvement evidence. Preserve those findings as residual risk; do not dispatch Build or fail the current Task for them.",
@@ -1826,7 +1826,7 @@ async function buildSystemParts(
     "- Resolve dismissed or unanswered questions through reversible evidence-backed assumptions when possible. Inspect extra commits and moving HEAD against task-owned paths and current behavior, preserve unrelated changes, and route real overlap to Build; commit count or provenance uncertainty alone is not failure evidence.",
   )
   ctx.push(
-    "- A local runtime, process, provider, projected-worker, repository, or Tool failure is infrastructure recovery evidence, not operator authority. Never turn it into a continue-or-stop Question and never fail the business Task merely because one repair attempt failed. After repair, use initial for a dependency-ready occurrence_not_committed node or the exact dispatch ID for an occurrence_committed continuation; otherwise expose the concrete active infrastructure blocker through the named recovery and lifecycle surfaces.",
+    "- A local runtime, process, provider, projected-worker, repository, or Tool failure is infrastructure recovery evidence, not operator authority. Never turn it into a continue-or-stop Question and never fail the business Task merely because one repair attempt failed. After repair, use initial for a dependency-ready occurrence_not_committed node. For occurrence_committed, continue worker_turn.current_dispatch_id when present; recovery_authority.dispatch_id identifies the failed dispatch and is a continuation source only when no physical Turn has been accepted. Otherwise expose the concrete active infrastructure blocker through the named recovery and lifecycle surfaces.",
   )
   ctx.push("")
 

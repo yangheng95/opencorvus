@@ -52,11 +52,15 @@ export const RequirementCoverageUnresolvedSchema = z
 
 export const RequirementCoverageDeclarationSchema = z
   .object({
-    status: z.enum(["complete", "incomplete"]),
+    status: z.enum(["complete", "incomplete"]).describe(
+      "Completeness of the requirement definitions and acceptance obligations, not implementation or product acceptance.",
+    ),
     request_sha256: z.string().regex(/^[a-f0-9]{64}$/),
     requirement_ids: z.array(RequirementDeclaredIDSchema),
     source_artifact_locators: z.array(ArtifactReadLocatorSchema),
-    unresolved: z.array(RequirementCoverageUnresolvedSchema),
+    unresolved: z.array(RequirementCoverageUnresolvedSchema).describe(
+      "Missing or ambiguous requirement coverage. Record known future implementation and verification work in requirements/decisions, including its owner and observation method; pending delivery evidence alone is not a coverage gap.",
+    ),
   })
   .strict()
   .superRefine((value, context) => {
