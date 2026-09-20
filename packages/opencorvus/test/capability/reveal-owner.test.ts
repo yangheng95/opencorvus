@@ -22,7 +22,6 @@ import {
 } from "../../src/capability/descriptor"
 import { bindHarnessProjection, createHarnessGrantSet } from "../../src/capability/harness-projection"
 import {
-  CapabilityRevealAuthorizationError,
   CapabilityRevealConflictError,
   createCapabilityRevealOwner,
   exactOccurrenceCapabilityDescriptor,
@@ -370,6 +369,7 @@ describe("occurrence capability reveal owner", () => {
             compatible_next_owner_kinds: ["create_task_with_expert_squad"],
           },
           results: [],
+          recovery_guidance: expect.stringContaining("this occurrence has no callable permission-request tool"),
         })
         expect(result.metadata).toMatchObject({
           result_count: 0,
@@ -553,7 +553,11 @@ describe("occurrence capability reveal owner", () => {
             sessionID: session.id,
             toolPartID: deniedPart.id,
           }),
-        ).rejects.toBeInstanceOf(CapabilityRevealAuthorizationError)
+        ).rejects.toMatchObject({
+          name: "CapabilityRevealAuthorizationError",
+          code: "execution_not_granted",
+          message: expect.stringContaining("Operation approval is requested by invoking an already granted tool"),
+        })
 
         const allowed = CapabilitySearchInput.parse({ queries: ["alpha"], exact_refs: [toolA] })
         const allowedPart = await runningSearchPart({

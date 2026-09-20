@@ -28,6 +28,7 @@ import {
 } from "./reveal-receipt"
 import { canonicalJSONValue, compareCanonicalStrings } from "@/util/canonical-digest"
 import { CapabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
+import { capabilityRecoveryGuidance } from "./recovery-guidance"
 
 export const CAPABILITY_REVEAL_OWNER_EXTRA_KEY = "opencorvusCapabilityRevealOwnerV2" as const
 
@@ -115,18 +116,29 @@ export function exactOccurrenceCapabilityDescriptor(
   return matches[0]!
 }
 
-function assertRevealable(payload: CatalogViewSnapshotPayloadV3, requested: CapabilityRef): CapabilityDescriptor {
+function assertRevealable(
+  payload: CatalogViewSnapshotPayloadV3,
+  requested: CapabilityRef,
+  recovery: string,
+): CapabilityDescriptor {
   const encoded = CapabilityRefCodec.encode(requested)
+  if (!payload.descriptors.some((descriptor) => CapabilityRefCodec.encode(descriptor.ref) === encoded)) {
+    throw new Error(`Capability ${encoded} is outside this frozen catalog. ${recovery}`)
+  }
   const descriptor = exactOccurrenceCapabilityDescriptor(payload, requested)
   const view = payload.views.find((candidate) => CapabilityRefCodec.encode(candidate.descriptor_ref) === encoded)
   if (!view || !view.discoverable_by.includes(payload.context.caller)) {
-    throw new Error(`Capability ${encoded} is not discoverable by ${payload.context.caller}.`)
+    throw new Error(`Capability ${encoded} is not discoverable by ${payload.context.caller}. ${recovery}`)
   }
   if (view.availability === "denied" || view.availability === "requires_auth" || view.availability === "unavailable") {
-    throw new Error(`Capability ${encoded} is ${view.availability} and cannot be revealed.`)
+    throw new Error(
+      `Capability ${encoded} is ${view.availability} and cannot be revealed. next_owner=${JSON.stringify(view.next_owner)}. ${recovery}`,
+    )
   }
   if (view.next_owner.kind === "open_settings" || view.next_owner.kind === "unavailable") {
-    throw new Error(`Capability ${encoded} has no executable next owner (${view.next_owner.kind}).`)
+    throw new Error(
+      `Capability ${encoded} has no executable next owner: ${JSON.stringify(view.next_owner)}. ${recovery}`,
+    )
   }
   return descriptor
 }
@@ -136,6 +148,7 @@ function assertExecutableGrant(
   harness: HarnessProjection,
   requested: CapabilityRef,
   executable: CapabilityRef,
+  recovery: string,
 ): void {
   const target = CapabilityRefCodec.encode(executable)
   const direct = harness.grants.find((grant) => CapabilityRefCodec.encode(grant.ref) === target)
@@ -167,7 +180,7 @@ function assertExecutableGrant(
   }
   throw new CapabilityRevealAuthorizationError(
     "execution_not_granted",
-    `Harness ${harness.projection_hash} does not grant execution of ${target}.`,
+    `Harness ${harness.projection_hash} does not grant execution of ${target}. ${recovery}`,
   )
 }
 
@@ -319,6 +332,7 @@ export function createCapabilityRevealOwner(input: {
       ).length
       const productPillar = missionAuthority?.productPillar ?? params.product_pillar
       const requestedProductPillar = params.product_pillar
+      const recovery = capabilityRecoveryGuidance(input.baseDefinition.providerNames)
       const activated = await Promise.all(
         params.exact_refs.map(async (requestedRef) => {
           if (
@@ -328,9 +342,9 @@ export function createCapabilityRevealOwner(input: {
           ) {
             throw new Error("capability_search is the permanent discovery Tool and is not a revealable active leaf.")
           }
-          const descriptor = assertRevealable(payload, requestedRef)
+          const descriptor = assertRevealable(payload, requestedRef, recovery)
           const executableRef = behaviorExecutableRef(descriptor)
-          assertExecutableGrant(payload, input.harness, requestedRef, executableRef)
+          assertExecutableGrant(payload, input.harness, requestedRef, executableRef, recovery)
           const materialized = await input.materialize(requestedRef, executableRef)
           if (CapabilityRefCodec.encode(materialized.executableRef) !== CapabilityRefCodec.encode(executableRef)) {
             throw new Error(
@@ -412,6 +426,7 @@ export function createCapabilityRevealOwner(input: {
           : {}),
         filter_diagnostic: search.filterDiagnostic,
         search_window: search.resultWindow,
+        ...(results.length === 0 && params.exact_refs.length === 0 ? { recovery_guidance: recovery } : {}),
         results,
       }
       const output = JSON.stringify(visible, null, 2)

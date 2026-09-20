@@ -224,7 +224,13 @@ outcome 终结；一旦 lineage 已存在，该 member 必须有 immutable settl
 recovery frontier 消失，而不是继续按 member 重放 scheduler Turn。
 
 TaskArtifact 的 Engine envelope 与 exact resource identity 进入 SQLite，当前不可变
-manifest 和资源字节则由 TaskArtifactStore 发布。资源完整性错误必须由 exact
+manifest 和资源字节则由 TaskArtifactStore 发布。发布的唯一文件系统提交点是最终目录中的
+canonical `manifest.json`：两个 writer 都先验证 stage、独占创建目标目录、逐个移动并同步
+regular resource files，最后原子 no-replace 发布清单；不移动含被开发服务器监听的子目录的
+整棵目录。没有清单的准备中目录不进入 snapshot 列表，exact ref 读取仍严格验证清单与资源。
+失败只清理本次独占创建的目标；同一 Task 的 catalog writer lock 下，确定性幂等重试可以清理
+其精确 producer/content identity 的未提交目录后重建，已有有效清单则校验并复用。
+资源完整性错误必须由 exact
 Artifact/resource consumer 明确报告；project bootstrap 的 retention scan 只能记录
 结构化 corruption evidence，不能把一个缺失或损坏的 snapshot 提升为整个 Project、
 VCS、Task events 或 Session events 不可用。严格读取继续验证 manifest、路径、媒体

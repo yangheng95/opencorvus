@@ -233,17 +233,18 @@ export async function compareBrowserPreviewRegions(
       imageSize: await readPngSize(sourceBytes),
     })
   }
-  const preparedDir = await fs.mkdtemp(
-    path.join(ProjectRuntimePaths.taskRoot(projectRoot, input.taskID), ".browser-preview-region-preparing-"),
-  )
-  let published = false
+  // Job files are private until TaskArtifact and the Engine envelope publish.
+  // Reserve the unique job directory in place: moving its watched descendants
+  // is not supported on Windows, even with delete-sharing handles.
+  await fs.mkdir(path.dirname(outDir), { recursive: true })
+  await fs.mkdir(outDir)
   try {
     const sidecar = await runBrowserPreviewRegionComparisonCapture({
       projectRoot,
       taskID: input.taskID,
       targetID: input.targetID,
       jobID,
-      outDir: preparedDir,
+      outDir,
       bindings: selectedBindings,
       signal: input.signal,
     })
@@ -283,7 +284,7 @@ export async function compareBrowserPreviewRegions(
       try {
         regions.push(
           await materializeRegionComparison({
-            outDir: preparedDir,
+            outDir,
             binding,
             sourceImageBytes: source.bytes,
             sourceBox: source.bbox,
@@ -319,10 +320,7 @@ export async function compareBrowserPreviewRegions(
       }
     }
 
-    await fs.mkdir(path.dirname(outDir), { recursive: true })
-    await fs.rename(preparedDir, outDir)
-    published = true
-    regions = regions.map((region) => rebaseRegionComparisonPaths(region, preparedDir, outDir))
+    regions.forEach((region) => validateRegionComparisonPaths(region, outDir))
 
     const manifestPath = path.join(outDir, "manifest.json")
     const diagnostics = regions.flatMap((region) => region.diagnostics)
@@ -384,43 +382,26 @@ export async function compareBrowserPreviewRegions(
   } catch (error) {
     return await throwAfterBrowserPreviewPublicationCleanup({
       primaryFailure: error,
-      residualPath: published ? outDir : preparedDir,
+      residualPath: outDir,
     })
   }
 }
 
-function rebaseRegionComparisonPaths(
+function validateRegionComparisonPaths(
   region: BrowserPreviewRegionComparisonResult["regions"][number],
-  preparedDir: string,
   outDir: string,
-): BrowserPreviewRegionComparisonResult["regions"][number] {
-  const rebase = (value: string | undefined) => (value ? rebaseJobPath(value, preparedDir, outDir) : undefined)
-  return {
-    ...region,
-    implementation_screenshot_path: rebase(region.implementation_screenshot_path),
-    route_diagnostics: region.route_diagnostics
-      ? {
-          ...region.route_diagnostics,
-          screenshot_path: rebaseJobPath(region.route_diagnostics.screenshot_path, preparedDir, outDir),
-        }
-      : undefined,
-    artifacts: region.artifacts
-      ? {
-          source_crop: rebaseJobPath(region.artifacts.source_crop, preparedDir, outDir),
-          implementation_crop: rebaseJobPath(region.artifacts.implementation_crop, preparedDir, outDir),
-          side_by_side: rebaseJobPath(region.artifacts.side_by_side, preparedDir, outDir),
-          diff: rebase(region.artifacts.diff),
-        }
-      : undefined,
+): void {
+  for (const value of [
+    region.implementation_screenshot_path,
+    region.route_diagnostics?.screenshot_path,
+    ...Object.values(region.artifacts ?? {}),
+  ]) {
+    if (!value) continue
+    const relative = path.relative(outDir, path.resolve(value))
+    if (!relative || relative === ".." || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
+      throw new Error(`Browser preview region runner returned a path outside its job directory: ${value}`)
+    }
   }
-}
-
-function rebaseJobPath(value: string, preparedDir: string, outDir: string): string {
-  const relative = path.relative(preparedDir, path.resolve(value))
-  if (!relative || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
-    throw new Error(`Browser preview region runner returned a path outside its preparation directory: ${value}`)
-  }
-  return path.join(outDir, relative)
 }
 
 async function materializeRegionComparison(input: {

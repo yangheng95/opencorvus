@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Browser interaction and screenshot publication](2026-09-20-browser-acceptance/README.md): manually inspected Browser MCP states and exact production-owner attachment readback under directory watching; explicitly scoped apart from Mission acceptance.
+
 - [Browser runtime and original-PRD fresh case](2026-09-20-browser-prd-case/README.md): operator-run packaged-runtime acceptance using the original three source attachments in a new project and Mission.
 
 - [Task coordination case and promotional material](2026-09-19-task-coordination/README.md): selected source excerpts, bilingual diagram/share material and visual review evidence.

@@ -13,6 +13,9 @@ import {
 } from "../src/build/merge-back-publication-authority"
 import type { SessionRuntimeContract } from "../src/session/runtime-contract"
 import {
+  createTaskArtifactStoreExecution,
+  listTaskArtifactSnapshots,
+  publishEngineArtifactResources,
   publishTaskArtifactGitCommitSubtree,
   publishTaskArtifactProjectFiles,
   readTaskArtifactRef,
@@ -47,6 +50,28 @@ async function git(directory: string, args: string[]) {
   const result = await hostGit(args, { cwd: directory, timeoutProfile: "default" })
   if (result.exitCode !== 0) throw new Error(result.stderr.toString().trim())
   return result.stdout.toString().trim()
+}
+
+async function watchDirectory(directory: string) {
+  const process = Bun.spawn(["node", path.join(import.meta.dir, "fixture/directory-watcher.mjs"), directory], {
+    stdin: "pipe",
+    stdout: "pipe",
+    stderr: "inherit",
+  })
+  const reader = process.stdout.getReader()
+  const ready = async () => expect(new TextDecoder().decode((await reader.read()).value)).toBe("ready\n")
+  await ready()
+  return {
+    async synchronize() {
+      process.stdin.write("scan\n")
+      await ready()
+    },
+    async [Symbol.asyncDispose]() {
+      reader.releaseLock()
+      process.stdin.end()
+      expect(await process.exited).toBe(0)
+    },
+  }
 }
 
 /**
@@ -173,6 +198,105 @@ async function establishProjectedSchedulerSnapshot(input: {
 }
 
 describe("Task Artifact immutable Git commit publication", () => {
+  test("publishes repeated Engine resource snapshots and reads their exact bytes", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { scope, taskID } = await establishProjectedSchedulerSnapshot({
+          projectPath: project.path,
+          file: "publication-input.txt",
+          contents: "resource publication authority",
+        })
+        const sourcePath = path.join(scope.taskRuntimeDirectory, "capture-source.bin")
+        await fs.mkdir(path.dirname(sourcePath), { recursive: true })
+        const bytes = Buffer.alloc(303115, 0x6b)
+        await fs.writeFile(sourcePath, bytes)
+        await using watcher = await watchDirectory(project.path)
+        const publications = await Promise.all(
+          Array.from({ length: 12 }, async (_, index) => {
+            const publication = await publishEngineArtifactResources({
+              projectID: scope.projectID,
+              projectDirectory: project.path,
+              taskID,
+              producer: { owner_kind: "core", component_id: "publication-contract", operation_id: `capture-${index}` },
+              files: [
+                {
+                  sourcePath,
+                  resourcePath: "0001-desktop-989dbe413f611429.bin",
+                  mediaType: "application/octet-stream",
+                },
+              ],
+            })
+            expect(Buffer.from(await readTaskArtifactRef({ ...scope, ref: publication.artifacts[0]! }))).toEqual(bytes)
+            return publication
+          }),
+        )
+        publications.sort((left, right) => left.manifest.publication_sequence - right.manifest.publication_sequence)
+        expect(publications.map((publication) => publication.manifest.publication_sequence)).toEqual(
+          Array.from({ length: 12 }, (_, index) => index + 1),
+        )
+        const unfinished = ProjectRuntimePaths.taskArtifactSnapshotRoot(project.path, taskID, crypto.randomUUID())
+        await fs.mkdir(path.join(unfinished, "resources"), { recursive: true })
+        await fs.writeFile(path.join(unfinished, "resources", "prepared.bin"), bytes)
+        expect((await listTaskArtifactSnapshots(scope)).map((record) => record.identity)).toEqual(
+          publications.map((publication) => publication.snapshot),
+        )
+      },
+    })
+  }, 60_000)
+
+  test("publishes watched nested Task stages, reuses committed identity and recovers an unfinished idempotent target", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { scope } = await establishProjectedSchedulerSnapshot({
+          projectPath: project.path,
+          file: "authority.txt",
+          contents: "projected publication",
+        })
+        await using watcher = await watchDirectory(project.path)
+        const execution = createTaskArtifactStoreExecution(scope)
+        try {
+          const bytes = Buffer.from("exact nested watched resource")
+          const publish = async () => {
+            const stage = await execution.stage({ trees: ["resources"] })
+            const resource = path.join(stage.treeDirectories.resources!, "nested/result.txt")
+            await fs.mkdir(path.dirname(resource), { recursive: true })
+            await fs.writeFile(resource, bytes)
+            await watcher.synchronize()
+            return execution.publish(stage, {
+              snapshot_kind: "catalog",
+              idempotent: true,
+              files: [{ tree: "resources", path: "nested/result.txt", media_type: "text/plain" }],
+            })
+          }
+          const first = await publish()
+          const repeated = await publish()
+          expect(repeated.snapshot).toEqual(first.snapshot)
+          expect(Buffer.from(await readTaskArtifactRef({ ...scope, ref: first.artifacts[0]! }))).toEqual(bytes)
+          const destination = ProjectRuntimePaths.taskArtifactSnapshotRoot(
+            project.path,
+            scope.taskID,
+            first.snapshot.snapshot_id,
+          )
+          // Model the exact on-disk state before the manifest-last commit.
+          await fs.unlink(path.join(destination, "manifest.json"))
+          const recovered = await publish()
+          expect(recovered.snapshot.snapshot_id).toBe(first.snapshot.snapshot_id)
+          expect(recovered.manifest.publication_sequence).toBe(first.manifest.publication_sequence + 1)
+          expect(Buffer.from(await readTaskArtifactRef({ ...scope, ref: recovered.artifacts[0]! }))).toEqual(bytes)
+          expect((await listTaskArtifactSnapshots(scope)).map((record) => record.identity)).toEqual([
+            recovered.snapshot,
+          ])
+        } finally {
+          await execution.close()
+        }
+      },
+    })
+  }, 60_000)
+
   test("projects snapshot inputs from the frozen current-project or managed-Build authority", async () => {
     const current = await ArtifactSnapshotTool.init({ artifactSnapshotSource: "current_task_project" })
     const managed = await ArtifactSnapshotTool.init({ artifactSnapshotSource: "merged_primary_commit" })

@@ -5,7 +5,7 @@
   "name": "Advanced",
   "label": "Advanced",
   "description": "Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.",
-  "version": "2026.09.20.1",
+  "version": "2026.09.20.2",
   "product_pillars": [
     "code",
     "work"
@@ -18,7 +18,7 @@
   },
   "capability_sets": {
     "shared-capabilities-1": {
-      "description": "Shared capabilities used by 2 projections.",
+      "description": "Browser interaction and method capabilities used by 5 projections.",
       "member_refs": [
         "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fcheck",
         "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fclick",
@@ -48,7 +48,7 @@
       ]
     },
     "shared-capabilities-3": {
-      "description": "Shared capabilities used by 10 projections.",
+      "description": "Shared method capability used by 7 projections.",
       "member_refs": [
         "capability:skill:package:advanced:advanced%2Fshared%2Fmethod"
       ]
@@ -153,7 +153,7 @@
       },
       "implementation-engineer": {
         "capability_refs": [
-          "capability:capability_set:package:advanced:shared-capabilities-3",
+          "capability:capability_set:package:advanced:shared-capabilities-1",
           "capability:capability_set:platform:tool-registry:build-base"
         ],
         "label": "Implementation Engineer",
@@ -163,7 +163,7 @@
       },
       "test-engineer": {
         "capability_refs": [
-          "capability:capability_set:package:advanced:shared-capabilities-3",
+          "capability:capability_set:package:advanced:shared-capabilities-1",
           "capability:capability_set:platform:tool-registry:delegated-worker-base"
         ],
         "label": "Test Engineer",
@@ -194,7 +194,7 @@
       },
       "interface-integrity-reviewer": {
         "capability_refs": [
-          "capability:capability_set:package:advanced:shared-capabilities-3",
+          "capability:capability_set:package:advanced:shared-capabilities-1",
           "capability:capability_set:platform:tool-registry:delegated-worker-base"
         ],
         "label": "Interface Integrity Reviewer",

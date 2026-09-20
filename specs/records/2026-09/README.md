@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Browser interaction and evidence publication repair](2026-09-20-browser-acceptance-publication-repair.md)
+
 - [Meaningful verification and repeated-repair evidence](2026-09-20-meaningful-verification.md)
 
 - [Mission-authored Task requests](2026-09-20-mission-request-authoring.md)

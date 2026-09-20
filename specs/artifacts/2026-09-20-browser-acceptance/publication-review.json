@@ -1,0 +1,77 @@
+{
+  "scope": "isolated task fixture; real MCP PNG, real store, real attachment readback; not Mission E2E",
+  "results": [
+    {
+      "name": "01-home.png",
+      "bytes": 444380,
+      "sha256": "2b2bf42dc0a9cf41f6fdf4d1b23867f3cbb9dc946255e15e4e3a90a99673d897",
+      "attachment": {
+        "type": "file",
+        "mime": "image/png",
+        "url": "/attachment/prj_hobk3YEvwGsrJoxuTEK9/2b2bf42dc0a9cf41f6fdf4d1b23867f3cbb9dc946255e15e4e3a90a99673d897.png",
+        "filename": "desktop-browser-preview-capture.png"
+      },
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_g0VVl5dID00CZI52rfre",
+        "catalog_revision": 4,
+        "expected_sha256": "cbd119e347a64620b3b178ff1380e0c521452f7691027aa838b831c22d3eb33e"
+      },
+      "readback": "exact"
+    },
+    {
+      "name": "02-playing.png",
+      "bytes": 342953,
+      "sha256": "b2d4dc90a11a03327f4c55e36f4b372d5260dcca1753c7cf0913ffa704e2faad",
+      "attachment": {
+        "type": "file",
+        "mime": "image/png",
+        "url": "/attachment/prj_hobk3YEvwGsrJoxuTEK9/b2d4dc90a11a03327f4c55e36f4b372d5260dcca1753c7cf0913ffa704e2faad.png",
+        "filename": "desktop-browser-preview-capture.png"
+      },
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_g0VVl5dOm00uD1zFkuW0",
+        "catalog_revision": 5,
+        "expected_sha256": "5c51eca7d46c4ce26ef7f8146adf795f57aa5c5217023f039c21cceadce995c1"
+      },
+      "readback": "exact"
+    },
+    {
+      "name": "03-fishing.png",
+      "bytes": 182342,
+      "sha256": "7311bbbd8bd4c67bce7aa12b5063b8326327a7b5d0b041b0487176ca07b80838",
+      "attachment": {
+        "type": "file",
+        "mime": "image/png",
+        "url": "/attachment/prj_hobk3YEvwGsrJoxuTEK9/7311bbbd8bd4c67bce7aa12b5063b8326327a7b5d0b041b0487176ca07b80838.png",
+        "filename": "desktop-browser-preview-capture.png"
+      },
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_g0VVl5dUd0097VpA1o44",
+        "catalog_revision": 6,
+        "expected_sha256": "8d501f3720d3e483b0294f9b1bea35ee5565b2cf80b7343c8b045d7ef364060b"
+      },
+      "readback": "exact"
+    },
+    {
+      "name": "04-paused.png",
+      "bytes": 179688,
+      "sha256": "565a85e5a4b2fd285aff42f4bd0f3938d76025fffaea9869e093d828f83ed439",
+      "attachment": {
+        "type": "file",
+        "mime": "image/png",
+        "url": "/attachment/prj_hobk3YEvwGsrJoxuTEK9/565a85e5a4b2fd285aff42f4bd0f3938d76025fffaea9869e093d828f83ed439.png",
+        "filename": "desktop-browser-preview-capture.png"
+      },
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_g0VVl5dZg00sZ0N0EsDm",
+        "catalog_revision": 7,
+        "expected_sha256": "68febab26d9d4ba656351e79804321bcf161ab12599a343de43db87278602d18"
+      },
+      "readback": "exact"
+    }
+  ]
+}

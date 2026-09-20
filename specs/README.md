@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Browser interaction and evidence publication repair](records/2026-09/2026-09-20-browser-acceptance-publication-repair.md).
+
 [Meaningful verification and repeated-repair evidence](records/2026-09/2026-09-20-meaningful-verification.md).
 
 [Mission-authored Task requests](records/2026-09/2026-09-20-mission-request-authoring.md).

@@ -135,7 +135,7 @@ export async function executeRequestOrchestratorDecision(params: RequestOrchestr
 export const RequestOrchestratorDecisionTool = Tool.define("request_orchestrator_decision", {
   description: `Create a visible worker-to-orchestrator coordination request for the current task.
 
-Use this when you need the orchestrator to choose scheduling, scope, retry, cancellation, or user-question policy. The request is persisted as a typed coordination handoff and the current dispatch returns it synchronously to the owning orchestrator. Do not continue the worker turn afterward.
+Use this when you need the orchestrator to choose scheduling, scope, retry, cancellation, capability ownership, or user-question policy. For a missing capability, include the exact search/tool error, required operation and evidence, and ask for a capable owner or an operator configuration decision. This tool does not grant permissions or change this occurrence's frozen capabilities. The request is persisted as a typed coordination handoff and the current dispatch returns it synchronously to the owning orchestrator. Do not continue the worker turn afterward.
 
 Do not use task messages, hidden notes, or a new subtask chat to ask the orchestrator for a decision.`,
   parameters: RequestOrchestratorDecisionInput,

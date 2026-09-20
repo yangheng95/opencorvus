@@ -1,5 +1,6 @@
 import type { CapabilityRef } from "@opencorvus-ai/util/capability-ref"
 import { harnessGrantedRefs, type HarnessGrantSet, type HarnessProjection } from "./harness-projection"
+import { capabilityRecoveryGuidance } from "./recovery-guidance"
 
 // Native assistants use this map to choose their routine surface. Task roles
 // already declare their platform tool surface through the Expert Squad grants;
@@ -73,5 +74,7 @@ export function routineToolPrompt(refs: readonly CapabilityRef[]): string {
       (ref) =>
         `- ${ref.local_ref}: ${guidance[ref.local_ref] ?? "Use this declared role tool according to its exact definition and current contract."}`,
     ),
+    "# Capability and permission recovery",
+    capabilityRecoveryGuidance(refs.map((ref) => ref.local_ref)),
   ].join("\n")
 }

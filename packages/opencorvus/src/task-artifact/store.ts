@@ -797,6 +797,61 @@ async function verifyCommittedSnapshot(
   )
 }
 
+/** The canonical manifest is the commit point. Never rename a directory tree:
+ * Windows cannot move it while a development server watches a child directory.
+ * Both writers use this one publication protocol, including idempotent output. */
+async function commitSnapshotFiles(input: {
+  scope: TaskArtifactReadAuthority
+  identity: TaskArtifactSnapshotIdentity
+  stageRoot: string
+  finalRoot: string
+  validateScope: () => void
+}): Promise<void> {
+  const staged = await verifySnapshotAtRoot(input.scope, input.identity, input.stageRoot, input.validateScope)
+  await assertManagedDirectoryPath({
+    projectDirectory: input.scope.projectDirectory,
+    target: path.dirname(input.finalRoot),
+    create: true,
+    context: "TaskArtifactStore publication",
+  })
+  input.validateScope()
+  // An exclusive reservation is essential: cleanup must never own an existing
+  // committed snapshot, even if another publisher chose the same identity.
+  await fs.mkdir(input.finalRoot)
+  try {
+    const directories = new Set<string>([input.finalRoot])
+    for (const [tree, inventory] of Object.entries(staged.manifest.trees)) {
+      for (const file of inventory.files) {
+        const relative = path.join(tree, ...file.path.split("/"))
+        const target = path.join(input.finalRoot, relative)
+        await fs.mkdir(path.dirname(target), { recursive: true })
+        for (let directory = path.dirname(target); directory !== input.finalRoot; directory = path.dirname(directory)) {
+          directories.add(directory)
+        }
+        await Filesystem.renameDurableNoReplace(path.join(input.stageRoot, relative), target)
+      }
+    }
+    for (const directory of [...directories].sort((left, right) => right.length - left.length)) {
+      await syncDirectoryMetadata(directory, "TaskArtifactStore prepared publication")
+    }
+    input.validateScope()
+    await Filesystem.renameDurableNoReplace(
+      path.join(input.stageRoot, "manifest.json"),
+      path.join(input.finalRoot, "manifest.json"),
+    )
+    await syncDirectoryMetadata(path.dirname(input.finalRoot), "TaskArtifactStore snapshot catalog")
+    await verifyCommittedSnapshot(input.scope, input.identity, input.validateScope)
+    await removeExact(input.stageRoot, "TaskArtifactStore committed stage")
+  } catch (cause) {
+    try {
+      await removeExact(input.finalRoot, "TaskArtifactStore failed publication")
+    } catch (cleanupCause) {
+      throw new AggregateError([cause, cleanupCause], `TaskArtifactStore publication left residue ${input.finalRoot}`)
+    }
+    throw cause
+  }
+}
+
 async function verifyCommittedSnapshotManifest(
   scope: TaskArtifactReadAuthority,
   identity: TaskArtifactSnapshotIdentity,
@@ -817,7 +872,10 @@ async function listCommittedSnapshotRecordsUnlocked(
   validateScope()
   const reservedSequences = await listReservedPublicationSequences(scope)
   const reservedSequenceSet = new Set(reservedSequences)
-  const snapshotsRoot = path.join(ProjectRuntimePaths.taskArtifactRoot(scope.projectDirectory, scope.taskID), "snapshots")
+  const snapshotsRoot = path.join(
+    ProjectRuntimePaths.taskArtifactRoot(scope.projectDirectory, scope.taskID),
+    "snapshots",
+  )
   let entries
   try {
     entries = await fs.readdir(snapshotsRoot, { withFileTypes: true })
@@ -831,7 +889,15 @@ async function listCommittedSnapshotRecordsUnlocked(
       throw new Error(`TaskArtifactStore: committed snapshot root contains invalid entry ${entry.name}`)
     }
     const root = path.join(snapshotsRoot, entry.name)
-    const manifestBytes = await readRegularFile(path.join(root, "manifest.json"), "TaskArtifactStore manifest")
+    const manifestBytes = await readRegularFile(path.join(root, "manifest.json"), "TaskArtifactStore manifest").catch(
+      (cause) => {
+        // A crash or an active producer may leave prepared bytes. Only the
+        // atomically published manifest establishes a committed snapshot.
+        if (missing(cause)) return undefined
+        throw cause
+      },
+    )
+    if (!manifestBytes) continue
     let decoded: unknown
     try {
       decoded = JSON.parse(Buffer.from(manifestBytes).toString("utf8"))
@@ -1022,7 +1088,7 @@ async function publishEngineResourceSnapshot(input: {
     snapshotID,
   )
   const tree = "resources"
-  let renamed = false
+  let published = false
   try {
     await assertManagedDirectoryPath({
       projectDirectory: input.targetProjectDirectory,
@@ -1079,15 +1145,16 @@ async function publishEngineResourceSnapshot(input: {
         manifest_sha256: sha256(manifestBytes),
       }),
     ) as TaskArtifactSnapshotIdentity
-    await verifySnapshotAtRoot(targetScope, identity, stageRoot, () => undefined)
-    await assertManagedDirectoryPath({
-      projectDirectory: input.targetProjectDirectory,
-      target: path.dirname(finalRoot),
-      create: true,
-      context: `${input.context} publication`,
+    await commitSnapshotFiles({
+      scope: targetScope,
+      identity,
+      stageRoot,
+      finalRoot,
+      validateScope: input.allowUncommittedTarget
+        ? () => undefined
+        : () => assertTaskArtifactReadAuthority(targetScope),
     })
-    await fs.rename(stageRoot, finalRoot)
-    renamed = true
+    published = true
     await syncDirectoryMetadata(path.dirname(finalRoot), `${input.context} snapshot catalog`)
     const artifacts = Object.freeze(
       manifestFiles.map(
@@ -1101,7 +1168,7 @@ async function publishEngineResourceSnapshot(input: {
     )
     return Object.freeze({ snapshot: identity, manifest, artifacts })
   } catch (cause) {
-    const residue = renamed ? finalRoot : stageRoot
+    const residue = published ? finalRoot : stageRoot
     try {
       await removeExact(residue, input.context)
     } catch (cleanupCause) {
@@ -1356,7 +1423,7 @@ export function createTaskArtifactStoreExecution(scope: TaskToolExecutionScope):
             scope.taskID,
             record.snapshotID,
           )
-          let renamed = false
+          let published = false
           try {
             const files = TaskArtifactPublicationInventorySchema.parse(input.files)
             const declaredTrees = [...new Set(files.map((file) => file.tree))].sort(compareTaskArtifactPathsByUTF8)
@@ -1418,39 +1485,55 @@ export function createTaskArtifactStoreExecution(scope: TaskToolExecutionScope):
                 const existingManifestBytes = await readRegularFile(
                   path.join(finalRoot, "manifest.json"),
                   "TaskArtifactStore idempotent manifest",
-                )
-                const existingManifest = TaskArtifactSnapshotManifestSchema.parse(
-                  JSON.parse(Buffer.from(existingManifestBytes).toString("utf8")),
-                )
-                const existingStable = stableTaskArtifactPublication({
-                  taskID: existingManifest.task_id,
-                  snapshotKind: "catalog",
-                  producer: existingManifest.producer,
-                  trees: existingManifest.trees,
+                ).catch((cause) => {
+                  if (missing(cause)) return undefined
+                  throw cause
                 })
-                if (JSON.stringify(existingStable) !== JSON.stringify(stablePublication)) {
-                  throw new Error("TaskArtifactStore: idempotent snapshot identity collision")
+                if (!existingManifestBytes) {
+                  // The exact deterministic identity belongs to this producer.
+                  // Under the Task catalog writer lock, a target without the
+                  // commit manifest is an interrupted preparation, not output.
+                  await assertManagedDirectoryPath({
+                    projectDirectory: scope.projectDirectory,
+                    target: finalRoot,
+                    create: false,
+                    context: "TaskArtifactStore interrupted idempotent publication",
+                  })
+                  await removeExact(finalRoot, "TaskArtifactStore interrupted idempotent publication")
+                } else {
+                  const existingManifest = TaskArtifactSnapshotManifestSchema.parse(
+                    JSON.parse(Buffer.from(existingManifestBytes).toString("utf8")),
+                  )
+                  const existingStable = stableTaskArtifactPublication({
+                    taskID: existingManifest.task_id,
+                    snapshotKind: "catalog",
+                    producer: existingManifest.producer,
+                    trees: existingManifest.trees,
+                  })
+                  if (JSON.stringify(existingStable) !== JSON.stringify(stablePublication)) {
+                    throw new Error("TaskArtifactStore: idempotent snapshot identity collision")
+                  }
+                  const identity = TaskArtifactSnapshotIdentitySchema.parse({
+                    schema_version: 2,
+                    project_id: scope.projectID,
+                    task_id: scope.taskID,
+                    snapshot_id: snapshotID,
+                    manifest_sha256: sha256(existingManifestBytes),
+                  })
+                  const committed = await verifySnapshotAtRoot(scope, identity, finalRoot, () => assertTaskScope(scope))
+                  await removeExact(record.root, "TaskArtifactStore idempotent retry stage")
+                  const artifacts = taskArtifactSnapshotResourceRefs({
+                    identity,
+                    manifest: committed.manifest,
+                    manifestBytes: existingManifestBytes,
+                  })
+                  publications.set(identity.snapshot_id, identity)
+                  return Object.freeze({
+                    snapshot: deepFreeze(identity) as TaskArtifactSnapshotIdentity,
+                    manifest: committed.manifest,
+                    artifacts,
+                  })
                 }
-                const identity = TaskArtifactSnapshotIdentitySchema.parse({
-                  schema_version: 2,
-                  project_id: scope.projectID,
-                  task_id: scope.taskID,
-                  snapshot_id: snapshotID,
-                  manifest_sha256: sha256(existingManifestBytes),
-                })
-                const committed = await verifySnapshotAtRoot(scope, identity, finalRoot, () => assertTaskScope(scope))
-                await removeExact(record.root, "TaskArtifactStore idempotent retry stage")
-                const artifacts = taskArtifactSnapshotResourceRefs({
-                  identity,
-                  manifest: committed.manifest,
-                  manifestBytes: existingManifestBytes,
-                })
-                publications.set(identity.snapshot_id, identity)
-                return Object.freeze({
-                  snapshot: deepFreeze(identity) as TaskArtifactSnapshotIdentity,
-                  manifest: committed.manifest,
-                  artifacts,
-                })
               }
             }
             const manifest = TaskArtifactSnapshotManifestSchema.parse({
@@ -1489,16 +1572,14 @@ export function createTaskArtifactStoreExecution(scope: TaskToolExecutionScope):
                 manifest_sha256: sha256(manifestBytes),
               }),
             ) as TaskArtifactSnapshotIdentity
-            await verifySnapshotAtRoot(scope, identity, record.root, () => assertTaskScope(scope))
-            await assertManagedDirectoryPath({
-              projectDirectory: scope.projectDirectory,
-              target: path.dirname(finalRoot),
-              create: true,
-              context: "TaskArtifactStore publication",
+            await commitSnapshotFiles({
+              scope,
+              identity,
+              stageRoot: record.root,
+              finalRoot,
+              validateScope: () => assertTaskScope(scope),
             })
-            assertTaskScope(scope)
-            await fs.rename(record.root, finalRoot)
-            renamed = true
+            published = true
             await syncDirectoryMetadata(path.dirname(finalRoot), "TaskArtifactStore snapshot catalog")
             const committed = await verifyCommittedSnapshot(scope, identity, () => assertTaskScope(scope))
             const artifacts = Object.freeze(
@@ -1507,7 +1588,7 @@ export function createTaskArtifactStoreExecution(scope: TaskToolExecutionScope):
             publications.set(identity.snapshot_id, identity)
             return Object.freeze({ snapshot: identity, manifest: committed.manifest, artifacts })
           } catch (cause) {
-            const residue = renamed ? finalRoot : record.root
+            const residue = published ? finalRoot : record.root
             try {
               await removeExact(residue, "TaskArtifactStore publish")
             } catch (cleanupCause) {
