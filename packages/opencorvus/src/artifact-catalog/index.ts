@@ -43,7 +43,7 @@ import { isDecodableText } from "@/session/text-mime"
 import { Database, and, desc, eq, lte, sql } from "@/storage/db"
 import { artifactPackageRevision } from "@/session/runtime-contract"
 import {
-  listTaskArtifactSnapshots,
+  withTaskArtifactSnapshotCatalog,
   readTaskArtifactRef,
   readTaskArtifactSnapshotManifest,
   taskArtifactSnapshotResourceRefs,
@@ -661,9 +661,15 @@ function snapshotIdentityKey(identity: TaskArtifactRef["snapshot"]): string {
   ].join("\u0000")
 }
 
-function referencedEngineResourceSnapshotKeys(rows: readonly EngineCatalogRow[]): ReadonlySet<string> {
-  return new Set(
-    rows.flatMap((row) => engineCatalogResourceRefs(row).map((resource) => snapshotIdentityKey(resource.snapshot))),
+function referencedEngineResourceSnapshots(
+  rows: readonly EngineCatalogRow[],
+): ReadonlyMap<string, TaskArtifactRef["snapshot"]> {
+  return new Map(
+    rows.flatMap((row) =>
+      engineCatalogResourceRefs(row).map(
+        (resource) => [snapshotIdentityKey(resource.snapshot), resource.snapshot] as const,
+      ),
+    ),
   )
 }
 
@@ -1207,8 +1213,16 @@ export async function searchTaskArtifacts(input: {
           : ({
               source,
               engine: [],
-              snapshots: await listTaskArtifactSnapshots(input.authority).then((records) => {
-                const referenced = referencedEngineResourceSnapshotKeys(loadResourceReferenceRows())
+              snapshots: await withTaskArtifactSnapshotCatalog(input.authority, (records) => {
+                const referenced = referencedEngineResourceSnapshots(loadResourceReferenceRows())
+                const committed = new Set(records.map((record) => snapshotIdentityKey(record.identity)))
+                for (const [key, identity] of referenced) {
+                  if (!committed.has(key)) {
+                    throw new Error(
+                      `Task Artifact catalog is missing referenced snapshot ${identity.snapshot_id} with its exact identity`,
+                    )
+                  }
+                }
                 return records.filter((record) =>
                   record.manifest.snapshot_kind === "catalog"
                     ? parsed.version_scope !== "historical"

@@ -553,7 +553,12 @@ test("requires a pre-release reset for the legacy expanded Project identity epoc
         ),
       ).toEqual({ id: discovered.project.id })
       Database.close()
-      expect(() => Database.Client()).not.toThrow()
+      Database.Client()
+      expect(
+        Database.use((db) =>
+          db.select({ id: ProjectTable.id }).from(ProjectTable).where(eq(ProjectTable.id, discovered.project.id)).get(),
+        ),
+      ).toEqual({ id: discovered.project.id })
     },
   })
 }, 60_000)
@@ -944,7 +949,10 @@ test("closes continuation admission before the real completion checkpoint and im
         taskID: task.taskID,
         timeCompleted: retriedTask.time_completed!,
       })
-      expect(retryDecision?.id).not.toBe(decision.id)
+      expect(retryDecision?.payload).toMatchObject({
+        orchestrator_session_id: task.sessionID,
+        orchestrator_message_id: retryAssistantMessage.id,
+      })
       let staleResolvedImport: unknown
       try {
         await prepareCrossTaskArtifactSourceImports({
@@ -1058,6 +1066,9 @@ test("projects exact referenced cross-Task resources through frozen Catalog memb
       })
 
       const authority = artifactCatalogAuthority(target.taskID)
+      const preparingRoot = ProjectRuntimePaths.taskArtifactSnapshotRoot(project.path, target.taskID, randomUUID())
+      await fs.mkdir(path.join(preparingRoot, "resources"), { recursive: true })
+      await fs.writeFile(path.join(preparingRoot, "resources", "preparing.md"), "Uncommitted resource bytes\n")
       const search = {
         sources: ["task_artifact" as const],
         kinds: ["task_artifact_resource" as const],
@@ -1169,33 +1180,51 @@ test("projects exact referenced cross-Task resources through frozen Catalog memb
         importedResources.map((ref) => ({ source: "task_artifact_resource", ref })),
       )
 
-      await fs.rm(
-        path.join(
-          ProjectRuntimePaths.taskArtifactSnapshotRoot(
-            project.path,
-            target.taskID,
-            extraPublication.snapshot.snapshot_id,
-          ),
-          "manifest.json",
-        ),
+      const snapshotRoot = ProjectRuntimePaths.taskArtifactSnapshotRoot(
+        project.path,
+        target.taskID,
+        extraPublication.snapshot.snapshot_id,
       )
+      const manifestPath = path.join(snapshotRoot, "manifest.json")
+      const manifestBytes = await fs.readFile(manifestPath)
+      await fs.rm(manifestPath)
       const incomplete = await searchTaskArtifacts({
         authority,
         search: { ...search, limit: 100 },
       })
-      expect(incomplete).toMatchObject({
+      const incompleteContract = {
         catalog_complete: false,
         provider_errors: [
           {
             source: "task_artifact",
-            message: expect.any(String),
+            message: `Task Artifact catalog is missing referenced snapshot ${extraPublication.snapshot.snapshot_id} with its exact identity`,
           },
         ],
         resolution: {
           status: "incomplete_catalog",
           limitations: ["provider_error"],
         },
-      })
+      }
+      expect(incomplete).toMatchObject(incompleteContract)
+
+      await fs.writeFile(manifestPath, manifestBytes)
+      const restored = await searchTaskArtifacts({ authority, search: { ...search, limit: 100 } })
+      expect(restored).toMatchObject({ catalog_complete: true, filtered_total: 1 })
+      expect(restored.entries.map((entry) => entry.locator)).toEqual(
+        extraPublication.artifacts.map((ref) => ({ source: "task_artifact_resource", ref })),
+      )
+
+      const replacedManifest = JSON.parse(manifestBytes.toString("utf8"))
+      replacedManifest.created_at_ms += 1
+      await fs.writeFile(manifestPath, JSON.stringify(replacedManifest))
+      expect(await searchTaskArtifacts({ authority, search: { ...search, limit: 100 } })).toMatchObject(
+        incompleteContract,
+      )
+
+      await fs.rm(snapshotRoot, { recursive: true })
+      expect(await searchTaskArtifacts({ authority, search: { ...search, limit: 100 } })).toMatchObject(
+        incompleteContract,
+      )
     },
   })
 }, 60_000)

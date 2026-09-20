@@ -243,6 +243,10 @@ Artifact Catalog 对 TaskArtifact 的可发现性同样由持久权威决定。`
 Engine catalog revision/version scope 内至少一个 exact Engine Artifact envelope 引用的
 `engine_resource` identity，才把它的 resource entries 投影为当前 Task 的
 `task_artifact_resource`。准备期、失败清理前或其他未引用物理 snapshot 不进入 Catalog。
+语义 Catalog 在现有 Task snapshot 读锁内核对引用集合与已提交 snapshot 的完整 identity；
+已被 Engine 引用的清单缺失、identity 被替换或整个 snapshot 丢失，必须返回
+`task_artifact` provider error、`catalog_complete: false` 与 `incomplete_catalog`，
+不能作为尚未提交的目录静默跳过。物理列表的准备期过滤不代表持久引用已完整解析。
 该引用集合与 Engine catalog revision upper bound、TaskArtifact publication sequence
 共同冻结在 cursor membership 中；后续 Engine receipt 只能由 fresh search 观察，不能改变
 既有分页结果。Agent 不得从 wrapper payload 手抄 resource locator，也不存在另一个资源发现路径。
