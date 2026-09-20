@@ -8,6 +8,8 @@ The repair plan, root causes and focused verification are in the [repair record]
 
 ## Operator entry point
 
+The compiled application is running, but `start` has not executed: automatic permission review requires explicit user approval to send these three original attachments to the currently configured `openai/gpt-5.6-luna` provider for processing. Do not rerun or bypass that denial until approval is supplied. No fresh-case receipt or Mission was created during this attempt.
+
 `case.ts` is an operator-run acceptance driver, not a UI automation test. Run it from the repository root only after the rebuilt packaged application is serving its normal local endpoint:
 
 ```powershell
