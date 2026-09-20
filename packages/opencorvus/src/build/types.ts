@@ -3,7 +3,7 @@ import { ArchitectContractGraphSchema } from "@/architect/contract-graph"
 
 export const BuildRequestInput = z.object({
   kind: z.literal("request"),
-  text: z.string().min(1).describe("The user's request, verbatim."),
+  text: z.string().min(1).describe("The complete Task request for this Build execution."),
 })
 export type BuildRequestInput = z.infer<typeof BuildRequestInput>
 

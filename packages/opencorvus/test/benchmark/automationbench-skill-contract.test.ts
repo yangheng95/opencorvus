@@ -124,13 +124,13 @@ test("AutomationBench Mission request preserves public reconciliation and explic
   expect(request).toContain("require the real `skill` Tool call before the first client call")
   expect(request).toContain("A projected worker that calls the benchmark client must load this Skill")
   expect(request).toContain("Mission and a child Task Orchestrator")
-  expect(request).toContain("For panel_create_task.request it copies the contiguous child-Task authority block")
-  expect(request).toContain("The Host validates byte provenance")
+  expect(request).toContain("For panel_create_task.request it may author a clear assignment")
+  expect(request).toContain("preserving the intended outcome and constraints")
   expect(request).toContain("materially depends on client-contract content absent from visible evidence")
   expect(request).toContain("load the exact named Skill directly without capability discovery")
   expect(request).toContain("new evidence-backed acceptance gap derived from the original request")
   expect(request).toContain(
-    "without a heading, delegation note, paraphrase, source prerequisite, destination representation field",
+    "Distinguish implementation guidance from additional user requirements or permissions",
   )
   expect(request).toContain("independent verification does not require a second API projection for every fact")
   expect(request).toContain("process, approval, historical, referenced-policy, incomplete-coverage")

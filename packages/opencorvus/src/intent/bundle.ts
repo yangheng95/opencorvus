@@ -1,6 +1,6 @@
 // ── IntentBundle ──
 //
-// Materializes the user's task request as a stable, on-disk bundle that
+// Materializes the creator's Task assignment as a stable, on-disk bundle that
 // downstream agents (architect / build executor / integrity) can
 // reference by path.
 //
@@ -9,7 +9,7 @@
 // Several stage prompts (architect-core.txt, session
 // system.txt) tell the LLM that the executor "has the intent bundle at
 // the task-scoped runtime intent bundle and explicitly point at its request.md
-// as the canonical source for the user's original request. Architect-generated
+// as the canonical source for the committed Task assignment. Architect-generated
 // goal contracts then reference paths like "see the runtime intent request
 // §3 for the full entity list" verbatim. Without this writer, those paths
 // resolved to nothing on disk — the architect was producing references to a
@@ -74,16 +74,17 @@ export namespace IntentBundle {
 
   /**
    * Prompt-text pointer to the materialized intent bundle. `pathMode` selects
-   * the path form for the consumer's file-tool resolution model. The user
-   * request (task row) is the source; this file is a deterministic projection.
+   * the path form for the consumer's file-tool resolution model. The committed
+   * Task request is the source; this file is a deterministic projection.
    */
   export function reference(input: { projectID: string; taskID: string; pathMode: "relative" | "absolute" }): string {
     const resolved = paths(input.projectID, input.taskID)
     const p = input.pathMode === "absolute" ? resolved.absolute : resolved.relative
     return [
-      "## Original User Request (intent bundle)",
+      "## Task Assignment (intent bundle)",
       "",
-      `The verbatim user request and attachment manifest for this task are at: ${p}`,
+      `The committed Task request and attachment manifest are at: ${p}`,
+      "A Mission-created request is the coordinator-authored assignment; preserve the operator's intended outcome and constraints.",
       "Read it before implementing or decomposing — do not paraphrase from upstream summaries.",
     ].join("\n")
   }
@@ -98,7 +99,7 @@ export namespace IntentBundle {
     lines.push(`createdAt: ${created}`)
     lines.push("---")
     lines.push("")
-    lines.push("# User request")
+    lines.push("# Task request")
     lines.push("")
     lines.push(input.request.replace(/\r\n/g, "\n").trimEnd())
     lines.push("")

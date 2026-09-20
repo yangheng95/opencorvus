@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Mission-authored Task requests](2026-09-20-mission-request-authoring.md)
+
 - [Browser Preview runtime and PRD execution fidelity](2026-09-20-browser-preview-prd-execution-fidelity.md)
 
 - [Worker continuation attachments and recovery identity](2026-09-20-worker-continuation-attachment-recovery.md)

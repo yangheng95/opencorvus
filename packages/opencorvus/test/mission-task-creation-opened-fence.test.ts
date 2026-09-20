@@ -11,6 +11,7 @@ import { InstanceBootstrap } from "../src/project/bootstrap"
 import { EngineService, TaskCreationCommitTestHooks } from "../src/task-api"
 import {
   MissionTaskCreationClosureError,
+  TaskCreatorAuthorityError,
 } from "../src/task-api/task-creator"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { openMissionThroughRealWake } from "./fixture/mission-opened"
@@ -30,6 +31,8 @@ import {
 import { taskCreationContractFingerprint } from "../src/engine/task-creation-contract"
 import { buildPanelCreationFact, panelCreationTargetID } from "../src/engine/panel-creation-fact"
 import { createRightSidebarConversationSession } from "../src/chat/session"
+import { AttachmentStore } from "../src/storage/attachment-store"
+import { IntentBundle } from "../src/intent/bundle"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -71,9 +74,16 @@ async function executeMissionPanelCreateTask(
   label: string,
   explicitRuntime = true,
   source?: { author: string; extra: Record<string, unknown> },
+  content?: {
+    userText: string
+    taskRequest: string
+    attachment?: AttachmentStore.Reference
+    creatorAuthor?: "mission" | "work"
+  },
 ) {
   const now = Date.now()
   const params = panelTaskInput(label, explicitRuntime)
+  if (content) params.request = content.taskRequest
   const user = await Session.updateMessage({
     id: Identifier.ascending("message"),
     sessionID: mission.id,
@@ -89,14 +99,26 @@ async function executeMissionPanelCreateTask(
     sessionID: mission.id,
     messageID: user.id,
     type: "text",
-    text: params.request,
+    text: content?.userText ?? params.request,
   })
+  if (content?.attachment) {
+    await Session.updatePart({
+      id: Identifier.ascending("part"),
+      sessionID: mission.id,
+      messageID: user.id,
+      type: "file",
+      url: content.attachment.url,
+      mime: content.attachment.mime,
+      filename: content.attachment.filename,
+      presentation: "attachment-index",
+    })
+  }
   const assistantNow = Date.now() + 1
   const assistant = await Session.updateMessage({
     id: Identifier.ascending("message"),
     sessionID: mission.id,
     role: "assistant",
-    author: "mission",
+    author: content?.creatorAuthor ?? "mission",
     parentID: user.id,
     time: { created: assistantNow },
     agent: "mission",
@@ -203,6 +225,90 @@ async function seedMissionChild(
 }
 
 describe("Mission Task creation exact opened occurrence", () => {
+  test("returns a creator-authority error for a foreign assistant claiming Mission creation", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      init: InstanceBootstrap,
+      fn: async () => {
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
+        const { mission } = await missionFixture("foreign-creator")
+        await expect(executeMissionPanelCreateTask(mission, "foreign-creator", true, undefined, {
+          userText: "Implement the requested game.",
+          taskRequest: "Build the game described in the supplied requirements.",
+          creatorAuthor: "work",
+        })).rejects.toMatchObject({
+          name: TaskCreatorAuthorityError.name,
+          data: { message: "Mission Task creation requires a real Mission-authored assistant Tool occurrence." },
+        })
+      },
+    })
+  }, 120_000)
+
+  test.each([
+    { label: "wording", taskRequest: "我需要你参考PRD，帮我完整如实地实现游戏" },
+    {
+      label: "structured-assignment",
+      taskRequest: "目标：根据所附 PRD 完整实现游戏。\n\n先梳理规则、数值和交互，再实现并验证可运行结果；如有未完成项，如实说明。",
+    },
+  ])("persists and replays a Mission-authored $label request with its original attachment", async ({ label, taskRequest }) => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      init: InstanceBootstrap,
+      fn: async () => {
+        using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
+        const { mission } = await missionFixture(`authored-${label}`)
+        const userText = "我需要你参考PRD，帮我完整如实的实现游戏"
+        const attachment = await AttachmentStore.write(
+          Instance.project.id,
+          Buffer.from("# PRD\nImplement the declared game rules and keyboard interaction."),
+          "text/markdown",
+          "game-prd.md",
+        )
+        const result = await executeMissionPanelCreateTask(mission, `authored-${label}`, true, undefined, {
+          userText,
+          taskRequest,
+          attachment,
+        })
+        const taskID = JSON.parse(result.output).task_id as string
+        await Database.awaitEffectIdle(10_000)
+        expect(requireTask(taskID)).toMatchObject({
+          request: taskRequest,
+          attachments: [{ url: attachment.url, sha: attachment.sha, filename: "game-prd.md" }],
+          metadata: { actor: "mission", mission: { id: mission.missionID, session_id: mission.id } },
+        })
+        const transcript = await Session.messages({ sessionID: mission.id })
+        const owner = transcript.flatMap((message) => message.parts
+          .filter((part): part is Message.ToolPart => part.type === "tool" && part.callID === `panel-create-authored-${label}`)
+          .map((part) => ({ messageID: message.info.id, parentID: message.info.role === "assistant" ? message.info.parentID : undefined, part }))).at(0)
+        if (!owner) throw new Error("Mission-authored request has no persisted Tool occurrence")
+        const original = transcript.find((message) => message.info.id === owner.parentID)
+        expect(original?.info).toMatchObject({ role: "user", author: "user" })
+        expect(original?.parts.filter((part) => part.type === "text").map((part) => part.text)).toEqual([userText])
+        expect(original?.parts.filter((part) => part.type === "file")).toMatchObject([
+          { url: attachment.url, presentation: "attachment-index" },
+        ])
+        expect(owner.part.state.input.request).toBe(taskRequest)
+        const bundle = await Bun.file(await IntentBundle.ensure(taskID)).text()
+        expect(bundle).toContain(`# Task request\n\n${taskRequest}\n`)
+        expect(bundle).toContain(attachment.url)
+        expect(IntentBundle.reference({ projectID: mission.projectID, taskID, pathMode: "absolute" }))
+          .toContain("A Mission-created request is the coordinator-authored assignment")
+        expect(await recoverPanelCreationToolPart({
+          sessionID: mission.id,
+          messageID: owner.messageID,
+          agent: "mission",
+          part: owner.part,
+        })).toEqual(result)
+        expect(listMissionTasks({ projectID: mission.projectID, missionID: mission.missionID, sessionID: mission.id })
+          .map((task) => ({ id: task.id, request: task.request }))).toEqual([{ id: taskID, request: taskRequest }])
+        const snapshot = exportMysqlTransferSnapshot()
+        expect(preflightMysqlTransferSnapshot(snapshot)).toMatchObject({ schemaFingerprint: snapshot.schemaFingerprint })
+      },
+    })
+  }, 120_000)
+
   test("creates through the immutable Work-to-Mission caller occurrence", async () => {
     await using project = await memoryProject()
     await Instance.provide({

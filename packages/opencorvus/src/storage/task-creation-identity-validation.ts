@@ -28,11 +28,6 @@ import {
   type CanonicalJSON,
 } from "@/engine/task-creation-request"
 import { canonicalJSONValue, compareCanonicalStrings } from "@/util/canonical-digest"
-import {
-  missionTaskRequestAuthoritySources,
-  missionTaskRequestHasAuthenticatedSource,
-  type TaskRequestSourceMessage,
-} from "@/engine/task-request-source"
 
 type Row = Record<string, any>
 
@@ -162,69 +157,13 @@ function validateTaskCreatorAuthority(
   if (
     !occurrence || occurrence.message_id !== input.creator.message_id ||
     occurrence.session_id !== input.creator.session_id || messageData?.role !== "assistant" ||
+    (input.creator.actor === "mission" && messageData.author !== "mission") ||
     requestData?.tool !== "panel_create_task" || requestData?.callID !== input.creator.tool_call_id ||
     Object.hasOwn(requestData?.input ?? {}, "action")
   ) {
     throw new Error(`Task ${input.taskID} creator Tool occurrence is not exact`)
   }
   equal(requestData.input, input.creator.tool_input, `Task ${input.taskID} creator Tool input`)
-  if (input.creator.actor === "mission") {
-    const readMessage = (messageID: string): TaskRequestSourceMessage | undefined => {
-      const message = row(db, "SELECT id,session_id,time_created,data FROM message WHERE id=?", messageID)
-      if (!message) return undefined
-      return {
-        messageID: String(message.id),
-        sessionID: String(message.session_id),
-        timeCreated: Number(message.time_created),
-        info: json(message.data, `Task ${input.taskID} creator source Message ${String(message.id)}`),
-        parts: rows(db, "SELECT id,time_created,data FROM part WHERE message_id=? ORDER BY time_created,id", message.id).map(
-          (part) => ({
-            id: String(part.id),
-            timeCreated: Number(part.time_created),
-            data: json(part.data, `Task ${input.taskID} creator source Part ${String(part.id)}`),
-          }),
-        ),
-      }
-    }
-    const sourceMessages = missionTaskRequestAuthoritySources({
-      missionSessionID: input.creator.session_id,
-      creatorMessageID: String(occurrence.message_id),
-      store: {
-        session(sessionID) {
-          const session = row(db, "SELECT id,project_id,kind,metadata FROM session WHERE id=?", sessionID)
-          return session
-            ? {
-                sessionID: String(session.id),
-                projectID: String(session.project_id),
-                kind: String(session.kind),
-                metadata: json(session.metadata, `Task ${input.taskID} authority Session ${sessionID}`),
-              }
-            : undefined
-        },
-        message: readMessage,
-        messages(sessionID) {
-          return rows(db, "SELECT id FROM message WHERE session_id=? ORDER BY time_created,id", sessionID).flatMap(
-            (message) => {
-              const value = readMessage(String(message.id))
-              return value ? [value] : []
-            },
-          )
-        },
-      },
-    })
-    const request = (requestData.input as Row).request
-    if (
-      typeof request !== "string" ||
-      !missionTaskRequestHasAuthenticatedSource({
-        creatorRole: messageData.role,
-        creatorAuthor: messageData.author,
-        request,
-        sourceMessages,
-      })
-    ) {
-      throw new Error(`Task ${input.taskID} Mission request has no authenticated real-user source`)
-    }
-  }
 }
 
 function validateTaskContracts(db: BunDatabase): void {

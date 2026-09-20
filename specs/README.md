@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Mission-authored Task requests](records/2026-09/2026-09-20-mission-request-authoring.md).
+
 [Browser Preview runtime and PRD execution fidelity](records/2026-09/2026-09-20-browser-preview-prd-execution-fidelity.md).
 
 [Worker continuation attachments and recovery identity](records/2026-09/2026-09-20-worker-continuation-attachment-recovery.md).

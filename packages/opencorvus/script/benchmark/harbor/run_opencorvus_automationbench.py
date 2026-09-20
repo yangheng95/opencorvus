@@ -84,7 +84,7 @@ def base_harness_request(instruction: str) -> str:
     return "\n\n".join(
         [
             "Mission is the real intake coordinator. Delegate the complete business workflow to child Task work owned by the selected Expert Squad; Mission must not execute benchmark operations itself.",
-            "Every child Task request must copy the contiguous authority block below exactly once without a heading, delegation note, paraphrase, source prerequisite, destination representation field, proof channel, approval, or acceptance duty.",
+            "Use the authority block below to preserve the benchmark operations, constraints and client Skill directive in every applicable assignment. You may paraphrase and organize each Task request for its assigned scope; preserve exact source values when required by the operation.",
             "Do not ask the operator a question, modify product files, or replace benchmark operations with a prose report.",
             authority,
         ]
