@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Meaningful verification and repeated-repair evidence](records/2026-09/2026-09-20-meaningful-verification.md).
+
 [Mission-authored Task requests](records/2026-09/2026-09-20-mission-request-authoring.md).
 
 [v0.1.8 native and website release](records/2026-09/2026-09-20-v0.1.8-release.md).

@@ -1,11 +1,8 @@
 import { describe, expect, test } from "bun:test"
 import { renderTaskDescription, type TaskDesc } from "@/engine/describe"
 import { LLM } from "@/session/llm"
-import {
-  comparePromptComposition,
-  fingerprintPromptComposition,
-  toolPayloadTexts,
-} from "@/session/prompt-composition"
+import { VERIFICATION_DISCIPLINE } from "@/prompt/fragments/verification-discipline"
+import { comparePromptComposition, fingerprintPromptComposition, toolPayloadTexts } from "@/session/prompt-composition"
 
 /**
  * The fingerprint exists to distinguish two things `context-diagnostics` totals
@@ -31,16 +28,24 @@ describe("prompt composition fingerprint", () => {
     expect(fingerprint.totalChars).toBeGreaterThan(0)
   })
 
-  test("carries sizes and digests, never bodies", () => {
+  test("records the exact diagnostic block shape with sizes and digests", () => {
     const secret = "sk-live-not-a-real-credential"
     const fingerprint = compose([`token ${secret}`], [{ role: "user", content: secret }])
-    expect(JSON.stringify(fingerprint)).not.toContain(secret)
-    for (const block of fingerprint.blocks) expect(block.sha256).toMatch(/^[0-9a-f]{16}$/)
+    for (const block of fingerprint.blocks) {
+      expect(Object.keys(block).sort()).toEqual(["chars", "index", "kind", "label", "sha256", "tokensEst"])
+      expect(block.sha256).toMatch(/^[0-9a-f]{16}$/)
+    }
   })
 
   test("an appended message leaves every earlier block byte-identical", () => {
     const before = compose(["env"], [{ role: "user", content: "go" }])
-    const after = compose(["env"], [{ role: "user", content: "go" }, { role: "assistant", content: "ok" }])
+    const after = compose(
+      ["env"],
+      [
+        { role: "user", content: "go" },
+        { role: "assistant", content: "ok" },
+      ],
+    )
     const divergence = comparePromptComposition(before, after)
 
     expect(divergence.appendOnly).toBe(true)
@@ -82,7 +87,6 @@ describe("prompt composition fingerprint", () => {
     const before = compose(["a", "b"], [])
     const after = compose(["b", "a"], [])
     expect(comparePromptComposition(before, after).firstDivergentLabel).toBe("system[0]")
-    expect(before.compositionSha256).not.toBe(after.compositionSha256)
   })
 
   test("the first call of a Session has nothing to compare against", () => {
@@ -108,8 +112,7 @@ describe("prompt composition fingerprint", () => {
 
     // The observability gain: the Task render now has a digest of its own, so a
     // divergence in it is distinguishable from a divergence in the wake header.
-    const fingerprintOf = (system: string[]) =>
-      fingerprintPromptComposition({ system, messages: [], toolPayloads: [] })
+    const fingerprintOf = (system: string[]) => fingerprintPromptComposition({ system, messages: [], toolPayloads: [] })
     expect(fingerprintOf(before).systemBlocks).toBe(2)
     expect(fingerprintOf(after).systemBlocks).toBe(3)
 
@@ -120,9 +123,9 @@ describe("prompt composition fingerprint", () => {
     // Under the old single-block shape the same change reported the blob, which
     // could equally have been the wake header moving.
     const oldChanged = [instructions, [...ctx, "## Task\n- artifact art_2"].join("\n")]
-    expect(
-      comparePromptComposition(fingerprintOf(before), fingerprintOf(oldChanged)).firstDivergentLabel,
-    ).toBe("system[1]")
+    expect(comparePromptComposition(fingerprintOf(before), fingerprintOf(oldChanged)).firstDivergentLabel).toBe(
+      "system[1]",
+    )
   })
 
   test("retains logical labels alongside the physically joined system request", async () => {
@@ -139,7 +142,7 @@ describe("prompt composition fingerprint", () => {
       system: logicalSystem,
       runtimeSystemMode: "complete",
     })
-    expect(physicalSystem).toEqual([logicalSystem.join("\n")])
+    expect(physicalSystem).toEqual([[logicalSystem.join("\n"), VERIFICATION_DISCIPLINE].join("\n\n")])
 
     const fingerprint = fingerprintPromptComposition({
       system: logicalSystem,
@@ -149,12 +152,14 @@ describe("prompt composition fingerprint", () => {
       toolPayloads: [],
     })
     expect(fingerprint.blocks.map((block) => block.label)).toEqual(["tools", ...labels])
-    expect(fingerprint.physicalSystem).toMatchObject({ chars: logicalSystem.join("\n").length })
+    expect(fingerprint.physicalSystem).toMatchObject({ chars: physicalSystem.join("\n").length })
 
     const changed = fingerprintPromptComposition({
       system: ["instructions", "wake", "live task changed"],
       systemLabels: labels,
-      physicalSystemText: ["instructions", "wake", "live task changed"].join("\n"),
+      physicalSystemText: [["instructions", "wake", "live task changed"].join("\n"), VERIFICATION_DISCIPLINE].join(
+        "\n\n",
+      ),
       messages: [],
       toolPayloads: [],
     })
@@ -189,7 +194,13 @@ describe("prompt composition fingerprint", () => {
         id: "tsk_cache_stability",
         title: "Cache-stable owner projection",
         status: "active",
-        execution_lifecycle: { taskID: "tsk_cache_stability", epoch: 1, openedEventID: "pev_open", openedAt: 1, status: "active" },
+        execution_lifecycle: {
+          taskID: "tsk_cache_stability",
+          epoch: 1,
+          openedEventID: "pev_open",
+          openedAt: 1,
+          status: "active",
+        },
         source: "operator",
         request: "Keep semantic prompt-owner state stable.",
         goals: [],

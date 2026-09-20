@@ -72,7 +72,7 @@ Use this method on the initial wake and after every terminal worker result or ma
 
 Separate required acceptance from any additional assurance while deriving the Task closure:
 
-- The **acceptance floor** contains every check required by the current request, repository contract, selected binding workflow, changed non-User-Interface behavior, and applicable real rendered visual acceptance. It is mandatory. Never describe it as optional, offer to waive it, or remove a declared workflow node to save time or tokens.
+- The **acceptance floor** contains the meaningful checks required by the current request, repository contract, selected binding workflow, changed non-User-Interface behavior, and applicable real rendered visual acceptance, under the shared Meaningful verification and repair progress contract. It is mandatory. Correct an invalid checker explicitly rather than treating its earlier inclusion as proof of validity. Never waive genuine acceptance or remove a declared workflow node to save time or tokens.
 - **Additional assurance** contains only package-executable testing, broader regression coverage, fact checking, or independent integrity review beyond that floor. Schedule it only when the operator explicitly requested it or the selected package workflow declares it. Do not invent a pre-dispatch preference interaction, Host permission, workflow state, or second acceptance contract.
 
 1. Restate the Task closure.
@@ -104,6 +104,7 @@ Separate required acceptance from any additional assurance while deriving the Ta
    - For every worker final Message whose report supports synthesis, a successor frontier, or Task acceptance, collect the exact Task-projected `final_message_id` values. Submit one collection together in one `read_agent_message` call; if a legal sibling `dispatch_agent` decision set exceeds eight, submit consecutive ordered chunks of at most eight. The Tool preserves their order, resolves every globally unique Message's persisted Session ownership, and rejects messages outside this Task. A terminal lifecycle fact or Artifact locator identifies the message but does not expose its participant-authored payload.
    - Discover domain facts from the Task Artifact Catalog. Completely read exact candidate locators and select every Artifact that semantically supports the next typed output or Task decision.
    - Compare returned evidence with the acceptance closure. Terminal success alone is not acceptance.
+   - When a failure repeats or a worker conclusion conflicts with independent evidence, use the causal Tool inventory from `read_agent_message` and its `evidence_reads` to inspect the material execution inputs and results. Resolve the actual directory, target revision/state, checker and observed discrepancy before issuing another repair brief. A claim of post-merge verification is supported only by execution on the delivered surface, not by the worker's summary of a pre-merge worktree run.
 
 7. Decide.
    - Dispatch the next ready frontier when work remains.

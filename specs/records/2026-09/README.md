@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Meaningful verification and repeated-repair evidence](2026-09-20-meaningful-verification.md)
+
 - [Mission-authored Task requests](2026-09-20-mission-request-authoring.md)
 
 - [v0.1.8 native and website release](2026-09-20-v0.1.8-release.md)

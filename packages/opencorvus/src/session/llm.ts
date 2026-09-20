@@ -19,7 +19,9 @@ import type { Config } from "@/config/config"
 import { Instance } from "@/project/instance"
 import type { SessionAgentRuntime } from "@/agent/session-agent-runtime"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
+import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
 import { withObservableWorkNarrative } from "@/prompt/fragments/observable-work-narrative"
+import { VERIFICATION_DISCIPLINE } from "@/prompt/fragments/verification-discipline"
 import { Message } from "./message"
 import { SessionEvents } from "./events"
 import { sessionLifecycleOrderKey } from "./status"
@@ -154,10 +156,14 @@ export namespace LLM {
     ]
       .filter((x) => x)
       .join("\n")
+    const executionPrompt =
+      !completeSystemMode && HelperAgentRegistry.isID(input.agentID)
+        ? composed
+        : [composed, VERIFICATION_DISCIPLINE].filter(Boolean).join("\n\n")
     return [
       !completeSystemMode && PrimaryAssistantRegistry.isID(input.agentID)
-        ? withObservableWorkNarrative(composed)
-        : composed,
+        ? withObservableWorkNarrative(executionPrompt)
+        : executionPrompt,
     ]
   }
 
