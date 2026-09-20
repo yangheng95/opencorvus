@@ -184,6 +184,52 @@ describe("structured process facade", () => {
     expect(new TextDecoder().decode(next.stdout)).toBe("next-owned-occurrence")
   })
 
+  test("Windows controlled admissions settle concurrent physical occurrences before fresh work", async () => {
+    if (process.platform !== "win32") return
+    const outcomes = await Promise.allSettled(
+      [5, 25, 50, 100, 150, 200].map((timeoutMs) =>
+        NodeProcess.run({
+          command: { executable: process.execPath, args: ["-e", "setInterval(() => {}, 1000)"] },
+          occurrenceID: `windows-admission-${timeoutMs}`,
+          ownership: "owned_tree",
+          timeoutMs,
+        }),
+      ),
+    )
+    for (const outcome of outcomes) {
+      expect(outcome.status).toBe("rejected")
+      if (outcome.status !== "rejected") throw new Error("Expected controlled process settlement")
+      expect(outcome.reason).toBeInstanceOf(ProcessDeadlineExceededError)
+    }
+    const aborted = await Promise.allSettled(
+      [5, 50, 150].map((delayMs) => {
+        const controller = new AbortController()
+        const timer = setTimeout(() => controller.abort(), delayMs)
+        return NodeProcess.run({
+          command: { executable: process.execPath, args: ["-e", "setInterval(() => {}, 1000)"] },
+          occurrenceID: `windows-admission-abort-${delayMs}`,
+          ownership: "owned_tree",
+          signal: controller.signal,
+        }).finally(() => clearTimeout(timer))
+      }),
+    )
+    for (const outcome of aborted) {
+      expect(outcome.status).toBe("rejected")
+      if (outcome.status !== "rejected") throw new Error("Expected aborted process settlement")
+      expect(outcome.reason).toBeInstanceOf(ProcessAbortedError)
+    }
+    const next = await NodeProcess.run({
+      command: { executable: process.execPath, args: ["-e", "process.stdout.write('admitted-after-settlement')"] },
+      occurrenceID: "windows-after-concurrent-admissions",
+      ownership: "owned_tree",
+      timeoutMs: 5000,
+    })
+    expect({ receipt: next.receipt, output: new TextDecoder().decode(next.stdout) }).toMatchObject({
+      receipt: { occurrenceID: "windows-after-concurrent-admissions", reason: "exited", exitCode: 0 },
+      output: "admitted-after-settlement",
+    })
+  })
+
   test("normal child exit settles while its input producer remains pending", async () => {
     let release!: () => void
     const pending = new Promise<void>((resolve) => (release = resolve))

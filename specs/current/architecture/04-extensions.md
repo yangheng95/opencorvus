@@ -76,6 +76,9 @@ does not settle until the helper publishes an exact occurrence marker with `acti
 not infer identity from a reusable Process Identifier (PID) or depend on the root remaining alive. Node obtains the owner
 creation-time identity through an abortable asynchronous helper probe; the supervisor opens the owner and verifies that
 same identity before target creation. Bare executables are resolved through an equally abortable asynchronous PATH probe.
+Readiness admission observes its abort/deadline rejection before awaiting filesystem markers, while delivering that same
+typed failure through the admission race and exact physical cleanup. Filesystem latency cannot turn a caller-owned
+control result into an unhandled process error.
 POSIX `owned_tree`
 uses a dedicated process group and likewise settles only after group disappearance. Core host and Task trees continue to
 use `ProcessSupervisor`'s durable occurrence/helper identity fence. A detached Browser or system-terminal launcher states

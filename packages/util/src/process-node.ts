@@ -314,6 +314,10 @@ async function waitForWindowsReady(input: {
     input.controlSignal.addEventListener("abort", abort, { once: true })
     if (input.controlSignal.aborted) abort()
   })
+  // A deadline can reject while the marker reads below are pending, before
+  // the loop reaches its race. Own the rejection now; the same promise still
+  // delivers the typed control error through admission and physical cleanup.
+  void controlled.catch(() => undefined)
   try {
     // Node's fs.promises.watch is an async generator: the filesystem watch is
     // not armed until the first next() call. Keep one event read pending before

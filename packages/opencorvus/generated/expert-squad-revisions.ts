@@ -10,7 +10,7 @@ export const generatedExpertSquadRevisions: Readonly<
 > = {
   "academic-paper-review": { version: "2026.08.30.2", contentDigest: "f67b4695fa49f2c6dd6e378ccdb27785784f8ff71f4405e1d76d01228d086342" },
   "actuarial-reserving": { version: "2026.08.30.2", contentDigest: "5fa7b1aea2063da97a51642908ba07068025ca537bb085b9f708628e9ee89214" },
-  "advanced": { version: "2026.09.12.1", contentDigest: "7bb884118689392086da99506cc93638c740d69615ffd45e78529967706f3260" },
+  "advanced": { version: "2026.09.20.1", contentDigest: "bd9c7d8d883d579741f8f2fbf8b8ec7faf9c1b491d2aceaf03a688725226b711" },
   "advertising-measurement-brand-safety": { version: "2026.08.30.2", contentDigest: "7ac9f9a0a7e6811e1049cffe6a2b2d073ea0eebcc2f233bfd3cc0aa44daeb0e8" },
   "agriculture-food-systems": { version: "2026.08.30.2", contentDigest: "4e164377c5eedcacb177aa9552ea2bbc9f3fbeb3d25f7295d4b788a89f4b2f14" },
   "ai-model-governance-evaluation": { version: "2026.08.30.2", contentDigest: "d9c88680715ac64ea6f283f2d57b3685e572cbec0e3bd4092add716111b91716" },
