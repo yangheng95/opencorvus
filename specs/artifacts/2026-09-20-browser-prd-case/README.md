@@ -8,7 +8,7 @@ The repair plan, root causes and focused verification are in the [repair record]
 
 ## Operator entry point
 
-The compiled application is running, but `start` has not executed: automatic permission review requires explicit user approval to send these three original attachments to the currently configured `openai/gpt-5.6-luna` provider for processing. Do not rerun or bypass that denial until approval is supplied. No fresh-case receipt or Mission was created during this attempt.
+After the initial permission denial, the user explicitly approved sending the three attachments to the currently configured `openai/gpt-5.6-luna` service. `start` then completed the real streaming Provider probe and byte-identity checks and created the fresh case. The [receipt](receipt.json) records project `prj_h7XkbbwlyZYnryY5LPoW`, Mission `cd45ee94f9076a6d` and root Session `ses_-zUUH2ulUzz8nn2uFXb2`. Use `status` to inspect this running case; do not create a duplicate.
 
 `case.ts` is an operator-run acceptance driver, not a UI automation test. Run it from the repository root only after the rebuilt packaged application is serving its normal local endpoint:
 
@@ -23,6 +23,7 @@ Project creation and Mission start use public HTTP ingress routes. `receipt.json
 
 ## Acceptance boundaries
 
+- Current execution: Task `tsk_g00VVixYlu000k7e0wUk`, title `完整实现并验收游戏`, under project `Anonymous 398949`. The Mission selected Advanced; the intent-analysis worker has successful physical reads against each of the three original attachment URLs, including successive pages of the Markdown PRD. The native UI has been opened on this new case. It is still running, not an accepted game delivery.
 - The original files are `NO_FISH_PRD_v1.0.html`, `pasted-20260919144506.markdown` and `NO_FISH_PRD_v1.0.md`.
 - The new case requests faithful implementation, reading relevant original source content and real GUI (Graphical User Interface) interaction through Browser MCP and Browser Preview.
 - A recorded Mission or successful provider probe proves launch/preflight, not completed game delivery, PRD fidelity or successful visual acceptance. Those require actual worker read/implementation/tool evidence and visible screenshots.
