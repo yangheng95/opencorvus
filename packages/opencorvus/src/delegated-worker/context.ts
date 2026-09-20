@@ -1,6 +1,7 @@
 import type { ProjectedAgentWorkScope } from "@/agent/projected-agent-work-scope"
 import type { TaskRow } from "@/engine/store"
 import { renderUserRequestSection } from "@/intent/request-prompt"
+import { withAttachmentPromptSections } from "@/agent/prompt-projection"
 
 export function delegatedWorkerContextSections(input: {
   reason: string
@@ -8,7 +9,7 @@ export function delegatedWorkerContextSections(input: {
   workScope: ProjectedAgentWorkScope
   deliverySliceRevisionIDs: string[]
 }): string[] {
-  return [
+  return withAttachmentPromptSections([
     [
       `## Task: ${input.task.title}`,
       `Reason: ${input.reason}`,
@@ -17,5 +18,5 @@ export function delegatedWorkerContextSections(input: {
       "For an explicit repository path, reveal and use the read Tool on that exact path. For durable Task Artifact evidence, use artifact_search and then read every selected Artifact locator to complete=true. Do not substitute one source authority for the other.",
     ].join("\n"),
     renderUserRequestSection({ heading: "## Original request", request: input.task.request, taskID: input.task.id }),
-  ]
+  ], input.task.attachments ?? undefined)
 }

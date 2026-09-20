@@ -153,7 +153,7 @@ async function createFixture(title: string) {
       workScope: { kind: "task" },
       workflowBinding,
       workflowNodeID: "intent",
-      adapterInput: { reason: "Resolve scope", attachment_refs: [] },
+      adapterInput: { reason: "Resolve scope" },
     }),
     childSessionID: worker.id,
   })
@@ -267,7 +267,7 @@ async function execute(
   persistIntentArtifact?: typeof persistIntentAnalysisArtifact,
 ) {
   const adapter = createAnalyzeIntentTool({
-    inputSchema: z.object({ reason: z.string(), attachment_refs: z.array(z.string()) }),
+    inputSchema: z.object({ reason: z.string() }),
     taskID: fixture.taskID,
     agentSessionID: fixture.root.id,
     requireTask: () => requireTask(fixture.taskID),
@@ -275,7 +275,7 @@ async function execute(
     persistIntentArtifact,
   }).analyze_intent
   if (!adapter.execute) throw new Error("analyze_intent is missing its production executor")
-  return adapter.execute({ reason: "Resolve scope", attachment_refs: [] }, fixture.context as never)
+  return adapter.execute({ reason: "Resolve scope" }, fixture.context as never)
 }
 
 async function waitForInteraction(taskID: string) {

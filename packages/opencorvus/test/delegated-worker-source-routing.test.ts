@@ -10,6 +10,7 @@ describe("delegated worker source routing", () => {
         id: Identifier.ascending("task"),
         title: "Assess the primary risk",
         request: "Read evidence/risk.txt and report the primary risk.",
+        attachments: [{ url: "/attachment/project/risk-prd.md", mime: "text/markdown", filename: "risk-prd.md" }],
       } as never,
       workScope: {} as never,
       deliverySliceRevisionIDs: ["revision-source-routing"],
@@ -20,5 +21,6 @@ describe("delegated worker source routing", () => {
       "For durable Task Artifact evidence, use artifact_search and then read every selected Artifact locator to complete=true.",
     )
     expect(sections[1]).toContain("Read evidence/risk.txt and report the primary risk.")
+    expect(sections[2]).toContain("risk-prd.md (text/markdown): /attachment/project/risk-prd.md")
   })
 })

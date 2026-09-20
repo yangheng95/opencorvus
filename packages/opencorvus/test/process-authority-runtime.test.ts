@@ -4,6 +4,7 @@ import path from "node:path"
 import { PassThrough } from "node:stream"
 import { TextReader, Uint8ArrayWriter, ZipWriter } from "@zip.js/zip.js"
 import { runHostBrowserNodeSidecar, runTaskBrowserNodeSidecar } from "../src/browser/runtime/node-executor"
+import { isBrowserPreviewTargetVisible, waitForBrowserPreviewUrlReachable } from "../src/browser-preview/liveness"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../src/id/id"
@@ -223,6 +224,33 @@ describe("explicit conversation and Task execution authority", () => {
           { cwd: project.path, value: { authority: "exact" } },
           { cwd: hostDirectory, value: { authority: "exact" } },
         ])
+
+        using previewServer = Bun.serve({
+          port: 0,
+          fetch(request) {
+            return new Response(new URL(request.url).pathname === "/ready" ? "ready" : "missing", {
+              status: new URL(request.url).pathname === "/ready" ? 200 : 404,
+            })
+          },
+        })
+        const previewBaseUrl = `http://127.0.0.1:${previewServer.port}`
+        await expect(isBrowserPreviewTargetVisible({ url: `${previewBaseUrl}/ready`, taskID }))
+          .rejects.toThrow(`Task ${taskID} Browser preview liveness requires an exact cwd`)
+        expect({
+          recoveredVisibility: await isBrowserPreviewTargetVisible({ url: `${previewBaseUrl}/ready`, taskID, cwd: project.path }),
+          reachable: await waitForBrowserPreviewUrlReachable(`${previewBaseUrl}/ready`, {
+            taskID,
+            cwd: project.path,
+            timeoutMs: 1_000,
+            intervalMs: 10,
+          }),
+          rejectedStatus: await waitForBrowserPreviewUrlReachable(`${previewBaseUrl}/missing`, {
+            taskID,
+            cwd: project.path,
+            timeoutMs: 0,
+            intervalMs: 10,
+          }),
+        }).toEqual({ recoveredVisibility: true, reachable: true, rejectedStatus: false })
 
         const mcpFixture = path.join(project.path, "authority-mcp.mjs")
         await writeMcpFixture(mcpFixture)

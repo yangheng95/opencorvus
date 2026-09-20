@@ -16,6 +16,7 @@ import {
   requireDispatchAdapterExecutionContext,
 } from "./dispatch-adapter-execution-context"
 import { projectedAdapterError } from "./projected-adapter-error"
+import { taskInputAttachmentRefs } from "@/agent/prompt-projection"
 
 const log = Log.create({ service: "build-tool" })
 
@@ -134,7 +135,7 @@ export function createBuildTool(dependencies: BuildToolDependencies) {
             workScope: execution.workScope,
             message: {
               text: buildUserPrompt(target, context, task.id),
-              attachmentRefs: [],
+              attachmentRefs: taskInputAttachmentRefs(task.attachments),
             },
             parentSessionID: input.agentSessionID,
             signal: execution.signal,

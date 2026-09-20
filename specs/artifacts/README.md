@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Browser runtime and original-PRD fresh case](2026-09-20-browser-prd-case/README.md): operator-run packaged-runtime acceptance using the original three source attachments in a new project and Mission.
+
 - [Task coordination case and promotional material](2026-09-19-task-coordination/README.md): selected source excerpts, bilingual diagram/share material and visual review evidence.
 
 Selected current operating deliverables; this is not an exhaustive inventory of historical artifacts.

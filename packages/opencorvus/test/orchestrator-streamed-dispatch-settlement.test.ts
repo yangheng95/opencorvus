@@ -81,38 +81,23 @@ afterEach(async () => {
 })
 
 for (const collection of [false, true]) {
-for (const scenario of ["base", "advanced", "advanced-preparation-failure", "advanced-preparation-recovery", "advanced-authority-recovery", "advanced-attachment-recovery"] as const) {
+for (const scenario of ["base", "advanced", "advanced-preparation-failure", "advanced-preparation-recovery", "advanced-authority-recovery"] as const) {
 if (collection && scenario === "advanced") continue
 const dispatchToolName = collection ? "dispatch_agents" : "dispatch_agent"
 const encodeDispatch = (request: any) => JSON.stringify(collection ? { team: [{ name: "worker", target: request.dispatch.target, responsibility: "Interpret one exact request", boundary: "Read-only Task evidence", expected_result: "Durable worker output", depends_on: [] }], dispatches: [request] } : request)
-const attachmentRecovery = scenario === "advanced-attachment-recovery"
 const authorityFailure = scenario === "advanced-authority-recovery"
 const recoveryCase = scenario === "advanced-preparation-recovery" || authorityFailure
 const preparationFails = scenario === "advanced-preparation-failure" || recoveryCase
-const profile = collection && !attachmentRecovery ? "light" : scenario === "base" ? "base" : "advanced"
-const activeProfile = collection && attachmentRecovery ? "attachment-collection" : profile
-const targetID = collection && !attachmentRecovery ? "light-planner" : profile === "base" ? "base-planner" : "request-interpreter"
-test(`${dispatchToolName}: ` + (attachmentRecovery ? "streamed invalid attachment input permits a corrected initial dispatch" : authorityFailure ? "streamed authority transaction rollback recovers the same reserved Session" : recoveryCase ? "streamed failed preparation continues the reserved worker and settles every dispatch" : preparationFails ? "streamed preparation failure permits the next model decision and durable re-read" : `${scenario} streamed dispatch commits a real child descriptor through the visible Tool boundary`), async () => {
+const profile = collection ? "light" : scenario === "base" ? "base" : "advanced"
+const activeProfile = profile
+const targetID = collection ? "light-planner" : profile === "base" ? "base-planner" : "request-interpreter"
+test(`${dispatchToolName}: ` + (authorityFailure ? "streamed authority transaction rollback recovers the same reserved Session" : recoveryCase ? "streamed failed preparation continues the reserved worker and settles every dispatch" : preparationFails ? "streamed preparation failure permits the next model decision and durable re-read" : `${scenario} streamed dispatch commits a real child descriptor through the visible Tool boundary`), async () => {
   using _durableDrain = Bus.TestHooks.suppressAutomaticDurableDrain()
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
     fn: async () => {
       if (collection) await ExpertSquadPackageManager.importDirectory({ projectDirectory: project.path, sourceDirectory: path.resolve(import.meta.dir, "../../../expert-squads/builtin/light"), installationScope: "project" })
-      if (collection && attachmentRecovery) {
-        // Advanced does not declare collection dispatch. This controlled package
-        // explicitly declares it so the collection's Intent input contract is real.
-        const sourceDirectory = path.join(project.path, "attachment-collection-package")
-        await fs.cp(path.resolve(import.meta.dir, "../src/expert-squad/builtin/advanced"), sourceDirectory, { recursive: true })
-        const manifestPath = path.join(sourceDirectory, "expert-squad.jsonc")
-        const manifest = JSON.parse((await fs.readFile(manifestPath, "utf8")).replaceAll(":package:advanced:", ":package:attachment-collection:").replaceAll("advanced%2F", "attachment-collection%2F"))
-        manifest.id = activeProfile
-        manifest.namespace = "test"
-        manifest.capability_projection.scheduler.capability_refs.push("capability:tool:platform:tool-registry:dispatch_agents")
-        manifest.capability_projection.scheduler.capability_refs.sort()
-        await fs.writeFile(manifestPath, JSON.stringify(manifest))
-        await ExpertSquadPackageManager.importDirectory({ projectDirectory: project.path, sourceDirectory, installationScope: "project" })
-      }
       await Config.updateProjectPatch({ prompt_profile: { active: activeProfile } })
       using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
         runner: async (input) =>
@@ -127,19 +112,19 @@ test(`${dispatchToolName}: ` + (attachmentRecovery ? "streamed invalid attachmen
       })
 
 
-      const initialRequest = (refs: string[] = []) => encodeDispatch({
+      const initialRequest = () => encodeDispatch({
         dispatch: {
           target: targetID,
           work_scope: { kind: "task" },
           turn: {
             kind: "initial",
-            workflow_subject: collection && !attachmentRecovery ? { kind: "direct" } : {
+            workflow_subject: collection ? { kind: "direct" } : {
               kind: "virtual_workflow",
               workflow_id: profile === "base" ? "planner-parallel-delivery" : "greenfield-interface-delivery",
               node_id: targetID,
             },
             use_worktree: false,
-            input: profile === "advanced" ? { reason: "Interpret the fictional local webpage request.", attachment_refs: refs } : {
+            input: profile === "advanced" ? { reason: "Interpret the fictional local webpage request." } : {
               goal_ids: [],
               instruction: "Record one durable streamed dispatch receipt.",
               reason: "The Task requires its first package-owned workflow occurrence.",
@@ -188,20 +173,12 @@ test(`${dispatchToolName}: ` + (attachmentRecovery ? "streamed invalid attachmen
                     type: "tool-call",
                     toolCallId: "call_streamed_dispatch",
                     toolName: dispatchToolName,
-                    input: initialRequest(attachmentRecovery ? ["msg_wrong_attachment_identity"] : []),
+                    input: initialRequest(),
                   },
                   { type: "finish", finishReason: { unified: "tool-calls", raw: "tool_calls" }, usage },
                 ],
               }),
             }
-          }
-          if (attachmentRecovery && rootProviderRequests === 1 && toolNames.includes(dispatchToolName)) {
-            rootProviderRequests++
-            return { stream: simulateReadableStream({ chunks: [
-              { type: "stream-start", warnings: [] },
-              { type: "tool-call", toolCallId: "call_correct_attachment_selection", toolName: dispatchToolName, input: initialRequest() },
-              { type: "finish", finishReason: { unified: "tool-calls", raw: "tool_calls" }, usage },
-            ] }) }
           }
           if (recoveryCase && failedDispatchID && rootProviderRequests === 1 && toolNames.includes(dispatchToolName)) {
             rootProviderRequests++
@@ -323,7 +300,7 @@ test(`${dispatchToolName}: ` + (attachmentRecovery ? "streamed invalid attachmen
         )
         const toolParts = messages.flatMap((message) => message.parts).filter((part) => part.type === "tool" && part.tool !== "capability_search")
         for (const part of toolParts) {
-          if (!attachmentRecovery && part.tool === dispatchToolName && part.state.status === "error") throw new Error(JSON.stringify(part.state.failure))
+          if (part.tool === dispatchToolName && part.state.status === "error") throw new Error(JSON.stringify(part.state.failure))
         }
         expect({
           taskError: task.error,
@@ -334,10 +311,10 @@ test(`${dispatchToolName}: ` + (attachmentRecovery ? "streamed invalid attachmen
           ingress: taskRootIngressDebugProjection(taskID).map((entry) => entry.projection.state),
         }).toEqual({
           taskError: null,
-          rootProviderRequests: preparationFails || attachmentRecovery ? 2 : 1,
-          providerFacts: Array.from({ length: (preparationFails || attachmentRecovery ? 2 : 1) + capabilityProviderRequests }, () => ({ id: expect.any(String), messageID: assistantIDs[0] })),
-          dispatchReceipts: attachmentRecovery ? [collection ? "completed" : "error", "completed"] : recoveryCase ? ["completed", "completed"] : ["completed"],
-          calls: recoveryCase || attachmentRecovery ? [dispatchToolName, dispatchToolName] : preparationFails ? [dispatchToolName, "no_action"] : [dispatchToolName],
+          rootProviderRequests: preparationFails ? 2 : 1,
+          providerFacts: Array.from({ length: (preparationFails ? 2 : 1) + capabilityProviderRequests }, () => ({ id: expect.any(String), messageID: assistantIDs[0] })),
+          dispatchReceipts: recoveryCase ? ["completed", "completed"] : ["completed"],
+          calls: recoveryCase ? [dispatchToolName, dispatchToolName] : preparationFails ? [dispatchToolName, "no_action"] : [dispatchToolName],
           ingress: ["resolved"],
         })
         const receipt = toolParts.filter((part) => part.tool === dispatchToolName).at(-1)!
@@ -354,17 +331,6 @@ test(`${dispatchToolName}: ` + (attachmentRecovery ? "streamed invalid attachmen
           expect({ decision: orchestratorCommittedDecisionInParts(reopened.parts), projection: taskRootIngressDebugProjection(taskID)[0]!.projection.state })
             .toEqual({ decision: "no_action", projection: "resolved" })
           return
-        }
-        if (attachmentRecovery) {
-          const rejected = toolParts.filter((part) => part.tool === dispatchToolName)[0]!
-          if (collection && rejected.state.status === "completed") {
-            expect(JSON.parse(rejected.state.output).members[0]).toMatchObject({ status: "failed", failure: { name: "PromptAttachmentReferenceError" } })
-          } else if (rejected.state.status === "error") {
-            expect(rejected.state.failure).toMatchObject({ name: "PromptAttachmentReferenceError" })
-          } else throw new Error("Expected the exact attachment selection error")
-          const lineages = Database.use((db) => db.all<{ payload: string }>(sql`SELECT payload FROM engine_artifact WHERE task_id=${taskID} AND kind='dispatch_lineage'`))
-          expect(lineages.map((row) => { const payload = typeof row.payload === "string" ? JSON.parse(row.payload) : row.payload; return { callID: payload.tool_call_id, input: payload.adapter_input } }))
-            .toEqual([{ callID: "call_correct_attachment_selection", input: { reason: "Interpret the fictional local webpage request.", attachment_refs: [] } }])
         }
         expect(accepted.kind).toBe("accepted")
         expect((await Session.get(accepted.session_id)).parentID).toBe(orchestrator.id)
@@ -394,7 +360,7 @@ test(`${dispatchToolName}: ` + (attachmentRecovery ? "streamed invalid attachmen
         await SessionPrompt.waitForFinish(orchestrator.id, project.path)
         await Database.awaitEffectIdle(30_000)
         expect({ rootProviderRequests, workerProviderRequests }).toEqual({
-          rootProviderRequests: recoveryCase || attachmentRecovery ? 3 : 2,
+          rootProviderRequests: recoveryCase ? 3 : 2,
           workerProviderRequests: 1,
         })
         if (authorityFailure) expect({ sessionID: authoritySessionID, inserted: authorityInsertedRow }).toEqual({ sessionID: accepted.session_id, inserted: { id: accepted.session_id } })

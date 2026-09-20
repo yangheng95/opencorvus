@@ -1848,14 +1848,14 @@ describe("recovered pending interaction ownership", () => {
         )
         try {
           const analyzeTool = createAnalyzeIntentTool({
-            inputSchema: z.object({ reason: z.string(), attachment_refs: z.array(z.string()) }),
+            inputSchema: z.object({ reason: z.string() }),
             taskID,
             agentSessionID: root.id,
             requireTask: () => requireTask(taskID),
           }).analyze_intent
           if (!analyzeTool.execute) throw new Error("analyze_intent is missing its executor")
           const dispatchSignal = new AbortController().signal
-          const output = analyzeTool.execute({ reason: "Resolve the implementation scope", attachment_refs: [] }, {
+          const output = analyzeTool.execute({ reason: "Resolve the implementation scope" }, {
             agentID: "intent-fixture",
             projectedAgent: {
               identity: { agentID: "intent-fixture" },

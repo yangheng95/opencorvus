@@ -10,6 +10,7 @@ import { Log } from "@/util/log"
 import { recordTaskInfrastructureErrorBestEffort } from "./infrastructure-observation"
 import { RequirementsAgent } from "@/requirements/agent"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
+import { taskInputAttachmentRefs } from "@/agent/prompt-projection"
 
 const log = Log.create({ service: "requirements-stage" })
 
@@ -23,7 +24,6 @@ type RequirementsStageDependencies = {
 type RequirementsStageDispatch = {
   task: TaskRow
   reason?: string
-  attachmentRefs: string[]
   agentID: string
   packageRevision: PromptProfileResolver.ResolvedPackageRevision
   workScope: import("@/agent/projected-agent-work-scope").ProjectedAgentWorkScope
@@ -64,7 +64,7 @@ export function createRequirementsStageDispatcher(dependencies: RequirementsStag
         instruction:
           dispatch.reason ??
           "Discover the Task evidence catalog and extract requirements from the original request plus exact facts you read.",
-        attachmentRefs: dispatch.attachmentRefs,
+        attachmentRefs: taskInputAttachmentRefs(task.attachments),
         taskID: dependencies.taskID,
         parentSessionID: dependencies.parentSessionID,
         signal: dispatch.signal,

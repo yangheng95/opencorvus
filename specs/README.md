@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Browser Preview runtime and PRD execution fidelity](records/2026-09/2026-09-20-browser-preview-prd-execution-fidelity.md).
+
 [Mission append recovery after Browser MCP disconnect](records/2026-09/2026-09-20-mission-append-browser-mcp-recovery.md).
 
 [v0.1.7 package repair and stable release](records/2026-09/2026-09-20-v0.1.7-release.md).

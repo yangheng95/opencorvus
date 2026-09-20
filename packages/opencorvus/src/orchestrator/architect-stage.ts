@@ -19,6 +19,7 @@ import { ArchitectAgent } from "@/architect/agent"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { researchEvidenceRefsForArtifactLocators } from "@/research/evidence-ref-projection"
 import { classifyArchitectReferenceIntegrity } from "@/architect/reference-integrity"
+import { taskInputAttachmentRefs } from "@/agent/prompt-projection"
 
 const log = Log.create({ service: "architect-stage" })
 
@@ -69,7 +70,6 @@ export function createArchitectStageDispatcher(dependencies: ArchitectStageDepen
     reason?: string
     agentID: string
     packageRevision: PromptProfileResolver.ResolvedPackageRevision
-    attachmentRefs: string[]
     workScope: import("@/agent/projected-agent-work-scope").ProjectedAgentWorkScope
     newSessionID?: string
     existingSessionID?: string
@@ -406,7 +406,7 @@ export function createArchitectStageDispatcher(dependencies: ArchitectStageDepen
         dispatchTurn: dispatch.dispatchTurn,
         instruction: dispatch.reason ?? "Produce or reassess the exact selected architecture facts.",
         taskID,
-        attachmentRefs: dispatch.attachmentRefs,
+        attachmentRefs: taskInputAttachmentRefs(task.attachments),
         signal: dispatch.signal,
         parentSessionID: input.agentSessionID,
         onStatus: () => {},

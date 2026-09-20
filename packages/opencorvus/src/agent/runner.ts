@@ -139,6 +139,7 @@ import { resolvedPackageRevisionFromBinding } from "@/engine/workflow-binding"
 import { composeProjectedWorkerSystemPrompt } from "@/agent/projected-worker-system-prompt"
 import { bindInternalStageTool, stageToolMaterializerBindingOf } from "@/agent/stage-tool-materializer"
 import { runProjectedWorkerTurnExclusive } from "./projected-worker-turn-owner"
+import { attachmentPromptSection } from "./prompt-projection"
 import { createAcceptanceEpochCheckpoint } from "@/mission/acceptance-checkpoint"
 import { readTaskAcceptanceLedgerArtifact } from "@/mission/acceptance-ledger"
 import { harnessGrantedRefs } from "@/capability/harness-projection"
@@ -1174,6 +1175,8 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
   let parts: SessionPromptInput["parts"]
   if (continuationText) {
     parts = [{ type: "text", text: continuationText }]
+    const attachments = attachmentPromptSection(requireTask(input.taskID).attachments ?? undefined)
+    if (attachments) parts.push({ type: "text", text: attachments })
   } else if (input.buildUserParts) {
     parts = await input.buildUserParts()
   } else {

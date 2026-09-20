@@ -293,7 +293,6 @@ async function dispatchArchitect(input: {
     task: requireTask(input.fixture.taskID),
     agentID: projectedArchitect.identity.agentID,
     packageRevision,
-    attachmentRefs: [],
     workScope: { kind: "task" },
   })
   recordDispatchSettlement({ taskID: input.fixture.taskID, dispatchID, outcome })

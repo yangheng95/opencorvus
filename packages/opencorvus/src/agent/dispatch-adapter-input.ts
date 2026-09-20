@@ -20,24 +20,12 @@ const DelegatedWorkerInputSchema = z
 const RequirementsInputSchema = z
   .object({
     reason: z.string().min(1).describe("Why you decided to analyze requirements"),
-    attachment_refs: z
-      .array(z.string().min(1))
-      .default([])
-      .describe(
-        "Exact canonical Task attachment URLs or SHA-256 (Secure Hash Algorithm 256-bit) refs selected for this Requirements Turn. Empty never expands to every Task attachment.",
-      ),
   })
   .strict()
 
 const ArchitectInputSchema = z
   .object({
     reason: z.string().min(1).describe("Why the single Task-scoped Architect occurrence is ready now"),
-    attachment_refs: z
-      .array(z.string().min(1))
-      .default([])
-      .describe(
-        "Exact canonical Task attachment URLs or SHA-256 (Secure Hash Algorithm 256-bit) refs selected for this Architect Turn. Empty never expands to every Task attachment.",
-      ),
   })
   .strict()
 
@@ -51,12 +39,6 @@ const WorkloadAnalysisInputSchema = z
 const AnalyzeIntentInputSchema = z
   .object({
     reason: z.string().min(1).describe("Why you decided to run intent analysis (first-wake / re-entry / scope change)"),
-    attachment_refs: z
-      .array(z.string().min(1))
-      .default([])
-      .describe(
-        "Exact canonical Task attachment URLs or SHA-256 (Secure Hash Algorithm 256-bit) refs selected for this Intent Analysis Turn. Empty never expands to every Task attachment.",
-      ),
   })
   .strict()
 

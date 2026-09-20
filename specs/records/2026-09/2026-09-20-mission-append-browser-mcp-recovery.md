@@ -103,5 +103,7 @@ The shared root cause is missing unexpected-close reconciliation in `createScope
   sidecar passed its built-in first-run/restart check (`firstRun: passed`, four Sessions created, two persisted across
   restart, no real Provider request). Tauri release linking completed and copied the new executable to
   `packages/overlay/dist/opencorvus-overlay-windows-x64/opencorvus-overlay.exe`.
-- Pending: final diff/commit/upstream merge/push, restart into the exact new binary, and real affected-Mission UI and
-  Browser MCP acceptance.
+- The scoped-owner repair was committed and pushed as `98f4e285`. A later attempt on the affected Mission exposed
+  separate packaged Browser Preview execution and original-PRD forwarding defects; it did not establish successful
+  game delivery. The user then requested a fresh case instead of another wake of the failed Mission. Follow-up
+  implementation and runtime evidence are tracked in [Browser Preview and PRD execution fidelity](2026-09-20-browser-preview-prd-execution-fidelity.md).

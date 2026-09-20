@@ -349,7 +349,7 @@ function renderTaskAttachmentInventory(
     ? "The active expert squad explicitly projects `read`; use it only for concrete project files required by the package contract."
     : "You do NOT have a `read` tool yourself — do not attempt to fetch reference content."
   return [
-    "# Task Attachments (explicit dispatch bindings required)",
+    "# Task Attachments",
     "",
     "The user attached the files below to this task. " +
       inlinedNote +
@@ -357,7 +357,7 @@ function renderTaskAttachmentInventory(
       "Text/json refs can be read by sub-agents that expose attachment-reading tools. " +
       schedulerReadNote +
       " " +
-      "A sub-agent receives an attachment only through the exact typed attachment fields exposed by its selected dispatch contract. Durable Artifact evidence is never forwarded in dispatch: each consumer searches the same-Task Artifact catalog and completely reads the exact versions it uses. Bind only relevant listed attachment refs, cite each by EXACT filename in the dispatch reason, and explain its relevance. NEVER imply hidden or automatic forwarding. NEVER reference an attachment that is not listed below — if this section is empty, the user attached nothing in this wake and any phrase implying you saw a file is a hallucination.",
+      "Intent analysis, Requirements, Architect, Build and general delegated workers receive the complete Task-input attachment inventory automatically. Build stages the original bytes into its worktree references directory. Worker continuations receive the current inventory, including follow-up attachments. For adapters exposing typed attachment selection or role bindings, bind the relevant exact refs according to that contract. Cite relevant files by exact filename and explain their role; inventory presence alone does not prove that the worker read them. Durable Artifact evidence is discovered and completely read by each consumer through the same-Task Artifact catalog.",
     "",
     attachmentList,
   ].join("\n")

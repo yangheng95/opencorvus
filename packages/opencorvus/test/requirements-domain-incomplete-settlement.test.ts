@@ -426,7 +426,6 @@ async function run(input: {
     }),
   })({
     task: requireTask(input.task.taskID),
-    attachmentRefs: [],
     agentID: identity.agentID,
     packageRevision,
     workScope: { kind: "task" },
@@ -709,7 +708,6 @@ describe("Requirements domain-incomplete settlement", () => {
           }),
         })({
           task: requireTask(task.taskID),
-          attachmentRefs: [],
           agentID: identity.agentID,
           packageRevision,
           workScope: { kind: "task" },

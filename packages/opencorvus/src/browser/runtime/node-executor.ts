@@ -146,7 +146,7 @@ async function runBrowserNodeSidecar<TResult>(
   const exit = await new Promise<{ code: number | null; signal: NodeJS.Signals | null }>((resolve, reject) => {
     rejectRun = reject
     resetInactivityTimer("start")
-    child.exited.then((code) => {
+    Promise.all([child.exited, child.outputSettled]).then(([code]) => {
       clearInactivityTimer()
       resolve({ code, signal: null })
     }, reject)

@@ -1260,13 +1260,12 @@ export function createOrchestratorTools(input: {
         "The active expert-squad scheduler decides whether and when to invoke or reinvoke this adapter; " +
         "the adapter does not choose a successor, infer team membership, or define a workflow order.",
       inputSchema: RequirementsInputSchema,
-      execute: async ({ reason, attachment_refs }, executionInput) => {
+      execute: async ({ reason }, executionInput) => {
         const execution = requireDispatchAdapterExecutionContext(executionInput)
         const task = requireTask(taskID)
         const dispatch = await dispatchRequirementsStage({
           task,
           reason,
-          attachmentRefs: attachment_refs,
           ...stageDispatchBinding(execution),
         })
         return dispatch
@@ -1304,7 +1303,6 @@ export function createOrchestratorTools(input: {
           task,
           reason: architectDispatchReason(input),
           ...stageDispatchBinding(execution),
-          attachmentRefs: input.attachment_refs,
         })
         return dispatch
       },

@@ -600,6 +600,7 @@ tool、permission、feature flag、Project state、Execution Capsule descriptor 
 OpenCorvus 作为 client / host 接入外部或 package-scoped MCP server，并把 active projection
 授予的工具暴露给 Agent。`mcp browser` 是内置浏览器 MCP 的独立 stdio 入口，Task 调度只使用
 内部 projected-agent runtime。Browser MCP 的 Playwright Page 是浏览、截图、诊断和用户观看的唯一页面事实源。
+Task Browser Preview 的 HTTP 存活探针与 Browser evidence 复用同一个 Node sidecar executor：native Task 由 packaged/dev Browser runtime 解析器选择 Node，Capsule Task 由自身 runtime fact 选择 Node；打包后的 OpenCorvus 可执行文件不承担 JavaScript 解释器角色。executor 等待进程退出及 stdout/stderr 结算后解析结果，统一保留超时和输出诊断。HTTP 不可达返回明确的 `reachable: false`；进程或协议错误继续可见，失败的进程内存活缓存项被释放，后续查询可以重新检查。
 Projected default MCP result materialization uses the parsed server identity,
 separately from the provider-visible Tool name. A Browser screenshot result
 exposes its canonical invocation `sourceToolPartID`, page URL and attachment

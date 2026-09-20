@@ -21,10 +21,11 @@ import { artifactProvenanceForAgentTurn } from "@/agent/artifact-read-facts"
 import { IntentAnalysisAgent } from "@/intent-analysis/agent"
 import { clarificationBlocksDispatch } from "@/intent-analysis/types"
 import { requireTaskOrchestratorToolExecutionContext } from "./tool-execution-context"
+import { taskInputAttachmentRefs } from "@/agent/prompt-projection"
 
 const log = Log.create({ service: "analyze-intent-tool" })
 
-type AnalyzeIntentInput = { reason: string; attachment_refs: string[] }
+type AnalyzeIntentInput = { reason: string }
 
 export function createAnalyzeIntentTool<TSchema extends z.ZodType<AnalyzeIntentInput>>(input: {
   inputSchema: TSchema
@@ -41,7 +42,7 @@ export function createAnalyzeIntentTool<TSchema extends z.ZodType<AnalyzeIntentI
       description:
         "Intent-analysis typed-adapter executor for one exact projected agent. It reconstructs the user's real intent from a terse or ambiguous request, existing task evidence, and read-only repository inspection. It persists the classification and routes blocker clarifications through the real question interaction path. The active expert-squad scheduler decides whether and when to invoke it. Use clarified_user_request when returned; never invent dismissed clarification scope.",
       inputSchema: input.inputSchema,
-      execute: async ({ reason, attachment_refs }, executionInput) => {
+      execute: async ({ reason }, executionInput) => {
         const execution = requireDispatchAdapterExecutionContext(executionInput)
         const toolExecution = await requireTaskOrchestratorToolExecutionContext(execution.toolOptions, "analyze_intent", {
           taskID: input.taskID,
@@ -61,7 +62,7 @@ export function createAnalyzeIntentTool<TSchema extends z.ZodType<AnalyzeIntentI
             dispatchTurn: execution.dispatch.turn,
             instruction: reason,
             taskID: input.taskID,
-            attachmentRefs: attachment_refs,
+            attachmentRefs: taskInputAttachmentRefs(task.attachments),
             parentSessionID: input.agentSessionID,
             signal: execution.signal,
             onStatus: () => {},

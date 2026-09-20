@@ -44,6 +44,11 @@ import { findTask } from "@/engine/store"
 import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
 import { deleteProject, ProjectDeleteTestHooks } from "@/project/delete"
 import { Project } from "@/project/project"
+import { AttachmentStore } from "@/storage/attachment-store"
+import { projectIntentAnalysisInput } from "@/intent-analysis/input-projection"
+import { projectRequirementsInput } from "@/requirements/input-projection"
+import { projectArchitectInput } from "@/architect/input-projection"
+import { taskInputAttachmentRefs } from "@/agent/prompt-projection"
 
 const modelRef = { providerID: "test", modelID: "build-terminal-publication" }
 
@@ -151,7 +156,20 @@ async function gitRef(directory: string, ref: string) {
   return result.exitCode === 0 ? result.text().trim() : undefined
 }
 
-async function createProductionFixture(projectPath: string, title: string, agentID = "base-planner") {
+async function createProductionFixture(
+  projectPath: string,
+  title: string,
+  agentID = "base-planner",
+  attachments: Array<{
+    sha: string
+    url: string
+    mime: string
+    size: number
+    filename?: string
+    intent: "task_input"
+    source: "user-upload"
+  }> = [],
+) {
   await Config.updateProjectPatch({ prompt_profile: { active: "base" }, model: `${modelRef.providerID}/${modelRef.modelID}` })
   const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
     prompt_profile: { active: "base" },
@@ -203,6 +221,7 @@ async function createProductionFixture(projectPath: string, title: string, agent
       packageRevisionSHA256: packageRevision.packageDigest,
       timeCreated: now,
     }),
+    attachments,
   })
   const dispatchID = Identifier.ascending("artifact")
   const childSessionID = Identifier.deterministic("session", `build-terminal-fact\0${dispatchID}`)
@@ -396,6 +415,53 @@ async function installPhysicalBuildSpies(options?: { mockProvider?: boolean }) {
 }
 
 describe.serial("Build terminal-fact publication", () => {
+  test("physical Build receives every immutable Task-input attachment", async () => {
+    await using project = await memoryProject()
+    await withBootstrappedProject(project.path, async () => {
+      using _spies = await installPhysicalBuildSpies()
+      const originals = [
+        { filename: "PRD.md", mime: "text/markdown", text: "# PRD\nThe counter starts at seven and reset restores seven.\n" },
+        { filename: "prototype.html", mime: "text/html", text: "<h1>Counter reference</h1>" },
+      ]
+      const attachments = await Promise.all(originals.map(async (source) => ({
+        ...await AttachmentStore.write(Instance.project.id, Buffer.from(source.text), source.mime, source.filename),
+        intent: "task_input" as const,
+        source: "user-upload" as const,
+      })))
+      const fixture = await createProductionFixture(
+        project.path,
+        "Build complete source projection",
+        "base-developer",
+        attachments,
+      )
+      const sourceInput = {
+        taskID: fixture.taskID,
+        instruction: "Read the original PRD",
+        workScope: { kind: "task" as const },
+        attachmentRefs: taskInputAttachmentRefs(findTask(fixture.taskID)!.attachments),
+      }
+      expect([
+        projectIntentAnalysisInput(sourceInput).attachments,
+        projectRequirementsInput(sourceInput).attachments,
+        projectArchitectInput(sourceInput).attachments,
+      ]).toEqual([attachments, attachments, attachments])
+      const settled = await executeProductionBuild({
+        fixture,
+        recordSettlement: false,
+      })
+      const messages = await Session.messages({ sessionID: fixture.context.newSessionID! })
+      const userText = messages.filter((message) => message.info.role === "user")
+        .flatMap((message) => message.parts).filter((part) => part.type === "text")
+        .map((part) => part.text).join("\n")
+      for (const source of originals) {
+        const relative = `references/${source.filename}`
+        expect(await fs.readFile(path.join(project.path, relative), "utf8")).toBe(source.text)
+        expect(userText).toContain(relative)
+      }
+      expect(settled.outcome).toMatchObject({ kind: "terminal_success", session_id: fixture.context.newSessionID })
+    })
+  }, 60_000)
+
   test("fresh managed-worktree Build preserves the preallocated Session identity", async () => {
     await using project = await memoryProject()
     await withBootstrappedProject(project.path, async () => {
