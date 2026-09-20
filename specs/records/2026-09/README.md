@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [0.1.9 Windows local build](2026-09-21-v0.1.9-local-build.md)
+
 - [OAuth flow re-entry and v0.1.5 binary release](2026-09-19-v0.1.5-oauth-release.md)
 
 - [v0.1.4 binary-only release](2026-09-19-v0.1.4-release.md)
