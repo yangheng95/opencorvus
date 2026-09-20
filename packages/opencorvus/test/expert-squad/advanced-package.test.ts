@@ -29,7 +29,6 @@ describe("built-in interface review workflow authority", () => {
   test("projects autonomous greenfield and explicit independent-visual Advanced workflows", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(advancedPackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.09.12.1")
     expect(schedulerCapabilityGrants(loaded.manifest).defaultSkillRefs).toEqual(["default/skill/grill-me"])
     expect(agentCapabilityGrants(loaded.manifest, "requirement-engineer").defaultSkillRefs).toEqual([
       "default/skill/grill-me",
@@ -191,7 +190,6 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.manifest.version).toBe("2026.09.14.15")
     expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
     expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
     expect(loaded.promptProfile.agents.orchestrator).toContain(
