@@ -8,6 +8,8 @@ import {
   ArtifactSelectOutputSchema,
   ArtifactSelectReferenceInputSchema,
   ArtifactSelectReferenceOutputSchema,
+  artifactRequestValues,
+  artifactResultValues,
   artifactReadLocatorKey,
   auditArtifactReadLocatorsFromFacts,
   type ArtifactReadLocator,
@@ -227,7 +229,7 @@ export function completedToolOutputValuesBeforeActionInTransaction(
       throw new Error(`Completed Artifact locator-producing tool part ${row.id} has no canonical string output.`)
     }
     try {
-      return [JSON.parse(row.canonicalOutput)]
+      return artifactResultValues(JSON.parse(row.canonicalOutput))
     } catch (cause) {
       throw new Error(`Completed Artifact locator-producing tool part ${row.id} output is not JSON.`, { cause })
     }
@@ -257,6 +259,138 @@ export function artifactReadReferenceLocatorsBeforeActionInTransaction(
   return found
 }
 
+type ReadAtom = {
+  request: z.infer<typeof ArtifactReadReferenceInputSchema>
+  chunk: z.infer<typeof ArtifactReadReferenceChunkSchema>
+  taskID?: string
+  terminalLifecycleReference?: TerminalLifecycleReference
+  fact: ArtifactReadWindowFact
+}
+
+function readAtoms(requestData: unknown, output: string): ReadAtom[] {
+  const data = requestData as { tool?: string; input?: unknown }
+  const panel = data.tool === "panel_read_task_artifact"
+  const inputs = artifactRequestValues(data.input).flatMap((value) => {
+    const parsed = panel
+      ? PanelArtifactReadReferenceInputSchema.safeParse({ action: "read_task_artifact", ...(value as object) })
+      : ArtifactReadReferenceInputSchema.safeParse(value)
+    return parsed.success ? [parsed.data] : []
+  })
+  const result: ReadAtom[] = []
+  for (const value of artifactResultValues(JSON.parse(output))) {
+    const parsed = panel
+      ? PanelArtifactReadReferenceFactSchema.safeParse(value)
+      : ArtifactReadReferenceChunkSchema.safeParse(value)
+    if (!parsed.success) continue
+    const chunk = parsed.data
+    const taskID = "taskID" in chunk && typeof chunk.taskID === "string" ? chunk.taskID : undefined
+    const matches = inputs.filter(
+      (input) =>
+        input.artifact_locator_ref === chunk.artifact_locator_ref &&
+        input.byte_offset === chunk.byte_start &&
+        (!panel || ("taskID" in input && input.taskID === taskID)),
+    )
+    if (matches.length !== 1)
+      throw new ArtifactReferenceResolutionError(
+        chunk.artifact_read_ref,
+        "Artifact result must bind exactly one submitted read item",
+      )
+    const input = matches[0]!
+    const request = ArtifactReadReferenceInputSchema.parse({
+      artifact_transport_version: 2,
+      artifact_locator_ref: input.artifact_locator_ref,
+      byte_offset: input.byte_offset,
+      max_bytes: input.max_bytes,
+      delivery: input.delivery,
+    })
+    const { artifact_transport_version, artifact_locator_ref, artifact_read_ref, ...fields } = chunk
+    const {
+      taskID: _taskID,
+      terminal_lifecycle_reference: _terminal,
+      ...canonical
+    } = fields as typeof fields & { taskID?: string; terminal_lifecycle_reference?: TerminalLifecycleReference }
+    result.push({
+      request,
+      chunk,
+      taskID,
+      terminalLifecycleReference:
+        "terminal_lifecycle_reference" in chunk
+          ? TerminalLifecycleReferenceSchema.parse(chunk.terminal_lifecycle_reference)
+          : undefined,
+      fact: {
+        request: ArtifactReadInputSchema.parse({
+          locator: chunk.locator,
+          byte_offset: request.byte_offset,
+          max_bytes: request.max_bytes,
+          delivery: request.delivery,
+        }),
+        chunk: ArtifactReadChunkSchema.parse(canonical),
+      },
+    })
+  }
+  return result
+}
+
+/** One Session-indexed pass, including deferred Permission results, for all batch atoms. */
+function readRowsForSession(
+  db: Database.TxOrDb,
+  sessionID: string,
+  scope?: ArtifactFactScope & { afterTimeCreated?: number },
+  references?: readonly string[],
+) {
+  const output = sql<string>`CASE WHEN json_type(${ToolPartOutcomeTable.data}, '$.resultAttemptID') = 'text'
+    THEN json_extract(${PermissionExecutionResultTable.result}, '$.value.output')
+    ELSE json_extract(${ToolPartOutcomeTable.data}, '$.output') END`
+  return db
+    .select({
+      id: PartTable.id,
+      request: PartTable.data,
+      outcome: ToolPartOutcomeTable.data,
+      storedResult: PermissionExecutionResultTable.result,
+    })
+    .from(MessageTable)
+    .innerJoin(PartTable, eq(PartTable.message_id, MessageTable.id))
+    .innerJoin(ToolPartOutcomeTable, eq(ToolPartOutcomeTable.request_part_id, PartTable.id))
+    .leftJoin(
+      PermissionExecutionResultTable,
+      eq(
+        PermissionExecutionResultTable.attempt_id,
+        sql<string>`json_extract(${ToolPartOutcomeTable.data}, '$.resultAttemptID')`,
+      ),
+    )
+    .where(
+      and(
+        eq(MessageTable.session_id, sessionID),
+        ...factScopeConditions(scope),
+        ...(scope?.afterTimeCreated !== undefined ? [gt(PartTable.time_created, scope.afterTimeCreated)] : []),
+        sql`json_extract(${PartTable.data}, '$.tool') IN ('artifact_read', 'panel_read_task_artifact')`,
+        sql`json_extract(${ToolPartOutcomeTable.data}, '$.outcome') = 'completed'`,
+        ...(references
+          ? [
+              sql`EXISTS (
+          SELECT 1 FROM json_tree(CASE WHEN json_valid(${output}) THEN ${output} ELSE '{}' END) AS read_reference
+          WHERE read_reference.key = 'artifact_read_ref' AND ${inArray(sql<string>`read_reference.value`, [...references])}
+        )`,
+            ]
+          : []),
+      ),
+    )
+    .orderBy(asc(PartTable.time_created), asc(PartTable.id))
+    .limit(references ? references.length + 1 : -1)
+    .all()
+    .map((row) => {
+      const outcome = row.outcome as ToolOutcomePartData
+      let output: string | undefined
+      if ("resultAttemptID" in outcome && outcome.resultAttemptID) {
+        const stored = row.storedResult as { kind?: string; value?: unknown } | undefined
+        if (stored?.kind !== "json") throw new Error("Artifact read references an invalid durable Permission result")
+        output = normalizeToolResult(stored.value).output
+      } else if ("output" in outcome) output = outcome.output
+      if (typeof output !== "string") throw new Error("Completed Artifact read has no canonical string output")
+      return { id: row.id, atoms: readAtoms(row.request, output) }
+    })
+}
+
 export function completeArtifactReadLocatorsForSessionInTransaction(
   db: Database.TxOrDb,
   sessionID: string,
@@ -265,123 +399,10 @@ export function completeArtifactReadLocatorsForSessionInTransaction(
   if (options?.afterTimeCreated !== undefined && options.after !== undefined) {
     throw new Error("Artifact read fact boundary must use either afterTimeCreated or after, not both.")
   }
-  const rows = db
-    .select({
-      id: PartTable.id,
-      messageID: PartTable.message_id,
-      messageTimeCreated: MessageTable.time_created,
-      request: PartTable.data,
-      outcome: ToolPartOutcomeTable.data,
-    })
-    .from(PartTable)
-    .innerJoin(ToolPartOutcomeTable, eq(ToolPartOutcomeTable.request_part_id, PartTable.id))
-    .innerJoin(MessageTable, eq(MessageTable.id, PartTable.message_id))
-    .where(
-      and(
-        eq(MessageTable.session_id, sessionID),
-        ...(options?.afterTimeCreated !== undefined ? [gt(PartTable.time_created, options.afterTimeCreated)] : []),
-        ...factScopeConditions(options),
-        sql`json_extract(${PartTable.data}, '$.type') = 'tool-request'`,
-        sql`json_extract(${PartTable.data}, '$.tool') IN ('artifact_read', 'panel_read_task_artifact')`,
-        sql`json_extract(${ToolPartOutcomeTable.data}, '$.outcome') = 'completed'`,
-      ),
-    )
-    .orderBy(asc(PartTable.time_created), asc(PartTable.id))
-    .all()
-    .map((row) => ({
-      ...row,
-      canonicalOutput: completedToolOutcomeOutput(
-        db,
-        row.outcome as ToolOutcomePartData,
-        () => `Completed Artifact read tool part ${row.id}`,
-      ),
-    }))
-  const facts: ArtifactReadWindowFact[] = []
-  for (const row of rows) {
-    const data = row.request as { tool?: unknown; input?: unknown }
-    const rawInput = data.input
-    if (data.tool === "panel_read_task_artifact") {
-      if (!rawInput || typeof rawInput !== "object" || Array.isArray(rawInput)) continue
-      const parsed = PanelArtifactReadReferenceInputSchema.safeParse({
-        action: "read_task_artifact",
-        ...(rawInput as Record<string, unknown>),
-      })
-      if (!parsed.success) continue
-      const panelInput = parsed.data
-      const { action: _action, taskID, ...read } = panelInput
-      if (options?.panelTaskID !== undefined && taskID !== options.panelTaskID) continue
-      if (typeof row.canonicalOutput !== "string") {
-        throw new Error(`Completed panel.read_task_artifact tool part ${row.id} has no canonical string output.`)
-      }
-      let decoded: unknown
-      try {
-        decoded = JSON.parse(row.canonicalOutput)
-      } catch (cause) {
-        throw new Error(`Completed panel.read_task_artifact tool part ${row.id} output is not JSON.`, { cause })
-      }
-      if ("artifact_transport_version" in read && read.artifact_transport_version === 2) {
-        const transportInput = ArtifactReadReferenceInputSchema.parse(read)
-        const chunk = PanelArtifactReadReferenceFactSchema.parse(decoded)
-        if (chunk.taskID !== taskID || chunk.artifact_locator_ref !== transportInput.artifact_locator_ref) {
-          throw new Error(`Completed panel.read_task_artifact tool part ${row.id} input does not identify its output.`)
-        }
-        const request = ArtifactReadInputSchema.parse({
-          locator: chunk.locator,
-          byte_offset: transportInput.byte_offset,
-          max_bytes: transportInput.max_bytes,
-          delivery: transportInput.delivery,
-        })
-        const {
-          taskID: _taskID,
-          terminal_lifecycle_reference: _terminalLifecycleReference,
-          artifact_transport_version: _artifactTransportVersion,
-          artifact_locator_ref: _artifactLocatorReference,
-          artifact_read_ref: _artifactReadReference,
-          ...canonicalChunk
-        } = chunk
-        facts.push({ request, chunk: ArtifactReadChunkSchema.parse(canonicalChunk) })
-      } else {
-        facts.push({ request: ArtifactReadInputSchema.parse(read), chunk: ArtifactReadChunkSchema.parse(decoded) })
-      }
-      continue
-    }
-    if (options?.panelTaskID !== undefined) continue
-    if (typeof row.canonicalOutput !== "string") {
-      throw new Error(`Completed artifact_read tool part ${row.id} has no canonical string output.`)
-    }
-    let decoded: unknown
-    try {
-      decoded = JSON.parse(row.canonicalOutput)
-    } catch (cause) {
-      throw new Error(`Completed artifact_read tool part ${row.id} output is not JSON.`, { cause })
-    }
-    const transportVersion =
-      rawInput && typeof rawInput === "object" && !Array.isArray(rawInput)
-        ? (rawInput as { artifact_transport_version?: unknown }).artifact_transport_version
-        : undefined
-    if (transportVersion === 2) {
-      const transportInput = ArtifactReadReferenceInputSchema.parse(rawInput)
-      const chunk = ArtifactReadReferenceChunkSchema.parse(decoded)
-      if (transportInput.artifact_locator_ref !== chunk.artifact_locator_ref) {
-        throw new Error(`Completed artifact_read tool part ${row.id} input does not identify its canonical output.`)
-      }
-      const request = ArtifactReadInputSchema.parse({
-        locator: chunk.locator,
-        byte_offset: transportInput.byte_offset,
-        max_bytes: transportInput.max_bytes,
-        delivery: transportInput.delivery,
-      })
-      const {
-        artifact_transport_version: _artifactTransportVersion,
-        artifact_locator_ref: _artifactLocatorReference,
-        artifact_read_ref: _artifactReadReference,
-        ...canonicalChunk
-      } = chunk
-      facts.push({ request, chunk: ArtifactReadChunkSchema.parse(canonicalChunk) })
-      continue
-    }
-    facts.push({ request: ArtifactReadInputSchema.parse(rawInput), chunk: ArtifactReadChunkSchema.parse(decoded) })
-  }
+  const facts = readRowsForSession(db, sessionID, options)
+    .flatMap((row) => row.atoms)
+    .filter((atom) => options?.panelTaskID === undefined || atom.taskID === options.panelTaskID)
+    .map((atom) => atom.fact)
   return auditArtifactReadLocatorsFromFacts(facts).completeLocators
 }
 
@@ -558,10 +579,11 @@ function panelArtifactReadReferenceLocatorsBeforeActionInTransaction(
     toolNames: ["panel_read_task_artifact"],
     acceptInput: (rawInput) => {
       if (!rawInput || typeof rawInput !== "object" || Array.isArray(rawInput)) return false
-      return PanelArtifactReadReferenceInputSchema.safeParse({
-        action: "read_task_artifact",
-        ...(rawInput as Record<string, unknown>),
-      }).success
+      return artifactRequestValues(rawInput).some(
+        (value) =>
+          PanelArtifactReadReferenceInputSchema.safeParse({ action: "read_task_artifact", ...(value as object) })
+            .success,
+      )
     },
   })) {
     const chunk = PanelArtifactReadReferenceFactSchema.safeParse(value)
@@ -619,23 +641,6 @@ export function resolvePanelArtifactReadReferencesBeforeActionInTransaction(
   return [...resolved.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([, locator]) => locator)
 }
 
-const toolOutcomeArtifactReadReference = sql<string>`
-  CASE
-    WHEN json_valid(json_extract(${ToolPartOutcomeTable.data}, '$.output'))
-    THEN json_extract(json_extract(${ToolPartOutcomeTable.data}, '$.output'), '$.artifact_read_ref')
-  END
-`
-
-const toolOutcomeResultAttemptID = sql<string>`json_extract(${ToolPartOutcomeTable.data}, '$.resultAttemptID')`
-
-const permissionResultArtifactReadReference = sql<string>`
-  CASE
-    WHEN json_extract(${PermissionExecutionResultTable.result}, '$.kind') = 'json'
-      AND json_valid(json_extract(${PermissionExecutionResultTable.result}, '$.value.output'))
-    THEN json_extract(json_extract(${PermissionExecutionResultTable.result}, '$.value.output'), '$.artifact_read_ref')
-  END
-`
-
 export type MissionArtifactReadAcceptanceInput = {
   taskID: string
   terminalLifecycleReference: TerminalLifecycleReference
@@ -676,175 +681,30 @@ export function resolveMissionArtifactReadAcceptancesBeforeCompletionInTransacti
   if (references.length === 0)
     return input.acceptances.map((acceptance) => ({ taskID: acceptance.taskID, evidenceLocators: [] }))
 
-  const inlineCandidates = db
-    .select({
-      partID: ToolPartOutcomeTable.request_part_id,
-      readReference: toolOutcomeArtifactReadReference,
-      canonicalOutput: sql<string>`json_extract(${ToolPartOutcomeTable.data}, '$.output')`,
-    })
-    .from(ToolPartOutcomeTable)
-    .where(
-      and(
-        sql`json_extract(${ToolPartOutcomeTable.data}, '$.outcome') = 'completed'`,
-        inArray(toolOutcomeArtifactReadReference, references),
-      ),
-    )
-    .limit(references.length + 1)
-    .all()
-
-  const deferredResults = db
-    .select({
-      attemptID: PermissionExecutionResultTable.attempt_id,
-      readReference: permissionResultArtifactReadReference,
-      storedResult: PermissionExecutionResultTable.result,
-    })
-    .from(PermissionExecutionResultTable)
-    .where(inArray(permissionResultArtifactReadReference, references))
-    .limit(references.length + 1)
-    .all()
-
-  const deferredResultByAttemptID = new Map(deferredResults.map((row) => [row.attemptID, row]))
-  const deferredAttemptIDs = [...deferredResultByAttemptID.keys()]
-  const deferredOutcomes =
-    deferredAttemptIDs.length === 0
-      ? []
-      : db
-          .select({
-            partID: ToolPartOutcomeTable.request_part_id,
-            attemptID: toolOutcomeResultAttemptID,
-          })
-          .from(ToolPartOutcomeTable)
-          .where(
-            and(
-              sql`json_extract(${ToolPartOutcomeTable.data}, '$.outcome') = 'completed'`,
-              inArray(toolOutcomeResultAttemptID, deferredAttemptIDs),
-            ),
-          )
-          .limit(deferredAttemptIDs.length + 1)
-          .all()
-
-  const candidateByReference = new Map<string, { partID: string; canonicalOutput: string }>()
-  const recordCandidate = (reference: string, candidate: { partID: string; canonicalOutput: string }) => {
-    if (candidateByReference.has(reference)) {
-      throw new ArtifactReferenceAmbiguityError(reference, "Persisted Mission Artifact read reference is ambiguous")
-    }
-    candidateByReference.set(reference, candidate)
-  }
-  for (const row of inlineCandidates) {
-    if (typeof row.readReference !== "string" || typeof row.canonicalOutput !== "string") continue
-    recordCandidate(row.readReference, { partID: row.partID, canonicalOutput: row.canonicalOutput })
-  }
-  const deferredOutcomeByAttemptID = new Map<string, { partID: string }>()
-  for (const outcome of deferredOutcomes) {
-    const result = deferredResultByAttemptID.get(outcome.attemptID)
-    if (!result || typeof result.readReference !== "string") continue
-    if (deferredOutcomeByAttemptID.has(outcome.attemptID)) {
-      throw new ArtifactReferenceAmbiguityError(
-        result.readReference,
-        "Permission result is linked to multiple Mission Artifact read outcomes",
-      )
-    }
-    deferredOutcomeByAttemptID.set(outcome.attemptID, { partID: outcome.partID })
-  }
-  for (const result of deferredResults) {
-    if (typeof result.readReference !== "string") continue
-    const outcome = deferredOutcomeByAttemptID.get(result.attemptID)
-    if (!outcome) continue
-    const stored = result.storedResult as { kind?: string; value?: unknown } | undefined
-    if (stored?.kind !== "json") {
-      throw new ArtifactReferenceResolutionError(
-        result.readReference,
-        `Persisted panel Artifact read ${outcome.partID} has an invalid Permission result`,
-      )
-    }
-    recordCandidate(result.readReference, {
-      partID: outcome.partID,
-      canonicalOutput: normalizeToolResult(stored.value).output,
-    })
-  }
-
-  const candidateByPartID = new Map(
-    [...candidateByReference.entries()].map(([readReference, candidate]) => [
-      candidate.partID,
-      { readReference, ...candidate },
-    ]),
-  )
-  const candidatePartIDs = [...candidateByPartID.keys()]
-  const rows =
-    candidatePartIDs.length === 0
-      ? []
-      : db
-          .select({ id: PartTable.id, request: PartTable.data })
-          .from(PartTable)
-          .innerJoin(MessageTable, eq(MessageTable.id, PartTable.message_id))
-          .where(
-            and(
-              inArray(PartTable.id, candidatePartIDs),
-              eq(MessageTable.session_id, input.sessionID),
-              ...factScopeConditions({ before: scope.before }),
-              sql`json_extract(${PartTable.data}, '$.tool') = 'panel_read_task_artifact'`,
-            ),
-          )
-          .orderBy(asc(PartTable.time_created), asc(PartTable.id))
-          .limit(candidatePartIDs.length + 1)
-          .all()
-          .map((row) => ({ ...row, ...candidateByPartID.get(row.id)! }))
-
   const factsByTaskID = new Map<string, ArtifactReadWindowFact[]>()
   const locatorByReference = new Map<string, ArtifactReadLocator>()
-  for (const row of rows) {
-    const readReference = row.readReference
-    if (typeof readReference !== "string") continue
-    const acceptance = acceptanceByReference.get(readReference)
-    if (!acceptance) continue
-    if (locatorByReference.has(readReference)) {
-      throw new ArtifactReferenceAmbiguityError(readReference, "Persisted Mission Artifact read reference is ambiguous")
+  for (const row of readRowsForSession(db, input.sessionID, { before: scope.before }, references)) {
+    for (const atom of row.atoms) {
+      const reference = atom.chunk.artifact_read_ref
+      const acceptance = acceptanceByReference.get(reference)
+      if (!acceptance) continue
+      if (locatorByReference.has(reference))
+        throw new ArtifactReferenceAmbiguityError(reference, "Persisted Mission Artifact read reference is ambiguous")
+      if (
+        atom.taskID !== acceptance.taskID ||
+        !atom.terminalLifecycleReference ||
+        !sameTerminalLifecycleReference(atom.terminalLifecycleReference, acceptance.terminalLifecycleReference)
+      ) {
+        throw new ArtifactReferenceResolutionError(
+          reference,
+          "Artifact read does not belong to the accepted Task terminal occurrence",
+        )
+      }
+      const facts = factsByTaskID.get(acceptance.taskID) ?? []
+      facts.push(atom.fact)
+      factsByTaskID.set(acceptance.taskID, facts)
+      locatorByReference.set(reference, atom.chunk.locator)
     }
-    const rawInput = (row.request as { input?: unknown }).input
-    if (!rawInput || typeof rawInput !== "object" || Array.isArray(rawInput)) {
-      throw new ArtifactReferenceResolutionError(readReference, `Persisted panel Artifact read ${row.id} has no input`)
-    }
-    const panelInput = PanelArtifactReadReferenceInputSchema.parse({
-      action: "read_task_artifact",
-      ...(rawInput as Record<string, unknown>),
-    })
-    const canonicalOutput = row.canonicalOutput
-    if (typeof canonicalOutput !== "string") {
-      throw new ArtifactReferenceResolutionError(readReference, `Persisted panel Artifact read ${row.id} has no output`)
-    }
-    const chunk = PanelArtifactReadReferenceFactSchema.parse(JSON.parse(canonicalOutput))
-    if (
-      chunk.artifact_read_ref !== readReference ||
-      chunk.taskID !== acceptance.taskID ||
-      panelInput.taskID !== acceptance.taskID ||
-      panelInput.artifact_locator_ref !== chunk.artifact_locator_ref ||
-      !sameTerminalLifecycleReference(chunk.terminal_lifecycle_reference, acceptance.terminalLifecycleReference)
-    ) {
-      throw new ArtifactReferenceResolutionError(
-        readReference,
-        `Persisted panel Artifact read does not belong to Task ${acceptance.taskID}'s exact current terminal occurrence`,
-      )
-    }
-    const { action: _action, taskID: _taskID, ...read } = panelInput
-    const transportInput = ArtifactReadReferenceInputSchema.parse(read)
-    const request = ArtifactReadInputSchema.parse({
-      locator: chunk.locator,
-      byte_offset: transportInput.byte_offset,
-      max_bytes: transportInput.max_bytes,
-      delivery: transportInput.delivery,
-    })
-    const {
-      taskID: _outputTaskID,
-      terminal_lifecycle_reference: _terminalLifecycleReference,
-      artifact_transport_version: _artifactTransportVersion,
-      artifact_locator_ref: _artifactLocatorReference,
-      artifact_read_ref: _artifactReadReference,
-      ...canonicalChunk
-    } = chunk
-    const facts = factsByTaskID.get(acceptance.taskID) ?? []
-    facts.push({ request, chunk: ArtifactReadChunkSchema.parse(canonicalChunk) })
-    factsByTaskID.set(acceptance.taskID, facts)
-    locatorByReference.set(readReference, chunk.locator)
   }
 
   return input.acceptances.map((acceptance) => {

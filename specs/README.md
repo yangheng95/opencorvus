@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Artifact batch queries and reads](records/2026-09/2026-09-21-artifact-batch-reads.md).
+
 [CLI run P0 repair](records/2026-09/2026-09-21-cli-run-p0.md).
 
 [RPM bundler short-write repair](records/2026-09/2026-09-21-rpm-short-write-repair.md).

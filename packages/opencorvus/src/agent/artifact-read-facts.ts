@@ -3,18 +3,18 @@ import {
   ArtifactLocatorReferenceSchema,
   ArtifactReadLocatorSchema,
   ArtifactReadReferenceSchema,
+  artifactRequestValues,
   artifactReadLocatorKey,
   type ArtifactReadLocator,
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import { Database } from "@/storage/db"
-import { panelLeafActionSchemaForAgent } from "@/panel/capability"
+import { PanelArtifactQuerySchema } from "@/panel/capability"
 import {
   sameTerminalLifecycleReference,
   TerminalLifecycleReferenceSchema,
   type TerminalLifecycleReference,
 } from "@/engine/terminal-lifecycle-reference-schema"
 
-const MissionPanelQueryTaskArtifactsInput = panelLeafActionSchemaForAgent("query_task_artifacts", "mission")
 import {
   ArtifactReferenceAmbiguityError,
   ArtifactReferenceResolutionError,
@@ -148,7 +148,7 @@ export function resolvePanelArtifactLocatorReferenceBeforeRead(input: {
     toolPartID: input.toolPartID,
     toolNames: ["panel_query_task_artifacts"],
     acceptInput: (rawInput) => {
-      return MissionPanelQueryTaskArtifactsInput.safeParse(rawInput).success
+      return artifactRequestValues(rawInput).some((item) => PanelArtifactQuerySchema.safeParse(item).success)
     },
   })) {
     const page = PanelArtifactReferencePageFactSchema.safeParse(value)

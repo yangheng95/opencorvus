@@ -21,6 +21,8 @@ export const ArtifactSchemaLimits = Object.freeze({
   defaultReadBytes: 24 * 1_024,
   maxReadBytes: 64 * 1_024,
   structuredOutputBytes: 40 * 1_024,
+  batchItems: 8,
+  batchAttachmentBytes: 32 * 1024 * 1024,
 } as const)
 
 // SHA-256 means Secure Hash Algorithm 256-bit.

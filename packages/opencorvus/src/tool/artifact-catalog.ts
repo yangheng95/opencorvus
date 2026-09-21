@@ -2,13 +2,13 @@ import { PACKAGE_OWNED_ARTIFACT_TYPE_NAMESPACES } from "@opencorvus-ai/plugin"
 import {
   ArtifactJSONValueSchema,
   ArtifactReadInputSchema,
-  ArtifactReadReferenceInputSchema,
+  ArtifactReadBatchInputSchema,
   ArtifactReadReferenceSchema,
   ArtifactSelectReferenceInputSchema,
   ArtifactSelectReferenceOutputSchema,
   ArtifactSelectOutputSchema,
   ArtifactSchemaLimits,
-  ArtifactSearchInputSchema,
+  ArtifactSearchBatchInputSchema,
   ArtifactSearchReferenceTransportPageSchema,
   EngineArtifactPublishInputSchema,
   artifactReadLocatorKey,
@@ -38,6 +38,7 @@ import { publishTaskArtifactProjectFiles, readTaskArtifactResourceSet } from "@/
 import { resolveArtifactSnapshotReadAuthority } from "@/build/merge-back-publication-authority"
 import { tool as aiTool } from "ai"
 import { Tool } from "./tool"
+import { artifactReadBatch, artifactSearchBatch, boundedArtifactPage } from "./artifact-batch"
 import {
   resolveCoreProjectedTaskToolExecutionScope,
   resolveCoreProjectedWorkerToolExecutionScope,
@@ -50,7 +51,7 @@ import {
 } from "@/agent/artifact-read-facts"
 
 const ARTIFACT_SEARCH_DESCRIPTION =
-  "Enumerate the current Task's durable current, historical, or immutable Artifacts. " +
+  "Search the current Task's Artifacts in a batch of up to eight queries; even one query uses the queries array. Continue by merging next_queries cursor/page fields (excluding request_index) into their original queries[request_index]; resubmit pending_queries items unchanged. " +
   "Task scope is derived from the current Session. Without query this is the complete existence path. " +
   "Use exact label, kind, type, Goal, and time filters for Core typed facts. Producer filters apply only when an " +
   "entry's producer field carries projected-Agent or Mission provenance; Core projections remain Core-owned even " +
@@ -61,7 +62,7 @@ const ARTIFACT_SEARCH_DESCRIPTION =
   "zero matches are valid. Inspect resolution, catalog_complete, provider_errors, and metadata_truncated."
 
 const ARTIFACT_READ_DESCRIPTION =
-  "Read one exact current-Task Artifact through an artifact_locator_ref returned by artifact_search or artifact_snapshot. Engine JSON, snapshot manifests, and text resources return " +
+  "Read up to eight exact current-Task Artifacts in one reads array using artifact_locator_ref from artifact_search or artifact_snapshot. One aggregate output budget is shared; pass next_reads unchanged to continue. Engine JSON, snapshot manifests, and text resources return " +
   "explicit UTF-8 byte chunks with total bytes and SHA-256. Binary resources return one verified complete media " +
   "attachment; byte_offset must remain zero and binary data is never split into invalid media fragments. " +
   "For a large text task_artifact_resource, delivery=materialized_file verifies the complete immutable bytes once " +
@@ -187,7 +188,9 @@ const ArtifactPublishToolInputSchema = EngineArtifactPublishInputSchema.omit({
       .array(ArtifactReadReferenceSchema)
       .max(ArtifactSchemaLimits.publishResources)
       .default([])
-      .describe("Explicitly select these prior complete artifact_read references as semantic sources for this publication."),
+      .describe(
+        "Explicitly select these prior complete artifact_read references as semantic sources for this publication.",
+      ),
     resource_set: TaskArtifactResourceSetLocatorSchema.nullable().describe(
       "Exact current-Task immutable resource set, expanded by the Host in canonical UTF-8 byte path order; use null when the Artifact has no files.",
     ),
@@ -269,7 +272,9 @@ function parseArtifactPublishJSON(text: string) {
   })
   if (!tree || errors.length > 0) {
     const detail =
-      errors.length > 0 ? errors.map((error) => describeArtifactJSONParseError(text, error)).join("; ") : "empty JSON document"
+      errors.length > 0
+        ? errors.map((error) => describeArtifactJSONParseError(text, error)).join("; ")
+        : "empty JSON document"
     throw new Error(`artifact_publish payload_json is invalid: ${detail}`)
   }
   assertUniqueArtifactJSONKeys(tree)
@@ -298,28 +303,20 @@ function transportSearchPage(page: Awaited<ReturnType<typeof searchTaskArtifacts
   })
 }
 
-async function boundedSearchResult(input: { taskID: string; search: ArtifactSearchInput }) {
-  let limit = input.search.limit
-  for (;;) {
-    const page = await searchTaskArtifacts({
-      authority: artifactCatalogAuthority(input.taskID),
-      search: {
-        ...input.search,
-        limit,
-      },
-    })
-    const transportPage = transportSearchPage(page)
-    const output = JSON.stringify(transportPage)
-    if (Buffer.byteLength(output, "utf8") <= ArtifactSchemaLimits.structuredOutputBytes) {
-      return resultForSearch(transportPage, output)
-    }
-    if (limit === 1) {
-      throw new Error(
-        `artifact_search cannot encode one catalog page within the ${ArtifactSchemaLimits.structuredOutputBytes}-byte transport boundary`,
-      )
-    }
-    limit = Math.max(1, Math.floor(limit / 2))
-  }
+async function boundedSearchResult(input: { taskID: string; search: ArtifactSearchInput }, maxOutputBytes?: number) {
+  const { page, output } = await boundedArtifactPage(
+    input.search.limit,
+    async (limit) =>
+      transportSearchPage(
+        await searchTaskArtifacts({
+          authority: artifactCatalogAuthority(input.taskID),
+          search: { ...input.search, limit },
+        }),
+      ),
+    (page) => JSON.stringify(page),
+    maxOutputBytes,
+  )
+  return resultForSearch(page, output)
 }
 
 function resultForSearch(page: ReturnType<typeof transportSearchPage>, output: string) {
@@ -336,6 +333,14 @@ function resultForSearch(page: ReturnType<typeof transportSearchPage>, output: s
     },
     output,
   }
+}
+
+function searchArtifactBatch(taskID: string, queries: ArtifactSearchInput[]) {
+  return artifactSearchBatch(
+    queries,
+    (search, budget) => boundedSearchResult({ taskID, search }, budget),
+    (_query, page) => (page.next_cursor ? { cursor: page.next_cursor } : undefined),
+  )
 }
 
 function resultForRead(result: ArtifactReadResult, artifactLocatorRef: string) {
@@ -457,25 +462,37 @@ export function artifactSnapshotTransport(
 
 export const ArtifactSearchTool = Tool.define("artifact_search", {
   description: ARTIFACT_SEARCH_DESCRIPTION,
-  parameters: ArtifactSearchInputSchema,
+  parameters: ArtifactSearchBatchInputSchema,
   async execute(args, ctx) {
     const taskID = taskIDForToolSession(ctx.sessionID, "artifact_search")
-    return boundedSearchResult({ taskID, search: args })
+    return searchArtifactBatch(taskID, args.queries)
   },
 })
 
+function readArtifactBatchForTool(
+  taskID: string,
+  reads: ArtifactReadReferenceInput[],
+  identity: { sessionID: string; assistantMessageID: string; toolPartID: string },
+) {
+  const resolved = reads.map((transport) => resolveArtifactReadInput({ ...identity, transport }))
+  return artifactReadBatch(reads, async (transport, index) =>
+    resultForRead(
+      await readArtifactForTool(taskID, { ...resolved[index]!, max_bytes: transport.max_bytes }),
+      transport.artifact_locator_ref,
+    ),
+  )
+}
+
 export const ArtifactReadTool = Tool.define("artifact_read", {
   description: ARTIFACT_READ_DESCRIPTION,
-  parameters: ArtifactReadReferenceInputSchema,
+  parameters: ArtifactReadBatchInputSchema,
   async execute(args, ctx) {
     const taskID = taskIDForToolSession(ctx.sessionID, "artifact_read")
-    const read = resolveArtifactReadInput({
+    return readArtifactBatchForTool(taskID, args.reads, {
       sessionID: ctx.sessionID,
       assistantMessageID: ctx.messageID,
       toolPartID: requireArtifactToolPartID(ctx.extra?.toolPartID, "artifact_read"),
-      transport: args,
     })
-    return resultForRead(await readArtifactForTool(taskID, read), args.artifact_locator_ref)
   },
 })
 
@@ -683,10 +700,10 @@ function requireArtifactToolPartID(value: unknown, toolName: string): string {
 export function createArtifactSearchAiTool(taskID: string) {
   return aiTool({
     description: ARTIFACT_SEARCH_DESCRIPTION,
-    inputSchema: ArtifactSearchInputSchema,
-    execute: async (args: ArtifactSearchInput, options) => {
+    inputSchema: ArtifactSearchBatchInputSchema,
+    execute: async (args, options) => {
       const exactTaskID = orchestratorTaskID({ taskID, options, toolName: "artifact_search" })
-      return boundedSearchResult({ taskID: exactTaskID, search: args })
+      return searchArtifactBatch(exactTaskID, args.queries)
     },
   })
 }
@@ -694,17 +711,15 @@ export function createArtifactSearchAiTool(taskID: string) {
 export function createArtifactReadAiTool(taskID: string) {
   return aiTool({
     description: ARTIFACT_READ_DESCRIPTION,
-    inputSchema: ArtifactReadReferenceInputSchema,
-    execute: async (args: ArtifactReadReferenceInput, options) => {
+    inputSchema: ArtifactReadBatchInputSchema,
+    execute: async (args, options) => {
       const exactTaskID = orchestratorTaskID({ taskID, options, toolName: "artifact_read" })
       const identity = orchestratorSessionIdentity(options, "artifact_read")
-      const read = resolveArtifactReadInput({
+      return readArtifactBatchForTool(exactTaskID, args.reads, {
         sessionID: identity.sessionID,
         assistantMessageID: identity.messageID,
         toolPartID: identity.toolPartID,
-        transport: args,
       })
-      return resultForRead(await readArtifactForTool(exactTaskID, read), args.artifact_locator_ref)
     },
   })
 }

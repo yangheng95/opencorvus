@@ -8,10 +8,7 @@ import { EngineArtifactTable } from "@/engine/engine.sql"
 import { recordEngineArtifact } from "@/engine/artifact"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
-import {
-  listRequirementSetArtifacts,
-  requireTask,
-} from "@/engine/store"
+import { listRequirementSetArtifacts, requireTask } from "@/engine/store"
 import type { SelectedWorkflowBinding } from "@/engine/workflow-binding"
 import { Identifier } from "@/id/id"
 import { createRequirementsStageDispatcher } from "@/orchestrator/requirements-stage"
@@ -20,7 +17,11 @@ import { Instance } from "@/project/instance"
 import type { RequirementCoverageDeclaration, RequirementSet } from "@/requirements/types"
 import { Session } from "@/session"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
-import { createArtifactReadAiTool, createArtifactSearchAiTool, createArtifactSelectAiTool } from "@/tool/artifact-catalog"
+import {
+  createArtifactReadAiTool,
+  createArtifactSearchAiTool,
+  createArtifactSelectAiTool,
+} from "@/tool/artifact-catalog"
 import { createRequirementsOutputToolFactory } from "@/requirements/output-tools"
 import { EngineArtifactEnvelopeSchema } from "@opencorvus-ai/plugin"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
@@ -248,9 +249,13 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
   const searchTool = createArtifactSearchAiTool(task.taskID)
   if (!searchTool.execute) throw new Error("artifact_search is missing its production execution boundary")
   const searchInput = {
-    artifact_types: ["requirements-test/source"],
-    version_scope: "current" as const,
-    limit: 10,
+    queries: [
+      {
+        artifact_types: ["requirements-test/source"],
+        version_scope: "current" as const,
+        limit: 10,
+      },
+    ],
   }
   await Session.updatePart({
     id: Identifier.ascending("part"),
@@ -289,7 +294,9 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
       time: { start: task.final.time.created - 6, end: task.final.time.created - 5 },
     },
   })
-  const searchPage = JSON.parse(searchOutput.output) as { entries: Array<{ artifact_locator_ref: string }> }
+  const searchPage = JSON.parse(searchOutput.output).results[0].value as {
+    entries: Array<{ artifact_locator_ref: string }>
+  }
   const artifactLocatorRef = searchPage.entries[0]?.artifact_locator_ref
   if (!artifactLocatorRef) throw new Error("artifact_search did not return the persisted requirements evidence")
   await Session.updateMessage({
@@ -302,11 +309,15 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
   const readTool = createArtifactReadAiTool(task.taskID)
   if (!readTool.execute) throw new Error("artifact_read is missing its production execution boundary")
   const readInput = {
-    artifact_transport_version: 2 as const,
-    artifact_locator_ref: artifactLocatorRef,
-    byte_offset: 0,
-    max_bytes: 16_384,
-    delivery: "inline" as const,
+    reads: [
+      {
+        artifact_transport_version: 2 as const,
+        artifact_locator_ref: artifactLocatorRef,
+        byte_offset: 0,
+        max_bytes: 16_384,
+        delivery: "inline" as const,
+      },
+    ],
   }
   await Session.updatePart({
     id: Identifier.ascending("part"),
@@ -323,15 +334,12 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
     tool: "artifact_read",
     state: { status: "running", input: readInput, time: { start: task.final.time.created - 4 } },
   })
-  const readOutput = await readTool.execute(
-    readInput,
-    {
-      toolCallId: "requirements-read",
-      messages: [],
-      abortSignal: new AbortController().signal,
-      opencorvus: { sessionID: task.worker.id, messageID: readMessage.id, toolPartID: readPart.id },
-    } as never,
-  )
+  const readOutput = await readTool.execute(readInput, {
+    toolCallId: "requirements-read",
+    messages: [],
+    abortSignal: new AbortController().signal,
+    opencorvus: { sessionID: task.worker.id, messageID: readMessage.id, toolPartID: readPart.id },
+  } as never)
   await Session.updatePart({
     id: readPart.id,
     sessionID: task.worker.id,
@@ -348,7 +356,7 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
       time: { start: task.final.time.created - 4, end: task.final.time.created - 3 },
     },
   })
-  const readResult = JSON.parse(readOutput.output) as { artifact_read_ref?: string }
+  const readResult = JSON.parse(readOutput.output).results[0].value as { artifact_read_ref?: string }
   if (!readResult.artifact_read_ref) throw new Error("artifact_read did not return a persisted read reference")
   await Session.updateMessage({
     ...readMessage,
@@ -491,12 +499,34 @@ describe("Requirements domain-incomplete settlement", () => {
         expect({ empty: emptyResult, decisionsOnly: decisionsOnlyResult }).toMatchObject({
           empty: {
             outcome: { kind: "domain_incomplete", domain: "requirements" },
-            artifacts: [{ payload: { coverage_receipt: { status: "incomplete", issues: ["finalization_missing", "no_requirements_registered"] } } }],
-            workflow: { frontier_node_ids: [], nodes: [{ node_id: "requirements", terminal_success: false }, { node_id: "architecture", terminal_success: false }] },
+            artifacts: [
+              {
+                payload: {
+                  coverage_receipt: {
+                    status: "incomplete",
+                    issues: ["finalization_missing", "no_requirements_registered"],
+                  },
+                },
+              },
+            ],
+            workflow: {
+              frontier_node_ids: [],
+              nodes: [
+                { node_id: "requirements", terminal_success: false },
+                { node_id: "architecture", terminal_success: false },
+              ],
+            },
           },
           decisionsOnly: {
             outcome: { kind: "domain_incomplete", domain: "requirements" },
-            artifacts: [{ payload: { decisions: [{ key: "runtime", value: "Bun" }], coverage_receipt: { status: "incomplete", issues: ["no_requirements_registered"] } } }],
+            artifacts: [
+              {
+                payload: {
+                  decisions: [{ key: "runtime", value: "Bun" }],
+                  coverage_receipt: { status: "incomplete", issues: ["no_requirements_registered"] },
+                },
+              },
+            ],
             workflow: { frontier_node_ids: [] },
           },
         })
@@ -517,7 +547,18 @@ describe("Requirements domain-incomplete settlement", () => {
         })
         expect(result).toMatchObject({
           outcome: { kind: "domain_incomplete", domain: "requirements" },
-          artifacts: [{ payload: { producer: { session_id: task.worker.id, final_message_id: task.final.id }, coverage_receipt: { status: "incomplete", issues: ["request_identity_mismatch"], request_sha256: taskRequestSHA256(requireTask(task.taskID).request) } } }],
+          artifacts: [
+            {
+              payload: {
+                producer: { session_id: task.worker.id, final_message_id: task.final.id },
+                coverage_receipt: {
+                  status: "incomplete",
+                  issues: ["request_identity_mismatch"],
+                  request_sha256: taskRequestSHA256(requireTask(task.taskID).request),
+                },
+              },
+            },
+          ],
           workflow: { frontier_node_ids: [] },
         })
       },
@@ -533,8 +574,16 @@ describe("Requirements domain-incomplete settlement", () => {
         const result = await run({ task, requirements: [requirement], finalization: completeDeclaration(task) })
         expect(result).toMatchObject({
           outcome: { kind: "terminal_success", session_id: task.worker.id, final_message_id: task.final.id },
-          artifacts: [{ payload: { requirements: [{ id: "REQ-1" }], coverage_receipt: { status: "complete", issues: [] } } }],
-          workflow: { frontier_node_ids: ["architecture"], nodes: [{ node_id: "requirements", terminal_success: true }, { node_id: "architecture", terminal_success: false }] },
+          artifacts: [
+            { payload: { requirements: [{ id: "REQ-1" }], coverage_receipt: { status: "complete", issues: [] } } },
+          ],
+          workflow: {
+            frontier_node_ids: ["architecture"],
+            nodes: [
+              { node_id: "requirements", terminal_success: true },
+              { node_id: "architecture", terminal_success: false },
+            ],
+          },
         })
       },
     })
@@ -547,15 +596,23 @@ describe("Requirements domain-incomplete settlement", () => {
       fn: async () => {
         const task = await fixture("Wire-valid Requirements")
         const output = createRequirementsOutputToolFactory()
-        await output.materializeExact("register_requirement")!.execute?.({
-          ...requirement,
-          acceptance: "x",
-        }, {} as never)
-        await output.materializeExact("register_decision")!.execute?.({ key: "runtime", value: "Bun", reason: "" }, {} as never)
-        await output.materializeExact("finalize_requirements")!.execute?.({
-          ...completeDeclaration(task),
-          requirement_ids: [requirement.id],
-        }, {} as never)
+        await output.materializeExact("register_requirement")!.execute?.(
+          {
+            ...requirement,
+            acceptance: "x",
+          },
+          {} as never,
+        )
+        await output
+          .materializeExact("register_decision")!
+          .execute?.({ key: "runtime", value: "Bun", reason: "" }, {} as never)
+        await output.materializeExact("finalize_requirements")!.execute?.(
+          {
+            ...completeDeclaration(task),
+            requirement_ids: [requirement.id],
+          },
+          {} as never,
+        )
         const collector = output.getCollector()
         const result = await run({
           task,
@@ -565,7 +622,9 @@ describe("Requirements domain-incomplete settlement", () => {
         })
         expect(result).toMatchObject({
           outcome: { kind: "terminal_success" },
-          artifacts: [{ payload: { schema_version: 2, requirements: [{ acceptance: "x" }], decisions: [{ reason: "" }] } }],
+          artifacts: [
+            { payload: { schema_version: 2, requirements: [{ acceptance: "x" }], decisions: [{ reason: "" }] } },
+          ],
           workflow: { frontier_node_ids: ["architecture"] },
         })
       },
@@ -641,7 +700,9 @@ describe("Requirements domain-incomplete settlement", () => {
         })
         expect(success).toMatchObject({
           outcome: { kind: "terminal_success" },
-          artifacts: [{ payload: { source_artifact_locators: [locator], coverage_receipt: { status: "complete", issues: [] } } }],
+          artifacts: [
+            { payload: { source_artifact_locators: [locator], coverage_receipt: { status: "complete", issues: [] } } },
+          ],
           workflow: { frontier_node_ids: ["architecture"] },
         })
 
@@ -831,9 +892,10 @@ describe("Requirements domain-incomplete settlement", () => {
         const sqlite = new BunDatabase(Database.Path())
         try {
           const triggers = sqlite
-            .query<{ name: string; sql: string }, []>(
-              "SELECT name, sql FROM sqlite_schema WHERE type = 'trigger' AND tbl_name IN ('engine_artifact', 'engine_artifact_version') ORDER BY name",
-            )
+            .query<
+              { name: string; sql: string },
+              []
+            >("SELECT name, sql FROM sqlite_schema WHERE type = 'trigger' AND tbl_name IN ('engine_artifact', 'engine_artifact_version') ORDER BY name")
             .all()
           if (triggers.length === 0 || triggers.some((trigger) => !trigger.sql)) {
             throw new Error("artifact integrity trigger fixture is incomplete")

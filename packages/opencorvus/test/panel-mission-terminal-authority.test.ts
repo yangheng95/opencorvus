@@ -503,11 +503,11 @@ describe("Mission terminal Task authority", () => {
           type: "tool",
           callID: unboundCatalogCallID,
           tool: queryArtifactsLeaf.id,
-          state: { status: "running", input: { taskID, page_number: 1 }, time: { start: now + 37 } },
+          state: { status: "running", input: { queries: [{ taskID, page_number: 1 }] }, time: { start: now + 37 } },
         })
         await expect(
           queryArtifactsLeaf.tool.execute(
-            { taskID, page_number: 1 },
+            { queries: [{ taskID, page_number: 1 }] },
             context(queryArtifactsLeaf.id, unboundCatalogCallID),
           ),
         ).rejects.toThrow(
@@ -558,10 +558,14 @@ describe("Mission terminal Task authority", () => {
         let pageNumber: number | null = 1
         while (pageNumber !== null) {
           const queryInput = {
-            taskID,
-            page_number: pageNumber,
-            kinds: ["expert_output"] as const,
-            sort: "oldest" as const,
+            queries: [
+              {
+                taskID,
+                page_number: pageNumber,
+                kinds: ["expert_output"] as const,
+                sort: "oldest" as const,
+              },
+            ],
           }
           const queryCallID = `query-terminal-artifact-page-${pageNumber}`
           await Session.updatePart({
@@ -586,7 +590,7 @@ describe("Mission terminal Task authority", () => {
           expect(Buffer.byteLength(result.output, "utf8")).toBeLessThanOrEqual(
             ArtifactSchemaLimits.structuredOutputBytes,
           )
-          const page = JSON.parse(result.output) as {
+          const page = JSON.parse(result.output).results[0].value as {
             taskID: string
             terminal_lifecycle_reference: typeof terminalReference
             page_number: number
@@ -617,21 +621,24 @@ describe("Mission terminal Task authority", () => {
           })
           visitedPageNumbers.push(page.page_number)
           entries.push(...page.entries)
-          pageNumber = page.next_page_number
+          pageNumber = JSON.parse(result.output).next_queries[0]?.page_number ?? null
         }
-        expect(visitedPageNumbers).toEqual([1, 2, 3])
+        expect(visitedPageNumbers).toEqual([1, 2])
         expect(entries).toHaveLength(33)
         expect(new Set(entries.map((entry) => JSON.stringify(entry.locator))).size).toBe(33)
         expect(new Set(entries.map((entry) => entry.artifact_locator_ref)).size).toBe(33)
         const panelUI = await PanelTool.init({ agentID: "panel_ui" })
         const panelUIPage = await panelUI.execute(
-          { action: "query_task_artifacts", taskID, page_number: 1, kinds: ["expert_output"], sort: "oldest" },
+          {
+            action: "query_task_artifacts",
+            queries: [{ taskID, page_number: 1, kinds: ["expert_output"], sort: "oldest" }],
+          },
           createPanelUIRequestToolContext({
             surface: "gateway",
             requestID: "00000000-0000-4000-8000-000000000001",
           }),
         )
-        expect(JSON.parse(panelUIPage.output)).toEqual(
+        expect(JSON.parse(panelUIPage.output).results[0].value).toEqual(
           expect.objectContaining({
             taskID,
             terminal_lifecycle_reference: terminalReference,
@@ -654,12 +661,14 @@ describe("Mission terminal Task authority", () => {
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
         })
         const readInput = {
-          taskID,
-          artifact_transport_version: 2 as const,
-          artifact_locator_ref: entries[0]!.artifact_locator_ref,
-          byte_offset: 0,
-          max_bytes: 65_536,
-          delivery: "inline" as const,
+          reads: entries.slice(0, 2).map((entry) => ({
+            taskID,
+            artifact_transport_version: 2 as const,
+            artifact_locator_ref: entry.artifact_locator_ref,
+            byte_offset: 0,
+            max_bytes: 65536,
+            delivery: "inline" as const,
+          })),
         }
         const readCallID = "read-terminal-artifact"
         await Session.updatePart({
@@ -682,7 +691,11 @@ describe("Mission terminal Task authority", () => {
           messageID: readMessage.id,
           callID: readCallID,
         })
-        expect(JSON.parse(read.output)).toEqual(
+        expect(JSON.parse(read.output).results.map((item: any) => item.value.locator)).toEqual(
+          entries.slice(0, 2).map((entry) => entry.locator),
+        )
+        expect(JSON.parse(read.output).complete).toBe(true)
+        expect(JSON.parse(read.output).results[0].value).toEqual(
           expect.objectContaining({
             taskID,
             terminal_lifecycle_reference: terminalReference,
@@ -748,51 +761,148 @@ describe("Mission terminal Task authority", () => {
     })
   }, 30_000)
 
-  test.each(["operator", "scheduled"] as const)("a new %s request opens the next bounded Mission acceptance", async (origin) => {
-    await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
-      const mission = await ensureMissionSession({ missionID: "bounded-operator-reopen", defaultCwd: project.path,
-        productPillar: "work", heldExpertSquadIDs: ["base"] })
-      const now = Date.now()
-      const user = await Session.updateMessage({ id: Identifier.ascending("message"), sessionID: mission.id,
-        role: "user", author: "user", time: { created: now }, agent: "mission",
-        model: { providerID: "openai", modelID: "gpt-5.6-terra" } })
-      const assistant = await Session.updateMessage({ id: Identifier.ascending("message"), sessionID: mission.id,
-        role: "assistant", author: "mission", parentID: user.id, time: { created: now + 1 }, agent: "mission",
-        providerID: "openai", modelID: "gpt-5.6-terra", path: { cwd: project.path, root: project.path }, cost: 0,
-        tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } } })
-      const leaf = await panelLeaf("complete_mission")
-      const partID = Identifier.ascending("part")
-      const callID = "bounded-completion"
-      const args = { summary: "Bounded coordination accepted", task_acceptances: [] }
-      await Session.updatePart({ id: Identifier.ascending("part"), sessionID: mission.id, messageID: assistant.id, type: "step-start" })
-      await Session.updatePart({ id: partID, sessionID: mission.id, messageID: assistant.id, type: "tool",
-        tool: leaf.id, callID, state: { status: "running", input: args, time: { start: now + 1 } } })
-      const output = await leaf.tool.execute(args, { sessionID: mission.id, messageID: assistant.id,
-        callID, agent: "mission", abort: new AbortController().signal, messages: [],
-        executionSurface: Tool.executionSurface([leaf.id], []), extra: { surface: "panel" }, metadata() {}, async ask() {} })
-      await Session.updatePart({ id: partID, sessionID: mission.id, messageID: assistant.id, type: "tool", tool: leaf.id,
-        callID, state: { status: "completed", input: args, output: output.output, title: output.title,
-          metadata: output.metadata, time: { start: now + 1, end: now + 2 } } })
-      const facts = { interruptible: false, pendingInteractions: 0, taskLifecycleStatuses: [] }
-      expect(missionBoardProjection(mission, facts)).toMatchObject({ lane: "completed", completion: { toolPartID: partID } })
-      const { orderKey: _priorOrder, ...newInput } = user
-      if (origin === "scheduled") {
-        Database.immediateTransaction((db) => {
-          db.insert(AutomationTable).values({ id: "recurring-job", definition_id: "recurring-job", revision: 1,
-            project_id: mission.projectID, session_id: mission.id, name: "daily check", kind: "recurring",
-            scope: "session", recurrence: "FREQ=DAILY", prompt: "Run the next authorized check" }).run()
-          db.insert(AutomationFireTable).values({ id: "next-scheduled-fire", automation_revision_id: "recurring-job",
-            scheduled_due_at: now + 3, origin: "scheduled", time_created: now + 3 }).run()
-        })
-      }
-      await Session.updateMessage({ ...newInput, id: Identifier.ascending("message"), time: { created: now + 3 },
-        author: origin === "operator" ? "user" : "orchestrator",
-        ...(origin === "scheduled" ? { extra: { wake_reason: { source: "scheduler.automation", jobID: "recurring-job",
-          jobName: "daily check", fireID: "next-scheduled-fire", scope: "session", recurrence: "FREQ=DAILY" } } } : {}) })
-      expect(missionBoardProjection(mission, facts).lane).toBe("backlog")
-    } })
-  })
+  test.each(["operator", "scheduled"] as const)(
+    "a new %s request opens the next bounded Mission acceptance",
+    async (origin) => {
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const mission = await ensureMissionSession({
+            missionID: "bounded-operator-reopen",
+            defaultCwd: project.path,
+            productPillar: "work",
+            heldExpertSquadIDs: ["base"],
+          })
+          const now = Date.now()
+          const user = await Session.updateMessage({
+            id: Identifier.ascending("message"),
+            sessionID: mission.id,
+            role: "user",
+            author: "user",
+            time: { created: now },
+            agent: "mission",
+            model: { providerID: "openai", modelID: "gpt-5.6-terra" },
+          })
+          const assistant = await Session.updateMessage({
+            id: Identifier.ascending("message"),
+            sessionID: mission.id,
+            role: "assistant",
+            author: "mission",
+            parentID: user.id,
+            time: { created: now + 1 },
+            agent: "mission",
+            providerID: "openai",
+            modelID: "gpt-5.6-terra",
+            path: { cwd: project.path, root: project.path },
+            cost: 0,
+            tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          })
+          const leaf = await panelLeaf("complete_mission")
+          const partID = Identifier.ascending("part")
+          const callID = "bounded-completion"
+          const args = { summary: "Bounded coordination accepted", task_acceptances: [] }
+          await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: mission.id,
+            messageID: assistant.id,
+            type: "step-start",
+          })
+          await Session.updatePart({
+            id: partID,
+            sessionID: mission.id,
+            messageID: assistant.id,
+            type: "tool",
+            tool: leaf.id,
+            callID,
+            state: { status: "running", input: args, time: { start: now + 1 } },
+          })
+          const output = await leaf.tool.execute(args, {
+            sessionID: mission.id,
+            messageID: assistant.id,
+            callID,
+            agent: "mission",
+            abort: new AbortController().signal,
+            messages: [],
+            executionSurface: Tool.executionSurface([leaf.id], []),
+            extra: { surface: "panel" },
+            metadata() {},
+            async ask() {},
+          })
+          await Session.updatePart({
+            id: partID,
+            sessionID: mission.id,
+            messageID: assistant.id,
+            type: "tool",
+            tool: leaf.id,
+            callID,
+            state: {
+              status: "completed",
+              input: args,
+              output: output.output,
+              title: output.title,
+              metadata: output.metadata,
+              time: { start: now + 1, end: now + 2 },
+            },
+          })
+          const facts = { interruptible: false, pendingInteractions: 0, taskLifecycleStatuses: [] }
+          expect(missionBoardProjection(mission, facts)).toMatchObject({
+            lane: "completed",
+            completion: { toolPartID: partID },
+          })
+          const { orderKey: _priorOrder, ...newInput } = user
+          if (origin === "scheduled") {
+            Database.immediateTransaction((db) => {
+              db.insert(AutomationTable)
+                .values({
+                  id: "recurring-job",
+                  definition_id: "recurring-job",
+                  revision: 1,
+                  project_id: mission.projectID,
+                  session_id: mission.id,
+                  name: "daily check",
+                  kind: "recurring",
+                  scope: "session",
+                  recurrence: "FREQ=DAILY",
+                  prompt: "Run the next authorized check",
+                })
+                .run()
+              db.insert(AutomationFireTable)
+                .values({
+                  id: "next-scheduled-fire",
+                  automation_revision_id: "recurring-job",
+                  scheduled_due_at: now + 3,
+                  origin: "scheduled",
+                  time_created: now + 3,
+                })
+                .run()
+            })
+          }
+          await Session.updateMessage({
+            ...newInput,
+            id: Identifier.ascending("message"),
+            time: { created: now + 3 },
+            author: origin === "operator" ? "user" : "orchestrator",
+            ...(origin === "scheduled"
+              ? {
+                  extra: {
+                    wake_reason: {
+                      source: "scheduler.automation",
+                      jobID: "recurring-job",
+                      jobName: "daily check",
+                      fireID: "next-scheduled-fire",
+                      scope: "session",
+                      recurrence: "FREQ=DAILY",
+                    },
+                  },
+                }
+              : {}),
+          })
+          expect(missionBoardProjection(mission, facts).lane).toBe("backlog")
+        },
+      })
+    },
+  )
 
   test("completes a Mission from canonical terminal reads retained across Mission inputs", async () => {
     await using project = await memoryProject()
@@ -1134,32 +1244,78 @@ describe("Mission terminal Task authority", () => {
         ).toMatchObject({ lane: "completed", completion: { summary: "Accepted terminal evidence" } })
 
         Database.immediateTransaction((db) => {
-          db.insert(AutomationTable).values({ id: "delay", definition_id: "delay", revision: 1,
-            project_id: mission.projectID, session_id: mission.id, name: "session wait", kind: "delay",
-            prompt: "Observe the pending result", due_at: now + 8 }).run()
-          db.insert(AutomationFireTable).values({ id: "delayed-fire", automation_revision_id: "delay",
-            scheduled_due_at: now + 8, origin: "scheduled", time_created: now + 8 }).run()
+          db.insert(AutomationTable)
+            .values({
+              id: "delay",
+              definition_id: "delay",
+              revision: 1,
+              project_id: mission.projectID,
+              session_id: mission.id,
+              name: "session wait",
+              kind: "delay",
+              prompt: "Observe the pending result",
+              due_at: now + 8,
+            })
+            .run()
+          db.insert(AutomationFireTable)
+            .values({
+              id: "delayed-fire",
+              automation_revision_id: "delay",
+              scheduled_due_at: now + 8,
+              origin: "scheduled",
+              time_created: now + 8,
+            })
+            .run()
         })
         await Session.updateMessage({
-          id: Identifier.ascending("message"), sessionID: mission.id, role: "user", author: "orchestrator",
-          time: { created: now + 8 }, agent: "mission", model: { providerID: "openai", modelID: "gpt-5.6-terra" },
-          extra: { wake_reason: { source: "scheduler.automation", jobID: "delay", jobName: "session wait",
-            fireID: "delayed-fire", scope: "session", recurrence: null } }, pendingDelivery: true,
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "user",
+          author: "orchestrator",
+          time: { created: now + 8 },
+          agent: "mission",
+          model: { providerID: "openai", modelID: "gpt-5.6-terra" },
+          extra: {
+            wake_reason: {
+              source: "scheduler.automation",
+              jobID: "delay",
+              jobName: "session wait",
+              fireID: "delayed-fire",
+              scope: "session",
+              recurrence: null,
+            },
+          },
+          pendingDelivery: true,
         })
-        expect(missionBoardProjection(mission, { interruptible: false, pendingInteractions: 0,
-          taskLifecycleStatuses: ["completed"] })).toMatchObject({ lane: "completed", completion: { toolPartID: completionPartID } })
+        expect(
+          missionBoardProjection(mission, {
+            interruptible: false,
+            pendingInteractions: 0,
+            taskLifecycleStatuses: ["completed"],
+          }),
+        ).toMatchObject({ lane: "completed", completion: { toolPartID: completionPartID } })
 
         await updateTask(requireTask(taskID), { status: "active" }, "Task resumed")
-        expect(missionBoardProjection(mission, { interruptible: false, pendingInteractions: 0,
-          taskLifecycleStatuses: ["active"] }).lane).toBe("running")
+        expect(
+          missionBoardProjection(mission, {
+            interruptible: false,
+            pendingInteractions: 0,
+            taskLifecycleStatuses: ["active"],
+          }).lane,
+        ).toBe("running")
         await terminalTask(
           requireTask(taskID),
           { status: "completed", time_completed: now + 8 },
           "New terminal occurrence",
         )
         const currentReference = requireCurrentTerminalLifecycleReference(taskID)
-        expect(missionBoardProjection(mission, { interruptible: false, pendingInteractions: 0,
-          taskLifecycleStatuses: ["completed"] }).lane).toBe("review")
+        expect(
+          missionBoardProjection(mission, {
+            interruptible: false,
+            pendingInteractions: 0,
+            taskLifecycleStatuses: ["completed"],
+          }).lane,
+        ).toBe("review")
         expect({
           accepted: receipt.task_acceptances[0]!.terminal_lifecycle_reference,
           current: currentReference,
@@ -1394,9 +1550,7 @@ describe("Mission terminal Task authority", () => {
         const currentCompletionInput = MissionCompletionActionInput.parse({
           action: "complete_mission",
           summary: "Accept the complete current evidence sequence",
-          task_acceptances: [
-            { task_id: taskID, evidence_read_refs: [currentPartialReadRef, currentFinalReadRef] },
-          ],
+          task_acceptances: [{ task_id: taskID, evidence_read_refs: [currentPartialReadRef, currentFinalReadRef] }],
         })
         const { action: _currentCompletionAction, ...currentCompletionArgs } = currentCompletionInput
         const currentCompletionCallID = "complete-with-current-read-sequence"

@@ -547,6 +547,18 @@ export function refineArtifactSearchInput(
 
 export const ArtifactSearchInputSchema = ArtifactSearchInputObjectSchema.superRefine(refineArtifactSearchInput)
 
+export const ArtifactSearchBatchInputSchema = z
+  .object({
+    queries: z
+      .array(ArtifactSearchInputSchema)
+      .min(1)
+      .max(ArtifactSchemaLimits.batchItems)
+      .describe(
+        "Independent searches in one call. Combine exact filter values in each query; apply each next_queries patch to queries[request_index] and resubmit pending_queries indexes unchanged.",
+      ),
+  })
+  .strict()
+
 export const ArtifactSearchAppliedFiltersSchema = ArtifactSearchInputObjectSchema.omit({
   cursor: true,
 }).superRefine(refineArtifactSearchInput)
@@ -714,6 +726,63 @@ export const ArtifactReadReferenceInputSchema = z
       ),
   })
   .strict()
+
+export const ArtifactReadBatchInputSchema = z
+  .object({
+    reads: z
+      .array(ArtifactReadReferenceInputSchema)
+      .min(1)
+      .max(ArtifactSchemaLimits.batchItems)
+      .superRefine(refineArtifactReadBatchItems)
+      .describe(
+        "Exact catalog references to read together. One aggregate byte budget is shared across items; use returned next_reads unchanged.",
+      ),
+  })
+  .strict()
+
+export function refineArtifactReadBatchItems(
+  reads: readonly { artifact_locator_ref: string; byte_offset: number }[],
+  context: z.RefinementCtx,
+) {
+  const seen = new Set<string>()
+  for (const [index, read] of reads.entries()) {
+    const key = `${read.artifact_locator_ref}:${read.byte_offset}`
+    if (seen.has(key))
+      context.addIssue({
+        code: "custom",
+        path: [index],
+        message: "Each exact Artifact byte window must appear once per batch",
+      })
+    seen.add(key)
+  }
+}
+
+/** Current immutable atomic facts can appear at the root or inside a visible batch result. */
+export function artifactResultValues(value: unknown): unknown[] {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return []
+  const results = (value as { results?: unknown }).results
+  return [
+    value,
+    ...(Array.isArray(results)
+      ? results.flatMap((entry) => {
+          if (!entry || typeof entry !== "object") return []
+          return artifactResultValues((entry as { value?: unknown }).value)
+        })
+      : []),
+  ]
+}
+
+/** Traverse requests without interpreting Artifact payload content as a request. */
+export function artifactRequestValues(value: unknown): unknown[] {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return []
+  const record = value as { reads?: unknown; queries?: unknown }
+  return [
+    value,
+    ...[record.reads, record.queries].flatMap((items) =>
+      Array.isArray(items) ? items.flatMap(artifactRequestValues) : [],
+    ),
+  ]
+}
 
 export const ArtifactReadChunkSchema = z
   .object({

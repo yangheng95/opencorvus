@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Artifact batch queries and reads](2026-09-21-artifact-batch-reads.md)
+
 - [CLI run P0 repair](2026-09-21-cli-run-p0.md)
 
 - [RPM bundler short-write repair](2026-09-21-rpm-short-write-repair.md)

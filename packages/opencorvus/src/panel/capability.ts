@@ -11,6 +11,8 @@ import {
   ArtifactSearchWithoutLimitSchema,
   CrossTaskArtifactSourceListSchema,
   refineArtifactSearchInput,
+  refineArtifactReadBatchItems,
+  ArtifactSchemaLimits,
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import { MissionCompletionInput } from "@/mission/completion"
 import { MissionAcceptanceGapInputSchema } from "@/mission/acceptance-gap"
@@ -24,6 +26,14 @@ import {
 } from "./action-ids"
 
 const { cursor: _genericArtifactCursor, ...PanelArtifactSearchShape } = ArtifactSearchWithoutLimitSchema.shape
+
+export const PanelArtifactQuerySchema = z
+  .object({
+    taskID: z.string().min(1).describe("Source Task whose terminal Artifact catalog should be queried."),
+    page_number: z.number().int().min(1).max(1000).describe("Start at 1; continue using next_queries."),
+    ...PanelArtifactSearchShape,
+  })
+  .superRefine(refineArtifactSearchInput)
 
 export const RIGHT_SIDEBAR_SURFACE = "right-sidebar"
 export const PanelSurface = z.enum([...SharedChannelSurface.options, RIGHT_SIDEBAR_SURFACE])
@@ -276,30 +286,25 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "query_task_artifacts",
     description:
-      "Enumerate one terminal Task occurrence's canonical Artifact catalog through a bounded numbered page. A Session-bound model call first uses panel_query_task in the same physical Turn, while a stateless Panel or gateway request binds the current canonical terminal occurrence at request start. Start with page_number 1 and repeat with next_page_number until null; the Host owns both authorities, retains and authenticates opaque catalog cursors internally, and revalidates the occurrence. Empty entries are a valid result. Select and completely read the current Completion Decision first, then every deliverable, report, review, or evidence item required by acceptance. If the decision names material participant session_message evidence, read that exact text through panel_read_task_message. Package/runtime bindings and Task-root ingress dispositions remain control-plane audit facts unless a concrete acceptance contradiction requires them. Each selected Artifact entry returns a short Host-minted artifact_locator_ref for panel_read_task_artifact; the model never reconstructs its canonical locator or copies a terminal event ID.",
+      "Query up to eight terminal Task catalogs or independent search conditions in one queries array. First batch panel_query_task for the source Tasks in the same physical Turn. Start each page_number at 1 and merge next_queries cursor/page fields (excluding request_index) into their original queries[request_index] and resubmit pending_queries items for remaining pages. The Host binds and revalidates exact terminal occurrences and authenticated cursors. Use arrays of exact kinds/types/labels to combine related filters. Results carry short artifact_locator_ref values for one batched panel_read_task_artifact call. Select the current Completion Decision and required deliverable/report/review/evidence items; catalog membership alone is not acceptance evidence.",
     kind: "query",
     surfaces: allProjectSurfaces,
     params: {
-      taskID: z.string().min(1).describe("Source Task whose Artifact catalog should be enumerated."),
-      page_number: z
-        .number()
-        .int()
-        .min(1)
-        .max(1_000)
-        .describe("One-based page number. Start at 1, then use the preceding response's next_page_number."),
-      ...PanelArtifactSearchShape,
+      queries: z.array(PanelArtifactQuerySchema).min(1).max(ArtifactSchemaLimits.batchItems),
     },
-    refine: refineArtifactSearchInput,
   }),
   item({
     action: "read_task_artifact",
     description:
-      "Read one exact Artifact selected by a Host-minted catalog reference from one terminal Task occurrence in this Mission lineage. Continue through every next_offset until complete, then use the returned occurrence-bound artifact_read_ref for acceptance or resume.",
+      "Read up to eight exact Artifacts together in one reads array, using Host-minted catalog references from terminal Tasks in this Mission lineage. One aggregate output budget is shared. Pass returned next_reads unchanged until complete; retain each occurrence-bound artifact_read_ref from the full chunk sequence for acceptance or resume. Batch independent required documents instead of making one call per document.",
     kind: "query",
     surfaces: ["panel"],
     params: {
-      taskID: z.string().min(1).describe("Terminal source Task in the current Mission lineage."),
-      ...ArtifactReadReferenceInputSchema.shape,
+      reads: z
+        .array(ArtifactReadReferenceInputSchema.extend({ taskID: z.string().min(1) }))
+        .min(1)
+        .max(ArtifactSchemaLimits.batchItems)
+        .superRefine(refineArtifactReadBatchItems),
     },
   }),
   item({
@@ -656,16 +661,10 @@ export function panelLeafCapability(action: PanelActionID) {
 export function panelLeafActionSchemaForAgent(action: PanelActionID, agent: string | undefined): z.ZodType {
   const capability = panelLeafCapability(action)
   const actor = agent === "panel_ui" ? "panel_ui" : derivePanelActor(agent)
-  if (
-    actor === "mission" &&
-    !MISSION_PANEL_ACTION_IDS.includes(action as (typeof MISSION_PANEL_ACTION_IDS)[number])
-  ) {
+  if (actor === "mission" && !MISSION_PANEL_ACTION_IDS.includes(action as (typeof MISSION_PANEL_ACTION_IDS)[number])) {
     throw new Error(`Mission does not own Panel leaf ${action}.`)
   }
-  if (
-    actor === "explore" &&
-    !EXPLORE_PANEL_ACTION_IDS.includes(action as (typeof EXPLORE_PANEL_ACTION_IDS)[number])
-  ) {
+  if (actor === "explore" && !EXPLORE_PANEL_ACTION_IDS.includes(action as (typeof EXPLORE_PANEL_ACTION_IDS)[number])) {
     throw new Error(`Explore does not own Panel leaf ${action}.`)
   }
   let schema = z.object(capability.params).strict() as z.ZodObject<any>
@@ -692,7 +691,6 @@ export function panelLeafActionSchemaForAgent(action: PanelActionID, agent: stri
     }
   }
   if (action === "create_task") return schema.superRefine(refineCreateTaskChannelBinding)
-  if (action === "query_task_artifacts") return schema.superRefine(refineArtifactSearchInput)
   return schema
 }
 

@@ -126,18 +126,55 @@ describe("Artifact read facts from provider Tool input", () => {
             time: { start: now + 1, end: now + 2 },
           },
         })
-        const queryPlan = Database.allFinalized<{ detail: string }>(
-          `
-          EXPLAIN QUERY PLAN
-          SELECT request_part_id
-          FROM tool_part_outcome
-          WHERE CASE
-            WHEN json_valid(json_extract(data, '$.output'))
-            THEN json_extract(json_extract(data, '$.output'), '$.artifact_read_ref')
-          END = '${readRef}'
-        `,
-        ).map((row) => row.detail)
-        expect(queryPlan.some((detail) => detail.includes("tool_part_outcome_artifact_read_reference_idx"))).toBeTrue()
+        const batchLocators = [0, 1].map((index) => ({ ...locator, artifact_id: "art_batch_" + index }))
+        const batchInputs = batchLocators.map((_, index) => ({
+          taskID,
+          artifact_transport_version: 2,
+          artifact_locator_ref: "al_batchreference0" + index,
+          byte_offset: 0,
+          max_bytes: 64,
+          delivery: "inline",
+        }))
+        const batchReferences = ["ar_batchreference00", "ar_batchreference01"]
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: session.id,
+          messageID: readMessage.id,
+          type: "tool",
+          callID: "call_batch_read_facts",
+          tool: "panel_read_task_artifact",
+          state: {
+            status: "completed",
+            input: { reads: batchInputs },
+            title: "Batch reads",
+            metadata: { truncated: false },
+            output: JSON.stringify({
+              results: batchLocators.map((current, index) => ({
+                request_index: index,
+                value: {
+                  taskID,
+                  terminal_lifecycle_reference: terminalReference,
+                  artifact_transport_version: 2,
+                  artifact_locator_ref: batchInputs[index]!.artifact_locator_ref,
+                  artifact_read_ref: batchReferences[index],
+                  locator: current,
+                  media_type: "application/json",
+                  byte_start: 0,
+                  byte_end: 1,
+                  next_offset: null,
+                  total_bytes: 1,
+                  complete: true,
+                  sha256: current.expected_sha256,
+                  text: "x",
+                  attachment: false,
+                },
+              })),
+              complete: true,
+              next_reads: [],
+            }),
+            time: { start: now + 1, end: now + 2 },
+          },
+        })
         const deferredReadRef = "ar_deferredread0000"
         const deferredCallID = "call_provider_deferred_read_fact"
         const deferredPartID = Identifier.ascending("part")
@@ -306,7 +343,7 @@ describe("Artifact read facts from provider Tool input", () => {
             toolPartID: mutationPart.id,
             taskID,
           }),
-        ).toEqual([locator])
+        ).toEqual([...batchLocators, locator])
         expect(
           resolveMissionArtifactReadAcceptancesBeforeCompletion({
             sessionID: session.id,
@@ -321,6 +358,22 @@ describe("Artifact read facts from provider Tool input", () => {
             ],
           }),
         ).toEqual([{ taskID, evidenceLocators: [locator] }])
+        expect(
+          resolveMissionArtifactReadAcceptancesBeforeCompletion({
+            sessionID: session.id,
+            assistantMessageID: mutationMessage.id,
+            toolPartID: mutationPart.id,
+            acceptances: [{ taskID, terminalLifecycleReference: terminalReference, references: batchReferences }],
+          }),
+        ).toEqual([{ taskID, evidenceLocators: batchLocators }])
+        expect(
+          resolveMissionArtifactReadAcceptancesBeforeCompletion({
+            sessionID: session.id,
+            assistantMessageID: mutationMessage.id,
+            toolPartID: mutationPart.id,
+            acceptances: [{ taskID, terminalLifecycleReference: terminalReference, references: [batchReferences[1]!] }],
+          }),
+        ).toEqual([{ taskID, evidenceLocators: [batchLocators[1]] }])
       },
     })
   })

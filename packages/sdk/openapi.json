@@ -58554,188 +58554,201 @@
                         "const": "query_task_artifacts",
                         "type": "string"
                       },
-                      "artifact_types": {
-                        "description": "Optional exact namespaced Artifact-type filter.",
+                      "queries": {
                         "items": {
-                          "maxLength": 512,
-                          "pattern": "^[a-z0-9][a-z0-9._-]*\\/[a-z0-9][a-z0-9._/-]*$",
-                          "type": "string"
-                        },
-                        "maxItems": 64,
-                        "minItems": 1,
-                        "type": "array"
-                      },
-                      "created_at_or_after_ms": {
-                        "description": "Optional inclusive lower creation-time bound in Unix milliseconds.",
-                        "maximum": 9007199254740991,
-                        "minimum": 0,
-                        "type": "integer"
-                      },
-                      "created_before_ms": {
-                        "description": "Optional exclusive upper creation-time bound in Unix milliseconds.",
-                        "exclusiveMinimum": 0,
-                        "maximum": 9007199254740991,
-                        "type": "integer"
-                      },
-                      "goal_ids": {
-                        "description": "Optional exact logical Goal-subject filter.",
-                        "items": {
-                          "maxLength": 512,
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "maxItems": 64,
-                        "minItems": 1,
-                        "type": "array"
-                      },
-                      "import_source_task_ids": {
-                        "description": "Optional exact source-Task lineage filter for imported Engine Artifacts. Non-imported entries never match.",
-                        "items": {
-                          "maxLength": 512,
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "maxItems": 64,
-                        "minItems": 1,
-                        "type": "array"
-                      },
-                      "kinds": {
-                        "description": "Optional exact persisted Artifact-kind filter.",
-                        "items": {
-                          "maxLength": 512,
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "maxItems": 64,
-                        "minItems": 1,
-                        "type": "array"
-                      },
-                      "labels": {
-                        "description": "Optional exact stable Artifact-label filter.",
-                        "items": {
-                          "maxLength": 2048,
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "maxItems": 64,
-                        "minItems": 1,
-                        "type": "array"
-                      },
-                      "media_types": {
-                        "description": "Optional exact resource media-type filter.",
-                        "items": {
-                          "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
-                          "type": "string"
-                        },
-                        "maxItems": 64,
-                        "minItems": 1,
-                        "type": "array"
-                      },
-                      "page_number": {
-                        "description": "One-based page number. Start at 1, then use the preceding response's next_page_number.",
-                        "maximum": 1000,
-                        "minimum": 1,
-                        "type": "integer"
-                      },
-                      "producer_agent_ids": {
-                        "description": "Optional exact projected producer Agent-identity filter. Core-owned typed projections never match this filter; select those by label, kind, artifact type, or Goal.",
-                        "items": {
-                          "maxLength": 512,
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "maxItems": 64,
-                        "minItems": 1,
-                        "type": "array"
-                      },
-                      "producer_session_ids": {
-                        "description": "Optional exact projected or Mission producer Session identity filter. Core-owned typed projections never match this filter.",
-                        "items": {
-                          "maxLength": 512,
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "maxItems": 64,
-                        "minItems": 1,
-                        "type": "array"
-                      },
-                      "producer_squad_ids": {
-                        "description": "Optional exact projected producer Expert Squad identity filter. Core-owned typed projections never match this filter.",
-                        "items": {
-                          "maxLength": 512,
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "maxItems": 64,
-                        "minItems": 1,
-                        "type": "array"
-                      },
-                      "query": {
-                        "additionalProperties": false,
-                        "description": "Optional hierarchical candidate query over bounded catalog identity, label, type, producer, Goal, and resource metadata. Fuzzy mode is explicit and never selects evidence. Omit query to enumerate.",
-                        "properties": {
-                          "mode": {
-                            "default": "substring",
-                            "enum": [
-                              "substring",
-                              "fuzzy"
-                            ],
-                            "type": "string"
+                          "properties": {
+                            "artifact_types": {
+                              "description": "Optional exact namespaced Artifact-type filter.",
+                              "items": {
+                                "maxLength": 512,
+                                "pattern": "^[a-z0-9][a-z0-9._-]*\\/[a-z0-9][a-z0-9._/-]*$",
+                                "type": "string"
+                              },
+                              "maxItems": 64,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "created_at_or_after_ms": {
+                              "description": "Optional inclusive lower creation-time bound in Unix milliseconds.",
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "created_before_ms": {
+                              "description": "Optional exclusive upper creation-time bound in Unix milliseconds.",
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991,
+                              "type": "integer"
+                            },
+                            "goal_ids": {
+                              "description": "Optional exact logical Goal-subject filter.",
+                              "items": {
+                                "maxLength": 512,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "maxItems": 64,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "import_source_task_ids": {
+                              "description": "Optional exact source-Task lineage filter for imported Engine Artifacts. Non-imported entries never match.",
+                              "items": {
+                                "maxLength": 512,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "maxItems": 64,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "kinds": {
+                              "description": "Optional exact persisted Artifact-kind filter.",
+                              "items": {
+                                "maxLength": 512,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "maxItems": 64,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "labels": {
+                              "description": "Optional exact stable Artifact-label filter.",
+                              "items": {
+                                "maxLength": 2048,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "maxItems": 64,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "media_types": {
+                              "description": "Optional exact resource media-type filter.",
+                              "items": {
+                                "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                "type": "string"
+                              },
+                              "maxItems": 64,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "page_number": {
+                              "description": "Start at 1; continue using next_queries.",
+                              "maximum": 1000,
+                              "minimum": 1,
+                              "type": "integer"
+                            },
+                            "producer_agent_ids": {
+                              "description": "Optional exact projected producer Agent-identity filter. Core-owned typed projections never match this filter; select those by label, kind, artifact type, or Goal.",
+                              "items": {
+                                "maxLength": 512,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "maxItems": 64,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "producer_session_ids": {
+                              "description": "Optional exact projected or Mission producer Session identity filter. Core-owned typed projections never match this filter.",
+                              "items": {
+                                "maxLength": 512,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "maxItems": 64,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "producer_squad_ids": {
+                              "description": "Optional exact projected producer Expert Squad identity filter. Core-owned typed projections never match this filter.",
+                              "items": {
+                                "maxLength": 512,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "maxItems": 64,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "query": {
+                              "additionalProperties": false,
+                              "description": "Optional hierarchical candidate query over bounded catalog identity, label, type, producer, Goal, and resource metadata. Fuzzy mode is explicit and never selects evidence. Omit query to enumerate.",
+                              "properties": {
+                                "mode": {
+                                  "default": "substring",
+                                  "enum": [
+                                    "substring",
+                                    "fuzzy"
+                                  ],
+                                  "type": "string"
+                                },
+                                "text": {
+                                  "maxLength": 2048,
+                                  "minLength": 1,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "text"
+                              ],
+                              "type": "object"
+                            },
+                            "sort": {
+                              "description": "Explicit candidate order. Defaults to relevance when query is present and newest otherwise.",
+                              "enum": [
+                                "relevance",
+                                "newest",
+                                "oldest",
+                                "name"
+                              ],
+                              "type": "string"
+                            },
+                            "sources": {
+                              "description": "Optional authoritative-store filter. Omit it to include every catalog provider.",
+                              "items": {
+                                "enum": [
+                                  "engine_artifact",
+                                  "task_artifact"
+                                ],
+                                "type": "string"
+                              },
+                              "maxItems": 2,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "taskID": {
+                              "description": "Source Task whose terminal Artifact catalog should be queried.",
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "version_scope": {
+                              "default": "current",
+                              "description": "Engine version scope at the frozen catalog revision. Task Artifact snapshots are immutable.",
+                              "enum": [
+                                "current",
+                                "historical",
+                                "all"
+                              ],
+                              "type": "string"
+                            }
                           },
-                          "text": {
-                            "maxLength": 2048,
-                            "minLength": 1,
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "text"
-                        ],
-                        "type": "object"
-                      },
-                      "sort": {
-                        "description": "Explicit candidate order. Defaults to relevance when query is present and newest otherwise.",
-                        "enum": [
-                          "relevance",
-                          "newest",
-                          "oldest",
-                          "name"
-                        ],
-                        "type": "string"
-                      },
-                      "sources": {
-                        "description": "Optional authoritative-store filter. Omit it to include every catalog provider.",
-                        "items": {
-                          "enum": [
-                            "engine_artifact",
-                            "task_artifact"
+                          "required": [
+                            "taskID",
+                            "page_number"
                           ],
-                          "type": "string"
+                          "type": "object"
                         },
-                        "maxItems": 2,
+                        "maxItems": 8,
                         "minItems": 1,
                         "type": "array"
-                      },
-                      "taskID": {
-                        "description": "Source Task whose Artifact catalog should be enumerated.",
-                        "minLength": 1,
-                        "type": "string"
-                      },
-                      "version_scope": {
-                        "default": "current",
-                        "description": "Engine version scope at the frozen catalog revision. Task Artifact snapshots are immutable.",
-                        "enum": [
-                          "current",
-                          "historical",
-                          "all"
-                        ],
-                        "type": "string"
                       }
                     },
                     "required": [
                       "action",
-                      "taskID",
-                      "page_number"
+                      "queries"
                     ],
                     "type": "object"
                   },
@@ -58746,49 +58759,62 @@
                         "const": "read_task_artifact",
                         "type": "string"
                       },
-                      "artifact_locator_ref": {
-                        "description": "Host-minted reference to one exact locator emitted earlier in this Session Turn.",
-                        "pattern": "^al_[A-Za-z0-9_-]{16}$",
-                        "type": "string"
-                      },
-                      "artifact_transport_version": {
-                        "const": 2,
-                        "type": "number"
-                      },
-                      "byte_offset": {
-                        "default": 0,
-                        "description": "Zero-based byte offset within the exact locator identified by artifact_locator_ref.",
-                        "maximum": 9007199254740991,
-                        "minimum": 0,
-                        "type": "integer"
-                      },
-                      "delivery": {
-                        "default": "inline",
-                        "description": "inline returns one bounded content chunk. materialized_file verifies one complete text resource and returns an immutable local cache path for bounded command-line inspection.",
-                        "enum": [
-                          "inline",
-                          "materialized_file"
-                        ],
-                        "type": "string"
-                      },
-                      "max_bytes": {
-                        "default": 24576,
-                        "description": "Maximum UTF-8 text bytes to return in this exact-read chunk. Binary resources use one complete attachment and ignore text pagination.",
-                        "maximum": 65536,
-                        "minimum": 1,
-                        "type": "integer"
-                      },
-                      "taskID": {
-                        "description": "Terminal source Task in the current Mission lineage.",
-                        "minLength": 1,
-                        "type": "string"
+                      "reads": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "artifact_locator_ref": {
+                              "description": "Host-minted reference to one exact locator emitted earlier in this Session Turn.",
+                              "pattern": "^al_[A-Za-z0-9_-]{16}$",
+                              "type": "string"
+                            },
+                            "artifact_transport_version": {
+                              "const": 2,
+                              "type": "number"
+                            },
+                            "byte_offset": {
+                              "default": 0,
+                              "description": "Zero-based byte offset within the exact locator identified by artifact_locator_ref.",
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "delivery": {
+                              "default": "inline",
+                              "description": "inline returns one bounded content chunk. materialized_file verifies one complete text resource and returns an immutable local cache path for bounded command-line inspection.",
+                              "enum": [
+                                "inline",
+                                "materialized_file"
+                              ],
+                              "type": "string"
+                            },
+                            "max_bytes": {
+                              "default": 24576,
+                              "description": "Maximum UTF-8 text bytes to return in this exact-read chunk. Binary resources use one complete attachment and ignore text pagination.",
+                              "maximum": 65536,
+                              "minimum": 1,
+                              "type": "integer"
+                            },
+                            "taskID": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "artifact_transport_version",
+                            "artifact_locator_ref",
+                            "taskID"
+                          ],
+                          "type": "object"
+                        },
+                        "maxItems": 8,
+                        "minItems": 1,
+                        "type": "array"
                       }
                     },
                     "required": [
                       "action",
-                      "taskID",
-                      "artifact_transport_version",
-                      "artifact_locator_ref"
+                      "reads"
                     ],
                     "type": "object"
                   },

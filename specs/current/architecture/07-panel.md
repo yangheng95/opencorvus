@@ -445,7 +445,7 @@ operator-authority, or explicitly requested lifecycle boundary. Every
 `panel_create_task` call supplies one explicit fixed `promptProfile`. The created
 Task, not Mission, is the execution and capability-projection boundary.
 
-The Mission Panel exposes `query_task_artifacts` for complete catalog paging.
+The Mission Panel exposes `query_task_artifacts.queries` for up to eight independent terminal Task catalog queries per call. Worker and Orchestrator `artifact_search.queries` use the same bounded batch envelope. Results identify their submitted item by zero-based `request_index`; `next_queries` contains only cursor/page patches to apply to the original item, excluding `request_index`, while `pending_queries` identifies items to resubmit unchanged. Panel page membership uses a fixed output budget independent of batch size, starting from the canonical maximum of 100 entries. A large batch defers whole queries rather than changing numbered page boundaries.
 For a Session-bound model caller, the Host binds the exact persisted terminal
 row returned by `panel_query_task` earlier in the same physical Turn; the model
 does not copy a terminal event identifier. A stateless Panel or gateway request
@@ -484,8 +484,8 @@ Task therefore makes its former references ineligible and requires fresh
 reconciliation; no mutable acceptance cache or Host-selected Artifact is
 introduced.
 
-`panel_read_task_artifact` performs exact canonical body reads under
-same-Mission terminal-child authority. `resume_task` is the separate mutation for an
+`panel_read_task_artifact.reads` performs up to eight exact canonical body reads under
+same-Mission terminal-child authority; worker and Orchestrator `artifact_read.reads` share the batch implementation. Structured results share 40 KiB and text chunks share 24 KiB per call; encoded media attachment URLs share 32 MiB. An item exceeding the media limit returns an explicit error; a batch that fills the limit defers whole remaining media items. `next_reads` contains exact continuation requests to resubmit unchanged. Each visible result retains its current version-2 atomic receipt. Evidence reducers traverse these atoms in the real Tool outcome, including deferred permission results, and match each read to exactly one submitted reference and byte offset. Final completion filters the Session-scoped joined query by the supplied references and accepts only those chunks; multiple receipts in one Tool Part remain distinct evidence. Existing immutable scalar version-2 receipts use the same atomic parser, with no second execution protocol, schema reset or copied evidence store. `resume_task` is the separate mutation for an
 evidence-backed acceptance gap: it binds the reviewed terminal occurrence and
 fully read locators, writes one visible Mission participant message, and
 returns the durable same-Task wake/receipt identity. `send_task_message` keeps
