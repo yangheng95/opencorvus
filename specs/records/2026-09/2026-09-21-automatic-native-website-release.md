@@ -47,3 +47,9 @@ Independent read-only review by review_continuation accepted the full implementa
 Focused acceptance: 57 tests / 350 assertions across release automation, workflow contracts, release dispatcher, release identity, asset contracts and website manifest pass; targeted strict TypeScript and both Python marker contracts pass. Version alignment (0.1.10), release mutation topology and architecture index pass. Generator and normal push-hook checks are pending completion below.
 
 Generator completed successfully with zero generated-file differences. Repository typecheck and docs:check (342 operations / 25 groups) pass. The full clean-worktree generated-artifact check is run after the scoped commit; normal pre-push checks remain enabled.
+
+## Hosted startup finding
+
+Run35589559825 (source51011f97) failed at startup before any job or release reservation. GitHub's annotation identifies the missing caller permission: package-overlay requests actions:read, but build's reusable caller allows actions:none. The local syntax checker and earlier review did not validate the effective nested permission ceiling. Whole-workflow search finds the production and debug callers; both must explicitly pass the callee's existing contents:read/actions:read contract. Add a positive contract for every reusable packaging caller. This is a real failed attempt, not a successful release or a reset of an in-flight release clock. The old cancelled private zero-asset reservation was preserved and withdrawn before dispatch; no new reservation was created by this startup failure.
+
+Caller repair: 24 lifecycle/workflow tests (195 assertions) pass. Independent read-only re-review accepts both explicit production and inherited debug permissions and their complete caller inventory. Actionlint passes after narrowly excluding only the three documented unsupported queue keys; no other diagnostic is suppressed.

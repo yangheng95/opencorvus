@@ -15,6 +15,7 @@ type WorkflowStep = {
 
 type WorkflowJob = {
   name?: string
+  permissions?: Record<string, string>
   uses?: string
   with?: Record<string, unknown>
   secrets?: Record<string, string>
@@ -32,6 +33,7 @@ type WorkflowJob = {
 
 type Workflow = {
   on?: Record<string, unknown>
+  permissions?: Record<string, string>
   concurrency?: Record<string, unknown>
   jobs?: Record<string, WorkflowJob>
 }
@@ -43,6 +45,20 @@ async function readWorkflow(file: string): Promise<Workflow> {
 }
 
 describe("GitHub Actions workflow contract", () => {
+  test("every native packaging caller grants the reusable workflow's required permissions", async () => {
+    const callee = await readWorkflow("package-overlay.yml")
+    const callers: string[] = []
+    for (const file of (await fs.readdir(workflowRoot)).filter((file) => file.endsWith(".yml"))) {
+      const workflow = await readWorkflow(file)
+      for (const [id, job] of Object.entries(workflow.jobs ?? {})) {
+        if (job.uses !== "./.github/workflows/package-overlay.yml") continue
+        callers.push(`${file}:${id}`)
+        expect(job.permissions ?? workflow.permissions, `${file}:${id}`).toEqual(callee.permissions)
+      }
+    }
+    expect(callers.sort()).toEqual(["build-overlays.yml:build-overlay", "build.yml:package-overlay"])
+  })
+
   test("executes complete native and website outcome contracts under the shared deadline owners", async () => {
     const release = await readWorkflow("build.yml")
     const website = await readWorkflow("deploy-opencorvus-com.yml")

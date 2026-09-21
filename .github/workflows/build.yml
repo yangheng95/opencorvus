@@ -166,6 +166,9 @@ jobs:
             platform: darwin-x64
           - runner: windows-latest
             platform: windows-x64
+    permissions:
+      contents: read
+      actions: read
     uses: ./.github/workflows/package-overlay.yml
     with:
       platform: ${{ matrix.platform }}
