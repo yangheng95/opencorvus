@@ -2219,3 +2219,5 @@ bun run docs:check
 - [2026-08-25-workbuddybench-luna-mission-base-code](records/2026-08/2026-08-25-workbuddybench-luna-mission-base-code.md)
 
 - [Historical WorkBuddy and fixed-round benchmark source](artifacts/2026-08-25-benchmark-history/README.md): exact committed August experiment materials; current-runtime limitations are explicit.
+
+- [Automatic native and website release repair](records/2026-09/2026-09-21-automatic-native-website-release.md).

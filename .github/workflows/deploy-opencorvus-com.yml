@@ -15,10 +15,20 @@ on:
       - "package.json"
   schedule:
     - cron: "17 3 1 * *"
-  repository_dispatch:
-    types: [opencorvus-release-published]
   workflow_dispatch:
     inputs:
+      release_version:
+        description: "Canonical native release version; paired with source and parent run."
+        type: string
+        default: ""
+      release_source_sha:
+        description: "Immutable native release source commit."
+        type: string
+        default: ""
+      release_run_id:
+        description: "Original native release workflow run; owns the shared deadline."
+        type: string
+        default: ""
       deployment_mode:
         description: Daily deploy, pre-DNS bootstrap stage, or post-cutover public verification
         required: true
@@ -31,6 +41,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: opencorvus-com-production
@@ -38,55 +49,56 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  deadline:
+    name: website deadline
+    runs-on: ubuntu-latest
+    timeout-minutes: 31
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-bun
+        with:
+          install_dependencies: "false"
+      - name: Enforce the original website release deadline
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_RUN_ID: ${{ inputs.release_run_id || github.run_id }}
+        run: bun script/release-automation.ts watch-website
+
   resolve-source:
     name: resolve immutable website source
+    timeout-minutes: 3
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      actions: read
     outputs:
       source-sha: ${{ steps.source.outputs.source-sha }}
     steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-bun
+        with:
+          install_dependencies: "false"
       - name: Resolve and verify website source
         id: source
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-          EVENT_NAME: ${{ github.event_name }}
           EVENT_SHA: ${{ github.sha }}
-          DISPATCH_VERSION: ${{ github.event.client_payload.version || '' }}
-          DISPATCH_TAG: ${{ github.event.client_payload.tag || '' }}
-          DISPATCH_SOURCE_SHA: ${{ github.event.client_payload.source_sha || '' }}
-        run: |
-          set -euo pipefail
-          SOURCE_SHA="$EVENT_SHA"
-          if [ "$EVENT_NAME" = "repository_dispatch" ]; then
-            python3 - "$DISPATCH_VERSION" "$DISPATCH_TAG" "$DISPATCH_SOURCE_SHA" <<'PY'
-          import re, sys
-          version, tag, source = sys.argv[1:]
-          if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?", version):
-              raise SystemExit("release dispatch version is invalid")
-          if tag != f"v{version}":
-              raise SystemExit("release dispatch tag does not match its version")
-          if not re.fullmatch(r"[a-f0-9]{40}", source):
-              raise SystemExit("release dispatch source SHA is invalid")
-          PY
-            OBJECT="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$DISPATCH_TAG" --jq '.object.type + " " + .object.sha')"
-            read -r OBJECT_TYPE OBJECT_SHA <<< "$OBJECT"
-            for _ in 1 2 3 4; do
-              if [ "$OBJECT_TYPE" != "tag" ]; then break; fi
-              OBJECT="$(gh api "repos/$GITHUB_REPOSITORY/git/tags/$OBJECT_SHA" --jq '.object.type + " " + .object.sha')"
-              read -r OBJECT_TYPE OBJECT_SHA <<< "$OBJECT"
-            done
-            test "$OBJECT_TYPE" = "commit"
-            test "$OBJECT_SHA" = "$DISPATCH_SOURCE_SHA"
-            SOURCE_SHA="$DISPATCH_SOURCE_SHA"
-          fi
-          [[ "$SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]]
-          echo "source-sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
-          echo "Resolved immutable website source $SOURCE_SHA"
+          VERSION: ${{ inputs.release_version || '' }}
+          SOURCE_SHA: ${{ inputs.release_source_sha || '' }}
+          RELEASE_RUN_ID: ${{ inputs.release_run_id || '' }}
+        run: bun script/release-automation.ts website-source
 
   archive-determinism:
     name: canonical archive (${{ matrix.os }})
+    timeout-minutes: 12
     needs: resolve-source
     strategy:
       fail-fast: false
@@ -116,6 +128,7 @@ jobs:
 
   build:
     name: build and verify database-backed release
+    timeout-minutes: 18
     needs: resolve-source
     runs-on: ubuntu-latest
     env:
@@ -154,11 +167,17 @@ jobs:
           set -euo pipefail
           python3 -c 'import json,os; value=json.loads(os.environ["EXPERT_SQUAD_TRUSTED_KEYS_JSON"]); assert isinstance(value,list) and len(value) >= 1'
 
+      - name: Verify remaining release budget
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_RUN_ID: ${{ inputs.release_run_id || github.run_id }}
+        run: bun script/release-automation.ts check
+
       - name: Generate current public download manifest
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-          DISPATCH_VERSION: ${{ github.event.client_payload.version || '' }}
+          DISPATCH_VERSION: ${{ inputs.release_version || '' }}
         run: |
           set -euo pipefail
           RELEASES_JSON="$(mktemp)"
@@ -242,11 +261,25 @@ jobs:
 
   sign-and-deploy:
     name: sign and deploy RackNerd release
+    timeout-minutes: 10
     needs: [resolve-source, archive-determinism, build]
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch' || vars.OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED == 'true' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || vars.OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     environment: production
     steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          ref: ${{ needs.resolve-source.outputs.source-sha }}
+      - uses: ./.github/actions/setup-bun
+        with:
+          install_dependencies: "false"
+      - name: Verify remaining release budget
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_RUN_ID: ${{ inputs.release_run_id || github.run_id }}
+        run: bun script/release-automation.ts check
+
       - name: Download frozen unsigned site
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
@@ -564,6 +597,12 @@ jobs:
             -czf "$RUNNER_TEMP/$RELEASE_ID.tar.gz" -C candidate .
           (cd "$RUNNER_TEMP" && sha256sum "$RELEASE_ID.tar.gz" > "$RELEASE_ID.tar.gz.sha256")
 
+      - name: Verify remaining release budget
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_RUN_ID: ${{ inputs.release_run_id || github.run_id }}
+        run: bun script/release-automation.ts check
+
       - name: Deploy immutable release and atomically switch current
         shell: bash
         env:
@@ -584,8 +623,8 @@ jobs:
           probe_public_release() {
             local expected_pointer=${1:-} probe pointer name path digest bytes output
             probe=$(mktemp -d)
-            curl --fail --silent --show-error --location --max-redirs 2 "https://opencorvus.com/" > "$probe/index.html" || { rm -rf -- "$probe"; return 1; }
-            curl --fail --silent --show-error --location --max-redirs 2 \
+            curl --fail --silent --show-error --location --max-redirs 2 --connect-timeout 10 --max-time 45 "https://opencorvus.com/" > "$probe/index.html" || { rm -rf -- "$probe"; return 1; }
+            curl --fail --silent --show-error --location --max-redirs 2 --connect-timeout 10 --max-time 45 \
               "https://opencorvus.com/downloads/latest.json" > "$probe/downloads.json" || { rm -rf -- "$probe"; return 1; }
             python3 - "$probe/downloads.json" <<'PY' || { rm -rf -- "$probe"; return 1; }
           import json, re, sys
@@ -600,11 +639,12 @@ jobs:
           if any(not isinstance(asset, dict) or not isinstance(asset.get("bytes"), int) or asset["bytes"] <= 0 or tag not in str(asset.get("url", "")) for asset in assets):
               raise SystemExit("invalid public download manifest asset")
           PY
-            curl --fail --silent --show-error --location --max-redirs 2 \
+            curl --fail --silent --show-error --location --max-redirs 2 --connect-timeout 10 --max-time 45 \
               "https://opencorvus.com/expert-squads/catalog.json" > "$probe/pointer.json" || { rm -rf -- "$probe"; return 1; }
             pointer="$probe/pointer.json"
             if test -n "$expected_pointer"; then
               cmp "$pointer" "$expected_pointer" || { rm -rf -- "$probe"; return 1; }
+              cmp "$probe/downloads.json" candidate/client/downloads/latest.json || { rm -rf -- "$probe"; return 1; }
             fi
             python3 - "$pointer" > "$probe/references.tsv" <<'PY'
           import json, re, sys
@@ -627,7 +667,7 @@ jobs:
             test -s "$probe/references.tsv" || { rm -rf -- "$probe"; return 1; }
             while IFS=$'\t' read -r name path digest bytes; do
               output="$probe/$name"
-              curl --fail --silent --show-error --location --max-redirs 2 "https://opencorvus.com$path" > "$output" || { rm -rf -- "$probe"; return 1; }
+              curl --fail --silent --show-error --location --max-redirs 2 --connect-timeout 10 --max-time 45 "https://opencorvus.com$path" > "$output" || { rm -rf -- "$probe"; return 1; }
               test "$(stat -c %s "$output")" -eq "$bytes" || { rm -rf -- "$probe"; return 1; }
               test "$(sha256sum "$output" | cut -d' ' -f1)" = "$digest" || { rm -rf -- "$probe"; return 1; }
             done < "$probe/references.tsv"
@@ -663,11 +703,11 @@ jobs:
           ):
               raise SystemExit("invalid public signature envelope")
           PY
-            curl --fail --silent --show-error --location --max-redirs 2 \
+            curl --fail --silent --show-error --location --max-redirs 2 --connect-timeout 10 --max-time 45 \
               "https://opencorvus.com/health/ready" > "$probe/ready.json" || { rm -rf -- "$probe"; return 1; }
-            curl --fail --silent --show-error --location --max-redirs 2 \
+            curl --fail --silent --show-error --location --max-redirs 2 --connect-timeout 10 --max-time 45 \
               "https://opencorvus.com/market/" > "$probe/market-en.html" || { rm -rf -- "$probe"; return 1; }
-            curl --fail --silent --show-error --location --max-redirs 2 \
+            curl --fail --silent --show-error --location --max-redirs 2 --connect-timeout 10 --max-time 45 \
               "https://opencorvus.com/zh-cn/market/" > "$probe/market-zh.html" || { rm -rf -- "$probe"; return 1; }
             python3 - "$probe/ready.json" "$probe/pointer.json" "$probe/catalog" > "$probe/exact.tsv" <<'PY' || { rm -rf -- "$probe"; return 1; }
           import json, sys
@@ -686,11 +726,11 @@ jobs:
           print(item["namespace"], item["id"], item["version"], item["packageDigest"], item["archive"]["sha256"], item["archive"]["bytes"], sep="\t")
           PY
             IFS=$'\t' read -r namespace squad_id version package_digest archive_digest archive_bytes < "$probe/exact.tsv"
-            curl --fail --silent --show-error --location --max-redirs 2 \
+            curl --fail --silent --show-error --location --max-redirs 2 --connect-timeout 10 --max-time 45 \
               "https://opencorvus.com/market/$namespace/$squad_id/" > "$probe/detail-en.html" || { rm -rf -- "$probe"; return 1; }
-            curl --fail --silent --show-error --location --max-redirs 2 \
+            curl --fail --silent --show-error --location --max-redirs 2 --connect-timeout 10 --max-time 45 \
               "https://opencorvus.com/zh-cn/market/$namespace/$squad_id/" > "$probe/detail-zh.html" || { rm -rf -- "$probe"; return 1; }
-            curl --fail --silent --show-error --location --max-redirs 2 \
+            curl --fail --silent --show-error --location --max-redirs 2 --connect-timeout 10 --max-time 45 \
               "https://opencorvus.com/api/registry/v1/squads/$namespace/$squad_id/$version/$package_digest/archive" > "$probe/exact.zip" || { rm -rf -- "$probe"; return 1; }
             test "$(stat -c %s "$probe/exact.zip")" -eq "$archive_bytes" || { rm -rf -- "$probe"; return 1; }
             test "$(sha256sum "$probe/exact.zip" | cut -d' ' -f1)" = "$archive_digest" || { rm -rf -- "$probe"; return 1; }
@@ -741,3 +781,25 @@ jobs:
           fi
           cleanup_deploy_credentials
           trap - EXIT
+
+  result:
+    name: website result
+    if: ${{ !cancelled() }}
+    needs: [resolve-source, archive-determinism, build, sign-and-deploy]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require the applicable website result
+        env:
+          SOURCE: ${{ needs.resolve-source.result }}
+          ARCHIVES: ${{ needs.archive-determinism.result }}
+          BUILD: ${{ needs.build.result }}
+          DEPLOY: ${{ needs.sign-and-deploy.result }}
+          DEPLOY_REQUIRED: ${{ github.event_name == 'workflow_dispatch' || vars.OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED == 'true' }}
+        run: |
+          for result in "$SOURCE" "$ARCHIVES" "$BUILD"; do
+            test "$result" = success || { echo "Incomplete website build: $result" >&2; exit 1; }
+          done
+          if test "$DEPLOY_REQUIRED" = true; then
+            test "$DEPLOY" = success || { echo "Incomplete website deployment: $DEPLOY" >&2; exit 1; }
+          fi

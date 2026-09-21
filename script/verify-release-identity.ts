@@ -134,8 +134,8 @@ async function resolveOwnedIdentity(
   const status = httpStatus(probe)
 
   if (probe.exitCode !== 0) {
-    if (status === 404 && !missingCode) return { kind: "available", tag, sourceSHA: input.sourceSHA }
     if (status === 404) {
+      if (!missingCode) return { kind: "available", tag, sourceSHA: input.sourceSHA }
       const label = missingCode === "release_tag_missing_for_tag_push" ? "Tag-triggered" : "Publication"
       throw new ReleaseIdentityError(
         missingCode,

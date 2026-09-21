@@ -12,10 +12,6 @@ on:
       expected_source_sha:
         description: "Exact commit SHA already reviewed and pushed for this release."
         required: true
-      deploy_website:
-        description: "Deploy the public website after publishing native binaries."
-        type: boolean
-        default: false
 
 concurrency:
   group: opencorvus-release-publication
@@ -23,11 +19,32 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  deadline:
+    name: release deadline
+    runs-on: ubuntu-latest
+    timeout-minutes: 31
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-bun
+        with:
+          install_dependencies: "false"
+      - name: Enforce the original whole-release deadline
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bun script/release-automation.ts watch-release
+
   prepare:
     name: prepare
+    timeout-minutes: 8
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: read
     outputs:
       version: ${{ steps.meta.outputs.version }}
       prerelease: ${{ steps.meta.outputs.prerelease }}
@@ -69,6 +86,11 @@ jobs:
         shell: bash
         run: bun ./script/sync-version.ts "${{ steps.meta.outputs.version }}" --check
 
+      - name: Verify remaining release budget
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bun script/release-automation.ts check
+
       - name: Verify immutable release identity
         shell: bash
         env:
@@ -98,6 +120,11 @@ jobs:
 
       # Reserve the same resumable owner before native compilation. A failed
       # platform retries inside this workflow run and reuses the owned draft.
+      - name: Verify publication budget before claiming identity
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bun script/release-automation.ts check
+
       - name: Claim immutable release identity
         shell: bash
         env:
@@ -145,6 +172,7 @@ jobs:
       runner: ${{ matrix.runner }}
       version: ${{ needs.prepare.outputs.version }}
       retention-days: 7
+      release-run-id: ${{ github.run_id }}
     secrets:
       TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
       TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
@@ -168,6 +196,10 @@ jobs:
           - runner: windows-latest
             platform: windows-x64
     runs-on: ${{ matrix.runner }}
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
     defaults:
       run:
         shell: bash
@@ -210,6 +242,11 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: packages/opencorvus/native/process-supervisor -> target
+
+      - name: Verify remaining release budget
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bun script/release-automation.ts check
 
       - name: Package CLI archives
         env:
@@ -275,8 +312,10 @@ jobs:
     # them, and never ships a Release missing a platform.
     if: ${{ !cancelled() && needs.prepare.result == 'success' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: write
+      actions: read
     outputs:
       complete: ${{ steps.completeness.outputs.complete }}
       missing: ${{ steps.completeness.outputs.missing }}
@@ -318,6 +357,11 @@ jobs:
           PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
           IDENTITY_MODE: verify-publication
         run: bun ./script/verify-release-identity.ts
+
+      - name: Verify remaining release budget
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bun script/release-automation.ts check
 
       - name: Upload release assets to GitHub Release
         env:
@@ -376,12 +420,14 @@ jobs:
       - publish-release-assets
     if: ${{ !cancelled() && needs.publish-release-assets.result == 'success' && needs.publish-release-assets.outputs.complete == 'true' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     concurrency:
       group: opencorvus-desktop-update-${{ needs.prepare.outputs.update-channel }}
       queue: max
       cancel-in-progress: false
     permissions:
       contents: write
+      actions: write
     steps:
       - uses: actions/checkout@v6
         with:
@@ -400,6 +446,11 @@ jobs:
           EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha || '' }}
           IDENTITY_MODE: verify-owned
         run: bun ./script/verify-release-identity.ts
+
+      - name: Verify remaining release budget
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bun script/release-automation.ts check
 
       - name: Settle public release
         env:
@@ -434,15 +485,41 @@ jobs:
         run: bun ./script/settle-desktop-update-channel.ts
 
       - name: Dispatch public download page deployment
-        if: ${{ inputs.deploy_website && steps.update-channel.outputs.promoted == 'true' }}
+        id: website
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.prepare.outputs.version }}
           SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
+        run: bun script/release-automation.ts dispatch-website
+
+      - name: Await exact website deployment result
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WEBSITE_RUN_ID: ${{ steps.website.outputs.run-id }}
+        run: bun script/release-automation.ts wait-website
+
+      - name: Cancel owned website work if release is cancelled
+        if: ${{ cancelled() && steps.website.outputs.run-id != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WEBSITE_RUN_ID: ${{ steps.website.outputs.run-id }}
+        run: bun script/release-automation.ts cancel-website
+
+  result:
+    name: release result
+    if: ${{ !cancelled() }}
+    needs: [prepare, package-overlay, package-cli, publish-release-assets, publish-release]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require the complete native and website result
+        env:
+          PREPARE: ${{ needs.prepare.result }}
+          OVERLAY: ${{ needs.package-overlay.result }}
+          CLI: ${{ needs.package-cli.result }}
+          ASSETS: ${{ needs.publish-release-assets.result }}
+          PUBLICATION: ${{ needs.publish-release.result }}
         run: |
-          TAG="v${VERSION}"
-          gh api --method POST "repos/$GITHUB_REPOSITORY/dispatches" \
-            -f event_type=opencorvus-release-published \
-            -f "client_payload[version]=$VERSION" \
-            -f "client_payload[tag]=$TAG" \
-            -f "client_payload[source_sha]=$SOURCE_SHA"
+          for result in "$PREPARE" "$OVERLAY" "$CLI" "$ASSETS" "$PUBLICATION"; do
+            test "$result" = success || { echo "Incomplete release: $result" >&2; exit 1; }
+          done

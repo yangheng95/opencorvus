@@ -98,8 +98,7 @@ acceptance.
 Before retaining an RPM, `script/check-rpm-package.py` runs system RPM verification,
 uses the official Python RPM bindings to check the uncompressed CPIO digest explicitly,
 and installs/verifies all files in an empty isolated root. The installed executable must
-match that single RPM stage's post-processing input: Tauri writes its format marker into
-the executable copied from the immutable compile snapshot. Both input digests are recorded. This accepts
+match the immutable compile snapshot after Tauri's exact first `__TAURI_BUNDLE_TYPE_VAR_UNK` to `__TAURI_BUNDLE_TYPE_VAR_RPM` transformation. Tauri restores its working binary after bundling, so that mutable path is not an installed-file comparison input. The compile digest, expected and actual installed digests, and marker offset are recorded. This accepts
 the package file transaction, not a desktop launch or OS dependency integration; packages
 with install scripts require additional acceptance rather than silently skipping those scripts.
 The workflow exercises this checker with system rpmbuild first, saves the verified bundler

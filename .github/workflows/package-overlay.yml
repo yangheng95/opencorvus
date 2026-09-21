@@ -13,6 +13,9 @@ on:
       version:
         type: string
         default: ""
+      release-run-id:
+        type: string
+        default: ""
       retention-days:
         type: number
         default: 7
@@ -24,10 +27,12 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   build:
     name: compile (${{ inputs.platform }})
+    timeout-minutes: 25
     runs-on: ${{ inputs.runner }}
     outputs:
       input-artifact-id: ${{ steps.input-upload.outputs.artifact-id }}
@@ -49,6 +54,12 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: packages/overlay/src-tauri -> target
+      - name: Verify remaining release budget
+        if: ${{ inputs.release-run-id != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_RUN_ID: ${{ inputs.release-run-id }}
+        run: bun script/release-automation.ts check
       - name: Compile Linux installer input
         if: startsWith(inputs.platform, 'linux-')
         env:
@@ -101,7 +112,7 @@ jobs:
     if: startsWith(inputs.platform, 'linux-')
     needs: build
     runs-on: ${{ inputs.runner }}
-    timeout-minutes: 90
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -117,6 +128,12 @@ jobs:
       - uses: ./.github/actions/setup-overlay-runtime
         timeout-minutes: 15
       - uses: dtolnay/rust-toolchain@stable
+      - name: Verify remaining release budget
+        if: ${{ inputs.release-run-id != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_RUN_ID: ${{ inputs.release-run-id }}
+        run: bun script/release-automation.ts check
       - name: Resolve RPM tool cache identity
         if: matrix.kind == 'rpm'
         id: rpm-tool
@@ -152,6 +169,12 @@ jobs:
         run: |
           mkdir -p packages/overlay/src-tauri/target/release
           tar -xf .scratch/gui-input/gui-input.tar -C packages/overlay/src-tauri/target/release
+      - name: Verify remaining release budget
+        if: ${{ inputs.release-run-id != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_RUN_ID: ${{ inputs.release-run-id }}
+        run: bun script/release-automation.ts check
       - name: Bundle one Linux format
         env:
           CI: "true"
@@ -170,7 +193,6 @@ jobs:
         run: |
           /usr/bin/python3 script/check-rpm-package.py \
             packages/overlay/src-tauri/target/release/bundle/rpm/*.rpm \
-            packages/overlay/src-tauri/target/release/opencorvus-overlay \
             --compiled-input packages/overlay/src-tauri/target/release/package-input/*
       - name: Retain failed RPM for diagnosis
         if: failure() && matrix.kind == 'rpm'
@@ -194,6 +216,7 @@ jobs:
 
   assemble-linux:
     name: validate installers (${{ inputs.platform }})
+    timeout-minutes: 10
     if: startsWith(inputs.platform, 'linux-')
     needs: [build, bundle-linux]
     runs-on: ${{ inputs.runner }}
@@ -218,7 +241,10 @@ jobs:
       - name: Assemble and validate complete installer row
         env:
           OPENCORVUS_VERSION: ${{ inputs.version }}
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_RUN_ID: ${{ inputs.release-run-id }}
         run: |
+          if test -n "$RELEASE_RUN_ID"; then bun script/release-automation.ts check; fi
           mkdir -p packages/overlay/src-tauri/target/release
           tar -xf .scratch/gui-input/gui-input.tar -C packages/overlay/src-tauri/target/release
           for kind in deb rpm appimage; do

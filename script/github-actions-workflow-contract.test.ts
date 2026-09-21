@@ -43,6 +43,32 @@ async function readWorkflow(file: string): Promise<Workflow> {
 }
 
 describe("GitHub Actions workflow contract", () => {
+  test("executes complete native and website outcome contracts under the shared deadline owners", async () => {
+    const release = await readWorkflow("build.yml")
+    const website = await readWorkflow("deploy-opencorvus-com.yml")
+    expect(release.jobs?.deadline?.steps?.at(-1)?.run).toBe("bun script/release-automation.ts watch-release")
+    expect(website.jobs?.deadline?.steps?.at(-1)).toMatchObject({
+      env: { RELEASE_RUN_ID: "${{ inputs.release_run_id || github.run_id }}" },
+      run: "bun script/release-automation.ts watch-website",
+    })
+    const bash = process.platform === "win32" ? "C:/Program Files/Git/usr/bin/bash.exe" : "bash"
+    for (const scenario of [
+      { workflow: release, env: { PREPARE: "success", OVERLAY: "success", CLI: "success", ASSETS: "success", PUBLICATION: "success" }, exit: 0 },
+      { workflow: release, env: { PREPARE: "success", OVERLAY: "failure", CLI: "success", ASSETS: "success", PUBLICATION: "skipped" }, exit: 1 },
+      { workflow: release, env: { PREPARE: "success", OVERLAY: "success", CLI: "success", ASSETS: "success", PUBLICATION: "failure" }, exit: 1 },
+      { workflow: website, env: { SOURCE: "success", ARCHIVES: "success", BUILD: "success", DEPLOY: "success", DEPLOY_REQUIRED: "true" }, exit: 0 },
+      { workflow: website, env: { SOURCE: "success", ARCHIVES: "success", BUILD: "success", DEPLOY: "failure", DEPLOY_REQUIRED: "true" }, exit: 1 },
+      { workflow: website, env: { SOURCE: "success", ARCHIVES: "success", BUILD: "success", DEPLOY: "skipped", DEPLOY_REQUIRED: "false" }, exit: 0 },
+    ]) {
+      const resultJob = scenario.workflow.jobs?.result
+      expect(resultJob?.if).toBe("${{ !cancelled() }}")
+      const result = Bun.spawnSync([bash, "-e", "-o", "pipefail", "-c", resultJob!.steps![0]!.run!], {
+        env: { ...process.env, ...scenario.env }, stdout: "pipe", stderr: "pipe",
+      })
+      expect(result.exitCode, result.stderr.toString()).toBe(scenario.exit)
+    }
+  })
+
   test("executes the required CI checker for full, documentation, failed and cancelled outcomes", async () => {
     const workflow = await readWorkflow("test.yml")
     const checker = workflow.jobs?.required?.steps?.find(({ name }) => name === "Verify applicable checks passed")?.run
@@ -264,11 +290,14 @@ describe("GitHub Actions workflow contract", () => {
     }
 
     expect(checkoutReferences).toEqual([
+      { file: "build.yml", job: "deadline", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "prepare", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "package-cli", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "publish-release-assets", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "publish-release", uses: "actions/checkout@v6" },
       { file: "codeql.yml", job: "analyze", uses: "actions/checkout@v6" },
+      { file: "deploy-opencorvus-com.yml", job: "deadline", uses: "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803" },
+      { file: "deploy-opencorvus-com.yml", job: "resolve-source", uses: "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803" },
       {
         file: "deploy-opencorvus-com.yml",
         job: "archive-determinism",
@@ -279,6 +308,7 @@ describe("GitHub Actions workflow contract", () => {
         job: "build",
         uses: "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
       },
+      { file: "deploy-opencorvus-com.yml", job: "sign-and-deploy", uses: "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803" },
       { file: "package-overlay.yml", job: "build", uses: "actions/checkout@v6" },
       { file: "package-overlay.yml", job: "bundle-linux", uses: "actions/checkout@v6" },
       { file: "package-overlay.yml", job: "assemble-linux", uses: "actions/checkout@v6" },
@@ -443,9 +473,13 @@ describe("GitHub Actions workflow contract", () => {
     const dispatch = publicationSteps.find(
       (step: { name?: string }) => step.name === "Dispatch public download page deployment",
     )
-    expect(dispatch.if).toBe("${{ inputs.deploy_website && steps.update-channel.outputs.promoted == 'true' }}")
+    expect(dispatch.id).toBe("website")
     expect(dispatch.env?.SOURCE_SHA).toBe("${{ needs.prepare.outputs.source-sha }}")
-    expect(dispatch.run).toContain("client_payload[source_sha]=$SOURCE_SHA")
+    expect(dispatch.run).toBe("bun script/release-automation.ts dispatch-website")
+    expect(publicationSteps.find((step) => step.name === "Await exact website deployment result")).toMatchObject({
+      env: { WEBSITE_RUN_ID: "${{ steps.website.outputs.run-id }}" },
+      run: "bun script/release-automation.ts wait-website",
+    })
   })
 
   test("packages all five native GUI and CLI rows before publishing the release", async () => {
@@ -463,11 +497,6 @@ describe("GitHub Actions workflow contract", () => {
           expected_source_sha: {
             description: "Exact commit SHA already reviewed and pushed for this release.",
             required: true,
-          },
-          deploy_website: {
-            description: "Deploy the public website after publishing native binaries.",
-            type: "boolean",
-            default: false,
           },
         },
       },
@@ -580,12 +609,14 @@ describe("GitHub Actions workflow contract", () => {
       run: "bun ./script/generate.ts\nbun ./script/generated-artifacts.ts --check-clean-worktree\n",
     })
     const prepareStepNames = jobs.prepare?.steps?.map(({ name }) => name) ?? []
-    expect(prepareStepNames.slice(-7)).toEqual([
+    expect(prepareStepNames.slice(-9)).toEqual([
       "Verify version alignment",
+      "Verify remaining release budget",
       "Verify immutable release identity",
       "Verify frozen dependency graph",
       "Build generated Software Development Kit",
       "Verify generated repository fixed point",
+      "Verify publication budget before claiming identity",
       "Claim immutable release identity",
       "Claim draft publication owner",
     ])
@@ -615,6 +646,7 @@ describe("GitHub Actions workflow contract", () => {
       runner: "${{ matrix.runner }}",
       version: "${{ needs.prepare.outputs.version }}",
       "retention-days": 7,
+      "release-run-id": "${{ github.run_id }}",
     })
     expect(jobs["package-overlay"]?.secrets).toEqual({
       TAURI_SIGNING_PRIVATE_KEY: "${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}",
@@ -646,20 +678,24 @@ describe("GitHub Actions workflow contract", () => {
       jobs["publish-release"]?.steps?.find(({ name }) => name === "Dispatch public download page deployment"),
     ).toEqual({
       name: "Dispatch public download page deployment",
-      if: "${{ inputs.deploy_website && steps.update-channel.outputs.promoted == 'true' }}",
+      id: "website",
       env: {
-        GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
+        GH_TOKEN: "${{ github.token }}",
         VERSION: "${{ needs.prepare.outputs.version }}",
         SOURCE_SHA: "${{ needs.prepare.outputs.source-sha }}",
       },
-      run: 'TAG="v${VERSION}"\ngh api --method POST "repos/$GITHUB_REPOSITORY/dispatches" \\\n  -f event_type=opencorvus-release-published \\\n  -f "client_payload[version]=$VERSION" \\\n  -f "client_payload[tag]=$TAG" \\\n  -f "client_payload[source_sha]=$SOURCE_SHA"\n',
+      run: "bun script/release-automation.ts dispatch-website",
     })
   })
 
   test("converges every production trigger on the current release download manifest", async () => {
     const workflow = await readWorkflow("deploy-opencorvus-com.yml")
     const jobs = workflow.jobs ?? {}
-    expect(workflow.on?.repository_dispatch).toEqual({ types: ["opencorvus-release-published"] })
+    expect(workflow.on?.workflow_dispatch).toMatchObject({ inputs: {
+      release_version: { type: "string", default: "" },
+      release_source_sha: { type: "string", default: "" },
+      release_run_id: { type: "string", default: "" },
+    } })
     expect(workflow.concurrency).toEqual({
       group: "opencorvus-com-production",
       queue: "max",
@@ -671,17 +707,12 @@ describe("GitHub Actions workflow contract", () => {
     const sourceStep = jobs["resolve-source"]?.steps?.find(({ name }) => name === "Resolve and verify website source")
     expect(sourceStep?.env).toEqual({
       GH_TOKEN: "${{ github.token }}",
-      EVENT_NAME: "${{ github.event_name }}",
       EVENT_SHA: "${{ github.sha }}",
-      DISPATCH_VERSION: "${{ github.event.client_payload.version || '' }}",
-      DISPATCH_TAG: "${{ github.event.client_payload.tag || '' }}",
-      DISPATCH_SOURCE_SHA: "${{ github.event.client_payload.source_sha || '' }}",
+      VERSION: "${{ inputs.release_version || '' }}",
+      SOURCE_SHA: "${{ inputs.release_source_sha || '' }}",
+      RELEASE_RUN_ID: "${{ inputs.release_run_id || '' }}",
     })
-    expect(sourceStep?.run).toContain('gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$DISPATCH_TAG"')
-    expect(sourceStep?.run).toContain('gh api "repos/$GITHUB_REPOSITORY/git/tags/$OBJECT_SHA"')
-    expect(sourceStep?.run).toContain('test "$OBJECT_TYPE" = "commit"')
-    expect(sourceStep?.run).toContain('test "$OBJECT_SHA" = "$DISPATCH_SOURCE_SHA"')
-    expect(sourceStep?.run).toContain('echo "source-sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"')
+    expect(sourceStep?.run).toBe("bun script/release-automation.ts website-source")
     for (const job of ["archive-determinism", "build"]) {
       expect(jobs[job]?.needs).toBe("resolve-source")
       expect(jobs[job]?.steps?.find(({ uses }) => uses?.startsWith("actions/checkout@"))?.with?.ref).toBe(
@@ -689,7 +720,7 @@ describe("GitHub Actions workflow contract", () => {
       )
     }
     expect(jobs["sign-and-deploy"]?.if).toBe(
-      "${{ github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch' || vars.OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED == 'true' }}",
+      "${{ github.event_name == 'workflow_dispatch' || vars.OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED == 'true' }}",
     )
     expect(jobs["sign-and-deploy"]?.needs).toEqual(["resolve-source", "archive-determinism", "build"])
     expect(jobs.build?.steps?.find(({ name }) => name === "Upload frozen unsigned site")?.with?.name).toBe(
@@ -728,7 +759,7 @@ describe("GitHub Actions workflow contract", () => {
     const manifestStep = buildSteps.find(({ name }) => name === "Generate current public download manifest")
     expect(manifestStep?.env).toEqual({
       GH_TOKEN: "${{ github.token }}",
-      DISPATCH_VERSION: "${{ github.event.client_payload.version || '' }}",
+      DISPATCH_VERSION: "${{ inputs.release_version || '' }}",
     })
     expect(manifestStep?.run).toContain('gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100"')
     expect(manifestStep?.run).toContain("generate-website-download-manifest.ts")
@@ -817,11 +848,6 @@ describe("GitHub Actions workflow contract", () => {
           expected_source_sha: {
             description: "Exact commit SHA already reviewed and pushed for this release.",
             required: true,
-          },
-          deploy_website: {
-            description: "Deploy the public website after publishing native binaries.",
-            type: "boolean",
-            default: false,
           },
         },
       },
