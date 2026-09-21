@@ -4,9 +4,10 @@ export async function durablePendingPermissionsForSession(input: {
   sdk: OpenCorvusClient
   sessionID: string
   directory?: string
+  signal?: AbortSignal
 }): Promise<PermissionRequest[]> {
   const pending = await input.sdk.permission
-    .list({ directory: input.directory }, { throwOnError: true })
+    .list({ directory: input.directory }, { throwOnError: true, signal: input.signal })
     .then((response) => response.data ?? [])
   return pending.filter((request) => request.sessionID === input.sessionID)
 }

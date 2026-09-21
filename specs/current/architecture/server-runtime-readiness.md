@@ -54,3 +54,37 @@ output, not the authority for file completion. With no open file destination
 there is no file flush obligation. Log records remain asynchronous; the one-byte
 minimum buffer threshold enables the library's drain-and-sync completion
 contract without delaying a nonempty JSON record for batching.
+
+## CLI run completion and error transport
+
+`run` owns one submitted input Message identity. It opens the project event stream and
+observes `server.connected` before submitting that Message. Only `idle` or `terminal`
+for that exact Session and input Message settles the event reader; an intermediate
+`step_finish`, a peer occurrence, or a heartbeat cannot complete the command. Normal
+standalone replies settle idle; Task/Mission lifecycle reducers remain unchanged.
+The reader cancels its owned connection before releasing its stream lock. The command
+also joins its HTTP request, so full output and reply failures precede process exit.
+Local bootstrap settles its own runtime; attached execution releases only client resources.
+
+`--format json` emits one JSONL error on input, configuration, HTTP, stream or Provider
+failure and exits 1; a successful run exits 0. Named errors retain their names/data,
+HTTP errors include their operation and status code, and an allocated Session ID stays
+on the envelope. A Session-only error event is not authority for another input's outcome;
+the exact request/reply and matching lifecycle supply that outcome. Text mode renders
+the same diagnostic. The existing run inactivity setting defaults to 300000 ms (0
+explicitly disables it), bounds silent initialization and remains active until both
+request and stream settle. Real current-Session message/part/tool progress renews it;
+server heartbeats and other Sessions do not. The permission hydration request shares
+the command's cancellation signal. Explicit agent IDs are validated without loading a
+client-side Instance; configured agent availability and permissions remain server-owned.
+
+Configuration mutation admission uses one ownership order shared with Skill readers
+and recovery: durable Skill catalog owner, Skill reference owner, conversation
+reference owner, Config generation writer, then config-file writer. Both Skill
+reference primitives first enter the existing recovery-capable catalog owner. A
+projection can therefore finish its Config read before a concurrent writer excludes
+readers, and a published-but-unconfigured replacement can re-enter a global Config
+write under the same catalog owner. Project initialization, global/project config
+updates and Task/Mission/Session capability reads share this boundary. Reference
+admission now waits for catalog recovery as well as its process-local lock; it does
+not create a second catalog or skip pending replacement settlement.

@@ -36,6 +36,7 @@ import { LedgerCommand } from "./cli/cmd/ledger"
 import { Capability } from "./platform/capability"
 import { installProcessErrorLogging } from "./util/process-error-logging"
 import { errorDiagnostic } from "./util/error-diagnostics"
+import { isJsonRun, writeRunError } from "./cli/run-error"
 
 installProcessErrorLogging()
 
@@ -120,6 +121,7 @@ let cli = yargs(hideBin(process.argv))
 
 cli = cli
   .fail((msg, err) => {
+    if (isJsonRun(hideBin(process.argv))) throw err ?? new Error(msg)
     if (
       msg?.startsWith("Unknown argument") ||
       msg?.startsWith("Not enough non-option arguments") ||
@@ -160,11 +162,15 @@ try {
     })
   }
   Log.Default.error("fatal", data)
-  const formatted = FormatError(e)
-  if (formatted) UI.error(formatted)
-  if (formatted === undefined) {
-    UI.error("Unexpected error, check log file at " + Log.file() + " for more details" + EOL)
-    process.stderr.write((e instanceof Error ? e.message : String(e)) + EOL)
+  if (isJsonRun(hideBin(process.argv))) {
+    writeRunError(e)
+  } else {
+    const formatted = FormatError(e)
+    if (formatted) UI.error(formatted)
+    if (formatted === undefined) {
+      UI.error("Unexpected error, check log file at " + Log.file() + " for more details" + EOL)
+      process.stderr.write((e instanceof Error ? e.message : String(e)) + EOL)
+    }
   }
   process.exitCode = 1
 }

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[CLI run P0 repair](records/2026-09/2026-09-21-cli-run-p0.md).
+
 [RPM bundler short-write repair](records/2026-09/2026-09-21-rpm-short-write-repair.md).
 
 [v0.1.10 native and website release](records/2026-09/2026-09-21-v0.1.10-release.md).

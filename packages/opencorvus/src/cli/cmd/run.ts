@@ -28,9 +28,11 @@ import { TodoWriteTool } from "../../tool/todo"
 import { Locale } from "../../util/locale"
 import { createInProcessFetch } from "@/server/in-process-client"
 import { renderToolFailureCause } from "@/session/tool-failure-cause"
-import { inProcessRunClientOptions } from "./run-client"
+import { inProcessRunClientOptions, runRequest } from "./run-client"
 import { runFileMime } from "./run-file"
 import { durablePendingPermissionsForSession } from "@/permission/pending-projection"
+import { runErrorObject, writeRunError } from "../run-error"
+import { FormatError } from "../error"
 
 type ToolProps<T extends Tool.Info> = {
   input: Tool.InferParameters<T>
@@ -212,7 +214,7 @@ function normalizePath(input?: string) {
 export async function resolveRunAgent(agent?: string) {
   if (!agent) return undefined
   if (!PrimaryAssistantRegistry.isID(agent)) throw new Error(`agent "${agent}" is not a primary assistant`)
-  return (await PrimaryAssistantRegistry.get(agent)).name
+  return agent
 }
 
 export const RunCommand = cmd({
@@ -296,374 +298,410 @@ export const RunCommand = cmd({
       })
   },
   handler: async (args) => {
-    let message = [...args.message, ...(args["--"] || [])]
-      .map((arg) => (arg.includes(" ") ? `"${arg.replace(/"/g, '\\"')}"` : arg))
-      .join(" ")
+    let sessionID: string | undefined
+    try {
+      let message = [...args.message, ...(args["--"] || [])]
+        .map((arg) => (arg.includes(" ") ? `"${arg.replace(/"/g, '\\"')}"` : arg))
+        .join(" ")
 
-    const directory = (() => {
-      if (!args.dir) return undefined
-      if (args.attach) return args.dir
-      try {
-        process.chdir(args.dir)
-        return process.cwd()
-      } catch {
-        UI.error("Failed to change directory to " + args.dir)
-        process.exit(1)
-      }
-    })()
-
-    const files: { type: "file"; url: string; filename: string; mime: string }[] = []
-    if (args.file) {
-      const list = Array.isArray(args.file) ? args.file : [args.file]
-
-      for (const filePath of list) {
-        const resolvedPath = path.resolve(process.cwd(), filePath)
-        if (!(await Filesystem.exists(resolvedPath))) {
-          UI.error(`File not found: ${filePath}`)
-          process.exit(1)
+      const directory = (() => {
+        if (!args.dir) return undefined
+        if (args.attach) return args.dir
+        try {
+          process.chdir(args.dir)
+          return process.cwd()
+        } catch {
+          throw new Error("Failed to change directory to " + args.dir)
         }
-
-        const mime = await runFileMime(resolvedPath)
-
-        files.push({
-          type: "file",
-          url: pathToFileURL(resolvedPath).href,
-          filename: path.basename(resolvedPath),
-          mime,
-        })
-      }
-    }
-
-    if (!process.stdin.isTTY) message += "\n" + (await Bun.stdin.text())
-
-    if (message.trim().length === 0 && !args.command) {
-      UI.error("You must provide a message or a command")
-      process.exit(1)
-    }
-
-    if (args.fork && !args.continue && !args.session) {
-      UI.error("--fork requires --continue or --session")
-      process.exit(1)
-    }
-
-    const rules: CapabilityRules.Ruleset = [
-      {
-        permission: "question",
-        action: "deny",
-        pattern: "*",
-      },
-    ]
-    function title() {
-      if (args.title === undefined) return
-      if (args.title !== "") return args.title
-      return message.slice(0, 50) + (message.length > 50 ? "..." : "")
-    }
-
-    async function session(sdk: OpenCorvusClient) {
-      const baseID = args.continue ? (await sdk.session.list()).data?.find((s) => !s.parentID)?.id : args.session
-
-      if (baseID && args.fork) {
-        const forked = await sdk.session.fork({ sessionID: baseID })
-        return forked.data?.id
-      }
-
-      if (baseID) return baseID
-
-      const name = title()
-      const result = await sdk.session.create({ kind: "assistant", title: name, permission: rules })
-      return result.data?.id
-    }
-
-    async function execute(sdk: OpenCorvusClient) {
-      const eventAbort = new AbortController()
-      const stallMs = (() => {
-        const raw = Number(process.env.OPENCORVUS_RUN_STALL_TIMEOUT_MS ?? "")
-        if (!Number.isFinite(raw)) return 300_000
-        if (raw <= 0) return 0
-        return Math.floor(raw)
       })()
 
-      function tool(part: ToolPart) {
-        try {
-          if (part.tool === "bash") return bash(props<typeof BashTool>(part))
-          if (part.tool === "glob") return glob(props<typeof GlobTool>(part))
-          if (part.tool === "search_code") return searchCode(props<typeof SearchCodeTool>(part))
-          if (part.tool === "list") return list(props<typeof ListTool>(part))
-          if (part.tool === "read") return read(props<typeof ReadTool>(part))
-          if (part.tool === "write") return write(props<typeof WriteTool>(part))
-          if (part.tool === "webfetch") return webfetch(props<typeof WebFetchTool>(part))
-          if (part.tool === "edit") return edit(props<typeof EditTool>(part))
-          if (part.tool === "external_code_search") {
-            return externalCodeSearch(props<typeof ExternalCodeSearchTool>(part))
+      const files: { type: "file"; url: string; filename: string; mime: string }[] = []
+      if (args.file) {
+        const list = Array.isArray(args.file) ? args.file : [args.file]
+
+        for (const filePath of list) {
+          const resolvedPath = path.resolve(process.cwd(), filePath)
+          if (!(await Filesystem.exists(resolvedPath))) {
+            throw new Error(`File not found: ${filePath}`)
           }
-          if (part.tool === "websearch") return websearch(props<typeof WebSearchTool>(part))
-          if (part.tool === "todowrite") return todo(props<typeof TodoWriteTool>(part))
-          if (part.tool === "skill") return skill(props<typeof SkillTool>(part))
-          return renderToolPartDefault(part)
-        } catch {
-          return renderToolPartDefault(part)
+
+          const mime = await runFileMime(resolvedPath)
+
+          files.push({
+            type: "file",
+            url: pathToFileURL(resolvedPath).href,
+            filename: path.basename(resolvedPath),
+            mime,
+          })
         }
       }
 
-      function emit(type: string, data: Record<string, unknown>) {
-        if (args.format === "json") {
-          process.stdout.write(JSON.stringify({ type, timestamp: Date.now(), sessionID, ...data }) + EOL)
-          return true
-        }
-        return false
+      if (!process.stdin.isTTY) message += "\n" + (await Bun.stdin.text())
+
+      if (message.trim().length === 0 && !args.command) {
+        throw new Error("You must provide a message or a command")
       }
 
-      let error: string | undefined
-      let last = Date.now()
+      if (args.fork && !args.continue && !args.session) {
+        throw new Error("--fork requires --continue or --session")
+      }
 
-      async function loop() {
-        const events = await sdk.event.subscribe(
-          {},
-          {
-            signal: eventAbort.signal,
-          },
+      const rules: CapabilityRules.Ruleset = [
+        {
+          permission: "question",
+          action: "deny",
+          pattern: "*",
+        },
+      ]
+      function title() {
+        if (args.title === undefined) return
+        if (args.title !== "") return args.title
+        return message.slice(0, 50) + (message.length > 50 ? "..." : "")
+      }
+
+      async function session(sdk: OpenCorvusClient, signal?: AbortSignal) {
+        const baseID = args.continue
+          ? (await runRequest("session.list", sdk.session.list({}, { signal }))).find((s) => !s.parentID)?.id
+          : args.session
+
+        if (baseID && args.fork) {
+          const forked = await runRequest("session.fork", sdk.session.fork({ sessionID: baseID }, { signal }))
+          return forked.id
+        }
+
+        if (baseID) return baseID
+
+        const name = title()
+        const result = await runRequest(
+          "session.create",
+          sdk.session.create({ kind: "assistant", title: name, permission: rules }, { signal }),
         )
-        const toggles = new Map<string, boolean>()
-        const projectedPermissions = new Set<string>()
-        const permissionRequested = (permission: {
-          id: string
-          sessionID: string
-          toolName: string
-          summary: string
-        }) => {
-          if (permission.sessionID !== sessionID || projectedPermissions.has(permission.id)) return
-          projectedPermissions.add(permission.id)
-          if (
-            emit("permission_requested", {
-              permission: {
-                requestID: permission.id,
-                toolName: permission.toolName,
-                summary: permission.summary,
+        return result.id
+      }
+
+      async function execute(sdk: OpenCorvusClient) {
+        const eventAbort = new AbortController()
+        const requestAbort = new AbortController()
+        const stallMs = (() => {
+          const raw = Number(process.env.OPENCORVUS_RUN_STALL_TIMEOUT_MS ?? "300000")
+          if (!Number.isFinite(raw)) return 300_000
+          if (raw <= 0) return 0
+          return Math.floor(raw)
+        })()
+
+        function tool(part: ToolPart) {
+          try {
+            if (part.tool === "bash") return bash(props<typeof BashTool>(part))
+            if (part.tool === "glob") return glob(props<typeof GlobTool>(part))
+            if (part.tool === "search_code") return searchCode(props<typeof SearchCodeTool>(part))
+            if (part.tool === "list") return list(props<typeof ListTool>(part))
+            if (part.tool === "read") return read(props<typeof ReadTool>(part))
+            if (part.tool === "write") return write(props<typeof WriteTool>(part))
+            if (part.tool === "webfetch") return webfetch(props<typeof WebFetchTool>(part))
+            if (part.tool === "edit") return edit(props<typeof EditTool>(part))
+            if (part.tool === "external_code_search") {
+              return externalCodeSearch(props<typeof ExternalCodeSearchTool>(part))
+            }
+            if (part.tool === "websearch") return websearch(props<typeof WebSearchTool>(part))
+            if (part.tool === "todowrite") return todo(props<typeof TodoWriteTool>(part))
+            if (part.tool === "skill") return skill(props<typeof SkillTool>(part))
+            return renderToolPartDefault(part)
+          } catch {
+            return renderToolPartDefault(part)
+          }
+        }
+
+        function emit(type: string, data: Record<string, unknown>) {
+          if (args.format === "json") {
+            process.stdout.write(JSON.stringify({ type, timestamp: Date.now(), sessionID, ...data }) + EOL)
+            return true
+          }
+          return false
+        }
+
+        let error: unknown
+        let last = Date.now()
+        const messageID = Identifier.ascending("message")
+        const connected = Promise.withResolvers<void>()
+
+        async function loop() {
+          const events = await sdk.event.subscribe(
+            {},
+            {
+              signal: eventAbort.signal,
+              sseMaxRetryAttempts: 1,
+              onSseError(cause) {
+                if (!eventAbort.signal.aborted) throw cause
               },
-            })
-          ) {
-            return
-          }
-          UI.println(
-            UI.Style.TEXT_WARNING_BOLD + "!",
-            UI.Style.TEXT_NORMAL +
-              `permission requested: ${permission.toolName} — ${permission.summary}; waiting for operator reply`,
+            },
           )
-        }
-        for (const permission of await durablePendingPermissionsForSession({
-          sdk,
-          sessionID: sessionID!,
-          directory,
-        })) {
-          permissionRequested(permission)
-        }
-        // Track reasoning part IDs so their deltas are not emitted as text_delta.
-        const reasoningPartIDs = new Set<string>()
-
-        for await (const event of events.stream) {
-          last = Date.now()
-          if (
-            event.type === "message.updated" &&
-            event.properties.info.role === "assistant" &&
-            args.format !== "json" &&
-            toggles.get("start") !== true
-          ) {
-            UI.empty()
-            UI.println(`> ${event.properties.info.agent} · ${event.properties.info.modelID}`)
-            UI.empty()
-            toggles.set("start", true)
-          }
-
-          if (event.type === "message.part.updated") {
-            const part = event.properties.part
-            if (part.sessionID !== sessionID) continue
-
-            if (part.type === "file") {
-              if (emit("file", { part })) continue
-            }
-
-            if (part.type === "tool" && (part.state.status === "completed" || part.state.status === "error")) {
-              if (emit("tool_use", { part })) continue
-              if (part.state.status === "completed") {
-                tool(part)
-                continue
-              }
-              inline({
-                icon: "✗",
-                title: `${part.tool} failed`,
+          const toggles = new Map<string, boolean>()
+          const projectedPermissions = new Set<string>()
+          const permissionRequested = (permission: {
+            id: string
+            sessionID: string
+            toolName: string
+            summary: string
+          }) => {
+            if (permission.sessionID !== sessionID || projectedPermissions.has(permission.id)) return
+            projectedPermissions.add(permission.id)
+            if (
+              emit("permission_requested", {
+                permission: {
+                  requestID: permission.id,
+                  toolName: permission.toolName,
+                  summary: permission.summary,
+                },
               })
-              UI.error(renderToolFailureCause((part.state as any).failure))
+            ) {
+              return
+            }
+            UI.println(
+              UI.Style.TEXT_WARNING_BOLD + "!",
+              UI.Style.TEXT_NORMAL +
+                `permission requested: ${permission.toolName} — ${permission.summary}; waiting for operator reply`,
+            )
+          }
+          for (const permission of await durablePendingPermissionsForSession({
+            sdk,
+            sessionID: sessionID!,
+            directory,
+            signal: eventAbort.signal,
+          })) {
+            permissionRequested(permission)
+          }
+          // Track reasoning part IDs so their deltas are not emitted as text_delta.
+          const reasoningPartIDs = new Set<string>()
+
+          for await (const event of events.stream) {
+            if (event.type === "server.connected") {
+              connected.resolve()
+              continue
+            }
+            const eventSessionID =
+              "sessionID" in event.properties
+                ? event.properties.sessionID
+                : event.type === "message.updated"
+                  ? event.properties.info.sessionID
+                  : event.type === "message.part.updated"
+                    ? event.properties.part.sessionID
+                    : undefined
+            if (eventSessionID === sessionID) last = Date.now()
+            if (
+              event.type === "message.updated" &&
+              event.properties.info.role === "assistant" &&
+              event.properties.info.sessionID === sessionID &&
+              args.format !== "json" &&
+              toggles.get("start") !== true
+            ) {
+              UI.empty()
+              UI.println(`> ${event.properties.info.agent} · ${event.properties.info.modelID}`)
+              UI.empty()
+              toggles.set("start", true)
             }
 
-            if (part.type === "step-start") {
-              if (emit("step_start", { part })) continue
-            }
+            if (event.type === "message.part.updated") {
+              const part = event.properties.part
+              if (part.sessionID !== sessionID) continue
 
-            if (part.type === "step-finish") {
-              if (emit("step_finish", { part })) continue
-            }
-
-            if (part.type === "text" && part.time?.end) {
-              if (emit("text", { part })) continue
-              const text = part.text.trim()
-              if (!text) continue
-              if (!process.stdout.isTTY) {
-                process.stdout.write(text + EOL)
-                continue
+              if (part.type === "file") {
+                if (emit("file", { part })) continue
               }
-              UI.empty()
-              UI.println(text)
-              UI.empty()
-            }
 
-            if (part.type === "reasoning") {
-              // Track this part ID so its deltas are skipped in the text_delta handler.
-              reasoningPartIDs.add(part.id)
-              if (part.time?.end && args.thinking) {
-                if (emit("reasoning", { part })) continue
-                const text = part.text.trim()
-                if (!text) continue
-                const line = `Thinking: ${text}`
-                if (process.stdout.isTTY) {
-                  UI.empty()
-                  UI.println(`${UI.Style.TEXT_DIM}\u001b[3m${line}\u001b[0m${UI.Style.TEXT_NORMAL}`)
-                  UI.empty()
+              if (part.type === "tool" && (part.state.status === "completed" || part.state.status === "error")) {
+                if (emit("tool_use", { part })) continue
+                if (part.state.status === "completed") {
+                  tool(part)
                   continue
                 }
-                process.stdout.write(line + EOL)
+                inline({
+                  icon: "✗",
+                  title: `${part.tool} failed`,
+                })
+                UI.error(renderToolFailureCause((part.state as any).failure))
+              }
+
+              if (part.type === "step-start") {
+                if (emit("step_start", { part })) continue
+              }
+
+              if (part.type === "step-finish") {
+                if (emit("step_finish", { part })) continue
+              }
+
+              if (part.type === "text" && part.time?.end) {
+                if (emit("text", { part })) continue
+                const text = part.text.trim()
+                if (!text) continue
+                if (!process.stdout.isTTY) {
+                  process.stdout.write(text + EOL)
+                  continue
+                }
+                UI.empty()
+                UI.println(text)
+                UI.empty()
+              }
+
+              if (part.type === "reasoning") {
+                // Track this part ID so its deltas are skipped in the text_delta handler.
+                reasoningPartIDs.add(part.id)
+                if (part.time?.end && args.thinking) {
+                  if (emit("reasoning", { part })) continue
+                  const text = part.text.trim()
+                  if (!text) continue
+                  const line = `Thinking: ${text}`
+                  if (process.stdout.isTTY) {
+                    UI.empty()
+                    UI.println(`${UI.Style.TEXT_DIM}\u001b[3m${line}\u001b[0m${UI.Style.TEXT_NORMAL}`)
+                    UI.empty()
+                    continue
+                  }
+                  process.stdout.write(line + EOL)
+                }
               }
             }
-          }
 
-          if (event.type === "message.part.delta") {
-            const delta = event.properties
-            if (delta.sessionID !== sessionID) continue
-            // Skip reasoning deltas — they should not appear as chat text output.
-            if (reasoningPartIDs.has(delta.partID)) continue
-            if (emit("text_delta", delta)) continue
-          }
-
-          if (event.type === "session.error") {
-            const props = event.properties
-            if (!("sessionID" in props) || props.sessionID !== sessionID || !props.error) continue
-            let err = String(props.error.name)
-            if ("data" in props.error && props.error.data && "message" in props.error.data) {
-              err = String(props.error.data.message)
+            if (event.type === "message.part.delta") {
+              const delta = event.properties
+              if (delta.sessionID !== sessionID) continue
+              // Skip reasoning deltas — they should not appear as chat text output.
+              if (reasoningPartIDs.has(delta.partID)) continue
+              if (emit("text_delta", delta)) continue
             }
-            error = error ? error + EOL + err : err
-            if (emit("error", { error: props.error })) continue
-            UI.error(err)
-            break
-          }
 
-          if (
-            event.type === "agent.execution.lifecycle" &&
-            event.properties.sessionID === sessionID &&
-            event.properties.status.type === "terminal"
-          ) {
-            break
-          }
+            if (
+              event.type === "agent.execution.lifecycle" &&
+              event.properties.sessionID === sessionID &&
+              event.properties.inputMessageID === messageID &&
+              (event.properties.status.type === "terminal" || event.properties.status.type === "idle")
+            ) {
+              const status = event.properties.status
+              if (status.type === "terminal" && (status.reason === "error" || status.reason === "aborted")) {
+                error ??= new Error(status.error ?? `Run ${status.reason}`)
+              }
+              // Cancel while the reader still owns its lock, before iterator return.
+              eventAbort.abort()
+              break
+            }
 
-          if (event.type === "permission.asked") {
-            permissionRequested(event.properties)
+            if (event.type === "permission.asked") {
+              permissionRequested(event.properties)
+            }
           }
+          if (!eventAbort.signal.aborted) throw new Error("Event stream ended before the run settled")
         }
-      }
 
-      const agent = await resolveRunAgent(args.agent)
+        const agent = await resolveRunAgent(args.agent)
 
-      const sessionID = await session(sdk)
-      if (!sessionID) {
-        UI.error("Session not found")
-        process.exit(1)
-      }
-      const probe =
-        stallMs <= 0
-          ? undefined
-          : setInterval(
-              () => {
-                if (eventAbort.signal.aborted) return
-                const age = Date.now() - last
-                if (age < stallMs) return
-                const timeout = Math.floor(stallMs / 1000)
-                const elapsed = Math.floor(age / 1000)
-                const message = `Event stream stalled for ${elapsed}s (timeout ${timeout}s)`
-                if (!error?.includes(message)) {
-                  error = error ? error + EOL + message : message
-                }
-                if (
-                  !emit("error", {
-                    error: {
-                      name: "event_stream_stalled",
-                      data: {
-                        message,
-                        timeout,
-                        elapsed,
-                      },
-                    },
-                  })
-                ) {
-                  UI.error(message)
-                }
-                eventAbort.abort(message)
-              },
-              Math.min(5000, Math.max(1000, Math.floor(stallMs / 6))),
-            )
+        sessionID = await session(sdk, stallMs > 0 ? AbortSignal.timeout(stallMs) : undefined)
+        if (!sessionID) {
+          throw new Error("Session not found")
+        }
+        const probe =
+          stallMs <= 0
+            ? undefined
+            : setInterval(
+                () => {
+                  if (requestAbort.signal.aborted) return
+                  const age = Date.now() - last
+                  if (age < stallMs) return
+                  const timeout = Math.floor(stallMs / 1000)
+                  const elapsed = Math.floor(age / 1000)
+                  const message = `Event stream stalled for ${elapsed}s (timeout ${timeout}s)`
+                  error ??= { name: "event_stream_stalled", data: { message, timeout, elapsed } }
+                  connected.reject(error)
+                  requestAbort.abort(error)
+                  eventAbort.abort(message)
+                },
+                Math.min(5000, Math.max(1000, Math.floor(stallMs / 6))),
+              )
 
-      const loopTask = loop()
-      let sendError: unknown
-
-      if (args.command) {
+        const loopTask = loop().catch((cause) => {
+          error ??= cause
+          connected.reject(cause)
+          requestAbort.abort(cause)
+          eventAbort.abort()
+        })
+        let sendError: unknown
+        let replyError: unknown
         try {
-          await sdk.session.command({
-            sessionID,
-            messageID: Identifier.ascending("message"),
-            agent,
-            model: args.model,
-            command: args.command,
-            arguments: message,
-            variant: args.variant,
-          })
-        } catch (cause) {
-          sendError = cause
+          await connected.promise
+          if (args.command) {
+            try {
+              const result = await runRequest(
+                "session.command",
+                sdk.session.command(
+                  {
+                    sessionID,
+                    messageID,
+                    agent,
+                    model: args.model,
+                    command: args.command,
+                    arguments: message,
+                    variant: args.variant,
+                  },
+                  { signal: requestAbort.signal },
+                ),
+              )
+              replyError = result.info.error
+            } catch (cause) {
+              sendError = cause
+            }
+          } else {
+            const model = args.model ? Provider.parseModel(args.model) : undefined
+            try {
+              const result = await runRequest(
+                "session.prompt",
+                sdk.session.prompt(
+                  {
+                    sessionID,
+                    messageID,
+                    agent,
+                    model,
+                    variant: args.variant,
+                    parts: [...files, { type: "text", text: message }],
+                  },
+                  { signal: requestAbort.signal },
+                ),
+              )
+              // The completed reply belongs to this request's exact input;
+              // session.error events have no input ID and can belong to a peer.
+              if (result.info.role === "assistant") replyError = result.info.error
+            } catch (cause) {
+              sendError = cause
+            }
+          }
+
+          if (sendError) eventAbort.abort("prompt request failed")
+          await loopTask
+        } finally {
+          if (probe) clearInterval(probe)
+          eventAbort.abort()
+          await loopTask
         }
-      } else {
-        const model = args.model ? Provider.parseModel(args.model) : undefined
-        try {
-          await sdk.session.prompt({
-            sessionID,
-            messageID: Identifier.ascending("message"),
-            agent,
-            model,
-            variant: args.variant,
-            parts: [...files, { type: "text", text: message }],
-          })
-        } catch (cause) {
-          sendError = cause
+        if (replyError || sendError || error) {
+          throw replyError ?? (requestAbort.signal.aborted ? error : sendError) ?? error
         }
       }
 
-      if (sendError) eventAbort.abort("prompt request failed")
-      try {
-        await loopTask
-      } catch (cause) {
-        if (!eventAbort.signal.aborted) throw cause
-      } finally {
-        if (probe) clearInterval(probe)
-        eventAbort.abort()
+      if (args.attach) {
+        const sdk = createOpenCorvusClient({
+          baseUrl: args.attach,
+          directory,
+          username: Flag.OPENCORVUS_SERVER_USERNAME,
+          password: Flag.OPENCORVUS_SERVER_PASSWORD,
+        })
+        return await execute(sdk)
       }
-      if (sendError) throw sendError
-      if (error) process.exitCode = 1
-    }
 
-    if (args.attach) {
-      const sdk = createOpenCorvusClient({ baseUrl: args.attach, directory })
-      return await execute(sdk)
+      await bootstrap(process.cwd(), async () => {
+        const sdk = createOpenCorvusClient(inProcessRunClientOptions(process.cwd(), createInProcessFetch()))
+        await execute(sdk)
+      })
+    } catch (cause) {
+      if (args.format === "json") writeRunError(cause, sessionID)
+      else UI.error(FormatError(cause) ?? String(runErrorObject(cause).data.message ?? runErrorObject(cause).name))
+      process.exitCode = 1
     }
-
-    await bootstrap(process.cwd(), async () => {
-      const sdk = createOpenCorvusClient(inProcessRunClientOptions(process.cwd(), createInProcessFetch()))
-      await execute(sdk)
-    })
   },
 })

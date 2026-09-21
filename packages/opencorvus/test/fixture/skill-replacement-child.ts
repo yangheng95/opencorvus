@@ -92,6 +92,27 @@ if (action === "setup") {
     }
     await importVersion(project.worktree, version, policy)
     process.stdout.write(`${JSON.stringify({ imported: true, completedAt: Date.now() })}\n`)
+  } else if (action === "recover-with-config-writer") {
+    await Instance.provide({
+      directory: project.worktree,
+      fn: async () => {
+        const [skills] = await Promise.all([
+          SkillManager.installed(),
+          Config.updateProjectPatch({ username: "recovered-concurrent-writer" }),
+        ])
+        const config = await Config.get()
+        process.stdout.write(
+          JSON.stringify({
+            username: config.username,
+            skills: skills
+              .filter((skill) => names.includes(skill.name))
+              .map((skill) => ({ name: skill.name, policy: skill.policy, description: skill.description }))
+              .sort((left, right) => left.name.localeCompare(right.name)),
+            terminal: (await SkillReplacementPublication.all()).at(-1)?.terminal,
+          }) + "\n",
+        )
+      },
+    })
   } else if (action === "mcp-write") {
     const runtimeRoot = process.env.OPENCORVUS_HOME
     if (!runtimeRoot) throw new Error("OPENCORVUS_HOME is required")

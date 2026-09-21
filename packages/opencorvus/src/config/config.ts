@@ -2422,70 +2422,80 @@ export namespace Config {
 
   export type ProjectMergePatch = Record<string, unknown>
 
+  // Catalog/reference readers may read Config while retaining their owners.
+  // A writer must acquire those owners before excluding Config readers, or a
+  // Skill projection and a concurrent Project initialization form a cycle.
+  async function withConfigMutationAuthority<T>(mutate: () => Promise<T>): Promise<T> {
+    if (configGenerationOwner.getStore()?.active) throw new ConfigGenerationReentrantMutationError()
+    const [{ withConversationCapabilityReferenceMutation }, { withSkillCatalogMutation }, { SkillManager }] =
+      await Promise.all([
+        import("@/conversation/capability-transaction"),
+        import("@/skill/reference-lock"),
+        import("@/skill/manager"),
+      ])
+    return withSkillCatalogMutation(() =>
+      withConversationCapabilityReferenceMutation(() =>
+        SkillManager.withCatalogMutationOwner(() => withConfigGenerationWrite(mutate)),
+      ),
+    )
+  }
+
   async function writeProjectPatch(
     patch: ProjectMergePatch | ((currentProject: Info) => ProjectMergePatch | Promise<ProjectMergePatch>),
   ) {
-    return withConfigGenerationWrite(async () => {
+    return withConfigMutationAuthority(async () => {
       const projectDirectory = ProjectInstanceContext.use().directory
-      const [{ withConversationCapabilityReferenceMutation }, { withSkillCatalogMutation }] = await Promise.all([
-        import("@/conversation/capability-transaction"),
-        import("@/skill/reference-lock"),
-      ])
       const target = await assertCanonicalProjectConfig()
-      return withSkillCatalogMutation(() =>
-        withConversationCapabilityReferenceMutation(async () => {
-          let transition: { before: Info; after: Info } | undefined
-          await fs.mkdir(path.dirname(target), { recursive: true })
-          return writeConfigFile(target, patch, {
-            async commit(merged, _appliedPatch, persist) {
-              assertProjectOwnedConfigSource(merged, target, { projectOwnedSource: "project" })
-              await state.reset()
-              const before = structuredClone(await get())
-              const candidate = await resolveProjectCandidate(merged)
-              const { validateConfigCandidate } = await import("@/config/candidate-validation")
-              await validateConfigCandidate({
-                config: candidate,
-                root: "config",
-                projectDirectory,
-                projectOwnedCapabilities: true,
-              })
-              await persist()
-              transition = { before, after: candidate }
-            },
-            async onWritten(merged) {
-              await resetProjectState()
-              global.reset()
-              const committedTransition = transition
-              if (!committedTransition) {
-                throw new Error("Project configuration post-commit reconciliation is missing its committed transition")
-              }
-              await TestHooks.beforeProjectRuntimeSettlement?.({
-                directory: projectDirectory,
-                config: committedTransition.after,
-              })
-              await settleProjectRuntimeTransition({
-                directory: projectDirectory,
-                before: committedTransition.before,
-                after: committedTransition.after,
-              })
-              // Project Config writers already own the exact project identity
-              // required by assertCanonicalProjectConfig(). Re-entering the
-              // Instance here is both redundant and invalid while Project open
-              // is preparing that same Instance. Reread the source generation
-              // under the current identity so a peer write that won after our
-              // commit still receives one ordered runtime transition.
-              const current = await currentProjectState()
-              if (!runtimeConfigsEqual(current.config, committedTransition.after)) {
-                await settleProjectRuntimeTransition({
-                  directory: projectDirectory,
-                  before: committedTransition.after,
-                  after: current.config,
-                })
-              }
-            },
+      let transition: { before: Info; after: Info } | undefined
+      await fs.mkdir(path.dirname(target), { recursive: true })
+      return writeConfigFile(target, patch, {
+        async commit(merged, _appliedPatch, persist) {
+          assertProjectOwnedConfigSource(merged, target, { projectOwnedSource: "project" })
+          await state.reset()
+          const before = structuredClone(await get())
+          const candidate = await resolveProjectCandidate(merged)
+          const { validateConfigCandidate } = await import("@/config/candidate-validation")
+          await validateConfigCandidate({
+            config: candidate,
+            root: "config",
+            projectDirectory,
+            projectOwnedCapabilities: true,
           })
-        }),
-      )
+          await persist()
+          transition = { before, after: candidate }
+        },
+        async onWritten(merged) {
+          await resetProjectState()
+          global.reset()
+          const committedTransition = transition
+          if (!committedTransition) {
+            throw new Error("Project configuration post-commit reconciliation is missing its committed transition")
+          }
+          await TestHooks.beforeProjectRuntimeSettlement?.({
+            directory: projectDirectory,
+            config: committedTransition.after,
+          })
+          await settleProjectRuntimeTransition({
+            directory: projectDirectory,
+            before: committedTransition.before,
+            after: committedTransition.after,
+          })
+          // Project Config writers already own the exact project identity
+          // required by assertCanonicalProjectConfig(). Re-entering the
+          // Instance here is both redundant and invalid while Project open
+          // is preparing that same Instance. Reread the source generation
+          // under the current identity so a peer write that won after our
+          // commit still receives one ordered runtime transition.
+          const current = await currentProjectState()
+          if (!runtimeConfigsEqual(current.config, committedTransition.after)) {
+            await settleProjectRuntimeTransition({
+              directory: projectDirectory,
+              before: committedTransition.after,
+              after: current.config,
+            })
+          }
+        },
+      })
     })
   }
 
@@ -2897,29 +2907,17 @@ export namespace Config {
 
   async function writeGlobalMutation(patch: unknown | ((existing: Info) => unknown | Promise<unknown>)) {
     await ConfigPaths.assertCanonicalDirectory(Global.Path.config, ["config.json"])
-    const [{ withConversationCapabilityReferenceMutation }, { withSkillCatalogMutation }, { SkillManager }] =
-      await Promise.all([
-        import("@/conversation/capability-transaction"),
-        import("@/skill/reference-lock"),
-        import("@/skill/manager"),
-      ])
-    return withConfigGenerationWrite(() =>
-      withSkillCatalogMutation(() =>
-        SkillManager.withCatalogMutationOwner(() =>
-          withConversationCapabilityReferenceMutation(async () => {
-            let transitions: GlobalProjectTransition[] = []
-            return writeConfigFile(globalConfigFile(), patch, {
-              async commit(merged, _appliedPatch, persist) {
-                transitions = await commitGlobalCandidate(merged, persist)
-              },
-              async onWritten() {
-                await reconcileGlobalProjectTransitions(transitions)
-              },
-            })
-          }),
-        ),
-      ),
-    )
+    return withConfigMutationAuthority(async () => {
+      let transitions: GlobalProjectTransition[] = []
+      return writeConfigFile(globalConfigFile(), patch, {
+        async commit(merged, _appliedPatch, persist) {
+          transitions = await commitGlobalCandidate(merged, persist)
+        },
+        async onWritten() {
+          await reconcileGlobalProjectTransitions(transitions)
+        },
+      })
+    })
   }
 
   export function assertNoProjectOwnedConfig(input: Record<string, unknown>) {
