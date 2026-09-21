@@ -9,7 +9,7 @@
  * use SettingsDetailSection/SettingsSurface. Both share radius, border,
  * spacing, typography, and interaction tokens.
  */
-import { Show, mergeProps, splitProps } from "solid-js"
+import { For, Show, mergeProps, splitProps } from "solid-js"
 import { Dynamic } from "solid-js/web"
 import type { JSX } from "solid-js"
 
@@ -218,4 +218,19 @@ export interface SettingsEmptyProps {
 
 export function SettingsEmpty(props: SettingsEmptyProps): JSX.Element {
   return <div class="s-empty">{props.children}</div>
+}
+
+/** Compact read-only identifiers; every reference stays selectable in full. */
+export function SettingsReferenceList(props: { values: readonly string[] }): JSX.Element {
+  return (
+    <ul class="s-reference-list">
+      <For each={props.values}>
+        {(value) => (
+          <li>
+            <code>{value}</code>
+          </li>
+        )}
+      </For>
+    </ul>
+  )
 }

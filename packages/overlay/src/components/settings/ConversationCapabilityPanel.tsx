@@ -8,9 +8,17 @@ import {
   type ConversationExperience,
 } from "../../services/conversation-capability"
 import { t } from "../../utils/i18n"
-import { Badge } from "../ui/Badge"
+import { Disclosure } from "../ui/Disclosure"
+import { implicitProjectSuffix, projectDirectoryLabel } from "../../utils/project-directory"
 import { Checkbox } from "../ui/Checkbox"
-import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./layout"
+import {
+  SettingsEmpty,
+  SettingsGroup,
+  SettingsPanel,
+  SettingsRow,
+  SettingsSurface,
+  SettingsReferenceList,
+} from "./layout"
 
 type DirectoryProp = string | (() => string | undefined)
 
@@ -39,7 +47,8 @@ export default function ConversationCapabilityPanel(props: {
   function scopeLabel() {
     const value = scopeDirectory()
     if (!value) return t("settings.product.project_required")
-    return value.replaceAll("\\", "/").replace(/\/+$/, "") || value
+    const name = projectDirectoryLabel(value, t("task.project.unknown"), t("work_ledger.implicit_project")).name
+    return [name, implicitProjectSuffix(value)].filter(Boolean).join(" ")
   }
 
   createEffect(() => {
@@ -145,22 +154,15 @@ export default function ConversationCapabilityPanel(props: {
       data-ui={`${props.experience === "chat" ? "code" : "work"}-capability-settings`}
       data-experience={props.experience}
     >
-      <SettingsGroup
-        title={t("settings.product.capability_title", { product: productLabel() })}
-        description={t("settings.product.capability_intro", { product: productLabel() })}
-        actions={
-          <Badge tone={directory() ? "neutral" : "warn"}>
-            <span class="conversation-capability-scope-path" title={scopeDirectory()}>
-              {t("settings.product.scope_badge", { project: scopeLabel(), product: productLabel() })}
-            </span>
-          </Badge>
-        }
-        contentInset
-      >
-        <p class="conversation-capability-model-owner conversation-capability-scope-notice">
-          {t("settings.product.scope_notice", { project: scopeLabel(), product: productLabel() })}
-        </p>
-        <p class="conversation-capability-model-owner">{t("settings.product.model_owner")}</p>
+      <SettingsGroup description={t("settings.product.capability_intro", { product: productLabel() })}>
+        <Show when={directory()}>
+          <Disclosure.Root class="conversation-capability-scope">
+            <Disclosure.Trigger>{t("settings.product.scope_project", { project: scopeLabel() })}</Disclosure.Trigger>
+            <Disclosure.Content>
+              <p class="conversation-capability-scope-path">{scopeDirectory()}</p>
+            </Disclosure.Content>
+          </Disclosure.Root>
+        </Show>
         <Show
           when={!!directory()}
           fallback={
@@ -185,22 +187,14 @@ export default function ConversationCapabilityPanel(props: {
               <Show when={settings()}>
                 {(current) => (
                   <div class="conversation-capability-sections">
-                    <SettingsGroup
-                      title={t("settings.product.tools", { product: productLabel() })}
-                      description={t("settings.product.tools_description", { product: productLabel() })}
-                    >
-                      <SettingsSurface>
-                        <For each={current().tools.declared}>
-                          {(tool) => (
-                            <SettingsRow
-                              title={tool}
-                              desc={t("settings.product.tool_owned", { product: productLabel() })}
-                              actions={<Badge tone="neutral">{t("settings.read_only")}</Badge>}
-                            />
-                          )}
-                        </For>
-                      </SettingsSurface>
-                    </SettingsGroup>
+                    <Disclosure.Root>
+                      <Disclosure.Trigger>
+                        {t("settings.product.tools_count", { count: current().tools.declared.length })}
+                      </Disclosure.Trigger>
+                      <Disclosure.Content>
+                        <SettingsReferenceList values={current().tools.declared} />
+                      </Disclosure.Content>
+                    </Disclosure.Root>
 
                     <SettingsGroup
                       title={t("settings.product.skills", { product: productLabel() })}
@@ -217,11 +211,21 @@ export default function ConversationCapabilityPanel(props: {
                               return (
                                 <SettingsRow
                                   title={skill.name}
-                                  desc={`${skill.description || t("settings.product.skill_available")} ${
-                                    assigned()
-                                      ? t("settings.product.skill_assigned_runtime", { product: productLabel() })
-                                      : t("settings.product.skill_unassigned", { product: productLabel() })
-                                  }`}
+                                  children={
+                                    <Disclosure.Root class="conversation-capability-description">
+                                      <Disclosure.Trigger indicatorPosition="end">
+                                        <span class="conversation-capability-description-preview">
+                                          {skill.description || t("settings.product.skill_available")}
+                                        </span>
+                                        <span class="conversation-capability-description-label">
+                                          {t("common.details")}
+                                        </span>
+                                      </Disclosure.Trigger>
+                                      <Disclosure.Content>
+                                        {skill.description || t("settings.product.skill_available")}
+                                      </Disclosure.Content>
+                                    </Disclosure.Root>
+                                  }
                                   actions={
                                     <Checkbox
                                       checked={assigned()}

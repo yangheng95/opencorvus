@@ -1034,11 +1034,17 @@ second active profile.
 
 SettingsRow owns a distinct read-only value slot with a bounded label column and
 a wrapping value column. Long paths never compete with labels as unshrinkable
-button clusters. Mission Skills and installed Expert Squads use quiet neutral
-master/detail selection, with the full description in the detail region. Skill
+button clusters. Settings content has a single reading column: Mission Skills
+and installed Expert Squads show a list, then open the selected resource in the
+same column with a Back to list action. Browsing details never activates a Squad.
+Independent capability groups, usage sections and settings forms flow vertically;
+the settings navigation rail and ordinary label/value rows retain their roles. Skill
 library rows show the name and two-line preview; the canonical Disclosure exposes
-the complete description, source and existing operations. Mission tool names and
-Squad scope explanations are independently expandable. Empty usage periods show
+the complete description, source and existing operations. Chat/Work show one short
+project label with an expandable exact path. Native and Mission tool references
+use a shared compact, wrapping text list inside Disclosure, without per-tool
+cards or repeated read-only labels. Squad scope explanations remain independently
+expandable. Empty usage periods show
 one empty presentation; detailed composition, provider and model sections render
 when the canonical call count is positive. Configured official usage sources keep
 their independent presentation even when local call count is zero.

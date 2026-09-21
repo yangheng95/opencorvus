@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Single-column settings and compact capability details](records/2026-09/2026-09-22-single-column-settings.md)
+
 - [Primitive-first frosted workspace implementation](records/2026-09/2026-09-21-primitive-ui-implementation.md)
 
 - [Codex-aligned UI review and design proposal](records/2026-09/2026-09-21-codex-aligned-ui-design.md)

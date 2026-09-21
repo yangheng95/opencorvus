@@ -281,6 +281,7 @@ function saveBase64Archive(filename: string, archiveBase64: string): void {
 
 export default function ExpertSquadPanel() {
   const [selectedSquadID, setSelectedSquadID] = createSignal("")
+  const [detailOpen, setDetailOpen] = createSignal(false)
   const [catalog, setCatalog] = createSignal<ExpertSquadCatalog | null>(null)
   const [catalogEntries, setCatalogEntries] = createSignal<ExpertSquadOption[]>([])
   const [catalogNextCursor, setCatalogNextCursor] = createSignal<string | null>(null)
@@ -322,6 +323,10 @@ export default function ExpertSquadPanel() {
 
   const currentScope = createMemo(() => expertSquadCatalogScope())
   const currentScopeIdentity = createMemo(() => catalogScopeIdentity(currentScope()))
+  createEffect(() => {
+    currentScopeIdentity()
+    setDetailOpen(false)
+  })
   const writableScopeAvailable = createMemo(() => {
     const scope = currentScope()
     return scope.kind === "project" || scope.kind === "session"
@@ -1397,561 +1402,579 @@ export default function ExpertSquadPanel() {
             </Show>
             <Show when={!scopeStatus() && !catalogError() && squads().length > 0}>
               <div class="expert-squad-layout" data-ui="expert-squad-panel">
-                <div class="expert-squad-list-toolbar expert-squad-catalog-toolbar">
-                  <div
-                    class="expert-squad-filter-list"
-                    role="toolbar"
-                    aria-label={t("expert_squad.catalog_filter_label")}
-                  >
-                    <For each={["all", "active", "package", "built_in"] as CatalogFilter[]}>
-                      {(filter) => (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          tone="neutral"
-                          class="expert-squad-filter-chip"
-                          data-selected={catalogFilter() === filter ? "true" : undefined}
-                          data-ui="expert-squad-catalog-filter"
-                          data-filter={filter}
-                          aria-pressed={catalogFilter() === filter}
-                          onClick={() => setCatalogFilter(filter)}
-                        >
-                          {catalogFilterLabel(filter)}
-                        </Button>
-                      )}
-                    </For>
-                  </div>
-                </div>
-                <Show
-                  when={filteredSquads().length > 0}
-                  fallback={<div class="empty-hint">{t("expert_squad.none")}</div>}
-                >
-                  <SettingsSurface class="expert-squad-list" data-ui="expert-squad-list">
-                    <For each={filteredSquads()}>
-                      {(squad) => {
-                        const selected = () =>
-                          currentSquadIndex()
-                            ? squadSelectionKey(currentSquadIndex()!) === squadSelectionKey(squad)
-                            : false
-                        return (
-                          <SettingsRow
-                            as="button"
-                            align="center"
-                            interactive
-                            class="expert-squad-master-row expert-squad-installed-row"
-                            leading={
-                              <Icon
-                                name={
-                                  squad.system_role === "expert_squad_generator"
-                                    ? "config-expert-squad-install"
-                                    : "expert-squad"
-                                }
-                                size="medium"
-                              />
-                            }
-                            title={squad.name}
-                            actions={
-                              <>
-                                <Show when={squad.system_role === "expert_squad_generator"}>
-                                  <Badge tone="accent">{t("expert_squad.system_generator")}</Badge>
-                                </Show>
-                                <Show when={effectiveActiveID() === squad.id && isEffectiveInstallation(squad)}>
-                                  <Badge tone="muted">{t("expert_squad.effective_active")}</Badge>
-                                </Show>
-                              </>
-                            }
-                            data-ui="expert-squad-select"
-                            data-squad-id={squad.id}
-                            data-selected={selected() ? "true" : undefined}
-                            aria-current={selected() ? "true" : undefined}
-                            onClick={() => setSelectedSquadID(squadSelectionKey(squad))}
-                          />
-                        )
-                      }}
-                    </For>
-                  </SettingsSurface>
-                  <Show when={catalogNextCursor()}>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="md"
-                      tone="neutral"
-                      onClick={() => void loadMoreCatalog()}
+                <Show when={!detailOpen()}>
+                  <div class="expert-squad-list-toolbar expert-squad-catalog-toolbar">
+                    <div
+                      class="expert-squad-filter-list"
+                      role="toolbar"
+                      aria-label={t("expert_squad.catalog_filter_label")}
                     >
-                      {t("expert_squad.load_more")}
-                    </Button>
+                      <For each={["all", "active", "package", "built_in"] as CatalogFilter[]}>
+                        {(filter) => (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            tone="neutral"
+                            class="expert-squad-filter-chip"
+                            data-selected={catalogFilter() === filter ? "true" : undefined}
+                            data-ui="expert-squad-catalog-filter"
+                            data-filter={filter}
+                            aria-pressed={catalogFilter() === filter}
+                            onClick={() => setCatalogFilter(filter)}
+                          >
+                            {catalogFilterLabel(filter)}
+                          </Button>
+                        )}
+                      </For>
+                    </div>
+                  </div>
+                  <Show
+                    when={filteredSquads().length > 0}
+                    fallback={<div class="empty-hint">{t("expert_squad.none")}</div>}
+                  >
+                    <SettingsSurface class="expert-squad-list" data-ui="expert-squad-list">
+                      <For each={filteredSquads()}>
+                        {(squad) => {
+                          return (
+                            <SettingsRow
+                              as="button"
+                              align="center"
+                              interactive
+                              class="expert-squad-master-row expert-squad-installed-row"
+                              leading={
+                                <Icon
+                                  name={
+                                    squad.system_role === "expert_squad_generator"
+                                      ? "config-expert-squad-install"
+                                      : "expert-squad"
+                                  }
+                                  size="medium"
+                                />
+                              }
+                              title={squad.name}
+                              actions={
+                                <>
+                                  <Show when={squad.system_role === "expert_squad_generator"}>
+                                    <Badge tone="accent">{t("expert_squad.system_generator")}</Badge>
+                                  </Show>
+                                  <Show when={effectiveActiveID() === squad.id && isEffectiveInstallation(squad)}>
+                                    <Badge tone="muted">{t("expert_squad.effective_active")}</Badge>
+                                  </Show>
+                                  <Icon name="chevron" />
+                                </>
+                              }
+                              data-ui="expert-squad-select"
+                              data-squad-id={squad.id}
+                              onClick={() => {
+                                setSelectedSquadID(squadSelectionKey(squad))
+                                setDetailOpen(true)
+                              }}
+                            />
+                          )
+                        }}
+                      </For>
+                    </SettingsSurface>
+                    <Show when={catalogNextCursor()}>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="md"
+                        tone="neutral"
+                        onClick={() => void loadMoreCatalog()}
+                      >
+                        {t("expert_squad.load_more")}
+                      </Button>
+                    </Show>
                   </Show>
                 </Show>
-
-                <Show when={selectedDetailLoading()}>
-                  <div class="loading-hint">{t("expert_squad.loading")}</div>
-                </Show>
-                <Show when={selectedDetailError()}>
-                  <Feedback tone="error">{selectedDetailError()}</Feedback>
-                </Show>
-                <Show when={currentSquad()} keyed>
-                  {(squad) => (
-                    <div class="expert-squad-detail" data-ui="expert-squad-detail">
-                      <header class="expert-squad-identity-head expert-squad-installed-identity">
-                        <div class="expert-squad-identity-copy">
-                          <h2>{squad.name}</h2>
-                          <div class="expert-squad-identity-meta">
-                            <code>{squad.id}</code>
-                            <span>{sourceLabel(squad)}</span>
-                            <Show when={squad.version}>
-                              <span>v{squad.version}</span>
-                            </Show>
-                          </div>
-                          <Show when={squad.description}>
-                            <p>{squad.description}</p>
-                          </Show>
-                          <div class="expert-squad-status-list">
-                            <Show when={squad.system_role === "expert_squad_generator"}>
-                              <Badge tone="accent">{t("expert_squad.system_generator")}</Badge>
-                            </Show>
-                            <Show when={isProjectActiveInstallation(squad)}>
-                              <Badge tone="accent">{t("expert_squad.project_active")}</Badge>
-                            </Show>
-                            <Show when={isSessionOverrideInstallation(squad)}>
-                              <Badge tone="ok">{t("expert_squad.session_override")}</Badge>
-                            </Show>
-                          </div>
-                        </div>
-                        <DropdownMenu.Root placement="bottom-end" gutter={6} fitViewport>
-                          <DropdownMenu.Trigger
-                            as={Button}
-                            type="button"
-                            variant="outline"
-                            size="md"
-                            tone="neutral"
-                            class="expert-squad-package-menu-trigger"
-                            data-ui="expert-squad-package-actions"
-                            disabled={!writableScopeAvailable() || !!activeBusy()}
-                          >
-                            <span>{t("expert_squad.package_actions")}</span>
-                            <Icon name="chevron-down" size="compact" />
-                          </DropdownMenu.Trigger>
-                          <DropdownMenu.Portal>
-                            <DropdownMenu.Content class="expert-squad-package-menu">
-                              <Show when={squad.configuration}>
-                                <DropdownMenu.Item
-                                  as="button"
-                                  type="button"
-                                  data-ui="expert-squad-configure"
-                                  disabled={configurationLoading()}
-                                  onSelect={() => selectInstalledSquadSection("configuration")}
-                                >
-                                  <Icon name={configurationLoading() ? "loading" : "config-general"} />
-                                  <span>{t("expert_squad.configure")}</span>
-                                </DropdownMenu.Item>
+                <Show when={detailOpen()}>
+                  <Button
+                    class="s-detail-back"
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    tone="neutral"
+                    onClick={() => setDetailOpen(false)}
+                  >
+                    <Icon name="nav-back" />
+                    {t("settings.back_to_list")}
+                  </Button>
+                  <Show when={selectedDetailLoading()}>
+                    <div class="loading-hint">{t("expert_squad.loading")}</div>
+                  </Show>
+                  <Show when={selectedDetailError()}>
+                    <Feedback tone="error">{selectedDetailError()}</Feedback>
+                  </Show>
+                  <Show when={currentSquad()} keyed>
+                    {(squad) => (
+                      <div class="expert-squad-detail" data-ui="expert-squad-detail">
+                        <header class="expert-squad-identity-head expert-squad-installed-identity">
+                          <div class="expert-squad-identity-copy">
+                            <h2>{squad.name}</h2>
+                            <div class="expert-squad-identity-meta">
+                              <code>{squad.id}</code>
+                              <span>{sourceLabel(squad)}</span>
+                              <Show when={squad.version}>
+                                <span>v{squad.version}</span>
                               </Show>
-                              <Show when={!squad.built_in && squad.source.kind === "installed_package"}>
-                                <Show when={hasBuiltinMarketSource(squad, scopedMarket())}>
+                            </div>
+                            <Show when={squad.description}>
+                              <p>{squad.description}</p>
+                            </Show>
+                            <div class="expert-squad-status-list">
+                              <Show when={squad.system_role === "expert_squad_generator"}>
+                                <Badge tone="accent">{t("expert_squad.system_generator")}</Badge>
+                              </Show>
+                              <Show when={isProjectActiveInstallation(squad)}>
+                                <Badge tone="accent">{t("expert_squad.project_active")}</Badge>
+                              </Show>
+                              <Show when={isSessionOverrideInstallation(squad)}>
+                                <Badge tone="ok">{t("expert_squad.session_override")}</Badge>
+                              </Show>
+                            </div>
+                          </div>
+                          <DropdownMenu.Root placement="bottom-end" gutter={6} fitViewport>
+                            <DropdownMenu.Trigger
+                              as={Button}
+                              type="button"
+                              variant="outline"
+                              size="md"
+                              tone="neutral"
+                              class="expert-squad-package-menu-trigger"
+                              data-ui="expert-squad-package-actions"
+                              disabled={!writableScopeAvailable() || !!activeBusy()}
+                            >
+                              <span>{t("expert_squad.package_actions")}</span>
+                              <Icon name="chevron-down" size="compact" />
+                            </DropdownMenu.Trigger>
+                            <DropdownMenu.Portal>
+                              <DropdownMenu.Content class="expert-squad-package-menu">
+                                <Show when={squad.configuration}>
                                   <DropdownMenu.Item
                                     as="button"
                                     type="button"
-                                    data-ui="expert-squad-update-builtin"
-                                    onSelect={() => void updateCurrent("builtin")}
+                                    data-ui="expert-squad-configure"
+                                    disabled={configurationLoading()}
+                                    onSelect={() => selectInstalledSquadSection("configuration")}
+                                  >
+                                    <Icon name={configurationLoading() ? "loading" : "config-general"} />
+                                    <span>{t("expert_squad.configure")}</span>
+                                  </DropdownMenu.Item>
+                                </Show>
+                                <Show when={!squad.built_in && squad.source.kind === "installed_package"}>
+                                  <Show when={hasBuiltinMarketSource(squad, scopedMarket())}>
+                                    <DropdownMenu.Item
+                                      as="button"
+                                      type="button"
+                                      data-ui="expert-squad-update-builtin"
+                                      onSelect={() => void updateCurrent("builtin")}
+                                    >
+                                      <Icon
+                                        name={
+                                          activeBusy() === `update:${installedPackageScope(squad)}:${squad.id}:builtin`
+                                            ? "loading"
+                                            : "refresh"
+                                        }
+                                      />
+                                      <span>{t("expert_squad.update_builtin")}</span>
+                                    </DropdownMenu.Item>
+                                  </Show>
+                                  <DropdownMenu.Item
+                                    as="button"
+                                    type="button"
+                                    data-ui="expert-squad-update-server"
+                                    onSelect={() => void updateCurrent("server")}
                                   >
                                     <Icon
                                       name={
-                                        activeBusy() === `update:${installedPackageScope(squad)}:${squad.id}:builtin`
+                                        activeBusy() === `update:${installedPackageScope(squad)}:${squad.id}:server`
                                           ? "loading"
-                                          : "refresh"
+                                          : "web-search"
                                       }
                                     />
-                                    <span>{t("expert_squad.update_builtin")}</span>
+                                    <span>{t("expert_squad.update_server")}</span>
                                   </DropdownMenu.Item>
                                 </Show>
                                 <DropdownMenu.Item
                                   as="button"
                                   type="button"
-                                  data-ui="expert-squad-update-server"
-                                  onSelect={() => void updateCurrent("server")}
+                                  data-ui="expert-squad-export"
+                                  disabled={squad.built_in}
+                                  onSelect={exportCurrent}
                                 >
-                                  <Icon
-                                    name={
-                                      activeBusy() === `update:${installedPackageScope(squad)}:${squad.id}:server`
-                                        ? "loading"
-                                        : "web-search"
-                                    }
-                                  />
-                                  <span>{t("expert_squad.update_server")}</span>
+                                  <Icon name="download" />
+                                  <span>{t("expert_squad.export")}</span>
                                 </DropdownMenu.Item>
-                              </Show>
-                              <DropdownMenu.Item
-                                as="button"
-                                type="button"
-                                data-ui="expert-squad-export"
-                                disabled={squad.built_in}
-                                onSelect={exportCurrent}
-                              >
-                                <Icon name="download" />
-                                <span>{t("expert_squad.export")}</span>
-                              </DropdownMenu.Item>
-                              <DropdownMenu.Separator />
-                              <DropdownMenu.Item
-                                as="button"
-                                type="button"
-                                class="expert-squad-danger-action"
-                                data-ui="expert-squad-uninstall"
-                                disabled={squad.built_in}
-                                onSelect={uninstallCurrent}
-                              >
-                                <Icon name="delete" />
-                                <span>{t("expert_squad.uninstall")}</span>
-                              </DropdownMenu.Item>
-                            </DropdownMenu.Content>
-                          </DropdownMenu.Portal>
-                        </DropdownMenu.Root>
-                      </header>
+                                <DropdownMenu.Separator />
+                                <DropdownMenu.Item
+                                  as="button"
+                                  type="button"
+                                  class="expert-squad-danger-action"
+                                  data-ui="expert-squad-uninstall"
+                                  disabled={squad.built_in}
+                                  onSelect={uninstallCurrent}
+                                >
+                                  <Icon name="delete" />
+                                  <span>{t("expert_squad.uninstall")}</span>
+                                </DropdownMenu.Item>
+                              </DropdownMenu.Content>
+                            </DropdownMenu.Portal>
+                          </DropdownMenu.Root>
+                        </header>
 
-                      <div class="expert-squad-selection-actions" data-ui="expert-squad-actions">
-                        <Show when={!isProjectActiveInstallation(squad)}>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="md"
-                            tone="neutral"
-                            data-ui="expert-squad-activate-project"
-                            disabled={
-                              !writableScopeAvailable() ||
-                              !!activeBusy() ||
-                              !isEffectiveInstallation(squad) ||
-                              isProjectActiveInstallation(squad)
-                            }
-                            onClick={activateProject}
-                          >
-                            <Icon name={isProjectActiveInstallation(squad) ? "check" : "folder"} />
-                            <span>
-                              {isProjectActiveInstallation(squad)
-                                ? t("expert_squad.project_active")
-                                : t("expert_squad.activate_project")}
-                            </span>
-                          </Button>
-                        </Show>
-                        <Show when={currentScopeSessionID()}>
-                          <Show when={!isSessionOverrideInstallation(squad)}>
+                        <div class="expert-squad-selection-actions" data-ui="expert-squad-actions">
+                          <Show when={!isProjectActiveInstallation(squad)}>
                             <Button
                               type="button"
                               variant="outline"
                               size="md"
                               tone="neutral"
-                              data-ui="expert-squad-activate-session"
+                              data-ui="expert-squad-activate-project"
                               disabled={
                                 !writableScopeAvailable() ||
                                 !!activeBusy() ||
                                 !isEffectiveInstallation(squad) ||
-                                isSessionOverrideInstallation(squad)
+                                isProjectActiveInstallation(squad)
                               }
-                              onClick={activateSession}
+                              onClick={activateProject}
                             >
-                              <Icon name={isSessionOverrideInstallation(squad) ? "check" : "message"} />
+                              <Icon name={isProjectActiveInstallation(squad) ? "check" : "folder"} />
                               <span>
-                                {isSessionOverrideInstallation(squad)
-                                  ? t("expert_squad.session_override")
-                                  : t("expert_squad.activate_session")}
+                                {isProjectActiveInstallation(squad)
+                                  ? t("expert_squad.project_active")
+                                  : t("expert_squad.activate_project")}
                               </span>
                             </Button>
                           </Show>
-                          <Show when={sessionOverrideID()}>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="md"
-                              tone="neutral"
-                              data-ui="expert-squad-clear-session-override"
-                              disabled={!writableScopeAvailable() || !!activeBusy() || !sessionOverrideID()}
-                              onClick={clearSessionOverride}
-                            >
-                              <Icon name="rewind" />
-                              <span>{t("expert_squad.clear_session_override")}</span>
-                            </Button>
-                          </Show>
-                        </Show>
-                      </div>
-
-                      <Tabs
-                        class="expert-squad-detail-tabs"
-                        value={installedSquadSection()}
-                        onValueChange={selectInstalledSquadSection}
-                      >
-                        <TabList
-                          class="expert-squad-detail-tablist"
-                          size="md"
-                          tone="neutral"
-                          aria-label={t("expert_squad.detail_sections")}
-                        >
-                          <Tab value="overview" size="md" tone="neutral">
-                            {t("expert_squad.detail_overview")}
-                          </Tab>
-                          <Tab value="agents" size="md" tone="neutral">
-                            {t("expert_squad.detail_agents")}
-                          </Tab>
-                          <Tab value="configuration" size="md" tone="neutral">
-                            {t("expert_squad.detail_configuration")}
-                          </Tab>
-                          <Show when={squad.source.kind === "installed_package"}>
-                            <Tab value="evolution" size="md" tone="neutral">
-                              {t("expert_squad.detail_evolution")}
-                            </Tab>
-                          </Show>
-                          <Tab value="package" size="md" tone="neutral">
-                            {t("expert_squad.detail_package")}
-                          </Tab>
-                        </TabList>
-
-                        <TabPanel value="overview" class="expert-squad-detail-panel">
-                          <dl class="expert-squad-overview-list">
-                            <div>
-                              <dt>{t("expert_squad.detail_project_selection")}</dt>
-                              <dd>
-                                <code>{projectActiveID() || "-"}</code>
-                              </dd>
-                            </div>
-                            <div>
-                              <dt>{t("expert_squad.detail_effective_selection")}</dt>
-                              <dd>
-                                <code>{effectiveActiveID() || "-"}</code>
-                              </dd>
-                            </div>
-                          </dl>
-                          <Disclosure.Root class="expert-squad-overview-note">
-                            <Disclosure.Trigger>{t("expert_squad.detail_runtime_boundary")}</Disclosure.Trigger>
-                            <Disclosure.Content>
-                              <p>{t("expert_squad.detail_runtime_boundary_body")}</p>
-                            </Disclosure.Content>
-                          </Disclosure.Root>
-                        </TabPanel>
-
-                        <TabPanel value="agents" class="expert-squad-detail-panel">
-                          <section
-                            class="expert-squad-agent-access-section"
-                            data-ui="expert-squad-agent-access-section"
-                          >
-                            <Show
-                              when={Object.keys(squad.capability_projection.agents).length > 0}
-                              fallback={<div class="empty-hint">{t("expert_squad.no_projected_agents")}</div>}
-                            >
-                              <div class="expert-squad-agent-access-list">
-                                <For each={Object.entries(squad.capability_projection.agents)}>
-                                  {([agentID, declaredProjection]) => {
-                                    const resolvedAccess = () => {
-                                      if (effectiveActiveID() !== squad.id) {
-                                        return { entry: declaredProjection, source: "declared" as const }
-                                      }
-                                      const active = activeAgentProjection()
-                                      if (!active || active.source_expert_squad_id !== squad.id) return null
-                                      const agent = active.agents.find((candidate) => candidate.agent_id === agentID)
-                                      if (!agent) return null
-                                      return { entry: agent, source: "effective" as const }
-                                    }
-                                    return (
-                                      <Disclosure.Root
-                                        class="expert-squad-agent-access"
-                                        data-ui="expert-squad-agent-access"
-                                        data-agent-id={agentID}
-                                        open={expandedAgentIDs().has(agentID)}
-                                        onOpenChange={(open) => setAgentExpanded(agentID, open)}
-                                        variant="plain"
-                                        size="md"
-                                      >
-                                        <Disclosure.Trigger
-                                          class="expert-squad-agent-access-head"
-                                          indicatorPosition="end"
-                                        >
-                                          <div class="expert-squad-agent-identity">
-                                            <span class="expert-squad-agent-icon" aria-hidden="true">
-                                              <Icon name="config-agent-models" size="medium" />
-                                            </span>
-                                            <div>
-                                              <span class="expert-squad-agent-title">{declaredProjection.label}</span>
-                                            </div>
-                                          </div>
-                                          <Show when={resolvedAccess()}>
-                                            {(access) => (
-                                              <Badge tone={access().source === "effective" ? "accent" : "muted"}>
-                                                {access().source === "effective"
-                                                  ? t("expert_squad.effective_access")
-                                                  : t("expert_squad.declared_access")}
-                                              </Badge>
-                                            )}
-                                          </Show>
-                                        </Disclosure.Trigger>
-                                        <Disclosure.Content class="expert-squad-agent-access-content">
-                                          <Show
-                                            when={resolvedAccess()}
-                                            fallback={
-                                              <div class="expert-squad-agent-access-error">
-                                                {t("expert_squad.access_projection_unavailable", { id: agentID })}
-                                              </div>
-                                            }
-                                          >
-                                            {(access) => (
-                                              <div class="expert-squad-agent-capability-grid">
-                                                <AgentCapabilityGroup
-                                                  kind="tools"
-                                                  title={t("expert_squad.tools")}
-                                                  icon="config-tool"
-                                                  items={toolCapabilityItems(access().entry, squad.capability_sets)}
-                                                />
-                                                <AgentCapabilityGroup
-                                                  kind="skills"
-                                                  title={t("expert_squad.skills")}
-                                                  icon="config-skill"
-                                                  items={skillCapabilityItems(access().entry, squad.capability_sets)}
-                                                />
-                                                <AgentCapabilityGroup
-                                                  kind="mcp"
-                                                  title={t("expert_squad.mcp")}
-                                                  icon="config-mcp"
-                                                  items={mcpCapabilityItems(access().entry, squad.capability_sets)}
-                                                />
-                                              </div>
-                                            )}
-                                          </Show>
-                                        </Disclosure.Content>
-                                      </Disclosure.Root>
-                                    )
-                                  }}
-                                </For>
-                              </div>
+                          <Show when={currentScopeSessionID()}>
+                            <Show when={!isSessionOverrideInstallation(squad)}>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="md"
+                                tone="neutral"
+                                data-ui="expert-squad-activate-session"
+                                disabled={
+                                  !writableScopeAvailable() ||
+                                  !!activeBusy() ||
+                                  !isEffectiveInstallation(squad) ||
+                                  isSessionOverrideInstallation(squad)
+                                }
+                                onClick={activateSession}
+                              >
+                                <Icon name={isSessionOverrideInstallation(squad) ? "check" : "message"} />
+                                <span>
+                                  {isSessionOverrideInstallation(squad)
+                                    ? t("expert_squad.session_override")
+                                    : t("expert_squad.activate_session")}
+                                </span>
+                              </Button>
                             </Show>
-                          </section>
-                        </TabPanel>
+                            <Show when={sessionOverrideID()}>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="md"
+                                tone="neutral"
+                                data-ui="expert-squad-clear-session-override"
+                                disabled={!writableScopeAvailable() || !!activeBusy() || !sessionOverrideID()}
+                                onClick={clearSessionOverride}
+                              >
+                                <Icon name="rewind" />
+                                <span>{t("expert_squad.clear_session_override")}</span>
+                              </Button>
+                            </Show>
+                          </Show>
+                        </div>
 
-                        <TabPanel value="configuration" class="expert-squad-detail-panel">
-                          <ConfigurationEditor />
-                        </TabPanel>
+                        <Tabs
+                          class="expert-squad-detail-tabs"
+                          value={installedSquadSection()}
+                          onValueChange={selectInstalledSquadSection}
+                        >
+                          <TabList
+                            class="expert-squad-detail-tablist"
+                            size="md"
+                            tone="neutral"
+                            aria-label={t("expert_squad.detail_sections")}
+                          >
+                            <Tab value="overview" size="md" tone="neutral">
+                              {t("expert_squad.detail_overview")}
+                            </Tab>
+                            <Tab value="agents" size="md" tone="neutral">
+                              {t("expert_squad.detail_agents")}
+                            </Tab>
+                            <Tab value="configuration" size="md" tone="neutral">
+                              {t("expert_squad.detail_configuration")}
+                            </Tab>
+                            <Show when={squad.source.kind === "installed_package"}>
+                              <Tab value="evolution" size="md" tone="neutral">
+                                {t("expert_squad.detail_evolution")}
+                              </Tab>
+                            </Show>
+                            <Tab value="package" size="md" tone="neutral">
+                              {t("expert_squad.detail_package")}
+                            </Tab>
+                          </TabList>
 
-                        <Show when={squad.source.kind === "installed_package" ? squad.source : null} keyed>
-                          {(source) => (
-                            <TabPanel value="evolution" class="expert-squad-detail-panel">
-                              <ExpertSquadEvolutionPanel
-                                directory={expertSquadCatalogDirectory()}
-                                namespace={source.namespace}
-                                id={squad.id}
-                                installationScope={source.installation_scope}
-                                onMutation={async () => {
-                                  const captured = captureCatalogActionScope()
-                                  if (!captured) return
-                                  await refreshCatalog(squadSelectionKey(squad), captured.scope, captured.identity)
-                                }}
-                              />
-                            </TabPanel>
-                          )}
-                        </Show>
-
-                        <TabPanel value="package" class="expert-squad-detail-panel">
-                          <div class="expert-squad-technical-body" data-ui="expert-squad-package-details">
-                            <div class="expert-squad-source-grid">
+                          <TabPanel value="overview" class="expert-squad-detail-panel">
+                            <dl class="expert-squad-overview-list">
                               <div>
-                                <span class="expert-squad-technical-label">{t("expert_squad.source")}</span>
-                                <span class="expert-squad-technical-value">{sourceLabel(squad)}</span>
+                                <dt>{t("expert_squad.detail_project_selection")}</dt>
+                                <dd>
+                                  <code>{projectActiveID() || "-"}</code>
+                                </dd>
                               </div>
                               <div>
-                                <span class="expert-squad-technical-label">{t("expert_squad.declaration_hash")}</span>
-                                <code>{squad.declaration_hash.slice(0, 12)}</code>
+                                <dt>{t("expert_squad.detail_effective_selection")}</dt>
+                                <dd>
+                                  <code>{effectiveActiveID() || "-"}</code>
+                                </dd>
                               </div>
-                              <div class="expert-squad-source-grid-agents">
-                                <span class="expert-squad-technical-label">{t("expert_squad.projected_agents")}</span>
-                                <code>{Object.keys(squad.capability_projection.agents).join(", ") || "-"}</code>
+                            </dl>
+                            <Disclosure.Root class="expert-squad-overview-note">
+                              <Disclosure.Trigger>{t("expert_squad.detail_runtime_boundary")}</Disclosure.Trigger>
+                              <Disclosure.Content>
+                                <p>{t("expert_squad.detail_runtime_boundary_body")}</p>
+                              </Disclosure.Content>
+                            </Disclosure.Root>
+                          </TabPanel>
+
+                          <TabPanel value="agents" class="expert-squad-detail-panel">
+                            <section
+                              class="expert-squad-agent-access-section"
+                              data-ui="expert-squad-agent-access-section"
+                            >
+                              <Show
+                                when={Object.keys(squad.capability_projection.agents).length > 0}
+                                fallback={<div class="empty-hint">{t("expert_squad.no_projected_agents")}</div>}
+                              >
+                                <div class="expert-squad-agent-access-list">
+                                  <For each={Object.entries(squad.capability_projection.agents)}>
+                                    {([agentID, declaredProjection]) => {
+                                      const resolvedAccess = () => {
+                                        if (effectiveActiveID() !== squad.id) {
+                                          return { entry: declaredProjection, source: "declared" as const }
+                                        }
+                                        const active = activeAgentProjection()
+                                        if (!active || active.source_expert_squad_id !== squad.id) return null
+                                        const agent = active.agents.find((candidate) => candidate.agent_id === agentID)
+                                        if (!agent) return null
+                                        return { entry: agent, source: "effective" as const }
+                                      }
+                                      return (
+                                        <Disclosure.Root
+                                          class="expert-squad-agent-access"
+                                          data-ui="expert-squad-agent-access"
+                                          data-agent-id={agentID}
+                                          open={expandedAgentIDs().has(agentID)}
+                                          onOpenChange={(open) => setAgentExpanded(agentID, open)}
+                                          variant="plain"
+                                          size="md"
+                                        >
+                                          <Disclosure.Trigger
+                                            class="expert-squad-agent-access-head"
+                                            indicatorPosition="end"
+                                          >
+                                            <div class="expert-squad-agent-identity">
+                                              <span class="expert-squad-agent-icon" aria-hidden="true">
+                                                <Icon name="config-agent-models" size="medium" />
+                                              </span>
+                                              <div>
+                                                <span class="expert-squad-agent-title">{declaredProjection.label}</span>
+                                              </div>
+                                            </div>
+                                            <Show when={resolvedAccess()}>
+                                              {(access) => (
+                                                <Badge tone={access().source === "effective" ? "accent" : "muted"}>
+                                                  {access().source === "effective"
+                                                    ? t("expert_squad.effective_access")
+                                                    : t("expert_squad.declared_access")}
+                                                </Badge>
+                                              )}
+                                            </Show>
+                                          </Disclosure.Trigger>
+                                          <Disclosure.Content class="expert-squad-agent-access-content">
+                                            <Show
+                                              when={resolvedAccess()}
+                                              fallback={
+                                                <div class="expert-squad-agent-access-error">
+                                                  {t("expert_squad.access_projection_unavailable", { id: agentID })}
+                                                </div>
+                                              }
+                                            >
+                                              {(access) => (
+                                                <div class="expert-squad-agent-capability-grid">
+                                                  <AgentCapabilityGroup
+                                                    kind="tools"
+                                                    title={t("expert_squad.tools")}
+                                                    icon="config-tool"
+                                                    items={toolCapabilityItems(access().entry, squad.capability_sets)}
+                                                  />
+                                                  <AgentCapabilityGroup
+                                                    kind="skills"
+                                                    title={t("expert_squad.skills")}
+                                                    icon="config-skill"
+                                                    items={skillCapabilityItems(access().entry, squad.capability_sets)}
+                                                  />
+                                                  <AgentCapabilityGroup
+                                                    kind="mcp"
+                                                    title={t("expert_squad.mcp")}
+                                                    icon="config-mcp"
+                                                    items={mcpCapabilityItems(access().entry, squad.capability_sets)}
+                                                  />
+                                                </div>
+                                              )}
+                                            </Show>
+                                          </Disclosure.Content>
+                                        </Disclosure.Root>
+                                      )
+                                    }}
+                                  </For>
+                                </div>
+                              </Show>
+                            </section>
+                          </TabPanel>
+
+                          <TabPanel value="configuration" class="expert-squad-detail-panel">
+                            <ConfigurationEditor />
+                          </TabPanel>
+
+                          <Show when={squad.source.kind === "installed_package" ? squad.source : null} keyed>
+                            {(source) => (
+                              <TabPanel value="evolution" class="expert-squad-detail-panel">
+                                <ExpertSquadEvolutionPanel
+                                  directory={expertSquadCatalogDirectory()}
+                                  namespace={source.namespace}
+                                  id={squad.id}
+                                  installationScope={source.installation_scope}
+                                  onMutation={async () => {
+                                    const captured = captureCatalogActionScope()
+                                    if (!captured) return
+                                    await refreshCatalog(squadSelectionKey(squad), captured.scope, captured.identity)
+                                  }}
+                                />
+                              </TabPanel>
+                            )}
+                          </Show>
+
+                          <TabPanel value="package" class="expert-squad-detail-panel">
+                            <div class="expert-squad-technical-body" data-ui="expert-squad-package-details">
+                              <div class="expert-squad-source-grid">
+                                <div>
+                                  <span class="expert-squad-technical-label">{t("expert_squad.source")}</span>
+                                  <span class="expert-squad-technical-value">{sourceLabel(squad)}</span>
+                                </div>
+                                <div>
+                                  <span class="expert-squad-technical-label">{t("expert_squad.declaration_hash")}</span>
+                                  <code>{squad.declaration_hash.slice(0, 12)}</code>
+                                </div>
+                                <div class="expert-squad-source-grid-agents">
+                                  <span class="expert-squad-technical-label">{t("expert_squad.projected_agents")}</span>
+                                  <code>{Object.keys(squad.capability_projection.agents).join(", ") || "-"}</code>
+                                </div>
+                                <Show when={generationTrace(squad)} keyed>
+                                  {(generation) => (
+                                    <>
+                                      <div>
+                                        <span class="expert-squad-technical-label">
+                                          {t("expert_squad.generated_by")}
+                                        </span>
+                                        <code>{generation.generator_expert_squad_id}</code>
+                                      </div>
+                                      <div>
+                                        <span class="expert-squad-technical-label">
+                                          {t("expert_squad.generation_method")}
+                                        </span>
+                                        <span class="expert-squad-technical-value">
+                                          {generationMethodLabel(generation.method)}
+                                        </span>
+                                      </div>
+                                      <div>
+                                        <span class="expert-squad-technical-label">
+                                          {t("expert_squad.generated_at")}
+                                        </span>
+                                        <time dateTime={generation.generated_at}>{generation.generated_at}</time>
+                                      </div>
+                                      <div>
+                                        <span class="expert-squad-technical-label">
+                                          {t("expert_squad.generation_task")}
+                                        </span>
+                                        <code>{generation.task_id}</code>
+                                      </div>
+                                      <div class="expert-squad-source-grid-agents">
+                                        <span class="expert-squad-technical-label">
+                                          {t("expert_squad.generation_session")}
+                                        </span>
+                                        <code>{generation.session_id}</code>
+                                      </div>
+                                    </>
+                                  )}
+                                </Show>
                               </div>
-                              <Show when={generationTrace(squad)} keyed>
-                                {(generation) => (
-                                  <>
-                                    <div>
-                                      <span class="expert-squad-technical-label">{t("expert_squad.generated_by")}</span>
-                                      <code>{generation.generator_expert_squad_id}</code>
+
+                              <div class="expert-squad-section">
+                                <div class="expert-squad-section-head">
+                                  <h3>{t("expert_squad.readme_title")}</h3>
+                                  <Badge tone="accent">{t("expert_squad.orchestrator_append")}</Badge>
+                                </div>
+                                <div
+                                  class="expert-squad-markdown md-content"
+                                  innerHTML={markdownHtml(squad.readme.content)}
+                                />
+                              </div>
+
+                              <Show when={squad.selector}>
+                                {(selector) => (
+                                  <div class="expert-squad-section">
+                                    <div class="expert-squad-section-head">
+                                      <h3>{t("expert_squad.selector_instructions_title")}</h3>
+                                      <code>{selector().ref}</code>
                                     </div>
-                                    <div>
-                                      <span class="expert-squad-technical-label">
-                                        {t("expert_squad.generation_method")}
+                                    <div class="expert-squad-selector-summary">
+                                      <p>{selector().summary}</p>
+                                      <span class="expert-squad-selector-guidance">
+                                        {selector().selection_guidance}
                                       </span>
-                                      <span class="expert-squad-technical-value">
-                                        {generationMethodLabel(generation.method)}
-                                      </span>
                                     </div>
-                                    <div>
-                                      <span class="expert-squad-technical-label">{t("expert_squad.generated_at")}</span>
-                                      <time dateTime={generation.generated_at}>{generation.generated_at}</time>
-                                    </div>
-                                    <div>
-                                      <span class="expert-squad-technical-label">
-                                        {t("expert_squad.generation_task")}
-                                      </span>
-                                      <code>{generation.task_id}</code>
-                                    </div>
-                                    <div class="expert-squad-source-grid-agents">
-                                      <span class="expert-squad-technical-label">
-                                        {t("expert_squad.generation_session")}
-                                      </span>
-                                      <code>{generation.session_id}</code>
-                                    </div>
-                                  </>
+                                    <div
+                                      class="expert-squad-markdown md-content"
+                                      innerHTML={markdownHtml(selector().instructions)}
+                                    />
+                                  </div>
                                 )}
                               </Show>
-                            </div>
 
-                            <div class="expert-squad-section">
-                              <div class="expert-squad-section-head">
-                                <h3>{t("expert_squad.readme_title")}</h3>
-                                <Badge tone="accent">{t("expert_squad.orchestrator_append")}</Badge>
-                              </div>
-                              <div
-                                class="expert-squad-markdown md-content"
-                                innerHTML={markdownHtml(squad.readme.content)}
-                              />
-                            </div>
-
-                            <Show when={squad.selector}>
-                              {(selector) => (
-                                <div class="expert-squad-section">
-                                  <div class="expert-squad-section-head">
-                                    <h3>{t("expert_squad.selector_instructions_title")}</h3>
-                                    <code>{selector().ref}</code>
-                                  </div>
-                                  <div class="expert-squad-selector-summary">
-                                    <p>{selector().summary}</p>
-                                    <span class="expert-squad-selector-guidance">{selector().selection_guidance}</span>
-                                  </div>
-                                  <div
-                                    class="expert-squad-markdown md-content"
-                                    innerHTML={markdownHtml(selector().instructions)}
-                                  />
+                              <div class="expert-squad-section">
+                                <div class="expert-squad-section-head">
+                                  <h3>{t("expert_squad.capability_projection")}</h3>
+                                  <span class="expert-squad-section-meta">
+                                    {t("expert_squad.tool_count", {
+                                      count: projectionToolRefCount(
+                                        squad.capability_projection.scheduler,
+                                        squad.capability_sets,
+                                      ),
+                                    })}
+                                  </span>
                                 </div>
-                              )}
-                            </Show>
-
-                            <div class="expert-squad-section">
-                              <div class="expert-squad-section-head">
-                                <h3>{t("expert_squad.capability_projection")}</h3>
-                                <span class="expert-squad-section-meta">
-                                  {t("expert_squad.tool_count", {
-                                    count: projectionToolRefCount(
-                                      squad.capability_projection.scheduler,
-                                      squad.capability_sets,
-                                    ),
-                                  })}
-                                </span>
-                              </div>
-                              <div class="expert-squad-projection-grid">
-                                <For each={projectionRows(squad.capability_projection.scheduler)}>
-                                  {([key, values]) => (
-                                    <div class="expert-squad-projection-row">
-                                      <code>{key}</code>
-                                      <code>{values.length ? values.join(", ") : "-"}</code>
-                                    </div>
-                                  )}
-                                </For>
+                                <div class="expert-squad-projection-grid">
+                                  <For each={projectionRows(squad.capability_projection.scheduler)}>
+                                    {([key, values]) => (
+                                      <div class="expert-squad-projection-row">
+                                        <code>{key}</code>
+                                        <code>{values.length ? values.join(", ") : "-"}</code>
+                                      </div>
+                                    )}
+                                  </For>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </TabPanel>
-                      </Tabs>
-                    </div>
-                  )}
+                          </TabPanel>
+                        </Tabs>
+                      </div>
+                    )}
+                  </Show>
                 </Show>
               </div>
             </Show>

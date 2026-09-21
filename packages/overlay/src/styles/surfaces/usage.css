@@ -149,7 +149,7 @@
 
 .usage-official-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--ui-gap-sm);
   padding: var(--ui-gap-xl) var(--ui-gap-2xl);
 }
@@ -523,7 +523,7 @@
 
 .usage-insights {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: calc(42px * var(--ui-scale));
   padding-top: var(--ui-gap-xs);
   border-top: var(--oc-border-width) solid var(--divider-soft);
@@ -565,7 +565,7 @@
 
 .usage-composition__legend {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--ui-gap-lg) var(--ui-gap-lg);
 }
 

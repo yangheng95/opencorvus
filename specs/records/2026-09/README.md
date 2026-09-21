@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Single-column settings and compact capability details](2026-09-22-single-column-settings.md)
+
 - [Primitive-first frosted workspace implementation](2026-09-21-primitive-ui-implementation.md)
 
 - [Codex-aligned UI review and design proposal](2026-09-21-codex-aligned-ui-design.md)
