@@ -17,6 +17,7 @@
 import { $ } from "bun"
 import path from "path"
 import { fileURLToPath } from "url"
+import { nativeBinaryBuildEnv } from "./package-native-binary"
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const overlay = path.join(repo, "packages/overlay")
@@ -46,10 +47,19 @@ export function localCargoTarget(repoRoot: string, env: NodeJS.ProcessEnv = proc
     : path.join(repoRoot, "packages", "overlay", "src-tauri", "target")
 }
 
+export function localBuildEnvironment(repoRoot: string, version: string, env: NodeJS.ProcessEnv = process.env) {
+  const buildEnv = nativeBinaryBuildEnv(env, version)
+  if (buildEnv.OPENCORVUS_VERSION !== version) {
+    throw new Error(`Local package version must match desktop metadata ${version}; received ${buildEnv.OPENCORVUS_VERSION}`)
+  }
+  return { ...buildEnv, CARGO_TARGET_DIR: localCargoTarget(repoRoot, env) }
+}
+
 async function main() {
-  const nativeTarget = localCargoTarget(repo)
+  const { version } = await Bun.file(path.join(repo, "packages/opencorvus/package.json")).json()
+  const nativeEnvironment = localBuildEnvironment(repo, version)
+  const nativeTarget = nativeEnvironment.CARGO_TARGET_DIR
   const nativeBundle = path.join(nativeTarget, "release", "bundle")
-  const nativeEnvironment = { ...process.env, CARGO_TARGET_DIR: nativeTarget }
   // ── 1. overlay — current platform (native) ─────────────────────────────────
   if (!skipNative) {
     console.log(`\n=== overlay ${process.platform}-${process.arch} (native) ===`)

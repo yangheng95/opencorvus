@@ -1,8 +1,19 @@
 import { describe, expect, test } from "bun:test"
 import path from "node:path"
-import { localBundleTargets, localCargoTarget, localTauriBundleConfig } from "./package-local"
+import { localBuildEnvironment, localBundleTargets, localCargoTarget, localTauriBundleConfig } from "./package-local"
 
 describe("local package host contract", () => {
+  test("binds the sidecar version to desktop metadata and preserves the explicit Cargo target", () => {
+    expect(localBuildEnvironment("D:\\repo", "0.1.10", { CARGO_TARGET_DIR: "target-local", PATH: "host-tools" })).toEqual({
+      CARGO_TARGET_DIR: path.resolve("D:\\repo", "target-local"),
+      PATH: "host-tools",
+      OPENCORVUS_VERSION: "0.1.10",
+      OPENCORVUS_CHANNEL: "local",
+    })
+    expect(() => localBuildEnvironment("D:\\repo", "0.1.10", { OPENCORVUS_VERSION: "0.1.9" })).toThrow(
+      "Local package version must match desktop metadata 0.1.10; received 0.1.9",
+    )
+  })
   test("selects native Windows installer kinds and an unsigned local updater contract", () => {
     expect(localBundleTargets("win32")).toEqual(["msi", "nsis"])
     expect(localTauriBundleConfig()).toEqual({

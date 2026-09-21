@@ -1,5 +1,11 @@
 # Packaging Current State
 
+`package:local` binds the native embedded service version to the canonical
+`packages/opencorvus/package.json` version using the native build environment.
+An explicit `OPENCORVUS_VERSION` must match desktop metadata. Its default channel
+is `local`; the general developer build's branch/timestamp version is not a
+local installer version.
+
 This document is the packaging map for the repository. It separates the CLI
 binary, the Tauri overlay desktop app, release CI, and local smoke packaging.
 
