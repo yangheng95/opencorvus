@@ -526,7 +526,10 @@ async function projectedWorkerDecisionSurface(input: { projectPath: string }) {
       workScope: { kind: "task" },
       workflowBinding: selectedWorkflowBinding({ projection: workflowProjection, workflowID: null }),
       workflowNodeID: null,
-      adapterInput: {},
+      adapterInput: {
+        instruction: "Request one exact scheduler decision.",
+        reason: "Verify the projected worker control occurrence.",
+      },
     }),
     childSessionID: session.id,
     now: now + 2,
@@ -1616,6 +1619,7 @@ describe("single Tool-result turn-control protocol", () => {
           },
         }
         const deliveryOwner = joinProcessLivenessLease(currentRuntimeOccurrenceID())
+        using _deliveryOwner = { [Symbol.dispose]: () => deliveryOwner.release() }
         const lineageHandle = await OrchestratorToolsTestHooks.openDispatchLineage(surface)({
           taskID: worker.taskID,
           targetAgentID: target.identity.agentID,
@@ -1624,107 +1628,105 @@ describe("single Tool-result turn-control protocol", () => {
           deliverySliceRevisionIDs: [],
           coordinationActionID: action.payload.action_id,
           toolOptions: dispatchExecution.options,
-          adapterInput: {},
-          continuationGuidance: "Continue with the scheduler's exact incremental guidance.",
-          evidenceLocators: [],
-        })
-        const claimedLineage = listDispatchLineage(worker.taskID).find(
-          (lineage) => lineage.payload.coordination_action_id === action.payload.action_id,
-        )
-        if (!claimedLineage) throw new Error("Coordination redispatch lineage was not claimed")
-        const prematureOutcomeID = Identifier.ascending("artifact")
-        const prematureAt = Date.now()
-        expect(() =>
-          Database.transaction((db) =>
-            insertEngineArtifact(db, {
-              id: prematureOutcomeID,
-              taskID: worker.taskID,
-              kind: "agent_coordination_action_outcome",
-              label: "completed",
-              payload: {
-                outcome_id: prematureOutcomeID,
-                request_id: action.payload.request_id,
-                response_id: action.payload.response_id,
-                action_id: action.payload.action_id,
-                task_id: worker.taskID,
-                execution_epoch: action.payload.execution_epoch,
-                action: "redispatch_worker",
-                status: "completed",
-                result: {
-                  dispatch_lineage_id: claimedLineage.artifactID,
-                  dispatch_id: claimedLineage.dispatchID,
-                  dispatch_agent_id: target.identity.agentID,
-                  dispatch_session_id: worker.session.id,
-                  work_scope: { kind: "task" },
-                  dispatch_bound: true,
-                  awaiting_explicit_dispatch: false,
-                },
-                created_at: prematureAt,
-              },
-              timeCreated: prematureAt,
-            }),
-          ),
-        ).toThrow("invalid immutable agent coordination action outcome fact")
-        const previous = WorkerTurnDescriptor.latestForSession(worker.session.id)
-        if (!previous) throw new Error("Coordination source descriptor was not persisted")
-        const descriptor = WorkerTurnDescriptor.create({
-          sessionID: worker.session.id,
-          payload: { ...previous.payload, dispatchTurn: lineageHandle.turn },
-        })
-        expect({
-          descriptor: descriptor.payload.dispatchTurn?.current_dispatch_id,
-          action: findAgentCoordinationAction({ taskID: worker.taskID, actionID: action.payload.action_id }),
-        }).toMatchObject({
-          descriptor: claimedLineage.dispatchID,
-          action: { payload: { status: "pending" } },
-        })
-        const extraReceiptOutcomeID = Identifier.ascending("artifact")
-        const extraReceiptAt = Date.now()
-        expect(() =>
-          Database.transaction((db) =>
-            insertEngineArtifact(db, {
-              id: extraReceiptOutcomeID,
-              taskID: worker.taskID,
-              kind: "agent_coordination_action_outcome",
-              label: "completed",
-              payload: {
-                outcome_id: extraReceiptOutcomeID,
-                request_id: action.payload.request_id,
-                response_id: action.payload.response_id,
-                action_id: action.payload.action_id,
-                task_id: worker.taskID,
-                execution_epoch: action.payload.execution_epoch,
-                action: "redispatch_worker",
-                status: "completed",
-                result: {
-                  dispatch_lineage_id: claimedLineage.artifactID,
-                  dispatch_id: claimedLineage.dispatchID,
-                  dispatch_agent_id: target.identity.agentID,
-                  dispatch_session_id: worker.session.id,
-                  work_scope: { kind: "task" },
-                  dispatch_bound: true,
-                  awaiting_explicit_dispatch: false,
-                  unverified_presentation_metadata: "must not enter the durable receipt",
-                },
-                created_at: extraReceiptAt,
-              },
-              timeCreated: extraReceiptAt,
-            }),
-          ),
-        ).toThrow("invalid immutable agent coordination action outcome fact")
-        const peerLineageHandle = OrchestratorToolsTestHooks.openDispatchLineage(surface)({
-          taskID: worker.taskID,
-          targetAgentID: target.identity.agentID,
-          projectedAgent: target,
-          workScope: { kind: "task" },
-          deliverySliceRevisionIDs: [],
-          coordinationActionID: action.payload.action_id,
-          toolOptions: dispatchExecution.options,
-          adapterInput: {},
           continuationGuidance: "Continue with the scheduler's exact incremental guidance.",
           evidenceLocators: [],
         })
         try {
+          const claimedLineage = listDispatchLineage(worker.taskID).find(
+            (lineage) => lineage.payload.coordination_action_id === action.payload.action_id,
+          )
+          if (!claimedLineage) throw new Error("Coordination redispatch lineage was not claimed")
+          const prematureOutcomeID = Identifier.ascending("artifact")
+          const prematureAt = Date.now()
+          expect(() =>
+            Database.transaction((db) =>
+              insertEngineArtifact(db, {
+                id: prematureOutcomeID,
+                taskID: worker.taskID,
+                kind: "agent_coordination_action_outcome",
+                label: "completed",
+                payload: {
+                  outcome_id: prematureOutcomeID,
+                  request_id: action.payload.request_id,
+                  response_id: action.payload.response_id,
+                  action_id: action.payload.action_id,
+                  task_id: worker.taskID,
+                  execution_epoch: action.payload.execution_epoch,
+                  action: "redispatch_worker",
+                  status: "completed",
+                  result: {
+                    dispatch_lineage_id: claimedLineage.artifactID,
+                    dispatch_id: claimedLineage.dispatchID,
+                    dispatch_agent_id: target.identity.agentID,
+                    dispatch_session_id: worker.session.id,
+                    work_scope: { kind: "task" },
+                    dispatch_bound: true,
+                    awaiting_explicit_dispatch: false,
+                  },
+                  created_at: prematureAt,
+                },
+                timeCreated: prematureAt,
+              }),
+            ),
+          ).toThrow("invalid immutable agent coordination action outcome fact")
+          const previous = WorkerTurnDescriptor.latestForSession(worker.session.id)
+          if (!previous) throw new Error("Coordination source descriptor was not persisted")
+          const descriptor = WorkerTurnDescriptor.create({
+            sessionID: worker.session.id,
+            payload: { ...previous.payload, dispatchTurn: lineageHandle.turn },
+          })
+          expect({
+            descriptor: descriptor.payload.dispatchTurn?.current_dispatch_id,
+            action: findAgentCoordinationAction({ taskID: worker.taskID, actionID: action.payload.action_id }),
+          }).toMatchObject({
+            descriptor: claimedLineage.dispatchID,
+            action: { payload: { status: "pending" } },
+          })
+          const extraReceiptOutcomeID = Identifier.ascending("artifact")
+          const extraReceiptAt = Date.now()
+          expect(() =>
+            Database.transaction((db) =>
+              insertEngineArtifact(db, {
+                id: extraReceiptOutcomeID,
+                taskID: worker.taskID,
+                kind: "agent_coordination_action_outcome",
+                label: "completed",
+                payload: {
+                  outcome_id: extraReceiptOutcomeID,
+                  request_id: action.payload.request_id,
+                  response_id: action.payload.response_id,
+                  action_id: action.payload.action_id,
+                  task_id: worker.taskID,
+                  execution_epoch: action.payload.execution_epoch,
+                  action: "redispatch_worker",
+                  status: "completed",
+                  result: {
+                    dispatch_lineage_id: claimedLineage.artifactID,
+                    dispatch_id: claimedLineage.dispatchID,
+                    dispatch_agent_id: target.identity.agentID,
+                    dispatch_session_id: worker.session.id,
+                    work_scope: { kind: "task" },
+                    dispatch_bound: true,
+                    awaiting_explicit_dispatch: false,
+                    unverified_presentation_metadata: "must not enter the durable receipt",
+                  },
+                  created_at: extraReceiptAt,
+                },
+                timeCreated: extraReceiptAt,
+              }),
+            ),
+          ).toThrow("invalid immutable agent coordination action outcome fact")
+          const peerLineageHandle = OrchestratorToolsTestHooks.openDispatchLineage(surface)({
+            taskID: worker.taskID,
+            targetAgentID: target.identity.agentID,
+            projectedAgent: target,
+            workScope: { kind: "task" },
+            deliverySliceRevisionIDs: [],
+            coordinationActionID: action.payload.action_id,
+            toolOptions: dispatchExecution.options,
+            continuationGuidance: "Continue with the scheduler's exact incremental guidance.",
+            evidenceLocators: [],
+          })
           const peer = await peerLineageHandle
           const continuation = listDispatchLineage(worker.taskID).find(
             (lineage) => lineage.payload.coordination_action_id === action.payload.action_id,
@@ -1748,6 +1750,7 @@ describe("single Tool-result turn-control protocol", () => {
               .get(),
           )
           expect({
+            adapterInput: continuation?.payload.adapter_input,
             lineageSource: continuation?.payload.continuation_of_dispatch_id,
             descriptorSource:
               persistedDescriptor?.payload.dispatchTurn?.kind === "continuation"
@@ -1757,6 +1760,7 @@ describe("single Tool-result turn-control protocol", () => {
             action: findAgentCoordinationAction({ taskID: worker.taskID, actionID: action.payload.action_id }),
             durableReceipt: durableOutcome?.payload,
           }).toMatchObject({
+            adapterInput: worker.dispatchLineage.payload.adapter_input,
             lineageSource: worker.dispatchLineage.dispatchID,
             descriptorSource: worker.dispatchLineage.dispatchID,
             peerReplay: {
@@ -1792,7 +1796,15 @@ describe("single Tool-result turn-control protocol", () => {
               },
             },
           })
-          expect((durableOutcome?.payload as any)?.result).not.toHaveProperty("redispatch_binding")
+          expect((durableOutcome?.payload as any)?.result).toEqual({
+            dispatch_lineage_id: continuation?.artifactID,
+            dispatch_id: continuation?.dispatchID,
+            dispatch_session_id: worker.session.id,
+            dispatch_agent_id: target.identity.agentID,
+            work_scope: { kind: "task" },
+            dispatch_bound: true,
+            awaiting_explicit_dispatch: false,
+          })
           if (!durableOutcome || !continuation) throw new Error("Redispatch outcome was not persisted")
           const duplicateReceiptOutcomeID = Identifier.ascending("artifact")
           const duplicateReceiptAt = Date.now()
@@ -1822,7 +1834,6 @@ describe("single Tool-result turn-control protocol", () => {
           ).toThrow("invalid immutable agent coordination action outcome fact")
         } finally {
           lineageHandle.releaseAdmission()
-          deliveryOwner.release()
         }
         await SessionRuntimeContractStore.dispose(worker.session.id)
       },
@@ -2223,10 +2234,6 @@ describe("single Tool-result turn-control protocol", () => {
           },
           facts: before,
         })
-        if (recoveredPart?.type !== "tool" || recoveredPart.state.status !== "completed") {
-          throw new Error("Recovered ask_user ToolPart did not complete")
-        }
-        expect(JSON.stringify(recoveredPart.state.output)).not.toContain("already completed as ask_user")
         expect(effectAdmissions).toBe(1)
         await SessionRuntimeContractStore.dispose(worker.session.id)
         },

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[v0.1.10 native and website release](records/2026-09/2026-09-21-v0.1.10-release.md).
+
 [0.1.10 main Windows package](records/2026-09/2026-09-21-v0.1.10-local-package.md).
 
 [Dispatch continuation input repair](records/2026-09/2026-09-21-dispatch-continuation-input.md).
