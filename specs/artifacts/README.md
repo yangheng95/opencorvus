@@ -19,3 +19,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [2026-09-09 first-result demo and communication cards](2026-09-09-first-result-media/README.md): retained Luna deliverable with runnable source/test, bilingual walkthrough, PNG/SVG sample cards and pilot copy.
 
 - [2026-09-08 bilingual founder case brief](2026-09-08-founder-case-brief/README.md): original PDF, derived facts, builder and source limitations.
+
+- [Historical WorkBuddy and fixed-round benchmark source](2026-08-25-benchmark-history/README.md): exact committed August experiment materials; current-runtime limitations are explicit.

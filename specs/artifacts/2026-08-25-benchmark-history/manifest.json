@@ -1,0 +1,130 @@
+{
+  "source_commit": "4e02bc63d1cb1415e0ce89c422d365251d915847",
+  "files": [
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/catalog_chain_proof.py",
+      "bytes": 12771,
+      "sha256": "a816ead8b4dfd0454328a41c822bc2d39769079e808ab377570bdd64e4109453"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/configs/harnesses/opencorvus/_defaults.yaml",
+      "bytes": 697,
+      "sha256": "23c5a1a831ae1adcd86f6d7f8979d6d9ece27d4dfb87bc3332a36b0d73dab774"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/configs/harnesses/opencorvus/docker/Dockerfile",
+      "bytes": 29,
+      "sha256": "f9120e8f92238150e0682a267bff88a471f3b51c087ba542828ce23d1de842ce"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/configs/harnesses/opencorvus/versions/chain-proof-r1.yaml",
+      "bytes": 60,
+      "sha256": "8545c0cc402c2b692a9dfa6b0da9d9f202c29822bb0614ec2403b5efc2460a2c"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/configs/jobs/opencorvus-luna-code-chain-proof.yaml",
+      "bytes": 1029,
+      "sha256": "ad31970a815e20b421126894c1de20feb5a38c663a01884b34a5b5310506c081"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/configs/models/opencorvus-luna.yaml",
+      "bytes": 172,
+      "sha256": "e2f13bff9eb7c22ac30e096d916012ee14d5ff075d17bc5ea9fa8179be59fb2a"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/docker-volume-lifecycle.sh",
+      "bytes": 1671,
+      "sha256": "94408a76012aff23678e69e2f5c94f7641517fba846699c4d44a7b295d6843f7"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/opencorvus_agent.py",
+      "bytes": 14826,
+      "sha256": "6716be90594417eb4ef85998b77e1386bd16cf94055613b3727385de6722ce1e"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/prepare-chain-proof.sh",
+      "bytes": 11077,
+      "sha256": "c2bea3565bd7a546413dde2bba307a5e63f293473fa8b9c83af2dba7bc601602"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/run-chain-proof.sh",
+      "bytes": 18497,
+      "sha256": "d916821e0b40282cec9c8898cccb890449ec6a88c9a4073707e0692cbb24c3d5"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/run_opencorvus_trial.py",
+      "bytes": 38228,
+      "sha256": "9e250d6a8e386bca1a1f897e785451e17415bed4a5b5554a58201590b14574c8"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/workbuddy-harness-adapter.patch",
+      "bytes": 762,
+      "sha256": "b0e29ff169749fdaeb7101a1cb3ddcf569c2417aedcf841477a90d3391ae587c"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/workbuddy-verifier-download.patch",
+      "bytes": 643,
+      "sha256": "655c18349e55f4e6119cf4cb7934e055255a2563af09bb76dd0437c5c9f00c59"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/workbuddy-verifier-upload-permission.patch",
+      "bytes": 637,
+      "sha256": "50f465ecee369c189a231ffa2bfbaef08725786494e0b21213699fc110ce31ca"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/workbuddy/workbuddybench-code.SKILL.md",
+      "bytes": 3384,
+      "sha256": "821e983e2f1774bae596429865c059c557bf95c8d4b8ae442d9d648645f7a2fc"
+    },
+    {
+      "path": "packages/opencorvus/test/benchmark/workbuddy_adapter_test.py",
+      "bytes": 29025,
+      "sha256": "918bd90de6589f760bef3df583b870518405ce7350eeaf1562565d63d1ddb790"
+    },
+    {
+      "path": "packages/opencorvus/test/benchmark/workbuddy_process_cleanup_container_test.py",
+      "bytes": 1355,
+      "sha256": "72d1b2df0a1e1921926cf85e06346e497d0b645227d827b26cced7f74e377945"
+    },
+    {
+      "path": "packages/opencorvus/test/benchmark/workbuddy_supervisor_recovery_container_test.py",
+      "bytes": 12185,
+      "sha256": "f10cfed86d053f3c23c1b75a1ede1258288126f0898fc39cdbf25a7b2718d9b3"
+    },
+    {
+      "path": "packages/opencorvus/test/benchmark/workbuddy_verifier_upload_permission_test.py",
+      "bytes": 2317,
+      "sha256": "78afbcd7707d81c9c999d64c2336657fc31d3c6beffa25d311fe519be55624b6"
+    },
+    {
+      "path": "skills/workbuddybench-experiment/SKILL.md",
+      "bytes": 6054,
+      "sha256": "0c57c1a91c81f82ff8462b0a41c32adff64902d80a508733a85e4b90bd8150b4"
+    },
+    {
+      "path": "skills/workbuddybench-experiment/agents/openai.yaml",
+      "bytes": 239,
+      "sha256": "f1c6b66584f0c44901820da1c4ca47dea0bc9879eb4494659a6bb05327a94373"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/external-agent/run-luna-mission-advanced-50.sh",
+      "bytes": 3874,
+      "sha256": "5d2778d6b764c4d27343ff8c76e740e8c80d086d19ffc62bd2143fe9bcb82a77"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/external-agent/run-luna-mission-base-cases-51-600.sh",
+      "bytes": 4501,
+      "sha256": "570fe4fa122d5f6cc8ea8b101928b4f4e3dc0b72c0f9260df2f594c1f31436a7"
+    },
+    {
+      "path": "packages/opencorvus/script/benchmark/external-agent/run-sol-mission-base-50.sh",
+      "bytes": 3093,
+      "sha256": "62b4f32f455693f580eb15314a1020e3ddc3bf9347be3fc60a41832cc194456e"
+    },
+    {
+      "path": "packages/opencorvus/tsconfig.benchmark.json",
+      "bytes": 887,
+      "sha256": "724829efed937305c4c788c64bda47a73f402cee6db0861201fcc79218fc4557"
+    }
+  ]
+}

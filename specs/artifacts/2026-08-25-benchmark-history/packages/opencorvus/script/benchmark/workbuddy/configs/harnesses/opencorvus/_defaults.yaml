@@ -1,0 +1,18 @@
+harness:
+  name: opencorvus-agent
+  import_path: "opencorvus_agent:OpenCorvusAgent"
+  protocol: openai
+  params:
+    OPENCORVUS_MODEL: "openai/gpt-5.6-luna"
+    OPENCORVUS_PROFILE: "base"
+    OPENCORVUS_WORKFLOW: "planner-execution-verification"
+    OPENCORVUS_INACTIVITY_SECONDS: 600
+  mount:
+    name: opencorvus
+    path: /opt/opencorvus
+    image_prefix: workbuddy-bench/harness/
+    dockerfile: /var/lib/opencorvus-benchmark/control-workbuddy-luna-mission-base-code-v20260825-chain-proof/harness-image/Dockerfile
+    context: /var/lib/opencorvus-benchmark/control-workbuddy-luna-mission-base-code-v20260825-chain-proof/harness-image
+    build:
+      args:
+        MOUNT_PATH: /opt/opencorvus

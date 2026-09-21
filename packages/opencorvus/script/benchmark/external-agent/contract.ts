@@ -3555,3 +3555,30 @@ export function auditTaskBoundPromptCompositionCoverage(input: {
     violations,
   }
 }
+
+export function activeAutomationBenchBatchRunIDs(
+  active: Array<{ batch_run_id?: string }>,
+  anchoredPlans: Array<{ batch_run_id?: string } | undefined>,
+) {
+  return new Set(
+    [...active.map((item) => item.batch_run_id), ...anchoredPlans.map((item) => item?.batch_run_id)].filter(
+      (batchRunID): batchRunID is string => typeof batchRunID === "string" && batchRunID.length > 0,
+    ),
+  )
+}
+
+
+export type PlannedAutomationBenchSlotState =
+  | { kind: "running" }
+  | { kind: "invalidated"; status: string; reason: string }
+  | { kind: "queued" }
+
+/** Project one planned slot from the authorities that already own its state. */
+export function plannedAutomationBenchSlotState(input: {
+  active: boolean
+  invalidation?: { status: string; reason: string }
+}): PlannedAutomationBenchSlotState {
+  if (input.active) return { kind: "running" }
+  if (input.invalidation) return { kind: "invalidated", ...input.invalidation }
+  return { kind: "queued" }
+}

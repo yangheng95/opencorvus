@@ -1,0 +1,83 @@
+---
+name: automationbench-experiment
+description: Run reproducible OpenCorvus harness experiments against AutomationBench, preserve paper-grade evidence for every attempt, invalidate bug-affected runs, and maintain a self-owned leaderboard. Use for AutomationBench runs, reruns, score cataloging, token/performance comparisons, and trajectory evidence; do not use for raw-model benchmarks or WorkBuddy unless the user explicitly expands scope.
+---
+
+# Run an AutomationBench experiment
+
+Treat OpenCorvus Base and Advanced as the evaluated multi-Agent harness, not as a model wrapper. Do not import the stock single-model runner's step budget: never cap Agent, model, tool, benchmark API, retry, or concurrent call counts for comparability. Record those quantities as efficiency and cost measurements.
+
+## Freeze the experiment
+
+- Keep adapters, Skills, configs, and records on `main` in the single repository checkout. Store uncommitted experiment outputs outside Git; do not create another branch or worktree.
+- The current primary round is AutomationBench `1.0.6`, the committed deterministic 50 public cases, exact model `openai/gpt-5.6-sol`, Mission intake, Base only, and repetition 1. The runner calls `POST /mission/wake`, holds only the Base Expert Squad, lets Mission create and accept its child Task set, and scores only after Mission plus every child Task reaches stable physical quiescence. Its dedicated roots are `evidence-sol-mission-base-v20260823-r1`, `control-sol-mission-base-v20260823-r1`, and external dashboard `sol-mission-base-v20260823-r1/index.html`.
+- The completed Luna Mission/Base r3 evidence is a historical read-only comparison baseline. Preserve it unchanged and never execute, resume, or adopt it into Sol. The cancelled Luna supplemental 250-trial plan never started and must not be resumed. Earlier direct-Task Luna/Terra rounds remain immutable debug evidence. WorkBuddy and Advanced are out of scope until the user explicitly adds them.
+- Schedule deterministic five-case Base-only Mission batches until Base is 50/50. No more than five distinct cases are active. Give each trial its own process, UID, home, Unix tool socket, OpenCorvus runtime, AutomationBench world, project, Mission and child Task evidence directory.
+- Before each run, require an isolated runtime containing both the source `auth.json` and `models.json`; verify the exact Provider/model reports `connected`. Never print or copy credential contents into evidence.
+- Keep `auth.json`, `models.json`, `exa.env`, and `network.env` under root-owned mode-`0700` `/var/lib/opencorvus-benchmark/provider-data`, with each file mode `0600`. `network.env` owns `AUTOMATIONBENCH_PROXY_PORT`; the shared supervisor environment helper derives the current Windows host from WSL's default route and projects the resulting single proxy URL into the standard proxy variables. Never commit or duplicate a machine gateway address in a supervisor.
+- Formal runs use WSL2 as an operational benchmark boundary, not as a hostile multi-tenant security proof. Keep evaluator, scorer, Provider data, control, and evidence roots owned by root with mode `0700`; run Agent Bash under the case UID with a private HOME, mount namespace, Windows mounts removed, and a UID-scoped Unix tool socket. The preflight must show that credentials/evaluator data are not readable and that the trial can use its own project/socket. Do not add stronger sandbox machinery unless an observed benchmark leak requires it.
+- Fail closed unless the bridge proves the exact AutomationBench distribution version, installed package-tree hash, and official task-contract hash. Map out only the stock single-model turn-budget sentence; preserve the business contract and record the mapped request hash.
+- The experimental Skill condition requires both projection evidence and a separately reported runtime-adherence outcome. Seeding `.opencorvus/skill/` does not project a Skill onto an Expert Squad's agents, and mounting it does not prove an Agent loaded it: a projected owner sees its manifest grants plus explicit operator mounts and nothing else. Physical assignment is exact-owner-specific. Base mounts `orchestrator`, `base-planner`, `base-developer`, and `base-tester`. Advanced mounts `orchestrator`, `requirement-engineer`, `solution-architect`, the read-only executable `source-investigator`, `implementation-engineer`, and `test-engineer`; Integrity audits preserved Test evidence without an executable client. Before creating the Task, verify those exact owners are Skill-mountable and expose the `skill` Tool, mount only them, re-read the matrix, and fail closed on a missing/disabled required mount or any unexpected effective mount. The canonical matrix includes the projected scheduler, scheduler-only platform workers, and package workers; no owner is implicitly exempt. Seal the required-owner list and matrix as run evidence and recompute the same audit in the checker; a self-declared `skill.enabled` is not a measurement. From the sealed transcript, measure for every mounted owner Session that actually produces an assistant Message whether it shows a completed exact `skill({name:"automationbench-api"})` load, and whether every Bash command that really invokes `python3 automationbench_tool.py ...` follows that load in the same Agent Session. Search-only calls, failed loads, another Session, descriptions, documentation searches, or prose mentions do not count. The same transcript audit must account for every Agent that actually ran as mounted or as an explicit non-owner. An uncovered Agent, missing Session identity, or receipt mismatch invalidates evidence; natural missing loads, client-before-load calls, and unmounted client use remain scored harness/model behavior with `runtime_adherence_passed=false` and never authorize a rerun.
+- Project tools may contain only the trial's Unix socket path. Keep the scorer admin token host-only through an anonymous stdin pipe, never project files, process arguments, environment variables, prompts, or transcripts. Invalidate a run if its transcript touches protected evaluator paths, admin routes, scorer symbols, or dataset internals.
+- A paper-result run must name the exact OpenCorvus commit and benchmark revision. Prefer a clean worktree; if development state is dirty, retain the attempt as development evidence rather than a final paper result.
+
+## Preserve every attempt
+
+Create a new timestamp-plus-UUID evidence directory before starting a run. Never reuse or overwrite a prior run directory. Preserve success, official zero, Provider failure, infrastructure failure, interruption, and invalidation alike.
+
+Each directory must contain the available raw suite events, composite Mission/child-Task terminal board, Mission wake/binding receipt, Mission transcript, exact 0..N child-Task transcript set and canonical flattened Task transcript, Task-bound OpenCorvus AgentTrace plus Mission usage from the Provider ledger, normalized trajectory data, rendered trajectory, result or failure record, exact per-call Provider token ledger plus transcript reconciliation, the verified Skill mount matrix, a redacted relational snapshot of the isolated runtime's Mission/Task/Session/occurrence/scheduler-delivery/usage rows, configuration identities, cleanup state, and an exact-file-set SHA-256 evidence manifest. The isolated runtime is deleted at the end of every trial, so any question that needs a join — which Agent occurrence produced this Artifact, which Mission and Task owned it, and what that occurrence cost — is unanswerable later unless the snapshot was sealed before cleanup. An interrupted run still gets a failure record and manifest. An explicit natural `manage_task(fail_task)` without a structured `infrastructure_failure` is harness performance and must be scored from the final world (normally strict zero), not discarded. Regenerate only derived catalogs; never rewrite a sealed per-run manifest except for an explicit secret-redaction chain that retains prior manifest hashes and receipts.
+
+The ordinary Task trace route is a bounded live/debug tail and is sufficient only for activity polling. After Mission and every child Task reach physical quiescence, the Host runner must read each Task's canonical `trace.jsonl` exactly once from the trusted route's Host-only runtime projection, require a stable file across the read, and seal the complete event set. The result, catalog and final verifier must agree on an exact complete-trace receipt containing the Task set, per-Task event counts and digests. Never reconcile the complete Provider ledger against the bounded live tail.
+
+The pre-repair r3 attempts did not contemporaneously seal the AgentTrace event-bound environment. Do not describe them as independently proving a complete Task trace. Their official scores may remain in the round only through an exact run-ID post-hoc operator environment attestation plus the strict physical tail lower-bound audit; report this evidence grade and limitation separately. The attestation never applies to an unlisted run, never repairs a failed prompt/usage reconciliation, and never authorizes a rerun of an already valid slot.
+
+Keep the last successful public board/transcript/trace/interactions observation during execution polling. A later failed or inactivity-stopped attempt must seal those partial artifacts and its recomputed Skill runtime-adherence receipt before cleanup; if no observation ever succeeded, seal typed `unavailable` rather than inferring non-adherence. Redact exact protected source-secret leaves from partial failure artifacts, keep the write create-only, and include every file in the ordinary evidence manifest. This preservation does not change timeout or score eligibility.
+
+Before a batch starts, write its planned case/profile/repetition identities and a create-only run-start receipt for each trial. Enforce an evidence-root lease limiting active trials to five and a case lease preventing Base and Advanced for the same case from overlapping. Catalog orphan start receipts and signal-terminated attempts instead of silently omitting them.
+
+Never rerun a profile/case/repetition slot that is already verified in the leaderboard, including a valid official strict-zero result. Build every recovery plan from the union of verified leaderboard rows and sealed failed-batch candidates, with the verified row authoritative for its slot. Only an invalid, unsealed, interrupted, or genuinely missing slot may launch a fresh attempt.
+
+Use the current generic `run-automationbench-batch.ts` coordinator with `--case-set`, `--base-restricted-shell`, and `--extended-restricted-shell`; choose the desired batches and model explicitly. To publish an operator view after a catalog update, invoke `write-automationbench-dashboard.ts` with `--root`, `--dashboard`, and `--model`. It writes the standalone HTML atomically. Keep the page outside Git and evidence roots, do not expose secrets or protected paths, and do not create a Codex visualization artifact for this experiment.
+
+## Bug rule
+
+If any product, adapter, scorer, evidence, timeout, credential/model projection, or lifecycle bug is discovered during or after a run:
+
+1. Mark every affected run `invalid_bug`. Keep it in the all-attempt evidence catalog, but exclude it from experiment tables, aggregates, rankings, and claims.
+2. Stop launching experiment runs. Diagnose and fix the shared root cause first; add focused positive coverage and perform the repository-required independent read-only review.
+4. Commit the repair on main, then rerun from a fresh AutomationBench world and new evidence directory. Never relabel an old run as fixed.
+
+An excessive call count, long duration while observable work continues, parallel Agents, repeated work, or a low official score is harness behavior—not a bug and not a reason to cancel. Use only true inactivity detection for a stuck run; do not impose a wall-clock deadline while work advances.
+
+## Execute
+
+Run the committed Sol/Base supervisor. It schedules deterministic five-case batches and uses a ten-minute inactivity window so a legitimate long streaming model call is not mistaken for a stuck trial:
+
+```bash
+apt-get update && apt-get install -y ripgrep nodejs
+bun install --frozen-lockfile
+bun run --cwd packages/sdk/js build
+# The SDK build refreshes this generated tracked source while producing ignored dist/.
+# Restore only this proven generated file so result source-state evidence stays clean.
+git restore -- packages/sdk/js/src/route-policy.ts
+test -z "$(git status --porcelain)"
+
+# Provision the approved auth.json, models.json, and exa.env without logging values.
+# Configure network.env with AUTOMATIONBENCH_PROXY_PORT for the active Windows proxy.
+# Confirm the shared helper completes a real HTTPS CONNECT before Provider preflight.
+
+bash packages/opencorvus/script/benchmark/external-agent/run-sol-mission-base-50.sh
+```
+
+Regenerate and verify this round with exact `--model openai/gpt-5.6-sol --profiles base --repetition 1`; use final mode after Base reaches 50/50. Do not add Luna, direct-Task, Terra, or Advanced rows to this Sol Mission/Base primary aggregate.
+
+## Score and report
+
+- Invoke AutomationBench's official scorer only after OpenCorvus reaches its natural terminal state.
+- In Mission mode, a durable `complete_mission` plus inactive/quiescent child Tasks may score immediately. A Mission that naturally becomes inactive without completion remains observable until the full inactivity window expires; if it is still inactive with every child Task naturally terminal, score that final world as harness behavior rather than rerunning it. An open/incomplete Provider stream or still-running Mission at the inactivity boundary remains infrastructure failure evidence.
+- Do not add Host business gates for benchmark-specific notions of sufficient evidence or fresh verification. After a Task becomes terminal, the benchmark runner waits until every recorded execution occurrence is terminal and detached ingress delivery settles, then re-reads the board, transcript, trace, and Provider ledger before scoring and sealing. An explicit natural `fail_task` counts only when that tool call actually completed; a rejected historical call is not terminal authority.
+- The bridge must atomically seal the world, score it, and record attempted/succeeded/failed API counts in one terminal critical section. Independently verify the initial-to-final world hash chain, replay deterministic stateless tools, reload the sealed final world, and rerun the official rubric; require exact strict, partial, assertions, final-world hash, deterministic output hashes, and call-count agreement.
+- Only natural scorable terminal runs—durable `complete_mission`, a healthy inactive Mission observed unchanged through the full inactivity window with every child Task terminal, or an explicit child `fail_task` with no structured infrastructure failure—with official scorer output, clean source, exact profile binding, passed evaluator-isolation audit, recomputable Provider ledger, and verified exact-set manifest are leaderboard-eligible. Cancelled, interrupted, infrastructure-affected, operator-steered, dirty-source final candidates, and `invalid_bug` runs remain evidence only.
+- Report strict `task_completed_correctly` as the primary score and `partial_credit` as diagnostic. Include input, text output, reasoning, cache read/write, total tokens, model calls, benchmark calls, Sessions, Agents, duration, and exact assertions. Report the per-Agent token split from the ledger's own Session/Agent attribution rather than inferring it from transcript timestamps, which cannot separate concurrent workers.
+- Write only the 50 Sol Mission/Base rows into this round's primary aggregate. Luna, direct-Task, Terra, and Advanced rows remain separate historical/debug evidence and must never be merged into the Sol score. Official private leaderboard rows are a separate context table only: never compute a cross-dataset rank, slot, band, position, or numeric delta; keep the exact Sol Mission configuration explicitly absent from the public board.
+- Render and visually inspect the current Mission Base trajectories. Keep direct-Task and Advanced trajectories as separate debug evidence only. If labels or lanes are unreadable, fix the renderer and regenerate the derived view without changing raw run evidence.

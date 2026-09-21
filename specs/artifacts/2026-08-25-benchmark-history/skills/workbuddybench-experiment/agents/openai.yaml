@@ -1,0 +1,4 @@
+interface:
+  display_name: "WorkBuddyBench Experiment"
+  short_description: "Run auditable OpenCorvus WorkBuddyBench experiments"
+  default_prompt: "Use $workbuddybench-experiment to run an auditable OpenCorvus WorkBuddyBench experiment."

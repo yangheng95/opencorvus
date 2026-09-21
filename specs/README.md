@@ -2205,3 +2205,17 @@ specs:
 ```bash
 bun run docs:check
 ```
+
+
+
+- [2026-08-20-external-agent-benchmark-pilot](records/2026-08/2026-08-20-external-agent-benchmark-pilot.md)
+
+- [2026-08-21-orchestrator-context-economics](records/2026-08/2026-08-21-orchestrator-context-economics.md)
+
+- [2026-08-22-automationbench-adversarial-acceptance-repair](records/2026-08/2026-08-22-automationbench-adversarial-acceptance-repair.md)
+
+- [2026-08-24-sol-base-restricted-shell-authority-repair](records/2026-08/2026-08-24-sol-base-restricted-shell-authority-repair.md)
+
+- [2026-08-25-workbuddybench-luna-mission-base-code](records/2026-08/2026-08-25-workbuddybench-luna-mission-base-code.md)
+
+- [Historical WorkBuddy and fixed-round benchmark source](artifacts/2026-08-25-benchmark-history/README.md): exact committed August experiment materials; current-runtime limitations are explicit.
