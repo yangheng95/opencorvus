@@ -24,6 +24,23 @@ class FrozenRpmGraph(unittest.TestCase):
         self.assertEqual(bundler.verify_patch_lock(self.before, self.after), 2)
         self.assertEqual(bundler.rpm_lock_entry(self.after)["version"], "0.16.0")
 
+    def test_projects_the_source_patch_into_the_exact_resolved_graph(self):
+        original = '''version = 4
+[[package]]
+name = "rpm"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "locked-crate"
+dependencies = ["flate2"]
+[[package]]
+name = "flate2"
+version = "1.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "locked-compressor"
+'''
+        self.assertEqual(bundler.tomllib.loads(bundler.patch_lock_source(original)),
+                         {"version": 4, **self.after})
+
     def test_reports_unrelated_dependency_drift(self):
         self.after["package"][1]["version"] = "1.1.9"
         with self.assertRaisesRegex(ValueError, "changed dependencies beyond the single local source patch"):

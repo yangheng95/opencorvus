@@ -57,6 +57,23 @@ def verify_patch_lock(before, after):
     return len(after["package"])
 
 
+def patch_lock_source(contents):
+    """Change only rpm's registry identity; keep every resolved dependency edge."""
+    before = tomllib.loads(contents)
+    rpm_lock_entry(before)
+    sections = contents.split("[[package]]")
+    for index, section in enumerate(sections[1:], 1):
+        entry = tomllib.loads("[[package]]" + section)["package"][0]
+        if entry["name"] == "rpm":
+            sections[index] = "".join(
+                line for line in section.splitlines(keepends=True)
+                if not line.startswith(("source = ", "checksum = "))
+            )
+    patched = "[[package]]".join(sections)
+    verify_patch_lock(before, tomllib.loads(patched))
+    return patched
+
+
 def unpack(archive, destination):
     with tarfile.open(archive) as package:
         package.extractall(destination, filter="data")
@@ -117,8 +134,7 @@ def prepare():
                        env=environment, stdout=sys.stderr, check=True)
         with (source / "Cargo.toml").open("a") as manifest:
             manifest.write("\n[patch.crates-io.rpm]\npath = " + json.dumps(str(crate)) + "\n")
-        subprocess.run(["cargo", "update", "--package", "rpm"], cwd=source,
-                       env=environment, stdout=sys.stderr, check=True)
+        lock_path.write_text(patch_lock_source(lock_path.read_text()))
         verify_patch_lock(before, tomllib.loads(lock_path.read_text()))
         subprocess.run(["cargo", "build", "--release", "--locked", "--package", "tauri-cli", "--bin", "cargo-tauri",
                         "--target-dir", str(stage / "target")], cwd=source,
