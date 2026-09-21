@@ -15,10 +15,7 @@ import {
   releaseDispatchAdmissionOnError,
 } from "@/engine/dispatch-lineage"
 import { joinProcessLivenessLease } from "@/engine/process-liveness"
-import {
-  materializeTestDispatchCreatorOccurrence,
-  recordTestDispatchLineage,
-} from "./fixture/dispatch-lineage"
+import { materializeTestDispatchCreatorOccurrence, recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import {
   findDispatchSettlementByDispatchID,
   recordDispatchSettlement,
@@ -44,14 +41,27 @@ import {
   deriveGoalWorkloadCoverage,
   type WorkloadBrief,
 } from "@/goal-workload-analyst/types"
-import {
-  GoalWorkloadPublicationConflictError,
-  publishGoalWorkload,
-} from "@/goal-workload-analyst/publication"
+import { GoalWorkloadPublicationConflictError, publishGoalWorkload } from "@/goal-workload-analyst/publication"
 import { goalWorkloadPublicationArtifactID } from "@/goal-workload-analyst/relational-integrity"
 import { Instance } from "@/project/instance"
 import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
-import { createDispatchAgentTool, type DispatchAdapterExecutors } from "@/orchestrator/dispatch-agent-tool"
+import {
+  createDispatchAgentTool,
+  DispatchAgentToolTestHooks,
+  dispatchAgentExecutionInputSchema,
+  type DispatchAdapterExecutors,
+} from "@/orchestrator/dispatch-agent-tool"
+import { createOrchestratorTools } from "@/orchestrator/tools"
+import {
+  createOperatorSteerCoordinationRequest,
+  createAgentCoordinationResponse,
+  findAgentCoordinationAction,
+} from "@/engine/agent-coordination"
+import { sendSchedulerMessage } from "@/protocol/scheduler-message"
+import { PersistedDispatchAgentsInputSchema } from "@/engine/dispatch-collection-contract"
+import { findDispatchLineageByDispatchID } from "@/engine/dispatch-lineage"
+import { projectWorkloadInput } from "@/goal-workload-analyst/input-projection"
+import { renderDispatchContinuationTurn } from "@/orchestrator/dispatch-turn-projection"
 import { createWorkloadAnalysisTool } from "@/orchestrator/workload-analysis-tool"
 import { Session } from "@/session"
 import { executionLifecycleOrderKey } from "@/session/status"
@@ -210,6 +220,7 @@ function persistGoalGraph(input: { taskID: string; goalIDs: string[]; prior?: En
 async function createWorkloadTurn(input: {
   task: Awaited<ReturnType<typeof createTaskFixture>>
   selectedGoalIDs: string[]
+  completeInitialAuthority?: boolean
   continuationOfDispatchID?: string
   workflowOccurrenceID?: string
   existingChild?: { id: string }
@@ -303,7 +314,10 @@ async function createWorkloadTurn(input: {
               task_id: input.task.taskID,
               root_session_id: input.task.root.id,
               request_sha256: taskRequestSHA256(input.task.request),
-              initial_control_text_parts: [],
+              ...(input.completeInitialAuthority ? { initial_user_message_id: parent.id } : {}),
+              initial_control_text_parts: input.completeInitialAuthority
+                ? [{ part_id: control.id, text_sha256: taskRequestSHA256(control.text) }]
+                : [],
             },
           }
         : {
@@ -318,7 +332,10 @@ async function createWorkloadTurn(input: {
               task_id: input.task.taskID,
               root_session_id: input.task.root.id,
               request_sha256: taskRequestSHA256(input.task.request),
-              initial_control_text_parts: [],
+              ...(input.completeInitialAuthority ? { initial_user_message_id: parent.id } : {}),
+              initial_control_text_parts: input.completeInitialAuthority
+                ? [{ part_id: control.id, text_sha256: taskRequestSHA256(control.text) }]
+                : [],
             },
           },
     },
@@ -396,16 +413,19 @@ async function createCompletedWorkloadAgentTurn(input: {
   dispatchTurn: NonNullable<Parameters<typeof GoalWorkloadAnalystAgent.analyze>[0]["dispatchTurn"]>
   briefs: WorkloadBrief[]
   newSessionID?: string
+  existingSessionID?: string
   onSessionCreated?: (sessionID: string) => void | Promise<void>
   onDispatchAuthorityCommit?: Parameters<typeof GoalWorkloadAnalystAgent.analyze>[0]["onDispatchAuthorityCommit"]
 }) {
-  const child = await Session.createNext({
-    id: input.newSessionID,
-    kind: "goal-workload-analyst",
-    parentID: input.task.root.id,
-    directory: Instance.directory,
-    title: "Production-chain Workload Analyst",
-  })
+  const child = input.existingSessionID
+    ? await Session.get(input.existingSessionID)
+    : await Session.createNext({
+        id: input.newSessionID,
+        kind: "goal-workload-analyst",
+        parentID: input.task.root.id,
+        directory: Instance.directory,
+        title: "Production-chain Workload Analyst",
+      })
   await input.onSessionCreated?.(child.id)
   const parent = await Session.updateMessage({
     id: Identifier.ascending("message"),
@@ -974,7 +994,8 @@ describe("Goal Workload coverage contract", () => {
       first: `OK: workload brief for "${goalA}" registered (1 total).`,
       duplicate: `Error: goal_id "${goalA}" was submitted more than once. Submission retained as duplicate coverage evidence.`,
       extra:
-        `Error: goal_id "${goalB}" is not a registered plan goal. Known goals: ${goalA}. ` +
+        `Error: goal_id "${goalB}" is not selected for this Turn. Selected goal IDs: ${JSON.stringify([goalA])}. ` +
+        "Ask the orchestrator to continue this Session with complete turn.input selecting the required goal_ids. " +
         "Submission retained as invalid coverage evidence.",
       collector: { briefs: [brief(goalA), brief(goalA), brief(goalB)] },
     })
@@ -1908,4 +1929,243 @@ describe("Goal Workload coverage contract", () => {
       },
     })
   }, 30_000)
+})
+
+describe("production continuation workload selection", () => {
+  for (const mode of ["direct", "collection", "inherit", "coordination", "empty"] as const) {
+    test(`${mode} persists the successor selection and registers exact workload evidence`, async () => {
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const task = await createTaskFixture(`Successor ${mode}`)
+          const goalID = Identifier.ascending("goal")
+          persistGoalGraph({ taskID: task.taskID, goalIDs: [goalID], now: task.now + 1 })
+          const previous = await createWorkloadTurn({
+            task,
+            selectedGoalIDs: mode === "inherit" || mode === "empty" ? [goalID] : [],
+            completeInitialAuthority: true,
+          })
+          recordDispatchSettlement({
+            taskID: task.taskID,
+            dispatchID: previous.dispatchID,
+            outcome: DispatchOutcome.terminal({ sessionID: previous.child.id, finalMessageID: previous.final.id }),
+          })
+          let coordinationActionID: string | undefined
+          if (mode === "coordination") {
+            const request = await createOperatorSteerCoordinationRequest({
+              taskID: task.taskID,
+              sessionID: previous.child.id,
+              sessionKind: "goal-workload-analyst",
+              operatorMessage: "Select the current Goal and complete its workload review",
+              operatorSteerID: Identifier.ascending("artifact"),
+            })
+            const scheduler = await Session.create({
+              kind: "orchestrator",
+              parentID: task.root.id,
+              title: "Coordination owner",
+            })
+            const responseOrigin = createDispatchLineageOrigin({
+              taskID: task.taskID,
+              orchestratorSessionID: scheduler.id,
+              orchestratorMessageID: Identifier.ascending("message"),
+              toolPartID: Identifier.ascending("part"),
+              toolCallID: Identifier.ascending("call"),
+              targetAgentID: workloadIdentity.agentID,
+              projectedWorkerIdentity: workloadIdentity,
+              workScope: { kind: "task" },
+              workflowBinding: previous.lineage.payload.workflow_binding,
+              workflowNodeID: previous.lineage.payload.workflow_node_id,
+              adapterInput: {},
+            })
+            materializeTestDispatchCreatorOccurrence(
+              { origin: responseOrigin, childSessionID: previous.child.id },
+              {
+                toolName: "respond_agent_coordination",
+                toolInput: {
+                  request_id: request.payload.request_id,
+                  decision: "redispatch",
+                  reason: "Update selected Goal input",
+                  message: "Continue the same Session with explicit input",
+                },
+              },
+            )
+            const response = await createAgentCoordinationResponse({
+              taskID: task.taskID,
+              requestID: request.payload.request_id,
+              orchestratorSessionID: scheduler.id,
+              orchestratorMessageID: responseOrigin.orchestratorMessageID,
+              orchestratorToolCallID: responseOrigin.toolCallID,
+              orchestratorToolPartID: responseOrigin.toolPartID,
+              decision: "redispatch",
+              reason: "Update selected Goal input",
+              message: "Continue the same Session with explicit input",
+            })
+            coordinationActionID = response.payload.action_id
+          }
+          const selected = mode === "empty" ? [] : [goalID]
+          const replacement = { reason: "Review the exact current Goal", goal_ids: selected }
+          const dispatch = {
+            target: workloadIdentity.agentID,
+            work_scope: { kind: "task" as const },
+            turn: {
+              kind: "continuation" as const,
+              authority: coordinationActionID
+                ? { kind: "coordination_action" as const, coordination_action_id: coordinationActionID }
+                : { kind: "prior_dispatch" as const, continuation_dispatch_id: previous.dispatchID },
+              guidance: "Register the current Goal workload brief",
+              evidence_locators: [],
+              ...(mode === "inherit" ? {} : { input: replacement }),
+            },
+          }
+          const surface = createOrchestratorTools({
+            taskID: task.taskID,
+            agentSessionID: task.root.id,
+            sendSchedulerMessage,
+            dispatchAgents: [projectedWorkloadAgent as never],
+          })
+          const tool = surface.tools.dispatch_agent!
+          const parsed = dispatchAgentExecutionInputSchema(tool).parse({ dispatch }) as { dispatch: typeof dispatch }
+          expect(parsed.dispatch.turn).toEqual(dispatch.turn)
+          const toolName = mode === "collection" ? "dispatch_agents" : "dispatch_agent"
+          const toolInput =
+            mode === "collection"
+              ? PersistedDispatchAgentsInputSchema.parse({
+                  team: [
+                    {
+                      name: "reviewer",
+                      target: workloadIdentity.agentID,
+                      responsibility: "Review the Goal",
+                      boundary: "Read only",
+                      expected_result: "Workload brief",
+                      depends_on: [],
+                    },
+                  ],
+                  dispatches: [{ dispatch }],
+                })
+              : { dispatch }
+          const origin = createDispatchLineageOrigin({
+            taskID: task.taskID,
+            orchestratorSessionID: task.root.id,
+            orchestratorMessageID: Identifier.ascending("message"),
+            toolPartID: Identifier.ascending("part"),
+            toolCallID: Identifier.ascending("call"),
+            toolName,
+            ...(mode === "collection" ? { collectionMemberIndex: 0, collectionMemberCount: 1 } : {}),
+            targetAgentID: workloadIdentity.agentID,
+            projectedWorkerIdentity: workloadIdentity,
+            workScope: { kind: "task" },
+            deliverySliceRevisionIDs: [goalID],
+            workflowBinding: previous.lineage.payload.workflow_binding,
+            workflowNodeID: previous.lineage.payload.workflow_node_id,
+            workflowOccurrenceID: previous.occurrenceID,
+            continuationOfDispatchID: previous.dispatchID,
+            adapterInput: replacement,
+          })
+          materializeTestDispatchCreatorOccurrence(
+            { origin, childSessionID: previous.child.id },
+            { completeAssistant: false, toolInput },
+          )
+          const open = DispatchAgentToolTestHooks.openLineage(tool)
+          const options = {
+            taskID: task.taskID,
+            targetAgentID: workloadIdentity.agentID,
+            projectedAgent: projectedWorkloadAgent as never,
+            workScope: { kind: "task" as const },
+            deliverySliceRevisionIDs: mode === "inherit" ? [] : [goalID],
+            ...(coordinationActionID ? { coordinationActionID } : { continuationDispatchID: previous.dispatchID }),
+            ...(mode === "inherit" ? {} : { adapterInput: replacement }),
+            continuationGuidance: dispatch.turn.guidance,
+            toolOptions: {
+              toolCallId: origin.toolCallID,
+              opencorvus: {
+                sessionID: task.root.id,
+                messageID: origin.orchestratorMessageID,
+                toolCallID: origin.toolCallID,
+                toolPartID: origin.toolPartID,
+                visibleToolName: toolName,
+                ...(mode === "collection" ? { collectionMember: { index: 0, count: 1 } } : {}),
+              },
+            },
+          }
+          const liveness = joinProcessLivenessLease(currentRuntimeOccurrenceID())
+          try {
+            const handle = await open(options)
+            if (handle.replayOutcome) throw new Error("Expected a live successor")
+            try {
+              const lineage = findDispatchLineageByDispatchID({ taskID: task.taskID, dispatchID: handle.dispatchID })!
+              expect({
+                input: handle.adapterInput,
+                subjects: handle.deliverySliceRevisionIDs,
+                session: handle.existingSessionID,
+                occurrence: handle.turn.workflow_occurrence_id,
+                stored: lineage.payload.adapter_input,
+              }).toEqual({
+                input: mode === "inherit" ? previous.lineage.payload.adapter_input : replacement,
+                subjects: selected,
+                session: previous.child.id,
+                occurrence: previous.occurrenceID,
+                stored: mode === "inherit" ? previous.lineage.payload.adapter_input : replacement,
+              })
+              const projection = projectWorkloadInput({
+                taskID: task.taskID,
+                workScope: { kind: "task" },
+                goalIDs: handle.adapterInput.goal_ids as string[],
+              })
+              const output = createGoalWorkloadOutputTools({ knownGoalIDs: projection.goals.map((goal) => goal.id) })
+              expect(projection.goals.map((goal) => goal.id)).toEqual(selected)
+              if (mode !== "empty") {
+                const registered = await output.materializeExact("register_workload_brief")!.execute!(
+                  brief(goalID),
+                  {} as never,
+                )
+                expect(registered).toBe(`OK: workload brief for "${goalID}" registered (1 total).`)
+              }
+              const prompt = renderDispatchContinuationTurn({
+                turn: handle.turn,
+                guidance: dispatch.turn.guidance,
+                adapterInput: handle.adapterInput,
+              })!
+              expect(prompt).toContain(JSON.stringify(handle.adapterInput))
+              const result = await createCompletedWorkloadAgentTurn({
+                task,
+                existingSessionID: handle.existingSessionID,
+                dispatchTurn: handle.turn,
+                briefs: output.getCollector().briefs,
+                onDispatchAuthorityCommit: (session, descriptor) => {
+                  handle.commitSession(session, descriptor)
+                },
+              })
+              if (coordinationActionID)
+                expect(
+                  findAgentCoordinationAction({ taskID: task.taskID, actionID: coordinationActionID })!.payload.status,
+                ).toBe("completed")
+              const publication = publishGoalWorkload({
+                taskID: task.taskID,
+                dispatchID: handle.dispatchID,
+                ...result,
+                now: Date.now(),
+              })
+              expect(publication.deliveryStatus).toBe(mode === "empty" ? "incomplete" : "complete")
+              const outcome = DispatchOutcome.terminal(result)
+              recordDispatchSettlement({ taskID: task.taskID, dispatchID: handle.dispatchID, outcome })
+              const replay = await open(options)
+              expect({ input: replay.adapterInput, outcome: replay.replayOutcome }).toEqual({
+                input: handle.adapterInput,
+                outcome,
+              })
+              expect(
+                findDispatchLineageByDispatchID({ taskID: task.taskID, dispatchID: previous.dispatchID })!.payload
+                  .adapter_input,
+              ).toEqual(previous.lineage.payload.adapter_input)
+            } finally {
+              handle.releaseAdmission()
+            }
+          } finally {
+            liveness.release()
+          }
+        },
+      })
+    }, 120_000)
+  }
 })

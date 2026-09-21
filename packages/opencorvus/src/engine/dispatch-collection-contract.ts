@@ -46,6 +46,7 @@ const DispatchCollectionContinuationTurnSchema = z
       z.object({ kind: z.literal("prior_dispatch"), continuation_dispatch_id: z.string().min(1) }).strict(),
     ]),
     guidance: z.string().trim().min(1),
+    input: z.record(z.string(), z.unknown()).optional(),
     evidence_locators: EvidenceLocatorInputListSchema.default([]),
     ...acceptanceRepairSelectionShape,
   })

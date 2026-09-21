@@ -107,7 +107,7 @@ export type OpenDispatchAgentLineage = (input: {
   continuationDispatchID?: string
   signal?: AbortSignal
   toolOptions: unknown
-  adapterInput: Record<string, unknown>
+  adapterInput?: Record<string, unknown>
   continuationGuidance?: string
   evidenceLocators?: EvidenceLocator[]
   acceptanceRepair?: AcceptanceRepairSelection
@@ -447,7 +447,7 @@ export function createDispatchAgentTool(input: {
     z
       .object({
         kind: z.literal("prior_dispatch"),
-        continuation_dispatch_id: z.string().min(1).describe("Exact dispatch ID of this worker Session’s latest accepted physical Turn. On infrastructure failure use worker_turn.current_dispatch_id when supplied, not the failed recovery_authority.dispatch_id. After an accepted continuation, use its current dispatch ID; the original logical workflow occurrence ID is not the current Turn. If no worker Turn was accepted, use the exact settled preparation-failure dispatch ID to recover the reserved worker. Stale accepted-Turn source identities are rejected; the Host never substitutes a newer source."),
+        continuation_dispatch_id: z.string().min(1).describe("Exact dispatch_id of this worker Session’s latest accepted physical Turn, never the containing dispatch_lineage Artifact ID. On infrastructure failure use worker_turn.current_dispatch_id when supplied, not the failed recovery_authority.dispatch_id. After an accepted continuation, use its current dispatch ID; the original logical workflow occurrence ID is not the current Turn. If no worker Turn was accepted, use the exact settled preparation-failure dispatch ID to recover the reserved worker. Stale accepted-Turn source identities are rejected; the Host never substitutes a newer source."),
       })
       .strict(),
   ])
@@ -481,7 +481,7 @@ export function createDispatchAgentTool(input: {
         .string()
         .trim()
         .min(1)
-        .describe("Only new instruction for this successor Turn; original adapter input remains frozen."),
+        .describe("New instruction for this successor Turn. To change structured selections, also supply the complete turn.input; prose alone does not change the inherited input."),
       evidence_locators: EvidenceLocatorInputListSchema.default([]).describe(
         "Exact new durable evidence identities selected for this successor Turn. Name each Artifact by its exact revision or snapshot path only; the Host reads the digest, byte count, and media type itself, so never restate a content digest here. A session_message locator must be Task-owned and pair the Message with its actual producing Session; for a Mission acceptance-repair Task-root message, use the Task root Session authority and never missionSessionID.",
       ),
@@ -519,7 +519,7 @@ export function createDispatchAgentTool(input: {
           "Projected expert-squad dispatch target identifier to dispatch through the single scheduler agent-dispatch tool. " +
             `For target ${JSON.stringify(agentID)}, provide only these adapter-specific fields: ${acceptedAdapterFields.join(", ")}; omit fields owned by every other target. ` +
             DispatchAdapterContractRegistry.modelGuidance(dispatchAdapterID) +
-            "Put those adapter-specific fields only in turn.input when turn.kind is initial. Every projected workflow node has one logical occurrence per Task. A continuation uses turn.kind=continuation, names one exact lineage authority, reopens its existing Session for another Turn, and reuses that occurrence. When this adapter accepts exact Delivery Slice revision identifiers, they select contract subjects and never create additional logical occurrences.",
+            "Put those adapter-specific fields in turn.input. Initial Turns require it. Continuations may supply a complete replacement input for the successor Turn; omitting it inherits the prior Turn input. Every projected workflow node has one logical occurrence per Task. A continuation names one exact lineage authority, reopens its existing Session for another Turn, and reuses that occurrence. Delivery Slice revision identifiers select current contract subjects and never create additional logical occurrences.",
         ),
       work_scope: ProjectedAgentWorkScopeSchema,
     } as const
@@ -535,7 +535,11 @@ export function createDispatchAgentTool(input: {
           ),
         })
         .strict(),
-      continuationTurnSchema,
+      continuationTurnSchema.extend({
+        input: publicAdapterInputSchema.optional().describe(
+          "Complete adapter input for this successor Turn. Omit to inherit the prior Turn input. When supplied, replaces that input without merging; empty selections remain empty. Earlier Turn facts stay immutable.",
+        ),
+      }),
     ])
     variants.push(
       z
@@ -603,6 +607,7 @@ export function createDispatchAgentTool(input: {
                   | { kind: "coordination_action"; coordination_action_id: string }
                   | { kind: "prior_dispatch"; continuation_dispatch_id: string }
                 guidance: string
+                input?: Record<string, unknown>
                 evidence_locators: unknown
                 acceptance_gap_id?: string
                 criterion_ids?: string[]
@@ -636,7 +641,7 @@ export function createDispatchAgentTool(input: {
         throw new Error(`dispatch_agent acceptance-repair Turn is missing its current gap or criteria.`)
       }
       const workflowSubject = initialTurn?.workflow_subject
-      const targetInput = initialTurn?.input ?? {}
+      const targetInput = initialTurn?.input ?? continuationTurn?.input
       const projectedAgent = agentsByID.get(target)
       const execute = handlersByAgentID.get(target)
       if (!projectedAgent || !execute) {

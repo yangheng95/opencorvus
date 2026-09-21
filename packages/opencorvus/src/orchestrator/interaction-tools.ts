@@ -74,7 +74,13 @@ export function createOrchestratorInteractionTools(input: {
         .strict(),
       execute: async ({ message_id, reason }) => {
         const wake = input.allowedRootMessages.find((candidate) => candidate.messageID === message_id)
-        if (!wake) throw new Error(`Task ${input.taskID} wake does not authorize task-root message ${message_id}`)
+        if (!wake) {
+          throw new Error(
+            `Task ${input.taskID} wake does not authorize task-root message ${message_id}. ` +
+              `Authorized message IDs: ${JSON.stringify(input.allowedRootMessages.map((message) => message.messageID))}. ` +
+              `The initial Task request is already in User Request; an ingress Artifact ID is not a Message ID.`,
+          )
+        }
         const task = requireTask(input.taskID)
         if (!task.session_id) throw new Error(`Task ${input.taskID} has no root session`)
         if (task.project_id !== Instance.project.id) {

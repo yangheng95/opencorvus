@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Dispatch continuation input repair](records/2026-09/2026-09-21-dispatch-continuation-input.md).
+
 [v0.1.9 main-branch fixes, native and website release](records/2026-09/2026-09-20-v0.1.9-release.md).
 
 [Browser interaction and evidence publication repair](records/2026-09/2026-09-20-browser-acceptance-publication-repair.md).

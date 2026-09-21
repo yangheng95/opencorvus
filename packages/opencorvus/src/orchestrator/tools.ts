@@ -2433,7 +2433,7 @@ export function createOrchestratorTools(input: {
         if (
           replayLineage.payload.target_agent_id !== targetAgentID ||
           !isDeepStrictEqual(replayLineage.payload.work_scope, workScope) ||
-          (!coordinationActionID && !continuationDispatchID &&
+          (adapterInput !== undefined &&
             !isDeepStrictEqual(replayLineage.payload.adapter_input, adapterInput))
         ) {
           throw new Error(
@@ -2552,7 +2552,7 @@ export function createOrchestratorTools(input: {
             })
             .map((row) => row.dispatchID)
           throw new Error(
-            `dispatch_agent continuation source ${continuationDispatchID} does not exist in Task ${ownershipTaskID}. ` +
+            `dispatch_agent continuation source ${continuationDispatchID} does not name a dispatch_id in Task ${ownershipTaskID}; a dispatch_lineage Artifact ID is a different identity. ` +
               (continuable.length
                 ? `Exact continuable dispatch identities for ${targetAgentID}: ${continuable.join(", ")}.`
                 : `Task ${ownershipTaskID} has no prior dispatch of ${targetAgentID} to continue; dispatch an initial Turn instead.`),
@@ -2597,6 +2597,18 @@ export function createOrchestratorTools(input: {
         sourceDispatchLineageArtifactID = sourceLineage.artifactID
       } else if (!exactWorkflowBinding || exactWorkflowNodeID === undefined) {
         throw new Error(`dispatch_agent ${targetAgentID} initial dispatch has no workflow binding`)
+      }
+      // Resolve the successor's complete explicit input only after proving
+      // the predecessor authority. Historical input stays immutable; the new
+      // lineage is the sole input authority for execution and recovery.
+      if (adapterInput !== undefined) {
+        exactAdapterInput = DispatchAdapterContractRegistry.modelFacingInputSchema(
+          projectedAgent.identity.dispatchAdapterID,
+        ).parse(adapterInput)
+        exactDeliverySliceRevisionIDs = DispatchAdapterContractRegistry.deliverySliceRevisionIDs(
+          projectedAgent.identity.dispatchAdapterID,
+          exactAdapterInput,
+        )
       }
       const sourceDispatchID = resolveDispatchContinuationSourceID({
         continuationDispatchID,

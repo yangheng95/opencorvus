@@ -15,6 +15,7 @@ import {
   taskRootIngressDebugProjection,
   waitForIngressDeliveryHooksForTest,
 } from "@/engine/task-root-ingress-delivery"
+import { persistArchitectGoalProjection } from "@/engine/persist"
 import { EngineGit } from "@/engine/git"
 import { requireTask } from "@/engine/store"
 import { EngineTaskTable } from "@/engine/engine.sql"
@@ -86,17 +87,23 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-for (const collection of [false, true]) {
-  test(`${collection ? "dispatch_agents" : "dispatch_agent"}: attachment continuation recovers the accepted Turn through streamed execution`, async () => {
+for (const { collection, selectGoals } of [
+  { collection: false, selectGoals: false },
+  { collection: true, selectGoals: false },
+  { collection: false, selectGoals: true },
+]) {
+  test(`${collection ? "dispatch_agents" : "dispatch_agent"}: ${selectGoals ? "workload selection and attachment" : "attachment"} continuation recovers the accepted Turn through streamed execution`, async () => {
     using _drain = Bus.TestHooks.suppressAutomaticDurableDrain()
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const dispatchToolName = collection ? "dispatch_agents" : "dispatch_agent"
-        const profile = collection ? "light" : "base"
-        const target = collection ? "light-planner" : "base-planner"
-        if (collection)
+        const profile = selectGoals ? "advanced" : collection ? "light" : "base"
+        const target = selectGoals ? "workload-reviewer" : collection ? "light-planner" : "base-planner"
+        const adapterID = selectGoals ? "workload_analysis" : "delegated_worker"
+        const goalID = Identifier.ascending("goal")
+        if (collection && !selectGoals)
           await ExpertSquadPackageManager.importDirectory({
             projectDirectory: project.path,
             sourceDirectory: path.resolve(import.meta.dir, "../../../expert-squads/builtin/light"),
@@ -185,11 +192,11 @@ for (const collection of [false, true]) {
                   dispatchToolName,
                   encode({
                     kind: "initial",
-                    workflow_subject: collection
+                    workflow_subject: collection || selectGoals
                       ? { kind: "direct" }
                       : { kind: "virtual_workflow", workflow_id: "planner-parallel-delivery", node_id: target },
                     use_worktree: false,
-                    input: {
+                    input: selectGoals ? { goal_ids: [], reason: "Review the currently selected workload" } : {
                       goal_ids: [],
                       instruction: "Read the original source and define the requirement.",
                       reason: "Prepare a typed handoff.",
@@ -209,6 +216,13 @@ for (const collection of [false, true]) {
                   "followup.txt",
                 )
                 await appendTaskAttachment(task.id, { ...followup, intent: "task_input", source: "user-upload" })
+                if (selectGoals) Database.immediateTransaction(db => persistArchitectGoalProjection(db, {
+                  taskID: task.id,
+                  producer: { kind: "architect_turn", session_id: Identifier.ascending("session"), final_message_id: Identifier.ascending("message") },
+                  observedArtifactLocators: [], sourceArtifactLocators: [],
+                  architectGoals: [{ goalID, llmID: goalID, title: "Current workload", objective: "Review the selected workload", acceptance_specs: [], owned_paths: [], priority: "blocking", kind: "feature" }],
+                  removals: [], graph: { contracts: [] }, fidelity: { sourceCoverage: [], referenceCoverage: [], assemblyOwners: [] }, now: Date.now(),
+                }))
                 phase = 2
                 return toolStream(
                   dispatchToolName,
@@ -216,6 +230,7 @@ for (const collection of [false, true]) {
                     kind: "continuation",
                     authority: { kind: "prior_dispatch", continuation_dispatch_id: initial.dispatchID },
                     guidance,
+                    ...(selectGoals ? { input: { goal_ids: [goalID], reason: "Review the newly selected current Goal" } } : {}),
                     evidence_locators: [],
                   }),
                 )
@@ -225,7 +240,7 @@ for (const collection of [false, true]) {
                   .payload.outcome
                 expect(failure).toMatchObject({
                   kind: "infrastructure_failure",
-                  message: `Projected agent "${target}" failed via adapter "delegated_worker": Injected continuation preparation failure`,
+                  message: expect.stringContaining("Injected continuation preparation failure"),
                   worker_turn: { current_dispatch_id: initial.dispatchID },
                   recovery_authority: { dispatch_id: failedDispatchID },
                 })
@@ -241,6 +256,7 @@ for (const collection of [false, true]) {
                       continuation_dispatch_id: failure.worker_turn.current_dispatch_id,
                     },
                     guidance,
+                    ...(selectGoals ? { input: { goal_ids: [goalID], reason: "Review the newly selected current Goal" } } : {}),
                     evidence_locators: [],
                   }),
                 )
@@ -345,12 +361,13 @@ for (const collection of [false, true]) {
             descriptor.sessionID,
             descriptor.sessionID,
           ])
+          expect({ subjects: descriptor.payload.dispatchTurn!.delivery_slice_revision_ids, input: latest.payload.adapter_input.goal_ids }).toEqual({ subjects: selectGoals ? [goalID] : [], input: selectGoals ? [goalID] : [] })
           const message = await MessageStore.get({
             sessionID: descriptor.sessionID,
             messageID: descriptor.payload.messageAuthority.user_message_id,
           })
           const expectedText = [
-            renderDispatchContinuationTurn({ turn: descriptor.payload.dispatchTurn!, guidance }),
+            renderDispatchContinuationTurn({ turn: descriptor.payload.dispatchTurn!, guidance, adapterInput: latest.payload.adapter_input }),
             attachmentPromptSection(requireTask(taskID).attachments ?? undefined),
           ].join("\n\n")
           expect(requireTask(taskID).attachments?.map((attachment) => attachment.filename)).toEqual([
@@ -367,8 +384,8 @@ for (const collection of [false, true]) {
           const failure = findDispatchSettlementByDispatchID({ taskID, dispatchID: failedDispatchID! })!
           expect(failure.payload.outcome).toEqual({
             kind: "infrastructure_failure",
-            operation: "delegated_worker_adapter",
-            message: `Projected agent "${target}" failed via adapter "delegated_worker": Injected continuation preparation failure`,
+            operation: `${adapterID}_adapter`,
+            message: expect.stringContaining("Injected continuation preparation failure"),
             recovery_authority: {
               occurrence_status: "occurrence_committed",
               dispatch_id: failedDispatchID,
@@ -389,7 +406,7 @@ for (const collection of [false, true]) {
           })
           expect(
             findDispatchSettlementByDispatchID({ taskID, dispatchID: latest.dispatchID })!.payload.outcome,
-          ).toMatchObject({ kind: "terminal_success", session_id: descriptor.sessionID })
+          ).toMatchObject({ kind: selectGoals ? "domain_incomplete" : "terminal_success", session_id: descriptor.sessionID })
           expect(
             Database.use((db) => {
               assertTaskDispatchesSettledInTransaction(db, taskID)

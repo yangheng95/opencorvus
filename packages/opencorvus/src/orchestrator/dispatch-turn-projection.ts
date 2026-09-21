@@ -128,6 +128,7 @@ export function controlTextSHA256(text: string): string {
 export function renderDispatchContinuationTurn(input: {
   turn: DispatchTurn
   guidance: string
+  adapterInput?: Readonly<Record<string, unknown>>
   evidenceLocators?: readonly EvidenceLocator[]
 }): string | undefined {
   const turn = DispatchTurnSchema.parse(input.turn)
@@ -153,6 +154,16 @@ export function renderDispatchContinuationTurn(input: {
     `- workflow_occurrence_id: ${turn.workflow_occurrence_id}`,
     `- delivery_slice_revision_ids: ${turn.delivery_slice_revision_ids.join(", ") || "(none)"}`,
     `- workflow_binding: ${JSON.stringify(turn.workflow_binding)}`,
+    ...(input.adapterInput
+      ? [
+          "",
+          "## Current Turn adapter input",
+          "",
+          JSON.stringify(input.adapterInput),
+          "",
+          "These are this Turn's exact structured selections; earlier Turn inputs remain historical.",
+        ]
+      : []),
     ...(turn.acceptance_repair
       ? [
           "",

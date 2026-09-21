@@ -1369,15 +1369,9 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
           `existing session ${session.id} continuation Task authority does not match its descriptor`,
         )
       }
-      if (
-        JSON.stringify(priorTurn.delivery_slice_revision_ids) !==
-        JSON.stringify(dispatchTurn.delivery_slice_revision_ids)
-      ) {
-        throw new AgentRunError(
-          kind,
-          `existing session ${session.id} continuation Delivery Slice subjects do not match`,
-        )
-      }
+      // Subjects belong to this physical Turn's immutable lineage. Admission
+      // validates the explicit selection and descriptor commit checks it
+      // against that lineage; the predecessor's selection is historical.
     }
 
     // ── 5. Stream-error capture + abort propagation ──────────────────────

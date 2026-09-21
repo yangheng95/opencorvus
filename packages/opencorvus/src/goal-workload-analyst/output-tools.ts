@@ -53,8 +53,9 @@ export function createGoalWorkloadOutputTools(input: { knownGoalIDs: string[]; o
         collector.briefs.push(brief)
         if (!knownGoals.has(brief.goal_id)) {
           return (
-            `Error: goal_id "${brief.goal_id}" is not a registered plan goal. ` +
-            `Known goals: ${[...knownGoals].join(", ") || "(none)"}. Submission retained as invalid coverage evidence.`
+            `Error: goal_id "${brief.goal_id}" is not selected for this Turn. ` +
+            `Selected goal IDs: ${JSON.stringify([...knownGoals])}. ` +
+            `Ask the orchestrator to continue this Session with complete turn.input selecting the required goal_ids. Submission retained as invalid coverage evidence.`
           )
         }
         if (repeated) {

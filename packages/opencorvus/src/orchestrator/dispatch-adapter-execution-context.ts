@@ -100,5 +100,6 @@ export function dispatchAdapterContinuationPrompt(
   return renderDispatchContinuationTurn({
     turn: context.dispatch.turn,
     guidance: context.dispatch.continuationGuidance ?? "",
+    adapterInput: context.dispatch.adapterInput,
   })
 }

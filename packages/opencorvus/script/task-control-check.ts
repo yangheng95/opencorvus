@@ -556,25 +556,40 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
           }
           const completed = ProtocolStore.listTaskEvents(taskID).find((event) => event.type === "task.completed")
           if (!completed || completed.time.emitted < lifecycle.time.emitted) return undefined
-          const finalMessageID = (lifecycle.payload?.status as { final_message_id?: string } | undefined)?.final_message_id
-          const decision = current.artifacts.find((artifact) => artifact.kind === "task_completion_decision" &&
-            Array.isArray(artifact.payload?.evidence_locators) && artifact.payload.evidence_locators.some((locator: any) =>
-              locator.source === "session_message" && locator.session_id === childSessionID && locator.message_id === finalMessageID))
-          if (!decision || !finalMessageID) throw new Error("Task completion requires the exact terminal worker Message evidence")
+          const decision = current.artifacts.find((artifact) => artifact.kind === "task_completion_decision")
+          if (!decision) throw new Error("Task completion requires a durable decision")
           const rootMessages = await Session.messages({ sessionID: String(decision.payload!.orchestrator_session_id) })
           const completionMessage = rootMessages.find((message) => message.info.id === decision.payload!.orchestrator_message_id)
           const parentID = completionMessage?.info.role === "assistant" ? completionMessage.info.parentID : undefined
           const parent = rootMessages.find((message) => message.info.id === parentID)
           const identity = parent?.info.role === "user" ? parent.info.extra?.orchestrator_control_ingress as { ingress_id?: string; predecessor_id?: string } | undefined : undefined
-          if (identity?.ingress_id !== wake.ingressID || !identity.predecessor_id || parent?.info.id !== orchestratorControlOccurrenceIdentity(wake.ingressID, identity.predecessor_id).messageID) {
+          // Completion follows the last verified worker result in a workflow,
+          // which need not be its first implementation dispatch.
+          const completionWake = ingresses.find((ingress) => ingress.ingressID === identity?.ingress_id)
+          if (completionWake && completionWake.projection.state !== "resolved" &&
+            !(completionWake.projection.state === "terminal_inapplicable" && completionWake.projection.boundary === "closed")) return undefined
+          const completionLifecycle = ProtocolStore.listTaskEvents(taskID).find((event) =>
+            event.id === completionWake?.sourceID && event.type === "agent.execution.lifecycle" &&
+            (event.payload?.status as { type?: string; reason?: string } | undefined)?.type === "terminal" &&
+            (event.payload?.status as { reason?: string } | undefined)?.reason === "completed")
+          const finalMessageID = (completionLifecycle?.payload?.status as { final_message_id?: string } | undefined)?.final_message_id
+          const finalWorkerSessionID = completionLifecycle?.sessionID
+          if (!completionWake || !completionLifecycle || !finalWorkerSessionID || !finalMessageID ||
+            completed.time.emitted < completionLifecycle.time.emitted ||
+            !current.artifacts.some((artifact) => artifact.kind === "dispatch_lineage" && artifact.payload?.child_session_id === finalWorkerSessionID) ||
+            !Array.isArray(decision.payload?.evidence_locators) || !decision.payload.evidence_locators.some((locator: any) =>
+              locator.source === "session_message" && locator.session_id === finalWorkerSessionID && locator.message_id === finalMessageID)) {
+            throw new Error("Task completion requires the exact completed worker lifecycle and Message evidence for its control wake")
+          }
+          if (!identity?.predecessor_id || parent?.info.id !== orchestratorControlOccurrenceIdentity(completionWake.ingressID, identity.predecessor_id).messageID) {
             throw new Error("Task completion must belong to the exact terminal lifecycle control wake")
           }
           return {
             taskID,
-            childSessionID,
-            lifecycleEventID: lifecycle.id,
-            wakeID: wake.ingressID,
-            lifecycleEmittedAt: lifecycle.time.emitted,
+            childSessionID: finalWorkerSessionID,
+            lifecycleEventID: completionLifecycle.id,
+            wakeID: completionWake.ingressID,
+            lifecycleEmittedAt: completionLifecycle.time.emitted,
             taskCompletedAt: completed.time.emitted,
           }
         },

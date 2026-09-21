@@ -80,7 +80,8 @@ export function assertCurrentDeliverySliceRevisionIDsInTransaction(input: {
   const missing = input.deliverySliceRevisionIDs.filter((revisionID) => !currentRevisionIDs.has(revisionID))
   if (missing.length > 0) {
     throw new Error(
-      `${input.subject} Delivery Slice revisions are not current members of Task ${input.taskID}: ${[...new Set(missing)].join(", ")}`,
+      `${input.subject} Delivery Slice revisions are not current members of Task ${input.taskID}: ${[...new Set(missing)].join(", ")}. ` +
+        `Exact current revision IDs: ${JSON.stringify([...currentRevisionIDs])}. Copy the required IDs exactly; an empty selection means no subjects.`,
     )
   }
   return [...input.deliverySliceRevisionIDs]

@@ -1,10 +1,7 @@
 import { recordDispatchLineage } from "../../src/engine/dispatch-lineage"
 import { joinProcessLivenessLease } from "../../src/engine/process-liveness"
 import { currentRuntimeOccurrenceID } from "../../src/runtime/process-occurrence"
-import {
-  EngineControlActivationLeaseTable,
-  EngineTaskRootIngressTable,
-} from "../../src/engine/engine.sql"
+import { EngineControlActivationLeaseTable, EngineTaskRootIngressTable } from "../../src/engine/engine.sql"
 import { MessageTable, ToolPartRequestTable } from "../../src/session/session.sql"
 import { Database, and, desc, eq, sql } from "../../src/storage/db"
 import { Identifier } from "../../src/id/id"
@@ -12,7 +9,7 @@ import type { Message } from "../../src/session/message"
 
 export function materializeTestDispatchCreatorOccurrence(
   input: Parameters<typeof recordDispatchLineage>[0],
-  options: { completeAssistant?: boolean } = {},
+  options: { completeAssistant?: boolean; toolInput?: Record<string, unknown>; toolName?: string } = {},
 ): void {
   Database.immediateTransaction((db) => {
     const existing = db
@@ -76,8 +73,8 @@ export function materializeTestDispatchCreatorOccurrence(
         data: {
           type: "tool-request",
           callID: input.origin.toolCallID,
-          tool: input.origin.toolName ?? "dispatch_agent",
-          input: {},
+          tool: options.toolName ?? input.origin.toolName ?? "dispatch_agent",
+          input: options.toolInput ?? {},
           time: { start: now },
         },
         time_created: now,
