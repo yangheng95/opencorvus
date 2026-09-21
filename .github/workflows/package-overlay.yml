@@ -117,6 +117,20 @@ jobs:
       - uses: ./.github/actions/setup-overlay-runtime
         timeout-minutes: 15
       - uses: dtolnay/rust-toolchain@stable
+      - name: Resolve RPM tool cache identity
+        if: matrix.kind == 'rpm'
+        id: rpm-tool
+        run: |
+          python3 -B script/prepare-rpm-bundler.test.py
+          echo "key=$(python3 script/prepare-rpm-bundler.py --cache-key)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v6
+        if: matrix.kind == 'rpm'
+        with:
+          path: .scratch/rpm-bundler/tool
+          key: ${{ runner.os }}-${{ steps.rpm-tool.outputs.key }}
+      - name: Install RPM package verifier
+        if: matrix.kind == 'rpm'
+        run: sudo bash script/install-ubuntu-packages.sh rpm
       - uses: actions/download-artifact@v8
         with:
           artifact-ids: ${{ needs.build.outputs.input-artifact-id }}
@@ -139,6 +153,12 @@ jobs:
           test -n "$(find "bundle/$BUNDLE_KIND" -maxdepth 1 -type f -print -quit)"
           find "bundle/$BUNDLE_KIND" -maxdepth 1 -type f -print0 |
             tar --null -T - -cf "$GITHUB_WORKSPACE/gui-bundle-$BUNDLE_KIND.tar"
+      - name: Verify RPM payload and isolated file installation
+        if: matrix.kind == 'rpm'
+        run: |
+          python3 script/check-rpm-package.py \
+            packages/overlay/src-tauri/target/release/bundle/rpm/*.rpm \
+            packages/overlay/src-tauri/target/release/package-input/*
       - name: Retain completed Linux format
         uses: actions/upload-artifact@v7
         with:

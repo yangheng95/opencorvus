@@ -9,6 +9,7 @@ import { runTimedStage } from "../../../script/timed-stage"
 import { writeOverlayPayloadStamp } from "../../opencorvus/script/build-overlay-payload-stamp"
 import { finalizeWorkArtifactPackage } from "../../opencorvus/script/finalize-work-artifact-package"
 import { parseOverlayReleaseBuildArgs } from "./release-build-options"
+import { installerBundler } from "./installer-bundler"
 
 import {
   overlayArchFromNode,
@@ -145,7 +146,8 @@ const groups = process.platform === "linux" ? options.bundles.map((kind) => [kin
 for (const bundles of groups.filter((group) => group.length > 0)) {
   if (!(await exists(packagingSnapshot))) throw new Error(`Missing compiled installer input: ${packagingSnapshot}`)
   if (process.platform === "linux") await copyReleaseFile(packagingSnapshot, path.join(release, overlayFile))
+  const bundler = await installerBundler(bundles)
   await runTimedStage(`Tauri installer bundle (${bundles.join(", ")})`, async () => {
-    await $`tauri bundle --bundles ${bundles} ${tauriArgs()}`.cwd(dir).env(tauriEnvironment)
+    await $`${bundler} bundle --bundles ${bundles} ${tauriArgs()}`.cwd(dir).env(tauriEnvironment)
   })
 }

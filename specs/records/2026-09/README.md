@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [RPM bundler short-write repair](2026-09-21-rpm-short-write-repair.md)
+
 - [v0.1.10 native and website release](2026-09-21-v0.1.10-release.md)
 
 - [0.1.10 main Windows package](2026-09-21-v0.1.10-local-package.md)

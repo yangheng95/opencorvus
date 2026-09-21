@@ -18,6 +18,7 @@ import { $ } from "bun"
 import path from "path"
 import { fileURLToPath } from "url"
 import { nativeBinaryBuildEnv } from "./package-native-binary"
+import { installerBundler } from "../packages/overlay/script/installer-bundler"
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const overlay = path.join(repo, "packages/overlay")
@@ -64,7 +65,9 @@ async function main() {
   if (!skipNative) {
     console.log(`\n=== overlay ${process.platform}-${process.arch} (native) ===`)
     await $`bun run build:overlay --skip-dist-copy`.cwd(overlay).env(nativeEnvironment)
-    await $`bun run tauri bundle --bundles ${localBundleTargets()} --config ${JSON.stringify(localTauriBundleConfig())}`
+    const bundles = localBundleTargets()
+    const bundler = await installerBundler(bundles)
+    await $`${bundler} bundle --bundles ${bundles} --config ${JSON.stringify(localTauriBundleConfig())}`
       .cwd(overlay)
       .env(nativeEnvironment)
     console.log(`  overlay native done -> ${nativeBundle}`)

@@ -78,8 +78,28 @@ Linux compilation runs once per architecture using `package:gui-installer-matrix
 It retains the `package-input` executable in a permission-preserving tar archive, and three
 independent native jobs consume that exact immutable Actions artifact ID to bundle DEB,
 RPM and AppImage in parallel. Each job has its own timer, a 90-minute bound and a retained
-format archive. RPM therefore does not hold up production of the other formats. This
-split isolates the slow stage; it does not change RPM compression or promise faster RPM.
+format archive. RPM therefore does not hold up production of the other formats.
+
+RPM uses `script/prepare-rpm-bundler.py` through the shared installer-command owner
+for both local and hosted packaging. It builds the installed Tauri CLI version's exact
+upstream source with one checksum-verified Cargo source patch to rpm 0.16.0: hash only
+the bytes the inner writer actually accepted. Gzip level 6 and installer metadata remain
+unchanged. The stock npm RPM producer is replaced; it is not a retry path. Other formats
+use the installed CLI as before. Linux local RPM packaging additionally needs Python 3.12+
+and `patch`, alongside the existing native Rust build environment.
+
+The workflow caches only the prepared bundler and its identity receipt, using CLI version,
+native architecture and preparation/patch identity. Product version bumps do not invalidate
+this tool cache. Preparation checks that the dependency graph changes only rpm's source;
+an upstream rpm version change requires reviewing/removing the patch. Cached executable
+bytes must match their recorded tool identity. These identity checks do not replace package
+acceptance.
+
+Before retaining an RPM, `script/check-rpm-package.py` runs system RPM verification,
+checks its uncompressed CPIO digest explicitly, and installs/verifies all files in an empty
+isolated root. The installed executable must match the exact compile artifact. This accepts
+the package file transaction, not a desktop launch or OS dependency integration; packages
+with install scripts require additional acceptance rather than silently skipping those scripts.
 
 After all three formats succeed, assembly restores their archives and invokes
 `package:gui-installer-matrix --skip-build`, including the existing complete installer

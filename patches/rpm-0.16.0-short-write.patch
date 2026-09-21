@@ -1,0 +1,14 @@
+--- a/src/rpm/headers/types.rs
++++ b/src/rpm/headers/types.rs
+@@ -512,8 +512,9 @@
+ 
+ impl<W: std::io::Write> std::io::Write for Sha256Writer<W> {
+     fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+-        self.hasher.update(buf);
+-        self.writer.write(buf)
++        let written = self.writer.write(buf)?;
++        self.hasher.update(&buf[..written]);
++        Ok(written)
+     }
+ 
+     fn flush(&mut self) -> std::io::Result<()> {
