@@ -2310,7 +2310,8 @@ export namespace Session {
     return { info: persistedInfo, part: persistedPart }
   }
 
-  export const updatePart = fn(UpdatePartInput, async (part) => {
+  async function updatePartImpl(part: Message.Part, signal?: AbortSignal) {
+    signal?.throwIfAborted()
     const publishAfterCommit = Database.hasActiveTransaction()
     const { outputPart, wrotePart } = updatePartRow(part, { publish: true })
     // SSE (Server-Sent Events) stream deltas depend on the part-created
@@ -2337,13 +2338,25 @@ export namespace Session {
           },
         },
       })
-      await Bus.publish(Message.Event.PartUpdated, {
-        orderKey: messageOrderKey,
-        part: outputPart as Message.VisiblePart,
-      })
+      await Bus.publish(
+        Message.Event.PartUpdated,
+        {
+          orderKey: messageOrderKey,
+          part: outputPart as Message.VisiblePart,
+        },
+        { signal },
+      )
     }
+    signal?.throwIfAborted()
     return outputPart
-  })
+  }
+
+  export const updatePart = fn(UpdatePartInput, async (part) => updatePartImpl(part))
+
+  /** Persist and publish one streamed Part under its physical activity owner. */
+  export function updatePartWithSignal(signal: AbortSignal, part: Message.Part): Promise<Message.Part> {
+    return updatePartImpl(UpdatePartInput.parse(part), signal)
+  }
 
   export const importSnapshot = fn(
     z.object({
@@ -2406,19 +2419,30 @@ export namespace Session {
   // and never observed — pure write amplification. Under parallel Session
   // execution this amplification used to starve the SQLite write lock and
   // stall the main event loop, which read as "overlay freezing".
-  export const updatePartDelta = fn(
-    z.object({
-      sessionID: z.string(),
-      messageID: z.string(),
-      partID: z.string(),
-      partType: Message.DeltaPartType,
-      field: z.string(),
-      delta: z.string(),
-    }),
-    async (input) => {
-      return Bus.publish(Message.Event.PartDelta, input)
-    },
-  )
+  const UpdatePartDeltaInput = z.object({
+    sessionID: z.string(),
+    messageID: z.string(),
+    partID: z.string(),
+    partType: Message.DeltaPartType,
+    field: z.string(),
+    delta: z.string(),
+  })
+
+  async function updatePartDeltaImpl(input: z.output<typeof UpdatePartDeltaInput>, signal?: AbortSignal) {
+    signal?.throwIfAborted()
+    await Bus.publish(Message.Event.PartDelta, input, { signal })
+    signal?.throwIfAborted()
+  }
+
+  export const updatePartDelta = fn(UpdatePartDeltaInput, async (input) => updatePartDeltaImpl(input))
+
+  /** Publish one ephemeral streamed delta under its physical activity owner. */
+  export function updatePartDeltaWithSignal(
+    signal: AbortSignal,
+    input: z.output<typeof UpdatePartDeltaInput>,
+  ): Promise<void> {
+    return updatePartDeltaImpl(UpdatePartDeltaInput.parse(input), signal)
+  }
 
   export const getUsage = fn(
     z.object({

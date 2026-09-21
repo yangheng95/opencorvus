@@ -139,7 +139,11 @@ describe("SessionLoop provider Tool execution input", () => {
       jsonSchema: Record<string, any>
       validate?: (input: unknown) => Promise<{ success: boolean; value?: unknown; error?: unknown }>
     }
-    const provider = schema.jsonSchema
+    expect(schema.jsonSchema.required).toEqual(["queries"])
+    expect(schema.jsonSchema.properties.queries).toEqual(
+      expect.objectContaining({ type: "array", minItems: 1, maxItems: 8 }),
+    )
+    const provider = schema.jsonSchema.properties.queries.items
     expect(provider.required).toEqual(expect.arrayContaining(["taskID", "page_number"]))
     expect(Object.keys(provider.properties).sort()).toEqual(
       [
@@ -323,12 +327,14 @@ describe("SessionLoop provider Tool execution input", () => {
   test("keeps a null required read Task ID as an explicit typed input error", async () => {
     const execution = preparedMissionPanelTool("read_task_artifact").execute(
       {
-        taskID: null,
-        artifact_transport_version: 2,
-        artifact_locator_ref: "al_1234567890abcdef",
-        byte_offset: null,
-        max_bytes: null,
-        delivery: null,
+        reads: [{
+          taskID: null,
+          artifact_transport_version: 2,
+          artifact_locator_ref: "al_1234567890abcdef",
+          byte_offset: null,
+          max_bytes: null,
+          delivery: null,
+        }],
       },
       executionOptions,
     )

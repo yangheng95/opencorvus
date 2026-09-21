@@ -34,6 +34,7 @@ class GlobalEventBus {
     id: string
     durable: boolean
     effectContract?: "idempotent_by_occurrence"
+    source?: string
   }>()
   private readonly runtimeID = randomUUID()
   private readonly durableListeners = new Map<string, {
@@ -42,6 +43,11 @@ class GlobalEventBus {
     id: string
     durable: boolean
     eventName: "event"
+    source?: string
+  }>()
+  private readonly activeDeliveries = new Map<string, {
+    occurrenceID: string
+    pending: Map<string, { id: string; durable: boolean; source?: string }>
   }>()
   private sequence = 0
 
@@ -68,6 +74,11 @@ class GlobalEventBus {
       id: options?.durableID ?? `runtime-global:${this.runtimeID}:${++this.sequence}`,
       durable: options !== undefined,
       effectContract: options?.effect,
+      source: new Error().stack
+        ?.split("\n")
+        .slice(2, 6)
+        .map((line) => line.trim())
+        .join(" | "),
     }
     this.registrations.add(registration)
     if (options) this.durableListeners.set(`${eventName}\u0000${options.durableID}`, registration)
@@ -98,12 +109,28 @@ class GlobalEventBus {
   }
 
   async emitAndWait(eventName: "event", ...args: GlobalBusEvents["event"]): Promise<boolean> {
-    const listeners = this.emitter.rawListeners(eventName)
+    const listeners = [...this.registrations].filter((registration) => registration.eventName === eventName)
+    const occurrenceID = args[0]?.payload?.occurrenceID
+    const deliveryID = randomUUID()
+    const pending = typeof occurrenceID === "string"
+      ? new Map<string, { id: string; durable: boolean; source?: string }>()
+      : undefined
+    if (pending) this.activeDeliveries.set(deliveryID, { occurrenceID, pending })
     const settled = await Promise.allSettled(
-      listeners.map(async (listener) => {
-        await Reflect.apply(listener as (...args: GlobalBusEvents["event"]) => unknown, this, args)
+      listeners.map(async (registration) => {
+        pending?.set(registration.id, {
+          id: registration.id,
+          durable: registration.durable,
+          source: registration.source,
+        })
+        try {
+          await Reflect.apply(registration.wrapper, this, args)
+        } finally {
+          pending?.delete(registration.id)
+        }
       }),
     )
+    if (pending) this.activeDeliveries.delete(deliveryID)
     const failures = settled
       .filter((result): result is PromiseRejectedResult => result.status === "rejected")
       .map((result) => result.reason)
@@ -111,6 +138,20 @@ class GlobalEventBus {
       throw new AggregateError(failures, `${failures.length} global bus listener(s) failed`)
     }
     return listeners.length > 0
+  }
+
+  deliveryActivitySnapshot(occurrenceID?: string) {
+    return [...this.activeDeliveries.entries()]
+      .filter(([, delivery]) => occurrenceID === undefined || delivery.occurrenceID === occurrenceID)
+      .map(([deliveryID, delivery]) => ({
+        delivery_id: deliveryID,
+        occurrence_id: delivery.occurrenceID,
+        pending: [...delivery.pending.values()].sort((left, right) => left.id.localeCompare(right.id)),
+      }))
+      .sort(
+        (left, right) =>
+          left.occurrence_id.localeCompare(right.occurrence_id) || left.delivery_id.localeCompare(right.delivery_id),
+      )
   }
 
   deliveryTargets(eventName: "event") {

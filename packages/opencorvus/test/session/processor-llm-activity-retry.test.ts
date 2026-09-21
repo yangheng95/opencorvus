@@ -45,6 +45,89 @@ afterEach(async () => {
 })
 
 describe("SessionProcessor semantic LLM activity retry", () => {
+  for (const partType of ["text", "reasoning"] as const) {
+    test(`retries a ${partType} start whose committed publication outlives its physical owner`, async () => {
+      await using project = await memoryProject()
+      await Instance.provide({ directory: project.path, fn: async () => {
+        const model = providerModel()
+        const config = await Config.get()
+        const nativeAgent = await PrimaryAssistantRegistry.get("coding", { config })
+        const agent = sessionRuntimeFromNativeAgent(nativeAgent)
+        const session = await Session.create({ kind: "assistant", title: "Publication commit retry" })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"), sessionID: session.id,
+          role: "user", author: "coding", agent: "coding", time: { created: Date.now() },
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"), parentID: user.id, sessionID: session.id,
+          role: "assistant", author: "coding", agent: "coding",
+          path: { cwd: project.path, root: project.path }, cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id, providerID: model.providerID, time: { created: Date.now() },
+        })
+        const abort = new AbortController().signal
+        const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
+        const idleSpy = spyOn(EngineConfig, "get").mockResolvedValue({
+          ...EngineConfig.defaults,
+          activity: { ...EngineConfig.defaults.activity, session_llm_idle_ms: 250 },
+        })
+        let attempts = 0
+        const order: string[] = []
+        let committedPart: Message.Part | undefined
+        const unsubscribe = Bus.subscribe(Message.Event.PartUpdated, async (event) => {
+          if (attempts !== 1 || event.properties.part.type !== partType) return
+          committedPart = (await MessageStore.parts(assistant.id)).find((part) => part.id === event.properties.part.id)
+          order.push("committed")
+          await new Promise<void>((resolve) => {
+            if (event.signal!.aborted) return resolve()
+            event.signal!.addEventListener("abort", () => resolve(), { once: true })
+          })
+          await new Promise((resolve) => setTimeout(resolve, 25))
+          order.push("publication-settled")
+        })
+        const streamSpy = spyOn(LLM, "stream").mockImplementation(async () => {
+          attempts += 1
+          if (attempts === 1) return {
+            fullStream: (async function* () {
+              yield { type: "start" }
+              yield { type: `${partType}-start`, id: "abandoned" }
+            })(),
+          } as Awaited<ReturnType<typeof LLM.stream>>
+          order.push("successor-started")
+          return {
+            fullStream: (async function* () {
+              yield { type: "start" }
+              yield { type: "text-start", id: "recovered" }
+              yield { type: "text-delta", id: "recovered", text: "Recovered complete answer." }
+              yield { type: "text-end", id: "recovered" }
+              yield { type: "finish-step", finishReason: "stop", usage: { inputTokens: 1, outputTokens: 2, totalTokens: 3 } }
+              yield { type: "finish", finishReason: "stop", totalUsage: { inputTokens: 1, outputTokens: 2, totalTokens: 3 } }
+            })(),
+          } as Awaited<ReturnType<typeof LLM.stream>>
+        })
+        try {
+          await processor.process({ user, agentID: "coding", agent, abort, sessionID: session.id, system: [], messages: [], tools: {}, model })
+          const persisted = await MessageStore.get({ sessionID: session.id, messageID: assistant.id })
+          expect(committedPart).toMatchObject({ type: partType, text: "" })
+          expect(order).toEqual(["committed", "publication-settled", "successor-started"])
+          expect({ attempts, info: persisted.info, parts: persisted.parts }).toMatchObject({
+            attempts: 2,
+            info: { finish: "stop", tokens: { total: 3, input: 1, output: 2 } },
+            parts: [
+              { type: "text", text: "Recovered complete answer." },
+              { type: "step-finish", reason: "stop", tokens: { total: 3, input: 1, output: 2 } },
+            ],
+          })
+        } finally {
+          unsubscribe()
+          streamSpy.mockRestore()
+          idleSpy.mockRestore()
+        }
+      } })
+    }, 30_000)
+  }
+
   test("persists one recovered answer after the observed idle, network, idle sequence", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -319,6 +402,158 @@ describe("SessionProcessor semantic LLM activity retry", () => {
           parts: [
             { type: "text", text: "Recovered after unowned Tool deltas." },
             { type: "step-finish", reason: "stop", tokens: { total: 7, input: 1, output: 6 } },
+          ],
+        })
+      },
+    })
+  }, 30_000)
+
+  test("recovers a parked stream after reasoning-end under the Session subscriber set", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const model = providerModel()
+        const config = await Config.get()
+        const nativeAgent = await PrimaryAssistantRegistry.get("coding", { config })
+        const agent = sessionRuntimeFromNativeAgent(nativeAgent)
+        const session = await Session.create({ kind: "assistant", title: "Processor reasoning-end retry" })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "coding",
+          time: { created: Date.now() },
+          agent: "coding",
+          model: { providerID: model.providerID, modelID: model.id },
+        })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          parentID: user.id,
+          sessionID: session.id,
+          role: "assistant",
+          author: "coding",
+          agent: "coding",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          modelID: model.id,
+          providerID: model.providerID,
+          time: { created: Date.now() },
+        })
+        const abort = new AbortController().signal
+        const processor = SessionProcessor.create({ assistantMessage: assistant, sessionID: session.id, model, abort })
+        const idleSpy = spyOn(EngineConfig, "get").mockResolvedValue({
+          ...EngineConfig.defaults,
+          activity: { ...EngineConfig.defaults.activity, session_llm_idle_ms: 250 },
+        })
+        let attempts = 0
+        let firstAttemptSignal: AbortSignal | undefined
+        let resolveSecondAttemptStarted!: (observedAt: number) => void
+        const secondAttemptStarted = new Promise<number>((resolve) => (resolveSecondAttemptStarted = resolve))
+        let resolveLateSourceResumed!: () => void
+        const lateSourceResumed = new Promise<void>((resolve) => (resolveLateSourceResumed = resolve))
+        const firstAttemptStartedAt = Date.now()
+        const streamSpy = spyOn(LLM, "stream").mockImplementation(async (streamInput) => {
+          attempts += 1
+          if (attempts === 1) {
+            firstAttemptSignal = streamInput.abort
+            const fullStream = (async function* () {
+              yield { type: "start" }
+              yield { type: "reasoning-start", id: "parked-reasoning" }
+              yield { type: "reasoning-delta", id: "parked-reasoning", text: "Reasoning before the parked read." }
+              yield { type: "reasoning-end", id: "parked-reasoning" }
+              await new Promise<void>((resolve) => {
+                if (streamInput.abort.aborted) return resolve()
+                streamInput.abort.addEventListener("abort", () => resolve(), { once: true })
+              })
+              await new Promise((resolve) => setTimeout(resolve, 40))
+              resolveLateSourceResumed()
+              yield { type: "reasoning-start", id: "late-reasoning" }
+              yield { type: "reasoning-delta", id: "late-reasoning", text: "Late abandoned reasoning." }
+              yield { type: "reasoning-end", id: "late-reasoning" }
+            })()
+            return {
+              fullStream: abortableIterable(fullStream, streamInput.abort),
+            } as Awaited<ReturnType<typeof LLM.stream>>
+          }
+          resolveSecondAttemptStarted(Date.now())
+          return {
+            fullStream: (async function* () {
+              yield { type: "start" }
+              yield { type: "text-start", id: "recovered" }
+              yield { type: "text-delta", id: "recovered", text: "Recovered after the reasoning-end idle." }
+              yield { type: "text-end", id: "recovered" }
+              yield {
+                type: "finish-step",
+                finishReason: "stop",
+                usage: { inputTokens: 1, outputTokens: 7, totalTokens: 8 },
+              }
+              yield {
+                type: "finish",
+                finishReason: "stop",
+                totalUsage: { inputTokens: 1, outputTokens: 7, totalTokens: 8 },
+              }
+            })(),
+          } as Awaited<ReturnType<typeof LLM.stream>>
+        })
+
+        const processOperation = processor.process({
+          user,
+          agentID: "coding",
+          agent,
+          abort,
+          sessionID: session.id,
+          system: [],
+          messages: [],
+          tools: {},
+          model,
+        })
+        try {
+          await new Promise((resolve) => setTimeout(resolve, 180))
+          expect({ attempts, aborted: firstAttemptSignal?.aborted }).toEqual({ attempts: 1, aborted: false })
+          const abortDeadline = Date.now() + 1_000
+          while (!firstAttemptSignal?.aborted && Date.now() < abortDeadline) {
+            await new Promise((resolve) => setTimeout(resolve, 10))
+          }
+          const firstAttemptAbortedAt = Date.now()
+          expect({
+            reason: String(firstAttemptSignal?.reason),
+            elapsedBeforeAbort: firstAttemptAbortedAt - firstAttemptStartedAt,
+            firstAttemptAborted: firstAttemptSignal?.aborted,
+          }).toEqual({
+            reason: expect.stringContaining("LLMActivity idle"),
+            elapsedBeforeAbort: expect.any(Number),
+            firstAttemptAborted: true,
+          })
+          expect(firstAttemptAbortedAt - firstAttemptStartedAt).toBeGreaterThanOrEqual(230)
+          const secondStartedAt = await secondAttemptStarted
+          expect(secondStartedAt).toBeGreaterThanOrEqual(firstAttemptAbortedAt)
+          await lateSourceResumed
+          await processOperation
+        } finally {
+          await processOperation.catch(() => undefined)
+          streamSpy.mockRestore()
+          idleSpy.mockRestore()
+        }
+
+        const persisted = await MessageStore.get({ sessionID: session.id, messageID: assistant.id })
+        expect({
+          attempts,
+          info: persisted.info,
+          parts: persisted.parts.map((part) =>
+            part.type === "text"
+              ? { type: part.type, text: part.text }
+              : part.type === "step-finish"
+                ? { type: part.type, reason: part.reason, tokens: part.tokens }
+                : { type: part.type },
+          ),
+        }).toMatchObject({
+          attempts: 2,
+          info: { finish: "stop", tokens: { total: 8, input: 1, output: 7 } },
+          parts: [
+            { type: "text", text: "Recovered after the reasoning-end idle." },
+            { type: "step-finish", reason: "stop", tokens: { total: 8, input: 1, output: 7 } },
           ],
         })
       },

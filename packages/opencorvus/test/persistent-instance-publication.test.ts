@@ -4,8 +4,13 @@ import { GlobalBus } from "@/bus/global"
 import { FileWatcher } from "@/file/watcher"
 import { Instance } from "@/project/instance"
 import { InstanceLifecycleContext } from "@/project/instance-lifecycle-context"
+import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { SessionTable } from "@/session/session.sql"
 import { Database } from "@/storage/db"
+import {
+  awaitTaskMessageProtocolBridgeIdle,
+  TaskMessageProtocolBridgeTestHooks,
+} from "@/orchestrator/protocol/message-bridge"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
@@ -50,4 +55,235 @@ test("a persistent watcher callback owns its complete database subscriber and Gl
     unsubscribe()
     GlobalBus.off("event", onGlobalEvent)
   }
+})
+
+test("a physical owner abort settles its in-flight Bus publication before successor work", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const owner = new AbortController()
+      let subscriberStarted!: () => void
+      const started = new Promise<void>((resolve) => (subscriberStarted = resolve))
+      let subscriberObservedAbort!: () => void
+      const abortObserved = new Promise<void>((resolve) => (subscriberObservedAbort = resolve))
+      let releaseSubscriber!: () => void
+      const released = new Promise<void>((resolve) => (releaseSubscriber = resolve))
+      let observedAbort: unknown
+      const deliveryOrder: string[] = []
+      const unsubscribe = Bus.subscribe(FileWatcher.Event.Updated, async (event) => {
+        if (event.properties.file.endsWith("successor.ts")) {
+          deliveryOrder.push("successor-delivered")
+          return
+        }
+        subscriberStarted()
+        await new Promise<void>((resolve, reject) => {
+          const abort = async () => {
+            observedAbort = event.signal?.reason
+            subscriberObservedAbort()
+            await released
+            deliveryOrder.push("old-finished")
+            reject(event.signal?.reason)
+          }
+          if (event.signal?.aborted) void abort()
+          else event.signal?.addEventListener("abort", () => void abort(), { once: true })
+        })
+      })
+      try {
+        const reason = new Error("physical publication owner ended")
+        const publication = Bus.publish(
+          FileWatcher.Event.Updated,
+          { file: `${project.path}\\owned.ts`, event: "change" },
+          { signal: owner.signal },
+        )
+        await started
+        owner.abort(reason)
+        await abortObserved
+        expect(Bus.publicationActivitySnapshot()).toContainEqual(
+          expect.objectContaining({
+            occurrence_id: publication.occurrenceID,
+            phase: "local",
+            aborted: true,
+            pending_local: [
+              expect.objectContaining({ phase: "exact", id: expect.any(String), source: expect.any(String) }),
+            ],
+          }),
+        )
+        expect(RuntimeExecutionSettlement.snapshot()).toContainEqual({
+          kind: "protocol_publication",
+          label: `${FileWatcher.Event.Updated.type}:${publication.occurrenceID}`,
+        })
+        releaseSubscriber()
+        await expect(publication).rejects.toBe(reason)
+        expect(observedAbort).toBe(reason)
+        expect(RuntimeExecutionSettlement.snapshot()).toEqual([])
+        await Bus.publish(FileWatcher.Event.Updated, {
+          file: `${project.path}\\successor.ts`,
+          event: "change",
+        })
+        expect(deliveryOrder).toEqual(["old-finished", "successor-delivered"])
+      } finally {
+        unsubscribe()
+      }
+    },
+  })
+})
+
+test("concurrent physical retries retain distinct diagnostics for one occurrence", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      let startedCount = 0
+      let resolveBothStarted!: () => void
+      const bothStarted = new Promise<void>((resolve) => (resolveBothStarted = resolve))
+      let releaseSubscribers!: () => void
+      const released = new Promise<void>((resolve) => (releaseSubscribers = resolve))
+      const unsubscribe = Bus.subscribe(FileWatcher.Event.Updated, async () => {
+        startedCount += 1
+        if (startedCount === 2) resolveBothStarted()
+        await released
+      })
+      try {
+        const first = Bus.publish(FileWatcher.Event.Updated, {
+          file: `${project.path}\\concurrent-retry.ts`,
+          event: "change",
+        })
+        const retry = first.retry()
+        await bothStarted
+        const active = Bus.publicationActivitySnapshot().filter(
+          (publication) => publication.occurrence_id === first.occurrenceID,
+        )
+        expect({
+          count: active.length,
+          executionIDs: new Set(active.map((publication) => publication.execution_id)).size,
+          allHavePendingSubscribers: active.every((publication) => publication.pending_local.length > 0),
+        }).toEqual({ count: 2, executionIDs: 2, allHavePendingSubscribers: true })
+        releaseSubscribers()
+        await Promise.all([first, retry])
+      } finally {
+        releaseSubscribers()
+        unsubscribe()
+      }
+    },
+  })
+})
+
+test("a GlobalBus publication retains its exact owner abort through physical listener settlement", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const owner = new AbortController()
+      let listenerStarted!: () => void
+      const started = new Promise<void>((resolve) => (listenerStarted = resolve))
+      let listenerObservedAbort!: () => void
+      const abortObserved = new Promise<void>((resolve) => (listenerObservedAbort = resolve))
+      let releaseListener!: () => void
+      const released = new Promise<void>((resolve) => (releaseListener = resolve))
+      const onGlobalEvent = async (envelope: Parameters<typeof GlobalBus.emitAndWait>[1]) => {
+        if (
+          envelope.payload.type !== FileWatcher.Event.Updated.type ||
+          !envelope.payload.properties.file.endsWith("global-owned.ts")
+        ) {
+          return
+        }
+        listenerStarted()
+        await new Promise<void>((resolve) => {
+          const abort = async () => {
+            listenerObservedAbort()
+            await released
+            resolve()
+          }
+          if (envelope.payload.signal?.aborted) void abort()
+          else envelope.payload.signal?.addEventListener("abort", () => void abort(), { once: true })
+        })
+      }
+      GlobalBus.on("event", onGlobalEvent)
+      try {
+        const reason = new Error("GlobalBus owner ended")
+        const publication = Bus.publish(
+          FileWatcher.Event.Updated,
+          { file: `${project.path}\\global-owned.ts`, event: "change" },
+          { signal: owner.signal },
+        )
+        await started
+        owner.abort(reason)
+        await abortObserved
+        expect(Bus.publicationActivitySnapshot()).toContainEqual(
+          expect.objectContaining({
+            occurrence_id: publication.occurrenceID,
+            phase: "global",
+            aborted: true,
+            pending_global: [
+              expect.objectContaining({
+                occurrence_id: publication.occurrenceID,
+                pending: [expect.objectContaining({ id: expect.any(String), source: expect.any(String) })],
+              }),
+            ],
+          }),
+        )
+        expect(GlobalBus.deliveryActivitySnapshot(publication.occurrenceID)).toContainEqual(
+          expect.objectContaining({
+            occurrence_id: publication.occurrenceID,
+            pending: [expect.objectContaining({ id: expect.any(String), source: expect.any(String) })],
+          }),
+        )
+        expect(RuntimeExecutionSettlement.snapshot()).toContainEqual({
+          kind: "protocol_publication",
+          label: `${FileWatcher.Event.Updated.type}:${publication.occurrenceID}`,
+        })
+        releaseListener()
+        await expect(publication).rejects.toBe(reason)
+        expect(RuntimeExecutionSettlement.snapshot()).toEqual([])
+      } finally {
+        releaseListener()
+        GlobalBus.off("event", onGlobalEvent)
+      }
+    },
+  })
+})
+
+test("a cancelled queued relay preserves its physical predecessor before successor delivery", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const events: string[] = []
+      let releasePredecessor!: () => void
+      const predecessor = new Promise<void>((resolve) => (releasePredecessor = resolve)).then(() => {
+        events.push("predecessor-finished")
+      })
+      const trackedPredecessor = TaskMessageProtocolBridgeTestHooks.trackLifecycle(predecessor)
+      const cancelledOwner = new AbortController()
+      const cancelledReason = new Error("queued relay owner ended")
+      const cancelled = TaskMessageProtocolBridgeTestHooks.enqueueRelay({
+        type: "test.cancelled-relay",
+        hostDirectory: project.path,
+        signal: cancelledOwner.signal,
+        fn: async () => {
+          events.push("cancelled-relay-started")
+        },
+      })
+      cancelledOwner.abort(cancelledReason)
+      await expect(cancelled).rejects.toBe(cancelledReason)
+      const successor = TaskMessageProtocolBridgeTestHooks.enqueueRelay({
+        type: "test.successor-relay",
+        hostDirectory: project.path,
+        fn: async () => {
+          events.push("successor-delivered")
+        },
+      })
+      try {
+        releasePredecessor()
+        await Promise.all([trackedPredecessor, successor])
+        await awaitTaskMessageProtocolBridgeIdle()
+        expect(events).toEqual(["predecessor-finished", "successor-delivered"])
+      } finally {
+        releasePredecessor()
+        await Promise.allSettled([trackedPredecessor, successor])
+        await awaitTaskMessageProtocolBridgeIdle().catch(() => undefined)
+      }
+    },
+  })
 })
