@@ -1,5 +1,15 @@
 # Specs Storage Index
 
+- [2026-08-24-character-led-product-video-v8](records/2026-08/2026-08-24-character-led-product-video-v8.md)
+- [2026-08-24-minimax-h3-mission-promo-video](records/2026-08/2026-08-24-minimax-h3-mission-promo-video.md)
+- [2026-08-24-paper-collage-explainer-v6](records/2026-08/2026-08-24-paper-collage-explainer-v6.md)
+- [2026-08-24-site-native-explainer-v7](records/2026-08/2026-08-24-site-native-explainer-v7.md)
+- [2026-08-25-bilingual-v5r-website-video](records/2026-08/2026-08-25-bilingual-v5r-website-video.md)
+- [2026-08-25-cartoon-task-metaphor-video-v5c](records/2026-08/2026-08-25-cartoon-task-metaphor-video-v5c.md)
+- [2026-08-25-desktop-video-v5r](records/2026-08/2026-08-25-desktop-video-v5r.md)
+- [2026-08-25-live-type-runtime-video-v9](records/2026-08/2026-08-25-live-type-runtime-video-v9.md)
+- [2026-08-25-tech-blog-mission-video-v10](records/2026-08/2026-08-25-tech-blog-mission-video-v10.md)
+
 [Historical scientific mission repair](records/2026-08/2026-08-22-deberta-absa-multi-squad-mission.md).
 
 [0.1.9 Windows local build](records/2026-09/2026-09-21-v0.1.9-local-build.md).

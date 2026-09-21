@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "manifest_kind": "h3-video-production",
+  "creative_direction": "cartoon-task-metaphor-v5c-trials",
+  "production_status": "prompt-locked",
+  "creative_source_url": "specs/records/2026-08/2026-08-25-cartoon-task-metaphor-video-v5c.md",
+  "total_duration_seconds": 24,
+  "global_visual_contract": "Bright hand-drawn 2D editorial cartoon animation derived from the supplied OpenCorvus expert-squad infographic. Warm white paper background, navy outlines, soft mint research green, clear cobalt development blue, warm pale yellow review color, restrained orange only for the user's hard constraints and confirmation. One recurring young personal creator with short dark hair and a white shirt with a tiny teal pocket; friendly round-faced experts share the same line-art anatomy and differ only by simple professional accessories. Cute but technically legible, generous negative space, real object movement and clear cause-and-effect. Never become photorealistic, glossy 3D, corporate stock animation, presentation slides, dense infographic panels or a dashboard.",
+  "runtime_visual_contract": "The single execution Agent is a small rounded white-and-cobalt helper robot with one dark face screen and two simple eye lights. Mission is a tabletop compass hub with a small flag; it reads a persistent paper map but never performs expert work. Expert squads are groups of three matching human cartoon specialists in green research, blue development and pale-yellow review workstations. Tasks are colored tickets fixed to the persistent map. Artifacts are physical document parcels with a blue evidence seal; accepted handoffs receive a green circular stamp. A rejected parcel visibly returns to its prior station. Context is a finite paper ribbon around the helper robot; when full, the oldest orange constraint segment visibly falls away. No automatic conveyor and no magical teleportation.",
+  "reference_assets": {
+    "full_visual_grammar": {
+      "role": "user_supplied_cartoon_visual_grammar",
+      "path": "../../../specs/artifacts/2026-08-25-cartoon-task-metaphor-reference.png",
+      "sha256": "3dc22a11032844be06012745aa2c3439bf8926acab0f4a2929f5791de7295690",
+      "generated_by": "user-supplied reference"
+    },
+    "single_agent_grammar": {
+      "role": "cropped_single_agent_and_artifact_reference",
+      "path": "../../../specs/artifacts/2026-08-25-cartoon-single-agent-reference.png",
+      "sha256": "317cef0b8e1a064304f4f16093c1932536a650fab40a20ecd7e67912af3450d8",
+      "generated_by": "deterministic crop of user-supplied reference"
+    },
+    "squad_chain_grammar": {
+      "role": "cropped_multi_squad_handoff_reference",
+      "path": "../../../specs/artifacts/2026-08-25-cartoon-squad-chain-reference.png",
+      "sha256": "a954c24974c5eb1fe707810ce026acb2087ce2f09b84239d7d7bf596f9eac992",
+      "generated_by": "deterministic crop of user-supplied reference"
+    },
+    "robot_identity": {
+      "role": "cropped_single_helper_robot_identity",
+      "path": "../../../specs/artifacts/2026-08-25-cartoon-robot-reference.png",
+      "sha256": "f7437f847d332cc0921c612b8893de3c88d2b543b3734f603c6485179e0e8224",
+      "generated_by": "deterministic crop of user-supplied reference"
+    },
+    "robot_style": {
+      "role": "cropped_single_helper_robot_style",
+      "path": "../../../specs/artifacts/2026-08-25-cartoon-robot-reference.png",
+      "sha256": "f7437f847d332cc0921c612b8893de3c88d2b543b3734f603c6485179e0e8224",
+      "generated_by": "deterministic crop of user-supplied reference"
+    },
+    "artifact_identity": {
+      "role": "cropped_artifact_gift_identity",
+      "path": "../../../specs/artifacts/2026-08-25-cartoon-artifact-reference.png",
+      "sha256": "8bd6a82d8f4f84e87d753acdb98219092a69e3f40c0a940a4b558732fb3cb20f",
+      "generated_by": "deterministic crop of user-supplied reference"
+    },
+    "context_start_clean": {
+      "role": "clean_h3_first_frame_context_ring",
+      "path": "../../../specs/artifacts/2026-08-25-cartoon-context-start-clean-v1.png",
+      "sha256": "262f484be8b627b25ccf239e62127237324e563dec2b9dd3a596301308646e27",
+      "generated_by": "precise cleanup of C02 take-002 start frame with built-in image editing"
+    },
+    "context_end_clean": {
+      "role": "clean_h3_last_frame_context_ring",
+      "path": "../../../specs/artifacts/2026-08-25-cartoon-context-end-clean-v1.png",
+      "sha256": "5f8c4e07ea9108c561b36c1fbb751c896c6101927e47d6e064be4296106181ed",
+      "generated_by": "precise cleanup of C02 take-002 end frame with built-in image editing"
+    },
+    "creator_pain_end": {
+      "role": "accepted_recurring_creator_identity",
+      "path": "../../../specs/artifacts/2026-08-25-cartoon-creator-pain-end-v1.png",
+      "sha256": "ca7d8f3d07cdebe280a441b9441b50e93749d5f4d595ba828d7ac0f1939f0182",
+      "generated_by": "accepted C01 take-003 end frame"
+    },
+    "mission_compass": {
+      "role": "cropped_faceless_mission_compass_identity",
+      "path": "../../../specs/artifacts/2026-08-25-cartoon-mission-compass-reference-v2.png",
+      "sha256": "7b4b147caef55587c869619191e1fb3f8127a14f530adfa972daa36ffa1edba6",
+      "generated_by": "deterministic crop of user-supplied reference"
+    },
+    "research_development_handoff": {
+      "role": "cropped_research_to_development_squad_handoff",
+      "path": "../../../specs/artifacts/2026-08-25-cartoon-research-development-handoff-reference.png",
+      "sha256": "a9110a3245b17cc04a6f2efddfaa66094c06bff4d26f7c205b50b230916c11c2",
+      "generated_by": "deterministic crop of user-supplied reference"
+    },
+    "research_development_style": {
+      "role": "cropped_research_to_development_character_style",
+      "path": "../../../specs/artifacts/2026-08-25-cartoon-research-development-handoff-reference.png",
+      "sha256": "a9110a3245b17cc04a6f2efddfaa66094c06bff4d26f7c205b50b230916c11c2",
+      "generated_by": "deterministic crop of user-supplied reference"
+    }
+  },
+  "shots": [
+    {
+      "id": "C01",
+      "timecode": "00:00-00:06",
+      "duration_seconds": 6,
+      "mode": "Ref2VA",
+      "runtime_elements": false,
+      "references": ["full_visual_grammar", "single_agent_grammar"],
+      "voiceover_zh": "你交给 Agent 的，往往不是一句问题，而是一个项目。",
+      "integrated_multimodal_description": "A clean sixteen-by-nine story scene, not an infographic. Preserve the same small friendly creator from the references at one warm-white home desk, viewed in a medium-wide three-quarter angle. The creator uses exactly one open small silver laptop like the reference. The back of the laptop is completely blank and unmarked: no logo, icon, fruit shape, circle, letter or symbol. No desktop monitor, no external screen, no desk lamp. Six distinct project objects arrive one after another from the upper right and land around the creator: a plain two-color model cube, a stack of data sheets with abstract lines only, a small GPU board, a blank browser-window-shaped paper, a bound paper manuscript, and a test checklist with empty geometric boxes only. The emotional change must be unmistakable: for only the first second the creator types calmly with a slight neutral smile; when the second and third objects land, the smile disappears and the eyes widen; by the fifth object the creator stops typing; in the final two seconds one hand remains beside the keyboard while the other hand presses the temple, shoulders visibly slump, eyebrows tilt upward in worried fatigue, and the creator looks across the overcrowded desk. Do not smile after 2.5 seconds. Keep only the creator and six objects; no robot or expert squad yet. Stable face, exactly two hands, no extra fingers. Slow eight-percent camera push, lively object timing, bright paper texture.",
+      "overall_soundscape": "Soft keyboard taps, six distinct paper and object landing sounds, quiet home room tone, one small breath at the end.",
+      "non_diegetic_music": "Light curious marimba and precise electronic pulse, warm rather than corporate."
+    },
+    {
+      "id": "C02",
+      "timecode": "00:06-00:12",
+      "duration_seconds": 6,
+      "mode": "FL2VA",
+      "runtime_elements": false,
+      "references": ["context_start_clean", "context_end_clean"],
+      "voiceover_zh": "任务一长，有限上下文会丢掉最早的硬约束。",
+      "integrated_multimodal_description": "Begin exactly from the supplied clean first frame and finish exactly at the supplied clean last frame. Preserve the same single full-body rounded white-and-cobalt helper robot and the same segmented context ring on a clean warm-white paper background. The camera is locked. One blue paper result segment at a time glides in from the right and fills the blank ring slots clockwise. The ring never grows. As the last blue segment settles, the only orange oldest segment at the far-left tail bends upward, cleanly peels away, and falls below-left into its exact final-frame position. The robot continues facing right and remains unaware. Animate only the blue inserts and the orange peel; do not introduce any new object, person, team, panel, compass, box, room, floor diagram, text, symbol or logo. Preserve exact robot anatomy, ring geometry, flat line art and warm-white background throughout.",
+      "overall_soundscape": "Seven clean paper insert clicks, rising ribbon tension, one dry peel and a soft falling-paper flutter.",
+      "non_diegetic_music": "The light pulse tightens with each inserted slip, then drops to one unresolved note as the orange segment falls."
+    },
+    {
+      "id": "C02B",
+      "timecode": "00:12-00:18",
+      "duration_seconds": 6,
+      "mode": "Ref2VA",
+      "runtime_elements": false,
+      "references": ["creator_pain_end", "robot_identity"],
+      "voiceover_zh": "约束丢了，Agent 却把残缺结果当成完成品交回来。",
+      "integrated_multimodal_description": "One simple delivery action on a clean warm-white desk in the same flat editorial cartoon style. Exactly two characters: the same creator from the reference on the right and exactly one small rounded white-and-cobalt helper robot on the left. No other person, no expert squad and no background crowd. Between them sits one closed pale-yellow gift-like delivery box with a blue ribbon and no symbol. The robot proudly slides the box to the creator. The creator opens the lid. Inside, a shallow divider reveals one thin plain paper artifact in the first compartment and three clearly empty compartments. The creator's neutral expression turns disappointed and tired while the robot still smiles, unaware. The box remains physically stable and does not transform. No generated writing, no floor diagram, no labels, no logo, no extra limbs. Medium side view, small push toward the open empty compartments, final two-second hold.",
+      "overall_soundscape": "One box slide, ribbon rustle, hollow lid opening and a quiet disappointed breath.",
+      "non_diegetic_music": "A single hopeful note resolves into a soft hollow interval when the empty compartments appear."
+    },
+    {
+      "id": "C03",
+      "timecode": "00:18-00:24",
+      "duration_seconds": 6,
+      "mode": "Ref2VA",
+      "runtime_elements": false,
+      "references": ["research_development_handoff", "research_development_style"],
+      "voiceover_zh": "Mission 把不同专家团组织成一条可验收的交付链。",
+      "integrated_multimodal_description": "One close physical handoff action on a clean warm-white paper workspace, not an infographic and not a diagram. Exactly six human cartoon experts in the same flat line-art anatomy: exactly three research experts wearing mint-green vests stand together at a simple left workbench, and exactly three development experts wearing cobalt-blue vests stand together at a simple right workbench. No seventh person, no robot, no compass, no creator, no panel, no title and no border. A research expert closes one pale document parcel with a blue evidence seal. The three research experts physically carry the same parcel from left to center. At center it passes through one freestanding green circular acceptance arch; the arch gives one brief green glow but no symbol or writing. A blue development expert receives the same parcel with both hands, carries it to the right workbench, opens it, and the three blue experts begin using the papers inside. The parcel never duplicates and never teleports. Stable six identities, exactly twelve human arms total, no generated writing, no labels, no cards, no conveyor. Smooth lateral camera track follows the single parcel from left to right, final hold on the blue team using the accepted evidence.",
+      "overall_soundscape": "Paper map unroll, compass click, magnifier tap, parcel latch, two soft acceptance chimes, tool clicks and a final stamp.",
+      "non_diegetic_music": "The pulse becomes a clear three-part handoff rhythm, optimistic but restrained."
+    }
+  ]
+}

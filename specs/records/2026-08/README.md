@@ -1,5 +1,15 @@
 # August 2026 Records
 
+- [2026-08-24-character-led-product-video-v8](2026-08-24-character-led-product-video-v8.md)
+- [2026-08-24-minimax-h3-mission-promo-video](2026-08-24-minimax-h3-mission-promo-video.md)
+- [2026-08-24-paper-collage-explainer-v6](2026-08-24-paper-collage-explainer-v6.md)
+- [2026-08-24-site-native-explainer-v7](2026-08-24-site-native-explainer-v7.md)
+- [2026-08-25-bilingual-v5r-website-video](2026-08-25-bilingual-v5r-website-video.md)
+- [2026-08-25-cartoon-task-metaphor-video-v5c](2026-08-25-cartoon-task-metaphor-video-v5c.md)
+- [2026-08-25-desktop-video-v5r](2026-08-25-desktop-video-v5r.md)
+- [2026-08-25-live-type-runtime-video-v9](2026-08-25-live-type-runtime-video-v9.md)
+- [2026-08-25-tech-blog-mission-video-v10](2026-08-25-tech-blog-mission-video-v10.md)
+
 - [Historical scientific mission repair](2026-08-22-deberta-absa-multi-squad-mission.md)
 
 - [2026-08-31-scheduled-busy-occurrence-e2e-repair.md](2026-08-31-scheduled-busy-occurrence-e2e-repair.md) diagnoses the missing durable delay lease for a due recurring Session Automation while its exact Session is busy, restores that delay through the canonical control-lease owner transaction, and records the isolated real-instance E2E closure.

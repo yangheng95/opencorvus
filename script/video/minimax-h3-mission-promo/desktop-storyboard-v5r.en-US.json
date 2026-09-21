@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "production_status": "renderer-locked",
+  "locale": "en-US",
+  "title": "Stop project-managing every agent handoff",
+  "canvas": {"width": 1920, "height": 1080, "fps": 25},
+  "brand": {
+    "product": "OpenCorvus",
+    "website": "opencorvus.com",
+    "repository": "github.com/yangheng95/opencorvus",
+    "author": "Heng Yang · @yangheng95",
+    "case_repository": "github.com/yangheng95/deberta-v3-absa-public-evidence"
+  },
+  "scenes": [
+    {
+      "id": "R01-project",
+      "duration": 18,
+      "mode": "project-input",
+      "narration": "What you hand an agent is rarely a question it can answer at once. It is a project that must keep moving for hours or days: find the model and data, run CUDA-only experiments, turn the results into a web app, figures and a paper, run the tests, then wait for your approval before release."
+    },
+    {
+      "id": "R02-failure",
+      "duration": 24,
+      "mode": "context-failure",
+      "narration": "The trouble starts as the task grows. Searches, code and tool results keep flowing back into a limited context window. After several compactions, the earliest hard constraints become a vague summary: CUDA disappears, and testing and release approval drop out of the plan. Training moves to the CPU, yet the agent still declares the work complete. The local steps exist, but the contract needed to judge completion is gone."
+    },
+    {
+      "id": "R03-fragmentation",
+      "duration": 16,
+      "mode": "fragmentation",
+      "narration": "Opening more agents does not automatically create a team. Two sessions edit the same file while a third waits for a checkpoint that was never saved. Duplicate work and ownerless dependencies accumulate, and you still have to copy context, inspect files and assign the work again."
+    },
+    {
+      "id": "R04-mission-record",
+      "duration": 22,
+      "mode": "mission-record",
+      "narration": "A Mission does not dispatch an agent immediately. It first writes the goal, hard constraints, acceptance criteria and Task dependencies into a durable record outside the conversation. Every later plan, execution and review reads the same contract. CUDA, testing and release approval become queryable, auditable project facts instead of reminders you must keep repeating."
+    },
+    {
+      "id": "R05-scheduler",
+      "duration": 25,
+      "mode": "scheduler",
+      "narration": "Scheduling is not an automatic reaction to a queue. While the upstream Task has no traceable artifact, the downstream Task stays waiting. Once the dependency is satisfied, the coordinator rereads durable facts, the model judges the next runnable frontier, and a real agent-dispatch call is issued. Only after its receipt and execution lease does this occurrence enter running. The queue is a hint; checkable facts define the state."
+    },
+    {
+      "id": "R06-recovery",
+      "duration": 21,
+      "mode": "recovery",
+      "narration": "When the service stops, OpenCorvus does not pretend the old agent is still alive. The old physical attempt is explicitly terminated when its lease expires. A successor activation rereads durable facts and existing artifacts, then continues the same Task. The old process is not disguised as a recovery, and a duplicate Task is not created."
+    },
+    {
+      "id": "R07-artifact",
+      "duration": 19,
+      "mode": "artifact",
+      "narration": "Expert squads do not hand off the sentence done. They hand off a traceable artifact the next stage can actually read. It records type, source, locator and digest, plus a real path when one applies. The downstream squad reads it, then explicitly selects the source it consumes, so the paper, web app and tests all lead back to the same evidence."
+    },
+    {
+      "id": "R08-review",
+      "duration": 19,
+      "mode": "review",
+      "narration": "Implementers cannot approve their own work. An independent reviewer reproduces the acceptance case. A confirmed defect returns with evidence and a locator. After the fix, the same step runs again. Evidence earns acceptance; unresolved hardware, credentials or permissions remain blocked with evidence. A Mission cannot call unfinished work done."
+    },
+    {
+      "id": "R09-evolution",
+      "duration": 23,
+      "mode": "evolution",
+      "narration": "Expert squads can evolve, but not rewrite themselves silently. Feedback becomes a candidate revision with a visible diff and rollback point; you decide whether to install it. The metric path freezes the package, cases, scorer and budget for a fair comparison. Regressions are rejected, and installation and restoration leave receipts. Evolution stays reviewable and reversible."
+    },
+    {
+      "id": "R10-open-ecosystem",
+      "duration": 14,
+      "mode": "open-ecosystem",
+      "narration": "OpenCorvus is MIT licensed, self-hostable, auditable and forkable. Coding agents, office agents and runtime harnesses keep their execution roles. Mission adds the higher layer for long-horizon progress and acceptance."
+    },
+    {
+      "id": "R11-proof",
+      "duration": 34,
+      "mode": "case-proof",
+      "narration": "A real DeBERTa Mission ran twelve hours and forty-five minutes, advanced six Tasks through three built-in squads and forty-six agent sessions, and ran three CUDA experiments on an RTX 5090. Validation and test Macro F1 were 83.43 and 83.61, from one seed and eighteen hundred examples. AutomationBench used the same Luna model: 8.07 percent raw. The latest user update reports Mission base at one hundred of six hundred verified cases and 34 percent strict pass, up 25.93 points. Official figures use another held-out context: reference only, not a cross-sample ranking."
+    },
+    {
+      "id": "R12-personal-cta",
+      "duration": 16,
+      "mode": "personal-cta",
+      "narration": "A thesis, course project, open-source product, side business, portfolio or independent study all cross research, implementation, testing and release. Define the goal, constraints and acceptance without maintaining every agent handoff yourself. Open OpenCorvus and create your first Mission."
+    }
+  ]
+}

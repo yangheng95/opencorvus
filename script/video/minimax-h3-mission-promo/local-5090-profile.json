@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "default_profile": "local_5090_nvfp4",
+  "profiles": [
+    {
+      "id": "local_5090_nvfp4",
+      "label": "Single RTX 5090 — INT8 ConvRot + NVFP4 AWQ",
+      "summary": "ComfyUI DynamicVRAM profile for one 32 GB Blackwell GPU and 64 GB host RAM.",
+      "min_vram_mib": 30000,
+      "min_ram_gib": 60,
+      "required_free_gib": 60,
+      "megapixels": 0.4,
+      "resolution": "864x480",
+      "duration_seconds": 3,
+      "diffusion_model": "diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "text_encoder": "text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+      "video_vae": "vae/minimax_h3_video_vae_fp16.safetensors",
+      "audio_vae": "vae/minimax_h3_audio_vae_fp32.safetensors"
+    }
+  ]
+}

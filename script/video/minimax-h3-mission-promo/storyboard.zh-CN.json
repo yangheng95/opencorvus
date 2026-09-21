@@ -1,0 +1,174 @@
+{
+  "schema_version": 3,
+  "production_status": "rejected",
+  "rejected_by": "user-light-ppt-visual-rejection-2026-08-24",
+  "title": "OpenCorvus Mission：别再给 Agent 当项目经理",
+  "canvas": { "width": 1920, "height": 1080, "fps": 25 },
+  "brand": {
+    "product": "OpenCorvus",
+    "website": "https://opencorvus.com",
+    "github": "https://github.com/yangheng95/opencorvus",
+    "author": "Heng Yang (@yangheng95)"
+  },
+  "case": {
+    "mission_id": "ae773cbff6362f19",
+    "task_count": 6,
+    "agent_sessions": 46,
+    "agent_roles": 20,
+    "wall_clock": "12 h 45 min",
+    "public_repository": "https://github.com/yangheng95/deberta-v3-absa-public-evidence"
+  },
+  "scenes": [
+    {
+      "id": "brand-opener",
+      "kind": "brand_card",
+      "duration": 5,
+      "asset": "brand-opener-v1.png",
+      "narration": ""
+    },
+    {
+      "id": "user-pain",
+      "kind": "h3",
+      "duration": 8,
+      "eyebrow": "THIS FEELS FAMILIAR",
+      "title": "你有没有遇到过\n这样的 Agent？",
+      "subtitle": "回复很快，代码也像模像样。可真正检查时，项目真的完成了吗？",
+      "narration": "你有没有遇到过这样的 Agent？你把一长串要求交给它。它回复得很快，代码也写得像模像样。",
+      "h3_prompt": "integrated_multimodal_description: A personal creator working alone at a bright home desk in clear morning daylight, seen over the shoulder. Soft sun enters through a large window onto a warm white desk and pale walls. The creator looks from a long handwritten checklist to a laptop with a completely blank neutral screen, notices several unfinished project materials, and exhales in frustration. Intimate consumer perspective, realistic small apartment workspace, airy high-key editorial lighting, natural human motion, relatable and contemporary, not a corporate office and not a night scene. The laptop screen must remain blank and neutral for later real UI compositing. No dark room, no moody low-key lighting, no text, no letters, no numbers, no logos, no readable screens, no fake user interface. overall_soundscape: gentle morning room tone, soft keyboard taps, paper movement, one tired breath. non_diegetic_music: light empathetic electronic pulse, no vocals."
+    },
+    {
+      "id": "agent-loop",
+      "kind": "motion_user_pain",
+      "duration": 20,
+      "eyebrow": "THE REAL PAIN",
+      "title": "最后，你成了 Agent 的项目经理",
+      "subtitle": "追问一次，修一点；换个会话，又要重新解释。",
+      "narration": "可等你真正检查：资料没查全，测试没跑，网页打不开，论文还是草稿。你追问一次，它修一点；再换一个会话，它已经忘了你最初的要求。最后，不是 Agent 在帮你做项目，而是你在给 Agent 当项目经理。"
+    },
+    {
+      "id": "personal-projects",
+      "kind": "motion_personal_chain",
+      "duration": 22,
+      "eyebrow": "YOU JUST WANT THE PROJECT DONE",
+      "title": "你要的不是更多回复",
+      "subtitle": "毕业论文 · 个人开源项目 · 副业产品 · 求职作品集",
+      "narration": "但你真正想要的很简单：把自己的项目做完。可能是毕业论文、个人开源项目、一个副业产品，或者一份真正能放进作品集的成果。它们都不是一次问答。你要调研、设计、实现、测试、修改、发布；任何一环没做完，最后留下的就只是半成品。"
+    },
+    {
+      "id": "multi-agent-gap",
+      "kind": "motion_user_pain",
+      "duration": 22,
+      "eyebrow": "MORE AGENTS ARE NOT ENOUGH",
+      "title": "打开很多 Agent，也不等于协作",
+      "subtitle": "谁负责什么？失败后从哪里继续？文件交给谁？谁来检查完成？",
+      "narration": "你也可以同时打开很多 Agent。但如果它们只靠眼前这一次对话，就不会自动记住谁负责什么、失败后从哪里继续、上一组 Agent 交付了哪些文件，也没有另一个 Agent 替你检查：它到底做完了没有。"
+    },
+    {
+      "id": "comparison",
+      "kind": "motion_comparison",
+      "duration": 28,
+      "eyebrow": "DIFFERENT TOOLS · DIFFERENT LAYERS",
+      "title": "不是谁都在解决同一个问题",
+      "subtitle": "WorkBuddy · DeepSeek Harness · Codex · Claude Code · OpenCorvus",
+      "narration": "现在你也有不少选择。WorkBuddy 强调一句话交付办公成品；DeepSeek Harness 提供插件化的开发者运行时；Codex 擅长隔离环境里的并行编码；Claude Code 提供多种并行协作方式。它们重心不同。OpenCorvus 解决的是开源、自托管的跨领域多专家团接力与验收。"
+    },
+    {
+      "id": "mission-reveal",
+      "kind": "typewriter",
+      "style": "chat",
+      "duration": 18,
+      "eyebrow": "OPEN CORVUS MISSION",
+      "title": "你先写下最终目标",
+      "subtitle": "Mission 把目标拆成彼此衔接的重型 Task，交给不同专家团。",
+      "narration": "所以，我们做了 OpenCorvus Mission。你先写下最终目标。Mission 会把它拆成一组彼此衔接的重型 Task，交给不同的专家团。",
+      "command": [
+        "帮我完成一个真正可交付的机器学习项目：",
+        "下载模型和数据，只用 GPU 训练并比较实验；",
+        "做训练监控和推理网页；",
+        "绘制图表，写完并审校论文；",
+        "最后整理成一个可以公开访问的 GitHub 仓库。"
+      ]
+    },
+    {
+      "id": "open-source-pillars",
+      "kind": "motion_open_source_pillars",
+      "duration": 24,
+      "eyebrow": "THE OPEN-SOURCE ADVANTAGE",
+      "title": "最大的杀手锏：完全开源",
+      "subtitle": "开源 · 定制 · 可控 · 透明 · 会按你的反馈修订专家团",
+      "narration": "而且 OpenCorvus 完全开源：MIT 许可，源码公开，可以自托管、审计和 fork。模型、工具、权限与专家团都能定制；任务在你的机器上运行，不可逆操作先确认，工具记录全程可回看。长期反馈还能形成可回退修订，只有你确认才安装。"
+    },
+    {
+      "id": "real-agents",
+      "kind": "motion_agent_activity",
+      "duration": 28,
+      "eyebrow": "REAL AGENTS · REAL HANDOFFS",
+      "title": "每一个 Agent，都能点开",
+      "subtitle": "implementation-engineer → test-engineer → system-integrity-reviewer",
+      "narration": "你可以点开每一个具名 Agent，看它正在调研、实现、测试还是复核。任务中断，状态仍然保留；上一组 Agent 交付的文件，带着来源进入下一组；关键结果还可以交给没有参与实现的 Agent 独立验收。你不必再靠反复复制上下文来维持协作，也不用把每个 Agent 的一句“完成了”当成唯一依据。"
+    },
+    {
+      "id": "case-command",
+      "kind": "typewriter",
+      "style": "chat",
+      "duration": 24,
+      "eyebrow": "ONE REAL PERSONAL PROJECT",
+      "title": "这条需求，真的跑完了",
+      "subtitle": "DeBERTa ABSA · RTX 5090 · 网页 · 图表 · ACL 论文 · GitHub",
+      "narration": "我们真的用它跑了一个很重的个人项目：下载 DeBERTa ABSA 模型和数据，只用 RTX 5090 训练；比较三组实验；做一个自动更新的训练监控和推理网页；绘制论文图表；写完并审校一篇五页 ACL 风格论文；最后整理成公开 GitHub 仓库。",
+      "command": [
+        "完成 DeBERTa ABSA 端到端项目：",
+        "1. 模型与数据准备",
+        "2. RTX 5090 CUDA 训练与三组实验",
+        "3. 自动更新的监控和推理网页",
+        "4. 模型架构与实验生命周期图",
+        "5. 五页 ACL 风格论文与独立审校",
+        "6. 公开 GitHub 仓库"
+      ]
+    },
+    {
+      "id": "case-agents",
+      "kind": "motion_agent_activity",
+      "duration": 20,
+      "eyebrow": "12 HOURS · 45 MINUTES",
+      "title": "不是一个 Agent 硬撑到底",
+      "subtitle": "6 个 Task · 3 个专家团 · 46 个 Agent 会话 · 20 种角色",
+      "narration": "这条 Mission 从派发到最终收敛，跨越 12 小时 45 分钟。6 个重型 Task，3 个内置专家团，实际形成 46 个 Agent 会话、20 种角色。你可以从界面里点开它们，看到谁做了什么，以及产物交给了谁。"
+    },
+    {
+      "id": "deliverables",
+      "kind": "motion_results",
+      "duration": 22,
+      "eyebrow": "WHAT YOU GET",
+      "title": "不是一句“任务完成”",
+      "subtitle": "模型 · 实验 · 网页 · 图表 · 论文 · 测试报告 · 公开仓库",
+      "narration": "最终留下的不是一句“任务完成”。而是模型检查点、三组 CUDA 实验、训练和推理网页、两张论文图表、五页论文、测试报告，以及一个可以匿名访问的公开仓库。"
+    },
+    {
+      "id": "proof",
+      "kind": "motion_monitor",
+      "duration": 20,
+      "eyebrow": "PROOF, NOT PROMISES",
+      "title": "结果可以复验",
+      "subtitle": "Val Macro-F1 83.43% · +1.47 pp · Test Macro-F1 83.61% · single seed 42",
+      "narration": "最佳实验的验证 Macro-F1 是 83.43%，比基线高 1.47 个百分点；测试 Macro-F1 是 83.61%。这是单个随机种子、1800 条训练样本的受限结果，所以我们只展示能够复验的事实。"
+    },
+    {
+      "id": "personal-scenarios",
+      "kind": "motion_personal_scenarios",
+      "duration": 20,
+      "eyebrow": "YOUR NEXT LONG PROJECT",
+      "title": "哪些事情，值得交给 Mission？",
+      "subtitle": "论文 · 课程项目 · 开源软件 · 副业应用 · 求职作品集 · 独立研究",
+      "narration": "如果你正在做毕业论文、课程大作业、开源项目、副业应用、求职作品集，或者任何需要连续几小时、几天才能完成的个人项目——你需要的可能不只是一个更会回答的 Agent。你需要的是一群 Agent，真的把结果交到你手里。"
+    },
+    {
+      "id": "brand-outro",
+      "kind": "brand_card",
+      "duration": 14,
+      "asset": "brand-outro-v1.png",
+      "voice": "zh-CN-YunyangNeural",
+      "narration": "OpenCorvus。别再给 Agent 当项目经理。让 Mission 帮你把项目推进到可检查、可验收的交付。"
+    }
+  ]
+}
