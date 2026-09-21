@@ -1,7 +1,7 @@
 .oc-menu {
   box-sizing: border-box;
   display: grid;
-  gap: var(--ui-gap-xs);
+  gap: var(--ui-gap-3xs);
   padding: var(--ui-gap-sm);
   border: var(--ui-focused-popup-border);
   border-radius: var(--oc-radius-large);

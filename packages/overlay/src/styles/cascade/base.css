@@ -61,7 +61,7 @@
   --ui-chat-send-size: calc(32px * var(--ui-scale));
   --ui-chat-min-height: calc(58px * var(--ui-scale));
   --ui-chat-max-height: calc(140px * var(--ui-scale));
-  --ui-chat-message-content-width: calc(853px * var(--ui-scale));
+  --ui-chat-message-content-width: calc(760px * var(--ui-scale));
   --ui-chat-message-padding-x: calc(22px * var(--ui-scale));
   --ui-chat-scrollbar-gutter-x: var(--session-scrollbar-size);
   --ui-select-padding-right: calc(28px * var(--ui-scale));
@@ -90,7 +90,7 @@ html {
   width: 100%;
   height: 100%;
   overflow: clip;
-  background: var(--body-bg);
+  background: var(--bg);
 }
 
 body {

@@ -12,7 +12,7 @@
   min-width: 0;
   overflow: hidden;
   border: 0 solid transparent;
-  border-radius: var(--oc-radius-pill);
+  border-radius: var(--oc-radius-soft);
   background: var(--surface-inset);
   color: var(--text-soft);
   font-family: var(--font);
@@ -27,7 +27,7 @@
 .oc-badge[data-size="sm"] {
   padding: var(--ui-gap-3xs) var(--ui-gap-sm);
   font-size: var(--ui-font-caption);
-  font-weight: var(--ui-font-weight-strong);
+  font-weight: var(--ui-font-weight-medium);
 }
 
 .oc-badge[data-size="md"] {

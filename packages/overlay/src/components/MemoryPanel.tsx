@@ -1,3 +1,4 @@
+import { Feedback } from "./ui/Feedback"
 // ── MemoryPanel Component ──
 // Knowledge/memory panel that lists memory files for the current task, supports
 // search, inline detail expansion, and deletion.
@@ -16,7 +17,7 @@ import { ArmedConfirmButton } from "./ui/ArmedConfirmButton"
 import { Badge } from "./ui/Badge"
 import { SearchField } from "./ui/SearchField"
 import { Icon } from "./ui/Icon"
-import { SettingsEmpty, SettingsState } from "./settings/layout"
+import { SettingsEmpty } from "./settings/layout"
 
 // ── Types ──
 
@@ -355,16 +356,16 @@ export function MemoryPanel(props: MemoryPanelProps) {
 
   const emptyState = () => {
     if (props.compact) return <div class="empty-hint">{emptyHint()}</div>
-    if (errorMessage()) return <SettingsState tone="error">{emptyHint()}</SettingsState>
-    if (loading()) return <SettingsState>{emptyHint()}</SettingsState>
+    if (errorMessage()) return <Feedback tone="error">{emptyHint()}</Feedback>
+    if (loading()) return <Feedback>{emptyHint()}</Feedback>
     if (!currentDirectory() || !currentTaskID()) {
       return (
-        <SettingsState
+        <Feedback
           tone="warning"
           title={currentTaskID() ? t("memory.scope_unavailable_title") : t("memory.task_required_title")}
         >
           {emptyHint()}
-        </SettingsState>
+        </Feedback>
       )
     }
     return <SettingsEmpty>{emptyHint()}</SettingsEmpty>
@@ -458,9 +459,9 @@ export function MemoryPanel(props: MemoryPanelProps) {
                         <div class="loading-hint">{t("common.loading")}</div>
                       </Show>
                       <Show when={!detailState()?.loading && !!detailState()?.error}>
-                        <SettingsState tone="error" data-ui="memory-detail-error">
+                        <Feedback tone="error" data-ui="memory-detail-error">
                           {detailState()?.error}
-                        </SettingsState>
+                        </Feedback>
                       </Show>
                       <Show when={!detailState()?.loading && !detailState()?.error && detail()}>
                         {(d) => (

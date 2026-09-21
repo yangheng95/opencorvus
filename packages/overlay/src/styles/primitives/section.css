@@ -50,7 +50,7 @@
 }
 
 .oc-section[open] > .oc-section__head > .oc-section__icon {
-  color: var(--accent);
+  color: var(--text-strong);
 }
 
 .oc-section__title,
@@ -82,8 +82,8 @@
   border-radius: var(--oc-radius-pill);
   color: var(--text-soft);
   font-size: var(--ui-font-caption);
-  font-weight: var(--ui-font-weight-strong);
-  letter-spacing: var(--ui-letter-spacing-loose);
+  font-weight: var(--ui-font-weight-medium);
+  letter-spacing: var(--ui-letter-spacing-normal);
   white-space: nowrap;
 }
 

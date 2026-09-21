@@ -106,7 +106,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   ])
   const projectOptions = createMemo<SelectOption[]>(() =>
     props.projectDirectories.map((directory) => {
-      const label = projectDirectoryLabel(directory, t("task.project.unknown"))
+      const label = projectDirectoryLabel(directory, t("task.project.unknown"), t("work_ledger.implicit_project"))
       return { value: directory, label: label.name, description: directory }
     }),
   )
@@ -499,7 +499,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             form="missionCreateForm"
             variant="solid"
             size="md"
-            tone="accent"
+            tone="neutral"
             data-ui="mission-create-submit"
             disabled={Boolean(prerequisiteMessage()) || submitting()}
             title={prerequisiteMessage() || undefined}
@@ -539,11 +539,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         />
 
         <Show when={mode() === "manual"}>
-          <TextField.Root
-            as="label"
-            class="mission-create-form__title"
-            invalid={titleInvalid()}
-          >
+          <TextField.Root as="label" class="mission-create-form__title" invalid={titleInvalid()}>
             <TextField.Label>{t("mission_board.create.title")}</TextField.Label>
             <TextField.Input
               ref={(element) => {
@@ -796,11 +792,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         </Show>
 
         <Show when={error() || marketError()}>
-          <div
-            class="mission-create-form__error"
-            role="alert"
-            tabIndex={-1}
-          >
+          <div class="mission-create-form__error" role="alert" tabIndex={-1}>
             <Icon name="error-reason" size="compact" />
             <span>{error() || marketError()}</span>
           </div>

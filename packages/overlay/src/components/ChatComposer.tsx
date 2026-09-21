@@ -17,7 +17,7 @@ import {
 import type { JSX } from "solid-js"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Slider } from "./ui/Slider"
-import { t, tArray } from "../utils/i18n"
+import { t } from "../utils/i18n"
 import { nativeMessage } from "../services/app-dialog"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { messageStore, setChatAttachments } from "../store/messages"
@@ -40,6 +40,7 @@ import {
 import { Icon } from "./ui/Icon"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
 import { Badge } from "./ui/Badge"
+import { Feedback } from "./ui/Feedback"
 import { Button } from "./ui/Button"
 import { SelectControl } from "./ui/SelectControl"
 import { PreviewableImage } from "./ImagePreview"
@@ -539,7 +540,13 @@ export function ChatComposer(props: ChatComposerProps) {
   const [caretPosition, setCaretPosition] = createSignal(0)
   const [dismissedMentionQueryKey, setDismissedMentionQueryKey] = createSignal("")
   const [highlightedMentionKey, setHighlightedMentionKey] = createSignal("")
-  const [hintText, setHintText] = createSignal("")
+  const [submissionError, setSubmissionError] = createSignal("")
+  createEffect(
+    on(
+      () => props.draftKey,
+      () => setSubmissionError(""),
+    ),
+  )
   const [submitting, setSubmitting] = createSignal(false)
   const [uploadingCount, setUploadingCount] = createSignal(0)
   const [modelAvailable, setModelAvailable] = createSignal(false)
@@ -806,84 +813,6 @@ export function ChatComposer(props: ChatComposerProps) {
     )
   }
 
-  // ── Rotating placeholder ──
-  // Cycles through a shuffled list of project-level examples while the
-  // composer sits idle (empty + unfocused). One signal write per rotation;
-  // no per-character typewriter. The previous 28–60ms typewriter loop wrote
-  // 20–70 signal-driven DOM mutations per second the entire time the
-  // composer was visible, which dominated idle WebView composition cost on
-  // laptops for a purely decorative affordance.
-  let rotateTimer: ReturnType<typeof setInterval> | undefined
-  let hintOrder: number[] = []
-  let hintCursor = 0
-  const ROTATE_MS = 7_000
-
-  function shuffleIndices(n: number): number[] {
-    const arr = Array.from({ length: n }, (_, i) => i)
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-      ;[arr[i], arr[j]] = [arr[j], arr[i]]
-    }
-    return arr
-  }
-
-  function stopHint() {
-    if (rotateTimer) {
-      clearInterval(rotateTimer)
-      rotateTimer = undefined
-    }
-  }
-
-  function startRotate(examples: string[]) {
-    stopHint()
-    if (examples.length === 0) {
-      setHintText("")
-      return
-    }
-    if (hintOrder.length !== examples.length) {
-      hintOrder = shuffleIndices(examples.length)
-      hintCursor = 0
-    }
-    setHintText(examples[hintOrder[hintCursor % hintOrder.length]!]!)
-    if (examples.length === 1) return
-    rotateTimer = setInterval(() => {
-      hintCursor = (hintCursor + 1) % hintOrder.length
-      setHintText(examples[hintOrder[hintCursor]!]!)
-    }, ROTATE_MS)
-  }
-
-  const showHint = createMemo(() => props.enabled && !props.busy && text().length === 0)
-
-  createEffect(() => {
-    const scopedPlaceholder = props.placeholder?.trim()
-    const examples = scopedPlaceholder ? [scopedPlaceholder] : tArray("chat.placeholder_projects")
-    if (showHint() && examples.length > 0) {
-      startRotate(examples)
-    } else {
-      stopHint()
-      setHintText("")
-    }
-  })
-
-  // Pause rotation when the overlay window is hidden / minimized — the user
-  // is not looking, and Tauri's WebView2 still wakes the JS event loop on
-  // setInterval ticks. visibilitychange covers minimize / alt-tab on Windows.
-  if (typeof document !== "undefined") {
-    const onVisibility = () => {
-      if (document.hidden) {
-        stopHint()
-      } else {
-        const scopedPlaceholder = props.placeholder?.trim()
-        const examples = scopedPlaceholder ? [scopedPlaceholder] : tArray("chat.placeholder_projects")
-        if (showHint() && examples.length > 0) startRotate(examples)
-      }
-    }
-    document.addEventListener("visibilitychange", onVisibility)
-    onCleanup(() => document.removeEventListener("visibilitychange", onVisibility))
-  }
-
-  onCleanup(() => stopHint())
-
   // ── Auto-grow textarea ──
   // Content-driven height (capped, then scroll) is owned by the shared
   // <AutoGrowTextarea> primitive. The drag handle below still sets
@@ -1059,6 +988,7 @@ export function ChatComposer(props: ChatComposerProps) {
     if (!trimmed) return
     const sentAttachments = [...attachments()]
     const submittedDraftKey = props.draftKey
+    setSubmissionError("")
     setSubmitting(true)
     try {
       const directives = resolveComposerMentionDirectives(trimmed, mentionCatalog())
@@ -1093,10 +1023,7 @@ export function ChatComposer(props: ChatComposerProps) {
       if (!dispatched) throw new Error("Composer submission completed without crossing the dispatch boundary")
     } catch (error) {
       console.error("[ChatComposer] submit failed", error)
-      showComposerMessage("send-failed", t("chat.send_failed", { error: submitErrorMessage(error) }), {
-        title: t("chat.send_failed_title"),
-        kind: "error",
-      })
+      setSubmissionError(submitErrorMessage(error))
     } finally {
       setSubmitting(false)
     }
@@ -1318,6 +1245,22 @@ export function ChatComposer(props: ChatComposerProps) {
 
   return (
     <div class="chat-composer-stack">
+      <Show when={submissionError()}>
+        {(details) => (
+          <Feedback
+            tone="error"
+            title={t("chat.send_failed_title")}
+            details={details()}
+            actions={
+              <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => setSubmissionError("")}>
+                {t("common.dismiss")}
+              </Button>
+            }
+          >
+            {t("chat.send_failed_inline")}
+          </Feedback>
+        )}
+      </Show>
       {/* Attachments strip */}
       <Show when={canAcceptComposerAttachment() && attachments().length > 0}>
         <div class="chat-attachments" id="chatAttachments">
@@ -1426,7 +1369,9 @@ export function ChatComposer(props: ChatComposerProps) {
               class="chat-textarea"
               rows={1}
               disabled={!props.enabled}
-              placeholder={props.enabled ? "" : t("chat.placeholder_disabled")}
+              placeholder={
+                props.enabled ? props.placeholder?.trim() || t("chat.placeholder") : t("chat.placeholder_disabled")
+              }
               title={t("chat.tip")}
               value={text()}
               data-ui={props.textareaDataUI}
@@ -1459,16 +1404,6 @@ export function ChatComposer(props: ChatComposerProps) {
                 onHighlight={(option) => setHighlightedMentionKey(option.key)}
                 onSelect={selectMentionOption}
               />
-            </Show>
-            <Show when={showHint()}>
-              <div class="chat-placeholder-float" aria-hidden="true">
-                <span class="chat-placeholder-text">
-                  <span class="chat-placeholder-mentions">{t("chat.placeholder_mentions")}</span>
-                  <span aria-hidden="true"> · </span>
-                  {hintText()}
-                </span>
-                <span class="chat-placeholder-caret" />
-              </div>
             </Show>
           </div>
         </div>

@@ -1127,61 +1127,6 @@ export function WorkLedger(props: WorkLedgerProps) {
           />
         </div>
       </div>
-      <div class="sidebar-codex-static-nav sidebar-codex-shortcuts" aria-label={t("work_ledger.shortcuts")}>
-        <WorkLedgerNavigationAction
-          data-ui="work-ledger-mission-board"
-          icon="tasks"
-          label={t("mission_board.navigation")}
-          description={t("mission_board.navigation_description")}
-          active={props.primarySurface === "mission-board"}
-          trailing={<Icon name="arrow-up-right" size="compact" class="mission-board-nav-arrow" />}
-          tooltipDetail={
-            busyMissionLanes().length > 0 ? (
-              <span class="mission-board-nav-summary">
-                <For each={busyMissionLanes()}>
-                  {(lane) => (
-                    <span class="mission-board-nav-summary__lane" data-lane={lane}>
-                      <i aria-hidden="true" />
-                      <strong>{missionCounts()[lane]}</strong>
-                      {t(`mission_board.lane.${lane}`)}
-                    </span>
-                  )}
-                </For>
-              </span>
-            ) : undefined
-          }
-          onClick={() => void props.onOpenMissionBoard()}
-        />
-        <WorkLedgerNavigationAction
-          data-ui="work-ledger-automations"
-          icon="scheduled"
-          label={t("automations.menu")}
-          description={t("work_ledger.tooltip.automations")}
-          onClick={() => openConfigDialog("scheduled")}
-        />
-        <WorkLedgerNavigationAction
-          data-ui="work-ledger-expert-squads"
-          icon="expert-squad"
-          label={t("expert_squad.title")}
-          description={t("work_ledger.tooltip.expert_squads")}
-          onClick={() => openConfigDialog("expert-squad-install")}
-        />
-        <WorkLedgerNavigationAction
-          data-ui="work-ledger-multica-import"
-          icon="download"
-          label={t("multica_import.sidebar_action")}
-          description={t("work_ledger.tooltip.multica_import")}
-          disabled={!activeProjectDirectory()}
-          onClick={startMulticaImportInCurrentDirectory}
-        />
-        <WorkLedgerNavigationAction
-          data-ui="work-ledger-channel"
-          icon="config-channel"
-          label={t("channel.title")}
-          description={t("work_ledger.tooltip.channel")}
-          onClick={() => openConfigDialog("channel")}
-        />
-      </div>
       <div class="work-ledger-projects-scroll" id="workLedgerProjectsScroll" data-ui="work-ledger-projects-scroll">
         <Show when={pinnedProjects().length > 0}>
           <div class="work-ledger-section-title oc-section-heading">{t("work_ledger.pinned")}</div>
@@ -1395,6 +1340,83 @@ export function WorkLedger(props: WorkLedgerProps) {
             )
           }
         </LedgerList>
+      </div>
+      <div class="sidebar-codex-static-nav sidebar-codex-shortcuts" aria-label={t("work_ledger.shortcuts")}>
+        <WorkLedgerNavigationAction
+          data-ui="work-ledger-mission-board"
+          icon="tasks"
+          label={t("mission_board.navigation")}
+          description={t("mission_board.navigation_description")}
+          active={props.primarySurface === "mission-board"}
+          trailing={<Icon name="arrow-up-right" size="compact" class="mission-board-nav-arrow" />}
+          tooltipDetail={
+            busyMissionLanes().length > 0 ? (
+              <span class="mission-board-nav-summary">
+                <For each={busyMissionLanes()}>
+                  {(lane) => (
+                    <span class="mission-board-nav-summary__lane" data-lane={lane}>
+                      <i aria-hidden="true" />
+                      <strong>{missionCounts()[lane]}</strong>
+                      {t(`mission_board.lane.${lane}`)}
+                    </span>
+                  )}
+                </For>
+              </span>
+            ) : undefined
+          }
+          onClick={() => void props.onOpenMissionBoard()}
+        />
+        <WorkLedgerNavigationAction
+          data-ui="work-ledger-automations"
+          icon="scheduled"
+          label={t("automations.menu")}
+          description={t("work_ledger.tooltip.automations")}
+          onClick={() => openConfigDialog("scheduled")}
+        />
+        <WorkLedgerNavigationAction
+          data-ui="work-ledger-expert-squads"
+          icon="expert-squad"
+          label={t("expert_squad.title")}
+          description={t("work_ledger.tooltip.expert_squads")}
+          onClick={() => openConfigDialog("expert-squad-install")}
+        />
+        <DropdownMenu.Root placement="top-start" fitViewport>
+          <DropdownMenu.Trigger
+            as={Button}
+            type="button"
+            variant="ghost"
+            size="sm"
+            tone="neutral"
+            class="sidebar-codex-action oc-navigation-row"
+          >
+            <Icon name="more-horizontal" size="medium" />
+            <span class="sidebar-codex-action-label">{t("common.more")}</span>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Portal>
+            <DropdownMenu.Content>
+              <DropdownMenu.Item
+                as="button"
+                type="button"
+                disabled={!activeProjectDirectory()}
+                onSelect={startMulticaImportInCurrentDirectory}
+              >
+                <Icon name="download" />
+                {t("multica_import.sidebar_action")}
+              </DropdownMenu.Item>
+              <DropdownMenu.Item as="button" type="button" onSelect={() => openConfigDialog("channel")}>
+                <Icon name="config-channel" />
+                {t("channel.title")}
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Portal>
+        </DropdownMenu.Root>
+        <WorkLedgerNavigationAction
+          data-ui="work-ledger-settings"
+          icon="config-general"
+          label={t("config.title")}
+          description={t("config.title")}
+          onClick={() => openConfigDialog("general")}
+        />
       </div>
     </div>
   )

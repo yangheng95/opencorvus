@@ -36,7 +36,7 @@
 
 .oc-tabs[data-layout="rail"] {
   --oc-tabs-height: auto;
-  --oc-tabs-gap: calc(3px * var(--ui-scale));
+  --oc-tabs-gap: var(--ui-gap-3xs);
   --oc-tabs-padding-x: 0;
 
   width: 100%;
@@ -60,7 +60,7 @@
 }
 
 .oc-tabs[data-layout="rail"] .oc-tab:is([data-selected], [data-highlighted], :hover, :focus-visible) {
-  border-color: color-mix(in srgb, var(--accent) 34%, transparent);
+  border-color: transparent;
 }
 
 .oc-tab {
@@ -72,7 +72,7 @@
   height: var(--oc-tabs-height);
   padding: 0 var(--oc-tab-padding-x);
   border: 0;
-  border-radius: 0;
+  border-radius: var(--oc-radius-soft);
   background: var(--oc-tab-bg);
   color: var(--oc-tab-color);
   font-family: var(--font);

@@ -54,12 +54,9 @@
   padding: var(--ui-gap-sm) var(--oc-panel-pad-x);
 }
 
-/* Variant selectors let surface files adjust look via data attributes
- * rather than modifier classes. Panel itself ships no defaults here —
- * this block reserves the selector contract for surface overrides. */
-.oc-panel[data-variant] {
-}
-.oc-panel[data-size] {
-}
-.oc-panel[data-tone] {
+/* One material rule for persistent application chrome. Its backdrop is painted
+ * by body once per normal invalidation; no live filter or animation owner. */
+.oc-material-glass {
+  background: var(--workspace-glass-bg);
+  box-shadow: inset 0 var(--oc-border-width) 0 var(--workspace-glass-edge);
 }

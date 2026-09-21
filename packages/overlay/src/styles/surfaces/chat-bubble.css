@@ -1,11 +1,11 @@
 .chat-bubble-row {
   --chat-avatar-ring-outset: calc(2px * var(--ui-scale));
-  --chat-avatar-inline-size: calc(24px * var(--ui-scale));
+  --chat-avatar-inline-size: calc(20px * var(--ui-scale));
   --chat-avatar-gap: calc(8px * var(--ui-scale));
 
   display: flex;
   width: 100%;
-  margin: var(--ui-gap-xl) 0;
+  margin: var(--ui-gap-md) 0;
   box-sizing: border-box;
   justify-content: flex-start;
 }
@@ -15,8 +15,8 @@
 }
 
 .chat-bubble-row[data-kind="agent"] {
-  --conversation-card-background: color-mix(in srgb, var(--card-stage, var(--accent)) 3%, var(--surface));
-  --conversation-card-edge: color-mix(in srgb, var(--border) 64%, transparent);
+  --conversation-card-background: var(--chat-canvas);
+  --conversation-card-edge: transparent;
 }
 
 .chat-bubble-row[data-role="user"] {
@@ -39,7 +39,8 @@
 }
 
 .chat-bubble-row[data-role="user"] .chat-bubble-shell {
-  width: var(--conversation-card-inline-size);
+  width: var(--conversation-user-card-inline-size);
+  margin-inline-start: auto;
   align-items: flex-start;
 }
 
@@ -72,7 +73,6 @@
   transform: none;
 }
 
-.chat-bubble-row[data-kind="agent"] .chat-bubble,
 .chat-bubble-row[data-role="user"] .chat-bubble {
   overflow: hidden;
   padding: var(--ui-gap-xl) var(--ui-gap-xl) var(--ui-gap-xl);
@@ -204,8 +204,8 @@
   justify-content: center;
   border: 0 solid transparent;
   border-radius: 50%;
-  color: var(--card-stage, var(--text-muted));
-  background: color-mix(in srgb, var(--card-stage, var(--text-muted)) 11%, transparent);
+  color: var(--text-soft);
+  background: var(--subtle-2);
   box-shadow: none;
 }
 
@@ -219,7 +219,7 @@
 }
 
 .chat-avatar[data-status="running"]::after {
-  border-color: color-mix(in srgb, var(--card-stage, var(--accent)) 42%, transparent);
+  border-color: var(--border-hover);
 }
 
 .chat-avatar__icon {
@@ -233,8 +233,8 @@
   flex: 0 1 auto;
   overflow: hidden;
   color: var(--text-soft);
-  font-size: var(--ui-font-body);
-  font-weight: var(--ui-font-weight-medium);
+  font-size: var(--ui-font-caption);
+  font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -247,11 +247,11 @@
   overflow-wrap: normal;
   color: var(--text-strong);
   font-size: var(--ui-font-body);
-  font-weight: var(--ui-font-weight-strong);
-  letter-spacing: var(--ui-letter-spacing-loose);
+  font-weight: var(--ui-font-weight-medium);
+  letter-spacing: var(--ui-letter-spacing-normal);
   line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
-  text-transform: uppercase;
+  text-transform: none;
   white-space: nowrap;
 }
 

@@ -22,37 +22,36 @@
    ───────────────────────────────────────────────────────────── */
 
 :root[data-theme="dark"] {
+  --workspace-glass-bg: rgb(21 23 28 / 0.56);
+  --workspace-glass-edge: rgb(255 255 255 / 0.08);
   color-scheme: dark;
   --text-on-accent: #000000;
   --text-on-strong: #000000;
   --text-on-danger: #000000;
-  --bg: rgb(26, 27, 30);
-  --surface: rgb(38, 40, 44);
-  --surface-hover: rgb(48, 50, 55);
-  --surface-inset: rgb(31, 33, 37);
-  --surface-strong: rgb(42, 44, 49);
-  --rail-surface: var(--surface);
-  --rail-background-image: none;
-  --chat-canvas: var(--bg);
-  --workspace-ambient-fill: var(--chat-canvas);
-  --inspector-surface: var(--chat-canvas);
-  --body-bg: var(--rail-surface);
-  --panel-body-bg: var(--rail-surface);
-  --panel-body-blur: none;
-  --chrome: rgb(32, 34, 38);
+  --bg: #24272e;
+  --surface: #242424;
+  --surface-hover: #303030;
+  --surface-inset: #282828;
+  --surface-strong: #2c2c2c;
+  --rail-surface: #141414;
+  --chat-canvas: #191a1c;
+  --workspace-ambient-fill: transparent;
+  --inspector-surface: transparent;
+  --body-bg:
+    radial-gradient(ellipse at 0% 15%, rgb(105 122 155 / 0.22), transparent 54%),
+    radial-gradient(ellipse at 100% 42%, rgb(130 103 125 / 0.18), transparent 56%),
+    radial-gradient(ellipse at 55% 110%, rgb(70 125 121 / 0.16), transparent 64%), var(--bg);
+  --chrome: #202124;
   --border: rgba(255, 255, 255, 0.1);
   --border-hover: rgba(255, 255, 255, 0.18);
   --border-strong: rgba(255, 255, 255, 0.24);
   --ui-focused-popup-border: var(--oc-border-width) solid var(--border-strong);
-  --ui-focused-popup-shadow:
-    0 calc(24px * var(--ui-scale)) calc(54px * var(--ui-scale))
-      color-mix(in srgb, var(--ui-shadow-tone) 28%, transparent),
-    var(--shadow-lg);
+  --ui-focused-popup-shadow: var(--shadow-lg);
   --ui-focused-popup-scrim: color-mix(in srgb, var(--text-strong) 14%, transparent);
-  --text: #d4d9e0;
-  --text-strong: #f1f3f5;
-  --text-soft: #aab3c0;
-  --text-muted: #929cad;
+  --text: #e0e0dd;
+  --text-strong: #eeeeec;
+  --text-soft: #c2c2bd;
+  --text-muted: #aaaaa5;
   --accent: #5b8def;
   --accent-dim: rgba(91, 141, 239, 0.12);
   --accent-hover: #4a7de0;
@@ -61,11 +60,11 @@
   --accent-ring: rgba(91, 141, 239, 0.24);
   --info: #5b8def;
   --info-dim: rgba(91, 141, 239, 0.12);
-  --good: #34d399;
+  --good: #75bc98;
   --good-dim: rgba(52, 211, 153, 0.1);
   --warn: #fbbf24;
   --warn-dim: rgba(251, 191, 36, 0.1);
-  --bad: #f87171;
+  --bad: #e79898;
   --bad-dim: rgba(248, 113, 113, 0.1);
   --shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.36);

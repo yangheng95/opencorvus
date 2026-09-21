@@ -16,24 +16,25 @@ body {
   min-height: 0;
   flex-direction: column;
   overflow: hidden;
-  background: var(--surface);
+  background: var(--chat-canvas);
   color: var(--text);
 }
 
 .mission-board__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-gap-xl);
   flex: 0 0 auto;
   height: auto;
-  min-height: calc(70px * var(--ui-scale));
+  min-height: var(--ui-panel-header-height);
   max-height: none;
-  padding: var(--ui-gap-md) var(--ui-gap-lg);
-  border-bottom: var(--oc-border-width) solid var(--border);
-  background: var(--surface);
+  padding: var(--ui-gap-3xl) var(--ui-gap-3xl) var(--ui-gap-xl);
 }
 
 .mission-board__heading,
 .mission-board__controls,
-.mission-board__heading > div,
-.mission-board__error > span {
+.mission-board__heading > div {
   display: flex;
   min-width: 0;
 }
@@ -43,26 +44,19 @@ body {
   gap: var(--ui-gap-md);
 }
 
-.mission-board__heading > div,
-.mission-board__error > span {
+.mission-board__heading > div {
   flex-direction: column;
-  gap: var(--ui-gap-3xs);
-}
-
-.mission-board__title-icon {
-  display: inline-flex;
-  color: var(--text-soft);
+  gap: var(--ui-gap-sm);
 }
 
 .mission-board__heading h1,
 .mission-board-lane__header h2 {
   margin: 0;
-  color: var(--text-strong);
 }
 
 .mission-board__heading h1 {
   font-size: var(--ui-font-emphasis);
-  font-weight: var(--ui-font-weight-strong);
+  font-weight: var(--ui-font-weight-medium);
   line-height: var(--ui-line-height-tight);
 }
 
@@ -74,38 +68,24 @@ body {
 }
 
 .mission-board__controls {
+  flex: 0 0 auto;
   align-items: center;
-  gap: var(--ui-gap-sm);
+  gap: var(--ui-gap-md);
+  padding: 0 var(--ui-gap-3xl) var(--ui-gap-xl);
+  flex-wrap: wrap;
 }
 
 .mission-board__search {
-  width: clamp(calc(180px * var(--ui-scale)), 22vw, calc(300px * var(--ui-scale)));
+  width: min(100%, calc(320px * var(--ui-scale)));
 }
 
 .mission-board__project-filter {
   width: calc(190px * var(--ui-scale));
 }
 
-.mission-board__project-filter .oc-select-trigger {
-  height: var(--oc-density-chip-height);
-}
-
 .mission-board__error {
-  display: flex;
   flex: 0 0 auto;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--ui-gap-md);
-  margin: var(--ui-gap-md) var(--ui-gap-lg) 0;
-  padding: var(--ui-gap-md);
-  border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 40%, var(--border));
-  border-radius: var(--oc-radius-large);
-  background: var(--bad-dim);
-}
-
-.mission-board__error small {
-  color: var(--text-soft);
-  font-size: var(--ui-font-body);
+  margin: 0 var(--ui-gap-3xl) var(--ui-gap-xl);
 }
 
 .mission-board__state {
@@ -136,11 +116,21 @@ body {
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
-  grid-template-columns: repeat(5, minmax(calc(276px * var(--ui-scale)), 1fr));
-  gap: var(--ui-gap-md);
+  grid-template-columns: repeat(5, minmax(calc(184px * var(--ui-scale)), 1fr));
+  gap: var(--ui-gap-lg);
   overflow: auto;
-  padding: var(--ui-gap-md) var(--ui-gap-lg) var(--ui-gap-lg);
-  scrollbar-gutter: stable;
+  padding: 0 var(--ui-gap-3xl) var(--ui-gap-3xl);
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+.mission-board__lanes::-webkit-scrollbar {
+  width: var(--ui-gap-md);
+  height: var(--ui-gap-md);
+}
+.mission-board__lanes::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--oc-radius-pill);
 }
 
 .mission-board-lane {
@@ -151,9 +141,8 @@ body {
   min-height: 0;
   flex-direction: column;
   overflow: hidden;
-  border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-large);
-  background: var(--surface);
+  border: 0;
+  background: transparent;
 }
 
 .mission-board-lane[data-lane="running"] {
@@ -175,11 +164,10 @@ body {
 .mission-board-lane__header {
   display: flex;
   flex: 0 0 auto;
-  min-height: calc(50px * var(--ui-scale));
+  min-height: var(--ui-panel-header-height);
   align-items: center;
   gap: var(--ui-gap-sm);
-  padding: 0 var(--ui-gap-md);
-  border-bottom: var(--oc-border-width) solid var(--border);
+  padding: 0 var(--ui-gap-sm);
 }
 
 .mission-board-lane__indicator {
@@ -195,9 +183,9 @@ body {
 }
 
 .mission-board-lane__header h2 {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   font-size: var(--ui-font-body);
-  font-weight: var(--ui-font-weight-strong);
+  font-weight: var(--ui-font-weight-medium);
 }
 
 .mission-board-lane__cards {
@@ -205,31 +193,29 @@ body {
   flex: 1 1 auto;
   min-height: 0;
   flex-direction: column;
-  gap: var(--ui-gap-sm);
+  gap: var(--ui-gap-lg);
   overflow-y: auto;
   padding: var(--ui-gap-sm);
+  border-radius: var(--oc-radius-soft);
+  background: color-mix(in srgb, var(--surface-inset) 38%, transparent);
 }
 
 .mission-board-lane__empty {
-  display: flex;
-  min-height: calc(120px * var(--ui-scale));
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  font-size: var(--ui-font-body);
+  min-height: calc(72px * var(--ui-scale));
+  border-top: var(--oc-border-width) solid var(--divider-soft);
 }
 
 .mission-board-card {
   display: flex;
   width: 100%;
-  min-height: calc(136px * var(--ui-scale));
+  min-height: 0;
   flex: 0 0 auto;
   flex-direction: column;
   overflow: hidden;
   border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-large);
+  border-radius: var(--oc-radius-soft);
   background: var(--surface-strong);
-  box-shadow: var(--shadow);
+  box-shadow: none;
   transition:
     border-color var(--ui-duration-fast) ease,
     background var(--ui-duration-fast) ease;
@@ -237,7 +223,7 @@ body {
 
 .mission-board-card:hover,
 .mission-board-card:focus-within {
-  border-color: color-mix(in srgb, var(--mission-board-lane-accent, var(--accent)) 42%, var(--border));
+  border-color: var(--border-hover);
   background: var(--surface-hover);
 }
 
@@ -264,7 +250,7 @@ body {
 
 .mission-board-card__open.oc-button {
   --oc-button-height: auto;
-  --oc-button-padding-x: var(--ui-gap-md);
+  --oc-button-padding-x: var(--ui-gap-lg);
   --oc-button-bg: transparent;
   --oc-button-bg-hover: transparent;
   --oc-button-border: 0;
@@ -272,12 +258,13 @@ body {
 
   display: flex;
   width: 100%;
-  min-height: calc(134px * var(--ui-scale));
+  min-height: 0;
   align-items: stretch;
   justify-content: flex-start;
   flex-direction: column;
-  gap: var(--ui-gap-sm);
-  padding-block: var(--ui-gap-md);
+  gap: var(--ui-gap-md);
+  padding-block: var(--ui-gap-lg);
+  font-weight: var(--ui-font-weight-body);
   border-radius: 0;
   color: var(--text);
   text-align: left;
@@ -301,6 +288,17 @@ body {
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
   font-variant-numeric: tabular-nums;
+}
+
+.mission-board-card__identity > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mission-board-card__identity > time {
+  flex: none;
+  white-space: nowrap;
 }
 
 .mission-board-card__title {
@@ -393,9 +391,9 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: var(--ui-gap-sm);
-  padding: var(--ui-gap-xs) var(--ui-gap-md);
+  padding: var(--ui-gap-md) var(--ui-gap-lg);
   border-top: var(--oc-border-width) solid var(--border);
-  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  background: transparent;
 }
 
 .mission-board-card__actions .oc-icon-loading,
@@ -420,6 +418,7 @@ body {
 }
 
 #missionCreateDialog .dialog-form {
+  max-width: calc(640px * var(--ui-scale));
   max-height: calc(var(--ui-overlay-shell-height) - calc(32px * var(--ui-scale)));
   overflow: hidden;
 }
@@ -432,9 +431,9 @@ body {
   display: flex;
   min-height: 0;
   flex-direction: column;
-  gap: var(--ui-gap-lg);
+  gap: var(--ui-gap-xl);
   overflow-y: auto;
-  padding: var(--ui-gap-lg);
+  padding: var(--ui-gap-xs);
   scrollbar-gutter: stable;
 }
 
@@ -448,7 +447,7 @@ body {
 }
 
 .mission-create-form__request textarea {
-  min-height: calc(168px * var(--ui-scale));
+  min-height: calc(112px * var(--ui-scale));
   resize: none;
 }
 
@@ -456,15 +455,14 @@ body {
   display: flex;
   min-width: 0;
   margin: 0;
-  padding: var(--ui-gap-md);
+  padding: 0;
   flex-direction: column;
-  gap: var(--ui-gap-md);
-  border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-large);
+  gap: var(--ui-gap-xl);
+  border: 0;
 }
 
 .mission-create-form__context > legend {
-  padding: 0 var(--ui-gap-xs);
+  padding: 0 0 var(--ui-gap-lg);
   color: var(--text-strong);
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
@@ -501,9 +499,9 @@ body {
   gap: var(--ui-gap-xs);
   overflow-y: auto;
   padding: var(--ui-gap-sm);
-  border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-large);
-  background: var(--surface);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 .mission-create-form__expert-squad-list .oc-checkbox {

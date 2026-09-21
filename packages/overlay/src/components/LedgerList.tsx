@@ -1,4 +1,6 @@
 import { Show, type JSX } from "solid-js"
+import { t } from "../utils/i18n"
+import { Feedback } from "./ui/Feedback"
 import { Button } from "./ui/Button"
 import { ProgressiveList } from "./ui/ProgressiveList"
 
@@ -38,14 +40,20 @@ export function LedgerList<T>(props: LedgerListProps<T>) {
   return (
     <div class="ledger-list" data-ui="ledger-list" aria-busy={props.loading ? "true" : "false"}>
       <Show when={props.error}>
-        <div class="ledger-error" role="alert" data-ui="ledger-error">
-          <span>{props.error}</span>
-          <Show when={props.onRetry}>
-            <Button type="button" variant="outline" size="sm" tone="danger" onClick={() => props.onRetry?.()}>
-              {props.retryLabel}
-            </Button>
-          </Show>
-        </div>
+        <Feedback
+          tone="error"
+          details={props.error}
+          data-ui="ledger-error"
+          actions={
+            <Show when={props.onRetry}>
+              <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => props.onRetry?.()}>
+                {props.retryLabel}
+              </Button>
+            </Show>
+          }
+        >
+          {props.items.length > 0 ? t("ledger.update_failed") : t("ledger.load_failed")}
+        </Feedback>
       </Show>
       <Show when={initialLoading()}>
         <LedgerLoadingStatus label={props.loadingLabel} />

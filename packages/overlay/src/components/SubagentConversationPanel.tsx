@@ -30,13 +30,12 @@ import { setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { t } from "../utils/i18n"
 import { isSubagentActivityRecord, subagentSessionRecords } from "../utils/subagent-presentation"
-import { Avatar } from "./Avatar"
 import { ConversationCard } from "./ConversationCard"
 import { Button } from "./ui/Button"
-import { DropdownMenu } from "./ui/DropdownMenu"
 import { Icon } from "./ui/Icon"
 import { StatusIndicator } from "./ui/StatusIndicator"
-import { Tab, TabList, TabPanel, Tabs } from "./ui/Tabs"
+import { SelectControl } from "./ui/SelectControl"
+import { Feedback } from "./ui/Feedback"
 
 function selectedConversationDirectory(): string {
   const source = boardStore.selectedSource
@@ -116,14 +115,10 @@ export function SubagentConversationPanel(props: {
   const records = createMemo(() =>
     conversationAgentRecordsForSource(boardStore.selectedSource).filter(isSubagentActivityRecord),
   )
-  // One tab per Session, newest occurrence. Scanning the raw list instead would
+  // One entry per Session, newest occurrence. Scanning the raw list instead would
   // repeat a Session that ran more than once and would answer a lookup with its
   // oldest occurrence, carrying that occurrence's stale status and target.
   const sessionRecords = createMemo(() => subagentSessionRecords(records()))
-  const sessionIDs = createMemo(() => sessionRecords().map((candidate) => candidate.sessionID), [], {
-    equals: (previous, next) =>
-      previous.length === next.length && previous.every((sessionID, index) => sessionID === next[index]),
-  })
   const recordForSession = (sessionID: string) =>
     sessionRecords().find((candidate) => candidate.sessionID === sessionID)
   const selectedRecord = createMemo(() => {
@@ -131,35 +126,12 @@ export function SubagentConversationPanel(props: {
     if (!sessionID) return undefined
     return recordForSession(sessionID)
   })
-  let agentTabListElement: HTMLDivElement | undefined
-  const revealSelectedTab = createAnimationFrameScheduler(() => {
-    const tabList = agentTabListElement
-    if (!tabList) return
-    const selectedSessionID = props.sessionID().trim()
-    const selectedTab = Array.from(
-      tabList.querySelectorAll<HTMLElement>(".subagent-conversation-panel__agent-tab"),
-    ).find((candidate) => candidate.dataset.sessionId === selectedSessionID)
-    if (!selectedTab) return
-    const listBounds = tabList.getBoundingClientRect()
-    const tabBounds = selectedTab.getBoundingClientRect()
-    if (tabBounds.left < listBounds.left) {
-      tabList.scrollLeft += tabBounds.left - listBounds.left
-    } else if (tabBounds.right > listBounds.right) {
-      tabList.scrollLeft += tabBounds.right - listBounds.right
-    }
-  })
-  createEffect(() => {
-    const selectedSessionID = props.sessionID().trim()
-    if (!selectedSessionID || !sessionIDs().includes(selectedSessionID)) return
-    revealSelectedTab.schedule()
-    const tabList = agentTabListElement
-    if (!tabList) return
-    // Dock resizing changes the visible strip without changing Session identity.
-    const resizeObserver = new ResizeObserver(() => revealSelectedTab.schedule())
-    resizeObserver.observe(tabList)
-    onCleanup(() => resizeObserver.disconnect())
-  })
-  onCleanup(() => revealSelectedTab.cancel())
+  const [showAgentList, setShowAgentList] = createSignal(false)
+  createEffect(on(props.sessionID, () => setShowAgentList(false), { defer: true }))
+  const selectAgent = (sessionID: string) => {
+    props.onSessionSelect(sessionID)
+    setShowAgentList(false)
+  }
   const requestKey = createMemo(() => {
     if (!props.active()) return null
     const source = boardStore.selectedSource
@@ -255,142 +227,104 @@ export function SubagentConversationPanel(props: {
   return (
     <section class="subagent-conversation-panel" data-session-id={props.sessionID()}>
       <Show
-        when={selectedRecord()}
-        fallback={<div class="subagent-conversation-panel__empty">{t("subagent.conversation.no_selection")}</div>}
-      >
-        <Tabs
-          class="subagent-conversation-panel__agents"
-          value={props.sessionID()}
-          onValueChange={props.onSessionSelect}
-        >
-          <div class="subagent-conversation-panel__agent-selector">
-            <TabList
-              ref={agentTabListElement}
-              class="subagent-conversation-panel__agent-tabs"
-              size="sm"
-              tone="neutral"
-              layout="strip"
-              aria-label={t("right_dock.tool.subagent")}
-            >
-              <For each={sessionIDs()}>
-                {(sessionID) => {
-                  const candidate = createMemo(() => {
-                    const record = recordForSession(sessionID)
-                    if (!record) throw new Error(`Sub-agent selector missing activity record for ${sessionID}`)
-                    return record
-                  })
-                  const candidateStatusLabel = () => t(`agent_rail.status.${candidate().status}`)
-                  return (
-                    <Tab
-                      value={sessionID}
-                      size="sm"
-                      tone="neutral"
-                      class="subagent-conversation-panel__agent-tab"
-                      data-session-id={sessionID}
-                      aria-label={t("subagent.progress.open", { agent: candidate().agentID })}
-                      title={`${candidate().agentID} · ${candidateStatusLabel()}`}
-                    >
-                      <Avatar
-                        role={candidate().stage}
-                        status={candidate().status}
-                        class="subagent-conversation-panel__agent-avatar"
-                      />
-                      <span class="subagent-conversation-panel__agent-label">{candidate().agentID}</span>
-                      <StatusIndicator
-                        status={candidate().status}
-                        label={candidateStatusLabel()}
-                        appearance="dot"
-                        aria-hidden="true"
-                      />
-                    </Tab>
-                  )
+        when={showAgentList() || !selectedRecord()}
+        fallback={
+          <>
+            <div class="subagent-conversation-panel__agent-selector">
+              <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => setShowAgentList(true)}>
+                <Icon name="nav-back" size="compact" />
+                {t("subagent.conversation.all_agents", { count: sessionRecords().length })}
+              </Button>
+              <SelectControl
+                options={sessionRecords()}
+                value={selectedRecord() ?? null}
+                optionValue="sessionID"
+                optionTextValue="agentID"
+                ariaLabel={t("right_dock.tool.subagent")}
+                triggerTitle={selectedRecord()?.agentID}
+                class="subagent-conversation-panel__select"
+                onChange={(record) => {
+                  if (record) selectAgent(record.sessionID)
                 }}
-              </For>
-            </TabList>
-            <Show when={sessionIDs().length > 1}>
-              <DropdownMenu.Root placement="bottom-end" gutter={6} fitViewport>
-                <DropdownMenu.Trigger
-                  as={Button}
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  tone="neutral"
-                  class="subagent-conversation-panel__agent-menu-trigger"
-                  data-ui="subagent-agent-menu-trigger"
-                  aria-label={t("subagent.conversation.all_agents", { count: sessionIDs().length })}
-                  title={t("subagent.conversation.all_agents", { count: sessionIDs().length })}
-                >
-                  <Icon name="more-horizontal" size="compact" />
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Portal>
-                  <DropdownMenu.Content class="subagent-conversation-panel__agent-menu" data-ui="subagent-agent-menu">
-                    <For each={sessionIDs()}>
-                      {(sessionID) => {
-                        const candidate = createMemo(() => {
-                          const record = recordForSession(sessionID)
-                          if (!record) throw new Error(`Sub-agent menu missing activity record for ${sessionID}`)
-                          return record
-                        })
-                        const candidateStatusLabel = () => t(`agent_rail.status.${candidate().status}`)
-                        return (
-                          <DropdownMenu.Item
-                            as="button"
-                            type="button"
-                            class="subagent-conversation-panel__agent-menu-item"
-                            data-session-id={sessionID}
-                            data-active={String(sessionID === props.sessionID())}
-                            onSelect={() => props.onSessionSelect(sessionID)}
-                          >
-                            <Avatar
-                              role={candidate().stage}
-                              status={candidate().status}
-                              class="subagent-conversation-panel__agent-menu-avatar"
-                            />
-                            <span class="subagent-conversation-panel__agent-menu-label">{candidate().agentID}</span>
-                            <span class="subagent-conversation-panel__agent-menu-status">{candidateStatusLabel()}</span>
-                          </DropdownMenu.Item>
-                        )
-                      }}
-                    </For>
-                  </DropdownMenu.Content>
-                </DropdownMenu.Portal>
-              </DropdownMenu.Root>
-            </Show>
-          </div>
-          <TabPanel
-            value={props.sessionID()}
-            forceMount
-            class="subagent-conversation-panel__selected-agent"
-            data-ui="subagent-selected-agent"
-          >
-            <Show
-              when={requestKey()}
-              fallback={<div class="subagent-conversation-panel__empty">{t("subagent.conversation.no_selection")}</div>}
-            >
+                renderValue={(record) => record?.agentID ?? ""}
+                renderOptionLabel={(record) => record.agentID}
+                renderOptionDescription={(record) => t(`agent_rail.status.${record.status}`)}
+              />
+            </div>
+            <div class="subagent-conversation-panel__selected-agent" data-ui="subagent-selected-agent">
               <Show
-                when={!conversation.error}
+                when={requestKey()}
                 fallback={
-                  <div class="subagent-conversation-panel__empty" role="alert">
-                    <strong>{t("subagent.conversation.load_failed")}</strong>
-                    <p>{formatErrorDetails(conversation.error)}</p>
-                    <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void refetch()}>
-                      {t("common.retry")}
-                    </Button>
-                  </div>
+                  <div class="subagent-conversation-panel__empty">{t("subagent.conversation.no_selection")}</div>
                 }
               >
                 <Show
-                  when={displayedConversation()}
-                  fallback={<div class="subagent-conversation-panel__empty">{t("subagent.conversation.loading")}</div>}
+                  when={!conversation.error}
+                  fallback={
+                    <Feedback
+                      tone="error"
+                      title={t("subagent.conversation.load_failed")}
+                      details={formatErrorDetails(conversation.error)}
+                      actions={
+                        <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => void refetch()}>
+                          {t("common.retry")}
+                        </Button>
+                      }
+                    >
+                      {t("subagent.conversation.no_selection")}
+                    </Feedback>
+                  }
                 >
-                  {(data) => (
-                    <SubagentConversationScroll conversation={data} sessionID={props.sessionID} status={status} />
-                  )}
+                  <Show
+                    when={displayedConversation()}
+                    fallback={
+                      <div class="subagent-conversation-panel__empty">{t("subagent.conversation.loading")}</div>
+                    }
+                  >
+                    {(data) => (
+                      <SubagentConversationScroll conversation={data} sessionID={props.sessionID} status={status} />
+                    )}
+                  </Show>
                 </Show>
               </Show>
-            </Show>
-          </TabPanel>
-        </Tabs>
+            </div>
+          </>
+        }
+      >
+        <div class="subagent-conversation-panel__list" aria-label={t("right_dock.tool.subagent")}>
+          <div class="subagent-conversation-panel__list-heading">
+            {t("subagent.conversation.all_agents", { count: sessionRecords().length })}
+          </div>
+          <For each={sessionRecords().map((record) => record.sessionID)}>
+            {(sessionID) => {
+              const candidate = () => recordForSession(sessionID)!
+              return (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="control"
+                  tone="neutral"
+                  class="oc-navigation-row subagent-conversation-panel__agent-row"
+                  data-active={String(sessionID === props.sessionID())}
+                  onClick={() => selectAgent(sessionID)}
+                >
+                  <StatusIndicator
+                    status={candidate().status}
+                    label={t(`agent_rail.status.${candidate().status}`)}
+                    aria-hidden="true"
+                  />
+                  <span class="subagent-conversation-panel__agent-name">{candidate().agentID}</span>
+                  <span class="subagent-conversation-panel__agent-status">
+                    {t(`agent_rail.status.${candidate().status}`)}
+                  </span>
+                </Button>
+              )
+            }}
+          </For>
+          <Show when={sessionRecords().length === 0}>
+            <p>{t("subagent.conversation.no_selection")}</p>
+          </Show>
+        </div>
       </Show>
     </section>
   )

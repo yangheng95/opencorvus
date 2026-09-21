@@ -42,6 +42,7 @@ interface ProviderGroup {
 
 interface ModelOption {
   id: string
+  label: string
 }
 
 interface ProviderAccountUsageBaseResourceKey {
@@ -313,7 +314,11 @@ export function ComposerModelSelector(props: ComposerModelSelectorProps) {
   createEffect(() => {
     props.onModelAvailabilityChange(Boolean(selectedModel().trim()))
   })
-  const modelLabel = createMemo(() => selectedModel() || t("model_selector.model_choose"))
+  const modelLabel = createMemo(() => {
+    const selected = selectedModel()
+    if (!selected) return t("model_selector.model_choose")
+    return connectedModelOptions().find((option) => option.value === selected)?.modelLabel ?? selected
+  })
   const accountUsage = createProviderAccountUsageState(selectedModel, taskID)
   const groups = createMemo(mirrorProviderGroups)
   const filteredGroups = createMemo(() => {
@@ -395,11 +400,11 @@ export function ComposerModelSelector(props: ComposerModelSelectorProps) {
               size="sm"
               tone="neutral"
               data-ui="composer-model-selector-trigger"
-              title={t("model_selector.model_chip_title", { model: modelLabel() })}
-              aria-label={t("model_selector.model_chip_aria", { model: modelLabel() })}
+              title={t("model_selector.model_chip_title", { model: selectedModel() || modelLabel() })}
+              aria-label={t("model_selector.model_chip_aria", { model: selectedModel() || modelLabel() })}
             >
               <span class="composer-model-selector-copy">
-                <span class="composer-model-selector-value" title={modelLabel()}>
+                <span class="composer-model-selector-value" title={selectedModel() || modelLabel()}>
                   {modelLabel()}
                 </span>
               </span>
@@ -481,11 +486,13 @@ interface ProviderModelGroupProps {
 }
 
 function ProviderModelGroup(props: ProviderModelGroupProps) {
-  const options = createMemo<ModelOption[]>(() =>
-    props.group.models.map((modelID) => ({
+  const options = createMemo<ModelOption[]>(() => {
+    const labels = new Map(connectedModelOptions().map((option) => [option.value, option.modelLabel]))
+    return props.group.models.map((modelID) => ({
       id: modelID,
-    })),
-  )
+      label: labels.get(modelID) ?? splitModelID(modelID).name,
+    }))
+  })
   const selectedOption = createMemo(() => options().find((option) => option.id === props.currentModel) ?? null)
   const selectedKeys = createMemo(() => {
     const option = selectedOption()
@@ -533,11 +540,12 @@ function ProviderModelGroup(props: ProviderModelGroupProps) {
               type="button"
               class="model-selector-option"
               data-model-value={option.id}
+              title={option.id}
             >
               <span class="composer-picker-option-icon" aria-hidden="true">
                 <Icon name="config-agent-models" size="compact" />
               </span>
-              <span class="composer-picker-option-label">{option.id}</span>
+              <span class="composer-picker-option-label">{option.label}</span>
               <Show when={option.id === props.currentModel}>
                 <Icon class="model-selector-option-check" name="check" size="compact" />
               </Show>

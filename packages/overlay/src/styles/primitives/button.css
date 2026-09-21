@@ -28,7 +28,7 @@
   padding: var(--oc-button-padding-y) var(--oc-button-padding-x);
   gap: var(--oc-button-gap);
   border: var(--oc-button-border);
-  border-radius: var(--oc-radius-large);
+  border-radius: var(--oc-radius-soft);
   background: var(--oc-button-bg);
   color: var(--oc-button-color);
   box-shadow: var(--oc-button-shadow);

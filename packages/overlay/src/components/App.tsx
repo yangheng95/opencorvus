@@ -279,7 +279,7 @@ export function App(props: AppProps) {
 
   return (
     <>
-      <header class="titlebar" id="titlebar">
+      <header class="titlebar oc-material-glass" id="titlebar">
         <div class="titlebar-top-row" data-tauri-drag-region>
           <div class="titlebar-left" data-tauri-drag-region>
             <div id="solidSidebarToggle">{props.sidebarToggle}</div>
@@ -298,7 +298,7 @@ export function App(props: AppProps) {
       <main class="panel" data-conversation-execution-status={conversationExecutionStatus() || undefined}>
         <div class="panel-body" id="panelBody">
           <div
-            class="left-activity-shell"
+            class="left-activity-shell oc-material-glass"
             id="leftActivityShell"
             onMouseEnter={cancelMailboxHoverClose}
             onMouseLeave={scheduleMailboxHoverPreviewClose}
@@ -532,7 +532,7 @@ export function App(props: AppProps) {
               tabIndex={-1}
             />
             <aside
-              class="right-dock"
+              class="right-dock oc-material-glass"
               id="rightDock"
               data-open="false"
               aria-label={t("right_dock.tools_panel")}

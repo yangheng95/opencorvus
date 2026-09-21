@@ -1,3 +1,4 @@
+import { Feedback } from "../ui/Feedback"
 import { Show, createMemo, onMount } from "solid-js"
 import { Button } from "../ui/Button"
 import {
@@ -14,7 +15,7 @@ import {
 } from "../../services/desktop-update"
 import { t } from "../../utils/i18n"
 import { OVERLAY_VERSION } from "../../utils/version"
-import { SettingsGroup, SettingsRow, SettingsState, SettingsSurface } from "./layout"
+import { SettingsGroup, SettingsRow, SettingsSurface } from "./layout"
 
 export default function DesktopUpdatePanel() {
   const readyToInstall = createMemo(() => desktopUpdateInfo()?.downloadedBytes !== undefined)
@@ -26,7 +27,7 @@ export default function DesktopUpdatePanel() {
 
   return (
     <SettingsGroup title={t("about.update_title")} description={t("about.update_description")}>
-      <Show when={desktopUpdateSupported()} fallback={<SettingsState>{t("about.update_desktop_only")}</SettingsState>}>
+      <Show when={desktopUpdateSupported()} fallback={<Feedback>{t("about.update_desktop_only")}</Feedback>}>
         <SettingsSurface>
           <SettingsRow
             align="center"
@@ -47,21 +48,18 @@ export default function DesktopUpdatePanel() {
           </SettingsRow>
         </SettingsSurface>
 
-        <Show when={desktopUpdateError()}>{(message) => <SettingsState tone="error">{message()}</SettingsState>}</Show>
+        <Show when={desktopUpdateError()}>{(message) => <Feedback tone="error">{message()}</Feedback>}</Show>
 
         <Show when={desktopUpdateDownloading()}>
-          <SettingsState tone="info" title={t("about.update_downloading")}>
+          <Feedback tone="info" title={t("about.update_downloading")}>
             {progressDescription()}
-          </SettingsState>
+          </Feedback>
         </Show>
 
         <Show when={!desktopUpdateChecking() && !desktopUpdateDownloading() && desktopUpdateInfo()}>
           {(info) => (
-            <Show
-              when={info().available}
-              fallback={<SettingsState tone="success">{t("about.update_latest")}</SettingsState>}
-            >
-              <SettingsState
+            <Show when={info().available} fallback={<Feedback tone="success">{t("about.update_latest")}</Feedback>}>
+              <Feedback
                 tone="info"
                 title={t("about.update_available", { version: info().version || "" })}
                 actions={
@@ -84,7 +82,7 @@ export default function DesktopUpdatePanel() {
                 {readyToInstall()
                   ? t("about.update_ready", { size: formatDesktopUpdateBytes(info().downloadedBytes || 0) })
                   : info().notes || t("about.update_available_description")}
-              </SettingsState>
+              </Feedback>
             </Show>
           )}
         </Show>

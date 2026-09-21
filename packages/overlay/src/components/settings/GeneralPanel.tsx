@@ -1,3 +1,4 @@
+import { Feedback } from "../ui/Feedback"
 import { createSignal, For, onCleanup, Show } from "solid-js"
 import { t } from "../../utils/i18n"
 import { settingsStore, setSettingsStore, saveSettings } from "../../store/settings"
@@ -7,7 +8,7 @@ import { appStore } from "../../store/app"
 import { Button } from "../ui/Button"
 import { Switch } from "../ui/Switch"
 import { PermissionsSettingsGroup } from "./PermissionsPanel"
-import { SettingsGroup, SettingsPanel, SettingsRow, SettingsState } from "./layout"
+import { SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
 import { inSecureContext } from "../../utils/secure-context"
 
 let desktopNotificationAction = 0
@@ -81,17 +82,17 @@ export default function GeneralPanel() {
   return (
     <SettingsPanel class="general-panel">
       <For each={appStore.configLoadIssues.filter((issue) => issue.resource === "config")}>
-        {(issue) => <SettingsState tone="error">{issue.message}</SettingsState>}
+        {(issue) => <Feedback tone="error">{issue.message}</Feedback>}
       </For>
       <For each={appStore.projectLoadIssues.filter((issue) => issue.resource !== "config")}>
         {(issue) => (
-          <SettingsState tone="error">
+          <Feedback tone="error">
             {issue.resource}: {issue.message}
-          </SettingsState>
+          </Feedback>
         )}
       </For>
       <Show when={!inSecureContext()}>
-        <SettingsState>{t("settings.insecure_context")}</SettingsState>
+        <Feedback>{t("settings.insecure_context")}</Feedback>
       </Show>
       <PermissionsSettingsGroup />
 
@@ -111,9 +112,9 @@ export default function GeneralPanel() {
           }
         />
         {desktopNotificationError() ? (
-          <SettingsState tone="error" data-ui="settings-desktop-notification-status">
+          <Feedback tone="error" data-ui="settings-desktop-notification-status">
             {desktopNotificationError()}
-          </SettingsState>
+          </Feedback>
         ) : null}
       </SettingsGroup>
 
@@ -138,12 +139,12 @@ export default function GeneralPanel() {
           }
         />
         {logExportNotice() ? (
-          <SettingsState
+          <Feedback
             tone={logExportNoticeStatus() === "error" ? "error" : "success"}
             data-ui="settings-log-export-status"
           >
             {logExportNotice()}
-          </SettingsState>
+          </Feedback>
         ) : null}
       </SettingsGroup>
     </SettingsPanel>

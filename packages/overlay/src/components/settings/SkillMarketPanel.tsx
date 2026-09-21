@@ -1,3 +1,5 @@
+import { Disclosure } from "../ui/Disclosure"
+import { Feedback } from "../ui/Feedback"
 // ── Shared resource management ──
 // Solid.js component for managing project Skills and MCP server definitions.
 // Displays:
@@ -52,7 +54,7 @@ import { Button } from "../ui/Button"
 import { TextField } from "../ui/TextField"
 import { Icon } from "../ui/Icon"
 import { SelectField, type SelectFieldOption } from "../ui/SelectField"
-import { SettingsDetailSection, SettingsGroup, SettingsRow, SettingsState } from "./layout"
+import { SettingsDetailSection, SettingsGroup, SettingsRow } from "./layout"
 
 // ── Types ──
 
@@ -697,7 +699,7 @@ function SharedResourceManagementPanel(props: {
       </Show>
 
       <Show when={notice()}>
-        <SettingsState
+        <Feedback
           tone={noticeStatus() === "error" ? "error" : noticeStatus() === "warn" ? "warning" : "success"}
           data-ui={`${props.mode}-capability-notice`}
           actions={
@@ -715,17 +717,17 @@ function SharedResourceManagementPanel(props: {
           }
         >
           {notice()}
-        </SettingsState>
+        </Feedback>
       </Show>
 
       <For each={skillLoadIssues()}>
         {(issue) => (
-          <SettingsState tone="error" data-ui="skill-load-issue">
+          <Feedback tone="error" data-ui="skill-load-issue">
             {t("skill.load_issue", {
               owner: `${issue.kind} · ${issue.path}`,
               error: issue.message,
             })}
-          </SettingsState>
+          </Feedback>
         )}
       </For>
 
@@ -733,14 +735,13 @@ function SharedResourceManagementPanel(props: {
       <Show when={skillPanelActive()}>
         <SettingsGroup
           class="extension-settings-group"
-          contentInset
           title={t("skill.market_title")}
           description={t("skill.market_intro")}
           actions={<Badge tone="neutral">skills.sh</Badge>}
         >
           <div class="extension-settings-body">
             <form
-              class="config-inline-form"
+              class="skill-market-search"
               onSubmit={(event) => {
                 event.preventDefault()
                 void handleMarketSearch()
@@ -760,7 +761,7 @@ function SharedResourceManagementPanel(props: {
                   type="submit"
                   variant="solid"
                   size="md"
-                  tone="accent"
+                  tone="neutral"
                   disabled={marketLoading() || marketQuery().trim().length < 2}
                 >
                   {marketLoading() ? t("common.loading") : t("common.search")}
@@ -863,7 +864,6 @@ function SharedResourceManagementPanel(props: {
       <Show when={skillPanelActive()}>
         <SettingsGroup
           class="extension-settings-group"
-          contentInset
           data-skill-drop-active={skillDragActive() ? "true" : "false"}
           title={t("skill.installed_title")}
           actions={
@@ -1009,76 +1009,84 @@ function SharedResourceManagementPanel(props: {
               <Show when={poolSkills().length > 0} fallback={<div class="empty-hint">{t("skill.none_custom")}</div>}>
                 <For each={poolSkills()}>
                   {(item) => (
-                    <SettingsRow
-                      class="extension-settings-row"
-                      title={<span>{item.name}</span>}
-                      desc={item.description || ""}
-                      meta={<small>{item.location || ""}</small>}
-                      interactive
-                      actions={
-                        <div class="extension-settings-actions">
-                          <Show when={item.builtin}>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              tone="neutral"
-                              data-ui="skill-update-builtin"
-                              disabled={loading()}
-                              onClick={() => void handleUpdateSkill(item, "builtin")}
-                            >
-                              {t("skill.update_builtin")}
-                            </Button>
-                          </Show>
-                          <Show when={!item.builtin && item.writable}>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              tone="neutral"
-                              data-ui="skill-update-server"
-                              disabled={loading()}
-                              onClick={() => void handleUpdateSkill(item, "server")}
-                            >
-                              {t("skill.update_server")}
-                            </Button>
-                          </Show>
-                          <Show when={skillRemovable(item)}>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="md"
-                              tone="danger"
-                              title={t("skill.delete_button_title")}
-                              aria-label={t("skill.delete_button_title")}
-                              onClick={() => handleRemoveSkill(item.source || "", skillRemoveKind(item), item.name)}
-                            >
-                              {t("common.delete")}
-                            </Button>
-                          </Show>
-                          <Show
-                            when={
-                              item.location &&
-                              item.location !== "builtin" &&
-                              (isRemoteUrl(item.location) ? canOpenRemoteUrl() : true)
-                            }
-                          >
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="md"
-                              tone="neutral"
-                              title={skillOpenLabel(item.location!)}
-                              aria-label={skillOpenLabel(item.location!)}
-                              onClick={() => handleOpenSkill(item.location!)}
-                            >
-                              {skillOpenLabel(item.location!)}
-                            </Button>
-                          </Show>
-                          <Badge tone="ok">{item.builtin ? t("skill.builtin") : t("common.loaded")}</Badge>
-                        </div>
-                      }
-                    />
+                    <Disclosure.Root class="skill-installed-item">
+                      <Disclosure.Trigger indicatorPosition="end">
+                        <span class="skill-installed-copy">
+                          <strong>{item.name}</strong>
+                          <span class="skill-installed-preview">{item.description}</span>
+                        </span>
+                        <Badge tone="muted">{item.builtin ? t("skill.builtin") : t("common.loaded")}</Badge>
+                      </Disclosure.Trigger>
+                      <Disclosure.Content>
+                        <SettingsRow
+                          class="extension-settings-row"
+                          desc={item.description || ""}
+                          meta={<small>{item.location || ""}</small>}
+                          actions={
+                            <div class="extension-settings-actions">
+                              <Show when={item.builtin}>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  tone="neutral"
+                                  data-ui="skill-update-builtin"
+                                  disabled={loading()}
+                                  onClick={() => void handleUpdateSkill(item, "builtin")}
+                                >
+                                  {t("skill.update_builtin")}
+                                </Button>
+                              </Show>
+                              <Show when={!item.builtin && item.writable}>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  tone="neutral"
+                                  data-ui="skill-update-server"
+                                  disabled={loading()}
+                                  onClick={() => void handleUpdateSkill(item, "server")}
+                                >
+                                  {t("skill.update_server")}
+                                </Button>
+                              </Show>
+                              <Show when={skillRemovable(item)}>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="md"
+                                  tone="danger"
+                                  title={t("skill.delete_button_title")}
+                                  aria-label={t("skill.delete_button_title")}
+                                  onClick={() => handleRemoveSkill(item.source || "", skillRemoveKind(item), item.name)}
+                                >
+                                  {t("common.delete")}
+                                </Button>
+                              </Show>
+                              <Show
+                                when={
+                                  item.location &&
+                                  item.location !== "builtin" &&
+                                  (isRemoteUrl(item.location) ? canOpenRemoteUrl() : true)
+                                }
+                              >
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="md"
+                                  tone="neutral"
+                                  title={skillOpenLabel(item.location!)}
+                                  aria-label={skillOpenLabel(item.location!)}
+                                  onClick={() => handleOpenSkill(item.location!)}
+                                >
+                                  {skillOpenLabel(item.location!)}
+                                </Button>
+                              </Show>
+                            </div>
+                          }
+                        />
+                      </Disclosure.Content>
+                    </Disclosure.Root>
                   )}
                 </For>
               </Show>

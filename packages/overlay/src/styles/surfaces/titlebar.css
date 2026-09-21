@@ -12,16 +12,9 @@
   margin: 0;
   padding: 0;
   min-height: var(--ui-titlebar-height);
-  background-color: var(--rail-surface);
-  background-image: var(--rail-background-image);
-  background-repeat: no-repeat;
-  background-position: left top;
-  background-size: var(--ui-overlay-shell-width) var(--ui-overlay-shell-height);
-  background-attachment: fixed;
   border: 0;
   border-bottom: 0;
   flex-shrink: 0;
-  box-shadow: none;
 }
 
 .titlebar-top-row {

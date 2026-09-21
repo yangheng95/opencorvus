@@ -25,6 +25,7 @@ import { Avatar } from "./Avatar"
 import { Icon, type IconName } from "./ui/Icon"
 import { Badge, type BadgeTone } from "./ui/Badge"
 import { Button } from "./ui/Button"
+import { Feedback } from "./ui/Feedback"
 import { Checkbox } from "./ui/Checkbox"
 import { Disclosure } from "./ui/Disclosure"
 import { SearchField } from "./ui/SearchField"
@@ -470,134 +471,125 @@ export function MailboxPanel(props: MailboxPanelProps) {
       data-selection-active={String(selectedCount() > 0)}
     >
       <header class="mailbox-panel__header">
-        <div class="mailbox-panel__toolbar">
-          <Show
-            when={searchOpen()}
-            fallback={
-              <>
-                <div class="mailbox-panel__selection-summary">
-                  <Checkbox
-                    class="mailbox-panel__select-visible"
-                    data-ui="mailbox-select-visible"
-                    checked={allVisibleSelected()}
-                    indeterminate={someVisibleSelected() && !allVisibleSelected()}
-                    disabled={visibleItems().length === 0 || loading() || deletePending()}
-                    aria-label={allVisibleSelected() ? t("mailbox.clear_selection") : t("mailbox.select_visible")}
-                    onChange={setVisibleMessagesSelected}
-                  />
-                  <Badge
-                    class="mailbox-panel__subtitle"
-                    data-ui="mailbox-summary"
-                    tone={selectedCount() > 0 || counts().unread > 0 ? "accent" : "neutral"}
-                    size="md"
-                  >
-                    {selectedCount() > 0
-                      ? t("mailbox.selected_count", { count: selectedCount() })
-                      : counts().unread > 0
-                        ? t("mailbox.unread_count", { count: counts().unread })
-                        : t("mailbox.caught_up")}
-                  </Badge>
-                </div>
-                <div class="mailbox-panel__actions">
-                  <Show when={selectedCount() > 0}>
+        <div class="mailbox-panel__heading">
+          <span
+            class="mailbox-panel__inbox"
+            title={`${t("mailbox.active")} (${counts().active})`}
+            aria-label={`${t("mailbox.active")} (${counts().active})`}
+          >
+            <span>{t("mailbox.title")}</span>
+            <Badge class="mailbox-panel__inbox-count" tone="muted" size="md">
+              {counts().active}
+            </Badge>
+          </span>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            tone="neutral"
+            class="mailbox-panel__search-toggle"
+            data-ui="mailbox-search-toggle"
+            title={searchOpen() ? t("common.close") : t("mailbox.search")}
+            aria-label={searchOpen() ? t("common.close") : t("mailbox.search")}
+            ref={(element) => {
+              searchToggle = element
+            }}
+            onClick={() => (searchOpen() ? closeSearch() : openSearch())}
+          >
+            <Icon name={searchOpen() ? "close" : "search"} />
+          </Button>
+        </div>
+        <Show when={searchOpen() || visibleItems().length > 0}>
+          <div class="mailbox-panel__toolbar">
+            <Show
+              when={searchOpen()}
+              fallback={
+                <>
+                  <div class="mailbox-panel__selection-summary">
+                    <Checkbox
+                      class="mailbox-panel__select-visible"
+                      data-ui="mailbox-select-visible"
+                      checked={allVisibleSelected()}
+                      indeterminate={someVisibleSelected() && !allVisibleSelected()}
+                      disabled={visibleItems().length === 0 || loading() || deletePending()}
+                      aria-label={allVisibleSelected() ? t("mailbox.clear_selection") : t("mailbox.select_visible")}
+                      onChange={setVisibleMessagesSelected}
+                    />
+                    <span class="mailbox-panel__subtitle" data-ui="mailbox-summary">
+                      {selectedCount() > 0
+                        ? t("mailbox.selected_count", { count: selectedCount() })
+                        : counts().unread > 0
+                          ? t("mailbox.unread_count", { count: counts().unread })
+                          : t("mailbox.caught_up")}
+                    </span>
+                  </div>
+                  <div class="mailbox-panel__actions">
+                    <Show when={selectedCount() > 0}>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        tone="danger"
+                        data-ui="mailbox-delete-selected"
+                        aria-label={t("mailbox.delete_selected", { count: selectedCount() })}
+                        title={t("mailbox.delete_selected", { count: selectedCount() })}
+                        disabled={deletePending() || loading() || !appStore.connected}
+                        onClick={deleteSelectedMessages}
+                      >
+                        <Icon name="delete" size="compact" />
+                      </Button>
+                    </Show>
                     <Button
                       type="button"
                       variant="ghost"
                       size="icon"
-                      tone="danger"
-                      data-ui="mailbox-delete-selected"
-                      aria-label={t("mailbox.delete_selected", { count: selectedCount() })}
-                      title={t("mailbox.delete_selected", { count: selectedCount() })}
-                      disabled={deletePending() || loading() || !appStore.connected}
-                      onClick={deleteSelectedMessages}
+                      tone={counts().unread > 0 ? "accent" : "neutral"}
+                      data-ui="mailbox-mark-all-read"
+                      aria-label={t("mailbox.mark_all_read")}
+                      title={t("mailbox.mark_all_read")}
+                      disabled={counts().unread === 0 || markAllReadPending() || loading() || !appStore.connected}
+                      onClick={() => void markAllAsRead()}
                     >
-                      <Icon name="delete" size="compact" />
+                      <Icon name="mail-check" />
                     </Button>
-                  </Show>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    tone={counts().unread > 0 ? "accent" : "neutral"}
-                    data-ui="mailbox-mark-all-read"
-                    aria-label={t("mailbox.mark_all_read")}
-                    title={t("mailbox.mark_all_read")}
-                    disabled={counts().unread === 0 || markAllReadPending() || loading() || !appStore.connected}
-                    onClick={() => void markAllAsRead()}
-                  >
-                    <Icon name="mail-check" />
-                  </Button>
-                </div>
-                <span
-                  class="mailbox-panel__inbox"
-                  title={`${t("mailbox.active")} (${counts().active})`}
-                  aria-label={`${t("mailbox.active")} (${counts().active})`}
-                >
-                  <Icon name="inbox" />
-                  <Badge class="mailbox-panel__inbox-count" tone="neutral" size="md">
-                    {counts().active}
-                  </Badge>
-                </span>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  tone="neutral"
-                  class="mailbox-panel__search-toggle"
-                  data-ui="mailbox-search-toggle"
-                  title={t("mailbox.search")}
-                  aria-label={t("mailbox.search")}
-                  ref={(element) => {
-                    searchToggle = element
+                  </div>
+                </>
+              }
+            >
+              <div class="mailbox-panel__search-shell">
+                <SearchField
+                  class="mailbox-panel__search"
+                  value={query()}
+                  size="sm"
+                  placeholder={t("mailbox.search")}
+                  inputRef={(element) => (searchInput = element)}
+                  onValueChange={setQuery}
+                  onKeyDown={(event) => {
+                    if (event.key !== "Escape") return
+                    event.preventDefault()
+                    closeSearch()
                   }}
-                  onClick={openSearch}
-                >
-                  <Icon name="search" />
-                </Button>
-              </>
-            }
-          >
-            <div class="mailbox-panel__search-shell">
-              <SearchField
-                class="mailbox-panel__search"
-                value={query()}
-                size="sm"
-                placeholder={t("mailbox.search")}
-                inputRef={(element) => (searchInput = element)}
-                onValueChange={setQuery}
-                onKeyDown={(event) => {
-                  if (event.key !== "Escape") return
-                  event.preventDefault()
-                  closeSearch()
-                }}
-                dataUI="mailbox-search"
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                tone="neutral"
-                class="mailbox-panel__search-close"
-                data-ui="mailbox-search-close"
-                title={t("common.close")}
-                aria-label={t("common.close")}
-                onClick={closeSearch}
-              >
-                <Icon name="close" />
-              </Button>
-            </div>
-          </Show>
-        </div>
+                  dataUI="mailbox-search"
+                />
+              </div>
+            </Show>
+          </div>
+        </Show>
       </header>
 
       <div class="mailbox-panel__body" aria-busy={loading()} data-loaded-directory={loadedDirectory()}>
         <Show when={loadError()}>
-          <div class="mailbox-panel__error" role="alert">
-            <span>{loadError()}</span>
-            <Button variant="outline" size="sm" tone="neutral" onClick={() => void refresh()}>
-              {t("common.retry")}
-            </Button>
-          </div>
+          <Feedback
+            tone="error"
+            details={loadError()}
+            actions={
+              <Button variant="outline" size="sm" tone="neutral" onClick={() => void refresh()}>
+                {t("common.retry")}
+              </Button>
+            }
+          >
+            {t("ledger.load_failed")}
+          </Feedback>
         </Show>
         <Show when={!loadError()}>
           <Show

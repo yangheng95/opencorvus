@@ -124,6 +124,8 @@ export interface SettingsRowProps extends Omit<JSX.HTMLAttributes<HTMLDivElement
   actions?: JSX.Element
   /** Use children when the main column needs richer content than title/desc. */
   children?: JSX.Element
+  /** Read-only value; wraps independently without squeezing the label. */
+  value?: JSX.Element
   /** Let complex domain rows provide their own inner grid while this primitive owns row chrome. */
   customContent?: boolean
   /** Center-align the row instead of the default top-align. */
@@ -146,6 +148,7 @@ export function SettingsRow(props: SettingsRowProps): JSX.Element {
     "desc",
     "meta",
     "actions",
+    "value",
     "children",
     "customContent",
     "align",
@@ -165,6 +168,7 @@ export function SettingsRow(props: SettingsRowProps): JSX.Element {
       title={merged.nativeTitle}
       data-align={merged.align === "center" ? "center" : undefined}
       data-interactive={merged.interactive ? "true" : undefined}
+      data-value-row={merged.value !== undefined ? "true" : undefined}
     >
       <Show
         when={merged.customContent}
@@ -185,6 +189,9 @@ export function SettingsRow(props: SettingsRowProps): JSX.Element {
                 <span class="s-row-meta">{merged.meta}</span>
               </Show>
             </div>
+            <Show when={merged.value !== undefined}>
+              <div class="s-row-value">{merged.value}</div>
+            </Show>
             <Show when={merged.actions}>
               <div class="s-row-actions">{merged.actions}</div>
             </Show>
@@ -211,44 +218,4 @@ export interface SettingsEmptyProps {
 
 export function SettingsEmpty(props: SettingsEmptyProps): JSX.Element {
   return <div class="s-empty">{props.children}</div>
-}
-
-export interface SettingsStateProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "class" | "children" | "title"> {
-  title?: JSX.Element
-  children: JSX.Element
-  actions?: JSX.Element
-  tone?: "neutral" | "info" | "success" | "warning" | "error"
-  class?: string
-}
-
-/**
- * Canonical feedback surface for settings-only loading, unavailable,
- * success, warning, and error states. Empty collections stay on
- * SettingsEmpty; SettingsState is reserved for state that explains
- * why content is not currently available or needs attention.
- */
-export function SettingsState(props: SettingsStateProps): JSX.Element {
-  const [local, rest] = splitProps(props, ["title", "children", "actions", "tone", "class"])
-  const tone = () => local.tone || "neutral"
-  return (
-    <div
-      {...rest}
-      class={local.class ? `s-state ${local.class}` : "s-state"}
-      data-tone={tone()}
-      role={tone() === "error" ? "alert" : "status"}
-      aria-live="polite"
-      aria-atomic="true"
-    >
-      <span class="s-state-marker" aria-hidden="true" />
-      <div class="s-state-copy">
-        <Show when={local.title}>
-          <strong class="s-state-title">{local.title}</strong>
-        </Show>
-        <span class="s-state-body">{local.children}</span>
-      </div>
-      <Show when={local.actions}>
-        <div class="s-state-actions">{local.actions}</div>
-      </Show>
-    </div>
-  )
 }

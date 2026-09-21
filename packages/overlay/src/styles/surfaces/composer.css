@@ -120,21 +120,18 @@
   max-width: 100%;
   min-height: var(--chat-composer-min-height);
   margin: 0;
-  padding: var(--ui-gap-lg) var(--ui-gap-xl) var(--ui-gap-lg);
+  padding: var(--ui-gap-lg) var(--ui-composer-content-inset);
   box-sizing: border-box;
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 76%, transparent);
   border-radius: var(--oc-radius-large);
   background: var(--surface-strong);
-  box-shadow: var(--shadow-md);
+  box-shadow: none;
   flex-shrink: 0;
 }
 
 .chat-input:focus-within {
-  border-color: color-mix(in srgb, var(--accent) 38%, var(--border));
-  background: var(--surface-elevated);
-  box-shadow:
-    0 0 0 calc(2px * var(--ui-scale)) color-mix(in srgb, var(--accent) 16%, transparent),
-    var(--shadow-lg);
+  border-color: var(--border-hover);
+  box-shadow: 0 0 0 var(--oc-border-width) var(--oc-control-focus-ring);
 }
 
 .chat-resize-handle {
@@ -196,8 +193,8 @@
   z-index: 0;
   box-sizing: border-box;
   overflow: hidden;
-  padding: var(--ui-gap-sm) var(--ui-gap-sm) var(--ui-gap-xs);
-  border: var(--oc-border-width) solid transparent;
+  padding: var(--ui-gap-sm) 0 var(--ui-gap-xs);
+  border: 0;
   color: var(--text-strong);
   font: inherit;
   font-size: var(--ui-font-body);
@@ -365,44 +362,11 @@
   white-space: nowrap;
 }
 
-.composer-mention-option[data-mention-kind="skill"] .composer-mention-option-kind,
-.composer-mention-option[data-mention-kind="mission-skill"] .composer-mention-option-kind,
-.composer-mention-option[data-mention-kind="squad"] .composer-mention-option-kind {
-  animation: composer-discovery-color-pulse var(--ui-duration-loop-pulse) var(--ui-timing-standard) infinite;
-}
-
 .composer-mention-empty {
   padding: var(--ui-gap-2xl) var(--ui-gap-lg);
   color: var(--text-muted);
   font-size: var(--ui-font-body);
   text-align: center;
-}
-
-/* Floating placeholder overlay: the textarea's native placeholder is
-   plain text; this overlay layers a stylised hint with an animated caret
-   that shows when the textarea is empty. The caret pulse animation was
-   removed (kept the WebView2 compositor awake on idle composers). */
-.chat-placeholder-float {
-  position: absolute;
-  inset: 0;
-  padding: calc(5px * var(--ui-scale) * var(--chat-compose-scale))
-    calc(8px * var(--ui-scale) * var(--chat-compose-scale));
-  font-size: var(--ui-font-body);
-  line-height: var(--ui-line-height-tight);
-  color: var(--text-muted);
-  pointer-events: none;
-  overflow: hidden;
-  opacity: var(--ui-opacity-subtle);
-}
-
-.chat-placeholder-text {
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.chat-placeholder-mentions {
-  color: var(--text-soft);
-  font-weight: var(--ui-font-weight-medium);
 }
 
 /* Composer send/stop controls route through the shared Button primitive.
@@ -575,7 +539,7 @@
   gap: calc(8px * var(--ui-scale) * var(--chat-compose-scale));
   flex-wrap: nowrap;
   min-width: 0;
-  padding: 0 calc(2px * var(--ui-scale) * var(--chat-compose-scale));
+  padding: 0;
   border-top: 0 solid transparent;
 }
 
@@ -1159,7 +1123,7 @@ div:has(> .composer-model-selector-popover) {
 }
 
 .composer-model-configure-provider-copy > :first-child {
-  animation: composer-discovery-color-pulse var(--ui-duration-loop-pulse) var(--ui-timing-standard) infinite;
+  color: var(--text-strong);
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
 }
@@ -1171,27 +1135,6 @@ div:has(> .composer-model-selector-popover) {
   line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-@keyframes composer-discovery-color-pulse {
-  0%,
-  100% {
-    color: var(--accent);
-  }
-
-  50% {
-    color: var(--good);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .composer-mention-option[data-mention-kind="skill"] .composer-mention-option-kind,
-  .composer-mention-option[data-mention-kind="mission-skill"] .composer-mention-option-kind,
-  .composer-mention-option[data-mention-kind="squad"] .composer-mention-option-kind,
-  .composer-model-configure-provider-copy > :first-child {
-    animation: none;
-    color: var(--accent);
-  }
 }
 
 /* Container query: when the composer container itself drops below
@@ -1219,18 +1162,6 @@ div:has(> .composer-model-selector-popover) {
   .chat-compose-meta-right .oc-button[data-mode] {
     width: var(--chat-composer-action-size);
   }
-}
-
-.chat-placeholder-caret {
-  display: inline-block;
-  width: 0.42em;
-  height: 0.42em;
-  margin-left: var(--ui-gap-xs);
-  vertical-align: middle;
-  background: var(--accent);
-  border-radius: 50%;
-  transform: translateY(-0.05em);
-  opacity: var(--ui-opacity-disabled);
 }
 
 .model-selector-popover {
@@ -1275,9 +1206,13 @@ div:has(> .composer-model-selector-popover) {
   flex-direction: column;
   gap: var(--ui-gap-xs);
   padding: var(--ui-gap-sm);
-  border: var(--oc-border-width) solid var(--divider-soft);
-  border-radius: var(--oc-radius-large);
-  background: color-mix(in srgb, var(--surface-elevated) 86%, transparent);
+  border: 0;
+  background: transparent;
+}
+
+.model-selector-popover-group + .model-selector-popover-group {
+  padding-top: var(--ui-gap-lg);
+  border-top: var(--oc-border-width) solid var(--divider-soft);
 }
 
 .model-selector-popover-group-header {
@@ -1298,8 +1233,8 @@ div:has(> .composer-model-selector-popover) {
   align-items: center;
   justify-content: center;
   border-radius: var(--oc-radius-soft);
-  background: color-mix(in srgb, var(--accent) 14%, var(--surface-inset));
-  color: var(--accent);
+  background: var(--surface-inset);
+  color: var(--text-soft);
   font-size: var(--ui-font-caption);
 }
 
@@ -1329,9 +1264,6 @@ div:has(> .composer-model-selector-popover) {
 }
 
 .model-selector-popover-group-count {
-  padding: var(--ui-gap-xs) var(--ui-gap-md);
-  border-radius: var(--oc-radius-pill);
-  background: var(--surface-inset);
   white-space: nowrap;
 }
 

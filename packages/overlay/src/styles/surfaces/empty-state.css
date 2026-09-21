@@ -10,7 +10,7 @@
    single multi-selector rule rather than per-container forks.
    ───────────────────────────────────────────────────────────── */
 
-.empty-hint {
+:where(.empty-hint) {
   display: block;
   font-size: var(--ui-font-body);
   color: var(--text-muted);

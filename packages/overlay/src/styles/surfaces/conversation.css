@@ -129,29 +129,32 @@
 /* The portaled prompt is the committed home-layout fact. Intent metadata can
    change before or after Portal disposal, so it must not own layout mode. */
 .chat:has(#solidChatHomePromptMount:not(:empty)) .chat-home-composition {
-  --chat-home-wide-content-width: calc(900px * var(--ui-scale));
-  --chat-home-composition-width: min(100%, var(--chat-home-wide-content-width));
-  --chat-home-compact-width: 84%;
-
   position: absolute;
   inset: 0;
   z-index: var(--ui-z-raised);
   display: grid;
+  grid-template-columns:
+    var(--conversation-message-start-inset)
+    minmax(0, 1fr)
+    calc(var(--conversation-message-end-inset) + var(--ui-chat-scrollbar-gutter-x));
   grid-template-rows: auto auto auto;
   align-content: center;
   justify-items: stretch;
   row-gap: var(--ui-gap-lg);
   min-width: 0;
   min-height: 0;
-  padding: clamp(
-      calc(48px * var(--ui-scale)),
-      calc(var(--ui-overlay-shell-height) * 0.08),
-      calc(96px * var(--ui-scale))
-    )
-    var(--conversation-environment-content-clearance) var(--ui-gap-2xl) 0;
+  padding-block: var(--ui-gap-4xl);
   box-sizing: border-box;
   overflow: hidden;
-  transition: padding-inline-end var(--ui-duration-slow) var(--ui-timing-standard);
+  transition: grid-template-columns var(--ui-duration-slow) var(--ui-timing-standard);
+}
+
+.chat:has(#solidChatHomePromptMount:not(:empty)) .chat-home-composition > div {
+  grid-column: 2;
+}
+
+.chat:has(#solidChatHomePromptMount:not(:empty)) #chatScroll {
+  overflow-y: hidden;
 }
 
 .chat-home-prompt {
@@ -162,82 +165,50 @@
 }
 
 .chat-home-prompt__title {
-  width: var(--chat-home-composition-width);
+  width: 100%;
   max-width: 100%;
   margin: 0;
-  text-align: center;
+  padding-inline: calc(var(--ui-composer-content-inset) + var(--oc-border-width));
+  text-align: left;
   font-size: var(--ui-font-emphasis);
   line-height: var(--ui-line-height-tight);
-  font-weight: var(--ui-font-weight-body);
-  letter-spacing: var(--ui-letter-spacing-tighter);
+  font-weight: var(--ui-font-weight-strong);
+  letter-spacing: var(--ui-letter-spacing-normal);
 }
 
 .chat-home-after {
-  width: var(--chat-home-composition-width);
+  width: 100%;
   max-width: 100%;
   margin-inline: auto;
+  padding-inline: calc(var(--ui-composer-content-inset) + var(--oc-border-width));
   display: grid;
   gap: var(--ui-gap-lg);
   color: var(--text-soft);
 }
 
 .chat-home-suggestions {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--ui-gap-md);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ui-gap-sm) var(--ui-gap-xl);
 }
 
 .chat-home-suggestion.oc-button {
-  --oc-button-height: calc(52px * var(--ui-scale));
-  --oc-button-padding-x: calc(14px * var(--ui-scale));
-  --oc-button-gap: calc(10px * var(--ui-scale));
-  --oc-button-bg: var(--surface-elevated);
-  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 78%, transparent);
-  --oc-button-color: var(--text-strong);
-  --oc-button-shadow: 0 calc(1px * var(--ui-scale)) calc(2px * var(--ui-scale))
-    color-mix(in srgb, var(--ui-shadow-tone) 8%, transparent);
-
-  display: flex;
-  align-items: center;
-  justify-items: start;
-  width: 100%;
+  --oc-button-height: var(--oc-density-control-height);
+  --oc-button-padding-x: 0;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: var(--text-soft);
+  justify-content: flex-start;
   min-width: 0;
-  padding-block: 0;
-  color: var(--text-strong);
-  font-size: var(--ui-font-body);
-  font-weight: var(--ui-font-weight-strong);
-  line-height: var(--ui-line-height-tight);
-  text-align: left;
-  white-space: normal;
-  transition:
-    background-color var(--ui-duration-base) var(--ui-timing-standard),
-    border-color var(--ui-duration-base) var(--ui-timing-standard),
-    color var(--ui-duration-base) var(--ui-timing-standard);
+  font-weight: var(--ui-font-weight-body);
 }
 
-.chat-home-suggestion.oc-button > svg {
+.chat-home-suggestion-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--oc-density-icon-button);
   flex: 0 0 auto;
-}
-
-.chat-home-suggestion.oc-button[data-suggestion-tone="info"] > svg {
-  color: var(--info);
-}
-
-.chat-home-suggestion.oc-button[data-suggestion-tone="accent"] > svg {
-  color: color-mix(in srgb, var(--accent) 62%, var(--bad) 38%);
-}
-
-.chat-home-suggestion.oc-button[data-suggestion-tone="good"] > svg {
-  color: var(--good);
-}
-
-.chat-home-suggestion.oc-button:hover,
-.chat-home-suggestion.oc-button:focus-visible {
-  --oc-button-bg: var(--ui-list-hover-bg);
-  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--text-strong) 15%, var(--border));
-  --oc-button-color: var(--text-strong);
-  --oc-button-shadow: none;
-  transform: none;
 }
 
 .chat-home-notice {
@@ -289,7 +260,7 @@
 .chat:has(#solidChatHomePromptMount:not(:empty)) #solidChatComposer {
   position: relative;
   inset: auto;
-  grid-column: auto;
+  grid-column: 2;
   grid-row: auto;
   align-self: auto;
   justify-self: auto;
@@ -315,16 +286,9 @@
 }
 
 .chat:has(#solidChatHomePromptMount:not(:empty)) #solidChatComposer .chat-composer-stack {
-  width: var(--chat-home-composition-width);
-  max-width: var(--chat-home-composition-width);
+  width: 100%;
+  max-width: 100%;
   margin-block: 0;
-}
-
-@container chat-workbench (width < 1200px) {
-  /* breakpoint: --ui-breakpoint-xl */
-  .chat:has(#solidChatHomePromptMount:not(:empty)) .chat-home-composition {
-    --chat-home-composition-width: min(var(--chat-home-compact-width), var(--chat-home-wide-content-width));
-  }
 }
 
 .workspace-main:has(.conversation-agent-rail-host:not(:empty)) .conversation-body {
@@ -471,7 +435,7 @@
 #solidChatComposer .oc-button.conversation-scroll-bottom[data-ui="conversation-scroll-bottom"] {
   --oc-button-height: calc(32px * var(--ui-scale));
   --oc-button-padding-x: 0;
-  --oc-button-bg: color-mix(in srgb, var(--text-strong) 14%, transparent);
+  --oc-button-bg: var(--surface-strong);
   --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--text-strong) 18%, transparent);
   --oc-button-color: var(--text-strong);
   --oc-button-shadow: 0 calc(8px * var(--ui-scale)) calc(18px * var(--ui-scale))
@@ -480,12 +444,11 @@
   width: var(--oc-button-height);
   min-width: var(--oc-button-height);
   pointer-events: auto;
-  backdrop-filter: blur(calc(8px * var(--ui-scale)));
 }
 
 #solidChatComposer .oc-button.conversation-scroll-bottom[data-ui="conversation-scroll-bottom"]:hover,
 #solidChatComposer .oc-button.conversation-scroll-bottom[data-ui="conversation-scroll-bottom"]:focus-visible {
-  --oc-button-bg: color-mix(in srgb, var(--text-strong) 22%, transparent);
+  --oc-button-bg: var(--surface-hover);
   --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--text-strong) 28%, transparent);
   --oc-button-color: var(--text-strong);
 }

@@ -895,37 +895,28 @@
 }
 
 .msg-sources {
-  display: grid;
-  gap: var(--ui-gap-sm);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--ui-gap-xs) var(--ui-gap-md);
   min-width: 0;
-  margin-block: var(--ui-gap-md) var(--ui-gap-3xs);
+  margin-block: var(--ui-gap-md);
 }
 
 .msg-sources__heading {
   display: inline-flex;
   align-items: center;
-  gap: var(--ui-gap-sm);
-  width: fit-content;
+  gap: var(--ui-gap-xs);
   color: var(--text-muted);
-  font-size: var(--ui-font-body);
-  font-weight: var(--ui-font-weight-medium);
+  font-size: var(--ui-font-caption);
+  font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-tight);
 }
 
-.msg-sources__heading .oc-icon {
-  color: var(--accent);
-}
-
 .msg-sources__count {
-  display: inline-grid;
-  place-items: center;
-  min-width: calc(17px * var(--ui-scale));
-  min-height: calc(17px * var(--ui-scale));
-  padding-inline: var(--ui-gap-xs);
-  border-radius: var(--oc-radius-pill);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
-  color: var(--accent);
+  color: var(--text-muted);
   font-size: var(--ui-font-caption);
+  font-variant-numeric: tabular-nums;
 }
 
 .msg-sources__list {
@@ -937,48 +928,40 @@
 
 .msg-source-chip {
   appearance: none;
-  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  gap: var(--ui-gap-sm);
+  gap: var(--ui-gap-xs);
   min-width: 0;
   max-width: min(100%, calc(310px * var(--ui-scale)));
-  min-height: calc(28px * var(--ui-scale));
-  padding: var(--ui-gap-xs) var(--ui-gap-md) var(--ui-gap-xs) var(--ui-gap-sm);
-  border: 1px solid color-mix(in srgb, var(--border) 82%, var(--accent) 18%);
-  border-radius: var(--oc-radius-large);
-  background: color-mix(in srgb, var(--surface-elevated) 92%, var(--accent) 8%);
-  color: var(--text);
-  font: inherit;
-  font-size: var(--ui-font-caption);
-  line-height: var(--ui-line-height-tight);
-  text-decoration: none;
+  min-height: var(--oc-density-chip-height);
+  padding: 0 var(--ui-gap-xs);
+  border: 0;
+  border-radius: var(--oc-radius-soft);
+  background: transparent;
+  color: var(--text-soft);
+  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 0.2em;
   cursor: pointer;
-  transition:
-    border-color var(--ui-duration-fast) var(--ui-timing-standard),
-    background var(--ui-duration-fast) var(--ui-timing-standard),
-    color var(--ui-duration-fast) var(--ui-timing-standard);
 }
 
-.msg-source-chip:hover,
-.msg-source-chip:focus-visible {
-  border-color: color-mix(in srgb, var(--accent) 46%, var(--border));
-  background: color-mix(in srgb, var(--surface-elevated) 84%, var(--accent) 16%);
+.msg-source-chip:hover {
+  background: var(--hover-wash);
   color: var(--text-strong);
-  outline: none;
+  text-decoration-color: currentColor;
+}
+
+.msg-source-chip:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: var(--ui-gap-3xs);
 }
 
 .msg-source-chip__index {
-  display: inline-grid;
-  place-items: center;
   flex: none;
-  width: calc(18px * var(--ui-scale));
-  height: calc(18px * var(--ui-scale));
-  border-radius: var(--oc-radius-soft);
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
-  color: var(--accent);
+  color: var(--text-muted);
   font-size: var(--ui-font-caption);
-  font-weight: var(--ui-font-weight-strong);
+  font-variant-numeric: tabular-nums;
 }
 
 .msg-source-chip .oc-icon {
@@ -1020,7 +1003,7 @@
 }
 .msg-work-details {
   --transcript-activity-icon-size: var(--oc-icon-size-standard);
-  --transcript-activity-row-height: 1.5em;
+  --transcript-activity-row-height: var(--oc-density-chip-height);
   --transcript-tool-foreground: color-mix(in srgb, var(--text-muted) 92%, transparent);
   --transcript-tool-foreground-hover: var(--text-muted);
   --transcript-tool-surface: light-dark(
@@ -1028,7 +1011,7 @@
     color-mix(in srgb, var(--conversation-card-background) 96%, var(--surface-strong))
   );
   --transcript-tool-header-surface: var(--conversation-card-background);
-  --transcript-tool-border: color-mix(in srgb, var(--card-stage, var(--accent)) 18%, var(--border));
+  --transcript-tool-border: var(--border);
 
   display: flex;
   width: 100%;
@@ -1531,7 +1514,6 @@
   line-height: var(--ui-line-height-tight);
   text-overflow: ellipsis;
   white-space: nowrap;
-  backdrop-filter: blur(calc(8px * var(--ui-scale)));
 }
 
 .msg-artifact-map-legend-item:nth-child(5n + 2) {

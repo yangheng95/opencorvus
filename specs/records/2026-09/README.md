@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Primitive-first frosted workspace implementation](2026-09-21-primitive-ui-implementation.md)
+
 - [Codex-aligned UI review and design proposal](2026-09-21-codex-aligned-ui-design.md)
 
 - [0.1.9 Windows local build](2026-09-21-v0.1.9-local-build.md)

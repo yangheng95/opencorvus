@@ -1,3 +1,4 @@
+import { Feedback } from "../ui/Feedback"
 import { createEffect, createMemo, createSignal, For, Show } from "solid-js"
 import { t } from "../../utils/i18n"
 import {
@@ -17,7 +18,7 @@ import { showAppDialog } from "../../services/app-dialog"
 import { Badge, type BadgeTone } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
-import { SettingsRow, SettingsState } from "./layout"
+import { SettingsRow } from "./layout"
 
 interface ExpertSquadEvolutionPanelProps {
   directory: string
@@ -281,7 +282,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
       </header>
 
       <Show when={error() && Boolean(history())}>
-        <SettingsState tone="error" data-ui="expert-squad-evolution-error">{error()}</SettingsState>
+        <Feedback tone="error" data-ui="expert-squad-evolution-error">{error()}</Feedback>
       </Show>
 
       <Show when={history()}>
@@ -438,20 +439,20 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
       </Show>
 
       <Show when={!error() || Boolean(history())} fallback={
-        <SettingsState tone="error" actions={
+        <Feedback tone="error" actions={
           <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void refresh()}>
             <Icon name="refresh" />{t("common.retry")}
           </Button>
-        }>{error()}</SettingsState>
+        }>{error()}</Feedback>
       }>
       <Show
         when={!loading() && entries().length > 0}
         fallback={
-          <Show when={!loading()} fallback={<SettingsState>{t("expert_squad.evolution_loading")}</SettingsState>}>
+          <Show when={!loading()} fallback={<Feedback>{t("expert_squad.evolution_loading")}</Feedback>}>
             {/* Feedback revisions render above and are history too, so the
                 empty state must not claim there is none. */}
             <Show when={(history()?.feedback_revisions.length ?? 0) === 0}>
-              <SettingsState title={t("expert_squad.evolution_empty_title")}>{t("expert_squad.evolution_empty_body")}</SettingsState>
+              <Feedback title={t("expert_squad.evolution_empty_title")}>{t("expert_squad.evolution_empty_body")}</Feedback>
             </Show>
           </Show>
         }
@@ -609,7 +610,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
                       </>
                     )}
                   </Show>
-                  <Show when={detailLoading()}><SettingsState>{t("expert_squad.evolution_detail_loading")}</SettingsState></Show>
+                  <Show when={detailLoading()}><Feedback>{t("expert_squad.evolution_detail_loading")}</Feedback></Show>
                   <Show when={!detailLoading() && detail()}>
                     {(current) => (
                       <div class="expert-squad-evolution-section">

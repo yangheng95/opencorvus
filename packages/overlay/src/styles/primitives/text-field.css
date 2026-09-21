@@ -18,7 +18,7 @@
 .oc-text-field__label {
   color: var(--text-soft);
   font-size: var(--ui-font-body);
-  font-weight: var(--ui-font-weight-strong);
+  font-weight: var(--ui-font-weight-medium);
 }
 
 .oc-text-field__label em {
@@ -33,7 +33,7 @@
   width: 100%;
   min-width: 0;
   border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-large);
+  border-radius: var(--oc-radius-soft);
   background: var(--oc-text-field-surface);
   color: var(--text-strong);
   box-shadow: none;
@@ -52,7 +52,7 @@
 }
 
 .oc-text-field__textarea[data-autogrow] {
-  border-radius: var(--oc-radius-large);
+  border-radius: var(--oc-radius-soft);
   resize: none;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -60,9 +60,9 @@
 }
 
 .oc-text-field__textarea[data-surface="composer"] {
-  border-color: transparent;
+  border: 0;
   background: transparent;
-  padding: var(--ui-gap-sm) var(--ui-gap-sm) var(--ui-gap-xs);
+  padding: var(--ui-gap-sm) 0 var(--ui-gap-xs);
   font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-tight);
 }
@@ -101,7 +101,7 @@
 .oc-text-field__textarea {
   min-height: calc(var(--oc-density-control-height) * 2);
   padding: var(--ui-gap-sm) var(--oc-text-field-padding-x);
-  border-radius: var(--oc-radius-large);
+  border-radius: var(--oc-radius-soft);
   resize: vertical;
 }
 
@@ -148,7 +148,7 @@
   gap: var(--ui-gap-sm);
   padding: 0 var(--ui-gap-sm);
   border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-large);
+  border-radius: var(--oc-radius-soft);
   background: var(--oc-text-field-surface);
 }
 

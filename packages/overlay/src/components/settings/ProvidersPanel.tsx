@@ -1,3 +1,4 @@
+import { Feedback } from "../ui/Feedback"
 // ── ProvidersPanel ──
 // Solid.js component for managing custom LLM providers.
 // Allows adding, editing, and removing OpenAI-compatible providers
@@ -28,18 +29,12 @@ import { AutoGrowTextarea } from "../ui/AutoGrowTextarea"
 import { Badge, type BadgeTone } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { ArmedConfirmButton } from "../ui/ArmedConfirmButton"
+import { DropdownMenu } from "../ui/DropdownMenu"
 import { Disclosure } from "../ui/Disclosure"
 import { SearchField } from "../ui/SearchField"
 import { TextField } from "../ui/TextField"
 import { getHostTransport } from "../../services/host-transport-runtime"
-import {
-  SettingsDetailSection,
-  SettingsEmpty,
-  SettingsGroup,
-  SettingsPanel,
-  SettingsRow,
-  SettingsState,
-} from "./layout"
+import { SettingsDetailSection, SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
 
 function describeFailure(e: unknown): string {
   if (e instanceof ApiError) return e.message
@@ -53,7 +48,7 @@ function describeProviderIssue(issue: { phase?: string; providerID?: string; mes
 }
 
 function providerStatusTone(tone: string | undefined): BadgeTone {
-  if (tone === "active" || tone === "ready") return "accent"
+  if (tone === "active" || tone === "ready") return "ok"
   if (tone === "error") return "bad"
   if (tone === "warn") return "warn"
   return "neutral"
@@ -820,7 +815,11 @@ export default function ProvidersPanel() {
         const modelIds = providerModelIds(provider.models)
         const canAuthenticate = providerAuthMethods(id).length > 0
         const status = canAuthenticate ? providerState(id) : null
-        const statusText = status ? `${status.label}: ${status.detail}` : ""
+        const statusText = status
+          ? status.label === status.detail
+            ? status.label
+            : `${status.label}: ${status.detail}`
+          : ""
         const modelOverflowText = hasMoreModels(modelIds)
           ? t("provider.models.more", { count: modelIds.length - VISIBLE_MODEL_SUMMARY_LIMIT })
           : ""
@@ -865,10 +864,18 @@ export default function ProvidersPanel() {
           modelCountText: t("provider.models.count", { count: modelCount }),
           authMethods: providerAuthMethods(p.id).length,
           status,
-          statusText: status ? `${status.label}: ${status.detail}` : "",
+          statusText: status
+            ? status.label === status.detail
+              ? status.label
+              : `${status.label}: ${status.detail}`
+            : "",
         }
       })
       .filter((row) => providerMatchesSearch([row.id, row.name, row.modelCountText, row.statusText]))
+      .sort(
+        (left, right) =>
+          Number(Boolean(right.status)) - Number(Boolean(left.status)) || left.name.localeCompare(right.name),
+      )
   })
   const totalProviderCount = createMemo(() => Object.keys(configProviders()).length + catalogProviders().length)
   const visibleProviderCount = createMemo(() => providerEntries().length + catalogEntries().length)
@@ -884,6 +891,9 @@ export default function ProvidersPanel() {
     return configured.size
   })
   const catalogProviderCount = createMemo(() => catalogProviders().length)
+  const catalogUnavailable = () => appStore.providerLoadIssues.some((issue) => issue.resource === "catalog")
+  const configuredUnavailable = () =>
+    appStore.providerLoadIssues.some((issue) => ["catalog", "auth", "config"].includes(issue.resource))
 
   function modelSummary(modelIds: string[]): string {
     if (modelIds.length === 0) return t("provider.label.no_models")
@@ -899,54 +909,61 @@ export default function ProvidersPanel() {
       <SettingsGroup class="provider-settings-flat">
         <div class="provider-command">
           <div class="provider-command-main">
+            <span class="provider-command-description">{t("provider.description")}</span>
             <div class="provider-stat-strip" aria-label={t("provider.stats.label")}>
-              <div class="provider-stat">
-                <span class="provider-stat-value">{configuredProviderCount()}</span>
-                <span class="provider-stat-label">{t("provider.stats.configured")}</span>
-              </div>
-              <div class="provider-stat">
-                <span class="provider-stat-value">{catalogProviderCount()}</span>
-                <span class="provider-stat-label">{t("provider.stats.catalog")}</span>
-              </div>
-              <div class="provider-toolbar-count">
-                {t("provider.search.count", { shown: visibleProviderCount(), total: totalProviderCount() })}
-              </div>
+              <span>
+                {t("provider.stats.configured")} ·{" "}
+                {configuredUnavailable() || !appStore.providerCatalog ? "—" : configuredProviderCount()}
+              </span>
+              <span>
+                {t("provider.stats.catalog")} ·{" "}
+                {catalogUnavailable() || !appStore.providerCatalog ? "—" : catalogProviderCount()}
+              </span>
+              <Show when={hasProviderSearch()}>
+                <span>
+                  {t("provider.search.count", { shown: visibleProviderCount(), total: totalProviderCount() })}
+                </span>
+              </Show>
             </div>
           </div>
           <div class="provider-head-actions">
-            <Button
-              type="button"
-              variant="outline"
-              size="md"
-              tone="neutral"
-              data-ui="provider-refresh-button"
-              onClick={() => void handleRefreshCatalog()}
-              disabled={refreshingProviders()}
-              title={t("provider.catalog_refresh.title")}
-              data-spinning={refreshingProviders() ? "true" : "false"}
-            >
-              <span class="provider-refresh-icon" aria-hidden="true">
-                <Icon name="refresh" />
-              </span>
-              {refreshingProviders() ? t("provider.catalog_refresh.refreshing") : t("provider.catalog_refresh.button")}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="md"
-              tone="neutral"
-              data-ui="provider-model-refresh-button"
-              onClick={() => void handleRefreshModels()}
-              disabled={refreshingModels()}
-              title={t("provider.model_refresh.title")}
-              data-spinning={refreshingModels() ? "true" : "false"}
-            >
-              <span class="provider-refresh-icon" aria-hidden="true">
-                <Icon name="refresh" />
-              </span>
-              {refreshingModels() ? t("provider.model_refresh.refreshing") : t("provider.model_refresh.button")}
-            </Button>
-            <Button type="button" variant="solid" size="md" tone="accent" data-ui="provider-add" onClick={startAdd}>
+            <DropdownMenu.Root placement="bottom-end" fitViewport>
+              <DropdownMenu.Trigger
+                as={Button}
+                type="button"
+                variant="ghost"
+                size="icon"
+                tone="neutral"
+                aria-label={t("common.more")}
+              >
+                <Icon name="more-horizontal" />
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content>
+                  <DropdownMenu.Item
+                    as="button"
+                    type="button"
+                    disabled={refreshingProviders()}
+                    onSelect={() => void handleRefreshCatalog()}
+                  >
+                    <Icon name="refresh" />
+                    {refreshingProviders()
+                      ? t("provider.catalog_refresh.refreshing")
+                      : t("provider.catalog_refresh.button")}
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item
+                    as="button"
+                    type="button"
+                    disabled={refreshingModels()}
+                    onSelect={() => void handleRefreshModels()}
+                  >
+                    <Icon name="refresh" />
+                    {refreshingModels() ? t("provider.model_refresh.refreshing") : t("provider.model_refresh.button")}
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu.Root>
+            <Button type="button" variant="solid" size="md" tone="neutral" data-ui="provider-add" onClick={startAdd}>
               <Icon name="plus" />
               {t("provider.action.add")}
             </Button>
@@ -984,18 +1001,25 @@ export default function ProvidersPanel() {
 
         <For each={appStore.providerLoadIssues}>
           {(issue) => (
-            <SettingsState tone="error">
-              {t("provider.load.failed", {
+            <Feedback tone="error" details={issue.message}>
+              {t("provider.load.unavailable", {
                 owner: [t(`provider.load.resource.${issue.resource}`), issue.providerID, issue.phase]
                   .filter(Boolean)
                   .join(" · "),
-                reason: issue.message,
               })}
-            </SettingsState>
+            </Feedback>
           )}
         </For>
 
-        <Show when={providerEntries().length === 0 && catalogEntries().length === 0 && !showAdd()}>
+        <Show
+          when={
+            providerEntries().length === 0 &&
+            catalogEntries().length === 0 &&
+            !showAdd() &&
+            appStore.providerLoadIssues.length === 0 &&
+            Boolean(appStore.providerCatalog)
+          }
+        >
           <SettingsEmpty>
             {hasProviderSearch()
               ? t("provider.search.no_results", { query: providerSearch().trim() })
@@ -1005,23 +1029,21 @@ export default function ProvidersPanel() {
 
         <Show when={providerRefreshError()}>
           {(msg) => (
-            <SettingsState tone="error" data-testid="provider-refresh-error">
+            <Feedback tone="error" data-testid="provider-refresh-error">
               {msg()}
-            </SettingsState>
+            </Feedback>
           )}
         </Show>
 
         <Show when={modelRefreshError()}>
           {(msg) => (
-            <SettingsState tone="error" data-testid="provider-model-refresh-error">
+            <Feedback tone="error" data-testid="provider-model-refresh-error">
               {msg()}
-            </SettingsState>
+            </Feedback>
           )}
         </Show>
 
-        <Show when={!showAdd() ? formError() : null}>
-          {(msg) => <SettingsState tone="error">{msg()}</SettingsState>}
-        </Show>
+        <Show when={!showAdd() ? formError() : null}>{(msg) => <Feedback tone="error">{msg()}</Feedback>}</Show>
 
         <Show when={providerEntries().length > 0}>
           <SettingsDetailSection
@@ -1056,7 +1078,7 @@ export default function ProvidersPanel() {
                         </div>
                       </div>
                       <div class="provider-row-summary">
-                        <Badge class="provider-model-count">{row.modelCountText}</Badge>
+                        <span class="provider-model-count">{row.modelCountText}</span>
                         <Show when={row.status}>
                           {(s) => (
                             <Badge class="provider-auth-status" tone={providerStatusTone(s().tone)}>
@@ -1287,7 +1309,7 @@ export default function ProvidersPanel() {
                 type="button"
                 variant="solid"
                 size="md"
-                tone="accent"
+                tone="neutral"
                 onClick={handleSave}
                 disabled={saving() || !formProviderId() || !formApi().trim()}
               >
@@ -1300,8 +1322,7 @@ export default function ProvidersPanel() {
           <SettingsDetailSection
             class="provider-flat-section provider-catalog-section"
             title={t("provider.section.catalog")}
-            description={t("provider.section.count", { count: catalogEntries().length })}
-            actions={<div class="provider-catalog-hint">{t("provider.catalog.hint")}</div>}
+            description={t("provider.catalog.hint")}
           >
             <div class="provider-flat-list">
               <For each={catalogEntries()}>
@@ -1319,7 +1340,7 @@ export default function ProvidersPanel() {
                       </div>
                     </div>
                     <div class="provider-row-summary">
-                      <Badge class="provider-model-count">{p.modelCountText}</Badge>
+                      <span class="provider-model-count">{p.modelCountText}</span>
                       <Show when={p.status}>
                         {(status) => (
                           <Badge class="provider-auth-status" tone={providerStatusTone(status().tone)}>
@@ -1329,7 +1350,7 @@ export default function ProvidersPanel() {
                       </Show>
                     </div>
                     <div class="provider-row-actions">
-                      <Show when={p.authMethods > 0}>
+                      <Show when={p.authMethods > 0 && expandedCatalogProviderID() === p.id}>
                         <Button
                           type="button"
                           variant="outline"

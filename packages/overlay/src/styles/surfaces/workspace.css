@@ -106,7 +106,7 @@ code .file-link:focus-visible {
   z-index: var(--ui-z-raised);
   border-top: var(--ui-workspace-contour);
   border-left: var(--ui-workspace-contour);
-  border-radius: var(--oc-radius-xl) 0 0 0;
+  border-radius: 0;
   background: var(--workspace-ambient-fill);
   overflow: hidden;
   isolation: isolate;
@@ -462,13 +462,7 @@ body[data-resizing="true"] .pane-resizer::after {
   border: 0;
   border-top: 0;
   border-radius: 0;
-  background-color: var(--panel-body-bg);
-  background-image: var(--rail-background-image);
-  background-repeat: no-repeat;
-  background-position: left top;
-  background-size: var(--ui-overlay-shell-width) var(--ui-overlay-shell-height);
-  background-attachment: fixed;
-  backdrop-filter: var(--panel-body-blur);
+  background: transparent;
   box-shadow: none;
   position: relative;
 }
@@ -490,7 +484,7 @@ body[data-resizing="true"] .pane-resizer::after {
 }
 
 .right-dock {
-  --right-dock-width: calc(360px * var(--ui-scale));
+  --right-dock-width: calc(380px * var(--ui-scale));
   flex: 0 0 var(--right-dock-width);
   width: var(--right-dock-width);
   max-width: min(var(--ui-right-dock-max-width), calc(100% - var(--ui-chat-min-width) - var(--oc-border-width)));
@@ -501,7 +495,6 @@ body[data-resizing="true"] .pane-resizer::after {
   overflow: hidden;
   /* The dock remains a layout root while sharing the workspace material. */
   border-left: 0;
-  background: transparent;
   opacity: var(--ui-opacity-full);
   transition:
     flex-basis var(--ui-duration-slow) var(--ui-timing-standard),
@@ -581,8 +574,6 @@ body[data-resizing="true"] .pane-resizer::after {
 
 .right-dock-tabs {
   --right-dock-control-height: var(--ui-header-control-height);
-  --right-dock-tab-active-bg: color-mix(in srgb, var(--accent) 12%, var(--chat-canvas));
-  --right-dock-tab-radius: calc(12px * var(--ui-scale));
 
   flex: 0 0 auto;
   height: var(--ui-panel-header-height);
@@ -591,9 +582,9 @@ body[data-resizing="true"] .pane-resizer::after {
   display: flex;
   align-items: center;
   gap: var(--ui-gap-3xs);
-  padding: var(--ui-gap-sm) var(--ui-gap-md);
+  padding: var(--ui-gap-sm) var(--ui-gap-lg);
   border-bottom: var(--oc-border-width) solid var(--divider-soft);
-  background: var(--chat-canvas);
+  background: transparent;
 }
 
 .right-dock-tab-strip.oc-tabs {
@@ -634,7 +625,7 @@ body[data-resizing="true"] .pane-resizer::after {
 .right-dock-tab.oc-tab {
   --oc-tabs-height: var(--right-dock-control-height);
   --oc-tab-bg: transparent;
-  --oc-tab-active-bg: var(--right-dock-tab-active-bg);
+  --oc-tab-active-bg: var(--ui-list-selected-bg);
 
   position: relative;
   justify-content: flex-start;
@@ -643,7 +634,7 @@ body[data-resizing="true"] .pane-resizer::after {
   min-width: 100%;
   max-width: 100%;
   padding: 0 calc(var(--right-dock-control-height) + var(--ui-gap-sm)) 0 var(--ui-gap-lg);
-  border-radius: var(--right-dock-tab-radius);
+  border-radius: var(--oc-radius-soft);
   background: transparent;
   font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
 }
@@ -652,28 +643,12 @@ body[data-resizing="true"] .pane-resizer::after {
   --oc-tab-bg: var(--ui-list-selected-bg);
   --oc-tab-color: var(--text-strong);
 
-  border-radius: var(--right-dock-tab-radius);
+  border-radius: var(--oc-radius-soft);
   background: var(--ui-list-selected-bg);
 }
 
 .right-dock-tab.oc-tab[data-selected]:hover {
   background: var(--ui-list-selected-hover-bg);
-}
-
-.right-dock-tab-shell[data-panel="subagent"] .right-dock-tab.oc-tab {
-  border-bottom: calc(2px * var(--ui-scale)) solid transparent;
-  border-radius: var(--oc-radius-soft) var(--oc-radius-soft) 0 0;
-}
-
-.right-dock-tab-shell[data-panel="subagent"] .right-dock-tab.oc-tab[data-selected] {
-  --oc-tab-bg: transparent;
-
-  border-bottom-color: var(--accent);
-  background: transparent;
-}
-
-.right-dock-tab-shell[data-panel="subagent"] .right-dock-tab.oc-tab[data-selected]:hover {
-  background: var(--hover-wash);
 }
 
 .right-dock-tab.oc-tab:not([data-selected]):is(:hover, :focus-visible) {

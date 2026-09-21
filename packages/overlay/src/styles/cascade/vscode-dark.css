@@ -23,6 +23,8 @@
    ───────────────────────────────────────────────────────────── */
 
 :root[data-theme="vscode-dark"] {
+  --workspace-glass-bg: #252526;
+  --workspace-glass-edge: transparent;
   color-scheme: dark;
 
   --text-on-accent: #000000;
@@ -34,22 +36,16 @@
   --surface-inset: rgb(24, 24, 24);
   --surface-strong: rgb(51, 51, 51);
   --rail-surface: var(--surface);
-  --rail-background-image: none;
   --chat-canvas: var(--bg);
   --workspace-ambient-fill: var(--chat-canvas);
   --inspector-surface: var(--chat-canvas);
   --body-bg: var(--rail-surface);
-  --panel-body-bg: var(--rail-surface);
-  --panel-body-blur: none;
   --chrome: rgb(60, 60, 60);
   --border: rgba(255, 255, 255, 0.12);
   --border-hover: rgba(0, 122, 204, 0.5);
   --border-strong: rgba(255, 255, 255, 0.18);
   --ui-focused-popup-border: var(--oc-border-width) solid var(--border-strong);
-  --ui-focused-popup-shadow:
-    0 calc(24px * var(--ui-scale)) calc(54px * var(--ui-scale))
-      color-mix(in srgb, var(--ui-shadow-tone) 28%, transparent),
-    var(--shadow-lg);
+  --ui-focused-popup-shadow: var(--shadow-lg);
   --ui-focused-popup-scrim: color-mix(in srgb, var(--text-strong) 14%, transparent);
 
   --text: #d6d6d6;

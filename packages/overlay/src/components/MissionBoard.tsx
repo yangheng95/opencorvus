@@ -12,7 +12,8 @@ import { Button } from "./ui/Button"
 import { ContextMenu } from "./ui/ContextMenu"
 import { Icon } from "./ui/Icon"
 import { SelectControl } from "./ui/SelectControl"
-import { TextField } from "./ui/TextField"
+import { SearchField } from "./ui/SearchField"
+import { Feedback } from "./ui/Feedback"
 import { appStore } from "../store/app"
 
 const MISSION_TASK_PREVIEW_LIMIT = 3
@@ -58,7 +59,7 @@ function taskStatusLabel(task: MissionTask): string {
 }
 
 function missionDirectoryLabel(directory: string): string {
-  return projectDirectoryLabel(directory, t("task.project.unknown")).name
+  return projectDirectoryLabel(directory, t("task.project.unknown"), t("work_ledger.implicit_project")).name
 }
 
 function missionProjectLabel(mission: MissionRecord): string {
@@ -103,12 +104,6 @@ function MissionBoardCard(props: {
           disabled={props.actionBusy}
           onClick={props.onOpen}
         >
-          <span class="mission-board-card__identity">
-            <span>{missionIdentity(props.mission)}</span>
-            <time datetime={new Date(props.mission.updated).toISOString()} title={detailStamp(props.mission.updated)}>
-              {relativeTime(props.mission.updated)}
-            </time>
-          </span>
           <strong class="mission-board-card__title">{props.mission.title}</strong>
           <span class="mission-board-card__project">
             <Icon name="folder" size="compact" />
@@ -120,6 +115,12 @@ function MissionBoardCard(props: {
           <Show when={props.mission.pendingPrompt?.text}>
             {(pendingPrompt) => <span class="mission-board-card__summary">{pendingPrompt()}</span>}
           </Show>
+          <span class="mission-board-card__identity">
+            <span title={props.mission.missionID}>{missionIdentity(props.mission)}</span>
+            <time datetime={new Date(props.mission.updated).toISOString()} title={detailStamp(props.mission.updated)}>
+              {relativeTime(props.mission.updated)}
+            </time>
+          </span>
           <Show when={props.mission.tasks.length > 0}>
             <span class="mission-board-card__progress-copy">
               <span>
@@ -172,9 +173,9 @@ function MissionBoardCard(props: {
             </Badge>
             <Button
               type="button"
-              variant="solid"
+              variant="outline"
               size="sm"
-              tone="accent"
+              tone="neutral"
               data-ui="mission-board-dispatch"
               disabled={props.actionBusy}
               onClick={props.onDispatch}
@@ -292,11 +293,8 @@ export function MissionBoard(props: MissionBoardProps) {
 
   return (
     <section class="mission-board" data-ui="mission-board" aria-labelledby="missionBoardTitle">
-      <header class="mission-board__header oc-surface-header">
-        <div class="mission-board__heading oc-surface-header__main">
-          <span class="mission-board__title-icon" aria-hidden="true">
-            <Icon name="tasks" size="medium" />
-          </span>
+      <header class="mission-board__header">
+        <div class="mission-board__heading">
           <div>
             <h1 id="missionBoardTitle" tabIndex={-1}>
               {t("mission_board.title")}
@@ -304,68 +302,69 @@ export function MissionBoard(props: MissionBoardProps) {
             <p>{t("mission_board.subtitle")}</p>
           </div>
         </div>
-        <div class="mission-board__controls oc-surface-header__actions">
-          <Button
-            type="button"
-            variant="solid"
-            size="sm"
-            tone="accent"
-            data-ui="mission-board-create"
-            disabled={Boolean(pendingAction())}
-            onClick={() => setCreateOpen(true)}
-          >
-            <Icon name="plus" size="compact" />
-            {t("mission_board.create.action")}
-          </Button>
-          <TextField.Root class="mission-board__search" size="sm" variant="search">
-            <Icon name="search" size="compact" />
-            <TextField.Input
-              ref={(element) => {
-                searchInput = element
-              }}
-              value={search()}
-              placeholder={t("mission_board.search_placeholder")}
-              aria-label={t("mission_board.search_placeholder")}
-              onInput={(event) => setSearch(event.currentTarget.value)}
-            />
-          </TextField.Root>
-          <SelectControl<ProjectOption>
-            class="mission-board__project-filter"
-            options={projectOptions()}
-            value={selectedProject()}
-            onChange={(option) => setProjectDirectory(option?.value ?? "")}
-            optionValue="value"
-            optionTextValue="label"
-            renderValue={(option) => option?.label ?? t("mission_board.all_projects")}
-            renderOptionLabel={(option) => option.label}
-            ariaLabel={t("mission_board.project_filter")}
-            disallowEmptySelection
-          />
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            tone="neutral"
-            title={t("mission_board.refresh")}
-            aria-label={t("mission_board.refresh")}
-            disabled={missionBoardStore.loading}
-            onClick={() => void reloadMissionBoard()}
-          >
-            <Icon name={missionBoardStore.loading ? "loading" : "refresh"} size="medium" />
-          </Button>
-        </div>
+        <Button
+          type="button"
+          variant="solid"
+          size="md"
+          tone="neutral"
+          data-ui="mission-board-create"
+          disabled={Boolean(pendingAction())}
+          onClick={() => setCreateOpen(true)}
+        >
+          <Icon name="plus" size="compact" />
+          {t("mission_board.create.action")}
+        </Button>
       </header>
+      <div class="mission-board__controls">
+        <SearchField
+          class="mission-board__search"
+          inputRef={(element) => {
+            searchInput = element
+          }}
+          value={search()}
+          placeholder={t("mission_board.search_placeholder")}
+          onValueChange={setSearch}
+          onClear={() => searchInput?.focus()}
+        />
+        <SelectControl<ProjectOption>
+          class="mission-board__project-filter"
+          options={projectOptions()}
+          value={selectedProject()}
+          onChange={(option) => setProjectDirectory(option?.value ?? "")}
+          optionValue="value"
+          optionTextValue="label"
+          renderValue={(option) => option?.label ?? t("mission_board.all_projects")}
+          renderOptionLabel={(option) => option.label}
+          ariaLabel={t("mission_board.project_filter")}
+          disallowEmptySelection
+        />
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          tone="neutral"
+          title={t("mission_board.refresh")}
+          aria-label={t("mission_board.refresh")}
+          disabled={missionBoardStore.loading}
+          onClick={() => void reloadMissionBoard()}
+        >
+          <Icon name={missionBoardStore.loading ? "loading" : "refresh"} size="medium" />
+        </Button>
+      </div>
 
       <Show when={actionError()}>
-        <div class="mission-board__error" role="alert">
-          <span>
-            <strong>{t("mission_board.action_failed")}</strong>
-            <small>{actionError()}</small>
-          </span>
-          <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => setActionError("")}>
-            {t("common.dismiss")}
-          </Button>
-        </div>
+        <Feedback
+          class="mission-board__error"
+          tone="error"
+          details={actionError()}
+          actions={
+            <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => setActionError("")}>
+              {t("common.dismiss")}
+            </Button>
+          }
+        >
+          {t("mission_board.action_failed")}
+        </Feedback>
       </Show>
 
       <Show
@@ -407,7 +406,13 @@ export function MissionBoard(props: MissionBoardProps) {
                     <>
                       <strong>{t("mission_board.empty_true")}</strong>
                       <span>{t("mission_board.empty_true_description")}</span>
-                      <Button type="button" variant="solid" size="sm" tone="accent" onClick={() => setCreateOpen(true)}>
+                      <Button
+                        type="button"
+                        variant="solid"
+                        size="md"
+                        tone="neutral"
+                        onClick={() => setCreateOpen(true)}
+                      >
                         <Icon name="plus" size="compact" />
                         {t("mission_board.create.action")}
                       </Button>
@@ -442,7 +447,7 @@ export function MissionBoard(props: MissionBoardProps) {
                     <div class="mission-board-lane__cards">
                       <For
                         each={laneMissions(lane)}
-                        fallback={<div class="mission-board-lane__empty">{t("mission_board.lane_empty")}</div>}
+                        fallback={<div class="mission-board-lane__empty" aria-label={t("mission_board.lane_empty")} />}
                       >
                         {(mission) => (
                           <MissionBoardCard

@@ -13,51 +13,38 @@
    ───────────────────────────────────────────────────────────── */
 
 :root[data-theme="light"] {
+  --workspace-glass-bg: rgb(250 251 253 / 0.68);
+  --workspace-glass-edge: rgb(255 255 255 / 0.64);
   color-scheme: light;
   --text-on-accent: #ffffff;
   --text-on-strong: #ffffff;
-  --text-on-danger: #101527;
-  /* Value ramp. Every step is a distinct lightness level, and the whole
-   * neutral scale carries the same slight cyan bias as --text / --border
-   * (R two points below G/B) so the greys read as chosen rather than
-   * inherited. Previously --surface, --surface-strong and --chat-canvas
-   * were all rgb(255,255,255): a card sat on the canvas with *zero*
-   * value difference and had to be carried by a 9%-alpha edge and a
-   * 6%-alpha shadow. Reading order, dimmest to brightest:
-   *   bg 238 < rail/chrome 242 < inset 241 < hover 246
-   *          < canvas 248 < surface 253 < strong 255
-   * Pure white is now reserved for what is genuinely lifted — dialogs,
-   * menus, popovers — so it reads as elevation instead of as default. */
-  --bg: rgb(236, 238, 238);
-  --surface: rgb(251, 253, 253);
-  --surface-hover: rgb(244, 246, 246);
-  --surface-inset: rgb(239, 241, 241);
-  --surface-strong: rgb(255, 255, 255);
-  --rail-surface: rgb(240, 242, 242);
-  /* Flat rail: the earlier 4-stop ambient gradient made the light rail read
-   * muddy next to the white canvas; all three themes now share the flat
-   * treatment and the rail separates by value, not by hue. */
-  --rail-background-image: none;
-  --chat-canvas: rgb(246, 248, 248);
-  --workspace-ambient-fill: var(--chat-canvas);
-  --inspector-surface: var(--chat-canvas);
-  --body-bg: var(--rail-surface);
-  --panel-body-bg: var(--rail-surface);
-  --panel-body-blur: blur(20px);
-  --chrome: rgb(240, 242, 242);
-  --border: rgba(32, 38, 40, 0.14);
-  --border-hover: rgba(32, 38, 40, 0.28);
-  --border-strong: rgba(32, 38, 40, 0.22);
+  --text-on-danger: #ffffff;
+  /* Static frosted backdrop. Reading surfaces remain opaque; chrome uses
+     the shared translucent material rather than sampling moving content. */
+  --bg: #e7e9ef;
+  --surface: #ffffff;
+  --surface-hover: #f2f2ef;
+  --surface-inset: #eeefed;
+  --surface-strong: #ffffff;
+  --rail-surface: #f7f7f5;
+  --chat-canvas: #fcfcfb;
+  --workspace-ambient-fill: transparent;
+  --inspector-surface: transparent;
+  --body-bg:
+    radial-gradient(ellipse at 0% 15%, rgb(181 197 220 / 0.6), transparent 54%),
+    radial-gradient(ellipse at 100% 42%, rgb(209 191 204 / 0.52), transparent 56%),
+    radial-gradient(ellipse at 55% 110%, rgb(178 204 197 / 0.48), transparent 64%), var(--bg);
+  --chrome: #f7f7f5;
+  --border: rgb(32 32 32 / 0.1);
+  --border-hover: rgb(32 32 32 / 0.3);
+  --border-strong: rgb(32 32 32 / 0.2);
   --ui-focused-popup-border: var(--oc-border-width) solid var(--border-strong);
-  --ui-focused-popup-shadow:
-    0 calc(24px * var(--ui-scale)) calc(54px * var(--ui-scale))
-      color-mix(in srgb, var(--ui-shadow-tone) 28%, transparent),
-    var(--shadow-lg);
+  --ui-focused-popup-shadow: var(--shadow-lg);
   --ui-focused-popup-scrim: color-mix(in srgb, var(--text-strong) 14%, transparent);
-  --text: #343a3d;
-  --text-strong: #181b1d;
-  --text-soft: #454c4f;
-  --text-muted: #596164;
+  --text: #292929;
+  --text-strong: #202020;
+  --text-soft: #53534f;
+  --text-muted: #686864;
   --accent: #0969da;
   --accent-dim: color-mix(in srgb, var(--accent) 7%, transparent);
   --accent-hover: #0757b3;
@@ -66,11 +53,11 @@
   --accent-ring: color-mix(in srgb, var(--accent) 20%, transparent);
   --info: #2f80ed;
   --info-dim: rgba(47, 128, 237, 0.1);
-  --good: #28a66a;
+  --good: #24724a;
   --good-dim: rgba(40, 166, 106, 0.12);
   --warn: #8f570c;
   --warn-dim: rgba(143, 87, 12, 0.12);
-  --bad: #d85666;
+  --bad: #9d3434;
   --bad-dim: rgba(216, 86, 102, 0.12);
   /* Flat elevation: plain soft drops, no inset top-highlight layer. The
    * embossed highlight fought the flat-surface direction and read as a

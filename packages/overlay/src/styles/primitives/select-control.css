@@ -4,7 +4,7 @@
   min-width: calc(120px * var(--ui-scale));
   max-width: min(calc(360px * var(--ui-scale)), calc(100cqw - (var(--ui-gap-md) * 2)));
   border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-large);
+  border-radius: var(--oc-radius-soft);
   background: var(--menu-panel-bg);
   color: var(--text-strong);
   box-shadow: var(--shadow-md);
@@ -17,10 +17,11 @@
   justify-content: space-between;
   gap: var(--ui-gap-md);
   width: 100%;
+  min-width: 0;
   height: var(--oc-density-control-height);
   padding: 0 var(--ui-gap-md);
   border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-large);
+  border-radius: var(--oc-radius-soft);
   background: var(--surface-strong);
   color: var(--text-strong);
   box-shadow: none;
@@ -33,6 +34,17 @@
     border-color var(--ui-duration-fast) var(--ui-timing-standard),
     background-color var(--ui-duration-base) var(--ui-timing-standard),
     box-shadow var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.oc-select-value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oc-select-icon {
+  flex: none;
 }
 
 .oc-select-trigger:hover:not([data-disabled]):not(:disabled) {
@@ -181,7 +193,7 @@
   max-height: min(calc(240px * var(--ui-scale)), calc(var(--ui-overlay-shell-height) - 32px));
   padding: var(--ui-gap-sm);
   border: var(--oc-border-width) solid var(--divider-soft);
-  border-radius: var(--oc-radius-large);
+  border-radius: var(--oc-radius-soft);
   background: color-mix(in srgb, var(--surface-elevated) 86%, transparent);
 }
 

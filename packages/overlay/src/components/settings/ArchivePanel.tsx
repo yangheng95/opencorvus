@@ -1,3 +1,4 @@
+import { Feedback } from "../ui/Feedback"
 import { For, Show, createSignal, onCleanup, onMount } from "solid-js"
 import { loadArchivedWorkLedger, type WorkLedgerCursor, type WorkLedgerItemRow } from "../../services/work-ledger"
 import { archiveRowKey } from "../../services/archive-row-key"
@@ -12,7 +13,7 @@ import { ArmedConfirmButton } from "../ui/ArmedConfirmButton"
 import { Badge } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { Icon, type IconName } from "../ui/Icon"
-import { SettingsDetailSection, SettingsEmpty, SettingsPanel, SettingsRow, SettingsState } from "./layout"
+import { SettingsDetailSection, SettingsEmpty, SettingsPanel, SettingsRow } from "./layout"
 
 const ARCHIVE_PAGE_SIZE = 100
 const DELETE_CONFIRM_WINDOW_MS = 3_000
@@ -234,7 +235,7 @@ export default function ArchivePanel() {
   return (
     <SettingsPanel ref={panelElement} data-ui="archive-panel" aria-busy={loading() || !!busyID() ? "true" : undefined}>
       <Show when={error() && rows().length > 0}>
-        <SettingsState tone="error">{error()}</SettingsState>
+        <Feedback tone="error">{error()}</Feedback>
       </Show>
       <SettingsDetailSection
         title={
@@ -246,11 +247,11 @@ export default function ArchivePanel() {
         actions={<Badge tone="muted">{rows().length}</Badge>}
       >
         <Show when={!error() || rows().length > 0} fallback={
-          <SettingsState tone="error" actions={
+          <Feedback tone="error" actions={
             <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void load(false)}>
               <Icon name="refresh" />{t("common.retry")}
             </Button>
-          }>{error()}</SettingsState>
+          }>{error()}</Feedback>
         }>
         <Show when={rows().length > 0} fallback={<SettingsEmpty>{loading() ? t("common.loading") : t("archive.empty")}</SettingsEmpty>}>
           <For each={rows()}>

@@ -1,3 +1,4 @@
+import { Feedback } from "../ui/Feedback"
 import { Show, createEffect, createSignal } from "solid-js"
 import { t } from "../../utils/i18n"
 import { expertSquadCatalogRequestKey, expertSquadCatalogScope } from "../../services/expert-squad-scope"
@@ -20,7 +21,7 @@ import { Button } from "../ui/Button"
 import { LinkButton } from "../ui/LinkButton"
 import { Icon } from "../ui/Icon"
 import { SelectField } from "../ui/SelectField"
-import { SettingsGroup, SettingsPanel, SettingsState, SettingsSurface } from "./layout"
+import { SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./layout"
 import { secureContextFailure } from "../../utils/secure-context"
 
 const EXPERT_SQUAD_MARKET_URL = "https://opencorvus.com/market/"
@@ -213,26 +214,21 @@ export default function ExpertSquadMarketPanel() {
   return (
     <SettingsPanel class="expert-squad-market-entry-panel">
       <Show when={notice()}>
-        <SettingsState tone="success">{notice()}</SettingsState>
+        <Feedback tone="success">{notice()}</Feedback>
       </Show>
       <Show when={error()}>
-        <SettingsState tone="error">{error()}</SettingsState>
+        <Feedback tone="error">{error()}</Feedback>
       </Show>
 
       <SettingsGroup>
         <SettingsSurface class="expert-squad-market-entry" data-ui="expert-squad-market-entry">
-          <span class="expert-squad-market-entry-icon" aria-hidden="true">
-            <Icon name="config-expert-squad-install" size="display" />
-          </span>
           <div class="expert-squad-market-entry-copy">
-            <h2>{t("expert_squad.market_title")}</h2>
             <p>{t("expert_squad.market_intro")}</p>
             <div class="expert-squad-market-facts" aria-live="polite">
               <span>
                 <strong>{marketTotalCount() ?? "—"}</strong>
                 {t("expert_squad.market_count")}
               </span>
-              <span>{t("expert_squad.market_verified")}</span>
             </div>
           </div>
           <div class="expert-squad-market-entry-actions">
@@ -240,7 +236,7 @@ export default function ExpertSquadMarketPanel() {
               class="expert-squad-market-web-action"
               variant="solid"
               size="md"
-              tone="accent"
+              tone="neutral"
               data-ui="expert-squad-market-web"
               href={EXPERT_SQUAD_MARKET_URL}
               target="_blank"
@@ -268,38 +264,32 @@ export default function ExpertSquadMarketPanel() {
 
       <SettingsGroup title={t("expert_squad.local_install_title")} description={t("expert_squad.local_install_body")}>
         <SettingsSurface class="expert-squad-local-install" data-ui="expert-squad-local-install">
-          <div class="expert-squad-local-install-head">
-            <div>
-              <span>{t("expert_squad.local_install_scope")}</span>
-              <small>{t("expert_squad.local_install_scope_note")}</small>
-            </div>
-            <SelectField
-              class="expert-squad-local-install-scope"
-              value={installationScope()}
-              options={[
-                { value: "global", label: t("expert_squad.local_scope_global") },
-                { value: "project", label: t("expert_squad.local_scope_project") },
-              ]}
-              ariaLabel={t("expert_squad.local_install_scope")}
-              onChange={(value) => setInstallationScope(value as ExpertSquadInstallationScope)}
-              disabled={!scopeAvailable() || busyAction() !== null}
-            />
-          </div>
-          <div class="expert-squad-local-install-actions">
-            <div class="expert-squad-local-install-option">
-              <span class="expert-squad-local-install-icon" aria-hidden="true">
-                <Icon name="folder-open" size="medium" />
-              </span>
-              <div>
-                <strong>{t("expert_squad.local_folder_title")}</strong>
-                <span>
-                  {t(
-                    getHostTransport().kind === "tauri"
-                      ? "expert_squad.local_folder_body"
-                      : "expert_squad.local_folder_desktop_only",
-                  )}
-                </span>
-              </div>
+          <SettingsRow
+            title={t("expert_squad.local_install_scope")}
+            desc={t("expert_squad.local_install_scope_note")}
+            align="center"
+            actions={
+              <SelectField
+                value={installationScope()}
+                options={[
+                  { value: "global", label: t("expert_squad.local_scope_global") },
+                  { value: "project", label: t("expert_squad.local_scope_project") },
+                ]}
+                ariaLabel={t("expert_squad.local_install_scope")}
+                onChange={(value) => setInstallationScope(value as ExpertSquadInstallationScope)}
+                disabled={!scopeAvailable() || busyAction() !== null}
+              />
+            }
+          />
+          <SettingsRow
+            title={t("expert_squad.local_folder_title")}
+            desc={t(
+              getHostTransport().kind === "tauri"
+                ? "expert_squad.local_folder_body"
+                : "expert_squad.local_folder_desktop_only",
+            )}
+            align="center"
+            actions={
               <Button
                 type="button"
                 variant="outline"
@@ -313,15 +303,13 @@ export default function ExpertSquadMarketPanel() {
                   ? t("expert_squad.local_installing")
                   : t("expert_squad.local_choose_folder")}
               </Button>
-            </div>
-            <div class="expert-squad-local-install-option">
-              <span class="expert-squad-local-install-icon" aria-hidden="true">
-                <Icon name="upload" size="medium" />
-              </span>
-              <div>
-                <strong>{t("expert_squad.local_archive_title")}</strong>
-                <span>{t("expert_squad.local_archive_body")}</span>
-              </div>
+            }
+          />
+          <SettingsRow
+            title={t("expert_squad.local_archive_title")}
+            desc={t("expert_squad.local_archive_body")}
+            align="center"
+            actions={
               <Button
                 type="button"
                 variant="outline"
@@ -335,8 +323,8 @@ export default function ExpertSquadMarketPanel() {
                   ? t("expert_squad.local_installing")
                   : t("expert_squad.local_choose_archive")}
               </Button>
-            </div>
-          </div>
+            }
+          />
           <input
             ref={(element) => {
               archiveInput = element

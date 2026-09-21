@@ -81,7 +81,9 @@ body .sidebar-header.oc-surface-header {
 }
 
 .sidebar-codex-shortcuts {
-  padding-top: 0;
+  flex: 0 0 auto;
+  padding-block: var(--ui-gap-md);
+  border-top: var(--oc-border-width) solid var(--border);
 }
 
 .sidebar-codex-action.oc-button,
@@ -117,6 +119,7 @@ body .sidebar-header.oc-surface-header {
 
 .sidebar-codex-action svg {
   grid-column: 1;
+  justify-self: center;
 }
 
 .sidebar-codex-action-label {
@@ -157,7 +160,7 @@ body .sidebar-header.oc-surface-header {
   align-items: center;
   justify-content: space-between;
   gap: var(--ui-gap-md);
-  padding: var(--ui-gap-lg) var(--ui-gap-xl);
+  padding: var(--ui-gap-lg) var(--ui-left-rail-nav-icon-inset);
   border-top: var(--oc-border-width) solid var(--divider-soft);
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
@@ -174,7 +177,7 @@ body .sidebar-header.oc-surface-header {
   min-width: 0;
   color: var(--text-soft);
   line-height: var(--ui-line-height-tight);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .chat-version-copy {
@@ -188,8 +191,8 @@ body .sidebar-header.oc-surface-header {
 
   display: grid;
   width: 100%;
-  grid-template-columns: calc(28px * var(--ui-scale)) minmax(0, 1fr);
-  column-gap: var(--ui-gap-md);
+  grid-template-columns: var(--ui-left-rail-row-icon-track) minmax(0, 1fr);
+  column-gap: var(--ui-left-rail-row-label-gap);
   align-items: center;
   min-width: 0;
   max-width: 100%;
@@ -205,6 +208,7 @@ body .sidebar-header.oc-surface-header {
 
 .chat-version-avatar {
   grid-row: 1 / span 2;
+  justify-self: center;
   display: inline-flex;
   width: calc(28px * var(--ui-scale));
   height: calc(28px * var(--ui-scale));
@@ -661,7 +665,7 @@ body .sidebar-header.oc-surface-header {
 }
 
 .ledger-skeleton-row {
-  height: calc(48px * var(--ui-scale));
+  height: var(--oc-density-navigation-row);
   border-radius: var(--oc-radius-soft);
   /* Placeholder rows sit on the neutral rung. The inline wash this replaces
    * existed only because --subtle-* was accent-mixed on light and tinted the

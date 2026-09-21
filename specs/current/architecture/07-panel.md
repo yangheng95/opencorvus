@@ -66,9 +66,9 @@ require Task scope and use the canonical current persisted collection directly.
 
 The Agent transcript panel is opened only from a child-session progress card.
 Every child session for the selected source is aggregated under one top-level
-`Squad agents` Dock tab. The inner Tabs primitive reads the canonical
-conversation-agent projection, and both progress-card clicks and inner-tab
-selection write the same selected `sessionID`. Task conversations load the
+`Squad agents` Dock tab. Its list/detail navigation and shared SelectControl
+read the canonical conversation-agent projection. Progress-card, list and
+selector actions write the same selected `sessionID`. Task conversations load the
 exact `/task/:taskID/conversation/session/:sessionID` view; standalone Chats
 load the selected `/session/:sessionID/conversation` view. The main progress
 card tree's global visible revision never participates in this request
@@ -96,17 +96,56 @@ when the viewport actually moves upward. DOM replacement therefore cannot
 masquerade as manual upward scrolling regardless of event order. Reaching the
 bottom re-arms follow mode.
 
-Selected-Agent visibility is owned only by the horizontal Agent tab strip.
-The strip reacts to its viewport size, selected Session identity and ordered Session-ID set,
-then changes its own `scrollLeft` just enough to reveal that tab. Live activity,
-status, target-message, and timestamp updates must not call
-`Element.scrollIntoView()` or write any ancestor's vertical scroll position,
-because the transcript follow controller is the sole vertical scroll writer.
-Agent Trigger component identity is likewise keyed only by canonical
-`sessionID`; live record fields update the mounted Trigger's presentation and
-must not unregister it from the Tabs collection. The selected Session changes
-only through an explicit progress-card, inner-tab, or inner-menu action, or a
-real selected-source reset.
+Agent list/detail visibility is local presentation state; it does not own
+Session identity. Returning to the list or choosing another Session is an
+explicit user action. List rows remain keyed by canonical `sessionID`, while
+live record fields update their existing presentation. Selection/status updates
+do not scroll an ancestor or remount a continuously selected transcript.
+The transcript follow controller remains the sole vertical scroll writer.
+
+## Shared visual primitives
+
+The existing design-language tokens own geometry, typography and neutral
+selection. Persistent titlebar, left navigation and right context use one
+`oc-material-glass` primitive. Theme palettes provide its translucent fill and
+edge; the body paints the single static ambient background. Readers use the
+canonical opaque conversation surface and popups remain opaque. Material has no
+live backdrop filter, per-frame script, desktop capture or animation owner.
+VS Code Dark retains its own neutral background and the same material contract.
+
+Button, TextField, SelectControl, Tabs, Disclosure and navigation rows own
+interactive states. Settings rows/groups and main/agent transcripts consume
+these contracts instead of restoring per-page card geometry. Sources retain
+their exact identities, indexes and destinations as lightweight links.
+
+Feedback is the shared inline loading/failure/notice primitive for settings,
+ledger lists and message submission. Optional diagnostics use the existing
+Disclosure and retain complete error text. A failed list retains existing data
+with an explicit stale-data notice. Unknown Provider counts are not displayed
+as a successful empty catalog. Composer presentation does not change the
+existing dispatch boundary or automatically retry a submission.
+
+Home headings, starter actions and the Composer use the same inherited reading
+column insets as the transcript. Home has no separate percentage-width rule or
+visible empty transcript scrollbar. The Textarea owns its native, static
+placeholder; no separate placeholder text layer, decorative caret or rotation
+timer participates in layout. Mention selection still uses the real Composer
+reference catalog and remains available through typing and the reference menu.
+Dock tabs share one neutral selected treatment across all panel kinds. Their
+header is part of the translucent Dock material rather than a second opaque
+slab. Shared empty hints provide low-specificity typography defaults so each
+panel can own its content inset without a late cascade override.
+
+The Mission board separates page creation from search/project filters. Its
+canonical five lane order and Mission/Task projections remain unchanged; lanes
+use quiet headings and independently scrollable content instead of full-height
+framed containers. Cards lead with the Mission title and retain identity, time,
+project and execution details beneath it. Mailbox uses the shared Feedback and
+neutral navigation selection while retaining unread and attention facts.
+Transcript actor avatars use neutral chrome with the role glyph; elapsed times
+are caption metadata and activity disclosures use the shared compact row height.
+The existing pane layout effect observes settings hydration and zoom so resolved
+widths follow the scale that the theme owner has applied.
 
 The compact Agent Rail uses the shared Kobalte Tooltip as its only hover and
 keyboard-focus detail surface. That Tooltip opens deterministically to the
@@ -244,28 +283,15 @@ second session list, or another transcript source.
 
 The Overlay radius scale remains owned only by
 `styles/tokens/design-language.css`. At scale one, soft containers use eight
-pixels and ordinary rounded primitives use twelve pixels; the Composer shell,
-agent cards, form fields, Buttons, and reusable popup surfaces share that
-ordinary page-surface tier. The single `.workspace-main` macro frame clips its
-children to one extra-large upper-left corner beside the aligned Work Ledger
-brand row; its other outer corners remain square. The continuous rail material
-continues behind that curve. The existing top and left physical borders paint
-one theme-aware contour on the actual outer quarter-circle. That
-Workbench-specific contour uses slightly wider low-alpha coverage than the
-shared one-pixel divider so its diagonal remains continuous at fractional
-desktop display scales without becoming visually heavier. The continuous rail
-material owns every pixel outside that contour: `.panel-body` paints the fixed
-rail ambient material across the complete panel row, and the left activity shell
-remains transparent over that single backing owner. The rounded cutout therefore
-reveals the same material as the visible rail instead of the global body color.
-The Workbench paints no exterior shadow, glow, haze, or directional depth.
-Transparent edge borders, inset duplicate contours, exterior projections,
-radius-sized blur fields, and split directional gradients are excluded because
-they produce doubled, tapered, or shadowed corner geometry. No square child or
-second background layer participates in the boundary.
-Extra-large remains reserved for this Workbench frame, modal dialogs, and other
-explicitly rounded macro surfaces, while zero and pill semantics retain their
-existing values.
+pixels for fields, Buttons, navigation and tabs; the Composer shell and reusable
+popup surfaces use the twelve-pixel tier. Agent transcripts have no enclosing
+card silhouette. The `.workspace-main` frame has square corners and one shared
+one-pixel top/left divider. The body owns the ambient field, while persistent
+chrome consumes the glass material; `.panel-body` adds no second paint owner.
+The Workbench paints no exterior shadow or glow. Ordinary dialogs use the
+twelve-pixel popup tier; extra-large remains available for immersive media
+viewers and explicitly rounded macro surfaces. Zero and pill semantics
+retain their existing values.
 Surface-specific code may choose the semantic token but cannot reintroduce a
 local radius fallback or another paint owner at the Workbench boundary.
 
@@ -407,8 +433,8 @@ The selected durable item owns one declarative Conversation header identity.
 Its title sits beside one Kobalte ellipsis menu containing exactly Pin/Unpin,
 Rename, and Archive, and the menu delegates to the same Work Ledger/domain
 writers as the row interactions. With no selected durable item, the menu is
-absent. The Conversation itself is one white extra-large-radius surface inset
-from the ambient Workbench canvas; header and content share that frame instead
+absent. The Conversation is one flat opaque reading surface within the ambient
+Workbench; header and content share that surface instead
 of creating separate cards or local geometry state.
 
 When the selected right-sidebar Chat or Work starts a durable Mission through
@@ -540,10 +566,10 @@ strong subject therefore disappear after the refreshed backend projection
 confirms that read fact. A yellow leading highlight projects the independent
 backend `attention` fact and does not disappear merely because a message was
 read. The left-sidebar surface projects the active Inbox only and represents
-it with one icon plus a compact Badge sourced from the backend `activeCount`;
-the unread/selection summary uses a semantic accent Badge while actionable and
-returns to a neutral Badge when caught up. Both toolbar counts use control-size
-strong typography instead of muted tiny text. The surface exposes no Archived
+it with a text heading and compact count sourced from the backend `activeCount`;
+the unread/selection summary is plain secondary text. The title and exact active
+count share the heading row with Search. Bulk actions occupy a second row only
+when there are visible messages. The surface exposes no Archived
 control. The upper-right left-Dock Mailbox launcher independently projects the
 exact backend `unreadCount` through the shared Badge primitive, visually caps
 counts above 99 as `99+`, and retains the exact count in its accessible label.
@@ -552,11 +578,9 @@ Dock returns to Work Ledger only when that hover still owns the selection.
 Clicking pins a hover-opened Mailbox. Both activities remain mounted, so this
 selection change preserves Mailbox pagination, loaded rows, disclosure, and
 scroll position. Search expands to
-the canonical SearchField only after explicit activation. The resting Mailbox
-header is one compact row; opening Search unmounts its summary, actions, and
-Inbox indicator so the SearchField owns the complete row. The expanded surface
-has no X action and closes through the same query-clearing operation when the
-mouse leaves the header or Escape is pressed. Open Task is a separate
+the canonical SearchField only after explicit activation. Search takes the second
+header row while the Inbox heading remains stable; its close button and Escape
+use the same query-clearing operation. Open Task is a separate
 hover/focus action that uses the canonical task ID and directory. The row
 exposes no archive/restore action. Neither reading
 nor navigation infers lifecycle or scheduling decisions from the message body.
@@ -687,9 +711,9 @@ Right Dock tab is its only panel title; owner-group headers place their
 canonical image count immediately after the owner/time label and never add a
 count-only panel header.
 
-Right Dock tabs retain the compact `28px` tab-control geometry, including each
-tab's embedded close action. The Dock-global add and close actions instead use
-the shared `32px` icon-button density and standard `14px` Icon tier, matching
+Right Dock tabs and their embedded close actions use the shared `32px`
+header-control geometry. The Dock-global add and close actions use the same
+icon-button density and standard `14px` Icon tier, matching
 the rest of the application chrome. The fixed-height tab header and mounted
 panel body meet at one quiet divider drawn by the header through the shared
 border-width and divider-color tokens. Open tabs use one Chrome-style width
@@ -1005,3 +1029,16 @@ second active profile.
 - `bun test packages/opencorvus/test/interactive-artifact/interactive-artifact.test.ts packages/opencorvus/test/session/processor-duplicate-tool-call.test.ts`
 - `bun test packages/opencorvus/test/tool/send-mailbox-message.test.ts packages/opencorvus/test/server/mailbox-routes.test.ts`
 - `bun test packages/opencorvus/test/script/document-health.test.ts`
+
+### Resource and factual settings layout
+
+SettingsRow owns a distinct read-only value slot with a bounded label column and
+a wrapping value column. Long paths never compete with labels as unshrinkable
+button clusters. Mission Skills and installed Expert Squads use quiet neutral
+master/detail selection, with the full description in the detail region. Skill
+library rows show the name and two-line preview; the canonical Disclosure exposes
+the complete description, source and existing operations. Mission tool names and
+Squad scope explanations are independently expandable. Empty usage periods show
+one empty presentation; detailed composition, provider and model sections render
+when the canonical call count is positive. Configured official usage sources keep
+their independent presentation even when local call count is zero.

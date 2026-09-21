@@ -101,20 +101,6 @@
   min-width: 0;
 }
 
-.ledger-error {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--ui-gap-sm);
-  margin: var(--ui-gap-sm);
-  padding: var(--ui-gap-sm);
-  border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-soft);
-  background: var(--surface);
-  color: var(--text);
-  font-size: var(--ui-font-body);
-}
-
 .work-ledger-section-title {
   margin: var(--ui-gap-md) var(--ui-left-rail-section-inline-inset) var(--ui-gap-xs);
   color: var(--text-muted);

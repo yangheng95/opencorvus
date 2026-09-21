@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Primitive-first frosted workspace implementation](records/2026-09/2026-09-21-primitive-ui-implementation.md)
+
 - [Codex-aligned UI review and design proposal](records/2026-09/2026-09-21-codex-aligned-ui-design.md)
 
 - [2026-08-24-character-led-product-video-v8](records/2026-08/2026-08-24-character-led-product-video-v8.md)

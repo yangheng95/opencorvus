@@ -139,7 +139,6 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
   return (
     <section class="msg-sources" aria-label={t("chat.sources")} data-ui="message-sources">
       <div class="msg-sources__heading">
-        <Icon name="channel-link" size="compact" />
         <span>{t("chat.sources")}</span>
         <span class="msg-sources__count">{props.sources.length}</span>
       </div>

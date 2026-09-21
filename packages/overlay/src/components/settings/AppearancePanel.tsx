@@ -1,3 +1,4 @@
+import { Feedback } from "../ui/Feedback"
 import { createSignal } from "solid-js"
 import { settingsStore } from "../../store/settings"
 import { applyThemePreference } from "../../services/theme-preference"
@@ -5,7 +6,7 @@ import { themeOptionsForCurrentHost } from "../../services/theme-registry"
 import { t } from "../../utils/i18n"
 import { applyLocalePreference } from "../../services/locale-preference"
 import { SelectField } from "../ui/SelectField"
-import { SettingsGroup, SettingsPanel, SettingsRow, SettingsState } from "./layout"
+import { SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
@@ -88,9 +89,9 @@ export default function AppearancePanel() {
           }
         />
         {error() ? (
-          <SettingsState tone="error" data-ui="settings-appearance-status">
+          <Feedback tone="error" data-ui="settings-appearance-status">
             {error()}
-          </SettingsState>
+          </Feedback>
         ) : null}
       </SettingsGroup>
     </SettingsPanel>

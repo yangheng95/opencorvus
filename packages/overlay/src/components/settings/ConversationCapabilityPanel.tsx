@@ -1,3 +1,4 @@
+import { Feedback } from "../ui/Feedback"
 import { createEffect, createSignal, For, Show } from "solid-js"
 import {
   loadConversationCapability,
@@ -9,7 +10,7 @@ import {
 import { t } from "../../utils/i18n"
 import { Badge } from "../ui/Badge"
 import { Checkbox } from "../ui/Checkbox"
-import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsState, SettingsSurface } from "./layout"
+import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./layout"
 
 type DirectoryProp = string | (() => string | undefined)
 
@@ -163,25 +164,22 @@ export default function ConversationCapabilityPanel(props: {
         <Show
           when={!!directory()}
           fallback={
-            <SettingsState
+            <Feedback
               tone="warning"
               title={t("settings.product.scope_unavailable_title", { product: productLabel() })}
               data-ui="conversation-capability-scope-unavailable"
             >
               {t("settings.product.scope_unavailable_body", { product: productLabel() })}
-            </SettingsState>
+            </Feedback>
           }
         >
-          <Show when={!loading()} fallback={<SettingsState>{t("common.loading")}</SettingsState>}>
+          <Show when={!loading()} fallback={<Feedback>{t("common.loading")}</Feedback>}>
             <Show
               when={!error()}
               fallback={
-                <SettingsState
-                  tone="error"
-                  title={t("settings.product.load_failed_title", { product: productLabel() })}
-                >
+                <Feedback tone="error" title={t("settings.product.load_failed_title", { product: productLabel() })}>
                   {t("settings.product.load_failed_body")}
-                </SettingsState>
+                </Feedback>
               }
             >
               <Show when={settings()}>

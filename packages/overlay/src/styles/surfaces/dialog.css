@@ -56,7 +56,7 @@
   overflow-y: auto;
   background: var(--dialog-bg);
   border: var(--ui-focused-popup-border);
-  border-radius: var(--oc-radius-xl);
+  border-radius: var(--oc-radius-large);
   box-shadow: var(--ui-focused-popup-shadow);
   /* Density refresh 2026-05-06: dialog-form padding was sized for the
    * primary panel (18/20) which made the modal feel airy and empty.
@@ -125,9 +125,9 @@
 
 .dialog-title {
   font-size: var(--ui-font-emphasis);
-  font-weight: var(--ui-font-weight-strong);
+  font-weight: var(--ui-font-weight-medium);
   color: var(--text-strong);
-  letter-spacing: var(--ui-letter-spacing-loose);
+  letter-spacing: var(--ui-letter-spacing-normal);
   line-height: var(--ui-line-height-tight);
   margin: 0;
 }

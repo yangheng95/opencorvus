@@ -8,7 +8,7 @@
   gap: var(--oc-segmented-gap);
   padding: 0;
   border: 0 solid transparent;
-  border-radius: var(--oc-radius-pill);
+  border-radius: var(--oc-radius-soft);
   background: transparent;
 }
 
@@ -25,7 +25,7 @@
   padding: 0 var(--oc-header-gap);
   gap: var(--ui-gap-xs);
   border: var(--oc-border-width) solid transparent;
-  border-radius: var(--oc-radius-pill);
+  border-radius: var(--oc-radius-soft);
   background: transparent;
   color: var(--text-soft);
   font: var(--ui-font-weight-medium) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
@@ -46,7 +46,7 @@
 }
 
 .oc-segmented__item[data-pressed] {
-  background: var(--surface-inset);
+  background: var(--ui-list-selected-bg);
   border-color: transparent;
   color: var(--text-strong);
 }

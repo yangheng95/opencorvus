@@ -494,7 +494,6 @@
   border-radius: var(--oc-radius-large);
   background: color-mix(in srgb, var(--surface-strong) 84%, transparent);
   box-shadow: 0 calc(22px * var(--ui-scale)) calc(52px * var(--ui-scale)) var(--ui-shadow-tone);
-  backdrop-filter: blur(calc(18px * var(--ui-scale)));
 }
 
 .browser-preview-node-comment-title {
@@ -639,6 +638,7 @@
   flex-direction: column;
   gap: var(--ui-gap-sm);
   --file-explorer-row-depth: 0;
+  --oc-header-padding-x: var(--ui-gap-lg);
 }
 
 .file-explorer-context-menu {
@@ -822,7 +822,7 @@
 }
 
 .file-explorer-empty {
-  padding: var(--ui-gap-2xl) var(--ui-gap-md);
+  padding: var(--ui-gap-lg);
 }
 
 .file-explorer-empty .oc-button[data-ui="file-explorer-retry"] {
@@ -2034,138 +2034,61 @@
 .subagent-conversation-panel {
   display: flex;
   flex-direction: column;
-  background: var(--chat-canvas);
+  background: transparent;
 }
 
-.subagent-conversation-panel__agents,
 .subagent-conversation-panel__selected-agent {
-  flex: 1 1 0;
-  min-width: 0;
-  min-height: 0;
   display: flex;
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 0;
   flex-direction: column;
 }
 
 .subagent-conversation-panel__agent-selector {
-  width: 100%;
-  height: calc(42px * var(--ui-scale));
-  min-height: calc(42px * var(--ui-scale));
-  flex: 0 0 auto;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  min-width: 0;
-  padding-inline: var(--ui-gap-sm);
-  border-bottom: var(--oc-border-width) solid var(--divider-soft);
-  background: var(--chat-canvas);
-}
-
-.subagent-conversation-panel__agent-tabs.oc-tabs {
-  --oc-tabs-height: calc(28px * var(--ui-scale));
-  --oc-tabs-gap: var(--ui-gap-xs);
-  --oc-tabs-padding-x: var(--ui-gap-xs);
-
-  flex: 1 1 auto;
-  min-width: 0;
-  height: 100%;
-  justify-content: flex-start;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-block: var(--ui-gap-xs);
-  scroll-padding-inline: var(--oc-tabs-padding-x);
-  scrollbar-width: none;
-}
-
-.subagent-conversation-panel__agent-tab.oc-tab {
-  --chat-avatar-inline-size: calc(16px * var(--ui-scale));
-  --chat-avatar-ring-outset: calc(1px * var(--ui-scale));
-  --oc-tab-bg: transparent;
-  --oc-tab-active-bg: var(--ui-list-selected-bg);
-  --oc-tabs-height: calc(28px * var(--ui-scale));
-
-  min-width: 0;
-  max-width: calc(170px * var(--ui-scale));
   flex: 0 0 auto;
-  justify-content: flex-start;
-  gap: var(--ui-gap-sm);
-  padding-inline: var(--ui-gap-sm);
-  border: var(--oc-border-width) solid transparent;
-  border-radius: var(--oc-radius-soft);
-  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
-  letter-spacing: var(--ui-letter-spacing-normal);
-  text-transform: none;
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-lg);
+  border-bottom: var(--oc-border-width) solid var(--border);
 }
 
-.subagent-conversation-panel__agent-tab.oc-tab[data-selected] {
-  --oc-tab-color: var(--text-strong);
-  --oc-tab-bg: var(--oc-tab-active-bg);
-
-  max-width: calc(240px * var(--ui-scale));
-  border-color: color-mix(in srgb, var(--accent) 26%, transparent);
-  font-weight: var(--ui-font-weight-medium);
+.subagent-conversation-panel__select {
+  flex: 1;
+  min-width: min(100%, calc(180px * var(--ui-scale)));
 }
-
-.subagent-conversation-panel__agent-avatar {
-  flex: 0 0 auto;
-}
-
-.subagent-conversation-panel__agent-label {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.subagent-conversation-panel__agent-tab > .oc-status-indicator {
-  flex: 0 0 auto;
-  margin-left: auto;
-}
-
-.subagent-conversation-panel__agent-menu-trigger.oc-button {
-  flex: 0 0 auto;
-  min-width: calc(28px * var(--ui-scale));
-  margin-left: var(--ui-gap-xs);
-  padding-inline: var(--ui-gap-sm);
-  border-radius: var(--oc-radius-soft);
-}
-
-.subagent-conversation-panel__agent-menu.oc-menu {
-  width: min(calc(280px * var(--ui-scale)), calc(100vw - calc(24px * var(--ui-scale))));
-  max-height: min(calc(360px * var(--ui-scale)), calc(100vh - calc(24px * var(--ui-scale))));
+.subagent-conversation-panel__list {
+  display: grid;
+  gap: var(--ui-gap-xs);
+  padding: var(--ui-gap-xl);
   overflow-y: auto;
 }
-
-.subagent-conversation-panel__agent-menu-item.oc-menu-item {
-  --chat-avatar-inline-size: calc(20px * var(--ui-scale));
-  --chat-avatar-ring-outset: calc(1px * var(--ui-scale));
-
-  width: 100%;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: var(--ui-gap-md);
-}
-
-/* Every other menu marks selection with the accent-tinted list token; a
- * neutral --surface-hover here read as a stuck hover rather than a choice. */
-.subagent-conversation-panel__agent-menu-item.oc-menu-item[data-active="true"] {
-  background: var(--ui-list-selected-bg);
-}
-
-.subagent-conversation-panel__agent-menu-avatar {
-  flex: 0 0 auto;
-}
-
-.subagent-conversation-panel__agent-menu-label {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.subagent-conversation-panel__agent-menu-status {
+.subagent-conversation-panel__list-heading {
+  margin-bottom: var(--ui-gap-lg);
   color: var(--text-muted);
-  font: var(--ui-font-weight-body) var(--ui-font-caption) / var(--ui-line-height-tight) var(--font);
-  white-space: nowrap;
+  font-size: var(--ui-font-caption);
+}
+.subagent-conversation-panel__agent-row.oc-button {
+  --oc-button-height: auto;
+  width: 100%;
+  min-height: calc(48px * var(--ui-scale));
+  padding: var(--ui-gap-md);
+  gap: var(--ui-gap-md);
+  justify-content: flex-start;
+  text-align: left;
+}
+.subagent-conversation-panel__agent-name {
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-weight: var(--ui-font-weight-body);
+}
+.subagent-conversation-panel__agent-status {
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
 }
 
 .subagent-conversation-panel__scroll {
@@ -2192,25 +2115,6 @@
 
 .subagent-conversation-panel__scroll .chat-bubble-shell {
   width: 100%;
-}
-
-.subagent-conversation-panel__scroll .chat-bubble-row[data-kind="agent"] .chat-bubble {
-  overflow: visible;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-}
-
-.subagent-conversation-panel__scroll .chat-bubble__identity-row {
-  position: sticky;
-  top: calc(-1 * var(--ui-gap-lg));
-  z-index: 2;
-  min-height: calc(36px * var(--ui-scale));
-  margin-bottom: var(--ui-gap-md);
-  padding-block: var(--ui-gap-sm);
-  border-bottom: var(--oc-border-width) solid var(--divider-soft);
-  background: var(--chat-canvas);
 }
 
 .subagent-conversation-panel__scroll .chat-bubble__title {
@@ -2260,7 +2164,9 @@
   font-size: var(--ui-font-caption);
 }
 
-.subagent-conversation-panel__scroll .msg-work-details > .oc-button[data-ui="work-details-toggle"]:is(:hover, :focus-visible) {
+.subagent-conversation-panel__scroll
+  .msg-work-details
+  > .oc-button[data-ui="work-details-toggle"]:is(:hover, :focus-visible) {
   --oc-button-bg: var(--hover-wash);
 }
 
@@ -2271,54 +2177,6 @@
 
 .subagent-conversation-panel__scroll .msg-work-details__tool-detail {
   font-size: var(--ui-font-caption);
-}
-
-.subagent-conversation-panel__scroll .msg-sources {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--ui-gap-xs) var(--ui-gap-sm);
-  margin-block: var(--ui-gap-sm);
-}
-
-.subagent-conversation-panel__scroll .msg-sources__heading {
-  font-size: var(--ui-font-caption);
-}
-
-.subagent-conversation-panel__scroll .msg-sources__count {
-  min-width: 0;
-  min-height: 0;
-  padding: 0;
-  background: transparent;
-  color: var(--text-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.subagent-conversation-panel__scroll .msg-sources__list {
-  gap: var(--ui-gap-xs);
-}
-
-.subagent-conversation-panel__scroll .msg-source-chip {
-  max-width: min(100%, calc(190px * var(--ui-scale)));
-  min-height: calc(24px * var(--ui-scale));
-  padding: var(--ui-gap-3xs) var(--ui-gap-sm);
-  border-color: transparent;
-  border-radius: var(--oc-radius-soft);
-  background: color-mix(in srgb, var(--surface-inset) 76%, transparent);
-  color: var(--text-soft);
-}
-
-.subagent-conversation-panel__scroll .msg-source-chip:is(:hover, :focus-visible) {
-  border-color: color-mix(in srgb, var(--accent) 36%, var(--border));
-  background: var(--ui-list-hover-bg);
-}
-
-.subagent-conversation-panel__scroll .msg-source-chip__index {
-  width: auto;
-  height: auto;
-  background: transparent;
-  color: var(--text-muted);
-  font-weight: var(--ui-font-weight-body);
 }
 
 .subagent-conversation-panel__scroll[data-follow-lock="true"] {

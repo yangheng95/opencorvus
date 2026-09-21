@@ -1936,6 +1936,10 @@ function OverlayRoot() {
   })
 
   createEffect(() => {
+    if (!settingsHydrated()) return
+    // Scale changes both pane constraints and default widths. Resolve geometry
+    // after the theme effect applies the hydrated scale, not only on dragging.
+    void settingsStore.zoom
     const sidebarCollapsed = settingsStore.sidebarCollapsed
 
     const sidebar = document.getElementById("sidebar")
@@ -1955,6 +1959,7 @@ function OverlayRoot() {
       sidebarCollapsed,
       sidebarWidth: settingsStore.sidebarWidth,
     })
+    renderRightDockWidth()
   })
 
   return (

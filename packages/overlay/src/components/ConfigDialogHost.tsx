@@ -382,11 +382,10 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
       case "about":
         return (
           <SettingsPanel>
-            <SettingsGroup title={t("about.author_name")}>
+            <SettingsGroup>
               <SettingsSurface>
                 <SettingsRow
                   align="center"
-                  leading={<Icon name="avatar-user" size="display" />}
                   title="杨恒@GitHub"
                   desc={t("about.self_built")}
                   actions={
@@ -411,9 +410,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
             </SettingsGroup>
             <SettingsGroup title={t("about.runtime")}>
               <SettingsSurface id="aboutRuntimeGrid">
-                <For each={aboutRows()}>
-                  {(row) => <SettingsRow align="center" title={row[0]} actions={<span>{row[1]}</span>} />}
-                </For>
+                <For each={aboutRows()}>{(row) => <SettingsRow title={row[0]} value={row[1]} />}</For>
               </SettingsSurface>
             </SettingsGroup>
             <DesktopUpdatePanel />

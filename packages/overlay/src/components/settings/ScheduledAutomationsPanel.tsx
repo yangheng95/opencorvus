@@ -1,3 +1,4 @@
+import { Feedback } from "../ui/Feedback"
 import { createEffect, createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
 import { activeSessionID, rootTaskSessionID } from "../../store/board"
 import {
@@ -41,7 +42,7 @@ import { SearchField } from "../ui/SearchField"
 import { SegmentedControl } from "../ui/SegmentedControl"
 import { SelectControl } from "../ui/SelectControl"
 import { TextField } from "../ui/TextField"
-import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsState, SettingsSurface } from "./layout"
+import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./layout"
 
 type SelectOption<T extends string> = { value: T; label: string }
 type AutomationError = { message: string; retry?: () => void; source?: "list-load" }
@@ -643,8 +644,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
           <Button
             type="button"
             variant="solid"
-            size="sm"
-            tone="accent"
+            size="md"
+            tone="neutral"
             data-ui="automation-create"
             disabled={loading() || Boolean(busyAction())}
             onClick={beginCreate}
@@ -660,7 +661,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
         <SettingsSurface class="automations-layout" data-drill-in={showForm() || selected() ? "true" : undefined}>
           <Show when={!initialLoadError() ? error() : null}>
             {(problem) => (
-              <SettingsState
+              <Feedback
                 tone="error"
                 actions={
                   <Show when={problem().retry}>
@@ -681,13 +682,13 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                 }
               >
                 {problem().message}
-              </SettingsState>
+              </Feedback>
             )}
           </Show>
           <Show
             when={!initialLoadError()}
             fallback={
-              <SettingsState
+              <Feedback
                 tone="error"
                 actions={
                   <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => initialLoadError()?.retry?.()}>
@@ -697,7 +698,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                 }
               >
                 {initialLoadError()?.message}
-              </SettingsState>
+              </Feedback>
             }
           >
           <aside ref={listElement} class="automations-list" aria-label={t("automations.list")}>
@@ -836,7 +837,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         type="button"
                         variant="solid"
                         size="md"
-                        tone="accent"
+                        tone="neutral"
                         disabled={loading() || Boolean(busyAction())}
                         onClick={beginCreate}
                       >
@@ -974,7 +975,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         <h4>{t("automations.prompt")}</h4>
                         <p>{automation().prompt}</p>
                         <Show when={automation().lastError}>
-                          <SettingsState tone="error">{automation().lastError}</SettingsState>
+                          <Feedback tone="error">{automation().lastError}</Feedback>
                         </Show>
                       </section>
 
@@ -1000,7 +1001,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                               when={selectedRunState().status === "error"}
                               fallback={<p class="automations-muted" role="status">{t("common.loading")}</p>}
                             >
-                              <SettingsState
+                              <Feedback
                                 tone="error"
                                 actions={
                                   <Button
@@ -1016,7 +1017,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                                 }
                               >
                                 {selectedRunState().error}
-                              </SettingsState>
+                              </Feedback>
                             </Show>
                           }
                         >
@@ -1099,7 +1100,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                       type="submit"
                       variant="solid"
                       size="md"
-                      tone="accent"
+                      tone="neutral"
                       disabled={
                         Boolean(busyAction()) ||
                         !name().trim() ||

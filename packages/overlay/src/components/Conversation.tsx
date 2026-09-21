@@ -19,6 +19,7 @@ import { conversationAgentRecordsForSource, conversationAgentStore } from "../st
 import { listenConversationCardScroll, type ConversationCardScrollRequest } from "../services/conversation-scroll"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { Icon } from "./ui/Icon"
+import { DropdownMenu } from "./ui/DropdownMenu"
 import { Button } from "./ui/Button"
 import { StatusIndicator } from "./ui/StatusIndicator"
 import { projectDirectoryLabel } from "../utils/project-directory"
@@ -456,8 +457,7 @@ export function Conversation(props: {
     const failure = boardStore.taskSelectionError
     return failure?.taskID === currentTaskID() ? failure : null
   }
-  const homeContentActive = () =>
-    props.homeActive && !taskContextID() && !selectedTaskLoadError() && !hasItems()
+  const homeContentActive = () => props.homeActive && !taskContextID() && !selectedTaskLoadError() && !hasItems()
   const retryTaskLoad = () => {
     void retrySelectedTaskSelection().catch(() => undefined)
   }
@@ -760,23 +760,55 @@ export function Conversation(props: {
                 </div>
               </Show>
               <div class="chat-home-suggestions">
-                <For each={homeSuggestions()}>
+                <For each={homeSuggestions().slice(0, 3)}>
                   {(item) => (
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
                       tone="neutral"
-                      class="chat-home-suggestion oc-action-tile"
+                      class="chat-home-suggestion"
                       data-suggestion-example={item.id}
-                      data-suggestion-tone={item.tone}
                       onClick={() => fillHomeSuggestionPrompt(item.prompt)}
                     >
-                      <Icon name={item.icon} size="medium" />
+                      <span class="chat-home-suggestion-icon">
+                        <Icon name={item.icon} size="medium" />
+                      </span>
                       <span>{item.label}</span>
                     </Button>
                   )}
                 </For>
+                <DropdownMenu.Root placement="bottom-end" fitViewport>
+                  <DropdownMenu.Trigger
+                    as={Button}
+                    variant="ghost"
+                    size="sm"
+                    tone="neutral"
+                    class="chat-home-suggestion"
+                  >
+                    <span class="chat-home-suggestion-icon">
+                      <Icon name="more-horizontal" size="medium" />
+                    </span>
+                    <span>{t("common.more")}</span>
+                    <Icon name="chevron-down" size="compact" />
+                  </DropdownMenu.Trigger>
+                  <DropdownMenu.Portal>
+                    <DropdownMenu.Content>
+                      <For each={homeSuggestions().slice(3)}>
+                        {(item) => (
+                          <DropdownMenu.Item
+                            as="button"
+                            type="button"
+                            onSelect={() => fillHomeSuggestionPrompt(item.prompt)}
+                          >
+                            <Icon name={item.icon} size="standard" />
+                            {item.label}
+                          </DropdownMenu.Item>
+                        )}
+                      </For>
+                    </DropdownMenu.Content>
+                  </DropdownMenu.Portal>
+                </DropdownMenu.Root>
               </div>
             </div>
           </Portal>

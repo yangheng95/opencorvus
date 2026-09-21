@@ -1,3 +1,4 @@
+import { Feedback } from "../ui/Feedback"
 import { createMemo, createSignal, onCleanup, onMount, Show } from "solid-js"
 import type { WorkLedgerCursor, WorkLedgerRow, WorkLedgerTaskRow } from "../../services/work-ledger"
 import { loadWorkLedger } from "../../services/work-ledger"
@@ -7,7 +8,7 @@ import { taskLifecycleStatusOrIdleLabel } from "../../utils/status-labels"
 import { t } from "../../utils/i18n"
 import { MemoryPanel } from "../MemoryPanel"
 import { SelectControl } from "../ui/SelectControl"
-import { SettingsGroup, SettingsPanel, SettingsState } from "./layout"
+import { SettingsGroup, SettingsPanel } from "./layout"
 
 interface MemoryTaskOption {
   key: string
@@ -136,9 +137,7 @@ export function MemoryContextPanel() {
             })}
           />
           <Show when={taskLoadError()}>
-            <SettingsState tone="error">
-              {t("memory.task_picker_load_failed", { error: taskLoadError() })}
-            </SettingsState>
+            <Feedback tone="error">{t("memory.task_picker_load_failed", { error: taskLoadError() })}</Feedback>
           </Show>
         </div>
       </SettingsGroup>

@@ -1,3 +1,4 @@
+import { Feedback } from "../ui/Feedback"
 import { createSignal, onCleanup } from "solid-js"
 import { configure as configureApi } from "../../services/api"
 import { checkConnection } from "../../services/connection"
@@ -5,7 +6,7 @@ import { reloadProjectScope } from "../../services/config"
 import { settingsStore, setSettingsStore, saveSettings } from "../../store/settings"
 import { t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
-import { SettingsGroup, SettingsRow, SettingsState } from "./layout"
+import { SettingsGroup, SettingsRow } from "./layout"
 import { TextField } from "../ui/TextField"
 
 function errorMessage(error: unknown): string {
@@ -129,9 +130,9 @@ export function ServerConnectionSettingsGroup() {
         }
       />
       {error() ? (
-        <SettingsState tone="error" data-ui="settings-server-status">
+        <Feedback tone="error" data-ui="settings-server-status">
           {error()}
-        </SettingsState>
+        </Feedback>
       ) : null}
     </SettingsGroup>
   )

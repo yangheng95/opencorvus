@@ -1,3 +1,4 @@
+import { Feedback } from "../ui/Feedback"
 // ── ExpertSquadPanel ──
 // Dynamic expert-squad catalog surface. Active selection remains config-owned
 // via prompt_profile.active; this panel edits only that existing config field.
@@ -47,7 +48,7 @@ import { Disclosure } from "../ui/Disclosure"
 import { DropdownMenu } from "../ui/DropdownMenu"
 import { Icon, type IconName } from "../ui/Icon"
 import { Tab, TabList, TabPanel, Tabs } from "../ui/Tabs"
-import { SettingsGroup, SettingsPanel, SettingsRow, SettingsState, SettingsSurface } from "./layout"
+import { SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./layout"
 import { showAppDialog } from "../../services/app-dialog"
 import { TextField } from "../ui/TextField"
 import { Switch } from "../ui/Switch"
@@ -1156,19 +1157,19 @@ export default function ExpertSquadPanel() {
         <Show
           when={squad()?.configuration}
           fallback={
-            <SettingsState title={t("expert_squad.configuration_unavailable_title")}>
+            <Feedback title={t("expert_squad.configuration_unavailable_title")}>
               {t("expert_squad.configuration_unavailable_body")}
-            </SettingsState>
+            </Feedback>
           }
         >
           <Show
             when={!configurationLoading()}
-            fallback={<SettingsState>{t("expert_squad.configuration_loading")}</SettingsState>}
+            fallback={<Feedback>{t("expert_squad.configuration_loading")}</Feedback>}
           >
             <Show when={configurationError()}>
-              <SettingsState tone="error" data-ui="expert-squad-configuration-error">
+              <Feedback tone="error" data-ui="expert-squad-configuration-error">
                 {configurationError()}
-              </SettingsState>
+              </Feedback>
             </Show>
             <Show when={configuration()} keyed>
               {(current) => (
@@ -1272,36 +1273,53 @@ export default function ExpertSquadPanel() {
   return (
     <>
       <Show when={notice()}>
-        <SettingsState tone={noticeTone() === "error" ? "error" : "success"} data-ui="expert-squad-notice">
+        <Feedback tone={noticeTone() === "error" ? "error" : "success"} data-ui="expert-squad-notice">
           {notice()}
-        </SettingsState>
+        </Feedback>
       </Show>
 
       <SettingsPanel class="general-panel expert-squad-panel">
         <SettingsGroup>
           <Show when={catalogError()}>
-            <SettingsState tone="error" data-ui="expert-squad-catalog-error">
-              {t("expert_squad.catalog_failed", {
+            <Feedback
+              tone="error"
+              data-ui="expert-squad-catalog-error"
+              title={t("expert_squad.catalog_recovery_title")}
+              details={t("expert_squad.catalog_failed", {
                 directory: catalogDirectoryLabel(),
                 error: catalogError(),
               })}
-            </SettingsState>
+              actions={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  tone="neutral"
+                  disabled={loading()}
+                  onClick={() => void refreshCatalog().catch(() => undefined)}
+                >
+                  {t("common.retry")}
+                </Button>
+              }
+            >
+              {t("expert_squad.catalog_unavailable_hint")}
+            </Feedback>
           </Show>
           <For each={catalogIssues()}>
             {(issue) => (
-              <SettingsState tone="error" data-ui="expert-squad-catalog-issue">
+              <Feedback tone="error" data-ui="expert-squad-catalog-issue">
                 {t("expert_squad.catalog_issue", {
                   owner: [issue.id, issue.phase].filter(Boolean).join(" · "),
                   error: issue.message,
                 })}
-              </SettingsState>
+              </Feedback>
             )}
           </For>
           <For each={catalogWarnings()}>
             {(warning) => (
-              <SettingsState data-ui="expert-squad-catalog-warning">
+              <Feedback data-ui="expert-squad-catalog-warning">
                 {t("expert_squad.project_override_warning", { id: warning.logical_id })}
-              </SettingsState>
+              </Feedback>
             )}
           </For>
           <Show when={catalogDiagnosticsNextCursor()}>
@@ -1310,7 +1328,7 @@ export default function ExpertSquadPanel() {
             </Button>
           </Show>
           <Show when={actionError()}>
-            <SettingsState
+            <Feedback
               tone="error"
               data-ui="expert-squad-action-error"
               actions={
@@ -1323,7 +1341,7 @@ export default function ExpertSquadPanel() {
                 directory: catalogDirectoryLabel(),
                 error: actionError(),
               })}
-            </SettingsState>
+            </Feedback>
           </Show>
 
           <Show when={!loading()} fallback={<div class="loading-hint">{t("expert_squad.loading")}</div>}>
@@ -1336,7 +1354,7 @@ export default function ExpertSquadPanel() {
                 </div>
               )}
             </Show>
-            <Show when={!scopeStatus() && catalogError()}>
+            <Show when={!scopeStatus() && catalogError() && (marketLoading() || recoveryUpdates().length > 0)}>
               <div class="expert-squad-recovery" data-ui="expert-squad-catalog-recovery" data-status="failed">
                 <Icon name="folder-open" size="medium" />
                 <div class="expert-squad-recovery-content">
@@ -1439,7 +1457,7 @@ export default function ExpertSquadPanel() {
                                   <Badge tone="accent">{t("expert_squad.system_generator")}</Badge>
                                 </Show>
                                 <Show when={effectiveActiveID() === squad.id && isEffectiveInstallation(squad)}>
-                                  <Badge tone="accent">{t("expert_squad.effective_active")}</Badge>
+                                  <Badge tone="muted">{t("expert_squad.effective_active")}</Badge>
                                 </Show>
                               </>
                             }
@@ -1470,22 +1488,12 @@ export default function ExpertSquadPanel() {
                   <div class="loading-hint">{t("expert_squad.loading")}</div>
                 </Show>
                 <Show when={selectedDetailError()}>
-                  <SettingsState tone="error">{selectedDetailError()}</SettingsState>
+                  <Feedback tone="error">{selectedDetailError()}</Feedback>
                 </Show>
                 <Show when={currentSquad()} keyed>
                   {(squad) => (
                     <div class="expert-squad-detail" data-ui="expert-squad-detail">
                       <header class="expert-squad-identity-head expert-squad-installed-identity">
-                        <span class="expert-squad-identity-icon" aria-hidden="true">
-                          <Icon
-                            name={
-                              squad.system_role === "expert_squad_generator"
-                                ? "config-expert-squad-install"
-                                : "expert-squad"
-                            }
-                            size="large"
-                          />
-                        </span>
                         <div class="expert-squad-identity-copy">
                           <h2>{squad.name}</h2>
                           <div class="expert-squad-identity-meta">
@@ -1600,49 +1608,53 @@ export default function ExpertSquadPanel() {
                       </header>
 
                       <div class="expert-squad-selection-actions" data-ui="expert-squad-actions">
-                        <Button
-                          type="button"
-                          variant={isProjectActiveInstallation(squad) ? "outline" : "solid"}
-                          size="md"
-                          tone={isProjectActiveInstallation(squad) ? "neutral" : "accent"}
-                          data-ui="expert-squad-activate-project"
-                          disabled={
-                            !writableScopeAvailable() ||
-                            !!activeBusy() ||
-                            !isEffectiveInstallation(squad) ||
-                            isProjectActiveInstallation(squad)
-                          }
-                          onClick={activateProject}
-                        >
-                          <Icon name={isProjectActiveInstallation(squad) ? "check" : "folder"} />
-                          <span>
-                            {isProjectActiveInstallation(squad)
-                              ? t("expert_squad.project_active")
-                              : t("expert_squad.activate_project")}
-                          </span>
-                        </Button>
-                        <Show when={currentScopeSessionID()}>
+                        <Show when={!isProjectActiveInstallation(squad)}>
                           <Button
                             type="button"
-                            variant={isSessionOverrideInstallation(squad) ? "outline" : "solid"}
+                            variant="outline"
                             size="md"
-                            tone={isSessionOverrideInstallation(squad) ? "neutral" : "accent"}
-                            data-ui="expert-squad-activate-session"
+                            tone="neutral"
+                            data-ui="expert-squad-activate-project"
                             disabled={
                               !writableScopeAvailable() ||
                               !!activeBusy() ||
                               !isEffectiveInstallation(squad) ||
-                              isSessionOverrideInstallation(squad)
+                              isProjectActiveInstallation(squad)
                             }
-                            onClick={activateSession}
+                            onClick={activateProject}
                           >
-                            <Icon name={isSessionOverrideInstallation(squad) ? "check" : "message"} />
+                            <Icon name={isProjectActiveInstallation(squad) ? "check" : "folder"} />
                             <span>
-                              {isSessionOverrideInstallation(squad)
-                                ? t("expert_squad.session_override")
-                                : t("expert_squad.activate_session")}
+                              {isProjectActiveInstallation(squad)
+                                ? t("expert_squad.project_active")
+                                : t("expert_squad.activate_project")}
                             </span>
                           </Button>
+                        </Show>
+                        <Show when={currentScopeSessionID()}>
+                          <Show when={!isSessionOverrideInstallation(squad)}>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="md"
+                              tone="neutral"
+                              data-ui="expert-squad-activate-session"
+                              disabled={
+                                !writableScopeAvailable() ||
+                                !!activeBusy() ||
+                                !isEffectiveInstallation(squad) ||
+                                isSessionOverrideInstallation(squad)
+                              }
+                              onClick={activateSession}
+                            >
+                              <Icon name={isSessionOverrideInstallation(squad) ? "check" : "message"} />
+                              <span>
+                                {isSessionOverrideInstallation(squad)
+                                  ? t("expert_squad.session_override")
+                                  : t("expert_squad.activate_session")}
+                              </span>
+                            </Button>
+                          </Show>
                           <Show when={sessionOverrideID()}>
                             <Button
                               type="button"
@@ -1705,10 +1717,12 @@ export default function ExpertSquadPanel() {
                               </dd>
                             </div>
                           </dl>
-                          <div class="expert-squad-overview-note">
-                            <h3>{t("expert_squad.detail_runtime_boundary")}</h3>
-                            <p>{t("expert_squad.detail_runtime_boundary_body")}</p>
-                          </div>
+                          <Disclosure.Root class="expert-squad-overview-note">
+                            <Disclosure.Trigger>{t("expert_squad.detail_runtime_boundary")}</Disclosure.Trigger>
+                            <Disclosure.Content>
+                              <p>{t("expert_squad.detail_runtime_boundary_body")}</p>
+                            </Disclosure.Content>
+                          </Disclosure.Root>
                         </TabPanel>
 
                         <TabPanel value="agents" class="expert-squad-detail-panel">

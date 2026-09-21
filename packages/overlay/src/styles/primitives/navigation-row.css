@@ -2,7 +2,7 @@
  * hover/selected feedback; the compact density variant additionally owns
  * ledger-row geometry so Project and work-item bars cannot drift. */
 .oc-navigation-row {
-  border-radius: var(--oc-radius-large);
+  border-radius: var(--oc-radius-soft);
   background: transparent;
   transition:
     background-color var(--ui-duration-base) var(--ui-timing-standard),

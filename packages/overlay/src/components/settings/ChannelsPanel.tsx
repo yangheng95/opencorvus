@@ -1,3 +1,4 @@
+import { Feedback } from "../ui/Feedback"
 // Solid.js component for channel configuration.
 // Data source: appStore.channels + appStore.config (populated by loadConfigInfo).
 // Save: channel config via PATCH /config (same as pre-Solid original).
@@ -19,7 +20,7 @@ import {
   channelConfigurationStatusLabelFromString,
   channelConfigurationStatusToneFromString,
 } from "../../utils/settings-status-labels"
-import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsState } from "./layout"
+import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
 
 interface ChannelField {
   key: string
@@ -307,14 +308,14 @@ export default function ChannelsPanel(props: { directory: string }) {
 
   function noticeState() {
     return (
-      <SettingsState
+      <Feedback
         tone={noticeTone() === "error" ? "error" : "success"}
         data-ui="channel-settings-notice"
         role={noticeTone() === "error" ? "alert" : "status"}
         aria-live={noticeTone() === "error" ? "assertive" : "polite"}
       >
         {notice()}
-      </SettingsState>
+      </Feedback>
     )
   }
 
@@ -322,7 +323,7 @@ export default function ChannelsPanel(props: { directory: string }) {
     <>
       <SettingsPanel class="channel-panel">
         <For each={appStore.configLoadIssues.filter((issue) => issue.resource === "channel")}>
-          {(issue) => <SettingsState tone="error">{issue.message}</SettingsState>}
+          {(issue) => <Feedback tone="error">{issue.message}</Feedback>}
         </For>
         <Show when={notice() && noticeFormIdentity() === "catalog"}>{noticeState()}</Show>
 

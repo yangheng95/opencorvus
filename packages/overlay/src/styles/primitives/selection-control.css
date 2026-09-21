@@ -32,7 +32,7 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border: var(--oc-border-width) solid var(--border);
+  border: var(--oc-border-width) solid var(--border-hover);
   border-radius: var(--oc-radius-soft);
   background: var(--surface-inset);
   color: var(--text-on-accent);
@@ -59,7 +59,7 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border: var(--oc-border-width) solid var(--border);
+  border: var(--oc-border-width) solid var(--border-hover);
   border-radius: var(--oc-radius-pill);
   background: var(--surface-inset);
   transition:

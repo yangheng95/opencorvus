@@ -1,28 +1,17 @@
+import { Feedback } from "../ui/Feedback"
 import type { MissionSkillSettingsResponse } from "@opencorvus-ai/sdk"
 import { For, Show, createEffect, createMemo, createSignal } from "solid-js"
 import { expertSquadSettingsScope, type ExpertSquadCatalogScopeState } from "../../services/expert-squad-scope"
 import { ensureMissionSkillDirectory, loadMissionSkillSettings } from "../../services/mission-skill"
-import {
-  pathRevealFailureText,
-  pathRevealLabelKey,
-  pathRevealNoticeKey,
-  revealPath,
-} from "../../services/workspace"
+import { pathRevealFailureText, pathRevealLabelKey, pathRevealNoticeKey, revealPath } from "../../services/workspace"
 import { t, tc } from "../../utils/i18n"
-import { Badge, type BadgeTone } from "../ui/Badge"
+import { Badge } from "../ui/Badge"
+import { Disclosure } from "../ui/Disclosure"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
 import { SearchField } from "../ui/SearchField"
 import { copyText } from "../../services/clipboard"
-import {
-  SettingsEmpty,
-  SettingsGroup,
-  SettingsPanel,
-  SettingsRow,
-  SettingsState,
-  SettingsSurface,
-  SettingsToolbar,
-} from "./layout"
+import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface, SettingsToolbar } from "./layout"
 
 type MissionSkillSettingsItem = MissionSkillSettingsResponse["mission_skills"][number]
 type MissionSkillSource = MissionSkillSettingsItem["source"]
@@ -39,12 +28,6 @@ function sourceLabel(source: MissionSkillSource): string {
   if (source === "built_in") return t("mission_skill.source.built_in")
   if (source === "project") return t("mission_skill.source.project")
   return t("mission_skill.source.global")
-}
-
-function sourceTone(source: MissionSkillSource): BadgeTone {
-  if (source === "built_in") return "accent"
-  if (source === "project") return "ok"
-  return "muted"
 }
 
 function filterLabel(filter: MissionSkillFilter): string {
@@ -220,7 +203,6 @@ export default function MissionSkillPanel() {
       <SettingsGroup
         title={t("mission_skill.boundary_title")}
         description={t("mission_skill.intro")}
-        contentInset
         actions={
           <Button
             type="button"
@@ -236,27 +218,25 @@ export default function MissionSkillPanel() {
           </Button>
         }
       >
-        <SettingsState tone="info" actions={<Badge tone="accent">{t("mission_skill.mission_only")}</Badge>}>
-          {t("mission_skill.boundary_body")}
-        </SettingsState>
+        <p class="mission-skill-boundary-copy">{t("mission_skill.boundary_body")}</p>
       </SettingsGroup>
 
       <Show when={notice()}>
-        <SettingsState tone={noticeTone() === "error" ? "error" : "success"}>{notice()}</SettingsState>
+        <Feedback tone={noticeTone() === "error" ? "error" : "success"}>{notice()}</Feedback>
       </Show>
       <Show when={error()}>
-        <SettingsState tone="error" data-ui="mission-skill-error">
+        <Feedback tone="error" data-ui="mission-skill-error">
           {error()}
-        </SettingsState>
+        </Feedback>
       </Show>
       <For each={catalogIssues()}>
         {(issue) => (
-          <SettingsState tone="error" data-ui="mission-skill-catalog-issue">
+          <Feedback tone="error" data-ui="mission-skill-catalog-issue">
             {t("mission_skill.catalog_issue", {
               owner: [issue.name, issue.source, issue.path].filter(Boolean).join(" · "),
               error: issue.message,
             })}
-          </SettingsState>
+          </Feedback>
         )}
       </For>
 
@@ -300,12 +280,12 @@ export default function MissionSkillPanel() {
           <Show
             when={!scopeStatus()}
             fallback={
-              <SettingsState tone="warning" title={t("expert_squad.scope_unavailable_title")}>
+              <Feedback tone="warning" title={t("expert_squad.scope_unavailable_title")}>
                 {scopeStatus()}
-              </SettingsState>
+              </Feedback>
             }
           >
-            <Show when={!loading() || scopedCatalog()} fallback={<SettingsState>{t("common.loading")}</SettingsState>}>
+            <Show when={!loading() || scopedCatalog()} fallback={<Feedback>{t("common.loading")}</Feedback>}>
               <Show
                 when={skills().length > 0}
                 fallback={
@@ -329,10 +309,9 @@ export default function MissionSkillPanel() {
                             interactive
                             leading={<Icon name="workflow" />}
                             title={skill.name}
-                            desc={skill.description}
                             meta={
                               <>
-                                <Badge tone={sourceTone(skill.source)} size="sm">
+                                <Badge tone="muted" size="sm">
                                   {sourceLabel(skill.source)}
                                 </Badge>
                                 <span>{tc("mission_skill.tools_count", skill.required_tools.length)}</span>
@@ -353,10 +332,10 @@ export default function MissionSkillPanel() {
                               <span>{t("mission_skill.detail_eyebrow")}</span>
                               <h3>{skill().name}</h3>
                             </div>
-                            <Badge tone={sourceTone(skill().source)}>{sourceLabel(skill().source)}</Badge>
+                            <Badge tone="muted">{sourceLabel(skill().source)}</Badge>
                           </header>
                           <p class="mission-skill-detail-description">{skill().description}</p>
-                          <div class="mission-skill-detail-section">
+                          <div class="mission-skill-detail-section mission-skill-invocation">
                             <strong>{t("mission_skill.invoke_title")}</strong>
                             <code>{invocation(skill().name)}</code>
                             <Button
@@ -371,17 +350,21 @@ export default function MissionSkillPanel() {
                               {t("mission_skill.copy_invocation")}
                             </Button>
                           </div>
-                          <div class="mission-skill-detail-section">
-                            <strong>{t("mission_skill.required_tools")}</strong>
-                            <div class="mission-skill-tool-list">
-                              <Show
-                                when={skill().required_tools.length > 0}
-                                fallback={<span>{t("mission_skill.no_required_tools")}</span>}
-                              >
-                                <For each={skill().required_tools}>{(tool) => <Badge tone="muted">{tool}</Badge>}</For>
-                              </Show>
-                            </div>
-                          </div>
+                          <Disclosure.Root class="mission-skill-detail-section">
+                            <Disclosure.Trigger>
+                              {tc("mission_skill.tools_count", skill().required_tools.length)}
+                            </Disclosure.Trigger>
+                            <Disclosure.Content>
+                              <div class="mission-skill-tool-list">
+                                <Show
+                                  when={skill().required_tools.length > 0}
+                                  fallback={<span>{t("mission_skill.no_required_tools")}</span>}
+                                >
+                                  <For each={skill().required_tools}>{(tool) => <code>{tool}</code>}</For>
+                                </Show>
+                              </div>
+                            </Disclosure.Content>
+                          </Disclosure.Root>
                           <Show when={skill().location}>
                             {(location) => (
                               <div class="mission-skill-detail-section">

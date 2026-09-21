@@ -13,7 +13,10 @@
 }
 
 .automations-page-intro {
-  display: grid;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--ui-gap-xl);
 }
 
@@ -62,45 +65,22 @@
   display: none;
 }
 
-.automations-layout > .s-state {
+.automations-layout > .oc-feedback {
   margin-bottom: var(--ui-gap-2xl);
 }
 
 .automations-search.search-field {
   width: 100%;
-  min-height: calc(44px * var(--ui-scale));
-  border-radius: calc(24px * var(--ui-scale));
 }
 
 .automations-filter.oc-segmented {
   display: flex;
   width: max-content;
-  margin-top: var(--ui-gap-4xl);
+  margin-top: var(--ui-gap-xl);
   padding: 0;
   gap: var(--ui-gap-sm);
   border: 0;
   background: transparent;
-}
-
-.automations-filter .oc-segmented__item {
-  min-height: calc(34px * var(--ui-scale));
-  padding: 0 var(--ui-gap-lg);
-  border: 0;
-  border-radius: var(--oc-radius-large);
-  background: transparent;
-  color: var(--text-muted);
-  font-size: var(--ui-font-body);
-  font-weight: var(--ui-font-weight-body);
-}
-
-.automations-filter .oc-segmented__item:is(:hover, :focus-visible) {
-  background: var(--settings-surface-hover);
-  color: var(--text-strong);
-}
-
-.automations-filter .oc-segmented__item[data-pressed] {
-  background: var(--settings-surface-muted);
-  color: var(--text-strong);
 }
 
 .automations-scope-filter.oc-segmented {
@@ -236,22 +216,7 @@
   width: calc(18px * var(--ui-scale));
   height: calc(18px * var(--ui-scale));
   margin: var(--ui-gap-3xs) auto 0;
-}
-
-.automation-suggestion:nth-of-type(1) > .oc-icon {
-  color: var(--accent);
-}
-
-/* Sits between the --accent and --good icons above and below it, so it is
- * derived as the midpoint rather than named as a fixed hex. The retired
- * --oc-stage-default was #6eb7ff, which measured 2.08 against the light
- * theme's surfaces — under the 3.0 that non-text UI needs to stay legible. */
-.automation-suggestion:nth-of-type(2) > .oc-icon {
-  color: color-mix(in oklch, var(--accent) 50%, var(--good) 50%);
-}
-
-.automation-suggestion:nth-of-type(3) > .oc-icon {
-  color: var(--good);
+  color: var(--text-soft);
 }
 
 .automation-suggestion > span {
