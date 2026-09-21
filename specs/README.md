@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[0.1.9 Windows local build](records/2026-09/2026-09-21-v0.1.9-local-build.md).
+
 [Artifact batch queries and reads](records/2026-09/2026-09-21-artifact-batch-reads.md).
 
 [CLI run P0 repair](records/2026-09/2026-09-21-cli-run-p0.md).
