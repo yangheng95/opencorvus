@@ -125,6 +125,7 @@ const packages = [
 
 const packageRoot = (id: string) => path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", id)
 const skillRef = (id: string) => `${id}/shared/method`
+const packageVersion = (id: string) => id === "scientific-research-design" ? "2026.09.21.1" : "2026.08.30.2"
 
 afterAll(async () => {
   await resetMemoryDatabase()
@@ -143,7 +144,7 @@ describe("Ten-domain Expert Squad package expansion", () => {
         schema_version: 2,
         namespace: "builtin",
         id: definition.id,
-        version: "2026.08.30.2",
+        version: packageVersion(definition.id),
       })
       expect([...loaded.packageSkills.keys()]).toEqual([ref])
       expect(method.definition.name).toBe(definition.skillName)
@@ -190,7 +191,7 @@ describe("Ten-domain Expert Squad package expansion", () => {
 
           expect(scheduler).toMatchObject({
             expertSquadID: definition.id,
-            packageRevision: { version: "2026.08.30.2" },
+            packageRevision: { version: packageVersion(definition.id) },
           })
           expect(scheduler.productionSkills.map((skill) => ({ ref: skill.ref, source: skill.source }))).toEqual([
             { ref, source: "package" },
@@ -204,6 +205,12 @@ describe("Ten-domain Expert Squad package expansion", () => {
               packageRevision: revision,
               agentID,
             })
+            if (agentID === "research-decision-integrator") {
+              expect(worker.identity).toMatchObject({ baseRole: "delegated-worker", dispatchAdapterID: "delegated_worker" })
+            }
+            if (agentID === "cloud-architecture-decision-owner") {
+              expect(worker.identity).toMatchObject({ baseRole: "architect", dispatchAdapterID: "architect" })
+            }
             expect(worker.productionSkills.map((skill) => ({ ref: skill.ref, source: skill.source }))).toEqual([
               { ref, source: "package" },
             ])

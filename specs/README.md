@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+[Historical scientific mission repair](records/2026-08/2026-08-22-deberta-absa-multi-squad-mission.md).
+
 [0.1.9 Windows local build](records/2026-09/2026-09-21-v0.1.9-local-build.md).
 
 [Artifact batch queries and reads](records/2026-09/2026-09-21-artifact-batch-reads.md).

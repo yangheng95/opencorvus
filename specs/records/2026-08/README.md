@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [Historical scientific mission repair](2026-08-22-deberta-absa-multi-squad-mission.md)
+
 - [2026-08-31-scheduled-busy-occurrence-e2e-repair.md](2026-08-31-scheduled-busy-occurrence-e2e-repair.md) diagnoses the missing durable delay lease for a due recurring Session Automation while its exact Session is busy, restores that delay through the canonical control-lease owner transaction, and records the isolated real-instance E2E closure.
 
 - [2026-08-30-search-native-capability-phase-cd.md](2026-08-30-search-native-capability-phase-cd.md) atomically cuts every Provider step from eager Registry, MCP, Skill, and stage Tool injection to occurrence-bound search, exact-leaf reveal receipts, CAS budgets, and pre-materialization Harness V2.

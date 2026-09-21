@@ -113,7 +113,7 @@ export const generatedExpertSquadRevisions: Readonly<
   "robotics-safety-validation": { version: "2026.08.30.2", contentDigest: "dbf3d83e4138ba1bb9b26ba7972ca775367b1c5c431d225175696e3e6470db10" },
   "sales-strategy": { version: "2026.09.02.1", contentDigest: "5899bc22f44b5291b15c94e733cf8021c4831e4aa4847a43f6af150bf789c710" },
   "satellite-mission-operations": { version: "2026.08.30.2", contentDigest: "dfb44b9f48871289449d6148e1b32c813e43e82eeb82f767c0659999056a32d9" },
-  "scientific-research-design": { version: "2026.08.30.2", contentDigest: "fbaae43ae0a10cc3adcacf425d6d41b38002a8a993940ee39b06b3af03416485" },
+  "scientific-research-design": { version: "2026.09.21.1", contentDigest: "02a536adbf6b097779c25c0c857a04d8be50f75675eec8990a39700076cf61c5" },
   "securities-post-trade-operations": { version: "2026.08.30.2", contentDigest: "e129e3f9e09ff1a54294a8165123b20b9ddb2d8c1ff1a045a612b5c4ceb62580" },
   "semiconductor-yield-engineering": { version: "2026.08.30.2", contentDigest: "2febaa91052e4cdeb815f556015e841d87d4f2e7e77fcc4d0c2b77b512ace5e8" },
   "seo-geo": { version: "2026.08.30.2", contentDigest: "c6ee96542d257a7ed8f89f6add3595fc0d2ae025aa3dfe0a15d90c07ad6d262b" },
