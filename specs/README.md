@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Codex-aligned UI review and design proposal](records/2026-09/2026-09-21-codex-aligned-ui-design.md)
+
 - [2026-08-24-character-led-product-video-v8](records/2026-08/2026-08-24-character-led-product-video-v8.md)
 - [2026-08-24-minimax-h3-mission-promo-video](records/2026-08/2026-08-24-minimax-h3-mission-promo-video.md)
 - [2026-08-24-paper-collage-explainer-v6](records/2026-08/2026-08-24-paper-collage-explainer-v6.md)

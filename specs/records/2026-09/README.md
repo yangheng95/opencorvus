@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Codex-aligned UI review and design proposal](2026-09-21-codex-aligned-ui-design.md)
+
 - [0.1.9 Windows local build](2026-09-21-v0.1.9-local-build.md)
 
 - [Artifact batch queries and reads](2026-09-21-artifact-batch-reads.md)
