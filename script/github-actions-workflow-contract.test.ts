@@ -198,7 +198,7 @@ describe("GitHub Actions workflow contract", () => {
     expect(jobs["bundle-linux"]?.steps?.find(({ name }) => name === "Bundle one Linux format")?.run).toContain(
       'script/build.ts --bundle "$BUNDLE_KIND"',
     )
-    expect(jobs["bundle-linux"]?.steps?.find(({ uses }) => uses === "actions/upload-artifact@v7")?.with).toEqual({
+    expect(jobs["bundle-linux"]?.steps?.find(({ name }) => name === "Retain completed Linux format")?.with).toEqual({
       name: "gui-bundle-${{ inputs.platform }}-${{ matrix.kind }}",
       path: "gui-bundle-${{ matrix.kind }}.tar",
       "if-no-files-found": "error",

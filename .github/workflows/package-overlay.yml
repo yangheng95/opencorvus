@@ -123,14 +123,26 @@ jobs:
         run: |
           python3 -B script/prepare-rpm-bundler.test.py
           echo "key=$(python3 script/prepare-rpm-bundler.py --cache-key)" >> "$GITHUB_OUTPUT"
-      - uses: actions/cache@v6
+      - uses: actions/cache/restore@v6
         if: matrix.kind == 'rpm'
+        id: rpm-cache
         with:
           path: .scratch/rpm-bundler/tool
           key: ${{ runner.os }}-${{ steps.rpm-tool.outputs.key }}
       - name: Install RPM package verifier
         if: matrix.kind == 'rpm'
-        run: sudo bash script/install-ubuntu-packages.sh rpm
+        run: sudo bash script/install-ubuntu-packages.sh rpm python3-rpm
+      - name: Verify native RPM checker contract
+        if: matrix.kind == 'rpm'
+        run: /usr/bin/python3 -B script/check-rpm-package.test.py
+      - name: Prepare corrected RPM bundler
+        if: matrix.kind == 'rpm'
+        run: /usr/bin/python3 script/prepare-rpm-bundler.py
+      - uses: actions/cache/save@v6
+        if: matrix.kind == 'rpm' && steps.rpm-cache.outputs.cache-hit != 'true'
+        with:
+          path: .scratch/rpm-bundler/tool
+          key: ${{ runner.os }}-${{ steps.rpm-tool.outputs.key }}
       - uses: actions/download-artifact@v8
         with:
           artifact-ids: ${{ needs.build.outputs.input-artifact-id }}
@@ -156,9 +168,20 @@ jobs:
       - name: Verify RPM payload and isolated file installation
         if: matrix.kind == 'rpm'
         run: |
-          python3 script/check-rpm-package.py \
+          /usr/bin/python3 script/check-rpm-package.py \
             packages/overlay/src-tauri/target/release/bundle/rpm/*.rpm \
-            packages/overlay/src-tauri/target/release/package-input/*
+            packages/overlay/src-tauri/target/release/opencorvus-overlay \
+            --compiled-input packages/overlay/src-tauri/target/release/package-input/*
+      - name: Retain failed RPM for diagnosis
+        if: failure() && matrix.kind == 'rpm'
+        uses: actions/upload-artifact@v7
+        with:
+          name: failed-rpm-${{ inputs.platform }}
+          path: gui-bundle-rpm.tar
+          if-no-files-found: ignore
+          compression-level: 0
+          overwrite: true
+          retention-days: ${{ inputs.retention-days }}
       - name: Retain completed Linux format
         uses: actions/upload-artifact@v7
         with:

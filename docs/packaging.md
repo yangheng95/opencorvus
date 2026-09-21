@@ -96,10 +96,14 @@ bytes must match their recorded tool identity. These identity checks do not repl
 acceptance.
 
 Before retaining an RPM, `script/check-rpm-package.py` runs system RPM verification,
-checks its uncompressed CPIO digest explicitly, and installs/verifies all files in an empty
-isolated root. The installed executable must match the exact compile artifact. This accepts
+uses the official Python RPM bindings to check the uncompressed CPIO digest explicitly,
+and installs/verifies all files in an empty isolated root. The installed executable must
+match that single RPM stage's post-processing input: Tauri writes its format marker into
+the executable copied from the immutable compile snapshot. Both input digests are recorded. This accepts
 the package file transaction, not a desktop launch or OS dependency integration; packages
 with install scripts require additional acceptance rather than silently skipping those scripts.
+The workflow exercises this checker with system rpmbuild first, saves the verified bundler
+cache before product acceptance, and retains failed RPMs for diagnosis.
 
 After all three formats succeed, assembly restores their archives and invokes
 `package:gui-installer-matrix --skip-build`, including the existing complete installer
