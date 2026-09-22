@@ -3,11 +3,11 @@
   overflow: hidden;
   min-width: calc(120px * var(--ui-scale));
   max-width: min(calc(360px * var(--ui-scale)), calc(100cqw - (var(--ui-gap-md) * 2)));
-  border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-soft);
+  border: var(--ui-focused-popup-border);
+  border-radius: var(--oc-radius-large);
   background: var(--menu-panel-bg);
   color: var(--text-strong);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--ui-focused-popup-shadow);
 }
 
 .oc-select-trigger {

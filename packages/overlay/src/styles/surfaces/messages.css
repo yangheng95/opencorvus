@@ -592,7 +592,7 @@
 }
 
 .dialog-overlay.image-preview-dialog__overlay {
-  background: color-mix(in srgb, var(--text-strong) 90%, transparent);
+  background: color-mix(in srgb, var(--surface-inset) 96%, transparent);
 }
 
 .dialog.dialog-fullscreen .dialog-form.image-preview-dialog__form {
@@ -632,28 +632,31 @@
 .dialog .image-preview-dialog__form .dialog-header-actions {
   flex: 0 0 auto;
   flex-wrap: nowrap;
-  gap: var(--ui-gap-lg);
+  gap: var(--ui-gap-xs);
+  padding: var(--ui-gap-xs);
+  border: var(--ui-focused-popup-border);
+  border-radius: var(--oc-radius-large);
+  background: var(--dialog-bg);
+  box-shadow: var(--ui-focused-popup-shadow);
   pointer-events: auto;
 }
 
 .image-preview-dialog__header-action.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="icon-action"] {
-  --oc-button-height: calc(48px * var(--ui-scale));
+  --oc-button-height: calc(32px * var(--ui-scale));
   --oc-button-padding-x: 0;
-  --oc-button-bg: var(--surface-strong);
+  --oc-button-bg: transparent;
   --oc-button-bg-hover: var(--surface-hover);
-  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--border-strong) 44%, transparent);
-  --oc-button-shadow: 0 calc(8px * var(--ui-scale)) calc(24px * var(--ui-scale))
-    color-mix(in srgb, var(--ui-shadow-tone) 44%, transparent);
+  --oc-button-border: 0;
+  --oc-button-shadow: none;
 
-  width: calc(48px * var(--ui-scale));
-  border-radius: var(--oc-radius-pill);
+  width: calc(32px * var(--ui-scale));
+  border-radius: var(--oc-radius-soft);
   color: var(--text-strong);
 }
 
 .image-preview-dialog__header-action.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="icon-action"]:hover,
 .image-preview-dialog__header-action.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="icon-action"]:focus-visible {
   --oc-button-bg: var(--surface-hover);
-  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--border-strong) 56%, transparent);
 }
 
 .image-preview-dialog__copy-status {

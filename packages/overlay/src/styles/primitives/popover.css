@@ -6,5 +6,36 @@
   background: var(--dialog-bg);
   color: var(--text-strong);
   box-shadow: var(--ui-focused-popup-shadow);
-  z-index: var(--ui-z-overlay);
+  z-index: calc(var(--ui-z-dialog) + 1);
+}
+
+/* Kobalte owns presence and placement; motion only runs on opening/closing. */
+@media (prefers-reduced-motion: no-preference) {
+  :is(.oc-popover, .oc-menu, .oc-select-content)[data-expanded] {
+    animation: oc-floating-enter var(--ui-duration-base) ease-out;
+  }
+
+  :is(.oc-popover, .oc-menu, .oc-select-content)[data-closed] {
+    animation: oc-floating-exit var(--ui-duration-fast) ease-in;
+  }
+}
+
+@keyframes oc-floating-enter {
+  from {
+    opacity: 0;
+    translate: 0 calc(3px * var(--ui-scale));
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes oc-floating-exit {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

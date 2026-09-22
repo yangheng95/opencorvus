@@ -24,12 +24,8 @@
   left: 0;
   width: 100%;
   height: var(--ui-overlay-shell-height);
-  z-index: var(--ui-z-overlay);
-  background: var(--ui-scrim);
-}
-
-.dialog-overlay.app-dialog-overlay {
   z-index: var(--ui-z-dialog);
+  background: var(--ui-scrim);
 }
 
 .dialog-overlay[data-dialog-modal="false"] {
@@ -37,8 +33,8 @@
 }
 
 .dialog-form {
-  --dialog-form-padding-block: calc(14px * var(--ui-scale));
-  --dialog-form-padding-inline: calc(16px * var(--ui-scale));
+  --dialog-form-padding-block: var(--ui-gap-lg);
+  --dialog-form-padding-inline: var(--ui-gap-xl);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -58,11 +54,7 @@
   border: var(--ui-focused-popup-border);
   border-radius: var(--oc-radius-large);
   box-shadow: var(--ui-focused-popup-shadow);
-  /* Density refresh 2026-05-06: dialog-form padding was sized for the
-   * primary panel (18/20) which made the modal feel airy and empty.
-   * Compressed to 14/16 — modals carry their own focus framing via
-   * the backdrop dim, so the inner padding can be tighter than the
-   * top-level surfaces without losing breathing room. */
+  /* Header and footer consume the same horizontal inset as the body. */
   padding: var(--dialog-form-padding-block) var(--dialog-form-padding-inline);
   display: flex;
   flex-direction: column;
@@ -134,7 +126,7 @@
 
 .dialog-form > .dialog-header {
   margin: calc(-1 * var(--dialog-form-padding-block)) calc(-1 * var(--dialog-form-padding-inline)) 0;
-  padding: var(--ui-gap-xl) var(--ui-gap-2xl);
+  padding: var(--ui-gap-lg) max(var(--dialog-form-padding-inline), var(--ui-gap-lg));
   border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 86%, transparent);
   background: transparent;
   box-shadow: none;
@@ -167,13 +159,36 @@
 
 .dialog-form > .dialog-actions:not(.compact) {
   margin: auto calc(-1 * var(--dialog-form-padding-inline)) calc(-1 * var(--dialog-form-padding-block));
-  padding: var(--ui-gap-xl) var(--ui-gap-2xl);
+  padding: var(--ui-gap-lg) max(var(--dialog-form-padding-inline), var(--ui-gap-lg));
   border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 86%, transparent);
   background: transparent;
 }
 
 .dialog-actions.compact {
   margin-top: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :is(.dialog, .dialog-overlay)[data-expanded] {
+    animation: oc-dialog-fade-in var(--ui-duration-base) ease-out;
+  }
+
+  .dialog[data-expanded]:not(.dialog-fullscreen) > .dialog-form {
+    animation: oc-floating-enter var(--ui-duration-base) ease-out;
+  }
+
+  :is(.dialog, .dialog-overlay)[data-closed] {
+    animation: oc-floating-exit var(--ui-duration-fast) ease-in;
+  }
+}
+
+@keyframes oc-dialog-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .goal-dialog-form {

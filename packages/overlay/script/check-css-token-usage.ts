@@ -102,7 +102,6 @@ const HOST_RUNTIME_TOKEN_OWNERS = new Map<string, string[]>([
   ["--mailbox-progress", ["src/components/MailboxPanel.tsx"]],
   ["--mcp-app-height", ["src/components/interactive-artifact/McpAppArtifact.tsx"]],
   ["--native-menu-maximum-height", ["src/native-menu.tsx"]],
-  ["--screenshot-browser-card-width", ["src/components/ScreenshotBrowserPanel.tsx"]],
   ["--screenshot-browser-columns", ["src/components/ScreenshotBrowserPanel.tsx"]],
   ["--ui-left-rail-scrollbar-gutter-x", ["src/main.tsx"]],
   ["--ui-overlay-min-aspect-ratio", ["script/overlay-size-contract.ts"]],

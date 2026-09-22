@@ -12,16 +12,17 @@ import {
   type ScreenshotBrowserRow,
 } from "../utils/screenshot-browser"
 import { fetchResourceAsObjectUrl, peekResourceObjectUrl } from "../services/api"
-import { fullStampWithRelative, stamp } from "../utils/time"
+import { fullStampWithRelative, compactDetailStamp, shortStamp } from "../utils/time"
 import { t } from "../utils/i18n"
 import { roleLabel } from "../utils/message"
 import { Icon } from "./ui/Icon"
+import { Avatar } from "./Avatar"
 import { PreviewableImage } from "./ImagePreview"
 
 const SCREENSHOT_BROWSER_ROW_BUFFER_PIXELS = 0
-const SCREENSHOT_BROWSER_CARD_WIDTH = 132
-const SCREENSHOT_BROWSER_ESTIMATED_ROW_HEIGHT = 148
-const SCREENSHOT_BROWSER_GRID_GAP = 8
+const SCREENSHOT_BROWSER_CARD_WIDTH = 208
+const SCREENSHOT_BROWSER_ESTIMATED_ROW_HEIGHT = 196
+const SCREENSHOT_BROWSER_GRID_GAP = 12
 const SCREENSHOT_BROWSER_LAZY_ROOT_MARGIN = "96px"
 const SCREENSHOT_BROWSER_THUMBNAIL_LOADS_PER_FRAME = 1
 
@@ -180,7 +181,6 @@ function ScreenshotBrowserVirtualRow(props: { row: ScreenshotBrowserRow; columns
     const ownerLabel = () => (row.label ? `${row.ownerID} · ${row.label}` : row.ownerID)
     const ownerTitle = () =>
       row.label ? `${row.ownerID} · ${row.label} · ${roleLabel(row.role)}` : `${row.ownerID} · ${roleLabel(row.role)}`
-    const label = () => (row.time > 0 ? `${ownerLabel()} · ${stamp(row.time)}` : ownerLabel())
     const labelTitle = () => (row.time > 0 ? `${ownerTitle()} · ${fullStampWithRelative(row.time)}` : ownerTitle())
     return (
       <section
@@ -190,7 +190,13 @@ function ScreenshotBrowserVirtualRow(props: { row: ScreenshotBrowserRow; columns
         data-owner-key={row.groupKey}
       >
         <header class="screenshot-browser-group__header oc-section-heading">
-          <span title={labelTitle()}>{label()}</span>
+          <Avatar role={row.role} />
+          <div class="screenshot-browser-group__identity" title={labelTitle()}>
+            <strong>{ownerLabel()}</strong>
+            <Show when={row.time > 0}>
+              <time datetime={new Date(row.time).toISOString()}>{compactDetailStamp(row.time)}</time>
+            </Show>
+          </div>
           <small aria-label={t("screenshots.group_count", { count: props.row.count })}>
             {t("screenshots.group_count", { count: props.row.count })}
           </small>
@@ -212,12 +218,9 @@ function ScreenshotBrowserVirtualRow(props: { row: ScreenshotBrowserRow; columns
             <ScreenshotThumbnail item={item} />
             <div class="screenshot-browser-card__body">
               <strong title={item.title}>{item.title}</strong>
-              <Show when={item.detail}>
-                <span title={item.detail}>{item.detail}</span>
-              </Show>
               <Show when={item.time > 0}>
                 <time datetime={new Date(item.time).toISOString()} title={fullStampWithRelative(item.time)}>
-                  {fullStampWithRelative(item.time)}
+                  {shortStamp(item.time)}
                 </time>
               </Show>
             </div>
@@ -302,7 +305,6 @@ export function ScreenshotBrowserPanel(props: { active: () => boolean }) {
           data-virtualized="true"
           data-item-count={sourceItems().length}
           data-rendered-count={rowsReady() ? sourceItems().length : 0}
-          style={`--screenshot-browser-card-width: ${cardWidth()}px`}
         >
           <Show when={rowsReady() && groups().length > 0}>
             <Virtualizer

@@ -103,6 +103,13 @@ live record fields update their existing presentation. Selection/status updates
 do not scroll an ancestor or remount a continuously selected transcript.
 The transcript follow controller remains the sole vertical scroll writer.
 
+Main child-progress cards size to their bounded canonical activity content and
+do not own a nested scrollport or automatic scroll writer. Current-source child
+activity changes notify the outer Conversation follow controller, including
+updates to an existing child. Native wheel movement over a card belongs to the
+outer transcript. Manual history navigation keeps the existing follow/pause
+contract, and full child history remains in the selected Agent transcript.
+
 ## Shared visual primitives
 
 The existing design-language tokens own geometry, typography and neutral
@@ -152,6 +159,13 @@ keyboard-focus detail surface. That Tooltip opens deterministically to the
 right of the active tick with an eight-pixel gutter and no placement fallback;
 its identity and bounded input preview remain viewport-constrained, while the
 same trigger continues to own stepped proximity and exact-card navigation.
+
+Dialog scrims share the modal layer; menu, popover and select content sit above
+that layer. Shared Kobalte presence attributes drive short entry/exit effects,
+with reduced-motion support and no perpetual animation or live blur. Dialog
+header/body/footer insets share their surface geometry. Screenshot panels retain
+virtualized rows and lazy thumbnail loading, with larger contained previews and
+separate owner/date/count metadata; full-size images still use ImagePreview.
 
 ## Typography Hierarchy
 
@@ -701,15 +715,14 @@ sync. No hidden Task, Session target, local URL signal, query override, iframe,
 or second renderer is created to bridge these scopes.
 
 The Screenshot Browser derives every card from the canonical card-tree
-screenshot index and keeps one fixed `132px` logical card/thumbnail width for
-the current UI scale. Its `ResizeObserver` content width determines every
-complete card slot that fits in a row; there is no maximum-column cap. Width
-changes therefore reflow rows without stretching cards or leaving space for a
-complete omitted column. Virtua remains the row-window owner and thumbnail
-attachment requests remain lazily scheduled through animation frames. The
-Right Dock tab is its only panel title; owner-group headers place their
-canonical image count immediately after the owner/time label and never add a
-count-only panel header.
+screenshot index. Its `ResizeObserver` content width determines how many
+`208px` logical minimum-width slots fit at the current UI scale, without a
+maximum-column cap. Cards share the available row width and contain the image
+inside a 16:10 preview. Virtua remains the row-window owner and thumbnail
+attachment requests remain lazily scheduled through animation frames. The Dock
+tab remains the only panel title; owner-group headers separate agent, date and
+image count. Each card keeps its title and short time, with the full timestamp
+available on hover.
 
 Right Dock tabs and their embedded close actions use the shared `32px`
 header-control geometry. The Dock-global add and close actions use the same

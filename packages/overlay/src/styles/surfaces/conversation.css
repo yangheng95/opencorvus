@@ -3036,12 +3036,11 @@
    the canonical child-session activity stream and opens its full transcript
    in the right dock. */
 .subagent-progress-grid {
-  --subagent-progress-card-block-size: calc(188px * var(--ui-scale));
-
   width: var(--conversation-card-inline-size);
   max-width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(calc(248px * var(--ui-scale)), 100%), 1fr));
+  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--ui-gap-md);
   padding-block: var(--ui-gap-3xs);
 }
@@ -3049,7 +3048,6 @@
 .subagent-progress-card {
   position: relative;
   min-width: 0;
-  block-size: var(--subagent-progress-card-block-size);
   display: flex;
   flex-direction: column;
   gap: var(--ui-gap-md);
@@ -3083,48 +3081,6 @@
     color-mix(in srgb, var(--card-stage, var(--accent)) 70%, transparent);
 }
 
-.subagent-progress-card {
-  isolation: isolate;
-}
-
-.subagent-progress-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    105deg,
-    transparent 20%,
-    color-mix(in srgb, var(--card-stage, var(--accent)) 4%, transparent) 38%,
-    color-mix(in srgb, var(--card-stage, var(--accent)) 14%, transparent) 50%,
-    color-mix(in srgb, var(--card-stage, var(--accent)) 4%, transparent) 62%,
-    transparent 80%
-  );
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(-100%);
-}
-
-.subagent-progress-card > * {
-  position: relative;
-  z-index: 1;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .panel[data-conversation-execution-status="active"] .subagent-progress-card[data-status="running"]::before {
-    opacity: 1;
-    animation: agent-running-surface-wave var(--ui-duration-loop-tool-wave) var(--ui-timing-standard) infinite;
-  }
-}
-
-@keyframes agent-running-surface-wave {
-  65%,
-  100% {
-    transform: translateX(100%);
-  }
-}
-
 .subagent-progress-card__header,
 .subagent-progress-card__identity {
   display: flex;
@@ -3153,15 +3109,11 @@
 }
 
 .subagent-progress-card__events {
-  flex: 1 1 0;
-  min-height: 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--ui-gap-3xs);
-  overflow-x: hidden;
-  overflow-y: auto;
   padding-block: var(--ui-gap-3xs);
-  overscroll-behavior: contain;
 }
 
 .subagent-progress-event {

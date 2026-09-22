@@ -15,7 +15,7 @@ import {
   loadOlderConversationHistory,
   selectedConversationHasVisibleItems,
 } from "../services/conversation"
-import { conversationAgentRecordsForSource, conversationAgentStore } from "../store/conversation-agents"
+import { conversationAgentRecordsForSource } from "../store/conversation-agents"
 import { listenConversationCardScroll, type ConversationCardScrollRequest } from "../services/conversation-scroll"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { Icon } from "./ui/Icon"
@@ -662,7 +662,14 @@ export function Conversation(props: {
 
   createEffect(
     on(
-      () => conversationAgentStore.records.length,
+      () =>
+        conversationAgentRecordsForSource(boardStore.selectedSource).map((record) => [
+          record.sessionID,
+          record.lastObservedAt,
+          record.status,
+          record.activity,
+          record.todoUpdatedAt,
+        ]),
       () => {
         scrollController?.contentChanged()
       },

@@ -9,7 +9,7 @@
   background: var(--menu-panel-bg);
   color: var(--text-strong);
   box-shadow: var(--ui-focused-popup-shadow);
-  z-index: var(--ui-z-overlay);
+  z-index: calc(var(--ui-z-dialog) + 1);
 }
 
 .oc-menu-item {

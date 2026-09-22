@@ -1,4 +1,4 @@
-import { For, Show, Switch, Match, createEffect, createMemo, onCleanup } from "solid-js"
+import { For, Show, Switch, Match, createMemo } from "solid-js"
 import { boardStore, selectedTaskDirectory } from "../store/board"
 import {
   conversationAgentRecordForSourceSession,
@@ -12,7 +12,6 @@ import {
 import { normalizeAgentRole } from "../utils/message"
 import { stageAccent } from "../utils/card-color"
 import { t } from "../utils/i18n"
-import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { summarizeTodos } from "../utils/todos"
 import { Avatar } from "./Avatar"
 import { TodoProgress } from "./TodoProgress"
@@ -98,7 +97,6 @@ function SubagentProgressEventRow(props: { event: SubagentProgressEvent }) {
 }
 
 function SubagentProgressCard(props: { sessionID: string; onOpen: (sessionID: string) => void }) {
-  let progressElement: HTMLDivElement | undefined
   const record = createMemo(() => {
     const item = conversationAgentRecordForSourceSession(boardStore.selectedSource, props.sessionID)
     if (!item) throw new Error(`subagent progress card missing activity record for ${props.sessionID}`)
@@ -119,20 +117,6 @@ function SubagentProgressCard(props: { sessionID: string; onOpen: (sessionID: st
       : t("subagent.progress.no_activity"),
   )
   const inputPreview = () => String(record().inputPreview?.text || "").trim()
-  const scrollProgressToLatest = createAnimationFrameScheduler(() => {
-    if (!progressElement) return
-    progressElement.scrollTop = progressElement.scrollHeight
-  })
-
-  createEffect(() => {
-    events()
-      .map((event) => event.id)
-      .join("|")
-    if (record().status === "running" || record().status === "pending") {
-      scrollProgressToLatest.schedule()
-    }
-  })
-  onCleanup(scrollProgressToLatest.cancel)
 
   const open = () => props.onOpen(props.sessionID)
 
@@ -165,7 +149,6 @@ function SubagentProgressCard(props: { sessionID: string; onOpen: (sessionID: st
         </span>
       </header>
       <div
-        ref={progressElement}
         class="subagent-progress-card__events"
         role="log"
         aria-label={t("subagent.progress.activity", { agent: record().agentID })}
