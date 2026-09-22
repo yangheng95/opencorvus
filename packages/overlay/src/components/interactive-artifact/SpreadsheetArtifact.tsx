@@ -1,6 +1,6 @@
 import { createSignal, onCleanup, onMount, Show } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
-import { observeAppliedTheme } from "../../services/theme"
+import { appliedColorScheme, observeAppliedTheme } from "../../services/theme"
 import { getLocale, t } from "../../utils/i18n"
 import { ArtifactFrame } from "./ArtifactFrame"
 import { mountUniverSpreadsheet } from "./univer-spreadsheet-adapter"
@@ -16,14 +16,9 @@ export function SpreadsheetArtifact(props: { payload: SpreadsheetPayload }) {
   onMount(() => {
     if (!host) return
     try {
-      const runtime = mountUniverSpreadsheet(
-        host,
-        props.payload,
-        getLocale(),
-        document.documentElement.dataset.theme === "dark",
-      )
+      const runtime = mountUniverSpreadsheet(host, props.payload, getLocale(), appliedColorScheme() === "dark")
       dispose = runtime.dispose
-      stopThemeObserver = observeAppliedTheme((theme) => runtime.setDarkMode(theme === "dark"))
+      stopThemeObserver = observeAppliedTheme(() => runtime.setDarkMode(appliedColorScheme() === "dark"))
     } catch {
       setError(true)
     }

@@ -1,7 +1,7 @@
 import mermaid from "mermaid"
 import { Show, createSignal, onCleanup, onMount } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
-import { observeAppliedTheme } from "../../services/theme"
+import { appliedColorScheme, observeAppliedTheme } from "../../services/theme"
 import { ArtifactFrame } from "./ArtifactFrame"
 import { randomUUID } from "../../utils/random-id"
 
@@ -18,7 +18,7 @@ export function DiagramArtifact(props: { payload: DiagramPayload }) {
     const generation = ++renderGeneration
     host.replaceChildren()
     setError("")
-    const dark = document.documentElement.dataset.theme !== "light"
+    const dark = appliedColorScheme() === "dark"
     mermaid.initialize({
       startOnLoad: false,
       securityLevel: "strict",

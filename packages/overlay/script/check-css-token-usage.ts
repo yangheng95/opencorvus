@@ -1,6 +1,7 @@
 import fs from "node:fs"
 import path from "node:path"
 import ts from "typescript"
+import { OVERLAY_THEME_IDS } from "@opencorvus-ai/transport-protocol"
 
 const OVERLAY_ROOT = path.resolve(import.meta.dir, "..")
 const SOURCE_ROOT = path.join(OVERLAY_ROOT, "src")
@@ -660,11 +661,9 @@ function declaredTokens(source: string): Set<string> {
   return new Set([...source.matchAll(/^\s*(--[a-z0-9-]+)\s*:/gm)].map((match) => match[1]!))
 }
 
-const themeSelectors = new Map([
-  ["light", ':root[data-theme="light"]'],
-  ["dark", ':root[data-theme="dark"]'],
-  ["vscode-dark", ':root[data-theme="vscode-dark"]'],
-])
+const themeSelectors = new Map(
+  OVERLAY_THEME_IDS.filter((theme) => theme !== "system").map((theme) => [theme, `:root[data-theme="${theme}"]`]),
+)
 const themeTokenSets = [...themeSelectors].map(([name, selector]) => {
   const file = path.join(SOURCE_ROOT, "styles", "cascade", `${name}.css`)
   return [name, declaredTokens(ruleBody(cssSource(file), selector))] as const

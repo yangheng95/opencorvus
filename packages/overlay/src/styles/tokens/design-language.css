@@ -269,6 +269,10 @@
   --oc-theme-swatch-light: linear-gradient(135deg, #f2f2f2 50%, #ffffff 50%);
   --oc-theme-swatch-vscode-dark: linear-gradient(135deg, #1e1e1e 50%, #252526 50%);
   --oc-theme-swatch-system: linear-gradient(135deg, #1a1b1e 50%, #f2f2f2 50%);
+  --oc-theme-swatch-ivory: linear-gradient(135deg, #f5eee2 50%, #94602f 50%);
+  --oc-theme-swatch-sage: linear-gradient(135deg, #edf3e9 50%, #356e52 50%);
+  --oc-theme-swatch-mist: linear-gradient(135deg, #edf3f9 50%, #356ba1 50%);
+  --oc-theme-swatch-graphite: linear-gradient(135deg, #2b2732 50%, #b7a1e6 50%);
 
   /* The --oc-stage-* palette (default / goal / architect / planner /
    * executor) was retired 2026-08-24. It was the last survivor of the

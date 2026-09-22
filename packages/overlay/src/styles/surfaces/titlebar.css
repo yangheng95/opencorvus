@@ -270,6 +270,22 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
   background: var(--oc-theme-swatch-system);
 }
 
+.titlebar-theme-option-swatch[data-theme="ivory"] {
+  background: var(--oc-theme-swatch-ivory);
+}
+
+.titlebar-theme-option-swatch[data-theme="sage"] {
+  background: var(--oc-theme-swatch-sage);
+}
+
+.titlebar-theme-option-swatch[data-theme="mist"] {
+  background: var(--oc-theme-swatch-mist);
+}
+
+.titlebar-theme-option-swatch[data-theme="graphite"] {
+  background: var(--oc-theme-swatch-graphite);
+}
+
 .titlebar-brand-identity {
   display: inline-flex;
   align-items: center;

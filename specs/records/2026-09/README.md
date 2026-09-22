@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Additional workspace color themes](2026-09-22-additional-workspace-themes.md)
+
 - [Outer subagent scrolling and overlay polish](2026-09-22-subagent-scroll-and-overlay-polish.md)
 
 - [Unattended release with a 40-minute budget](2026-09-22-unattended-release-40-minutes.md)

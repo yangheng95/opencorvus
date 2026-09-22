@@ -20,7 +20,7 @@ import { ApiError } from "../../services/api"
 import type { StreamHandle } from "../../services/host-transport"
 import { getHostTransport } from "../../services/host-transport-runtime"
 import { promptSessionMessage } from "../../services/chat"
-import { observeAppliedTheme } from "../../services/theme"
+import { appliedColorScheme, observeAppliedTheme } from "../../services/theme"
 import { AppLog } from "../../utils/log"
 import { getLocale, t } from "../../utils/i18n"
 import { OVERLAY_VERSION } from "../../utils/version"
@@ -181,9 +181,7 @@ export function McpAppArtifact(props: {
   const [bridgeConnected, setBridgeConnected] = createSignal(false)
   const [confirmation, setConfirmation] = createSignal<Confirmation>()
   const [hostError, setHostError] = createSignal("")
-  const [hostTheme, setHostTheme] = createSignal<"light" | "dark">(
-    document.documentElement.dataset.theme === "light" ? "light" : "dark",
-  )
+  const [hostTheme, setHostTheme] = createSignal<"light" | "dark">(appliedColorScheme())
 
   const setBridgeHostContext = (context: Parameters<AppBridge["sendHostContextChange"]>[0]) => {
     if (!bridgeConnected() || teardownPromise) return
@@ -367,7 +365,7 @@ export function McpAppArtifact(props: {
   }
 
   onMount(() => {
-    stopThemeObserver = observeAppliedTheme((theme) => setHostTheme(theme === "light" ? "light" : "dark"))
+    stopThemeObserver = observeAppliedTheme(() => setHostTheme(appliedColorScheme()))
     const csp = props.payload.resource.metadata.csp
     const permissions = props.payload.resource.metadata.permissions
     const hostTransport = getHostTransport()

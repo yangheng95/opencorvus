@@ -6,7 +6,7 @@ export type { OverlayThemeID }
 
 export type OverlayThemeOption = {
   id: OverlayThemeID
-  i18nSlug: "dark" | "light" | "system" | "vscode_dark"
+  i18nSlug: "dark" | "light" | "system" | "vscode_dark" | "ivory" | "sage" | "mist" | "graphite"
 }
 
 export const DEFAULT_THEME_ID: OverlayThemeID = "light"
@@ -14,7 +14,11 @@ export const DEFAULT_THEME_ID: OverlayThemeID = "light"
 const DESKTOP_THEME_OPTIONS: OverlayThemeOption[] = [
   { id: "dark", i18nSlug: "dark" },
   { id: "vscode-dark", i18nSlug: "vscode_dark" },
+  { id: "graphite", i18nSlug: "graphite" },
   { id: "light", i18nSlug: "light" },
+  { id: "ivory", i18nSlug: "ivory" },
+  { id: "sage", i18nSlug: "sage" },
+  { id: "mist", i18nSlug: "mist" },
   { id: "system", i18nSlug: "system" },
 ]
 

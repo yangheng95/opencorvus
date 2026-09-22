@@ -366,6 +366,16 @@ describe("native command validation", () => {
     expect(isOverlayPersistedSettings({ ...persistedSettings, username: "" })).toBe(true)
   })
 
+  test.each(["ivory", "sage", "mist", "graphite"] as const)(
+    "persists the %s theme through the native settings contract",
+    (theme) => {
+      const payload = JSON.parse(JSON.stringify({ ...persistedSettings, theme }))
+      expect(isOverlayPersistedSettings(payload)).toBe(true)
+      expect(isNativeCommand({ kind: "settings.save", payload })).toBe(true)
+      expect(payload.theme).toBe(theme)
+    },
+  )
+
   test("accepts every canonical native command payload", () => {
     const valid = [
       { kind: "open-url", url: "https://example.com" },

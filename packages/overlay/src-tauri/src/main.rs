@@ -1664,7 +1664,18 @@ fn validate_overlay_settings(settings: OverlaySettings) -> Result<OverlaySetting
             return Err(format!("overlay settings field `{name}` must not be blank"));
         }
     }
-    if !["dark", "light", "system", "vscode-dark"].contains(&settings.theme.as_str()) {
+    if ![
+        "dark",
+        "light",
+        "system",
+        "vscode-dark",
+        "ivory",
+        "sage",
+        "mist",
+        "graphite",
+    ]
+    .contains(&settings.theme.as_str())
+    {
         return Err("overlay settings theme is invalid".to_string());
     }
     if !["by-project", "one-list"].contains(&settings.work_ledger_organization.as_str()) {
@@ -5694,6 +5705,10 @@ fn build_macos_application_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result
         .text("native-menu:theme-light", "Light")
         .text("native-menu:theme-dark", "Dark")
         .text("native-menu:theme-vscode-dark", "VS Code Dark")
+        .text("native-menu:theme-ivory", "Ivory")
+        .text("native-menu:theme-sage", "Sage")
+        .text("native-menu:theme-mist", "Mist Blue")
+        .text("native-menu:theme-graphite", "Graphite Violet")
         .build()?;
     let toggle_locale = MenuItem::with_id(
         app,
@@ -5958,6 +5973,10 @@ fn main() {
                     "dark" => OVERLAY_STARTUP_SURFACE_DARK,
                     "vscode-dark" => OVERLAY_STARTUP_SURFACE_VSCODE_DARK,
                     "light" => OVERLAY_STARTUP_SURFACE_LIGHT,
+                    "ivory" => Color(255, 253, 248, 255),
+                    "sage" => Color(251, 253, 249, 255),
+                    "mist" => Color(251, 253, 255, 255),
+                    "graphite" => Color(43, 39, 50, 255),
                     _ if window
                         .theme()
                         .is_ok_and(|theme| theme == tauri::Theme::Dark) =>
@@ -6536,6 +6555,17 @@ mod tests {
         let parsed =
             parse_overlay_settings_text(&text).expect("overlay JSONC settings should parse");
         assert_eq!(parsed, overlay_test_settings());
+    }
+
+    #[test]
+    fn overlay_settings_round_trips_named_color_palettes() {
+        for theme in ["ivory", "sage", "mist", "graphite"] {
+            let mut settings = overlay_test_settings();
+            settings.theme = theme.to_string();
+            let text = format_overlay_settings_text(&settings).expect("palette settings serialize");
+            let parsed = parse_overlay_settings_text(&text).expect("palette settings parse");
+            assert_eq!(parsed, settings);
+        }
     }
 
     #[test]

@@ -973,7 +973,16 @@ export const PROJECT_EDITOR_IDS = ["vscode", "pycharm", "webstorm", "intellij", 
 
 export type ProjectEditorID = (typeof PROJECT_EDITOR_IDS)[number]
 
-export const OVERLAY_THEME_IDS = ["dark", "light", "system", "vscode-dark"] as const
+export const OVERLAY_THEME_IDS = [
+  "dark",
+  "light",
+  "system",
+  "vscode-dark",
+  "ivory",
+  "sage",
+  "mist",
+  "graphite",
+] as const
 
 export type OverlayThemeID = (typeof OVERLAY_THEME_IDS)[number]
 

@@ -2,7 +2,7 @@
 // Exported surface:
 // sanitizeTheme(value) — supported theme id, or TypeError (it validates, not coerces)
 // sanitizeZoom(value) — number clamped to [0.8, 1.6]
-// resolvedTheme() — effective "light" | "dark" after system detection
+// resolvedTheme() — effective palette after system detection
 // applyTheme(theme) — writes the documentElement data-theme
 // applyZoom(zoom) — writes --ui-scale CSS custom property via renderScale
 // themeColor(element, token) — palette token as an rgba() color libraries can parse
@@ -51,7 +51,7 @@ const systemThemeMedia: MediaQueryList | null =
     : null
 
 // ── sanitizeTheme ──
-// "light" | "system" → returned as-is; everything else → default theme
+// Validate against the canonical palette identifiers.
 
 export function sanitizeTheme(value: any): string {
   return sanitizeThemeForHost(value)
@@ -92,6 +92,13 @@ export function applyTheme(theme: string): void {
   const sanitized = sanitizeTheme(theme)
   const effective = resolveThemeValue(sanitized)
   document.documentElement.dataset.theme = effective
+}
+
+/** Binary mode for embedded libraries comes from the active palette itself. */
+export function appliedColorScheme(): "light" | "dark" {
+  const scheme = getComputedStyle(document.documentElement).colorScheme
+  if (scheme === "light" || scheme === "dark") return scheme
+  throw new Error(`Overlay palette must declare a light or dark color-scheme: ${scheme}`)
 }
 
 /** Observe the effective palette applied to the document root and return its cleanup function. */

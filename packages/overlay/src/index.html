@@ -4,7 +4,7 @@
     <script>
       // This bootstrap cannot import the module registry before first paint.
       // Keep this validation list aligned with OVERLAY_THEME_IDS.
-      const ocThemeIDs = ["dark", "vscode-dark", "light", "system"]
+      const ocThemeIDs = ["dark", "vscode-dark", "light", "system", "ivory", "sage", "mist", "graphite"]
       const ocStartupThemeQuery = matchMedia("(prefers-color-scheme: light)")
       const ocStartupTheme = new URLSearchParams(location.search).get("acceptance-startup-theme")
       const ocNativeStartupTheme = globalThis.__OPENCORVUS_STARTUP_THEME__ || ""
@@ -97,9 +97,10 @@
         z-index: var(--ui-z-decoration);
       }
 
-      [data-theme="light"] .oc-startup-surface__logo-dark,
+      :is([data-theme="light"], [data-theme="ivory"], [data-theme="sage"], [data-theme="mist"])
+        .oc-startup-surface__logo-dark,
       [data-theme="dark"] .oc-startup-surface__logo-light,
-      [data-theme="vscode-dark"] .oc-startup-surface__logo-light {
+      :is([data-theme="vscode-dark"], [data-theme="graphite"]) .oc-startup-surface__logo-light {
         display: none;
       }
 
@@ -280,6 +281,10 @@
     <link rel="stylesheet" href="styles/cascade/dark.css" />
     <link rel="stylesheet" href="styles/cascade/vscode-dark.css" />
     <link rel="stylesheet" href="styles/cascade/light.css" />
+    <link rel="stylesheet" href="styles/cascade/ivory.css" />
+    <link rel="stylesheet" href="styles/cascade/sage.css" />
+    <link rel="stylesheet" href="styles/cascade/mist.css" />
+    <link rel="stylesheet" href="styles/cascade/graphite.css" />
     <link rel="stylesheet" href="styles/cascade/typography.css" />
     <link rel="stylesheet" href="styles/primitives/button.css" />
     <link rel="stylesheet" href="styles/primitives/icon.css" />

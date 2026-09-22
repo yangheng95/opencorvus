@@ -413,6 +413,10 @@ export function TitlebarMenubar() {
     "native-menu:theme-light": () => setTheme("light"),
     "native-menu:theme-dark": () => setTheme("dark"),
     "native-menu:theme-vscode-dark": () => setTheme("vscode-dark"),
+    "native-menu:theme-ivory": () => setTheme("ivory"),
+    "native-menu:theme-sage": () => setTheme("sage"),
+    "native-menu:theme-mist": () => setTheme("mist"),
+    "native-menu:theme-graphite": () => setTheme("graphite"),
     "native-menu:toggle-locale": async () => {
       await applyLocalePreference(settingsStore.locale === "zh-CN" ? "en-US" : "zh-CN")
     },

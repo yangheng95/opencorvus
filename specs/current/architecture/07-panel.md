@@ -167,6 +167,18 @@ header/body/footer insets share their surface geometry. Screenshot panels retain
 virtualized rows and lazy thumbnail loading, with larger contained previews and
 separate owner/date/count metadata; full-size images still use ImagePreview.
 
+## Color Themes
+
+Theme selection uses the existing persisted Overlay theme identifier. The named
+palettes are Light, Dark, VS Code Dark, Ivory, Sage, Mist Blue and Graphite Violet;
+System resolves through the operating-system preference. Every palette declares
+the complete semantic token set and its CSS color-scheme. Settings, command
+palette and web menu consume the theme registry; pre-module startup, native
+settings validation and native menu boundaries accept the same identifiers.
+Embedded diagram, spreadsheet and MCP app binary light/dark modes read the
+applied CSS color-scheme rather than comparing specific palette names. The static
+frosted material, primitive geometry and interaction semantics stay shared.
+
 ## Typography Hierarchy
 
 Panel typography follows [Overlay typography](overlay-typography.md), which is

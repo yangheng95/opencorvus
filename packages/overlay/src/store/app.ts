@@ -4,6 +4,7 @@
 
 import { createStore, reconcile } from "solid-js/store"
 import type { SkillMountsResponse } from "@opencorvus-ai/sdk"
+import type { OverlayThemeID } from "@opencorvus-ai/transport-protocol"
 
 // ── Types ──
 
@@ -57,8 +58,8 @@ export interface AppState {
    *  `lsof -p <pid>` without scanning netstat. Undefined when the overlay
    *  is talking to an external server it didn't spawn. */
   serverPid?: number
-  /** Resolved effective theme: "dark" | "light" | "vscode-dark" */
-  theme: "dark" | "light" | "vscode-dark"
+  /** Applied palette after resolving the system preference. */
+  theme: Exclude<OverlayThemeID, "system">
   locale: string
   /** User-configured zoom multiplier (0.8–1.6) */
   zoom: number
