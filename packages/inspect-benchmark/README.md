@@ -224,14 +224,15 @@ inspect eval your_eval.py \
 - Adapter timeout stops observing the sample; it does not cancel or delete the
   still-owned OpenCorvus Task.
 - `timeout_seconds` is an inactivity window. Changes in durable Task/Session
-  execution facts or real transcript content renew it. Successful polling,
+  execution facts or the Task live event cursor renew it. Successful polling,
   observation timestamps and an unchanged running flag do not. Task acceptance
   and final projection each have a separate bounded window; network operations
   also retain stage timeouts. Timeout is an observation error, not a business zero.
-- `poll_seconds` must be smaller than `timeout_seconds`. The observer reads the
-  latest unfinished assistant Message in each Session through its canonical
-  endpoint, so persisted reasoning activity counts even when display projections
-  omit it. Reasoning is observed for activity only and is not logged as result text.
+- `poll_seconds` must be smaller than `timeout_seconds`. The observer resumes the
+  existing Task-wide `(liveEpoch, lastLiveSequence)` from the root Session conversation
+  endpoint. Unpersisted reasoning/text/Tool deltas in descendant Sessions count as
+  activity, without fetching reasoning bodies. Heartbeats and other Tasks do not
+  advance this clock. Process restarts and terminal-boundary cursor resets are valid.
 - Inspect sample concurrency is real OpenCorvus/Provider concurrency. Set
   Inspect's connection limit to a value the service and Provider can sustain.
 - `project_isolation=shared` implies shared mutable state and is never accepted

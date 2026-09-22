@@ -419,23 +419,25 @@ class OpenCorvusClient:
     async def task(self, task_id: str) -> Mapping[str, Any]:
         return await self._request_json("GET", f"/task/{task_id}", params=self._project_params())
 
-    async def conversation(self, task_id: str) -> Mapping[str, Any]:
-        return await self._request_json(
-            "GET",
-            f"/task/{task_id}/conversation",
-            params={"directory": self.config.project_dir, "tail_limit": "200"},
-        )
-
-    async def message(self, session_id: str, message_id: str) -> Mapping[str, Any]:
+    async def task_live_cursor(
+        self, task_id: str, session_id: str, previous: tuple[int, int] | None
+    ) -> tuple[int, int]:
+        """Read the Task-wide live clock, including unpersisted descendant deltas."""
+        params = self._project_params()
+        if previous is not None:
+            params.update(after_live_epoch=str(previous[0]), after_live_sequence=str(previous[1]))
         result = await self._request_json(
             "GET",
-            f"/session/{quote(session_id, safe='')}/message/{quote(message_id, safe='')}",
-            params=self._project_params(),
+            f"/task/{quote(task_id, safe='')}/conversation/session/{quote(session_id, safe='')}",
+            params=params,
         )
-        info = _mapping(result.get("info"), label="Message.info")
-        if info.get("id") != message_id or info.get("sessionID") != session_id:
-            raise OpenCorvusProtocolError("Observed Message identity disagrees")
-        return result
+        epoch, sequence = result.get("liveEpoch"), result.get("lastLiveSequence")
+        if type(epoch) is not int or epoch <= 0 or type(sequence) is not int or sequence < 0:
+            raise OpenCorvusProtocolError(
+                "Task live cursor requires a positive epoch and nonnegative sequence"
+            )
+        # Terminal/reopened Task boundaries also clear the sequence in the same process.
+        return epoch, sequence
 
     async def completion_part(self, task: Mapping[str, Any]) -> Mapping[str, Any]:
         decision = _mapping(task.get("completionDecision"), label="task.completionDecision")
@@ -448,26 +450,6 @@ class OpenCorvusClient:
             f"/session/{ids[0]}/message/{ids[1]}/part/{ids[2]}",
             params=self._project_params(),
         )
-
-    async def unfinished_messages(self, conversation: Mapping[str, Any]) -> list[Mapping[str, Any]]:
-        transcript = conversation.get("transcript")
-        if not isinstance(transcript, list):
-            raise OpenCorvusProtocolError("OpenCorvus conversation transcript must be an array")
-        latest: dict[str, Mapping[str, Any]] = {}
-        for entry in transcript:
-            if not isinstance(entry, Mapping):
-                continue
-            info = entry.get("info")
-            if isinstance(info, Mapping) and info.get("role") == "assistant":
-                session_id = _required_string(info.get("sessionID"), label="Message.sessionID")
-                latest[session_id] = info
-        messages = []
-        for session_id, info in latest.items():
-            stamp = _mapping(info.get("time"), label="Message.time")
-            if stamp.get("completed") is None:
-                message_id = _required_string(info.get("id"), label="Message.id")
-                messages.append(await self.message(session_id, message_id))
-        return messages
 
     async def _within_task_deadline(
         self,
@@ -493,7 +475,7 @@ class OpenCorvusClient:
         if deadline is None:
             deadline = time.monotonic() + self.config.timeout_seconds
         last_status = "unobserved"
-        previous_progress: object = None
+        previous_cursor: tuple[int, int] | None = None
         previous_status: object = None
         while True:
             status = await self._within_task_deadline(
@@ -525,26 +507,27 @@ class OpenCorvusClient:
             if durable_status != previous_status:
                 previous_status = durable_status
                 deadline = time.monotonic() + self.config.timeout_seconds
-            conversation = await self._within_task_deadline(
-                task_id=task_id,
-                deadline=deadline,
-                last_status=last_status,
-                operation=lambda: self.conversation(task_id),
+            topology = _mapping(
+                status.get("sessionInvocationTopology"), label="status.sessionInvocationTopology"
             )
-            # Only durable facts and actual participant output renew the idle window.
-            # Polling success, generatedAt and an unchanged "running" flag do not.
-            progress = {
-                "transcript": conversation.get("transcript"),
-                "unfinished_messages": await self._within_task_deadline(
+            if topology.get("taskID") != task_id:
+                raise OpenCorvusProtocolError("Observed Task topology identity disagrees")
+            root_session_id = topology.get("rootSessionID")
+            if root_session_id is not None:
+                root_session_id = _required_string(root_session_id, label="topology.rootSessionID")
+                cursor = await self._within_task_deadline(
                     task_id=task_id,
                     deadline=deadline,
                     last_status=last_status,
-                    operation=partial(self.unfinished_messages, conversation),
-                ),
-            }
-            if progress != previous_progress:
-                previous_progress = progress
-                deadline = time.monotonic() + self.config.timeout_seconds
+                    operation=partial(
+                        self.task_live_cursor, task_id, root_session_id, previous_cursor
+                    ),
+                )
+                # The Task clock includes live reasoning/text/Tool deltas before
+                # persistence. Poll timestamps, heartbeats and other Tasks do not advance it.
+                if cursor != previous_cursor:
+                    previous_cursor = cursor
+                    deadline = time.monotonic() + self.config.timeout_seconds
             remaining = deadline - time.monotonic()
             if remaining <= 0:
                 raise OpenCorvusTaskTimeout(task_id, self.config.timeout_seconds, last_status)

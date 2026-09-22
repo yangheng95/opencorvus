@@ -46,7 +46,16 @@ async def test_public_task_lifecycle_returns_exact_completion_decision_message()
         if request.method == "GET" and request.url.path == "/task/task-1/status":
             status_calls += 1
             lifecycle = "active" if status_calls == 1 else "completed"
-            return httpx.Response(200, json={"lifecycleStatus": lifecycle})
+            return httpx.Response(
+                200,
+                json={
+                    "lifecycleStatus": lifecycle,
+                    "sessionInvocationTopology": {
+                        "taskID": "task-1",
+                        "rootSessionID": "session-root",
+                    },
+                },
+            )
         if request.method == "GET" and request.url.path == "/task/task-1":
             return httpx.Response(
                 200,
@@ -74,42 +83,10 @@ async def test_public_task_lifecycle_returns_exact_completion_decision_message()
                     },
                 },
             )
-        if request.method == "GET" and request.url.path == "/task/task-1/conversation":
+        if request.url.path == "/task/task-1/conversation/session/session-root":
             return httpx.Response(
                 200,
-                json={
-                    "transcript": [
-                        {
-                            "info": {
-                                "id": "message-accepted",
-                                "sessionID": "session-root",
-                                "role": "assistant",
-                                "time": {"created": 10, "completed": 12},
-                            },
-                            "parts": [
-                                {
-                                    "type": "tool",
-                                    "id": "part-complete",
-                                    "callID": "call-complete",
-                                    "tool": "complete_task",
-                                    "state": {
-                                        "status": "completed",
-                                        "input": {"summary": "accepted answer"},
-                                    },
-                                }
-                            ],
-                        },
-                        {
-                            "info": {
-                                "id": "message-later",
-                                "sessionID": "session-agent",
-                                "role": "assistant",
-                                "time": {"created": 11, "completed": 13},
-                            },
-                            "parts": [{"type": "text", "text": "later unrelated text"}],
-                        },
-                    ]
-                },
+                json={"liveEpoch": 1, "lastLiveSequence": 5, "transcript": []},
             )
         raise AssertionError(f"unexpected request: {request.method} {request.url}")
 

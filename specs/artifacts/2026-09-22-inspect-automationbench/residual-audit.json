@@ -1,5 +1,18 @@
 {
   "scope": "local acceptance only; no model or Provider calls",
+  "adapter_version": "0.3.2",
+  "focused_python_tests": 55,
+  "native_contract_tests": {
+    "passed": 3,
+    "assertions": 25,
+    "paths": [
+      "test/automationbench-project-admission.test.ts",
+      "test/automationbench-expert-squad.test.ts",
+      "test/inspect-task-live-observation.test.ts"
+    ],
+    "streaming_path": "Session.updatePartDelta -> actual protocol bridge -> Task Session HTTP live cursor",
+    "streaming_checks": ["unpersisted descendant reasoning", "cursor resume", "cross-project Task isolation"]
+  },
   "initial_state_roundtrips": {
     "cases": 800,
     "roundtrips": 800,

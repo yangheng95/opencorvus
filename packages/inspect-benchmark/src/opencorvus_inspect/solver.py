@@ -63,7 +63,7 @@ def opencorvus_system_metadata(
         "prompt_profile": config.prompt_profile,
         "product_pillar": config.product_pillar,
         "timeout_seconds": config.timeout_seconds,
-        "timeout_policy": "durable-progress-inactivity-v1",
+        "timeout_policy": "task-live-progress-inactivity-v2",
         "poll_seconds": config.poll_seconds,
         "project": {
             "root_sha256": _identity_digest(str(Path(config.project_dir).resolve())),

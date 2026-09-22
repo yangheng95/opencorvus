@@ -16,7 +16,8 @@ from opencorvus_inspect.adapter import (
 
 
 @pytest.mark.asyncio
-async def test_streaming_progress_extends_the_inactivity_window() -> None:
+@pytest.mark.parametrize("restart", [False, True])
+async def test_live_streaming_cursor_extends_the_inactivity_window(restart: bool) -> None:
     polls = 0
 
     async def handler(request: httpx.Request) -> httpx.Response:
@@ -28,12 +29,27 @@ async def test_streaming_progress_extends_the_inactivity_window() -> None:
                 200,
                 json={
                     "lifecycleStatus": "completed" if polls == 10 else "active",
+                    "sessionInvocationTopology": {
+                        "taskID": "task-progress",
+                        "rootSessionID": "session-root",
+                    },
                 },
+            )
+        assert request.url.path == "/task/task-progress/conversation/session/session-root"
+        previous_poll = polls - 1
+        if previous_poll:
+            assert request.url.params["after_live_epoch"] == str(
+                2 if restart and previous_poll >= 5 else 1
+            )
+            assert request.url.params["after_live_sequence"] == str(
+                previous_poll - 5 if restart and previous_poll >= 5 else previous_poll
             )
         return httpx.Response(
             200,
             json={
-                "transcript": [{"parts": [{"type": "text", "text": "token " * polls}]}],
+                "transcript": [],
+                "liveEpoch": 2 if restart and polls >= 5 else 1,
+                "lastLiveSequence": polls - 5 if restart and polls >= 5 else polls,
             },
         )
 
@@ -47,11 +63,26 @@ async def test_streaming_progress_extends_the_inactivity_window() -> None:
 
 
 @pytest.mark.asyncio
-async def test_observer_clock_with_unchanged_facts_reaches_typed_idle_timeout() -> None:
+@pytest.mark.parametrize("root_session_id", [None, "session-root"])
+async def test_observer_clock_with_unchanged_facts_reaches_typed_idle_timeout(
+    root_session_id: str | None,
+) -> None:
     async def handler(request: httpx.Request) -> httpx.Response:
-        payload = {"lifecycleStatus": "active", "generatedAt": time.time()}
-        if request.url.path.endswith("/conversation"):
-            payload = {"transcript": [], "generatedAt": time.time()}
+        payload = {
+            "lifecycleStatus": "active",
+            "generatedAt": time.time(),
+            "sessionInvocationTopology": {
+                "taskID": "task-stalled",
+                "rootSessionID": root_session_id,
+            },
+        }
+        if request.url.path.endswith("/conversation/session/session-root"):
+            payload = {
+                "transcript": [],
+                "liveEpoch": 1,
+                "lastLiveSequence": 7,
+                "generatedAt": time.time(),
+            }
         return httpx.Response(200, json=payload)
 
     config = AdapterConfig.resolve(project_dir="D:/bench", timeout_seconds=0.05, poll_seconds=0.01)
@@ -82,48 +113,34 @@ def test_poll_window_conflict_is_an_explicit_configuration_error(poll: float) ->
 
 
 @pytest.mark.asyncio
-async def test_canonical_reasoning_activity_extends_observation() -> None:
-    polls = 0
-    info = {
-        "id": "message-thinking",
-        "sessionID": "session-thinking",
-        "role": "assistant",
-        "time": {"created": 1},
-    }
-
+@pytest.mark.parametrize(
+    "cursor",
+    [
+        {},
+        {"liveEpoch": 0, "lastLiveSequence": 1},
+        {"liveEpoch": 1, "lastLiveSequence": -1},
+        {"liveEpoch": True, "lastLiveSequence": 0},
+        {"liveEpoch": 1, "lastLiveSequence": "1"},
+    ],
+)
+async def test_malformed_live_cursor_is_an_explicit_protocol_error(cursor: dict) -> None:
     async def handler(request: httpx.Request) -> httpx.Response:
-        nonlocal polls
-        if request.url.path.endswith("/status"):
-            polls += 1
-            await asyncio.sleep(0.02)
-            return httpx.Response(
-                200,
-                json={
-                    "lifecycleStatus": "completed" if polls == 10 else "active",
-                },
-            )
-        if request.url.path.endswith("/conversation"):
-            return httpx.Response(200, json={"transcript": [{"info": info, "parts": []}]})
-        assert request.url.path == "/session/session-thinking/message/message-thinking"
-        return httpx.Response(
-            200,
-            json={
-                "info": info,
-                "parts": [
-                    {
-                        "id": "reasoning-1",
-                        "type": "reasoning",
-                        "text": "thinking " * polls,
-                    }
-                ],
-            },
-        )
+        return httpx.Response(200, json=cursor)
 
-    config = AdapterConfig.resolve(project_dir="D:/bench", timeout_seconds=0.15, poll_seconds=0.01)
+    config = AdapterConfig.resolve(project_dir="D:/bench")
     async with OpenCorvusClient(config, transport=httpx.MockTransport(handler)) as client:
-        status = await client.wait_for_terminal("task-thinking")
-    assert status == {"lifecycleStatus": "completed"}
-    assert polls == 10
+        with pytest.raises(OpenCorvusProtocolError, match="Task live cursor requires"):
+            await client.task_live_cursor("task-thinking", "session-root", None)
+
+
+@pytest.mark.asyncio
+async def test_terminal_boundary_cursor_reset_is_a_valid_observation() -> None:
+    async def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json={"liveEpoch": 1, "lastLiveSequence": 0})
+
+    config = AdapterConfig.resolve(project_dir="D:/bench")
+    async with OpenCorvusClient(config, transport=httpx.MockTransport(handler)) as client:
+        assert await client.task_live_cursor("task-thinking", "session-root", (1, 5)) == (1, 0)
 
 
 def test_raw_completion_preserves_long_summary_and_validates_exact_identity() -> None:

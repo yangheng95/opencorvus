@@ -7,17 +7,20 @@ not own Provider calls, scheduling, messages or Task terminal decisions.
 
 Each solver attempt has a fresh request identity. `sample_epoch` creates a fresh
 project occurrence even when Inspect restores an existing sample UUID. Observation
-uses an inactivity window renewed by durable Task/Session execution facts and actual
-conversation output. Poll success and observer timestamps do not renew it. Task
+uses an inactivity window renewed by durable Task/Session execution facts and the
+Task live event cursor. Poll success and observer timestamps do not renew it. Task
 acceptance and terminal evidence retrieval have separate bounded stages. Failed
 observations remain errors; accepted completion text is resolved only from the
 `summary` input of the exact Completion Decision Tool invocation, bound to its
 Session, Message, Tool Part and call identities. No final narration is required.
 This is read through the canonical Session Part endpoint, not the display-only
-conversation projection that defers large tool inputs. Observation hydrates the
-latest unfinished assistant Message for each Session so persisted reasoning also
-counts as progress; the observer does not publish that reasoning. Poll intervals
-must be shorter than the inactivity window.
+conversation projection that defers large tool inputs. Observation reads the
+existing `(liveEpoch, lastLiveSequence)` from the Task Session conversation endpoint,
+using the root Session in the status topology. This Task-wide cursor includes
+unpersisted reasoning, text and Tool deltas from descendant Sessions, while display
+transport omits reasoning bodies. Heartbeats and other Tasks do not advance it.
+Epoch changes and terminal-boundary sequence resets are valid observations; polling
+resumes the returned cursor. Poll intervals must be shorter than the inactivity window.
 
 AutomationBench is an optional stateful benchmark integration pinned to an official
 source revision. Its manifest freezes domain/task/example identity and order.
