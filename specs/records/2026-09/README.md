@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Inspect AutomationBench engine and expert squad](2026-09-22-inspect-automationbench-engine.md)
+
 - [v0.1.12 Windows qualification repair](2026-09-22-v0.1.12-windows-qualification-repair.md)
 
 - [GitHub Actions retention cleanup](2026-09-22-actions-retention-cleanup.md)

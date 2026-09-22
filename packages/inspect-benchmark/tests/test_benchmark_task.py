@@ -47,7 +47,7 @@ def test_registered_suite_freezes_effective_environment_config(
     assert configured.metadata["system"]["prompt_profile"] == "resolved-profile"
     assert configured.metadata["system"]["adapter_distribution"] == {
         "name": "opencorvus-inspect",
-        "version": "0.2.0",
+        "version": "0.3.0",
     }
     assert configured.metadata["system"]["project"]["isolation"] == "shared"
     assert configured.metadata["run"] == {"comparable_mode": False}

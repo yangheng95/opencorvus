@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Inspect AutomationBench local acceptance](2026-09-22-inspect-automationbench/README.md): model-free official MCP/API/rubric execution and offline re-scoring evidence.
+
 - [Browser interaction and screenshot publication](2026-09-20-browser-acceptance/README.md): manually inspected Browser MCP states and exact production-owner attachment readback under directory watching; explicitly scoped apart from Mission acceptance.
 
 - [Browser runtime and original-PRD fresh case](2026-09-20-browser-prd-case/README.md): operator-run packaged-runtime acceptance using the original three source attachments in a new project and Mission.

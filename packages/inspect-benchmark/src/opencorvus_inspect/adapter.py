@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import math
 import os
 import time
 from collections.abc import Awaitable, Callable, Mapping
@@ -47,11 +48,11 @@ class OpenCorvusProtocolError(OpenCorvusAdapterError):
 
 
 class OpenCorvusTaskTimeout(OpenCorvusAdapterError):
-    """The adapter observation window ended before Task terminal state."""
+    """No observable Task progress occurred within the inactivity window."""
 
     def __init__(self, task_id: str, timeout_seconds: float, last_status: str) -> None:
         super().__init__(
-            f"OpenCorvus Task {task_id} did not reach terminal state within "
+            f"OpenCorvus Task {task_id} observation stalled for "
             f"{timeout_seconds:g}s; last lifecycle={last_status}"
         )
         self.task_id = task_id
@@ -66,8 +67,8 @@ def _environment(name: str) -> str | None:
 
 def _positive_float(value: float | str | None, *, name: str, default: float) -> float:
     resolved = default if value is None else float(value)
-    if resolved <= 0:
-        raise ValueError(f"{name} must be greater than zero")
+    if not math.isfinite(resolved) or resolved <= 0:
+        raise ValueError(f"{name} must be finite and greater than zero")
     return resolved
 
 
@@ -116,6 +117,8 @@ class AdapterConfig:
         parsed_url = urlsplit(resolved_url)
         if parsed_url.scheme not in {"http", "https"} or not parsed_url.netloc:
             raise ValueError("base_url must be an absolute HTTP(S) URL")
+        if parsed_url.username or parsed_url.password or parsed_url.query or parsed_url.fragment:
+            raise ValueError("base_url must not contain credentials, query parameters or fragments")
 
         resolved_dir = (project_dir or _environment("OPENCORVUS_INSPECT_PROJECT_DIR") or "").strip()
         if not resolved_dir:
@@ -182,20 +185,6 @@ def _optional_string(value: object) -> str | None:
     return value if isinstance(value, str) and value.strip() else None
 
 
-def _visible_text(message: Mapping[str, Any]) -> str:
-    parts = message.get("parts")
-    if not isinstance(parts, list):
-        return ""
-    texts: list[str] = []
-    for part in parts:
-        if not isinstance(part, Mapping) or part.get("type") != "text":
-            continue
-        text = part.get("text")
-        if isinstance(text, str) and text.strip():
-            texts.append(text.strip())
-    return "\n\n".join(texts)
-
-
 def _message_identity(message: Mapping[str, Any]) -> str | None:
     info = message.get("info")
     return _optional_string(info.get("id")) if isinstance(info, Mapping) else None
@@ -210,7 +199,7 @@ def _assistant_messages(conversation: Mapping[str, Any]) -> list[Mapping[str, An
         if not isinstance(raw, Mapping):
             continue
         info = raw.get("info")
-        if isinstance(info, Mapping) and info.get("role") == "assistant" and _visible_text(raw):
+        if isinstance(info, Mapping) and info.get("role") == "assistant":
             result.append(cast(Mapping[str, Any], raw))
     return result
 
@@ -218,7 +207,7 @@ def _assistant_messages(conversation: Mapping[str, Any]) -> list[Mapping[str, An
 def extract_completion(
     task: Mapping[str, Any], conversation: Mapping[str, Any]
 ) -> tuple[str, str | None]:
-    """Resolve the canonical completed Message, with a terminal-failure fallback."""
+    """Resolve the exact accepted completion Tool input; failures have no accepted output."""
 
     lifecycle = _required_string(task.get("status"), label="task.status")
     assistants = _assistant_messages(conversation)
@@ -229,28 +218,40 @@ def extract_completion(
             decision_map.get("orchestratorMessageID"),
             label="task.completionDecision.orchestratorMessageID",
         )
+        session_id = _required_string(
+            decision_map.get("orchestratorSessionID"),
+            label="completionDecision.orchestratorSessionID",
+        )
+        part_id = _required_string(
+            decision_map.get("toolPartID"), label="completionDecision.toolPartID"
+        )
+        call_id = _required_string(
+            decision_map.get("toolCallID"), label="completionDecision.toolCallID"
+        )
         for message in assistants:
             if _message_identity(message) == message_id:
-                text = _visible_text(message)
-                if text:
-                    return text, message_id
+                info = _mapping(message["info"], label="completion Message.info")
+                if info.get("sessionID") != session_id:
+                    raise OpenCorvusProtocolError("Completion Decision Session identity disagrees")
+                parts = message.get("parts")
+                if not isinstance(parts, list):
+                    raise OpenCorvusProtocolError(
+                        "Completion Decision Message.parts must be an array"
+                    )
+                for part in parts:
+                    if not isinstance(part, Mapping) or part.get("id") != part_id:
+                        continue
+                    if part.get("type") != "tool" or part.get("callID") != call_id:
+                        raise OpenCorvusProtocolError("Completion Decision Tool identity disagrees")
+                    state = _mapping(part.get("state"), label="completion Tool.state")
+                    arguments = _mapping(state.get("input"), label="completion Tool.state.input")
+                    summary = _required_string(arguments.get("summary"), label="completion summary")
+                    return summary.strip(), message_id
         raise OpenCorvusProtocolError(
-            f"OpenCorvus Completion Decision Message {message_id} "
-            "has no visible text in conversation"
+            f"OpenCorvus Completion Decision Tool {part_id} is missing from Message {message_id}"
         )
 
-    root_session_id = _optional_string(task.get("sessionID"))
-    preferred: list[Mapping[str, Any]] = []
-    if root_session_id:
-        for message in assistants:
-            info = message.get("info")
-            if isinstance(info, Mapping) and info.get("sessionID") == root_session_id:
-                preferred.append(message)
-    selected = (preferred or assistants)[-1] if preferred or assistants else None
-    if selected is not None:
-        return _visible_text(selected), _message_identity(selected)
-    fallback = _optional_string(task.get("error")) or _optional_string(task.get("terminalReason"))
-    return fallback or f"OpenCorvus Task ended with lifecycle {lifecycle}", None
+    return "", None
 
 
 @dataclass(frozen=True, slots=True)
@@ -301,6 +302,7 @@ class OpenCorvusClient:
         transport: httpx.AsyncBaseTransport | None = None,
     ) -> None:
         self.config = config
+        self.accepted_task: dict[str, str] | None = None
         password = _environment("OPENCORVUS_SERVER_PASSWORD")
         username = _environment("OPENCORVUS_SERVER_USERNAME") or "opencorvus"
         auth = httpx.BasicAuth(username, password) if password else None
@@ -308,6 +310,7 @@ class OpenCorvusClient:
             base_url=config.base_url,
             auth=auth,
             transport=transport,
+            trust_env=urlsplit(config.base_url).hostname not in {"127.0.0.1", "localhost", "::1"},
             timeout=httpx.Timeout(30, connect=10),
         )
 
@@ -470,6 +473,7 @@ class OpenCorvusClient:
         if deadline is None:
             deadline = time.monotonic() + self.config.timeout_seconds
         last_status = "unobserved"
+        previous_progress: object = None
         while True:
             status = await self._within_task_deadline(
                 task_id=task_id,
@@ -486,6 +490,31 @@ class OpenCorvusClient:
                 raise OpenCorvusProtocolError(
                     f"OpenCorvus Task {task_id} returned unknown lifecycle {last_status}"
                 )
+            conversation = await self._within_task_deadline(
+                task_id=task_id,
+                deadline=deadline,
+                last_status=last_status,
+                operation=lambda: self.conversation(task_id),
+            )
+            # Only durable facts and actual participant output renew the idle window.
+            # Polling success, generatedAt and an unchanged "running" flag do not.
+            progress = {
+                "status": {
+                    key: status.get(key)
+                    for key in (
+                        "lifecycleStatus",
+                        "time",
+                        "goals",
+                        "requirements",
+                        "sessionInvocationTopology",
+                        "executionProjection",
+                    )
+                },
+                "transcript": conversation.get("transcript"),
+            }
+            if progress != previous_progress:
+                previous_progress = progress
+                deadline = time.monotonic() + self.config.timeout_seconds
             remaining = deadline - time.monotonic()
             if remaining <= 0:
                 raise OpenCorvusTaskTimeout(task_id, self.config.timeout_seconds, last_status)
@@ -514,13 +543,19 @@ class OpenCorvusClient:
         task_id = _required_string(accepted.get("task_id"), label="task.create.task_id")
         project_id = _required_string(accepted.get("project_id"), label="task.create.project_id")
         directory = _required_string(accepted.get("directory"), label="task.create.directory")
-        terminal_status = await self.wait_for_terminal(task_id, deadline=deadline)
+        self.accepted_task = {
+            "task_id": task_id,
+            "project_id": project_id,
+            "directory": directory,
+            "request_id": request_id,
+        }
+        terminal_status = await self.wait_for_terminal(task_id)
         observed_lifecycle = _required_string(
             terminal_status.get("lifecycleStatus"), label="task.status.lifecycleStatus"
         )
         task, conversation = await self._within_task_deadline(
             task_id=task_id,
-            deadline=deadline,
+            deadline=time.monotonic() + self.config.timeout_seconds,
             last_status=observed_lifecycle,
             operation=lambda: asyncio.gather(self.task(task_id), self.conversation(task_id)),
         )

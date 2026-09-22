@@ -45,6 +45,9 @@ async def test_public_task_lifecycle_returns_exact_completion_decision_message()
                     "terminalReason": "completed",
                     "completionDecision": {
                         "orchestratorMessageID": "message-accepted",
+                        "orchestratorSessionID": "session-root",
+                        "toolPartID": "part-complete",
+                        "toolCallID": "call-complete",
                         "artifactLocator": {
                             "source": "engine_artifact",
                             "artifact_id": "artifact-1",
@@ -71,7 +74,18 @@ async def test_public_task_lifecycle_returns_exact_completion_decision_message()
                                 "role": "assistant",
                                 "time": {"created": 10},
                             },
-                            "parts": [{"type": "text", "text": "accepted answer"}],
+                            "parts": [
+                                {
+                                    "type": "tool",
+                                    "id": "part-complete",
+                                    "callID": "call-complete",
+                                    "tool": "complete_task",
+                                    "state": {
+                                        "status": "completed",
+                                        "input": {"summary": "accepted answer"},
+                                    },
+                                }
+                            ],
                         },
                         {
                             "info": {
@@ -229,3 +243,9 @@ async def test_task_observation_deadline_returns_typed_timeout(
     assert raised.value.task_id == "task-timeout"
     assert raised.value.timeout_seconds == 0.01
     assert raised.value.last_status == expected_last_status
+    assert client.accepted_task == {
+        "task_id": "task-timeout",
+        "project_id": "project-timeout",
+        "directory": "D:/bench",
+        "request_id": "inspect:timeout-sample",
+    }

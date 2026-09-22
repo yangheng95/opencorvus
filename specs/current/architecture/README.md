@@ -37,4 +37,6 @@ file.
 
 ## Boundaries, verification, and principles
 
+- [Inspect benchmark boundary](inspect-benchmark.md)
+
 - [Security, permission, and metric-evaluator boundaries](security-permission.md)

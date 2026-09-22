@@ -64,9 +64,11 @@ async def test_solver_projects_terminal_result_into_inspect_state(
     result = await solve(state, None)  # type: ignore[arg-type]
 
     assert result is state
+    request_id = captured["request"]["request_id"]
+    assert request_id.startswith("inspect:sample-uuid:2:1:")
     assert captured["request"] == {
         "request": "solve this",
-        "request_id": "inspect:sample-uuid",
+        "request_id": request_id,
         "title": "Custom title",
         "sample_id": "sample-1",
         "sample_uuid": "sample-uuid",
@@ -87,9 +89,12 @@ async def test_solver_projects_terminal_result_into_inspect_state(
         "isolation": "sample_epoch",
         "init_git": True,
         "attempt": 1,
+        "request_id": request_id,
     }
 
     await solve(state, None)  # type: ignore[arg-type]
     retry_config = cast(list[AdapterConfig], captured["configs"])[1]
     assert Path(retry_config.project_dir).name == "attempt-2"
     assert state.metadata["opencorvus_project"]["attempt"] == 2
+    assert len({request_id, captured["request"]["request_id"]}) == 2
+    assert len({sample_config.project_dir, retry_config.project_dir}) == 2

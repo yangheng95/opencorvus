@@ -421,6 +421,31 @@ export const publicMarketZhTranslations01To35 = {
       },
     },
   },
+  "builtin/automationbench": {
+    label: "AutomationBench 自动化基准",
+    description: "在官方模拟环境中执行跨应用业务任务，由独立核验员检查真实结果，Inspect 引擎负责官方评分。",
+    selectorSummary: "用于已配置独立 AutomationBench 工具环境的业务自动化基准任务。",
+    agents: {
+      "automationbench-executor": {
+        label: "业务执行专家",
+        description: "查明权威来源、执行已授权操作并保留精确回执。",
+      },
+      "automationbench-verifier": {
+        label: "独立结果核验员",
+        description: "从原始要求出发，独立核对来源记录、目标状态和操作回执。",
+      },
+    },
+    workflows: {
+      "execute-verify": {
+        label: "执行与独立核验",
+        description: "由单一执行者完成业务变更，再由独立核验员检查结果。",
+        nodes: {
+          "automationbench-executor": "查明事实、执行业务任务并保留证据。",
+          "automationbench-verifier": "根据原始要求和权威来源独立核对最终结果。",
+        },
+      },
+    },
+  },
   "builtin/automotive-functional-safety": {
     label: "汽车功能安全",
     description: "将 Item、HARA、安全要求、故障分析、验证和生命周期证据整合为供合格人员审查的功能安全论证资料包。",

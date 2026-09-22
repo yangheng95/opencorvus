@@ -1,0 +1,34 @@
+{
+  "status": "passed",
+  "scope": "local-checker-validation; no model or provider execution",
+  "benchmark": "zapier/automationbench@4a8e106",
+  "samples": [
+    {
+      "scenario": "complete",
+      "strict": 1.0,
+      "partial": 1.0,
+      "checker_contract": "C",
+      "tool_calls": 10,
+      "execution_mode": "local-checker-validation"
+    },
+    {
+      "scenario": "empty",
+      "strict": 0.0,
+      "partial": 0.0,
+      "checker_contract": "C",
+      "tool_calls": 2,
+      "execution_mode": "local-checker-validation"
+    },
+    {
+      "scenario": "partial",
+      "strict": 0.0,
+      "partial": 0.5,
+      "checker_contract": "C",
+      "tool_calls": 6,
+      "execution_mode": "local-checker-validation"
+    }
+  ],
+  "rescore": "official full result recomputed from snapshots in a separate process",
+  "source_log": "local-check.eval",
+  "rescored_log": "rescored.eval"
+}

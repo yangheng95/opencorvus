@@ -1,0 +1,158 @@
+from __future__ import annotations
+
+import asyncio
+import json
+from pathlib import Path
+from typing import Any
+from urllib.parse import urlsplit
+
+import httpx
+import pytest
+from inspect_ai import eval
+from inspect_ai.model import ChatMessageUser
+from inspect_ai.scorer import Target
+from inspect_ai.solver import TaskState
+
+from opencorvus_inspect.adapter import AdapterConfig
+from opencorvus_inspect.automationbench.check import automationbench_local_check
+from opencorvus_inspect.automationbench.task import (
+    automationbench_score,
+    opencorvus_automationbench,
+    sample_environment,
+)
+from opencorvus_inspect.automationbench.world import BENCHMARK, OfficialWorld, load_cases, rescore
+
+PACKAGE = Path(__file__).parents[1]
+MANIFEST = PACKAGE / "src/opencorvus_inspect/examples/automationbench-smoke.json"
+SQUAD = PACKAGE.parents[1] / "expert-squads/builtin/automationbench"
+
+pytest.importorskip("automationbench", reason="AutomationBench checks require the automation extra")
+
+
+def state_for(case: Any) -> TaskState:
+    return TaskState(
+        model="none",  # type: ignore[arg-type]
+        sample_id=case.task,
+        epoch=1,
+        input=case.request,
+        messages=[ChatMessageUser(content=case.request)],
+        metadata={"automationbench_case": case.task, "automationbench_example_id": case.example_id},
+    )
+
+
+def test_manifest_binds_official_case_membership_order_and_original_request() -> None:
+    cases = load_cases(MANIFEST)
+    assert [(case.task, case.example_id) for case in cases] == [
+        ("finance.wave_freelance_invoice", 4014),
+        ("sales.multi_hop_lookup", 501),
+        ("marketing.social_engagement_response", 1003),
+    ]
+    assert cases[0].prompt[1]["content"] in cases[0].request
+    task = opencorvus_automationbench(
+        str(MANIFEST),
+        str(SQUAD),
+        "D:/bench/isolated-inspect",
+        "provider/model",
+    )
+    assert task.metadata["system"]["prompt_profile"] == "automationbench"
+    assert task.dataset[0].input == cases[0].request
+
+
+def test_duplicate_case_has_explicit_manifest_error(tmp_path: Path) -> None:
+    payload = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    payload["cases"] = [payload["cases"][0], payload["cases"][0]]
+    manifest = tmp_path / "duplicate.json"
+    manifest.write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(ValueError, match="duplicate manifest case"):
+        load_cases(manifest)
+
+
+def test_real_inspect_mcp_official_rubric_and_snapshot_contracts(tmp_path: Path) -> None:
+    logs = eval(
+        automationbench_local_check(),
+        model="none",
+        log_dir=str(tmp_path / "logs"),
+        display="none",
+        max_samples=3,
+        ctl_server=False,
+    )
+    assert logs[0].status == "success"
+    samples = {sample.id: sample for sample in logs[0].samples}
+    assert len(samples) == 3
+    for name, expected in {
+        "empty": (0.0, 0.0),
+        "partial": (0.0, 0.5),
+        "complete": (1.0, 1.0),
+    }.items():
+        sample = samples[name]
+        assert sample.metadata["execution_mode"] == "local-checker-validation"
+        score = sample.metadata["automationbench_score"]
+        assert (score["strict"], score["partial"]) == expected
+        assert sample.scores["checker_contract"].value == "C"
+        assert sample.metadata["automationbench_snapshot"]["benchmark"] == BENCHMARK
+
+
+@pytest.mark.asyncio
+async def test_sample_setup_settles_separate_worlds_and_releases_owned_endpoints(
+    tmp_path: Path,
+) -> None:
+    cases = load_cases(MANIFEST)[:1]
+    setup = sample_environment(cases, SQUAD)
+
+    async def occurrence(index: int) -> tuple[str, TaskState]:
+        state = state_for(cases[0])
+        config = AdapterConfig.resolve(project_dir=str(tmp_path / str(index)))
+        async with setup(state, config):
+            settings = json.loads((Path(config.project_dir) / "opencorvus.json").read_text())
+            url = settings["mcp"]["automationbench"]["url"]
+            state.metadata["opencorvus_result"] = {"lifecycle_status": "failed"}
+        return url, state
+
+    results = await asyncio.gather(occurrence(1), occurrence(2))
+    assert len({url for url, _ in results}) == 2
+    for url, state in results:
+        assert state.metadata["automationbench_execution"] == {"status": "scored"}
+        assert state.metadata["automationbench_score"]["partial"] == 0.0
+        async with httpx.AsyncClient(trust_env=False) as client:
+            with pytest.raises(httpx.ConnectError):
+                await client.get(url)
+
+
+@pytest.mark.asyncio
+async def test_setup_error_retains_unscored_evidence_and_releases_endpoint(tmp_path: Path) -> None:
+    case = load_cases(MANIFEST)[0]
+    state = state_for(case)
+    config = AdapterConfig.resolve(project_dir=str(tmp_path / "failed"))
+    with pytest.raises(RuntimeError, match="injected observation error"):
+        async with sample_environment([case], SQUAD)(state, config):
+            settings = json.loads((Path(config.project_dir) / "opencorvus.json").read_text())
+            endpoint = urlsplit(settings["mcp"]["automationbench"]["url"])
+            raise RuntimeError("injected observation error")
+    assert state.metadata["automationbench_execution"] == {
+        "status": "error",
+        "error_type": "RuntimeError",
+    }
+    result = await automationbench_score()(state, Target(""))
+    assert result.explanation == "AutomationBench execution is error"
+    with pytest.raises(OSError):
+        await asyncio.open_connection(endpoint.hostname, endpoint.port)
+
+
+def test_sheet_write_tracking_survives_official_snapshot_restoration() -> None:
+    case = load_cases(MANIFEST)[0]
+    world = OfficialWorld(case)
+    result = json.loads(
+        world.call(
+            "api_fetch",
+            {
+                "method": "PUT",
+                "url": "https://sheets.googleapis.com/v4/spreadsheets/ss_projects/values/January%202026!C2",
+                "params": json.dumps({"valueInputOption": "RAW"}),
+                "body": json.dumps({"values": [["33"]]}),
+            },
+        )
+    )
+    assert result["updatedCells"] == 1
+    snapshot = world.snapshot()
+    assert snapshot["google_sheets_updated_row_keys"] == ["ss_projects:ws_jan_proj:2"]
+    assert rescore(case, snapshot, len(world.events)) == world.seal()

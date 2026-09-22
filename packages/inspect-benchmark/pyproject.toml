@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "opencorvus-inspect"
-version = "0.2.0"
+version = "0.3.0"
 description = "Extensible Inspect AI benchmark platform for the OpenCorvus Task API"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -18,6 +18,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+automation = [
+  "automation-bench @ git+https://github.com/zapier/AutomationBench@4a8e1061254004d9dac807054eed33fad7d1ff14",
+  "mcp==1.30.0",
+  "json5==0.12.1",
+  "uvicorn==0.53.0",
+]
 dev = [
   "mypy>=1.15,<2",
   "numpy>=1.26,<2.3",
@@ -33,7 +39,7 @@ opencorvus_inspect = "opencorvus_inspect._registry"
 where = ["src"]
 
 [tool.setuptools.package-data]
-opencorvus_inspect = ["examples/*.jsonl", "py.typed"]
+opencorvus_inspect = ["examples/*.jsonl", "examples/*.json", "py.typed"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
@@ -53,3 +59,7 @@ select = ["E", "F", "I", "UP", "B", "ASYNC"]
 python_version = "3.10"
 strict = true
 packages = ["opencorvus_inspect"]
+
+[[tool.mypy.overrides]]
+module = ["automationbench.*"]
+ignore_missing_imports = true

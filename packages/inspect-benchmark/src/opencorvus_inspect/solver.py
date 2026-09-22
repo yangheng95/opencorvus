@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import hashlib
+from collections.abc import Callable
+from contextlib import AbstractAsyncContextManager, AsyncExitStack
 from dataclasses import replace
 from importlib.metadata import version
 from pathlib import Path
 from typing import Any, Literal, cast
+from uuid import uuid4
 
 from inspect_ai.model import ModelOutput
 from inspect_ai.solver import Generate, Solver, TaskState, solver
@@ -14,6 +17,7 @@ from inspect_ai.solver import Generate, Solver, TaskState, solver
 from .adapter import AdapterConfig, OpenCorvusClient
 
 ProjectIsolation = Literal["shared", "sample_epoch"]
+SampleSetup = Callable[[TaskState, AdapterConfig], AbstractAsyncContextManager[None]]
 
 
 def _identity_digest(value: str) -> str:
@@ -59,6 +63,7 @@ def opencorvus_system_metadata(
         "prompt_profile": config.prompt_profile,
         "product_pillar": config.product_pillar,
         "timeout_seconds": config.timeout_seconds,
+        "timeout_policy": "durable-progress-inactivity-v1",
         "poll_seconds": config.poll_seconds,
         "project": {
             "root_sha256": _identity_digest(str(Path(config.project_dir).resolve())),
@@ -110,6 +115,7 @@ def build_opencorvus_solver(
     config: AdapterConfig,
     *,
     project_isolation: ProjectIsolation,
+    sample_setup: SampleSetup | None = None,
 ) -> Solver:
     """Build the one OpenCorvus Solver from an already-resolved configuration."""
 
@@ -118,13 +124,13 @@ def build_opencorvus_solver(
     attempts: dict[str, int] = {}
 
     async def solve(state: TaskState, _generate: Generate) -> TaskState:
-        request_id = f"inspect:{state.uuid}"
         attempt = attempts.get(state.uuid, 0) + 1
         attempts[state.uuid] = attempt
+        request_id = f"inspect:{state.uuid}:{state.epoch}:{attempt}:{uuid4().hex}"
         sample_config = _project_config(
             config,
             isolation=project_isolation,
-            sample_uuid=state.uuid,
+            sample_uuid=request_id,
             epoch=state.epoch,
             attempt=attempt,
         )
@@ -133,21 +139,33 @@ def build_opencorvus_solver(
             "isolation": project_isolation,
             "init_git": sample_config.init_git,
             "attempt": attempt,
+            "request_id": request_id,
         }
-        async with OpenCorvusClient(sample_config) as client:
-            result = await client.run_task(
-                request=state.input_text,
-                request_id=request_id,
-                title=_sample_title(state.metadata, state.sample_id),
-                sample_id=str(state.sample_id),
-                sample_uuid=state.uuid,
-                epoch=state.epoch,
-            )
-        state.metadata["opencorvus_result"] = result.metadata()
-        output = ModelOutput.from_content(model="opencorvus/task", content=result.completion)
-        state.output = output
-        state.messages.append(output.message)
-        state.completed = True
+        async with AsyncExitStack() as stack:
+            if sample_setup is not None:
+                await stack.enter_async_context(sample_setup(state, sample_config))
+            client = await stack.enter_async_context(OpenCorvusClient(sample_config))
+            try:
+                result = await client.run_task(
+                    request=state.input_text,
+                    request_id=request_id,
+                    title=_sample_title(state.metadata, state.sample_id),
+                    sample_id=str(state.sample_id),
+                    sample_uuid=state.uuid,
+                    epoch=state.epoch,
+                )
+            except BaseException as error:
+                state.metadata["opencorvus_observation"] = {
+                    "error_type": type(error).__name__,
+                    "accepted_task": client.accepted_task,
+                }
+                raise
+            state.metadata["opencorvus_result"] = result.metadata()
+            output = ModelOutput.from_content(model="opencorvus/task", content=result.completion)
+            state.output = output
+            if result.completion:
+                state.messages.append(output.message)
+            state.completed = True
         return state
 
     return cast(Solver, solve)

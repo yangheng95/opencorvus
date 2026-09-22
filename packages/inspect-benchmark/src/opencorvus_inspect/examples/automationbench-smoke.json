@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "benchmark": "zapier/automationbench@4a8e106",
+  "cases": [
+    {"domain": "finance", "task": "finance.wave_freelance_invoice", "example_id": 4014},
+    {"domain": "sales", "task": "sales.multi_hop_lookup", "example_id": 501},
+    {"domain": "marketing", "task": "marketing.social_engagement_response", "example_id": 1003}
+  ]
+}

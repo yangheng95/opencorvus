@@ -1,0 +1,71 @@
+{
+  "schema_version": 2,
+  "namespace": "builtin",
+  "id": "automationbench",
+  "name": "AutomationBench",
+  "label": "AutomationBench",
+  "description": "Execute simulated cross-application business workflows and independently verify exact outcomes through the official AutomationBench API tools.",
+  "version": "2026.09.22.2",
+  "product_pillars": ["code", "work"],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for official AutomationBench API-mode tasks.",
+    "selection_guidance": "Requires a sample-scoped automationbench MCP server supplied by the Inspect harness. One executor owns mutations; a separate verifier checks the original request against current records and exact receipts.",
+    "instructions": "selector.md",
+  },
+  "capability_sets": {},
+  "capability_projection": {
+    "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:manage_task",
+      ],
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+    },
+    "agents": {
+      "automationbench-executor": {
+        "capability_refs": [
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fapi_fetch",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fapi_search",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fbase64_encode",
+        ],
+        "label": "AutomationBench Executor",
+        "description": "Discovers source records, executes authorized simulated business mutations and preserves exact receipts.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/automationbench-executor/system.md",
+      },
+      "automationbench-verifier": {
+        "capability_refs": [
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fapi_fetch",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fapi_search",
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fbase64_encode",
+        ],
+        "label": "AutomationBench Verifier",
+        "description": "Independently maps original requirements to exact records and receipts after execution settles.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/automationbench-verifier/system.md",
+      },
+    },
+    "virtual_workflows": {
+      "execute-verify": {
+        "label": "Execute and independently verify",
+        "description": "One mutation owner followed by independent outcome verification.",
+        "nodes": {
+          "automationbench-executor": {
+            "agent_id": "automationbench-executor",
+            "description": "Resolve source facts, execute the business request and preserve evidence.",
+            "depends_on": [],
+          },
+          "automationbench-verifier": {
+            "agent_id": "automationbench-verifier",
+            "description": "Verify current outcomes independently from the original request and source records.",
+            "depends_on": ["automationbench-executor"],
+          },
+        },
+      },
+    },
+  },
+}

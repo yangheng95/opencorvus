@@ -5,18 +5,21 @@ OpenCorvus Task lifecycle. Inspect owns datasets, sample concurrency, scoring,
 logs, and the log viewer. OpenCorvus continues to own Provider selection,
 streaming model calls, Agents, tools, persistence, and terminal acceptance.
 
-It has two entry points:
+It has three benchmark entry points:
 
 - `opencorvus_benchmark` loads an ordinary JSON or JSON Lines dataset with a
   generic completion scorer.
 - `opencorvus_suite` resolves a versioned benchmark definition, validates its
   declared dataset schema and optional exact-ID manifest, and runs its frozen
   quality scorer alongside the durable Task-completed scorer.
+- `opencorvus_automationbench` runs an exact official AutomationBench case manifest
+  with a fresh simulated world, project, and API-only expert squad per occurrence.
 
 The integration is an Inspect solver rather than a model provider. One Inspect
 sample creates one OpenCorvus Task through `POST /task`, observes its public
 status snapshots, and resolves the completed Task's exact Completion Decision
-Message from the public conversation payload.
+Tool summary from the public conversation payload, binding Session, Message,
+Tool Part and call identities. Free-text narration is not required.
 
 ## Install
 
@@ -220,16 +223,18 @@ inspect eval your_eval.py \
 
 - Adapter timeout stops observing the sample; it does not cancel or delete the
   still-owned OpenCorvus Task.
-- The adapter timeout is one end-to-end observation deadline beginning before
-  Task creation. The `POST /task` acceptance request is wall-clock bounded by
-  the remaining deadline, in addition to per-network-stage timeouts, because
-  OpenCorvus may await the Task control plane's first owner turn before
-  returning its durable `202` receipt.
+- `timeout_seconds` is an inactivity window. Changes in durable Task/Session
+  execution facts or real transcript content renew it. Successful polling,
+  observation timestamps and an unchanged running flag do not. Task acceptance
+  and final projection each have a separate bounded window; network operations
+  also retain stage timeouts. Timeout is an observation error, not a business zero.
 - Inspect sample concurrency is real OpenCorvus/Provider concurrency. Set
   Inspect's connection limit to a value the service and Provider can sustain.
 - `project_isolation=shared` implies shared mutable state and is never accepted
   by comparable mode. Use `sample_epoch` for concurrent samples, retries, or
   multiple epochs.
+- Every solver attempt gets a fresh request identity. `sample_epoch` also creates
+  a fresh project occurrence, including after Inspect retries or resumes an evaluation.
 - `src/opencorvus_inspect/examples/smoke.jsonl` proves adapter wiring only. Its result is not a
   capability benchmark.
 - A real quality run requires explicit dataset, model, Provider credential,
@@ -237,6 +242,79 @@ inspect eval your_eval.py \
 - Comparable benchmark data and ground truth must remain outside the
   system-under-test's readable project or sandbox. Recorded provenance cannot
   by itself prove operating-system isolation.
+
+## AutomationBench
+
+Use Python 3.13 or newer and install `.[dev,automation]`. The optional extra pins
+the official Zapier source to commit `4a8e1061254004d9dac807054eed33fad7d1ff14`
+(version 1.0.6), MCP 1.30.0, Uvicorn 0.53.0 and JSON5 0.12.1 for squad JSONC manifests.
+Installation identity is checked
+against the immutable source revision; mutable source-tree hashes are not used
+as acceptance criteria. Official world models, APIs and rubric functions remain
+the sole owners of business semantics.
+
+From this package directory, run the model-free local checker:
+
+```powershell
+.venv/Scripts/python -m inspect_ai eval opencorvus_inspect/automationbench_local_check --model none --ctl-server false --max-samples 3 --log-dir logs/local-check
+```
+
+The three independent scenarios use the official `finance.wave_freelance_invoice`
+case: zero, one and two billed clients yield `(strict, partial)` of `(0, 0)`,
+`(0, 0.5)` and `(1, 1)`. All three `checker_contract` checks must pass. This runs
+actual loopback MCP requests, official mutations, scoring and snapshot restoration;
+it does not call a model or execute the expert squad. Its aggregate business score
+is not a model capability result. On Windows, `--ctl-server false` disables Inspect's
+optional Unix-only control endpoint; evaluation and normal Inspect log viewing work.
+
+After separately authorizing a Provider run and starting a co-located isolated
+OpenCorvus service, run the actual squad:
+
+```powershell
+.venv/Scripts/python -m inspect_ai eval opencorvus_inspect/opencorvus_automationbench --model none --ctl-server false --max-samples 1 -T manifest=src/opencorvus_inspect/examples/automationbench-smoke.json -T squad=../../expert-squads/builtin/automationbench -T project_dir=D:/bench/inspect-projects -T model=provider/model -T base_url=http://127.0.0.1:7878 -T timeout_seconds=300 --log-dir logs/automationbench
+```
+
+The manifest contains exact case identities across finance, sales and marketing.
+It controls membership and order; no case is silently substituted. Each sample
+installs the canonical squad into its fresh project configuration and exposes
+only the official `api_search`, `api_fetch` and `base64_encode` business tools
+through its own MCP endpoint. MCP query/body objects are serialized to the
+official API's JSON-string parameters. The executor handles mutations and the
+verifier independently checks records and receipts. The host adds no workflow
+state machine or case-specific routing.
+
+Inspect logs record the exact request/project occurrence, Task terminal evidence,
+squad version, ordered tool inputs and outputs, official final world snapshot,
+Google Sheets row-write tracking, and strict/partial rubric results. Offline
+`inspect score` recomputes the official rubric from that snapshot and checks its
+identity and recorded score. It does not re-execute mutations: official record IDs
+and timestamps are nondeterministic. The logs contain simulated business records
+and belong outside agent-readable projects. Failed/cancelled observations preserve
+diagnostics; infrastructure errors and cancellation are unscored. A normally
+settled failed Task still receives its actual official business score.
+
+Specify the fully qualified scorer when re-scoring a packaged task (Inspect
+0.3.259 stores unqualified scorer names in logs):
+
+```powershell
+.venv/Scripts/python -m inspect_ai score logs/run.eval --scorer opencorvus_inspect/automationbench_strict --action append --model none --output-file logs/rescored.eval
+```
+
+Use `opencorvus_inspect/automationbench_partial` for the partial metric. Both
+scorers recompute and validate the complete official strict/partial result.
+
+The harness closes its own MCP endpoint on success, failure or cancellation,
+preserves project files and does not cancel the OpenCorvus Task. A timed-out Task
+may remain owned by the service but can no longer mutate that closed world.
+Starting/stopping services, copying credentials, selecting another model and
+cleaning old projects remain explicit operator actions.
+
+This harness requires the same host/filesystem as the loopback OpenCorvus service.
+Distinct projects and in-memory worlds provide sample isolation, not an operating-
+system sandbox. The results explicitly record `comparable=false`; unrestricted
+host tools or global capabilities require separate isolation review before a
+leaderboard-comparable experiment. Model-driven execution is separate from local
+checker acceptance.
 
 ## Extending the catalog
 

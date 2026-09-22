@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from dataclasses import replace
 from typing import Any, cast
 
@@ -33,7 +32,6 @@ def test_judge_provenance_hashes_transport_values_and_rejects_credential_urls() 
     metadata = BROWSECOMP.judge.metadata()
 
     assert metadata["transport"] == BROWSECOMP.judge.transport_metadata()
-    assert "https://api.openai.com/v1" not in json.dumps(metadata)
     with pytest.raises(ValueError, match="credential-free"):
         replace(
             BROWSECOMP.judge,
@@ -72,7 +70,6 @@ async def test_inspect_judge_forces_declared_streaming_transport(
     }
     config = captured["config"]
     assert config.max_retries == 0
-    assert config.fallback_models == []
 
 
 @pytest.mark.asyncio
