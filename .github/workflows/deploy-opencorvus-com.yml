@@ -52,7 +52,7 @@ jobs:
   deadline:
     name: website deadline
     runs-on: ubuntu-latest
-    timeout-minutes: 31
+    timeout-minutes: 41
     permissions:
       contents: read
       actions: write

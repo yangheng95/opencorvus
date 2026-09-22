@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Unattended release with a 40-minute budget](2026-09-22-unattended-release-40-minutes.md)
+
 - [v0.1.11 release](2026-09-22-v0.1.11-release.md)
 
 - [Single-column settings and compact capability details](2026-09-22-single-column-settings.md)

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Unattended release with a 40-minute budget](records/2026-09/2026-09-22-unattended-release-40-minutes.md)
+
 - [v0.1.11 release](records/2026-09/2026-09-22-v0.1.11-release.md)
 
 - [Single-column settings and compact capability details](records/2026-09/2026-09-22-single-column-settings.md)

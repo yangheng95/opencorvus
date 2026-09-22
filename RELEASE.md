@@ -50,7 +50,7 @@ The workflow does all of the following in one pipeline:
 6. Reverify both owners and upload the verified files to the draft GitHub Release
 7. Publish the draft only after every independent Release asset uploads successfully
 8. Dispatch the existing website deployment owner and await its exact returned workflow run ID
-9. Require native publication, updater settlement, website activation and public readback to complete within the original 30-minute run budget
+9. Require native publication, updater settlement, website activation, public readback and the final aggregate result to complete within the original 40-minute run budget
 
 Early admission leaves an exact tag and empty draft if native compilation later
 fails. Re-run failed jobs in the same workflow run to retain that ownership and
@@ -69,7 +69,13 @@ format job within the same run to reuse the successful compilation. See the
 
 Native publication, the desktop update channel and website deployment are one automatic release scope for tag pushes, manual dispatch and the local release command. The website workflow retains its own signing-version counter and main-only production environment; its checkout verifies the exact release tag/source and parent run. The native workflow waits on the workflow ID returned by GitHub's 2026-03-10 dispatch API, so deployment failure fails the combined release. A same-run publication retry still executes website deployment even when the update channel is already current.
 
-`script/release-automation.ts` owns a 30-minute deadline measured from the original native workflow `created_at`. Queue time, retries and delegated website time share that budget; reruns do not reset it. Both workflows have deadline watchers and explicit final-result jobs, and publication/deployment boundaries recheck remaining time. An expired run is cancelled and remains failed, with completed artifacts retained where their jobs already uploaded them. Deadline enforcement is not proof of performance: an actual successful native-plus-website run must record its elapsed time below the limit.
+`script/release-automation.ts` owns a 40-minute deadline measured from the original native workflow `created_at`. Queue time, retries and delegated website time share that budget; reruns do not reset it. Both workflows have deadline watchers and explicit final-result jobs, and publication/deployment boundaries recheck remaining time. Their watchdog job ceilings are 41 minutes so the shared policy can cancel an expired run itself. An expired run is cancelled and remains failed, with completed artifacts retained where their jobs already uploaded them. Deadline enforcement is not proof of performance: an actual successful native-plus-website run must record its elapsed time below the limit.
+
+### Unattended handoff
+
+Preparation ends with reviewed fixes, aligned versions/changelog and a pushed immutable source. After `script/release` returns the GitHub workflow run URL, GitHub Actions owns the complete release; Codex and the initiating computer can be closed. Native first-run checks, installer/signature validation, Release publication, desktop update settlement, website dispatch, public readback and the final result run automatically with the existing configured credentials and production environment policy. An agent's later polling, downloaded-package checks or screenshots are supplemental review, not required release steps.
+
+The workflow reports success only when all required stages succeed. A failed stage or expired budget ends the attempt with a visible failure/cancellation and retained available diagnostics; it does not wait for an agent to approve or complete another step. Automatic execution is not a promise that runner availability, networks, credentials or deployment services will always succeed. Repairing such a failure and deliberately starting an authorized retry remains a separate operator decision; it never rewrites the source or resets the original run's clock. Repository administrators must keep the existing credentials available and avoid adding a manual environment approval if unattended publication is required.
 
 Generated binaries are never committed to a distribution branch. GitHub rejects
 individual Git objects larger than 100 MB, while current native installers and

@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
+import { RELEASE_BUDGET_MINUTES } from "./release-automation"
 
 type WorkflowStep = {
   id?: string
@@ -15,6 +16,7 @@ type WorkflowStep = {
 
 type WorkflowJob = {
   name?: string
+  "timeout-minutes"?: number
   permissions?: Record<string, string>
   uses?: string
   with?: Record<string, unknown>
@@ -62,6 +64,9 @@ describe("GitHub Actions workflow contract", () => {
   test("executes complete native and website outcome contracts under the shared deadline owners", async () => {
     const release = await readWorkflow("build.yml")
     const website = await readWorkflow("deploy-opencorvus-com.yml")
+    expect(release.jobs?.deadline?.["timeout-minutes"]).toBe(RELEASE_BUDGET_MINUTES + 1)
+    expect(website.jobs?.deadline?.["timeout-minutes"]).toBe(RELEASE_BUDGET_MINUTES + 1)
+    expect(release.jobs?.["publish-release"]?.["timeout-minutes"]).toBe(RELEASE_BUDGET_MINUTES)
     expect(release.jobs?.deadline?.steps?.at(-1)?.run).toBe("bun script/release-automation.ts watch-release")
     expect(website.jobs?.deadline?.steps?.at(-1)).toMatchObject({
       env: { RELEASE_RUN_ID: "${{ inputs.release_run_id || github.run_id }}" },

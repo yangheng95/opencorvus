@@ -38,10 +38,10 @@ async function withAPI(
 }
 
 describe("automatic release lifecycle", () => {
-  test("dispatches the exact website run and joins its successful completion", async () => {
+  test("dispatches the exact website run after minute 30 and joins its successful completion", async () => {
     const requests: Array<{ method: string; route: string; body?: unknown }> = []
     let reads = 0
-    let now = started + 60_000
+    let now = started + 30 * 60_000
     await withAPI(async (request, route) => {
       const body = request.method === "POST" ? await request.json() : undefined
       requests.push({ method: request.method, route, ...(body === undefined ? {} : { body }) })
@@ -57,7 +57,7 @@ describe("automatic release lifecycle", () => {
         now: () => now, sleep: async (milliseconds) => { now += milliseconds },
       })
       expect({ id: completed.id, conclusion: completed.conclusion, elapsed: now - started }).toEqual({
-        id: 72, conclusion: "success", elapsed: 70_000,
+        id: 72, conclusion: "success", elapsed: 30 * 60_000 + 10_000,
       })
     })
     expect(requests).toEqual([
@@ -73,9 +73,10 @@ describe("automatic release lifecycle", () => {
 
   test("a rerun retains the original creation deadline and expires with an explicit error", () => {
     const deadline = releaseDeadline({ ...parent, run_attempt: 3, run_started_at: new Date(started + 25 * 60_000).toISOString() } as ActionsRun)
-    expect(deadline).toBe(started + RELEASE_BUDGET_MS)
-    expect(assertReleaseBudget(deadline, started + 29 * 60_000)).toBe(60_000)
-    expect(() => assertReleaseBudget(deadline, started + 30 * 60_000)).toThrow("RELEASE_BUDGET_EXHAUSTED")
+    expect(deadline).toBe(started + 40 * 60_000)
+    expect(assertReleaseBudget(deadline, started + 30 * 60_000)).toBe(10 * 60_000)
+    expect(assertReleaseBudget(deadline, started + 39 * 60_000)).toBe(60_000)
+    expect(() => assertReleaseBudget(deadline, started + 40 * 60_000)).toThrow("The original release's 40-minute budget has expired")
   })
 
   test("a failed website conclusion becomes the parent release error", async () => {
@@ -148,6 +149,29 @@ describe("automatic release lifecycle", () => {
         now: () => started, sleep: async () => {},
       })).rejects.toMatchObject({ code: "RELEASE_RESULT_FAILED" })
     })
+  })
+
+  test("both deadline owners settle queued aggregate jobs after minute 30", async () => {
+    for (const [currentRunID, resultJob] of [[41, RELEASE_RESULT_JOB], [72, WEBSITE_RESULT_JOB]] as const) {
+      let now = started + 32 * 60_000
+      let reads = 0
+      await withAPI((_request, route) => {
+        if (route === "actions/runs/41") return Response.json(parent)
+        reads += 1
+        return Response.json({ jobs: [{
+          name: resultJob,
+          status: reads === 1 ? "queued" : "completed",
+          conclusion: reads === 1 ? null : "success",
+        }] })
+      }, async (client) => {
+        const result = await watchReleaseDeadline(client, { releaseRunID: 41, currentRunID, attempt: 1, resultJob }, {
+          now: () => now, sleep: async (milliseconds) => { now += milliseconds },
+        })
+        expect(result).toEqual({
+          releaseRunID: 41, currentRunID, elapsedMs: 32 * 60_000 + 10_000, budgetMs: 40 * 60_000,
+        })
+      })
+    }
   })
 
   test("release cancellation terminates the recorded website run", async () => {

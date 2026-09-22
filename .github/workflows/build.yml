@@ -22,7 +22,7 @@ jobs:
   deadline:
     name: release deadline
     runs-on: ubuntu-latest
-    timeout-minutes: 31
+    timeout-minutes: 41
     permissions:
       contents: read
       actions: write
@@ -423,7 +423,7 @@ jobs:
       - publish-release-assets
     if: ${{ !cancelled() && needs.publish-release-assets.result == 'success' && needs.publish-release-assets.outputs.complete == 'true' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     concurrency:
       group: opencorvus-desktop-update-${{ needs.prepare.outputs.update-channel }}
       queue: max

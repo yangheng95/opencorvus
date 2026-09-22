@@ -2,7 +2,8 @@ import fs from "node:fs/promises"
 import { enforceReleaseIdentity } from "./verify-release-identity"
 import { normalizeReleaseVersion } from "./release-version"
 
-export const RELEASE_BUDGET_MS = 30 * 60_000
+export const RELEASE_BUDGET_MINUTES = 40
+export const RELEASE_BUDGET_MS = RELEASE_BUDGET_MINUTES * 60_000
 export const RELEASE_RESULT_JOB = "release result"
 export const WEBSITE_RESULT_JOB = "website result"
 
@@ -61,7 +62,7 @@ export function releaseDeadline(run: ActionsRun): number {
 export function assertReleaseBudget(deadline: number, now = Date.now()): number {
   const remaining = deadline - now
   if (remaining <= 0) {
-    throw new ReleaseAutomationError("RELEASE_BUDGET_EXHAUSTED", "The original release's 30-minute budget has expired, including retries and website deployment")
+    throw new ReleaseAutomationError("RELEASE_BUDGET_EXHAUSTED", `The original release's ${RELEASE_BUDGET_MINUTES}-minute budget has expired, including retries and website deployment`)
   }
   return remaining
 }
@@ -182,7 +183,7 @@ async function main() {
   if (command === "check") {
     const run = await readReleaseRun(client, releaseRunID)
     const remaining = assertReleaseBudget(releaseDeadline(run))
-    console.log(`Release ${releaseRunID}: ${Math.ceil(remaining / 1000)} seconds remain in the original 30-minute budget`)
+    console.log(`Release ${releaseRunID}: ${Math.ceil(remaining / 1000)} seconds remain in the original ${RELEASE_BUDGET_MINUTES}-minute budget`)
   } else if (command === "dispatch-website") {
     if (!process.env.GITHUB_OUTPUT) throw new Error("GITHUB_OUTPUT is required for the exact website run receipt")
     const runID = await dispatchReleaseWebsite(client, { releaseRunID, version: process.env.VERSION ?? "", sourceSHA: process.env.SOURCE_SHA ?? "" })
@@ -226,7 +227,7 @@ async function main() {
     })
     console.log(JSON.stringify(timing))
     if (process.env.GITHUB_STEP_SUMMARY) {
-      await fs.appendFile(process.env.GITHUB_STEP_SUMMARY, `Completed in ${(timing.elapsedMs / 60_000).toFixed(2)} minutes of the original 30-minute release budget (run ${timing.releaseRunID}).\n`)
+      await fs.appendFile(process.env.GITHUB_STEP_SUMMARY, `Completed in ${(timing.elapsedMs / 60_000).toFixed(2)} minutes of the original ${RELEASE_BUDGET_MINUTES}-minute release budget (run ${timing.releaseRunID}).\n`)
     }
   } else {
     throw new Error("Expected check, website-source, dispatch-website, wait-website, cancel-website, watch-release, or watch-website")
