@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [v0.1.12 release](2026-09-22-v0.1.12-release.md)
+
 - [Additional workspace color themes](2026-09-22-additional-workspace-themes.md)
 
 - [Outer subagent scrolling and overlay polish](2026-09-22-subagent-scroll-and-overlay-polish.md)
