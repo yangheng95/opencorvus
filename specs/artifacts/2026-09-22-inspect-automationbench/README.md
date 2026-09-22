@@ -26,6 +26,8 @@ Implementation and verification details are in the
 - [Machine-readable result summary](summary.json).
 - [Native Inspect run](local-check.eval): 3/3 checker contracts passed, with the exact expected official strict/partial values.
 - [Independent offline re-scoring](rescored.eval): fully qualified `opencorvus_inspect/automationbench_strict` recomputed the complete official result for every stored snapshot and matched all original values.
+- [Residual audit summary](residual-audit.json): adapter 0.3.1 passed 800/800 initial-world score roundtrips and 3/3 local checker contracts.
+- [Residual audit Inspect run](residual-local-check.eval) and [independent re-scoring](residual-rescored.eval): repeat official API/checker acceptance after the residual repairs. See the [audit record](../../records/2026-09/2026-09-22-inspect-automationbench-residual-audit.md) for the additional actual product configuration and expert-squad projection check.
 
 Commands (from the repository root):
 

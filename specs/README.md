@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Inspect AutomationBench residual audit](records/2026-09/2026-09-22-inspect-automationbench-residual-audit.md)
+
 - [Inspect AutomationBench engine and expert squad](records/2026-09/2026-09-22-inspect-automationbench-engine.md)
 
 - [v0.1.12 Windows qualification repair](records/2026-09/2026-09-22-v0.1.12-windows-qualification-repair.md)

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import shutil
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
@@ -103,7 +104,9 @@ async def test_sample_setup_settles_separate_worlds_and_releases_owned_endpoints
         state = state_for(cases[0])
         config = AdapterConfig.resolve(project_dir=str(tmp_path / str(index)))
         async with setup(state, config):
-            settings = json.loads((Path(config.project_dir) / "opencorvus.json").read_text())
+            settings = json.loads(
+                (Path(config.project_dir) / ".opencorvus/opencorvus.jsonc").read_text()
+            )
             url = settings["mcp"]["automationbench"]["url"]
             state.metadata["opencorvus_result"] = {"lifecycle_status": "failed"}
         return url, state
@@ -125,7 +128,9 @@ async def test_setup_error_retains_unscored_evidence_and_releases_endpoint(tmp_p
     config = AdapterConfig.resolve(project_dir=str(tmp_path / "failed"))
     with pytest.raises(RuntimeError, match="injected observation error"):
         async with sample_environment([case], SQUAD)(state, config):
-            settings = json.loads((Path(config.project_dir) / "opencorvus.json").read_text())
+            settings = json.loads(
+                (Path(config.project_dir) / ".opencorvus/opencorvus.jsonc").read_text()
+            )
             endpoint = urlsplit(settings["mcp"]["automationbench"]["url"])
             raise RuntimeError("injected observation error")
     assert state.metadata["automationbench_execution"] == {
@@ -156,3 +161,67 @@ def test_sheet_write_tracking_survives_official_snapshot_restoration() -> None:
     snapshot = world.snapshot()
     assert snapshot["google_sheets_updated_row_keys"] == ["ss_projects:ws_jan_proj:2"]
     assert rescore(case, snapshot, len(world.events)) == world.seal()
+
+
+def test_disabled_official_strict_policy_is_an_explicit_scoring_error(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from automationbench.rubric import registry
+
+    case = load_cases(MANIFEST)[0]
+    world = OfficialWorld(case)
+    monkeypatch.setattr(registry, "STRICT_MODE", False)
+    with pytest.raises(ValueError, match="requires AUTOMATIONBENCH_STRICT_ASSERTIONS=1"):
+        load_cases(MANIFEST)
+    with pytest.raises(ValueError, match="requires AUTOMATIONBENCH_STRICT_ASSERTIONS=1"):
+        world.seal()
+
+
+@pytest.mark.asyncio
+async def test_solver_retains_exact_squad_input_when_operator_edits_source(tmp_path: Path) -> None:
+    source = tmp_path / "source"
+    shutil.copytree(SQUAD, source)
+    case = load_cases(MANIFEST)[0]
+    original = (source / "agents/automationbench-executor/system.md").read_bytes()
+    setup = sample_environment([case], source)
+    (source / "agents/automationbench-executor/system.md").write_text(
+        "changed after solver construction"
+    )
+    config = AdapterConfig.resolve(project_dir=str(tmp_path / "sample"))
+    state = state_for(case)
+    async with setup(state, config):
+        installed = Path(config.project_dir) / ".opencorvus/expert-squads/builtin/automationbench"
+        assert (installed / "agents/automationbench-executor/system.md").read_bytes() == original
+
+
+@pytest.mark.asyncio
+async def test_cancellation_closes_owned_mcp_and_preserves_sample_evidence(tmp_path: Path) -> None:
+    case = load_cases(MANIFEST)[0]
+    state = state_for(case)
+    config = AdapterConfig.resolve(project_dir=str(tmp_path / "cancelled"))
+    ready = asyncio.Event()
+    endpoint = ""
+
+    async def occurrence() -> None:
+        nonlocal endpoint
+        async with sample_environment([case], SQUAD)(state, config):
+            settings = json.loads(
+                (Path(config.project_dir) / ".opencorvus/opencorvus.jsonc").read_text()
+            )
+            endpoint = settings["mcp"]["automationbench"]["url"]
+            ready.set()
+            await asyncio.Future()
+
+    operation = asyncio.create_task(occurrence())
+    await asyncio.wait_for(ready.wait(), timeout=10)
+    operation.cancel()
+    with pytest.raises(asyncio.CancelledError):
+        await operation
+    assert state.metadata["automationbench_execution"] == {
+        "status": "error",
+        "error_type": "CancelledError",
+    }
+    assert state.metadata["automationbench_snapshot"]["task"] == case.task
+    async with httpx.AsyncClient(trust_env=False) as client:
+        with pytest.raises(httpx.ConnectError):
+            await client.get(endpoint)

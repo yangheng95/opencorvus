@@ -13,6 +13,11 @@ acceptance and terminal evidence retrieval have separate bounded stages. Failed
 observations remain errors; accepted completion text is resolved only from the
 `summary` input of the exact Completion Decision Tool invocation, bound to its
 Session, Message, Tool Part and call identities. No final narration is required.
+This is read through the canonical Session Part endpoint, not the display-only
+conversation projection that defers large tool inputs. Observation hydrates the
+latest unfinished assistant Message for each Session so persisted reasoning also
+counts as progress; the observer does not publish that reasoning. Poll intervals
+must be shorter than the inactivity window.
 
 AutomationBench is an optional stateful benchmark integration pinned to an official
 source revision. Its manifest freezes domain/task/example identity and order.
@@ -22,6 +27,9 @@ The service exposes the official search/fetch/encoding business tools. Scoring i
 host-owned and has no agent-facing endpoint. Squad prompts and capability
 projections define executor/verifier responsibilities; the host introduces no
 workflow state machine.
+The project config uses `.opencorvus/opencorvus.jsonc`, admitted by the same
+ConfigPaths authority as normal Tasks. The solver freezes package bytes before
+sample execution instead of re-reading mutable source files for each occurrence.
 
 The official package owns world transitions and rubric semantics. Inspect keeps
 ordered real tool events, sealed world state and the private Google Sheets row-write
@@ -29,6 +37,9 @@ tracking required by the pinned rubric. Scoring and offline re-scoring restore t
 state and call the official rubric. Mutation replay is not used because upstream
 record identifiers and timestamps are nondeterministic. Source-tree hashes and
 agent self-reports do not establish correctness.
+The installed official rubric must retain its strict assertion mode, recorded as
+`official-strict-assertions-v1`. A disabled policy is rejected; assertion errors
+remain infrastructure failures rather than becoming business scores.
 
 Cleanup closes only the sample-owned MCP service and preserves evidence/project
 files. Observation failure does not silently cancel the product Task. Completed

@@ -13,7 +13,7 @@ from inspect_ai.scorer import CORRECT, Score, Scorer, Target, accuracy, scorer
 from inspect_ai.solver import Generate, Solver, TaskState, solver
 
 from .task import automationbench_partial, automationbench_strict
-from .world import BENCHMARK, OfficialWorld, load_cases, rescore
+from .world import BENCHMARK, SCORING_POLICY, OfficialWorld, load_cases, rescore
 
 
 async def exercise_invoice_case(url: str, count: int) -> None:
@@ -192,5 +192,9 @@ def automationbench_local_check() -> Task:
             automationbench_partial(),
         ],
         model=None,
-        metadata={"benchmark": BENCHMARK, "execution_mode": "local-checker-validation"},
+        metadata={
+            "benchmark": BENCHMARK,
+            "scoring_policy": SCORING_POLICY,
+            "execution_mode": "local-checker-validation",
+        },
     )

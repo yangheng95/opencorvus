@@ -18,7 +18,7 @@ It has three benchmark entry points:
 The integration is an Inspect solver rather than a model provider. One Inspect
 sample creates one OpenCorvus Task through `POST /task`, observes its public
 status snapshots, and resolves the completed Task's exact Completion Decision
-Tool summary from the public conversation payload, binding Session, Message,
+Tool summary from the exact public Session Part endpoint, binding Session, Message,
 Tool Part and call identities. Free-text narration is not required.
 
 ## Install
@@ -228,6 +228,10 @@ inspect eval your_eval.py \
   observation timestamps and an unchanged running flag do not. Task acceptance
   and final projection each have a separate bounded window; network operations
   also retain stage timeouts. Timeout is an observation error, not a business zero.
+- `poll_seconds` must be smaller than `timeout_seconds`. The observer reads the
+  latest unfinished assistant Message in each Session through its canonical
+  endpoint, so persisted reasoning activity counts even when display projections
+  omit it. Reasoning is observed for activity only and is not logged as result text.
 - Inspect sample concurrency is real OpenCorvus/Provider concurrency. Set
   Inspect's connection limit to a value the service and Provider can sustain.
 - `project_isolation=shared` implies shared mutable state and is never accepted
@@ -282,6 +286,26 @@ through its own MCP endpoint. MCP query/body objects are serialized to the
 official API's JSON-string parameters. The executor handles mutations and the
 verifier independently checks records and receipts. The host adds no workflow
 state machine or case-specific routing.
+
+The single project config is `.opencorvus/opencorvus.jsonc`. Squad bytes are frozen
+when the solver is constructed, so editing its source while an evaluation runs
+does not silently change subsequent samples. The loaded official rubric must use
+strict assertions (`AUTOMATIONBENCH_STRICT_ASSERTIONS=1`, upstream's default);
+disabling them is an explicit configuration/scoring error. Every run records the
+`official-strict-assertions-v1` policy. Checker exceptions are never business zeroes.
+
+To verify the Python-generated project with the actual product configuration
+loader, squad resolver and live official MCP service, run this additional local
+check from the repository root (it does not invoke a model):
+
+```powershell
+$env:OPENCORVUS_INSPECT_TEST_PYTHON = (Resolve-Path packages/inspect-benchmark/.venv/Scripts/python.exe).Path
+cd packages/opencorvus
+bun test test/automationbench-project-admission.test.ts test/automationbench-expert-squad.test.ts
+```
+
+The cross-language test requires that explicitly selected Python environment and
+is skipped in ordinary Bun-only unit runs. Benchmark acceptance must enable it.
 
 Inspect logs record the exact request/project occurrence, Task terminal evidence,
 squad version, ordered tool inputs and outputs, official final world snapshot,

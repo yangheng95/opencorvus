@@ -1,0 +1,25 @@
+{
+  "scope": "local acceptance only; no model or Provider calls",
+  "initial_state_roundtrips": {
+    "cases": 800,
+    "roundtrips": 800,
+    "snapshot_mutations": 0,
+    "errors": [],
+    "domains": {
+      "sales": 100,
+      "marketing": 100,
+      "operations": 100,
+      "support": 100,
+      "finance": 100,
+      "hr": 100,
+      "simple": 200
+    }
+  },
+  "inspect_status": "success",
+  "scoring_policy": "official-strict-assertions-v1",
+  "sample_contracts": {
+    "complete": "C",
+    "empty": "C",
+    "partial": "C"
+  }
+}

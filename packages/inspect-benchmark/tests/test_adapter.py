@@ -21,6 +21,18 @@ async def test_public_task_lifecycle_returns_exact_completion_decision_message()
 
     async def handler(request: httpx.Request) -> httpx.Response:
         nonlocal status_calls
+        if request.url.path == "/session/session-root/message/message-accepted/part/part-complete":
+            return httpx.Response(
+                200,
+                json={
+                    "type": "tool",
+                    "id": "part-complete",
+                    "callID": "call-complete",
+                    "sessionID": "session-root",
+                    "messageID": "message-accepted",
+                    "state": {"status": "completed", "input": {"summary": "accepted answer"}},
+                },
+            )
         if request.method == "POST" and request.url.path == "/task":
             seen_create["query"] = dict(request.url.params)
             seen_create["body"] = json.loads(request.content)
@@ -72,7 +84,7 @@ async def test_public_task_lifecycle_returns_exact_completion_decision_message()
                                 "id": "message-accepted",
                                 "sessionID": "session-root",
                                 "role": "assistant",
-                                "time": {"created": 10},
+                                "time": {"created": 10, "completed": 12},
                             },
                             "parts": [
                                 {
@@ -92,7 +104,7 @@ async def test_public_task_lifecycle_returns_exact_completion_decision_message()
                                 "id": "message-later",
                                 "sessionID": "session-agent",
                                 "role": "assistant",
-                                "time": {"created": 11},
+                                "time": {"created": 11, "completed": 13},
                             },
                             "parts": [{"type": "text", "text": "later unrelated text"}],
                         },
@@ -175,6 +187,7 @@ async def test_task_creation_deadline_returns_typed_api_observation_failure() ->
         base_url="http://opencorvus.test",
         project_dir="D:/bench",
         timeout_seconds=0.01,
+        poll_seconds=0.001,
     )
     async with OpenCorvusClient(config, transport=httpx.MockTransport(handler)) as client:
         with pytest.raises(OpenCorvusAPIError) as raised:

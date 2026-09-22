@@ -5,7 +5,6 @@ from __future__ import annotations
 import asyncio
 import json
 import math
-import shutil
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -20,12 +19,25 @@ from inspect_ai.solver import Solver, TaskState, solver
 from ..adapter import AdapterConfig
 from ..scorer import task_completed
 from ..solver import SampleSetup, build_opencorvus_solver, opencorvus_system_metadata
-from .world import BENCHMARK, Case, OfficialWorld, load_cases, official_case, rescore
+from .world import (
+    BENCHMARK,
+    SCORING_POLICY,
+    Case,
+    OfficialWorld,
+    load_cases,
+    official_case,
+    rescore,
+)
 
 
 def sample_environment(cases: list[Case], squad: Path) -> SampleSetup:
     """Provision only a fresh project; never rewrite an existing project or user's service."""
     by_id = {case.task: case for case in cases}
+    files = tuple(
+        (file.relative_to(squad), file.read_bytes())
+        for file in sorted(squad.rglob("*"))
+        if file.is_file()
+    )
 
     @asynccontextmanager
     async def setup(state: TaskState, config: AdapterConfig) -> AsyncIterator[None]:
@@ -43,8 +55,11 @@ def sample_environment(cases: list[Case], squad: Path) -> SampleSetup:
                     target = (
                         project / ".opencorvus" / "expert-squads" / "builtin" / "automationbench"
                     )
-                    shutil.copytree(squad, target)
-                    (project / "opencorvus.json").write_text(
+                    for relative, content in files:
+                        destination = target / relative
+                        destination.parent.mkdir(parents=True, exist_ok=True)
+                        destination.write_bytes(content)
+                    (project / ".opencorvus" / "opencorvus.jsonc").write_text(
                         json.dumps(
                             {
                                 "mcp": {
@@ -232,6 +247,7 @@ def opencorvus_automationbench(
     )
     metadata: dict[str, Any] = {
         "benchmark": BENCHMARK,
+        "scoring_policy": SCORING_POLICY,
         "execution_mode": "opencorvus-task-api",
         "comparable": False,
         "isolation": "local-sample-project-and-mcp-world",

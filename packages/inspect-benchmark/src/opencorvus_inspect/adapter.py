@@ -8,8 +8,9 @@ import os
 import time
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass
+from functools import partial
 from typing import Any, Literal, TypeVar, cast
-from urllib.parse import urlsplit
+from urllib.parse import quote, urlsplit
 
 import httpx
 
@@ -98,6 +99,10 @@ class AdapterConfig:
     poll_seconds: float
     init_git: bool
 
+    def __post_init__(self) -> None:
+        if self.poll_seconds >= self.timeout_seconds:
+            raise ValueError("poll_seconds must be less than timeout_seconds")
+
     @classmethod
     def resolve(
         cls,
@@ -185,32 +190,12 @@ def _optional_string(value: object) -> str | None:
     return value if isinstance(value, str) and value.strip() else None
 
 
-def _message_identity(message: Mapping[str, Any]) -> str | None:
-    info = message.get("info")
-    return _optional_string(info.get("id")) if isinstance(info, Mapping) else None
-
-
-def _assistant_messages(conversation: Mapping[str, Any]) -> list[Mapping[str, Any]]:
-    transcript = conversation.get("transcript")
-    if not isinstance(transcript, list):
-        raise OpenCorvusProtocolError("OpenCorvus conversation transcript must be an array")
-    result: list[Mapping[str, Any]] = []
-    for raw in transcript:
-        if not isinstance(raw, Mapping):
-            continue
-        info = raw.get("info")
-        if isinstance(info, Mapping) and info.get("role") == "assistant":
-            result.append(cast(Mapping[str, Any], raw))
-    return result
-
-
 def extract_completion(
-    task: Mapping[str, Any], conversation: Mapping[str, Any]
+    task: Mapping[str, Any], part: Mapping[str, Any] | None
 ) -> tuple[str, str | None]:
     """Resolve the exact accepted completion Tool input; failures have no accepted output."""
 
     lifecycle = _required_string(task.get("status"), label="task.status")
-    assistants = _assistant_messages(conversation)
     decision = task.get("completionDecision")
     if lifecycle == "completed":
         decision_map = _mapping(decision, label="task.completionDecision")
@@ -228,28 +213,20 @@ def extract_completion(
         call_id = _required_string(
             decision_map.get("toolCallID"), label="completionDecision.toolCallID"
         )
-        for message in assistants:
-            if _message_identity(message) == message_id:
-                info = _mapping(message["info"], label="completion Message.info")
-                if info.get("sessionID") != session_id:
-                    raise OpenCorvusProtocolError("Completion Decision Session identity disagrees")
-                parts = message.get("parts")
-                if not isinstance(parts, list):
-                    raise OpenCorvusProtocolError(
-                        "Completion Decision Message.parts must be an array"
-                    )
-                for part in parts:
-                    if not isinstance(part, Mapping) or part.get("id") != part_id:
-                        continue
-                    if part.get("type") != "tool" or part.get("callID") != call_id:
-                        raise OpenCorvusProtocolError("Completion Decision Tool identity disagrees")
-                    state = _mapping(part.get("state"), label="completion Tool.state")
-                    arguments = _mapping(state.get("input"), label="completion Tool.state.input")
-                    summary = _required_string(arguments.get("summary"), label="completion summary")
-                    return summary.strip(), message_id
-        raise OpenCorvusProtocolError(
-            f"OpenCorvus Completion Decision Tool {part_id} is missing from Message {message_id}"
-        )
+        selected = _mapping(part, label="completion Tool Part")
+        expected = {
+            "id": part_id,
+            "messageID": message_id,
+            "sessionID": session_id,
+            "callID": call_id,
+            "type": "tool",
+        }
+        if any(selected.get(key) != value for key, value in expected.items()):
+            raise OpenCorvusProtocolError("Completion Decision Tool identity disagrees")
+        state = _mapping(selected.get("state"), label="completion Tool.state")
+        arguments = _mapping(state.get("input"), label="completion Tool.state.input")
+        summary = _required_string(arguments.get("summary"), label="completion summary")
+        return summary.strip(), message_id
 
     return "", None
 
@@ -449,6 +426,49 @@ class OpenCorvusClient:
             params={"directory": self.config.project_dir, "tail_limit": "200"},
         )
 
+    async def message(self, session_id: str, message_id: str) -> Mapping[str, Any]:
+        result = await self._request_json(
+            "GET",
+            f"/session/{quote(session_id, safe='')}/message/{quote(message_id, safe='')}",
+            params=self._project_params(),
+        )
+        info = _mapping(result.get("info"), label="Message.info")
+        if info.get("id") != message_id or info.get("sessionID") != session_id:
+            raise OpenCorvusProtocolError("Observed Message identity disagrees")
+        return result
+
+    async def completion_part(self, task: Mapping[str, Any]) -> Mapping[str, Any]:
+        decision = _mapping(task.get("completionDecision"), label="task.completionDecision")
+        ids = [
+            quote(_required_string(decision.get(key), label=f"completionDecision.{key}"), safe="")
+            for key in ("orchestratorSessionID", "orchestratorMessageID", "toolPartID")
+        ]
+        return await self._request_json(
+            "GET",
+            f"/session/{ids[0]}/message/{ids[1]}/part/{ids[2]}",
+            params=self._project_params(),
+        )
+
+    async def unfinished_messages(self, conversation: Mapping[str, Any]) -> list[Mapping[str, Any]]:
+        transcript = conversation.get("transcript")
+        if not isinstance(transcript, list):
+            raise OpenCorvusProtocolError("OpenCorvus conversation transcript must be an array")
+        latest: dict[str, Mapping[str, Any]] = {}
+        for entry in transcript:
+            if not isinstance(entry, Mapping):
+                continue
+            info = entry.get("info")
+            if isinstance(info, Mapping) and info.get("role") == "assistant":
+                session_id = _required_string(info.get("sessionID"), label="Message.sessionID")
+                latest[session_id] = info
+        messages = []
+        for session_id, info in latest.items():
+            stamp = _mapping(info.get("time"), label="Message.time")
+            if stamp.get("completed") is None:
+                message_id = _required_string(info.get("id"), label="Message.id")
+                messages.append(await self.message(session_id, message_id))
+        return messages
+
     async def _within_task_deadline(
         self,
         *,
@@ -474,6 +494,7 @@ class OpenCorvusClient:
             deadline = time.monotonic() + self.config.timeout_seconds
         last_status = "unobserved"
         previous_progress: object = None
+        previous_status: object = None
         while True:
             status = await self._within_task_deadline(
                 task_id=task_id,
@@ -490,6 +511,20 @@ class OpenCorvusClient:
                 raise OpenCorvusProtocolError(
                     f"OpenCorvus Task {task_id} returned unknown lifecycle {last_status}"
                 )
+            durable_status = {
+                key: status.get(key)
+                for key in (
+                    "lifecycleStatus",
+                    "time",
+                    "goals",
+                    "requirements",
+                    "sessionInvocationTopology",
+                    "executionProjection",
+                )
+            }
+            if durable_status != previous_status:
+                previous_status = durable_status
+                deadline = time.monotonic() + self.config.timeout_seconds
             conversation = await self._within_task_deadline(
                 task_id=task_id,
                 deadline=deadline,
@@ -499,18 +534,13 @@ class OpenCorvusClient:
             # Only durable facts and actual participant output renew the idle window.
             # Polling success, generatedAt and an unchanged "running" flag do not.
             progress = {
-                "status": {
-                    key: status.get(key)
-                    for key in (
-                        "lifecycleStatus",
-                        "time",
-                        "goals",
-                        "requirements",
-                        "sessionInvocationTopology",
-                        "executionProjection",
-                    )
-                },
                 "transcript": conversation.get("transcript"),
+                "unfinished_messages": await self._within_task_deadline(
+                    task_id=task_id,
+                    deadline=deadline,
+                    last_status=last_status,
+                    operation=partial(self.unfinished_messages, conversation),
+                ),
             }
             if progress != previous_progress:
                 previous_progress = progress
@@ -553,11 +583,12 @@ class OpenCorvusClient:
         observed_lifecycle = _required_string(
             terminal_status.get("lifecycleStatus"), label="task.status.lifecycleStatus"
         )
-        task, conversation = await self._within_task_deadline(
+        terminal_deadline = time.monotonic() + self.config.timeout_seconds
+        task = await self._within_task_deadline(
             task_id=task_id,
-            deadline=time.monotonic() + self.config.timeout_seconds,
+            deadline=terminal_deadline,
             last_status=observed_lifecycle,
-            operation=lambda: asyncio.gather(self.task(task_id), self.conversation(task_id)),
+            operation=lambda: self.task(task_id),
         )
         returned_task_id = _required_string(task.get("id"), label="task.id")
         if returned_task_id != task_id:
@@ -570,7 +601,17 @@ class OpenCorvusClient:
                 f"OpenCorvus Task {task_id} terminal projections disagree"
             )
 
-        completion, completion_message_id = extract_completion(task, conversation)
+        part = (
+            await self._within_task_deadline(
+                task_id=task_id,
+                deadline=terminal_deadline,
+                last_status=observed_lifecycle,
+                operation=lambda: self.completion_part(task),
+            )
+            if lifecycle == "completed"
+            else None
+        )
+        completion, completion_message_id = extract_completion(task, part)
         decision_raw = task.get("completionDecision")
         decision = _mapping(decision_raw, label="task.completionDecision") if decision_raw else None
         artifact = (

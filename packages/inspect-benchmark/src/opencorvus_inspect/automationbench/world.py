@@ -12,10 +12,19 @@ from typing import Any
 
 UPSTREAM_REVISION = "4a8e1061254004d9dac807054eed33fad7d1ff14"
 BENCHMARK = f"zapier/automationbench@{UPSTREAM_REVISION[:7]}"
+SCORING_POLICY = "official-strict-assertions-v1"
+
+
+def require_strict_assertions() -> None:
+    from automationbench.rubric import registry
+
+    if registry.STRICT_MODE is not True:
+        raise ValueError("AutomationBench requires AUTOMATIONBENCH_STRICT_ASSERTIONS=1 at import")
 
 
 def require_official_distribution() -> None:
     """Verify the installed immutable source identity, not a mutable tree digest."""
+    require_strict_assertions()
     installed = distribution("automation-bench")
     direct = json.loads(installed.read_text("direct_url.json") or "{}")
     if (
@@ -139,6 +148,8 @@ class OfficialWorld:
 
     def seal(self) -> dict[str, Any]:
         from automationbench.rubric import partial_credit, task_completed_correctly
+
+        require_strict_assertions()
 
         if self.sealed:
             raise RuntimeError("automationbench_world_sealed")
