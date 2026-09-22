@@ -327,28 +327,36 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
           if (step === 1 || step === 5) return call("panel_query_task", { taskIDs: [taskID] })
           if (step === 2 || step === 6)
             return call("panel_query_task_artifacts", {
-              taskID,
-              page_number: 1,
-              artifact_types: [step === 2 ? "base/development-report" : "base/test-report"],
+              queries: [{
+                taskID,
+                page_number: 1,
+                artifact_types: [step === 2 ? "base/development-report" : "base/test-report"],
+              }],
             })
           if (step === 3 || step === 7) {
-            const catalog = outputs("panel_query_task_artifacts").at(-1)
-            const entries = catalog.entries ?? catalog.artifacts ?? []
+            const batch = outputs("panel_query_task_artifacts").at(-1)
+            expect(batch).toMatchObject({ complete: true, results: [{ request_index: 0 }] })
+            const catalog = batch.results[0].value
+            const entries = catalog.entries
             const entry = entries.find(
               (e: any) => e.artifact_type === (step === 3 ? "base/development-report" : "base/test-report"),
             )
             selectedRef = entry?.artifact_locator_ref
             if (!selectedRef) throw new Error(`Missing real catalog reference: ${JSON.stringify(catalog)}`)
             return call("panel_read_task_artifact", {
-              taskID,
-              artifact_transport_version: 2,
-              artifact_locator_ref: selectedRef,
-              byte_offset: 0,
-              max_bytes: 65536,
-              delivery: "inline",
+              reads: [{
+                taskID,
+                artifact_transport_version: 2,
+                artifact_locator_ref: selectedRef,
+                byte_offset: 0,
+                max_bytes: 65536,
+                delivery: "inline",
+              }],
             })
           }
-          const read = outputs("panel_read_task_artifact").at(-1)
+          const readBatch = outputs("panel_read_task_artifact").at(-1)
+          expect(readBatch).toMatchObject({ complete: true, results: [{ request_index: 0 }] })
+          const read = readBatch.results[0].value
           if (!read?.complete) throw new Error(`Incomplete real acceptance read: ${JSON.stringify(read)}`)
           readRefs.push(read.artifact_read_ref)
           if (step === 4)

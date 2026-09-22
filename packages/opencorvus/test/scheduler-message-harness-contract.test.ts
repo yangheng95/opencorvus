@@ -38,7 +38,7 @@ describe("scheduler message model harness", () => {
       "Mission state records only authored stage graph, ownership, acceptance judgment, dependency frontier, force-majeure blocker, next-wake action, and operator-visible outcome",
       "If none of those authored facts changes, do not call `mission_state`",
       "include every exact authored file thereby made stale in one `mission_state` commit",
-      "call `panel_query_task`, enumerate and read the current Completion Decision plus every acceptance Artifact required by the original request or stage contract",
+      "call `panel_query_task`, batch the current Completion Decision and the acceptance Artifacts required by the original request or stage contract through `panel_query_task_artifacts.queries` and `panel_read_task_artifact.reads`",
       "An earlier plan's stage-local statement that execution had not happened cannot establish a present omission",
       "Persistent user constraints, authoritative source facts, and contradictions not resolved by later concrete evidence still require independent judgment",
       "call the already-callable `publish_interactive_artifact` in the final assistant turn",

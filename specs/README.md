@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [v0.1.11 release](records/2026-09/2026-09-22-v0.1.11-release.md)
+
 - [Single-column settings and compact capability details](records/2026-09/2026-09-22-single-column-settings.md)
 
 - [Primitive-first frosted workspace implementation](records/2026-09/2026-09-21-primitive-ui-implementation.md)

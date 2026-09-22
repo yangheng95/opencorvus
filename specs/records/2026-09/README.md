@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [v0.1.11 release](2026-09-22-v0.1.11-release.md)
+
 - [Single-column settings and compact capability details](2026-09-22-single-column-settings.md)
 
 - [Primitive-first frosted workspace implementation](2026-09-21-primitive-ui-implementation.md)

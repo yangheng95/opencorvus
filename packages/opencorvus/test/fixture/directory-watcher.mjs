@@ -17,7 +17,11 @@ function scan(directory = root) {
       )
     }
   } catch (error) {
-    if (error.code !== "ENOENT") throw error
+    // Windows may report EPERM while a watched staging directory is being
+    // deleted. Confirm its disappearance before retiring that exact handle.
+    const removed = error.code === "ENOENT" ||
+      (process.platform === "win32" && error.code === "EPERM" && !fs.existsSync(directory))
+    if (!removed) throw error
     watchers.get(directory)?.close()
     watchers.delete(directory)
     return

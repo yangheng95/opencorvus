@@ -117,30 +117,33 @@ describe("Artifact catalog cursor", () => {
 
         const tool = createArtifactSearchAiTool(taskID)
         if (!tool.execute) throw new Error("artifact_search AI Tool is missing its execution boundary")
-        const transported = await tool.execute({ ...search, limit: 100 }, {
+        const transported = await tool.execute({ queries: [search] }, {
           toolCallId: "artifact-search-cursor-contract",
           messages: [],
           abortSignal: new AbortController().signal,
           opencorvus: { sessionID: session.id },
         } as never)
-        const transportedPage = JSON.parse(transported.output) as typeof first
-        expect(transported.metadata).toMatchObject({ filteredTotal: 50, hasMore: true })
+        const batch = JSON.parse(transported.output)
+        const transportedPage = batch.results[0].value
+        expect(batch).toMatchObject({ complete: false, results: [{ request_index: 0, value: { filtered_total: 50 } }] })
         expect(transportedPage.entries).toHaveLength(25)
         expect(Buffer.byteLength(transported.output, "utf8")).toBeLessThanOrEqual(40 * 1_024)
-        expect(transportedPage.next_cursor).toEqual(expect.any(String))
-        expect(transportedPage.next_cursor!.length).toBeLessThan(600)
+        expect(batch.next_queries).toEqual([{ request_index: 0, cursor: expect.any(String) }])
+        expect(batch.next_queries[0].cursor.length).toBeLessThan(600)
 
         publishCursorArtifact(taskID, 50)
-        const transportedSecond = await tool.execute({ ...search, limit: 100, cursor: transportedPage.next_cursor! }, {
+        const transportedSecond = await tool.execute({ queries: [{ ...search, cursor: batch.next_queries[0].cursor }] }, {
           toolCallId: "artifact-search-cursor-contract-next",
           messages: [],
           abortSignal: new AbortController().signal,
           opencorvus: { sessionID: session.id },
         } as never)
-        const second = JSON.parse(transportedSecond.output) as typeof first
+        const secondBatch = JSON.parse(transportedSecond.output)
+        const second = secondBatch.results[0].value
         const frozenIDs = [...transportedPage.entries, ...second.entries].map((entry) => entry.locator)
 
-        expect(second).toMatchObject({ filtered_total: 50, catalog_complete: true, next_cursor: null })
+        expect(secondBatch).toMatchObject({ complete: true, next_queries: [], pending_queries: [] })
+        expect(second).toMatchObject({ filtered_total: 50, catalog_complete: true })
         expect(second.entries).toHaveLength(25)
         expect(Buffer.byteLength(transportedSecond.output, "utf8")).toBeLessThanOrEqual(40 * 1_024)
         expect(new Set(frozenIDs.map((locator) => JSON.stringify(locator))).size).toBe(50)
