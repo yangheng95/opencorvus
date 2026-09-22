@@ -39,6 +39,7 @@ import {
 } from "../src/work-artifact/runtime/runtime-lock"
 import { WORK_ARTIFACT_RUNTIME_LOCK } from "./work-artifact-runtime-lock"
 import { copyOfficeCliRuntime } from "./build-runtime-binaries"
+import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 
 const execFileAsync = promisify(execFile)
 
@@ -320,14 +321,25 @@ const rawProfile = flag("--profile")
 if (rawProfile !== "office.presentation@1") {
   throw new Error("Usage: check-work-artifact-profile.ts --profile office.presentation@1 [--package-root DIR | --host-runtime-smoke] [--pptx FILE]")
 }
-const catalog = await checkCatalog(rawProfile)
 const packageRoot = flag("--package-root")
 const pptx = flag("--pptx")
 if (!packageRoot && pptx) throw new Error("--pptx requires --package-root")
 const hostRuntimeSmoke = process.argv.includes("--host-runtime-smoke")
+if (hostRuntimeSmoke && packageRoot) throw new Error("--host-runtime-smoke cannot be combined with --package-root")
+if (process.platform === "win32" && (packageRoot || hostRuntimeSmoke)) {
+  // This checker runs from Bun source, so bind its host processes to the package
+  // being qualified before a parser deadline starts. Host smoke has no packaged
+  // supervisor; prepare its source-test helper before those deadlines instead.
+  const supervisor = packageRoot
+    ? path.resolve(packageRoot, "opencorvus-process-supervisor.exe")
+    : prepareTestProcessSupervisor()!
+  const info = await fs.stat(supervisor)
+  if (!info.isFile() || info.size === 0) throw new Error(`Invalid qualification process supervisor: ${supervisor}`)
+  process.env.OPENCORVUS_PROCESS_SUPERVISOR = supervisor
+}
+const catalog = await checkCatalog(rawProfile)
 let packaged
 if (hostRuntimeSmoke) {
-  if (packageRoot) throw new Error("--host-runtime-smoke cannot be combined with --package-root")
   const target = { os: process.platform as "darwin" | "linux" | "win32", arch: process.arch as "arm64" | "x64" }
   const root = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-work-artifact-host-package-"))
   try {
