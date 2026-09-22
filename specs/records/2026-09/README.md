@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [GitHub Actions retention cleanup](2026-09-22-actions-retention-cleanup.md)
+
 - [v0.1.12 release](2026-09-22-v0.1.12-release.md)
 
 - [Additional workspace color themes](2026-09-22-additional-workspace-themes.md)

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [GitHub Actions retention cleanup](records/2026-09/2026-09-22-actions-retention-cleanup.md)
+
 - [v0.1.12 release](records/2026-09/2026-09-22-v0.1.12-release.md)
 
 - [Additional workspace color themes](records/2026-09/2026-09-22-additional-workspace-themes.md)
