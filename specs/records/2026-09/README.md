@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [v0.1.13 release](2026-09-23-v0.1.13-release.md)
+
 - [Tool consolidation synchronization audit](2026-09-23-tool-consolidation-sync-audit.md)
 
 - [First round of built-in tool consolidation](2026-09-23-tool-consolidation-round-one.md)
