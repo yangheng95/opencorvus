@@ -1539,7 +1539,7 @@ export function ChatComposer(props: ChatComposerProps) {
                   skills={props.skills}
                   missionSkills={props.missionSkills}
                   expertSquads={props.expertSquads}
-                  activeExpertSquad={activeExpertSquad()}
+                  activeExpertSquad={activeComposerIntent().conversationTarget === "mission" ? activeExpertSquad() : undefined}
                   launchReferences={props.launchReferences}
                   readOnly
                 />
