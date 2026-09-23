@@ -121,14 +121,8 @@
 }
 
 .work-row {
-  --task-row-actions-width: calc(42px * var(--ui-scale));
+  --task-row-actions-width: calc(22px * var(--ui-scale));
   --work-row-action-size: calc(18px * var(--ui-scale));
-  --work-row-action-gap: calc(2px * var(--ui-scale));
-  --work-row-action-rail-pad: 0;
-  /* Lucide Archive reaches x=21 while Plus reaches x=19 in the shared
-     24-unit viewBox. Offset the trailing archive glyph by that 2/24 optical
-     delta so its painted edge, not merely its SVG box, aligns with Project. */
-  --work-row-trailing-icon-optical-offset: calc(-1.1666667px * var(--ui-scale));
 
   grid-template-columns: var(--ui-left-rail-row-icon-track) minmax(0, 1fr) max-content;
   column-gap: var(--ui-left-rail-row-label-gap);
@@ -157,30 +151,6 @@
 .work-row .oc-button[data-ui="ledger-row-main"] {
   --oc-button-padding-x: 0;
   --oc-button-border: 0 solid transparent;
-}
-
-.work-row[data-action-count="1"] {
-  --task-row-actions-width: calc(22px * var(--ui-scale));
-}
-
-.work-row[data-action-count="2"] {
-  --task-row-actions-width: calc(42px * var(--ui-scale));
-}
-
-.work-row[data-action-count="3"] {
-  --task-row-actions-width: calc(62px * var(--ui-scale));
-}
-
-.work-row[data-action-count="4"] {
-  --task-row-actions-width: calc(82px * var(--ui-scale));
-}
-
-.work-row[data-action-count="5"] {
-  --task-row-actions-width: calc(102px * var(--ui-scale));
-}
-
-.work-row[data-action-count="6"] {
-  --task-row-actions-width: calc(122px * var(--ui-scale));
 }
 
 .work-row-kind-mark {
@@ -253,7 +223,7 @@
   flex: none;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--work-row-action-gap);
+  gap: 0;
   padding: 0;
   overflow: hidden;
   transform: translateY(-50%);
@@ -302,14 +272,14 @@
 }
 
 .work-row:hover .task-row-actions.work-row-actions,
+.work-row:focus-within .task-row-actions.work-row-actions,
 .work-row[data-actions-keyboard-open="true"] .task-row-actions.work-row-actions {
   opacity: var(--ui-opacity-full);
   pointer-events: auto;
 }
 
-.work-row:hover .work-row-body,
-.work-row[data-actions-keyboard-open="true"] .work-row-body {
-  padding-inline-end: max(0px, calc(var(--task-row-actions-width) - var(--work-row-action-size)));
+.work-row .work-row-body {
+  padding-inline-end: max(0px, calc(var(--task-row-actions-width) - (var(--work-row-action-size) / 2)));
 }
 
 .work-row:hover .work-row-status-mark:not([data-status="active"]),
@@ -537,16 +507,7 @@
   white-space: normal;
 }
 
-.work-row-actions .oc-button[data-chrome="icon-action"][data-ui="work-row-stop"],
-.work-row-actions .oc-button[data-chrome="icon-action"][data-ui="mission-row-archive"],
-.work-row-actions .oc-button[data-chrome="icon-action"][data-ui="chat-row-archive"],
-.work-row-actions .oc-button[data-chrome="icon-action"][data-ui="mission-row-pin"],
-.work-row-actions .oc-button[data-chrome="icon-action"][data-ui="chat-row-pin"],
-.work-row-actions .oc-button[data-chrome="icon-action"][data-ui="mission-row-download"],
-.work-row-actions .oc-button[data-chrome="icon-action"][data-ui="task-row-cancel"],
-.work-row-actions .oc-button[data-chrome="icon-action"][data-ui="task-row-download"],
-.work-row-actions .oc-button[data-chrome="icon-action"][data-ui="task-row-pin"],
-.work-row-actions .oc-button[data-chrome="icon-action"][data-ui="task-row-archive"] {
+.work-row-actions .oc-button[data-chrome="icon-action"][data-ui="work-row-actions-menu-trigger"] {
   --oc-button-height: var(--work-row-action-size);
   --oc-button-padding-x: 0;
   --oc-button-border: 0 solid transparent;
@@ -554,87 +515,19 @@
   --oc-button-color: color-mix(in srgb, var(--text-soft) 82%, var(--text-muted));
   --oc-button-shadow: none;
 
-  position: static;
   width: var(--work-row-action-size);
   height: var(--work-row-action-size);
   min-width: var(--work-row-action-size);
   min-height: var(--work-row-action-size);
-  opacity: var(--ui-opacity-hidden);
-  pointer-events: none;
-  transition:
-    opacity var(--ui-duration-base) var(--ui-timing-standard),
-    background var(--ui-duration-base) var(--ui-timing-standard),
-    color var(--ui-duration-base) var(--ui-timing-standard),
-    box-shadow var(--ui-duration-slow) var(--ui-timing-standard);
 }
 
-.work-row-actions .oc-button[data-ui="mission-row-archive"] .oc-icon,
-.work-row-actions .oc-button[data-ui="chat-row-archive"] .oc-icon,
-.work-row-actions .oc-button[data-ui="task-row-archive"] .oc-icon {
-  transform: translateX(var(--work-row-trailing-icon-optical-offset));
+.oc-menu-item[data-ui="task-row-cancel"],
+.oc-menu-item[data-ui="work-row-stop"] {
+  color: var(--warn);
 }
 
-.work-row:hover .work-row-actions .oc-button[data-ui="work-row-stop"],
-.work-row[data-actions-keyboard-open="true"] .work-row-actions .oc-button[data-ui="work-row-stop"],
-.work-row:hover .work-row-actions .oc-button[data-ui="mission-row-archive"],
-.work-row[data-actions-keyboard-open="true"] .work-row-actions .oc-button[data-ui="mission-row-archive"],
-.work-row:hover .work-row-actions .oc-button[data-ui="chat-row-archive"],
-.work-row[data-actions-keyboard-open="true"] .work-row-actions .oc-button[data-ui="chat-row-archive"],
-.work-row:hover .work-row-actions .oc-button[data-ui="mission-row-pin"],
-.work-row[data-actions-keyboard-open="true"] .work-row-actions .oc-button[data-ui="mission-row-pin"],
-.work-row:hover .work-row-actions .oc-button[data-ui="chat-row-pin"],
-.work-row[data-actions-keyboard-open="true"] .work-row-actions .oc-button[data-ui="chat-row-pin"],
-.work-row:hover .work-row-actions .oc-button[data-ui="task-row-cancel"],
-.work-row[data-actions-keyboard-open="true"] .work-row-actions .oc-button[data-ui="task-row-cancel"],
-.work-row:hover .work-row-actions .oc-button[data-ui="mission-row-download"],
-.work-row[data-actions-keyboard-open="true"] .work-row-actions .oc-button[data-ui="mission-row-download"],
-.work-row:hover .work-row-actions .oc-button[data-ui="task-row-download"],
-.work-row[data-actions-keyboard-open="true"] .work-row-actions .oc-button[data-ui="task-row-download"],
-.work-row:hover .work-row-actions .oc-button[data-ui="task-row-pin"],
-.work-row[data-actions-keyboard-open="true"] .work-row-actions .oc-button[data-ui="task-row-pin"],
-.work-row:hover .work-row-actions .oc-button[data-ui="task-row-archive"],
-.work-row[data-actions-keyboard-open="true"] .work-row-actions .oc-button[data-ui="task-row-archive"] {
-  opacity: var(--ui-opacity-full);
-  pointer-events: auto;
-}
-
-.work-row-actions .oc-button[data-ui$="-row-pin"][data-pinned="true"],
-.work-row-actions .oc-button[data-ui$="-row-pin"][data-pinned="true"]:is(:hover, :focus-visible) {
-  --oc-button-color: var(--accent);
-}
-
-.work-row-actions .oc-button[data-ui="work-row-stop"]:hover,
-.work-row-actions .oc-button[data-ui="task-row-cancel"]:hover {
-  opacity: var(--ui-opacity-full);
-  --oc-button-bg: color-mix(in srgb, var(--warn) 9%, transparent);
-  --oc-button-color: var(--warn);
-}
-
-.work-row-actions .oc-button[data-ui="work-row-stop"]:focus-visible,
-.work-row-actions .oc-button[data-ui="task-row-cancel"]:focus-visible {
-  opacity: var(--ui-opacity-full);
-  --oc-button-bg: color-mix(in srgb, var(--warn) 9%, transparent);
-  --oc-button-color: var(--warn);
-  outline: var(--oc-border-width) solid var(--accent);
-  outline-offset: calc(1px * var(--ui-scale));
-}
-
-.work-row-actions
-  .oc-button:is([data-ui="mission-row-archive"], [data-ui="chat-row-archive"], [data-ui="task-row-archive"]):hover {
-  opacity: var(--ui-opacity-full);
-  --oc-button-bg: color-mix(in srgb, var(--text-strong) 8%, transparent);
-  --oc-button-color: var(--text-strong);
-}
-
-.work-row-actions
-  .oc-button:is(
-    [data-ui="mission-row-archive"],
-    [data-ui="chat-row-archive"],
-    [data-ui="task-row-archive"]
-  ):focus-visible {
-  opacity: var(--ui-opacity-full);
-  --oc-button-bg: color-mix(in srgb, var(--text-strong) 8%, transparent);
-  --oc-button-color: var(--text-strong);
-  outline: var(--oc-border-width) solid var(--accent);
-  outline-offset: calc(1px * var(--ui-scale));
+.oc-menu-item[data-ui="task-row-cancel"]:is(:hover, [data-highlighted], :focus-visible),
+.oc-menu-item[data-ui="work-row-stop"]:is(:hover, [data-highlighted], :focus-visible) {
+  background: color-mix(in srgb, var(--warn) 9%, transparent);
+  color: var(--warn);
 }

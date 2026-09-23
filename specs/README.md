@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Work Ledger stop-action safety](records/2026-09/2026-09-24-work-ledger-stop-safety.md)
+
 - [Sub-agent selector and compact progress preview](records/2026-09/2026-09-23-subagent-selector-and-preview.md)
 
 - [Desktop updater check and in-app installation repair](records/2026-09/2026-09-23-desktop-updater-repair.md)

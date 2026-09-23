@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Work Ledger stop-action safety](2026-09-24-work-ledger-stop-safety.md)
+
 - [Sub-agent selector and compact progress preview](2026-09-23-subagent-selector-and-preview.md)
 
 - [Desktop updater check and in-app installation repair](2026-09-23-desktop-updater-repair.md)

@@ -30,6 +30,7 @@ import {
   type WorkLedgerTaskRow,
 } from "../services/work-ledger"
 import { openConfigDialog } from "../services/config-dialog-control"
+import { showAppDialog } from "../services/app-dialog"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { appStore } from "../store/app"
 import { activeProjectDirectory } from "../services/project-directory"
@@ -372,12 +373,6 @@ function WorkLedgerRowView(props: {
   const showDownloadActions = getHostTransport().kind !== "tauri"
   const hasActions = () => true
   const rowActions = useTaskRowActionsKeyboard(hasActions)
-  const actionCount = () => {
-    let count = 2
-    if (canStop()) count += 1
-    if (showDownloadActions && canDownload()) count += 1
-    return count
-  }
 
   async function runAction(actionName: string, action: () => void | Promise<void>) {
     if (busy()) return
@@ -409,6 +404,37 @@ function WorkLedgerRowView(props: {
     return row().kind === "task" ? "task-row-cancel" : "work-row-stop"
   }
 
+  function stopKindLabel(current: WorkLedgerItemRow): string {
+    if (current.kind === "mission") return t("work_ledger.kind.mission")
+    if (current.kind === "chat") return t("work_ledger.kind.chat")
+    return t("work_ledger.kind.task")
+  }
+
+  async function confirmAndStopCurrentRow(): Promise<void> {
+    const current = row()
+    const confirmation = await showAppDialog({
+      title: t("work_ledger.stop_confirm.title", { kind: stopKindLabel(current) }),
+      message: t("work_ledger.stop_confirm.message", { title: current.title || current.id }),
+      cancel: true,
+      okLabel: t("work_ledger.stop_confirm.action"),
+      okTone: "danger",
+    })
+    if (!confirmation.confirmed || row().id !== current.id || row().kind !== current.kind || !canStop()) return
+    if (current.kind === "mission") return props.onAbortMission(current)
+    if (current.kind === "chat") return props.onStopChat(current)
+    return props.onCancelTask(current)
+  }
+
+  function downloadLabel(): string {
+    return row().kind === "mission" ? t("work_ledger.action.download_mission") : t("task.download_project_button_title")
+  }
+
+  function archiveLabel(): string {
+    if (row().kind === "mission") return t("mission.ledger.archive_title")
+    if (row().kind === "chat") return t("coding_assistant.ledger.archive_title")
+    return t("task.archive_button_title")
+  }
+
   function archiveDataUi() {
     if (row().kind === "mission") return "mission-row-archive"
     if (row().kind === "chat") return "chat-row-archive"
@@ -435,7 +461,6 @@ function WorkLedgerRowView(props: {
         data-row-key={rowKey(row())}
         data-active={props.selected ? "true" : undefined}
         data-status={workLedgerPresentationStatus(row())}
-        data-action-count={String(actionCount())}
         data-actions-keyboard-open={rowActions.actionsKeyboardOpenData()}
         ref={(el) => rowActions.setRowRef(el)}
         onFocusOut={(event) => rowActions.closeActionsOnFocusOut(event)}
@@ -555,118 +580,85 @@ function WorkLedgerRowView(props: {
             </span>
           </Show>
           <div class="task-row-actions work-row-actions" onKeyDown={rowActions.closeActionsFromKeyboardEvent}>
-            <Show when={canStop()}>
-              <Button
+            <DropdownMenu.Root placement="bottom-end" gutter={6} fitViewport>
+              <DropdownMenu.Trigger
+                as={Button}
                 type="button"
                 variant="ghost"
                 size="icon"
                 tone="neutral"
                 data-chrome="icon-action"
-                data-ui={stopDataUi()}
-                data-state={cancellationPending() ? "pending" : "idle"}
-                disabled={busy() || cancellationPending()}
-                tabIndex={rowActions.actionButtonTabIndex()}
-                title={stopLabel()}
-                aria-label={stopLabel()}
-                onClick={(event) => {
-                  event.stopPropagation()
-                  void runAction("stop", () => {
-                    const current = row()
-                    if (current.kind === "mission") return props.onAbortMission(current)
-                    if (current.kind === "chat") return props.onStopChat(current)
-                    return props.onCancelTask(current)
-                  })
-                }}
-              >
-                <Icon name={cancellationPending() ? "loading" : "stop"} />
-              </Button>
-            </Show>
-            <Show when={showDownloadActions && canDownload()}>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                tone="neutral"
-                data-chrome="icon-action"
-                data-ui={row().kind === "mission" ? "mission-row-download" : "task-row-download"}
+                data-ui="work-row-actions-menu-trigger"
                 disabled={busy()}
                 tabIndex={rowActions.actionButtonTabIndex()}
-                title={
-                  row().kind === "mission"
-                    ? t("work_ledger.action.download_mission")
-                    : t("task.download_project_button_title")
-                }
-                aria-label={
-                  row().kind === "mission"
-                    ? t("work_ledger.action.download_mission")
-                    : t("task.download_project_button_title")
-                }
-                onClick={(event) => {
-                  event.stopPropagation()
-                  void runAction("download", () => {
-                    const current = row()
-                    if (current.kind === "mission") return props.onDownloadMission(current)
-                    return props.onDownloadTask(current as WorkLedgerTaskRow)
-                  })
-                }}
+                title={t("work_ledger.action.more")}
+                aria-label={t("work_ledger.action.more")}
               >
-                <Icon name="download" />
-              </Button>
-            </Show>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              tone="neutral"
-              data-chrome="icon-action"
-              data-ui={`${row().kind}-row-pin`}
-              data-pinned={row().pinned ? "true" : "false"}
-              disabled={busy()}
-              tabIndex={rowActions.actionButtonTabIndex()}
-              title={row().pinned ? t("work_ledger.action.unpin") : t("work_ledger.action.pin")}
-              aria-label={row().pinned ? t("work_ledger.action.unpin") : t("work_ledger.action.pin")}
-              onClick={(event) => {
-                event.stopPropagation()
-                void runAction("pin", () => setWorkLedgerItemPinned({ row: row(), pinned: !row().pinned }))
-              }}
-            >
-              <Icon name="pin" />
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              tone="neutral"
-              data-chrome="icon-action"
-              data-ui={archiveDataUi()}
-              disabled={busy()}
-              tabIndex={rowActions.actionButtonTabIndex()}
-              title={
-                row().kind === "mission"
-                  ? t("mission.ledger.archive_title")
-                  : row().kind === "chat"
-                    ? t("coding_assistant.ledger.archive_title")
-                    : t("task.archive_button_title")
-              }
-              aria-label={
-                row().kind === "mission"
-                  ? t("mission.ledger.archive_title")
-                  : row().kind === "chat"
-                    ? t("coding_assistant.ledger.archive_title")
-                    : t("task.archive_button_title")
-              }
-              onClick={(event) => {
-                event.stopPropagation()
-                void runAction("archive", () => {
-                  const current = row()
-                  if (current.kind === "mission") return props.onArchiveMission(current)
-                  if (current.kind === "chat") return props.onArchiveChat(current)
-                  return props.onArchiveTask(current)
-                })
-              }}
-            >
-              <Icon name="archive" />
-            </Button>
+                <Icon name="more-horizontal" />
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content data-ui="work-row-actions-menu">
+                  <Show when={canStop()}>
+                    <DropdownMenu.Item
+                      as="button"
+                      type="button"
+                      data-ui={stopDataUi()}
+                      disabled={busy() || cancellationPending()}
+                      onSelect={() => void runAction("stop", confirmAndStopCurrentRow)}
+                    >
+                      <Icon name={cancellationPending() ? "loading" : "stop"} />
+                      {stopLabel()}
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Separator />
+                  </Show>
+                  <Show when={showDownloadActions && canDownload()}>
+                    <DropdownMenu.Item
+                      as="button"
+                      type="button"
+                      data-ui={row().kind === "mission" ? "mission-row-download" : "task-row-download"}
+                      disabled={busy()}
+                      onSelect={() =>
+                        void runAction("download", () => {
+                          const current = row()
+                          if (current.kind === "mission") return props.onDownloadMission(current)
+                          return props.onDownloadTask(current as WorkLedgerTaskRow)
+                        })
+                      }
+                    >
+                      <Icon name="download" />
+                      {downloadLabel()}
+                    </DropdownMenu.Item>
+                  </Show>
+                  <DropdownMenu.Item
+                    as="button"
+                    type="button"
+                    data-ui={`${row().kind}-row-pin`}
+                    disabled={busy()}
+                    onSelect={() => void runAction("pin", () => setWorkLedgerItemPinned({ row: row(), pinned: !row().pinned }))}
+                  >
+                    <Icon name="pin" />
+                    {row().pinned ? t("work_ledger.action.unpin") : t("work_ledger.action.pin")}
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item
+                    as="button"
+                    type="button"
+                    data-ui={archiveDataUi()}
+                    disabled={busy()}
+                    onSelect={() =>
+                      void runAction("archive", () => {
+                        const current = row()
+                        if (current.kind === "mission") return props.onArchiveMission(current)
+                        if (current.kind === "chat") return props.onArchiveChat(current)
+                        return props.onArchiveTask(current)
+                      })
+                    }
+                  >
+                    <Icon name="archive" />
+                    {archiveLabel()}
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu.Root>
           </div>
         </div>
       </div>

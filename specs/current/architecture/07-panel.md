@@ -420,16 +420,19 @@ second `Chats` section, wrapper, renderer identity, or one-list exclusion.
 Explicitly pinned named Projects remain complete groups in the separate `Pinned`
 section and are omitted from Projects exactly once.
 
-Every Mission, Task, Chat, and Work row exposes the same persisted pin action in
-its hover/focus action rail. The transparent resting rail is absolutely anchored
-to the row and contributes no permanent grid width; only a visible activity
-indicator occupies the trailing column. Hover, focus, or keyboard action-open
-temporarily reserves the rail inside the title body while the row bounds,
-leading icon, trailing indicator anchor, and adjacent-row positions remain
-unchanged. The row rail has no rename pencil; double-clicking the canonical row
-main button invokes its existing domain rename dialog while single click retains
-selection. Pinned items remain inside their canonical Project group or one-list
-projection and sort before unpinned siblings without changing activity time.
+Every Mission, Task, Chat, and Work row exposes one narrow hover/focus actions
+menu containing its persisted pin action and applicable stop, download, and
+archive actions. The transparent resting trigger is absolutely anchored to the
+row and contributes no grid width; the title body permanently reserves its hit
+area so revealing the trigger cannot move the main button beneath a pointer.
+Hover, focus, or keyboard action-open changes trigger visibility while the row
+bounds, leading icon, trailing indicator anchor, and adjacent-row positions
+remain unchanged. Stopping a Task, Mission, or Chat from this menu requires an
+item-named confirmation before dispatch. The row menu has no rename action;
+double-clicking the canonical row main button invokes its existing domain rename
+dialog while single click retains selection. Pinned items remain inside their
+canonical Project group or one-list projection and sort before unpinned siblings
+without changing activity time.
 
 Work Ledger and the selected Conversation header expose one binary activity
 projection for Task and Mission: `Running` while execution is active and
