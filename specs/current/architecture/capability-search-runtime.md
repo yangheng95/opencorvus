@@ -25,9 +25,12 @@ universal executable interface.
    schedulers, their granted platform Registry and runtime-projected tools form
    the routine base; the specialized Skill loaders retain exact selection.
    `capability/routine-tools.ts` intersects those grants with model projection,
-   permissions and Message switches. Its guidance map describes their use and
-   selects the narrower native Conversation/Mission routine surface, rather
-   than imposing another Task role allowlist. Declared dispatch-stage interfaces also
+   permissions and Message switches. Every role-authorized built-in general tool
+   is directly available, including native Conversation/Mission web, memory,
+   planning, scheduling and panel tools. Its guidance map describes usage only;
+   it cannot narrow tool availability or impose an additional role allowlist.
+   Skill/Mission Skill behavior and external extensions retain their exact
+   on-demand loading contracts. Declared dispatch-stage interfaces also
    belong to their worker's base. `capability_search` discovers and loads
    specialist and extension capabilities that are not already callable.
    A caller-requested JSON-schema response can additionally use the existing

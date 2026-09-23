@@ -38,6 +38,7 @@ import { initializeProjectDirectoryGit } from "./project-git"
 import { setAppStore, type ProjectLoadIssue } from "../store/app"
 import { AppLog } from "../utils/log"
 import { refreshProjectMemory } from "./project-memory"
+import { restoreDraftComposerModel } from "./composer-model"
 
 // ── Types ──
 
@@ -245,6 +246,7 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
   // 1. Load settings into the Solid store
   await loadSettings()
   if (!isCurrentInitLifecycle(lifecycleGeneration)) return
+  restoreDraftComposerModel()
   startMissingProjectDirectoryRecovery()
   await onSettingsLoaded?.()
   if (!isCurrentInitLifecycle(lifecycleGeneration)) return

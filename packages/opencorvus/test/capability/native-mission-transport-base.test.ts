@@ -32,22 +32,38 @@ const missionRoutineNames = [
   "bash",
   "capability_search",
   "edit",
+  "external_code_search",
   "glob",
+  "memory",
   "mission_state",
+  "panel_cancel_task",
   "panel_complete_mission",
   "panel_create_task",
+  "panel_expert_squad_inspect",
+  "panel_multica_catalog",
   "panel_query_task",
   "panel_query_task_artifacts",
   "panel_read_task_artifact",
   "panel_read_task_message",
+  "panel_reject_interaction",
+  "panel_reply_interaction",
+  "panel_resume_task",
+  "panel_view_board",
+  "panel_view_plan",
+  "panel_view_tasks",
+  "planner",
   "publish_interactive_artifact",
   "question",
   "read",
+  "schedule",
   "scheduler_message",
   "search_code",
+  "skill_market",
   "todoread",
   "todowrite",
   "wait",
+  "webfetch",
+  "websearch",
   "write",
 ].sort()
 
@@ -409,7 +425,7 @@ describe("native Mission transport base", () => {
         expect(Object.keys(initial.tools).sort()).toEqual(missionRoutineNames)
 
         const revealed = await resolveTestCapabilityTools({ ...occurrence.common, activeLocalRefs: ["webfetch"] })
-        expect(Object.keys(revealed.tools).sort()).toEqual([...missionRoutineNames, "webfetch"].sort())
+        expect(Object.keys(revealed.tools).sort()).toEqual(missionRoutineNames)
         const search = revealed.tools.capability_search
         if (!search?.execute) throw new Error("Native Mission transport occurrence has no capability_search Tool.")
         await search.execute(

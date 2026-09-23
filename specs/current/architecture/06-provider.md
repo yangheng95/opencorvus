@@ -385,7 +385,7 @@ saved Auth authority 与 callback 一样投影 typed `AuthReadError` 503；Proje
 
 - `config` 与 `channel` 属于基础配置 owner，并在同一 owner 内原子提交。
 - `provider` 与 `provider/auth` 是 Provider 设置面的两个独立只读资源；每个成功响应独立提交，失败资源保留旧值并进入同一 Provider diagnostics 列表。
-- 无活动目录时，Provider 设置读取全局 config/catalog/auth methods 并写入全局 config/Auth；内置 Provider subscription/API auth 通过 `/global/providers/**` 的显式控制面执行，不创建或读取 Project `Instance`。Overlay 不再提供 Agent Models 设置面；Composer 是当前新建草稿或当前 Task / Chat / Work / Mission 根 Session 模型的唯一前端投影。切换持久化会话时，它通过根 Session Config 重新加载该会话自己的有效模型；选择模型时只写回当前根 Session，新建草稿则保持零持久化直到首次有效提交。每次 Chat、Work、Task 创建或 follow-up 请求仍显式传递当前投影。后端保留 top-level 与 `agent.<id>.model` 配置和解析能力，供非 Overlay 调用方使用。
+- 无活动目录时，Provider 设置读取全局 config/catalog/auth methods 并写入全局 config/Auth；内置 Provider subscription/API auth 通过 `/global/providers/**` 的显式控制面执行，不创建或读取 Project `Instance`。Overlay 不再提供 Agent Models 设置面；Composer 是当前新建草稿或当前 Task / Chat / Work / Mission 根 Session 模型的唯一前端投影。切换持久化会话时，它通过根 Session Config 重新加载该会话自己的有效模型。显式模型选择写回当前根 Session（如果存在），并通过既有 Overlay settings 的 `lastSelectedModel` 保存新对话偏好；应用重开与空白新对话均读取该偏好，浏览已有会话不改写偏好。空白草稿首次提交前不创建 Project 或 Session，也不改写全局模型配置。每次 Chat、Work、Task 创建或 follow-up 请求仍显式传递当前投影。后端保留 top-level 与 `agent.<id>.model` 配置和解析能力，供非 Overlay 调用方使用。
 - Projected scheduler 的每个 continued model Turn 都从当前 Task 根 Session overlay 解析模型；Orchestrator 子 Session 的历史 user Turn 只属于审计历史，不能作为当前请求的 `explicitModel` 覆盖根 Session。Projected worker 仍使用不可变 worker Turn runtime model，普通 Session 仍使用最新可见 user Turn 的显式模型。
 - `config/prompt` 属于 Prompt owner，独立校验和提交。
 - Settings 可并发刷新三个 owner，但任一 owner 失败只能阻止该 owner 的提交；错误仍必须显式上抛并进入通知面，不能清空或阻断其他已成功 owner。模型选择面只消费 Provider owner 的 canonical catalog。

@@ -1647,6 +1647,12 @@ struct OverlaySettings {
     )]
     workspace_directory: Option<String>,
     desktop_notifications: bool,
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "deserialize_present_value"
+    )]
+    last_selected_model: Option<String>,
 }
 
 fn overlay_settings_filename() -> &'static str {
@@ -1713,6 +1719,7 @@ fn validate_overlay_settings(settings: OverlaySettings) -> Result<OverlaySetting
     for (name, value) in [
         ("directory", settings.directory.as_deref()),
         ("workspaceTaskID", settings.workspace_task_id.as_deref()),
+        ("lastSelectedModel", settings.last_selected_model.as_deref()),
         (
             "workspaceDirectory",
             settings.workspace_directory.as_deref(),
@@ -6544,6 +6551,7 @@ mod tests {
             workspace_task_id: Some("tsk_settings".to_string()),
             workspace_directory: Some("C:/repo/workspace".to_string()),
             desktop_notifications: false,
+            last_selected_model: Some("openai/gpt-5".to_string()),
         }
     }
 
@@ -6590,6 +6598,7 @@ mod tests {
                 "desktopNotifications",
                 "directory",
                 "initGit",
+                "lastSelectedModel",
                 "locale",
                 "password",
                 "preferredProjectEditor",

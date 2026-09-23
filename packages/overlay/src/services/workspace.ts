@@ -33,7 +33,7 @@ import { activeProjectDirectory, restoreWorkspaceDirectory, setProjectDirectoryC
 import { directoryScopedPath } from "./task-path"
 import { cancelConversationReplay, resetConversationProjection } from "./conversation"
 import { clearBrowserPreviewRevisionCursors } from "./browser-preview"
-import { clearComposerModelProjection } from "./composer-model"
+import { restoreDraftComposerModel } from "./composer-model"
 import { initializeProjectDirectoryGit } from "./project-git"
 import {
   TaskCancellationRequestBody,
@@ -246,7 +246,6 @@ export function clearProjectScopeData(): void {
 
 function enterDirectoryFreeWorkspace(savedDirectory: string): number {
   const selectionEpoch = beginWorkspaceSelection()
-  clearComposerModelProjection()
   stopSSE()
   setSettingsStore("directoryEpoch", (n: number) => n + 1)
   setSettingsStore({
@@ -535,6 +534,7 @@ export async function deleteProjectState(
 export function enterEmptyWorkspace(options: EnterEmptyWorkspaceOptions = {}): void {
   batch(() => {
     setBoardStore("selectedSource", null)
+    restoreDraftComposerModel()
     if (options.restoreDirectory !== false) {
       restoreWorkspaceDirectory()
     }
@@ -586,6 +586,7 @@ function clearSelectedWorkItem(): void {
     boardQueued: false,
     snapshotVersion: "",
   })
+  restoreDraftComposerModel()
 }
 
 // ── Tauri file / directory pickers ──
@@ -741,7 +742,6 @@ export function supersedePendingWorkspaceSelection(): number {
   const epoch = beginWorkspaceSelection()
   if (!pending) return epoch
   stopSSE()
-  clearComposerModelProjection()
   clearSelectedWorkItem()
   return epoch
 }

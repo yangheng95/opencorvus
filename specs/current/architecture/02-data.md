@@ -553,7 +553,7 @@ project-scoped `POST /attachment`，composer 只保留返回的
 `/attachment/<projectID>/<name>` canonical reference。后续 Chat、Mission、Task create
 和 Task follow-up 都只传该 reference，不能在 browser store 或 JSON（JavaScript Object
 Notation，JavaScript 对象表示法）请求体中保留 data URL / base64 bytes。
-全局 New Chat / Work 的空 Composer 和取消 picker 保持零持久化；一旦 picker 返回真实文件或
+全局 New Chat / Work 的空 Composer 和取消 picker 不创建 Project / Session 数据（显式模型偏好由既有 Overlay settings 保存）；一旦 picker 返回真实文件或
 目录、发生拖放或粘贴，实际附件就是首个 durable input，由统一 Composer Project resolver
 创建并激活一个匿名 Project，再进入上述严格 project-scoped ingress。后续首次 Session 或
 Mission 提交复用该 Project，不能为附件建立 browser-memory 暂存源或第二个 Project identity。

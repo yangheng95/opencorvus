@@ -1,5 +1,9 @@
 # 2026-09 Records
 
+- [Conversation web evidence and NVDA investigation](2026-09-23-conversation-web-evidence.md)
+
+- [Remember the last Composer model](2026-09-23-composer-model-memory.md)
+
 - [Inspect AutomationBench residual audit](2026-09-22-inspect-automationbench-residual-audit.md)
 
 - [Inspect AutomationBench engine and expert squad](2026-09-22-inspect-automationbench-engine.md)

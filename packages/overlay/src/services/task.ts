@@ -58,7 +58,7 @@ import { cardTreeStore } from "../store/card-tree"
 import { AppLog } from "../utils/log"
 import { isImplicitProjectDirectory } from "../utils/project-directory"
 import { requestTaskCancellation, type TaskCancellationSurface } from "./task-cancellation"
-import { clearComposerModelProjection, projectComposerModelFromSession } from "./composer-model"
+import { clearComposerModelProjection, projectComposerModelFromSession, restoreDraftComposerModel } from "./composer-model"
 import { wakeMission } from "./mission"
 import { workLedgerSessionExecution } from "./work-ledger"
 import { randomUUID } from "../utils/random-id"
@@ -306,6 +306,7 @@ export async function selectTask(taskID: string, options: SelectTaskOptions = {}
   })
 
   if (!nextTaskID) {
+    restoreDraftComposerModel()
     // Deselection has no async work; make sure any lingering progress UI
     // from a superseded switch is cleared.
     // Clear persisted workspace identity so next launch does not resume a

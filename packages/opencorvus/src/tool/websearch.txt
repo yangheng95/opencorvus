@@ -1,14 +1,13 @@
-- Search the web for real-time, up-to-date information through the shared Exa-first search service
+- Search current public web sources through the shared Exa-first search service
 - When Exa cannot return usable results, the same tool uses the built-in Host search provider; do not call another search tool
-- Provides up-to-date information for current events and recent data
+- Retrieve external evidence for current events and recent data; check source timestamps before treating a result as current
 - Supports configurable result counts and returns the content from the most relevant websites
 - Use this tool for accessing information beyond knowledge cutoff
 - Searches are performed automatically within a single API call
 
 Usage notes:
-  - Live crawling mode is fixed to 'preferred' by the tool schema.
-  - Search types: 'auto' (balanced), 'fast' (quick results), 'deep' (comprehensive search)
-  - Configurable context length for optimal LLM integration
+  - Provide `query` and optionally `numResults` (1–50, default 8).
+  - Search results can contain delayed or historical observations; a successful search is not a live quote feed.
   - This tool interface does not expose explicit domain filters; refine scope in the query text
 
 The current year is {{year}}. You MUST use this year when searching for recent information or current events

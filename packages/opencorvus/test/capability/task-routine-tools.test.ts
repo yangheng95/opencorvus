@@ -5,8 +5,46 @@ import { RuntimeTemplateID } from "../../src/agent/runtime-template-id"
 import { bindHarnessProjection, createHarnessGrantSet } from "../../src/capability/harness-projection"
 import { routineToolRefs } from "../../src/capability/routine-tools"
 import { SessionLoop } from "../../src/session/loop"
+import { AgentToolPool } from "../../src/agent/tool-pool-contract"
 
 describe("Task role routine authority", () => {
+  for (const role of ["coding", "chat", "work", "control", "mission"] as const) {
+    test(`${role} directly projects its granted built-in tools on every occurrence`, () => {
+      const ids = [...AgentToolPool.visibleToolIDs(AgentToolPool.assignment(role))]
+      const grants = createHarnessGrantSet({
+        context: role === "mission" ? { kind: "mission" } : { kind: "conversation", agent_id: role },
+        owner_revision: "native-role",
+        grants: ids.map((local_ref) => ({
+          ref: capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref }),
+          access: "execute",
+        })),
+      })
+      const expected = ids.filter((id) => !["skill", "mission_skill"].includes(id)).sort()
+      for (const harness of [
+        grants,
+        bindHarnessProjection(grants, {
+          snapshot_ref: "/attachment/native-catalog.json",
+          snapshot_hash: "a".repeat(64),
+        }),
+      ]) {
+        const actual = SessionLoop.occurrencePermanentToolRefs({
+          harness,
+          visibleToolIDs: ids,
+          explicitSkillNames: [],
+          productionSkillContext: role !== "mission",
+        })
+        expect(actual.map((ref) => ref.local_ref).sort()).toEqual(expected)
+      }
+      const restricted = SessionLoop.occurrencePermanentToolRefs({
+        harness: grants,
+        visibleToolIDs: ["capability_search"],
+        explicitSkillNames: [],
+        productionSkillContext: false,
+      })
+      expect(restricted.map((ref) => ref.local_ref)).toEqual(["capability_search"])
+    })
+  }
+
   for (const role of RuntimeTemplateID.ids) {
     test(`${role} keeps its authorized platform base on a new and bound occurrence`, () => {
       const refs = PlatformCapabilitySetRegistry.get(

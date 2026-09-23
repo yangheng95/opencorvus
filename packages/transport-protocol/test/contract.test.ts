@@ -366,6 +366,13 @@ describe("native command validation", () => {
     expect(isOverlayPersistedSettings({ ...persistedSettings, username: "" })).toBe(true)
   })
 
+  test("persists the last selected model through the native settings contract", () => {
+    const payload = JSON.parse(JSON.stringify({ ...persistedSettings, lastSelectedModel: "openai/gpt-5" }))
+    expect(isOverlayPersistedSettings(payload)).toBe(true)
+    expect(isNativeCommand({ kind: "settings.save", payload })).toBe(true)
+    expect(payload.lastSelectedModel).toBe("openai/gpt-5")
+  })
+
   test.each(["ivory", "sage", "mist", "graphite"] as const)(
     "persists the %s theme through the native settings contract",
     (theme) => {

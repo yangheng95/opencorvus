@@ -2,15 +2,15 @@ import type { CapabilityRef } from "@opencorvus-ai/util/capability-ref"
 import { harnessGrantedRefs, type HarnessGrantSet, type HarnessProjection } from "./harness-projection"
 import { capabilityRecoveryGuidance } from "./recovery-guidance"
 
-// Native assistants use this map to choose their routine surface. Task roles
-// already declare their platform tool surface through the Expert Squad grants;
-// for those roles this map supplies guidance, not a second capability filter.
+// Guidance describes tools; role grants and execution visibility own availability.
 const guidance: Readonly<Record<string, string>> = {
   capability_search: "Discover and load specialist or extension capabilities that are not already callable.",
   read: "Read project files and exact file ranges.",
   list: "Inspect directory contents.",
   glob: "Find files by path pattern.",
   search_code: "Find definitions, callers and text in the project.",
+  websearch: "Search current external sources before answering time-sensitive questions.",
+  webfetch: "Read a known source URL and verify its content and date.",
   bash: "Run shell commands, application checks and existing tests.",
   edit: "Apply precise edits to existing files.",
   write: "Create or replace a file with the intended content.",
@@ -52,7 +52,6 @@ export function routineToolRefs(input: {
   visibleToolIDs: readonly string[]
 }): CapabilityRef[] {
   const visible = new Set(input.visibleToolIDs)
-  const taskRole = input.harness.context.kind === "task_agent" || input.harness.context.kind === "task_scheduler"
   return harnessGrantedRefs(input.harness, "execute").filter(
     (ref) =>
       ref.kind === "tool" &&
@@ -61,8 +60,7 @@ export function routineToolRefs(input: {
       (ref.owner_ref.startsWith("dispatch-stage:") ||
         ((ref.owner_ref === "tool-registry" || ref.owner_ref.startsWith("runtime-projection:")) &&
           ref.local_ref !== "skill" &&
-          ref.local_ref !== "mission_skill" &&
-          (taskRole || Object.hasOwn(guidance, ref.local_ref)))),
+          ref.local_ref !== "mission_skill")),
   )
 }
 

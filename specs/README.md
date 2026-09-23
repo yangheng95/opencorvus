@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Conversation web evidence and NVDA investigation](records/2026-09/2026-09-23-conversation-web-evidence.md)
+
+- [Remember the last Composer model](records/2026-09/2026-09-23-composer-model-memory.md)
+
 - [Inspect AutomationBench residual audit](records/2026-09/2026-09-22-inspect-automationbench-residual-audit.md)
 
 - [Inspect AutomationBench engine and expert squad](records/2026-09/2026-09-22-inspect-automationbench-engine.md)

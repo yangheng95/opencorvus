@@ -377,7 +377,8 @@ Work Ledger 顶层只保留 New Chat，并与标题栏和命令面板共享同�
 入口。每次调用只清除会话与 Project runtime selection、进入 directory-free launcher 并聚焦
 composer；没有实际提交时禁止调用任何 Project 或 Session 写路由。首次 Code / Work 发送分别
 通过 `/global/chat` 或 `/global/work` 原子创建一个新的 dated UUID 临时 Project 与 Session；
-directory-free launcher 中显式选择的 Model 作为这两个创建请求的可选 `model` 字段传递，并在
+directory-free launcher 从既有 Overlay settings 的 `lastSelectedModel` 恢复最后一次显式模型选择；
+主动选模型更新该偏好，浏览历史会话只投影其根 Session 配置。当前选择的 Model 作为这两个创建请求的可选 `model` 字段传递，并在
 返回前写入根 Session 的 config overlay。未显式选择时请求保持继承语义；后续 prompt 禁止再次
 携带临时 Model，而是统一通过根 Session overlay、Project config 与 global config 的既定优先级
 解析。Provider catalog 只负责证明 Model 可用，不能替代这条持久化配置来源。

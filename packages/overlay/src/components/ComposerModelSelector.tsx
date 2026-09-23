@@ -355,10 +355,6 @@ export function ComposerModelSelector(props: ComposerModelSelectorProps) {
   }
 
   async function pickModel(value: string) {
-    if (value === selectedModel()) {
-      disclosure.close()
-      return
-    }
     await selectComposerModel(value)
     disclosure.close()
   }

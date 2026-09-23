@@ -1014,6 +1014,7 @@ export interface OverlayPersistedSettings {
   workspaceTaskID?: string
   workspaceDirectory?: string
   desktopNotifications: boolean
+  lastSelectedModel?: string
 }
 
 export type HostPermission = "granted" | "denied" | "default" | "unsupported"
@@ -1320,6 +1321,7 @@ const OVERLAY_PERSISTED_SETTINGS_KEYS = [
   "workspaceTaskID",
   "workspaceDirectory",
   "desktopNotifications",
+  "lastSelectedModel",
 ] as const
 
 const MAXIMUM_UNSIGNED_32_BIT_INTEGER = 0xffff_ffff
@@ -1363,7 +1365,8 @@ export function isOverlayPersistedSettings(value: unknown): value is OverlayPers
     (PROJECT_EDITOR_IDS as readonly unknown[]).includes(settings.preferredProjectEditor) &&
     isOptionalNonBlankString(settings.workspaceTaskID) &&
     isOptionalNonBlankString(settings.workspaceDirectory) &&
-    typeof settings.desktopNotifications === "boolean"
+    typeof settings.desktopNotifications === "boolean" &&
+    isOptionalNonBlankString(settings.lastSelectedModel)
   )
 }
 

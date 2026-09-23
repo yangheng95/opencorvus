@@ -44,6 +44,8 @@ export interface OverlaySettings {
   directoryEpoch: number
   /** Whether task lifecycle events may be delivered through the host OS notification surface. */
   desktopNotifications: boolean
+  /** Last explicit Composer choice used to initialize new conversations. */
+  lastSelectedModel: string
 }
 
 // ── Sanitisers ──
@@ -132,6 +134,7 @@ export const DEFAULT_SETTINGS: OverlaySettings = {
   workspaceEpoch: 0,
   directoryEpoch: 0,
   desktopNotifications: true,
+  lastSelectedModel: "",
 }
 
 // ── Store ──
@@ -188,6 +191,7 @@ export function applySettings(input: Partial<OverlaySettings>): void {
         : DEFAULT_SETTINGS.workspaceDirectory,
     preferredProjectEditor: sanitizeProjectEditor((input as any)?.preferredProjectEditor),
     desktopNotifications: input?.desktopNotifications !== false,
+    lastSelectedModel: input?.lastSelectedModel?.trim() ?? DEFAULT_SETTINGS.lastSelectedModel,
   })
 }
 
@@ -298,6 +302,7 @@ export function bootstrapOverlaySettings(input: Partial<OverlaySettings> = setti
     theme: sanitizeTheme(input.theme ?? DEFAULT_SETTINGS.theme),
     locale: input.locale ?? DEFAULT_SETTINGS.locale,
     desktopNotifications: input.desktopNotifications ?? DEFAULT_SETTINGS.desktopNotifications,
+    lastSelectedModel: input.lastSelectedModel?.trim() || undefined,
     directory: input.savedDirectory || undefined,
     preferredProjectEditor: sanitizeProjectEditor(input.preferredProjectEditor),
     workspaceTaskID,
