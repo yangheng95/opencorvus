@@ -1,6 +1,7 @@
 import z from "zod"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference"
 import { MissionAcceptanceGapSchema } from "@/mission/acceptance-gap"
+import { ArtifactLocatorSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 
 export const PanelTaskAcceptanceLedger = z
   .object({
@@ -23,14 +24,20 @@ export const PanelTaskResult = z.object({
   summary: z.string(),
   failure: PanelTaskFailureResult.optional(),
 })
-export const PanelQueryTaskErrorRow = z.object({
-  taskID: z.string(),
-  error: z.string(),
-})
-export const PanelQueryTaskSummaryRow = z.object({
-  taskID: z.string(),
-  title: z.string(),
-  status: PanelTaskStatus,
+export const PanelQueryTaskErrorRow = z
+  .object({
+    taskID: z.string(),
+    error: z.string(),
+  })
+  .strict()
+export const PanelQueryTaskListRow = z
+  .object({
+    taskID: z.string(),
+    title: z.string(),
+    status: PanelTaskStatus,
+  })
+  .strict()
+export const PanelQueryTaskSummaryRow = PanelQueryTaskListRow.extend({
   created: z.number().optional(),
   started: z.number(),
   completed: z.number().optional(),
@@ -39,8 +46,22 @@ export const PanelQueryTaskSummaryRow = z.object({
   pendingInteractions: z.number().int().nonnegative().optional(),
   terminal_lifecycle_reference: TerminalLifecycleReferenceSchema.optional(),
   acceptance_ledger: PanelTaskAcceptanceLedger.optional(),
+  board: z.object({ headline: z.string().optional(), summary: z.string().optional() }).optional(),
+  plan: z
+    .object({
+      goals: z.array(
+        z.object({
+          title: z.string(),
+          accepted: z.boolean(),
+          activeSessionIDs: z.array(z.string()),
+          reviewCount: z.number().int().nonnegative(),
+        }),
+      ),
+      artifacts: z.array(z.object({ kind: z.string(), locator: ArtifactLocatorSchema })),
+    })
+    .optional(),
 })
-export const PanelQueryTaskRow = z.union([PanelQueryTaskSummaryRow, PanelQueryTaskErrorRow])
+export const PanelQueryTaskRow = z.union([PanelQueryTaskSummaryRow, PanelQueryTaskErrorRow, PanelQueryTaskListRow])
 export const PanelQueryTaskOutput = z.object({
   tasks: z.array(PanelQueryTaskRow),
 })

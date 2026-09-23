@@ -92,10 +92,9 @@ describe("host-owned native Session MCP composition", () => {
           const names = HostSessionMcpRuntime.catalogSnapshots(sessionID)
             .flatMap((snapshot) => Object.keys(snapshot.tool_bindings))
             .sort()
-          expect(names).toEqual([
-            "browser_tabs",
-            ...ComputerMCPBuiltin.ImportableToolNames.map((name) => `computer_${name}`),
-          ].sort())
+          expect(names).toEqual(
+            ["browser_tabs", ...ComputerMCPBuiltin.ImportableToolNames.map((name) => `computer_${name}`)].sort(),
+          )
           expect(discoveredServers[0]).toEqual({
             key: BrowserMCPBuiltin.ServerName,
             connectionIdentity: "session:ses_host_native_mcp:browser",
@@ -279,7 +278,9 @@ describe("host-owned native Session MCP composition", () => {
           { computer_id: "host-mcp-recovery-missing" },
           { toolCallId: "call_execute_recovered_computer", messages: [], abortSignal: abort },
         )
-        const recoveredOwners = HostSessionMcpRuntime.catalogSnapshots(session.id).map((item) => item.owner.owner_id).sort()
+        const recoveredOwners = HostSessionMcpRuntime.catalogSnapshots(session.id)
+          .map((item) => item.owner.owner_id)
+          .sort()
         await HostSessionMcpRuntime.dispose(session.id)
         const unavailable = spyOn(MCP, "inspectScopedCapabilitySnapshot").mockResolvedValue({
           tool_definitions: [],
@@ -292,7 +293,7 @@ describe("host-owned native Session MCP composition", () => {
           (error) => ({
             name: error instanceof Error ? error.name : typeof error,
             mismatches: Array.isArray((error as { mismatches?: unknown })?.mismatches)
-              ? ((error as { mismatches: string[] }).mismatches)
+              ? (error as { mismatches: string[] }).mismatches
               : [],
           }),
         )
@@ -301,15 +302,22 @@ describe("host-owned native Session MCP composition", () => {
         const codingBase = [
           "bash",
           "capability_search",
+          "delegate_agent",
           "edit",
+          "external_code_search",
           "glob",
+          "memory",
           "mission_state",
+          "planner",
           "publish_interactive_artifact",
           "question",
           "read",
+          "schedule",
           "search_code",
-          "todoread",
-          "todowrite",
+          "skill_market",
+          "todo",
+          "webfetch",
+          "websearch",
           "write",
         ]
         expect({
@@ -424,29 +432,47 @@ describe("host-owned native Session MCP composition", () => {
             activeLocalRefs: ["wait"],
           })
           expect(resolved.map((entry) => entry.key).sort()).toEqual(Object.keys(config.mcp ?? {}).sort())
-          expect(HostSessionMcpRuntime.catalogSnapshots(mission.id).map((snapshot) => snapshot.owner.owner_id).sort()).toEqual(
-            resolved.map((entry) => entry.connectionIdentity).filter((entry): entry is string => Boolean(entry)).sort(),
+          expect(
+            HostSessionMcpRuntime.catalogSnapshots(mission.id)
+              .map((snapshot) => snapshot.owner.owner_id)
+              .sort(),
+          ).toEqual(
+            resolved
+              .map((entry) => entry.connectionIdentity)
+              .filter((entry): entry is string => Boolean(entry))
+              .sort(),
           )
           expect(Object.keys(tools).sort()).toEqual([
             "bash",
             "capability_search",
             "edit",
+            "external_code_search",
             "glob",
+            "memory",
             "mission_state",
+            "panel_cancel_task",
             "panel_complete_mission",
             "panel_create_task",
+            "panel_expert_squad_inspect",
+            "panel_multica_catalog",
             "panel_query_task",
             "panel_query_task_artifacts",
             "panel_read_task_artifact",
             "panel_read_task_message",
+            "panel_respond_interaction",
+            "panel_resume_task",
+            "planner",
             "publish_interactive_artifact",
             "question",
             "read",
+            "schedule",
             "scheduler_message",
             "search_code",
-            "todoread",
-            "todowrite",
+            "skill_market",
+            "todo",
             "wait",
+            "webfetch",
+            "websearch",
             "write",
           ])
         } finally {

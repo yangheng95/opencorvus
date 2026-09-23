@@ -41,8 +41,7 @@ export const RIGHT_SIDEBAR_CONVERSATION_REQUIRED_TOOLS = [
   "edit",
   "write",
   "apply_patch",
-  "todoread",
-  "todowrite",
+  "todo",
   "schedule",
 ] as const
 export const RightSidebarConversationSessionResponse = z.object({

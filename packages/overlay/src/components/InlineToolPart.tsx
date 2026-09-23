@@ -26,10 +26,10 @@ const FILE_WRITE_TOOLS = new Set(["write", "writefile"])
 const FILE_EDIT_TOOLS = new Set(["edit", "editfile", "applypatch"])
 const FILE_READ_TOOLS = new Set(["read", "readfile"])
 const SHELL_TOOLS = new Set(["bash", "shellcommand", "runcommand"])
-// todowrite/todoread/todoupdate render as a structured checklist instead of
+// Checklist tools render a structured list instead of
 // raw JSON — the output is JSON.stringify of the todos array, which is
 // unreadable and floods the card body. updateplan uses the same shape.
-const TODO_TOOLS = new Set(["todowrite", "todoread", "todoupdate", "updateplan"])
+const TODO_TOOLS = new Set(["todo", "todoupdate", "updateplan"])
 const DEFERRED_TOOL_PART_CACHE_LIMIT = 128
 const deferredToolPartCache = new Map<string, Promise<any>>()
 
@@ -418,7 +418,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
 
   // Structured todo list — populated during streaming from state.input.todos,
   // once committed from state.metadata.todos. Both shapes are handled by
-  // extractTodos so a streaming or completed todowrite renders identically.
+  // extractTodos so a streaming or completed todo renders identically.
   const todoItems = createMemo(() => {
     if (!TODO_TOOLS.has(key())) return null
     return extractTodos(state())

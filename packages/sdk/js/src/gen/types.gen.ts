@@ -3875,8 +3875,7 @@ export type PermissionConfig =
       search_code?: PermissionRuleConfig
       skill?: PermissionRuleConfig
       task?: PermissionRuleConfig
-      todoread?: PermissionActionConfig
-      todowrite?: PermissionActionConfig
+      todo?: PermissionActionConfig
       webfetch?: PermissionActionConfig
       websearch?: PermissionActionConfig
       [key: string]: PermissionRuleConfig | PermissionActionConfig | undefined
@@ -16222,32 +16221,19 @@ export type GatewayControlActionData = {
         action: "multica_catalog"
       }
     | {
-        action: "view_plan"
-        /**
-         * Task ID whose plan should be inspected.
-         */
-        taskID: string
-      }
-    | {
-        action: "view_board"
-        /**
-         * Task ID whose board should be inspected; omit to list recent tasks.
-         */
-        taskID?: string
-      }
-    | {
-        action: "view_tasks"
-      }
-    | {
         action: "query_task"
+        /**
+         * Additional details for explicit taskIDs.
+         */
+        include?: Array<"board" | "plan">
         /**
          * Include pending interaction counts for each requested task.
          */
         includeInteractions?: boolean
         /**
-         * Task IDs to query in one request.
+         * Exact Task IDs to inspect; omit to list Tasks.
          */
-        taskIDs: Array<string>
+        taskIDs?: Array<string>
       }
     | {
         action: "query_task_artifacts"
@@ -16810,30 +16796,26 @@ export type GatewayControlActionData = {
         taskID: string
       }
     | {
-        action: "reply_interaction"
+        action: "respond_interaction"
         /**
-         * Pending interaction ID to answer.
+         * Pending interaction ID.
          */
         interactionID: string
-        /**
-         * Custom answer text for the pending interaction.
-         */
-        message?: string
-        /**
-         * Preset reply behavior for the interaction.
-         */
-        reply?: "once" | "always"
-      }
-    | {
-        action: "reject_interaction"
-        /**
-         * Pending interaction ID to reject.
-         */
-        interactionID: string
-        /**
-         * Reason shown when rejecting the pending interaction.
-         */
-        message?: string
+        response:
+          | {
+              kind: "answer"
+              message: string
+            }
+          | {
+              kind: "allow_once"
+            }
+          | {
+              kind: "allow_project"
+            }
+          | {
+              kind: "reject"
+              message?: string
+            }
       }
     | {
         action: "cancel_task"
@@ -16987,18 +16969,14 @@ export type GatewayControlActionData = {
         match?: string
       }
     | {
-        action: "select_task"
-        /**
-         * Task ID to focus in the local project assistant surface.
-         */
-        taskID: string
-      }
-    | {
-        action: "select_session"
-        /**
-         * Session ID to focus in the local project assistant surface.
-         */
-        sessionID: string
+        action: "select_workspace"
+        target: {
+          /**
+           * ID of the Task or Session to focus.
+           */
+          id: string
+          kind: "task" | "session"
+        }
       }
     | {
         action: "create_session"

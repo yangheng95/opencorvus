@@ -134,8 +134,8 @@ function list<const T extends readonly [Capability, ...Capability[]]>(...items: 
   return items
 }
 
-type CapabilityTuple = [Capability, Capability, ...Capability[]]
-type SchemaTuple = [z.ZodObject<any>, z.ZodObject<any>, ...z.ZodObject<any>[]]
+type CapabilityTuple = [Capability, ...Capability[]]
+type SchemaTuple = [z.ZodObject<any>, ...z.ZodObject<any>[]]
 
 function refineCreateTaskChannelBinding(
   value: { platform?: unknown; channel?: unknown; thread?: unknown },
@@ -213,7 +213,7 @@ function selectCapabilities(actions: readonly string[], context: string): Capabi
     if (!capability) throw new Error(`${context} references unknown panel action ${action}.`)
     return capability
   })
-  if (items.length < 2) throw new Error(`${context} must declare at least two panel actions.`)
+  if (items.length === 0) throw new Error(`${context} must declare at least one panel action.`)
   return items as CapabilityTuple
 }
 
@@ -242,41 +242,26 @@ export const PanelCapabilityRegistry = list(
     params: {},
   }),
   item({
-    action: "view_plan",
-    description: "Inspect a task plan and goal list.",
-    kind: "query",
-    surfaces: allProjectSurfaces,
-    params: {
-      taskID: z.string().describe("Task ID whose plan should be inspected."),
-    },
-  }),
-  item({
-    action: "view_board",
-    description: "Inspect a task board or list recent tasks when taskID is omitted.",
-    kind: "query",
-    surfaces: allProjectSurfaces,
-    params: {
-      taskID: z.string().optional().describe("Task ID whose board should be inspected; omit to list recent tasks."),
-    },
-  }),
-  item({
-    action: "view_tasks",
-    description: "List recent tasks in the current project.",
-    kind: "query",
-    surfaces: allProjectSurfaces,
-    params: {},
-  }),
-  item({
     action: "query_task",
     description:
-      "Structured batch task status query for LLM reconciliation. Returns stable JSON for up to 50 taskIDs " +
-      "at a time. Distinct from view_board (which produces human-oriented prose, single-task at a time) — " +
-      "use this when an agent needs to programmatically inspect outcomes of tasks it has dispatched. " +
-      "The current acceptance-ledger obligation is projected when present; other Artifact bodies remain excluded and are enumerated through query_task_artifacts.",
+      "List or inspect Tasks as structured JSON. Omit taskIDs to list recent Project Tasks, or all Tasks owned by the current Mission. " +
+      "Pass up to 50 taskIDs for canonical status, results and terminal lifecycle references used in reconciliation. " +
+      "Use include to add board summaries or goals/planning-artifact locators. Listing returns identity/title/status only; " +
+      "inspect explicit IDs before terminal Artifact reads or acceptance. Artifact bodies are read through the Artifact tools.",
     kind: "query",
     surfaces: allProjectSurfaces,
     params: {
-      taskIDs: z.array(z.string().min(1)).min(1).max(50).describe("Task IDs to query in one request."),
+      taskIDs: z
+        .array(z.string().min(1))
+        .min(1)
+        .max(50)
+        .optional()
+        .describe("Exact Task IDs to inspect; omit to list Tasks."),
+      include: z
+        .array(z.enum(["board", "plan"]))
+        .max(2)
+        .optional()
+        .describe("Additional details for explicit taskIDs."),
       includeInteractions: z
         .boolean()
         .optional()
@@ -477,24 +462,18 @@ export const PanelCapabilityRegistry = list(
     },
   }),
   item({
-    action: "reply_interaction",
-    description: "Answer a pending task interaction.",
+    action: "respond_interaction",
+    description: "Answer, allow or reject a pending Task interaction using one explicit response.",
     kind: "mutation",
     surfaces: allProjectSurfaces,
     params: {
-      interactionID: z.string().describe("Pending interaction ID to answer."),
-      reply: z.enum(["once", "always"]).optional().describe("Preset reply behavior for the interaction."),
-      message: z.string().optional().describe("Custom answer text for the pending interaction."),
-    },
-  }),
-  item({
-    action: "reject_interaction",
-    description: "Reject a pending task interaction.",
-    kind: "mutation",
-    surfaces: allProjectSurfaces,
-    params: {
-      interactionID: z.string().describe("Pending interaction ID to reject."),
-      message: z.string().optional().describe("Reason shown when rejecting the pending interaction."),
+      interactionID: z.string().min(1).describe("Pending interaction ID."),
+      response: z.discriminatedUnion("kind", [
+        z.object({ kind: z.literal("answer"), message: z.string().min(1) }).strict(),
+        z.object({ kind: z.literal("allow_once") }).strict(),
+        z.object({ kind: z.literal("allow_project") }).strict(),
+        z.object({ kind: z.literal("reject"), message: z.string().optional() }).strict(),
+      ]),
     },
   }),
   item({
@@ -527,25 +506,19 @@ export const PanelCapabilityRegistry = list(
     },
   }),
   item({
-    action: "select_task",
-    description: "Focus a task in the local project assistant surface.",
+    action: "select_workspace",
+    description: "Focus a Task or Session in the local project assistant surface.",
     kind: "mutation",
     surfaces: localSurfaces,
     params: {
-      taskID: z.string().describe("Task ID to focus in the local project assistant surface."),
+      target: z
+        .object({
+          kind: z.enum(["task", "session"]),
+          id: z.string().min(1).describe("ID of the Task or Session to focus."),
+        })
+        .strict(),
     },
-    local_action_types: ["select_task"],
-    local_action_surfaces: localSurfaces,
-  }),
-  item({
-    action: "select_session",
-    description: "Focus a session in the local project assistant surface.",
-    kind: "mutation",
-    surfaces: localSurfaces,
-    params: {
-      sessionID: z.string().describe("Session ID to focus in the local project assistant surface."),
-    },
-    local_action_types: ["select_session"],
+    local_action_types: ["select_task", "select_session"],
     local_action_surfaces: localSurfaces,
   }),
   item({

@@ -1,0 +1,7 @@
+Read or update the current Session's checklist with one tool.
+
+- Use `action: "read"` to inspect the saved checklist.
+- Use `action: "write"` with the complete `todos` array to replace it. Preserve relevant unfinished items and mark progress as it happens; an empty array clears the checklist.
+- Both actions return the canonical saved checklist. Each item has content, status and priority.
+- Use a checklist for substantive multi-step work or when the user requests one. Keep single-step answers and ordinary conversation free of unnecessary bookkeeping.
+- These are per-Session checklist items, not engine Tasks, Mission goals or delegated work. Use the relevant execution tool to perform the work.

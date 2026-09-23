@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [First round of built-in tool consolidation](records/2026-09/2026-09-23-tool-consolidation-round-one.md)
+
 - [Conversation web evidence and NVDA investigation](records/2026-09/2026-09-23-conversation-web-evidence.md)
 
 - [Remember the last Composer model](records/2026-09/2026-09-23-composer-model-memory.md)

@@ -69,8 +69,7 @@ export function createExploreTool(input: {
             bash: false,
             edit: false,
             write: false,
-            todowrite: false,
-            todoread: false,
+            todo: false,
           },
         })
         if (isAgentCoordinationHandoffResult(exploreResult)) {

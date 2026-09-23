@@ -21,7 +21,7 @@ OpenCorvus 内置一组工具供 agent 调用。工具实现位于 `packages/ope
 | `webfetch`             | 抓取 URL                                             |
 | `websearch`            | 网络搜索                                             |
 | `memory`               | 持久化记忆存储                                       |
-| `todoread` / `todowrite` | 读取和更新 agent 的 todo list                     |
+| `todo`                 | 读取或替换当前 Session 的待办清单                    |
 | `external_code_search` | 搜索外部代码源                                       |
 | `skill`                | 加载 projected Skill                                 |
 | `delegate_agent`       | 从 coding 或 chat assistant 派发有边界的 helper     |
@@ -33,6 +33,15 @@ OpenCorvus 内置一组工具供 agent 调用。工具实现位于 `packages/ope
 | `question`             | 向用户提问（需 `OPENCORVUS_ENABLE_QUESTION_TOOL=1`） |
 | `schedule`             | 安排后续动作                                         |
 | `analytics`            | 上报遥测事件                                         |
+
+## 合并后的操作接口
+
+- `todo({ action: "read" })` 返回已保存的待办清单；`todo({ action: "write", todos: [...] })` 用完整列表替换清单，空列表表示清空。
+- `panel_query_task({})` 列出当前 Project 最近的任务，Mission 则列出自身拥有的全部任务。传入 `taskIDs` 可查询最多 50 个任务；`include: ["board", "plan"]` 添加看板摘要、目标和规划产物定位信息。读取终态任务证据前需先按明确 ID 查询。
+- `panel_respond_interaction({ interactionID, response })` 统一处理交互。`response.kind` 支持 `answer`（必填 `message`）、`allow_once`、`allow_project`、`reject`（可选 `message`）。
+- `panel_select_workspace({ target: { kind: "task", id } })` 在本地界面定位任务；定位 Session 时使用 `kind: "session"`。
+
+当前角色获授权的通用预置工具直接提供；专业和扩展能力继续按需发现、加载。
 
 ## Task Orchestrator 工具
 

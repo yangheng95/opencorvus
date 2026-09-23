@@ -31,8 +31,7 @@ const conversationEffects = [
   "edit",
   "write",
   "webfetch",
-  "todowrite",
-  "todoread",
+  "todo",
   "websearch",
   "external_code_search",
   "skill",
@@ -47,9 +46,7 @@ describe("execution authority Tool surfaces", () => {
   test("binds the source and generated general Mission Skill to the ordered Mission Panel leaf contract", async () => {
     const generated = builtinMissionSkillSources.find((item) => item.name === "general")
     if (!generated) throw new Error("Built-in general Mission Skill source is missing.")
-    const sourceText = await Bun.file(
-      new URL("../src/mission-skill/builtin/general/SKILL.md", import.meta.url),
-    ).text()
+    const sourceText = await Bun.file(new URL("../src/mission-skill/builtin/general/SKILL.md", import.meta.url)).text()
     const parseRequiredTools = (value: string, label: string) => {
       const markdown = ConfigMarkdown.parseText(value, label)
       return Skill.parseDefinition(markdown.data, label).required_tools
@@ -132,14 +129,14 @@ describe("execution authority Tool surfaces", () => {
     })
   })
 
-  test("directly calls available Control leaves and discovers the Mission handoff capability", () => {
+  test("directly calls available Control leaves and the Mission handoff capability", () => {
     const control = renderControlSystemPrompt({ surface: "panel", allowCreate: true })
     expect(control).toContain("panel_create_task")
     expect(PrimaryAssistantRegistry.nativeDefaultPrompt("control")).toContain(
       "Call the available exact `panel_<action>` tool required by the current request directly",
     )
-    expect(PrimaryAssistantRegistry.nativeDefaultPrompt("chat")).toContain("reveal and call `panel_wake_mission`")
-    expect(WORK_RUNTIME_PROMPT).toContain("reveal and call `panel_wake_mission`")
+    expect(PrimaryAssistantRegistry.nativeDefaultPrompt("chat")).toContain("directly available `panel_wake_mission`")
+    expect(WORK_RUNTIME_PROMPT).toContain("directly available `panel_wake_mission`")
   })
 
   test("projects durable scheduler communication to both scheduler roles", () => {

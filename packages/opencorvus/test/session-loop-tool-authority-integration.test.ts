@@ -139,92 +139,65 @@ afterEach(async () => {
 })
 
 describe("SessionLoop Tool execution authority integration", () => {
-  test("reveals and executes an exact Panel leaf through a real Control turn", async () => {
+  test("directly executes the consolidated Task query through a real Control turn", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const model = providerModel()
-        const session = await Session.create({ kind: "assistant", title: "Control Panel leaf discovery" })
+        const session = await Session.create({ kind: "assistant", title: "Control direct Task query" })
         const provider = spyOn(Provider, "getModel").mockResolvedValue(model)
         let providerStep = 0
         const stream = spyOn(LLM, "stream").mockImplementation(async (input) => {
           providerStep += 1
           if (providerStep === 1) {
-            expect({
-              tools: Object.keys(input.tools),
-              system: input.system.join("\n"),
-            }).toEqual({
-              tools: ["capability_search", "panel_complete_mission", "panel_create_task", "panel_query_task", "panel_query_task_artifacts", "panel_read_task_artifact", "panel_read_task_message"],
-              system: expect.stringContaining("panel_create_task"),
-            })
-            const params = {
-              queries: ["current tasks"],
-              exact_refs: [
-                capabilityRef({
-                  kind: "tool",
-                  source: "platform",
-                  owner_ref: "tool-registry",
-                  local_ref: "panel_view_tasks",
-                }),
-              ],
-              deactivate_refs: [],
-              limit: 5,
-            }
+            expect(Object.keys(input.tools).sort()).toEqual([
+              "capability_search",
+              "panel_cancel_task",
+              "panel_capture_overlay_screenshot",
+              "panel_complete_mission",
+              "panel_create_session",
+              "panel_create_task",
+              "panel_delete_goal",
+              "panel_delete_session",
+              "panel_expert_squad_inspect",
+              "panel_fork_session",
+              "panel_multica_catalog",
+              "panel_query_task",
+              "panel_query_task_artifacts",
+              "panel_read_task_artifact",
+              "panel_read_task_message",
+              "panel_respond_interaction",
+              "panel_resume_task",
+              "panel_select_workspace",
+              "panel_send_task_message",
+              "panel_update_checks",
+              "panel_update_goal",
+              "panel_wake_mission",
+              "panel_wake_work",
+            ])
             return {
               fullStream: (async function* () {
                 yield { type: "start" }
                 yield {
                   type: "tool-call",
-                  toolCallId: "call_control_reveal_panel_view_tasks",
-                  toolName: "capability_search",
-                  input: params,
-                }
-                const output = await input.tools.capability_search!.execute!(params, {
-                  toolCallId: "call_control_reveal_panel_view_tasks",
-                  messages: input.messages,
-                  abortSignal: input.abort,
-                })
-                yield {
-                  type: "tool-result",
-                  toolCallId: "call_control_reveal_panel_view_tasks",
-                  toolName: "capability_search",
-                  input: params,
-                  output,
-                }
-                yield {
-                  type: "finish-step",
-                  finishReason: "tool-calls",
-                  usage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
-                }
-                yield {
-                  type: "finish",
-                  finishReason: "tool-calls",
-                  totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 },
-                }
-              })(),
-            } as Awaited<ReturnType<typeof LLM.stream>>
-          }
-          if (providerStep === 2) {
-            expect(Object.keys(input.tools).sort()).toEqual(["capability_search", "panel_complete_mission", "panel_create_task", "panel_query_task", "panel_query_task_artifacts", "panel_read_task_artifact", "panel_read_task_message", "panel_view_tasks"])
-            return {
-              fullStream: (async function* () {
-                yield { type: "start" }
-                yield {
-                  type: "tool-call",
-                  toolCallId: "call_control_panel_view_tasks",
-                  toolName: "panel_view_tasks",
+                  toolCallId: "call_control_panel_query_task",
+                  toolName: "panel_query_task",
                   input: {},
                 }
-                const output = await input.tools.panel_view_tasks!.execute!({}, {
-                  toolCallId: "call_control_panel_view_tasks",
-                  messages: input.messages,
-                  abortSignal: input.abort,
-                })
+                const output = await input.tools.panel_query_task!.execute!(
+                  {},
+                  {
+                    toolCallId: "call_control_panel_query_task",
+                    messages: input.messages,
+                    abortSignal: input.abort,
+                  },
+                )
+                expect(JSON.parse(output.output)).toEqual({ tasks: [] })
                 yield {
                   type: "tool-result",
-                  toolCallId: "call_control_panel_view_tasks",
-                  toolName: "panel_view_tasks",
+                  toolCallId: "call_control_panel_query_task",
+                  toolName: "panel_query_task",
                   input: {},
                   output,
                 }
@@ -245,7 +218,7 @@ describe("SessionLoop Tool execution authority integration", () => {
             fullStream: (async function* () {
               yield { type: "start" }
               yield { type: "text-start", id: "control-final" }
-              yield { type: "text-delta", id: "control-final", text: "Control leaf discovery is ready." }
+              yield { type: "text-delta", id: "control-final", text: "Current Task list is empty." }
               yield { type: "text-end", id: "control-final" }
               yield {
                 type: "finish-step",
@@ -261,20 +234,17 @@ describe("SessionLoop Tool execution authority integration", () => {
           } as Awaited<ReturnType<typeof LLM.stream>>
         })
         try {
-          const reply = await withControlPromptContext(
-            session.id,
-            { surface: "panel", allowCreate: true },
-            () =>
-              SessionPrompt.prompt({
-                sessionID: session.id,
-                author: "user",
-                agent: "control",
-                model: { providerID: model.providerID, modelID: model.id },
-                parts: [{ type: "text", text: "Show the current Task state." }],
-              }),
+          const reply = await withControlPromptContext(session.id, { surface: "panel", allowCreate: true }, () =>
+            SessionPrompt.prompt({
+              sessionID: session.id,
+              author: "user",
+              agent: "control",
+              model: { providerID: model.providerID, modelID: model.id },
+              parts: [{ type: "text", text: "Show the current Task state." }],
+            }),
           )
           expect({ providerStep, info: reply.info }).toMatchObject({
-            providerStep: 3,
+            providerStep: 2,
             info: { role: "assistant", agent: "control", finish: "stop" },
           })
         } finally {

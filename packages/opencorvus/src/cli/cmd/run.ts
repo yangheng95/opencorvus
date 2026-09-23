@@ -24,7 +24,7 @@ import { ExternalCodeSearchTool } from "../../tool/codesearch"
 import { WebSearchTool } from "../../tool/websearch"
 import { SkillTool } from "../../tool/skill"
 import { BashTool } from "../../tool/bash"
-import { TodoWriteTool } from "../../tool/todo"
+import { TodoTool } from "../../tool/todo"
 import { Locale } from "../../util/locale"
 import { createInProcessFetch } from "@/server/in-process-client"
 import { renderToolFailureCause } from "@/session/tool-failure-cause"
@@ -195,13 +195,23 @@ function bash(info: ToolProps<typeof BashTool>) {
   )
 }
 
-function todo(info: ToolProps<typeof TodoWriteTool>) {
+function todo(info: ToolProps<typeof TodoTool>) {
+  const todos =
+    info.input.action === "write"
+      ? info.input.todos
+      : info.part.state.status === "completed"
+        ? info.metadata.todos
+        : []
   block(
     {
       icon: "#",
       title: "Todos",
     },
-    info.input.todos.map((item) => `${item.status === "completed" ? "[x]" : "[ ]"} ${item.content}`).join("\n"),
+    todos
+      .map(
+        (item: { status: string; content: string }) => `${item.status === "completed" ? "[x]" : "[ ]"} ${item.content}`,
+      )
+      .join("\n"),
   )
 }
 
@@ -403,7 +413,7 @@ export const RunCommand = cmd({
               return externalCodeSearch(props<typeof ExternalCodeSearchTool>(part))
             }
             if (part.tool === "websearch") return websearch(props<typeof WebSearchTool>(part))
-            if (part.tool === "todowrite") return todo(props<typeof TodoWriteTool>(part))
+            if (part.tool === "todo") return todo(props<typeof TodoTool>(part))
             if (part.tool === "skill") return skill(props<typeof SkillTool>(part))
             return renderToolPartDefault(part)
           } catch {

@@ -89,7 +89,7 @@ Git Safety Protocol:
 
 Important notes:
 - NEVER run additional commands to read or explore code, besides git bash commands
-- NEVER use the TodoWrite tool
+- NEVER use the todo tool
 - Push only when the user request or project instructions require it, and never bypass hooks.
 - IMPORTANT: Never use git commands with the -i flag (like git rebase -i or git add -i) since they require interactive input which is not supported.
 - If there are no changes to commit (i.e., no untracked files and no modifications), do not create an empty commit
@@ -116,7 +116,7 @@ gh pr create --title "the pr title" --body "$(cat <<'EOF'
 </example>
 
 Important:
-- DO NOT use the TodoWrite tool
+- DO NOT use the todo tool
 - Return the PR URL when you're done, so the user can see it
 
 # Other common operations

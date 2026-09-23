@@ -48,7 +48,7 @@ function normStatus(raw: any): CardStatus | undefined {
 // Todo tools render a structured checklist; inline chips would hide the list,
 // and a collapsed completed card would hide the plan itself — so they stay
 // expanded regardless of completion status.
-const TODO_TOOLS = new Set(["todowrite", "todoread", "todoupdate", "updateplan"])
+const TODO_TOOLS = new Set(["todo", "todoupdate", "updateplan"])
 
 function isFinishedConversationStatus(status: CardStatus | undefined): boolean {
   return status === "completed" || status === "error" || status === "skipped"
@@ -464,7 +464,7 @@ export function collectActivityCounts(node: CardNode): ActivityCounts {
 }
 
 // ── Todo summary (collapsed header) ──
-// Walks the subtree to find the most recent TodoWrite/UpdatePlan tool part
+// Walks the subtree to find the most recent todo/UpdatePlan tool part
 // and reports counts + the in-progress (or last completed) item title.
 // Returns null when no todo tool calls exist anywhere in the subtree —
 // the header then skips the third row entirely.

@@ -1,35 +1,24 @@
 import z from "zod"
 import { Tool } from "./tool"
-import DESCRIPTION_WRITE from "./todowrite.txt"
+import DESCRIPTION from "./todo.txt"
 import { Todo } from "../session/todo"
 import { TodoStore } from "../session/todo-store"
 
-export const TodoWriteTool = Tool.define("todowrite", {
-  description: DESCRIPTION_WRITE,
-  parameters: z.object({
-    todos: z.array(z.object(Todo.Info.shape)).describe("The updated todo list"),
-  }),
+export const TodoTool = Tool.define("todo", {
+  description: DESCRIPTION,
+  parameters: z.discriminatedUnion("action", [
+    z.object({ action: z.literal("read") }).strict(),
+    z
+      .object({
+        action: z.literal("write"),
+        todos: z.array(Todo.Info).describe("The complete updated checklist; an empty array clears it."),
+      })
+      .strict(),
+  ]),
   async execute(params, ctx) {
-
-    await TodoStore.update({
-      sessionID: ctx.sessionID,
-      todos: params.todos,
-    })
-    return {
-      title: `${params.todos.filter((x) => x.status !== "completed").length} todos`,
-      output: JSON.stringify(params.todos, null, 2),
-      metadata: {
-        todos: params.todos,
-      },
+    if (params.action === "write") {
+      await TodoStore.update({ sessionID: ctx.sessionID, todos: params.todos })
     }
-  },
-})
-
-export const TodoReadTool = Tool.define("todoread", {
-  description: "Use this tool to read your todo list",
-  parameters: z.object({}),
-  async execute(_params, ctx) {
-
     const todos = await TodoStore.get(ctx.sessionID)
     return {
       title: `${todos.filter((x) => x.status !== "completed").length} todos`,

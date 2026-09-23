@@ -126,7 +126,7 @@ function parseOutputTodos(output: unknown): TodoItem[] | null {
 }
 
 /**
- * Coerce a TodoWrite/TodoRead/UpdatePlan tool state into the canonical todo
+ * Coerce a todo/UpdatePlan tool state into the canonical todo
  * list. Completed tool results are authoritative over the original input,
  * because input.todos is only the call-time snapshot and can stay at 0/N.
  */

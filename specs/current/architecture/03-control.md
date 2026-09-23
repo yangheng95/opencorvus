@@ -6,7 +6,7 @@
 ## 设计原则
 
 1. **消息直达**。外部消息进入 channel 后不经过无关 LLM 二次推理，直接路由到目标 task session（若该 session 有 pending interaction，确定性回填）。
-2. **对话层只产出白名单 action**。`ControlMessage` 是对话层 LLM 入口，但不给它自由 tool 集合；它的输出必须匹配 `PanelCapabilityRegistry` 中的 capability schema（`create_task` / `send_task_message` / `reply_interaction` / `cancel_task` / …）。系统执行 action 时走既有 `EngineService` / `Session` API。
+2. **对话层只产出白名单 action**。`ControlMessage` 是对话层 LLM 入口，但不给它自由 tool 集合；它的输出必须匹配 `PanelCapabilityRegistry` 中的 capability schema（`create_task` / `send_task_message` / `respond_interaction` / `cancel_task` / …）。系统执行 action 时走既有 `EngineService` / `Session` API。
 3. **control ≠ workspace**。`control/` 保存外部控制账号，并用普通 Session message/tool part
    记录 Control Agent 的真实对话；`workspace/` 是多工作区代理层。不存在独立 control timeline。
 
@@ -28,7 +28,7 @@
  │ - 有 pending 交互 →    │              │  tool action           │
  │   确定性 reply_        │              │    create_task         │
  │   interaction          │              │    send_task_message   │
- │ - 否则 → Control       │              │    reply_interaction   │
+ │ - 否则 → Control       │              │    respond_interaction   │
  │   Message.handle       │              │    cancel_task …       │
  │                        │              │                        │
  └───────────┬────────────┘              └───────────┬────────────┘

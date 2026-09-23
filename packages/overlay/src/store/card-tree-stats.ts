@@ -73,7 +73,7 @@ import {
 // byte-equivalent, which the cache-invariant test enforces by comparing
 // cached output to a recursive recomputation on the same fixture.
 
-const TODO_TOOLS = new Set(["todowrite", "todoread", "todoupdate", "updateplan"])
+const TODO_TOOLS = new Set(["todo", "todoupdate", "updateplan"])
 
 const PREVIEW_SUPPRESS_TOOLS = new Set(["structuredoutput", "structured_output"])
 

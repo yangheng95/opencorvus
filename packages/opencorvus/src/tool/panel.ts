@@ -102,6 +102,7 @@ import { requireTaskCompletionDecisionMessage } from "@/engine/completion-decisi
 import { taskIDForSession } from "@/engine/task-session-lineage"
 import {
   PanelQueryTaskErrorRow,
+  PanelQueryTaskListRow,
   PanelQueryTaskOutput,
   PanelQueryTaskRow,
   PanelQueryTaskSummaryRow,
@@ -378,7 +379,7 @@ async function panelTaskSummaryRow(board: PanelTaskBoard): Promise<z.infer<typeo
 
 async function panelQueryTaskRow(
   taskID: string,
-  input: { includeInteractions?: boolean },
+  input: { includeInteractions?: boolean; include?: Array<"board" | "plan"> },
 ): Promise<z.infer<typeof PanelQueryTaskRow>> {
   try {
     const board = await EngineService.getBoard(taskID)
@@ -387,6 +388,26 @@ async function panelQueryTaskRow(
       ...(input.includeInteractions
         ? {
             pendingInteractions: (board.interactions ?? []).filter((req) => req.status === "pending").length,
+          }
+        : {}),
+      ...(input.include?.includes("board")
+        ? { board: { headline: board.overview?.headline, summary: board.overview?.summary } }
+        : {}),
+      ...(input.include?.includes("plan")
+        ? {
+            plan: {
+              goals: board.goals.map((goal) => ({
+                title: goal.goalTitle,
+                accepted: goal.acceptance.accepted,
+                activeSessionIDs: goal.activity.activeSessionIDs,
+                reviewCount: goal.reviewAssociations.length,
+              })),
+              artifacts: board.artifacts
+                .filter(
+                  (artifact) => artifact.kind === "requirement_set" || artifact.kind === "architect_contract_graph",
+                )
+                .map((artifact) => ({ kind: artifact.kind, locator: artifact.locator })),
+            },
           }
         : {}),
     }
@@ -1018,94 +1039,6 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           metadata: {},
         }
       }
-      case "view_plan": {
-        const board = await EngineService.getBoard(params.taskID)
-        const goals = board.goals
-        const planningArtifacts = board.artifacts.filter(
-          (artifact) => artifact.kind === "requirement_set" || artifact.kind === "architect_contract_graph",
-        )
-        return {
-          title: "Task goals and planning artifacts",
-          output: [
-            `Task: ${board.task.title}`,
-            planningArtifacts.length > 0
-              ? `Planning artifacts:\n${planningArtifacts
-                  .map((artifact) => `- locator=${JSON.stringify(artifact.locator)} kind=${artifact.kind}`)
-                  .join("\n")}`
-              : "No RequirementSet or ContractGraph artifacts recorded.",
-            goals.length > 0 ? "Goals:" : undefined,
-            ...goals.map(
-              (goal, index) =>
-                `${index + 1}. ${goal.goalTitle} [accepted=${goal.acceptance.accepted}; active_sessions=${goal.activity.activeSessionIDs.length}; reviews=${goal.reviewAssociations.length}]`,
-            ),
-          ]
-            .filter(Boolean)
-            .join("\n"),
-          metadata: {},
-        }
-      }
-      case "view_board": {
-        if (!params.taskID) {
-          const project = await EngineService.getProjectBoard({ limit: 8 })
-          return {
-            title: "Tasks",
-            output:
-              project.tasks.length === 0
-                ? "No tasks found."
-                : project.tasks
-                    .map((item, index) => `${index + 1}. ${item.task.title} [${item.task.status}] (${item.task.id})`)
-                    .join("\n"),
-            metadata: {},
-          }
-        }
-        const board = await EngineService.getBoard(params.taskID)
-        return {
-          title: "Board",
-          output: [
-            `Task: ${board.task.title}`,
-            `Status: ${board.task.status}`,
-            board.overview?.headline,
-            board.overview?.summary,
-          ]
-            .filter(Boolean)
-            .join("\n"),
-          metadata: {},
-        }
-      }
-      case "view_tasks": {
-        if (actor === "mission") {
-          const mission = await requireMissionSession(ctx.sessionID)
-          const tasks = listMissionTasks({
-            projectID: mission.projectID,
-            missionID: mission.missionID,
-            sessionID: mission.id,
-          })
-          const boards = await Promise.all(tasks.map((task) => EngineService.getBoard(task.id)))
-          return {
-            title: "Mission Tasks",
-            output:
-              boards.length === 0
-                ? "No Mission-owned tasks found."
-                : boards
-                    .map(
-                      (board, index) => `${index + 1}. ${board.task.title} [${board.task.status}] (${board.task.id})`,
-                    )
-                    .join("\n"),
-            metadata: { missionID: mission.missionID, count: boards.length },
-          }
-        }
-        const board = await EngineService.getProjectBoard({ limit: 8 })
-        return {
-          title: "Tasks",
-          output:
-            board.tasks.length === 0
-              ? "No tasks found."
-              : board.tasks
-                  .map((item, index) => `${index + 1}. ${item.task.title} [${item.task.status}] (${item.task.id})`)
-                  .join("\n"),
-          metadata: {},
-        }
-      }
       case "query_task_artifacts": {
         const mission = actor === "mission" ? await requireMissionSession(ctx.sessionID) : undefined
         const references = new Map<string, TerminalLifecycleReference>()
@@ -1501,15 +1434,35 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         }
       }
       case "query_task": {
-        // Structured batch reconciliation for agents (mission, etc.).
-        // view_board is the prose surface; this is the stable JSON surface.
-        // Each input ID maps to one output entry — failures (not found,
-        // cross-project, etc.) surface as { taskID, error } so the caller
-        // gets a deterministic 1:1 row count back.
+        if (!params.taskIDs) {
+          const mission = actor === "mission" ? await requireMissionSession(ctx.sessionID) : undefined
+          const boards = mission
+            ? await Promise.all(
+                listMissionTasks({
+                  projectID: mission.projectID,
+                  missionID: mission.missionID,
+                  sessionID: mission.id,
+                }).map((task) => EngineService.getBoard(task.id)),
+              )
+            : (await EngineService.getProjectBoard({ limit: 8 })).tasks
+          const tasks = boards.map((board) =>
+            PanelQueryTaskListRow.parse({
+              taskID: board.task.id,
+              title: board.task.title,
+              status: board.task.status,
+            }),
+          )
+          return {
+            title: mission ? "Mission Tasks" : "Tasks",
+            output: panelStructuredOutput(PanelQueryTaskOutput.parse({ tasks }), "panel.query_task"),
+            metadata: { truncated: false, count: tasks.length, ...(mission ? { missionID: mission.missionID } : {}) },
+          }
+        }
         const results = await Promise.all(
           params.taskIDs.map((taskID) =>
             panelQueryTaskRow(taskID, {
               includeInteractions: params.includeInteractions,
+              include: params.include,
             }),
           ),
         )
@@ -1937,41 +1890,28 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           metadata: { truncated: false },
         }
       }
-      case "reply_interaction": {
-        const result = await EngineService.replyInteraction(
-          params.interactionID,
-          params.reply
-            ? {
-                decision: params.reply === "always" ? ("allow_project" as const) : ("allow_once" as const),
+      case "respond_interaction": {
+        const response = params.response
+        const result =
+          response.kind === "reject"
+            ? await EngineService.rejectInteraction(params.interactionID, {
+                message: response.message,
                 autoReply: false,
-              }
-            : params.message
-              ? { message: params.message, autoReply: false }
-              : { decision: "allow_once", autoReply: false },
-        )
+              })
+            : await EngineService.replyInteraction(
+                params.interactionID,
+                response.kind === "answer"
+                  ? { message: response.message, autoReply: false }
+                  : { decision: response.kind, autoReply: false },
+              )
+        const rejected = response.kind === "reject"
         return {
-          title: "Interaction replied",
+          title: rejected ? "Interaction rejected" : "Interaction replied",
           output: JSON.stringify({
             kind: "interaction",
             task_id: result.taskID,
             interaction_id: result.id,
-            message: "Interaction answered.",
-          }),
-          metadata: {},
-        }
-      }
-      case "reject_interaction": {
-        const result = await EngineService.rejectInteraction(params.interactionID, {
-          message: params.message,
-          autoReply: false,
-        })
-        return {
-          title: "Interaction rejected",
-          output: JSON.stringify({
-            kind: "interaction",
-            task_id: result.taskID,
-            interaction_id: result.id,
-            message: "Interaction rejected.",
+            message: rejected ? "Interaction rejected." : "Interaction answered.",
           }),
           metadata: {},
         }
@@ -2026,30 +1966,21 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
             metadata: {},
           }
         }
-      case "select_task":
-        if (!localOnly(ctx)) throw new Error("Task selection is only available in the desktop panel.")
+      case "select_workspace": {
+        if (!localOnly(ctx)) throw new Error("Workspace selection is only available in the desktop panel.")
+        const { kind, id } = params.target
         return {
-          title: "Task selected",
+          title: kind === "task" ? "Task selected" : "Session selected",
           output: JSON.stringify({
             kind: "panel_response",
-            task_id: params.taskID,
-            message: `Selected task ${params.taskID}.`,
-            local_action: { type: "select_task", taskID: params.taskID },
+            ...(kind === "task" ? { task_id: id } : { session_id: id }),
+            message: `Selected ${kind} ${id}.`,
+            local_action:
+              kind === "task" ? { type: "select_task", taskID: id } : { type: "select_session", sessionID: id },
           }),
           metadata: {},
         }
-      case "select_session":
-        if (!localOnly(ctx)) throw new Error("Session selection is only available in the desktop panel.")
-        return {
-          title: "Session selected",
-          output: JSON.stringify({
-            kind: "panel_response",
-            session_id: params.sessionID,
-            message: `Selected session ${params.sessionID}.`,
-            local_action: { type: "select_session", sessionID: params.sessionID },
-          }),
-          metadata: {},
-        }
+      }
       case "create_session": {
         const session = await Session.create({ kind: "assistant" })
         return {

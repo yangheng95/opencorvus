@@ -10,13 +10,9 @@ required_tools:
   - panel_read_task_artifact
   - panel_read_task_message
   - panel_complete_mission
-  - panel_view_board
-  - panel_view_plan
-  - panel_view_tasks
   - panel_resume_task
   - panel_cancel_task
-  - panel_reply_interaction
-  - panel_reject_interaction
+  - panel_respond_interaction
 ---
 
 # General Mission

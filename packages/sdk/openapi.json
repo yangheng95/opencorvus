@@ -13523,10 +13523,7 @@
               "task": {
                 "$ref": "#/components/schemas/PermissionRuleConfig"
               },
-              "todoread": {
-                "$ref": "#/components/schemas/PermissionActionConfig"
-              },
-              "todowrite": {
+              "todo": {
                 "$ref": "#/components/schemas/PermissionActionConfig"
               },
               "webfetch": {
@@ -58475,63 +58472,27 @@
                     "additionalProperties": false,
                     "properties": {
                       "action": {
-                        "const": "view_plan",
-                        "type": "string"
-                      },
-                      "taskID": {
-                        "description": "Task ID whose plan should be inspected.",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "action",
-                      "taskID"
-                    ],
-                    "type": "object"
-                  },
-                  {
-                    "additionalProperties": false,
-                    "properties": {
-                      "action": {
-                        "const": "view_board",
-                        "type": "string"
-                      },
-                      "taskID": {
-                        "description": "Task ID whose board should be inspected; omit to list recent tasks.",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "action"
-                    ],
-                    "type": "object"
-                  },
-                  {
-                    "additionalProperties": false,
-                    "properties": {
-                      "action": {
-                        "const": "view_tasks",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "action"
-                    ],
-                    "type": "object"
-                  },
-                  {
-                    "additionalProperties": false,
-                    "properties": {
-                      "action": {
                         "const": "query_task",
                         "type": "string"
+                      },
+                      "include": {
+                        "description": "Additional details for explicit taskIDs.",
+                        "items": {
+                          "enum": [
+                            "board",
+                            "plan"
+                          ],
+                          "type": "string"
+                        },
+                        "maxItems": 2,
+                        "type": "array"
                       },
                       "includeInteractions": {
                         "description": "Include pending interaction counts for each requested task.",
                         "type": "boolean"
                       },
                       "taskIDs": {
-                        "description": "Task IDs to query in one request.",
+                        "description": "Exact Task IDs to inspect; omit to list Tasks.",
                         "items": {
                           "minLength": 1,
                           "type": "string"
@@ -58542,8 +58503,7 @@
                       }
                     },
                     "required": [
-                      "action",
-                      "taskIDs"
+                      "action"
                     ],
                     "type": "object"
                   },
@@ -60337,51 +60297,83 @@
                     "additionalProperties": false,
                     "properties": {
                       "action": {
-                        "const": "reply_interaction",
+                        "const": "respond_interaction",
                         "type": "string"
                       },
                       "interactionID": {
-                        "description": "Pending interaction ID to answer.",
+                        "description": "Pending interaction ID.",
+                        "minLength": 1,
                         "type": "string"
                       },
-                      "message": {
-                        "description": "Custom answer text for the pending interaction.",
-                        "type": "string"
-                      },
-                      "reply": {
-                        "description": "Preset reply behavior for the interaction.",
-                        "enum": [
-                          "once",
-                          "always"
-                        ],
-                        "type": "string"
+                      "response": {
+                        "oneOf": [
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "kind": {
+                                "const": "answer",
+                                "type": "string"
+                              },
+                              "message": {
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "message"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "kind": {
+                                "const": "allow_once",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "kind": {
+                                "const": "allow_project",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "kind": {
+                                "const": "reject",
+                                "type": "string"
+                              },
+                              "message": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind"
+                            ],
+                            "type": "object"
+                          }
+                        ]
                       }
                     },
                     "required": [
                       "action",
-                      "interactionID"
-                    ],
-                    "type": "object"
-                  },
-                  {
-                    "additionalProperties": false,
-                    "properties": {
-                      "action": {
-                        "const": "reject_interaction",
-                        "type": "string"
-                      },
-                      "interactionID": {
-                        "description": "Pending interaction ID to reject.",
-                        "type": "string"
-                      },
-                      "message": {
-                        "description": "Reason shown when rejecting the pending interaction.",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "action",
-                      "interactionID"
+                      "interactionID",
+                      "response"
                     ],
                     "type": "object"
                   },
@@ -60901,35 +60893,35 @@
                     "additionalProperties": false,
                     "properties": {
                       "action": {
-                        "const": "select_task",
+                        "const": "select_workspace",
                         "type": "string"
                       },
-                      "taskID": {
-                        "description": "Task ID to focus in the local project assistant surface.",
-                        "type": "string"
+                      "target": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "id": {
+                            "description": "ID of the Task or Session to focus.",
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "kind": {
+                            "enum": [
+                              "task",
+                              "session"
+                            ],
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "id"
+                        ],
+                        "type": "object"
                       }
                     },
                     "required": [
                       "action",
-                      "taskID"
-                    ],
-                    "type": "object"
-                  },
-                  {
-                    "additionalProperties": false,
-                    "properties": {
-                      "action": {
-                        "const": "select_session",
-                        "type": "string"
-                      },
-                      "sessionID": {
-                        "description": "Session ID to focus in the local project assistant surface.",
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "action",
-                      "sessionID"
+                      "target"
                     ],
                     "type": "object"
                   },

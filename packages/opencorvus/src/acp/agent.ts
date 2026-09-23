@@ -448,7 +448,7 @@ export namespace ACP {
                   })
                 }
 
-                if (part.tool === "todowrite") {
+                if (part.tool === "todo" && z.object({ action: z.literal("write") }).safeParse(part.state.input).success) {
                   const parsedTodos = z.array(Todo.Info).safeParse(JSON.parse(part.state.output))
                   if (parsedTodos.success) {
                     await this.connection
@@ -1048,7 +1048,7 @@ export namespace ACP {
                 })
               }
 
-              if (toolPart.tool === "todowrite") {
+              if (toolPart.tool === "todo" && z.object({ action: z.literal("write") }).safeParse(toolPart.state.input).success) {
                 const parsedTodos = z.array(Todo.Info).safeParse(JSON.parse(toolPart.state.output))
                 if (parsedTodos.success) {
                   await this.connection

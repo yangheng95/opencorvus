@@ -334,7 +334,7 @@ export function displayToolIconName(name: string): IconName {
   if (n === "grep" || n === "searchcode") return "search"
   if (n === "glob" || n === "findfiles") return "folder-open"
   if (n === "agent" || n === "spawnagent") return "avatar-assistant"
-  if (n === "todowrite" || n === "todoupdate" || n === "updateplan") return "tasks"
+  if (n === "todo" || n === "todoupdate" || n === "updateplan") return "tasks"
   return "config-tool"
 }
 

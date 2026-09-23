@@ -79,7 +79,7 @@ afterEach(async () => {
 
 describe("Mission terminal Task authority", () => {
   test("projects Mission panel queries as ordinary work and mutations as exclusive turn control", async () => {
-    const missionViewTasks = await panelLeaf("view_tasks")
+    const missionViewTasks = await panelLeaf("query_task")
     const missionInspectSquad = await panelLeaf("expert_squad_inspect")
     const missionCreateTask = await panelLeaf("create_task")
     const missionComplete = await panelLeaf("complete_mission")
@@ -168,10 +168,10 @@ describe("Mission terminal Task authority", () => {
           config,
           includeMcpTools: false,
           extra: { surface: "panel" },
-          activeLocalRefs: ["panel_expert_squad_inspect", "panel_view_tasks", "panel_create_task"],
+          activeLocalRefs: ["panel_expert_squad_inspect", "panel_query_task", "panel_create_task"],
         })
         const inspectSquad = tools.panel_expert_squad_inspect
-        const viewTasks = tools.panel_view_tasks
+        const viewTasks = tools.panel_query_task
         const createTask = tools.panel_create_task
         if (!inspectSquad?.execute || !viewTasks?.execute || !createTask?.execute) {
           throw new Error("Final Mission SessionLoop surface did not project the exact Panel leaves.")
@@ -246,7 +246,7 @@ describe("Mission terminal Task authority", () => {
             order: ["inspection:start", "tasks:done", "inspection:end", "mutation:effect"],
             tasks: {
               title: "Mission Tasks",
-              output: "No Mission-owned tasks found.",
+              output: JSON.stringify({ tasks: [] }),
               metadata: { missionID: mission.missionID, count: 0, truncated: false },
             },
             inspection: { title: "Expert Squad", squadID: "base" },
@@ -458,7 +458,7 @@ describe("Mission terminal Task authority", () => {
           messageID: caller.id,
           type: "step-start",
         })
-        const viewTasksLeaf = await panelLeaf("view_tasks")
+        const viewTasksLeaf = await panelLeaf("query_task")
         const queryTaskLeaf = await panelLeaf("query_task")
         const queryArtifactsLeaf = await panelLeaf("query_task_artifacts")
         const readArtifactLeaf = await panelLeaf("read_task_artifact")
@@ -476,7 +476,7 @@ describe("Mission terminal Task authority", () => {
         })
         const missionTasks = await viewTasksLeaf.tool.execute({}, context(viewTasksLeaf.id))
         expect({ output: missionTasks.output, metadata: missionTasks.metadata }).toEqual({
-          output: `1. Paged terminal child [completed] (${taskID})`,
+          output: JSON.stringify({ tasks: [{ taskID, title: "Paged terminal child", status: "completed" }] }),
           metadata: { missionID: mission.missionID, count: 1, truncated: false },
         })
         await Session.updatePart({

@@ -4,8 +4,7 @@ import { displayToolArguments, toolNameKey } from "./tool"
 import { requireTimelineOrderKeyDomain } from "./timeline-order"
 
 const TODO_CARD_TITLE_KEYS: Record<string, string> = {
-  todowrite: "tool.card.todos",
-  todoread: "tool.card.todos",
+  todo: "tool.card.todos",
   todoupdate: "tool.card.todos",
   updateplan: "tool.card.plan",
 }

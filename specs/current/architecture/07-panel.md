@@ -498,6 +498,21 @@ operator-authority, or explicitly requested lifecycle boundary. Every
 `panel_create_task` call supplies one explicit fixed `promptProfile`. The created
 Task, not Mission, is the execution and capability-projection boundary.
 
+`panel_query_task` returns structured JSON for both Task listing and inspection.
+Omitted `taskIDs` lists the latest eight Project Tasks, or all Tasks owned by the
+current Mission, as identity/title/status rows. Explicit IDs (up to fifty) return
+canonical status and current terminal lifecycle references. `include: ["board",
+"plan"]` adds Board overview and goal/planning-artifact summaries from the same
+EngineService Board. Listing is an identity discovery receipt; terminal Artifact
+reads require an explicit-ID inspection receipt from the current physical Turn.
+
+`panel_respond_interaction` delegates typed `answer`, `allow_once`,
+`allow_project`, or `reject` responses to the existing EngineService interaction
+writers. Mission mutation exclusivity and permission effect classification
+remain owned by those existing authorities. `panel_select_workspace` accepts a
+Task/Session target only on a local surface and emits the existing typed
+`select_task`/`select_session` local event; output events are not model-tool aliases.
+
 The Mission Panel exposes `query_task_artifacts.queries` for up to eight independent terminal Task catalog queries per call. Worker and Orchestrator `artifact_search.queries` use the same bounded batch envelope. Results identify their submitted item by zero-based `request_index`; `next_queries` contains only cursor/page patches to apply to the original item, excluding `request_index`, while `pending_queries` identifies items to resubmit unchanged. Panel page membership uses a fixed output budget independent of batch size, starting from the canonical maximum of 100 entries. A large batch defers whole queries rather than changing numbered page boundaries.
 For a Session-bound model caller, the Host binds the exact persisted terminal
 row returned by `panel_query_task` earlier in the same physical Turn; the model

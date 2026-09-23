@@ -56,6 +56,24 @@ A new authoritative input starts at revision zero with its bound
 permanent base, including an eligible exact visible production Skill directive;
 v2 search receipts continue to record only dynamically activated extensions.
 
+## General tool contracts
+
+Overlapping built-in operations share a narrow typed interface rather than
+separate tool identities or a discovery prerequisite. `todo` reads or replaces
+the current Session checklist through `action: read | write`; write supplies
+the complete list. TodoStore remains the state owner, and completed writes
+project to the Agent Client Protocol (ACP) plan and the shared checklist renderer.
+The persistent Task planner is a separate domain and keeps its own interface.
+
+`panel_query_task` owns Task listing and explicit-ID status queries with optional
+`board` and `plan` details. `panel_respond_interaction` selects an explicit answer,
+allow-once, allow-project or reject response. `panel_select_workspace` focuses a
+Task or Session on a local surface. These identities replace the older split
+operations in role declarations, permission configuration, public Panel schemas
+and generated clients; there are no executable compatibility aliases. Existing
+stored transcripts remain historical facts. The Panel chapter defines query
+receipts and the underlying effect/ownership boundaries.
+
 ## Search and reveal contract
 
 One search accepts one to four queries, exact kind/owner filters, at most five

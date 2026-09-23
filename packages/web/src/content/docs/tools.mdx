@@ -21,7 +21,7 @@ OpenCorvus ships a set of built-in tools the agent can call. Tools live under `p
 | `webfetch`             | Fetch URL contents                                      |
 | `websearch`            | Run a web search                                        |
 | `memory`               | Persistent memory store                                 |
-| `todoread` / `todowrite` | Read and update the agent's todo list                 |
+| `todo`                 | Read or replace the current Session checklist           |
 | `external_code_search` | Search external code sources                            |
 | `skill`                | Load a projected Skill                                  |
 | `delegate_agent`       | Dispatch a bounded helper from coding or chat assistants |
@@ -33,6 +33,15 @@ OpenCorvus ships a set of built-in tools the agent can call. Tools live under `p
 | `question`             | Ask the user (when `OPENCORVUS_ENABLE_QUESTION_TOOL=1`) |
 | `schedule`             | Schedule follow-up actions                              |
 | `analytics`            | Emit telemetry events                                   |
+
+## Shared operation interfaces
+
+- `todo({ action: "read" })` returns the saved checklist. `todo({ action: "write", todos: [...] })` replaces it with the complete supplied list; an empty list clears it.
+- `panel_query_task({})` lists recent Project Tasks, or all Tasks owned by the current Mission. Supply `taskIDs` to inspect up to fifty exact Tasks; `include: ["board", "plan"]` adds summaries and planning-artifact locators. Inspect explicit IDs before reading terminal Task evidence.
+- `panel_respond_interaction({ interactionID, response })` answers or rejects an interaction. The response `kind` is `answer` (with `message`), `allow_once`, `allow_project`, or `reject` (with an optional `message`).
+- `panel_select_workspace({ target: { kind: "task", id } })` focuses a Task on a local surface; use `kind: "session"` for a Session.
+
+General built-in tools authorized for the current role are directly callable. Specialist and extension capabilities retain their discovery/loading contracts.
 
 ## Task Orchestrator tools
 
