@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { createManagedTemporaryDirectory, removeManagedDirectoryTree } from "@opencorvus-ai/util/runtime-directories"
+import { controlledProviderRequestKind } from "./fixture/controlled-streaming-provider"
 
 function startStreamingProvider() {
   const requests: Array<{ kind: "memory" | "prompt"; body: unknown }> = []
@@ -13,14 +14,7 @@ function startStreamingProvider() {
     async fetch(request) {
       const body = await request.json().catch(() => undefined)
       const messages = Array.isArray((body as any)?.messages) ? (body as any).messages : []
-      const kind = messages.some(
-        (message: any) =>
-          message?.role === "system" &&
-          typeof message.content === "string" &&
-          message.content.includes("dedicated Memory Organizer"),
-      )
-        ? ("memory" as const)
-        : ("prompt" as const)
+      const kind = controlledProviderRequestKind(messages)
       requests.push({ kind, body })
       const memoryInstruction = messages.find((message: any) => message?.role === "user")?.content
       const coveredOccurrenceIDs =

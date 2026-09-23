@@ -1,3 +1,16 @@
+import MEMORY_PROMPT from "../../src/agent/prompt/memory.txt"
+import { SystemPrompt } from "../../src/session/system"
+
+// These fixtures use the default helper. Its entire physical system prompt is
+// authoritative; ordinary agent guidance also mentions the Memory Organizer.
+const memorySystemPrompt = [MEMORY_PROMPT, SystemPrompt.requestLanguage()].join("\n\n")
+
+export function controlledProviderRequestKind(messages: Array<{ role?: string; content?: unknown }>) {
+  return messages.some((message) => message.role === "system" && message.content === memorySystemPrompt)
+    ? ("memory" as const)
+    : ("prompt" as const)
+}
+
 export type ControlledProviderRequest = {
   index: number
   kind: "memory" | "prompt"
@@ -21,14 +34,7 @@ export function startControlledStreamingProvider(options?: { failPromptFrom?: nu
       const responded = Promise.withResolvers<void>()
       const index = requests.length
       const messages = Array.isArray((body as any)?.messages) ? (body as any).messages : []
-      const kind = messages.some(
-        (message: any) =>
-          message?.role === "system" &&
-          typeof message.content === "string" &&
-          message.content.includes("dedicated Memory Organizer"),
-      )
-        ? ("memory" as const)
-        : ("prompt" as const)
+      const kind = controlledProviderRequestKind(messages)
       const promptOrdinal =
         kind === "prompt" ? requests.filter((candidate) => candidate.kind === "prompt").length + 1 : 0
       requests.push({ index, kind, body, responded: responded.promise, release: released.resolve })
