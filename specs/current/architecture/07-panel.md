@@ -103,7 +103,8 @@ live record fields update their existing presentation. Selection/status updates
 do not scroll an ancestor or remount a continuously selected transcript.
 The transcript follow controller remains the sole vertical scroll writer.
 
-Main child-progress cards size to their bounded canonical activity content and
+Main child-progress cards preview the latest four projected activity items and
+size to that content; the full child history remains in the selected Agent transcript. They
 do not own a nested scrollport or automatic scroll writer. Current-source child
 activity changes notify the outer Conversation follow controller, including
 updates to an existing child. Native wheel movement over a card belongs to the

@@ -21,6 +21,8 @@ import { isAgentActivityTerminalStatus } from "../utils/agent-activity"
 import { DelegatedContextDisclosure } from "./DelegatedContextDisclosure"
 import { StaticTextPart } from "./TextPart"
 
+const SUBAGENT_PROGRESS_PREVIEW_LIMIT = 4
+
 function SubagentProgressEventRow(props: { event: SubagentProgressEvent }) {
   return (
     <span
@@ -107,7 +109,7 @@ function SubagentProgressCard(props: { sessionID: string; onOpen: (sessionID: st
     subagentProgressEvents({
       record: record(),
       directory: selectedTaskDirectory(),
-    }),
+    }).slice(-SUBAGENT_PROGRESS_PREVIEW_LIMIT),
   )
   const todoSummary = createMemo(() => summarizeTodos(record().todos))
   const terminal = createMemo(() => isAgentActivityTerminalStatus(record().status))

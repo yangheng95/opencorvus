@@ -112,6 +112,7 @@ export function SubagentConversationPanel(props: {
   sessionID: Accessor<string>
   onSessionSelect: (sessionID: string) => void
 }) {
+  type AgentOption = { sessionID: string; agentID: string }
   const records = createMemo(() =>
     conversationAgentRecordsForSource(boardStore.selectedSource).filter(isSubagentActivityRecord),
   )
@@ -119,6 +120,20 @@ export function SubagentConversationPanel(props: {
   // repeat a Session that ran more than once and would answer a lookup with its
   // oldest occurrence, carrying that occurrence's stale status and target.
   const sessionRecords = createMemo(() => subagentSessionRecords(records()))
+  const agentOptions = createMemo<AgentOption[]>(
+    () => sessionRecords().map(({ sessionID, agentID }) => ({ sessionID, agentID })),
+    undefined,
+    {
+      equals: (previous, next) =>
+        previous.length === next.length &&
+        previous.every(
+          (option, index) => option.sessionID === next[index]?.sessionID && option.agentID === next[index]?.agentID,
+        ),
+    },
+  )
+  const selectedOption = createMemo(
+    () => agentOptions().find((option) => option.sessionID === props.sessionID().trim()) ?? null,
+  )
   const recordForSession = (sessionID: string) =>
     sessionRecords().find((candidate) => candidate.sessionID === sessionID)
   const selectedRecord = createMemo(() => {
@@ -236,19 +251,21 @@ export function SubagentConversationPanel(props: {
                 {t("subagent.conversation.all_agents", { count: sessionRecords().length })}
               </Button>
               <SelectControl
-                options={sessionRecords()}
-                value={selectedRecord() ?? null}
+                options={agentOptions()}
+                value={selectedOption()}
                 optionValue="sessionID"
                 optionTextValue="agentID"
                 ariaLabel={t("right_dock.tool.subagent")}
-                triggerTitle={selectedRecord()?.agentID}
+                triggerTitle={selectedOption()?.agentID}
                 class="subagent-conversation-panel__select"
                 onChange={(record) => {
                   if (record) selectAgent(record.sessionID)
                 }}
                 renderValue={(record) => record?.agentID ?? ""}
                 renderOptionLabel={(record) => record.agentID}
-                renderOptionDescription={(record) => t(`agent_rail.status.${record.status}`)}
+                renderOptionDescription={(option) =>
+                  t(`agent_rail.status.${recordForSession(option.sessionID)?.status ?? "pending"}`)
+                }
               />
             </div>
             <div class="subagent-conversation-panel__selected-agent" data-ui="subagent-selected-agent">
