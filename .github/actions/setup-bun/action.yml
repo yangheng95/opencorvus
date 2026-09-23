@@ -22,6 +22,9 @@ runs:
         node-version: 22
 
     - name: Cache Bun dependencies
+      # Archiving the Windows package tree can outlast a completed native build
+      # and exhaust its job deadline. Windows uses the frozen install below.
+      if: runner.os == 'Linux' || runner.os == 'macOS'
       uses: actions/cache@v6
       with:
         path: ~/.bun/install/cache

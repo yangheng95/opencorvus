@@ -53,6 +53,12 @@ binary, the Tauri overlay desktop app, release CI, and local smoke packaging.
 
 `.github/workflows/build.yml` is the canonical release workflow.
 
+The shared `setup-bun` action installs the frozen dependency graph on every native
+host. Linux and macOS also restore/save the Bun download cache through GitHub
+Actions. Windows uses the runner-local Bun cache populated by its normal install:
+archiving the full Windows download tree after a successful build exceeded the
+native job deadline. Rust build and Bun executable caches retain their own owners.
+
 It currently has these jobs:
 
 1. `prepare`: resolves version, syncs package metadata, and optionally creates the GitHub Release.

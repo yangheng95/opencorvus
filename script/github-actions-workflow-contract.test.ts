@@ -47,6 +47,25 @@ async function readWorkflow(file: string): Promise<Workflow> {
 }
 
 describe("GitHub Actions workflow contract", () => {
+  test("shared Bun setup installs the frozen graph on every host and archives the Unix download cache", async () => {
+    const setup = Bun.YAML.parse(
+      await Bun.file(path.join(workflowRoot, "../actions/setup-bun/action.yml")).text(),
+    ) as { inputs: Record<string, { default: string }>; runs: { steps: WorkflowStep[] } }
+    expect(setup.inputs.install_dependencies?.default).toBe("true")
+    expect(setup.runs.steps.find(({ name }) => name === "Install dependencies")).toEqual({
+      name: "Install dependencies",
+      if: "${{ inputs.install_dependencies == 'true' }}",
+      run: "bun install --frozen-lockfile --no-progress --ignore-scripts",
+      shell: "bash",
+      env: { HUSKY: "0" },
+    })
+    expect(setup.runs.steps.find(({ name }) => name === "Cache Bun dependencies")).toMatchObject({
+      if: "runner.os == 'Linux' || runner.os == 'macOS'",
+      uses: "actions/cache@v6",
+      with: { path: "~/.bun/install/cache" },
+    })
+  })
+
   test("every native packaging caller grants the reusable workflow's required permissions", async () => {
     const callee = await readWorkflow("package-overlay.yml")
     const callers: string[] = []
