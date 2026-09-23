@@ -31,6 +31,8 @@ Each projected worker declares a required `base_role`. The base role selects a c
 
 Manifest v2 gives every scheduler and worker one canonically sorted `capability_refs` array. Each entry is a typed `capability:<kind>:<source>:<owner>:<local-ref>` identity or a one-level CapabilitySet reference; package-owned sets are declared once under top-level `capability_sets`.
 
+`base_role` sets an upper bound; it does not itself grant every base tool. An explicitly granted platform set such as `build-base` expands from the current platform registry, so its checklist member is now `todo` without editing each package. A direct checklist grant uses `capability:tool:platform:tool-registry:todo`. Keep direct refs, Skill `required_tools`, permission/tool switches and prompt examples aligned with the [current tool contracts](../tools/#shared-operation-interfaces). Authorized general built-ins are directly callable; use discovery only for a needed specialist or extension that is not already callable. A package revision update does not rewrite an existing Task's frozen package revision.
+
 The same manifest declares an explicit `virtual_workflows` record. Use `{}` for direct dispatch without a binding graph. Every declared node executes once per Task:
 
 ```jsonc

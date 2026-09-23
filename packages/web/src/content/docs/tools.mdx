@@ -10,7 +10,9 @@ OpenCorvus ships a set of built-in tools the agent can call. Tools live under `p
 | Tool                   | Purpose                                                 |
 | ---------------------- | ------------------------------------------------------- |
 | `bash`                 | Execute shell commands through the configured shell     |
-| `browser_preview`      | Inspect and interact with a browser preview              |
+| `browser_preview`      | Start a preview service and save its Task-scoped target  |
+| `browser_preview_capture` | Capture visible evidence from a saved preview target |
+| `capability_search`    | Discover and load specialist or extension capabilities  |
 | `read`                 | Read a file (line-numbered, range-aware)                |
 | `write`                | Create or overwrite a file                              |
 | `edit`                 | Apply targeted string replacements                      |
@@ -30,7 +32,7 @@ OpenCorvus ships a set of built-in tools the agent can call. Tools live under `p
 | `mission_state`        | Read Mission coordination state                         |
 | `wait`                 | Yield until an external wake condition                  |
 | `request_orchestrator_decision` / `send_mailbox_message` | Exchange visible worker coordination messages |
-| `question`             | Ask the user (when `OPENCORVUS_ENABLE_QUESTION_TOOL=1`) |
+| `question`             | Ask the user in app/CLI/desktop clients, or when explicitly enabled |
 | `schedule`             | Schedule follow-up actions                              |
 | `analytics`            | Emit telemetry events                                   |
 
@@ -42,6 +44,31 @@ OpenCorvus ships a set of built-in tools the agent can call. Tools live under `p
 - `panel_select_workspace({ target: { kind: "task", id } })` focuses a Task on a local surface; use `kind: "session"` for a Session.
 
 General built-in tools authorized for the current role are directly callable. Specialist and extension capabilities retain their discovery/loading contracts.
+
+## Updating existing integrations
+
+The consolidated names and inputs replace the former split interfaces:
+
+| Former interface | Current call |
+| --- | --- |
+| `todoread` / `todowrite` | `todo` with `action: "read"` / `"write"`; writes still supply the complete `todos` list |
+| `panel_view_tasks` / `panel_view_board` / `panel_view_plan` | `panel_query_task({})` for listing; explicit `taskIDs` with the required `include` details for inspection |
+| `panel_reply_interaction` / `panel_reject_interaction` | `panel_respond_interaction` with a required typed `response`; former `reply: "once" / "always"` becomes `kind: "allow_once" / "allow_project"` |
+| `panel_select_task` / `panel_select_session` | `panel_select_workspace` with `target.kind` and `target.id` |
+
+Update exact tool refs, Skill requirements, prompt examples and `tools`/`permission` keys together. `todo` grants one read/write interface, so reconcile any former separate policies explicitly. The retired names are not executable aliases. Platform capability sets already expand to the current names; do not copy their member lists into every expert-squad package. Older transcripts and frozen Task package revisions remain historical facts. An incompatible frozen capability catalog follows the existing stale-catalog error/recovery contract.
+
+Model calls use the `panel_` tool name without an `action` field. A structured HTTP request to `/gateway/control/action` uses the action name without that prefix, for example:
+
+```json
+{
+  "action": "respond_interaction",
+  "interactionID": "<pending-interaction-id>",
+  "response": { "kind": "answer", "message": "Use Markdown." }
+}
+```
+
+Surface authorization still applies: `select_workspace` is local and is unavailable through the gateway. The existing user-facing `/interaction/:id/reply`, `/interaction/:id/reject` and `/question/:id/...` endpoints retain their contracts. Human permission cards additionally support `allow_task`; the model tool's permission choices remain `allow_once` and `allow_project`. Selection results still emit typed `select_task`/`select_session` local events. See the generated [API reference](../reference/api/) for public request envelopes.
 
 ## Task Orchestrator tools
 

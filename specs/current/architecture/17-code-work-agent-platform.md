@@ -1,14 +1,15 @@
 # Code and Work Agent Platform
 
-Status: search-native Catalog, Harness V2, and exact reveal runtime implemented
+Status: routine tools directly available; specialist and extension reveal implemented
 
-Implementation calibration (2026-08-30): typed `CapabilityRef`, immutable
-content-addressed Catalog occurrence binding, Harness grants, Expert Squad
-manifest V2, exact Tool/MCP/Skill materialization, and append-only
-`capability_search` reveal receipts are live. The executable Harness contributes
-search at revision zero plus native Mission's two fixed transport leaves,
-`mission_state` and `scheduler_message`, and a bounded receipt-derived active
-leaf set thereafter. Conditional `StructuredOutput` remains outside the Harness but
+Implementation calibration (2026-09-23): typed `CapabilityRef`, immutable
+Catalog V3 occurrence binding, Harness grants, Expert Squad manifest V2,
+exact Tool/MCP/Skill materialization, and append-only `capability_search`
+reveal receipts are live. Revision zero exposes every authorized general
+built-in tool after model compatibility, permission and Message switches.
+Specialist and extension leaves are added through exact reveal receipts;
+eligible explicitly named production Skills follow the same permanent-base
+selection contract. Conditional `StructuredOutput` remains outside the Harness but
 inside the immutable Provider base and total definition budget. The
 complete current execution contract is
 [`capability-search-runtime.md`](capability-search-runtime.md). The evidence,
@@ -290,7 +291,7 @@ dedicated `work` conversation experience. Either may hand off to Mission.
 | Task execution ingress/recovery | Durable Task-root ingress and Session wake paths already exist. | Reuse. |
 | External always-on host | Runtime services currently depend on an opened project instance. Full `InstanceBootstrap` also starts interactive services and registered directories include sandboxes. | Missing. Add one headless composition plus explicit daemon/desktop ownership. |
 | External provider ingress | No generic package-owned poll/webhook adapter emits normalized external events. | Partial future need; do not block the first paid slice. |
-| Capability fuzzy search | Typed cross-kind `capability_search` binds one immutable occurrence Catalog and activates only exact receipt-selected leaves; revision zero has no eager domain Tool surface. | Remove the remaining local fuzzy/list branches from exact Skill/Mission Skill loaders; keep external Market and business-data search under their own owners. |
+| Capability fuzzy search | The immutable occurrence Catalog supplies authorized routine tools at revision zero; typed cross-kind `capability_search` activates exact specialist and extension leaves. | Use the [routine capability contract](capability-search-runtime.md); keep external Market and business-data search under their own owners. |
 | Authorization | One permission evaluator and MCP OAuth path exist, but generic non-Browser MCP execution has no provider-semantic argument mapper and unmatched permissions default to allow. | Add a package-owned typed action boundary that calls the existing evaluator; do not create a grant service. |
 
 ## Product-Pillar Contract
@@ -641,21 +642,24 @@ The mount hierarchy has seven levels:
 | 0. Inventory | Installed/configured metadata exists | Skill Manager, Tool Registry, MCP and package Registry, Expert Squad Registry, Mission Skill Registry | No runtime authority |
 | 1. Runtime bounds | Role/template upper bound and platform transport invariants | runtime-template contract and typed platform sets | Yes, before occurrence admission only |
 | 2. Harness assignment | Exact capability references for this context | Chat/Work `ConversationCapability`; Mission runtime; Task `PromptProfileResolver` | Yes: built-ins within level 1; package/provider refs within the owner's catalog |
-| 3. Turn reveal | Persist exact active leaves selected through search | reveal receipt reducer and occurrence compare-and-swap owner | No |
-| 4. Exact materialization | Instantiate only receipt-active Tool, Skill, and MCP providers | `ToolRegistry`, exact Skill/MCP owners, `RuntimeToolOwner` | No |
+| 3. Turn projection | Bind the permanent routine base and fold exact extension reveal receipts | input-bound Catalog and reveal receipt reducer | No |
+| 4. Exact materialization | Instantiate the permanent base plus exact active specialist and extension providers | `ToolRegistry`, exact Skill/MCP owners, `RuntimeToolOwner` | No |
 | 5. Operator narrowing | Tool switches plus Agent/Session denies | execution surface and `PermissionNext` | No |
 | 6. Call authorization | Evaluate exact semantic action and arguments | Tool wrapper, package action mapper, `PermissionNext`, OAuth | No |
 
 The concrete context rules are:
 
-- Chat and Work use fixed native role grants as an occurrence upper bound; the
-  Provider does not receive that whole Tool pool. Their project
+- Chat and Work use fixed native role grants as an occurrence upper bound;
+  authorized general built-ins are directly materialized after model,
+  permission and Message-switch narrowing. Specialist loaders and external
+  extensions retain exact selection. Their project
   `primary_assistant_capabilities` assignment adds only exact installed Skill
   refs and configured MCP server refs. Their default MCP assignment is empty:
   configured inventory never activates a provider by itself. A message may reference an attached
   Skill explicitly, but the same resolver revalidates installation,
   eligibility, Tool requirements, switches, and permission.
-- Mission receives only Mission management Tools and Mission Skills. Catalog
+- Mission receives its authorized general tools and Mission management tools
+  directly; Mission Skills retain exact selection. Catalog
   search may reveal compatible Expert Squads, but Mission must create a Task
   with an exact pillar and profile; it never mounts the package's domain Tools.
 - A Task scheduler receives the active package scheduler projection plus its
@@ -678,16 +682,17 @@ The effective executable Tool set is therefore:
 
 ```text
 materialize(
-  (exact projected built-ins intersect runtime-template upper bound)
-  union exact projected package/MCP refs
-  union platform-required transport Tools
+  input-bound permanent routine base
+  union receipt-selected specialist/extension refs
 )
-minus explicit switches/denies
+within owning Harness grants and runtime-template upper bounds
+after model compatibility, explicit switches and permission narrowing
 ```
 
-The final union is not a fallback or extension grant: those Tools are declared
-by the platform runtime contract before package projection and are verified as
-present during materialization.
+The permanent base includes declared platform-required transport Tools and any
+eligible explicitly named production Skill loader. It is resolved before
+extension selection and remains available across reveal steps. Exact reveal
+does not expand Harness authority or turn an ungranted catalog entry into a tool.
 
 ### Caller discovery views
 
@@ -715,9 +720,10 @@ The product idea may be called Harness Search. The runtime tool should be named
 runtime identity. One name must not represent both an Agent harness and a
 catalog query.
 
-Every production Agent receives `capability_search` as a platform-owned,
-read-only level-1 Tool. It searches the canonical snapshot, then applies a
-caller-specific discovery view:
+Every production Agent receives `capability_search` as a platform-owned Tool.
+It searches the canonical snapshot through a caller-specific discovery view;
+explicit `exact_refs` additionally persist an occurrence-bound reveal receipt.
+Search itself grants no execution permission. The searchable kinds include:
 
 - mounted and installed Skills;
 - visible built-in and package Tools;
@@ -1034,9 +1040,10 @@ Primary metrics:
 
 ### Milestone A: typed Capability Catalog and fuzzy search
 
-Status: A1 Catalog single-source hard replacement implemented. Durable
-input-Part snapshot binding and the later search/reveal execution cut remain
-pending; eager execution is intentionally unchanged.
+Status: Catalog publication, durable input-Part snapshot binding, routine-base
+materialization and exact extension reveal are implemented. The steps below
+record the design decomposition; current execution semantics are owned by
+the [routine capability contract](capability-search-runtime.md).
 
 Goal: complete discovery identity and indexing without touching execution
 authority.
@@ -1064,8 +1071,9 @@ Exit criteria:
 - concurrent first queries publish one complete snapshot and never observe a
   partially rebuilt or silently stale revision;
 - denied metadata and wrong-pillar Squad details do not leak;
-- search performs no config mutation, mounting, OAuth, approval, package load,
-  or provider call;
+- metadata-only search performs no config mutation, OAuth, approval, package
+  execution or provider call; exact activation persists a reveal receipt for
+  the existing materializers to consume at the next Provider step;
 - existing exact owners remain the only load/select/execute paths.
 
 ### Milestone B: Harness projection convergence

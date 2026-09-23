@@ -10,7 +10,9 @@ OpenCorvus 内置一组工具供 agent 调用。工具实现位于 `packages/ope
 | 工具                   | 用途                                                 |
 | ---------------------- | ---------------------------------------------------- |
 | `bash`                 | 通过配置的 shell 执行命令                            |
-| `browser_preview`      | 检查并操作 browser preview                           |
+| `browser_preview`      | 启动预览服务并保存 Task 范围内的预览目标              |
+| `browser_preview_capture` | 从已保存的预览目标捕获可见证据                    |
+| `capability_search`    | 发现并加载专业或扩展能力                             |
 | `read`                 | 读取文件（带行号、范围）                             |
 | `write`                | 创建或覆盖文件                                       |
 | `edit`                 | 精确字符串替换                                       |
@@ -30,7 +32,7 @@ OpenCorvus 内置一组工具供 agent 调用。工具实现位于 `packages/ope
 | `mission_state`        | 读取 Mission 协调状态                                |
 | `wait`                 | 等待外部 wake 条件                                   |
 | `request_orchestrator_decision` / `send_mailbox_message` | 交换可见的 worker 协调消息 |
-| `question`             | 向用户提问（需 `OPENCORVUS_ENABLE_QUESTION_TOOL=1`） |
+| `question`             | 在 app/CLI/desktop 客户端或显式启用时向用户提问      |
 | `schedule`             | 安排后续动作                                         |
 | `analytics`            | 上报遥测事件                                         |
 
@@ -42,6 +44,31 @@ OpenCorvus 内置一组工具供 agent 调用。工具实现位于 `packages/ope
 - `panel_select_workspace({ target: { kind: "task", id } })` 在本地界面定位任务；定位 Session 时使用 `kind: "session"`。
 
 当前角色获授权的通用预置工具直接提供；专业和扩展能力继续按需发现、加载。
+
+## 更新已有集成
+
+合并后的名称和参数替换了原先的分立接口：
+
+| 原接口 | 当前调用 |
+| --- | --- |
+| `todoread` / `todowrite` | `todo` 的 `action: "read"` / `"write"`；写入仍传完整 `todos` 列表 |
+| `panel_view_tasks` / `panel_view_board` / `panel_view_plan` | 列表使用 `panel_query_task({})`；详情传明确 `taskIDs` 和所需 `include` |
+| `panel_reply_interaction` / `panel_reject_interaction` | `panel_respond_interaction` 必须传明确 `response`；原 `reply: "once" / "always"` 对应 `kind: "allow_once" / "allow_project"` |
+| `panel_select_task` / `panel_select_session` | `panel_select_workspace` 使用 `target.kind` 与 `target.id` |
+
+精确工具 ref、Skill 要求、提示词示例和 `tools`/`permission` 配置键需要一起更新。`todo` 是统一读写接口，原先分别设置的策略应明确收敛。旧名称不再是可执行别名。平台能力集已展开为当前名称，不应在每个专家团复制其成员表。历史对话和已有 Task 冻结的 package revision 保留原始事实；不兼容的冻结能力目录沿用已有的过期目录错误与恢复契约。
+
+模型调用使用带 `panel_` 前缀的工具名，参数中不再加 `action`。向 `/gateway/control/action` 发送结构化 HTTP 请求时，使用不带该前缀的动作名，例如：
+
+```json
+{
+  "action": "respond_interaction",
+  "interactionID": "<pending-interaction-id>",
+  "response": { "kind": "answer", "message": "使用 Markdown。" }
+}
+```
+
+调用仍受界面范围约束：`select_workspace` 只用于本地，gateway 不提供该动作。用户界面的 `/interaction/:id/reply`、`/interaction/:id/reject` 和 `/question/:id/...` 接口保留原契约。人工权限卡还支持 `allow_task`，模型工具的允许选项仍是 `allow_once`、`allow_project`。定位结果继续发送 `select_task`/`select_session` 类型化本地事件。公开请求结构见生成的 [API 参考](../reference/api/)。
 
 ## Task Orchestrator 工具
 

@@ -133,6 +133,15 @@ file/folder/ZIP import 和 MCP（Model Context Protocol，模型上下文协议�
 
 ## Expert Squad Package —— Agent 能力包
 
+专家团的通用工具由显式 `capability_refs` 和平台能力集展开产生。`base_role`
+定义能力上限，不等于自动获得全部基础工具；只有已声明的 `build-base` 等平台集
+才跟随 `PlatformCapabilitySetRegistry` / `AgentToolPool` 的当前成员。例如本轮
+待办合并后，这些集合展开为 `todo`，无需在每个专家团复制一份工具表。
+直接声明具体工具的 package 必须使用当前精确 identity；工具名、参数、Skill 的
+`required_tools` 和提示词示例应一起更新。已授权通用工具直接调用，专业 Skill 和
+扩展的加载按 [能力运行时契约](capability-search-runtime.md) 执行。
+安装包与既有 Task 冻结 revision 是独立的生命周期事实，仓库文档更新不能重写它们。
+
 **代码**：`src/expert-squad/` · `src/expert-squad/prompt-profile-resolver.ts` ·
 `src/agent/runtime-template-registry.ts` · `src/skill/`
 

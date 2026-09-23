@@ -31,6 +31,8 @@ Manifest 中 `capability_projection.agents.<agent-id>` 的 key 是 package worke
 
 Manifest v2 为 scheduler 和每个 worker 提供唯一、canonical 排序的 `capability_refs` 数组。每个条目都是 typed `capability:<kind>:<source>:<owner>:<local-ref>` identity 或一层 CapabilitySet 引用；package-owned set 统一声明在顶层 `capability_sets`。
 
+`base_role` 只定义能力上限，不会自动授予全部基础工具。显式声明的 `build-base` 等平台集从当前注册表展开，因此待办成员已变为 `todo`，无需逐个修改专家团。直接授权待办时使用 `capability:tool:platform:tool-registry:todo`；精确 ref、Skill 的 `required_tools`、权限/工具开关和提示词示例都应与[当前工具契约](../tools/#合并后的操作接口)同步。已授权通用预置工具直接调用，只有所需专业或扩展能力尚未提供时才进行发现。更新 package revision 不会重写已有 Task 冻结的版本。
+
 同一个 manifest 必须显式声明 `virtual_workflows` record；无需 binding graph 的直接调度使用 `{}`。每个已声明 node 在一个 Task 中只执行一次：
 
 ```jsonc

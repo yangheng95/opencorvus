@@ -513,6 +513,18 @@ remain owned by those existing authorities. `panel_select_workspace` accepts a
 Task/Session target only on a local surface and emits the existing typed
 `select_task`/`select_session` local event; output events are not model-tool aliases.
 
+The model tool and human interaction APIs have distinct input envelopes. A model
+calls `panel_respond_interaction` with `interactionID` and typed `response`;
+the structured gateway uses the same parameters with
+`action: "respond_interaction"` and no `panel_` prefix. Overlay interaction cards
+continue to call `/interaction/:id/reply` or `/reject`, and standalone Question
+cards use their `/question/:id/...` routes. Human permission replies additionally
+support `allow_task`; the model tool retains its declared
+`allow_once`/`allow_project` choices. Both paths reach their existing
+EngineService/Question authorities. This consolidation changes neither those
+human endpoints nor the visible card actions. Gateway selection remains
+forbidden because `select_workspace` is local.
+
 The Mission Panel exposes `query_task_artifacts.queries` for up to eight independent terminal Task catalog queries per call. Worker and Orchestrator `artifact_search.queries` use the same bounded batch envelope. Results identify their submitted item by zero-based `request_index`; `next_queries` contains only cursor/page patches to apply to the original item, excluding `request_index`, while `pending_queries` identifies items to resubmit unchanged. Panel page membership uses a fixed output budget independent of batch size, starting from the canonical maximum of 100 entries. A large batch defers whole queries rather than changing numbered page boundaries.
 For a Session-bound model caller, the Host binds the exact persisted terminal
 row returned by `panel_query_task` earlier in the same physical Turn; the model

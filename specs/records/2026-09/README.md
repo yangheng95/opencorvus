@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Tool consolidation synchronization audit](2026-09-23-tool-consolidation-sync-audit.md)
+
 - [First round of built-in tool consolidation](2026-09-23-tool-consolidation-round-one.md)
 
 - [Conversation web evidence and NVDA investigation](2026-09-23-conversation-web-evidence.md)
