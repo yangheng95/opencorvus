@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [v0.1.14 release](records/2026-09/2026-09-24-v0.1.14-release.md)
+
 - [About and Usage settings redesign](records/2026-09/2026-09-24-about-usage-visual-redesign.md)
 
 - [Work Ledger stop-action safety](records/2026-09/2026-09-24-work-ledger-stop-safety.md)

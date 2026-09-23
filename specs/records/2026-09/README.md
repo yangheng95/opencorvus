@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [v0.1.14 release](2026-09-24-v0.1.14-release.md)
+
 - [About and Usage settings redesign](2026-09-24-about-usage-visual-redesign.md)
 
 - [Work Ledger stop-action safety](2026-09-24-work-ledger-stop-safety.md)
