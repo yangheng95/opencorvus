@@ -943,6 +943,7 @@ export default function ProvidersPanel() {
                   <DropdownMenu.Item
                     as="button"
                     type="button"
+                    title={t("provider.catalog_refresh.title")}
                     disabled={refreshingProviders()}
                     onSelect={() => void handleRefreshCatalog()}
                   >
@@ -954,6 +955,7 @@ export default function ProvidersPanel() {
                   <DropdownMenu.Item
                     as="button"
                     type="button"
+                    title={t("provider.model_refresh.title")}
                     disabled={refreshingModels()}
                     onSelect={() => void handleRefreshModels()}
                   >

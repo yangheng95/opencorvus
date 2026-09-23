@@ -25,8 +25,9 @@ const MemoryContextPanel = lazy(async () => ({
 }))
 const DesktopUpdatePanel = lazy(() => import("./settings/DesktopUpdatePanel"))
 const UsagePanel = lazy(() => import("./settings/UsagePanel"))
-import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./settings/layout"
+import { SettingsEmpty, SettingsPanel, SettingsRow, SettingsSurface } from "./settings/layout"
 import { Dialog } from "./ui/Dialog"
+import { Disclosure } from "./ui/Disclosure"
 import { Button } from "./ui/Button"
 import { LinkButton } from "./ui/LinkButton"
 import { SearchField } from "./ui/SearchField"
@@ -47,6 +48,7 @@ import {
   PROJECT_URL,
 } from "../utils/project-links"
 import { OVERLAY_VERSION } from "../utils/version"
+import brandLogoUrl from "../opencorvus-logo-dark.svg"
 import { currentUIScale } from "../utils/layout-tokens"
 import { Icon, type IconName } from "./ui/Icon"
 import {
@@ -133,14 +135,10 @@ const CONFIG_NAV_GROUPS: Array<{ labelKey: string; tabs: ConfigTabDef[] }> = [
 ]
 const ABOUT_CONFIG_TAB = CONFIG_TABS.find((tab) => tab.id === "about") as ConfigTabDef
 
-const AUTHOR_LINKS: Array<{ href: string; icon: IconName; label: () => string }> = [
-  { href: AUTHOR_GITHUB_URL, icon: "github", label: () => "GitHub" },
+const ABOUT_LINKS: Array<{ href: string; icon: IconName; label: () => string }> = [
+  { href: PROJECT_URL, icon: "github", label: () => t("about.source_code") },
   { href: AUTHOR_HOMEPAGE_URL, icon: "web-search", label: () => t("about.homepage") },
   { href: `mailto:${AUTHOR_EMAIL}`, icon: "mailbox", label: () => t("about.email") },
-]
-
-const ABOUT_LINKS: Array<{ href: string; icon: IconName; label: () => string }> = [
-  { href: PROJECT_URL, icon: "github", label: () => "GitHub" },
   { href: PROJECT_ISSUES_URL, icon: "info-circle", label: () => t("about.issues") },
 ]
 
@@ -297,20 +295,16 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
     return resizeBounds().min
   }
 
-  const aboutRows = createMemo(() => {
+  const aboutTechnicalRows = createMemo(() => {
     const config = appStore.config
     const rows: Array<[string, string]> = [
-      [t("about.rt_overlay"), `v${OVERLAY_VERSION}`],
       [t("about.rt_core"), (config as any)?.version || t("about.rt_unavailable")],
       [t("about.rt_server"), settingsStore.serverUrl || "-"],
       [t("about.rt_pid"), typeof appStore.serverPid === "number" ? String(appStore.serverPid) : "-"],
-      [t("about.rt_connection"), appStore.config !== null ? t("about.rt_connected") : t("about.rt_disconnected")],
       [t("about.rt_directory"), settingsStore.directory || "-"],
-      [t("about.rt_tasks"), String(boardStore.tasks?.length || 0)],
     ]
     if ((config as any)?.platform) rows.push([t("about.platform"), String((config as any).platform)])
     if ((config as any)?.goVersion) rows.push([t("about.go_version"), String((config as any).goVersion)])
-    rows.push([t("about.runtime_type"), runtimeTypeLabel()])
     return rows
   })
   const activeConfigTab = createMemo(() => dialogStore.config.activeTab)
@@ -381,69 +375,78 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
         return <ArchivePanel />
       case "about":
         return (
-          <SettingsPanel>
-            <SettingsGroup>
-              <SettingsSurface>
-                <SettingsRow
-                  align="center"
-                  title="杨恒@GitHub"
-                  desc={t("about.self_built")}
-                  actions={
-                    <For each={AUTHOR_LINKS}>
-                      {(link) => (
-                        <LinkButton
-                          variant="outline"
-                          size="sm"
-                          tone="neutral"
-                          href={link.href}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <Icon name={link.icon} size="compact" />
-                          {link.label()}
-                        </LinkButton>
-                      )}
-                    </For>
-                  }
-                />
-              </SettingsSurface>
-            </SettingsGroup>
-            <SettingsGroup title={t("about.runtime")}>
-              <SettingsSurface id="aboutRuntimeGrid">
-                <For each={aboutRows()}>{(row) => <SettingsRow title={row[0]} value={row[1]} />}</For>
-              </SettingsSurface>
-            </SettingsGroup>
-            <DesktopUpdatePanel />
-            <SettingsGroup title={t("about.links")} contentInset>
-              <div class="about-links">
+          <SettingsPanel class="about-panel">
+            <section class="about-hero">
+              <div class="about-hero__identity">
+                <img class="about-hero__mark" src={brandLogoUrl} alt="" aria-hidden="true" />
+                <div class="about-hero__copy">
+                  <span class="about-hero__eyebrow">{t("about.product_label")}</span>
+                  <strong>OpenCorvus</strong>
+                  <span class="about-hero__byline">
+                    {t("about.by")} <a href={AUTHOR_GITHUB_URL} target="_blank" rel="noopener noreferrer">杨恒</a>
+                  </span>
+                </div>
+                <span class="about-hero__version">{t("about.rt_overlay")} · v{OVERLAY_VERSION}</span>
+              </div>
+              <p>{t("about.self_built")}</p>
+              <nav class="about-hero__links" aria-label={t("about.links")}>
                 <For each={ABOUT_LINKS}>
                   {(link) => (
-                    <LinkButton
-                      variant="outline"
-                      size="md"
-                      tone="neutral"
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener"
-                    >
-                      <Icon name={link.icon} />
-                      <span>{link.label()}</span>
+                    <LinkButton variant="outline" size="sm" tone="neutral" href={link.href} target="_blank" rel="noopener noreferrer">
+                      <Icon name={link.icon} size="compact" />
+                      {link.label()}
                     </LinkButton>
                   )}
                 </For>
+              </nav>
+            </section>
+
+            <section class="about-runtime" aria-label={t("about.runtime")}>
+              <header class="about-section-heading">{t("about.runtime")}</header>
+              <div class="about-runtime__summary">
+                <div>
+                  <span>{t("about.rt_connection")}</span>
+                  <strong data-state={appStore.connectionStatus}>
+                    {appStore.connectionStatus === "online"
+                      ? t("about.rt_connected")
+                      : appStore.connectionStatus === "connecting"
+                        ? t("titlebar.connection.connecting")
+                        : t("about.rt_disconnected")}
+                  </strong>
+                </div>
+                <div>
+                  <span>{t("about.runtime_type")}</span>
+                  <strong>{runtimeTypeLabel()}</strong>
+                </div>
+                <div>
+                  <span>{t("about.rt_tasks")}</span>
+                  <strong>{String(boardStore.tasks?.length || 0)}</strong>
+                </div>
               </div>
-            </SettingsGroup>
-            <SettingsGroup title={t("about.shortcuts")}>
-              <SettingsSurface>
-                <SettingsRow align="center" title={<kbd>F12</kbd>} actions={t("about.shortcut_devtools")} />
-                <SettingsRow align="center" title={<kbd>Ctrl +</kbd>} actions={t("about.shortcut_zoom_in")} />
-                <SettingsRow align="center" title={<kbd>Ctrl -</kbd>} actions={t("about.shortcut_zoom_out")} />
-                <SettingsRow align="center" title={<kbd>Ctrl 0</kbd>} actions={t("about.shortcut_zoom_reset")} />
-                <SettingsRow align="center" title={<kbd>Enter</kbd>} actions={t("about.shortcut_send")} />
-                <SettingsRow align="center" title={<kbd>Shift+Enter</kbd>} actions={t("about.shortcut_newline")} />
-                <SettingsRow align="center" title={<kbd>Esc</kbd>} actions={t("about.shortcut_close")} />
-              </SettingsSurface>
-            </SettingsGroup>
+              <Disclosure.Root class="about-disclosure">
+                <Disclosure.Trigger indicatorPosition="end">{t("about.technical_details")}</Disclosure.Trigger>
+                <Disclosure.Content>
+                  <SettingsSurface id="aboutRuntimeGrid">
+                    <For each={aboutTechnicalRows()}>{(row) => <SettingsRow title={row[0]} value={row[1]} />}</For>
+                  </SettingsSurface>
+                </Disclosure.Content>
+              </Disclosure.Root>
+            </section>
+            <DesktopUpdatePanel />
+            <Disclosure.Root class="about-disclosure about-shortcuts">
+              <Disclosure.Trigger indicatorPosition="end">{t("about.shortcuts")}</Disclosure.Trigger>
+              <Disclosure.Content>
+                <SettingsSurface>
+                  <SettingsRow align="center" title={<kbd>F12</kbd>} actions={t("about.shortcut_devtools")} />
+                  <SettingsRow align="center" title={<kbd>Ctrl +</kbd>} actions={t("about.shortcut_zoom_in")} />
+                  <SettingsRow align="center" title={<kbd>Ctrl -</kbd>} actions={t("about.shortcut_zoom_out")} />
+                  <SettingsRow align="center" title={<kbd>Ctrl 0</kbd>} actions={t("about.shortcut_zoom_reset")} />
+                  <SettingsRow align="center" title={<kbd>Enter</kbd>} actions={t("about.shortcut_send")} />
+                  <SettingsRow align="center" title={<kbd>Shift+Enter</kbd>} actions={t("about.shortcut_newline")} />
+                  <SettingsRow align="center" title={<kbd>Esc</kbd>} actions={t("about.shortcut_close")} />
+                </SettingsSurface>
+              </Disclosure.Content>
+            </Disclosure.Root>
           </SettingsPanel>
         )
     }

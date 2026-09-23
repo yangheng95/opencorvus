@@ -5,7 +5,7 @@ import { For, Show, createEffect, createMemo, createSignal, onCleanup } from "so
 import type { OfficialUsageSource, UsagePeriod, UsageStatistics } from "@opencorvus-ai/sdk"
 
 import { UsageServerVersionError, loadUsageStatistics, userTimeZone } from "../../services/usage"
-import { formatDetailedCostUSD, formatTokenCount } from "../../utils/format-usage"
+import { formatCostUSD, formatDetailedCostUSD, formatTokenCount } from "../../utils/format-usage"
 import { localeTag, t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
@@ -377,38 +377,35 @@ export default function UsagePanel() {
       <Show when={data()}>
         {(resolved) => (
           <>
-            <section class="usage-total" aria-live="polite">
-              <span class="usage-total__label">{t("usage.total_tokens")}</span>
-              <strong>{formatTokenCount(resolved().current.summary.tokens.total)}</strong>
-              <span class="usage-total__comparison">{comparisonLabel(resolved().comparison.tokensPercent)}</span>
-              <div class="usage-period-meta">
-                <span>{dateRange(resolved())}</span>
-                <span>{resolved().timeZone}</span>
-                <span>{t("usage.event_time_note")}</span>
-              </div>
-            </section>
-
-            <section class="usage-metrics" aria-label={t("usage.summary_aria")}>
-              <article class="usage-metric">
+            <section class="usage-overview" aria-label={t("usage.summary_aria")}>
+              <div class="usage-total" aria-live="polite">
+                <span class="usage-total__label">{t("usage.total_tokens")}</span>
                 <strong>{exactNumber(resolved().current.summary.tokens.total)}</strong>
-                <span class="usage-metric__label">{t("usage.measured_tokens")}</span>
-              </article>
-              <article class="usage-metric">
-                <strong>{formatTokenCount(peakBucket())}</strong>
-                <span class="usage-metric__label">{t("usage.peak_tokens")}</span>
-              </article>
-              <article class="usage-metric">
-                <strong>{formatDetailedCostUSD(resolved().current.summary.costUSD)}</strong>
-                <span class="usage-metric__label">{t("usage.cost")}</span>
-              </article>
-              <article class="usage-metric">
-                <strong>{exactNumber(resolved().current.summary.calls)}</strong>
-                <span class="usage-metric__label">{t("usage.calls")}</span>
-              </article>
-              <article class="usage-metric">
-                <strong>{pricingCoverage() === null ? "—" : percent(pricingCoverage()!)}</strong>
-                <span class="usage-metric__label">{t("usage.pricing_coverage")}</span>
-              </article>
+                <span class="usage-total__comparison">{comparisonLabel(resolved().comparison.tokensPercent)}</span>
+                <div class="usage-period-meta">
+                  <span>{dateRange(resolved())}</span>
+                  <span>{resolved().timeZone}</span>
+                  <span>{t("usage.event_time_note")}</span>
+                </div>
+              </div>
+              <div class="usage-metrics">
+                <div class="usage-metric">
+                  <strong>{formatTokenCount(peakBucket())}</strong>
+                  <span class="usage-metric__label">{t("usage.peak_tokens")}</span>
+                </div>
+                <div class="usage-metric" title={formatDetailedCostUSD(resolved().current.summary.costUSD)}>
+                  <strong>{formatCostUSD(resolved().current.summary.costUSD)}</strong>
+                  <span class="usage-metric__label">{t("usage.cost")}</span>
+                </div>
+                <div class="usage-metric">
+                  <strong>{exactNumber(resolved().current.summary.calls)}</strong>
+                  <span class="usage-metric__label">{t("usage.calls")}</span>
+                </div>
+                <div class="usage-metric">
+                  <strong>{pricingCoverage() === null ? "—" : percent(pricingCoverage()!)}</strong>
+                  <span class="usage-metric__label">{t("usage.pricing_coverage")}</span>
+                </div>
+              </div>
             </section>
 
             <Show when={visibleOfficialSources().length > 0}>

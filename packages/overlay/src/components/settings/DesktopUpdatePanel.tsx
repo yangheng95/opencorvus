@@ -26,7 +26,7 @@ export default function DesktopUpdatePanel() {
   })
 
   return (
-    <SettingsGroup title={t("about.update_title")} description={t("about.update_description")}>
+    <SettingsGroup class="about-update-group" title={t("about.update_title")} description={t("about.update_description")}>
       <Show when={desktopUpdateSupported()} fallback={<Feedback>{t("about.update_desktop_only")}</Feedback>}>
         <SettingsSurface>
           <SettingsRow

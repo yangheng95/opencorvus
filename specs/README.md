@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [About and Usage settings redesign](records/2026-09/2026-09-24-about-usage-visual-redesign.md)
+
 - [Work Ledger stop-action safety](records/2026-09/2026-09-24-work-ledger-stop-safety.md)
 
 - [Sub-agent selector and compact progress preview](records/2026-09/2026-09-23-subagent-selector-and-preview.md)

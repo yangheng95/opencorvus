@@ -1111,3 +1111,8 @@ expandable. Empty usage periods show
 one empty presentation; detailed composition, provider and model sections render
 when the canonical call count is positive. Configured official usage sources keep
 their independent presentation even when local call count is zero.
+About presents product identity, a concise runtime status summary and desktop
+updates first; exact server and workspace facts plus keyboard shortcuts remain
+available in disclosures. Usage gives the measured Token total and selected
+calendar period one dominant summary, keeps supporting metrics compact, and
+preserves official Provider reconciliation as a separate compare-only section.

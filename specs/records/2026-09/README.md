@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [About and Usage settings redesign](2026-09-24-about-usage-visual-redesign.md)
+
 - [Work Ledger stop-action safety](2026-09-24-work-ledger-stop-safety.md)
 
 - [Sub-agent selector and compact progress preview](2026-09-23-subagent-selector-and-preview.md)
