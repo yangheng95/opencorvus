@@ -1076,6 +1076,12 @@ squads. `prompt_profile.active` remains the only active expert-squad selection
 source. Settings does not define agent-team order, a package workflow, or a
 second active profile.
 
+The desktop updater checks the compiled signed release channel at app startup,
+on visibility return, and hourly while visible, independently of backend
+health. The native updater owns signature verification and the prepared package;
+the sidebar and About panel project that one state. Discovery can download in
+the background, while installation requires an explicit restart confirmation.
+
 ## Verification
 
 - `bun test packages/opencorvus/test/workbench/board.test.ts`

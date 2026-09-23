@@ -123,7 +123,7 @@ import { teardownApp } from "./services/init"
 import { stopTimers } from "./services/sync"
 import { nativeOpen } from "./utils/native"
 import { getHostTransport } from "./services/host-transport-runtime"
-import { checkDesktopUpdate } from "./services/desktop-update"
+import { startDesktopUpdateMonitor, stopDesktopUpdateMonitor } from "./services/desktop-update"
 import { installNativeWindowCloseLifecycle } from "./services/native-window-lifecycle"
 import { showOverlayWindow } from "./services/window"
 import { installExpertSquadInstallHandoffBridge } from "./services/expert-squad-install-handoff"
@@ -2687,6 +2687,8 @@ installSystemThemeListener(() => applyTheme(settingsStore.theme))
 
 // ── Init ──
 runMainAsync("initApp", async () => {
+  startDesktopUpdateMonitor()
+  disposers.push(stopDesktopUpdateMonitor)
   try {
     await initApp({
       onSettingsLoaded: () => {
@@ -2695,7 +2697,6 @@ runMainAsync("initApp", async () => {
       onConnected: async () => {
         await focusInitialRestoredTaskWorkspace()
         void clipboardApiKeyPrompt.checkNow()
-        void checkDesktopUpdate({ background: true })
       },
     })
   } catch (error) {

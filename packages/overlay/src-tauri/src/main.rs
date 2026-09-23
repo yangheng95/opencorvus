@@ -5428,18 +5428,15 @@ async fn overlay_desktop_update_check<R: Runtime>(
         *coordinator.prepared.lock().unwrap() = None;
         return Ok(DesktopUpdateInfo::current());
     };
-    let info = DesktopUpdateInfo::available(&update, None);
-    if coordinator
-        .prepared
-        .lock()
-        .unwrap()
-        .as_ref()
-        .map(|prepared| prepared.update.version.as_str())
-        != Some(update.version.as_str())
-    {
-        *coordinator.prepared.lock().unwrap() = None;
-    }
-    Ok(info)
+    let mut prepared = coordinator.prepared.lock().unwrap();
+    let downloaded_bytes = match prepared.as_ref() {
+        Some(cached) if cached.update.version == update.version => Some(cached.bytes.len() as u64),
+        _ => {
+            *prepared = None;
+            None
+        }
+    };
+    Ok(DesktopUpdateInfo::available(&update, downloaded_bytes))
 }
 
 #[tauri::command]

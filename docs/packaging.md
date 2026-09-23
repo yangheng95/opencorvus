@@ -163,6 +163,16 @@ that configuration on the beta or stable channel derived from the synchronized
 semantic version, so release, local installer, host-bound, and development
 builds consume one updater configuration.
 
+The desktop window checks its compiled channel on startup, when a hidden window
+becomes visible again, and hourly while visible. This check is independent of
+the managed backend connection. A newer signed package downloads and verifies
+in the background. The sidebar surfaces available updates and download status;
+About settings also shows channel errors and ready-to-install state. Installation
+requires an explicit restart
+confirmation. If native shutdown or installation fails before restart, the
+verified package remains available for another attempt. A draft version does
+not appear in the channel until `publish-release` promotes its manifest.
+
 Release packaging requires these protected GitHub Actions secrets:
 
 - `TAURI_SIGNING_PRIVATE_KEY`: the complete encrypted private key used only by native packaging jobs;

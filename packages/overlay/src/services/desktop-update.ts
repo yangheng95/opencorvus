@@ -2,6 +2,7 @@ import { createSignal } from "solid-js"
 import { showAppDialog } from "./app-dialog"
 import { getHostTransport } from "./host-transport-runtime"
 import { listenTauriEvent } from "./tauri-transport"
+import { createVisibilityInterval, type VisibilityInterval } from "../utils/visibility-interval"
 import { t } from "../utils/i18n"
 
 export interface DesktopUpdateInfo {
@@ -26,6 +27,10 @@ const [desktopUpdateDownloading, setDesktopUpdateDownloading] = createSignal(fal
 const [desktopUpdateProgress, setDesktopUpdateProgress] = createSignal<DesktopUpdateProgress | null>(null)
 const [desktopUpdateError, setDesktopUpdateError] = createSignal("")
 let progressListener: Promise<void> | undefined
+let updateMonitor: VisibilityInterval | undefined
+let lastAutomaticCheck = 0
+let installing = false
+const UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1000
 
 function nonBlank(value: unknown, label: string): string {
   if (typeof value !== "string" || !value.trim()) throw new Error(`Desktop update ${label} is missing`)
@@ -110,7 +115,12 @@ async function ensureProgressListener(): Promise<void> {
     } catch (error) {
       setDesktopUpdateError(errorMessage(error))
     }
-  }).then(() => undefined)
+  })
+    .then(() => undefined)
+    .catch((error) => {
+      progressListener = undefined
+      throw error
+    })
   return progressListener
 }
 
@@ -118,23 +128,25 @@ export function desktopUpdateSupported(): boolean {
   return getHostTransport().capabilities.nativeCommands["desktopUpdate.check"]
 }
 
-export async function checkDesktopUpdate(options: { background?: boolean } = {}): Promise<void> {
-  if (!desktopUpdateSupported() || desktopUpdateChecking()) return
+export async function checkDesktopUpdate(options: { background?: boolean; download?: boolean } = {}): Promise<void> {
+  if (!desktopUpdateSupported() || desktopUpdateChecking() || desktopUpdateDownloading() || installing) return
   setDesktopUpdateChecking(true)
   if (!options.background) setDesktopUpdateError("")
   try {
-    await ensureProgressListener()
     const response = await getHostTransport().native({ kind: "desktopUpdate.check" })
-    setDesktopUpdateInfo(parseDesktopUpdateInfo(response))
+    const info = parseDesktopUpdateInfo(response)
+    setDesktopUpdateInfo(info)
     setDesktopUpdateError("")
+    if (options.download && info.available && info.downloadedBytes === undefined) await downloadDesktopUpdate()
   } catch (error) {
-    if (!options.background || desktopUpdateInfo() === null) setDesktopUpdateError(errorMessage(error))
+    setDesktopUpdateError(errorMessage(error))
   } finally {
     setDesktopUpdateChecking(false)
   }
 }
 
 export async function downloadDesktopUpdate(): Promise<void> {
+  if (desktopUpdateDownloading() || installing) return
   const version = desktopUpdateInfo()?.version
   if (!version) throw new Error("No desktop update is available to download")
   setDesktopUpdateDownloading(true)
@@ -174,20 +186,26 @@ export function desktopUpdateProgressLabel(): string {
  * matter where the install was triggered from.
  */
 export async function confirmAndInstallDesktopUpdate(): Promise<void> {
-  const version = desktopUpdateInfo()?.version
-  if (!version) return
-  const result = await showAppDialog({
-    title: t("about.update_install_title"),
-    message: t("about.update_install_message", { version }),
-    okLabel: t("about.update_restart"),
-    cancel: true,
-  })
-  if (result.confirmed) await installDesktopUpdate()
+  if (installing) return
+  const info = desktopUpdateInfo()
+  if (!info?.version || info.downloadedBytes === undefined) return
+  installing = true
+  try {
+    const result = await showAppDialog({
+      title: t("about.update_install_title"),
+      message: t("about.update_install_message", { version: info.version }),
+      okLabel: t("about.update_restart"),
+      cancel: true,
+    })
+    if (result.confirmed) await installDesktopUpdate(info.version)
+  } finally {
+    installing = false
+  }
 }
 
-async function installDesktopUpdate(): Promise<void> {
+async function installDesktopUpdate(expectedVersion: string): Promise<void> {
   const info = desktopUpdateInfo()
-  if (!info?.version || info.downloadedBytes === undefined) {
+  if (info?.version !== expectedVersion || info.downloadedBytes === undefined) {
     throw new Error("No verified desktop update is ready to install")
   }
   setDesktopUpdateError("")
@@ -195,13 +213,36 @@ async function installDesktopUpdate(): Promise<void> {
     await getHostTransport().native({ kind: "desktopUpdate.install", expectedVersion: info.version })
   } catch (error) {
     setDesktopUpdateError(errorMessage(error))
-    // A failed install leaves no claim that the package is still installable
-    // here, so drop the downloaded state: the next attempt downloads again
-    // rather than repeating an install the host may no longer be able to serve.
-    const stale = desktopUpdateInfo()
-    if (stale) setDesktopUpdateInfo({ ...stale, downloadedBytes: undefined })
-    setDesktopUpdateProgress(null)
+    const code = error && typeof error === "object" ? (error as { code?: unknown }).code : undefined
+    if (code !== "DESKTOP_UPDATE_SHUTDOWN_FAILED" && code !== "DESKTOP_UPDATE_INSTALL_FAILED") {
+      const stale = desktopUpdateInfo()
+      if (stale) setDesktopUpdateInfo({ ...stale, downloadedBytes: undefined })
+      setDesktopUpdateProgress(null)
+    }
   }
+}
+
+function automaticUpdateCheck(): void {
+  if (!desktopUpdateSupported() || desktopUpdateChecking() || desktopUpdateDownloading() || installing) return
+  const now = Date.now()
+  if (now - lastAutomaticCheck < UPDATE_CHECK_INTERVAL_MS) return
+  lastAutomaticCheck = now
+  void checkDesktopUpdate({ background: true, download: true })
+}
+
+export function startDesktopUpdateMonitor(): void {
+  if (updateMonitor || !desktopUpdateSupported()) return
+  updateMonitor = createVisibilityInterval(automaticUpdateCheck, UPDATE_CHECK_INTERVAL_MS, {
+    onVisible: automaticUpdateCheck,
+  })
+  updateMonitor.start()
+  automaticUpdateCheck()
+}
+
+export function stopDesktopUpdateMonitor(): void {
+  updateMonitor?.dispose()
+  updateMonitor = undefined
+  lastAutomaticCheck = 0
 }
 
 export { desktopUpdateChecking, desktopUpdateDownloading, desktopUpdateError, desktopUpdateInfo }
