@@ -63,7 +63,7 @@ It currently has these jobs:
 
 The canonical release publishes both portable CLI archives and Tauri GUI installers:
 
-- `package-overlay` calls the shared `.github/workflows/package-overlay.yml` once per native host. The debug-only `build-overlays.yml` uses that same implementation (`linux_only=true` selects just the two Linux hosts). The matrix script owns SDK preparation, compilation, staging, naming and validation.
+- `package-overlay` calls the shared `.github/workflows/package-overlay.yml` once per native host. The debug-only `build-overlays.yml` uses that same implementation; `platform=all`, `platform=linux` or an exact platform such as `darwin-x64` selects rows from the canonical release matrix through `script/overlay-build-selection.ts`. The former `linux_only` input is replaced by this one selector. The matrix script owns SDK preparation, compilation, staging, naming and validation.
 - `script/check-release-assets.ts overlay --require-bundle --require-updater` verifies each staged executable, installer set, selected updater artifact, and updater signature before upload.
 - `package-cli` invokes `package:binary-matrix`, which owns native CLI compilation, complete runtime staging, smoke execution, archive creation, and archive verification.
 - `script/package-linux-binary.ts` remains the remote/container overlay-server bundle with embedded UI under `dist/binary/*`; it is not the public terminal CLI archive.
@@ -73,6 +73,15 @@ The canonical release publishes both portable CLI archives and Tauri GUI install
   GitHub Releases is the single binary distribution authority.
 
 ### CI transfer artifacts and public release assets
+
+The shared installer command enables Tauri verbose logs for local and hosted builds,
+including the corrected RPM producer. Native bundle subprocess output is otherwise
+hidden behind Tauri's generic `failed to run` error. Non-Linux GUI jobs retain a package
+log on failure; failed macOS jobs additionally retain the generated DMG script, disk
+space, mounted-image and disk inventories in `installer-diagnostics-<platform>`.
+These diagnostics do not convert a failed bundle into success or replace installer
+validation. Use the exact-platform debug workflow for native diagnosis; its artifacts
+cannot replace another release run's source-owned publication inputs.
 
 Linux compilation runs once per architecture using `package:gui-installer-matrix --build-only`.
 It retains the `package-input` executable in a permission-preserving tar archive, and three

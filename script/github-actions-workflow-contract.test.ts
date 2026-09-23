@@ -228,7 +228,20 @@ describe("GitHub Actions workflow contract", () => {
       "./.github/workflows/package-overlay.yml",
       "./.github/workflows/package-overlay.yml",
     ])
+    expect(debug.jobs?.["build-overlay"]?.needs).toBe("select-platforms")
+    expect(debug.jobs?.["build-overlay"]?.strategy?.matrix).toBe("${{ fromJSON(needs.select-platforms.outputs.matrix) }}")
+    expect(debug.jobs?.["select-platforms"]?.steps?.find(({ id }) => id === "selection")).toMatchObject({
+      env: { OVERLAY_BUILD_PLATFORM: "${{ inputs.platform }}" },
+      run: 'bun script/overlay-build-selection.ts >> "$GITHUB_OUTPUT"',
+    })
     const jobs = overlay.jobs!
+    expect(jobs.build?.steps?.find(({ name }) => name === "Package GUI installers")?.run).toContain(
+      "tee .scratch/installer-diagnostics/package.log",
+    )
+    expect(jobs.build?.steps?.find(({ name }) => name === "Retain failed installer diagnostics")?.with).toMatchObject({
+      name: "installer-diagnostics-${{ inputs.platform }}",
+      "retention-days": "${{ inputs.retention-days }}",
+    })
     expect(jobs["bundle-linux"]?.needs).toBe("build")
     expect(jobs["bundle-linux"]?.strategy).toEqual({ "fail-fast": false, matrix: { kind: ["deb", "rpm", "appimage"] } })
     expect(jobs.build?.outputs).toEqual({ "input-artifact-id": "${{ steps.input-upload.outputs.artifact-id }}" })
@@ -311,6 +324,7 @@ describe("GitHub Actions workflow contract", () => {
     }
 
     expect(checkoutReferences).toEqual([
+      { file: "build-overlays.yml", job: "select-platforms", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "deadline", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "prepare", uses: "actions/checkout@v6" },
       { file: "build.yml", job: "package-cli", uses: "actions/checkout@v6" },

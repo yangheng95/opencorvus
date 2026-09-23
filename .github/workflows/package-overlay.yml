@@ -86,7 +86,9 @@ jobs:
           OPENCORVUS_CHANNEL: latest
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-        run: bun run package:gui-installer-matrix
+        run: |
+          mkdir -p .scratch/installer-diagnostics
+          bun run package:gui-installer-matrix 2>&1 | tee .scratch/installer-diagnostics/package.log
       - name: Upload overlay artifact
         if: ${{ !startsWith(inputs.platform, 'linux-') }}
         uses: actions/upload-artifact@v7
@@ -94,6 +96,24 @@ jobs:
           name: overlay-${{ inputs.platform }}
           path: packages/overlay/dist-artifacts/${{ inputs.platform }}
           if-no-files-found: error
+          overwrite: true
+          retention-days: ${{ inputs.retention-days }}
+      - name: Collect failed macOS installer diagnostics
+        if: ${{ failure() && runner.os == 'macOS' }}
+        run: |
+          mkdir -p .scratch/installer-diagnostics
+          df -h > .scratch/installer-diagnostics/disk-space.txt 2>&1 || true
+          hdiutil info > .scratch/installer-diagnostics/disk-images.txt 2>&1 || true
+          diskutil list > .scratch/installer-diagnostics/disks.txt 2>&1 || true
+      - name: Retain failed installer diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: installer-diagnostics-${{ inputs.platform }}
+          path: |
+            .scratch/installer-diagnostics/
+            packages/overlay/src-tauri/target/release/bundle/dmg/bundle_dmg.sh
+          if-no-files-found: ignore
           overwrite: true
           retention-days: ${{ inputs.retention-days }}
       - name: Retain failed native first-run diagnostics

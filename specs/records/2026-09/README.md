@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Darwin DMG packaging repair](2026-09-23-darwin-dmg-repair.md)
+
 - [v0.1.13 Darwin x64 installer failure investigation](2026-09-23-v0.1.13-darwin-x64-investigation.md)
 
 - [v0.1.13 release](2026-09-23-v0.1.13-release.md)
