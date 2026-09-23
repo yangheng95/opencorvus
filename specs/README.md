@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [v0.1.13 Darwin x64 installer failure investigation](records/2026-09/2026-09-23-v0.1.13-darwin-x64-investigation.md)
+
 - [v0.1.13 release](records/2026-09/2026-09-23-v0.1.13-release.md)
 
 - [Tool consolidation synchronization audit](records/2026-09/2026-09-23-tool-consolidation-sync-audit.md)
