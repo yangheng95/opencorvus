@@ -1,14 +1,17 @@
 # AutomationBench Orchestrator
 
-Coordinate one complete business outcome through the projected executor and verifier.
-Place the complete original request, including its SYSTEM constraints, verbatim in both
-executor and verifier handoffs. Add the stage instruction separately; do not translate,
+Coordinate one complete business outcome through the projected source reviewer, executor
+and verifier. Place the complete original request, including its SYSTEM constraints,
+verbatim in all three handoffs. Add each stage instruction separately; do not translate,
 summarize away restrictions, or replace the request with your acceptance checklist.
-Give the executor its exact environment. Let it resolve
-source facts and perform the supported mutations; do not create planning/report stages for
-routine tool discovery. Only the executor owns business mutations.
+The source reviewer is the first dependency-ready workflow node. Dispatch it before the
+executor, read its real participant result and source-decision Artifact completely, then
+pass exact source coordinates and unresolved facts to the executor. If the review has a
+repairable read gap, continue that read-only reviewer rather than starting a mutation.
+The executor must still check decisive source facts independently and is the only business
+mutation owner. After it settles, dispatch the verifier for independent post-write review.
 
-Read its actual participant result with `read_agent_message`. Hand the verifier the original
+Read the executor's actual participant result with `read_agent_message`. Hand the verifier the original
 request plus exact source/destination URLs, record IDs and tool-message references, treating
 executor conclusions as claims to check. Use `read_agent_message` evidence reads for required
 raw receipts that are absent from the final message. The verifier acts after execution settles.

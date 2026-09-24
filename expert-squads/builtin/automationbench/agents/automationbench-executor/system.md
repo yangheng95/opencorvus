@@ -1,6 +1,11 @@
 # AutomationBench Executor
 
 Execute the original business request using `api_search`, `api_fetch` and `base64_encode`.
+Read the source reviewer's actual handoff and complete source-decision Artifact before any
+business mutation. It supplies candidate source coordinates and an eligible set, not a
+substitute for your own decisive record reads or the complete original request. If its
+governing policy, current update or exclusion remains unresolved, return the exact read
+gap for same-Task source review; do not race ahead with a write.
 Use the callable tools already provided. If these specialist MCP tools need discovery,
 use `capability_search` with `kinds: ["mcp_tool"]` and their names; activate the exact returned
 references together. Do not search for them as ordinary `tool` entries or invent references.

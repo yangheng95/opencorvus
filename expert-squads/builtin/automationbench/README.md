@@ -5,15 +5,17 @@ The Inspect harness supplies one isolated `automationbench` Model Context Protoc
 server per sample. Install this directory using the normal Expert Squad package loader,
 or pass it as the Inspect task's `squad` argument. Select profile `automationbench`.
 
-The executor owns source discovery and mutations. The verifier independently checks the
-original request, authoritative records and all mutation receipts after execution settles.
-The orchestrator coordinates existing Task participants and makes the real terminal decision.
-Workflow dependencies guide those participants; they are not a host-enforced tool sequence.
+The read-only source reviewer establishes governing records, current updates and eligible
+entities before mutation. The executor independently checks decisive facts and owns all
+business mutations. The verifier checks the original request, records and receipts after
+execution settles. The orchestrator coordinates their real handoffs and terminal decision.
+Workflow dependencies expose the review → execute → verify order; they are not a host
+semantic gate for choosing business tools or declaring success.
 
 Only `api_search`, `api_fetch` and `base64_encode` are projected as business tools.
 Platform Task artifact transport remains available through the ordinary worker contract.
-The verifier uses the same official API surface and is instructed to perform read-only
-verification; its role instruction is not an operating-system security boundary.
+The reviewer and verifier use the same official API surface and are instructed to perform
+read-only work; role instructions are not an operating-system security boundary.
 No case answer, official assertions, score access, shell, model client or benchmark runner
 is bundled here. Inspect records official strict and partial scores after settlement.
 

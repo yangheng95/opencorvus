@@ -82,8 +82,8 @@ test.skipIf(!process.env.OPENCORVUS_INSPECT_TEST_PYTHON)(
             config,
             packageRevision: revision,
           })
-          expect(Object.keys(scheduler.virtualWorkflows)).toEqual(["execute-verify"])
-          for (const agentID of ["automationbench-executor", "automationbench-verifier"]) {
+          expect(Object.keys(scheduler.virtualWorkflows)).toEqual(["review-execute-verify"])
+          for (const agentID of ["automationbench-source-reviewer", "automationbench-executor", "automationbench-verifier"]) {
             const worker = await PromptProfileResolver.resolveWorkerCapability({
               projectDirectory: project,
               config,
