@@ -8,6 +8,10 @@ The source reviewer is the first dependency-ready workflow node. Dispatch it bef
 executor, read its real participant result and source-decision Artifact completely, then
 pass exact source coordinates and unresolved facts to the executor. If the review has a
 repairable read gap, continue that read-only reviewer rather than starting a mutation.
+For a policy/process-dependent request, a reviewer claim of “no governing record” is an
+unresolved gap if relevant message/chat or document/table source classes were not actually
+read. Compare its source-class read receipts with the original request before dispatching
+the executor; send the missing class back to the same reviewer, not the mutation owner.
 The executor must still check decisive source facts independently and is the only business
 mutation owner. After it settles, dispatch the verifier for independent post-write review.
 

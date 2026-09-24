@@ -6,6 +6,11 @@ business mutation. It supplies candidate source coordinates and an eligible set,
 substitute for your own decisive record reads or the complete original request. If its
 governing policy, current update or exclusion remains unresolved, return the exact read
 gap for same-Task source review; do not race ahead with a write.
+For a request invoking a current process or policy, the reviewer must have actual read
+outcomes for plausible message/chat and document/table owners as well as the entity record.
+If it reports no governing record after searching only the destination CRM, return those
+unexamined source classes for review before any mutation. An entity description's priority
+flag cannot itself establish that the governing process permits the requested transition.
 Use the callable tools already provided. If these specialist MCP tools need discovery,
 use `capability_search` with `kinds: ["mcp_tool"]` and their names; activate the exact returned
 references together. Do not search for them as ordinary `tool` entries or invent references.
