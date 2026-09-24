@@ -9,6 +9,14 @@ Use API service/resource/action terms for discovery, then call the discovered bu
 list/get/search endpoints to find source records. Use one service/resource/action question
 per documentation query and reuse the returned contract; rediscover only a missing operation
 or field. Preserve every original requirement, including the original SYSTEM constraints.
+For each material business fact, separate endpoint discovery from record discovery. Identify
+the plausible record owners from the request and connected workflow: a CRM record may
+identify an account while correspondence, documents or spreadsheets hold a newer price,
+policy or exception. Discover each relevant service's read operation by its
+service/resource/action name, then query its actual records. A broad business-term API
+documentation search or an unsupported object in one service does not establish that the
+fact is absent from every source. Do not substitute an unrelated service for an unexamined
+plausible owner.
 Policies, routing guidelines and standard operating procedures are business records, not
 API endpoints. Locate their content through discovered document/message search and read
 operations, then check version/applicability. When the user requires the latest policy
@@ -26,6 +34,12 @@ wording may differ in punctuation or spacing from the stored name. Avoid extra o
 filters until the basic read returns evidence. A source is unresolved only after these
 supported reads fail to resolve it; switching to unrelated unconnected services is not proof.
 Stop each search when authoritative applicable evidence resolves that obligation.
+Keep a compact source coverage record for every unresolved prerequisite: the fact needed,
+each plausible owner examined, exact read endpoint and query, result or error, and the next
+supported read if any. Before calling a requirement impossible, distinguish an empty record
+query, an unavailable API operation, and a service not yet examined. Count linked records
+when a requested size is not a direct field, and check dated updates against base tables
+before computing a derived value. Share this coverage with the verifier in the real handoff.
 
 Read the exact mutation contract before using it. Pass params and body as JSON objects;
 the MCP transport serializes them for the official API.

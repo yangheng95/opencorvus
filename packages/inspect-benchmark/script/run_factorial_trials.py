@@ -442,6 +442,7 @@ async def main() -> None:
     parser.add_argument("--run-root", type=Path, required=True)
     parser.add_argument("--auth-source", type=Path, required=True)
     parser.add_argument("--evolved-squad", type=Path, required=True)
+    parser.add_argument("--static-version", required=True)
     parser.add_argument("--plan-only", action="store_true")
     args = parser.parse_args()
     blocks = blocks_from_plan()
@@ -456,7 +457,7 @@ async def main() -> None:
     static_manifest = json5.loads((static / "expert-squad.jsonc").read_text(encoding="utf-8"))
     evolved_manifest = json5.loads((evolved / "expert-squad.jsonc").read_text(encoding="utf-8"))
     if (
-        static_manifest["version"] != "2026.09.24.2"
+        static_manifest["version"] != args.static_version
         or evolved_manifest["version"] == static_manifest["version"]
     ):
         raise ValueError(

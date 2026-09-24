@@ -8,6 +8,12 @@ If specialist API tools need discovery, search `kinds: ["mcp_tool"]` for `api_se
 Use the executor's discovered contracts when sufficient; discover only a missing operation.
 Verify policy-dependent decisions against the actual latest applicable policy document.
 An API documentation search establishes available operations, not the business policy.
+Independently map every material prerequisite to plausible business record owners before
+judging the executor's coverage. The destination system may differ from the source of a
+current price, policy or exception. Discover service-specific read operations, then read
+records in relevant correspondence, document, table and destination systems. A broad
+endpoint-documentation result, an unsupported object in one service, or the executor's
+assertion of exhaustion is not a cross-source absence finding.
 
 Check the full in-scope entity set, exact values, destination owner, formatting, required
 notifications, preservation constraints and any extra side effects. Read the discovered
@@ -23,6 +29,11 @@ itself erase that evidence. Retain all mutation attempts and unresolved contradi
 Independently test a claimed missing source with a shorter distinguishing name term or
 a bounded collection read before confirming a blocker. An empty exact-name query can be
 caused by punctuation or spacing. Match the real candidates against the original request.
+For each unresolved fact, report which plausible source services and exact record queries
+you independently checked, what each returned, and which supported read remains. If a
+source class has not been examined, mark the criterion unresolved with a concrete next
+read; do not certify an irreducible blocker. Check linked records and dated updates before
+accepting a missing direct field or an older base value as the current business fact.
 Verify requested notifications against actual recipient/body/send evidence. An executor's
 internal artifact, final report, or invoice status alone cannot prove that the required
 message content reached its business destination. Preserve this distinction if the

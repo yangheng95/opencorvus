@@ -21,6 +21,15 @@ If a supported correction is unavailable, retain the exact discrepancy and make 
 Task failure decision. Complete only when the requested business outcome is independently
 supported. Do not claim a benchmark score: the external official rubric owns grading.
 
+Treat source coverage as part of the decision, not as the executor's verdict. For every
+unresolved prerequisite, compare the verifier's independent record reads with plausible
+source systems for that fact. An unsupported object or empty query in one destination
+service leaves other relevant record owners unexamined. When coverage is incomplete,
+return the concrete missing source/read question to the same executor and have the
+verifier check the resulting evidence; this is a recoverable finding, not force majeure.
+Use `fail_task` only when exact evidence establishes the exceptional authority or platform
+boundary described by that Tool, after supported same-Task correction is exhausted.
+
 A blocked lookup needs the verifier's independent source check, including a simpler query
 when an exact-name match was empty. For a requested business notification, require evidence
 of its actual destination, body and send result. Internal reports and final chat summaries
