@@ -16,7 +16,7 @@ export const generatedExpertSquadRevisions: Readonly<
   "ai-model-governance-evaluation": { version: "2026.08.30.2", contentDigest: "d9c88680715ac64ea6f283f2d57b3685e572cbec0e3bd4092add716111b91716" },
   "air-traffic-management-safety": { version: "2026.08.30.2", contentDigest: "7a158a46bfa95d73b87b24e6a855d05d71d9d595ecd15f027092ab7e89bb5df0" },
   "anti-money-laundering-compliance": { version: "2026.08.30.2", contentDigest: "7271d811b8db3cdbe5bf872e38e201dfc882e5f108dc471c58f8cc1c02524f6f" },
-  "automationbench": { version: "2026.09.22.2", contentDigest: "d7f5a5b10b0775df2b5418d43baa5a0f491a77748e4084c645a020ceb3f97ecc" },
+  "automationbench": { version: "2026.09.24.2", contentDigest: "28b95edffa5948b296b4233837e278444fabb1537b5d7d719e2fa85031d93712" },
   "automotive-functional-safety": { version: "2026.08.30.2", contentDigest: "e8cdecee8fa08c72a5cbe54a28cf1c7a7c1e987a4bd189d79b02185fd6607952" },
   "aviation-maintenance-reliability": { version: "2026.08.30.2", contentDigest: "ce45f8d83914319c15f9cbd312df55e31608763d462bccb2fe0995d2141346e3" },
   "base": { version: "2026.09.14.15", contentDigest: "0e1ea7e3e8f9f772a56f08210db40e8284837f67379a6777bf58d001abbf2e75" },

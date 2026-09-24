@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Inspect AutomationBench Luna calibration](2026-09-24-inspect-automationbench-luna/README.md): isolated real-model diagnostics and frozen pilot.
+
 - [Inspect AutomationBench local acceptance](2026-09-22-inspect-automationbench/README.md): model-free official MCP/API/rubric execution and offline re-scoring evidence.
 
 - [Browser interaction and screenshot publication](2026-09-20-browser-acceptance/README.md): manually inspected Browser MCP states and exact production-owner attachment readback under directory watching; explicitly scoped apart from Mission acceptance.

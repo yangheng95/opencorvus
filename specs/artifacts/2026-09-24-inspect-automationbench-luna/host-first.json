@@ -1,0 +1,24 @@
+{
+  "status": "stopped",
+  "model": "openai/gpt-5.6-luna",
+  "runtimeRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-wlUBwi\\runner-4060-C9j33x\\runtime-root",
+  "processRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-wlUBwi\\runner-4060-C9j33x",
+  "pid": 4060,
+  "startedAt": "2026-09-24T02:10:15.825Z",
+  "source": "b9a72f4134de3a582dcf55cb09b6c1b299f8b3d1",
+  "catalog": {
+    "providerID": "openai",
+    "modelID": "gpt-5.6-luna",
+    "apiModel": "gpt-5.6-luna"
+  },
+  "url": "http://127.0.0.1:55565/",
+  "preflight": {
+    "sessionID": "ses_h3HfCfc4GhARwKWmNAXe",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-5.6-luna",
+    "streaming": true
+  },
+  "credentialCopiesRemoved": true,
+  "finishedAt": "2026-09-24T03:02:25.239Z"
+}

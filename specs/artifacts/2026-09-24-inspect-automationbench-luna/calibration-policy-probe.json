@@ -1,0 +1,121 @@
+[
+  {
+    "input": {
+      "method": "GET",
+      "url": "https://gmail.googleapis.com/gmail/v1/users/me/messages",
+      "params": "{\"q\": \"SOP\", \"maxResults\": 100}",
+      "body": null
+    },
+    "output": {
+      "messages": [
+        {
+          "id": "msg_sop",
+          "threadId": "th_sop"
+        }
+      ],
+      "resultSizeEstimate": 1
+    }
+  },
+  {
+    "input": {
+      "method": "GET",
+      "url": "https://gmail.googleapis.com/gmail/v1/users/me/messages",
+      "params": "{\"q\": \"social\", \"maxResults\": 100}",
+      "body": null
+    },
+    "output": {
+      "messages": [
+        {
+          "id": "msg_sop",
+          "threadId": "th_sop"
+        },
+        {
+          "id": "msg_mkt_noise_018",
+          "threadId": "th_mkt_noise_018"
+        },
+        {
+          "id": "msg_mkt_noise_029",
+          "threadId": "th_mkt_noise_029"
+        }
+      ],
+      "resultSizeEstimate": 3
+    }
+  },
+  {
+    "input": {
+      "method": "GET",
+      "url": "https://gmail.googleapis.com/gmail/v1/users/me/messages",
+      "params": "{\"q\": \"\", \"maxResults\": 100}",
+      "body": null
+    },
+    "output": {
+      "messages": [
+        {
+          "id": "msg_sop",
+          "threadId": "th_sop"
+        },
+        {
+          "id": "msg_mkt_noise_032",
+          "threadId": "th_mkt_noise_032"
+        },
+        {
+          "id": "msg_mkt_noise_024",
+          "threadId": "th_mkt_noise_024"
+        },
+        {
+          "id": "msg_mkt_noise_015",
+          "threadId": "th_mkt_noise_015"
+        },
+        {
+          "id": "msg_mkt_noise_030",
+          "threadId": "th_mkt_noise_030"
+        },
+        {
+          "id": "msg_mkt_noise_033",
+          "threadId": "th_mkt_noise_033"
+        },
+        {
+          "id": "msg_mkt_noise_018",
+          "threadId": "th_mkt_noise_018"
+        },
+        {
+          "id": "msg_mkt_noise_031",
+          "threadId": "th_mkt_noise_031"
+        },
+        {
+          "id": "msg_mkt_noise_013",
+          "threadId": "th_mkt_noise_013"
+        },
+        {
+          "id": "msg_mkt_noise_001",
+          "threadId": "th_mkt_noise_001"
+        },
+        {
+          "id": "msg_mkt_noise_023",
+          "threadId": "th_mkt_noise_023"
+        },
+        {
+          "id": "msg_mkt_noise_011",
+          "threadId": "th_mkt_noise_011"
+        },
+        {
+          "id": "msg_mkt_noise_003",
+          "threadId": "th_mkt_noise_003"
+        },
+        {
+          "id": "msg_mkt_noise_016",
+          "threadId": "th_mkt_noise_016"
+        },
+        {
+          "id": "msg_mkt_noise_017",
+          "threadId": "th_mkt_noise_017"
+        },
+        {
+          "id": "msg_mkt_noise_029",
+          "threadId": "th_mkt_noise_029"
+        }
+      ],
+      "resultSizeEstimate": 16
+    }
+  }
+]

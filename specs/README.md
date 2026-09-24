@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Inspect AutomationBench Luna calibration and pilot](records/2026-09/2026-09-24-inspect-automationbench-luna-calibration.md)
+
 - [v0.1.14 release](records/2026-09/2026-09-24-v0.1.14-release.md)
 
 - [About and Usage settings redesign](records/2026-09/2026-09-24-about-usage-visual-redesign.md)

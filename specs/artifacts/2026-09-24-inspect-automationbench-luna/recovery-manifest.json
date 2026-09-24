@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "benchmark": "zapier/automationbench@4a8e106",
+  "cases": [
+    {
+      "domain": "sales",
+      "task": "sales.unreliable_label_account_review",
+      "example_id": 1203
+    },
+    {
+      "domain": "support",
+      "task": "support.zoho_desk_capacity_planning",
+      "example_id": 1585
+    },
+    {
+      "domain": "hr",
+      "task": "hr.candidate_submittal_docs",
+      "example_id": 5034
+    }
+  ]
+}

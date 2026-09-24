@@ -1,0 +1,49 @@
+[
+  {
+    "task_id": "tsk_g00VW6KeV4006rmZsJvb",
+    "case": "Inspect sample sales.unreliable_label_account_review",
+    "http": 202,
+    "receipt": {
+      "requestEventID": "pev_g0VW6RraB00TUPq4K0S6",
+      "requestedAt": 1790218852575,
+      "source": "task.cancel",
+      "requestID": "74512a92-9df1-44dd-92d6-5725eb1909e1",
+      "actor": "user",
+      "surface": "api",
+      "reason": "Experiment host budget correction; retain cancelled/unscored evidence before a fresh exact-input measurement",
+      "status": "cancelling"
+    }
+  },
+  {
+    "task_id": "tsk_g00VW6Q6ex00JA9g5Fmj",
+    "case": "Inspect sample support.zoho_desk_capacity_planning",
+    "http": 202,
+    "receipt": {
+      "requestEventID": "pev_g0VW6Rrr800hY2hbWev1",
+      "requestedAt": 1790218853626,
+      "source": "task.cancel",
+      "requestID": "cbdd9edd-6677-4ae0-8232-db3a29fb34bd",
+      "actor": "user",
+      "surface": "api",
+      "reason": "Experiment host budget correction; retain cancelled/unscored evidence before a fresh exact-input measurement",
+      "status": "cancelling"
+    }
+  },
+  {
+    "task_id": "tsk_g00VW6RtMF00D53Mpjpg",
+    "case": "Inspect sample hr.candidate_submittal_docs",
+    "http": 202,
+    "receipt": {
+      "requestEventID": "pev_g0VW6RtqL009aV5irZ1N",
+      "requestedAt": 1790218861265,
+      "source": "task.cancel",
+      "requestID": "796f313a-e763-46fb-9267-29ccc9697520",
+      "actor": "user",
+      "surface": "api",
+      "reason": "Experiment host budget correction; retain cancelled/unscored evidence before a fresh exact-input measurement",
+      "status": "cancelled",
+      "terminalEventID": "pev_g0VW6RtqS00EB7tfkaSo",
+      "terminalAt": 1790218861271
+    }
+  }
+]
