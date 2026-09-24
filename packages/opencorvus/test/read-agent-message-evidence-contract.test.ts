@@ -1,11 +1,14 @@
 import { describe, expect, test } from "bun:test"
-import { ReadAgentMessageTestHooks } from "../src/orchestrator/read-agent-message-tool"
+import { ReadAgentMessageTestHooks } from "../src/tool/read-agent-message"
 
 describe("read_agent_message causal evidence projection", () => {
   test("pages every causal Tool Message and fences equal-time messages by persisted identity", () => {
     const boundary = { time: { created: 100 }, id: "msg_m" }
-    expect(ReadAgentMessageTestHooks.orderedBeforeOrAt({ time: { created: 100 }, id: "msg_a" }, boundary)).toBe(true)
-    expect(ReadAgentMessageTestHooks.orderedBeforeOrAt({ time: { created: 100 }, id: "msg_z" }, boundary)).toBe(false)
+    const candidates = [{ time: { created: 100 }, id: "msg_a" }, boundary, { time: { created: 100 }, id: "msg_z" }]
+    expect(candidates.filter((candidate) => ReadAgentMessageTestHooks.orderedBeforeOrAt(candidate, boundary))).toEqual([
+      candidates[0]!,
+      boundary,
+    ])
 
     const messages = Array.from({ length: 33 }, (_, index) => ({
       info: { time: { created: index }, id: `msg_${String(index).padStart(2, "0")}` },

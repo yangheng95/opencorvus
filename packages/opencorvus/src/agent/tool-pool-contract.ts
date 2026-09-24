@@ -1,5 +1,5 @@
 import type { AgentRoleID } from "./role-contract"
-import { TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
+import { TASK_ARTIFACT_TOOL_IDS, TASK_PARTICIPANT_EVIDENCE_TOOL_IDS } from "@/tool/tool-id-catalog"
 import { RuntimeTemplateID, type RuntimeTemplateID as RuntimeTemplateIDValue } from "./runtime-template-id"
 import {
   ORCHESTRATOR_SCHEDULER_PROJECTABLE_TOOL_IDS,
@@ -44,6 +44,7 @@ export namespace AgentToolPool {
     return new Set([
       ...visibleToolIDs(runtimeTemplateAssignments[exactID]),
       ...TASK_ARTIFACT_TOOL_IDS,
+      ...TASK_PARTICIPANT_EVIDENCE_TOOL_IDS,
       ...(PACKAGE_PROJECTABLE_BUILT_IN_TOOL_IDS[exactID] ?? []),
     ])
   }
@@ -97,5 +98,4 @@ export namespace AgentToolPool {
   export function reservedCoreToolIDs(): Set<string> {
     return collectReservedCoreToolIDs()
   }
-
 }

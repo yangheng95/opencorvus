@@ -2,12 +2,22 @@ import { isHttpWebpageUrl } from "@/util/web-url"
 import { z } from "zod"
 import { DesignResourceIntentSchema } from "@/protocol/design-resource-intent"
 
-const DeliverySliceRevisionSubjectsSchema = z
+export const DeliverySliceRevisionSubjectsSchema = z
   .array(z.string().min(1))
   .default([])
   .describe(
     "Exact current Delivery Slice revision IDs selected as immutable work or evidence subjects for this Task-scoped dispatch. The array never multiplies workers or workflow nodes, and empty means no Slice contract was selected.",
   )
+
+/** The shared field schema owns its semantic role. Keeping a second adapter
+ * field-name declaration silently dropped subjects from otherwise valid inputs. */
+export function deliverySliceRevisionSubjectField(schema: z.ZodObject<any>): string | undefined {
+  const fields = Object.entries(schema.shape)
+    .filter(([, field]) => field === DeliverySliceRevisionSubjectsSchema)
+    .map(([name]) => name)
+  if (fields.length > 1) throw new Error("A dispatch input must declare at most one Delivery Slice subject field")
+  return fields[0]
+}
 
 const DelegatedWorkerInputSchema = z
   .object({

@@ -41,6 +41,7 @@ const OBSERVATION_ONLY_BUILTINS = new Set<string>([
   "capability_search",
   "artifact_search",
   "artifact_read",
+  "read_agent_message",
   "artifact_select",
   "read",
   "glob",

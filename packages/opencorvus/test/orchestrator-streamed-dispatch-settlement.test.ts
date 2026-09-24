@@ -2,6 +2,7 @@ import { afterEach, expect, spyOn, test } from "bun:test"
 import { MockLanguageModelV3, simulateReadableStream } from "ai/test"
 import { capabilityRef } from "@opencorvus-ai/util/capability-ref"
 import { findDispatchSettlementByDispatchID, assertTaskDispatchesSettledInTransaction } from "@/engine/dispatch-settlement"
+import { delegatedWorkerAcceptanceSection } from "@/delegated-worker/context"
 import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
 import { ExpertSquadPackageManager } from "@/expert-squad/manager"
 import path from "node:path"
@@ -17,7 +18,7 @@ import {
 } from "@/engine/task-root-ingress-delivery"
 import { persistArchitectGoalProjection } from "@/engine/persist"
 import { EngineGit } from "@/engine/git"
-import { requireTask } from "@/engine/store"
+import { requireCurrentGoalContext, requireTask } from "@/engine/store"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { taskLifecycleProjection } from "@/engine/task-lifecycle"
 import { noActionTaskObservation } from "@/orchestrator/no-action-tool"
@@ -87,23 +88,26 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-for (const { collection, selectGoals } of [
+for (const { collection, selectGoals, delegatedSelection = false } of [
   { collection: false, selectGoals: false },
   { collection: true, selectGoals: false },
   { collection: false, selectGoals: true },
+  { collection: false, selectGoals: true, delegatedSelection: true },
+  { collection: true, selectGoals: true, delegatedSelection: true },
 ]) {
-  test(`${collection ? "dispatch_agents" : "dispatch_agent"}: ${selectGoals ? "workload selection and attachment" : "attachment"} continuation recovers the accepted Turn through streamed execution`, async () => {
+  test(`${collection ? "dispatch_agents" : "dispatch_agent"}: ${delegatedSelection ? "delegated selection and participant evidence" : selectGoals ? "workload selection and attachment" : "attachment"} continuation recovers the accepted Turn through streamed execution`, async () => {
     using _drain = Bus.TestHooks.suppressAutomaticDurableDrain()
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const dispatchToolName = collection ? "dispatch_agents" : "dispatch_agent"
-        const profile = selectGoals ? "advanced" : collection ? "light" : "base"
-        const target = selectGoals ? "workload-reviewer" : collection ? "light-planner" : "base-planner"
-        const adapterID = selectGoals ? "workload_analysis" : "delegated_worker"
+        const profile = selectGoals && !delegatedSelection ? "advanced" : collection ? "light" : "base"
+        const target = selectGoals && !delegatedSelection ? "workload-reviewer" : collection ? "light-planner" : "base-planner"
+        const adapterID = selectGoals && !delegatedSelection ? "workload_analysis" : "delegated_worker"
         const goalID = Identifier.ascending("goal")
-        if (collection && !selectGoals)
+        const initialGoalID = Identifier.ascending("goal")
+        if (collection && (!selectGoals || delegatedSelection))
           await ExpertSquadPackageManager.importDirectory({
             projectDirectory: project.path,
             sourceDirectory: path.resolve(import.meta.dir, "../../../expert-squads/builtin/light"),
@@ -142,6 +146,12 @@ for (const { collection, selectGoals } of [
         }
         let phase = 0
         let serial = 0
+        let producerReads = 0
+        let reviewerStep = 0
+        let reviewedInput = ""
+        let reviewedOutput = ""
+        const syntheticQuery = `synthetic evidence ${"x".repeat(300)} source records`
+        const producerInput = { queries: [{ query: { text: syntheticQuery, mode: "substring" }, limit: 25, version_scope: "current" }] }
         let failedDispatchID: string | undefined
         const workerPrompts: unknown[] = []
         const guidance =
@@ -187,6 +197,13 @@ for (const { collection, selectGoals } of [
             if (names.includes(dispatchToolName)) {
               const task = Database.use((db) => db.select().from(EngineTaskTable).get())!
               if (phase === 0) {
+                if (delegatedSelection) Database.immediateTransaction(db => persistArchitectGoalProjection(db, {
+                  taskID: task.id,
+                  producer: { kind: "architect_turn", session_id: Identifier.ascending("session"), final_message_id: Identifier.ascending("message") },
+                  observedArtifactLocators: [], sourceArtifactLocators: [],
+                  architectGoals: [initialGoalID, goalID].map((id) => ({ goalID: id, llmID: id, title: `Selected contract ${id}`, objective: "Preserve original values outside the selected write range", acceptance_specs: [], owned_paths: [], priority: "blocking" as const, kind: "feature" as const })),
+                  removals: [], graph: { contracts: [] }, fidelity: { sourceCoverage: [], referenceCoverage: [], assemblyOwners: [] }, now: Date.now(),
+                }))
                 phase = 1
                 return toolStream(
                   dispatchToolName,
@@ -196,8 +213,8 @@ for (const { collection, selectGoals } of [
                       ? { kind: "direct" }
                       : { kind: "virtual_workflow", workflow_id: "planner-parallel-delivery", node_id: target },
                     use_worktree: false,
-                    input: selectGoals ? { goal_ids: [], reason: "Review the currently selected workload" } : {
-                      goal_ids: [],
+                    input: selectGoals && !delegatedSelection ? { goal_ids: [], reason: "Review the currently selected workload" } : {
+                      goal_ids: delegatedSelection ? [initialGoalID] : [],
                       instruction: "Read the original source and define the requirement.",
                       reason: "Prepare a typed handoff.",
                     },
@@ -216,7 +233,7 @@ for (const { collection, selectGoals } of [
                   "followup.txt",
                 )
                 await appendTaskAttachment(task.id, { ...followup, intent: "task_input", source: "user-upload" })
-                if (selectGoals) Database.immediateTransaction(db => persistArchitectGoalProjection(db, {
+                if (selectGoals && !delegatedSelection) Database.immediateTransaction(db => persistArchitectGoalProjection(db, {
                   taskID: task.id,
                   producer: { kind: "architect_turn", session_id: Identifier.ascending("session"), final_message_id: Identifier.ascending("message") },
                   observedArtifactLocators: [], sourceArtifactLocators: [],
@@ -230,7 +247,7 @@ for (const { collection, selectGoals } of [
                     kind: "continuation",
                     authority: { kind: "prior_dispatch", continuation_dispatch_id: initial.dispatchID },
                     guidance,
-                    ...(selectGoals ? { input: { goal_ids: [goalID], reason: "Review the newly selected current Goal" } } : {}),
+                    ...(selectGoals ? { input: { goal_ids: [goalID], reason: "Review the newly selected current Goal", ...(delegatedSelection ? { instruction: "Review the exact preceding participant evidence" } : {}) } } : {}),
                     evidence_locators: [],
                   }),
                 )
@@ -256,7 +273,7 @@ for (const { collection, selectGoals } of [
                       continuation_dispatch_id: failure.worker_turn.current_dispatch_id,
                     },
                     guidance,
-                    ...(selectGoals ? { input: { goal_ids: [goalID], reason: "Review the newly selected current Goal" } } : {}),
+                    ...(selectGoals ? { input: { goal_ids: [goalID], reason: "Review the newly selected current Goal", ...(delegatedSelection ? { instruction: "Review the exact preceding participant evidence" } : {}) } } : {}),
                     evidence_locators: [],
                   }),
                 )
@@ -265,6 +282,49 @@ for (const { collection, selectGoals } of [
                 observed_task: observedTask(),
                 reason: "The current dispatch is already executing or settled.",
               })
+            }
+            if (delegatedSelection) {
+              expect(names).toContain("read_agent_message")
+              if (phase === 1 && producerReads < 17) {
+                producerReads++
+                return toolStream("artifact_search", producerReads === 1 ? producerInput : { queries: [{ query: { text: `${syntheticQuery} ${producerReads}`, mode: "substring" } }] })
+              }
+              if (phase === 3) {
+                const task = Database.use((db) => db.select().from(EngineTaskTable).get())!
+                const initial = listDispatchLineage(task.id)[0]!
+                const outcome = findDispatchSettlementByDispatchID({ taskID: task.id, dispatchID: initial.dispatchID })!.payload.outcome
+                if (outcome.kind !== "terminal_success") throw new Error("Producer must have a settled participant report")
+                const message_ids = [outcome.final_message_id]
+                if (reviewerStep++ === 0) return toolStream("read_agent_message", { message_ids })
+                const reads = (await Session.messages({ sessionID: initial.payload.child_session_id })).flatMap(message =>
+                  message.parts.flatMap(part => part.type === "tool" && part.tool === "read_agent_message" && part.state.status === "completed"
+                    ? [JSON.parse(part.state.output)] : []))
+                const last = reads.at(-1)
+                if (!last) throw new Error("Reviewer did not receive the real shared reader result")
+                if (reviewerStep === 2) {
+                  expect(last.causal_tool_message_inventory).toHaveLength(16)
+                  expect(last.inventory_next_before).toHaveLength(1)
+                  return toolStream("read_agent_message", { message_ids, inventory_before: last.inventory_next_before })
+                }
+                const earliest = reads[1].causal_tool_message_inventory[0]
+                const fact = earliest.tool_facts[0]
+                if (reviewerStep === 3) {
+                  expect(reads[1].causal_tool_message_inventory).toHaveLength(1)
+                  return toolStream("read_agent_message", { message_ids, evidence_reads: [
+                    { message_id: earliest.message_id, part_id: fact.part_id, field: "input", offset: 0, limit: 120 },
+                    { message_id: earliest.message_id, part_id: fact.part_id, field: "output", offset: 0, limit: 8000 },
+                  ] })
+                }
+                const inputRead = last.evidence_reads.find((read: any) => read.field === "input")
+                if (!inputRead) throw new Error(JSON.stringify((await Session.messages({ sessionID: initial.payload.child_session_id })).flatMap(message => message.parts.filter(part => part.type === "tool" && part.state.status === "error"))))
+                reviewedInput += inputRead.content
+                reviewedOutput ||= last.evidence_reads.find((read: any) => read.field === "output")?.content ?? ""
+                if (inputRead.next_offset !== null) return toolStream("read_agent_message", { message_ids, evidence_reads: [
+                  { message_id: earliest.message_id, part_id: fact.part_id, field: "input", offset: inputRead.next_offset, limit: 120 },
+                ] })
+                expect(JSON.parse(reviewedInput)).toEqual(producerInput)
+                expect(JSON.parse(reviewedOutput).results).toBeArray()
+              }
             }
             workerPrompts.push(options.prompt)
             return {
@@ -333,7 +393,7 @@ for (const { collection, selectGoals } of [
           }
           await Database.awaitEffectIdle(30_000)
           const lineages = listDispatchLineage(taskID)
-          if (phase !== 3)
+          if (phase !== 3 || workerPrompts.length !== 2)
             throw new Error(
               JSON.stringify({
                 phase,
@@ -368,6 +428,9 @@ for (const { collection, selectGoals } of [
           })
           const expectedText = [
             renderDispatchContinuationTurn({ turn: descriptor.payload.dispatchTurn!, guidance, adapterInput: latest.payload.adapter_input }),
+            ...(adapterID === "delegated_worker" ? [delegatedWorkerAcceptanceSection(
+              latest.payload.delivery_slice_revision_ids.map(goalID => requireCurrentGoalContext({ taskID, goalID }).goal.goal),
+            )] : []),
             attachmentPromptSection(requireTask(taskID).attachments ?? undefined),
           ].join("\n\n")
           expect(requireTask(taskID).attachments?.map((attachment) => attachment.filename)).toEqual([
@@ -377,6 +440,14 @@ for (const { collection, selectGoals } of [
           expect(
             message.parts.map((part) => ({ type: part.type, text: part.type === "text" ? part.text : undefined })),
           ).toEqual([{ type: "text", text: expectedText }])
+          if (delegatedSelection) {
+            expect(lineages[0]!.payload.delivery_slice_revision_ids).toEqual([initialGoalID])
+            expect(latest.payload.delivery_slice_revision_ids).toEqual([goalID])
+            expect(JSON.stringify(workerPrompts[0])).toContain("Preserve original values outside the selected write range")
+            expect(JSON.stringify(workerPrompts[1])).toContain(`Selected contract ${goalID}`)
+            expect(JSON.parse(reviewedInput)).toEqual(producerInput)
+            expect(JSON.parse(reviewedOutput).results).toBeArray()
+          }
           expect(descriptor.payload.messageAuthority.control_text_parts).toEqual([
             { part_id: message.parts[0]!.id, text_sha256: controlTextSHA256(expectedText) },
           ])
@@ -406,7 +477,7 @@ for (const { collection, selectGoals } of [
           })
           expect(
             findDispatchSettlementByDispatchID({ taskID, dispatchID: latest.dispatchID })!.payload.outcome,
-          ).toMatchObject({ kind: selectGoals ? "domain_incomplete" : "terminal_success", session_id: descriptor.sessionID })
+          ).toMatchObject({ kind: selectGoals && !delegatedSelection ? "domain_incomplete" : "terminal_success", session_id: descriptor.sessionID })
           expect(
             Database.use((db) => {
               assertTaskDispatchesSettledInTransaction(db, taskID)

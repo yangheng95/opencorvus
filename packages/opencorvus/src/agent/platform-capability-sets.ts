@@ -1,12 +1,12 @@
 import { AgentToolPool } from "./tool-pool-contract"
 import { RuntimeTemplateID, type RuntimeTemplateID as RuntimeTemplateIDValue } from "./runtime-template-id"
 import type { CapabilitySetDescriptor } from "@/capability/descriptor"
-import { TASK_ARTIFACT_SCHEDULER_TOOL_IDS, TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
 import {
-  capabilityRef,
-  CapabilityRefCodec,
-  type CapabilityRef,
-} from "@opencorvus-ai/util/capability-ref"
+  TASK_ARTIFACT_SCHEDULER_TOOL_IDS,
+  TASK_ARTIFACT_TOOL_IDS,
+  TASK_PARTICIPANT_EVIDENCE_TOOL_IDS,
+} from "@/tool/tool-id-catalog"
+import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
 import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
 
 const OWNER_REF = "tool-registry"
@@ -22,7 +22,12 @@ function setRef(localRef: string): CapabilityRef {
   return capabilityRef({ kind: "capability_set", source: "platform", owner_ref: OWNER_REF, local_ref: localRef })
 }
 
-function definition(localRef: string, name: string, description: string, toolIDs: Iterable<string>): CapabilitySetDescriptor {
+function definition(
+  localRef: string,
+  name: string,
+  description: string,
+  toolIDs: Iterable<string>,
+): CapabilitySetDescriptor {
   const memberRefs = [...new Set(toolIDs)].sort(compareCanonicalStrings).map(toolRef)
   Object.freeze(memberRefs)
   return Object.freeze({
@@ -38,7 +43,11 @@ function runtimeBaseID(templateID: RuntimeTemplateIDValue): string {
 }
 
 const schedulerTransportIDs = new Set<string>([...TASK_ARTIFACT_SCHEDULER_TOOL_IDS, "publish_interactive_artifact"])
-const workerTransportIDs = new Set<string>([...TASK_ARTIFACT_TOOL_IDS, "publish_interactive_artifact"])
+const workerTransportIDs = new Set<string>([
+  ...TASK_ARTIFACT_TOOL_IDS,
+  ...TASK_PARTICIPANT_EVIDENCE_TOOL_IDS,
+  "publish_interactive_artifact",
+])
 
 const definitions = Object.freeze([
   definition(
@@ -66,7 +75,7 @@ const definitions = Object.freeze([
   definition(
     WORKER_TRANSPORT,
     "Worker transport",
-    "Platform-owned Task artifact transport appended to every projected worker.",
+    "Platform-owned Task artifact and participant evidence transport appended to every projected worker.",
     workerTransportIDs,
   ),
 ])

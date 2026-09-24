@@ -1,6 +1,10 @@
 import type { SessionKind } from "@/session/session.sql"
 import type { z } from "zod"
-import { DispatchAdapterInputSchemas } from "./dispatch-adapter-input"
+import {
+  DispatchAdapterInputSchemas,
+  DeliverySliceRevisionSubjectsSchema,
+  deliverySliceRevisionSubjectField,
+} from "./dispatch-adapter-input"
 import { DispatchOutcomeSchema } from "./dispatch-outcome"
 
 export interface DispatchAdapterContract {
@@ -14,8 +18,6 @@ export interface DispatchAdapterContract {
   readonly coordinationHandoffToolID: "request_orchestrator_decision"
   /** Input fields the Host supplies; omitted from what the model is shown. */
   readonly hostOwnedInputFields?: readonly string[]
-  /** Input field carrying exact Delivery Slice revision refs, when the adapter takes them. */
-  readonly deliverySliceRevisionField?: string
   /** Adapter-authored sentence appended to the generic dispatch tool description. */
   readonly modelGuidance?: string
 }
@@ -168,7 +170,6 @@ const contracts = {
     abiVersion: 1,
     inputSchema: DispatchAdapterInputSchemas.workload_analysis,
     sessionKind: "goal-workload-analyst",
-    deliverySliceRevisionField: "goal_ids",
     modelGuidance:
       "`goal_ids` contains exact immutable Delivery Slice revision subjects: an empty array produces a zero-Slice review and does not infer Slices from a ContractGraph artifact. For a whole-plan review, copy every exact current Slice revision ref returned by the Architect into `goal_ids`. ",
     privateStageToolIDs: ["register_workload_brief"],
@@ -325,28 +326,24 @@ export namespace DispatchAdapterContractRegistry {
 
   /** Exact Delivery Slice revision refs this adapter's input carries, if any. */
   export function deliverySliceRevisionIDs(id: string, input: unknown): string[] {
-    const field = get(id).deliverySliceRevisionField
+    const field = deliverySliceRevisionSubjectField(get(id).inputSchema)
     if (!field) return []
     const value = (input as Record<string, unknown> | undefined)?.[field]
-    return Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === "string") : []
+    return DeliverySliceRevisionSubjectsSchema.parse(value)
   }
 
   /**
    * The same input with its Delivery Slice revision refs replaced by the exact
    * frozen set, or unchanged when this adapter declares no such field.
    *
-   * Symmetric with `deliverySliceRevisionIDs` on purpose. The write side used
-   * to name `"goal_ids"` as a literal while the read side asked the registry,
-   * so the second adapter to declare a different `deliverySliceRevisionField`
-   * would have had its frozen Slice set quietly dropped — the same silent
-   * empty Delivery Slice the contract table was introduced to prevent.
+   * Both read and write derive the field from its canonical schema. The model
+   * input, durable lineage and continuation carry one exact subject set.
    */
   export function withDeliverySliceRevisionIDs<Input>(id: string, input: Input, ids: readonly string[]): Input {
-    const field = get(id).deliverySliceRevisionField
+    const field = deliverySliceRevisionSubjectField(get(id).inputSchema)
     if (!field) return input
     const record = input as Record<string, unknown>
-    if (!Object.hasOwn(record, field)) return input
-    return { ...record, [field]: [...ids] } as Input
+    return { ...record, [field]: DeliverySliceRevisionSubjectsSchema.parse(ids) } as Input
   }
 
   /** Adapter-authored guidance appended to the generic dispatch description. */

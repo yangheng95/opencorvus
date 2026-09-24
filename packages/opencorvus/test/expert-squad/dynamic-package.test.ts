@@ -29,7 +29,7 @@ import {
 import { createDispatchAgentsTool } from "../../src/orchestrator/dispatch-agents-tool"
 import { taskRequestSHA256 } from "../../src/orchestrator/dispatch-turn-projection"
 import { createDelegatedWorkerTool } from "../../src/orchestrator/delegated-worker-tool"
-import { createReadAgentMessageTool } from "../../src/orchestrator/read-agent-message-tool"
+import { createReadAgentMessageTool } from "../../src/tool/read-agent-message"
 import { Instance } from "../../src/project/instance"
 import { currentRuntimeOccurrenceID } from "../../src/runtime/process-occurrence"
 import { Provider } from "../../src/provider/provider"
@@ -197,6 +197,7 @@ describe("Dynamic Expert Squad package", () => {
           "publish_interactive_artifact",
           "capability_search",
           "read",
+          "read_agent_message",
           "glob",
           "search_code",
           "webfetch",

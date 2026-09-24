@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Supervision acceptance data-flow repair](2026-09-24-supervision-acceptance-repair.md)
+
 - [Expert Squad feedback evolution algorithm repair](2026-09-24-expert-squad-evolution-algorithm.md)
 
 - [AutomationBench ten-case automatic revision experiment](2026-09-24-automationbench-self-evolution.md)

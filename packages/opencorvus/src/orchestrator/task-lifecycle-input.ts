@@ -24,7 +24,7 @@ export const CompleteTaskInputSchema = z
       .string()
       .min(1)
       .describe(
-        "Orchestrator-owned task decision summary. Cite the evidence you used, including IntegrityReview or VisualReview artifacts when relevant.",
+        "Orchestrator-owned acceptance decision for the original requested work. Connect required effects and preservation obligations to the exact evidence and explain resolution of material contradictory findings. An unresolved required effect calls for repair or an evidenced blocker, not successful completion with a disclaimer. Include IntegrityReview or VisualReview evidence when relevant.",
       ),
     evidence_locators: EvidenceLocatorInputListSchema.default([]).describe(
       "Exact typed durable evidence locators used for this completion decision. For every worker final Message relied on for synthesis or acceptance, include a session_message locator pairing the exact producing session_id and message_id returned by read_agent_message. A terminal lifecycle Artifact does not replace that participant Message. Name each Artifact by its exact revision or snapshot path only; the Host reads the digest, byte count, and media type itself, so never restate a content digest here. Empty is explicit and remains visible; it is not a host-side completion gate. Raw IDs and artifact:<id> display strings are invalid.",

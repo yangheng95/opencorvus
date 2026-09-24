@@ -28,7 +28,7 @@ import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Identifier } from "../../src/id/id"
 import { orchestratorControlOccurrenceIdentity } from "../../src/orchestrator/control-message-identity"
 import { applyTaskProjectionDelta, currentOrchestratorControlMessage, renderTaskProjectionContext } from "../../src/orchestrator/agent"
-import { createReadAgentMessageTool } from "../../src/orchestrator/read-agent-message-tool"
+import { createReadAgentMessageTool } from "../../src/tool/read-agent-message"
 import {
   createDispatchAgentTool,
   type DispatchAdapterExecutors,
@@ -83,6 +83,7 @@ const projectedReadOnlyTools = [
   "artifact_select",
   "artifact_snapshot",
   "publish_interactive_artifact",
+  "read_agent_message",
   "capability_search",
   "external_code_search",
   "glob",
@@ -528,7 +529,7 @@ describe("Light Expert Squad package", () => {
                     }
                     const revealed = await resolveTestCapabilityTools(common)
                     workerPhases.set(assistant.sessionID, "initial-tools-ready")
-                    expect(Object.keys(revealed.tools).sort()).toEqual(["artifact_publish", "artifact_read", "artifact_search", "artifact_select", "artifact_snapshot", "capability_search", "external_code_search", "glob", "publish_interactive_artifact", "read", "search_code", "webfetch", "websearch"])
+                    expect(Object.keys(revealed.tools).sort()).toEqual(["artifact_publish", "artifact_read", "artifact_search", "artifact_select", "artifact_snapshot", "capability_search", "external_code_search", "glob", "publish_interactive_artifact", "read", "read_agent_message", "search_code", "webfetch", "websearch"])
                     const authoredWorker = await PromptProfileResolver.resolveWorkerCapability({
                       projectDirectory: project.path, config, packageRevision, agentID: streamInput.agentID,
                     })
@@ -561,7 +562,7 @@ describe("Light Expert Squad package", () => {
                     }
                     expect(skill.behavior.name).toBe("light-advisory-method")
                     const reconstructed = await resolveTestCapabilityTools(common)
-                    expect(Object.keys(reconstructed.tools).sort()).toEqual(["artifact_publish", "artifact_read", "artifact_search", "artifact_select", "artifact_snapshot", "capability_search", "external_code_search", "glob", "publish_interactive_artifact", "read", "search_code", "skill", "webfetch", "websearch"])
+                    expect(Object.keys(reconstructed.tools).sort()).toEqual(["artifact_publish", "artifact_read", "artifact_search", "artifact_select", "artifact_snapshot", "capability_search", "external_code_search", "glob", "publish_interactive_artifact", "read", "read_agent_message", "search_code", "skill", "webfetch", "websearch"])
                     const loaded = await reconstructed.tools.skill!.execute!(
                       { name: skill.behavior.name },
                       { toolCallId: `call_load_light_method_${assistant.id}`, messages: [], abortSignal: input.abort },

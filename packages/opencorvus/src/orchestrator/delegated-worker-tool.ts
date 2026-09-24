@@ -2,8 +2,8 @@ import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contra
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { isAgentCoordinationHandoffResult } from "@/agent/runner"
 import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
-import { delegatedWorkerContextSections } from "@/delegated-worker/context"
-import type { TaskRow } from "@/engine/store"
+import { delegatedWorkerAcceptanceSection, delegatedWorkerContextSections } from "@/delegated-worker/context"
+import { requireCurrentGoalContext, type TaskRow } from "@/engine/store"
 import { tool } from "ai"
 import {
   dispatchAdapterContinuationPrompt,
@@ -28,25 +28,31 @@ export function createDelegatedWorkerTool(input: {
       description:
         "Dispatch a projected general delegated worker through its exact runtime template. The worker returns its outcome in the visible final assistant message.",
       inputSchema: DelegatedWorkerInputSchema,
-      execute: async ({ instruction, reason, goal_ids }, executionInput) => {
+      execute: async ({ instruction, reason }, executionInput) => {
         const execution = requireDispatchAdapterExecutionContext(executionInput)
         const agentID = execution.agentID
         try {
           const task = await input.requireCurrentTaskAndAgentSessionLineage()
+          const deliverySlices = execution.dispatch.turn.delivery_slice_revision_ids.map(
+            (goalID) => requireCurrentGoalContext({ taskID: task.id, goalID }).goal.goal,
+          )
+          const continuation = dispatchAdapterContinuationPrompt(execution)
           const run = await DelegatedWorkerAgent.run({
             agentID,
             packageRevision: execution.projectedAgent.packageRevision,
             workScope: execution.workScope,
             newSessionID: execution.newSessionID,
             existingSessionID: execution.existingSessionID,
-            continuationPrompt: dispatchAdapterContinuationPrompt(execution),
+            continuationPrompt: continuation
+              ? [continuation, delegatedWorkerAcceptanceSection(deliverySlices)].join("\n\n")
+              : undefined,
             dispatchTurn: execution.dispatch.turn,
             instruction,
             contextSections: delegatedWorkerContextSections({
               reason,
               task,
               workScope: execution.workScope,
-              deliverySliceRevisionIDs: goal_ids,
+              deliverySlices,
             }),
             sessionTitle: delegatedWorkerSessionTitle(agentID, instruction),
             taskID: input.taskID,
@@ -55,7 +61,8 @@ export function createDelegatedWorkerTool(input: {
             onSessionCreated: async (sessionID) => {
               execution.dispatch.observeSession(sessionID)
             },
-            onDispatchAuthorityCommit: (sessionID, descriptor) => execution.dispatch.commitSession(sessionID, descriptor),
+            onDispatchAuthorityCommit: (sessionID, descriptor) =>
+              execution.dispatch.commitSession(sessionID, descriptor),
           })
           if (isAgentCoordinationHandoffResult(run)) {
             return DispatchOutcome.coordination(run)

@@ -165,7 +165,7 @@ import { createIntegrityReviewRunner, createIntegrityTool } from "./integrity-to
 import { authorizedTaskRootMessagesForWake, createOrchestratorInteractionTools } from "./interaction-tools"
 import { type TerminalConversationAuthority } from "./terminal-conversation-authority"
 import { createReadContextTool } from "./read-context-tool"
-import { createReadAgentMessageTool } from "./read-agent-message-tool"
+import { createReadAgentMessageTool } from "@/tool/read-agent-message"
 import { createRequirementsStageDispatcher } from "./requirements-stage"
 import { createRuntimeRepairTools } from "./runtime-repair-tools"
 import { cancelDispatchedSession } from "./subagent-cancellation-runtime"
