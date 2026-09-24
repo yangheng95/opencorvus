@@ -5,12 +5,12 @@
   "name": "AutomationBench",
   "label": "AutomationBench",
   "description": "Execute simulated cross-application business workflows and independently verify exact outcomes through the official AutomationBench API tools.",
-  "version": "2026.09.25.6",
+  "version": "2026.09.25.2",
   "product_pillars": ["code", "work"],
   "readme": "README.md",
   "selector": {
     "summary": "Use for official AutomationBench API-mode tasks.",
-    "selection_guidance": "Requires a sample-scoped automationbench MCP server supplied by the Inspect harness. A read-only source reviewer establishes eligibility before the sole executor mutates; a separate verifier checks current records and exact receipts afterward.",
+    "selection_guidance": "Requires a sample-scoped automationbench MCP server supplied by the Inspect harness. One executor owns mutations; a separate verifier checks the original request against current records and exact receipts.",
     "instructions": "selector.md",
   },
   "capability_sets": {},
@@ -26,17 +26,6 @@
       "prompt": "agents/orchestrator/system.md",
     },
     "agents": {
-      "automationbench-source-reviewer": {
-        "capability_refs": [
-          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fapi_fetch",
-          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fapi_search",
-          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fbase64_encode",
-        ],
-        "label": "AutomationBench Source Reviewer",
-        "description": "Reads authoritative policy, current updates and exclusions before business mutation and hands off the eligible set with source evidence.",
-        "base_role": "delegated-worker",
-        "prompt": "agents/automationbench-source-reviewer/system.md",
-      },
       "automationbench-executor": {
         "capability_refs": [
           "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fapi_fetch",
@@ -61,19 +50,14 @@
       },
     },
     "virtual_workflows": {
-      "review-execute-verify": {
-        "label": "Review sources, execute and verify",
-        "description": "Read-only source eligibility review precedes the sole mutation owner and independent outcome verification.",
+      "execute-verify": {
+        "label": "Execute and independently verify",
+        "description": "One mutation owner followed by independent outcome verification.",
         "nodes": {
-          "automationbench-source-reviewer": {
-            "agent_id": "automationbench-source-reviewer",
-            "description": "Resolve current governing records, exclusions and eligible entities before any mutation.",
-            "depends_on": [],
-          },
           "automationbench-executor": {
             "agent_id": "automationbench-executor",
             "description": "Resolve source facts, execute the business request and preserve evidence.",
-            "depends_on": ["automationbench-source-reviewer"],
+            "depends_on": [],
           },
           "automationbench-verifier": {
             "agent_id": "automationbench-verifier",

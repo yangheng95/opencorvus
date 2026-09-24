@@ -10,7 +10,6 @@ test("AutomationBench loads through the real package loader with official API ca
   expect(pkg.manifest.id).toBe("automationbench")
   expect(Object.keys(pkg.promptProfile.agents).sort()).toEqual([
     "automationbench-executor",
-    "automationbench-source-reviewer",
     "automationbench-verifier",
     "orchestrator",
   ])
@@ -27,13 +26,5 @@ test("AutomationBench loads through the real package loader with official API ca
       "default/mcp/automationbench/tool/base64_encode",
     ])
   }
-  expect(analyzeExpertSquadWorkflowTopology(pkg.manifest)).toMatchObject([{
-    workflow_id: "review-execute-verify",
-    structure: "dependency_dag",
-    waves: [
-      { depth: 0, node_ids: ["automationbench-source-reviewer"] },
-      { depth: 1, node_ids: ["automationbench-executor"] },
-      { depth: 2, node_ids: ["automationbench-verifier"] },
-    ],
-  }])
+  expect(analyzeExpertSquadWorkflowTopology(pkg.manifest)[0].structure).toBe("dependency_dag")
 })
