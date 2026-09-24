@@ -200,3 +200,10 @@ Mission 接收完全相同的原始业务请求和官方时钟；另加固定的
 3. Mission 提示词在不可修复的真实 blocker 已证实时，先发布所需的可见 Artifact，再调用显式 blocked 结算；可修复缺口仍走原 Task acceptance-resume，不因一条 failed 通知自动收尾。Inspect Mission adapter 只在**真实 accepted 或 blocked 终态且相关执行树静止**后封存同一个官方世界。官方 strict/partial scorer 不变；blocked 世界仍由原评分器给出实际 0/部分分，native blocked 与业务分分开报告。当前历史 `.eval` 的 null 保持 null，不补评。
 4. 修改前完成共享路径审计：Task/Mission/Session 入口、normal/failed/cancelled/blocked/completed 终态、同 Task 修复 epoch、Operator 再唤醒、重启恢复、并发竞争与多项目隔离；界面消费和所有 Tool/SDK 调用点也要核对。聚焦正向合同测试验证真实失败 Task → 终态通知 → Mission 审证 → blocked receipt → 公共投影 → 同世界官方评分，以及可修复失败不提前结算、成功路径保持、重启与并发原子性。最后用独立且明确标注的真实 Luna smoke 验证模型实际调用；不得拿既有四臂历史分数修改后重算冒充本轮试验。
 - 风险与待证：新业务终态可能与现有 `mission.execution.closed`（abort/delete/archive 的控制面关闭）及旧 `MissionCompletionFact` 形成双源，具体 schema/迁移必须以完整调用点审计定稿。现有历史成功 Mission 的不可变完成事实必须仍可读；不能用结果重写或兼容 fallback 掩盖它。当前试验结束、数据冻结并完成分析前不实施源码修复；届时按本段方案修复、运行聚焦测试与真实 checker，再报告是否消除受阻超时。
+
+## Confusion-matrix first, then repair and independent retest
+
+- 用户最新要求：“先画出实验结果的混淆矩阵，然后修复问题后重新测试”。顺序现为：完成当前冻结的 40 个 episode → 从它们的原始 `.eval` 只读绘制最终混淆矩阵和四臂配对质量/覆盖表 → 完成上节 Mission 受阻终态修复与正向验收 → 以新实验身份对**同十例全部四臂**独立重测。不得只补旧缺分、选择性重跑失败样本、回写旧世界/评分或把新旧记录拼接为一轮。旧代码 `5f8ee789` 和 E1 定义保持原样作为前测身份；后测锁定修复后的新源码身份，S0/E1、Luna、案例/时钟/官方 scorer、四臂区组并发及顺序维持相同。后测额外请求和成本如实记录；没有用户给定的 3000 请求上限。
+- 混淆矩阵的真实分类契约：行是**官方 strict pass/fail**，列是原生 `task_completed`/`mission_completed` 的 **C/I**，分别为 TP/FN/FP/TN。只有 `.eval` 同时具备官方严格分数和原生 scorer 的 episode 进入 2×2 格；Inspect 错误、超时和无官方分数在每臂另计 `unscored`，绝不换算为 fail。原生完成是控制面生命周期，不冒称模型业务判断与官方成功等价。另给出 2×2 因素矩阵（Task/Mission × S0/E1）的十例 strict、部分分、覆盖和成本，使“混淆矩阵”与全因子收益不相互替代。
+- 截至 2026-09-24 16:07 UTC，已完整收尾的前四区组形成**阶段图** `.tmp/inspect-factorial-20260924/analysis/confusion-current.png`（另存 `.svg` 和只读提取的 `.json`）：TS 评分 3/4、缺分 1，TE 4/4、缺分 0，MS 2/4、缺分 2，ME 1/4、缺分 3。该图逐个 `.eval` 读取原 scorer，未修改原评分；不能当作十例最终矩阵。用于复算的提取与绘图脚本保存在同一隔离分析目录，不进入正式运行输入。
+- 修复后的验收至少证明：失败子 Task 通知送达后，Mission 有证据地选择真正可修复的同 Task 返工或明确 blocked 终态；blocked 经公开状态和 Inspect 自然封存后可获得原官方部分/严格评分；成功路径仍能完成；旧 null 不重算。新一轮 40 episode 全部按预注册方式尝试并保存每条原始日志、终态、不可评分和成本。若后测仍有其他超时或回退，按事实报告而不称修复通过。后测与前测是运行时修复前后的开发探针，不能被解释为专家团定义单变量收益或独立留出。
