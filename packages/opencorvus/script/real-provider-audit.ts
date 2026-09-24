@@ -1,5 +1,18 @@
 import assert from "node:assert/strict"
 
+export class CopiedOAuthCredentialExpiredError extends Error {
+  override readonly name = "CopiedOAuthCredentialExpiredError"
+  readonly code = "COPIED_OAUTH_CREDENTIAL_EXPIRED"
+  constructor(readonly expiresAt: number) {
+    super("Copied OAuth access has expired; reconnect or refresh through the original Provider authority")
+  }
+}
+
+export function assertCopiedOAuthAccess(expiresAt: number) {
+  assert(Number.isFinite(expiresAt) && expiresAt > 0, "Copied OAuth access requires a finite positive expiry")
+  if (Date.now() >= expiresAt) throw new CopiedOAuthCredentialExpiredError(expiresAt)
+}
+
 /** Test-runner evidence only. Never retain prompts, headers or credentials. */
 export class RealProviderAudit implements Disposable {
   readonly requests: Array<{ model: string; streaming: true; status?: number }> = []
@@ -8,12 +21,17 @@ export class RealProviderAudit implements Disposable {
   exhausted = false
   readonly #wrapped: typeof fetch
 
-  constructor(readonly modelID: string, readonly maxRequests: number, readonly onUpdate?: () => void) {
+  constructor(readonly modelID: string, readonly maxRequests: number, readonly onUpdate?: () => void,
+    readonly authority?: { copiedOAuthExpiresAt: number }) {
     assert(Number.isSafeInteger(maxRequests) && maxRequests >= 0, "Request budget must be a nonnegative integer")
+    if (authority) assertCopiedOAuthAccess(authority.copiedOAuthExpiresAt)
     this.#wrapped = Object.assign(async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = input instanceof Request ? input.url : String(input)
       let entry: (typeof this.requests)[number] | undefined
       if (!this.localOrigins.has(new URL(url).origin)) {
+        // A copy has access authority only. Refreshing it would fork the source's
+        // rotating credential generation into an independent, disposable store.
+        if (authority) assertCopiedOAuthAccess(authority.copiedOAuthExpiresAt)
         const body = typeof init?.body === "string" ? init.body : input instanceof Request ? await input.clone().text() : undefined
         if (body) {
           let parsed: any

@@ -8,7 +8,7 @@ import {
   applyIsolatedTestUserEnvironment,
 } from "../../../packages/util/src/test-runtime-environment"
 import { prepareTestProcessSupervisor } from "../../../packages/opencorvus/script/prepare-test-process-supervisor"
-import { CredentialRedactor, RealProviderAudit } from "../../../packages/opencorvus/script/real-provider-audit"
+import { assertCopiedOAuthAccess, CredentialRedactor, RealProviderAudit } from "../../../packages/opencorvus/script/real-provider-audit"
 
 const evidence = path.resolve(process.env.INSPECT_LUNA_EVIDENCE!)
 const authSource = path.resolve(process.env.INSPECT_LUNA_AUTH_SOURCE!)
@@ -24,11 +24,7 @@ process.env.OPENCORVUS_TASK_PROCESS_MODE = "native"
 process.env.OPENCORVUS_CONFIG_CONTENT = JSON.stringify({
   permission_mode: "full_access", model, small_model: model,
 })
-await fs.mkdir(path.join(isolated.runtimeRoot, "data"), { recursive: true })
-await fs.copyFile(authSource, path.join(isolated.runtimeRoot, "data/auth.json"))
-await fs.copyFile(path.join(path.dirname(authSource), "models.json"), path.join(isolated.runtimeRoot, "data/models.json"))
 const redactor = new CredentialRedactor()
-redactor.collect(JSON.parse(await fs.readFile(authSource, "utf8")))
 const auditFile = path.join(evidence, "provider-audit.json")
 const receiptFile = path.join(evidence, "host.json")
 const receipt: Record<string, unknown> = {
@@ -37,12 +33,25 @@ const receipt: Record<string, unknown> = {
 }
 const save = () => writeFileSync(receiptFile, JSON.stringify(receipt, null, 2))
 save()
-let audit!: RealProviderAudit
-audit = new RealProviderAudit(modelID, maxRequests, () => {
-  writeFileSync(auditFile, JSON.stringify({ model, maxRequests, requests: audit.requests, exhausted: audit.exhausted }, null, 2))
-})
+let audit: RealProviderAudit | undefined
+const saveAudit = () => writeFileSync(auditFile, JSON.stringify({
+  model, maxRequests, requests: audit?.requests ?? [], exhausted: audit?.exhausted ?? false,
+}, null, 2))
+saveAudit()
 let shutdown: (() => Promise<unknown>) | undefined
 try {
+  const source = JSON.parse(await fs.readFile(authSource, "utf8"))
+  redactor.collect(source)
+  const entry = source.openai
+  if (entry?.info?.type !== "oauth" || typeof entry.info.access !== "string" || !entry.info.access)
+    throw new Error("Inspect Luna host requires the authorized OpenAI OAuth entry")
+  const expiresAt = entry.info.expires
+  receipt.credentialAuthority = { mode: "copied-access-only", expiresAt }
+  assertCopiedOAuthAccess(expiresAt)
+  audit = new RealProviderAudit(modelID, maxRequests, saveAudit, { copiedOAuthExpiresAt: expiresAt })
+  await fs.mkdir(path.join(isolated.runtimeRoot, "data"), { recursive: true })
+  await fs.writeFile(path.join(isolated.runtimeRoot, "data/auth.json"), JSON.stringify({ openai: entry }), { mode: 0o600 })
+  await fs.copyFile(path.join(path.dirname(authSource), "models.json"), path.join(isolated.runtimeRoot, "data/models.json"))
   const [{ Provider }, { Instance }, { SessionStatus }, serverRuntime, recovery, { Database }] = await Promise.all([
     import("../../../packages/opencorvus/src/provider/provider"),
     import("../../../packages/opencorvus/src/project/instance"),
@@ -83,15 +92,32 @@ try {
 } catch (error) {
   receipt.status = "failed"
   receipt.error = redactor.redact(error instanceof Error ? error.message : String(error))
+  if (error instanceof Error) {
+    receipt.errorType = error.name
+    if ("code" in error && typeof error.code === "string") receipt.errorCode = error.code
+  }
   process.exitCode = 1
 } finally {
-  await shutdown?.()
-  audit[Symbol.dispose]()
-  for (const file of ["auth.json", "models.json"]) {
-    await fs.rm(path.join(isolated.runtimeRoot, "data", file), { force: true })
+  try {
+    await shutdown?.()
+  } catch (error) {
+    receipt.status = "failed"
+    receipt.shutdownError = redactor.redact(error instanceof Error ? error.message : String(error))
+    process.exitCode = 1
+  } finally {
+    audit?.[Symbol.dispose]()
+    const removed = await Promise.allSettled(["auth.json", "models.json"].map((file) =>
+      fs.rm(path.join(isolated.runtimeRoot, "data", file), { force: true }),
+    ))
+    receipt.credentialCopiesRemoved = removed.every((result) => result.status === "fulfilled")
+    if (!receipt.credentialCopiesRemoved) {
+      receipt.status = "failed"
+      receipt.cleanupError = "Experiment credential copy cleanup failed"
+      process.exitCode = 1
+    }
+    receipt.finishedAt = new Date().toISOString()
+    saveAudit()
+    save()
   }
-  receipt.credentialCopiesRemoved = true
-  receipt.finishedAt = new Date().toISOString()
-  save()
 }
 process.exit(process.exitCode ?? 0)

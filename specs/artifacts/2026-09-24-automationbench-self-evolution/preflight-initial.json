@@ -1,0 +1,19 @@
+{
+  "status": "failed",
+  "model": "openai/gpt-5.6-luna",
+  "runtimeRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-1RapBh\\runner-25716-tc4v2e\\runtime-root",
+  "processRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-1RapBh\\runner-25716-tc4v2e",
+  "pid": 25716,
+  "maxRequests": 3000,
+  "startedAt": "2026-09-24T04:07:20.466Z",
+  "source": "03194426df83b1c754d683c3c485e8b5ad8ef345",
+  "catalog": {
+    "providerID": "openai",
+    "modelID": "gpt-5.6-luna",
+    "apiModel": "gpt-5.6-luna"
+  },
+  "url": "http://127.0.0.1:55858/",
+  "error": "PROVIDER_PREFLIGHT: {\"name\":\"UnknownError\",\"data\":{\"message\":\"ProviderAuthOAuthExchangeUncertainError: ProviderAuthOAuthExchangeUncertainError: {\\\"providerID\\\":\\\"openai\\\",\\\"flowID\\\":\\\"6ff3964a-d2fb-4c78-bbcd-69bb351ae9b2\\\"}\"}}",
+  "credentialCopiesRemoved": true,
+  "finishedAt": "2026-09-24T04:07:31.169Z"
+}

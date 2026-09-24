@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [AutomationBench ten-case automatic revision experiment](2026-09-24-automationbench-self-evolution.md)
+
 - [Inspect AutomationBench Luna calibration and pilot](2026-09-24-inspect-automationbench-luna-calibration.md)
 
 - [v0.1.14 release](2026-09-24-v0.1.14-release.md)

@@ -1,0 +1,19 @@
+{
+  "status": "failed",
+  "model": "openai/gpt-5.6-luna",
+  "runtimeRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-f6EpVT\\runner-48236-ztWhpy\\runtime-root",
+  "processRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-f6EpVT\\runner-48236-ztWhpy",
+  "pid": 48236,
+  "maxRequests": 3000,
+  "startedAt": "2026-09-24T04:14:33.395Z",
+  "source": "03194426df83b1c754d683c3c485e8b5ad8ef345",
+  "credentialAuthority": {
+    "mode": "copied-access-only",
+    "expiresAt": 1790216843657
+  },
+  "error": "Copied OAuth access has expired; reconnect or refresh through the original Provider authority",
+  "errorType": "CopiedOAuthCredentialExpiredError",
+  "errorCode": "COPIED_OAUTH_CREDENTIAL_EXPIRED",
+  "credentialCopiesRemoved": true,
+  "finishedAt": "2026-09-24T04:14:33.466Z"
+}

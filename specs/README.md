@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [AutomationBench ten-case automatic revision experiment](records/2026-09/2026-09-24-automationbench-self-evolution.md)
+
 - [Inspect AutomationBench Luna calibration and pilot](records/2026-09/2026-09-24-inspect-automationbench-luna-calibration.md)
 
 - [v0.1.14 release](records/2026-09/2026-09-24-v0.1.14-release.md)

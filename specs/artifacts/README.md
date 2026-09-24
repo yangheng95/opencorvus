@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [AutomationBench ten-case automatic revision experiment](2026-09-24-automationbench-self-evolution/README.md): paired official scores for a model-authored candidate.
+
 - [Inspect AutomationBench Luna calibration](2026-09-24-inspect-automationbench-luna/README.md): isolated real-model diagnostics and frozen pilot.
 
 - [Inspect AutomationBench local acceptance](2026-09-22-inspect-automationbench/README.md): model-free official MCP/API/rubric execution and offline re-scoring evidence.

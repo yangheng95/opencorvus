@@ -1,5 +1,32 @@
 import { expect, test } from "bun:test"
-import { CredentialRedactor, RealProviderAudit } from "../script/real-provider-audit"
+import { assertCopiedOAuthAccess, CopiedOAuthCredentialExpiredError, CredentialRedactor, RealProviderAudit } from "../script/real-provider-audit"
+
+test("copied OAuth access expires with an explicit authority error", () => {
+  const expires = Date.now() - 1
+  expect(() => assertCopiedOAuthAccess(expires)).toThrow(CopiedOAuthCredentialExpiredError)
+  try { assertCopiedOAuthAccess(expires) } catch (error) {
+    expect({ name: error.name, code: error.code, expiresAt: error.expiresAt }).toEqual({
+      name: "CopiedOAuthCredentialExpiredError", code: "COPIED_OAUTH_CREDENTIAL_EXPIRED", expiresAt: expires,
+    })
+  }
+})
+
+test("copied authority permits valid streaming and retains local observation after expiry", async () => {
+  const original = globalThis.fetch
+  globalThis.fetch = Object.assign(async () => new Response("ok"), original) as typeof fetch
+  try {
+    const authority = { copiedOAuthExpiresAt: Date.now() + 60_000 }
+    using audit = new RealProviderAudit("authorized-model", 2, undefined, authority)
+    const request = () => fetch("https://provider.invalid/responses", { method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true }) })
+    expect((await request()).status).toBe(200)
+    expect(audit.requests).toEqual([{ model: "authorized-model", streaming: true, status: 200 }])
+    authority.copiedOAuthExpiresAt = Date.now() - 1
+    await expect(fetch("https://provider.invalid/oauth/token", { method: "POST", body: "grant_type=refresh_token" }))
+      .rejects.toThrow(CopiedOAuthCredentialExpiredError)
+    audit.localOrigins.add("http://127.0.0.1:1234")
+    expect(await (await fetch("http://127.0.0.1:1234/task/status")).text()).toBe("ok")
+  } finally { globalThis.fetch = original }
+})
 
 test("the last authorized streaming request completes before the next is refused", async () => {
   const original = globalThis.fetch
