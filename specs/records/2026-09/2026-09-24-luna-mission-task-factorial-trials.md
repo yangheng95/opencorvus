@@ -285,3 +285,64 @@ Mission 接收完全相同的原始业务请求和官方时钟；另加固定的
 - 处置：已复制停止点 matrix 到独立 `formal-5-matrix-at-project-init-failure.json`，精确停止控制器及仍在途的自有 Inspect。第二区组 TS/TE 原生 Task 均 failed，MS 无子 Task，ME 的活跃 Task 经公开 Mission abort 转为 cancelled；四主机均 stopped 且 credentialCopiesRemoved=true。旧 formal-5 原日志、世界、评分和 null 只读，不拼接或仅补跑第二区组。
 - 实施与验收：新增聚焦正向契约，证明 `init_git=True` 的 Mission 路径先取得真实项目初始化收据再 wake、精确目录一致；证明 accepted 与 blocked outcome 在控制器清理中保持原业务结算，而未结算路径仍可经公共 API 收敛。运行 Python ruff/mypy/pytest 与文档检查，提交冻结。随后用同静态定义与同一不可变 E3，从全新 `formal-6` 目录完整运行十组四臂；先验证两入口每例项目均有自己的 Git 根和真实 package 绑定。原始评分只读，缺分 null 单列，最终 Markdown 混淆矩阵与成本由新一轮独立证据生成。
 - 实施复核：Mission adapter 已在 wake 前调用现有公开 `POST /project/current/init-git` 并核对返回项目目录，移除 wake 上无效的 `init-git` 参数；Task 入口仍沿用 `POST /task?init-git=true`。控制器用当前 `outcome.kind` 识别 accepted/blocked 结算，其余未结算 Mission 才走公开 abort。MockTransport 正向契约覆盖初始化→wake 顺序、accepted/blocked/pending 清理，连同原 Mission adapter 与世界封存测试共 22/22 通过；ruff、mypy、`docs:check` 通过。真实仓库与 Luna 交互仍需新完整试验验证。
+
+## Formal-6 用户指令停测与回退机制审计（2026-09-25）
+
+### Recall 与已保存事实
+
+- 用户原话：“既然变差了你都没必要等全部结束，彻查问题”。据此提前停止 formal-6；不再推进第八至十组，也不把未完成组拼成完整十例结论。旧用户要求仅用 Markdown 表格呈现混淆矩阵、null 单列仍适用。
+- 本轮冻结源 `af5213a27464b11dfe5728d7fc6f94a0b37dc930`，静态 `2026.09.25.2` 与真实 Luna 发布的不可变 E3 `2026.09.25.3`（digest `69255b12cab8d4f1240fcc253fcf7333b948b80934c368093dce00bfbb7ef39b`）；官方十例、输入、世界与评分器未改。前六组四臂各一次均已获原始官方评分，严格通过 TS 1/6、TE 1/6、MS 2/6、ME 1/6；平均部分分依次为 53.33%、40.95%、48.81%、27.14%。这是六个配对区组的描述性结果，尚不能归因于单句 prompt。
+- 第七组 TS/TE 已生成原评分，MS/ME 没有评分，分别保留 null。停止点矩阵复制到 `.tmp/inspect-factorial-20260925/formal-6-matrix-at-user-stop.json`，原 `matrix.json`、全部 `.eval`/业务产物/消息/Tool 结果与 E3 保持只读；独立停止收据为 `.tmp/inspect-factorial-20260925/formal-6-user-stop.json`。控制器和第七组仍运行的两个 Inspect 经精确 PID/命令行核对后停止，两个未完成 Mission 经公开 abort 收敛；全部自有 host 已 stopped 且复制 auth/models 删除。旧 PID 若被其他进程复用不得触碰。
+- 已读本文件 Recall、实验身份、正式轮次事故与修复；已读 E3 发布收据、formal-6 停止收据、官方 result 样本和三份静态/E3 角色 prompt 的精确差异。全仓定义/调用点与历史决策搜索将在机制审计中继续；未委托子 agent。当前工作树在调查开始时为 clean。
+
+### 问题深度、范围与调查顺序
+
+1. **可观察现象**：E3 相对同轮静态版在两个入口均回退，尤其 Mission 的销售机会与账户复核从静态满分变为 E3 零分；内部 Task/Mission 终态有时与官方质量不一致。每臂每例仅一次，不能将差异直接证明为 prompt 因果或统计泛化。
+2. **直接触发点待核**：逐个配对读取原始世界事件、Tool 输入输出、executor/verifier 真实消息、Orchestrator 与 Mission 的验收和返工操作，定位第一个决定性分歧。区分真实源不可用、端点发现后未读取、数据取错、模型过早认定阻塞、验证漏项、Host 协议失败和官方断言边界；不能以最后错误或模型自述代替根因。
+3. **控制/数据流候选问题**：E3 只比静态父新增逐操作来源账本与“未读即未审”要求。它可能提高审慎性，也可能引导在已具备足够证据时过早阻塞或耗尽执行机会；需用真实调用链证伪/确认。旧轮 prompt 追加提醒并未根治跨来源假阻塞，不能再靠同类文案无分析迭代。
+4. **进化机制审计**：核对作者真实读取了哪些成功/失败反例和父定义，生产 `evolve_expert_squad_from_feedback` 的输入、编辑、范围校验与发布逻辑，以及是否存在只检结构、不守住父版成功行为的验收空隙。发布产物本身只读；不手写候选、不挑例重跑、不改官方评分。
+5. **共享机制横向影响面**：若发现调度、唤醒、恢复、终态、证据投影或并发异常，必须检查全部 Task/Mission/Session 生产入口与 occurrence、正常/失败/取消/修复 epoch、重启恢复、串并行、多项目隔离，才判断是公共机制还是定义局部问题。接口改动前搜索定义、调用点、同义实现和现有测试/架构决策。
+6. **交付与验收**：先给六组原分和逐例回退的 Markdown 表格，再给每个关键失败的证据链、已证实根因/未知项及优先级。若证据支持范围内算法修复，按单一事实来源实施聚焦正向合同和真实 Checker 验收；保持旧世界、评分、已发布 E3 不变，不自行启动另一轮 40 例。任何 UI 改动须真实页面截图复核。记录所有修改风险及未满足项。
+
+### 六个完整配对区组的原始结果
+
+表内为官方 `strict / partial`。第七组仅 TS `0 / 0.9444`、TE `1 / 1` 已评分，MS/ME 为 null；第八至十组未启动，均不进入下面六组均值或配对效应。
+
+| 区组 | TS | TE | MS | ME |
+| --- | --- | --- | --- | --- |
+| 1 HR 候选提交 | 0 / 0.7143 | 0 / 0 | 0 / 0 | 0 / 0 |
+| 2 销售机会 | 0 / 0 | 0 / 0 | 1 / 1 | 0 / 0 |
+| 3 账户复核 | 0 / 0.8571 | 0 / 0.8571 | 1 / 1 | 0 / 0 |
+| 4 审批请求 | 1 / 1 | 1 / 1 | 0 / 0 | 1 / 1 |
+| 5 试用期提醒 | 0 / 0.2 | 0 / 0 | 0 / 0.5 | 0 / 0.2 |
+| 6 逾期费 | 0 / 0.4286 | 0 / 0.6 | 0 / 0.4286 | 0 / 0.4286 |
+| 六组汇总 | 1/6；53.33% | 1/6；40.95% | 2/6；48.81% | 1/6；27.14% |
+
+六组 Task 进化效应的部分分为 −12.38 个百分点，Mission 为 −21.67 个百分点；Mission 进化相对 Task 进化的交互差为约 −9.29 个百分点。样本小、每格一次且非独立留出；这些是观测差值，不能直接证明单段提示词的因果效应。第一至六组实际流式 Luna 请求 TS/TE/MS/ME 分别 438/425/550/612 次，持久化 Provider `total_tokens` 分别 17,185,487 / 16,770,712 / 21,719,866 / 25,744,836；Mission 进化臂多用约 18.5% token 却得分下降。第七组停止前四臂又产生 58/51/84/71 次请求，均计成本，MS 有 1 次无最终 HTTP 状态；账本与原始结果不补齐。上述请求均由正式运行自然产生，本记录只读汇总。
+
+下表为六组的 Markdown 混淆矩阵汇总：预测“成功”仅指原生 Task completed 或 Mission accepted，真值“成功”仅指官方 strict=1；TP/FP/FN/TN 分别为两者都成功、仅原生成功、仅官方成功、两者都未成功。它是终态与官方分的对照报警，FP 不自动证明模型故意虚报或所有部分义务都失败。
+
+| 臂 | TP | FP | FN | TN | null |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| TS | 0 | 4 | 1 | 1 | 0 |
+| TE | 1 | 3 | 0 | 2 | 0 |
+| MS | 2 | 2 | 0 | 2 | 0 |
+| ME | 0 | 2 | 1 | 3 | 0 |
+
+第七组与未执行组不混入此矩阵；第七组 MS/ME 评分为 null，TS/TE 是孤立已评分诊断。特别是区组 4 TS/ME 为 FN，官方业务动作完成但原生监督因缺独立 GET 判失败/blocked。
+
+### 原始操作链与可证实的失效点
+
+- **区组 1，发现与读取脱节。** TE 的官方 `api_search` 事件 6 明确返回 `sheets.spreadsheets.values.get`、`values.batchGet`，事件 12 返回 `google_drive.files.list`；后续真实 `api_fetch` 对 Sheets/Drive 均为零，Gmail 邮件发送为零，部分分 0。TS 在同一官方世界通过 Sheets 与邮件读取发出三封候选邮件及一封经理交接，部分分 5/7。ME 同样在事件 12 发现 Sheets 读操作却未执行，最后随 MS 都 blocked。E3 新增的“discovered→called→result”指令在真正需要的案例没有被执行；这否定了“增加这段提醒已根治旧假阻塞”的说法，但单次样本不证明提醒导致遗漏。
+- **区组 2，搜索范围漏掉最新来源。** MS 官方事件 24 读标准价目表 `$7,500`/联系人，事件 35 又读定价团队的 `msg_q4_pricing_001`，确知 Summit 的 Q4 2025 续约适用 `$5,000` 忠诚价；事件 36 读 `msg_acct_health_001`，政策规定开放支持案时 stage=`On Hold`。MS 随后 POST、按 ID GET 回读 `$54,000` 机会并获官方满分。ME 同样读取标准价目表（事件 43/67），却在 72 个官方 Tool 事件中没有一次 Gmail `api_fetch`，只按旧 `$7,500` 算 `$63,000` 并把健康政策称为不存在；executor、verifier、Orchestrator、Mission 多层接受该共同缺源前提，最终 blocked/零分。ME 的 `api_search` 没有把 Gmail message-list/get 作为相关结果发现，故“逐个已发现操作核对”无法覆盖这项完全漏掉的来源。该臂 142 次 Luna 请求对 MS 83 次，且未完成 mutation。独立世界初始价目表与邮件政策一致，故不是两臂不同数据或 Provider 504 所致。
+- **区组 3，读到了同一规则却错误套用。** MS 与 ME 均读 `ss_health/Criteria`：`Churned` 明确“Exclude from QBR”；均读 `ss_activity`：Vanguard 行日期与金额为空。MS 结合实际 Salesforce 状态将 Vanguard 排除，只发送 NovaTech/Stratos 两账户邮件，官方满分。ME 把空日期判成“90 天无活动”，将 Vanguard 当成必须纳入的 at-risk 客户，又因金额空而认定不可交付；它先发送两账户邮件，随后删除该邮件，verifier/Orchestrator/Mission 多次复读同样源却共同确认错误解释，最终零分和 blocked。这是规则优先级/空值语义与共享前提的监督失败，不是缺少 Tool 结果或终态反馈。
+- **区组 4，业务分与原生受阻不能混同。** ME 创建并放入正确 Asana Backlog，官方 `1 / 1`；但 Asana task GET 返回 `404 No handler`，Verifier 和 Mission 因无法独立读回而判 blocked。TS 也在官方满分后原生 Task failed，TE 则把成功 mutation/section 收据当可接受的验证依据而完成。静态 MS 因未解析项目/section ID 零分。这个案例证明“真实业务动作完成”与“内部验收终态”是两个事实；独立 readback 的证据标准在冻结 API 不支持 GET 时被不一致地应用。不能把 ME blocked 记成官方失败，也不能把官方满分当内部监督已通过。
+- **区组 5，延期证据缺漏。** 官方试用期政策 `msg_probation_policy` 指明经理可个案延期并要求查其沟通渠道。MS 官方事件 11 读到 David 在 Slack 对 Sarah 延至 120 天的消息，重算为 2026-03-31、剩余 16 天，邮件按此发送，部分分 0.5。ME 读了政策和员工表，却没有 Slack `api_fetch`，按表内旧 90 天推为 2026-03-01、逾期 14 天，发送 URGENT 邮件并由 verifier/Mission 接受，部分分 0.2。TE 更是在 `api_search` 找到 Sheets `values.get` 后无 Sheets `api_fetch`、零通知、零分。来源操作建账既未保证实际执行，也未保证跨渠道例外读取。
+- **区组 6，改进并非单向。** TE 的逾期费部分分 0.6，高于 TS 的 0.4286；MS/ME 均 0.4286。四臂各有实际 Sheets mutation 与邮件，细节需另按原断言审计，不能把六组所有差异都称为进化回退或证明 E3 一无所长。
+
+### 自进化链路根因边界与处理决定
+
+- 真实作者 Task 的输入集中在旧 formal-3 单个“已发现 Sheets/Drive 却未读取”假阻塞。作者确实用 `artifact_snapshot`/多段 `artifact_read` 读取了父角色 prompt 与若干来源；发布前第一次 Tool 调用因不完整来源引用失败，第二次首次成功。成功调用仅改三段角色指令，其 `hypothesis/reason` 明确预测增加 `api_fetch` 与按操作结算，同时只用文字声称会保留原成功行为。没有对“最新邮件覆盖旧价目表”“Churned 优先排除”“延期消息覆盖表中默认天数”分别提出或验证保持不变的行为条件；这些失败不是作者当时能从尚未发生的 formal-6 原数据直接知道的。
+- `feedback-revision.ts` 的 `source_read_refs` 校验只证明同 Turn 完整字节读取，文件注释也明确“source read receipts establish delivered bytes, not semantic understanding”；`applyRevisionEdits` 保证精确 span 替换，`compareCandidateIntegrity` 保证包结构、权限继承和冻结资源字节。它们不执行候选对父版的业务回归，不证明模型按指令操作，也不选择更优候选。反馈 Tool 产物是 **unmeasured candidate/pending acceptance**，并未正式安装/推广。将“合法发布”当“自进化已改善”是优化闭环缺失而非该工具内部校验坏掉；本轮实测已经证伪了 E3 的总体提升假设。
+- 具体设计缺陷是单一历史失败驱动的局部指令强化，加上过宽的“每个发现读操作”范围，却没有同时约束完整来源枚举、权威证据的新旧优先级、例外/排除规则与已完成写入的复核；模型可以遵循表面上的大量搜索，同时遗漏最关键的邮件或 Slack。多 agent 验证层读取的是同一错误筛选的来源集，独立性并不自动成立。当前证据不能证明该段文字是回退的唯一原因：四臂各只一次且模型路径有随机性，但足以证明指令变化未实现其预测行为，并展示多个具体失效点。
+- **不再盲改或开启新测量。** 下一修复应先把“事实发现是否覆盖了请求暗示的权威来源”“更新/例外/排除的优先级”“已发起 mutation 的收据与不可用读回如何验收”分成独立机制契约，明确责任角色与实际 Tool 证据；成功行为须在全套预登记配对案例中保持，再由现有真实 Checker 测量候选相对父版的业务分与成本。不要通过 Host gate 教模型选工具、硬编码案例答案、编辑旧世界或把官方评分写回原日志。若做新的候选，需另获用户要求，保持旧 E3 不可变；目前只交付根因审计与修复设计。
