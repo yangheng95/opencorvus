@@ -230,3 +230,9 @@ Mission 接收完全相同的原始业务请求和官方时钟；另加固定的
 - 静态专家团已改为 `2026.09.25.1` 草案：executor 对每项物质前提先列可能的业务记录来源，再用服务/资源/操作名发现读端点并读取真实记录；verifier 独立覆盖不同来源并列出未查来源；orchestrator 对仅查一个系统的“缺失”保留同 Task 返工，不把它当 force majeure。没有写入任何本例答案、评分断言或具体记录 ID。上述三份定义及 manifest 是本任务源码改动，旧 E1 仍不可变，后续须由真实 Luna 从新静态父版本经生产进化工具生成新候选，不能手补旧 E1。
 - Mission core 提示词已按真实 Tool 契约区分完成与失败：完成 Task 才有 Completion Decision 和 `panel_read_task_message`；失败/取消 Task 读取当前生命周期和可用原始 Artifacts，不能把没有 Decision 当成来源缺失。对未查的跨服务来源使用现有同 Task acceptance-gap 恢复动作。Host、Panel Tool、官方评分器、Inspect、旧世界未修改。该 prompt 修复只校正控制流指令，不宣称已解决所有失败；若真实检查证明 Artifacts 仍不足以监督失败终态，再实施上述只读协议扩展。
 - 已用公开 `api_search` 查到 Gmail list/get、Drive files.list、Sheets values.get 的精确读合同，并用新建只读官方世界实际 `api_fetch` 返回上述业务记录；这证明“工具源不可达”不是 Sales 失败根因。四臂控制器先前将静态版本硬编码为旧 `.2`，现改为启动时显式 `--static-version` 与 manifest 核对，仅是新运行身份参数，不改官方评分/案例/世界。针对 prompt 修改，`automationbench-skill-contract` 2 项通过，`check:expert-squad-types`、`docs:check` 与架构索引检查通过；catalog-index 最初从仓库根目录以 Bun 默认 5 秒超时运行出现慢例/临时路径干扰，改在 package 根目录用 30 秒超时重跑原 14 例全部通过。这些仅是局部契约，不冒充真实 Luna 自主发现成功。新作者及完整 40 例尚未启动，blocked Mission 终态未改，旧轮仍是用户中止诊断。
+
+### New author checkpoint (2026-09-25)
+
+- 上述来源/监督指令修复提交 `f2f56fa3` 已经按 AGENTS 拉取上游、检查唯一待推送提交并推送；正常 pre-push typecheck、文档、架构、模块拓扑及 secret scan 通过。`run_factorial_trials.py` 的十例排程 `--plan-only` 通过。没有宣布模型效果改善。
+- 新独立作者项目 `.tmp/inspect-factorial-20260925/author-project` 只复制了新静态父 `2026.09.25.1`、旧只读开发证据及本审计记录；旧 candidate 和旧测量世界没有改动。新作者主机 `.tmp/inspect-factorial-20260925/author-host/host.json`，PID 53932，启动源码 `f2f56fa3`，地址 `http://127.0.0.1:63566/`。它在启动前配对验证了有效 OAuth 和 `models.json` 投影，预检回执确认流式实际模型 `gpt-5.6-luna`。公共 Task `tsk_g00VW9nDD300LveMTQTY` 位于上述作者项目，已接收一次候选创作请求；最后只读快照为 `active`，Provider 审计 35 个实际请求，正式四臂仍未启动。不要重复启动作者或另发创作 Task；等待真实生产 Tool 首次合规发布后只读审查候选、正常停作者主机并清理复制凭据。
+- 正式新四臂实验尚未具备冻结 E 身份，不能使用旧 `2026.09.24.3` 冒充新静态父的后代。作者完成后只允许一个由真实 Luna 发布的候选；如作者无法产生合规候选，保留失败并明确阻塞，不手写补丁或按效果挑版本。完整四臂从新的隔离目录运行，结果只用 Markdown 混淆矩阵和逐例原分表。
