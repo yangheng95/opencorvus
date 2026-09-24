@@ -16,6 +16,7 @@ import httpx
 
 LifecycleStatus = Literal["active", "completed", "failed", "cancelled"]
 ProductPillar = Literal["code", "work"]
+EntryPoint = Literal["task", "mission"]
 TERMINAL_LIFECYCLES = frozenset({"completed", "failed", "cancelled"})
 T = TypeVar("T")
 
@@ -59,6 +60,19 @@ class OpenCorvusTaskTimeout(OpenCorvusAdapterError):
         self.task_id = task_id
         self.timeout_seconds = timeout_seconds
         self.last_status = last_status
+
+
+class OpenCorvusMissionTimeout(OpenCorvusAdapterError):
+    """No observable Mission-tree progress occurred within the inactivity window."""
+
+    def __init__(self, mission_id: str, timeout_seconds: float, last_lane: str) -> None:
+        super().__init__(
+            f"OpenCorvus Mission {mission_id} observation stalled for "
+            f"{timeout_seconds:g}s; last board lane={last_lane}"
+        )
+        self.mission_id = mission_id
+        self.timeout_seconds = timeout_seconds
+        self.last_lane = last_lane
 
 
 def _environment(name: str) -> str | None:
@@ -190,6 +204,11 @@ def _optional_string(value: object) -> str | None:
     return value if isinstance(value, str) and value.strip() else None
 
 
+def _directory_key(value: str) -> str:
+    """Compare public and stored project paths without changing their identities."""
+    return os.path.normcase(os.path.normpath(value))
+
+
 def extract_completion(
     task: Mapping[str, Any], part: Mapping[str, Any] | None
 ) -> tuple[str, str | None]:
@@ -269,6 +288,31 @@ class TaskResult:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class MissionResult:
+    """Exact public Mission completion with its one Mission-owned Task."""
+
+    mission_id: str
+    session_id: str
+    task_id: str
+    request_id: str
+    completion: str
+    completion_message_id: str
+    package_revision_binding: Mapping[str, Any]
+
+    def metadata(self) -> dict[str, Any]:
+        return {
+            "schema_version": 1,
+            "entrypoint": "mission",
+            "mission_id": self.mission_id,
+            "mission_session_id": self.session_id,
+            "task_id": self.task_id,
+            "request_id": self.request_id,
+            "mission_completion_message_id": self.completion_message_id,
+            "package_revision_binding": dict(self.package_revision_binding),
+        }
+
+
 class OpenCorvusClient:
     """Call OpenCorvus through its public project-scoped Task API."""
 
@@ -300,7 +344,7 @@ class OpenCorvusClient:
     async def aclose(self) -> None:
         await self._client.aclose()
 
-    async def _request_json(
+    async def _request_payload(
         self,
         method: str,
         path: str,
@@ -309,7 +353,7 @@ class OpenCorvusClient:
         json: Mapping[str, Any] | None = None,
         request_id: str | None = None,
         timeout_seconds: float | None = None,
-    ) -> Mapping[str, Any]:
+    ) -> object:
         headers = {"x-opencorvus-request-id": request_id} if request_id else None
         request_timeout = (
             self._client.timeout
@@ -346,7 +390,35 @@ class OpenCorvusClient:
             raise OpenCorvusProtocolError(
                 f"OpenCorvus {method} {path} returned non-JSON success response"
             ) from error
+        return payload
+
+    async def _request_json(
+        self,
+        method: str,
+        path: str,
+        *,
+        params: Mapping[str, str] | None = None,
+        json: Mapping[str, Any] | None = None,
+        request_id: str | None = None,
+        timeout_seconds: float | None = None,
+    ) -> Mapping[str, Any]:
+        payload = await self._request_payload(
+            method,
+            path,
+            params=params,
+            json=json,
+            request_id=request_id,
+            timeout_seconds=timeout_seconds,
+        )
         return _mapping(payload, label=f"{method} {path} response")
+
+    async def _request_list(
+        self, method: str, path: str, *, params: Mapping[str, str] | None = None
+    ) -> list[Mapping[str, Any]]:
+        payload = await self._request_payload(method, path, params=params)
+        if not isinstance(payload, list):
+            raise OpenCorvusProtocolError(f"OpenCorvus {method} {path} must return an array")
+        return [_mapping(item, label=f"{method} {path} item") for item in payload]
 
     def _project_params(self) -> dict[str, str]:
         return {"directory": self.config.project_dir}
@@ -629,3 +701,154 @@ class OpenCorvusClient:
             accepted_delivery_slice_revision_ids=tuple(cast(list[str], accepted_ids_raw)),
             package_revision_binding=binding,
         )
+
+    async def run_mission(
+        self,
+        *,
+        request: str,
+        request_id: str,
+        title: str,
+        sample_id: str,
+        sample_uuid: str,
+        epoch: int,
+    ) -> MissionResult:
+        """Observe the real Mission decision, including any child Task repair epoch."""
+        if not self.config.model or not self.config.prompt_profile:
+            raise ValueError("Mission execution requires an explicit model and Expert Squad")
+        mission_text = (
+            f"{request}\n\n"
+            "Use the held Expert Squad for one initial business Task. Inspect its result against "
+            "this original request; if it is incomplete, use the existing Mission acceptance "
+            "and same-Task repair flow. Report only the actually accepted outcome."
+        )
+        accepted = await self._request_json(
+            "POST",
+            "/mission/wake",
+            params={
+                "directory": self.config.project_dir,
+                "init-git": "true" if self.config.init_git else "false",
+            },
+            json={
+                "requestID": request_id,
+                "productPillar": self.config.product_pillar,
+                "text": mission_text,
+                "model": self.config.model,
+                "expertSquadIDs": [self.config.prompt_profile],
+            },
+            request_id=request_id,
+        )
+        mission_id = _required_string(accepted.get("missionID"), label="mission.wake.missionID")
+        session_id = _required_string(accepted.get("sessionID"), label="mission.wake.sessionID")
+        self.accepted_task = {
+            "mission_id": mission_id,
+            "session_id": session_id,
+            "request_id": request_id,
+        }
+        try:
+            deadline = time.monotonic() + self.config.timeout_seconds
+            last_lane = "unobserved"
+            previous_activity: str | None = None
+            while True:
+                records = await self._request_list("GET", "/mission")
+                matching = [item for item in records if item.get("missionID") == mission_id]
+                if len(matching) != 1:
+                    raise OpenCorvusProtocolError(
+                        f"Mission list must identify one current Mission {mission_id}; "
+                        f"found {len(matching)}"
+                    )
+                record = matching[0]
+                if record.get("missionID") != mission_id or record.get("sessionID") != session_id:
+                    raise OpenCorvusProtocolError("Mission identity changed during observation")
+                directory = _required_string(record.get("directory"), label="mission.directory")
+                if _directory_key(directory) != _directory_key(self.config.project_dir):
+                    raise OpenCorvusProtocolError("Mission directory changed during observation")
+                last_lane = _required_string(record.get("boardLane"), label="mission.boardLane")
+                tasks = record.get("tasks")
+                if not isinstance(tasks, list):
+                    raise OpenCorvusProtocolError("Mission tasks must be an array")
+                completion = record.get("completion")
+                if (
+                    completion is not None
+                    and last_lane == "completed"
+                    and record.get("interruptible") is False
+                ):
+                    decision = _mapping(completion, label="mission.completion")
+                    if len(tasks) != 1:
+                        raise OpenCorvusProtocolError(
+                            "Mission trial requires one initial business Task; "
+                            f"observed {len(tasks)}"
+                        )
+                    task_row = _mapping(tasks[0], label="mission.tasks[0]")
+                    task_id = _required_string(task_row.get("id"), label="mission.task.id")
+                    if (
+                        task_row.get("lifecycleStatus") != "completed"
+                        or task_row.get("source") != "mission"
+                    ):
+                        raise OpenCorvusProtocolError(
+                            "Mission completion lacks a completed Mission-owned Task"
+                        )
+                    task = await self.task(task_id)
+                    binding = _mapping(
+                        task.get("packageRevisionBinding"),
+                        label="mission.task.packageRevisionBinding",
+                    )
+                    message_id = _required_string(
+                        decision.get("messageID"), label="mission.completion.messageID"
+                    )
+                    summary = _required_string(
+                        decision.get("summary"), label="mission.completion.summary"
+                    )
+                    return MissionResult(
+                        mission_id=mission_id,
+                        session_id=session_id,
+                        task_id=task_id,
+                        request_id=request_id,
+                        completion=summary,
+                        completion_message_id=message_id,
+                        package_revision_binding=binding,
+                    )
+                activity = await self._request_json(
+                    "GET",
+                    f"/mission/{quote(mission_id, safe='')}/activity-cursor",
+                    params=self._project_params(),
+                )
+                if (
+                    activity.get("mission_id") != mission_id
+                    or activity.get("session_id") != session_id
+                ):
+                    raise OpenCorvusProtocolError(
+                        "Mission activity scope changed during observation"
+                    )
+                digest = _required_string(
+                    activity.get("activity_sha256"), label="mission.activity_sha256"
+                )
+                if digest != previous_activity:
+                    previous_activity = digest
+                    deadline = time.monotonic() + self.config.timeout_seconds
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    raise OpenCorvusMissionTimeout(
+                        mission_id, self.config.timeout_seconds, last_lane
+                    )
+                await asyncio.sleep(min(self.config.poll_seconds, remaining))
+        except BaseException:
+            if last_lane != "completed":
+                try:
+                    await self._request_json(
+                        "POST",
+                        f"/mission/{quote(mission_id, safe='')}/abort",
+                        params=self._project_params(),
+                        json={
+                            "surface": "api",
+                            "reason": (
+                                "Inspect Mission observation ended before "
+                                "accepted completion"
+                            ),
+                        },
+                        request_id=f"{request_id}:observation-cleanup",
+                        timeout_seconds=30,
+                    )
+                    self.accepted_task["cleanup"] = "mission_abort_accepted"
+                except Exception as cleanup_error:
+                    self.accepted_task["cleanup"] = type(cleanup_error).__name__
+            raise

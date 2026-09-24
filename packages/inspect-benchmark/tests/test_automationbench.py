@@ -180,6 +180,32 @@ async def test_sample_setup_settles_separate_worlds_and_releases_owned_endpoints
 
 
 @pytest.mark.asyncio
+async def test_mission_world_seals_only_after_accepted_mission_completion(tmp_path: Path) -> None:
+    case = load_cases(MANIFEST)[0]
+    config = AdapterConfig.resolve(project_dir=str(tmp_path / "mission"))
+    setup = sample_environment([case], SQUAD, entrypoint="mission")
+    state = state_for(case)
+    async with setup(state, config):
+        state.metadata["opencorvus_result"] = {
+            "entrypoint": "mission",
+            "task_id": "task-first-completed",
+            "lifecycle_status": "completed",
+        }
+    assert state.metadata["automationbench_execution"] == {"status": "unscored"}
+
+    accepted = state_for(case)
+    accepted_config = AdapterConfig.resolve(project_dir=str(tmp_path / "accepted"))
+    async with setup(accepted, accepted_config):
+        accepted.metadata["opencorvus_result"] = {
+            "entrypoint": "mission",
+            "mission_id": "mission-accepted",
+            "mission_completion_message_id": "message-accepted",
+        }
+    assert accepted.metadata["automationbench_execution"] == {"status": "scored"}
+    assert accepted.metadata["automationbench_score"]["strict"] == 0.0
+
+
+@pytest.mark.asyncio
 async def test_setup_error_retains_unscored_evidence_and_releases_endpoint(tmp_path: Path) -> None:
     case = load_cases(MANIFEST)[0]
     state = state_for(case)

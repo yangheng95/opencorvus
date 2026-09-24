@@ -14,7 +14,7 @@ from uuid import uuid4
 from inspect_ai.model import ModelOutput
 from inspect_ai.solver import Generate, Solver, TaskState, solver
 
-from .adapter import AdapterConfig, OpenCorvusClient
+from .adapter import AdapterConfig, EntryPoint, OpenCorvusClient
 
 ProjectIsolation = Literal["shared", "sample_epoch"]
 SampleSetup = Callable[[TaskState, AdapterConfig], AbstractAsyncContextManager[None]]
@@ -48,11 +48,12 @@ def opencorvus_system_metadata(
     config: AdapterConfig,
     *,
     project_isolation: ProjectIsolation,
+    entrypoint: EntryPoint = "task",
 ) -> dict[str, object]:
     """Return the exact non-secret system configuration used by a Solver."""
 
     return {
-        "adapter": "opencorvus-task-api",
+        "adapter": f"opencorvus-{entrypoint}-api",
         "adapter_schema_version": 1,
         "adapter_distribution": {
             "name": "opencorvus-inspect",
@@ -116,11 +117,14 @@ def build_opencorvus_solver(
     *,
     project_isolation: ProjectIsolation,
     sample_setup: SampleSetup | None = None,
+    entrypoint: EntryPoint = "task",
 ) -> Solver:
     """Build the one OpenCorvus Solver from an already-resolved configuration."""
 
     if project_isolation not in {"shared", "sample_epoch"}:
         raise ValueError("project_isolation must be shared or sample_epoch")
+    if entrypoint not in {"task", "mission"}:
+        raise ValueError("entrypoint must be task or mission")
     attempts: dict[str, int] = {}
 
     async def solve(state: TaskState, _generate: Generate) -> TaskState:
@@ -146,7 +150,8 @@ def build_opencorvus_solver(
                 await stack.enter_async_context(sample_setup(state, sample_config))
             client = await stack.enter_async_context(OpenCorvusClient(sample_config))
             try:
-                result = await client.run_task(
+                run = client.run_task if entrypoint == "task" else client.run_mission
+                result = await run(
                     request=state.input_text,
                     request_id=request_id,
                     title=_sample_title(state.metadata, state.sample_id),
@@ -161,7 +166,9 @@ def build_opencorvus_solver(
                 }
                 raise
             state.metadata["opencorvus_result"] = result.metadata()
-            output = ModelOutput.from_content(model="opencorvus/task", content=result.completion)
+            output = ModelOutput.from_content(
+                model=f"opencorvus/{entrypoint}", content=result.completion
+            )
             state.output = output
             if result.completion:
                 state.messages.append(output.message)

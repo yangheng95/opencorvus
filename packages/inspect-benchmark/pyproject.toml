@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "opencorvus-inspect"
-version = "0.3.3"
+version = "0.3.4"
 description = "Extensible Inspect AI benchmark platform for the OpenCorvus Task API"
 readme = "README.md"
 requires-python = ">=3.10"

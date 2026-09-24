@@ -16,8 +16,8 @@ from inspect_ai.dataset import Sample
 from inspect_ai.scorer import Score, Scorer, Target, mean, scorer, stderr
 from inspect_ai.solver import Solver, TaskState, solver
 
-from ..adapter import AdapterConfig
-from ..scorer import task_completed
+from ..adapter import AdapterConfig, EntryPoint
+from ..scorer import mission_completed, task_completed
 from ..solver import SampleSetup, build_opencorvus_solver, opencorvus_system_metadata
 from .world import (
     BENCHMARK,
@@ -31,7 +31,9 @@ from .world import (
 )
 
 
-def sample_environment(cases: list[Case], squad: Path) -> SampleSetup:
+def sample_environment(
+    cases: list[Case], squad: Path, entrypoint: EntryPoint = "task"
+) -> SampleSetup:
     """Provision only a fresh project; never rewrite an existing project or user's service."""
     by_id = {case.task: case for case in cases}
     files = tuple(
@@ -82,8 +84,12 @@ def sample_environment(cases: list[Case], squad: Path) -> SampleSetup:
                 await asyncio.to_thread(prepare_project)
                 state.metadata["automationbench_execution"] = {"status": "running"}
                 yield
-            lifecycle = state.metadata.get("opencorvus_result", {}).get("lifecycle_status")
-            if lifecycle in {"completed", "failed"}:
+            result = state.metadata.get("opencorvus_result", {})
+            lifecycle = result.get("lifecycle_status")
+            mission_accepted = bool(result.get("mission_completion_message_id"))
+            if (entrypoint == "task" and lifecycle in {"completed", "failed"}) or (
+                entrypoint == "mission" and mission_accepted
+            ):
                 score = world.seal()
                 snapshot = world.snapshot()
                 state.metadata["automationbench_snapshot"] = snapshot
@@ -207,6 +213,7 @@ def automationbench_task_solver(
     base_url: str,
     timeout_seconds: float,
     poll_seconds: float,
+    entrypoint: EntryPoint = "task",
 ) -> Solver:
     config, squad_path, _squad_manifest = _settings(
         manifest,
@@ -220,7 +227,8 @@ def automationbench_task_solver(
     return build_opencorvus_solver(
         config,
         project_isolation="sample_epoch",
-        sample_setup=sample_environment(load_cases(manifest), squad_path),
+        sample_setup=sample_environment(load_cases(manifest), squad_path, entrypoint),
+        entrypoint=entrypoint,
     )
 
 
@@ -234,9 +242,12 @@ def opencorvus_automationbench(
     base_url: str = "http://127.0.0.1:7878",
     timeout_seconds: float = 300,
     poll_seconds: float = 2,
+    entrypoint: EntryPoint = "task",
 ) -> Task:
     """Run a frozen public case set against a co-located, separately started OpenCorvus service."""
     cases = load_cases(manifest)
+    if entrypoint not in {"task", "mission"}:
+        raise ValueError("entrypoint must be task or mission")
     config, squad_path, squad_manifest = _settings(
         manifest,
         squad,
@@ -250,10 +261,12 @@ def opencorvus_automationbench(
         "benchmark": BENCHMARK,
         "scoring_policy": SCORING_POLICY,
         "case_context_policy": CASE_CONTEXT_POLICY,
-        "execution_mode": "opencorvus-task-api",
+        "execution_mode": f"opencorvus-{entrypoint}-api",
         "comparable": False,
         "isolation": "local-sample-project-and-mcp-world",
-        "system": opencorvus_system_metadata(config, project_isolation="sample_epoch"),
+        "system": opencorvus_system_metadata(
+            config, project_isolation="sample_epoch", entrypoint=entrypoint
+        ),
         "squad_version": squad_manifest["version"],
         "cases": [{"domain": c.domain, "task": c.task, "example_id": c.example_id} for c in cases],
     }
@@ -279,9 +292,10 @@ def opencorvus_automationbench(
             base_url=config.base_url,
             timeout_seconds=config.timeout_seconds,
             poll_seconds=config.poll_seconds,
+            entrypoint=entrypoint,
         ),
         scorer=[
-            task_completed(),
+            task_completed() if entrypoint == "task" else mission_completed(),
             automationbench_strict(),
             automationbench_partial(),
         ],
