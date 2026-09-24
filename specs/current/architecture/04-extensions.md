@@ -893,6 +893,16 @@ worker 只获得当前主项目 `files`；只有该 managed Build surface 获得
 Host 只解析一次并把结构化 `payload` 交给与 Plugin ToolHost `engineArtifacts.publish` 相同的
 `publishExpertArtifact` authority，两条入口只有 transport 不同。跨 Task 导入在 `import_lineage.source_provenance`
 保留源 Artifact 的原始 observed/source provenance；导入 envelope 自身的 observed/source 仍是目标 Task 本地事实。
+
+Core `evolve_expert_squad_from_feedback` 复用同一组完整读取事实：本次修订显式提交 `source_read_refs`，
+Host 按实际调用的 Session、Message、Tool Part 解析，只有同 Turn 已完整覆盖的来源进入 candidate 的
+`provenance` 与 envelope `source_artifact_locators`；`observed_artifact_locators` 保留已完整读取的观察。
+不依赖 Artifact 的偏好修订可以提交空数组，不能据此宣称证据验收。长 JSON 或 Tool 记录通过既有 snapshot
+和按字节分页读取传递，普通文件阅读器的行截断结果不证明证据完整。读取回执也不证明模型理解了内容。
+修订输入只有精确 `edits`（path、old_text、new_text、reason）：非空 old_text 必须在当前文本中唯一匹配，
+空 old_text 只创建尚不存在的文件，多个编辑顺序应用；其余字节保留。Host 派生版本并复用 package integrity，
+只证明编辑实际作用于所述原文，不判断语义冲突已解决或效果已提升。已移除整文件覆盖与全局冲突声明启发式，
+没有旧输入兼容路径。生成候选不等于测量或推广，安装仍走现有授权与撤回契约。
 workflow dependency 只表达 evidence
 topology。生成包 README 记录 source 与
 mapping digest；导入的 Agent instruction、完整 Skill directory 和 MCP 声明是不可变快照，不是后台同步源。

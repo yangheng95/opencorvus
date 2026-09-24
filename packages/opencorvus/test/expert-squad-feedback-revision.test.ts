@@ -2,7 +2,7 @@ import { afterAll, describe, expect, spyOn, test } from "bun:test"
 import { writeExpertSquadPackage, type ExpertSquadPackageDefinition } from "@opencorvus-ai/sdk/expert-squad-authoring"
 import path from "node:path"
 import { createHash } from "node:crypto"
-import { readFile } from "node:fs/promises"
+import { readFile, writeFile } from "node:fs/promises"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import {
@@ -18,6 +18,7 @@ import {
   parseFeedbackRevisionTarget,
   reviseInstalledExpertSquadFromFeedback,
   FeedbackRevisionIdentityConflictError,
+  FeedbackRevisionEditError,
 } from "../src/expert-squad/feedback-revision"
 import { readEvolutionHistory } from "../src/expert-squad/evolution-history"
 import { ExpertSquadPackageManager } from "../src/expert-squad/manager"
@@ -30,11 +31,24 @@ import { Database, DatabaseUnavailableError } from "../src/storage/db"
 import { configureTaskIngressRunner } from "../src/engine/task-root-ingress-delivery"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { capabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
+import { publishTaskArtifactProjectFiles } from "../src/task-artifact/store"
+import { artifactSnapshotTransport, ArtifactReadTool } from "../src/tool/artifact-catalog"
+import { artifactCatalogAuthority, readTaskArtifact } from "../src/artifact-catalog"
+import { ArtifactReferenceResolutionError } from "../src/agent/artifact-read-facts"
+import { ProjectRuntimePaths } from "../src/project/runtime-paths"
+import { createToolExecutionSurface } from "../src/tool/execution-surface"
+import type { Tool } from "../src/tool/tool"
 
 const SQUAD_ID = "feedback-revision-squad"
 const FEEDBACK = "我希望调研报告尽可能多的图和表，不要干干的全是文字"
 const REVISED_PROMPT =
   "# Feedback revision worker\n\nOpen with a summary table, and give every quantitative claim a chart or a table.\n"
+const BASELINE_PROMPT = "# Feedback revision worker\n\nbaseline\n"
+const PROMPT_PATH = "agents/feedback-revision-worker/system.md"
+
+function exactEdit(path: string, old_text: string, new_text: string) {
+  return { path, old_text, new_text, reason: "Change the owning instruction while preserving surrounding working behavior." }
+}
 
 function emptyProjectionResources() {
   return { capability_refs: [] as string[] }
@@ -146,9 +160,9 @@ describe("revising an installed expert squad from operator feedback", () => {
             taskID: task.taskID,
             sessionID: task.session.id,
             request: {
-              target_squad_id: SQUAD_ID, feedback: FEEDBACK, conflicting_instruction: "rewritten",
+              target_squad_id: SQUAD_ID, feedback: FEEDBACK, source_read_refs: [],
               hypothesis: "Use tables and charts to show the requested evidence.",
-              files: [{ path: "agents/feedback-revision-worker/system.md", content: REVISED_PROMPT }],
+              edits: [exactEdit(PROMPT_PATH, BASELINE_PROMPT, REVISED_PROMPT)],
             },
           })
           artifactID = revision.locator.artifact_id
@@ -224,9 +238,9 @@ describe("revising an installed expert squad from operator feedback", () => {
           request: {
             target_squad_id: SQUAD_ID,
             feedback: FEEDBACK,
-            conflicting_instruction: "rewritten",
+            source_read_refs: [],
             hypothesis: "Naming tables and charts in the worker prompt makes reports carry them.",
-            files: [{ path: "agents/feedback-revision-worker/system.md", content: REVISED_PROMPT }],
+            edits: [exactEdit(PROMPT_PATH, BASELINE_PROMPT, REVISED_PROMPT)],
           },
         }
         const revision = await reviseInstalledExpertSquadFromFeedback(revisionInput)
@@ -427,15 +441,22 @@ describe("revising an installed expert squad from operator feedback", () => {
         })
 
         async function reviseAndInstall(prompt: string, hypothesis: string) {
+          const installedRoot = ExpertSquadRegistry.installedPackageRoot({
+            projectDirectory: project.path,
+            installationScope: "project",
+            namespace: "evolution-test",
+            id: SQUAD_ID,
+          })
+          const oldPrompt = await readFile(path.join(installedRoot, PROMPT_PATH), "utf8")
           const revision = await reviseInstalledExpertSquadFromFeedback({
             taskID: task.taskID,
             sessionID: task.session.id,
             request: {
               target_squad_id: SQUAD_ID,
               feedback: FEEDBACK,
-              conflicting_instruction: "rewritten",
+              source_read_refs: [],
               hypothesis,
-              files: [{ path: "agents/feedback-revision-worker/system.md", content: prompt }],
+              edits: [exactEdit(PROMPT_PATH, oldPrompt, prompt)],
             },
           })
           const intent = {
@@ -628,9 +649,9 @@ describe("revising an installed expert squad from operator feedback", () => {
           request: {
             target_squad_id: SQUAD_ID,
             feedback: FEEDBACK,
-            conflicting_instruction: "rewritten",
+            source_read_refs: [],
             hypothesis: "Naming the worker for what the operator wants keeps the intent visible in the manifest.",
-            files: [{ path: "expert-squad.jsonc", content: relabelled }],
+            edits: [exactEdit("expert-squad.jsonc", baselineManifest, relabelled)],
           },
         })
         const revised = await ExpertSquadRegistry.loadPackageRevisionSnapshot(revision.candidatePackageDigest)
@@ -639,13 +660,11 @@ describe("revising an installed expert squad from operator feedback", () => {
           changed: revision.changedPaths,
           // The Host restamps its own version over whatever the author wrote.
           version: revision.version,
-          staleVersionSurvived: revisedManifest.includes("1999.01.01.1"),
-          relabelled: revisedManifest.includes("Chart-first revision worker"),
+          manifest: JSON.parse(revisedManifest),
         }).toEqual({
           changed: ["expert-squad.jsonc"],
           version: revision.version,
-          staleVersionSurvived: false,
-          relabelled: true,
+          manifest: { ...JSON.parse(relabelled), version: revision.version },
         })
 
         // Reaching for a Tool no revision before it declared is the one move
@@ -665,9 +684,9 @@ describe("revising an installed expert squad from operator feedback", () => {
             request: {
               target_squad_id: SQUAD_ID,
               feedback: FEEDBACK,
-              conflicting_instruction: "rewritten",
-            hypothesis: "Granting a shell would let the worker draw charts itself.",
-              files: [{ path: "expert-squad.jsonc", content: selfWidened }],
+              source_read_refs: [],
+              hypothesis: "Granting a shell would let the worker draw charts itself.",
+              edits: [exactEdit("expert-squad.jsonc", baselineManifest, selfWidened)],
             },
           }),
         ).rejects.toThrow(/capability_refs/)
@@ -675,111 +694,239 @@ describe("revising an installed expert squad from operator feedback", () => {
     })
   })
 
-  /**
-   * The shape three live revisions in a row actually took.
-   *
-   * Each appended a hedged sentence to a prompt that already prescribed the
-   * opposite shape, changed nothing else, installed cleanly, and behaved
-   * exactly like its parent. The Host cannot read the new wording and judge it,
-   * but it can hold the author to what they said they did.
-   */
-  test("refuses a rewrite claim that only appended, and takes the same edit once the claim is honest", async () => {
-    const sourceRoot = await Global.createTemporaryDirectory("expert-squad-append-claim-test-")
+  test("applies exact sequential edits and preserves the remaining parent text", async () => {
     await using project = await memoryProject()
-    const baselineSource = path.join(sourceRoot, "baseline")
-    await writeExpertSquadPackage({ directory: baselineSource, definition: packageDefinition("2026.08.13.1") })
+    const sourceDirectory = path.join(project.path, "source")
+    await writeExpertSquadPackage({ directory: sourceDirectory, definition: packageDefinition("2026.08.13.1") })
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         configureTaskIngressRunner(async () => {})
         const installed = await ExpertSquadPackageManager.importDirectory({
-          projectDirectory: project.path,
-          sourceDirectory: baselineSource,
-          installationScope: "project",
+          projectDirectory: project.path, sourceDirectory, installationScope: "project",
         })
         const task = await createTask({
-          namespace: "evolution-test",
-          id: SQUAD_ID,
-          version: "2026.08.13.1",
-          packageDigest: installed.after.packageDigest,
+          namespace: "evolution-test", id: SQUAD_ID, version: "2026.08.13.1", packageDigest: installed.after.packageDigest,
         })
-        const promptPath = "agents/feedback-revision-worker/system.md"
-        const baselinePrompt = "# Feedback revision worker\n\nbaseline\n"
-
-        // The observed failure: the parent survives verbatim and a hedged
-        // sentence arrives at the end, while the author reports a rewrite.
-        const appended = `${baselinePrompt}\nUse charts and tables where the task permits.\n`
-        await expect(
-          reviseInstalledExpertSquadFromFeedback({
-            taskID: task.taskID,
-            sessionID: task.session.id,
-            request: {
-              target_squad_id: SQUAD_ID,
-              feedback: FEEDBACK,
-              conflicting_instruction: "rewritten",
-              hypothesis: "Adding a presentation preference makes reports carry charts.",
-              files: [{ path: promptPath, content: appended }],
-            },
-          }),
-        ).rejects.toThrow(/only adds at the end/)
-
-        // The same bytes are accepted the moment the author stops claiming a
-        // rewrite: the Host checks the claim, it does not read the prose.
-        const additive = await reviseInstalledExpertSquadFromFeedback({
-          taskID: task.taskID,
-          sessionID: task.session.id,
+        const revision = await reviseInstalledExpertSquadFromFeedback({
+          taskID: task.taskID, sessionID: task.session.id,
           request: {
-            target_squad_id: SQUAD_ID,
-            feedback: FEEDBACK,
-            conflicting_instruction: "none",
-            hypothesis: "Nothing in this Squad prescribed a shape, so the rule is new rather than competing.",
-            files: [{ path: promptPath, content: appended }],
+            target_squad_id: SQUAD_ID, feedback: FEEDBACK, source_read_refs: [],
+            hypothesis: "Put the concrete output requirement in the worker's existing instruction.",
+            edits: [
+              exactEdit(PROMPT_PATH, "baseline", "Use tables."),
+              exactEdit(PROMPT_PATH, "Use tables.", "Use tables and charts."),
+            ],
           },
         })
+        const snapshot = await ExpertSquadRegistry.loadPackageRevisionSnapshot(revision.candidatePackageDigest)
+        expect(await readFile(path.join(snapshot.root, PROMPT_PATH), "utf8"))
+          .toBe("# Feedback revision worker\n\nUse tables and charts.\n")
+        expect(await readFile(path.join(snapshot.root, "README.md"), "utf8"))
+          .toBe("# Feedback revision squad\n\nbaseline\n")
+        expect(revision.changedPaths).toEqual([PROMPT_PATH, "expert-squad.jsonc"])
 
-        // And a revision that truly edits what was there passes while claiming it.
-        const rewritten = await reviseInstalledExpertSquadFromFeedback({
-          taskID: task.taskID,
-          sessionID: task.session.id,
+        const created = await reviseInstalledExpertSquadFromFeedback({
+          taskID: task.taskID, sessionID: task.session.id,
           request: {
-            target_squad_id: SQUAD_ID,
-            feedback: FEEDBACK,
-            conflicting_instruction: "rewritten",
-            hypothesis: "The line that told the worker to answer in prose is the one the operator is objecting to.",
-            files: [{ path: promptPath, content: "# Feedback revision worker\n\nAnswer with tables.\n" }],
+            target_squad_id: SQUAD_ID, feedback: FEEDBACK, source_read_refs: [],
+            hypothesis: "The scheduler owns the handoff carrying the worker's output requirement.",
+            edits: [
+              exactEdit("expert-squad.jsonc", '"base_role": "orchestrator"',
+                '"base_role": "orchestrator", "prompt": "agents/orchestrator/system.md"'),
+              exactEdit("agents/orchestrator/system.md", "", "# Scheduler\n\nPreserve the complete output requirement in the handoff.\n"),
+            ],
           },
         })
-        expect({
-          additiveChanged: additive.changedPaths,
-          rewrittenChanged: rewritten.changedPaths,
-        }).toEqual({
-          additiveChanged: [promptPath, "expert-squad.jsonc"],
-          rewrittenChanged: [promptPath, "expert-squad.jsonc"],
-        })
+        const createdSnapshot = await ExpertSquadRegistry.loadPackageRevisionSnapshot(created.candidatePackageDigest)
+        expect(await readFile(path.join(createdSnapshot.root, "agents/orchestrator/system.md"), "utf8"))
+          .toBe("# Scheduler\n\nPreserve the complete output requirement in the handoff.\n")
       },
     })
   })
 
-  test("refuses a candidate that names a file the operator may not write", async () => {
+  test("reports exact edit conflicts at the requested path and index", async () => {
     await using project = await memoryProject()
+    const sourceDirectory = path.join(project.path, "source")
+    await writeExpertSquadPackage({ directory: sourceDirectory, definition: packageDefinition("2026.08.13.1") })
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        for (const badPath of ["expert-squad.jsonc", "../escape.md", "/absolute.md", "agents/../../escape.md"]) {
-          await expect(
-            reviseInstalledExpertSquadFromFeedback({
-              taskID: "tsk_unused",
-              sessionID: "ses_unused",
+        configureTaskIngressRunner(async () => {})
+        const installed = await ExpertSquadPackageManager.importDirectory({
+          projectDirectory: project.path, sourceDirectory, installationScope: "project",
+        })
+        const task = await createTask({
+          namespace: "evolution-test", id: SQUAD_ID, version: "2026.08.13.1", packageDigest: installed.after.packageDigest,
+        })
+        const examples = [
+          { edit: exactEdit(PROMPT_PATH, "old wording not in this parent", "Use tables."), code: "source_text_missing" },
+          { edit: exactEdit(PROMPT_PATH, "e", "x"), code: "source_text_ambiguous" },
+          { edit: exactEdit(PROMPT_PATH, "", "New content"), code: "target_exists" },
+          { edit: exactEdit("agents/missing/system.md", "old", "new"), code: "target_missing" },
+          { edit: exactEdit(PROMPT_PATH, "baseline", "baseline"), code: "no_change" },
+          ...["../escape.md", "/absolute.md", "agents/../../escape.md", " padded.md", ".", "C:/escape.md", "agents/file.md:stream", "agents/CON.md"]
+            .map((name) => ({ edit: exactEdit(name, "", "New content"), code: "invalid_path" })),
+        ]
+        for (const example of examples) {
+          let observed: unknown
+          try {
+            await reviseInstalledExpertSquadFromFeedback({
+              taskID: task.taskID, sessionID: task.session.id,
               request: {
-                target_squad_id: SQUAD_ID,
-                feedback: FEEDBACK,
-                conflicting_instruction: "rewritten",
-            hypothesis: "unused",
-                files: [{ path: badPath, content: "x" }],
+                target_squad_id: SQUAD_ID, feedback: FEEDBACK, source_read_refs: [],
+                hypothesis: "An unrelated heading change cannot apply a missing instruction replacement.",
+                edits: [exactEdit("README.md", "# Feedback revision squad", "# Revised squad"), example.edit],
               },
-            }),
-          ).rejects.toThrow()
+            })
+          } catch (error) {
+            observed = error
+          }
+          expect(FeedbackRevisionEditError.isInstance(observed) ? observed.data : undefined)
+            .toEqual({ editIndex: 1, path: example.edit.path, code: example.code })
         }
+      },
+    })
+  })
+
+  test("reads long evidence in exact byte chunks and publishes its verified source provenance", async () => {
+    await using project = await memoryProject()
+    const sourceDirectory = path.join(project.path, "source")
+    await writeExpertSquadPackage({ directory: sourceDirectory, definition: packageDefinition("2026.08.13.1") })
+    const evidence = JSON.stringify({
+      earlier_events: "x".repeat(6500),
+      decisive: { actor: "orchestrator", rule: "Preserve the original interaction constraint." },
+      multibyte: "证据🙂".repeat(1200),
+    })
+    await writeFile(path.join(project.path, "evidence.json"), evidence)
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        configureTaskIngressRunner(async () => {})
+        const installed = await ExpertSquadPackageManager.importDirectory({
+          projectDirectory: project.path, sourceDirectory, installationScope: "project",
+        })
+        const task = await createTask({
+          namespace: "evolution-test", id: SQUAD_ID, version: "2026.08.13.1", packageDigest: installed.after.packageDigest,
+        })
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"), sessionID: task.session.id, role: "user", author: "user",
+          time: { created: Date.now() }, agent: "orchestrator", model: { providerID: "test", modelID: "test" },
+        })
+        const session = await Session.create({ kind: "assistant", parentID: task.session.id, title: "Revision evidence contract" })
+        const assistant = await Session.updateMessage({
+          id: Identifier.ascending("message"), sessionID: session.id, parentID: user.id,
+          role: "assistant", author: "orchestrator", agent: "orchestrator", time: { created: Date.now() },
+          providerID: "test", modelID: "test", path: { cwd: project.path, root: project.path },
+          cost: 0, tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        const executionSurface = createToolExecutionSurface({ toolIDs: ["artifact_snapshot", "artifact_read"], permission: [] })
+        // Fixture participants exercise the real snapshot/read/publication path;
+        // the separate live author probe verifies actual model consumption.
+        async function begin(tool: string, input: Record<string, unknown>) {
+          await Session.updatePart({
+            id: Identifier.ascending("part"), sessionID: session.id, messageID: assistant.id, type: "step-start",
+          })
+          const id = Identifier.ascending("part")
+          const callID = `call_${id}`
+          const start = Date.now()
+          await Session.updatePart({
+            id, sessionID: session.id, messageID: assistant.id, type: "tool", tool, callID,
+            state: { status: "running", input, time: { start } },
+          })
+          return {
+            id, callID, start,
+            finish: async (result: { output: string; title: string; metadata: Record<string, unknown> }) => {
+              await Session.updatePart({
+                id, sessionID: session.id, messageID: assistant.id, type: "tool", tool, callID,
+                state: { status: "completed", input, ...result, time: { start, end: Date.now() } },
+              })
+            },
+          }
+        }
+        const snapshotCall = await begin("artifact_snapshot", { files: [{ path: "evidence.json", media_type: "application/json" }] })
+        const publication = await publishTaskArtifactProjectFiles({
+          scope: {
+            kind: "task", projectID: Instance.project.id, projectDirectory: project.path, taskID: task.taskID,
+            taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, task.taskID), sessionID: session.id,
+            messageID: assistant.id, toolCallID: snapshotCall.callID, toolPartID: snapshotCall.id, executionSurface,
+            owner: {
+              kind: "projected-scheduler", expertSquadID: SQUAD_ID, agentID: "orchestrator", projectionHash: "d".repeat(64),
+              packageRevision: { scope: "project", projectID: Instance.project.id, namespace: "evolution-test", id: SQUAD_ID,
+                version: "2026.08.13.1", packageDigest: installed.after.packageDigest },
+            },
+          },
+          files: [{ path: "evidence.json", mediaType: "application/json" }], source: { kind: "current_task_project" },
+        })
+        const snapshot = artifactSnapshotTransport(publication.snapshot, publication.artifacts)
+        await snapshotCall.finish({ output: JSON.stringify(snapshot), title: "Evidence snapshot", metadata: { truncated: false } })
+        const resource = snapshot.locators.find((item) => item.role === "resource")!
+        const reader = await ArtifactReadTool.init()
+        let reads = [{ artifact_transport_version: 2 as const, artifact_locator_ref: resource.artifact_locator_ref,
+          byte_offset: 0, max_bytes: 4096, delivery: "inline" as const }]
+        const chunks: string[] = []
+        let finalReadRef = ""
+        while (reads.length) {
+          const call = await begin("artifact_read", { reads })
+          const ctx: Tool.Context = {
+            sessionID: session.id, messageID: assistant.id, agent: "orchestrator", callID: call.callID,
+            abort: new AbortController().signal, messages: [], executionSurface, extra: { toolPartID: call.id }, metadata: () => {},
+          }
+          const result = await reader.execute({ reads }, ctx)
+          await call.finish(result)
+          const batch = JSON.parse(result.output)
+          chunks.push(batch.results[0].value.text)
+          finalReadRef = batch.results[0].value.artifact_read_ref
+          reads = batch.next_reads
+          if (chunks.length === 1) {
+            const partialRequest = {
+              target_squad_id: SQUAD_ID, feedback: FEEDBACK, hypothesis: "A partial prefix leaves decisive evidence unread.",
+              source_read_refs: [finalReadRef], edits: [exactEdit(PROMPT_PATH, "baseline", "Use tables.")],
+            }
+            const attempt = await begin("evolve_expert_squad_from_feedback", partialRequest)
+            let observed: unknown
+            try {
+              await reviseInstalledExpertSquadFromFeedback({
+                taskID: task.taskID, sessionID: session.id, request: partialRequest,
+                evidenceScope: { assistantMessageID: assistant.id, toolPartID: attempt.id },
+              })
+            } catch (error) {
+              observed = error
+            }
+            expect(observed instanceof ArtifactReferenceResolutionError ? observed.code : undefined)
+              .toBe("ARTIFACT_REFERENCE_UNRESOLVED")
+          }
+        }
+        expect(chunks.length).toBeGreaterThan(1)
+        expect(Buffer.from(chunks.join(""))).toEqual(Buffer.from(evidence))
+        expect(JSON.parse(chunks.join("")).decisive)
+          .toEqual({ actor: "orchestrator", rule: "Preserve the original interaction constraint." })
+        const request = {
+          target_squad_id: SQUAD_ID, feedback: FEEDBACK,
+          hypothesis: "Change the exact owning instruction using the complete source, not its clipped prefix.",
+          source_read_refs: [finalReadRef, finalReadRef], edits: [exactEdit(PROMPT_PATH, "baseline", "Use tables.")],
+        }
+        const reviseCall = await begin("evolve_expert_squad_from_feedback", request)
+        const revision = await reviseInstalledExpertSquadFromFeedback({
+          taskID: task.taskID, sessionID: session.id, request,
+          evidenceScope: { assistantMessageID: assistant.id, toolPartID: reviseCall.id },
+        })
+        const persisted = await readTaskArtifact({
+          authority: artifactCatalogAuthority(task.taskID),
+          read: { locator: revision.locator, byte_offset: 0, max_bytes: 65536, delivery: "inline" },
+        })
+        const envelope = JSON.parse(persisted.chunk.text!)
+        expect(envelope.payload.provenance).toEqual([resource.locator])
+        expect(envelope.source_artifact_locators).toEqual([resource.locator])
+        expect(envelope.observed_artifact_locators).toEqual([resource.locator])
+        const prepared = prepareEvolutionPackageMutation({
+          taskID: task.taskID,
+          intent: {
+            operation: "feedback_revision", candidateRevisionLocator: revision.locator,
+            expectedCurrentPackageDigest: revision.expectedCurrentPackageDigest,
+          },
+        })
+        expect(prepared.evidence).toEqual([revision.locator])
       },
     })
   })

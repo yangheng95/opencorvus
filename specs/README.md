@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Expert Squad feedback evolution algorithm repair](records/2026-09/2026-09-24-expert-squad-evolution-algorithm.md)
+
 - [AutomationBench ten-case automatic revision experiment](records/2026-09/2026-09-24-automationbench-self-evolution.md)
 
 - [Inspect AutomationBench Luna calibration and pilot](records/2026-09/2026-09-24-inspect-automationbench-luna-calibration.md)

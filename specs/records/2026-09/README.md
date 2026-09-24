@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Expert Squad feedback evolution algorithm repair](2026-09-24-expert-squad-evolution-algorithm.md)
+
 - [AutomationBench ten-case automatic revision experiment](2026-09-24-automationbench-self-evolution.md)
 
 - [Inspect AutomationBench Luna calibration and pilot](2026-09-24-inspect-automationbench-luna-calibration.md)

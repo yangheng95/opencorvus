@@ -3,13 +3,22 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import { mkdir, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 import z from "zod"
+import { isCanonicalProjectRelativePath } from "@opencorvus-ai/plugin/project-path"
 import {
   canonicalEvolutionJSON,
   compareCandidateIntegrity,
   EngineArtifactEnvelopeSchema,
   EvolutionArtifactSchemas,
+  ArtifactReadReferenceSchema,
+  artifactReadLocatorKey,
+  type ArtifactReadLocator,
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin"
+import {
+  ArtifactReferenceResolutionError,
+  completeArtifactReadsBeforePublication,
+  resolveArtifactReadReferenceBeforeSelection,
+} from "@/agent/artifact-read-facts"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import { insertEngineArtifact } from "@/engine/artifact"
 import { EngineArtifactTable } from "@/engine/engine.sql"
@@ -23,10 +32,10 @@ import { ExpertSquadVersionSchema } from "./version"
 /**
  * The Core component that authors a feedback-driven candidate.
  *
- * Only the Host can attest that a revision came from what the operator said:
- * it is the one participant that saw the Message. A projected squad claiming
- * the same provenance would be claiming to have witnessed something outside
- * its own evidence, so the mutation path accepts this component and no other.
+ * The Host owns validation, immutable package identity and persisted source
+ * attribution. A projected squad cannot issue this Core receipt for itself.
+ * The author still owns the feedback quotation and causal hypothesis; source
+ * read receipts establish delivered bytes, not semantic understanding.
  */
 export const FEEDBACK_REVISION_COMPONENT_ID = "expert-squad-feedback-revision"
 
@@ -35,16 +44,27 @@ export const FeedbackRevisionIdentityConflictError = NamedError.create(
   z.object({ artifactID: z.string() }),
 )
 
+export const FeedbackRevisionEditError = NamedError.create(
+  "FeedbackRevisionEditError",
+  z.object({
+    editIndex: z.number().int().nonnegative(),
+    path: z.string(),
+    code: z.enum(["invalid_path", "target_exists", "target_missing", "source_text_missing", "source_text_ambiguous", "no_change"]),
+  }),
+)
+
 const MANIFEST = "expert-squad.jsonc"
 const VERSION_FIELD = /("version"\s*:\s*)"(\d{4}\.\d{2}\.\d{2}\.[1-9]\d*)"/
 
-export const ExpertSquadFeedbackRevisionFileSchema = z
+export const ExpertSquadFeedbackRevisionEditSchema = z
   .object({
     path: z
       .string()
       .min(1)
-      .describe("Package-relative POSIX path to overwrite or add, for example agents/<agent-id>/system.md."),
-    content: z.string().describe("Complete new UTF-8 content for that path."),
+      .describe("Package-relative POSIX path of the owning instruction, for example agents/<agent-id>/system.md."),
+    old_text: z.string().describe("Exact existing UTF-8 text to replace, including whitespace; it must match once. Empty only to create a new file."),
+    new_text: z.string().describe("Replacement text for that exact span, or the complete content of a new file. Empty deletes the matched text."),
+    reason: z.string().min(1).describe("Why this owning instruction must change: observed decision, predicted Tool arguments, and working behavior preserved."),
   })
   .strict()
 
@@ -70,15 +90,12 @@ export const ExpertSquadFeedbackRevisionInputSchema = z
           "An answer that only restates the preference is the shape that has repeatedly shipped " +
           "revisions changing wording and nothing else.",
       ),
-    conflicting_instruction: z
-      .enum(["rewritten", "none"])
-      .describe(
-        'Whether an instruction already in this Squad conflicts with the preference. "rewritten" means you edited ' +
-          'that instruction where it stands; "none" means nothing in the Squad said otherwise and your edit only ' +
-          "adds. Answer from the text you read, not from what you wrote: appending beside a conflicting instruction " +
-          "leaves the older, more specific one in force, which is how a revision changes wording and nothing else.",
-      ),
-    files: z.array(ExpertSquadFeedbackRevisionFileSchema).min(1),
+    edits: z.array(ExpertSquadFeedbackRevisionEditSchema).min(1),
+    source_read_refs: z.array(ArtifactReadReferenceSchema).describe(
+      "Exact artifact_read_ref values from complete same-Turn Artifact reads supporting this revision. " +
+      "Use artifact_snapshot and bounded artifact_read byte chunks for long evidence; follow next_reads. " +
+      "An empty array is valid when this preference revision relies on no Artifact evidence.",
+    ),
   })
   .strict()
 
@@ -106,15 +123,6 @@ export function parseFeedbackRevisionTarget(value: string): { namespace?: string
 
 export type ExpertSquadFeedbackRevisionInput = z.infer<typeof ExpertSquadFeedbackRevisionInputSchema>
 
-function assertPackageRelativePath(value: string) {
-  if (value !== value.trim()) throw new Error(`Expert Squad revision path must not be padded: ${JSON.stringify(value)}`)
-  if (value.includes("\\")) throw new Error(`Expert Squad revision path must use POSIX separators: ${value}`)
-  if (path.posix.isAbsolute(value)) throw new Error(`Expert Squad revision path must be package-relative: ${value}`)
-  const normalized = path.posix.normalize(value)
-  if (normalized !== value || normalized.startsWith("../") || normalized === "..")
-    throw new Error(`Expert Squad revision path must be canonical and inside the package: ${value}`)
-}
-
 /**
  * The next version for a revision published today.
  *
@@ -139,75 +147,53 @@ function manifestTextWithVersion(input: { text: string; version: string }): stri
   return input.text.replace(VERSION_FIELD, (_match, prefix: string) => `${prefix}"${input.version}"`)
 }
 
-/**
- * Author one candidate revision of an installed Expert Squad from verbatim
- * operator feedback, and stage the mutation the operator can then accept.
- *
- * There is no Campaign, no trial and no comparison: one piece of feedback has
- * nothing to measure against, so the operator's own acceptance is the verdict
- * and the published receipt is the way back.
- */
-/**
- * Hold the author to what they said they did.
- *
- * The Host cannot judge whether new wording is strong enough — that is a
- * reading, and a gate built on one refuses honest revisions and teaches
- * nothing. What it can do is check a claim against the bytes. An author who
- * says an existing instruction was rewritten has made a statement this file can
- * verify: some changed text file must differ from its parent somewhere other
- * than the end. Three live revisions in a row appended a hedged sentence to a
- * prompt that already prescribed the opposite shape and changed nothing else,
- * and each one shipped as a version that behaved exactly like its parent.
- *
- * Claiming "none" stays available and is not second-guessed. It is not an
- * escape so much as the decision itself, made on purpose and on the record:
- * the author has to look at what the Squad already says before answering.
- */
-function assertConflictingInstructionClaim(input: {
-  claim: "rewritten" | "none"
-  parentBytes: ReadonlyMap<string, Buffer>
-  candidateBytes: ReadonlyMap<string, Buffer>
-  changedPaths: readonly string[]
-}) {
-  if (input.claim !== "rewritten") return
-  const appendedOnly: string[] = []
-  for (const changed of input.changedPaths) {
-    // The Host owns the manifest's version, so the manifest always differs and
-    // proves nothing about what the author did.
-    if (changed === MANIFEST) continue
-    const before = input.parentBytes.get(changed)
-    const after = input.candidateBytes.get(changed)
-    // A file this revision introduces or removes is not an append.
-    if (!before || !after) return
-    // Compared as text after trimming the end, because an appending author
-    // routinely eats the parent's trailing newline, which no byte-level prefix
-    // test would forgive and which says nothing about what changed.
-    if (!after.toString("utf8").trimEnd().startsWith(before.toString("utf8").trimEnd())) return
-    appendedOnly.push(changed)
+/** Apply only the author's exact spans. This proves byte application, not
+ * semantic conflict resolution or behavioral improvement. */
+function applyRevisionEdits(parentBytes: ReadonlyMap<string, Buffer>, edits: ExpertSquadFeedbackRevisionInput["edits"]) {
+  const candidate = new Map(parentBytes)
+  for (const [editIndex, edit] of edits.entries()) {
+    const fail = (code: InstanceType<typeof FeedbackRevisionEditError>["data"]["code"]): never => {
+      throw new FeedbackRevisionEditError({ editIndex, path: edit.path, code })
+    }
+    if (!isCanonicalProjectRelativePath(edit.path)) fail("invalid_path")
+    if (edit.old_text === edit.new_text) fail("no_change")
+    const prior = candidate.get(edit.path)
+    if (edit.old_text === "") {
+      if (prior !== undefined) fail("target_exists")
+      candidate.set(edit.path, Buffer.from(edit.new_text, "utf8"))
+      continue
+    }
+    const text = prior?.toString("utf8") ?? fail("target_missing")
+    const start = text.indexOf(edit.old_text)
+    if (start < 0) fail("source_text_missing")
+    if (text.indexOf(edit.old_text, start + 1) >= 0) fail("source_text_ambiguous")
+    candidate.set(edit.path, Buffer.from(text.slice(0, start) + edit.new_text + text.slice(start + edit.old_text.length), "utf8"))
   }
-  if (appendedOnly.length === 0) return
-  throw new Error(
-    "Expert Squad revision claims conflicting_instruction=rewritten, but every changed text file still begins with " +
-      `its parent unchanged and only adds at the end: ${JSON.stringify(appendedOnly.toSorted())}. ` +
-      'expected: an edit to the instruction that conflicts, or conflicting_instruction="none" when nothing in the ' +
-      'Squad said otherwise. received: "rewritten" with an append-only revision. ' +
-      "Read the prompt you are changing, find the sentence that prescribes the shape the operator is objecting to, " +
-      "and rewrite that sentence where it stands.",
-  )
+  return candidate
 }
 
+/** Stage an unmeasured candidate; supplied evidence is attributed through the
+ * existing complete-read facts, while installation still needs acceptance. */
 export async function reviseInstalledExpertSquadFromFeedback(input: {
   taskID: string
   sessionID: string
   request: ExpertSquadFeedbackRevisionInput
+  evidenceScope?: { assistantMessageID: string; toolPartID: string }
   now?: number
 }) {
   const request = ExpertSquadFeedbackRevisionInputSchema.parse(input.request)
   const target = parseFeedbackRevisionTarget(request.target_squad_id)
   const id = target.id
-  for (const file of request.files) assertPackageRelativePath(file.path)
-  const declared = new Set(request.files.map((file) => file.path))
-  if (declared.size !== request.files.length) throw new Error("Expert Squad revision declares one path twice")
+  const evidenceScope = input.evidenceScope && { sessionID: input.sessionID, ...input.evidenceScope }
+  const sourceByLocator = new Map<string, ArtifactReadLocator>()
+  for (const reference of request.source_read_refs) {
+    if (!evidenceScope)
+      throw new ArtifactReferenceResolutionError(reference, "Feedback revision requires persisted invocation identity for evidence reads")
+    const locator = resolveArtifactReadReferenceBeforeSelection({ ...evidenceScope, reference })
+    sourceByLocator.set(artifactReadLocatorKey(locator), locator)
+  }
+  const sourceArtifactLocators = [...sourceByLocator.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([, value]) => value)
+  const observedArtifactLocators = evidenceScope ? completeArtifactReadsBeforePublication(evidenceScope) : []
 
   const installed = await installedProjectPackage(target)
   const parentSnapshot = await ExpertSquadRegistry.loadPackageRevisionSnapshot(installed.packageDigest)
@@ -219,8 +205,7 @@ export async function reviseInstalledExpertSquadFromFeedback(input: {
   const version = nextExpertSquadVersion({ current: parent.version, now: input.now ?? Date.now() })
 
   const parentBytesByPath = new Map(parentFiles.map((file) => [file.path, Buffer.from(file.bytes)]))
-  const candidateBytes = new Map(parentBytesByPath)
-  for (const file of request.files) candidateBytes.set(file.path, Buffer.from(file.content, "utf8"))
+  const candidateBytes = applyRevisionEdits(parentBytesByPath, request.edits)
   // The author may rewrite the manifest — an agent's grants, the workflow
   // topology and the agent set all live there, and refusing the file left this
   // path able to change only prose while the Campaign path could change all of
@@ -261,12 +246,6 @@ export async function reviseInstalledExpertSquadFromFeedback(input: {
   }
 
   const comparison = compareCandidateIntegrity(parent, candidate)
-  assertConflictingInstructionClaim({
-    claim: request.conflicting_instruction,
-    parentBytes: parentBytesByPath,
-    candidateBytes,
-    changedPaths: comparison.changed_paths,
-  })
   const payload = EvolutionArtifactSchemas["evolution-lab/candidate-revision"].parse({
     development_campaign_locator: null,
     feedback: request.feedback,
@@ -285,16 +264,15 @@ export async function reviseInstalledExpertSquadFromFeedback(input: {
       version: candidate.version,
       package_digest: candidate.package_digest,
     },
-    // The evidence this revision was authored from is the operator's own
-    // words, carried verbatim in `feedback`; there is no prior Artifact to
-    // cite, and citing the Task's own Messages as Artifacts would invent one.
-    provenance: [],
+    provenance: sourceArtifactLocators,
   })
 
   const locator = persistCandidate({
     taskID: input.taskID,
     sessionID: input.sessionID,
     payload,
+    observedArtifactLocators,
+    sourceArtifactLocators,
   })
   return {
     locator,
@@ -344,6 +322,8 @@ function persistCandidate(input: {
   taskID: string
   sessionID: string
   payload: unknown
+  observedArtifactLocators: ArtifactReadLocator[]
+  sourceArtifactLocators: ArtifactReadLocator[]
 }): EngineArtifactLocator {
   const envelope = EngineArtifactEnvelopeSchema.parse({
     artifact_type: "evolution-lab/candidate-revision",
@@ -355,8 +335,8 @@ function persistCandidate(input: {
     },
     payload: input.payload,
     resources: [],
-    observed_artifact_locators: [],
-    source_artifact_locators: [],
+    observed_artifact_locators: input.observedArtifactLocators,
+    source_artifact_locators: input.sourceArtifactLocators,
   })
   const artifactID = Identifier.deterministic("artifact", `feedback-revision\0${input.taskID}\0${canonicalEvolutionJSON(envelope)}`)
   Database.transaction((db) => {
