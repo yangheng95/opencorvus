@@ -62,7 +62,9 @@ export const ExpertSquadFeedbackRevisionInputSchema = z
       .min(1)
       .describe(
         "By what mechanism these edits make the squad satisfy that preference: which agent's behavior changes, and " +
-          "through what it produces. Name the Tool when the preference asks for an output the squad renders rather " +
+          "through what it produces. For measured improvement, identify the observed failure, the instruction or " +
+          "decision responsible, the predicted change on a fresh run, and the successful behavior to preserve. " +
+          "Distinguish untested predictions from actual checker evidence. Name the Tool when the preference asks for an output the squad renders rather " +
           "than describes — `publish_interactive_artifact` carries `table@1` and `chart@1`, and every projected " +
           "worker already holds it; scheduler availability follows its exact inherited and explicit Tool surface. " +
           "An answer that only restates the preference is the shape that has repeatedly shipped " +
