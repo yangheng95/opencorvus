@@ -1,5 +1,6 @@
 import z from "zod"
 import { TaskBoard } from "@/engine/model"
+import { MissionOutcomeFact } from "@/mission/completion"
 import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
 
 export const TaskActivityState = z.enum(["running", "inactive"])
@@ -60,6 +61,7 @@ export const MissionStatusSnapshot = z.object({
   directory: z.string(),
   productPillar: ProductPillarSchema,
   status: TaskActivityState,
+  outcome: MissionOutcomeFact.optional(),
   taskCounts: MissionTaskCounts,
   activity: TaskActivitySummary,
   tasks: TaskStatusDetail.array(),
@@ -146,6 +148,7 @@ export function missionStatusSnapshot(input: {
   directory: string
   productPillar: z.infer<typeof ProductPillarSchema>
   missionActivity: TaskActivityState
+  outcome?: z.infer<typeof MissionOutcomeFact>
   tasks: TaskStatusDetail[]
   generatedAt?: number
 }): MissionStatusSnapshot {
@@ -167,6 +170,7 @@ export function missionStatusSnapshot(input: {
     directory: input.directory,
     productPillar: input.productPillar,
     status,
+    outcome: input.outcome,
     taskCounts,
     activity,
     tasks: input.tasks,

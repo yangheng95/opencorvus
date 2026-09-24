@@ -46,6 +46,7 @@ const guidance: Readonly<Record<string, string>> = {
     "Read a failed child Task's settled worker reports and causal Tool facts by exact Message identities.",
   panel_create_task: "Create a Task with the selected ownership and requested work.",
   panel_complete_mission: "Complete a Mission using its accepted Task evidence.",
+  panel_block_mission: "Settle a Mission as blocked using exact current Task evidence and unmet obligations.",
 }
 
 export function routineToolRefs(input: {

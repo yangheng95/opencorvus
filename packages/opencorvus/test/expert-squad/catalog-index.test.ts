@@ -340,6 +340,7 @@ describe("Expert Squad catalog index", () => {
           "glob",
           "memory",
           "mission_state",
+          "panel_block_mission",
           "panel_cancel_task",
           "panel_complete_mission",
           "panel_create_task",

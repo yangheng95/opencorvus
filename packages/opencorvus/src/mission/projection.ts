@@ -13,7 +13,7 @@ import { SessionStatus } from "@/session"
 import { MissionID, MissionPendingPrompt, ProductPillarSchema } from "./schema"
 import { missionPendingPrompt, type MissionSession } from "./session"
 import { MissionBoardLane, missionBoardProjection } from "./board"
-import { MissionCompletionFact } from "./completion"
+import { MissionOutcomeFact } from "./completion"
 import { pendingTaskCancellationProjection } from "@/engine/cancellation-projection"
 
 export const MissionTaskStatus = z.enum(["active", "completed", "failed", "cancelled"])
@@ -55,7 +55,7 @@ export const MissionRecord = z.object({
   boardLane: MissionBoardLane,
   pendingInteractions: z.number().int().nonnegative(),
   pendingPrompt: MissionPendingPrompt.optional(),
-  completion: MissionCompletionFact.optional(),
+  outcome: MissionOutcomeFact.optional(),
   tasks: MissionTaskProjection.array(),
   taskStats: MissionTaskStats,
 })
@@ -144,7 +144,7 @@ export function missionRecord(session: MissionSession): MissionRecordValue {
     boardLane: board.lane,
     pendingInteractions: board.pendingInteractions,
     pendingPrompt: missionPendingPrompt(session),
-    completion: board.completion,
+    outcome: board.outcome,
     tasks,
     taskStats: missionTaskStats(tasks),
   })
@@ -162,6 +162,7 @@ export function missionStatusRecord(session: MissionSession): z.infer<typeof Mis
     directory: session.directory,
     productPillar: session.productPillar,
     missionActivity: SessionStatus.isExecuting(sessionStatus) ? "running" : "inactive",
+    outcome: missionRecord(session).outcome,
     tasks,
   })
 }

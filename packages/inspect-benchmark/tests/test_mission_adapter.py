@@ -44,10 +44,11 @@ async def test_real_mission_endpoint_waits_past_first_child_completion() -> None
                                 "lifecycleStatus": "completed",
                             }
                         ],
-                        "completion": (
+                        "outcome": (
                             None
                             if mission_reads < 3
                             else {
+                                "kind": "accepted",
                                 "messageID": "message-accepted",
                                 "summary": "Mission accepted result",
                             }
@@ -100,7 +101,9 @@ async def test_real_mission_endpoint_waits_past_first_child_completion() -> None
         "mission_session_id": "session-1",
         "task_id": "task-1",
         "request_id": "trial-mission-1",
+        "mission_outcome_kind": "accepted",
         "mission_completion_message_id": "message-accepted",
+        "mission_blockage_message_id": None,
         "package_revision_binding": {"manifest_id": "builtin/automationbench@1"},
     }
     assert wake == {
@@ -114,6 +117,67 @@ async def test_real_mission_endpoint_waits_past_first_child_completion() -> None
         ),
         "model": "openai/gpt-5.6-luna",
         "expertSquadIDs": ["automationbench"],
+    }
+
+
+@pytest.mark.asyncio
+async def test_blocked_mission_returns_the_real_terminal_receipt_and_failed_child() -> None:
+    async def handler(request: httpx.Request) -> httpx.Response:
+        if request.method == "POST" and request.url.path == "/mission/wake":
+            return httpx.Response(
+                200, json={"missionID": "mission-blocked", "sessionID": "session-blocked"}
+            )
+        if request.method == "GET" and request.url.path in {"/mission", "/mission/"}:
+            return httpx.Response(200, json=[{
+                "missionID": "mission-blocked",
+                "sessionID": "session-blocked",
+                "directory": "D:/bench",
+                "boardLane": "attention",
+                "interruptible": False,
+                "tasks": [{"id": "task-blocked", "source": "mission", "lifecycleStatus": "failed"}],
+                "outcome": {
+                    "kind": "blocked",
+                    "messageID": "message-blocked",
+                    "summary": (
+                        "The authorized portal handoff is complete; "
+                        "direct submission remains external."
+                    ),
+                    "unresolvedCriteria": ["Direct portal submission"],
+                },
+            }])
+        if request.method == "GET" and request.url.path == "/task/task-blocked":
+            return httpx.Response(
+                200,
+                json={"packageRevisionBinding": {"manifest_id": "builtin/automationbench@1"}},
+            )
+        raise AssertionError(f"unexpected request: {request.method} {request.url}")
+
+    config = AdapterConfig.resolve(
+        base_url="http://opencorvus.test",
+        project_dir="D:/bench",
+        model="openai/gpt-5.6-luna",
+        prompt_profile="automationbench",
+    )
+    async with OpenCorvusClient(config, transport=httpx.MockTransport(handler)) as client:
+        result = await client.run_mission(
+            request="Complete the original case",
+            request_id="trial-mission-blocked",
+            title="Case",
+            sample_id="sample-blocked",
+            sample_uuid="uuid-blocked",
+            epoch=1,
+        )
+    assert result.metadata() == {
+        "schema_version": 1,
+        "entrypoint": "mission",
+        "mission_id": "mission-blocked",
+        "mission_session_id": "session-blocked",
+        "task_id": "task-blocked",
+        "request_id": "trial-mission-blocked",
+        "mission_outcome_kind": "blocked",
+        "mission_completion_message_id": None,
+        "mission_blockage_message_id": "message-blocked",
+        "package_revision_binding": {"manifest_id": "builtin/automationbench@1"},
     }
 
 
@@ -132,7 +196,9 @@ async def test_mission_completion_with_two_business_tasks_is_a_protocol_error() 
                     "boardLane": "completed",
                     "interruptible": False,
                     "tasks": [{"id": "task-1"}, {"id": "task-2"}],
-                    "completion": {"messageID": "message-2", "summary": "Two Tasks"},
+                    "outcome": {
+                        "kind": "accepted", "messageID": "message-2", "summary": "Two Tasks",
+                    },
                 }
             ],
         )
@@ -177,7 +243,7 @@ async def test_stalled_mission_retains_the_exact_accepted_identity() -> None:
                         "boardLane": "review",
                         "interruptible": False,
                         "tasks": [],
-                        "completion": None,
+                        "outcome": None,
                     }
                 ],
             )

@@ -153,6 +153,7 @@ describe("SessionLoop Tool execution authority integration", () => {
           if (providerStep === 1) {
             expect(Object.keys(input.tools).sort()).toEqual([
               "capability_search",
+              "panel_block_mission",
               "panel_cancel_task",
               "panel_capture_overlay_screenshot",
               "panel_complete_mission",

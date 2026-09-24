@@ -86,9 +86,12 @@ def sample_environment(
                 yield
             result = state.metadata.get("opencorvus_result", {})
             lifecycle = result.get("lifecycle_status")
-            mission_accepted = bool(result.get("mission_completion_message_id"))
+            mission_settled = bool(
+                result.get("mission_completion_message_id")
+                or result.get("mission_blockage_message_id")
+            )
             if (entrypoint == "task" and lifecycle in {"completed", "failed"}) or (
-                entrypoint == "mission" and mission_accepted
+                entrypoint == "mission" and mission_settled
             ):
                 score = world.seal()
                 snapshot = world.snapshot()

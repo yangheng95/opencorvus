@@ -66,3 +66,49 @@ export const MissionCompletionFact = z.object({
 })
 
 export type MissionCompletionFactValue = z.infer<typeof MissionCompletionFact>
+
+export const MissionBlockTaskReviewInput = z.object({
+  task_id: z.string().min(1).describe("Current terminal child Task reviewed before blocking this Mission."),
+  evidence_read_refs: MissionCompletionTaskAcceptanceInput.shape.evidence_read_refs,
+}).strict()
+
+export const MissionBlockTaskReview = z.object({
+  task_id: z.string().min(1),
+  evidence_locators: MissionCompletionTaskAcceptance.shape.evidence_locators,
+  terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
+}).strict()
+
+export const MissionBlockInput = z.object({
+  summary: MissionCompletionInput.shape.summary.describe("Truthful user-facing summary of the blocked Mission."),
+  unresolved_criteria: z.array(z.string().trim().min(1).max(1_000)).min(1).max(32).describe(
+    "Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.",
+  ),
+  task_reviews: z.array(MissionBlockTaskReviewInput).min(1).max(128).describe(
+    "Complete current child-Task set and exact fully read evidence for each terminal occurrence.",
+  ),
+}).strict()
+
+export const MissionBlockActionInput = MissionBlockInput.extend({ action: z.literal("block_mission") }).strict()
+
+export const MissionBlockReceipt = z.object({
+  kind: z.literal("mission_blocked"),
+  mission_id: z.string().min(1),
+  mission_session_id: z.string().min(1),
+  summary: MissionBlockInput.shape.summary,
+  unresolved_criteria: MissionBlockInput.shape.unresolved_criteria,
+  task_reviews: z.array(MissionBlockTaskReview).min(1).max(128),
+  assistant_message_id: z.string().min(1),
+  tool_call_id: z.string().min(1),
+  tool_part_id: z.string().min(1),
+  time_recorded: z.number().nonnegative(),
+}).strict()
+
+export const MissionOutcomeFact = z.discriminatedUnion("kind", [
+  MissionCompletionFact.extend({ kind: z.literal("accepted") }),
+  MissionCompletionFact.extend({
+    kind: z.literal("blocked"),
+    unresolvedCriteria: MissionBlockInput.shape.unresolved_criteria,
+  }),
+])
+
+export type MissionOutcomeFactValue = z.infer<typeof MissionOutcomeFact>

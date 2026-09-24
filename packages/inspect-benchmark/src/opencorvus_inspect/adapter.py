@@ -290,14 +290,15 @@ class TaskResult:
 
 @dataclass(frozen=True, slots=True)
 class MissionResult:
-    """Exact public Mission completion with its one Mission-owned Task."""
+    """Exact public Mission business outcome with its one Mission-owned Task."""
 
     mission_id: str
     session_id: str
     task_id: str
     request_id: str
     completion: str
-    completion_message_id: str
+    outcome_kind: str
+    outcome_message_id: str
     package_revision_binding: Mapping[str, Any]
 
     def metadata(self) -> dict[str, Any]:
@@ -308,7 +309,13 @@ class MissionResult:
             "mission_session_id": self.session_id,
             "task_id": self.task_id,
             "request_id": self.request_id,
-            "mission_completion_message_id": self.completion_message_id,
+            "mission_outcome_kind": self.outcome_kind,
+            "mission_completion_message_id": (
+                self.outcome_message_id if self.outcome_kind == "accepted" else None
+            ),
+            "mission_blockage_message_id": (
+                self.outcome_message_id if self.outcome_kind == "blocked" else None
+            ),
             "package_revision_binding": dict(self.package_revision_binding),
         }
 
@@ -766,13 +773,22 @@ class OpenCorvusClient:
                 tasks = record.get("tasks")
                 if not isinstance(tasks, list):
                     raise OpenCorvusProtocolError("Mission tasks must be an array")
-                completion = record.get("completion")
+                outcome = record.get("outcome")
                 if (
-                    completion is not None
-                    and last_lane == "completed"
+                    outcome is not None
+                    and last_lane in {"completed", "attention"}
                     and record.get("interruptible") is False
                 ):
-                    decision = _mapping(completion, label="mission.completion")
+                    decision = _mapping(outcome, label="mission.outcome")
+                    outcome_kind = _required_string(
+                        decision.get("kind"), label="mission.outcome.kind"
+                    )
+                    if outcome_kind not in {"accepted", "blocked"} or last_lane != (
+                        "completed" if outcome_kind == "accepted" else "attention"
+                    ):
+                        raise OpenCorvusProtocolError(
+                            "Mission board lane and outcome kind disagree"
+                        )
                     if len(tasks) != 1:
                         raise OpenCorvusProtocolError(
                             "Mission trial requires one initial business Task; "
@@ -781,11 +797,12 @@ class OpenCorvusClient:
                     task_row = _mapping(tasks[0], label="mission.tasks[0]")
                     task_id = _required_string(task_row.get("id"), label="mission.task.id")
                     if (
-                        task_row.get("lifecycleStatus") != "completed"
+                        task_row.get("lifecycleStatus")
+                        != ("completed" if outcome_kind == "accepted" else "failed")
                         or task_row.get("source") != "mission"
                     ):
                         raise OpenCorvusProtocolError(
-                            "Mission completion lacks a completed Mission-owned Task"
+                            "Mission outcome lacks its exact terminal Mission-owned Task"
                         )
                     task = await self.task(task_id)
                     binding = _mapping(
@@ -793,10 +810,10 @@ class OpenCorvusClient:
                         label="mission.task.packageRevisionBinding",
                     )
                     message_id = _required_string(
-                        decision.get("messageID"), label="mission.completion.messageID"
+                        decision.get("messageID"), label="mission.outcome.messageID"
                     )
                     summary = _required_string(
-                        decision.get("summary"), label="mission.completion.summary"
+                        decision.get("summary"), label="mission.outcome.summary"
                     )
                     return MissionResult(
                         mission_id=mission_id,
@@ -804,7 +821,8 @@ class OpenCorvusClient:
                         task_id=task_id,
                         request_id=request_id,
                         completion=summary,
-                        completion_message_id=message_id,
+                        outcome_kind=outcome_kind,
+                        outcome_message_id=message_id,
                         package_revision_binding=binding,
                     )
                 activity = await self._request_json(

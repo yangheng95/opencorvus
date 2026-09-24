@@ -109,7 +109,7 @@ function MissionBoardCard(props: {
             <Icon name="folder" size="compact" />
             <span>{missionProjectLabel(props.mission)}</span>
           </span>
-          <Show when={props.mission.completion?.summary}>
+          <Show when={props.mission.outcome?.summary}>
             {(summary) => <span class="mission-board-card__summary">{summary()}</span>}
           </Show>
           <Show when={props.mission.pendingPrompt?.text}>

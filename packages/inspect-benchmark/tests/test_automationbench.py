@@ -180,7 +180,9 @@ async def test_sample_setup_settles_separate_worlds_and_releases_owned_endpoints
 
 
 @pytest.mark.asyncio
-async def test_mission_world_seals_only_after_accepted_mission_completion(tmp_path: Path) -> None:
+async def test_mission_world_seals_after_accepted_or_blocked_business_outcome(
+    tmp_path: Path,
+) -> None:
     case = load_cases(MANIFEST)[0]
     config = AdapterConfig.resolve(project_dir=str(tmp_path / "mission"))
     setup = sample_environment([case], SQUAD, entrypoint="mission")
@@ -203,6 +205,19 @@ async def test_mission_world_seals_only_after_accepted_mission_completion(tmp_pa
         }
     assert accepted.metadata["automationbench_execution"] == {"status": "scored"}
     assert accepted.metadata["automationbench_score"]["strict"] == 0.0
+
+    blocked = state_for(case)
+    blocked_config = AdapterConfig.resolve(project_dir=str(tmp_path / "blocked"))
+    async with setup(blocked, blocked_config):
+        blocked.metadata["opencorvus_result"] = {
+            "entrypoint": "mission",
+            "mission_id": "mission-blocked",
+            "mission_outcome_kind": "blocked",
+            "mission_completion_message_id": None,
+            "mission_blockage_message_id": "message-blocked",
+        }
+    assert blocked.metadata["automationbench_execution"] == {"status": "scored"}
+    assert blocked.metadata["automationbench_score"]["strict"] == 0.0
 
 
 @pytest.mark.asyncio

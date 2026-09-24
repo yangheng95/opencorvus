@@ -848,7 +848,7 @@ describe("Mission terminal Task authority", () => {
           const facts = { interruptible: false, pendingInteractions: 0, taskLifecycleStatuses: [] }
           expect(missionBoardProjection(mission, facts)).toMatchObject({
             lane: "completed",
-            completion: { toolPartID: partID },
+            outcome: { kind: "accepted", toolPartID: partID },
           })
           const { orderKey: _priorOrder, ...newInput } = user
           if (origin === "scheduled") {
@@ -1241,7 +1241,7 @@ describe("Mission terminal Task authority", () => {
             pendingInteractions: 0,
             taskLifecycleStatuses: ["completed"],
           }),
-        ).toMatchObject({ lane: "completed", completion: { summary: "Accepted terminal evidence" } })
+        ).toMatchObject({ lane: "completed", outcome: { kind: "accepted", summary: "Accepted terminal evidence" } })
 
         Database.immediateTransaction((db) => {
           db.insert(AutomationTable)
@@ -1293,7 +1293,7 @@ describe("Mission terminal Task authority", () => {
             pendingInteractions: 0,
             taskLifecycleStatuses: ["completed"],
           }),
-        ).toMatchObject({ lane: "completed", completion: { toolPartID: completionPartID } })
+        ).toMatchObject({ lane: "completed", outcome: { kind: "accepted", toolPartID: completionPartID } })
 
         await updateTask(requireTask(taskID), { status: "active" }, "Task resumed")
         expect(

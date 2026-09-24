@@ -82,7 +82,12 @@ import {
 } from "@/agent/artifact-read-facts"
 import { reviewedTerminalLifecycleReferenceBeforePanelAction } from "@/agent/task-review-facts"
 import { listMissionTasks } from "@/engine/store"
-import { MissionCompletionReceipt, MissionCompletionTaskAcceptance } from "@/mission/completion"
+import {
+  MissionBlockReceipt,
+  MissionBlockTaskReview,
+  MissionCompletionReceipt,
+  MissionCompletionTaskAcceptance,
+} from "@/mission/completion"
 import {
   acceptanceGapEvidenceLocators,
   acceptanceGapReadReferences,
@@ -497,6 +502,49 @@ function panelCancellationActor(actor: Exclude<PanelActor, "panel_ui">) {
   throw new Error(`panel.cancel_task is not permitted for actor ${actor}.`)
 }
 
+function requireMissionCurrentChildTerminals(input: {
+  mission: Awaited<ReturnType<typeof requireMissionSession>>
+  taskIDs: readonly string[]
+  operation: "complete_mission" | "block_mission"
+}): Map<string, z.infer<typeof TerminalLifecycleReferenceSchema>> {
+  const missionTasks = listMissionTasks({
+    projectID: input.mission.projectID,
+    missionID: input.mission.missionID,
+    sessionID: input.mission.id,
+  })
+  const expectedTaskIDs = missionTasks.map((task) => task.id).sort()
+  const receivedTaskIDs = [...input.taskIDs].sort()
+  if (
+    new Set(receivedTaskIDs).size !== receivedTaskIDs.length ||
+    expectedTaskIDs.length !== receivedTaskIDs.length ||
+    expectedTaskIDs.some((taskID, index) => taskID !== receivedTaskIDs[index])
+  ) {
+    throw new Error(
+      `panel.${input.operation} requires the complete current child Task set. ` +
+        `Expected [${expectedTaskIDs.join(", ")}], received [${receivedTaskIDs.join(", ")}].`,
+    )
+  }
+  const references = new Map<string, z.infer<typeof TerminalLifecycleReferenceSchema>>()
+  let failed = 0
+  for (const taskID of input.taskIDs) {
+    EngineService.requireMissionArtifactSource(taskID, {
+      missionID: input.mission.missionID,
+      sessionID: input.mission.id,
+    })
+    const reference = requireCurrentTerminalLifecycleReference(taskID)
+    const status = resolveTerminalLifecycleReference(taskID, reference).terminalStatus
+    if (status === "failed") failed += 1
+    if (input.operation === "complete_mission" ? status !== "completed" : status !== "completed" && status !== "failed") {
+      throw new Error(`panel.${input.operation} Task ${taskID} must cite its exact current ${input.operation === "complete_mission" ? "completed" : "completed or failed"} occurrence.`)
+    }
+    references.set(taskID, reference)
+  }
+  if (input.operation === "block_mission" && failed === 0) {
+    throw new Error("panel.block_mission requires at least one current failed child Task")
+  }
+  return references
+}
+
 async function panelMutationIdentity(
   ctx: Tool.Context,
   actor: PanelActor,
@@ -546,6 +594,7 @@ async function requirePanelToolIdentity(
   operation:
     | "cancel_task"
     | "complete_mission"
+    | "block_mission"
     | "create_task"
     | "delete_session"
     | "query_task_artifacts"
@@ -1404,40 +1453,11 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         }
         const mission = await requireMissionSession(ctx.sessionID)
         const identity = await requirePanelToolIdentity(ctx, "complete_mission")
-        const missionTasks = listMissionTasks({
-          projectID: mission.projectID,
-          missionID: mission.missionID,
-          sessionID: mission.id,
+        const currentReferenceByTaskID = requireMissionCurrentChildTerminals({
+          mission,
+          taskIDs: params.task_acceptances.map((acceptance) => acceptance.task_id),
+          operation: "complete_mission",
         })
-        const expectedTaskIDs = missionTasks.map((task) => task.id).sort()
-        const acceptedTaskIDs = params.task_acceptances.map((acceptance) => acceptance.task_id).sort()
-        if (
-          new Set(acceptedTaskIDs).size !== acceptedTaskIDs.length ||
-          expectedTaskIDs.length !== acceptedTaskIDs.length ||
-          expectedTaskIDs.some((taskID, index) => taskID !== acceptedTaskIDs[index])
-        ) {
-          throw new Error(
-            `panel.complete_mission requires the complete current child Task set. ` +
-              `Expected [${expectedTaskIDs.join(", ")}], received [${acceptedTaskIDs.join(", ")}].`,
-          )
-        }
-        const currentReferenceByTaskID = new Map<
-          string,
-          z.infer<typeof MissionCompletionTaskAcceptance>["terminal_lifecycle_reference"]
-        >()
-        for (const acceptance of params.task_acceptances) {
-          EngineService.requireMissionArtifactSource(acceptance.task_id, {
-            missionID: mission.missionID,
-            sessionID: mission.id,
-          })
-          const currentReference = requireCurrentTerminalLifecycleReference(acceptance.task_id)
-          if (resolveTerminalLifecycleReference(acceptance.task_id, currentReference).terminalStatus !== "completed") {
-            throw new Error(
-              `panel.complete_mission Task ${acceptance.task_id} must cite its exact current completed occurrence.`,
-            )
-          }
-          currentReferenceByTaskID.set(acceptance.task_id, currentReference)
-        }
         const resolvedAcceptances = resolveMissionArtifactReadAcceptancesBeforeCompletion({
           sessionID: ctx.sessionID,
           assistantMessageID: ctx.messageID,
@@ -1472,6 +1492,50 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               time_recorded: Date.now(),
             }),
           ),
+          metadata: { truncated: false },
+        }
+      }
+      case "block_mission": {
+        if (actor !== "mission") {
+          throw new Error("panel.block_mission is only available to a real Mission")
+        }
+        const mission = await requireMissionSession(ctx.sessionID)
+        const identity = await requirePanelToolIdentity(ctx, "block_mission")
+        const currentReferenceByTaskID = requireMissionCurrentChildTerminals({
+          mission,
+          taskIDs: params.task_reviews.map((review) => review.task_id),
+          operation: "block_mission",
+        })
+        const resolvedReviews = resolveMissionArtifactReadAcceptancesBeforeCompletion({
+          sessionID: ctx.sessionID,
+          assistantMessageID: ctx.messageID,
+          toolPartID: identity.toolPartID,
+          acceptances: params.task_reviews.map((review) => ({
+            taskID: review.task_id,
+            terminalLifecycleReference: currentReferenceByTaskID.get(review.task_id)!,
+            references: review.evidence_read_refs,
+          })),
+        })
+        const resolvedByTaskID = new Map(resolvedReviews.map((review) => [review.taskID, review.evidenceLocators]))
+        const taskReviews: Array<z.infer<typeof MissionBlockTaskReview>> = params.task_reviews.map((review) => ({
+          task_id: review.task_id,
+          evidence_locators: resolvedByTaskID.get(review.task_id)!,
+          terminal_lifecycle_reference: currentReferenceByTaskID.get(review.task_id)!,
+        }))
+        return {
+          title: "Mission blocked",
+          output: JSON.stringify(MissionBlockReceipt.parse({
+            kind: "mission_blocked",
+            mission_id: mission.missionID,
+            mission_session_id: mission.id,
+            summary: params.summary,
+            unresolved_criteria: params.unresolved_criteria,
+            task_reviews: taskReviews,
+            assistant_message_id: identity.messageID,
+            tool_call_id: identity.toolCallID,
+            tool_part_id: identity.toolPartID,
+            time_recorded: Date.now(),
+          })),
           metadata: { truncated: false },
         }
       }

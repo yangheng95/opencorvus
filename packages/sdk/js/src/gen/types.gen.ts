@@ -16367,6 +16367,34 @@ export type GatewayControlActionData = {
         taskID: string
       }
     | {
+        action: "read_task_dispatch_evidence"
+        /**
+         * Optional exact input, output, or failure chunks selected from this final's causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. The sum of every limit in one call must be at most 30000 characters. Follow next_offset until null.
+         */
+        evidence_reads?: Array<{
+          field: "input" | "output" | "failure"
+          limit?: number
+          message_id: string
+          offset?: number
+          part_id: string
+        }>
+        /**
+         * Optional older-page cursors returned by a prior causal Tool Message inventory.
+         */
+        inventory_before?: Array<{
+          before_message_id: string
+          final_message_id: string
+        }>
+        /**
+         * One to eight exact terminal worker Message identities from current Task settlements, in result order.
+         */
+        message_ids: Array<string>
+        /**
+         * Current failed child Task in this Mission lineage.
+         */
+        taskID: string
+      }
+    | {
         action: "complete_mission"
         /**
          * Concise user-facing summary of the accepted Mission outcome.
@@ -16385,6 +16413,30 @@ export type GatewayControlActionData = {
            */
           task_id: string
         }>
+      }
+    | {
+        action: "block_mission"
+        /**
+         * Truthful user-facing summary of the blocked Mission.
+         */
+        summary: string
+        /**
+         * Complete current child-Task set and exact fully read evidence for each terminal occurrence.
+         */
+        task_reviews: Array<{
+          /**
+           * Complete supplied reference set whose persisted chunks cover every byte of each accepted Artifact in this Task's exact current terminal occurrence.
+           */
+          evidence_read_refs: Array<string>
+          /**
+           * Current terminal child Task reviewed before blocking this Mission.
+           */
+          task_id: string
+        }>
+        /**
+         * Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.
+         */
+        unresolved_criteria: Array<string>
       }
     | {
         action: "create_task"
@@ -20777,17 +20829,31 @@ export type MissionListResponses = {
   200: Array<{
     archived?: number
     boardLane: "backlog" | "running" | "attention" | "review" | "completed"
-    completion?: {
-      messageID: string
-      summary: string
-      timeRecorded: number
-      toolCallID: string
-      toolPartID: string
-    }
     created: number
     directory: string
     interruptible: boolean
     missionID: string
+    outcome?:
+      | {
+          kind: "accepted"
+          messageID: string
+          summary: string
+          timeRecorded: number
+          toolCallID: string
+          toolPartID: string
+        }
+      | {
+          kind: "blocked"
+          messageID: string
+          summary: string
+          timeRecorded: number
+          toolCallID: string
+          toolPartID: string
+          /**
+           * Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.
+           */
+          unresolvedCriteria: Array<string>
+        }
     pendingInteractions: number
     pendingPrompt?: {
       text: string
@@ -21052,17 +21118,31 @@ export type MissionCreateDraftResponses = {
   200: {
     archived?: number
     boardLane: "backlog" | "running" | "attention" | "review" | "completed"
-    completion?: {
-      messageID: string
-      summary: string
-      timeRecorded: number
-      toolCallID: string
-      toolPartID: string
-    }
     created: number
     directory: string
     interruptible: boolean
     missionID: string
+    outcome?:
+      | {
+          kind: "accepted"
+          messageID: string
+          summary: string
+          timeRecorded: number
+          toolCallID: string
+          toolPartID: string
+        }
+      | {
+          kind: "blocked"
+          messageID: string
+          summary: string
+          timeRecorded: number
+          toolCallID: string
+          toolPartID: string
+          /**
+           * Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.
+           */
+          unresolvedCriteria: Array<string>
+        }
     pendingInteractions: number
     pendingPrompt?: {
       text: string
@@ -21446,17 +21526,31 @@ export type MissionSetArchivedResponses = {
   200: {
     archived?: number
     boardLane: "backlog" | "running" | "attention" | "review" | "completed"
-    completion?: {
-      messageID: string
-      summary: string
-      timeRecorded: number
-      toolCallID: string
-      toolPartID: string
-    }
     created: number
     directory: string
     interruptible: boolean
     missionID: string
+    outcome?:
+      | {
+          kind: "accepted"
+          messageID: string
+          summary: string
+          timeRecorded: number
+          toolCallID: string
+          toolPartID: string
+        }
+      | {
+          kind: "blocked"
+          messageID: string
+          summary: string
+          timeRecorded: number
+          toolCallID: string
+          toolPartID: string
+          /**
+           * Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.
+           */
+          unresolvedCriteria: Array<string>
+        }
     pendingInteractions: number
     pendingPrompt?: {
       text: string
@@ -21672,6 +21766,27 @@ export type MissionStatusResponses = {
     directory: string
     generatedAt: number
     missionID: string
+    outcome?:
+      | {
+          kind: "accepted"
+          messageID: string
+          summary: string
+          timeRecorded: number
+          toolCallID: string
+          toolPartID: string
+        }
+      | {
+          kind: "blocked"
+          messageID: string
+          summary: string
+          timeRecorded: number
+          toolCallID: string
+          toolPartID: string
+          /**
+           * Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.
+           */
+          unresolvedCriteria: Array<string>
+        }
     productPillar: "code" | "work"
     sessionID: string
     status: "running" | "inactive"
@@ -21878,17 +21993,31 @@ export type MissionRenameResponses = {
   200: {
     archived?: number
     boardLane: "backlog" | "running" | "attention" | "review" | "completed"
-    completion?: {
-      messageID: string
-      summary: string
-      timeRecorded: number
-      toolCallID: string
-      toolPartID: string
-    }
     created: number
     directory: string
     interruptible: boolean
     missionID: string
+    outcome?:
+      | {
+          kind: "accepted"
+          messageID: string
+          summary: string
+          timeRecorded: number
+          toolCallID: string
+          toolPartID: string
+        }
+      | {
+          kind: "blocked"
+          messageID: string
+          summary: string
+          timeRecorded: number
+          toolCallID: string
+          toolPartID: string
+          /**
+           * Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.
+           */
+          unresolvedCriteria: Array<string>
+        }
     pendingInteractions: number
     pendingPrompt?: {
       text: string

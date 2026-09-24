@@ -1766,7 +1766,7 @@ try {
     benchmarkEvents,
   })
   const finishedAt = Date.now()
-  const lifecycleStatus = terminal.missionRecord.completion ? "completed" : "inactive"
+  const lifecycleStatus = terminal.missionRecord.outcome?.kind === "accepted" ? "completed" : "inactive"
   const missionSession = missionSessionReceipt
   const taskBoards = terminal.tasks.map((task) => ({ task_id: task.task_id, board: task.board }))
   const profileAudit = auditMissionRunBinding({

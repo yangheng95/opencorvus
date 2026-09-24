@@ -14,7 +14,7 @@ import {
   refineArtifactReadBatchItems,
   ArtifactSchemaLimits,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import { MissionCompletionInput } from "@/mission/completion"
+import { MissionBlockInput, MissionCompletionInput } from "@/mission/completion"
 import { MissionAcceptanceGapInputSchema } from "@/mission/acceptance-gap"
 import { ReadAgentMessageInputSchema } from "@/tool/read-agent-message"
 import { TaskCancellationReason } from "@opencorvus-ai/transport-protocol"
@@ -349,6 +349,14 @@ export const PanelCapabilityRegistry = list(
     kind: "mutation",
     surfaces: ["panel"],
     params: MissionCompletionInput.shape,
+  }),
+  item({
+    action: "block_mission",
+    description:
+      "Record an evidenced blocked Mission outcome when the complete current child-Task set is terminal, at least one Task failed, and the remaining original obligation requires external authority or a capability unavailable to this Mission. Supply every Task's exact fully read terminal evidence and name each unmet obligation. The Host validates identity and evidence completeness, not whether the business blocker is genuine. This is a durable business outcome, not Mission abort or accepted completion.",
+    kind: "mutation",
+    surfaces: ["panel"],
+    params: MissionBlockInput.shape,
   }),
   item({
     action: "create_task",

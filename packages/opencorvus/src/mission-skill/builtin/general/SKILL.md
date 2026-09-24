@@ -9,7 +9,9 @@ required_tools:
   - panel_query_task_artifacts
   - panel_read_task_artifact
   - panel_read_task_message
+  - panel_read_task_dispatch_evidence
   - panel_complete_mission
+  - panel_block_mission
   - panel_resume_task
   - panel_cancel_task
   - panel_respond_interaction

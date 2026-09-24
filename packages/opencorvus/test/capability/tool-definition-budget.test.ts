@@ -350,7 +350,7 @@ describe("search-native Tool definition budgets", () => {
           "panel_read_task_dispatch_evidence",
           "panel_read_task_message",
         ] as const
-        const completionToolIDs = ["panel_complete_mission"] as const
+        const completionToolIDs = ["panel_complete_mission", "panel_block_mission"] as const
         const allToolIDs = [
           ...NATIVE_MISSION_TRANSPORT_TOOL_IDS,
           ...auditToolIDs,

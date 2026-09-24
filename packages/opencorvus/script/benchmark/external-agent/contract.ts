@@ -1433,7 +1433,7 @@ export function auditMissionOutcome(input: {
           item.evidence_locators.length > 0,
       )
     : false
-  const completionReceiptMatches = input.missionRecord?.completion
+  const completionReceiptMatches = input.missionRecord?.outcome?.kind === "accepted"
     ? completionCalls.length === 1 &&
       completion?.output?.kind === "mission_completed" &&
       completion.output.mission_id === input.missionRecord?.missionID &&
@@ -1444,11 +1444,11 @@ export function auditMissionOutcome(input: {
       completion.output.summary === completion.operation.summary &&
       JSON.stringify(completion.operation.task_acceptances.map((item) => item.task_id).sort()) ===
         JSON.stringify(acceptedTaskIDs) &&
-      completion.output.summary === input.missionRecord.completion.summary &&
-      completion.output.assistant_message_id === input.missionRecord.completion.messageID &&
-      completion.output.tool_call_id === input.missionRecord.completion.toolCallID &&
-      completion.output.tool_part_id === input.missionRecord.completion.toolPartID &&
-      completion.output.time_recorded === input.missionRecord.completion.timeRecorded &&
+      completion.output.summary === input.missionRecord.outcome.summary &&
+      completion.output.assistant_message_id === input.missionRecord.outcome.messageID &&
+      completion.output.tool_call_id === input.missionRecord.outcome.toolCallID &&
+      completion.output.tool_part_id === input.missionRecord.outcome.toolPartID &&
+      completion.output.time_recorded === input.missionRecord.outcome.timeRecorded &&
       acceptedTaskEvidenceValid &&
       JSON.stringify(acceptedTaskIDs) === JSON.stringify(recordIDs)
     : completionCalls.length === 0
@@ -1463,7 +1463,7 @@ export function auditMissionOutcome(input: {
   return {
     passed: scoredTerminal,
     scored_terminal: scoredTerminal,
-    mission_completed: input.missionRecord?.completion !== undefined,
+    mission_completed: input.missionRecord?.outcome?.kind === "accepted",
     explicit_complete_mission: completionCalls.length === 1,
     completion_receipt_matches: completionReceiptMatches,
     mission_transcript_session_ids: transcriptSessionIDs,
@@ -1504,7 +1504,7 @@ export function auditMissionQuiescence(input: {
   return {
     passed: missionInactive && exactTaskSet && taskStatusesTerminal && taskAudits.every((task) => task.passed),
     mission_status: input.missionStatus?.status ?? null,
-    mission_completed: input.missionRecord?.completion !== undefined,
+    mission_completed: input.missionRecord?.outcome?.kind === "accepted",
     task_count: taskAudits.length,
     task_audits: taskAudits,
   }

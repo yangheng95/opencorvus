@@ -58844,6 +58844,103 @@
                     "additionalProperties": false,
                     "properties": {
                       "action": {
+                        "const": "read_task_dispatch_evidence",
+                        "type": "string"
+                      },
+                      "evidence_reads": {
+                        "description": "Optional exact input, output, or failure chunks selected from this final's causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. The sum of every limit in one call must be at most 30000 characters. Follow next_offset until null.",
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "field": {
+                              "enum": [
+                                "input",
+                                "output",
+                                "failure"
+                              ],
+                              "type": "string"
+                            },
+                            "limit": {
+                              "default": 8000,
+                              "maximum": 30000,
+                              "minimum": 1,
+                              "type": "integer"
+                            },
+                            "message_id": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "offset": {
+                              "default": 0,
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "part_id": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "message_id",
+                            "part_id",
+                            "field"
+                          ],
+                          "type": "object"
+                        },
+                        "maxItems": 8,
+                        "type": "array"
+                      },
+                      "inventory_before": {
+                        "description": "Optional older-page cursors returned by a prior causal Tool Message inventory.",
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "before_message_id": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "final_message_id": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "final_message_id",
+                            "before_message_id"
+                          ],
+                          "type": "object"
+                        },
+                        "maxItems": 8,
+                        "type": "array"
+                      },
+                      "message_ids": {
+                        "description": "One to eight exact terminal worker Message identities from current Task settlements, in result order.",
+                        "items": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "maxItems": 8,
+                        "minItems": 1,
+                        "type": "array"
+                      },
+                      "taskID": {
+                        "description": "Current failed child Task in this Mission lineage.",
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "action",
+                      "taskID",
+                      "message_ids"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "action": {
                         "const": "complete_mission",
                         "type": "string"
                       },
@@ -58889,6 +58986,71 @@
                       "action",
                       "summary",
                       "task_acceptances"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "action": {
+                        "const": "block_mission",
+                        "type": "string"
+                      },
+                      "summary": {
+                        "description": "Truthful user-facing summary of the blocked Mission.",
+                        "maxLength": 4000,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "task_reviews": {
+                        "description": "Complete current child-Task set and exact fully read evidence for each terminal occurrence.",
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "evidence_read_refs": {
+                              "description": "Complete supplied reference set whose persisted chunks cover every byte of each accepted Artifact in this Task's exact current terminal occurrence.",
+                              "items": {
+                                "description": "Host-minted reference to one persisted read chunk in this Mission Session for the Task's exact current terminal occurrence.",
+                                "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                "type": "string"
+                              },
+                              "maxItems": 64,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "task_id": {
+                              "description": "Current terminal child Task reviewed before blocking this Mission.",
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "task_id",
+                            "evidence_read_refs"
+                          ],
+                          "type": "object"
+                        },
+                        "maxItems": 128,
+                        "minItems": 1,
+                        "type": "array"
+                      },
+                      "unresolved_criteria": {
+                        "description": "Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.",
+                        "items": {
+                          "maxLength": 1000,
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "maxItems": 32,
+                        "minItems": 1,
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "action",
+                      "summary",
+                      "unresolved_criteria",
+                      "task_reviews"
                     ],
                     "type": "object"
                   },
@@ -71789,38 +71951,6 @@
                         ],
                         "type": "string"
                       },
-                      "completion": {
-                        "properties": {
-                          "messageID": {
-                            "minLength": 1,
-                            "type": "string"
-                          },
-                          "summary": {
-                            "minLength": 1,
-                            "type": "string"
-                          },
-                          "timeRecorded": {
-                            "minimum": 0,
-                            "type": "number"
-                          },
-                          "toolCallID": {
-                            "minLength": 1,
-                            "type": "string"
-                          },
-                          "toolPartID": {
-                            "minLength": 1,
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "messageID",
-                          "toolCallID",
-                          "toolPartID",
-                          "summary",
-                          "timeRecorded"
-                        ],
-                        "type": "object"
-                      },
                       "created": {
                         "type": "number"
                       },
@@ -71835,6 +71965,96 @@
                         "minLength": 1,
                         "pattern": "^[a-z0-9-]+$",
                         "type": "string"
+                      },
+                      "outcome": {
+                        "oneOf": [
+                          {
+                            "properties": {
+                              "kind": {
+                                "const": "accepted",
+                                "type": "string"
+                              },
+                              "messageID": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "summary": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "timeRecorded": {
+                                "minimum": 0,
+                                "type": "number"
+                              },
+                              "toolCallID": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "toolPartID": {
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "messageID",
+                              "toolCallID",
+                              "toolPartID",
+                              "summary",
+                              "timeRecorded",
+                              "kind"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "properties": {
+                              "kind": {
+                                "const": "blocked",
+                                "type": "string"
+                              },
+                              "messageID": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "summary": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "timeRecorded": {
+                                "minimum": 0,
+                                "type": "number"
+                              },
+                              "toolCallID": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "toolPartID": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "unresolvedCriteria": {
+                                "description": "Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.",
+                                "items": {
+                                  "maxLength": 1000,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "maxItems": 32,
+                                "minItems": 1,
+                                "type": "array"
+                              }
+                            },
+                            "required": [
+                              "messageID",
+                              "toolCallID",
+                              "toolPartID",
+                              "summary",
+                              "timeRecorded",
+                              "kind",
+                              "unresolvedCriteria"
+                            ],
+                            "type": "object"
+                          }
+                        ]
                       },
                       "pendingInteractions": {
                         "maximum": 9007199254740991,
@@ -72651,38 +72871,6 @@
                       ],
                       "type": "string"
                     },
-                    "completion": {
-                      "properties": {
-                        "messageID": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "summary": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "timeRecorded": {
-                          "minimum": 0,
-                          "type": "number"
-                        },
-                        "toolCallID": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "toolPartID": {
-                          "minLength": 1,
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "messageID",
-                        "toolCallID",
-                        "toolPartID",
-                        "summary",
-                        "timeRecorded"
-                      ],
-                      "type": "object"
-                    },
                     "created": {
                       "type": "number"
                     },
@@ -72697,6 +72885,96 @@
                       "minLength": 1,
                       "pattern": "^[a-z0-9-]+$",
                       "type": "string"
+                    },
+                    "outcome": {
+                      "oneOf": [
+                        {
+                          "properties": {
+                            "kind": {
+                              "const": "accepted",
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "summary": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "timeRecorded": {
+                              "minimum": 0,
+                              "type": "number"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "messageID",
+                            "toolCallID",
+                            "toolPartID",
+                            "summary",
+                            "timeRecorded",
+                            "kind"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "properties": {
+                            "kind": {
+                              "const": "blocked",
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "summary": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "timeRecorded": {
+                              "minimum": 0,
+                              "type": "number"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "unresolvedCriteria": {
+                              "description": "Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.",
+                              "items": {
+                                "maxLength": 1000,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "maxItems": 32,
+                              "minItems": 1,
+                              "type": "array"
+                            }
+                          },
+                          "required": [
+                            "messageID",
+                            "toolCallID",
+                            "toolPartID",
+                            "summary",
+                            "timeRecorded",
+                            "kind",
+                            "unresolvedCriteria"
+                          ],
+                          "type": "object"
+                        }
+                      ]
                     },
                     "pendingInteractions": {
                       "maximum": 9007199254740991,
@@ -73786,38 +74064,6 @@
                       ],
                       "type": "string"
                     },
-                    "completion": {
-                      "properties": {
-                        "messageID": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "summary": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "timeRecorded": {
-                          "minimum": 0,
-                          "type": "number"
-                        },
-                        "toolCallID": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "toolPartID": {
-                          "minLength": 1,
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "messageID",
-                        "toolCallID",
-                        "toolPartID",
-                        "summary",
-                        "timeRecorded"
-                      ],
-                      "type": "object"
-                    },
                     "created": {
                       "type": "number"
                     },
@@ -73832,6 +74078,96 @@
                       "minLength": 1,
                       "pattern": "^[a-z0-9-]+$",
                       "type": "string"
+                    },
+                    "outcome": {
+                      "oneOf": [
+                        {
+                          "properties": {
+                            "kind": {
+                              "const": "accepted",
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "summary": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "timeRecorded": {
+                              "minimum": 0,
+                              "type": "number"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "messageID",
+                            "toolCallID",
+                            "toolPartID",
+                            "summary",
+                            "timeRecorded",
+                            "kind"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "properties": {
+                            "kind": {
+                              "const": "blocked",
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "summary": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "timeRecorded": {
+                              "minimum": 0,
+                              "type": "number"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "unresolvedCriteria": {
+                              "description": "Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.",
+                              "items": {
+                                "maxLength": 1000,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "maxItems": 32,
+                              "minItems": 1,
+                              "type": "array"
+                            }
+                          },
+                          "required": [
+                            "messageID",
+                            "toolCallID",
+                            "toolPartID",
+                            "summary",
+                            "timeRecorded",
+                            "kind",
+                            "unresolvedCriteria"
+                          ],
+                          "type": "object"
+                        }
+                      ]
                     },
                     "pendingInteractions": {
                       "maximum": 9007199254740991,
@@ -74517,6 +74853,96 @@
                     },
                     "missionID": {
                       "type": "string"
+                    },
+                    "outcome": {
+                      "oneOf": [
+                        {
+                          "properties": {
+                            "kind": {
+                              "const": "accepted",
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "summary": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "timeRecorded": {
+                              "minimum": 0,
+                              "type": "number"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "messageID",
+                            "toolCallID",
+                            "toolPartID",
+                            "summary",
+                            "timeRecorded",
+                            "kind"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "properties": {
+                            "kind": {
+                              "const": "blocked",
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "summary": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "timeRecorded": {
+                              "minimum": 0,
+                              "type": "number"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "unresolvedCriteria": {
+                              "description": "Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.",
+                              "items": {
+                                "maxLength": 1000,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "maxItems": 32,
+                              "minItems": 1,
+                              "type": "array"
+                            }
+                          },
+                          "required": [
+                            "messageID",
+                            "toolCallID",
+                            "toolPartID",
+                            "summary",
+                            "timeRecorded",
+                            "kind",
+                            "unresolvedCriteria"
+                          ],
+                          "type": "object"
+                        }
+                      ]
                     },
                     "productPillar": {
                       "enum": [
@@ -75300,38 +75726,6 @@
                       ],
                       "type": "string"
                     },
-                    "completion": {
-                      "properties": {
-                        "messageID": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "summary": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "timeRecorded": {
-                          "minimum": 0,
-                          "type": "number"
-                        },
-                        "toolCallID": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "toolPartID": {
-                          "minLength": 1,
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "messageID",
-                        "toolCallID",
-                        "toolPartID",
-                        "summary",
-                        "timeRecorded"
-                      ],
-                      "type": "object"
-                    },
                     "created": {
                       "type": "number"
                     },
@@ -75346,6 +75740,96 @@
                       "minLength": 1,
                       "pattern": "^[a-z0-9-]+$",
                       "type": "string"
+                    },
+                    "outcome": {
+                      "oneOf": [
+                        {
+                          "properties": {
+                            "kind": {
+                              "const": "accepted",
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "summary": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "timeRecorded": {
+                              "minimum": 0,
+                              "type": "number"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "messageID",
+                            "toolCallID",
+                            "toolPartID",
+                            "summary",
+                            "timeRecorded",
+                            "kind"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "properties": {
+                            "kind": {
+                              "const": "blocked",
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "summary": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "timeRecorded": {
+                              "minimum": 0,
+                              "type": "number"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "unresolvedCriteria": {
+                              "description": "Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.",
+                              "items": {
+                                "maxLength": 1000,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "maxItems": 32,
+                              "minItems": 1,
+                              "type": "array"
+                            }
+                          },
+                          "required": [
+                            "messageID",
+                            "toolCallID",
+                            "toolPartID",
+                            "summary",
+                            "timeRecorded",
+                            "kind",
+                            "unresolvedCriteria"
+                          ],
+                          "type": "object"
+                        }
+                      ]
                     },
                     "pendingInteractions": {
                       "maximum": 9007199254740991,

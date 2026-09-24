@@ -302,7 +302,7 @@ while (Date.now() < activityDeadline.deadlineMs) {
     inboxes: snapshot.inboxes,
     toolParts: snapshot.toolParts,
     schedulerEventCount: snapshot.events.length,
-    missionCompleted: missionProjection.completion !== undefined,
+    missionCompleted: missionProjection.outcome?.kind === "accepted",
   })
   if (progressKey !== lastProgressKey) {
     lastProgressKey = progressKey
@@ -604,7 +604,7 @@ while (Date.now() < activityDeadline.deadlineMs) {
       const noFailedToolOccurrences = snapshot.toolHealth.failedToolPartIDs.length === 0
       const reconciliationEvidence = missionTaskDuplexReconciliationEvidence({
         missionSessionID: mission.sessionID,
-        completionPartID: missionProjection.completion?.toolPartID,
+        completionPartID: missionProjection.outcome?.kind === "accepted" ? missionProjection.outcome.toolPartID : undefined,
         taskIDs: [taskA.id, taskB.id],
         toolParts: snapshot.toolParts,
       })
@@ -617,15 +617,16 @@ while (Date.now() < activityDeadline.deadlineMs) {
           kind: session.kind,
         })),
       })
-      const completionMessage = missionProjection.completion
-        ? snapshot.messages.find((message) => message.id === missionProjection.completion!.messageID)
+      const acceptedOutcome = missionProjection.outcome?.kind === "accepted" ? missionProjection.outcome : undefined
+      const completionMessage = acceptedOutcome
+        ? snapshot.messages.find((message) => message.id === acceptedOutcome.messageID)
         : undefined
       const completionMessageData = completionMessage?.data as
         | { role?: string; parentID?: string }
         | undefined
       const finalEvidence = missionTaskDuplexFinalEvidenceState({
         missionSessionID: mission.sessionID,
-        completionMessageID: missionProjection.completion?.messageID,
+        completionMessageID: acceptedOutcome?.messageID,
         completionParentMessageID:
           completionMessageData?.role === "assistant" ? completionMessageData.parentID : undefined,
         messages: snapshot.messages.map((row) => {
@@ -692,7 +693,7 @@ while (Date.now() < activityDeadline.deadlineMs) {
         missingUsageOwners: finalEvidence.missingUsageOwners,
         finalReply: finalEvidence.finalReply,
         missionBoardLane: missionProjection.boardLane,
-        missionCompleted: missionProjection.completion !== undefined,
+        missionCompleted: acceptedOutcome !== undefined,
         duplexContract,
         terminalOrder,
       }
@@ -722,7 +723,7 @@ while (Date.now() < activityDeadline.deadlineMs) {
         noFailedToolOccurrences &&
         reconciliationEvidence.ready &&
         missionProjection.boardLane === "completed" &&
-        missionProjection.completion !== undefined &&
+        acceptedOutcome !== undefined &&
         finalEvidence.ready &&
         finalEvidence.finalArtifactID !== undefined
       ) {
@@ -734,7 +735,7 @@ while (Date.now() < activityDeadline.deadlineMs) {
           inboxes: protocolInboxes,
           sourceToolPartIDs: sourceToolParts.map((row) => row!.id),
           missionAckMessageID: missionAck.id,
-          missionCompletion: missionProjection.completion,
+          missionCompletion: acceptedOutcome,
           reconciliationEvidence,
           duplexContract,
           terminalOrder,
@@ -743,7 +744,7 @@ while (Date.now() < activityDeadline.deadlineMs) {
           finalReply: finalEvidence.finalReply,
           trajectoryEvidence: missionTaskDuplexTrajectoryEvidence({
             missionCreatedAtMs: missionProjection.created,
-            missionCompletedAtMs: missionProjection.completion.timeRecorded,
+            missionCompletedAtMs: acceptedOutcome.timeRecorded,
             tasks: [taskA, taskB].map((task) => ({
               createdAtMs: task.time_created,
               completedAtMs: task.time_completed!,
