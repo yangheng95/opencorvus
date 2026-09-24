@@ -84,6 +84,8 @@ export const ExpertSquadFeedbackRevisionInputSchema = z
         "By what mechanism these edits make the squad satisfy that preference: which agent's behavior changes, and " +
           "through what it produces. For measured improvement, identify the observed failure, the instruction or " +
           "decision responsible, the predicted change on a fresh run, and the successful behavior to preserve. " +
+          "Separate source-not-discovered, discovered-but-unread, read-but-misinterpreted, and " +
+          "successful-write-but-unavailable-readback failures; one repaired failure class does not imply a general improvement. " +
           "Distinguish untested predictions from actual checker evidence. Name the Tool when the preference asks for an output the squad renders rather " +
           "than describes — `publish_interactive_artifact` carries `table@1` and `chart@1`, and every projected " +
           "worker already holds it; scheduler availability follows its exact inherited and explicit Tool surface. " +
