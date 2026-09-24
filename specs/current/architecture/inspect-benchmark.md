@@ -33,6 +33,14 @@ workflow state machine.
 The project config uses `.opencorvus/opencorvus.jsonc`, admitted by the same
 ConfigPaths authority as normal Tasks. The solver freezes package bytes before
 sample execution instead of re-reading mutable source files for each occurrence.
+The visible Task request starts with harness-authored context carrying the exact
+official `initial_state.meta.current_time`, then retains the original prompt
+sections verbatim. This simulated business clock controls relative-date business
+calculations; it does not replace real host time, Provider time or inactivity
+observation. An absent optional clock remains explicitly unspecified; a declared
+malformed time is an input error. Logs record
+`case_context_policy=official-world-clock-v1` and each sample's exact clock so
+paired comparisons can bind the same context policy.
 
 The official package owns world transitions and rubric semantics. Inspect keeps
 ordered real tool events, sealed world state and the private Google Sheets row-write

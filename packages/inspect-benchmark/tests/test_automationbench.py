@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import asyncio
+import copy
 import json
 import shutil
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
@@ -21,7 +23,14 @@ from opencorvus_inspect.automationbench.task import (
     opencorvus_automationbench,
     sample_environment,
 )
-from opencorvus_inspect.automationbench.world import BENCHMARK, OfficialWorld, load_cases, rescore
+from opencorvus_inspect.automationbench.world import (
+    BENCHMARK,
+    CASE_CONTEXT_POLICY,
+    OfficialWorld,
+    load_cases,
+    official_case,
+    rescore,
+)
 
 PACKAGE = Path(__file__).parents[1]
 MANIFEST = PACKAGE / "src/opencorvus_inspect/examples/automationbench-smoke.json"
@@ -57,6 +66,55 @@ def test_manifest_binds_official_case_membership_order_and_original_request() ->
     )
     assert task.metadata["system"]["prompt_profile"] == "automationbench"
     assert task.dataset[0].input == cases[0].request
+    assert task.metadata["case_context_policy"] == CASE_CONTEXT_POLICY
+    assert task.metadata["cases"][0] == {
+        "domain": cases[0].domain,
+        "task": cases[0].task,
+        "example_id": cases[0].example_id,
+    }
+    assert task.dataset[0].metadata["automationbench_current_time"] == cases[0].current_time
+
+
+def test_request_carries_exact_simulated_clock_and_original_prompt() -> None:
+    case = official_case("sales.unreliable_label_account_review", 1203)
+    assert case.current_time == "2026-02-26T10:00:00"
+    context, original = case.request.split("\n\n", 1)
+    assert context.splitlines()[1] == "Simulated business current_time: 2026-02-26T10:00:00"
+    assert original == "\n\n".join(
+        f"{part['role'].upper()}:\n{part['content']}" for part in case.prompt
+    )
+    assert OfficialWorld(case).world.meta.current_time.isoformat() == case.current_time
+
+
+def test_distinct_samples_project_their_own_clock() -> None:
+    left = official_case("sales.unreliable_label_account_review", 1203)
+    right_info = copy.deepcopy(left.info)
+    right_info["initial_state"]["meta"]["current_time"] = "2026-04-01T15:30:00+08:00"
+    right = replace(left, info=right_info)
+    assert [case.request.splitlines()[1] for case in (left, right)] == [
+        "Simulated business current_time: 2026-02-26T10:00:00",
+        "Simulated business current_time: 2026-04-01T15:30:00+08:00",
+    ]
+
+
+def test_optional_world_clock_is_explicitly_unspecified() -> None:
+    for case in (
+        official_case("operations.sheets_asana_approved_request", 1223),
+        official_case("sales.create_new_opportunity", 9),
+    ):
+        assert case.current_time is None
+        assert case.request.splitlines()[1] == (
+            "Simulated business current_time: unspecified in the official sample."
+        )
+
+
+@pytest.mark.parametrize("value", ["", "yesterday", 42])
+def test_invalid_world_clock_has_an_explicit_input_error(value: Any) -> None:
+    case = load_cases(MANIFEST)[0]
+    info = copy.deepcopy(case.info)
+    info["initial_state"]["meta"]["current_time"] = value
+    with pytest.raises(ValueError, match="ISO 8601"):
+        _ = replace(case, info=info).request
 
 
 def test_duplicate_case_has_explicit_manifest_error(tmp_path: Path) -> None:

@@ -1,0 +1,117 @@
+[
+  {
+    "task_id": "tsk_g00VW6r66N003YjhBu6g",
+    "case": "Inspect sample operations.sheets_asana_approved_request",
+    "http": 202,
+    "receipt": {
+      "requestEventID": "pev_g0VW6tGiZ004XsWdtRI7",
+      "requestedAt": 1790225384051,
+      "source": "task.cancel",
+      "requestID": "014f71fc-7e5c-4c3e-9dbd-135b4f69c1f3",
+      "actor": "user",
+      "surface": "api",
+      "reason": "Shared benchmark input defect: simulated world clock omitted; preserve this diagnostic arm and rerun every frozen case after correction",
+      "status": "cancelling"
+    }
+  },
+  {
+    "task_id": "tsk_g00VW6swxo00g4X7Wt3d",
+    "case": "Inspect sample support.zoho_desk_capacity_planning",
+    "http": 202,
+    "receipt": {
+      "requestEventID": "pev_g0VW6tGlL00rUGSR2uBA",
+      "requestedAt": 1790225384223,
+      "source": "task.cancel",
+      "requestID": "be5d1443-69a0-48e2-b202-52014948bf3d",
+      "actor": "user",
+      "surface": "api",
+      "reason": "Shared benchmark input defect: simulated world clock omitted; preserve this diagnostic arm and rerun every frozen case after correction",
+      "status": "cancelling"
+    }
+  },
+  {
+    "task_id": "tsk_g00VW6tIBM009ZTfh2QG",
+    "case": "Inspect sample hr.candidate_submittal_docs",
+    "http": 202,
+    "receipt": {
+      "requestEventID": "pev_g0VW6tIiD00tYkW640Es",
+      "requestedAt": 1790225391717,
+      "source": "task.cancel",
+      "requestID": "691a1b93-be8f-4631-a56a-ddd8e6df2187",
+      "actor": "user",
+      "surface": "api",
+      "reason": "Shared benchmark input defect: simulated world clock omitted; preserve this diagnostic arm and rerun every frozen case after correction",
+      "status": "cancelled",
+      "terminalEventID": "pev_g0VW6tIiP00NNkUFeowj",
+      "terminalAt": 1790225391727
+    }
+  },
+  {
+    "task_id": "tsk_g00VW6tIYa00dw5gXS33",
+    "case": "Inspect sample finance.late_fee_calculation",
+    "http": 202,
+    "receipt": {
+      "requestEventID": "pev_g0VW6tJOv00REbdAkiNM",
+      "requestedAt": 1790225394365,
+      "source": "task.cancel",
+      "requestID": "220a4175-331f-4f7a-96e9-bdf0f9087df5",
+      "actor": "user",
+      "surface": "api",
+      "reason": "Shared benchmark input defect: simulated world clock omitted; preserve this diagnostic arm and rerun every frozen case after correction",
+      "status": "cancelled",
+      "terminalEventID": "pev_g0VW6tJPA002n5A3kavg",
+      "terminalAt": 1790225394378
+    }
+  },
+  {
+    "task_id": "tsk_g00VW6tKKE00EMTtCneS",
+    "case": "Inspect sample sales.create_new_opportunity",
+    "http": 202,
+    "receipt": {
+      "requestEventID": "pev_g0VW6tKk5003C329shvI",
+      "requestedAt": 1790225399521,
+      "source": "task.cancel",
+      "requestID": "44dc4268-ce27-4d4a-9a8a-b81edfc49df3",
+      "actor": "user",
+      "surface": "api",
+      "reason": "Shared benchmark input defect: simulated world clock omitted; preserve this diagnostic arm and rerun every frozen case after correction",
+      "status": "cancelled",
+      "terminalEventID": "pev_g0VW6tKkE00uQXrgbNjg",
+      "terminalAt": 1790225399529
+    }
+  },
+  {
+    "task_id": "tsk_g00VW6tLb400Dz4B4M5L",
+    "case": "Inspect sample operations.monday_slack_inventory",
+    "http": 202,
+    "receipt": {
+      "requestEventID": "pev_g0VW6tM3E00KNqx8vgUn",
+      "requestedAt": 1790225404552,
+      "source": "task.cancel",
+      "requestID": "2bcadd3d-9abe-48b3-9f95-b647dc29b09c",
+      "actor": "user",
+      "surface": "api",
+      "reason": "Shared benchmark input defect: simulated world clock omitted; preserve this diagnostic arm and rerun every frozen case after correction",
+      "status": "cancelled",
+      "terminalEventID": "pev_g0VW6tM3P00ps3mLvq53",
+      "terminalAt": 1790225404562
+    }
+  },
+  {
+    "task_id": "tsk_g00VW6tMSm0078nH6kgi",
+    "case": "Inspect sample hr.probation_review_reminder",
+    "http": 202,
+    "receipt": {
+      "requestEventID": "pev_g0VW6tNOk00CzC3B79ZD",
+      "requestedAt": 1790225409730,
+      "source": "task.cancel",
+      "requestID": "c0bc40c0-17a1-4a17-855c-bad7ccd93ece",
+      "actor": "user",
+      "surface": "api",
+      "reason": "Shared benchmark input defect: simulated world clock omitted; preserve this diagnostic arm and rerun every frozen case after correction",
+      "status": "cancelled",
+      "terminalEventID": "pev_g0VW6tNOv00QM2bLbd3i",
+      "terminalAt": 1790225409739
+    }
+  }
+]

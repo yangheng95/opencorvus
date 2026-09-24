@@ -16,7 +16,12 @@ def inputs():
         "model": "openai/gpt-5.6-luna",
         "benchmark": "frozen",
         "timeout_policy": "idle",
-        "execution_settings": {"max_samples": 2, "epochs": 1, "timeout_seconds": 300},
+        "execution_settings": {
+            "max_samples": 2,
+            "epochs": 1,
+            "timeout_seconds": 300,
+            "case_context_policy": "official-world-clock-v1",
+        },
         "squad_version": "baseline",
         "mean_sample_seconds": 10,
         "official_tool_calls": 20,
@@ -25,6 +30,7 @@ def inputs():
             {
                 **case,
                 "task_id": f"base-{i}",
+                "simulated_current_time": "2026-02-26T10:00:00",
                 "strict": int(i < 2),
                 "partial": 0.5,
                 "execution": {"status": "scored"},
@@ -82,6 +88,19 @@ class PairedComparison(unittest.TestCase):
         manifest, baseline, candidate = inputs()
         candidate["execution_settings"]["max_samples"] = 4
         with self.assertRaisesRegex(ValueError, "disagree on execution_settings"):
+            paired_report(manifest, baseline, candidate)
+
+    def test_different_case_clocks_have_a_pairing_error(self):
+        manifest, baseline, candidate = inputs()
+        candidate["cases"][0]["simulated_current_time"] = "2026-09-24T10:00:00"
+        with self.assertRaisesRegex(ValueError, "simulated clocks disagree"):
+            paired_report(manifest, baseline, candidate)
+
+    def test_original_context_is_identified_as_an_invalid_controlled_baseline(self):
+        manifest, baseline, candidate = inputs()
+        for arm in (baseline, candidate):
+            arm["execution_settings"]["case_context_policy"] = None
+        with self.assertRaisesRegex(ValueError, "official simulated clock context"):
             paired_report(manifest, baseline, candidate)
 
 

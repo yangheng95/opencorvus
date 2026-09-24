@@ -295,6 +295,16 @@ strict assertions (`AUTOMATIONBENCH_STRICT_ASSERTIONS=1`, upstream's default);
 disabling them is an explicit configuration/scoring error. Every run records the
 `official-strict-assertions-v1` policy. Checker exceptions are never business zeroes.
 
+The Task request visibly supplies the official world's exact `meta.current_time`
+before the unchanged original prompt sections. Relative dates and activity windows
+belong to that simulated business clock, while host execution and inactivity
+observation retain real wall time. An absent optional date is explicitly
+unspecified; a declared malformed time is an input error. Every run records
+`case_context_policy=official-world-clock-v1`, and sample
+metadata records `automationbench_current_time`. Results from earlier versions
+that omitted this context are separate diagnostic measurements, not a controlled
+baseline for the clock-aware input.
+
 To verify the Python-generated project with the actual product configuration
 loader, squad resolver and live official MCP service, run this additional local
 check from the repository root (it does not invoke a model):

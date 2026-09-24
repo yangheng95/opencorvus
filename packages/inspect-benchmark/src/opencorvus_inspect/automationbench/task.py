@@ -21,6 +21,7 @@ from ..scorer import task_completed
 from ..solver import SampleSetup, build_opencorvus_solver, opencorvus_system_metadata
 from .world import (
     BENCHMARK,
+    CASE_CONTEXT_POLICY,
     SCORING_POLICY,
     Case,
     OfficialWorld,
@@ -248,12 +249,13 @@ def opencorvus_automationbench(
     metadata: dict[str, Any] = {
         "benchmark": BENCHMARK,
         "scoring_policy": SCORING_POLICY,
+        "case_context_policy": CASE_CONTEXT_POLICY,
         "execution_mode": "opencorvus-task-api",
         "comparable": False,
         "isolation": "local-sample-project-and-mcp-world",
         "system": opencorvus_system_metadata(config, project_isolation="sample_epoch"),
         "squad_version": squad_manifest["version"],
-        "cases": [{"task": c.task, "example_id": c.example_id} for c in cases],
+        "cases": [{"domain": c.domain, "task": c.task, "example_id": c.example_id} for c in cases],
     }
     return Task(
         dataset=[
@@ -264,6 +266,7 @@ def opencorvus_automationbench(
                     **metadata,
                     "automationbench_example_id": case.example_id,
                     "automationbench_case": case.task,
+                    "automationbench_current_time": case.current_time,
                 },
             )
             for case in cases

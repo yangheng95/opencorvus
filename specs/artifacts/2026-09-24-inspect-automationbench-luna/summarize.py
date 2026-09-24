@@ -81,6 +81,7 @@ for case in cases:
             **case,
             "task_id": task_id,
             "epoch": sample.epoch,
+            "simulated_current_time": data.get("automationbench_current_time"),
             "lifecycle": result.get("lifecycle_status"),
             "inspect_error": sample.error.message if sample.error else None,
             "execution": data.get("automationbench_execution"),
@@ -109,6 +110,7 @@ summary = {
     "benchmark": metadata["benchmark"],
     "timeout_policy": metadata["system"]["timeout_policy"],
     "execution_settings": {
+        "case_context_policy": metadata.get("case_context_policy"),
         "max_samples": log.eval.config.max_samples,
         "epochs": log.eval.config.epochs,
         "timeout_seconds": metadata["system"]["timeout_seconds"],

@@ -6,6 +6,7 @@ import copy
 import json
 import math
 from dataclasses import dataclass
+from datetime import datetime
 from importlib.metadata import distribution
 from pathlib import Path
 from typing import Any
@@ -13,6 +14,7 @@ from typing import Any
 UPSTREAM_REVISION = "4a8e1061254004d9dac807054eed33fad7d1ff14"
 BENCHMARK = f"zapier/automationbench@{UPSTREAM_REVISION[:7]}"
 SCORING_POLICY = "official-strict-assertions-v1"
+CASE_CONTEXT_POLICY = "official-world-clock-v1"
 
 
 def require_strict_assertions() -> None:
@@ -44,8 +46,38 @@ class Case:
     info: dict[str, Any]
 
     @property
+    def current_time(self) -> str | None:
+        meta = self.info.get("initial_state", {}).get("meta")
+        if meta is None:
+            return None
+        value = meta.get("current_time")
+        if value is None:
+            return None
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError(f"Official case current_time must be ISO 8601: {self.task}")
+        try:
+            datetime.fromisoformat(value.replace("Z", "+00:00"))
+        except ValueError as error:
+            raise ValueError(f"Official case current_time must be ISO 8601: {self.task}") from error
+        return value
+
+    @property
     def request(self) -> str:
-        return "\n\n".join(f"{part['role'].upper()}:\n{part['content']}" for part in self.prompt)
+        original = "\n\n".join(
+            f"{part['role'].upper()}:\n{part['content']}" for part in self.prompt
+        )
+        context = "Benchmark environment supplied by Inspect from the official sample:\n"
+        current_time = self.current_time
+        if current_time is None:
+            context += "Simulated business current_time: unspecified in the official sample."
+        else:
+            context += (
+                f"Simulated business current_time: {current_time}\n"
+                "Use this simulated time for today's date, relative dates, deadlines and activity "
+                "windows in the business request. The computer's execution date describes runtime "
+                "wall time and does not change the simulated business date."
+            )
+        return f"{context}\n\n{original}"
 
 
 def _domain_cases(domain: str) -> dict[str, Case]:

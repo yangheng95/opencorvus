@@ -20,6 +20,11 @@ def paired_report(manifest: dict, baseline: dict, candidate: dict) -> dict:
         raise ValueError("Arms disagree with the frozen benchmark")
     if baseline["model"] != "openai/gpt-5.6-luna":
         raise ValueError("Arms must use the authorized Luna model")
+    if (
+        baseline["execution_settings"]["case_context_policy"]
+        != "official-world-clock-v1"
+    ):
+        raise ValueError("Paired arms require the official simulated clock context")
 
     def index(summary: dict) -> dict:
         rows = summary["cases"]
@@ -51,10 +56,13 @@ def paired_report(manifest: dict, baseline: dict, candidate: dict) -> dict:
     pairs = []
     for case in expected:
         left, right = before[case["task"]], after[case["task"]]
+        if left["simulated_current_time"] != right["simulated_current_time"]:
+            raise ValueError("Paired case simulated clocks disagree")
         measured = left["strict"] is not None and right["strict"] is not None
         pairs.append(
             {
                 **case,
+                "simulated_current_time": left["simulated_current_time"],
                 "baseline_task": left["task_id"],
                 "candidate_task": right["task_id"],
                 "baseline_strict": left["strict"],
