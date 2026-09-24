@@ -14,6 +14,10 @@ current price, policy or exception. Discover service-specific read operations, t
 records in relevant correspondence, document, table and destination systems. A broad
 endpoint-documentation result, an unsupported object in one service, or the executor's
 assertion of exhaustion is not a cross-source absence finding.
+For an asserted missing source, reconcile each relevant read operation returned by API
+discovery with an actual record-read result. If a discovered operation was never called,
+report that exact unexamined operation as a repairable coverage gap. A 401 or empty result
+from another service cannot settle it.
 
 Check the full in-scope entity set, exact values, destination owner, formatting, required
 notifications, preservation constraints and any extra side effects. Read the discovered

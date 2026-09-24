@@ -197,6 +197,7 @@ describe("revising an installed expert squad from operator feedback", () => {
     // A second revision on the same day continues that day's sequence.
     expect(nextExpertSquadVersion({ current: "2026.08.18.1", now: noon })).toBe("2026.08.18.2")
     expect(nextExpertSquadVersion({ current: "2026.08.18.9", now: noon })).toBe("2026.08.18.10")
+    expect(nextExpertSquadVersion({ current: "2026.08.19.2", now: noon })).toBe("2026.08.19.3")
   })
 
   test("names the squad the way every other surface does", () => {

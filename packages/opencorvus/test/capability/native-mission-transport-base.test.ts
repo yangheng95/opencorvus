@@ -44,6 +44,7 @@ const missionRoutineNames = [
   "panel_query_task",
   "panel_query_task_artifacts",
   "panel_read_task_artifact",
+  "panel_read_task_dispatch_evidence",
   "panel_read_task_message",
   "panel_respond_interaction",
   "panel_resume_task",

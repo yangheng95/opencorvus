@@ -42,6 +42,8 @@ const guidance: Readonly<Record<string, string>> = {
   panel_read_task_artifact: "Batch required Task Artifact reads for acceptance.",
   panel_read_task_message:
     "Read a bounded exact terminal Task evidence Message batch named by its Completion Decision.",
+  panel_read_task_dispatch_evidence:
+    "Read a failed child Task's settled worker reports and causal Tool facts by exact Message identities.",
   panel_create_task: "Create a Task with the selected ownership and requested work.",
   panel_complete_mission: "Complete a Mission using its accepted Task evidence.",
 }

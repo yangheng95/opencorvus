@@ -16,6 +16,7 @@ import {
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import { MissionCompletionInput } from "@/mission/completion"
 import { MissionAcceptanceGapInputSchema } from "@/mission/acceptance-gap"
+import { ReadAgentMessageInputSchema } from "@/tool/read-agent-message"
 import { TaskCancellationReason } from "@opencorvus-ai/transport-protocol"
 import {
   EXPLORE_PANEL_ACTION_IDS,
@@ -271,7 +272,7 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "query_task_artifacts",
     description:
-      "Query up to eight terminal Task catalogs or independent search conditions in one queries array. First batch panel_query_task for the source Tasks in the same physical Turn. Start each page_number at 1 and merge next_queries cursor/page fields (excluding request_index) into their original queries[request_index] and resubmit pending_queries items for remaining pages. The Host binds and revalidates exact terminal occurrences and authenticated cursors. Use arrays of exact kinds/types/labels to combine related filters. Results carry short artifact_locator_ref values for one batched panel_read_task_artifact call. Select the current Completion Decision and required deliverable/report/review/evidence items; catalog membership alone is not acceptance evidence.",
+      "Query up to eight terminal Task catalogs or independent search conditions in one queries array. First batch panel_query_task for the source Tasks in the same physical Turn. Start each page_number at 1 and merge next_queries cursor/page fields (excluding request_index) into their original queries[request_index] and resubmit pending_queries items for remaining pages. The Host binds and revalidates exact terminal occurrences and authenticated cursors. Use arrays of exact kinds/types/labels to combine related filters. Results carry short artifact_locator_ref values for one batched panel_read_task_artifact call. For a completed Task select its current Completion Decision and required evidence; for a failed Task select its dispatch_settlement and available worker Artifacts. Catalog membership alone is not acceptance evidence.",
     kind: "query",
     surfaces: allProjectSurfaces,
     params: {
@@ -328,6 +329,17 @@ export const PanelCapabilityRegistry = list(
         .max(30_000)
         .optional()
         .describe("Aggregate UTF-8 text byte window for this batch call; defaults to 30,000."),
+    },
+  }),
+  item({
+    action: "read_task_dispatch_evidence",
+    description:
+      "Read exact real worker final Messages and their causal Tool evidence from dispatch_settlement Artifacts of a failed Task in this Mission. First query the current terminal Task, completely read the relevant dispatch_settlement Artifacts from its catalog, then copy their outcome.final_message_id values into message_ids. The Host binds the current terminal occurrence and Mission ownership; the shared read_agent_message projection validates Task/Session/Message identity, returns paged actual Tool facts and redacts sensitive fields. This is evidence for Mission judgment and same-Task repair, not a Completion Decision or a business-success verdict.",
+    kind: "query",
+    surfaces: ["panel"],
+    params: {
+      taskID: z.string().min(1).describe("Current failed child Task in this Mission lineage."),
+      ...ReadAgentMessageInputSchema.shape,
     },
   }),
   item({

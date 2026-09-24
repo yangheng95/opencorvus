@@ -347,6 +347,7 @@ describe("search-native Tool definition budgets", () => {
           "panel_query_task",
           "panel_query_task_artifacts",
           "panel_read_task_artifact",
+          "panel_read_task_dispatch_evidence",
           "panel_read_task_message",
         ] as const
         const completionToolIDs = ["panel_complete_mission"] as const

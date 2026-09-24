@@ -99,6 +99,7 @@ import {
   TerminalLifecycleReferenceSchema,
 } from "@/engine/terminal-lifecycle-reference-schema"
 import { requireTaskCompletionDecisionMessage } from "@/engine/completion-decision-read"
+import { readAgentMessages } from "@/tool/read-agent-message"
 import { taskIDForSession } from "@/engine/task-session-lineage"
 import {
   PanelQueryTaskErrorRow,
@@ -549,6 +550,7 @@ async function requirePanelToolIdentity(
     | "delete_session"
     | "query_task_artifacts"
     | "read_task_artifact"
+    | "read_task_dispatch_evidence"
     | "read_task_message"
     | "resume_task"
     | "wake_mission"
@@ -1163,6 +1165,46 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           }
         }
         return batch
+      }
+      case "read_task_dispatch_evidence": {
+        if (actor !== "mission") {
+          throw new Error("panel.read_task_dispatch_evidence is only available to a real Mission")
+        }
+        const mission = await requireMissionSession(ctx.sessionID)
+        const { taskID, message_ids, inventory_before, evidence_reads } = params
+        EngineService.requireMissionArtifactSource(taskID, {
+          missionID: mission.missionID,
+          sessionID: mission.id,
+        })
+        const reviewedReference = reviewedTerminalLifecycleReferenceBeforePanelAction({
+          sessionID: ctx.sessionID,
+          assistantMessageID: ctx.messageID,
+          toolPartID: (await requirePanelToolIdentity(ctx, "read_task_dispatch_evidence")).toolPartID,
+          taskID,
+        })
+        const currentReference = requireCurrentTerminalLifecycleReference(taskID)
+        if (!sameTerminalLifecycleReference(currentReference, reviewedReference)) {
+          throw new Error(`panel.read_task_dispatch_evidence terminal occurrence changed for Task ${taskID}`)
+        }
+        if (resolveTerminalLifecycleReference(taskID, currentReference).terminalStatus !== "failed") {
+          throw new Error(`panel.read_task_dispatch_evidence requires a failed Task occurrence: ${taskID}`)
+        }
+        const evidence = JSON.parse(
+          await readAgentMessages(taskID, { message_ids, inventory_before, evidence_reads }),
+        )
+        const settledReference = requireCurrentTerminalLifecycleReference(taskID)
+        if (!sameTerminalLifecycleReference(settledReference, reviewedReference)) {
+          throw new Error(`panel.read_task_dispatch_evidence terminal occurrence changed while reading Task ${taskID}`)
+        }
+        return {
+          title: "Failed Task dispatch evidence",
+          output: JSON.stringify({
+            taskID,
+            terminal_lifecycle_reference: settledReference,
+            ...evidence,
+          }),
+          metadata: { truncated: false },
+        }
       }
       case "read_task_message": {
         if (actor !== "mission") {

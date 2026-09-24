@@ -121,7 +121,7 @@ export const ReadAgentMessageTestHooks = Object.freeze({
   evidenceReadsDescription: EVIDENCE_READS_DESCRIPTION,
 })
 
-const ReadAgentMessageInputSchema = z
+export const ReadAgentMessageInputSchema = z
   .object({
     message_ids: MessageIDs.describe(
       "One to eight exact terminal worker Message identities from current Task settlements, in result order.",
@@ -175,7 +175,7 @@ const READ_AGENT_MESSAGE_DESCRIPTION =
   "Discover exact final_message_id values through artifact_search kind=dispatch_settlement and artifact_read of its returned locators. For final worker reports, submit exact Task dispatch settlement final_message_id values in ordered chunks of at most eight, including an earlier settled worker whose evidence remains material after a later dispatch. " +
   "The result includes a paged, redacted inventory of real Tool Messages from each final report's execution occurrence. When a material source or mutation fact is absent from the final text, use only a necessary message_id and part_id returned by that final's inventory in this or an earlier call, select field=input, output, or failure, and paginate with offset/limit until next_offset is null. A completed Tool step is not a final report."
 
-async function readAgentMessages(taskID: string, rawInput: unknown) {
+export async function readAgentMessages(taskID: string, rawInput: unknown) {
   const { message_ids, inventory_before, evidence_reads } = ReadAgentMessageInputSchema.parse(rawInput)
   for (const cursor of inventory_before ?? []) {
     if (!message_ids.includes(cursor.final_message_id)) {

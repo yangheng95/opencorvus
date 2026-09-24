@@ -124,11 +124,11 @@ export function parseFeedbackRevisionTarget(value: string): { namespace?: string
 export type ExpertSquadFeedbackRevisionInput = z.infer<typeof ExpertSquadFeedbackRevisionInputSchema>
 
 /**
- * The next version for a revision published today.
+ * The next version for a revision published now.
  *
- * The version is a derivable fact — today's UTC date and the next daily
- * revision — so the Host computes it rather than asking the author to restate
- * a field the candidate integrity check will reject if it is wrong.
+ * The Host derives the version from the later of today's UTC date and the
+ * parent's date. A parent authored in a later local calendar day must not
+ * regress merely because UTC has not crossed midnight.
  */
 export function nextExpertSquadVersion(input: { current: string; now: number }): string {
   const date = new Date(input.now)
@@ -136,8 +136,9 @@ export function nextExpertSquadVersion(input: { current: string; now: number }):
     .toString()
     .padStart(2, "0")}.${date.getUTCDate().toString().padStart(2, "0")}`
   const currentMatch = /^(\d{4}\.\d{2}\.\d{2})\.([1-9]\d*)$/.exec(input.current)
-  const revision = currentMatch && currentMatch[1] === today ? Number(currentMatch[2]) + 1 : 1
-  return ExpertSquadVersionSchema.parse(`${today}.${revision}`)
+  const publicationDay = currentMatch && currentMatch[1]! > today ? currentMatch[1]! : today
+  const revision = currentMatch && currentMatch[1] === publicationDay ? Number(currentMatch[2]) + 1 : 1
+  return ExpertSquadVersionSchema.parse(`${publicationDay}.${revision}`)
 }
 
 function manifestTextWithVersion(input: { text: string; version: string }): string {

@@ -12,6 +12,11 @@ Read its actual participant result with `read_agent_message`. Hand the verifier 
 request plus exact source/destination URLs, record IDs and tool-message references, treating
 executor conclusions as claims to check. Use `read_agent_message` evidence reads for required
 raw receipts that are absent from the final message. The verifier acts after execution settles.
+When a worker claims a source is unavailable, inspect the causal Tool evidence behind that
+claim: compare discovered read operations with actual record-read calls and their results.
+An applicable read operation found by endpoint discovery but never called is an unexamined
+source, even when another service returned 401 or an empty collection. Give the same Task a
+specific source/read gap for executor follow-up and independent verifier review.
 Do not manufacture reports or messages to move a workflow forward.
 
 Judge completeness from the verifier's criterion-by-criterion evidence. A real, repairable gap
