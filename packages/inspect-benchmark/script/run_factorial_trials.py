@@ -323,8 +323,12 @@ async def settle_owned_activity(episode: Episode) -> dict[str, Any]:
                 directory = mission.get("directory")
                 if not isinstance(directory, str) or not in_episode_directory(directory, episode):
                     continue
-                if mission.get("completion") is not None:
-                    receipts.append({"mission_id": mission["missionID"], "state": "completed"})
+                outcome = mission.get("outcome")
+                if isinstance(outcome, dict) and outcome.get("kind") in {"accepted", "blocked"}:
+                    receipts.append({
+                        "mission_id": mission["missionID"],
+                        "state": outcome["kind"],
+                    })
                     continue
                 request_id = f"trial:{episode.block.index}:{episode.arm}:cleanup"
                 stopped = await client.post(

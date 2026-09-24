@@ -20,10 +20,16 @@ async def test_real_mission_endpoint_waits_past_first_child_completion() -> None
     mission_reads = 0
     activities = 0
     wake: dict[str, Any] = {}
+    ingress: list[str] = []
 
     async def handler(request: httpx.Request) -> httpx.Response:
         nonlocal mission_reads, activities
+        if request.method == "POST" and request.url.path == "/project/current/init-git":
+            ingress.append("project.initGit")
+            assert request.url.params["directory"] == "D:/bench"
+            return httpx.Response(200, json={"created": True, "project": {"worktree": "D:/bench"}})
         if request.method == "POST" and request.url.path == "/mission/wake":
+            ingress.append("mission.wake")
             wake.update(json.loads(request.content))
             return httpx.Response(200, json={"missionID": "mission-1", "sessionID": "session-1"})
         if request.method == "GET" and request.url.path in {"/mission", "/mission/"}:
@@ -79,6 +85,7 @@ async def test_real_mission_endpoint_waits_past_first_child_completion() -> None
         model="openai/gpt-5.6-luna",
         prompt_profile="automationbench",
         product_pillar="work",
+        init_git=True,
         timeout_seconds=1,
         poll_seconds=0.001,
     )
@@ -92,6 +99,7 @@ async def test_real_mission_endpoint_waits_past_first_child_completion() -> None
             epoch=1,
         )
     assert isinstance(result, MissionResult)
+    assert ingress == ["project.initGit", "mission.wake"]
     assert mission_reads == 3
     assert activities == 2
     assert result.metadata() == {

@@ -9,6 +9,7 @@ import time
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass
 from functools import partial
+from pathlib import Path
 from typing import Any, Literal, TypeVar, cast
 from urllib.parse import quote, urlsplit
 
@@ -722,6 +723,20 @@ class OpenCorvusClient:
         """Observe the real Mission decision, including any child Task repair epoch."""
         if not self.config.model or not self.config.prompt_profile:
             raise ValueError("Mission execution requires an explicit model and Expert Squad")
+        if self.config.init_git:
+            initialized = await self._request_json(
+                "POST",
+                "/project/current/init-git",
+                params=self._project_params(),
+                request_id=f"{request_id}:project-init",
+            )
+            project = _mapping(initialized.get("project"), label="project.initGit.project")
+            worktree = _required_string(project.get("worktree"), label="project.worktree")
+            same_project = await asyncio.to_thread(
+                lambda: Path(worktree).resolve() == Path(self.config.project_dir).resolve()
+            )
+            if not same_project:
+                raise OpenCorvusProtocolError("Initialized project identity disagrees with Mission")
         mission_text = (
             f"{request}\n\n"
             "Use the held Expert Squad for one initial business Task. Inspect its result against "
@@ -731,10 +746,7 @@ class OpenCorvusClient:
         accepted = await self._request_json(
             "POST",
             "/mission/wake",
-            params={
-                "directory": self.config.project_dir,
-                "init-git": "true" if self.config.init_git else "false",
-            },
+            params=self._project_params(),
             json={
                 "requestID": request_id,
                 "productPillar": self.config.product_pillar,
