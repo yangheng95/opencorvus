@@ -26,6 +26,44 @@ PLAN = ROOT / "specs/records/2026-09/2026-09-24-luna-mission-task-factorial-tria
 MODEL = "openai/gpt-5.6-luna"
 ARMS = ("TS", "TE", "MS", "ME")
 STARTUP_SECONDS = 120
+SOURCE_FREEZE_PATHS = (
+    "expert-squads/builtin/automationbench",
+    "packages/opencorvus/src",
+    "packages/opencorvus/script/automationbench-factorial-host.ts",
+    "packages/opencorvus/script/real-provider-audit.ts",
+    "packages/inspect-benchmark/src",
+    "packages/inspect-benchmark/script/run_factorial_trials.py",
+    "specs/artifacts/2026-09-24-automationbench-self-evolution/probe-manifest.json",
+)
+
+
+class SourceRevisionDriftError(RuntimeError):
+    pass
+
+
+def current_source_revision(root: Path = ROOT) -> str:
+    return subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=root, text=True
+    ).strip()
+
+
+def require_frozen_source(
+    revision: str,
+    root: Path = ROOT,
+    source_paths: tuple[str, ...] = SOURCE_FREEZE_PATHS,
+) -> None:
+    current = current_source_revision(root)
+    if current != revision:
+        raise SourceRevisionDriftError(
+            f"frozen source revision changed: expected {revision}, observed {current}"
+        )
+    changed = subprocess.check_output(
+        ["git", "status", "--porcelain", "--", *source_paths], cwd=root, text=True
+    ).strip()
+    if changed:
+        raise SourceRevisionDriftError(
+            f"frozen source paths have uncommitted changes:\n{changed}"
+        )
 
 
 @dataclass(frozen=True)
@@ -88,7 +126,9 @@ class Episode:
         return "mission" if self.arm.startswith("M") else "task"
 
 
-async def launch_host(episode: Episode, auth_source: Path) -> None:
+async def launch_host(
+    episode: Episode, auth_source: Path, source_revision: str
+) -> None:
     episode.directory.mkdir(parents=True, exist_ok=False)
     stdout = (episode.directory / "host.stdout.log").open("wb")
     stderr = (episode.directory / "host.stderr.log").open("wb")
@@ -120,6 +160,11 @@ async def launch_host(episode: Episode, auth_source: Path) -> None:
     while time.monotonic() < deadline:
         state = read_receipt(episode.directory / "host.json")
         if state and state.get("status") == "running":
+            if state.get("sourceSHA") != source_revision:
+                raise SourceRevisionDriftError(
+                    f"{episode.arm} host source differs from frozen revision: "
+                    f"{state.get('sourceSHA')} != {source_revision}"
+                )
             episode.url = state["url"]
             assert isinstance(episode.url, str) and episode.url.startswith("http://127.0.0.1:")
             preflight = read_receipt(episode.directory / "preflight.json")
@@ -371,6 +416,7 @@ async def execute_block(
     static: Path,
     evolved: Path,
     versions: dict[str, tuple[str, str | None]],
+    source_revision: str,
 ) -> dict[str, Any]:
     episodes = {
         arm: Episode(
@@ -383,7 +429,7 @@ async def execute_block(
     }
     launches = []
     for arm in block.order:
-        launches.append(asyncio.create_task(launch_host(episodes[arm], auth)))
+        launches.append(asyncio.create_task(launch_host(episodes[arm], auth, source_revision)))
         await asyncio.sleep(0.25)
     attempts = await asyncio.gather(*launches, return_exceptions=True)
     startup_errors = {
@@ -399,6 +445,17 @@ async def execute_block(
         return {
             "status": "host_startup_failed",
             "errors": startup_errors,
+            "stopped": [str(item) for item in stopped],
+        }
+    try:
+        require_frozen_source(source_revision)
+    except SourceRevisionDriftError as error:
+        stopped = await asyncio.gather(
+            *(stop_host(episodes[arm]) for arm in block.order), return_exceptions=True
+        )
+        return {
+            "status": "source_revision_drift",
+            "error": str(error),
             "stopped": [str(item) for item in stopped],
         }
     try:
@@ -477,16 +534,14 @@ async def main() -> None:
         raise ValueError("Paired local auth.json must be an existing regular file")
     if not (args.auth_source.parent / "models.json").is_file():
         raise ValueError("The matching models.json catalog is required")
+    source_revision = current_source_revision()
+    require_frozen_source(source_revision)
     run_root.mkdir(parents=True)
     write_receipt(
         run_root / "matrix.json",
         {
             "status": "running",
-            "source_revision": (
-                await asyncio.to_thread(
-                    subprocess.check_output, ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
-                )
-            ).strip(),
+            "source_revision": source_revision,
             "model": MODEL,
             "manifest": str(MANIFEST),
             "static_version": static_manifest["version"],
@@ -499,12 +554,27 @@ async def main() -> None:
     snapshot = read_receipt(run_root / "matrix.json")
     assert snapshot is not None
     for block in blocks:
-        outcome = await execute_block(block, run_root, args.auth_source, static, evolved, versions)
+        try:
+            require_frozen_source(source_revision)
+        except SourceRevisionDriftError as error:
+            snapshot["status"] = "source_revision_drift"
+            snapshot["source_revision_drift"] = {
+                "before_block": block.index,
+                "error": str(error),
+            }
+            break
+        outcome = await execute_block(
+            block, run_root, args.auth_source, static, evolved, versions, source_revision
+        )
         snapshot["blocks"][str(block.index)] = outcome
         write_receipt(run_root / "matrix.json", snapshot)
         print(f"block {block.index}/10: {outcome['status']}", flush=True)
         if outcome["status"] != "observed":
-            snapshot["status"] = "failed"
+            snapshot["status"] = (
+                "source_revision_drift"
+                if outcome["status"] == "source_revision_drift"
+                else "failed"
+            )
             break
     else:
         snapshot["status"] = (
