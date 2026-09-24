@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Luna Mission/Task factorial trials](records/2026-09/2026-09-24-luna-mission-task-factorial-trials.md)
+
 - [Supervision acceptance data-flow repair](records/2026-09/2026-09-24-supervision-acceptance-repair.md)
 
 - [Expert Squad feedback evolution algorithm repair](records/2026-09/2026-09-24-expert-squad-evolution-algorithm.md)
