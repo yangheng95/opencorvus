@@ -588,3 +588,17 @@
 - 新机制交付见[跨轨迹决策](../../artifacts/2026-09-25-acceptance-comparison-design/mechanism-decision.md)。共同可观察问题为原目标关系退化成错误的局部充分条件，并跨判断/派单/结算保持；不能将其当模型内部唯一因果根因。Cycle3否定“只补来源即可”；G21否定“方法Artifact与后续调查足以纠错”；T1只提供正常交付反例，不能用来估计H-E效果。G4–G10局部合同保留，不扩大成业务验证；G1仍无真实完整Campaign收益证据。
 - 一个不同但未验证的候选是“预期形成前移到执行者开始前”。当前`.14`manifest和scheduler明确executor→verifier；仅在同一后验verifier里再说先推导不能改变新producer结论已存在的事实。当前prompt-profile-resolver明确workflow图由真实Agent可见决定遵守、不是Host硬gate；SDK/绑定分别有node_id与agent_id，已有同一agent绑定不同节点/Session的局部合同。故可讨论原verifier的前置方法节点→原executor→原verifier复核节点，复用角色/能力/Artifact，不增加Host语义门；但它改变工作流、节点出现次数、上下文和成本，不能称原H-E单段或只改一行。
 - 本轮没有创建该图、包、fixture、Task或运行登记；既有错误业务文本仍可在前置节点被读到，不能保证盲审，也不能用Host隐藏它。候选仅能检验“没有新executor报告时方法是否仍错”等条件，不能一次分离固有来源选择/旧文本锚定/能力的全部贡献。后续需要明确是否转向这种执行顺序研究；当前结束H-E后验方法记录的自动试错路径，保留整体未达成状态。无运行期间不继续五分钟查旧日志或制造重复报告。
+
+## G23实施前：继续已授权本地设计，不将方向判断转为逐步确认
+
+- 用户问“怎么不做了”。纠正G22执行上的过早停顿：原无人值守授权覆盖有依据的本地研究、设计与检查，无需再让用户批准这一步。停止无信息重抽不等于停止机制工作。本轮继续H-T的精确未应用差异和局部生产合同检查，不启动模型/业务世界、不替代运行登记。G22文末“等待选择”属于已被本次纠正的历史状态。
+- 可证伪的本地预测：原manifest表达三节点但仍只有原两个worker角色，真实loader/immutable reload能读取；原MCP能力完全相同；scheduler的真实可见instruction可以区分两个verifier节点并携带同Task方法坐标，原render不替模型补阶段；最终证据仍包含前后两次verifier产物，旧方法不能隐藏。这里证明表达/身份/数据合同，不能证明方法正确、实际遵循顺序或业务纠错。
+- 已读新增边界：delegated-worker/context保留原请求；ordinary initial不走renderDispatchContinuationTurn，其阶段必须由真实scheduler放入既有instruction，不能假定node_id自动出现在初始正文。completion-decision当前按terminal agent及包归属收集expert_output，因此复用同verifier角色会带入前置方法，最终复核应明确引用及改判关系；不是只剩最终节点报告。本轮不修改Host completion或消息/权限实现。
+- 范围：在spec产物生成可审查patch，仅调整包manifest三节点、scheduler阶段交接、verifier前置/最终职责及README；executor/selector/core/API权限保持。版本只作未发布设计身份，原`.14`源及不可变包不改。将patch应用于新的隔离临时副本，使用原生产loader、capability materializer、workflow binding与初始prompt renderer检查；不安装到用户项目、不生成模型Task/Message/Tool结果或启动MCP world。失败若来自真实合同，先记录再改设计，不增Host门或绕过检查。
+
+### G23精确设计与本地检查 checkpoint
+
+- [精确设计](../../artifacts/2026-09-25-acceptance-comparison-design/expectation-first-design.md)、未应用`expectation-first.patch`和明确test-driver检查器已落盘。实际四文件差异为manifest/README/scheduler/verifier；executor/selector原字节和所有能力保持。角色仍两个，节点三个；真实调度者通过原instruction表达阶段、以同Task Artifact交接，不隐藏初态旧错误说明。原source`.14`没有应用patch，没有安装/推广。
+- 隔离副本位于`.tmp/supervision-causal-20260925/ht-local-design/staged-squad`。首次版本suffix被原schema明确拒绝，改用合法未发布设计版本2026.09.25.15；真实loader/immutable reload identity为`a231dffdaed86a638cb8cc0995eab387a67dba8d70330980b37210553fd37b40`。检查六文件reload相同、两个worker全部grant及四MCPrefs与`.14`相同、三个topology wave及node→agent绑定正确、初始renderer保留显式阶段和原测试请求；receipt在`checker-run-02/receipt.json`。全部为本地loader/纯合同，无LLM/MCP业务调用/Task/participant消息，不能当模型顺序或效果验证。
+- git apply --check/四文件numstat、专用检查器typecheck、docs342ops25groups/diff通过。专用tsconfig第一版遗漏项目原*.md声明，补入原src/**/*.d.ts后通过，未新增假类型声明。completion收集前后verifier产物的结论仍是源码核对，未做Task sealing运行。所有失败/限制在设计文档保留，不把检查器通过包装业务根治。
+- 已恢复原heartbeat的本地工作跟进，不等待G22选择题。下一步是具体的H-T测量预登记审查，核对新问题是否能区分预测、原输入/旧文本/评估侧隔离、次数/停止规则；当前仍没有真实运行收据，不启动模型/业务world/候选作者/Campaign，也不重启任何旧run。

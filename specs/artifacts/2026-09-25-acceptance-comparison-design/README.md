@@ -46,6 +46,10 @@ original database/eval log.
 - [Cross-trajectory mechanism decision](mechanism-decision.md): separates established
   protocol repairs from unresolved semantic judgment and bounds a possible change to
   when expectations are formed; no implementation or model run is authorized by it.
+- [Expectation-first exact design](expectation-first-design.md), its
+  [unapplied patch](expectation-first.patch) and [local checker](check-expectation-first.ts)
+  define the three-node proposal using the original two roles and API grants. Loader,
+  binding and renderer checks are local contracts, not model behavior.
 
 Source pointers are labels in this prototype. It does not resolve them, verify
 complete reads, infer missing terms, choose a formula, or determine business truth.
