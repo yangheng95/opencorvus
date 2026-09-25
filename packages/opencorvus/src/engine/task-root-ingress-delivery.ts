@@ -8,6 +8,7 @@
  * reconciler below.
  */
 import { createHash } from "node:crypto"
+import { ZodError } from "zod"
 import { Identifier } from "@/id/id"
 import { OrchestratorEventSchema, type OrchestratorEvent } from "@/orchestrator/event"
 import {
@@ -36,7 +37,10 @@ import {
 import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import { Database, and, asc, desc, eq, inArray, sql } from "@/storage/db"
 import { Log } from "@/util/log"
-import { compareCanonicalStrings } from "@/util/canonical-digest"
+import { canonicalJSONValue, compareCanonicalStrings } from "@/util/canonical-digest"
+import { MissionTaskResumeReceiptIntegrityError, readMissionTaskResumeReceipt } from "@/mission/acceptance-resume-receipt"
+import { MissionAcceptanceGapIntegrityError, readTaskAcceptanceLedgerArtifact } from "@/mission/acceptance-ledger"
+import { requireMissionTaskLineageAuthority } from "./cross-task-artifact-import"
 import { Filesystem } from "@/util/filesystem"
 import { IntentBundle } from "@/intent/bundle"
 import {
@@ -451,6 +455,10 @@ function eventForIngress(ingress: typeof EngineTaskRootIngressTable.$inferSelect
     }
     return OrchestratorEventSchema.parse({ note: `Protocol occurrence ${event.id}` })
   }
+  return eventForTaskRootMessage(ingress)
+}
+
+function eventForTaskRootMessage(ingress: typeof EngineTaskRootIngressTable.$inferSelect): OrchestratorEvent {
   const row = Database.use((db) =>
     db
       .select({ id: MessageTable.id, sessionID: MessageTable.session_id, data: MessageTable.data })
@@ -463,7 +471,9 @@ function eventForIngress(ingress: typeof EngineTaskRootIngressTable.$inferSelect
       ingress.id,
       `Task-root ingress ${ingress.id} references missing Message ${ingress.source_id}`,
     )
-  const message = Message.Info.parse({ ...row.data, id: row.id, sessionID: row.sessionID })
+  const parsedMessage = Message.Info.safeParse({ ...row.data, id: row.id, sessionID: row.sessionID })
+  if (!parsedMessage.success) throw new TaskRootIngressIntegrityError(ingress.id, `Task-root Message ${row.id} is malformed`)
+  const message = parsedMessage.data
   if (message.role !== "user")
     throw new TaskRootIngressIntegrityError(
       ingress.id,
@@ -476,6 +486,43 @@ function eventForIngress(ingress: typeof EngineTaskRootIngressTable.$inferSelect
       `Task-root ingress ${ingress.id} source Message ${message.id} has no well-formed Task-root provenance`,
     )
   const provenance = parsedProvenance.data
+  if (provenance.kind === "mission" && provenance.source === "mission.acceptance_resume") {
+    let recorded: ReturnType<typeof readMissionTaskResumeReceipt>
+    try {
+      recorded = readMissionTaskResumeReceipt(ingress.task_id, { ingressID: ingress.id })
+    } catch (error) {
+      if (!(error instanceof MissionTaskResumeReceiptIntegrityError)) throw error
+      throw new TaskRootIngressIntegrityError(ingress.id, error.message)
+    }
+    if (!recorded) throw new TaskRootIngressIntegrityError(ingress.id, "Mission resume Message has no exact durable receipt")
+    const receipt = recorded.receipt
+    let ledger: ReturnType<typeof readTaskAcceptanceLedgerArtifact>
+    try {
+      ledger = readTaskAcceptanceLedgerArtifact(ingress.task_id, receipt.acceptance_ledger_revision_artifact_id)
+    } catch (error) {
+      if (!(error instanceof MissionAcceptanceGapIntegrityError) && !(error instanceof ZodError)) throw error
+      throw new TaskRootIngressIntegrityError(ingress.id, error.message)
+    }
+    const task = requireMissionTaskLineageAuthority({
+      sourceTaskID: ingress.task_id, projectID: Instance.project.id,
+      importer: { missionID: receipt.mission_id, sessionID: receipt.mission_session_id },
+    })
+    if (provenance.taskID !== ingress.task_id || message.author !== "mission" ||
+      message.sessionID !== task.session_id || receipt.message_id !== message.id || receipt.wake_id !== message.id ||
+      ledger.revision.execution_epoch !== ingress.execution_epoch ||
+      canonicalJSONValue(ledger.revision.gap) !== canonicalJSONValue(receipt.acceptance_gap) ||
+      receipt.prior_terminal_lifecycle_reference.terminalEventID !== receipt.acceptance_gap.reviewed_terminal_lifecycle_reference.terminalEventID) {
+      throw new TaskRootIngressIntegrityError(ingress.id, "Mission resume receipt, Message and acceptance ledger do not identify the same occurrence")
+    }
+    return OrchestratorEventSchema.parse({ missionAcceptanceResume: {
+      missionID: receipt.mission_id, missionSessionID: receipt.mission_session_id,
+      messageID: receipt.message_id, panelMessageID: receipt.panel_message_id,
+      toolCallID: receipt.tool_call_id, toolPartID: receipt.tool_part_id,
+      reviewedTerminalLifecycleReference: receipt.prior_terminal_lifecycle_reference,
+      acceptanceLedgerRevisionArtifactID: receipt.acceptance_ledger_revision_artifact_id,
+      acceptanceGap: ledger.revision.gap,
+    } })
+  }
   return OrchestratorEventSchema.parse({
     note: `Task-root Message ${message.id}`,
     rootMessage: {
@@ -535,6 +582,9 @@ function interactionFacts(
  * interpreted only at their terminal immutable boundary; the Tool storage
  * normalization in the same cutover replaces the remaining transport shape. */
 export const readTaskRootIngressEvidence: TaskRootIngressEvidenceReader = (db, ingress) => {
+  // Source identity violations must reduce to host_fault before acquisition,
+  // rather than appearing only after the driver has projected this input ready.
+  if (ingress.source === "message") eventForTaskRootMessage(ingress)
   const leaseIDs = db
     .select({ id: EngineControlActivationLeaseTable.id })
     .from(EngineControlActivationLeaseTable)

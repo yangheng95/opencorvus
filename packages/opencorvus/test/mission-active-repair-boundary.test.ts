@@ -22,6 +22,9 @@ import { SessionWake } from "@/session/wake"
 import { Database, eq } from "@/storage/db"
 import { EngineService } from "@/task-api"
 import { PanelArtifactQuerySchema } from "@/panel/capability"
+import { readMissionTaskResumeReceipt } from "@/mission/acceptance-resume-receipt"
+import type { OrchestratorEvent } from "@/orchestrator/event"
+import { renderWakeProvenanceNotice } from "@/orchestrator/agent"
 import {
   currentTaskArtifactObservation,
   assertCurrentTaskArtifactObservation,
@@ -93,7 +96,11 @@ test("Mission inspects active repair evidence while formal mutation retains its 
     directory: project.path,
     init: InstanceBootstrap,
     fn: async () => {
-      using _taskLoop = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
+      const observedResume = Promise.withResolvers<OrchestratorEvent>()
+      using _taskLoop = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async ({ event }) => {
+        if (event.missionAcceptanceResume || event.rootMessage?.kind === "mission") observedResume.resolve(event)
+        return {}
+      } })
       const mission = await ensureMissionSession({
         missionID: "mission-local-protocol-repair",
         defaultCwd: project.path,
@@ -214,6 +221,15 @@ test("Mission inspects active repair evidence while formal mutation retains its 
           completeEvidenceLocators: [originalA, reviewedA, missingB],
         }
         const first = await EngineService.resumeMissionTask(firstInput)
+        const delivered = await observedResume.promise
+        expect(delivered).toMatchObject({ missionAcceptanceResume: {
+          missionID: mission.missionID, missionSessionID: mission.id, messageID: first.message_id,
+          panelMessageID: firstInput.importer.messageID, toolCallID: firstInput.importer.toolCallID,
+          toolPartID: firstInput.toolPartID, reviewedTerminalLifecycleReference: terminal,
+          acceptanceLedgerRevisionArtifactID: first.acceptance_ledger_revision_artifact_id, acceptanceGap: originalGap,
+        } })
+        expect(renderWakeProvenanceNotice(delivered, taskID, first.ingress_artifact_id))
+          .toContain(`acceptance_ledger_revision_artifact_id=${first.acceptance_ledger_revision_artifact_id}`)
         const originalLedger = readLatestTaskAcceptanceLedger(taskID)!
         activeObservation = currentTaskArtifactObservation(taskID)
         expect(activeObservation).toEqual({
@@ -358,6 +374,12 @@ test("Mission inspects active repair evidence while formal mutation retains its 
           gap: { criteria: [{ criterion_id: "A", state: "open", disposition: "stale_evidence" }, originalGap.criteria[1]] },
         })
         expect(readTaskAcceptanceLedgerArtifact(taskID, originalLedger.artifactID)).toEqual(originalLedger)
+        const receiptByIngress = readMissionTaskResumeReceipt(taskID, { ingressID: first.ingress_artifact_id })
+        expect(receiptByIngress).toEqual(readMissionTaskResumeReceipt(taskID, { toolCallID: firstInput.importer.toolCallID }))
+        expect(receiptByIngress?.receipt).toMatchObject({
+          acceptance_ledger_revision_artifact_id: originalLedger.artifactID, acceptance_gap: originalGap,
+          message_id: first.message_id, task_id: taskID,
+        })
         expect(() => Database.immediateTransaction((db) => appendTaskAcceptanceLedgerRevisionInTransaction({
           db, taskID, artifactID: Identifier.ascending("artifact"), executionEpoch: 2,
           expectedPreviousArtifactID: originalLedger.artifactID, gap: attemptedGap, now: Date.now(),

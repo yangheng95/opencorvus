@@ -263,6 +263,7 @@ import {
   type MissionAcceptanceGap,
 } from "@/mission/acceptance-gap"
 import { appendTaskAcceptanceLedgerRevisionInTransaction } from "@/mission/acceptance-ledger"
+import { MissionTaskResumeReceiptSchema, readMissionTaskResumeReceipt } from "@/mission/acceptance-resume-receipt"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { SessionWake } from "@/session/wake"
 import { IntentBundle } from "@/intent/bundle"
@@ -415,25 +416,6 @@ export const MissionTaskResumeEvidenceError = NamedError.create(
     unreadEvidenceLocators: z.array(ArtifactReadLocatorSchema),
   }),
 )
-
-const MissionTaskResumeReceiptSchema = z
-  .object({
-    protocol: z.literal("mission-acceptance-resume-receipt"),
-    task_id: z.string().min(1),
-    mission_id: z.string().min(1),
-    mission_session_id: z.string().min(1),
-    panel_message_id: z.string().min(1),
-    tool_call_id: z.string().min(1),
-    tool_part_id: z.string().min(1),
-    message_id: z.string().min(1),
-    wake_id: z.string().min(1),
-    ingress_artifact_id: z.string().min(1),
-    acceptance_ledger_revision_artifact_id: z.string().min(1),
-    prior_terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
-    acceptance_gap: MissionAcceptanceGapSchema,
-    time_accepted: z.number().int().positive(),
-  })
-  .strict()
 
 /**
  * A Session cannot be physically deleted while a Task still owns it as its
@@ -3739,26 +3721,8 @@ export namespace EngineService {
     }
   }
 
-  function missionTaskResumeReceipt(taskID: string, toolCallID: string) {
-    const row = Database.use((db) =>
-      db
-        .select({ id: EngineArtifactTable.id, payload: EngineArtifactTable.payload })
-        .from(EngineArtifactTable)
-        .where(
-          and(
-            eq(EngineArtifactTable.task_id, taskID),
-            eq(EngineArtifactTable.kind, "mission_acceptance_resume_receipt"),
-            sql`json_extract(${EngineArtifactTable.payload}, '$.tool_call_id') = ${toolCallID}`,
-          ),
-        )
-        .get(),
-    )
-    if (!row) return undefined
-    return { artifactID: row.id, receipt: MissionTaskResumeReceiptSchema.parse(row.payload) }
-  }
-
   function assertMissionTaskResumeReceiptIdentity(
-    existing: NonNullable<ReturnType<typeof missionTaskResumeReceipt>>,
+    existing: NonNullable<ReturnType<typeof readMissionTaskResumeReceipt>>,
     input: {
       importer: CrossTaskArtifactImporter
       toolPartID: string
@@ -3834,7 +3798,7 @@ export namespace EngineService {
       projectID: Instance.project.id,
       importer: input.importer,
     })
-    const existing = missionTaskResumeReceipt(input.taskID, input.importer.toolCallID)
+    const existing = readMissionTaskResumeReceipt(input.taskID, { toolCallID: input.importer.toolCallID })
     if (existing) {
       assertMissionTaskResumeReceiptIdentity(existing, { ...input, acceptanceGap })
       return {
@@ -3896,7 +3860,7 @@ export namespace EngineService {
         rootSessionID: task.session_id!,
         wakeID: `mission-acceptance-resume:${input.importer.toolCallID}`,
         run: async () => {
-          const committed = missionTaskResumeReceipt(input.taskID, input.importer.toolCallID)
+          const committed = readMissionTaskResumeReceipt(input.taskID, { toolCallID: input.importer.toolCallID })
           if (committed) {
             assertMissionTaskResumeReceiptIdentity(committed, { ...input, acceptanceGap })
             durableReceipt = committed
