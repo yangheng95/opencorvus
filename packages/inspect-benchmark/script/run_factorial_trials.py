@@ -12,6 +12,7 @@ import subprocess
 import sys
 import time
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -25,6 +26,7 @@ MANIFEST = ROOT / "specs/artifacts/2026-09-24-automationbench-self-evolution/pro
 PLAN = ROOT / "specs/records/2026-09/2026-09-24-luna-mission-task-factorial-trials.md"
 ARMS = ("TS", "TE", "MS", "ME")
 STARTUP_SECONDS = 120
+UNSPECIFIED_CLOCK = datetime.now(timezone.utc).isoformat()
 SOURCE_FREEZE_PATHS = (
     "expert-squads/builtin/automationbench",
     "packages/opencorvus/src",
@@ -329,6 +331,8 @@ async def run_inspect(
         "-T",
         f"model={model}",
         "-T",
+        f"unspecified_clock={UNSPECIFIED_CLOCK}",
+        "-T",
         f"base_url={episode.url}",
         "-T",
         "timeout_seconds=300",
@@ -620,6 +624,7 @@ async def main() -> None:
             "status": "running",
             "source_revision": source_revision,
             "model": args.model,
+            "unspecified_clock": UNSPECIFIED_CLOCK,
             "manifest": str(MANIFEST),
             "static_version": static_manifest["version"],
             "static_digest": static_digest,

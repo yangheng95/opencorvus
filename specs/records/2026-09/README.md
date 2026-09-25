@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [AutomationBench environment clock audit](2026-09-25-automationbench-environment-clock-audit.md)
+
 - [Supervision causal iteration](2026-09-25-supervision-causal-iteration.md)
 
 - [Acceptance comparison design probe](../../artifacts/2026-09-25-acceptance-comparison-design/README.md)

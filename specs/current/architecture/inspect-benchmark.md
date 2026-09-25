@@ -34,13 +34,16 @@ The project config uses `.opencorvus/opencorvus.jsonc`, admitted by the same
 ConfigPaths authority as normal Tasks. The solver freezes package bytes before
 sample execution instead of re-reading mutable source files for each occurrence.
 The visible Task request starts with harness-authored context carrying the exact
-official `initial_state.meta.current_time`, then retains the original prompt
-sections verbatim. This simulated business clock controls relative-date business
-calculations; it does not replace real host time, Provider time or inactivity
-observation. An absent optional clock remains explicitly unspecified; a declared
-malformed time is an input error. Logs record
-`case_context_policy=official-world-clock-v1` and each sample's exact clock so
-paired comparisons can bind the same context policy.
+effective business clock, then retains the original prompt sections verbatim.
+An official `initial_state.meta.current_time` remains authoritative. When the
+sample omits it, Inspect fixes one UTC timestamp before constructing the Sample
+and uses that value in the request, the initial world and rubric replay. A
+paired run passes the same `unspecified_clock` to both occurrences; the original
+official prompt and seed remain unchanged. This simulated clock controls
+relative-date business calculations; it does not replace real host time,
+Provider time or inactivity observation. A malformed supplied timestamp is an
+input error. Logs record `case_context_policy=official-world-clock-v2` and
+each sample's effective clock. Old v1 results retain their original evidence.
 
 The official package owns world transitions and rubric semantics. Inspect keeps
 ordered real tool events, sealed world state and the private Google Sheets row-write

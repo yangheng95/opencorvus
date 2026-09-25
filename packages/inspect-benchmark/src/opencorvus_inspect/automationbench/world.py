@@ -5,8 +5,8 @@ from __future__ import annotations
 import copy
 import json
 import math
-from dataclasses import dataclass
-from datetime import datetime
+from dataclasses import dataclass, replace
+from datetime import datetime, timezone
 from importlib.metadata import distribution
 from pathlib import Path
 from typing import Any
@@ -14,7 +14,7 @@ from typing import Any
 UPSTREAM_REVISION = "4a8e1061254004d9dac807054eed33fad7d1ff14"
 BENCHMARK = f"zapier/automationbench@{UPSTREAM_REVISION[:7]}"
 SCORING_POLICY = "official-strict-assertions-v1"
-CASE_CONTEXT_POLICY = "official-world-clock-v1"
+CASE_CONTEXT_POLICY = "official-world-clock-v2"
 
 
 def require_strict_assertions() -> None:
@@ -80,6 +80,19 @@ class Case:
         return f"{context}\n\n{original}"
 
 
+def freeze_missing_case_clock(case: Case, clock: datetime) -> Case:
+    """Give one originally undated sample a visible, replayable business clock."""
+    if case.current_time is not None:
+        return case
+    if clock.tzinfo is None or clock.utcoffset() is None:
+        raise ValueError("Frozen AutomationBench clock must include a timezone")
+    info = copy.deepcopy(case.info)
+    info["initial_state"].setdefault("meta", {})["current_time"] = clock.astimezone(
+        timezone.utc
+    ).isoformat()
+    return replace(case, info=info)
+
+
 def _domain_cases(domain: str) -> dict[str, Case]:
     from automationbench.domains import get_domain_dataset
 
@@ -142,6 +155,9 @@ class OfficialWorld:
         self.initial = strip_none_values(copy.deepcopy(self.info["initial_state"]))
         self.info["assertions"] = [strip_none_values(a) for a in self.info["assertions"]]
         self.world = WorldState(**copy.deepcopy(self.initial))
+        self.initial.setdefault("meta", {})["current_time"] = (
+            self.world.meta.current_time.isoformat()
+        )
         # Upstream creates this marker on the first row update and treats absence as empty.
         object.__setattr__(self.world.google_sheets, "_updated_row_keys", set())
         self.world.meta.allowed_services = compute_allowed_services(
@@ -231,6 +247,21 @@ def rescore(case: Case, snapshot: dict[str, Any], tool_calls: int) -> dict[str, 
     updated = snapshot["google_sheets_updated_row_keys"]
     if not isinstance(updated, list) or any(not isinstance(key, str) for key in updated):
         raise ValueError("AutomationBench snapshot has invalid row-write tracking")
+    snapshot_world = snapshot.get("world")
+    metadata = snapshot_world.get("meta") if isinstance(snapshot_world, dict) else None
+    clock_text = metadata.get("current_time") if isinstance(metadata, dict) else None
+    if not isinstance(clock_text, str):
+        raise ValueError("AutomationBench snapshot has no effective business clock")
+    try:
+        snapshot_clock = datetime.fromisoformat(clock_text.replace("Z", "+00:00"))
+    except ValueError as error:
+        raise ValueError("AutomationBench snapshot has an invalid business clock") from error
+    if case.current_time is not None:
+        source_clock = datetime.fromisoformat(case.current_time.replace("Z", "+00:00"))
+        if snapshot_clock != source_clock:
+            raise ValueError("AutomationBench snapshot clock differs from the official case")
+    else:
+        case = freeze_missing_case_clock(case, snapshot_clock)
     world = OfficialWorld(case)
     world.world = WorldState.model_validate(snapshot["world"])
     object.__setattr__(world.world.google_sheets, "_updated_row_keys", set(updated))

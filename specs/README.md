@@ -1,11 +1,14 @@
 # Specs Storage Index
 
+- [AutomationBench environment clock audit](records/2026-09/2026-09-25-automationbench-environment-clock-audit.md)
+
 - [Supervision causal iteration](records/2026-09/2026-09-25-supervision-causal-iteration.md)
 
 - [Acceptance comparison design probe](artifacts/2026-09-25-acceptance-comparison-design/README.md)
 - [Acceptance relation and input observation](artifacts/2026-09-25-acceptance-comparison-design/input-observation.md)
 - [Method handoff intervention design](artifacts/2026-09-25-acceptance-comparison-design/method-handoff.md)
 - [H-E two-episode results](artifacts/2026-09-25-acceptance-comparison-design/he-01-results.md)
+- [Archived review input boundary](artifacts/2026-09-25-acceptance-comparison-design/archive-review-ingress.md)
 
 - [Luna Mission/Task factorial trials](records/2026-09/2026-09-24-luna-mission-task-factorial-trials.md)
 

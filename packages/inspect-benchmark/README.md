@@ -296,15 +296,17 @@ strict assertions (`AUTOMATIONBENCH_STRICT_ASSERTIONS=1`, upstream's default);
 disabling them is an explicit configuration/scoring error. Every run records the
 `official-strict-assertions-v1` policy. Checker exceptions are never business zeroes.
 
-The Task request visibly supplies the official world's exact `meta.current_time`
-before the unchanged original prompt sections. Relative dates and activity windows
-belong to that simulated business clock, while host execution and inactivity
-observation retain real wall time. An absent optional date is explicitly
-unspecified; a declared malformed time is an input error. Every run records
-`case_context_policy=official-world-clock-v1`, and sample
-metadata records `automationbench_current_time`. Results from earlier versions
-that omitted this context are separate diagnostic measurements, not a controlled
-baseline for the clock-aware input.
+The Task request visibly supplies the resolved business `meta.current_time`
+before the unchanged original prompt sections. For a sample that omits this
+field, `unspecified_clock` supplies one UTC timestamp to its request, initial
+world, and rubric replay. Without that argument, the Task fixes current UTC
+once when the dataset is constructed. Paired evaluations supply the same
+timestamp to each occurrence. Relative dates and activity windows use this
+business clock; host execution and inactivity observation use real wall time.
+Malformed timestamps are input errors. Every run records
+`case_context_policy=official-world-clock-v2` and the effective per-sample
+`automationbench_current_time`. Earlier v1 results retain their original
+evidence; they are not rescored to claim a comparable clock.
 
 To verify the Python-generated project with the actual product configuration
 loader, squad resolver and live official MCP service, run this additional local

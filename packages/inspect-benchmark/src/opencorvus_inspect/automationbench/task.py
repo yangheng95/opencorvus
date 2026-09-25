@@ -7,6 +7,7 @@ import json
 import math
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, cast
 from urllib.parse import urlsplit
@@ -14,7 +15,7 @@ from urllib.parse import urlsplit
 from inspect_ai import Task, task
 from inspect_ai.dataset import Sample
 from inspect_ai.scorer import Score, Scorer, Target, mean, scorer, stderr
-from inspect_ai.solver import Solver, TaskState, solver
+from inspect_ai.solver import TaskState
 
 from ..adapter import AdapterConfig, EntryPoint
 from ..scorer import mission_completed, task_completed
@@ -25,6 +26,7 @@ from .world import (
     SCORING_POLICY,
     Case,
     OfficialWorld,
+    freeze_missing_case_clock,
     load_cases,
     official_case,
     rescore,
@@ -207,34 +209,6 @@ def _settings(
     return config, squad_path, squad_manifest
 
 
-@solver
-def automationbench_task_solver(
-    manifest: str,
-    squad: str,
-    project_dir: str,
-    model: str,
-    base_url: str,
-    timeout_seconds: float,
-    poll_seconds: float,
-    entrypoint: EntryPoint = "task",
-) -> Solver:
-    config, squad_path, _squad_manifest = _settings(
-        manifest,
-        squad,
-        project_dir,
-        model,
-        base_url,
-        timeout_seconds,
-        poll_seconds,
-    )
-    return build_opencorvus_solver(
-        config,
-        project_isolation="sample_epoch",
-        sample_setup=sample_environment(load_cases(manifest), squad_path, entrypoint),
-        entrypoint=entrypoint,
-    )
-
-
 @task
 def opencorvus_automationbench(
     manifest: str,
@@ -246,9 +220,19 @@ def opencorvus_automationbench(
     timeout_seconds: float = 300,
     poll_seconds: float = 2,
     entrypoint: EntryPoint = "task",
+    unspecified_clock: str | None = None,
 ) -> Task:
     """Run a frozen public case set against a co-located, separately started OpenCorvus service."""
-    cases = load_cases(manifest)
+    if unspecified_clock is None:
+        clock = datetime.now(timezone.utc)
+    else:
+        try:
+            clock = datetime.fromisoformat(unspecified_clock.replace("Z", "+00:00"))
+        except ValueError as error:
+            raise ValueError("unspecified_clock must be an ISO 8601 timestamp") from error
+        if clock.tzinfo is None or clock.utcoffset() is None:
+            raise ValueError("unspecified_clock must include a timezone")
+    cases = [freeze_missing_case_clock(case, clock) for case in load_cases(manifest)]
     if entrypoint not in {"task", "mission"}:
         raise ValueError("entrypoint must be task or mission")
     config, squad_path, squad_manifest = _settings(
@@ -287,14 +271,10 @@ def opencorvus_automationbench(
             )
             for case in cases
         ],
-        solver=automationbench_task_solver(
-            manifest=manifest,
-            squad=str(squad_path),
-            project_dir=config.project_dir,
-            model=model,
-            base_url=config.base_url,
-            timeout_seconds=config.timeout_seconds,
-            poll_seconds=config.poll_seconds,
+        solver=build_opencorvus_solver(
+            config,
+            project_isolation="sample_epoch",
+            sample_setup=sample_environment(cases, squad_path, entrypoint),
             entrypoint=entrypoint,
         ),
         scorer=[

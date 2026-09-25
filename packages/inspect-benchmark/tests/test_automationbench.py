@@ -5,6 +5,7 @@ import copy
 import json
 import shutil
 from dataclasses import replace
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
@@ -28,6 +29,7 @@ from opencorvus_inspect.automationbench.world import (
     BENCHMARK,
     CASE_CONTEXT_POLICY,
     OfficialWorld,
+    freeze_missing_case_clock,
     load_cases,
     official_case,
     rescore,
@@ -35,6 +37,10 @@ from opencorvus_inspect.automationbench.world import (
 
 PACKAGE = Path(__file__).parents[1]
 MANIFEST = PACKAGE / "src/opencorvus_inspect/examples/automationbench-smoke.json"
+PROBE_MANIFEST = (
+    PACKAGE.parents[1]
+    / "specs/artifacts/2026-09-24-automationbench-self-evolution/probe-manifest.json"
+)
 SQUAD = PACKAGE.parents[1] / "expert-squads/builtin/automationbench"
 
 pytest.importorskip("automationbench", reason="AutomationBench checks require the automation extra")
@@ -66,14 +72,19 @@ def test_manifest_binds_official_case_membership_order_and_original_request() ->
         "provider/model",
     )
     assert task.metadata["system"]["prompt_profile"] == "automationbench"
-    assert task.dataset[0].input == cases[0].request
+    assert task.dataset[0].input.split("\n\n", 1)[1] == cases[0].request.split(
+        "\n\n", 1
+    )[1]
     assert task.metadata["case_context_policy"] == CASE_CONTEXT_POLICY
     assert task.metadata["cases"][0] == {
         "domain": cases[0].domain,
         "task": cases[0].task,
         "example_id": cases[0].example_id,
     }
-    assert task.dataset[0].metadata["automationbench_current_time"] == cases[0].current_time
+    assert task.dataset[0].input.splitlines()[1] == (
+        "Simulated business current_time: "
+        + task.dataset[0].metadata["automationbench_current_time"]
+    )
 
 
 def test_request_carries_exact_simulated_clock_and_original_prompt() -> None:
@@ -106,6 +117,63 @@ def test_optional_world_clock_is_explicitly_unspecified() -> None:
         assert case.current_time is None
         assert case.request.splitlines()[1] == (
             "Simulated business current_time: unspecified in the official sample."
+        )
+
+
+def test_undated_official_case_uses_one_resolved_clock_in_request_and_business_world() -> None:
+    original = official_case("sales.create_new_opportunity", 9)
+    frozen = "2025-11-20T12:00:00+00:00"
+    task = opencorvus_automationbench(
+        str(PROBE_MANIFEST), str(SQUAD), "D:/bench/frozen-clock", "provider/model",
+        unspecified_clock=frozen,
+    )
+    sample = next(item for item in task.dataset if item.id == original.task)
+    assert sample.metadata["automationbench_current_time"] == frozen
+    assert sample.input.splitlines()[1] == f"Simulated business current_time: {frozen}"
+    assert sample.input.split("\n\n", 1)[1] == original.request.split("\n\n", 1)[1]
+    assert original.current_time is None
+
+    case = freeze_missing_case_clock(original, datetime.fromisoformat(frozen))
+    world = OfficialWorld(case)
+    assert world.world.meta.current_time.isoformat() == frozen
+    assert world.initial["meta"]["current_time"] == frozen
+    query = "SELECT Id FROM Account WHERE ContractRenewalDate = THIS_QUARTER"
+    response = json.loads(world.call("api_fetch", {
+        "method": "GET",
+        "url": "https://example.my.salesforce.com/services/data/v61.0/query",
+        "params": json.dumps({"q": query}),
+        "body": None,
+    }))
+    assert response["totalSize"] == 1
+    assert response["records"][0]["Id"] == "001xx000003SMT1"
+    later = OfficialWorld(
+        freeze_missing_case_clock(original, datetime.fromisoformat("2026-09-25T06:04:20+00:00"))
+    )
+    later_response = json.loads(later.call("api_fetch", {
+        "method": "GET",
+        "url": "https://example.my.salesforce.com/services/data/v61.0/query",
+        "params": json.dumps({"q": query}),
+        "body": None,
+    }))
+    assert later_response["totalSize"] == 0
+    result = world.seal()
+    assert rescore(original, world.snapshot(), len(world.events)) == result
+
+
+def test_operator_clock_preserves_declared_official_clock_and_validates_timezone() -> None:
+    explicit = official_case("sales.unreliable_label_account_review", 1203)
+    other = freeze_missing_case_clock(explicit, datetime.fromisoformat("2025-11-20T12:00:00+00:00"))
+    assert other is explicit
+    task = opencorvus_automationbench(
+        str(PROBE_MANIFEST), str(SQUAD), "D:/bench/frozen-clock", "provider/model",
+        unspecified_clock="2025-11-20T20:00:00+08:00",
+    )
+    sample = next(item for item in task.dataset if item.id == "sales.create_new_opportunity")
+    assert sample.metadata["automationbench_current_time"] == "2025-11-20T12:00:00+00:00"
+    with pytest.raises(ValueError, match="include a timezone"):
+        opencorvus_automationbench(
+            str(PROBE_MANIFEST), str(SQUAD), "D:/bench/frozen-clock", "provider/model",
+            unspecified_clock="2025-11-20T12:00:00",
         )
 
 
