@@ -572,3 +572,12 @@
 - 原单一controller源码增加必填`--run-dir`以读取显式独立freeze，删除硬编码旧RUN目录；episode必须归属于该登记目录。没有第二controller实现、后备路径或改变原host/Inspect/cleanup逻辑。旧运行目录/controller.json/freeze/log只读，旧源码版本在`d24c215c`保留，新实例按新source/script身份独占创建。先py_compile/Ruff和实际CLI错误合同（episode越界→明确ValueError）核对，无模型。
 - 验证并提交后写新freeze，引用旧失败收据说明业务Task为0，所有新旧预检和后续调用累计报告。真实包/输入按原已核验收据再核对身份，不重新生成源、材料化候选或扩大测试。新Host使用同一成对授权/模型目录并重新做精确Luna流式预检，不刷新凭据副本；预检不通过就收尾。
 - 新旧两次启动各自完整留存，结果不得拼入原H-E/官方历史。本次只验证G16/G18规定的真实修正、保持义务和判断/返工来源；executor首次修正仍不证明监督触发。运行期间源码/spec冻结、五分钟快照；新Task/Mission身份以实际收据为准，不提前填造。结束先零活动/host退出/复制件删除，再读完整原Tool/消息/产物/世界判定。
+
+## G21结果：真实后续调查没有修正错误价格，H-E交接不足
+
+- [完整结果](../../artifacts/2026-09-25-acceptance-comparison-design/repair-01-results.md)按G18/G20原义务审定。恢复源8560c039、同fixture与`.14`，新Mission `bd1e13b3299af570` / Task `tsk_g00VWEnlcF00x17zwsMd`。controller于13:34:50 UTC finished，Task failed/Mission blocked；原公共cleanup active=[]、host stopped、成对复制件实际删除，13:37核对精确自有进程全退出。Inspect closed/log success只表示观测及收尾完成，官方strict/partial null，不套create rubric。
+- 两方实际读到定价邮件“Base prices remain unchanged.”、Gold及4Contacts，但没有Drive/Sheets业务读取。初始executor认20,000及原说明已正确，无需修改；verifier的方法`art_hJrFxBRCwUnfhZ7nJzgl`也先选择4×5,000=20,000。方法完整读后比较`art_hf0OMARvH3yU7cngCkZf`真实引用它；交接顺序发生，不代表方法正确，producer报告和目标GET均先曝光。
+- verifier提出健康政策文字只适用于创建新机会，以及缺全字段baseline的疑问；scheduler真实continuation `prt_g0VWEpqHs00FInV5oBdG`限制为只读政策调查、不得修改机会/说明，executor查询后发布未找到扩展的证据。第二verifier仍认pricing satisfied；真实fail_task和panel_block_mission均继续肯定20,000，因政策/保持证据疑问结算。不是通知没到或缺后续执行，而是错误通过项未被重开；本次没有Mission resume/extension。
+- 全45业务事件为5 api_search+40 GET，完整最终state与初态逐值相同；目标ID/名称/Account/On Hold和所有无关事实保持，但金额20,000与原580字节错误description未修。初态原Sheet仍有base40,000/Gold10%，登记金额关系54,000仅在评估侧。健康政策“when creating new opportunities…until cases resolved”的既有记录适用性歧义单列，不拿它证明整项不可完成、不重判旧官方分。该歧义不消除确定的价格修复缺失。
+- 原116请求/116usage全部Luna流式HTTP200，4,867,281tokens，106全Tool（104completed/2failed）/45业务事件，sample1061.288秒。两次Tool失败分别为非terminal settlement Message身份与旧Turn locator，实际错误保留，不假称runtime失败或价格根因。加原零业务启动失败2请求/29,219tokens，共118请求/4,896,500tokens。全成本、分角色、原生/外侧矩阵见结果文档；原eval/DB只读派生在`repair-01-recovery/audit/`，未改分或拼历史。
+- 本次反证限定为：可审查方法/引用与同Task后续调查不足以保证关系判断和业务纠错。H-E单段改写没有得到可宣称的纠错收益，不再同义改写或抽样；`.14`不晋升/推广。整体可靠纠错/进化收益未完成；当前没有本轮证据支持的新生产补丁或下一次模型登记。先交付共同机制结论与未识别项，后续新干预必须有不同的可检验因果机制，不能用再加API或局部通过替代。

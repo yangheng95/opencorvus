@@ -40,6 +40,9 @@ original database/eval log.
   all costs and stop rules. Its [preparer](prepare-repair-input.py) preserves source
   values and its [controller](run-repair-01.py) reuses the existing host/cleanup.
   Preregistration and entry construction do not establish model behavior.
+- [Repair 01 results](repair-01-results.md): the real same-Task evidence continuation
+  ended blocked with the original wrong amount and explanation unchanged; method
+  publication did not establish method correctness. Includes the retained startup failure.
 
 Source pointers are labels in this prototype. It does not resolve them, verify
 complete reads, infer missing terms, choose a formula, or determine business truth.

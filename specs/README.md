@@ -11,6 +11,7 @@
 - [Archived review input boundary](artifacts/2026-09-25-acceptance-comparison-design/archive-review-ingress.md)
 - [Fixed-state business repair design](artifacts/2026-09-25-acceptance-comparison-design/fixed-state-repair-design.md)
 - [Repair 01 preregistration](artifacts/2026-09-25-acceptance-comparison-design/repair-01-preregistration.md)
+- [Repair 01 results](artifacts/2026-09-25-acceptance-comparison-design/repair-01-results.md)
 
 - [Luna Mission/Task factorial trials](records/2026-09/2026-09-24-luna-mission-task-factorial-trials.md)
 
