@@ -457,3 +457,13 @@
 - 只读核对原成对auth/models存在，OAuth当时未过期且目录确实含精确Luna；不输出凭据、不刷新。本地检查不能代替真实preflight，两个host启动后仍各自按原实现验证可用性/投影/实际streaming模型。六项已登记输入观察统一用于两臂，其中新增角色标题和方法/比较原文片段；它们仅进审计器，不进模型消息。
 - 新`he-01-preparation/run_pair.py`只组织原driver的launch_host/run_inspect/settle_owned_activity/stop_host，已py_compile。controller独占创建，B1/T1各一次，每300秒存只读快照；评分失败保留，runtime/null或cleanup未达成则停止余项。cleanup需零活动、正常stopped、进程退出与两文件实际删除后才进T1。该编译只证明脚本语法，不能当运行成功。所有启动字段在提交后写入`.tmp/supervision-causal-20260925/he-01/freeze.json`，再启动唯一controller；未来事实在原receipt中保存，运行期间不更新本spec或源码。
 - 源包改动、原package loader与文档检查完成后按AGENTS提交。本次交付是待测交接实现，不是可靠纠错或自进化收益；G12的两个样本及全部反例/未知/停止规则不变。
+
+## G14：H-E两次运行完成，正常交付不能冒充纠错收益
+
+- Recall：严格完成G12固定两次Mission世界B1/T1，没有补跑/替补、作者或Campaign。源全程`fe233643e8bfbea3cd46dc81ed6123fec5720c84`，两包精确binding、原输入/clock/scorer保留。controller于11:35:10.971 UTC finished；追加本记录前核对两个host stopped、所有自有controller/Inspect/host进程退出、零活动、auth/models实际删除。原SQLite用`mode=ro/query_only`读取，未启动/迁移旧runtime、改分或重算评分。
+- 完整[结果报告](../../artifacts/2026-09-25-acceptance-comparison-design/he-01-results.md)包含原分、逐段归因、原native/官方Markdown矩阵、请求/token/Tool/时长及原证据引用。原始与派生文件分别在`he-01/{B1,T1}`和`he-01/audit`，原收据只读。两个Task均completed、Mission均accepted；B1原strict0/partial0且最终20,000，T1原strict1/partial1且最终54,000。两者都各一次原始创建、两个initial dispatch，没有金额修正/continuation/Mission resume。
+- B1并非重复Cycle3“全部计算项已齐”：复杂Drive查询空结果后，没有读取价表/折扣；executor和verifier均读到含base不变的原邮件，却将`4×5000=20000`判完整。真实verifier Artifact `art_hhq98XNCPfLqTy4xdxng`明确把该公式satisfied，不是通知缺失。空查询与模拟API复合query语义未分离，不能单凭它归模型弱，但未完成的依赖仍不能当正确总价。
+- T1真实executor POST `prt_g0VWEMFsx00xBksrTjw3`于11:28:49.571已是54,000，官方事件22成功且最终world吻合；之后verifier方法`art_h1YKQBld9fGslU5KgD8r`于11:31:50.117发布，比较`art_hHQZrQnqaH8IDvQHUwQj`于11:32:54.871真实选源方法，公式正确。这支持现有Tool下交接可执行和本次正常交付，**不证明verifier修复了错误，更不能把+1分归为因果收益**。两臂前置executor结果不同，不能事后装作同起点。
+- 曝光边界也有新事实：T1 verifier在11:31:08.225已GET实际Opportunity，先于方法；方法选源executor且自述已读executor。其“Deferred to comparison”文字不能倒置真实读取顺序。方法先于比较publication成立，但未见实际结果前形成方法不成立；独立推导与确认既有正确解释未分离。G11显示原重算/标题在B1 18次、T1 25次出站instructions出现，新方法/比较段仅T1 25次出现；这是片段发送证据，不是完整wire/理解保证。
+- 成本完整记录：B1 79请求/79usage、2,826,202 tokens、27官方Tool/71全Tool、534.622秒；T1 78/78、2,727,654 tokens、32官方Tool/70全Tool、626.884秒。全157请求均Luna流式HTTP200，usage数量缺口0，合5,553,856 tokens。包含preflight/内部调用；原cost_usd0不是免费账单。verifier本身由18请求/490,273tokens变25/946,978，其它角色成本也变，不能以整体tokens稍低宣称交接节省成本。
+- 决策：本次两episode闭合，不再重抽，不晋升`.14`为已证更优父代。它保留为有一次正常路径证据的开发交接，可靠纠错/自进化收益仍未达成。下一可做的本地工作只审查如何固定同一自然错误交付与允许来源的真实、明确归属、只读验收起点，排除前置executor不同的识别问题；不得复活旧Task、改官方world、伪造producer、泄露operator答案或立即增加模型样本。合法设计未成立时应明确未知/不可识别边界，而不是同义prompt或更多随机世界。整体五段机制工作继续，停止此对照不等于暂停整体工作。

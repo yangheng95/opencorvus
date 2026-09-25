@@ -1,7 +1,8 @@
 # Acceptance comparison design probe
 
-This is an operator-authored, offline design artifact, **not a production Tool,
-candidate, model experiment, or replacement benchmark scorer**.
+The original schema/probe/vectors below are operator-authored offline design artifacts,
+**not production Tools or replacement benchmark scorers**. Later preregistration and
+real behavior results are separately linked and retain their distinct evidence levels.
 
 The [investigation record](../../records/2026-09/2026-09-25-supervision-causal-iteration.md)
 defines the hypotheses and constraints. The immutable Cycle 3 evidence remains in
@@ -23,6 +24,9 @@ original database/eval log.
 - [Method handoff preregistration](method-handoff.md) fixes one verifier section
   patch, two episodes, competing explanations and stop rules. G13 applies it in
   source version .14; implementation does not establish behavior improvement.
+- [H-E two-episode results](he-01-results.md): original scores, participant/source
+  chronology, costs and closure; normal delivery is observed but correction benefit
+  remains unidentified because the executor starting results differ.
 
 Source pointers are labels in this prototype. It does not resolve them, verify
 complete reads, infer missing terms, choose a formula, or determine business truth.
