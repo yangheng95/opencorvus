@@ -56,6 +56,9 @@ original database/eval log.
   uncertainty and all costs remain separate; it is not a historical score comparison.
 - [H-T 01 results](ht-01-results.md): real expectation-first chronology, original source
   and Tool lineage, unchanged wrong business value, false acceptance, cleanup and full costs.
+- [Source dependency and judgment boundary](source-dependency-boundary.md): current
+  API catalog/search reachability, observed ranking noise and the separate failure of
+  business relation judgment, with explicit limits on possible local fixes.
 
 Source pointers are labels in this prototype. It does not resolve them, verify
 complete reads, infer missing terms, choose a formula, or determine business truth.

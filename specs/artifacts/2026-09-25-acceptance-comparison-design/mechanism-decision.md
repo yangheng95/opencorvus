@@ -4,6 +4,8 @@ G25状态：原H-T方向随后经[精确设计](expectation-first-design.md)、
 [一次预登记](ht-01-preregistration.md)与[真实结果](ht-01-results.md)检验。
 方法确实早于新executor形成却仍选错金额，最终错误接受；它否定了“前置时序足以根治”
 的充分性。下文保留G22提出研究方向时的历史决定，不将当时“尚未运行”当作现在状态。
+G26进一步核对了[来源发现与判断边界](source-dependency-boundary.md)：当前全服务目录
+排序确有噪声，但不能解释Cycle3读齐仍误验收；不据此更改官方Tool或添加Host业务gate。
 
 ## Recall与交付范围
 

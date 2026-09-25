@@ -623,3 +623,10 @@
 - executor实际PATCH同一机会的Amount20,000及逐字相同的580字节说明，返回`{}`、Tool completed，后续GET仍20,000；完整初末world仅目标`last_modified_date`由上游PATCH变动，其余字段/来源/4服务/clock/Sheets跟踪均同值。最终verifier仍价格pass，真实`complete_task`与`panel_complete_mission` accepted。原生终态相对外侧登记关系54,000及说明更正为错误接受；没有业务修正或监督触发的同Task返工。健康政策对既有机会的适用性及年份文字歧义仍单列，不遮蔽价格缺口。
 - 本次113请求/113usage全流式LunaHTTP200，input675757/output24746/reasoning3287/cache-read3853056/cache-write0/total4556846 tokens；104全Tool（101 completed/3 failed）、42业务事件（8 search/33 GET/1 PATCH）、sample1009.282秒/controller1033.098秒。三次非终止Tool错误为错误Task Message身份、首次派单输入无效、首次方法JSON无效；后续合法轮次均真实完成，错误原样保留。完整成本不能与G21/H-E差额当边际收益，cost_usd0非免费。
 - 这次证伪“方法形成在新执行者前，就足以避免错误关系被接受”。仅保留有界时序识别与已通过的协议/运行器合同，不晋升`.15`、安装推广、补第二次样本、同义改写或开启作者/Campaign。可靠业务纠错与自进化收益仍未达成；当前没有证据支持把这个错误接受改称交付或把H-T继续随机扩样。
+
+## G26：目录噪声可见，语义关系失真仍无合法局部补丁
+
+- Recall：按用户原无人值守与全局机制要求，承接G25的新反证，在无活动实验/Host且`e2a31895`工作区干净时，只读核对当前Agent指令、模拟API发现/真实权限、Task/Mission裁决的全仓定义与调用，不重提取旧评分、不启动模型/世界。结论及代码边界见[来源依赖审查](../../artifacts/2026-09-25-acceptance-comparison-design/source-dependency-boundary.md)。
+- 当前共同`ApiSession`将`api_search`原样交上游全部schema的BM25目录，`api_catalog`同样列全服务；真正`api_fetch`另按world.meta.allowed_services四服务做401。H-T01前两次泛查询各20条，分别混入14与7条未连接服务，均无Drive/Sheets，表明发现噪声；但当前Sheets读取合约存在、四服务允许、Agent未发相关定向查询，不能由目录噪声证明Sheets不可达或若过滤就会修好。
+- 当前executor/verifier/scheduler指令已经要求完整base、人数、tier调整及原始来源，G25有部分出站片段和实际定价邮件读取；仍在新executor之前选错方法。Cycle3即使读齐全部依赖仍错误接受，否定“只改目录发现就是共同根治”。Task Completion Decision及Mission的Host校验覆盖真实Message/Artifact、生命周期等身份与一致性，而不判价格公式；H-T01是错误业务判断被真实裁决接受，不是调度状态丢失或Host工具没调用。
+- 因此不改原官方Tool、world/scorer或Host业务gate，不再同义追加方法/角色/随机样本，也不把目录过滤作为这次业务修复交付。目录文档与连接权限的差别可作为**独立发现能力问题**另行研究，但受官方Tool只读边界约束且不足以处理读齐仍误判。当前没有证据支持一个同时解决来源选择和方法判断、且不转移Agent语义权的最小生产修改；这一具体路径收束，整体可靠业务纠错和进化收益仍未达成。

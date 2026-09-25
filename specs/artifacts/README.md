@@ -12,6 +12,7 @@
 - [Expectation-first exact design](2026-09-25-acceptance-comparison-design/expectation-first-design.md): an unapplied three-node patch with unchanged worker grants and explicit production-loader/binding/renderer local checks; no model run.
 - [H-T 01 preregistration](2026-09-25-acceptance-comparison-design/ht-01-preregistration.md): one explicitly bounded temporal-mechanism diagnosis on unchanged repair input, with separate method, action and preservation judgments.
 - [H-T 01 results](2026-09-25-acceptance-comparison-design/ht-01-results.md): the expectation preceded the new executor but selected the wrong price; a no-op business PATCH was accepted, with original facts and full costs preserved.
+- [Source dependency and judgment boundary](2026-09-25-acceptance-comparison-design/source-dependency-boundary.md): distinguishes all-service catalog noise from source-selection and relation-judgment failures; records why no local gate or same-prompt patch is justified.
 
 - [AutomationBench ten-case automatic revision experiment](2026-09-24-automationbench-self-evolution/README.md): paired official scores for a model-authored candidate.
 
