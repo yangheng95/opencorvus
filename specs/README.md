@@ -15,6 +15,7 @@
 - [Cross-trajectory mechanism decision](artifacts/2026-09-25-acceptance-comparison-design/mechanism-decision.md)
 - [Expectation-first exact design](artifacts/2026-09-25-acceptance-comparison-design/expectation-first-design.md)
 - [H-T 01 preregistration](artifacts/2026-09-25-acceptance-comparison-design/ht-01-preregistration.md)
+- [H-T 01 results](artifacts/2026-09-25-acceptance-comparison-design/ht-01-results.md)
 
 - [Luna Mission/Task factorial trials](records/2026-09/2026-09-24-luna-mission-task-factorial-trials.md)
 

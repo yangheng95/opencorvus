@@ -53,6 +53,8 @@ original database/eval log.
 - [H-T 01 preregistration](ht-01-preregistration.md) fixes one new method-before-execution
   occurrence on the unchanged attributed repair input. Temporal evidence, business effects,
   uncertainty and all costs remain separate; it is not a historical score comparison.
+- [H-T 01 results](ht-01-results.md): real expectation-first chronology, original source
+  and Tool lineage, unchanged wrong business value, false acceptance, cleanup and full costs.
 
 Source pointers are labels in this prototype. It does not resolve them, verify
 complete reads, infer missing terms, choose a formula, or determine business truth.

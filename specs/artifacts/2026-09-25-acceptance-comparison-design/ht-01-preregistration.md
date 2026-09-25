@@ -1,5 +1,8 @@
 # H-T 01：新执行者开始前的方法形成与后续业务闭环
 
+G25的[实际结果](ht-01-results.md)已覆盖本登记时点的待运行状态；本文件保留原预测与
+停止规则，不以观察结果倒改预登记。
+
 ## Recall与信息增益
 
 承接[H-T精确设计](expectation-first-design.md)、[共同机制结论](mechanism-decision.md)

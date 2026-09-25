@@ -614,3 +614,12 @@
 
 - 新`.tmp/supervision-causal-20260925/ht-01-preparation/entry-construction.json`核对原fixture及1844字节公开request身份、`.15`不可变六文件与G23已检设计相同。真实registered development Task constructor接受该输入/包/新目录并返回原sample/request、Mission配置、scorerNone；只是构造，没有调用solver或启动业务API世界，不能冒称实际Inspect已跑过。
 - 原授权auth/models源只读核对通过OAuth未过期及openai目录有精确Luna；未复制/刷新凭据，未发模型预检。真实preflight必须由新host另行完成。controller源码不变，无新平台或测量代码；本登记和索引docs/diff通过后范围提交，准确运行SHA写新freeze，不改旧Repair01/H-E记录。
+
+## G25结果：前置方法已在先，错误关系仍穿过全链
+
+- [H-T01完整结果](../../artifacts/2026-09-25-acceptance-comparison-design/ht-01-results.md)按G24原登记逐项审定。唯一新Mission `1d6cb3654d038745`、Task `tsk_g00VWF7Deg00jKHmW9Kv`真实绑定隔离`.15/a231dffd…`，运行源`0a8780f3`。controller 14:51:13 UTC自然finished；公开cleanup active=[]、host stopped；精确launcher/controller/host/Inspect进程均退出，episode内成对auth/models复制件实际不存在。原eval/DB/世界只读，数据库`mode=ro`/`query_only`；官方strict/partial仍null。
+- 三个成功初始dispatch真实为前置verifier节点→executor节点→最终verifier节点。前置方法`art_hwy9iy8BrDqRLCNRsnoD`在14:38:46发布，新executor首派单在14:39:44。scheduler完整read/select、executor完整read、最终verifier完整read原方法与执行产物，比较`art_h69rY5TyXL0yVb0LMisl`真实引用两者。时序干预及资料交接成立，不等于方法正确。
+- 前置verifier先GET原Opportunity，已见20,000及旧错误Description；它读到定价邮件原句“Base prices remain unchanged.”、Gold账户和四联系人，却没有读Drive/Sheets原base40,000与Gold10%。方法在新executor出现前就认`4×5000=20000`，因此**新executor报告不是本次错误方法的必要条件**；旧业务文本锚定、来源选择、指令解释、推理能力仍未分离，不能称盲审或Luna整体弱。
+- executor实际PATCH同一机会的Amount20,000及逐字相同的580字节说明，返回`{}`、Tool completed，后续GET仍20,000；完整初末world仅目标`last_modified_date`由上游PATCH变动，其余字段/来源/4服务/clock/Sheets跟踪均同值。最终verifier仍价格pass，真实`complete_task`与`panel_complete_mission` accepted。原生终态相对外侧登记关系54,000及说明更正为错误接受；没有业务修正或监督触发的同Task返工。健康政策对既有机会的适用性及年份文字歧义仍单列，不遮蔽价格缺口。
+- 本次113请求/113usage全流式LunaHTTP200，input675757/output24746/reasoning3287/cache-read3853056/cache-write0/total4556846 tokens；104全Tool（101 completed/3 failed）、42业务事件（8 search/33 GET/1 PATCH）、sample1009.282秒/controller1033.098秒。三次非终止Tool错误为错误Task Message身份、首次派单输入无效、首次方法JSON无效；后续合法轮次均真实完成，错误原样保留。完整成本不能与G21/H-E差额当边际收益，cost_usd0非免费。
+- 这次证伪“方法形成在新执行者前，就足以避免错误关系被接受”。仅保留有界时序识别与已通过的协议/运行器合同，不晋升`.15`、安装推广、补第二次样本、同义改写或开启作者/Campaign。可靠业务纠错与自进化收益仍未达成；当前没有证据支持把这个错误接受改称交付或把H-T继续随机扩样。
