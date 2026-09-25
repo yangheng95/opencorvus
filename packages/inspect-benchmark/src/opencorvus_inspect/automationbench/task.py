@@ -8,7 +8,6 @@ from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, cast
-from urllib.parse import urlsplit
 
 from inspect_ai import Task, task
 from inspect_ai.dataset import Sample
@@ -18,7 +17,7 @@ from inspect_ai.solver import TaskState
 from ..adapter import AdapterConfig, EntryPoint
 from ..scorer import mission_completed, task_completed
 from ..solver import SampleSetup, build_opencorvus_solver, opencorvus_system_metadata
-from .environment import freeze_squad_files, project_environment
+from .environment import freeze_squad_files, project_environment, sample_settings
 from .world import (
     BENCHMARK,
     CASE_CONTEXT_POLICY,
@@ -133,44 +132,6 @@ def automationbench_partial() -> Scorer:
     return automationbench_score("partial")
 
 
-def _settings(
-    manifest: str,
-    squad: str,
-    project_dir: str,
-    model: str,
-    base_url: str,
-    timeout_seconds: float,
-    poll_seconds: float,
-) -> tuple[AdapterConfig, Path, dict[str, Any]]:
-    import json5
-
-    if not model.strip():
-        raise ValueError("AutomationBench requires an explicit provider/model")
-    squad_path = Path(squad).resolve(strict=True)
-    squad_manifest = json5.loads((squad_path / "expert-squad.jsonc").read_text(encoding="utf-8"))
-    if (squad_manifest.get("namespace"), squad_manifest.get("id")) != (
-        "builtin",
-        "automationbench",
-    ):
-        raise ValueError("squad must identify the canonical builtin/automationbench package")
-    config = AdapterConfig.resolve(
-        base_url=base_url,
-        project_dir=project_dir,
-        model=model,
-        prompt_profile="automationbench",
-        product_pillar="work",
-        init_git=True,
-        timeout_seconds=timeout_seconds,
-        poll_seconds=poll_seconds,
-    )
-    if urlsplit(config.base_url).hostname not in {"127.0.0.1", "localhost", "::1"}:
-        raise ValueError("AutomationBench requires a co-located loopback OpenCorvus service")
-    root = Path(project_dir).resolve()
-    if Path(manifest).resolve().is_relative_to(root) or squad_path.is_relative_to(root):
-        raise ValueError("manifest and squad source must remain outside the sample project root")
-    return config, squad_path, squad_manifest
-
-
 @task
 def opencorvus_automationbench(
     manifest: str,
@@ -197,7 +158,7 @@ def opencorvus_automationbench(
     cases = [freeze_missing_case_clock(case, clock) for case in load_cases(manifest)]
     if entrypoint not in {"task", "mission"}:
         raise ValueError("entrypoint must be task or mission")
-    config, squad_path, squad_manifest = _settings(
+    config, squad_path, squad_manifest = sample_settings(
         manifest,
         squad,
         project_dir,

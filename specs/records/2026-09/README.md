@@ -6,6 +6,7 @@
 
 - [Acceptance comparison design probe](../../artifacts/2026-09-25-acceptance-comparison-design/README.md)
 - [Fixed-state business repair design](../../artifacts/2026-09-25-acceptance-comparison-design/fixed-state-repair-design.md)
+- [Repair 01 preregistration](../../artifacts/2026-09-25-acceptance-comparison-design/repair-01-preregistration.md)
 
 - [Luna Mission/Task factorial trials](2026-09-24-luna-mission-task-factorial-trials.md)
 

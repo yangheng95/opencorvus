@@ -24,6 +24,7 @@ from opencorvus_inspect.automationbench.development import (
     development_environment,
     load_development_fixture,
 )
+from opencorvus_inspect.automationbench.development_task import opencorvus_business_repair
 from opencorvus_inspect.automationbench.mcp import world_server
 
 PACKAGE = Path(__file__).parents[1]
@@ -334,3 +335,49 @@ async def test_development_ingress_requires_registered_input(tmp_path: Path, cha
     with pytest.raises(ValueError, match=error):
         async with development_environment(fixture, SQUAD)(state, config):
             raise AssertionError("mismatched fixture was admitted")
+
+
+def test_development_task_freezes_explicit_mission_input(tmp_path: Path) -> None:
+    fixture = load_input(tmp_path, driver_input())
+    task = opencorvus_business_repair(
+        str(tmp_path / "input.json"),
+        str(SQUAD),
+        str(tmp_path / "projects"),
+        "openai/gpt-5.6-luna",
+    )
+    sample = task.dataset[0]
+    assert (sample.id, sample.input) == (fixture.identifier, fixture.request)
+    metadata = task.metadata
+    assert isinstance(metadata, dict)
+    assert metadata["assessment"] == "not_evaluated"
+    assert metadata["system"]["adapter"] == "opencorvus-mission-api"
+    assert metadata["system"]["model"] == "openai/gpt-5.6-luna"
+    assert metadata["system"]["timeout_seconds"] == 300
+    assert metadata["development_fixture"] == fixture.identity()
+    assert metadata["comparable"] is False
+
+
+@pytest.mark.parametrize(
+    ("option", "value", "error"),
+    [
+        ("model", "", "requires an explicit provider/model"),
+        ("base_url", "https://example.invalid", "requires a co-located loopback"),
+        ("project_dir", ".", "input and squad source must remain outside"),
+    ],
+)
+def test_development_task_configuration_errors(
+    tmp_path: Path,
+    option: str,
+    value: str,
+    error: str,
+) -> None:
+    load_input(tmp_path, driver_input())
+    options: dict[str, Any] = {
+        "fixture": str(tmp_path / "input.json"),
+        "squad": str(SQUAD),
+        "project_dir": str(tmp_path / "projects"),
+        "model": "openai/gpt-5.6-luna",
+    }
+    options[option] = str(tmp_path) if option == "project_dir" else value
+    with pytest.raises(ValueError, match=error):
+        opencorvus_business_repair(**options)

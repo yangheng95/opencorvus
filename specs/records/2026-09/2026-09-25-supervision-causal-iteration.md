@@ -526,3 +526,21 @@
 - 保留两类检查器输入错误：首次driver写v59 URL，原上游只实现v61，GET返回无Amount的错误对象使测试失败；按实际原路由改测试v61，没有改生产API。随后两项错误入口测试尝试给Inspect只读input/sample_id属性赋值，返回AttributeError；改为构造合法TaskState携带待拒输入，真实返回预期ValueError。原失败日志保留在`.tmp/supervision-causal-20260925/g17-local-check/pytest.log`/xml，最终14项在`pytest-development-final.*`，跨语言在`project-admission.log`。首v59失败只在本轮工具输出，未伪造持久化收据。
 - 检查进程均正常退出；按本轮路径复核没有遗留python/bun进程，未创建模型Task/controller、使用或复制auth/models，也未把B1旧snapshot启动为活动世界。当前架构和package README已同步；G16文档标明历史设计时点。旧官方input/world/原分与包`.13/.14`只读，未重算历史。
 - 下一未证边界是自然错误材料经这条入口进入真实Agent后，事实是否改变判断并实际修正。现在可准备一个公开归属的固定状态业务诊断冻结，但不得把这34项本地合同当可靠业务纠错/进化收益，也不能重复扩展环境API代替行为检查。任何B1材料导出须先原eval逐值核对并明确新身份、完整初态/原服务/clock/description；真实Luna调用仍另行预登记，不从本检查产物接着运行模型。
+
+## G18实施前：一次固定错误业务状态诊断的输入与运行冻结
+
+- Recall：本轮起始`d5871ffd`/干净工作区，核对原实验均已停止，读G16/G17、原H-E收据、原Inspect solver/config/driver与实际开发输入契约。目标是把可读来源转成正确判断/真实修正/复核，交付仍与监督返工及进化收益分开。用户问的v61已解释为上游Salesforce REST API路径版本；没有把检查器URL错误当业务模型问题。
+- 本轮先准备：从B1原`.eval`以Inspect reader只读取sample、snapshot和原事件，逐值匹配B1-final-chain；导出新operator-derived fixture，全集复制world和Sheets跟踪，保持原4服务、clock、目标description及噪声。新请求采用G16明确的“审查并修正既有记录”，不附operator公式/来源ID/官方断言。原SYSTEM作为公开历史任务约束保留其文字，create动作由当前返工请求明确替换，不合成新system/participant消息。外侧义务与具体判定单独落盘，不作为fixture输入。
+- 必要入口改动限定为`automationbench/development_task.py`组合原loader/development_environment/build_opencorvus_solver的Mission入口；原纯配置`_settings`移到environment.py成为唯一sample_settings，官方消费者同步迁移、删除旧定义。Inspect registry注册显式开发任务；不改生命周期/权限/包/业务API，无另一个runner或Provider客户端。scorer为None，原生结果及业务证据只入metadata，任何业务结论仍须完整外侧审查，不能把没有scorer变成0或完成。
+- 入口构造/错误配置先做局部正向检查与Ruff/Mypy/docs/diff，不重复34项当新进展。真实`.14`由原loader在新隔离材料化目录核验digest/六文件与权限；仅材料化不是安装推广。新增计划/索引和必要入口代码验证提交后才冻结实际source SHA。新的测量问题与信息/授权变化单独说明，不使用原official manifest/create rubric。
+- 预定样本：`.tmp/supervision-causal-20260925/repair-01/`一个新Mission/新世界、`.14`一次、无替补；准备目录为`repair-01-preparation/`。控制器复用原driver的launch_host/精确preflight/公共cleanup/stop_host，仅Inspect命令与开发结果读取按新入口调整；独占创建controller，300秒快照，outer none/真实无活动300秒/poll2。源码、fixture和精确script身份全冻结后才可能启动，不运行旧脚本/旧目录、不自设请求预算。
+- 启动条件：已提交源/真实包身份、原始来源一致性、冻结公开请求与评估侧义务、唯一新目录/控制器、成对auth/models及精确Luna流式预检。当前写本段时尚未移交凭据或发模型预检。若全部成立，才依原无人值守授权考虑这一已登记单次诊断；任何条件失败保留null及实际原因，不能重复抽样。运行期间不改源码/spec。正常收尾需本轮零活动/Host退出/复制件删除后再分析。
+
+### G18准备与实现 checkpoint
+
+- 已完成[Repair 01预登记](../../artifacts/2026-09-25-acceptance-comparison-design/repair-01-preregistration.md)，包含固定材料、原错误对象/来源、当前返工请求与历史create范围的显式差异、外侧业务义务、错误/未知/停止、完整成本与公共收尾。控制器和只读准备脚本作为可审查artifact提交；没有新增业务scorer或Host语义判断。
+- 从B1原eval只读核对snapshot/input/27事件与原链逐值相等，读取前后eval字节身份一致。新fixture为231,703 bytes、`af809c323ab14ac90b6df4193825bc65d5cae3697eb434ed8b4d727989ebe869`，源eval为`373c00b3732e478dc02d7bdfb57a48c296df10903e8d0c5130b5d8462cb789c9`。只用于确切不可变输入身份，不作业务验收。完整state、4服务、clock和description保留；原分/断言/其它arm/producer历史没有投影到新Task。source-receipt位于新准备目录，旧输入未改。
+- 真实loader从H-E不可变`.14`材料化到新package-runtime并reload；digest仍`b4c645f4a90c002e83842c46d56afbb1563ee24f7a9cb215f2488a1d9d379f93`，六文件字节相等、两worker原capabilities/流程保留，package-freeze收据已落盘。不是晋升父代或安装到用户项目。
+- 新`opencorvus_business_repair`入口仅组成原Mission solver/setup，注册名明确为开发返工。纯配置校验迁为environment.sample_settings，旧私有定义已删除、官方消费同一个函数。scorer=None，输出原生结果与未评估开发证据，外侧按逐项事实审查。实际构造B1派生输入成功，公开request UTF8为1844 bytes且无补入金额/公式/source ID；无活动MCP或模型在此构造中启动。
+- 聚焦入口/错误配置及原官方构造共5测试通过；package Mypy24源文件/新测试Mypy1文件、Ruff（含两个artifact脚本）、脚本py_compile、docs342ops25groups/diff通过。初次静态检查指出controller在async中同步Popen和测试metadata/kwargs类型，已沿原driver的to_thread写法与准确类型修正；不是模型/runtime失败，也没有绕过检查。原G17行为合同不重复累计。
+- 只读检查原auth/models存在、OAuth当时未过期、目录含精确Luna，没有输出凭据或刷新。真实preflight仍须新Host执行并记录usable/projected/exact/streaming。提交后的freeze及controller将记录准确源SHA、数据/脚本身份、一次样本和实际运行过程；在这些运行收据出现前不能说模型已经启动。

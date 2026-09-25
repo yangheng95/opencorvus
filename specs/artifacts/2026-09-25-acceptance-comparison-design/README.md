@@ -35,6 +35,11 @@ original database/eval log.
   reproducible business starting state from identical verifier input, records the
   four-to-48-service seed conversion hazard, and bounds a proposed real-API repair
   diagnostic. No new world or model was created.
+- [Repair 01 preregistration](repair-01-preregistration.md) fixes one attributed
+  archived-state business diagnosis, external obligations, real Mission entry,
+  all costs and stop rules. Its [preparer](prepare-repair-input.py) preserves source
+  values and its [controller](run-repair-01.py) reuses the existing host/cleanup.
+  Preregistration and entry construction do not establish model behavior.
 
 Source pointers are labels in this prototype. It does not resolve them, verify
 complete reads, infer missing terms, choose a formula, or determine business truth.

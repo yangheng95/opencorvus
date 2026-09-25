@@ -6,6 +6,7 @@
 - [H-E two-episode results](2026-09-25-acceptance-comparison-design/he-01-results.md): original scores/costs and real handoff chronology; no demonstrated causal correction benefit.
 - [Archived review input boundary](2026-09-25-acceptance-comparison-design/archive-review-ingress.md): fixed historical material, real local attachment checks and exact native projection limits; no model replay.
 - [Fixed-state business repair design](2026-09-25-acceptance-comparison-design/fixed-state-repair-design.md): same business state versus same verifier input, original API/clock/permission boundaries and a proposed development repair diagnostic; no new world or model.
+- [Repair 01 preregistration](2026-09-25-acceptance-comparison-design/repair-01-preregistration.md): one explicitly derived business-state repair diagnosis with separate external obligations; not an official score or demonstrated correction gain.
 
 - [AutomationBench ten-case automatic revision experiment](2026-09-24-automationbench-self-evolution/README.md): paired official scores for a model-authored candidate.
 

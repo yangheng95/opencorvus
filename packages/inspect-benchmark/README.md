@@ -371,9 +371,12 @@ seed: its default service fields must not broaden connected-service permissions.
 contract. Its `TaskState.sample_id` must equal the fixture identifier and its input
 must equal `fixture.request`, which visibly declares seeded data and the business
 clock. A separately registered caller may compose it with
-`build_opencorvus_solver(..., entrypoint="mission", sample_setup=...)`. This does
-not introduce a registered model task or a business scorer. Keep fixture, source
-and evaluator materials outside the new sample project.
+`build_opencorvus_solver(..., entrypoint="mission", sample_setup=...)`.
+The registered `opencorvus_inspect/opencorvus_business_repair` task provides that
+bounded composition with `fixture`, `squad`, `project_dir`, explicit `model` and
+the standard loopback/inactivity options. It has no scorer: business corrections
+and preservation require a preregistered external review of the real evidence.
+Keep fixture, source and evaluator materials outside the new sample project.
 
 The environment uses the same package/configuration/MCP scope and simulated API
 session as official samples. Its logs use `development_*`, identify the source,

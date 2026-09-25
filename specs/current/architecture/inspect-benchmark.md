@@ -86,8 +86,10 @@ input attribution, not Host-issued producer authority.
 Development events start with the new API occurrence. Output is recorded under
 `development_*` metadata with `assessment=not_evaluated`; a closed environment is
 not business acceptance. Official case/manifest/scorer identity remains separate.
-There is no registered model task, official scorer or automatic behavior run for
-this development entry. A future separately registered diagnosis can compose its
-`SampleSetup` with the existing Mission solver and must independently assess real
-business corrections and preservation. Fixed initial state alone does not fix
-the later executor/verifier inputs or establish causal improvement.
+`opencorvus_business_repair` composes that setup with the existing Mission solver
+for one explicitly provided fixture. It has no scorer: real native outcomes and
+business evidence remain available for a separately preregistered external review.
+`sample_settings` is the single configuration/loopback/source-location validator
+shared with official tasks. A task declaration does not start a model or authorize
+a run. Fixed initial state alone does not fix the later executor/verifier inputs
+or establish causal improvement.
