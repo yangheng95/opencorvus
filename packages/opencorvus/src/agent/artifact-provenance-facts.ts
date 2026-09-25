@@ -35,11 +35,12 @@ import { PermissionExecutionResultTable } from "@/permission/permission.sql"
 import type { Database } from "@/storage/db"
 import { and, asc, desc, eq, gt, inArray, or, sql } from "drizzle-orm"
 import z from "zod"
+import { TaskArtifactObservationFields, refineTaskArtifactObservation } from "@/engine/task-artifact-observation"
 
 export const PanelArtifactReadReferenceFactSchema = ArtifactReadReferenceChunkSchema.extend({
   taskID: z.string().min(1),
-  terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
-})
+  ...TaskArtifactObservationFields,
+}).superRefine(refineTaskArtifactObservation)
 
 export const PanelArtifactReadReferenceInputSchema = z
   .object({
@@ -80,6 +81,7 @@ export type ArtifactFactScope = {
   excludeMessageID?: string
   beforeMessage?: { timeCreated: number; messageID: string }
   panelTaskID?: string
+  terminalLifecycleReference?: TerminalLifecycleReference
 }
 
 function factScopeConditions(scope: ArtifactFactScope | undefined) {
@@ -307,14 +309,19 @@ function readAtoms(requestData: unknown, output: string): ReadAtom[] {
     const {
       taskID: _taskID,
       terminal_lifecycle_reference: _terminal,
+      active_execution_reference: _active,
       ...canonical
-    } = fields as typeof fields & { taskID?: string; terminal_lifecycle_reference?: TerminalLifecycleReference }
+    } = fields as typeof fields & {
+      taskID?: string
+      terminal_lifecycle_reference?: TerminalLifecycleReference | null
+      active_execution_reference?: unknown
+    }
     result.push({
       request,
       chunk,
       taskID,
       terminalLifecycleReference:
-        "terminal_lifecycle_reference" in chunk
+        "terminal_lifecycle_reference" in chunk && chunk.terminal_lifecycle_reference !== null
           ? TerminalLifecycleReferenceSchema.parse(chunk.terminal_lifecycle_reference)
           : undefined,
       fact: {
@@ -402,6 +409,12 @@ export function completeArtifactReadLocatorsForSessionInTransaction(
   const facts = readRowsForSession(db, sessionID, options)
     .flatMap((row) => row.atoms)
     .filter((atom) => options?.panelTaskID === undefined || atom.taskID === options.panelTaskID)
+    .filter(
+      (atom) =>
+        options?.terminalLifecycleReference === undefined ||
+        (atom.terminalLifecycleReference !== undefined &&
+          sameTerminalLifecycleReference(atom.terminalLifecycleReference, options.terminalLifecycleReference)),
+    )
     .map((atom) => atom.fact)
   return auditArtifactReadLocatorsFromFacts(facts).completeLocators
 }
@@ -554,13 +567,20 @@ export function resolveArtifactReadReferenceBeforeSelectionInTransaction(
 
 export function completeArtifactReadsBeforePanelActionInTransaction(
   db: Database.TxOrDb,
-  input: { sessionID: string; assistantMessageID: string; toolPartID: string; taskID: string },
+  input: {
+    sessionID: string
+    assistantMessageID: string
+    toolPartID: string
+    taskID: string
+    terminalLifecycleReference?: TerminalLifecycleReference
+  },
 ): ArtifactReadLocator[] {
   const scope = assistantActionFactScopeInTransaction(db, input.sessionID, input.assistantMessageID, input.toolPartID)
   return completeArtifactReadLocatorsForSessionInTransaction(db, input.sessionID, {
     turnParentMessageID: scope.turnParentMessageID,
     before: scope.before,
     panelTaskID: input.taskID,
+    terminalLifecycleReference: input.terminalLifecycleReference,
   })
 }
 
@@ -587,7 +607,8 @@ function panelArtifactReadReferenceLocatorsBeforeActionInTransaction(
     },
   })) {
     const chunk = PanelArtifactReadReferenceFactSchema.safeParse(value)
-    if (!chunk.success || chunk.data.taskID !== input.taskID) continue
+    if (!chunk.success || chunk.data.taskID !== input.taskID || chunk.data.terminal_lifecycle_reference === null)
+      continue
     const candidate = {
       locator: chunk.data.locator,
       terminalLifecycleReference: chunk.data.terminal_lifecycle_reference,

@@ -79,8 +79,19 @@ import {
   resolveMissionArtifactReadAcceptancesBeforeCompletion,
   resolvePanelArtifactLocatorReferenceBeforeRead,
   resolvePanelArtifactReadReferencesBeforeAction,
+  requirePanelArtifactContinuationBeforeQuery,
 } from "@/agent/artifact-read-facts"
-import { reviewedTerminalLifecycleReferenceBeforePanelAction } from "@/agent/task-review-facts"
+import {
+  reviewedTerminalLifecycleReferenceBeforePanelAction,
+  reviewedTaskArtifactObservationBeforePanelAction,
+} from "@/agent/task-review-facts"
+import {
+  TaskArtifactObservationFields,
+  refineTaskArtifactObservation,
+  currentTaskArtifactObservation,
+  assertCurrentTaskArtifactObservation,
+  type TaskArtifactObservation,
+} from "@/engine/task-artifact-observation"
 import { listMissionTasks } from "@/engine/store"
 import {
   MissionBlockReceipt,
@@ -97,7 +108,6 @@ import { readLatestTaskAcceptanceLedger } from "@/mission/acceptance-ledger"
 import {
   requireCurrentTerminalLifecycleReference,
   resolveTerminalLifecycleReference,
-  type TerminalLifecycleReference,
 } from "@/engine/terminal-lifecycle-reference"
 import {
   sameTerminalLifecycleReference,
@@ -138,12 +148,12 @@ const localOnly = (ctx: Tool.Context) => {
   return surface === "panel" || surface === "right-sidebar"
 }
 
-const PanelTaskArtifactPage = ArtifactSearchReferenceTransportPageSchema.omit({ next_cursor: true }).extend({
+const PanelTaskArtifactPage = ArtifactSearchReferenceTransportPageSchema.extend({
   taskID: z.string().min(1),
-  terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
+  ...TaskArtifactObservationFields,
   page_number: z.number().int().min(1),
   next_page_number: z.number().int().min(2).nullable(),
-})
+}).superRefine(refineTaskArtifactObservation)
 
 const PANEL_ARTIFACT_PAGE_INITIAL_LIMIT = ArtifactSchemaLimits.maxSearchLimit
 const MISSION_RECOMMENDATION_TIMEOUT_MS = 10_000
@@ -301,63 +311,53 @@ function panelStructuredOutput(value: unknown, context: string): string {
 
 async function panelTaskArtifactPage(
   taskID: string,
-  input: Omit<z.input<typeof ArtifactSearchInputSchema>, "limit" | "cursor"> & {
-    terminal_lifecycle_reference: TerminalLifecycleReference
+  input: Omit<z.input<typeof ArtifactSearchInputSchema>, "limit"> & {
+    observation: TaskArtifactObservation
     page_number: number
   },
+  maxOutputBytes: number,
 ): Promise<string> {
-  const { terminal_lifecycle_reference: expectedTerminalReference, page_number: requestedPageNumber, ...search } = input
-  const assertCurrentTerminalOccurrence = () => {
-    const current = requireCurrentTerminalLifecycleReference(taskID)
-    if (!sameTerminalLifecycleReference(current, expectedTerminalReference)) {
-      throw new Error(
-        `panel.query_task_artifacts terminal occurrence changed for Task ${taskID}; query the current Task before enumerating its Artifact catalog`,
-      )
-    }
-    return current
+  const { observation, page_number: requestedPageNumber, ...search } = input
+  const assertCurrentObservation = () => {
+    return assertCurrentTaskArtifactObservation(taskID, observation, "panel.query_task_artifacts")
   }
 
-  assertCurrentTerminalOccurrence()
-  let cursor: string | undefined
-  for (let pageNumber = 1; pageNumber <= requestedPageNumber; pageNumber += 1) {
-    const { page, output } = await boundedArtifactPage(
-      PANEL_ARTIFACT_PAGE_INITIAL_LIMIT,
-      async (limit) => {
-        assertCurrentTerminalOccurrence()
-        return EngineService.searchArtifactCatalog(taskID, { ...search, limit, ...(cursor ? { cursor } : {}) })
-      },
-      (page) =>
-        JSON.stringify(
-          PanelTaskArtifactPage.parse({
-            taskID,
-            terminal_lifecycle_reference: assertCurrentTerminalOccurrence(),
-            page_number: pageNumber,
-            next_page_number: page.next_cursor ? pageNumber + 1 : null,
-            entries: page.entries.map((entry) => ({ ...entry, artifact_locator_ref: mintArtifactLocatorReference() })),
-            catalog_total: page.catalog_total,
-            filtered_total: page.filtered_total,
-            catalog_complete: page.catalog_complete,
-            metadata_truncated: page.metadata_truncated,
-            provider_errors: page.provider_errors,
-            resolution: page.resolution,
-          }),
-        ),
-    )
-    if (pageNumber === requestedPageNumber) return output
-    if (!page.next_cursor)
-      throw new Error(
-        `panel.query_task_artifacts page ${requestedPageNumber} is beyond the complete ${pageNumber}-page catalog for Task ${taskID}`,
-      )
-    cursor = page.next_cursor
-  }
-
-  throw new Error(`panel.query_task_artifacts failed to resolve requested page ${requestedPageNumber}`)
+  assertCurrentObservation()
+  const { output } = await boundedArtifactPage(
+    PANEL_ARTIFACT_PAGE_INITIAL_LIMIT,
+    async (limit) => {
+      assertCurrentObservation()
+      return EngineService.searchArtifactCatalog(taskID, { ...search, limit })
+    },
+    (page) =>
+      JSON.stringify(
+        PanelTaskArtifactPage.parse({
+          taskID,
+          ...assertCurrentObservation(),
+          page_number: requestedPageNumber,
+          next_page_number: page.next_cursor ? requestedPageNumber + 1 : null,
+          next_cursor: page.next_cursor,
+          entries: page.entries.map((entry) => ({ ...entry, artifact_locator_ref: mintArtifactLocatorReference() })),
+          catalog_total: page.catalog_total,
+          filtered_total: page.filtered_total,
+          catalog_complete: page.catalog_complete,
+          metadata_truncated: page.metadata_truncated,
+          provider_errors: page.provider_errors,
+          resolution: page.resolution,
+        }),
+      ),
+    maxOutputBytes,
+  )
+  return output
 }
 
 async function panelTaskSummaryRow(board: PanelTaskBoard): Promise<z.infer<typeof PanelQueryTaskSummaryRow>> {
   const terminalLifecycleReference = ["completed", "failed", "cancelled"].includes(board.task.status)
     ? requireCurrentTerminalLifecycleReference(board.task.id)
     : undefined
+  const activeExecutionReference = terminalLifecycleReference
+    ? undefined
+    : currentTaskArtifactObservation(board.task.id).active_execution_reference
   const acceptanceLedger = readLatestTaskAcceptanceLedger(board.task.id)
   return PanelQueryTaskSummaryRow.parse({
     taskID: board.task.id,
@@ -369,6 +369,7 @@ async function panelTaskSummaryRow(board: PanelTaskBoard): Promise<z.infer<typeo
     error: board.task.error,
     result: panelTaskResult(board),
     terminal_lifecycle_reference: terminalLifecycleReference,
+    active_execution_reference: activeExecutionReference,
     ...(acceptanceLedger
       ? {
           acceptance_ledger: {
@@ -1092,38 +1093,53 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
       }
       case "query_task_artifacts": {
         const mission = actor === "mission" ? await requireMissionSession(ctx.sessionID) : undefined
-        const references = new Map<string, TerminalLifecycleReference>()
-        for (const { taskID } of params.queries) {
+        const references = new Map<string, TaskArtifactObservation>()
+        for (const query of params.queries) {
+          const { taskID } = query
           if (mission) {
-            EngineService.requireMissionArtifactSource(taskID, {
+            EngineService.requireMissionArtifactInspectionSource(taskID, {
               missionID: mission.missionID,
               sessionID: mission.id,
             })
           }
-          const terminalLifecycleReference = panelUIRequestContext(ctx)
-            ? requireCurrentTerminalLifecycleReference(taskID)
-            : reviewedTerminalLifecycleReferenceBeforePanelAction({
+          const observation = panelUIRequestContext(ctx)
+            ? currentTaskArtifactObservation(taskID)
+            : reviewedTaskArtifactObservationBeforePanelAction({
                 sessionID: ctx.sessionID,
                 assistantMessageID: ctx.messageID,
                 toolPartID: (await requirePanelToolIdentity(ctx, "query_task_artifacts")).toolPartID,
                 taskID,
               })
-          references.set(taskID, terminalLifecycleReference)
+          references.set(taskID, observation)
+          if (query.cursor && !panelUIRequestContext(ctx)) {
+            requirePanelArtifactContinuationBeforeQuery({
+              sessionID: ctx.sessionID,
+              assistantMessageID: ctx.messageID,
+              toolPartID: (await requirePanelToolIdentity(ctx, "query_task_artifacts")).toolPartID,
+              taskID,
+              observation,
+              cursor: query.cursor,
+              pageNumber: query.page_number,
+            })
+          }
         }
         const result = await artifactSearchBatch(
           params.queries,
-          async ({ taskID, ...search }) => ({
-            output: await panelTaskArtifactPage(taskID, {
-              ...search,
-              terminal_lifecycle_reference: references.get(taskID)!,
-            }),
+          async ({ taskID, ...search }, maxOutputBytes) => ({
+            output: await panelTaskArtifactPage(
+              taskID,
+              {
+                ...search,
+                observation: references.get(taskID)!,
+              },
+              maxOutputBytes,
+            ),
           }),
-          (_query, page) => (page.next_page_number ? { page_number: page.next_page_number } : undefined),
+          (_query, page) =>
+            page.next_page_number ? { page_number: page.next_page_number, cursor: page.next_cursor } : undefined,
         )
         for (const [taskID, reference] of references) {
-          if (!sameTerminalLifecycleReference(requireCurrentTerminalLifecycleReference(taskID), reference)) {
-            throw new Error(`Task ${taskID} terminal occurrence changed during Artifact query batch`)
-          }
+          assertCurrentTaskArtifactObservation(taskID, reference, "Artifact query batch")
         }
         return result
       }
@@ -1135,7 +1151,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         const toolPartID = (await requirePanelToolIdentity(ctx, "read_task_artifact")).toolPartID
         const references = new Map(
           params.reads.map((transport) => {
-            EngineService.requireMissionArtifactSource(transport.taskID, {
+            EngineService.requireMissionArtifactInspectionSource(transport.taskID, {
               missionID: mission.missionID,
               sessionID: mission.id,
             })
@@ -1152,12 +1168,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         const batch = await artifactReadBatch(params.reads, async (transport) => {
           const { taskID } = transport
           const resolvedReference = references.get(transport.artifact_locator_ref)!
-          const currentReference = requireCurrentTerminalLifecycleReference(taskID)
-          if (!sameTerminalLifecycleReference(currentReference, resolvedReference.terminalLifecycleReference)) {
-            throw new Error(
-              `panel.read_task_artifact terminal occurrence changed for Task ${taskID}; query the current Task and Artifact catalog before reading`,
-            )
-          }
+          assertCurrentTaskArtifactObservation(taskID, resolvedReference.observation, "panel.read_task_artifact")
           const result = await EngineService.readMissionTaskArtifact({
             taskID,
             importer: { missionID: mission.missionID, sessionID: mission.id },
@@ -1168,23 +1179,24 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               delivery: transport.delivery,
             }),
           })
-          const settledReference = requireCurrentTerminalLifecycleReference(taskID)
-          if (!sameTerminalLifecycleReference(settledReference, resolvedReference.terminalLifecycleReference)) {
-            throw new Error(
-              `panel.read_task_artifact terminal occurrence changed while reading Task ${taskID}; query the current Task and Artifact catalog again`,
-            )
-          }
+          const settledReference = assertCurrentTaskArtifactObservation(
+            taskID,
+            resolvedReference.observation,
+            "panel.read_task_artifact",
+          )
           const transportChunk = ArtifactReadReferenceChunkSchema.extend({
             taskID: z.string().min(1),
-            terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
-          }).parse({
-            ...result.chunk,
-            taskID,
-            terminal_lifecycle_reference: settledReference,
-            artifact_transport_version: 2,
-            artifact_locator_ref: transport.artifact_locator_ref,
-            artifact_read_ref: mintArtifactReadReference(),
+            ...TaskArtifactObservationFields,
           })
+            .superRefine(refineTaskArtifactObservation)
+            .parse({
+              ...result.chunk,
+              taskID,
+              ...settledReference,
+              artifact_transport_version: 2,
+              artifact_locator_ref: transport.artifact_locator_ref,
+              artifact_read_ref: mintArtifactReadReference(),
+            })
           return {
             title: "Task Artifact",
             output: JSON.stringify(transportChunk),
@@ -1204,14 +1216,11 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           }
         })
         for (const transport of params.reads) {
-          if (
-            !sameTerminalLifecycleReference(
-              requireCurrentTerminalLifecycleReference(transport.taskID),
-              references.get(transport.artifact_locator_ref)!.terminalLifecycleReference,
-            )
-          ) {
-            throw new Error(`Task ${transport.taskID} terminal occurrence changed during Artifact read batch`)
-          }
+          assertCurrentTaskArtifactObservation(
+            transport.taskID,
+            references.get(transport.artifact_locator_ref)!.observation,
+            "Artifact read batch",
+          )
         }
         return batch
       }

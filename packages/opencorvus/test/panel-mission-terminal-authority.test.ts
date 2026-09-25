@@ -10,6 +10,7 @@ import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { requireTask } from "@/engine/store"
 import { terminalTask, updateTask } from "@/engine/state"
+import { taskLifecycleProjection } from "@/engine/task-lifecycle"
 import { Identifier } from "@/id/id"
 import { missionBoardProjection } from "@/mission/board"
 import { MissionCompletionActionInput, MissionCompletionReceipt } from "@/mission/completion"
@@ -511,7 +512,7 @@ describe("Mission terminal Task authority", () => {
             context(queryArtifactsLeaf.id, unboundCatalogCallID),
           ),
         ).rejects.toThrow(
-          `requires a completed panel.query_task terminal row for Task ${taskID} earlier in the same Turn`,
+          `requires a completed panel.query_task occurrence row for Task ${taskID} earlier in the same Turn`,
         )
         const queriedTask = await queryTaskLeaf.tool.execute({ taskIDs: [taskID] }, context(queryTaskLeaf.id))
         expect(PanelQueryTaskOutput.parse(JSON.parse(queriedTask.output))).toEqual({
@@ -556,12 +557,14 @@ describe("Mission terminal Task authority", () => {
         const entries: Array<{ locator: unknown; artifact_locator_ref: string }> = []
         const visitedPageNumbers: number[] = []
         let pageNumber: number | null = 1
+        let cursor: string | undefined
         while (pageNumber !== null) {
           const queryInput = {
             queries: [
               {
                 taskID,
                 page_number: pageNumber,
+                ...(cursor ? { cursor } : {}),
                 kinds: ["expert_output"] as const,
                 sort: "oldest" as const,
               },
@@ -594,7 +597,6 @@ describe("Mission terminal Task authority", () => {
             taskID: string
             terminal_lifecycle_reference: typeof terminalReference
             page_number: number
-            next_page_number: number | null
             entries: Array<{ locator: unknown; artifact_locator_ref: string }>
             filtered_total: number
             catalog_complete: boolean
@@ -622,6 +624,7 @@ describe("Mission terminal Task authority", () => {
           visitedPageNumbers.push(page.page_number)
           entries.push(...page.entries)
           pageNumber = JSON.parse(result.output).next_queries[0]?.page_number ?? null
+          cursor = JSON.parse(result.output).next_queries[0]?.cursor
         }
         expect(visitedPageNumbers).toEqual([1, 2])
         expect(entries).toHaveLength(33)
@@ -707,6 +710,145 @@ describe("Mission terminal Task authority", () => {
           }),
         )
         await updateTask(requireTask(taskID), { status: "active" }, "Task reopened after catalog read")
+        // Local protocol driver: execute the real Panel leaves and persist their actual outputs.
+        let activeCallTime = now + 100
+        const activeCall = async (leaf: Awaited<ReturnType<typeof panelLeaf>>, input: any, callID: string) => {
+          const started = activeCallTime
+          activeCallTime += 2
+          await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: mission.id,
+            messageID: readMessage.id,
+            type: "step-start",
+          })
+          const part = await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: mission.id,
+            messageID: readMessage.id,
+            type: "tool",
+            callID,
+            tool: leaf.id,
+            state: { status: "running", input, time: { start: started } },
+          })
+          const result = await leaf.tool.execute(input, context(leaf.id, callID, readMessage.id))
+          await Session.updatePart({
+            ...part,
+            state: {
+              status: "completed",
+              input,
+              output: result.output,
+              title: result.title,
+              metadata: result.metadata,
+              time: { start: started, end: started + 1 },
+            },
+          })
+          return JSON.parse(result.output)
+        }
+        const activeTask = (await activeCall(queryTaskLeaf, { taskIDs: [taskID] }, "query-active-task")).tasks[0]
+        expect(activeTask).toMatchObject({
+          status: "active",
+          active_execution_reference: {
+            executionEpoch: 2,
+            openedEventID: taskLifecycleProjection(taskID).openedEventID,
+          },
+        })
+        const activeCatalog = await activeCall(
+          queryArtifactsLeaf,
+          { queries: [{ taskID, page_number: 1, kinds: ["expert_output"], sort: "newest" }] },
+          "query-active-artifacts",
+        )
+        const activePage = activeCatalog.results[0].value
+        expect(activePage).toMatchObject({
+          terminal_lifecycle_reference: null,
+          active_execution_reference: activeTask.active_execution_reference,
+          page_number: 1,
+        })
+        recordEngineArtifact({
+          taskID,
+          kind: "expert_output",
+          label: "published-between-pages",
+          payload: { observation: "new active result after page one" },
+          timeCreated: Date.now(),
+        })
+        const activeContinuation = activeCatalog.next_queries[0]
+        const activeSecondCatalog = await activeCall(
+          queryArtifactsLeaf,
+          {
+            queries: [
+              {
+                taskID,
+                page_number: activeContinuation.page_number,
+                cursor: activeContinuation.cursor,
+                kinds: ["expert_output"],
+                sort: "newest",
+              },
+            ],
+          },
+          "continue-active-artifacts",
+        )
+        const activeSecondPage = activeSecondCatalog.results[0].value
+        expect(activeSecondPage).toMatchObject({ page_number: 2, filtered_total: 33 })
+        expect(activeSecondCatalog.next_queries).toEqual([])
+        expect(
+          [...activePage.entries, ...activeSecondPage.entries].map((entry: any) => entry.locator.artifact_id).sort(),
+        ).toEqual(entries.map((entry: any) => entry.locator.artifact_id).sort())
+        const multipleCatalogs = await activeCall(
+          queryArtifactsLeaf,
+          {
+            queries: [
+              { taskID, page_number: 1, kinds: ["expert_output"], labels: ["Paged evidence 00"], sort: "oldest" },
+              { taskID, page_number: 1, kinds: ["expert_output"], sort: "newest" },
+            ],
+          },
+          "query-active-catalogs-in-one-batch",
+        )
+        expect(
+          multipleCatalogs.results.map((result: any) => [result.request_index, result.value.filtered_total]),
+        ).toEqual([
+          [0, 1],
+          [1, 34],
+        ])
+        expect(Buffer.byteLength(JSON.stringify(multipleCatalogs), "utf8")).toBeLessThanOrEqual(
+          ArtifactSchemaLimits.structuredOutputBytes,
+        )
+        expect(multipleCatalogs.next_queries).toEqual([
+          expect.objectContaining({ request_index: 1, page_number: 2, cursor: expect.any(String) }),
+        ])
+        const activeRead = (
+          await activeCall(
+            readArtifactLeaf,
+            {
+              reads: [
+                {
+                  taskID,
+                  artifact_transport_version: 2,
+                  artifact_locator_ref: activePage.entries[0].artifact_locator_ref,
+                  byte_offset: 0,
+                  max_bytes: 65536,
+                  delivery: "inline",
+                },
+              ],
+            },
+            "read-active-artifact",
+          )
+        ).results[0].value
+        expect(activeRead).toMatchObject({
+          complete: true,
+          terminal_lifecycle_reference: null,
+          active_execution_reference: activeTask.active_execution_reference,
+          locator: activePage.entries[0].locator,
+        })
+        const completeLeaf = await panelLeaf("complete_mission")
+        await expect(
+          activeCall(
+            completeLeaf,
+            {
+              summary: "Protocol test of active inspection boundary",
+              task_acceptances: [{ task_id: taskID, evidence_read_refs: [activeRead.artifact_read_ref] }],
+            },
+            "attempt-complete-from-active-read",
+          ),
+        ).rejects.toThrow(`Cross-Task Artifact source ${taskID} is not terminal`)
         await terminalTask(
           requireTask(taskID),
           { status: "completed", time_completed: now + 39 },

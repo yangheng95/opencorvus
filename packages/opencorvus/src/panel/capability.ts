@@ -26,15 +26,22 @@ import {
   type PanelActionID,
 } from "./action-ids"
 
-const { cursor: _genericArtifactCursor, ...PanelArtifactSearchShape } = ArtifactSearchWithoutLimitSchema.shape
-
 export const PanelArtifactQuerySchema = z
   .object({
-    taskID: z.string().min(1).describe("Source Task whose terminal Artifact catalog should be queried."),
+    taskID: z.string().min(1).describe("Source Task whose immutable Artifact catalog should be queried."),
     page_number: z.number().int().min(1).max(1000).describe("Start at 1; continue using next_queries."),
-    ...PanelArtifactSearchShape,
+    ...ArtifactSearchWithoutLimitSchema.shape,
   })
   .superRefine(refineArtifactSearchInput)
+  .superRefine((input, context) => {
+    if ((input.page_number === 1) === (input.cursor !== undefined)) {
+      context.addIssue({
+        code: "custom",
+        path: ["cursor"],
+        message: "Page 1 starts without a cursor; later pages require the exact next_queries cursor.",
+      })
+    }
+  })
 
 export const RIGHT_SIDEBAR_SURFACE = "right-sidebar"
 export const PanelSurface = z.enum([...SharedChannelSurface.options, RIGHT_SIDEBAR_SURFACE])
@@ -246,9 +253,9 @@ export const PanelCapabilityRegistry = list(
     action: "query_task",
     description:
       "List or inspect Tasks as structured JSON. Omit taskIDs to list recent Project Tasks, or all Tasks owned by the current Mission. " +
-      "Pass up to 50 taskIDs for canonical status, results and terminal lifecycle references used in reconciliation. " +
+      "Pass up to 50 taskIDs for canonical status, results and active execution or terminal lifecycle references used in reconciliation. " +
       "Use include to add board summaries or goals/planning-artifact locators. Listing returns identity/title/status only; " +
-      "inspect explicit IDs before terminal Artifact reads or acceptance. Artifact bodies are read through the Artifact tools.",
+      "inspect explicit IDs before Artifact catalog reads or acceptance. Artifact bodies are read through the Artifact tools.",
     kind: "query",
     surfaces: allProjectSurfaces,
     params: {
@@ -272,7 +279,7 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "query_task_artifacts",
     description:
-      "Query up to eight terminal Task catalogs or independent search conditions in one queries array. First batch panel_query_task for the source Tasks in the same physical Turn. Start each page_number at 1 and merge next_queries cursor/page fields (excluding request_index) into their original queries[request_index] and resubmit pending_queries items for remaining pages. The Host binds and revalidates exact terminal occurrences and authenticated cursors. Use arrays of exact kinds/types/labels to combine related filters. Results carry short artifact_locator_ref values for one batched panel_read_task_artifact call. For a completed Task select its current Completion Decision and required evidence; for a failed Task select its dispatch_settlement and available worker Artifacts. Catalog membership alone is not acceptance evidence.",
+      "Query up to eight owned Task catalogs or independent search conditions in one queries array. First batch panel_query_task for the source Tasks in the same physical Turn. Start each page_number at 1 and merge next_queries cursor/page fields (excluding request_index) into their original queries[request_index] and resubmit pending_queries items for remaining pages. The Host binds and revalidates the observed active execution or terminal occurrence and authenticated cursors. Use arrays of exact kinds/types/labels to combine related filters. Results carry short artifact_locator_ref values for one batched panel_read_task_artifact call. Active Task inspection supplies evidence for coordination, not terminal acceptance. For a completed Task select its current Completion Decision and required evidence; for a failed Task select its dispatch_settlement and available worker Artifacts. Catalog membership alone is not acceptance evidence.",
     kind: "query",
     surfaces: allProjectSurfaces,
     params: {
@@ -282,7 +289,7 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "read_task_artifact",
     description:
-      "Read up to eight exact Artifacts together in one reads array, using Host-minted catalog references from terminal Tasks in this Mission lineage. One aggregate output budget is shared. Pass returned next_reads unchanged until complete; retain each occurrence-bound artifact_read_ref from the full chunk sequence for acceptance or resume. Batch independent required documents instead of making one call per document.",
+      "Read up to eight exact Artifacts together in one reads array, using Host-minted catalog references from owned Tasks in this Mission lineage. One aggregate output budget is shared. Pass returned next_reads unchanged until complete. Active execution reads support supervision and coordination; only reads bound to the current terminal occurrence support acceptance or resume. Retain each occurrence-bound artifact_read_ref from the full chunk sequence. Batch independent required documents instead of making one call per document.",
     kind: "query",
     surfaces: ["panel"],
     params: {

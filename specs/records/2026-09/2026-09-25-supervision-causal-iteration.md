@@ -276,3 +276,31 @@
 - 下一设计必须把三个不同权威分开但沿用唯一事实源：所属Mission对不可变Artifact的活动监督读取；对当前终态的正式接受/跨Task移交；对当前repair范围的证据驱动修订。先核对`tool/panel.ts`的query/read/完成/恢复消费者、`agent/artifact-read-facts.ts`的locator与读取引用绑定、`engine/cross-task-artifact-import.ts`的正式移交约束，再确定最小变更。不可直接放开全部导入或让active读取自动成为Mission完成依据，也不能新增另一份可变状态来跳过当前epoch/CAS校验。
 - 本轮尚未改生产读取、修订或权限。G4输入冲突已修，但G5证明正式活跃纠错仍有确定性协议缺口；Cycle3未经过该返工路径，其0分仍不能归因于此。H-E独立预期形成与进化选择的其它边界继续保留，不能让这项协议发现替代总体业务目标。
 - 交付复核：新测试1通过/13断言，`bun run typecheck`、根`bun run docs:check`、`git diff --check`通过；隔离Task通过公共取消收尾，测试runtime按现有fixture清理。模型调用、官方样本与候选数量均未增加。
+
+## G6实施前方案：活动观察与终态验收使用同一Artifact，不混同权限
+
+- 影响面已定位：`task-review-facts`只从已完成query_task输出取terminal引用；Panel catalog分页、locator解析、read前后检查与read凭证均绑定它；`artifact-provenance-facts`还用这些真实read引用供Mission complete/block/resume。正式跨Task导入使用`requireMissionArtifactSourceAuthority`。因此本次实现仅打通**既有所属Task的只读监督**，不修改active ledger、不新增Tool/角色/grant，不把终态移交约束一起移除。
+- 单一观察契约：终态观察继续携带精确`terminal_lifecycle_reference`；活动观察明确为该字段null并携带`active_execution_reference={openedEventID,executionEpoch}`，引用原Protocol lifecycle事实。两个互斥变体是当前不同生命周期的真实观察，不是新旧协议fallback。终态现有事实原样有效；活动观察不能伪造terminal ID。共享schema/投影/等价检查验证查询、分页和read前后同一发生轮次，取消或重新打开导致引用变化时明确要求重新查询。cancelling仍属于尚未终结的同一执行轮次，只读观察不批准新工作。
+- 数据流：query_task输出活动引用→同一物理Turn的query_task_artifacts使用该已读引用→现有catalog返回同一观察绑定的locator→原read_task_artifact产生带明确观察种类的Host读取引用。所属Mission/项目检查仍在服务端；跨Task导入、complete/block、resume、Message/dispatch终态reader继续要求真实终态。不会增加另一份状态表、复制Artifact或使用新消息通道。
+- 验收消费：活动读取证明的只有不可变字节已读，不是Task完成。终态read-ref解析及正式Mission验收仍只接受对应当前terminal的真实读取；防止用活动阶段的完整读取补齐终态阶段的部分读取，再以一个terminal片段冒充完整终态复核。既有Artifact事实聚合增加明确的终态过滤参数供终态动作使用，普通来源读取仍以原immutable locator判断完整性。
+- 预测与测试：G5中的活动Mission读取应变成complete且原内容相同；正式导入仍返回其精确终态权限错误；active resume仍返回精确生命周期错误，不能声称整个H-R已完成。新增观察schema/轮次变化正向合同，沿已有Panel与provenance测试证明活动引用可读、终态接受不混用活动凭证，旧终态接受与重开检查保持有效。共享生产服务与Tool代码是真实被测路径，脚本fixture不是LLM自主行为；本阶段不启动模型/官方世界。
+- 横向边界：独立Task读取不新增Mission权限；Mission只读自有Task；初始/重开active epoch由原lifecycle计算；所有项目隔离仍使用现有ownership与catalog authority；每次分块前后复验并在重启后从持久化Tool事实恢复。没有调度、队列、终态写入或在途worker失效策略变更。本次仅改变观察输入，正式活跃返工范围更新仍需单独设计，不能让此局部修复代替独立判断和业务纠错。
+- 实施复核补充：旧`panelTaskArtifactPage`按页码每次从第一页重新搜索，依赖终态目录稳定。开放active后该做法会在新Artifact进入排序前部时产生页漂移。必须同步替换为现有Artifact catalog的签名cursor续页，保留页码作返回顺序；Mission续页还须绑定当前Turn上一页的真实`next_cursor`、下一页码及同一生命周期观察。移除从第一页重算的旧实现，不另存分页状态、不保留无cursor的旧续页fallback。Native catalog自身仍验证查询过滤、Task和快照签名；首次page1不带cursor，page>1必须提交Host返回的cursor。
+- 批量输出契约核对：`artifactSearchBatch`已将cursor/page continuation统一写到`next_queries`并按`request_index`关联结果，本次消费这一单一事实，不在单页再复制续页字段。原Panel callback没有传递批量分配的字节额度，可能在多查询时重复生成同样超额页面；本次分页替换同时把该额度交给现有`boundedArtifactPage`，验证同一批次多查询的实际返回、剩余项和续页。
+
+### G6实施与验证 checkpoint
+
+- 已实现单一`task-artifact-observation`契约，从现有Task lifecycle读取opened event/epoch或terminal event，不新增状态表。`query_task`、catalog页、locator解析与read输出共同使用它。所属Mission对active Task的不可变Artifact可真实读取；原终态移交检查单独保留。模型可见Tool说明与当前`07-panel`、`task-control-plane`架构同步更新，无新Tool/角色/执行权限、无UI改动。
+- 分页改为消费既有签名cursor及批量`next_queries`。在同一活动Task第一页返回后新增第34份Artifact，第二页仍完成原33份目录，原ID集合完全一致；新查询返回34份。两查询同批次实际返回各自1/34个匹配总量、合法后续cursor并满足共享输出上限。旧从第一页重算路径已删除，不增加游标账本。初次实现错误地从单页取续页字段，生产批量路径准确拒绝；现已按原`request_index`关联`next_queries`修正，没有增加双份续页字段。
+
+| 检查路径 | 实际结果 | 证据层级 |
+| --- | --- | --- |
+| 原G5服务层场景，A accepted/B open、epoch2中发布A反证 | 原Task与所属Mission均complete读取同一不可变内容；其它Mission得到归属错误 | 真实EngineService/Artifact/本地数据库，后续模型loop被测试hook替代 |
+| 当前活动读取与正式动作 | 正式跨Task移交/complete仍得到当前非终态错误；active resume仍为`MissionTaskResumeLifecycleConflictError`；精确重放仍返回原receipt | 服务层及Panel真实Tool实现；不代表活跃ledger已能修订 |
+| 活动与终态读取聚合 | 活动完整读取可作普通来源证据；terminal partial读取不能借活动字节补全，得到精确完整读取错误；活动read-ref用于完成得到错误终态归属 | 明确标注的Tool事实fixture，真实provenance reducer；不是模型产出 |
+| Panel query→catalog→read | 实际Tool生成active epoch引用、catalog locator与完整read-ref；终态/重开后旧引用得到轮次变化错误 | 脚本化Session/Tool请求fixture，执行真实生产Tool并持久化实际输出；不是自主Tool选择或LLM端到端 |
+| 原终态完成路径 | 当前终态分块证据跨Mission inputs保留并完成原有验收，operator/scheduled新输入仍打开新的受限Mission acceptance | 现有隔离本地合同保持通过 |
+
+- 最终聚焦命令：`bun run test test/panel-mission-terminal-authority.test.ts test/artifact-read-facts-provider-input.test.ts test/mission-active-repair-boundary.test.ts`：**11项通过、0失败、85个明确断言**。`bun run typecheck`、根`bun run docs:check`（342 ops/25 groups）、`git diff --check`通过。首次测试driver把后续依赖调用放在同一Provider step内，真实事实作用域正确阻止消费；已将每个依赖调用安排到下一明确step，没有放宽生产的物理Turn/step边界。反证读取fixture的格式、引用长度与EOF标记错误也按现有契约修正，没有降低reader校验。
+- 所有新运行都是隔离本地协议测试，无Provider请求、官方世界、作者或候选。原Cycle3四个PID仍已退出；不重启任何历史实验。服务测试以公共cancel收尾，临时runtime由既有fixture清理。尚未执行真实worker→Task→Mission的反证上报、自主范围修订和业务再验收；也未进行真实进程重启的模型链验证。
+- 下一未闭合边界明确为：**已经读到新反证，但正在active repair的单一ledger如何合法改变范围**。继续横审当前ledger append、criterion选择、dispatch descriptor/checkpoint、Task/Mission的真实coordination与所有生命周期入口。先落盘一个最小契约，明确语义责任、当前epoch/ledger比较并交换（CAS）、在途worker旧引用、串并行/多项目/取消/恢复；不得用假complete/fail得到resume，不得直接放开active修改而忽略在途工作。当前不再重复验证已修读取拒绝，不急于新官方样本或H-E作者；G6仍不能认领从未Mission resume的Cycle3金额误验收根因，业务可靠纠错和进化收益尚未达成。

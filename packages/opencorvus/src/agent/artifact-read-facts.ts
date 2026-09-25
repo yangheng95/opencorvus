@@ -10,10 +10,13 @@ import {
 import { Database } from "@/storage/db"
 import { PanelArtifactQuerySchema } from "@/panel/capability"
 import {
-  sameTerminalLifecycleReference,
-  TerminalLifecycleReferenceSchema,
-  type TerminalLifecycleReference,
-} from "@/engine/terminal-lifecycle-reference-schema"
+  TaskArtifactObservationFields,
+  refineTaskArtifactObservation,
+  taskArtifactObservation,
+  sameTaskArtifactObservation,
+  type TaskArtifactObservation,
+} from "@/engine/task-artifact-observation"
+import type { TerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference-schema"
 
 import {
   ArtifactReferenceAmbiguityError,
@@ -49,7 +52,8 @@ function locatorKey(locator: ArtifactReadLocator): string {
 const PanelArtifactReferencePageFactSchema = z
   .object({
     taskID: z.string().min(1),
-    terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
+    ...TaskArtifactObservationFields,
+    page_number: z.number().int().positive().optional(),
     entries: z.array(
       z
         .object({
@@ -60,6 +64,20 @@ const PanelArtifactReferencePageFactSchema = z
     ),
   })
   .passthrough()
+  .superRefine(refineTaskArtifactObservation)
+
+const PanelArtifactContinuationFactSchema = z.object({
+  results: z.array(
+    z.object({ request_index: z.number().int().nonnegative(), value: PanelArtifactReferencePageFactSchema }),
+  ),
+  next_queries: z.array(
+    z.object({
+      request_index: z.number().int().nonnegative(),
+      cursor: z.string().min(1),
+      page_number: z.number().int().min(2),
+    }),
+  ),
+})
 
 export function assistantTurnFactScope(sessionID: string, assistantMessageID: string) {
   return Database.use((db) => assistantTurnFactScopeInTransaction(db, sessionID, assistantMessageID))
@@ -137,11 +155,8 @@ export function resolvePanelArtifactLocatorReferenceBeforeRead(input: {
   toolPartID: string
   taskID: string
   reference: string
-}): { locator: ArtifactReadLocator; terminalLifecycleReference: TerminalLifecycleReference } {
-  const found = new Map<
-    string,
-    { locator: ArtifactReadLocator; terminalLifecycleReference: TerminalLifecycleReference }
-  >()
+}): { locator: ArtifactReadLocator; observation: TaskArtifactObservation } {
+  const found = new Map<string, { locator: ArtifactReadLocator; observation: TaskArtifactObservation }>()
   for (const value of completedToolOutputValuesBeforeAction({
     sessionID: input.sessionID,
     assistantMessageID: input.assistantMessageID,
@@ -156,13 +171,13 @@ export function resolvePanelArtifactLocatorReferenceBeforeRead(input: {
     for (const entry of page.data.entries) {
       const candidate = {
         locator: entry.locator,
-        terminalLifecycleReference: page.data.terminal_lifecycle_reference,
+        observation: taskArtifactObservation(page.data),
       }
       const prior = found.get(entry.artifact_locator_ref)
       if (
         prior &&
         (locatorKey(prior.locator) !== locatorKey(candidate.locator) ||
-          !sameTerminalLifecycleReference(prior.terminalLifecycleReference, candidate.terminalLifecycleReference))
+          !sameTaskArtifactObservation(prior.observation, candidate.observation))
       ) {
         throw new ArtifactReferenceAmbiguityError(
           entry.artifact_locator_ref,
@@ -180,6 +195,35 @@ export function resolvePanelArtifactLocatorReferenceBeforeRead(input: {
     )
   }
   return resolved
+}
+
+export function requirePanelArtifactContinuationBeforeQuery(input: {
+  sessionID: string
+  assistantMessageID: string
+  toolPartID: string
+  taskID: string
+  cursor: string
+  pageNumber: number
+  observation: TaskArtifactObservation
+}): void {
+  for (const value of completedToolOutputValuesBeforeAction({ ...input, toolNames: ["panel_query_task_artifacts"] })) {
+    const batch = PanelArtifactContinuationFactSchema.safeParse(value)
+    if (!batch.success) continue
+    for (const continuation of batch.data.next_queries) {
+      if (continuation.cursor !== input.cursor || continuation.page_number !== input.pageNumber) continue
+      const page = batch.data.results.find((result) => result.request_index === continuation.request_index)?.value
+      if (
+        page?.taskID === input.taskID &&
+        page.page_number === input.pageNumber - 1 &&
+        sameTaskArtifactObservation(taskArtifactObservation(page), input.observation)
+      )
+        return
+    }
+  }
+  throw new ArtifactReferenceResolutionError(
+    input.cursor,
+    "Panel catalog continuation must name the preceding page of the same Task observation in this Turn",
+  )
 }
 
 /**

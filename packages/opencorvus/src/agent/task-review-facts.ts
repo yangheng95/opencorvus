@@ -4,15 +4,16 @@ import type { TerminalLifecycleReference } from "@/engine/terminal-lifecycle-ref
 import { PanelQueryTaskOutput } from "@/panel/task-query"
 import { assistantActionFactScope } from "./artifact-read-facts"
 import { panelLeafActionSchemaForAgent } from "@/panel/capability"
+import { type TaskArtifactObservation, taskArtifactObservation } from "@/engine/task-artifact-observation"
 
 const MissionPanelQueryTaskInput = panelLeafActionSchemaForAgent("query_task", "mission")
 
-export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
+export function reviewedTaskArtifactObservationBeforePanelAction(input: {
   sessionID: string
   assistantMessageID: string
   toolPartID: string
   taskID: string
-}): TerminalLifecycleReference {
+}): TaskArtifactObservation {
   const scope = assistantActionFactScope(input.sessionID, input.assistantMessageID, input.toolPartID)
   const rows = Database.use((db) =>
     db
@@ -36,7 +37,7 @@ export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
       .orderBy(asc(PartTable.time_created), asc(PartTable.id))
       .all(),
   )
-  let reviewed: TerminalLifecycleReference | undefined
+  let reviewed: TaskArtifactObservation | undefined
   for (const row of rows) {
     const state = {
       input: (row.request as { input?: unknown }).input,
@@ -56,13 +57,33 @@ export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
     const output = PanelQueryTaskOutput.parse(decoded)
     const task = output.tasks.find((candidate) => candidate.taskID === input.taskID)
     if (task && "terminal_lifecycle_reference" in task && task.terminal_lifecycle_reference) {
-      reviewed = task.terminal_lifecycle_reference
+      reviewed = taskArtifactObservation({ terminal_lifecycle_reference: task.terminal_lifecycle_reference })
+    } else if (task && "active_execution_reference" in task && task.active_execution_reference) {
+      reviewed = taskArtifactObservation({
+        terminal_lifecycle_reference: null,
+        active_execution_reference: task.active_execution_reference,
+      })
     }
   }
   if (!reviewed) {
     throw new Error(
-      `The panel mutation requires a completed panel.query_task terminal row for Task ${input.taskID} earlier in the same Turn.`,
+      `The panel action requires a completed panel.query_task occurrence row for Task ${input.taskID} earlier in the same Turn.`,
     )
   }
   return reviewed
+}
+
+export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
+  sessionID: string
+  assistantMessageID: string
+  toolPartID: string
+  taskID: string
+}): TerminalLifecycleReference {
+  const observation = reviewedTaskArtifactObservationBeforePanelAction(input)
+  if (!observation.terminal_lifecycle_reference) {
+    throw new Error(
+      `The panel mutation requires a completed panel.query_task terminal row for Task ${input.taskID} earlier in the same Turn.`,
+    )
+  }
+  return observation.terminal_lifecycle_reference
 }

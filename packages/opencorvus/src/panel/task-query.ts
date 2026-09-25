@@ -2,6 +2,7 @@ import z from "zod"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference"
 import { MissionAcceptanceGapSchema } from "@/mission/acceptance-gap"
 import { ArtifactLocatorSchema } from "@opencorvus-ai/plugin/artifact-catalog"
+import { ActiveTaskExecutionReferenceSchema } from "@/engine/task-artifact-observation"
 
 export const PanelTaskAcceptanceLedger = z
   .object({
@@ -45,6 +46,7 @@ export const PanelQueryTaskSummaryRow = PanelQueryTaskListRow.extend({
   result: PanelTaskResult,
   pendingInteractions: z.number().int().nonnegative().optional(),
   terminal_lifecycle_reference: TerminalLifecycleReferenceSchema.optional(),
+  active_execution_reference: ActiveTaskExecutionReferenceSchema.optional(),
   acceptance_ledger: PanelTaskAcceptanceLedger.optional(),
   board: z.object({ headline: z.string().optional(), summary: z.string().optional() }).optional(),
   plan: z

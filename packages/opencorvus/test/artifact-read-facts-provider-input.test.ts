@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test"
+import { createHash } from "node:crypto"
 import {
   completeArtifactReadsBeforePanelAction,
   resolveMissionArtifactReadAcceptancesBeforeCompletion,
+  resolvePanelArtifactReadReferencesBeforeAction,
 } from "@/agent/artifact-read-facts"
 import { Identifier } from "@/id/id"
 import { PermissionExecutionResultTable, PermissionLedgerTable } from "@/permission/permission.sql"
@@ -301,6 +303,59 @@ describe("Artifact read facts from provider Tool input", () => {
         `,
         ).map((row) => row.detail)
         expect(deferredOutcomePlan.join("\n")).toContain("tool_part_outcome_result_attempt_idx")
+        const activeLocator = {
+          ...locator,
+          artifact_id: "art_active_observation",
+          expected_sha256: createHash("sha256").update("{}").digest("hex"),
+        }
+        const activeReadRef = "ar_activeinspect001"
+        const terminalPartialRef = "ar_terminalpartial1"
+        for (const active of [true, false]) {
+          const reference = active ? activeReadRef : terminalPartialRef
+          const byteStart = active ? 0 : 1
+          await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: session.id,
+            messageID: readMessage.id,
+            type: "tool",
+            callID: `read-observation-${active}`,
+            tool: "panel_read_task_artifact",
+            state: {
+              status: "completed",
+              input: {
+                taskID,
+                artifact_transport_version: 2,
+                artifact_locator_ref: locatorRef,
+                byte_offset: byteStart,
+                max_bytes: 65536,
+                delivery: "inline",
+              },
+              output: JSON.stringify({
+                taskID,
+                terminal_lifecycle_reference: active ? null : terminalReference,
+                ...(active
+                  ? { active_execution_reference: { openedEventID: "pev_active_read", executionEpoch: 1 } }
+                  : {}),
+                artifact_transport_version: 2,
+                artifact_locator_ref: locatorRef,
+                artifact_read_ref: reference,
+                locator: activeLocator,
+                media_type: "application/json",
+                byte_start: byteStart,
+                byte_end: 2,
+                next_offset: null,
+                total_bytes: 2,
+                complete: true,
+                sha256: activeLocator.expected_sha256,
+                text: active ? "{}" : "}",
+                attachment: false,
+              }),
+              title: "Local observation fact fixture",
+              metadata: {},
+              time: { start: now + 2, end: now + 3 },
+            },
+          })
+        }
         await Session.updateMessage({
           ...readMessage,
           time: { ...readMessage.time, completed: now + 3 },
@@ -343,7 +398,25 @@ describe("Artifact read facts from provider Tool input", () => {
             toolPartID: mutationPart.id,
             taskID,
           }),
-        ).toEqual([...batchLocators, locator])
+        ).toEqual([activeLocator, ...batchLocators, locator])
+        expect(() =>
+          resolveMissionArtifactReadAcceptancesBeforeCompletion({
+            sessionID: session.id,
+            assistantMessageID: mutationMessage.id,
+            toolPartID: mutationPart.id,
+            acceptances: [{ taskID, terminalLifecycleReference: terminalReference, references: [activeReadRef] }],
+          }),
+        ).toThrow("Artifact read does not belong to the accepted Task terminal occurrence")
+        expect(() =>
+          resolvePanelArtifactReadReferencesBeforeAction({
+            sessionID: session.id,
+            assistantMessageID: mutationMessage.id,
+            toolPartID: mutationPart.id,
+            taskID,
+            terminalLifecycleReference: terminalReference,
+            references: [terminalPartialRef],
+          }),
+        ).toThrow("not backed by a complete persisted read")
         expect(
           resolveMissionArtifactReadAcceptancesBeforeCompletion({
             sessionID: session.id,

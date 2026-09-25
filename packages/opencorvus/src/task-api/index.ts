@@ -2203,16 +2203,19 @@ export namespace EngineService {
     })
   }
 
+  export function requireMissionArtifactInspectionSource(
+    taskID: string,
+    importer: Pick<CrossTaskArtifactImporter, "missionID" | "sessionID">,
+  ): void {
+    requireMissionTaskLineageAuthority({ sourceTaskID: taskID, projectID: Instance.project.id, importer })
+  }
+
   export async function readMissionTaskArtifact(input: {
     taskID: string
     importer: Pick<CrossTaskArtifactImporter, "missionID" | "sessionID">
     read: ArtifactReadInput
   }) {
-    requireMissionArtifactSourceAuthority({
-      sourceTaskID: input.taskID,
-      projectID: Instance.project.id,
-      importer: input.importer,
-    })
+    requireMissionArtifactInspectionSource(input.taskID, input.importer)
     return readTaskArtifact({
       authority: artifactCatalogAuthority(input.taskID),
       read: ArtifactReadInputSchema.parse(input.read),
