@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Supervision causal iteration](2026-09-25-supervision-causal-iteration.md)
+
 - [Luna Mission/Task factorial trials](2026-09-24-luna-mission-task-factorial-trials.md)
 
 - [Supervision acceptance data-flow repair](2026-09-24-supervision-acceptance-repair.md)
