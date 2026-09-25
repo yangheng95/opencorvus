@@ -247,3 +247,32 @@
 - 修前运行现有生产测试入口，新增的三个正向输入合同准确失败（worker初始、worker延续、Task-root），其余相关合同通过。修后`bun run test test/mission-acceptance-delta.test.ts test/orchestrator-mission-resume-provenance.test.ts`为17通过、0失败；其中保留真实本地数据库的resume事务/Message/ledger以及精确错误合同、stale-evidence转换和checkpoint attempt测试。
 - `bun run typecheck`、根`bun run docs:check`和`git diff --check`通过。上述测试使用隔离测试环境，其中resume事务测试替代了后续ingress runner，未调用真实LLM；没有新模型请求、官方世界、候选或凭据副本。它们验证共享输入与数据合同，**不是模型可靠纠错或完整端到端业务验收**。
 - 复核结论：已经移除一个会压制新反证的输入冲突，仍未打通活跃repair中新反证跨责任节点改变正式范围的完整链路。下一步应以本地隔离的真实公共API/持久化事实构造“旧accepted A、当前open B、修B时出现A反证”的最小机制场景，检查Message、读证据、合法决定和ledger的实际可达性。逐个明确失败的公共合同，再决定是否需要变更现有单一契约；不再仅改提示词，也不以虚假终态获取resume。该本地协议验证不是新官方世界或模型实验。
+
+## G5预登记：活跃返工证据与修订边界的本地公共API检查
+
+- 已读新调用事实：`EngineService.readMissionTaskArtifact`和Panel query/read都调用`requireMissionArtifactSourceAuthority`，后者在校验项目与所属Mission后额外要求Task终态；同一函数还服务正式跨Task导入。活跃自有Task的只读监督和终态产物移交目前共用该限制。不能只改一个低层predicate而放开导入/完成验收；必须先分别测量读、移交、修订三个契约。
+- 新增聚焦测试`packages/opencorvus/test/mission-active-repair-boundary.test.ts`，使用仓库隔离测试runtime和真实`EngineService.createTask`、`terminalTask`、Artifact publish/read、`resumeMissionTask`，不直接写Task/ledger/Protocol表。初始测试故障是明确的初始化B失败，A为已有可读输入证据；故criteria使用合法`task_initialization`归属，**不冒充跨worker dispatch实验**。原生API创建Mission所属Task，首次真实失败终态仅是预登记测试前提；之后绝不以假complete/fail获取修订入口。
+- 原始测试输入与反证JSON明确标为`local_protocol_test`，全部在独立临时数据库，不进入旧运行。Mission通过现有真实wake原语打开；测试hook只替代后续LLM执行，Task ingress同样不进入Provider。不会捏造assistant消息或声称已执行worker→Task协调/真实模型Tool选择。当前先验证最早公共边界；若该处失败，完整参与者闭环仍未验收，已有通信源码审计不能补作运行证明。
+- 精确步骤与预测：初始终态时Mission按实际locator完整读取A/B→首次resume写accepted A/open B及epoch2→原Task新Artifact记录A反证→Mission读取该不可变Artifact若因active被拒，得到精确错误→以A stale_evidence/B新证据提交另一次resume，若因active被拒，得到`MissionTaskResumeLifecycleConflictError`及currentLifecycle=active。旧Tool调用精确重放仍返回原receipt，新证据仍在同Task catalog，旧ledger/epoch保持真实原状态。取消仅用于测试最终收尾，核对取消权限回复，不能把取消当业务修复。
+- 竞争解释：若原Artifact连终态都读不了，先修测试输入/身份问题，不能归因active限制；若active读取可行，则推翻该读路径假设；若当前API能提交active修订，则沿已有路径继续，不能预设新API；若二者被确切拒绝，记录机制不可达的具体边界，而非宣称LLM弱或以更多prompt补齐。
+- 本检查不引入新的模型、官方世界、候选、凭据或生产权限。其结果只能证明公共服务层和持久化合同，不能叫完整真实LLM Checker或效果改善。后续修复前还需横审Panel read-reference绑定、跨Task导入、完成证据归属和活跃epoch并发；保持单一生命周期和ledger，不将读取权限与语义接受混为一谈。
+
+### G5实际结果：两个公共边界均阻断，消息到达不等于可复核或可返工
+
+| 真实本地服务调用 | 结果 |
+| --- | --- |
+| `EngineService.createTask`以已打开的Mission为owner创建原生Task | 真实Task/root/归属由生产代码建立，未直接写表 |
+| 测试初始化失败后Mission读取A来源、A原验收材料、B缺口 | 三份原Artifact均complete，项目/所属Mission与定位正确 |
+| 首次`resumeMissionTask` | active epoch2，单一ledger revision1，A accepted/B open |
+| 新A反证发布，原Task用自身catalog读取 | complete且JSON为预登记的corrected输入；证据并未丢失或不可读取 |
+| 所属Mission调用`readMissionTaskArtifact`读同一locator | 精确拒绝`Cross-Task Artifact source <taskID> is not terminal` |
+| 以保留原resolution、新invalidating证据构造合法stale A，尝试新resume调用 | 精确`MissionTaskResumeLifecycleConflictError`，currentLifecycle=active；因Mission读被拒，测试没有伪造该新Artifact的完整Mission读取凭证 |
+| 精确重放最初的resume调用 | 返回同一receipt/Message，Task仍epoch2、原ledger不变；重放不是正式扩大范围 |
+| 公共`cancelTask`测试收尾 | cancelled epoch2。没有用取消或假complete/fail获取第二次业务修订 |
+
+- `bun run test test/mission-active-repair-boundary.test.ts`最终1项通过、13个正向断言。两次先期测试构造错误也保留在开发过程说明中：首次将真实reader的`chunk`误认为顶层输出；第二次把同一A来源用于observation和resolution，违反当前role唯一性。已按真实接口修正前者，并用明确不同的A原始来源和原验收材料作为后者的合法测试前提；没有改生产返回值/约束来使测试通过。不是新的业务世界重试或取最好分。
+- 这是公共服务层的确定性复现，进一步限定“已有反馈”含义：真实scheduler消息通道存在，并不提供活跃Artifact读取权或active ledger修订。当前Panel query/read还要求本Turn已观察的terminal reference，并在分页/read前后复验；这解释了为何不能只移除底层`isTaskTerminal`检查。
+- 本测试没有构造assistant Message、worker模型输出或Tool结果。Native API调用标识和materialize的read-reference映射由明确的测试driver提供；它们不冒充Panel生成的Host读取凭证。Task/Mission后续模型loop被测试hook替代，故worker→Task协调、Task→Mission真实Tool请求及自主选择仍只完成源码审计，**未完成运行验收**。测试场景使用初始化归属，跨worker节点纠正也未运行。不能把本结果说成完整自主纠错链已覆盖。
+- 下一设计必须把三个不同权威分开但沿用唯一事实源：所属Mission对不可变Artifact的活动监督读取；对当前终态的正式接受/跨Task移交；对当前repair范围的证据驱动修订。先核对`tool/panel.ts`的query/read/完成/恢复消费者、`agent/artifact-read-facts.ts`的locator与读取引用绑定、`engine/cross-task-artifact-import.ts`的正式移交约束，再确定最小变更。不可直接放开全部导入或让active读取自动成为Mission完成依据，也不能新增另一份可变状态来跳过当前epoch/CAS校验。
+- 本轮尚未改生产读取、修订或权限。G4输入冲突已修，但G5证明正式活跃纠错仍有确定性协议缺口；Cycle3未经过该返工路径，其0分仍不能归因于此。H-E独立预期形成与进化选择的其它边界继续保留，不能让这项协议发现替代总体业务目标。
+- 交付复核：新测试1通过/13断言，`bun run typecheck`、根`bun run docs:check`、`git diff --check`通过；隔离Task通过公共取消收尾，测试runtime按现有fixture清理。模型调用、官方样本与候选数量均未增加。
