@@ -1,4 +1,4 @@
-"""Harness-owned loopback MCP transport for one official simulated world."""
+"""Harness-owned loopback MCP transport for one simulated API occurrence."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ import uvicorn
 from automationbench.tools.api.search import _load_schemas
 from mcp.server.fastmcp import FastMCP
 
-from .world import OfficialWorld
+from .api_session import ApiSession
 
 
 class _Server(uvicorn.Server):
@@ -24,7 +24,7 @@ class _Server(uvicorn.Server):
 
 
 @asynccontextmanager
-async def world_server(world: OfficialWorld) -> AsyncIterator[str]:
+async def world_server(world: ApiSession) -> AsyncIterator[str]:
     mcp = FastMCP("automationbench", stateless_http=True, json_response=True)
 
     @mcp.tool()

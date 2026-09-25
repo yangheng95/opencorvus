@@ -2,6 +2,10 @@
 
 ## Recall与结论
 
+本文件保留G16设计时点。G17已实现共同API会话、显式开发输入和SampleSetup；
+本地检查使用新test-driver合成记录，不使用B1活动快照，不代表模型纠错。实施与验证
+状态以主记录G17为准，下文“尚未实施”等文字描述原设计时点。
+
 承接[H-E结果](he-01-results.md)、[归档入口审计](archive-review-ingress.md)和
 [主记录G16](../../records/2026-09/2026-09-25-supervision-causal-iteration.md)。用户要求真实
 业务纠错，不能把只读文字判断降格成成功标准。本轮源为`e90bc09b`，只审查、落盘设计及

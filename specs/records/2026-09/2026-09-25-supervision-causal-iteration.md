@@ -500,3 +500,29 @@
 - 正式API源码存在Opportunity PATCH/GET路径，原MCP、solver的sample_setup及Mission请求可复用。必要适配应只分离原唯一API运输/事件/状态组件与官方评分，开发入口明确新身份并恢复原权限/clock；不能借OfficialWorld官方标签评分、扩大4服务或删除原错误description。当前仅设计，未创建fixture文件、未改生产代码/包/权限。
 - 识别边界已收敛：相同初态仍允许executor先改变业务值及交接内容，因此它不能保证verifier见到相同待审结果或排除锚定。保留原工作流时停止“固定verifier完整输入”的这个方案；未来固定初态若成功，只能按真实轨迹区分executor直接修复、监督触发返工、误accept或未知，不能外推进化收益。未实施部分及任何新模型诊断仍须单独方案/验证/冻结，不因本设计提交自动启动。
 - 根`docs:check`通过（342 ops/25 groups），`git diff --check`通过；本轮没有生产行为改动，未运行旧模型/协议测试或UI测试。新clock提交已按源码和当前架构读到，但不重算历史，也未在本线程独立核验其外部授权/验收。完整待推送仍须检查原`2a55323e`及`ba89e5cb`归属；本地设计交付不解除推送阻塞。业务可靠纠错和进化收益仍未达成。
+
+## G17实施前：单一模拟API会话与开发环境适配
+
+- Recall：按用户本轮明确授权把G16必要适配推进到本地实现。起始`ba7f2c35`/工作区干净，原实验均已停；读过原world/MCP/Task setup/solver、全部包内同名调用、相关正向测试、当前Inspect架构和新时钟记录。继续使用benchmark-debug-template，无委托、无模型/凭据/旧Task重启。旧原始材料不参与本轮活动world。
+- 已定位的职责耦合是`OfficialWorld`同时承担三工具调用、状态/事件和官方评分，`sample_environment`又包含重复不了的项目配置/MCP资源生命周期。G16权限4→48反例要求恢复完整状态而非重新seed；不是修改官方业务转移。计划新增`automationbench/api_session.py`承接唯一call和原始state snapshot/restore，原OfficialWorld继承该会话、删除迁出的call/重复state导出；官方rescore消费同一restore。MCP只改会话类型，不变工具定义/权限。
+- 新`automationbench/environment.py`承接原唯一squad bytes冻结与新项目/MCP作用域；官方setup原状态/评分逻辑保留，开发setup共用它。新`automationbench/development.py`仅接受显式operator-derived fixture envelope和完整state/provenance/request，公开输入clock来自恢复状态，记录新事件与未评估开发末态，复用原SampleSetup→Mission solver。没有新注册模型任务/业务scorer，不让official manifest接受任意seed，不复制业务引擎/当前状态或增加角色/执行权限。
+- 一致性检查只处理完整序列化状态、明确clock、非null且合法的服务列表、Sheets跟踪、fixture身份/来源；不能用Host判断金额/来源充分性。业务意义仍由Agent与外侧验收负责。调度/Task/Mission/Session协议不改；环境作用域横向检查正常退出、异常/取消、多项目并行及恢复后的独立会话，沿原资源清理，不修改用户进程或Task生命周期。
+- 可证伪预测：同一完整状态通过开发入口恢复后，真实MCP GET可见给定记录；原PATCH改变同一record并GET可读，权限仍只4服务、其它服务真实401；保存/恢复保留业务clock、全部记录与Sheets写标记，新会话事件从1开始。原官方checker的empty/partial/complete分数与snapshot replay契约保持。若为达成它必须改业务Tool/放开权限/伪造输出，停止实现而非绕过。
+
+### G17模型无关Checker独立预登记
+
+- 输入：新增`tests/test_automationbench_development.py`内明确由test-driver构造的完整WorldState序列化fixture；不是B1或任何旧world。固定clock `2026-01-15T09:00:00Z`，四服务，测试Opportunity `checker-opportunity`初值20及原description、独立保留记录、一个测试Sheet行。driver显式PATCH为42并改测试说明，随后GET；此数值仅测试数据，生产模块不包含它，不是模型业务答案。
+- 执行：仅包内venv的pytest/原localhost MCP客户端与真正上游API，临时目录由pytest隔离；落盘日志目录预留`.tmp/supervision-causal-20260925/g17-local-check/`。输入作者为test-driver，无OpenCorvus Task/模型/伪participant。两个独立会话用于状态和事件隔离；一次正常、一次异常/取消资源作用域合同。任何driver产物不能用作未来模型初态。此登记仅授权这些本地Checker，没有自然业务修复样本。
+- 预期输出：明确的GET记录/更新返回/401错误、完整恢复state、开发身份和`assessment=not_evaluated`、同项目配置与原工具集合；原官方正向checker仍调用其原rubric。非法kind/clock/权限/不完整state输入映射精确ValueError；不新增负向字符串/不调用断言或UI测试。只在代码实现后执行该登记检查，不使用旧eval评分器重算历史。
+- 验证范围：上述新文件、原`test_automationbench.py`中因共享会话/环境被迁移的合同；Ruff/Mypy及根docs/diff。新环境的本地MCP检查是运输/状态验收，不是Agent自主纠错、Luna能力、正式分数或进化收益。任何未来真实行为另行冻结输入/目录/版本/模型/样本和停止规则。
+- 共享项目配置复核另执行原`automationbench-project-admission.test.ts`：其真实Python sample setup/localhost MCP→产品ConfigPaths/Config/原package与worker resolver→base64实际返回，使用临时本地Project、无模型或业务Task。它验证此次迁出的同一环境构造，没有新角色或工具权限；不是LLM行为。
+
+### G17实施与本地验收 checkpoint
+
+- 已实现`ApiSession`作为唯一三工具call/事件/原始状态导出的owner，OfficialWorld继承它并保留原Case初始化和官方rubric；已删除迁出的call/导出实现。官方rescore与开发入口共用`restore_world_state`，要求完整序列化状态、明确clock/服务列表/Sheets写入跟踪，原状态复原不重新扩大seed权限。MCP四工具定义与原业务转移不变，api_catalog仍是文档。
+- `environment.py`承接原唯一squad bytes冻结、创建新目录、MCP/project config作用域；官方setup保留原评分/错误合同。新`development.py`严格接受`operator-derived-business-repair` envelope、作者/来源/请求/完整state；新Task输入必须匹配冻结identity/request，clock从state公开投影。输出只有development身份、新事件与末态，`assessment=not_evaluated`；closed不代表Task/Mission成功。没有注册可自动启动的模型Task、业务scorer、角色、API权限或第二ledger。
+- 登记的本地真实MCP检查以test-driver新合成状态运行：GET原20→PATCH42/说明→同record GET42；原On Hold和另一个记录保持；未连接Slack真实401；全部48个序列化字段仍仅4服务授权；Sheets真实PUT后写入跟踪保持，JSON保存/恢复state完整、新会话事件从1开始。开发setup两项目并行、输入冻结、取消后保留state/明确CancelledError且端口ConnectError；错identity/request和不完整/不合法输入映射明确ValueError。所有这些是测试driver行为，不是模型发现或纠错。
+- 验证表：新增Python开发检查最终14通过；共享变化涉及的原官方Python合同19通过（正常empty/partial/complete原分、重放、clock、Mission状态观察、异常/取消、并行项目）；真实跨语言project admission 1通过/11断言。package Mypy23源文件、新测试Mypy1文件、Ruff、docs342ops25groups与diff通过。Python最终增补只涉及两个错误输入测试，官方19项沿同一未变生产实现的上一轮有效结果，不重复累计旧运行。
+- 保留两类检查器输入错误：首次driver写v59 URL，原上游只实现v61，GET返回无Amount的错误对象使测试失败；按实际原路由改测试v61，没有改生产API。随后两项错误入口测试尝试给Inspect只读input/sample_id属性赋值，返回AttributeError；改为构造合法TaskState携带待拒输入，真实返回预期ValueError。原失败日志保留在`.tmp/supervision-causal-20260925/g17-local-check/pytest.log`/xml，最终14项在`pytest-development-final.*`，跨语言在`project-admission.log`。首v59失败只在本轮工具输出，未伪造持久化收据。
+- 检查进程均正常退出；按本轮路径复核没有遗留python/bun进程，未创建模型Task/controller、使用或复制auth/models，也未把B1旧snapshot启动为活动世界。当前架构和package README已同步；G16文档标明历史设计时点。旧官方input/world/原分与包`.13/.14`只读，未重算历史。
+- 下一未证边界是自然错误材料经这条入口进入真实Agent后，事实是否改变判断并实际修正。现在可准备一个公开归属的固定状态业务诊断冻结，但不得把这34项本地合同当可靠业务纠错/进化收益，也不能重复扩展环境API代替行为检查。任何B1材料导出须先原eval逐值核对并明确新身份、完整初态/原服务/clock/description；真实Luna调用仍另行预登记，不从本检查产物接着运行模型。

@@ -356,6 +356,40 @@ checker acceptance.
 
 ## Extending the catalog
 
+### Explicit development business-repair state
+
+`automationbench.development.load_development_fixture` accepts a JSON object with
+exact keys `schema_version` (1), `kind` (`operator-derived-business-repair`), `id`,
+`request`, `source` and `state`. `source` contains nonempty `author`, `reference`
+and `description`; it attributes copied/test data, not a current agent decision.
+`state` contains the complete serialized `world` and
+`google_sheets_updated_row_keys`. The original explicit `meta.allowed_services`
+and `meta.current_time` survive restoration. A full snapshot is not an official
+seed: its default service fields must not broaden connected-service permissions.
+
+`development_environment(fixture, squad)` returns the existing `SampleSetup`
+contract. Its `TaskState.sample_id` must equal the fixture identifier and its input
+must equal `fixture.request`, which visibly declares seeded data and the business
+clock. A separately registered caller may compose it with
+`build_opencorvus_solver(..., entrypoint="mission", sample_setup=...)`. This does
+not introduce a registered model task or a business scorer. Keep fixture, source
+and evaluator materials outside the new sample project.
+
+The environment uses the same package/configuration/MCP scope and simulated API
+session as official samples. Its logs use `development_*`, identify the source,
+and always label business assessment `not_evaluated`. Environment closure cannot
+establish correction. Do not send these fixtures to the official manifest loader
+or reuse the original case's create rubric as a repair score. True model behavior
+and evaluator criteria need a separate frozen run definition.
+
+Focused model-free checks (synthetic test-driver records, not archived worlds):
+
+```powershell
+.venv/Scripts/python -m pytest tests/test_automationbench_development.py tests/test_automationbench.py -q
+```
+
+### Benchmark definitions
+
 A new benchmark contributes one immutable `BenchmarkDefinition`: stable ID,
 dataset field schema, exact source provenance, scorer revision, frozen judge
 policy, and scorer key. Its implementation is registered separately under that

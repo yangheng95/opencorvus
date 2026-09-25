@@ -51,6 +51,14 @@ tracking required by the pinned rubric. Scoring and offline re-scoring restore t
 state and call the official rubric. Mutation replay is not used because upstream
 record identifiers and timestamps are nondeterministic. Source-tree hashes and
 agent self-reports do not establish correctness.
+The single `automationbench/api_session.py` owns simulated API calls, ordered
+events, sealing and raw state serialization. `OfficialWorld` adds official case
+initialization and grading; it inherits that same API implementation. Both rubric
+restoration and development restoration use the complete serialized world,
+explicit connected-service list, effective clock and Sheets write tracking.
+Expanded snapshot fields are never reinterpreted as seeded service grants.
+Incomplete or non-round-tripping state is an integrity error, not a new initial
+world filled with defaults.
 The installed official rubric must retain its strict assertion mode, recorded as
 `official-strict-assertions-v1`. A disabled policy is rejected; assertion errors
 remain infrastructure failures rather than becoming business scores.
@@ -65,3 +73,21 @@ The local harness is co-located with the OpenCorvus service and explicitly recor
 boundary. `automationbench_local_check` validates actual local MCP, official APIs,
 rubrics and snapshot restoration with known inputs. It does not establish model or
 expert-squad capability.
+
+Development business-repair inputs use the explicit
+`operator-derived-business-repair` envelope in `automationbench/development.py`.
+It includes author/reference/description provenance, a new business request and
+complete raw state. Its sample setup freezes both input and squad files and uses
+the same `environment.py` project/MCP scope as official samples. The visible
+request declares seeded records and the state's business clock; it does not claim
+that an earlier participant belongs to the current Task. Source provenance is
+input attribution, not Host-issued producer authority.
+
+Development events start with the new API occurrence. Output is recorded under
+`development_*` metadata with `assessment=not_evaluated`; a closed environment is
+not business acceptance. Official case/manifest/scorer identity remains separate.
+There is no registered model task, official scorer or automatic behavior run for
+this development entry. A future separately registered diagnosis can compose its
+`SampleSetup` with the existing Mission solver and must independently assess real
+business corrections and preservation. Fixed initial state alone does not fix
+the later executor/verifier inputs or establish causal improvement.

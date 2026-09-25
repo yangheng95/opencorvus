@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
-import json
 import math
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -20,6 +18,7 @@ from inspect_ai.solver import TaskState
 from ..adapter import AdapterConfig, EntryPoint
 from ..scorer import mission_completed, task_completed
 from ..solver import SampleSetup, build_opencorvus_solver, opencorvus_system_metadata
+from .environment import freeze_squad_files, project_environment
 from .world import (
     BENCHMARK,
     CASE_CONTEXT_POLICY,
@@ -38,52 +37,15 @@ def sample_environment(
 ) -> SampleSetup:
     """Provision only a fresh project; never rewrite an existing project or user's service."""
     by_id = {case.task: case for case in cases}
-    files = tuple(
-        (file.relative_to(squad), file.read_bytes())
-        for file in sorted(squad.rglob("*"))
-        if file.is_file()
-    )
+    files = freeze_squad_files(squad)
 
     @asynccontextmanager
     async def setup(state: TaskState, config: AdapterConfig) -> AsyncIterator[None]:
-        from .mcp import world_server
-
         case = by_id[str(state.sample_id)]
         world = OfficialWorld(case)
-        project = Path(config.project_dir)
         state.metadata["automationbench_execution"] = {"status": "preparing"}
         try:
-            await asyncio.to_thread(project.mkdir, parents=True, exist_ok=False)
-            async with world_server(world) as url:
-
-                def prepare_project() -> None:
-                    target = (
-                        project / ".opencorvus" / "expert-squads" / "builtin" / "automationbench"
-                    )
-                    for relative, content in files:
-                        destination = target / relative
-                        destination.parent.mkdir(parents=True, exist_ok=True)
-                        destination.write_bytes(content)
-                    (project / ".opencorvus" / "opencorvus.jsonc").write_text(
-                        json.dumps(
-                            {
-                                "mcp": {
-                                    "automationbench": {
-                                        "type": "remote",
-                                        "url": url,
-                                        "transport": "streamable-http",
-                                        "enabled": True,
-                                        "oauth": False,
-                                    }
-                                },
-                            },
-                            indent=2,
-                        )
-                        + "\n",
-                        encoding="utf-8",
-                    )
-
-                await asyncio.to_thread(prepare_project)
+            async with project_environment(config, files, world):
                 state.metadata["automationbench_execution"] = {"status": "running"}
                 yield
             result = state.metadata.get("opencorvus_result", {})

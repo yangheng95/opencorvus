@@ -11,6 +11,8 @@ from importlib.metadata import distribution
 from pathlib import Path
 from typing import Any
 
+from .api_session import ApiSession, restore_world_state, snapshot_clock
+
 UPSTREAM_REVISION = "4a8e1061254004d9dac807054eed33fad7d1ff14"
 BENCHMARK = f"zapier/automationbench@{UPSTREAM_REVISION[:7]}"
 SCORING_POLICY = "official-strict-assertions-v1"
@@ -143,7 +145,7 @@ def load_cases(manifest: str | Path) -> list[Case]:
     return list(selected.values())
 
 
-class OfficialWorld:
+class OfficialWorld(ApiSession):
     """One sample occurrence, with ordered official API events and a sealed rubric result."""
 
     def __init__(self, case: Case) -> None:
@@ -154,7 +156,7 @@ class OfficialWorld:
         self.info = copy.deepcopy(case.info)
         self.initial = strip_none_values(copy.deepcopy(self.info["initial_state"]))
         self.info["assertions"] = [strip_none_values(a) for a in self.info["assertions"]]
-        self.world = WorldState(**copy.deepcopy(self.initial))
+        super().__init__(WorldState(**copy.deepcopy(self.initial)))
         self.initial.setdefault("meta", {})["current_time"] = (
             self.world.meta.current_time.isoformat()
         )
@@ -163,36 +165,6 @@ class OfficialWorld:
         self.world.meta.allowed_services = compute_allowed_services(
             self.initial, self.info["assertions"], self.info.get("zapier_tools", [])
         )
-        self.events: list[dict[str, Any]] = []
-        self.sealed = False
-
-    def call(self, tool: str, arguments: dict[str, Any]) -> str:
-        from automationbench.tools.api import api_fetch, api_search, base64_encode
-
-        if self.sealed:
-            raise RuntimeError("automationbench_world_sealed")
-        event: dict[str, Any] = {
-            "sequence": len(self.events) + 1,
-            "tool": tool,
-            "arguments": copy.deepcopy(arguments),
-        }
-        try:
-            if tool == "api_search":
-                result = api_search(**arguments)
-            elif tool == "api_fetch":
-                result = api_fetch(self.world, **arguments)
-            elif tool == "base64_encode":
-                result = base64_encode(**arguments)
-            else:
-                raise ValueError(f"unknown official tool: {tool}")
-        except Exception as error:
-            event["error_type"] = type(error).__name__
-            raise
-        else:
-            event["output"] = result
-            return str(result)
-        finally:
-            self.events.append(event)
 
     def seal(self) -> dict[str, Any]:
         from automationbench.rubric import partial_credit, task_completed_correctly
@@ -228,15 +200,12 @@ class OfficialWorld:
             "benchmark": BENCHMARK,
             "task": self.case.task,
             "example_id": self.case.example_id,
-            "world": self.world.model_dump(mode="json"),
-            "google_sheets_updated_row_keys": sorted(self.world.google_sheets._updated_row_keys),
+            **self.state_snapshot(),
         }
 
 
 def rescore(case: Case, snapshot: dict[str, Any], tool_calls: int) -> dict[str, Any]:
     """Recompute from the settled official state, preserving transient assertion inputs."""
-    from automationbench.schema.world import WorldState
-
     if (
         snapshot.get("schema_version") != 1
         or snapshot.get("benchmark") != BENCHMARK
@@ -244,27 +213,15 @@ def rescore(case: Case, snapshot: dict[str, Any], tool_calls: int) -> dict[str, 
         or snapshot.get("example_id") != case.example_id
     ):
         raise ValueError("AutomationBench snapshot identity does not match the case")
-    updated = snapshot["google_sheets_updated_row_keys"]
-    if not isinstance(updated, list) or any(not isinstance(key, str) for key in updated):
-        raise ValueError("AutomationBench snapshot has invalid row-write tracking")
-    snapshot_world = snapshot.get("world")
-    metadata = snapshot_world.get("meta") if isinstance(snapshot_world, dict) else None
-    clock_text = metadata.get("current_time") if isinstance(metadata, dict) else None
-    if not isinstance(clock_text, str):
-        raise ValueError("AutomationBench snapshot has no effective business clock")
-    try:
-        snapshot_clock = datetime.fromisoformat(clock_text.replace("Z", "+00:00"))
-    except ValueError as error:
-        raise ValueError("AutomationBench snapshot has an invalid business clock") from error
+    snapshot_clock_value = snapshot_clock(snapshot)
     if case.current_time is not None:
         source_clock = datetime.fromisoformat(case.current_time.replace("Z", "+00:00"))
-        if snapshot_clock != source_clock:
+        if snapshot_clock_value != source_clock:
             raise ValueError("AutomationBench snapshot clock differs from the official case")
     else:
-        case = freeze_missing_case_clock(case, snapshot_clock)
+        case = freeze_missing_case_clock(case, snapshot_clock_value)
     world = OfficialWorld(case)
-    world.world = WorldState.model_validate(snapshot["world"])
-    object.__setattr__(world.world.google_sheets, "_updated_row_keys", set(updated))
+    world.world = restore_world_state(snapshot)
     result = world.seal()
     result["tool_calls"] = tool_calls
     return result
