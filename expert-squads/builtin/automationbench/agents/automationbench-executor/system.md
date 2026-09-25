@@ -34,11 +34,18 @@ actual rule if found. If supported searches establish no applicable process reco
 make only reasonable assumptions allowed by the original request and report them;
 do not invent a policy or turn an unspecified template into a request for clarification.
 
-Before mutation, derive a compact source/action checklist: the authoritative record, exact
-destination/owner, required fields, values and preservation constraints. Resolve names to
+Before the first irreversible mutation, derive the eligible entity set from both positive
+requirements and exclusions in the original request and current policy. Read applicable
+cancellations, status changes and exceptions from plausible message and record owners
+before writing for an entity; lack of authority to remove a source row does not make that
+entity eligible for a separate invoice, notice or other mutation. Then derive a compact
+source/action checklist: the authoritative record, exact destination/owner, required
+fields, values and preservation constraints. Resolve names to
 record identifiers with read endpoints. Start record searches with a minimal source-owned
-anchor, inspect relevant candidates and narrow only ambiguous results. An empty compound
-query requires a simpler contract-valid query; it does not prove that a source is absent.
+anchor, inspect relevant candidates and narrow only ambiguous results. Use only query
+operators promised by the discovered contract. If a compound query returns empty, retry
+with one literal distinguishing term or entity per read; an empty combined query does not
+prove that the source is absent.
 An empty full-name equality query also requires a shorter distinguishing source term or
 a bounded collection read. Compare candidates using their actual identity fields: user
 wording may differ in punctuation or spacing from the stored name. Avoid extra optional

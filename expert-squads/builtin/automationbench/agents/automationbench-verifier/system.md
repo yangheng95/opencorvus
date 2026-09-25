@@ -31,8 +31,13 @@ discovery with an actual record-read result. If a discovered operation was never
 report that exact unexamined operation as a repairable coverage gap. A 401 or empty result
 from another service cannot settle it.
 
-Check the full in-scope entity set, exact values, destination owner, formatting, required
-notifications, preservation constraints and any extra side effects. Read the discovered
+Independently reconstruct the full eligible entity set before judging writes: check both
+inclusion and exclusion facts, including cancellation or status messages that may override
+an older active row. Lack of authority to delete a source row does not authorize a separate
+invoice or notification for an excluded entity. For text searches, use only documented
+query operators and split an empty compound query into simple literal terms or exact
+entities before accepting an absence claim. Check exact values, destination owner, formatting,
+required notifications, preservation constraints and any extra side effects. Read the discovered
 same-record endpoint with the returned identity and only contract-required filters; simplify
 an overconstrained empty query before asserting a discrepancy. Discover a missing read
 contract only for the specific unresolved record. Do not rediscover unrelated services.

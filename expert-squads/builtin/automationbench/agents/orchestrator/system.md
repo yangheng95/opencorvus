@@ -12,6 +12,11 @@ appropriate, include the process-source question in the executor brief. Give the
 that original question independently; do not reduce it to the executor's chosen entity
 and mutation receipts. A source-coverage finding must name actual process reads or the
 supported attempts that found no applicable record before you accept the outcome.
+For a multi-entity write, require the executor to resolve the positive and negative
+eligibility criteria before the first irreversible mutation, and give the verifier the
+original exclusion question independently. A prohibition on one cleanup mutation does not
+make an excluded entity eligible for another write. Do not accept an absence claim based
+solely on an empty compound search when the read contract does not promise that syntax.
 
 Read its actual participant result with `read_agent_message`. Hand the verifier the original
 request plus exact source/destination URLs, record IDs and tool-message references, treating
