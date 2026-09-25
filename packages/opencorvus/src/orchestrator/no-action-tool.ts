@@ -40,7 +40,7 @@ export const NoActionInputSchema = z
   })
   .strict()
 
-export function createNoActionTool(input: { taskID: string; activeAcceptanceGapID?: string }) {
+export function createNoActionTool(input: { taskID: string }) {
   return {
     no_action: bindToolExecutionMode(
       tool({
@@ -52,18 +52,13 @@ export function createNoActionTool(input: { taskID: string; activeAcceptanceGapI
           "For active execution work with no such authority, finishing all work requires the current Task epoch's " +
           "manage_task lifecycle decision. A historical completed epoch or completed worker does not close a reopened Task. This " +
           "records only the current decision receipt: it does not create a timer, Automation, Interaction, worker action, " +
-          "Task lifecycle fact, future wake, or durable waiting state. Never use it when current evidence requires a real " +
+          "Task lifecycle fact, future wake, or durable waiting state. An acceptance ledger remains binding: this receipt settles only the current input, not any criterion. Never use it when current evidence requires a real " +
           "scheduler action.",
         inputSchema: NoActionInputSchema,
         execute: async ({ reason, observed_task }) => {
           const actual = noActionTaskObservation(taskLifecycleProjection(input.taskID))
           if (Object.keys(actual).some((key) => actual[key as keyof typeof actual] !== observed_task[key as keyof typeof actual])) {
             throw new TaskLifecycleObservationConflictError(actual)
-          }
-          if (input.activeAcceptanceGapID) {
-            throw new Error(
-              `Acceptance gap ${input.activeAcceptanceGapID} requires a scoped repair Turn or an evidence-backed Task terminal decision; no_action cannot settle it.`,
-            )
           }
           return {
             title: "Current Ingress Reconciled",

@@ -354,3 +354,21 @@
 - 聚焦验证：`mission-active-repair-boundary.test.ts`3通过/36断言；`orchestrator-mission-resume-provenance.test.ts`2通过/32断言；`task-control-reconciliation.test.ts`12通过/49断言；`scheduler-task-root-message-schema.test.ts`8通过/106断言。合计**25项、223断言，全部通过**。覆盖实际resume交接、原分块事件投影、Question/错误归属、FIFO、失联assistant的并发恢复、终态后的原活动结算，以及多项目scheduler、Mission关闭重开和Project取消。各测试为明确隔离fixture/生产函数合同，不把这些局部证据称完整真实LLM或操作系统进程重启验收。
 - package typecheck、根docs:check（342 ops/25 groups）、diff检查通过。无新增模型请求/官方世界/候选/凭据副本，无历史数据改写；本地服务场景仍公共cancel收尾。G8修复的是现有终态resume→实际root输入的共同链路，不是Cycle3从未发生的Mission resume，也不能认领其金额错误修复。
 - 活动修订下一步仍在原五段机制之内：真正可用串行边界已定位为`task-root-fact-store::acquireTaskRootIngressLease`的数据库事务，它检查项目admission、同epoch和FIFO先行输入后获取当前control lease；原Promise链不是它的替代。先以隔离并发Checker验证新的修订输入在旧root运行时仅被接收、取得真实租约后才应用并重建工具/检查点；先行完成/取消或CAS变化须产生明确结算，而非重开Task/替换历史。旧worker descriptor保持不可变，需要改其授权时必须有真实coordination回执。公开入口与应用事务尚未实施，禁止把现在可恢复typed resume说成active范围修订已完成，也不立即重跑benchmark。
+
+## G9实施前：当前输入结算与Task返工义务不能混同
+
+- 为租约顺序Checker核对真实decision生产者时发现：`createOrchestratorTools`不分当前输入来源，将`activeAcceptanceGapID`传给`createNoActionTool`；后者只因gap存在便拒绝全部no_action。它没有读取当前输入是否状态询问、是否已有worker或后续输入负责返工。这是Host用业务状态代替Agent选择流程的硬禁令，违反本仓库职责边界。未完成gap确实不能算完成，但这不等于每个后续输入都必须派工或终结Task。
+- 影响面为全部具有Mission acceptance ledger的Task-root输入：原repair、worker/lifecycle/scheduler通知、operator状态询问和恢复。`no_action`的真实输出只结算当前ingress并park该Turn，没有Task终态、ledger或未来wake写入；durable reducer按原Tool事实释放FIFO。原精确`observed_task`一致性检查属于合法数据校验，保留。不会新增另一套“允许no_action的输入类型”Host白名单或自动替模型选工具。
+- 单一修复：删除`activeAcceptanceGapID`参数及无条件拒绝，现有工具说明明确返工义务仍有效、receipt只结算当前输入。Agent仍必须对已知未满足目标采取真实行动或交给已存在的独立执行，不能以no_action宣称业务完成。语义误判要由真实验收发现，不用Host gate遮盖。现有dispatch/criterion选择、ledger/lifecycle和全部权限保持不变。
+- 预测：公共resume建立的真实A accepted/B open Task中，脚本化状态询问输入调用实际精确no_action工具，返回当前epoch观察和park收据；Task仍active、ledger完全相同。修前精确拒绝，修后成功。此为明确测试driver的Tool请求，不是假模型自主决策，返回值必须由真实生产Tool产生。
+- 新租约顺序Checker使用公共createTask/handleTaskMessage接收两个独立状态输入，实际reconciler进入被测试hook替代的runner；第一输入由barrier持有，第二输入已持久化时由真实acquire返回blockedByIngressID。释放后用明确脚本请求调用实际no_action，持久化**真实返回值**，原reducer释放FIFO并激活后续输入。仅Session/Tool请求使用显式fixture；不直接写Task/Protocol/ledger表，不手写“decision committed”输出，也不称LLM端到端。公共cancel仅作最终清理，不用于取得resume。
+- 这次Checker证明已有输入串行边界，不能把普通operator输入当已实现的Mission amendment。公开active修订及其CAS应用/完成竞态结算仍需在该边界上实现；当前不新增模型/世界或用旧分数宣称改善。
+
+### G9实施与租约边界验证 checkpoint
+
+- 已删除`createNoActionTool.activeAcceptanceGapID`和唯一caller的传参/全局拒绝分支；保留精确当前epoch、opened/terminal事件、status校验与原exclusive/park控制。工具与架构明确只结算当前输入，ledger/Task义务不变。没有用输入关键词或来源类型白名单重新建一个Host gate。现有Mission repair的业务指令继续要求真实纠错或有证据的结算，并没有把未完成工作改成成功。
+- 公共resume产生的真实active/epoch2、A accepted/B open，在修前调用实际no_action工具得到`Acceptance gap ... no_action cannot settle it`；修后返回真实观察收据，Task仍active、ledger完整相同。新输入的具体语义由明确测试请求给定，不声称模型自主选择正确。
+- 新`task-root-input-lease-boundary.test.ts`通过公共createTask与handleTaskMessage生成真实Task及两个输入；第一输入实际取得lease并由barrier持有时，第二输入的API立即返回accepted且已持久化。直接调用原lease writer作为竞争测试driver得到`acquired=false/blockedByIngressID=first/projection=ready`。释放第一输入后，脚本请求调用真实no_action实现并持久化实际返回值，两个原ingress按序成为resolved，Task保持active epoch1，最后仅公共cancel清理为cancelled epoch1。没有直接写Task/lifecycle/ledger表或手写Tool成功结果。
+- 该测试使用显式Session/Tool请求fixture驱动真实代码，不是Provider输出或业务checker；竞争driver的liveness callback是测试输入，只验证FIFO拒绝路径，不能宣称已取得真实跨进程owner。当前尚未把Mission amendment写入这些输入，也未验证请求应用/CAS业务结算。首次运行因为将可复用API返回对象直接交给Bun非对称matcher，后续读到`ExpectAny`而失败；已对断言使用独立标量快照，未改生产租约代码。
+- 聚焦结果：`mission-active-repair-boundary`3通过/38断言，`task-root-input-lease-boundary`1通过/7断言，`no-action-tool`1通过/8断言；合计**5通过、53断言**。package typecheck通过。没有新模型请求、凭据、官方世界、候选或旧数据修改，隔离Task均公共收尾。
+- 仍未交付的核心是active Mission修订的合法生效，不是再次证明FIFO或另跑低分案例。下一方案必须明确请求接收与应用两类事实，以及先行完成/取消、ledger CAS失配的真实结果；不能将普通no_action结算当修改ledger。已有输入串行链可以复用，业务语义决定继续属于Agent。需要运行中改变worker授权时必须有实际协调回执，不能在它未接收新输入时把latest revision当已遵守。业务自主纠错/收益均仍未验证。

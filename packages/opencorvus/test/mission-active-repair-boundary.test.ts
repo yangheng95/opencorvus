@@ -25,6 +25,8 @@ import { PanelArtifactQuerySchema } from "@/panel/capability"
 import { readMissionTaskResumeReceipt } from "@/mission/acceptance-resume-receipt"
 import type { OrchestratorEvent } from "@/orchestrator/event"
 import { renderWakeProvenanceNotice } from "@/orchestrator/agent"
+import { createExactOrchestratorTool } from "@/orchestrator/tools"
+import { noActionTaskObservation } from "@/orchestrator/no-action-tool"
 import {
   currentTaskArtifactObservation,
   assertCurrentTaskArtifactObservation,
@@ -231,6 +233,14 @@ test("Mission inspects active repair evidence while formal mutation retains its 
         expect(renderWakeProvenanceNotice(delivered, taskID, first.ingress_artifact_id))
           .toContain(`acceptance_ledger_revision_artifact_id=${first.acceptance_ledger_revision_artifact_id}`)
         const originalLedger = readLatestTaskAcceptanceLedger(taskID)!
+        const statusDecision = createExactOrchestratorTool({ toolID: "no_action", taskID,
+          agentSessionID: requireTask(taskID).session_id!, dispatchAgents: [] })
+        const statusInput = { observed_task: noActionTaskObservation(taskLifecycleProjection(taskID)),
+          reason: "LOCAL TOOL CONTRACT: this status inquiry is answered; the independent repair input retains its obligation." }
+        const statusResult = await statusDecision.execute!(statusInput, {} as never) as { output: string }
+        expect(JSON.parse(statusResult.output)).toEqual(statusInput)
+        expect({ lifecycle: taskLifecycleProjection(taskID), ledger: readLatestTaskAcceptanceLedger(taskID) })
+          .toMatchObject({ lifecycle: { status: "active", epoch: 2 }, ledger: originalLedger })
         activeObservation = currentTaskArtifactObservation(taskID)
         expect(activeObservation).toEqual({
           terminal_lifecycle_reference: null,
