@@ -13,10 +13,17 @@ from script.run_factorial_trials import (
     Episode,
     SourceRevisionDriftError,
     current_source_revision,
+    openai_model_id,
     paired_early_stop,
     require_frozen_source,
     settle_owned_activity,
 )
+
+
+def test_explicit_sol_model_identity_projects_to_the_host_preflight_model() -> None:
+    assert openai_model_id("openai/gpt-5.6-sol") == "gpt-5.6-sol"
+    with pytest.raises(ValueError, match="explicit openai"):
+        openai_model_id("gpt-5.6-sol")
 
 
 def test_preregistered_paired_early_stop_reports_scored_harm_and_unscored_arms() -> None:

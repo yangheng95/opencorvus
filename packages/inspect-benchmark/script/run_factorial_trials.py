@@ -23,7 +23,6 @@ ROOT = Path(__file__).resolve().parents[3]
 PACKAGE = ROOT / "packages/opencorvus"
 MANIFEST = ROOT / "specs/artifacts/2026-09-24-automationbench-self-evolution/probe-manifest.json"
 PLAN = ROOT / "specs/records/2026-09/2026-09-24-luna-mission-task-factorial-trials.md"
-MODEL = "openai/gpt-5.6-luna"
 ARMS = ("TS", "TE", "MS", "ME")
 STARTUP_SECONDS = 120
 SOURCE_FREEZE_PATHS = (
@@ -39,6 +38,13 @@ SOURCE_FREEZE_PATHS = (
 
 class SourceRevisionDriftError(RuntimeError):
     pass
+
+
+def openai_model_id(model: str) -> str:
+    provider, separator, model_id = model.partition("/")
+    if provider != "openai" or separator != "/" or not model_id or "/" in model_id:
+        raise ValueError("trial model must be one explicit openai/<model-id> identity")
+    return model_id
 
 
 def current_source_revision(root: Path = ROOT) -> str:
@@ -181,7 +187,7 @@ class Episode:
 
 
 async def launch_host(
-    episode: Episode, auth_source: Path, source_revision: str
+    episode: Episode, auth_source: Path, source_revision: str, model: str
 ) -> None:
     episode.directory.mkdir(parents=True, exist_ok=False)
     stdout = (episode.directory / "host.stdout.log").open("wb")
@@ -190,7 +196,7 @@ async def launch_host(
     environment.update(
         AUTOMATIONBENCH_FACTORIAL_RUN_DIR=str(episode.directory),
         AUTOMATIONBENCH_FACTORIAL_AUTH_SOURCE=str(auth_source),
-        AUTOMATIONBENCH_FACTORIAL_MODEL=MODEL,
+        AUTOMATIONBENCH_FACTORIAL_MODEL=model,
     )
     try:
         episode.process = await asyncio.to_thread(
@@ -222,7 +228,13 @@ async def launch_host(
             episode.url = state["url"]
             assert isinstance(episode.url, str) and episode.url.startswith("http://127.0.0.1:")
             preflight = read_receipt(episode.directory / "preflight.json")
-            assert preflight and preflight.get("actualModel") == "gpt-5.6-luna"
+            assert (
+                preflight
+                and preflight.get("credential") == "usable"
+                and preflight.get("catalog") == "projected"
+                and preflight.get("actualModel") == openai_model_id(model)
+                and preflight.get("streaming") is True
+            )
             return
         if state and state.get("status") == "failed":
             raise RuntimeError(f"host startup failed: {state.get('error', 'unknown')}")
@@ -288,7 +300,7 @@ def score_summary(
 
 
 async def run_inspect(
-    episode: Episode, expected_version: str, expected_digest: str | None
+    episode: Episode, expected_version: str, expected_digest: str | None, model: str
 ) -> dict[str, Any]:
     assert episode.url is not None
     command = [
@@ -315,7 +327,7 @@ async def run_inspect(
         "-T",
         f"project_dir={episode.directory / 'projects'}",
         "-T",
-        f"model={MODEL}",
+        f"model={model}",
         "-T",
         f"base_url={episode.url}",
         "-T",
@@ -475,6 +487,7 @@ async def execute_block(
     evolved: Path,
     versions: dict[str, tuple[str, str | None]],
     source_revision: str,
+    model: str,
 ) -> dict[str, Any]:
     episodes = {
         arm: Episode(
@@ -487,7 +500,9 @@ async def execute_block(
     }
     launches = []
     for arm in block.order:
-        launches.append(asyncio.create_task(launch_host(episodes[arm], auth, source_revision)))
+        launches.append(
+            asyncio.create_task(launch_host(episodes[arm], auth, source_revision, model))
+        )
         await asyncio.sleep(0.25)
     attempts = await asyncio.gather(*launches, return_exceptions=True)
     startup_errors = {
@@ -518,7 +533,7 @@ async def execute_block(
         }
     try:
         results = await asyncio.gather(
-            *(run_inspect(episodes[arm], *versions[arm]) for arm in block.order),
+            *(run_inspect(episodes[arm], *versions[arm], model) for arm in block.order),
             return_exceptions=True,
         )
         out = {}
@@ -556,10 +571,13 @@ async def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-root", type=Path, required=True)
     parser.add_argument("--auth-source", type=Path, required=True)
+    parser.add_argument("--model", required=True)
+    parser.add_argument("--static-squad", type=Path, required=True)
     parser.add_argument("--evolved-squad", type=Path, required=True)
     parser.add_argument("--static-version", required=True)
     parser.add_argument("--plan-only", action="store_true")
     args = parser.parse_args()
+    openai_model_id(args.model)
     blocks = blocks_from_plan()
     if args.plan_only:
         print(json.dumps([block.__dict__ for block in blocks], ensure_ascii=False, indent=2))
@@ -567,7 +585,7 @@ async def main() -> None:
     run_root = args.run_root.resolve()
     if not run_root.is_relative_to(ROOT / ".tmp") or run_root.exists():
         raise ValueError("run-root must be a new directory under this workspace's .tmp")
-    static = ROOT / "expert-squads/builtin/automationbench"
+    static = args.static_squad.resolve(strict=True)
     evolved = args.evolved_squad.resolve(strict=True)
     static_manifest = json5.loads((static / "expert-squad.jsonc").read_text(encoding="utf-8"))
     evolved_manifest = json5.loads((evolved / "expert-squad.jsonc").read_text(encoding="utf-8"))
@@ -581,11 +599,12 @@ async def main() -> None:
     for package in (static_manifest, evolved_manifest):
         if (package["namespace"], package["id"]) != ("builtin", "automationbench"):
             raise ValueError("Both arms must use canonical builtin/automationbench")
+    static_digest = static.name if re.fullmatch(r"[a-f0-9]{64}", static.name) else None
     digest = evolved.name if re.fullmatch(r"[a-f0-9]{64}", evolved.name) else None
     versions = {
-        "TS": (static_manifest["version"], None),
+        "TS": (static_manifest["version"], static_digest),
         "TE": (evolved_manifest["version"], digest),
-        "MS": (static_manifest["version"], None),
+        "MS": (static_manifest["version"], static_digest),
         "ME": (evolved_manifest["version"], digest),
     }
     if args.auth_source.name != "auth.json" or not args.auth_source.is_file():
@@ -600,9 +619,10 @@ async def main() -> None:
         {
             "status": "running",
             "source_revision": source_revision,
-            "model": MODEL,
+            "model": args.model,
             "manifest": str(MANIFEST),
             "static_version": static_manifest["version"],
+            "static_digest": static_digest,
             "evolved_version": evolved_manifest["version"],
             "evolved_digest": digest,
             "schedule": [block.__dict__ for block in blocks],
@@ -622,7 +642,8 @@ async def main() -> None:
             }
             break
         outcome = await execute_block(
-            block, run_root, args.auth_source, static, evolved, versions, source_revision
+            block, run_root, args.auth_source, static, evolved, versions, source_revision,
+            args.model,
         )
         snapshot["blocks"][str(block.index)] = outcome
         write_receipt(run_root / "matrix.json", snapshot)

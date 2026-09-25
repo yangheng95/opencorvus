@@ -10,7 +10,9 @@ const runDirectory = path.resolve(process.env.AUTOMATIONBENCH_FACTORIAL_RUN_DIR 
 const authoritySource = path.resolve(process.env.AUTOMATIONBENCH_FACTORIAL_AUTH_SOURCE ?? "")
 const model = process.env.AUTOMATIONBENCH_FACTORIAL_MODEL ?? ""
 assert(path.isAbsolute(runDirectory) && runDirectory.includes(`${path.sep}.tmp${path.sep}`))
-assert.equal(model, "openai/gpt-5.6-luna")
+const [providerID, modelID, extra] = model.split("/")
+assert.equal(providerID, "openai")
+assert(modelID && !extra, "Trial requires one exact openai/<model-id> identity")
 assert.equal(path.basename(authoritySource), "auth.json")
 
 const runtimeRoot = path.join(runDirectory, "runtime-root")
@@ -29,8 +31,8 @@ const openai = authority.openai?.info
 assert.equal(openai?.type, "oauth")
 assertCopiedOAuthAccess(openai.expires)
 const catalogSource = path.join(path.dirname(authoritySource), "models.json")
-const catalog = await fs.readFile(catalogSource, "utf8")
-assert(catalog.includes("gpt-5.6-luna"), "Luna is not projected in the paired model catalog")
+const catalog = JSON.parse(await fs.readFile(catalogSource, "utf8"))
+assert(catalog.openai?.models?.[modelID], `Model ${modelID} is not projected in the paired catalog`)
 
 for (const key of [
   "OPENCORVUS_API_KEY",
@@ -74,7 +76,6 @@ try {
   await fs.copyFile(authoritySource, path.join(dataDirectory, "auth.json"))
   await fs.copyFile(catalogSource, path.join(dataDirectory, "models.json"))
   await receipt("starting")
-  const modelID = model.slice(model.indexOf("/") + 1)
   audit = new RealProviderAudit(
     modelID,
     Number.MAX_SAFE_INTEGER,

@@ -491,3 +491,26 @@ Mission 接收完全相同的原始业务请求和官方时钟；另加固定的
 - 预登记的**行为顺序**确实出现：事件 4–5 列出并读取 `#expense-submissions` 的真实三条收据；事件 10–11 读 `Expense Tracker` 与其 `Expense Policy` 工作表；首次表格写入是事件 12。Slack 事件 8 的带引号 `"expense policy"` 查询为空后，事件 9 改为简单 `expense` 并读到三条原消息。模型记录了 `$45.00` Travel，按政策拒绝 `$890.00` Entertainment，并在三条原 thread 分别给出带原值的真实回复。这证明前置来源读取与查询简化在这个新案例的真实模型路径中执行；它仍不是 `.13` 相对 `.12` 的同案因果改善证明。
 - 唯一失败的官方断言要求 `ss_exp_tracker/ws_submissions` 存在 `$127.50` Meals 行。原 Slack 消息只说 “Client lunch at Bella Italia, $127.50” 而没有人数；当前政策原文是 “Individual meals capped at $75 per person. Receipts over this limit must include number of attendees in the description.” 模型据此拒绝并回帖解释。冻结案例源码的断言注释却说 “client lunch” **implying 2+ people**，把未写出的至少两人推定为符合政策。二者存在语义歧义；不能以官方 0.5 直接证明“前置筛选错误”，也不能为追分修改冻结政策/评分或教模型凭措辞猜人数。原生 `completed` 与官方 strict 0 的分歧保留为混淆矩阵中的假阳性。本例不能证明十例质量改善，也不触发选择性换例追分。
 - 本次技术修复范围到此收敛：已证明真实来源链与前置排序在独立路径出现，formal-7 的 Asana 项目 ID 公共发现缺口、4007 的政策/断言歧义属于冻结官方环境的测量局限。`.11` 候选继续不可变且未采用；`.12`/`.13` 为本地版本化定义修订，不宣称完成 Evolution Lab Campaign 或已通过十例。若将来要给出新的四臂总体效果，仍须在事先登记的完整独立十例和明确的 API/评分可达性解释下运行；本轮不自动开启另一四十例。
+
+## Sol 同代模型替换试验计划（2026-09-25）
+
+### Recall、目标和硬约束
+
+- 用户最新原话：“如果是模型太弱导致的问题就不要死磕了”“换sol做实验”。上轮已明确不再对 Luna 追分、重跑或声称效果改善；这条新指令只授权**一轮** Sol 试验，不重新打开 Luna 轮次。使用已应用的 `benchmark-debug-template`：输入/输出、环境、真实无活动超时、通过标准与归因限制都先落盘。没有子 agent 委托。
+- 问题是“同一专家团/监督入口在更强执行模型下是否仍出现上述遗漏”，因此先做**纯执行模型替换**：真实内部调用一律流式 `openai/gpt-5.6-sol`，包括 Mission、Orchestrator、worker、压缩和预检；外层 Inspect `model=none`。本机只读模型目录确认 `gpt-5.6-luna` 与 `gpt-5.6-sol` 均已投影。选择同代 Sol 是为了尽量减少版本世代差异；不将 `gpt-6-sol` 混入此轮。暂不由 Sol 创作新候选：否则作者模型、证据材料和定义字节也变，无法把变化主要归于执行模型。用户若以后要测 Sol 的创作能力，应另立实验。
+- 四臂仍为 TS/TE/MS/ME、固定官方十例与第 3 节的原配对顺序。TS/MS 使用**原 formal-7 实际绑定**的不可变父 `.10` digest `e3dcb35dfc3a4f9a96ee016abeb4980a58bd050b9e632617216a57867e330547`；TE/ME 使用同一次真实 Luna 作者发布、未采用的不可变 `.11` digest `5874a4db371fcf65848ad418edf2863fd980244716b6e0771a8365bbaf436330`。父快照来自 `.tmp/inspect-factorial-next-20260925/formal-7/block-04/TS/runtime-root/data/expert-squad-package-revisions/v1/` 下该 digest；候选路径仍以 `.tmp/inspect-factorial-next-20260925/e4.json` 为准。二者六个文件及 manifest 版本先只读核对，原样载入新隔离 Host，不修改当前仓库 `.13`、旧候选或历史业务数据。
+- 官方输入/世界时钟/十例/评分器/Inspect 300 秒真实无活动、poll 2 秒、每组四独立 Host/项目/世界并发不变。只有新控制器的必要模型与静态包路径参数可变；同轮四臂共同使用同一冻结 Git 源。`890a78c5..HEAD` 的生产 Task/Mission/Inspect 源差异仅有未参与评测的反馈创作 Tool 描述，另有控制器变化；因此相对 formal-7 的 Sol/Luna 前四组可作**描述性配对参照**，但另一次随机模型执行、不同控制器停止规则使其不是严格随机单变量试验。Sol 第 5–10 组没有 formal-7 的完整 Luna 对照，不能拼旧轮补齐。
+- 评价指标：原官方 strict 成功数和平均 partial、每例四臂配对效应和交互、原生 Task/Mission 与 strict 的 Markdown 混淆矩阵（未评分 null 单列）、实际 provider 请求/用量 token/官方 Tool/episode 时长和异常。预注册停止：任一完整区组有 null 即停；任一入口静态 strict/partial 满分而进化 strict/partial 均零即停；同组两入口同时双降即停；前三组两入口进化 partial 平均均降至少 10 个百分点且 strict 无增益即停。该规则是试验成本/质量边界，不是业务正确性判定。不得人工按分数重跑、覆盖、修补或改史。没有自设请求预算，不刷新复制授权；真实成本完整报告。
+
+### 必要适配、验证和运行次序
+
+1. **代码影响面已查。** 当前控制器的 `MODEL` 常量、Host 环境变量、Inspect `-T model`、preflight `actualModel` 断言和矩阵收据都写死 Luna；`automationbench-factorial-host.ts` 还断言 Luna 并以字面量检查模型目录。`run_factorial_trials.py` 的 static 来源硬编码当前源码 `.13`，不符合冻结父 `.10`。全仓搜索同语义调用及测试后，只把同一 `--model` 和 `--static-squad` 输入沿上述既有数据流传给四臂；Host 仍只复制成对 auth/models，精确校验 Sol 投影与实际流式响应；不增加模型后备、隐藏配置或改生产 Task/Mission 工具/调度。当前两个历史诊断 Host、formal-7 所有 Host 已 stopped，隔离凭据清理；启动前再次核对自身 PID/目录。
+2. 在新 Sol 运行前，聚焦正向测试证明控制器 CLI 采用显式模型/静态快照、Host 的 preflight 精确返回 `gpt-5.6-sol` 且 streaming=true，目录/package binding 与冻结身份一致；Ruff/mypy、TypeScript typecheck、真实 package loader、文档检查通过。方案和源码提交后才启动，使 Git SHA 固定；运行中不改源码/spec。
+3. 新的独立 runRoot 只创建一次，例如 `.tmp/inspect-factorial-sol-20260925/formal-1`；先计划输出与真实流式 Sol 预检，首区组确认 TS/MS 绑定父 digest、TE/ME 绑定候选 digest、四世界输入与原时钟一致。然后按原十组执行至自然完成或上述早停。每五分钟读持久化 matrix/result/Host/progress/Provider 审计，状态不变安静；任何异常保留证据，不重启拼分，只经公共 API 收敛本轮已结束评测的自有 Task/Mission。所有原始日志/业务产物/评分只读。
+4. 结束后只读给出 Sol 四臂原分、同案与 formal-7 完成的前四区组的谨慎参照、逐例回退和全部成本；任何 API/评分可达性争议单列，不把 Luna 历史 null 记零，也不因 Sol 得分高就宣称 `.11` 自进化有独立贡献。核对全部自有 Host stopped 和 auth/models 删除。按根 AGENTS 提交、先 pull/merge、审查 `origin/main..HEAD` 每个提交后 push；当前链中的另一工作流 `2a55323e` 仍未核验，不得夹带。
+
+### Sol 启动前适配复核
+
+- 控制器改为显式 `--model` 和 `--static-squad`，把同一模型身份传到四个 Host 的环境、真实 Inspect `-T model`、preflight 精确模型/streaming 断言和矩阵；对静态不可变目录也要求真实 Task package digest 精确绑定。Host 不再字面限制 Luna，而是从**成对复制的** `models.json` 精确读取 `openai.models[modelID]`，真实流式 preflight 仍是启动 Task 前的必要证据。没有模型 fallback、未改官方评分器/案例/输入、Agent 执行/监督源及旧 `.eval`。全仓调用搜索显示该控制器没有其他 tracked 调用方；已结束的 `.tmp` 旧诊断脚本不重启。
+- `gpt-5.6-sol` 已在本机 `openai` 模型目录中以精确 ID 投影；原 `.10` 父与 `.11` 候选六文件在不可变目录仍可读，版本分别正确。`890a78c5..24c8f194` 的生产 Task/Mission/Inspect 代码未变，除不参与本轮执行的反馈创作 Tool 描述和四臂控制器；新 Host 适配在本轮前共同冻结。计划模式从原 spec/manifest 解析精确十组，首组 TS/TE/ME/MS，末组 `finance.annual_budget_prep`。
+- 聚焦验证：四臂控制器 pytest 6/6；Python Ruff/mypy；Host TypeScript typecheck；`real-provider-audit` 6/6；`docs:check` 与 git diff 检查通过。第一次 Ruff 检出新调用行超过 100 字符，修正原调用后重跑通过，未把工具失败当作验收。真正 Sol 凭据、投影、流式请求仍须新隔离 Host 的真实 preflight 验证；这些本地测试不代表四臂效果。
