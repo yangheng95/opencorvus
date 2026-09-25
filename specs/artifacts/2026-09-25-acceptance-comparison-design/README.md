@@ -17,6 +17,9 @@ original database/eval log.
 - [Results](results.json) retain every control, including the counterexample.
 - [Handoff design](handoff-design.md) maps the proposed information flow to current
   production primitives and states what still needs to be demonstrated.
+- [Input observation](input-observation.md) separates relational acceptance from
+  source presence and documents exact, non-content-retaining Provider evidence.
+  Its [registered text probes](input-probes.json) are audit configuration, never model input.
 
 Source pointers are labels in this prototype. It does not resolve them, verify
 complete reads, infer missing terms, choose a formula, or determine business truth.

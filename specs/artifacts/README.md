@@ -1,6 +1,7 @@
 # Artifact entry points
 
 - [Acceptance comparison design probe](2026-09-25-acceptance-comparison-design/README.md): offline contract controls and a retained counterexample; not a model evaluation or production acceptance gate.
+- [Acceptance relation and input observation](2026-09-25-acceptance-comparison-design/input-observation.md): read-only trace findings and explicit non-content-retaining input probes; no new model evaluation.
 
 - [AutomationBench ten-case automatic revision experiment](2026-09-24-automationbench-self-evolution/README.md): paired official scores for a model-authored candidate.
 

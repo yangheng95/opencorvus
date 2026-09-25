@@ -9,6 +9,8 @@ import { CredentialRedactor, RealProviderAudit, assertCopiedOAuthAccess } from "
 const runDirectory = path.resolve(process.env.AUTOMATIONBENCH_FACTORIAL_RUN_DIR ?? "")
 const authoritySource = path.resolve(process.env.AUTOMATIONBENCH_FACTORIAL_AUTH_SOURCE ?? "")
 const model = process.env.AUTOMATIONBENCH_FACTORIAL_MODEL ?? ""
+// Optional predeclared known-text probes. Only their identities and outgoing JSON positions are retained.
+const inputProbePath = process.env.AUTOMATIONBENCH_FACTORIAL_INPUT_PROBES
 assert(path.isAbsolute(runDirectory) && runDirectory.includes(`${path.sep}.tmp${path.sep}`))
 const [providerID, modelID, extra] = model.split("/")
 assert.equal(providerID, "openai")
@@ -79,8 +81,10 @@ try {
   audit = new RealProviderAudit(
     modelID,
     Number.MAX_SAFE_INTEGER,
-    () => writeFileSync(auditPath, JSON.stringify({ model, requests: audit?.requests ?? [] }, null, 2)),
+    () => writeFileSync(auditPath, JSON.stringify({ model, requests: audit?.requests ?? [],
+      ...(inputProbePath ? { inputEvidenceEnabled: true } : {}) }, null, 2)),
     { copiedOAuthExpiresAt: openai.expires },
+    inputProbePath ? { probes: JSON.parse(await fs.readFile(inputProbePath, "utf8")), redactor } : undefined,
   )
   const [
     { listenWithRecoveredServerRuntime, requireRecoveredServerRuntime },

@@ -405,3 +405,23 @@
 - 实施过程保留事实：首次registry顺序未与canonical action目录一致，立即在模块加载时失败；fixture先装Mission wake hook与已有open fixture重复，按原hook生命周期修正；旧terminal reader测试参数与旧resume文案断言因契约变化失败，已更新。恢复fixture最初只等待未决Promise，无法可靠维持隔离test host的定时器活性；改为在应用边界缩短测试租约并明确维持一个1700ms本地恢复观察窗口，不修改生产时间策略/预算。早期未完成的本地测试已精确停止；最后进程核对没有残余测试或历史实验。未把这些fixture错误说成模型/业务故障。
 - 数据与部署边界：新disposition与不可变约束修改canonical DDL。本仓库pre-0.1.0既有策略会拒绝不匹配的旧数据库；本轮只在隔离新runtime验证，**未打开、迁移、重置任何用户或旧实验数据库**。新request/outcome是不可变输入及应用回执，只有`task_acceptance_ledger`是验收状态事实源。无UI改动；无Provider调用、凭据复制或费用、新官方分数、世界、作者或候选。
 - 尚未达成：真实worker→Task→Mission反证上报、Agent选择扩展、真实worker在原Task中修复、复核与业务结算，以及自主进化收益。G10也不是Cycle3金额错误的已证修复。下一工作应从五段机制重新核对新能力解决了什么、仍需何种可区分解释的行为证据，再预登记必要的最小Luna验证；不要重复这55项当进展、继续堆提示或直接重启旧/40例benchmark。当前阶段不启动模型或官方世界。
+
+## G11实施前：关系义务丢失与可证伪的输入观察
+
+- Recall：按用户要求回到五段共同机制；本轮不启动模型/世界/作者/候选，不增加角色、业务gate或演算器。已读原始Cycle3两个verifier的`artifact_publish`完整输入、四次真实dispatch、原任务及Goal内容、当前`.13`三个角色与core、delegated-worker context/agent、continuation renderer/runner、fact-check schema、G3 handoff与原型反例，并全仓查相应调用。后续动作必须区分证据可达、实际输入、模型判断、业务效果。
+- 新的具体观察：`prt_g0VWD4qjQ001d6Og7Htl`的首份review把`pricing`列为satisfied，同时account-size unresolved；`prt_g0VWD6ETd00e8wda3MsV`的最后review把项目改成`account_size`、`standard_pricing_basis`、`latest_pricing`、`opportunity`等各自satisfied。原Goal仍要求依据size/tier/current pricing确定pricing，最终Artifact完整列了各项来源与5000实际金额，却未提供金额与这些项之间的推导/比较。不能把“各输入存在且被读过”的合取当成“目标金额满足它们之间关系”。这是报告的可见语义变化；不能据报告缺公式断言模型内部从未计算。
+- 原始约束中的关系仍保留在Mission assignment与Task Goal，未发现Host删掉这一金额关系。初始Task request是明确标注为Mission作者的assignment，并非逐字原operator全文；缺少某些原SYSTEM文字另列，不将其未经证据归为金额根因。现有core/角色早已要求独立推导和重算，当前运行中没有另一个自动执行的`llm_judge`。G10没有经过此普通continuation路径，不能据此认领修复。
+- 因果未知：源文本/重算指令是否在出站请求的正确位置，先前解释是否造成锚定，以及新鲜上下文能否形成正确方法仍未分离。只读打开旧DB（SQLite mode=ro/query_only）确认`provider_activity_request`只有id/assistant_message_id/time；descriptor存system摘要而非完整请求体。源码重建、已持久化Message和最终自述均不能追认旧wire上下文。
+- 本次最小实现针对这个观察缺口，复用现有`script/real-provider-audit.ts`的唯一fetch审计入口及隔离factorial host。默认仍只保留model/stream/status；显式提供一份预登记文本探针清单时，审计实际发送的JSON字串，记录探针ID、精确匹配的JSON pointer/UTF-8字节位置、片段长度与身份摘要及整份请求体身份摘要。**不保存prompt正文、请求头、URL认证信息或凭据**，也不把未匹配当调用失败/业务失败。所有匹配都只是已知片段的出站位置证据，不声称完整上下文已留存或远端模型理解了它。
+- 探针文本只进入隔离审计器内存，不加入任何模型消息/工具或改变原请求。已知凭据由原CredentialRedactor统一核对，探针ID/正文若含该凭据则配置明确拒绝；输出只包含无正文的定位与身份资料。已有四个e2e及native plugin调用默认不启用；只给当前隔离host增加显式文件入口，保持模型/流式/成对目录/expiry及原request预算策略不变，不新增代理或第二日志事实源。摘要只证明本次不可变出站对象/片段身份，不作为业务正确性或代码验收门槛。
+- 单一预测与局部Checker：用本地fetch接收器驱动同一实际包装器，含Unicode和重复片段的JSON请求应返回准确位置，并把原请求字节/stream/model送到接收器；Request对象与string body走同一观察函数。凭据命中应为明确配置错误，已消费清单后调用方改动清单不能改写注册对象；普通HTTP状态/原模型错误/过期复制凭据合同保持。无LLM、无外部连接，这只验证未来观察能力。
+- 下一行为验证的判别问题固定为：在预先登记的原目标与原始来源下，独立方法是否形成；前次结论/窄化派单进入前后是否改变同一关系判断。H-E比较前方法Artifact仍只是待验证交接提案，错误方法和来源遗漏仍可穿透。不能用观察器、摘要、报告字段或更多API当纠错收益。本轮先交付可用观察能力与具体关系证据；真正Luna对照须另行锁定输入、唯一改动、生产入口、版本、目录及样本数，不能在未定义可区分预测时重跑旧案例。
+
+### G11实施与验证 checkpoint
+
+- 已在原`RealProviderAudit`增加显式注册的输入观察，默认不启用；factorial host以`AUTOMATIONBENCH_FACTORIAL_INPUT_PROBES`接收预登记JSON文件。复用原fetch包装、原redactor及原provider-audit记录，无第二代理、请求体日志、Role/Tool新增或模型输入改写。已注册定义按值固定，后续调用方修改数组不影响已登记片段；精确模型、流式、复制OAuth expiry和原请求余额合同不变。
+- 每个观察记录只增加请求体身份/UTF-8长度、每个片段的身份/长度及精确JSON位置、解码后字符串的UTF-8偏移；保留最近的标准role字段及其位置，帮助区分同一文字在指令/消息/工具定义等不同位置。JSON pointer或role中已知凭据被原redactor遮盖；已知凭据出现在登记正文/ID时配置明确失败。它记录JSON结构事实，不把role字样或片段匹配自动变成语义权威，不以未匹配阻断请求。没有捕获完整wire上下文或追认旧请求。
+- [关系证据与配置说明](../../artifacts/2026-09-25-acceptance-comparison-design/input-observation.md)列出了两份原verifier Artifact及两次真实返工的精确ID；[清单](../../artifacts/2026-09-25-acceptance-comparison-design/input-probes.json)中三个片段分别在原USER、`.13` verifier原文及原事件49中核对为一次出现。这只证明登记对象有来源，**不是本轮模型收到它们的证据**，清单不加入模型消息。Handoff历史段标记为G3快照，避免把G4–G10已经完成的API边界继续当当前缺陷。
+- 聚焦`bun run test test/real-provider-audit.test.ts`为**9测试、31断言通过**。其中两个请求实际穿过原包装器并由随机端口的localhost HTTP接收器读取，证明原请求字节/stream/model与记录位置相符；分别覆盖string body、Request对象、Unicode偏移、重复片段及developer/user/root instructions位置。接收器只返回测试运输确认，不伪装Provider或模型输出。其它case为明确transport fixture，覆盖配置错误、敏感路径、既有模型/流式/expiry/余额及redactor合同。没有外部Provider调用，临时HTTP服务已停止。
+- package typecheck、docs:check（342 ops/25 groups）、diff通过。由于package配置明确排除script/test，还用临时配置扩展原tsconfig并显式包含audit、host、测试、原`src/sql.d.ts`和package的Bun类型根，完整类型检查通过。首次临时配置缺Bun类型根/Markdown ambient declarations已按原类型来源补齐；触及的原catch补类型收窄，没有修改生产行为或绕过检查。没有新增永久平行配置面。
+- 结论只到：本例可见报告用来源/字段存在替代了关系验证，且下一次可以观察预登记片段的实际出站位置。模型内部推理、锚定与能力贡献仍未分离；未修复或验真业务误验收。下一阶段应把H-E的方法形成/比较交接落实为一个可区分解释的最小行为对照，先明确唯一干预、生产入口、固定样本数和失败后的结论边界；不再添加观察功能、重复旧协议检查或无信息重抽，也不能把新增字段/Artifact当算法收益。此阶段没有新模型、官方世界、候选、作者或历史分数。
