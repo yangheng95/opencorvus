@@ -2,7 +2,7 @@
 
 - [Acceptance comparison design probe](2026-09-25-acceptance-comparison-design/README.md): offline contract controls and a retained counterexample; not a model evaluation or production acceptance gate.
 - [Acceptance relation and input observation](2026-09-25-acceptance-comparison-design/input-observation.md): read-only trace findings and explicit non-content-retaining input probes; no new model evaluation.
-- [Method handoff intervention design](2026-09-25-acceptance-comparison-design/method-handoff.md): exact un-applied verifier patch and bounded behavioral preregistration, not an evaluated candidate.
+- [Method handoff intervention design](2026-09-25-acceptance-comparison-design/method-handoff.md): exact verifier patch and bounded behavioral preregistration; source .14 implementation is not an evaluated improvement.
 
 - [AutomationBench ten-case automatic revision experiment](2026-09-24-automationbench-self-evolution/README.md): paired official scores for a model-authored candidate.
 

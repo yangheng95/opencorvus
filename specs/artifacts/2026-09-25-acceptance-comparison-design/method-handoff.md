@@ -5,7 +5,8 @@
 用户要求从全局机制定位误验收，并检验反证是否真正改变判断与行动。
 本设计承接[主记录G12](../../records/2026-09/2026-09-25-supervision-causal-iteration.md)、
 [交接调用图](handoff-design.md)及[原关系证据](input-observation.md)。
-**这是完成到可应用差异的预登记设计，尚未应用、发布包、启动运行或证明收益。**
+**本文件保留G12预登记设计。G13已在源包`.14`应用精确patch并核对原loader/权限；
+设计下文的“本轮未应用”描述G12时点，不代表当前仍未实施。行为结果以主记录和独立冻结/运行收据为准。**
 
 当前读过的生产版本为Git `64c441821f5c8635e6164a6bb1fe8790e7be7a94`；
 baseline为`builtin/automationbench 2026.09.25.13`，不可变包digest

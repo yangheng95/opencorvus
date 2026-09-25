@@ -441,3 +441,19 @@
 - 两个未来episode固定为同sales/9、同Mission入口，B1原`.13`后T1唯一干预，各一次、不替补；不将两次随机执行之差当因果效果。明确列出方法先错、producer暴露、正确差异未行动、两臂都直接正确、前置执行结果不同、未执行交接及runtime/null各自能说明什么。无自然纠错机会就不声称纠错成功，也不补跑求反例。不存在等token/盲审控制，能力与锚定仍可能未分离。
 - 设计不是已就绪启动收据：新包实际版本/digest、共同运行源码、manifest参数解析、空目录和成对目录/模型精确预检尚未冻结。本轮未访问凭据、发送模型/预检、创建世界或复用旧controller。后续可依据这个明确的单一方案实施必要的角色交接，再完成原包loader/来源身份检查与独立冻结记录；不要再从空白重写计划或新增另一项干预，运行前仍须满足预登记边界。
 - 根docs:check（342 ops/25 groups）、差异检查通过；纯spec与未应用patch，无生产代码/测试修改，未重复运行G6–G11的合同来当行为证据。原输入/Tool/世界/评分/候选保持只读，全部历史host仍已停。可靠业务纠错与进化收益尚未达成，下一实际验收必须经过真实模型/Tool/业务结果链。
+
+## G13实施前：应用已登记交接并准备独立冻结
+
+- Recall：本轮按用户已授权的G12下一步实施唯一verifier段改动，不再另写干预或扩展观察器。已核对G12精确patch、当前`.13`、generic publisher/read-ref与terminal expert_output合同、原loader/materialization和driver的launch/run/cleanup路径；没有发现需要扩大权限、改scheduler/core或制造新schema的契约。旧运行全部停止且工作区起始干净。
+- 实施范围固定为应用原patch、源manifest版本`.13`递增到`2026.09.25.14`。原不可变`.13`及全部旧记录不变；`.14`是operator登记的开发干预，不是生产evolve作者产物、性能已证候选或更优父代。无其它角色/工具/流程改变。
+- 验证先走现有AutomationBench真实package loader测试，并在新的隔离本地目录用同一loader材料化两包、比较完整文件树及manifest语义；预期仅verifier段和version不同，API权限/工作流相同。比较真实immutable资源身份有意义，不作为业务正确性门槛。因只有包内容改动不改TypeScript，不重复共享生命周期测试或增加静态prompt文案测试。
+- 验证并范围提交后，才把共同Git源、两包真实版本/digest、原manifest/Inspect配置与未使用目录写入独立运行冻结收据。当前尚未发模型预检；后续两个隔离host各自以既有成对auth/models、精确Luna流式preflight后才启动官方episode。复用原primitive、单控制器顺序B1/T1，失败按G12不替补，运行时不改冻结源码/spec。
+
+### G13实施与启动准备 checkpoint
+
+- 精确patch已应用，源包为`2026.09.25.14`。真实`ExpertSquadRegistry.loadSourcePackage`和`loadPackageRevisionSnapshot`在新隔离runtime材料化并重读两包；baseline`.13` digest仍为`9061cb18bd24f80563430abb437afb4460843cc48fb4c4a8eaa60171e6a74a8b`，treatment`.14`为`b4c645f4a90c002e83842c46d56afbb1563ee24f7a9cb215f2488a1d9d379f93`。完整六文件比较只变verifier与manifest，manifest去version后完全一致，原生产capability materializer两角色授权相同。材料化收据在`.tmp/supervision-causal-20260925/he-01-preparation/package-freeze.json`，不是安装到用户项目/进化推广。
+- 聚焦`bun run test test/automationbench-expert-squad.test.ts`为1通过、5断言，验证真实loader、三角色、官方API能力与dependency DAG。方法形成/真实选源/业务纠错仍未验证。首次临时材料化脚本把runtime与process目录设成siblings，被原隔离校验明确拒绝；按原合同改为process内child后通过，未改生产隔离。去掉临时命令的多余tsconfig override后也消除了Bun诊断噪声。
+- 原Inspect `load_cases`与`_settings`已实际解析两臂配置，原upstream固定`4a8e1061254004d9dac807054eed33fad7d1ff14`、sales/9、strict/context policy均原样；此例官方world_clock为null，明确保留unspecified，不填运行日期。未构造OfficialWorld、未调用评分器。原SYSTEM/USER投影与配置保存在`he-01-preparation/inspect-settings.json`；loopback端口1仅用于纯配置解析，真正URL由各host preflight receipt绑定。
+- 只读核对原成对auth/models存在，OAuth当时未过期且目录确实含精确Luna；不输出凭据、不刷新。本地检查不能代替真实preflight，两个host启动后仍各自按原实现验证可用性/投影/实际streaming模型。六项已登记输入观察统一用于两臂，其中新增角色标题和方法/比较原文片段；它们仅进审计器，不进模型消息。
+- 新`he-01-preparation/run_pair.py`只组织原driver的launch_host/run_inspect/settle_owned_activity/stop_host，已py_compile。controller独占创建，B1/T1各一次，每300秒存只读快照；评分失败保留，runtime/null或cleanup未达成则停止余项。cleanup需零活动、正常stopped、进程退出与两文件实际删除后才进T1。该编译只证明脚本语法，不能当运行成功。所有启动字段在提交后写入`.tmp/supervision-causal-20260925/he-01/freeze.json`，再启动唯一controller；未来事实在原receipt中保存，运行期间不更新本spec或源码。
+- 源包改动、原package loader与文档检查完成后按AGENTS提交。本次交付是待测交接实现，不是可靠纠错或自进化收益；G12的两个样本及全部反例/未知/停止规则不变。
