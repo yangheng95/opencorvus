@@ -320,19 +320,16 @@ export namespace Server {
       const { terminateCurrentProcessOwnedExecution } = await import("../engine/writer")
       terminated = await terminateCurrentProcessOwnedExecution({ reason })
       const settledExecution = terminated
-      // Session termination publishes the real terminal lifecycle occurrence.
-      // Keep protocol admission open until every current-process execution owner
-      // has emitted that fact, then fence new publications before the final drain.
-      runtimeExecutionGate.closeAdmission(["protocol_publication"])
+      // Session termination publishes its terminal lifecycle occurrence. Instance
+      // disposal can also publish terminal Question and Bus facts, so keep
+      // protocol admission open through that disposal before the final fence.
       await schedulerSettlement
-      runtimeExecutionGate.requestCancellation(["protocol_publication"], new Error(reason))
       await runtimeExecutionGate.waitForIdle(
         [
           "scheduler_event_fire",
           "scheduler_automation_fire",
           "session_wake_loop",
           "task_cancellation",
-          "protocol_publication",
           "detached_dispatch_pipeline",
         ],
         settlementInactivityTimeoutMilliseconds,
@@ -352,6 +349,9 @@ export namespace Server {
       instanceSettlementGate = Instance.acquireProcessSettlementGate()
       await instanceSettlementGate.waitForIdle(settlementInactivityTimeoutMilliseconds)
       await options.disposeInstances()
+      runtimeExecutionGate.closeAdmission(["protocol_publication"])
+      runtimeExecutionGate.requestCancellation(["protocol_publication"], new Error(reason))
+      await runtimeExecutionGate.waitForIdle(["protocol_publication"], settlementInactivityTimeoutMilliseconds)
       const databaseEffectGate = await Database.acquireEffectSettlementGate(settlementInactivityTimeoutMilliseconds)
       settlementGates.push(databaseEffectGate)
       await awaitTaskMessageProtocolBridgeIdle()

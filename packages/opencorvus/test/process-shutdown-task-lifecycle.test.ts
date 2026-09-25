@@ -8,6 +8,8 @@ import { ProtocolStore } from "@/protocol/store"
 import { Server } from "@/server/server"
 import { Session } from "@/session"
 import { SessionPromptState } from "@/session/prompt/state"
+import { Bus } from "@/bus"
+import { Question } from "@/question"
 import { Database } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -97,6 +99,36 @@ test("real listener shutdown settles a terminal Task Prompt tail and retains its
     expect(taskLifecycleProjection(task.taskID)).toEqual(before)
   } finally {
     await SessionPromptState.release(task.root.id, task.root.directory)
+    await server.stop(true)
+  }
+}, 60_000)
+
+test("real listener shutdown publishes pending Question abandonments across two Projects before protocol admission closes", async () => {
+  await using first = await memoryProject("pending-question-first")
+  await using second = await memoryProject("pending-question-second")
+  const observed: Array<{ requestID: string; origin: string }> = []
+  const requestIDs: string[] = []
+  const server = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
+  try {
+    for (const project of [first, second]) {
+      await Instance.provide({ directory: project.path, fn: async () => {
+        const root = await Session.create({ kind: "root", title: "Question shutdown" })
+        Bus.subscribe(Question.Event.Abandoned, ({ properties }) => {
+          observed.push({ requestID: properties.requestID, origin: properties.origin })
+        })
+        void Question.ask({
+          sessionID: root.id,
+          questions: [{ header: "Shutdown", question: "Which action?", options: [] }],
+          expireOnDeadline: false,
+        })
+        const pending = await Question.list()
+        expect(pending.length).toBe(1)
+        requestIDs.push(pending[0]!.id)
+      } })
+    }
+    await server.stop(true)
+    expect(observed).toEqual(requestIDs.map((requestID) => ({ requestID, origin: "infrastructure" })))
+  } finally {
     await server.stop(true)
   }
 }, 60_000)
