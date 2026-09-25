@@ -43,6 +43,9 @@ original database/eval log.
 - [Repair 01 results](repair-01-results.md): the real same-Task evidence continuation
   ended blocked with the original wrong amount and explanation unchanged; method
   publication did not establish method correctness. Includes the retained startup failure.
+- [Cross-trajectory mechanism decision](mechanism-decision.md): separates established
+  protocol repairs from unresolved semantic judgment and bounds a possible change to
+  when expectations are formed; no implementation or model run is authorized by it.
 
 Source pointers are labels in this prototype. It does not resolve them, verify
 complete reads, infer missing terms, choose a formula, or determine business truth.

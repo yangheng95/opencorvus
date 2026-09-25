@@ -581,3 +581,10 @@
 - 全45业务事件为5 api_search+40 GET，完整最终state与初态逐值相同；目标ID/名称/Account/On Hold和所有无关事实保持，但金额20,000与原580字节错误description未修。初态原Sheet仍有base40,000/Gold10%，登记金额关系54,000仅在评估侧。健康政策“when creating new opportunities…until cases resolved”的既有记录适用性歧义单列，不拿它证明整项不可完成、不重判旧官方分。该歧义不消除确定的价格修复缺失。
 - 原116请求/116usage全部Luna流式HTTP200，4,867,281tokens，106全Tool（104completed/2failed）/45业务事件，sample1061.288秒。两次Tool失败分别为非terminal settlement Message身份与旧Turn locator，实际错误保留，不假称runtime失败或价格根因。加原零业务启动失败2请求/29,219tokens，共118请求/4,896,500tokens。全成本、分角色、原生/外侧矩阵见结果文档；原eval/DB只读派生在`repair-01-recovery/audit/`，未改分或拼历史。
 - 本次反证限定为：可审查方法/引用与同Task后续调查不足以保证关系判断和业务纠错。H-E单段改写没有得到可宣称的纠错收益，不再同义改写或抽样；`.14`不晋升/推广。整体可靠纠错/进化收益未完成；当前没有本轮证据支持的新生产补丁或下一次模型登记。先交付共同机制结论与未识别项，后续新干预必须有不同的可检验因果机制，不能用再加API或局部通过替代。
+
+## G22：跨轨迹机制结论与研究方向边界
+
+- Recall：按用户要求收敛Cycle3、H-E B1/T1、G21四条轨迹，区分交付、纠错、优化与协议收敛；不再重复提取原数据、不启动模型/世界/候选。起始4396553c/工作区干净。已读五段机制图、四轨迹已交付报告、G4–G10记录与当前task-control-plane；沿现有manifest、scheduler/verifier prompt、SDK authoring schema、workflow-binding/facts、dispatch-agent-tool及workflow-node-occurrence-authority测试审查下一假设的表达边界。
+- 新机制交付见[跨轨迹决策](../../artifacts/2026-09-25-acceptance-comparison-design/mechanism-decision.md)。共同可观察问题为原目标关系退化成错误的局部充分条件，并跨判断/派单/结算保持；不能将其当模型内部唯一因果根因。Cycle3否定“只补来源即可”；G21否定“方法Artifact与后续调查足以纠错”；T1只提供正常交付反例，不能用来估计H-E效果。G4–G10局部合同保留，不扩大成业务验证；G1仍无真实完整Campaign收益证据。
+- 一个不同但未验证的候选是“预期形成前移到执行者开始前”。当前`.14`manifest和scheduler明确executor→verifier；仅在同一后验verifier里再说先推导不能改变新producer结论已存在的事实。当前prompt-profile-resolver明确workflow图由真实Agent可见决定遵守、不是Host硬gate；SDK/绑定分别有node_id与agent_id，已有同一agent绑定不同节点/Session的局部合同。故可讨论原verifier的前置方法节点→原executor→原verifier复核节点，复用角色/能力/Artifact，不增加Host语义门；但它改变工作流、节点出现次数、上下文和成本，不能称原H-E单段或只改一行。
+- 本轮没有创建该图、包、fixture、Task或运行登记；既有错误业务文本仍可在前置节点被读到，不能保证盲审，也不能用Host隐藏它。候选仅能检验“没有新executor报告时方法是否仍错”等条件，不能一次分离固有来源选择/旧文本锚定/能力的全部贡献。后续需要明确是否转向这种执行顺序研究；当前结束H-E后验方法记录的自动试错路径，保留整体未达成状态。无运行期间不继续五分钟查旧日志或制造重复报告。
