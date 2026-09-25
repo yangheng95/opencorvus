@@ -5,6 +5,7 @@
 - [Method handoff intervention design](2026-09-25-acceptance-comparison-design/method-handoff.md): exact verifier patch and bounded behavioral preregistration; source .14 implementation is not an evaluated improvement.
 - [H-E two-episode results](2026-09-25-acceptance-comparison-design/he-01-results.md): original scores/costs and real handoff chronology; no demonstrated causal correction benefit.
 - [Archived review input boundary](2026-09-25-acceptance-comparison-design/archive-review-ingress.md): fixed historical material, real local attachment checks and exact native projection limits; no model replay.
+- [Fixed-state business repair design](2026-09-25-acceptance-comparison-design/fixed-state-repair-design.md): same business state versus same verifier input, original API/clock/permission boundaries and a proposed development repair diagnostic; no new world or model.
 
 - [AutomationBench ten-case automatic revision experiment](2026-09-24-automationbench-self-evolution/README.md): paired official scores for a model-authored candidate.
 

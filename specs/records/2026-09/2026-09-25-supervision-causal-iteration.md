@@ -484,3 +484,19 @@
 - [入口审计](../../artifacts/2026-09-25-acceptance-comparison-design/archive-review-ingress.md)给出中性附件、真实worker读取、正式跨Task移交与MCP投影的边界。停止“只上传归档就能原权限直跑verifier”的方案；这是前提不满足，不是新增Host修复理由，也不证明所有同起点设计都不可能。不能把另一角色/无工具问答仍叫原生`.13/.14`对照。
 - 主验收仍为真实业务纠错。当前归档包只支持有限的依据充分性审计，不能从B1未读到的价表中凭空要求正确总价。若继续同起点研究，下一设计应优先审查既有业务引擎能否支持明确标注的开发fixture和原真实API，而不是把只读文字判断当完整交付；不能改旧官方世界/原分、冒充旧参与者、增加权限或立即创建新world/model。若该边界不能合法满足，应记录停止该方案，不以更多随机样本替代。当前无已登记的新运行。
 - 并行工作区事实：本地Checker收据写于11:58:38 UTC；随后12:03:10出现非本轮操作产生的提交`ba89e5cb`（Freeze AutomationBench business clock across input world and replay），HEAD从`a550f822`前进。该提交还包含本轮已写的根spec索引链接；保留其已提交状态，不回退/改写。新的benchmark源不能冒充H-E原`fe233643`；未来运行须先核对更新后的Inspect架构/时钟契约并重新登记，不改历史分数。此提交的授权/验证归属未在本线程核验，完整待推送集合需连同原`2a55323e`一起审查；当前继续保留推送阻塞。
+
+## G16实施前：固定业务状态与固定监督输入的识别边界
+
+- Recall：本轮从`e90bc09b`继续G15，只读核对新的时钟记录/Inspect架构、官方Case/WorldState/MCP、通用solver的sample setup、原包executor→verifier依赖和原API更新实现。产物限于具体设计与只读结构收据，不创建世界、Task、模型、服务器、包或凭据，不改变旧数据/评分。起始工作区干净，按路径核对未见原实验运行；不操作旧PID。
+- 现象与直接原因：H-E两臂executor交付不同，上传归档又不能满足原MCP投影。现有`load_cases`只认原官方case；`rescore`恢复snapshot用于官方评分，不是公开活动世界入口；`sample_environment`固定创建官方世界并自动评分。不能把派生初态塞进同一官方身份，也不能用归档输出充当当前API结果。
+- 新的共享数据风险：B1 snapshot含全部48个服务字段，但原`meta.allowed_services`只有gmail/google_drive/google_sheets/salesforce；`OfficialWorld`把initial_state键重新交给`compute_allowed_services`，因此直接拿完整snapshot作seed会扩大服务范围。B1原业务记录description还保留错误公式，不能为了“独立”删掉它。新的时钟修复只冻结世界业务时间；Salesforce update仍由上游写入实际wall-clock修改时间，应与业务时间、原数据和运行时间分别记录。
+- 本轮单一方案：明确标记的“固定既有错误状态的业务返工”开发诊断。评估者保留B1完整状态/原身份与外侧真值，模型经原四个API工具自行发现来源并修改现有记录；新Task不承接旧participant身份。该方案可回答整条业务修复链，不能单独识别verifier段的因果收益：原executor仍先执行。保持相同verifier输入还要求改变流程/角色入口，本轮不作该改动、不添加gate或假producer。
+- 落盘前补齐原helper对权限派生的只读检查、原快照结构/时间/来源边界和原API路由证据；不得构造WorldState/OfficialWorld、重评分或发API。最终设计须给出确切数据流、operator新业务请求、修改/保持义务、共同适配及未实现部分、成功/失败解释和未来本地Checker合同。仅文档与结构收据不称可运行行为验收；未实现和未预登记部分保持关闭。
+
+### G16设计交付与识别结论
+
+- 已完成[固定业务状态返工设计](../../artifacts/2026-09-25-acceptance-comparison-design/fixed-state-repair-design.md)：明确源快照/归档作者/当前入口/当前真实Tool与评估侧真值的分界，提供不含来源ID/答案的新业务请求、修改与保持义务、未来真实MCP Checker和停止条件。只选择整条业务返工链的诊断，不把归档问答作为业务成功，也不再提出无法固定verifier输入的H-E两臂。
+- 原`compute_allowed_services(snapshot.world, [], [])`本轮真实纯函数结果为48服务，原B1允许列表为4；B1业务clock为`2026-09-25T11:15:25.718221Z`，Sheets跟踪为空。没有World构造器、API、Provider、scorer或服务器调用。该结果写入设计表，只证明不可直接把展开snapshot当seed，不是新生产故障或已实现的fixture导入器。
+- 正式API源码存在Opportunity PATCH/GET路径，原MCP、solver的sample_setup及Mission请求可复用。必要适配应只分离原唯一API运输/事件/状态组件与官方评分，开发入口明确新身份并恢复原权限/clock；不能借OfficialWorld官方标签评分、扩大4服务或删除原错误description。当前仅设计，未创建fixture文件、未改生产代码/包/权限。
+- 识别边界已收敛：相同初态仍允许executor先改变业务值及交接内容，因此它不能保证verifier见到相同待审结果或排除锚定。保留原工作流时停止“固定verifier完整输入”的这个方案；未来固定初态若成功，只能按真实轨迹区分executor直接修复、监督触发返工、误accept或未知，不能外推进化收益。未实施部分及任何新模型诊断仍须单独方案/验证/冻结，不因本设计提交自动启动。
+- 根`docs:check`通过（342 ops/25 groups），`git diff --check`通过；本轮没有生产行为改动，未运行旧模型/协议测试或UI测试。新clock提交已按源码和当前架构读到，但不重算历史，也未在本线程独立核验其外部授权/验收。完整待推送仍须检查原`2a55323e`及`ba89e5cb`归属；本地设计交付不解除推送阻塞。业务可靠纠错和进化收益仍未达成。

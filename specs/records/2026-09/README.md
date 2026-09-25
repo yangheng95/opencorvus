@@ -5,6 +5,7 @@
 - [Supervision causal iteration](2026-09-25-supervision-causal-iteration.md)
 
 - [Acceptance comparison design probe](../../artifacts/2026-09-25-acceptance-comparison-design/README.md)
+- [Fixed-state business repair design](../../artifacts/2026-09-25-acceptance-comparison-design/fixed-state-repair-design.md)
 
 - [Luna Mission/Task factorial trials](2026-09-24-luna-mission-task-factorial-trials.md)
 

@@ -31,6 +31,10 @@ original database/eval log.
   [fixed historical input](archive-review-input.json) separate neutral copied
   material from current Task authority. Local storage works; unchanged verifier
   projection still requires the real declared MCP service. No model run was made.
+- [Fixed-state business repair design](fixed-state-repair-design.md) separates a
+  reproducible business starting state from identical verifier input, records the
+  four-to-48-service seed conversion hazard, and bounds a proposed real-API repair
+  diagnostic. No new world or model was created.
 
 Source pointers are labels in this prototype. It does not resolve them, verify
 complete reads, infer missing terms, choose a formula, or determine business truth.
