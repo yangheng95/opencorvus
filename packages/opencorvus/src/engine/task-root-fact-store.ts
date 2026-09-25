@@ -1,3 +1,5 @@
+import { MissionAcceptanceGapIntegrityError } from "@/mission/acceptance-ledger"
+import { applyMissionAcceptanceExtensionAtLease, readMissionAcceptanceExtensionOutcome } from "@/mission/acceptance-extension"
 import { Identifier } from "@/id/id"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import {
@@ -340,7 +342,17 @@ export function taskRootIngressFactsInTransaction(
     taskID: ingress.task_id,
     ingressID: ingress.id,
   })
+  let extension: ReturnType<typeof readMissionAcceptanceExtensionOutcome>
+  try {
+    extension = readMissionAcceptanceExtensionOutcome(db, ingress.task_id, ingressID)
+  } catch (error) {
+    if (!(error instanceof MissionAcceptanceGapIntegrityError)) throw error
+    integrityViolation = { message: error.message }
+  }
   return {
+    ...(extension?.outcome.result.kind === "rejected"
+      ? { inputRejected: { evidenceIDs: [extension.artifactID] } }
+      : {}),
     ...(integrityViolation ? { integrityViolation } : {}),
     ingress: {
       id: ingress.id,
@@ -465,6 +477,9 @@ export function acquireTaskRootIngressLease(input: {
         ),
       }
     }
+    const application = applyMissionAcceptanceExtensionAtLease(db, input.ingressID, acquired.lease.id, input.now)
+    if (application?.outcome.result.kind === "rejected")
+      return { acquired: false, projection: { state: "input_rejected", evidenceIDs: [application.artifactID] } }
     return { acquired: true, activationID: acquired.lease.id, expiresAt: acquired.lease.expires_at }
   })
 }

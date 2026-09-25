@@ -49,6 +49,8 @@ export const ENGINE_ARTIFACT_KINDS = [
   "dispatch_delivery_disposition",
   "task_root_ingress_disposition",
   "mission_acceptance_resume_receipt",
+  "mission_acceptance_extension_request",
+  "mission_acceptance_extension_outcome",
   "task_acceptance_ledger",
   "task_checkpoint_settlement",
   "task_auxiliary_settlement",

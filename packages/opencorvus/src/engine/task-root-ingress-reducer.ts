@@ -91,6 +91,7 @@ export type TaskRootIngressFacts = {
   /** Immutable operator decision that this broken occurrence will never run.
    * Other disposition kinds are already derivable from their immutable facts. */
   operatorAbandoned?: { evidenceIDs: readonly string[] }
+  inputRejected?: { evidenceIDs: readonly string[] }
 }
 
 /**
@@ -122,6 +123,7 @@ export type TaskRootIngressProjection =
   | { state: "terminal_inapplicable"; boundary: "cancelled" | "closed" | "reopened" | "deleted" }
   | { state: "resolved"; decisionIDs: readonly string[] }
   | { state: "operator_abandoned"; evidenceIDs: readonly string[] }
+  | { state: "input_rejected"; evidenceIDs: readonly string[] }
   | { state: "leased"; activationID: string; ownerOccurrenceID: string; expiresAt: number }
   | { state: "reconcile_required"; requestIDs: readonly string[] }
   | { state: "waiting"; interactionID: string; resumeAt?: number }
@@ -151,7 +153,8 @@ export function taskRootIngressReleasesHeadOfLine(projection: TaskRootIngressPro
     projection.state === "resolved" ||
     projection.state === "terminal_inapplicable" ||
     projection.state === "exhausted" ||
-    projection.state === "operator_abandoned"
+    projection.state === "operator_abandoned" ||
+    projection.state === "input_rejected"
   )
 }
 
@@ -309,6 +312,7 @@ export function classifyTaskRootIngressWake(
     case "resolved":
     case "terminal_inapplicable":
     case "operator_abandoned":
+    case "input_rejected":
       return { class: "absorbing" }
     case "leased":
       return finiteWake(projection.expiresAt, absoluteDeadline)
@@ -352,6 +356,7 @@ export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: num
     return { state: "operator_abandoned", evidenceIDs: facts.operatorAbandoned.evidenceIDs }
   }
   if (facts.integrityViolation) return { state: "host_fault", reason: "evidence_violation" }
+  if (facts.inputRejected) return { state: "input_rejected", evidenceIDs: facts.inputRejected.evidenceIDs }
   const fault = hostFault(facts)
   if (fault) return { state: "host_fault", reason: fault }
 

@@ -99,7 +99,7 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import { isDeepStrictEqual } from "node:util"
 import { createHash } from "node:crypto"
 import { canonicalJSONValue } from "@/util/canonical-digest"
-import type { OrchestratorEvent } from "./event"
+import { missionAcceptanceRepairForEvent, type OrchestratorEvent } from "./event"
 import type { TerminalConversationAuthority } from "./terminal-conversation-authority"
 import type { OrchestratorTaskErrorEnvelope } from "./error-envelope"
 import { assertTaskRootSessionLineage, taskOrchestratorSession } from "./task-session"
@@ -497,7 +497,7 @@ export namespace Orchestrator {
           signal: executionSignal,
           dispatchAgents: schedulerDispatchAgents,
           rootMessage: event?.rootMessage,
-          missionAcceptanceResume: event?.missionAcceptanceResume,
+          missionAcceptanceRepair: missionAcceptanceRepairForEvent(event),
           terminalConversationAuthority,
         })
       const materializeProjectedTool = async (toolID: string) => {
@@ -873,15 +873,15 @@ export namespace Orchestrator {
           SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
           runtimeWakeArmed = true
         }
-        if (event?.missionAcceptanceResume) {
+        if (missionAcceptanceRepairForEvent(event)) {
           if (!currentControlMessage) {
             throw new Error(`Mission acceptance resume has no current Orchestrator control Message.`)
           }
           const repair = currentTaskAcceptanceRepair(taskID)
           if (
             !repair ||
-            repair.artifactID !== event.missionAcceptanceResume.acceptanceLedgerRevisionArtifactID ||
-            repair.revision.gap.gap_id !== event.missionAcceptanceResume.acceptanceGap.gap_id
+            repair.artifactID !== missionAcceptanceRepairForEvent(event)!.acceptanceLedgerRevisionArtifactID ||
+            repair.revision.gap.gap_id !== missionAcceptanceRepairForEvent(event)!.acceptanceGap.gap_id
           ) {
             throw new Error(`Mission acceptance resume does not match the current Task acceptance ledger.`)
           }
@@ -1253,15 +1253,15 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
     }
   }
 
-  if (event?.missionAcceptanceResume) {
+  if (missionAcceptanceRepairForEvent(event)) {
     currentIngressCount += 1
-    const resume = event.missionAcceptanceResume
+    const resume = missionAcceptanceRepairForEvent(event)!
     lines.push(
-      `Current missionAcceptanceResume: mission_id=${resume.missionID}; mission_session_id=${resume.missionSessionID}; ` +
+      `Current Mission acceptance ${resume.mode}: mission_id=${resume.missionID}; mission_session_id=${resume.missionSessionID}; ` +
         `message_id=${resume.messageID}; reviewed_terminal_event=${resume.reviewedTerminalLifecycleReference.terminalEventID}; ` +
         `acceptance_ledger_revision_artifact_id=${resume.acceptanceLedgerRevisionArtifactID}; ` +
         `acceptance_gap=${JSON.stringify(resume.acceptanceGap)}. ` +
-        `This exact Mission-authored acceptance gap opened a new non-terminal execution occurrence for the same Task. Use the real Message and canonical ledger identified above. ${renderAcceptanceRepairEvidenceGuidance()} Continue existing responsible or verifying nodes in their original lineage; a required node of the same selected virtual workflow that has never committed an occurrence uses its initial Turn. Every such Turn names the current gap and its scoped criteria. Because this acceptance resume opened a non-terminal repair occurrence, no_action alone cannot settle it: consume this gap through the corresponding initial or continuation Turn, or make the evidence-backed complete/fail lifecycle decision when current evidence proves closure or irreducible force majeure. The Host does not prescribe a worker, verdict, or completion outcome.`,
+        `${resume.mode === "resume" ? "This Mission gap opened a new non-terminal Task execution." : "This Mission extension added obligations in the current Task execution; all prior open grants remain unchanged."} Use the real Message and canonical ledger identified above. ${renderAcceptanceRepairEvidenceGuidance()} Continue existing responsible or verifying nodes in their original lineage; a required node of the same selected virtual workflow that has never committed an occurrence uses its initial Turn. Every such Turn names the current gap and its scoped criteria. A current-input no_action receipt cannot discharge these Task obligations: consume this gap through the corresponding initial or continuation Turn, or make the evidence-backed complete/fail lifecycle decision when current evidence proves closure or irreducible force majeure. The Host does not prescribe a worker, verdict, or completion outcome.`,
       renderCurrentOccurrenceDecisionObligation(),
     )
   }
@@ -1470,7 +1470,7 @@ export function isCurrentWakeIngress(event?: OrchestratorEvent): boolean {
   return Boolean(
     event?.taskCreation ||
       event?.rootMessage ||
-      event?.missionAcceptanceResume ||
+      missionAcceptanceRepairForEvent(event) ||
       event?.coordinationRequest ||
       event?.taskWaitActivity ||
       event?.taskWaitWake ||
@@ -1782,16 +1782,16 @@ async function buildSystemParts(
     }
     ctx.push("")
   }
-  if (event?.missionAcceptanceResume) {
-    ctx.push("## Current Mission Acceptance Resume")
+  if (missionAcceptanceRepairForEvent(event)) {
+    ctx.push("## Current Mission Acceptance Repair")
     ctx.push(
-      `- message_id=${event.missionAcceptanceResume.messageID}; mission_id=${event.missionAcceptanceResume.missionID}`,
+      `- message_id=${missionAcceptanceRepairForEvent(event)!.messageID}; mission_id=${missionAcceptanceRepairForEvent(event)!.missionID}`,
     )
     ctx.push(
       "- Read the exact visible Mission message before deciding. This is a current same-Task repair authority tied to the reviewed terminal occurrence and evidence locators shown in Wake Provenance.",
     )
     ctx.push(
-      "- This resume opened a non-terminal repair occurrence. Do not use no_action as its sole decision; dispatch the responsible existing lineage, or record the evidence-backed complete/fail lifecycle decision when no further physical progress authority remains.",
+      "- The canonical repair ledger remains the Task obligation; an input receipt alone does not discharge it; dispatch the responsible existing lineage, or record the evidence-backed complete/fail lifecycle decision when no further physical progress authority remains.",
     )
     ctx.push("")
   }

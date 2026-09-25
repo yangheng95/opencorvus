@@ -35,6 +35,7 @@ const TaskRootIngressDispositionBaseSchema = z
   .strict()
 
 const TaskRootIngressDispositionPayloadSchema = z.discriminatedUnion("disposition", [
+  TaskRootIngressDispositionBaseSchema.extend({ disposition: z.literal("input_rejected") }).strict(),
   TaskRootIngressDispositionBaseSchema.extend({
     disposition: z.literal("resolved"),
     decision_occurrence: TaskRootDecisionOccurrenceSchema,
@@ -97,7 +98,7 @@ export function recordTaskRootIngressDispositionInTransaction(
     now: number
   } & (
     | { disposition: "resolved"; decisionOccurrence: TaskRootDecisionOccurrence }
-    | { disposition: "terminal_inapplicable" | "exhausted" | "operator_abandoned" }
+    | { disposition: "terminal_inapplicable" | "exhausted" | "operator_abandoned" | "input_rejected" }
   ),
 ): string {
   const evidenceIDs = [...new Set(input.evidenceIDs)].toSorted()

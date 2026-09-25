@@ -24,18 +24,19 @@ export function authorizedTaskRootMessagesForWake(input: {
     messageID: string
     kind: TaskRootMessageKind
   }
-  missionAcceptanceResume?: {
+  missionAcceptanceRepair?: {
     messageID: string
+    mode?: "resume" | "extension"
   }
 }): Array<{ messageID: string; kind: TaskRootMessageKind; expectedSource?: string }> {
   return [
     ...(input.rootMessage ? [input.rootMessage] : []),
-    ...(input.missionAcceptanceResume
+    ...(input.missionAcceptanceRepair
       ? [
           {
-            messageID: input.missionAcceptanceResume.messageID,
+            messageID: input.missionAcceptanceRepair.messageID,
             kind: "mission" as const,
-            expectedSource: "mission.acceptance_resume",
+            expectedSource: input.missionAcceptanceRepair.mode === "extension" ? "mission.acceptance_extension" : "mission.acceptance_resume",
           },
         ]
       : []),

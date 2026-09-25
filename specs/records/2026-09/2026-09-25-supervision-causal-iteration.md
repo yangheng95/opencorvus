@@ -372,3 +372,36 @@
 - 该测试使用显式Session/Tool请求fixture驱动真实代码，不是Provider输出或业务checker；竞争driver的liveness callback是测试输入，只验证FIFO拒绝路径，不能宣称已取得真实跨进程owner。当前尚未把Mission amendment写入这些输入，也未验证请求应用/CAS业务结算。首次运行因为将可复用API返回对象直接交给Bun非对称matcher，后续读到`ExpectAny`而失败；已对断言使用独立标量快照，未改生产租约代码。
 - 聚焦结果：`mission-active-repair-boundary`3通过/38断言，`task-root-input-lease-boundary`1通过/7断言，`no-action-tool`1通过/8断言；合计**5通过、53断言**。package typecheck通过。没有新模型请求、凭据、官方世界、候选或旧数据修改，隔离Task均公共收尾。
 - 仍未交付的核心是active Mission修订的合法生效，不是再次证明FIFO或另跑低分案例。下一方案必须明确请求接收与应用两类事实，以及先行完成/取消、ledger CAS失配的真实结果；不能将普通no_action结算当修改ledger。已有输入串行链可以复用，业务语义决定继续属于Agent。需要运行中改变worker授权时必须有实际协调回执，不能在它未接收新输入时把latest revision当已遵守。业务自主纠错/收益均仍未验证。
+
+## G10实施前：同一执行轮次中的追加返工义务
+
+- Recall：用户授权继续全局机制修复，要求推进真实可用的active修订，不再用局部通过冒充业务根治。本次只本地协议实现与明确fixture驱动的生产检查；无Provider/官方世界/作者/候选，全部历史只读。已读G6–G9、handoff设计、ledger、Task API、Panel读取凭证、durable ingress source/delivery/reducer/fact-store/disposition、root/worker检查点与终态工具。当前唯一ledger仍为`task_acceptance_ledger`。
+- 现象与根因：所属Mission已能读active反证，但现有resume只授权真实终态开启下一epoch；后台修改latest会绕过当前root输入及已固定的worker descriptor。Promise链不是执行租约，G9已证明真正FIFO租约边界。此前修复分别解决观察、集合表达、typed恢复及输入结算，均没有提供活动请求的合法生效路径。
+- 单一最小契约命名为“追加返工义务”：保持Task epoch，保留所有既有open项的完整授权；允许有新反证的accepted项重新open/stale及新增open项，且至少新增一个open义务。任意修改/撤销现有open授权不属于此操作，仍须真实协调和执行结算。这样旧worker的不可变descriptor仍只拥有原有效子集；不会以latest代替它实际收到的输入。
+- Mission原始请求、当前active观察、精确base ledger与完整read evidence经现有Panel/公共服务进入真实Mission Message和原durable ingress；接收回执明确pending，不称应用成功。请求是不可变输入，非第二ledger。取得原root lease后，在同一数据库事务中检查epoch/CAS并追加唯一ledger；Task不终结、不重开。应用结果保留可读原请求/结果关联。精确Tool重放沿同一请求，不再次写入。
+- 排队中旧CAS是正常结构冲突：必须产生明确的不可变拒绝结果并释放该输入的FIFO位置，不能伪造assistant决定、host_fault或业务失败。先行完成/取消/新epoch沿现有terminal_inapplicable边界，不能偷偷复活。来源损坏仍为原integrity故障。成功应用后从请求和指定ledger重建typed输入、当前工具及checkpoint；当前在途root不会看到后台变化。
+- 横向影响：Task/Mission归属、Project admission及取消仍由原事实核验；正常/恢复扫描使用同一lease和loader；同项目不同Task以及跨项目无共享范围；独立Session和普通operator/scheduler消息不新增权限。formal导入/complete/block/resume继续要求准确终态。现有root completion closure不是输入租约，须验证先行终态使队列请求不适用。无UI或外部执行工具权限变化。
+- 可证伪预测与Checker：公共resume建立epoch2、A accepted/B open；真实root lease持有期间Mission提交A反证追加请求，立即持久化但ledger仍r1；旧输入以真实Tool结果结算后请求在原lease边界应用r2，A stale/open、B完全原样、epoch2，并进入实际runner typed输入。同base第二请求明确CAS拒绝；重放保持同请求/r2；先行取消明确不适用；旧descriptor引用仍读原revision。使用隔离runtime/真实公共API与生产Tool返回，模型loop显式hook替代，不能宣称LLM自主纠错。必要新错误合同、恢复及多项目检查按实际影响覆盖。
+- 竞争解释与交付限制：这项修复只证明读到反证后的授权与输入可达性，不证明Agent会推导正确公式、提出有效反证或修好Cycle3；Cycle3从未Mission resume。若实现发现租约不能提供所需原子性，应更正此方案而不是加Host语义流程门；本地合同通过后仍需另行预登记真实行为验证。
+
+### G10实施与公共Tool链验证 checkpoint
+
+- 新增Mission专属`panel_extend_task_acceptance`及公共`EngineService.extendMissionTaskAcceptance`。复用原query/catalog/read、同一gap materializer、真实Mission Message与durable ingress；active read-ref按精确观察聚合完整字节，原terminal消费也改用同一观察解析函数，未保留并行reader。原`resume_task`仍只处理completed/failed。模型可见声明、Mission core、当前Panel与Task-control架构已同步；无外部执行工具或角色扩权。
+- 接收事务只发布不可变request和真实输入，返回pending。原`acquireTaskRootIngressLease`成功取得唯一当前租约的事务内验证epoch、opened event、base ledger和scope growth，追加原单一ledger并记录不可变outcome。新模块再次核对准确live lease。允许新增open项或用新反证重开accepted；既有open项须完整相同，其在途descriptor与授权不变。任意撤销/改写正在执行的open项不在此能力范围内，仍需真实协调及结算。
+- CAS失配产生`ledger_conflict`拒绝outcome，原reducer投影`input_rejected`；数据库disposition合同要求其指向同Task/ingress的真实request/outcome。该输入随即释放FIFO并继续后继输入，不写assistant决定、Task failed或Host fault。先行完成/取消仍由原lifecycle使输入terminal_inapplicable。request/outcome有数据库不可变约束；重复与并发重复调用返回同一request，竞争事务自己的Message回滚，不重复应用。
+- 正常激活及失联后恢复均从原request、Message与指定ledger恢复`missionAcceptanceExtension`；根Agent使用同一repair投影构造授权、工具和checkpoint，同时保留resume/extension的真实来源区别。原义务与账本保持Agent语义，不把结构检查当业务验收。request接收、账本应用、Agent实际消费、业务修正是不同事实，现有Artifact目录显示前两种事实，不宣称它们自动证明后两种。
+
+| 本轮检查 | 实际结果 | 证明范围 |
+| --- | --- | --- |
+| 真正Panel query→catalog→逐份完整read→extend | Host实际生成active引用/read-ref和pending请求；未注入手写Tool成功输出 | 显式脚本化Mission Session/Tool请求，生产Tool执行，无Provider |
+| root旧输入持lease时请求排队 | r1保持；原输入用实际no_action返回结算后，同epoch2应用r2，A stale/open、B原样 | 公共API、真实事务/租约/reconciler，root模型loop显式hook替代 |
+| 同base第二请求、并发精确重放 | 同一重复request；旧CAS明确rejected，后续operator输入实际激活 | 冲突/replay/FIFO数据合同，不是业务失败 |
+| 原请求篡改、异Mission、旧epoch、改写open B | 分别得到数据库不可变错误、归属错误、精确观察变化错误、范围保持错误 | 真实生产writer/API错误合同 |
+| 应用后执行丢失再恢复 | 测试driver在第一次应用后的runner入口结束而不制造决定；有限租约后恢复第二次激活，仍同r2/原request | 失联模拟+实际恢复扫描；不是操作系统进程重启或真实LLM |
+| 已排队请求遇先行completed/cancelled | application明确inapplicable；原r2保持，原ingress为对应closed/cancelled边界 | 两个独立隔离场景，完成为预登记本地生产terminal writer前提；取消为公共API |
+| 原resume/worker/checkpoint/多项目控制路径 | 聚焦现有合同通过 | 泛化共享路径检查；没有运行真正worker反证上报或新的多项目模型实验 |
+
+- 最终有效结果合计**55测试、397断言通过**：extension 2/50、Panel terminal authority 7/50、read facts 1/8、Mission root message 2/19、input lease 1/7、active repair 3/38、acceptance delta 17/38、resume provenance 2/32、control reconciliation 12/49、scheduler Task-root 8/106。package typecheck与docs:check（342 ops/25 groups）通过。触及的旧reader签名及旧文案断言已更新为当前合同，没有为旧测试保留兼容路径。
+- 实施过程保留事实：首次registry顺序未与canonical action目录一致，立即在模块加载时失败；fixture先装Mission wake hook与已有open fixture重复，按原hook生命周期修正；旧terminal reader测试参数与旧resume文案断言因契约变化失败，已更新。恢复fixture最初只等待未决Promise，无法可靠维持隔离test host的定时器活性；改为在应用边界缩短测试租约并明确维持一个1700ms本地恢复观察窗口，不修改生产时间策略/预算。早期未完成的本地测试已精确停止；最后进程核对没有残余测试或历史实验。未把这些fixture错误说成模型/业务故障。
+- 数据与部署边界：新disposition与不可变约束修改canonical DDL。本仓库pre-0.1.0既有策略会拒绝不匹配的旧数据库；本轮只在隔离新runtime验证，**未打开、迁移、重置任何用户或旧实验数据库**。新request/outcome是不可变输入及应用回执，只有`task_acceptance_ledger`是验收状态事实源。无UI改动；无Provider调用、凭据复制或费用、新官方分数、世界、作者或候选。
+- 尚未达成：真实worker→Task→Mission反证上报、Agent选择扩展、真实worker在原Task中修复、复核与业务结算，以及自主进化收益。G10也不是Cycle3金额错误的已证修复。下一工作应从五段机制重新核对新能力解决了什么、仍需何种可区分解释的行为证据，再预登记必要的最小Luna验证；不要重复这55项当进展、继续堆提示或直接重启旧/40例benchmark。当前阶段不启动模型或官方世界。

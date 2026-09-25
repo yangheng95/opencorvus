@@ -1,3 +1,5 @@
+import { MissionAcceptanceGapIntegrityError, readTaskAcceptanceLedgerArtifact } from "@/mission/acceptance-ledger"
+import { readMissionAcceptanceExtensionRequest, readMissionAcceptanceExtensionOutcome } from "@/mission/acceptance-extension"
 /**
  * Fact-reduced Task-root control plane.
  *
@@ -39,7 +41,6 @@ import { Database, and, asc, desc, eq, inArray, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { canonicalJSONValue, compareCanonicalStrings } from "@/util/canonical-digest"
 import { MissionTaskResumeReceiptIntegrityError, readMissionTaskResumeReceipt } from "@/mission/acceptance-resume-receipt"
-import { MissionAcceptanceGapIntegrityError, readTaskAcceptanceLedgerArtifact } from "@/mission/acceptance-ledger"
 import { requireMissionTaskLineageAuthority } from "./cross-task-artifact-import"
 import { Filesystem } from "@/util/filesystem"
 import { IntentBundle } from "@/intent/bundle"
@@ -472,7 +473,8 @@ function eventForTaskRootMessage(ingress: typeof EngineTaskRootIngressTable.$inf
       `Task-root ingress ${ingress.id} references missing Message ${ingress.source_id}`,
     )
   const parsedMessage = Message.Info.safeParse({ ...row.data, id: row.id, sessionID: row.sessionID })
-  if (!parsedMessage.success) throw new TaskRootIngressIntegrityError(ingress.id, `Task-root Message ${row.id} is malformed`)
+  if (!parsedMessage.success)
+    throw new TaskRootIngressIntegrityError(ingress.id, `Task-root Message ${row.id} is malformed`)
   const message = parsedMessage.data
   if (message.role !== "user")
     throw new TaskRootIngressIntegrityError(
@@ -486,6 +488,69 @@ function eventForTaskRootMessage(ingress: typeof EngineTaskRootIngressTable.$inf
       `Task-root ingress ${ingress.id} source Message ${message.id} has no well-formed Task-root provenance`,
     )
   const provenance = parsedProvenance.data
+  if (provenance.kind === "mission" && provenance.source === "mission.acceptance_extension") {
+    try {
+      const recorded = Database.use((db) =>
+        readMissionAcceptanceExtensionRequest(db, ingress.task_id, { ingressID: ingress.id }),
+      )
+      if (!recorded)
+        throw new MissionAcceptanceGapIntegrityError(
+          ingress.task_id,
+          "Mission extension Message has no durable request",
+        )
+      const request = recorded.request
+      const task = requireMissionTaskLineageAuthority({
+        sourceTaskID: ingress.task_id,
+        projectID: Instance.project.id,
+        importer: { missionID: request.mission_id, sessionID: request.mission_session_id },
+      })
+      if (
+        provenance.taskID !== ingress.task_id ||
+        message.author !== "mission" ||
+        message.sessionID !== task.session_id ||
+        request.message_id !== message.id ||
+        request.active_execution_reference.executionEpoch !== ingress.execution_epoch
+      )
+        throw new MissionAcceptanceGapIntegrityError(
+          ingress.task_id,
+          "Mission extension request and Message occurrence differ",
+        )
+      const application = Database.use((db) => readMissionAcceptanceExtensionOutcome(db, ingress.task_id, ingress.id))
+      if (application && application.outcome.request_artifact_id !== recorded.artifactID)
+        throw new MissionAcceptanceGapIntegrityError(
+          ingress.task_id,
+          "Extension application refers to a different request",
+        )
+      if (application?.outcome.result.kind === "applied") {
+        const ledger = readTaskAcceptanceLedgerArtifact(ingress.task_id, application.outcome.result.ledger_artifact_id)
+        if (
+          ledger.revision.execution_epoch !== ingress.execution_epoch ||
+          ledger.revision.previous_revision_artifact_id !== request.expected_ledger_artifact_id ||
+          canonicalJSONValue(ledger.revision.gap) !== canonicalJSONValue(request.acceptance_gap)
+        )
+          throw new MissionAcceptanceGapIntegrityError(
+            ingress.task_id,
+            "Extension application does not identify the exact ledger",
+          )
+        return OrchestratorEventSchema.parse({
+          missionAcceptanceExtension: {
+            missionID: request.mission_id,
+            missionSessionID: request.mission_session_id,
+            messageID: message.id,
+            panelMessageID: request.panel_message_id,
+            toolCallID: request.tool_call_id,
+            toolPartID: request.tool_part_id,
+            reviewedTerminalLifecycleReference: request.acceptance_gap.reviewed_terminal_lifecycle_reference,
+            acceptanceLedgerRevisionArtifactID: ledger.artifactID,
+            acceptanceGap: ledger.revision.gap,
+          },
+        })
+      }
+    } catch (error) {
+      if (!(error instanceof MissionAcceptanceGapIntegrityError) && !(error instanceof ZodError)) throw error
+      throw new TaskRootIngressIntegrityError(ingress.id, error.message)
+    }
+  }
   if (provenance.kind === "mission" && provenance.source === "mission.acceptance_resume") {
     let recorded: ReturnType<typeof readMissionTaskResumeReceipt>
     try {
@@ -494,7 +559,8 @@ function eventForTaskRootMessage(ingress: typeof EngineTaskRootIngressTable.$inf
       if (!(error instanceof MissionTaskResumeReceiptIntegrityError)) throw error
       throw new TaskRootIngressIntegrityError(ingress.id, error.message)
     }
-    if (!recorded) throw new TaskRootIngressIntegrityError(ingress.id, "Mission resume Message has no exact durable receipt")
+    if (!recorded)
+      throw new TaskRootIngressIntegrityError(ingress.id, "Mission resume Message has no exact durable receipt")
     const receipt = recorded.receipt
     let ledger: ReturnType<typeof readTaskAcceptanceLedgerArtifact>
     try {
@@ -504,24 +570,39 @@ function eventForTaskRootMessage(ingress: typeof EngineTaskRootIngressTable.$inf
       throw new TaskRootIngressIntegrityError(ingress.id, error.message)
     }
     const task = requireMissionTaskLineageAuthority({
-      sourceTaskID: ingress.task_id, projectID: Instance.project.id,
+      sourceTaskID: ingress.task_id,
+      projectID: Instance.project.id,
       importer: { missionID: receipt.mission_id, sessionID: receipt.mission_session_id },
     })
-    if (provenance.taskID !== ingress.task_id || message.author !== "mission" ||
-      message.sessionID !== task.session_id || receipt.message_id !== message.id || receipt.wake_id !== message.id ||
+    if (
+      provenance.taskID !== ingress.task_id ||
+      message.author !== "mission" ||
+      message.sessionID !== task.session_id ||
+      receipt.message_id !== message.id ||
+      receipt.wake_id !== message.id ||
       ledger.revision.execution_epoch !== ingress.execution_epoch ||
       canonicalJSONValue(ledger.revision.gap) !== canonicalJSONValue(receipt.acceptance_gap) ||
-      receipt.prior_terminal_lifecycle_reference.terminalEventID !== receipt.acceptance_gap.reviewed_terminal_lifecycle_reference.terminalEventID) {
-      throw new TaskRootIngressIntegrityError(ingress.id, "Mission resume receipt, Message and acceptance ledger do not identify the same occurrence")
+      receipt.prior_terminal_lifecycle_reference.terminalEventID !==
+        receipt.acceptance_gap.reviewed_terminal_lifecycle_reference.terminalEventID
+    ) {
+      throw new TaskRootIngressIntegrityError(
+        ingress.id,
+        "Mission resume receipt, Message and acceptance ledger do not identify the same occurrence",
+      )
     }
-    return OrchestratorEventSchema.parse({ missionAcceptanceResume: {
-      missionID: receipt.mission_id, missionSessionID: receipt.mission_session_id,
-      messageID: receipt.message_id, panelMessageID: receipt.panel_message_id,
-      toolCallID: receipt.tool_call_id, toolPartID: receipt.tool_part_id,
-      reviewedTerminalLifecycleReference: receipt.prior_terminal_lifecycle_reference,
-      acceptanceLedgerRevisionArtifactID: receipt.acceptance_ledger_revision_artifact_id,
-      acceptanceGap: ledger.revision.gap,
-    } })
+    return OrchestratorEventSchema.parse({
+      missionAcceptanceResume: {
+        missionID: receipt.mission_id,
+        missionSessionID: receipt.mission_session_id,
+        messageID: receipt.message_id,
+        panelMessageID: receipt.panel_message_id,
+        toolCallID: receipt.tool_call_id,
+        toolPartID: receipt.tool_part_id,
+        reviewedTerminalLifecycleReference: receipt.prior_terminal_lifecycle_reference,
+        acceptanceLedgerRevisionArtifactID: receipt.acceptance_ledger_revision_artifact_id,
+        acceptanceGap: ledger.revision.gap,
+      },
+    })
   }
   return OrchestratorEventSchema.parse({
     note: `Task-root Message ${message.id}`,
@@ -1023,6 +1104,8 @@ async function activate(input: {
       // `ready` would arm no timer at all and strand the Task.
       return { activated: false, projection: acquired.projection }
     }
+    // The lease transaction may have applied this exact Mission input. Rebuild from its immutable outcome.
+    event = eventForIngress(ingress)
     const runActivation = () =>
       runner()({
         taskID: input.taskID,
@@ -1253,7 +1336,7 @@ function recordAbsorbingTaskRootIngressDisposition(input: {
   ingressID: string
   expected: Extract<
     TaskRootIngressProjection,
-    { state: "resolved" | "terminal_inapplicable" | "exhausted" | "host_fault" }
+    { state: "resolved" | "terminal_inapplicable" | "exhausted" | "host_fault" | "input_rejected" }
   >
   now: number
 }): void {
@@ -1273,6 +1356,8 @@ function recordAbsorbingTaskRootIngressDisposition(input: {
         ingressID: input.ingressID,
         decisionIDs: evidenceIDs,
       })
+    } else if (current.state === "input_rejected") {
+      evidenceIDs = [...current.evidenceIDs]
     } else if (current.state === "exhausted" || current.state === "host_fault") {
       const gateID = taskRootIngressOperatorGateID(input.ingressID, current.state, current.reason)
       const exit =
@@ -1767,7 +1852,7 @@ async function scanTaskControlPlane(
         }
         if ((await terminalizeExpiredTaskRootAssistants(ingress.id, now)) > 0) continue
         const projection = projectTaskRootIngress(ingress.id, now, readTaskRootIngressEvidence)
-        if (projection.state === "resolved" || projection.state === "terminal_inapplicable") {
+        if (projection.state === "resolved" || projection.state === "terminal_inapplicable" || projection.state === "input_rejected") {
           recordAbsorbingTaskRootIngressDisposition({
             taskID,
             ingressID: ingress.id,
@@ -1819,6 +1904,7 @@ async function scanTaskControlPlane(
             activated += 1
             continue
           }
+          if (attempt.projection.state === "input_rejected") continue
           // Pace on what the acquisition actually saw, never on the stale
           // `ready` that led here.
           wakeAt = settle(attempt.projection)
@@ -2045,7 +2131,7 @@ export async function dispatchTaskLoop(input: DispatchTaskLoopInput): Promise<Di
   if (!task) throw new TaskRootIngressError(`Task ${input.taskID} does not exist`, "task_not_found", input.taskID)
   const event = OrchestratorEventSchema.parse(input.event ?? { note: "Task wake" })
   const identity = {
-    messageID: event.rootMessage?.messageID ?? event.missionAcceptanceResume?.messageID,
+    messageID: event.rootMessage?.messageID ?? event.missionAcceptanceResume?.messageID ?? event.missionAcceptanceExtension?.messageID,
     requestID: event.coordinationRequest?.requestID,
     recoveryFactID: event.processRecovery?.recoveryFactID,
     infrastructureFactID: event.dispatchInfrastructureFailure?.infrastructureFactID,

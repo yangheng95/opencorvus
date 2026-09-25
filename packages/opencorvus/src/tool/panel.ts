@@ -1,3 +1,4 @@
+import { readTaskAcceptanceLedgerArtifact } from "@/mission/acceptance-ledger"
 import z from "zod"
 import { Config } from "@/config/config"
 import { Buffer } from "node:buffer"
@@ -603,6 +604,7 @@ async function requirePanelToolIdentity(
     | "read_task_dispatch_evidence"
     | "read_task_message"
     | "resume_task"
+    | "extend_task_acceptance"
     | "wake_mission"
     | "wake_work",
 ) {
@@ -1952,18 +1954,31 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           metadata: {},
         }
       }
+      case "extend_task_acceptance":
       case "resume_task": {
         if (actor !== "mission") {
-          throw new Error(`panel.resume_task is only available to a real Mission.`)
+          throw new Error(`panel.${params.action} is only available to a real Mission.`)
         }
         const mission = await requireMissionSession(ctx.sessionID)
-        const identity = await requirePanelToolIdentity(ctx, "resume_task")
-        const reviewedTerminalLifecycleReference = reviewedTerminalLifecycleReferenceBeforePanelAction({
+        const identity = await requirePanelToolIdentity(ctx, params.action)
+        const observation = reviewedTaskArtifactObservationBeforePanelAction({
           sessionID: ctx.sessionID,
           assistantMessageID: ctx.messageID,
           toolPartID: identity.toolPartID,
           taskID: params.taskID,
         })
+        const extension = params.action === "extend_task_acceptance"
+        const baseLedgerID = params.acceptance_gap.current_ledger_revision_artifact_id
+        if (extension && (!observation.active_execution_reference || !baseLedgerID))
+          throw new Error("An acceptance extension requires the current active execution and exact ledger.")
+        const reviewedTerminalLifecycleReference = extension
+          ? readTaskAcceptanceLedgerArtifact(params.taskID, baseLedgerID!).revision.gap.reviewed_terminal_lifecycle_reference
+          : reviewedTerminalLifecycleReferenceBeforePanelAction({
+              sessionID: ctx.sessionID,
+              assistantMessageID: ctx.messageID,
+              toolPartID: identity.toolPartID,
+              taskID: params.taskID,
+            })
         const evidenceByReadReference = new Map(
           acceptanceGapReadReferences(params.acceptance_gap).map((reference) => {
             const resolved = resolvePanelArtifactReadReferencesBeforeAction({
@@ -1971,7 +1986,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               assistantMessageID: ctx.messageID,
               toolPartID: identity.toolPartID,
               taskID: params.taskID,
-              terminalLifecycleReference: reviewedTerminalLifecycleReference,
+              observation,
               references: [reference],
             })
             const locator = resolved[0]
@@ -1985,7 +2000,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           evidenceByReadReference,
         })
         const evidenceLocators = acceptanceGapEvidenceLocators(acceptanceGap)
-        const result = await EngineService.resumeMissionTask({
+        const shared = {
           taskID: params.taskID,
           importer: {
             missionID: mission.missionID,
@@ -1998,9 +2013,18 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           acceptanceGap,
           completeEvidenceLocators: evidenceLocators,
           toolPartID: identity.toolPartID,
-        })
+        }
+        const result = extension
+          ? await EngineService.extendMissionTaskAcceptance({
+              ...shared,
+              expectedAcceptanceLedgerArtifactID: baseLedgerID!,
+              activeExecutionReference: observation.active_execution_reference!,
+            })
+          : await EngineService.resumeMissionTask(shared)
         return {
-          title: result.kind === "resumed" ? "Task resumed" : "Task cancellation authority required",
+          title: result.kind === "accepted"
+            ? "Task acceptance extension request"
+            : result.kind === "resumed" ? "Task resumed" : "Task cancellation authority required",
           output: JSON.stringify(result),
           metadata: { truncated: false },
         }

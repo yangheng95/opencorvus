@@ -91,7 +91,7 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
       })
 
       const allowedRootMessages = authorizedTaskRootMessagesForWake({
-        missionAcceptanceResume: { messageID },
+        missionAcceptanceRepair: { messageID },
       })
       const readTool = createOrchestratorInteractionTools({
         taskID,
@@ -337,7 +337,7 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
         taskID,
         agentSessionID: root.id,
         allowedRootMessages: authorizedTaskRootMessagesForWake({
-          missionAcceptanceResume: { messageID: wrongSourceMessageID },
+          missionAcceptanceRepair: { messageID: wrongSourceMessageID },
         }),
       }).read_task_message
       if (!wrongSourceTool.execute) throw new Error("read_task_message is missing its executor")

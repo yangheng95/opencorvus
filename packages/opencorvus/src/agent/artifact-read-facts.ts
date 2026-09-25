@@ -297,7 +297,7 @@ export function resolvePanelArtifactReadReferencesBeforeAction(input: {
   assistantMessageID: string
   toolPartID: string
   taskID: string
-  terminalLifecycleReference: TerminalLifecycleReference
+  observation: TaskArtifactObservation
   references: readonly z.infer<typeof ArtifactReadReferenceSchema>[]
 }): ArtifactReadLocator[] {
   return Database.use((db) => resolvePanelArtifactReadReferencesBeforeActionInTransaction(db, input))

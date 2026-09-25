@@ -1821,7 +1821,7 @@ WHEN NEW.kind = 'task_root_ingress_disposition'
     AND substr(json_extract(NEW.payload, '$.ingress_id'), 6) NOT GLOB '*[^A-Za-z0-9]*'
     AND json_type(NEW.payload, '$.execution_epoch') = 'integer'
     AND json_extract(NEW.payload, '$.execution_epoch') BETWEEN 1 AND 9007199254740991
-    AND json_extract(NEW.payload, '$.disposition') IN ('resolved','terminal_inapplicable','exhausted','operator_abandoned')
+    AND json_extract(NEW.payload, '$.disposition') IN ('resolved','terminal_inapplicable','exhausted','operator_abandoned','input_rejected')
     AND json_type(NEW.payload, '$.evidence_ids') = 'array'
     AND json_array_length(NEW.payload, '$.evidence_ids') > 0
     AND NOT EXISTS (
@@ -2030,6 +2030,21 @@ WHEN NEW.kind = 'task_root_ingress_disposition'
         )
       )
       OR (
+        json_extract(NEW.payload, '$.disposition') = 'input_rejected'
+        AND json_array_length(NEW.payload, '$.evidence_ids') = 1
+        AND EXISTS (
+          SELECT 1 FROM engine_artifact outcome
+          JOIN engine_artifact request ON request.id = json_extract(outcome.payload, '$.request_artifact_id')
+          WHERE outcome.id = json_extract(NEW.payload, '$.evidence_ids[0]')
+            AND outcome.task_id = NEW.task_id AND request.task_id = NEW.task_id
+            AND outcome.kind = 'mission_acceptance_extension_outcome'
+            AND request.kind = 'mission_acceptance_extension_request'
+            AND json_extract(outcome.payload, '$.result.kind') = 'rejected'
+            AND json_extract(outcome.payload, '$.ingress_artifact_id') = json_extract(NEW.payload, '$.ingress_id')
+            AND json_extract(request.payload, '$.ingress_artifact_id') = json_extract(NEW.payload, '$.ingress_id')
+        )
+      )
+      OR (
         json_extract(NEW.payload, '$.disposition') = 'operator_abandoned'
         AND json_array_length(NEW.payload, '$.evidence_ids') = 1
         AND EXISTS (
@@ -2047,6 +2062,23 @@ WHEN NEW.kind = 'task_root_ingress_disposition'
   )
 BEGIN
   SELECT RAISE(ABORT, 'engine_artifact: Task-root ingress disposition requires exact immutable release evidence');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_acceptance_extension_no_update
+BEFORE UPDATE ON engine_artifact
+FOR EACH ROW
+WHEN OLD.kind IN ('mission_acceptance_extension_request','mission_acceptance_extension_outcome')
+BEGIN
+  SELECT RAISE(ABORT, 'engine_artifact: Mission acceptance extension facts are immutable');
+END;
+
+CREATE TRIGGER IF NOT EXISTS engine_acceptance_extension_no_delete
+BEFORE DELETE ON engine_artifact
+FOR EACH ROW
+WHEN OLD.kind IN ('mission_acceptance_extension_request','mission_acceptance_extension_outcome')
+  AND EXISTS (SELECT 1 FROM engine_task task WHERE task.id = OLD.task_id)
+BEGIN
+  SELECT RAISE(ABORT, 'engine_artifact: Mission acceptance extension facts require Task retention');
 END;
 
 CREATE TRIGGER IF NOT EXISTS engine_scheduling_disposition_no_delete

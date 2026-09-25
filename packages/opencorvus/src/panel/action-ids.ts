@@ -12,6 +12,7 @@ export const PANEL_ACTIONS = Object.freeze([
   { action: "wake_mission", kind: "mutation" },
   { action: "wake_work", kind: "mutation" },
   { action: "send_task_message", kind: "mutation" },
+  { action: "extend_task_acceptance", kind: "mutation" },
   { action: "resume_task", kind: "mutation" },
   { action: "respond_interaction", kind: "mutation" },
   { action: "cancel_task", kind: "mutation" },
@@ -51,6 +52,7 @@ export const MISSION_PANEL_ACTION_IDS = Object.freeze([
   "complete_mission",
   "block_mission",
   "resume_task",
+  "extend_task_acceptance",
   "cancel_task",
   "respond_interaction",
 ] as const satisfies readonly PanelActionID[])

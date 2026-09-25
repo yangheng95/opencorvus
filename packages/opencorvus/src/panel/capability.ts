@@ -476,6 +476,16 @@ export const PanelCapabilityRegistry = list(
     },
   }),
   item({
+    action: "extend_task_acceptance",
+    description: "Request additional evidence-backed repair obligations on the current active Mission-owned Task, in the same execution epoch. Preserve every existing open criterion exactly; reopen contradicted accepted criteria or add open criteria. Acceptance is pending until the Task-root input lease applies it; query/read the request and outcome Artifacts for the actual result. This never revokes running worker grants or completes the Task.",
+    kind: "mutation",
+    surfaces: ["panel"],
+    params: {
+      taskID: z.string().min(1),
+      acceptance_gap: MissionAcceptanceGapInputSchema.describe("Full next ledger, retaining the original reviewed occurrence and all open grants; current_ledger_revision_artifact_id must name the active execution's exact current ledger. Use complete reads bound to the current active Task observation."),
+    },
+  }),
+  item({
     action: "resume_task",
     description:
       "Resume the same completed or failed Mission-owned Task from an evidence-backed acceptance gap. This writes one visible Mission message and opens a new execution occurrence; scheduler_message remains communication-only and never reopens a terminal Task.",

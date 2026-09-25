@@ -1044,7 +1044,8 @@ export function createOrchestratorTools(input: {
     messageID: string
     kind: TaskRootMessageKind
   }
-  missionAcceptanceResume?: {
+  missionAcceptanceRepair?: {
+    mode?: "resume" | "extension"
     messageID: string
   }
   terminalConversationAuthority?: TerminalConversationAuthority

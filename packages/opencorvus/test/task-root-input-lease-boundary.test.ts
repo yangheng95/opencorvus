@@ -1,16 +1,11 @@
+import { settleScriptedStatusInput } from "./fixture/task-root-status-input"
 import { afterEach, expect, test } from "bun:test"
 import { EngineService } from "@/task-api"
 import { Instance } from "@/project/instance"
 import { InstanceBootstrap } from "@/project/bootstrap"
-import { requireTask } from "@/engine/store"
 import { taskLifecycleProjection } from "@/engine/task-lifecycle"
 import { acquireTaskRootIngressLease, projectTaskRootIngress } from "@/engine/task-root-fact-store"
 import { readTaskRootIngressEvidence, reconcileTaskControlPlane, TestHooks } from "@/engine/task-root-ingress-delivery"
-import { currentOrchestratorControlMessage } from "@/orchestrator/agent"
-import { taskOrchestratorSession } from "@/orchestrator/task-session"
-import { createNoActionTool, noActionTaskObservation } from "@/orchestrator/no-action-tool"
-import { normalizeToolResult } from "@/session/tool-result-normalization"
-import { Session } from "@/session"
 import { Identifier } from "@/id/id"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -42,89 +37,16 @@ test("public inputs queue behind a real activation and advance after the actual 
             firstStarted.resolve(wakeID)
             await releaseFirst.promise
           }
-          const scheduler = await taskOrchestratorSession(requireTask(taskID))
-          const control = currentOrchestratorControlMessage(event, taskID, wakeID, predecessorID)
-          if (!control) throw new Error("Expected the current source-backed control occurrence")
-          await Session.persistMessage({
-            info: {
-              id: control.messageID,
-              sessionID: scheduler.id,
-              role: "user",
-              author: "orchestrator",
-              time: { created: Date.now() },
-              agent: "orchestrator",
-              model: { providerID: "firmware", modelID: "gpt-5" },
-              extra: control.extra,
-            },
-            parts: [
-              {
-                id: control.partID,
-                sessionID: scheduler.id,
-                messageID: control.messageID,
-                type: "text",
-                text: control.text,
-                kind: "control",
-                source: "system",
-              },
-            ],
-          })
-          const assistant = await Session.updateMessage({
-            id: Identifier.ascending("message"),
-            sessionID: scheduler.id,
-            parentID: control.messageID,
-            role: "assistant",
-            author: "orchestrator",
-            time: { created: Date.now() },
-            agent: "orchestrator",
-            providerID: "firmware",
-            modelID: "gpt-5",
-            path: { cwd: project.path, root: project.path },
-            cost: 0,
-            tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+          const result = await settleScriptedStatusInput({
+            taskID,
+            event,
+            wakeID,
             activationID,
-          })
-          await Session.updatePart({
-            id: Identifier.ascending("part"),
-            sessionID: scheduler.id,
-            messageID: assistant.id,
-            type: "text",
-            text: "LOCAL PROTOCOL TEST: status observation returned.",
-            time: { start: Date.now(), end: Date.now() },
-          })
-          const requestInput = {
-            reason: "LOCAL PROTOCOL TEST: the requested status observation is returned.",
-            observed_task: noActionTaskObservation(taskLifecycleProjection(taskID)),
-          }
-          const request = await Session.updatePart({
-            id: Identifier.ascending("part"),
-            sessionID: scheduler.id,
-            messageID: assistant.id,
-            type: "tool",
-            callID: `local-status-${wakeID}`,
-            tool: "no_action",
-            state: { status: "running", input: requestInput, time: { start: Date.now() } },
-          })
-          const result = normalizeToolResult(
-            await createNoActionTool({ taskID }).no_action.execute!(requestInput, {} as never),
-          )
-          await Session.updatePart({
-            ...request,
-            state: {
-              status: "completed",
-              input: requestInput,
-              output: result.output,
-              title: result.title,
-              metadata: result.metadata,
-              time: { start: request.state.time.start, end: Date.now() },
-            },
-          })
-          await Session.updateMessage({
-            ...assistant,
-            finish: "stop",
-            time: { ...assistant.time, completed: Date.now() },
+            predecessorID,
+            directory: project.path,
           })
           if (activated.length === 2) secondFinished.resolve()
-          return { finalMessageID: assistant.id }
+          return result
         },
       })
       let taskID: string | undefined

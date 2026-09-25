@@ -22,6 +22,7 @@ export function taskRootIngressSourceKind(event: OrchestratorEvent): TaskRootIng
   if (parsed.rootMessage?.kind === "orchestrator") candidates.push("orchestrator_message")
   if (parsed.rootMessage?.kind === "mission") candidates.push("mission_message")
   if (parsed.missionAcceptanceResume) candidates.push("mission_acceptance_resume")
+  if (parsed.missionAcceptanceExtension) candidates.push("mission_message")
   if (parsed.coordinationRequest) candidates.push("coordination_request")
   if (parsed.processRecovery) candidates.push("infrastructure_recovery")
   if (parsed.dispatchInfrastructureFailure) candidates.push("dispatch_infrastructure_failure")

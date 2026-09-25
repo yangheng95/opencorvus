@@ -413,7 +413,7 @@ describe("Artifact read facts from provider Tool input", () => {
             assistantMessageID: mutationMessage.id,
             toolPartID: mutationPart.id,
             taskID,
-            terminalLifecycleReference: terminalReference,
+            observation: { terminal_lifecycle_reference: terminalReference },
             references: [terminalPartialRef],
           }),
         ).toThrow("not backed by a complete persisted read")

@@ -4,6 +4,20 @@ import { MissionAcceptanceGapSchema } from "@/mission/acceptance-gap"
 import { DispatchInfrastructureFailureOutcomeSchema } from "@/agent/dispatch-outcome"
 import { SchedulerDeliveryReference, TaskRootMessageKind } from "@/protocol/task-root-message-schema"
 
+const MissionAcceptanceRepairEventSchema = z
+  .object({
+    missionID: z.string().min(1),
+    missionSessionID: z.string().min(1),
+    messageID: z.string().min(1),
+    panelMessageID: z.string().min(1),
+    toolCallID: z.string().min(1),
+    toolPartID: z.string().min(1),
+    reviewedTerminalLifecycleReference: TerminalLifecycleReferenceSchema,
+    acceptanceLedgerRevisionArtifactID: z.string().min(1),
+    acceptanceGap: MissionAcceptanceGapSchema,
+  })
+  .strict()
+
 export const OrchestratorEventSchema = z
   .object({
     /** Diagnostic wake label only. It is never persisted as a conversation message. */
@@ -39,20 +53,8 @@ export const OrchestratorEventSchema = z
       })
       .strict()
       .optional(),
-    missionAcceptanceResume: z
-      .object({
-        missionID: z.string().min(1),
-        missionSessionID: z.string().min(1),
-        messageID: z.string().min(1),
-        panelMessageID: z.string().min(1),
-        toolCallID: z.string().min(1),
-        toolPartID: z.string().min(1),
-        reviewedTerminalLifecycleReference: TerminalLifecycleReferenceSchema,
-        acceptanceLedgerRevisionArtifactID: z.string().min(1),
-        acceptanceGap: MissionAcceptanceGapSchema,
-      })
-      .strict()
-      .optional(),
+    missionAcceptanceResume: MissionAcceptanceRepairEventSchema.optional(),
+    missionAcceptanceExtension: MissionAcceptanceRepairEventSchema.optional(),
     coordinationRequest: z
       .object({ requestID: z.string().min(1) })
       .strict()
@@ -86,5 +88,11 @@ export const OrchestratorEventSchema = z
       .optional(),
   })
   .strict()
+
+export function missionAcceptanceRepairForEvent(event: OrchestratorEvent | undefined) {
+  if (event?.missionAcceptanceResume) return { ...event.missionAcceptanceResume, mode: "resume" as const }
+  if (event?.missionAcceptanceExtension) return { ...event.missionAcceptanceExtension, mode: "extension" as const }
+  return undefined
+}
 
 export type OrchestratorEvent = z.infer<typeof OrchestratorEventSchema>

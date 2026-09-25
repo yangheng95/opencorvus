@@ -1,3 +1,4 @@
+import { missionAcceptanceRepairForEvent } from "@/orchestrator/event"
 import { afterEach, expect, spyOn, test } from "bun:test"
 import {
   currentOrchestratorControlMessage,
@@ -75,7 +76,7 @@ test("Mission acceptance resume projects current message authority and real-deci
   expect(notice).toContain('"gap_id":"gap-current-acceptance"')
   expect(notice).toContain("record at least one current scheduling or lifecycle decision")
   expect(notice).toContain("matching real tool call")
-  expect(notice).toContain("no_action alone cannot settle it")
+  expect(notice).toContain("consume this gap through the corresponding initial or continuation Turn")
   expect(notice).toContain("complete/fail lifecycle decision")
   expect(notice).toContain(
     "New contradictory evidence may invalidate an earlier acceptance, including one outside this selection.",
@@ -85,7 +86,7 @@ test("Mission acceptance resume projects current message authority and real-deci
   )
   expect(isCurrentWakeIngress(event)).toBe(true)
 
-  expect(authorizedTaskRootMessagesForWake(event)).toEqual([
+  expect(authorizedTaskRootMessagesForWake({ rootMessage: event.rootMessage, missionAcceptanceRepair: missionAcceptanceRepairForEvent(event) })).toEqual([
     {
       messageID,
       kind: "mission",

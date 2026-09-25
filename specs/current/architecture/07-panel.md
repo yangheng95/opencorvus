@@ -579,6 +579,8 @@ its ordinary terminal conversation behavior. These are model-visible control
 facts; Overlay renders the existing Task, message, activity, and Artifact
 projections and does not invent a second acceptance or resume state.
 
+`panel_extend_task_acceptance` is Mission-only control for additional obligations in an existing active repair. Its read references bind the exact active execution and complete bytes, using the same observation-aware reducer as terminal reads. It preserves every existing open grant, can reopen an accepted criterion with new invalidating evidence, and can add open criteria. It records a visible Mission request and returns a pending receipt until the root input lease applies the exact ledger CAS. Immutable request/outcome Artifacts distinguish applied from rejected; prior completion or cancellation makes a queued request inapplicable. Neither acceptance of the request nor active evidence reading grants terminal acceptance, changes a running worker descriptor, or starts a new Task epoch. Existing terminal `resume_task` retains its separate lifecycle authority.
+
 The embedded Terminal is a normal Right Dock activity panel. Shell selection is
 resolved by the server-owned terminal profile registry; the project-scoped PTY
 host owns process lifecycle, buffering, input, and resize; authenticated output

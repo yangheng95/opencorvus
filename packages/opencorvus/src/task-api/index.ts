@@ -1,4 +1,7 @@
 import z from "zod"
+import { canonicalJSONValue } from "@/util/canonical-digest"
+import { MissionAcceptanceExtensionRequestSchema, readMissionAcceptanceExtensionRequest, readMissionAcceptanceExtensionOutcome, requireAcceptanceScopeExtension } from "@/mission/acceptance-extension"
+import { ActiveTaskExecutionReferenceSchema, assertCurrentTaskArtifactObservation } from "@/engine/task-artifact-observation"
 import { createHash, randomUUID } from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
@@ -95,7 +98,7 @@ import {
   type EngineInteractionStatus,
   type EngineMetadata,
 } from "@/engine/engine.sql"
-import { taskLifecycleProjectionInTransaction } from "@/engine/task-lifecycle"
+import { taskLifecycleProjectionInTransaction, taskLifecycleProjection } from "@/engine/task-lifecycle"
 import { OperatorSteerRequestConflictError } from "@/engine/agent-coordination-errors"
 import { insertEngineArtifact } from "@/engine/artifact"
 import { buildObservationCleanupRowsForTask, settleBuildObservationCleanup } from "@/engine/build-observation-cleanup"
@@ -262,7 +265,7 @@ import {
   renderMissionAcceptanceRepairMessage,
   type MissionAcceptanceGap,
 } from "@/mission/acceptance-gap"
-import { appendTaskAcceptanceLedgerRevisionInTransaction } from "@/mission/acceptance-ledger"
+import { appendTaskAcceptanceLedgerRevisionInTransaction, readLatestTaskAcceptanceLedger, MissionAcceptanceLedgerConflictError } from "@/mission/acceptance-ledger"
 import { MissionTaskResumeReceiptSchema, readMissionTaskResumeReceipt } from "@/mission/acceptance-resume-receipt"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { SessionWake } from "@/session/wake"
@@ -3770,6 +3773,154 @@ export namespace EngineService {
         reason: cancellation.reason,
       },
     }
+  }
+
+  export async function extendMissionTaskAcceptance(input: {
+    taskID: string
+    importer: CrossTaskArtifactImporter
+    activeExecutionReference: z.infer<typeof ActiveTaskExecutionReferenceSchema>
+    expectedAcceptanceLedgerArtifactID: string
+    acceptanceGap: MissionAcceptanceGap
+    completeEvidenceLocators: ArtifactReadLocator[]
+    toolPartID: string
+  }) {
+    const task = requireTaskInCurrentProject(input.taskID)
+    await assertTaskRootSessionLineageInCurrentProject(task)
+    requireMissionTaskLineageAuthority({
+      sourceTaskID: task.id,
+      projectID: Instance.project.id,
+      importer: input.importer,
+    })
+    const gap = MissionAcceptanceGapSchema.parse(input.acceptanceGap)
+    const reference = ActiveTaskExecutionReferenceSchema.parse(input.activeExecutionReference)
+    const find = () =>
+      Database.use((db) =>
+        readMissionAcceptanceExtensionRequest(db, task.id, { toolCallID: input.importer.toolCallID }),
+      )
+    const response = (recorded: NonNullable<ReturnType<typeof find>>) => {
+      const r = recorded.request
+      if (
+        r.mission_id !== input.importer.missionID ||
+        r.mission_session_id !== input.importer.sessionID ||
+        r.panel_message_id !== input.importer.messageID ||
+        r.tool_part_id !== input.toolPartID ||
+        r.expected_ledger_artifact_id !== input.expectedAcceptanceLedgerArtifactID ||
+        canonicalJSONValue(r.active_execution_reference) !== canonicalJSONValue(reference) ||
+        canonicalJSONValue(r.acceptance_gap) !== canonicalJSONValue(gap)
+      )
+        throw new Error("Mission extension replay identity changed")
+      const outcome = Database.use((db) => readMissionAcceptanceExtensionOutcome(db, task.id, r.ingress_artifact_id))
+      const lifecycle = taskLifecycleProjection(task.id)
+      return {
+        kind: "accepted" as const,
+        request_artifact_id: recorded.artifactID,
+        ...r,
+        application: outcome
+          ? { ...outcome.outcome.result, outcome_artifact_id: outcome.artifactID }
+          : lifecycle.status !== "active" || lifecycle.epoch !== reference.executionEpoch
+            ? { kind: "inapplicable" as const, lifecycle: lifecycle.status, execution_epoch: lifecycle.epoch }
+            : { kind: "pending" as const },
+      }
+    }
+    const previousRequest = find()
+    if (previousRequest) return response(previousRequest)
+    const validate = () => {
+      assertCurrentTaskArtifactObservation(
+        task.id,
+        { terminal_lifecycle_reference: null, active_execution_reference: reference },
+        "Mission acceptance extension",
+      )
+      const lifecycle = taskLifecycleProjection(task.id)
+      if (lifecycle.status !== "active")
+        throw new Error(`Mission extension requires active execution, received ${lifecycle.status}`)
+      const previous = readLatestTaskAcceptanceLedger(task.id)
+      if (
+        !previous ||
+        previous.artifactID !== input.expectedAcceptanceLedgerArtifactID ||
+        previous.revision.execution_epoch !== reference.executionEpoch
+      )
+        throw new MissionAcceptanceLedgerConflictError(
+          task.id,
+          input.expectedAcceptanceLedgerArtifactID,
+          previous?.artifactID ?? null,
+          "Mission extension requires the current execution's exact ledger.",
+        )
+      requireAcceptanceScopeExtension(previous, gap)
+    }
+    validate()
+    const complete = new Set(input.completeEvidenceLocators.map(artifactReadLocatorKey))
+    const unreadEvidenceLocators = acceptanceGapEvidenceLocators(gap).filter(
+      (locator) => !complete.has(artifactReadLocatorKey(locator)),
+    )
+    if (unreadEvidenceLocators.length)
+      throw new MissionTaskResumeEvidenceError({
+        message: "Mission extension evidence requires complete reads from the observed execution.",
+        taskID: task.id,
+        unreadEvidenceLocators,
+      })
+    const bundle = await buildTaskSessionMessageBundle(
+      task,
+      renderMissionAcceptanceRepairMessage(gap),
+      "mission.acceptance_extension",
+      "mission",
+    )
+    try {
+      await Session.persistMessageWithCommit(bundle, () =>
+        Database.use((db) => {
+          validate()
+          const now = Date.now()
+          const ingressID = persistTaskRootMessageIngressInTransaction(db, {
+            task,
+            messageID: bundle.info.id,
+            kind: "mission",
+            now,
+          })
+          const request = MissionAcceptanceExtensionRequestSchema.parse({
+            protocol: "mission-acceptance-extension-request",
+            task_id: task.id,
+            mission_id: input.importer.missionID,
+            mission_session_id: input.importer.sessionID,
+            panel_message_id: input.importer.messageID,
+            tool_call_id: input.importer.toolCallID,
+            tool_part_id: input.toolPartID,
+            message_id: bundle.info.id,
+            ingress_artifact_id: ingressID,
+            active_execution_reference: reference,
+            expected_ledger_artifact_id: input.expectedAcceptanceLedgerArtifactID,
+            acceptance_gap: gap,
+            time_accepted: now,
+          })
+          insertEngineArtifact(db, {
+            id: Identifier.deterministic(
+              "artifact",
+              `mission-acceptance-extension-request\0${task.id}\0${input.importer.toolCallID}`,
+            ),
+            taskID: task.id,
+            kind: "mission_acceptance_extension_request",
+            label: "accepted",
+            payload: request,
+            timeCreated: now,
+          })
+          EngineProtocol.emitInTransaction(
+            Event.TaskMessageRecorded,
+            {
+              taskID: task.id,
+              source: "mission.acceptance_extension",
+              summary: "Mission acceptance extension requested",
+              messageID: bundle.info.id,
+            },
+            { taskID: task.id, sessionID: input.importer.sessionID, source: "mission.acceptance_extension" },
+          )
+        }),
+      )
+    } catch (error) {
+      const committed = find()
+      if (committed) return response(committed)
+      throw error
+    }
+    const recorded = find()!
+    await dispatchPersistedTaskLoop(task.id, recorded.request.ingress_artifact_id)
+    return response(recorded)
   }
 
   export async function resumeMissionTask(input: {
