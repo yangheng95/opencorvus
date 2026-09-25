@@ -425,3 +425,19 @@
 - 聚焦`bun run test test/real-provider-audit.test.ts`为**9测试、31断言通过**。其中两个请求实际穿过原包装器并由随机端口的localhost HTTP接收器读取，证明原请求字节/stream/model与记录位置相符；分别覆盖string body、Request对象、Unicode偏移、重复片段及developer/user/root instructions位置。接收器只返回测试运输确认，不伪装Provider或模型输出。其它case为明确transport fixture，覆盖配置错误、敏感路径、既有模型/流式/expiry/余额及redactor合同。没有外部Provider调用，临时HTTP服务已停止。
 - package typecheck、docs:check（342 ops/25 groups）、diff通过。由于package配置明确排除script/test，还用临时配置扩展原tsconfig并显式包含audit、host、测试、原`src/sql.d.ts`和package的Bun类型根，完整类型检查通过。首次临时配置缺Bun类型根/Markdown ambient declarations已按原类型来源补齐；触及的原catch补类型收窄，没有修改生产行为或绕过检查。没有新增永久平行配置面。
 - 结论只到：本例可见报告用来源/字段存在替代了关系验证，且下一次可以观察预登记片段的实际出站位置。模型内部推理、锚定与能力贡献仍未分离；未修复或验真业务误验收。下一阶段应把H-E的方法形成/比较交接落实为一个可区分解释的最小行为对照，先明确唯一干预、生产入口、固定样本数和失败后的结论边界；不再添加观察功能、重复旧协议检查或无信息重抽，也不能把新增字段/Artifact当算法收益。此阶段没有新模型、官方世界、候选、作者或历史分数。
+
+## G12实施前：把H-E收敛为单一可审查干预
+
+- Recall：本轮按用户指令回到独立预期与反证改变判断，不启动模型、世界、作者、候选或Campaign，不增加API/观察能力或同义提醒。已重读五段图、G6–G11、handoff/input-observation、当前`.13` manifest/verifier/orchestrator、delegated-worker core/context/agent/adapter、generic Artifact publisher与来源read-ref定义、当前02-data的终态产物完整性契约及既有Artifact测试。全仓搜索未发现AutomationBench已经实施的比较前方法Artifact契约；现有“先独立推导”指令真实存在，不能以新增措辞重复认领。
+- 当前可确定的实现边界：generic `artifact_publish`允许当前专家团命名空间的JSON产物，真实作者/Task/Session/Tool身份由Host产生；方法发布后仍须原search→完整read得到当前Turn read-ref，后续review以`source_read_refs`选择它，正文自写ID不替代真实来源关系。continuation保留原worker Session；跨Turn旧read-ref不能复用，需重新读取原不可变方法。不改worker权限、工作流executor→verifier顺序或ledger。
+- 新发现的设计约束：verifier是工作流terminal node，现有Task completion要求包含该节点全部current expert_output，故方法与被更正的方法也可能进入完成证据集合。不能为减少材料而隐藏旧产物、改completion或添加“方法已发布即合格”的Host规则；最终review必须解释其方法引用/改判关系，未知仍未知。额外发布与回读有成本，须计入所有请求和tokens。
+- 本次产物是可直接审查的未应用单段patch及两次运行的预登记设计，不修改`.13`、core、Host或生产schema。只替换verifier现有raw-receipt comparison段，具体要求它真实发布方法/前提，再以原read-ref连接比较记录；其余角色、工具、原输入保持。方法由模型自己选择，没有案例名称、金额答案、来源ID或operator公式。模型不执行该交接、先形成错误方法、只有文档而没有修正，分别按预登记失败类别记录，不当收益。
+- Checker层级：本轮只检查patch确切适用于当前`.13`单个文件、diff范围和docs；不新增或运行模型/语义fixture测试，不以静态文字通过证明行为。未来固定同案例两个全新Mission世界，baseline与treatment各一次；这能观察交接/判断/行动差异，但executor先前行为与随机性仍是竞争解释，不声称完全隔离锚定和能力。下一文档将列明确判定表、来源曝光约束、终止条件与尚欠的启动冻结收据。
+
+### G12设计交付 checkpoint
+
+- [method-handoff.md](../../artifacts/2026-09-25-acceptance-comparison-design/method-handoff.md)现在包含完整英文干预、生产调用/来源选择边界、终态证据影响和两次观察的固定设计。唯一拟改内容是verifier原比较段4行替换为31行：原Agent先真实发布方法，再用当前Turn完整read-ref连接比较；新前提改变时保留旧方法引用并改判。没有发布/安装包、改生产prompt、增加工具/角色/Host gate，也未把输入观察再扩成新功能。
+- 可审查[patch](../../artifacts/2026-09-25-acceptance-comparison-design/verifier-method-handoff.patch)已经由精确原段与登记文本生成；`git apply --check`通过，`--numstat`确认仅一个verifier文件31增/4删。只读逐字节核对原`.13`immutable目录与当前source verifier相同（5651字节），不是用可变代码摘要判断功能。patch尚未应用；它是设计交付而非纠错实现。
+- 两个未来episode固定为同sales/9、同Mission入口，B1原`.13`后T1唯一干预，各一次、不替补；不将两次随机执行之差当因果效果。明确列出方法先错、producer暴露、正确差异未行动、两臂都直接正确、前置执行结果不同、未执行交接及runtime/null各自能说明什么。无自然纠错机会就不声称纠错成功，也不补跑求反例。不存在等token/盲审控制，能力与锚定仍可能未分离。
+- 设计不是已就绪启动收据：新包实际版本/digest、共同运行源码、manifest参数解析、空目录和成对目录/模型精确预检尚未冻结。本轮未访问凭据、发送模型/预检、创建世界或复用旧controller。后续可依据这个明确的单一方案实施必要的角色交接，再完成原包loader/来源身份检查与独立冻结记录；不要再从空白重写计划或新增另一项干预，运行前仍须满足预登记边界。
+- 根docs:check（342 ops/25 groups）、差异检查通过；纯spec与未应用patch，无生产代码/测试修改，未重复运行G6–G11的合同来当行为证据。原输入/Tool/世界/评分/候选保持只读，全部历史host仍已停。可靠业务纠错与进化收益尚未达成，下一实际验收必须经过真实模型/Tool/业务结果链。

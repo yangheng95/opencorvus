@@ -20,6 +20,9 @@ original database/eval log.
 - [Input observation](input-observation.md) separates relational acceptance from
   source presence and documents exact, non-content-retaining Provider evidence.
   Its [registered text probes](input-probes.json) are audit configuration, never model input.
+- [Method handoff preregistration](method-handoff.md) fixes one un-applied verifier
+  section patch, two future episodes, competing explanations and stop rules. It is
+  a design deliverable, not a published package or completed behavior experiment.
 
 Source pointers are labels in this prototype. It does not resolve them, verify
 complete reads, infer missing terms, choose a formula, or determine business truth.
