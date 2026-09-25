@@ -14,6 +14,8 @@ import { resolveCoreProjectedTaskToolExecutionScope } from "./task-tool-executio
 
 const CAUSAL_TOOL_MESSAGE_INVENTORY_LIMIT_PER_FINAL = 16
 const TOOL_INPUT_PREVIEW_CHARS = 240
+const CAUSAL_TOOL_REFERENCE_PREVIEW_CHARS = 160
+const CAUSAL_TOOL_REFERENCE_INDEX_MAX_CHARS = 40_000
 const EVIDENCE_OUTPUT_DEFAULT_CHARS = 8_000
 const EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL = 30_000
 const EVIDENCE_READS_DESCRIPTION = `Optional exact input, output, or failure chunks selected from this final's causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. The sum of every limit in one call must be at most ${EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL} characters. Follow next_offset until null.`
@@ -74,13 +76,32 @@ function orderedBefore(
   )
 }
 
-function safeInputPreview(input: unknown) {
+function safeInputPreview(input: unknown, limit = TOOL_INPUT_PREVIEW_CHARS) {
   const serialized = JSON.stringify(input) ?? "null"
   const redacted = JSON.stringify(ProviderError.redactSensitiveProviderValue(input)) ?? "null"
   return {
-    input_preview: redacted.slice(0, TOOL_INPUT_PREVIEW_CHARS),
+    input_preview: redacted.slice(0, limit),
     input_chars: serialized.length,
-    input_preview_truncated: redacted.length > TOOL_INPUT_PREVIEW_CHARS,
+    input_preview_truncated: redacted.length > limit,
+  }
+}
+
+type CausalToolReference = {
+  final_message_id: string
+  message_id: string
+  part_id: string
+  tool_name: string
+  status: string
+  input_preview: string
+  input_preview_truncated: boolean
+}
+
+function compactCausalToolReferenceIndex(refs: CausalToolReference[]) {
+  const complete = JSON.stringify(refs).length <= CAUSAL_TOOL_REFERENCE_INDEX_MAX_CHARS
+  return {
+    complete,
+    tool_count: refs.length,
+    refs: complete ? refs : [],
   }
 }
 
@@ -115,6 +136,7 @@ export const ReadAgentMessageTestHooks = Object.freeze({
   safeInputPreview,
   causalInventoryPage,
   evidenceOutputChunk,
+  compactCausalToolReferenceIndex,
   causalToolMessageInventoryLimitPerFinal: CAUSAL_TOOL_MESSAGE_INVENTORY_LIMIT_PER_FINAL,
   evidenceOutputDefaultChars: EVIDENCE_OUTPUT_DEFAULT_CHARS,
   evidenceOutputMaxCharsPerCall: EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL,
@@ -173,7 +195,7 @@ const READ_AGENT_MESSAGE_DESCRIPTION =
   "Read an ordered batch of exact persisted Agent messages and their tool parts by globally unique message refs from Task dispatch settlements. " +
   "This is a read-only fact projection: it does not select a latest message, infer success, or materialize an artifact. " +
   "Discover exact final_message_id values through artifact_search kind=dispatch_settlement and artifact_read of its returned locators. For final worker reports, submit exact Task dispatch settlement final_message_id values in ordered chunks of at most eight, including an earlier settled worker whose evidence remains material after a later dispatch. " +
-  "The result includes a paged, redacted inventory of real Tool Messages from each final report's execution occurrence. When a material source or mutation fact is absent from the final text, use only a necessary message_id and part_id returned by that final's inventory in this or an earlier call, select field=input, output, or failure, and paginate with offset/limit until next_offset is null. A completed Tool step is not a final report."
+  "The result includes a compact, redacted index of exact causal Tool references when it fits its declared bound, plus the paged detailed inventory. If the compact index says complete=false, follow inventory_next_before to discover older references. When a material source or mutation fact is absent from the final text, use only a necessary message_id and part_id returned by the index or inventory in this or an earlier call, select field=input, output, or failure, and paginate with offset/limit until next_offset is null. A completed Tool step is not a final report."
 
 export async function readAgentMessages(taskID: string, rawInput: unknown) {
   const { message_ids, inventory_before, evidence_reads } = ReadAgentMessageInputSchema.parse(rawInput)
@@ -247,6 +269,7 @@ export async function readAgentMessages(taskID: string, rawInput: unknown) {
     (inventory_before ?? []).map((cursor) => [cursor.final_message_id, cursor.before_message_id]),
   )
   const causalToolMessageInventory: CausalToolMessage[] = []
+  const causalToolReferences: CausalToolReference[] = []
   const inventoryNextBefore: Array<{ final_message_id: string; before_message_id: string }> = []
   const causalToolMessageSessions = new Map<string, string>()
   for (const final of finals) {
@@ -271,6 +294,19 @@ export async function readAgentMessages(taskID: string, rawInput: unknown) {
     const inventoryPage = causalInventoryPage(occurrenceMessages, before)
     for (const candidate of occurrenceMessages) {
       causalToolMessageSessions.set(candidate.info.id, final.session_id)
+      for (const part of candidate.parts) {
+        if (part.type !== "tool") continue
+        const preview = safeInputPreview(part.state.input, CAUSAL_TOOL_REFERENCE_PREVIEW_CHARS)
+        causalToolReferences.push({
+          final_message_id: final.message_id,
+          message_id: candidate.info.id,
+          part_id: part.id,
+          tool_name: part.tool,
+          status: part.state.status,
+          input_preview: preview.input_preview,
+          input_preview_truncated: preview.input_preview_truncated,
+        })
+      }
     }
     if (inventoryPage.next_before_message_id) {
       inventoryNextBefore.push({
@@ -345,6 +381,7 @@ export async function readAgentMessages(taskID: string, rawInput: unknown) {
   return JSON.stringify(
     {
       messages,
+      causal_tool_reference_index: compactCausalToolReferenceIndex(causalToolReferences),
       causal_tool_message_inventory: causalToolMessageInventory,
       inventory_next_before: inventoryNextBefore,
       evidence_reads: evidenceReads,

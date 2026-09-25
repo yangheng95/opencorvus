@@ -302,6 +302,8 @@ for (const { collection, selectGoals, delegatedSelection = false } of [
                 const last = reads.at(-1)
                 if (!last) throw new Error("Reviewer did not receive the real shared reader result")
                 if (reviewerStep === 2) {
+                  expect(last.causal_tool_reference_index).toMatchObject({ complete: true, tool_count: 17 })
+                  expect(last.causal_tool_reference_index.refs).toHaveLength(17)
                   expect(last.causal_tool_message_inventory).toHaveLength(16)
                   expect(last.inventory_next_before).toHaveLength(1)
                   return toolStream("read_agent_message", { message_ids, inventory_before: last.inventory_next_before })
@@ -309,6 +311,10 @@ for (const { collection, selectGoals, delegatedSelection = false } of [
                 const earliest = reads[1].causal_tool_message_inventory[0]
                 const fact = earliest.tool_facts[0]
                 if (reviewerStep === 3) {
+                  expect(reads[0].causal_tool_reference_index.refs[0]).toMatchObject({
+                    message_id: earliest.message_id,
+                    part_id: fact.part_id,
+                  })
                   expect(reads[1].causal_tool_message_inventory).toHaveLength(1)
                   return toolStream("read_agent_message", { message_ids, evidence_reads: [
                     { message_id: earliest.message_id, part_id: fact.part_id, field: "input", offset: 0, limit: 120 },

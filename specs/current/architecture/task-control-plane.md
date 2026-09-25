@@ -155,9 +155,14 @@ Message IDs. A later dispatch does not revoke an earlier terminal worker
 Message whose evidence remains material. The
 first read also returns a bounded, redacted page of real Tool Message and Part
 identities from the same Session, the same accepted input parent and no later
-than each selected final in persisted `(time,id)` order. Older pages use the
-returned per-final `inventory_next_before` cursor. A caller may then supply up
-to eight exact `message_id+part_id` pairs returned by that final's inventory
+than each selected final in persisted `(time,id)` order. A compact reference
+index lists every causal Tool Part's exact Message/Part identity and redacted
+short input preview when its serialized size fits the declared bound;
+`complete=false` and the total Tool count explicitly mark an oversized index.
+This is another density of the same persisted facts, not a second authority or
+an inferred business decision. Older detailed pages use the returned per-final
+`inventory_next_before` cursor. A caller may then supply up
+to eight exact `message_id+part_id` pairs returned by that final's index or inventory
 in this or an earlier call through
 `evidence_reads` with an explicit `input`, `output`, or `failure` field; the
 same reader returns a structured-redacted projection of that persisted Tool

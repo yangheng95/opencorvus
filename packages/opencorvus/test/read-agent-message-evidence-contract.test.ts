@@ -76,4 +76,29 @@ describe("read_agent_message causal evidence projection", () => {
       private_key: "<redacted>",
     })
   })
+
+  test("reports a bounded compact reference index with an explicit oversized result", () => {
+    const reference = {
+      final_message_id: "msg_final",
+      message_id: "msg_early",
+      part_id: "part_source",
+      tool_name: "api_fetch",
+      status: "completed",
+      input_preview: ReadAgentMessageTestHooks.safeInputPreview({
+        url: "https://example.invalid/messages/msg_early",
+        Authorization: "Bearer SYNTHETIC_REVIEW_CANARY",
+      }, 160).input_preview,
+      input_preview_truncated: false,
+    }
+    expect(ReadAgentMessageTestHooks.compactCausalToolReferenceIndex([reference])).toEqual({
+      complete: true,
+      tool_count: 1,
+      refs: [{ ...reference, input_preview: '{"url":"https://example.invalid/messages/msg_early","Authorization":"<redacted>"}' }],
+    })
+    const oversized = ReadAgentMessageTestHooks.compactCausalToolReferenceIndex([
+      { ...reference, input_preview: "x".repeat(21_000) },
+      { ...reference, message_id: "msg_late", input_preview: "x".repeat(21_000) },
+    ])
+    expect(oversized).toEqual({ complete: false, tool_count: 2, refs: [] })
+  })
 })
