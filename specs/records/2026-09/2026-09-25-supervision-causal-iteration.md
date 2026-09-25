@@ -467,3 +467,20 @@
 - 曝光边界也有新事实：T1 verifier在11:31:08.225已GET实际Opportunity，先于方法；方法选源executor且自述已读executor。其“Deferred to comparison”文字不能倒置真实读取顺序。方法先于比较publication成立，但未见实际结果前形成方法不成立；独立推导与确认既有正确解释未分离。G11显示原重算/标题在B1 18次、T1 25次出站instructions出现，新方法/比较段仅T1 25次出现；这是片段发送证据，不是完整wire/理解保证。
 - 成本完整记录：B1 79请求/79usage、2,826,202 tokens、27官方Tool/71全Tool、534.622秒；T1 78/78、2,727,654 tokens、32官方Tool/70全Tool、626.884秒。全157请求均Luna流式HTTP200，usage数量缺口0，合5,553,856 tokens。包含preflight/内部调用；原cost_usd0不是免费账单。verifier本身由18请求/490,273tokens变25/946,978，其它角色成本也变，不能以整体tokens稍低宣称交接节省成本。
 - 决策：本次两episode闭合，不再重抽，不晋升`.14`为已证更优父代。它保留为有一次正常路径证据的开发交接，可靠纠错/自进化收益仍未达成。下一可做的本地工作只审查如何固定同一自然错误交付与允许来源的真实、明确归属、只读验收起点，排除前置executor不同的识别问题；不得复活旧Task、改官方world、伪造producer、泄露operator答案或立即增加模型样本。合法设计未成立时应明确未知/不可识别边界，而不是同义prompt或更多随机世界。整体五段机制工作继续，停止此对照不等于暂停整体工作。
+
+## G15实施前：固定归档材料的归属与可执行性
+
+- Recall：本轮只做G14留下的同起点识别审查，无模型/世界/作者/新包、凭据或旧Task恢复。已读Task `CreateTaskInput`/`materializeApiAttachments`、AttachmentStore、共享附件index投影、跨Task正式移交、worker能力resolver、原`.13/.14` manifest与相关成功合同；当前架构02-data及task-control-plane是权限事实源。全仓调用区分数据可复制、模型可读取、原Tool身份可消费、正式移交四件事。
+- 当前代码事实：API附件原入口支持bytes/base64即时材料化，持久化为中性`task_input/user-upload`；共享worker只投影附件index，不能用存储成功冒充实际读到内容。跨Task正式移交要求当前DB内同Project/Mission lineage的终态及精确deliverable，不能从另一个已停止runtime搬旧ID。`.13/.14` worker声明了原AutomationBench MCP能力，`defaultMcpServersForRefs`精确要求真实配置；不能删工具声明或伪造MCP来把归档当原运行。
+- 单一具体产物：从B1只读原链复制原operator请求、全部27条实际官方调用及其返回、原verifier的验收主张，标明operator整理的历史材料与原归属，旧ID仅作归档坐标。排除整份world、评分/assertions、其它arm/Cycle的知识及operator答案；不筛选“有利”的source子集。复制品不进入原Task或原Artifact表，也不伪造新participant/Tool结果。它能固定待审文本，尚不能固定新的模型派单或执行上下文。
+- B1没有取得基础价/折扣，所以该闭卷材料不能合法要求模型给出54,000；最多检验是否识别计算依据未闭合、保留unknown而非继续接受。若要完整数值修正或重新发现来源，就需要另一个明确的环境/权限契约，不能将其偷偷加入本轮。此限制在评估侧说明，不把定位答案附加到模型输入。
+- 本地Checker仅验证原AttachmentStore写入/完整读取保持同一归档bytes，并调用真实worker resolver观察缺少原MCP配置时的确切合同。使用新隔离runtime/project，无Task/LLM/假assistant消息。若resolver拒绝，这是诊断方案前提不满足，不是待修Host bug；不为测试绕过权限。实施后给出已证/未知和下一决定，不称为真实业务纠错。
+
+### G15本地结果与路线决定
+
+- 已生成[固定历史输入](../../artifacts/2026-09-25-acceptance-comparison-design/archive-review-input.json)，81,724字节：原请求、完整27条顺序调用/原返回、原verifier主张，分别逐值比对原B1链。外层明确operator整理、原IDs仅为归档坐标，未写入新Task/Artifact/Message或伪造Tool。完整world、评分/assertions、T1/Cycle3与operator答案未进入该输入。
+- 原`AttachmentStore.write`、URL解析、read/readReference在新隔离Project真实保存并完整读回相同bytes与MIME/长度，内容身份`4375156964102c71e4d16a33d5eeb826dfeed8dcd1bfbd891be81801850be215`。这是不可变材料传输证据，不是模型看过材料或业务判断通过。
+- 两版immutable包的真实`resolveWorkerCapability`均返回`Active expert squad projects missing default MCP server default/mcp/automationbench.`。使用明确test-driver binding和空MCP配置，没有修改包、隐藏原工具、替换服务或调用Provider。收据`.tmp/supervision-causal-20260925/archive-input-local/receipt.json`保留；本地DB为Project1，其余Task/Session/Message/Provider activity/usage均0，无auth/models，进程已退出。旧runtime未打开为产品实例、未迁移或重置。
+- [入口审计](../../artifacts/2026-09-25-acceptance-comparison-design/archive-review-ingress.md)给出中性附件、真实worker读取、正式跨Task移交与MCP投影的边界。停止“只上传归档就能原权限直跑verifier”的方案；这是前提不满足，不是新增Host修复理由，也不证明所有同起点设计都不可能。不能把另一角色/无工具问答仍叫原生`.13/.14`对照。
+- 主验收仍为真实业务纠错。当前归档包只支持有限的依据充分性审计，不能从B1未读到的价表中凭空要求正确总价。若继续同起点研究，下一设计应优先审查既有业务引擎能否支持明确标注的开发fixture和原真实API，而不是把只读文字判断当完整交付；不能改旧官方世界/原分、冒充旧参与者、增加权限或立即创建新world/model。若该边界不能合法满足，应记录停止该方案，不以更多随机样本替代。当前无已登记的新运行。
+- 并行工作区事实：本地Checker收据写于11:58:38 UTC；随后12:03:10出现非本轮操作产生的提交`ba89e5cb`（Freeze AutomationBench business clock across input world and replay），HEAD从`a550f822`前进。该提交还包含本轮已写的根spec索引链接；保留其已提交状态，不回退/改写。新的benchmark源不能冒充H-E原`fe233643`；未来运行须先核对更新后的Inspect架构/时钟契约并重新登记，不改历史分数。此提交的授权/验证归属未在本线程核验，完整待推送集合需连同原`2a55323e`一起审查；当前继续保留推送阻塞。

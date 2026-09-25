@@ -4,6 +4,7 @@
 - [Acceptance relation and input observation](2026-09-25-acceptance-comparison-design/input-observation.md): read-only trace findings and explicit non-content-retaining input probes; no new model evaluation.
 - [Method handoff intervention design](2026-09-25-acceptance-comparison-design/method-handoff.md): exact verifier patch and bounded behavioral preregistration; source .14 implementation is not an evaluated improvement.
 - [H-E two-episode results](2026-09-25-acceptance-comparison-design/he-01-results.md): original scores/costs and real handoff chronology; no demonstrated causal correction benefit.
+- [Archived review input boundary](2026-09-25-acceptance-comparison-design/archive-review-ingress.md): fixed historical material, real local attachment checks and exact native projection limits; no model replay.
 
 - [AutomationBench ten-case automatic revision experiment](2026-09-24-automationbench-self-evolution/README.md): paired official scores for a model-authored candidate.
 

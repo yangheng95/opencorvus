@@ -27,6 +27,10 @@ original database/eval log.
 - [H-E two-episode results](he-01-results.md): original scores, participant/source
   chronology, costs and closure; normal delivery is observed but correction benefit
   remains unidentified because the executor starting results differ.
+- [Archived review ingress audit](archive-review-ingress.md) and its
+  [fixed historical input](archive-review-input.json) separate neutral copied
+  material from current Task authority. Local storage works; unchanged verifier
+  projection still requires the real declared MCP service. No model run was made.
 
 Source pointers are labels in this prototype. It does not resolve them, verify
 complete reads, infer missing terms, choose a formula, or determine business truth.
