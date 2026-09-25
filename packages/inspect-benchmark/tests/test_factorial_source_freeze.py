@@ -33,6 +33,21 @@ def test_preregistered_paired_early_stop_reports_scored_harm_and_unscored_arms()
     assert paired_early_stop(incomplete) == {"kind": "unscored", "block": 1, "arms": ["ME"]}
 
 
+def test_single_entrypoint_complete_loss_has_a_reviewable_stop_receipt() -> None:
+    completed = {"4": {"results": {
+        "TS": {"strict": 1.0, "partial": 1.0},
+        "TE": {"strict": 1.0, "partial": 1.0},
+        "MS": {"strict": 1.0, "partial": 1.0},
+        "ME": {"strict": 0.0, "partial": 0.0},
+    }}}
+    assert paired_early_stop(completed) == {
+        "kind": "single_arm_complete_loss",
+        "block": 4,
+        "static_arm": "MS",
+        "evolved_arm": "ME",
+    }
+
+
 def test_preregistered_three_block_partial_regression_and_continue_receipts() -> None:
     row = {
         "TS": {"strict": 0.0, "partial": 0.6},

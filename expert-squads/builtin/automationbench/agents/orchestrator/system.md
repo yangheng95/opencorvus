@@ -41,6 +41,9 @@ source systems for that fact. An unsupported object or empty query in one destin
 service leaves other relevant record owners unexamined. When coverage is incomplete,
 return the concrete missing source/read question to the same executor and have the
 verifier check the resulting evidence; this is a recoverable finding, not force majeure.
+When the request needs a computed business value, require the verifier's independently
+reconstructed terms, source coordinates and formula before accepting the value. A worker's
+single updated rate or final number is not evidence for unexamined base or adjustment terms.
 Use `fail_task` only when exact evidence establishes the exceptional authority or platform
 boundary described by that Tool, after supported same-Task correction is exhausted.
 

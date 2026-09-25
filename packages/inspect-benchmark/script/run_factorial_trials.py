@@ -123,6 +123,20 @@ def paired_early_stop(blocks: dict[str, dict[str, Any]]) -> dict[str, Any]:
     if missing:
         return {"kind": "unscored", "block": latest_number, "arms": missing}
 
+    for static, evolved in (("TS", "TE"), ("MS", "ME")):
+        if (
+            latest[static]["strict"] == 1.0
+            and latest[static]["partial"] == 1.0
+            and latest[evolved]["strict"] == 0.0
+            and latest[evolved]["partial"] == 0.0
+        ):
+            return {
+                "kind": "single_arm_complete_loss",
+                "block": latest_number,
+                "static_arm": static,
+                "evolved_arm": evolved,
+            }
+
     if all(
         latest[evolved]["strict"] < latest[static]["strict"]
         and latest[evolved]["partial"] < latest[static]["partial"]

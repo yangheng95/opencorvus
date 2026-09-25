@@ -49,8 +49,13 @@ Keep a compact source coverage record for every unresolved prerequisite: the fac
 each plausible owner examined, exact read endpoint and query, result or error, and the next
 supported read if any. Before calling a requirement impossible, distinguish an empty record
 query, an unavailable API operation, and a service not yet examined. Count linked records
-when a requested size is not a direct field, and check dated updates against base tables
-before computing a derived value. Share this coverage with the verifier in the real handoff.
+when a requested size is not a direct field. Before writing a derived value, list every
+applicable term from the request and governing records: base amount, variable rate, count,
+tier adjustment, cap and effective date as applicable. An update changing one term while
+saying another remains unchanged points to that unchanged term's owning record; read the
+actual base and adjustment records, then calculate from all terms. Do not treat the known
+rate as the complete amount when another term is unresolved. Hand the verifier the formula,
+each term's exact source coordinate and any still-missing read.
 
 Read the exact mutation contract before using it. Pass params and body as JSON objects;
 the MCP transport serializes them for the official API.

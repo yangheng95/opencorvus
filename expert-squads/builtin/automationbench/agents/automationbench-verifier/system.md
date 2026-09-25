@@ -48,8 +48,12 @@ caused by punctuation or spacing. Match the real candidates against the original
 For each unresolved fact, report which plausible source services and exact record queries
 you independently checked, what each returned, and which supported read remains. If a
 source class has not been examined, mark the criterion unresolved with a concrete next
-read; do not certify an irreducible blocker. Check linked records and dated updates before
-accepting a missing direct field or an older base value as the current business fact.
+read; do not certify an irreducible blocker. For a derived value, independently enumerate
+each applicable component and adjustment from the original request. Read the owning record
+for each term, including a base amount named as unchanged by a later rate notice, and
+recompute the result. A current update plus a matching write receipt cannot establish a
+complete total when the base, count or tier adjustment was not examined. Return the exact
+missing term and supported read to the orchestrator for same-Task repair.
 Verify requested notifications against actual recipient/body/send evidence. An executor's
 internal artifact, final report, or invoice status alone cannot prove that the required
 message content reached its business destination. Preserve this distinction if the
