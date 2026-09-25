@@ -13,9 +13,41 @@ from script.run_factorial_trials import (
     Episode,
     SourceRevisionDriftError,
     current_source_revision,
+    paired_early_stop,
     require_frozen_source,
     settle_owned_activity,
 )
+
+
+def test_preregistered_paired_early_stop_reports_scored_harm_and_unscored_arms() -> None:
+    harm = {"1": {"results": {
+        "TS": {"strict": 1.0, "partial": 1.0},
+        "TE": {"strict": 0.0, "partial": 0.5},
+        "MS": {"strict": 1.0, "partial": 1.0},
+        "ME": {"strict": 0.0, "partial": 0.4},
+    }}}
+    assert paired_early_stop(harm) == {"kind": "paired_regression", "block": 1}
+    incomplete = {"1": {"results": {
+        **harm["1"]["results"], "ME": {"strict": None, "partial": None},
+    }}}
+    assert paired_early_stop(incomplete) == {"kind": "unscored", "block": 1, "arms": ["ME"]}
+
+
+def test_preregistered_three_block_partial_regression_and_continue_receipts() -> None:
+    row = {
+        "TS": {"strict": 0.0, "partial": 0.6},
+        "TE": {"strict": 0.0, "partial": 0.4},
+        "MS": {"strict": 0.0, "partial": 0.6},
+        "ME": {"strict": 0.0, "partial": 0.4},
+    }
+    assert paired_early_stop({"1": {"results": row}}) == {"kind": "continue", "block": 1}
+    decision = paired_early_stop({str(index): {"results": row} for index in (1, 2, 3)})
+    assert decision == {
+        "kind": "three_block_regression",
+        "block": 3,
+        "partial_effects": {"TE": pytest.approx(-0.2), "ME": pytest.approx(-0.2)},
+        "strict_gains": {"TE": 0.0, "ME": 0.0},
+    }
 
 
 def git(root: Path, *args: str) -> None:

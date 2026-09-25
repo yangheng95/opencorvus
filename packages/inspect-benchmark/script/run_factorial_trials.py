@@ -112,6 +112,46 @@ def read_receipt(path: Path) -> dict[str, Any] | None:
         return None
 
 
+def paired_early_stop(blocks: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    """Apply the preregistered four-arm harm rule to completed paired blocks only."""
+    latest_number = max(map(int, blocks))
+    latest = blocks[str(latest_number)]["results"]
+    missing = [
+        arm for arm in ARMS
+        if latest[arm].get("strict") is None or latest[arm].get("partial") is None
+    ]
+    if missing:
+        return {"kind": "unscored", "block": latest_number, "arms": missing}
+
+    if all(
+        latest[evolved]["strict"] < latest[static]["strict"]
+        and latest[evolved]["partial"] < latest[static]["partial"]
+        for static, evolved in (("TS", "TE"), ("MS", "ME"))
+    ):
+        return {"kind": "paired_regression", "block": latest_number}
+
+    if len(blocks) == 3:
+        first_three = [blocks[str(index)]["results"] for index in (1, 2, 3)]
+        effects = {
+            evolved: sum(
+                row[evolved]["partial"] - row[static]["partial"] for row in first_three
+            ) / 3
+            for static, evolved in (("TS", "TE"), ("MS", "ME"))
+        }
+        strict_gains = {
+            evolved: sum(row[evolved]["strict"] - row[static]["strict"] for row in first_three)
+            for static, evolved in (("TS", "TE"), ("MS", "ME"))
+        }
+        if all(effects[arm] <= -0.10 and strict_gains[arm] <= 0 for arm in ("TE", "ME")):
+            return {
+                "kind": "three_block_regression",
+                "block": latest_number,
+                "partial_effects": effects,
+                "strict_gains": strict_gains,
+            }
+    return {"kind": "continue", "block": latest_number}
+
+
 @dataclass
 class Episode:
     arm: str
@@ -579,6 +619,14 @@ async def main() -> None:
                 if outcome["status"] == "source_revision_drift"
                 else "failed"
             )
+            break
+        decision = paired_early_stop(snapshot["blocks"])
+        if decision["kind"] != "continue":
+            snapshot["status"] = (
+                "stopped_for_unscored" if decision["kind"] == "unscored"
+                else "stopped_for_regression"
+            )
+            snapshot["early_stop"] = decision
             break
     else:
         snapshot["status"] = (
