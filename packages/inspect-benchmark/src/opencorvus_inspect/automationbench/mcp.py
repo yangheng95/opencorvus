@@ -10,6 +10,7 @@ from contextlib import asynccontextmanager, contextmanager
 from typing import Any
 
 import uvicorn
+from automationbench.tools.api.search import _load_schemas
 from mcp.server.fastmcp import FastMCP
 
 from .world import OfficialWorld
@@ -25,6 +26,40 @@ class _Server(uvicorn.Server):
 @asynccontextmanager
 async def world_server(world: OfficialWorld) -> AsyncIterator[str]:
     mcp = FastMCP("automationbench", stateless_http=True, json_response=True)
+
+    @mcp.tool()
+    async def api_catalog(service: str | None = None) -> str:
+        """List real simulated API services or one service's documented operations.
+
+        This is endpoint metadata, not business records. Use api_search for the
+        exact request contract and api_fetch to read actual business data.
+
+        Args:
+            service: Exact service name from the service listing; omit to list services.
+        """
+        schemas = _load_schemas()
+        if service is None:
+            return json.dumps({
+                "services": [
+                    {"name": name, "endpoint_count": len(schema.get("endpoints", []))}
+                    for name, schema in sorted(schemas.items())
+                ]
+            })
+        if service not in schemas:
+            raise ValueError(f"unknown official API service: {service}")
+        schema = schemas[service]
+        return json.dumps({
+            "service": service,
+            "notes": schema.get("notes", ""),
+            "operations": [
+                {
+                    "id": endpoint["id"],
+                    "method": endpoint["method"],
+                    "description": endpoint.get("description", ""),
+                }
+                for endpoint in schema.get("endpoints", [])
+            ],
+        })
 
     @mcp.tool()
     async def api_search(query: str, top_k: int = 5) -> str:

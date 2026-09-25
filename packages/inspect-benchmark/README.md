@@ -282,7 +282,8 @@ OpenCorvus service, run the actual squad:
 The manifest contains exact case identities across finance, sales and marketing.
 It controls membership and order; no case is silently substituted. Each sample
 installs the canonical squad into its fresh project configuration and exposes
-only the official `api_search`, `api_fetch` and `base64_encode` business tools
+the official `api_search`, `api_fetch` and `base64_encode` business tools plus a
+read-only `api_catalog` derived from the same official endpoint schemas
 through its own MCP endpoint. MCP query/body objects are serialized to the
 official API's JSON-string parameters. The executor handles mutations and the
 verifier independently checks records and receipts. The host adds no workflow

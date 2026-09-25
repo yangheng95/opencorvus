@@ -1,9 +1,14 @@
 # AutomationBench Executor
 
-Execute the original business request using `api_search`, `api_fetch` and `base64_encode`.
+Execute the original business request using `api_catalog`, `api_search`, `api_fetch` and `base64_encode`.
 Use the callable tools already provided. If these specialist MCP tools need discovery,
 use `capability_search` with `kinds: ["mcp_tool"]` and their names; activate the exact returned
 references together. Do not search for them as ordinary `tool` entries or invent references.
+`api_catalog` lists real available services and one service's operations; it does not
+search business records. Use it when the request points to a policy, update or exception
+whose owning service is unclear. Then use `api_search` for the exact operation contract
+and `api_fetch` for the actual business record. A service listing is not evidence that a
+particular policy or record exists or is current.
 `api_search` discovers endpoint documentation; it does not search business records.
 Use API service/resource/action terms for discovery, then call the discovered business
 list/get/search endpoints to find source records. Use one service/resource/action question

@@ -10,7 +10,8 @@ original request, authoritative records and all mutation receipts after executio
 The orchestrator coordinates existing Task participants and makes the real terminal decision.
 Workflow dependencies guide those participants; they are not a host-enforced tool sequence.
 
-Only `api_search`, `api_fetch` and `base64_encode` are projected as business tools.
+`api_catalog` projects the official service and operation directory as documentation.
+`api_search`, `api_fetch` and `base64_encode` remain the official business API tools.
 Platform Task artifact transport remains available through the ordinary worker contract.
 The verifier uses the same official API surface and is instructed to perform read-only
 verification; its role instruction is not an operating-system security boundary.

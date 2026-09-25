@@ -5,7 +5,7 @@
   "name": "AutomationBench",
   "label": "AutomationBench",
   "description": "Execute simulated cross-application business workflows and independently verify exact outcomes through the official AutomationBench API tools.",
-  "version": "2026.09.25.2",
+  "version": "2026.09.25.8",
   "product_pillars": ["code", "work"],
   "readme": "README.md",
   "selector": {
@@ -28,6 +28,7 @@
     "agents": {
       "automationbench-executor": {
         "capability_refs": [
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fapi_catalog",
           "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fapi_fetch",
           "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fapi_search",
           "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fbase64_encode",
@@ -39,6 +40,7 @@
       },
       "automationbench-verifier": {
         "capability_refs": [
+          "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fapi_catalog",
           "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fapi_fetch",
           "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fapi_search",
           "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fautomationbench%2Ftool%2Fbase64_encode",

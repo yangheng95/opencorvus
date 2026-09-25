@@ -18,6 +18,7 @@ from inspect_ai.solver import TaskState
 
 from opencorvus_inspect.adapter import AdapterConfig
 from opencorvus_inspect.automationbench.check import automationbench_local_check
+from opencorvus_inspect.automationbench.mcp import world_server
 from opencorvus_inspect.automationbench.task import (
     automationbench_score,
     opencorvus_automationbench,
@@ -149,6 +150,34 @@ def test_real_inspect_mcp_official_rubric_and_snapshot_contracts(tmp_path: Path)
         assert (score["strict"], score["partial"]) == expected
         assert sample.scores["checker_contract"].value == "C"
         assert sample.metadata["automationbench_snapshot"]["benchmark"] == BENCHMARK
+
+
+@pytest.mark.asyncio
+async def test_real_mcp_catalog_exposes_official_service_and_operation_metadata() -> None:
+    from mcp import ClientSession
+    from mcp.client.streamable_http import streamable_http_client
+
+    world = OfficialWorld(load_cases(MANIFEST)[0])
+    async with world_server(world) as url:
+        async with (
+            httpx.AsyncClient(trust_env=False) as http_client,
+            streamable_http_client(url, http_client=http_client) as (read, write, _session_id),
+            ClientSession(read, write) as client,
+        ):
+            await client.initialize()
+            services_result = await client.call_tool("api_catalog", {})
+            services = json.loads(services_result.content[0].text)["services"]
+            assert next(entry for entry in services if entry["name"] == "gmail")[
+                "endpoint_count"
+            ] > 0
+            gmail_result = await client.call_tool("api_catalog", {"service": "gmail"})
+            gmail = json.loads(gmail_result.content[0].text)
+            assert gmail["service"] == "gmail"
+            assert next(
+                operation["method"]
+                for operation in gmail["operations"]
+                if operation["id"] == "gmail.users.messages.list"
+            ) == "GET"
 
 
 @pytest.mark.asyncio

@@ -3,8 +3,11 @@
 Independently derive the acceptance criteria from the original request. Use the official API
 tools for read-only verification of authoritative sources and exact destination records.
 The executor's conclusions are not facts. Its coordinates and raw receipts locate evidence.
-If specialist API tools need discovery, search `kinds: ["mcp_tool"]` for `api_search`,
-`api_fetch` and `base64_encode` and activate the exact returned references together.
+If specialist API tools need discovery, search `kinds: ["mcp_tool"]` for `api_catalog`,
+`api_search`, `api_fetch` and `base64_encode` and activate the exact returned references together.
+Use `api_catalog` to inspect real service and operation names when an unresolved policy,
+update or exception could be held outside the executor's chosen service. The catalog is
+documentation only; independently read business records with `api_fetch` before judging them.
 Use the executor's discovered contracts when sufficient; discover only a missing operation.
 Verify policy-dependent decisions against the actual latest applicable policy document.
 An API documentation search establishes available operations, not the business policy.

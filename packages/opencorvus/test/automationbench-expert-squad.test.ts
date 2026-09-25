@@ -21,6 +21,7 @@ test("AutomationBench loads through the real package loader with official API ca
       context: id,
     })
     expect(grants.defaultMcpToolRefs).toEqual([
+      "default/mcp/automationbench/tool/api_catalog",
       "default/mcp/automationbench/tool/api_fetch",
       "default/mcp/automationbench/tool/api_search",
       "default/mcp/automationbench/tool/base64_encode",

@@ -91,6 +91,7 @@ test.skipIf(!process.env.OPENCORVUS_INSPECT_TEST_PYTHON)(
               agentID,
             })
             expect(worker.defaultMcpTools.map((tool) => tool.ref)).toEqual([
+              "default/mcp/automationbench/tool/api_catalog",
               "default/mcp/automationbench/tool/api_fetch",
               "default/mcp/automationbench/tool/api_search",
               "default/mcp/automationbench/tool/base64_encode",

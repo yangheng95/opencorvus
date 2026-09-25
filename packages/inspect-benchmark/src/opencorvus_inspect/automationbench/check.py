@@ -32,12 +32,13 @@ async def exercise_invoice_case(url: str, count: int) -> None:
             await client.initialize()
             inventory = await client.list_tools()
             if sorted(tool.name for tool in inventory.tools) != [
+                "api_catalog",
                 "api_fetch",
                 "api_search",
                 "base64_encode",
             ]:
                 raise ValueError(
-                    "AutomationBench MCP inventory does not match the official surface"
+                    "AutomationBench MCP inventory does not match the documented surface"
                 )
 
             async def call(name: str, arguments: dict[str, Any]) -> str:
@@ -46,6 +47,9 @@ async def exercise_invoice_case(url: str, count: int) -> None:
                     raise ValueError(f"local checker tool {name} returned an MCP error")
                 return "\n".join(item.text for item in result.content if item.type == "text")
 
+            services = json.loads(await call("api_catalog", {}))["services"]
+            if "wave" not in {entry["name"] for entry in services}:
+                raise ValueError("Official endpoint catalog omitted Wave")
             await call("api_search", {"query": "wave invoice", "top_k": 20})
             await call("api_search", {"query": "gmail messages send", "top_k": 5})
             inputs = [
