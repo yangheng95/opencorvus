@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Acceptance comparison design probe](2026-09-25-acceptance-comparison-design/README.md): offline contract controls and a retained counterexample; not a model evaluation or production acceptance gate.
+
 - [AutomationBench ten-case automatic revision experiment](2026-09-24-automationbench-self-evolution/README.md): paired official scores for a model-authored candidate.
 
 - [Inspect AutomationBench Luna calibration](2026-09-24-inspect-automationbench-luna/README.md): isolated real-model diagnostics and frozen pilot.

@@ -1,0 +1,116 @@
+{
+  "scope": "Operator-authored contract controls, not model results or benchmark samples",
+  "records": {
+    "total": {
+      "criterion": "A declared account-size and tier calculation agrees with the observed opportunity total",
+      "expectation": {
+        "kind": "computed_number", "unit": "USD",
+        "inputs": {
+          "base": {"value": "40000", "sources": ["Cycle3:prt_g0VWD65IV00Hco4AJ9Bt:Module Pricing"]},
+          "count": {"value": "4", "sources": ["Cycle3:prt_g0VWD643R00cxZfPYtoW:records"]},
+          "fee": {"value": "5000", "sources": ["Cycle3:msg_q4_pricing_001:Per-Contact Fee"]},
+          "discount": {"value": "0.10", "sources": ["Cycle3:prt_g0VWD65IV00Hco4AJ9Bt:Tier Discounts"]}
+        },
+        "expression": {
+          "op": "multiply",
+          "left": {"op": "add", "left": {"input": "base"}, "right": {"op": "multiply", "left": {"input": "count"}, "right": {"input": "fee"}}},
+          "right": {"op": "subtract", "left": {"constant": "1"}, "right": {"input": "discount"}}
+        }
+      },
+      "observation": {"state": "available", "value": "54000", "unit": "USD", "sources": ["design:correct-value-control-not-a-Cycle3-mutation"]}
+    },
+    "delivery": {
+      "criterion": "The independently declared ordered delivery-effect record agrees with the observed record",
+      "expectation": {"kind": "literal", "value": ["slack", "regular_mail", "vip_mail"], "sources": ["design:explicit-three-effect-request"]},
+      "observation": {"state": "available", "value": ["slack", "regular_mail", "vip_mail"], "unit": null, "sources": ["design:complete-delivery-control"]}
+    }
+  },
+  "cases": [
+    {
+      "id": "complete_numeric_control", "record": "total",
+      "meaning": "Given the declared complete formula, the correct observation matches; this is not a new business run.",
+      "expected_output": {"status": "matched", "expected": "54000", "observed": "54000", "unused_inputs": []}
+    },
+    {
+      "id": "observed_cycle3_amount", "record": "total",
+      "meaning": "The same independently supplied formula contradicts the actual Cycle3 amount; original scoring stays untouched.",
+      "replace": [
+        {"path": ["observation", "value"], "value": "5000"},
+        {"path": ["observation", "sources"], "value": ["Cycle3:prt_g0VWD3wVO00vN8ku2rjW:Amount"]}
+      ],
+      "expected_output": {"status": "contradicted", "expected": "54000", "observed": "5000", "unused_inputs": []}
+    },
+    {
+      "id": "missing_count", "record": "total",
+      "meaning": "A required input is unavailable, so the prototype cannot convert the gap to a numeric zero or a match.",
+      "replace": [{"path": ["expectation", "inputs", "count", "value"], "value": null}],
+      "expected_output": {"status": "unresolved", "reason": "missing_input", "inputs": ["count"], "unused_inputs": []}
+    },
+    {
+      "id": "hypothetical_stale_observation", "record": "total",
+      "meaning": "The supplied formula contradicts a hypothetical earlier observation. This control supplies no historical fee or dependency invalidation implementation.",
+      "replace": [{"path": ["observation", "value"], "value": "63000"}],
+      "expected_output": {"status": "contradicted", "expected": "54000", "observed": "63000", "unused_inputs": []}
+    },
+    {
+      "id": "wrong_method_same_value", "record": "total",
+      "meaning": "COUNTEREXAMPLE: a wrong but legal method still matches a wrong business value. A schema/calculator does not prove method validity or independence.",
+      "replace": [
+        {"path": ["expectation", "expression"], "value": {"input": "fee"}},
+        {"path": ["observation", "value"], "value": "5000"}
+      ],
+      "expected_output": {"status": "matched", "expected": "5000", "observed": "5000", "unused_inputs": ["base", "count", "discount"]}
+    },
+    {
+      "id": "wrong_method_omitted_inputs", "record": "total",
+      "meaning": "STRONGER COUNTEREXAMPLE: the author omits relevant inputs as well as the method. The comparison cannot recover facts outside its declared record.",
+      "replace": [
+        {"path": ["expectation", "inputs"], "value": {"fee": {"value": "5000", "sources": ["Cycle3:msg_q4_pricing_001:Per-Contact Fee"]}}},
+        {"path": ["expectation", "expression"], "value": {"input": "fee"}},
+        {"path": ["observation", "value"], "value": "5000"}
+      ],
+      "expected_output": {"status": "matched", "expected": "5000", "observed": "5000", "unused_inputs": []}
+    },
+    {
+      "id": "complete_effects", "record": "delivery",
+      "meaning": "Literal comparison can represent non-numeric effects when their expected ordered record is supplied independently.",
+      "expected_output": {"status": "matched", "expected": ["slack", "regular_mail", "vip_mail"], "observed": ["slack", "regular_mail", "vip_mail"]}
+    },
+    {
+      "id": "missing_delivery_effects", "record": "delivery",
+      "meaning": "A supplied expectation of three effects exposes a Slack-only observation as incomplete; this is an operator-authored control.",
+      "replace": [{"path": ["observation", "value"], "value": ["slack"]}],
+      "expected_output": {"status": "contradicted", "expected": ["slack", "regular_mail", "vip_mail"], "observed": ["slack"]}
+    },
+    {
+      "id": "unavailable_observation", "record": "total",
+      "meaning": "An unavailable observation remains unresolved even with a complete formula.",
+      "replace": [{"path": ["observation"], "value": {"state": "unavailable", "reason": "Exact result was not read", "sources": ["design:read-gap"]}}],
+      "expected_output": {"status": "unresolved", "reason": "observation_unavailable"}
+    },
+    {
+      "id": "different_units", "record": "total",
+      "meaning": "Different declared units yield an explicit unresolved contract relationship, not implicit conversion.",
+      "replace": [{"path": ["observation", "unit"], "value": "USD/contact"}],
+      "expected_output": {"status": "unresolved", "reason": "unit_mismatch"}
+    },
+    {
+      "id": "undefined_arithmetic", "record": "total",
+      "meaning": "A declared divide-by-zero method yields an explicit domain error; it is never a business verdict.",
+      "replace": [{"path": ["expectation", "expression"], "value": {"op": "divide", "left": {"input": "base"}, "right": {"constant": "0"}}}],
+      "expected_output": {"status": "unresolved", "reason": "derivation_domain_error"}
+    },
+    {
+      "id": "unspecified_rounding", "record": "total",
+      "meaning": "A non-terminating decimal method with no rounding policy yields an explicit precision limit instead of a silently rounded comparison.",
+      "replace": [{"path": ["expectation", "expression"], "value": {"op": "divide", "left": {"constant": "1"}, "right": {"constant": "3"}}}],
+      "expected_output": {"status": "unresolved", "reason": "derivation_precision_unavailable"}
+    },
+    {
+      "id": "malformed_numeric_observation", "record": "total",
+      "meaning": "A nonnumeric string maps to an exact schema error path rather than being silently coerced.",
+      "replace": [{"path": ["observation", "value"], "value": "accepted"}],
+      "expected_output": {"status": "invalid_contract", "paths": [["observation", "value"]]}
+    }
+  ]
+}

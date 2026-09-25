@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Offline declared expectation comparison; not business acceptance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["criterion", "expectation", "observation"],
+  "properties": {
+    "criterion": {"type": "string", "minLength": 1},
+    "expectation": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "value", "sources"],
+          "properties": {
+            "kind": {"const": "literal"}, "value": {},
+            "sources": {"$ref": "#/$defs/sources"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "unit", "inputs", "expression"],
+          "properties": {
+            "kind": {"const": "computed_number"},
+            "unit": {"type": "string", "minLength": 1},
+            "inputs": {
+              "type": "object", "minProperties": 1,
+              "additionalProperties": {
+                "type": "object", "additionalProperties": false,
+                "required": ["value", "sources"],
+                "properties": {
+                  "value": {"anyOf": [{"$ref": "#/$defs/decimal"}, {"type": "null"}]},
+                  "sources": {"$ref": "#/$defs/sources"}
+                }
+              }
+            },
+            "expression": {"$ref": "#/$defs/expression"}
+          }
+        }
+      ]
+    },
+    "observation": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["state", "value", "unit", "sources"],
+          "properties": {
+            "state": {"const": "available"}, "value": {},
+            "unit": {"type": ["string", "null"]},
+            "sources": {"$ref": "#/$defs/sources"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["state", "reason", "sources"],
+          "properties": {
+            "state": {"const": "unavailable"},
+            "reason": {"type": "string", "minLength": 1},
+            "sources": {"$ref": "#/$defs/sources"}
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "decimal": {"type": "string", "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$"},
+    "sources": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "expression": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false, "required": ["input"],
+          "properties": {"input": {"type": "string", "minLength": 1}}
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["constant"],
+          "properties": {"constant": {"$ref": "#/$defs/decimal"}}
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["op", "left", "right"],
+          "properties": {
+            "op": {"enum": ["add", "subtract", "multiply", "divide"]},
+            "left": {"$ref": "#/$defs/expression"},
+            "right": {"$ref": "#/$defs/expression"}
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "scope": "operator_authored_offline_contract_probe",
+  "production_or_model_acceptance": false,
+  "cases": [
+    {
+      "id": "complete_numeric_control",
+      "meaning": "Given the declared complete formula, the correct observation matches; this is not a new business run.",
+      "output": {
+        "status": "matched",
+        "expected": "54000",
+        "observed": "54000",
+        "unused_inputs": []
+      }
+    },
+    {
+      "id": "observed_cycle3_amount",
+      "meaning": "The same independently supplied formula contradicts the actual Cycle3 amount; original scoring stays untouched.",
+      "output": {
+        "status": "contradicted",
+        "expected": "54000",
+        "observed": "5000",
+        "unused_inputs": []
+      }
+    },
+    {
+      "id": "missing_count",
+      "meaning": "A required input is unavailable, so the prototype cannot convert the gap to a numeric zero or a match.",
+      "output": {
+        "status": "unresolved",
+        "reason": "missing_input",
+        "inputs": [
+          "count"
+        ],
+        "unused_inputs": []
+      }
+    },
+    {
+      "id": "hypothetical_stale_observation",
+      "meaning": "The supplied formula contradicts a hypothetical earlier observation. This control supplies no historical fee or dependency invalidation implementation.",
+      "output": {
+        "status": "contradicted",
+        "expected": "54000",
+        "observed": "63000",
+        "unused_inputs": []
+      }
+    },
+    {
+      "id": "wrong_method_same_value",
+      "meaning": "COUNTEREXAMPLE: a wrong but legal method still matches a wrong business value. A schema/calculator does not prove method validity or independence.",
+      "output": {
+        "status": "matched",
+        "expected": "5000",
+        "observed": "5000",
+        "unused_inputs": [
+          "base",
+          "count",
+          "discount"
+        ]
+      }
+    },
+    {
+      "id": "wrong_method_omitted_inputs",
+      "meaning": "STRONGER COUNTEREXAMPLE: the author omits relevant inputs as well as the method. The comparison cannot recover facts outside its declared record.",
+      "output": {
+        "status": "matched",
+        "expected": "5000",
+        "observed": "5000",
+        "unused_inputs": []
+      }
+    },
+    {
+      "id": "complete_effects",
+      "meaning": "Literal comparison can represent non-numeric effects when their expected ordered record is supplied independently.",
+      "output": {
+        "status": "matched",
+        "expected": [
+          "slack",
+          "regular_mail",
+          "vip_mail"
+        ],
+        "observed": [
+          "slack",
+          "regular_mail",
+          "vip_mail"
+        ]
+      }
+    },
+    {
+      "id": "missing_delivery_effects",
+      "meaning": "A supplied expectation of three effects exposes a Slack-only observation as incomplete; this is an operator-authored control.",
+      "output": {
+        "status": "contradicted",
+        "expected": [
+          "slack",
+          "regular_mail",
+          "vip_mail"
+        ],
+        "observed": [
+          "slack"
+        ]
+      }
+    },
+    {
+      "id": "unavailable_observation",
+      "meaning": "An unavailable observation remains unresolved even with a complete formula.",
+      "output": {
+        "status": "unresolved",
+        "reason": "observation_unavailable"
+      }
+    },
+    {
+      "id": "different_units",
+      "meaning": "Different declared units yield an explicit unresolved contract relationship, not implicit conversion.",
+      "output": {
+        "status": "unresolved",
+        "reason": "unit_mismatch"
+      }
+    },
+    {
+      "id": "undefined_arithmetic",
+      "meaning": "A declared divide-by-zero method yields an explicit domain error; it is never a business verdict.",
+      "output": {
+        "status": "unresolved",
+        "reason": "derivation_domain_error"
+      }
+    },
+    {
+      "id": "unspecified_rounding",
+      "meaning": "A non-terminating decimal method with no rounding policy yields an explicit precision limit instead of a silently rounded comparison.",
+      "output": {
+        "status": "unresolved",
+        "reason": "derivation_precision_unavailable"
+      }
+    },
+    {
+      "id": "malformed_numeric_observation",
+      "meaning": "A nonnumeric string maps to an exact schema error path rather than being silently coerced.",
+      "output": {
+        "status": "invalid_contract",
+        "paths": [
+          [
+            "observation",
+            "value"
+          ]
+        ]
+      }
+    }
+  ]
+}
