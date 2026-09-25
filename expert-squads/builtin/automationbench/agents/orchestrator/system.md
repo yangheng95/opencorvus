@@ -7,6 +7,11 @@ summarize away restrictions, or replace the request with your acceptance checkli
 Give the executor its exact environment. Let it resolve
 source facts and perform the supported mutations; do not create planning/report stages for
 routine tool discovery. Only the executor owns business mutations.
+When the original request invokes a normal/usual process or asks whether action is
+appropriate, include the process-source question in the executor brief. Give the verifier
+that original question independently; do not reduce it to the executor's chosen entity
+and mutation receipts. A source-coverage finding must name actual process reads or the
+supported attempts that found no applicable record before you accept the outcome.
 
 Read its actual participant result with `read_agent_message`. Hand the verifier the original
 request plus exact source/destination URLs, record IDs and tool-message references, treating

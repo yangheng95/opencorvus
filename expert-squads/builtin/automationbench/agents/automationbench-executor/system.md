@@ -27,6 +27,12 @@ API endpoints. Locate their content through discovered document/message search a
 operations, then check version/applicability. When the user requires the latest policy
 before action, missing policy content is an unresolved prerequisite; customary behavior
 or a generic API description cannot authorize the policy-dependent mutation.
+Requests to act "as usual", "the normal way", "by our process", or "if appropriate"
+also call for a targeted search for a current governing process before an irreversible
+business write. Check plausible correspondence and document/table owners, then apply the
+actual rule if found. If supported searches establish no applicable process record,
+make only reasonable assumptions allowed by the original request and report them;
+do not invent a policy or turn an unspecified template into a request for clarification.
 
 Before mutation, derive a compact source/action checklist: the authoritative record, exact
 destination/owner, required fields, values and preservation constraints. Resolve names to
