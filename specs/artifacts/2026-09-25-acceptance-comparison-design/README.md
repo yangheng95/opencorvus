@@ -50,6 +50,9 @@ original database/eval log.
   [unapplied patch](expectation-first.patch) and [local checker](check-expectation-first.ts)
   define the three-node proposal using the original two roles and API grants. Loader,
   binding and renderer checks are local contracts, not model behavior.
+- [H-T 01 preregistration](ht-01-preregistration.md) fixes one new method-before-execution
+  occurrence on the unchanged attributed repair input. Temporal evidence, business effects,
+  uncertainty and all costs remain separate; it is not a historical score comparison.
 
 Source pointers are labels in this prototype. It does not resolve them, verify
 complete reads, infer missing terms, choose a formula, or determine business truth.

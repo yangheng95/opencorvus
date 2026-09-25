@@ -602,3 +602,15 @@
 - 隔离副本位于`.tmp/supervision-causal-20260925/ht-local-design/staged-squad`。首次版本suffix被原schema明确拒绝，改用合法未发布设计版本2026.09.25.15；真实loader/immutable reload identity为`a231dffdaed86a638cb8cc0995eab387a67dba8d70330980b37210553fd37b40`。检查六文件reload相同、两个worker全部grant及四MCPrefs与`.14`相同、三个topology wave及node→agent绑定正确、初始renderer保留显式阶段和原测试请求；receipt在`checker-run-02/receipt.json`。全部为本地loader/纯合同，无LLM/MCP业务调用/Task/participant消息，不能当模型顺序或效果验证。
 - git apply --check/四文件numstat、专用检查器typecheck、docs342ops25groups/diff通过。专用tsconfig第一版遗漏项目原*.md声明，补入原src/**/*.d.ts后通过，未新增假类型声明。completion收集前后verifier产物的结论仍是源码核对，未做Task sealing运行。所有失败/限制在设计文档保留，不把检查器通过包装业务根治。
 - 已恢复原heartbeat的本地工作跟进，不等待G22选择题。下一步是具体的H-T测量预登记审查，核对新问题是否能区分预测、原输入/旧文本/评估侧隔离、次数/停止规则；当前仍没有真实运行收据，不启动模型/业务world/候选作者/Campaign，也不重启任何旧run。
+
+## G24预登记：只观察一个新的前置方法前缀与完整业务闭环
+
+- Recall：继续用户明确的无人值守要求，读取G23/原repair/fixed-state约束及单一controller/registered development Task调用。起始677fa711、工作区干净，实际无本任务controller/Inspect/host在运行。新[H-T01预登记](../../artifacts/2026-09-25-acceptance-comparison-design/ht-01-preregistration.md)只改变新producer报告与方法形成的时序；原record中的历史错误说明完整可见。H-E/G21为历史背景，不作效果对照或父代选择。
+- 信息增益限于真实前缀：此前T1/G21已观察的方法产物形成前都见过新executor结论；现在检验原verifier在新executor不存在时的方法及其后续改变。前置已错只否定新executor报告是必要条件，不分离旧文本锚定/来源选择/能力；没有顺序就记干预未执行。固定一次、无替补/自动恢复，不因结果不理想改prompt重抽。
+- 同一原fixture af809c…/1844字节公开request、clock/四服务/完整错误description和外侧义务保持。使用G23真实loader的`.15/a231dffd…`不可变设计包，原默认source`.14`不必改；实际诊断project显式绑定设计包，不推广/晋升。原run-repair-01.py可接受新ht-01目录/冻结包身份，registered Inspect Mission入口/scorerNone/300秒无活动/poll2均沿原实现，无控制器或业务引擎改动。
+- 登记先提交，再生成独立freeze核对source、原料和包、controller/probe/外侧登记身份；必要真实启动之前仍需成对凭据/模型目录的只读检查及新host精确Luna流式预检。没有freeze/预检不开始业务Mission。运行时源码/spec冻结，完整成本与cleanup必须保留，不能用本地loader通过当模型验证。
+
+### G24启动前核对
+
+- 新`.tmp/supervision-causal-20260925/ht-01-preparation/entry-construction.json`核对原fixture及1844字节公开request身份、`.15`不可变六文件与G23已检设计相同。真实registered development Task constructor接受该输入/包/新目录并返回原sample/request、Mission配置、scorerNone；只是构造，没有调用solver或启动业务API世界，不能冒称实际Inspect已跑过。
+- 原授权auth/models源只读核对通过OAuth未过期及openai目录有精确Luna；未复制/刷新凭据，未发模型预检。真实preflight必须由新host另行完成。controller源码不变，无新平台或测量代码；本登记和索引docs/diff通过后范围提交，准确运行SHA写新freeze，不改旧Repair01/H-E记录。
