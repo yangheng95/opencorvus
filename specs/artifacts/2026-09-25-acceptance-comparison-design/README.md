@@ -45,7 +45,8 @@ original database/eval log.
   publication did not establish method correctness. Includes the retained startup failure.
 - [Cross-trajectory mechanism decision](mechanism-decision.md): separates established
   protocol repairs from unresolved semantic judgment and bounds a possible change to
-  when expectations are formed; no implementation or model run is authorized by it.
+  when expectations are formed. Its G22 wording is historical; H-T was subsequently
+  designed and tested once with the result recorded separately below.
 - [Expectation-first exact design](expectation-first-design.md), its
   [unapplied patch](expectation-first.patch) and [local checker](check-expectation-first.ts)
   define the three-node proposal using the original two roles and API grants. Loader,
