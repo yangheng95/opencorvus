@@ -217,3 +217,33 @@
 - 下一优先级是该共享反馈边界的横审：全仓唯一生产append调用在`task-api/index.ts`，内部append要求active epoch；还须核对公共resume的终态前提、活跃repair中发现新反证时的真实消息/状态归属、下游criterion选择、checkpoint恢复与正向测试。先确认可用反馈路线再修冲突，不能让worker以虚假complete/fail换取下一轮，或新增第二ledger。此项比立即发布上述方法记录提案更有确定的代码切入点；仍从共同五段机制图定位，不开启按案例追分。
 - 继续核对已确认：`resumeMissionTask`在入口和事务内两次绑定当前终态，先open再append新epoch；取消态保留其取消权限边界。`dispatch-agent-tool.ts`的criterion选择只允许当前ledger的open项。`acceptance-checkpoint.ts`把完整criterion状态和locator放进原有compaction control，保留成功/失败attempt。故内部append的active断言不能被解读为已有active修订API；当前下一步必须审查活跃返工中的反证回传与权限，而非仅删除一句“only”。现有`mission-acceptance-delta.test.ts`覆盖stale reopen、下游初次派单与checkpoint等局部合同，但本轮未运行或修改这些生产测试，也没有证明运行中扩大受影响范围已经可达。
 - 本次验证：离线probe 13个精确输出吻合；`bun run docs:check`通过；`git diff --check`通过。没有生产源码修改、没有新的运行凭据或残留实验。交付是可执行设计反例、具体调用图和下一共同边界定位，尚不是业务误验收修复。
+
+## G4：返工行动范围不能冻结证据判断
+
+### 修改前共享路径横审
+
+| 入口或边界 | 代码事实 | 结论与本次范围 |
+| --- | --- | --- |
+| Mission→Task恢复 | `panel/capability.ts`只提供completed/failed的resume；`task-api/index.ts::resumeMissionTask`绑定当前terminal、项目/Mission归属与完整读取，事务内重新核验后open新epoch、append单一ledger | 取消不恢复；普通operator消息是另一已授权入口。活跃repair不能借此直接更新ledger。本次不改变这些权限和生命周期 |
+| Task-root恢复输入 | `orchestrator/agent.ts::renderWakeProvenanceNotice`真实写入“Preserve every listed acceptance” | 与worker端无条件保留相同风险，必须一起修，不能只改局部角色prompt |
+| Worker初始/延续输入 | shared `renderDispatchContinuationTurn`同时用于新下游节点的initial repair与现有Session continuation；`delegated-worker-tool.ts`和runner保留当前authority/真实Message | 现有“Recheck only”将派工范围偷换为事实审查范围。恢复checkpoint携带完整原criteria，但不会自行消除相冲突指令 |
+| Worker→Task反证 | `request_orchestrator_decision`以真实Tool输入形成worker_handoff；已有dispatch owner归还真实coordination，或由正常final交回报告。`agent-coordination-facts`保留原summary/details及请求身份 | 已有合法上报通道，无需新增角色、工具或伪Message；上报不是判定成立，更不是修订ledger |
+| Task↔Mission沟通 | Task工具factory和Mission `scheduler_message`共用`protocol/scheduler-message.ts`，从真实source Message/Tool Part读取正文，持久化request/reply并按所属Mission/Task路由 | 活跃Task可上报反证并请求决策。消息没有resume或改ledger权限；不能以传递成功声称活跃修订已实现 |
+| 串并行与多项目 | dispatch lineage固定Task/epoch/workflow/Session；修复criterion选择按当前ledger及责任校验。通信绑定project与owner，消息lease/replay独立归还原调用 | 本次不改选择/租约/队列/并发，也不把一个Task反证写入另一个Task状态。新增指导只是同一canonical输入在各合法Session中的投影 |
+| 正常、失败、取消及重启 | 普通非repair输入不经过该分支；failed/completed经同一公开resume；cancel保持取消；checkpoint使用Task/epoch/ledger/gap/Session和原attempt事实 | 本次改动不增入口、状态或恢复分支。代码横审不能当作新真实LLM/重启端到端验收，相关运行性质仍由已有机制负责 |
+
+### 单一修复预测与边界
+
+- 已证缺陷是**共享输入同时要求接受反证和无条件维持旧验收**。修复仅消除后一个禁令，明确区分：保持仍有效的成功业务效果；允许新反证质疑未选中的旧结论并通过真实报告/既有coordination上报；修改业务和ledger仍须当前权限。它不是增加同义“仔细核验”提醒，也不宣称消除了模型锚定。
+- 在`mission/acceptance-gap.ts`定义一份共享的证据指导，由Task-root wake notice和worker initial/continuation renderer消费，替换两处无条件保留语句。保持既有schema、Artifact、Tool权限、Task/Mission/Session生命周期和派单责任校验。本次不实现活跃ledger修订，不用fake complete/fail制造下一epoch；该执行范围缺口继续单列。
+- 可证伪的局部预测：当前合法初始worker repair、同Session continuation和Task-root resume的真实输入构造结果，都会明确允许新证据否定选择范围外的旧验收，并区分证据上报与扩大行动权限；修前这三个正向输出合同失败。现有stale-evidence状态转换及checkpoint合同保持通过。
+- 聚焦测试修改现有`mission-acceptance-delta.test.ts`和`orchestrator-mission-resume-provenance.test.ts`。后者已有一条以“旧字符串不存在”为核心的断言，按AGENTS删除，保留当前operator root输入的正向authority断言。不加UI测试。测试只证明生产输入构造和已有状态合同，不能冒称LLM实际发现/纠正了业务错误；本阶段仍不新开模型或世界。
+- 完整H-R尚未交付：正式活跃验收范围如何更新、跨责任节点的新反证如何得到执行仍需单一事实源的后续设计。Cycle3没有走Mission acceptance repair，本修复不能计作其金额根因修复，也不能改变其原分。
+
+### G4实施与验证
+
+- 已用单一`renderAcceptanceRepairEvidenceGuidance`替换Task-root的“Preserve every listed acceptance”和worker的“Recheck only/Preserve every acceptance”。新指导区分仍有依据的业务效果、新反证及其原始义务、真实上报渠道和当前修改权限；共享原型位于既有acceptance-gap模块，无新schema/Tool/ledger。当前架构同步记录这个边界。
+- 实际全仓调用链还包含Build、Analyze Intent、Explore、Frontend Design、Fact Check、Workload Analysis等适配器经`dispatchAdapterContinuationPrompt`使用共享renderer，以及runner的初始repair材料化；不是只给AutomationBench写特例。没有触及这些适配器权限或运行器控制代码。
+- 修前运行现有生产测试入口，新增的三个正向输入合同准确失败（worker初始、worker延续、Task-root），其余相关合同通过。修后`bun run test test/mission-acceptance-delta.test.ts test/orchestrator-mission-resume-provenance.test.ts`为17通过、0失败；其中保留真实本地数据库的resume事务/Message/ledger以及精确错误合同、stale-evidence转换和checkpoint attempt测试。
+- `bun run typecheck`、根`bun run docs:check`和`git diff --check`通过。上述测试使用隔离测试环境，其中resume事务测试替代了后续ingress runner，未调用真实LLM；没有新模型请求、官方世界、候选或凭据副本。它们验证共享输入与数据合同，**不是模型可靠纠错或完整端到端业务验收**。
+- 复核结论：已经移除一个会压制新反证的输入冲突，仍未打通活跃repair中新反证跨责任节点改变正式范围的完整链路。下一步应以本地隔离的真实公共API/持久化事实构造“旧accepted A、当前open B、修B时出现A反证”的最小机制场景，检查Message、读证据、合法决定和ledger的实际可达性。逐个明确失败的公共合同，再决定是否需要变更现有单一契约；不再仅改提示词，也不以虚假终态获取resume。该本地协议验证不是新官方世界或模型实验。

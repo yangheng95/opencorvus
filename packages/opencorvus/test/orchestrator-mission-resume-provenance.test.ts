@@ -77,6 +77,12 @@ test("Mission acceptance resume projects current message authority and real-deci
   expect(notice).toContain("matching real tool call")
   expect(notice).toContain("no_action alone cannot settle it")
   expect(notice).toContain("complete/fail lifecycle decision")
+  expect(notice).toContain(
+    "New contradictory evidence may invalidate an earlier acceptance, including one outside this selection.",
+  )
+  expect(notice).toContain(
+    "Record the exact evidence and affected original obligation in the real participant result or existing coordination channel, distinguishing the finding from a decision to expand repair.",
+  )
   expect(isCurrentWakeIngress(event)).toBe(true)
 
   expect(authorizedTaskRootMessagesForWake(event)).toEqual([
@@ -98,7 +104,7 @@ test("Mission acceptance resume projects current message authority and real-deci
     "art_current_operator_wake",
   )
   expect(operatorNotice).toContain("Current durable wake occurrence=art_current_operator_wake")
-  expect(operatorNotice).not.toContain("taskIntent")
+  expect(operatorNotice).toContain("Current rootMessage=msg_operator_resume; kind=operator")
 })
 
 test("agent lifecycle delivery projects its exact current occurrence", () => {

@@ -377,6 +377,9 @@ describe("Mission acceptance baseline readiness", () => {
       collectionTurn: { kind: "initial", acceptance_gap_id: "gap-builder-r2", criterion_ids: [criterion.criterion_id] },
       prompt: expect.stringContaining("- gap_id: gap-builder-r2"),
     })
+    expect(renderDispatchContinuationTurn({ turn, guidance: "Verify the repaired outcome." })).toContain(
+      "New contradictory evidence may invalidate an earlier acceptance, including one outside this selection.",
+    )
   })
 
   test("renders an open criterion continuation and applies the exact canonical Task delta", () => {
@@ -425,6 +428,12 @@ describe("Mission acceptance baseline readiness", () => {
       baseline: before,
       applied: after,
     })
+    expect(continuation).toContain(
+      "New contradictory evidence may invalidate an earlier acceptance, including one outside this selection.",
+    )
+    expect(continuation).toContain(
+      "Keep mutations and ledger changes within current authority; a repair-scope selection does not require endorsing a contradicted conclusion.",
+    )
   })
 
   test("keeps baseline plus an applicable delta on the first and every later Provider step", () => {

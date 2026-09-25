@@ -67,6 +67,7 @@ import { Message } from "@/session/message"
 import { MessageStore } from "@/session/message-store"
 import { createAcceptanceEpochCheckpoint } from "@/mission/acceptance-checkpoint"
 import { currentTaskAcceptanceRepair } from "@/mission/acceptance-ledger"
+import { renderAcceptanceRepairEvidenceGuidance } from "@/mission/acceptance-gap"
 import { Bus } from "@/bus"
 import { Instance } from "@/project/instance"
 import { provideInitializedProjectExecution } from "@/project/independent-project-owner"
@@ -1260,7 +1261,7 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
         `message_id=${resume.messageID}; reviewed_terminal_event=${resume.reviewedTerminalLifecycleReference.terminalEventID}; ` +
         `acceptance_ledger_revision_artifact_id=${resume.acceptanceLedgerRevisionArtifactID}; ` +
         `acceptance_gap=${JSON.stringify(resume.acceptanceGap)}. ` +
-        `This exact Mission-authored acceptance gap opened a new non-terminal execution occurrence for the same Task. Use the real Message and canonical ledger identified above. Preserve every listed acceptance. Continue existing responsible or verifying nodes in their original lineage; a required node of the same selected virtual workflow that has never committed an occurrence uses its initial Turn. Every such Turn names the current gap and its scoped criteria. Because this acceptance resume opened a non-terminal repair occurrence, no_action alone cannot settle it: consume this gap through the corresponding initial or continuation Turn, or make the evidence-backed complete/fail lifecycle decision when current evidence proves closure or irreducible force majeure. The Host does not prescribe a worker, verdict, or completion outcome.`,
+        `This exact Mission-authored acceptance gap opened a new non-terminal execution occurrence for the same Task. Use the real Message and canonical ledger identified above. ${renderAcceptanceRepairEvidenceGuidance()} Continue existing responsible or verifying nodes in their original lineage; a required node of the same selected virtual workflow that has never committed an occurrence uses its initial Turn. Every such Turn names the current gap and its scoped criteria. Because this acceptance resume opened a non-terminal repair occurrence, no_action alone cannot settle it: consume this gap through the corresponding initial or continuation Turn, or make the evidence-backed complete/fail lifecycle decision when current evidence proves closure or irreducible force majeure. The Host does not prescribe a worker, verdict, or completion outcome.`,
       renderCurrentOccurrenceDecisionObligation(),
     )
   }

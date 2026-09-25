@@ -371,6 +371,15 @@ function responsibilityText(responsibility: MissionAcceptanceCriterionResponsibi
     : `${responsibility.package_revision.namespace}/${responsibility.package_revision.id}@${responsibility.package_revision.version} agent=${responsibility.agent_id} lineage=${responsibility.dispatch_lineage_id}`
 }
 
+export function renderAcceptanceRepairEvidenceGuidance(): string {
+  return [
+    "Repair the selected criteria and preserve business effects that remain supported by current evidence.",
+    "New contradictory evidence may invalidate an earlier acceptance, including one outside this selection.",
+    "Record the exact evidence and affected original obligation in the real participant result or existing coordination channel, distinguishing the finding from a decision to expand repair.",
+    "Keep mutations and ledger changes within current authority; a repair-scope selection does not require endorsing a contradicted conclusion.",
+  ].join(" ")
+}
+
 export function renderMissionAcceptanceRepairMessage(rawGap: MissionAcceptanceGap): string {
   const gap = MissionAcceptanceGapSchema.parse(rawGap)
   return [

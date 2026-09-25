@@ -6,6 +6,7 @@ import { EvidenceLocatorListSchema, type EvidenceLocator } from "@opencorvus-ai/
 import {
   acceptanceCriterionEvidenceLocators,
   MissionAcceptanceOpenCriterionSchema,
+  renderAcceptanceRepairEvidenceGuidance,
 } from "@/mission/acceptance-gap"
 
 export const ControlTextPartAuthoritySchema = z
@@ -187,7 +188,7 @@ export function renderDispatchContinuationTurn(input: {
             `- irreducible_blocker_evidence_locators: ${JSON.stringify(criterion.irreducible_blocker_evidence_locators)}`,
             `- repair_action: ${JSON.stringify(criterion.repair_action)}`,
           ]),
-          "- Recheck only these criteria. Preserve every acceptance not named here and publish delta evidence in the canonical Artifact lineage.",
+          `- ${renderAcceptanceRepairEvidenceGuidance()}`,
         ]
       : []),
     "",
