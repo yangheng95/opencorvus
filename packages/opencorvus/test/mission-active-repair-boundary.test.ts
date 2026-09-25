@@ -10,7 +10,11 @@ import { requireCurrentTerminalLifecycleReference } from "@/engine/terminal-life
 import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
 import { Identifier } from "@/id/id"
 import { materializeMissionAcceptanceGap } from "@/mission/acceptance-gap"
-import { readLatestTaskAcceptanceLedger } from "@/mission/acceptance-ledger"
+import {
+  appendTaskAcceptanceLedgerRevisionInTransaction,
+  readLatestTaskAcceptanceLedger,
+  readTaskAcceptanceLedgerArtifact,
+} from "@/mission/acceptance-ledger"
 import { ensureMissionSession } from "@/mission/session"
 import { Instance } from "@/project/instance"
 import { InstanceBootstrap } from "@/project/bootstrap"
@@ -296,7 +300,7 @@ test("Mission inspects active repair evidence while formal mutation retains its 
                 criterion_id: "B",
                 state: "open",
                 disposition: "unresolved",
-                finding: "Initialization B remains open.",
+                finding: "Initialization B is incomplete.",
                 responsibility,
                 observation_evidence_read_refs: ["ar_local_protocol_B"],
                 repair_evidence_read_refs: [],
@@ -307,7 +311,7 @@ test("Mission inspects active repair evidence while formal mutation retains its 
                   operation: "initialize",
                   target: "B",
                   expected_evidence_kind: "initialized-B",
-                  parameters: { revisit: true },
+                  parameters: {},
                 },
               },
             ],
@@ -342,6 +346,28 @@ test("Mission inspects active repair evidence while formal mutation retains its 
           ledger: originalLedger,
           lifecycle: { status: "active", epoch: 2 },
         })
+        // Domain-writer contract only: this driver does not grant Mission a new
+        // active API, synthesize a participant decision, or change the Task epoch.
+        const revisionID = Identifier.ascending("artifact")
+        const revised = Database.immediateTransaction((db) => appendTaskAcceptanceLedgerRevisionInTransaction({
+          db, taskID, artifactID: revisionID, executionEpoch: 2,
+          expectedPreviousArtifactID: originalLedger.artifactID, gap: attemptedGap, now: Date.now(),
+        }))
+        expect(revised.revision).toMatchObject({ revision: 2, execution_epoch: 2,
+          previous_revision_artifact_id: originalLedger.artifactID,
+          gap: { criteria: [{ criterion_id: "A", state: "open", disposition: "stale_evidence" }, originalGap.criteria[1]] },
+        })
+        expect(readTaskAcceptanceLedgerArtifact(taskID, originalLedger.artifactID)).toEqual(originalLedger)
+        expect(() => Database.immediateTransaction((db) => appendTaskAcceptanceLedgerRevisionInTransaction({
+          db, taskID, artifactID: Identifier.ascending("artifact"), executionEpoch: 2,
+          expectedPreviousArtifactID: originalLedger.artifactID, gap: attemptedGap, now: Date.now(),
+        }))).toThrow(`Task ${taskID} acceptance ledger changed; query the current Task before resuming.`)
+        expect(() => Database.immediateTransaction((db) => appendTaskAcceptanceLedgerRevisionInTransaction({
+          db, taskID, artifactID: Identifier.ascending("artifact"), executionEpoch: 2,
+          expectedPreviousArtifactID: revisionID, gap: { ...attemptedGap, gap_id: "renamed-without-progress" }, now: Date.now(),
+        }))).toThrow("Acceptance ledger revision requires at least one new or changed criterion.")
+        expect({ ledger: readLatestTaskAcceptanceLedger(taskID), lifecycle: taskLifecycleProjection(taskID) })
+          .toMatchObject({ ledger: revised, lifecycle: { status: "active", epoch: 2 } })
       } finally {
         if (taskLifecycleProjection(taskID).status === "active") {
           await EngineService.cancelTask(taskID, {

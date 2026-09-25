@@ -260,17 +260,13 @@ describe("Mission acceptance baseline readiness", () => {
       gap: gap(
         [
           stale,
-          openCriterion({
-            criterionID: "publication",
-            responsibility: { ...builderResponsibility, workflow_node_id: "publisher" },
-            observation: [thirdLocator],
-            actionSequence: 2,
-          }),
+          sentinel,
         ],
         "gap-stale",
       ),
     })
     expect(reopened.criteria[0]).toMatchObject({ state: "open", disposition: "stale_evidence" })
+    expect(reopened.criteria[1]).toEqual(sentinel)
 
     const blocked = validateTaskAcceptanceLedgerTransition({
       taskID: "tsk_acceptance",
@@ -292,6 +288,36 @@ describe("Mission acceptance baseline readiness", () => {
       ]),
     })
     expect(blocked.criteria[0]).toMatchObject({ state: "blocked", irreducible_blocker_evidence_locators: [secondLocator] })
+  })
+
+  test("retains an unchanged open obligation when another obligation makes evidenced progress", () => {
+    const pending = openCriterion({ criterionID: "pending", observation: [thirdLocator] })
+    const prior = ledgerProjection([openCriterion(), pending])
+    const revised = validateTaskAcceptanceLedgerTransition({
+      taskID: "tsk_acceptance", previous: prior, workflowBinding,
+      gap: gap([openCriterion({ repair: [secondLocator] }), pending], "gap-partial-progress"),
+    })
+    expect(revised.criteria).toEqual([openCriterion({ repair: [secondLocator] }), pending])
+    const added = openCriterion({ criterionID: "new-obligation", observation: [fourthLocator] })
+    expect(validateTaskAcceptanceLedgerTransition({
+      taskID: "tsk_acceptance", previous: prior, workflowBinding,
+      gap: gap([...prior.revision.gap.criteria, added], "gap-new-obligation"),
+    }).criteria).toEqual([...prior.revision.gap.criteria, added])
+  })
+
+  test("returns exact integrity errors for unchanged revisions and unsupported changes to carried criteria", () => {
+    const pending = openCriterion({ criterionID: "pending", observation: [thirdLocator] })
+    const prior = ledgerProjection([openCriterion(), pending])
+    for (const criteria of [prior.revision.gap.criteria, [...prior.revision.gap.criteria].reverse()]) {
+      expect(() => validateTaskAcceptanceLedgerTransition({
+        taskID: "tsk_acceptance", previous: prior, workflowBinding,
+        gap: { ...gap(criteria, "renamed-gap"), reviewed_terminal_lifecycle_reference: { terminalEventID: "pev_another_terminal" } },
+      })).toThrow("Acceptance ledger revision requires at least one new or changed criterion.")
+    }
+    expect(() => validateTaskAcceptanceLedgerTransition({
+      taskID: "tsk_acceptance", previous: prior, workflowBinding,
+      gap: gap([openCriterion({ repair: [secondLocator] }), { ...pending, finding: "Reworded without new evidence." }]),
+    })).toThrow("Repeated criterion pending requires new evidence or a changed canonical repair action.")
   })
 
   test("binds a direct acceptance criterion to its exact immutable dispatch lineage", () => {

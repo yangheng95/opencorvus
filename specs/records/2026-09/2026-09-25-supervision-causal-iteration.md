@@ -304,3 +304,37 @@
 - 最终聚焦命令：`bun run test test/panel-mission-terminal-authority.test.ts test/artifact-read-facts-provider-input.test.ts test/mission-active-repair-boundary.test.ts`：**11项通过、0失败、85个明确断言**。`bun run typecheck`、根`bun run docs:check`（342 ops/25 groups）、`git diff --check`通过。首次测试driver把后续依赖调用放在同一Provider step内，真实事实作用域正确阻止消费；已将每个依赖调用安排到下一明确step，没有放宽生产的物理Turn/step边界。反证读取fixture的格式、引用长度与EOF标记错误也按现有契约修正，没有降低reader校验。
 - 所有新运行都是隔离本地协议测试，无Provider请求、官方世界、作者或候选。原Cycle3四个PID仍已退出；不重启任何历史实验。服务测试以公共cancel收尾，临时runtime由既有fixture清理。尚未执行真实worker→Task→Mission的反证上报、自主范围修订和业务再验收；也未进行真实进程重启的模型链验证。
 - 下一未闭合边界明确为：**已经读到新反证，但正在active repair的单一ledger如何合法改变范围**。继续横审当前ledger append、criterion选择、dispatch descriptor/checkpoint、Task/Mission的真实coordination与所有生命周期入口。先落盘一个最小契约，明确语义责任、当前epoch/ledger比较并交换（CAS）、在途worker旧引用、串并行/多项目/取消/恢复；不得用假complete/fail得到resume，不得直接放开active修改而忽略在途工作。当前不再重复验证已修读取拒绝，不急于新官方样本或H-E作者；G6仍不能认领从未Mission resume的Cycle3金额误验收根因，业务可靠纠错和进化收益尚未达成。
+
+## G7实施前：多义务修订中的保持规则与活动期边界
+
+### 共享机制横审的新事实
+
+| 边界 | 真实定义和调用 | 对活动期修订的约束 |
+| --- | --- | --- |
+| 唯一ledger写入 | `acceptance-ledger::appendTaskAcceptanceLedgerRevisionInTransaction`核对当前Artifact比较并交换、active epoch、责任与证据连续性；唯一生产caller仍为`resumeMissionTask` | 内部可写active不提供公开权限；不得直接暴露此函数绕开Mission输入、原子Message/ingress和归属 |
+| 原子恢复与重复调用 | `resumeMissionTask`在Task-root ingress owner内同事务记录真实Mission Message、epoch open、ledger、ingress、receipt，提交后才调reconciler；精确Tool重放返回旧receipt | 取消权不变化；新active契约必须留在同epoch且有自己的确切调用事实，不能伪resume或隐式重开 |
+| 正式范围和在途输入 | `createOrchestratorTools`构造时读取当前repair，dispatch校验并生成不可变Turn；`runner`读descriptor引用的特定ledger并检查gap/epoch，checkpoint按revision隔离 | 直接后台改latest会让已构造root工具和在途worker仍持原revision。历史输入不能重写；必须区分保留有效子集与需要新决定的变化，不能仅新增一个API |
+| 根Session与worker恢复 | Task-root仅在missionAcceptanceResume事件消费对应ledger checkpoint；worker continuation消费指定revision checkpoint。重启使用持久化descriptor/ingress/attempt | 单独新增Artifact无法确保新义务被实际输入。真实Mission消息、root接收和后续选择须同一因果链；不可合成消息或只更新latest投影 |
+| 完成/失败/取消 | lifecycle Tools沿Task execution与completion closure/dispatch settled事实结算；当前完成契约不以ledger全部accepted为Host gate | 不能用Host替模型判断；修订与结算竞争应按原epoch/输入发生轮次串行，而非加业务成功锁或丢弃已请求副作用 |
+| 消息与多项目 | scheduler_message从真实source Part读取正文并以项目/endpoint/occurrence持久化request/reply；coordination保留原dispatch与归属 | 消息传递不等于授权已写ledger。新契约只能使用原Task/Mission/Session单一事实源，不能在通知回调偷偷修改状态 |
+
+### 已定位的共同数据合同缺陷与本次实现范围
+
+- `requireOpenTransition`目前对**每一个**open→open项要求新增证据或新repair action；`requireCriterionStateContinuity`又要求保留所有旧项。因此重开accepted A时，即便有明确新反证，也无法原样携带未受影响的open B。旧测试在此场景给B人为改变actionSequence才通过，掩盖了无须修改B的真实输入。这是多义务修订的共同表达缺口，独立于是否开放active API；现有终态resume也会遇到它。
+- 单一修复预测：有依据的A变化或新增C可以与**完全相同**的open B共存；B若被改写仍须按原规则提供新证据或新修复动作。整份revision若所有criteria都不变，改gap名、改reviewed terminal或调整数组顺序也不能制造新修订。accepted/blocked保持、证据role保留、责任、CAS和epoch检查维持原合同。这里比较的只是声明是否改变及引用结构，不替Agent判业务真假。
+- 实施只改现有ledger transition reducer：精确相同的open项可以携带；变化的open项继续原校验；完成所有项校验后要求至少一个新增或有合法变化的criterion。不新增schema、API、Tool、ledger、权限、消息或生命周期路径。它是活动范围方案的必要条件，**不是整个活动期修订已完成**。
+- 先在现有delta测试写正向“只修A、保留B”的输出与“全复制/仅改文字”的精确错误，再运行修前失败；同时将G5/G6既有本地服务场景的B改为真正原样保留，在已经通过公共resume建立的隔离Task上直接调用真实ledger事务检查append、旧revision保留及CAS拒绝。该直接domain调用明确是测试driver，不冒充新的公开active权限，不伪造Task终态或模型Message。公共active resume的原拒绝仍保留，公共cancel收尾。
+
+### 活动期单一契约设计的当前约束（尚未实现）
+
+- 最小候选是同一Mission对现有repair的**证据驱动增量修订**，保留同一Task epoch、唯一ledger与现有owner。Mission判断哪些旧accepted项被新证据推翻，Host只校验身份、观察轮次、引用完整性和结构连续性。新revision与真实Mission输入必须原子发布，Task-root在原输入串行边界接收并重新投影工具/检查点，不能在当前Provider步骤背后换范围。
+- 首先须证明是否可在原root ingress owner边界发布并由现有reconciler可靠接收；同时规定旧在途dispatch仅继续它仍有效的原criterion子集，新范围只由新revision派发。若改动了正在执行项的原授权，必须走真实协调/停工回执再形成下一合法dispatch，不能篡改descriptor、伪造完成或把取消当成功。尚需从真实owner/queue代码和隔离合同证明这一时序；未将该草案当已证实现，也未新增active控制入口。
+- 下一公共端到端局部Checker应覆盖Mission真实Tool请求→root持久化输入→当前revision选择→worker归属及重启恢复，区分已接受修订、旧epoch/旧CAS拒绝、取消/完成竞态与无进展请求。当前不启动模型或官方世界；局部协议可达后，真实Luna行为仍须另行预登记。
+
+### G7实施结果及被否定的时序假设
+
+- 共同reducer已允许原样携带open项，同时把“必须有进展”绑定到整份criterion集合；变化的open项仍必须有新证据或新action，责任和证据角色保持不变。Mission core的原“Repeat an open criterion only…”也同步替换为准确的当前契约，避免代码允许保留B而实际指令仍强迫改B；不是追加业务核验提醒。没有修改已发布的`.13`包或历史prompt字节。
+- 修前delta测试3项失败：有依据重开A但B不变、A有新证据/B不变、全重复修订的新精确错误；隔离服务场景中的真实ledger append也以`Repeated criterion B`失败。修后`bun run test test/mission-acceptance-delta.test.ts test/mission-active-repair-boundary.test.ts`为**20通过、0失败、70断言**。其中实际domain writer在公共resume创建的epoch2追加revision2，A stale/open、B完整原样，原revision1仍可读；过期CAS和仅改gap名均得到精确错误，latest仍revision2，最终公共cancel结算epoch2。
+- 域事务直接调用明确是测试driver，不是新的公开active入口、Mission自主选择或LLM端到端。公共active resume仍拒绝，Task不伪造终态/重开；原Message/Tool/世界不动。测试后的runtime由既有fixture清理，无新Provider请求/凭据/模型成本。package typecheck通过；当前架构同步记录修订集合规则。没有以一个函数测试通过宣称活动纠错完成。
+- 新全仓调用事实否定了前述草案的一项隐含前提：`SessionPromptState.runTaskRootIngress`的生产caller只有`resumeMissionTask`。其实现是process-local的root键Promise链，并非所有Task-root Provider/Tool步骤的统一执行租约。**不能仅套用这个函数就宣称active修订与在途root/complete互斥**。当前终态resume额外有准确terminal前提，所以该缺口不等于已有resume发生竞态；它是新增active方案必须解决的条件。此前“root ingress owner内写入”只描述实际resume调用，不能扩成所有执行的全局锁。
+- 下一实现前必须核对真正的Task-root ingress admission/activation lease、SessionLoop和Task completion closure之间的边界，选择同一持久化输入发生轮次来接收修订并重新建立工具投影。未经这一步，禁止直接发布active API、更新latest后只发通知，或取消worker来掩盖陈旧输入。重点是**接收Mission原始修订意图**与**在正确root执行边界生效为唯一ledger**的区别；若需要已接受但尚未应用的输入，应复用现有ingress事实而非第二份ledger。串并行/跨进程/重启/取消的证据尚未完成，继续本地推进。

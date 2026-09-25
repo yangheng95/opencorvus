@@ -254,6 +254,9 @@ function requireOpenTransition(
   prior: MissionAcceptanceOpenCriterion,
   current: MissionAcceptanceCriterion,
 ) {
+  // An append describes the whole obligation set. Carrying an unaffected open
+  // criterion is valid; progress belongs to the revision, not to every item.
+  if (sameCanonicalValue(prior, current)) return
   if (!retainsAllLocatorsByRole(current, prior)) {
     throw new MissionAcceptanceGapIntegrityError(
       taskID,
@@ -325,6 +328,7 @@ function requireCriterionStateContinuity(input: {
 }) {
   if (!input.previous) return
   const currentByID = new Map(input.gap.criteria.map((criterion) => [criterion.criterion_id, criterion]))
+  let changed = input.gap.criteria.length > input.previous.revision.gap.criteria.length
   for (const prior of input.previous.revision.gap.criteria) {
     const current = currentByID.get(prior.criterion_id)
     if (!current) {
@@ -333,6 +337,7 @@ function requireCriterionStateContinuity(input: {
         `Acceptance criterion ${prior.criterion_id} cannot disappear from the append-only ledger.`,
       )
     }
+    if (!sameCanonicalValue(prior, current)) changed = true
     requireSameResponsibility(input.taskID, prior, current)
     if (prior.state === "open") {
       requireOpenTransition(input.taskID, prior, current)
@@ -344,6 +349,12 @@ function requireCriterionStateContinuity(input: {
         `Irreducibly blocked criterion ${prior.criterion_id} must retain its exact evidence-backed state.`,
       )
     }
+  }
+  if (!changed) {
+    throw new MissionAcceptanceGapIntegrityError(
+      input.taskID,
+      "Acceptance ledger revision requires at least one new or changed criterion.",
+    )
   }
 }
 
