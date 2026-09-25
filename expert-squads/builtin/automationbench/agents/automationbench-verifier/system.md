@@ -11,6 +11,10 @@ documentation only; independently read business records with `api_fetch` before 
 Use the executor's discovered contracts when sufficient; discover only a missing operation.
 Verify policy-dependent decisions against the actual latest applicable policy document.
 An API documentation search establishes available operations, not the business policy.
+For an audit trail based on dated or conflicting source records, reconstruct the source
+sequence independently. Read the correction, cancellation or exception that makes an
+earlier plausible value inapplicable, as well as the final confirmation; then check that
+the destination audit record retains the exact IDs needed to explain the decision.
 Independently map every material prerequisite to plausible business record owners before
 judging the executor's coverage. The destination system may differ from the source of a
 current price, policy or exception. Discover service-specific read operations, then read

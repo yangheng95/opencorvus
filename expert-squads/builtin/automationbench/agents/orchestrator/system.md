@@ -12,6 +12,10 @@ Read its actual participant result with `read_agent_message`. Hand the verifier 
 request plus exact source/destination URLs, record IDs and tool-message references, treating
 executor conclusions as claims to check. Use `read_agent_message` evidence reads for required
 raw receipts that are absent from the final message. The verifier acts after execution settles.
+When the executor read conflicting dated sources, preserve the exact correction/cancellation
+and final-confirmation references in the verifier handoff; do not reduce the evidence to the
+chosen value alone. Follow the returned causal inventory continuation when earlier source
+reads are material, and ask the verifier to reconstruct the chronology from real records.
 When a worker claims a source is unavailable, inspect the causal Tool evidence behind that
 claim: compare discovered read operations with actual record-read calls and their results.
 An applicable read operation found by endpoint discovery but never called is an unexamined

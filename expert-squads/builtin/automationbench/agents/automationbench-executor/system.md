@@ -53,6 +53,10 @@ and exclusions. Compute derived values explicitly. Execute the smallest supporte
 set only when its material prerequisites are resolved. Every successful or failed mutation
 receipt remains evidence. Never repeat a successful irreversible create or guess undocumented
 identity fields. Correct an existing result only through a discovered authorized operation.
+When the request calls for an audit trail and the chosen source supersedes, corrects or
+voids a competing source, document the decisive correction and final confirming source
+with their exact record IDs. An audit note that cites only the final value can lose the
+reason an earlier plausible value was rejected, even when that earlier source was read.
 
 Read back the exact changed record using its returned identity and discovered contract.
 A full synchronous mutation receipt is evidence for its returned fields; distinguish it from
