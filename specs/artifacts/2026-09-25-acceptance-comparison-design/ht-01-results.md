@@ -32,7 +32,8 @@ accepted。最终完整业务状态仅 `last_modified_date` 变化。故新 exec
 原字节身份 `50db47b2bed767e2ea02377dd017e7c49462228fa65bb90a2731fad7562a7466`
 只固定这份记录，不是业务验收。原 eval、数据库、输入和世界只读；数据库查询使用
 `mode=ro` 与 `PRAGMA query_only=ON`。同目录 `audit/final-chain.json`、
-`artifacts.json`、`business-review.json` 为只读派生材料，原评分未重算。
+`artifacts.json`、`business-review.json`、`assessment-check.json` 和 `closure.json`
+为只读派生材料，原评分未重算。
 
 ## 目标→来源→方法→行动→裁决的原始链
 
@@ -51,6 +52,12 @@ accepted。最终完整业务状态仅 `last_modified_date` 变化。故新 exec
 前后 verifier 为不同 Session。方法 `prior_exposure` 自己记录已见原金额/说明，
 原 API 事件也证实这一点。此次能够排除“**新** executor 的报告必须先出现，错误方法才会形成”；
 不能排除旧业务文本锚定、未读价表、Gold 折扣来源选择或模型推理的共同作用。
+隔离包的 verifier 指令已明确要求读取“后来费率通知称未变”的 base 原记录，并在
+base、人数或 tier 调整未查时不得认定完整总额；本次仍跳过 Sheets。
+G11 出站审计在 44 个请求的 `/instructions` 匹配了“逐项组成和调整”片段，
+在 30 个请求的 Tool output 匹配了邮件“基础价不变”片段。这只是局部文本发送位置证据，
+不是完整 wire、模型理解或注意力证明；新阶段文案不匹配旧方法/比较探针也不能
+升级为未发送。因此不把这次失误简单改写成“再补一句同义提醒”即可解决。
 
 ## 外侧逐项义务与原生裁决
 
