@@ -41,6 +41,9 @@ const baselineRevision = {
 const candidateRevision = { ...baselineRevision, version: "2026.08.07.2", package_digest: candidateDigest }
 
 type ScorerSpec = { id: string; weight: number; baseline: number[]; candidate: number[] }
+type IntegrityFinding = ReturnType<
+  (typeof EvolutionArtifactSchemas)["evolution-lab/integrity-review"]["parse"]
+>["findings"][number]
 
 function scorerDefinition(spec: ScorerSpec) {
   return {
@@ -64,7 +67,10 @@ function scorerDefinition(spec: ScorerSpec) {
  * One case, `repetitions` repetitions, and one measured value per scorer per
  * arm per repetition. Every scorer must supply exactly `repetitions` values.
  */
-function comparisonFor(scorers: ScorerSpec[], options?: { uiRubricDigest?: string | null }) {
+function comparisonFor(scorers: ScorerSpec[], options?: {
+  uiRubricDigest?: string | null
+  candidateFinding?: IntegrityFinding
+}) {
   const repetitions = scorers[0]!.baseline.length
   for (const spec of scorers) {
     if (spec.baseline.length !== repetitions || spec.candidate.length !== repetitions) {
@@ -173,7 +179,9 @@ function comparisonFor(scorers: ScorerSpec[], options?: { uiRubricDigest?: strin
         repetition,
         evaluation_result_locator: locator,
         status: "reviewed",
-        findings: [],
+        findings: arm === "candidate" && repetition === 0 && options?.candidateFinding
+          ? [options.candidateFinding]
+          : [],
         accepted_limitations: [],
         unknowns: [],
       }),
@@ -222,6 +230,53 @@ function comparisonFor(scorers: ScorerSpec[], options?: { uiRubricDigest?: strin
 }
 
 describe("Evolution Lab deterministic comparison", () => {
+  const findingCategories = ["evidence_integrity", "reward_hacking", "permission", "side_effect", "security"] as const
+  const improvedScores = [{ id: "correctness", weight: 1, baseline: [0.2, 0.2, 0.2], candidate: [0.8, 0.8, 0.8] }]
+  function finding(
+    category: IntegrityFinding["category"],
+    outcome: IntegrityFinding["outcome"],
+    severity: IntegrityFinding["severity"],
+  ): IntegrityFinding {
+    return {
+      category, outcome, severity, invariant: "declared audit dimension",
+      evidence: [locator], owner: "evolution-safety-auditor", correction: null,
+    }
+  }
+
+  test.each(findingCategories)("completed review with passed %s blocker supports promotion", (category) => {
+    const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "passed", "blocker") })
+    expect(result.recommendation).toBe("promote")
+    expect(result.aggregate_score).toBeCloseTo(0.6)
+  })
+
+  test.each(findingCategories)("completed review with failed %s blocker yields an inconclusive recommendation", (category) => {
+    const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "failed", "blocker") })
+    expect(result.recommendation).toBe("inconclusive")
+    expect(result.aggregate_score).toBeCloseTo(0.6)
+    expect(result.paired_deltas[0]!.mean).toBeCloseTo(0.6)
+  })
+
+  test.each(findingCategories)("completed review with unavailable %s blocker exposes its required dimension", (category) => {
+    const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "unavailable", "blocker") })
+    const dimension = `integrity_finding:case-1:candidate:0:${category}:0`
+    expect(result.recommendation).toBe("inconclusive")
+    expect(result.aggregate_score).toBeNull()
+    expect(result.required_unavailable_dimensions).toEqual([dimension])
+    expect(result.unavailable_dimensions).toEqual([dimension])
+  })
+
+  test.each(["evidence_integrity", "permission", "side_effect", "security"] as const)("a nonblocking %s warning retains the measured promotion decision", (category) => {
+    const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "failed", "warning") })
+    expect(result.recommendation).toBe("promote")
+    expect(result.aggregate_score).toBeCloseTo(0.6)
+  })
+
+  test.each(findingCategories)("an unavailable nonblocking %s observation retains the measured promotion decision", (category) => {
+    const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "unavailable", "warning") })
+    expect(result.recommendation).toBe("promote")
+    expect(result.aggregate_score).toBeCloseTo(0.6)
+  })
+
   test("reconstructs the complete case, arm, repetition, and scorer matrix", () => {
     const comparison = comparisonFor([
       { id: "correctness", weight: 1, baseline: [0.8], candidate: [0.9] },
@@ -276,7 +331,7 @@ describe("Evolution Lab deterministic comparison", () => {
     expect(comparison.aggregate_interval?.lower).toBeGreaterThan(0)
   })
 
-  test("does not open the visual gate for a Campaign that declares no visual scorer", () => {
+  test("reports not_applicable visual review for a nonvisual Campaign", () => {
     // `ui_rubric_digest` is the digest of the first `judge` scorer's resource,
     // so a Campaign that declares a judge scorer for something other than UI —
     // code quality, say — used to set it, take the `unavailable` branch for
@@ -292,7 +347,7 @@ describe("Evolution Lab deterministic comparison", () => {
     expect(comparison.recommendation).toBe("promote")
   })
 
-  test("does not promote a positive mean whose interval still spans zero", () => {
+  test("retains the baseline when a positive mean interval spans zero", () => {
     // Mean delta is +0.05 across four repetitions, so the old rule promoted.
     // The spread is far wider than the effect, so the interval covers zero.
     const comparison = comparisonFor([

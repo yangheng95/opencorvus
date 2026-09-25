@@ -215,6 +215,14 @@ function classifyComparisonAvailability(input: {
     if (!run) requiredUnavailable.add(`run:${slot.key}`)
     const review = reviews.get(slot.key)
     if (!review || review.status === "unavailable") requiredUnavailable.add(`integrity_review:${slot.key}`)
+    // A completed review can still report an unobserved required dimension.
+    // Consume the auditor's typed conclusion, not the existence of its report.
+    if (review?.status === "reviewed") {
+      for (const [index, finding] of review.findings.entries()) {
+        if (finding.severity === "blocker" && finding.outcome === "unavailable")
+          requiredUnavailable.add(`integrity_finding:${slot.key}:${finding.category}:${index}`)
+      }
+    }
     for (const scorer of campaign.scorers) {
       const result = evaluation?.scorers.find((item) => item.scorer_id === scorer.scorer_id)
       if (!result || result.status === "unavailable") requiredUnavailable.add(`scorer:${scorer.scorer_id}:${slot.key}`)
@@ -408,6 +416,13 @@ export function deriveComparisonRecommendation(input: {
     const review = reviews.get(slot.key)
     return review?.status === "reviewed" ? [review] : []
   })
+  // Measured improvements do not establish an adoptable experiment when the
+  // independent auditor has recorded a failed blocking invariant. Keep the
+  // measurements and exact Review sources; the finding remains failed rather
+  // than being relabeled as an unavailable observation.
+  const failedIntegrityBlocker = reviewedSlots.some((review) =>
+    review.findings.some((finding) => finding.severity === "blocker" && finding.outcome === "failed"),
+  )
   const derivedUnknowns = [...new Set(reviewedSlots.flatMap((review) => [
     ...review.unknowns,
     ...review.accepted_limitations,
@@ -457,6 +472,7 @@ export function deriveComparisonRecommendation(input: {
   // weights set both the aggregate and the width of its uncertainty.
   const recommendation =
     requiredUnavailable.size > 0 ||
+    failedIntegrityBlocker ||
     visualReview.status === "unavailable" ||
     rewardHackingReview.findings.length > 0
       ? "inconclusive"

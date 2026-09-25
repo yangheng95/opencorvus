@@ -205,7 +205,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
       "evolution-lab/integrity-review": "evolution-safety-auditor",
       "evolution-lab/comparison-recommendation": "evolution-recommendation-owner",
     })
-    expect(() => assertEvolutionArtifactOwner("evolution-lab/opportunity", "evolution-observer")).not.toThrow()
+    assertEvolutionArtifactOwner("evolution-lab/opportunity", "evolution-observer")
     expect(() => assertEvolutionArtifactOwner("evolution-lab/opportunity", "evolution-failure-analyst")).toThrow(
       new EvolutionArtifactIntegrityError(
         "evolution-lab/opportunity must be published by Evolution Lab worker evolution-observer",
@@ -262,7 +262,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
       },
     })
 
-    expect(() => requireEvolutionWorkerProducer(importedEnvelope, "evolution-observer")).not.toThrow()
+    requireEvolutionWorkerProducer(importedEnvelope, "evolution-observer")
+    expect(importedEnvelope.import_lineage?.source_producer).toEqual(workerProducer)
     expect(() => requireEvolutionWorkerProducer(importedEnvelope, "evolution-failure-analyst")).toThrow(
       new EvolutionArtifactIntegrityError(
         "evolution-lab/opportunity must be produced by Evolution Lab worker evolution-failure-analyst",
@@ -1689,6 +1690,15 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                       owner: "evolution-safety-auditor",
                       correction: null,
                     },
+                    {
+                      category: "security",
+                      invariant: "The frozen Trial evidence supports its declared security boundary",
+                      outcome: "unavailable",
+                      evidence: [evaluationReceipt.locator],
+                      severity: "blocker",
+                      owner: "evolution-safety-auditor",
+                      correction: "Obtain the missing boundary observation in an independent Trial",
+                    },
                   ],
                   accepted_limitations: [],
                   unknowns: ["candidate arm remains a separate immutable Trial"],
@@ -1767,6 +1777,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                     "aggregate_score",
                     "cost_delta",
                     "evaluation:case-1:candidate:0",
+                    "integrity_finding:case-1:baseline:0:security:1",
                     "integrity_review:case-1:candidate:0",
                     "run:case-1:candidate:0",
                     "scorer:correctness:case-1:candidate:0",
@@ -1775,6 +1786,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   required_unavailable_dimensions: [
                     "aggregate_score",
                     "evaluation:case-1:candidate:0",
+                    "integrity_finding:case-1:baseline:0:security:1",
                     "integrity_review:case-1:candidate:0",
                     "run:case-1:candidate:0",
                     "scorer:correctness:case-1:candidate:0",
