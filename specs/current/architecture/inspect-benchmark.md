@@ -44,6 +44,13 @@ relative-date business calculations; it does not replace real host time,
 Provider time or inactivity observation. A malformed supplied timestamp is an
 input error. Logs record `case_context_policy=official-world-clock-v2` and
 each sample's effective clock. Old v1 results retain their original evidence.
+Native task declarations use registered Inspect solver factories:
+`automationbench_task_solver` for official Task/Mission samples and
+`business_repair_solver` for explicit development inputs. Their logged parameters
+are the real input/package paths and configuration; the official factory receives
+the task's already-resolved clock instead of consulting wall time again. Both
+delegate to the single HTTP/lifecycle solver. Constructor checks alone do not
+verify plan/log registration; model-free Inspect evaluations exercise that boundary.
 
 The official package owns world transitions and rubric semantics. Inspect keeps
 ordered real tool events, sealed world state and the private Google Sheets row-write

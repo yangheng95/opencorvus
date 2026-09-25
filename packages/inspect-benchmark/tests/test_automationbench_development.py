@@ -5,12 +5,16 @@ from __future__ import annotations
 import asyncio
 import copy
 import json
+import socket
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 import httpx
 import pytest
 from automationbench.schema.world import WorldState
+from inspect_ai import eval
+from inspect_ai.log import read_eval_log
 from inspect_ai.model import ChatMessageUser
 from inspect_ai.solver import TaskState
 from mcp import ClientSession
@@ -26,6 +30,7 @@ from opencorvus_inspect.automationbench.development import (
 )
 from opencorvus_inspect.automationbench.development_task import opencorvus_business_repair
 from opencorvus_inspect.automationbench.mcp import world_server
+from opencorvus_inspect.automationbench.task import opencorvus_automationbench
 
 PACKAGE = Path(__file__).parents[1]
 SQUAD = PACKAGE.parents[1] / "expert-squads/builtin/automationbench"
@@ -381,3 +386,63 @@ def test_development_task_configuration_errors(
     options[option] = str(tmp_path) if option == "project_dir" else value
     with pytest.raises(ValueError, match=error):
         opencorvus_business_repair(**options)
+
+
+@pytest.mark.parametrize("entry", ["official-task", "official-mission", "development-mission"])
+def test_real_inspect_records_native_ingress_error_with_registered_plan(
+    tmp_path: Path,
+    entry: str,
+) -> None:
+    # An owned, bound but non-listening port produces a real connection refusal.
+    # No product response, participant output, model response, or Tool result is fabricated.
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as endpoint:
+        endpoint.bind(("127.0.0.1", 0))
+        url = f"http://127.0.0.1:{endpoint.getsockname()[1]}"
+        config: dict[str, Any] = {
+            "squad": str(SQUAD),
+            "project_dir": str(tmp_path / "projects"),
+            "model": "openai/gpt-5.6-luna",
+            "base_url": url,
+        }
+        if entry == "development-mission":
+            load_input(tmp_path, driver_input())
+            task = opencorvus_business_repair(fixture=str(tmp_path / "input.json"), **config)
+            expected_solver = "business_repair_solver"
+            execution_key = "development_execution"
+        else:
+            task = opencorvus_automationbench(
+                manifest=str(
+                    PACKAGE / "src/opencorvus_inspect/examples/automationbench-smoke.json"
+                ),
+                entrypoint="mission" if entry == "official-mission" else "task",
+                unspecified_clock="2026-01-15T09:00:00+00:00",
+                **config,
+            )
+            expected_solver = "automationbench_task_solver"
+            execution_key = "automationbench_execution"
+        logs = eval(
+            task,
+            model="none",
+            log_dir=str(tmp_path / "logs"),
+            display="none",
+            ctl_server=False,
+            limit=1,
+            fail_on_error=False,
+        )
+    assert len(logs) == 1
+    log = read_eval_log(logs[0].location)
+    # fail_on_error=False completes the log while preserving each sample's real error.
+    assert log.status == "success"
+    assert log.plan.steps[0].solver == f"opencorvus_inspect/{expected_solver}"
+    assert log.plan.steps[0].params["base_url"] == url
+    assert len(log.samples or []) == 1
+    sample = (log.samples or [])[0]
+    assert sample.metadata["opencorvus_observation"]["error_type"] == "OpenCorvusAPIError"
+    assert sample.metadata[execution_key] == {"status": "error", "error_type": "OpenCorvusAPIError"}
+    if entry.startswith("official"):
+        assert log.plan.steps[0].params["unspecified_clock"] == "2026-01-15T09:00:00+00:00"
+        projected = sample.metadata["automationbench_current_time"]
+        actual = sample.metadata["automationbench_snapshot"]["world"]["meta"]["current_time"]
+        assert datetime.fromisoformat(projected.replace("Z", "+00:00")) == (
+            datetime.fromisoformat(actual.replace("Z", "+00:00"))
+        )

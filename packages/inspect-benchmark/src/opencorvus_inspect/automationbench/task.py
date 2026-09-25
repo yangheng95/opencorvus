@@ -12,7 +12,7 @@ from typing import Any, cast
 from inspect_ai import Task, task
 from inspect_ai.dataset import Sample
 from inspect_ai.scorer import Score, Scorer, Target, mean, scorer, stderr
-from inspect_ai.solver import TaskState
+from inspect_ai.solver import Solver, TaskState, solver
 
 from ..adapter import AdapterConfig, EntryPoint
 from ..scorer import mission_completed, task_completed
@@ -132,6 +132,32 @@ def automationbench_partial() -> Scorer:
     return automationbench_score("partial")
 
 
+@solver
+def automationbench_task_solver(
+    manifest: str,
+    squad: str,
+    project_dir: str,
+    model: str,
+    base_url: str,
+    timeout_seconds: float,
+    poll_seconds: float,
+    unspecified_clock: str,
+    entrypoint: EntryPoint = "task",
+) -> Solver:
+    """Registered plan identity with the Task's already-resolved business clock."""
+    config, squad_path, _ = sample_settings(
+        manifest, squad, project_dir, model, base_url, timeout_seconds, poll_seconds
+    )
+    clock = datetime.fromisoformat(unspecified_clock.replace("Z", "+00:00"))
+    cases = [freeze_missing_case_clock(case, clock) for case in load_cases(manifest)]
+    return build_opencorvus_solver(
+        config,
+        project_isolation="sample_epoch",
+        sample_setup=sample_environment(cases, squad_path, entrypoint),
+        entrypoint=entrypoint,
+    )
+
+
 @task
 def opencorvus_automationbench(
     manifest: str,
@@ -194,10 +220,15 @@ def opencorvus_automationbench(
             )
             for case in cases
         ],
-        solver=build_opencorvus_solver(
-            config,
-            project_isolation="sample_epoch",
-            sample_setup=sample_environment(cases, squad_path, entrypoint),
+        solver=automationbench_task_solver(
+            manifest=manifest,
+            squad=str(squad_path),
+            project_dir=config.project_dir,
+            model=model,
+            base_url=config.base_url,
+            timeout_seconds=config.timeout_seconds,
+            poll_seconds=config.poll_seconds,
+            unspecified_clock=clock.isoformat(),
             entrypoint=entrypoint,
         ),
         scorer=[

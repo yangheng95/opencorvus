@@ -544,3 +544,23 @@
 - 新`opencorvus_business_repair`入口仅组成原Mission solver/setup，注册名明确为开发返工。纯配置校验迁为environment.sample_settings，旧私有定义已删除、官方消费同一个函数。scorer=None，输出原生结果与未评估开发证据，外侧按逐项事实审查。实际构造B1派生输入成功，公开request UTF8为1844 bytes且无补入金额/公式/source ID；无活动MCP或模型在此构造中启动。
 - 聚焦入口/错误配置及原官方构造共5测试通过；package Mypy24源文件/新测试Mypy1文件、Ruff（含两个artifact脚本）、脚本py_compile、docs342ops25groups/diff通过。初次静态检查指出controller在async中同步Popen和测试metadata/kwargs类型，已沿原driver的to_thread写法与准确类型修正；不是模型/runtime失败，也没有绕过检查。原G17行为合同不重复累计。
 - 只读检查原auth/models存在、OAuth当时未过期、目录含精确Luna，没有输出凭据或刷新。真实preflight仍须新Host执行并记录usable/projected/exact/streaming。提交后的freeze及controller将记录准确源SHA、数据/脚本身份、一次样本和实际运行过程；在这些运行收据出现前不能说模型已经启动。
+
+### Repair 01启动边界失败：业务样本尚未开始
+
+- 源`d24c215c27a6a56cc03e80f65929815edfd7b5a6`在12:58 UTC按原freeze启动一次controller。Luna真实预检通过（usable/projected/gpt-5.6-luna/streaming），随后Inspect在实际log计划登记时报告`Object 'solve' does not have registry info`，没有生成eval。进程exit0并不是成功；原controller精确记录`log_unavailable`/assessment null，停止在runtime boundary。
+- 原controller54268/launcher42572/host34880/Inspect57848均已退出，cleanup为零活动、host stopped，auth/models复制件实际删除。旧数据只读核对`engine_task=0`；两次Luna请求只来自预检，usage2条/input29046/output62/reasoning111/cache0/total29219 tokens。不能记业务0分或称业务判断失败；原controller不重启、不补写原记录。
+- 横审发现不是局限新开发任务：`ba89e5cb`为保持单一clock删除了官方`@solver automationbench_task_solver`包装，直接把plain build_opencorvus_solver闭包交给Inspect；G18新入口沿用该模式。H-E原eval实际计划仍记录旧registered automationbench_task_solver，解释旧运行为何能启动。当前官方Task/Mission与新开发Mission均受影响；通用opencorvus_task仍有装饰器，目录构造和MCP checker路径没有进入这个原生任务日志边界。
+- 检查覆盖缺口由本任务负责：G18只做了Task构造检查；G17官方本地checker自身有注册solver，不能代替真实原生任务的Inspect启动。不是`scorer=None`或Luna能力问题，也不是业务API v61问题。停止真实样本路径，先修工具链并用模型无关真实Inspect错误路径验收；是否再登记业务运行另行决定，不静默把失败替掉。
+
+## G19实施前：恢复Inspect执行计划的真实注册身份
+
+- 已读当前Inspect0.3.259的solver decorator/registry参数序列化、resolve_plan/plan_to_eval_plan，以及全仓build_opencorvus_solver调用。计划保留唯一公共HTTP/lifecycle实现；官方与开发两种输入工厂分别使用参数为可序列化路径/配置的真实`@solver`，不手写registry属性、合成日志或把callback名字伪装成可重建参数。官方包装显式接受Task已冻结的effective unspecified_clock，不能恢复过去两次取当前时间的旧缺陷；官方原Case、开发归档来源各自唯一权威。
+- 范围限于两个Inspect Task组合模块及聚焦测试/架构。通用Task已注册路径、Mission/Task HTTP客户端、取消/恢复/并行调度实现不改。测试覆盖官方Task、官方Mission、开发Mission三种入口的真实eval计划/错误日志、clock保持和资源收尾；原通用solver合同作为对照。
+- 独立无模型Checker：用G17合成fixture或原smoke Case；socket独占bind但不listen的本机随机端口是明确不可用API端点，避免碰用户服务。Inspect实际eval(model=none)启动自己的本地MCP/项目，真正HTTP连接失败应生成含准确registered solver/参数的eval与OpenCorvusAPIError和原环境error；不伪造product成功响应或LLM/Tool输出。日志放`.tmp/supervision-causal-20260925/g19-local-check/`，不使用B1活动world，不发Provider。先红后绿核对这个精确失败，不用静态字符串替代。
+
+### G19修复与验证 checkpoint
+
+- 官方`automationbench_task_solver`恢复为真实`@solver`，显式接收Task构造时已经选定的clock；开发`business_repair_solver`注册真实fixture/squad/config参数。两者继续调用唯一build_opencorvus_solver；路径指向同一冻结输入，未手写registry信息、复制HTTP/生命周期实现或重新按当前wall-time给world定时。原通用opencorvus_task仍沿原注册路径。
+- 三种真实Inspect检查在修前均复现无registry导致eval未写出；修后都生成可完整读取的eval，保存准确solver名、真实参数和各sample的OpenCorvusAPIError。官方Task和Mission的input投影clock与最终world clock一致。整体`log.status=success`在fail_on_error=False下仅代表日志完成，sample仍明确error；初次Checker把它预期为overall error，已改为断言真实sample错误和完整计划，没有放宽生产错误语义。controller原先同时检查环境closed/原生outcome，因此本次没有误判成功。
+- 聚焦三个原生入口、原通用solver、官方构造/clock共7测试通过；这是无Provider的实际Inspect计划/HTTP连接错误/MCP收尾路径，非LLM或业务修复。原料为新合成或smoke输入，未使用B1活动world。package Mypy24源文件/新测试1文件、Ruff、docs342ops25groups/diff均通过；按当前路径复核所有检查/本轮host进程已退出。原Repair 01保持停止，不重启控制器、不补写eval或把null记0。
+- `repair-01/failure-review.json`只读记录engine_task0、两次流式LunaHTTP200预检请求、2usage/29219 tokens、零活动及host停止/两复制件删除。原Provider activity表只有1条不等于只有1次调用，以真实审计2请求和2usage并列保存。恢复这个零业务样本的运行需新的独立冻结/明确失败保留策略，不能沿用已停止目录或把未开始的业务验证称为通过。

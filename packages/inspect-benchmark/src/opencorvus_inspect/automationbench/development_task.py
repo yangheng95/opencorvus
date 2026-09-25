@@ -4,10 +4,34 @@ from __future__ import annotations
 
 from inspect_ai import Task, task
 from inspect_ai.dataset import Sample
+from inspect_ai.solver import Solver, solver
 
 from ..solver import build_opencorvus_solver, opencorvus_system_metadata
 from .development import development_environment, load_development_fixture
 from .environment import sample_settings
+
+
+@solver
+def business_repair_solver(
+    fixture: str,
+    squad: str,
+    project_dir: str,
+    model: str,
+    base_url: str,
+    timeout_seconds: float,
+    poll_seconds: float,
+) -> Solver:
+    """Register reproducible input/configuration arguments, not an anonymous callback."""
+    config, squad_path, _ = sample_settings(
+        fixture, squad, project_dir, model, base_url, timeout_seconds, poll_seconds
+    )
+    material = load_development_fixture(fixture)
+    return build_opencorvus_solver(
+        config,
+        project_isolation="sample_epoch",
+        sample_setup=development_environment(material, squad_path),
+        entrypoint="mission",
+    )
 
 
 @task
@@ -39,11 +63,14 @@ def opencorvus_business_repair(
     }
     return Task(
         dataset=[Sample(id=material.identifier, input=material.request, metadata=metadata)],
-        solver=build_opencorvus_solver(
-            config,
-            project_isolation="sample_epoch",
-            sample_setup=development_environment(material, squad_path),
-            entrypoint="mission",
+        solver=business_repair_solver(
+            fixture=fixture,
+            squad=str(squad_path),
+            project_dir=config.project_dir,
+            model=model,
+            base_url=config.base_url,
+            timeout_seconds=config.timeout_seconds,
+            poll_seconds=config.poll_seconds,
         ),
         scorer=None,
         model=None,
