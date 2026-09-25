@@ -564,3 +564,11 @@
 - 三种真实Inspect检查在修前均复现无registry导致eval未写出；修后都生成可完整读取的eval，保存准确solver名、真实参数和各sample的OpenCorvusAPIError。官方Task和Mission的input投影clock与最终world clock一致。整体`log.status=success`在fail_on_error=False下仅代表日志完成，sample仍明确error；初次Checker把它预期为overall error，已改为断言真实sample错误和完整计划，没有放宽生产错误语义。controller原先同时检查环境closed/原生outcome，因此本次没有误判成功。
 - 聚焦三个原生入口、原通用solver、官方构造/clock共7测试通过；这是无Provider的实际Inspect计划/HTTP连接错误/MCP收尾路径，非LLM或业务修复。原料为新合成或smoke输入，未使用B1活动world。package Mypy24源文件/新测试1文件、Ruff、docs342ops25groups/diff均通过；按当前路径复核所有检查/本轮host进程已退出。原Repair 01保持停止，不重启控制器、不补写eval或把null记0。
 - `repair-01/failure-review.json`只读记录engine_task0、两次流式LunaHTTP200预检请求、2usage/29219 tokens、零活动及host停止/两复制件删除。原Provider activity表只有1条不等于只有1次调用，以真实审计2请求和2usage并列保存。恢复这个零业务样本的运行需新的独立冻结/明确失败保留策略，不能沿用已停止目录或把未开始的业务验证称为通过。
+
+## G20预登记：零业务样本启动失败后的独立恢复
+
+- Recall：用户本轮明确要求界定并推进恢复。Repair 01未创建业务Task，原null、日志、2次预检/29219 tokens及旧freeze完整保留。G19已定位并真实验证注册故障修复；这次恢复不是挑选业务结果或H-E第三臂。起始`9eee9b1e`/工作区干净，实际无旧controller/host/Inspect进程运行。
+- 只进行一次恢复启动，目录`.tmp/supervision-causal-20260925/repair-01-recovery/`，episode在其子目录；同一fixture身份`af809c323ab14ac90b6df4193825bc65d5cae3697eb434ed8b4d727989ebe869`、同一1844字节公开请求、同一原4服务/clock/完整description、同一`.14/b4c645f4...`及原评估侧义务。业务样本上限仍1，无替补。若再次runtime失败，保留null并停止这条真实启动路径，不循环试启动；若业务失败照样保留，不更改提示重抽。
+- 原单一controller源码增加必填`--run-dir`以读取显式独立freeze，删除硬编码旧RUN目录；episode必须归属于该登记目录。没有第二controller实现、后备路径或改变原host/Inspect/cleanup逻辑。旧运行目录/controller.json/freeze/log只读，旧源码版本在`d24c215c`保留，新实例按新source/script身份独占创建。先py_compile/Ruff和实际CLI错误合同（episode越界→明确ValueError）核对，无模型。
+- 验证并提交后写新freeze，引用旧失败收据说明业务Task为0，所有新旧预检和后续调用累计报告。真实包/输入按原已核验收据再核对身份，不重新生成源、材料化候选或扩大测试。新Host使用同一成对授权/模型目录并重新做精确Luna流式预检，不刷新凭据副本；预检不通过就收尾。
+- 新旧两次启动各自完整留存，结果不得拼入原H-E/官方历史。本次只验证G16/G18规定的真实修正、保持义务和判断/返工来源；executor首次修正仍不证明监督触发。运行期间源码/spec冻结、五分钟快照；新Task/Mission身份以实际收据为准，不提前填造。结束先零活动/host退出/复制件删除，再读完整原Tool/消息/产物/世界判定。

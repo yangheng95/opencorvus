@@ -2,6 +2,11 @@
 
 ## Recall与测量问题
 
+G18首次启动在业务Task创建前因Inspect solver未注册而停止；原目录只读，业务结果null。
+G19已修复并通过三个入口的真实无模型Inspect检查。G20另行登记一次零样本启动恢复，
+目录为`repair-01-recovery`，输入/包/义务沿用本文，准确新源和脚本由该目录独立freeze绑定。
+控制器当前要求显式`--run-dir`，不会默认选择原停止目录；不能重跑本次失败或覆盖其费用。
+
 依据[固定状态设计](fixed-state-repair-design.md)及[主记录G18](../../records/2026-09/2026-09-25-supervision-causal-iteration.md)，
 本次只问：原生Mission/Task链能否从一个自然产生且归属明确的错误记录出发，读到足够
 来源，改变判断并实际修正，再验证和结算，同时保持已经满足的业务义务。

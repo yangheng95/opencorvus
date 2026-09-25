@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import asyncio
 import hashlib
 import json
@@ -12,7 +13,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
-RUN = ROOT / ".tmp/supervision-causal-20260925/repair-01"
 sys.path.insert(0, str(ROOT / "packages/inspect-benchmark/script"))
 import run_factorial_trials as driver  # noqa: E402
 
@@ -21,8 +21,12 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-async def main() -> None:
-    frozen = json.loads((RUN / "freeze.json").read_text(encoding="utf-8"))
+async def main(run_directory: Path) -> None:
+    run = await asyncio.to_thread(run_directory.resolve, strict=True)
+    frozen = json.loads((run / "freeze.json").read_text(encoding="utf-8"))
+    episode_directory = await asyncio.to_thread(Path(frozen["episode_directory"]).resolve)
+    if not episode_directory.is_relative_to(run):
+        raise ValueError("Episode directory must be inside its registered run directory")
     if frozen["sample_count"] != 1 or frozen["model"] != "openai/gpt-5.6-luna":
         raise ValueError("This controller requires the registered single Luna occurrence")
     for name in ("fixture", "controller", "input_probes"):
@@ -50,19 +54,19 @@ async def main() -> None:
         "cleanup": None,
         "host": None,
     }
-    with (RUN / "controller.json").open("x", encoding="utf-8") as output:
+    with (run / "controller.json").open("x", encoding="utf-8") as output:
         json.dump(state, output, ensure_ascii=False, indent=2)
 
     def save() -> None:
         state["updated_at"] = datetime.now(timezone.utc).isoformat()
-        driver.write_receipt(RUN / "controller.json", state)
+        driver.write_receipt(run / "controller.json", state)
 
     def snapshot() -> None:
         audit = driver.read_receipt(episode.directory / "provider-audit.json") or {}
         requests = audit.get("requests", [])
         now = datetime.now(timezone.utc)
         driver.write_receipt(
-            RUN / "snapshots" / f"{now.strftime('%Y%m%dT%H%M%S%fZ')}.json",
+            run / "snapshots" / f"{now.strftime('%Y%m%dT%H%M%S%fZ')}.json",
             {
                 "at": now.isoformat(),
                 "host": driver.read_receipt(episode.directory / "host.json"),
@@ -240,4 +244,6 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--run-dir", type=Path, required=True)
+    asyncio.run(main(parser.parse_args().run_dir))
