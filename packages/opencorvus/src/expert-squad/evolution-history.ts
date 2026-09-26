@@ -31,6 +31,7 @@ import { ExpertSquadPackageLocations } from "./locations"
 import { ExpertSquadRegistry } from "./registry"
 import { evolutionMutationConfirmationText } from "./evolution-mutation-intent"
 import { FEEDBACK_REVISION_COMPONENT_ID } from "./feedback-revision"
+import { missingComparisonReviews } from "./evolution-review-freshness"
 
 type InstallationScope = "project" | "global"
 type Partition = "current" | "historical"
@@ -449,6 +450,7 @@ function completeness(campaign: Campaign, graph: ComparisonGraph) {
 }
 
 function buildComparison(input: {
+  read: FrozenRead
   graph: ComparisonGraph
   campaign: FrozenArtifact<Campaign>
   candidate: FrozenArtifact<Candidate>
@@ -460,6 +462,30 @@ function buildComparison(input: {
   const candidate = input.candidate.payload!
   const campaign = input.campaign.payload!
   const graphIssues = [...input.graph.graphIssues]
+  // History may retain multiple physical versions. Use the latest version per
+  // identity within this frozen read, not wall time or the globally latest row.
+  const reviews = new Map<string, FrozenArtifact>()
+  for (const artifact of input.read.artifacts) {
+    if (
+      artifact.catalog.taskID !== input.campaign.catalog.taskID ||
+      artifact.envelope.artifact_type !== "evolution-lab/integrity-review"
+    )
+      continue
+    const prior = reviews.get(artifact.locator.artifact_id)
+    if (!prior || prior.locator.catalog_revision < artifact.locator.catalog_revision)
+      reviews.set(artifact.locator.artifact_id, artifact)
+  }
+  const missingReviews = missingComparisonReviews({
+    comparison: input.graph.comparison.envelope,
+    evaluations: input.graph.evaluations.map((artifact) => artifact.locator),
+    reviews: [...reviews.values()],
+  })
+  if (missingReviews.length)
+    graphIssues.push({
+      code: "REVIEW_SNAPSHOT_CHANGED",
+      owner: artifactIdentity(input.graph.comparison),
+      missing_review_locators: missingReviews,
+    })
   if (
     !sameIdentity(campaign.baseline_revision, comparison.baseline_revision) ||
     !sameIdentity(candidate.parent_revision, comparison.baseline_revision) ||
@@ -631,6 +657,7 @@ function buildCampaignRecord(input: {
         diff_sha256: candidate.payload!.diff_sha256,
         comparisons: comparisonArtifacts.map((comparison) =>
           buildComparison({
+            read: input.read,
             graph: comparisonGraph(input.read, comparison),
             campaign: input.campaign,
             candidate,

@@ -285,6 +285,15 @@ Task catalog分页内发现并完整读取这些确切Evaluation的全部Review�
 findings全部进入比较，后续完整Review可显式取代多个分支；原件永久保留。history的review_history
 逐项暴露真实状态，单项review投影只在唯一current时存在，不合成合并Review或写第二ledger。
 
+晋升授权与尚未提交的执行必须核对Comparison确切Evaluation所关联的当前完整Review身份。
+后发独立或显式改判Review未进入该Comparison来源时，返回
+`EvolutionComparisonReviewChangedError`及确切缺失locators；不按结论好坏决定是否忽略。
+history在自身冻结目录上用同一差异计算公开`REVIEW_SNAPSHOT_CHANGED`，保留原推荐，
+不提供该快照已知过期的promotion_intent。安装前检查仅为预检，最终检查与durable receipt写入
+在同一个SQLite immediate事务中串行化：Review先提交则原manager按journal回滚未提交安装；
+receipt先提交则后发Review不倒改历史。重试先识别已有receipt，按原journal清理并返回；
+未提交的中断先reconcile再复核新证据，避免提前拒绝遗留未提交安装。恢复/feedback授权保持原契约。
+
 Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 metrics store：
 `engine_metric_spec`、`engine_metric_result` 和 `engine_iteration` 的唯一直接表写入文件
 是 `metrics/store.ts`。任务、agent、engine 或 UI 层不得直接写这些 metrics 表。

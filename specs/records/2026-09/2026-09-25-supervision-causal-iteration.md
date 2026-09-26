@@ -905,3 +905,30 @@
 - 源/嵌入Evolution Lab同步`2026.09.27.1`，content digest `6e9398066a58346de1e98f6e2d70f5a4853bfd240b278822dba514fcef5cb8b6`；同步Auditor/Owner/scheduler及Campaign Skill，删除通用“已有有效Artifact永不重发”对Review合法改判的阻断，保留测量不重跑择优。只更新本包生成项，其它base/AutomationBench漂移不夹带。当前架构02-data同步，未推广安装。
 - 保留检查器失败：未同步生成物时真实source/embedded身份检查失败；本地同步辅助脚本一度以未提交的中间生成版本为发布基线而拒绝同版本更新，改为读取HEAD中的真实已提交基线后完成同一个尚未发布的新版本，未改任何已发布包。第一次相关日志`.tmp/g36-host-tests-initial.log`、`g36-host-final.log`及`g36-package-sync-final.log`保留；最后真实source/embedded/登记身份检查通过。差异只在本任务文件内；部分已触及TS文件随格式化产生排版变化，未改变其余逻辑。
 - 仍未交付：比较发布后新证据出现时，promotion新鲜性与完整权威复核；Run/Evaluation全Campaign集合的选择与重复Trial边界。G36不宣称这些已根治，历史Comparison不重算，业务可靠纠错/进化收益仍未知。下一步沿现有mutation授权/检查/提交同一链审查这些事实边界，不通过新业务样本掩盖。
+
+## G37：晋升提交时的 Review 证据新鲜性
+
+### Recall 与实施前影响面
+
+- 用户要求Codex继续实际开发，在02:45上海以后交回准确Opus5.5；本轮沿G36剩余边界工作，不开新业务模型/世界/Campaign，不修改历史Artifact。验收是旧Comparison在相关新Review出现后返回可审查的证据身份差异，新Comparison仍可支持合法晋升，已提交回执的重试/恢复继续返回原事实；不将此称作真实进化收益。
+- 已读AGENTS、主记录Recall/五段机制图/G35–G36、02-data当前架构、Review publisher/resolver、Catalog冻结分页、mutation-intent/mutation/authorization、manager安装锁/journal/回执恢复、history冻结读取、真实mutation测试。全仓查到晋升/恢复只经server两入口及此mutation权威；feedback工具复用prepare但有独立授权语义。没有UI改动，不运行UI自动化。
+- 可观察触发：Comparison发布后，同Task同Evaluation发布新独立或显式改判Review。prepare只核对原Campaign/Candidate/Comparison身份、promote、required为空、CAS和Project，没有当前Review集合；authorize和execute复用该旧事实检查，history也仍提供旧promotion_intent。G36保证一次发布快照完整，无法保证之后未出现新事实。先在原实际DB/包安装测试驱动复现“授权后新增blocker→执行旧Comparison”的真实安装结果，再限定结论。
+- 共同控制流横审：mutation授权基于真实root operator消息；执行先验证授权，再查确定性已提交receipt，未提交才进入包安装锁。manager先恢复journal，再CAS/暂存/rename，durable receipt是唯一提交点。未提交的异常或重启按原journal回滚，已有receipt则保留已装版本并清理。Task创建会先恢复未完mutation；Project/session归属、project/global范围、feedback/restoration走原规则。不能把新鲜性检查放在receipt重放前，否则后来Review会破坏已完成操作的幂等恢复。
+- 拟议单一修复：对Comparison确切Evaluation来源，按同Task当前完整Review身份检查其是否都已进入Comparison来源。检查只回答身份/完整性，不判断findings真假或新记录优劣；新增空结论也需新的可审查Comparison，显式更正可由新Comparison解除旧阻断，旧Comparison字节和推荐保留。不同Evaluation/Task不混入；物理版本变化按确切locator区分，不用时间/版本号/自由文本代替一致性。
+- 校验点：authorize前与未提交execute前快速复核；在既有durable receipt写入的同一个SQLite immediate事务再次复核，使并发Review写入与晋升提交有确定顺序。若安装期间出现新Review，原manager无receipt回滚真实包；若receipt已提交，之后的新Review不倒改历史或自动卸载。恢复重放只重现原回执，不再进行新的晋升授权。history在自己的冻结目录上调用同一纯差异计算，保留原推荐同时以结构化问题停止提供该快照已知过期的promotion_intent；真正执行仍重读当前DB。
+- 边界：此次不修Run/Evaluation集合选择、不重算历史比较、不增加Review ledger或角色，不修改manager已有journal协议。来源集合齐全不证明历史payload曾正确派生，也不证明业务判断正确。若真实反例或检查否定方案，保留证据并调整，不制造新的运行门。
+- 计划正向Checker：旧版实际安装反例；新增Review后authorize/execute精确错误与缺失locator；安装到提交间真实新增Review触发回滚并读回baseline；同证据显式改判后新Comparison安装；提交后再新增Review仍可重放同receipt/恢复；其它Evaluation/Task不影响当前比较；原异常恢复/串行重放/多Project/feedback测试复验。类型、API生成（如schema变化）、docs/diff和实际pre-push随后验证，范围提交/pull merge/审完整出站后push。
+
+### G37原版反例与实现复核
+
+- 原版真实DB/包manager路径确实完成了过期晋升：Comparison原recommendation=promote，真实授权后向同Evaluation新增security/failed/blocker独立Review，再执行原请求，返回durable promotion receipt并实际读回candidate安装身份。对完整新集合调用原唯一比较器仅作诊断，得到inconclusive；没有覆盖原Comparison。原始收据`.tmp/g37-stale-promotion-probe.json`、日志和临时补丁保留，测试源核对只有本轮插入后精确恢复。该反例使用明确合成test-driver，证明安装权限消费过期证据，不是模型自主行为或业务收益。
+- 新鲜性计算只比较当前相关Review的确切locator是否已在Comparison来源中；mutation与history共用`missingComparisonReviews`。授权预检、未提交执行和最终receipt immediate事务共用当前DB读取权威；receipt已存在时直接走原reconcile/重放，不倒判。审查时发现前置执行拒绝还可能留下旧journal，因此未提交执行先调用既有manager reconcile，恢复原包后才检查新增Review；不新增journal/安装状态。
+- 首轮修后真实测试回归路径通过，但新history测试错把detail字段写作comparison而非record中的comparison，抛TypeError；改用公开ResponseSchema真实字段后2项/46断言通过。保留`.tmp/g37-mutation-initial.log`，这属于test-driver错误，不放宽生产协议；后续补测中断后新证据与全相关合同。
+
+### G37已完成验收与限制
+
+- 真实mutation三条路径3项/69断言通过：原授权/安装/崩溃恢复/恢复旧版/Project与global隔离；新Review在授权前后导致精确身份错误；实际rename后、receipt前发布Review使原manager回滚并读回baseline；中断遗留candidate先reconcile到baseline再返回过期错误；同原证据显式改判与新Comparison真实安装；commit之后追加Review仍重放同一receipt及安装身份。旧Comparison payload逐值保持。另一Evaluation与另一Task的Review不影响当前Comparison；新鲜性并不因此保证Run/Evaluation全集，那个问题仍待审查。
+- history真实读回保留promote原结论并公开REVIEW_SNAPSHOT_CHANGED和null promotion_intent；原目录上界读取仍保留当时的promotion_intent，不回写历史。新的纯差异实现由当前DB提交与冻结history共用；没加安装状态或第二证据ledger。HTTP沿既有ExpertSquadPackageError包装保留完整NamedError名称/身份数据文字，未新增路由或HTTP状态。
+- 五文件聚焦检查合计68项/397断言通过：mutation3/69、manager CAS与project/global隔离1/30、feedback9/48、真实Host publisher9/105、comparison46/145；`.tmp/g37-focused-tests.log`。最后缩小测试排版差异和限制新增提前reconcile只用于promotion后，mutation3/69再次通过，`.tmp/g37-mutation-final.log`。根类型8项、docs342ops25groups通过；所有检查无模型/业务费用，无UI代码/自动化。
+- canonical SDK生成器完成；OpenAPI递归结构对比只新增history与detail中6处REVIEW_SNAPSHOT_CHANGED联合分支，原其它字段和值相等，`.tmp/g37-openapi-changes.json`。文本大diff来自嵌套联合展开/对齐，不是新增其它API；生成types同步。没有修改专家团源码或嵌入包，真实Host source/embedded身份检查仍通过，Evolution Lab保持2026.09.27.1，不新增候选或推广。
+- 安装commit时的Review全集一致性已本地验证；先后顺序由原SQLite immediate writer事务与原manager journal确定，检查器通过真实持久化插入控制交错点，不冒称真实并发模型试验。后发Review不自动卸载已提交包，既有restore授权仍可按确切已安装回执恢复。历史Comparison即使sources齐全也未必曾正确派生，本修复不重算它；G33/G36前的错误派生不靠新增引用数量治愈。真实可靠业务纠错与进化收益仍未达成。

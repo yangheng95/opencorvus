@@ -21,10 +21,8 @@ import { Instance } from "@/project/instance"
 import { EngineService } from "@/task-api"
 import { Database, eq } from "@/storage/db"
 import { ExpertSquadPackageManager } from "./manager"
-import {
-  requireEvolutionMutationAuthorization,
-  requireEvolutionMutationRootSession,
-} from "./mutation-authorization"
+import { requireCurrentEvolutionReviews } from "./evolution-review-freshness"
+import { requireEvolutionMutationAuthorization, requireEvolutionMutationRootSession } from "./mutation-authorization"
 import {
   evolutionMutationConfirmationText,
   prepareEvolutionPackageMutation,
@@ -50,6 +48,8 @@ export async function authorizeEvolutionPackageMutation(rawInput: EvolutionMutat
     sessionID: input.sessionID,
   })
   const prepared = prepareEvolutionPackageMutation({ taskID: input.taskID, intent: input.intent })
+  if (prepared.operation === "promotion")
+    requireCurrentEvolutionReviews({ taskID: input.taskID, comparisonLocator: prepared.intent.comparisonResultLocator })
   const confirmationText = preparedConfirmation(prepared)
   if (input.confirmationText !== confirmationText)
     throw new Error("Evolution mutation authorization text does not equal the exact current evidence decision")
@@ -96,7 +96,9 @@ function receiptArtifactID(input: ReceiptIdentity) {
 }
 
 function existingReceipt(input: { taskID: string; artifactID: string; identity: ReceiptIdentity }) {
-  const row = Database.use((db) => db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, input.artifactID)).get())
+  const row = Database.use((db) =>
+    db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, input.artifactID)).get(),
+  )
   if (!row) return undefined
   if (row.task_id !== input.taskID || row.kind !== "expert_output")
     throw new EvolutionMutationReceiptIdentityConflictError({ artifactID: input.artifactID })
@@ -124,7 +126,8 @@ function existingReceipt(input: { taskID: string; artifactID: string; identity: 
   if (
     envelope.producer.operation_id !== input.identity.authorizationMessageID ||
     canonicalEvolutionJSON(identity) !== canonicalEvolutionJSON(input.identity)
-  ) throw new EvolutionMutationReceiptIdentityConflictError({ artifactID: input.artifactID })
+  )
+    throw new EvolutionMutationReceiptIdentityConflictError({ artifactID: input.artifactID })
   return receipt
 }
 
@@ -133,6 +136,7 @@ function persistReceipt(input: {
   artifactID: string
   operationID: string
   receipt: EvolutionPromotionReceipt
+  prepared: PreparedEvolutionMutation
 }) {
   const envelope = EngineArtifactEnvelopeSchema.parse({
     artifact_type: "evolution-lab/promotion-receipt",
@@ -147,7 +151,7 @@ function persistReceipt(input: {
     observed_artifact_locators: input.receipt.evidence,
     source_artifact_locators: input.receipt.evidence,
   })
-  Database.transaction((db) => {
+  Database.immediateTransaction((db) => {
     const current = db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, input.artifactID)).get()
     if (current) {
       if (
@@ -158,6 +162,11 @@ function persistReceipt(input: {
         throw new EvolutionMutationReceiptIdentityConflictError({ artifactID: input.artifactID })
       return
     }
+    if (input.prepared.operation === "promotion")
+      requireCurrentEvolutionReviews({
+        taskID: input.taskID,
+        comparisonLocator: input.prepared.intent.comparisonResultLocator,
+      })
     insertEngineArtifact(db, {
       id: input.artifactID,
       taskID: input.taskID,
@@ -204,6 +213,19 @@ export async function executeEvolutionPackageMutation(rawInput: EvolutionMutatio
       })
       return { receipt: prior, locator: exactEngineArtifactLocator({ taskID: input.authorization.taskID, artifactID }) }
     }
+    // Restore a pre-receipt interrupted installation before rejecting a newly
+    // stale request. Committed operations took the idempotent return above.
+    if (prepared.operation === "promotion") {
+      await ExpertSquadPackageManager.reconcileCommittedPackageMutation({
+        projectDirectory: Instance.project.worktree,
+        id: prepared.target.id,
+        installationScope: prepared.target.scope,
+      })
+      requireCurrentEvolutionReviews({
+        taskID: input.authorization.taskID,
+        comparisonLocator: prepared.intent.comparisonResultLocator,
+      })
+    }
     let receipt!: EvolutionPromotionReceipt
     await ExpertSquadPackageManager.promotePackageRevision({
       projectDirectory: Instance.project.worktree,
@@ -224,7 +246,13 @@ export async function executeEvolutionPackageMutation(rawInput: EvolutionMutatio
             evidence: prepared.evidence,
             manager_receipt: managerReceipt,
           })
-          persistReceipt({ taskID: input.authorization.taskID, artifactID, operationID: authorization.message_id, receipt })
+          persistReceipt({
+            taskID: input.authorization.taskID,
+            artifactID,
+            operationID: authorization.message_id,
+            receipt,
+            prepared,
+          })
         },
       },
     })
@@ -254,7 +282,10 @@ export async function executeEvolutionPackageMutation(rawInput: EvolutionMutatio
       id: prepared.target.id,
       installationScope: prepared.target.scope,
     })
-    return { receipt: existing, locator: exactEngineArtifactLocator({ taskID: input.authorization.taskID, artifactID }) }
+    return {
+      receipt: existing,
+      locator: exactEngineArtifactLocator({ taskID: input.authorization.taskID, artifactID }),
+    }
   }
   let receipt!: EvolutionPromotionReceipt
   await ExpertSquadPackageManager.restorePackageRevisionWithReceipt({
@@ -276,7 +307,13 @@ export async function executeEvolutionPackageMutation(rawInput: EvolutionMutatio
           evidence: prepared.evidence,
           manager_receipt: managerReceipt,
         })
-        persistReceipt({ taskID: input.authorization.taskID, artifactID, operationID: authorization.message_id, receipt })
+        persistReceipt({
+          taskID: input.authorization.taskID,
+          artifactID,
+          operationID: authorization.message_id,
+          receipt,
+          prepared,
+        })
       },
     },
   })

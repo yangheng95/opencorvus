@@ -56,6 +56,19 @@ export namespace ExpertSquadPackageManager {
   let packageMutationAfterBackupRemovalFailureForTest: (() => Promise<void>) | undefined
 
   export namespace TestHooks {
+    export function afterTargetInstallBeforeReceiptOnce(callback: () => Promise<void>) {
+      const previous = evolutionMutationInterruptForTest
+      let pending = true
+      evolutionMutationInterruptForTest = async () => {
+        if (!pending) return
+        pending = false
+        await callback()
+      }
+      return () => {
+        evolutionMutationInterruptForTest = previous
+      }
+    }
+
     export function interruptAfterTargetInstallBeforeReceiptOnce() {
       const previous = evolutionMutationInterruptForTest
       let pending = true

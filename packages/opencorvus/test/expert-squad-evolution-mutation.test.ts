@@ -17,6 +17,7 @@ import {
   EvolutionMutationReceiptIdentityConflictError,
 } from "../src/expert-squad/evolution-mutation"
 import { evolutionMutationConfirmationText } from "../src/expert-squad/evolution-mutation-intent"
+import { EvolutionComparisonReviewChangedError } from "../src/expert-squad/evolution-review-freshness"
 import { ExpertSquadPackageManager } from "../src/expert-squad/manager"
 import { readEvolutionCampaignDetail, readEvolutionHistory } from "../src/expert-squad/evolution-history"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
@@ -173,7 +174,7 @@ afterAll(async () => {
 })
 
 describe("authorized expert squad evolution mutation", () => {
-  test("promotes and restores exact snapshots while preserving existing Task revision pins", async () => {
+  test.each(["recovery", "review-freshness", "review-recovery"] as const)("authorized exact installation: %s", async (scenario) => {
     const sourceRoot = await Global.createTemporaryDirectory("expert-squad-evolution-mutation-")
     await using project = await memoryProject()
     await using foreignProject = await memoryProject()
@@ -629,7 +630,199 @@ describe("authorized expert squad evolution mutation", () => {
             comparisonResultLocator: comparison,
             expectedCurrentPackageDigest: baselineRevision.package_digest,
           } as const
-          const restoreInterruption = ExpertSquadPackageManager.TestHooks.interruptAfterTargetInstallBeforeReceiptOnce()
+          if (scenario !== "recovery") {
+            const historyBefore = await readEvolutionHistory({
+              namespace: target.namespace,
+              id: target.id,
+              installationScope: "project",
+            })
+            // Another evaluation and another Task are distinct evidence scopes.
+            const otherEvaluation = recordEvaluation("baseline", baselineRuns[0]!, 0.2, digests.baselineMetric, 0)
+            recordReview("baseline", otherEvaluation, 0)
+            recordEvolutionArtifact({
+              taskID: oldTask.taskID,
+              type: "evolution-lab/integrity-review",
+              payload: candidateReview.value,
+            })
+            const { authorization: ignoredAuthorization, ...intent } = mutationRequest
+            const repeatedAuthorization = await authorizeEvolutionPackageMutation({
+              taskID: operationTask.taskID,
+              sessionID: operationTask.session.id,
+              intent,
+              confirmationText: promotionText,
+            })
+            expect(repeatedAuthorization.confirmationText).toBe(promotionText)
+            if (scenario === "review-recovery") {
+              const interrupt = ExpertSquadPackageManager.TestHooks.interruptAfterTargetInstallBeforeReceiptOnce()
+              try {
+                await expect(executeEvolutionPackageMutation(mutationRequest)).rejects.toBeInstanceOf(
+                  ExpertSquadPackageManager.EvolutionMutationAbruptTerminationForTest,
+                )
+              } finally {
+                interrupt()
+              }
+              expect((await ExpertSquadRegistry.loadPackage(installed.after.targetRoot)).packageDigest).toBe(
+                candidateRevision.package_digest,
+              )
+            }
+            const lateReview = recordReview("candidate", candidateEvaluation, 0)
+            const expectedChange = {
+              taskID: operationTask.taskID,
+              comparisonLocator: comparison,
+              missingReviewLocators: [lateReview.locator],
+            }
+            const captureChanged = async (operation: () => Promise<unknown>) => {
+              try {
+                await operation()
+                return undefined
+              } catch (error) {
+                expect(error).toBeInstanceOf(EvolutionComparisonReviewChangedError)
+                return (error as InstanceType<typeof EvolutionComparisonReviewChangedError>).data
+              }
+            }
+            expect(
+              await captureChanged(() =>
+                authorizeEvolutionPackageMutation({
+                  taskID: operationTask.taskID,
+                  sessionID: operationTask.session.id,
+                  intent,
+                  confirmationText: promotionText,
+                }),
+              ),
+            ).toEqual(expectedChange)
+            expect(await captureChanged(() => executeEvolutionPackageMutation(mutationRequest))).toEqual(
+              expectedChange,
+            )
+            expect((await ExpertSquadRegistry.loadPackage(installed.after.targetRoot)).packageDigest).toBe(
+              baselineRevision.package_digest,
+            )
+            const historyAfter = await readEvolutionHistory({
+              namespace: target.namespace,
+              id: target.id,
+              installationScope: "project",
+            })
+            const knownStale = historyAfter.records[0]!.candidates[0]!.comparisons[0]!
+            expect({
+              recommendation: knownStale.recommendation,
+              intent: knownStale.promotion_intent,
+              issues: knownStale.graph_issues.map((issue) => issue.code),
+            }).toEqual({
+              recommendation: "promote",
+              intent: null,
+              issues: ["REVIEW_SNAPSHOT_CHANGED"],
+            })
+            const historicalDetail = await readEvolutionCampaignDetail({
+              namespace: target.namespace,
+              id: target.id,
+              installationScope: "project",
+              campaignTaskID: operationTask.taskID,
+              campaignLocator: campaign,
+              candidateLocator: candidateArtifact,
+              comparisonLocator: comparison,
+              catalogRevisionUpper: historyBefore.catalog_revision_upper,
+            })
+            // Frozen history still describes the decision it observed at that time.
+            const frozenComparison = historicalDetail.record.candidates[0]!.comparisons[0]!
+            expect({
+              recommendation: frozenComparison.recommendation,
+              intent: frozenComparison.promotion_intent?.request,
+              issues: frozenComparison.graph_issues,
+            }).toEqual({ recommendation: "promote", intent, issues: [] })
+            const reviewSet = [...baselineReviews, ...candidateReviews, revisionReview, lateReview]
+            const publishReconsideration = async () => {
+              const payload = {
+                ...revisionReview.value,
+                revision: {
+                  supersedes: reviewSet
+                    .filter((item) => item.value.arm === "candidate" && item.value.repetition === 0)
+                    .map((item) => item.locator),
+                  reason: "Reconsidered the same original evidence and corrected the boundary interpretation.",
+                },
+              }
+              const revised = {
+                value: payload,
+                locator: recordEvolutionArtifact({
+                  taskID: operationTask.taskID,
+                  type: "evolution-lab/integrity-review",
+                  payload,
+                  sources: [candidateEvaluation.locator, ...payload.revision.supersedes],
+                }),
+              }
+              reviewSet.push(revised)
+              const value = deriveComparisonRecommendation({
+                campaign: campaignPayload,
+                campaignLocator: campaign,
+                candidate: candidatePayload,
+                candidateLocator: candidateArtifact,
+                evaluations: [...baselineEvaluations, ...candidateEvaluations],
+                reviews: reviewSet,
+                runs: [...baselineRuns, ...candidateRuns],
+              })
+              expect(value.recommendation).toBe("promote")
+              const next = recordEvolutionArtifact({
+                taskID: operationTask.taskID,
+                type: "evolution-lab/comparison-recommendation",
+                payload: value,
+                sources: [...comparisonSources, ...reviewSet.map((review) => review.locator)].filter(
+                  (locator, index, all) =>
+                    all.findIndex((item) => item.artifact_id === locator.artifact_id) === index,
+                ),
+              })
+              const nextIntent = { ...intent, comparisonResultLocator: next }
+              const nextAuthorization = await authorizeEvolutionPackageMutation({
+                taskID: operationTask.taskID,
+                sessionID: operationTask.session.id,
+                intent: nextIntent,
+                confirmationText: evolutionMutationConfirmationText({
+                  projectID: Instance.project.id,
+                  target,
+                  beforeDigest: baselineRevision.package_digest,
+                  afterDigest: candidateRevision.package_digest,
+                  evidenceSHA256s: [campaign, candidateArtifact, next].map((locator) => locator.expected_sha256),
+                  operation: "promotion",
+                }),
+              })
+              return { ...nextIntent, authorization: nextAuthorization.authorization }
+            }
+            const reconsidered = await publishReconsideration()
+            let concurrentReview!: typeof lateReview
+            const restoreHook = ExpertSquadPackageManager.TestHooks.afterTargetInstallBeforeReceiptOnce(async () => {
+              concurrentReview = recordReview("candidate", candidateEvaluation, 0)
+              reviewSet.push(concurrentReview)
+            })
+            try {
+              expect(await captureChanged(() => executeEvolutionPackageMutation(reconsidered))).toEqual({
+                taskID: operationTask.taskID,
+                comparisonLocator: reconsidered.comparisonResultLocator,
+                missingReviewLocators: [concurrentReview.locator],
+              })
+            } finally {
+              restoreHook()
+            }
+            expect((await ExpertSquadRegistry.loadPackage(installed.after.targetRoot)).packageDigest).toBe(
+              baselineRevision.package_digest,
+            )
+            const finalRequest = await publishReconsideration()
+            const committed = await executeEvolutionPackageMutation(finalRequest)
+            expect(committed.receipt.after_digest).toBe(candidateRevision.package_digest)
+            recordReview("candidate", candidateEvaluation, 0)
+            const replay = await executeEvolutionPackageMutation(finalRequest)
+            expect(replay).toEqual(committed)
+            expect((await ExpertSquadRegistry.loadPackage(installed.after.targetRoot)).packageDigest).toBe(
+              candidateRevision.package_digest,
+            )
+            expect(
+              EngineArtifactEnvelopeSchema.parse(
+                requireEngineArtifactByLocator({
+                  taskID: operationTask.taskID,
+                  locator: comparison,
+                }).payload,
+              ).payload,
+            ).toEqual(comparisonPayload)
+            return
+          }
+          const restoreInterruption =
+            ExpertSquadPackageManager.TestHooks.interruptAfterTargetInstallBeforeReceiptOnce()
           let interruption: unknown
           try {
             await executeEvolutionPackageMutation(mutationRequest)
@@ -649,7 +842,9 @@ describe("authorized expert squad evolution mutation", () => {
             },
             { actor: "user" },
           )
-          expect(requireTaskPackageRevisionBinding(recoveryTaskID).package_digest).toBe(baselineRevision.package_digest)
+          expect(requireTaskPackageRevisionBinding(recoveryTaskID).package_digest).toBe(
+            baselineRevision.package_digest,
+          )
           const receiptReadFailure = ExpertSquadPackageManager.TestHooks.failFirstReceiptReadAfterCommit()
           let promotion!: Awaited<ReturnType<typeof executeEvolutionPackageMutation>>
           try {

@@ -32102,6 +32102,316 @@
                                                 "diagnostic"
                                               ],
                                               "type": "object"
+                                            },
+                                            {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "code": {
+                                                  "const": "REVIEW_SNAPSHOT_CHANGED",
+                                                  "type": "string"
+                                                },
+                                                "missing_review_locators": {
+                                                  "items": {
+                                                    "additionalProperties": false,
+                                                    "properties": {
+                                                      "artifact_id": {
+                                                        "maxLength": 512,
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      "catalog_revision": {
+                                                        "exclusiveMinimum": 0,
+                                                        "maximum": 9007199254740991,
+                                                        "type": "integer"
+                                                      },
+                                                      "expected_sha256": {
+                                                        "pattern": "^[a-f0-9]{64}$",
+                                                        "type": "string"
+                                                      },
+                                                      "source": {
+                                                        "const": "engine_artifact",
+                                                        "type": "string"
+                                                      }
+                                                    },
+                                                    "required": [
+                                                      "source",
+                                                      "artifact_id",
+                                                      "catalog_revision",
+                                                      "expected_sha256"
+                                                    ],
+                                                    "type": "object"
+                                                  },
+                                                  "minItems": 1,
+                                                  "type": "array"
+                                                },
+                                                "owner": {
+                                                  "additionalProperties": false,
+                                                  "properties": {
+                                                    "artifact_type": {
+                                                      "enum": [
+                                                        "evolution-lab/opportunity",
+                                                        "evolution-lab/campaign-spec",
+                                                        "evolution-lab/failure-attribution",
+                                                        "evolution-lab/candidate-revision",
+                                                        "evolution-lab/run-evidence-bundle",
+                                                        "evolution-lab/evaluation-result",
+                                                        "evolution-lab/integrity-review",
+                                                        "evolution-lab/comparison-recommendation",
+                                                        "evolution-lab/promotion-receipt"
+                                                      ],
+                                                      "type": "string"
+                                                    },
+                                                    "locator": {
+                                                      "additionalProperties": false,
+                                                      "properties": {
+                                                        "artifact_id": {
+                                                          "maxLength": 512,
+                                                          "minLength": 1,
+                                                          "type": "string"
+                                                        },
+                                                        "catalog_revision": {
+                                                          "exclusiveMinimum": 0,
+                                                          "maximum": 9007199254740991,
+                                                          "type": "integer"
+                                                        },
+                                                        "expected_sha256": {
+                                                          "pattern": "^[a-f0-9]{64}$",
+                                                          "type": "string"
+                                                        },
+                                                        "source": {
+                                                          "const": "engine_artifact",
+                                                          "type": "string"
+                                                        }
+                                                      },
+                                                      "required": [
+                                                        "source",
+                                                        "artifact_id",
+                                                        "catalog_revision",
+                                                        "expected_sha256"
+                                                      ],
+                                                      "type": "object"
+                                                    },
+                                                    "partition": {
+                                                      "enum": [
+                                                        "current",
+                                                        "historical"
+                                                      ],
+                                                      "type": "string"
+                                                    },
+                                                    "producer": {
+                                                      "oneOf": [
+                                                        {
+                                                          "additionalProperties": false,
+                                                          "properties": {
+                                                            "agent_id": {
+                                                              "maxLength": 512,
+                                                              "minLength": 1,
+                                                              "type": "string"
+                                                            },
+                                                            "expert_squad_id": {
+                                                              "maxLength": 512,
+                                                              "minLength": 1,
+                                                              "type": "string"
+                                                            },
+                                                            "message_id": {
+                                                              "maxLength": 512,
+                                                              "minLength": 1,
+                                                              "type": "string"
+                                                            },
+                                                            "owner_kind": {
+                                                              "enum": [
+                                                                "projected-scheduler",
+                                                                "projected-worker"
+                                                              ],
+                                                              "type": "string"
+                                                            },
+                                                            "package_revision": {
+                                                              "additionalProperties": false,
+                                                              "properties": {
+                                                                "id": {
+                                                                  "maxLength": 512,
+                                                                  "minLength": 1,
+                                                                  "type": "string"
+                                                                },
+                                                                "namespace": {
+                                                                  "maxLength": 512,
+                                                                  "minLength": 1,
+                                                                  "type": "string"
+                                                                },
+                                                                "package_digest": {
+                                                                  "pattern": "^[a-f0-9]{64}$",
+                                                                  "type": "string"
+                                                                },
+                                                                "project_id": {
+                                                                  "anyOf": [
+                                                                    {
+                                                                      "maxLength": 512,
+                                                                      "minLength": 1,
+                                                                      "type": "string"
+                                                                    },
+                                                                    {
+                                                                      "type": "null"
+                                                                    }
+                                                                  ]
+                                                                },
+                                                                "scope": {
+                                                                  "enum": [
+                                                                    "built_in",
+                                                                    "project",
+                                                                    "global"
+                                                                  ],
+                                                                  "type": "string"
+                                                                },
+                                                                "version": {
+                                                                  "maxLength": 512,
+                                                                  "minLength": 1,
+                                                                  "type": "string"
+                                                                }
+                                                              },
+                                                              "required": [
+                                                                "scope",
+                                                                "project_id",
+                                                                "namespace",
+                                                                "id",
+                                                                "version",
+                                                                "package_digest"
+                                                              ],
+                                                              "type": "object"
+                                                            },
+                                                            "projection_hash": {
+                                                              "pattern": "^[a-f0-9]{64}$",
+                                                              "type": "string"
+                                                            },
+                                                            "session_id": {
+                                                              "maxLength": 512,
+                                                              "minLength": 1,
+                                                              "type": "string"
+                                                            },
+                                                            "tool_call_id": {
+                                                              "maxLength": 512,
+                                                              "minLength": 1,
+                                                              "type": "string"
+                                                            }
+                                                          },
+                                                          "required": [
+                                                            "owner_kind",
+                                                            "expert_squad_id",
+                                                            "package_revision",
+                                                            "agent_id",
+                                                            "projection_hash",
+                                                            "session_id",
+                                                            "message_id",
+                                                            "tool_call_id"
+                                                          ],
+                                                          "type": "object"
+                                                        },
+                                                        {
+                                                          "additionalProperties": false,
+                                                          "properties": {
+                                                            "message_id": {
+                                                              "maxLength": 512,
+                                                              "minLength": 1,
+                                                              "type": "string"
+                                                            },
+                                                            "mission_id": {
+                                                              "maxLength": 512,
+                                                              "minLength": 1,
+                                                              "type": "string"
+                                                            },
+                                                            "owner_kind": {
+                                                              "const": "mission",
+                                                              "type": "string"
+                                                            },
+                                                            "session_id": {
+                                                              "maxLength": 512,
+                                                              "minLength": 1,
+                                                              "type": "string"
+                                                            },
+                                                            "tool_call_id": {
+                                                              "maxLength": 512,
+                                                              "minLength": 1,
+                                                              "type": "string"
+                                                            }
+                                                          },
+                                                          "required": [
+                                                            "owner_kind",
+                                                            "mission_id",
+                                                            "session_id",
+                                                            "message_id",
+                                                            "tool_call_id"
+                                                          ],
+                                                          "type": "object"
+                                                        },
+                                                        {
+                                                          "additionalProperties": false,
+                                                          "properties": {
+                                                            "component_id": {
+                                                              "maxLength": 512,
+                                                              "minLength": 1,
+                                                              "type": "string"
+                                                            },
+                                                            "operation_id": {
+                                                              "maxLength": 512,
+                                                              "minLength": 1,
+                                                              "type": "string"
+                                                            },
+                                                            "owner_kind": {
+                                                              "const": "core",
+                                                              "type": "string"
+                                                            }
+                                                          },
+                                                          "required": [
+                                                            "owner_kind",
+                                                            "component_id",
+                                                            "operation_id"
+                                                          ],
+                                                          "type": "object"
+                                                        }
+                                                      ]
+                                                    },
+                                                    "root_session_id": {
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "schema_version": {
+                                                      "const": 1,
+                                                      "type": "number"
+                                                    },
+                                                    "task_id": {
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "time_created": {
+                                                      "maximum": 9007199254740991,
+                                                      "minimum": 0,
+                                                      "type": "integer"
+                                                    },
+                                                    "time_updated": {
+                                                      "maximum": 9007199254740991,
+                                                      "minimum": 0,
+                                                      "type": "integer"
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "task_id",
+                                                    "root_session_id",
+                                                    "locator",
+                                                    "artifact_type",
+                                                    "schema_version",
+                                                    "producer",
+                                                    "time_created",
+                                                    "time_updated",
+                                                    "partition"
+                                                  ],
+                                                  "type": "object"
+                                                }
+                                              },
+                                              "required": [
+                                                "code",
+                                                "owner",
+                                                "missing_review_locators"
+                                              ],
+                                              "type": "object"
                                             }
                                           ]
                                         },
@@ -35322,6 +35632,316 @@
                                           "diagnostic"
                                         ],
                                         "type": "object"
+                                      },
+                                      {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "code": {
+                                            "const": "REVIEW_SNAPSHOT_CHANGED",
+                                            "type": "string"
+                                          },
+                                          "missing_review_locators": {
+                                            "items": {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "artifact_id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "catalog_revision": {
+                                                  "exclusiveMinimum": 0,
+                                                  "maximum": 9007199254740991,
+                                                  "type": "integer"
+                                                },
+                                                "expected_sha256": {
+                                                  "pattern": "^[a-f0-9]{64}$",
+                                                  "type": "string"
+                                                },
+                                                "source": {
+                                                  "const": "engine_artifact",
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "source",
+                                                "artifact_id",
+                                                "catalog_revision",
+                                                "expected_sha256"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "minItems": 1,
+                                            "type": "array"
+                                          },
+                                          "owner": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                              "artifact_type": {
+                                                "enum": [
+                                                  "evolution-lab/opportunity",
+                                                  "evolution-lab/campaign-spec",
+                                                  "evolution-lab/failure-attribution",
+                                                  "evolution-lab/candidate-revision",
+                                                  "evolution-lab/run-evidence-bundle",
+                                                  "evolution-lab/evaluation-result",
+                                                  "evolution-lab/integrity-review",
+                                                  "evolution-lab/comparison-recommendation",
+                                                  "evolution-lab/promotion-receipt"
+                                                ],
+                                                "type": "string"
+                                              },
+                                              "locator": {
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                  "artifact_id": {
+                                                    "maxLength": 512,
+                                                    "minLength": 1,
+                                                    "type": "string"
+                                                  },
+                                                  "catalog_revision": {
+                                                    "exclusiveMinimum": 0,
+                                                    "maximum": 9007199254740991,
+                                                    "type": "integer"
+                                                  },
+                                                  "expected_sha256": {
+                                                    "pattern": "^[a-f0-9]{64}$",
+                                                    "type": "string"
+                                                  },
+                                                  "source": {
+                                                    "const": "engine_artifact",
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "source",
+                                                  "artifact_id",
+                                                  "catalog_revision",
+                                                  "expected_sha256"
+                                                ],
+                                                "type": "object"
+                                              },
+                                              "partition": {
+                                                "enum": [
+                                                  "current",
+                                                  "historical"
+                                                ],
+                                                "type": "string"
+                                              },
+                                              "producer": {
+                                                "oneOf": [
+                                                  {
+                                                    "additionalProperties": false,
+                                                    "properties": {
+                                                      "agent_id": {
+                                                        "maxLength": 512,
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      "expert_squad_id": {
+                                                        "maxLength": 512,
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      "message_id": {
+                                                        "maxLength": 512,
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      "owner_kind": {
+                                                        "enum": [
+                                                          "projected-scheduler",
+                                                          "projected-worker"
+                                                        ],
+                                                        "type": "string"
+                                                      },
+                                                      "package_revision": {
+                                                        "additionalProperties": false,
+                                                        "properties": {
+                                                          "id": {
+                                                            "maxLength": 512,
+                                                            "minLength": 1,
+                                                            "type": "string"
+                                                          },
+                                                          "namespace": {
+                                                            "maxLength": 512,
+                                                            "minLength": 1,
+                                                            "type": "string"
+                                                          },
+                                                          "package_digest": {
+                                                            "pattern": "^[a-f0-9]{64}$",
+                                                            "type": "string"
+                                                          },
+                                                          "project_id": {
+                                                            "anyOf": [
+                                                              {
+                                                                "maxLength": 512,
+                                                                "minLength": 1,
+                                                                "type": "string"
+                                                              },
+                                                              {
+                                                                "type": "null"
+                                                              }
+                                                            ]
+                                                          },
+                                                          "scope": {
+                                                            "enum": [
+                                                              "built_in",
+                                                              "project",
+                                                              "global"
+                                                            ],
+                                                            "type": "string"
+                                                          },
+                                                          "version": {
+                                                            "maxLength": 512,
+                                                            "minLength": 1,
+                                                            "type": "string"
+                                                          }
+                                                        },
+                                                        "required": [
+                                                          "scope",
+                                                          "project_id",
+                                                          "namespace",
+                                                          "id",
+                                                          "version",
+                                                          "package_digest"
+                                                        ],
+                                                        "type": "object"
+                                                      },
+                                                      "projection_hash": {
+                                                        "pattern": "^[a-f0-9]{64}$",
+                                                        "type": "string"
+                                                      },
+                                                      "session_id": {
+                                                        "maxLength": 512,
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      "tool_call_id": {
+                                                        "maxLength": 512,
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      }
+                                                    },
+                                                    "required": [
+                                                      "owner_kind",
+                                                      "expert_squad_id",
+                                                      "package_revision",
+                                                      "agent_id",
+                                                      "projection_hash",
+                                                      "session_id",
+                                                      "message_id",
+                                                      "tool_call_id"
+                                                    ],
+                                                    "type": "object"
+                                                  },
+                                                  {
+                                                    "additionalProperties": false,
+                                                    "properties": {
+                                                      "message_id": {
+                                                        "maxLength": 512,
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      "mission_id": {
+                                                        "maxLength": 512,
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      "owner_kind": {
+                                                        "const": "mission",
+                                                        "type": "string"
+                                                      },
+                                                      "session_id": {
+                                                        "maxLength": 512,
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      "tool_call_id": {
+                                                        "maxLength": 512,
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      }
+                                                    },
+                                                    "required": [
+                                                      "owner_kind",
+                                                      "mission_id",
+                                                      "session_id",
+                                                      "message_id",
+                                                      "tool_call_id"
+                                                    ],
+                                                    "type": "object"
+                                                  },
+                                                  {
+                                                    "additionalProperties": false,
+                                                    "properties": {
+                                                      "component_id": {
+                                                        "maxLength": 512,
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      "operation_id": {
+                                                        "maxLength": 512,
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      "owner_kind": {
+                                                        "const": "core",
+                                                        "type": "string"
+                                                      }
+                                                    },
+                                                    "required": [
+                                                      "owner_kind",
+                                                      "component_id",
+                                                      "operation_id"
+                                                    ],
+                                                    "type": "object"
+                                                  }
+                                                ]
+                                              },
+                                              "root_session_id": {
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "schema_version": {
+                                                "const": 1,
+                                                "type": "number"
+                                              },
+                                              "task_id": {
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "time_created": {
+                                                "maximum": 9007199254740991,
+                                                "minimum": 0,
+                                                "type": "integer"
+                                              },
+                                              "time_updated": {
+                                                "maximum": 9007199254740991,
+                                                "minimum": 0,
+                                                "type": "integer"
+                                              }
+                                            },
+                                            "required": [
+                                              "task_id",
+                                              "root_session_id",
+                                              "locator",
+                                              "artifact_type",
+                                              "schema_version",
+                                              "producer",
+                                              "time_created",
+                                              "time_updated",
+                                              "partition"
+                                            ],
+                                            "type": "object"
+                                          }
+                                        },
+                                        "required": [
+                                          "code",
+                                          "owner",
+                                          "missing_review_locators"
+                                        ],
+                                        "type": "object"
                                       }
                                     ]
                                   },
@@ -37399,6 +38019,316 @@
                                     "receipt",
                                     "evidence",
                                     "diagnostic"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "code": {
+                                      "const": "REVIEW_SNAPSHOT_CHANGED",
+                                      "type": "string"
+                                    },
+                                    "missing_review_locators": {
+                                      "items": {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "artifact_id": {
+                                            "maxLength": 512,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "catalog_revision": {
+                                            "exclusiveMinimum": 0,
+                                            "maximum": 9007199254740991,
+                                            "type": "integer"
+                                          },
+                                          "expected_sha256": {
+                                            "pattern": "^[a-f0-9]{64}$",
+                                            "type": "string"
+                                          },
+                                          "source": {
+                                            "const": "engine_artifact",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "source",
+                                          "artifact_id",
+                                          "catalog_revision",
+                                          "expected_sha256"
+                                        ],
+                                        "type": "object"
+                                      },
+                                      "minItems": 1,
+                                      "type": "array"
+                                    },
+                                    "owner": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "artifact_type": {
+                                          "enum": [
+                                            "evolution-lab/opportunity",
+                                            "evolution-lab/campaign-spec",
+                                            "evolution-lab/failure-attribution",
+                                            "evolution-lab/candidate-revision",
+                                            "evolution-lab/run-evidence-bundle",
+                                            "evolution-lab/evaluation-result",
+                                            "evolution-lab/integrity-review",
+                                            "evolution-lab/comparison-recommendation",
+                                            "evolution-lab/promotion-receipt"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "locator": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "artifact_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "catalog_revision": {
+                                              "exclusiveMinimum": 0,
+                                              "maximum": 9007199254740991,
+                                              "type": "integer"
+                                            },
+                                            "expected_sha256": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "source": {
+                                              "const": "engine_artifact",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "source",
+                                            "artifact_id",
+                                            "catalog_revision",
+                                            "expected_sha256"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "partition": {
+                                          "enum": [
+                                            "current",
+                                            "historical"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "producer": {
+                                          "oneOf": [
+                                            {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "agent_id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "expert_squad_id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "message_id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "owner_kind": {
+                                                  "enum": [
+                                                    "projected-scheduler",
+                                                    "projected-worker"
+                                                  ],
+                                                  "type": "string"
+                                                },
+                                                "package_revision": {
+                                                  "additionalProperties": false,
+                                                  "properties": {
+                                                    "id": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "namespace": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "package_digest": {
+                                                      "pattern": "^[a-f0-9]{64}$",
+                                                      "type": "string"
+                                                    },
+                                                    "project_id": {
+                                                      "anyOf": [
+                                                        {
+                                                          "maxLength": 512,
+                                                          "minLength": 1,
+                                                          "type": "string"
+                                                        },
+                                                        {
+                                                          "type": "null"
+                                                        }
+                                                      ]
+                                                    },
+                                                    "scope": {
+                                                      "enum": [
+                                                        "built_in",
+                                                        "project",
+                                                        "global"
+                                                      ],
+                                                      "type": "string"
+                                                    },
+                                                    "version": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "scope",
+                                                    "project_id",
+                                                    "namespace",
+                                                    "id",
+                                                    "version",
+                                                    "package_digest"
+                                                  ],
+                                                  "type": "object"
+                                                },
+                                                "projection_hash": {
+                                                  "pattern": "^[a-f0-9]{64}$",
+                                                  "type": "string"
+                                                },
+                                                "session_id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "tool_call_id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "owner_kind",
+                                                "expert_squad_id",
+                                                "package_revision",
+                                                "agent_id",
+                                                "projection_hash",
+                                                "session_id",
+                                                "message_id",
+                                                "tool_call_id"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "message_id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "mission_id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "owner_kind": {
+                                                  "const": "mission",
+                                                  "type": "string"
+                                                },
+                                                "session_id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "tool_call_id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "owner_kind",
+                                                "mission_id",
+                                                "session_id",
+                                                "message_id",
+                                                "tool_call_id"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "component_id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "operation_id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "owner_kind": {
+                                                  "const": "core",
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "owner_kind",
+                                                "component_id",
+                                                "operation_id"
+                                              ],
+                                              "type": "object"
+                                            }
+                                          ]
+                                        },
+                                        "root_session_id": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "schema_version": {
+                                          "const": 1,
+                                          "type": "number"
+                                        },
+                                        "task_id": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "time_created": {
+                                          "maximum": 9007199254740991,
+                                          "minimum": 0,
+                                          "type": "integer"
+                                        },
+                                        "time_updated": {
+                                          "maximum": 9007199254740991,
+                                          "minimum": 0,
+                                          "type": "integer"
+                                        }
+                                      },
+                                      "required": [
+                                        "task_id",
+                                        "root_session_id",
+                                        "locator",
+                                        "artifact_type",
+                                        "schema_version",
+                                        "producer",
+                                        "time_created",
+                                        "time_updated",
+                                        "partition"
+                                      ],
+                                      "type": "object"
+                                    }
+                                  },
+                                  "required": [
+                                    "code",
+                                    "owner",
+                                    "missing_review_locators"
                                   ],
                                   "type": "object"
                                 }
@@ -41077,6 +42007,316 @@
                                               "diagnostic"
                                             ],
                                             "type": "object"
+                                          },
+                                          {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                              "code": {
+                                                "const": "REVIEW_SNAPSHOT_CHANGED",
+                                                "type": "string"
+                                              },
+                                              "missing_review_locators": {
+                                                "items": {
+                                                  "additionalProperties": false,
+                                                  "properties": {
+                                                    "artifact_id": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "catalog_revision": {
+                                                      "exclusiveMinimum": 0,
+                                                      "maximum": 9007199254740991,
+                                                      "type": "integer"
+                                                    },
+                                                    "expected_sha256": {
+                                                      "pattern": "^[a-f0-9]{64}$",
+                                                      "type": "string"
+                                                    },
+                                                    "source": {
+                                                      "const": "engine_artifact",
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "source",
+                                                    "artifact_id",
+                                                    "catalog_revision",
+                                                    "expected_sha256"
+                                                  ],
+                                                  "type": "object"
+                                                },
+                                                "minItems": 1,
+                                                "type": "array"
+                                              },
+                                              "owner": {
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                  "artifact_type": {
+                                                    "enum": [
+                                                      "evolution-lab/opportunity",
+                                                      "evolution-lab/campaign-spec",
+                                                      "evolution-lab/failure-attribution",
+                                                      "evolution-lab/candidate-revision",
+                                                      "evolution-lab/run-evidence-bundle",
+                                                      "evolution-lab/evaluation-result",
+                                                      "evolution-lab/integrity-review",
+                                                      "evolution-lab/comparison-recommendation",
+                                                      "evolution-lab/promotion-receipt"
+                                                    ],
+                                                    "type": "string"
+                                                  },
+                                                  "locator": {
+                                                    "additionalProperties": false,
+                                                    "properties": {
+                                                      "artifact_id": {
+                                                        "maxLength": 512,
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      "catalog_revision": {
+                                                        "exclusiveMinimum": 0,
+                                                        "maximum": 9007199254740991,
+                                                        "type": "integer"
+                                                      },
+                                                      "expected_sha256": {
+                                                        "pattern": "^[a-f0-9]{64}$",
+                                                        "type": "string"
+                                                      },
+                                                      "source": {
+                                                        "const": "engine_artifact",
+                                                        "type": "string"
+                                                      }
+                                                    },
+                                                    "required": [
+                                                      "source",
+                                                      "artifact_id",
+                                                      "catalog_revision",
+                                                      "expected_sha256"
+                                                    ],
+                                                    "type": "object"
+                                                  },
+                                                  "partition": {
+                                                    "enum": [
+                                                      "current",
+                                                      "historical"
+                                                    ],
+                                                    "type": "string"
+                                                  },
+                                                  "producer": {
+                                                    "oneOf": [
+                                                      {
+                                                        "additionalProperties": false,
+                                                        "properties": {
+                                                          "agent_id": {
+                                                            "maxLength": 512,
+                                                            "minLength": 1,
+                                                            "type": "string"
+                                                          },
+                                                          "expert_squad_id": {
+                                                            "maxLength": 512,
+                                                            "minLength": 1,
+                                                            "type": "string"
+                                                          },
+                                                          "message_id": {
+                                                            "maxLength": 512,
+                                                            "minLength": 1,
+                                                            "type": "string"
+                                                          },
+                                                          "owner_kind": {
+                                                            "enum": [
+                                                              "projected-scheduler",
+                                                              "projected-worker"
+                                                            ],
+                                                            "type": "string"
+                                                          },
+                                                          "package_revision": {
+                                                            "additionalProperties": false,
+                                                            "properties": {
+                                                              "id": {
+                                                                "maxLength": 512,
+                                                                "minLength": 1,
+                                                                "type": "string"
+                                                              },
+                                                              "namespace": {
+                                                                "maxLength": 512,
+                                                                "minLength": 1,
+                                                                "type": "string"
+                                                              },
+                                                              "package_digest": {
+                                                                "pattern": "^[a-f0-9]{64}$",
+                                                                "type": "string"
+                                                              },
+                                                              "project_id": {
+                                                                "anyOf": [
+                                                                  {
+                                                                    "maxLength": 512,
+                                                                    "minLength": 1,
+                                                                    "type": "string"
+                                                                  },
+                                                                  {
+                                                                    "type": "null"
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "scope": {
+                                                                "enum": [
+                                                                  "built_in",
+                                                                  "project",
+                                                                  "global"
+                                                                ],
+                                                                "type": "string"
+                                                              },
+                                                              "version": {
+                                                                "maxLength": 512,
+                                                                "minLength": 1,
+                                                                "type": "string"
+                                                              }
+                                                            },
+                                                            "required": [
+                                                              "scope",
+                                                              "project_id",
+                                                              "namespace",
+                                                              "id",
+                                                              "version",
+                                                              "package_digest"
+                                                            ],
+                                                            "type": "object"
+                                                          },
+                                                          "projection_hash": {
+                                                            "pattern": "^[a-f0-9]{64}$",
+                                                            "type": "string"
+                                                          },
+                                                          "session_id": {
+                                                            "maxLength": 512,
+                                                            "minLength": 1,
+                                                            "type": "string"
+                                                          },
+                                                          "tool_call_id": {
+                                                            "maxLength": 512,
+                                                            "minLength": 1,
+                                                            "type": "string"
+                                                          }
+                                                        },
+                                                        "required": [
+                                                          "owner_kind",
+                                                          "expert_squad_id",
+                                                          "package_revision",
+                                                          "agent_id",
+                                                          "projection_hash",
+                                                          "session_id",
+                                                          "message_id",
+                                                          "tool_call_id"
+                                                        ],
+                                                        "type": "object"
+                                                      },
+                                                      {
+                                                        "additionalProperties": false,
+                                                        "properties": {
+                                                          "message_id": {
+                                                            "maxLength": 512,
+                                                            "minLength": 1,
+                                                            "type": "string"
+                                                          },
+                                                          "mission_id": {
+                                                            "maxLength": 512,
+                                                            "minLength": 1,
+                                                            "type": "string"
+                                                          },
+                                                          "owner_kind": {
+                                                            "const": "mission",
+                                                            "type": "string"
+                                                          },
+                                                          "session_id": {
+                                                            "maxLength": 512,
+                                                            "minLength": 1,
+                                                            "type": "string"
+                                                          },
+                                                          "tool_call_id": {
+                                                            "maxLength": 512,
+                                                            "minLength": 1,
+                                                            "type": "string"
+                                                          }
+                                                        },
+                                                        "required": [
+                                                          "owner_kind",
+                                                          "mission_id",
+                                                          "session_id",
+                                                          "message_id",
+                                                          "tool_call_id"
+                                                        ],
+                                                        "type": "object"
+                                                      },
+                                                      {
+                                                        "additionalProperties": false,
+                                                        "properties": {
+                                                          "component_id": {
+                                                            "maxLength": 512,
+                                                            "minLength": 1,
+                                                            "type": "string"
+                                                          },
+                                                          "operation_id": {
+                                                            "maxLength": 512,
+                                                            "minLength": 1,
+                                                            "type": "string"
+                                                          },
+                                                          "owner_kind": {
+                                                            "const": "core",
+                                                            "type": "string"
+                                                          }
+                                                        },
+                                                        "required": [
+                                                          "owner_kind",
+                                                          "component_id",
+                                                          "operation_id"
+                                                        ],
+                                                        "type": "object"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "root_session_id": {
+                                                    "minLength": 1,
+                                                    "type": "string"
+                                                  },
+                                                  "schema_version": {
+                                                    "const": 1,
+                                                    "type": "number"
+                                                  },
+                                                  "task_id": {
+                                                    "minLength": 1,
+                                                    "type": "string"
+                                                  },
+                                                  "time_created": {
+                                                    "maximum": 9007199254740991,
+                                                    "minimum": 0,
+                                                    "type": "integer"
+                                                  },
+                                                  "time_updated": {
+                                                    "maximum": 9007199254740991,
+                                                    "minimum": 0,
+                                                    "type": "integer"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "task_id",
+                                                  "root_session_id",
+                                                  "locator",
+                                                  "artifact_type",
+                                                  "schema_version",
+                                                  "producer",
+                                                  "time_created",
+                                                  "time_updated",
+                                                  "partition"
+                                                ],
+                                                "type": "object"
+                                              }
+                                            },
+                                            "required": [
+                                              "code",
+                                              "owner",
+                                              "missing_review_locators"
+                                            ],
+                                            "type": "object"
                                           }
                                         ]
                                       },
@@ -44297,6 +45537,316 @@
                                         "diagnostic"
                                       ],
                                       "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "code": {
+                                          "const": "REVIEW_SNAPSHOT_CHANGED",
+                                          "type": "string"
+                                        },
+                                        "missing_review_locators": {
+                                          "items": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                              "artifact_id": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "catalog_revision": {
+                                                "exclusiveMinimum": 0,
+                                                "maximum": 9007199254740991,
+                                                "type": "integer"
+                                              },
+                                              "expected_sha256": {
+                                                "pattern": "^[a-f0-9]{64}$",
+                                                "type": "string"
+                                              },
+                                              "source": {
+                                                "const": "engine_artifact",
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "source",
+                                              "artifact_id",
+                                              "catalog_revision",
+                                              "expected_sha256"
+                                            ],
+                                            "type": "object"
+                                          },
+                                          "minItems": 1,
+                                          "type": "array"
+                                        },
+                                        "owner": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "artifact_type": {
+                                              "enum": [
+                                                "evolution-lab/opportunity",
+                                                "evolution-lab/campaign-spec",
+                                                "evolution-lab/failure-attribution",
+                                                "evolution-lab/candidate-revision",
+                                                "evolution-lab/run-evidence-bundle",
+                                                "evolution-lab/evaluation-result",
+                                                "evolution-lab/integrity-review",
+                                                "evolution-lab/comparison-recommendation",
+                                                "evolution-lab/promotion-receipt"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "locator": {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "artifact_id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "catalog_revision": {
+                                                  "exclusiveMinimum": 0,
+                                                  "maximum": 9007199254740991,
+                                                  "type": "integer"
+                                                },
+                                                "expected_sha256": {
+                                                  "pattern": "^[a-f0-9]{64}$",
+                                                  "type": "string"
+                                                },
+                                                "source": {
+                                                  "const": "engine_artifact",
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "source",
+                                                "artifact_id",
+                                                "catalog_revision",
+                                                "expected_sha256"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "partition": {
+                                              "enum": [
+                                                "current",
+                                                "historical"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "producer": {
+                                              "oneOf": [
+                                                {
+                                                  "additionalProperties": false,
+                                                  "properties": {
+                                                    "agent_id": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "expert_squad_id": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "message_id": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "owner_kind": {
+                                                      "enum": [
+                                                        "projected-scheduler",
+                                                        "projected-worker"
+                                                      ],
+                                                      "type": "string"
+                                                    },
+                                                    "package_revision": {
+                                                      "additionalProperties": false,
+                                                      "properties": {
+                                                        "id": {
+                                                          "maxLength": 512,
+                                                          "minLength": 1,
+                                                          "type": "string"
+                                                        },
+                                                        "namespace": {
+                                                          "maxLength": 512,
+                                                          "minLength": 1,
+                                                          "type": "string"
+                                                        },
+                                                        "package_digest": {
+                                                          "pattern": "^[a-f0-9]{64}$",
+                                                          "type": "string"
+                                                        },
+                                                        "project_id": {
+                                                          "anyOf": [
+                                                            {
+                                                              "maxLength": 512,
+                                                              "minLength": 1,
+                                                              "type": "string"
+                                                            },
+                                                            {
+                                                              "type": "null"
+                                                            }
+                                                          ]
+                                                        },
+                                                        "scope": {
+                                                          "enum": [
+                                                            "built_in",
+                                                            "project",
+                                                            "global"
+                                                          ],
+                                                          "type": "string"
+                                                        },
+                                                        "version": {
+                                                          "maxLength": 512,
+                                                          "minLength": 1,
+                                                          "type": "string"
+                                                        }
+                                                      },
+                                                      "required": [
+                                                        "scope",
+                                                        "project_id",
+                                                        "namespace",
+                                                        "id",
+                                                        "version",
+                                                        "package_digest"
+                                                      ],
+                                                      "type": "object"
+                                                    },
+                                                    "projection_hash": {
+                                                      "pattern": "^[a-f0-9]{64}$",
+                                                      "type": "string"
+                                                    },
+                                                    "session_id": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "tool_call_id": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "owner_kind",
+                                                    "expert_squad_id",
+                                                    "package_revision",
+                                                    "agent_id",
+                                                    "projection_hash",
+                                                    "session_id",
+                                                    "message_id",
+                                                    "tool_call_id"
+                                                  ],
+                                                  "type": "object"
+                                                },
+                                                {
+                                                  "additionalProperties": false,
+                                                  "properties": {
+                                                    "message_id": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "mission_id": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "owner_kind": {
+                                                      "const": "mission",
+                                                      "type": "string"
+                                                    },
+                                                    "session_id": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "tool_call_id": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "owner_kind",
+                                                    "mission_id",
+                                                    "session_id",
+                                                    "message_id",
+                                                    "tool_call_id"
+                                                  ],
+                                                  "type": "object"
+                                                },
+                                                {
+                                                  "additionalProperties": false,
+                                                  "properties": {
+                                                    "component_id": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "operation_id": {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "owner_kind": {
+                                                      "const": "core",
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "owner_kind",
+                                                    "component_id",
+                                                    "operation_id"
+                                                  ],
+                                                  "type": "object"
+                                                }
+                                              ]
+                                            },
+                                            "root_session_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "schema_version": {
+                                              "const": 1,
+                                              "type": "number"
+                                            },
+                                            "task_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "time_created": {
+                                              "maximum": 9007199254740991,
+                                              "minimum": 0,
+                                              "type": "integer"
+                                            },
+                                            "time_updated": {
+                                              "maximum": 9007199254740991,
+                                              "minimum": 0,
+                                              "type": "integer"
+                                            }
+                                          },
+                                          "required": [
+                                            "task_id",
+                                            "root_session_id",
+                                            "locator",
+                                            "artifact_type",
+                                            "schema_version",
+                                            "producer",
+                                            "time_created",
+                                            "time_updated",
+                                            "partition"
+                                          ],
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [
+                                        "code",
+                                        "owner",
+                                        "missing_review_locators"
+                                      ],
+                                      "type": "object"
                                     }
                                   ]
                                 },
@@ -46374,6 +47924,316 @@
                                   "receipt",
                                   "evidence",
                                   "diagnostic"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "code": {
+                                    "const": "REVIEW_SNAPSHOT_CHANGED",
+                                    "type": "string"
+                                  },
+                                  "missing_review_locators": {
+                                    "items": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "artifact_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "catalog_revision": {
+                                          "exclusiveMinimum": 0,
+                                          "maximum": 9007199254740991,
+                                          "type": "integer"
+                                        },
+                                        "expected_sha256": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "source": {
+                                          "const": "engine_artifact",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source",
+                                        "artifact_id",
+                                        "catalog_revision",
+                                        "expected_sha256"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "minItems": 1,
+                                    "type": "array"
+                                  },
+                                  "owner": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "artifact_type": {
+                                        "enum": [
+                                          "evolution-lab/opportunity",
+                                          "evolution-lab/campaign-spec",
+                                          "evolution-lab/failure-attribution",
+                                          "evolution-lab/candidate-revision",
+                                          "evolution-lab/run-evidence-bundle",
+                                          "evolution-lab/evaluation-result",
+                                          "evolution-lab/integrity-review",
+                                          "evolution-lab/comparison-recommendation",
+                                          "evolution-lab/promotion-receipt"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      "locator": {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "artifact_id": {
+                                            "maxLength": 512,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "catalog_revision": {
+                                            "exclusiveMinimum": 0,
+                                            "maximum": 9007199254740991,
+                                            "type": "integer"
+                                          },
+                                          "expected_sha256": {
+                                            "pattern": "^[a-f0-9]{64}$",
+                                            "type": "string"
+                                          },
+                                          "source": {
+                                            "const": "engine_artifact",
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "source",
+                                          "artifact_id",
+                                          "catalog_revision",
+                                          "expected_sha256"
+                                        ],
+                                        "type": "object"
+                                      },
+                                      "partition": {
+                                        "enum": [
+                                          "current",
+                                          "historical"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      "producer": {
+                                        "oneOf": [
+                                          {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                              "agent_id": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "expert_squad_id": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "message_id": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "owner_kind": {
+                                                "enum": [
+                                                  "projected-scheduler",
+                                                  "projected-worker"
+                                                ],
+                                                "type": "string"
+                                              },
+                                              "package_revision": {
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                  "id": {
+                                                    "maxLength": 512,
+                                                    "minLength": 1,
+                                                    "type": "string"
+                                                  },
+                                                  "namespace": {
+                                                    "maxLength": 512,
+                                                    "minLength": 1,
+                                                    "type": "string"
+                                                  },
+                                                  "package_digest": {
+                                                    "pattern": "^[a-f0-9]{64}$",
+                                                    "type": "string"
+                                                  },
+                                                  "project_id": {
+                                                    "anyOf": [
+                                                      {
+                                                        "maxLength": 512,
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      {
+                                                        "type": "null"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "scope": {
+                                                    "enum": [
+                                                      "built_in",
+                                                      "project",
+                                                      "global"
+                                                    ],
+                                                    "type": "string"
+                                                  },
+                                                  "version": {
+                                                    "maxLength": 512,
+                                                    "minLength": 1,
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "scope",
+                                                  "project_id",
+                                                  "namespace",
+                                                  "id",
+                                                  "version",
+                                                  "package_digest"
+                                                ],
+                                                "type": "object"
+                                              },
+                                              "projection_hash": {
+                                                "pattern": "^[a-f0-9]{64}$",
+                                                "type": "string"
+                                              },
+                                              "session_id": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "tool_call_id": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "owner_kind",
+                                              "expert_squad_id",
+                                              "package_revision",
+                                              "agent_id",
+                                              "projection_hash",
+                                              "session_id",
+                                              "message_id",
+                                              "tool_call_id"
+                                            ],
+                                            "type": "object"
+                                          },
+                                          {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                              "message_id": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "mission_id": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "owner_kind": {
+                                                "const": "mission",
+                                                "type": "string"
+                                              },
+                                              "session_id": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "tool_call_id": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "owner_kind",
+                                              "mission_id",
+                                              "session_id",
+                                              "message_id",
+                                              "tool_call_id"
+                                            ],
+                                            "type": "object"
+                                          },
+                                          {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                              "component_id": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "operation_id": {
+                                                "maxLength": 512,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "owner_kind": {
+                                                "const": "core",
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "owner_kind",
+                                              "component_id",
+                                              "operation_id"
+                                            ],
+                                            "type": "object"
+                                          }
+                                        ]
+                                      },
+                                      "root_session_id": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "schema_version": {
+                                        "const": 1,
+                                        "type": "number"
+                                      },
+                                      "task_id": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "time_created": {
+                                        "maximum": 9007199254740991,
+                                        "minimum": 0,
+                                        "type": "integer"
+                                      },
+                                      "time_updated": {
+                                        "maximum": 9007199254740991,
+                                        "minimum": 0,
+                                        "type": "integer"
+                                      }
+                                    },
+                                    "required": [
+                                      "task_id",
+                                      "root_session_id",
+                                      "locator",
+                                      "artifact_type",
+                                      "schema_version",
+                                      "producer",
+                                      "time_created",
+                                      "time_updated",
+                                      "partition"
+                                    ],
+                                    "type": "object"
+                                  }
+                                },
+                                "required": [
+                                  "code",
+                                  "owner",
+                                  "missing_review_locators"
                                 ],
                                 "type": "object"
                               }

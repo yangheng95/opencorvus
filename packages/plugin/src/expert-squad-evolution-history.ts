@@ -131,6 +131,13 @@ export const EvolutionGraphIssueSchema = z.discriminatedUnion("code", [
       diagnostic: z.string().min(1),
     })
     .strict(),
+  z
+    .object({
+      code: z.literal("REVIEW_SNAPSHOT_CHANGED"),
+      owner: EvolutionHistoryArtifactIdentitySchema,
+      missing_review_locators: z.array(EngineArtifactLocatorSchema).min(1),
+    })
+    .strict(),
 ])
 
 export const EvolutionUnlinkedIssueSchema = z.discriminatedUnion("code", [
