@@ -857,3 +857,19 @@
 - 本次真实入口构造收据`.tmp/supervision-causal-20260926/hb-01-preparation/entry-construction.json`：调用原`load_development_fixture`与registered `opencorvus_business_repair`，实际sample ID和1844字节公开input一致、scorer=None、Mission配置、300秒真实无活动/poll2正确。六文件staged与G31真实loader的immutable目录逐字相等，包`2026.09.26.1`/`0a13f002…`；完整49个world键=meta+48服务字段，meta内原四连接权限与clock、原Sheets跟踪保持。没有执行solver、API world或Provider。
 - 2026-09-26 23:36上海本地只读核对授权auth/models成对存在、OAuth未过期、目录精确含gpt-5.6-luna；未复制/刷新或输出凭据内容。启动前精确命令行扫描没有本任务Claude/controller/Host/Inspect活动，未操作旧PID或其它用户进程。启动后的真实Host仍必须逐项usable/projected/actualModel/streaming预检，静态存在不能替代。
 - 下一步骤：独占创建新freeze，绑定准确干净HEAD、既有fixture/request/source receipt/包receipt/控制脚本/六探针以及本次入口收据，再且仅再启动一次。正常或失败均不替补；先核对公共cleanup、零活动、正常退出与复制件删除，再按预登记逐项解释原API/Artifact/dispatch/最终state及全部成本。若运行跨过Opus恢复，交接只读监督当前run，不能重复启动或边运行边改源码。
+
+## G35：H-B结算——提前搜索曝光，干预未执行，错误状态仍被接受
+
+### Recall与新增事实
+
+- G34唯一新运行以`b9e1743f`冻结，15:42:15–15:54:20 UTC自然结束，实际包`.26.1/0a13f002…`正确；Task `tsk_g00VWLEvvX000Oj49XAR` completed、Mission `3c9c6f83e78ff535` accepted。15:56实际核对公共cleanup零活动、Host stopped、精确命令行本轮进程全退出、auth/models复制件实际删除，`hb-01/audit/closure.json`保留。后续不重复查询已停日志，原run不恢复/补跑。
+- [完整结果](../../artifacts/2026-09-25-acceptance-comparison-design/hb-01-results.md)按预登记判为**读取顺序干预未执行、业务修复未达成**：前置verifier主动在事件3的SOSL搜索声明RETURNING Account, Opportunity, Case, Task，15:44:34.864返回目标20,000与完整580字节错误Description；方法`art_hX8xSOJQI3YIoj11wt4X`到15:45:50.271才发布，实际首次新executor派单15:46:50.597。方法如实写了提前曝光，不能把后来的exact ID GET较晚说成未曝光；本次对锚定必要性没有合法新结论。
+- 三角色实际分别读Gold、4Contacts、pricing邮件（事件9/21/26含Base prices remain unchanged）、health policy/Case；仍未读Drive/Sheets，方法与执行/最终比较都判4×5000=20000。scheduler/两个worker完整读方法并真实引用；最终派单把20,000与七项读取列为待核关系，末verifier将所选子集当覆盖完整。没有独立重选价格关系、continuation或Mission resume，29业务事件=6search+23GET，另3catalog仅文档。完整最终state与初态逐值相等，连last_modified_date也未变；原身份/已满足字段/无关记录保持，错误金额及说明未修。
+- 原Task complete与Mission accept均真实发生。Mission首次完成因read-ref拼写错误失败，修正后接受；另一次read_task_message把ingress Artifact ID当Message ID失败。API事件2的SOSL送到query入口返回MALFORMED_QUERY，后改search；它是Tool completed中的业务错误JSON，不混成宿主Tool失败，不删请求。这些协议/调用纠正不是定价纠正。健康政策对既有机会的范围与原年份歧义单列。
+- 88请求/88usage全流式LunaHTTP200、usage数量差0；input514832/output18721/reasoning2677/cache-read2630400/cache-write0/total3166630。79全Tool=77completed/2failed，sample702.841秒/controller725.274秒。activity85行与88真实请求并列；本地priced/cost0非账单或免费。历史各轮成本不拼分、不作为同起点随机对照，未推广或晋升包。
+- 原eval与DB只读（mode=ro/query_only）；派生`audit/final-chain.json`、`business-review.json`、`artifact-reads.json`、`assessment-check.json`包含29个原事件与Tool请求逐项对应、真实结果/原Message/Artifact/usage和全state。外侧核对器按已登记观察判定通过，不是业务成功。初次提取误查generic part得到空Tool计数，已从唯一tool_part_outcome/permission_execution_result补齐；初次参数对比因MCP把params字典序列化为JSON字符串失败，明确解码运输字段后全部对应，原参数均保留。
+
+### 本段后的实际工作
+
+- H-B这一运行路径按预登记结算，不增加同义提示/隐藏目标/过滤返回再抽。当前未知仍是锚定、来源选择、指令执行与关系判断的贡献；Cycle3读齐仍错不能被目录问题解释。整体可靠纠错/进化收益未达成。
+- Codex继续第3项真实问题：Review完整证据发现、显式取代和比较事实传递。G33仅交付确定性派生字段盖章；G31归档patch未应用。先以现有Catalog/Artifact/metric receipt/晋升读取语义确定可审计的改判与完整性契约，再实施正向Checker，不以category自由文本相等、无意义新引用或增加Host业务gate解决。

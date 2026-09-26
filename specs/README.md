@@ -17,6 +17,7 @@
 - [H-T 01 preregistration](artifacts/2026-09-25-acceptance-comparison-design/ht-01-preregistration.md)
 - [H-T 01 results](artifacts/2026-09-25-acceptance-comparison-design/ht-01-results.md)
 - [H-B 01 preregistration](artifacts/2026-09-25-acceptance-comparison-design/hb-01-preregistration.md)
+- [H-B 01 results](artifacts/2026-09-25-acceptance-comparison-design/hb-01-results.md)
 - [G31 incomplete comparator patch](artifacts/2026-09-25-acceptance-comparison-design/comparison-evidence-in-progress.patch) — preserved work, unapplied and unverified.
 - [Source dependency and judgment boundary](artifacts/2026-09-25-acceptance-comparison-design/source-dependency-boundary.md)
 

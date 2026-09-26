@@ -63,6 +63,8 @@ original database/eval log.
   node publishes its method before reading the destination record, with its
   [patch](blind-expectation.patch) and [local checker](check-blind-expectation.ts); it tests
   existing-value anchoring against source selection and claims no correction result.
+- [H-B 01 results](hb-01-results.md): early search exposure prevented the registered
+  reading-order intervention; the unchanged wrong business state was still accepted.
 - [Source dependency and judgment boundary](source-dependency-boundary.md): current
   API catalog/search reachability, observed ranking noise and the separate failure of
   business relation judgment, with explicit limits on possible local fixes.
