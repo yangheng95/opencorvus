@@ -1,3 +1,4 @@
+import { requireEvolutionTrialSlotIdentity, EvolutionTrialSlotConflictError } from "@opencorvus-ai/plugin"
 /**
  * The promotion rule decides on the interval it computes, not on the sign of a
  * point estimate.
@@ -709,4 +710,39 @@ describe("Evolution Lab deterministic comparison", () => {
     expect(qualityLed.regressions).toEqual([])
     expect(noiseLed.regressions).toEqual([])
   })
+})
+
+test("a single Trial per arm cannot supply two independent repetitions", () => {
+  const input = comparisonInputs([{ id: "quality", weight: 1, baseline: [0.2, 0.2], candidate: [0.8, 0.8] }])
+  const independent = deriveComparisonRecommendation(input)
+  expect({ recommendation: independent.recommendation, interval: independent.aggregate_interval }).toEqual({
+    recommendation: "promote", interval: { confidence: 0.95, lower: 0.6000000000000001, upper: 0.6000000000000001 },
+  })
+  for (const run of input.runs) run.value.task_id = `one-trial-${run.value.arm}`
+  for (const evaluation of input.evaluations) evaluation.value.trial_task_id = `one-trial-${evaluation.value.arm}`
+  let caught: unknown
+  try { deriveComparisonRecommendation(input) } catch (error) { caught = error }
+  expect(caught).toBeInstanceOf(EvolutionTrialSlotConflictError)
+  expect((caught as EvolutionTrialSlotConflictError).conflicts.map(({ trial_task_id, slots }) => ({ trial_task_id, slots })))
+    .toEqual([
+      { trial_task_id: "one-trial-baseline", slots: ["case-1:baseline:0", "case-1:baseline:1"] },
+      { trial_task_id: "one-trial-candidate", slots: ["case-1:candidate:0", "case-1:candidate:1"] },
+    ])
+})
+
+test.each(["case", "arm", "repetition"] as const)("identifies a Trial reused across %s slots", (dimension) => {
+  const input = comparisonInputs([{ id: "quality", weight: 1, baseline: [0.2], candidate: [0.8] }])
+  const source = input.runs[0]!
+  const target = { ...source, locator: { ...source.locator, artifact_id: "reassigned-trial" }, value: { ...source.value } }
+  if (dimension === "case") target.value.case_id = "case-2"
+  if (dimension === "arm") target.value.arm = "candidate"
+  if (dimension === "repetition") target.value.repetition = 1
+  let caught: unknown
+  try { requireEvolutionTrialSlotIdentity({ runs: [source, target], evaluations: [] }) } catch (error) { caught = error }
+  expect(caught).toBeInstanceOf(EvolutionTrialSlotConflictError)
+  expect((caught as EvolutionTrialSlotConflictError).conflicts).toEqual([{
+    trial_task_id: source.value.task_id,
+    slots: ["case-1:baseline:0", `${target.value.case_id}:${target.value.arm}:${target.value.repetition}`].sort(),
+    observation_locators: [source.locator, target.locator].sort((a, b) => JSON.stringify(a) < JSON.stringify(b) ? -1 : 1),
+  }])
 })

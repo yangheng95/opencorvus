@@ -1,4 +1,4 @@
-import { VISUAL_FEEDBACK_VERIFICATION_SCORER_NAME, artifactReadLocatorKey, type EvolutionArtifactReferences } from "@opencorvus-ai/plugin"
+import { VISUAL_FEEDBACK_VERIFICATION_SCORER_NAME, artifactReadLocatorKey, requireEvolutionTrialSlotIdentity, type EvolutionArtifactReferences } from "@opencorvus-ai/plugin"
 import {
   EvolutionArtifactSchemas,
   EvolutionArtifactIntegrityError,
@@ -313,6 +313,7 @@ export function deriveComparisonRecommendation(input: {
     expectedScorerIDs,
     referenceKey,
   })
+  requireEvolutionTrialSlotIdentity(input)
   const { unavailable, requiredUnavailable } = classifyComparisonAvailability({
     campaign,
     expectedSlots,

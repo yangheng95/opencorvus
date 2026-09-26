@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, spyOn, test } from "bun:test"
 import { writeExpertSquadPackage, type ExpertSquadPackageDefinition } from "@opencorvus-ai/sdk/expert-squad-authoring"
-import { EngineArtifactEnvelopeSchema, EvolutionArtifactSchemas, createEvolutionArtifactReferences, EvolutionArtifactReferenceError } from "@opencorvus-ai/plugin"
+import { EngineArtifactEnvelopeSchema, EvolutionArtifactSchemas, createEvolutionArtifactReferences, EvolutionArtifactReferenceError, EvolutionTrialSlotConflictError } from "@opencorvus-ai/plugin"
 import { rm } from "node:fs/promises"
 import path from "node:path"
 import { Config } from "../src/config/config"
@@ -700,6 +700,47 @@ describe("authorized expert squad evolution mutation", () => {
             operation: "promotion",
           })
           if (scenario === "review-freshness") {
+            const reusedRun = recordEvolutionArtifact({ taskID: operationTask.taskID,
+              type: "evolution-lab/run-evidence-bundle", sources: [campaign],
+              payload: { ...baselineRuns[1]!.value, task_id: baselineRuns[0]!.value.task_id } })
+            const reusedEvaluation = recordEvolutionArtifact({ taskID: operationTask.taskID,
+              type: "evolution-lab/evaluation-result", sources: [campaign, reusedRun],
+              payload: { ...baselineEvaluations[1]!.value, trial_task_id: baselineRuns[0]!.value.task_id, run_evidence_locator: reusedRun } })
+            const reusedReview = recordEvolutionArtifact({ taskID: operationTask.taskID,
+              type: "evolution-lab/integrity-review", sources: [reusedEvaluation],
+              payload: { ...baselineReviews[1]!.value, evaluation_result_locator: reusedEvaluation } })
+            const inputs = comparisonPayload.calculation_inputs!
+            const repeatedTaskComparison = recordEvolutionArtifact({ taskID: operationTask.taskID,
+              type: "evolution-lab/comparison-recommendation",
+              payload: { ...comparisonPayload, calculation_inputs: { ...inputs,
+                runs: inputs.runs.map((item) => item.artifact_id === baselineRuns[1]!.locator.artifact_id ? reusedRun : item),
+                evaluations: inputs.evaluations.map((item) => item.artifact_id === baselineEvaluations[1]!.locator.artifact_id ? reusedEvaluation : item),
+                reviews: inputs.reviews.map((item) => item.artifact_id === baselineReviews[1]!.locator.artifact_id ? reusedReview : item),
+              } }, sources: [...comparisonSources, reusedRun, reusedEvaluation, reusedReview] })
+            const repeatedTaskIntent = { operation: "promotion" as const, campaignSpecLocator: campaign,
+              candidateRevisionLocator: candidateArtifact, comparisonResultLocator: repeatedTaskComparison,
+              expectedCurrentPackageDigest: baselineRevision.package_digest }
+            await expect(authorizeEvolutionPackageMutation({ taskID: operationTask.taskID, sessionID: operationTask.session.id,
+              intent: repeatedTaskIntent, confirmationText: evolutionMutationConfirmationText({ projectID: Instance.project.id, target,
+                operation: "promotion", beforeDigest: baselineRevision.package_digest, afterDigest: candidateRevision.package_digest,
+                evidenceSHA256s: [campaign, candidateArtifact, repeatedTaskComparison].map((item) => item.expected_sha256) }),
+            })).rejects.toBeInstanceOf(EvolutionTrialSlotConflictError)
+            const repeatedTaskHistory = await readEvolutionHistory({ namespace: target.namespace, id: target.id, installationScope: "project" })
+            const repeatedTaskDetail = await readEvolutionCampaignDetail({ namespace: target.namespace, id: target.id,
+              installationScope: "project", campaignTaskID: operationTask.taskID, campaignLocator: campaign,
+              candidateLocator: candidateArtifact, comparisonLocator: repeatedTaskComparison,
+              catalogRevisionUpper: repeatedTaskHistory.catalog_revision_upper })
+            const repeatedTaskRecord = repeatedTaskDetail.record.candidates.flatMap((item) => item.comparisons)
+              .find((item) => item.artifact.locator.artifact_id === repeatedTaskComparison.artifact_id)!
+            expect({ recommendation: repeatedTaskRecord.recommendation, intent: repeatedTaskRecord.promotion_intent,
+              conflicts: repeatedTaskRecord.graph_issues.flatMap((issue) => issue.code === "TRIAL_SLOT_COLLISION"
+                ? [{ trial_task_id: issue.trial_task_id, slots: issue.slots }] : []),
+            }).toEqual({ recommendation: "promote", intent: null, conflicts: [{
+              trial_task_id: baselineRuns[0]!.value.task_id, slots: ["case-a:baseline:0", "case-a:baseline:1"],
+            }] })
+            expect(repeatedTaskDetail.slots.filter((slot) => slot.arm === "baseline")
+              .map((slot) => new Set(slot.run_aliases.map((item) => item.locator.artifact_id))))
+              .toEqual([new Set([baselineRuns[0]!.locator.artifact_id, runAlias.locator.artifact_id]), new Set([reusedRun.artifact_id])])
             const unrelatedCampaign = recordEvolutionArtifact({ taskID: operationTask.taskID,
               type: "evolution-lab/campaign-spec", payload: campaignPayload })
             const backgroundComparison = recordEvolutionArtifact({ taskID: operationTask.taskID,

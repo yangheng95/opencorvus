@@ -58,3 +58,44 @@ export function expandEvolutionMeasurementAliases<T extends MeasurementPublicati
   }
   return [...result.keys()].sort().map((identity) => result.get(identity)!)
 }
+
+type TrialMatrix = {
+  runs: readonly (LocatedMeasurement & { value: { task_id: string } })[]
+  evaluations: readonly (LocatedMeasurement & { value: { trial_task_id: string } })[]
+}
+
+/** Within one exact comparison matrix, one durable Trial Task cannot be two
+ * case/arm/repetition slots. Same-slot aliases or later observations retain
+ * their separate identities; neither equal bytes nor wall time picks a Trial. */
+export function evolutionTrialSlotConflicts(input: TrialMatrix) {
+  const trials = new Map<string, { slots: Set<string>; locators: Map<string, ArtifactReadLocator> }>()
+  for (const { taskID, artifact } of [
+    ...input.runs.map((artifact) => ({ taskID: artifact.value.task_id, artifact })),
+    ...input.evaluations.map((artifact) => ({ taskID: artifact.value.trial_task_id, artifact })),
+  ]) {
+    let trial = trials.get(taskID)
+    if (!trial) trials.set(taskID, (trial = { slots: new Set(), locators: new Map() }))
+    const { case_id, arm, repetition } = artifact.value
+    trial.slots.add(`${case_id}:${arm}:${repetition}`)
+    trial.locators.set(artifactReadLocatorKey(artifact.locator), artifact.locator)
+  }
+  return [...trials.keys()].sort().flatMap((trial_task_id) => {
+    const trial = trials.get(trial_task_id)!
+    return trial.slots.size > 1 ? [{
+      trial_task_id, slots: [...trial.slots].sort(),
+      observation_locators: [...trial.locators.keys()].sort().map((key) => trial.locators.get(key)!),
+    }] : []
+  })
+}
+
+export class EvolutionTrialSlotConflictError extends Error {
+  override readonly name = "EvolutionTrialSlotConflictError"
+  constructor(readonly conflicts: ReturnType<typeof evolutionTrialSlotConflicts>) {
+    super(`Evolution comparison reuses a Trial Task across distinct matrix slots: ${JSON.stringify(conflicts)}`)
+  }
+}
+
+export function requireEvolutionTrialSlotIdentity(input: TrialMatrix): void {
+  const conflicts = evolutionTrialSlotConflicts(input)
+  if (conflicts.length) throw new EvolutionTrialSlotConflictError(conflicts)
+}

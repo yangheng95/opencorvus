@@ -16,6 +16,7 @@ import {
   evolutionComparisonContext,
   resolveEvolutionIntegrityReviews,
   groupEvolutionMeasurements,
+  evolutionTrialSlotConflicts,
   type EvolutionCampaignDetailResponse,
   type ArtifactReadLocator,
   type EvolutionCampaignHistoryRecord,
@@ -456,6 +457,10 @@ function comparisonGraph(read: FrozenRead, comparison: FrozenArtifact<Comparison
       else graphIssues.push(invalidPayloadIssue(artifact))
     }
   }
+  for (const conflict of evolutionTrialSlotConflicts({
+    runs: runs.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })),
+    evaluations: evaluations.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })),
+  })) graphIssues.push({ code: "TRIAL_SLOT_COLLISION", owner: artifactIdentity(comparison), ...conflict })
   for (const [artifactType, artifacts] of [
     ["evolution-lab/run-evidence-bundle", runs],
     ["evolution-lab/evaluation-result", evaluations],

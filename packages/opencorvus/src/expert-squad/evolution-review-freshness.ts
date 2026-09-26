@@ -7,6 +7,7 @@ import {
   createEvolutionArtifactReferences,
   evolutionArtifactProvenance,
   resolveEvolutionComparisonInputs,
+  requireEvolutionTrialSlotIdentity,
   EvolutionArtifactSchemas,
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin"
@@ -98,6 +99,12 @@ export function requireCurrentEvolutionReviews(input: { taskID: string; comparis
       })
     const references = createEvolutionArtifactReferences([...catalog, ...nativeSources])
     const consumed = resolveEvolutionComparisonInputs(comparison, references)
+    requireEvolutionTrialSlotIdentity({
+      runs: consumed.runs.map(({ locator, artifact }) => ({ locator,
+        value: EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse(artifact.envelope.payload) })),
+      evaluations: consumed.evaluations.map(({ locator, artifact }) => ({ locator,
+        value: EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse(artifact.envelope.payload) })),
+    })
     const measurements = [consumed.campaign, consumed.candidate, ...consumed.runs,
       ...consumed.evaluations, ...consumed.reviews].map((item) => item.artifact)
     const missingReviewLocators = missingComparisonReviews({ comparison, measurements, catalog })

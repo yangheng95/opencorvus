@@ -369,6 +369,13 @@ history以同一分组计数并投影run_aliases/evaluation_aliases；多观察�
 Comparison直接引用的Run/Evaluation通过该图可达，不要求baseline Run另抄Candidate来源。
 此规则不保证尚未选入的Run/Evaluation全集或未公开Trial的完整执行历史。
 
+在一次Comparison的实际计算集合内，Run.task_id与Evaluation.trial_task_id必须各自只归属一个
+case/arm/repetition槽位；同一Trial的发布别名、晚到费用或继续/恢复不能变成第二个独立槽位。
+`evolutionTrialSlotConflicts`是唯一纯身份计算，比较器及当前安装证据复核共用，错误携带确切
+Task/slots/原locators。history保留原推荐与原测量，公开TRIAL_SLOT_COLLISION并不给当前安装intent；
+已提交receipt仍先重放。规则不跨Campaign禁止复用baseline，不选择同slot的不同观察，不按相同
+资源字节合并不同Task，也不能证明统计独立或全部Trial已经公开。
+
 同一测量的发布身份闭包由`expandEvolutionMeasurementAliases`唯一计算：在当前Task目录中，
 以已选Run/Evaluation完整typed payload补齐全部等值发布，再关联每个Evaluation别名上的Review。
 publisher一次分页同时读取三类Artifact，固定同一upper/membership，完整read/select后发布比较；

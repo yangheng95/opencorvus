@@ -38,6 +38,7 @@ import {
   TaskRunEvidenceBundleSchema,
   canonicalWorkspaceTreeJSON,
   evolutionComparisonInputs,
+  EvolutionTrialSlotConflictError,
 } from "@opencorvus-ai/plugin"
 import type { ArtifactReadLocator, EngineArtifactLocator, MetricEvaluationRequest, TaskArtifactRef } from "@opencorvus-ai/plugin"
 import {
@@ -1185,6 +1186,12 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ),
           ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
           sourceCampaignLocator = campaignReceipt.locator as EngineArtifactLocator
+          const repeatedTrialCampaign = JSON.parse(await executePublishEvolutionArtifact({
+            artifact_type: "evolution-lab/campaign-spec",
+            payload: { ...campaignDraft, repetitions: 2, budget: { ...campaignDraft.budget, max_runs: 4 } },
+            resource_set: campaignInputResourceSet, source_artifact_locators: [opportunityReceipt.locator, attributionReceipt.locator],
+          }, { host } as never)) as { locator: EngineArtifactLocator }
+
           const campaignEnvelopeRead = await host.engineArtifacts.read({
             locator: campaignReceipt.locator,
             byte_offset: 0,
@@ -1671,6 +1678,10 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           }, { host } as never)) as typeof runReceipt
           expect(await readRunPayload(runAlias.locator)).toEqual(stampedRun)
           expect(new Set([runReceipt.locator, runAlias.locator].map((item) => JSON.stringify(item))).size).toBe(2)
+          const reusedTrialRun = JSON.parse(await executePublishEvolutionArtifact({
+            artifact_type: "evolution-lab/run-evidence-bundle", payload: { ...runSlot, repetition: 1 },
+            resource_set: collectorResourceSet, source_artifact_locators: [repeatedTrialCampaign.locator],
+          }, { host } as never)) as { locator: EngineArtifactLocator }
           const mislabeledRunReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
               {
@@ -2179,6 +2190,38 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             source_artifact_locators: [campaignReceipt.locator],
           })
           ;(scope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
+          const reusedEvaluations: EngineArtifactLocator[] = []
+          const repeatedTrialIDs: string[] = []
+          for (const runLocator of [runReceipt.locator, reusedTrialRun.locator]) {
+            ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
+            const measured = JSON.parse(await executeEvolutionMetricsTool.execute({
+              campaign_spec_locator: repeatedTrialCampaign.locator, candidate_revision_locator: null,
+              run_evidence_locator: runLocator, iteration: 0, delivery_slice_revision_id: null,
+              visual_feedback_verification_artifact_locators: [],
+            } as never, { host } as never))
+            repeatedTrialIDs.push(measured.receipt.trial_task_id)
+            const evaluation = JSON.parse(await executePublishEvolutionArtifact({
+              artifact_type: "evolution-lab/evaluation-result", payload: {}, resource_set: measured.resource_set,
+              source_artifact_locators: [],
+            }, { host } as never)) as { locator: EngineArtifactLocator }
+            reusedEvaluations.push(evaluation.locator)
+            ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
+            await executePublishEvolutionArtifact({ artifact_type: "evolution-lab/integrity-review",
+              payload: { case_id: "case-1", arm: "baseline", repetition: measured.receipt.repetition,
+                evaluation_result_locator: evaluation.locator, status: "reviewed", findings: [], accepted_limitations: [], unknowns: [] },
+              resource_set: null, source_artifact_locators: [evaluation.locator],
+            }, { host } as never)
+          }
+          expect(repeatedTrialIDs).toEqual([trialTaskID, trialTaskID])
+          ;(scope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
+          let trialCollision: unknown
+          try { await executePublishEvolutionArtifact({ artifact_type: "evolution-lab/comparison-recommendation", payload: {},
+            resource_set: null, source_artifact_locators: [repeatedTrialCampaign.locator, candidateSource.locator,
+              runReceipt.locator, reusedTrialRun.locator, ...reusedEvaluations],
+          }, { host } as never) } catch (error) { trialCollision = error }
+          expect(trialCollision).toBeInstanceOf(EvolutionTrialSlotConflictError)
+          expect((trialCollision as EvolutionTrialSlotConflictError).conflicts.map(({ trial_task_id, slots }) => ({ trial_task_id, slots })))
+            .toEqual([{ trial_task_id: trialTaskID, slots: ["case-1:baseline:0", "case-1:baseline:1"] }])
           const originalReviewLocator = EngineArtifactLocatorSchema.parse(integrityReviewReceipt.locator)
           sourceMeasurementImports = [candidateSource.locator, evaluationReceipt.locator, originalReviewLocator, metricEvidenceLocator]
           const expectedComparison = {
@@ -2967,7 +3010,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.10")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.11")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(

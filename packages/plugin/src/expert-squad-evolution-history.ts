@@ -152,6 +152,13 @@ export const EvolutionGraphIssueSchema = z.discriminatedUnion("code", [
       observation_locators: z.array(EngineArtifactLocatorSchema).min(2),
     })
     .strict(),
+  z.object({
+    code: z.literal("TRIAL_SLOT_COLLISION"),
+    owner: EvolutionHistoryArtifactIdentitySchema,
+    trial_task_id: z.string().min(1),
+    slots: z.array(z.string().min(1)).min(2),
+    observation_locators: z.array(EngineArtifactLocatorSchema).min(2),
+  }).strict(),
 ])
 
 export const EvolutionUnlinkedIssueSchema = z.discriminatedUnion("code", [
