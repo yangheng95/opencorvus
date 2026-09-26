@@ -2,6 +2,9 @@ import { afterAll, describe, expect, test } from "bun:test"
 import path from "node:path"
 import { cp, mkdir, readFile, stat, writeFile } from "node:fs/promises"
 import { ExpertSquadRegistry } from "../src/expert-squad/registry"
+import { payloadPackageSources } from "../generated/expert-squad-payload"
+import { generatedExpertSquadRevisions } from "../generated/expert-squad-revisions"
+import { packageContentDigest } from "../script/generate-expert-squad-revisions"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
@@ -2101,6 +2104,21 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         })
       },
     })
+  })
+
+  test("loads the current Evolution Lab comparison from the embedded production package", async () => {
+    const source = path.resolve(import.meta.dir, "../../../expert-squads/builtin/evolution-lab")
+    const sourcePackage = await ExpertSquadRegistry.loadSourcePackage(source)
+    const embeddedSource = payloadPackageSources.find((entry) => entry.namespace === "builtin" && entry.id === "evolution-lab")
+    expect(embeddedSource).toBeDefined()
+    const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
+
+    expect(embeddedPackage.manifest.version).toBe("2026.09.26.1")
+    expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
+    expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
+    expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(
+      packageContentDigest(path.resolve(import.meta.dir, "../../.."), source),
+    )
   })
 
   test("loads the self-contained package ABI and materializes one exact immutable revision", async () => {

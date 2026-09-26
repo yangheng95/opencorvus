@@ -213,6 +213,9 @@ function classifyComparisonAvailability(input: {
       throw new EvolutionArtifactIntegrityError(`comparison slot ${slot.key} metric receipt and run Artifact differ`)
     if (!evaluation) requiredUnavailable.add(`evaluation:${slot.key}`)
     if (!run) requiredUnavailable.add(`run:${slot.key}`)
+    // A present receipt for an inactive or awaiting-interaction Trial still
+    // lacks a terminal result; measured scorer values cannot fill that gap.
+    if (run?.outcome === "unavailable") requiredUnavailable.add(`run_outcome:${slot.key}`)
     const review = reviews.get(slot.key)
     if (!review || review.status === "unavailable") requiredUnavailable.add(`integrity_review:${slot.key}`)
     // A completed review can still report an unobserved required dimension.

@@ -70,6 +70,7 @@ function scorerDefinition(spec: ScorerSpec) {
 function comparisonFor(scorers: ScorerSpec[], options?: {
   uiRubricDigest?: string | null
   candidateFinding?: IntegrityFinding
+  candidateFirstRunOutcome?: "success" | "failure" | "unavailable"
 }) {
   const repetitions = scorers[0]!.baseline.length
   for (const spec of scorers) {
@@ -205,7 +206,9 @@ function comparisonFor(scorers: ScorerSpec[], options?: {
         token_usage: arm === "baseline" ? 100 : 110,
         cost: arm === "baseline" ? 1 : 1.2,
         last_activity_at: "2026-08-07T00:00:00.000Z",
-        outcome: "success",
+        outcome: arm === "candidate" && repetition === 0
+          ? options?.candidateFirstRunOutcome ?? "success"
+          : "success",
         activity_duration_ms: arm === "baseline" ? 1_000 : 1_100,
         revision_equality: {
           installed: arm === "baseline" ? baselineDigest : candidateDigest,
@@ -329,6 +332,32 @@ describe("Evolution Lab deterministic comparison", () => {
     expect(comparison.confidence).toBe("high")
     expect(comparison.regressions).toEqual([])
     expect(comparison.aggregate_interval?.lower).toBeGreaterThan(0)
+  })
+
+  test("a measured candidate slot with an unavailable Trial outcome is inconclusive", () => {
+    const comparison = comparisonFor(
+      [{ id: "correctness", weight: 1, baseline: [0.8, 0.8, 0.8, 0.8], candidate: [0.9, 0.9, 0.9, 0.9] }],
+      { candidateFirstRunOutcome: "unavailable" },
+    )
+
+    expect(comparison.outcome_rates.candidate).toEqual({ failure: 0, unavailable: 0.25 })
+    expect(comparison.paired_deltas[0]!.mean).toBeCloseTo(0.1)
+    expect(comparison.required_unavailable_dimensions).toEqual(["run_outcome:case-1:candidate:0"])
+    expect(comparison.unavailable_dimensions).toEqual(["run_outcome:case-1:candidate:0"])
+    expect(comparison.aggregate_score).toBeNull()
+    expect(comparison.recommendation).toBe("inconclusive")
+  })
+
+  test("a failed candidate Trial remains a measured failure rather than an unavailable Trial", () => {
+    const comparison = comparisonFor(
+      [{ id: "correctness", weight: 1, baseline: [0.8, 0.8, 0.8, 0.8], candidate: [0.9, 0.9, 0.9, 0.9] }],
+      { candidateFirstRunOutcome: "failure" },
+    )
+
+    expect(comparison.outcome_rates.candidate).toEqual({ failure: 0.25, unavailable: 0 })
+    expect(comparison.aggregate_score).toBeCloseTo(0.1)
+    expect(comparison.required_unavailable_dimensions).toEqual([])
+    expect(comparison.recommendation).toBe("retain")
   })
 
   test("reports not_applicable visual review for a nonvisual Campaign", () => {
