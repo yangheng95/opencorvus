@@ -218,12 +218,16 @@ function classifyComparisonAvailability(input: {
     if (run?.outcome === "unavailable") requiredUnavailable.add(`run_outcome:${slot.key}`)
     const review = reviews.get(slot.key)
     if (!review || review.status === "unavailable") requiredUnavailable.add(`integrity_review:${slot.key}`)
-    // A completed review can still report an unobserved required dimension.
-    // Consume the auditor's typed conclusion, not the existence of its report.
+    // A completed review can still report an unobserved dimension. Consume the
+    // auditor's typed conclusion, not the existence of its report: every
+    // unobserved invariant is unavailable, and the auditor's own blocker
+    // severity alone makes it required.
     if (review?.status === "reviewed") {
       for (const [index, finding] of review.findings.entries()) {
-        if (finding.severity === "blocker" && finding.outcome === "unavailable")
-          requiredUnavailable.add(`integrity_finding:${slot.key}:${finding.category}:${index}`)
+        if (finding.outcome !== "unavailable") continue
+        const dimension = `integrity_finding:${slot.key}:${finding.category}:${index}`
+        unavailable.add(dimension)
+        if (finding.severity === "blocker") requiredUnavailable.add(dimension)
       }
     }
     for (const scorer of campaign.scorers) {
@@ -428,7 +432,9 @@ export function deriveComparisonRecommendation(input: {
   const failedIntegrityBlocker = reviewedSlots.some((review) =>
     review.findings.some((finding) => finding.severity === "blocker" && finding.outcome === "failed"),
   )
-  const derivedUnknowns = [...new Set(reviewedSlots.flatMap((review) => [
+  // An unavailable review states why in its unknowns; that reason is as much
+  // an unknown of this comparison as a completed review's residual unknowns.
+  const derivedUnknowns = [...new Set([...reviews.values()].flatMap((review) => [
     ...review.unknowns,
     ...review.accepted_limitations,
   ]))].toSorted()

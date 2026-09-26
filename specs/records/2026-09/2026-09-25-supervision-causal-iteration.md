@@ -698,3 +698,39 @@
 - 顺带修复的既有红测试：`evolution-lab-package-projection.test.ts`把已发布版本写死为`2026.09.06.1`，而自G27提交`23bb9386`同步嵌入payload为`2026.09.26.1`后它已必然失败（G27验证未运行此文件）。改为读取生成revision记录这一单一来源，恢复原1项/40断言通过。
 - 验证：`bun run test`（packages/opencorvus）——`evolution-comparison` 34通过/98断言；`evolution-artifact-evidence-host` 9通过/93断言；`evolution-lab-package-projection` 1/40；`expert-squad-evolution-mutation` 1、`random-evolution-e2e-support` 14、`evolution-chain-host-defect-repairs` 3、`evolution-candidate-manifest-surface` 13、`expert-squad-feedback-revision` 9、`evolution-feedback-revision` 4，全部通过。plugin、opencorvus、`check:expert-squad-types`类型检查exit 0；拓扑122 manifests；`docs:check` 342 ops/25 groups；`git diff --check`通过。仓库无Biome可执行文件与lint脚本，未运行lint。
 - 如实边界：revision计划显示与本修复无关的既有漂移（`automationbench`源`.25.14`对记录`.24.2`；`base`内容变化未升版本），本提交不夹带。`06-provider.md`的CRLF来自自动checkpoint `2a55323e`，新增行按`.gitattributes`的`eol=lf`写入，不重写其它行。已记录用量是下界；按角色配置多模型的Trial不能进入单模型Campaign（如实报错）；`environment_digest`表示所引Campaign声明的环境。无Provider请求、无真实Campaign/作者/候选、无官方world/scorer改动；本修复只闭合测量来源完整性，**不证明业务纠错、候选收益或晋升正确**。下一项仍是同一测量段的G1同源缺口：`reviewed`而`findings: []`可promote（缺失审查类别被当无问题），需先定义必需审查维度再改，避免把缺失处理成新的抛错门。
+
+## G29：独立Review的空findings是已审无发现；丢失的是Auditor已声明的未观察
+
+### Recall
+
+- 用户2026-09-26要求有界核实我在G28重判末尾提出的“`status: reviewed`且`findings: []`仍可promote是G1同源覆盖缺口”，并把它当可被推翻的假设：区分“没有负面发现”与“没有执行某项必需审查”，不能凭空数组判未审，也不能擅自把五个category设成每个Campaign必需；先证明必需维度的权威来源与真正未观察的表达，再定单一方案。无合法依据则只写反证与边界、不制造代码或新抛错gate；同一审计直接发现的确定性根因可在完成影响面后处理，不得无目标扩大。不重启旧运行、不造世界/Campaign/作者/候选、不推广包。
+- 已读：根AGENTS、本记录Recall/G1/G27/G28主管重判；Review/Campaign ABI（`expert-squad-evolution-artifact.ts`）、metric scorer observation class、Evolution Lab README/Skill/调度与七个角色prompt/manifest工作流描述、`platform-capability-sets.ts`（Auditor实际工具）、publisher Review与comparison分支、`comparison.ts`、`evolution-mutation-intent.ts`、`evolution-history.ts`、Artifact幂等发布身份、`2026-08-17-evolution-evaluation-review-ownership-split.md`、`docs/evolution-gate-audit.md`、平台Integrity的覆盖检查（算法层R2-06/R2-20）及相关正向测试。另用真实`deriveComparisonRecommendation`做了只读探针（`packages/opencorvus/.tmp`，已忽略、不入库）。
+
+### 假设被推翻：必需维度的权威来源与未观察的表达
+
+- 权威来源只有两处：Auditor自己的typed结论（`status`决定该slot审查是否完成；每个finding的`severity: blocker`决定是否阻断采用），以及Campaign冻结的visual scorer（比较器已据此要求visual review）。Review schema、Campaign ABI、Skill、README、调度prompt与工作流都没有声明每个Campaign必需的审查类别列表；category只是允许值。manifest中的Auditor描述属于候选可改写的描述性文本，不能当契约；平台Integrity的“空checkID即缺陷”依赖已注册检查与需求覆盖，Evolution Lab没有对应声明，不能移植。scorer observation class只有quality/diagnostic/efficiency，安全维度不由scorer测量。
+- Auditor的实际能力：`delegated-worker-base`（bash/read/search/web等）加Artifact传输与`read_agent_message`，只能读评估Task中的Campaign、Candidate、Run bundle（Evaluator选定披露的消息正文）与Evaluation；看不到Trial Task全部transcript。某类别能否观察取决于证据，必须由Auditor判断并记录，不能由枚举静态决定。
+- 真正未观察已有typed表达且被比较器消费：整份审查未完成发布`status: unavailable`（理由写在`unknowns`）→`integrity_review:<slot>`必需不可用；某不变量无法观察记`outcome: unavailable`，阻断采用时`severity: blocker`→`integrity_finding:<slot>:<category>:<index>`必需不可用（G1）。缺失Review同样必需不可用。publisher对`reviewed`要求的完成证据（所审Evaluation为直接来源、finding证据为直接来源）在空findings时依然存在。
+- 结论：`reviewed`+`[]`是Auditor对完整审查且无可报告项的声明，比较器promote符合当前契约；它无法区分“审过且干净”与“声称完成但未审”，但这是依赖Auditor如实声明的设计边界，不是消费缺陷。把五类设为必需会凭空创造Host外的新门，本次不做。上轮称其为“G1同源缺口”不成立。
+
+### 同一审计直接发现的确定性缺口
+
+- 现象（真实比较器探针）：Review记`side_effect`或`reward_hacking`为`outcome: unavailable`但非阻断时，推荐仍promote（符合Auditor自定严重度），而`unavailable_dimensions`为空；整份Review为`unavailable`时推荐inconclusive且记必需维度，但Auditor写在`unknowns`里的原因不进入比较的`unknowns`。
+- 触发与根因：`classifyComparisonAvailability`只在`severity === "blocker"`时登记`unavailable` finding，把“未观察”与“必需”合成一个条件；`derivedUnknowns`只取`reviewed`的Review。该函数自身注释把`unavailable`定义为“no evidence supports”的维度、`requiredUnavailable`为其阻断子集，且已把非阻断的cost/token/activity缺失计入`unavailable`；Review的非阻断未观察是唯一被丢掉的一类。
+- 影响：不改变任何推荐或晋升（Mission只消费必需维度与推荐）。但比较是决策事实，Recommendation Owner必须逐字等于它、渲染不得新增数值，所以Auditor明确说出的“未观察”在决策Artifact里无法出现，读者会把它当作已观察。历史详情仍逐slot显示Review原文，信息没有从数据库消失。
+- 旧路径不足：G1只把阻断的未观察接进必需集合；G27/G28未触及Review。现有单测只断言非阻断未观察“保持promote”，没有断言其是否出现在不可用向量。
+
+### 精确改动与验证计划
+
+- `comparison.ts`：每个`outcome: unavailable` finding都以原名称计入`unavailable`，仅blocker再计入`requiredUnavailable`；`unknowns`取所有所引Review（含`unavailable`）的`unknowns`与`accepted_limitations`。推荐规则、必需集合、schema、Mission晋升、Host均不改。README写明空findings的含义、非阻断未观察的报告方式与没有声明的必需类别表。包版本`2026.09.26.3`，只同步Evolution Lab嵌入条目与revision记录。
+- 可证伪预测：修前探针C/F的`unavailable_dimensions`为空、B的`unknowns`为空；修后分别出现该finding名称与原因，推荐与必需集合不变。比较单测覆盖：全部适用类别均有证据地passed、以accepted limitation明示不适用、非阻断与阻断未观察、整份不可用含理由、缺失Review、阻断与非阻断实际失败、空findings。真实host测试在已有Auditor Review里加入一条非阻断未观察，经真实publisher发布并让比较精确等值通过。再做类型、拓扑、docs、diff检查。
+- 不做与下一项：同一Evaluation可发布多份Review（幂等身份含payload），比较只消费Recommendation Owner所选那一份，失败blocker的Review可被另一份干净Review替代且历史不标为未链接——这需要先决定取代语义（最新有效、全部取并集或冲突即不可用），本次只记录。非阻断的实际失败在比较输出中没有字段；比较推荐仍要求Owner逐字复现（门审计第一类待改）；均不在本次范围。
+
+### G29实施与验证 checkpoint
+
+- 已按方案改`comparison.ts`两处：每个`outcome: unavailable`的finding都以原名称计入`unavailable`，只有Auditor标`blocker`的才进入必需集合；`unknowns`取全部所引Review（含`unavailable`）的`unknowns`与`accepted_limitations`。推荐规则、必需集合、schema、publisher、Mission晋升与Host均未改。README补写空findings的含义、非阻断未观察的报告、没有声明的必需类别表与ABI无not-applicable结果。包版本`2026.09.26.3`，嵌入payload只替换Evolution Lab条目（manifest、comparison、README三个文件），revision内容身份`eef7914a6c7b21472daa2cf2ceeb4b9785da3565144aad1fed9fb5a42e5fef79`；revision计划对本包稳定，仍只显示既有无关的`automationbench`/`base`漂移。
+- 探针前后对照（真实比较器、只读、未入库）：修前非阻断未观察的`side_effect`/`reward_hacking`不在`unavailable_dimensions`，整份不可用Review的原因不在`unknowns`；修后二者出现，七种形态的推荐与必需集合全部不变。空findings、缺失Review、非阻断实际失败与带unknown的passed输出前后相同。
+- 比较合同测试新增并收紧：空findings为“无可报告项”仍promote且不可用/unknowns为空；五类均有证据地passed仍promote；以accepted limitation明示不适用只进入unknowns；五类非阻断未观察出现在不可用向量但不必需；整份不可用为必需且带原因；缺失Review为必需；非阻断实际失败不算未观察。把`comparison.ts`临时换回HEAD版本时恰好6项变红（5类非阻断未观察+不可用Review原因），其余新测试在修前修后都通过，说明它们钉住的是既有正确语义；恢复后逐字节一致。
+- 真实发布路径：`evolution-artifact-evidence-host`里已由真实publisher发布的Auditor Review增加一条非阻断`side_effect`未观察；Recommendation Owner的比较声明须含`integrity_finding:case-1:baseline:0:side_effect:2`，真实publisher逐字核对通过。换回HEAD比较器时，同一发布以`comparison-recommendation must equal the deterministic ... matrix`被拒——修复前Owner即使读懂Review也无法报告这项未观察。
+- 验证：`bun run test`（packages/opencorvus）`evolution-comparison` 39/126、`evolution-artifact-evidence-host` 9/93、`evolution-lab-package-projection` 1/40、`expert-squad-evolution-mutation` 1/23、`random-evolution-e2e-support` 14/33、`evolution-chain-host-defect-repairs` 3/13、`evolution-candidate-manifest-surface` 13/13、`expert-squad-feedback-revision` 9/48、`evolution-feedback-revision` 4/12，全部通过；`check:expert-squad-types`与opencorvus类型检查exit 0；拓扑122 manifests；`docs:check` 342 ops/25 groups；`git diff --check`通过。plugin源码本轮未改。
+- 边界：本修复只让Auditor已声明的未观察进入决策Artifact，不判定哪些类别必需，不能区分“审过且干净”与“声称完成但未审”，也不证明任何业务纠错、候选收益或晋升正确。同一Evaluation可有多份Review而由Owner选一份、非阻断实际失败在比较输出中无字段、比较推荐仍需Owner逐字复现，三项保持未处理，前者需先决定取代语义。

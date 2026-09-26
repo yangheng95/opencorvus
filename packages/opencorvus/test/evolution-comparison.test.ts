@@ -70,6 +70,13 @@ function scorerDefinition(spec: ScorerSpec) {
 function comparisonFor(scorers: ScorerSpec[], options?: {
   uiRubricDigest?: string | null
   candidateFinding?: IntegrityFinding
+  /** Replaces the whole candidate repetition-0 review; null omits it. */
+  candidateReview?: {
+    status: "reviewed" | "unavailable"
+    findings: IntegrityFinding[]
+    accepted_limitations: string[]
+    unknowns: string[]
+  } | null
   candidateFirstRunOutcome?: "success" | "failure" | "unavailable"
   candidateFirstRunCost?: number | null
   candidateFirstRunModel?: string
@@ -174,21 +181,28 @@ function comparisonFor(scorers: ScorerSpec[], options?: {
   )
 
   const reviews = arms.flatMap((arm) =>
-    indices.map((repetition) => ({
-      locator,
-      value: EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse({
-        case_id: "case-1",
-        arm,
-        repetition,
-        evaluation_result_locator: locator,
-        status: "reviewed",
-        findings: arm === "candidate" && repetition === 0 && options?.candidateFinding
-          ? [options.candidateFinding]
-          : [],
-        accepted_limitations: [],
-        unknowns: [],
-      }),
-    })),
+    indices.flatMap((repetition) => {
+      const candidateSlot = arm === "candidate" && repetition === 0
+      if (candidateSlot && options?.candidateReview === null) return []
+      const review = candidateSlot && options?.candidateReview
+        ? options.candidateReview
+        : {
+            status: "reviewed" as const,
+            findings: candidateSlot && options?.candidateFinding ? [options.candidateFinding] : [],
+            accepted_limitations: [],
+            unknowns: [],
+          }
+      return [{
+        locator,
+        value: EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse({
+          case_id: "case-1",
+          arm,
+          repetition,
+          evaluation_result_locator: locator,
+          ...review,
+        }),
+      }]
+    }),
   )
 
   const runs = arms.flatMap((arm) =>
@@ -280,12 +294,72 @@ describe("Evolution Lab deterministic comparison", () => {
     const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "failed", "warning") })
     expect(result.recommendation).toBe("promote")
     expect(result.aggregate_score).toBeCloseTo(0.6)
+    // An observed failure is not an unobserved dimension.
+    expect(result.unavailable_dimensions).toEqual([])
   })
 
-  test.each(findingCategories)("an unavailable nonblocking %s observation retains the measured promotion decision", (category) => {
+  test.each(findingCategories)("an unavailable nonblocking %s observation is reported without blocking the measured promotion", (category) => {
     const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "unavailable", "warning") })
     expect(result.recommendation).toBe("promote")
     expect(result.aggregate_score).toBeCloseTo(0.6)
+    expect(result.unavailable_dimensions).toEqual([`integrity_finding:case-1:candidate:0:${category}:0`])
+    expect(result.required_unavailable_dimensions).toEqual([])
+  })
+
+  test("a completed review with no findings is the auditor's claim that nothing needed reporting", () => {
+    const result = comparisonFor(improvedScores, {
+      candidateReview: { status: "reviewed", findings: [], accepted_limitations: [], unknowns: [] },
+    })
+    expect(result.recommendation).toBe("promote")
+    expect(result.unavailable_dimensions).toEqual([])
+    expect(result.unknowns).toEqual([])
+  })
+
+  test("every applicable category passed with cited evidence supports promotion", () => {
+    const result = comparisonFor(improvedScores, {
+      candidateReview: {
+        status: "reviewed",
+        findings: findingCategories.map((category) => finding(category, "passed", "info")),
+        accepted_limitations: [],
+        unknowns: [],
+      },
+    })
+    expect(result.recommendation).toBe("promote")
+    expect(result.unavailable_dimensions).toEqual([])
+  })
+
+  test("an inapplicable category stated as an accepted limitation is reported rather than treated as unobserved", () => {
+    const limitation = "side_effect not applicable: the frozen case grants no external action"
+    const result = comparisonFor(improvedScores, {
+      candidateReview: {
+        status: "reviewed",
+        findings: findingCategories
+          .filter((category) => category !== "side_effect")
+          .map((category) => finding(category, "passed", "info")),
+        accepted_limitations: [limitation],
+        unknowns: [],
+      },
+    })
+    expect(result.recommendation).toBe("promote")
+    expect(result.unavailable_dimensions).toEqual([])
+    expect(result.unknowns).toEqual([limitation])
+  })
+
+  test("an unavailable review is required unavailable and carries the auditor's stated reason", () => {
+    const reason = "Trial tool inputs were not disclosed, so external side effects could not be observed"
+    const result = comparisonFor(improvedScores, {
+      candidateReview: { status: "unavailable", findings: [], accepted_limitations: [], unknowns: [reason] },
+    })
+    expect(result.recommendation).toBe("inconclusive")
+    expect(result.aggregate_score).toBeNull()
+    expect(result.required_unavailable_dimensions).toEqual(["integrity_review:case-1:candidate:0"])
+    expect(result.unknowns).toEqual([reason])
+  })
+
+  test("a slot without any review is a required unavailable dimension", () => {
+    const result = comparisonFor(improvedScores, { candidateReview: null })
+    expect(result.recommendation).toBe("inconclusive")
+    expect(result.required_unavailable_dimensions).toEqual(["integrity_review:case-1:candidate:0"])
   })
 
   test("reconstructs the complete case, arm, repetition, and scorer matrix", () => {

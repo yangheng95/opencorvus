@@ -52,7 +52,7 @@ export const generatedExpertSquadRevisions: Readonly<
   "energy-utilities-planning": { version: "2026.08.30.2", contentDigest: "02e6c634427a5a8d9a2542652799c2fbc9d733a78d06bbec0f01fe033afd1b43" },
   "enterprise-backup-recovery-assurance": { version: "2026.08.30.2", contentDigest: "1156288f74713de51a91652f111cf5745af31de5b746d9eee2e784ac1ffa9ce8" },
   "equity-research": { version: "2026.09.02.1", contentDigest: "6388fb27441a48f23905fb9c2f0813f759114848575cdbbdb4491767660a747a" },
-  "evolution-lab": { version: "2026.09.26.2", contentDigest: "a54eb67614bb76d6dafadce51de0985440ef6ac474ac9d756f9f16f3f34c5a4f" },
+  "evolution-lab": { version: "2026.09.26.3", contentDigest: "eef7914a6c7b21472daa2cf2ceeb4b9785da3565144aad1fed9fb5a42e5fef79" },
   "finance-operations": { version: "2026.08.30.2", contentDigest: "f9bc4e436b1c000ea05c55fa970f60f731b7358ff6ff553f8fcaeed94540fccd" },
   "fire-protection-engineering-assurance": { version: "2026.08.30.2", contentDigest: "26340fe564a1a27ecde44a14ee8733fa6240e2d129461ed5152cd068dc2bf74a" },
   "food-safety-quality": { version: "2026.08.30.2", contentDigest: "5c45f77f6b9aec852ed2e11d4399c73fe1a48fec8c1188c513beeac9453ad023" },

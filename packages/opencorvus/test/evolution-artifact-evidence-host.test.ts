@@ -1869,6 +1869,15 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                       owner: "evolution-safety-auditor",
                       correction: "Obtain the missing boundary observation in an independent Trial",
                     },
+                    {
+                      category: "side_effect",
+                      invariant: "The Trial made no external change beyond its frozen case",
+                      outcome: "unavailable",
+                      evidence: [evaluationReceipt.locator],
+                      severity: "warning",
+                      owner: "evolution-safety-auditor",
+                      correction: null,
+                    },
                   ],
                   accepted_limitations: [],
                   unknowns: ["candidate arm remains a separate immutable Trial"],
@@ -1948,6 +1957,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                     "cost_delta",
                     "evaluation:case-1:candidate:0",
                     "integrity_finding:case-1:baseline:0:security:1",
+                    "integrity_finding:case-1:baseline:0:side_effect:2",
                     "integrity_review:case-1:candidate:0",
                     "run:case-1:candidate:0",
                     "scorer:correctness:case-1:candidate:0",
@@ -2280,7 +2290,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.26.2")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.26.3")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(
