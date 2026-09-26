@@ -11,6 +11,7 @@ export {
   EvolutionRunEvidencePublishInputSchema,
   resolveEvolutionIntegrityReviews,
   groupEvolutionMeasurements,
+  expandEvolutionMeasurementAliases,
   EvolutionReviewLineageError,
   parseEvolutionArtifact,
   type EvolutionArtifactType,

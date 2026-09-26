@@ -964,3 +964,28 @@
 - 根类型8项通过，docs342ops25groups/API6规则34文件/包拓扑122manifest135workflow通过。canonical SDK生成完成，结构差异仅history/detail的6处MEASUREMENT_OBSERVATION_CONFLICT分支、detail的两个alias字段及required列表；`.tmp/g38-openapi-changes.json`。源和嵌入Evolution Lab同步2026.09.27.2，content digest754f3a9c73e8c97bfcd4747d2ace4c34e8f36102ab847f09808e31ebc244a29e，仅同步本包。默认AutomationBench/base、已发布历史包与原实验均未修改，未安装推广，没有新Provider/业务费用或UI自动化。
 - 另保留一次旧版本测试期待：包已生成.27.2时Host测试仍期待.27.1，8/9通过；更新此当前版本期待后9/110通过，没有为旧断言保留旧代码。第一次诊断driver变量错误和history真实可达性失败的原日志也保留，不混算为模型失败。
 - 未完成项准确保留：Owner仍可挑Run/Evaluation子集；published目录完整性不等于Trial执行全集；后来相同payload Evaluation别名上的新Review也需要跟随别名全集发现；不同usage/occurrence的合法后续观察尚无可据以默认取代的测量契约。G39须先据这些原事实追完整发现/当前安装权限，不能机械apply旧G31 patch或靠“duplicate”错误一律永久锁住。旧Comparison的payload与source图可能来自旧错误派生，history现可显示矛盾，安装权威的完整测量图复核尚未因此自动实现。持续推进这些共同机制，不开同义业务抽样。
+
+## G39：同一测量的完整发布别名与 Review 闭包
+
+### Recall、影响面与诊断
+
+- 用户要求Codex持续推进，02:45上海后交回准确Opus5.5；本轮不启动业务模型/旧实验。先处理G38已经证明可达的选择绕过：同payload Evaluation别名上的独立Review，不能因为Owner挑另一份等值Evaluation而消失。验收必须同时进入原publisher和真实DB/安装链，保留旧Comparison；不把一次局部闭包称作完整Trial集合。
+- 已重读AGENTS/Recall/G36–G38、当前02-data、publisher冻结搜索/完整读取/producer校验、通用publication identity、collectTaskRunEvidence/current terminal、metric receipt盖章、G37授权/execute/receipt immediate事务/reconcile/replay和history冻结图。定义/调用搜索确认当前publisher仅按选中Evaluation ID搜索Review；G37同样只取Comparison直接Evaluation ID。G38承认同payload多个ID是同一测量后，这两个精确ID集合仍漏别名边，直接触发点是事实身份与发布身份没有在读取闭包中连通。
+- 诊断在实际Host发布alias Review后对比只选原Evaluation与选全别名的Comparison required维度；原fixture缺candidate，不能声称它有真实promote。另在既有真实DB/package-manager checker中先发布完整promote并授权，再增加同payload candidate Evaluation别名及failed blocker Review，执行旧请求并读回真实安装receipt；用原比较器消费全别名/Review只作外侧对照，不重写旧Artifact。先保留原版结果，再实施。
+- 单一拟议修复：在已选Run/Evaluation事实基础上，沿同一Task当前Catalog冻结snapshot枚举Run/Evaluation/Review，按G38完整payload相等关系补齐全部发布别名，再读取这些Evaluation别名的全部Review；不是选最新或合并不同测量。仅目录获取/等值闭包/原producer与引用一致性检查由Host/工具执行，finding判断仍属Auditor及唯一比较器。
+- 同一纯别名闭包供publisher、live mutation和history使用。publisher把别名与Review放在**一次**固定upper/membership分页，避免两个目录快照混称一份全集；全部相关原件完整read/select。mutation在已有SQLite事务同时读取measurement/Review当前记录再查缺失Review，仍在durable receipt处最终重验；已提交receipt重放和未提交journal恢复顺序保持G37。history用自己的冻结目录，旧上界不倒写后来记录。
+- 本轮不对不同payload观察建立未经授权的取代关系：same Trial inactive/awaiting→terminal、后记usage、另一metric receipt与新Trial，需要各自真实因果/冻结契约，不能依赖artifact时间或“第二份”一律裁决。Campaign/createTask未绑定全部Trial ID的边界不变，未公开执行全集仍未知。不同Campaign的Evaluation引用不同且payload不相同，不能混入；Run相同完整事实只补别名，不借此引入别的Trial。跨Task只沿当前Task已导入的原协议，不借外部旧ID。
+
+### G39原版实际反例
+
+- 实际Host测试在同一metric receipt的Evaluation别名上发布permission/unavailable/blocker Review，只传原Evaluation时缺失该Review对应required dimension，传两份后维度出现。两次因fixture缺candidate仍inconclusive，不称此处错误promote。真实publisher/完整read/source已执行，`.tmp/g39-alias-review-host-probe.json`、log和patch保留；9项112断言用于完成诊断，不冒充新机制验收。
+- 原实际DB/package-manager驱动在已发布完整promote且授权后，另写同payload candidate Evaluation别名与failed blocker Review，旧请求仍返回durable promotion receipt，真实candidate安装读回一致；唯一比较器对完整别名/Review集合给inconclusive。`.tmp/g39-alias-review-promotion-probe.json`、log/patch保留。该驱动使用明确合成typed记录及真实安装权威，与上面的真实publisher合同分别报告，不伪称自主LLM Campaign。旧Comparison未改；临时test-driver插入核对后精确恢复再添加回归合同。
+
+### G39实现与完成验收
+
+- 唯一`expandEvolutionMeasurementAliases`补齐同artifact type+完整payload的发布身份，publisher、当前安装复核和冻结history共用。没有更改generic publisher的source身份，也没有挑较新/较好值。publisher一次Catalog分页同时枚举Run/Evaluation/Review，先扩展选中事实的全部等值别名，再完整read/select关联Review；删除原独立Review-only枚举实现，不保留双路径。不同payload观察只被目录观察，不冒充选中事实。
+- live mutation在同一DB snapshot读取三类记录；原G37授权/执行/receipt immediate事务/reconcile/replay复用这一闭包。新增alias Review会使旧Comparison失去当前安装条件，即使旧source没有那个Evaluation发布ID；history报告同一精确缺失Review，并在旧目录上界保持原决定。
+- 真实mutation/history4项94断言通过，新增alias-review路径覆盖Comparison后新别名、授权与执行拒绝、history新旧上界、安装后到receipt前同时新增另一别名和Review并回滚、按各exact Evaluation分别显式改判后真实安装，以及commit后幂等重放。fixture原所谓otherEvaluation其实与原payload相同，按G38真别名定义已不能当不同scope；现用不同value/receipt明确表示另一测量，未为测试保留遗漏别名的旧行为。
+- 实际Host publisher9项116断言通过：不传新别名/Review仍发现其permission unavailable维度，包含Run/Evaluation所有真别名及Review原件；原别名上的同证据显式更正后，比较准确回到原不含该维度的结果，旧Review仍在source。原102份跨页Review检查同样通过，现在三个类型共用一次upper/membership。比较52/157、包投影1/40也通过；共66项/407断言。日志`.tmp/g39-mutation-final.log`、`g39-package-tests.log`。第一次实现把history局部Map命名为已有confirmation evidence数组同名，编译器精确拒绝；改名catalogEvidence后全部通过，保留`g39-mutation-initial.log`，不误报业务失败。
+- root类型8项、docs342ops25groups、API6规则34文件、拓扑122manifest135workflow通过。源与嵌入Evolution Lab2026.09.27.3，contentDigest8ab7dcb9ef5549baa3772a828a77ecd5cd261a715d8d07eb60b02dc4ba5e25eb；只同步此包，没有公共JSON schema变化、不生成无关SDK差异，不安装推广。未启动Provider/业务实验、无UI自动化。
+- 剩余边界：不同payload Run/Evaluation全集仍由Owner选；同Trial合法后续观察/usage补记与重跑择优不能按“第二份”或时间一律处理；缺少预绑定Trial身份的目录不能证明执行全集。旧Comparison payload与更宽source图可能曾由旧错误子集生成，仍不可重算历史以伪修。G40须继续沿真正的Campaign归属/测量事实/当前安装权威审查，不把本轮同事实Review闭包包装成业务可靠纠错或进化收益。

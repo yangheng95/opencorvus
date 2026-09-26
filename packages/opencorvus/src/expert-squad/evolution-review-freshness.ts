@@ -3,28 +3,34 @@ import {
   canonicalEvolutionJSON,
   EngineArtifactEnvelopeSchema,
   EngineArtifactLocatorSchema,
+  expandEvolutionMeasurementAliases,
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { requireEngineArtifactByLocator } from "@/engine/engine-artifact-version-facts"
 import { EngineArtifactTable } from "@/engine/engine.sql"
-import { Database, and, eq } from "@/storage/db"
+import { Database, and, eq, inArray } from "@/storage/db"
 
 type Envelope = z.infer<typeof EngineArtifactEnvelopeSchema>
-type ReviewArtifact = { locator: EngineArtifactLocator; envelope: Envelope }
+type EvidenceArtifact = { locator: EngineArtifactLocator; envelope: Envelope }
 
 /** The same exact-identity difference for a live commit and a frozen history read.
  * Findings stay the Auditor's facts; this does not recalculate a recommendation.
  */
 export function missingComparisonReviews(input: {
   comparison: Envelope
-  evaluations: readonly EngineArtifactLocator[]
-  reviews: readonly ReviewArtifact[]
+  measurements: readonly EvidenceArtifact[]
+  catalog: readonly EvidenceArtifact[]
 }): EngineArtifactLocator[] {
-  const evaluations = new Set(input.evaluations.map(canonicalEvolutionJSON))
+  const evaluations = new Set(
+    expandEvolutionMeasurementAliases(input.measurements, input.catalog)
+      .filter((item) => item.envelope.artifact_type === "evolution-lab/evaluation-result")
+      .map((item) => canonicalEvolutionJSON(item.locator)),
+  )
   const selected = new Set(input.comparison.source_artifact_locators.map(canonicalEvolutionJSON))
-  return input.reviews
+  return input.catalog
     .filter(({ locator, envelope }) => {
+      if (envelope.artifact_type !== "evolution-lab/integrity-review") return false
       const correlation = z
         .object({ evaluation_result_locator: EngineArtifactLocatorSchema })
         .safeParse(envelope.payload)
@@ -56,12 +62,10 @@ export function requireCurrentEvolutionReviews(input: { taskID: string; comparis
     const read = (locator: EngineArtifactLocator) =>
       EngineArtifactEnvelopeSchema.parse(requireEngineArtifactByLocator({ db, taskID: input.taskID, locator }).payload)
     const comparison = read(input.comparisonLocator)
-    const evaluations = comparison.source_artifact_locators.flatMap((source) =>
-      source.source === "engine_artifact" && read(source).artifact_type === "evolution-lab/evaluation-result"
-        ? [source]
-        : [],
+    const measurements = comparison.source_artifact_locators.flatMap((locator) =>
+      locator.source === "engine_artifact" ? [{ locator, envelope: read(locator) }] : [],
     )
-    const reviews = db
+    const catalog = db
       .select({
         artifactID: EngineArtifactTable.id,
         catalogRevision: EngineArtifactTable.catalog_revision,
@@ -72,7 +76,11 @@ export function requireCurrentEvolutionReviews(input: { taskID: string; comparis
         and(
           eq(EngineArtifactTable.task_id, input.taskID),
           eq(EngineArtifactTable.kind, "expert_output"),
-          eq(EngineArtifactTable.catalog_artifact_type, "evolution-lab/integrity-review"),
+          inArray(EngineArtifactTable.catalog_artifact_type, [
+            "evolution-lab/run-evidence-bundle",
+            "evolution-lab/evaluation-result",
+            "evolution-lab/integrity-review",
+          ]),
         ),
       )
       .all()
@@ -85,7 +93,7 @@ export function requireCurrentEvolutionReviews(input: { taskID: string; comparis
         }
         return { locator, envelope: read(locator) }
       })
-    const missingReviewLocators = missingComparisonReviews({ comparison, evaluations, reviews })
+    const missingReviewLocators = missingComparisonReviews({ comparison, measurements, catalog })
     if (missingReviewLocators.length)
       throw new EvolutionComparisonReviewChangedError({ ...input, missingReviewLocators })
   })

@@ -27,6 +27,7 @@ import {
   EvolutionMetricReceiptSchema,
   EvolutionPackagePublishableArtifactInputSchema,
   EvolutionRunEvidencePublishInputSchema,
+  expandEvolutionMeasurementAliases,
   parseEvolutionArtifact,
 } from "../lib/evolution-lab/artifacts"
 import { candidateMutableTextPaths, compareCandidateIntegrity } from "../lib/evolution-lab/candidate-integrity"
@@ -116,17 +117,22 @@ async function readEngineArtifactEnvelope(
   return EngineArtifactEnvelopeSchema.parse(JSON.parse(text))
 }
 
-async function discoverIntegrityReviews(evaluationLocators: readonly EngineArtifactLocator[], context: ToolContext) {
-  const evaluations = new Set(evaluationLocators.map((locator) => JSON.stringify(locator)))
-  const reviews: Array<{
-    locator: EngineArtifactLocator
-    envelope: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>
-  }> = []
+type ComparisonEvidence = {
+  locator: EngineArtifactLocator
+  envelope: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>
+}
+
+async function discoverComparisonEvidence(selected: readonly ComparisonEvidence[], context: ToolContext) {
+  const catalog: ComparisonEvidence[] = []
   let cursor: string | undefined
   do {
     const page = await context.host.engineArtifacts.search({
       sources: ["engine_artifact"],
-      artifact_types: ["evolution-lab/integrity-review"],
+      artifact_types: [
+        "evolution-lab/run-evidence-bundle",
+        "evolution-lab/evaluation-result",
+        "evolution-lab/integrity-review",
+      ],
       version_scope: "current",
       sort: "oldest",
       limit: ArtifactSchemaLimits.maxSearchLimit,
@@ -134,35 +140,56 @@ async function discoverIntegrityReviews(evaluationLocators: readonly EngineArtif
     })
     if (!page.catalog_complete || page.provider_errors.length > 0)
       throw new EvolutionArtifactIntegrityError(
-        `Review catalog is incomplete; retry discovery: ${JSON.stringify(page.provider_errors)}`,
+        `Comparison evidence catalog is incomplete; retry discovery: ${JSON.stringify(page.provider_errors)}`,
       )
     for (const entry of page.entries) {
       if (entry.locator.source !== "engine_artifact")
-        throw new EvolutionArtifactIntegrityError("Review catalog entry must identify an Engine Artifact")
-      const envelope = await readEngineArtifactEnvelope(entry.locator, context, "Review catalog observation", false)
-      const correlation = tool.schema
-        .object({ evaluation_result_locator: ArtifactReadLocatorSchema })
-        .safeParse(envelope.payload)
-      if (!correlation.success) {
-        if (envelope.source_artifact_locators.some((locator) => evaluations.has(JSON.stringify(locator))))
-          throw new EvolutionArtifactIntegrityError(
-            "A Review sourced from the selected Evaluation has no valid evaluation identity",
-          )
-        continue
-      }
-      if (!evaluations.has(JSON.stringify(correlation.data.evaluation_result_locator))) continue
-      if (envelope.artifact_type !== "evolution-lab/integrity-review")
-        throw new EvolutionArtifactIntegrityError("Review catalog identity differs from its immutable envelope")
-      EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(envelope.payload)
-      await context.host.engineArtifacts.select({
-        locator: entry.locator,
-        purpose: "Complete independent Review evidence for the selected evaluation",
-      })
-      reviews.push({ locator: entry.locator, envelope })
+        throw new EvolutionArtifactIntegrityError("Comparison evidence catalog entry must identify an Engine Artifact")
+      const envelope = await readEngineArtifactEnvelope(
+        entry.locator,
+        context,
+        "Comparison evidence catalog observation",
+        false,
+      )
+      catalog.push({ locator: entry.locator, envelope })
     }
     cursor = page.next_cursor ?? undefined
   } while (cursor)
-  return reviews
+  // All three families share one catalog upper bound and membership. Later
+  // Reviews of these same measured facts are rechecked by the mutation commit.
+  const measurements = expandEvolutionMeasurementAliases(selected, catalog)
+  for (const item of measurements)
+    await context.host.engineArtifacts.select({
+      locator: item.locator,
+      purpose: "Complete publication aliases of the selected measured fact",
+    })
+  const evaluations = new Set(
+    measurements
+      .filter((item) => item.envelope.artifact_type === "evolution-lab/evaluation-result")
+      .map((item) => JSON.stringify(item.locator)),
+  )
+  const reviews: ComparisonEvidence[] = []
+  for (const { locator, envelope } of catalog) {
+    if (envelope.artifact_type !== "evolution-lab/integrity-review") continue
+    const correlation = tool.schema
+      .object({ evaluation_result_locator: ArtifactReadLocatorSchema })
+      .safeParse(envelope.payload)
+    if (!correlation.success) {
+      if (envelope.source_artifact_locators.some((locator) => evaluations.has(JSON.stringify(locator))))
+        throw new EvolutionArtifactIntegrityError(
+          "A Review sourced from the selected Evaluation has no valid evaluation identity",
+        )
+      continue
+    }
+    if (!evaluations.has(JSON.stringify(correlation.data.evaluation_result_locator))) continue
+    EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(envelope.payload)
+    await context.host.engineArtifacts.select({
+      locator,
+      purpose: "Complete independent Review evidence for the selected evaluation",
+    })
+    reviews.push({ locator, envelope })
+  }
+  return [...measurements, ...reviews]
 }
 
 export function requireEvolutionWorkerProducer(
@@ -786,14 +813,8 @@ export default tool({
         )
       requireEvolutionWorkerProducer(campaigns[0]!.envelope, "evolution-experiment-planner")
       requireEvolutionWorkerProducer(candidates[0]!.envelope, "evolution-candidate-author")
-      envelopes.push(
-        ...(await discoverIntegrityReviews(
-          envelopes
-            .filter((item) => item.envelope.artifact_type === "evolution-lab/evaluation-result")
-            .map((item) => item.locator),
-          context,
-        )),
-      )
+      const evidence = await discoverComparisonEvidence(envelopes, context)
+      envelopes.splice(0, envelopes.length, ...campaigns, ...candidates, ...evidence)
       for (const item of envelopes) {
         if (item.envelope.artifact_type === "evolution-lab/evaluation-result")
           requireEvolutionWorkerProducer(item.envelope, "evolution-evaluator")

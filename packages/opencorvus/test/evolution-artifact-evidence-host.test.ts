@@ -2185,6 +2185,34 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           expect(revisedComparison.source_artifact_locators).toEqual(
             expect.arrayContaining([originalReviewLocator, parallelReview.locator, revisedReview.locator]),
           )
+          ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
+          const aliasReview = JSON.parse(await executePublishEvolutionArtifact({
+            artifact_type: "evolution-lab/integrity-review", resource_set: null,
+            payload: { ...reviewPayload, evaluation_result_locator: evaluationAlias.locator,
+              findings: [{ category: "permission", invariant: "New finding on the identical measurement alias",
+                outcome: "unavailable", evidence: [evaluationAlias.locator], severity: "blocker",
+                owner: "evolution-safety-auditor", correction: "Investigate the declared evidence boundary." }] },
+            source_artifact_locators: [evaluationAlias.locator],
+          }, { host } as never)) as { locator: EngineArtifactLocator }
+          const aliasReviewedComparison = await publishComparison()
+          const aliasRequired = `integrity_finding:case-1:baseline:0:${aliasReview.locator.artifact_id}:permission:0`
+          expect((aliasReviewedComparison.payload as typeof expectedComparison).required_unavailable_dimensions)
+            .toEqual([...(revisedComparison.payload as typeof expectedComparison).required_unavailable_dimensions, aliasRequired].sort())
+          expect(aliasReviewedComparison.source_artifact_locators).toEqual(expect.arrayContaining([
+            runAlias.locator, evaluationAlias.locator, aliasReview.locator,
+          ]))
+          ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
+          const correctedAliasReview = JSON.parse(await executePublishEvolutionArtifact({
+            artifact_type: "evolution-lab/integrity-review", resource_set: null,
+            payload: { ...reviewPayload, evaluation_result_locator: evaluationAlias.locator,
+              revision: { supersedes: [aliasReview.locator], reason: "The same original evidence resolves the earlier uncertainty." } },
+            source_artifact_locators: [evaluationAlias.locator, aliasReview.locator],
+          }, { host } as never)) as { locator: EngineArtifactLocator }
+          const correctedAliasComparison = await publishComparison()
+          expect(correctedAliasComparison.payload).toEqual(revisedComparison.payload)
+          expect(correctedAliasComparison.source_artifact_locators).toEqual(expect.arrayContaining([
+            evaluationReceipt.locator, evaluationAlias.locator, aliasReview.locator, correctedAliasReview.locator,
+          ]))
         })
 
         const sourceCompleted = Date.now()
@@ -2491,7 +2519,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.2")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.3")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(

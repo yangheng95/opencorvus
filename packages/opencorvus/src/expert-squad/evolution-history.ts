@@ -494,21 +494,25 @@ function buildComparison(input: {
   const graphIssues = [...input.graph.graphIssues]
   // History may retain multiple physical versions. Use the latest version per
   // identity within this frozen read, not wall time or the globally latest row.
-  const reviews = new Map<string, FrozenArtifact>()
+  const catalogEvidence = new Map<string, FrozenArtifact>()
   for (const artifact of input.read.artifacts) {
     if (
       artifact.catalog.taskID !== input.campaign.catalog.taskID ||
-      artifact.envelope.artifact_type !== "evolution-lab/integrity-review"
+      ![
+        "evolution-lab/run-evidence-bundle",
+        "evolution-lab/evaluation-result",
+        "evolution-lab/integrity-review",
+      ].includes(artifact.envelope.artifact_type)
     )
       continue
-    const prior = reviews.get(artifact.locator.artifact_id)
+    const prior = catalogEvidence.get(artifact.locator.artifact_id)
     if (!prior || prior.locator.catalog_revision < artifact.locator.catalog_revision)
-      reviews.set(artifact.locator.artifact_id, artifact)
+      catalogEvidence.set(artifact.locator.artifact_id, artifact)
   }
   const missingReviews = missingComparisonReviews({
     comparison: input.graph.comparison.envelope,
-    evaluations: input.graph.evaluations.map((artifact) => artifact.locator),
-    reviews: [...reviews.values()],
+    measurements: [...input.graph.evaluations, ...input.graph.runs],
+    catalog: [...catalogEvidence.values()],
   })
   if (missingReviews.length)
     graphIssues.push({

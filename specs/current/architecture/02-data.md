@@ -303,6 +303,13 @@ history以同一分组计数并投影run_aliases/evaluation_aliases；多观察�
 Comparison直接引用的Run/Evaluation通过该图可达，不要求baseline Run另抄Candidate来源。
 此规则不保证尚未选入的Run/Evaluation全集或未公开Trial的完整执行历史。
 
+同一测量的发布身份闭包由`expandEvolutionMeasurementAliases`唯一计算：在当前Task目录中，
+以已选Run/Evaluation完整typed payload补齐全部等值发布，再关联每个Evaluation别名上的Review。
+publisher一次分页同时读取三类Artifact，固定同一upper/membership，完整read/select后发布比较；
+不以Owner只传一个别名为由遗漏另一别名的审查。mutation在原receipt immediate事务中读同一当前
+DB快照并使用相同闭包；history用自己的冻结上界。新的别名与Review在安装期间出现时也进入复核，
+同证据显式Review更正仍按各自exact Evaluation scope执行，旧回执幂等重放保持。
+
 Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 metrics store：
 `engine_metric_spec`、`engine_metric_result` 和 `engine_iteration` 的唯一直接表写入文件
 是 `metrics/store.ts`。任务、agent、engine 或 UI 层不得直接写这些 metrics 表。

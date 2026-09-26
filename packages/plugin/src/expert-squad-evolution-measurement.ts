@@ -1,4 +1,4 @@
-import { artifactReadLocatorKey, type ArtifactReadLocator } from "./artifact-catalog.js"
+import { artifactReadLocatorKey, type ArtifactReadLocator, type EngineArtifactEnvelope } from "./artifact-catalog.js"
 import { canonicalEvolutionJSON } from "./expert-squad-evolution.js"
 
 type LocatedMeasurement = {
@@ -32,4 +32,29 @@ export function groupEvolutionMeasurements<T extends LocatedMeasurement>(artifac
       }),
     ]),
   )
+}
+
+type MeasurementPublication = { locator: ArtifactReadLocator; envelope: EngineArtifactEnvelope }
+
+/** Complete the publication identities of the selected measured facts in one
+ * caller-owned Task/catalog snapshot. This does not select a different value,
+ * receipt or Trial, and does not claim completeness of unselected measurements.
+ */
+export function expandEvolutionMeasurementAliases<T extends MeasurementPublication>(
+  selected: readonly T[],
+  catalog: readonly T[],
+): T[] {
+  const key = (artifact: T) => {
+    const type = artifact.envelope.artifact_type
+    return type === "evolution-lab/run-evidence-bundle" || type === "evolution-lab/evaluation-result"
+      ? `${type}\0${canonicalEvolutionJSON(artifact.envelope.payload)}`
+      : undefined
+  }
+  const facts = new Set(selected.map(key).filter((value): value is string => value !== undefined))
+  const result = new Map<string, T>()
+  for (const artifact of [...selected, ...catalog]) {
+    const fact = key(artifact)
+    if (fact !== undefined && facts.has(fact)) result.set(artifactReadLocatorKey(artifact.locator), artifact)
+  }
+  return [...result.keys()].sort().map((identity) => result.get(identity)!)
 }

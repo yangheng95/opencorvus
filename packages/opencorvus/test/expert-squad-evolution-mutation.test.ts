@@ -174,7 +174,7 @@ afterAll(async () => {
 })
 
 describe("authorized expert squad evolution mutation", () => {
-  test.each(["recovery", "review-freshness", "review-recovery"] as const)("authorized exact installation: %s", async (scenario) => {
+  test.each(["recovery", "review-freshness", "review-recovery", "alias-review"] as const)("authorized exact installation: %s", async (scenario) => {
     const sourceRoot = await Global.createTemporaryDirectory("expert-squad-evolution-mutation-")
     await using project = await memoryProject()
     await using foreignProject = await memoryProject()
@@ -646,8 +646,8 @@ describe("authorized expert squad evolution mutation", () => {
               id: target.id,
               installationScope: "project",
             })
-            // Another evaluation and another Task are distinct evidence scopes.
-            const otherEvaluation = recordEvaluation("baseline", baselineRuns[0]!, 0.2, digests.baselineMetric, 0)
+            // A different measured fact, not merely another publication ID.
+            const otherEvaluation = recordEvaluation("baseline", baselineRuns[0]!, 0.25, "f".repeat(64), 0)
             recordReview("baseline", otherEvaluation, 0)
             recordEvolutionArtifact({
               taskID: oldTask.taskID,
@@ -675,7 +675,15 @@ describe("authorized expert squad evolution mutation", () => {
                 candidateRevision.package_digest,
               )
             }
-            const lateReview = recordReview("candidate", candidateEvaluation, 0)
+            const reviewedEvaluation = scenario === "alias-review" ? {
+              value: candidateEvaluation.value,
+              locator: recordEvolutionArtifact({ taskID: operationTask.taskID,
+                type: "evolution-lab/evaluation-result", payload: candidateEvaluation.value,
+                sources: [campaign, candidateArtifact, candidateRuns[0]!.locator] }),
+            } : candidateEvaluation
+            const allEvaluations = [...baselineEvaluations, ...candidateEvaluations, evaluationAlias,
+              ...(scenario === "alias-review" ? [reviewedEvaluation] : [])]
+            const lateReview = recordReview("candidate", reviewedEvaluation, 0)
             const expectedChange = {
               taskID: operationTask.taskID,
               comparisonLocator: comparison,
@@ -740,31 +748,23 @@ describe("authorized expert squad evolution mutation", () => {
             }).toEqual({ recommendation: "promote", intent, issues: [] })
             const reviewSet = [...baselineReviews, ...candidateReviews, revisionReview, lateReview]
             const publishReconsideration = async () => {
-              const payload = {
-                ...revisionReview.value,
-                revision: {
-                  supersedes: reviewSet
-                    .filter((item) => item.value.arm === "candidate" && item.value.repetition === 0)
-                    .map((item) => item.locator),
-                  reason: "Reconsidered the same original evidence and corrected the boundary interpretation.",
-                },
+              // Each explicit correction retains its own exact Evaluation scope,
+              // even when the evaluations describe the same measured fact.
+              for (const evaluation of allEvaluations.filter((item) => item.value.arm === "candidate" && item.value.repetition === 0)) {
+                const parents = reviewSet.filter((item) => JSON.stringify(item.value.evaluation_result_locator) === JSON.stringify(evaluation.locator))
+                const payload = { ...revisionReview.value, evaluation_result_locator: evaluation.locator,
+                  revision: { supersedes: parents.map((item) => item.locator),
+                    reason: "Reconsidered the same original evidence and corrected the boundary interpretation." } }
+                reviewSet.push({ value: payload, locator: recordEvolutionArtifact({ taskID: operationTask.taskID,
+                  type: "evolution-lab/integrity-review", payload,
+                  sources: [evaluation.locator, ...payload.revision.supersedes] }) })
               }
-              const revised = {
-                value: payload,
-                locator: recordEvolutionArtifact({
-                  taskID: operationTask.taskID,
-                  type: "evolution-lab/integrity-review",
-                  payload,
-                  sources: [candidateEvaluation.locator, ...payload.revision.supersedes],
-                }),
-              }
-              reviewSet.push(revised)
               const value = deriveComparisonRecommendation({
                 campaign: campaignPayload,
                 campaignLocator: campaign,
                 candidate: candidatePayload,
                 candidateLocator: candidateArtifact,
-                evaluations: [...baselineEvaluations, ...candidateEvaluations],
+                evaluations: allEvaluations,
                 reviews: reviewSet,
                 runs: [...baselineRuns, ...candidateRuns],
               })
@@ -773,7 +773,7 @@ describe("authorized expert squad evolution mutation", () => {
                 taskID: operationTask.taskID,
                 type: "evolution-lab/comparison-recommendation",
                 payload: value,
-                sources: [...comparisonSources, ...reviewSet.map((review) => review.locator)].filter(
+                sources: [...comparisonSources, ...allEvaluations.map((item) => item.locator), ...reviewSet.map((review) => review.locator)].filter(
                   (locator, index, all) =>
                     all.findIndex((item) => item.artifact_id === locator.artifact_id) === index,
                 ),
@@ -797,7 +797,14 @@ describe("authorized expert squad evolution mutation", () => {
             const reconsidered = await publishReconsideration()
             let concurrentReview!: typeof lateReview
             const restoreHook = ExpertSquadPackageManager.TestHooks.afterTargetInstallBeforeReceiptOnce(async () => {
-              concurrentReview = recordReview("candidate", candidateEvaluation, 0)
+              const concurrentEvaluation = scenario === "alias-review" ? {
+                value: candidateEvaluation.value,
+                locator: recordEvolutionArtifact({ taskID: operationTask.taskID,
+                  type: "evolution-lab/evaluation-result", payload: candidateEvaluation.value,
+                  sources: [campaign, candidateArtifact, candidateRuns[0]!.locator] }),
+              } : reviewedEvaluation
+              if (scenario === "alias-review") allEvaluations.push(concurrentEvaluation)
+              concurrentReview = recordReview("candidate", concurrentEvaluation, 0)
               reviewSet.push(concurrentReview)
             })
             try {
