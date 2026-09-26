@@ -314,7 +314,7 @@ Host精确读取canonical bundle，shell按其terminal Git commit/tree在本次�
 Evaluation receipt JSON是测量结果的运输形式，其不可变身份不单独证明测量来源。
 `metrics.recorded`按当前评分owner Task和确切attempt资源，在原`engine_metric_result`读取
 已记录结果，核对原MetricSpec与attempt的Task、iteration、status/value，返回原Trial subject及
-measured/unavailable事实。未落账的独立JSON或另一Task的结果不能作为当前Task的新测量。
+measured/unavailable事实及原metric_result_id。未落账的独立JSON或另一Task的结果不能作为当前Task的新测量。
 Evolution执行与发布共用原Campaign/Run上下文和同一recorded结果投影；publisher要求receipt的
 slot、Trial、subject、完整冻结scorer集合/revision及声明结果与原生事实一致，再发布Evaluation。
 unavailable先按其真实状态运输，不把raw_value=null解释为measured或0。已有跨Task Evaluation
@@ -360,9 +360,15 @@ history在自身冻结目录上用同一差异计算公开`REVIEW_SNAPSHOT_CHANG
 receipt先提交则后发Review不倒改历史。重试先识别已有receipt，按原journal清理并返回；
 未提交的中断先reconcile再复核新证据，避免提前拒绝遗留未提交安装。恢复/feedback授权保持原契约。
 
-Run/Evaluation的发布身份与测量身份分开：唯一`groupEvolutionMeasurements`按slot和完整typed
-payload分组，完全相同事实的多个Artifact是发布别名，统计只计一次，原locators全部保留。
-不同receipt、Trial、结果、usage或terminal事实保持不同观察，比较不默认选择最新/最好。
+Run/Evaluation的发布身份与测量身份分开：Evaluation publisher从已核验原生结果盖章
+measurement_identity（owner_task_id及每个scorer的metric_result_id），不从回执包装猜评分发生。
+唯一`createEvolutionMeasurementKey`供分组与别名闭包使用：Run仍以完整typed payload为事实；
+有原生身份的Evaluation保留Trial/slot/scorer revision、值、状态、attempt及原结果ID，只将回执
+运输身份排除，并按已证明的Campaign/Candidate原件及完整等值Run事实归一引用。scorer集合顺序
+不创造新观察；不同原结果ID即使同分、同Tool或同iteration仍保持不同观察。历史缺少原生身份
+表示未记录，只有完整原payload相等才是已证发布别名，不猜发生、不回填、不以值或时间择优。
+`groupEvolutionMeasurements`按slot与同一key分组，统计只计一次，原locators全部保留。
+不同Trial、结果、usage或terminal事实保持不同观察；仅运输receipt不同不证明另一次评分。
 Review可引用同一测量组内任一确切Evaluation别名；原Review的显式取代scope不改变。
 history以同一分组计数并投影run_aliases/evaluation_aliases；多观察冲突时单项为null，
 公开MEASUREMENT_OBSERVATION_CONFLICT及原身份，scorer投影为typed unavailable。
@@ -377,7 +383,7 @@ Task/slots/原locators。history保留原推荐与原测量，公开TRIAL_SLOT_C
 资源字节合并不同Task，也不能证明统计独立或全部Trial已经公开。
 
 同一测量的发布身份闭包由`expandEvolutionMeasurementAliases`唯一计算：在当前Task目录中，
-以已选Run/Evaluation完整typed payload补齐全部等值发布，再关联每个Evaluation别名上的Review。
+以已选Run/Evaluation的同一测量key补齐全部已证发布别名，再关联每个Evaluation别名上的Review。
 publisher一次分页同时读取三类Artifact，固定同一upper/membership，完整read/select后发布比较；
 不以Owner只传一个别名为由遗漏另一别名的审查。mutation在原receipt immediate事务中读同一当前
 DB快照并使用相同闭包；history用自己的冻结上界。新的别名与Review在安装期间出现时也进入复核，

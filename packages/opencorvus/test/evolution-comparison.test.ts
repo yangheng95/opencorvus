@@ -1,4 +1,4 @@
-import { requireEvolutionTrialSlotIdentity, EvolutionTrialSlotConflictError } from "@opencorvus-ai/plugin"
+import { requireEvolutionTrialSlotIdentity, EvolutionTrialSlotConflictError, createEvolutionMeasurementKey } from "@opencorvus-ai/plugin"
 /**
  * The promotion rule decides on the interval it computes, not on the sign of a
  * point estimate.
@@ -164,7 +164,7 @@ function comparisonInputs(
 
   const evaluations = arms.flatMap((arm) =>
     indices.map((repetition) => ({
-      locator,
+      locator: { ...locator, artifact_id: `evaluation-${arm}-${repetition}` },
       value: EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse({
         case_id: "case-1",
         arm,
@@ -179,7 +179,7 @@ function comparisonInputs(
         trial_revision_digest: arm === "baseline" ? baselineDigest : candidateDigest,
         campaign_spec_locator: locator,
         candidate_revision_locator: arm === "candidate" ? locator : null,
-        run_evidence_locator: locator,
+        run_evidence_locator: { ...locator, artifact_id: `run-${arm}-${repetition}` },
         metric_receipt_resource: resource,
       }),
     })),
@@ -205,7 +205,7 @@ function comparisonInputs(
             case_id: "case-1",
             arm,
             repetition,
-            evaluation_result_locator: locator,
+            evaluation_result_locator: { ...locator, artifact_id: `evaluation-${arm}-${repetition}` },
             ...review,
           }),
         },
@@ -215,7 +215,7 @@ function comparisonInputs(
 
   const runs = arms.flatMap((arm) =>
     indices.map((repetition) => ({
-      locator,
+      locator: { ...locator, artifact_id: `run-${arm}-${repetition}` },
       value: EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse({
         case_id: "case-1",
         arm,
@@ -310,7 +310,7 @@ describe("Evolution Lab deterministic comparison", () => {
     )
   })
 
-  test("keeps a different metric receipt distinct even if the reported values agree", () => {
+  test("keeps unrecorded measurement identities distinct when only their receipts differ", () => {
     const input = comparisonInputs([{ id: "quality", weight: 1, baseline: [0.2, 0.2], candidate: [0.8, 0.8] }])
     const original = input.evaluations[0]!
     const changed = { locator: { ...original.locator, artifact_id: "another-measurement" }, value: {
@@ -745,4 +745,32 @@ test.each(["case", "arm", "repetition"] as const)("identifies a Trial reused acr
     slots: ["case-1:baseline:0", `${target.value.case_id}:${target.value.arm}:${target.value.repetition}`].sort(),
     observation_locators: [source.locator, target.locator].sort((a, b) => JSON.stringify(a) < JSON.stringify(b) ? -1 : 1),
   }])
+})
+
+test("groups one native scorer occurrence across receipt and Run publication aliases", () => {
+  const input = comparisonInputs([{ id: "quality", weight: 1, baseline: [0.2, 0.2], candidate: [0.8, 0.8] }])
+  for (const evaluation of input.evaluations) evaluation.value.measurement_identity = {
+    owner_task_id: "evaluation-owner", scorer_results: [{ scorer_id: "quality",
+      metric_result_id: `native-${evaluation.value.arm}-${evaluation.value.repetition}` }],
+  }
+  const original = input.evaluations[0]!
+  const run = input.runs[0]!
+  const aliasRun = { ...run, locator: { ...run.locator, artifact_id: "run-copy" } }
+  const transported = { locator: { ...original.locator, artifact_id: "receipt-copy" }, value: {
+    ...original.value, run_evidence_locator: aliasRun.locator,
+    metric_receipt_resource: { ...original.value.metric_receipt_resource, sha256: "1".repeat(64) },
+  } }
+  const source = deriveComparisonRecommendation(input)
+  const result = deriveComparisonRecommendation({ ...input, runs: [...input.runs, aliasRun], evaluations: [...input.evaluations, transported] })
+  const { calculation_inputs: originalInputs, ...originalStatistics } = source
+  const { calculation_inputs: transportedInputs, ...statistics } = result
+  expect(statistics).toEqual(originalStatistics)
+  expect(transportedInputs!.evaluations).toEqual(expect.arrayContaining([original.locator, transported.locator]))
+  const anotherExecution = { ...transported, value: { ...transported.value,
+    measurement_identity: { ...transported.value.measurement_identity!, scorer_results: [{ scorer_id: "quality", metric_result_id: "another-native-result" }] },
+  } }
+  expect(() => deriveComparisonRecommendation({ ...input, runs: [...input.runs, aliasRun], evaluations: [...input.evaluations, anotherExecution] }))
+    .toThrow("comparison has conflicting evaluation observations for slot case-1:baseline:0")
+  const key = createEvolutionMeasurementKey({ runs: [...input.runs, aliasRun] })
+  expect(groupEvolutionMeasurements([original, transported], key).get("case-1:baseline:0")!.map((group) => group.length)).toEqual([2])
 })

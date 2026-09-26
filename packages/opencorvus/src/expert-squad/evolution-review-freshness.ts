@@ -31,7 +31,7 @@ export function missingComparisonReviews(input: {
   const consumed = resolveEvolutionComparisonInputs(input.comparison, references)
   const measurements = [...consumed.runs, ...consumed.evaluations].map((item) => item.artifact)
   const evaluations = new Set(
-    expandEvolutionMeasurementAliases(measurements, input.catalog)
+    expandEvolutionMeasurementAliases(measurements, input.catalog, references.key)
       .filter((item) => item.envelope.artifact_type === "evolution-lab/evaluation-result")
       .map((item) => references.key(item.locator)),
   )

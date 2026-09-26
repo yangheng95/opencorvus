@@ -2318,6 +2318,28 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           })
           expect(summarizeEvolutionEvidence(profileFacts).recommendation.locator).toEqual(recommendationReceipt.locator)
 
+          ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
+          const transportedEvaluation = JSON.parse(await publishAlteredReceipt({ ...metricOutcome.receipt,
+            run_evidence_locator: runAlias.locator })) as { locator: EngineArtifactLocator }
+          const readEvaluation = async (locator: EngineArtifactLocator) => {
+            const read = await host.engineArtifacts.read({ locator, byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
+            return EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse(JSON.parse(read.chunk.text!).payload)
+          }
+          const originalMeasured = await readEvaluation(EngineArtifactLocatorSchema.parse(evaluationReceipt.locator))
+          const transportedMeasured = await readEvaluation(transportedEvaluation.locator)
+          expect(transportedMeasured.measurement_identity).toEqual(originalMeasured.measurement_identity)
+          expect(transportedMeasured.scorers).toEqual(originalMeasured.scorers)
+          expect(originalMeasured.measurement_identity!.scorer_results).toEqual(await Promise.all(
+            metricOutcome.receipt.scorers.map(async (scorer) => {
+              const evidence = scorer.evidence[0]!
+              if (evidence.source !== "task_artifact_resource") throw new Error("Expected recorded scorer evidence")
+              const original = await host.metrics.recorded({ evidence_ref: evidence.ref })
+              return { scorer_id: scorer.scorer_id, metric_result_id: original.metric_result_id }
+            })))
+          const separatelyMeasured = await readEvaluation(EngineArtifactLocatorSchema.parse(intactSecond.locator))
+          expect(new Set([originalMeasured.measurement_identity!.scorer_results[0]!.metric_result_id,
+            separatelyMeasured.measurement_identity!.scorer_results[0]!.metric_result_id]).size).toBe(2)
+          ;(scope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
           const aliasComparison = JSON.parse(await executePublishEvolutionArtifact({
             artifact_type: "evolution-lab/comparison-recommendation", payload: {}, resource_set: null,
             source_artifact_locators: [campaignReceipt.locator, candidateSource.locator, runReceipt.locator,
@@ -2327,6 +2349,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
           const aliasEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(aliasRead.chunk.text!))
           expect(comparisonStatistics(aliasEnvelope.payload)).toEqual(expectedComparison)
+          expect(evolutionComparisonInputs(aliasEnvelope).evaluations).toEqual(expect.arrayContaining([transportedEvaluation.locator]))
+
           expect(aliasEnvelope.source_artifact_locators.filter((item) => [runReceipt.locator, runAlias.locator,
             evaluationReceipt.locator, evaluationAlias.locator].some((alias) => JSON.stringify(alias) === JSON.stringify(item))).length).toBe(4)
           const comparisonSources = [
@@ -2494,11 +2518,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
           const aliasReview = JSON.parse(await executePublishEvolutionArtifact({
             artifact_type: "evolution-lab/integrity-review", resource_set: null,
-            payload: { ...reviewPayload, evaluation_result_locator: evaluationAlias.locator,
+            payload: { ...reviewPayload, evaluation_result_locator: transportedEvaluation.locator,
               findings: [{ category: "permission", invariant: "New finding on the identical measurement alias",
-                outcome: "unavailable", evidence: [evaluationAlias.locator], severity: "blocker",
+                outcome: "unavailable", evidence: [transportedEvaluation.locator], severity: "blocker",
                 owner: "evolution-safety-auditor", correction: "Investigate the declared evidence boundary." }] },
-            source_artifact_locators: [evaluationAlias.locator],
+            source_artifact_locators: [transportedEvaluation.locator],
           }, { host } as never)) as { locator: EngineArtifactLocator }
           const aliasReviewedComparison = await publishComparison()
           const aliasRequired = `integrity_finding:case-1:baseline:0:${aliasReview.locator.artifact_id}:permission:0`
@@ -2510,9 +2534,9 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
           const correctedAliasReview = JSON.parse(await executePublishEvolutionArtifact({
             artifact_type: "evolution-lab/integrity-review", resource_set: null,
-            payload: { ...reviewPayload, evaluation_result_locator: evaluationAlias.locator,
+            payload: { ...reviewPayload, evaluation_result_locator: transportedEvaluation.locator,
               revision: { supersedes: [aliasReview.locator], reason: "The same original evidence resolves the earlier uncertainty." } },
-            source_artifact_locators: [evaluationAlias.locator, aliasReview.locator],
+            source_artifact_locators: [transportedEvaluation.locator, aliasReview.locator],
           }, { host } as never)) as { locator: EngineArtifactLocator }
           const correctedAliasComparison = await publishComparison()
           expect(comparisonStatistics(correctedAliasComparison.payload)).toEqual(comparisonStatistics(revisedComparison.payload))
@@ -3010,7 +3034,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.11")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.12")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(

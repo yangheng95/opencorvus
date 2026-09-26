@@ -280,6 +280,7 @@ export const MetricEvaluationOutcomeSchema = z
 export type MetricEvaluationOutcome = z.infer<typeof MetricEvaluationOutcomeSchema>
 
 export const MetricRecordedObservationSchema = z.object({
+  metric_result_id: z.string().min(1),
   task_id: z.string().min(1),
   producer: ArtifactProducerSchema,
   iteration: z.number().int().nonnegative(),

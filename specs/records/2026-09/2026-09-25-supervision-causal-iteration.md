@@ -1251,3 +1251,28 @@
 - 最终89项557断言全过（g49-focused-tests.log）：Host9/173、mutation/history5/118、comparison56/170、reference4/16、e2e support14/40、包projection1/40。pure跨case/arm/repetition都报告确切错误；不同Task即使值/资源相同仍正常promote；既有same-slot别名和费用/terminal观察错误合同保留。原探针捕获错误及两次时机错误保留，未将错误行为留作长期通过断言；实现后本轮正向测试没有失败。
 - Lab源/嵌入2026.09.27.11/contentDigest9220b4b2e0a7a0c1d15036bada3b14b777136e2a317acb2e285ed865495bf724，仅Lab同步未推广。root类型8、docs342ops25、API6规则34、包拓扑122/135/diff通过；SDK唯一生成器实际生成，g49-openapi-verified.json确认只有6处TRIAL_SLOT_COLLISION联合分支，其余JSON逐值相等。无业务Provider费用/UI自动化。范围提交后执行pull/完整outgoing/真实prepush与push。
 - 下一G50继续完整已发布测量集合，但必须先区分真正另一次测量与同一测量改用已证明的引用别名。当前groupEvolutionMeasurements用完整Evaluation payload（包括metric_receipt_resource和run_evidence_locator）分组，而G44证明receipt是运输、scorer的原native attempt才是数值权威。要用真实Host证伪：同一次原attempt/subject/scorers，仅把Run引用改成其已发布等值别名再运输同一回执，是否被误当不同测量；这是待核对假设，不是已确定bug。不能直接忽略全部receipt或仅按值合并；不同Tool评分即使同分仍是不同观察，导入资源也必须保持原发生/权限事实。若假设被否定，记录边界，继续利用已发布Evaluation的exactCampaign关系研究遗漏，不能停在无信息巡检。未公开Trial无法由catalog证明、同slot合法恢复/晚到费用/再评分的取代契约及整体可靠业务纠错/真实进化收益仍未达成。
+
+## G50：同次原评分经引用别名再次运输
+
+### Recall与实施前调查
+
+- 从6cbf9b21已push/clean继续，读AGENTS/Recall/五段图/G48–G49与02-data；搜索groupEvolutionMeasurements、expandEvolutionMeasurementAliases所有consumer、publisher G44/G45原native result与attempt验证、metric-context、G47引用原链以及history/mutation。没有重跑业务样本/委托/外部模型。
+- 当前Evaluation完整payload里混有评分事实和运输身份：metric_receipt_resource是回执运输，run_evidence_locator是被评Run的发布身份；原scorer evidence精确指向native账本已核验的attempt。当前group按整个payload判断是否同一观察，可能把同一次原测量用Run等值发布别名再运输后的Evaluation判为冲突。不能仅据源码疑点修改，亦不能只按同分数或Task/iteration去合并。
+- 本地真实Host探针：原Run及等值发布别名已由G38 fixture实际生成；同一原metric receipt只替换run_evidence_locator为该别名，经原taskArtifacts新快照运输和真实Evaluation publisher验证，原attempt/value/status/Trial/collector不变，不再次调用metrics.evaluate。然后把原Evaluation和这份新发布一起交给真实Comparison，保存两个payload/相同scorer事实、Run值与错误。只读旧产物，不改原回执/DB/模型Tool记录。若确有冲突再收敛单一身份方案，区分新评分与合法运输，当前时限07:45优先Opus交接。
+
+### G50已确认反例与精确身份方案
+
+- 原真实Host成功发布换Run等值别名的Evaluation，原scorers（含每个attempt完整ref）逐值相等，Run完整payload也相等；仅run_evidence_locator与metric_receipt_resource不同。真实比较报conflicting evaluation observations。g50-transported-measurement-probe.json/log/patch保留，捕获后driver主动G50_PROBE_CAPTURED退出，原临时文件已精确恢复。无新metrics执行、无业务模型。
+- 最小权威来自已有engine_metric_result.id，不再让回执包装决定评分发生。metrics.recorded额外投影其当前owner Task内确切原row ID，Evaluation publisher在原G44/G45验证后盖章measurement_identity={owner_task_id,scorer_results:[scorer_id,metric_result_id]}；不建表/ledger或用新UUID替代原身份。原payload/回执/resources都保留。历史缺少该事实明确未记录，只能保留完整payload相等的发布别名，不能因同值/同Task/同iteration猜是同次评分；不回填旧记录。
+- 单一measurement key从完整已解析事实生成：已记录身份的Evaluation保留原Task/slot/revision/scorer value-status-evidence/native result IDs，按scorer ID规范集合顺序，Campaign/Candidate经G47原件引用索引，Run引用仅在完整Run事实已证明相同时归一；只有运输receipt身份不作为另一次评分。未记录身份保持其原运输声明的精确完整性，不能据回执不同就声称已证明另一次真实执行。Run本身仍完整payload相等才是别名，后入账/不同terminal不合并。不同原result ID（即使同Tool/iteration或同分数）保持不同观察。
+- 分组、发现闭包、历史和mutation Review新鲜性共用此key/引用上下文；Comparison仍保留全部原发布身份，Review显式取代仍以自己exact Evaluation原件为scope，不借“同一测量”扩大改判权限。generic artifact_publish已有strict ABI类型拒绝，不能绕过typed publisher任填测量身份；此处不新增工具隐藏或流程门。
+- 验收：原真实Host反例转正、原两个独立Tool评分保持区别、相关运输别名上的Review由冻结目录发现、history与当前安装新鲜性同源；原scorer/attempt未重新执行或改写。纯函数/预置数据只能证明局部合同，真实Host和既有DB/manager必须通过。该修复仍不证明不同真实测量全集或后续观察取代规则，07:45优先交接前须收敛范围提交。
+
+### G50已实施与验证
+
+- 原生metric_result_id通过现有recorded入口读取并由publisher盖章到Evaluation；原native结果/attempt/receipt与广义来源保持不变。唯一createEvolutionMeasurementKey共供比较、目录别名闭包、history和mutation Review新鲜性；Run完整事实、scorer原结果ID/值/状态/evidence保留，只有已证运输差异被归一。Review显式取代仍要求同一exact Evaluation原件，不跨测量别名自动取代。未改评分流水写入/Task终态/调度/统计公式/DDL，也没有新账本或业务gate。
+- 真实Host原反例转正：用同次原attempt和Run等值发布别名运输新回执，publisher投影同一组原native IDs，Comparison实际inputs保留两份Evaluation并维持原矩阵；另一真实Tool评分即使同分，其原result IDs仍不同。新运输别名上的permission unavailable审查进入完整目录比较，同证据明确改判后恢复原矩阵。原跨Task导入/完整读取与不可用结果合同继续通过，未启动外部Provider。
+- 真实DB/manager的alias-review路径同时增加等值Run发布和新receipt运输，旧Comparison授权/执行准确报后发Review身份；history保留旧promote且当前intent为空，冻结旧上界保持原历史。各exact Evaluation显式改判后新Comparison正常安装，后续新Review不改变已提交receipt重放。此安装仍为test-driver预置测量，不是模型自主Campaign/真实用户项目推广。
+- 最终96项619断言全部通过（g50-focused-tests.log）：真实Host9/178、mutation/history5/118、比较57/174、reference4/16、e2e证据消费14/40、包projection1/40、metric runtime6/53。原纯比较fixture把多份不同Run复用一个locator，已改成各真实逻辑条目自己的标识，关系同步而非弱化身份检查；旧未记录测量的不同回执仍保留未知/冲突，不将其描述为已证不同执行。原探针主动捕获退出保留，最终正向验收无失败。
+- Lab源/嵌入2026.09.27.12/contentDigestcab52fb838a7eeaedefce003ef027052a9ecf28d6fb66a23cc3235aa7c38718c（g50-package-sync.log），仅Lab同步未推广。类型8、docs342ops25、API6规则34、包拓扑122/135和diff检查通过。新增字段仅内部recorded/不可变Artifact payload，history公开响应投影仍是原Artifact identities/scorer slots；无HTTP/SDK响应/DDL/UI变化。范围提交后按原规则pull、审完整outgoing、实际pre-push和push。
+- 下一范围仍是不同完整已发布测量的选择/遗漏和合法后续观察；本次只消除运输造成的假冲突，不证明全集、后续取代关系、业务可靠纠错或真实进化收益。须用现已可区分的native result ID和Evaluation exactCampaign/Candidate/Run关系定位，不能以Turn宽来源猜Run唯一归属，不能把后入账/恢复/重评分/新Trial全部永久毒化或默认最新/最好。无全部Trial预绑定清单时catalog最多证明已发布集；07:45优先将精确现状交给原Opus主管，旧业务实验继续只读停止。

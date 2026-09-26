@@ -499,6 +499,12 @@ export const EvolutionArtifactSchemas = {
     }),
   "evolution-lab/evaluation-result": z
     .object({
+      measurement_identity: z.object({
+        owner_task_id: z.string().min(1),
+        scorer_results: z.array(z.object({
+          scorer_id: portableIdentity, metric_result_id: z.string().min(1),
+        }).strict()).min(1),
+      }).strict().optional(),
       case_id: portableIdentity,
       arm: z.enum(["baseline", "candidate"]),
       repetition: z.number().int().nonnegative(),
@@ -510,7 +516,16 @@ export const EvolutionArtifactSchemas = {
       run_evidence_locator: ArtifactReadLocatorSchema,
       metric_receipt_resource: taskArtifactResourceIdentity,
     })
-    .strict(),
+    .strict()
+    .superRefine((value, context) => {
+      const identity = value.measurement_identity
+      if (!identity) return
+      const names = identity.scorer_results.map((item) => item.scorer_id).sort()
+      if (JSON.stringify(names) !== JSON.stringify(value.scorers.map((item) => item.scorer_id).sort()) ||
+          new Set(identity.scorer_results.map((item) => item.metric_result_id)).size !== identity.scorer_results.length)
+        context.addIssue({ code: "custom", path: ["measurement_identity"],
+          message: "recorded measurement must identify one distinct native result for every scorer" })
+    }),
   "evolution-lab/integrity-review": z
     .object({
       case_id: portableIdentity,

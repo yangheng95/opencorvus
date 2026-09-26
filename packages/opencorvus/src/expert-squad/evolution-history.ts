@@ -16,6 +16,7 @@ import {
   evolutionComparisonContext,
   resolveEvolutionIntegrityReviews,
   groupEvolutionMeasurements,
+  createEvolutionMeasurementKey,
   evolutionTrialSlotConflicts,
   type EvolutionCampaignDetailResponse,
   type ArtifactReadLocator,
@@ -461,11 +462,13 @@ function comparisonGraph(read: FrozenRead, comparison: FrozenArtifact<Comparison
     runs: runs.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })),
     evaluations: evaluations.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })),
   })) graphIssues.push({ code: "TRIAL_SLOT_COLLISION", owner: artifactIdentity(comparison), ...conflict })
+  const factKey = createEvolutionMeasurementKey({ runs: runs.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })),
+    referenceKey: read.references.get(comparison.catalog.taskID)!.key })
   for (const [artifactType, artifacts] of [
     ["evolution-lab/run-evidence-bundle", runs],
     ["evolution-lab/evaluation-result", evaluations],
   ] as const) {
-    for (const [slot, observations] of measurementGroups<Run | Evaluation>(artifacts)) {
+    for (const [slot, observations] of measurementGroups<Run | Evaluation>(artifacts, factKey)) {
       if (observations.length < 2) continue
       graphIssues.push({
         code: "MEASUREMENT_OBSERVATION_CONFLICT",
@@ -479,22 +482,23 @@ function comparisonGraph(read: FrozenRead, comparison: FrozenArtifact<Comparison
   return { comparison, runs, evaluations, reviews, graphIssues, referenceKey: read.references.get(comparison.catalog.taskID)!.key }
 }
 
-function measurementGroups<T extends Run | Evaluation>(artifacts: readonly FrozenArtifact<T>[]) {
+function measurementGroups<T extends Run | Evaluation>(artifacts: readonly FrozenArtifact<T>[], factKey: (value: unknown) => string) {
   return groupEvolutionMeasurements(
-    artifacts.map((artifact) => ({ locator: artifact.locator, value: artifact.payload!, artifact })),
+    artifacts.map((artifact) => ({ locator: artifact.locator, value: artifact.payload!, artifact })), factKey,
   )
 }
 
-function uniqueMeasurements<T extends Run | Evaluation>(artifacts: readonly FrozenArtifact<T>[]) {
-  return [...measurementGroups(artifacts).values()].flatMap((observations) =>
+function uniqueMeasurements<T extends Run | Evaluation>(artifacts: readonly FrozenArtifact<T>[], factKey: (value: unknown) => string) {
+  return [...measurementGroups(artifacts, factKey).values()].flatMap((observations) =>
     observations.length === 1 ? [observations[0]![0]!.artifact] : [],
   )
 }
 
 function completeness(campaign: Campaign, graph: ComparisonGraph) {
   const expectedSlots = campaign.cases.length * campaign.repetitions * 2
-  const uniqueRuns = uniqueMeasurements(graph.runs)
-  const uniqueEvaluations = uniqueMeasurements(graph.evaluations)
+  const factKey = createEvolutionMeasurementKey({ runs: graph.runs.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })), referenceKey: graph.referenceKey })
+  const uniqueRuns = uniqueMeasurements(graph.runs, factKey)
+  const uniqueEvaluations = uniqueMeasurements(graph.evaluations, factKey)
   const scorerResults = uniqueEvaluations.flatMap((evaluation) => evaluation.payload!.scorers)
   const current = resolveEvolutionIntegrityReviews(
     graph.reviews.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })),
@@ -1253,8 +1257,9 @@ function detailSlots(input: {
 }) {
   const campaign = input.campaign.payload!
   const candidate = input.candidate.payload!
-  const runs = measurementGroups(input.graph.runs)
-  const evaluations = measurementGroups(input.graph.evaluations)
+  const factKey = createEvolutionMeasurementKey({ runs: input.graph.runs.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })), referenceKey: input.graph.referenceKey })
+  const runs = measurementGroups(input.graph.runs, factKey)
+  const evaluations = measurementGroups(input.graph.evaluations, factKey)
   const lineage = resolveEvolutionIntegrityReviews(
     input.graph.reviews.map((artifact) => ({ locator: artifact.locator, value: artifact.payload!, artifact })),
     input.graph.referenceKey,

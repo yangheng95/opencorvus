@@ -1,4 +1,4 @@
-import { VISUAL_FEEDBACK_VERIFICATION_SCORER_NAME, artifactReadLocatorKey, requireEvolutionTrialSlotIdentity, type EvolutionArtifactReferences } from "@opencorvus-ai/plugin"
+import { VISUAL_FEEDBACK_VERIFICATION_SCORER_NAME, artifactReadLocatorKey, createEvolutionMeasurementKey, requireEvolutionTrialSlotIdentity, type EvolutionArtifactReferences } from "@opencorvus-ai/plugin"
 import {
   EvolutionArtifactSchemas,
   EvolutionArtifactIntegrityError,
@@ -135,9 +135,10 @@ function indexComparisonEvidence(input: {
   referenceKey: (ref: ArtifactLocator) => string
 }): IndexedComparisonEvidence {
   const { campaign, candidate, expectedSlotKeys, expectedScorerIDs } = input
+  const factKey = createEvolutionMeasurementKey({ runs: input.runs, referenceKey: input.referenceKey })
   const evaluations = new Map<string, Evaluation>()
   const evaluationLocators = new Map<string, ArtifactLocator[]>()
-  for (const [key, observations] of groupEvolutionMeasurements(input.evaluations)) {
+  for (const [key, observations] of groupEvolutionMeasurements(input.evaluations, factKey)) {
     if (observations.length !== 1)
       throw new EvolutionArtifactIntegrityError(`comparison has conflicting evaluation observations for slot ${key}`)
     const aliases = observations[0]!
@@ -190,7 +191,7 @@ function indexComparisonEvidence(input: {
   }
   const runs = new Map<string, RunEvidence>()
   const runLocators = new Map<string, ArtifactLocator[]>()
-  for (const [key, observations] of groupEvolutionMeasurements(input.runs)) {
+  for (const [key, observations] of groupEvolutionMeasurements(input.runs, factKey)) {
     if (observations.length !== 1)
       throw new EvolutionArtifactIntegrityError(`comparison has conflicting run observations for slot ${key}`)
     const aliases = observations[0]!

@@ -163,6 +163,7 @@ export function createMetricEvaluationHost(
         throw new Error("Recorded metric result and its immutable attempt have inconsistent identities or values")
       }
       return MetricRecordedObservationSchema.parse({
+        metric_result_id: row.id,
         task_id: row.task_id, producer: source.manifest.producer, iteration: row.iteration, scorer_id: spec.name,
         scorer_revision: spec.evaluator_config.scorer_revision,
         subject: attempt.subject.resource, trial_task_id: attempt.subject.trial_task_id,

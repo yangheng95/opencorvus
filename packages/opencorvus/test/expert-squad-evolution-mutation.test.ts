@@ -442,6 +442,9 @@ describe("authorized expert squad evolution mutation", () => {
             repetition: number,
           ) => {
             const payload = EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse({
+              measurement_identity: { owner_task_id: operationTask.taskID, scorer_results: [{
+                scorer_id: "quality", metric_result_id: `fixture-metric-${arm}-${repetition}-${metricDigest}`,
+              }] },
               case_id: "case-a",
               arm,
               repetition,
@@ -861,12 +864,19 @@ describe("authorized expert squad evolution mutation", () => {
                 candidateRevision.package_digest,
               )
             }
+            const candidateRunAlias = scenario === "alias-review" ? recordEvolutionArtifact({ taskID: operationTask.taskID,
+              type: "evolution-lab/run-evidence-bundle", payload: candidateRuns[0]!.value,
+              sources: [campaign, candidateArtifact] }) : candidateRuns[0]!.locator
+            const transportedEvaluation = { ...candidateEvaluation.value, run_evidence_locator: candidateRunAlias,
+              metric_receipt_resource: { ...candidateEvaluation.value.metric_receipt_resource, sha256: "3".repeat(64) } }
             const reviewedEvaluation = scenario === "alias-review" ? {
-              value: candidateEvaluation.value,
+              value: transportedEvaluation,
               locator: recordEvolutionArtifact({ taskID: operationTask.taskID,
-                type: "evolution-lab/evaluation-result", payload: candidateEvaluation.value,
-                sources: [campaign, candidateArtifact, candidateRuns[0]!.locator] }),
+                type: "evolution-lab/evaluation-result", payload: transportedEvaluation,
+                sources: [campaign, candidateArtifact, candidateRunAlias] }),
             } : candidateEvaluation
+            const allRuns = [...baselineRuns, ...candidateRuns,
+              ...(scenario === "alias-review" ? [{ locator: candidateRunAlias, value: candidateRuns[0]!.value }] : [])]
             const allEvaluations = [...baselineEvaluations, ...candidateEvaluations, evaluationAlias,
               ...(scenario === "alias-review" ? [reviewedEvaluation] : [])]
             const lateReview = recordReview("candidate", reviewedEvaluation, 0)
@@ -961,14 +971,14 @@ describe("authorized expert squad evolution mutation", () => {
                 candidateLocator: candidateArtifact,
                 evaluations: allEvaluations,
                 reviews: reviewSet,
-                runs: [...baselineRuns, ...candidateRuns],
+                runs: allRuns,
               })
               expect(value.recommendation).toBe("promote")
               const next = recordEvolutionArtifact({
                 taskID: operationTask.taskID,
                 type: "evolution-lab/comparison-recommendation",
                 payload: value,
-                sources: [...comparisonSources, ...allEvaluations.map((item) => item.locator), ...reviewSet.map((review) => review.locator)].filter(
+                sources: [...comparisonSources, ...allRuns.map((item) => item.locator), ...allEvaluations.map((item) => item.locator), ...reviewSet.map((review) => review.locator)].filter(
                   (locator, index, all) =>
                     all.findIndex((item) => item.artifact_id === locator.artifact_id) === index,
                 ),
@@ -1040,7 +1050,9 @@ describe("authorized expert squad evolution mutation", () => {
               })
               const changedEvaluation = recordEvolutionArtifact({ taskID: operationTask.taskID,
                 type: "evolution-lab/evaluation-result", sources: [campaign, baselineRuns[0]!.locator],
-                payload: { ...baselineEvaluation.value, metric_receipt_resource: {
+                payload: { ...baselineEvaluation.value, measurement_identity: {
+                  ...baselineEvaluation.value.measurement_identity!, scorer_results: [{ scorer_id: "quality", metric_result_id: "another-recorded-fixture-result" }],
+                }, metric_receipt_resource: {
                   ...baselineEvaluation.value.metric_receipt_resource, sha256: "f".repeat(64),
                 } },
               })

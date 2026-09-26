@@ -162,7 +162,7 @@ async function discoverComparisonEvidence(selected: readonly ComparisonEvidence[
   // All three families share one catalog upper bound and membership. Later
   // Reviews of these same measured facts are rechecked by the mutation commit.
   const references = createEvolutionArtifactReferences([...selected, ...catalog])
-  const measurements = expandEvolutionMeasurementAliases(selected, catalog)
+  const measurements = expandEvolutionMeasurementAliases(selected, catalog, references.key)
   for (const item of measurements)
     await context.host.engineArtifacts.select({
       locator: item.locator,
@@ -629,6 +629,12 @@ export default tool({
       // Immutable JSON is a transport, not measurement authority. Exact native
       // result rows and their attempts own each scorer fact.
       payload = EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse({
+        measurement_identity: {
+          owner_task_id: verified[0]!.observation.task_id,
+          scorer_results: verified.map(({ observation, scorer }) => ({
+            scorer_id: scorer.scorer_id, metric_result_id: observation.metric_result_id,
+          })).sort((a, b) => a.scorer_id < b.scorer_id ? -1 : a.scorer_id > b.scorer_id ? 1 : 0),
+        },
         campaign_spec_locator: receipt.campaign_spec_locator,
         candidate_revision_locator: receipt.candidate_revision_locator,
         run_evidence_locator: receipt.run_evidence_locator,
