@@ -532,7 +532,15 @@ export function deriveComparisonRecommendation(input: {
         ? "promote"
         : "retain"
 
+  const identities = (values: readonly { locator: ArtifactLocator }[]) => {
+    const byIdentity = new Map(values.map(({ locator }) => [artifactReadLocatorKey(locator), locator]))
+    return [...byIdentity.keys()].sort().map((key) => byIdentity.get(key)!)
+  }
   return EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse({
+    calculation_inputs: {
+      campaign: input.campaignLocator, candidate: input.candidateLocator,
+      runs: identities(input.runs), evaluations: identities(input.evaluations), reviews: identities(input.reviews),
+    },
     baseline_revision: campaign.baseline_revision,
     candidate_revision: candidate.candidate_revision,
     paired_deltas: pairedDeltas.map(({ standardErrorKnown: _standardErrorKnown, ...delta }) => delta),

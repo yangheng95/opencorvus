@@ -9,6 +9,16 @@ import {
   TaskArtifactRelativePathSchema,
 } from "./task-artifact.js"
 
+// Absent on historical records means the consumed set was not recorded.
+// It must never be inferred from the wider Turn provenance graph.
+export const EvolutionComparisonInputsSchema = z.object({
+  campaign: EngineArtifactLocatorSchema,
+  candidate: EngineArtifactLocatorSchema,
+  runs: z.array(EngineArtifactLocatorSchema),
+  evaluations: z.array(EngineArtifactLocatorSchema),
+  reviews: z.array(EngineArtifactLocatorSchema),
+}).strict()
+
 const sha256 = z.string().regex(/^[a-f0-9]{64}$/)
 const portableIdentity = TaskArtifactPortableSegmentSchema
 const exactRevision = EvolutionExactRevisionSchema
@@ -540,6 +550,7 @@ export const EvolutionArtifactSchemas = {
     .strict(),
   "evolution-lab/comparison-recommendation": z
     .object({
+      calculation_inputs: EvolutionComparisonInputsSchema.optional(),
       baseline_revision: exactRevision,
       candidate_revision: exactRevision,
       paired_deltas: z.array(

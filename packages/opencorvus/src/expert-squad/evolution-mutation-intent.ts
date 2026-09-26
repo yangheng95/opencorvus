@@ -3,6 +3,7 @@ import {
   canonicalEvolutionJSON,
   createEvolutionArtifactReferences,
   evolutionArtifactProvenance,
+  evolutionComparisonInputs,
   EngineArtifactEnvelopeSchema,
   EvolutionExactRevisionSchema,
   EvolutionInstallableTargetSchema,
@@ -144,12 +145,10 @@ export function prepareEvolutionPackageMutation(input: {
       { locator: intent.candidateRevisionLocator, envelope: candidateArtifact.envelope },
       { locator: intent.comparisonResultLocator, envelope: comparisonArtifact.envelope },
     ])
-    const sources = evolutionArtifactProvenance(comparisonArtifact.envelope).sources
-    if (
-      !sources.some((source) => references.same(source, intent.campaignSpecLocator)) ||
-      !sources.some((source) => references.same(source, intent.candidateRevisionLocator))
-    )
-      throw new Error("Evolution comparison must directly source its exact Campaign and Candidate Artifacts")
+    const consumed = evolutionComparisonInputs(comparisonArtifact.envelope)
+    if (!references.same(consumed.campaign, intent.campaignSpecLocator) ||
+        !references.same(consumed.candidate, intent.candidateRevisionLocator))
+      throw new Error("Evolution comparison calculation inputs must identify the exact Campaign and Candidate Artifacts")
     const campaign = CampaignMutationFactsSchema.parse(campaignArtifact.envelope.payload)
     const candidate = CandidateMutationFactsSchema.parse(candidateArtifact.envelope.payload)
     const comparison = ComparisonMutationFactsSchema.parse(comparisonArtifact.envelope.payload)

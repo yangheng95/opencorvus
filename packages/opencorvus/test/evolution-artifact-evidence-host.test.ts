@@ -1,4 +1,5 @@
 import { afterAll, describe, expect, test } from "bun:test"
+import { summarizeEvolutionEvidence } from "../script/expert-squad-evolution-e2e-support"
 import path from "node:path"
 import { cp, mkdir, readFile, stat, writeFile } from "node:fs/promises"
 import { ExpertSquadRegistry } from "../src/expert-squad/registry"
@@ -36,6 +37,7 @@ import {
   canonicalTaskRunEvidenceJSON,
   TaskRunEvidenceBundleSchema,
   canonicalWorkspaceTreeJSON,
+  evolutionComparisonInputs,
 } from "@opencorvus-ai/plugin"
 import type { ArtifactReadLocator, EngineArtifactLocator, MetricEvaluationRequest, TaskArtifactRef } from "@opencorvus-ai/plugin"
 import {
@@ -78,6 +80,11 @@ import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { requireCurrentEvolutionReviews, EvolutionComparisonReviewChangedError } from "../src/expert-squad/evolution-review-freshness"
 import { MetricExecutionEvidence } from "../src/metrics/types"
 import { metricJudgeMessages } from "../src/tool/metric-judge-runner"
+
+function comparisonStatistics(payload: unknown) {
+  const { calculation_inputs, ...statistics } = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(payload)
+  return statistics
+}
 
 function executePublishEvolutionArtifact(
   args: Record<string, unknown> & { artifact_type: string; payload: unknown },
@@ -2241,7 +2248,33 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           })
           expect(comparisonRead.chunk.complete).toBe(true)
           const comparisonEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(comparisonRead.chunk.text!))
-          expect(comparisonEnvelope.payload).toEqual(expectedComparison)
+          expect(comparisonStatistics(comparisonEnvelope.payload)).toEqual(expectedComparison)
+          const consumed = evolutionComparisonInputs(comparisonEnvelope)
+          expect({ campaign: consumed.campaign, candidate: consumed.candidate,
+            runs: new Set(consumed.runs.map((item) => item.artifact_id)),
+            evaluations: new Set(consumed.evaluations.map((item) => item.artifact_id)),
+            reviews: new Set(consumed.reviews.map((item) => item.artifact_id)) }).toEqual({
+              campaign: campaignReceipt.locator, candidate: candidateSource.locator,
+              runs: new Set([runReceipt.locator.artifact_id, runAlias.locator.artifact_id]),
+              evaluations: new Set([evaluationReceipt.locator.artifact_id, evaluationAlias.locator.artifact_id]),
+              reviews: new Set([originalReviewLocator.artifact_id]),
+            })
+          expect(comparisonEnvelope.source_artifact_locators.some((item) => item.source === "task_artifact_resource")).toBe(true)
+          const facts = Database.use((db) => db.select().from(EngineArtifactTable)
+            .where(eq(EngineArtifactTable.task_id, scope.taskID)).all())
+            .filter((row) => row.kind === "expert_output").map((row) => ({ taskID: row.task_id,
+              locator: { source: "engine_artifact" as const, artifact_id: row.id,
+                catalog_revision: row.catalog_revision, expected_sha256: row.payload_sha256 }, envelope: row.payload }))
+          // The independent harness has one declared opportunity/attribution profile.
+          // This Host fixture also publishes another scope's pair; keep that pair
+          // outside this profile without changing the actual broad Comparison graph.
+          const profileFacts = facts.filter((fact) => {
+            const type = EngineArtifactEnvelopeSchema.parse(fact.envelope).artifact_type
+            return type === "evolution-lab/opportunity" ? JSON.stringify(fact.locator) === JSON.stringify(opportunityReceipt.locator)
+              : type === "evolution-lab/failure-attribution" ? JSON.stringify(fact.locator) === JSON.stringify(attributionReceipt.locator) : true
+          })
+          expect(summarizeEvolutionEvidence(profileFacts).recommendation.locator).toEqual(recommendationReceipt.locator)
+
           const aliasComparison = JSON.parse(await executePublishEvolutionArtifact({
             artifact_type: "evolution-lab/comparison-recommendation", payload: {}, resource_set: null,
             source_artifact_locators: [campaignReceipt.locator, candidateSource.locator, runReceipt.locator,
@@ -2250,7 +2283,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           const aliasRead = await host.engineArtifacts.read({ locator: aliasComparison.locator,
             byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
           const aliasEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(aliasRead.chunk.text!))
-          expect(aliasEnvelope.payload).toEqual(expectedComparison)
+          expect(comparisonStatistics(aliasEnvelope.payload)).toEqual(expectedComparison)
           expect(aliasEnvelope.source_artifact_locators.filter((item) => [runReceipt.locator, runAlias.locator,
             evaluationReceipt.locator, evaluationAlias.locator].some((alias) => JSON.stringify(alias) === JSON.stringify(item))).length).toBe(4)
           const comparisonSources = [
@@ -2272,14 +2305,17 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 { host } as never,
               ),
             ) as { locator: EngineArtifactLocator }
-            const read = await host.engineArtifacts.read({
-              locator: receipt.locator,
-              byte_offset: 0,
-              max_bytes: 65_536,
-              delivery: "inline",
-            })
-            expect(read.chunk.complete).toBe(true)
-            return EngineArtifactEnvelopeSchema.parse(JSON.parse(read.chunk.text!))
+            let offset = 0
+            let text = ""
+            for (;;) {
+              const read = await host.engineArtifacts.read({ locator: receipt.locator,
+                byte_offset: offset, max_bytes: 65_536, delivery: "inline" })
+              text += read.chunk.text!
+              if (read.chunk.complete) break
+              if (read.chunk.next_offset === null) throw new Error("Comparison read ended before its complete byte range")
+              offset = read.chunk.next_offset
+            }
+            return EngineArtifactEnvelopeSchema.parse(JSON.parse(text))
           }
           const reviewPayload = {
             case_id: metricOutcome.receipt.case_id,
@@ -2305,7 +2341,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ),
           ) as { locator: EngineArtifactLocator }
           const parallelComparison = await publishComparison()
-          expect(parallelComparison.payload).toEqual(expectedComparison)
+          expect(comparisonStatistics(parallelComparison.payload)).toEqual(expectedComparison)
           expect(parallelComparison.source_artifact_locators).toEqual(
             expect.arrayContaining([originalReviewLocator, parallelReview.locator]),
           )
@@ -2341,7 +2377,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             pagedReviews.push(receipt.locator)
           }
           const pagedComparison = await publishComparison()
-          expect(pagedComparison.payload).toEqual(expectedComparison)
+          expect(comparisonStatistics(pagedComparison.payload)).toEqual(expectedComparison)
           expect(pagedComparison.source_artifact_locators).toEqual(expect.arrayContaining(pagedReviews))
           ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
           await expect(
@@ -2386,7 +2422,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           ) as { locator: EngineArtifactLocator }
           const revisedComparison = await publishComparison()
           sourceCorrectedComparisonPayload = revisedComparison.payload
-          expect(revisedComparison.payload).toEqual({
+          expect(comparisonStatistics(revisedComparison.payload)).toEqual({
             ...expectedComparison,
             unavailable_dimensions: [
               "activity_duration_ms_delta",
@@ -2436,7 +2472,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             source_artifact_locators: [evaluationAlias.locator, aliasReview.locator],
           }, { host } as never)) as { locator: EngineArtifactLocator }
           const correctedAliasComparison = await publishComparison()
-          expect(correctedAliasComparison.payload).toEqual(revisedComparison.payload)
+          expect(comparisonStatistics(correctedAliasComparison.payload)).toEqual(comparisonStatistics(revisedComparison.payload))
           expect(correctedAliasComparison.source_artifact_locators).toEqual(expect.arrayContaining([
             evaluationReceipt.locator, evaluationAlias.locator, aliasReview.locator, correctedAliasReview.locator,
           ]))
@@ -2702,7 +2738,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           expect((freshnessError as InstanceType<typeof EvolutionComparisonReviewChangedError>).data.missingReviewLocators)
             .toEqual([reconsidered.locator])
           const correctedImportedComparison = await publishImportedComparison()
-          expect(correctedImportedComparison.envelope.payload).toEqual(sourceCorrectedComparisonPayload)
+          expect(comparisonStatistics(correctedImportedComparison.envelope.payload)).toEqual(comparisonStatistics(sourceCorrectedComparisonPayload))
           requireCurrentEvolutionReviews({ taskID: importedTaskID, comparisonLocator: correctedImportedComparison.locator })
           ;(importedScope.owner as { agentID: string }).agentID = "evolution-evaluator"
           await expect(host.metrics.recorded({ evidence_ref: sourceMetricEvidence })).rejects.toThrow(
@@ -2931,7 +2967,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.9")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.10")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(

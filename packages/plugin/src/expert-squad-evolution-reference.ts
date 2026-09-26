@@ -1,3 +1,4 @@
+import { EvolutionComparisonInputsSchema } from "./expert-squad-evolution-artifact.js"
 import {
   artifactReadLocatorKey,
   engineArtifactSourceChain,
@@ -92,3 +93,45 @@ export function createEvolutionArtifactReferences<T extends EvolutionReferenceAr
 }
 
 export type EvolutionArtifactReferences = ReturnType<typeof createEvolutionArtifactReferences>
+
+export class EvolutionComparisonInputError extends Error {
+  override readonly name = "EvolutionComparisonInputError"
+  constructor(readonly code: "unrecorded_inputs" | "invalid_inputs" | "undeclared_source" | "wrong_type",
+    readonly locator?: ArtifactReadLocator) {
+    super(`Evolution comparison calculation inputs ${code}${locator ? `: ${artifactReadLocatorKey(locator)}` : ""}`)
+  }
+}
+
+/** Read only the persisted calculation occurrence, never reconstruct it from
+ * wider provenance. Resolution uses one authorized Task's frozen context. */
+export function evolutionComparisonInputs(envelope: EngineArtifactEnvelope) {
+  const payload = envelope.payload as { calculation_inputs?: unknown } | null
+  if (payload?.calculation_inputs === undefined) throw new EvolutionComparisonInputError("unrecorded_inputs")
+  const parsed = EvolutionComparisonInputsSchema.safeParse(payload.calculation_inputs)
+  if (!parsed.success) throw new EvolutionComparisonInputError("invalid_inputs")
+  const sources = new Set(evolutionArtifactProvenance(envelope).sources.map(artifactReadLocatorKey))
+  const value = parsed.data
+  const locators = [value.campaign, value.candidate, ...value.runs, ...value.evaluations, ...value.reviews]
+  for (const locator of locators)
+    if (!sources.has(artifactReadLocatorKey(locator))) throw new EvolutionComparisonInputError("undeclared_source", locator)
+  return value
+}
+
+export function resolveEvolutionComparisonInputs<T extends EvolutionReferenceArtifact>(
+  envelope: EngineArtifactEnvelope,
+  references: ReturnType<typeof createEvolutionArtifactReferences<T>>,
+) {
+  const inputs = evolutionComparisonInputs(envelope)
+  const bind = (locator: ArtifactReadLocator, type: string) => {
+    const artifact = references.require(locator)[0]!
+    if (artifact.envelope.artifact_type !== type) throw new EvolutionComparisonInputError("wrong_type", locator)
+    return { locator, artifact }
+  }
+  return {
+    campaign: bind(inputs.campaign, "evolution-lab/campaign-spec"),
+    candidate: bind(inputs.candidate, "evolution-lab/candidate-revision"),
+    runs: inputs.runs.map((item) => bind(item, "evolution-lab/run-evidence-bundle")),
+    evaluations: inputs.evaluations.map((item) => bind(item, "evolution-lab/evaluation-result")),
+    reviews: inputs.reviews.map((item) => bind(item, "evolution-lab/integrity-review")),
+  }
+}

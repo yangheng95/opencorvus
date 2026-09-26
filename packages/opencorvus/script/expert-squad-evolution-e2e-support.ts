@@ -1,12 +1,12 @@
 import { createHash } from "node:crypto"
 import {
-  ArtifactReadLocatorListSchema,
   ArtifactReadLocatorSchema,
   EngineArtifactEnvelopeSchema,
   EvolutionArtifactSchemas,
   EvolutionPackagePublishableArtifactTypeSchema,
   createEvolutionArtifactReferences,
   evolutionArtifactProvenance,
+  resolveEvolutionComparisonInputs,
   parseEvolutionArtifact,
   type ArtifactReadLocator,
   type EngineArtifactEnvelope,
@@ -596,12 +596,9 @@ export function summarizeEvolutionEvidence(facts: readonly EvolutionArtifactFact
   requireProducer(recommendation, "evolution-recommendation-owner")
 
   const references = createEvolutionArtifactReferences(parsed.filter((fact) => fact.taskID === recommendation.taskID))
-  const sourceLocators = ArtifactReadLocatorListSchema.parse(evolutionArtifactProvenance(recommendation.envelope).sources)
-  const bindings = sourceLocators.map((locator) => {
-    const source = references.resolve(locator)[0]
-    if (!source) throw new Error(`Evolution recommendation source was not completely read: ${JSON.stringify(locator)}`)
-    return { locator, source }
-  })
+  const consumed = resolveEvolutionComparisonInputs(recommendation.envelope, references)
+  const bindings = [consumed.campaign, consumed.candidate, ...consumed.runs,
+    ...consumed.evaluations, ...consumed.reviews].map(({ locator, artifact }) => ({ locator, source: artifact }))
   const sources = bindings.map((item) => item.source)
   const campaigns = sources.filter((fact) => fact.artifactType === "evolution-lab/campaign-spec")
   const candidates = sources.filter((fact) => fact.artifactType === "evolution-lab/candidate-revision")

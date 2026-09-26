@@ -280,7 +280,11 @@ describe("Evolution Lab deterministic comparison", () => {
       ["aaa-run-alias", run.locator.artifact_id],
     ])
     const withAliases = { ...input, runs: [...input.runs, aliasRun], evaluations: [...input.evaluations, aliasEvaluation] }
-    expect(deriveComparisonRecommendation(withAliases)).toEqual(expected)
+    const { calculation_inputs: used, ...aliasStatistics } = deriveComparisonRecommendation(withAliases)
+    const { calculation_inputs: originalInputs, ...originalStatistics } = expected
+    expect(aliasStatistics).toEqual(originalStatistics)
+    expect(used!.runs).toEqual(expect.arrayContaining([run.locator, aliasRun.locator]))
+    expect(used!.evaluations).toEqual(expect.arrayContaining([evaluation.locator, aliasEvaluation.locator]))
     const originalReview = input.reviews.find((item) => item.value.arm === "candidate")!
     const aliasReview = { locator: { ...originalReview.locator, artifact_id: "review-of-alias" }, value: {
       ...originalReview.value, evaluation_result_locator: aliasEvaluation.locator,
@@ -540,7 +544,10 @@ describe("Evolution Lab deterministic comparison", () => {
   test("reconstructs the complete case, arm, repetition, and scorer matrix", () => {
     const comparison = comparisonFor([{ id: "correctness", weight: 1, baseline: [0.8], candidate: [0.9] }])
 
-    expect(comparison).toEqual({
+    const { calculation_inputs, ...statistics } = comparison
+    expect(calculation_inputs!.campaign).toEqual(locator)
+    expect(calculation_inputs!.candidate).toEqual(locator)
+    expect(statistics).toEqual({
       baseline_revision: baselineRevision,
       candidate_revision: candidateRevision,
       paired_deltas: [

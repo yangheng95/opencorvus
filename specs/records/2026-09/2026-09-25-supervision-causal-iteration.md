@@ -1198,3 +1198,30 @@
 - 最终94项606断言：引用索引3/11、比较52/157、真实Host9/172、mutation/history5/108、e2e support14/40（g47-consumers-final.log）；manager CAS1/30、真实feedback9/48、包projection1/40（g47-final-tests.log）。前面的g47-focused-initial和g47-final-tests记录分别是接入checker之前的通过结果，最终对应消费者已重跑；G46原错误原件仍保留。本轮没有新的业务Provider费用或UI自动化。
 - Lab源/嵌入2026.09.27.9/contentDigest966d23669c3521f242cffddcfa7d585fbb3d560196bd164750d85025e05b8731，单一生成器仅同步Lab，未推广；第一次未提交生成4adc…在加入README契约后重生成，非覆盖已发布包。最终类型8、docs342ops25、API6规则34文件、包拓扑122/135过，g47-types-final/docs/api/topology/package-sync-final保留；无HTTP/SDK响应/DDL变化。范围提交后按完整outgoing与实际pre-push完成交付。
 - 下一G48回到不同完整Run/Evaluation集合与合法后续观察：当前只修已读/已导入原件关系，仍允许Owner选不同完整测量子集。不要把source/import引用等价当作完整Trial注册表，不按最新/最佳或同值选择；G40同一source图可比实际派生输入更宽仍有效。先全仓核对publication显式输入与Turn选择来源并集的契约、Campaign/Run实际语义归属、原metric Tool发生/iteration/Task terminal occurrence和合法恢复，利用已保存真实反例再决定一个有事实授权的最小机制。若具体路线无可证伪方案则如实收束该路线并转向有证据的问题，不重复同义模型抽样。整体业务可靠纠错与真实进化收益仍未达成；07:45之后Opus优先接管，先读本结果而非重做G47。
+
+## G48：比较计算输入与宽来源图的边界
+
+### Recall与实施前调查
+
+- 从d32af8fc已push/clean继续，重读AGENTS、Recall/五段图/G46–G47、02-data；搜索通用artifact_publish、typed Plugin Host、publisher显式参数、comparison/freshness/history/mutation及独立e2e checker和2026-08-17、2026-09-12历史。无委托、无外部模型。
+- 通用publisher的source_read_refs是本次显式来源；typed Host保留同一物理Turn既有选择加本次选择。这是不同公开契约，不能为方便比较而删除宽来源或当作相同语义。G40已证宽图可包含未参与数值派生的另一Run。现Comparison仅存派生结果，checker/freshness/mutation却把宽来源当其实际输入；因此完整集合研究前必须先确认本次计算发生的精确身份能否重放，而非直接增加全目录冲突门。
+- 先用当前真实Host已发布的Comparison送入现有summarizeEvolutionEvidence，保存实际源图/原payload/错误。原记录只读，test-driver不是模型行为。若复现，下一个候选最小机制为唯一比较器给结果盖章精确计算输入，保留完整宽provenance和原始证据；所有消费面共用同一解析器，不能各写转换。历史缺少该事实时明确unknown，不从宽来源猜输入或重算覆盖旧结果。新字段的历史读取/当前安装权限、跨Task导入、别名与Review修订必须一起界定，之后才改生产。
+- 此边界不解决已发布全集、未公开Trial或合法重复测量取代；不会把记录了输入当成输入选得完整。后入账/恢复/再评分不得以时间最新或结果最好自动选择，也不新增ledger/角色/业务gate。
+
+### G48确定反例与精确实施契约
+
+- 当前真实Host首份Comparison已发布并正确读回；独立summarizeEvolutionEvidence读取当前Task真实Engine行后报`source was not completely read`，所指是宽provenance里的task_artifact_resource评分attempt，不是缺少实际参与比较的Engine原件。原收据g48-comparison-consumption-probe.json/log/patch。这个fixture缺candidate测量，因此不能称promote失败或完整Campaign；已证同一公开产物无法按其真实计算输入重放。
+- 新Comparison `calculation_inputs`由唯一deriveComparisonRecommendation盖章：exact Campaign、Candidate及全部实际传入Run/Evaluation/Review locators（包括被取代Review和等值别名），排序保留身份。模型输入仍空payload；宽source/observed/resource原样保留，不删反证。字段可缺失仅表达历史未记录的unknown，绝不从宽来源fallback猜值；旧payload读回保持原数值，当前安装/重放需要已记录的计算身份，缺失返回明确错误，history保留旧结果并说明不可重放。不是另一ledger或模型自报清单。
+- 唯一纯reader校验字段结构、每个输入属于原直接来源、类型与当前Task已读原件关系；重放/Review freshness/history/mutation共用。native与G47多跳import均只用当前已授权副本，不跨Task追读。新Comparison Campaign/Candidate严格绑定实际计算对，不能借同Turn另一背景Campaign授权。旧receipt先重放、未提交安装同事务freshness等既有时序不变。
+- 核心验收：真实Host原反例转正且宽图包含原评分资源；计算输入逐项核对。追加背景Review或不同测量仅作为宽来源时，不伪称它已被比较消费；相关新Review仍由G37/G39完整目录复核发现。历史缺字段保留原推荐、current intent为空且精确issue；明确缺源/错类型/非直接来源/错误Campaign对的正向错误。正向比较、Host、mutation/history、导入、独立checker及包投影/类型/API/docs实际检查。无新模型/world/UI/DDL。
+- 这一步不准许选择性遗漏真实不利测量，亦不声称已关闭它；不同Run/Evaluation全集及合法后续观察的因果合同继续待续。记录精确输入是区分“已发现/作为背景引用/实际纳入计算”的必要原始事实。
+
+### G48已实施与最终验证
+
+- 当前比较器在同一返回值盖章calculation_inputs，排序精确保存全部实际Campaign/Candidate/Run/Evaluation/Review身份；原宽source/observed/resources完全保留。唯一reference模块reader校验已记录输入、直接来源、原件类型和当前Task可达性；native/imported消费共用，不用时间或同值猜身份。history按实际输入展示测量；背景Campaign不能取得该比较的晋升权限，背景Review引用不能冒充已被比较消费。
+- 原真实Host反例含14个宽sources，其中1个是评分资源；原checker误当计算输入。修复后公开Host实际产物通过现有checker重放，计算输入逐项与实际fixture身份相等、原宽评分资源仍存在。独立checker已有单opportunity/attribution profile；本Host夹具另测过另一scope的一对前驱，最终驱动只把本声明profile的一对交给该checker，Comparison原宽sources不变，全部Run/Evaluation/Review仍交付。不是已解决任意多Campaign或多推荐profile。
+- 真实DB/manager：同宽图额外Campaign不能授权；历史未记录输入仍原promote但current intent=null/COMPARISON_INPUTS_UNAVAILABLE；后发Review即使在宽sources中、未在实际计算输入中也精确触发freshness。宽来源里的不同Run/Evaluation不会被谎称为该次已消费测量；明确声明冲突的保留记录仍公开原conflict。合法改判后安装、receipt重放、rename/恢复与跨Task导入路径继续通过。旧历史不重算、不补字段、不改原receipt。
+- 最终95项620断言在g48-final-tests.log全部8文件exit0：reference4/16、comparison52/161、真实Host9/170、mutation/history5/115、独立e2e support14/40、manager CAS1/30、真实feedback9/48、package projection1/40。没有业务模型调用/费用或UI自动化。公开Host的102份Review使新Comparison超过64KiB，旧测试单chunk完整断言失败，现沿真实next_offset完整读取，保持原生产分页合同。
+- 其它初始失败均保留：纯alias测试原先把统计相等误当含输入的整产物相等；纯import fixture缺observed来源；mutation夹具新增多Campaign后旧数组第0项断言失效；checker原缺源错误更新为唯一reference错误。修复测试的明确正向输出与身份，不放宽生产校验。原探针和g48-focused-initial/consumers-tests/host-mutation-verified日志保留；最后两文件的局部绿不能冒称整个文件绿。
+- Lab源/嵌入2026.09.27.10/contentDigestc9845d9c6e21dfa9fcc1f0cd39bf7472b275d7a030e5bfd7406e2a458cda8d3b，仅Lab同步未推广；初次未提交生成584f…在Owner/Skill说明和共享identity排序更新后前向生成，同一未发布版本。root类型8、docs342ops25、API6规则34文件、包拓扑122/135/diff通过。SDK唯一生成器实际运行；OpenAPI递归验证仅新增6处COMPARISON_INPUTS_UNAVAILABLE联合分支，其余JSON逐值相等。检查脚本曾用Windows默认cp1252错读UTF-8造成35个假乱码差异，修正显式UTF-8后g48-openapi-verified.json准确通过，未改生成内容掩盖差异。
+- 下一G49继续不同完整测量全集与合法后续观察。G48关闭的是“比较发生实际用了哪些输入不可重放”这个共同根因，不是集合完备或真实进化收益。现在应沿真实calculation_inputs与已发布Evaluation exactCampaign/Candidate/Run事实调查遗漏；Run仍没有exactCampaign payload，不能以宽provenance推断归属。先核对实际Task创建/collector/metric发生事实及历史合同，区分原收费后记、合法恢复与再评分/重跑择优；无权威就不能默认最新/最好或永久封锁第二记录。07:45或以后优先准确Opus5.5接管，在此之前继续有依据本地工作，无新登记不启动业务模型。

@@ -12,6 +12,7 @@ import {
   canonicalEvolutionJSON,
   createEvolutionArtifactReferences,
   evolutionArtifactProvenance,
+  resolveEvolutionComparisonInputs,
   evolutionComparisonContext,
   resolveEvolutionIntegrityReviews,
   groupEvolutionMeasurements,
@@ -121,7 +122,13 @@ function referenceMatches(read: FrozenRead, owner: FrozenArtifact, locator: Arti
 }
 
 function sourceIncludes(read: FrozenRead, owner: FrozenArtifact, target: FrozenArtifact) {
-  return evolutionArtifactProvenance(owner.envelope).sources.some((source) =>
+  // For records that carry a calculation occurrence, background provenance
+  // cannot associate the recommendation with a different Campaign/Candidate.
+  const consumed = owner.envelope.artifact_type === "evolution-lab/comparison-recommendation"
+    ? (owner.payload as Comparison | undefined)?.calculation_inputs : undefined
+  const sources = consumed ? [consumed.campaign, consumed.candidate, ...consumed.runs,
+    ...consumed.evaluations, ...consumed.reviews] : evolutionArtifactProvenance(owner.envelope).sources
+  return sources.some((source) =>
     source.source === "engine_artifact" && referenceMatches(read, owner, source, target),
   )
 }
@@ -420,7 +427,14 @@ function receiptsForComparison(input: {
 }
 
 function comparisonGraph(read: FrozenRead, comparison: FrozenArtifact<Comparison>): ComparisonGraph {
-  const direct = directArtifacts(read, comparison)
+  let direct: { artifacts: FrozenArtifact[]; issues: unknown[] }
+  try {
+    const consumed = resolveEvolutionComparisonInputs(comparison.envelope, read.references.get(comparison.catalog.taskID)!)
+    direct = { artifacts: [...consumed.runs, ...consumed.evaluations, ...consumed.reviews].map((item) => item.artifact), issues: [] }
+  } catch (error) {
+    direct = { artifacts: [], issues: [{ code: "COMPARISON_INPUTS_UNAVAILABLE",
+      owner: artifactIdentity(comparison), diagnostic: diagnostic(error) }] }
+  }
   const runs: FrozenArtifact<Run>[] = []
   const evaluations: FrozenArtifact<Evaluation>[] = []
   const reviews: FrozenArtifact<Review>[] = []
@@ -530,9 +544,9 @@ function buildComparison(input: {
     if (!prior || prior.locator.catalog_revision < artifact.locator.catalog_revision)
       catalogEvidence.set(artifact.locator.artifact_id, artifact)
   }
-  const missingReviews = missingComparisonReviews({
+  const missingReviews = graphIssues.length ? [] : missingComparisonReviews({
     comparison: input.graph.comparison.envelope,
-    measurements: [...input.graph.evaluations, ...input.graph.runs],
+    measurements: [...input.graph.evaluations, ...input.graph.runs, ...input.graph.reviews, input.campaign, input.candidate],
     catalog: [...catalogEvidence.values()],
   })
   if (missingReviews.length)

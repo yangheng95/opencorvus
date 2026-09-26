@@ -6,6 +6,9 @@ import {
   evolutionArtifactProvenance,
   EvolutionArtifactReferenceError,
   resolveEvolutionIntegrityReviews,
+  evolutionComparisonInputs,
+  resolveEvolutionComparisonInputs,
+  EvolutionComparisonInputError,
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin"
 
@@ -35,7 +38,7 @@ function imported(id: string, source: ReturnType<typeof native>) {
     import_lineage: {
       source_task_id: `task-${source.locator.artifact_id}`, source_locator: source.locator,
       source_kind: "expert_output", source_producer: source.envelope.producer,
-      source_provenance: { observed_artifact_locators: [], source_artifact_locators: source.envelope.source_artifact_locators },
+      source_provenance: { observed_artifact_locators: source.envelope.observed_artifact_locators, source_artifact_locators: source.envelope.source_artifact_locators },
       ...(prior.length ? { prior_imports: prior.map(({ prior_imports: ignored, ...fact }) => fact) } : {}),
     },
   }) }
@@ -96,4 +99,29 @@ test("resolves explicit revisions across transport aliases without replacing ind
   })), allCopyReferences.key)
   expect(merged.superseded.map((item) => item.locator)).toEqual([a.locator, b.locator])
   expect(merged.current.map((item) => item.locator)).toEqual([allCopies.locator])
+})
+
+test("resolves exact calculation inputs across imports while preserving wider sources", () => {
+  const campaign = native("campaign", {}, "evolution-lab/campaign-spec")
+  const candidate = native("candidate", {}, "evolution-lab/candidate-revision")
+  const background = native("background", {}, "evolution-lab/integrity-review")
+  const inputs = { campaign: campaign.locator, candidate: candidate.locator, runs: [], evaluations: [], reviews: [] }
+  const comparison = native("comparison", { calculation_inputs: inputs }, "evolution-lab/comparison-recommendation")
+  comparison.envelope.source_artifact_locators = [campaign.locator, candidate.locator, background.locator]
+  comparison.envelope.observed_artifact_locators = comparison.envelope.source_artifact_locators
+  const localCampaign = imported("local-campaign", campaign)
+  const localCandidate = imported("local-candidate", candidate)
+  const localComparison = imported("local-comparison", imported("middle-comparison", comparison))
+  const resolved = resolveEvolutionComparisonInputs(localComparison.envelope,
+    createEvolutionArtifactReferences([localCampaign, localCandidate, localComparison]))
+  expect([resolved.campaign.artifact.locator, resolved.candidate.artifact.locator, resolved.reviews]).toEqual([
+    localCampaign.locator, localCandidate.locator, [],
+  ])
+  expect(evolutionArtifactProvenance(localComparison.envelope).sources).toEqual(comparison.envelope.source_artifact_locators)
+  expect(() => evolutionComparisonInputs(native("historical", {}).envelope)).toThrow(new EvolutionComparisonInputError("unrecorded_inputs"))
+  expect(() => evolutionComparisonInputs({ ...comparison.envelope, source_artifact_locators: [candidate.locator] }))
+    .toThrow(new EvolutionComparisonInputError("undeclared_source", campaign.locator))
+  expect(() => resolveEvolutionComparisonInputs(comparison.envelope, createEvolutionArtifactReferences([
+    { ...campaign, envelope: { ...campaign.envelope, artifact_type: "evolution-lab/integrity-review" } }, candidate,
+  ]))).toThrow(new EvolutionComparisonInputError("wrong_type", campaign.locator))
 })

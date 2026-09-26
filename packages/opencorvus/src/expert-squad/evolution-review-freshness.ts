@@ -6,6 +6,7 @@ import {
   expandEvolutionMeasurementAliases,
   createEvolutionArtifactReferences,
   evolutionArtifactProvenance,
+  resolveEvolutionComparisonInputs,
   EvolutionArtifactSchemas,
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin"
@@ -26,12 +27,14 @@ export function missingComparisonReviews(input: {
   catalog: readonly EvidenceArtifact[]
 }): EngineArtifactLocator[] {
   const references = createEvolutionArtifactReferences([...input.measurements, ...input.catalog])
+  const consumed = resolveEvolutionComparisonInputs(input.comparison, references)
+  const measurements = [...consumed.runs, ...consumed.evaluations].map((item) => item.artifact)
   const evaluations = new Set(
-    expandEvolutionMeasurementAliases(input.measurements, input.catalog)
+    expandEvolutionMeasurementAliases(measurements, input.catalog)
       .filter((item) => item.envelope.artifact_type === "evolution-lab/evaluation-result")
       .map((item) => references.key(item.locator)),
   )
-  const selected = new Set(evolutionArtifactProvenance(input.comparison).sources.map(references.key))
+  const selected = new Set(consumed.reviews.map((item) => references.key(item.locator)))
   return input.catalog
     .filter(({ locator, envelope }) => {
       if (envelope.artifact_type !== "evolution-lab/integrity-review") return false
@@ -94,9 +97,9 @@ export function requireCurrentEvolutionReviews(input: { taskID: string; comparis
         return { locator, envelope: read(locator) }
       })
     const references = createEvolutionArtifactReferences([...catalog, ...nativeSources])
-    const measurements = evolutionArtifactProvenance(comparison).sources.flatMap((locator) =>
-      locator.source === "engine_artifact" ? references.require(locator) : [],
-    )
+    const consumed = resolveEvolutionComparisonInputs(comparison, references)
+    const measurements = [consumed.campaign, consumed.candidate, ...consumed.runs,
+      ...consumed.evaluations, ...consumed.reviews].map((item) => item.artifact)
     const missingReviewLocators = missingComparisonReviews({ comparison, measurements, catalog })
     if (missingReviewLocators.length)
       throw new EvolutionComparisonReviewChangedError({ ...input, missingReviewLocators })

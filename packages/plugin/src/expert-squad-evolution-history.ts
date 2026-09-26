@@ -131,6 +131,11 @@ export const EvolutionGraphIssueSchema = z.discriminatedUnion("code", [
       diagnostic: z.string().min(1),
     })
     .strict(),
+  z.object({
+    code: z.literal("COMPARISON_INPUTS_UNAVAILABLE"),
+    owner: EvolutionHistoryArtifactIdentitySchema,
+    diagnostic: z.string().min(1),
+  }).strict(),
   z
     .object({
       code: z.literal("REVIEW_SNAPSHOT_CHANGED"),

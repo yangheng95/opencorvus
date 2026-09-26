@@ -16,8 +16,8 @@ import {
   executeEvolutionPackageMutation,
   EvolutionMutationReceiptIdentityConflictError,
 } from "../src/expert-squad/evolution-mutation"
-import { evolutionMutationConfirmationText } from "../src/expert-squad/evolution-mutation-intent"
-import { EvolutionComparisonReviewChangedError } from "../src/expert-squad/evolution-review-freshness"
+import { prepareEvolutionPackageMutation, evolutionMutationConfirmationText } from "../src/expert-squad/evolution-mutation-intent"
+import { requireCurrentEvolutionReviews, EvolutionComparisonReviewChangedError } from "../src/expert-squad/evolution-review-freshness"
 import { ExpertSquadPackageManager } from "../src/expert-squad/manager"
 import { readEvolutionCampaignDetail, readEvolutionHistory } from "../src/expert-squad/evolution-history"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
@@ -699,6 +699,33 @@ describe("authorized expert squad evolution mutation", () => {
             evidenceSHA256s: [campaign, candidateArtifact, comparison].map((locator) => locator.expected_sha256),
             operation: "promotion",
           })
+          if (scenario === "review-freshness") {
+            const unrelatedCampaign = recordEvolutionArtifact({ taskID: operationTask.taskID,
+              type: "evolution-lab/campaign-spec", payload: campaignPayload })
+            const backgroundComparison = recordEvolutionArtifact({ taskID: operationTask.taskID,
+              type: "evolution-lab/comparison-recommendation", payload: comparisonPayload,
+              sources: [...comparisonSources, unrelatedCampaign] })
+            expect(() => prepareEvolutionPackageMutation({ taskID: operationTask.taskID, intent: {
+              operation: "promotion", campaignSpecLocator: unrelatedCampaign, candidateRevisionLocator: candidateArtifact,
+              comparisonResultLocator: backgroundComparison, expectedCurrentPackageDigest: baselineRevision.package_digest,
+            } })).toThrow("Evolution comparison calculation inputs must identify the exact Campaign and Candidate Artifacts")
+            const { calculation_inputs: omitted, ...historicalPayload } = comparisonPayload
+            const historicalComparison = recordEvolutionArtifact({ taskID: operationTask.taskID,
+              type: "evolution-lab/comparison-recommendation", payload: historicalPayload, sources: comparisonSources })
+            expect(() => prepareEvolutionPackageMutation({ taskID: operationTask.taskID, intent: {
+              operation: "promotion", campaignSpecLocator: campaign, candidateRevisionLocator: candidateArtifact,
+              comparisonResultLocator: historicalComparison, expectedCurrentPackageDigest: baselineRevision.package_digest,
+            } })).toThrow("Evolution comparison calculation inputs unrecorded_inputs")
+            const history = await readEvolutionHistory({ namespace: target.namespace, id: target.id, installationScope: "project" })
+            const detail = await readEvolutionCampaignDetail({ namespace: target.namespace, id: target.id, installationScope: "project",
+              campaignTaskID: operationTask.taskID, campaignLocator: campaign, candidateLocator: candidateArtifact,
+              comparisonLocator: historicalComparison, catalogRevisionUpper: history.catalog_revision_upper })
+            const record = detail.record.candidates.flatMap((item) => item.comparisons)
+              .find((item) => item.artifact.locator.artifact_id === historicalComparison.artifact_id)!
+            expect({ recommendation: record.recommendation, intent: record.promotion_intent,
+              issues: record.graph_issues.map((issue) => issue.code) }).toEqual({ recommendation: "promote", intent: null,
+                issues: ["COMPARISON_INPUTS_UNAVAILABLE"] })
+          }
           const authorization = await authorizeEvolutionPackageMutation({
             taskID: operationTask.taskID,
             sessionID: operationTask.session.id,
@@ -826,6 +853,13 @@ describe("authorized expert squad evolution mutation", () => {
                 }),
               ),
             ).toEqual(expectedChange)
+            if (scenario === "review-freshness") {
+              const backgroundOnlyReview = recordEvolutionArtifact({ taskID: operationTask.taskID,
+                type: "evolution-lab/comparison-recommendation", payload: comparisonPayload,
+                sources: [...comparisonSources, lateReview.locator] })
+              expect(await captureChanged(async () => requireCurrentEvolutionReviews({ taskID: operationTask.taskID,
+                comparisonLocator: backgroundOnlyReview }))).toEqual({ ...expectedChange, comparisonLocator: backgroundOnlyReview })
+            }
             expect(await captureChanged(() => executeEvolutionPackageMutation(mutationRequest))).toEqual(
               expectedChange,
             )
@@ -837,7 +871,8 @@ describe("authorized expert squad evolution mutation", () => {
               id: target.id,
               installationScope: "project",
             })
-            const knownStale = historyAfter.records[0]!.candidates[0]!.comparisons[0]!
+            const knownStale = historyAfter.records.flatMap((record) => record.candidates.flatMap((item) => item.comparisons))
+              .find((item) => item.artifact.locator.artifact_id === comparison.artifact_id)!
             expect({
               recommendation: knownStale.recommendation,
               intent: knownStale.promotion_intent,
@@ -858,7 +893,8 @@ describe("authorized expert squad evolution mutation", () => {
               catalogRevisionUpper: historyBefore.catalog_revision_upper,
             })
             // Frozen history still describes the decision it observed at that time.
-            const frozenComparison = historicalDetail.record.candidates[0]!.comparisons[0]!
+            const frozenComparison = historicalDetail.record.candidates.flatMap((item) => item.comparisons)
+              .find((item) => item.artifact.locator.artifact_id === comparison.artifact_id)!
             expect({
               recommendation: frozenComparison.recommendation,
               intent: frozenComparison.promotion_intent?.request,
@@ -955,8 +991,8 @@ describe("authorized expert squad evolution mutation", () => {
               ).payload,
             ).toEqual(comparisonPayload)
             if (scenario === "review-freshness") {
-              // Retained older comparisons may contain a wider source graph
-              // than the measurements their original producer consumed.
+              // A persisted declaration of conflicting observations exposes the
+              // exact conflict instead of silently choosing a measured value.
               const changedRun = recordEvolutionArtifact({ taskID: operationTask.taskID,
                 type: "evolution-lab/run-evidence-bundle", sources: [campaign],
                 payload: { ...baselineRuns[0]!.value, token_usage: baselineRuns[0]!.value.token_usage + 20 },
@@ -967,8 +1003,24 @@ describe("authorized expert squad evolution mutation", () => {
                   ...baselineEvaluation.value.metric_receipt_resource, sha256: "f".repeat(64),
                 } },
               })
-              const retainedComparison = recordEvolutionArtifact({ taskID: operationTask.taskID,
+              const wideComparison = recordEvolutionArtifact({ taskID: operationTask.taskID,
                 type: "evolution-lab/comparison-recommendation", payload: comparisonPayload,
+                sources: [...comparisonSources, changedRun, changedEvaluation] })
+              const wideHistory = await readEvolutionHistory({ namespace: target.namespace, id: target.id, installationScope: "project" })
+              const wideDetail = await readEvolutionCampaignDetail({ namespace: target.namespace, id: target.id, installationScope: "project",
+                campaignTaskID: operationTask.taskID, campaignLocator: campaign, candidateLocator: candidateArtifact,
+                comparisonLocator: wideComparison, catalogRevisionUpper: wideHistory.catalog_revision_upper })
+              const wideSlot = wideDetail.slots.find((slot) => slot.arm === "baseline" && slot.repetition === 0)!
+              expect({ aliases: [wideSlot.run_aliases.length, wideSlot.evaluation_aliases.length],
+                statuses: wideSlot.scorer_results.map((item) => item.status) }).toEqual({ aliases: [2, 2], statuses: ["measured"] })
+              expect(EngineArtifactEnvelopeSchema.parse(requireEngineArtifactByLocator({ taskID: operationTask.taskID,
+                locator: wideComparison }).payload).source_artifact_locators).toEqual(expect.arrayContaining([changedRun, changedEvaluation]))
+              const retainedComparison = recordEvolutionArtifact({ taskID: operationTask.taskID,
+                type: "evolution-lab/comparison-recommendation", payload: { ...comparisonPayload, calculation_inputs: {
+                  ...comparisonPayload.calculation_inputs!,
+                  runs: [...comparisonPayload.calculation_inputs!.runs, changedRun],
+                  evaluations: [...comparisonPayload.calculation_inputs!.evaluations, changedEvaluation],
+                } },
                 sources: [...comparisonSources, changedRun, changedEvaluation],
               })
               const conflictingHistory = await readEvolutionHistory({ namespace: target.namespace, id: target.id, installationScope: "project" })

@@ -333,8 +333,16 @@ engine_resource分别可复用和恢复其相同字节，二者的身份保持�
 Campaign、Candidate、Run、Evaluation 直接来源；Review 不由它选择子集。publisher在一次冻结
 Task catalog分页内发现并完整读取这些确切Evaluation的全部Review，再经唯一比较器生成并持久化
 全部统计、可用性、置信度与推荐字段，不要求模型重抄派生结果。Owner 完整读回所发布的比较后
-再渲染文档与图表；比较存储格式、测量槽位和下游晋升权限不变。目录不完整或provider错误不能
+再渲染文档与图表；测量槽位和统计公式保持原定义，计算输入与当前晋升身份按下述契约核对。目录不完整或provider错误不能
 等同没有Review。这只保证该目录快照中的Review集合，不保证未来证据新鲜性或业务判断正确。
+
+Comparison的`calculation_inputs`由唯一比较器盖章exact Campaign/Candidate及实际消费的全部
+Run/Evaluation/Review身份（含等值别名与已取代Review）；它与保留的同Turn宽来源图不同。
+共享reader校验原直接来源和原件类型，重放、history与晋升使用同一当前Task引用索引。
+历史缺字段表示没有记录计算输入，保留原结果并公开COMPARISON_INPUTS_UNAVAILABLE、
+promotion_intent=null，不能从宽来源猜值或改写历史。新比较的授权Campaign/Candidate必须匹配
+实际计算身份；额外背景来源不扩大权限。Review新鲜性对照实际已消费Review，而非宽来源成员。
+本契约不能证明已发布不同测量全集或未公开Trial完整性。
 
 `integrity-review.revision`是可选的显式改判声明，包含`supersedes`确切父Review及`reason`；
 未声明时是初始/独立审查，不取代任何记录。publisher校验同一Evaluation/slot、生产者和直接来源，

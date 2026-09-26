@@ -792,7 +792,7 @@ describe("random Expert Squad evolution controller contracts", () => {
       ...transported.filter((item) => !EngineArtifactLocatorSchema.parse(item.locator).artifact_id.endsWith(locations.baselineReview.artifact_id)),
       facts.find((item) => EngineArtifactLocatorSchema.parse(item.locator).artifact_id === locations.baselineReview.artifact_id)!,
     ]
-    expect(() => summarizeEvolutionEvidence(foreignOnlyReview)).toThrow("Evolution recommendation source was not completely read")
+    expect(() => summarizeEvolutionEvidence(foreignOnlyReview)).toThrow("Evolution Artifact reference missing_source")
     expect({
       counts: summary.counts,
       recommendation: {
