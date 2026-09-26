@@ -1015,3 +1015,20 @@
 - 第一轮Host测试早于异步包生成完成，加载的是旧嵌入.3而期待.4；保留`.tmp/g40-host-and-order-tests.log`，同步后真实Host全过，见`g40-host-final.log`的首个文件exit=0。该复验命令还误列了不存在的`expert-squad-evolution-comparison.test.ts`，其工具错误同样保留；正确的`evolution-comparison.test.ts`及projection已在`g40-comparison-projection.log`独立全部通过，不把命令名错误算业务失败或掩盖检查缺项。原临时时序probe日志`g40-terminal-usage-order.log`也保留。
 - 根类型8项、docs342ops25groups、API6规则34文件、topology122manifest135workflow、diff检查通过。源/嵌入Evolution Lab2026.09.27.4/contentDigest4fe44f12d143ec62c475d65ad9c87837204b7efb7fda822d24bd01c44bcb1342；仅同步此包，其他预存base漂移保留，未推广。无公共HTTP schema/SDK或DDL变化，没有UI自动化、外部Provider请求或业务费用。
 - 下一问题仍是**完整已发布观察如何进入当前决策**，不是再修相同快照：原Host反例证明source图可能含未参与计算的Run，所以不能只检查引用集合是否齐全就认为旧Comparison已消费它。必须明确Campaign/Trial归属、精确消费快照和同Task后续观察的合法关系；旧值原件与当时Comparison保留。当前修复没有解决Owner对子集的选择，也没有证明业务可靠纠错/自进化收益。尚待进一步核验的相邻边界：execute-evolution-metrics传入Run envelope，但通用metric Host的task_id/workDir仍是Evaluator Task；shell/query/judge各自实际评价对象需沿真实checker区分，不凭变量名直接判定业务测错。
+
+## G41：测量回执身份与实际评价对象
+
+### Recall、影响面及本地反例计划
+
+- G40 b12a0969已push，真实pre-push模块1123/5695零SCC、4cold imports及其他检查/secret scan通过。本轮从干净工作区继续；无模型/业务世界或旧run。用户要求的是全局可靠纠错和可验证进化，先确认测量对象才能继续选择完整性，不能让typed receipt盖章替代真正的观察。
+- 已读`execute-evolution-metrics`、`metric-evaluation-host`、`metrics/executor`所有evaluator分支、scorer authoring schema、Campaign Planner及scorer contract。生产路径明确从Run读取Trial ID，但host.metrics.evaluate把`scope.taskID`传给通用executor，把`scope.projectDirectory`作为workDir；shell未指定cwd时用它，shell配置的workspace_digest只写进输出；judge得到直接选中的Run envelope字节；query/aggregator使用Evaluator Task中metric流水。这些事实尚不能把所有evaluator一概判错：聚合在Evaluator Task内合并测量是合理的，judge也可能只评价元数据。
+- 有界反例：在既有真实Host/隔离Trial fixture中，初态Trial目录写marker=0，Evaluator项目目录写marker=1；两者在Campaign资源冻结前写入。唯一将原constant_value=1 scorer替换为无显式cwd、读取marker的真实shell scorer，其workspace_digest声明精确Trial冻结目录。沿原collect→Run→execute-evolution-metrics→immutable receipt读取值和attempt.json中的实际cwd/stdout身份；再与两个原文件逐值比对。只运行确定性本地进程，无LLM、伪Tool结果或原历史数据修改。
+- 先保留原路径结果，不把预期1当正确答案；随后精确恢复临时测试。若结果证明对象错位，修复需以原Trial/immutable collector作唯一subject权威，区分评分流水归属和被评对象、可变现场与冻结证据、各种evaluator和跨Task/import范围；没有完整合同前不把cwd硬改成某目录或新增Host业务gate。Run/Evaluation全集和合法后续观察仍待继续，不因这个旁支宣称已完成。
+
+### G41真实反例与下一实施边界
+
+- 真实Host/实际shell完整通过原发布链，9项122断言完成；`.tmp/g41-metric-subject-probe.json`、log、patch及精确原/临时测试副本保留。Trial `tsk_g00VWLsNj200NUzoF2H4`目录marker为0，Evaluator `tsk_g00VWLsMZR005kyHii47`项目marker为1；Run与metric receipt精确声明前一个Trial，实际attempt.json的task_id/cwd却是后一个Evaluator，stdout实际为1、raw_value与receipt都measured=1。Scorer asset所写workspace_digest与Trial冻结目录一致，但executor只是原样记录它，没有把它用于选择实际被评workspace。不是计算器算错或模型复述错，也不凭测试标题认定反例；实际路径、两个文件、进程stdout和immutable receipt可逐值核对。
+- 这是明确的测量对象错位：对需要Trial结果文件的shell scorer，准确的Trial标签仍会包住来自Evaluator目录的数值。原constant_value测试只能验通道，不能证明评分对象。该例没有candidate臂或promotion，不称真实错误晋升或自主LLM错误。临时探针在结束后精确恢复为b12a0969的测试；没有新增长期“错误行为应通过”回归断言。G40生产修复和所有旧业务世界均未改。
+- 全仓调用核对：当前只有Evolution Lab调用`host.metrics.evaluate`；通用`executeMetrics`还服务其他当前Task评分，不能全局把task_id改成Trial。metric流水保存到Evaluator Task是合理的归属；应修的是显式subject及其被执行/读取的数据。query/aggregator在同次Evaluator metric结果上聚合并不因此有错；judge当前仅收到所选Run envelope、无自动追资源读取，是否满足业务rubric另需准确输入证据，不泛称所有judge必错。
+- 下一实施前的两个必要事实：①终态Git checkpoint、嵌套仓库及既有WorkspaceTree/TaskArtifact原语能否提供**该次不可变结果**的评分目录，且不执行在旧Trial活动现场、不因cwd覆盖冻结scorer语义；②judge应接收哪些明确选中且同Trial的原始内容，如何在既有完整读取/权限/冻结字节上保留来源，而不是Host猜业务证据。inactive/awaiting观察只有live_observation tree identity，不能伪造成已归档终态结果；不能直接拿Campaign初始workspace_digest检验已经合法修改过的最终结果。
+- 这项已证根因优先于继续给完整集合加引用门：先把被评对象和证据输入接对，再解决Run exact Campaign归属、消费集合及不同观察合法关系。当前G41仅交付真实反例及完整影响边界，生产修复尚未实施；Codex继续原语审查，02:45后按用户要求交回同一准确Opus主管，不等待用户逐步指挥。业务可靠纠错与真实进化收益仍未达成。
