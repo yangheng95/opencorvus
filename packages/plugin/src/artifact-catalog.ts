@@ -277,7 +277,7 @@ export const CrossTaskArtifactSourceListSchema = z
     }
   })
 
-export const EngineArtifactImportLineageSchema = z
+export const EngineArtifactImportSourceSchema = z
   .object({
     source_task_id: ArtifactIdentifierSchema,
     source_locator: ArtifactReadLocatorSchema,
@@ -286,6 +286,12 @@ export const EngineArtifactImportLineageSchema = z
     source_provenance: ArtifactConsumptionProvenanceSchema,
   })
   .strict()
+
+export const EngineArtifactImportLineageSchema = EngineArtifactImportSourceSchema.extend({
+  // Retained source facts from earlier imports, nearest first. Absence supplies
+  // no earlier authority; it does not make a Mission producer an original author.
+  prior_imports: z.array(EngineArtifactImportSourceSchema).min(1).optional(),
+})
 
 export const CrossTaskArtifactImportMappingSchema = z
   .object({
@@ -973,11 +979,19 @@ export const EngineArtifactPublishResultSchema = z
   })
   .strict()
 
+/** Read only the import facts transported in this exact current-Task envelope. */
+export function engineArtifactSourceChain(envelope: EngineArtifactEnvelope): readonly EngineArtifactImportSource[] {
+  if (!envelope.import_lineage) return []
+  const { prior_imports, ...immediate } = envelope.import_lineage
+  return [immediate, ...(prior_imports ?? [])]
+}
+
 export type { ArtifactProducer } from "./artifact-producer.js"
 export type EngineArtifactLocator = z.infer<typeof EngineArtifactLocatorSchema>
 export type CrossTaskArtifactImport = z.infer<typeof CrossTaskArtifactImportSchema>
 export type CrossTaskArtifactSource = z.infer<typeof CrossTaskArtifactSourceSchema>
 export type EngineArtifactImportLineage = z.infer<typeof EngineArtifactImportLineageSchema>
+export type EngineArtifactImportSource = z.infer<typeof EngineArtifactImportSourceSchema>
 export type CrossTaskArtifactImportMapping = z.infer<typeof CrossTaskArtifactImportMappingSchema>
 export type TaskArtifactSnapshotLocator = z.infer<typeof TaskArtifactSnapshotLocatorSchema>
 export type TaskArtifactResourceLocator = z.infer<typeof TaskArtifactResourceLocatorSchema>

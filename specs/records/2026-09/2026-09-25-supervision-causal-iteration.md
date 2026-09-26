@@ -1151,3 +1151,28 @@
 - engine_resource幂等根因已在共享store修复：existingStable使用existingManifest.snapshot_kind，类型复用原manifest kind union。两种kind相同bytes仍是两个身份，各自重复发布同identity；两类manifest-last中断场景都正确恢复原snapshot ID和bytes。扩展测试首次忘记把新engine_resource计入内部listTaskArtifactSnapshots完整清单，实际返回两项使断言失败；按真实完整inventory纠正后通过，不改变catalog provider的可见范围。
 - Lab源嵌入2026.09.27.7/contentDigest178272b6d9907f4e3bb8cda451d1f7353f65aef1a58f26e5c5c4df283a6453a1，只同步Lab、未推广。类型8/docs342ops25/API6规则34文件/包拓扑122/135与diff检查通过，日志g45-types/docs/api/topology/package-sync保留。范围提交后按当前upstream完整outgoing和真实pre-push交付；本轮无Provider费用、UI自动化、HTTP或SDK响应变化。
 - 仍未满足：不同完整评分调用之间择取/遗漏观察，Run/Campaign精确归属、未公开Trial全集，以及同一Tool内任意SDK多次evaluate的细批次。本修复不禁止完整观察重新表达、不把第二记录永久毒化，也不按最新/最佳代替合法关系。下一轮先检验这些原始发生事实在跨Task导入后是否仍可沿当前Task证据完整取得，再决定测量集合的单一权威；不能拿源snapshot ID猜producer，不能要求Agent读取未授权的source Task。整体可靠业务纠错和真实进化收益仍未达成。
+
+## G46：已发布评分证据跨Task运输与关系消费
+
+### Recall、影响面及原路径检查计划
+
+- 从已push的b1df7e0e/clean继续；读AGENTS、Recall/五段图/G44–G45、02-data和2026-08-17所有权拆分历史，搜索跨Task import、完整资源复制、source_producer/source_provenance、publisher/comparator、Review freshness/history/mutation及真实Host import测试。无模型、旧实验或委托，保持07:45 Opus交接。
+- 代码事实先分开：直接resource导入保留原snapshot producer到import_lineage；EngineArtifact导入保留该Artifact producer与source provenance并复制所带资源，但资源新snapshot producer是Mission importer。Evaluation payload仍原字节，内含原Campaign/Run/attempt locator；现测试只验证导入Campaign/Run后重新评分，没有验证直接消费已发布Evaluation/Review。因此不能概括为全部来源丢失，也不能把重新评分当原测量运输。
+- 有界原路径探针：沿既有真实Host双scorer链，将原Campaign/Candidate/Run/Evaluation/Review以及一个原attempt作为明确完成交付导入新Task；从新Task公开read读取完整原件与资源，核对原producer/引用和原bytes，尝试用这些已导入记录发布Comparison。旧记录不改、不重跑Trial或评分；只增加确定性test-driver的完成交付与原import流程。比较若拒绝，记录第一个真实错误；若能完成则核对原安全unavailable finding是否真实进入结果，不根据“导入成功”认定下游语义可消费。
+- 当前线索：比较器按精确当前locator验证Evaluation→Campaign/Run及Review→Evaluation，而import内部引用仍原Task；Review自动发现及freshness也用当前Evaluation locator集合。这个关系是否导致真实失败待探针，暂不改生产实现。后续方案须同时解释首次导入/重复导入/多跳导入、原scope与当前授权、显式Review取代与合法旧证据改判、history/promotion及不可变历史；不能由每个消费者复制转换器或让下游跨权限追源。Run/Campaign全Trial集合仍另列未解决。
+
+### G46实际反例与单一运输修复决定
+
+- 原真实Host首跳：直接attempt导入保留原worker producer，Evaluation连带attempt的原bytes相同、其目标snapshot producer如实为Mission；不把复制动作当原评分。Campaign/Candidate/Run/Evaluation/Review均按完成交付导入，但Comparison实际报`comparison evaluation slot case-1:baseline:0 has the wrong Campaign or Candidate source`。原始收据g46-imported-measurement-probe-initial.json与log/patch；后续同probe再次执行的JSON见非initial文件及second-import-probe.log。无新模型/评分择优，失败被探针记录而非长期正确行为断言。
+- 第二跳真实import→persist后，Evaluation payload仍原值，但新import_lineage只保留上一Mission producer及空外层source provenance；原worker和原Campaign/Run关系链不再在当前Task envelope中。现worker checker实际报`must be produced by Evolution Lab worker evolution-evaluator`。g46-second-import-probe.json/log/patch保留。这个更前置的不可逆运输丢失必须先修，否则消费者的locator转换器无法从当前已授权证据恢复原事实；不能回源猜补或只特判第一跳。
+- 本提交边界收敛为共享import运输：在原import_lineage加入可选非空prior_imports，每项为已有一跳source事实（不含递归字段），writer在导入已imported envelope时保留其原一跳及已携带的older facts。当前一跳身份/source_producer保持即时来源，旧payload/resources字节保持；不flatten成错误的直达来源，不写第二ledger或重造参与者。字段缺失只表示没运输更早事实，不能假定历史Mission来源等于最初作者；已有丢失历史不回填。
+- 唯一纯reader从当前envelope返回已保存source chain。现Lab worker producer验证及attribution/opportunity原关系使用同一reader的最早已知事实；链终点若仍是Mission/unknown，既有明确authority错误继续显示，禁止外查未授权Task。非imported事实原路径保持。新增范围是所有通用cross-Task import生产入口复用原writer，完成/失败取消授权仍由原terminal authority决定，包角色/授予及生命周期不变。
+- 真实正向验收保留原Task→两次import→实际persist→当前read原payload/bytes/worker与逐跳provenance，覆盖每次即时来源及原来源；已完成/failed-terminal import合同、源权限检查维持。首跳Comparison关系消费、Review闭包、history对import的排除与promotion producer要求尚需下一共同reader接线，不能把本运输修复冒称比较成功；下轮以已证反例直接推进，不等Opus或重跑业务样本。公共Envelope schema由原位置扩展，检查API/SDK是否实际暴露再生成；无UI改动。
+
+### G46实现与验证结算
+
+- 共享import writer已在第二次及以后导入时完整保留原source chain，当前源Task/locator/Mission producer仍准确指向上一跳。唯一engineArtifactSourceChain只读当前envelope。Lab的原作者及归因/机会关联消费同一链；native产物保持原作者检查，不能借lineage字段改作者。没有重建已丢失历史、跨权限回源、重新测量、迁移DB或隐藏消息。
+- 最终22项272断言：真实Host9/166（g46-host-final.log），Task终态/完成交付/failed同Mission导入12/66、完整包投影1/40（g46-focused-tests.log）。Host真实完成交付、prepare/import/persist连续三跳，逐值确认原payload、原attempt bytes、每跳即时producer和最早worker/source provenance；错误worker和缺少早期链明确拒绝，原first-hop重新评分仍通过。本轮没有完整Campaign、真实Provider或实际晋升。
+- 首次探针编辑因匹配到两个host anchor而在写文件前停止，误执行的是原版9/146基线（g46-unmodified-baseline.log）；随后精确修正anchor才得到首跳比较失败和第二跳作者丢失的原版真实收据。临时失败行为探针已转为当前正确运输合同，没有将“Comparison应失败”保留成通过要求。首跳比较错误收据保留供下一轮实修。
+- Lab源/嵌入2026.09.27.8/contentDigest f58d51602e891abe0c83f570ba9e3ebd5cd97074e2d5d3bb0b2b43ecbacc441d，仅同步Lab未推广；首次生成a1a4…在最后保留native作者边界后被同一未提交版本重新生成，非修改已发布包。类型8/docs342ops25/API6规则34文件/包拓扑122/135通过，日志g46-types/docs/api/topology/package-sync-final保留；公共HTTP以原JSON资源交付envelope，OpenAPI不展开该lineage，因此无SDK响应/DDL变更。按范围提交后再跑实际pre-push及完整outgoing审查。
+- 下一G47直接消费这条完整已运输来源：统一当前Task内exact locator关系解析，覆盖Comparison发现/比较、Review显式取代及freshness、history和promotion。当前Comparison仍以新本地locator硬比原payload locator；history源码currentRows/historicalRows排除import rows，mutation exactArtifact也仅认原生投影producer。前者已有真实反例，后两者目前是源码确定边界、未宣称新真实安装失败。需要同一权威映射保留原字节/每跳身份，歧义不能默认最新或第一份，缺源不能跨权限追读，不让每个消费者各写转换器。先落盘完整影响面和精确方案，再原反例转正，不重做本运输修复。不同完整测量全集与真实进化收益仍未完成。

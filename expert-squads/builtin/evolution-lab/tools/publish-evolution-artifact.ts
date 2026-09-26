@@ -2,6 +2,7 @@ import {
   ArtifactReadLocatorSchema,
   ArtifactSchemaLimits,
   EngineArtifactEnvelopeSchema,
+  engineArtifactSourceChain,
   EngineArtifactLocatorSchema,
   TaskArtifactResourceSetLocatorSchema,
   TaskRunEvidenceBundleSchema,
@@ -198,8 +199,8 @@ export function requireEvolutionWorkerProducer(
   envelope: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>,
   agentID: string,
 ) {
-  const producer =
-    envelope.producer.owner_kind === "mission" ? envelope.import_lineage?.source_producer : envelope.producer
+  const chain = envelope.producer.owner_kind === "mission" ? engineArtifactSourceChain(envelope) : []
+  const producer = chain.length ? chain.at(-1)!.source_producer : envelope.producer
   if (
     producer?.owner_kind !== "projected-worker" ||
     producer.expert_squad_id !== "evolution-lab" ||
@@ -218,8 +219,8 @@ function attributionIdentifiesOpportunity(input: {
   opportunityLocator: EngineArtifactLocator
 }) {
   if (input.attribution.owner_evidence.some((locator) => sameJSON(locator, input.opportunityLocator))) return true
-  const opportunityLineage = input.opportunityEnvelope.import_lineage
-  const attributionLineage = input.attributionEnvelope.import_lineage
+  const opportunityLineage = engineArtifactSourceChain(input.opportunityEnvelope).at(-1)
+  const attributionLineage = engineArtifactSourceChain(input.attributionEnvelope).at(-1)
   if (
     !opportunityLineage ||
     !attributionLineage ||

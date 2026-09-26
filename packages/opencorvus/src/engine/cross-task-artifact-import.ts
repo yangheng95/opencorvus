@@ -4,6 +4,8 @@ import {
   ArtifactConsumptionProvenanceSchema,
   ArtifactJSONValueSchema,
   EngineArtifactEnvelopeSchema,
+  engineArtifactSourceChain,
+  type EngineArtifactImportSource,
   type ArtifactProducer,
   type ArtifactConsumptionProvenance,
   type ArtifactJSONValue,
@@ -124,6 +126,7 @@ type ExactSourceArtifact = Readonly<{
   schemaVersion: number
   producer: ArtifactProducer | null
   sourceProvenance: ArtifactConsumptionProvenance
+  sourceImports?: readonly EngineArtifactImportSource[]
   payload: ArtifactJSONValue
   resources: readonly TaskArtifactRef[]
 }>
@@ -409,6 +412,7 @@ async function readExactSourceArtifact(input: {
         artifactType: envelope.data.artifact_type,
         schemaVersion: envelope.data.schema_version,
         producer: envelope.data.producer,
+        sourceImports: engineArtifactSourceChain(envelope.data),
         sourceProvenance: {
           observed_artifact_locators: envelope.data.observed_artifact_locators,
           source_artifact_locators: envelope.data.source_artifact_locators,
@@ -557,6 +561,7 @@ async function prepareResolvedCrossTaskArtifactImports(input: {
         source_kind: source.sourceKind,
         source_producer: source.producer,
         source_provenance: source.sourceProvenance,
+        ...(source.sourceImports?.length ? { prior_imports: source.sourceImports } : {}),
       },
     })
     prepared.push(

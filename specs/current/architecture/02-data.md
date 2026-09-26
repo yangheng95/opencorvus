@@ -263,6 +263,16 @@ attribution 的唯一 source provenance 与 payload owner evidence 时，把两�
 canonical predecessor pair；Campaign 自身仍只持久化当前 Task locator。错配 pair 返回同一 typed
 integrity error，不允许模型引用 source-Task locator、改写 imported payload 或重发 attribution。
 
+重复导入时，当前`import_lineage`仍描述即时来源Task/locator/producer；其`prior_imports`
+以近到远顺序保留源envelope已经携带的逐跳事实，使用同一非递归source schema。共享import
+writer只复制实际已有事实，不把Mission importer改称原作者，也不通过未授权Task补查历史。
+唯一`engineArtifactSourceChain`读取当前Task envelope中的完整已运输链，Lab作者检查与
+attribution/opportunity相关性使用最早已知事实。缺失`prior_imports`不证明历史完整；若已知
+链末仍是Mission，就不能满足原worker作者合同。旧丢失记录保持原样、不回填；payload与资源
+原bytes保持，目标资源snapshot的Mission producer仍只说明本次复制动作。该运输能力本身
+不把原payload内的locator转换成当前Task locator，不等于Comparison/history/promotion已消费
+跨Task关系；这些消费者仍须在已授权的当前证据集合内解析关系。
+
 `run-evidence-bundle` 的模型面输入只有 Evaluator 选择的 Campaign 槽位（`case_id`、`arm`、`repetition`），
 publication 以唯一一份 campaign-spec 为 source、以 collector 的唯一 JSON 资源为 resource set。publisher
 要求该资源等于对同一 Trial 的新鲜采集，再盖章 Task、终态时间、outcome、活动时长、workspace 与五项

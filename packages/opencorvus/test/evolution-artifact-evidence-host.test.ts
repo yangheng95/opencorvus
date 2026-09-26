@@ -29,6 +29,7 @@ import {
   TaskArtifactResourceSetLocatorSchema,
   TaskArtifactRefSchema,
   EngineArtifactEnvelopeSchema,
+  engineArtifactSourceChain,
   EngineArtifactLocatorSchema,
   PreparedExpertSquadCandidateSchema,
   ValidatedExpertSquadPackageSchema,
@@ -41,6 +42,7 @@ import {
   createTaskArtifactStoreExecution,
   publishTaskArtifactProjectFiles,
   readTaskArtifactSnapshotManifest,
+  readTaskArtifactRef,
 } from "../src/task-artifact/store"
 import { ProjectRuntimePaths } from "../src/project/runtime-paths"
 import type { TaskToolExecutionScope } from "../src/tool/task-tool-execution-scope"
@@ -273,6 +275,10 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
 
     requireEvolutionWorkerProducer(importedEnvelope, "evolution-observer")
     expect(importedEnvelope.import_lineage?.source_producer).toEqual(workerProducer)
+    const nativeEnvelope = { ...importedEnvelope, producer: { ...workerProducer, agent_id: "evolution-evaluator" } }
+    expect(() => requireEvolutionWorkerProducer(nativeEnvelope, "evolution-observer")).toThrow(
+      "evolution-lab/opportunity must be produced by Evolution Lab worker evolution-observer",
+    )
     expect(() => requireEvolutionWorkerProducer(importedEnvelope, "evolution-failure-analyst")).toThrow(
       new EvolutionArtifactIntegrityError(
         "evolution-lab/opportunity must be produced by Evolution Lab worker evolution-failure-analyst",
@@ -904,6 +910,9 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         let sourceCampaignLocator!: EngineArtifactLocator
         let sourceRunLocator!: EngineArtifactLocator
         let sourceMetricEvidence!: TaskArtifactRef
+        let sourceMeasurementImports: ArtifactReadLocator[] = []
+        let sourceAttemptText = ""
+        let importedEvaluationEnvelope!: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>
         let sourceOpportunityInput!: Record<string, unknown>
         let sourceCampaignInput!: Record<string, unknown>
         let subjectMaterialization = ""
@@ -1929,6 +1938,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           const metricReceiptResource = TaskArtifactRefSchema.parse(metricOutcome.resource)
           const metricEvidenceLocator = metricOutcome.receipt.scorers[0]!.evidence[0]!
           sourceMetricEvidence = metricEvidenceLocator.ref
+          sourceAttemptText = new TextDecoder().decode(await host.taskArtifacts.read(sourceMetricEvidence))
           expect(
             (
               await host.engineArtifacts.read({
@@ -2161,6 +2171,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           })
           ;(scope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
           const originalReviewLocator = EngineArtifactLocatorSchema.parse(integrityReviewReceipt.locator)
+          sourceMeasurementImports = [candidateSource.locator, evaluationReceipt.locator, originalReviewLocator, metricEvidenceLocator]
           const expectedComparison = {
             baseline_revision: revision,
             candidate_revision: candidateRevision,
@@ -2478,6 +2489,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             sourceAttributionLocator,
             sourceCampaignLocator,
             sourceRunLocator,
+            ...sourceMeasurementImports,
           ],
           completedAt: sourceCompleted,
         })
@@ -2493,6 +2505,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             { source_task_id: taskID, locator: sourceAttributionLocator },
             { source_task_id: taskID, locator: sourceCampaignLocator },
             { source_task_id: taskID, locator: sourceRunLocator },
+            ...sourceMeasurementImports.map((locator) => ({ source_task_id: taskID, locator })),
           ],
           projectID: Instance.project.id,
           targetProjectDirectory: project.path,
@@ -2626,6 +2639,30 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           },
         } satisfies TaskToolExecutionScope
         await withTaskScopedPluginToolHost(importedScope, async (host) => {
+          const importedEvidence = []
+          for (const [type, locator] of importedLocators) {
+            const read = await host.engineArtifacts.read({locator, byte_offset:0, max_bytes:65_536, delivery:"inline"})
+            if (!read.chunk.complete) throw new Error("Expected complete imported envelope")
+            const envelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(read.chunk.text!))
+            importedEvidence.push({ type, locator, envelope })
+          }
+          const direct = importedEvidence.find((item) => item.type === "opencorvus/imported-task-artifact-resource")!
+          const nested = importedEvidence.find((item) => item.type === "evolution-lab/evaluation-result")!
+          const nestedAttempt = nested.envelope.resources.find((ref) => ref.sha256 === sourceMetricEvidence.sha256)!
+          const nestedManifest = await readTaskArtifactSnapshotManifest({projectID:importedScope.projectID,
+            projectDirectory:project.path, taskID:importedTaskID, snapshot:nestedAttempt.snapshot})
+          const directText = new TextDecoder().decode(await host.taskArtifacts.read(direct.envelope.resources[0]!))
+          const nestedText = new TextDecoder().decode(await host.taskArtifacts.read(nestedAttempt))
+          expect(directText).toBe(sourceAttemptText)
+          expect(nestedText).toBe(sourceAttemptText)
+          expect(direct.envelope.import_lineage).toMatchObject({
+            source_task_id: taskID,
+            source_locator: { source: "task_artifact_resource", ref: sourceMetricEvidence },
+            source_producer: { owner_kind: "projected-worker", tool_call_id: scope.toolCallID },
+          })
+          expect(nestedManifest.manifest.producer).toMatchObject({ owner_kind: "mission", tool_call_id: "call-campaign-import" })
+          importedEvaluationEnvelope = nested.envelope
+          expect(engineArtifactSourceChain(nested.envelope)).toEqual([nested.envelope.import_lineage!])
           await expect(host.metrics.recorded({ evidence_ref: sourceMetricEvidence })).rejects.toThrow(
             `Metric evidence must identify exactly one recorded result in Task ${importedTaskID}; found 0`,
           )
@@ -2765,6 +2802,80 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             scorers: [{ value: 1 }, { value: 1 }],
           })
         })
+        let previousTaskID = importedTaskID
+        let previousSessionID = importedSession.id
+        let previousLocator = importedLocators.get("evolution-lab/evaluation-result")!
+        let previousEnvelope = importedEvaluationEnvelope
+        // Each step goes through the same completed-delivery authority, actual
+        // import writer and persistence used by Mission-created Tasks.
+        for (const hop of [2, 3]) {
+          const completedAt = Date.now()
+          await completeFixtureTaskWithDeliverables({
+            taskID: previousTaskID, sessionID: previousSessionID,
+            deliverableArtifactLocators: [previousLocator], completedAt,
+          })
+          const nextTaskID = Identifier.ascending("task")
+          const nextRoot = Session.prepareRootNext({
+            kind: "root", directory: Instance.directory, title: `Imported measurement hop ${hop}`,
+          })
+          const imports = await prepareCrossTaskArtifactImports({
+            imports: [{ source_task_id: previousTaskID, locator: previousLocator }],
+            projectID: Instance.project.id, targetProjectDirectory: project.path, targetTaskID: nextTaskID,
+            importer: {
+              missionID, sessionID: missionSessionID, messageID: Identifier.ascending("message"),
+              toolCallID: `call-measurement-import-${hop}`,
+            },
+          })
+          persistTask({
+            taskID: nextTaskID, rootSession: nextRoot, now: completedAt + 1,
+            title: `Imported measurement hop ${hop}`, request: "Read the same original Evaluation",
+            productPillar: "code", source: "test", priority: "normal",
+            metadata: { actor: "mission", mission: { id: missionID, session_id: missionSessionID } },
+            projectID: Instance.project.id, artifactImports: imports,
+            packageRevision: {
+              scope: "project", projectID: Instance.project.id, namespace: "builtin", id: "evolution-lab",
+              version: loaded.manifest.version, packageDigest: loaded.packageDigest,
+            },
+            executionCapsuleBinding: await taskProcessBinding(nextTaskID, loaded.packageDigest, completedAt + 1),
+          })
+          const row = Database.use((db) => db.select().from(EngineArtifactTable)
+            .where(eq(EngineArtifactTable.id, imports[0]!.importedArtifactID)).get())!
+          const envelope = EngineArtifactEnvelopeSchema.parse(row.payload)
+          expect(envelope.payload).toEqual(importedEvaluationEnvelope.payload)
+          expect(envelope.producer).toMatchObject({ owner_kind: "mission", tool_call_id: `call-measurement-import-${hop}` })
+          const chain = engineArtifactSourceChain(envelope)
+          expect(chain).toEqual([{
+            source_task_id: previousTaskID, source_locator: previousLocator,
+            source_kind: "expert_output", source_producer: previousEnvelope.producer,
+            source_provenance: {
+              observed_artifact_locators: previousEnvelope.observed_artifact_locators,
+              source_artifact_locators: previousEnvelope.source_artifact_locators,
+            },
+          }, ...engineArtifactSourceChain(previousEnvelope)])
+          requireEvolutionWorkerProducer(envelope, "evolution-evaluator")
+          expect(chain.at(-1)).toEqual(importedEvaluationEnvelope.import_lineage!)
+          expect(() => requireEvolutionWorkerProducer(envelope, "evolution-safety-auditor")).toThrow(
+            "evolution-lab/evaluation-result must be produced by Evolution Lab worker evolution-safety-auditor",
+          )
+          const incompleteHistory = structuredClone(envelope)
+          delete incompleteHistory.import_lineage!.prior_imports
+          expect(() => requireEvolutionWorkerProducer(incompleteHistory, "evolution-evaluator")).toThrow(
+            "evolution-lab/evaluation-result must be produced by Evolution Lab worker evolution-evaluator",
+          )
+          const attempt = envelope.resources.find((ref) => ref.sha256 === sourceMetricEvidence.sha256)!
+          const bytes = await readTaskArtifactRef({
+            projectID: Instance.project.id, projectDirectory: project.path, taskID: nextTaskID, ref: attempt,
+          })
+          expect(new TextDecoder().decode(bytes)).toBe(sourceAttemptText)
+          previousTaskID = nextTaskID
+          previousSessionID = nextRoot.id
+          previousLocator = {
+            source: "engine_artifact", artifact_id: row.id, catalog_revision: row.catalog_revision,
+            expected_sha256: row.payload_sha256,
+          }
+          previousEnvelope = envelope
+        }
+
       },
     })
   })
@@ -2778,7 +2889,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.7")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.8")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(
