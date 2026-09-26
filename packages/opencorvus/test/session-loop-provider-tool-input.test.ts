@@ -150,6 +150,7 @@ describe("SessionLoop provider Tool execution input", () => {
         "artifact_types",
         "created_at_or_after_ms",
         "created_before_ms",
+        "cursor",
         "goal_ids",
         "import_source_task_ids",
         "kinds",

@@ -937,6 +937,8 @@ export type EventArtifactPersisted = {
       | "dispatch_delivery_disposition"
       | "task_root_ingress_disposition"
       | "mission_acceptance_resume_receipt"
+      | "mission_acceptance_extension_request"
+      | "mission_acceptance_extension_outcome"
       | "task_acceptance_ledger"
       | "task_checkpoint_settlement"
       | "task_auxiliary_settlement"
@@ -16251,6 +16253,10 @@ export type GatewayControlActionData = {
            */
           created_before_ms?: number
           /**
+           * Opaque cursor returned by the preceding page; omit it for the first page.
+           */
+          cursor?: string
+          /**
            * Optional exact logical Goal-subject filter.
            */
           goal_ids?: Array<string>
@@ -16302,7 +16308,7 @@ export type GatewayControlActionData = {
            */
           sources?: Array<"engine_artifact" | "task_artifact">
           /**
-           * Source Task whose terminal Artifact catalog should be queried.
+           * Source Task whose immutable Artifact catalog should be queried.
            */
           taskID: string
           /**
@@ -16707,6 +16713,142 @@ export type GatewayControlActionData = {
          * External user ID associated with the follow-up message.
          */
         user_id?: string
+      }
+    | {
+        /**
+         * Full next ledger, retaining the original reviewed occurrence and all open grants; current_ledger_revision_artifact_id must name the active execution's exact current ledger. Use complete reads bound to the current active Task observation.
+         */
+        acceptance_gap: {
+          criteria: Array<
+            | {
+                criterion_id: string
+                disposition: "failed" | "unresolved" | "stale_evidence"
+                finding: string
+                invalidating_evidence_read_refs: Array<string>
+                irreducible_blocker_evidence_read_refs: Array<string>
+                observation_evidence_read_refs: Array<string>
+                repair_action: {
+                  expected_evidence_kind: string
+                  operation: string
+                  parameters: {
+                    [key: string]: unknown
+                  }
+                  target: string
+                }
+                repair_evidence_read_refs: Array<string>
+                resolution_evidence_read_refs: Array<string>
+                responsibility:
+                  | {
+                      /**
+                       * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.
+                       */
+                      failure_reference: {
+                        terminalEventID: string
+                      }
+                      kind: "task_initialization"
+                    }
+                  | {
+                      kind: "workflow_node"
+                      workflow_id: string
+                      workflow_node_id: string
+                    }
+                  | {
+                      agent_id: string
+                      dispatch_lineage_id: string
+                      kind: "direct_dispatch"
+                      package_revision: {
+                        id: string
+                        namespace: string
+                        package_digest: string
+                        project_id: string | null
+                        scope: "built_in" | "project" | "global"
+                        version: string
+                      }
+                    }
+                state: "open"
+              }
+            | {
+                criterion_id: string
+                finding: string
+                invalidating_evidence_read_refs: Array<string>
+                irreducible_blocker_evidence_read_refs: Array<string>
+                observation_evidence_read_refs: Array<string>
+                repair_evidence_read_refs: Array<string>
+                resolution_evidence_read_refs: Array<string>
+                responsibility:
+                  | {
+                      /**
+                       * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.
+                       */
+                      failure_reference: {
+                        terminalEventID: string
+                      }
+                      kind: "task_initialization"
+                    }
+                  | {
+                      kind: "workflow_node"
+                      workflow_id: string
+                      workflow_node_id: string
+                    }
+                  | {
+                      agent_id: string
+                      dispatch_lineage_id: string
+                      kind: "direct_dispatch"
+                      package_revision: {
+                        id: string
+                        namespace: string
+                        package_digest: string
+                        project_id: string | null
+                        scope: "built_in" | "project" | "global"
+                        version: string
+                      }
+                    }
+                state: "accepted"
+              }
+            | {
+                criterion_id: string
+                finding: string
+                invalidating_evidence_read_refs: Array<string>
+                irreducible_blocker_evidence_read_refs: Array<string>
+                observation_evidence_read_refs: Array<string>
+                repair_evidence_read_refs: Array<string>
+                resolution_evidence_read_refs: Array<string>
+                responsibility:
+                  | {
+                      /**
+                       * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.
+                       */
+                      failure_reference: {
+                        terminalEventID: string
+                      }
+                      kind: "task_initialization"
+                    }
+                  | {
+                      kind: "workflow_node"
+                      workflow_id: string
+                      workflow_node_id: string
+                    }
+                  | {
+                      agent_id: string
+                      dispatch_lineage_id: string
+                      kind: "direct_dispatch"
+                      package_revision: {
+                        id: string
+                        namespace: string
+                        package_digest: string
+                        project_id: string | null
+                        scope: "built_in" | "project" | "global"
+                        version: string
+                      }
+                    }
+                state: "blocked"
+              }
+          >
+          current_ledger_revision_artifact_id: string | null
+          gap_id: string
+        }
+        action: "extend_task_acceptance"
+        taskID: string
       }
     | {
         /**
@@ -29496,6 +29638,8 @@ export type TaskBoardResponses = {
         | "dispatch_delivery_disposition"
         | "task_root_ingress_disposition"
         | "mission_acceptance_resume_receipt"
+        | "mission_acceptance_extension_request"
+        | "mission_acceptance_extension_outcome"
         | "task_acceptance_ledger"
         | "task_checkpoint_settlement"
         | "task_auxiliary_settlement"
@@ -31540,6 +31684,8 @@ export type TaskConversationResponses = {
           | "dispatch_delivery_disposition"
           | "task_root_ingress_disposition"
           | "mission_acceptance_resume_receipt"
+          | "mission_acceptance_extension_request"
+          | "mission_acceptance_extension_outcome"
           | "task_acceptance_ledger"
           | "task_checkpoint_settlement"
           | "task_auxiliary_settlement"

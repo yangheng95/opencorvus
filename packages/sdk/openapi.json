@@ -2725,6 +2725,8 @@
                   "dispatch_delivery_disposition",
                   "task_root_ingress_disposition",
                   "mission_acceptance_resume_receipt",
+                  "mission_acceptance_extension_request",
+                  "mission_acceptance_extension_outcome",
                   "task_acceptance_ledger",
                   "task_checkpoint_settlement",
                   "task_auxiliary_settlement",
@@ -58540,6 +58542,12 @@
                               "maximum": 9007199254740991,
                               "type": "integer"
                             },
+                            "cursor": {
+                              "description": "Opaque cursor returned by the preceding page; omit it for the first page.",
+                              "maxLength": 16384,
+                              "minLength": 1,
+                              "type": "string"
+                            },
                             "goal_ids": {
                               "description": "Optional exact logical Goal-subject filter.",
                               "items": {
@@ -58680,7 +58688,7 @@
                               "type": "array"
                             },
                             "taskID": {
-                              "description": "Source Task whose terminal Artifact catalog should be queried.",
+                              "description": "Source Task whose immutable Artifact catalog should be queried.",
                               "minLength": 1,
                               "type": "string"
                             },
@@ -59727,6 +59735,730 @@
                       "taskID",
                       "text",
                       "source"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "acceptance_gap": {
+                        "additionalProperties": false,
+                        "description": "Full next ledger, retaining the original reviewed occurrence and all open grants; current_ledger_revision_artifact_id must name the active execution's exact current ledger. Use complete reads bound to the current active Task observation.",
+                        "properties": {
+                          "criteria": {
+                            "items": {
+                              "oneOf": [
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "criterion_id": {
+                                      "maxLength": 160,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "disposition": {
+                                      "enum": [
+                                        "failed",
+                                        "unresolved",
+                                        "stale_evidence"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "finding": {
+                                      "maxLength": 8000,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "invalidating_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "type": "array"
+                                    },
+                                    "irreducible_blocker_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "type": "array"
+                                    },
+                                    "observation_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "minItems": 1,
+                                      "type": "array"
+                                    },
+                                    "repair_action": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "expected_evidence_kind": {
+                                          "maxLength": 160,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "operation": {
+                                          "maxLength": 1000,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "parameters": {
+                                          "additionalProperties": {},
+                                          "propertyNames": {
+                                            "type": "string"
+                                          },
+                                          "type": "object"
+                                        },
+                                        "target": {
+                                          "maxLength": 1000,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "operation",
+                                        "target",
+                                        "expected_evidence_kind",
+                                        "parameters"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "repair_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "type": "array"
+                                    },
+                                    "resolution_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "type": "array"
+                                    },
+                                    "responsibility": {
+                                      "oneOf": [
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "failure_reference": {
+                                              "additionalProperties": false,
+                                              "description": "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
+                                              "properties": {
+                                                "terminalEventID": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "terminalEventID"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "kind": {
+                                              "const": "task_initialization",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "failure_reference"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "kind": {
+                                              "const": "workflow_node",
+                                              "type": "string"
+                                            },
+                                            "workflow_id": {
+                                              "maxLength": 160,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "workflow_node_id": {
+                                              "maxLength": 160,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "workflow_id",
+                                            "workflow_node_id"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "agent_id": {
+                                              "maxLength": 160,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "dispatch_lineage_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "kind": {
+                                              "const": "direct_dispatch",
+                                              "type": "string"
+                                            },
+                                            "package_revision": {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "id": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "namespace": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "package_digest": {
+                                                  "pattern": "^[a-f0-9]{64}$",
+                                                  "type": "string"
+                                                },
+                                                "project_id": {
+                                                  "anyOf": [
+                                                    {
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "type": "null"
+                                                    }
+                                                  ]
+                                                },
+                                                "scope": {
+                                                  "enum": [
+                                                    "built_in",
+                                                    "project",
+                                                    "global"
+                                                  ],
+                                                  "type": "string"
+                                                },
+                                                "version": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "scope",
+                                                "project_id",
+                                                "namespace",
+                                                "id",
+                                                "version",
+                                                "package_digest"
+                                              ],
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "package_revision",
+                                            "agent_id",
+                                            "dispatch_lineage_id"
+                                          ],
+                                          "type": "object"
+                                        }
+                                      ]
+                                    },
+                                    "state": {
+                                      "const": "open",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "criterion_id",
+                                    "state",
+                                    "disposition",
+                                    "finding",
+                                    "responsibility",
+                                    "observation_evidence_read_refs",
+                                    "repair_evidence_read_refs",
+                                    "resolution_evidence_read_refs",
+                                    "invalidating_evidence_read_refs",
+                                    "irreducible_blocker_evidence_read_refs",
+                                    "repair_action"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "criterion_id": {
+                                      "maxLength": 160,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "finding": {
+                                      "maxLength": 8000,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "invalidating_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "type": "array"
+                                    },
+                                    "irreducible_blocker_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "type": "array"
+                                    },
+                                    "observation_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "type": "array"
+                                    },
+                                    "repair_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "type": "array"
+                                    },
+                                    "resolution_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "minItems": 1,
+                                      "type": "array"
+                                    },
+                                    "responsibility": {
+                                      "oneOf": [
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "failure_reference": {
+                                              "additionalProperties": false,
+                                              "description": "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
+                                              "properties": {
+                                                "terminalEventID": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "terminalEventID"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "kind": {
+                                              "const": "task_initialization",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "failure_reference"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "kind": {
+                                              "const": "workflow_node",
+                                              "type": "string"
+                                            },
+                                            "workflow_id": {
+                                              "maxLength": 160,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "workflow_node_id": {
+                                              "maxLength": 160,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "workflow_id",
+                                            "workflow_node_id"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "agent_id": {
+                                              "maxLength": 160,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "dispatch_lineage_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "kind": {
+                                              "const": "direct_dispatch",
+                                              "type": "string"
+                                            },
+                                            "package_revision": {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "id": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "namespace": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "package_digest": {
+                                                  "pattern": "^[a-f0-9]{64}$",
+                                                  "type": "string"
+                                                },
+                                                "project_id": {
+                                                  "anyOf": [
+                                                    {
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "type": "null"
+                                                    }
+                                                  ]
+                                                },
+                                                "scope": {
+                                                  "enum": [
+                                                    "built_in",
+                                                    "project",
+                                                    "global"
+                                                  ],
+                                                  "type": "string"
+                                                },
+                                                "version": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "scope",
+                                                "project_id",
+                                                "namespace",
+                                                "id",
+                                                "version",
+                                                "package_digest"
+                                              ],
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "package_revision",
+                                            "agent_id",
+                                            "dispatch_lineage_id"
+                                          ],
+                                          "type": "object"
+                                        }
+                                      ]
+                                    },
+                                    "state": {
+                                      "const": "accepted",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "criterion_id",
+                                    "state",
+                                    "finding",
+                                    "responsibility",
+                                    "observation_evidence_read_refs",
+                                    "repair_evidence_read_refs",
+                                    "resolution_evidence_read_refs",
+                                    "invalidating_evidence_read_refs",
+                                    "irreducible_blocker_evidence_read_refs"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "criterion_id": {
+                                      "maxLength": 160,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "finding": {
+                                      "maxLength": 8000,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "invalidating_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "type": "array"
+                                    },
+                                    "irreducible_blocker_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "minItems": 1,
+                                      "type": "array"
+                                    },
+                                    "observation_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "type": "array"
+                                    },
+                                    "repair_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "type": "array"
+                                    },
+                                    "resolution_evidence_read_refs": {
+                                      "items": {
+                                        "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                        "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                        "type": "string"
+                                      },
+                                      "maxItems": 64,
+                                      "type": "array"
+                                    },
+                                    "responsibility": {
+                                      "oneOf": [
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "failure_reference": {
+                                              "additionalProperties": false,
+                                              "description": "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
+                                              "properties": {
+                                                "terminalEventID": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "terminalEventID"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "kind": {
+                                              "const": "task_initialization",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "failure_reference"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "kind": {
+                                              "const": "workflow_node",
+                                              "type": "string"
+                                            },
+                                            "workflow_id": {
+                                              "maxLength": 160,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "workflow_node_id": {
+                                              "maxLength": 160,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "workflow_id",
+                                            "workflow_node_id"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "agent_id": {
+                                              "maxLength": 160,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "dispatch_lineage_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "kind": {
+                                              "const": "direct_dispatch",
+                                              "type": "string"
+                                            },
+                                            "package_revision": {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "id": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "namespace": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "package_digest": {
+                                                  "pattern": "^[a-f0-9]{64}$",
+                                                  "type": "string"
+                                                },
+                                                "project_id": {
+                                                  "anyOf": [
+                                                    {
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "type": "null"
+                                                    }
+                                                  ]
+                                                },
+                                                "scope": {
+                                                  "enum": [
+                                                    "built_in",
+                                                    "project",
+                                                    "global"
+                                                  ],
+                                                  "type": "string"
+                                                },
+                                                "version": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "scope",
+                                                "project_id",
+                                                "namespace",
+                                                "id",
+                                                "version",
+                                                "package_digest"
+                                              ],
+                                              "type": "object"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind",
+                                            "package_revision",
+                                            "agent_id",
+                                            "dispatch_lineage_id"
+                                          ],
+                                          "type": "object"
+                                        }
+                                      ]
+                                    },
+                                    "state": {
+                                      "const": "blocked",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "criterion_id",
+                                    "state",
+                                    "finding",
+                                    "responsibility",
+                                    "observation_evidence_read_refs",
+                                    "repair_evidence_read_refs",
+                                    "resolution_evidence_read_refs",
+                                    "invalidating_evidence_read_refs",
+                                    "irreducible_blocker_evidence_read_refs"
+                                  ],
+                                  "type": "object"
+                                }
+                              ]
+                            },
+                            "maxItems": 128,
+                            "minItems": 1,
+                            "type": "array"
+                          },
+                          "current_ledger_revision_artifact_id": {
+                            "anyOf": [
+                              {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "gap_id": {
+                            "maxLength": 160,
+                            "minLength": 1,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "gap_id",
+                          "current_ledger_revision_artifact_id",
+                          "criteria"
+                        ],
+                        "type": "object"
+                      },
+                      "action": {
+                        "const": "extend_task_acceptance",
+                        "type": "string"
+                      },
+                      "taskID": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "action",
+                      "taskID",
+                      "acceptance_gap"
                     ],
                     "type": "object"
                   },
@@ -98895,6 +99627,8 @@
                               "dispatch_delivery_disposition",
                               "task_root_ingress_disposition",
                               "mission_acceptance_resume_receipt",
+                              "mission_acceptance_extension_request",
+                              "mission_acceptance_extension_outcome",
                               "task_acceptance_ledger",
                               "task_checkpoint_settlement",
                               "task_auxiliary_settlement",
@@ -105811,6 +106545,8 @@
                                   "dispatch_delivery_disposition",
                                   "task_root_ingress_disposition",
                                   "mission_acceptance_resume_receipt",
+                                  "mission_acceptance_extension_request",
+                                  "mission_acceptance_extension_outcome",
                                   "task_acceptance_ledger",
                                   "task_checkpoint_settlement",
                                   "task_auxiliary_settlement",

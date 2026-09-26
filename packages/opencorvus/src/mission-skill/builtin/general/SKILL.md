@@ -13,6 +13,7 @@ required_tools:
   - panel_complete_mission
   - panel_block_mission
   - panel_resume_task
+  - panel_extend_task_acceptance
   - panel_cancel_task
   - panel_respond_interaction
 ---

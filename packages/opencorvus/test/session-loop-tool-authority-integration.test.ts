@@ -162,6 +162,7 @@ describe("SessionLoop Tool execution authority integration", () => {
               "panel_delete_goal",
               "panel_delete_session",
               "panel_expert_squad_inspect",
+              "panel_extend_task_acceptance",
               "panel_fork_session",
               "panel_multica_catalog",
               "panel_query_task",

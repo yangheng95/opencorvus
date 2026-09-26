@@ -455,6 +455,7 @@ describe("host-owned native Session MCP composition", () => {
             "panel_complete_mission",
             "panel_create_task",
             "panel_expert_squad_inspect",
+            "panel_extend_task_acceptance",
             "panel_multica_catalog",
             "panel_query_task",
             "panel_query_task_artifacts",
