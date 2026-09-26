@@ -12,6 +12,7 @@ import {
   canonicalEvolutionJSON,
   evolutionComparisonContext,
   resolveEvolutionIntegrityReviews,
+  groupEvolutionMeasurements,
   type EvolutionCampaignDetailResponse,
   type EvolutionCampaignHistoryRecord,
   type EvolutionHistoryListResponse,
@@ -421,12 +422,41 @@ function comparisonGraph(read: FrozenRead, comparison: FrozenArtifact<Comparison
       else graphIssues.push(invalidPayloadIssue(artifact))
     }
   }
+  for (const [artifactType, artifacts] of [
+    ["evolution-lab/run-evidence-bundle", runs],
+    ["evolution-lab/evaluation-result", evaluations],
+  ] as const) {
+    for (const [slot, observations] of measurementGroups<Run | Evaluation>(artifacts)) {
+      if (observations.length < 2) continue
+      graphIssues.push({
+        code: "MEASUREMENT_OBSERVATION_CONFLICT",
+        owner: artifactIdentity(comparison),
+        artifact_type: artifactType,
+        slot,
+        observation_locators: observations.flatMap((aliases) => aliases.map((item) => item.locator)),
+      })
+    }
+  }
   return { comparison, runs, evaluations, reviews, graphIssues }
+}
+
+function measurementGroups<T extends Run | Evaluation>(artifacts: readonly FrozenArtifact<T>[]) {
+  return groupEvolutionMeasurements(
+    artifacts.map((artifact) => ({ locator: artifact.locator, value: artifact.payload!, artifact })),
+  )
+}
+
+function uniqueMeasurements<T extends Run | Evaluation>(artifacts: readonly FrozenArtifact<T>[]) {
+  return [...measurementGroups(artifacts).values()].flatMap((observations) =>
+    observations.length === 1 ? [observations[0]![0]!.artifact] : [],
+  )
 }
 
 function completeness(campaign: Campaign, graph: ComparisonGraph) {
   const expectedSlots = campaign.cases.length * campaign.repetitions * 2
-  const scorerResults = graph.evaluations.flatMap((evaluation) => evaluation.payload!.scorers)
+  const uniqueRuns = uniqueMeasurements(graph.runs)
+  const uniqueEvaluations = uniqueMeasurements(graph.evaluations)
+  const scorerResults = uniqueEvaluations.flatMap((evaluation) => evaluation.payload!.scorers)
   const current = resolveEvolutionIntegrityReviews(
     graph.reviews.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })),
   ).current
@@ -437,8 +467,8 @@ function completeness(campaign: Campaign, graph: ComparisonGraph) {
   }
   return {
     expected_slots: expectedSlots,
-    present_runs: graph.runs.length,
-    present_evaluations: graph.evaluations.length,
+    present_runs: uniqueRuns.length,
+    present_evaluations: uniqueEvaluations.length,
     expected_scorer_results: expectedSlots * campaign.scorers.length,
     measured_scorer_results: scorerResults.filter((scorer) => scorer.status === "measured").length,
     unavailable_scorer_results: scorerResults.filter((scorer) => scorer.status === "unavailable").length,
@@ -1020,6 +1050,11 @@ function integrityIssuesForTarget(read: FrozenRead, target: ReturnType<typeof Ev
       }
     }
   }
+  // Run publications need the Campaign, not a copied Candidate source. Their
+  // explicit use by this Comparison makes them reachable through that graph.
+  for (const { comparison } of comparisons)
+    for (const artifact of directArtifacts(read, comparison).artifacts)
+      reachable.add(exactKey(artifact.catalog.taskID, artifact.locator))
   const reachableEvaluations = read.artifacts.flatMap((artifact) =>
     reachable.has(exactKey(artifact.catalog.taskID, artifact.locator)) &&
     artifact.envelope.artifact_type === "evolution-lab/evaluation-result"
@@ -1174,15 +1209,8 @@ function detailSlots(input: {
 }) {
   const campaign = input.campaign.payload!
   const candidate = input.candidate.payload!
-  const runs = new Map(
-    input.graph.runs.map((run) => [slotKey(run.payload!.case_id, run.payload!.arm, run.payload!.repetition), run]),
-  )
-  const evaluations = new Map(
-    input.graph.evaluations.map((evaluation) => [
-      slotKey(evaluation.payload!.case_id, evaluation.payload!.arm, evaluation.payload!.repetition),
-      evaluation,
-    ]),
-  )
+  const runs = measurementGroups(input.graph.runs)
+  const evaluations = measurementGroups(input.graph.evaluations)
   const lineage = resolveEvolutionIntegrityReviews(
     input.graph.reviews.map((artifact) => ({ locator: artifact.locator, value: artifact.payload!, artifact })),
   )
@@ -1191,8 +1219,12 @@ function detailSlots(input: {
     Array.from({ length: campaign.repetitions }, (_, repetition) =>
       (["baseline", "candidate"] as const).map((arm) => {
         const key = slotKey(caseID, arm, repetition)
-        const run = runs.get(key)
-        const evaluation = evaluations.get(key)
+        const runGroups = runs.get(key) ?? []
+        const evaluationGroups = evaluations.get(key) ?? []
+        const runAliases = runGroups.length === 1 ? runGroups[0]!.map((item) => item.artifact) : []
+        const evaluationAliases = evaluationGroups.length === 1 ? evaluationGroups[0]!.map((item) => item.artifact) : []
+        const run = runAliases[0]
+        const evaluation = evaluationAliases[0]
         const slotReviews = input.graph.reviews
           .filter((review) => slotKey(review.payload!.case_id, review.payload!.arm, review.payload!.repetition) === key)
           .toSorted((left, right) => left.catalog.catalogRevision - right.catalog.catalogRevision)
@@ -1208,12 +1240,24 @@ function detailSlots(input: {
               : candidate.candidate_revision.package_digest,
           run: run ? artifactIdentity(run) : null,
           evaluation: evaluation ? artifactIdentity(evaluation) : null,
+          run_aliases: runAliases.map(artifactIdentity),
+          evaluation_aliases: evaluationAliases.map(artifactIdentity),
           review: review ? artifactIdentity(review) : null,
           scorer_results: campaign.scorers.map((scorer) => {
             const result = evaluation?.payload!.scorers.find(
               (candidateResult) => candidateResult.scorer_id === scorer.scorer_id,
             )
-            return result ?? { status: "missing" as const, scorer_id: scorer.scorer_id }
+            return (
+              result ??
+              (evaluationGroups.length > 1
+                ? {
+                    status: "unavailable" as const,
+                    scorer_id: scorer.scorer_id,
+                    reason: "conflicting_evaluation_observations",
+                    evidence: evaluationGroups.flatMap((aliases) => aliases.map((item) => item.locator)),
+                  }
+                : { status: "missing" as const, scorer_id: scorer.scorer_id })
+            )
           }),
           integrity_review: review?.payload ?? null,
           review_history: slotReviews.map((item) => ({

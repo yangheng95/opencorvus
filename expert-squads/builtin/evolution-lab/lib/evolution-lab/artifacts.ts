@@ -10,6 +10,7 @@ export {
   EvolutionPackagePublishableArtifactTypeSchema,
   EvolutionRunEvidencePublishInputSchema,
   resolveEvolutionIntegrityReviews,
+  groupEvolutionMeasurements,
   EvolutionReviewLineageError,
   parseEvolutionArtifact,
   type EvolutionArtifactType,

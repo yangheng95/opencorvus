@@ -932,3 +932,35 @@
 - 五文件聚焦检查合计68项/397断言通过：mutation3/69、manager CAS与project/global隔离1/30、feedback9/48、真实Host publisher9/105、comparison46/145；`.tmp/g37-focused-tests.log`。最后缩小测试排版差异和限制新增提前reconcile只用于promotion后，mutation3/69再次通过，`.tmp/g37-mutation-final.log`。根类型8项、docs342ops25groups通过；所有检查无模型/业务费用，无UI代码/自动化。
 - canonical SDK生成器完成；OpenAPI递归结构对比只新增history与detail中6处REVIEW_SNAPSHOT_CHANGED联合分支，原其它字段和值相等，`.tmp/g37-openapi-changes.json`。文本大diff来自嵌套联合展开/对齐，不是新增其它API；生成types同步。没有修改专家团源码或嵌入包，真实Host source/embedded身份检查仍通过，Evolution Lab保持2026.09.27.1，不新增候选或推广。
 - 安装commit时的Review全集一致性已本地验证；先后顺序由原SQLite immediate writer事务与原manager journal确定，检查器通过真实持久化插入控制交错点，不冒称真实并发模型试验。后发Review不自动卸载已提交包，既有restore授权仍可按确切已安装回执恢复。历史Comparison即使sources齐全也未必曾正确派生，本修复不重算它；G33/G36前的错误派生不靠新增引用数量治愈。真实可靠业务纠错与进化收益仍未达成。
+
+## G38：Run/Evaluation 集合与测量重复的边界
+
+### Recall 与诊断前影响面
+
+- 用户要求继续有依据的机制开发，Opus额度恢复后交接；不重复G36/G37或真实业务样本。当前验收先区分相同测量的多个发布身份与不同测量，不以全部第二份证据错误、默认最新或挑最好作为方案。尚未决定生产修复；先经真实Host发布反证。
+- 已读当前publisher Run/Evaluation/Comparison路径、collectTaskRunEvidence及collectTaskRunUsage、execute-evolution-metrics、Plugin Host source合并、artifact-catalog idempotentExpertPublicationIdentity、比较器slot校验、Campaign Skill/Evaluator和2026-08-17测量与Review所有权拆分。搜索覆盖Task终态/current occurrence、metric receipt、真实Host测试和当前history/mutation消费者。当前Run从fresh collector+ProviderUsage账本盖章，Evaluation完全投影immutable metric receipt，模型不能填写scorer值。
+- 明确事实：通用idempotent publication身份包含完整source_artifact_locators，Plugin Host合并真实Turn与本次已选择来源；同payload/resource在后来新增来源后可能产生不同Artifact身份。同一terminal Trial在usage账本追加后重新发布也可能有不同token/cost（G28测试真实覆盖），这不同于重新执行业务任务。collector要求当前terminal occurrence，同Task恢复后不能用旧terminal引用重新采集当前状态；旧Run Artifact仍是当时不可变观察。metric工具的iteration属于评价调用，不是预登记Trial repetition。
+- 比较只检查Owner输入的Run/Evaluation，重复slot一律报错；Evaluation中的Campaign/Candidate/Run确切引用已校验，Run通过envelope直接Campaign及package/runtime事实关联。Campaign当前没有预绑定全部Trial Task IDs的执行清单，目录完整只可能证明已发布的集合，不能证明没有未公开执行。新机制不得伪造这种更强保证。
+- 诊断以原真实Host测试为driver：完全相同Run收据在新增已选来源后重发；完全相同metric receipt重发；对比payload/resource与实际publication identity；保留原单份比较与同时包含两份时的精确输出/错误。另外读取原已发布不同usage观察及其它Trial事实，确认完整发现不能机械套用“所有同slot都为不同样本”。仅保存新隔离诊断收据，不改原实验、评分或生产源码；再据实际结果落盘单一修复方案。
+
+### G38真实反例与实施选择
+
+- 已复现真实Host两次发布：Run与Evaluation各自payload逐值相同，仍分别得到不同Artifact ID；因完整来源集合新增了原件等已选择证据，符合通用publication identity，不是hash碰撞。把两份Evaluation一起交比较器，报`comparison has duplicate evaluation slot case-1:baseline:0`；原单份仍可正常比较。这不是两个Trial或两次measurement，不能为了目录完整性将它们永久判冲突。收据`.tmp/g38-identical-measurement-probe.json`、log、临时patch保留；9项105断言通过仅证明原诊断正常执行，不表示修复验收。首次driver误用不存在的candidateReceipt变量，allError是ReferenceError；已另存initial收据并改为真实candidateSource后复验，不能拿首次错误当业务证据。
+- 同一真实Trial另有原G28追加usage后发布的Run：token从80变100、cost从1.25变null。这些payload不相同，必须保持不同观察，不能因为Task/slot相同就合并；不同terminal occurrence、新Trial、不同metric receipt同样不自动合并。当前没有足够协议事实授权“最新/最佳”胜出。
+- 本轮先实现完整集合处理的必要前提：唯一typed measurement grouping按slot及**完整已验证payload**将事实完全相等的Run/Evaluation发布别名归为一组，保留全部真实locators/producer原件。只有一组时才有一个测量值；locator稳定排序只选展示代表，不选择业务优劣；不同值/收据/Trial保持多组，比较器继续返回明确冲突，不能捏合平均或抹掉旧观察。无需改通用publisher identity或新增ledger/模型/角色。
+- 比较器以这些组计样本与统计，Run/Evaluation交叉引用接受同一事实组内确切别名；Review仍引用自己原Evaluation且保留显式改判语义，来自等值Evaluation别名的独立Review全部进入判断，不凭代表选择漏掉它。history共用分组，slot显示完整真实别名集合；冲突时不伪造单项或分数，返回明确图问题。原Comparison不重算。
+- 全目录发现不能先机械套上旧duplicate-slot错误再称完成；本提交仅解除已证实的表示重复障碍，Run/Evaluation全集发现和后发测量新鲜性仍作为随后独立实施边界。该分步不依赖Opus上线；当前继续有依据地完成本地实现/真实Checker/包同步与提交。未发布Trial执行是否完整仍无预绑定清单，不能由目录伪证。
+
+### G38实现中的真实边界检查
+
+- 已实现唯一`groupEvolutionMeasurements`，比较与history共用。它只归并完整typed payload相同的别名，保留各原记录；不同事实不被时间排序取代。展示代表按locator稳定排序，仅在值相等的组内使用。比较的Review关联接受任一Evaluation别名，Evaluation→Run关联接受任一Run别名，统计及成本按唯一事实计，不按Artifact数量加权。
+- history增加run_aliases/evaluation_aliases；只有一个事实组才有单项。多组时保留MEASUREMENT_OBSERVATION_CONFLICT和所有原locators，slot的scorer展示为conflicting_evaluation_observations未可判定，原Evaluation数值与历史Comparison不改。这个投影不把已测原值抹成null，原件仍在完整候选证据目录内可读。
+- 新实际history检查发现另一个相关旧缺口：只要求Campaign来源的合法Run/基线Evaluation，即使被Comparison直接使用，也会因缺Candidate直接来源被标成unlinked。修为沿已归属Comparison的真实直接source边建立可达性，未给原件补Candidate引用。首轮纯比较52项通过；mutation原roundtrip在该误报处失败，另两条真实freshness/recovery通过；保留`.tmp/g38-local-initial.log`。修复后mutation3项/73断言通过，包含别名计数不膨胀、精确别名原件、保留历史多观察冲突和G37全部恢复合同。
+- 本轮未改变测量发布identity、评分器、metric receipt、终态或Trial运行规则。Evaluator不能重写数值，Review显式取代仍限原确切Evaluation。全文档发现与后发等值Evaluation别名上的新Review关联仍需下一步完善，不能将本轮局部别名支持称为集合闭环完成。
+
+### G38验收与交付范围
+
+- 最终65项/380断言通过：比较52/157（原46及6条新增别名/差异观察合同）、真实mutation/history3/73、真实Host publication9/110、包投影1/40。Host实际重发同一collector和metric receipt，得到不同publication身份但完整payload相同；同时输入全部原件/别名后比较payload与原单份逐值相等，四个原locators都在真实持久化source中。等值Evaluation别名上的另一个failed blocker Review仍可改变结论；不是根据代表省掉反证。数值不同的usage、新Trial/terminal、同值不同metric receipt保持冲突。日志`.tmp/g38-focus-tests.log`、`g38-host-final.log`、`g38-comparison-final.log`；展示排序改用code-unit顺序后比较重验通过。
+- 根类型8项通过，docs342ops25groups/API6规则34文件/包拓扑122manifest135workflow通过。canonical SDK生成完成，结构差异仅history/detail的6处MEASUREMENT_OBSERVATION_CONFLICT分支、detail的两个alias字段及required列表；`.tmp/g38-openapi-changes.json`。源和嵌入Evolution Lab同步2026.09.27.2，content digest754f3a9c73e8c97bfcd4747d2ace4c34e8f36102ab847f09808e31ebc244a29e，仅同步本包。默认AutomationBench/base、已发布历史包与原实验均未修改，未安装推广，没有新Provider/业务费用或UI自动化。
+- 另保留一次旧版本测试期待：包已生成.27.2时Host测试仍期待.27.1，8/9通过；更新此当前版本期待后9/110通过，没有为旧断言保留旧代码。第一次诊断driver变量错误和history真实可达性失败的原日志也保留，不混算为模型失败。
+- 未完成项准确保留：Owner仍可挑Run/Evaluation子集；published目录完整性不等于Trial执行全集；后来相同payload Evaluation别名上的新Review也需要跟随别名全集发现；不同usage/occurrence的合法后续观察尚无可据以默认取代的测量契约。G39须先据这些原事实追完整发现/当前安装权限，不能机械apply旧G31 patch或靠“duplicate”错误一律永久锁住。旧Comparison的payload与source图可能来自旧错误派生，history现可显示矛盾，安装权威的完整测量图复核尚未因此自动实现。持续推进这些共同机制，不开同义业务抽样。

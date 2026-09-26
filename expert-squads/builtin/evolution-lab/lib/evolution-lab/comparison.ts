@@ -3,6 +3,7 @@ import {
   EvolutionArtifactSchemas,
   EvolutionArtifactIntegrityError,
   resolveEvolutionIntegrityReviews,
+  groupEvolutionMeasurements,
 } from "./artifacts"
 
 type Campaign = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/campaign-spec"]["parse"]>
@@ -106,10 +107,10 @@ type ExpectedSlot = { caseID: string; arm: "baseline" | "candidate"; repetition:
 
 type IndexedComparisonEvidence = {
   evaluations: Map<string, Evaluation>
-  evaluationLocators: Map<string, ArtifactLocator>
+  evaluationLocators: Map<string, ArtifactLocator[]>
   reviews: Map<string, Located<Review>[]>
   runs: Map<string, RunEvidence>
-  runLocators: Map<string, ArtifactLocator>
+  runLocators: Map<string, ArtifactLocator[]>
 }
 
 /**
@@ -134,14 +135,15 @@ function indexComparisonEvidence(input: {
 }): IndexedComparisonEvidence {
   const { campaign, candidate, expectedSlotKeys, expectedScorerIDs } = input
   const evaluations = new Map<string, Evaluation>()
-  const evaluationLocators = new Map<string, ArtifactLocator>()
-  for (const located of input.evaluations) {
+  const evaluationLocators = new Map<string, ArtifactLocator[]>()
+  for (const [key, observations] of groupEvolutionMeasurements(input.evaluations)) {
+    if (observations.length !== 1)
+      throw new EvolutionArtifactIntegrityError(`comparison has conflicting evaluation observations for slot ${key}`)
+    const aliases = observations[0]!
+    const located = aliases[0]!
     const evaluation = located.value
-    const key = slotKey(evaluation.case_id, evaluation.arm, evaluation.repetition)
     if (!expectedSlotKeys.has(key))
       throw new EvolutionArtifactIntegrityError(`comparison has undeclared evaluation slot ${key}`)
-    if (evaluations.has(key))
-      throw new EvolutionArtifactIntegrityError(`comparison has duplicate evaluation slot ${key}`)
     const scorerIDs = evaluation.scorers.map((scorer) => scorer.scorer_id).toSorted()
     if (JSON.stringify(scorerIDs) !== JSON.stringify(expectedScorerIDs))
       throw new EvolutionArtifactIntegrityError(
@@ -164,7 +166,7 @@ function indexComparisonEvidence(input: {
         `comparison evaluation slot ${key} has the wrong Campaign or Candidate source`,
       )
     evaluations.set(key, evaluation)
-    evaluationLocators.set(key, located.locator)
+    evaluationLocators.set(key, aliases.map((artifact) => artifact.locator))
   }
   const reviews = new Map<string, Located<Review>[]>()
   for (const located of input.reviews) {
@@ -172,7 +174,7 @@ function indexComparisonEvidence(input: {
     const key = slotKey(review.case_id, review.arm, review.repetition)
     if (!expectedSlotKeys.has(key))
       throw new EvolutionArtifactIntegrityError(`comparison has undeclared review slot ${key}`)
-    if (!sameLocator(review.evaluation_result_locator, evaluationLocators.get(key) ?? null))
+    if (!evaluationLocators.get(key)?.some((locator) => sameLocator(review.evaluation_result_locator, locator)))
       throw new EvolutionArtifactIntegrityError(
         `comparison review slot ${key} does not review its exact evaluation result`,
       )
@@ -185,13 +187,15 @@ function indexComparisonEvidence(input: {
     reviews.set(key, slot)
   }
   const runs = new Map<string, RunEvidence>()
-  const runLocators = new Map<string, ArtifactLocator>()
-  for (const located of input.runs) {
+  const runLocators = new Map<string, ArtifactLocator[]>()
+  for (const [key, observations] of groupEvolutionMeasurements(input.runs)) {
+    if (observations.length !== 1)
+      throw new EvolutionArtifactIntegrityError(`comparison has conflicting run observations for slot ${key}`)
+    const aliases = observations[0]!
+    const located = aliases[0]!
     const run = located.value
-    const key = slotKey(run.case_id, run.arm, run.repetition)
     if (!expectedSlotKeys.has(key))
       throw new EvolutionArtifactIntegrityError(`comparison has undeclared run slot ${key}`)
-    if (runs.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has duplicate run slot ${key}`)
     const expectedRevision =
       run.arm === "baseline" ? campaign.baseline_revision.package_digest : candidate.candidate_revision.package_digest
     if (Object.values(run.revision_equality).some((digest) => digest !== expectedRevision))
@@ -203,7 +207,7 @@ function indexComparisonEvidence(input: {
     )
       throw new EvolutionArtifactIntegrityError(`comparison run slot ${key} differs from the frozen Campaign runtime`)
     runs.set(key, run)
-    runLocators.set(key, located.locator)
+    runLocators.set(key, aliases.map((artifact) => artifact.locator))
   }
   return { evaluations, evaluationLocators, reviews, runs, runLocators }
 }
@@ -228,7 +232,7 @@ function classifyComparisonAvailability(input: {
     const run = runs.get(slot.key)
     if (evaluation && run && evaluation.trial_task_id !== run.task_id)
       throw new EvolutionArtifactIntegrityError(`comparison slot ${slot.key} run and evaluation Task identities differ`)
-    if (evaluation && run && !sameLocator(evaluation.run_evidence_locator, runLocators.get(slot.key)!))
+    if (evaluation && run && !runLocators.get(slot.key)?.some((locator) => sameLocator(evaluation.run_evidence_locator, locator)))
       throw new EvolutionArtifactIntegrityError(`comparison slot ${slot.key} metric receipt and run Artifact differ`)
     if (!evaluation) requiredUnavailable.add(`evaluation:${slot.key}`)
     if (!run) requiredUnavailable.add(`run:${slot.key}`)

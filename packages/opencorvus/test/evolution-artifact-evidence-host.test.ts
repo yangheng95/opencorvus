@@ -1617,6 +1617,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             },
           }
           expect(await readRunPayload(runReceipt.locator)).toEqual(stampedRun)
+          await host.engineArtifacts.select({ locator: runReceipt.locator, purpose: "Read the existing immutable run observation before republishing it" })
+          const runAlias = JSON.parse(await executePublishEvolutionArtifact({
+            artifact_type: "evolution-lab/run-evidence-bundle", payload: runSlot,
+            resource_set: collectorResourceSet, source_artifact_locators: [campaignReceipt.locator],
+          }, { host } as never)) as typeof runReceipt
+          expect(await readRunPayload(runAlias.locator)).toEqual(stampedRun)
+          expect(new Set([runReceipt.locator, runAlias.locator].map((item) => JSON.stringify(item))).size).toBe(2)
           const mislabeledRunReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
               {
@@ -1845,6 +1852,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             locator: evaluationReceipt.locator,
             purpose: "Measured evaluation result for independent integrity review",
           })
+          const evaluationAlias = JSON.parse(await executePublishEvolutionArtifact({
+            artifact_type: "evolution-lab/evaluation-result", payload: {}, resource_set: metricReceiptResourceSet,
+            source_artifact_locators: [campaignReceipt.locator, runReceipt.locator, metricEvidenceLocator],
+          }, { host } as never)) as typeof evaluationReceipt
+          expect(new Set([evaluationReceipt.locator, evaluationAlias.locator].map((item) => JSON.stringify(item))).size).toBe(2)
           ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
           const integrityReviewReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
@@ -2006,6 +2018,17 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           expect(comparisonRead.chunk.complete).toBe(true)
           const comparisonEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(comparisonRead.chunk.text!))
           expect(comparisonEnvelope.payload).toEqual(expectedComparison)
+          const aliasComparison = JSON.parse(await executePublishEvolutionArtifact({
+            artifact_type: "evolution-lab/comparison-recommendation", payload: {}, resource_set: null,
+            source_artifact_locators: [campaignReceipt.locator, candidateSource.locator, runReceipt.locator,
+              runAlias.locator, evaluationReceipt.locator, evaluationAlias.locator],
+          }, { host } as never)) as typeof recommendationReceipt
+          const aliasRead = await host.engineArtifacts.read({ locator: aliasComparison.locator,
+            byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
+          const aliasEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(aliasRead.chunk.text!))
+          expect(aliasEnvelope.payload).toEqual(expectedComparison)
+          expect(aliasEnvelope.source_artifact_locators.filter((item) => [runReceipt.locator, runAlias.locator,
+            evaluationReceipt.locator, evaluationAlias.locator].some((alias) => JSON.stringify(alias) === JSON.stringify(item))).length).toBe(4)
           const comparisonSources = [
             campaignReceipt.locator,
             candidateSource.locator,
@@ -2468,7 +2491,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.1")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.2")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(

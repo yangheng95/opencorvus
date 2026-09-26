@@ -13,7 +13,7 @@
 import { describe, expect, test } from "bun:test"
 import { deriveComparisonRecommendation } from "@squads/evolution-lab/lib/evolution-lab/comparison"
 import { EvolutionArtifactSchemas } from "@squads/evolution-lab/lib/evolution-lab/artifacts"
-import { EvolutionReviewLineageError, resolveEvolutionIntegrityReviews } from "@opencorvus-ai/plugin"
+import { EvolutionReviewLineageError, resolveEvolutionIntegrityReviews, groupEvolutionMeasurements } from "@opencorvus-ai/plugin"
 
 const baselineDigest = "a".repeat(64)
 const candidateDigest = "b".repeat(64)
@@ -268,6 +268,53 @@ function comparisonFor(...args: Parameters<typeof comparisonInputs>) {
 }
 
 describe("Evolution Lab deterministic comparison", () => {
+  test("counts complete identical measurement aliases once and accepts their exact references", () => {
+    const input = comparisonInputs([{ id: "quality", weight: 1, baseline: [0.2, 0.2], candidate: [0.8, 0.8] }])
+    const expected = deriveComparisonRecommendation(input)
+    const run = input.runs.find((item) => item.value.arm === "candidate")!
+    const evaluation = input.evaluations.find((item) => item.value.arm === "candidate")!
+    const aliasRun = { ...run, locator: { ...run.locator, artifact_id: "aaa-run-alias" } }
+    const aliasEvaluation = { ...evaluation, locator: { ...evaluation.locator, artifact_id: "aaa-evaluation-alias" } }
+    const observations = groupEvolutionMeasurements([run, aliasRun, run]).get("case-1:candidate:0")!
+    expect(observations.map((aliases) => aliases.map((item) => item.locator.artifact_id))).toEqual([
+      ["aaa-run-alias", run.locator.artifact_id],
+    ])
+    const withAliases = { ...input, runs: [...input.runs, aliasRun], evaluations: [...input.evaluations, aliasEvaluation] }
+    expect(deriveComparisonRecommendation(withAliases)).toEqual(expected)
+    const originalReview = input.reviews.find((item) => item.value.arm === "candidate")!
+    const aliasReview = { locator: { ...originalReview.locator, artifact_id: "review-of-alias" }, value: {
+      ...originalReview.value, evaluation_result_locator: aliasEvaluation.locator,
+      findings: [{ category: "security" as const, invariant: "Alias evidence still requires independent review", outcome: "failed" as const,
+        evidence: [aliasEvaluation.locator], severity: "blocker" as const, owner: "evolution-safety-auditor", correction: "Resolve the observed defect." }],
+    } }
+    expect(deriveComparisonRecommendation({ ...withAliases, reviews: [...input.reviews, aliasReview] }).recommendation).toBe("inconclusive")
+  })
+
+  test.each(["cost", "tokens", "trial", "terminal"] as const)("keeps different run %s facts as conflicting observations", (field) => {
+    const input = comparisonInputs([{ id: "quality", weight: 1, baseline: [0.2, 0.2], candidate: [0.8, 0.8] }])
+    const original = input.runs[0]!
+    const value = { ...original.value }
+    if (field === "cost") value.cost = null
+    if (field === "tokens") value.token_usage += 20
+    if (field === "trial") value.task_id = "different-trial"
+    if (field === "terminal") value.terminal_time += 1
+    const changed = { value, locator: { ...original.locator, artifact_id: "different-run-observation" } }
+    expect(groupEvolutionMeasurements([original, changed]).get("case-1:baseline:0")!.length).toBe(2)
+    expect(() => deriveComparisonRecommendation({ ...input, runs: [...input.runs, changed] })).toThrow(
+      "comparison has conflicting run observations for slot case-1:baseline:0",
+    )
+  })
+
+  test("keeps a different metric receipt distinct even if the reported values agree", () => {
+    const input = comparisonInputs([{ id: "quality", weight: 1, baseline: [0.2, 0.2], candidate: [0.8, 0.8] }])
+    const original = input.evaluations[0]!
+    const changed = { locator: { ...original.locator, artifact_id: "another-measurement" }, value: {
+      ...original.value, metric_receipt_resource: { ...original.value.metric_receipt_resource, sha256: "1".repeat(64) },
+    } }
+    expect(() => deriveComparisonRecommendation({ ...input, evaluations: [...input.evaluations, changed] })).toThrow(
+      "comparison has conflicting evaluation observations for slot case-1:baseline:0",
+    )
+  })
   const findingCategories = ["evidence_integrity", "reward_hacking", "permission", "side_effect", "security"] as const
   const improvedScores = [{ id: "correctness", weight: 1, baseline: [0.2, 0.2, 0.2], candidate: [0.8, 0.8, 0.8] }]
   function finding(

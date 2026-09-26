@@ -294,6 +294,15 @@ history在自身冻结目录上用同一差异计算公开`REVIEW_SNAPSHOT_CHANG
 receipt先提交则后发Review不倒改历史。重试先识别已有receipt，按原journal清理并返回；
 未提交的中断先reconcile再复核新证据，避免提前拒绝遗留未提交安装。恢复/feedback授权保持原契约。
 
+Run/Evaluation的发布身份与测量身份分开：唯一`groupEvolutionMeasurements`按slot和完整typed
+payload分组，完全相同事实的多个Artifact是发布别名，统计只计一次，原locators全部保留。
+不同receipt、Trial、结果、usage或terminal事实保持不同观察，比较不默认选择最新/最好。
+Review可引用同一测量组内任一确切Evaluation别名；原Review的显式取代scope不改变。
+history以同一分组计数并投影run_aliases/evaluation_aliases；多观察冲突时单项为null，
+公开MEASUREMENT_OBSERVATION_CONFLICT及原身份，scorer投影为typed unavailable。
+Comparison直接引用的Run/Evaluation通过该图可达，不要求baseline Run另抄Candidate来源。
+此规则不保证尚未选入的Run/Evaluation全集或未公开Trial的完整执行历史。
+
 Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 metrics store：
 `engine_metric_spec`、`engine_metric_result` 和 `engine_iteration` 的唯一直接表写入文件
 是 `metrics/store.ts`。任务、agent、engine 或 UI 层不得直接写这些 metrics 表。

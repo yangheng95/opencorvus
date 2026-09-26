@@ -138,6 +138,15 @@ export const EvolutionGraphIssueSchema = z.discriminatedUnion("code", [
       missing_review_locators: z.array(EngineArtifactLocatorSchema).min(1),
     })
     .strict(),
+  z
+    .object({
+      code: z.literal("MEASUREMENT_OBSERVATION_CONFLICT"),
+      owner: EvolutionHistoryArtifactIdentitySchema,
+      artifact_type: z.enum(["evolution-lab/run-evidence-bundle", "evolution-lab/evaluation-result"]),
+      slot: z.string().min(1),
+      observation_locators: z.array(EngineArtifactLocatorSchema).min(2),
+    })
+    .strict(),
 ])
 
 export const EvolutionUnlinkedIssueSchema = z.discriminatedUnion("code", [
@@ -405,6 +414,8 @@ export const EvolutionEvidenceSlotSchema = z
     expected_revision_digest: ArtifactSHA256Schema,
     run: EvolutionHistoryArtifactIdentitySchema.nullable(),
     evaluation: EvolutionHistoryArtifactIdentitySchema.nullable(),
+    run_aliases: z.array(EvolutionHistoryArtifactIdentitySchema),
+    evaluation_aliases: z.array(EvolutionHistoryArtifactIdentitySchema),
     review: EvolutionHistoryArtifactIdentitySchema.nullable(),
     scorer_results: z.array(ScorerSlotSchema),
     integrity_review: EvolutionArtifactSchemas["evolution-lab/integrity-review"].nullable(),

@@ -537,14 +537,22 @@ describe("authorized expert squad evolution mutation", () => {
             evaluations: 4,
             candidateDigest: candidateRevision.package_digest,
           })
+          const runAlias = { value: baselineRuns[0]!.value, locator: recordEvolutionArtifact({
+            taskID: operationTask.taskID, type: "evolution-lab/run-evidence-bundle",
+            payload: baselineRuns[0]!.value, sources: [campaign],
+          }) }
+          const evaluationAlias = { value: baselineEvaluations[0]!.value, locator: recordEvolutionArtifact({
+            taskID: operationTask.taskID, type: "evolution-lab/evaluation-result",
+            payload: baselineEvaluations[0]!.value, sources: [campaign, baselineRuns[0]!.locator],
+          }) }
           const comparisonPayload = deriveComparisonRecommendation({
             campaign: campaignPayload,
             campaignLocator: campaign,
             candidate: candidatePayload,
             candidateLocator: candidateArtifact,
-            evaluations: [...baselineEvaluations, ...candidateEvaluations],
+            evaluations: [...baselineEvaluations, ...candidateEvaluations, evaluationAlias],
             reviews: [...baselineReviews, ...candidateReviews, revisionReview],
-            runs: [...baselineRuns, ...candidateRuns],
+            runs: [...baselineRuns, ...candidateRuns, runAlias],
           })
           const comparisonSources = [
             campaign,
@@ -556,6 +564,8 @@ describe("authorized expert squad evolution mutation", () => {
             ...baselineReviews.map((review) => review.locator),
             ...candidateReviews.map((review) => review.locator),
             revisionReview.locator,
+            runAlias.locator,
+            evaluationAlias.locator,
           ]
           const comparison = recordEvolutionArtifact({
             taskID: operationTask.taskID,
@@ -819,6 +829,42 @@ describe("authorized expert squad evolution mutation", () => {
                 }).payload,
               ).payload,
             ).toEqual(comparisonPayload)
+            if (scenario === "review-freshness") {
+              // Retained older comparisons may contain a wider source graph
+              // than the measurements their original producer consumed.
+              const changedRun = recordEvolutionArtifact({ taskID: operationTask.taskID,
+                type: "evolution-lab/run-evidence-bundle", sources: [campaign],
+                payload: { ...baselineRuns[0]!.value, token_usage: baselineRuns[0]!.value.token_usage + 20 },
+              })
+              const changedEvaluation = recordEvolutionArtifact({ taskID: operationTask.taskID,
+                type: "evolution-lab/evaluation-result", sources: [campaign, baselineRuns[0]!.locator],
+                payload: { ...baselineEvaluation.value, metric_receipt_resource: {
+                  ...baselineEvaluation.value.metric_receipt_resource, sha256: "f".repeat(64),
+                } },
+              })
+              const retainedComparison = recordEvolutionArtifact({ taskID: operationTask.taskID,
+                type: "evolution-lab/comparison-recommendation", payload: comparisonPayload,
+                sources: [...comparisonSources, changedRun, changedEvaluation],
+              })
+              const conflictingHistory = await readEvolutionHistory({ namespace: target.namespace, id: target.id, installationScope: "project" })
+              const conflictingDetail = await readEvolutionCampaignDetail({ namespace: target.namespace, id: target.id,
+                installationScope: "project", campaignTaskID: operationTask.taskID, campaignLocator: campaign,
+                candidateLocator: candidateArtifact, comparisonLocator: retainedComparison,
+                catalogRevisionUpper: conflictingHistory.catalog_revision_upper,
+              })
+              const conflictingSlot = conflictingDetail.slots.find((slot) => slot.arm === "baseline" && slot.repetition === 0)!
+              expect({ run: conflictingSlot.run, evaluation: conflictingSlot.evaluation,
+                aliases: [conflictingSlot.run_aliases, conflictingSlot.evaluation_aliases],
+                scorers: conflictingSlot.scorer_results.map((result) => ({ status: result.status,
+                  reason: result.status === "unavailable" ? result.reason : null })),
+              }).toEqual({ run: null, evaluation: null, aliases: [[], []],
+                scorers: [{ status: "unavailable", reason: "conflicting_evaluation_observations" }],
+              })
+              const retainedRecord = conflictingDetail.record.candidates[0]!.comparisons.find((item) => item.artifact.locator.artifact_id === retainedComparison.artifact_id)!
+              expect(retainedRecord.graph_issues.filter((issue) => issue.code === "MEASUREMENT_OBSERVATION_CONFLICT")
+                .map((issue) => issue.code === "MEASUREMENT_OBSERVATION_CONFLICT" ? [issue.artifact_type, issue.slot, issue.observation_locators.length] : []))
+                .toEqual([["evolution-lab/run-evidence-bundle", "case-a:baseline:0", 3], ["evolution-lab/evaluation-result", "case-a:baseline:0", 3]])
+            }
             return
           }
           const restoreInterruption =
@@ -964,6 +1010,13 @@ describe("authorized expert squad evolution mutation", () => {
             catalogRevisionUpper: historyAfterPromotion.catalog_revision_upper,
           })
           const revisedSlot = historyDetail.slots.find((slot) => slot.arm === "candidate" && slot.repetition === 0)!
+          const aliasSlot = historyDetail.slots.find((slot) => slot.arm === "baseline" && slot.repetition === 0)!
+          expect(new Set(aliasSlot.run_aliases.map((item) => item.locator.artifact_id))).toEqual(
+            new Set([baselineRuns[0]!.locator.artifact_id, runAlias.locator.artifact_id]),
+          )
+          expect(new Set(aliasSlot.evaluation_aliases.map((item) => item.locator.artifact_id))).toEqual(
+            new Set([baselineEvaluations[0]!.locator.artifact_id, evaluationAlias.locator.artifact_id]),
+          )
           expect(revisedSlot.review?.locator).toEqual(revisionReview.locator)
           expect(
             revisedSlot.review_history.map((item) => ({
