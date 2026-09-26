@@ -271,6 +271,12 @@ package revision；从该 Trial 的 `provider_usage_event` 盖章已记录 token
 返回写出实际值的 typed integrity error，该槽位没有可发布的运行证据。比较与度量工具的冻结模型检查
 因此比较的是实际服务模型；Evaluator 不复述任何宿主事实。
 
+`comparison-recommendation` 的模型面 payload 是空对象；Recommendation Owner 选择并完整读取
+Campaign、Candidate、Run、Evaluation 和 Review 直接来源。publisher 通过唯一比较器生成并持久化
+全部统计、可用性、置信度与推荐字段，不要求模型重抄派生结果。Owner 完整读回所发布的比较后
+再渲染文档与图表；存储格式和下游晋升权限不变。这一盖章契约不改变现有来源选择、槽位或审查
+取代语义，也不证明所选证据集完整或业务判断正确。
+
 Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 metrics store：
 `engine_metric_spec`、`engine_metric_result` 和 `engine_iteration` 的唯一直接表写入文件
 是 `metrics/store.ts`。任务、agent、engine 或 UI 层不得直接写这些 metrics 表。

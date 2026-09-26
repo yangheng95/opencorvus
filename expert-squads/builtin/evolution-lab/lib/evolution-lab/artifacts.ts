@@ -3,6 +3,7 @@ export {
   EvolutionArtifactTypeSchema,
   EvolutionCampaignPublishInputSchema,
   EvolutionCandidateRevisionPublishInputSchema,
+  EvolutionComparisonRecommendationPublishInputSchema,
   EvolutionEvaluationResultPublishInputSchema,
   EvolutionMetricReceiptSchema,
   EvolutionPackagePublishableArtifactInputSchema,

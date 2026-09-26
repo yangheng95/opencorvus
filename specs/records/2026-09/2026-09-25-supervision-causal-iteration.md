@@ -828,3 +828,22 @@
 - 已原样移动53行纯契约到独立schema模块，原模块只保留两个实时读取/校验函数，7个生产消费者与1个混合测试入口改为直接依赖所需层；旧路径不re-export，DDL/字段/API/权限/业务逻辑未改。首次补丁因架构段落定位失败整体未应用，确认源码未变后重试；首次差异检查发现新文件末尾多一空行，已移除，没有放宽检查。
 - 暂存快照的真实`module-topology --index`通过：1122模块、5690 runtime edges、零多模块环、4个clean imports通过。根类型检查8项通过（7个无变化package缓存、当前opencorvus重新检查）。真实四文件9项/108断言通过：active-repair 3/38、extension 2/50、provider-input read facts 1/8、agent-message证据3/12；保留active/terminal/reopen的原身份与失效错误合同。原日志`.tmp/g32-module-topology.log`、`g32-observation-tests.log`、`g32-typecheck.log`。
 - `api:routes-check`6规则/34文件通过，证明公开导出与现有生成SDK一致；docs342ops25groups与diff通过。此为依赖分层与交付闭环修复，无新模型或业务运行，不构成业务纠错或进化收益证据。提交后继续pull/merge、完整出站核对及真实pre-push检查，全部通过再自动推送。
+- `e3910e40`已提交；pull up-to-date并复核完整64项出站集合后，真实pre-push的根类型、API、docs、lease owner、architecture/package/release/module topology与secret scan全部通过，`4888dccc..e3910e40 main -> main`推送成功。提交快照仍为1122模块/5690边/4 clean imports。原“他任务未知”与模块循环推送阻塞均已解除，继续业务/测量机制工作。
+
+## G33：比较派生事实由唯一发布器盖章
+
+### Recall、影响面与方案（实施前）
+
+- 延续用户要求Codex接手直至Opus恢复；主线第4项已完成交付，接着处理第3项测量事实的重复所有权。G31全目录发现/取代方案仍待语义审查，本次不机械应用待续patch、不声称已解决择优。已读plugin存储/发布Schema、publisher全部分支、唯一比较器、Owner指令/Skill所有权、Mutation/history/e2e消费者、真实Host测试、2026-08-17所有权拆分史及门审计。
+- 真实根因：比较publisher先从所选不可变Campaign/Candidate/Run/Evaluation/Review算出完整`deriveComparisonRecommendation`，却只用它与模型逐项重抄的payload比较，再把模型payload存储。模型没有拥有这些统计数值的事实源，错误字符串不能给出整份正确高熵结果；Run与Evaluation已经采用空/最小输入+宿主盖章，comparison尚保留同类重复。历史门审计明确标为待改。此问题影响发布输入、role指令、包闭包和真实发布测试；不涉及Task/Mission/Session调度、业务语义、既有存储Schema或晋升授权。
+- 补充反证：当前Evaluation已从immutable metric receipt盖章，Evaluator不能手抄错误scorer值；2026-08-17明确单slot一个Evaluation。因此G31关于“错误Evaluation同Trial更正”的争议须进一步落到真实可重复指标执行/receipt身份与可用性变化，不能凭想象新增任意修订API。Review来源选择、并行审查及显式取代尚待独立解决。
+- 单一改动：新增空对象的Comparison**发布输入**Schema并替换原输入分支；publisher校验原有角色/来源与槽位身份后直接把唯一比较器结果赋为payload并发布，删除模型复述/逐字相等分支，不保留双输入。Owner仍负责当前协议的来源选择和结果解释；源集合完整性/重复槽位规则/统计公式/推荐规则全部保持，既有Comparison存储和历史读取格式不变。
+- Owner发布后必须完整读回真实Comparison，再从同一结果渲染文档/图，不再要求提前自算传入派生字段。同步README、所有权文档与历史门审计对应状态，Evolution Lab版本至2026.09.26.4，仅同步该包生成闭包；默认目标包、权限、工作流均不改，不安装推广。
+- 验收预测：现有真实DB/collector/metric/Review/publisher测试只交空payload，原版应明确因缺比较字段失败；修复后发布成功且读回逐项等于该夹具独立登记的完整比较结果（包括原failed Trial、缺候选、blocker/非blocker未观察和unknowns），不以调用比较器自行计算期望替代断言。再跑原39项比较规则、包投影和相关晋升/历史e2e合同、类型/包拓扑/docs/diff。没有真实Campaign或业务增益结论。
+
+### G33实施与验证
+
+- 真实原版红测为8通过/1失败：空payload经原发布入口精确返回缺comparison字段错误，日志`.tmp/g33-publisher-red.log`。修复后真实publisher成功并完整读回，逐项匹配独立列出的比较结果；保留原前驱校验与唯一统计实现，仅删除模型复述及其相等门。
+- 首轮9文件有一处过期版本断言（写死`.3`，实际嵌入`.4`）失败，原日志`.tmp/g33-green-tests.log`保留；同步当前明确版本后该文件9项/95断言全部通过，见`.tmp/g33-host-final.log`。其余8文件原次全部通过，包括39项比较、真实包投影、晋升mutation、历史e2e解析、链修复、候选surface与feedback。合计93项/503断言，不把初次失败覆盖成通过。
+- 源包与嵌入包同步到`2026.09.26.4`，content digest `8e5a56e736edf3a4895e7fea1961e8eca848fa10cc48dfc743bbbb6704182845`；采用现有payload/revision生成器只更新Evolution Lab项，其它设计包/默认包保持。真实loader检查源包/嵌入/登记身份一致。根类型8项全部实际检查通过；专家团拓扑122 manifests/135 workflows、docs342ops25groups与diff通过。当前架构02-data同步单一发布所有权。
+- 未启动新业务模型或Campaign，Review完整发现/取代仍未解决，业务纠错与进化收益仍未证。G31归档patch继续未应用；本项不以更多引用或字符串相等代替业务判断。

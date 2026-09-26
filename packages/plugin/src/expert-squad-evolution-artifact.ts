@@ -165,6 +165,13 @@ export const EvolutionCandidateRevisionPublishInputSchema = z
 export const EvolutionEvaluationResultPublishInputSchema = z.object({}).strict()
 
 /**
+ * The Recommendation Owner chooses the predecessor evidence and interprets the
+ * published result. All fields of the comparison itself are deterministic facts
+ * derived from those predecessors by the publisher, so none is model input.
+ */
+export const EvolutionComparisonRecommendationPublishInputSchema = z.object({}).strict()
+
+/**
  * Model-facing run-evidence-bundle publication input.
  *
  * The Evaluator owns one decision: which frozen Campaign slot a collected
@@ -671,7 +678,7 @@ export const EvolutionPackagePublishableArtifactInputSchema = z.discriminatedUni
   }),
   z.object({
     artifact_type: z.literal("evolution-lab/comparison-recommendation"),
-    payload: EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"],
+    payload: EvolutionComparisonRecommendationPublishInputSchema,
   }),
 ])
 

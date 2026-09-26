@@ -1933,50 +1933,51 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             source_artifact_locators: [campaignReceipt.locator],
           })
           ;(scope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
+          const expectedComparison = {
+            baseline_revision: revision,
+            candidate_revision: candidateRevision,
+            paired_deltas: [],
+            cost_delta: null,
+            token_delta: null,
+            activity_duration_ms_delta: null,
+            outcome_rates: {
+              baseline: { failure: 1, unavailable: 0 },
+              candidate: { failure: 0, unavailable: 1 },
+            },
+            aggregate_score: null,
+            aggregate_interval: null,
+            regressions: [],
+            unavailable_dimensions: [
+              "activity_duration_ms_delta",
+              "aggregate_score",
+              "cost_delta",
+              "evaluation:case-1:candidate:0",
+              "integrity_finding:case-1:baseline:0:security:1",
+              "integrity_finding:case-1:baseline:0:side_effect:2",
+              "integrity_review:case-1:candidate:0",
+              "run:case-1:candidate:0",
+              "scorer:correctness:case-1:candidate:0",
+              "token_delta",
+            ],
+            required_unavailable_dimensions: [
+              "aggregate_score",
+              "evaluation:case-1:candidate:0",
+              "integrity_finding:case-1:baseline:0:security:1",
+              "integrity_review:case-1:candidate:0",
+              "run:case-1:candidate:0",
+              "scorer:correctness:case-1:candidate:0",
+            ],
+            unknowns: ["candidate arm remains a separate immutable Trial"],
+            visual_review: { status: "not_applicable", evidence: [] },
+            reward_hacking_review: { findings: [], evidence: [] },
+            confidence: "low",
+            recommendation: "inconclusive",
+          }
           const recommendationReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/comparison-recommendation",
-                payload: {
-                  baseline_revision: revision,
-                  candidate_revision: candidateRevision,
-                  paired_deltas: [],
-                  cost_delta: null,
-                  token_delta: null,
-                  activity_duration_ms_delta: null,
-                  outcome_rates: {
-                    baseline: { failure: 1, unavailable: 0 },
-                    candidate: { failure: 0, unavailable: 1 },
-                  },
-                  aggregate_score: null,
-                  aggregate_interval: null,
-                  regressions: [],
-                  unavailable_dimensions: [
-                    "activity_duration_ms_delta",
-                    "aggregate_score",
-                    "cost_delta",
-                    "evaluation:case-1:candidate:0",
-                    "integrity_finding:case-1:baseline:0:security:1",
-                    "integrity_finding:case-1:baseline:0:side_effect:2",
-                    "integrity_review:case-1:candidate:0",
-                    "run:case-1:candidate:0",
-                    "scorer:correctness:case-1:candidate:0",
-                    "token_delta",
-                  ],
-                  required_unavailable_dimensions: [
-                    "aggregate_score",
-                    "evaluation:case-1:candidate:0",
-                    "integrity_finding:case-1:baseline:0:security:1",
-                    "integrity_review:case-1:candidate:0",
-                    "run:case-1:candidate:0",
-                    "scorer:correctness:case-1:candidate:0",
-                  ],
-                  unknowns: ["candidate arm remains a separate immutable Trial"],
-                  visual_review: { status: "not_applicable", evidence: [] },
-                  reward_hacking_review: { findings: [], evidence: [] },
-                  confidence: "low",
-                  recommendation: "inconclusive",
-                },
+                payload: {},
                 resource_set: null,
                 source_artifact_locators: [
                   campaignReceipt.locator,
@@ -1990,6 +1991,15 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ),
           ) as { artifact_type: string; locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
           expect(recommendationReceipt.artifact_type).toBe("evolution-lab/comparison-recommendation")
+          const comparisonRead = await host.engineArtifacts.read({
+            locator: recommendationReceipt.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
+          expect(comparisonRead.chunk.complete).toBe(true)
+          const comparisonEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(comparisonRead.chunk.text!))
+          expect(comparisonEnvelope.payload).toEqual(expectedComparison)
         })
 
         const sourceCompleted = Date.now()
@@ -2290,7 +2300,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.26.3")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.26.4")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(

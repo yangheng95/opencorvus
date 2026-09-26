@@ -21,6 +21,7 @@ import {
   EvolutionArtifactSchemas,
   EvolutionCampaignPublishInputSchema,
   EvolutionCandidateRevisionPublishInputSchema,
+  EvolutionComparisonRecommendationPublishInputSchema,
   EvolutionEvaluationResultPublishInputSchema,
   EvolutionMetricReceiptSchema,
   EvolutionPackagePublishableArtifactInputSchema,
@@ -412,7 +413,9 @@ export default tool({
               ? EvolutionEvaluationResultPublishInputSchema.parse(publication.payload)
               : artifact_type === "evolution-lab/run-evidence-bundle"
                 ? EvolutionRunEvidencePublishInputSchema.parse(publication.payload)
-                : parseEvolutionArtifact(artifact_type, publication.payload)
+                : artifact_type === "evolution-lab/comparison-recommendation"
+                  ? EvolutionComparisonRecommendationPublishInputSchema.parse(publication.payload)
+                  : parseEvolutionArtifact(artifact_type, publication.payload)
     if (artifact_type === "evolution-lab/candidate-revision") {
       const candidatePayload = EvolutionCandidateRevisionPublishInputSchema.parse(payload)
       const campaignLocator = candidatePayload.development_campaign_locator
@@ -686,7 +689,6 @@ export default tool({
             )
     }
     if (artifact_type === "evolution-lab/comparison-recommendation") {
-      const claimed = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(payload)
       if (publication.source_artifact_locators.some((locator) => locator.source !== "engine_artifact"))
         throw new EvolutionArtifactIntegrityError("comparison sources must all be exact Engine Artifact locators")
       const envelopes = await Promise.all(
@@ -746,7 +748,7 @@ export default tool({
           locator: item.locator,
           value: EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse(item.envelope.payload),
         }))
-      const exact = deriveComparisonRecommendation({
+      payload = deriveComparisonRecommendation({
         campaign: EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(campaigns[0]!.envelope.payload),
         campaignLocator: campaigns[0]!.locator,
         candidate: EvolutionArtifactSchemas["evolution-lab/candidate-revision"].parse(candidates[0]!.envelope.payload),
@@ -755,10 +757,6 @@ export default tool({
         reviews,
         runs,
       })
-      if (!sameJSON(exact, claimed))
-        throw new EvolutionArtifactIntegrityError(
-          "comparison-recommendation must equal the deterministic Campaign, Candidate, run, and evaluation matrix",
-        )
     }
     const receipt = await context.host.engineArtifacts.publish({
       artifact_type,
