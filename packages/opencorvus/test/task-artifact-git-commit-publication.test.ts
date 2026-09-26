@@ -1,5 +1,6 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
+import os from "node:os"
 import path from "node:path"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
@@ -13,6 +14,7 @@ import {
 } from "../src/build/merge-back-publication-authority"
 import type { SessionRuntimeContract } from "../src/session/runtime-contract"
 import {
+  TaskArtifactGitCommitUnavailableError,
   createTaskArtifactStoreExecution,
   listTaskArtifactSnapshots,
   publishEngineArtifactResources,
@@ -686,4 +688,145 @@ describe("Task Artifact immutable Git commit publication", () => {
       },
     })
   })
+
+  test("materializes one exact committed tree and names every entry it cannot reproduce", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { scope } = await establishProjectedSchedulerSnapshot({
+          projectPath: project.path,
+          file: "materialization-authority.txt",
+          contents: "commit materialization",
+        })
+        const scratch = await fs.mkdtemp(path.join(os.tmpdir(), "commit-materialization-"))
+        const index = path.join(scratch, "index")
+        const blob = async (name: string, bytes: Uint8Array) => {
+          await fs.writeFile(path.join(scratch, name), bytes)
+          return git(project.path, ["hash-object", "-w", "--no-filters", path.join(scratch, name)])
+        }
+        // A private index keeps the constructed trees away from the project
+        // worktree and applies no checkout filter to the committed bytes.
+        const commitTree = async (entries: ReadonlyArray<readonly [string, string, string]>) => {
+          await fs.rm(index, { force: true })
+          for (const [mode, objectID, entryPath] of entries) {
+            await hostGit(["-c", "core.ignorecase=false", "update-index", "--add", "--cacheinfo", `${mode},${objectID},${entryPath}`], {
+              cwd: project.path,
+              env: { GIT_INDEX_FILE: index },
+              timeoutProfile: "default",
+            }).then((result) => {
+              if (result.exitCode !== 0) throw new Error(result.stderr.toString().trim())
+            })
+          }
+          const written = await hostGit(["write-tree"], {
+            cwd: project.path,
+            env: { GIT_INDEX_FILE: index },
+            timeoutProfile: "default",
+          })
+          if (written.exitCode !== 0) throw new Error(written.stderr.toString().trim())
+          const tree = written.stdout.toString().trim()
+          return { tree, commit: await git(project.path, ["commit-tree", tree, "-m", "constructed exact tree"]) }
+        }
+        const readme = Buffer.from("# Exact subject\r\nline two\n")
+        const binary = Buffer.from([0, 13, 10, 255, 1, 2, 3])
+        const script = Buffer.from("#!/bin/sh\necho measured\n")
+        const readmeID = await blob("readme", readme)
+        const binaryID = await blob("binary", binary)
+        const scriptID = await blob("script", script)
+        const exact = await commitTree([
+          ["100644", readmeID, "README.md"],
+          ["100644", binaryID, "data/nested/crlf.bin"],
+          ["100755", scriptID, "bin/run.sh"],
+        ])
+
+        const execution = createTaskArtifactStoreExecution(scope)
+        let directory = ""
+        try {
+          const copy = await execution.materializeGitCommit(exact)
+          directory = copy.directory
+          expect(path.dirname(directory)).toBe(
+            path.dirname(ProjectRuntimePaths.taskArtifactMaterializationRoot(project.path, scope.taskID, "probe")),
+          )
+          expect(copy).toMatchObject({ file_count: 3, byte_count: readme.length + binary.length + script.length })
+          expect(await fs.readFile(path.join(directory, "README.md"))).toEqual(readme)
+          expect(await fs.readFile(path.join(directory, "data", "nested", "crlf.bin"))).toEqual(binary)
+          expect(await fs.readFile(path.join(directory, "bin", "run.sh"))).toEqual(script)
+          expect((await fs.readdir(directory, { recursive: true })).map((entry) => entry.replaceAll("\\", "/")).sort()).toEqual([
+            "README.md",
+            "bin",
+            "bin/run.sh",
+            "data",
+            "data/nested",
+            "data/nested/crlf.bin",
+          ])
+          if (process.platform !== "win32") {
+            expect((await fs.stat(path.join(directory, "bin", "run.sh"))).mode & 0o111).toBe(0o111)
+          }
+
+          const replacement = await commitTree([["100644", binaryID, "README.md"]])
+          await git(project.path, ["replace", exact.tree, replacement.tree])
+          let replacedCopy: Awaited<ReturnType<typeof execution.materializeGitCommit>>
+          try {
+            replacedCopy = await execution.materializeGitCommit(exact)
+            expect(await fs.readFile(path.join(replacedCopy.directory, "README.md"))).toEqual(readme)
+            expect(replacedCopy.file_count).toBe(3)
+          } finally {
+            await git(project.path, ["replace", "-d", exact.tree])
+          }
+
+          const unavailable = async (input: { commit: string; tree: string }) => {
+            const failure = await execution.materializeGitCommit(input).then(
+              () => undefined,
+              (error: unknown) => error,
+            )
+            expect(failure).toBeInstanceOf(TaskArtifactGitCommitUnavailableError)
+            return (failure as Error).message
+          }
+          expect(await unavailable({ commit: exact.commit, tree: "0".repeat(40) })).toBe(
+            `TaskArtifactStore commit ${exact.commit} has tree ${exact.tree}; expected ${"0".repeat(40)}`,
+          )
+          expect(await unavailable({ commit: "e".repeat(40), tree: exact.tree })).toContain(
+            `TaskArtifactStore commit ${"e".repeat(40)} is not a readable commit in this repository`,
+          )
+          expect(await unavailable(await commitTree([["120000", readmeID, "link"]]))).toEndWith(
+            'contains "link" as a symbolic link, not a regular file',
+          )
+          expect(await unavailable(await commitTree([["160000", exact.commit, "vendor/nested"]]))).toEndWith(
+            'contains "vendor/nested" as a gitlink to a nested repository, not a regular file',
+          )
+          expect(
+            await unavailable(
+              await commitTree([
+                ["100644", readmeID, "README.md"],
+                ["100644", readmeID, "readme.md"],
+              ]),
+            ),
+          ).toEndWith("contains file paths that differ only by case")
+          expect(
+            await unavailable(
+              await commitTree([
+                ["100644", readmeID, "Docs"],
+                ["100644", readmeID, "docs/guide.md"],
+              ]),
+            ),
+          ).toEndWith('contains "Docs" as a file and as a directory of docs/guide.md')
+          expect(
+            await unavailable(
+              await commitTree([
+                ["100644", readmeID, "Docs/first.md"],
+                ["100644", readmeID, "docs/second.md"],
+              ]),
+            ),
+          ).toEndWith('contains directories "Docs" and "docs" that differ only by case')
+          expect((await fs.readdir(path.dirname(directory))).sort()).toEqual(
+            [path.basename(directory), path.basename(replacedCopy!.directory)].sort(),
+          )
+        } finally {
+          await execution.close()
+          await fs.rm(scratch, { recursive: true, force: true })
+        }
+        await expect(fs.stat(directory)).rejects.toMatchObject({ code: "ENOENT" })
+      },
+    })
+  }, 60_000)
 })

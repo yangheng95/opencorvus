@@ -1,14 +1,21 @@
+import { createHash } from "node:crypto"
 import {
   MetricEvaluationOutcomeSchema,
   MetricEvaluationRequestSchema,
+  TaskRunEvidenceBundleSchema,
+  canonicalTaskRunEvidenceJSON,
   type MetricEvaluationHost,
   type MetricScorerSpec,
-  type TaskArtifactHost,
+  type TaskArtifactRef,
 } from "@opencorvus-ai/plugin"
 import { readTaskArtifact } from "@/artifact-catalog"
-import { executeMetrics } from "@/metrics/executor"
+import { executeMetrics, type MetricSubject, type MetricSubjectWorkspace } from "@/metrics/executor"
 import { canonicalMetricJSON } from "@/metrics/canonical-json"
 import { readSpecsForTask, registerBaselineSpec } from "@/metrics/store"
+import {
+  TaskArtifactGitCommitUnavailableError,
+  type TaskArtifactStoreExecution,
+} from "@/task-artifact/store"
 import type { TaskToolExecutionScope } from "./task-tool-execution-scope"
 import { createMetricJudgeRunner } from "./metric-judge-runner"
 
@@ -73,13 +80,72 @@ function ensureFrozenScorers(taskID: string, scorers: readonly MetricScorerSpec[
   return physicalIDs
 }
 
+type MetricTaskArtifacts = Pick<TaskArtifactStoreExecution, "stage" | "publish" | "read" | "materializeGitCommit">
+
+/**
+ * Bind the subject to its canonical collector bundle in this Task. Only a
+ * terminal Git result of the root repository is an immutable workspace; the
+ * copy is made once, on first use, and removed when the invocation closes.
+ */
+async function readMetricSubject(taskArtifacts: MetricTaskArtifacts, resource: TaskArtifactRef): Promise<MetricSubject> {
+  const text = new TextDecoder("utf-8", { fatal: true }).decode(await taskArtifacts.read(resource))
+  const bundle = TaskRunEvidenceBundleSchema.parse(JSON.parse(text))
+  const { canonical_sha256: canonicalSHA256, ...semantic } = bundle
+  if (
+    canonicalTaskRunEvidenceJSON(bundle) !== text ||
+    createHash("sha256").update(canonicalTaskRunEvidenceJSON(semantic)).digest("hex") !== canonicalSHA256
+  ) {
+    throw new Error(
+      `Metric subject ${resource.tree}/${resource.path} must be one canonical Task run evidence bundle; its bytes or canonical_sha256 are not canonical`,
+    )
+  }
+  const checkpoint = bundle.workspace_checkpoint.result
+  const identity = {
+    resource,
+    trial_task_id: bundle.task.id,
+    canonical_sha256: canonicalSHA256,
+    result:
+      checkpoint.kind === "terminal_git"
+        ? { kind: checkpoint.kind, commit: checkpoint.commit, tree: checkpoint.tree }
+        : { kind: checkpoint.kind, tree_sha256: checkpoint.tree_sha256, time_observed: checkpoint.time_observed },
+  }
+  const materialize = async (): Promise<MetricSubjectWorkspace> => {
+    if (checkpoint.kind === "live_observation") {
+      return {
+        status: "unavailable",
+        message: `Subject Trial ${bundle.task.id} has no terminal Git result; its live observation at ${checkpoint.time_observed} is not an immutable workspace`,
+      }
+    }
+    const nested = checkpoint.repositories.filter((repository) => repository.path !== ".")
+    if (nested.length > 0) {
+      return {
+        status: "unavailable",
+        message: `Subject Trial ${bundle.task.id} result includes nested repositories ${nested.map((repository) => repository.path).join(", ")}; only a single root repository can be materialized`,
+      }
+    }
+    try {
+      const copy = await taskArtifacts.materializeGitCommit({ commit: checkpoint.commit, tree: checkpoint.tree })
+      return { status: "available", directory: copy.directory }
+    } catch (cause) {
+      if (cause instanceof TaskArtifactGitCommitUnavailableError) return { status: "unavailable", message: cause.message }
+      throw cause
+    }
+  }
+  let workspace: Promise<MetricSubjectWorkspace> | undefined
+  return {
+    identity,
+    workspace: () => (workspace ??= materialize()),
+  }
+}
+
 export function createMetricEvaluationHost(
   scope: TaskToolExecutionScope,
-  taskArtifacts: Pick<TaskArtifactHost, "stage" | "publish">,
+  taskArtifacts: MetricTaskArtifacts,
 ): MetricEvaluationHost {
   return Object.freeze({
     async evaluate(rawInput) {
       const input = MetricEvaluationRequestSchema.parse(rawInput)
+      const subject = await readMetricSubject(taskArtifacts, input.subject)
       const physicalIDs = ensureFrozenScorers(scope.taskID, input.scorers)
       const logicalIDs = new Map([...physicalIDs].map(([logical, physical]) => [physical, logical]))
       const outcome = await executeMetrics(
@@ -91,7 +157,7 @@ export function createMetricEvaluationHost(
           visual_feedback_verification_artifact_locators: input.visual_feedback_verification_artifact_locators,
         },
         {
-          workDir: scope.projectDirectory,
+          subject,
           taskArtifacts,
           evidenceReader: {
             read: (read) =>

@@ -111,12 +111,38 @@ export const MetricUnavailableReasonCode = z.enum([
 ])
 export type MetricUnavailableReasonCode = z.infer<typeof MetricUnavailableReasonCode>
 
+const GitObjectID = z.string().regex(/^[a-f0-9]{40}([a-f0-9]{24})?$/)
+
+/**
+ * The measured Trial, fixed by its canonical run-evidence resource. The
+ * evaluating Task owns the attempt; this names what the attempt observed.
+ */
+export const MetricSubjectIdentity = z
+  .object({
+    resource: TaskArtifactRefSchema,
+    trial_task_id: z.string().min(1),
+    canonical_sha256: z.string().regex(/^[a-f0-9]{64}$/),
+    result: z.discriminatedUnion("kind", [
+      z.object({ kind: z.literal("terminal_git"), commit: GitObjectID, tree: GitObjectID }).strict(),
+      z
+        .object({
+          kind: z.literal("live_observation"),
+          tree_sha256: z.string().regex(/^[a-f0-9]{64}$/),
+          time_observed: z.number().int().nonnegative(),
+        })
+        .strict(),
+    ]),
+  })
+  .strict()
+export type MetricSubjectIdentity = z.infer<typeof MetricSubjectIdentity>
+
 const MetricExecutionEvidenceIdentity = z.object({
-  schema_version: z.literal(1),
+  schema_version: z.literal(2),
   metric_spec_id: z.string().min(1),
   task_id: z.string().min(1),
   iteration: z.number().int().nonnegative(),
   evaluator_kind: MetricEvaluatorKind,
+  subject: MetricSubjectIdentity,
   selected_evidence: z.array(
     z
       .object({

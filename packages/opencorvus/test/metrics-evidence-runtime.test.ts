@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import path from "node:path"
-import { readFile, writeFile } from "node:fs/promises"
+import { mkdir, readFile, writeFile } from "node:fs/promises"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
@@ -288,6 +288,18 @@ describe("Metric scorer exact evidence runtime", () => {
           files: [{ tree: "judge-input", path: "source.txt", media_type: "text/plain" }],
         })
         const sourceLocator = { source: "task_artifact_resource" as const, ref: sourcePublication.artifacts[0]! }
+        // Every script below is addressed absolutely; the subject workspace is
+        // only the directory the shell scorers run in.
+        const runtimeSubjectIdentity = {
+          resource: sourcePublication.artifacts[0]!,
+          trial_task_id: taskID,
+          canonical_sha256: "f".repeat(64),
+          result: { kind: "terminal_git" as const, commit: "1".repeat(40), tree: "2".repeat(40) },
+        }
+        const runtimeSubject = {
+          identity: runtimeSubjectIdentity,
+          workspace: async () => ({ status: "available" as const, directory: project!.path }),
+        }
         const materializedSource = await readTaskArtifact({
           authority: { projectID: Instance.project.id, projectDirectory: project.path, taskID },
           read: { locator: sourceLocator, byte_offset: 0, max_bytes: 1, delivery: "materialized_file" },
@@ -594,7 +606,7 @@ describe("Metric scorer exact evidence runtime", () => {
             visual_feedback_verification_artifact_locators: [verificationLocator],
           },
           {
-            workDir: project.path,
+            subject: runtimeSubject,
             taskArtifacts: execution,
             evidenceReader: {
               read: (read) =>
@@ -623,7 +635,8 @@ describe("Metric scorer exact evidence runtime", () => {
         const measuredAttempt = MetricExecutionEvidence.parse(
           JSON.parse(new TextDecoder().decode(await execution.read(bySpec.get(measuredSpec.id)!.evidence_ref))),
         )
-        expect(measuredAttempt).toMatchObject({ status: "measured", raw_value: 7 })
+        expect(measuredAttempt).toMatchObject({ schema_version: 2, status: "measured", raw_value: 7 })
+        expect(measuredAttempt.subject).toEqual(runtimeSubjectIdentity)
         expect(bySpec.get(measuredSpec.id)).toMatchObject({ raw_value: 7, evidence_fresh: true })
         expect(bySpec.get(parseUnavailableSpec.id)).toMatchObject({
           raw_value: null,
@@ -720,7 +733,7 @@ describe("Metric scorer exact evidence runtime", () => {
             visual_feedback_verification_artifact_locators: [wrongIdentityLocator],
           },
           {
-            workDir: project.path,
+            subject: runtimeSubject,
             taskArtifacts: execution,
             evidenceReader: {
               read: (read) =>
@@ -751,7 +764,7 @@ describe("Metric scorer exact evidence runtime", () => {
             visual_feedback_verification_artifact_locators: [verificationLocator],
           },
           {
-            workDir: project.path,
+            subject: runtimeSubject,
             taskArtifacts: execution,
             evidenceReader: {
               read: (read) =>
@@ -783,4 +796,180 @@ describe("Metric scorer exact evidence runtime", () => {
       },
     })
   }, 120_000)
+
+  test("runs shell scorers only inside the measured subject workspace", async () => {
+    project ??= await memoryProject()
+    const projectPath = project.path
+    await Instance.provide({
+      directory: projectPath,
+      fn: async () => {
+        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Metric subject" })
+        const taskID = Identifier.ascending("task")
+        const started = Date.now()
+        const packageRevision = {
+          scope: "built_in" as const,
+          projectID: null,
+          namespace: "builtin",
+          id: "evolution-lab",
+          version: "2026.08.06.1",
+          packageDigest: "a".repeat(64),
+        }
+        persistTask({
+          taskID,
+          rootSession: session,
+          now: started,
+          title: "Metric subject",
+          request: "Measure only the subject workspace",
+          productPillar: "code",
+          source: "test",
+          priority: "normal",
+          metadata: {},
+          projectID: Instance.project.id,
+          packageRevision,
+          executionCapsuleBinding: await prepareTaskProcessBinding({
+            mode: "native",
+            taskID,
+            projectID: Instance.project.id,
+            rootDirectory: Instance.directory,
+            packageRevisionSHA256: packageRevision.packageDigest,
+            timeCreated: started,
+          }),
+        })
+        const execution = createTaskArtifactStoreExecution({
+          kind: "task",
+          projectID: Instance.project.id,
+          projectDirectory: projectPath,
+          taskID,
+          taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(projectPath, taskID),
+          sessionID: session.id,
+          messageID: "message-metric-subject",
+          toolCallID: "call-metric-subject",
+          toolPartID: "part-metric-subject",
+          executionSurface: {},
+          owner: {
+            kind: "projected-worker",
+            expertSquadID: "evolution-lab",
+            packageRevision,
+            agentID: "evaluator",
+            projectionHash: "b".repeat(64),
+            workerTurnDescriptorID: "descriptor-metric-subject",
+            workerTurnDescriptorHash: "c".repeat(64),
+          },
+        } as unknown as TaskToolExecutionScope)
+        const subjectRoot = path.join(projectPath, "measured-subject")
+        await mkdir(path.join(subjectRoot, "nested"), { recursive: true })
+        await writeFile(path.join(subjectRoot, "subject-marker.txt"), "3")
+        await writeFile(path.join(subjectRoot, "nested", "subject-marker.txt"), "5")
+        // The evaluating Task's own directory holds a different marker that no
+        // scorer may observe.
+        await writeFile(path.join(projectPath, "subject-marker.txt"), "9")
+        const digest = "d".repeat(64)
+        const readMarker = {
+          scorer_revision: digest,
+          workspace_digest: digest,
+          executable: Bun.which("node")!,
+          args: ["-e", "process.stdout.write(require('node:fs').readFileSync('subject-marker.txt', 'utf8'))"],
+          parse: "stdout_number",
+          inactivity_timeout_ms: 30_000,
+        }
+        const common = {
+          task_id: taskID,
+          scope: "global" as const,
+          goal_id: null,
+          description: "Subject marker observation",
+          unit: "count",
+          direction: "higher_better" as const,
+          target: 1,
+          floor: 0,
+          weight: 1,
+          observation_class: "quality" as const,
+          evaluator_kind: "shell" as const,
+        }
+        const rootSpec = registerBaselineSpec({ ...common, name: "subject-root", evaluator_config: readMarker })
+        const nestedSpec = registerBaselineSpec({
+          ...common,
+          name: "subject-nested",
+          evaluator_config: { ...readMarker, cwd: "nested" },
+        })
+        const escapingSpec = registerBaselineSpec({
+          ...common,
+          name: "subject-absolute-cwd",
+          evaluator_config: { ...readMarker, cwd: projectPath },
+        })
+        const stage = await execution.stage({ trees: ["run-evidence"] })
+        await writeFile(path.join(stage.treeDirectories["run-evidence"]!, "run-evidence.json"), "{}")
+        const identityResource = (
+          await execution.publish(stage, {
+            snapshot_kind: "catalog",
+            files: [{ tree: "run-evidence", path: "run-evidence.json", media_type: "application/json" }],
+          })
+        ).artifacts[0]!
+        const identity = {
+          resource: identityResource,
+          trial_task_id: "task-measured-trial",
+          canonical_sha256: "f".repeat(64),
+          result: { kind: "terminal_git" as const, commit: "1".repeat(40), tree: "2".repeat(40) },
+        }
+        const evidenceReader = {
+          read: (read: Parameters<typeof readTaskArtifact>[0]["read"]) =>
+            readTaskArtifact({
+              authority: { projectID: Instance.project.id, projectDirectory: projectPath, taskID },
+              read,
+            }),
+        }
+        const attempt = async (ref: Parameters<typeof execution.read>[0]) =>
+          MetricExecutionEvidence.parse(JSON.parse(new TextDecoder().decode(await execution.read(ref))))
+
+        const available = await executeMetrics(
+          { task_id: taskID, iteration: 0, selected_evidence_locators: [] },
+          {
+            subject: { identity, workspace: async () => ({ status: "available", directory: subjectRoot }) },
+            taskArtifacts: execution,
+            evidenceReader,
+          },
+        )
+        const measured = new Map(available.results.map((result) => [result.metric_spec_id, result]))
+        expect(measured.get(rootSpec.id)).toMatchObject({ raw_value: 3, evidence_fresh: true })
+        expect(measured.get(nestedSpec.id)).toMatchObject({ raw_value: 5, evidence_fresh: true })
+        expect(measured.get(escapingSpec.id)).toMatchObject({ raw_value: null, evidence_fresh: false })
+        expect(available.unavailable.map((item) => [item.spec_id, item.reason_code])).toEqual([
+          [escapingSpec.id, "configuration_invalid"],
+        ])
+        const rootAttempt = await attempt(measured.get(rootSpec.id)!.evidence_ref)
+        expect(rootAttempt.subject).toEqual(identity)
+        expect(rootAttempt.execution).toMatchObject({ cwd: subjectRoot })
+        expect((await attempt(measured.get(nestedSpec.id)!.evidence_ref)).execution).toMatchObject({
+          cwd: path.join(subjectRoot, "nested"),
+        })
+        expect(await attempt(available.unavailable[0]!.evidence_ref)).toMatchObject({
+          status: "unavailable",
+          reason_code: "configuration_invalid",
+          message: `Shell scorer cwd must be a canonical path inside the measured subject workspace, or omitted for its root; received ${JSON.stringify(projectPath)}`,
+        })
+
+        const missing = await executeMetrics(
+          { task_id: taskID, iteration: 1, selected_evidence_locators: [] },
+          {
+            subject: {
+              identity,
+              workspace: async () => ({ status: "unavailable", message: "Subject has no terminal Git result" }),
+            },
+            taskArtifacts: execution,
+            evidenceReader,
+          },
+        )
+        expect(Object.fromEntries(missing.unavailable.map((item) => [item.spec_id, item.reason_code]))).toEqual({
+          [rootSpec.id]: "input_unavailable",
+          [nestedSpec.id]: "input_unavailable",
+          [escapingSpec.id]: "configuration_invalid",
+        })
+        const missingRoot = missing.unavailable.find((item) => item.spec_id === rootSpec.id)!
+        expect(await attempt(missingRoot.evidence_ref)).toMatchObject({
+          subject: identity,
+          message: "Subject has no terminal Git result",
+        })
+        await execution.close()
+      },
+    })
+  }, 60_000)
 })

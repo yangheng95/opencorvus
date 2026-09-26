@@ -16,7 +16,7 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import { Database } from "@/storage/db"
 import { Identifier } from "@/id/id"
 import { EngineMetricResultTable, EngineMetricSpecTable } from "./metrics.sql"
-import { MetricResult, type MetricSpec } from "./types"
+import { MetricResult, MetricSpec } from "./types"
 import z from "zod"
 import type { TaskArtifactRef } from "@opencorvus-ai/plugin/task-artifact"
 import { canonicalMetricJSON } from "./canonical-json"
@@ -147,7 +147,7 @@ export function readSpecsForTask(taskID: string): MetricSpec[] {
   const rows = Database.use((db) =>
     db.select().from(EngineMetricSpecTable).where(eq(EngineMetricSpecTable.task_id, taskID)).all(),
   )
-  return rows as MetricSpec[]
+  return rows.map((row) => MetricSpec.parse(row))
 }
 
 export function readResultsForIteration(taskID: string, iteration: number): MetricResult[] {

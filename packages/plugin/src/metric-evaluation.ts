@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { ArtifactReadLocatorListSchema, EngineArtifactLocatorSchema } from "./artifact-catalog.js"
+import { ProjectRelativePathSchema } from "./project-path.js"
 import { TaskArtifactRefSchema } from "./task-artifact.js"
 
 const SHA256Schema = z.string().regex(/^[a-f0-9]{64}$/)
@@ -167,7 +168,11 @@ const MetricScorerAuthoringIdentitySchema = MetricScorerIdentitySchema.omit(HOST
 export const MetricScorerAuthoringSpecSchema = z.discriminatedUnion("evaluator_kind", [
   MetricScorerAuthoringIdentitySchema.extend({
     evaluator_kind: z.literal("shell"),
-    evaluator_config: ShellMetricEvaluatorConfigSchema.omit(HOST_STAMPED_CONFIG_FACTS),
+    // A new scorer runs inside the measured subject workspace, so its cwd can
+    // only name a directory there. Frozen specs keep their original shape.
+    evaluator_config: ShellMetricEvaluatorConfigSchema.omit(HOST_STAMPED_CONFIG_FACTS).extend({
+      cwd: ProjectRelativePathSchema.optional(),
+    }),
   }),
   MetricScorerAuthoringIdentitySchema.extend({
     evaluator_kind: z.literal("judge"),
@@ -216,6 +221,12 @@ export const MetricEvaluationRequestSchema = z
     iteration: z.number().int().nonnegative(),
     delivery_slice_revision_id: z.string().min(1).nullable(),
     scorers: z.array(MetricScorerSpecSchema).min(1),
+    /**
+     * The measured Trial: its canonical run-evidence bundle resource in the
+     * current Task. Shell scorers run in an isolated copy of that Trial's
+     * terminal committed workspace; the current Task only owns the attempts.
+     */
+    subject: TaskArtifactRefSchema,
     selected_evidence_locators: ArtifactReadLocatorListSchema,
     visual_feedback_verification_artifact_locators: z.array(EngineArtifactLocatorSchema),
   })

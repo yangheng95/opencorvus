@@ -17,9 +17,8 @@ import {
   QueryMetricEvaluatorConfigSchema,
   ShellMetricEvaluatorConfigSchema,
 } from "@opencorvus-ai/plugin"
-import { Instance } from "@/project/instance"
+import { isCanonicalProjectRelativePath } from "@opencorvus-ai/plugin/project-path"
 import { runTaskCommandWithInactivity } from "@/shell/command-inactivity"
-import { Filesystem } from "@/util/filesystem"
 import { activeTaskExecutionCapsule } from "@/engine/task-execution-capsule-binding"
 import { Log } from "@/util/log"
 import {
@@ -40,10 +39,22 @@ import {
   type MetricDirection,
   type MetricResult,
   type MetricSpec,
+  type MetricSubjectIdentity,
   type MetricUnavailableReasonCode,
 } from "./types"
 
 const log = Log.create({ service: "metric-executor" })
+
+/** An immutable copy of the measured workspace, or why none exists. */
+export type MetricSubjectWorkspace =
+  | Readonly<{ status: "available"; directory: string }>
+  | Readonly<{ status: "unavailable"; message: string }>
+
+/** What every attempt measures. Shell scorers run inside its workspace. */
+export interface MetricSubject {
+  identity: MetricSubjectIdentity
+  workspace(): Promise<MetricSubjectWorkspace>
+}
 
 export interface MetricExecutorContext {
   /** Exact Artifact reader for the evaluator Task. */
@@ -52,7 +63,7 @@ export interface MetricExecutorContext {
   taskArtifacts: Pick<TaskArtifactHost, "stage" | "publish">
   /** Streaming LLM (Large Language Model) judge implementation. */
   judge?: JudgeRunner
-  workDir?: string
+  subject: MetricSubject
 }
 
 export interface ExecuteMetricsInput {
@@ -130,6 +141,7 @@ export async function executeMetrics(
       taskArtifacts: context.taskArtifacts,
       spec,
       input,
+      subject: context.subject.identity,
       selectedEvidence,
       attempt,
     })
@@ -180,16 +192,18 @@ async function publishAttempt(input: {
   taskArtifacts: MetricExecutorContext["taskArtifacts"]
   spec: MetricSpec
   input: ExecuteMetricsInput
+  subject: MetricSubjectIdentity
   selectedEvidence: SelectedEvidenceIdentity[]
   attempt: EvaluationAttempt
 }): Promise<TaskArtifactRef> {
   const { resources = [], ...semanticAttempt } = input.attempt
   const evidence = MetricExecutionEvidence.parse({
-    schema_version: 1,
+    schema_version: 2,
     metric_spec_id: input.spec.id,
     task_id: input.input.task_id,
     iteration: input.input.iteration,
     evaluator_kind: input.spec.evaluator_kind,
+    subject: input.subject,
     selected_evidence: input.selectedEvidence,
     ...semanticAttempt,
   })
@@ -302,7 +316,19 @@ async function runShell(spec: MetricSpec, context: MetricExecutorContext, taskID
   const parsed = ShellMetricEvaluatorConfigSchema.safeParse(spec.evaluator_config)
   if (!parsed.success) return unavailableAttempt("configuration_invalid", z.prettifyError(parsed.error), {})
   const config = parsed.data
-  const cwd = config.cwd ? Filesystem.resolve(config.cwd) : (context.workDir ?? Filesystem.resolve(Instance.directory))
+  const frozen = { scorer_revision: config.scorer_revision, workspace_digest: config.workspace_digest }
+  // A shell scorer observes the subject's workspace and nothing else: no
+  // evaluator directory stands in when the subject has none.
+  if (config.cwd !== undefined && !isCanonicalProjectRelativePath(config.cwd)) {
+    return unavailableAttempt(
+      "configuration_invalid",
+      `Shell scorer cwd must be a canonical path inside the measured subject workspace, or omitted for its root; received ${JSON.stringify(config.cwd)}`,
+      { ...frozen, cwd: config.cwd },
+    )
+  }
+  const workspace = await context.subject.workspace()
+  if (workspace.status === "unavailable") return unavailableAttempt("input_unavailable", workspace.message, frozen)
+  const cwd = config.cwd ? path.join(workspace.directory, ...config.cwd.split("/")) : workspace.directory
   const result = await runTaskCommandWithInactivity(
     { taskID, cwd },
     {

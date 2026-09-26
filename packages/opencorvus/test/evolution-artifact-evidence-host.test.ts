@@ -36,7 +36,7 @@ import {
   TaskRunEvidenceBundleSchema,
   canonicalWorkspaceTreeJSON,
 } from "@opencorvus-ai/plugin"
-import type { ArtifactReadLocator, EngineArtifactLocator } from "@opencorvus-ai/plugin"
+import type { ArtifactReadLocator, EngineArtifactLocator, MetricEvaluationRequest } from "@opencorvus-ai/plugin"
 import {
   createTaskArtifactStoreExecution,
   publishTaskArtifactProjectFiles,
@@ -72,6 +72,8 @@ import {
   executionCapsuleSourceTreeSnapshot,
 } from "../src/execution-capsule/tree-digest"
 import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
+import { MetricExecutionEvidence } from "../src/metrics/types"
+import { metricJudgeMessages } from "../src/tool/metric-judge-runner"
 
 function executePublishEvolutionArtifact(
   args: Record<string, unknown> & { artifact_type: string; payload: unknown },
@@ -902,6 +904,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         let sourceRunLocator!: EngineArtifactLocator
         let sourceOpportunityInput!: Record<string, unknown>
         let sourceCampaignInput!: Record<string, unknown>
+        let subjectMaterialization = ""
         await withTaskScopedPluginToolHost(scope, async (host) => {
           ;(scope.owner as { agentID: string }).agentID = "evolution-observer"
           const opportunityReceipt = JSON.parse(
@@ -1036,6 +1039,18 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             path.join(trialWorktree.directory, "subject", "decision-ledger.mjs"),
             "export const decision = 'trial-workspace-only'\n",
           )
+          // The scorer reads one file that differs in every place it could be
+          // read from: the Evaluator project (0), the Trial workspace before
+          // and after its run (2), and the Trial's terminal commit (1).
+          await writeFile(path.join(trialWorktree.directory, "g43-subject.txt"), "2")
+          await writeFile(path.join(project.path, "g43-subject.txt"), "0")
+          const subjectScorerConfig = {
+            workspace_digest: await executionCapsuleSourceTreeDigest(trialWorktree.directory),
+            executable: process.execPath,
+            args: ["-e", "process.stdout.write(require('node:fs').readFileSync('g43-subject.txt', 'utf8'))"],
+            parse: "stdout_number" as const,
+            inactivity_timeout_ms: 30_000,
+          }
           const campaignWorkspaceSnapshot = canonicalWorkspaceTreeJSON(
             await executionCapsuleSourceTreeSnapshot(trialWorktree.directory),
           )
@@ -1080,8 +1095,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 floor: 0,
                 weight: 1,
                 observation_class: "quality",
-                evaluator_kind: "query",
-                evaluator_config: { query: "constant_value", value: 1 },
+                evaluator_kind: "shell",
+                evaluator_config: subjectScorerConfig,
               }),
             ],
           ])
@@ -1176,12 +1191,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           expect(persistedCampaign.scorers[0]).toMatchObject({
             scorer_id: "correctness",
             scorer_revision: scorerResource.sha256,
-            evaluator_kind: "query",
-            evaluator_config: {
-              scorer_revision: scorerResource.sha256,
-              query: "constant_value",
-              value: 1,
-            },
+            evaluator_kind: "shell",
+            evaluator_config: { ...subjectScorerConfig, scorer_revision: scorerResource.sha256 },
           })
           await expect(
             executePublishEvolutionArtifact(
@@ -1352,6 +1363,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 })
                 const trialBaseline = await EngineGit.prepare(requireTask(trialTaskID))
                 if (trialBaseline.error) throw new Error(trialBaseline.error)
+                // The Trial's own work, committed by its terminal checkpoint.
+                await writeFile(path.join(trialWorktree.directory, "g43-subject.txt"), "1")
                 const trialArtifactExecution = createTaskArtifactStoreExecution({
                   kind: "task",
                   projectID: Instance.project.id,
@@ -1464,6 +1477,9 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   },
                   "Exact baseline Trial reached a terminal fixture outcome",
                 )
+                // The shared workspace returns to its Campaign state, so the
+                // next Trial starts from the frozen workspace digest again.
+                await writeFile(path.join(trialWorktree.directory, "g43-subject.txt"), "2")
                 const trialLifecycle = resolveTerminalLifecycleReference(
                   trialTaskID,
                   requireCurrentTerminalLifecycleReference(trialTaskID),
@@ -1776,6 +1792,9 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               { host } as never,
             ),
           ).rejects.toBeInstanceOf(EvolutionMetricIdentityError)
+          // The live Trial workspace changes after collection; only its
+          // terminal commit is the measured subject.
+          await writeFile(path.join(trialWorktree.directory, "g43-subject.txt"), "9")
           const metricOutcome = JSON.parse(
             await executeEvolutionMetricsTool.execute(
               {
@@ -1813,6 +1832,89 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             trial_revision_digest: revision.package_digest,
             scorers: [{ scorer_id: "correctness", status: "measured", value: 1 }],
           })
+          const subjectEvidence = metricOutcome.receipt.scorers[0]!.evidence[0]!
+          if (subjectEvidence.source !== "task_artifact_resource") throw new Error("Expected the metric attempt resource")
+          const subjectAttempt = MetricExecutionEvidence.parse(
+            JSON.parse(new TextDecoder().decode(await host.taskArtifacts.read(subjectEvidence.ref))),
+          )
+          const subjectBundle = await readCollector(collectorReceipt)
+          if (subjectBundle.workspace_checkpoint.result.kind !== "terminal_git")
+            throw new Error("Expected the Trial's terminal Git result")
+          const collectorIdentity = {
+            path: collectorReceipt.resource.path,
+            bytes: collectorReceipt.resource.bytes,
+            sha256: collectorReceipt.resource.sha256,
+          }
+          expect(subjectAttempt).toMatchObject({
+            task_id: taskID,
+            status: "measured",
+            raw_value: 1,
+            subject: {
+              resource: collectorIdentity,
+              trial_task_id: trialTaskID,
+              canonical_sha256: subjectBundle.canonical_sha256,
+              result: {
+                kind: "terminal_git",
+                commit: subjectBundle.workspace_checkpoint.result.commit,
+                tree: subjectBundle.workspace_checkpoint.result.tree,
+              },
+            },
+            // The exact selected input shared with the judge renderer.
+            selected_evidence: [
+              { locator: { source: "task_artifact_resource", ref: collectorIdentity }, sha256: collectorIdentity.sha256 },
+            ],
+          })
+          const measuredRunEnvelope = EngineArtifactEnvelopeSchema.parse(
+            JSON.parse(
+              (
+                await host.engineArtifacts.read({
+                  locator: runReceipt.locator,
+                  byte_offset: 0,
+                  max_bytes: 65_536,
+                  delivery: "inline",
+                })
+              ).chunk.text!,
+            ),
+          )
+          expect(subjectAttempt.subject.resource).toEqual(
+            measuredRunEnvelope.resources.find((resource) => resource.sha256 === collectorIdentity.sha256),
+          )
+          const criteria = "Evaluate the selected Trial output"
+          const rubric = [{ score: 1, label: "complete", anchor: "Output satisfies the request", passes: true }]
+          const judgeInput = metricJudgeMessages({
+            spec: {
+              id: "g43-judge-renderer", task_id: taskID, scope: "global", goal_id: null,
+              name: "g43-judge-renderer", description: criteria, unit: "ordinal", direction: "higher_better",
+              target: 1, floor: 0, weight: 1, observation_class: "quality", evaluator_kind: "judge",
+              source: "baseline", frozen_at: 1, created_by: "architect",
+              evaluator_config: {
+                scorer_revision: scorerResource.sha256, provider_id: "test-driver", model_id: "test-driver",
+                inactivity_timeout_ms: 30_000, max_evidence_bytes: collectorReceipt.resource.bytes,
+                criteria, rubric,
+              },
+            },
+            criteria, rubric,
+            selectedEvidence: [{
+              locator: subjectAttempt.selected_evidence[0]!.locator,
+              mediaType: "application/json",
+              sha256: collectorIdentity.sha256,
+              bytes: await host.taskArtifacts.read(subjectAttempt.subject.resource),
+            }],
+          })
+          // Production message rendering, with no Provider call: content and
+          // selected Message bodies are preserved, not a claim of model understanding.
+          const judgeEvidence = JSON.parse(judgeInput[1]!.content).selected_evidence[0]
+          expect(judgeEvidence.content).toBe(canonicalTaskRunEvidenceJSON(subjectBundle))
+          expect(JSON.parse(judgeEvidence.content).messages).toEqual(subjectBundle.messages)
+          subjectMaterialization = (subjectAttempt.execution as { cwd: string }).cwd
+          expect(path.dirname(subjectMaterialization)).toBe(
+            path.dirname(ProjectRuntimePaths.taskArtifactMaterializationRoot(project.path, taskID, "subject")),
+          )
+          expect({
+            evaluator: await readFile(path.join(project.path, "g43-subject.txt"), "utf8"),
+            liveTrial: await readFile(path.join(trialWorktree.directory, "g43-subject.txt"), "utf8"),
+            measuredCopy: await readFile(path.join(subjectMaterialization, "g43-subject.txt"), "utf8"),
+          }).toEqual({ evaluator: "0", liveTrial: "9", measuredCopy: "1" })
           const metricReceiptResourceSet = TaskArtifactResourceSetLocatorSchema.parse(metricOutcome.resource_set)
           const metricReceiptResource = TaskArtifactRefSchema.parse(metricOutcome.resource)
           const metricEvidenceLocator = metricOutcome.receipt.scorers[0]!.evidence[0]!
@@ -2233,6 +2335,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             evaluationReceipt.locator, evaluationAlias.locator, aliasReview.locator, correctedAliasReview.locator,
           ]))
         })
+        // The measured copy belonged to that invocation and closed with it.
+        await expect(stat(subjectMaterialization)).rejects.toMatchObject({ code: "ENOENT" })
 
         const sourceCompleted = Date.now()
         await completeFixtureTaskWithDeliverables({
@@ -2538,7 +2642,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.4")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.5")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(
@@ -3809,6 +3913,58 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             id: interactionID,
             time_updated: activityTime,
           },
+        })
+        const scope: TaskToolExecutionScope = {
+          kind: "task", projectID: Instance.project.id, projectDirectory: project.path, taskID,
+          taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, taskID), sessionID: session.id,
+          messageID: "g43-live-subject", toolCallID: "g43-live-subject", toolPartID: "g43-live-subject",
+          executionSurface: {},
+          owner: {
+            kind: "projected-scheduler", expertSquadID: "base", agentID: "orchestrator",
+            projectionHash: "a".repeat(64),
+            packageRevision: {
+              scope: "built_in", projectID: null, namespace: "builtin", id: "base",
+              version: "2026.08.06.1", packageDigest: "a".repeat(64),
+            },
+          },
+        }
+        await withTaskScopedPluginToolHost(scope, async (host) => {
+          for (const [iteration, bundle] of [awaiting, inactive].entries()) {
+            const stage = await host.taskArtifacts.stage({ trees: ["subject"] })
+            await writeFile(path.join(stage.treeDirectories.subject!, "bundle.json"), canonicalTaskRunEvidenceJSON(bundle))
+            const publication = await host.taskArtifacts.publish(stage, {
+              snapshot_kind: "engine_resource",
+              files: [{ tree: "subject", path: "bundle.json", media_type: "application/json" }],
+            })
+            const resource = publication.artifacts[0]!
+            const input: MetricEvaluationRequest = {
+              iteration, delivery_slice_revision_id: null, subject: resource,
+              selected_evidence_locators: [{ source: "task_artifact_resource", ref: resource }],
+              visual_feedback_verification_artifact_locators: [],
+              scorers: [{
+                scorer_id: "live-subject-shell", scorer_revision: "a".repeat(64), scope: "global", goal_id: null,
+                description: "A live observation has no immutable shell workspace", unit: "number",
+                direction: "higher_better", target: 1, floor: 0, weight: 1, observation_class: "quality",
+                evaluator_kind: "shell", evaluator_config: {
+                  scorer_revision: "a".repeat(64), workspace_digest: awaiting.workspace_checkpoint.initial_tree_sha256,
+                  executable: process.execPath, args: ["-e", "process.stdout.write('1')"],
+                  parse: "stdout_number", inactivity_timeout_ms: 30_000,
+                },
+              }],
+            }
+            const outcome = await host.metrics.evaluate(input)
+            expect(outcome.unavailable).toMatchObject([{ scorer_id: "live-subject-shell", reason_code: "input_unavailable" }])
+            const attempt = MetricExecutionEvidence.parse(
+              JSON.parse(new TextDecoder().decode(await host.taskArtifacts.read(outcome.unavailable[0]!.evidence_ref))),
+            )
+            expect(attempt).toMatchObject({
+              status: "unavailable", reason_code: "input_unavailable", task_id: taskID,
+              subject: { resource, trial_task_id: taskID, result: { kind: "live_observation" } },
+            })
+            await expect(host.metrics.evaluate({
+              ...input, scorers: input.scorers.map((scorer) => ({ ...scorer, target: 2 })),
+            })).rejects.toThrow(`Metric scorer live-subject-shell conflicts with the frozen Task scorer definition`)
+          }
         })
       },
     })

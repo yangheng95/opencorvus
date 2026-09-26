@@ -20,7 +20,7 @@ import {
   type TaskArtifactSet,
 } from "@opencorvus-ai/plugin/task-artifact"
 import { ArtifactProducerSchema, type ArtifactProducer } from "@opencorvus-ai/plugin/artifact-catalog"
-import { ProjectRelativePathSchema } from "@opencorvus-ai/plugin/project-path"
+import { ProjectRelativePathSchema, isCanonicalProjectRelativePath } from "@opencorvus-ai/plugin/project-path"
 import { createHash, randomUUID } from "node:crypto"
 import fs from "node:fs/promises"
 import type { BigIntStats } from "node:fs"
@@ -31,7 +31,8 @@ import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import type { TaskToolExecutionScope } from "@/tool/task-tool-execution-scope"
 import { Filesystem } from "@/util/filesystem"
 import { Lock } from "@/util/lock"
-import { taskGit } from "@/util/git"
+import { GitTimeout, gitProcessArgs, taskGit } from "@/util/git"
+import { Process } from "@/util/process"
 import { artifactPackageRevision } from "@/session/runtime-contract"
 
 type SnapshotFile = Readonly<{
@@ -62,8 +63,25 @@ export type TaskArtifactStoreExecution = Omit<TaskArtifactHost, "publish"> &
         idempotent?: true
       },
     ): Promise<TaskArtifactPublication>
+    /** Copy one exact committed tree into a directory this execution removes on close. */
+    materializeGitCommit(input: { commit: string; tree: string }): Promise<TaskArtifactGitCommitMaterialization>
     close(): Promise<void>
   }>
+
+export type TaskArtifactGitCommitMaterialization = Readonly<{
+  directory: string
+  file_count: number
+  byte_count: number
+}>
+
+/**
+ * The committed tree cannot be reproduced as exactly its regular files here:
+ * the objects are absent from this repository, or an entry is a symbolic link,
+ * a gitlink, or a path this filesystem cannot hold. Nothing is substituted.
+ */
+export class TaskArtifactGitCommitUnavailableError extends Error {
+  override readonly name = "TaskArtifactGitCommitUnavailableError"
+}
 
 export type TaskArtifactReadAuthority = Readonly<{
   projectID: string
@@ -98,13 +116,14 @@ async function readTaskArtifactGitCommitFile(input: {
     throw new Error(`TaskArtifactStore source commit is not an exact Git object ID: ${input.sourceCommit}`)
   }
   const identity = { taskID: input.scope.taskID, cwd: input.scope.projectDirectory }
-  const objectType = await taskGit(identity, ["cat-file", "-t", input.sourceCommit], { timeoutProfile: "fast" })
+  const objectType = await taskGit(identity, ["--no-replace-objects", "cat-file", "-t", input.sourceCommit], { timeoutProfile: "fast" })
   if (objectType.exitCode !== 0 || objectType.stdout.toString("utf8").trim() !== "commit") {
     throw new Error(`TaskArtifactStore source object is not an exact Git commit: ${input.sourceCommit}`)
   }
   const entry = await taskGit(
     identity,
     [
+      "--no-replace-objects",
       "--literal-pathspecs",
       "-c",
       "core.quotepath=false",
@@ -135,7 +154,7 @@ async function readTaskArtifactGitCommitFile(input: {
       `TaskArtifactStore committed source is not the exact regular file ${input.sourceRelativePath} at ${input.sourceCommit}`,
     )
   }
-  const blob = await taskGit(identity, ["cat-file", "blob", match[2]!], { timeoutProfile: "fast" })
+  const blob = await taskGit(identity, ["--no-replace-objects", "cat-file", "blob", match[2]!], { timeoutProfile: "fast" })
   if (blob.exitCode !== 0) {
     throw new Error(
       `TaskArtifactStore failed to read committed blob ${match[2]} for ${input.sourceRelativePath}: ${blob.stderr.toString().trim()}`,
@@ -159,13 +178,14 @@ async function committedSubtreeFiles(input: {
   }
   const sourceRoot = ProjectRelativePathSchema.parse(input.sourceRoot)
   const identity = { taskID: input.scope.taskID, cwd: input.scope.projectDirectory }
-  const objectType = await taskGit(identity, ["cat-file", "-t", input.sourceCommit], { timeoutProfile: "fast" })
+  const objectType = await taskGit(identity, ["--no-replace-objects", "cat-file", "-t", input.sourceCommit], { timeoutProfile: "fast" })
   if (objectType.exitCode !== 0 || objectType.stdout.toString("utf8").trim() !== "commit") {
     throw new Error(`TaskArtifactStore source object is not an exact Git commit: ${input.sourceCommit}`)
   }
   const listing = await taskGit(
     identity,
     [
+      "--no-replace-objects",
       "--literal-pathspecs",
       "-c",
       "core.quotepath=false",
@@ -218,6 +238,167 @@ async function committedSubtreeFiles(input: {
     foldedPaths.set(folded, file.path)
   }
   return files
+}
+
+type CommittedTreeFile = Readonly<{
+  path: string
+  executable: boolean
+  objectID: string
+  size: number
+}>
+
+// One cat-file process reads many blobs; the bound keeps its buffered output
+// finite without spawning a process per file.
+const COMMITTED_TREE_BATCH_BYTES = 32 * 1024 * 1024
+
+function committedEntryKind(mode: string): string {
+  if (mode === "120000") return "symbolic link"
+  if (mode === "160000") return "gitlink to a nested repository"
+  return `mode ${mode} entry`
+}
+
+function gitBlobObjectID(bytes: Uint8Array, objectID: string): string {
+  return createHash(objectID.length === 64 ? "sha256" : "sha1")
+    .update(`blob ${bytes.byteLength}\0`)
+    .update(bytes)
+    .digest("hex")
+}
+
+/** Every entry of one exact commit, which must be a regular file. */
+async function committedTreeFiles(input: {
+  identity: Readonly<{ taskID: string; cwd: string }>
+  commit: string
+  tree: string
+}): Promise<readonly CommittedTreeFile[]> {
+  const unavailable = (message: string) =>
+    new TaskArtifactGitCommitUnavailableError(`TaskArtifactStore commit ${input.commit} ${message}`)
+  if (!EXACT_GIT_COMMIT_PATTERN.test(input.commit) || !EXACT_GIT_COMMIT_PATTERN.test(input.tree)) {
+    throw new Error(`TaskArtifactStore commit and tree must be exact Git object IDs: ${input.commit} ${input.tree}`)
+  }
+  const header = await taskGit(input.identity, ["--no-replace-objects", "cat-file", "commit", input.commit], { timeoutProfile: "fast" })
+  if (header.exitCode !== 0) {
+    throw unavailable(`is not a readable commit in this repository: ${header.stderr.toString().trim()}`)
+  }
+  const recordedTree = /^tree ([0-9a-f]+)\n/.exec(header.stdout.toString("utf8"))?.[1]
+  if (recordedTree !== input.tree) {
+    throw unavailable(`has tree ${recordedTree ?? "(none)"}; expected ${input.tree}`)
+  }
+  const listing = await taskGit(
+    input.identity,
+    ["--no-replace-objects", "-c", "core.quotepath=false", "ls-tree", "-r", "-z", "--full-tree", "-l", input.commit],
+    { timeoutProfile: "default" },
+  )
+  if (listing.exitCode !== 0) {
+    throw unavailable(`could not be listed: ${listing.stderr.toString().trim()}`)
+  }
+  const files: CommittedTreeFile[] = []
+  let rowStart = 0
+  while (rowStart < listing.stdout.byteLength) {
+    const rowEnd = listing.stdout.indexOf(0, rowStart)
+    if (rowEnd < 0) throw new Error(`TaskArtifactStore commit ${input.commit} listing is not NUL-terminated`)
+    let row: string
+    try {
+      row = new TextDecoder("utf-8", { fatal: true }).decode(listing.stdout.subarray(rowStart, rowEnd))
+    } catch {
+      throw unavailable("contains a path that is not UTF-8")
+    }
+    rowStart = rowEnd + 1
+    const match = /^(\d{6}) (\S+) ([0-9a-f]+) +(\d+|-)\t([\s\S]+)$/.exec(row)
+    if (!match) throw new Error(`TaskArtifactStore unexpected committed tree entry: ${row}`)
+    const [, mode, type, objectID, size, entryPath] = match
+    if ((mode !== "100644" && mode !== "100755") || type !== "blob" || size === "-") {
+      throw unavailable(`contains ${JSON.stringify(entryPath)} as a ${committedEntryKind(mode!)}, not a regular file`)
+    }
+    if (!isCanonicalProjectRelativePath(entryPath)) {
+      throw unavailable(`contains ${JSON.stringify(entryPath)}, which is not a portable relative file path`)
+    }
+    files.push({ path: entryPath, executable: mode === "100755", objectID: objectID!, size: Number(size) })
+  }
+  // A case-insensitive filesystem cannot hold two paths that fold together,
+  // nor a file whose folded path is also another file's folded directory.
+  const foldedFiles = new Map(files.map((file) => [file.path.toLowerCase(), file.path]))
+  if (foldedFiles.size !== files.length) throw unavailable("contains file paths that differ only by case")
+  const foldedDirectories = new Map<string, string>()
+  for (const file of files) {
+    const segments = file.path.split("/")
+    for (let index = 1; index < segments.length; index++) {
+      const directory = segments.slice(0, index).join("/")
+      const folded = directory.toLowerCase()
+      const conflict = foldedFiles.get(folded)
+      if (conflict) throw unavailable(`contains ${JSON.stringify(conflict)} as a file and as a directory of ${file.path}`)
+      const prior = foldedDirectories.get(folded)
+      if (prior && prior !== directory) {
+        throw unavailable(`contains directories ${JSON.stringify(prior)} and ${JSON.stringify(directory)} that differ only by case`)
+      }
+      foldedDirectories.set(folded, directory)
+    }
+  }
+  return files
+}
+
+/** Read the exact blobs of `files` through bounded `git cat-file --batch` processes. */
+async function readCommittedBlobs(input: {
+  identity: Readonly<{ taskID: string; cwd: string }>
+  commit: string
+  files: readonly CommittedTreeFile[]
+  visit(file: CommittedTreeFile, bytes: Uint8Array): Promise<void>
+}): Promise<void> {
+  const batches: CommittedTreeFile[][] = []
+  let batchBytes = 0
+  for (const file of input.files) {
+    const current = batches.at(-1)
+    if (!current || batchBytes + file.size > COMMITTED_TREE_BATCH_BYTES) {
+      batches.push([file])
+      batchBytes = file.size
+      continue
+    }
+    current.push(file)
+    batchBytes += file.size
+  }
+  for (const batch of batches) {
+    const request = new TextEncoder().encode(`${batch.map((file) => file.objectID).join("\n")}\n`)
+    const result = await Process.runTask(input.identity, gitProcessArgs(["--no-replace-objects", "cat-file", "--batch"]), {
+      stdin: "pipe",
+      input: (async function* () {
+        yield request
+      })(),
+      nothrow: true,
+      inactivityTimeoutMs: GitTimeout.default,
+      maxOutputBytes: batch.reduce((total, file) => total + file.size + 160, 4096),
+    })
+    if (result.code !== 0) {
+      throw new Error(`TaskArtifactStore commit ${input.commit} blob read failed: ${result.stderr.toString().trim()}`)
+    }
+    let offset = 0
+    for (const file of batch) {
+      const headerEnd = result.stdout.indexOf(10, offset)
+      if (headerEnd < 0) throw new Error(`TaskArtifactStore commit ${input.commit} blob batch ended early`)
+      const header = result.stdout.subarray(offset, headerEnd).toString("utf8")
+      if (header === `${file.objectID} missing`) {
+        throw new TaskArtifactGitCommitUnavailableError(
+          `TaskArtifactStore commit ${input.commit} blob ${file.objectID} for ${file.path} is missing from this repository`,
+        )
+      }
+      if (header !== `${file.objectID} blob ${file.size}`) {
+        throw new Error(
+          `TaskArtifactStore commit ${input.commit} blob header for ${file.path}: expected ${file.objectID} blob ${file.size}, received ${header}`,
+        )
+      }
+      const contentEnd = headerEnd + 1 + file.size
+      if (contentEnd >= result.stdout.byteLength || result.stdout[contentEnd] !== 10) {
+        throw new Error(`TaskArtifactStore commit ${input.commit} blob ${file.objectID} is truncated`)
+      }
+      const bytes = result.stdout.subarray(headerEnd + 1, contentEnd)
+      if (gitBlobObjectID(bytes, file.objectID) !== file.objectID) {
+        throw new Error(`TaskArtifactStore commit ${input.commit} blob bytes for ${file.path} do not hash to ${file.objectID}`)
+      }
+      await input.visit(file, bytes)
+      offset = contentEnd + 1
+    }
+    if (offset !== result.stdout.byteLength) {
+      throw new Error(`TaskArtifactStore commit ${input.commit} blob batch returned unrequested bytes`)
+    }
+  }
 }
 
 export function taskArtifactSnapshotResourceRefs(record: TaskArtifactSnapshotRecord): readonly TaskArtifactRef[] {
@@ -1331,6 +1512,7 @@ async function removeExact(target: string, context: string): Promise<void> {
 export function createTaskArtifactStoreExecution(scope: TaskToolExecutionScope): TaskArtifactStoreExecution {
   const stages = new Set<StageRecord>()
   const materializations = new Map<string, MaterializationRecord>()
+  const commitMaterializations = new Set<string>()
   const publications = new Map<string, TaskArtifactSnapshotIdentity>()
   const operations = new Set<Promise<unknown>>()
   let active = true
@@ -1666,6 +1848,51 @@ export function createTaskArtifactStoreExecution(scope: TaskToolExecutionScope):
       })
     },
 
+    materializeGitCommit(input: { commit: string; tree: string }): Promise<TaskArtifactGitCommitMaterialization> {
+      return track(async () => {
+        const identity = { taskID: scope.taskID, cwd: scope.projectDirectory }
+        const files = await committedTreeFiles({ identity, commit: input.commit, tree: input.tree })
+        const directory = ProjectRuntimePaths.taskArtifactMaterializationRoot(
+          scope.projectDirectory,
+          scope.taskID,
+          randomUUID(),
+        )
+        try {
+          await assertManagedDirectoryPath({
+            projectDirectory: scope.projectDirectory,
+            target: path.dirname(directory),
+            create: true,
+            context: "TaskArtifactStore commit materialization",
+          })
+          await fs.mkdir(directory)
+          let byteCount = 0
+          await readCommittedBlobs({
+            identity,
+            commit: input.commit,
+            files,
+            async visit(file, bytes) {
+              const target = path.join(directory, ...file.path.split("/"))
+              await fs.mkdir(path.dirname(target), { recursive: true })
+              await fs.writeFile(target, bytes, { flag: "wx", mode: file.executable ? 0o755 : 0o644 })
+              byteCount += bytes.byteLength
+            },
+          })
+          commitMaterializations.add(directory)
+          return Object.freeze({ directory, file_count: files.length, byte_count: byteCount })
+        } catch (cause) {
+          try {
+            await removeExact(directory, "TaskArtifactStore commit materialization")
+          } catch (cleanupCause) {
+            throw new AggregateError(
+              [cause, cleanupCause],
+              `TaskArtifactStore commit materialization failed and left residue ${directory}`,
+            )
+          }
+          throw cause
+        }
+      })
+    },
+
     verify(input: TaskArtifactSet): Promise<void> {
       return track(async () => {
         const artifactSet = TaskArtifactSetSchema.parse(input)
@@ -1714,9 +1941,14 @@ export function createTaskArtifactStoreExecution(scope: TaskToolExecutionScope):
           failures.push(cause)
         }
       }
-      const cleanup = [...[...stages].map((stage) => stage.root), ...materializations.keys()]
+      const cleanup = [
+        ...[...stages].map((stage) => stage.root),
+        ...materializations.keys(),
+        ...commitMaterializations,
+      ]
       stages.clear()
       materializations.clear()
+      commitMaterializations.clear()
       for (const target of cleanup) {
         try {
           await removeExact(target, "TaskArtifactStore execution")

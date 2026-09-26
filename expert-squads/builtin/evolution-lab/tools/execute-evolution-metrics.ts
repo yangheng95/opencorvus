@@ -125,11 +125,16 @@ export default tool({
     )
     if (!trialResourceDigests.includes(frozenCase.resource.sha256))
       throw new EvolutionMetricIdentityError("Trial evidence does not contain its exact frozen case resource")
+    // The collector bundle is the measured Trial: shell scorers run in its
+    // terminal committed workspace, and a judge reads its canonical bytes with
+    // the selected Message bodies. The Run Artifact, which names the arm, is
+    // never scorer input.
     const outcome = await context.host.metrics.evaluate({
       iteration: args.iteration,
       delivery_slice_revision_id: args.delivery_slice_revision_id,
       scorers: campaign.scorers,
-      selected_evidence_locators: [args.run_evidence_locator],
+      subject: collectorResource,
+      selected_evidence_locators: [{ source: "task_artifact_resource", ref: collectorResource }],
       visual_feedback_verification_artifact_locators: args.visual_feedback_verification_artifact_locators,
     })
     const parsedOutcome = MetricEvaluationOutcomeSchema.parse(outcome)

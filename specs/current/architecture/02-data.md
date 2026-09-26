@@ -277,6 +277,18 @@ bundle盖章，独立taskRuns.usage入口已删除。后入账会使旧采集与
 生成新资源，旧资源不改。完成工具可先于本次请求的用量回调，因此终态时间不等于费用封口。
 旧v1采集资源保留历史字节；当前发布/metric执行只接受v2，不补字段、重算历史或fallback。
 
+Metric请求显式以Run所携带的collector资源作为subject；评分owner仍是Evaluator Task。
+Host精确读取canonical bundle，shell按其terminal Git commit/tree在本次调用的受管目录物化
+根仓库regular文件，保留Git执行位，执行后随TaskArtifact execution关闭回收。相对cwd限定在
+该副本内；绝对/越界配置是configuration_invalid。live_observation、嵌套仓库、symlink/gitlink、
+不可移植路径和本仓库缺失对象是input_unavailable，不借用Trial现场或Evaluator目录。
+独立Git对象库导入仅传collector字节不保证对象可达；忽略的构建输出不属于冻结commit主体。
+每次attempt的schema_version 2记录subject资源、原Trial及commit/tree或live observation身份，
+旧attempt字节保留。judge消费同一bundle及采集时选择的Message正文；原消息和provenance不
+隐藏，这不保证盲审或证据业务充分性。query/aggregator继续归属Evaluator评分流水。
+冻结spec读取经唯一MetricSpec schema解析，数据库更新时间不是评分定义；同定义可复用，
+真实定义变化仍按原冻结契约拒绝。
+
 `comparison-recommendation` 的模型面 payload 是空对象；Recommendation Owner 选择并完整读取
 Campaign、Candidate、Run、Evaluation 直接来源；Review 不由它选择子集。publisher在一次冻结
 Task catalog分页内发现并完整读取这些确切Evaluation的全部Review，再经唯一比较器生成并持久化

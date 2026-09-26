@@ -1061,3 +1061,40 @@
 - 新隔离真实Host/DB/scorer过程9项123断言通过，`.tmp/g42-materialized-subject-probe.json`、log和patch保留。观察精确为`originalMetric=1 / frozenMetric=0 / liveTrial=9 / evaluator=1 / frozenCopy=0`；新attempt的cwd是Evaluator Task受管artifact materializations目录，owner仍为Evaluator Task，原receipt=1未被覆盖。
 - 具体复用了现有`publishTaskArtifactProjectFiles`的exact commit模式、TaskArtifact真实publish/materialize/close和原`executeMetrics`，没有第二评分器/伪Tool/模型/世界。测试直接给executor传物化context，是明确的接线原型；**公开host.metrics.evaluate仍有G41错误，不能将此原型当生产修复已完成**。原型只复制被该scorer读取的一份regular文件，不能外推为完整多仓库执行环境。临时测试已精确恢复，生产源仍是G40的.4。
 - Opus接手已有可证伪正向样例：将真实公开Host subject绑定实施后，应沿同一公开调用取得上述0和完整来源，同时保留Task owner、评分receipt、原历史数据和回收边界。还需覆盖公开路径与未决的完整结果树/显式cwd/特殊条目/独立Git库/旧occurrence/导入和judge原始输入。不得把原型context硬编码进生产，或只在metadata补Trial标签。
+
+## G43：Opus接管——公开评分路径绑定Trial终态主体（实施前）
+
+### Recall
+
+- 用户“让opus解决这些问题”后，Codex在Opus额度等待期完成G32–G42并交回；我从G42与干净HEAD`2c6b507d`（=upstream）继续，不重做已完成项。四项目标中，推送链（G32）与Review完整发现/取代/晋升新鲜性/别名闭包（G36–G39）、Run用量快照（G40）已交付；H-B（G35）干预未执行、业务未修。当前首要是G41已证的评分对象错位：它使任何真实Campaign的shell测量与judge输入都不可信，是“进化收益”可测的前提，也先于不同Run/Evaluation集合语义。
+- 已读AGENTS、G40–G42、G42原型patch；核对`metric-evaluation-host.ts`、`metrics/executor.ts`（shell/judge/prebuilt/query/aggregator与attempt发布）、`task-artifact/store.ts`（精确commit文件/子树读取、materialize/close受管目录）、`engine/git.ts`终态checkpoint、`execute-evolution-metrics.ts`、plugin `MetricEvaluationRequestSchema`与shell/judge配置、scorer合同、`metrics-evidence-runtime`与真实Host测试。`host.metrics.evaluate`唯一调用者是Evolution Lab；`build-tool`的workDir无关评分。
+
+### 事实、根因与单一方案
+
+- 现象（G41真实反例）：公开路径中shell评分的cwd是Evaluator项目目录（`config.cwd`或Host传入的`scope.projectDirectory`），测到Evaluator的marker而非Trial的；judge收到的是Run envelope元数据字节，而且其中含`arm`标签，违背judge不得接触臂信息的冻结准则，也看不到Trial实际输出。
+- 根因：评分请求只传“所选证据”，没有被评对象；执行器用评分owner的目录代替被评Trial。评分流水属于Evaluator，被评subject属于Trial，两者被合并。
+- 唯一权威：Run Artifact所载的collector资源（Host采集、发布时已核对等于新鲜采集的canonical bundle）。其`workspace_checkpoint.result`给出Trial终态Git commit与仓库集合，其被Evaluator选定的Message正文是Trial的原始输出。不再另存整棵结果树：终态commit本身就是不可变事实，复制全部文件只会造第二份。
+- 改动：plugin评分请求增加必填`subject`（该collector资源引用）。Host在Evaluator Task内精确读取并校验该bundle；只有`terminal_git`且仅根仓库时，才用现有精确commit读取原语把该commit的完整树物化到本execution受管目录（只接受regular文件，保留100755可执行位，大小逐一核对，大小写冲突拒绝），随execution关闭回收；嵌套仓库、symlink/gitlink、缺失对象、`live_observation`（inactive/awaiting）一律让shell评分typed `input_unavailable`，绝不回退到任何活动目录。执行器以`subject`取代`workDir`：shell的cwd为主体根或其内相对`cwd`，绝对或越界路径为`configuration_invalid`；attempt记录主体Task、commit、tree与实际cwd。Evolution Lab评分工具把collector资源同时作为`subject`与judge的唯一所选证据，judge因此读到Trial的canonical bundle与所选Message正文，不再接触Run envelope中的arm标签。query/aggregator继续在Evaluator评分流水中聚合，prebuilt不变。
+- 不做：不新增ledger、角色、业务gate或另一存储；不改历史receipt/Run；不复制Trial结果树为Artifact；不宣称大仓库性能（逐文件精确读取，正确优先）。
+
+### 验证计划
+
+- 真实Host测试把冻结scorer改为读取Trial结果文件的shell：Trial在基线之后写marker=1并终结，Evaluator项目写marker=0；采集后把Trial活动文件改成9。公开`execute-evolution-metrics`必须得到1，attempt记录Trial主体commit与受管物化cwd，工具结束后目录已回收；导入后的再评分同样得到1。修前同路径应得到0（红测）。另覆盖相对cwd、绝对cwd的`configuration_invalid`、inactive主体的shell `input_unavailable`、judge实际收到的是collector bundle字节；执行器运行时测试改为显式主体。再做类型、包拓扑、docs、diff、源嵌入同步与版本记录，完整pre-push后推送。
+
+### G43额度中断后Codex接手复核（实施前补充）
+
+- 2026-09-27 03:14:44上海原Opus进程自然退出，159 turns、exit1、is_error=true、terminal_reason=api_error，原文`You've hit your session limit · resets 7:40am (Asia/Shanghai)`。原stdout与exit在`.tmp/opus55-global-resolution-20260926T184512131Z.*`；没有重试。累计CLI估算87.654808美元，减前65.7677364为本轮21.8870716，非外部账单。按用户原授权由Codex接手；07:45或以后再交回同一会话。完整未提交差异已另存`.tmp/g43-opus-uncommitted.patch`。
+- 原13项107断言通过；公开Host8过1失败124断言的失败点为旧包版本期待.4、实际.5。代码、检查与提交尚未完成，不能以局部绿测交付。接手先重读AGENTS/Recall/G40–G43、当前架构权限与Task runtime路径，搜索所有metric请求/执行器/attempt/物化调用，确认只一个生产调用链，无HTTP/DDL/SDK公共响应变化；未改UI，不做UI自动化。
+- 校正主管方案的过强措辞：G41证明依赖Trial文件的shell测错目录；不能由此证明所有Campaign/judge分数必错。collector bundle包含原始Message及运行身份，改读它只修正所选输入，不能称完整盲审或保证业务证据充分。原消息不删改、隐藏、合成。
+- 本次补充验收：真实Host绑定原终态commit且不同于活动文件/评分owner，保留导入后再评分；真实inactive/awaiting采集资源映射shell input_unavailable；实际judge消息渲染取得同一collector字节（无外部模型调用，理解/能力未测）；Git树中大小写冲突目录在Windows会合并，现实现只检查文件冲突，须同一物化原语明确拒绝目录拼写冲突并加真实Git对象测试。保留特殊条目/缺对象错误、相对cwd与清理检查。修改仅收敛已有subject方案，不新增业务gate或实验。
+- 新增真实Host重复调用红测已实际触发`Metric scorer live-subject-shell conflicts with the frozen Task scorer definition`，见`.tmp/g43-codex-focused.log`：第一次live subject评分已产生typed unavailable，第二次同一定义/Task/新iteration在ensureFrozenScorers失败。全仓确认readSpecsForTask仅被该Host和executeMetrics消费；它把带Timestamps的DB整行直接断言为MetricSpec，语义比较意外加入time_created/time_updated。修复点是现有唯一读取入口用现有MetricSpec schema解析，既不更新冻结行、忽略真实配置差异，也不新增fallback；重复定义应继续评分，改target仍给原精确冲突错误。此为真实共享评分入口问题，不是inactive特例。
+- 二次复核真实Git对象红测：在同一隔离fixture创建tree replacement，`materializeGitCommit`仍标原commit/tree却写出替换tree的binary内容，断言原README字节失败；`.tmp/g43-replace-objects-red.log`保留。这不是哈希形式检查：实际文件内容被改变。全仓核对task-artifact精确commit file/subtree/full-tree各自cat-file/ls-tree及batch调用、共享gitProcessArgs默认未禁replace。只对该模块的精确对象读取使用Git原生--no-replace-objects，覆盖这三种既有读取入口；不改变通用Git操作/用户refs、不重写仓库对象、不建立第二版本权威。正向测试在replacement存在时仍物化确切原commit的实际文件。
+- 包同步初次与剩余测试进程重叠时遇EUNKNOWN(open generated payload)，收据g43-codex-package-sync.log保留；全部测试进程结束后同生成器成功。随后源/嵌入身份检查发现本轮Python写README/Skill采用Windows行尾，生成器按仓库既有规则生成LF；将本任务这两个源文件按.gitattributes恢复LF，保留实际内容与同一未发布.5版本，重跑原loader身份验收。此为不可变发布包身份检查，不用行尾代替功能验证。
+
+### G43实际交付与边界
+
+- 公开Host9项135断言与Git publication/materialization7项57断言最终通过（`.tmp/g43-codex-verified-tests.log`）；metric runtime6项53断言通过（`.tmp/g43-codex-final-tests.log`该文件含此前包身份红测，不能将整个文件称全绿）。合计22项245断言。真实值为Evaluator0、Trial现场9、原terminal commit副本1、公开receipt1；同项目跨Task导入后仍得到1。inactive和awaiting的真实collector资源均经公开Host得到input_unavailable；同一定义第二次iteration可执行，改target仍精确冲突。judge原始bundle经过生产消息渲染器逐字节核对；没有外部模型调用或理解验证。
+- 单一subject源、评分owner及attempt schema 2已接通；单文件/子树/完整树的精确Git对象读取统一禁用replacement解释。真实tree replacement存在时仍得到原README/完整3文件；binary/CRLF原文件bytes、特殊条目/缺对象/文件及目录大小写冲突、清理均有实际Git/文件输出。Windows只验证文件内容与类型，POSIX执行位断言在此平台未执行，不冒称跨平台运行验证。
+- 支持范围明确为当前Evaluator可读取Git对象的单根regular文件树；独立Git对象库的跨Project端到端导入未验证、也未新增对象运输。缺对象和不支持的tree形态明确unavailable。副本供本次评分调用执行，非操作系统沙箱；未证明任意shell scorer之间的副作用隔离。旧collector/attempt/receipt原件不改，未推广任何用户项目包。G41错误已修，业务可靠纠错和真实进化收益仍未达成。
+- Evolution Lab源/嵌入为2026.09.27.5，最终contentDigest `3794f61310a631b9be4ee04615b5c1b590fba6621c0ef70d8513fd43736c0a58`；真实loader身份通过，只更新该包，未夹带base漂移。类型8项、docs342ops25groups、API6规则34文件、包拓扑122/135通过；原始日志g43-codex-types-final.log/docs.log/api.log/topology.log。完整待推送集合与真实pre-push在范围提交后按原流程核验，尚不预写成功。
+- 下一机制问题仍为不同payload Run/Evaluation完整集合与合法后续观察，不能把本轮subject修复当全集修复。旧G31半成品不应用、旧业务实验不恢复；Opus07:45后恢复时应先读本结果而非重做G43。
