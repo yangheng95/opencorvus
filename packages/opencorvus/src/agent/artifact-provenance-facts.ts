@@ -35,7 +35,7 @@ import { PermissionExecutionResultTable } from "@/permission/permission.sql"
 import type { Database } from "@/storage/db"
 import { and, asc, desc, eq, gt, inArray, or, sql } from "drizzle-orm"
 import z from "zod"
-import { TaskArtifactObservationFields, refineTaskArtifactObservation, taskArtifactObservation, sameTaskArtifactObservation, type TaskArtifactObservation } from "@/engine/task-artifact-observation"
+import { TaskArtifactObservationFields, refineTaskArtifactObservation, taskArtifactObservation, sameTaskArtifactObservation, type TaskArtifactObservation } from "@/engine/task-artifact-observation-schema"
 
 export const PanelArtifactReadReferenceFactSchema = ArtifactReadReferenceChunkSchema.extend({
   taskID: z.string().min(1),

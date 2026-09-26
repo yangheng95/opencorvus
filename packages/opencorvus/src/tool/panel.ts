@@ -89,9 +89,11 @@ import {
 import {
   TaskArtifactObservationFields,
   refineTaskArtifactObservation,
+  type TaskArtifactObservation,
+} from "@/engine/task-artifact-observation-schema"
+import {
   currentTaskArtifactObservation,
   assertCurrentTaskArtifactObservation,
-  type TaskArtifactObservation,
 } from "@/engine/task-artifact-observation"
 import { listMissionTasks } from "@/engine/store"
 import {

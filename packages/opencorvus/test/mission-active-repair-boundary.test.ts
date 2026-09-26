@@ -30,8 +30,8 @@ import { noActionTaskObservation } from "@/orchestrator/no-action-tool"
 import {
   currentTaskArtifactObservation,
   assertCurrentTaskArtifactObservation,
-  TaskArtifactObservationSchema,
 } from "@/engine/task-artifact-observation"
+import { TaskArtifactObservationSchema } from "@/engine/task-artifact-observation-schema"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { openMissionThroughRealWake } from "./fixture/mission-opened"
 

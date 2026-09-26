@@ -4,7 +4,7 @@ import { EngineArtifactTable, EngineTaskRootIngressTable } from "@/engine/engine
 import { insertEngineArtifact } from "@/engine/artifact"
 import { currentControlLeaseInTransaction } from "@/engine/control-lease"
 import { Identifier } from "@/id/id"
-import { ActiveTaskExecutionReferenceSchema } from "@/engine/task-artifact-observation"
+import { ActiveTaskExecutionReferenceSchema } from "@/engine/task-artifact-observation-schema"
 import { taskLifecycleProjectionInTransaction } from "@/engine/task-lifecycle"
 import { canonicalJSONValue } from "@/util/canonical-digest"
 import { MissionAcceptanceGapSchema, type MissionAcceptanceGap } from "./acceptance-gap"

@@ -2,7 +2,7 @@ import z from "zod"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference"
 import { MissionAcceptanceGapSchema } from "@/mission/acceptance-gap"
 import { ArtifactLocatorSchema } from "@opencorvus-ai/plugin/artifact-catalog"
-import { ActiveTaskExecutionReferenceSchema } from "@/engine/task-artifact-observation"
+import { ActiveTaskExecutionReferenceSchema } from "@/engine/task-artifact-observation-schema"
 
 export const PanelTaskAcceptanceLedger = z
   .object({

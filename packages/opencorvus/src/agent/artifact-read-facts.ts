@@ -15,7 +15,7 @@ import {
   taskArtifactObservation,
   sameTaskArtifactObservation,
   type TaskArtifactObservation,
-} from "@/engine/task-artifact-observation"
+} from "@/engine/task-artifact-observation-schema"
 import type { TerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference-schema"
 
 import {

@@ -812,3 +812,19 @@
 - 22:50上海时间调用方核验扫描完整结束：146个文件均有DONE，145文件原次通过、唯一失败为第25个`execution-authority-tool-surface`，该项修正后已有独立6项全通过的原收据，不改写原扫描失败。逐文件时长合计2453.7秒不是全工程耗时；汇总及Temp原日志完整副本保存在`.tmp/supervision-causal-20260926/g30-closure/verification-summary.json`与同目录5个日志。精确命令匹配的本轮test runner/timeout与同任务Claude均已退出，未处理用户的其它进程。
 - 最终生产比较器保持已提交原实现，未完成G31只以未应用补丁保存。SDK同步后的根类型检查再次通过（8个实际typecheck任务），实际API routes、SDK typecheck、docs342ops25groups、lease owner18/22、architecture index17、package topology10、release topology5及专家团拓扑122通过。当前唯一已发现且未修的推送验收失败是上述module-topology；不以其余通过绕过它。没有执行push、发布、安装推广或新业务实验。
 - H-B检查器的独立类型检查通过：复用G23的真实package tsconfig与Markdown声明，只将检查入口换为`check-blind-expectation.ts`，`bunx tsc --noEmit -p .tmp/supervision-causal-20260926/hb-local-design/tsconfig-checker.json`退出0。结合此前真实loader回执，仅验证本地包设计与检查器，不代表H-B行为实验已经执行。
+
+## G32：Codex接手，分离观察数据契约与生命周期读取
+
+### Recall、根因与影响面（实施前）
+
+- 用户最新指令“你自己接手弄，等opis上线了再交接”授权调用方在Opus限额期间继续实质工作，恢复后交接，不等待额度才修。起点`9010d5d7`工作区干净；原业务运行全部只读。先处理已复现模块循环，再继续总体问题，不把解循环等同业务纠错或进化收益。
+- 现象与触发：当前module-topology报告13模块循环，上游同检查通过。`373f4169`把观察schema/纯值规范化/纯相等比较，与`currentTaskArtifactObservation`、`assertCurrentTaskArtifactObservation`这两个数据库生命周期读取函数放入同一模块；低层provenance解析导入纯契约时也加载`task-lifecycle → ProtocolStore/Database`，经`Database → relational-integrity → artifact-provenance-facts`闭环。此前功能测试可通过但未运行该整链拓扑检查；这不是某个业务案例的错误，也不是新调度状态异常。
+- 已读当前task-control-plane的active/terminal观察约束、`terminal-lifecycle-reference-schema.ts`分层、Task生命周期实现、module-topology真实图与cold import入口、全部9个观察模块import点（7生产文件、2测试文件），以及G5/G10历史。纯消费者：provenance/read/review facts、Panel query schema、Mission extension schema；混合消费者：Panel Tool与Task API；测试覆盖观察schema、真实active→terminal→reopen失效、延展的完成/失败/取消/重启/多项目边界。
+- 精确改动：将所有schema、type、refinement、规范化和相等比较**移动**到唯一`engine/task-artifact-observation-schema.ts`，与既有terminal schema分层一致；原`task-artifact-observation.ts`仅保留两个实时读取/校验函数并直接导入该纯契约。所有纯消费者和混合消费者的纯部分直接导入新文件，不保留旧模块re-export兼容路径。字段、Zod错误、生命周期读取、DB/DDL、API、权限和动作语义均不变；不添加状态、缓存、业务gate或白名单。
+- 验收：已有正向schema与真实Mission active-repair/acceptance-extension两文件重跑，另跑真实provenance/agent-message证据检查；module-topology在工作树及提交快照验证图与4个clean imports，类型/docs/diff检查。重用刚完成的其余146文件结果，不无目标重复全套。若解环后出现另一条环或任何当前契约失败，按实际依赖继续定位而不放宽检查。
+
+### G32实施与验收
+
+- 已原样移动53行纯契约到独立schema模块，原模块只保留两个实时读取/校验函数，7个生产消费者与1个混合测试入口改为直接依赖所需层；旧路径不re-export，DDL/字段/API/权限/业务逻辑未改。首次补丁因架构段落定位失败整体未应用，确认源码未变后重试；首次差异检查发现新文件末尾多一空行，已移除，没有放宽检查。
+- 暂存快照的真实`module-topology --index`通过：1122模块、5690 runtime edges、零多模块环、4个clean imports通过。根类型检查8项通过（7个无变化package缓存、当前opencorvus重新检查）。真实四文件9项/108断言通过：active-repair 3/38、extension 2/50、provider-input read facts 1/8、agent-message证据3/12；保留active/terminal/reopen的原身份与失效错误合同。原日志`.tmp/g32-module-topology.log`、`g32-observation-tests.log`、`g32-typecheck.log`。
+- `api:routes-check`6规则/34文件通过，证明公开导出与现有生成SDK一致；docs342ops25groups与diff通过。此为依赖分层与交付闭环修复，无新模型或业务运行，不构成业务纠错或进化收益证据。提交后继续pull/merge、完整出站核对及真实pre-push检查，全部通过再自动推送。

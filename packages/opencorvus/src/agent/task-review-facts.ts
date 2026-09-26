@@ -4,7 +4,7 @@ import type { TerminalLifecycleReference } from "@/engine/terminal-lifecycle-ref
 import { PanelQueryTaskOutput } from "@/panel/task-query"
 import { assistantActionFactScope } from "./artifact-read-facts"
 import { panelLeafActionSchemaForAgent } from "@/panel/capability"
-import { type TaskArtifactObservation, taskArtifactObservation } from "@/engine/task-artifact-observation"
+import { type TaskArtifactObservation, taskArtifactObservation } from "@/engine/task-artifact-observation-schema"
 
 const MissionPanelQueryTaskInput = panelLeafActionSchemaForAgent("query_task", "mission")
 
