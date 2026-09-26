@@ -297,7 +297,15 @@ Evolution执行与发布共用原Campaign/Run上下文和同一recorded结果投
 slot、Trial、subject、完整冻结scorer集合/revision及声明结果与原生事实一致，再发布Evaluation。
 unavailable先按其真实状态运输，不把raw_value=null解释为measured或0。已有跨Task Evaluation
 导入保持原件，新Task重新评分仍归其自身账本。此约束不证明全部Trial已公开，也不解决从多次
-真实metric执行选择或拼接观察的完整性；没有重写旧回执或新增测量ledger。
+真实metric执行选择观察的完整性；没有重写旧回执或新增测量ledger。
+
+recorded observation同时投影评分attempt原snapshot manifest的完整producer；不从后来发布的
+receipt推断评分调用。单份Evaluation的全部scorer必须有相同Task、原Tool producer和iteration。
+当前Lab公开评分Tool内只有一次evaluate，故该规则阻止不同Tool调用的真实结果拼接；它不
+定义任意SDK在同一Tool内多次evaluate的更细批次。不同snapshot可以属于同一调用，iteration
+自身也不能唯一识别调用；不要求外层Tool成功来丢弃已经完整落账的测量。完整回执重新发布
+保留原来源。TaskArtifact幂等复核沿原manifest实际snapshot_kind计算身份，catalog与
+engine_resource分别可复用和恢复其相同字节，二者的身份保持区分。
 
 `comparison-recommendation` 的模型面 payload 是空对象；Recommendation Owner 选择并完整读取
 Campaign、Candidate、Run、Evaluation 直接来源；Review 不由它选择子集。publisher在一次冻结

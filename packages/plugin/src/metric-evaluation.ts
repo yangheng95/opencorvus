@@ -2,6 +2,7 @@ import { z } from "zod"
 import { ArtifactReadLocatorListSchema, EngineArtifactLocatorSchema } from "./artifact-catalog.js"
 import { ProjectRelativePathSchema } from "./project-path.js"
 import { TaskArtifactRefSchema } from "./task-artifact.js"
+import { ArtifactProducerSchema } from "./artifact-producer.js"
 
 const SHA256Schema = z.string().regex(/^[a-f0-9]{64}$/)
 
@@ -280,6 +281,7 @@ export type MetricEvaluationOutcome = z.infer<typeof MetricEvaluationOutcomeSche
 
 export const MetricRecordedObservationSchema = z.object({
   task_id: z.string().min(1),
+  producer: ArtifactProducerSchema,
   iteration: z.number().int().nonnegative(),
   scorer_id: z.string().min(1),
   scorer_revision: SHA256Schema,

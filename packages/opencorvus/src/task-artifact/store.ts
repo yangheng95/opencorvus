@@ -58,7 +58,7 @@ export type TaskArtifactStoreExecution = Omit<TaskArtifactHost, "publish"> &
     publish(
       stage: TaskArtifactStage,
       input: {
-        snapshot_kind: "catalog"
+        snapshot_kind: TaskArtifactSnapshotManifest["snapshot_kind"]
         files: readonly TaskArtifactPublicationFile[]
         idempotent?: true
       },
@@ -1688,7 +1688,7 @@ export function createTaskArtifactStoreExecution(scope: TaskToolExecutionScope):
                   )
                   const existingStable = stableTaskArtifactPublication({
                     taskID: existingManifest.task_id,
-                    snapshotKind: "catalog",
+                    snapshotKind: existingManifest.snapshot_kind,
                     producer: existingManifest.producer,
                     trees: existingManifest.trees,
                   })

@@ -16,6 +16,7 @@ import { readSpecsForTask, registerBaselineSpec, readRecordedMetricResult } from
 import { MetricExecutionEvidence } from "@/metrics/types"
 import {
   TaskArtifactGitCommitUnavailableError,
+  readTaskArtifactSnapshotManifest,
   type TaskArtifactStoreExecution,
 } from "@/task-artifact/store"
 import type { TaskToolExecutionScope } from "./task-tool-execution-scope"
@@ -147,6 +148,10 @@ export function createMetricEvaluationHost(
   return Object.freeze({
     async recorded(input) {
       const row = readRecordedMetricResult(scope.taskID, input.evidence_ref)
+      const source = await readTaskArtifactSnapshotManifest({
+        projectID: scope.projectID, projectDirectory: scope.projectDirectory, taskID: scope.taskID,
+        snapshot: row.evidence_ref.snapshot,
+      })
       const attempt = MetricExecutionEvidence.parse(JSON.parse(
         new TextDecoder("utf-8", { fatal: true }).decode(await taskArtifacts.read(row.evidence_ref)),
       ))
@@ -158,7 +163,7 @@ export function createMetricEvaluationHost(
         throw new Error("Recorded metric result and its immutable attempt have inconsistent identities or values")
       }
       return MetricRecordedObservationSchema.parse({
-        task_id: row.task_id, iteration: row.iteration, scorer_id: spec.name,
+        task_id: row.task_id, producer: source.manifest.producer, iteration: row.iteration, scorer_id: spec.name,
         scorer_revision: spec.evaluator_config.scorer_revision,
         subject: attempt.subject.resource, trial_task_id: attempt.subject.trial_task_id,
         evidence_ref: row.evidence_ref,

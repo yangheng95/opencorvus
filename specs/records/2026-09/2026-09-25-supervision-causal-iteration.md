@@ -1124,3 +1124,30 @@
 - Metric runtime6项53断言、完整包投影1项40断言通过（g44-focused-tests.log对应两文件exit0；该log的首轮Host仍含失败）。合计16项234断言。初次新测试把复制ref按非canonical属性序写入receipt，先被原canonical检查拒绝；修正fixture为原schema序后实际到达DB权威错误。新增公共helper使两份精确包文件清单断言过期，按真实当前inventory同步后通过。错误日志保留，没有放宽原canonical/冻结文件或身份校验。
 - 源/嵌入Lab2026.09.27.6、contentDigest1db936231f4b13655508e3fea8933818822cc6e63612c23b7ddaba034d1064d1，单一生成器只同步Lab。类型8项、docs342ops25groups、API6规则34文件、包拓扑122/135和diff通过，g44-types/docs/api/topology/package-sync.log保留。无HTTP/DDL/SDK响应变化、无UI自动化或Provider费用，未安装推广项目包；范围提交后再按完整outgoing与pre-push核验推送。
 - 本修复证明新Evaluation数值来自记录过的真实评分，并不保证比较已包含所有真实测量。仍可能在同subject的多次metric执行间选择或拼接已真实记录的attempt；receipt目前没有独立“同一执行发生”的完整集合身份，只有native observation的iteration/owner和各资源来源。下一步应先沿原Tool Part/TaskArtifact producer/metric结果的真实发生关系审查，不凭时间最新、iteration等同Trial或引用数来补洞；需真实反例再决定单一来源，不先加新ledger或随意测量修订。不同Run的Campaign归属与未公开Trial全集同样尚未解决。整体业务可靠纠错/真实进化收益未达成，Opus恢复先读本结果。
+
+## G45：一次评分Tool调用的真实来源一致性
+
+### Recall、边界与原路径反例计划
+
+- 从673b3a22已push/clean继续。读AGENTS、本记录Recall/五段图/G43–G44、02-data；全仓核对MetricEvaluationHost/evaluate、唯一Lab调用、executeMetrics逐scorer publish→writeMetricResult、TaskArtifact manifest/producer/idempotency、真实scope解算和Session ToolPart request/outcome。无模型、无旧实验、无委托。
+- 已知原事实：真实Task scope必须匹配持久Session/assistant Message/Tool Part及call ID；request_part_id的terminal outcome唯一。metric attempt由原生execution.publish发布（非plugin幂等wrapper），每个snapshot的不可变producer保留package/agent/session/message/tool_call_id；一般TaskArtifact幂等发布可能保留首次producer，因此不能对任意资源默认“当前调用就是来源”。当前Lab execute-evolution-metrics公开Tool每次恰好调用一次metrics.evaluate；纯executor或任意SDK调用可在同一Tool中多次调用，这个更宽语义不能仅由Tool producer区分。
+- 一次evaluate顺序产生全部当前冻结scorer的attempt与DB结果。G44已逐项验真，但publisher未比较多个真实attempt的原调用；iteration为模型显式评分参数，不等于调用、Trial或repetition，也不是不可变的全局批次键。资源snapshot ID则逐scorer变化，不能要求所有scorer同snapshot。
+- 本地原路径探针：将既有真实Host fixture的冻结scorer集合扩为两个（原shell+constant query），同Trial/同collector在两个不同持久Tool call ID的Host scope中评分，iteration都0；另写一份新receipt分别取A、B的一项原始结果，走当前publisher读回。原两份receipt/attempt不改，使用的数值均为真实记录；这检验来源拼接，不以相同数值声称数值变坏、收益提高或实际晋升。两调用均为明确test-driver，不是自主模型行为。先保存原路径结果及差异，再改正向检查。
+- 若被接受，最小候选修复是从原attempt snapshot manifest经既有真实reader取得完整producer，加入只读recorded observation；publisher要求该receipt的全部scorer来自同一Task/Tool producer与iteration，再保留G44逐项subject/冻结scorer校验。不新增批次ledger/UUID、角色/消息或按tool名字猜意义，不选择最新/最好。不声称同一Tool里任意多次底层evaluate已获得唯一批次身份；也不证明不同完整测量的选择/已发布全集已解决。若证据否定其有效性，记录范围而不硬加门。
+
+### G45原版证据与实施范围
+
+- 原真实Host已实际发布拼接回执：同一个Trial/collector、相同iteration=0和冻结双scorer，原snapshot manifest分别记录call-evolution-abi-chain与call-g45-metric-second；新receipt取A的correctness和B的coverage，当前publisher接受并持久化。g45-mixed-occurrence-probe.json/log/patch保留。两值均为1，故证明的是来源拼接被接受，不声称分值变坏、模型欺骗或实际晋升。两个scope和第二Tool请求/结果由明确本地test-driver写入原Session存储，使用真实Host/执行器/SQLite/资源，不冒称完整模型工具调度验收。
+- 采用已有来源事实：metrics.recorded用原TaskArtifact manifest reader取得该exact attempt snapshot的producer，API只投影它，不新建发生记录；publisher逐项G44校验后，再要求task_id、完整producer和iteration一致。不同snapshot可属同一调用；引用数量/相同分数/相同iteration不足以替代来源。读取的producer来自评分attempt，不来自后来重发的receipt，完整B回执重发仍合法。
+- 范围是当前Lab公开Tool的一次调用（该冻结代码内只有一次evaluate）；不以“Tool调用”冒充所有可能SDK内部evaluate批次。也不要求外层Tool必须success：已经落账且完整的原事实可在外层交付失败后继续读取，不能因为收尾故障丢弃测量。Task/Mission调度与terminal occurrence不改；已检查scope严格解算、Tool request/outcome唯一索引与Task/Project目录权限，当前没有新增调度异常要改。
+- 正向测试保留双scorer原真实链，拼接A/B给精确integrity error，B整份及原别名/导入/typed unavailable保持；native recorded producer逐值等于原manifest。不同完整测量的选择/全集、同一Tool内部多次SDK evaluate的更细身份仍单列未知，不靠永久冲突/新ledger修饰。
+- G45首轮正向检查在“B整份回执合法重发”触发真实共享store错误`idempotent snapshot identity collision`，g45-focused-tests.log保留。根因是stable publication key包含snapshot_kind，但existing manifest复核硬写catalog；engine_resource第一次成功，原字节重发却被误判。审查全部kind定义/publish入口：公共Host原合同已支持两kind，具体实现也支持；TaskArtifactStoreExecution类型仍只写catalog，须与原单一manifest kind契约对齐。修复仅用existingManifest.snapshot_kind核对，不放宽identity、不改幂等key或首次producer。扩展真实store checker覆盖catalog和engine_resource分别重发/半完成恢复与原bytes，Task/Project隔离和目录授权保持。
+- 来源发生进一步审查：scope解算要求持久assistant/part/provider/call匹配；Session恢复对普通未完成Tool收敛失败，特殊恢复路径单列；权限执行已有成功结果时重放durable result，无outcome时为unknown，MCP恢复单独查询原任务。这里只做源码审查，不冒称重启真实模型验收；未改任何调度/恢复/lease/terminal实现。当前一致性主张仍限确切Tool producer，而非任意内部SDK批次。
+
+### G45已完成验证及范围
+
+- Native recorded observation现在从同一原snapshot manifest reader投影producer，publisher要求全scorer的task_id/producer/iteration一致。真实request表有(message_id, callID)唯一索引，故这一元组指向原Tool request；outcome表对request_part_id也唯一。无新ID/DDL/ledger或工作流状态门，不把Tool名称、字段数或时间戳当身份。每项原生测量权威与subject/scorer校验保持G44。
+- 最终23项307断言：Host9/146（g45-host-store-final.log对应Host exit0，该log后一个旧store断言失败保留）；store7/68（g45-store-verified.log全过）；runtime6/53与package projection1/40（g45-focused-tests.log两对应文件exit0，该log首轮Host幂等失败保留）。原版两调用均iteration0的拼接被接受；新版native producer逐值等于原manifest、调用A/B精确区别、拼接返回声明的integrity error；B完整回执重发成功，原正确值/别名/导入再评分/typed unavailable链仍通过。
+- engine_resource幂等根因已在共享store修复：existingStable使用existingManifest.snapshot_kind，类型复用原manifest kind union。两种kind相同bytes仍是两个身份，各自重复发布同identity；两类manifest-last中断场景都正确恢复原snapshot ID和bytes。扩展测试首次忘记把新engine_resource计入内部listTaskArtifactSnapshots完整清单，实际返回两项使断言失败；按真实完整inventory纠正后通过，不改变catalog provider的可见范围。
+- Lab源嵌入2026.09.27.7/contentDigest178272b6d9907f4e3bb8cda451d1f7353f65aef1a58f26e5c5c4df283a6453a1，只同步Lab、未推广。类型8/docs342ops25/API6规则34文件/包拓扑122/135与diff检查通过，日志g45-types/docs/api/topology/package-sync保留。范围提交后按当前upstream完整outgoing和真实pre-push交付；本轮无Provider费用、UI自动化、HTTP或SDK响应变化。
+- 仍未满足：不同完整评分调用之间择取/遗漏观察，Run/Campaign精确归属、未公开Trial全集，以及同一Tool内任意SDK多次evaluate的细批次。本修复不禁止完整观察重新表达、不把第二记录永久毒化，也不按最新/最佳代替合法关系。下一轮先检验这些原始发生事实在跨Task导入后是否仍可沿当前Task证据完整取得，再决定测量集合的单一权威；不能拿源snapshot ID猜producer，不能要求Agent读取未授权的source Task。整体可靠业务纠错和真实进化收益仍未达成。

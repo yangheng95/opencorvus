@@ -1064,6 +1064,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             "workspace-template.json",
             "permission-snapshot.json",
             "scorer-correctness.json",
+            "scorer-coverage.json",
           ].sort()
           const campaignInputPaths = campaignInputNames.map((name) => `campaign-inputs/${name}`)
           await mkdir(path.join(project.path, "campaign-inputs"), { recursive: true })
@@ -1102,6 +1103,12 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               }),
             ],
           ])
+          campaignInputContents.set("scorer-coverage.json", JSON.stringify({
+            schema_version: 1, scorer_id: "coverage", description: "Second independent recorded observation",
+            unit: "ratio", direction: "higher_better", target: 1, floor: 0, weight: 1,
+            observation_class: "quality", evaluator_kind: "query",
+            evaluator_config: { query: "constant_value", value: 1 },
+          }))
           for (const name of campaignInputNames)
             await writeFile(path.join(project.path, "campaign-inputs", name), campaignInputContents.get(name)!)
           const campaignInputPublication = await publishTaskArtifactProjectFiles({
@@ -1125,6 +1132,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           const workspaceResource = campaignInput.get("campaign-inputs/workspace-template.json")!
           const permissionResource = campaignInput.get("campaign-inputs/permission-snapshot.json")!
           const scorerResource = campaignInput.get("campaign-inputs/scorer-correctness.json")!
+          const coverageResource = campaignInput.get("campaign-inputs/scorer-coverage.json")!
           const campaignWorkspaceTreeSHA256 = await executionCapsuleSourceTreeDigest(trialWorktree.directory)
           ;(scope.owner as { agentID: string }).agentID = "evolution-experiment-planner"
           const campaignDraft = {
@@ -1138,7 +1146,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               environment_path: environmentResource.path,
               workspace_template_path: workspaceResource.path,
               permission_snapshot_path: permissionResource.path,
-              scorer_assets: [{ scorer_id: "correctness", resource_path: scorerResource.path }],
+              scorer_assets: [{ scorer_id: "correctness", resource_path: scorerResource.path }, { scorer_id: "coverage", resource_path: coverageResource.path }],
             },
             external_side_effect_policy: "No production side effects",
             repetitions: 1,
@@ -1173,7 +1181,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             target,
             baseline_revision: revision,
             dataset_digest: datasetResource.sha256,
-            scorer_digests: [scorerResource.sha256],
+            scorer_digests: [scorerResource.sha256, coverageResource.sha256],
             model: "provider/model",
             model_configuration_digest: modelConfigurationResource.sha256,
             environment_digest: environmentResource.sha256,
@@ -1832,7 +1840,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             repetition: 0,
             trial_task_id: trialTaskID,
             trial_revision_digest: revision.package_digest,
-            scorers: [{ scorer_id: "correctness", status: "measured", value: 1 }],
+            scorers: [{ scorer_id: "correctness", status: "measured", value: 1 }, { scorer_id: "coverage", status: "measured", value: 1 }],
           })
           const subjectEvidence = metricOutcome.receipt.scorers[0]!.evidence[0]!
           if (subjectEvidence.source !== "task_artifact_resource") throw new Error("Expected the metric attempt resource")
@@ -2014,6 +2022,50 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           await expect(publishAlteredReceipt(alteredReceipt)).rejects.toThrow(
             `Metric evidence must identify exactly one recorded result in Task ${taskID}; found 0`,
           )
+          const secondCall = {
+            ...scope, toolCallID: "call-g45-metric-second", toolPartID: "part-g45-metric-second",
+            owner: { ...scope.owner },
+          }
+          const secondInput = {
+            campaign_spec_locator: campaignReceipt.locator, candidate_revision_locator: null,
+            run_evidence_locator: runReceipt.locator, iteration: 0, delivery_slice_revision_id: null,
+            visual_feedback_verification_artifact_locators: [],
+          }
+          const secondStarted = Date.now()
+          await Session.updatePart({
+            id: secondCall.toolPartID, sessionID: secondCall.sessionID, messageID: secondCall.messageID,
+            type: "tool", tool: "execute-evolution-metrics", callID: secondCall.toolCallID,
+            state: { status: "running", input: secondInput, time: { start: secondStarted } },
+          })
+          const secondMeasurement = await withTaskScopedPluginToolHost(secondCall, async (secondHost) =>
+            JSON.parse(await executeEvolutionMetricsTool.execute(secondInput, { host: secondHost } as never)),
+          )
+          await Session.updatePart({
+            id: secondCall.toolPartID, sessionID: secondCall.sessionID, messageID: secondCall.messageID,
+            type: "tool", tool: "execute-evolution-metrics", callID: secondCall.toolCallID,
+            state: { status: "completed", input: secondInput, title: "Recorded local metric invocation",
+              output: JSON.stringify(secondMeasurement), metadata: {}, time: { start: secondStarted, end: Date.now() } },
+          })
+          const mixedReceipt = structuredClone(metricOutcome.receipt)
+          mixedReceipt.scorers[1] = secondMeasurement.receipt.scorers[1]
+          const producers = await Promise.all(mixedReceipt.scorers.map(async (scorer: { evidence: Array<{ ref: TaskArtifactRef }> }) => {
+            const ref = scorer.evidence[0]!.ref
+            const record = await readTaskArtifactSnapshotManifest({ projectID: scope.projectID,
+              projectDirectory: project.path, taskID, snapshot: ref.snapshot })
+            const observed = await host.metrics.recorded({ evidence_ref: ref })
+            expect(observed.producer).toEqual(record.manifest.producer)
+            if (record.manifest.producer.owner_kind !== "projected-worker") throw new Error("Expected a worker metric source")
+            return record.manifest.producer.tool_call_id
+          }))
+          expect(producers).toEqual([scope.toolCallID, secondCall.toolCallID])
+          await expect(publishAlteredReceipt(mixedReceipt)).rejects.toThrow(
+            "Metric receipt combines observations from different Tool invocations or iterations",
+          )
+          const intactSecond = JSON.parse(await publishAlteredReceipt(secondMeasurement.receipt))
+          const intactRead = await host.engineArtifacts.read({
+            locator: intactSecond.locator, byte_offset: 0, max_bytes: 65_536, delivery: "inline",
+          })
+          expect(JSON.parse(intactRead.chunk.text!).payload.scorers).toEqual(secondMeasurement.receipt.scorers)
           ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
           const integrityReviewReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
@@ -2133,6 +2185,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               "integrity_review:case-1:candidate:0",
               "run:case-1:candidate:0",
               "scorer:correctness:case-1:candidate:0",
+              "scorer:coverage:case-1:candidate:0",
               "token_delta",
             ],
             required_unavailable_dimensions: [
@@ -2142,6 +2195,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               "integrity_review:case-1:candidate:0",
               "run:case-1:candidate:0",
               "scorer:correctness:case-1:candidate:0",
+              "scorer:coverage:case-1:candidate:0",
             ],
             unknowns: ["candidate arm remains a separate immutable Trial"],
             visual_review: { status: "not_applicable", evidence: [] },
@@ -2328,6 +2382,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               "integrity_review:case-1:candidate:0",
               "run:case-1:candidate:0",
               "scorer:correctness:case-1:candidate:0",
+              "scorer:coverage:case-1:candidate:0",
               "token_delta",
             ],
             required_unavailable_dimensions: [
@@ -2336,6 +2391,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               "integrity_review:case-1:candidate:0",
               "run:case-1:candidate:0",
               "scorer:correctness:case-1:candidate:0",
+              "scorer:coverage:case-1:candidate:0",
             ],
             unknowns: [],
           })
@@ -2397,6 +2453,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           }, { host } as never))
           expect(unavailableMeasurement.receipt.scorers).toMatchObject([
             { scorer_id: "correctness", status: "unavailable", reason: "parse_failed" },
+            { scorer_id: "coverage", status: "measured", value: 1 },
           ])
           const unavailableEvaluation = JSON.parse(await executePublishEvolutionArtifact({
             artifact_type: "evolution-lab/evaluation-result", payload: {},
@@ -2588,6 +2645,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             "model_configuration",
             "permission_snapshot",
             "scorer:correctness",
+            "scorer:coverage",
             "workspace_template",
           ])
           const resourcePathByRole = new Map(rehydrated.role_resources.map((item) => [item.role, item.resource.path]))
@@ -2602,6 +2660,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               permission_snapshot_path: resourcePathByRole.get("permission_snapshot")!,
               scorer_assets: [
                 { scorer_id: "correctness", resource_path: resourcePathByRole.get("scorer:correctness")! },
+                { scorer_id: "coverage", resource_path: resourcePathByRole.get("scorer:coverage")! },
               ],
             },
           }
@@ -2703,7 +2762,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           ) as { receipt: { trial_task_id: string; scorers: Array<{ value: number }> } }
           expect(importedMetricOutcome.receipt).toMatchObject({
             trial_task_id: expect.any(String),
-            scorers: [{ value: 1 }],
+            scorers: [{ value: 1 }, { value: 1 }],
           })
         })
       },
@@ -2719,7 +2778,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.6")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.7")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(

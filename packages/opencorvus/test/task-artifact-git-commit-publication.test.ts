@@ -262,14 +262,14 @@ describe("Task Artifact immutable Git commit publication", () => {
         const execution = createTaskArtifactStoreExecution(scope)
         try {
           const bytes = Buffer.from("exact nested watched resource")
-          const publish = async () => {
+          const publish = async (kind: "catalog" | "engine_resource" = "catalog") => {
             const stage = await execution.stage({ trees: ["resources"] })
             const resource = path.join(stage.treeDirectories.resources!, "nested/result.txt")
             await fs.mkdir(path.dirname(resource), { recursive: true })
             await fs.writeFile(resource, bytes)
             await watcher.synchronize()
             return execution.publish(stage, {
-              snapshot_kind: "catalog",
+              snapshot_kind: kind,
               idempotent: true,
               files: [{ tree: "resources", path: "nested/result.txt", media_type: "text/plain" }],
             })
@@ -278,6 +278,12 @@ describe("Task Artifact immutable Git commit publication", () => {
           const repeated = await publish()
           expect(repeated.snapshot).toEqual(first.snapshot)
           expect(Buffer.from(await readTaskArtifactRef({ ...scope, ref: first.artifacts[0]! }))).toEqual(bytes)
+          const engineResource = await publish("engine_resource")
+          const repeatedResource = await publish("engine_resource")
+          expect(repeatedResource.snapshot).toEqual(engineResource.snapshot)
+          expect(repeatedResource.manifest.snapshot_kind).toBe("engine_resource")
+          expect(new Set([first.snapshot.snapshot_id, engineResource.snapshot.snapshot_id]).size).toBe(2)
+          expect(Buffer.from(await readTaskArtifactRef({ ...scope, ref: repeatedResource.artifacts[0]! }))).toEqual(bytes)
           const destination = ProjectRuntimePaths.taskArtifactSnapshotRoot(
             project.path,
             scope.taskID,
@@ -287,11 +293,21 @@ describe("Task Artifact immutable Git commit publication", () => {
           await fs.unlink(path.join(destination, "manifest.json"))
           const recovered = await publish()
           expect(recovered.snapshot.snapshot_id).toBe(first.snapshot.snapshot_id)
-          expect(recovered.manifest.publication_sequence).toBe(first.manifest.publication_sequence + 1)
+          expect(recovered.manifest.publication_sequence).toBe(engineResource.manifest.publication_sequence + 1)
           expect(Buffer.from(await readTaskArtifactRef({ ...scope, ref: recovered.artifacts[0]! }))).toEqual(bytes)
           expect((await listTaskArtifactSnapshots(scope)).map((record) => record.identity)).toEqual([
+            engineResource.snapshot,
             recovered.snapshot,
           ])
+          const resourceDestination = ProjectRuntimePaths.taskArtifactSnapshotRoot(
+            project.path, scope.taskID, engineResource.snapshot.snapshot_id,
+          )
+          await fs.unlink(path.join(resourceDestination, "manifest.json"))
+          const recoveredResource = await publish("engine_resource")
+          expect(recoveredResource.snapshot.snapshot_id).toBe(engineResource.snapshot.snapshot_id)
+          expect(recoveredResource.manifest.snapshot_kind).toBe("engine_resource")
+          expect(recoveredResource.manifest.publication_sequence).toBe(recovered.manifest.publication_sequence + 1)
+          expect(Buffer.from(await readTaskArtifactRef({ ...scope, ref: recoveredResource.artifacts[0]! }))).toEqual(bytes)
         } finally {
           await execution.close()
         }

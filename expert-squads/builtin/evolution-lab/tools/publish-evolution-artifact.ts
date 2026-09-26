@@ -609,7 +609,7 @@ export default tool({
         campaign.scorers.map((item) => item.scorer_id).toSorted())) {
         throw new EvolutionArtifactIntegrityError("Metric receipt must contain the complete frozen scorer set")
       }
-      const verifiedScorers = await Promise.all(receipt.scorers.map(async (scorer) => {
+      const verified = await Promise.all(receipt.scorers.map(async (scorer) => {
         const evidence = scorer.evidence[0]
         if (scorer.evidence.length !== 1 || evidence?.source !== "task_artifact_resource")
           throw new EvolutionArtifactIntegrityError(`Metric receipt scorer ${scorer.scorer_id} requires one recorded attempt`)
@@ -621,8 +621,16 @@ export default tool({
             !sameJSON(recorded.scorer, scorer)) {
           throw new EvolutionArtifactIntegrityError(`Metric receipt scorer ${scorer.scorer_id} differs from its recorded observation`)
         }
-        return recorded.scorer
+        return recorded
       }))
+      const origins = verified.map(({ observation }) => ({
+        task_id: observation.task_id, producer: observation.producer, iteration: observation.iteration,
+      }))
+      if (origins.some((origin) => !sameJSON(origin, origins[0]))) {
+        throw new EvolutionArtifactIntegrityError(
+          "Metric receipt combines observations from different Tool invocations or iterations",
+        )
+      }
       // Immutable JSON is a transport, not measurement authority. Exact native
       // result rows and their attempts own each scorer fact.
       payload = EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse({
@@ -634,7 +642,7 @@ export default tool({
         repetition: receipt.repetition,
         trial_task_id: receipt.trial_task_id,
         trial_revision_digest: receipt.trial_revision_digest,
-        scorers: verifiedScorers,
+        scorers: verified.map(({ scorer }) => scorer),
         metric_receipt_resource: resourceIdentity(receiptResource),
       })
       const scorerResources = receipt.scorers.flatMap((scorer) =>
