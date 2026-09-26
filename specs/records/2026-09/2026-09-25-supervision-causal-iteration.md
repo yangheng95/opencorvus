@@ -1050,3 +1050,14 @@
 - judge路径应传入明确选中的原始内容，不能把Run locator/hash当作已读业务材料。已有collector可选Message body与Artifact目录索引可作为选择入口；具体选择/完整读取API须沿现有同Project/Trial身份核对，不能Host按关键词挑业务答案或自动塞所有隐藏内容。需要保持原max_evidence_bytes/MIME/UTF-8的明确错误语义，不截断后称完整。query/aggregator继续以本次评分流水聚合，prebuilt验证明确subject来源，不能误改成Trial内并不存在的metric spec。
 - 实施验收应保留G41原0/1反例：真实shell结果必须来自冻结Trial的0；采集后再改Trial活动文件以及Evaluator文件，物化评分仍读原0；物化中的允许写入只作用于副本并由现有close清理。补同Project不同Task、不同Project、旧occurrence、嵌套文件和明确不支持条目的真实正向输出/错误；judge核对实际发送的原始字节与确切locators，不能仅测构造对象或新字段存在。没有业务LLM运行登记，不启动模型来替代这些本地合同。
 - 本段是**待落实的精确方案/风险清单**，没有宣称现有Git读取已支持跨Task终态导出、没有已验证的实现patch。Opus恢复后接管这一方案和G41原始反例，自主收敛字段/实施，不重新争论已经实测的cwd错位；G40快照修复已交付，完整测量集合与合法后续观察仍是随后任务。
+
+### 有界物化原型预登记
+
+- 在全新无模型test-driver中复用G41两个marker目录，只验证一个已存在的具体路径：当前测试的Trial worktree与Evaluator project共用Git对象库，原terminal commit可由同Project的精确commit读取原语访问。先按原Host评分留存1，再将Trial活动文件改为9；通过原`publishTaskArtifactProjectFiles(merged_primary_commit)`读取collector所绑定terminal commit中的marker0，发布为真实Evaluator Task资源，并通过同一TaskArtifact.materialize得到隔离副本。
+- 同一个原`executeMetrics`、同一冻结shell配置在该物化目录进行第二次明确test-driver测量，评分owner仍为Evaluator Task；原receipt不改。预期新attempt raw_value0、cwd物化目录、Trial活动文件仍9、Evaluator文件仍1。该原型用于证明既有原语可承载正确信息，不冒充已修复的public Host路径；不证明独立Git库、完整根目录/嵌套库或link/mode处理。临时测试和输入修改结束后精确恢复，不保留第二控制器或替代生产实现。
+
+### G42原型实际结果
+
+- 新隔离真实Host/DB/scorer过程9项123断言通过，`.tmp/g42-materialized-subject-probe.json`、log和patch保留。观察精确为`originalMetric=1 / frozenMetric=0 / liveTrial=9 / evaluator=1 / frozenCopy=0`；新attempt的cwd是Evaluator Task受管artifact materializations目录，owner仍为Evaluator Task，原receipt=1未被覆盖。
+- 具体复用了现有`publishTaskArtifactProjectFiles`的exact commit模式、TaskArtifact真实publish/materialize/close和原`executeMetrics`，没有第二评分器/伪Tool/模型/世界。测试直接给executor传物化context，是明确的接线原型；**公开host.metrics.evaluate仍有G41错误，不能将此原型当生产修复已完成**。原型只复制被该scorer读取的一份regular文件，不能外推为完整多仓库执行环境。临时测试已精确恢复，生产源仍是G40的.4。
+- Opus接手已有可证伪正向样例：将真实公开Host subject绑定实施后，应沿同一公开调用取得上述0和完整来源，同时保留Task owner、评分receipt、原历史数据和回收边界。还需覆盖公开路径与未决的完整结果树/显式cwd/特殊条目/独立Git库/旧occurrence/导入和judge原始输入。不得把原型context硬编码进生产，或只在metadata补Trial标签。
