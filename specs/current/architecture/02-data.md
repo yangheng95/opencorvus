@@ -270,8 +270,20 @@ writer只复制实际已有事实，不把Mission importer改称原作者，也�
 attribution/opportunity相关性使用最早已知事实。缺失`prior_imports`不证明历史完整；若已知
 链末仍是Mission，就不能满足原worker作者合同。旧丢失记录保持原样、不回填；payload与资源
 原bytes保持，目标资源snapshot的Mission producer仍只说明本次复制动作。该运输能力本身
-不把原payload内的locator转换成当前Task locator，不等于Comparison/history/promotion已消费
-跨Task关系；这些消费者仍须在已授权的当前证据集合内解析关系。
+不把原payload内的locator改写成当前Task locator。`createEvolutionArtifactReferences`在调用者
+当前Task/冻结目录已读集合中，以exact current locator及已运输Engine source chain建立原件
+身份索引；`evolutionArtifactProvenance`投影已知最早作者和直接来源。索引没有I/O、没有新账本，
+不以值/名称/时间或普通source引用合并身份；同一exact原件若出现矛盾type/schema/payload会
+报conflicting_identity，当前集合缺少所需前驱报missing_source。所有物理Artifact及原payload保留。
+
+Comparison发现/比较、Review显式取代、新鲜性检查、history和Lab晋升前驱验证共用该规则。
+相同原件的运输副本可通过任意已保存一跳关联；两个独立native Review即使内容相同仍是两份
+审查事实。明确supersedes多个同源副本会取代同一原件的全部已读副本，不伪造新的Review；
+重复列同一exact locator仍是duplicate_parent。当前新Review仍需自己的直接来源，导入Review
+的finding与父声明按原source provenance校验，不让复制动作变成原审查作者。
+history纳入可验证Lab导入事实，按所属Task分别建索引，保持当前Task locator/原payload和
+冻结历史上界；不同Task不得混成授权域。安装检查仍在原receipt immediate事务，Lab原作者可由
+已运输链证明，Core反馈/恢复权限不扩大；缺源不等于没有后发Review，已提交receipt仍先重放。
 
 `run-evidence-bundle` 的模型面输入只有 Evaluator 选择的 Campaign 槽位（`case_id`、`arm`、`repetition`），
 publication 以唯一一份 campaign-spec 为 source、以 collector 的唯一 JSON 资源为 resource set。publisher

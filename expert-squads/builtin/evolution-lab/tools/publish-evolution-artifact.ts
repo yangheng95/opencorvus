@@ -2,7 +2,8 @@ import {
   ArtifactReadLocatorSchema,
   ArtifactSchemaLimits,
   EngineArtifactEnvelopeSchema,
-  engineArtifactSourceChain,
+  createEvolutionArtifactReferences,
+  evolutionArtifactProvenance,
   EngineArtifactLocatorSchema,
   TaskArtifactResourceSetLocatorSchema,
   TaskRunEvidenceBundleSchema,
@@ -160,6 +161,7 @@ async function discoverComparisonEvidence(selected: readonly ComparisonEvidence[
   } while (cursor)
   // All three families share one catalog upper bound and membership. Later
   // Reviews of these same measured facts are rechecked by the mutation commit.
+  const references = createEvolutionArtifactReferences([...selected, ...catalog])
   const measurements = expandEvolutionMeasurementAliases(selected, catalog)
   for (const item of measurements)
     await context.host.engineArtifacts.select({
@@ -169,7 +171,7 @@ async function discoverComparisonEvidence(selected: readonly ComparisonEvidence[
   const evaluations = new Set(
     measurements
       .filter((item) => item.envelope.artifact_type === "evolution-lab/evaluation-result")
-      .map((item) => JSON.stringify(item.locator)),
+      .map((item) => references.key(item.locator)),
   )
   const reviews: ComparisonEvidence[] = []
   for (const { locator, envelope } of catalog) {
@@ -178,13 +180,13 @@ async function discoverComparisonEvidence(selected: readonly ComparisonEvidence[
       .object({ evaluation_result_locator: ArtifactReadLocatorSchema })
       .safeParse(envelope.payload)
     if (!correlation.success) {
-      if (envelope.source_artifact_locators.some((locator) => evaluations.has(JSON.stringify(locator))))
+      if (evolutionArtifactProvenance(envelope).sources.some((locator) => evaluations.has(references.key(locator))))
         throw new EvolutionArtifactIntegrityError(
           "A Review sourced from the selected Evaluation has no valid evaluation identity",
         )
       continue
     }
-    if (!evaluations.has(JSON.stringify(correlation.data.evaluation_result_locator))) continue
+    if (!evaluations.has(references.key(correlation.data.evaluation_result_locator))) continue
     EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(envelope.payload)
     await context.host.engineArtifacts.select({
       locator,
@@ -199,8 +201,7 @@ export function requireEvolutionWorkerProducer(
   envelope: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>,
   agentID: string,
 ) {
-  const chain = envelope.producer.owner_kind === "mission" ? engineArtifactSourceChain(envelope) : []
-  const producer = chain.length ? chain.at(-1)!.source_producer : envelope.producer
+  const { producer } = evolutionArtifactProvenance(envelope)
   if (
     producer?.owner_kind !== "projected-worker" ||
     producer.expert_squad_id !== "evolution-lab" ||
@@ -219,20 +220,13 @@ function attributionIdentifiesOpportunity(input: {
   opportunityLocator: EngineArtifactLocator
 }) {
   if (input.attribution.owner_evidence.some((locator) => sameJSON(locator, input.opportunityLocator))) return true
-  const opportunityLineage = engineArtifactSourceChain(input.opportunityEnvelope).at(-1)
-  const attributionLineage = engineArtifactSourceChain(input.attributionEnvelope).at(-1)
-  if (
-    !opportunityLineage ||
-    !attributionLineage ||
-    opportunityLineage.source_task_id !== attributionLineage.source_task_id
-  )
-    return false
-  const originalOpportunityLocator = opportunityLineage.source_locator
-  return (
-    attributionLineage.source_provenance.source_artifact_locators.length === 1 &&
-    sameJSON(attributionLineage.source_provenance.source_artifact_locators[0], originalOpportunityLocator) &&
-    input.attribution.owner_evidence.some((locator) => sameJSON(locator, originalOpportunityLocator))
-  )
+  const references = createEvolutionArtifactReferences([{
+    locator: input.opportunityLocator, envelope: input.opportunityEnvelope,
+  }])
+  const { sources } = evolutionArtifactProvenance(input.attributionEnvelope)
+  return sources.length === 1 && references.same(sources[0]!, input.opportunityLocator) &&
+    input.attribution.owner_evidence.some((locator) => references.same(locator, input.opportunityLocator))
+
 }
 
 export const evolutionArtifactOwner = {
@@ -812,7 +806,10 @@ export default tool({
         requireEvolutionWorkerProducer(parentEnvelope, "evolution-safety-auditor")
         const parent = EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(parentEnvelope.payload)
         if (
-          !sameJSON(parent.evaluation_result_locator, evaluationLocator) ||
+          !createEvolutionArtifactReferences([
+            { locator: evaluationLocator, envelope: evaluationEnvelope },
+            { locator, envelope: parentEnvelope },
+          ]).same(parent.evaluation_result_locator, evaluationLocator) ||
           parent.case_id !== review.case_id ||
           parent.arm !== review.arm ||
           parent.repetition !== review.repetition
@@ -860,7 +857,7 @@ export default tool({
         if (item.envelope.artifact_type === "evolution-lab/integrity-review") {
           requireEvolutionWorkerProducer(item.envelope, "evolution-safety-auditor")
           const review = EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(item.envelope.payload)
-          const sourceKeys = new Set(item.envelope.source_artifact_locators.map((locator) => JSON.stringify(locator)))
+          const sourceKeys = new Set(evolutionArtifactProvenance(item.envelope).sources.map((locator) => JSON.stringify(locator)))
           for (const locator of review.revision?.supersedes ?? [])
             if (!sourceKeys.has(JSON.stringify(locator)))
               throw new EvolutionArtifactIntegrityError(
@@ -895,6 +892,7 @@ export default tool({
           value: EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse(item.envelope.payload),
         }))
       payload = deriveComparisonRecommendation({
+        references: createEvolutionArtifactReferences(envelopes),
         campaign: EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(campaigns[0]!.envelope.payload),
         campaignLocator: campaigns[0]!.locator,
         candidate: EvolutionArtifactSchemas["evolution-lab/candidate-revision"].parse(candidates[0]!.envelope.payload),

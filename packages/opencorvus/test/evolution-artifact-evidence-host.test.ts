@@ -75,6 +75,7 @@ import {
   executionCapsuleSourceTreeSnapshot,
 } from "../src/execution-capsule/tree-digest"
 import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
+import { requireCurrentEvolutionReviews, EvolutionComparisonReviewChangedError } from "../src/expert-squad/evolution-review-freshness"
 import { MetricExecutionEvidence } from "../src/metrics/types"
 import { metricJudgeMessages } from "../src/tool/metric-judge-runner"
 
@@ -911,6 +912,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         let sourceRunLocator!: EngineArtifactLocator
         let sourceMetricEvidence!: TaskArtifactRef
         let sourceMeasurementImports: ArtifactReadLocator[] = []
+        let sourceCorrectedComparisonPayload: unknown
         let sourceAttemptText = ""
         let importedEvaluationEnvelope!: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>
         let sourceOpportunityInput!: Record<string, unknown>
@@ -2383,6 +2385,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ),
           ) as { locator: EngineArtifactLocator }
           const revisedComparison = await publishComparison()
+          sourceCorrectedComparisonPayload = revisedComparison.payload
           expect(revisedComparison.payload).toEqual({
             ...expectedComparison,
             unavailable_dimensions: [
@@ -2663,6 +2666,45 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           expect(nestedManifest.manifest.producer).toMatchObject({ owner_kind: "mission", tool_call_id: "call-campaign-import" })
           importedEvaluationEnvelope = nested.envelope
           expect(engineArtifactSourceChain(nested.envelope)).toEqual([nested.envelope.import_lineage!])
+          const importedReview = importedEvidence.find((item) => item.type === "evolution-lab/integrity-review")!
+          const publishImportedComparison = async () => {
+            ;(importedScope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
+            const receipt = JSON.parse(await executePublishEvolutionArtifact({
+              artifact_type: "evolution-lab/comparison-recommendation", payload: {}, resource_set: null,
+              source_artifact_locators: [importedCampaignLocator,
+                importedLocators.get("evolution-lab/candidate-revision")!, importedRunLocator, nested.locator],
+            }, { host } as never))
+            const read = await host.engineArtifacts.read({ locator: receipt.locator, byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
+            return { locator: receipt.locator, envelope: EngineArtifactEnvelopeSchema.parse(JSON.parse(read.chunk.text!)) }
+          }
+          const importedComparison = await publishImportedComparison()
+          const importedValue = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(importedComparison.envelope.payload)
+          expect(importedValue).toMatchObject({ recommendation: "inconclusive", aggregate_score: null,
+            unknowns: ["candidate arm remains a separate immutable Trial"] })
+          expect(importedValue.required_unavailable_dimensions).toContain(
+            `integrity_finding:case-1:baseline:0:${importedReview.locator.artifact_id}:security:1`,
+          )
+          expect(importedComparison.envelope.source_artifact_locators).toEqual(expect.arrayContaining([importedReview.locator]))
+          ;(importedScope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
+          const reconsidered = JSON.parse(await executePublishEvolutionArtifact({
+            artifact_type: "evolution-lab/integrity-review", resource_set: null,
+            payload: {
+              ...EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(importedReview.envelope.payload),
+              evaluation_result_locator: nested.locator, findings: [], unknowns: [],
+              revision: { supersedes: [importedReview.locator], reason: "Reconsidered the same imported original evidence." },
+            },
+            source_artifact_locators: [nested.locator, importedReview.locator],
+          }, { host } as never))
+          let freshnessError: unknown
+          try { requireCurrentEvolutionReviews({ taskID: importedTaskID, comparisonLocator: importedComparison.locator }) }
+          catch (error) { freshnessError = error }
+          expect(freshnessError).toBeInstanceOf(EvolutionComparisonReviewChangedError)
+          expect((freshnessError as InstanceType<typeof EvolutionComparisonReviewChangedError>).data.missingReviewLocators)
+            .toEqual([reconsidered.locator])
+          const correctedImportedComparison = await publishImportedComparison()
+          expect(correctedImportedComparison.envelope.payload).toEqual(sourceCorrectedComparisonPayload)
+          requireCurrentEvolutionReviews({ taskID: importedTaskID, comparisonLocator: correctedImportedComparison.locator })
+          ;(importedScope.owner as { agentID: string }).agentID = "evolution-evaluator"
           await expect(host.metrics.recorded({ evidence_ref: sourceMetricEvidence })).rejects.toThrow(
             `Metric evidence must identify exactly one recorded result in Task ${importedTaskID}; found 0`,
           )
@@ -2889,7 +2931,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.8")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.9")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(

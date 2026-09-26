@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { EngineArtifactEnvelopeSchema, EvolutionArtifactSchemas } from "@opencorvus-ai/plugin"
+import { EngineArtifactEnvelopeSchema, EngineArtifactLocatorSchema, EvolutionArtifactSchemas, engineArtifactSourceChain } from "@opencorvus-ai/plugin"
 import { deriveComparisonRecommendation } from "@squads/evolution-lab/lib/evolution-lab/comparison"
 import {
   assertRandomEvolutionCampaignContract,
@@ -759,6 +759,40 @@ describe("random Expert Squad evolution controller contracts", () => {
       ),
     ]
     const summary = summarizeEvolutionEvidence(facts)
+    let transported = facts
+    for (const hop of [1, 2]) {
+      transported = transported.map((item) => {
+        const previous = EngineArtifactEnvelopeSchema.parse(item.envelope)
+        const previousLocator = EngineArtifactLocatorSchema.parse(item.locator)
+        const prior = engineArtifactSourceChain(previous)
+        return {
+          taskID: `receiving-task-${hop}`,
+          locator: { ...previousLocator, artifact_id: `copy-${hop}-${previousLocator.artifact_id}`, catalog_revision: previousLocator.catalog_revision + 100 },
+          envelope: EngineArtifactEnvelopeSchema.parse({
+            ...previous, producer: { owner_kind: "mission", mission_id: "fixture-mission", session_id: "fixture-session",
+              message_id: `import-message-${hop}`, tool_call_id: `import-call-${hop}` },
+            observed_artifact_locators: [], source_artifact_locators: [],
+            import_lineage: { source_task_id: item.taskID, source_locator: previousLocator, source_kind: "expert_output",
+              source_producer: previous.producer,
+              source_provenance: { observed_artifact_locators: previous.observed_artifact_locators,
+                source_artifact_locators: previous.source_artifact_locators },
+              ...(prior.length ? { prior_imports: prior } : {}),
+            },
+          }),
+        }
+      })
+      const transportedSummary = summarizeEvolutionEvidence(transported)
+      expect(transportedSummary.counts).toEqual(summary.counts)
+      expect(transportedSummary.recommendation.payload).toEqual(recommendation)
+      expect(transportedSummary.campaign.locator).toEqual(
+        transported.find((item) => EngineArtifactEnvelopeSchema.parse(item.envelope).artifact_type === "evolution-lab/campaign-spec")!.locator,
+      )
+    }
+    const foreignOnlyReview = [
+      ...transported.filter((item) => !EngineArtifactLocatorSchema.parse(item.locator).artifact_id.endsWith(locations.baselineReview.artifact_id)),
+      facts.find((item) => EngineArtifactLocatorSchema.parse(item.locator).artifact_id === locations.baselineReview.artifact_id)!,
+    ]
+    expect(() => summarizeEvolutionEvidence(foreignOnlyReview)).toThrow("Evolution recommendation source was not completely read")
     expect({
       counts: summary.counts,
       recommendation: {

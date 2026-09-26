@@ -5,6 +5,8 @@ import {
   EngineArtifactEnvelopeSchema,
   EvolutionArtifactSchemas,
   EvolutionPackagePublishableArtifactTypeSchema,
+  createEvolutionArtifactReferences,
+  evolutionArtifactProvenance,
   parseEvolutionArtifact,
   type ArtifactReadLocator,
   type EngineArtifactEnvelope,
@@ -495,8 +497,8 @@ function parseEvolutionFact(fact: EvolutionArtifactFact): ParsedEvolutionArtifac
 }
 
 function requireProducer(fact: ParsedEvolutionArtifactFact, agentID: string) {
-  const producer = fact.envelope.producer
-  if (producer.owner_kind !== "projected-worker" || producer.agent_id !== agentID) {
+  const producer = evolutionArtifactProvenance(fact.envelope).producer
+  if (producer?.owner_kind !== "projected-worker" || producer.agent_id !== agentID) {
     throw new Error(`${fact.artifactType} requires projected worker ${agentID}`)
   }
 }
@@ -593,12 +595,14 @@ export function summarizeEvolutionEvidence(facts: readonly EvolutionArtifactFact
   const recommendation = recommendations[0]!
   requireProducer(recommendation, "evolution-recommendation-owner")
 
-  const sourceLocators = ArtifactReadLocatorListSchema.parse(recommendation.envelope.source_artifact_locators)
-  const sources = sourceLocators.map((locator) => {
-    const source = byIdentity.get(factIdentity(recommendation.taskID, locator))
+  const references = createEvolutionArtifactReferences(parsed.filter((fact) => fact.taskID === recommendation.taskID))
+  const sourceLocators = ArtifactReadLocatorListSchema.parse(evolutionArtifactProvenance(recommendation.envelope).sources)
+  const bindings = sourceLocators.map((locator) => {
+    const source = references.resolve(locator)[0]
     if (!source) throw new Error(`Evolution recommendation source was not completely read: ${JSON.stringify(locator)}`)
-    return source
+    return { locator, source }
   })
+  const sources = bindings.map((item) => item.source)
   const campaigns = sources.filter((fact) => fact.artifactType === "evolution-lab/campaign-spec")
   const candidates = sources.filter((fact) => fact.artifactType === "evolution-lab/candidate-revision")
   const runs = sources.filter((fact) => fact.artifactType === "evolution-lab/run-evidence-bundle")
@@ -631,20 +635,23 @@ export function summarizeEvolutionEvidence(facts: readonly EvolutionArtifactFact
   const campaign = EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(campaigns[0]!.payload)
   const candidate = EvolutionArtifactSchemas["evolution-lab/candidate-revision"].parse(candidates[0]!.payload)
   const exactRecommendation = deriveComparisonRecommendation({
+    references,
     campaign,
-    campaignLocator: campaigns[0]!.locator,
+    campaignLocator: bindings.find((item) => item.source === campaigns[0])!.locator,
     candidate,
-    candidateLocator: candidates[0]!.locator,
-    runs: runs.map((fact) => ({
-      locator: fact.locator,
+    candidateLocator: bindings.find((item) => item.source === candidates[0])!.locator,
+    // Replay the decision with the exact identities it cited. The transported
+    // current-Task copies remain the returned/read evidence, not rewritten facts.
+    runs: bindings.filter((item) => item.source.artifactType === "evolution-lab/run-evidence-bundle").map(({ source: fact, locator }) => ({
+      locator,
       value: EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse(fact.payload),
     })),
-    evaluations: evaluations.map((fact) => ({
-      locator: fact.locator,
+    evaluations: bindings.filter((item) => item.source.artifactType === "evolution-lab/evaluation-result").map(({ source: fact, locator }) => ({
+      locator,
       value: EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse(fact.payload),
     })),
-    reviews: reviews.map((fact) => ({
-      locator: fact.locator,
+    reviews: bindings.filter((item) => item.source.artifactType === "evolution-lab/integrity-review").map(({ source: fact, locator }) => ({
+      locator,
       value: EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(fact.payload),
     })),
   })

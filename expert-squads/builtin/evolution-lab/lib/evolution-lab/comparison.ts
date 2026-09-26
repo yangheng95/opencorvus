@@ -1,4 +1,4 @@
-import { VISUAL_FEEDBACK_VERIFICATION_SCORER_NAME } from "@opencorvus-ai/plugin"
+import { VISUAL_FEEDBACK_VERIFICATION_SCORER_NAME, artifactReadLocatorKey, type EvolutionArtifactReferences } from "@opencorvus-ai/plugin"
 import {
   EvolutionArtifactSchemas,
   EvolutionArtifactIntegrityError,
@@ -90,8 +90,8 @@ function exactRevisionIdentity(left: Candidate["candidate_revision"], right: Can
   )
 }
 
-function sameLocator(left: ArtifactLocator | null, right: ArtifactLocator | null) {
-  return JSON.stringify(left) === JSON.stringify(right)
+function sameLocator(left: ArtifactLocator | null, right: ArtifactLocator | null, key: (ref: ArtifactLocator) => string) {
+  return left === null || right === null ? left === right : key(left) === key(right)
 }
 
 function exactEvidence(values: readonly ArtifactLocator[]) {
@@ -132,6 +132,7 @@ function indexComparisonEvidence(input: {
   runs: readonly Located<RunEvidence>[]
   expectedSlotKeys: ReadonlySet<string>
   expectedScorerIDs: readonly string[]
+  referenceKey: (ref: ArtifactLocator) => string
 }): IndexedComparisonEvidence {
   const { campaign, candidate, expectedSlotKeys, expectedScorerIDs } = input
   const evaluations = new Map<string, Evaluation>()
@@ -156,10 +157,11 @@ function indexComparisonEvidence(input: {
     if (evaluation.trial_revision_digest !== expectedRevision)
       throw new EvolutionArtifactIntegrityError(`comparison evaluation slot ${key} has the wrong package revision`)
     if (
-      !sameLocator(evaluation.campaign_spec_locator, input.campaignLocator) ||
+      !sameLocator(evaluation.campaign_spec_locator, input.campaignLocator, input.referenceKey) ||
       !sameLocator(
         evaluation.candidate_revision_locator,
         evaluation.arm === "candidate" ? input.candidateLocator : null,
+        input.referenceKey,
       )
     )
       throw new EvolutionArtifactIntegrityError(
@@ -174,12 +176,12 @@ function indexComparisonEvidence(input: {
     const key = slotKey(review.case_id, review.arm, review.repetition)
     if (!expectedSlotKeys.has(key))
       throw new EvolutionArtifactIntegrityError(`comparison has undeclared review slot ${key}`)
-    if (!evaluationLocators.get(key)?.some((locator) => sameLocator(review.evaluation_result_locator, locator)))
+    if (!evaluationLocators.get(key)?.some((locator) => sameLocator(review.evaluation_result_locator, locator, input.referenceKey)))
       throw new EvolutionArtifactIntegrityError(
         `comparison review slot ${key} does not review its exact evaluation result`,
       )
   }
-  for (const located of resolveEvolutionIntegrityReviews(input.reviews).current) {
+  for (const located of resolveEvolutionIntegrityReviews(input.reviews, input.referenceKey).current) {
     const review = located.value
     const key = slotKey(review.case_id, review.arm, review.repetition)
     const slot = reviews.get(key) ?? []
@@ -221,6 +223,7 @@ function classifyComparisonAvailability(input: {
   campaign: Campaign
   expectedSlots: readonly ExpectedSlot[]
   evidence: IndexedComparisonEvidence
+  referenceKey: (ref: ArtifactLocator) => string
 }): { unavailable: Set<string>; requiredUnavailable: Set<string> } {
   const { campaign, expectedSlots } = input
   const { evaluations, reviews, runs, runLocators } = input.evidence
@@ -232,7 +235,7 @@ function classifyComparisonAvailability(input: {
     const run = runs.get(slot.key)
     if (evaluation && run && evaluation.trial_task_id !== run.task_id)
       throw new EvolutionArtifactIntegrityError(`comparison slot ${slot.key} run and evaluation Task identities differ`)
-    if (evaluation && run && !runLocators.get(slot.key)?.some((locator) => sameLocator(evaluation.run_evidence_locator, locator)))
+    if (evaluation && run && !runLocators.get(slot.key)?.some((locator) => sameLocator(evaluation.run_evidence_locator, locator, input.referenceKey)))
       throw new EvolutionArtifactIntegrityError(`comparison slot ${slot.key} metric receipt and run Artifact differ`)
     if (!evaluation) requiredUnavailable.add(`evaluation:${slot.key}`)
     if (!run) requiredUnavailable.add(`run:${slot.key}`)
@@ -274,7 +277,9 @@ export function deriveComparisonRecommendation(input: {
   evaluations: readonly Located<Evaluation>[]
   reviews: readonly Located<Review>[]
   runs: readonly Located<RunEvidence>[]
+  references?: Pick<EvolutionArtifactReferences, "key">
 }): Comparison {
+  const referenceKey = input.references?.key ?? artifactReadLocatorKey
   const { campaign, candidate } = input
   if (!exactRevisionIdentity(campaign.baseline_revision, candidate.parent_revision))
     throw new EvolutionArtifactIntegrityError("comparison candidate parent must equal the frozen campaign baseline")
@@ -306,11 +311,13 @@ export function deriveComparisonRecommendation(input: {
     runs: input.runs,
     expectedSlotKeys,
     expectedScorerIDs,
+    referenceKey,
   })
   const { unavailable, requiredUnavailable } = classifyComparisonAvailability({
     campaign,
     expectedSlots,
     evidence: { evaluations, evaluationLocators, reviews, runs, runLocators },
+    referenceKey,
   })
 
   const pairedDeltas = campaign.scorers.flatMap((scorer) => {

@@ -4,6 +4,9 @@ import {
   EngineArtifactEnvelopeSchema,
   EngineArtifactLocatorSchema,
   expandEvolutionMeasurementAliases,
+  createEvolutionArtifactReferences,
+  evolutionArtifactProvenance,
+  EvolutionArtifactSchemas,
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin"
 import { NamedError } from "@opencorvus-ai/util/error"
@@ -22,12 +25,13 @@ export function missingComparisonReviews(input: {
   measurements: readonly EvidenceArtifact[]
   catalog: readonly EvidenceArtifact[]
 }): EngineArtifactLocator[] {
+  const references = createEvolutionArtifactReferences([...input.measurements, ...input.catalog])
   const evaluations = new Set(
     expandEvolutionMeasurementAliases(input.measurements, input.catalog)
       .filter((item) => item.envelope.artifact_type === "evolution-lab/evaluation-result")
-      .map((item) => canonicalEvolutionJSON(item.locator)),
+      .map((item) => references.key(item.locator)),
   )
-  const selected = new Set(input.comparison.source_artifact_locators.map(canonicalEvolutionJSON))
+  const selected = new Set(evolutionArtifactProvenance(input.comparison).sources.map(references.key))
   return input.catalog
     .filter(({ locator, envelope }) => {
       if (envelope.artifact_type !== "evolution-lab/integrity-review") return false
@@ -37,9 +41,9 @@ export function missingComparisonReviews(input: {
       // A malformed related record also changes the evidence set. A subsequent
       // publication must expose its diagnostic instead of treating it as absent.
       const related = correlation.success
-        ? evaluations.has(canonicalEvolutionJSON(correlation.data.evaluation_result_locator))
-        : envelope.source_artifact_locators.some((source) => evaluations.has(canonicalEvolutionJSON(source)))
-      return related && !selected.has(canonicalEvolutionJSON(locator))
+        ? evaluations.has(references.key(correlation.data.evaluation_result_locator))
+        : evolutionArtifactProvenance(envelope).sources.some((source) => evaluations.has(references.key(source)))
+      return related && !selected.has(references.key(locator))
     })
     .map(({ locator }) => locator)
     .toSorted((left, right) => canonicalEvolutionJSON(left).localeCompare(canonicalEvolutionJSON(right)))
@@ -62,7 +66,7 @@ export function requireCurrentEvolutionReviews(input: { taskID: string; comparis
     const read = (locator: EngineArtifactLocator) =>
       EngineArtifactEnvelopeSchema.parse(requireEngineArtifactByLocator({ db, taskID: input.taskID, locator }).payload)
     const comparison = read(input.comparisonLocator)
-    const measurements = comparison.source_artifact_locators.flatMap((locator) =>
+    const nativeSources = (comparison.producer.owner_kind === "mission" ? [] : comparison.source_artifact_locators).flatMap((locator) =>
       locator.source === "engine_artifact" ? [{ locator, envelope: read(locator) }] : [],
     )
     const catalog = db
@@ -76,11 +80,7 @@ export function requireCurrentEvolutionReviews(input: { taskID: string; comparis
         and(
           eq(EngineArtifactTable.task_id, input.taskID),
           eq(EngineArtifactTable.kind, "expert_output"),
-          inArray(EngineArtifactTable.catalog_artifact_type, [
-            "evolution-lab/run-evidence-bundle",
-            "evolution-lab/evaluation-result",
-            "evolution-lab/integrity-review",
-          ]),
+          inArray(EngineArtifactTable.catalog_artifact_type, Object.keys(EvolutionArtifactSchemas)),
         ),
       )
       .all()
@@ -93,6 +93,10 @@ export function requireCurrentEvolutionReviews(input: { taskID: string; comparis
         }
         return { locator, envelope: read(locator) }
       })
+    const references = createEvolutionArtifactReferences([...catalog, ...nativeSources])
+    const measurements = evolutionArtifactProvenance(comparison).sources.flatMap((locator) =>
+      locator.source === "engine_artifact" ? references.require(locator) : [],
+    )
     const missingReviewLocators = missingComparisonReviews({ comparison, measurements, catalog })
     if (missingReviewLocators.length)
       throw new EvolutionComparisonReviewChangedError({ ...input, missingReviewLocators })

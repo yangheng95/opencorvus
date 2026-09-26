@@ -10,10 +10,13 @@ import {
   EvolutionHistoryListResponseSchema,
   EvolutionInstallableTargetSchema,
   canonicalEvolutionJSON,
+  createEvolutionArtifactReferences,
+  evolutionArtifactProvenance,
   evolutionComparisonContext,
   resolveEvolutionIntegrityReviews,
   groupEvolutionMeasurements,
   type EvolutionCampaignDetailResponse,
+  type ArtifactReadLocator,
   type EvolutionCampaignHistoryRecord,
   type EvolutionHistoryListResponse,
 } from "@opencorvus-ai/plugin"
@@ -25,7 +28,7 @@ import {
   EngineTaskTable,
 } from "@/engine/engine.sql"
 import { Instance } from "@/project/instance"
-import { Database, and, desc, eq, inArray, isNull, lte, max } from "@/storage/db"
+import { Database, and, desc, eq, inArray, lte, max } from "@/storage/db"
 import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
 import { ExpertSquadPackageLocations } from "./locations"
@@ -84,6 +87,7 @@ interface FrozenArtifact<T = unknown> {
 interface FrozenRead {
   artifacts: FrozenArtifact[]
   byExactIdentity: Map<string, FrozenArtifact>
+  references: Map<string, ReturnType<typeof createEvolutionArtifactReferences<FrozenArtifact>>>
   integrityIssues: Array<{
     code: "UNLINKED_INVALID_ARTIFACT"
     task_id: string
@@ -100,6 +104,7 @@ interface ComparisonGraph {
   evaluations: FrozenArtifact<Evaluation>[]
   reviews: FrozenArtifact<Review>[]
   graphIssues: unknown[]
+  referenceKey: ReturnType<typeof createEvolutionArtifactReferences>["key"]
 }
 
 function diagnostic(error: unknown) {
@@ -110,8 +115,15 @@ function sameIdentity(left: unknown, right: unknown) {
   return canonicalEvolutionJSON(left) === canonicalEvolutionJSON(right)
 }
 
-function sourceIncludes(envelope: Envelope, locator: EngineLocator) {
-  return envelope.source_artifact_locators.some((source) => sameIdentity(source, locator))
+function referenceMatches(read: FrozenRead, owner: FrozenArtifact, locator: ArtifactReadLocator | null, target: FrozenArtifact) {
+  return locator !== null && owner.catalog.taskID === target.catalog.taskID &&
+    read.references.get(owner.catalog.taskID)!.same(locator, target.locator)
+}
+
+function sourceIncludes(read: FrozenRead, owner: FrozenArtifact, target: FrozenArtifact) {
+  return evolutionArtifactProvenance(owner.envelope).sources.some((source) =>
+    source.source === "engine_artifact" && referenceMatches(read, owner, source, target),
+  )
 }
 
 function targetForQuery(query: Pick<HistoryQuery, "namespace" | "id" | "installationScope">) {
@@ -185,6 +197,7 @@ function artifactIdentity(artifact: FrozenArtifact) {
 }
 
 function requireEvolutionProducer(envelope: Envelope) {
+  const producer = evolutionArtifactProvenance(envelope).producer
   if (envelope.artifact_type === "evolution-lab/promotion-receipt") {
     if (envelope.producer.owner_kind !== "core" || envelope.producer.component_id !== "expert-squad-package-manager")
       throw new Error("Evolution history receipt must be produced by the Core package manager")
@@ -199,8 +212,9 @@ function requireEvolutionProducer(envelope: Envelope) {
     return
   }
   if (
-    (envelope.producer.owner_kind !== "projected-scheduler" && envelope.producer.owner_kind !== "projected-worker") ||
-    envelope.producer.expert_squad_id !== "evolution-lab"
+    !producer ||
+    (producer.owner_kind !== "projected-scheduler" && producer.owner_kind !== "projected-worker") ||
+    producer.expert_squad_id !== "evolution-lab"
   )
     throw new Error(`Evolution history Artifact ${envelope.artifact_type} must be produced by Evolution Lab`)
 }
@@ -224,7 +238,6 @@ function currentRows(db: Database.TxOrDb, revisionUpper: number): CatalogRow[] {
         eq(EngineTaskTable.project_id, Instance.project.id),
         eq(EngineArtifactTable.kind, "expert_output"),
         inArray(EngineArtifactTable.catalog_artifact_type, Object.keys(EvolutionArtifactSchemas)),
-        isNull(EngineArtifactTable.catalog_import_source_task_id),
         lte(EngineArtifactTable.catalog_revision, revisionUpper),
       ),
     )
@@ -261,7 +274,6 @@ function historicalRows(db: Database.TxOrDb, revisionUpper: number): CatalogRow[
         eq(EngineTaskTable.project_id, Instance.project.id),
         eq(EngineArtifactVersionTable.kind, "expert_output"),
         inArray(EngineArtifactVersionTable.catalog_artifact_type, Object.keys(EvolutionArtifactSchemas)),
-        isNull(EngineArtifactVersionTable.catalog_import_source_task_id),
         lte(EngineArtifactVersionTable.catalog_revision, revisionUpper),
       ),
     )
@@ -312,8 +324,16 @@ function frozenRead(db: Database.TxOrDb, revisionUpper: number): FrozenRead {
       })
     }
   }
+  const byTask = new Map<string, FrozenArtifact[]>()
+  for (const artifact of artifacts) {
+    const taskID = artifact.catalog.taskID
+    const records = byTask.get(taskID)
+    if (records) records.push(artifact)
+    else byTask.set(taskID, [artifact])
+  }
   return {
     artifacts,
+    references: new Map([...byTask].map(([taskID, records]) => [taskID, createEvolutionArtifactReferences(records)])),
     byExactIdentity: new Map(
       artifacts.map((artifact) => [exactKey(artifact.catalog.taskID, artifact.locator), artifact]),
     ),
@@ -338,11 +358,11 @@ function invalidPayloadIssue(artifact: FrozenArtifact) {
 function directArtifacts(read: FrozenRead, owner: FrozenArtifact) {
   const artifacts: FrozenArtifact[] = []
   const issues: unknown[] = []
-  for (const source of owner.envelope.source_artifact_locators) {
+  for (const source of evolutionArtifactProvenance(owner.envelope).sources) {
     const locator = EngineArtifactLocatorSchema.safeParse(source)
     if (!locator.success) continue
-    const artifact = read.byExactIdentity.get(exactKey(owner.catalog.taskID, locator.data))
-    if (artifact) artifacts.push(artifact)
+    const matches = read.references.get(owner.catalog.taskID)!.resolve(locator.data)
+    if (matches.length) artifacts.push(...matches)
     else
       issues.push({
         code: "MISSING_EXACT_SOURCE" as const,
@@ -350,7 +370,7 @@ function directArtifacts(read: FrozenRead, owner: FrozenArtifact) {
         missing_locator: locator.data,
       })
   }
-  return { artifacts, issues }
+  return { artifacts: [...new Map(artifacts.map((item) => [exactKey(item.catalog.taskID, item.locator), item])).values()], issues }
 }
 
 function receiptsForComparison(input: {
@@ -437,7 +457,7 @@ function comparisonGraph(read: FrozenRead, comparison: FrozenArtifact<Comparison
       })
     }
   }
-  return { comparison, runs, evaluations, reviews, graphIssues }
+  return { comparison, runs, evaluations, reviews, graphIssues, referenceKey: read.references.get(comparison.catalog.taskID)!.key }
 }
 
 function measurementGroups<T extends Run | Evaluation>(artifacts: readonly FrozenArtifact<T>[]) {
@@ -459,6 +479,7 @@ function completeness(campaign: Campaign, graph: ComparisonGraph) {
   const scorerResults = uniqueEvaluations.flatMap((evaluation) => evaluation.payload!.scorers)
   const current = resolveEvolutionIntegrityReviews(
     graph.reviews.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })),
+    graph.referenceKey,
   ).current
   const reviewSlots = new Map<string, Review[]>()
   for (const { value } of current) {
@@ -630,7 +651,7 @@ function buildCampaignRecord(input: {
     (artifact) =>
       artifact.catalog.taskID === input.campaign.catalog.taskID &&
       artifact.envelope.artifact_type === "evolution-lab/candidate-revision" &&
-      sourceIncludes(artifact.envelope, input.campaign.locator),
+      sourceIncludes(input.read, artifact, input.campaign),
   )
   const candidates = candidateArtifacts.flatMap((artifact) => {
     const candidate = typedArtifact<Candidate>(artifact, "evolution-lab/candidate-revision")
@@ -640,7 +661,7 @@ function buildCampaignRecord(input: {
     }
     const candidateIssues: unknown[] = []
     if (
-      !sameIdentity(candidate.payload!.development_campaign_locator, input.campaign.locator) ||
+      !referenceMatches(input.read, candidate, candidate.payload!.development_campaign_locator, input.campaign) ||
       !sameIdentity(candidate.payload!.parent_revision, campaign.baseline_revision)
     )
       candidateIssues.push({
@@ -652,8 +673,8 @@ function buildCampaignRecord(input: {
     const related = input.read.artifacts.filter(
       (relatedArtifact) =>
         relatedArtifact.catalog.taskID === candidate.catalog.taskID &&
-        sourceIncludes(relatedArtifact.envelope, input.campaign.locator) &&
-        sourceIncludes(relatedArtifact.envelope, candidate.locator),
+        sourceIncludes(input.read, relatedArtifact, input.campaign) &&
+        sourceIncludes(input.read, relatedArtifact, candidate),
     )
     const runArtifacts = related.flatMap((item) => {
       const value = typedArtifact<Run>(item, "evolution-lab/run-evidence-bundle")
@@ -1036,16 +1057,16 @@ function integrityIssuesForTarget(read: FrozenRead, target: ReturnType<typeof Ev
       const candidate = typedArtifact<Candidate>(artifact, "evolution-lab/candidate-revision")
       if (
         !candidate ||
-        !sameIdentity(candidate.payload!.development_campaign_locator, campaign.locator) ||
-        !sourceIncludes(candidate.envelope, campaign.locator)
+        !referenceMatches(read, candidate, candidate.payload!.development_campaign_locator, campaign) ||
+        !sourceIncludes(read, candidate, campaign)
       )
         continue
       reachable.add(exactKey(candidate.catalog.taskID, candidate.locator))
       for (const related of read.artifacts) {
         if (
           related.catalog.taskID !== campaign.catalog.taskID ||
-          !sourceIncludes(related.envelope, campaign.locator) ||
-          !sourceIncludes(related.envelope, candidate.locator)
+          !sourceIncludes(read, related, campaign) ||
+          !sourceIncludes(read, related, candidate)
         )
           continue
         reachable.add(exactKey(related.catalog.taskID, related.locator))
@@ -1062,14 +1083,14 @@ function integrityIssuesForTarget(read: FrozenRead, target: ReturnType<typeof Ev
   const reachableEvaluations = read.artifacts.flatMap((artifact) =>
     reachable.has(exactKey(artifact.catalog.taskID, artifact.locator)) &&
     artifact.envelope.artifact_type === "evolution-lab/evaluation-result"
-      ? [artifact.locator]
+      ? [artifact]
       : [],
   )
   for (const artifact of read.artifacts) {
     const review = typedArtifact<Review>(artifact, "evolution-lab/integrity-review")
     if (
       review &&
-      reachableEvaluations.some((locator) => sameIdentity(review.payload!.evaluation_result_locator, locator))
+      reachableEvaluations.some((evaluation) => referenceMatches(read, review, review.payload!.evaluation_result_locator, evaluation))
     )
       reachable.add(exactKey(artifact.catalog.taskID, artifact.locator))
   }
@@ -1085,12 +1106,12 @@ function integrityIssuesForTarget(read: FrozenRead, target: ReturnType<typeof Ev
     reachable.add(exactKey(pair.candidate.catalog.taskID, pair.candidate.locator))
     for (const receipt of pair.receipts) reachable.add(exactKey(receipt.catalog.taskID, receipt.locator))
   }
-  const targetCampaignLocators = campaigns.map((campaign) => campaign.locator)
+  const targetCampaigns = campaigns
   const candidateTargetsCampaign = (candidate: FrozenArtifact<Candidate>) =>
     campaigns.some(
       (campaign) =>
         campaign.catalog.taskID === candidate.catalog.taskID &&
-        sameIdentity(candidate.payload!.development_campaign_locator, campaign.locator),
+        referenceMatches(read, candidate, candidate.payload!.development_campaign_locator, campaign),
     )
   const targetCandidates = read.artifacts.flatMap((artifact) => {
     const candidate = typedArtifact<Candidate>(artifact, "evolution-lab/candidate-revision")
@@ -1099,8 +1120,8 @@ function integrityIssuesForTarget(read: FrozenRead, target: ReturnType<typeof Ev
   const targetEvaluationLocators = read.artifacts.flatMap((artifact) => {
     const evaluation = typedArtifact<Evaluation>(artifact, "evolution-lab/evaluation-result")
     return evaluation &&
-      targetCampaignLocators.some((locator) => sameIdentity(evaluation.payload!.campaign_spec_locator, locator))
-      ? [evaluation.locator]
+      targetCampaigns.some((campaign) => referenceMatches(read, evaluation, evaluation.payload!.campaign_spec_locator, campaign))
+      ? [evaluation]
       : []
   })
   const targetRelevant = (artifact: FrozenArtifact) => {
@@ -1112,26 +1133,26 @@ function integrityIssuesForTarget(read: FrozenRead, target: ReturnType<typeof Ev
         campaigns.some(
           (campaign) =>
             campaign.catalog.taskID === comparison.catalog.taskID &&
-            sourceIncludes(comparison.envelope, campaign.locator),
+            sourceIncludes(read, comparison, campaign),
         ) ||
         targetCandidates.some(
           (candidateArtifact) =>
             candidateArtifact.catalog.taskID === comparison.catalog.taskID &&
-            sourceIncludes(comparison.envelope, candidateArtifact.locator),
+            sourceIncludes(read, comparison, candidateArtifact),
         )
       )
     const receipt = typedArtifact<Receipt>(artifact, "evolution-lab/promotion-receipt")
     if (receipt) return sameIdentity(receipt.payload!.target, target)
     const evaluation = typedArtifact<Evaluation>(artifact, "evolution-lab/evaluation-result")
     if (evaluation)
-      return targetCampaignLocators.some((locator) => sameIdentity(evaluation.payload!.campaign_spec_locator, locator))
+      return targetCampaigns.some((campaign) => referenceMatches(read, evaluation, evaluation.payload!.campaign_spec_locator, campaign))
     const review = typedArtifact<Review>(artifact, "evolution-lab/integrity-review")
     if (review)
-      return targetEvaluationLocators.some((locator) =>
-        sameIdentity(review.payload!.evaluation_result_locator, locator),
+      return targetEvaluationLocators.some((evaluation) =>
+        referenceMatches(read, review, review.payload!.evaluation_result_locator, evaluation),
       )
     const run = typedArtifact<Run>(artifact, "evolution-lab/run-evidence-bundle")
-    if (run) return targetCampaignLocators.some((locator) => sourceIncludes(run.envelope, locator))
+    if (run) return targetCampaigns.some((campaign) => sourceIncludes(read, run, campaign))
     return false
   }
   const unlinked = read.artifacts.flatMap((artifact) =>
@@ -1217,6 +1238,7 @@ function detailSlots(input: {
   const evaluations = measurementGroups(input.graph.evaluations)
   const lineage = resolveEvolutionIntegrityReviews(
     input.graph.reviews.map((artifact) => ({ locator: artifact.locator, value: artifact.payload!, artifact })),
+    input.graph.referenceKey,
   )
   const currentReviewIDs = new Set(lineage.current.map(({ artifact }) => artifact.catalog.artifactID))
   return campaign.cases.flatMap((caseID) =>
@@ -1305,8 +1327,8 @@ export async function readEvolutionCampaignDetail(rawInput: unknown): Promise<Ev
       : undefined
     if (
       !candidate ||
-      !sourceIncludes(candidate.envelope, campaign.locator) ||
-      !sameIdentity(candidate.payload!.development_campaign_locator, campaign.locator)
+      !sourceIncludes(read, candidate, campaign) ||
+      !referenceMatches(read, candidate, candidate.payload!.development_campaign_locator, campaign)
     )
       throw new Error("Evolution history detail Candidate does not belong to the exact Campaign graph")
     const comparisonArtifact = read.byExactIdentity.get(exactKey(input.campaignTaskID, input.comparisonLocator))
@@ -1315,8 +1337,8 @@ export async function readEvolutionCampaignDetail(rawInput: unknown): Promise<Ev
       : undefined
     if (
       !comparison ||
-      !sourceIncludes(comparison.envelope, campaign.locator) ||
-      !sourceIncludes(comparison.envelope, candidate.locator)
+      !sourceIncludes(read, comparison, campaign) ||
+      !sourceIncludes(read, comparison, candidate)
     )
       throw new Error("Evolution history detail Comparison does not belong to the exact Campaign/Candidate graph")
     const graph = comparisonGraph(read, comparison)

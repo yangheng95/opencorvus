@@ -1,6 +1,8 @@
 import z from "zod"
 import {
   canonicalEvolutionJSON,
+  createEvolutionArtifactReferences,
+  evolutionArtifactProvenance,
   EngineArtifactEnvelopeSchema,
   EvolutionExactRevisionSchema,
   EvolutionInstallableTargetSchema,
@@ -79,16 +81,14 @@ function exactArtifact(input: {
         `Evolution mutation evidence ${input.artifactType} must be produced by Core ${input.coreComponentID}`,
       )
   } else if (input.artifactType !== "evolution-lab/promotion-receipt") {
+    const producer = evolutionArtifactProvenance(envelope).producer
+    if (!producer) throw new Error(`Evolution mutation evidence ${input.artifactType} has no known original producer`)
     if (producer.owner_kind !== "projected-scheduler" && producer.owner_kind !== "projected-worker")
       throw new Error(`Evolution mutation evidence ${input.artifactType} must be produced by Evolution Lab`)
     if (producer.expert_squad_id !== EVOLUTION_LAB_EXPERT_SQUAD_ID)
       throw new Error(`Evolution mutation evidence ${input.artifactType} must be produced by Evolution Lab`)
   }
   return Object.assign(row, { envelope })
-}
-
-function sourceIncludes(envelope: z.infer<typeof EngineArtifactEnvelopeSchema>, locator: unknown) {
-  return envelope.source_artifact_locators.some((source) => canonicalEvolutionJSON(source) === canonicalEvolutionJSON(locator))
 }
 
 export type PreparedEvolutionMutation =
@@ -139,9 +139,15 @@ export function prepareEvolutionPackageMutation(input: {
       locator: intent.comparisonResultLocator,
       artifactType: "evolution-lab/comparison-recommendation",
     })
+    const references = createEvolutionArtifactReferences([
+      { locator: intent.campaignSpecLocator, envelope: campaignArtifact.envelope },
+      { locator: intent.candidateRevisionLocator, envelope: candidateArtifact.envelope },
+      { locator: intent.comparisonResultLocator, envelope: comparisonArtifact.envelope },
+    ])
+    const sources = evolutionArtifactProvenance(comparisonArtifact.envelope).sources
     if (
-      !sourceIncludes(comparisonArtifact.envelope, intent.campaignSpecLocator) ||
-      !sourceIncludes(comparisonArtifact.envelope, intent.candidateRevisionLocator)
+      !sources.some((source) => references.same(source, intent.campaignSpecLocator)) ||
+      !sources.some((source) => references.same(source, intent.candidateRevisionLocator))
     )
       throw new Error("Evolution comparison must directly source its exact Campaign and Candidate Artifacts")
     const campaign = CampaignMutationFactsSchema.parse(campaignArtifact.envelope.payload)

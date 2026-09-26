@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, spyOn, test } from "bun:test"
 import { writeExpertSquadPackage, type ExpertSquadPackageDefinition } from "@opencorvus-ai/sdk/expert-squad-authoring"
-import { EngineArtifactEnvelopeSchema, EvolutionArtifactSchemas } from "@opencorvus-ai/plugin"
+import { EngineArtifactEnvelopeSchema, EvolutionArtifactSchemas, createEvolutionArtifactReferences, EvolutionArtifactReferenceError } from "@opencorvus-ai/plugin"
 import { rm } from "node:fs/promises"
 import path from "node:path"
 import { Config } from "../src/config/config"
@@ -23,6 +23,10 @@ import { readEvolutionCampaignDetail, readEvolutionHistory } from "../src/expert
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
 import { ExpertSquadRegistry } from "../src/expert-squad/registry"
 import { Global } from "../src/global"
+import { Database } from "../src/storage/db"
+import { terminalTask } from "../src/engine/state"
+import { requireTask } from "../src/engine/store"
+import { resolveCrossTaskArtifactSources, prepareCrossTaskArtifactSourceImports, persistPreparedCrossTaskArtifactImports, listCrossTaskArtifactImportMappings } from "../src/engine/cross-task-artifact-import"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
@@ -83,6 +87,7 @@ async function writeSource(root: string, version: string, marker: string) {
 
 async function createTask(input: {
   title: string
+  mission?: { id: string; sessionID: string }
   revision: { namespace: string; id: string; version: string; packageDigest: string }
 }) {
   const session = Session.prepareRootNext({
@@ -107,7 +112,7 @@ async function createTask(input: {
     productPillar: "code",
     source: "test",
     priority: "normal",
-    metadata: {},
+    metadata: input.mission ? { actor: "mission", mission: { id: input.mission.id, session_id: input.mission.sessionID } } : {},
     projectID: Instance.project.id,
     packageRevision: {
       scope: "project",
@@ -174,7 +179,7 @@ afterAll(async () => {
 })
 
 describe("authorized expert squad evolution mutation", () => {
-  test.each(["recovery", "review-freshness", "review-recovery", "alias-review"] as const)("authorized exact installation: %s", async (scenario) => {
+  test.each(["recovery", "review-freshness", "review-recovery", "alias-review", "imported-evidence"] as const)("authorized exact installation: %s", async (scenario) => {
     const sourceRoot = await Global.createTemporaryDirectory("expert-squad-evolution-mutation-")
     await using project = await memoryProject()
     await using foreignProject = await memoryProject()
@@ -217,7 +222,16 @@ describe("authorized expert squad evolution mutation", () => {
               packageDigest: baselineRevision.package_digest,
             },
           })
+          const missionID = "imported-evolution-mutation"
+          const mission = scenario === "imported-evidence" ? {
+            id: missionID,
+            sessionID: (await Session.create({ kind: "mission", title: "Imported Evolution mutation",
+              metadata: { mission: { id: missionID, channelKey: `mission:${missionID}`, cwd: project.path,
+                productPillar: "code", visibleExpertSquadIDs: ["evolution-lab"] } },
+            })).id,
+          } : undefined
           const operationTask = await createTask({
+            mission,
             title: "Authorized evolution operation",
             revision: {
               namespace: baselineRevision.namespace,
@@ -573,6 +587,110 @@ describe("authorized expert squad evolution mutation", () => {
             payload: comparisonPayload,
             sources: comparisonSources,
           })
+          if (scenario === "imported-evidence") {
+            await terminalTask(requireTask(operationTask.taskID), {
+              status: "failed", error: "Deterministic fixture retains its published comparison for another Task",
+            }, "Preserve the original measured evidence", { preExecutionInfrastructureFailure: true, terminalAt: Date.now() })
+            const importEvidence = async (sources: typeof comparisonSources, title: string) => {
+              const receiving = await createTask({ title, mission, revision: {
+                namespace: baselineRevision.namespace, id: baselineRevision.id,
+                version: baselineRevision.version, packageDigest: baselineRevision.package_digest,
+              } })
+              const importer = { missionID: mission!.id, sessionID: mission!.sessionID,
+                messageID: Identifier.ascending("message"), toolCallID: `call-${receiving.taskID}` }
+              const resolved = resolveCrossTaskArtifactSources({
+                sources: sources.map((locator) => ({ authority: "terminal_lifecycle" as const,
+                  source_task_id: operationTask.taskID, locator })), projectID: Instance.project.id, importer,
+              })
+              const prepared = await prepareCrossTaskArtifactSourceImports({ resolved, projectID: Instance.project.id,
+                targetProjectDirectory: project.path, targetTaskID: receiving.taskID, importer })
+              Database.transaction((db) => persistPreparedCrossTaskArtifactImports(db, {
+                targetTaskID: receiving.taskID, prepared: prepared.imports, authorities: prepared.authorities, timeCreated: Date.now(),
+              }))
+              const mapping = new Map(listCrossTaskArtifactImportMappings(receiving.taskID)
+                .map((item) => [JSON.stringify(item.source_locator), item.imported_locator]))
+              return { ...receiving, mapped: (locator: typeof campaign) => mapping.get(JSON.stringify(locator))! }
+            }
+            const incomplete = await importEvidence([campaign, candidateArtifact, comparison], "Incomplete imported comparison")
+            const complete = await importEvidence([...comparisonSources, comparison], "Complete imported comparison")
+            const importedIntent = {
+              operation: "promotion" as const,
+              campaignSpecLocator: complete.mapped(campaign), candidateRevisionLocator: complete.mapped(candidateArtifact),
+              comparisonResultLocator: complete.mapped(comparison), expectedCurrentPackageDigest: baselineRevision.package_digest,
+            }
+            const confirm = (intent: typeof importedIntent) => evolutionMutationConfirmationText({
+              projectID: Instance.project.id, target, beforeDigest: baselineRevision.package_digest,
+              afterDigest: candidateRevision.package_digest, operation: "promotion",
+              evidenceSHA256s: [intent.campaignSpecLocator, intent.candidateRevisionLocator, intent.comparisonResultLocator]
+                .map((locator) => locator.expected_sha256),
+            })
+            const missingIntent = { ...importedIntent, campaignSpecLocator: incomplete.mapped(campaign),
+              candidateRevisionLocator: incomplete.mapped(candidateArtifact), comparisonResultLocator: incomplete.mapped(comparison) }
+            let missingError: unknown
+            try { await authorizeEvolutionPackageMutation({ taskID: incomplete.taskID, sessionID: incomplete.session.id,
+              intent: missingIntent, confirmationText: confirm(missingIntent) }) }
+            catch (error) { missingError = error }
+            expect(missingError).toBeInstanceOf(EvolutionArtifactReferenceError)
+            expect(missingError).toMatchObject({ code: "missing_source" })
+            const before = await readEvolutionHistory({ namespace: target.namespace, id: target.id, installationScope: "project" })
+            const record = before.records.find((item) => item.campaign.artifact.task_id === complete.taskID)!
+            expect(record.candidates[0]!.comparisons[0]!.promotion_intent?.request).toEqual(importedIntent)
+            const detailInput = { namespace: target.namespace, id: target.id, installationScope: "project",
+              campaignTaskID: complete.taskID, campaignLocator: importedIntent.campaignSpecLocator,
+              candidateLocator: importedIntent.candidateRevisionLocator, comparisonLocator: importedIntent.comparisonResultLocator,
+              catalogRevisionUpper: before.catalog_revision_upper }
+            const detail = await readEvolutionCampaignDetail(detailInput)
+            expect(detail.slots.find((slot) => slot.arm === "candidate" && slot.repetition === 0)!.review_history.map((item) => ({
+              locator: item.artifact.locator, disposition: item.disposition,
+            }))).toEqual(expect.arrayContaining([
+              { locator: complete.mapped(candidateReview.locator), disposition: "superseded" },
+              { locator: complete.mapped(revisionReview.locator), disposition: "current" },
+            ]))
+            const authorization = await authorizeEvolutionPackageMutation({ taskID: complete.taskID,
+              sessionID: complete.session.id, intent: importedIntent, confirmationText: confirm(importedIntent) })
+            const lateValue = { ...candidateReview.value, evaluation_result_locator: complete.mapped(candidateEvaluation.locator),
+              findings: candidateReview.value.findings.map((finding) => ({ ...finding, evidence: [complete.mapped(candidateEvaluation.locator)] })) }
+            const late = recordEvolutionArtifact({ taskID: complete.taskID, type: "evolution-lab/integrity-review",
+              payload: lateValue, sources: [complete.mapped(candidateEvaluation.locator)] })
+            await expect(executeEvolutionPackageMutation({ ...importedIntent, authorization: authorization.authorization }))
+              .rejects.toBeInstanceOf(EvolutionComparisonReviewChangedError)
+            const after = await readEvolutionHistory({ namespace: target.namespace, id: target.id, installationScope: "project" })
+            const stale = after.records.find((item) => item.campaign.artifact.task_id === complete.taskID)!.candidates[0]!.comparisons[0]!
+            expect({ recommendation: stale.recommendation, intent: stale.promotion_intent, issues: stale.graph_issues.map((issue) => issue.code) })
+              .toEqual({ recommendation: "promote", intent: null, issues: ["REVIEW_SNAPSHOT_CHANGED"] })
+            expect((await readEvolutionCampaignDetail(detailInput)).record.candidates[0]!.comparisons[0]!.promotion_intent?.request)
+              .toEqual(importedIntent)
+            const correctedValue = { ...revisionPayload, evaluation_result_locator: complete.mapped(candidateEvaluation.locator),
+              revision: { supersedes: [complete.mapped(revisionReview.locator), late], reason: "Corrected the same original imported evidence." } }
+            const corrected = recordEvolutionArtifact({ taskID: complete.taskID, type: "evolution-lab/integrity-review",
+              payload: correctedValue, sources: [complete.mapped(candidateEvaluation.locator), ...correctedValue.revision.supersedes] })
+            const localSources = [...comparisonSources.map(complete.mapped), late, corrected]
+            const referenceEvidence = localSources.map((locator) => ({ locator,
+              envelope: EngineArtifactEnvelopeSchema.parse(requireEngineArtifactByLocator({ taskID: complete.taskID, locator }).payload) }))
+            const value = deriveComparisonRecommendation({
+              campaign: campaignPayload, campaignLocator: importedIntent.campaignSpecLocator,
+              candidate: candidatePayload, candidateLocator: importedIntent.candidateRevisionLocator,
+              runs: [...baselineRuns, ...candidateRuns, runAlias].map((item) => ({ locator: complete.mapped(item.locator), value: item.value })),
+              evaluations: [...baselineEvaluations, ...candidateEvaluations, evaluationAlias].map((item) => ({ locator: complete.mapped(item.locator), value: item.value })),
+              reviews: [...baselineReviews, ...candidateReviews, revisionReview].map((item) => ({ locator: complete.mapped(item.locator), value: item.value }))
+                .concat([{ locator: late, value: lateValue }, { locator: corrected, value: correctedValue }]),
+              references: createEvolutionArtifactReferences(referenceEvidence),
+            })
+            expect(value.recommendation).toBe("promote")
+            const next = recordEvolutionArtifact({ taskID: complete.taskID, type: "evolution-lab/comparison-recommendation",
+              payload: value, sources: localSources })
+            const nextIntent = { ...importedIntent, comparisonResultLocator: next }
+            const nextAuthorization = await authorizeEvolutionPackageMutation({ taskID: complete.taskID, sessionID: complete.session.id,
+              intent: nextIntent, confirmationText: confirm(nextIntent) })
+            const request = { ...nextIntent, authorization: nextAuthorization.authorization }
+            const installedImport = await executeEvolutionPackageMutation(request)
+            expect(installedImport.receipt.after_digest).toBe(candidateRevision.package_digest)
+            expect((await ExpertSquadRegistry.loadPackage(installed.after.targetRoot)).packageDigest).toBe(candidateRevision.package_digest)
+            recordEvolutionArtifact({ taskID: complete.taskID, type: "evolution-lab/integrity-review",
+              payload: lateValue, sources: [complete.mapped(candidateEvaluation.locator)] })
+            expect((await executeEvolutionPackageMutation(request)).receipt).toEqual(installedImport.receipt)
+            return
+          }
           const promotionText = evolutionMutationConfirmationText({
             projectID: Instance.project.id,
             target,
