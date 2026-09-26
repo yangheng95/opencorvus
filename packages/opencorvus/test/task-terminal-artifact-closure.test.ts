@@ -3,6 +3,14 @@ import type { EvidenceLocatorInput } from "@opencorvus-ai/plugin/artifact-catalo
 import fs from "node:fs/promises"
 import path from "node:path"
 import { randomUUID } from "node:crypto"
+import { tool } from "ai"
+import { MockLanguageModelV3, simulateReadableStream } from "ai/test"
+import z from "zod"
+import { streamText } from "@/llm/api"
+import { ProviderLLM } from "@/provider/llm"
+import type { Provider } from "@/provider/provider"
+import { ProviderUsageEventTable } from "@/usage/usage.sql"
+import { deriveTaskStatus } from "@/engine/task-status"
 import {
   artifactCatalogAuthority,
   EngineArtifactIdentityCollisionError,
@@ -236,6 +244,71 @@ async function completeFixtureTask(
     { toolCallId: callID, messages: [] },
   )
 }
+
+test("observes the completion call usage after the real Task terminal tool returns", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const task = await taskFixture(project.path)
+      const model: Provider.Model = {
+        id: "terminal-usage-driver", providerID: "test-driver", name: "Terminal usage driver",
+        api: { id: "terminal-usage-driver", npm: "@ai-sdk/openai-compatible", url: "https://provider.test/v1" },
+        status: "active", headers: {}, options: {}, variants: {}, release_date: "2026-09-27",
+        cost: { available: true, input: 1, output: 2, cache: { read: 0, write: 0 } },
+        limit: { context: 100000, output: 10000 },
+        capabilities: { temperature: true, reasoning: true, attachment: false, toolcall: true,
+          input: { text: true, audio: false, image: false, video: false, pdf: false },
+          output: { text: true, audio: false, image: false, video: false, pdf: false }, interleaved: false },
+      }
+      // Deterministic Provider transport input, real SDK execution, lifecycle
+      // Tool, completion transaction and usage ledger. This is a local ordering
+      // contract; it does not model autonomous business completion or billing.
+      const language = new MockLanguageModelV3({
+        provider: model.providerID, modelId: model.id,
+        async doStream() {
+          return { stream: simulateReadableStream({ chunks: [
+            { type: "stream-start", warnings: [] },
+            { type: "tool-call", toolCallId: "terminal-usage-call", toolName: "complete", input: "{}" },
+            { type: "finish", finishReason: { unified: "tool-calls", raw: "tool_calls" },
+              usage: { inputTokens: { total: 120, noCache: 120, cacheRead: 0, cacheWrite: 0 },
+                outputTokens: { total: 30, text: 25, reasoning: 5 } } },
+          ] }) }
+        },
+      })
+      const observations: unknown[] = []
+      const observe = async (stage: string) => {
+        const events = Database.use((db) => db.select({
+          model: ProviderUsageEventTable.model_id, tokens: ProviderUsageEventTable.total_tokens,
+          cost: ProviderUsageEventTable.cost_usd,
+        }).from(ProviderUsageEventTable).where(eq(ProviderUsageEventTable.session_id, task.sessionID)).all())
+        observations.push({ stage, status: deriveTaskStatus(requireTask(task.taskID)), events })
+      }
+      await observe("before-request")
+      const response = streamText({
+        model: ProviderLLM.wrapModel(language, model, {}), prompt: "Complete the local lifecycle fixture",
+        timeoutMs: false, usagePurpose: "session",
+        usageAttribution: { sessionID: task.sessionID, agentID: "orchestrator" },
+        tools: { complete: tool({ inputSchema: z.object({}), execute: async () => {
+          const result = await completeFixtureTask(task, project.path, [], "usage-order")
+          expect(result).toMatchObject({ title: "Task Completed" })
+          await observe("terminal-tool-return")
+          return result
+        } }) },
+        onStepFinish: async () => { await observe("caller-step-finish") },
+      })
+      for await (const _part of response.fullStream) { /* consume the actual SDK stream */ }
+      await observe("stream-finished")
+      expect(observations).toEqual([
+        { stage: "before-request", status: "active", events: [] },
+        { stage: "terminal-tool-return", status: "completed", events: [] },
+        { stage: "caller-step-finish", status: "completed", events: [] },
+        { stage: "stream-finished", status: "completed",
+          events: [{ model: "terminal-usage-driver", tokens: 150, cost: 0.00018 }] },
+      ])
+    },
+  })
+}, 60000)
 
 test("binds an exact Task-owned worker Message into the completion decision", async () => {
   await using project = await memoryProject()

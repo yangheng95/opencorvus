@@ -661,7 +661,7 @@ export default tool({
             `(resource canonical_sha256 ${bundle.canonical_sha256}, fresh canonical_sha256 ${recollected.canonical_sha256}); ` +
             "collect this run again and publish the new collector resource",
         )
-      const usage = await context.host.taskRuns.usage({ taskID: bundle.task.id })
+      const usage = bundle.usage
       const model = usage.models.length === 1 ? usage.models[0] : undefined
       if (!model)
         throw new EvolutionArtifactIntegrityError(

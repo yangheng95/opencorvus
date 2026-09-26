@@ -33,6 +33,7 @@ import {
   PreparedExpertSquadCandidateSchema,
   ValidatedExpertSquadPackageSchema,
   canonicalTaskRunEvidenceJSON,
+  TaskRunEvidenceBundleSchema,
   canonicalWorkspaceTreeJSON,
 } from "@opencorvus-ai/plugin"
 import type { ArtifactReadLocator, EngineArtifactLocator } from "@opencorvus-ai/plugin"
@@ -1510,12 +1511,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             sessionID: trialWorkerSession.id,
             agentID: "target-worker",
           })
-          expect(await host.taskRuns.usage({ taskID: trialTaskID })).toEqual({
-            token_usage: 80,
-            cost: 1.25,
-            models: ["provider/model"],
-          })
-          const collectorReceipt = JSON.parse(
+          const collectTrial = async () => JSON.parse(
             await collectRunEvidenceTool.execute(
               {
                 task_id: trialTaskID,
@@ -1538,7 +1534,14 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               sha256: string
             }
           }
+          const collectorReceipt = await collectTrial()
           const collectorResourceSet = TaskArtifactResourceSetLocatorSchema.parse(collectorReceipt.resource_set)
+          const readCollector = async (receipt: typeof collectorReceipt) => TaskRunEvidenceBundleSchema.parse(
+            JSON.parse(new TextDecoder().decode(await host.taskArtifacts.read(TaskArtifactRefSchema.parse(receipt.resource)))),
+          )
+          const originalUsage = (await readCollector(collectorReceipt)).usage
+          expect(originalUsage).toMatchObject({ token_usage: 80, cost: 1.25, models: ["provider/model"] })
+          expect(originalUsage.ledger_event_ids).toHaveLength(1)
           const trialProcessBinding = readTaskProcessBinding(trialTaskID)
           const trialInitialTreeSHA256 =
             trialProcessBinding.protocol === "task-native-process-binding-v2"
@@ -1647,12 +1650,21 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             sessionID: trialWorkerSession.id,
             agentID: "target-worker",
           })
+          await expect(executePublishEvolutionArtifact({
+            artifact_type: "evolution-lab/run-evidence-bundle", payload: runSlot,
+            resource_set: collectorResourceSet, source_artifact_locators: [campaignReceipt.locator],
+          }, { host } as never)).rejects.toThrow("run-evidence-bundle resource no longer equals a fresh collection of authoritative Task facts")
+          const unpricedCollector = await collectTrial()
+          const unpricedUsage = (await readCollector(unpricedCollector)).usage
+          expect(unpricedUsage).toMatchObject({ token_usage: 100, cost: null, models: ["provider/model"] })
+          expect(unpricedUsage.ledger_event_ids).toHaveLength(2)
+          expect(unpricedUsage.ledger_event_ids.slice(0, 1)).toEqual(originalUsage.ledger_event_ids)
           const unpricedRunReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/run-evidence-bundle",
                 payload: runSlot,
-                resource_set: collectorResourceSet,
+                resource_set: TaskArtifactResourceSetLocatorSchema.parse(unpricedCollector.resource_set),
                 source_artifact_locators: [campaignReceipt.locator],
               },
               { host } as never,
@@ -1660,9 +1672,15 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
           expect(await readRunPayload(unpricedRunReceipt.locator)).toEqual({
             ...stampedRun,
+            run_evidence_sha256: unpricedCollector.resource.sha256,
+            run_evidence_resource: {
+              path: unpricedCollector.resource.path, media_type: unpricedCollector.resource.media_type,
+              bytes: unpricedCollector.resource.bytes, sha256: unpricedCollector.resource.sha256,
+            },
             token_usage: 100,
             cost: null,
           })
+          expect((await readCollector(collectorReceipt)).usage).toEqual(originalUsage)
           // A step served by a second model means this Trial did not run on
           // one model, so it cannot fill a single-model Campaign slot at all.
           UsageLedger.record({
@@ -1675,12 +1693,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             sessionID: trialWorkerSession.id,
             agentID: "target-worker",
           })
+          const mixedModelCollector = await collectTrial()
           await expect(
             executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/run-evidence-bundle",
                 payload: runSlot,
-                resource_set: collectorResourceSet,
+                resource_set: TaskArtifactResourceSetLocatorSchema.parse(mixedModelCollector.resource_set),
                 source_artifact_locators: [campaignReceipt.locator],
               },
               { host } as never,
@@ -2519,7 +2538,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.3")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.4")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(

@@ -989,3 +989,29 @@
 - 实际Host publisher9项116断言通过：不传新别名/Review仍发现其permission unavailable维度，包含Run/Evaluation所有真别名及Review原件；原别名上的同证据显式更正后，比较准确回到原不含该维度的结果，旧Review仍在source。原102份跨页Review检查同样通过，现在三个类型共用一次upper/membership。比较52/157、包投影1/40也通过；共66项/407断言。日志`.tmp/g39-mutation-final.log`、`g39-package-tests.log`。第一次实现把history局部Map命名为已有confirmation evidence数组同名，编译器精确拒绝；改名catalogEvidence后全部通过，保留`g39-mutation-initial.log`，不误报业务失败。
 - root类型8项、docs342ops25groups、API6规则34文件、拓扑122manifest135workflow通过。源与嵌入Evolution Lab2026.09.27.3，contentDigest8ab7dcb9ef5549baa3772a828a77ecd5cd261a715d8d07eb60b02dc4ba5e25eb；只同步此包，没有公共JSON schema变化、不生成无关SDK差异，不安装推广。未启动Provider/业务实验、无UI自动化。
 - 剩余边界：不同payload Run/Evaluation全集仍由Owner选；同Trial合法后续观察/usage补记与重跑择优不能按“第二份”或时间一律处理；缺少预绑定Trial身份的目录不能证明执行全集。旧Comparison payload与更宽source图可能曾由旧错误子集生成，仍不可重算历史以伪修。G40须继续沿真正的Campaign归属/测量事实/当前安装权威审查，不把本轮同事实Review闭包包装成业务可靠纠错或进化收益。
+
+## G40：不同测量的归属与观察完成时序
+
+### Recall、影响面与检查计划
+
+- 用户要求继续有依据的实质开发，02:45上海后交回准确Opus5.5。本轮从已push的76d7b4d8及干净工作区开始；没有业务模型、旧实验、凭据或另一个agent参与。目标是为完整测量集合确定真实权威，不能把G39等值别名闭包直接扩大成按source并集猜Campaign，或把所有后续记录永久判冲突。
+- 已读本记录Recall/五段图/G37–G39、02-data、2026-08-17测量/Review所有权及Campaign恢复历史；全仓检查publisher、collector、metric receipt、比较器、history、mutation授权/receipt事务、generic publication identity、Task创建和跨Task导入。另定位唯一生产UsageLedger.record调用到llm/api.ts的onStepFinish；沿Session processor和真实complete_task/terminalTask检查时序。当前只是待验证的可达时序，不能把源码顺序说成真实Luna已丢费用。
+- 直接触发与数据根因候选：Owner仍显式选不同payload的Run/Evaluation；G39只补同payload身份。Run模型入参中的唯一Campaign经Host读取但payload没有保存该exact locator；实际envelope的source集合又包含同Turn以前的选择，所以不能把每个Campaign source成员都解释为这次Run的归属。Evaluation有exact Campaign/Candidate/Run，但没有合法不同测量取代合同；原2026-08-17每slot一次测量约束仍有效。
+- 先做两个有界本地Checker：(1) 原真实Host fixture在已发布80-token Run后生成100-token/unpriced Run，分别选择前者与两者，保存原publisher结果与完整source集合，区分所消费集合、持久provenance与统计结果；不把缺candidate的fixture称作实际promote。(2) 流式SDK生产封装配确定性test-driver输入和真实Task终态写入，直接读取在工具完成时、step回调时和流结束后的ProviderUsageEvent，验证同一调用是否可在终态后入账。后者证明运行器合同，不是外部Provider或自主LLM验收。
+- 两项检查不得改变历史Artifact或改写生产生命周期/用量账本。原路径临时探针先保存精确原文件和diff，运行后精确恢复；若建立可长期复用的正向时序合同，单独保留测试。不同Trial/非终态继续/同Task重新打开/重复metric执行各自的取代权威在设计成立前仍未知，不用默认最新、最好或新Host业务gate填补。待原反例和时序结果明确后再决定生产修复范围。
+
+### 原反例与单一快照实施决定
+
+- 原真实Host9项117断言通过，`.tmp/g40-different-run-selection-probe.json`及final.log/patch保存三项结果：同一collector资源先得到80 tokens/$1.25，再得到100 tokens/cost null；只选择80的Run产生inconclusive（原夹具缺candidate），同时选择两份报`comparison has conflicting run observations for slot case-1:baseline:0`；先完整选择100的Run、再仍只传80作为语义输入时，持久Comparison source包含100，但派生结果仍只消费80。**来源图不等于消费清单**已经由真实publisher证实。该临时probe结束后精确恢复原测试文件。
+- 新正向时序Checker使用确定性Provider传输输入、真实SDK、complete_task、SQLite终态和UsageLedger：工具返回和caller onStepFinish时Task已completed/账本0，流结束后记录150 tokens/$0.00018。它证明正常完成调用可以晚于Task终态入账，不是合成追加usage的猜测，也不是外部Luna或账单验收。横向源码检查区分complete/fail工具中的终态、startup/stream错误终态与cancel的实际prompt-settlement barrier；不能把一个完成路径断言推广成取消也必然迟记。terminal conversation及同Task resume还可追加真实调用，因而Task终态不是永久费用封口。
+- **本次生产修复限定为采集快照一致性**：把已记录用量及原ledger event IDs放进原collector的同一SQLite读事务，与Session树/消息/终态一起形成唯一canonical资源；Run publisher只从已验真的bundle盖章，不在采集之后另读账本。删除原独立`taskRuns.usage` Host入口和独立采集函数，不保留双路径。相同collector资源不能再承载两个不同费用观察；后入账时原fresh-check给出明确过期资源错误，重新采集生成新资源。这里核对SHA是真实不可变证据身份，不以哈希代业务正确。
+- collector JSON显式升级为schema_version 2，要求usage快照；旧资源保留原字节，不回填、不迁移旧runtime、不添加版本fallback。旧历史Run/Comparison仍按原Artifact数据读取，本次不重算它们；以后需要新发布/执行metric的采集输入必须使用当前v2资源，旧v1输入由schema给出不匹配错误。Evolution Lab源/嵌入同步一个新版本；无DDL、公共HTTP或SDK响应变化。原Run Artifact字段、slot计数、比较统计、Review改判、promotion路径本轮不改。
+- 全集选择仍未解决：新快照使不同观察可追溯，但不宣称旧观察自动失效或已获得跨观察取代授权。Run exact Campaign归属、真实消费集合、inactive/awaiting→terminal、同Task恢复与重复metric执行须继续设计；禁止借本修复挑最新/最好或丢弃旧失败。聚焦验收包括真实Host旧资源→明确过期错误→新资源准确100/unpriced、混合模型仍精确拒绝、流式终态时序、原collect/review/compare合同、源嵌入/类型/docs及完整push检查。
+
+### G40实现与验收
+
+- collector在原Task/Session读取事务内枚举同一Session树的ProviderUsageEvent，按occurred_at/id稳定顺序记录event IDs及原有总量/定价语义。用量进入canonical bundle v2，Run只读bundle.usage；独立Host usage入口及另开事务的采集函数已删除。只有一个当前实现，没有重写历史账本、Task终态或测量结果。
+- 真实Host9项122断言通过：原80-token资源后遇到追加20-token/unpriced事件，旧资源明确报fresh-collection不一致；重新采集得到2个确切ledger IDs、100 tokens/cost null及新的collector资源，原资源读回仍为80/$1.25。再次采集混合模型后原精确模型拒绝仍成立；另一个Trial独立模型/用量保持隔离。终态/Artifact12项66断言及共享usage2项4断言通过，包含本次SDK→真实complete_task→原账本150-token时序。比较52/157及完整包投影1/40通过，共76项389断言。
+- 第一轮Host测试早于异步包生成完成，加载的是旧嵌入.3而期待.4；保留`.tmp/g40-host-and-order-tests.log`，同步后真实Host全过，见`g40-host-final.log`的首个文件exit=0。该复验命令还误列了不存在的`expert-squad-evolution-comparison.test.ts`，其工具错误同样保留；正确的`evolution-comparison.test.ts`及projection已在`g40-comparison-projection.log`独立全部通过，不把命令名错误算业务失败或掩盖检查缺项。原临时时序probe日志`g40-terminal-usage-order.log`也保留。
+- 根类型8项、docs342ops25groups、API6规则34文件、topology122manifest135workflow、diff检查通过。源/嵌入Evolution Lab2026.09.27.4/contentDigest4fe44f12d143ec62c475d65ad9c87837204b7efb7fda822d24bd01c44bcb1342；仅同步此包，其他预存base漂移保留，未推广。无公共HTTP schema/SDK或DDL变化，没有UI自动化、外部Provider请求或业务费用。
+- 下一问题仍是**完整已发布观察如何进入当前决策**，不是再修相同快照：原Host反例证明source图可能含未参与计算的Run，所以不能只检查引用集合是否齐全就认为旧Comparison已消费它。必须明确Campaign/Trial归属、精确消费快照和同Task后续观察的合法关系；旧值原件与当时Comparison保留。当前修复没有解决Owner对子集的选择，也没有证明业务可靠纠错/自进化收益。尚待进一步核验的相邻边界：execute-evolution-metrics传入Run envelope，但通用metric Host的task_id/workDir仍是Evaluator Task；shell/query/judge各自实际评价对象需沿真实checker区分，不凭变量名直接判定业务测错。

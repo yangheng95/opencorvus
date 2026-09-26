@@ -271,6 +271,12 @@ package revision；从该 Trial 的 `provider_usage_event` 盖章已记录 token
 返回写出实际值的 typed integrity error，该槽位没有可发布的运行证据。比较与度量工具的冻结模型检查
 因此比较的是实际服务模型；Evaluator 不复述任何宿主事实。
 
+collector JSON当前为schema_version 2，其usage把原ledger event IDs、token/cost/model与
+Task lifecycle、Session树放在同一SQLite采集事务及同一canonical资源中。publisher只从已验真
+bundle盖章，独立taskRuns.usage入口已删除。后入账会使旧采集与fresh collection不一致，必须
+生成新资源，旧资源不改。完成工具可先于本次请求的用量回调，因此终态时间不等于费用封口。
+旧v1采集资源保留历史字节；当前发布/metric执行只接受v2，不补字段、重算历史或fallback。
+
 `comparison-recommendation` 的模型面 payload 是空对象；Recommendation Owner 选择并完整读取
 Campaign、Candidate、Run、Evaluation 直接来源；Review 不由它选择子集。publisher在一次冻结
 Task catalog分页内发现并完整读取这些确切Evaluation的全部Review，再经唯一比较器生成并持久化
