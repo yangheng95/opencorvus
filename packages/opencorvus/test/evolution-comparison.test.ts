@@ -71,6 +71,8 @@ function comparisonFor(scorers: ScorerSpec[], options?: {
   uiRubricDigest?: string | null
   candidateFinding?: IntegrityFinding
   candidateFirstRunOutcome?: "success" | "failure" | "unavailable"
+  candidateFirstRunCost?: number | null
+  candidateFirstRunModel?: string
 }) {
   const repetitions = scorers[0]!.baseline.length
   for (const spec of scorers) {
@@ -201,10 +203,16 @@ function comparisonFor(scorers: ScorerSpec[], options?: {
         run_evidence_resource: resource,
         task_id: `task-${arm}-${repetition}`,
         terminal_time: 1,
-        model: "provider/model",
+        model: arm === "candidate" && repetition === 0
+          ? options?.candidateFirstRunModel ?? "provider/model"
+          : "provider/model",
         environment_digest: resourceDigest,
         token_usage: arm === "baseline" ? 100 : 110,
-        cost: arm === "baseline" ? 1 : 1.2,
+        // `??` would turn an explicit null cost back into 1.2; only an absent
+        // option takes the default.
+        cost: arm === "candidate" && repetition === 0 && options?.candidateFirstRunCost !== undefined
+          ? options.candidateFirstRunCost
+          : arm === "baseline" ? 1 : 1.2,
         last_activity_at: "2026-08-07T00:00:00.000Z",
         outcome: arm === "candidate" && repetition === 0
           ? options?.candidateFirstRunOutcome ?? "success"
@@ -358,6 +366,24 @@ describe("Evolution Lab deterministic comparison", () => {
     expect(comparison.aggregate_score).toBeCloseTo(0.1)
     expect(comparison.required_unavailable_dimensions).toEqual([])
     expect(comparison.recommendation).toBe("retain")
+  })
+
+  test("unpriced Trial cost keeps the cost delta unknown while preserving measured quality", () => {
+    const comparison = comparisonFor(
+      [{ id: "correctness", weight: 1, baseline: [0.8, 0.8, 0.8, 0.8], candidate: [0.9, 0.9, 0.9, 0.9] }],
+      { candidateFirstRunCost: null },
+    )
+
+    expect(comparison.cost_delta).toBeNull()
+    expect(comparison.unavailable_dimensions).toEqual(["cost_delta"])
+    expect(comparison.aggregate_score).toBeCloseTo(0.1)
+    expect(comparison.recommendation).toBe("promote")
+  })
+
+  test("a Trial served by another model cannot enter the frozen-model comparison", () => {
+    expect(() =>
+      comparisonFor(improvedScores, { candidateFirstRunModel: "openai/gpt-5.6-luna" }),
+    ).toThrow("comparison run slot case-1:candidate:0 differs from the frozen Campaign runtime")
   })
 
   test("reports not_applicable visual review for a nonvisual Campaign", () => {

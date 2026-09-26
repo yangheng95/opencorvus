@@ -53,8 +53,8 @@ append 而非不可逆 effect，Q3 无普通出口，Q4 冻结整个 Task。
 | `candidate parent revision must equal its exact development campaign target and baseline` | **已改**（2026-08-18，改为从 parent resource set 证明） |
 | candidate 的 revision/manifest/changed_paths/diff/frozen_files/receipt 比对（8 字段） | **已改**（发布器盖章） |
 | `evaluation-result identity and values must equal the exact metric receipt` | 待改 |
-| `run-evidence-bundle does not equal a fresh collection of authoritative Task facts` | 待改 |
-| `run-evidence-bundle does not match its canonical collector and package revision facts` | 待改 |
+| `run-evidence-bundle does not equal a fresh collection of authoritative Task facts` | **改为可自纠**（2026-09-26：资源本是宿主 collector 产物，检查的是它是否仍为当前事实；错误写出两份 canonical 摘要并要求重新采集） |
+| `run-evidence-bundle does not match its canonical collector and package revision facts` | **已改**（2026-09-26：Evaluator 只交 Campaign 槽位，发布器从新鲜采集、Trial 用量账本与所引 Campaign 盖章全部 Trial 事实） |
 | `comparison-recommendation must equal the deterministic Campaign, Candidate, run, and evaluation matrix` | 待改 |
 | `campaign-spec resource set must equal every exact frozen campaign input` | 待改 |
 | `integrity-review slot identity must equal its exact evaluation result` | 待改 |

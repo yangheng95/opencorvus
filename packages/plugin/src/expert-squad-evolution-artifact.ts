@@ -164,6 +164,27 @@ export const EvolutionCandidateRevisionPublishInputSchema = z
  */
 export const EvolutionEvaluationResultPublishInputSchema = z.object({}).strict()
 
+/**
+ * Model-facing run-evidence-bundle publication input.
+ *
+ * The Evaluator owns one decision: which frozen Campaign slot a collected
+ * Trial fills. Every other field of the published artifact is a Host fact the
+ * publisher stamps — Task, terminal time, outcome, activity duration, workspace
+ * and package revision identities from a fresh collection of the Trial; token
+ * usage, cost, and the serving model from the Trial's own Provider usage
+ * ledger; the environment from the Campaign the publication sources. Asking the
+ * Evaluator to restate them let a Trial that ran on another model publish the
+ * Campaign's model anyway, because a restated value can only echo what the
+ * author was shown.
+ */
+export const EvolutionRunEvidencePublishInputSchema = z
+  .object({
+    case_id: portableIdentity,
+    arm: z.enum(["baseline", "candidate"]),
+    repetition: z.number().int().nonnegative(),
+  })
+  .strict()
+
 export const EvolutionCampaignPublishInputSchema = z
   .object({
     candidate_version_policy: z.string().min(1),
@@ -423,10 +444,13 @@ export const EvolutionArtifactSchemas = {
       run_evidence_resource: taskArtifactResourceIdentity.extend({ media_type: z.literal("application/json") }),
       task_id: z.string().min(1),
       terminal_time: z.number().int().nonnegative(),
+      // The single `provider/model` the Trial's usage ledger recorded, and that
+      // ledger's recorded tokens and priced USD estimate. A null cost means some
+      // recorded step had no price; it is unknown, never free.
       model: z.string().min(1),
       environment_digest: sha256,
       token_usage: z.number().nonnegative(),
-      cost: z.number().nonnegative(),
+      cost: z.number().nonnegative().nullable(),
       last_activity_at: z.string().datetime(),
       outcome: z.enum(["success", "failure", "unavailable"]),
       activity_duration_ms: z.number().int().nonnegative().nullable(),
@@ -635,7 +659,7 @@ export const EvolutionPackagePublishableArtifactInputSchema = z.discriminatedUni
   }),
   z.object({
     artifact_type: z.literal("evolution-lab/run-evidence-bundle"),
-    payload: EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"],
+    payload: EvolutionRunEvidencePublishInputSchema,
   }),
   z.object({
     artifact_type: z.literal("evolution-lab/evaluation-result"),

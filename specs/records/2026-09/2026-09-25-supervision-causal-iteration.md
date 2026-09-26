@@ -641,3 +641,60 @@
 - 红色反例已实测：四次稳定测量与`reviewed`俱全、一个candidate Run为`unavailable`时，旧比较器仍输出空的必需不可用维度；失败Trial的对照仍按失败率`retain`。本轮修改后聚焦比较测试已绿。检查分发路径又发现`generated/expert-squad-payload.ts`内Evolution Lab仍是G1前的`.06`及旧比较函数；只改源包会令嵌入式生产包继续使用旧策略。故本任务必须同步**Evolution Lab条目**的生成字节，版本升为`2026.09.26.1`，验证其与当前源一致。生成器还输出AutomationBench五行的既有无关漂移；按精确行与HEAD核对后保留原嵌入内容，不夹带这项工作。该局部生成同步与完整生成物检查的差别须在验收中披露。
 - 交付复核：源与内嵌Evolution Lab由真实`loadSourcePackage`/`loadEmbeddedPackage`得到同一不可变package digest；版本均`2026.09.26.1`。生成revision记录原来也停在`.06`；用当前单一`packageContentDigest`算得本包内容身份`af0427f2fd2b7675e8b8de05081d9082e038899caa9953ee01a7cd94d4ce9b0e`，精确更新本包记录并由正向测试复核。完整revision生成计划另会给无关`base`包盖新版本，故未执行有副作用的整表生成，不把它混入本提交。新版比较器明确记录`run_outcome:case-1:candidate:0`、`aggregate_score=null`、`recommendation=inconclusive`，仍保留配对测量与`outcome_rates.candidate.unavailable=0.25`；正常成功仍`promote`，真实失败仍按失败率`retain`。
 - 验证：聚焦比较32项通过；真实Artifact发布/读取合同1项通过；生产嵌入包身份合同1项通过；真实Promotion Mutation Intent的合法promote/restore路径1项通过；Expert Squad类型检查、opencorvus类型检查、122 manifest拓扑、`docs:check`（342 ops/25 groups）和`git diff --check`通过。首次从仓库根运行Bun时额外拾取`tmp/gallery-project`副本并因其缺依赖报错，改在目标package目录运行同一聚焦测试通过；发布合同默认5秒timeout，按其真实耗时改用命令行60秒超时后通过，无生产合同放宽。没有新Provider、业务世界或模型费用。该修复是父代选择的证据完整性边界，不是业务语义纠错或已证进化收益；未推广任何候选。
+
+## G28：Trial用量观测必须来自同一不可变账本
+
+- Recall：用户再次指出没有活动代码可“跟”，要求停止把定时巡检当进展。本轮直接审查测量→父代选择，不开模型、旧世界或Campaign。起始`23bb9386`干净工作区；已读AGENTS、本记录G27、当前架构的Task运行证据、Evolution Lab Run Artifact schema/发布器/比较器、Tool Host、Provider用量账本及真实Session归属、原发布/晋升测试。全仓搜索`token_usage`、`cost_delta`、`TaskRunEvidenceHost`、`ProviderUsageEventTable`及其调用与测试。
+- 现象/根因：`TaskRunEvidenceBundle`的canonical collector验证Task、Session、消息、Artifact、终态和包身份，却不含Provider用量。Run Artifact另收`token_usage`与`cost`两个非负数字；当前publisher严格复收前者的原运行证据，但不比对这两个数字。Comparison直接求candidate-baseline均值差并公开，Recommendation Owner据此报告成本；因此任意数字可随真实run Artifact发布。旧G27只核对outcome，不覆盖用量。下游父代`promote`当前不以成本差为门槛，故本轮不声称能改变晋升决策；它修测量报告的来源完整性。
+- 现有唯一用量事实源是不可变`provider_usage_event`：每步记录`session_id`、总token、USD估计及`priced/unpriced/unknown`；Task活动集已有真实Session归属，未归属的preflight不应塞入Trial。方案是在现有`TaskRunEvidenceHost`增加一项按Task/Project归属收集的**账本观测**，复用原Task活动Session集合，在同库事务中求和并返回token总数和仅全部已定价时可知的cost，否则cost为null。Run Artifact的`cost`允许null；publisher在发布时用该Host观测精确核对`token_usage`/`cost`。Comparison对任一null cost返回null与现有`cost_delta`不可用维度，保留质量评分与原结果，不用0冒充免费。原Artifact的数值cost仍可解析，原始材料只读；不新建ledger、LLM工具、角色、关键词流程gate或外部账单保证。
+- 影响面：插件Tool Host ABI、OpenCorvus唯一Host实现、Run Artifact schema与publisher、comparison、Evolution Lab源包/生成嵌入包及版本记录、真实发布与比较测试；`package-tool-capsule`动态转发同一Host成员，无第二实现。不得变更原业务World/scorer或历史运行。风险是账本事件可能缺失或有`unknown`计费，故返回的仅是**内部已记录用量/已定价估计**，不称外部发票；没有事件的Task不能凭0证明模型从未请求，须由测试与观察注明此上限。若现有Host权限/归属无法证明精确关联，就保留发现而停止实现，不造假收据。
+- 实施/验收：原`collect-run-evidence` Tool回执投影同一Host账本观测，使Agent能填准确值；publisher发布前再按同一Host核对，不能要求模型猜账本数字，也不能静默改写其输入。先在真实发布测试让有账本token的Run携带错误数，要求精确完整性错误；再用正确数真实发布/读取，另验证unpriced/unknown时cost为null且comparison保留null差额。正常成功/失败与G27不可用推荐合同保持。聚焦测试、类型、生成包身份、docs和diff检查后范围提交；不借此启动Campaign或声称业务纠错。
+
+## G28主管重判：测量事实由宿主盖章，而非让Agent复述后比对
+
+### Recall
+
+- 用户2026-09-26要求以主管身份接管全部无人值守监督/自进化工作：不把上面G28中断实现当既定方向，从原始事实、代码和目标重判优先级，并完成最有信息量的下一项实际工作；逐层区分目标→原始事实/反证→独立判断→同Task返工/复核/结算→测量/父代选择，协议收敛、正常交付、业务纠错、优化收益互不顶替；特别审查G1、G27的测量/父代选择边界与G25业务错误接受，不从H-E分差推因果收益。G28 diff须先审定义、调用、测试、生成包与历史Artifact读取，再决定补完、重做或精确撤回；不因测试绿忽略账本覆盖与unpriced语义。禁止重复已结束运行、改官方输入/world/scorer/原分、偷跑Campaign/作者/候选；新真实模型行为须单独预登记；Host不做业务金额gate、不隐藏/伪造消息、不增第二ledger/角色。
+- 已读：根AGENTS、本记录Recall/五段机制图/G1–G28、`he-01-results`/`repair-01-results`/`ht-01-results`/`mechanism-decision`/`source-dependency-boundary`、`docs/evolution-gate-audit.md`、当前架构`02-data`与`06-provider`；源码`comparison.ts`、`publish-evolution-artifact.ts`、`collect-run-evidence.ts`、`execute-evolution-metrics.ts`、plugin `task-run-evidence.ts`/`expert-squad-evolution-artifact.ts`、`task-run-evidence-host.ts`、`plugin-tool-host.ts`、`package-tool-capsule.ts`、`usage/`、`llm/api.ts`、`session/llm.ts`、`agent/model.ts`、`evolution-mutation-intent.ts`、`evolution-history.ts`、Evolution Lab README/Skill/七个角色prompt与相关测试。全仓搜索`run-evidence-bundle`、`token_usage`、`cost_delta`、`taskRuns`、`model_configuration`、`usageAttribution`、`getSmallModel`的定义与调用。无委托、无模型请求。
+
+### 全局判断：五段机制的已证、反证与未知
+
+| 段 | 已证 | 被反证的充分条件 | 未知/未达成 |
+| --- | --- | --- | --- |
+| 目标→分工 | Cycle1/3、H-E、Repair01、H-T01的真实派单保留原定价/邮件义务 | “原请求在派单中丢失”不是这些失败的统一解释 | Mission未逐字转发原SYSTEM是否影响其它案例 |
+| 执行→观察 | 来源可达、实际读取和写入收据完整；G26目录噪声可见 | “只补来源即可”（Cycle3读齐仍错） | H-T01/Repair01为何未读Sheets：来源选择、锚定、能力未分离 |
+| 观察→判断 | 四条轨迹都出现“完整业务关系被局部充分条件替代并被后续层沿用” | 方法Artifact交接（G21）、方法前置时序（G25）都不充分 | 没有已识别的新机制；无合法Host补丁（金额gate/关键词路由被禁止）。不启动新运行 |
+| 判断→返工/结算 | G4–G10协议合同、G8 typed resume、G10活跃追加的本地真实服务合同 | “发生continuation即返工成功”（Cycle3/G21续跑都针对错误gap） | 真实模型经监督发现业务错误并同Task修正：**0次观察到**；活跃追加从未被真实模型使用 |
+| 测量→选择 | G1审查blocker、G27 Run不可用进入比较；promote需区间下界>0，n=1不可能promote | H-E的+1分不是处理效应：两臂executor起点不同，T1无纠错机会 | 从未跑通真实Campaign；本段仍有确定性数据缺口（下节） |
+
+- G25专项：H-T01的错误接受发生在“观察→判断”，前后verifier、Task complete与Mission accept均通过身份/来源/生命周期校验，没有协议违约；G26“无合法局部补丁”的结论成立。本轮不把它写成已修复，也不设金额或关键词gate。
+- G1专项补充：比较器只消费**已出现**的finding；`status: reviewed`且`findings: []`（测试夹具即如此）仍可promote，缺失的审查类别被当成无问题。这是与G1同源、尚未处理的“未观察当通过”缺口，列为下一项，不在本次改动中顺带修改。
+
+### G28差异审查结论：方向对，做法错，重做
+
+- 现象与直接触发点：Run Artifact除G28关注的`token_usage`/`cost`外，`model`、`environment_digest`、`last_activity_at`同样由Evaluator填写，publisher从不核对；而`comparison.ts`与`execute-evolution-metrics.ts`恰恰用`run.model === campaign.model`、`run.environment_digest === campaign.environment_digest`判断“同一冻结运行时”。Evaluator拿不到任何宿主提供的Trial模型事实，只能照抄Campaign值，该检查因此永远成立。仓库自己的真实host测试即反例：Trial assistant消息为`test/test`，G28写入的账本事件为`openai/gpt-5.6-luna`，Run却声称`provider/model`，照样发布并被度量工具接受。
+- 根因：Run发布仍是“Agent复述宿主事实→publisher比对”的旧协议（16个字段中7个是64位摘要），与同一publisher对candidate-revision、evaluation-result已采用的“宿主盖章”相反；`docs/evolution-gate-audit.md`已把“run-evidence-bundle does not match its canonical collector and package revision facts”列为待删除并改宿主盖章的第一类门。G28在此之上**新增**一个同类门（Agent只能抄collector回执里的数字，门只能制造抄写错误，发现不了真实不一致），且没有覆盖真正被当作门用的`model`。
+- 账本覆盖：`provider_usage_event`只由共享stream wrapper在上游step完成时写入，且只有`session/llm.ts`带Session归属；中断/未完成step不入账，无Session归属的helper不计入Trial。所以它是“已记录用量”下界，不是发票。计价：`getUsage`只写`priced`/`unpriced`，迁移回填的旧行可能是`unknown`；任一非priced即cost为null正确。G28对零事件返回cost=0（空集全priced）会把“无记录”表成“已计价为0”。
+- 未完成项：新null-cost比较测试未运行；Evolution Lab嵌入生成包与版本记录未同步；collector回执新增`usage`只为让Agent抄写。
+- 处置：保留“用量来自Trial自身账本”“cost可null且比较输出null差额”两项正确部分；撤回“复述后比对”与collector回执`usage`；改为下述盖章方案。
+
+### 单一修复方案（实施前）
+
+- **模型面输入**：新增`EvolutionRunEvidencePublishInputSchema`，Evaluator只提交它确实拥有的Campaign槽位`case_id`/`arm`/`repetition`，`resource_set`为collector资源，`source_artifact_locators`为唯一一份所读的campaign-spec。存储schema不变（除`cost`可null），历史Run Artifact照常解析；不保留旧输入的双形态。
+- **宿主盖章**：publisher读取并校验collector资源（唯一JSON、canonical、与新鲜采集完全相同、canonical摘要自洽），读取Campaign（planner生产者），再调用`TaskRunEvidenceHost.usage`。盖章字段：`workspace_digest`、`run_evidence_sha256`/`run_evidence_resource`、`task_id`、`terminal_time`、`last_activity_at`（同一终态时间ISO）、`outcome`、`activity_duration_ms`、五项revision equality、`token_usage`、`cost`、`model`、`environment_digest`（来自所引Campaign）。
+- **账本观测**：`TaskRunEvidenceHost.usage`返回Trial Session树（与bundle同一`readTaskDurableActivityScope`）内已记录事件的`token_usage`总和、`cost`（非空且全部priced才求和，否则null）与排序去重的`models`。空账本cost为null。
+- **真实边界而非抄写门**：记录模型不是恰好一个（零个或多个）时，Trial不是单模型Campaign运行，publisher返回写明expected/received模型列表的typed错误，该槽位保持不可用；revision事实不等时返回列出五个摘要的错误；collector资源过期时返回两份canonical摘要并说明需重新采集。它们描述Trial本身的事实，不是要求Agent重抄。
+- **消费方**：比较与度量工具的同运行时检查不改写，但此后比较的是宿主观测模型；`comparison.ts`保留G28的null cost处理。Mission晋升仍只消费确定性推荐。
+- **不变项**：不改Task/Mission/Session生命周期、调度、ledger、权限、官方world/scorer或历史Artifact；不新增角色、Tool、工作流或业务gate；Run存储schema字段集不变。
+- **影响面**：plugin ABI（Host接口、Run发布输入、发布联合体）、OpenCorvus Host实现、Evolution Lab publisher/collector/Evaluator与Recommendation Owner prompt/README/ownership参考、嵌入生成包与版本记录（`2026.09.26.2`）、架构`02-data`/`06-provider`、`docs/evolution-gate-audit.md`状态、真实host与比较测试。`package-tool-capsule`按成员名动态转发，无第二实现；`evolution-history`按存储schema解析，不受输入变化影响；SDK/OpenAPI不含Run payload。
+- **可证伪预测与Checker**：在真实host测试（真实DB、collector、publisher、metrics Tool）中：账本记录Campaign模型并priced时，只交槽位即发布，读回payload的每个盖章字段等于Host事实；追加同模型unpriced事件后再发布，cost为null、token累加；追加另一模型事件后发布得到列出两个模型的错误；账本模型与Campaign不同时，metrics返回`EvolutionMetricIdentityError`。比较单测验证null cost只使`cost_delta`不可用。若真实publisher或Host合同否定上述预测，停止并修正方案，不放宽检查。
+- **风险与限制**：已记录用量是下界；单模型限制会使按角色配置不同模型的Trial无法入Campaign（如实报错，不猜主模型）；`environment_digest`表示Run所属Campaign声明的环境，宿主不能观测Trial实际环境。本修复只修测量来源完整性，不证明业务纠错、候选收益或自动晋升。
+
+### G28重判实施与验证 checkpoint
+
+- 已按上方案实现：plugin新增`EvolutionRunEvidencePublishInputSchema`（只含槽位）并作为发布联合体的Run分支；`TaskRunEvidenceHost.usage`改为返回`TaskRunUsageObservation`（token、cost、models），空账本cost为null；Host按Task durable Session树读取账本；publisher要求唯一campaign-spec来源与唯一JSON collector资源，保留“资源等于新鲜采集”检查（错误改为写出两份canonical摘要并要求重新采集），删除随之冗余的canonical摘要复算、`sameResourceIdentity`与全部复述比对，改为盖章；collector回执恢复为HEAD（撤回G28的`usage`）；比较器保留G28的null cost处理。Evaluator/Recommendation Owner prompt、README、ownership参考、架构`02-data`/`06-provider`与门审计状态同步。包版本`2026.09.26.2`，嵌入payload只替换Evolution Lab一个条目（8个文件），revision记录内容身份`a54eb67614bb76d6dafadce51de0985440ef6ac474ac9d756f9f16f3f34c5a4f`。
+- 失败与反证保留：G28新增的null-cost比较测试写作`candidateFirstRunCost ?? 1.2`，显式null被`??`变回1.2，首次运行实得`cost_delta=0.2`而失败——它从未检验过null cost；已改夹具仅在选项缺省时取默认，生产代码未为此修改。嵌入包身份测试在同步前按预期失败（源与嵌入digest不同）。变异检验：把publisher临时改成盖Campaign模型（旧“复述”语义），真实host测试在另一模型Trial断言处变红，恢复后逐字节与变异前一致。
+- 新增真实host证据（真实DB、collector、publisher、metrics Tool）：只交槽位即可发布，读回payload的全部盖章字段等于Host事实（模型取账本`provider/model`，而该Trial assistant消息写的是`test/test`）；追加同模型unpriced step后再发布，token 100、cost null；追加另一模型step后发布，返回列出`["openai/gpt-5.6-luna","provider/model"]`的精确错误；另建一个只由`openai/gpt-5.6-luna`服务、其余身份均与Campaign一致的Trial，发布得到该模型与token 50/cost 0.75，metrics Tool以“Trial execution identity differs from the frozen campaign inputs”拒绝。缺Campaign来源得到精确source错误。比较单测新增“另一模型的Run不能进入冻结模型比较”的错误合同。
+- 顺带修复的既有红测试：`evolution-lab-package-projection.test.ts`把已发布版本写死为`2026.09.06.1`，而自G27提交`23bb9386`同步嵌入payload为`2026.09.26.1`后它已必然失败（G27验证未运行此文件）。改为读取生成revision记录这一单一来源，恢复原1项/40断言通过。
+- 验证：`bun run test`（packages/opencorvus）——`evolution-comparison` 34通过/98断言；`evolution-artifact-evidence-host` 9通过/93断言；`evolution-lab-package-projection` 1/40；`expert-squad-evolution-mutation` 1、`random-evolution-e2e-support` 14、`evolution-chain-host-defect-repairs` 3、`evolution-candidate-manifest-surface` 13、`expert-squad-feedback-revision` 9、`evolution-feedback-revision` 4，全部通过。plugin、opencorvus、`check:expert-squad-types`类型检查exit 0；拓扑122 manifests；`docs:check` 342 ops/25 groups；`git diff --check`通过。仓库无Biome可执行文件与lint脚本，未运行lint。
+- 如实边界：revision计划显示与本修复无关的既有漂移（`automationbench`源`.25.14`对记录`.24.2`；`base`内容变化未升版本），本提交不夹带。`06-provider.md`的CRLF来自自动checkpoint `2a55323e`，新增行按`.gitattributes`的`eol=lf`写入，不重写其它行。已记录用量是下界；按角色配置多模型的Trial不能进入单模型Campaign（如实报错）；`environment_digest`表示所引Campaign声明的环境。无Provider请求、无真实Campaign/作者/候选、无官方world/scorer改动；本修复只闭合测量来源完整性，**不证明业务纠错、候选收益或晋升正确**。下一项仍是同一测量段的G1同源缺口：`reviewed`而`findings: []`可promote（缺失审查类别被当无问题），需先定义必需审查维度再改，避免把缺失处理成新的抛错门。

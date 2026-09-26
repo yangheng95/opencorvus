@@ -4,7 +4,7 @@
 - Failure Analyst: `evolution-lab/failure-attribution@1`.
 - Experiment Planner: `evolution-lab/campaign-spec@1`.
 - Candidate Author: `evolution-lab/candidate-revision@1`.
-- Evaluator: `evolution-lab/run-evidence-bundle@1` and the scorer-owned `evolution-lab/evaluation-result@1`.
+- Evaluator: `evolution-lab/run-evidence-bundle@1`, naming only the Campaign slot while the publisher stamps every Trial fact, and the scorer-owned `evolution-lab/evaluation-result@1`.
 - Safety Auditor: `evolution-lab/integrity-review@1`, exactly one per evaluation result, each naming that exact result as its reviewed source.
 - Recommendation Owner: `evolution-lab/comparison-recommendation@1`.
 

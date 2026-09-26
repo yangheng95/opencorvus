@@ -195,6 +195,11 @@ purpose、Token 分量、total、成本和价格覆盖。共享 stream wrapper �
 旧 Part 没有覆盖字段时写成 `unknown`。Session 继续保留 Part/assistant aggregate 只服务于
 对话投影，统计不再双读它们。
 
+Evolution Lab 的 Trial 用量同样只读这张账本：`TaskRunEvidenceHost.usage` 按 Task 的 durable
+Session 树求和已记录 token，所有已记录 step 均为 `priced` 时才给出 USD 估计（否则为 null，
+表示未知而非免费），并返回实际服务过这些 step 的 `provider/model` 集合。未完成的 upstream
+step 不入账，所以它是已记录用量而不是账单；Session 树之外的 preflight 与协调 Mission 不计入 Trial。
+
 `GET /global/usage` 是 Overlay 的唯一自然周期聚合 API：按严格 IANA 时区计算
 day/week/month/year 半开区间和上一周期，补齐真实 DST（Daylight Saving Time，夏令时）
 hourly/daily buckets，并返回总量、比较、Provider/model 分组和计费覆盖。自然周从周一开始；

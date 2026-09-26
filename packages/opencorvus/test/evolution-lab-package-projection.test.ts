@@ -9,10 +9,15 @@ import { MCP } from "../src/mcp"
 import { projectedTaskToolRuntimeBindingOf } from "../src/tool/task-tool-execution-scope"
 import { configureTaskIngressRunner } from "../src/engine/task-root-ingress-delivery"
 import { EngineService } from "../src/task-api"
+import { generatedExpertSquadRevisions } from "../generated/expert-squad-revisions"
 
 afterAll(async () => {
   await resetMemoryDatabase()
 })
+
+// The released package is the embedded payload, recorded with its version in
+// the generated revision record; it moves with every published package change.
+const releasedVersion = generatedExpertSquadRevisions["evolution-lab"]!.version
 
 const agentTools = {
   "evolution-observer": [
@@ -78,7 +83,7 @@ describe("Evolution Lab complete package projection", () => {
             installationScope: "project",
             namespace: "builtin",
             id: "evolution-lab",
-            version: "2026.09.06.1",
+            version: releasedVersion,
           },
         })
         const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
@@ -91,7 +96,7 @@ describe("Evolution Lab complete package projection", () => {
         expect(revision).toMatchObject({
           id: "evolution-lab",
           namespace: "builtin",
-          version: "2026.09.06.1",
+          version: releasedVersion,
         })
 
         const scheduler = await PromptProfileResolver.resolveSchedulerCapability({

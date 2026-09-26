@@ -7,6 +7,7 @@ import { generatedExpertSquadRevisions } from "../generated/expert-squad-revisio
 import { packageContentDigest } from "../script/generate-expert-squad-revisions"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
+import { UsageLedger } from "../src/usage"
 import { Session } from "../src/session"
 import { Database, eq } from "../src/storage/db"
 import { EngineArtifactTable, EngineTaskTable } from "../src/engine/engine.sql"
@@ -1302,7 +1303,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               EngineArtifactEnvelopeSchema.parse(JSON.parse(builtInCampaignRead.chunk.text!)).payload,
             ).trial_execution,
           ).toEqual({ status: "unavailable", reason_code: "product_release_required" })
-          const trial = await Instance.provide({
+          // Each call creates one independent terminal baseline Trial Task.
+          const createTrial = () => Instance.provide({
             directory: trialWorktree.directory,
             fn: async () => {
               const trialPackageRevision = {
@@ -1477,6 +1479,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               }
             },
           })
+          const trial = await createTrial()
           const {
             trialSession,
             trialWorkerSession,
@@ -1487,6 +1490,25 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             trialAssistant,
             terminalOccurrence,
           } = trial
+          // One completed upstream step of the Trial worker, served by the
+          // Campaign's frozen model. The Trial's own assistant Message above
+          // was written by `test/test`, and that is deliberately not what the
+          // run records: the model fact is the ledger's, not the transcript's.
+          UsageLedger.record({
+            providerID: "provider",
+            modelID: "model",
+            purpose: "session",
+            tokens: { input: 60, output: 20, reasoning: 5, cache: { read: 0, write: 0 }, total: 80 },
+            costUSD: 1.25,
+            billing: { status: "priced" },
+            sessionID: trialWorkerSession.id,
+            agentID: "target-worker",
+          })
+          expect(await host.taskRuns.usage({ taskID: trialTaskID })).toEqual({
+            token_usage: 80,
+            cost: 1.25,
+            models: ["provider/model"],
+          })
           const collectorReceipt = JSON.parse(
             await collectRunEvidenceTool.execute(
               {
@@ -1516,19 +1538,67 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             trialProcessBinding.protocol === "task-native-process-binding-v2"
               ? trialProcessBinding.initial_tree_sha256
               : trialProcessBinding.workspace.initial_tree_sha256
-          const runArtifactPayload = {
-            case_id: "case-1",
-            arm: "baseline" as const,
-            repetition: 0,
+          // The Evaluator states only the Campaign slot; the publisher stamps
+          // every Trial fact from the collector, the Trial's usage ledger, and
+          // the sourced Campaign.
+          const runSlot = { case_id: "case-1", arm: "baseline" as const, repetition: 0 }
+          ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
+          await expect(
+            executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/run-evidence-bundle",
+                payload: runSlot,
+                resource_set: collectorResourceSet,
+                source_artifact_locators: [],
+              },
+              { host } as never,
+            ),
+          ).rejects.toThrow(
+            "run-evidence-bundle requires exactly one source: the exact campaign-spec Engine Artifact whose slot this Trial fills",
+          )
+          const runReceipt = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/run-evidence-bundle",
+                payload: runSlot,
+                resource_set: collectorResourceSet,
+                source_artifact_locators: [campaignReceipt.locator],
+              },
+              { host } as never,
+            ),
+          ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
+          sourceRunLocator = runReceipt.locator as EngineArtifactLocator
+          const readRunPayload = async (locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"]) =>
+            EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse(
+              EngineArtifactEnvelopeSchema.parse(
+                JSON.parse(
+                  (
+                    await host.engineArtifacts.read({
+                      locator,
+                      byte_offset: 0,
+                      max_bytes: 65_536,
+                      delivery: "inline",
+                    })
+                  ).chunk.text!,
+                ),
+              ).payload,
+            )
+          const stampedRun = {
+            ...runSlot,
             workspace_digest: trialInitialTreeSHA256,
             run_evidence_sha256: collectorReceipt.resource.sha256,
-            run_evidence_resource: collectorReceipt.resource,
+            run_evidence_resource: {
+              path: collectorReceipt.resource.path,
+              media_type: collectorReceipt.resource.media_type,
+              bytes: collectorReceipt.resource.bytes,
+              sha256: collectorReceipt.resource.sha256,
+            },
             task_id: trialTaskID,
             terminal_time: trialCompleted,
             model: "provider/model",
             environment_digest: environmentResource.sha256,
-            token_usage: 0,
-            cost: 0,
+            token_usage: 80,
+            cost: 1.25,
             last_activity_at: new Date(trialCompleted).toISOString(),
             outcome: "failure",
             activity_duration_ms: trialCompleted - trialStarted,
@@ -1540,30 +1610,127 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               runtime_snapshot: revision.package_digest,
             },
           }
-          ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
-          const runReceipt = JSON.parse(
-            await executePublishEvolutionArtifact(
-              {
-                artifact_type: "evolution-lab/run-evidence-bundle",
-                payload: runArtifactPayload,
-                resource_set: collectorResourceSet,
-                source_artifact_locators: [],
-              },
-              { host } as never,
-            ),
-          ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
-          sourceRunLocator = runReceipt.locator as EngineArtifactLocator
+          expect(await readRunPayload(runReceipt.locator)).toEqual(stampedRun)
           const mislabeledRunReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/run-evidence-bundle",
-                payload: { ...runArtifactPayload, arm: "candidate" },
+                payload: { ...runSlot, arm: "candidate" },
                 resource_set: collectorResourceSet,
-                source_artifact_locators: [],
+                source_artifact_locators: [campaignReceipt.locator],
               },
               { host } as never,
             ),
           ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
+          // A later recorded step without a price keeps the tokens and makes
+          // the cost unknown instead of pretending the unpriced step was free.
+          UsageLedger.record({
+            providerID: "provider",
+            modelID: "model",
+            purpose: "session",
+            tokens: { input: 15, output: 5, reasoning: 0, cache: { read: 0, write: 0 }, total: 20 },
+            costUSD: 0,
+            billing: { status: "unpriced" },
+            sessionID: trialWorkerSession.id,
+            agentID: "target-worker",
+          })
+          const unpricedRunReceipt = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/run-evidence-bundle",
+                payload: runSlot,
+                resource_set: collectorResourceSet,
+                source_artifact_locators: [campaignReceipt.locator],
+              },
+              { host } as never,
+            ),
+          ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
+          expect(await readRunPayload(unpricedRunReceipt.locator)).toEqual({
+            ...stampedRun,
+            token_usage: 100,
+            cost: null,
+          })
+          // A step served by a second model means this Trial did not run on
+          // one model, so it cannot fill a single-model Campaign slot at all.
+          UsageLedger.record({
+            providerID: "openai",
+            modelID: "gpt-5.6-luna",
+            purpose: "session",
+            tokens: { input: 10, output: 5, reasoning: 0, cache: { read: 0, write: 0 }, total: 15 },
+            costUSD: 0.5,
+            billing: { status: "priced" },
+            sessionID: trialWorkerSession.id,
+            agentID: "target-worker",
+          })
+          await expect(
+            executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/run-evidence-bundle",
+                payload: runSlot,
+                resource_set: collectorResourceSet,
+                source_artifact_locators: [campaignReceipt.locator],
+              },
+              { host } as never,
+            ),
+          ).rejects.toThrow(
+            'run-evidence-bundle requires the Trial\'s Provider usage ledger to record exactly one model; expected: one model, received: ["openai/gpt-5.6-luna","provider/model"].',
+          )
+          // A Trial served entirely by another model publishes that model, so
+          // the Campaign's frozen-model check now has something real to refuse.
+          // Workspace, environment, revision, case, and repetition all match
+          // the Campaign here; the model is the only differing identity.
+          const otherModelTrial = await createTrial()
+          UsageLedger.record({
+            providerID: "openai",
+            modelID: "gpt-5.6-luna",
+            purpose: "session",
+            tokens: { input: 40, output: 10, reasoning: 0, cache: { read: 0, write: 0 }, total: 50 },
+            costUSD: 0.75,
+            billing: { status: "priced" },
+            sessionID: otherModelTrial.trialWorkerSession.id,
+            agentID: "target-worker",
+          })
+          const otherModelCollectorReceipt = JSON.parse(
+            await collectRunEvidenceTool.execute(
+              {
+                task_id: otherModelTrial.trialTaskID,
+                terminal_occurrence: otherModelTrial.terminalOccurrence,
+                selected_messages: [],
+              },
+              { host } as never,
+            ),
+          ) as { resource_set: unknown }
+          const otherModelRunReceipt = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/run-evidence-bundle",
+                payload: runSlot,
+                resource_set: TaskArtifactResourceSetLocatorSchema.parse(otherModelCollectorReceipt.resource_set),
+                source_artifact_locators: [campaignReceipt.locator],
+              },
+              { host } as never,
+            ),
+          ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
+          expect(await readRunPayload(otherModelRunReceipt.locator)).toMatchObject({
+            task_id: otherModelTrial.trialTaskID,
+            model: "openai/gpt-5.6-luna",
+            environment_digest: environmentResource.sha256,
+            token_usage: 50,
+            cost: 0.75,
+          })
+          await expect(
+            executeEvolutionMetricsTool.execute(
+              {
+                campaign_spec_locator: campaignReceipt.locator,
+                candidate_revision_locator: null,
+                run_evidence_locator: otherModelRunReceipt.locator,
+                iteration: 0,
+                delivery_slice_revision_id: null,
+                visual_feedback_verification_artifact_locators: [],
+              },
+              { host } as never,
+            ),
+          ).rejects.toThrow("Trial execution identity differs from the frozen campaign inputs")
           await expect(
             executeEvolutionMetricsTool.execute(
               {
@@ -2113,7 +2280,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.26.1")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.26.2")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(
@@ -3145,39 +3312,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           },
           executionCapsuleBinding: await taskProcessBinding(evidenceOwnerTaskID, "d".repeat(64), completed + 1),
         })
-        const evidenceOwnerUserMessageID = "message-evidence-owner-user"
-        await Session.updateMessage({
-          id: evidenceOwnerUserMessageID,
-          sessionID: evidenceOwnerSession.id,
-          role: "user",
-          author: "user",
-          time: { created: completed + 1 },
-          agent: "user",
-          model: { providerID: "test", modelID: "test" },
-        })
-        // Producer Messages live on a child worker Session; a root Session
-        // carries the operator's user Messages only.
-        const evidenceOwnerWorkerSession = await Session.create({
-          kind: "assistant",
-          parentID: evidenceOwnerSession.id,
-          title: "Evolution evidence owner worker",
-        })
-        const evidenceOwnerMessageID = "message-evidence-owner-publisher"
-        await Session.updateMessage({
-          id: evidenceOwnerMessageID,
-          sessionID: evidenceOwnerWorkerSession.id,
-          role: "assistant",
-          author: "evolution-evaluator",
-          time: { created: completed + 1 },
-          parentID: evidenceOwnerUserMessageID,
-          modelID: "test",
-          providerID: "test",
-          agent: "evolution-evaluator",
-          path: { cwd: project.path, root: project.path },
-          cost: 0,
-          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-          finish: "stop",
-        })
         const evidenceOwnerExecution = createTaskArtifactStoreExecution({
           kind: "task",
           projectID: Instance.project.id,
@@ -3247,127 +3381,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           path: "run-evidence.json",
         })
         await evidenceOwnerExecution.close()
-
-        await Session.updatePart({
-          id: "part--step-evidence-owner-publisher",
-          sessionID: evidenceOwnerWorkerSession.id,
-          messageID: evidenceOwnerMessageID,
-          type: "step-start",
-        })
-        await Session.updatePart({
-          id: "part-evidence-owner-publisher",
-          sessionID: evidenceOwnerWorkerSession.id,
-          messageID: evidenceOwnerMessageID,
-          type: "tool",
-          callID: "call-evidence-owner-publisher",
-          tool: "publish-evolution-artifact",
-          state: { status: "running", input: {}, time: { start: Date.now() } },
-        })
-        const evidencePublisherScope = {
-          kind: "task" as const,
-          projectID: Instance.project.id,
-          projectDirectory: project.path,
-          taskID: evidenceOwnerTaskID,
-          taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, evidenceOwnerTaskID),
-          sessionID: evidenceOwnerWorkerSession.id,
-          messageID: evidenceOwnerMessageID,
-          toolCallID: "call-evidence-owner-publisher",
-          toolPartID: "part-evidence-owner-publisher",
-          executionSurface: {},
-          owner: {
-            kind: "projected-worker" as const,
-            expertSquadID: "evolution-lab",
-            packageRevision: {
-              scope: "built_in" as const,
-              projectID: null,
-              namespace: "builtin",
-              id: "evolution-lab",
-              version: "2026.08.06.1",
-              packageDigest: "d".repeat(64),
-            },
-            agentID: "evolution-evaluator",
-            projectionHash: "e".repeat(64),
-            workerTurnDescriptorID: "descriptor-evidence-owner-publisher",
-            workerTurnDescriptorHash: "f".repeat(64),
-          },
-        } satisfies TaskToolExecutionScope
-        const evidenceTerminalTime = evidence.terminal_occurrence.status === "failed"
-          ? evidence.terminal_occurrence.lifecycle.timeCompleted
-          : completed
-        const evidenceActivityDuration = evidence.task.time_started === null
-          ? null
-          : evidenceTerminalTime - evidence.task.time_started
-        await withTaskScopedPluginToolHost(evidencePublisherScope, async (host) => {
-          await expect(
-            executePublishEvolutionArtifact(
-              {
-                artifact_type: "evolution-lab/run-evidence-bundle",
-                payload: {
-                  case_id: "case-1",
-                  arm: "baseline",
-                  repetition: 0,
-                  workspace_digest: evidence.workspace_checkpoint.initial_tree_sha256,
-                  run_evidence_sha256: runEvidenceReceipt.resource.sha256,
-                  run_evidence_resource: runEvidenceReceipt.resource,
-                  task_id: taskID,
-                  terminal_time: evidenceTerminalTime,
-                  model: "provider/model",
-                  environment_digest: "a".repeat(64),
-                  token_usage: 0,
-                  cost: 0,
-                  last_activity_at: new Date(evidenceTerminalTime).toISOString(),
-                  outcome: "failure",
-                  activity_duration_ms: evidenceActivityDuration,
-                  revision_equality: {
-                    installed: "c".repeat(64),
-                    expected: "c".repeat(64),
-                    task_binding: "c".repeat(64),
-                    workflow_binding: "c".repeat(64),
-                    runtime_snapshot: "c".repeat(64),
-                  },
-                },
-                resource_set: runEvidenceResourceSet,
-                source_artifact_locators: [],
-              },
-              { host } as never,
-            ),
-          ).rejects.toBeInstanceOf(EvolutionArtifactIntegrityError)
-          const runArtifactReceipt = JSON.parse(
-            await executePublishEvolutionArtifact(
-              {
-                artifact_type: "evolution-lab/run-evidence-bundle",
-                payload: {
-                  case_id: "case-1",
-                  arm: "baseline",
-                  repetition: 0,
-                  workspace_digest: evidence.workspace_checkpoint.initial_tree_sha256,
-                  run_evidence_sha256: runEvidenceReceipt.resource.sha256,
-                  run_evidence_resource: runEvidenceReceipt.resource,
-                  task_id: taskID,
-                  terminal_time: evidenceTerminalTime,
-                  model: "provider/model",
-                  environment_digest: "a".repeat(64),
-                  token_usage: 0,
-                  cost: 0,
-                  last_activity_at: new Date(evidenceTerminalTime).toISOString(),
-                  outcome: "failure",
-                  activity_duration_ms: evidenceActivityDuration,
-                  revision_equality: {
-                    installed: "a".repeat(64),
-                    expected: "a".repeat(64),
-                    task_binding: "a".repeat(64),
-                    workflow_binding: "a".repeat(64),
-                    runtime_snapshot: "a".repeat(64),
-                  },
-                },
-                resource_set: runEvidenceResourceSet,
-                source_artifact_locators: [],
-              },
-              { host } as never,
-            ),
-          ) as { artifact_type: string }
-          expect(runArtifactReceipt.artifact_type).toBe("evolution-lab/run-evidence-bundle")
-        })
 
         Database.transaction((db) => {
           writeTaskUpdateInTransaction({

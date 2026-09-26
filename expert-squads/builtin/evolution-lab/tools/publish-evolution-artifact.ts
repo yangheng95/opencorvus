@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto"
 import {
   ArtifactReadLocatorSchema,
   EngineArtifactEnvelopeSchema,
@@ -25,6 +24,7 @@ import {
   EvolutionEvaluationResultPublishInputSchema,
   EvolutionMetricReceiptSchema,
   EvolutionPackagePublishableArtifactInputSchema,
+  EvolutionRunEvidencePublishInputSchema,
   parseEvolutionArtifact,
 } from "../lib/evolution-lab/artifacts"
 import { candidateMutableTextPaths, compareCandidateIntegrity } from "../lib/evolution-lab/candidate-integrity"
@@ -41,13 +41,6 @@ function resourceIdentity(resource: { path: string; media_type: string; bytes: n
     bytes: resource.bytes,
     sha256: resource.sha256,
   }
-}
-
-function sameResourceIdentity(
-  resource: { path: string; media_type: string; bytes: number; sha256: string },
-  identity: { path: string; media_type: string; bytes: number; sha256: string },
-) {
-  return sameJSON(resourceIdentity(resource), identity)
 }
 
 function canonicalResourceIdentitySet(
@@ -417,7 +410,9 @@ export default tool({
             ? EvolutionCandidateRevisionPublishInputSchema.parse(publication.payload)
             : artifact_type === "evolution-lab/evaluation-result"
               ? EvolutionEvaluationResultPublishInputSchema.parse(publication.payload)
-              : parseEvolutionArtifact(artifact_type, publication.payload)
+              : artifact_type === "evolution-lab/run-evidence-bundle"
+                ? EvolutionRunEvidencePublishInputSchema.parse(publication.payload)
+                : parseEvolutionArtifact(artifact_type, publication.payload)
     if (artifact_type === "evolution-lab/candidate-revision") {
       const candidatePayload = EvolutionCandidateRevisionPublishInputSchema.parse(payload)
       const campaignLocator = candidatePayload.development_campaign_locator
@@ -539,14 +534,30 @@ export default tool({
       ]
     }
     if (artifact_type === "evolution-lab/run-evidence-bundle") {
-      const resourceIdentityClaim = (payload as { run_evidence_resource: ReturnType<typeof resourceIdentity> })
-        .run_evidence_resource
-      const resource = resources.find((candidate) => sameResourceIdentity(candidate, resourceIdentityClaim))
-      if (resources.length !== 1 || !resource) {
+      // The Evaluator names the slot; every other field is stamped here from
+      // the facts that own it. Nothing it could restate would verify anything.
+      const slot = EvolutionRunEvidencePublishInputSchema.parse(payload)
+      const campaignLocator = publication.source_artifact_locators[0]
+      if (publication.source_artifact_locators.length !== 1 || campaignLocator?.source !== "engine_artifact")
         throw new EvolutionArtifactIntegrityError(
-          "run-evidence-bundle resource set does not contain its exact collector resource",
+          "run-evidence-bundle requires exactly one source: the exact campaign-spec Engine Artifact whose slot this Trial fills",
         )
-      }
+      const campaignEnvelope = await readEngineArtifactEnvelope(
+        campaignLocator,
+        context,
+        "Frozen Campaign whose slot this Trial run fills",
+      )
+      if (campaignEnvelope.artifact_type !== "evolution-lab/campaign-spec")
+        throw new EvolutionArtifactIntegrityError(
+          `run-evidence-bundle source must identify an evolution-lab/campaign-spec Artifact; received ${campaignEnvelope.artifact_type}`,
+        )
+      requireEvolutionWorkerProducer(campaignEnvelope, "evolution-experiment-planner")
+      const campaign = EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(campaignEnvelope.payload)
+      const resource = resources[0]
+      if (resources.length !== 1 || !resource || resource.media_type !== "application/json")
+        throw new EvolutionArtifactIntegrityError(
+          "run-evidence-bundle resource set must contain exactly the one JSON resource published by collect-run-evidence",
+        )
       const bytes = await context.host.taskArtifacts.read(resource)
       const text = new TextDecoder("utf-8", { fatal: true }).decode(bytes)
       const bundle = TaskRunEvidenceBundleSchema.parse(JSON.parse(text))
@@ -562,28 +573,39 @@ export default tool({
       })
       if (canonicalTaskRunEvidenceJSON(recollected) !== text)
         throw new EvolutionArtifactIntegrityError(
-          "run-evidence-bundle does not equal a fresh collection of authoritative Task facts",
+          "run-evidence-bundle resource no longer equals a fresh collection of authoritative Task facts " +
+            `(resource canonical_sha256 ${bundle.canonical_sha256}, fresh canonical_sha256 ${recollected.canonical_sha256}); ` +
+            "collect this run again and publish the new collector resource",
         )
-      const { canonical_sha256: recordedCanonicalSHA256, ...semantic } = bundle
-      const derivedCanonicalSHA256 = createHash("sha256").update(canonicalTaskRunEvidenceJSON(semantic)).digest("hex")
-      const runPayload = payload as {
-        run_evidence_sha256: string
-        workspace_digest: string
-        task_id: string
-        terminal_time: number
+      const usage = await context.host.taskRuns.usage({ taskID: bundle.task.id })
+      const model = usage.models.length === 1 ? usage.models[0] : undefined
+      if (!model)
+        throw new EvolutionArtifactIntegrityError(
+          "run-evidence-bundle requires the Trial's Provider usage ledger to record exactly one model; " +
+            `expected: one model, received: ${JSON.stringify(usage.models)}. ` +
+            "This Trial is not a single-model Campaign run, so its slot has no publishable run evidence.",
+        )
+      const facts = bundle.revision_facts
+      const runtimeDigests = [...new Set(facts.runtime_snapshot_digests)]
+      const revisionFacts = {
+        installed: facts.installed_resolved_digest,
+        expected: facts.creation_expected_digest,
+        task_binding: facts.task_binding_digest,
+        workflow_binding: facts.workflow_binding_digest,
+        runtime_snapshot: runtimeDigests,
       }
-      const claimedRevisions = (
-        payload as {
-          revision_equality: {
-            installed: string
-            expected: string
-            task_binding: string
-            workflow_binding: string
-            runtime_snapshot: string
-          }
-        }
-      ).revision_equality
-      const runtimeDigests = bundle.revision_facts.runtime_snapshot_digests
+      const revision = facts.installed_resolved_digest
+      if (
+        facts.creation_expected_digest !== revision ||
+        facts.task_binding_digest !== revision ||
+        facts.workflow_binding_digest !== revision ||
+        runtimeDigests.length !== 1 ||
+        runtimeDigests[0] !== revision
+      )
+        throw new EvolutionArtifactIntegrityError(
+          "run-evidence-bundle requires one Trial package revision across installed, expected, Task binding, " +
+            `workflow binding, and every runtime snapshot; received: ${JSON.stringify(revisionFacts)}`,
+        )
       const terminalTime =
         bundle.terminal_occurrence.status === "inactive"
           ? bundle.terminal_occurrence.last_activity.time_updated
@@ -600,28 +622,30 @@ export default tool({
         bundle.task.time_started === null || terminalTime < bundle.task.time_started
           ? null
           : terminalTime - bundle.task.time_started
-      if (
-        derivedCanonicalSHA256 !== recordedCanonicalSHA256 ||
-        resource.sha256 !== runPayload.run_evidence_sha256 ||
-        bundle.workspace_checkpoint.initial_tree_sha256 !== runPayload.workspace_digest ||
-        bundle.task.id !== runPayload.task_id ||
-        terminalTime !== runPayload.terminal_time ||
-        (payload as { outcome: string }).outcome !== outcome ||
-        (payload as { activity_duration_ms: number | null }).activity_duration_ms !== activityDuration ||
-        bundle.revision_facts.workflow_binding_digest === null ||
-        bundle.revision_facts.creation_expected_digest === null ||
-        runtimeDigests.length === 0 ||
-        runtimeDigests.some((digest) => digest !== runtimeDigests[0]) ||
-        claimedRevisions.installed !== bundle.revision_facts.installed_resolved_digest ||
-        claimedRevisions.expected !== bundle.revision_facts.creation_expected_digest ||
-        claimedRevisions.task_binding !== bundle.revision_facts.task_binding_digest ||
-        claimedRevisions.workflow_binding !== bundle.revision_facts.workflow_binding_digest ||
-        claimedRevisions.runtime_snapshot !== runtimeDigests[0]
-      ) {
-        throw new EvolutionArtifactIntegrityError(
-          "run-evidence-bundle does not match its canonical collector and package revision facts",
-        )
-      }
+      payload = EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse({
+        case_id: slot.case_id,
+        arm: slot.arm,
+        repetition: slot.repetition,
+        workspace_digest: bundle.workspace_checkpoint.initial_tree_sha256,
+        run_evidence_sha256: resource.sha256,
+        run_evidence_resource: resourceIdentity(resource),
+        task_id: bundle.task.id,
+        terminal_time: terminalTime,
+        model,
+        environment_digest: campaign.environment_digest,
+        token_usage: usage.token_usage,
+        cost: usage.cost,
+        last_activity_at: new Date(terminalTime).toISOString(),
+        outcome,
+        activity_duration_ms: activityDuration,
+        revision_equality: {
+          installed: revision,
+          expected: revision,
+          task_binding: revision,
+          workflow_binding: revision,
+          runtime_snapshot: revision,
+        },
+      })
     }
     if (artifact_type === "evolution-lab/integrity-review") {
       const review = EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(payload)

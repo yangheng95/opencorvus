@@ -281,6 +281,23 @@ export const TaskRunEvidenceBundleSchema = z
 export type TaskRunEvidenceCollectInput = z.infer<typeof TaskRunEvidenceCollectInputSchema>
 export type TaskRunEvidenceBundle = z.infer<typeof TaskRunEvidenceBundleSchema>
 
+/**
+ * The Trial's own Provider usage, read from the local request ledger for the
+ * Task's Session tree. The ledger records one row per completed upstream step,
+ * so an interrupted step leaves no row: this is recorded usage, not an invoice.
+ * `cost` is the request-time USD estimate and is null unless at least one step
+ * was recorded and every recorded step was priced. `models` lists each exact
+ * `provider/model` that served a recorded step, sorted and without repeats.
+ */
+export const TaskRunUsageObservationSchema = z
+  .object({
+    token_usage: z.number().int().nonnegative(),
+    cost: z.number().nonnegative().nullable(),
+    models: z.array(z.string().min(1)),
+  })
+  .strict()
+export type TaskRunUsageObservation = z.infer<typeof TaskRunUsageObservationSchema>
+
 export function canonicalTaskRunEvidenceJSON(value: unknown): string {
   if (value === null || typeof value === "boolean" || typeof value === "string") return JSON.stringify(value)
   if (typeof value === "number" && Number.isFinite(value)) return JSON.stringify(value)
@@ -298,4 +315,5 @@ export function canonicalTaskRunEvidenceJSON(value: unknown): string {
 
 export type TaskRunEvidenceHost = Readonly<{
   collect(input: TaskRunEvidenceCollectInput): Promise<TaskRunEvidenceBundle>
+  usage(input: { taskID: string }): Promise<TaskRunUsageObservation>
 }>

@@ -94,8 +94,8 @@ function exactEvidence(values: readonly ArtifactLocator[]) {
   return [...entries.entries()].toSorted(([left], [right]) => left.localeCompare(right)).map(([, value]) => value)
 }
 
-function averageByArm(runs: readonly RunEvidence[], arm: "baseline" | "candidate", field: "cost" | "token_usage") {
-  return mean(runs.filter((run) => run.arm === arm).map((run) => run[field]))
+function averageByArm(runs: readonly RunEvidence[], arm: "baseline" | "candidate") {
+  return mean(runs.filter((run) => run.arm === arm).map((run) => run.token_usage))
 }
 
 type ExpectedSlot = { caseID: string; arm: "baseline" | "candidate"; repetition: number; key: string }
@@ -325,11 +325,13 @@ export function deriveComparisonRecommendation(input: {
 
   const completeRuns = expectedSlots.map((slot) => runs.get(slot.key)).filter((run): run is RunEvidence => Boolean(run))
   const runCountsComplete = completeRuns.length === expectedSlots.length
-  const costDelta = runCountsComplete
-    ? averageByArm(completeRuns, "candidate", "cost") - averageByArm(completeRuns, "baseline", "cost")
+  const costsComplete = runCountsComplete && completeRuns.every((run) => run.cost !== null)
+  const costDelta = costsComplete
+    ? mean(completeRuns.filter((run) => run.arm === "candidate").map((run) => run.cost!)) -
+      mean(completeRuns.filter((run) => run.arm === "baseline").map((run) => run.cost!))
     : null
   const tokenDelta = runCountsComplete
-    ? averageByArm(completeRuns, "candidate", "token_usage") - averageByArm(completeRuns, "baseline", "token_usage")
+    ? averageByArm(completeRuns, "candidate") - averageByArm(completeRuns, "baseline")
     : null
   const activityComplete = runCountsComplete && completeRuns.every((run) => run.activity_duration_ms !== null)
   const activityDurationDelta = activityComplete

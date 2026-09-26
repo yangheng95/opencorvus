@@ -18,7 +18,7 @@ import {
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { createTaskArtifactStoreExecution } from "@/task-artifact/store"
 import type { TaskToolExecutionScope } from "@/tool/task-tool-execution-scope"
-import { collectTaskRunEvidence } from "@/tool/task-run-evidence-host"
+import { collectTaskRunEvidence, collectTaskRunUsage } from "@/tool/task-run-evidence-host"
 import { createExpertSquadPackageHost } from "@/tool/expert-squad-package-host"
 import { createMetricEvaluationHost } from "@/tool/metric-evaluation-host"
 import { createPluginToolFilesHost } from "@/tool/plugin-tool-files-host"
@@ -371,6 +371,10 @@ export async function withTaskScopedPluginToolHost<T>(
             projectID: scope.projectID,
             request,
           }),
+        ),
+      usage: (request) =>
+        trackArtifactOperation(() =>
+          collectTaskRunUsage({ projectID: scope.projectID, taskID: request.taskID }),
         ),
     }),
     expertSquadPackages: createExpertSquadPackageHost(execution, scope),

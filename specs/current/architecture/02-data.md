@@ -263,6 +263,14 @@ attribution 的唯一 source provenance 与 payload owner evidence 时，把两�
 canonical predecessor pair；Campaign 自身仍只持久化当前 Task locator。错配 pair 返回同一 typed
 integrity error，不允许模型引用 source-Task locator、改写 imported payload 或重发 attribution。
 
+`run-evidence-bundle` 的模型面输入只有 Evaluator 选择的 Campaign 槽位（`case_id`、`arm`、`repetition`），
+publication 以唯一一份 campaign-spec 为 source、以 collector 的唯一 JSON 资源为 resource set。publisher
+要求该资源等于对同一 Trial 的新鲜采集，再盖章 Task、终态时间、outcome、活动时长、workspace 与五项
+package revision；从该 Trial 的 `provider_usage_event` 盖章已记录 token、cost（null 表示未知）与唯一
+服务模型；从所引 Campaign 盖章 environment。账本记录的模型不是恰好一个、或 revision 事实不一致时，
+返回写出实际值的 typed integrity error，该槽位没有可发布的运行证据。比较与度量工具的冻结模型检查
+因此比较的是实际服务模型；Evaluator 不复述任何宿主事实。
+
 Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 metrics store：
 `engine_metric_spec`、`engine_metric_result` 和 `engine_iteration` 的唯一直接表写入文件
 是 `metrics/store.ts`。任务、agent、engine 或 UI 层不得直接写这些 metrics 表。

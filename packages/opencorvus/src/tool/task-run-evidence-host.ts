@@ -3,9 +3,11 @@ import z from "zod"
 import {
   TaskRunEvidenceBundleSchema,
   TaskRunEvidenceCollectInputSchema,
+  TaskRunUsageObservationSchema,
   canonicalTaskRunEvidenceJSON,
   type TaskRunEvidenceBundle,
   type TaskRunEvidenceCollectInput,
+  type TaskRunUsageObservation,
 } from "@opencorvus-ai/plugin"
 import { asc, Database, eq, inArray } from "@/storage/db"
 import { EngineArtifactVersionTable, EngineTaskTable } from "@/engine/engine.sql"
@@ -14,6 +16,7 @@ import { Event } from "@/engine/model"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
 import { resolveTerminalLifecycleReference, terminalLifecycleReferenceMatchesTaskRow } from "@/engine/terminal-lifecycle-reference"
 import { WorkerTurnDescriptorTable } from "@/session/session.sql"
+import { ProviderUsageEventTable } from "@/usage/usage.sql"
 import { withTaskArtifactSnapshotCatalog } from "@/task-artifact/store"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { TaskPackageRevisionBindingPayloadSchema } from "@/engine/task-package-revision-binding"
@@ -60,6 +63,44 @@ function checkpointFact(taskID: string, checkpointInput: unknown, stage: "baseli
   const root = repositories.find((repository) => repository.path === ".")
   if (!root) throw new Error(`Task ${taskID} ${stage} checkpoint has no initialized root repository`)
   return { commit: root.commit, tree: root.tree, repositories }
+}
+
+/**
+ * Recorded Provider usage of one Trial Task, from the one usage ledger.
+ *
+ * The Session set is the Task's durable activity scope, the same set the run
+ * evidence bundle attests, so usage outside that tree (preflight probes, the
+ * coordinating Mission) is never charged to the Trial. Rows are summed in
+ * ledger order so a repeated observation yields the identical floating-point
+ * cost.
+ */
+export async function collectTaskRunUsage(input: {
+  projectID: string
+  taskID: string
+}): Promise<TaskRunUsageObservation> {
+  return Database.transaction((db) => {
+    const persistedTask = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get()
+    if (!persistedTask || persistedTask.project_id !== input.projectID) {
+      throw new Error(`Task ${input.taskID} is not owned by Project ${input.projectID}`)
+    }
+    const task = projectTaskRowInTransaction(db, persistedTask)
+    const sessionIDs = readTaskDurableActivityScope(db, task).sessions.map((session) => session.id)
+    const events = sessionIDs.length === 0
+      ? []
+      : db.select().from(ProviderUsageEventTable)
+          .where(inArray(ProviderUsageEventTable.session_id, sessionIDs))
+          .orderBy(asc(ProviderUsageEventTable.occurred_at), asc(ProviderUsageEventTable.id))
+          .all()
+    return TaskRunUsageObservationSchema.parse({
+      token_usage: events.reduce((total, event) => total + event.total_tokens, 0),
+      // An empty ledger has no priced step to sum; reporting 0 would state a
+      // price that was never observed.
+      cost: events.length > 0 && events.every((event) => event.billing_status === "priced")
+        ? events.reduce((total, event) => total + event.cost_usd, 0)
+        : null,
+      models: [...new Set(events.map((event) => `${event.provider_id}/${event.model_id}`))].toSorted(),
+    })
+  })
 }
 
 export async function collectTaskRunEvidence(input: {
