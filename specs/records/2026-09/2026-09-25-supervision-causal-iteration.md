@@ -1098,3 +1098,29 @@
 - 支持范围明确为当前Evaluator可读取Git对象的单根regular文件树；独立Git对象库的跨Project端到端导入未验证、也未新增对象运输。缺对象和不支持的tree形态明确unavailable。副本供本次评分调用执行，非操作系统沙箱；未证明任意shell scorer之间的副作用隔离。旧collector/attempt/receipt原件不改，未推广任何用户项目包。G41错误已修，业务可靠纠错和真实进化收益仍未达成。
 - Evolution Lab源/嵌入为2026.09.27.5，最终contentDigest `3794f61310a631b9be4ee04615b5c1b590fba6621c0ef70d8513fd43736c0a58`；真实loader身份通过，只更新该包，未夹带base漂移。类型8项、docs342ops25groups、API6规则34文件、包拓扑122/135通过；原始日志g43-codex-types-final.log/docs.log/api.log/topology.log。完整待推送集合与真实pre-push在范围提交后按原流程核验，尚不预写成功。
 - 下一机制问题仍为不同payload Run/Evaluation完整集合与合法后续观察，不能把本轮subject修复当全集修复。旧G31半成品不应用、旧业务实验不恢复；Opus07:45后恢复时应先读本结果而非重做G43。
+
+## G44：完整测量集合之前的回执事实权威复核
+
+### Recall、影响面与有界原路径检查
+
+- 从已push的bc76455a与干净工作区继续，先重读AGENTS、Recall/五段图/G40–G43、02-data及2026-08-17测量/Review所有权拆分。沿publisher、comparison、measurement alias resolver、promotion freshness、跨Task import、collector、metric store/receipt搜定义与调用。没有模型或旧实验；继续遵守已授权本地真实Checker和07:45以后Opus交接。
+- G40–G43并未消除已知集合缺口：Run无独立Campaign字段，来源并集不是唯一归属；Evaluation有exactCampaign/Run，但其不同观察没有合法取代语义。不能简单把全部目录Run或所有后续Evaluation强制混入一个slot，导致无关观察混用或永久冲突。原2026-08-17只规定每slot单一测量，不提供任意测量重做择优权限；此边界保持，不靠新字段/关键词猜业务。
+- 本轮全仓查到一个先验需要反证的精确点：Evaluation publisher解析唯一receipt JSON并盖章其scorers，但当前没有调用原engine_metric_result账本或读取所引attempt核对；execute-evolution-metrics确实产生真实receipt，然而TaskArtifact publish也能接收其它新JSON。不可变只证明发布后字节不变，不自动证明这些字节出自评分器。现阶段仅为代码线索，不能称模型曾伪造/所有分数错误，也不能以此假设给测量加修订。
+- 有界真实Host探针：沿G43现有实际shell=1→attempt→receipt链，另创建一个全新的测试驱动receipt资源，保持同Trial/Campaign/Run和真实attempt locator，仅将scorer value声明为0；调用原公开Evaluation publisher并读取实际持久化值。所有原receipt/attempt不改；检查publisher是否拒绝或接受矛盾事实。若证实接受，则应把score事实回接原唯一metric result/attempt权威，而不是增加业务金额gate、重跑评分、修改旧Evaluation或另建ledger。临时探针与原文件差异先保存，结果后决定单一实现；无外部Provider费用。
+
+### G44原版实际反例与实施决定
+
+- 真实Host原路径9项135断言完成，g44-receipt-authority-probe.json/log/patch保留；actual attempt=1、原receipt=1，另行发布的新receipt声称0但引用同一原attempt，原Evaluation publisher接受并持久化scorers.value=0（Artifact art_heb2L6iYlIaVQvqZFfft）。原attempt/receipt未改。此处是可实际发布矛盾测量事实，不是猜测模型会抄错、不代表已观察到自主模型欺骗或实际晋升。临时测试差异已保存并精确恢复为bc76455a。
+- 根因在事实权威边界：publisher只确认receipt字节不可变/形状合法，没证明其中分数和evidence属于真实metric执行。此前“已从immutable receipt盖章，因此模型不能改分”的结论必须收窄。G43修评分对象没有解决评分结果重写运输；补全这种不可靠集合会把伪测量和真实测量一同传播，故先修此确切根因，不新增测量修订/重跑权限。
+- 单一实现：原metrics store增加按当前评分owner Task与exact evidence_ref读取已持久结果，沿原MetricSpec和原attempt校验identity/status/value；公开package Host metrics增加只读recorded observation接口，读回Task/iteration/scorer revision/原Trial subject与measured或unavailable事实。没有第二ledger、签名旁路或业务评分判断；所有数值仍由原executor和engine_metric_result拥有。未落账/非当前owner的独立JSON不能冒充结果，原历史字节不改。
+- Evaluation publisher对每项receipt使用这个原生读取入口，并将原Run/Trial/collector、冻结Campaign scorer集合/revision与实际observation关联；原receipt若与原生事实不一致，给明确integrity error，不替换分值后保留一份自相矛盾的receipt。正常receipt继续盖章，原同receipt发布别名保持，导入后重新评分仍走当前owner。已有Evaluation跨Task导入读取不重写；这不承诺把任意独立导入的原receipt重发为新的测量。
+- 同路径还发现typed unavailable运输待验点：Host outcomes.results也含raw_value=null的已落账不可用行，而package execute-evolution-metrics先按results当measured，可能在读取unavailable之前抛错。先按实际接口与正向测试验证并将唯一状态映射复用，不能把null当0或更换scorer。
+- 验收：真实Host正确receipt→同值发布；声明改分/替换未落账attempt→精确错误；真实inactive shell产生unavailable可经package receipt发布且精确read回；同Task异subject/Trial/scorer与owner隔离；聚焦runtime/Host、源嵌入/类型/docs/prepush。无HTTP/DDL/UI改动。Lab提升一个尚未发布版本，旧@1对象仍只读，不将本修复称完整Run/Evaluation全集或进化收益。
+
+### G44实现、验收与仍未满足项
+
+- 生产修复已实现：metrics.recorded沿当前Task+exact evidence_ref读取唯一原engine_metric_result，并读原MetricSpec及不可变attempt核对Task/spec/iteration/status/value，再返回原Trial subject/scorer revision及typed outcome。没有模型填写结果的第二事实源或新的ledger。Evolution执行与发布通过新metric-context.ts共用已有Campaign/Run身份检查及recorded scorer投影；旧工具内重复逻辑移出，未保留备用路径。publisher对receipt完整scorer集合、slot、Trial/collector、scorer revision和数值状态逐值一致性检查；历史原件不改。
+- 真实Host9项141断言通过（.tmp/g44-host-final.log），覆盖：真实shell=1正常发布/别名；另写receipt=0→明确recorded observation错误；另写匹配score=0的attempt JSON而没有DB结果→found0错误；错误Trial ID→exact Trial/slot错误；另一Task借原评分ref→owner域found0；新本地fixture Trial的冻结输出是非数值文本，原shell实际返回后给parse_failed，经真实execute-evolution-metrics→receipt→Evaluation发布保留unavailable。此为确定性测试驱动，不是新业务模型实验或收费Trial。
+- Metric runtime6项53断言、完整包投影1项40断言通过（g44-focused-tests.log对应两文件exit0；该log的首轮Host仍含失败）。合计16项234断言。初次新测试把复制ref按非canonical属性序写入receipt，先被原canonical检查拒绝；修正fixture为原schema序后实际到达DB权威错误。新增公共helper使两份精确包文件清单断言过期，按真实当前inventory同步后通过。错误日志保留，没有放宽原canonical/冻结文件或身份校验。
+- 源/嵌入Lab2026.09.27.6、contentDigest1db936231f4b13655508e3fea8933818822cc6e63612c23b7ddaba034d1064d1，单一生成器只同步Lab。类型8项、docs342ops25groups、API6规则34文件、包拓扑122/135和diff通过，g44-types/docs/api/topology/package-sync.log保留。无HTTP/DDL/SDK响应变化、无UI自动化或Provider费用，未安装推广项目包；范围提交后再按完整outgoing与pre-push核验推送。
+- 本修复证明新Evaluation数值来自记录过的真实评分，并不保证比较已包含所有真实测量。仍可能在同subject的多次metric执行间选择或拼接已真实记录的attempt；receipt目前没有独立“同一执行发生”的完整集合身份，只有native observation的iteration/owner和各资源来源。下一步应先沿原Tool Part/TaskArtifact producer/metric结果的真实发生关系审查，不凭时间最新、iteration等同Trial或引用数来补洞；需真实反例再决定单一来源，不先加新ledger或随意测量修订。不同Run的Campaign归属与未公开Trial全集同样尚未解决。整体业务可靠纠错/真实进化收益未达成，Opus恢复先读本结果。

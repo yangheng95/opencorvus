@@ -161,6 +161,17 @@ export function readResultsForIteration(taskID: string, iteration: number): Metr
   return rows.map((row) => MetricResult.parse({ ...row, evidence_ref: JSON.parse(row.evidence_ref) }))
 }
 
+export function readRecordedMetricResult(taskID: string, evidence: TaskArtifactRef): MetricResult {
+  const rows = Database.use((db) => db.select().from(EngineMetricResultTable).where(and(
+    eq(EngineMetricResultTable.task_id, taskID),
+    eq(EngineMetricResultTable.evidence_ref, canonicalMetricJSON(evidence)),
+  )).all())
+  if (rows.length !== 1) {
+    throw new Error(`Metric evidence must identify exactly one recorded result in Task ${taskID}; found ${rows.length}`)
+  }
+  return MetricResult.parse({ ...rows[0], evidence_ref: JSON.parse(rows[0]!.evidence_ref) })
+}
+
 // ---------------------------------------------------------------------------
 // Internal validators
 // ---------------------------------------------------------------------------

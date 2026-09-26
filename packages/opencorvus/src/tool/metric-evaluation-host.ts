@@ -2,6 +2,7 @@ import { createHash } from "node:crypto"
 import {
   MetricEvaluationOutcomeSchema,
   MetricEvaluationRequestSchema,
+  MetricRecordedObservationSchema,
   TaskRunEvidenceBundleSchema,
   canonicalTaskRunEvidenceJSON,
   type MetricEvaluationHost,
@@ -11,7 +12,8 @@ import {
 import { readTaskArtifact } from "@/artifact-catalog"
 import { executeMetrics, type MetricSubject, type MetricSubjectWorkspace } from "@/metrics/executor"
 import { canonicalMetricJSON } from "@/metrics/canonical-json"
-import { readSpecsForTask, registerBaselineSpec } from "@/metrics/store"
+import { readSpecsForTask, registerBaselineSpec, readRecordedMetricResult } from "@/metrics/store"
+import { MetricExecutionEvidence } from "@/metrics/types"
 import {
   TaskArtifactGitCommitUnavailableError,
   type TaskArtifactStoreExecution,
@@ -143,6 +145,28 @@ export function createMetricEvaluationHost(
   taskArtifacts: MetricTaskArtifacts,
 ): MetricEvaluationHost {
   return Object.freeze({
+    async recorded(input) {
+      const row = readRecordedMetricResult(scope.taskID, input.evidence_ref)
+      const attempt = MetricExecutionEvidence.parse(JSON.parse(
+        new TextDecoder("utf-8", { fatal: true }).decode(await taskArtifacts.read(row.evidence_ref)),
+      ))
+      const spec = readSpecsForTask(scope.taskID).find((item) => item.id === row.metric_spec_id)
+      if (!spec || attempt.task_id !== row.task_id || attempt.metric_spec_id !== row.metric_spec_id ||
+          attempt.iteration !== row.iteration || attempt.evaluator_kind !== spec.evaluator_kind ||
+          row.evidence_fresh !== (attempt.status === "measured") ||
+          row.raw_value !== (attempt.status === "measured" ? attempt.raw_value : null)) {
+        throw new Error("Recorded metric result and its immutable attempt have inconsistent identities or values")
+      }
+      return MetricRecordedObservationSchema.parse({
+        task_id: row.task_id, iteration: row.iteration, scorer_id: spec.name,
+        scorer_revision: spec.evaluator_config.scorer_revision,
+        subject: attempt.subject.resource, trial_task_id: attempt.subject.trial_task_id,
+        evidence_ref: row.evidence_ref,
+        outcome: attempt.status === "measured"
+          ? { status: "measured", value: row.raw_value }
+          : { status: "unavailable", reason_code: attempt.reason_code },
+      })
+    },
     async evaluate(rawInput) {
       const input = MetricEvaluationRequestSchema.parse(rawInput)
       const subject = await readMetricSubject(taskArtifacts, input.subject)

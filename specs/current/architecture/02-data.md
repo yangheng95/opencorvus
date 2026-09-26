@@ -289,6 +289,16 @@ Host精确读取canonical bundle，shell按其terminal Git commit/tree在本次�
 冻结spec读取经唯一MetricSpec schema解析，数据库更新时间不是评分定义；同定义可复用，
 真实定义变化仍按原冻结契约拒绝。
 
+Evaluation receipt JSON是测量结果的运输形式，其不可变身份不单独证明测量来源。
+`metrics.recorded`按当前评分owner Task和确切attempt资源，在原`engine_metric_result`读取
+已记录结果，核对原MetricSpec与attempt的Task、iteration、status/value，返回原Trial subject及
+measured/unavailable事实。未落账的独立JSON或另一Task的结果不能作为当前Task的新测量。
+Evolution执行与发布共用原Campaign/Run上下文和同一recorded结果投影；publisher要求receipt的
+slot、Trial、subject、完整冻结scorer集合/revision及声明结果与原生事实一致，再发布Evaluation。
+unavailable先按其真实状态运输，不把raw_value=null解释为measured或0。已有跨Task Evaluation
+导入保持原件，新Task重新评分仍归其自身账本。此约束不证明全部Trial已公开，也不解决从多次
+真实metric执行选择或拼接观察的完整性；没有重写旧回执或新增测量ledger。
+
 `comparison-recommendation` 的模型面 payload 是空对象；Recommendation Owner 选择并完整读取
 Campaign、Candidate、Run、Evaluation 直接来源；Review 不由它选择子集。publisher在一次冻结
 Task catalog分页内发现并完整读取这些确切Evaluation的全部Review，再经唯一比较器生成并持久化

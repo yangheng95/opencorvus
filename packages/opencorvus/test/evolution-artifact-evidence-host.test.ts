@@ -36,7 +36,7 @@ import {
   TaskRunEvidenceBundleSchema,
   canonicalWorkspaceTreeJSON,
 } from "@opencorvus-ai/plugin"
-import type { ArtifactReadLocator, EngineArtifactLocator, MetricEvaluationRequest } from "@opencorvus-ai/plugin"
+import type { ArtifactReadLocator, EngineArtifactLocator, MetricEvaluationRequest, TaskArtifactRef } from "@opencorvus-ai/plugin"
 import {
   createTaskArtifactStoreExecution,
   publishTaskArtifactProjectFiles,
@@ -47,6 +47,7 @@ import type { TaskToolExecutionScope } from "../src/tool/task-tool-execution-sco
 import {
   EvolutionArtifactIntegrityError,
   EvolutionMetricIdentityError,
+  EvolutionMetricReceiptSchema,
   EvolutionArtifactSchemas,
   EvolutionPackagePublishableArtifactInputSchema,
 } from "@squads/evolution-lab/lib/evolution-lab/artifacts"
@@ -902,6 +903,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         let sourceAttributionLocator!: EngineArtifactLocator
         let sourceCampaignLocator!: EngineArtifactLocator
         let sourceRunLocator!: EngineArtifactLocator
+        let sourceMetricEvidence!: TaskArtifactRef
         let sourceOpportunityInput!: Record<string, unknown>
         let sourceCampaignInput!: Record<string, unknown>
         let subjectMaterialization = ""
@@ -1321,7 +1323,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ).trial_execution,
           ).toEqual({ status: "unavailable", reason_code: "product_release_required" })
           // Each call creates one independent terminal baseline Trial Task.
-          const createTrial = () =>
+          const createTrial = (marker = "1") =>
             Instance.provide({
               directory: trialWorktree.directory,
               fn: async () => {
@@ -1364,7 +1366,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 const trialBaseline = await EngineGit.prepare(requireTask(trialTaskID))
                 if (trialBaseline.error) throw new Error(trialBaseline.error)
                 // The Trial's own work, committed by its terminal checkpoint.
-                await writeFile(path.join(trialWorktree.directory, "g43-subject.txt"), "1")
+                await writeFile(path.join(trialWorktree.directory, "g43-subject.txt"), marker)
                 const trialArtifactExecution = createTaskArtifactStoreExecution({
                   kind: "task",
                   projectID: Instance.project.id,
@@ -1918,6 +1920,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           const metricReceiptResourceSet = TaskArtifactResourceSetLocatorSchema.parse(metricOutcome.resource_set)
           const metricReceiptResource = TaskArtifactRefSchema.parse(metricOutcome.resource)
           const metricEvidenceLocator = metricOutcome.receipt.scorers[0]!.evidence[0]!
+          sourceMetricEvidence = metricEvidenceLocator.ref
           expect(
             (
               await host.engineArtifacts.read({
@@ -1978,6 +1981,39 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             source_artifact_locators: [campaignReceipt.locator, runReceipt.locator, metricEvidenceLocator],
           }, { host } as never)) as typeof evaluationReceipt
           expect(new Set([evaluationReceipt.locator, evaluationAlias.locator].map((item) => JSON.stringify(item))).size).toBe(2)
+          const publishAlteredReceipt = async (value: unknown) => {
+            const stage = await host.taskArtifacts.stage({ trees: ["metric-evaluation"] })
+            await writeFile(path.join(stage.treeDirectories["metric-evaluation"]!, "receipt.json"),
+              JSON.stringify(EvolutionMetricReceiptSchema.parse(value)))
+            const publication = await host.taskArtifacts.publish(stage, {
+              snapshot_kind: "engine_resource",
+              files: [{ tree: "metric-evaluation", path: "receipt.json", media_type: "application/json" }],
+            })
+            return executePublishEvolutionArtifact({
+              artifact_type: "evolution-lab/evaluation-result", payload: {},
+              resource_set: { snapshot: publication.snapshot, tree: "metric-evaluation" },
+              source_artifact_locators: [campaignReceipt.locator, runReceipt.locator, metricEvidenceLocator],
+            }, { host } as never)
+          }
+          const alteredReceipt = structuredClone(metricOutcome.receipt)
+          alteredReceipt.scorers[0].value = 0
+          await expect(publishAlteredReceipt(alteredReceipt)).rejects.toThrow(
+            "Metric receipt scorer correctness differs from its recorded observation",
+          )
+          await expect(publishAlteredReceipt({
+            ...metricOutcome.receipt, trial_task_id: otherModelTrial.trialTaskID,
+          })).rejects.toThrow("Metric receipt does not identify its exact Trial run and slot")
+          const copiedAttemptStage = await host.taskArtifacts.stage({ trees: ["metric-evidence"] })
+          await writeFile(path.join(copiedAttemptStage.treeDirectories["metric-evidence"]!, "attempt.json"),
+            JSON.stringify({ ...subjectAttempt, raw_value: 0 }))
+          const copiedAttempt = await host.taskArtifacts.publish(copiedAttemptStage, {
+            snapshot_kind: "engine_resource",
+            files: [{ tree: "metric-evidence", path: "attempt.json", media_type: "application/json" }],
+          })
+          alteredReceipt.scorers[0].evidence = [{ source: "task_artifact_resource", ref: copiedAttempt.artifacts[0] }]
+          await expect(publishAlteredReceipt(alteredReceipt)).rejects.toThrow(
+            `Metric evidence must identify exactly one recorded result in Task ${taskID}; found 0`,
+          )
           ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
           const integrityReviewReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
@@ -2334,6 +2370,44 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           expect(correctedAliasComparison.source_artifact_locators).toEqual(expect.arrayContaining([
             evaluationReceipt.locator, evaluationAlias.locator, aliasReview.locator, correctedAliasReview.locator,
           ]))
+          // A distinct local Trial returns nonnumeric output under the same
+          // frozen scorer. Its unavailable result travels through the package
+          // receipt and publisher, rather than being read as a measured null.
+          await writeFile(path.join(trialWorktree.directory, "g43-subject.txt"), "2")
+          const unavailableTrial = await createTrial("unreadable-number")
+          UsageLedger.record({
+            providerID: "provider", modelID: "model", purpose: "session",
+            tokens: { input: 1, output: 1, reasoning: 0, cache: { read: 0, write: 0 }, total: 2 },
+            costUSD: 0, billing: { status: "priced" },
+            sessionID: unavailableTrial.trialWorkerSession.id, agentID: "target-worker",
+          })
+          ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
+          const unavailableCollection = JSON.parse(await collectRunEvidenceTool.execute({
+            task_id: unavailableTrial.trialTaskID, terminal_occurrence: unavailableTrial.terminalOccurrence,
+            selected_messages: [],
+          }, { host } as never))
+          const unavailableRun = JSON.parse(await executePublishEvolutionArtifact({
+            artifact_type: "evolution-lab/run-evidence-bundle", payload: runSlot,
+            resource_set: unavailableCollection.resource_set, source_artifact_locators: [campaignReceipt.locator],
+          }, { host } as never))
+          const unavailableMeasurement = JSON.parse(await executeEvolutionMetricsTool.execute({
+            campaign_spec_locator: campaignReceipt.locator, candidate_revision_locator: null,
+            run_evidence_locator: unavailableRun.locator, iteration: 1, delivery_slice_revision_id: null,
+            visual_feedback_verification_artifact_locators: [],
+          }, { host } as never))
+          expect(unavailableMeasurement.receipt.scorers).toMatchObject([
+            { scorer_id: "correctness", status: "unavailable", reason: "parse_failed" },
+          ])
+          const unavailableEvaluation = JSON.parse(await executePublishEvolutionArtifact({
+            artifact_type: "evolution-lab/evaluation-result", payload: {},
+            resource_set: unavailableMeasurement.resource_set,
+            source_artifact_locators: [campaignReceipt.locator, unavailableRun.locator,
+              unavailableMeasurement.receipt.scorers[0].evidence[0]],
+          }, { host } as never))
+          const unavailableRead = await host.engineArtifacts.read({
+            locator: unavailableEvaluation.locator, byte_offset: 0, max_bytes: 65_536, delivery: "inline",
+          })
+          expect(JSON.parse(unavailableRead.chunk.text!).payload.scorers).toEqual(unavailableMeasurement.receipt.scorers)
         })
         // The measured copy belonged to that invocation and closed with it.
         await expect(stat(subjectMaterialization)).rejects.toMatchObject({ code: "ENOENT" })
@@ -2495,6 +2569,9 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           },
         } satisfies TaskToolExecutionScope
         await withTaskScopedPluginToolHost(importedScope, async (host) => {
+          await expect(host.metrics.recorded({ evidence_ref: sourceMetricEvidence })).rejects.toThrow(
+            `Metric evidence must identify exactly one recorded result in Task ${importedTaskID}; found 0`,
+          )
           const rehydrated = JSON.parse(
             await rehydrateEvolutionResourcesTool.execute(
               { artifact_locator: importedCampaignLocator, resource_role: "campaign_inputs" },
@@ -2642,7 +2719,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.5")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.6")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(
@@ -2842,6 +2919,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           "lib/evolution-lab/artifacts.ts",
           "lib/evolution-lab/candidate-integrity.ts",
           "lib/evolution-lab/comparison.ts",
+          "lib/evolution-lab/metric-context.ts",
           "selector.md",
           "skills/campaign/SKILL.md",
           "skills/campaign/references/artifact-ownership.md",
@@ -2948,6 +3026,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           "lib/evolution-lab/artifacts.ts",
           "lib/evolution-lab/candidate-integrity.ts",
           "lib/evolution-lab/comparison.ts",
+          "lib/evolution-lab/metric-context.ts",
           "tools/collect-run-evidence.ts",
           "tools/execute-evolution-metrics.ts",
           "tools/expert-squad-package.ts",

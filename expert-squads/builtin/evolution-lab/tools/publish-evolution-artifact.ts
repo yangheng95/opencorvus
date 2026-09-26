@@ -2,6 +2,7 @@ import {
   ArtifactReadLocatorSchema,
   ArtifactSchemaLimits,
   EngineArtifactEnvelopeSchema,
+  EngineArtifactLocatorSchema,
   TaskArtifactResourceSetLocatorSchema,
   TaskRunEvidenceBundleSchema,
   canonicalTaskRunEvidenceJSON,
@@ -32,6 +33,7 @@ import {
 } from "../lib/evolution-lab/artifacts"
 import { candidateMutableTextPaths, compareCandidateIntegrity } from "../lib/evolution-lab/candidate-integrity"
 import { deriveComparisonRecommendation } from "../lib/evolution-lab/comparison"
+import { readEvolutionMetricContext, readRecordedMetricScorer } from "../lib/evolution-lab/metric-context"
 
 function sameJSON(left: unknown, right: unknown) {
   return JSON.stringify(left) === JSON.stringify(right)
@@ -592,9 +594,37 @@ export default tool({
       const receipt = EvolutionMetricReceiptSchema.parse(JSON.parse(receiptText))
       if (JSON.stringify(receipt) !== receiptText)
         throw new EvolutionArtifactIntegrityError("metric evaluation receipt is not exact canonical JSON")
-      // The receipt is the fact; this artifact is its catalog projection. The
-      // Evaluator owns no field here, so every one is stamped from the receipt
-      // rather than restated and compared.
+      const binding = await readEvolutionMetricContext({
+        campaign_spec_locator: EngineArtifactLocatorSchema.parse(receipt.campaign_spec_locator),
+        candidate_revision_locator: receipt.candidate_revision_locator
+          ? EngineArtifactLocatorSchema.parse(receipt.candidate_revision_locator) : null,
+        run_evidence_locator: EngineArtifactLocatorSchema.parse(receipt.run_evidence_locator),
+      }, context)
+      const { run, campaign, collectorResource } = binding
+      if (receipt.case_id !== run.case_id || receipt.arm !== run.arm || receipt.repetition !== run.repetition ||
+          receipt.trial_task_id !== run.task_id || receipt.trial_revision_digest !== run.revision_equality.installed) {
+        throw new EvolutionArtifactIntegrityError("Metric receipt does not identify its exact Trial run and slot")
+      }
+      if (!sameJSON(receipt.scorers.map((item) => item.scorer_id).toSorted(),
+        campaign.scorers.map((item) => item.scorer_id).toSorted())) {
+        throw new EvolutionArtifactIntegrityError("Metric receipt must contain the complete frozen scorer set")
+      }
+      const verifiedScorers = await Promise.all(receipt.scorers.map(async (scorer) => {
+        const evidence = scorer.evidence[0]
+        if (scorer.evidence.length !== 1 || evidence?.source !== "task_artifact_resource")
+          throw new EvolutionArtifactIntegrityError(`Metric receipt scorer ${scorer.scorer_id} requires one recorded attempt`)
+        const recorded = await readRecordedMetricScorer(evidence.ref, context)
+        const definition = campaign.scorers.find((item) => item.scorer_id === scorer.scorer_id)!
+        if (recorded.observation.trial_task_id !== run.task_id ||
+            !sameTaskArtifactRef(recorded.observation.subject, collectorResource) ||
+            recorded.observation.scorer_revision !== definition.scorer_revision ||
+            !sameJSON(recorded.scorer, scorer)) {
+          throw new EvolutionArtifactIntegrityError(`Metric receipt scorer ${scorer.scorer_id} differs from its recorded observation`)
+        }
+        return recorded.scorer
+      }))
+      // Immutable JSON is a transport, not measurement authority. Exact native
+      // result rows and their attempts own each scorer fact.
       payload = EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse({
         campaign_spec_locator: receipt.campaign_spec_locator,
         candidate_revision_locator: receipt.candidate_revision_locator,
@@ -604,7 +634,7 @@ export default tool({
         repetition: receipt.repetition,
         trial_task_id: receipt.trial_task_id,
         trial_revision_digest: receipt.trial_revision_digest,
-        scorers: receipt.scorers,
+        scorers: verifiedScorers,
         metric_receipt_resource: resourceIdentity(receiptResource),
       })
       const scorerResources = receipt.scorers.flatMap((scorer) =>

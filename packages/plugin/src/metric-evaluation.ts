@@ -278,6 +278,26 @@ export const MetricEvaluationOutcomeSchema = z
 
 export type MetricEvaluationOutcome = z.infer<typeof MetricEvaluationOutcomeSchema>
 
+export const MetricRecordedObservationSchema = z.object({
+  task_id: z.string().min(1),
+  iteration: z.number().int().nonnegative(),
+  scorer_id: z.string().min(1),
+  scorer_revision: SHA256Schema,
+  subject: TaskArtifactRefSchema,
+  trial_task_id: z.string().min(1),
+  evidence_ref: TaskArtifactRefSchema,
+  outcome: z.discriminatedUnion("status", [
+    z.object({ status: z.literal("measured"), value: z.number() }).strict(),
+    z.object({
+      status: z.literal("unavailable"),
+      reason_code: MetricEvaluationOutcomeSchema.shape.unavailable.element.shape.reason_code,
+    }).strict(),
+  ]),
+}).strict()
+export type MetricRecordedObservation = z.infer<typeof MetricRecordedObservationSchema>
+
 export type MetricEvaluationHost = Readonly<{
   evaluate(input: MetricEvaluationRequest): Promise<MetricEvaluationOutcome>
+  /** Read an exact attempt backed by this Task's persisted metric result. */
+  recorded(input: { evidence_ref: import("./task-artifact.js").TaskArtifactRef }): Promise<MetricRecordedObservation>
 }>
