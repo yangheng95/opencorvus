@@ -11,6 +11,7 @@ import {
   EvolutionInstallableTargetSchema,
   canonicalEvolutionJSON,
   evolutionComparisonContext,
+  resolveEvolutionIntegrityReviews,
   type EvolutionCampaignDetailResponse,
   type EvolutionCampaignHistoryRecord,
   type EvolutionHistoryListResponse,
@@ -190,10 +191,7 @@ function requireEvolutionProducer(envelope: Envelope) {
   // A feedback-driven candidate has no Campaign and no Evolution Lab run
   // behind it: the Host authored it from a Message only the Host saw, so the
   // Host is its honest producer.
-  if (
-    envelope.artifact_type === "evolution-lab/candidate-revision" &&
-    envelope.producer.owner_kind === "core"
-  ) {
+  if (envelope.artifact_type === "evolution-lab/candidate-revision" && envelope.producer.owner_kind === "core") {
     if (envelope.producer.component_id !== FEEDBACK_REVISION_COMPONENT_ID)
       throw new Error(`Evolution history candidate revision must be produced by Core ${FEEDBACK_REVISION_COMPONENT_ID}`)
     return
@@ -231,7 +229,8 @@ function currentRows(db: Database.TxOrDb, revisionUpper: number): CatalogRow[] {
     .orderBy(desc(EngineArtifactTable.catalog_revision))
     .all()
     .map((row) => {
-      if (!row.sessionID || !row.artifactType) throw new Error("Evolution history Artifact requires exact Task Session and type")
+      if (!row.sessionID || !row.artifactType)
+        throw new Error("Evolution history Artifact requires exact Task Session and type")
       return {
         ...row,
         sessionID: row.sessionID,
@@ -267,7 +266,8 @@ function historicalRows(db: Database.TxOrDb, revisionUpper: number): CatalogRow[
     .orderBy(desc(EngineArtifactVersionTable.catalog_revision))
     .all()
     .map((row) => {
-      if (!row.sessionID || !row.artifactType) throw new Error("Evolution history Artifact requires exact Task Session and type")
+      if (!row.sessionID || !row.artifactType)
+        throw new Error("Evolution history Artifact requires exact Task Session and type")
       return {
         ...row,
         sessionID: row.sessionID,
@@ -312,7 +312,9 @@ function frozenRead(db: Database.TxOrDb, revisionUpper: number): FrozenRead {
   }
   return {
     artifacts,
-    byExactIdentity: new Map(artifacts.map((artifact) => [exactKey(artifact.catalog.taskID, artifact.locator), artifact])),
+    byExactIdentity: new Map(
+      artifacts.map((artifact) => [exactKey(artifact.catalog.taskID, artifact.locator), artifact]),
+    ),
     integrityIssues,
   }
 }
@@ -366,7 +368,8 @@ function receiptsForComparison(input: {
       if (artifact.catalog.taskID !== input.comparison.catalog.taskID) continue
       const receipt = artifact.payload!
       const key = canonicalEvolutionJSON(artifact.locator)
-      if (selected.has(key) || !receipt.evidence.some((locator) => reachable.has(canonicalEvolutionJSON(locator)))) continue
+      if (selected.has(key) || !receipt.evidence.some((locator) => reachable.has(canonicalEvolutionJSON(locator))))
+        continue
       const validEvidence =
         receipt.operation === "promotion"
           ? sameIdentity(
@@ -423,6 +426,14 @@ function comparisonGraph(read: FrozenRead, comparison: FrozenArtifact<Comparison
 function completeness(campaign: Campaign, graph: ComparisonGraph) {
   const expectedSlots = campaign.cases.length * campaign.repetitions * 2
   const scorerResults = graph.evaluations.flatMap((evaluation) => evaluation.payload!.scorers)
+  const current = resolveEvolutionIntegrityReviews(
+    graph.reviews.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })),
+  ).current
+  const reviewSlots = new Map<string, Review[]>()
+  for (const { value } of current) {
+    const key = slotKey(value.case_id, value.arm, value.repetition)
+    reviewSlots.set(key, [...(reviewSlots.get(key) ?? []), value])
+  }
   return {
     expected_slots: expectedSlots,
     present_runs: graph.runs.length,
@@ -430,7 +441,9 @@ function completeness(campaign: Campaign, graph: ComparisonGraph) {
     expected_scorer_results: expectedSlots * campaign.scorers.length,
     measured_scorer_results: scorerResults.filter((scorer) => scorer.status === "measured").length,
     unavailable_scorer_results: scorerResults.filter((scorer) => scorer.status === "unavailable").length,
-    reviewed_integrity_slots: graph.reviews.filter((review) => review.payload!.status === "reviewed").length,
+    reviewed_integrity_slots: [...reviewSlots.values()].filter((reviews) =>
+      reviews.every((review) => review.status === "reviewed"),
+    ).length,
     required_unavailable_dimensions: graph.comparison.payload!.required_unavailable_dimensions,
   }
 }
@@ -534,7 +547,10 @@ function buildComparison(input: {
     confidence: comparison.confidence,
     recommendation: comparison.recommendation,
     completeness: completeness(campaign, input.graph),
-    receipts: receiptGraph.receipts.map((artifact) => ({ artifact: artifactIdentity(artifact), receipt: artifact.payload! })),
+    receipts: receiptGraph.receipts.map((artifact) => ({
+      artifact: artifactIdentity(artifact),
+      receipt: artifact.payload!,
+    })),
     promotion_intent: promotionIntent,
     restoration_intents: restorationIntents,
     graph_issues: graphIssues,
@@ -634,8 +650,7 @@ function buildCampaignRecord(input: {
   campaignIssues.push(...campaignDirect.issues)
   const relatedArtifacts = campaignDirect.artifacts.filter(
     (artifact) =>
-      artifact.payload !== undefined &&
-      artifact.envelope.artifact_type !== "evolution-lab/candidate-revision",
+      artifact.payload !== undefined && artifact.envelope.artifact_type !== "evolution-lab/candidate-revision",
   )
   return EvolutionCampaignHistoryRecordSchema.parse({
     campaign: {
@@ -653,8 +668,12 @@ function buildCampaignRecord(input: {
 }
 
 function currentCatalogRevision(db: Database.TxOrDb) {
-  return db.select({ revision: max(EngineArtifactCatalogRevisionTable.revision) }).from(EngineArtifactCatalogRevisionTable).get()
-    ?.revision ?? 0
+  return (
+    db
+      .select({ revision: max(EngineArtifactCatalogRevisionTable.revision) })
+      .from(EngineArtifactCatalogRevisionTable)
+      .get()?.revision ?? 0
+  )
 }
 
 function receiptArtifacts(read: FrozenRead) {
@@ -877,7 +896,10 @@ function revisionChoices(input: {
     const digest = pair.payload.candidate_revision.package_digest
     if (witnesses.has(digest) || digest === input.installed.package_digest) continue
     if (pair.payload.parent_revision.package_digest !== input.installed.package_digest) continue
-    acceptances.set(digest, { intent: feedbackAcceptanceIntent({ pair, target: input.target }), artifact: pair.candidate })
+    acceptances.set(digest, {
+      intent: feedbackAcceptanceIntent({ pair, target: input.target }),
+      artifact: pair.candidate,
+    })
     note(digest, pair.candidate.row.time_created)
   }
   return [...order.keys()]
@@ -935,10 +957,7 @@ function campaignArtifacts(read: FrozenRead, target: ReturnType<typeof Evolution
   })
 }
 
-function integrityIssuesForTarget(
-  read: FrozenRead,
-  target: ReturnType<typeof EvolutionInstallableTargetSchema.parse>,
-) {
+function integrityIssuesForTarget(read: FrozenRead, target: ReturnType<typeof EvolutionInstallableTargetSchema.parse>) {
   const campaigns = campaignArtifacts(read, target)
   const campaignKeys = new Set(campaigns.map((campaign) => exactKey(campaign.catalog.taskID, campaign.locator)))
   const reachable = new Set(campaignKeys)
@@ -1026,7 +1045,8 @@ function integrityIssuesForTarget(
       return (
         campaigns.some(
           (campaign) =>
-            campaign.catalog.taskID === comparison.catalog.taskID && sourceIncludes(comparison.envelope, campaign.locator),
+            campaign.catalog.taskID === comparison.catalog.taskID &&
+            sourceIncludes(comparison.envelope, campaign.locator),
         ) ||
         targetCandidates.some(
           (candidateArtifact) =>
@@ -1068,7 +1088,8 @@ export async function readEvolutionHistory(rawQuery: unknown): Promise<Evolution
   return Database.transaction((db) => {
     const observedRevision = currentCatalogRevision(db)
     const revisionUpper = query.catalogRevisionUpper ?? observedRevision
-    if (revisionUpper > observedRevision) throw new Error("Evolution history cursor exceeds the current Catalog revision")
+    if (revisionUpper > observedRevision)
+      throw new Error("Evolution history cursor exceeds the current Catalog revision")
     const read = frozenRead(db, revisionUpper)
     const before = query.beforeCatalogRevision ?? Number.MAX_SAFE_INTEGER
     const matching = campaignArtifacts(read, historyAuthority.target).filter(
@@ -1126,40 +1147,53 @@ function detailSlots(input: {
 }) {
   const campaign = input.campaign.payload!
   const candidate = input.candidate.payload!
-  const runs = new Map(input.graph.runs.map((run) => [slotKey(run.payload!.case_id, run.payload!.arm, run.payload!.repetition), run]))
+  const runs = new Map(
+    input.graph.runs.map((run) => [slotKey(run.payload!.case_id, run.payload!.arm, run.payload!.repetition), run]),
+  )
   const evaluations = new Map(
     input.graph.evaluations.map((evaluation) => [
       slotKey(evaluation.payload!.case_id, evaluation.payload!.arm, evaluation.payload!.repetition),
       evaluation,
     ]),
   )
-  const reviews = new Map(
-    input.graph.reviews.map((review) => [
-      slotKey(review.payload!.case_id, review.payload!.arm, review.payload!.repetition),
-      review,
-    ]),
+  const lineage = resolveEvolutionIntegrityReviews(
+    input.graph.reviews.map((artifact) => ({ locator: artifact.locator, value: artifact.payload!, artifact })),
   )
+  const currentReviewIDs = new Set(lineage.current.map(({ artifact }) => artifact.catalog.artifactID))
   return campaign.cases.flatMap((caseID) =>
     Array.from({ length: campaign.repetitions }, (_, repetition) =>
       (["baseline", "candidate"] as const).map((arm) => {
         const key = slotKey(caseID, arm, repetition)
         const run = runs.get(key)
         const evaluation = evaluations.get(key)
-        const review = reviews.get(key)
+        const slotReviews = input.graph.reviews
+          .filter((review) => slotKey(review.payload!.case_id, review.payload!.arm, review.payload!.repetition) === key)
+          .toSorted((left, right) => left.catalog.catalogRevision - right.catalog.catalogRevision)
+        const current = slotReviews.filter((review) => currentReviewIDs.has(review.catalog.artifactID))
+        const review = current.length === 1 ? current[0] : undefined
         return {
           case_id: caseID,
           arm,
           repetition,
           expected_revision_digest:
-            arm === "baseline" ? campaign.baseline_revision.package_digest : candidate.candidate_revision.package_digest,
+            arm === "baseline"
+              ? campaign.baseline_revision.package_digest
+              : candidate.candidate_revision.package_digest,
           run: run ? artifactIdentity(run) : null,
           evaluation: evaluation ? artifactIdentity(evaluation) : null,
           review: review ? artifactIdentity(review) : null,
           scorer_results: campaign.scorers.map((scorer) => {
-            const result = evaluation?.payload!.scorers.find((candidateResult) => candidateResult.scorer_id === scorer.scorer_id)
+            const result = evaluation?.payload!.scorers.find(
+              (candidateResult) => candidateResult.scorer_id === scorer.scorer_id,
+            )
             return result ?? { status: "missing" as const, scorer_id: scorer.scorer_id }
           }),
           integrity_review: review?.payload ?? null,
+          review_history: slotReviews.map((item) => ({
+            artifact: artifactIdentity(item),
+            disposition: currentReviewIDs.has(item.catalog.artifactID) ? ("current" as const) : ("superseded" as const),
+            integrity_review: item.payload!,
+          })),
         }
       }),
     ).flat(),
@@ -1204,7 +1238,11 @@ export async function readEvolutionCampaignDetail(rawInput: unknown): Promise<Ev
     const comparison = comparisonArtifact
       ? typedArtifact<Comparison>(comparisonArtifact, "evolution-lab/comparison-recommendation")
       : undefined
-    if (!comparison || !sourceIncludes(comparison.envelope, campaign.locator) || !sourceIncludes(comparison.envelope, candidate.locator))
+    if (
+      !comparison ||
+      !sourceIncludes(comparison.envelope, campaign.locator) ||
+      !sourceIncludes(comparison.envelope, candidate.locator)
+    )
       throw new Error("Evolution history detail Comparison does not belong to the exact Campaign/Candidate graph")
     const graph = comparisonGraph(read, comparison)
     const record = buildCampaignRecord({

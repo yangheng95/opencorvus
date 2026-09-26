@@ -401,6 +401,15 @@ export const EvolutionEvidenceSlotSchema = z
     review: EvolutionHistoryArtifactIdentitySchema.nullable(),
     scorer_results: z.array(ScorerSlotSchema),
     integrity_review: EvolutionArtifactSchemas["evolution-lab/integrity-review"].nullable(),
+    review_history: z.array(
+      z
+        .object({
+          artifact: EvolutionHistoryArtifactIdentitySchema,
+          disposition: z.enum(["current", "superseded"]),
+          integrity_review: EvolutionArtifactSchemas["evolution-lab/integrity-review"],
+        })
+        .strict(),
+    ),
   })
   .strict()
 

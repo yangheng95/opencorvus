@@ -13,6 +13,7 @@
 import { describe, expect, test } from "bun:test"
 import { deriveComparisonRecommendation } from "@squads/evolution-lab/lib/evolution-lab/comparison"
 import { EvolutionArtifactSchemas } from "@squads/evolution-lab/lib/evolution-lab/artifacts"
+import { EvolutionReviewLineageError, resolveEvolutionIntegrityReviews } from "@opencorvus-ai/plugin"
 
 const baselineDigest = "a".repeat(64)
 const candidateDigest = "b".repeat(64)
@@ -67,20 +68,23 @@ function scorerDefinition(spec: ScorerSpec) {
  * One case, `repetitions` repetitions, and one measured value per scorer per
  * arm per repetition. Every scorer must supply exactly `repetitions` values.
  */
-function comparisonFor(scorers: ScorerSpec[], options?: {
-  uiRubricDigest?: string | null
-  candidateFinding?: IntegrityFinding
-  /** Replaces the whole candidate repetition-0 review; null omits it. */
-  candidateReview?: {
-    status: "reviewed" | "unavailable"
-    findings: IntegrityFinding[]
-    accepted_limitations: string[]
-    unknowns: string[]
-  } | null
-  candidateFirstRunOutcome?: "success" | "failure" | "unavailable"
-  candidateFirstRunCost?: number | null
-  candidateFirstRunModel?: string
-}) {
+function comparisonInputs(
+  scorers: ScorerSpec[],
+  options?: {
+    uiRubricDigest?: string | null
+    candidateFinding?: IntegrityFinding
+    /** Replaces the whole candidate repetition-0 review; null omits it. */
+    candidateReview?: {
+      status: "reviewed" | "unavailable"
+      findings: IntegrityFinding[]
+      accepted_limitations: string[]
+      unknowns: string[]
+    } | null
+    candidateFirstRunOutcome?: "success" | "failure" | "unavailable"
+    candidateFirstRunCost?: number | null
+    candidateFirstRunModel?: string
+  },
+) {
   const repetitions = scorers[0]!.baseline.length
   for (const spec of scorers) {
     if (spec.baseline.length !== repetitions || spec.candidate.length !== repetitions) {
@@ -184,24 +188,27 @@ function comparisonFor(scorers: ScorerSpec[], options?: {
     indices.flatMap((repetition) => {
       const candidateSlot = arm === "candidate" && repetition === 0
       if (candidateSlot && options?.candidateReview === null) return []
-      const review = candidateSlot && options?.candidateReview
-        ? options.candidateReview
-        : {
-            status: "reviewed" as const,
-            findings: candidateSlot && options?.candidateFinding ? [options.candidateFinding] : [],
-            accepted_limitations: [],
-            unknowns: [],
-          }
-      return [{
-        locator,
-        value: EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse({
-          case_id: "case-1",
-          arm,
-          repetition,
-          evaluation_result_locator: locator,
-          ...review,
-        }),
-      }]
+      const review =
+        candidateSlot && options?.candidateReview
+          ? options.candidateReview
+          : {
+              status: "reviewed" as const,
+              findings: candidateSlot && options?.candidateFinding ? [options.candidateFinding] : [],
+              accepted_limitations: [],
+              unknowns: [],
+            }
+      return [
+        {
+          locator: { ...locator, artifact_id: `review-${arm}-${repetition}` },
+          value: EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse({
+            case_id: "case-1",
+            arm,
+            repetition,
+            evaluation_result_locator: locator,
+            ...review,
+          }),
+        },
+      ]
     }),
   )
 
@@ -217,20 +224,22 @@ function comparisonFor(scorers: ScorerSpec[], options?: {
         run_evidence_resource: resource,
         task_id: `task-${arm}-${repetition}`,
         terminal_time: 1,
-        model: arm === "candidate" && repetition === 0
-          ? options?.candidateFirstRunModel ?? "provider/model"
-          : "provider/model",
+        model:
+          arm === "candidate" && repetition === 0
+            ? (options?.candidateFirstRunModel ?? "provider/model")
+            : "provider/model",
         environment_digest: resourceDigest,
         token_usage: arm === "baseline" ? 100 : 110,
         // `??` would turn an explicit null cost back into 1.2; only an absent
         // option takes the default.
-        cost: arm === "candidate" && repetition === 0 && options?.candidateFirstRunCost !== undefined
-          ? options.candidateFirstRunCost
-          : arm === "baseline" ? 1 : 1.2,
+        cost:
+          arm === "candidate" && repetition === 0 && options?.candidateFirstRunCost !== undefined
+            ? options.candidateFirstRunCost
+            : arm === "baseline"
+              ? 1
+              : 1.2,
         last_activity_at: "2026-08-07T00:00:00.000Z",
-        outcome: arm === "candidate" && repetition === 0
-          ? options?.candidateFirstRunOutcome ?? "success"
-          : "success",
+        outcome: arm === "candidate" && repetition === 0 ? (options?.candidateFirstRunOutcome ?? "success") : "success",
         activity_duration_ms: arm === "baseline" ? 1_000 : 1_100,
         revision_equality: {
           installed: arm === "baseline" ? baselineDigest : candidateDigest,
@@ -243,7 +252,7 @@ function comparisonFor(scorers: ScorerSpec[], options?: {
     })),
   )
 
-  return deriveComparisonRecommendation({
+  return {
     campaign,
     candidate,
     campaignLocator: locator,
@@ -251,7 +260,11 @@ function comparisonFor(scorers: ScorerSpec[], options?: {
     evaluations,
     reviews,
     runs,
-  })
+  }
+}
+
+function comparisonFor(...args: Parameters<typeof comparisonInputs>) {
+  return deriveComparisonRecommendation(comparisonInputs(...args))
 }
 
 describe("Evolution Lab deterministic comparison", () => {
@@ -263,10 +276,111 @@ describe("Evolution Lab deterministic comparison", () => {
     severity: IntegrityFinding["severity"],
   ): IntegrityFinding {
     return {
-      category, outcome, severity, invariant: "declared audit dimension",
-      evidence: [locator], owner: "evolution-safety-auditor", correction: null,
+      category,
+      outcome,
+      severity,
+      invariant: "declared audit dimension",
+      evidence: [locator],
+      owner: "evolution-safety-auditor",
+      correction: null,
     }
   }
+
+  test("consumes both independent reviews of one measured slot", () => {
+    const input = comparisonInputs(improvedScores, { candidateFinding: finding("security", "unavailable", "blocker") })
+    const prior = input.reviews.find((item) => item.value.arm === "candidate" && item.value.repetition === 0)!
+    input.reviews.push({
+      locator: { ...prior.locator, artifact_id: "review-parallel" },
+      value: { ...prior.value, findings: [] },
+    })
+    const result = deriveComparisonRecommendation(input)
+    expect(result.recommendation).toBe("inconclusive")
+    expect(result.required_unavailable_dimensions).toEqual([
+      "integrity_finding:case-1:candidate:0:review-candidate-0:security:0",
+    ])
+    expect(resolveEvolutionIntegrityReviews(input.reviews).current).toHaveLength(7)
+  })
+
+  test("an explicit same-evidence revision supersedes both prior review branches", () => {
+    const input = comparisonInputs(improvedScores, { candidateFinding: finding("security", "failed", "blocker") })
+    const prior = input.reviews.find((item) => item.value.arm === "candidate" && item.value.repetition === 0)!
+    const parallel = {
+      locator: { ...prior.locator, artifact_id: "review-parallel" },
+      value: { ...prior.value, findings: [finding("permission", "unavailable", "blocker")] },
+    }
+    const revised = {
+      locator: { ...prior.locator, artifact_id: "review-corrected" },
+      value: {
+        ...prior.value,
+        findings: [finding("security", "passed", "blocker")],
+        revision: {
+          supersedes: [prior.locator, parallel.locator],
+          reason:
+            "Re-deriving the declared boundaries from the same immutable evidence corrects both earlier interpretations.",
+        },
+      },
+    }
+    input.reviews.push(parallel, revised)
+    const result = deriveComparisonRecommendation(input)
+    expect(result.recommendation).toBe("promote")
+    expect(result.aggregate_score).toBeCloseTo(0.6)
+    expect(result.required_unavailable_dimensions).toEqual([])
+    const lineage = resolveEvolutionIntegrityReviews(input.reviews)
+    expect(lineage.current.map((item) => item.locator.artifact_id)).toContain("review-corrected")
+    expect(lineage.superseded.map((item) => item.locator.artifact_id)).toEqual([
+      "review-candidate-0",
+      "review-parallel",
+    ])
+    expect(deriveComparisonRecommendation({ ...input, reviews: [...input.reviews].reverse() })).toEqual(result)
+  })
+
+  test("a remaining independent branch contributes its unresolved blocker after another branch is revised", () => {
+    const input = comparisonInputs(improvedScores, { candidateFinding: finding("security", "failed", "blocker") })
+    const prior = input.reviews.find((item) => item.value.arm === "candidate" && item.value.repetition === 0)!
+    input.reviews.push({
+      locator: { ...prior.locator, artifact_id: "review-parallel" },
+      value: { ...prior.value, findings: [finding("permission", "unavailable", "blocker")] },
+    })
+    input.reviews.push({
+      locator: { ...prior.locator, artifact_id: "review-corrected" },
+      value: {
+        ...prior.value,
+        findings: [],
+        revision: { supersedes: [prior.locator], reason: "The prior logic used an inapplicable condition." },
+      },
+    })
+    const result = deriveComparisonRecommendation(input)
+    expect(result.recommendation).toBe("inconclusive")
+    expect(result.required_unavailable_dimensions).toEqual([
+      "integrity_finding:case-1:candidate:0:review-parallel:permission:0",
+    ])
+  })
+
+  test.each(["missing_parent", "different_evaluation", "cycle", "duplicate_parent"] as const)(
+    "reports exact %s review lineage",
+    (code) => {
+      const input = comparisonInputs(improvedScores)
+      const prior = input.reviews[0]!
+      const revised = {
+        locator: { ...prior.locator, artifact_id: "review-revision" },
+        value: {
+          ...prior.value,
+          revision: { supersedes: [prior.locator], reason: "Reconsider prior evidence." },
+        },
+      }
+      if (code === "missing_parent") revised.value.revision.supersedes = [{ ...locator, artifact_id: "review-missing" }]
+      if (code === "different_evaluation") revised.value.repetition = prior.value.repetition + 1
+      if (code === "cycle") revised.value.revision.supersedes = [revised.locator]
+      if (code === "duplicate_parent") revised.value.revision.supersedes = [prior.locator, prior.locator]
+      try {
+        resolveEvolutionIntegrityReviews([...input.reviews, revised])
+        throw new Error("Expected the exact declared lineage error")
+      } catch (error) {
+        expect(error).toBeInstanceOf(EvolutionReviewLineageError)
+        expect((error as EvolutionReviewLineageError).code).toBe(code)
+      }
+    },
+  )
 
   test.each(findingCategories)("completed review with passed %s blocker supports promotion", (category) => {
     const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "passed", "blocker") })
@@ -274,37 +388,51 @@ describe("Evolution Lab deterministic comparison", () => {
     expect(result.aggregate_score).toBeCloseTo(0.6)
   })
 
-  test.each(findingCategories)("completed review with failed %s blocker yields an inconclusive recommendation", (category) => {
-    const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "failed", "blocker") })
-    expect(result.recommendation).toBe("inconclusive")
-    expect(result.aggregate_score).toBeCloseTo(0.6)
-    expect(result.paired_deltas[0]!.mean).toBeCloseTo(0.6)
-  })
+  test.each(findingCategories)(
+    "completed review with failed %s blocker yields an inconclusive recommendation",
+    (category) => {
+      const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "failed", "blocker") })
+      expect(result.recommendation).toBe("inconclusive")
+      expect(result.aggregate_score).toBeCloseTo(0.6)
+      expect(result.paired_deltas[0]!.mean).toBeCloseTo(0.6)
+    },
+  )
 
-  test.each(findingCategories)("completed review with unavailable %s blocker exposes its required dimension", (category) => {
-    const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "unavailable", "blocker") })
-    const dimension = `integrity_finding:case-1:candidate:0:${category}:0`
-    expect(result.recommendation).toBe("inconclusive")
-    expect(result.aggregate_score).toBeNull()
-    expect(result.required_unavailable_dimensions).toEqual([dimension])
-    expect(result.unavailable_dimensions).toEqual([dimension])
-  })
+  test.each(findingCategories)(
+    "completed review with unavailable %s blocker exposes its required dimension",
+    (category) => {
+      const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "unavailable", "blocker") })
+      const dimension = `integrity_finding:case-1:candidate:0:review-candidate-0:${category}:0`
+      expect(result.recommendation).toBe("inconclusive")
+      expect(result.aggregate_score).toBeNull()
+      expect(result.required_unavailable_dimensions).toEqual([dimension])
+      expect(result.unavailable_dimensions).toEqual([dimension])
+    },
+  )
 
-  test.each(["evidence_integrity", "permission", "side_effect", "security"] as const)("a nonblocking %s warning retains the measured promotion decision", (category) => {
-    const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "failed", "warning") })
-    expect(result.recommendation).toBe("promote")
-    expect(result.aggregate_score).toBeCloseTo(0.6)
-    // An observed failure is not an unobserved dimension.
-    expect(result.unavailable_dimensions).toEqual([])
-  })
+  test.each(["evidence_integrity", "permission", "side_effect", "security"] as const)(
+    "a nonblocking %s warning retains the measured promotion decision",
+    (category) => {
+      const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "failed", "warning") })
+      expect(result.recommendation).toBe("promote")
+      expect(result.aggregate_score).toBeCloseTo(0.6)
+      // An observed failure is not an unobserved dimension.
+      expect(result.unavailable_dimensions).toEqual([])
+    },
+  )
 
-  test.each(findingCategories)("an unavailable nonblocking %s observation is reported without blocking the measured promotion", (category) => {
-    const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "unavailable", "warning") })
-    expect(result.recommendation).toBe("promote")
-    expect(result.aggregate_score).toBeCloseTo(0.6)
-    expect(result.unavailable_dimensions).toEqual([`integrity_finding:case-1:candidate:0:${category}:0`])
-    expect(result.required_unavailable_dimensions).toEqual([])
-  })
+  test.each(findingCategories)(
+    "an unavailable nonblocking %s observation is reported without blocking the measured promotion",
+    (category) => {
+      const result = comparisonFor(improvedScores, { candidateFinding: finding(category, "unavailable", "warning") })
+      expect(result.recommendation).toBe("promote")
+      expect(result.aggregate_score).toBeCloseTo(0.6)
+      expect(result.unavailable_dimensions).toEqual([
+        `integrity_finding:case-1:candidate:0:review-candidate-0:${category}:0`,
+      ])
+      expect(result.required_unavailable_dimensions).toEqual([])
+    },
+  )
 
   test("a completed review with no findings is the auditor's claim that nothing needed reporting", () => {
     const result = comparisonFor(improvedScores, {
@@ -363,9 +491,7 @@ describe("Evolution Lab deterministic comparison", () => {
   })
 
   test("reconstructs the complete case, arm, repetition, and scorer matrix", () => {
-    const comparison = comparisonFor([
-      { id: "correctness", weight: 1, baseline: [0.8], candidate: [0.9] },
-    ])
+    const comparison = comparisonFor([{ id: "correctness", weight: 1, baseline: [0.8], candidate: [0.9] }])
 
     expect(comparison).toEqual({
       baseline_revision: baselineRevision,
@@ -455,9 +581,9 @@ describe("Evolution Lab deterministic comparison", () => {
   })
 
   test("a Trial served by another model cannot enter the frozen-model comparison", () => {
-    expect(() =>
-      comparisonFor(improvedScores, { candidateFirstRunModel: "openai/gpt-5.6-luna" }),
-    ).toThrow("comparison run slot case-1:candidate:0 differs from the frozen Campaign runtime")
+    expect(() => comparisonFor(improvedScores, { candidateFirstRunModel: "openai/gpt-5.6-luna" })).toThrow(
+      "comparison run slot case-1:candidate:0 differs from the frozen Campaign runtime",
+    )
   })
 
   test("reports not_applicable visual review for a nonvisual Campaign", () => {

@@ -17,6 +17,7 @@ export * from "./files.js"
 export * from "./workspace-tree.js"
 export * from "./expert-squad-evolution.js"
 export * from "./expert-squad-evolution-artifact.js"
+export * from "./expert-squad-evolution-review.js"
 export * from "./expert-squad-evolution-integrity.js"
 export * from "./expert-squad-evolution-history.js"
 

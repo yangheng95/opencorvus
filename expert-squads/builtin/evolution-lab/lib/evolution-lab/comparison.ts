@@ -1,5 +1,9 @@
 import { VISUAL_FEEDBACK_VERIFICATION_SCORER_NAME } from "@opencorvus-ai/plugin"
-import { EvolutionArtifactSchemas, EvolutionArtifactIntegrityError } from "./artifacts"
+import {
+  EvolutionArtifactSchemas,
+  EvolutionArtifactIntegrityError,
+  resolveEvolutionIntegrityReviews,
+} from "./artifacts"
 
 type Campaign = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/campaign-spec"]["parse"]>
 type Candidate = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/candidate-revision"]["parse"]>
@@ -39,8 +43,8 @@ function sampleVariance(values: readonly number[], average: number) {
  * table the t and normal quantiles agree to within a rounding of this scale.
  */
 const T_QUANTILE_95_BY_DF: readonly number[] = [
-  12.706, 4.303, 3.182, 2.776, 2.571, 2.447, 2.365, 2.306, 2.262, 2.228, 2.201, 2.179, 2.16, 2.145, 2.131, 2.12,
-  2.11, 2.101, 2.093, 2.086, 2.08, 2.074, 2.069, 2.064, 2.06, 2.056, 2.052, 2.048, 2.045, 2.042,
+  12.706, 4.303, 3.182, 2.776, 2.571, 2.447, 2.365, 2.306, 2.262, 2.228, 2.201, 2.179, 2.16, 2.145, 2.131, 2.12, 2.11,
+  2.101, 2.093, 2.086, 2.08, 2.074, 2.069, 2.064, 2.06, 2.056, 2.052, 2.048, 2.045, 2.042,
 ]
 const NORMAL_QUANTILE_95 = 1.96
 const INTERVAL_CONFIDENCE = 0.95
@@ -103,7 +107,7 @@ type ExpectedSlot = { caseID: string; arm: "baseline" | "candidate"; repetition:
 type IndexedComparisonEvidence = {
   evaluations: Map<string, Evaluation>
   evaluationLocators: Map<string, ArtifactLocator>
-  reviews: Map<string, Review>
+  reviews: Map<string, Located<Review>[]>
   runs: Map<string, RunEvidence>
   runLocators: Map<string, ArtifactLocator>
 }
@@ -134,14 +138,19 @@ function indexComparisonEvidence(input: {
   for (const located of input.evaluations) {
     const evaluation = located.value
     const key = slotKey(evaluation.case_id, evaluation.arm, evaluation.repetition)
-    if (!expectedSlotKeys.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has undeclared evaluation slot ${key}`)
-    if (evaluations.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has duplicate evaluation slot ${key}`)
+    if (!expectedSlotKeys.has(key))
+      throw new EvolutionArtifactIntegrityError(`comparison has undeclared evaluation slot ${key}`)
+    if (evaluations.has(key))
+      throw new EvolutionArtifactIntegrityError(`comparison has duplicate evaluation slot ${key}`)
     const scorerIDs = evaluation.scorers.map((scorer) => scorer.scorer_id).toSorted()
     if (JSON.stringify(scorerIDs) !== JSON.stringify(expectedScorerIDs))
-      throw new EvolutionArtifactIntegrityError(`comparison evaluation slot ${key} does not contain the exact scorer set`)
-    const expectedRevision = evaluation.arm === "baseline"
-      ? campaign.baseline_revision.package_digest
-      : candidate.candidate_revision.package_digest
+      throw new EvolutionArtifactIntegrityError(
+        `comparison evaluation slot ${key} does not contain the exact scorer set`,
+      )
+    const expectedRevision =
+      evaluation.arm === "baseline"
+        ? campaign.baseline_revision.package_digest
+        : candidate.candidate_revision.package_digest
     if (evaluation.trial_revision_digest !== expectedRevision)
       throw new EvolutionArtifactIntegrityError(`comparison evaluation slot ${key} has the wrong package revision`)
     if (
@@ -151,30 +160,40 @@ function indexComparisonEvidence(input: {
         evaluation.arm === "candidate" ? input.candidateLocator : null,
       )
     )
-      throw new EvolutionArtifactIntegrityError(`comparison evaluation slot ${key} has the wrong Campaign or Candidate source`)
+      throw new EvolutionArtifactIntegrityError(
+        `comparison evaluation slot ${key} has the wrong Campaign or Candidate source`,
+      )
     evaluations.set(key, evaluation)
     evaluationLocators.set(key, located.locator)
   }
-  const reviews = new Map<string, Review>()
+  const reviews = new Map<string, Located<Review>[]>()
   for (const located of input.reviews) {
     const review = located.value
     const key = slotKey(review.case_id, review.arm, review.repetition)
-    if (!expectedSlotKeys.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has undeclared review slot ${key}`)
-    if (reviews.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has duplicate review slot ${key}`)
+    if (!expectedSlotKeys.has(key))
+      throw new EvolutionArtifactIntegrityError(`comparison has undeclared review slot ${key}`)
     if (!sameLocator(review.evaluation_result_locator, evaluationLocators.get(key) ?? null))
-      throw new EvolutionArtifactIntegrityError(`comparison review slot ${key} does not review its exact evaluation result`)
-    reviews.set(key, review)
+      throw new EvolutionArtifactIntegrityError(
+        `comparison review slot ${key} does not review its exact evaluation result`,
+      )
+  }
+  for (const located of resolveEvolutionIntegrityReviews(input.reviews).current) {
+    const review = located.value
+    const key = slotKey(review.case_id, review.arm, review.repetition)
+    const slot = reviews.get(key) ?? []
+    slot.push(located)
+    reviews.set(key, slot)
   }
   const runs = new Map<string, RunEvidence>()
   const runLocators = new Map<string, ArtifactLocator>()
   for (const located of input.runs) {
     const run = located.value
     const key = slotKey(run.case_id, run.arm, run.repetition)
-    if (!expectedSlotKeys.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has undeclared run slot ${key}`)
+    if (!expectedSlotKeys.has(key))
+      throw new EvolutionArtifactIntegrityError(`comparison has undeclared run slot ${key}`)
     if (runs.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has duplicate run slot ${key}`)
-    const expectedRevision = run.arm === "baseline"
-      ? campaign.baseline_revision.package_digest
-      : candidate.candidate_revision.package_digest
+    const expectedRevision =
+      run.arm === "baseline" ? campaign.baseline_revision.package_digest : candidate.candidate_revision.package_digest
     if (Object.values(run.revision_equality).some((digest) => digest !== expectedRevision))
       throw new EvolutionArtifactIntegrityError(`comparison run slot ${key} has the wrong package revision`)
     if (
@@ -216,16 +235,20 @@ function classifyComparisonAvailability(input: {
     // A present receipt for an inactive or awaiting-interaction Trial still
     // lacks a terminal result; measured scorer values cannot fill that gap.
     if (run?.outcome === "unavailable") requiredUnavailable.add(`run_outcome:${slot.key}`)
-    const review = reviews.get(slot.key)
-    if (!review || review.status === "unavailable") requiredUnavailable.add(`integrity_review:${slot.key}`)
+    const slotReviews = reviews.get(slot.key) ?? []
+    if (slotReviews.length === 0 || slotReviews.some(({ value }) => value.status === "unavailable"))
+      requiredUnavailable.add(`integrity_review:${slot.key}`)
     // A completed review can still report an unobserved dimension. Consume the
     // auditor's typed conclusion, not the existence of its report: every
     // unobserved invariant is unavailable, and the auditor's own blocker
     // severity alone makes it required.
-    if (review?.status === "reviewed") {
+    for (const { locator, value: review } of slotReviews) {
+      if (review.status !== "reviewed") continue
       for (const [index, finding] of review.findings.entries()) {
         if (finding.outcome !== "unavailable") continue
-        const dimension = `integrity_finding:${slot.key}:${finding.category}:${index}`
+        if (locator.source !== "engine_artifact")
+          throw new EvolutionArtifactIntegrityError("comparison review must identify an exact Engine Artifact")
+        const dimension = `integrity_finding:${slot.key}:${locator.artifact_id}:${finding.category}:${index}`
         unavailable.add(dimension)
         if (finding.severity === "blocker") requiredUnavailable.add(dimension)
       }
@@ -259,18 +282,17 @@ export function deriveComparisonRecommendation(input: {
 
   const expectedSlots = campaign.cases.flatMap((caseID) =>
     Array.from({ length: campaign.repetitions }, (_, repetition) =>
-      (["baseline", "candidate"] as const).map((arm) => ({ caseID, arm, repetition, key: slotKey(caseID, arm, repetition) })),
+      (["baseline", "candidate"] as const).map((arm) => ({
+        caseID,
+        arm,
+        repetition,
+        key: slotKey(caseID, arm, repetition),
+      })),
     ).flat(),
   )
   const expectedSlotKeys = new Set(expectedSlots.map((slot) => slot.key))
   const expectedScorerIDs = campaign.scorers.map((scorer) => scorer.scorer_id).toSorted()
-  const {
-    evaluations,
-    evaluationLocators,
-    reviews,
-    runs,
-    runLocators,
-  } = indexComparisonEvidence({
+  const { evaluations, evaluationLocators, reviews, runs, runLocators } = indexComparisonEvidence({
     campaign,
     candidate,
     campaignLocator: input.campaignLocator,
@@ -308,23 +330,25 @@ export function deriveComparisonRecommendation(input: {
     // into the aggregate, which then reports low confidence.
     const halfWidth = interval.halfWidth ?? 0
     const directional = deltas.map((delta) => (scorer.direction === "higher_better" ? delta : -delta))
-    return [{
-      scorer_id: scorer.scorer_id,
-      mean: interval.mean,
-      median: median(deltas),
-      variance: interval.variance,
-      confidence_interval: {
-        confidence: INTERVAL_CONFIDENCE,
-        lower: interval.mean - halfWidth,
-        upper: interval.mean + halfWidth,
+    return [
+      {
+        scorer_id: scorer.scorer_id,
+        mean: interval.mean,
+        median: median(deltas),
+        variance: interval.variance,
+        confidence_interval: {
+          confidence: INTERVAL_CONFIDENCE,
+          lower: interval.mean - halfWidth,
+          upper: interval.mean + halfWidth,
+        },
+        standardErrorKnown: interval.halfWidth !== undefined,
+        win_tie_loss: {
+          wins: directional.filter((value) => value > 0).length,
+          ties: directional.filter((value) => value === 0).length,
+          losses: directional.filter((value) => value < 0).length,
+        },
       },
-      standardErrorKnown: interval.halfWidth !== undefined,
-      win_tie_loss: {
-        wins: directional.filter((value) => value > 0).length,
-        ties: directional.filter((value) => value === 0).length,
-        losses: directional.filter((value) => value < 0).length,
-      },
-    }]
+    ]
   })
 
   const completeRuns = expectedSlots.map((slot) => runs.get(slot.key)).filter((run): run is RunEvidence => Boolean(run))
@@ -365,22 +389,25 @@ export function deriveComparisonRecommendation(input: {
     if (!delta) return []
     const range = Math.abs(scorer.target - scorer.floor)
     if (range === 0 || scorer.weight === 0) return []
-    return [{
-      scorer_id: scorer.scorer_id,
-      value: (scorer.direction === "higher_better" ? delta.mean : -delta.mean) / range,
-      halfWidth: delta.standardErrorKnown
-        ? (delta.confidence_interval.upper - delta.confidence_interval.lower) / 2 / range
-        : undefined,
-      weight: scorer.weight,
-    }]
+    return [
+      {
+        scorer_id: scorer.scorer_id,
+        value: (scorer.direction === "higher_better" ? delta.mean : -delta.mean) / range,
+        halfWidth: delta.standardErrorKnown
+          ? (delta.confidence_interval.upper - delta.confidence_interval.lower) / 2 / range
+          : undefined,
+        weight: scorer.weight,
+      },
+    ]
   })
   if (directionalMeans.length !== campaign.scorers.filter((scorer) => scorer.weight > 0).length)
     requiredUnavailable.add("aggregate_score")
   for (const dimension of requiredUnavailable) unavailable.add(dimension)
   const weight = directionalMeans.reduce((sum, item) => sum + item.weight, 0)
-  const aggregateScore = requiredUnavailable.size === 0 && weight > 0
-    ? directionalMeans.reduce((sum, item) => sum + item.value * item.weight, 0) / weight
-    : null
+  const aggregateScore =
+    requiredUnavailable.size === 0 && weight > 0
+      ? directionalMeans.reduce((sum, item) => sum + item.value * item.weight, 0) / weight
+      : null
   // Uncertainty of the weighted mean, combining the per-scorer half-widths in
   // quadrature under the campaign's own weights. Scorers measure different
   // properties of the same runs, so independence is an approximation, and
@@ -389,9 +416,7 @@ export function deriveComparisonRecommendation(input: {
   // measured once, and that unknown propagates instead of being filled in.
   const aggregateHalfWidth =
     aggregateScore !== null && directionalMeans.every((item) => item.halfWidth !== undefined)
-      ? Math.sqrt(
-          directionalMeans.reduce((sum, item) => sum + ((item.weight / weight) * item.halfWidth!) ** 2, 0),
-        )
+      ? Math.sqrt(directionalMeans.reduce((sum, item) => sum + ((item.weight / weight) * item.halfWidth!) ** 2, 0))
       : undefined
   const aggregateInterval =
     aggregateScore !== null && aggregateHalfWidth !== undefined
@@ -421,10 +446,9 @@ export function deriveComparisonRecommendation(input: {
         : aggregateHalfWidth <= AGGREGATE_MEDIUM_CONFIDENCE_HALF_WIDTH
           ? "medium"
           : "low"
-  const reviewedSlots = expectedSlots.flatMap((slot) => {
-    const review = reviews.get(slot.key)
-    return review?.status === "reviewed" ? [review] : []
-  })
+  const reviewedSlots = expectedSlots.flatMap((slot) =>
+    (reviews.get(slot.key) ?? []).flatMap(({ value }) => (value.status === "reviewed" ? [value] : [])),
+  )
   // Measured improvements do not establish an adoptable experiment when the
   // independent auditor has recorded a failed blocking invariant. Keep the
   // measurements and exact Review sources; the finding remains failed rather
@@ -434,10 +458,11 @@ export function deriveComparisonRecommendation(input: {
   )
   // An unavailable review states why in its unknowns; that reason is as much
   // an unknown of this comparison as a completed review's residual unknowns.
-  const derivedUnknowns = [...new Set([...reviews.values()].flatMap((review) => [
-    ...review.unknowns,
-    ...review.accepted_limitations,
-  ]))].toSorted()
+  const derivedUnknowns = [
+    ...new Set(
+      [...reviews.values()].flat().flatMap(({ value: review }) => [...review.unknowns, ...review.accepted_limitations]),
+    ),
+  ].toSorted()
   const rewardFindings = reviewedSlots.flatMap((review) =>
     review.findings.filter((finding) => finding.category === "reward_hacking" && finding.outcome === "failed"),
   )
@@ -454,8 +479,8 @@ export function deriveComparisonRecommendation(input: {
       )
       .map((scorer) => scorer.scorer_id),
   )
-  const visualResults = expectedSlots.flatMap((slot) =>
-    evaluations.get(slot.key)?.scorers.filter((result) => visualScorerIDs.has(result.scorer_id)) ?? [],
+  const visualResults = expectedSlots.flatMap(
+    (slot) => evaluations.get(slot.key)?.scorers.filter((result) => visualScorerIDs.has(result.scorer_id)) ?? [],
   )
   const visualExpectedCount = expectedSlots.length * visualScorerIDs.size
   // Whether visual review applies is decided by the Campaign's visual scorers,
@@ -470,9 +495,11 @@ export function deriveComparisonRecommendation(input: {
   const visualReview =
     visualScorerIDs.size === 0
       ? { status: "not_applicable" as const, evidence: [] }
-      : visualResults.length !== visualExpectedCount ||
-          visualResults.some((result) => result.status === "unavailable")
-        ? { status: "unavailable" as const, evidence: exactEvidence(visualResults.flatMap((result) => result.evidence)) }
+      : visualResults.length !== visualExpectedCount || visualResults.some((result) => result.status === "unavailable")
+        ? {
+            status: "unavailable" as const,
+            evidence: exactEvidence(visualResults.flatMap((result) => result.evidence)),
+          }
         : { status: "reviewed" as const, evidence: exactEvidence(visualResults.flatMap((result) => result.evidence)) }
   // Promotion needs the whole aggregate interval above zero, not just its
   // midpoint. Requiring `aggregateScore > 0` while separately vetoing any

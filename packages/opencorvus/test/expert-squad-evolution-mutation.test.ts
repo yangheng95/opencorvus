@@ -374,12 +374,7 @@ describe("authorized expert squad evolution mutation", () => {
           // and a candidate that cannot be bounded is deliberately not promotable.
           const repetitionDigest = (base: string, repetition: number) =>
             `${base.slice(0, 62)}${String(repetition).padStart(2, "0")}`
-          const recordRun = (
-            arm: "baseline" | "candidate",
-            digest: string,
-            revision: string,
-            repetition: number,
-          ) => {
+          const recordRun = (arm: "baseline" | "candidate", digest: string, revision: string, repetition: number) => {
             const payload = EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse({
               case_id: "case-a",
               arm,
@@ -474,7 +469,20 @@ describe("authorized expert squad evolution mutation", () => {
               repetition,
               evaluation_result_locator: evaluation.locator,
               status: "reviewed",
-              findings: [],
+              findings:
+                arm === "candidate" && repetition === 0
+                  ? [
+                      {
+                        category: "security",
+                        invariant: "Declared fixture boundary",
+                        outcome: "failed",
+                        evidence: [evaluation.locator],
+                        severity: "blocker",
+                        owner: "evolution-safety-auditor",
+                        correction: "Reconsider the original evidence under the correct boundary.",
+                      },
+                    ]
+                  : [],
               accepted_limitations: [],
               unknowns: [],
             })
@@ -494,6 +502,23 @@ describe("authorized expert squad evolution mutation", () => {
           )
           const baselineReview = baselineReviews[0]!
           const candidateReview = candidateReviews[0]!
+          const revisionPayload = EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse({
+            ...candidateReview.value,
+            findings: [],
+            revision: {
+              supersedes: [candidateReview.locator],
+              reason: "The original evidence establishes that the previous boundary interpretation was incorrect.",
+            },
+          })
+          const revisionReview = {
+            value: revisionPayload,
+            locator: recordEvolutionArtifact({
+              taskID: operationTask.taskID,
+              type: "evolution-lab/integrity-review",
+              payload: revisionPayload,
+              sources: [candidateEvaluation.locator, candidateReview.locator],
+            }),
+          }
           const trialEvidenceHistory = await readEvolutionHistory({
             namespace: target.namespace,
             id: target.id,
@@ -517,7 +542,7 @@ describe("authorized expert squad evolution mutation", () => {
             candidate: candidatePayload,
             candidateLocator: candidateArtifact,
             evaluations: [...baselineEvaluations, ...candidateEvaluations],
-            reviews: [...baselineReviews, ...candidateReviews],
+            reviews: [...baselineReviews, ...candidateReviews, revisionReview],
             runs: [...baselineRuns, ...candidateRuns],
           })
           const comparisonSources = [
@@ -529,6 +554,7 @@ describe("authorized expert squad evolution mutation", () => {
             ...candidateEvaluations.map((evaluation) => evaluation.locator),
             ...baselineReviews.map((review) => review.locator),
             ...candidateReviews.map((review) => review.locator),
+            revisionReview.locator,
           ]
           const comparison = recordEvolutionArtifact({
             taskID: operationTask.taskID,
@@ -742,6 +768,18 @@ describe("authorized expert squad evolution mutation", () => {
             comparisonLocator: promotionComparison.artifact.locator,
             catalogRevisionUpper: historyAfterPromotion.catalog_revision_upper,
           })
+          const revisedSlot = historyDetail.slots.find((slot) => slot.arm === "candidate" && slot.repetition === 0)!
+          expect(revisedSlot.review?.locator).toEqual(revisionReview.locator)
+          expect(
+            revisedSlot.review_history.map((item) => ({
+              locator: item.artifact.locator,
+              disposition: item.disposition,
+              findings: item.integrity_review.findings,
+            })),
+          ).toEqual([
+            { locator: candidateReview.locator, disposition: "superseded", findings: candidateReview.value.findings },
+            { locator: revisionReview.locator, disposition: "current", findings: [] },
+          ])
           expect(
             historyDetail.slots
               .map((slot) => ({
@@ -843,8 +881,9 @@ describe("authorized expert squad evolution mutation", () => {
             } catch (error) {
               conflict = error
             }
-            expect(EvolutionMutationReceiptIdentityConflictError.isInstance(conflict) ? conflict.data : undefined)
-              .toEqual({ artifactID: promotion.locator.artifact_id })
+            expect(
+              EvolutionMutationReceiptIdentityConflictError.isInstance(conflict) ? conflict.data : undefined,
+            ).toEqual({ artifactID: promotion.locator.artifact_id })
           } finally {
             collision.mockRestore()
           }

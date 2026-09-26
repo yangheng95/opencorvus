@@ -508,6 +508,19 @@ export const EvolutionArtifactSchemas = {
       repetition: z.number().int().nonnegative(),
       evaluation_result_locator: ArtifactReadLocatorSchema,
       status: z.enum(["reviewed", "unavailable"]),
+      revision: z
+        .object({
+          supersedes: z
+            .array(EngineArtifactLocatorSchema)
+            .min(1)
+            .refine(
+              (locators) => new Set(locators.map((locator) => JSON.stringify(locator))).size === locators.length,
+              "Review revision must identify each superseded Review exactly once",
+            ),
+          reason: z.string().trim().min(1),
+        })
+        .strict()
+        .optional(),
       findings: z.array(
         z
           .object({

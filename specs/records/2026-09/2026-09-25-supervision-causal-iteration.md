@@ -873,3 +873,35 @@
 
 - H-B这一运行路径按预登记结算，不增加同义提示/隐藏目标/过滤返回再抽。当前未知仍是锚定、来源选择、指令执行与关系判断的贡献；Cycle3读齐仍错不能被目录问题解释。整体可靠纠错/进化收益未达成。
 - Codex继续第3项真实问题：Review完整证据发现、显式取代和比较事实传递。G33仅交付确定性派生字段盖章；G31归档patch未应用。先以现有Catalog/Artifact/metric receipt/晋升读取语义确定可审计的改判与完整性契约，再实施正向Checker，不以category自由文本相等、无意义新引用或增加Host业务gate解决。
+
+## G36：Review来源子集的真实发布反例与取代边界
+
+### Recall与有界诊断（生产实现前）
+
+- 用户要求Codex继续实质解决Review多证据选择/取代，Opus额度恢复后交接。H-B已按登记结束，不再启动模型/world。起点`ce3788b5`干净且已push。本段先把已定位的来源子集问题放进真实publisher/DB/完整读取路径，而不是把G31的假设直接编码为新门。
+- 已查当前plugin Review/Comparison输入和存储Schema、publisher身份/来源/slot校验、比较器所有索引与可用性规则、Auditor/Owner/Skill、2026-08-17所有权拆分、catalog与plugin-tool-host实现、history和promotion消费，以及真实Host/39项比较测试。原合同每Evaluation一份Review；publisher没有这一唯一性限制，comparator只拒绝**选中集合**的duplicate slot，Owner可交不同子集。promotion只消费选定Comparison的推荐和required维度，不能自动补回未计入的Review。
+- Catalog已有单一分页事实：首page固定engineCatalogRevisionUpper与source membership，cursor后续沿同上界，成员漂移报告provider error；新发布不进入旧snapshot。它可支持“该snapshot的完整集合”，但不能把一次分页称作一直到未来promotion都新鲜。现有producer/来源scope必须保留；不得把其它Candidate/Task或未读取的记录混入。
+- Plugin Host真实publication来源由同Turn已选择来源和本次完整read/select合并，publish参数本身不是另一个来源权威；比较器目前只计算模型参数中的子集。因此即使实际envelope额外保留了另一个被选过的Review，派生字段仍可能没有消费它。诊断必须同时读回payload与envelope，不能只看source列。
+- 本地诊断：在现有真实Host fixture完成原Review和Comparison后，对同一原Evaluation再以真实Auditor发布`reviewed/findings=[]`的新Review，随后Owner分别只以这份Review、以及两份Review调用现有publisher。记录返回的实际required维度、unknowns、source集合和精确错误。此fixture本来缺candidate，所以不能冒称它从inconclusive变promote；它只能证明选择可删除已声明的安全未观察维度。实际推荐影响沿已有完整正向比较测试的blocker契约另行界定。
+- 诊断仅临时增加测试驱动观察，先逐字保存原测试，运行标准隔离测试入口、落盘结果后精确恢复本任务插入；不修改生产代码/存储或业务原件、不保留针对错误行为的回归断言。新方案须基于结果明确单一当前Review和**显式**取代、同证据逻辑改判与并行分支关系，不能用默认最新、仅引用、自由文本相等或强制新事实代替作者判断。
+
+### G36真实反例与单一修复设计（实施前）
+
+- 诊断9项/95断言通过，实际两份Review都经同一publisher持久化。只选后发的reviewed/空findings后，原`integrity_finding:case-1:baseline:0:security:1`与side_effect未观察维度及原unknown消失；两个Review一起输入则精确报`EvolutionArtifactIntegrityError: comparison has duplicate review slot case-1:baseline:0`。两次仍inconclusive（fixture缺candidate），不夸称此checker已产生错误promote。日志`.tmp/g36-review-source-probe.log`、完整产物`.tmp/g36-review-source-probe.json`；临时测试补丁单独保存后核对只有本任务47行插入并恢复原字节。还证实后发comparison的实际envelope仍列着先前选择过的Review，而其payload未消费它；增加引用数量本身不能修复。
+- 单一当前Review契约：在原`integrity-review` payload上增加可选的`revision`声明（`supersedes`确切Review locators、非空`reason`）。它是当前协议的可选**改判操作**，初始/独立Review不填写即不取代任何记录；不按版本走兼容分支、不将“最新”或普通source引用解释成取代。旧不可变Review字节不改，仍表示未声明取代。Auditor拥有改判理由及完整新结论，Host只校验父记录真实/同Evaluation及slot/确切直接来源/无环，不判断理由正确，不要求新业务事实或强制finding文本同名。
+- 当前关系由唯一纯函数从不可变Review和显式revision边计算，返回current与superseded原记录；不新建ledger/角色或合成Review。分支并发时全部未被明确取代的Review都继续有效，typed failed/unavailable blocker按原规则影响比较；一份后续Review可显式取代多个分支并用既有来源重新推导，合法更正能解除它们。循环、缺父、跨Evaluation或slot是明确身份错误，不是业务gate。
+- 比较发布输入继续空payload；Owner选Campaign/Candidate/Run/Evaluation，Review不再由它挑子集。publisher在现有current Task catalog一次冻结分页中精确枚举Review，完整读回，绑定到本次Evaluation集合，校验Auditor及原来源后选择全部相关Review（包括被取代的历史原件以保留来龙去脉）。只消费current原记录，但存储全部来源。目录不完整/provider error返回明确可重试错误，不能把查不全当没有。仍保持Run/Evaluation原冻结slot身份及单测量规则；不借本项改变实验取样。
+- 比较器和history共用该纯关系函数；history按唯一current Review填原单项投影，分支时单项为null并通过新的review_history逐项展示真实current/superseded身份与原payload，reviewed slot计数按slot而非产物个数。没有伪造合并Artifact。未观察dimension包含原Review身份以区分同slot同category的多个finding。
+- 范围限制明确：这是某次comparison发布所用catalog snapshot的完整Review集合，不承诺未来永无新证据。现有promotion消费者对后来新增证据的新鲜性复核另需沿共同mutation权威审查，不把本项局部修复写成全部进化闭环已好；历史Comparison不重算。跨Task导入的原Evaluation相关性保持当前契约，不凭旧DB ID跨域借身份。
+- 正向验收：真实Host发布第二份独立Review后，即便Owner不提交它，原blocker仍进入comparison；显式基于原证据取代两份后产生准确解除后的矩阵，普通引用不取代。纯比较器覆盖并列blocker、同证据改判、合并分支、缺父/循环/错slot错误合同；history保留真实修订链。原39项统计/typed维度、实际包投影/晋升与源嵌入/类型/API生成/docs/拓扑复验。只使用明确test-driver，没有新模型、Campaign或包推广。
+
+### G36实现与已完成验收
+
+- 已实现单一`packages/plugin/src/expert-squad-evolution-review.ts`关系解析器，比较器与history共用；无新ledger、角色、模型调用或业务gate。Review的optional revision只表示是否声明改判，既有未声明记录不被改写、不默认取代。publisher在持久化前校验重复父引用/同Evaluation与slot/父记录角色与直接来源；比较消费全部current分支，未观察dimension包含原Review ID。解析器对缺父、错scope、环、重复父给出精确错误。
+- Comparison输入不再接受Owner选Review子集；生产publisher真实分页查询current Task的Review目录，沿同一cursor快照，完整read后只把绑定所选Evaluation的记录加入source并校验。其它Evaluation的Review仅被观察，不混成当前来源；相关Review无有效Evaluation身份则明确报错，目录不完整不可冒充空集合。原Run/Evaluation slot规则与统计公式保持。
+- 真实Host checker覆盖102份同Evaluation原Review跨两个目录page，Owner不传Review列表仍准确保留原blocker；普通引用旧Review不取代，显式revision用同一原始证据合并全部分支后矩阵按新判断解除原维度；全部旧/新locators均在实际持久化source集合。重复父输入在写入前返回明确错误，防止写入无效关系后阻塞后续比较。最终Host9项/105断言通过，`.tmp/g36-host-verified.log`。
+- 纯比较46项/145断言通过（含原39项与7个新关系/错误合同）；真实promotion/restoration/history1项/25断言，新的Review在原measurement不变时支撑派生promote，history逐项显示旧superseded与新current，原Task版本pin不变；包投影1/40，历史e2e消费14/33，相关链修复3/13。合计74项/361断言；是无模型test-driver合同，不是实际自主Campaign或收益证明。原6文件汇总`.tmp/g36-final-tests.log`，后续分页与重复父补验以上述最终Host日志为准。
+- 根类型8项实际检查通过；docs342ops25groups、API routes6规则34文件、专家团拓扑122/135通过。唯一SDK生成器build通过，只改变OpenAPI和generated types两文件；递归JSON差异限定于evolution-history/detail的Review revision、review_history及对应required字段，没有新增路由。没有UI代码或UI自动化测试。
+- 源/嵌入Evolution Lab同步`2026.09.27.1`，content digest `6e9398066a58346de1e98f6e2d70f5a4853bfd240b278822dba514fcef5cb8b6`；同步Auditor/Owner/scheduler及Campaign Skill，删除通用“已有有效Artifact永不重发”对Review合法改判的阻断，保留测量不重跑择优。只更新本包生成项，其它base/AutomationBench漂移不夹带。当前架构02-data同步，未推广安装。
+- 保留检查器失败：未同步生成物时真实source/embedded身份检查失败；本地同步辅助脚本一度以未提交的中间生成版本为发布基线而拒绝同版本更新，改为读取HEAD中的真实已提交基线后完成同一个尚未发布的新版本，未改任何已发布包。第一次相关日志`.tmp/g36-host-tests-initial.log`、`g36-host-final.log`及`g36-package-sync-final.log`保留；最后真实source/embedded/登记身份检查通过。差异只在本任务文件内；部分已触及TS文件随格式化产生排版变化，未改变其余逻辑。
+- 仍未交付：比较发布后新证据出现时，promotion新鲜性与完整权威复核；Run/Evaluation全Campaign集合的选择与重复Trial边界。G36不宣称这些已根治，历史Comparison不重算，业务可靠纠错/进化收益仍未知。下一步沿现有mutation授权/检查/提交同一链审查这些事实边界，不通过新业务样本掩盖。

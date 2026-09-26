@@ -9,6 +9,8 @@ export {
   EvolutionPackagePublishableArtifactInputSchema,
   EvolutionPackagePublishableArtifactTypeSchema,
   EvolutionRunEvidencePublishInputSchema,
+  resolveEvolutionIntegrityReviews,
+  EvolutionReviewLineageError,
   parseEvolutionArtifact,
   type EvolutionArtifactType,
 } from "@opencorvus-ai/plugin"

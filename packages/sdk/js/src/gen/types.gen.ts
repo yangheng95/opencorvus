@@ -12959,6 +12959,15 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
           severity: "info" | "warning" | "blocker"
         }>
         repetition: number
+        revision?: {
+          reason: string
+          supersedes: Array<{
+            artifact_id: string
+            catalog_revision: number
+            expected_sha256: string
+            source: "engine_artifact"
+          }>
+        }
         status: "reviewed" | "unavailable"
         unknowns: Array<string>
       } | null
@@ -13017,6 +13026,157 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
         time_created: number
         time_updated: number
       } | null
+      review_history: Array<{
+        artifact: {
+          artifact_type:
+            | "evolution-lab/opportunity"
+            | "evolution-lab/campaign-spec"
+            | "evolution-lab/failure-attribution"
+            | "evolution-lab/candidate-revision"
+            | "evolution-lab/run-evidence-bundle"
+            | "evolution-lab/evaluation-result"
+            | "evolution-lab/integrity-review"
+            | "evolution-lab/comparison-recommendation"
+            | "evolution-lab/promotion-receipt"
+          locator: {
+            artifact_id: string
+            catalog_revision: number
+            expected_sha256: string
+            source: "engine_artifact"
+          }
+          partition: "current" | "historical"
+          producer:
+            | {
+                agent_id: string
+                expert_squad_id: string
+                message_id: string
+                owner_kind: "projected-scheduler" | "projected-worker"
+                package_revision: {
+                  id: string
+                  namespace: string
+                  package_digest: string
+                  project_id: string | null
+                  scope: "built_in" | "project" | "global"
+                  version: string
+                }
+                projection_hash: string
+                session_id: string
+                tool_call_id: string
+              }
+            | {
+                message_id: string
+                mission_id: string
+                owner_kind: "mission"
+                session_id: string
+                tool_call_id: string
+              }
+            | {
+                component_id: string
+                operation_id: string
+                owner_kind: "core"
+              }
+          root_session_id: string
+          schema_version: 1
+          task_id: string
+          time_created: number
+          time_updated: number
+        }
+        disposition: "current" | "superseded"
+        integrity_review: {
+          accepted_limitations: Array<string>
+          arm: "baseline" | "candidate"
+          case_id: string
+          evaluation_result_locator:
+            | {
+                artifact_id: string
+                catalog_revision: number
+                expected_sha256: string
+                source: "engine_artifact"
+              }
+            | {
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                source: "task_artifact_snapshot"
+              }
+            | {
+                ref: {
+                  bytes: number
+                  media_type: string
+                  path: string
+                  sha256: string
+                  snapshot: {
+                    manifest_sha256: string
+                    project_id: string
+                    schema_version: 2
+                    snapshot_id: string
+                    task_id: string
+                  }
+                  tree: string
+                }
+                source: "task_artifact_resource"
+              }
+          findings: Array<{
+            category: "evidence_integrity" | "reward_hacking" | "permission" | "side_effect" | "security"
+            correction: string | null
+            evidence: Array<
+              | {
+                  artifact_id: string
+                  catalog_revision: number
+                  expected_sha256: string
+                  source: "engine_artifact"
+                }
+              | {
+                  snapshot: {
+                    manifest_sha256: string
+                    project_id: string
+                    schema_version: 2
+                    snapshot_id: string
+                    task_id: string
+                  }
+                  source: "task_artifact_snapshot"
+                }
+              | {
+                  ref: {
+                    bytes: number
+                    media_type: string
+                    path: string
+                    sha256: string
+                    snapshot: {
+                      manifest_sha256: string
+                      project_id: string
+                      schema_version: 2
+                      snapshot_id: string
+                      task_id: string
+                    }
+                    tree: string
+                  }
+                  source: "task_artifact_resource"
+                }
+            >
+            invariant: string
+            outcome: "passed" | "failed" | "unavailable"
+            owner: string
+            severity: "info" | "warning" | "blocker"
+          }>
+          repetition: number
+          revision?: {
+            reason: string
+            supersedes: Array<{
+              artifact_id: string
+              catalog_revision: number
+              expected_sha256: string
+              source: "engine_artifact"
+            }>
+          }
+          status: "reviewed" | "unavailable"
+          unknowns: Array<string>
+        }
+      }>
       run: {
         artifact_type:
           | "evolution-lab/opportunity"

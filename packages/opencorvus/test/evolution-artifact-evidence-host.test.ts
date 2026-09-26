@@ -29,6 +29,7 @@ import {
   TaskArtifactResourceSetLocatorSchema,
   TaskArtifactRefSchema,
   EngineArtifactEnvelopeSchema,
+  EngineArtifactLocatorSchema,
   PreparedExpertSquadCandidateSchema,
   ValidatedExpertSquadPackageSchema,
   canonicalTaskRunEvidenceJSON,
@@ -755,7 +756,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           "resource_set",
           "source_artifact_locators",
         ])
-        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Evolution typed ABI chain" })
+        const session = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Evolution typed ABI chain",
+        })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         const missionID = "evolution-abi-chain"
@@ -1304,181 +1309,182 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ).trial_execution,
           ).toEqual({ status: "unavailable", reason_code: "product_release_required" })
           // Each call creates one independent terminal baseline Trial Task.
-          const createTrial = () => Instance.provide({
-            directory: trialWorktree.directory,
-            fn: async () => {
-              const trialPackageRevision = {
-                scope: "project" as const,
-                projectID: Instance.project.id,
-                namespace: "acme",
-                id: "target",
-                version: revision.version,
-                packageDigest: revision.package_digest,
-              }
-              const trialSession = Session.prepareRootNext({
-                kind: "root",
-                directory: Instance.directory,
-                title: "Frozen baseline Trial",
-                metadata: { configOverlay: { prompt_profile: { active: trialPackageRevision.id } } },
-              })
-              const trialTaskID = Identifier.ascending("task")
-              const trialStarted = started + 10
-              const trialCompleted = trialStarted + 1
-              persistTask({
-                taskID: trialTaskID,
-                rootSession: trialSession,
-                now: trialStarted - 1,
-                title: "Frozen baseline Trial",
-                request: "Execute case-1 against the exact baseline revision",
-                productPillar: "code",
-                source: "test",
-                priority: "normal",
-                metadata: { actor: "user" },
-                projectID: Instance.project.id,
-                packageRevision: trialPackageRevision,
-                creationExpectedPackageDigest: revision.package_digest,
-                executionCapsuleBinding: await taskProcessBinding(
-                  trialTaskID,
-                  revision.package_digest,
-                  trialStarted - 1,
-                ),
-              })
-              const trialBaseline = await EngineGit.prepare(requireTask(trialTaskID))
-              if (trialBaseline.error) throw new Error(trialBaseline.error)
-              const trialArtifactExecution = createTaskArtifactStoreExecution({
-                kind: "task",
-                projectID: Instance.project.id,
-                projectDirectory: trialWorktree.directory,
-                taskID: trialTaskID,
-                taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(trialWorktree.directory, trialTaskID),
-                sessionID: trialSession.id,
-                messageID: "message-trial-artifact",
-                toolCallID: "call-trial-artifact",
-                toolPartID: "part-trial-artifact",
-                executionSurface: {},
-                owner: {
-                  kind: "projected-worker",
-                  expertSquadID: "target",
-                  packageRevision: {
-                    scope: "project",
-                    projectID: Instance.project.id,
-                    namespace: "acme",
-                    id: "target",
-                    version: revision.version,
-                    packageDigest: revision.package_digest,
-                  },
-                  agentID: "target-worker",
-                  projectionHash: "1".repeat(64),
-                  workerTurnDescriptorID: "descriptor-trial",
-                  workerTurnDescriptorHash: "2".repeat(64),
-                },
-              } as unknown as TaskToolExecutionScope)
-              const trialStage = await trialArtifactExecution.stage({ trees: ["result"] })
-              await writeFile(
-                path.join(trialStage.treeDirectories.result!, "case-1.json"),
-                campaignInputContents.get("case-1.json")!,
-              )
-              await writeFile(path.join(trialStage.treeDirectories.result!, "result.txt"), "exact baseline result")
-              await trialArtifactExecution.publish(trialStage, {
-                snapshot_kind: "catalog",
-                files: [
-                  { tree: "result", path: "case-1.json", media_type: "application/json" },
-                  { tree: "result", path: "result.txt", media_type: "text/plain" },
-                ],
-              })
-              await trialArtifactExecution.close()
-              const trialUser = await Session.updateMessage({
-                id: Identifier.ascending("message"),
-                sessionID: trialSession.id,
-                role: "user",
-                author: "user",
-                time: { created: trialStarted },
-                agent: "user",
-                model: { providerID: "test", modelID: "test" },
-              })
-              // Producer Messages live on a child worker Session; a root
-              // Session carries the operator's user Messages only.
-              const trialWorkerSession = await Session.create({
-                kind: "delegated-worker",
-                parentID: trialSession.id,
-                title: "Frozen baseline Trial worker",
-              })
-              const trialDispatchID = Identifier.ascending("artifact")
-              recordTestDispatchLineage({
-                origin: createDispatchLineageOrigin({
-                  dispatchID: trialDispatchID,
+          const createTrial = () =>
+            Instance.provide({
+              directory: trialWorktree.directory,
+              fn: async () => {
+                const trialPackageRevision = {
+                  scope: "project" as const,
+                  projectID: Instance.project.id,
+                  namespace: "acme",
+                  id: "target",
+                  version: revision.version,
+                  packageDigest: revision.package_digest,
+                }
+                const trialSession = Session.prepareRootNext({
+                  kind: "root",
+                  directory: Instance.directory,
+                  title: "Frozen baseline Trial",
+                  metadata: { configOverlay: { prompt_profile: { active: trialPackageRevision.id } } },
+                })
+                const trialTaskID = Identifier.ascending("task")
+                const trialStarted = started + 10
+                const trialCompleted = trialStarted + 1
+                persistTask({
                   taskID: trialTaskID,
-                  orchestratorSessionID: trialSession.id,
-                  orchestratorMessageID: Identifier.ascending("message"),
-                  toolPartID: Identifier.ascending("part"),
-                  toolCallID: Identifier.ascending("call"),
-                  targetAgentID: "target-worker",
-                  projectedWorkerIdentity: {
+                  rootSession: trialSession,
+                  now: trialStarted - 1,
+                  title: "Frozen baseline Trial",
+                  request: "Execute case-1 against the exact baseline revision",
+                  productPillar: "code",
+                  source: "test",
+                  priority: "normal",
+                  metadata: { actor: "user" },
+                  projectID: Instance.project.id,
+                  packageRevision: trialPackageRevision,
+                  creationExpectedPackageDigest: revision.package_digest,
+                  executionCapsuleBinding: await taskProcessBinding(
+                    trialTaskID,
+                    revision.package_digest,
+                    trialStarted - 1,
+                  ),
+                })
+                const trialBaseline = await EngineGit.prepare(requireTask(trialTaskID))
+                if (trialBaseline.error) throw new Error(trialBaseline.error)
+                const trialArtifactExecution = createTaskArtifactStoreExecution({
+                  kind: "task",
+                  projectID: Instance.project.id,
+                  projectDirectory: trialWorktree.directory,
+                  taskID: trialTaskID,
+                  taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(trialWorktree.directory, trialTaskID),
+                  sessionID: trialSession.id,
+                  messageID: "message-trial-artifact",
+                  toolCallID: "call-trial-artifact",
+                  toolPartID: "part-trial-artifact",
+                  executionSurface: {},
+                  owner: {
+                    kind: "projected-worker",
+                    expertSquadID: "target",
+                    packageRevision: {
+                      scope: "project",
+                      projectID: Instance.project.id,
+                      namespace: "acme",
+                      id: "target",
+                      version: revision.version,
+                      packageDigest: revision.package_digest,
+                    },
                     agentID: "target-worker",
-                    baseRole: "delegated-worker",
-                    sessionKind: "delegated-worker",
-                    dispatchAdapterID: "delegated_worker",
-                    runtimeTemplateABIVersion: 1,
-                    dispatchAdapterABIVersion: 1,
                     projectionHash: "1".repeat(64),
+                    workerTurnDescriptorID: "descriptor-trial",
+                    workerTurnDescriptorHash: "2".repeat(64),
                   },
-                  workScope: { kind: "task" },
-                  workflowBinding: selectedWorkflowBinding({
-                    projection: { packageRevision: trialPackageRevision, virtualWorkflows: {} },
-                    workflowID: null,
+                } as unknown as TaskToolExecutionScope)
+                const trialStage = await trialArtifactExecution.stage({ trees: ["result"] })
+                await writeFile(
+                  path.join(trialStage.treeDirectories.result!, "case-1.json"),
+                  campaignInputContents.get("case-1.json")!,
+                )
+                await writeFile(path.join(trialStage.treeDirectories.result!, "result.txt"), "exact baseline result")
+                await trialArtifactExecution.publish(trialStage, {
+                  snapshot_kind: "catalog",
+                  files: [
+                    { tree: "result", path: "case-1.json", media_type: "application/json" },
+                    { tree: "result", path: "result.txt", media_type: "text/plain" },
+                  ],
+                })
+                await trialArtifactExecution.close()
+                const trialUser = await Session.updateMessage({
+                  id: Identifier.ascending("message"),
+                  sessionID: trialSession.id,
+                  role: "user",
+                  author: "user",
+                  time: { created: trialStarted },
+                  agent: "user",
+                  model: { providerID: "test", modelID: "test" },
+                })
+                // Producer Messages live on a child worker Session; a root
+                // Session carries the operator's user Messages only.
+                const trialWorkerSession = await Session.create({
+                  kind: "delegated-worker",
+                  parentID: trialSession.id,
+                  title: "Frozen baseline Trial worker",
+                })
+                const trialDispatchID = Identifier.ascending("artifact")
+                recordTestDispatchLineage({
+                  origin: createDispatchLineageOrigin({
+                    dispatchID: trialDispatchID,
+                    taskID: trialTaskID,
+                    orchestratorSessionID: trialSession.id,
+                    orchestratorMessageID: Identifier.ascending("message"),
+                    toolPartID: Identifier.ascending("part"),
+                    toolCallID: Identifier.ascending("call"),
+                    targetAgentID: "target-worker",
+                    projectedWorkerIdentity: {
+                      agentID: "target-worker",
+                      baseRole: "delegated-worker",
+                      sessionKind: "delegated-worker",
+                      dispatchAdapterID: "delegated_worker",
+                      runtimeTemplateABIVersion: 1,
+                      dispatchAdapterABIVersion: 1,
+                      projectionHash: "1".repeat(64),
+                    },
+                    workScope: { kind: "task" },
+                    workflowBinding: selectedWorkflowBinding({
+                      projection: { packageRevision: trialPackageRevision, virtualWorkflows: {} },
+                      workflowID: null,
+                    }),
+                    workflowNodeID: null,
+                    adapterInput: { reason: "Execute the frozen baseline Trial" },
                   }),
-                  workflowNodeID: null,
-                  adapterInput: { reason: "Execute the frozen baseline Trial" },
-                }),
-                childSessionID: trialWorkerSession.id,
-              })
-              const trialAssistant = await Session.updateMessage({
-                id: Identifier.ascending("message"),
-                sessionID: trialWorkerSession.id,
-                role: "assistant",
-                author: "target-worker",
-                time: { created: trialStarted, completed: trialCompleted },
-                parentID: trialUser.id,
-                modelID: "test",
-                providerID: "test",
-                agent: "target-worker",
-                path: { cwd: trialWorktree.directory, root: trialWorktree.directory },
-                cost: 0,
-                tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
-                finish: "stop",
-              })
-              await terminalTask(
-                requireTask(trialTaskID),
-                {
-                  status: "failed",
-                  time_started: trialStarted,
-                  time_completed: trialCompleted,
-                  error: "fixture terminal Trial",
-                },
-                "Exact baseline Trial reached a terminal fixture outcome",
-              )
-              const trialLifecycle = resolveTerminalLifecycleReference(
-                trialTaskID,
-                requireCurrentTerminalLifecycleReference(trialTaskID),
-              )
-              const terminalTrialTask = requireTask(trialTaskID)
-              const terminalOccurrence = {
-                status: "failed" as const,
-                lifecycle: trialLifecycle,
-                completion_decision_artifact_id: null,
-              }
-              return {
-                trialSession,
-                trialWorkerSession,
-                trialTaskID,
-                trialStarted: terminalTrialTask.time_started,
-                trialCompleted: trialLifecycle.timeCompleted,
-                trialUser,
-                trialAssistant,
-                terminalOccurrence,
-              }
-            },
-          })
+                  childSessionID: trialWorkerSession.id,
+                })
+                const trialAssistant = await Session.updateMessage({
+                  id: Identifier.ascending("message"),
+                  sessionID: trialWorkerSession.id,
+                  role: "assistant",
+                  author: "target-worker",
+                  time: { created: trialStarted, completed: trialCompleted },
+                  parentID: trialUser.id,
+                  modelID: "test",
+                  providerID: "test",
+                  agent: "target-worker",
+                  path: { cwd: trialWorktree.directory, root: trialWorktree.directory },
+                  cost: 0,
+                  tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+                  finish: "stop",
+                })
+                await terminalTask(
+                  requireTask(trialTaskID),
+                  {
+                    status: "failed",
+                    time_started: trialStarted,
+                    time_completed: trialCompleted,
+                    error: "fixture terminal Trial",
+                  },
+                  "Exact baseline Trial reached a terminal fixture outcome",
+                )
+                const trialLifecycle = resolveTerminalLifecycleReference(
+                  trialTaskID,
+                  requireCurrentTerminalLifecycleReference(trialTaskID),
+                )
+                const terminalTrialTask = requireTask(trialTaskID)
+                const terminalOccurrence = {
+                  status: "failed" as const,
+                  lifecycle: trialLifecycle,
+                  completion_decision_artifact_id: null,
+                }
+                return {
+                  trialSession,
+                  trialWorkerSession,
+                  trialTaskID,
+                  trialStarted: terminalTrialTask.time_started,
+                  trialCompleted: trialLifecycle.timeCompleted,
+                  trialUser,
+                  trialAssistant,
+                  terminalOccurrence,
+                }
+              },
+            })
           const trial = await createTrial()
           const {
             trialSession,
@@ -1933,6 +1939,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             source_artifact_locators: [campaignReceipt.locator],
           })
           ;(scope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
+          const originalReviewLocator = EngineArtifactLocatorSchema.parse(integrityReviewReceipt.locator)
           const expectedComparison = {
             baseline_revision: revision,
             candidate_revision: candidateRevision,
@@ -1952,8 +1959,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               "aggregate_score",
               "cost_delta",
               "evaluation:case-1:candidate:0",
-              "integrity_finding:case-1:baseline:0:security:1",
-              "integrity_finding:case-1:baseline:0:side_effect:2",
+              `integrity_finding:case-1:baseline:0:${originalReviewLocator.artifact_id}:security:1`,
+              `integrity_finding:case-1:baseline:0:${originalReviewLocator.artifact_id}:side_effect:2`,
               "integrity_review:case-1:candidate:0",
               "run:case-1:candidate:0",
               "scorer:correctness:case-1:candidate:0",
@@ -1962,7 +1969,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             required_unavailable_dimensions: [
               "aggregate_score",
               "evaluation:case-1:candidate:0",
-              "integrity_finding:case-1:baseline:0:security:1",
+              `integrity_finding:case-1:baseline:0:${originalReviewLocator.artifact_id}:security:1`,
               "integrity_review:case-1:candidate:0",
               "run:case-1:candidate:0",
               "scorer:correctness:case-1:candidate:0",
@@ -1984,7 +1991,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   candidateSource.locator,
                   runReceipt.locator,
                   evaluationReceipt.locator,
-                  integrityReviewReceipt.locator,
                 ],
               },
               { host } as never,
@@ -2000,6 +2006,162 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           expect(comparisonRead.chunk.complete).toBe(true)
           const comparisonEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(comparisonRead.chunk.text!))
           expect(comparisonEnvelope.payload).toEqual(expectedComparison)
+          const comparisonSources = [
+            campaignReceipt.locator,
+            candidateSource.locator,
+            runReceipt.locator,
+            evaluationReceipt.locator,
+          ]
+          const publishComparison = async () => {
+            ;(scope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
+            const receipt = JSON.parse(
+              await executePublishEvolutionArtifact(
+                {
+                  artifact_type: "evolution-lab/comparison-recommendation",
+                  payload: {},
+                  resource_set: null,
+                  source_artifact_locators: comparisonSources,
+                },
+                { host } as never,
+              ),
+            ) as { locator: EngineArtifactLocator }
+            const read = await host.engineArtifacts.read({
+              locator: receipt.locator,
+              byte_offset: 0,
+              max_bytes: 65_536,
+              delivery: "inline",
+            })
+            expect(read.chunk.complete).toBe(true)
+            return EngineArtifactEnvelopeSchema.parse(JSON.parse(read.chunk.text!))
+          }
+          const reviewPayload = {
+            case_id: metricOutcome.receipt.case_id,
+            arm: metricOutcome.receipt.arm,
+            repetition: metricOutcome.receipt.repetition,
+            evaluation_result_locator: evaluationReceipt.locator,
+            status: "reviewed",
+            findings: [],
+            accepted_limitations: [],
+            unknowns: [],
+          }
+          ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
+          const parallelReview = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/integrity-review",
+                payload: reviewPayload,
+                resource_set: null,
+                // An ordinary citation is evidence, not a replacement operation.
+                source_artifact_locators: [evaluationReceipt.locator, originalReviewLocator],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          const parallelComparison = await publishComparison()
+          expect(parallelComparison.payload).toEqual(expectedComparison)
+          expect(parallelComparison.source_artifact_locators).toEqual(
+            expect.arrayContaining([originalReviewLocator, parallelReview.locator]),
+          )
+          // More than one real catalog page: later independent pass findings
+          // must all remain attributable, without replacing the blocker.
+          ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
+          const pagedReviews: EngineArtifactLocator[] = []
+          for (let index = 0; index < 100; index++) {
+            const receipt = JSON.parse(
+              await executePublishEvolutionArtifact(
+                {
+                  artifact_type: "evolution-lab/integrity-review",
+                  payload: {
+                    ...reviewPayload,
+                    findings: [
+                      {
+                        category: "evidence_integrity",
+                        invariant: `Independent fixture observation ${index}`,
+                        outcome: "passed",
+                        evidence: [evaluationReceipt.locator],
+                        severity: "info",
+                        owner: "evolution-safety-auditor",
+                        correction: null,
+                      },
+                    ],
+                  },
+                  resource_set: null,
+                  source_artifact_locators: [evaluationReceipt.locator],
+                },
+                { host } as never,
+              ),
+            ) as { locator: EngineArtifactLocator }
+            pagedReviews.push(receipt.locator)
+          }
+          const pagedComparison = await publishComparison()
+          expect(pagedComparison.payload).toEqual(expectedComparison)
+          expect(pagedComparison.source_artifact_locators).toEqual(expect.arrayContaining(pagedReviews))
+          ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
+          await expect(
+            executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/integrity-review",
+                payload: {
+                  ...reviewPayload,
+                  revision: {
+                    supersedes: [originalReviewLocator, originalReviewLocator],
+                    reason: "Duplicate parent input.",
+                  },
+                },
+                resource_set: null,
+                source_artifact_locators: [evaluationReceipt.locator, originalReviewLocator],
+              },
+              { host } as never,
+            ),
+          ).rejects.toThrow("Review revision must identify each superseded Review exactly once")
+          const revisedReview = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/integrity-review",
+                payload: {
+                  ...reviewPayload,
+                  revision: {
+                    supersedes: [originalReviewLocator, parallelReview.locator, ...pagedReviews],
+                    reason:
+                      "Reconsidering the same measured evidence establishes that both prior missing-observation claims were inapplicable; no new Trial or evidence was required.",
+                  },
+                },
+                resource_set: null,
+                source_artifact_locators: [
+                  evaluationReceipt.locator,
+                  originalReviewLocator,
+                  parallelReview.locator,
+                  ...pagedReviews,
+                ],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          const revisedComparison = await publishComparison()
+          expect(revisedComparison.payload).toEqual({
+            ...expectedComparison,
+            unavailable_dimensions: [
+              "activity_duration_ms_delta",
+              "aggregate_score",
+              "cost_delta",
+              "evaluation:case-1:candidate:0",
+              "integrity_review:case-1:candidate:0",
+              "run:case-1:candidate:0",
+              "scorer:correctness:case-1:candidate:0",
+              "token_delta",
+            ],
+            required_unavailable_dimensions: [
+              "aggregate_score",
+              "evaluation:case-1:candidate:0",
+              "integrity_review:case-1:candidate:0",
+              "run:case-1:candidate:0",
+              "scorer:correctness:case-1:candidate:0",
+            ],
+            unknowns: [],
+          })
+          expect(revisedComparison.source_artifact_locators).toEqual(
+            expect.arrayContaining([originalReviewLocator, parallelReview.locator, revisedReview.locator]),
+          )
         })
 
         const sourceCompleted = Date.now()
@@ -2015,7 +2177,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           completedAt: sourceCompleted,
         })
         const importedTaskID = Identifier.ascending("task")
-        const importedSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Imported campaign evaluation" })
+        const importedSession = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Imported campaign evaluation",
+        })
         const preparedImports = await prepareCrossTaskArtifactImports({
           imports: [
             { source_task_id: taskID, locator: sourceOpportunityLocator },
@@ -2296,11 +2462,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
   test("loads the current Evolution Lab comparison from the embedded production package", async () => {
     const source = path.resolve(import.meta.dir, "../../../expert-squads/builtin/evolution-lab")
     const sourcePackage = await ExpertSquadRegistry.loadSourcePackage(source)
-    const embeddedSource = payloadPackageSources.find((entry) => entry.namespace === "builtin" && entry.id === "evolution-lab")
+    const embeddedSource = payloadPackageSources.find(
+      (entry) => entry.namespace === "builtin" && entry.id === "evolution-lab",
+    )
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.26.4")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.1")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(
@@ -2324,7 +2492,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Evolution package fixture" })
+        const session = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Evolution package fixture",
+        })
         const taskID = Identifier.ascending("task")
         const missionID = "evolution-candidate-chain"
         const missionSession = await Session.create({
@@ -2878,7 +3050,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           completedAt: sourceCompleted,
         })
         const importedTaskID = Identifier.ascending("task")
-        const importedSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Imported candidate validation" })
+        const importedSession = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Imported candidate validation",
+        })
         const preparedImports = await prepareCrossTaskArtifactImports({
           imports: [{ source_task_id: taskID, locator: candidateArtifactLocator }],
           projectID: Instance.project.id,
@@ -3214,10 +3390,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           "Fixture failure",
         )
         const terminalTaskRow = requireTask(taskID)
-        const lifecycle = resolveTerminalLifecycleReference(
-          taskID,
-          requireCurrentTerminalLifecycleReference(taskID),
-        )
+        const lifecycle = resolveTerminalLifecycleReference(taskID, requireCurrentTerminalLifecycleReference(taskID))
 
         const evidence = await collectTaskRunEvidence({
           projectID: Instance.project.id,
@@ -3249,7 +3422,9 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           completion_decision_artifact_id: null,
         })
         expect(evidence.messages).toHaveLength(3)
-        expect(evidence.messages.find((candidate) => candidate.locator.message_id === evidenceCreatorMessageID)).toMatchObject({
+        expect(
+          evidence.messages.find((candidate) => candidate.locator.message_id === evidenceCreatorMessageID),
+        ).toMatchObject({
           role: "assistant",
           agent: "orchestrator",
           parts: [{ type: "tool", tool: { name: "dispatch_agent" } }],
@@ -3309,7 +3484,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         ])
         expect(evidence.canonical_sha256).toHaveLength(64)
 
-        const evidenceOwnerSession = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Evolution evidence owner" })
+        const evidenceOwnerSession = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Evolution evidence owner",
+        })
         const evidenceOwnerTaskID = Identifier.ascending("task")
         persistTask({
           taskID: evidenceOwnerTaskID,
@@ -3472,7 +3651,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Nonterminal Trial evidence fixture" })
+        const session = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Nonterminal Trial evidence fixture",
+        })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         persistTask({

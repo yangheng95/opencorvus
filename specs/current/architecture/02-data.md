@@ -272,10 +272,18 @@ package revision；从该 Trial 的 `provider_usage_event` 盖章已记录 token
 因此比较的是实际服务模型；Evaluator 不复述任何宿主事实。
 
 `comparison-recommendation` 的模型面 payload 是空对象；Recommendation Owner 选择并完整读取
-Campaign、Candidate、Run、Evaluation 和 Review 直接来源。publisher 通过唯一比较器生成并持久化
+Campaign、Candidate、Run、Evaluation 直接来源；Review 不由它选择子集。publisher在一次冻结
+Task catalog分页内发现并完整读取这些确切Evaluation的全部Review，再经唯一比较器生成并持久化
 全部统计、可用性、置信度与推荐字段，不要求模型重抄派生结果。Owner 完整读回所发布的比较后
-再渲染文档与图表；存储格式和下游晋升权限不变。这一盖章契约不改变现有来源选择、槽位或审查
-取代语义，也不证明所选证据集完整或业务判断正确。
+再渲染文档与图表；比较存储格式、测量槽位和下游晋升权限不变。目录不完整或provider错误不能
+等同没有Review。这只保证该目录快照中的Review集合，不保证未来证据新鲜性或业务判断正确。
+
+`integrity-review.revision`是可选的显式改判声明，包含`supersedes`确切父Review及`reason`；
+未声明时是初始/独立审查，不取代任何记录。publisher校验同一Evaluation/slot、生产者和直接来源，
+唯一`resolveEvolutionIntegrityReviews`校验完整父集合及无环并投影current/superseded原记录。
+普通引用和时间先后不表示取代，不要求新增证据或自由文本finding同名。并列current分支的typed
+findings全部进入比较，后续完整Review可显式取代多个分支；原件永久保留。history的review_history
+逐项暴露真实状态，单项review投影只在唯一current时存在，不合成合并Review或写第二ledger。
 
 Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 metrics store：
 `engine_metric_spec`、`engine_metric_result` 和 `engine_iteration` 的唯一直接表写入文件

@@ -1,5 +1,6 @@
 import {
   ArtifactReadLocatorSchema,
+  ArtifactSchemaLimits,
   EngineArtifactEnvelopeSchema,
   TaskArtifactResourceSetLocatorSchema,
   TaskRunEvidenceBundleSchema,
@@ -92,6 +93,7 @@ async function readEngineArtifactEnvelope(
   locator: EngineArtifactLocator,
   context: ToolContext,
   purpose = "Exact Evolution Artifact predecessor",
+  select = true,
 ) {
   let offset = 0
   let text = ""
@@ -110,8 +112,57 @@ async function readEngineArtifactEnvelope(
       throw new EvolutionArtifactIntegrityError("Evolution predecessor Artifact ended before completion")
     offset = result.chunk.next_offset
   }
-  await context.host.engineArtifacts.select({ locator, purpose })
+  if (select) await context.host.engineArtifacts.select({ locator, purpose })
   return EngineArtifactEnvelopeSchema.parse(JSON.parse(text))
+}
+
+async function discoverIntegrityReviews(evaluationLocators: readonly EngineArtifactLocator[], context: ToolContext) {
+  const evaluations = new Set(evaluationLocators.map((locator) => JSON.stringify(locator)))
+  const reviews: Array<{
+    locator: EngineArtifactLocator
+    envelope: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>
+  }> = []
+  let cursor: string | undefined
+  do {
+    const page = await context.host.engineArtifacts.search({
+      sources: ["engine_artifact"],
+      artifact_types: ["evolution-lab/integrity-review"],
+      version_scope: "current",
+      sort: "oldest",
+      limit: ArtifactSchemaLimits.maxSearchLimit,
+      ...(cursor ? { cursor } : {}),
+    })
+    if (!page.catalog_complete || page.provider_errors.length > 0)
+      throw new EvolutionArtifactIntegrityError(
+        `Review catalog is incomplete; retry discovery: ${JSON.stringify(page.provider_errors)}`,
+      )
+    for (const entry of page.entries) {
+      if (entry.locator.source !== "engine_artifact")
+        throw new EvolutionArtifactIntegrityError("Review catalog entry must identify an Engine Artifact")
+      const envelope = await readEngineArtifactEnvelope(entry.locator, context, "Review catalog observation", false)
+      const correlation = tool.schema
+        .object({ evaluation_result_locator: ArtifactReadLocatorSchema })
+        .safeParse(envelope.payload)
+      if (!correlation.success) {
+        if (envelope.source_artifact_locators.some((locator) => evaluations.has(JSON.stringify(locator))))
+          throw new EvolutionArtifactIntegrityError(
+            "A Review sourced from the selected Evaluation has no valid evaluation identity",
+          )
+        continue
+      }
+      if (!evaluations.has(JSON.stringify(correlation.data.evaluation_result_locator))) continue
+      if (envelope.artifact_type !== "evolution-lab/integrity-review")
+        throw new EvolutionArtifactIntegrityError("Review catalog identity differs from its immutable envelope")
+      EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(envelope.payload)
+      await context.host.engineArtifacts.select({
+        locator: entry.locator,
+        purpose: "Complete independent Review evidence for the selected evaluation",
+      })
+      reviews.push({ locator: entry.locator, envelope })
+    }
+    cursor = page.next_cursor ?? undefined
+  } while (cursor)
+  return reviews
 }
 
 export function requireEvolutionWorkerProducer(
@@ -419,7 +470,10 @@ export default tool({
     if (artifact_type === "evolution-lab/candidate-revision") {
       const candidatePayload = EvolutionCandidateRevisionPublishInputSchema.parse(payload)
       const campaignLocator = candidatePayload.development_campaign_locator
-      if (campaignLocator && !publication.source_artifact_locators.some((locator) => sameJSON(locator, campaignLocator)))
+      if (
+        campaignLocator &&
+        !publication.source_artifact_locators.some((locator) => sameJSON(locator, campaignLocator))
+      )
         throw new EvolutionArtifactIntegrityError(
           "candidate publication sources must include its exact development campaign",
         )
@@ -681,6 +735,26 @@ export default tool({
           "integrity-review slot identity must equal its exact evaluation result",
         )
       const sourceKeys = new Set(publication.source_artifact_locators.map((locator) => JSON.stringify(locator)))
+      for (const locator of review.revision?.supersedes ?? []) {
+        if (!sourceKeys.has(JSON.stringify(locator)))
+          throw new EvolutionArtifactIntegrityError(
+            "Review revision must directly source every explicitly superseded Review",
+          )
+        const parentEnvelope = await readEngineArtifactEnvelope(locator, context, "Exact Review being superseded")
+        if (parentEnvelope.artifact_type !== "evolution-lab/integrity-review")
+          throw new EvolutionArtifactIntegrityError("Review revision predecessor must be an integrity-review")
+        requireEvolutionWorkerProducer(parentEnvelope, "evolution-safety-auditor")
+        const parent = EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(parentEnvelope.payload)
+        if (
+          !sameJSON(parent.evaluation_result_locator, evaluationLocator) ||
+          parent.case_id !== review.case_id ||
+          parent.arm !== review.arm ||
+          parent.repetition !== review.repetition
+        )
+          throw new EvolutionArtifactIntegrityError(
+            "Review revision predecessor must review the same exact Evaluation and slot",
+          )
+      }
       for (const finding of review.findings)
         for (const locator of finding.evidence)
           if (!sourceKeys.has(JSON.stringify(locator)))
@@ -702,7 +776,6 @@ export default tool({
         "evolution-lab/campaign-spec",
         "evolution-lab/candidate-revision",
         "evolution-lab/evaluation-result",
-        "evolution-lab/integrity-review",
         "evolution-lab/run-evidence-bundle",
       ])
       if (envelopes.some((item) => !supportedTypes.has(item.envelope.artifact_type)))
@@ -713,6 +786,14 @@ export default tool({
         )
       requireEvolutionWorkerProducer(campaigns[0]!.envelope, "evolution-experiment-planner")
       requireEvolutionWorkerProducer(candidates[0]!.envelope, "evolution-candidate-author")
+      envelopes.push(
+        ...(await discoverIntegrityReviews(
+          envelopes
+            .filter((item) => item.envelope.artifact_type === "evolution-lab/evaluation-result")
+            .map((item) => item.locator),
+          context,
+        )),
+      )
       for (const item of envelopes) {
         if (item.envelope.artifact_type === "evolution-lab/evaluation-result")
           requireEvolutionWorkerProducer(item.envelope, "evolution-evaluator")
@@ -720,6 +801,11 @@ export default tool({
           requireEvolutionWorkerProducer(item.envelope, "evolution-safety-auditor")
           const review = EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse(item.envelope.payload)
           const sourceKeys = new Set(item.envelope.source_artifact_locators.map((locator) => JSON.stringify(locator)))
+          for (const locator of review.revision?.supersedes ?? [])
+            if (!sourceKeys.has(JSON.stringify(locator)))
+              throw new EvolutionArtifactIntegrityError(
+                "Review revision must directly source every explicitly superseded Review",
+              )
           for (const finding of review.findings)
             for (const locator of finding.evidence)
               if (!sourceKeys.has(JSON.stringify(locator)))
