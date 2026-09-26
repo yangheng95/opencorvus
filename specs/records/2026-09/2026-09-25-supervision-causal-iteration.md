@@ -1032,3 +1032,21 @@
 - 全仓调用核对：当前只有Evolution Lab调用`host.metrics.evaluate`；通用`executeMetrics`还服务其他当前Task评分，不能全局把task_id改成Trial。metric流水保存到Evaluator Task是合理的归属；应修的是显式subject及其被执行/读取的数据。query/aggregator在同次Evaluator metric结果上聚合并不因此有错；judge当前仅收到所选Run envelope、无自动追资源读取，是否满足业务rubric另需准确输入证据，不泛称所有judge必错。
 - 下一实施前的两个必要事实：①终态Git checkpoint、嵌套仓库及既有WorkspaceTree/TaskArtifact原语能否提供**该次不可变结果**的评分目录，且不执行在旧Trial活动现场、不因cwd覆盖冻结scorer语义；②judge应接收哪些明确选中且同Trial的原始内容，如何在既有完整读取/权限/冻结字节上保留来源，而不是Host猜业务证据。inactive/awaiting观察只有live_observation tree identity，不能伪造成已归档终态结果；不能直接拿Campaign初始workspace_digest检验已经合法修改过的最终结果。
 - 这项已证根因优先于继续给完整集合加引用门：先把被评对象和证据输入接对，再解决Run exact Campaign归属、消费集合及不同观察合法关系。当前G41仅交付真实反例及完整影响边界，生产修复尚未实施；Codex继续原语审查，02:45后按用户要求交回同一准确Opus主管，不等待用户逐步指挥。业务可靠纠错与真实进化收益仍未达成。
+
+## G42实施前：复用冻结资源，显式分离评价对象与评分流水
+
+### Recall与已核对原语
+
+- 用户授权Codex在Opus恢复前继续修复；本轮从647e718c干净工作区继续，不重复G41反例或任何已停实验。已读AGENTS、五段图/G39–G41，核对`task-artifact/store.ts`的Git commit file/subtree读取、发布/materialize/close；`engine/git-process.ts`的封闭Git词汇；`execution-capsule/tree-digest.ts`、`workspace-tree.ts`、Snapshot实现；所有`host.metrics.evaluate`/`executeMetrics`定义调用、各evaluator和metric judge真实消息渲染。没有生产改动、模型或委托。
+- 现有TaskArtifact精确commit读取已经使用cat-file/ls-tree验证commit、文件mode、blob大小及路径，subtree拒绝非regular条目。已验证快照的materialize在Evaluator Task管理目录复制实际bytes并复核inventory，close统一回收；应复用，不另造存储/ledger。**当前限制**：读取绑定scope.taskID/projectDirectory，只支持自己的project源；subtree是包子目录而非通用多仓库终态结果导出。不能篡改Evaluator scope或把另一Task ID伪装成当前owner去通过。
+- WorkspaceTree当前只存path/base64，不保留文件mode；source snapshot对Git symlink存的是readlink目标文本，嵌套仓库按当时活动目录展开。因此它是现有输入身份的表示，不能未经合同扩展就把这些bytes写成普通文件后声称恢复了同一可执行终态。Snapshot.track也是独立当前工作区捕获，不是collector所声明的terminal Git commit，不能替换原终态权威。
+- `MetricEvaluationHost.evaluate`当前唯一生产调用是Evolution Lab，通用executor目前也仅由该Host调用；上一轮“通用executor另有当前Task评分调用”的措辞过强，准确事实是它的数据契约与查询/聚合以评分owner Task为域，不能据此把所有task_id换成被评Trial。后续改动仍需核对消费者而非假定另有调用。shell的cwd可显式绝对路径；judge发送给模型的是直接selectedEvidence字节，既不追resource，也不执行Tool读取。
+
+### 单一因果设计与未决完整性
+
+- 单一机制是**显式、不可变的metric subject**：Run引用的采集资源/结果及明确选中的同Trial证据决定被评输入；Evaluator Task只拥有评分执行、metric流水与receipt。subject身份进入原metric attempt/receipt来源，不新增独立ledger、角色或Agent业务判断。Host只解析/读取/验证确切身份和完整性，评价准则与选择证据仍来自冻结scorer和Agent。
+- shell路径拟在采集/证据发布阶段，沿原终态occurrence与repository checkpoint捕获对应结果资源，复用TaskArtifact的精确commit读取和现有发布/materialize。必须显式区分只读source authority（原Trial/Project/terminal/repository）与destination owner（真实Evaluator Tool调用），不能借source union猜归属或临时改Instance。之后评分只在这些不可变资源的隔离物化中执行，mutable Trial cwd和Evaluator项目cwd都不作默认替代。现有显式cwd也须清楚约束为subject内路径；不能默默忽略冻结配置或允许它绕过subject。
+- 需要在实施前进一步收敛的实际字段/错误：完整根仓库与嵌套仓库的路径映射、gitlink/symlink/executable mode语义、原Git对象缺失或Project已删除、当前/历史terminal occurrence与import后可读的资源身份。对无法完整恢复的对象保留typed unavailable，不能取当前HEAD或活动目录补齐。inactive/awaiting仅有live_observation，不能制造terminal snapshot；Campaign初始workspace_digest不能作为最终内容相等门槛。
+- judge路径应传入明确选中的原始内容，不能把Run locator/hash当作已读业务材料。已有collector可选Message body与Artifact目录索引可作为选择入口；具体选择/完整读取API须沿现有同Project/Trial身份核对，不能Host按关键词挑业务答案或自动塞所有隐藏内容。需要保持原max_evidence_bytes/MIME/UTF-8的明确错误语义，不截断后称完整。query/aggregator继续以本次评分流水聚合，prebuilt验证明确subject来源，不能误改成Trial内并不存在的metric spec。
+- 实施验收应保留G41原0/1反例：真实shell结果必须来自冻结Trial的0；采集后再改Trial活动文件以及Evaluator文件，物化评分仍读原0；物化中的允许写入只作用于副本并由现有close清理。补同Project不同Task、不同Project、旧occurrence、嵌套文件和明确不支持条目的真实正向输出/错误；judge核对实际发送的原始字节与确切locators，不能仅测构造对象或新字段存在。没有业务LLM运行登记，不启动模型来替代这些本地合同。
+- 本段是**待落实的精确方案/风险清单**，没有宣称现有Git读取已支持跨Task终态导出、没有已验证的实现patch。Opus恢复后接管这一方案和G41原始反例，自主收敛字段/实施，不重新争论已经实测的cwd错位；G40快照修复已交付，完整测量集合与合法后续观察仍是随后任务。
