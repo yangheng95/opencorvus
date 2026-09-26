@@ -776,3 +776,39 @@
 - 实际交付仅上述来源调查和实施前计划，生产代码未修改；第3项仍为待完整审查及真实Checker证伪的设计，不能当成已经实现、验证或批准的契约。尤其证据全集的发现范围、显式取代的既有语义、冲突/重复Trial分类以及用category/invariant和新引用表达改判的充分性，恢复后必须继续完成定义/调用/历史影响面审查，不把字符串相等或多一个引用冒充业务判断正确。
 - 调用方已核验原工具输出中时钟侧对话的真实用户请求，以及Git仅此记录35行计划新增。CLI估算累计费用`42.4022432`美元包含上轮`30.534527`美元，本轮增量约`11.8677162`美元；不是外部账单核对，也不是业务模型费用。原失败和全部收据保留，不换账号、凭据或模型绕过限额，不立即重试。
 - 后续安排上海时间2026-09-26 21:45恢复同一主管会话、同一四项目标，从本checkpoint继续；无需用户再次确认。恢复前核对是否已有同任务Claude，不能重复启动。当前四项总体目标未完成，行尾前向修复、完整出站验证和推送尚未执行。
+
+### G30第4项实施 checkpoint：行尾前向修复与整链验证（进行中）
+
+- `4ae54dbe`把`2a55323e`遗留的128个文件恢复为LF；`--ignore-cr-at-eol`差异为空，索引中已无CRLF或混合行尾。
+- 整链验证先跑出站链触及的33个OpenCorvus测试文件与4个Python测试文件：Python 50项全过；OpenCorvus 29个文件通过，4个失败。4个失败同一原因：`50dcb47a`（G10）新增Mission Panel工具`panel_extend_task_acceptance`，而钉死Mission/Control精确工具列表的`catalog-index`、`host-session-runtime`、`native-mission-transport-base`、`session-loop-tool-authority-integration`未更新。`MISSION_PANEL_ACTION_IDS`包含该动作且Control本就持有全部Panel叶工具（含`resume_task`），所以这是G10的既定契约，按现契约补入列表后49项全过。
+- 同类排查又发现两份过期钉住：`scheduler-message-harness-contract`的5条Mission原文条款（其中3条在`origin/main`上已不存在，说明该测试推送前就是红的；另2条因链上`c9aa1f18`/`d362e9a9`把terminal改为completed并合并句子而过期），按现文重钉；`session-loop-provider-tool-input`缺G6为续页新增的可选`cursor`。两文件11项全过。
+- 因链上提交未跑全受影响测试，改为按“直接导入链上内容变更的41个源模块或`mission-core.txt`”选出146个测试文件做整链清扫，结果写入本checkpoint后再决定推送。
+
+### G31：比较证据全集由宿主发现，Review显式取代（实施前方案）
+
+- 契约审查事实：比较器有15处按槽位证据抛错（未声明/重复槽位、scorer集合、包版本、Campaign/Candidate来源、运行时、Run与Evaluation身份）和2处Campaign/Candidate配对错误。Owner必须提交与推导逐字相等的比较（门审计第一类），并自选来源；同一Evaluation可发布多份Review，同一槽位可有多份Evaluation或来自不同Trial的Run，同一Trial可被标到多个repetition。Engine Artifact的current/historical版本只用于核心原地投影；包产出按内容派生ID，没有既有取代原语。目录search支持精确类型过滤与游标分页，并报告`catalog_complete`与provider错误。
+- 单一方案：Owner只提交空payload，以Campaign与Candidate为唯一两个来源；publisher分页搜索当前Task目录中的Run、Evaluation、Review，完整读取后只选择绑定到该Campaign/Candidate的证据，推导并盖章比较。目录不完整或有provider错误时拒绝发布（可重试）。绑定：Evaluation按其Campaign定位与候选臂的Candidate定位；Run按其唯一Campaign来源（G28）与包版本属于基线或本候选；Review按所审Evaluation。其它候选的证据不绑定。
+- 槽位问题一律成为typed必需不可用维度而非抛错，比较始终可发布：`evaluation_invalid`（scorer集合或版本不符）、`evaluation_conflict`（同槽位多份Evaluation）、`run_revision`（臂标签与包版本不符）、`trial_conflict`（同槽位来自不同Trial的Run）、`trial_reuse`（同一Trial占多个槽位）、`run_runtime`（workspace/environment/model与冻结值不符）、`undeclared_evidence`（未声明的case或repetition）。同一Trial多次发布的Run取被Evaluation引用者，无Evaluation时取最新目录修订。测量或Trial的重复不是可在同一Campaign内更正的对象：预登记实验中重测或换Trial即偏离，诚实结果是该槽位不可用，合法更正是新冻结的Campaign，而原比较仍可发布，不被毒化。
+- Review取代：新Review若以同一Evaluation的旧Review为直接来源即取代它。旧Review中每个failed或unavailable的blocker必须在新Review中以同category与invariant再次出现；结论改变时须引用旧finding未引用的证据，否则发布返回列出该blocker的typed错误（可自纠）。这只保证blocker不被静默丢弃、改判留下可审计的新来源，不证明新判断正确；语义仍归Auditor，比较保留被取代的Review为来源。比较只用未被取代的Review；同一Evaluation有多份互不取代的Review时取并集（任一不可用或blocker生效），后续一份同时取代它们的Review即可解除，不永久毒化。
+- 非阻断失败：不影响决策，保留在Review中；Review现在是比较的完整直接来源并在历史详情逐槽显示，不改比较schema。
+- 验证计划：比较单测覆盖每种typed维度、其它候选证据不绑定、Review取代后promote、互不取代的并集、同Trial重发布取引用者；真实host测试用空payload发布比较并断言盖章结果含已存在的冲突证据，真实publisher上验证合法改判被接受、静默丢弃blocker被拒；更新e2e支持脚本与测试以同一取代信息复算。限制：Evaluator从未收集的Trial仍不可见；跨Task导入的Evaluation仍不绑定（与现状同）。
+
+### G31主管第二次额度中断与调用方复核（未实施交付）
+
+- 2026-09-26上海21:47恢复同一主管会话，真实模型`claude-opus-5-5`；收据`.tmp/opus55-global-resolution-resume-20260926T1347.jsonl`。92 turns后CLI退出1、HTTP429、`terminal_reason=api_error`，原错误`You've hit your session limit · resets 2:40am (Asia/Shanghai)`；本轮时长2209.869秒。累计CLI估算65.7677364美元包含此前42.4022432，本轮增量约23.3654932美元，非外部账单。未启动业务模型/新世界/作者/Campaign。
+- Opus只修改了G31比较器的一部分；新增的`currentIntegrityReviews`尚无实现，publisher/ABI/消费者/包身份/新测试未完成。调用方完整保存差异为[待续补丁](../../artifacts/2026-09-25-acceptance-comparison-design/comparison-evidence-in-progress.patch)（21988字节），审查后只对本轮从干净状态修改的`comparison.ts`执行单文件恢复。生产比较器恢复HEAD原实现；补丁未应用、未通过类型或行为验收。`git apply --check`通过仅证明差异可续用，不是功能通过。
+- 对G31仍须解决两个具体反证：①同一冻结Trial的错误Evaluation被更正，不等于重跑Trial取优；把任何第二份Evaluation永久记冲突并要求新Campaign，可能使合法纠错永久不可采用。“仍可发布inconclusive”本身不能排除此问题。②Cycle3的既有事实已读齐，重新推导可纠正逻辑而不新增事实；硬要求新引用、以category与自由文本invariant严格相等定义义务身份，可能拒绝合法改判或激励无意义引用。这两点恢复后交回同一Opus审查，不机械应用待续补丁，不以这些假设已经成立为实现依据。
+- Opus另交付[H-B预登记](../../artifacts/2026-09-25-acceptance-comparison-design/hb-01-preregistration.md)、隔离读取顺序补丁和真实loader检查器。真实检查回执`.tmp/supervision-causal-20260926/hb-local-design/checker-run/receipt.json`确认6文件、四项文件差异、两worker能力与三节点拓扑保持，设计包`2026.09.26.1`/`0a13f0021ee42d57a23d6c9052220966c61aaf7cae1bc0df99e06a574b2fdf62`；默认AutomationBench源`.14`未改。没有H-B运行freeze或业务Task。调用方纠正了预登记中“未见目标而方法正确即说明曝光牵连错误”的因果过度主张：单新样本只能符合预测，不能识别因果贡献；改判证据也区分新事实与旧事实重新推导。
+- 已核验原始工具结果：Python受影响4文件50项通过；四个工具名单修正后49项通过；提示原文与cursor两项修正后11项通过；补充扫描发现Mission Skill前置工具声明遗漏同一验收延展工具，补源声明并仅同步general嵌入后`execution-authority-tool-surface`6项通过。146文件补充扫描在Claude退出后仍由本轮自有runner继续，不能把部分结果记为全通过；调用方继续收尾并在下面记录最终结果。没有停止或修改用户既有Claude/终端进程。
+- 后续上海时间2026-09-27 02:45恢复同一主管会话；先读此checkpoint与最新任务prompt，核对无重复进程，从未完成项继续，不重做已交付调查。整体四项目标仍未完成，当前尚未push。
+
+### G30交付检查补项：同步既有Artifact类别导出（调用方）
+
+- 生产比较器恢复后根`bun typecheck`通过；lease owner、架构索引、package topology、docs检查通过。`api:routes-check`真实失败：G10提交`50dcb47a`已在唯一`engine.sql.ts`类型源声明`mission_acceptance_extension_request`与`mission_acceptance_extension_outcome`，原OpenAPI/SDK生成物却缺它们。触发为比较运行时生成OpenAPI与tracked版本，直接根因为该提交的生成同步遗漏，不是新增路由或运行时语义问题。
+- 已查定义、`task-api`写入、`mission/acceptance-extension`读写、DDL完整性、现架构task-control-plane、routes检查器及`packages/sdk/js/script/build.ts`的现有事务生成器；SDK工作区修改前干净。补项仅运行唯一SDK生成器同步这两个既有类别，审查全部输出，重跑实际route库存与SDK类型检查。不会手写第二份schema、放宽运行时契约或改变比较/调度/业务判断；生成器的暂存/替换目标均限制在当前SDK package目录。
+- 实际完整生成差异还揭示同一链上G6的`query_task_artifacts.cursor`/immutable目录说明与G10的`extend_task_acceptance`结构化输入未导出，非另一新增设计。JSON递归差异核对只涉及这两类动作定义及三个位置的两项Artifact枚举；共生成`openapi.json`、`sdk.gen.ts`、`types.gen.ts`三个文件，其余SDK输出逐字未变。真实SDK build及其事务暂存类型编译通过；`api:routes-check`重跑6规则/34文件通过，SDK独立类型检查通过。原失败保留在调用方工具记录；无新模型、服务或业务实验。
+- 上述Skill/测试与SDK同步已范围提交`3d2c5283`。`check:release-mutation-topology --treeish HEAD`（5项权威）与`check:expert-squad-topology`（122 manifests/135 workflows）通过。
+- 新的真实推送阻塞：`check:module-topology --treeish HEAD`对`3d2c5283`失败，13模块形成未许可跨边界循环；同一checker对`origin/main`（`4888dcccae6b`）通过，1118模块/5650 runtime edges/4 clean imports。关键环为`storage/db → goal-workload-analyst/relational-integrity → agent/artifact-provenance-facts → engine/task-artifact-observation → engine/task-lifecycle → storage/db`，还合入协议与项目模块。当前`artifact-provenance-facts`只需观察schema/纯比较函数，但同一观察模块顶层导入`taskLifecycleProjection`；该模块由本任务`373f4169`引入、`50dcb47a`后续触及。此为有源码和checker反证的待处理架构问题，不放宽拓扑检查、不把旧授权问题当作仍未解决。留给同一Opus继续完成影响面和单一依赖来源修复；暂不push。
+- 22:50上海时间调用方核验扫描完整结束：146个文件均有DONE，145文件原次通过、唯一失败为第25个`execution-authority-tool-surface`，该项修正后已有独立6项全通过的原收据，不改写原扫描失败。逐文件时长合计2453.7秒不是全工程耗时；汇总及Temp原日志完整副本保存在`.tmp/supervision-causal-20260926/g30-closure/verification-summary.json`与同目录5个日志。精确命令匹配的本轮test runner/timeout与同任务Claude均已退出，未处理用户的其它进程。
+- 最终生产比较器保持已提交原实现，未完成G31只以未应用补丁保存。SDK同步后的根类型检查再次通过（8个实际typecheck任务），实际API routes、SDK typecheck、docs342ops25groups、lease owner18/22、architecture index17、package topology10、release topology5及专家团拓扑122通过。当前唯一已发现且未修的推送验收失败是上述module-topology；不以其余通过绕过它。没有执行push、发布、安装推广或新业务实验。
+- H-B检查器的独立类型检查通过：复用G23的真实package tsconfig与Markdown声明，只将检查入口换为`check-blind-expectation.ts`，`bunx tsc --noEmit -p .tmp/supervision-causal-20260926/hb-local-design/tsconfig-checker.json`退出0。结合此前真实loader回执，仅验证本地包设计与检查器，不代表H-B行为实验已经执行。

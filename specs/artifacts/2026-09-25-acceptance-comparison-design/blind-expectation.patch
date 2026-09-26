@@ -1,0 +1,76 @@
+diff --git a/README.md b/README.md
+--- a/README.md
++++ b/README.md
+@@ -14,6 +14,10 @@
+ Workflow dependencies guide those participants; they are not a host-enforced tool sequence.
+ Extra method work and the additional verifier occurrence must be counted as real cost;
+ this ordering proposal is not evidence of independence or improved business performance.
++The H-B variant changes only the expectation stage's reading order: the method is derived
++from the sources that establish each premise and published before the destination record's
++current value or explanation is read. The record stays visible and any earlier exposure is
++recorded; this is not evidence that anchoring causes errors or that the order improves results.
+ 
+ `api_catalog` projects the official service and operation directory as documentation.
+ `api_search`, `api_fetch` and `base64_encode` remain the official business API tools.
+diff --git a/agents/automationbench-verifier/system.md b/agents/automationbench-verifier/system.md
+--- a/agents/automationbench-verifier/system.md
++++ b/agents/automationbench-verifier/system.md
+@@ -45,15 +45,18 @@
+ an overconstrained empty query before asserting a discrepancy. Discover a missing read
+ contract only for the specific unresolved record. Do not rediscover unrelated services.
+ 
+-In the expectation formation stage, read the original obligations and authoritative facts
+-needed to derive an expectation, then publish one `automationbench/verification-method`
+-Artifact with the existing `artifact_publish` tool. Record each original obligation,
+-applicable conditions and preservation constraints, the method connecting premises to an
+-expected effect, exact source evidence, the derived expectation and unresolved premises.
+-A list of inputs is not the method. Record any pre-existing conclusion or observed result
+-as prior exposure; do not claim blindness. Existing destination values can be preservation
+-baselines but cannot establish their own correctness. Return the method locator and the
+-bounded findings; no new executor result exists yet and no delivered outcome is accepted.
++In the expectation formation stage, derive the expectation before reading the current value
++or explanation of the destination record the request asks you to review. First identify, for
++each original obligation, the business records that establish its premises and read those.
++Then publish one `automationbench/verification-method` Artifact with the existing
++`artifact_publish` tool. Record each original obligation, applicable conditions and
++preservation constraints, the method connecting premises to an expected effect, exact source
++evidence, the derived expectation and unresolved premises. A list of inputs is not the method.
++Only after publishing may you read the destination record, for identity and preservation
++baselines. If you saw a destination value or any pre-existing conclusion before publishing,
++record it as prior exposure; do not claim blindness. Existing destination values cannot
++establish their own correctness. Return the method locator and the bounded findings; no new
++executor result exists yet and no delivered outcome is accepted.
+ 
+ In the outcome verification stage, search the Task catalog and completely read the earlier
+ method to obtain a real read reference in this Turn. Independently check its premises and
+diff --git a/agents/orchestrator/system.md b/agents/orchestrator/system.md
+--- a/agents/orchestrator/system.md
++++ b/agents/orchestrator/system.md
+@@ -10,9 +10,12 @@
+ "expectation formation" in the real delegated instruction. Give it the original request
+ and the sample environment so it can read authoritative business sources and publish an
+ inspectable method with derived expectations or exact unresolved premises before the
+-executor begins. Existing destination records and their explanations remain visible;
+-never remove them or fabricate a producer report to claim blindness. Completion of this
+-source-and-method work is not acceptance of a delivered business outcome.
++executor begins. In that instruction, say that the method must be derived from the sources
++that establish each premise and published before the node reads the current value or
++explanation of the destination record the request asks to review. Existing destination
++records and their explanations remain visible; never remove them or fabricate a producer
++report to claim blindness. Completion of this source-and-method work is not acceptance of
++a delivered business outcome.
+ Read that participant result and the complete method Artifact through the Task catalog.
+ Pass its exact immutable locator, premises and unresolved questions to the executor as
+ claims to examine, not as new authority or an answer that must be reproduced. Do not pass
+diff --git a/expert-squad.jsonc b/expert-squad.jsonc
+--- a/expert-squad.jsonc
++++ b/expert-squad.jsonc
+@@ -5,7 +5,7 @@
+   "name": "AutomationBench",
+   "label": "AutomationBench",
+   "description": "Execute simulated cross-application business workflows and independently verify exact outcomes through the official AutomationBench API tools.",
+-  "version": "2026.09.25.15",
++  "version": "2026.09.26.1",
+   "product_pillars": ["code", "work"],
+   "readme": "README.md",
+   "selector": {

@@ -1,0 +1,433 @@
+diff --git a/expert-squads/builtin/evolution-lab/lib/evolution-lab/comparison.ts b/expert-squads/builtin/evolution-lab/lib/evolution-lab/comparison.ts
+index dc02113d..70869a9a 100644
+--- a/expert-squads/builtin/evolution-lab/lib/evolution-lab/comparison.ts
++++ b/expert-squads/builtin/evolution-lab/lib/evolution-lab/comparison.ts
+@@ -1,5 +1,5 @@
+ import { VISUAL_FEEDBACK_VERIFICATION_SCORER_NAME } from "@opencorvus-ai/plugin"
+-import { EvolutionArtifactSchemas, EvolutionArtifactIntegrityError } from "./artifacts"
++import { EvolutionArtifactSchemas, EvolutionArtifactIntegrityError, currentIntegrityReviews } from "./artifacts"
+ 
+ type Campaign = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/campaign-spec"]["parse"]>
+ type Candidate = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/candidate-revision"]["parse"]>
+@@ -100,93 +100,203 @@ function averageByArm(runs: readonly RunEvidence[], arm: "baseline" | "candidate
+ 
+ type ExpectedSlot = { caseID: string; arm: "baseline" | "candidate"; repetition: number; key: string }
+ 
+-type IndexedComparisonEvidence = {
+-  evaluations: Map<string, Evaluation>
+-  evaluationLocators: Map<string, ArtifactLocator>
+-  reviews: Map<string, Review>
+-  runs: Map<string, RunEvidence>
+-  runLocators: Map<string, ArtifactLocator>
++/**
++ * An Artifact with the direct sources its publication selected. A run names its
++ * Campaign that way, and a review names the earlier reviews it supersedes.
++ */
++export type SourcedArtifact<T> = Located<T> & { sources: readonly ArtifactLocator[] }
++export type LocatedReview = SourcedArtifact<Review>
++export type LocatedRun = SourcedArtifact<RunEvidence>
++
++/**
++ * The evidence a comparison of this Campaign and Candidate consumes: every
++ * measurement of this Campaign (and, on the candidate arm, this Candidate),
++ * every run that names this Campaign and belongs to its baseline or this
++ * candidate, and every review of one of those measurements. Evidence for
++ * another candidate under the same Campaign belongs to that comparison.
++ */
++export function boundComparisonEvidence(input: {
++  campaign: Campaign
++  candidate: Candidate
++  campaignLocator: ArtifactLocator
++  candidateLocator: ArtifactLocator
++  evaluations: readonly Located<Evaluation>[]
++  runs: readonly LocatedRun[]
++  reviews: readonly LocatedReview[]
++}) {
++  const evaluations = input.evaluations.filter(
++    (located) =>
++      sameLocator(located.value.campaign_spec_locator, input.campaignLocator) &&
++      sameLocator(
++        located.value.candidate_revision_locator,
++        located.value.arm === "candidate" ? input.candidateLocator : null,
++      ),
++  )
++  const revisions = new Set([input.campaign.baseline_revision.package_digest, input.candidate.candidate_revision.package_digest])
++  const runs = input.runs.filter(
++    (located) =>
++      located.sources.some((source) => sameLocator(source, input.campaignLocator)) &&
++      revisions.has(located.value.revision_equality.installed),
++  )
++  const measured = new Set(evaluations.map((located) => JSON.stringify(located.locator)))
++  const reviews = input.reviews.filter((located) => measured.has(JSON.stringify(located.value.evaluation_result_locator)))
++  return { evaluations, runs, reviews }
++}
++
++type MergedReview = Pick<Review, "status" | "findings" | "unknowns" | "accepted_limitations">
++
++type SlotEvidence = {
++  evaluation?: Located<Evaluation>
++  run?: LocatedRun
++  review?: MergedReview
++}
++
++function catalogOrder(locator: ArtifactLocator) {
++  return locator.source === "engine_artifact" ? locator.catalog_revision : 0
++}
++
++function inCatalogOrder<T extends { locator: ArtifactLocator }>(values: readonly T[]) {
++  return values.toSorted(
++    (left, right) =>
++      catalogOrder(left.locator) - catalogOrder(right.locator) ||
++      JSON.stringify(left.locator).localeCompare(JSON.stringify(right.locator)),
++  )
+ }
+ 
+ /**
+- * Bind every submitted Artifact to its declared slot, refusing anything that
+- * does not belong to the frozen Campaign.
++ * Resolve the complete evidence bound to one Campaign and Candidate into at
++ * most one Evaluation, one Trial run, and one current review per declared slot.
+  *
+- * Extracted from `deriveComparisonRecommendation`, which ran indexing,
+- * availability classification, delta statistics and the promotion rule as one
+- * 300-line body: none of the four could be exercised without constructing
+- * inputs valid for all of them.
++ * The comparison consumes every bound Artifact rather than a subset a role
++ * chose, so evidence that does not fit the frozen plan becomes a typed required
++ * dimension instead of an error: an error would let one stray publication make
++ * the Campaign permanently unpublishable. A repeated measurement, a second
++ * Trial for a slot, or one Trial counted in two slots is a deviation from the
++ * preregistered plan; the honest result for that slot is unavailable, and a
++ * corrected measurement belongs to a newly frozen Campaign. Reviews differ: an
++ * auditor's conclusion may be corrected, so a later review that names an
++ * earlier one among its sources supersedes it, and reviews of one evaluation
++ * that do not supersede each other are all current.
+  */
+-function indexComparisonEvidence(input: {
++function resolveComparisonEvidence(input: {
+   campaign: Campaign
+   candidate: Candidate
+   campaignLocator: ArtifactLocator
+   candidateLocator: ArtifactLocator
+   evaluations: readonly Located<Evaluation>[]
+-  reviews: readonly Located<Review>[]
+-  runs: readonly Located<RunEvidence>[]
+-  expectedSlotKeys: ReadonlySet<string>
++  reviews: readonly LocatedReview[]
++  runs: readonly LocatedRun[]
++  expectedSlots: readonly ExpectedSlot[]
+   expectedScorerIDs: readonly string[]
+-}): IndexedComparisonEvidence {
+-  const { campaign, candidate, expectedSlotKeys, expectedScorerIDs } = input
+-  const evaluations = new Map<string, Evaluation>()
+-  const evaluationLocators = new Map<string, ArtifactLocator>()
+-  for (const located of input.evaluations) {
++}): { slots: Map<string, SlotEvidence>; required: Set<string> } {
++  const { campaign, candidate } = input
++  const required = new Set<string>()
++  const declared = new Set(input.expectedSlots.map((slot) => slot.key))
++  const baselineDigest = campaign.baseline_revision.package_digest
++  const candidateDigest = candidate.candidate_revision.package_digest
++  const digestFor = (arm: "baseline" | "candidate") => (arm === "baseline" ? baselineDigest : candidateDigest)
++
++  const bound = boundComparisonEvidence(input)
++  const evaluationsBySlot = new Map<string, Located<Evaluation>[]>()
++  for (const located of bound.evaluations) {
+     const evaluation = located.value
+     const key = slotKey(evaluation.case_id, evaluation.arm, evaluation.repetition)
+-    if (!expectedSlotKeys.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has undeclared evaluation slot ${key}`)
+-    if (evaluations.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has duplicate evaluation slot ${key}`)
++    if (!declared.has(key)) {
++      required.add(`undeclared_evidence:${key}`)
++      continue
++    }
++    evaluationsBySlot.set(key, [...(evaluationsBySlot.get(key) ?? []), located])
++  }
++  const evaluationBySlot = new Map<string, Located<Evaluation>>()
++  for (const [key, located] of evaluationsBySlot) {
++    if (located.length > 1) {
++      required.add(`evaluation_conflict:${key}`)
++      continue
++    }
++    const evaluation = located[0]!.value
+     const scorerIDs = evaluation.scorers.map((scorer) => scorer.scorer_id).toSorted()
+-    if (JSON.stringify(scorerIDs) !== JSON.stringify(expectedScorerIDs))
+-      throw new EvolutionArtifactIntegrityError(`comparison evaluation slot ${key} does not contain the exact scorer set`)
+-    const expectedRevision = evaluation.arm === "baseline"
+-      ? campaign.baseline_revision.package_digest
+-      : candidate.candidate_revision.package_digest
+-    if (evaluation.trial_revision_digest !== expectedRevision)
+-      throw new EvolutionArtifactIntegrityError(`comparison evaluation slot ${key} has the wrong package revision`)
+     if (
+-      !sameLocator(evaluation.campaign_spec_locator, input.campaignLocator) ||
+-      !sameLocator(
+-        evaluation.candidate_revision_locator,
+-        evaluation.arm === "candidate" ? input.candidateLocator : null,
+-      )
+-    )
+-      throw new EvolutionArtifactIntegrityError(`comparison evaluation slot ${key} has the wrong Campaign or Candidate source`)
+-    evaluations.set(key, evaluation)
+-    evaluationLocators.set(key, located.locator)
+-  }
+-  const reviews = new Map<string, Review>()
+-  for (const located of input.reviews) {
+-    const review = located.value
+-    const key = slotKey(review.case_id, review.arm, review.repetition)
+-    if (!expectedSlotKeys.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has undeclared review slot ${key}`)
+-    if (reviews.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has duplicate review slot ${key}`)
+-    if (!sameLocator(review.evaluation_result_locator, evaluationLocators.get(key) ?? null))
+-      throw new EvolutionArtifactIntegrityError(`comparison review slot ${key} does not review its exact evaluation result`)
+-    reviews.set(key, review)
++      JSON.stringify(scorerIDs) !== JSON.stringify(input.expectedScorerIDs) ||
++      evaluation.trial_revision_digest !== digestFor(evaluation.arm)
++    ) {
++      required.add(`evaluation_invalid:${key}`)
++      continue
++    }
++    evaluationBySlot.set(key, located[0]!)
+   }
+-  const runs = new Map<string, RunEvidence>()
+-  const runLocators = new Map<string, ArtifactLocator>()
+-  for (const located of input.runs) {
++
++  const runsBySlot = new Map<string, LocatedRun[]>()
++  for (const located of bound.runs) {
+     const run = located.value
++    const revision = run.revision_equality.installed
+     const key = slotKey(run.case_id, run.arm, run.repetition)
+-    if (!expectedSlotKeys.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has undeclared run slot ${key}`)
+-    if (runs.has(key)) throw new EvolutionArtifactIntegrityError(`comparison has duplicate run slot ${key}`)
+-    const expectedRevision = run.arm === "baseline"
+-      ? campaign.baseline_revision.package_digest
+-      : candidate.candidate_revision.package_digest
+-    if (Object.values(run.revision_equality).some((digest) => digest !== expectedRevision))
+-      throw new EvolutionArtifactIntegrityError(`comparison run slot ${key} has the wrong package revision`)
++    if (!declared.has(key)) {
++      required.add(`undeclared_evidence:${key}`)
++      continue
++    }
++    if (revision !== digestFor(run.arm)) {
++      required.add(`run_revision:${key}`)
++      continue
++    }
++    runsBySlot.set(key, [...(runsBySlot.get(key) ?? []), located])
++  }
++
++  const slots = new Map<string, SlotEvidence>()
++  for (const slot of input.expectedSlots) {
++    const evaluation = evaluationBySlot.get(slot.key)
++    const runs = runsBySlot.get(slot.key) ?? []
++    let run: LocatedRun | undefined
++    if (evaluation) {
++      // The measurement names its run; other publications of that same Trial are
++      // harmless, but a run of another Trial is a second Trial for the slot.
++      run = runs.find((candidateRun) => sameLocator(candidateRun.locator, evaluation.value.run_evidence_locator))
++      if (runs.some((other) => other.value.task_id !== evaluation.value.trial_task_id))
++        required.add(`trial_conflict:${slot.key}`)
++      if (run && run.value.task_id !== evaluation.value.trial_task_id) {
++        required.add(`evaluation_invalid:${slot.key}`)
++        run = undefined
++      }
++    } else if (new Set(runs.map((other) => other.value.task_id)).size > 1) {
++      required.add(`trial_conflict:${slot.key}`)
++    } else {
++      run = inCatalogOrder(runs).at(-1)
++    }
+     if (
+-      run.workspace_digest !== campaign.workspace_digest ||
+-      run.environment_digest !== campaign.environment_digest ||
+-      run.model !== campaign.model
++      run &&
++      (run.value.workspace_digest !== campaign.workspace_digest ||
++        run.value.environment_digest !== campaign.environment_digest ||
++        run.value.model !== campaign.model)
+     )
+-      throw new EvolutionArtifactIntegrityError(`comparison run slot ${key} differs from the frozen Campaign runtime`)
+-    runs.set(key, run)
+-    runLocators.set(key, located.locator)
++      required.add(`run_runtime:${slot.key}`)
++    slots.set(slot.key, { evaluation, run })
+   }
+-  return { evaluations, evaluationLocators, reviews, runs, runLocators }
++
++  const slotsByTrial = new Map<string, string[]>()
++  for (const [key, evidence] of slots) {
++    if (!evidence.run) continue
++    const taskID = evidence.run.value.task_id
++    slotsByTrial.set(taskID, [...(slotsByTrial.get(taskID) ?? []), key])
++  }
++  for (const keys of slotsByTrial.values()) if (keys.length > 1) for (const key of keys) required.add(`trial_reuse:${key}`)
++
++  for (const [key, evidence] of slots) {
++    const evaluation = evidence.evaluation
++    if (!evaluation) continue
++    const reviews = bound.reviews.filter(
++      (review) =>
++        sameLocator(review.value.evaluation_result_locator, evaluation.locator) &&
++        slotKey(review.value.case_id, review.value.arm, review.value.repetition) === key,
++    )
++    const heads = inCatalogOrder(currentIntegrityReviews(reviews))
++    if (heads.length === 0) continue
++    evidence.review = {
++      status: heads.every((head) => head.value.status === "reviewed") ? "reviewed" : "unavailable",
++      findings: heads.flatMap((head) => head.value.findings),
++      unknowns: heads.flatMap((head) => head.value.unknowns),
++      accepted_limitations: heads.flatMap((head) => head.value.accepted_limitations),
++    }
++  }
++  return { slots, required }
+ }
+ 
+ /**
+@@ -197,26 +307,19 @@ function indexComparisonEvidence(input: {
+ function classifyComparisonAvailability(input: {
+   campaign: Campaign
+   expectedSlots: readonly ExpectedSlot[]
+-  evidence: IndexedComparisonEvidence
++  slots: ReadonlyMap<string, SlotEvidence>
++  required: ReadonlySet<string>
+ }): { unavailable: Set<string>; requiredUnavailable: Set<string> } {
+   const { campaign, expectedSlots } = input
+-  const { evaluations, reviews, runs, runLocators } = input.evidence
+-
+   const unavailable = new Set<string>()
+-  const requiredUnavailable = new Set<string>()
++  const requiredUnavailable = new Set<string>(input.required)
+   for (const slot of expectedSlots) {
+-    const evaluation = evaluations.get(slot.key)
+-    const run = runs.get(slot.key)
+-    if (evaluation && run && evaluation.trial_task_id !== run.task_id)
+-      throw new EvolutionArtifactIntegrityError(`comparison slot ${slot.key} run and evaluation Task identities differ`)
+-    if (evaluation && run && !sameLocator(evaluation.run_evidence_locator, runLocators.get(slot.key)!))
+-      throw new EvolutionArtifactIntegrityError(`comparison slot ${slot.key} metric receipt and run Artifact differ`)
++    const { evaluation, run, review } = input.slots.get(slot.key) ?? {}
+     if (!evaluation) requiredUnavailable.add(`evaluation:${slot.key}`)
+     if (!run) requiredUnavailable.add(`run:${slot.key}`)
+     // A present receipt for an inactive or awaiting-interaction Trial still
+     // lacks a terminal result; measured scorer values cannot fill that gap.
+-    if (run?.outcome === "unavailable") requiredUnavailable.add(`run_outcome:${slot.key}`)
+-    const review = reviews.get(slot.key)
++    if (run?.value.outcome === "unavailable") requiredUnavailable.add(`run_outcome:${slot.key}`)
+     if (!review || review.status === "unavailable") requiredUnavailable.add(`integrity_review:${slot.key}`)
+     // A completed review can still report an unobserved dimension. Consume the
+     // auditor's typed conclusion, not the existence of its report: every
+@@ -231,7 +334,7 @@ function classifyComparisonAvailability(input: {
+       }
+     }
+     for (const scorer of campaign.scorers) {
+-      const result = evaluation?.scorers.find((item) => item.scorer_id === scorer.scorer_id)
++      const result = evaluation?.value.scorers.find((item) => item.scorer_id === scorer.scorer_id)
+       if (!result || result.status === "unavailable") requiredUnavailable.add(`scorer:${scorer.scorer_id}:${slot.key}`)
+     }
+   }
+@@ -245,8 +348,8 @@ export function deriveComparisonRecommendation(input: {
+   candidate: Candidate
+   candidateLocator: ArtifactLocator
+   evaluations: readonly Located<Evaluation>[]
+-  reviews: readonly Located<Review>[]
+-  runs: readonly Located<RunEvidence>[]
++  reviews: readonly LocatedReview[]
++  runs: readonly LocatedRun[]
+ }): Comparison {
+   const { campaign, candidate } = input
+   if (!exactRevisionIdentity(campaign.baseline_revision, candidate.parent_revision))
+@@ -262,15 +365,8 @@ export function deriveComparisonRecommendation(input: {
+       (["baseline", "candidate"] as const).map((arm) => ({ caseID, arm, repetition, key: slotKey(caseID, arm, repetition) })),
+     ).flat(),
+   )
+-  const expectedSlotKeys = new Set(expectedSlots.map((slot) => slot.key))
+   const expectedScorerIDs = campaign.scorers.map((scorer) => scorer.scorer_id).toSorted()
+-  const {
+-    evaluations,
+-    evaluationLocators,
+-    reviews,
+-    runs,
+-    runLocators,
+-  } = indexComparisonEvidence({
++  const { slots, required } = resolveComparisonEvidence({
+     campaign,
+     candidate,
+     campaignLocator: input.campaignLocator,
+@@ -278,23 +374,24 @@ export function deriveComparisonRecommendation(input: {
+     evaluations: input.evaluations,
+     reviews: input.reviews,
+     runs: input.runs,
+-    expectedSlotKeys,
++    expectedSlots,
+     expectedScorerIDs,
+   })
+   const { unavailable, requiredUnavailable } = classifyComparisonAvailability({
+     campaign,
+     expectedSlots,
+-    evidence: { evaluations, evaluationLocators, reviews, runs, runLocators },
++    slots,
++    required,
+   })
++  const evaluationAt = (key: string) => slots.get(key)?.evaluation?.value
++  const runAt = (key: string) => slots.get(key)?.run?.value
+ 
+   const pairedDeltas = campaign.scorers.flatMap((scorer) => {
+     const deltas = campaign.cases.flatMap((caseID) =>
+       Array.from({ length: campaign.repetitions }, (_, repetition) => {
+-        const baseline = evaluations
+-          .get(slotKey(caseID, "baseline", repetition))
++        const baseline = evaluationAt(slotKey(caseID, "baseline", repetition))
+           ?.scorers.find((result) => result.scorer_id === scorer.scorer_id)
+-        const candidateResult = evaluations
+-          .get(slotKey(caseID, "candidate", repetition))
++        const candidateResult = evaluationAt(slotKey(caseID, "candidate", repetition))
+           ?.scorers.find((result) => result.scorer_id === scorer.scorer_id)
+         if (baseline?.status !== "measured" || candidateResult?.status !== "measured") return undefined
+         return candidateResult.value - baseline.value
+@@ -327,7 +424,7 @@ export function deriveComparisonRecommendation(input: {
+     }]
+   })
+ 
+-  const completeRuns = expectedSlots.map((slot) => runs.get(slot.key)).filter((run): run is RunEvidence => Boolean(run))
++  const completeRuns = expectedSlots.map((slot) => runAt(slot.key)).filter((run): run is RunEvidence => Boolean(run))
+   const runCountsComplete = completeRuns.length === expectedSlots.length
+   const costsComplete = runCountsComplete && completeRuns.every((run) => run.cost !== null)
+   const costDelta = costsComplete
+@@ -348,7 +445,7 @@ export function deriveComparisonRecommendation(input: {
+ 
+   const outcomeRate = (arm: "baseline" | "candidate") => {
+     const expected = expectedSlots.filter((slot) => slot.arm === arm)
+-    const values = expected.map((slot) => runs.get(slot.key)?.outcome ?? "unavailable")
++    const values = expected.map((slot) => runAt(slot.key)?.outcome ?? "unavailable")
+     return {
+       failure: values.filter((outcome) => outcome === "failure").length / expected.length,
+       unavailable: values.filter((outcome) => outcome === "unavailable").length / expected.length,
+@@ -421,10 +518,11 @@ export function deriveComparisonRecommendation(input: {
+         : aggregateHalfWidth <= AGGREGATE_MEDIUM_CONFIDENCE_HALF_WIDTH
+           ? "medium"
+           : "low"
+-  const reviewedSlots = expectedSlots.flatMap((slot) => {
+-    const review = reviews.get(slot.key)
+-    return review?.status === "reviewed" ? [review] : []
++  const currentReviews = expectedSlots.flatMap((slot) => {
++    const review = slots.get(slot.key)?.review
++    return review ? [review] : []
+   })
++  const reviewedSlots = currentReviews.filter((review) => review.status === "reviewed")
+   // Measured improvements do not establish an adoptable experiment when the
+   // independent auditor has recorded a failed blocking invariant. Keep the
+   // measurements and exact Review sources; the finding remains failed rather
+@@ -434,7 +532,8 @@ export function deriveComparisonRecommendation(input: {
+   )
+   // An unavailable review states why in its unknowns; that reason is as much
+   // an unknown of this comparison as a completed review's residual unknowns.
+-  const derivedUnknowns = [...new Set([...reviews.values()].flatMap((review) => [
++  // A superseded review's unknowns were answered or restated by its successor.
++  const derivedUnknowns = [...new Set(currentReviews.flatMap((review) => [
+     ...review.unknowns,
+     ...review.accepted_limitations,
+   ]))].toSorted()
+@@ -455,7 +554,7 @@ export function deriveComparisonRecommendation(input: {
+       .map((scorer) => scorer.scorer_id),
+   )
+   const visualResults = expectedSlots.flatMap((slot) =>
+-    evaluations.get(slot.key)?.scorers.filter((result) => visualScorerIDs.has(result.scorer_id)) ?? [],
++    evaluationAt(slot.key)?.scorers.filter((result) => visualScorerIDs.has(result.scorer_id)) ?? [],
+   )
+   const visualExpectedCount = expectedSlots.length * visualScorerIDs.size
+   // Whether visual review applies is decided by the Campaign's visual scorers,

@@ -11,6 +11,9 @@ original database/eval log.
 
 ## Contract and boundary
 
+- [G31 incomplete comparator patch](comparison-evidence-in-progress.patch) preserves
+  interrupted work for supervisor review. It is unapplied, lacks its planned helper
+  and publisher integration, and is not a runnable or accepted implementation.
 - [Schema](comparison.schema.json) separates a declared expectation from an observation.
 - [Probe](probe.py) checks that schema and evaluates only a supplied arithmetic tree
   or literal equality. Decimal arithmetic avoids binary floating-point surprises.
@@ -56,6 +59,10 @@ original database/eval log.
   uncertainty and all costs remain separate; it is not a historical score comparison.
 - [H-T 01 results](ht-01-results.md): real expectation-first chronology, original source
   and Tool lineage, unchanged wrong business value, false acceptance, cleanup and full costs.
+- [H-B 01 preregistration](hb-01-preregistration.md) fixes one run in which the expectation
+  node publishes its method before reading the destination record, with its
+  [patch](blind-expectation.patch) and [local checker](check-blind-expectation.ts); it tests
+  existing-value anchoring against source selection and claims no correction result.
 - [Source dependency and judgment boundary](source-dependency-boundary.md): current
   API catalog/search reachability, observed ranking noise and the separate failure of
   business relation judgment, with explicit limits on possible local fixes.
