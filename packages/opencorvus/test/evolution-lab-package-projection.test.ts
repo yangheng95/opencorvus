@@ -105,6 +105,9 @@ describe("Evolution Lab complete package projection", () => {
           packageRevision: revision,
         })
         expect(scheduler.expertSquadID).toBe("evolution-lab")
+        expect(scheduler.promptOverlay).toContain(
+          "Run and Evaluation evidence covers every frozen case, arm and repetition, and integrity Reviews cover each exact Evaluation, retaining publication aliases and explicit Review revisions.",
+        )
         expect(scheduler.packageRevision).toEqual(revision)
         expect(scheduler.builtInToolIDs).toEqual(
           expect.arrayContaining(["artifact_search", "artifact_read", "artifact_select", "artifact_snapshot"]),
@@ -133,6 +136,14 @@ describe("Evolution Lab complete package projection", () => {
           expect(worker.packageRevision).toEqual(revision)
           expect(worker.productionSkills.map((grant) => grant.ref)).toEqual(["evolution-lab/shared/campaign"])
           expect(worker.packageTools.map((entry) => entry.ref).sort()).toEqual([...expectedTools])
+          if (agentID === "evolution-recommendation-owner") {
+            expect(worker.promptOverlay).toContain(
+              "The publisher stamps Evaluation measurement_identity from the scoring owner Task and each original native metric result ID; the receipt transports those observations.",
+            )
+            expect(worker.promptOverlay).toContain(
+              "Different native metric result IDs remain distinct observations even with equal values, Tool producer or iteration.",
+            )
+          }
         }
 
         const observer = await PromptProfileResolver.resolveWorkerCapability({

@@ -5,7 +5,7 @@
   "name": "Evolution Lab",
   "label": "Evolution Lab",
   "description": "Target-agnostic evidence, candidate, evaluation, integrity review, and recommendation package for explicit Expert Squad evolution campaigns.",
-  "version": "2026.09.27.12",
+  "version": "2026.09.27.13",
   "product_pillars": [
     "code",
     "work"
@@ -175,7 +175,7 @@
         "nodes": {
           "evolution-evaluator": {
             "agent_id": "evolution-evaluator",
-            "description": "Computes the metric evidence for both frozen Trials from the exact imported Campaign and Candidate.",
+            "description": "Computes the metric evidence for every frozen Trial slot from the exact imported Campaign and Candidate.",
             "depends_on": []
           },
           "evolution-safety-auditor": {

@@ -1276,3 +1276,36 @@
 - 最终96项619断言全部通过（g50-focused-tests.log）：真实Host9/178、mutation/history5/118、比较57/174、reference4/16、e2e证据消费14/40、包projection1/40、metric runtime6/53。原纯比较fixture把多份不同Run复用一个locator，已改成各真实逻辑条目自己的标识，关系同步而非弱化身份检查；旧未记录测量的不同回执仍保留未知/冲突，不将其描述为已证不同执行。原探针主动捕获退出保留，最终正向验收无失败。
 - Lab源/嵌入2026.09.27.12/contentDigestcab52fb838a7eeaedefce003ef027052a9ecf28d6fb66a23cc3235aa7c38718c（g50-package-sync.log），仅Lab同步未推广。类型8、docs342ops25、API6规则34、包拓扑122/135和diff检查通过。新增字段仅内部recorded/不可变Artifact payload，history公开响应投影仍是原Artifact identities/scorer slots；无HTTP/SDK响应/DDL/UI变化。范围提交后按原规则pull、审完整outgoing、实际pre-push和push。
 - 下一范围仍是不同完整已发布测量的选择/遗漏和合法后续观察；本次只消除运输造成的假冲突，不证明全集、后续取代关系、业务可靠纠错或真实进化收益。须用现已可区分的native result ID和Evaluation exactCampaign/Candidate/Run关系定位，不能以Turn宽来源猜Run唯一归属，不能把后入账/恢复/重评分/新Trial全部永久毒化或默认最新/最好。无全部Trial预绑定清单时catalog最多证明已发布集；07:45优先将精确现状交给原Opus主管，旧业务实验继续只读停止。
+
+## G51：不同完整测量的遗漏与模型侧契约同步
+
+### Recall与实施前影响面
+
+- 从G50的2301c65b已push/clean继续，重读AGENTS/Recall/五段图/G48–G50/02-data、2026-08-17 ownership split与campaign resume段、现Evaluator/Owner/Auditor/scheduler/Campaign Skill、metric-context/execute/store、G48精确输入与G50共享测量key。继续主线测量→父代选择，不把局部协议完成当业务收益；07:45上海优先交给原Opus主管，不开启新业务模型或旧样本。
+- 历史合同只给每slot一份测量和保留既有结果的stage resume；当前Skill允许resume/import继续阶段，明确禁止重跑择优。Campaign冻结Dataset/cases/repetitions/scorers/model/environment等，却没有结构化TrialID全名单或第二次完整评分的保留/选择/取代协议。通用metrics iteration是评分owner域参数，不等于Trial repetition；每次writeMetricResult产生自己的原生ID，无“最新即权威”合同。现有事实不足以把任何后续观察自动取代前件，也不足以把全部第二观察永久定性无效。
+- 已确认模型侧契约漂移：G50实现/README已把同原评分的receipt视作运输，但Recommendation Owner真实system.md仍称Different receipts为不同观察，并称exact-payload闭包。该旧规则会要求模型把已证合法运输误报冲突，需同步成当前单一原生身份合同，不是增加同义提醒。影响只限该角色原prompt、Lab版本/源嵌入与实际Capability prompt投影测试；不改grant/角色/工作流/比较算法或业务gate。
+- 另做有界真实Host probe：复用G45原fixture已执行两次的完整评分，各自native IDs不同；给第二Evaluation实际发布permission unavailable Review，只选择第一份测量发布Comparison，再选择两份比较。保存原结果/原native身份/实际calculation_inputs/Review/错误，精确区分“不利独立审查被遗漏”与“同测量运输别名已被G50覆盖”。这是明确test-driver，不是LLM自主行为或真实promote；现fixture缺candidate不能夸大推荐收益。probe结束恢复精确原文件，不能留下把已知错误当通过的长期断言。
+- 若独立测量遗漏证实，先保留可复核事实与未满足的选择授权，不能为了闭合目录立即做永久冲突门或机械移植Review supersedes。模型侧旧规则的精确同步可独立完成并验证；完整不同测量协议交接主管继续，原Artifact/world/评分不改。
+
+### G51真实遗漏反例与本轮修复范围
+
+- 两份真实Evaluation同Trial tsk_g00VWN54V1005VfchrYB、同scorer值[1,1]，但原native result IDs各自不同；第二份art_hQ6L3HjoqK3VAVjY5ted的独立permission/unavailable/blocker Review art_hbW7ipkbxEintFHU42yq已真实发布。只传第一份测量，当前Comparison成功发布、calculation_inputs只包含第一份及其G50运输别名；第二份测量与其Review没有进入实际输入，其required dimension也未进入结果。传两份则报conflicting evaluation observations。g51-distinct-measurement-omission-probe.json/log/patch保留。
+- 夹具缺candidate且原第一份Review已有另一个security unavailable，两种情况下不能夸称实际错误promote或收益差。新反例精确证明不同真实测量上的不利审查可被遗漏，区别于G39/G50已关闭的同一测量别名遗漏。首次driver错误引用后方尚未定义的reviewPayload，修成从已读第二Evaluation构造独立Review后到达真实路径；initial日志保留。捕获后的G51_PROBE_CAPTURED是主动停止driver，非自然产品失败；临时源已逐字恢复，不把已知遗漏留作长期通过测试。
+- 当前只精确修复已确认的模型侧旧契约：Recommendation Owner从“不同回执必是不同测量”改为消费Host已盖章的原native result IDs及完整事实，保持未知历史/独立评分/完整证据/禁止重跑择优边界。删除旧exact-payload闭包说法，同步Lab源嵌入；实际安装包→resolveWorkerCapability正向验收当前promptOverlay。此测试证明真实投影，不声称已发模型或理解；没有模型运行。不同完整测量遗漏尚未修复，不能用这次prompt同步冒称全集完成。
+- 交给主管的核心未决点：现有单slot合同未声明多次完整测量的纳入/合法取代授权；阶段resume和同原结果再次运输已有正向能力，但不能据此推定不同原结果间的支配关系。next应依据冻结协议与原发生事实定义当前测量集及合法后续观察，并使实际比较/安装新鲜性消费一致。不得默认最新/最好，也不得把每个第二记录永久毒化；Run仍无exactCampaign字段，宽source不能猜归属；catalog不能证明未公开Trial。保持旧评分/世界/Artifact只读。
+
+### G51同一模型侧合同的数量冲突
+
+- 同轮进一步读到orchestrator/system.md要求依赖派单前每个前驱类型恰好一个Engine Artifact；但Campaign的cases×arms×repetitions、Evaluator每slot输出和Auditor每Evaluation审查天然允许多个同类型原件，G50实际Host已生产多份。这里是角色文案对现有数据合同的确定数量冲突，不是新发现的runtime调度故障，也不能据此宣称它导致历史模型遗漏。原completion-decision.ts按完整终端worker集合派生原件列表，未要求每类型单一；当前Catalog/Host真实多产物路径已验证。
+- 修复限于同一Lab模型合同：scheduler依据冻结Campaign与原角色所有权读完整前驱集合，区分Campaign/Candidate单一精确身份和多slot测量/逐Evaluation Review，并保留别名/显式修订/冲突记录。manifest Evaluator节点description的both frozen Trials改为every frozen Trial slot，去掉暗含单pair的错误限制；不改变graph/agent/grant/Task生命周期/host检查。实际resolveSchedulerCapability的promptOverlay验证当前集合文案，Owner同样实际投影。源/嵌入在同一未提交.13版本前向重生，随后重跑对应公开Host/包投影。
+
+- 安装消费面补一项有界诊断：以既有真实DB/package-manager测试的预置promote矩阵，授权后新增同Trial但另一个原生测量身份的Evaluation和阻断Review，实际执行旧请求并核对receipt/安装目录。身份与数值为明确typed fixture，原native身份来源另由上述Host probe证明；不能把此驱动称模型选择/真实业务晋升。只修改临时test-driver并保存/恢复，不改生产新鲜性或构造长期错误通过断言。
+
+### G51安装消费面与最终验收
+
+- 真实DB/package-manager诊断确认：预置完整promote矩阵先授权，再发布同Trial的另一个明确measurement_identity及security failed/blocker Review；追加后的authorize仍成功，原请求实际安装candidate、写入promotion receipt，installedDigest等于candidateDigest。g51-distinct-measurement-promotion-probe.json/log/patch保留。这里的测量ID/数值是明确test-driver预置typed输入，非native ledger实测；上一个Host反例单独证明同scope真实第二评分可发布且被遗漏，两项证据不能冒充一次模型自主Campaign。capture后主动G51_PROMOTION_PROBE_CAPTURED退出，临时测试已逐字恢复。
+- 因而未解决项同时涉及发布比较与当前安装：G37/G39/G50只复核已选测量家族的Review，未选不同真实测量及其Review不会让旧Comparison失效。原G48精确输入/旧receipt重放规则仍正确；修复必须先定义完整已发布测量的当前集合及合法后续观察关系，不能把历史推荐直接重算覆盖，也不能靠任意Review去消除真实测量。
+- 第二次嵌入同步曾在打开generated/expert-squad-payload.ts时发生Bun EUNKNOWN（g51-package-sync-initial-error.log）。本轮局部同步助手改为调用原唯一生成器输出临时文件，渲染进程退出后再以精确输出写入目标；写入前核对非Lab段/非Lab revision行原字节相等。原OS打开失败的具体持有者未知，未操作其它进程。随后真实源/嵌入身份验收通过；不是手写生成包或放宽digest规则。中间owner-only .13未提交digest5eed…保留，最终同一未发布版本前向生成为eea2f9e6dab6990ac97dd0a3db40c41201d788c7e62b01a3699c74f23300e515。
+
+- 最终聚焦验收15项339断言：当前Lab实际投影1/43与真实Host9/178在g51-final-tests.log，精确恢复诊断测试后真实mutation/history5/118在g51-mutation-restored.log，均exit0。较早g51-focused-tests.log只覆盖Owner同步的中间版本，不当最终scheduler验收；原Host probe initial ReferenceError与两个主动捕获退出均保留。原native评分、G50别名/Review改判/导入、原安装/回滚/重放合同均保持。没有外部Provider或UI自动化。
+- Lab源/嵌入2026.09.27.13/eea2f9e6dab6990ac97dd0a3db40c41201d788c7e62b01a3699c74f23300e515，仅Lab同步，不推广。类型8、docs342ops25、包拓扑122/135/diff检查通过；本轮无公共接口、SDK、DDL、grant/graph、比较或安装算法变更。范围提交后pull审完整outgoing/实际pre-push/push，保留原收据。07:45上海交回准确Opus5.5：先以本G51两项原始反例处理不同完整测量遗漏/合法后续观察，不能重复G50或把本次指令同步当集合根治；整体业务可靠纠错/真实进化收益仍未完成。
