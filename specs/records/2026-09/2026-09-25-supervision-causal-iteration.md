@@ -734,3 +734,45 @@
 - 真实发布路径：`evolution-artifact-evidence-host`里已由真实publisher发布的Auditor Review增加一条非阻断`side_effect`未观察；Recommendation Owner的比较声明须含`integrity_finding:case-1:baseline:0:side_effect:2`，真实publisher逐字核对通过。换回HEAD比较器时，同一发布以`comparison-recommendation must equal the deterministic ... matrix`被拒——修复前Owner即使读懂Review也无法报告这项未观察。
 - 验证：`bun run test`（packages/opencorvus）`evolution-comparison` 39/126、`evolution-artifact-evidence-host` 9/93、`evolution-lab-package-projection` 1/40、`expert-squad-evolution-mutation` 1/23、`random-evolution-e2e-support` 14/33、`evolution-chain-host-defect-repairs` 3/13、`evolution-candidate-manifest-surface` 13/13、`expert-squad-feedback-revision` 9/48、`evolution-feedback-revision` 4/12，全部通过；`check:expert-squad-types`与opencorvus类型检查exit 0；拓扑122 manifests；`docs:check` 342 ops/25 groups；`git diff --check`通过。plugin源码本轮未改。
 - 边界：本修复只让Auditor已声明的未观察进入决策Artifact，不判定哪些类别必需，不能区分“审过且干净”与“声称完成但未审”，也不证明任何业务纠错、候选收益或晋升正确。同一Evaluation可有多份Review而由Owner选一份、非阻断实际失败在比较输出中无字段、比较推荐仍需Owner逐字复现，三项保持未处理，前者需先决定取代语义。
+
+## G30：主管接管四项未完成目标——排序、接受条件与计划
+
+### Recall
+
+- 用户2026-09-26最新要求“让opus解决这些问题”：由我（Claude Opus 5.5主管）直接负责四项未完成目标的分析、实现、验证和交付，不再委托、不缩成巡检，不重复G29。四项：1）可靠业务纠错未证；2）自进化收益未证；3）同一Evaluation多份Review的选择/取代语义，及同审计涉及的比较事实由Owner逐字转录、非阻断失败报告边界；4）待推送链中`2a55323e`/`ba89e5cb`应主动核验授权、真实改动、验收与前向修复，能安全解决就交付，确缺用户独有选择才报告唯一缺失事实。旧运行与原世界/输入/评分/消息/Tool/候选只读；新真实验证须先独立预登记单一改变、输入/源/包/模型/目录/次数/停止条件与全部费用；业务模型只用流式`openai/gpt-5.6-luna`；Host只做身份/来源/类型/完整性/一致性。
+- 已读：本记录Recall/五段图/G25–G29、`2026-09-24-luna-mission-task-factorial-trials.md`（授权与formal-2源漂移段）、`engine/git.ts` checkpoint生成、`af5213a2`、基准adapter/solver的`init_git`、Evolution Lab发布器/比较器/ABI/prompt、`.husky/pre-push`；本地会话库仅用于核对`ba89e5cb`的原始用户请求。
+
+### 主管排序（目标→事实/反证→判断→返工/结算→测量/选择）
+
+| 目标 | 已证 | 被推翻的充分条件 | 最先可改变的真正责任层 |
+| --- | --- | --- | --- |
+| 1 业务纠错 | 协议可达（G4–G10）；四条轨迹记录了同一关系失真 | 补读来源（Cycle3读齐仍接受5,000）、方法交接（G21）、方法前置（G25 H-T01先写4×5,000）、多轮/同义提示；目录噪声只可能影响未读Sheets的三例 | 语义判断属真实Agent；Host不能改。已有诊断未证明包内手工改写根治；拟继续检验“测量→父代选择”闭环（见3、2），当前未验不能写成必然不可执行 |
+| 2 进化收益 | G1/G27/G28/G29的局部合同 | 合同通过、候选发布、一次accepted | 评估阶段的转录与选择契约继续审查；本主线尚无真实完整闭环跑通的证据，拟先处理3的确定问题，再以登记运行观察其可执行性 |
+| 3 评估证据 | Review/Run/Evaluation的typed事实 | “Owner读懂即可” | 比较事实由Owner逐字转录（门审计第一类），且Owner决定哪份Evaluation/Run/Review进入比较——同一槽位多份事实时可挑选有利者、同一Trial可重复计入 |
+| 4 推送链 | 见下方核验 | 旧“未核验”标签 | 前向修复`2a55323e`遗留的行尾，再完整验证整链 |
+
+### 4 的核验事实（已完成调查）
+
+- `2a55323e`由产品`EngineGit` baseline checkpoint生成（`engine/git.ts`的“Checkpoint before …”），发生在用户授权的formal-2（`4888dccc`）首组启动时：该组ME臂Mission项目`attempt-1`没有自己的`.git`（其余三臂有），checkpoint上溯到外层开发仓库，把工作树中128个文件以CRLF提交。忽略CR后差异为空；这些文件在其父提交中均为LF，其中含`deploy/racknerd/opencorvus-activate-release`脚本（CRLF会破坏Linux执行）。根因已由同链`af5213a2`修复（Mission基准项目init-git并校验工作树等于项目目录），此后各运行未再写入main。同类产品checkpoint已有7个（2026-08-08至08-26）在`origin/main`上，属本仓库既有dogfooding历史。HEAD中仍有86个纯CRLF与42个混合行尾文件，恰为这128个，仓库其余文件无CRLF。
+- `ba89e5cb`由Codex侧对话线程`01a0d846…`产生：用户原话2026-09-25 11:15Z“我需要你检查bench环境是否有bug”、11:50Z“我认为不止这些问题，修复全部问题”，12:03Z提交；其记录`2026-09-25-automationbench-environment-clock-audit.md`列出验证。它删去注册solver的缺陷已由本记录G19修复并以真实Inspect验证。
+- 处置：新增范围提交，把这128个文件按`.gitattributes`（`* text=auto eol=lf`）恢复为LF，忽略CR后零内容变化；随后在HEAD运行pre-push全套（根typecheck、API路由、docs、租约所有者、架构索引、包/模块/发布拓扑、secret scan）及链上各记录的聚焦检查，逐提交列出归属与验证后推送。不改写历史、不force。
+
+### 3 的单一方案（实施前）
+
+- 共同根因：比较结果与其证据集合都由模型角色提供，Host只做事后逐字比对。改为：Owner只命名Campaign与Candidate，publisher在当前Task目录发现所有绑定该Campaign（及候选臂的Candidate）的Evaluation、Run与Review，完整读取并选择它们，推导并盖章比较；比较来源因此是完整证据集。
+- 槽位与Trial：一个槽位多份Evaluation→`evaluation_conflict:<slot>`必需不可用；一个Trial出现在多个槽位→`trial_reuse:<slot>`；槽位有来自不同Trial的Run→`trial_conflict:<slot>`；同一Trial的多次Run发布取被Evaluation引用者，无Evaluation时取最新。均为typed不可用，不抛错、不毒化后续发布。
+- Review取代：新Review以同一Evaluation的旧Review为直接来源即取代它；旧Review中每个failed/unavailable blocker必须在新Review中以相同category与invariant出现，若结论改变须引用旧finding未引用的新证据，否则发布返回写明缺失项的typed错误（可自纠）。比较只用未被取代的Review；同一Evaluation多份未互相取代的Review取并集（任一不可用或blocker生效）。区分有新证据的改判与无依据丢弃blocker。
+- 非阻断失败：决策无关，保留在Review中；Review现为比较的完整直接来源并在历史详情逐槽显示，不改比较schema。
+- 限制：Evaluator从未收集的Trial仍不可见（需要在Trial创建时绑定Campaign，另议）；跨Task导入的Evaluation仍按原Campaign定位不参与比较（与现状相同）。
+
+### 2、1 的后续
+
+- 3完成后，按新登记用现有`check:evolution-e2e`观察一次真实闭环能否执行（单次、固定停止条件、全部费用），失败先定位首个缺陷；任何结果都不等于进化收益。收益需要同源多案例、候选对父代的区间判定与独立审查，当前无此数据集能力。
+- 业务纠错的下一可证伪机制依赖“以真实业务案例为Campaign数据集”的Trial环境（每个Trial需独立AutomationBench世界）；当前Evolution Lab的Trial是Mission项目内普通Task，无法提供。本轮只在2的闭环可执行后评估其规模，不以同义提示或重抽替代。
+
+### G30额度中断 checkpoint（调用方核验）
+
+- 本轮真实主管为`claude-opus-5-5`，恢复原会话`a6ab2544-f778-492f-a880-c21f191aad43`，原始流式收据`.tmp/opus55-global-resolution-20260926T1118.jsonl`、新任务prompt`.tmp/opus55-global-resolution-task.md`。40 turns后CLI退出1，`terminal_reason=api_error`、HTTP429，原错误`You've hit your session limit · resets 9:40pm (Asia/Shanghai)`。2026-09-26 19:31上海时间已核对该主管进程退出；没有启动任何业务实验。
+- 实际交付仅上述来源调查和实施前计划，生产代码未修改；第3项仍为待完整审查及真实Checker证伪的设计，不能当成已经实现、验证或批准的契约。尤其证据全集的发现范围、显式取代的既有语义、冲突/重复Trial分类以及用category/invariant和新引用表达改判的充分性，恢复后必须继续完成定义/调用/历史影响面审查，不把字符串相等或多一个引用冒充业务判断正确。
+- 调用方已核验原工具输出中时钟侧对话的真实用户请求，以及Git仅此记录35行计划新增。CLI估算累计费用`42.4022432`美元包含上轮`30.534527`美元，本轮增量约`11.8677162`美元；不是外部账单核对，也不是业务模型费用。原失败和全部收据保留，不换账号、凭据或模型绕过限额，不立即重试。
+- 后续安排上海时间2026-09-26 21:45恢复同一主管会话、同一四项目标，从本checkpoint继续；无需用户再次确认。恢复前核对是否已有同任务Claude，不能重复启动。当前四项总体目标未完成，行尾前向修复、完整出站验证和推送尚未执行。
