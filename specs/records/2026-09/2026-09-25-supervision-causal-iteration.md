@@ -847,3 +847,13 @@
 - 首轮9文件有一处过期版本断言（写死`.3`，实际嵌入`.4`）失败，原日志`.tmp/g33-green-tests.log`保留；同步当前明确版本后该文件9项/95断言全部通过，见`.tmp/g33-host-final.log`。其余8文件原次全部通过，包括39项比较、真实包投影、晋升mutation、历史e2e解析、链修复、候选surface与feedback。合计93项/503断言，不把初次失败覆盖成通过。
 - 源包与嵌入包同步到`2026.09.26.4`，content digest `8e5a56e736edf3a4895e7fea1961e8eca848fa10cc48dfc743bbbb6704182845`；采用现有payload/revision生成器只更新Evolution Lab项，其它设计包/默认包保持。真实loader检查源包/嵌入/登记身份一致。根类型8项全部实际检查通过；专家团拓扑122 manifests/135 workflows、docs342ops25groups与diff通过。当前架构02-data同步单一发布所有权。
 - 未启动新业务模型或Campaign，Review完整发现/取代仍未解决，业务纠错与进化收益仍未证。G31归档patch继续未应用；本项不以更多引用或字符串相等代替业务判断。
+
+## G34：Codex接续既有H-B预登记的执行准备
+
+### Recall与执行边界
+
+- 用户明确要求调用方在Opus额度恢复前接手推进，恢复后交接。G32已完成整链推送，G33消除比较结果重抄；本段按G31已提交的[H-B预登记](../../artifacts/2026-09-25-acceptance-comparison-design/hb-01-preregistration.md)继续业务诊断，不重新设计或恢复任何旧run。唯一改变仍为前置方法先于目标记录值/说明读取，原世界、请求、角色、权限与后续执行保持。实际干预以真实读取/发布顺序判定；一个样本不能识别锚定因果效应或总体可靠性。
+- 已重读原Repair01外侧义务、Inspect当前架构、唯一controller、driver的冻结源/Host预检/公共cleanup路径和H-B四文件补丁。controller沿用`run-repair-01.py --run-dir`；新目录`.tmp/supervision-causal-20260926/hb-01`，不创建另一控制器。新源码经提交及push前完整检查后冻结；运行中不改源码/spec，不并行交给Opus编辑。
+- 本次真实入口构造收据`.tmp/supervision-causal-20260926/hb-01-preparation/entry-construction.json`：调用原`load_development_fixture`与registered `opencorvus_business_repair`，实际sample ID和1844字节公开input一致、scorer=None、Mission配置、300秒真实无活动/poll2正确。六文件staged与G31真实loader的immutable目录逐字相等，包`2026.09.26.1`/`0a13f002…`；完整49个world键=meta+48服务字段，meta内原四连接权限与clock、原Sheets跟踪保持。没有执行solver、API world或Provider。
+- 2026-09-26 23:36上海本地只读核对授权auth/models成对存在、OAuth未过期、目录精确含gpt-5.6-luna；未复制/刷新或输出凭据内容。启动前精确命令行扫描没有本任务Claude/controller/Host/Inspect活动，未操作旧PID或其它用户进程。启动后的真实Host仍必须逐项usable/projected/actualModel/streaming预检，静态存在不能替代。
+- 下一步骤：独占创建新freeze，绑定准确干净HEAD、既有fixture/request/source receipt/包receipt/控制脚本/六探针以及本次入口收据，再且仅再启动一次。正常或失败均不替补；先核对公共cleanup、零活动、正常退出与复制件删除，再按预登记逐项解释原API/Artifact/dispatch/最终state及全部成本。若运行跨过Opus恢复，交接只读监督当前run，不能重复启动或边运行边改源码。
