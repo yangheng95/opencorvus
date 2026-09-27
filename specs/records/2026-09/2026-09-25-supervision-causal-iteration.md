@@ -1505,3 +1505,25 @@
 - 原Task接受与数据库绑定是真实生产路径；既有test hook持有ingress，未调用Provider，没有冒称模型调度、Mission panel原调用、checkpoint终结、完整Artifact跨库运输或shell评分。源码核对Mission panel directory→同一EngineService、原sameProject/Mission import与独立目录登记合同；整体执行仍需新launcher。G43独立Git库的shell对象缺失限制保留，不能把原生collector bytes当对象运输授权或把unavailable改成通过。
 - 旧e2e四文件模板与更宽实际Git源的差异属于本轮源码确定准备问题，未重启旧controller或重跑其历史实验；新Checker证明可用原显式目录合同保留初态，没有放宽生产workspace身份或新增配置/调度路径。本轮只新增聚焦测试/冻结输入/独立算术与索引、记录，无生产API/DDL/SDK/包嵌入变化。
 - 下一G59应实现并本地验证最小diagnostic-01运输入口：使用上述冻结实际包/新input和独立执行库，单一model/inactivity配置、成对auth/models及精确流式预检、原Mission创建/状态/abort/费用事实，固定只一次自然diagnostic目标Task，不隐式调用候选/旧随机脚本。启动前把最终source commit、目录、实际模型预检结果和输入/包身份写独立launch receipt；不存在receipt即未运行。有自然正确交付只记普通成功，有自然错误先定位再另登记单一干预和后续Trials，不能为了产生候选追抽。完整启动条件未满足前不碰Provider；这是待完成运行器工作，不是授权阻塞。12:45上海优先交回原Opus。
+
+## G59：固定诊断的独立运输、预检与收尾入口
+
+### Recall与实施前影响面
+
+- 从75de77a8已push/clean继续，已读AGENTS/Recall/五段图/G57–58与G58输入登记、原e2e request/status/abort/活动primitive、RealProviderAudit及全部调用者、native audit plugin、原UsageLedger、Mission活动cursor、Task目录接受与自有runtime清理。目的只把固定diagnostic-01变成可审查运行入口，不启动旧控制器、随机target、候选或Campaign。尚无业务Provider调用。
+- 单一入口拟为script/evolution-diagnostic.ts：prepare模式只初始化新隔离home/coordinator/独立execution Git库，真实安装指定embedded data-analysis、读取完整初态、生成普通Mission请求、启动/关闭本地真实服务并保存准备收据；run模式需显式auth源、干净已提交代码、唯一固定run目录，复制成对auth/models并验证原模型投影后才进行一次真实流式preflight和Mission wake。已有目录是明确错误，不覆盖/另抽。最终Provider启动源身份写launch，准备测试目录不能冒充注册运行。
+- 模型/小模型统一为登记的Luna，复用原配置及Native process audit插件，不加total turns/duration/cost。现RealProviderAudit构造器强制数字maxRequests，native插件也以Number读env；新增显式null表无请求计数上限，原有限数字调用保持原义。不是用MAX_SAFE_INTEGER伪装未设置。流式/模型一致性继续原唯一audit；前检poll显式2000ms，旧调用默认值保持其原既有配置。
+- 原copiedOAuthExpiresAt在过期后拒绝任意外部请求；为严格遵守不刷新复制凭据，原audit同时对OAuth标准refresh_token grant给明确权限错误（无凭据输出）。母进程与native插件共享同一进程audit实例，避免同一次请求两份统计；其余子进程各自原snapshot publication保存请求元数据，原usage表仍唯一用量账本，不把请求收据当第二费用账本。
+- 运行只用原HTTP Mission wake/status/activity-cursor/abort与Task读取、原Session preflight。300秒真实活动窗口复用durable cursor并结合原流活动，poll和写observer收据不算活动；固定一Task超出登记、明确Provider错误、pending交互、Task失败或无活动终止该次，不重试Mission。终态需自然Mission inactive+原Task terminal；成功只报execution settled/business pending review，不在runner按关键词替模型或人判断业务正确。
+- 收尾先停止本轮Mission/活动与listener、settle原instances/processes/DB，再删除本轮成对凭据；保留原Task/Message/Tool/terminal报告与全部usage、未知/未定价和preflight；provider异常也保留中断原件。只对自有隔离根执行清理，不触用户或旧进程。原生read/projection与本地prepare可测试，真实凭据/Provider还未验证，不因本地checker绿称业务通过。
+- 验收：null及有限上限、准确模型/流式/复制凭据refresh错误的聚焦正向合同；真实新process prepare→Host/package/输入/收尾收据与唯一目录冲突错误。脚本类型检查/root类型/docs/diff及完整prepush，范围提交/pull/outgoing/push；12:45上海优先收敛交给Opus。启动真实诊断必须在入口源码提交后独立进行，不将开发期间prepare标成真实样本。
+
+### G59入口交付与本地验证
+
+- 新evolution-diagnostic.ts提供互斥prepare/run。prepare用新目录真实启动原source Host/InstanceBootstrap，安装冻结data-analysis，封存原完整4文件初态、生成可见Mission请求并正常收尾；不接收凭据，providerProjection明确not_checked。run只用已注册diagnostic-01根，要求干净提交和显式已授权auth源，原配对models须含Luna；仅复制原OpenAI记录，先建立不刷新/过期检查，再加载凭据相关runtime。claim防重复，实际包/输入/模型投影齐全后才写唯一launch.json并开始真实stream preflight。当前测试阶段尚未写真实run launch或调用Provider。
+- 原RealProviderAudit新增显式maxRequests=null，旧数字（含0）继续其原计数合同；native插件读取显式JSON ceiling。同一进程audit实例供入口与插件共享，子进程各自记录原请求元数据；没有第二费用账本。复用原UsageLedger全行导出，unpriced/unknown或无行的cost仍null。原copied-access检查之外，标准OAuth refresh_token grant精确CopiedOAuthRefreshForbiddenError，测试没有真实刷新。新入口preflight轮询显式2秒，无新增model total/turn/cost预算。
+- 运行路径仅原Mission wake/status/activity-cursor/abort及Task读取；原durable cursor结合in-process stream last_activity_at，不把controller写文件/轮询本身算进展。固定一Task，失败/交互/超出预登记/300秒无活动都停止同次而不换样本；natural settled仅execution_settled/business requires independent review，runner不按业务数字或关键词定成功。收尾先原runtime/自有processes/DB并导出usage，再删本轮凭据；收尾错误独立cleanup_failed，不能把prepared误报整体通过。
+- 最终13项46断言（g59-verified-tests.log，entry1/5、audit12/41，均exit0）：真实新进程prepare封存原d285…完整tree、加载实际27141…目标包、正常listener/实例关闭；第二次同目录精确DiagnosticRunAlreadyExists且原收据逐值保持。真实本地HTTP传输验证null不设计数上限、一次请求只有一份共享audit、正确模型/流式/原有限计数/过期与refresh权限错误；不是外部Provider或Luna能力证明。显式脚本类型检查g59-script-types-verified.log与root类型8/8、docs342ops25通过。
+- 原失败保留：entry初版多写一个右括号（g59-entry-audit-initial.log）；继承test process root未对齐自有home导致隔离错误（g59-entry-second.log），现显式自有process root；prepare没有models却试图验证Luna配置给ProviderModelNotFound（g59-entry-third.log），不是凭据错误，现prepare不启用Provider配置而显式not_checked，run仍要求真正paired catalog和原校验，没有伪造模型条目。第一次单文件tsconfig漏载原*.md声明且inputFiles空数组推断never；加入原sql.d.ts等声明及准确数组类型后实际检查通过，没有suppress错误。
+- 单独只读核对当前已授权源路径C:/Users/hengu/AppData/Local/opencorvus/data/auth.json及相邻models.json：文件存在，OpenAI记录类型oauth、到期1791088087790晚于当前时间，catalog中存在gpt-5.6-luna。未输出credential值，未刷新/复制；这只是期限和目录事实，不代表网络凭据已可用。真正stream preflight仍待提交后的唯一run证明。
+- 下一步在本范围commit/pull/upstream..HEAD完整审查/实际push后，若无新的实现阻碍，用已登记唯一run调用该入口；运行中不改源码/spec、不另开业务样本，每五分钟必要原收据快照。12:45上海仍优先交回准确Opus；若诊断届时还在运行，向原主管明确运行源码冻结，先监督同一run到自然结算，不并行改其运行依赖。真实业务结果以新launch/preflight/Mission/Task原件为准，不用此次本地13项代替。

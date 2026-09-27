@@ -1,5 +1,62 @@
 import { expect, test } from "bun:test"
-import { assertCopiedOAuthAccess, CopiedOAuthCredentialExpiredError, CredentialRedactor, RealProviderAudit, ProviderAuditProbeConfigurationError } from "../script/real-provider-audit"
+import { mkdtemp, readFile, rm } from "node:fs/promises"
+import os from "node:os"
+import path from "node:path"
+import nativeProviderAudit from "../script/native-provider-audit-plugin"
+import { latestAuditSnapshotFiles } from "../script/audit-snapshot"
+import { requireProcessProviderAudit } from "../script/real-provider-audit"
+import { assertCopiedOAuthAccess, CopiedOAuthCredentialExpiredError, CopiedOAuthRefreshForbiddenError, CredentialRedactor, RealProviderAudit, ProviderAuditProbeConfigurationError } from "../script/real-provider-audit"
+
+test("an undeclared request ceiling retains every real local transport receipt", async () => {
+  const bodies: string[] = []
+  const server = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: async (request) => {
+    bodies.push(await request.text())
+    return new Response("accepted", { status: 202 })
+  } })
+  try {
+    using audit = new RealProviderAudit("authorized-model", null)
+    const body = JSON.stringify({ model: "authorized-model", stream: true })
+    for (let index = 0; index < 3; index++) expect((await fetch(server.url, { method: "POST", body })).status).toBe(202)
+    expect({ ceiling: audit.maxRequests, bodies, receipts: audit.requests }).toEqual({
+      ceiling: null, bodies: [body, body, body],
+      receipts: Array.from({ length: 3 }, () => ({ model: "authorized-model", streaming: true, status: 202 })),
+    })
+  } finally { await server.stop(true) }
+})
+
+test("native plugin reuses the process audit and publishes one actual transport observation", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "provider-audit-singleton-"))
+  const keys = ["OPENCORVUS_NATIVE_REAL_PROVIDER", "OPENCORVUS_NATIVE_AUDIT_ROOT", "OPENCORVUS_NATIVE_AUDIT_MODEL", "OPENCORVUS_NATIVE_AUDIT_MAX_REQUESTS", "OPENCORVUS_NATIVE_AUDIT_COPIED_OAUTH_EXPIRES"]
+  const previous = keys.map((key) => process.env[key])
+  const server = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: () => new Response("local transport", { status: 202 }) })
+  try {
+    Object.assign(process.env, { OPENCORVUS_NATIVE_REAL_PROVIDER: "1", OPENCORVUS_NATIVE_AUDIT_ROOT: root,
+      OPENCORVUS_NATIVE_AUDIT_MODEL: "authorized-model", OPENCORVUS_NATIVE_AUDIT_MAX_REQUESTS: "null" })
+    delete process.env.OPENCORVUS_NATIVE_AUDIT_COPIED_OAUTH_EXPIRES
+    await nativeProviderAudit({ serverUrl: new URL("http://127.0.0.1:1") })
+    const first = requireProcessProviderAudit()
+    await nativeProviderAudit({ serverUrl: new URL("http://127.0.0.1:1") })
+    expect(requireProcessProviderAudit().audit).toBe(first.audit)
+    expect((await fetch(server.url, { method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true }) })).status).toBe(202)
+    const files = await latestAuditSnapshotFiles(root, "provider")
+    expect(files.length).toBe(1)
+    expect(JSON.parse(await readFile(files[0]!, "utf8"))).toMatchObject({
+      pid: process.pid, model: "authorized-model", requests: [{ model: "authorized-model", streaming: true, status: 202 }],
+    })
+  } finally {
+    requireProcessProviderAudit().audit[Symbol.dispose]()
+    keys.forEach((key, index) => { if (previous[index] === undefined) delete process.env[key]; else process.env[key] = previous[index] })
+    await server.stop(true)
+    await rm(root, { recursive: true, force: true })
+  }
+})
+
+test("copied OAuth refresh grants return a precise authority error while access is current", async () => {
+  using audit = new RealProviderAudit("authorized-model", null, undefined, { copiedOAuthExpiresAt: Date.now() + 60_000 })
+  for (const body of ["grant_type=refresh_token&refresh_token=diagnostic-only", JSON.stringify({ grant_type: "refresh_token", refresh_token: "diagnostic-only" })]) {
+    await expect(fetch("https://provider.invalid/oauth/token", { method: "POST", body })).rejects.toThrow(CopiedOAuthRefreshForbiddenError)
+  }
+})
 
 test("copied OAuth access expires with an explicit authority error", () => {
   const expires = Date.now() - 1

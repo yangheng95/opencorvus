@@ -131,6 +131,11 @@ export class CopiedOAuthCredentialExpiredError extends Error {
   }
 }
 
+export class CopiedOAuthRefreshForbiddenError extends Error {
+  override readonly name = "CopiedOAuthRefreshForbiddenError"
+  constructor() { super("Copied OAuth authority cannot refresh the source credential generation") }
+}
+
 export function assertCopiedOAuthAccess(expiresAt: number) {
   assert(Number.isFinite(expiresAt) && expiresAt > 0, "Copied OAuth access requires a finite positive expiry")
   if (Date.now() >= expiresAt) throw new CopiedOAuthCredentialExpiredError(expiresAt)
@@ -144,10 +149,10 @@ export class RealProviderAudit implements Disposable {
   exhausted = false
   readonly #wrapped: typeof fetch
 
-  constructor(readonly modelID: string, readonly maxRequests: number, readonly onUpdate?: () => void,
+  constructor(readonly modelID: string, readonly maxRequests: number | null, readonly onUpdate?: () => void,
     readonly authority?: { copiedOAuthExpiresAt: number },
     observation?: { probes: unknown; redactor: CredentialRedactor }) {
-    assert(Number.isSafeInteger(maxRequests) && maxRequests >= 0, "Request budget must be a nonnegative integer")
+    assert(maxRequests === null || (Number.isSafeInteger(maxRequests) && maxRequests >= 0), "Request budget must be null or a nonnegative integer")
     if (authority) assertCopiedOAuthAccess(authority.copiedOAuthExpiresAt)
     const observeInput = observation ? registerInputObservation(observation) : undefined
     this.#wrapped = Object.assign(async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -161,10 +166,13 @@ export class RealProviderAudit implements Disposable {
         if (body) {
           let parsed: any
           try { parsed = JSON.parse(body) } catch {}
+          if (authority && (parsed?.grant_type === "refresh_token" || new URLSearchParams(body).get("grant_type") === "refresh_token")) {
+            throw new CopiedOAuthRefreshForbiddenError()
+          }
           if (parsed?.model) {
             assert.equal(parsed.model, modelID, "Actual outgoing request model differs from authorized model")
             assert.equal(parsed.stream, true, "Every real Provider request must stream")
-            if (this.requests.length >= maxRequests) {
+            if (maxRequests !== null && this.requests.length >= maxRequests) {
               this.exhausted = true
               this.onUpdate?.()
               throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
@@ -192,6 +200,7 @@ export class RealProviderAudit implements Disposable {
     model: string
     inactivityMs: number
     activity: (sessionID: string) => unknown
+    pollIntervalMs?: number
   }) {
     this.localOrigins.add(input.serverURL.origin)
     const request = async (route: string, body?: unknown, directory?: string) => {
@@ -223,9 +232,24 @@ export class RealProviderAudit implements Disposable {
         return { sessionID: chat.session.id as string, credential: "usable", catalog: "projected", actualModel: this.modelID, streaming: true }
       }
       if (Date.now() - lastActivity > input.inactivityMs) throw new Error("PROVIDER_PREFLIGHT_INACTIVITY")
-      await new Promise((resolve) => setTimeout(resolve, 500))
+      await new Promise((resolve) => setTimeout(resolve, input.pollIntervalMs ?? 500))
     }
   }
+}
+
+const processAuditIdentity = Symbol.for("opencorvus.native-provider-audit")
+type ProcessProviderAudit = { audit: RealProviderAudit; persist: () => void }
+const processAuditState = globalThis as typeof globalThis & { [processAuditIdentity]?: ProcessProviderAudit }
+
+/** One audit per process, shared by the explicit checker and its loaded plugin. */
+export function installProcessProviderAudit(create: () => ProcessProviderAudit): ProcessProviderAudit {
+  return processAuditState[processAuditIdentity] ??= create()
+}
+
+export function requireProcessProviderAudit(): ProcessProviderAudit {
+  const value = processAuditState[processAuditIdentity]
+  if (!value) throw new Error("Native Provider audit has not been initialized")
+  return value
 }
 
 /** Known credential values stay in memory; only redacted diagnostics leave the checker. */
