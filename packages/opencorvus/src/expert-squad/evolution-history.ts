@@ -15,8 +15,8 @@ import {
   resolveEvolutionComparisonInputs,
   evolutionComparisonContext,
   resolveEvolutionIntegrityReviews,
-  groupEvolutionMeasurements,
-  createEvolutionMeasurementKey,
+  deriveEvolutionSlotObservations,
+  evolutionMeasurementReviewCoverage,
   evolutionTrialSlotConflicts,
   type EvolutionCampaignDetailResponse,
   type ArtifactReadLocator,
@@ -38,7 +38,7 @@ import { ExpertSquadPackageLocations } from "./locations"
 import { ExpertSquadRegistry } from "./registry"
 import { evolutionMutationConfirmationText } from "./evolution-mutation-intent"
 import { FEEDBACK_REVISION_COMPONENT_ID } from "./feedback-revision"
-import { missingComparisonReviews } from "./evolution-review-freshness"
+import { missingComparisonMeasurements, missingComparisonReviews } from "./evolution-review-freshness"
 
 type InstallationScope = "project" | "global"
 type Partition = "current" | "historical"
@@ -462,63 +462,72 @@ function comparisonGraph(read: FrozenRead, comparison: FrozenArtifact<Comparison
     runs: runs.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })),
     evaluations: evaluations.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })),
   })) graphIssues.push({ code: "TRIAL_SLOT_COLLISION", owner: artifactIdentity(comparison), ...conflict })
-  const factKey = createEvolutionMeasurementKey({ runs: runs.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })),
-    referenceKey: read.references.get(comparison.catalog.taskID)!.key })
-  for (const [artifactType, artifacts] of [
-    ["evolution-lab/run-evidence-bundle", runs],
-    ["evolution-lab/evaluation-result", evaluations],
-  ] as const) {
-    for (const [slot, observations] of measurementGroups<Run | Evaluation>(artifacts, factKey)) {
-      if (observations.length < 2) continue
+  const referenceKey = read.references.get(comparison.catalog.taskID)!.key
+  // Several observations of one slot are consumed together; only a Trial,
+  // outcome or scorer value they disagree on is a conflict.
+  for (const [slot, observed] of slotObservations({ runs, evaluations, referenceKey })) {
+    const locators = (groups: readonly (readonly { locator: EngineLocator }[])[]) =>
+      groups.flatMap((aliases) => aliases.map((item) => item.locator))
+    if (observed.runs.length > 1 && (observed.trialConflict || observed.outcome === "conflict"))
       graphIssues.push({
         code: "MEASUREMENT_OBSERVATION_CONFLICT",
         owner: artifactIdentity(comparison),
-        artifact_type: artifactType,
+        artifact_type: "evolution-lab/run-evidence-bundle",
         slot,
-        observation_locators: observations.flatMap((aliases) => aliases.map((item) => item.locator)),
+        observation_locators: locators(observed.runs),
       })
-    }
+    if (
+      observed.evaluations.length > 1 &&
+      (observed.trialConflict || [...observed.scorers.values()].some((scorer) => scorer.status === "conflict"))
+    )
+      graphIssues.push({
+        code: "MEASUREMENT_OBSERVATION_CONFLICT",
+        owner: artifactIdentity(comparison),
+        artifact_type: "evolution-lab/evaluation-result",
+        slot,
+        observation_locators: locators(observed.evaluations),
+      })
   }
-  return { comparison, runs, evaluations, reviews, graphIssues, referenceKey: read.references.get(comparison.catalog.taskID)!.key }
+  return { comparison, runs, evaluations, reviews, graphIssues, referenceKey }
 }
 
-function measurementGroups<T extends Run | Evaluation>(artifacts: readonly FrozenArtifact<T>[], factKey: (value: unknown) => string) {
-  return groupEvolutionMeasurements(
-    artifacts.map((artifact) => ({ locator: artifact.locator, value: artifact.payload!, artifact })), factKey,
-  )
-}
-
-function uniqueMeasurements<T extends Run | Evaluation>(artifacts: readonly FrozenArtifact<T>[], factKey: (value: unknown) => string) {
-  return [...measurementGroups(artifacts, factKey).values()].flatMap((observations) =>
-    observations.length === 1 ? [observations[0]![0]!.artifact] : [],
-  )
+/** The same slot derivation the comparison publisher consumed. */
+function slotObservations(input: {
+  runs: readonly FrozenArtifact<Run>[]
+  evaluations: readonly FrozenArtifact<Evaluation>[]
+  referenceKey: (locator: ArtifactReadLocator) => string
+  scorerIDs?: readonly string[]
+}) {
+  return deriveEvolutionSlotObservations({
+    runs: input.runs.map((artifact) => ({ locator: artifact.locator, value: artifact.payload!, artifact })),
+    evaluations: input.evaluations.map((artifact) => ({ locator: artifact.locator, value: artifact.payload!, artifact })),
+    scorerIDs:
+      input.scorerIDs ??
+      [...new Set(input.evaluations.flatMap((artifact) => artifact.payload!.scorers.map((scorer) => scorer.scorer_id)))].sort(),
+    referenceKey: input.referenceKey,
+  })
 }
 
 function completeness(campaign: Campaign, graph: ComparisonGraph) {
   const expectedSlots = campaign.cases.length * campaign.repetitions * 2
-  const factKey = createEvolutionMeasurementKey({ runs: graph.runs.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })), referenceKey: graph.referenceKey })
-  const uniqueRuns = uniqueMeasurements(graph.runs, factKey)
-  const uniqueEvaluations = uniqueMeasurements(graph.evaluations, factKey)
-  const scorerResults = uniqueEvaluations.flatMap((evaluation) => evaluation.payload!.scorers)
+  const observed = [...slotObservations({ ...graph, scorerIDs: campaign.scorers.map((scorer) => scorer.scorer_id) }).values()]
+  const scorerResults = observed.flatMap((slot) => [...slot.scorers.values()])
   const current = resolveEvolutionIntegrityReviews(
     graph.reviews.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })),
     graph.referenceKey,
   ).current
-  const reviewSlots = new Map<string, Review[]>()
-  for (const { value } of current) {
-    const key = slotKey(value.case_id, value.arm, value.repetition)
-    reviewSlots.set(key, [...(reviewSlots.get(key) ?? []), value])
-  }
   return {
     expected_slots: expectedSlots,
-    present_runs: uniqueRuns.length,
-    present_evaluations: uniqueEvaluations.length,
+    present_runs: observed.filter((slot) => slot.runs.length > 0 && !slot.trialConflict && !slot.terminalIdentityUnavailable && slot.outcome !== "conflict").length,
+    present_evaluations: observed.filter((slot) => slot.contributing.length > 0).length,
     expected_scorer_results: expectedSlots * campaign.scorers.length,
     measured_scorer_results: scorerResults.filter((scorer) => scorer.status === "measured").length,
-    unavailable_scorer_results: scorerResults.filter((scorer) => scorer.status === "unavailable").length,
-    reviewed_integrity_slots: [...reviewSlots.values()].filter((reviews) =>
-      reviews.every((review) => review.status === "reviewed"),
+    unavailable_scorer_results: scorerResults.filter(
+      (scorer) => scorer.status === "unavailable" || scorer.status === "conflict",
     ).length,
+    reviewed_integrity_slots: observed.filter((slot) => evolutionMeasurementReviewCoverage({
+      evaluations: slot.evaluations, reviews: current, referenceKey: graph.referenceKey,
+    }).reviewed).length,
     required_unavailable_dimensions: graph.comparison.payload!.required_unavailable_dimensions,
   }
 }
@@ -553,11 +562,20 @@ function buildComparison(input: {
     if (!prior || prior.locator.catalog_revision < artifact.locator.catalog_revision)
       catalogEvidence.set(artifact.locator.artifact_id, artifact)
   }
-  const missingReviews = graphIssues.length ? [] : missingComparisonReviews({
+  const snapshot = {
     comparison: input.graph.comparison.envelope,
     measurements: [...input.graph.evaluations, ...input.graph.runs, ...input.graph.reviews, input.campaign, input.candidate],
     catalog: [...catalogEvidence.values()],
-  })
+  }
+  const resolvable = graphIssues.length === 0
+  const missingMeasurements = resolvable ? missingComparisonMeasurements(snapshot) : []
+  const missingReviews = resolvable ? missingComparisonReviews(snapshot) : []
+  if (missingMeasurements.length)
+    graphIssues.push({
+      code: "MEASUREMENT_SNAPSHOT_CHANGED",
+      owner: artifactIdentity(input.graph.comparison),
+      missing_measurement_locators: missingMeasurements,
+    })
   if (missingReviews.length)
     graphIssues.push({
       code: "REVIEW_SNAPSHOT_CHANGED",
@@ -1257,9 +1275,7 @@ function detailSlots(input: {
 }) {
   const campaign = input.campaign.payload!
   const candidate = input.candidate.payload!
-  const factKey = createEvolutionMeasurementKey({ runs: input.graph.runs.map((artifact) => ({ locator: artifact.locator, value: artifact.payload! })), referenceKey: input.graph.referenceKey })
-  const runs = measurementGroups(input.graph.runs, factKey)
-  const evaluations = measurementGroups(input.graph.evaluations, factKey)
+  const observed = slotObservations({ ...input.graph, scorerIDs: campaign.scorers.map((scorer) => scorer.scorer_id) })
   const lineage = resolveEvolutionIntegrityReviews(
     input.graph.reviews.map((artifact) => ({ locator: artifact.locator, value: artifact.payload!, artifact })),
     input.graph.referenceKey,
@@ -1269,8 +1285,9 @@ function detailSlots(input: {
     Array.from({ length: campaign.repetitions }, (_, repetition) =>
       (["baseline", "candidate"] as const).map((arm) => {
         const key = slotKey(caseID, arm, repetition)
-        const runGroups = runs.get(key) ?? []
-        const evaluationGroups = evaluations.get(key) ?? []
+        const slot = observed.get(key)
+        const runGroups = slot?.runs ?? []
+        const evaluationGroups = slot?.evaluations ?? []
         const runAliases = runGroups.length === 1 ? runGroups[0]!.map((item) => item.artifact) : []
         const evaluationAliases = evaluationGroups.length === 1 ? evaluationGroups[0]!.map((item) => item.artifact) : []
         const run = runAliases[0]
@@ -1294,20 +1311,24 @@ function detailSlots(input: {
           evaluation_aliases: evaluationAliases.map(artifactIdentity),
           review: review ? artifactIdentity(review) : null,
           scorer_results: campaign.scorers.map((scorer) => {
-            const result = evaluation?.payload!.scorers.find(
-              (candidateResult) => candidateResult.scorer_id === scorer.scorer_id,
-            )
-            return (
-              result ??
-              (evaluationGroups.length > 1
-                ? {
-                    status: "unavailable" as const,
-                    scorer_id: scorer.scorer_id,
-                    reason: "conflicting_evaluation_observations",
-                    evidence: evaluationGroups.flatMap((aliases) => aliases.map((item) => item.locator)),
-                  }
-                : { status: "missing" as const, scorer_id: scorer.scorer_id })
-            )
+            const result = slot?.scorers.get(scorer.scorer_id)
+            if (result?.status === "measured")
+              return { status: "measured" as const, scorer_id: scorer.scorer_id, value: result.value, evidence: result.evidence }
+            if (result?.status === "unavailable")
+              return {
+                status: "unavailable" as const,
+                scorer_id: scorer.scorer_id,
+                reason: result.reasons.join("; "),
+                evidence: result.evidence,
+              }
+            if (result?.status === "conflict")
+              return {
+                status: "unavailable" as const,
+                scorer_id: scorer.scorer_id,
+                reason: "conflicting_evaluation_observations",
+                evidence: evaluationGroups.flatMap((aliases) => aliases.map((item) => item.locator)),
+              }
+            return { status: "missing" as const, scorer_id: scorer.scorer_id }
           }),
           integrity_review: review?.payload ?? null,
           review_history: slotReviews.map((item) => ({

@@ -461,6 +461,8 @@ export const EvolutionArtifactSchemas = {
       run_evidence_resource: taskArtifactResourceIdentity.extend({ media_type: z.literal("application/json") }),
       task_id: z.string().min(1),
       terminal_time: z.number().int().nonnegative(),
+      // Absent on historical publications means the native occurrence was not recorded.
+      terminal_event_id: z.string().min(1).nullable().optional(),
       // The single `provider/model` the Trial's usage ledger recorded, and that
       // ledger's recorded tokens and priced USD estimate. A null cost means some
       // recorded step had no price; it is unknown, never free.

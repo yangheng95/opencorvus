@@ -31,6 +31,7 @@ import {
   EvolutionPackagePublishableArtifactInputSchema,
   EvolutionRunEvidencePublishInputSchema,
   expandEvolutionMeasurementAliases,
+  evolutionComparisonMembers,
   parseEvolutionArtifact,
 } from "../lib/evolution-lab/artifacts"
 import { candidateMutableTextPaths, compareCandidateIntegrity } from "../lib/evolution-lab/candidate-integrity"
@@ -126,7 +127,11 @@ type ComparisonEvidence = {
   envelope: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>
 }
 
-async function discoverComparisonEvidence(selected: readonly ComparisonEvidence[], context: ToolContext) {
+async function discoverComparisonEvidence(
+  selected: readonly ComparisonEvidence[],
+  pair: { campaign: EngineArtifactLocator; candidate: EngineArtifactLocator },
+  context: ToolContext,
+) {
   const catalog: ComparisonEvidence[] = []
   let cursor: string | undefined
   do {
@@ -159,14 +164,17 @@ async function discoverComparisonEvidence(selected: readonly ComparisonEvidence[
     }
     cursor = page.next_cursor ?? undefined
   } while (cursor)
-  // All three families share one catalog upper bound and membership. Later
-  // Reviews of these same measured facts are rechecked by the mutation commit.
+  // All three families share one catalog upper bound and membership. Every
+  // measurement bound to this Campaign/Candidate pair is consumed, not only the
+  // selected ones; later measurements and Reviews are rechecked by the mutation
+  // commit.
   const references = createEvolutionArtifactReferences([...selected, ...catalog])
-  const measurements = expandEvolutionMeasurementAliases(selected, catalog, references.key)
+  const members = evolutionComparisonMembers({ ...pair, catalog, references })
+  const measurements = expandEvolutionMeasurementAliases([...selected, ...members], catalog, references.key)
   for (const item of measurements)
     await context.host.engineArtifacts.select({
       locator: item.locator,
-      purpose: "Complete publication aliases of the selected measured fact",
+      purpose: "Complete published measurement evidence of the compared Campaign and Candidate",
     })
   const evaluations = new Set(
     measurements
@@ -754,6 +762,8 @@ export default tool({
         run_evidence_resource: resourceIdentity(resource),
         task_id: bundle.task.id,
         terminal_time: terminalTime,
+        terminal_event_id: "lifecycle" in bundle.terminal_occurrence
+          ? bundle.terminal_occurrence.lifecycle.terminalEventID : null,
         model,
         environment_digest: campaign.environment_digest,
         token_usage: usage.token_usage,
@@ -855,7 +865,11 @@ export default tool({
         )
       requireEvolutionWorkerProducer(campaigns[0]!.envelope, "evolution-experiment-planner")
       requireEvolutionWorkerProducer(candidates[0]!.envelope, "evolution-candidate-author")
-      const evidence = await discoverComparisonEvidence(envelopes, context)
+      const evidence = await discoverComparisonEvidence(
+        envelopes,
+        { campaign: campaigns[0]!.locator, candidate: candidates[0]!.locator },
+        context,
+      )
       envelopes.splice(0, envelopes.length, ...campaigns, ...candidates, ...evidence)
       for (const item of envelopes) {
         if (item.envelope.artifact_type === "evolution-lab/evaluation-result")

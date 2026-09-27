@@ -1309,3 +1309,58 @@
 
 - 最终聚焦验收15项339断言：当前Lab实际投影1/43与真实Host9/178在g51-final-tests.log，精确恢复诊断测试后真实mutation/history5/118在g51-mutation-restored.log，均exit0。较早g51-focused-tests.log只覆盖Owner同步的中间版本，不当最终scheduler验收；原Host probe initial ReferenceError与两个主动捕获退出均保留。原native评分、G50别名/Review改判/导入、原安装/回滚/重放合同均保持。没有外部Provider或UI自动化。
 - Lab源/嵌入2026.09.27.13/eea2f9e6dab6990ac97dd0a3db40c41201d788c7e62b01a3699c74f23300e515，仅Lab同步，不推广。类型8、docs342ops25、包拓扑122/135/diff检查通过；本轮无公共接口、SDK、DDL、grant/graph、比较或安装算法变更。范围提交后pull审完整outgoing/实际pre-push/push，保留原收据。07:45上海交回准确Opus5.5：先以本G51两项原始反例处理不同完整测量遗漏/合法后续观察，不能重复G50或把本次指令同步当集合根治；整体业务可靠纠错/真实进化收益仍未完成。
+
+## G52：Campaign比较的已发布测量全集与同槽多次观察（Opus恢复，实施前）
+
+### Recall与主管排序
+
+- 2026-09-27 07:46上海以准确claude-opus-5-5恢复同一主管会话；HEAD b31dada6=origin/main、clean，无业务模型、同任务Claude或旧实验运行。Codex在额度等待期完成并推送G43–G51；已读AGENTS、本记录Recall/五段图、G43–G51全部结果、02-data相关段、2026-08-17 ownership split（“两份evaluation-result会成为一次测量的两个语义事实”“已有有效Artifact的slot不再发布第二次”）及Campaign Skill resume/禁止重跑择优。不重做G43–G51，不应用旧G31半成品。
+- 四项总目标现状：推送链（第4项）已解；G29指出的Review选择/取代与比较事实转录（第3项）由G33/G36/G37/G39/G47/G48落地；业务可靠纠错（第1项）与真实进化收益（第2项）仍未证明。H-B结论为干预未执行、业务未修，禁止隐藏目标/过滤搜索制造“未曝光”，当前没有经证据支持的新业务机制可登记真实运行。进化环是唯一能在不由Host做语义判断的前提下，用冻结测量改进业务verifier包的路径；而G51已证该环的父代选择仍可漏掉另一份真实测量的阻断Review并实际安装候选。故本轮先修这一选择可信度缺口，再评估是否具备登记真实Campaign的条件。
+- 本轮全仓核对：comparison.ts按Owner所传Run/Evaluation分槽，同槽多个不同观察直接抛错；publisher的discoverComparisonEvidence只把所选事实补全为G38/G50别名及其Review；core freshness（missingComparisonReviews/requireCurrentEvolutionReviews）与history（comparisonGraph/completeness/detailSlots）也只看已消费事实家族；G49的跨槽Trial重用在比较器内抛错。Evaluation有由native结果盖章的exact Campaign/Candidate/Run（G44/G45/G50），Run没有exact Campaign字段（宽source是同Turn选择并集）。
+
+### 已证事实与根因
+
+- G51两项原始反例：①真实Host中同Trial两次完整评分（native result IDs不同、值[1,1]），第二份带permission/unavailable/blocker Review；Owner只传第一份即可发布Comparison，第二份及其required维度不在calculation_inputs；两份都传则抛conflicting evaluation observations。②真实DB/manager中授权后再发布同Trial另一测量身份及failed blocker Review，旧请求仍实际安装候选并写receipt。
+- 根因是“比较消费集合”由Owner选择决定，而同槽第二份观察唯一的处理方式是抛错：隐藏它可以得到结果，暴露它则比较永远无法发布。两条路径都不符合冻结合同（已发布证据不可被选择性遗漏；冲突要明确报告，不能按最新/最好消解）。只把目录发现扩大而保留抛错，会让任何同槽第二记录永久阻断发布（Owner节点无可执行修复），正是本轮必须避免的“永久毒化”。
+
+### 单一方案
+
+- 成员权威：Comparison(C,K)消费当前Task冻结目录中所有“由自身盖章事实绑定到该对”的已发布Evaluation：campaign_spec_locator经G47引用索引等于C，且candidate臂的candidate_revision_locator等于K、baseline臂为null（沿用比较器现有接受规则；绑定了候选的baseline测量本来不能被任何比较消费，保持为已知边界）。这些Evaluation精确引用的Run（及其G38发布别名）与全部Review（G36/G39/G47）随之纳入。Owner所选测量必须是成员或仍按原规则报错；Owner无需也不能替比较决定遗漏哪份。Run因无exact Campaign字段，不从宽source猜归属：未被任何成员Evaluation引用的Run只在Owner明确选择时参与（记录为边界）。
+- 同槽多次观察的派生（唯一共享纯函数，比较器与history共用）：不丢弃任何观察，也不以时间或分值择一。
+  - Trial身份：一个槽位的观察必须属于一个Trial Task；且其终态观察只能有一个终态发生（task_id+terminal_time）。多个Trial或同Task多个终态发生（重跑、终态后再恢复）为required `trial_conflict:<slot>`。
+  - 终态优先：槽位存在终态Run观察时，结果/资源/评分值只取终态观察及测量该终态观察的Evaluation；同一Trial的非终态观察（inactive/awaiting，outcome=unavailable）仍作为输入与其Review生效，但不提供值。只有非终态观察时维持现有语义（run_outcome required，已测值仍可见并进入差值）。
+  - 一致性：参与取值的观察逐项比较。scorer的measured值唯一则采用；多值为required `scorer_conflict:<scorer>:<slot>`；typed unavailable不提供值也不与已测值冲突（无观测≠反证）。终态outcome多值为required `run_outcome_conflict:<slot>`。token/cost/activity不一致只使对应资源差值不可用（`run_resource_conflict:<slot>`，非required），不借“更新更全”择一。
+  - Review：槽内所有成员Evaluation的当前Review全部生效；同一Evaluation的显式revision仍按G36，不跨测量扩大取代。
+- 比较器把G49跨槽Trial重用和上述冲突一律写成明确required维度并发布inconclusive，不再抛错；其余身份/版本/运行时/未声明槽错误保持原抛错（成员经metric工具身份检查，不会因发现而新增此类错误）。calculation_inputs记录全部实际消费身份。
+- 安装与历史新鲜性：授权/执行（原immediate事务）重算当前目录中该对成员；存在未被消费的不同测量事实（按G50测量key/Run完整事实，运输别名不算新测量）时给新的`EvolutionComparisonMeasurementChangedError`，Review缺失沿用原错误且扩展到全部成员Evaluation。history新增`MEASUREMENT_SNAPSHOT_CHANGED`（missing_measurement_locators）并使current intent为null；`MEASUREMENT_OBSERVATION_CONFLICT`只在派生有冲突时出现（多份一致观察不再误报），completeness/detail slot按同一派生投影。已提交receipt仍先重放；旧Comparison字节不改、不重算。
+- 不做：不新增ledger/角色/业务gate/Host语义判断；不引入测量修订或按最新/最好取代；不宣称目录可证明未发布的测量（Evaluator执行了评分却不发布Evaluation、原生账本存在而未发布的测量仍不可见——此为已知下一层边界，需原生账本完整性另立事实）或未公开Trial。
+
+### 验证计划
+
+- 纯比较：同槽两份一致测量（不同native ID）+第二份阻断Review→inconclusive且含其finding维度；一致且无阻断→与单份同统计；不一致→scorer_conflict且不抛错；unavailable+measured→取已测值；两Trial/同Task两终态→trial_conflict；inactive+终态且judge值不同→取终态值；late usage→仅资源差值不可用、推荐不因此改变；G49跨槽重用→明确维度。
+- 真实Host：G51原反例转正——Owner只传第一份，发布的Comparison实际发现第二份测量及其Review，calculation_inputs含两份、required维度出现、推荐inconclusive；另用读取主体外计数文件的冻结shell评分产生真实不同值，公开路径发布scorer_conflict而非抛错。
+- 真实DB/manager：G51安装诊断转正——授权后发布不同测量身份与阻断Review，执行旧请求明确拒绝且未安装；history给MEASUREMENT_SNAPSHOT_CHANGED、intent为null；一致的运输别名不触发；原合法改判/重放/回滚回归。再做类型、SDK唯一生成器/API、docs、拓扑、源嵌入同步与完整pre-push。
+
+### G52额度中断与Codex独立复核
+
+- Opus于08:27:10.718上海真实退出：exit1、131 turns、is_error=true、terminal_reason=api_error，原文You've hit your session limit · resets 12:40pm (Asia/Shanghai)。准确调用模型claude-opus-5-5；末尾synthetic是CLI额度错误消息，不是另换模型。累计CLI估算109.9422252美元，前87.654808，增22.2874172，非账单/业务费用。原stream/exit及g52-opus-quota-review.json、g52-opus-interrupted.patch保留。22文件未提交由Codex按用户授权接手，不重启该CLI。
+- 已核验Opus的原7文件聚焦101项667断言和相邻25项74断言通过，SDK原唯一生成器exit0；仍需独立语义审查、SDK结构差异核对、根类型/文档/拓扑、范围提交/push。测试通过不代表独立审查已完成。
+- 复核发现待真实checker证伪的具体缺口：G52把同槽不同Evaluation一起纳入，却仍只要求槽内有一份Review；第二个独立评分未被审查时，第一份Review可能被当作整个槽的覆盖。现Auditor合同仍逐Evaluation审查，G29的reviewed/空findings合法结论不支持把未审查的新测量当已审。先加纯比较正向缺失审查→required维度、后发真实Review→恢复的红测；确认后用唯一已分组测量身份计算覆盖，comparison与history共用；真正运输别名仍共享同次测量的Review，不强设finding category。
+- 另复核终态身份：G52用task_id+terminal_time判发生，原collector拥有真实terminal_occurrence.lifecycle.terminalEventID，时间不是发生身份。需保留这一边界并实证，不能以同时间猜同终态。先完成已证相关覆盖缺口与当前交付收尾；无依据的全局新策略不能混入本修复。
+
+- 审查覆盖红测已确认：原G52 received promote/required=[]，62pass/1fail；现共享evolutionMeasurementReviewCoverage按真正测量组核对current Review，comparison与history共用，未审新评分明确required，实际补审可恢复。纯多观察夹具补其各自真实语义的Review，不复用别的测量审查。
+- 终态身份的实施契约：Run新增可选terminal_event_id，由publisher从原collector terminal_occurrence.lifecycle.terminalEventID盖章；非终态为null，历史未记录保持undefined，不从时间/摘要回填。当前新发布总携带该事实。共享slot派生用原Task+eventID核对终态，已知ID矛盾即conflict；同事件不同时间是事实不一致，不当作晚到费用。多个终态观察若有未记录身份则明确required trial_occurrence，而非猜同发生；单份历史观察原样保留。真实Host核对盖章ID，纯合同覆盖同时间不同事件、同事件晚到费用、历史发生未知，不改生命周期/原事件/历史字节或另造ledger。
+
+### G52最终实现与交付验收（Codex收敛）
+
+- G51两条原反例已在当前生产路径转正。公开Host只传第一份测量时，仍完整发现该Campaign/Candidate已发布的另一独立测量及其Review；真实第二次shell评分产生不同值时，Comparison发布明确scorer_conflict/inconclusive并保留全部calculation_inputs。当前Task目录按一个固定快照分页；宽provenance没有删减，真正运输别名仍按G50归并，native结果不同不会合并成同一发生。
+- 不同观察现在能够显式报告一致、冲突、不可用和缺审查，而非通过抛错使任何第二记录都无法进入Comparison。统计每slot计一次；一致值和typed unavailable的处理是本次明确落盘的domain派生合同，不等于证明任意重复执行有独立统计收益。所有独立测量都需自己的current Review覆盖，真正别名共享同一次审查；全部当前finding仍贡献，合法显式Review改判保持原exact scope。
+- 原实施前方案以task_id+terminal_time判终态的部分已由上段原生terminal_event_id合同替换。历史缺少发生ID不回填；多份终态事实无法证明同一发生时明确trial_occurrence required。原生不同终态/Trial为trial_conflict；inactive/awaiting原件及其Review保留，有终态时仅终态观察供应值。此为终态事实消费变化，没有改Task/Session事件创建或恢复路径。
+- 当前安装唯一requireCurrentEvolutionEvidence同时核对已发布测量集合和Review集合，授权、未提交execute预检及原SQLite immediate收据事务共用。新增真实manager测试在安装后、写receipt前追加独立测量和阻断Review，收到EvolutionComparisonMeasurementChangedError及确切locator，实际安装回滚至baseline；完整重新比较/明确Review改判后可安装，commit后追加事实仍重放原receipt。旧Comparison数值、冻结旧上界历史及原测量全部不改。
+- 最终聚焦98项653断言：公开Host9/179、纯比较64/207、reference4/16、独立e2e证据消费14/41、包投影1/43在.tmp/g52-codex-focused.log；其中mutation中间5/133由最终.tmp/g52-codex-atomic-tests.log的5/137替代，不重复计数；manager CAS1/30在.tmp/g52-codex-cas.log。全部对应文件exit0。真实Host包含缺审查→required、实际补审后恢复、原生终态ID、不同native测量发现、不同实测值冲突、导入与完整分页。实际DB/manager包含授权/执行拒绝、rename后回滚、中断恢复、显式改判、历史上界、跨Task导入及receipt重放。明确test-driver身份，不冒称自主模型Campaign或业务收益。
+- 初始红测及修正完整保留：Opus comparison初轮50pass/7fail、Host未同步嵌入identity失败、mutation初轮失败；Codex缺审查红测原promote（62pass/1fail，g52-codex-review-red.log），补覆盖后旧夹具未提供独立Review的失败（g52-codex-review-first.log），以及新历史发生测试把undefined显式写入JSON被canonical校验正确拒绝（g52-codex-occurrence-tests.log）。后者改为真正缺字段，未放宽原JSON校验；没有把含失败日志称全绿。
+- Lab源/嵌入2026.09.27.14，最终contentDigest为39f87368b9246bf3097d3d11b97c438a4b4a066e4d5ea5deeae6d678686d5ef2（g52-codex-package-final-sync.log）；末次README澄清“仅非终态观察”与“已出现终态”的区别后同步。只同步Lab，其他base版本漂移原样保留，未向用户项目推广。所有未提交中间摘要不是已发布版本。原唯一SDK生成器成功，递归JSON核对只增加history/detail六处MEASUREMENT_SNAPSHOT_CHANGED联合分支，去掉这六处后与HEAD逐值相等（g52-openapi-verified.json）；无DDL、新ledger、角色或UI自动化。
+- 末次包同步后公开Host9/179与实际包投影1/43再次通过，完整exit0在g52-codex-host-package-final.log；它替代上面的同两文件中间运行，重复测试不另计入98/653。
+- 根类型8任务、docs342ops25groups、API6规则34文件、包拓扑122/135及diff检查均通过（g52-codex-types/docs/api/topology.log）；范围提交后按原规则pull、审全部outgoing、实际pre-push并push，收据使用.tmp/g52-push.log。
+- 未完成边界：本次只能保证当前授权Task冻结目录中的已发布Evaluation集合；未发布的native评分、未移交的source Task产物、未公开Trial仍不是目录可证明的事实。Run无exact Campaign字段，未测量Run不能从宽source猜归属。下一步先核对原metric执行发生/冻结Campaign归属与已发布成员之间的事实可达性，再用具体真实路径确认是否有可修的遗漏，不能凭猜测添第二ledger、任意取代测量或重开旧样本。整体可靠业务纠错/真实进化收益仍未达成。
+- 主管下一次恢复不早于2026-09-27 12:45上海（原限额明确12:40恢复），继续同一session、准确claude-opus-5-5、原参数与全新时间戳收据，不加用户未设预算。恢复前收敛当时Codex修改并更新全文交接；启动后Codex停止并行编辑。当前G52只做本地确定性检查，没有外部业务Provider费用。

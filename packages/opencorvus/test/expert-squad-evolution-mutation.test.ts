@@ -17,7 +17,11 @@ import {
   EvolutionMutationReceiptIdentityConflictError,
 } from "../src/expert-squad/evolution-mutation"
 import { prepareEvolutionPackageMutation, evolutionMutationConfirmationText } from "../src/expert-squad/evolution-mutation-intent"
-import { requireCurrentEvolutionReviews, EvolutionComparisonReviewChangedError } from "../src/expert-squad/evolution-review-freshness"
+import {
+  requireCurrentEvolutionEvidence,
+  EvolutionComparisonMeasurementChangedError,
+  EvolutionComparisonReviewChangedError,
+} from "../src/expert-squad/evolution-review-freshness"
 import { ExpertSquadPackageManager } from "../src/expert-squad/manager"
 import { readEvolutionCampaignDetail, readEvolutionHistory } from "../src/expert-squad/evolution-history"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
@@ -402,6 +406,7 @@ describe("authorized expert squad evolution mutation", () => {
               ),
               task_id: `${operationTask.taskID}-${arm}-${repetition}`,
               terminal_time: Date.now(),
+              terminal_event_id: `terminal-${arm}-${repetition}`,
               model: "test-model",
               environment_digest: digests.environment,
               token_usage: arm === "baseline" ? 100 : 90,
@@ -703,12 +708,18 @@ describe("authorized expert squad evolution mutation", () => {
             operation: "promotion",
           })
           if (scenario === "review-freshness") {
+            // The repeated-Trial declaration is bound to its own Campaign copy:
+            // a published measurement bound to the compared pair would itself
+            // make the pair's comparison stale before the collision is read.
+            const declarationCampaign = recordEvolutionArtifact({ taskID: operationTask.taskID,
+              type: "evolution-lab/campaign-spec", payload: campaignPayload })
             const reusedRun = recordEvolutionArtifact({ taskID: operationTask.taskID,
-              type: "evolution-lab/run-evidence-bundle", sources: [campaign],
+              type: "evolution-lab/run-evidence-bundle", sources: [declarationCampaign],
               payload: { ...baselineRuns[1]!.value, task_id: baselineRuns[0]!.value.task_id } })
             const reusedEvaluation = recordEvolutionArtifact({ taskID: operationTask.taskID,
-              type: "evolution-lab/evaluation-result", sources: [campaign, reusedRun],
-              payload: { ...baselineEvaluations[1]!.value, trial_task_id: baselineRuns[0]!.value.task_id, run_evidence_locator: reusedRun } })
+              type: "evolution-lab/evaluation-result", sources: [declarationCampaign, reusedRun],
+              payload: { ...baselineEvaluations[1]!.value, campaign_spec_locator: declarationCampaign,
+                trial_task_id: baselineRuns[0]!.value.task_id, run_evidence_locator: reusedRun } })
             const reusedReview = recordEvolutionArtifact({ taskID: operationTask.taskID,
               type: "evolution-lab/integrity-review", sources: [reusedEvaluation],
               payload: { ...baselineReviews[1]!.value, evaluation_result_locator: reusedEvaluation } })
@@ -835,9 +846,6 @@ describe("authorized expert squad evolution mutation", () => {
               id: target.id,
               installationScope: "project",
             })
-            // A different measured fact, not merely another publication ID.
-            const otherEvaluation = recordEvaluation("baseline", baselineRuns[0]!, 0.25, "f".repeat(64), 0)
-            recordReview("baseline", otherEvaluation, 0)
             recordEvolutionArtifact({
               taskID: oldTask.taskID,
               type: "evolution-lab/integrity-review",
@@ -908,7 +916,7 @@ describe("authorized expert squad evolution mutation", () => {
               const backgroundOnlyReview = recordEvolutionArtifact({ taskID: operationTask.taskID,
                 type: "evolution-lab/comparison-recommendation", payload: comparisonPayload,
                 sources: [...comparisonSources, lateReview.locator] })
-              expect(await captureChanged(async () => requireCurrentEvolutionReviews({ taskID: operationTask.taskID,
+              expect(await captureChanged(async () => requireCurrentEvolutionEvidence({ taskID: operationTask.taskID,
                 comparisonLocator: backgroundOnlyReview }))).toEqual({ ...expectedChange, comparisonLocator: backgroundOnlyReview })
             }
             expect(await captureChanged(() => executeEvolutionPackageMutation(mutationRequest))).toEqual(
@@ -1024,7 +1032,57 @@ describe("authorized expert squad evolution mutation", () => {
             expect((await ExpertSquadRegistry.loadPackage(installed.after.targetRoot)).packageDigest).toBe(
               baselineRevision.package_digest,
             )
-            const finalRequest = await publishReconsideration()
+            // After authorization, a separately executed measurement of a
+            // compared slot and its blocking Review are published. The
+            // Comparison that did not consume them cannot install; a new one
+            // consumes both, and the Auditor's explicit correction of that
+            // Review is what lets it promote.
+            const staleRequest = await publishReconsideration()
+            const separateMeasurement = recordEvaluation("candidate", candidateRuns[0]!, 0.8, "e".repeat(64), 0)
+            allEvaluations.push(separateMeasurement)
+            reviewSet.push(recordReview("candidate", separateMeasurement, 0))
+            let separateChange: unknown
+            try {
+              await executeEvolutionPackageMutation(staleRequest)
+            } catch (error) {
+              separateChange = error
+            }
+            expect(separateChange).toBeInstanceOf(EvolutionComparisonMeasurementChangedError)
+            expect((separateChange as InstanceType<typeof EvolutionComparisonMeasurementChangedError>).data).toEqual({
+              taskID: operationTask.taskID,
+              comparisonLocator: staleRequest.comparisonResultLocator,
+              missingMeasurementLocators: [separateMeasurement.locator],
+            })
+            expect((await ExpertSquadRegistry.loadPackage(installed.after.targetRoot)).packageDigest).toBe(
+              baselineRevision.package_digest,
+            )
+            const separateHistory = await readEvolutionHistory({ namespace: target.namespace, id: target.id, installationScope: "project" })
+            const staleRecord = separateHistory.records.flatMap((record) => record.candidates.flatMap((item) => item.comparisons))
+              .find((item) => item.artifact.locator.artifact_id === staleRequest.comparisonResultLocator.artifact_id)!
+            expect({
+              intent: staleRecord.promotion_intent,
+              issues: staleRecord.graph_issues.flatMap((issue) =>
+                issue.code === "MEASUREMENT_SNAPSHOT_CHANGED" ? [issue.missing_measurement_locators] : []),
+            }).toEqual({ intent: null, issues: [[separateMeasurement.locator]] })
+            let finalRequest = await publishReconsideration()
+            if (scenario === "alias-review") {
+              let duringInstall!: typeof candidateEvaluation
+              const restoreMeasurementHook = ExpertSquadPackageManager.TestHooks.afterTargetInstallBeforeReceiptOnce(async () => {
+                duringInstall = recordEvaluation("candidate", candidateRuns[0]!, 0.8, "7".repeat(64), 0)
+                allEvaluations.push(duringInstall)
+                reviewSet.push(recordReview("candidate", duringInstall, 0))
+              })
+              let atomicChange: unknown
+              try { await executeEvolutionPackageMutation(finalRequest) } catch (error) { atomicChange = error }
+              finally { restoreMeasurementHook() }
+              expect(atomicChange).toBeInstanceOf(EvolutionComparisonMeasurementChangedError)
+              expect((atomicChange as InstanceType<typeof EvolutionComparisonMeasurementChangedError>).data).toEqual({
+                taskID: operationTask.taskID, comparisonLocator: finalRequest.comparisonResultLocator,
+                missingMeasurementLocators: [duringInstall.locator],
+              })
+              expect((await ExpertSquadRegistry.loadPackage(installed.after.targetRoot)).packageDigest).toBe(baselineRevision.package_digest)
+              finalRequest = await publishReconsideration()
+            }
             const committed = await executeEvolutionPackageMutation(finalRequest)
             expect(committed.receipt.after_digest).toBe(candidateRevision.package_digest)
             recordReview("candidate", candidateEvaluation, 0)
@@ -1044,13 +1102,16 @@ describe("authorized expert squad evolution mutation", () => {
             if (scenario === "review-freshness") {
               // A persisted declaration of conflicting observations exposes the
               // exact conflict instead of silently choosing a measured value.
+              // Contradictory clock facts for one native terminal event and a
+              // disagreeing measured value remain explicit conflicts.
               const changedRun = recordEvolutionArtifact({ taskID: operationTask.taskID,
                 type: "evolution-lab/run-evidence-bundle", sources: [campaign],
-                payload: { ...baselineRuns[0]!.value, token_usage: baselineRuns[0]!.value.token_usage + 20 },
+                payload: { ...baselineRuns[0]!.value, terminal_time: baselineRuns[0]!.value.terminal_time + 1 },
               })
               const changedEvaluation = recordEvolutionArtifact({ taskID: operationTask.taskID,
                 type: "evolution-lab/evaluation-result", sources: [campaign, baselineRuns[0]!.locator],
-                payload: { ...baselineEvaluation.value, measurement_identity: {
+                payload: { ...baselineEvaluation.value, scorers: baselineEvaluation.value.scorers.map((scorer) =>
+                  scorer.status === "measured" ? { ...scorer, value: 0.25 } : scorer), measurement_identity: {
                   ...baselineEvaluation.value.measurement_identity!, scorer_results: [{ scorer_id: "quality", metric_result_id: "another-recorded-fixture-result" }],
                 }, metric_receipt_resource: {
                   ...baselineEvaluation.value.metric_receipt_resource, sha256: "f".repeat(64),

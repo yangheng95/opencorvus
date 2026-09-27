@@ -6,6 +6,8 @@ import {
   EvolutionPackagePublishableArtifactTypeSchema,
   createEvolutionArtifactReferences,
   evolutionArtifactProvenance,
+  evolutionComparisonMembers,
+  expandEvolutionMeasurementAliases,
   resolveEvolutionComparisonInputs,
   parseEvolutionArtifact,
   type ArtifactReadLocator,
@@ -595,8 +597,30 @@ export function summarizeEvolutionEvidence(facts: readonly EvolutionArtifactFact
   const recommendation = recommendations[0]!
   requireProducer(recommendation, "evolution-recommendation-owner")
 
-  const references = createEvolutionArtifactReferences(parsed.filter((fact) => fact.taskID === recommendation.taskID))
+  const catalog = parsed.filter((fact) => fact.taskID === recommendation.taskID)
+  const references = createEvolutionArtifactReferences(catalog)
   const consumed = resolveEvolutionComparisonInputs(recommendation.envelope, references)
+  // Every published measurement bound to the compared pair in this Task must be
+  // among the calculation inputs; an omitted one is not a smaller sample.
+  const consumedMeasurements = new Set(
+    expandEvolutionMeasurementAliases(
+      [...consumed.runs, ...consumed.evaluations].map((item) => item.artifact),
+      catalog,
+      references.key,
+    ).map((item) => references.key(item.locator)),
+  )
+  const omitted = evolutionComparisonMembers({
+    campaign: consumed.campaign.locator,
+    candidate: consumed.candidate.locator,
+    catalog,
+    references,
+  }).filter((item) => !consumedMeasurements.has(references.key(item.locator)))
+  if (omitted.length > 0)
+    throw new Error(
+      `Evolution recommendation omits published measurements of its Campaign and Candidate: ${omitted
+        .map((item) => JSON.stringify(item.locator))
+        .join(", ")}`,
+    )
   const bindings = [consumed.campaign, consumed.candidate, ...consumed.runs,
     ...consumed.evaluations, ...consumed.reviews].map(({ locator, artifact }) => ({ locator, source: artifact }))
   const sources = bindings.map((item) => item.source)

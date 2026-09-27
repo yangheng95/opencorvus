@@ -330,11 +330,13 @@ receipt推断评分调用。单份Evaluation的全部scorer必须有相同Task�
 engine_resource分别可复用和恢复其相同字节，二者的身份保持区分。
 
 `comparison-recommendation` 的模型面 payload 是空对象；Recommendation Owner 选择并完整读取
-Campaign、Candidate、Run、Evaluation 直接来源；Review 不由它选择子集。publisher在一次冻结
-Task catalog分页内发现并完整读取这些确切Evaluation的全部Review，再经唯一比较器生成并持久化
-全部统计、可用性、置信度与推荐字段，不要求模型重抄派生结果。Owner 完整读回所发布的比较后
+确切Campaign与Candidate（可附带Run/Evaluation，但它们必须属于该对）；测量与Review都不由它选择子集。
+publisher在一次冻结Task catalog分页内，经`evolutionComparisonMembers`发现所有以自身盖章事实
+绑定该对的已发布Evaluation（baseline臂candidate为null，candidate臂为该Candidate）及其确切Run，
+补齐发布别名并完整读取全部相关Review，再经唯一比较器生成并持久化全部统计、可用性、置信度与
+推荐字段，不要求模型重抄派生结果。Owner 完整读回所发布的比较后
 再渲染文档与图表；测量槽位和统计公式保持原定义，计算输入与当前晋升身份按下述契约核对。目录不完整或provider错误不能
-等同没有Review。这只保证该目录快照中的Review集合，不保证未来证据新鲜性或业务判断正确。
+等同没有Review。这保证该目录快照中绑定该对的已发布测量及其Review集合，不保证未来证据新鲜性或业务判断正确。
 
 Comparison的`calculation_inputs`由唯一比较器盖章exact Campaign/Candidate及实际消费的全部
 Run/Evaluation/Review身份（含等值别名与已取代Review）；它与保留的同Turn宽来源图不同。
@@ -342,7 +344,8 @@ Run/Evaluation/Review身份（含等值别名与已取代Review）；它与保�
 历史缺字段表示没有记录计算输入，保留原结果并公开COMPARISON_INPUTS_UNAVAILABLE、
 promotion_intent=null，不能从宽来源猜值或改写历史。新比较的授权Campaign/Candidate必须匹配
 实际计算身份；额外背景来源不扩大权限。Review新鲜性对照实际已消费Review，而非宽来源成员。
-本契约不能证明已发布不同测量全集或未公开Trial完整性。
+已发布且绑定该对的不同测量全部被消费；本契约不能证明执行了却未发布的测量或未公开Trial完整性，
+未被任何成员Evaluation引用的Run也不从宽来源猜归属。
 
 `integrity-review.revision`是可选的显式改判声明，包含`supersedes`确切父Review及`reason`；
 未声明时是初始/独立审查，不取代任何记录。publisher校验同一Evaluation/slot、生产者和直接来源，
@@ -351,13 +354,14 @@ promotion_intent=null，不能从宽来源猜值或改写历史。新比较的�
 findings全部进入比较，后续完整Review可显式取代多个分支；原件永久保留。history的review_history
 逐项暴露真实状态，单项review投影只在唯一current时存在，不合成合并Review或写第二ledger。
 
-晋升授权与尚未提交的执行必须核对Comparison确切Evaluation所关联的当前完整Review身份。
-后发独立或显式改判Review未进入该Comparison来源时，返回
-`EvolutionComparisonReviewChangedError`及确切缺失locators；不按结论好坏决定是否忽略。
-history在自身冻结目录上用同一差异计算公开`REVIEW_SNAPSHOT_CHANGED`，保留原推荐，
-不提供该快照已知过期的promotion_intent。安装前检查仅为预检，最终检查与durable receipt写入
-在同一个SQLite immediate事务中串行化：Review先提交则原manager按journal回滚未提交安装；
-receipt先提交则后发Review不倒改历史。重试先识别已有receipt，按原journal清理并返回；
+晋升授权与尚未提交的执行（`requireCurrentEvolutionEvidence`）先核对该对的当前成员测量：
+绑定该Campaign/Candidate的已发布测量不在Comparison实际输入（同一测量的发布别名除外）时，返回
+`EvolutionComparisonMeasurementChangedError`及确切缺失locators；再核对确切Evaluation所关联的
+当前完整Review身份，后发独立或显式改判Review未进入时返回`EvolutionComparisonReviewChangedError`。
+不按结论好坏决定是否忽略。history在自身冻结目录上用同一差异公开`MEASUREMENT_SNAPSHOT_CHANGED`
+与`REVIEW_SNAPSHOT_CHANGED`，保留原推荐，不提供该快照已知过期的promotion_intent。安装前检查仅为预检，最终检查与durable receipt写入
+在同一个SQLite immediate事务中串行化：相关新测量或Review先提交则原manager按journal回滚未提交安装；
+receipt先提交则后发证据不倒改历史。重试先识别已有receipt，按原journal清理并返回；
 未提交的中断先reconcile再复核新证据，避免提前拒绝遗留未提交安装。恢复/feedback授权保持原契约。
 
 Run/Evaluation的发布身份与测量身份分开：Evaluation publisher从已核验原生结果盖章
@@ -370,24 +374,41 @@ measurement_identity（owner_task_id及每个scorer的metric_result_id），不�
 `groupEvolutionMeasurements`按slot与同一key分组，统计只计一次，原locators全部保留。
 不同Trial、结果、usage或terminal事实保持不同观察；仅运输receipt不同不证明另一次评分。
 Review可引用同一测量组内任一确切Evaluation别名；原Review的显式取代scope不改变。
-history以同一分组计数并投影run_aliases/evaluation_aliases；多观察冲突时单项为null，
-公开MEASUREMENT_OBSERVATION_CONFLICT及原身份，scorer投影为typed unavailable。
+同槽多个不同观察由唯一`deriveEvolutionSlotObservations`派生，比较器与history共用：全部观察
+都被消费，不按时间或数值择一。多于一个Trial Task、或同一Trial多于一个终态发生，为required
+`trial_conflict:<slot>`；槽位有终态观察时，只由终态观察及测量它的Evaluation提供结果、资源与
+scorer值，同一Trial的inactive/awaiting观察及其Review仍被消费但不供值。参与观察一致的事实被
+采用：measured值多于一个为required `scorer_conflict:<scorer>:<slot>`，typed unavailable不提供值
+也不与已测值冲突；终态outcome不一致为required `run_outcome_conflict:<slot>`；token/cost/activity
+不一致只使对应资源差值不可用（`run_resource_conflict:<slot>`）。槽内全部成员Evaluation的当前
+Review均生效。history只在上述Trial/outcome/scorer不一致时公开MEASUREMENT_OBSERVATION_CONFLICT，
+多个一致观察的单项run/evaluation为null而scorer投影为一致值。
 Comparison直接引用的Run/Evaluation通过该图可达，不要求baseline Run另抄Candidate来源。
-此规则不保证尚未选入的Run/Evaluation全集或未公开Trial的完整执行历史。
+此引用可达性规则本身不证明测量全集；成员发现的范围由上文目录合同界定，不能证明未公开Trial的完整执行历史。
 
 在一次Comparison的实际计算集合内，Run.task_id与Evaluation.trial_task_id必须各自只归属一个
 case/arm/repetition槽位；同一Trial的发布别名、晚到费用或继续/恢复不能变成第二个独立槽位。
-`evolutionTrialSlotConflicts`是唯一纯身份计算，比较器及当前安装证据复核共用，错误携带确切
-Task/slots/原locators。history保留原推荐与原测量，公开TRIAL_SLOT_COLLISION并不给当前安装intent；
+`evolutionTrialSlotConflicts`是唯一纯身份计算：比较器把它写成required
+`trial_slot_collision:<trial_task_id>`并发布inconclusive（已发布测量全部被消费，拒绝发布只会让
+Owner无法披露），当前安装证据复核对已消费输入仍抛出携带确切Task/slots/原locators的错误。
+history保留原推荐与原测量，公开TRIAL_SLOT_COLLISION并不给当前安装intent；
 已提交receipt仍先重放。规则不跨Campaign禁止复用baseline，不选择同slot的不同观察，不按相同
 资源字节合并不同Task，也不能证明统计独立或全部Trial已经公开。
 
 同一测量的发布身份闭包由`expandEvolutionMeasurementAliases`唯一计算：在当前Task目录中，
-以已选Run/Evaluation的同一测量key补齐全部已证发布别名，再关联每个Evaluation别名上的Review。
+以已选及成员Run/Evaluation的同一测量key补齐全部已证发布别名，再关联每个Evaluation别名上的Review。
 publisher一次分页同时读取三类Artifact，固定同一upper/membership，完整read/select后发布比较；
 不以Owner只传一个别名为由遗漏另一别名的审查。mutation在原receipt immediate事务中读同一当前
 DB快照并使用相同闭包；history用自己的冻结上界。新的别名与Review在安装期间出现时也进入复核，
 同证据显式Review更正仍按各自exact Evaluation scope执行，旧回执幂等重放保持。
+
+多观察归约仍按真正测量组要求独立审查：任一组没有current Review或有unavailable审查，
+该slot的integrity_review保持required unavailable；同一原测量的运输别名可以共用审查。
+`evolutionMeasurementReviewCoverage`供比较与history完整性计数共同消费，不以一个slot内第一份
+Review替代其余独立测量的审查，不要求固定finding类别。原审查仍逐件保留。
+Run的terminal_event_id由原collector.lifecycle.terminalEventID盖章，非终态为null，旧记录缺失即
+未记录。多份终态Run仅凭相同时间不能证明同一次发生；已知不同ID或同ID矛盾时间为发生冲突，
+多份观察缺少原生发生身份为required trial_occurrence，不从时间/摘要回填。单份历史原件仍可读。
 
 Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 metrics store：
 `engine_metric_spec`、`engine_metric_result` 和 `engine_iteration` 的唯一直接表写入文件

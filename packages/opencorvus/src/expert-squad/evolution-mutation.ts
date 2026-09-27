@@ -21,7 +21,7 @@ import { Instance } from "@/project/instance"
 import { EngineService } from "@/task-api"
 import { Database, eq } from "@/storage/db"
 import { ExpertSquadPackageManager } from "./manager"
-import { requireCurrentEvolutionReviews } from "./evolution-review-freshness"
+import { requireCurrentEvolutionEvidence } from "./evolution-review-freshness"
 import { requireEvolutionMutationAuthorization, requireEvolutionMutationRootSession } from "./mutation-authorization"
 import {
   evolutionMutationConfirmationText,
@@ -49,7 +49,7 @@ export async function authorizeEvolutionPackageMutation(rawInput: EvolutionMutat
   })
   const prepared = prepareEvolutionPackageMutation({ taskID: input.taskID, intent: input.intent })
   if (prepared.operation === "promotion")
-    requireCurrentEvolutionReviews({ taskID: input.taskID, comparisonLocator: prepared.intent.comparisonResultLocator })
+    requireCurrentEvolutionEvidence({ taskID: input.taskID, comparisonLocator: prepared.intent.comparisonResultLocator })
   const confirmationText = preparedConfirmation(prepared)
   if (input.confirmationText !== confirmationText)
     throw new Error("Evolution mutation authorization text does not equal the exact current evidence decision")
@@ -163,7 +163,7 @@ function persistReceipt(input: {
       return
     }
     if (input.prepared.operation === "promotion")
-      requireCurrentEvolutionReviews({
+      requireCurrentEvolutionEvidence({
         taskID: input.taskID,
         comparisonLocator: input.prepared.intent.comparisonResultLocator,
       })
@@ -221,7 +221,7 @@ export async function executeEvolutionPackageMutation(rawInput: EvolutionMutatio
         id: prepared.target.id,
         installationScope: prepared.target.scope,
       })
-      requireCurrentEvolutionReviews({
+      requireCurrentEvolutionEvidence({
         taskID: input.authorization.taskID,
         comparisonLocator: prepared.intent.comparisonResultLocator,
       })

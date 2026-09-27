@@ -225,6 +225,7 @@ function comparisonInputs(
         run_evidence_resource: resource,
         task_id: `task-${arm}-${repetition}`,
         terminal_time: 1,
+        terminal_event_id: `terminal-${arm}-${repetition}`,
         model:
           arm === "candidate" && repetition === 0
             ? (options?.candidateFirstRunModel ?? "provider/model")
@@ -268,6 +269,13 @@ function comparisonFor(...args: Parameters<typeof comparisonInputs>) {
   return deriveComparisonRecommendation(comparisonInputs(...args))
 }
 
+function reviewForMeasurement(input: ReturnType<typeof comparisonInputs>, measured: ReturnType<typeof comparisonInputs>["evaluations"][number]) {
+  const source = input.reviews.find((review) => review.value.case_id === measured.value.case_id &&
+    review.value.arm === measured.value.arm && review.value.repetition === measured.value.repetition)!
+  return { locator: { ...source.locator, artifact_id: `review-${measured.locator.artifact_id}` },
+    value: { ...source.value, evaluation_result_locator: measured.locator } }
+}
+
 describe("Evolution Lab deterministic comparison", () => {
   test("counts complete identical measurement aliases once and accepts their exact references", () => {
     const input = comparisonInputs([{ id: "quality", weight: 1, baseline: [0.2, 0.2], candidate: [0.8, 0.8] }])
@@ -295,7 +303,12 @@ describe("Evolution Lab deterministic comparison", () => {
     expect(deriveComparisonRecommendation({ ...withAliases, reviews: [...input.reviews, aliasReview] }).recommendation).toBe("inconclusive")
   })
 
-  test.each(["cost", "tokens", "trial", "terminal"] as const)("keeps different run %s facts as conflicting observations", (field) => {
+  test.each([
+    ["cost", [], ["run_resource_conflict:case-1:baseline:0"], "promote"],
+    ["tokens", [], ["run_resource_conflict:case-1:baseline:0"], "promote"],
+    ["trial", ["trial_conflict:case-1:baseline:0"], [], "inconclusive"],
+    ["terminal", ["trial_conflict:case-1:baseline:0"], [], "inconclusive"],
+  ] as const)("reports different run %s facts instead of choosing one", (field, required, advisory, recommendation) => {
     const input = comparisonInputs([{ id: "quality", weight: 1, baseline: [0.2, 0.2], candidate: [0.8, 0.8] }])
     const original = input.runs[0]!
     const value = { ...original.value }
@@ -305,20 +318,29 @@ describe("Evolution Lab deterministic comparison", () => {
     if (field === "terminal") value.terminal_time += 1
     const changed = { value, locator: { ...original.locator, artifact_id: "different-run-observation" } }
     expect(groupEvolutionMeasurements([original, changed]).get("case-1:baseline:0")!.length).toBe(2)
-    expect(() => deriveComparisonRecommendation({ ...input, runs: [...input.runs, changed] })).toThrow(
-      "comparison has conflicting run observations for slot case-1:baseline:0",
-    )
+    const result = deriveComparisonRecommendation({ ...input, runs: [...input.runs, changed] })
+    expect(result.required_unavailable_dimensions).toEqual([...required])
+    expect(result.unavailable_dimensions).toEqual(expect.arrayContaining([...required, ...advisory]))
+    expect(result.recommendation).toBe(recommendation)
+    expect(result.calculation_inputs!.runs).toEqual(expect.arrayContaining([original.locator, changed.locator]))
+    if (field === "cost") expect(result.cost_delta).toBeNull()
+    if (field === "tokens") {
+      expect(result.token_delta).toBeNull()
+      expect(result.cost_delta).toBeCloseTo(0.2)
+    }
   })
 
-  test("keeps unrecorded measurement identities distinct when only their receipts differ", () => {
+  test("consumes unrecorded measurement identities that differ only by receipt when their values agree", () => {
     const input = comparisonInputs([{ id: "quality", weight: 1, baseline: [0.2, 0.2], candidate: [0.8, 0.8] }])
     const original = input.evaluations[0]!
     const changed = { locator: { ...original.locator, artifact_id: "another-measurement" }, value: {
       ...original.value, metric_receipt_resource: { ...original.value.metric_receipt_resource, sha256: "1".repeat(64) },
     } }
-    expect(() => deriveComparisonRecommendation({ ...input, evaluations: [...input.evaluations, changed] })).toThrow(
-      "comparison has conflicting evaluation observations for slot case-1:baseline:0",
-    )
+    expect(groupEvolutionMeasurements([original, changed]).get("case-1:baseline:0")!.length).toBe(2)
+    const { calculation_inputs: inputs, ...statistics } = deriveComparisonRecommendation({ ...input, evaluations: [...input.evaluations, changed], reviews: [...input.reviews, reviewForMeasurement(input, changed)] })
+    const { calculation_inputs: _originalInputs, ...originalStatistics } = deriveComparisonRecommendation(input)
+    expect(statistics).toEqual(originalStatistics)
+    expect(inputs!.evaluations).toEqual(expect.arrayContaining([original.locator, changed.locator]))
   })
   const findingCategories = ["evidence_integrity", "reward_hacking", "permission", "side_effect", "security"] as const
   const improvedScores = [{ id: "correctness", weight: 1, baseline: [0.2, 0.2, 0.2], candidate: [0.8, 0.8, 0.8] }]
@@ -720,8 +742,15 @@ test("a single Trial per arm cannot supply two independent repetitions", () => {
   })
   for (const run of input.runs) run.value.task_id = `one-trial-${run.value.arm}`
   for (const evaluation of input.evaluations) evaluation.value.trial_task_id = `one-trial-${evaluation.value.arm}`
+  // Every published measurement is consumed, so the reuse must be disclosed in
+  // the published comparison rather than refusing to publish one.
+  const reused = deriveComparisonRecommendation(input)
+  expect({ recommendation: reused.recommendation, required: reused.required_unavailable_dimensions }).toEqual({
+    recommendation: "inconclusive",
+    required: ["trial_slot_collision:one-trial-baseline", "trial_slot_collision:one-trial-candidate"],
+  })
   let caught: unknown
-  try { deriveComparisonRecommendation(input) } catch (error) { caught = error }
+  try { requireEvolutionTrialSlotIdentity(input) } catch (error) { caught = error }
   expect(caught).toBeInstanceOf(EvolutionTrialSlotConflictError)
   expect((caught as EvolutionTrialSlotConflictError).conflicts.map(({ trial_task_id, slots }) => ({ trial_task_id, slots })))
     .toEqual([
@@ -769,8 +798,240 @@ test("groups one native scorer occurrence across receipt and Run publication ali
   const anotherExecution = { ...transported, value: { ...transported.value,
     measurement_identity: { ...transported.value.measurement_identity!, scorer_results: [{ scorer_id: "quality", metric_result_id: "another-native-result" }] },
   } }
-  expect(() => deriveComparisonRecommendation({ ...input, runs: [...input.runs, aliasRun], evaluations: [...input.evaluations, anotherExecution] }))
-    .toThrow("comparison has conflicting evaluation observations for slot case-1:baseline:0")
   const key = createEvolutionMeasurementKey({ runs: [...input.runs, aliasRun] })
   expect(groupEvolutionMeasurements([original, transported], key).get("case-1:baseline:0")!.map((group) => group.length)).toEqual([2])
+  // Another native execution is a second measurement even at equal values. It
+  // is consumed with the first; agreeing values leave the statistics intact.
+  expect(groupEvolutionMeasurements([original, anotherExecution], key).get("case-1:baseline:0")!.map((group) => group.length)).toEqual([1, 1])
+  const { calculation_inputs: repeatedInputs, ...repeatedStatistics } = deriveComparisonRecommendation({
+    ...input, runs: [...input.runs, aliasRun], evaluations: [...input.evaluations, anotherExecution],
+    reviews: [...input.reviews, reviewForMeasurement(input, anotherExecution)],
+  })
+  expect(repeatedStatistics).toEqual(originalStatistics)
+  expect(repeatedInputs!.evaluations).toEqual(expect.arrayContaining([original.locator, anotherExecution.locator]))
+})
+
+describe("every published measurement of a slot is consumed", () => {
+  const scorers = [{ id: "quality", weight: 1, baseline: [0.2, 0.2], candidate: [0.8, 0.8] }]
+  type Inputs = ReturnType<typeof comparisonInputs>
+  type Located<T extends keyof Inputs & ("evaluations" | "runs" | "reviews")> = Inputs[T][number]
+
+  function slotFirst(input: Inputs) {
+    const evaluation = input.evaluations.find((item) => item.value.arm === "candidate" && item.value.repetition === 0)!
+    const run = input.runs.find((item) => item.value.arm === "candidate" && item.value.repetition === 0)!
+    return { evaluation, run }
+  }
+
+  /** A second native execution of the same frozen scorers over the same Trial. */
+  function remeasured(
+    evaluation: Located<"evaluations">,
+    id: string,
+    scorer: Located<"evaluations">["value"]["scorers"][number],
+    runLocator: Located<"evaluations">["value"]["run_evidence_locator"] = evaluation.value.run_evidence_locator,
+  ): Located<"evaluations"> {
+    return {
+      locator: { ...evaluation.locator, artifact_id: `evaluation-${id}` },
+      value: EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse({
+        ...evaluation.value,
+        scorers: [scorer],
+        run_evidence_locator: runLocator,
+        measurement_identity: {
+          owner_task_id: "evaluation-owner",
+          scorer_results: [{ scorer_id: scorer.scorer_id, metric_result_id: `native-${id}` }],
+        },
+      }),
+    }
+  }
+
+  function statistics(result: ReturnType<typeof deriveComparisonRecommendation>) {
+    const { calculation_inputs: _inputs, ...rest } = result
+    return rest
+  }
+
+  test("a second measurement's blocking Review cannot be left out of the comparison", () => {
+    const input = comparisonInputs(scorers)
+    const { evaluation } = slotFirst(input)
+    const second = remeasured(evaluation, "second", { scorer_id: "quality", status: "measured", value: 0.8, evidence: [locator] })
+    const review = {
+      locator: { ...locator, artifact_id: "review-of-second" },
+      value: EvolutionArtifactSchemas["evolution-lab/integrity-review"].parse({
+        case_id: "case-1",
+        arm: "candidate",
+        repetition: 0,
+        evaluation_result_locator: second.locator,
+        status: "reviewed",
+        findings: [
+          {
+            category: "permission",
+            invariant: "The second measurement observed the Trial's declared permission boundary",
+            outcome: "unavailable",
+            evidence: [second.locator],
+            severity: "blocker",
+            owner: "evolution-safety-auditor",
+            correction: null,
+          },
+        ],
+        accepted_limitations: [],
+        unknowns: [],
+      }),
+    }
+    const original = deriveComparisonRecommendation(input)
+    const agreeing = deriveComparisonRecommendation({ ...input, evaluations: [...input.evaluations, second] })
+    expect({ recommendation: agreeing.recommendation, required: agreeing.required_unavailable_dimensions })
+      .toEqual({ recommendation: "inconclusive", required: ["integrity_review:case-1:candidate:0"] })
+    const reviewed = deriveComparisonRecommendation({
+      ...input,
+      evaluations: [...input.evaluations, second],
+      reviews: [...input.reviews, review],
+    })
+    expect({
+      recommendation: reviewed.recommendation,
+      required: reviewed.required_unavailable_dimensions,
+      deltas: reviewed.paired_deltas,
+      reviews: reviewed.calculation_inputs!.reviews,
+    }).toEqual({
+      recommendation: "inconclusive",
+      required: ["integrity_finding:case-1:candidate:0:review-of-second:permission:0"],
+      deltas: original.paired_deltas,
+      reviews: expect.arrayContaining([review.locator]),
+    })
+  })
+
+  test("disagreeing measured values are an explicit conflict rather than a choice", () => {
+    const input = comparisonInputs(scorers)
+    const { evaluation } = slotFirst(input)
+    const worse = remeasured(evaluation, "worse", { scorer_id: "quality", status: "measured", value: 0.3, evidence: [locator] })
+    const result = deriveComparisonRecommendation({ ...input, evaluations: [...input.evaluations, worse], reviews: [...input.reviews, reviewForMeasurement(input, worse)] })
+    expect({
+      recommendation: result.recommendation,
+      required: result.required_unavailable_dimensions,
+      measuredPairs: result.paired_deltas[0]!.win_tie_loss,
+      aggregate: result.aggregate_score,
+    }).toEqual({
+      recommendation: "inconclusive",
+      required: ["scorer_conflict:quality:case-1:candidate:0"],
+      measuredPairs: { wins: 1, ties: 0, losses: 0 },
+      aggregate: null,
+    })
+  })
+
+  test("a typed unavailable measurement records no value against a measured one", () => {
+    const input = comparisonInputs(scorers)
+    const { evaluation } = slotFirst(input)
+    const timedOut = remeasured(evaluation, "timed-out", {
+      scorer_id: "quality",
+      status: "unavailable",
+      reason: "inactivity_timeout",
+      evidence: [locator],
+    })
+    const original = deriveComparisonRecommendation(input)
+    expect(statistics(deriveComparisonRecommendation({ ...input, evaluations: [...input.evaluations, timedOut], reviews: [...input.reviews, reviewForMeasurement(input, timedOut)] }))).toEqual(
+      statistics(original),
+    )
+    const onlyUnavailable = deriveComparisonRecommendation({
+      ...input,
+      evaluations: [...input.evaluations.filter((item) => item !== evaluation), timedOut],
+      reviews: input.reviews.map((item) =>
+        item.value.arm === "candidate" && item.value.repetition === 0
+          ? { ...item, value: { ...item.value, evaluation_result_locator: timedOut.locator } }
+          : item,
+      ),
+    })
+    expect(onlyUnavailable.required_unavailable_dimensions).toEqual(["scorer:quality:case-1:candidate:0"])
+  })
+
+  test("a terminal observation supplies the slot result over the same Trial's inactive observation", () => {
+    const input = comparisonInputs(scorers)
+    const { evaluation, run } = slotFirst(input)
+    const inactive = {
+      locator: { ...run.locator, artifact_id: "run-candidate-0-inactive" },
+      value: EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse({
+        ...run.value,
+        outcome: "unavailable",
+        terminal_time: 0,
+        terminal_event_id: null,
+        token_usage: 50,
+        cost: 0.5,
+        activity_duration_ms: 500,
+      }),
+    }
+    const interim = remeasured(
+      evaluation,
+      "interim",
+      { scorer_id: "quality", status: "measured", value: 0.1, evidence: [locator] },
+      inactive.locator,
+    )
+    const original = deriveComparisonRecommendation(input)
+    const result = deriveComparisonRecommendation({
+      ...input,
+      runs: [...input.runs, inactive],
+      evaluations: [...input.evaluations, interim],
+      reviews: [...input.reviews, reviewForMeasurement(input, interim)],
+    })
+    expect(statistics(result)).toEqual(statistics(original))
+    expect(result.calculation_inputs!.runs).toEqual(expect.arrayContaining([inactive.locator]))
+    expect(result.calculation_inputs!.evaluations).toEqual(expect.arrayContaining([interim.locator]))
+  })
+
+  test("a second Trial for one slot is a conflict even when its values agree", () => {
+    const input = comparisonInputs(scorers)
+    const { evaluation, run } = slotFirst(input)
+    const rerun = {
+      locator: { ...run.locator, artifact_id: "run-candidate-0-rerun" },
+      value: { ...run.value, task_id: "task-candidate-0-rerun" },
+    }
+    const rerunMeasurement = remeasured(
+      { ...evaluation, value: { ...evaluation.value, trial_task_id: rerun.value.task_id } },
+      "rerun",
+      { scorer_id: "quality", status: "measured", value: 0.8, evidence: [locator] },
+      rerun.locator,
+    )
+    const result = deriveComparisonRecommendation({
+      ...input,
+      runs: [...input.runs, rerun],
+      evaluations: [...input.evaluations, rerunMeasurement],
+      reviews: [...input.reviews, reviewForMeasurement(input, rerunMeasurement)],
+    })
+    expect({ recommendation: result.recommendation, required: result.required_unavailable_dimensions }).toEqual({
+      recommendation: "inconclusive",
+      required: ["trial_conflict:case-1:candidate:0"],
+    })
+  })
+})
+
+
+test("each distinct measurement needs an independent Review before its slot is reviewed", () => {
+  const input = comparisonInputs([{ id: "quality", weight: 1, baseline: [0.2, 0.2], candidate: [0.8, 0.8] }])
+  const original = input.evaluations.find((item) => item.value.arm === "candidate" && item.value.repetition === 0)!
+  const repeated = { locator: { ...original.locator, artifact_id: "distinct-unreviewed" }, value: {
+    ...original.value, measurement_identity: { owner_task_id: "evaluation-owner",
+      scorer_results: [{ scorer_id: "quality", metric_result_id: "distinct-unreviewed-native" }] },
+  } }
+  const second = { ...input, evaluations: [...input.evaluations, repeated] }
+  const missing = deriveComparisonRecommendation(second)
+  expect({ recommendation: missing.recommendation, required: missing.required_unavailable_dimensions })
+    .toEqual({ recommendation: "inconclusive", required: ["integrity_review:case-1:candidate:0"] })
+  const originalReview = input.reviews.find((item) => item.value.arm === "candidate" && item.value.repetition === 0)!
+  const reviewed = deriveComparisonRecommendation({ ...second, reviews: [...input.reviews, {
+    locator: { ...originalReview.locator, artifact_id: "second-measurement-review" },
+    value: { ...originalReview.value, evaluation_result_locator: repeated.locator },
+  }] })
+  expect({ recommendation: reviewed.recommendation, required: reviewed.required_unavailable_dimensions })
+    .toEqual({ recommendation: "promote", required: [] })
+})
+
+
+test("terminal observations retain native occurrence identity even at the same clock value", () => {
+  const input = comparisonInputs([{ id: "quality", weight: 1, baseline: [0.2, 0.2], candidate: [0.8, 0.8] }])
+  const run = input.runs[0]!
+  const another = { locator: { ...run.locator, artifact_id: "same-clock-another-terminal" },
+    value: { ...run.value, terminal_event_id: "another-terminal-event" } }
+  const result = deriveComparisonRecommendation({ ...input, runs: [...input.runs, another] })
+  expect({ recommendation: result.recommendation, required: result.required_unavailable_dimensions })
+    .toEqual({ recommendation: "inconclusive", required: ["trial_conflict:case-1:baseline:0"] })
+  const { terminal_event_id: _eventID, ...unrecordedValue } = another.value
+  const unrecorded = { ...another, value: unrecordedValue }
+  const unknown = deriveComparisonRecommendation({ ...input, runs: [...input.runs, unrecorded] })
+  expect({ recommendation: unknown.recommendation, required: unknown.required_unavailable_dimensions })
+    .toEqual({ recommendation: "inconclusive", required: ["trial_occurrence:case-1:baseline:0"] })
 })

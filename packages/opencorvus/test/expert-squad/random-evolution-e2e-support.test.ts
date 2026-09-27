@@ -759,6 +759,16 @@ describe("random Expert Squad evolution controller contracts", () => {
       ),
     ]
     const summary = summarizeEvolutionEvidence(facts)
+    // A published measurement of the compared pair that the recommendation did
+    // not consume is refused rather than read as a smaller sample.
+    const omittedEvaluation = { ...locations.baselineEvaluation, artifact_id: "omitted-baseline-evaluation" }
+    expect(() => summarizeEvolutionEvidence([
+      ...facts,
+      fact("evolution-lab/evaluation-result", omittedEvaluation, {
+        ...baselineEvaluation,
+        scorers: baselineEvaluation.scorers.map((scorer) => (scorer.status === "measured" ? { ...scorer, value: 0.6 } : scorer)),
+      }, "evolution-evaluator"),
+    ])).toThrow("Evolution recommendation omits published measurements of its Campaign and Candidate")
     let transported = facts
     for (const hop of [1, 2]) {
       transported = transported.map((item) => {

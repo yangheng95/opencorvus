@@ -145,6 +145,13 @@ export const EvolutionGraphIssueSchema = z.discriminatedUnion("code", [
     .strict(),
   z
     .object({
+      code: z.literal("MEASUREMENT_SNAPSHOT_CHANGED"),
+      owner: EvolutionHistoryArtifactIdentitySchema,
+      missing_measurement_locators: z.array(EngineArtifactLocatorSchema).min(1),
+    })
+    .strict(),
+  z
+    .object({
       code: z.literal("MEASUREMENT_OBSERVATION_CONFLICT"),
       owner: EvolutionHistoryArtifactIdentitySchema,
       artifact_type: z.enum(["evolution-lab/run-evidence-bundle", "evolution-lab/evaluation-result"]),

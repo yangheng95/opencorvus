@@ -9974,6 +9974,69 @@ export type ExpertSquadEvolutionHistoryResponses = {
                 }
               }
             | {
+                code: "MEASUREMENT_SNAPSHOT_CHANGED"
+                missing_measurement_locators: Array<{
+                  artifact_id: string
+                  catalog_revision: number
+                  expected_sha256: string
+                  source: "engine_artifact"
+                }>
+                owner: {
+                  artifact_type:
+                    | "evolution-lab/opportunity"
+                    | "evolution-lab/campaign-spec"
+                    | "evolution-lab/failure-attribution"
+                    | "evolution-lab/candidate-revision"
+                    | "evolution-lab/run-evidence-bundle"
+                    | "evolution-lab/evaluation-result"
+                    | "evolution-lab/integrity-review"
+                    | "evolution-lab/comparison-recommendation"
+                    | "evolution-lab/promotion-receipt"
+                  locator: {
+                    artifact_id: string
+                    catalog_revision: number
+                    expected_sha256: string
+                    source: "engine_artifact"
+                  }
+                  partition: "current" | "historical"
+                  producer:
+                    | {
+                        agent_id: string
+                        expert_squad_id: string
+                        message_id: string
+                        owner_kind: "projected-scheduler" | "projected-worker"
+                        package_revision: {
+                          id: string
+                          namespace: string
+                          package_digest: string
+                          project_id: string | null
+                          scope: "built_in" | "project" | "global"
+                          version: string
+                        }
+                        projection_hash: string
+                        session_id: string
+                        tool_call_id: string
+                      }
+                    | {
+                        message_id: string
+                        mission_id: string
+                        owner_kind: "mission"
+                        session_id: string
+                        tool_call_id: string
+                      }
+                    | {
+                        component_id: string
+                        operation_id: string
+                        owner_kind: "core"
+                      }
+                  root_session_id: string
+                  schema_version: 1
+                  task_id: string
+                  time_created: number
+                  time_updated: number
+                }
+              }
+            | {
                 artifact_type: "evolution-lab/run-evidence-bundle" | "evolution-lab/evaluation-result"
                 code: "MEASUREMENT_OBSERVATION_CONFLICT"
                 observation_locators: Array<{
@@ -10865,6 +10928,69 @@ export type ExpertSquadEvolutionHistoryResponses = {
               }
             }
           | {
+              code: "MEASUREMENT_SNAPSHOT_CHANGED"
+              missing_measurement_locators: Array<{
+                artifact_id: string
+                catalog_revision: number
+                expected_sha256: string
+                source: "engine_artifact"
+              }>
+              owner: {
+                artifact_type:
+                  | "evolution-lab/opportunity"
+                  | "evolution-lab/campaign-spec"
+                  | "evolution-lab/failure-attribution"
+                  | "evolution-lab/candidate-revision"
+                  | "evolution-lab/run-evidence-bundle"
+                  | "evolution-lab/evaluation-result"
+                  | "evolution-lab/integrity-review"
+                  | "evolution-lab/comparison-recommendation"
+                  | "evolution-lab/promotion-receipt"
+                locator: {
+                  artifact_id: string
+                  catalog_revision: number
+                  expected_sha256: string
+                  source: "engine_artifact"
+                }
+                partition: "current" | "historical"
+                producer:
+                  | {
+                      agent_id: string
+                      expert_squad_id: string
+                      message_id: string
+                      owner_kind: "projected-scheduler" | "projected-worker"
+                      package_revision: {
+                        id: string
+                        namespace: string
+                        package_digest: string
+                        project_id: string | null
+                        scope: "built_in" | "project" | "global"
+                        version: string
+                      }
+                      projection_hash: string
+                      session_id: string
+                      tool_call_id: string
+                    }
+                  | {
+                      message_id: string
+                      mission_id: string
+                      owner_kind: "mission"
+                      session_id: string
+                      tool_call_id: string
+                    }
+                  | {
+                      component_id: string
+                      operation_id: string
+                      owner_kind: "core"
+                    }
+                root_session_id: string
+                schema_version: 1
+                task_id: string
+                time_created: number
+                time_updated: number
+              }
+            }
+          | {
               artifact_type: "evolution-lab/run-evidence-bundle" | "evolution-lab/evaluation-result"
               code: "MEASUREMENT_OBSERVATION_CONFLICT"
               observation_locators: Array<{
@@ -11473,6 +11599,69 @@ export type ExpertSquadEvolutionHistoryResponses = {
         | {
             code: "REVIEW_SNAPSHOT_CHANGED"
             missing_review_locators: Array<{
+              artifact_id: string
+              catalog_revision: number
+              expected_sha256: string
+              source: "engine_artifact"
+            }>
+            owner: {
+              artifact_type:
+                | "evolution-lab/opportunity"
+                | "evolution-lab/campaign-spec"
+                | "evolution-lab/failure-attribution"
+                | "evolution-lab/candidate-revision"
+                | "evolution-lab/run-evidence-bundle"
+                | "evolution-lab/evaluation-result"
+                | "evolution-lab/integrity-review"
+                | "evolution-lab/comparison-recommendation"
+                | "evolution-lab/promotion-receipt"
+              locator: {
+                artifact_id: string
+                catalog_revision: number
+                expected_sha256: string
+                source: "engine_artifact"
+              }
+              partition: "current" | "historical"
+              producer:
+                | {
+                    agent_id: string
+                    expert_squad_id: string
+                    message_id: string
+                    owner_kind: "projected-scheduler" | "projected-worker"
+                    package_revision: {
+                      id: string
+                      namespace: string
+                      package_digest: string
+                      project_id: string | null
+                      scope: "built_in" | "project" | "global"
+                      version: string
+                    }
+                    projection_hash: string
+                    session_id: string
+                    tool_call_id: string
+                  }
+                | {
+                    message_id: string
+                    mission_id: string
+                    owner_kind: "mission"
+                    session_id: string
+                    tool_call_id: string
+                  }
+                | {
+                    component_id: string
+                    operation_id: string
+                    owner_kind: "core"
+                  }
+              root_session_id: string
+              schema_version: 1
+              task_id: string
+              time_created: number
+              time_updated: number
+            }
+          }
+        | {
+            code: "MEASUREMENT_SNAPSHOT_CHANGED"
+            missing_measurement_locators: Array<{
               artifact_id: string
               catalog_revision: number
               expected_sha256: string
@@ -12568,6 +12757,69 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
                 }
               }
             | {
+                code: "MEASUREMENT_SNAPSHOT_CHANGED"
+                missing_measurement_locators: Array<{
+                  artifact_id: string
+                  catalog_revision: number
+                  expected_sha256: string
+                  source: "engine_artifact"
+                }>
+                owner: {
+                  artifact_type:
+                    | "evolution-lab/opportunity"
+                    | "evolution-lab/campaign-spec"
+                    | "evolution-lab/failure-attribution"
+                    | "evolution-lab/candidate-revision"
+                    | "evolution-lab/run-evidence-bundle"
+                    | "evolution-lab/evaluation-result"
+                    | "evolution-lab/integrity-review"
+                    | "evolution-lab/comparison-recommendation"
+                    | "evolution-lab/promotion-receipt"
+                  locator: {
+                    artifact_id: string
+                    catalog_revision: number
+                    expected_sha256: string
+                    source: "engine_artifact"
+                  }
+                  partition: "current" | "historical"
+                  producer:
+                    | {
+                        agent_id: string
+                        expert_squad_id: string
+                        message_id: string
+                        owner_kind: "projected-scheduler" | "projected-worker"
+                        package_revision: {
+                          id: string
+                          namespace: string
+                          package_digest: string
+                          project_id: string | null
+                          scope: "built_in" | "project" | "global"
+                          version: string
+                        }
+                        projection_hash: string
+                        session_id: string
+                        tool_call_id: string
+                      }
+                    | {
+                        message_id: string
+                        mission_id: string
+                        owner_kind: "mission"
+                        session_id: string
+                        tool_call_id: string
+                      }
+                    | {
+                        component_id: string
+                        operation_id: string
+                        owner_kind: "core"
+                      }
+                  root_session_id: string
+                  schema_version: 1
+                  task_id: string
+                  time_created: number
+                  time_updated: number
+                }
+              }
+            | {
                 artifact_type: "evolution-lab/run-evidence-bundle" | "evolution-lab/evaluation-result"
                 code: "MEASUREMENT_OBSERVATION_CONFLICT"
                 observation_locators: Array<{
@@ -13459,6 +13711,69 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
               }
             }
           | {
+              code: "MEASUREMENT_SNAPSHOT_CHANGED"
+              missing_measurement_locators: Array<{
+                artifact_id: string
+                catalog_revision: number
+                expected_sha256: string
+                source: "engine_artifact"
+              }>
+              owner: {
+                artifact_type:
+                  | "evolution-lab/opportunity"
+                  | "evolution-lab/campaign-spec"
+                  | "evolution-lab/failure-attribution"
+                  | "evolution-lab/candidate-revision"
+                  | "evolution-lab/run-evidence-bundle"
+                  | "evolution-lab/evaluation-result"
+                  | "evolution-lab/integrity-review"
+                  | "evolution-lab/comparison-recommendation"
+                  | "evolution-lab/promotion-receipt"
+                locator: {
+                  artifact_id: string
+                  catalog_revision: number
+                  expected_sha256: string
+                  source: "engine_artifact"
+                }
+                partition: "current" | "historical"
+                producer:
+                  | {
+                      agent_id: string
+                      expert_squad_id: string
+                      message_id: string
+                      owner_kind: "projected-scheduler" | "projected-worker"
+                      package_revision: {
+                        id: string
+                        namespace: string
+                        package_digest: string
+                        project_id: string | null
+                        scope: "built_in" | "project" | "global"
+                        version: string
+                      }
+                      projection_hash: string
+                      session_id: string
+                      tool_call_id: string
+                    }
+                  | {
+                      message_id: string
+                      mission_id: string
+                      owner_kind: "mission"
+                      session_id: string
+                      tool_call_id: string
+                    }
+                  | {
+                      component_id: string
+                      operation_id: string
+                      owner_kind: "core"
+                    }
+                root_session_id: string
+                schema_version: 1
+                task_id: string
+                time_created: number
+                time_updated: number
+              }
+            }
+          | {
               artifact_type: "evolution-lab/run-evidence-bundle" | "evolution-lab/evaluation-result"
               code: "MEASUREMENT_OBSERVATION_CONFLICT"
               observation_locators: Array<{
@@ -14067,6 +14382,69 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
         | {
             code: "REVIEW_SNAPSHOT_CHANGED"
             missing_review_locators: Array<{
+              artifact_id: string
+              catalog_revision: number
+              expected_sha256: string
+              source: "engine_artifact"
+            }>
+            owner: {
+              artifact_type:
+                | "evolution-lab/opportunity"
+                | "evolution-lab/campaign-spec"
+                | "evolution-lab/failure-attribution"
+                | "evolution-lab/candidate-revision"
+                | "evolution-lab/run-evidence-bundle"
+                | "evolution-lab/evaluation-result"
+                | "evolution-lab/integrity-review"
+                | "evolution-lab/comparison-recommendation"
+                | "evolution-lab/promotion-receipt"
+              locator: {
+                artifact_id: string
+                catalog_revision: number
+                expected_sha256: string
+                source: "engine_artifact"
+              }
+              partition: "current" | "historical"
+              producer:
+                | {
+                    agent_id: string
+                    expert_squad_id: string
+                    message_id: string
+                    owner_kind: "projected-scheduler" | "projected-worker"
+                    package_revision: {
+                      id: string
+                      namespace: string
+                      package_digest: string
+                      project_id: string | null
+                      scope: "built_in" | "project" | "global"
+                      version: string
+                    }
+                    projection_hash: string
+                    session_id: string
+                    tool_call_id: string
+                  }
+                | {
+                    message_id: string
+                    mission_id: string
+                    owner_kind: "mission"
+                    session_id: string
+                    tool_call_id: string
+                  }
+                | {
+                    component_id: string
+                    operation_id: string
+                    owner_kind: "core"
+                  }
+              root_session_id: string
+              schema_version: 1
+              task_id: string
+              time_created: number
+              time_updated: number
+            }
+          }
+        | {
+            code: "MEASUREMENT_SNAPSHOT_CHANGED"
+            missing_measurement_locators: Array<{
               artifact_id: string
               catalog_revision: number
               expected_sha256: string

@@ -12,6 +12,7 @@ export {
   resolveEvolutionIntegrityReviews,
   groupEvolutionMeasurements,
   expandEvolutionMeasurementAliases,
+  evolutionComparisonMembers,
   EvolutionReviewLineageError,
   parseEvolutionArtifact,
   type EvolutionArtifactType,

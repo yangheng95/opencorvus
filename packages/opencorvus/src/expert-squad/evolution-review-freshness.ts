@@ -4,6 +4,7 @@ import {
   EngineArtifactEnvelopeSchema,
   EngineArtifactLocatorSchema,
   expandEvolutionMeasurementAliases,
+  evolutionComparisonMembers,
   createEvolutionArtifactReferences,
   evolutionArtifactProvenance,
   resolveEvolutionComparisonInputs,
@@ -53,6 +54,43 @@ export function missingComparisonReviews(input: {
     .toSorted((left, right) => canonicalEvolutionJSON(left).localeCompare(canonicalEvolutionJSON(right)))
 }
 
+/** Published measurements of the compared Campaign/Candidate pair that the
+ * Comparison did not consume. Publication aliases of a consumed measured fact
+ * are the same measurement; a different native occurrence or Run is not. */
+export function missingComparisonMeasurements(input: {
+  comparison: Envelope
+  measurements: readonly EvidenceArtifact[]
+  catalog: readonly EvidenceArtifact[]
+}): EngineArtifactLocator[] {
+  const references = createEvolutionArtifactReferences([...input.measurements, ...input.catalog])
+  const consumed = resolveEvolutionComparisonInputs(input.comparison, references)
+  const known = new Set(
+    expandEvolutionMeasurementAliases(
+      [...consumed.runs, ...consumed.evaluations].map((item) => item.artifact),
+      input.catalog,
+      references.key,
+    ).map((item) => references.key(item.locator)),
+  )
+  return evolutionComparisonMembers({
+    campaign: consumed.campaign.locator,
+    candidate: consumed.candidate.locator,
+    catalog: input.catalog,
+    references,
+  })
+    .filter(({ locator }) => !known.has(references.key(locator)))
+    .map(({ locator }) => locator)
+    .toSorted((left, right) => canonicalEvolutionJSON(left).localeCompare(canonicalEvolutionJSON(right)))
+}
+
+export const EvolutionComparisonMeasurementChangedError = NamedError.create(
+  "EvolutionComparisonMeasurementChangedError",
+  z.object({
+    taskID: z.string(),
+    comparisonLocator: EngineArtifactLocatorSchema,
+    missingMeasurementLocators: z.array(EngineArtifactLocatorSchema).min(1),
+  }),
+)
+
 export const EvolutionComparisonReviewChangedError = NamedError.create(
   "EvolutionComparisonReviewChangedError",
   z.object({
@@ -62,10 +100,11 @@ export const EvolutionComparisonReviewChangedError = NamedError.create(
   }),
 )
 
-/** Call in the receipt's immediate transaction to serialize Review publication
- * against the installation commit. Earlier calls are only useful preflight.
+/** Call in the receipt's immediate transaction to serialize measurement and
+ * Review publication against the installation commit. Earlier calls are only
+ * useful preflight.
  */
-export function requireCurrentEvolutionReviews(input: { taskID: string; comparisonLocator: EngineArtifactLocator }) {
+export function requireCurrentEvolutionEvidence(input: { taskID: string; comparisonLocator: EngineArtifactLocator }) {
   return Database.transaction((db) => {
     const read = (locator: EngineArtifactLocator) =>
       EngineArtifactEnvelopeSchema.parse(requireEngineArtifactByLocator({ db, taskID: input.taskID, locator }).payload)
@@ -107,6 +146,9 @@ export function requireCurrentEvolutionReviews(input: { taskID: string; comparis
     })
     const measurements = [consumed.campaign, consumed.candidate, ...consumed.runs,
       ...consumed.evaluations, ...consumed.reviews].map((item) => item.artifact)
+    const missingMeasurementLocators = missingComparisonMeasurements({ comparison, measurements, catalog })
+    if (missingMeasurementLocators.length)
+      throw new EvolutionComparisonMeasurementChangedError({ ...input, missingMeasurementLocators })
     const missingReviewLocators = missingComparisonReviews({ comparison, measurements, catalog })
     if (missingReviewLocators.length)
       throw new EvolutionComparisonReviewChangedError({ ...input, missingReviewLocators })

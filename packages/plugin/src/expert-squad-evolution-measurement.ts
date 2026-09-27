@@ -1,6 +1,7 @@
 import { EvolutionArtifactSchemas } from "./expert-squad-evolution-artifact.js"
 import { artifactReadLocatorKey, type ArtifactReadLocator, type EngineArtifactEnvelope } from "./artifact-catalog.js"
 import { canonicalEvolutionJSON } from "./expert-squad-evolution.js"
+import type { EvolutionArtifactReferences } from "./expert-squad-evolution-reference.js"
 
 type LocatedMeasurement = {
   locator: ArtifactReadLocator
@@ -100,6 +101,205 @@ export function expandEvolutionMeasurementAliases<T extends MeasurementPublicati
     if (fact !== undefined && facts.has(fact)) result.set(artifactReadLocatorKey(artifact.locator), artifact)
   }
   return [...result.keys()].sort().map((identity) => result.get(identity)!)
+}
+
+/** Every published Evaluation whose own stamped facts bind it to one exact
+ * Campaign/Candidate comparison, with the exact Runs it measured. Membership is
+ * not the Owner's selection, so a comparison cannot omit a published
+ * measurement. A Run names no exact Campaign; an unmeasured Run is never
+ * assigned to a comparison from wider provenance. */
+export function evolutionComparisonMembers<T extends MeasurementPublication>(input: {
+  campaign: ArtifactReadLocator
+  candidate: ArtifactReadLocator
+  catalog: readonly T[]
+  references: Pick<EvolutionArtifactReferences, "key" | "same">
+}): T[] {
+  const members = new Map<string, T>()
+  const measuredRuns = new Set<string>()
+  for (const artifact of input.catalog) {
+    if (artifact.envelope.artifact_type !== "evolution-lab/evaluation-result") continue
+    const parsed = EvolutionArtifactSchemas["evolution-lab/evaluation-result"].safeParse(artifact.envelope.payload)
+    if (!parsed.success) continue
+    const evaluation = parsed.data
+    const bound =
+      input.references.same(evaluation.campaign_spec_locator, input.campaign) &&
+      (evaluation.arm === "baseline"
+        ? evaluation.candidate_revision_locator === null
+        : evaluation.candidate_revision_locator !== null &&
+          input.references.same(evaluation.candidate_revision_locator, input.candidate))
+    if (!bound) continue
+    members.set(artifactReadLocatorKey(artifact.locator), artifact)
+    measuredRuns.add(input.references.key(evaluation.run_evidence_locator))
+  }
+  for (const artifact of input.catalog)
+    if (
+      artifact.envelope.artifact_type === "evolution-lab/run-evidence-bundle" &&
+      measuredRuns.has(input.references.key(artifact.locator))
+    )
+      members.set(artifactReadLocatorKey(artifact.locator), artifact)
+  return [...members.keys()].sort().map((identity) => members.get(identity)!)
+}
+
+type RunObservation = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/run-evidence-bundle"]["parse"]>
+type EvaluationObservation = ReturnType<(typeof EvolutionArtifactSchemas)["evolution-lab/evaluation-result"]["parse"]>
+
+export type EvolutionAgreedFact<T> = { agreed: true; value: T } | { agreed: false; values: T[] }
+
+export type EvolutionSlotScorer =
+  | { status: "measured"; value: number; evidence: ArtifactReadLocator[] }
+  | { status: "unavailable"; reasons: string[]; evidence: ArtifactReadLocator[] }
+  | { status: "conflict"; values: number[]; evidence: ArtifactReadLocator[] }
+  | { status: "missing" }
+
+export type EvolutionSlotObservations<
+  R extends { locator: ArtifactReadLocator; value: RunObservation },
+  E extends { locator: ArtifactReadLocator; value: EvaluationObservation },
+> = {
+  /** Distinct observations; each inner array is one fact and its publication aliases. */
+  runs: R[][]
+  evaluations: E[][]
+  /** More than one Trial Task, or more than one terminal occurrence of it. */
+  trialConflict: boolean
+  terminalIdentityUnavailable: boolean
+  /** null: no Run. unavailable: no terminal observation. conflict: terminal observations disagree. */
+  outcome: RunObservation["outcome"] | "conflict" | null
+  resources: null | {
+    token_usage: EvolutionAgreedFact<number>
+    cost: EvolutionAgreedFact<number | null>
+    activity_duration_ms: EvolutionAgreedFact<number | null>
+  }
+  /** Measurements contributing values: those of the terminal observation once one exists. */
+  contributing: E[][]
+  scorers: Map<string, EvolutionSlotScorer>
+}
+
+function agreed<T>(values: readonly T[]): EvolutionAgreedFact<T> {
+  const distinct = [...new Map(values.map((value) => [canonicalEvolutionJSON(value), value])).values()]
+  return distinct.length === 1 ? { agreed: true, value: distinct[0]! } : { agreed: false, values: distinct }
+}
+
+function exactLocators(values: readonly ArtifactReadLocator[]) {
+  const byKey = new Map(values.map((value) => [artifactReadLocatorKey(value), value]))
+  return [...byKey.keys()].sort().map((key) => byKey.get(key)!)
+}
+
+/** Derive each slot from every observation it holds. Nothing is dropped and no
+ * observation wins by time or value: facts the contributing observations agree
+ * on are used, disagreement stays an explicit conflict, and a typed
+ * unavailable result records no value rather than contradicting one. Once a
+ * Trial has a terminal observation, its inactive or awaiting observations stay
+ * consumed evidence but supply no outcome, resource or scorer value. */
+export function deriveEvolutionSlotObservations<
+  R extends { locator: ArtifactReadLocator; value: RunObservation },
+  E extends { locator: ArtifactReadLocator; value: EvaluationObservation },
+>(input: {
+  runs: readonly R[]
+  evaluations: readonly E[]
+  scorerIDs: readonly string[]
+  referenceKey?: (locator: ArtifactReadLocator) => string
+}): Map<string, EvolutionSlotObservations<R, E>> {
+  const referenceKey = input.referenceKey ?? artifactReadLocatorKey
+  const factKey = createEvolutionMeasurementKey({ runs: input.runs, referenceKey })
+  const runGroups = groupEvolutionMeasurements(input.runs, factKey)
+  const evaluationGroups = groupEvolutionMeasurements(input.evaluations, factKey)
+  const slots = new Set([...runGroups.keys(), ...evaluationGroups.keys()])
+  const result = new Map<string, EvolutionSlotObservations<R, E>>()
+  for (const slot of [...slots].sort()) {
+    const runs = runGroups.get(slot) ?? []
+    const evaluations = evaluationGroups.get(slot) ?? []
+    const terminal = runs.filter((aliases) => aliases[0]!.value.outcome !== "unavailable")
+    const contributingRuns = terminal.length > 0 ? terminal : runs
+    const trials = new Set([
+      ...runs.map((aliases) => aliases[0]!.value.task_id),
+      ...evaluations.map((aliases) => aliases[0]!.value.trial_task_id),
+    ])
+    const terminalIdentityUnavailable = terminal.length > 1 && terminal.some((aliases) => !aliases[0]!.value.terminal_event_id)
+    const occurrences = new Set(terminal.flatMap((aliases) => {
+      const run = aliases[0]!.value
+      return run.terminal_event_id ? [`${run.task_id}\0${run.terminal_event_id}`] : []
+    }))
+    const knownTimeDisagreement = !terminalIdentityUnavailable && terminal.length > 1 &&
+      !agreed(terminal.map((aliases) => aliases[0]!.value.terminal_time)).agreed
+    const terminalOutcomes = agreed(terminal.map((aliases) => aliases[0]!.value.outcome))
+    const runIndex = new Map<string, R[]>()
+    for (const aliases of runs) for (const run of aliases) runIndex.set(referenceKey(run.locator), aliases)
+    const contributing =
+      runs.length === 0
+        ? evaluations
+        : evaluations.filter((aliases) => {
+            const measured = runIndex.get(referenceKey(aliases[0]!.value.run_evidence_locator))
+            return measured !== undefined && contributingRuns.includes(measured)
+          })
+    const scorers = new Map<string, EvolutionSlotScorer>()
+    for (const scorerID of input.scorerIDs) {
+      const results = contributing.flatMap((aliases) =>
+        aliases[0]!.value.scorers.filter((scorer) => scorer.scorer_id === scorerID),
+      )
+      const measured = results.flatMap((scorer) => (scorer.status === "measured" ? [scorer] : []))
+      const values = [...new Set(measured.map((scorer) => scorer.value))].sort((left, right) => left - right)
+      // One observation keeps its own evidence order; several are merged exactly.
+      const evidenceOf = (items: readonly { evidence: ArtifactReadLocator[] }[]) =>
+        items.length === 1 ? items[0]!.evidence : exactLocators(items.flatMap((scorer) => scorer.evidence))
+      const evidence = evidenceOf(results)
+      scorers.set(
+        scorerID,
+        results.length === 0
+          ? { status: "missing" }
+          : values.length === 1
+            ? { status: "measured", value: values[0]!, evidence: evidenceOf(measured) }
+            : values.length > 1
+              ? { status: "conflict", values, evidence }
+              : {
+                  status: "unavailable",
+                  reasons: [...new Set(results.flatMap((scorer) => (scorer.status === "unavailable" ? [scorer.reason] : [])))].sort(),
+                  evidence,
+                },
+      )
+    }
+    result.set(slot, {
+      runs,
+      evaluations,
+      trialConflict: trials.size > 1 || occurrences.size > 1 || knownTimeDisagreement,
+      terminalIdentityUnavailable,
+      outcome:
+        runs.length === 0
+          ? null
+          : terminal.length === 0
+            ? "unavailable"
+            : terminalOutcomes.agreed
+              ? terminalOutcomes.value
+              : "conflict",
+      resources:
+        contributingRuns.length === 0
+          ? null
+          : {
+              token_usage: agreed(contributingRuns.map((aliases) => aliases[0]!.value.token_usage)),
+              cost: agreed(contributingRuns.map((aliases) => aliases[0]!.value.cost)),
+              activity_duration_ms: agreed(contributingRuns.map((aliases) => aliases[0]!.value.activity_duration_ms)),
+            },
+      contributing,
+      scorers,
+    })
+  }
+  return result
+}
+
+/** Coverage follows independent measured facts, not merely their shared slot.
+ * A Review of any proven publication alias covers that one measurement only. */
+export function evolutionMeasurementReviewCoverage(input: {
+  evaluations: readonly (readonly { locator: ArtifactReadLocator }[])[]
+  reviews: readonly { value: { evaluation_result_locator: ArtifactReadLocator; status: "reviewed" | "unavailable" } }[]
+  referenceKey?: (locator: ArtifactReadLocator) => string
+}) {
+  const key = input.referenceKey ?? artifactReadLocatorKey
+  const missing = input.evaluations.filter((aliases) =>
+    !input.reviews.some(({ value }) => aliases.some(({ locator }) => key(locator) === key(value.evaluation_result_locator))),
+  )
+  const reviewed = input.evaluations.length > 0 && missing.length === 0 && input.evaluations.every((aliases) =>
+    input.reviews.filter(({ value }) => aliases.some(({ locator }) => key(locator) === key(value.evaluation_result_locator)))
+      .every(({ value }) => value.status === "reviewed"),
+  )
+  return { reviewed, missing: missing.map((aliases) => aliases.map(({ locator }) => locator)) }
 }
 
 type TrialMatrix = {
