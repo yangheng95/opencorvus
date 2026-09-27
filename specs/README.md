@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Reviewer evidence-standard observation](artifacts/2026-09-27-review-evidence/README.md)
+
 - [Complete team feedback observation](artifacts/2026-09-27-team-feedback/README.md)
 - [Complete team feedback result](artifacts/2026-09-27-team-feedback/assessment.md)
 

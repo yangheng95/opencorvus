@@ -135,7 +135,7 @@ describe("Data Analysis expert squad package", () => {
       namespace: "builtin",
       id: "data-analysis",
       name: "Data Analysis & Business Insights",
-      version: "2026.09.27.2",
+      version: "2026.09.27.3",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))

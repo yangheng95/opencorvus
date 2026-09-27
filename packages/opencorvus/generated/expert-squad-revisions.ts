@@ -40,7 +40,7 @@ export const generatedExpertSquadRevisions: Readonly<
   "customs-trade-compliance": { version: "2026.08.30.2", contentDigest: "4ebe5a1627611d7985aff1b3e93ef8eaed7f1b6f7bc26723b953402ffb501649" },
   "cybersecurity-assurance": { version: "2026.08.30.2", contentDigest: "19391ac3004b9c7e71d2c2763b2efb0c8094f85d44f52dda73947240c4727c0a" },
   "dam-safety-surveillance-assurance": { version: "2026.08.30.2", contentDigest: "6a1a129090a1b386968267424f7fc6632000ad6699eb6a23b60034d219409fad" },
-  "data-analysis": { version: "2026.09.27.2", contentDigest: "4d09ee442a8e915cebf66de9dad62d854e77816b27a9ca8134081406240bcaed" },
+  "data-analysis": { version: "2026.09.27.3", contentDigest: "4509dfea21a9b10d5b301757bb9c22d7b87b2cd84c5123fab50551b1fb4316ec" },
   "data-engineering-reliability": { version: "2026.08.30.2", contentDigest: "913be831eb2d2e3c64902ca39e0de2dbab8423b81b2479cbf13c2be9f3bb9fef" },
   "deep-research": { version: "2026.09.02.1", contentDigest: "9e9b17ecf1d50407d0ba156b711d789b935234fcfa3e618ec962c16c61b0f316" },
   "digital-accessibility-assurance": { version: "2026.08.30.2", contentDigest: "712245ac520dbddafa723941c6bc5af504c559ff1c4e6c773f6866364a00926d" },

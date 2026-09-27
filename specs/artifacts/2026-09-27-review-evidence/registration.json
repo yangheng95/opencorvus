@@ -1,0 +1,9 @@
+{
+  "id": "nyc311-review-evidence-01",
+  "runRoot": ".tmp/review-evidence-20260927/run-01",
+  "inputRoot": "specs/artifacts/2026-09-27-team-feedback/input",
+  "packageDigest": "6bce55825c4dccde60f62bd6016e65a15b223052d89b17627454d3d6efc838a9",
+  "model": "openai/gpt-5.6-luna",
+  "inactivityMs": 300000,
+  "pollIntervalMs": 2000
+}

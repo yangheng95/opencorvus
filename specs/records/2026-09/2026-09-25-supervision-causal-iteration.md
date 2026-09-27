@@ -1762,3 +1762,32 @@ Recall：从8abcb06f已push/clean继续，只读当前data-analysis团队及原G
 - 另有来源误判恢复：fact-checker最初带过滤查询却称brief缺失，原brief rev22已在；同Session协调续行后发audit rev34/Core review rev35。它是来源判断恢复，不替代业务纠错。performance/segment实际分别dispatch_agent串行，第二派单明确增加前一分析为输入；已读真实请求及及时accepted回执，未复现所请求并行batch在Host失效，也未审当时完整Provider工具定义，不能据此直接重写调度。
 - 原audit315次流式准确gpt-5.6-luna/HTTP200；native usage312行全session/priced，input2622230/output117678/reasoning13663/cache_read18351104/total21104675，local cost0非免费/发票。Provider activity309逻辑请求全done，306单attempt、3双attempt，sum312。审计无逐请求ID/时间，尚不能完整逐次对账或给外部账单；不能凭计数差发明取消/收费原因。CLI费用与业务用量分开。
 - 本轮只封存结果，不改生产实现/角色/原样本、不再开模型。原readonly辅助导出遇到Python默认cp1252及tuple-key JSON错误，改明确UTF-8/可序列化汇总后取得原事实；这不是产品运行失败。下一决定应围绕“独立判断是否挑战上游解释并尊重源字段”而非再补调度底座/类型协议；17:45优先将用户纠偏、真实窄修正及漏判原证据交回原Opus，任何新干预另行有据登记。
+
+## G65（Opus恢复）：独立判断的证据标准——单一改变与登记（实施前）
+
+### Recall与原件依据
+
+- 2026-09-27 17:45后以准确claude-opus-5-5恢复同一主管会话，从2e0da6b6（=origin/main、clean）继续；无运行中业务。已读用户两次纠偏、Codex/ZCode对照、当前团队路径映射、data-analysis职责澄清与feedback-01独立结果/原件。G61–G64与团队反馈已交付项不重做；diagnostic-01、review-01、feedback-01全部只读关闭。无委托。
+- 原义务：请求要求说明同月关闭测量“能与不能”说明什么、使用给定字段定义与时间分辨率，且“不支持时说明限制而非发明值”。把输入已有的字段说成未知，同样违反“使用给定字段”的义务。原字段：24组全部有`closed_month`；同月以外的10组正是July 117→2025-08、August 391→2025-09的行政关闭记录。
+- 解释的传递（原件逐字可见，不推断模型内部）：charter的`unknowns`写“No historical backlog at 2025-07-01 or complete later closure view”，`source_policy`/`stopping_conditions`把later closure列为禁止推断、“unsupported claims remain limitations”；segment写“No opening backlog or later closure”；brief写“the extract cannot show later closure completeness”；audit写“later closure completeness … remain unsupported by the source”；终稿写remaining“does not show whether they subsequently closed”。七个角色提示都含同一句“Preserve explicit unknowns instead of inventing inputs”，上游声明的未知在下游作为应保留事实出现。
+- 独立判断失效的精确形态：brief的Core FactCheckReview（evidence.json第35项）第3项已从metrics.json行算出July 117/August 391 remaining，反证在审查者自己的上下文里；第4项“limitations are factually supported”的三条证据却是brief自身、metrics.json里与此无关的`source_limits`文字、以及charter“explicitly prohibits inferring … later closure completeness”。它检验的是“是否符合charter禁令、各方是否一致”，不是“输入字段能否支持该限制”。包审查提示只说“trace claims to sources”，未界定sources；Core fact-check要求每项有具体指针，但不排除团队产物作证据。
+- Mission另为判断点：runner请求把它设为“diagnostic执行者，preserve any failure”；它开头读过metrics.json，验收前读完整终稿与各worker“已审clean”的最终消息后接受。本次保持该请求不变作对照，不在同一次改变里叠加。
+- 外部校准（只读ZCode `dynamic-workflows/SKILL.md` §2–§3，固定commit见上文）：持续复用的审查者会锚定于自己先前判断；fresh eyes四条中“Separate context”“Ask for failures, not approval… approving takes evidence and objecting is the easy move”“Give the eyes the same evidence（判断正确性必须读原始材料）”，并提醒相关审查者（同模型同提示）增益很小。对照当前data-analysis：同actor反馈续行已由feedback-01证实可用；缺的是审查者的证据集与问题形式——它把团队链条当证据、以批准为默认。initial fact-check Turn本身已是独立Session，因此无需新协议或新角色即可让它只看目标与原始材料。
+
+### 单一改变与刻意不变
+
+- 只改`data-analysis-fact-checker`：审查以原请求与Task输入文件为唯一证据；charter、dossier、分析、先前审查等团队产物及其范围限制/未知都是待检声明，不用来支持目标，团队一致不是独立证据；问法改为找出使目标出错之处——不能由输入行复现的数字、偏离给定定义/单位、未满足的请求义务、以及输入字段其实能回答的限制或未知；只有指向请求或输入的证据才可verified，查不到的为unresolved。审查者自身那句“Preserve explicit unknowns”改为“只有输入缺该值时未知才成立”。manifest中该角色描述同步“对照原请求与输入文件”，包版本2026.09.27.3，只同步data-analysis嵌入。
+- 刻意不变：planner/steward/两分析/synthesizer/writer提示（含其“Preserve explicit unknowns”）、scheduler、workflow图、typed ABI、Host/Schema/SDK/调度、runner及Mission请求、冻结输入、模型与限制。目的在检验纠错而非预防：生产者不变，自然错误仍可能出现；若同时改生产者，一份正确终稿无法区分“被纠正”与“未发生”。
+- 不是同义提醒：原文没有界定证据集，Core允许任意指针；本改变修改可接受证据与审查问题，原件可证伪（若审查仍以团队产物背书或放过输入可回答的限制即失败）。不是Host业务gate、新角色、新ledger或隐藏答案；审查者仍自行判断。
+
+### 预测、证伪与登记
+
+- 登记见`specs/artifacts/2026-09-27-review-evidence/README.md`与`registration.json`：同一冻结NYC 311输入、唯一新根、唯一Mission/Task、流式openai/gpt-5.6-luna、300秒真实无活动/poll2、无总时长/轮次/请求/金额上限、固定1次、不补样本。
+- 预测：若团队再次在brief或终稿中声称输入不能显示同月以外请求后来是否/何时关闭，改后的审查以metrics.json行指出矛盾；调度者把具体反证送回同Task负责者；交付结果改为按记录的关闭月份描述（仍保留“关闭≠现实解决/精确时长/重开历史”等真实限制），并有针对改后结果的审查。证伪：审查仍verified此类限制或以团队产物为证据（漏判）；标出但交付未改（未执行）；改了但无后续审查或丢失已正确内容（未验证/失败）。若团队未产生此类或其他实质错误，记“未触发”，不重跑。
+- 一次观察即使完整通过，也只证明该机制在此例可以闭环，不是可靠率、因果A/B或进化收益；把改变归因到“证据集”还是“问法”也不可分。
+
+### 包与登记的本地验收
+
+- 仅改审查者提示与角色描述，manifest 2026.09.27.3；原唯一生成器渲染到临时文件后替换，核对payload中data-analysis块以外字节与HEAD完全相同、revisions只改该行（contentDigest 4509dfea…）；生成器同时报告的base 2026.09.14.15→2026.09.27.1已知无关漂移未夹带。源包packageDigest 6bce55825c4dccde60f62bd6016e65a15b223052d89b17627454d3d6efc838a9。
+- 聚焦检查`.tmp/g65-focused-tests.log`：data-analysis包4/48（实际嵌入安装身份=源包、scheduler与七worker promptOverlay逐字来自源、原DB/Host六前驱发布链）、diagnostic入口2/29（新登记真实prepare/恢复合同，旧G58登记精确身份错误）、发布权威3/14、typed schema 2/10、G58可达性1/14，共12项115断言、各文件exit0。根类型8/8（7缓存）、docs 342/25、内置专家团拓扑122/135、diff检查通过。这些只证明配置运输与接口相容，不证明模型会按新标准审查。
+- 独立无凭据`.tmp/review-evidence-20260927/prepare-01`真实安装.3/6bce5582…，完整初态2e4cade92def04ceac7df7071e34fd56bf5f28647764ae204d23a9f3f2d651f4，与feedback-01逐字相同的四文件；runtime结算、无凭据。唯一业务launch须在本提交push后按登记执行。

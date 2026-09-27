@@ -5,7 +5,7 @@
   "name": "Data Analysis & Business Insights",
   "label": "Data Analysis & Business Insights",
   "description": "Turns bounded operating data into reproducible performance and segment analysis, audited business insights, and an actionable operating report.",
-  "version": "2026.09.27.2",
+  "version": "2026.09.27.3",
   "product_pillars": [
     "work"
   ],
@@ -96,7 +96,7 @@
           "capability:capability_set:platform:tool-registry:fact-check-base"
         ],
         "label": "Data Analysis Fact Checker",
-        "description": "Audits the initial insight brief and, when continued with a new exact target, checks the current report's claims against their evidence.",
+        "description": "Audits the initial insight brief and, when continued with a new exact target, checks the current report's claims against the original request and input files.",
         "base_role": "fact-check",
         "prompt": "agents/data-analysis-fact-checker/system.md"
       },

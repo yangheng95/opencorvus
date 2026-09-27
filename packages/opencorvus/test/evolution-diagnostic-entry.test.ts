@@ -40,7 +40,7 @@ test("registered diagnostic prepares the actual package and preserves one initia
   const parent = await Global.createTemporaryDirectory("evolution-diagnostic-entry-")
   const root = path.join(parent, "prepare")
   const script = path.resolve(import.meta.dir, "../script/evolution-diagnostic.ts")
-  const registration = path.resolve(import.meta.dir, "../../../specs/artifacts/2026-09-27-team-feedback/registration.json")
+  const registration = path.resolve(import.meta.dir, "../../../specs/artifacts/2026-09-27-review-evidence/registration.json")
   const invoke = async (extra: string[] = []) => {
     const child = Bun.spawn([process.execPath, script, "--registration", registration, "--prepare", "--run-root", root, ...extra], { stdout: "pipe", stderr: "pipe" })
     const [exit, stdout, stderr] = await Promise.all([child.exited, new Response(child.stdout).text(), new Response(child.stderr).text()])
@@ -53,12 +53,12 @@ test("registered diagnostic prepares the actual package and preserves one initia
     expect(receipt).toMatchObject({ mode: "prepare", outcome: "prepared", model: "openai/gpt-5.6-luna",
       requestCeiling: null, inactivityMs: 300_000, pollIntervalMs: 2_000, businessVerdict: "not_evaluated",
       cleanup: { runtimeDisposed: true, credentialsRemoved: true },
-      target: { id: "data-analysis", version: "2026.09.27.2", packageDigest: "ecb3aa0e89e113336d2fa7e693834c14973e6d8b9d64df27d29a115f93ef704d" },
+      target: { id: "data-analysis", version: "2026.09.27.3", packageDigest: "6bce55825c4dccde60f62bd6016e65a15b223052d89b17627454d3d6efc838a9" },
     })
     expect(receipt.registration).toEqual(JSON.parse(await readFile(registration, "utf8")))
     for (const name of ["request.md", "metrics.json"]) {
       expect(await readFile(path.join(root, "execution", name), "utf8"))
-        .toEqual(await readFile(path.join(path.dirname(registration), "input", name), "utf8"))
+        .toEqual(await readFile(path.resolve(import.meta.dir, "../../..", receipt.registration.inputRoot, name), "utf8"))
     }
     const initial = JSON.parse(await readFile(path.join(root, "initial-tree.json"), "utf8"))
     expect(initial.files.map((file: { path: string }) => file.path)).toEqual([".gitattributes", ".gitignore", "metrics.json", "request.md"])
