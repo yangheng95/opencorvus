@@ -1,5 +1,5 @@
 import { taskIDForSession } from "./task-session-lineage"
-import { Database, and, eq } from "@/storage/db"
+import { Database, and, eq, sql } from "@/storage/db"
 import { Message } from "@/session/message"
 import { MessageTable, ToolPartRequestTable, SessionTable, type SessionKind } from "@/session/session.sql"
 import { projectToolPartInTransaction } from "@/session/tool-part-facts"
@@ -58,6 +58,29 @@ export function assertTaskAssistantProducerMessage(input: TaskAssistantProducerM
     throw new Error(`Producer assistant message ${input.messageID} in Session ${input.sessionID} is not completed.`)
   }
   return message.data
+}
+
+/** Read the immutable request of an exact producer occurrence. Its progress or
+ * terminal outcome does not determine whether an already-persisted domain fact
+ * exists. The unique (message, call) constraint identifies this request. */
+export function readTaskAssistantProducerToolRequest(
+  input: Pick<TaskAssistantProducerMessageInput, "taskID" | "sessionID" | "messageID"> & { toolCallID: string },
+) {
+  return Database.transaction((db) => {
+    assertTaskAssistantProducerMessage({ taskID: input.taskID, sessionID: input.sessionID, messageID: input.messageID })
+    const request = db.select().from(ToolPartRequestTable).where(and(
+      eq(ToolPartRequestTable.message_id, input.messageID),
+      sql`json_extract(${ToolPartRequestTable.data}, '$.callID') = ${input.toolCallID}`,
+    )).get()
+    if (!request || request.data.type !== "tool-request") {
+      throw new Error(`Producer Tool request ${input.toolCallID} does not exist on assistant message ${input.messageID}.`)
+    }
+    return {
+      tool_part_id: request.id,
+      tool_name: request.data.tool,
+      input: Message.ToolInput.parse(request.data.input),
+    }
+  })
 }
 
 export function assertTaskAssistantProducerToolPart(

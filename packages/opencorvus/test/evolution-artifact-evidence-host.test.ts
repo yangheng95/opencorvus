@@ -12,6 +12,7 @@ import { UsageLedger } from "../src/usage"
 import { Session } from "../src/session"
 import { MessageStore } from "../src/session/message-store"
 import { readResultsForIteration } from "../src/metrics/store"
+import { readTaskAssistantProducerToolRequest } from "../src/engine/producer-turn"
 import { Database, eq } from "../src/storage/db"
 import { EngineArtifactTable, EngineTaskTable } from "../src/engine/engine.sql"
 import { insertEngineInteractionRequest } from "../src/engine/interaction-request"
@@ -2606,13 +2607,26 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             state: { status: "running", input: secondInput, time: { start: thirdStarted } } })
           const thirdMeasurement = await withTaskScopedPluginToolHost(thirdCall, async (thirdHost) =>
             JSON.parse(await executeEvolutionMetricsTool.execute(secondInput, { host: thirdHost } as never)))
+          const thirdRef = TaskArtifactRefSchema.parse(thirdMeasurement.receipt.scorers[0].evidence[0].ref)
+          const whileRunning = await host.metrics.recorded({ evidence_ref: thirdRef })
+          expect(whileRunning).toMatchObject({ tool_request: {
+            tool_part_id: thirdCall.toolPartID, tool_name: "execute-evolution-metrics", input: secondInput,
+          } })
+          const producerRequest = { taskID, sessionID: thirdCall.sessionID,
+            messageID: thirdCall.messageID, toolCallID: thirdCall.toolCallID }
+          expect(() => readTaskAssistantProducerToolRequest({ ...producerRequest, taskID: otherModelTrial.trialTaskID }))
+            .toThrow(`Producer session ${thirdCall.sessionID} does not belong to Task ${otherModelTrial.trialTaskID}.`)
+          expect(() => readTaskAssistantProducerToolRequest({ ...producerRequest, toolCallID: "missing-call-g54" }))
+            .toThrow(`Producer Tool request missing-call-g54 does not exist on assistant message ${thirdCall.messageID}.`)
           await Session.updatePart({ id: thirdCall.toolPartID, sessionID: thirdCall.sessionID,
             messageID: thirdCall.messageID, type: "tool", tool: "execute-evolution-metrics", callID: thirdCall.toolCallID,
-            state: { status: "completed", input: secondInput, title: "Third recorded local metric invocation",
-              output: JSON.stringify(thirdMeasurement), metadata: {}, time: { start: thirdStarted, end: Date.now() } } })
+            state: { status: "error", input: secondInput, failure: {
+              kind: "test-driver", name: "PostMeasurementFailure", message: "The call failed after its measured results were recorded",
+              originSite: "evolution-artifact-evidence-host.test", classification: "tool-execution",
+            }, time: { start: thirdStarted, end: Date.now() } } })
           await writeFile(metricObservationControl, "1")
-          const thirdRef = TaskArtifactRefSchema.parse(thirdMeasurement.receipt.scorers[0].evidence[0].ref)
           const thirdRecorded = await host.metrics.recorded({ evidence_ref: thirdRef })
+          expect(thirdRecorded).toEqual(whileRunning)
           const thirdAttempt = MetricExecutionEvidence.parse(JSON.parse(new TextDecoder().decode(await host.taskArtifacts.read(thirdRef))))
           expect(thirdRecorded).toMatchObject({ task_id: taskID, trial_task_id: trialTaskID, iteration: 0,
             producer: { session_id: thirdCall.sessionID, message_id: thirdCall.messageID, tool_call_id: thirdCall.toolCallID },
@@ -2623,7 +2637,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           const savedInvocation = await MessageStore.get({ sessionID: thirdCall.sessionID, messageID: thirdCall.messageID })
           const savedCalls = savedInvocation.parts.filter((part) => part.type === "tool" && part.callID === thirdCall.toolCallID)
           expect(savedCalls).toMatchObject([{ type: "tool", tool: "execute-evolution-metrics",
-            state: { status: "completed", input: secondInput } }])
+            state: { status: "error", input: secondInput, failure: { name: "PostMeasurementFailure" } } }])
           const visibleResources: Array<{ locator: ArtifactReadLocator; producer: unknown }> = []
           let resourceCursor: string | undefined
           do {

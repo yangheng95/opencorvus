@@ -1391,3 +1391,23 @@
 - Lab源/嵌入2026.09.27.15，contentDigest5a373b6a8b980f6203b8806d20e942a5683127552b0c5c6c269495b3825c6225，原生成器只更新Lab（g53-package-sync.log），非Lab漂移原样保留，未推广。根类型8、docs342ops25groups、包拓扑122/135与diff通过；当前Tool返回JSON/API/SDK/DDL不变，作用是原持久收据的当前目录可达性。范围提交后pull/审完整outgoing/实际pre-push/push收据为g53-push.log。
 - G52说明中的“真实Host不同值分歧已验收”已更正为当时纯比较验证，本G53才补齐真实Host同subject/冻结scorer的不同native值检查；原G52测试数值/日志未改。本轮是明确test-driver写入合法Session/Tool事实并走真实Host/DB，不是模型自主选择、完整Task resume调度或真实业务收益验证。
 - 下一项仍是已发生但未发布Evaluation的集合消费：当前Task的native row→不可变attempt→原producer→持久Tool request可以给出原Campaign/Run绑定，不能从iteration/值/路径猜；当前metrics.recorded尚未对package投影原request关联。需先核对该原事实的单一只读投影、完整/中断调用、冻结快照与跨Task正式运输，再用本G53反例验证比较/安装消费；不能用receipt可见性代替完整性，不能跨权限取source Task或新增第二ledger、任意评分取代、业务gate。业务可靠纠错与真实进化收益仍未达成；Opus仍等12:40重置、12:45以后一次恢复。
+
+## G54：评分原请求的当前Task权威投影
+
+### Recall、根因与实施前影响面
+
+- 从a27b6a2d已push/clean继续，用户要求推进G53未发布Evaluation集合遗漏，不重跑旧反例、不等待主管才动。已重读AGENTS/Recall/五段图/G52–G53/02-data，核对Metric host/schema/store/sql、immutable attempt与manifest、Task Session lineage、producer-turn、Session tool_part_request/outcome/progress分表、MessageStore、当前comparison/freshness同步事务与全部recorded调用。
+- G53已实证原native行本身没有Campaign，attempt只有subject/scorer、manifest只有原Tool producer；完整Lab请求保存在独立tool_part_request。其(message_id, callID)有数据库唯一约束，原请求input不会因Tool进度/结果改变。已有assertTaskAssistantProducerMessage证明精确Task/Session/assistant身份，不能仅凭同名Tool、时间、iteration或后来receipt取得执行归属。
+- 当前metrics.recorded从原row/attempt验证值，但package拿不到原request事实；直接扩大目录或在比较器猜receipt上下文都会越过未证明的执行关联。先完成唯一只读原请求投影：在producer-turn沿已有Task身份断言，按exact Message/call读取原request，返回原Tool Part ID、名称和完整input；不读取outcome来判测量是否有效，不匹配Tool名称路由。metrics.recorded增加tool_request字段从原manifest producer定位该事实，不从当前调用者或后来receipt推导。
+- Core producer没有Tool身份时明确tool_request=null，仍保留其原native数值；带Tool身份却找不到精确同Task请求是明确完整性错误，不能回退当前scope或外查另一Task。导入旧Evaluation仍走已有G46/G47消费，直接导入attempt不凭源producer获得当前Task账本权限。该投影只描述原请求，不声称它识别同一Tool内部任意多个SDK evaluate。
+- 影响面为producer-turn新增只读reader、内部MetricRecordedObservationSchema/Host、当前架构与聚焦真实测试；既有assertTaskAssistantProducerToolPart保持原语义，不改Architect/completion decision/调度、数据库写入、DDL、HTTP或SDK响应。最终完整集合/安装原子一致性仍需在此权威基础上实现；当前同步SQLite receipt事务不能夹带异步文件读取，不另造DB ledger或从外层Tool success推断完整发生。
+- Checker在G53真实评分链加原request精确输出红测，分别在Tool仍running与实际持久error后读取同一原native行，值和request一致；原完整成功评分继续通过，错误Task/缺call为确定错误，原跨Task账本拒绝保留。明确本地test-driver，不是新的业务模型或整体闭环验收。
+
+### G54实现与验收
+
+- 新readTaskAssistantProducerToolRequest复用原Task/Session/assistant身份断言，在同一同步读取事务按Message/call唯一键返回原Part ID、Tool名称和完整JSON input；入口仅接受身份，不带完成状态选项。原assertTaskAssistantProducerToolPart及Architect/completion decision行为保持原实现，没有扩大为生命周期改造。
+- metrics.recorded的tool_request来自被读取attempt的原manifest producer，主线程后来调用、transport receipt和Tool outcome均不是来源。Core原件没有Tool身份时null；其他原件的wrong Task或missing call精确拒绝。没有重写native行、request、attempt、receipt或Evaluation，也不依赖Tool名称推断Campaign。
+- 真实红测原字段缺失，8pass/1fail（g54-origin-request-red.log）；新增正确输出通过后，原第三次native0在外层Tool仍running时可读取精确Campaign/Run请求。随后test-driver按原持久化接口将该Tool结算为明确PostMeasurementFailure，原request和native值再读取逐值相同；仍从原catalog receipt发布Evaluation，原真实0/1冲突完整保留。该错误由driver明确构造，不冒称模型或生产运行自发失败。旧跨Task导入及current-owner账本边界回归通过，不把失败Tool整体丢弃或凭success认定测量完整。
+- 最终聚焦16项260断言：Host9/192、metrics runtime6/53、Tool request/outcome真实存储1/15，全文件exit0见g54-focused-tests.log。wrong Task和missing call断言走同一实际reader，未使用mock替换DB；字段红测保存，不称旧行为正确。根类型8通过（g54-types.log），docs/API及完整pre-push随范围提交/pull/outgoing审查执行，push收据为g54-push.log。
+- 本轮6文件范围：Host/plugin内部读取契约、新reader、真实Host测试、02-data与本记录；无DDL、HTTP或公共SDK响应变化，无Lab源码/嵌入变更，包仍2026.09.27.15/5a373b6a8b980f6203b8806d20e942a5683127552b0c5c6c269495b3825c6225且真实Host身份通过，没有推广/模型费用。
+- 未解决：G53已实证的未发布Evaluation遗漏尚未被比较与安装消费关闭。下一G55应基于这一现成原请求投影及native ID/subject/scorer事实定义完整作用域，验证当前Task完整与中断调用的观察集合，并考虑原同步receipt事务所需的可复核快照。原执行Campaign不自动成为排他性归属，也不能据此禁掉已允许的跨Campaign baseline复用；一个Tool内部任意多SDK调用不能只靠同request合并。跨Task原request和原native账本未运输时明确授权/事实边界，不跨权限外查、不合成Evaluation、不开第二ledger或无依据门槛。整体业务可靠纠错/真实进化收益仍未完成，准确Opus下次恢复仍为12:45上海以后。

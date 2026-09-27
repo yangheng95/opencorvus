@@ -10,6 +10,7 @@ import {
   type TaskArtifactRef,
 } from "@opencorvus-ai/plugin"
 import { readTaskArtifact } from "@/artifact-catalog"
+import { readTaskAssistantProducerToolRequest } from "@/engine/producer-turn"
 import { executeMetrics, type MetricSubject, type MetricSubjectWorkspace } from "@/metrics/executor"
 import { canonicalMetricJSON } from "@/metrics/canonical-json"
 import { readSpecsForTask, registerBaselineSpec, readRecordedMetricResult } from "@/metrics/store"
@@ -165,6 +166,12 @@ export function createMetricEvaluationHost(
       return MetricRecordedObservationSchema.parse({
         metric_result_id: row.id,
         task_id: row.task_id, producer: source.manifest.producer, iteration: row.iteration, scorer_id: spec.name,
+        tool_request: source.manifest.producer.owner_kind === "core" ? null : readTaskAssistantProducerToolRequest({
+          taskID: row.task_id,
+          sessionID: source.manifest.producer.session_id,
+          messageID: source.manifest.producer.message_id,
+          toolCallID: source.manifest.producer.tool_call_id,
+        }),
         scorer_revision: spec.evaluator_config.scorer_revision,
         subject: attempt.subject.resource, trial_task_id: attempt.subject.trial_task_id,
         evidence_ref: row.evidence_ref,

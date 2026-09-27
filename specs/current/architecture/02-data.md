@@ -318,6 +318,10 @@ engine_resource目录，也不据可见性宣称所有原生评分已进入Compa
 `metrics.recorded`按当前评分owner Task和确切attempt资源，在原`engine_metric_result`读取
 已记录结果，核对原MetricSpec与attempt的Task、iteration、status/value，返回原Trial subject及
 measured/unavailable事实及原metric_result_id。未落账的独立JSON或另一Task的结果不能作为当前Task的新测量。
+该投影的tool_request通过原manifest producer的Session/Message/call，在同一Task内读取不可变
+tool_part_request，含原Part ID、Tool名称与完整input；running或failed outcome不改变原请求或
+已落账评分。Core producer无Tool发生时为null；有Tool身份却缺少精确同Task请求则是完整性错误，
+不得从当前调用者、后来receipt、同名Tool或时间重建。请求本身不定义同一Tool内部多次SDK评分的批次。
 Evolution执行与发布共用原Campaign/Run上下文和同一recorded结果投影；publisher要求receipt的
 slot、Trial、subject、完整冻结scorer集合/revision及声明结果与原生事实一致，再发布Evaluation。
 unavailable先按其真实状态运输，不把raw_value=null解释为measured或0。已有跨Task Evaluation

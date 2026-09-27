@@ -283,6 +283,13 @@ export const MetricRecordedObservationSchema = z.object({
   metric_result_id: z.string().min(1),
   task_id: z.string().min(1),
   producer: ArtifactProducerSchema,
+  /** Original immutable request in the scoring Task, independent of the Tool's
+   * outcome. Core producers have no Tool request and explicitly return null. */
+  tool_request: z.object({
+    tool_part_id: z.string().min(1),
+    tool_name: z.string().min(1),
+    input: z.unknown(),
+  }).strict().nullable(),
   iteration: z.number().int().nonnegative(),
   scorer_id: z.string().min(1),
   scorer_revision: SHA256Schema,
