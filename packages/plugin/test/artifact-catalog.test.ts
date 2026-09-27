@@ -124,6 +124,7 @@ const searchPage = {
   },
   facets,
   resolution: {
+    scope: { sources: ["engine_artifact" as const, "task_artifact" as const], version_scope: "current" as const },
     status: "unique_candidate" as const,
     candidate_count: 1,
     unmatched_filters: {
@@ -840,6 +841,12 @@ describe("exact Artifact assembler", () => {
     }
     expect(failure).toBeInstanceOf(ArtifactInspectionError)
     expect((failure as ArtifactInspectionError).diagnostics).toHaveLength(5)
+    // A Tool failure shows the model only this message, so it must carry what
+    // was expected and received rather than a diagnostic count.
+    expect((failure as Error).message).toBe(
+      `Artifact inspection failed: ${(failure as ArtifactInspectionError).diagnostics.join("; ")}`,
+    )
+    expect((failure as Error).message).toContain("artifact_type must be example/expected; received example/actual")
   })
 })
 

@@ -1552,3 +1552,53 @@
 - 唯一claimDiagnosticInitialization读取原DB与audit后，exclusive创建parent continuation并分配新收据目录；evolution-diagnostic.ts首次入口与显式恢复共用同一剩余执行路径。原home/coordinator/execution/DB复用，输入只读核对，恢复不再git init/add/commit；完整tree仍用原primitive逐值核对。业务launch仍是root级exclusive文件。未修改业务Role/Task/Session/Mission/Provider core或费用权威。
 - 初次真实准备及恢复均正常启动/关闭实际Host、原包加载、完整初态保留；原parent claim/result逐字相同。原业务launch标记、原实际schema插入的明确local-test usage行、越界parent及重复parent分别返回精确错误；并发两个claim真实争用同一文件，恰一份success/一份already_continued，原continuation指向成功者。用量行只是本地错误合同fixture，不是外部Provider测量；prepare不请求模型。
 - g60-focused-tests.log全部exit0，14项62断言（entry2/21、audit12/41）；此前g60-entry-initial.log2/19为增加并发断言前的中间通过，不重复计数。脚本类型g60-script-types-final.log、根类型8/8（7cached，g60-root-types.log）、docs342ops25（g60-docs.log）通过。没有遇到新的生产调度/终态异常；原业务诊断仍需提交后唯一恢复及真实preflight证明。
+
+## G61：diagnostic-01独立复核与最早支持机制（Opus恢复）
+
+### Recall与复核范围
+
+- 2026-09-27 12:46上海以准确claude-opus-5-5恢复同一主管会话；HEAD 0ab85736=origin/main、clean。G52–G60由Codex交付不重做；G60 diagnostic-01已于12:41:44自然结算（controller exit0、runtimeDisposed/credentialsRemoved均true），本轮不重启、不恢复、不补样本。只读取原root/initializations/f81ffbbf收据、原隔离SQLite（`mode=ro`）与不可变TaskArtifact快照；提取脚本`.tmp/g61-read-artifacts.py`、`.tmp/g61-writer-tools.py`与导出`.tmp/g61-diagnostic-artifacts.json`保留。
+- 报告资源经原manifest逐字核对：snapshot c00f4f6b…/manifest a330f937…/`artifacts/data-analysis/report.md` 4581 bytes sha256 d96b2bab…，与Completion Decision art_g0VWOOokY00BVgcxbt6N/rev45所列deliverable一致。
+
+### 业务结论（按G58登记的独立验收）
+
+- 报告逐项正确：July 80/100、18/30、98/130=75.3846%；August 9/10、64/100、73/110=66.3636%；整体−9.0210pp；两层分别+10.0000pp、+4.0000pp；占比76.9231%→9.0909%、23.0769%→90.9091%；以七月权重固定得84.0000%（=273/325），rate effect +8.6154pp（=28/325），mix residual −17.6364pp（=−1261/7150），二者精确合成−9.0210pp（=−129/1430）。明确七月为参照、把分解称为描述性算术而非因果，下一步有界（复杂层失败样本复核），并列出聚合数据不能证明的事项及August standard仅10个样本。按登记的业务验收：**通过**，是一次未修改baseline的普通正确交付，不是纠错或进化收益。
+- fact-checker的`data-analysis/audit` art_hYsAng8Pl1vIiJpAIUpG/rev37独立重算了同样数字并给出“无需更正”；insight-brief rev33同值。该次审计没有反证可供纠错，因此本样本不能检验“真实反证→改判→返工”。
+
+### 同一交付中的真实证据链失败（自然发生、原件保留）
+
+- 终稿Engine Artifact art_hFDlmYZ9zebkGDdpfiPy/rev42的`source_artifact_locators`只有request.md与metrics.json两项原始输入；六个类型化前驱（charter/dossier/performance/segment/insight/audit）一个也未消费。报告正文与payload都写“No data-analysis/audit predecessor Artifact was available in the current Task catalog”，而audit在其之前（rev37，1790483440307）已发布。这是交付物中的**错误流程事实**，不是业务数值错误。
+- report-writer真实Tool序列：①按提示只找`data-analysis/audit`，但用`sources:["task_artifact"]`——宿主返回`catalog_total:3、catalog_complete:true、no_match`并把`artifact_types`列为unmatched，没有说明Engine来源被该过滤排除；②package类型化发布器依次拒绝：payload形状、`data-analysis/report requires 6 exact source Artifact locator(s)`、两次`Artifact inspection failed with 1 diagnostics`（诊断内容未进入模型可见消息）、一次伪造manifest_sha256格式错误；③Engine文本检索“service completion”对41项为0；④**改用通用`artifact_publish`，以`data-analysis/report`类型和两项原始输入发布成功**，绕过类型化发布器的六前驱/生产者/ABI校验。
+- 同一搜索误用在全部七个worker出现：planner、steward、performance、segment、insight、report-writer的首次前驱检索都把Engine类型放进`sources:["task_artifact"]`或错配`kinds/labels`而得到“完整目录无匹配”；五个随后用宽检索恢复，steward经原生coordination后才找到charter，report-writer未恢复并绕过。类型化发布器全程失败23次（主要是把resource_set/sources塞进artifact及来源数量），193个Tool请求中32个未完成。orchestrator另有7次相同`cursor:"bad"`失败检索。
+- orchestrator的Completion Decision同时引用报告与audit作为证据并接受，未指出报告自称“无audit”且未消费任何前驱；Mission随后被唤醒复核Task完成，但diagnostic controller在Mission会话刚开始流式（step-start 1790484104493）时以`status==inactive && Task completed`结算并停机，该Mission回合以`MessageAbortedError: Server.stop graceful runtime shutdown`终止——Mission自身对终稿的复核被运行器截断，这是runner结算竞态，不是模型行为。
+
+### 用量与未决请求
+
+- 原生`provider_usage_event` 204行，全部openai/gpt-5.6-luna/session/priced：total 10,162,160 tokens（input 1,436,205、output 78,906、reasoning 10,633、cache-read 8,636,416、cache-write 0），本地cost_usd合计0——只是本地字段，不是账单或免费。provider audit 205个流式请求：204个HTTP200；第205个是上述Mission回合，1790484104470创建activity、step-start后97ms被停机中止，无状态、无usage行，其提供方计费未知（可能计入prompt tokens），如实保留为unknown。provider_activity_request 202行（按assistant message归属，与审计计数口径不同）。旧初始化publisher 25072为0请求，不重复累计。
+
+### 机制判断与主管排序
+
+- 不能把这次正确数值称为可靠：独立审计这一“反证通道”被终稿完全绕过，且宿主允许以包的正式类型发布；若审计给出反证，同一路径同样会被忽略。按“目标→原始事实→独立判断→返工/复核/结算”排序，最早可改变的真正责任层依次为：
+  - **D1 宿主事实（原始事实层）**：`artifact_search`在`sources`过滤时把被裁剪子集称为`catalog_complete`并给出无匹配诊断，没有披露被排除来源中存在请求的类型；七个worker中六个首次被误导。属于宿主的目录事实准确性，修正不含语义判断或隐藏答案。
+  - **D5 模型可见错误（事实层）**：共享`ArtifactInspectionError`消息只写“failed with N diagnostics”，具体期望/实际丢失；这正是既有“模型面错误必须给expected/received”规则的违反，直接导致report-writer无法修正来源形状。
+  - **D2 宿主类型权威（复核/结算层）**：通用`artifact_publish`只保护`evolution-lab/`；另外9个内置包（commercial-legal、data-analysis、hr-operations、marketing-growth、omnichannel-distribution、sales-strategy、seo-geo、tax-compliance、viral-content）各有类型化发布器，但其ABI类型可被通用发布绕过。需要包对其类型化类型的显式、宿主可读声明，而不是按名称/输入形状猜。
+  - **D3 包合同**：生成模板的终点writer提示只列直接依赖（data-analysis只写audit），而其发布器要求完整六前驱；hr-operations、sales-strategy同模板。属于包文本缺陷，是后续登记进化Campaign的自然候选，不在宿主层手改冒充收益。
+  - **D4 语义接受**：orchestrator接受自相矛盾的终稿，是Agent判断，不加宿主业务gate；D2完成后该终稿本不可能以正式类型发布。
+  - runner：diagnostic controller结算条件须等待Mission会话完成其对终态的回合，再结算。
+- 本轮先实施D5、D1与runner结算修复（证据最直接、改动局部、可真实checker复现），再以显式声明实施D2；D3留作独立登记的进化候选，D4不做宿主gate。修复后是否再运行一次诊断，须另行完整预登记单一改变，不以本次正确数值或局部测试宣称业务可靠纠错或进化收益。
+
+### Codex额度接手：D1/D5影响面复核与收敛方案
+
+- Opus于13:03:59上海真实exit1/91turns/api_error，原session limit重置17:40；原launch/exit/stream和未提交diff保留于g61-opus-quota-review.json/g61-opus-interrupted.patch。CLI累计估算133.720985、增23.7787598，非账单或业务费。Codex按已有授权接手，17:45或以后交回同会话；原业务诊断已结束且不重启。
+- D1原始直接根因再定位：生产ArtifactSearchTransportPageSchema为压缩输出移除了applied_filters和facets，模型只见完整标志、计数与resolution，缺少与这些事实紧邻的实际来源/版本范围。因此完整标志只对请求子集成立，却容易被读成全Task。Opus初版为诊断去读取excluded providers，失败时静默用空集，且未以同一snapshotSequenceUpper冻结排除来源；这是扩大读取并引入另一个完整性语义，不能将其局部2/24通过当最终方案。
+- 收敛为唯一已有请求事实：resolution显式携带scope.sources和scope.version_scope，所有计数/完整标志/unmatched仍只针对原请求与同一冻结membership；scope经实际Agent Tool运输保留。删除初版excluded读取，不查另一权限域/未请求provider，不凭排除来源读取失败断言全Task不存在。原filters、cursor、provider error和权限合同不变；未匹配本范围不证明其他来源缺失。Tool描述及02-data同步，公共schema/生成物按真实引用影响面处理，无默认历史回填或兼容双源。
+- 聚焦红绿检查：真实50-entry分页在首尾之间追加未请求TaskArtifact，既有cursor的resolution保持同一scope/诊断；真实sources=task_artifact查询Engine前驱在model-facing Tool输出中明确给task_artifact范围和no_match，广搜仍返回真实Engine原件。不存在类型仍给本范围unmatched，provider损坏仍原incomplete_catalog。D5保持唯一ArtifactInspectionError消息携带实际expected/received，并进入真实Package Tool错误路径复核；不凭字符串测试称完整模型理解。
+- runner/Mission收尾和D2正式类型权威是尚待完成的后续机制，不把当前scope改动当全部修复，不增业务样本。所有现存原工具/消息/用量/报告只读；先完成此有界当前改动的真实检查与范围交付，再继续后续项。
+
+### Codex独立复核与D1/D5实际验收
+
+- 原DB以SQLite只读连接backup到专用offline-reader目录；仅克隆元数据供生产reader初始化，未启动Server/InstanceBootstrap/Provider，原DB/消息/产物不写。`readTaskArtifactRef`及`readExactArtifact`验证原完整报告4581bytes和audit7998bytes的权限/精确版本/manifest/字节，原收据g61-codex-reader-receipt.json，完整派生文本g61-codex-verified-report.md/audit.json。Codex逐项读全文并用原arithmetic.py再算同一输入（g61-codex-arithmetic.json）：数值、分母、七月权重、非因果口径及小样本限制通过；报告声称没有audit的流程事实明确错误。因此将主管早先“业务验收通过”收窄为**数值部分通过**，完整交付不能称全部正确。原Task accepted与原分/字节不改。
+- 新真实红测g61-codex-scope-red-verified.log证明初版读取excluded snapshot使同一Engine-only冻结cursor的unmatched kinds在追加文件后改变；实际Agent Tool还缺少范围事实。最终唯一scope来源是原normalized request，model运输保留sources/version_scope，所有诊断只用同一stableCandidates，删除初版额外查询及其静默错误处理，不建立第二目录。保持原cursor/权限/错误语义；全仓发现此类型经TaskAPI、Panel和Package Host/Agent Tool消费，公共HTTP/SDK没有展开此response，原OpenAPI不含unmatched_filters，因此无生成响应变动。
+- D5通过真实Node Package Tool进程检验：原DB持久化schema_version2前驱→真实artifact_search取得exact locator→原readTaskArtifact跨Host RPC完整读取→实际viral-content类型化发布器抛出并运输“Artifact inspection failed: schema_version must be 1; received 2”。它是明确本地fixture，证明真实错误链，非模型理解或外部行为。未修改包源码或发布身份。
+- 最终41项296断言：scope cursor2/25（g61-codex-scope-final.log）；plugin26/194（g61-plugin-errors-test.log）；native process1/11与terminal/catalog/import12/66（g61-native-catalog-verified.log），各文件exit0。根类型8/8、docs342ops25通过。中间red.log第一次提取helper遗留project局部变量报ReferenceError，不算产品红测；修正后上述verified-red才是真反例。native-catalog-tests.log首轮把recordEngineArtifact返回ID错当row且误写两个测试文件名，原错误保留，改用真实Catalog locator及存在的文件后重跑通过，没有放宽生产校验。
+- 本范围仅D1/D5和真实诊断结果归档。runner提前结束Mission及通用发布器正式类型绕过仍待修复，不能以41项绿称整体完成；下一轮继续原生Mission最终回合/请求/终态共同事实，按AGENTS横审共享路径并先落盘方案，不重启diagnostic-01或另开未登记模型。

@@ -11,6 +11,9 @@ import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
 import { Session } from "../../src/session"
+import { EngineArtifactEnvelopeSchema, type ArtifactReadRequest } from "@opencorvus-ai/plugin"
+import { artifactCatalogAuthority, readTaskArtifact, searchTaskArtifacts } from "../../src/artifact-catalog"
+import { recordEngineArtifact } from "../../src/engine/artifact"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", "viral-content")
@@ -206,6 +209,30 @@ describe("native Task package-tool process authority", () => {
             abort: new AbortController().signal,
           }),
         ).rejects.toThrow(/resource_set|Unrecognized key/)
+
+        // A real stored predecessor is read through the Host RPC into the native
+        // package worker. Its typed inspection error must survive that transport.
+        const predecessor = recordEngineArtifact({ taskID, kind: "expert_output", label: "Versioned predecessor", payload:
+          EngineArtifactEnvelopeSchema.parse({ artifact_type: "viral-content/campaign-brief", schema_version: 2,
+            producer: { owner_kind: "core", component_id: "native-inspection-test", operation_id: "publish" },
+            payload: {}, resources: [], observed_artifact_locators: [], source_artifact_locators: [] }),
+        })
+        const predecessors = await searchTaskArtifacts({ authority: artifactCatalogAuthority(taskID),
+          search: { artifact_types: ["viral-content/campaign-brief"] } })
+        const predecessorLocator = predecessors.entries.find((entry) =>
+          entry.locator.source === "engine_artifact" && entry.locator.artifact_id === predecessor)?.locator
+        if (!predecessorLocator) throw new Error("Stored inspection predecessor is missing from its actual catalog")
+        await expect(executePackageToolInCapsule({ prepared, taskID, cwd: project.path,
+          host: { ...host, engineArtifacts: { ...host.engineArtifacts,
+            read: (read: ArtifactReadRequest) => readTaskArtifact({ authority: artifactCatalogAuthority(taskID), read }),
+          } }, context: { ...context, messageID: Identifier.ascending("message") },
+          args: { artifact: { artifact_type: "viral-content/audience-dossier", payload: {
+            workflow_id: "evidence-backed-content-campaign",
+            segments: [{ name: "Maintainers", need: "Exact errors", evidence_urls: ["https://example.invalid/test"] }],
+            tensions: ["An incompatible predecessor version"], language_patterns: ["Expected and received"], unknowns: [],
+          } }, resource_set: null, source_artifact_locators: [predecessorLocator] },
+          abort: new AbortController().signal,
+        })).rejects.toThrow("Artifact inspection failed: schema_version must be 1; received 2")
       },
     })
   })

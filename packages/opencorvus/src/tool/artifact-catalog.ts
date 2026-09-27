@@ -59,7 +59,11 @@ const ARTIFACT_SEARCH_DESCRIPTION =
   "discovery mode and fuzzy matching is available only when explicitly requested. Sort can be relevance, newest, " +
   "oldest, or name. Task Artifact snapshots are accompanied by independently pageable task_artifact_resource entries; " +
   "pass each returned artifact_locator_ref to artifact_read. A fuzzy candidate is never automatic evidence selection. Stable cursors freeze membership; " +
-  "zero matches are valid. Inspect resolution, catalog_complete, provider_errors, and metadata_truncated."
+  "zero matches are valid. Inspect resolution, catalog_complete, provider_errors, and metadata_truncated. " +
+  "resolution.scope states the requested sources and version scope shared by counts, completeness, and resolution. " +
+  "unmatched_filters and no_match apply only within that scope; excluded sources are unobserved. " +
+  "Engine Artifact types are held by engine_artifact, while task_artifact holds snapshots and resources. " +
+  "filter_intersection_empty means each requested value exists within the searched scope but no entry satisfies them together."
 
 const ARTIFACT_READ_DESCRIPTION =
   "Read up to eight exact current-Task Artifacts in one reads array using artifact_locator_ref from artifact_search or artifact_snapshot. One aggregate output budget is shared; pass next_reads unchanged to continue. Engine JSON, snapshot manifests, and text resources return " +

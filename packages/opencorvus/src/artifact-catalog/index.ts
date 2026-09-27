@@ -1064,6 +1064,7 @@ function unmatchedValues(requested: readonly string[] | undefined, available: re
 
 function searchResolution(input: {
   parsed: ArtifactSearchInput
+  sources: ArtifactCatalogEntry["source"][]
   candidates: readonly CatalogCandidate[]
   queryCandidates: readonly CatalogCandidate[]
   filteredTotal: number
@@ -1140,6 +1141,7 @@ function searchResolution(input: {
   }
   const anyUnmatched = Object.values(unmatchedFilters).some((values) => values.length > 0)
   return {
+    scope: { sources: input.sources, version_scope: input.parsed.version_scope },
     status:
       input.filteredTotal >= 2
         ? "ambiguous_candidates"
@@ -1353,6 +1355,7 @@ export async function searchTaskArtifacts(input: {
     facets: facetValues,
     resolution: searchResolution({
       parsed,
+      sources: requestedSources,
       candidates: stableCandidates,
       queryCandidates: structuredFiltered,
       filteredTotal,

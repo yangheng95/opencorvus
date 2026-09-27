@@ -251,6 +251,13 @@ Engine catalog revision/version scope 内至少一个 exact Engine Artifact enve
 共同冻结在 cursor membership 中；后续 Engine receipt 只能由 fresh search 观察，不能改变
 既有分页结果。Agent 不得从 wrapper payload 手抄 resource locator，也不存在另一个资源发现路径。
 
+`artifact_search`的计数、`catalog_complete`与`resolution`均只描述请求来源和版本范围内的
+同一冻结目录。模型运输保留`resolution.scope.sources/version_scope`，即使省略较大的facets与
+applied_filters，也不能丢掉完整性事实的作用范围。`unmatched_filters`和`no_match`不证明排除
+来源中没有该事实；诊断不额外查询排除来源。读取失败继续给明确provider error及不完整状态，
+不能当空目录。`ArtifactInspectionError`的模型可见消息保留具体expected/received诊断，
+不能只给错误数量而省略可修正的差异。
+
 Evolution Lab 的 typed Artifact publisher 在写入前验证直接语义前驱，而不是把先前的
 `artifact_select` 当成隐式 publication provenance。`failure-attribution` 必须直接绑定且完整读取
 唯一的 `opportunity` Engine Artifact，验证其 Evolution observer producer，并让 payload

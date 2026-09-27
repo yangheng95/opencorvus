@@ -599,6 +599,10 @@ export const ArtifactCatalogProviderErrorSchema = z
 
 export const ArtifactSearchResolutionSchema = z
   .object({
+    scope: z.object({
+      sources: z.array(ArtifactCatalogSourceSchema).min(1).max(ArtifactCatalogSourceSchema.options.length),
+      version_scope: ArtifactVersionScopeSchema,
+    }).strict().describe("Requested current-Task catalog scope shared by counts, completeness and resolution; excluded sources are unobserved."),
     status: z.enum(["no_match", "unique_candidate", "ambiguous_candidates", "incomplete_catalog"]),
     candidate_count: z.number().int().nonnegative(),
     unmatched_filters: z
@@ -639,6 +643,8 @@ export const ArtifactSearchPageSchema = z
  * The complete catalog page projected into an Agent tool result.
  *
  * Facets and applied filters are search diagnostics, not page membership.
+ * The compact resolution scope remains visible so completeness and no-match
+ * facts cannot be mistaken for observations of excluded catalog sources.
  * Omitting them keeps the exact entries, stable cursor, provider health, and
  * metadata-completeness facts within a bounded model transport. Callers
  * already own the filters they supplied and can issue a separate search when
@@ -1196,9 +1202,11 @@ export class ArtifactInspectionError extends AggregateError {
 
   constructor(diagnostics: readonly string[]) {
     const ordered = [...diagnostics].sort()
+    // Tool failures reach the model as this message alone; a count without the
+    // diagnostics leaves a caller nothing to correct.
     super(
       ordered.map((message) => new Error(message)),
-      `Artifact inspection failed with ${ordered.length} diagnostics`,
+      `Artifact inspection failed: ${ordered.join("; ")}`,
     )
     this.name = "ArtifactInspectionError"
     this.diagnostics = ordered
