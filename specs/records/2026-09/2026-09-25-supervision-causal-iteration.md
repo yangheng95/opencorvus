@@ -1702,3 +1702,24 @@
 **不作错误外推。** ZCode也有类型编译、journal、恢复和完整并发调度器；不能将此次反思简化为“成熟系统没有状态机/越少代码越好”。它的subagent-messages实现有model-only synthetic user notice，动态workflow示例有round cap；这些不符合本项目真实可见参与者及不得自设预算的约束，不照搬。上述是文档/源码机制调查，不是两个外部产品已跑通本业务案例的实测结论。
 
 **具体纠偏。** G64另开Chat只验证聚焦材料下的一次判断，仍没有测试团队把反证送回原执行者并完成修正；把主目标拆成容易通过的局部问题，是此前方法偏差的一部分。停止继续同形微实验。下一动作先把当前一个真实团队链路映射到“派单→结果→异议→继续原执行者→新结果→独立复核”，明确已有可复用能力、阻碍反馈的冲突和仅属审计/业务产物的额外要求，再决定最小必要改动。无证据支持的新增协议、角色、运行器或整仓重写均不开始；不以此次对照为由粗暴删除已有完整性/权限保护。把外部参照及用户纠偏置于后续自动任务与Opus交接最前，停止由旧待办清单驱动扩大范围。
+
+### 当前团队路径映射：已有原语与真正缺口
+
+Recall：从8abcb06f已push/clean继续，只读当前data-analysis团队及原G60/G64证据，不启动模型、不重做测试、不改生产实现。已查dispatch schema/adapter/continuation renderer、Task结果读取与coordination、fact-check adapter及其目标绑定、Mission resume、选定包scheduler/workflow/publisher，并定位已有streamed-dispatch检查；引用旧实际运行只用于证据，不重启。
+
+| 协作步骤 | 当前可复用实现 | 证据与边界 |
+| --- | --- | --- |
+| 派单 | `orchestrator/dispatch-agent-tool.ts`的initial Turn和单个/批量dispatch；`orchestrator/tools.ts`提交原Session/lineage | 首次逻辑节点与后续物理Turn分开；原G60七节点实际执行。无须另建spawn API。 |
+| 结果回传 | 原dispatch settlement及`read_agent_message`；原Artifact reader提供独立持久产物 | 原G60调度者实际收到fact-checker final，完整读到报告正文。返回/可读不自动等于接受，不能再归咎于完全没收到结果。 |
+| 异议/指导 | worker的`request_orchestrator_decision`，scheduler的`respond_agent_coordination`；已知证据也可直接形成continuation guidance | 原steward确有coordinated与真实后续派单；它是来源获取/发布合同纠正，不是终稿业务返工证明。 |
+| 原执行者继续 | `turn.kind=continuation`引用当前prior_dispatch或coordination_action，带guidance/evidence_locators；完整turn.input可更新本轮结构化目标 | `tools.ts`验证当前dispatch后复用existingSessionID、原workflow_occurrence_id及目录；`dispatch-turn-projection.ts`将实际增量和证据呈现给原worker。已有能力对应follow-up/steering，不应再造队列或会话。 |
+| 重新判断当前结果 | `fact-check-tool.ts`/`fact-check/index.ts`接收确切target Session/Message与内容身份，复用已有审查Session；核心验收指令要求解决实质矛盾 | 可通过continuation的完整input把目标改为新writer Message；旧目标结论不自动获得新目标身份。该能力的代码/现有检查不是新业务闭环已成功的证据。 |
+| Task已终态后的同Task返工 | `panel.ts`的resume_task与原Mission acceptance gap/ledger/receipt | 与活动worker continuation是两条不同层级的已有入口，仍指向原Task。原G60 Mission复核被取消，未观察到这条业务反馈链；所有旧run禁止再恢复。 |
+
+**当前真正需要澄清的是两种“审核”的作用域。** 包正式`data-analysis/audit`的唯一前驱是insight-brief，属于分析简报阶段的业务产物；Core FactCheckReview是一次针对确切Message的审查判断。二者用途不同，不得把简报audit的六项通过继承成后来report所有新增陈述的保证。原G60正是在终稿加入false audit-availability陈述后，scheduler仍用早先六项通过作完成说明。G64仅证一次集中上下文能识别该矛盾，未说明历史漏判的完整原因。
+
+当前包scheduler的“Dispatch every node exactly once”、workflow Skill的“Every node runs once”和fact-checker的固定“single synthesized insight brief”措辞，与现有多Turn/可更新target能力存在解释冲突。它们是当前可观察的指令合同问题；原steward在这些措辞下仍成功续行，所以不能称它们已被证明是硬性运行阻断或历史最终漏判的唯一原因。固定publisher前驱维护的是这份阶段产物的来源合同，也不应被随意扩成通用最终稿review以消除表面冲突。
+
+**保留/复用/简化决定：** 保留原Task/Session身份、权限、精确来源、租约/持久化和当前Turn校验；复用现有continuation、targeted FactCheckReview及必要时Mission同Task恢复。需要简化的是把“初始阶段产物链”和“其后的具体反馈/复核”混成一次性完整流程的指令解释，不能再加Host状态机来替模型做业务判断。新上下文与复用旧上下文各有用途，不能把沿用审查Session称为fresh-eyes验证，也不新增一个角色来装作独立。
+
+**下一项有界决策：** 以data-analysis现有一条团队路径为单位，把初始发布、后续返工及当前交付对象的复核职责讲清；先确认这些职责能完全由现有入口表达。若需要改指令，范围只针对这项冲突，阶段Artifact原件与完整性合同保留，效果必须通过独立登记的整条团队反馈观察判断。D3来源发现措辞、更多角色、另一套runtime和另起Chat微实验不随之自动扩入。当前没有足够证据宣称需要新的调度底座，也没有证明业务纠错/进化已完成。
