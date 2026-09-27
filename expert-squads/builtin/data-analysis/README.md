@@ -20,6 +20,8 @@ The stage `data-analysis/audit` covers its exact insight brief. Review of a late
 
 Every consumed stage uses the package-owned codec and `data-analysis/shared/publish-data-analysis-artifact` publisher. Only the final Build-owned role writes and rereads `artifacts/data-analysis/report.md`, verifies, commits, and merges it when working in a managed worktree, reads and snapshots the exact immutable returned `primary_head`, publishes the terminal Artifact, and publishes an identical `document@1` view.
 
+The publisher takes one `artifact` object containing `artifact_type`, the type-specific `payload`, `resource_set` (null for intermediate stages), and `source_artifact_locators`. The final report supplies its immutable resource set and all six exact predecessor locators in that same object. This input contract belongs to package version `2026.09.27.4`; previously installed Task bindings retain their own immutable package version.
+
 ## Boundary
 
 Treat correlation as observation, not causation. Never invent missing values, silently change metric definitions, or present an estimate as a source fact.

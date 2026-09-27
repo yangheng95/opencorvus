@@ -1796,7 +1796,36 @@ Recall：从8abcb06f已push/clean继续，只读当前data-analysis团队及原G
 
 - 14574871 push后于2026-09-27 18:09:42上海唯一启动（claim PID65504，source 14574871），流式预检ses_hv1cFSDEjIsQ5yCp1V5s实际gpt-5.6-luna/usable/projected；Mission 0159b4acbae66907创建唯一Task tsk_g00VWPjil300cs26sAmF。18:53:57调度者fail_task，runner按登记的“Task failed即停”规则中止Mission正在进行的一回合（其对失败的反应未能观察）、runtime结算并删除复制auth/models（已核），launcher exit1。原件不改、不重跑；完整结果`specs/artifacts/2026-09-27-review-evidence/assessment.md`及receipt/review/publisher/报告副本。
 - **登记分类：漏判（2）。** 生产者不变时同类错误更强地复现：charter“August eventual closure is unknown”、dossier“Current extract cannot distinguish later closure, still open, unavailable closure”、performance与brief把“remaining后来是否关闭”列为unknown，已提交终稿写“A remaining request may later close, remain open, or lack a recorded closure”。终稿15行数值与operator参考一致。
-- **证据集改变生效，但审查单位仍是生产者的叙述。** brief的Core审查rev28只打开brief本身，证据指针全部指向metrics.json/request.md，不再引用charter——这部分行为确实变了；但它只登记了synthesizer最终叙述消息里的3条概括声明，“interpretation limits were reconciled”用metrics.json第27–39行source_limits文字背书，未逐项检验brief里的具体unknown；verdict clean，audit无required corrections。feedback-01的审查同样只有5条概括声明。结论：读对证据不足以纠错，被审的是生产者自述而不是交付内容；“找失败”的措辞没有改变审查单位。
-- **交付失败于类型化发布器的参数形状（系统性执行路径缺陷）。** 原tool记录：本次每个角色都先失败再成功，共26失败/7成功，其中17次把`resource_set`/`source_artifact_locators`放进`artifact`对象；feedback-01为25失败/8成功（11次嵌套），G60记录23次发布器失败。提供给模型的schema本身正确（三字段顶层必填，`artifact`是15.5KB七个严格变体的union），拒绝信息也精确；writer两次失败、调度者按原错误给出修复续行后第三次仍同样嵌套，调度者如实fail_task。G63前该角色可经通用发布器绕过，G63后包类型只能走本包发布器，此形状陷阱变为致命。
+- **证据集改变生效，但审查单位仍是生产者的叙述。** brief的Core审查rev28只打开brief本身，两项分析claim的证据指向metrics.json/request.md，不再引用charter；第一项发布事实仍指向brief本身——这部分行为确实变了；但它只登记了synthesizer最终叙述消息里的3条概括声明，“interpretation limits were reconciled”用metrics.json第27–39行source_limits文字背书，未逐项检验brief里的具体unknown；verdict clean，audit无required corrections。feedback-01的审查同样只有5条概括声明。结论：读对证据不足以纠错，被审的是生产者自述而不是交付内容；“找失败”的措辞没有改变审查单位。
+- **交付失败于类型化发布器的参数形状（系统性执行路径缺陷）。** 原tool记录：本次六个阶段先失败后成功，writer三次均失败，共26失败/6成功，其中17次把`resource_set`/`source_artifact_locators`放进`artifact`对象；feedback-01为25失败/8成功（11次嵌套），G60记录23次发布器失败。提供给模型的schema本身正确（三字段顶层必填，`artifact`是15.5KB七个严格变体的union），拒绝信息也精确；writer两次失败、调度者按原错误给出修复续行后第三次仍同样嵌套，调度者如实fail_task。G63前该角色可经通用发布器绕过，G63后包类型只能走本包发布器，此形状陷阱变为致命。
 - 用量：审计209次流式gpt-5.6-luna，208×HTTP200、1次无状态（停机时被中止的Mission回合，计费未知）；原生usage 208行全session/priced，input1617440/output90928/reasoning11951/cache_read9021696/total10742015，本地cost0非账单。
 - 判断：这次证伪了“只改证据集即可”的预测，并暴露两个比措辞更大的阻碍：审查单位（叙述而非交付内容）与发布器参数形状（每角色、每次运行、已致命）。后者是验证路径上的明确阻碍，按用户纠偏可修；二者都需新的独立登记后再观察，不重跑本根。
+
+
+## G66 — 额度后独立接手：只收敛已发生的发布参数障碍（实施前）
+
+### Recall、证据与影响面
+
+- 用户要求停止抓小放大，已有同Task续行与二次合并原语可用；目标仍是独立业务判断及真实修正。本轮不启动模型，不恢复任何旧run，不委托。Opus于2026-09-27 19:09:17.511上海真实exit1，原terminal api_error/131turns，额度原文`You've hit your session limit · resets 10:40pm (Asia/Shanghai)`；exec44309已收。CLI累计152.5812776、本轮18.8602926美元，仅CLI估算。22:45之后再单次恢复同session/准确模型。
+- 已读AGENTS、本记录Recall/五段图/G65、G65登记/assessment/原result/launcher/原只读DB、包codec/publisher/schema投影和本地/native工具checker；用benchmark-debug-template技能做证据复核，用户禁止同义重抽优先于技能循环。当前HEAD af1b4181=origin/main；原修改完整保存`.tmp/g66-opus-interrupted.patch`，额度收据`.tmp/g66-opus-quota-review.json`。
+- 现象与触发：原`tool_part_request`/`tool_part_outcome`三条writer请求prt_g0VWPsxsb00uUUJMQhd3、prt_g0VWPtA8M00bMkBw67or、prt_g0VWPuDge00eyaygEN04都只有顶层artifact，里面同时包含artifact_type/payload/resource_set/source_artifact_locators；冻结.3 schema只允许后两字段在外层，因此返回精确ZodError。模型在后续续行仍重复形状。源schema无错读/参数丢失证据；不能据此声称Host调度故障或新形状必使模型正确。
+- 控制流：package Tool args→原生工具schema parse→包execute→exact predecessor read/select→Host engineArtifacts.publish。原严格union将正文与发布控制字段分为两层；旧修复是重试提示，未改变这个易混淆的接口。Opus未完成的placedOnce接受两种位置并用unknown/optional降级模型声明，违反单一契约。保留原patch后删除双路解析，不能提交为兼容方案。
+- 全仓检索该schema只有本包publisher生产消费；显式调用为data-analysis-package测试，另外typed-publisher-provider-schema共用投影检查。所有七stage生产者共用该Tool；包README、嵌入payload/revisions、native执行checker和prepare登记身份需同步。旧已安装包及Task immutable binding不回填；其他九包有类似接口但本轮没有其业务反例，不扩范围。API/SDK/DDL/Host/runtime/调度/终态/权限未改，不适用调度横审；原Task按登记failed即停，Mission中止如实保留。
+- G65独立核对：原result failed、launcher exit1、auth/models实际删除；原usage208行/10742015tokens/local cost0。精确Tool名原DB共32调用=26failed/6completed（原byType已为26/6，归档文案将成功数多计1，已修正）；最后三次错误已直接读原回执。Core review确有三项概括claim/clean，第一项引用brief发布事实，其余引用原输入；不能笼统称每条指针只在原输入。审查漏判的业务结论保留，不能把“必要”或单一prompt因果当已证结论。
+
+### 唯一方案与验收
+
+- 当前.4只改发布入口：唯一`artifact`对象含四个必填字段artifact_type/payload/resource_set/source_artifact_locators；资源为原nullable locator、来源为原locator数组，每个type仍绑定原严格payload。模型schema与实际parse共用定义；execute直接消费它，删除外层两个字段和placedOnce；原来源数量/类型/生产者/资源/发布权限不变。
+- 审查单位提示新增段从本轮撤下；未提交review-unit草案原件保存到.tmp，登记未启动（原root不存在）。它不是完成登记或允许立即开新模型的成果，后续与主管从业务证据决定。现有.3审查标准保留，不与接口修复叠加。
+- 正向checker复用原data-analysis真实Task/DB/Host七stage链，改为通过原生Node package capsule执行及introspection，核对新唯一schema、全部七产物与最终不可变资源，保留缺前驱明确错误和正式publisher身份错误；验证错typed locator的明确schema错误。原本地driver不冒充模型行为/业务效果。准备测试用隔离临时registration固定当前包身份，不为测试新建业务样本，旧登记身份错误仍明确。
+- 运行聚焦checker、包类型/root类型/docs/必要生成与diff检查，范围commit，pull merge完整outgoing审查后push。失败日志保留。交付只说明当前契约及真实本地路径；新模型会否用对、业务独立复核/纠错与进化收益继续未知。
+
+
+### G66本地交付与独立核对
+
+- .4发布器现只有一个artifact输入对象，四字段均以原真实类型声明；删除双位置解析，所有七stage仍有原类型/payload关联和exact前驱、生产者、资源与Host authority检查。fact-checker prompt与HEAD逐字相同；未提交review-unit草案已完整存.tmp/g66-opus-review-unit-draft，原目录文件删除、索引撤回。没有新的业务登记/Provider调用或角色变更。
+- 包contentDigest 9dd3786b85fc036d15463cc0f87453e9a5f161c36382726cb4e1ddcf1749265e，实际源与嵌入安装packageDigest 6dbc6fcbb2d8eaa7f6991cac4b8711a7e3127c5d0eb3a35e5325a43c8e4a2eb9。生成模块除data-analysis条目外逐字不变，revisions只变该行；base既有漂移不夹带。
+- 聚焦验收g66-focused-final.log：包4项58断言（完整源/嵌入安装/七worker运输，真实DB/Host RPC→native Node package Tool→六前驱/最终不可变资源发布与回读），provider schema2项10断言，真实prepare/原初始化合同2项29断言；共8项97断言，各文件exit0。原生检查是本地driver，不是自主模型业务效果。根类型g66-types.log 8/8。
+- 首次g66-focused-tests.log失败保留：原生完整发布链已通过，但Python默认写换行令lib源码CRLF与生成LF字节不一致，导致安装身份不同；修为原LF后真实源/安装身份相同。prepare test首轮把保留runRoot放到了workspace .tmp之外，改本地临时登记的保留路径满足既有入口，未放宽生产校验/更新历史登记。
+- G65原数据库始终mode=ro，仅backup副本由production reader打开；g66-original-reader-receipt.json记录40个原catalog exact reads及原snapshot报告资源，6862bytes/SHA81957c03260d595ef653a4d55b389cd4114b03d6aef53d36c5c9791e0c379000，与已归档report逐字一致。原Core review三项、两项分析以inputs支持而第一项出版以brief支持；原工具表确为26failed/6completed/17内嵌层级错误，归档byType已正确，仅文案算错总数，现更正。既有漏判/Task failed结论、原件与分数不改。
+- 本次仅确认接口合同和本地真实运输，不承诺新模型使用该形状的成功率；整体独立业务纠错及进化收益仍未达成。将这项必要接口修复收敛后交回原主管；不能以等待额度为由继续扩底座或立即抽同输入新样本。

@@ -158,12 +158,14 @@ describe("built-in typed publisher provider schemas", () => {
     })
 
     expect(projected).toEqual(
-      publishers.map(({ artifactTypes }) => ({
+      publishers.map(({ publisher, artifactTypes }) => ({
         artifactTypes: [...artifactTypes],
         payloadTypes: artifactTypes.map(() => "object"),
         payloadStrictness: artifactTypes.map(() => false),
         branchStrictness: artifactTypes.map(() => false),
-        required: artifactTypes.map(() => ["artifact_type", "payload"]),
+        required: artifactTypes.map(() => publisher === publishDataAnalysisArtifact
+          ? ["artifact_type", "payload", "resource_set", "source_artifact_locators"]
+          : ["artifact_type", "payload"]),
         expectedArtifactTypes: [...artifactTypes],
       })),
     )

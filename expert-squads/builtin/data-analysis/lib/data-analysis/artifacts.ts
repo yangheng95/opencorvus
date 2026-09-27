@@ -1,7 +1,7 @@
 // ABI means Application Binary Interface. JSON means JavaScript Object Notation.
 // URL means Uniform Resource Locator.
 
-import { tool } from "@opencorvus-ai/plugin"
+import { ArtifactReadLocatorSchema, TaskArtifactResourceSetLocatorSchema, tool } from "@opencorvus-ai/plugin"
 
 const nonempty = tool.schema.string().trim().min(1)
 const distinctStrings = tool.schema.array(nonempty).refine(
@@ -62,14 +62,19 @@ export const DataAnalysisArtifactLabels = {
 
 export const DataAnalysisArtifactTypeSchema = tool.schema.enum(["data-analysis/analysis-charter", "data-analysis/data-dossier", "data-analysis/performance-analysis", "data-analysis/segment-analysis", "data-analysis/insight-brief", "data-analysis/audit", "data-analysis/report"])
 export type DataAnalysisArtifactType = tool.schema.infer<typeof DataAnalysisArtifactTypeSchema>
+// The complete publication has one location, including its resources and exact sources.
+const publicationFields = {
+  resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
+  source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema),
+}
 export const DataAnalysisPublishableArtifactInputSchema = tool.schema.discriminatedUnion("artifact_type", [
-  tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/analysis-charter"), payload: DataAnalysisArtifactSchemas["data-analysis/analysis-charter"] }).strict(),
-  tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/data-dossier"), payload: DataAnalysisArtifactSchemas["data-analysis/data-dossier"] }).strict(),
-  tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/performance-analysis"), payload: DataAnalysisArtifactSchemas["data-analysis/performance-analysis"] }).strict(),
-  tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/segment-analysis"), payload: DataAnalysisArtifactSchemas["data-analysis/segment-analysis"] }).strict(),
-  tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/insight-brief"), payload: DataAnalysisArtifactSchemas["data-analysis/insight-brief"] }).strict(),
-  tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/audit"), payload: DataAnalysisArtifactSchemas["data-analysis/audit"] }).strict(),
-  tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/report"), payload: DataAnalysisArtifactSchemas["data-analysis/report"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/analysis-charter"), payload: DataAnalysisArtifactSchemas["data-analysis/analysis-charter"], ...publicationFields }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/data-dossier"), payload: DataAnalysisArtifactSchemas["data-analysis/data-dossier"], ...publicationFields }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/performance-analysis"), payload: DataAnalysisArtifactSchemas["data-analysis/performance-analysis"], ...publicationFields }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/segment-analysis"), payload: DataAnalysisArtifactSchemas["data-analysis/segment-analysis"], ...publicationFields }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/insight-brief"), payload: DataAnalysisArtifactSchemas["data-analysis/insight-brief"], ...publicationFields }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/audit"), payload: DataAnalysisArtifactSchemas["data-analysis/audit"], ...publicationFields }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("data-analysis/report"), payload: DataAnalysisArtifactSchemas["data-analysis/report"], ...publicationFields }).strict(),
 ])
 export const DATAANALYSIS_TERMINAL_ARTIFACT_TYPE = "data-analysis/report"
 

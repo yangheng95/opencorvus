@@ -8,6 +8,7 @@ import {
 } from "@opencorvus-ai/plugin"
 import { Config } from "../../src/config/config"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
+import { executePackageToolInCapsule, introspectPackageToolInCapsule } from "../../src/expert-squad/package-tool-capsule"
 import { persistEstablishedTask as persistTask } from "../fixture/engine-task"
 import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
@@ -135,7 +136,7 @@ describe("Data Analysis expert squad package", () => {
       namespace: "builtin",
       id: "data-analysis",
       name: "Data Analysis & Business Insights",
-      version: "2026.09.27.3",
+      version: "2026.09.27.4",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))
@@ -191,12 +192,14 @@ describe("Data Analysis expert squad package", () => {
     })
   }, 120_000)
 
-  test("publishes and consumes exact typed predecessor evidence in a real memory Task", async () => {
+  test("publishes the single artifact input through native workers and exact typed predecessors in a real Task", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const loaded = await ExpertSquadRegistry.loadSourcePackage(packageRoot)
+        const prepared = loaded.packageToolBundles.get(publisherRef)
+        if (!prepared) throw new Error(`Missing prepared package tool ${publisherRef}`)
         const session = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Data Analysis typed Artifact chain" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
@@ -229,6 +232,12 @@ describe("Data Analysis expert squad package", () => {
             timeCreated: started,
           }),
         })
+        const introspection = await introspectPackageToolInCapsule({ prepared, taskID, cwd: project.path })
+        expect(introspection.inputSchema.required).toEqual(["artifact"])
+        const branches = (introspection.inputSchema.properties as Record<string, { oneOf: Array<{ required: string[] }> }>).artifact.oneOf
+        expect(branches.map((branch) => branch.required)).toEqual(
+          Object.keys(samples).map(() => ["artifact_type", "payload", "resource_set", "source_artifact_locators"]),
+        )
         const userMessage = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: session.id,
@@ -310,8 +319,8 @@ describe("Data Analysis expert squad package", () => {
                 artifact_type: artifactType, schema_version: 1, label: "Report bypass", payload: samples[artifactType],
                 resources: [], source_artifact_locators: [],
               } })).rejects.toMatchObject({ code: "PACKAGE_TYPED_PUBLISHER_REQUIRED", expectedPublisher: publisherRef, actualPublisher: null })
-              await expect(publishDataAnalysisArtifact.execute({ artifact: { artifact_type: artifactType, payload: samples[artifactType] } as never,
-                resource_set: null, source_artifact_locators: [] }, { host } as never)).rejects.toThrow("requires 6 exact source Artifact locator(s)")
+              await expect(publishDataAnalysisArtifact.execute({ artifact: { artifact_type: artifactType, payload: samples[artifactType],
+                resource_set: null, source_artifact_locators: [] } as never }, { host } as never)).rejects.toThrow("requires 6 exact source Artifact locator(s)")
               const note = await publishExpertArtifact({ scope: { ...scope, packageToolRef: null }, artifact: {
                 artifact_type: "data-analysis/operator-note", schema_version: 1, label: "Generic note", payload: { status: "observed" }, resources: [], source_artifact_locators: [],
               } })
@@ -334,16 +343,19 @@ describe("Data Analysis expert squad package", () => {
                 tree: "data-analysis-delivery",
               })
             }
-            const receipt = JSON.parse(
-              await publishDataAnalysisArtifact.execute(
-                {
-                  artifact: { artifact_type: artifactType, payload: samples[artifactType] } as never,
-                  resource_set: resourceSet,
-                  source_artifact_locators: sources,
-                },
-                { host } as never,
-              ),
-            ) as { locator: EngineArtifactLocator; artifact_sha256: string }
+            const placed = { artifact: { artifact_type: artifactType, payload: samples[artifactType], resource_set: resourceSet, source_artifact_locators: sources } }
+            expect(publishDataAnalysisArtifact.inputSchema.safeParse(placed).success).toBe(true)
+            const context = { sessionID: session.id, messageID: assistantMessage.id, agent: producer,
+              directory: project.path, worktree: project.path, configuration: {} }
+            if (artifactType === "data-analysis/report") {
+              await expect(executePackageToolInCapsule({ prepared, taskID, cwd: project.path, host, context,
+                args: { artifact: { ...placed.artifact, resource_set: "invalid-resource-set" } },
+                abort: new AbortController().signal,
+              })).rejects.toThrow(/resource_set/)
+            }
+            const execution = await executePackageToolInCapsule({ prepared, taskID, cwd: project.path, host, context,
+              args: placed, abort: new AbortController().signal })
+            const receipt = JSON.parse(execution.output) as { locator: EngineArtifactLocator; artifact_sha256: string }
             const read = await host.engineArtifacts.read({
               locator: receipt.locator,
               byte_offset: 0,

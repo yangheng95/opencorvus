@@ -2,8 +2,6 @@
 // SHA-256 means Secure Hash Algorithm 256-bit.
 
 import {
-  ArtifactReadLocatorSchema,
-  TaskArtifactResourceSetLocatorSchema,
   inspectEngineArtifactEnvelope,
   readExactArtifactsSettled,
   selectExactArtifactSources,
@@ -39,15 +37,14 @@ const producerByType: Readonly<Record<DataAnalysisArtifactType, string>> = {
 }
 
 export default tool({
-  description: "Validate and publish one complete data-analysis Artifact ABI value with exact sources and immutable resources.",
+  description: "Validate and publish one complete data-analysis Artifact ABI value. Supply artifact_type, payload, resource_set and source_artifact_locators together inside the single artifact object; resource_set is null for stages and the exact immutable resource set for the report.",
   args: {
     artifact: DataAnalysisPublishableArtifactInputSchema,
-    resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
-    source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema),
   },
-  async execute(args, context) {
-    const artifactType = args.artifact.artifact_type
-    const payload = parseDataAnalysisArtifact(artifactType, args.artifact.payload)
+  async execute(input, context) {
+    const args = input.artifact
+    const artifactType = args.artifact_type
+    const payload = parseDataAnalysisArtifact(artifactType, args.payload)
     const expected = expectedSources[artifactType]
     if (args.source_artifact_locators.length !== expected.length) {
       throw new Error(artifactType + " requires " + expected.length + " exact source Artifact locator(s)")
