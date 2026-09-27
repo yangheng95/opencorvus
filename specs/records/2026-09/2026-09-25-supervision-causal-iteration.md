@@ -1832,22 +1832,32 @@ Recall：从8abcb06f已push/clean继续，只读当前data-analysis团队及原G
 - G65原数据库始终mode=ro，仅backup副本由production reader打开；g66-original-reader-receipt.json记录40个原catalog exact reads及原snapshot报告资源，6862bytes/SHA81957c03260d595ef653a4d55b389cd4114b03d6aef53d36c5c9791e0c379000，与已归档report逐字一致。原Core review三项、两项分析以inputs支持而第一项出版以brief支持；原工具表确为26failed/6completed/17内嵌层级错误，归档byType已正确，仅文案算错总数，现更正。既有漏判/Task failed结论、原件与分数不改。
 - 本次仅确认接口合同和本地真实运输，不承诺新模型使用该形状的成功率；整体独立业务纠错及进化收益仍未达成。将这项必要接口修复收敛后交回原主管；不能以等待额度为由继续扩底座或立即抽同输入新样本。
 
-## G67（Opus 22:48恢复）：本失败链的核心机制——“未知”是只能累积、不能被否定的单向通道
+## G67（Opus 22:50恢复）：未知声明沿用的候选解释与提示调整
+
+> 23:03 起的退出后独立复核不接受“核心机制已找到并修复”的结论。修改前 `.3/.4` 审查提示已明确把团队未知视为待检声明、要求检查输入能够消除的未知并给出纠正；`unknowns` 字段也不限制模型否定其内容。原件证明漏判和错误沿用，不证明合同禁止否定未知。以下提示调整已提交，但其效果、必要性和核心因果均未获业务验证，不据此启动新的样本。
 
 - Recall：从f4309419（=origin/main、clean）恢复；六类总方案已撤回，不作依据。只沿NYC 311真实失败链（feedback-01与G65 run-01）判断，旧运行只读、不重跑、无新Provider样本。
-- **判断（设计矛盾，可直接指向源码与原件）：** 在data-analysis团队合同里，“某事未知/不支持”这一类陈述没有任何角色被要求、也没有任何环节能够否定，只能沿阶段累积到交付。
-  1. 六个生产者提示逐字要求“Preserve explicit unknowns instead of inventing inputs”：前驱声明的未知是应保留的对象（hr-operations、sales-strategy同一模板各7处）。
-  2. 所有角色唯一的认识论禁令是“Never invent missing values…”——只防假阳性（编造），不防假阴性（把输入已有的事实说成未知/不支持）。
-  3. 共享stage codec给全部七种产物（包括`audit`与`report`）都设`unknowns`槽；审查者的判断对象是“claim”，未知不被当作可被推翻的主张。
+- **主管提出的解释及独立复核边界：** 生产者保留未知的文案可能促使上游错误被沿用；这仍是候选解释。
+  1. 六个生产者提示含“Preserve explicit unknowns instead of inventing inputs”（hr-operations、sales-strategy同一模板各7处），但该句本身没有要求保留已被原输入推翻的声明。
+  2. 修改前data-analysis审查提示已有“their scope limits and stated unknowns”都是团队主张、“limits or unknowns that the supplied fields actually resolve”以及“an unknown stands only where the input files lack the value”。因此“所有角色只防编造、无人负责否定未知”的说法不成立。
+  3. 共享stage codec为七类产物提供`unknowns`字符串数组，并为audit提供`required_corrections`等字段；它保存声明，不判定声明真伪，也未禁止审查者否定未知。字段存在不能作为“只能累积”的控制流证据。
 - **原件证据（只读backup，逐字）：** feedback-01：charter rev5“…complete later closure view”→segment rev18“No opening backlog or later closure”→**audit rev34自己的unknowns**“…later closure completeness… remain unsupported by the source”→report rev39/rev47 unknowns同句。run-01：charter rev6“August eventual closure is unknown”→dossier rev10→performance rev15→brief rev23“Whether remaining requests later closed, remained open, or lacked recording”→**audit rev27自己的unknowns**“Whether residual requests later closed, remained open, or lacked closure recording”→报告“A remaining request may later close, remain open, or lack a recorded closure”。输入24/24组都有`closed_month`。审查者没有判它、而是把它当作自己的未知转发。
-- **对照（同一机制的反面）：** 真实被纠正的两个“缺失”错误——G60 steward称charter不存在、feedback-01 fact-checker称brief缺失——都是前驱存在性，类型化发布器机械要求确切前驱，存在性因此被迫复核；业务内容的“未知”没有任何对应检查。
-- **区分三层：** 设计矛盾成立（上述1–3）。模型不遵守已有正确职责也发生过：G65 `.3`审查提示已写“limits or unknowns that the supplied fields actually resolve”“an unknown stands only where the input files lack the value”，审查者仍照抄；这说明只改审查侧不够，棘轮在生产者规则与audit自身的unknowns槽。被测业务断言的含义：说“同月关闭这个指标本身不显示后续关闭”是正确的指标限制；说“这份extract不能显示/不知道remaining后来是否关闭”是与字段矛盾的错误——两次运行的错误均属后者。
+- **对照的限制：** 两个“缺失”错误——G60 steward称charter不存在、feedback-01 fact-checker称brief缺失——涉及前驱存在性，可以由类型化发布器验证身份与完整性。业务声明真伪由模型负责；两类检查责任不同，不能由此推导业务内容缺少检查，或要求Host增加业务裁决。
+- **区分三层：** 原件确定显示审查者没有完成已有明确职责；生产者文案如何影响此次漏判、为什么原审查规则未被执行，尚未定位。不能从“只改审查提示后仍失败”推出“必须改全部生产者”，也不能归因于audit的`unknowns`字段。被测业务断言的含义：说“同月关闭这个指标本身不显示后续关闭”是正确的指标限制；说“这份extract不能显示/不知道remaining后来是否关闭”与已有关闭月字段矛盾。
 - **不解释的：** Cycle3、H-T/H-B的错误是正值/关系判断错误（如4×5000），不是未知陈述；G60终稿“没有audit”也是缺失陈述，但其接受者是调度者，本判断不外推为所有历史失败的单一原因。
-- **一致修复（单点、同一机制）：** 三个同模板包中那句“Preserve explicit unknowns instead of inventing inputs”一律替换为对称规则：不编造输入，也不把输入已显示的内容称为未知；从前驱继承的未知或限制是关于输入的主张，只在输入确实缺该值时保留。三个审查者（fact-checker）另加一句：目标陈述的每条未知/限制都是待核对的主张；audit自己的unknowns只写审查者自己无法核对的事项，不得照抄目标的未知。codec、Host、调度、图、角色、ABI不变；不加新gate/ledger/schema。
-- **验证边界：** 本地只能证明新文本被实际安装与投影、旧句不再存在；是否让Luna在同一输入上不再产生或能否定该错误，只能由另行完整登记的一次完整团队观察回答。本轮不启动新样本。
+- **已实施的提示调整（未确证的干预）：** 三个同模板包将保留未知的句子改为对称规则：不编造输入，也不把输入已显示的内容称为未知；从前驱继承的未知或限制是关于输入的主张，只在输入确实缺该值时保留。三个审查者（fact-checker）另加一句：目标陈述的每条未知/限制都是待核对的主张；audit自己的unknowns只写审查者自己无法核对的事项，不得照抄目标的未知。codec、Host、调度、图、角色、ABI不变；不加新gate/ledger/schema。相同模板证明了改动覆盖范围，不能证明三个包共享已定位的业务根因。
+- **验证边界：** 本地只能证明配置文本被实际安装与投影，不能证明模型行为。尚无有区分力的因果依据支持再抽样；同时改变生产者与审查者，即使未来交付正确也不能单凭结果区分错误预防与独立纠错。本轮不启动新样本。
 
 ### G67实施与本地验证
 
-- 21份提示（三包各7份：6个生产者+writer，以及fact-checker）中旧句全部替换，全仓`Preserve explicit unknowns`已不存在；三个fact-checker另加“目标的每条未知/限制是待核对主张，audit自己的unknowns只写无法核对的事项，不照抄目标”。data-analysis `2026.09.27.5`（contentDigest af4db610…，packageDigest 196e4f8d7a55a01783f00b4b46074dbaf17b2783b3856b43000c710988dfeb68）、hr-operations `2026.09.27.2`（d470d2fd…/20e40e4186b346751d7c8cbd14a9456a503272cf2ecb17e4e5e12c2ce7994ee7）、sales-strategy `2026.09.27.2`（7cb392c8…/6d02e25969c350582ed0a3f00069ccc3d2c8a90b65a1bb0d04afc297858554b8）。原唯一生成器渲染到临时文件后替换；核对payload中这三个块以外字节与HEAD相同、revisions只改这三行；生成器同时报告的base已知漂移未夹带。源文件无CRLF。codec/Host/调度/图/ABI/其他包未改。
+- 21份提示（三包各7份：6个生产者含writer，以及1个fact-checker）调整了未知声明要求；三个fact-checker另加“目标的每条未知/限制是待核对主张，audit自己的unknowns只写无法核对的事项，不照抄目标”。data-analysis `2026.09.27.5`（contentDigest af4db610…，packageDigest 196e4f8d7a55a01783f00b4b46074dbaf17b2783b3856b43000c710988dfeb68）、hr-operations `2026.09.27.2`（d470d2fd…/20e40e4186b346751d7c8cbd14a9456a503272cf2ecb17e4e5e12c2ce7994ee7）、sales-strategy `2026.09.27.2`（7cb392c8…/6d02e25969c350582ed0a3f00069ccc3d2c8a90b65a1bb0d04afc297858554b8）。原唯一生成器渲染到临时文件后替换；核对payload中这三个块以外字节与HEAD相同、revisions只改这三行；生成器同时报告的base已知漂移未夹带。源文件无CRLF。codec/Host/调度/图/ABI/其他包未改。
 - `.tmp/g67-focused-tests.log`：data-analysis 4/73（实际嵌入安装→scheduler与七worker promptOverlay逐字来自源包，且每个角色含对称规则、不含旧句，审查者含不得照抄；原DB/Host七阶段typed链与G66单一artifact参数合同）、hr-operations 4/51、sales-strategy 4/51（真实安装投影同样三条断言）、provider schema 2/10、diagnostic入口 2/29（真实`.5` prepare/恢复合同）、发布权威 3/14，共19项228断言、各文件exit0。根类型8/8、docs 342/25、内置拓扑122/135、diff检查通过。
-- 这些只证明新规则被实际安装和投影、旧规则不再下发；不证明Luna会据此不产生或能否定错误未知，也不是可靠业务纠错或进化收益。
+- 这些只证明配置文本被实际安装和投影；不证明Luna会据此不产生或能否定错误未知，也不是可靠业务纠错或进化收益。上条历史日志包含违反仓库测试规范的负向文案断言，退出后独立复核删除它们，保留真实安装及当前提示的正向运输检查。
+
+### G67退出后独立复核：Recall、影响面与收敛方案
+
+- 用户要求定位核心问题，不接受将现象、候选解释或测试数量当成果。本轮独立复核读取AGENTS、本文Recall/最新记录、修改前审查提示、当前core及codec、主管真实Tool结果与提交差异；不开新业务样本，不恢复旧run，不自动再次启动主管。
+- 23:00:55.656上海主管真实exit0，当前完整session命令行查询成功且结果为空；本次exit.json、最后terminal completed/is_error=false/26turns与exec27768 exit0一致。实际模型仅claude-opus-5-5。累计CLI估算160.615417美元，减基线152.5812776得8.0341394美元；不是账单或业务费用。
+- 1ee4424026dceda0f69f1977041dcb69c776c1f8为真实已推送31文件提交，远端main已独立核对。g67-focused-tests与完整g67-push收据确实成功，不能据此接受主管最终答复或提交说明中的“因为只有防编造规则”这一因果断言。
+- 本次明确修复范围仅为本文过度结论和三个包测试各一处`not.toContain`负向断言及其过度注释。保留正向提示投影检查与真实安装/发布链，运行这三个包的原checker及docs:check，再范围提交、pull merge、审完整outgoing、push。无生产提示、包版本、Host、schema、调度、凭据或原业务产物改动；不以本次记录更正宣称业务目标进展。核心根因和可靠纠错/进化收益仍未达成。
+- 原checker重跑成功，见`.tmp/g67-independent-tests.log`：data-analysis 4项66断言、hr-operations与sales-strategy各4项44断言，均通过真实安装/投影与原产物链；docs:check通过（342 ops/25 groups），diff检查通过。结算收据`.tmp/g67-independent-settlement.json`保留三项退出证据与费用差额。未重复原业务运行或声称上述测试证明模型纠错。

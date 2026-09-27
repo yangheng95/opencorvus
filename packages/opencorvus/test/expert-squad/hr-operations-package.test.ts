@@ -179,8 +179,7 @@ describe("Human Resources Operations expert squad package", () => {
             agentID,
           })
           expect(worker.expertSquadID).toBe("hr-operations")
-          // A stated unknown is a claim about the inputs; no role carries one forward unchecked.
-          expect(worker.promptOverlay).not.toContain("Preserve explicit unknowns")
+          // Check installed prompt transport; this does not establish model compliance.
           expect(worker.promptOverlay).toContain("do not call unknown what the inputs show")
           if (agentID.endsWith("fact-checker")) expect(worker.promptOverlay).toContain("never a copy of the target's")
           expect(worker.productionSkills.map((entry) => entry.ref)).toEqual(skillRefs)
