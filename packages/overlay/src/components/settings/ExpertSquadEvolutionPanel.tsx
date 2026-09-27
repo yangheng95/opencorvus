@@ -532,7 +532,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
                   <div class="expert-squad-evolution-facts">
                     <span>{t("expert_squad.evolution_baseline")}: {digest(entry().record.campaign.baseline_revision.package_digest)}</span>
                     <span>{t("expert_squad.evolution_dataset")}: {entry().record.context.dataset_partition} · {digest(entry().record.context.dataset_digest)}</span>
-                    <span>{t("expert_squad.evolution_budget")}: {entry().record.context.budget.max_runs} runs · {entry().record.context.budget.max_cost}</span>
+                    <span>{t("expert_squad.evolution_budget")}: {entry().record.context.budget.max_runs} runs · {entry().record.context.budget.max_cost === null ? t("expert_squad.evolution_cost_ceiling_undeclared") : entry().record.context.budget.max_cost}</span>
                   </div>
                   <Show when={[
                     ...entry().record.graph_issues,

@@ -345,7 +345,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         owner_hypothesis: "Target prompt contract",
         unknowns: ["holdout behavior"],
         sensitivity: "internal",
-        suggested_budget: { runs: 4, max_cost: 12 },
+        suggested_budget: { runs: 4, max_cost: null },
       },
       "evolution-lab/campaign-spec": {
         target,
@@ -952,7 +952,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                   owner_hypothesis: "Target prompt contract",
                   unknowns: ["provider variance"],
                   sensitivity: "internal",
-                  suggested_budget: { runs: 4, max_cost: 12 },
+                  suggested_budget: { runs: 4, max_cost: null },
                 },
                 resource_set: null,
                 source_artifact_locators: [],
@@ -976,7 +976,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             owner_hypothesis: "Target prompt contract",
             unknowns: ["provider variance"],
             sensitivity: "internal",
-            suggested_budget: { runs: 4, max_cost: 12 },
+            suggested_budget: { runs: 4, max_cost: null },
           }
           const read = await host.engineArtifacts.read({
             locator: opportunityReceipt.locator,
@@ -985,6 +985,9 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             delivery: "inline",
           })
           expect(read.chunk.complete).toBe(true)
+          expect(EngineArtifactEnvelopeSchema.parse(JSON.parse(read.chunk.text!)).payload).toMatchObject({
+            suggested_budget: { runs: 4, max_cost: null },
+          })
           await host.engineArtifacts.select({
             locator: opportunityReceipt.locator,
             purpose: "Exact opportunity predecessor for causal attribution",
@@ -1180,7 +1183,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             repetitions: 1,
             arm_order: ["baseline", "candidate"] as const,
             statistics: "paired mean and variance",
-            budget: { max_runs: 2, max_cost: 12 },
+            budget: { max_runs: 2, max_cost: null },
           }
           sourceCampaignInput = campaignDraft
           const campaignReceipt = JSON.parse(
@@ -1212,6 +1215,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             campaignEnvelope.payload,
           )
           expect(persistedCampaign).toMatchObject({
+            budget: { max_runs: 2, max_cost: null },
             target,
             baseline_revision: revision,
             dataset_digest: datasetResource.sha256,
@@ -1276,7 +1280,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                     owner_hypothesis: "Target prompt contract",
                     unknowns: ["provider variance"],
                     sensitivity: "internal",
-                    suggested_budget: { runs: 4, max_cost: 12 },
+                    suggested_budget: { runs: 4, max_cost: null },
                   }),
                   target: {
                     scope: "built_in",
@@ -3298,7 +3302,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.18")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.19")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(

@@ -4,6 +4,7 @@ import { ArtifactProducerSchema, ArtifactSHA256Schema } from "./artifact-produce
 import { ArtifactReadLocatorSchema, EngineArtifactLocatorSchema } from "./artifact-catalog.js"
 import {
   canonicalEvolutionJSON,
+  EvolutionCampaignBudgetSchema,
   EvolutionExactRevisionSchema,
   EvolutionInstallableTargetSchema,
   EvolutionPromotionReceiptSchema,
@@ -30,7 +31,7 @@ export const EvolutionComparisonContextSchema = z
     repetitions: z.number().int().positive(),
     arm_order: z.tuple([z.enum(["baseline", "candidate"]), z.enum(["baseline", "candidate"])]),
     statistics: z.string().min(1),
-    budget: z.object({ max_runs: z.number().int().positive(), max_cost: z.number().nonnegative() }).strict(),
+    budget: EvolutionCampaignBudgetSchema,
     inactivity_timeout_ms: z.number().int().positive(),
     ui_rubric_digest: ArtifactSHA256Schema.nullable(),
   })

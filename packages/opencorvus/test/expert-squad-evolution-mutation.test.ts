@@ -328,7 +328,7 @@ describe("authorized expert squad evolution mutation", () => {
             repetitions: 2,
             arm_order: ["baseline", "candidate"],
             statistics: "paired population statistics",
-            budget: { max_runs: 4, max_cost: 1 },
+            budget: { max_runs: 4, max_cost: scenario === "review-freshness" ? null : 1 },
             inactivity_timeout_ms: 1_000,
             ui_rubric_digest: null,
             mutable_paths: ["README.md"],
@@ -346,10 +346,12 @@ describe("authorized expert squad evolution mutation", () => {
             limit: 20,
           })
           expect({
+            budget: frozenCampaignHistory.records[0]!.context.budget,
             campaigns: frozenCampaignHistory.records.length,
             hypothesis: frozenCampaignHistory.records[0]!.campaign.candidate_hypothesis,
             candidates: frozenCampaignHistory.records[0]!.candidates.length,
           }).toEqual({
+            budget: campaignPayload.budget,
             campaigns: 1,
             hypothesis: campaignPayload.candidate_hypothesis,
             candidates: 0,
@@ -1360,7 +1362,7 @@ describe("authorized expert squad evolution mutation", () => {
               repetitions: 2,
               arm_order: ["baseline", "candidate"],
               statistics: "paired population statistics",
-              budget: { max_runs: 4, max_cost: 1 },
+              budget: { max_runs: 4, max_cost: scenario === "review-freshness" ? null : 1 },
               inactivity_timeout_ms: 1_000,
               ui_rubric_digest: null,
             },

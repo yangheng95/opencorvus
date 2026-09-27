@@ -2,6 +2,13 @@ import { z } from "zod"
 import { EngineArtifactLocatorSchema, ArtifactReadLocatorSchema } from "./artifact-catalog.js"
 import { ArtifactSHA256Schema } from "./artifact-producer.js"
 
+// Null means no monetary ceiling was declared; zero remains a literal zero ceiling.
+export const EvolutionCostCeilingSchema = z.number().nonnegative().nullable()
+export const EvolutionCampaignBudgetSchema = z.object({
+  max_runs: z.number().int().positive(),
+  max_cost: EvolutionCostCeilingSchema,
+}).strict()
+
 export function canonicalEvolutionJSON(value: unknown): string {
   if (value === null || typeof value === "boolean" || typeof value === "string") return JSON.stringify(value)
   if (typeof value === "number" && Number.isFinite(value)) return JSON.stringify(value)

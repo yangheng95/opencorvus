@@ -39643,8 +39643,15 @@
                                 "additionalProperties": false,
                                 "properties": {
                                   "max_cost": {
-                                    "minimum": 0,
-                                    "type": "number"
+                                    "anyOf": [
+                                      {
+                                        "minimum": 0,
+                                        "type": "number"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
                                   },
                                   "max_runs": {
                                     "exclusiveMinimum": 0,
@@ -54186,8 +54193,15 @@
                               "additionalProperties": false,
                               "properties": {
                                 "max_cost": {
-                                  "minimum": 0,
-                                  "type": "number"
+                                  "anyOf": [
+                                    {
+                                      "minimum": 0,
+                                      "type": "number"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
                                 },
                                 "max_runs": {
                                   "exclusiveMinimum": 0,

@@ -1463,3 +1463,24 @@
 - Lab源/嵌入2026.09.27.18/contentDigest d6df7e22af13e9fb01706f2da409a83cad061713367b63548537cf33e68cc35c，仅同步Lab（g56-package-sync.log），默认base漂移保留，未推广。9文件范围提交，完整pre-push与实际push收据g56-push.log；内部返回类型变化无HTTP/公共SDK响应/DDL改动。
 - 真实Campaign准备的新确定边界：旧随机e2e脚本默认openai/gpt-5.6-terra、controller inactivity1200000ms、judge120000ms，prompt固定repetitions=1/max_runs=2/max_cost=10，独立checker也硬认一次repetition。这些是旧协议验收输入，不是当前用户新的Luna/300秒真实无活动/不得自行费用预算授权；n=1在现有比较器不能形成支持promote的完整区间，也不能把non-executing inconclusive当真实进化收益。未启动该脚本、凭据或旧run，也不为凑结果修改旧预登记。
 - 下一G57继续把新的独立验证压成明确可证伪机制与真实可执行输入，先审现有Campaign预算字段/冻结范围和新用户约束（当前max_cost要求显式非负数，没有已证“0=无限”含义，不能偷用0或10），选定足以回答机制问题的固定次数、来源/包/模型/目录、失败停止与全费用记录，再准备新入口。不能直接重用旧随机抽样、伪造金额gate或替补失败样本。当前Capsule协议修复不等于模型会正确恢复测量，不等于原业务纠错/真实进化收益已达成；Opus仍12:45上海以后交回。
+
+## G57：未声明费用上限的真实Campaign输入与展示
+
+### Recall、影响面与实施前方案
+
+- 从f99d76bc/main=origin/clean继续；用户禁止自行设费用预算，要求新的独立真实验证先完整登记并使用流式Luna/300秒真实无活动。本轮首先回答一个可证伪的准备机制问题：没有声明费用上限的授权能否沿Opportunity→Campaign Tool输入→真实持久化→history→实际页面保留原义，而不被迫伪造0或10？这不是业务模型预登记，不启动Provider、旧随机控制器、旧实验或新的Campaign模型任务；12:45上海优先交回原Opus。
+- 已读AGENTS、Recall/五段图/G55–56、02-data、当前Campaign/Opportunity输入与Artifact schema、history context、真实publisher、Planner/Observer/Skill/README、旧e2e配置和checker、历史2026-08-17合同及实际Host/mutation测试。全仓max_cost/maxCost搜索确认三个Artifact/input预算定义和history预算均只接受非负数；未找到max_cost执行金额gate，旧e2e仅硬声明/核对10。唯一页面消费在ExpertSquadEvolutionPanel预算行，公共history/detail SDK类型也受影响。无委托。
+- 可观察现象是明确null输入会被数值schema拒绝；根因是合同没有“未声明上限”表示。旧固定10仅使协议夹具可运行，不能代表本用户授权；0是实际零值，不能私定无限语义。当前费用统计/usage ledger不是这个字段，不能用未知计价混淆未声明上限。此次不触及调度、终态、角色授权、测量集合、统计方法或安装事务。
+- 单一实现：在已有evolution公共schema定义共享cost ceiling与Campaign budget；max_cost必填且为非负数字或null，null精确表示未声明金额上限，数字（含0）原义保留。Opportunity建议预算用同一cost定义，Campaign存储/输入/history共用同一budget定义。无默认值、fallback、历史回填或新ledger；此数据表示不增加花费授权，也不新增Host金额gate。
+- 同步模型侧Observer/Planner与现README/Skill：没有用户/Mission声明时写null，建议值不等于授权上限。页面明确显示“未声明费用上限”，不把null显示为空或计价未知；英文同步。原数字历史原样读取。公共OpenAPI/SDK用唯一生成器更新并审查精确差异。Lab源/嵌入仅前向同步Lab，默认base漂移不动。
+- 验收：先保留原Tool输入null的明确红测，再经真实Host实际发布Opportunity/Campaign并读取持久化原值；共享schema验证null/0/有限数及负数明确错误，实际history读取null。页面只用隔离本地真实服务/ui、真实浏览器交互与截图人工复核，不新增/运行UI自动化测试；本地诊断夹具明确标示，无凭据或业务模型。必要根类型/docs/拓扑、SDK结构检查、差异审查后范围commit/pull merge/审完整outgoing/auto push。
+- 风险与边界：允许null只解决当前真实验证准备的预算表达阻碍。既有controller模型/超时/重复数/随机输入问题仍需独立方案，不能直接运行。此次不宣称已完成模型Campaign、监督纠错或进化收益；实际页面若无法获得证据，必须明确报告该未达成项。
+
+### G57交付与验证
+
+- 原发布输入的budget子schema真实拒绝null，ZodError指向budget.max_cost/expected number（g57-budget-schema-red.log）；这是输入合同红测，不冒称原完整模型Tool运行。现EvolutionCostCeilingSchema与EvolutionCampaignBudgetSchema是唯一实现，Opportunity建议、Campaign输入/持久化及history共用。null明确未声明金额上限，0和有限正数原义保留，负数映射到too_small错误；字段仍必填。没有金额gate、实际费用代值或历史回填。
+- 正向生产Host实际发布并读回Opportunity.suggested_budget.max_cost=null和Campaign.budget.max_cost=null，原后续比较/跨Task导入/Capsule路径通过。实际DB/history在review-freshness分支读回null，其他安装/恢复分支仍使用有限数1并保留原值。最终81项615断言，g57-focused-tests.log四文件exit0：Host9/205、comparison66/219、mutation/history5/147、实际包projection1/44。没有新的外部Provider请求。
+- 真实页面验证使用独立.tmp/g57-visual-runtime/home与project、实际source Server.listen及本次编译overlay/ui；未复制auth/models。显式本地诊断Task tsk_g00VWNyA6m00Nr7pnBZ3、Campaign art_g0VWNyAHu00oqj1mMoF6/revision3只作预算呈现夹具，无模型请求/候选/业务实验。经真实Installed Expert Squads→Evolution History交互，页面从实际history读取budget={max_runs:4,max_cost:null}，截图人工确认“Budget: 4 runs · No cost ceiling declared”完整可读、无遮挡；首次截图该行在折叠视口下方，滚动后才实际看见。英文页面实际验收，中文文案同步；未宣称中文页面另验。截图在本次CUA工具回执，种子/服务收据g57-visual-seed.json/g57-visual-server.json、日志g57-visual-server.log保留。浏览器页关闭，自有服务通过stop marker正常exit0；没有UI自动化测试。
+- Lab源/嵌入2026.09.27.19/contentDigest88cea9739a98a32fa78522ec44d1ae14f18f09af3a2fa574fd13030870e09327（g57-package-sync.log），仅Lab同步，base漂移保留，未推广。Observer/Planner/Skill/README明确未声明写null，建议预算不等于花费批准。SDK由唯一生成器完成；g57-openapi-verified.json逐值确认仅history/detail两处max_cost从number扩为number|null，其余JSON相同。无HTTP路由/数据库表变化。
+- 根类型8/8、docs342ops25、包拓扑122/135、前端正式构建与diff通过；实际pre-push与推送结果以g57-push.log为准。上述可达性修复不构成新业务Campaign预登记，不重启旧随机e2e，不代表可靠纠错/进化收益。
+- 下一G58应收敛新独立验证的完整输入与执行计划：优先选定一个可证伪的机制问题，明确自然证据/来源、唯一改动、固定源包/候选边界、Luna模型、300秒真实无活动poll2、目录、固定次数与停止失败/全费用。可用null忠实表达未声明金额上限；旧e2e的随机target、n1硬断言、默认Terra与超时仍不能直接当本用户新运行。先核对真实Mission→stage Task→target Trials→import→evaluation的输入可执行性；需要新执行入口时复用当前原语，不造并行ledger/隐藏答案/业务gate。没有完整独立登记前不调用Provider，不将永久等待登记当结果。12:45上海优先范围提交并交回原Opus。

@@ -14,7 +14,18 @@ import { deriveEvolutionNativeMeasurements, evolutionNativeRequestedRuns, artifa
 import { describe, expect, test } from "bun:test"
 import { deriveComparisonRecommendation } from "@squads/evolution-lab/lib/evolution-lab/comparison"
 import { EvolutionArtifactSchemas } from "@squads/evolution-lab/lib/evolution-lab/artifacts"
-import { EvolutionReviewLineageError, resolveEvolutionIntegrityReviews, groupEvolutionMeasurements } from "@opencorvus-ai/plugin"
+import { EvolutionCampaignBudgetSchema, EvolutionReviewLineageError, resolveEvolutionIntegrityReviews, groupEvolutionMeasurements } from "@opencorvus-ai/plugin"
+
+test("Campaign preserves an undeclared, zero or finite monetary ceiling", () => {
+  for (const max_cost of [null, 0, 12.5]) {
+    expect(EvolutionCampaignBudgetSchema.parse({ max_runs: 4, max_cost })).toEqual({ max_runs: 4, max_cost })
+  }
+  const invalid = EvolutionCampaignBudgetSchema.safeParse({ max_runs: 4, max_cost: -1 })
+  if (invalid.success) throw new Error("Expected a typed invalid ceiling result")
+  expect(invalid.error.issues.map(({ code, path }) => ({ code, path }))).toEqual([
+    { code: "too_small", path: ["max_cost"] },
+  ])
+})
 
 const baselineDigest = "a".repeat(64)
 const candidateDigest = "b".repeat(64)

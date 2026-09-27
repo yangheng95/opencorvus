@@ -299,6 +299,8 @@ bundle盖章，独立taskRuns.usage入口已删除。后入账会使旧采集与
 生成新资源，旧资源不改。完成工具可先于本次请求的用量回调，因此终态时间不等于费用封口。
 旧v1采集资源保留历史字节；当前发布/metric执行只接受v2，不补字段、重算历史或fallback。
 
+Evolution Opportunity建议预算与Campaign预算的`max_cost`使用同一显式合同：非负数字或null。null表示用户/Mission未声明费用上限，0保留零上限原义；缺字段仍是输入错误，不默认或回填。Campaign输入、持久化与history context共用预算schema，页面明确显示未声明状态。该字段不是实际费用、未知计价或新增花费授权；原usage事实、全矩阵max_runs校验和金额执行策略不变。
+
 Metric请求显式以Run所携带的collector资源作为subject；评分owner仍是Evaluator Task。
 Host精确读取canonical bundle，shell按其terminal Git commit/tree在本次调用的受管目录物化
 根仓库regular文件，保留Git执行位，执行后随TaskArtifact execution关闭回收。相对cwd限定在

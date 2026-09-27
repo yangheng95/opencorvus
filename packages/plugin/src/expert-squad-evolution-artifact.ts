@@ -1,7 +1,7 @@
 // ABI means Application Binary Interface. ID means Identifier.
 import { z } from "zod"
 import { ArtifactReadLocatorSchema, EngineArtifactLocatorSchema } from "./artifact-catalog.js"
-import { EvolutionExactRevisionSchema, EvolutionPromotionReceiptSchema } from "./expert-squad-evolution.js"
+import { EvolutionCampaignBudgetSchema, EvolutionCostCeilingSchema, EvolutionExactRevisionSchema, EvolutionPromotionReceiptSchema } from "./expert-squad-evolution.js"
 import { MetricScorerSpecSchema } from "./metric-evaluation.js"
 import {
   TaskArtifactMediaTypeSchema, TaskArtifactRefSchema,
@@ -136,7 +136,7 @@ const evolutionCampaignPublishInputShape = {
   repetitions: z.number().int().positive(),
   arm_order: z.array(z.enum(["baseline", "candidate"])).min(2),
   statistics: z.string().min(1),
-  budget: z.object({ max_runs: z.number().int().positive(), max_cost: z.number().nonnegative() }).strict(),
+  budget: EvolutionCampaignBudgetSchema,
   inactivity_timeout_ms: z.number().int().positive(),
   ui_rubric_digest: sha256.nullable(),
   mutable_paths: z.array(z.string().min(1)),
@@ -257,7 +257,7 @@ export const EvolutionCampaignPublishInputSchema = z
     repetitions: z.number().int().positive(),
     arm_order: z.array(z.enum(["baseline", "candidate"])).min(2),
     statistics: z.string().min(1),
-    budget: z.object({ max_runs: z.number().int().positive(), max_cost: z.number().nonnegative() }).strict(),
+    budget: EvolutionCampaignBudgetSchema,
   })
   .strict()
 
@@ -289,7 +289,7 @@ export const EvolutionArtifactSchemas = {
       owner_hypothesis: z.string().min(1),
       unknowns,
       sensitivity: z.string().min(1),
-      suggested_budget: z.object({ runs: z.number().int().positive(), max_cost: z.number().nonnegative() }).strict(),
+      suggested_budget: z.object({ runs: z.number().int().positive(), max_cost: EvolutionCostCeilingSchema }).strict(),
     })
     .strict(),
   "evolution-lab/campaign-spec": z

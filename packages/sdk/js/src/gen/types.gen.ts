@@ -11364,7 +11364,7 @@ export type ExpertSquadEvolutionHistoryResponses = {
       context: {
         arm_order: ["baseline" | "candidate", "baseline" | "candidate"]
         budget: {
-          max_cost: number
+          max_cost: number | null
           max_runs: number
         }
         case_ids: Array<string>
@@ -14333,7 +14333,7 @@ export type ExpertSquadEvolutionHistoryDetailResponses = {
       context: {
         arm_order: ["baseline" | "candidate", "baseline" | "candidate"]
         budget: {
-          max_cost: number
+          max_cost: number | null
           max_runs: number
         }
         case_ids: Array<string>
