@@ -1687,3 +1687,18 @@
 - 这证明一次集中证据下的发现能力，不证明历史错因就是上下文丢失，不构成历史/当前因果A/B，也没有同Task返工、可靠率或进化收益。既有Chat及memory helper共4次真实流式gpt-5.6-luna/HTTP200，4原native用量：input66116/output1892/reasoning839/cache_read0/total68847，local priced cost0非免费/账单。无业务Task（原DB count0）/Tool调用/作者/候选/Campaign。实际runtimeDisposed/credentialsRemoved true，auth/models已删除。原visible User Message逐字等于登记packet；不冒称存有全部Provider serialized request。
 - 输入准备先误将pretty-printed审查导出字节与原compact身份相比而失败，最终从原DB只读提取并匹配原sha、与生产reader结果逐值一致。派生provenance JSON的自算hash/换行门已删除，仅4份原不可变输入身份参与检查。无凭据prepare03成功、usage0/cleanup true，专项类型和docs通过。prepare即时关服出现scheduler disposing取消日志及Bun显式tsconfig override尾部directory warning保留，没有据此扩基础设施工单；真实review无中断，全部请求/用量完整落账。
 - 下一唯一业务边界仍是反证改变接受决定→同一Task真实返工→按原义务复核。先形成能合法观察该转换的独立完整登记；新增草稿编辑/新增输入后正常交付不算该转换，若自然没有错误则标未触发而不补样本。不得重开review-01/diagnostic-01，不自动改D3或堆一轮机制测试。用户纠偏、此部分结果和未满足目标优先交给17:45恢复的Opus。
+
+## 用户再次纠偏：先用Codex与ZCode校准团队调度
+
+用户明确质疑“搞了这几天……闭门造车，比如codex和zcode是怎么处理agent team调度的？够你反思吗？”本轮先做外部一手资料对照，不新增生产实现或模型调用。ZCode暂按Z.ai官方zai-org/ZCode；已异步询问项目身份，未收到更正。Codex本机npm包只有启动器/二进制，不能据此声称读过其Rust调度实现；下述Codex事实来自已实际打开的官方产品与API文档，API与本机产品的实现不混为一谈。ZCode源码按2026-09-24提交29628c9acdb81b703bbd4080c207a0e7ce5e276e只读取得，未安装/启动其程序。
+
+| 参照 | 已核对机制 | 对当前工作的约束 |
+| --- | --- | --- |
+| [Codex子agent文档](https://learn.chatgpt.com/docs/agent-configuration/subagents) | 主agent管理目标/决策/最终结果；独立上下文处理有界工作，摘要回传；支持创建、跟进、等待和结束。文档专门提醒长主上下文被中间日志淹没会降低可靠性。 | 不能把每轮几十项机制历史继续塞进主指令，再让历史缺口自动生成新工作。主线程必须保留当前目标、一个阻碍和下一决定。 |
+| [OpenAI Responses多agent契约](https://developers.openai.com/api/docs/guides/responses-multi-agent) | 模型通过spawn_agent/send_message/followup_task/wait_agent/interrupt_agent/list_agents协调；运行时处理并发和传递。官方另明确独立工作适合并行，强依赖/共享可变写入需谨慎。 | 先用创建、通信、等待、继续原上下文、返回结果这几个语义解释当前Task/worker链；再论证额外正式产物协议的必要性。该API说明不是本机CLI源码验收。 |
+| [ZCode普通子agent](https://zcode.z.ai/cn/docs/subagents) | 主agent选择独立上下文和前后台；前台等结果、后台完成通知主对话。源码SubagentPort明确launch/run/start/wait/stop/sendMessage，消息有queued/steered/resumed_background状态；原runtime command queue接收子agent结果。 | 活动中指导、已结束后继续、结果回传是协作基础，不能用一次性固定节点完成替代闭环。 |
+| [ZCode动态工作流合同](https://github.com/zai-org/ZCode/blob/29628c9acdb81b703bbd4080c207a0e7ce5e276e/apps/zcode-cli/packages/bundled-skills/skills/dynamic-workflows/SKILL.md)及[实际ask调度器](https://github.com/zai-org/ZCode/blob/29628c9acdb81b703bbd4080c207a0e7ce5e276e/apps/zcode-cli/packages/dynamic-workflow/src/engine/scheduler.ts) | 普通Agent与显式CreateWorkflow分开；脚本里agent().ask<T>、并行分支和结果条件表达控制。每actor按FIFO接续，跨actor受并发上限；planner/reviewer循环保留上下文并把具体feedback带回，最后需要时另用新上下文检查最终稿。检查按错误影响安排，避免多层重复审查。 | 反馈闭环应是实际执行路径；独立性来自上下文与证据，不来自角色名/审核状态。正式Artifact发布成功与业务结论成立分开。 |
+
+**不作错误外推。** ZCode也有类型编译、journal、恢复和完整并发调度器；不能将此次反思简化为“成熟系统没有状态机/越少代码越好”。它的subagent-messages实现有model-only synthetic user notice，动态workflow示例有round cap；这些不符合本项目真实可见参与者及不得自设预算的约束，不照搬。上述是文档/源码机制调查，不是两个外部产品已跑通本业务案例的实测结论。
+
+**具体纠偏。** G64另开Chat只验证聚焦材料下的一次判断，仍没有测试团队把反证送回原执行者并完成修正；把主目标拆成容易通过的局部问题，是此前方法偏差的一部分。停止继续同形微实验。下一动作先把当前一个真实团队链路映射到“派单→结果→异议→继续原执行者→新结果→独立复核”，明确已有可复用能力、阻碍反馈的冲突和仅属审计/业务产物的额外要求，再决定最小必要改动。无证据支持的新增协议、角色、运行器或整仓重写均不开始；不以此次对照为由粗暴删除已有完整性/权限保护。把外部参照及用户纠偏置于后续自动任务与Opus交接最前，停止由旧待办清单驱动扩大范围。
