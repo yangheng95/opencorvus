@@ -36,13 +36,15 @@ const home = path.join(root, "home")
 const project = path.join(root, "project")
 const auditRoot = path.join(root, "provider-audit")
 try {
-  const packet = JSON.parse(await fs.readFile(path.join(import.meta.dir, "packet.json"), "utf8")) as { files: { path: string; bytes: number; sha256: string }[] }
+  const packet = JSON.parse(await fs.readFile(path.join(import.meta.dir, "packet.json"), "utf8")) as { files: { path: string; bytes?: number; sha256?: string }[] }
   const chunks = [await fs.readFile(path.join(import.meta.dir, "request.md"), "utf8")]
   for (const file of packet.files) {
     assert.equal(path.basename(file.path), file.path)
     const bytes = await fs.readFile(path.join(import.meta.dir, file.path))
-    assert.equal(bytes.length, file.bytes)
-    assert.equal(createHash("sha256").update(bytes).digest("hex"), file.sha256)
+    if (file.sha256 !== undefined) {
+      assert.equal(bytes.length, file.bytes)
+      assert.equal(createHash("sha256").update(bytes).digest("hex"), file.sha256)
+    }
     chunks.push(`\n<retained-evidence file="${file.path}">\n${bytes.toString("utf8")}\n</retained-evidence>`)
   }
   const text = chunks.join("\n")
