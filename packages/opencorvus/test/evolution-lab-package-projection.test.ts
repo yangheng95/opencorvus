@@ -143,6 +143,9 @@ describe("Evolution Lab complete package projection", () => {
             expect(worker.promptOverlay).toContain(
               "Different native metric result IDs remain distinct observations even with equal values, Tool producer or iteration.",
             )
+            expect(worker.promptOverlay).toContain(
+              "Report the missing measurement to the Scheduler; the authorized Evaluator can recover the original complete receipt and publish its Evaluation.",
+            )
           }
         }
 

@@ -3246,7 +3246,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.16")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.17")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(
