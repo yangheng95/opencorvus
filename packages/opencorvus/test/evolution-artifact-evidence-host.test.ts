@@ -1,4 +1,5 @@
 import { afterAll, describe, expect, test } from "bun:test"
+import { executePackageToolInCapsule } from "../src/expert-squad/package-tool-capsule"
 import { summarizeEvolutionEvidence } from "../script/expert-squad-evolution-e2e-support"
 import path from "node:path"
 import { cp, mkdir, readFile, stat, writeFile } from "node:fs/promises"
@@ -2681,8 +2682,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           const nativeSnapshot = await host.metrics.recordedSnapshot()
           expect(nativeSnapshot.observations.find((item) => item.metric_result_id === thirdRecorded.metric_result_id))
             .toEqual(thirdRecorded)
-          expect(() => host.metrics.assertRecordedSnapshot({ task_id: taskID, result_ids: [] }))
-            .toThrow(`Native metric snapshot changed for Task ${taskID}; read a new snapshot`)
+          await expect(host.metrics.assertRecordedSnapshot({ task_id: taskID, result_ids: [] }))
+            .rejects.toThrow(`Native metric snapshot changed for Task ${taskID}; read a new snapshot`)
           const unpublishedComparison = await publishComparison()
           const unpublishedPayload = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(unpublishedComparison.payload)
           const nativeInputs = unpublishedPayload.calculation_inputs!.native_measurements!
@@ -3158,6 +3159,57 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             trial_task_id: expect.any(String),
             scorers: [{ value: 1 }, { value: 1 }],
           })
+          // Execute the actual frozen package bundle in its Node worker. A
+          // native write after the first read must cross RPC as the original
+          // validation error, not as an unhandled worker rejection.
+          const prepared = loaded.packageToolBundles.get("evolution-lab/shared/publish-evolution-artifact")!
+          const measuredCampaign = EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(
+            importedEvidence.find((item) => item.type === "evolution-lab/campaign-spec")!.envelope.payload)
+          const measuredRun = importedEvidence.find((item) => item.type === "evolution-lab/run-evidence-bundle")!
+          const measuredRunValue = EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse(measuredRun.envelope.payload)
+          const measuredSubject = measuredRun.envelope.resources.find((item) => item.sha256 === measuredRunValue.run_evidence_resource.sha256)!
+          ;(importedScope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
+          const concurrentHost = { ...host, metrics: { ...host.metrics,
+            async recordedSnapshot() {
+              const frozen = await host.metrics.recordedSnapshot()
+              // All observation bytes and native rows come from the production
+              // executor; this driver controls only the concurrency window.
+              ;(importedScope.owner as { agentID: string }).agentID = "evolution-evaluator"
+              try {
+                await host.metrics.evaluate({ iteration: 0, delivery_slice_revision_id: null,
+                  scorers: measuredCampaign.scorers, subject: measuredSubject,
+                  selected_evidence_locators: [{ source: "task_artifact_resource", ref: measuredSubject }],
+                  visual_feedback_verification_artifact_locators: [] })
+              } finally { (importedScope.owner as { agentID: string }).agentID = "evolution-recommendation-owner" }
+              return frozen
+            },
+          } }
+          const capsuleInput = { prepared, taskID: importedTaskID, cwd: project.path,
+            abort: new AbortController().signal,
+            context: { sessionID: importedScope.sessionID, messageID: importedScope.messageID,
+              agent: "evolution-recommendation-owner", directory: project.path, worktree: project.path, configuration: {} },
+            args: { artifact: { artifact_type: "evolution-lab/comparison-recommendation", payload: {}, resource_set: null,
+              source_artifact_locators: [importedCampaignLocator, importedLocators.get("evolution-lab/candidate-revision")!] } },
+          }
+          let capsuleFailure: unknown
+          try { await executePackageToolInCapsule({ ...capsuleInput, host: concurrentHost }) }
+          catch (error) { capsuleFailure = { name: (error as Error).name, message: (error as Error).message } }
+          expect(capsuleFailure).toEqual({ name: "Error",
+            message: `Native metric snapshot changed for Task ${importedTaskID}; read a new snapshot` })
+          const currentNative = await host.metrics.recordedSnapshot()
+          const capsuleSuccess = await executePackageToolInCapsule({ ...capsuleInput, host })
+          const capsuleReceipt = JSON.parse(capsuleSuccess.output)
+          const capsuleRead = await host.engineArtifacts.read({ locator: capsuleReceipt.locator,
+            byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
+          expect(capsuleRead.chunk.complete).toBe(true)
+          const capsuleEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(capsuleRead.chunk.text!))
+          const capsuleComparison = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(capsuleEnvelope.payload)
+          expect(capsuleComparison.calculation_inputs!.native_measurements!.result_ids)
+            .toEqual(currentNative.observations.map((item) => item.metric_result_id).sort())
+          expect(capsuleComparison.required_unavailable_dimensions.filter((item) => item.startsWith("unpublished_measurement:")))
+            .toEqual(currentNative.observations.map((item) => `unpublished_measurement:${importedTaskID}:${item.metric_result_id}`).sort())
+          expect(capsuleComparison.recommendation).toBe("inconclusive")
+
         })
         let previousTaskID = importedTaskID
         let previousSessionID = importedSession.id
@@ -3246,7 +3298,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.17")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.18")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(

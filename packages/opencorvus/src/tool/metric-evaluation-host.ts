@@ -186,7 +186,7 @@ export function createMetricEvaluationHost(
       assertMetricResultIDs(scope.taskID, rows.map((row) => row.id))
       return { task_id: scope.taskID, observations }
     },
-    assertRecordedSnapshot(input) {
+    async assertRecordedSnapshot(input) {
       if (input.task_id !== scope.taskID) throw new Error("Native metric snapshot must belong to the current Task")
       assertMetricResultIDs(scope.taskID, input.result_ids)
     },

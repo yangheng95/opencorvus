@@ -311,7 +311,7 @@ export type MetricRecordedSnapshot = Readonly<{ task_id: string; observations: M
 export type MetricEvaluationHost = Readonly<{
   /** One stable set of this Task's native results, each verified by recorded. */
   recordedSnapshot(): Promise<MetricRecordedSnapshot>
-  assertRecordedSnapshot(input: { task_id: string; result_ids: string[] }): void
+  assertRecordedSnapshot(input: { task_id: string; result_ids: string[] }): Promise<void>
   evaluate(input: MetricEvaluationRequest): Promise<MetricEvaluationOutcome>
   /** Read an exact attempt backed by this Task's persisted metric result. */
   recorded(input: { evidence_ref: import("./task-artifact.js").TaskArtifactRef }): Promise<MetricRecordedObservation>

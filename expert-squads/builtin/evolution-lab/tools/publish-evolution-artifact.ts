@@ -938,7 +938,7 @@ export default tool({
         }
         await context.host.engineArtifacts.select({ locator, purpose: "Unpublished native measurement consumed by this comparison" })
       }
-      context.host.metrics.assertRecordedSnapshot(nativeMeasurements)
+      await context.host.metrics.assertRecordedSnapshot(nativeMeasurements)
       payload = deriveComparisonRecommendation({
         nativeMeasurements,
         references: createEvolutionArtifactReferences(envelopes),

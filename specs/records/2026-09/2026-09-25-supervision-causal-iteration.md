@@ -1436,3 +1436,30 @@
 
 - G55首次范围提交2e4d6364已通过真实pre-push并push：module1123/5698、零SCC、4clean imports/secret0。随后的角色归属复核发现新增Owner句子“recover ... publish the measurement”没有指明补发Evaluation的现有授权Evaluator，易造成共享Tool分支的角色误用。按原evolutionArtifactOwner与实际能力投影合同收尾：Owner报告给Scheduler，由Evaluator找回原receipt并发布，Owner继续如实呈现inconclusive；不新增角色、消息或Host调度。追加实际resolveWorkerCapability promptOverlay正向断言。因.16已push，前向发布源/嵌入.17，不覆盖已发布.16身份。
 - 角色收尾最终Lab源/嵌入2026.09.27.17，contentDigest da482268b19976251f235608703dfc70d9cdbe56f5940bcd731744ae5ea84638（g55-role-package-sync.log）。实际包projection1/44及Host9/199再次全绿（g55-role-package-final.log），替代上段projection1/43后本G55唯一测试总数104项715断言，重复运行不累加。第二次7文件范围提交仅角色归属/版本嵌入/对应验收/本记录，实际pre-push与push收据g55-role-push.log。当前完整交付仍非模型理解或业务收益证明。
+
+## G56：原生集合复核在实际Package Tool进程中的等待合同
+
+### Recall与实施前影响面
+
+- 从ba29d354已push/clean继续。按用户要求回到真实完整链的可达性，重读AGENTS/五段图/G54–55/02-data、campaign Skill/所有权、七角色/工作流、旧2026-08-17决策与现有e2e准备器、collector/Task创建/dispatch continuation/原生package运行路径，继续使用benchmark-debug-template，无委托、业务模型或旧实验运行。
+- 两个初步疑点没有给出新修复依据：dispatch的initial node只绑定一次，已有continuation复用原workflow occurrence与Session；Run.workspace_digest当前已经来自collector初始tree而不是简单照抄Campaign。没有把这两项重新标成bug，也不重新跑已完成checker。
+- 新源码事实：当前真实package Tool经prompt-profile-resolver→executePackageToolInCapsule→Node worker的hostProxy调用所有Host方法；hostCall总是返回Promise，父端逐条异步dispatch。native与隔离Capsule共用同一WORKER_SOURCE和wire协议。G55新增assertRecordedSnapshot却声明返回void、实现同步，publisher没有await。直接Host测试只能证明同步分支；真实跨进程调用可能忽略错误并继续publish，甚至以未处理Promise拒绝终结进程。全仓目前唯一生产调用是Lab Comparison，另有一个直接Host断言；recorded/evaluate等其它metrics方法均已异步，context.metadata为worker本地方法，不属于此缺口。
+- 本轮先在已存在真实Host/DB夹具末端使用实际已编译Lab Tool bundle与真实Node Capsule执行Comparison，测试driver仅在native snapshot读取后追加一次真实原生评分，保留原snapshot与新行。读取原调用/返回/持久Comparison身份，证明真实RPC成功或失败语义，不能把源码疑点当已发生。临时原版探针只留原始.tmp收据，不把错误发布行为保留成通过断言；不调用模型或重启旧实验。
+- 若反例成立，唯一修复是内部Host签名Promise<void>、实现async、publisher显式await；同一底层store同步ID核对与receipt immediate事务保持，桥接器无需替调用者猜依赖/等待所有消息，也不新增调度、ledger或gate。原recorded异步错误不再改形态。扩展正向真实Capsule checker：正常调用返回实际Comparison/native输入；快照后原生追加返回确切snapshot-changed错误；G55最终安装原子保护不重复认领为本次新修复。
+- 影响面：plugin内部MetricHost、Host实现、Lab publisher/版本嵌入、真实Host/Capsule测试与本记录/当前数据契约。无HTTP/DDL/公共SDK响应变化，无新消息角色、权限扩大或业务判断。修复后聚焦真实RPC与直接Host回归、类型/文档/包身份/必要拓扑，范围commit/pull/outgoing审查后push。当前业务验证准备仍未完成；这次若验证协议边界成立，只证明真实调用链可正确承接已有复核，不证明模型判断或进化收益。
+
+### G56原版真实Capsule反例
+
+- 原Task tsk_g00VWNrfin00pY5Xg4ER的真实Native snapshot含2条结果。test-driver在该读取完成后调用原metrics.evaluate，同一Trial/冻结scorer实际再写2条，随后真实Node worker继续发布路径。原始RPC事件依次assert_requested、assert_failed（精确Native metric snapshot changed）、publication_requested、publication_committed；实际持久Comparison为art_hQzjYBwU3ILZZILhhOPd/revision177。Node因未await的Promise拒绝退出1，调用方得到ExecutionCapsuleRuntimeUnavailableError及原stderr，而非正常Tool failure协议。
+- 原收据g56-capsule-snapshot-probe.json/log/patch完整保留。它使用真实已编译Lab bundle、Task process binding、Node worker/Host RPC、DB、metric executor和publisher；并发追加时点由明确driver包装原snapshot读取控制，不是模型自主行为或自然调度故障。capture后主动G56_CAPSULE_PROBE_CAPTURED退出不是产品自然错误，产品的Node退出1另有原stderr。原payload未被手工改写，没有执行promotion；G55安装原子保护仍独立有效。
+- 据此实施上列Promise<void>/async/await单一修复。共享RPC桥本身正确返回Promise，不新增自动推断依赖、等待所有调用或重试；扫描其Host合同只发现这个新void方法，metadata是worker本地回调。长期正向测试保留精确跨进程错误与随后正常Comparison/native输入，不保留错误发布为通过断言。
+
+### G56实施、验收与真实验证准备边界
+
+- 内部MetricHost.assertRecordedSnapshot改为Promise<void>，原Host实现async，唯一生产publisher调用显式await。底层assertMetricResultIDs和receipt immediate同步事实读取完全不变，没有把异步读文件放进SQLite事务，也没有改桥接器/Task/Mission/Session/调度状态机。
+- 正向checker使用实际已编译Lab bundle、Node worker、RPC和原Host；driver在真实snapshot读取之后用原executor追加评分。跨进程返回精确Error/Native metric snapshot changed，而非worker退出导致的RuntimeUnavailable。随后新的正常Capsule调用返回真实Comparison，读回native ID全集与原账本一致、全部尚未发布测量给精确required维度和inconclusive。原快照/原测量/旧推荐不改。driver只控制并发窗口，未把Host stub当成这条公开路径；另有原RPC值运输与native process binding合同回归。
+- 最终14项263断言（g56-capsule-focused.log整文件exit0）：Host9/204、真实包投影1/44、RPC值运输3/5、native package进程1/10。最后一项含原8个并发introspection，仍归同一Task process authority。根类型8、docs342ops25、拓扑122/135及diff通过；不重复G55统计或原安装测试冒充本轮新增收益。模型调用0，费用0代表没有外部业务Provider调用。
+- 横向只读检查：原生与隔离Capsule分支共用同一WORKER_SOURCE/hostProxy；本轮实际运行Windows native Node，未启动OCI镜像。39个package TypeScript文件中68个Host调用的直接表达式检查当前无裸Host调用（g56-package-host-call-audit.json）；这是机械补充，不能证明任意Promise别名的数据流。其余Host合同原本异步，metadata/Stats本地方法保持同步，无需改共享RPC协议或新增调用队列。
+- Lab源/嵌入2026.09.27.18/contentDigest d6df7e22af13e9fb01706f2da409a83cad061713367b63548537cf33e68cc35c，仅同步Lab（g56-package-sync.log），默认base漂移保留，未推广。9文件范围提交，完整pre-push与实际push收据g56-push.log；内部返回类型变化无HTTP/公共SDK响应/DDL改动。
+- 真实Campaign准备的新确定边界：旧随机e2e脚本默认openai/gpt-5.6-terra、controller inactivity1200000ms、judge120000ms，prompt固定repetitions=1/max_runs=2/max_cost=10，独立checker也硬认一次repetition。这些是旧协议验收输入，不是当前用户新的Luna/300秒真实无活动/不得自行费用预算授权；n=1在现有比较器不能形成支持promote的完整区间，也不能把non-executing inconclusive当真实进化收益。未启动该脚本、凭据或旧run，也不为凑结果修改旧预登记。
+- 下一G57继续把新的独立验证压成明确可证伪机制与真实可执行输入，先审现有Campaign预算字段/冻结范围和新用户约束（当前max_cost要求显式非负数，没有已证“0=无限”含义，不能偷用0或10），选定足以回答机制问题的固定次数、来源/包/模型/目录、失败停止与全费用记录，再准备新入口。不能直接重用旧随机抽样、伪造金额gate或替补失败样本。当前Capsule协议修复不等于模型会正确恢复测量，不等于原业务纠错/真实进化收益已达成；Opus仍12:45上海以后交回。
