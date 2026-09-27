@@ -1,0 +1,74 @@
+{
+ "source": "original launch/result, launcher exit, native audit and provider_usage_event",
+ "root": ".tmp/review-evidence-20260927/run-01",
+ "sourceCommit": "14574871a4c694c235232f6a5e35f21912db18b2",
+ "startedAt": "2026-09-27T10:09:42.904Z",
+ "finishedAt": "2026-09-27T10:53:57.989Z",
+ "outcome": "failed",
+ "error": "Error: Diagnostic Task ended failed",
+ "cleanup": {
+  "runtimeDisposed": true,
+  "credentialsRemoved": true
+ },
+ "launcher": {
+  "launcherStartedAt": "2026-09-27T10:09:42.621Z",
+  "exitCode": 1,
+  "finishedAt": "2026-09-27T10:53:58.172Z",
+  "log": ".tmp/review-evidence-run.log"
+ },
+ "preflight": {
+  "sessionID": "ses_hv1cFSDEjIsQ5yCp1V5s",
+  "credential": "usable",
+  "catalog": "projected",
+  "actualModel": "gpt-5.6-luna",
+  "streaming": true
+ },
+ "mission": {
+  "missionID": "0159b4acbae66907",
+  "sessionID": "ses_-zUTaGWDOzzD4FXdo4wu",
+  "created": true,
+  "productPillar": "work"
+ },
+ "missionSettlement": {
+  "status": "pending",
+  "missionID": "0159b4acbae66907",
+  "sessionID": "ses_-zUTaGWDOzzD4FXdo4wu",
+  "interruptible": false,
+  "finalReply": {
+   "status": "pending",
+   "responseMessageIDs": [],
+   "failedReplyIDs": []
+  },
+  "latestReply": {
+   "status": "pending",
+   "responseMessageIDs": [],
+   "failedReplyIDs": []
+  }
+ },
+ "audit": {
+  "requests": 209,
+  "statuses": {
+   "200": 208,
+   "none": 1
+  },
+  "model": "gpt-5.6-luna",
+  "streaming": true
+ },
+ "nativeUsage": {
+  "rows": 208,
+  "input_tokens": 1617440,
+  "output_tokens": 90928,
+  "reasoning_tokens": 11951,
+  "cache_read_tokens": 9021696,
+  "cache_write_tokens": 0,
+  "total_tokens": 10742015,
+  "cost_usd": 0,
+  "note": "local cost 0 is not an invoice or free-service claim"
+ },
+ "reportSnapshot": {
+  "snapshot": "dbc093ce-a53b-5458-aae5-64d5a221cec5",
+  "path": "resources/artifacts/data-analysis/report.md",
+  "bytes": 6862,
+  "sha256": "81957c03260d595ef653a4d55b389cd4114b03d6aef53d36c5c9791e0c379000"
+ }
+}

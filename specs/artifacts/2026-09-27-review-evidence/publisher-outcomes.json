@@ -1,0 +1,87 @@
+{
+ "source": "read-only backup; original tool_part_request/tool_part_outcome",
+ "byType": {
+  "data-analysis/analysis-charter": {
+   "failed": 3,
+   "completed": 1
+  },
+  "data-analysis/data-dossier": {
+   "failed": 1,
+   "completed": 1
+  },
+  "data-analysis/performance-analysis": {
+   "failed": 5,
+   "completed": 1
+  },
+  "data-analysis/segment-analysis": {
+   "failed": 9,
+   "completed": 1
+  },
+  "None": {
+   "failed": 1
+  },
+  "data-analysis/insight-brief": {
+   "failed": 3,
+   "completed": 1
+  },
+  "data-analysis/audit": {
+   "failed": 1,
+   "completed": 1
+  },
+  "data-analysis/report": {
+   "failed": 3
+  }
+ },
+ "nestedTopLevelFieldsInsideArtifact": {
+  "data-analysis/analysis-charter": 2,
+  "data-analysis/data-dossier": 1,
+  "data-analysis/performance-analysis": 4,
+  "data-analysis/segment-analysis": 6,
+  "data-analysis/insight-brief": 1,
+  "data-analysis/report": 3
+ },
+ "writerReportAttempts": [
+  {
+   "requestPart": "prt_g0VWPsxsb00uUUJMQhd3",
+   "topLevelKeys": [
+    "artifact"
+   ],
+   "artifactKeys": [
+    "artifact_type",
+    "payload",
+    "resource_set",
+    "source_artifact_locators"
+   ],
+   "outcome": "failed",
+   "error": "[\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \"resource_set\",\n      \"source_artifact_locators\"\n    ],\n    \"path\": [\n      \"artifact\"\n    ],\n    \"message\": \"Unrecognized keys: \\\"resource_set\\\", \\\"source_artifact_locators\\\"\"\n  },\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"resource_set\"\n    ],\n    \"message\": \"Invalid input: expected object, received undefined\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"source_artifact_locators\"\n    ],\n    \"message\": \"Invalid input: expected array, received undefined\"\n  }\n]"
+  },
+  {
+   "requestPart": "prt_g0VWPtA8M00bMkBw67or",
+   "topLevelKeys": [
+    "artifact"
+   ],
+   "artifactKeys": [
+    "artifact_type",
+    "payload",
+    "resource_set",
+    "source_artifact_locators"
+   ],
+   "outcome": "failed",
+   "error": "[\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \"resource_set\",\n      \"source_artifact_locators\"\n    ],\n    \"path\": [\n      \"artifact\"\n    ],\n    \"message\": \"Unrecognized keys: \\\"resource_set\\\", \\\"source_artifact_locators\\\"\"\n  },\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"resource_set\"\n    ],\n    \"message\": \"Invalid input: expected object, received undefined\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"source_artifact_locators\"\n    ],\n    \"message\": \"Invalid input: expected array, received undefined\"\n  }\n]"
+  },
+  {
+   "requestPart": "prt_g0VWPuDge00eyaygEN04",
+   "topLevelKeys": [
+    "artifact"
+   ],
+   "artifactKeys": [
+    "artifact_type",
+    "payload",
+    "resource_set",
+    "source_artifact_locators"
+   ],
+   "outcome": "failed",
+   "error": "[\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \"resource_set\",\n      \"source_artifact_locators\"\n    ],\n    \"path\": [\n      \"artifact\"\n    ],\n    \"message\": \"Unrecognized keys: \\\"resource_set\\\", \\\"source_artifact_locators\\\"\"\n  },\n  {\n    \"expected\": \"object\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"resource_set\"\n    ],\n    \"message\": \"Invalid input: expected object, received undefined\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"source_artifact_locators\"\n    ],\n    \"message\": \"Invalid input: expected array, received undefined\"\n  }\n]"
+  }
+ ]
+}

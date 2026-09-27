@@ -1791,3 +1791,12 @@ Recall：从8abcb06f已push/clean继续，只读当前data-analysis团队及原G
 - 仅改审查者提示与角色描述，manifest 2026.09.27.3；原唯一生成器渲染到临时文件后替换，核对payload中data-analysis块以外字节与HEAD完全相同、revisions只改该行（contentDigest 4509dfea…）；生成器同时报告的base 2026.09.14.15→2026.09.27.1已知无关漂移未夹带。源包packageDigest 6bce55825c4dccde60f62bd6016e65a15b223052d89b17627454d3d6efc838a9。
 - 聚焦检查`.tmp/g65-focused-tests.log`：data-analysis包4/48（实际嵌入安装身份=源包、scheduler与七worker promptOverlay逐字来自源、原DB/Host六前驱发布链）、diagnostic入口2/29（新登记真实prepare/恢复合同，旧G58登记精确身份错误）、发布权威3/14、typed schema 2/10、G58可达性1/14，共12项115断言、各文件exit0。根类型8/8（7缓存）、docs 342/25、内置专家团拓扑122/135、diff检查通过。这些只证明配置运输与接口相容，不证明模型会按新标准审查。
 - 独立无凭据`.tmp/review-evidence-20260927/prepare-01`真实安装.3/6bce5582…，完整初态2e4cade92def04ceac7df7071e34fd56bf5f28647764ae204d23a9f3f2d651f4，与feedback-01逐字相同的四文件；runtime结算、无凭据。唯一业务launch须在本提交push后按登记执行。
+
+### 唯一运行的真实结算与独立结果
+
+- 14574871 push后于2026-09-27 18:09:42上海唯一启动（claim PID65504，source 14574871），流式预检ses_hv1cFSDEjIsQ5yCp1V5s实际gpt-5.6-luna/usable/projected；Mission 0159b4acbae66907创建唯一Task tsk_g00VWPjil300cs26sAmF。18:53:57调度者fail_task，runner按登记的“Task failed即停”规则中止Mission正在进行的一回合（其对失败的反应未能观察）、runtime结算并删除复制auth/models（已核），launcher exit1。原件不改、不重跑；完整结果`specs/artifacts/2026-09-27-review-evidence/assessment.md`及receipt/review/publisher/报告副本。
+- **登记分类：漏判（2）。** 生产者不变时同类错误更强地复现：charter“August eventual closure is unknown”、dossier“Current extract cannot distinguish later closure, still open, unavailable closure”、performance与brief把“remaining后来是否关闭”列为unknown，已提交终稿写“A remaining request may later close, remain open, or lack a recorded closure”。终稿15行数值与operator参考一致。
+- **证据集改变生效，但审查单位仍是生产者的叙述。** brief的Core审查rev28只打开brief本身，证据指针全部指向metrics.json/request.md，不再引用charter——这部分行为确实变了；但它只登记了synthesizer最终叙述消息里的3条概括声明，“interpretation limits were reconciled”用metrics.json第27–39行source_limits文字背书，未逐项检验brief里的具体unknown；verdict clean，audit无required corrections。feedback-01的审查同样只有5条概括声明。结论：读对证据不足以纠错，被审的是生产者自述而不是交付内容；“找失败”的措辞没有改变审查单位。
+- **交付失败于类型化发布器的参数形状（系统性执行路径缺陷）。** 原tool记录：本次每个角色都先失败再成功，共26失败/7成功，其中17次把`resource_set`/`source_artifact_locators`放进`artifact`对象；feedback-01为25失败/8成功（11次嵌套），G60记录23次发布器失败。提供给模型的schema本身正确（三字段顶层必填，`artifact`是15.5KB七个严格变体的union），拒绝信息也精确；writer两次失败、调度者按原错误给出修复续行后第三次仍同样嵌套，调度者如实fail_task。G63前该角色可经通用发布器绕过，G63后包类型只能走本包发布器，此形状陷阱变为致命。
+- 用量：审计209次流式gpt-5.6-luna，208×HTTP200、1次无状态（停机时被中止的Mission回合，计费未知）；原生usage 208行全session/priced，input1617440/output90928/reasoning11951/cache_read9021696/total10742015，本地cost0非账单。
+- 判断：这次证伪了“只改证据集即可”的预测，并暴露两个比措辞更大的阻碍：审查单位（叙述而非交付内容）与发布器参数形状（每角色、每次运行、已致命）。后者是验证路径上的明确阻碍，按用户纠偏可修；二者都需新的独立登记后再观察，不重跑本根。

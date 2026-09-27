@@ -1,0 +1,109 @@
+{
+ "source": "read-only backup of the original run database; exact Engine Artifact payloads",
+ "taskID": "tsk_g00VWPjil300cs26sAmF",
+ "brief_rev23_unknowns": [
+  "Elapsed response and closure durations and completeness.",
+  "Historical opening inventory/backlog before July 2025.",
+  "Whether remaining requests later closed, remained open, or lacked recording.",
+  "Whether extraction-time status is final outcome.",
+  "Direct resolution, satisfaction, recurrence, staffing, capacity, cost, and causal drivers.",
+  "Meaning/completeness of Unspecified categories, including August borough omission.",
+  "Any causal explanation for volume or alignment differences."
+ ],
+ "audit_rev27_details": {
+  "audited_claims": [
+   "Target message claims successful typed insight-brief publication.",
+   "Target message claims totals, borough concentration, closure alignment, and limitations were reconciled.",
+   "Target message identifies absent August borough-Unspecified as a material unresolved issue and says it was not treated as zero."
+  ],
+  "numerical_checks": [
+   "July total = 26,659; August total = 32,756; absolute change = 6,097; percent change uses July denominator = 22.87%.",
+   "Borough totals and same-month aligned counts/remaining residuals match the 24 grouped rows.",
+   "July borough-Unspecified = 18; August borough-Unspecified has no supplied row."
+  ],
+  "source_checks": [
+   "request.md lines 3-10; metrics.json lines 27-39 and 40-208; exact predecessor artifact art_hCjXp8QLnpZQYOr3NajF."
+  ],
+  "required_corrections": [],
+  "publication_guidance": "Publish the brief's reconciled calculations with the explicit August borough-Unspecified unknown; do not convert the omission to zero or infer speed, backlog, resolution, staffing, causation, or quality."
+ },
+ "core_review_rev28": {
+  "observed_artifact_locators": [
+   {
+    "source": "engine_artifact",
+    "artifact_id": "art_hCjXp8QLnpZQYOr3NajF",
+    "catalog_revision": 23,
+    "expected_sha256": "0d600f89d213db895e5421073b431dd4d36282d5b5df8020fa4ea17a66ac765f"
+   }
+  ],
+  "source_artifact_locators": [
+   {
+    "source": "engine_artifact",
+    "artifact_id": "art_hCjXp8QLnpZQYOr3NajF",
+    "catalog_revision": 23,
+    "expected_sha256": "0d600f89d213db895e5421073b431dd4d36282d5b5df8020fa4ea17a66ac765f"
+   }
+  ],
+  "target_session_id": "ses_h2XMp7E5UrIWeQTIHJnx",
+  "target_agent": "data-analysis-insight-synthesizer",
+  "target_message_id": "msg_g0VWPrMD500oeruteBkW",
+  "target_message_content_hash": "d4a2b688bd579fabab171ff7c804a08fde245cbd7c49ea3a9da0fc83f61982c5",
+  "invoked_by_orchestrator_session_id": "ses_-zUTaGGR7zzEuS9U3dg9",
+  "fact_check_session_id": "ses_htOBz1N3gbeITu3Edu1l",
+  "review": {
+   "scope": {
+    "target_session_id": "ses_h2XMp7E5UrIWeQTIHJnx",
+    "target_agent": "data-analysis-insight-synthesizer",
+    "target_message_id": "msg_g0VWPrMD500oeruteBkW",
+    "target_message_content_hash": "d4a2b688bd579fabab171ff7c804a08fde245cbd7c49ea3a9da0fc83f61982c5",
+    "items_total": 3,
+    "items_inspected": 3
+   },
+   "verified": [
+    {
+     "claim": "The typed data-analysis/insight-brief Artifact was successfully published.",
+     "evidence": [
+      {
+       "kind": "memory",
+       "pointer": "engine_artifact:art_hCjXp8QLnpZQYOr3NajF@catalog_revision_23",
+       "excerpt": "Catalog read returned a current data-analysis/insight-brief Artifact with the target producer and complete payload."
+      }
+     ]
+    },
+    {
+     "claim": "July/August totals, borough concentration, closure alignment, and interpretation limits were reconciled.",
+     "evidence": [
+      {
+       "kind": "code",
+       "pointer": "metrics.json:40-208",
+       "excerpt": "The frozen 24 grouped rows reproduce July 26,659, August 32,756, borough totals, aligned counts, and residuals."
+      },
+      {
+       "kind": "code",
+       "pointer": "metrics.json:27-39",
+       "excerpt": "Field definitions and source limits restrict timing to calendar months and state that staffing, satisfaction, and direct problem-resolution fields are absent."
+      }
+     ]
+    },
+    {
+     "claim": "August borough-Unspecified is absent and was preserved as not supplied rather than treated as zero.",
+     "evidence": [
+      {
+       "kind": "code",
+       "pointer": "metrics.json:126-145",
+       "excerpt": "July has borough Unspecified with 18 requests; August rows begin with BRONX and contain no borough-Unspecified row."
+      },
+      {
+       "kind": "code",
+       "pointer": "metrics.json:30",
+       "excerpt": "Borough categories supplied in the source are retained; no rule supports imputing an omitted category as zero."
+      }
+     ]
+    }
+   ],
+   "corrected": [],
+   "unresolved": [],
+   "overall_verdict": "clean"
+  }
+ }
+}

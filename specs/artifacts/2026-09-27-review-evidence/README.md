@@ -1,6 +1,6 @@
 # One registered observation: reviewer evidence standard
 
-Status: registered, not yet launched. No business model has run for this registration unless a launch receipt exists in the registered root.
+Closed result: [assessment](assessment.md). The false later-closure unknown recurred; the changed review read only the brief and the input files but judged three grouped claims from the producer's narration and missed it; the writer then failed the typed publisher's nested argument shape three times and the Task failed. Do not rerun this root.
 
 ## Why this observation
 
