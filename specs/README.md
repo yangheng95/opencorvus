@@ -1,6 +1,8 @@
 # Specs Storage Index
 
 - [Four-arm AutomationBench retry](artifacts/2026-09-28-four-arm-benchmark-retry/README.md)
+- [Four-arm run 01 infrastructure result](artifacts/2026-09-28-four-arm-benchmark-retry/run-01-result.md)
+- [Four-arm run 02 registration](artifacts/2026-09-28-four-arm-benchmark-retry/run-02-registration.json)
 
 - [Supervision mechanism consolidation](records/2026-09/2026-09-27-supervision-mechanism-consolidation.md)
 

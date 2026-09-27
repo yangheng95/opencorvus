@@ -1,6 +1,7 @@
 # Artifact entry points
 
 - [Four-arm AutomationBench retry](2026-09-28-four-arm-benchmark-retry/README.md): one registered Luna TS/TE/MS/ME ten-case attempt on frozen `.10/.11` revisions, with new worlds, original scores and explicit early-stop/null accounting.
+- [Four-arm run 01 result](2026-09-28-four-arm-benchmark-retry/run-01-result.md) and [run 02 registration](2026-09-28-four-arm-benchmark-retry/run-02-registration.json): original zero-business-sample Inspect clock parsing failure and one fresh post-repair attempt.
 
 - [Reviewer evidence-standard observation](2026-09-27-review-evidence/README.md): one registered Mission/Task on the same frozen NYC 311 input after changing only the data-analysis reviewer's evidence set and question; not a reliability or evolution result.
 

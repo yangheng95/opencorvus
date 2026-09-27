@@ -1,0 +1,31 @@
+{
+  "id": "automationbench-four-arm-retry-20260928-run-02",
+  "prior_attempt": "automationbench-four-arm-retry-20260928-run-01",
+  "reason": "Run 01 reached no business Task or official score: the public Inspect task argument parsed an ISO clock as datetime and the adapter expected str",
+  "run_root": ".tmp/inspect-factorial-retry-20260928/run-02",
+  "source_revision_policy": "Committed and pushed HEAD containing the single Inspect task clock normalization; exact SHA frozen by controller before block one",
+  "case_manifest": "specs/artifacts/2026-09-24-automationbench-self-evolution/probe-manifest.json",
+  "schedule_source": "specs/records/2026-09/2026-09-24-luna-mission-task-factorial-trials.md",
+  "blocks": 10,
+  "arms_per_block": ["TS", "TE", "MS", "ME"],
+  "planned_episodes": 40,
+  "model": "openai/gpt-5.6-luna",
+  "outer_inspect_model": "none",
+  "static": {
+    "id": "builtin/automationbench",
+    "version": "2026.09.25.10",
+    "package_digest": "e3dcb35dfc3a4f9a96ee016abeb4980a58bd050b9e632617216a57867e330547"
+  },
+  "evolved": {
+    "id": "builtin/automationbench",
+    "version": "2026.09.25.11",
+    "package_digest": "5874a4db371fcf65848ad418edf2863fd980244716b6e0771a8365bbaf436330",
+    "author_artifact": "art_hBStGVUYpxjgs4rWoFbs",
+    "acceptance": "pending"
+  },
+  "inactivity_ms": 300000,
+  "poll_ms": 2000,
+  "stop": "Existing full-block unscored or paired/single-arm/three-block regression, infrastructure failure, or source drift; retain all null cells and original scores",
+  "attempts": 1,
+  "cost_scope": "All run-02 preflights, streamed requests, errors and cleanup tracked separately from run-01 eight real preflights; no new ceiling"
+}

@@ -13,6 +13,7 @@ from urllib.parse import urlsplit
 import httpx
 import pytest
 from inspect_ai import eval
+from inspect_ai._cli.util import parse_cli_config
 from inspect_ai.model import ChatMessageUser
 from inspect_ai.scorer import Target
 from inspect_ai.solver import TaskState
@@ -158,6 +159,20 @@ def test_undated_official_case_uses_one_resolved_clock_in_request_and_business_w
     assert later_response["totalSize"] == 0
     result = world.seal()
     assert rescore(original, world.snapshot(), len(world.events)) == result
+
+
+def test_inspect_cli_parsed_clock_reaches_the_actual_task_and_frozen_sample() -> None:
+    frozen = "2026-09-27T16:32:09.579446+00:00"
+    parsed = parse_cli_config([f"unspecified_clock={frozen}"], None)
+    assert isinstance(parsed["unspecified_clock"], datetime)
+
+    task = opencorvus_automationbench(
+        str(PROBE_MANIFEST), str(SQUAD), "D:/bench/cli-clock", "openai/gpt-5.6-luna",
+        **parsed,
+    )
+    sample = next(item for item in task.dataset if item.id == "sales.create_new_opportunity")
+    assert sample.metadata["automationbench_current_time"] == frozen
+    assert sample.input.splitlines()[1] == f"Simulated business current_time: {frozen}"
 
 
 def test_operator_clock_preserves_declared_official_clock_and_validates_timezone() -> None:

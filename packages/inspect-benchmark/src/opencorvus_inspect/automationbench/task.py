@@ -169,18 +169,22 @@ def opencorvus_automationbench(
     timeout_seconds: float = 300,
     poll_seconds: float = 2,
     entrypoint: EntryPoint = "task",
-    unspecified_clock: str | None = None,
+    unspecified_clock: str | datetime | None = None,
 ) -> Task:
     """Run a frozen public case set against a co-located, separately started OpenCorvus service."""
     if unspecified_clock is None:
         clock = datetime.now(timezone.utc)
-    else:
+    elif isinstance(unspecified_clock, datetime):
+        clock = unspecified_clock
+    elif isinstance(unspecified_clock, str):
         try:
             clock = datetime.fromisoformat(unspecified_clock.replace("Z", "+00:00"))
         except ValueError as error:
             raise ValueError("unspecified_clock must be an ISO 8601 timestamp") from error
-        if clock.tzinfo is None or clock.utcoffset() is None:
-            raise ValueError("unspecified_clock must include a timezone")
+    else:
+        raise ValueError("unspecified_clock must be an ISO 8601 timestamp")
+    if clock.tzinfo is None or clock.utcoffset() is None:
+        raise ValueError("unspecified_clock must include a timezone")
     cases = [freeze_missing_case_clock(case, clock) for case in load_cases(manifest)]
     if entrypoint not in {"task", "mission"}:
         raise ValueError("entrypoint must be task or mission")
