@@ -133,7 +133,7 @@ describe("Sales Strategy expert squad package", () => {
       namespace: "builtin",
       id: "sales-strategy",
       name: "Sales Strategy & Customer Research",
-      version: "2026.09.27.1",
+      version: "2026.09.27.2",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))
@@ -179,6 +179,10 @@ describe("Sales Strategy expert squad package", () => {
             agentID,
           })
           expect(worker.expertSquadID).toBe("sales-strategy")
+          // A stated unknown is a claim about the inputs; no role carries one forward unchecked.
+          expect(worker.promptOverlay).not.toContain("Preserve explicit unknowns")
+          expect(worker.promptOverlay).toContain("do not call unknown what the inputs show")
+          if (agentID.endsWith("fact-checker")) expect(worker.promptOverlay).toContain("never a copy of the target's")
           expect(worker.productionSkills.map((entry) => entry.ref)).toEqual(skillRefs)
           expect(worker.packageTools.map((entry) => entry.ref)).toEqual([publisherRef])
         }

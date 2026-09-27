@@ -1831,3 +1831,23 @@ Recall：从8abcb06f已push/clean继续，只读当前data-analysis团队及原G
 - 首次g66-focused-tests.log失败保留：原生完整发布链已通过，但Python默认写换行令lib源码CRLF与生成LF字节不一致，导致安装身份不同；修为原LF后真实源/安装身份相同。prepare test首轮把保留runRoot放到了workspace .tmp之外，改本地临时登记的保留路径满足既有入口，未放宽生产校验/更新历史登记。
 - G65原数据库始终mode=ro，仅backup副本由production reader打开；g66-original-reader-receipt.json记录40个原catalog exact reads及原snapshot报告资源，6862bytes/SHA81957c03260d595ef653a4d55b389cd4114b03d6aef53d36c5c9791e0c379000，与已归档report逐字一致。原Core review三项、两项分析以inputs支持而第一项出版以brief支持；原工具表确为26failed/6completed/17内嵌层级错误，归档byType已正确，仅文案算错总数，现更正。既有漏判/Task failed结论、原件与分数不改。
 - 本次仅确认接口合同和本地真实运输，不承诺新模型使用该形状的成功率；整体独立业务纠错及进化收益仍未达成。将这项必要接口修复收敛后交回原主管；不能以等待额度为由继续扩底座或立即抽同输入新样本。
+
+## G67（Opus 22:48恢复）：本失败链的核心机制——“未知”是只能累积、不能被否定的单向通道
+
+- Recall：从f4309419（=origin/main、clean）恢复；六类总方案已撤回，不作依据。只沿NYC 311真实失败链（feedback-01与G65 run-01）判断，旧运行只读、不重跑、无新Provider样本。
+- **判断（设计矛盾，可直接指向源码与原件）：** 在data-analysis团队合同里，“某事未知/不支持”这一类陈述没有任何角色被要求、也没有任何环节能够否定，只能沿阶段累积到交付。
+  1. 六个生产者提示逐字要求“Preserve explicit unknowns instead of inventing inputs”：前驱声明的未知是应保留的对象（hr-operations、sales-strategy同一模板各7处）。
+  2. 所有角色唯一的认识论禁令是“Never invent missing values…”——只防假阳性（编造），不防假阴性（把输入已有的事实说成未知/不支持）。
+  3. 共享stage codec给全部七种产物（包括`audit`与`report`）都设`unknowns`槽；审查者的判断对象是“claim”，未知不被当作可被推翻的主张。
+- **原件证据（只读backup，逐字）：** feedback-01：charter rev5“…complete later closure view”→segment rev18“No opening backlog or later closure”→**audit rev34自己的unknowns**“…later closure completeness… remain unsupported by the source”→report rev39/rev47 unknowns同句。run-01：charter rev6“August eventual closure is unknown”→dossier rev10→performance rev15→brief rev23“Whether remaining requests later closed, remained open, or lacked recording”→**audit rev27自己的unknowns**“Whether residual requests later closed, remained open, or lacked closure recording”→报告“A remaining request may later close, remain open, or lack a recorded closure”。输入24/24组都有`closed_month`。审查者没有判它、而是把它当作自己的未知转发。
+- **对照（同一机制的反面）：** 真实被纠正的两个“缺失”错误——G60 steward称charter不存在、feedback-01 fact-checker称brief缺失——都是前驱存在性，类型化发布器机械要求确切前驱，存在性因此被迫复核；业务内容的“未知”没有任何对应检查。
+- **区分三层：** 设计矛盾成立（上述1–3）。模型不遵守已有正确职责也发生过：G65 `.3`审查提示已写“limits or unknowns that the supplied fields actually resolve”“an unknown stands only where the input files lack the value”，审查者仍照抄；这说明只改审查侧不够，棘轮在生产者规则与audit自身的unknowns槽。被测业务断言的含义：说“同月关闭这个指标本身不显示后续关闭”是正确的指标限制；说“这份extract不能显示/不知道remaining后来是否关闭”是与字段矛盾的错误——两次运行的错误均属后者。
+- **不解释的：** Cycle3、H-T/H-B的错误是正值/关系判断错误（如4×5000），不是未知陈述；G60终稿“没有audit”也是缺失陈述，但其接受者是调度者，本判断不外推为所有历史失败的单一原因。
+- **一致修复（单点、同一机制）：** 三个同模板包中那句“Preserve explicit unknowns instead of inventing inputs”一律替换为对称规则：不编造输入，也不把输入已显示的内容称为未知；从前驱继承的未知或限制是关于输入的主张，只在输入确实缺该值时保留。三个审查者（fact-checker）另加一句：目标陈述的每条未知/限制都是待核对的主张；audit自己的unknowns只写审查者自己无法核对的事项，不得照抄目标的未知。codec、Host、调度、图、角色、ABI不变；不加新gate/ledger/schema。
+- **验证边界：** 本地只能证明新文本被实际安装与投影、旧句不再存在；是否让Luna在同一输入上不再产生或能否定该错误，只能由另行完整登记的一次完整团队观察回答。本轮不启动新样本。
+
+### G67实施与本地验证
+
+- 21份提示（三包各7份：6个生产者+writer，以及fact-checker）中旧句全部替换，全仓`Preserve explicit unknowns`已不存在；三个fact-checker另加“目标的每条未知/限制是待核对主张，audit自己的unknowns只写无法核对的事项，不照抄目标”。data-analysis `2026.09.27.5`（contentDigest af4db610…，packageDigest 196e4f8d7a55a01783f00b4b46074dbaf17b2783b3856b43000c710988dfeb68）、hr-operations `2026.09.27.2`（d470d2fd…/20e40e4186b346751d7c8cbd14a9456a503272cf2ecb17e4e5e12c2ce7994ee7）、sales-strategy `2026.09.27.2`（7cb392c8…/6d02e25969c350582ed0a3f00069ccc3d2c8a90b65a1bb0d04afc297858554b8）。原唯一生成器渲染到临时文件后替换；核对payload中这三个块以外字节与HEAD相同、revisions只改这三行；生成器同时报告的base已知漂移未夹带。源文件无CRLF。codec/Host/调度/图/ABI/其他包未改。
+- `.tmp/g67-focused-tests.log`：data-analysis 4/73（实际嵌入安装→scheduler与七worker promptOverlay逐字来自源包，且每个角色含对称规则、不含旧句，审查者含不得照抄；原DB/Host七阶段typed链与G66单一artifact参数合同）、hr-operations 4/51、sales-strategy 4/51（真实安装投影同样三条断言）、provider schema 2/10、diagnostic入口 2/29（真实`.5` prepare/恢复合同）、发布权威 3/14，共19项228断言、各文件exit0。根类型8/8、docs 342/25、内置拓扑122/135、diff检查通过。
+- 这些只证明新规则被实际安装和投影、旧规则不再下发；不证明Luna会据此不产生或能否定错误未知，也不是可靠业务纠错或进化收益。

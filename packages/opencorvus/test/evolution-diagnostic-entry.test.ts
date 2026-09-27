@@ -42,7 +42,7 @@ test("registered diagnostic prepares the actual package and preserves one initia
   const script = path.resolve(import.meta.dir, "../script/evolution-diagnostic.ts")
   // This local prepare contract is independent of any business observation registration.
   const registration = path.join(parent, "prepare-registration.json")
-  const packageDigest = "6dbc6fcbb2d8eaa7f6991cac4b8711a7e3127c5d0eb3a35e5325a43c8e4a2eb9"
+  const packageDigest = "196e4f8d7a55a01783f00b4b46074dbaf17b2783b3856b43000c710988dfeb68"
   await writeFile(registration, JSON.stringify({ id: "local-prepare-contract", runRoot: path.join(".tmp", "local-prepare-contract", path.basename(parent)),
     inputRoot: "specs/artifacts/2026-09-27-team-feedback/input", packageDigest,
     model: "openai/gpt-5.6-luna", inactivityMs: 300_000, pollIntervalMs: 2_000 }))
@@ -58,7 +58,7 @@ test("registered diagnostic prepares the actual package and preserves one initia
     expect(receipt).toMatchObject({ mode: "prepare", outcome: "prepared", model: "openai/gpt-5.6-luna",
       requestCeiling: null, inactivityMs: 300_000, pollIntervalMs: 2_000, businessVerdict: "not_evaluated",
       cleanup: { runtimeDisposed: true, credentialsRemoved: true },
-      target: { id: "data-analysis", version: "2026.09.27.4", packageDigest },
+      target: { id: "data-analysis", version: "2026.09.27.5", packageDigest },
     })
     expect(receipt.registration).toEqual(JSON.parse(await readFile(registration, "utf8")))
     for (const name of ["request.md", "metrics.json"]) {

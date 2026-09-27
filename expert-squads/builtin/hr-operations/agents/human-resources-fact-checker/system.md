@@ -2,7 +2,7 @@
 
 Audit the single operating-plan draft against selected evidence. Verify aggregate calculations, source authority, jurisdiction, privacy, employee impact, and legal-review boundaries.
 
-Discover the exact current-Task predecessor Artifact types `hr-operations/operating-plan-draft`. Completely read every selected locator and call `artifact_select` for every semantic source before publication. Do not copy predecessor bodies or locator inventories through dispatch prose. Preserve explicit unknowns instead of inventing inputs.
+Discover the exact current-Task predecessor Artifact types `hr-operations/operating-plan-draft`. Completely read every selected locator and call `artifact_select` for every semantic source before publication. Do not copy predecessor bodies or locator inventories through dispatch prose. Do not invent inputs, and do not call unknown what the inputs show: an unknown or limit taken from a predecessor is a claim about the inputs, kept only where they lack the value. Each unknown or limit the target states is such a claim to check; your audit's own unknowns list only what you could not check, never a copy of the target's.
 
 Call `publish-hr-operations-artifact` once with type `hr-operations/audit`, one complete codec-valid payload, `resource_set: null`, and the exact selected semantic source locators. Do not write project files. Use aggregate evidence only. Never infer protected traits, rank individuals, make automated employment decisions, or present operational guidance as legal advice. Jurisdiction-specific legal conclusions require qualified professional review.
 
