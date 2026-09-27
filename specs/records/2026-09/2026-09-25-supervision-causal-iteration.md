@@ -1527,3 +1527,11 @@
 - 原失败保留：entry初版多写一个右括号（g59-entry-audit-initial.log）；继承test process root未对齐自有home导致隔离错误（g59-entry-second.log），现显式自有process root；prepare没有models却试图验证Luna配置给ProviderModelNotFound（g59-entry-third.log），不是凭据错误，现prepare不启用Provider配置而显式not_checked，run仍要求真正paired catalog和原校验，没有伪造模型条目。第一次单文件tsconfig漏载原*.md声明且inputFiles空数组推断never；加入原sql.d.ts等声明及准确数组类型后实际检查通过，没有suppress错误。
 - 单独只读核对当前已授权源路径C:/Users/hengu/AppData/Local/opencorvus/data/auth.json及相邻models.json：文件存在，OpenAI记录类型oauth、到期1791088087790晚于当前时间，catalog中存在gpt-5.6-luna。未输出credential值，未刷新/复制；这只是期限和目录事实，不代表网络凭据已可用。真正stream preflight仍待提交后的唯一run证明。
 - 下一步在本范围commit/pull/upstream..HEAD完整审查/实际push后，若无新的实现阻碍，用已登记唯一run调用该入口；运行中不改源码/spec、不另开业务样本，每五分钟必要原收据快照。12:45上海仍优先交回准确Opus；若诊断届时还在运行，向原主管明确运行源码冻结，先监督同一run到自然结算，不并行改其运行依赖。真实业务结果以新launch/preflight/Mission/Task原件为准，不用此次本地13项代替。
+
+### G59唯一启动的真实初始化失败与修正方案
+
+- 已push源594670201bc477ef107eeee7f3acf6327ee6c9f5后，于2026-09-27 11:39:24上海实际调用登记入口，claim PID25072，11:39:29 exit1。原根.tmp/evolution-readiness-g58/diagnostic-01保持：claim存在，launch/preflight/Mission均未产生，audit requests=0、UsageLedger原表0行；runtimeDisposed/credentialsRemoved均true，原result/log保留。没有实际业务样本或模型费用，不能称诊断已执行，也不连续重启或换目录。
+- 原先只读源catalog含Luna不等于裁剪后catalog可用。本次真正上游错误是provider phase=catalog.read：models.json missing required provider kilo；后面才是openai不在模型列表及ProviderModelNotFound。入口为了少复制内容把models裁成openai，却破坏ModelsDev完整catalog要求（kilo/opencorvus是必需元数据）。这是本轮runner根因，不是源凭据或Luna额度错误，不改核心模型目录验证、不补造provider条目。
+- 单一修复方案：把授权文件读取/成对stage抽到此入口的一个helper；auth仅原OpenAI credential record，models完整原字节运输，先用原ModelsDev.validateExplicitCatalog验证整份源与指定模型。返回只有expiry/provider/model元信息。caller仍在该stage前标记可能部分复制以保证收尾，scope/不刷新/唯一目录原规则不变。一个真实本地file stage测试从原完整catalog读取、写回逐字一致、再用原catalog parser检查指定模型及必需providers；无需凭据真实请求。更新原README中过强“仅OpenAI记录”措辞，保留原失败claim；当前不自动重试该诊断。
+- 修复已经落到唯一stageDiagnosticProvider；本地真实文件运输及原ModelsDev解析检查通过，原完整catalog字节、指定模型、kilo/opencorvus元数据逐值保留，auth只运输OpenAI结构。此用例用明确本地测试OAuth值及测试目录原catalog，不能当真实账号或Luna请求证明。最终14项52断言全绿（g59-catalog-tests.log，entry2/11、audit12/41）；显式脚本类型g59-catalog-types.log、根类型8/8（7cached，g59-catalog-root-types.log）及docs342ops25（g59-catalog-docs.log）通过。无公共API/SDK/DDL/包嵌入改动。
+- 原diagnostic-01初始化失败根及零请求原件完整保留，没有重新运行或更换样本。运行器仍要求唯一新根，当前业务诊断未开始；要继续必须先明确同一已登记初始化的恢复合同并保持原失败收据和唯一业务launch，不能删除claim、覆盖result、换目录或将本地prepare当真实模型验收。整体可靠纠错与进化收益仍未完成。

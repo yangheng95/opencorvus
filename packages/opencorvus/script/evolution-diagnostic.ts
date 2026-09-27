@@ -5,7 +5,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
 import { createHash } from "node:crypto"
-import { CredentialRedactor, assertCopiedOAuthAccess, requireProcessProviderAudit } from "./real-provider-audit"
+import { CredentialRedactor, requireProcessProviderAudit } from "./real-provider-audit"
 import nativeProviderAudit from "./native-provider-audit-plugin"
 import { latestAuditSnapshotFiles } from "./audit-snapshot"
 import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
@@ -107,20 +107,11 @@ try {
   await fs.writeFile(path.join(home, "config/opencorvus.jsonc"), JSON.stringify(config))
   if (values.run) {
     const source = path.resolve(values["auth-source"]!)
-    assert.equal(path.basename(source), "auth.json")
-    const authority = JSON.parse(await fs.readFile(source, "utf8"))
-    redactor.collect(authority)
-    const openai = authority.openai?.info
-    assert.equal(openai?.type, "oauth", "The registered isolated authority uses existing OpenAI OAuth access")
-    assertCopiedOAuthAccess(openai.expires)
-    const modelsSource = path.join(path.dirname(source), "models.json")
-    const catalog = JSON.parse(await fs.readFile(modelsSource, "utf8"))
-    assert(catalog.openai?.models?.[modelID], "Exact Luna model must exist in the paired source catalog")
-    process.env.OPENCORVUS_NATIVE_AUDIT_COPIED_OAUTH_EXPIRES = String(openai.expires)
     credentialCopiesStarted = true
-    await fs.writeFile(path.join(home, "data/auth.json"), JSON.stringify({ openai: authority.openai }), { mode: 0o600 })
-    await fs.writeFile(path.join(home, "data/models.json"), JSON.stringify({ openai: catalog.openai }))
-    result.providerAuthority = { kind: "isolated-paired-copy", expiresAt: openai.expires, refresh: "forbidden" }
+    const { stageDiagnosticProvider } = await import("./evolution-diagnostic-provider")
+    const access = await stageDiagnosticProvider({ authSource: source, dataDirectory: path.join(home, "data"), modelID, redactor })
+    process.env.OPENCORVUS_NATIVE_AUDIT_COPIED_OAUTH_EXPIRES = String(access.copiedOAuthExpiresAt)
+    result.providerAuthority = { kind: "isolated-paired-copy", expiresAt: access.copiedOAuthExpiresAt, refresh: "forbidden" }
     // Establish the copied-access guard before any credential-aware runtime imports.
     await nativeProviderAudit({ serverUrl: new URL("http://127.0.0.1:0") })
   }

@@ -1,7 +1,38 @@
 import { expect, test } from "bun:test"
-import { readFile, rm } from "node:fs/promises"
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { Global } from "../src/global"
+import { ModelsDev } from "../src/provider/models"
+import { stageDiagnosticProvider } from "../script/evolution-diagnostic-provider"
+import { CredentialRedactor } from "../script/real-provider-audit"
+
+test("diagnostic paired staging preserves the complete runtime catalog and scoped authority", async () => {
+  const root = await Global.createTemporaryDirectory("evolution-diagnostic-provider-")
+  const source = path.join(root, "source")
+  const destination = path.join(root, "destination")
+  try {
+    await mkdir(source)
+    await mkdir(destination)
+    const catalog = await ModelsDev.get()
+    const modelID = Object.keys(catalog.openai.models).sort()[0]!
+    const bytes = JSON.stringify(catalog, null, 2) + "\n"
+    const expires = Date.now() + 3_600_000
+    const authority = { openai: { info: { type: "oauth", access: "local-test-access", refresh: "local-test-refresh", expires } },
+      unrelated: { info: { type: "api", key: "local-test-unrelated-key" } } }
+    await writeFile(path.join(source, "auth.json"), JSON.stringify(authority))
+    await writeFile(path.join(source, "models.json"), bytes)
+    const access = await stageDiagnosticProvider({ authSource: path.join(source, "auth.json"), dataDirectory: destination,
+      modelID, redactor: new CredentialRedactor() })
+    expect(access).toEqual({ providerID: "openai", modelID, copiedOAuthExpiresAt: expires })
+    expect(JSON.parse(await readFile(path.join(destination, "auth.json"), "utf8"))).toEqual({ openai: authority.openai })
+    const staged = await readFile(path.join(destination, "models.json"), "utf8")
+    expect(staged).toEqual(bytes)
+    const validated = ModelsDev.validateExplicitCatalog(JSON.parse(staged))
+    expect(validated.openai.models[modelID]).toEqual(catalog.openai.models[modelID])
+    expect(validated.kilo).toEqual(catalog.kilo)
+    expect(validated.opencorvus).toEqual(catalog.opencorvus)
+  } finally { await rm(root, { recursive: true, force: true }) }
+})
 
 test("diagnostic preparation executes real isolated startup and settles its owned runtime", async () => {
   const parent = await Global.createTemporaryDirectory("evolution-diagnostic-entry-")
