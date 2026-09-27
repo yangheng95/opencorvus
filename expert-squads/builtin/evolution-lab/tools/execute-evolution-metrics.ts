@@ -56,7 +56,9 @@ export default tool({
     const receiptJSON = JSON.stringify(receipt)
     await writeFile(path.join(stage.treeDirectories["metric-evaluation"]!, "receipt.json"), receiptJSON)
     const publication = await context.host.taskArtifacts.publish(stage, {
-      snapshot_kind: "engine_resource",
+      // A completed measurement must remain discoverable before its separate
+      // Evaluation publication, including when the producing stage resumes.
+      snapshot_kind: "catalog",
       files: [{ tree: "metric-evaluation", path: "receipt.json", media_type: "application/json" }],
     })
     const resource = publication.artifacts[0]!

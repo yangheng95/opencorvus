@@ -312,6 +312,9 @@ Host精确读取canonical bundle，shell按其terminal Git commit/tree在本次�
 真实定义变化仍按原冻结契约拒绝。
 
 Evaluation receipt JSON是测量结果的运输形式，其不可变身份不单独证明测量来源。
+Lab评分Tool完成全部scorer后以原catalog TaskArtifact发布该receipt，使同Task可在Evaluation
+发布前公开发现并读取，恢复时可继续发布原测量。历史receipt种类保持原样；不放开通用
+engine_resource目录，也不据可见性宣称所有原生评分已进入Comparison。
 `metrics.recorded`按当前评分owner Task和确切attempt资源，在原`engine_metric_result`读取
 已记录结果，核对原MetricSpec与attempt的Task、iteration、status/value，返回原Trial subject及
 measured/unavailable事实及原metric_result_id。未落账的独立JSON或另一Task的结果不能作为当前Task的新测量。

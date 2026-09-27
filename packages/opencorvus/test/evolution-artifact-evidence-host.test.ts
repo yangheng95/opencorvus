@@ -10,6 +10,8 @@ import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { UsageLedger } from "../src/usage"
 import { Session } from "../src/session"
+import { MessageStore } from "../src/session/message-store"
+import { readResultsForIteration } from "../src/metrics/store"
 import { Database, eq } from "../src/storage/db"
 import { EngineArtifactTable, EngineTaskTable } from "../src/engine/engine.sql"
 import { insertEngineInteractionRequest } from "../src/engine/interaction-request"
@@ -737,6 +739,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     ])
   })
 
+  // This real Git/Host chain includes independent native executions, complete
+  // paginated evidence and three imports; it owns a longer test window.
   test("publishes and consumes exact typed predecessor evidence through the package ABI", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -1064,10 +1068,14 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           // and after its run (2), and the Trial's terminal commit (1).
           await writeFile(path.join(trialWorktree.directory, "g43-subject.txt"), "2")
           await writeFile(path.join(project.path, "g43-subject.txt"), "0")
+          // Declared before freezing: a deterministic external scorer input,
+          // varied later by this driver to expose distinct native observations.
+          const metricObservationControl = path.join(project.path, "metric-observation-control.txt")
+          await writeFile(metricObservationControl, "1")
           const subjectScorerConfig = {
             workspace_digest: await executionCapsuleSourceTreeDigest(trialWorktree.directory),
             executable: process.execPath,
-            args: ["-e", "process.stdout.write(require('node:fs').readFileSync('g43-subject.txt', 'utf8'))"],
+            args: ["-e", `const fs=require('node:fs'); const subject=fs.readFileSync('g43-subject.txt','utf8'); process.stdout.write(subject==='1'?fs.readFileSync(${JSON.stringify(metricObservationControl)},'utf8'):subject)`],
             parse: "stdout_number" as const,
             inactivity_timeout_ms: 30_000,
           }
@@ -2577,6 +2585,83 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           expect(correctedAliasComparison.source_artifact_locators).toEqual(expect.arrayContaining([
             evaluationReceipt.locator, evaluationAlias.locator, aliasReview.locator, correctedAliasReview.locator,
           ]))
+          // One more complete native invocation of the same frozen scorer and
+          // immutable Trial. Its original request remains the exact context
+          // even before any Evaluation transports these measured results.
+          ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
+          await writeFile(metricObservationControl, "0")
+          const thirdCall = { ...scope, messageID: Identifier.ascending("message"),
+            toolCallID: "call-g53-metric-third", toolPartID: Identifier.ascending("part"),
+            owner: { ...scope.owner } }
+          const thirdStarted = Date.now()
+          await Session.updateMessage({ id: thirdCall.messageID, sessionID: thirdCall.sessionID,
+            role: "assistant", author: "evolution-evaluator", time: { created: thirdStarted }, parentID: userMessage.id,
+            modelID: "test", providerID: "test", agent: "evolution-evaluator",
+            path: { cwd: project.path, root: project.path }, cost: 0,
+            tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } }, finish: "stop" })
+          await Session.updatePart({ id: Identifier.ascending("part"), sessionID: thirdCall.sessionID,
+            messageID: thirdCall.messageID, type: "step-start" })
+          await Session.updatePart({ id: thirdCall.toolPartID, sessionID: thirdCall.sessionID,
+            messageID: thirdCall.messageID, type: "tool", tool: "execute-evolution-metrics", callID: thirdCall.toolCallID,
+            state: { status: "running", input: secondInput, time: { start: thirdStarted } } })
+          const thirdMeasurement = await withTaskScopedPluginToolHost(thirdCall, async (thirdHost) =>
+            JSON.parse(await executeEvolutionMetricsTool.execute(secondInput, { host: thirdHost } as never)))
+          await Session.updatePart({ id: thirdCall.toolPartID, sessionID: thirdCall.sessionID,
+            messageID: thirdCall.messageID, type: "tool", tool: "execute-evolution-metrics", callID: thirdCall.toolCallID,
+            state: { status: "completed", input: secondInput, title: "Third recorded local metric invocation",
+              output: JSON.stringify(thirdMeasurement), metadata: {}, time: { start: thirdStarted, end: Date.now() } } })
+          await writeFile(metricObservationControl, "1")
+          const thirdRef = TaskArtifactRefSchema.parse(thirdMeasurement.receipt.scorers[0].evidence[0].ref)
+          const thirdRecorded = await host.metrics.recorded({ evidence_ref: thirdRef })
+          const thirdAttempt = MetricExecutionEvidence.parse(JSON.parse(new TextDecoder().decode(await host.taskArtifacts.read(thirdRef))))
+          expect(thirdRecorded).toMatchObject({ task_id: taskID, trial_task_id: trialTaskID, iteration: 0,
+            producer: { session_id: thirdCall.sessionID, message_id: thirdCall.messageID, tool_call_id: thirdCall.toolCallID },
+            outcome: { status: "measured", value: 0 } })
+          expect(thirdAttempt).toMatchObject({ status: "measured", raw_value: 0, subject: subjectAttempt.subject })
+          expect(readResultsForIteration(taskID, 0).find((row) => row.id === thirdRecorded.metric_result_id))
+            .toMatchObject({ raw_value: 0, evidence_ref: thirdRef, evidence_fresh: true })
+          const savedInvocation = await MessageStore.get({ sessionID: thirdCall.sessionID, messageID: thirdCall.messageID })
+          const savedCalls = savedInvocation.parts.filter((part) => part.type === "tool" && part.callID === thirdCall.toolCallID)
+          expect(savedCalls).toMatchObject([{ type: "tool", tool: "execute-evolution-metrics",
+            state: { status: "completed", input: secondInput } }])
+          const visibleResources: Array<{ locator: ArtifactReadLocator; producer: unknown }> = []
+          let resourceCursor: string | undefined
+          do {
+            const page = await host.engineArtifacts.search({ sources: ["task_artifact"], limit: 100,
+              producer_session_ids: [thirdCall.sessionID], ...(resourceCursor ? { cursor: resourceCursor } : {}) })
+            expect({ complete: page.catalog_complete, errors: page.provider_errors }).toEqual({ complete: true, errors: [] })
+            visibleResources.push(...page.entries)
+            resourceCursor = page.next_cursor ?? undefined
+          } while (resourceCursor)
+          expect(visibleResources.find(({ locator }) => locator.source === "task_artifact_resource" &&
+            JSON.stringify(locator.ref) === JSON.stringify(thirdRef)))
+            .toMatchObject({ producer: thirdRecorded.producer })
+          const thirdReceiptRef = TaskArtifactRefSchema.parse(thirdMeasurement.resource)
+          const recoveredReceipt = visibleResources.find(({ locator }) => locator.source === "task_artifact_resource" &&
+            JSON.stringify(locator.ref) === JSON.stringify(thirdReceiptRef))
+          expect(recoveredReceipt).toMatchObject({ producer: thirdRecorded.producer })
+          if (recoveredReceipt?.locator.source !== "task_artifact_resource") throw new Error("Expected the original catalog receipt")
+          const recoveredRead = await host.engineArtifacts.read({ locator: recoveredReceipt.locator,
+            byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
+          expect({ complete: recoveredRead.chunk.complete, receipt: JSON.parse(recoveredRead.chunk.text!) })
+            .toEqual({ complete: true, receipt: thirdMeasurement.receipt })
+          ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
+          const thirdEvaluation = JSON.parse(await executePublishEvolutionArtifact({
+            artifact_type: "evolution-lab/evaluation-result", payload: {},
+            resource_set: { snapshot: recoveredReceipt.locator.ref.snapshot, tree: recoveredReceipt.locator.ref.tree },
+            source_artifact_locators: [campaignReceipt.locator, runReceipt.locator,
+              { source: "task_artifact_resource", ref: thirdRef }],
+          }, { host } as never)) as { locator: EngineArtifactLocator }
+          ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
+          await executePublishEvolutionArtifact({ artifact_type: "evolution-lab/integrity-review", resource_set: null,
+            payload: { ...reviewPayload, evaluation_result_locator: thirdEvaluation.locator },
+            source_artifact_locators: [thirdEvaluation.locator] }, { host } as never)
+          const thirdComparison = await publishComparison()
+          const thirdComparisonPayload = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(thirdComparison.payload)
+          expect({ recommendation: thirdComparisonPayload.recommendation,
+            conflict: thirdComparisonPayload.required_unavailable_dimensions.filter((item) => item.startsWith("scorer_conflict:")),
+            inputs: evolutionComparisonInputs(thirdComparison).evaluations.some((item) => item.artifact_id === thirdEvaluation.locator.artifact_id),
+          }).toEqual({ recommendation: "inconclusive", conflict: ["scorer_conflict:correctness:case-1:baseline:0"], inputs: true })
           // A distinct local Trial returns nonnumeric output under the same
           // frozen scorer. Its unavailable result travels through the package
           // receipt and publisher, rather than being read as a measured null.
@@ -3100,7 +3185,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
 
       },
     })
-  })
+  }, 120_000)
 
   test("loads the current Evolution Lab comparison from the embedded production package", async () => {
     const source = path.resolve(import.meta.dir, "../../../expert-squads/builtin/evolution-lab")
@@ -3111,7 +3196,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.14")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.15")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(

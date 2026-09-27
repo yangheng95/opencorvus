@@ -1353,14 +1353,41 @@
 
 ### G52最终实现与交付验收（Codex收敛）
 
-- G51两条原反例已在当前生产路径转正。公开Host只传第一份测量时，仍完整发现该Campaign/Candidate已发布的另一独立测量及其Review；真实第二次shell评分产生不同值时，Comparison发布明确scorer_conflict/inconclusive并保留全部calculation_inputs。当前Task目录按一个固定快照分页；宽provenance没有删减，真正运输别名仍按G50归并，native结果不同不会合并成同一发生。
+- G51两条原反例已在当前生产路径转正。公开Host只传第一份测量时，仍完整发现该Campaign/Candidate已发布的另一独立测量及其Review；同槽不同值的scorer_conflict/inconclusive在G52由纯比较检查验证，真实Host不同值路径由G53补验（此前把计划中的该项写成已执行，G53复核已纠正）。当前Task目录按一个固定快照分页；宽provenance没有删减，真正运输别名仍按G50归并，native结果不同不会合并成同一发生。
 - 不同观察现在能够显式报告一致、冲突、不可用和缺审查，而非通过抛错使任何第二记录都无法进入Comparison。统计每slot计一次；一致值和typed unavailable的处理是本次明确落盘的domain派生合同，不等于证明任意重复执行有独立统计收益。所有独立测量都需自己的current Review覆盖，真正别名共享同一次审查；全部当前finding仍贡献，合法显式Review改判保持原exact scope。
 - 原实施前方案以task_id+terminal_time判终态的部分已由上段原生terminal_event_id合同替换。历史缺少发生ID不回填；多份终态事实无法证明同一发生时明确trial_occurrence required。原生不同终态/Trial为trial_conflict；inactive/awaiting原件及其Review保留，有终态时仅终态观察供应值。此为终态事实消费变化，没有改Task/Session事件创建或恢复路径。
 - 当前安装唯一requireCurrentEvolutionEvidence同时核对已发布测量集合和Review集合，授权、未提交execute预检及原SQLite immediate收据事务共用。新增真实manager测试在安装后、写receipt前追加独立测量和阻断Review，收到EvolutionComparisonMeasurementChangedError及确切locator，实际安装回滚至baseline；完整重新比较/明确Review改判后可安装，commit后追加事实仍重放原receipt。旧Comparison数值、冻结旧上界历史及原测量全部不改。
-- 最终聚焦98项653断言：公开Host9/179、纯比较64/207、reference4/16、独立e2e证据消费14/41、包投影1/43在.tmp/g52-codex-focused.log；其中mutation中间5/133由最终.tmp/g52-codex-atomic-tests.log的5/137替代，不重复计数；manager CAS1/30在.tmp/g52-codex-cas.log。全部对应文件exit0。真实Host包含缺审查→required、实际补审后恢复、原生终态ID、不同native测量发现、不同实测值冲突、导入与完整分页。实际DB/manager包含授权/执行拒绝、rename后回滚、中断恢复、显式改判、历史上界、跨Task导入及receipt重放。明确test-driver身份，不冒称自主模型Campaign或业务收益。
+- 最终聚焦98项653断言：公开Host9/179、纯比较64/207、reference4/16、独立e2e证据消费14/41、包投影1/43在.tmp/g52-codex-focused.log；其中mutation中间5/133由最终.tmp/g52-codex-atomic-tests.log的5/137替代，不重复计数；manager CAS1/30在.tmp/g52-codex-cas.log。全部对应文件exit0。真实Host包含缺审查→required、实际补审后恢复、原生终态ID、不同native测量发现、导入与完整分页；G52不同值冲突的直接验证是纯比较合同，见G53纠正与补验。实际DB/manager包含授权/执行拒绝、rename后回滚、中断恢复、显式改判、历史上界、跨Task导入及receipt重放。明确test-driver身份，不冒称自主模型Campaign或业务收益。
 - 初始红测及修正完整保留：Opus comparison初轮50pass/7fail、Host未同步嵌入identity失败、mutation初轮失败；Codex缺审查红测原promote（62pass/1fail，g52-codex-review-red.log），补覆盖后旧夹具未提供独立Review的失败（g52-codex-review-first.log），以及新历史发生测试把undefined显式写入JSON被canonical校验正确拒绝（g52-codex-occurrence-tests.log）。后者改为真正缺字段，未放宽原JSON校验；没有把含失败日志称全绿。
 - Lab源/嵌入2026.09.27.14，最终contentDigest为39f87368b9246bf3097d3d11b97c438a4b4a066e4d5ea5deeae6d678686d5ef2（g52-codex-package-final-sync.log）；末次README澄清“仅非终态观察”与“已出现终态”的区别后同步。只同步Lab，其他base版本漂移原样保留，未向用户项目推广。所有未提交中间摘要不是已发布版本。原唯一SDK生成器成功，递归JSON核对只增加history/detail六处MEASUREMENT_SNAPSHOT_CHANGED联合分支，去掉这六处后与HEAD逐值相等（g52-openapi-verified.json）；无DDL、新ledger、角色或UI自动化。
 - 末次包同步后公开Host9/179与实际包投影1/43再次通过，完整exit0在g52-codex-host-package-final.log；它替代上面的同两文件中间运行，重复测试不另计入98/653。
 - 根类型8任务、docs342ops25groups、API6规则34文件、包拓扑122/135及diff检查均通过（g52-codex-types/docs/api/topology.log）；范围提交后按原规则pull、审全部outgoing、实际pre-push并push，收据使用.tmp/g52-push.log。
 - 未完成边界：本次只能保证当前授权Task冻结目录中的已发布Evaluation集合；未发布的native评分、未移交的source Task产物、未公开Trial仍不是目录可证明的事实。Run无exact Campaign字段，未测量Run不能从宽source猜归属。下一步先核对原metric执行发生/冻结Campaign归属与已发布成员之间的事实可达性，再用具体真实路径确认是否有可修的遗漏，不能凭猜测添第二ledger、任意取代测量或重开旧样本。整体可靠业务纠错/真实进化收益仍未达成。
 - 主管下一次恢复不早于2026-09-27 12:45上海（原限额明确12:40恢复），继续同一session、准确claude-opus-5-5、原参数与全新时间戳收据，不加用户未设预算。恢复前收敛当时Codex修改并更新全文交接；启动后Codex停止并行编辑。当前G52只做本地确定性检查，没有外部业务Provider费用。
+
+## G53：原生评分发生与未发布测量的可达性
+
+### Recall与实施前影响面
+
+- 从a98e5826已push/clean继续。用户要求额度期间实质推进原生评分到父代选择的事实链，不能把G52已发布目录当全部发生；不新开业务模型、旧样本、作者或Campaign运行。已读AGENTS、Recall/五段图/G51–G52、02-data、2026-08-17所有权拆分、当前Campaign Skill，以及metric-context、execute-evolution-metrics、metric-evaluation-host、metrics executor/store/types/sql、原TaskArtifact producer、Session tool-part-facts/MessageStore、目录资源发现及正式跨Task导入。
+- 已确定的源码边界：原engine_metric_result记录owner Task、spec、iteration、attempt ref；attempt记录原Trial subject/commit和selected evidence，manifest记录原producer的Session/Message/Tool call。Lab执行Tool的原request另外保存exact Campaign/Candidate/Run；原ToolPart投影从独立持久request事实取input，不从结果/时间猜归属。通用metrics本身不声明Campaign。原package调用是唯一生产evaluate入口，但SDK底层与已导入attempt仍不能仅靠一个Tool名称猜同一完整批次。
+- 可达性并非“未发Evaluation就完全不可见”：TaskArtifact catalog会给engine_resource提供resource条目，只省略其snapshot条目；attempt也是catalog资源。直接resource正式导入保留原manifest producer，Engine Artifact连带resource与原Tool request/原native DB行的运输是不同范围。当前已导入Evaluation保持G46/G47合同；本轮不跨权限读取source Task，不造并行测量ledger或合成Evaluation。
+- 还发现G52交付说明的证据表述过强：最终公开Host测试真实第二次评分仍为[1,1]，另一个Trial是parse_failed；真实“同一Trial、同一冻结shell、不同已测值”的Host分歧检查在最终文件中没有实现，scorer_conflict目前只由纯比较合同直接覆盖。G52相应实现结论需用本轮真实检查补实，不能把实施前计划当已执行证据。
+- 本轮具体Checker：在Campaign冻结前声明同一shell读取原subject文件及一个明确test-driver控制文件；首两次1保持原合同，第三次同一Trial/collector/iteration在不同持久Tool调用实际输出0。保存native row、attempt、manifest producer、原request输入和公开catalog可读身份；在Evaluation发布前后分别发布Comparison，记录实际calculation_inputs/scorer维度差异。原scorer/subject不改，变化的是已声明外部控制文件，明确这不是OS隔离或模型收益验证。捕获前后反例仅留.tmp，之后长期正向验收仅保留原生发生可达性、真实发布后冲突输出，不能把遗漏当正确行为断言。
+- 影响面限现有真实Host测试及本记录；暂不修改生产集合/权限/安装算法。当前Task原request足以证明本次调用选择，跨Task仅有attempt资源时是否具备完整发生绑定仍未知；下一实现必须先明确当前授权事实闭包，不能按时间/iteration/文件名自动推断或让Host裁业务分数。无公共API、SDK、DDL、模型或UI改动预期。
+
+### G53真实反例与修订方案（实施前）
+
+- 第三次同Trial/collector/iteration的原native结果mtr_g0VWNWF5x00Ss9hTgG0T实测0，原第一次1；原producer指向独立持久Tool call-g53-metric-third，原request精确绑定Campaign/Run，当前Task公开catalog实际可读该attempt。Evaluation未发布时Comparison仅4份Evaluation输入，没有baseline scorer_conflict；发布并补审后5份输入，出现scorer_conflict:correctness:case-1:baseline:0。两次因fixture缺candidate都inconclusive，不能称实际错误promote。完整g53-unpublished-measurement-probe.json/log/patch保留；capture后主动G53_PROBE_CAPTURED退出，非产品自然失败。初次重用旧非canonical Message ID、第二次新Message漏step-start被原契约拒绝，均保留并修正driver，未放宽生产校验。
+- 后续真实正向收据目录检查给出新的红测：attempt条目确实可见，但尚未被Evaluation引用的原receipt目录条目缺失（g53-receipt-visibility-red.log/patch，8pass/1fail）。此前只读snapshotCandidates而判断engine_resource均可见不完整；完整provider路径先按Engine引用过滤engine_resource，只有catalog类型独立进入当前Task目录。原receipt准确locator仍可读取，缺口是公开发现而非丢失字节或权限拒绝。
+- 根因与单一修复：execute-evolution-metrics已经完成并持久化全部评分，再以engine_resource发布receipt；这把尚未产生Evaluation时的恢复入口依赖到caller Tool输出。将这份原有receipt改为catalog snapshot，使它像原attempt一样独立可发现；保留原JSON、producer、native账本、后续Evaluation单一publisher及全部G44/G45验证。只改该生产调用，不放开通用engine_resource目录，不新建ledger、角色或消息；已发布历史种类不迁移。仅同Task恢复可见性有保证，跨Task仍须正式导入原源且不得冒充目标Task新评分。
+- 影响面：该Tool、Evaluator与README合同、Lab版本/嵌入及真实Host与包投影。红测保持为原receipt公开目录的正向producer/locator检查，真实0/1发布后冲突检查保持；临时“遗漏是正确结果”的断言不保留。原发布/比较/安装算法不因这个可见性修复自动获得未发布评分全集保证，G53反例仍界定下一层工作。先验证再范围提交/push，无模型费用。
+
+### G53实施与验收
+
+- 原执行Tool唯一receipt publication改为snapshot_kind=catalog；没有新增资源、JSON字段、ledger或读写旁路。Evaluator/README/02-data同步同Task找回原收据再发布Evaluation的合同，历史engine_resource原件不回填，不放宽通用catalog或跨Task权限。
+- 正向真实Host在第三次评分Tool关闭后，从公开分页目录实际找到原attempt与原receipt，核对producer及原生值0，MessageStore读取原持久Tool input精确等于Campaign/Run输入；完整读取找到的receipt，再直接用其原resource set发布Evaluation和Review。Comparison实际包含这份测量并给出同槽1/0的scorer_conflict/inconclusive。没有再次评分或重写该收据；长期测试不保留“原生0被忽略是通过”的断言。
+- 聚焦10项231断言：Host9/188在g53-host-verified.log完整exit0，包投影1/43在g53-host-projection-final.log的第二文件exit0；该较早合并日志整体exit1，因为当时Host长链触及runner默认60秒并中断，不称整份全绿。检查路径已从原53–57秒级长链增加原生评分/分页/跨调用读取，按原测试运行器支持的逐用例窗口设120秒，仅本用例；重跑Host全文件81.51秒、该长用例53.10秒通过。此为本地测试窗口，不是模型或业务运行预算。原超时与SuppressedError收据g53-host-timeout.log保留；其他驱动初次ID、step-start和receipt可见性红测亦全保留。
+- Lab源/嵌入2026.09.27.15，contentDigest5a373b6a8b980f6203b8806d20e942a5683127552b0c5c6c269495b3825c6225，原生成器只更新Lab（g53-package-sync.log），非Lab漂移原样保留，未推广。根类型8、docs342ops25groups、包拓扑122/135与diff通过；当前Tool返回JSON/API/SDK/DDL不变，作用是原持久收据的当前目录可达性。范围提交后pull/审完整outgoing/实际pre-push/push收据为g53-push.log。
+- G52说明中的“真实Host不同值分歧已验收”已更正为当时纯比较验证，本G53才补齐真实Host同subject/冻结scorer的不同native值检查；原G52测试数值/日志未改。本轮是明确test-driver写入合法Session/Tool事实并走真实Host/DB，不是模型自主选择、完整Task resume调度或真实业务收益验证。
+- 下一项仍是已发生但未发布Evaluation的集合消费：当前Task的native row→不可变attempt→原producer→持久Tool request可以给出原Campaign/Run绑定，不能从iteration/值/路径猜；当前metrics.recorded尚未对package投影原request关联。需先核对该原事实的单一只读投影、完整/中断调用、冻结快照与跨Task正式运输，再用本G53反例验证比较/安装消费；不能用receipt可见性代替完整性，不能跨权限取source Task或新增第二ledger、任意评分取代、业务gate。业务可靠纠错与真实进化收益仍未达成；Opus仍等12:40重置、12:45以后一次恢复。
