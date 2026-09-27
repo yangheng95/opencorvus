@@ -135,7 +135,7 @@ describe("Data Analysis expert squad package", () => {
       namespace: "builtin",
       id: "data-analysis",
       name: "Data Analysis & Business Insights",
-      version: "2026.09.27.1",
+      version: "2026.09.27.2",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))
@@ -157,12 +157,13 @@ describe("Data Analysis expert squad package", () => {
 
   test("projects the exact workflow, Skills, and typed publisher through the active package", async () => {
     await using project = await memoryProject()
-    await ExpertSquadPackageManager.importDirectory({
+    const source = await ExpertSquadRegistry.loadSourcePackage(packageRoot)
+    const installed = await ExpertSquadPackageManager.installPayloadPackage({
       projectDirectory: project.path,
-      sourceDirectory: packageRoot,
-      replace: false,
+      id: "data-analysis",
       installationScope: "project",
     })
+    expect(installed.after.packageDigest).toBe(source.packageDigest)
     await Instance.provide({
       directory: project.path,
       fn: async () => {
@@ -172,6 +173,7 @@ describe("Data Analysis expert squad package", () => {
           config,
         })
         expect(scheduler.expertSquadID).toBe("data-analysis")
+        expect(scheduler.promptOverlay).toBe(source.promptProfile.agents.orchestrator)
         expect(scheduler.productionSkills.map((entry) => entry.ref)).toEqual(skillRefs)
         expect(Object.keys(scheduler.virtualWorkflows)).toEqual(["operating-insight-report"])
         for (const agentID of Object.keys(dependencies)) {
@@ -181,6 +183,7 @@ describe("Data Analysis expert squad package", () => {
             agentID,
           })
           expect(worker.expertSquadID).toBe("data-analysis")
+          expect(worker.promptOverlay).toBe(source.promptProfile.agents[agentID])
           expect(worker.productionSkills.map((entry) => entry.ref)).toEqual(skillRefs)
           expect(worker.packageTools.map((entry) => entry.ref)).toEqual([publisherRef])
         }

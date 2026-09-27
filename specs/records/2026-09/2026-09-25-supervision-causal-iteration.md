@@ -1723,3 +1723,18 @@ Recall：从8abcb06f已push/clean继续，只读当前data-analysis团队及原G
 **保留/复用/简化决定：** 保留原Task/Session身份、权限、精确来源、租约/持久化和当前Turn校验；复用现有continuation、targeted FactCheckReview及必要时Mission同Task恢复。需要简化的是把“初始阶段产物链”和“其后的具体反馈/复核”混成一次性完整流程的指令解释，不能再加Host状态机来替模型做业务判断。新上下文与复用旧上下文各有用途，不能把沿用审查Session称为fresh-eyes验证，也不新增一个角色来装作独立。
 
 **下一项有界决策：** 以data-analysis现有一条团队路径为单位，把初始发布、后续返工及当前交付对象的复核职责讲清；先确认这些职责能完全由现有入口表达。若需要改指令，范围只针对这项冲突，阶段Artifact原件与完整性合同保留，效果必须通过独立登记的整条团队反馈观察判断。D3来源发现措辞、更多角色、另一套runtime和另起Chat微实验不随之自动扩入。当前没有足够证据宣称需要新的调度底座，也没有证明业务纠错/进化已完成。
+
+### 选定团队的初始与续行职责澄清（实施前）
+
+- Recall：从c40e3e9c已push/clean继续；本轮只收敛上述已定位指令冲突，不以局部检查替代业务验证。外部参照强调同actor接收反馈与审查实际交付；当前Host已有对应入口。无委托/Provider/旧run恢复，不改变D3前驱发现方式、其他包、图拓扑、权限、Schema或生命周期。
+- 已补核写入边界：BuildAgent.run接受existingSessionID，核对原Project/目录，每次run创建本轮merge_back工具实例；成功合并的single-flight结果属于该实例，后续run重新物化工具。mergeSafely返回原合并结果，不在该函数删除worker工作区。Artifact snapshot仍核对已持久化merge_back的确切primary_head。由此不能把“本轮merge后不再写”解释为原writer永久禁止后续返工；本轮不修改或扩大这些实现。本结论是代码边界核对，不是新模型已完成第二次合并。
+- 事实审查adapter的本轮collector以target Session/Message/内容身份绑定Core FactCheckReview；它允许existingSessionID与完整新turn.input。包data-analysis/audit仍只审insight-brief，两种产物的语义不得混合。为复核后来report，无须改该包audit前驱或重算历史audit，应对当前writer Message形成已有Core Review。
+- 最小改动：仅data-analysis已有scheduler、workflow说明、fact-checker、writer及对应简短角色描述/README。把once限于initial dispatch；对后续实质异议复用continuation，改变审查对象时必须显式完整turn.input；将brief阶段audit与对当前报告的Core Review分开；writer的每次交付Turn仍遵守write→commit/merge→读取原确切提交→publish，本轮merge后只读，但合法后续Turn可按反馈修正。保留原角色/工具/DAG/typed publication，不新增自动业务gate、不把每份产物套重复review。
+- 验收只检查实际包加载/安装→scheduler/worker promptOverlay运输和既有真实DB/Host阶段产物链，明确只能证明配置合同与原接口相容。仅该包增版本并同步其嵌入，其他包及历史绑定不变；不冒称模型理解、业务返工成功或候选收益。完整团队反馈效果留给独立完整预登记，不能重启旧diagnostic或review。按实际影响面跑聚焦检查/docs/types及范围commit/pull merge/outgoing/push。
+
+### 选定团队职责澄清的实际交付
+
+- 仅上述data-analysis范围实施：初始七节点图保留，后续反馈明确复用原节点；完整新turn.input选择当前writer Message，Core FactCheckReview与原brief阶段audit分开；writer按每个交付Turn重新完成合并及精确提交发布。D3的audit-only前驱发现段未改，没有新增Host/运行器/角色/工具/接口或业务判断门。
+- 源与嵌入版本2026.09.27.2，contentDigest `4d09ee442a8e915cebf66de9dad62d854e77816b27a9ca8134081406240bcaed`。原生成器输出到临时文件、进程退出后应用确切字节；仅data-analysis payload块与revision行变化，其余包字节及原base漂移保留。没有推广原Task或回填历史包绑定。
+- 原data-analysis-package检查改为实际嵌入安装，核对安装身份与源包一致、实际scheduler和七worker的promptOverlay逐字来自该包；原真实DB/Host六前驱发布链继续通过。`team-feedback-package-tests.log`为4项48断言、0失败、文件exit0。它证明真实配置运输和接口相容，不证明模型理解或第二轮业务合并。`team-feedback-types.log`根类型8/8（7缓存），`team-feedback-docs.log`文档342操作/25组均exit0，diff检查通过。没有Provider请求或新业务样本。
+- 下一验收只针对完整反馈链：在一个独立完整登记的新团队任务中，观察原义务、自然产生的实质错误/反证、针对当前交付的独立判断、反馈回到原执行者、实际修正与复核。若自然无错误，记为未触发；不制造失败、不另开Chat代替、不继续同义抽样。当前仍没有可靠业务纠错或进化收益证据；本次指令澄清不能当作历史漏判唯一原因或候选收益证明。
