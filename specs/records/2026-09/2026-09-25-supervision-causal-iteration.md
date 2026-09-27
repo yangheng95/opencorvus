@@ -1484,3 +1484,24 @@
 - Lab源/嵌入2026.09.27.19/contentDigest88cea9739a98a32fa78522ec44d1ae14f18f09af3a2fa574fd13030870e09327（g57-package-sync.log），仅Lab同步，base漂移保留，未推广。Observer/Planner/Skill/README明确未声明写null，建议预算不等于花费批准。SDK由唯一生成器完成；g57-openapi-verified.json逐值确认仅history/detail两处max_cost从number扩为number|null，其余JSON相同。无HTTP路由/数据库表变化。
 - 根类型8/8、docs342ops25、包拓扑122/135、前端正式构建与diff通过；实际pre-push与推送结果以g57-push.log为准。上述可达性修复不构成新业务Campaign预登记，不重启旧随机e2e，不代表可靠纠错/进化收益。
 - 下一G58应收敛新独立验证的完整输入与执行计划：优先选定一个可证伪的机制问题，明确自然证据/来源、唯一改动、固定源包/候选边界、Luna模型、300秒真实无活动poll2、目录、固定次数与停止失败/全费用。可用null忠实表达未声明金额上限；旧e2e的随机target、n1硬断言、默认Terra与超时仍不能直接当本用户新运行。先核对真实Mission→stage Task→target Trials→import→evaluation的输入可执行性；需要新执行入口时复用当前原语，不造并行ledger/隐藏答案/业务gate。没有完整独立登记前不调用Provider，不将永久等待登记当结果。12:45上海优先范围提交并交回原Opus。
+
+## G58：新独立验证输入与Trial初态可达性
+
+### Recall、影响面与实施前方案
+
+- 从d30935ca已push/clean继续。用户要求实质准备一条新的独立真实验证，而非重跑旧世界、随机target或把G43–57局部合同当收益。重读AGENTS、Recall/五段图/G56–57、02-data、benchmark-debug-template、Evolution Lab三个workflow/角色/Skill、旧e2e入口及checker、panel.create_task/Task创建、工作区初态/Project目录注册、候选prepare/merge、source snapshot、cross-task import、metrics subject全部相关定义。无委托、Provider请求或旧run巡检。
+- 当前没有已证新模型侧因果修复；不能先造一个候选或削弱baseline再声称进化。选择新的固定本地经营数据诊断，target为已有data-analysis包，不随机抽样：分层成功率都提高但混合总体下降时，能否保存正确分母、如实给数值和组成效应解释并完成原工作流？输入是本轮新合成且明确标注的两期两层计数，不用旧Cycle/H样本。完整执行计划将先有一次自然诊断；若正确，只记普通交付、不启动无依据作者；若出现具体错误，保留原件再据实确定单一可改机制，不能重抽同义案例找失败。
+- 本轮产出是冻结输入、独立算术验收及本地运行可达性Checker；尚不执行模型。完整诊断启动登记需要固定实际source commit/target包身份/目录、精确Provider预检与停止成本合同后才算可执行，不能把本段计划当已经运行。后续Campaign阶段必须沿实际自然结果登记唯一改动，不因为预先想要提升而修改测量定义。
+- 新源码边界：旧e2e仅把4个case/subject文件放workspace template，却把README和campaign/model/environment/workspace/scorer等也提交到同一Git源目录；Task创建从原sourceSnapshotPaths完整枚举，metric-context比较完整Run.workspace_digest，因此不是可以直接沿用的真实初态。候选作者还向其primary提交候选目录；共享同一物理Trial根不能靠叙述“相同环境”消除此变化。不给Host放宽workspace校验、不让模板包含自己、不从Case子集冒称整个初态。
+- 已有合法路径而非新状态机：panel.create_task已有directory，EngineService在原项目目录上下文调用Project.registerExecutionDirectory，把一个明确独立Git执行库排他登记到同一durable Project；其配置/包权限仍来自原项目，物理root/初始tree按各Trial登记。跨Task import检查同Project/Mission而非相同物理路径。普通Worktree.create总取其所在Git库primary分支，故独立Git库可隔离后续candidate/Trial写入，不修改生产worktree实现。是否完整可达须真实createTask/checkpoint/Artifact运输证明，不能仅凭源码宣称。
+- 有界Checker：在隔离临时Project中使用原注册/EngineService.createTask和原持久Task binding，两个独立Git库拥有同一完整输入树；原primary另有控制文件，再追加阶段交付。确认两Task持久project相同、directory分别准确、initial tree与固定输入逐字相等；真实文件追加使该库新快照变化而另一库仍原值。测试driver明确接管ingress，避免模型调用；这只证明真实接受/绑定和物理隔离，不冒称模型调度或独立Git对象已可供shell评分。G43独立库shell对象缺失仍须typed unavailable，不借这个准备绕过；后续真实诊断本身不调用Evolution metrics。
+- 影响面仅新独立输入/规格索引及聚焦非UI测试，若既有合法路径被反证则保留原错误并收敛精确阻碍，不盲改Task/Project/调度。无公共API/DDL/角色/ledger/gate、无UI测试、无业务金额或模型预算。测试与文档检查、范围commit/pull merge/outgoing审查/push后更新交接；12:45上海优先交回原Opus。
+
+### G58实际准备与验收
+
+- 已固定新合成service-mix输入：2026-07/08、standard/complex两层、4条完整eligible/successful计数。它不是旧案例重抽，未故意弱化target。独立Python Fraction只从同一metrics.json派生：整体49/65→73/110、两层分别+1/10/+1/25；以前期权重标准化后21/25，within28/325、mix−97/550，和精确等于总体−129/1430。原operator算术收据g58-arithmetic.json，未注入模型消息或变为Host gate。输入/定义/一次诊断与停止/费用/未知合同在specs/artifacts/2026-09-27-evolution-readiness/README.md；真实模型仍未运行。
+- 真实目标package manager安装embedded builtin/data-analysis@2026.09.02.1，原包digest27141f11209e4891fc2119b3f84a239238c08d8951cd5fefab6143e30f31e0ed，不是generated contentDigest，两者不混用。此次目标选择是与固定经营数据匹配的现有包，不使用旧随机selector。没有写新候选、改角色或推广。
+- 现有directory路径正向Checker1项14断言通过（g58-readiness-initial.log全文件exit0，首次即通过）。实际EngineService.createTask接受两个独立Git执行库，Task IDs tsk_g00VWO20KF00e4qfAeFe/tsk_g00VWO20YO006p2eHrZQ，同Project prj_h4DjXROuxh7fRcUAdfCP、原package/process binding准确，初态完整4文件（.gitattributes/.gitignore/metrics.json/request.md）相同，tree d285b2ec25c80d6389dee4cfb6092a45a4533157466dbf96caa3ec8f20ac036b。协调根追加control和第一执行库新增report后，第二库逐字保持初态，第一Task原binding不改。所有库由本地Checker新建并清理，未在开发仓库创建branch/worktree。
+- 原Task接受与数据库绑定是真实生产路径；既有test hook持有ingress，未调用Provider，没有冒称模型调度、Mission panel原调用、checkpoint终结、完整Artifact跨库运输或shell评分。源码核对Mission panel directory→同一EngineService、原sameProject/Mission import与独立目录登记合同；整体执行仍需新launcher。G43独立Git库的shell对象缺失限制保留，不能把原生collector bytes当对象运输授权或把unavailable改成通过。
+- 旧e2e四文件模板与更宽实际Git源的差异属于本轮源码确定准备问题，未重启旧controller或重跑其历史实验；新Checker证明可用原显式目录合同保留初态，没有放宽生产workspace身份或新增配置/调度路径。本轮只新增聚焦测试/冻结输入/独立算术与索引、记录，无生产API/DDL/SDK/包嵌入变化。
+- 下一G59应实现并本地验证最小diagnostic-01运输入口：使用上述冻结实际包/新input和独立执行库，单一model/inactivity配置、成对auth/models及精确流式预检、原Mission创建/状态/abort/费用事实，固定只一次自然diagnostic目标Task，不隐式调用候选/旧随机脚本。启动前把最终source commit、目录、实际模型预检结果和输入/包身份写独立launch receipt；不存在receipt即未运行。有自然正确交付只记普通成功，有自然错误先定位再另登记单一干预和后续Trials，不能为了产生候选追抽。完整启动条件未满足前不碰Provider；这是待完成运行器工作，不是授权阻塞。12:45上海优先交回原Opus。

@@ -1,0 +1,50 @@
+# G58 fixed operating-analysis diagnostic preparation
+
+## Recall and status
+
+The user requires a fresh, independently registered validation with streaming `openai/gpt-5.6-luna`, a 300-second real-inactivity window, 2-second polling, all request costs recorded, and no invented monetary ceiling. Earlier Cycle/H-E/Repair/H-T/H-B runs remain closed. This is new synthetic operating data, not a replay, substitute sample, or modified historical score.
+
+**Prepared, not executed.** No business Provider request, candidate, or Campaign has run under this registration. The exact launch source commit and installed target package identity must be recorded from the committed preparation and real package loader before any Provider use. Pairwise auth/models isolation and an actual streaming preflight must establish the requested model before the single diagnostic starts.
+
+## Mechanism and fixed inputs
+
+Target: the existing embedded `builtin/data-analysis@2026.09.02.1`, installed at project scope. The real package manager loaded exact package digest `27141f11209e4891fc2119b3f84a239238c08d8951cd5fefab6143e30f31e0ed` in the G58 readiness check; launch must resolve the same immutable package. Do not modify or deliberately weaken that baseline. Its `operating-insight-report` workflow covers a charter, dossier, independent performance and segment analysis, synthesis, audit, and report.
+
+The question is whether the current workflow preserves eligible denominators across strata and periods and explains a mixture change without treating correlation as causal evidence. The only model inputs are the files under [input/](input/request.md). They contain a public metric definition and four synthetic aggregate records. The operator arithmetic below is an independently derived expectation, not an injected model answer or an additional hidden message.
+
+The two source files and ordinary runtime Git metadata (`.gitignore` and `.gitattributes`) form the complete initial source tree. Control manifests, credentials, run receipts, and comparison interpretations stay in the separate coordinator/runtime directories; they are not included in the target's source workspace. This is physical experiment isolation, not hidden model-visible messages. The canonical tree is obtained from the actual source-tree primitive after project preparation, not from a guessed subset of its files.
+
+## Independent acceptance
+
+Run `python specs/artifacts/2026-09-27-evolution-readiness/arithmetic.py` to derive the following quantities directly from the only data source. This operator calculation is not a Host validator or model workflow gate.
+
+- July: standard `80/100`, complex `18/30`, overall `98/130`.
+- August: standard `9/10`, complex `64/100`, overall `73/110`.
+- Both stratum rates rise; the overall weighted rate falls. These are three simultaneous observations, not contradictory data.
+- The July-weight-standardized August rate is `(100/130)*(9/10)+(30/130)*(64/100) = 273/325`. Its difference from July's overall rate is `28/325` (about +8.615 percentage points).
+- The August observed overall difference is `73/110 - 98/130 = -129/1430` (about −9.021 percentage points).
+- At August's stratum rates, the change from the July weights to the August weights is `73/110 - 273/325 = -1261/7150` (about −17.636 percentage points). The two decomposition terms sum exactly to the observed change.
+- The report must retain the supplied counts/definitions, label percentage points and the chosen fixed-weight convention, distinguish composition from within-stratum rates, and avoid a causal claim or invented evidence. A different transparent, arithmetically correct decomposition is acceptable when it states its reference weights.
+- Verify the final report and its cited immutable source/report artifacts. Protocol completion alone does not meet this business acceptance. Model-selected findings remain visible even if the operator disagrees; preserve the original verdict and report the disagreement.
+
+## Fixed diagnostic execution envelope
+
+- Runtime root reserved: `.tmp/evolution-readiness-g58/diagnostic-01/`. Use a fresh directory once; an existing launch receipt means observe that same run, never overwrite or start a replacement.
+- One Mission with one diagnostic target Task, one unchanged input set, the existing target workflow. No candidate author or Evolution Lab stage in this diagnostic. This fixed count is experimental design, not a user-unset model turn/time/cost cap.
+- All model roles, compaction and the single exact preflight use streaming `openai/gpt-5.6-luna`. Configure through the original runtime model surface. No account/model fallback or credential refresh.
+- No declared monetary ceiling (`max_cost: null` if a Campaign is later independently registered). Record all requests, native usage rows, unpriced/unknown costs, helper/preflight calls and provider failures. Native usage is not a billing statement.
+- Observe real model/tool activity every two seconds; stop after 300 seconds with no real activity. A poll or observer heartbeat is not activity. Preserve partial evidence on provider/protocol/input-identity failure, and end this diagnostic without replacement or automatic retry. No independent total-duration/turn/cost ceiling is added.
+- No production account, network business action, publication, installation of a candidate, or historical file mutation. The target writes only its diagnostic working copy and ordinary immutable artifacts.
+- If the result is correct, record one ordinary successful delivery; do not invent a flaw or author a candidate. If it is wrong, preserve the natural error and identify the earliest supported mechanism before separately registering a causal repair or Campaign. Neither branch demonstrates evolution gains by itself.
+
+## Whole-chain reachability and limits
+
+The next possible evolution sequence remains Mission → opportunity/attribution Task → candidate-preparation Task → separately initialized target Trials → campaign-evaluation Task. Mission must import actual accepted terminal evidence through the existing authority and keep original identities. Trial repetitions, candidate count, arm order and the unique intervention must be fixed in that later registration, before those executions; this diagnostic is not a blank authorization for a candidate search.
+
+`EngineService.createTask(directory)` explicitly registers a standalone Git execution directory in the coordinator's durable Project; configuration and package authority remain those of that Project. This is the existing route to independent physical input trees while retaining same-Project/Mission Artifact authority. The local checker verifies real Task acceptance and immutable bindings, with a declared test driver holding ingress so no model executes. It does not prove model scheduling or all cross-directory lifecycle paths.
+
+The old random e2e controller is unsuitable: it fixes Terra, other inactivity windows, `n=1`, cost 10, a random target, and a four-file template despite committing more source files. It will not be run or silently repurposed. Current shell measurement can materialize only Git objects available to its scoring repository; independent Trial Git databases are not automatically transported by a collector bundle. The eventual evaluation must establish that authority or explicitly retain unavailable results, not copy unapproved source objects or relax identity checks. Judge evidence adequacy is rubric-dependent and is not a substitute for an unverified shell path.
+
+See [the G58 implementation record](../../records/2026-09/2026-09-25-supervision-causal-iteration.md) for actual local check results and unresolved launch preparation. A later launch receipt must reference the final committed inputs and exact package; absence of that receipt means this has not run.
+
+Actual local validation: `evolution-campaign-readiness.test.ts` passed 1 test with 14 assertions. It installed the actual embedded target, accepted two Tasks through `EngineService.createTask`, read their original persisted process/package bindings, and verified byte-complete inputs and independent output directories. The driver held ingress using the existing test hook; it did not exercise Provider execution, Mission model dispatch, or a whole Campaign. The frozen four-file tree identity was `d285b2ec25c80d6389dee4cfb6092a45a4533157466dbf96caa3ec8f20ac036b`. Runtime-added Git metadata was included, not ignored. Source analysis established the existing Mission parameter/import route, but its full execution with this new input remains to be checked by the registered diagnostic launcher.

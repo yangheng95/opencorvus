@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [G58 fixed operating-analysis diagnostic preparation](2026-09-27-evolution-readiness/README.md): new fixed synthetic inputs, independent arithmetic expectations, and local Task-directory readiness; no model run or demonstrated evolution gain.
+
 - [Acceptance comparison design probe](2026-09-25-acceptance-comparison-design/README.md): offline contract controls and a retained counterexample; not a model evaluation or production acceptance gate.
 - [Acceptance relation and input observation](2026-09-25-acceptance-comparison-design/input-observation.md): read-only trace findings and explicit non-content-retaining input probes; no new model evaluation.
 - [Method handoff intervention design](2026-09-25-acceptance-comparison-design/method-handoff.md): exact verifier patch and bounded behavioral preregistration; source .14 implementation is not an evaluated improvement.
