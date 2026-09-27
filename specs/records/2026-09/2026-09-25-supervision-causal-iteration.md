@@ -1668,3 +1668,14 @@
 - 用户明确质疑“又开始钻研不重要的问题，抓小放大”。这项批评有证据支持：G63虽修的是原自然反例，但范围扩到10包/47余文件和大量局部检查；持续将机制修补当作主线，仍未给出可靠业务纠错或真实进化收益。当前把已经验证的G63范围收束提交，不再由潜在基础设施疑点自动派生下一轮源码任务。
 - 主验收重新固定为：原始业务义务→真实可核验错误/反证→独立判断改变→同一Task实际修正→复核后的业务结果，以及固定输入/相同源和测量下基线与候选的可比收益。G60数值正确只证明一次普通交付；steward修正来源形状只证明局部协议纠正；G43–63本地检查不代替上述结果。
 - 下一动作先用现有记录做简短整体证据复盘，只保留一个最大的未完成业务环节及能证伪它的最小验证。只有该验证真实执行路径遇到明确阻碍，才继续修基础设施。D3提示前驱冲突不自动升级为下一源码工单；不得为了找失败同义追抽，也不得把新增输入后的正常交付说成纠错。新模型验证仍须完整独立预登记，所有旧样本只读不恢复。必要准备自主推进，17:45或以后把本纠偏和实际事实优先交回原Opus。
+
+## G64 — 先检验独立业务判断，不再扩大基础设施
+
+### Recall、原事实与有界验证（实施前）
+
+- 从a0ab6087已push/clean继续。用户最新纠偏优先；本轮不修生产源码、角色、Schema或包，不重跑diagnostic-01，不创建候选/Campaign，不将普通交付或局部合同当纠错。已读本记录Recall/五段图/G61–63、G58登记/原报告审查、当前Task控制面、原Task transcript/Completion Decision、data-analysis三个角色及workflow、orchestrator-core，使用既有benchmark skill但不循环抽样。无委托。
+- 更精确的观察：原Task根Session容器ses_-zUTbl2Avzz0WRMDhOjn本身无消息，实际决策者由Completion Decision指向ses_-zUTbl1IWzzFNgwNlnTF。其read_agent_message Part prt_g0VWOMBG700ppi8iVvfI取得fact-checker原final（六项通过、零纠正、audit已发布）；最终artifact_read Part prt_g0VWOOdu800o7fug7V50真实输出完整Engine report8498bytes和Markdown4581bytes、complete=true，含“没有audit”陈述。随后同assistant msg_hEP8ABfoO9mg5TY1esSR的manage_task Part prt_g0VWOOksI00n45yVSYyb仍complete，summary引用六项通过且解释generic publisher绕过，原evidence同时列report rev42及audit rev37。不能把它仅归为未读取终稿；Tool结果投影不证明模型如何注意/理解，也不单独证明这些bytes在最终Provider请求未被上下文裁剪。
+- 原audit完整payload明确审的是insight-brief rev33；它先于report rev42，不能为后者新增陈述背书。数值仍正确。最大缺口收敛为“反证能否改变独立接受判断”，不是再加类型/读取门。Core已有原义务、矛盾解决和同Task返工要求，当前没有证据支持重复追加同义prompt。包once措辞/D3继续作为背景，不自动改它们。
+- 最小诊断是一个全新、独立、只读的普通Chat复核（review-01），输入仅原公开请求/metrics、生产reader已核验的原report/audit及其精确出处；不携带operator答案、错误位置、旧Completion摘要或本分析。明确这些是旧已结束交付的只读资料；不重新生成业务交付、恢复原Task、变更原分或替补样本。使用现有global/chat/start原参与者，不新增角色。唯一研究变量是把完整评审材料在一个新的可见请求中集中呈现；历史原Task与它不构成受控A/B收益比较。
+- 预测：若独立Luna自行识别真实不一致且区分早先简报审查与最终报告，说明集中上下文下可完成这个语义判断，可据此再设计同Task反馈验证；若漏判，记录该失败，不换模型/添答案/继续追问或重抽。即使通过也不声称原Task已修、因果改善、可靠返工或进化收益。单次能力诊断只排除一个解释，不以它外推可靠率。
+- 登记、输入原件与运行边界见specs/artifacts/2026-09-27-supervision-review/README.md。运输只复用现有source Server、paired stage、native audit、global Chat和原Session消息/用量；300秒真实无活动/poll2、全成本、无用户未设总时长/轮次/费用上限。启动前提交完整登记及运输文件、原输入完整性检查和无凭据本地prepare；实际launch固定最终source commit后再唯一preflight与唯一复核。缺少launch仍未运行。17:45交回规则不变。

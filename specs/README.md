@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [G64 independent business-evidence review](artifacts/2026-09-27-supervision-review/README.md)
+
 - [G58 fixed operating-analysis diagnostic preparation](artifacts/2026-09-27-evolution-readiness/README.md)
 
 - [AutomationBench environment clock audit](records/2026-09/2026-09-25-automationbench-environment-clock-audit.md)

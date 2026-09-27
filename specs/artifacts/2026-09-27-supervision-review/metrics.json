@@ -1,0 +1,10 @@
+{
+  "dataset_id": "g58-service-mix-2026-07-08-v1",
+  "synthetic": true,
+  "rows": [
+    { "period": "2026-07", "segment": "standard", "eligible": 100, "successful": 80 },
+    { "period": "2026-07", "segment": "complex", "eligible": 30, "successful": 18 },
+    { "period": "2026-08", "segment": "standard", "eligible": 10, "successful": 9 },
+    { "period": "2026-08", "segment": "complex", "eligible": 100, "successful": 64 }
+  ]
+}

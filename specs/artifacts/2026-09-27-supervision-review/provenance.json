@@ -1,0 +1,24 @@
+{
+  "task_id": "tsk_g00VWOExkC00zV1j3Bzr",
+  "report": {
+    "snapshot": {
+      "schema_version": 2,
+      "project_id": "prj_hPRT83unwxBpRfj06663",
+      "task_id": "tsk_g00VWOExkC00zV1j3Bzr",
+      "snapshot_id": "c00f4f6b-06df-5718-a481-580afdc7756e",
+      "manifest_sha256": "a330f937f807cdeadf7ebb64bfa6025164a1e0877dd2ca8e7180823c0d18dabb"
+    },
+    "tree": "resources",
+    "path": "artifacts/data-analysis/report.md",
+    "media_type": "text/markdown",
+    "bytes": 4581,
+    "sha256": "d96b2bab6fdf32a1b770041ace3ca93d72176c462d1d6ab793ea5a954186b03b"
+  },
+  "audit": {
+    "source": "engine_artifact",
+    "artifact_id": "art_hYsAng8Pl1vIiJpAIUpG",
+    "catalog_revision": 37,
+    "expected_sha256": "00038c4b50541938ecc85a315ee2c5ea841e62257d6b8a610ac4a9f38454c1bf"
+  },
+  "source": "Read-only records of an ended synthetic local task. Audit catalog revision 37; final Engine report catalog revision 42. Original bytes and outcomes remain unchanged."
+}
