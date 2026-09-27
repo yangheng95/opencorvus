@@ -1,0 +1,30 @@
+{
+  "id": "automationbench-four-arm-retry-20260928-run-01",
+  "purpose": "One complete ten-case TS/TE/MS/ME retry of formal-7 package identities on a new common source revision",
+  "run_root": ".tmp/inspect-factorial-retry-20260928/run-01",
+  "source_revision_policy": "Committed and pushed HEAD after this registration; exact SHA recorded by the controller before block one and frozen for all arms",
+  "case_manifest": "specs/artifacts/2026-09-24-automationbench-self-evolution/probe-manifest.json",
+  "schedule_source": "specs/records/2026-09/2026-09-24-luna-mission-task-factorial-trials.md",
+  "blocks": 10,
+  "arms_per_block": ["TS", "TE", "MS", "ME"],
+  "planned_episodes": 40,
+  "model": "openai/gpt-5.6-luna",
+  "outer_inspect_model": "none",
+  "static": {
+    "id": "builtin/automationbench",
+    "version": "2026.09.25.10",
+    "package_digest": "e3dcb35dfc3a4f9a96ee016abeb4980a58bd050b9e632617216a57867e330547"
+  },
+  "evolved": {
+    "id": "builtin/automationbench",
+    "version": "2026.09.25.11",
+    "package_digest": "5874a4db371fcf65848ad418edf2863fd980244716b6e0771a8365bbaf436330",
+    "author_artifact": "art_hBStGVUYpxjgs4rWoFbs",
+    "acceptance": "pending"
+  },
+  "inactivity_ms": 300000,
+  "poll_ms": 2000,
+  "stop": "The existing controller stops after any unscored full block or its predeclared paired/single-arm/three-block regression; infrastructure or source-identity failure also stops this sole attempt",
+  "attempts": 1,
+  "cost_scope": "Every actual streamed provider request including preflight, failures and cleanup; record usage and unknown billing without a new ceiling"
+}

@@ -1,0 +1,19 @@
+# Four-arm AutomationBench retry
+
+## Recall and scope
+
+User request: “重试四次臂bench”. This is a new, independently identified attempt of the existing ten-case TS/TE/MS/ME factorial benchmark, planned for 40 episodes. The earlier formal attempts, their worlds, scores and candidate remain read-only. The [original four-arm design](../../records/2026-09/2026-09-24-luna-mission-task-factorial-trials.md) owns the ten case identities and within-block launch order. No extra case, candidate authoring attempt, official score rewrite, selective rerun, model substitution or new business account is included.
+
+The prior formal-7 attempt stopped after four scored blocks and one cancelled block. Its parent `automationbench@2026.09.25.10` and the one real author-produced, still pending-acceptance candidate `2026.09.25.11` remain available as immutable package revisions. Reusing those exact revisions makes this a retry of that comparison on current common runtime source; it is not a test of current static `.13`, and the candidate is not asserted better. The old fourth-block ME decline and unresolved public Asana project-ID reachability remain disclosed in analysis. The current checkout begins clean at `e3880e9a`; this registration must be committed and pushed before the controller freezes its source revision in the new matrix receipt.
+
+## Fixed run
+
+[Registration](registration.json) fixes one fresh root, `openai/gpt-5.6-luna` for every real streamed request, ten original official cases, the original world/clock/scorer, one static and one evolved immutable package identity, four independent hosts/projects/worlds per block, and one scheduled occurrence of every arm per case. The original controller uses 300 seconds of **actual inactivity** with a 2-second poll. It stops after a complete block with an unscored result or its registered paired/serious regression rule. A stop preserves remaining cells as null and does not authorize a partial retry. There is no user-set request, token, time or dollar ceiling; every preflight, failed request, cache event and cleanup request belongs in the cost account. Local cost zero is not an invoice.
+
+The existing local OpenCorvus `auth.json` and complete `models.json` are a read-only, paired source. Before starting, check the credential is usable, Luna is projected and the actual streaming preflight returns that exact model. Each host copies both files only into its own disposable runtime and removes both during cleanup. No credential content belongs in this registration, terminal output, Git or prompt. The simulated official business world is the only business account target.
+
+## Acceptance and failure evidence
+
+First run the controller's read-only plan mode and focused existing controller/host checks. Then start exactly one controller against the fresh root. The controller must preserve each original `.eval`, world events, Tool inputs/outcomes, native Task/Mission status, exact model audit, package binding and per-arm cleanup. A controller error, source drift, missing paired authorization, wrong model, unscored block or quality early-stop is a recorded outcome, not an invitation to substitute a model, case or root. At terminal, confirm every owned host stopped and copied credentials were removed; independently read official scores and native decisions. Report a Markdown 10×4 table, null cells, per-case paired effects where scored, the native-versus-official strict confusion matrix, actual requests/tokens/Tool calls and evidence-limited conclusion. An all-local green check or an isolated official score is not proof of reliable correction or evolution gain.
+
+This attempt changes no Host, squad prompt, scorer, simulator or workflow contract. Prior partial results are comparisons for context only and never fill new cells.

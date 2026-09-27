@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Four-arm AutomationBench retry](artifacts/2026-09-28-four-arm-benchmark-retry/README.md)
+
 - [Supervision mechanism consolidation](records/2026-09/2026-09-27-supervision-mechanism-consolidation.md)
 
 - [Reviewer evidence-standard observation](artifacts/2026-09-27-review-evidence/README.md)
