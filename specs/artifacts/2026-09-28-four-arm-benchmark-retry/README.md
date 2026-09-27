@@ -19,3 +19,5 @@ First run the controller's read-only plan mode and focused existing controller/h
 This attempt changes no Host, squad prompt, scorer, simulator or workflow contract. Prior partial results are comparisons for context only and never fill new cells.
 
 Run 01 reached no business sample and stopped with four null scores because the Inspect CLI parsed its explicit ISO clock as a `datetime` while the Task adapter expected `str`; see the [original result and adapter repair plan](run-01-result.md). The separately [registered run 02](run-02-registration.json) uses a new root after the adapter fix is committed and pushed. Its 40 planned cells are never merged with run 01.
+
+[Run 02 settled result](run-02-result.md): one complete block produced three official scores and one real Task timeout, triggering the registered unscored early stop. The remaining nine blocks were not launched; null scores and all costs are retained.
