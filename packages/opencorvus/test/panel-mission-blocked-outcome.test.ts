@@ -11,6 +11,9 @@ import { ensureMissionSession, requireMissionSession } from "@/mission/session"
 import { panelLeafToolID } from "@/panel/action-ids"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
+import { SessionStatus } from "@/session/status"
+import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
+import { observeMissionSettlement } from "../script/mission-settlement"
 import { Database } from "@/storage/db"
 import { Tool } from "@/tool/tool"
 import { PanelLeafTools } from "@/tool/panel"
@@ -212,6 +215,24 @@ test("a failed child Task can settle its Mission as an evidenced blocked outcome
       expect(missionStatusRecord(mission)).toMatchObject({
         outcome: { kind: "blocked", summary: args.summary }, tasks: [{ taskID, lifecycleStatus: "failed" }],
       })
+      const observe = () => observeMissionSettlement({ directory: project.path, missionID: mission.missionID, sessionID: mission.id })
+      expect((await observe()).status).toBe("pending")
+      ensureTaskMessageProtocolBridge()
+      const owner = new AbortController().signal
+      SessionStatus.beginPromptGeneration(mission.id, owner)
+      SessionStatus.beginExecutionOccurrence(mission.id, input.id, owner)
+      try {
+        await SessionStatus.set(mission.id, { type: "streaming" }, { promptGenerationOwner: owner })
+        const { orderKey: _assistantOrderKey, ...replyFields } = assistant
+        await Session.updateMessage({ ...replyFields, id: Identifier.ascending("message"),
+          time: { created: now + 7, completed: now + 7 }, finish: "stop" })
+        expect((await observe()).status).toBe("pending")
+        await SessionStatus.settleAcceptedExecutionOccurrence(mission.id, owner)
+        expect(await observe()).toMatchObject({ status: "blocked", finalReply: { status: "settled" },
+          outcome: { kind: "blocked", unresolvedCriteria: args.unresolved_criteria } })
+      } finally {
+        SessionStatus.release(mission.id)
+      }
       return { missionSessionID: mission.id, taskID, now }
     },
   })
@@ -223,6 +244,7 @@ test("a failed child Task can settle its Mission as an evidenced blocked outcome
       expect(missionRecord(mission)).toMatchObject({
         boardLane: "attention", outcome: { kind: "blocked" }, tasks: [{ id: identity.taskID, lifecycleStatus: "failed" }],
       })
+      expect((await observeMissionSettlement({ directory: project.path, missionID: mission.missionID, sessionID: mission.id })).status).toBe("blocked")
       Database.transaction((db) => writeTaskUpdateInTransaction({
         db, taskID: identity.taskID, values: { status: "active", error: null },
         summary: "Operator supplied new portal authority", now: identity.now + 8,
@@ -234,6 +256,7 @@ test("a failed child Task can settle its Mission as an evidenced blocked outcome
       expect(missionBoardProjection(mission, {
         interruptible: false, pendingInteractions: 0, taskLifecycleStatuses: ["completed"],
       })).toMatchObject({ lane: "review" })
+      expect((await observeMissionSettlement({ directory: project.path, missionID: mission.missionID, sessionID: mission.id })).status).toBe("pending")
     },
   })
 })

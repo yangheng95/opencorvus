@@ -129,11 +129,11 @@ try {
   }
   const [{ Instance }, { Database }, { ensureGitProjectMetadata }, { executionCapsuleSourceTreeSnapshot },
     { workspaceTreeDigest }, { ExpertSquadPackageManager }, { Provider }, { SessionStatus }, { ProcessSupervisor },
-    { ProviderUsageEventTable }, { Server }, { InstanceBootstrap }] = await Promise.all([
+    { ProviderUsageEventTable }, { Server }, { InstanceBootstrap }, { observeMissionSettlement }] = await Promise.all([
     import("../src/project/instance"), import("../src/storage/db"), import("../src/engine/git-project-metadata"),
     import("../src/execution-capsule/tree-digest"), import("@opencorvus-ai/plugin"), import("../src/expert-squad/manager"),
     import("../src/provider/provider"), import("../src/session/status"), import("../src/shell/process-supervisor"),
-    import("../src/usage/usage.sql"), import("../src/server/server"), import("../src/project/bootstrap"),
+    import("../src/usage/usage.sql"), import("../src/server/server"), import("../src/project/bootstrap"), import("./mission-settlement"),
   ])
   exportUsage = async () => {
     const rows = Database.use((db) => db.select().from(ProviderUsageEventTable).all())
@@ -226,7 +226,12 @@ try {
         const interactions = await fetchJSON(taskRoute(task.taskID, "interactions"))
         if (interactions.some((item: { status: string }) => item.status === "pending")) throw new Error("Diagnostic requested external interaction")
       }
-      if (status.status === "inactive" && status.tasks.length === 1 && status.tasks[0].lifecycleStatus === "completed") {
+      const settlement = await observeMissionSettlement({ directory: coordinator, missionID, sessionID: wake.sessionID })
+      await json("mission-settlement.json", settlement)
+      if (settlement.status === "blocked" || settlement.status === "failed") {
+        throw new Error(`Diagnostic Mission settlement ${settlement.status}: ${JSON.stringify(settlement)}`)
+      }
+      if (settlement.status === "accepted" && status.tasks.length === 1 && status.tasks[0].lifecycleStatus === "completed") {
         const taskID = status.tasks[0].taskID
         await json("task.json", await fetchJSON(taskRoute(taskID)))
         await json("task-transcript.json", await fetchJSON(taskRoute(taskID, "transcript")))

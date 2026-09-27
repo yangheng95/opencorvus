@@ -1,9 +1,9 @@
+import { missionFinalReplyState, type MissionFinalReplyInput } from "./mission-settlement"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { projectTaskRowsInTransaction } from "@/engine/store"
 import { PublishableInteractiveArtifactPayload } from "@/interactive-artifact/schema"
 import { projectProtocolDeliveryInTransaction } from "@/protocol/delivery-projection"
 import { ProtocolInboxTable } from "@/protocol/protocol.sql"
-import { ProtocolStore } from "@/protocol/store"
 import {
   MessageTable,
   PartTable,
@@ -15,13 +15,6 @@ import { projectToolPartInTransaction } from "@/session/tool-part-facts"
 import type { Database } from "@/storage/db"
 import { PanelArtifactReadReferenceFactSchema } from "@/agent/artifact-provenance-facts"
 import { MissionCompletionInput } from "@/mission/completion"
-import { SessionStatus } from "@/session/status"
-
-export function missionTaskDuplexCompletionExecution(sessionID: string, inputMessageID?: string) {
-  if (!inputMessageID) return {}
-  const event = ProtocolStore.latestSessionOccurrenceEvent(sessionID, "agent.execution.lifecycle", inputMessageID)
-  return { inputMessageID, status: event ? SessionStatus.Info.parse(event.payload?.status) : undefined }
-}
 
 // This bounded protocol case produces one small Completion Decision per Task.
 // Its acceptance trajectory is stricter than the general paged Artifact API.
@@ -263,20 +256,7 @@ export function missionTaskDuplexUsageOwnerRequirements(input: {
   return { owners, unresolvedTaskRootSessionIDs }
 }
 
-export function missionTaskDuplexFinalEvidenceState(input: {
-  missionSessionID: string
-  completionMessageID?: string
-  completionParentMessageID?: string
-  messages: readonly {
-    id: string
-    sessionID: string
-    role: string
-    parentMessageID?: string
-    completedAtMs?: number
-    finish?: string
-    error?: unknown
-  }[]
-  execution: { inputMessageID?: string; status?: SessionStatus.Info }
+export function missionTaskDuplexFinalEvidenceState(input: MissionFinalReplyInput & {
   nonce: string
   artifacts: readonly {
     id: string
@@ -289,52 +269,9 @@ export function missionTaskDuplexFinalEvidenceState(input: {
   requiredUsageOwners: readonly MissionTaskDuplexUsageOwner[]
   unresolvedUsageOwners?: readonly string[]
 }) {
-  const replies = input.completionParentMessageID
-    ? input.messages.filter(
-        (message) =>
-          message.sessionID === input.missionSessionID &&
-          message.role === "assistant" &&
-          message.parentMessageID === input.completionParentMessageID,
-      )
-    : []
-  const completionReply = replies.find((message) => message.id === input.completionMessageID)
-  const sameExecution = input.execution.inputMessageID === input.completionParentMessageID
-  const failedReplyIDs = replies
-    .filter((message) => message.error != null)
-    .map((message) => message.id)
-    .sort()
-  const successfulStops =
-    completionReply?.completedAtMs !== undefined
-      ? replies.filter(
-          (message) =>
-            message.error == null &&
-            message.finish === "stop" &&
-            message.completedAtMs !== undefined &&
-            message.completedAtMs >= completionReply.completedAtMs!,
-        )
-      : []
-  const executionFailed =
-    sameExecution &&
-    input.execution.status?.type === "terminal" &&
-    (input.execution.status.reason === "error" || input.execution.status.reason === "aborted")
-  const executionSettled =
-    sameExecution &&
-    (input.execution.status?.type === "idle" ||
-      (input.execution.status?.type === "terminal" && input.execution.status.reason === "completed"))
-  const replyFailed = failedReplyIDs.length > 0 || executionFailed
-  const replySettled = Boolean(
-    completionReply &&
-      successfulStops.length > 0 &&
-      replies.every((message) => message.completedAtMs !== undefined) &&
-      executionSettled &&
-      !replyFailed,
-  )
-  const finalReply = {
-    status: replyFailed ? ("failed" as const) : replySettled ? ("settled" as const) : ("pending" as const),
-    responseMessageIDs: successfulStops.map((message) => message.id).sort(),
-    completedAtMs: replySettled ? Math.max(...successfulStops.map((message) => message.completedAtMs!)) : undefined,
-    failedReplyIDs,
-  }
+  const finalReply = missionFinalReplyState(input)
+  const replySettled = finalReply.status === "settled"
+  const replyFailed = finalReply.status === "failed"
   const completionArtifacts =
     input.completionMessageID && input.completionParentMessageID
     ? input.artifacts.filter(

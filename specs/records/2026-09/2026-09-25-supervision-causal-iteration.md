@@ -1602,3 +1602,28 @@
 - D5通过真实Node Package Tool进程检验：原DB持久化schema_version2前驱→真实artifact_search取得exact locator→原readTaskArtifact跨Host RPC完整读取→实际viral-content类型化发布器抛出并运输“Artifact inspection failed: schema_version must be 1; received 2”。它是明确本地fixture，证明真实错误链，非模型理解或外部行为。未修改包源码或发布身份。
 - 最终41项296断言：scope cursor2/25（g61-codex-scope-final.log）；plugin26/194（g61-plugin-errors-test.log）；native process1/11与terminal/catalog/import12/66（g61-native-catalog-verified.log），各文件exit0。根类型8/8、docs342ops25通过。中间red.log第一次提取helper遗留project局部变量报ReferenceError，不算产品红测；修正后上述verified-red才是真反例。native-catalog-tests.log首轮把recordEngineArtifact返回ID错当row且误写两个测试文件名，原错误保留，改用真实Catalog locator及存在的文件后重跑通过，没有放宽生产校验。
 - 本范围仅D1/D5和真实诊断结果归档。runner提前结束Mission及通用发布器正式类型绕过仍待修复，不能以41项绿称整体完成；下一轮继续原生Mission最终回合/请求/终态共同事实，按AGENTS横审共享路径并先落盘方案，不重启diagnostic-01或另开未登记模型。
+
+## G62 — 运行器等待原Mission接受与最终回复（实施前）
+
+### Recall、根因与影响面
+
+- 从08b57d19已push/clean继续；用户授权Codex在17:45上海交回Opus前实质修复。G61 D1/D5不重做，diagnostic-01只读结束，无Provider、凭据、业务样本或委托。本轮继续benchmark-debug-template的真实检查流程，原实验不重跑。目标是保护Mission对真实交付的独立判断与结算，不以Task completed或正确算术代替完整复核。
+- 原日志已证Server.stop取消最后Mission回复。直接触发是evolution-diagnostic只检查活动投影inactive与一个Task completed；expert-squad-evolution-e2e也有inactive/allTasksTerminal分支。Task终态可能先于生命周期消息交付、Mission读取和判断；多次空轮询或增加等待秒数均不能证明完成。两入口共享错误的消费合同，不需要改Session/Task生命周期或增加完成ledger。
+- 已读AGENTS、Recall/五段图/G60–G61、02-data/task-control-plane、Mission routes/projection/board/completion/session/execution-closure/process-recovery、Session状态及ProtocolStore occurrence读取、duplex检查与真实存储测试、两个运行器/cleanup、AutomationBench终结与scheduler settlement。全仓搜索inactive、allTasksTerminal、Server.stop、missionRecord与finalEvidence调用。Mission /status只是活动事实；唯一接受/blocked权威是missionRecord.outcome，原board校验Tool输入/收据、完整read refs和当前Task终态发生。不存在GET单Mission路由，使用已有按directory定位的原Mission读路径。
+- 横审结论：Task正常/失败/取消与复开时旧terminal reference校验已有；Mission接受/blocked和新operator输入、Session retry/streaming/idle/terminal/error/aborted分别有原事实。恢复路径读取持久化occurrence及未完成assistant，不可用进程内idle冒充恢复后完成。duplex原检查已要求接受Tool所在input occurrence、完成后的finish=stop回复、所有同parent回复completed及原执行终结；AutomationBench另有完整transcript/outcome、scheduler drain与quiescence检查，单独inactive函数只用于等待期分类，不是直接成功出口。本轮不改其样本或调度合同。多项目按原directory/Mission/session身份定位，消息与事件只读同Session；并行其他Mission的idle/完成不能用于本Mission。
+
+### 单一方案与正向Checker
+
+- 从duplex辅助抽出唯一通用最终回复判定及原ProtocolStore occurrence读取；保留duplex特有nonce、交付、Tool和费用验收。新共享只读观察器用原Mission投影、真实Message与事件在同一读取事务派生pending/accepted/blocked/failed，不写第二完成事实。接受收据尚未出现、Tool已返回但最终回复仍streaming、同输入有未完成assistant均为pending；原error/aborted为failed。若接受后已有新输入，亦须其原回复/occurrence完成，防止旧收据遮住已入队的后续回合；未来未发生定时输入不是本轮已执行事实。
+- 两运行器只在该原接受及回复结算成立时进入原产物验收/cleanup；blocked/失败输出明确错误，原Task失败/交互/真实无活动停止合同不变。不增总时长、轮次、金额预算，不注入消息、补写接受或替模型判断。当前诊断原receipt/输入/分数保持。
+- 真实Checker扩展现有本地DB→Task terminal→完整read ref→真实panel_complete_mission Tool链：Task已completed但无Mission接受给pending；Tool收据已落账且回复未完仍pending；真实最终stop和精确执行终结后accepted；后续输入pending、终态复开旧收据失效。通用原判定继续验证retry/error/aborted、错误发生及同Session隔离；真实读取持久化event覆盖进程状态释放后恢复读取。测试driver显式构造合法参与者事实，不冒称模型自主行为。聚焦测试、脚本类型、根类型/docs及实际prepush后范围提交/pull merge/outgoing/push。
+- 影响限于本地运行器/共享检查器/测试和文档，无HTTP、SDK、DDL、包源码/嵌入或UI变化。D2正式类型权威仍后续实施，整体可靠业务纠错/真实进化收益未达成。
+
+### 实施、原件复核与验收
+
+- `script/mission-settlement.ts`提取原duplex最终回复谓词和精确ProtocolStore读取，原duplex复用且保留自身业务/费用检查。只读观察器按原directory/Mission/Session身份读取当前outcome，同一DB读取事务投影接受所在occurrence及最新真实输入的回复；批量输入用原Message.acceptedInputMessageIDs定位其真实parent，不从时间猜因果。没有Instance初始化、Server、消息/状态写入。两运行器使用此观察器；旧evolution入口接受后产物检查失败明确抛出，不再吞错等待。没有改模型、样本数或源包，旧入口没有执行。
+- 真实Task/DB/Panel Tool Checker中，原inactive+Task completed条件已经成立而观察器为pending；真实panel_complete_mission落收据后仍pending；实际Message stop及原SessionStatus→message protocol bridge→ProtocolStore终结后accepted。随后本地owner释放仍可从持久化事实读到accepted；新已入队delay消息使latestReply pending。真实block_mission也只在最后回复完后给blocked，Instance释放再读保持，Task新终态使旧outcome失效回pending。错误Session给确切identity mismatch；纯合同补齐retry/coordinated pending、error/aborted failed、另一Session未完消息与本occurrence隔离。它们是合法本地test-driver，不是完整跨进程重启或模型自主验收。
+- 首轮`g62-initial-tests.log`中真实Panel测试6pass/1fail：测试只调SessionStatus，未装生产事件桥，内存idle但原事件缺失，观察器正确保持pending。接入唯一原bridge后通过，未放宽持久化条件。`g62-script-types-initial.log`还发现旧duplex的completion类型已改outcome、旧evolution空数组推断never及闭包selection收窄丢失；按当前真实类型作最小修正，无兼容实现。初版及中间日志均保留，不当最终计数。
+- 对G61只读备份的原诊断元数据，用新观察器直接复核（不启动Instance/Server/Provider、不写原DB）：`g62-original-settlement.json`返回failed，Mission原outcome缺失，最新回复明确failed。原assistant `msg_g0VWOOpJF00cB902q5hu`的parent正是`msg_h236mNcpKemb0MsHRVfD`；原MessageAbortedError携带Server.stop/process.shutdown/session-wake-loop。后者是输入Message，不误称assistant。原execution_settled、Task accepted、报告、账本均不改；这个只读结论不是新样本。首次带tsconfig-override的Bun退出0但尾部有内部directory warning，改正常自动解析调用后`g62-original-settlement-verified.log`干净exit0，同一观察结果。
+- 最终18项130断言：terminal authority7/59、blocked1/12、duplex8/38在`g62-settlement-verified.log`全部exit0；真实入口prepare2/21在`g62-focused-final.log`第四文件exit0（其前三文件是前一相同合同运行，不重复加总）。prepare只验证独立source Host/原包/输入/cleanup，无Provider。脚本包含三个入口和共享helper的专项类型通过`g62-script-types-verified.log`；根类型8/8（7cached）与docs342ops25通过，原日志`g62-root-types.log`/`g62-docs.log`。本次没有新业务费用。
+- 下一项仍是G61 D2：先核对全部包类型化发布器、通用publisher与包manifest/安装/实际Host投影的唯一类型权威，显式声明正式类型后按当前caller身份执行完整性合同；不能靠包名前缀、关键词或业务结果造gate。D3 writer前驱文本属于后续独立干预候选，不能并入Host改动冒称进化收益。17:45或以后按原授权交回准确Opus。

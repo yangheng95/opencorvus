@@ -131,7 +131,6 @@ const [
   { EngineTaskTable },
   {
     missionTaskDuplexFinalEvidenceState,
-    missionTaskDuplexCompletionExecution,
     missionTaskDuplexActivityKey,
     observeMissionTaskDuplexActivity,
     projectMissionTaskDuplexControlStateInTransaction,
@@ -141,6 +140,7 @@ const [
     missionTaskDuplexReconciliationEvidence,
     missionTaskDuplexUsageOwnerRequirements,
   },
+  { missionCompletionExecution },
   { requireMissionSession },
   { missionRecord },
   { ProcessSupervisor },
@@ -156,6 +156,7 @@ const [
   import("@/session/session.sql"),
   import("@/engine/engine.sql"),
   import("./mission-task-duplex-snapshot"),
+  import("./mission-settlement"),
   import("@/mission/session"),
   import("@/mission/projection"),
   import("@/shell/process-supervisor"),
@@ -229,7 +230,7 @@ let evidence:
       inboxes: DuplexControlState["inboxes"]
       sourceToolPartIDs: string[]
       missionAckMessageID: string
-      missionCompletion: NonNullable<ReturnType<typeof missionRecord>["completion"]>
+      missionCompletion: NonNullable<ReturnType<typeof missionRecord>["outcome"]>
       reconciliationEvidence: ReturnType<typeof missionTaskDuplexReconciliationEvidence>
       duplexContract: ReturnType<typeof assertMissionTaskDuplexContract>
       terminalOrder: ReturnType<typeof assertMissionTaskTerminalOrder>
@@ -645,7 +646,7 @@ while (Date.now() < activityDeadline.deadlineMs) {
               : {}),
           }
         }),
-        execution: missionTaskDuplexCompletionExecution(mission.sessionID,
+        execution: missionCompletionExecution(mission.sessionID,
           completionMessageData?.role === "assistant" ? completionMessageData.parentID : undefined),
         nonce,
         artifacts: snapshot.artifacts.map((artifact) => {

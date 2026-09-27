@@ -21,6 +21,10 @@ import { PanelQueryTaskOutput } from "@/panel/task-query"
 import { Instance } from "@/project/instance"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Session } from "@/session"
+import { SessionStatus } from "@/session/status"
+import { observeMissionSettlement } from "../script/mission-settlement"
+import { missionStatusRecord } from "@/mission/projection"
+import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
 import { Database } from "@/storage/db"
 import { AutomationFireTable, AutomationTable } from "@/scheduler/automation.sql"
 import { SessionProcessor } from "@/session/processor"
@@ -1305,6 +1309,11 @@ describe("Mission terminal Task authority", () => {
         const { action: _completionAction, ...completionArgs } = completionInput
 
         const completionCallID = "complete-terminal-mission"
+        const observeSettlement = () => observeMissionSettlement({ directory: project.path, missionID: mission.missionID, sessionID: mission.id })
+        expect(missionStatusRecord(mission)).toMatchObject({ status: "inactive", tasks: [{ taskID, lifecycleStatus: "completed" }] })
+        expect((await observeSettlement()).status).toBe("pending")
+        await expect(observeMissionSettlement({ directory: project.path, missionID: mission.missionID, sessionID: "another-session" }))
+          .rejects.toThrow(`Mission settlement Session identity mismatch: ${mission.missionID}`)
         const completionPartID = Identifier.ascending("part")
         await Session.updatePart({
           id: Identifier.ascending("part"),
@@ -1385,6 +1394,31 @@ describe("Mission terminal Task authority", () => {
           }),
         ).toMatchObject({ lane: "completed", outcome: { kind: "accepted", summary: "Accepted terminal evidence" } })
 
+        // The real Tool receipt is present, but its response occurrence is not finished.
+        ensureTaskMessageProtocolBridge()
+        const settlementOwner = new AbortController().signal
+        SessionStatus.beginPromptGeneration(mission.id, settlementOwner)
+        SessionStatus.beginExecutionOccurrence(mission.id, completionUser.id, settlementOwner)
+        try {
+          await SessionStatus.set(mission.id, { type: "streaming" }, { promptGenerationOwner: settlementOwner })
+          expect(await observeSettlement()).toMatchObject({ status: "pending", outcome: { kind: "accepted" }, finalReply: { status: "pending" } })
+          const { orderKey: _mutationOrderKey, ...responseFields } = mutationMessage
+          const finalResponse = await Session.updateMessage({
+            ...responseFields, id: Identifier.ascending("message"), time: { created: now + 7 }, finish: undefined,
+          })
+          await SessionStatus.settleAcceptedExecutionOccurrence(mission.id, settlementOwner)
+          expect((await observeSettlement()).status).toBe("pending")
+          await SessionStatus.set(mission.id, { type: "streaming" }, { promptGenerationOwner: settlementOwner })
+          await Session.updateMessage({ ...finalResponse, time: { created: now + 7, completed: now + 7 }, finish: "stop" })
+          expect((await observeSettlement()).status).toBe("pending")
+          await SessionStatus.settleAcceptedExecutionOccurrence(mission.id, settlementOwner)
+          expect(await observeSettlement()).toMatchObject({ status: "accepted", finalReply: { status: "settled", responseMessageIDs: [finalResponse.id] } })
+        } finally {
+          SessionStatus.release(mission.id)
+        }
+        // A fresh observer uses durable lifecycle facts after the local owner was released.
+        expect((await observeSettlement()).status).toBe("accepted")
+
         Database.immediateTransaction((db) => {
           db.insert(AutomationTable)
             .values({
@@ -1436,6 +1470,7 @@ describe("Mission terminal Task authority", () => {
             taskLifecycleStatuses: ["completed"],
           }),
         ).toMatchObject({ lane: "completed", outcome: { kind: "accepted", toolPartID: completionPartID } })
+        expect(await observeSettlement()).toMatchObject({ status: "pending", finalReply: { status: "settled" }, latestReply: { status: "pending" } })
 
         await updateTask(requireTask(taskID), { status: "active" }, "Task resumed")
         expect(

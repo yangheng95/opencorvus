@@ -541,6 +541,7 @@ try {
       import("../src/project/instance"),
       import("../src/storage/db"),
     ])
+  const { observeMissionSettlement } = await import("./mission-settlement")
   const overlayUiSource = freezeOverlayUiDirectory({
     directory: overlayBuildDirectory,
     manifestPath: overlayManifestRelativePath,
@@ -690,7 +691,7 @@ try {
   async function collectRecommendationRenderings(input: { taskID: string; sessionID: string }) {
     const transcript = (await requestJSON(taskRoute(input.taskID, "transcript"))) as unknown as Array<JsonObject>
     const artifactIDs = recommendationInteractiveArtifactIDs(transcript, input.sessionID)
-    const records = []
+    const records: Array<ReturnType<typeof InteractiveArtifactRecord.parse>> = []
     for (const artifactID of [...new Set(artifactIDs)]) {
       const record = await requestJSON(
         `/session/${encodeURIComponent(input.sessionID)}/interactive-artifact/${encodeURIComponent(artifactID)}`,
@@ -1197,14 +1198,15 @@ try {
     const allTasksTerminal =
       latestStatus.tasks.length > 0 &&
       latestStatus.tasks.every((task) => ["completed", "failed", "cancelled"].includes(task.lifecycleStatus))
-    if (latestStatus.status === "inactive" && allTasksTerminal) {
+    const settlement = await observeMissionSettlement({ directory: projectDirectory, missionID, sessionID: missionSessionID })
+    await writeJSON(path.join(runRoot, "mission-settlement.json"), settlement)
+    if (settlement.status === "blocked" || settlement.status === "failed") {
+      throw new Error(`Evolution Mission settlement ${settlement.status}: ${JSON.stringify(settlement)}`)
+    }
+    if (settlement.status === "accepted" && allTasksTerminal) {
       terminalFacts = await collectTerminalFacts(latestStatus)
-      try {
-        summarizeEvolutionEvidence(terminalFacts.artifacts)
-        break
-      } catch {
-        // Mission lifecycle delivery may schedule the next stage after a brief inactive projection.
-      }
+      summarizeEvolutionEvidence(terminalFacts.artifacts)
+      break
     }
 
     if (Date.now() >= deadline.deadlineMs) {
@@ -1296,7 +1298,7 @@ try {
 
   const targetTaskDigests = terminalFacts!.tasks.flatMap((task) => {
     const binding = task.packageRevisionBinding as JsonObject | undefined
-    return binding?.id === selection.selected.id && typeof binding.package_digest === "string"
+    return binding?.id === selection!.selected.id && typeof binding.package_digest === "string"
       ? [binding.package_digest]
       : []
   })

@@ -1,3 +1,4 @@
+import { missionCompletionExecution } from "../script/mission-settlement"
 import { afterEach, describe, expect, test } from "bun:test"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
@@ -19,7 +20,6 @@ import {
 import { Database } from "@/storage/db"
 import {
   missionTaskDuplexFinalEvidenceState,
-  missionTaskDuplexCompletionExecution,
   missionTaskDuplexActivityKey,
   missionTaskDuplexProgressKey,
   missionTaskDuplexToolHealth,
@@ -53,7 +53,7 @@ describe("Mission Task duplex snapshot", () => {
           aggregate_id: session.id, source: "test.duplex", emitted_at: now + index,
           order_key: executionLifecycleOrderKey(session.id, input.id), payload: { inputMessageID: input.id, status } })
       }
-      expect(inputs.map((id) => missionTaskDuplexCompletionExecution(session.id, id))).toEqual([
+      expect(inputs.map((id) => missionCompletionExecution(session.id, id))).toEqual([
         { inputMessageID: inputs[0], status: { type: "idle" } },
         { inputMessageID: inputs[1], status: { type: "streaming" } },
       ])
@@ -437,6 +437,7 @@ describe("Mission Task duplex snapshot", () => {
     for (const status of [
       { type: "streaming" as const },
       { type: "retry" as const, attempt: 1, message: "retrying", next: 300 },
+      { type: "terminal" as const, reason: "coordinated" as const },
     ]) {
       expect(
         missionTaskDuplexFinalEvidenceState({
@@ -451,6 +452,15 @@ describe("Mission Task duplex snapshot", () => {
         execution: { ...base.execution, inputMessageID: "another-input" },
       }).finalReply.status,
     ).toBe("pending")
+    for (const reason of ["error", "aborted"] as const) {
+      expect(missionTaskDuplexFinalEvidenceState({
+        ...base, execution: { ...base.execution, status: { type: "terminal", reason } },
+      }).blockingReasons).toEqual(["final_response_failed"])
+    }
+    expect(missionTaskDuplexFinalEvidenceState({
+      ...base, execution: { ...base.execution, status: { type: "terminal", reason: "completed" } },
+      messages: [...base.messages, { ...base.messages[0]!, sessionID: "another-mission", id: "foreign-stream", completedAtMs: undefined }],
+    }).finalReply.status).toBe("settled")
     expect(
       missionTaskDuplexFinalEvidenceState({
         ...base,
