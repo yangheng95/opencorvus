@@ -1,0 +1,127 @@
+{
+  "sourceCommit": "3add75a7711f0285b3066fea804e5b8fb06804c8",
+  "runRoot": ".tmp\\supervision-review-g64\\review-01",
+  "startedAt": "2026-09-27T06:53:45.038Z",
+  "finishedAt": "2026-09-27T06:54:28.346Z",
+  "reviewSessionID": "ses_hL5Ij8Y60PqJJN7d2gR6",
+  "inputMessageID": "msg_h2hFzM8Rce6W5BH2Po9G",
+  "settlement": {
+    "status": "settled",
+    "responseMessageIDs": [
+      "msg_g0VWOw80u00nzi3AGdGw"
+    ],
+    "completedAtMs": 1790492062172,
+    "failedReplyIDs": []
+  },
+  "visibleUserMessageEqualsRegisteredPacket": true,
+  "providerRequestCount": 4,
+  "nativeUsageRows": [
+    {
+      "id": "pvu_g0VWOw6tf00VZP7NtqjI",
+      "occurred_at": 1790492035331,
+      "provider_id": "openai",
+      "model_id": "gpt-5.6-luna",
+      "purpose": "session",
+      "input_tokens": 501,
+      "output_tokens": 66,
+      "reasoning_tokens": 93,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 660,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_hVuEzN27depeuDQsmi9f",
+      "agent_id": "memory"
+    },
+    {
+      "id": "pvu_g0VWOw6to00hZMUgPzDB",
+      "occurred_at": 1790492035340,
+      "provider_id": "openai",
+      "model_id": "gpt-5.6-luna",
+      "purpose": "session",
+      "input_tokens": 28512,
+      "output_tokens": 5,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 28517,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_hVuEzN27depeuDQsmi9f",
+      "agent_id": "chat"
+    },
+    {
+      "id": "pvu_g0VWOwDrr00FwnZ3EopR",
+      "occurred_at": 1790492062127,
+      "provider_id": "openai",
+      "model_id": "gpt-5.6-luna",
+      "purpose": "session",
+      "input_tokens": 32420,
+      "output_tokens": 541,
+      "reasoning_tokens": 516,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 33477,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_hL5Ij8Y60PqJJN7d2gR6",
+      "agent_id": "chat"
+    },
+    {
+      "id": "pvu_g0VWOwFTW00yohDOL1eT",
+      "occurred_at": 1790492068306,
+      "provider_id": "openai",
+      "model_id": "gpt-5.6-luna",
+      "purpose": "session",
+      "input_tokens": 4683,
+      "output_tokens": 1280,
+      "reasoning_tokens": 230,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 6193,
+      "cost_usd": 0,
+      "billing_status": "priced",
+      "session_id": "ses_hL5Ij8Y60PqJJN7d2gR6",
+      "agent_id": "memory"
+    }
+  ],
+  "finalProviderAudit": {
+    "pid": 19956,
+    "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "model": "gpt-5.6-luna",
+    "requests": [
+      {
+        "model": "gpt-5.6-luna",
+        "streaming": true,
+        "status": 200
+      },
+      {
+        "model": "gpt-5.6-luna",
+        "streaming": true,
+        "status": 200
+      },
+      {
+        "model": "gpt-5.6-luna",
+        "streaming": true,
+        "status": 200
+      },
+      {
+        "model": "gpt-5.6-luna",
+        "streaming": true,
+        "status": 200
+      }
+    ],
+    "exhausted": false,
+    "observedAt": "2026-09-27T06:54:02.115Z"
+  },
+  "review": {
+    "path": "review-01.md",
+    "bytes": 2753,
+    "sha256": "fcb84c034a06b4d6b5f2a5b68e2b7a12eed589b96282dd511ec73878f863366f"
+  },
+  "cleanup": {
+    "runtimeDisposed": true,
+    "credentialsRemoved": true
+  },
+  "scope": "Archived copies/projections of original run receipts, not a new usage or business verdict ledger. Local recorded cost is not an invoice."
+}

@@ -1,5 +1,7 @@
 # G64: one independent review of retained business evidence
 
+**Closed after its one review.** The independent response detected the false audit-availability statement and preserved correct arithmetic, but did not establish the complete registered review-scope/correction result. See [assessment.md](assessment.md) and [the unchanged response](review-01.md). Do not run this registration again.
+
 ## Recall and decision
 
 The user redirected the work toward demonstrable business correction and away from expanding infrastructure. The ended G60 report was numerically correct but made a false provenance statement. Its Task decision maker had received the complete final report and the prior reviewer's message before accepting it. The independent review concerned an earlier insight brief. These facts narrow the missing evidence to whether an independent judgment actually detects the discrepancy; they do not establish the model's attention or the contents retained in its last Provider request.

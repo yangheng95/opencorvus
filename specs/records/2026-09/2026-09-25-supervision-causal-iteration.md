@@ -1679,3 +1679,11 @@
 - 最小诊断是一个全新、独立、只读的普通Chat复核（review-01），输入仅原公开请求/metrics、生产reader已核验的原report/audit及其精确出处；不携带operator答案、错误位置、旧Completion摘要或本分析。明确这些是旧已结束交付的只读资料；不重新生成业务交付、恢复原Task、变更原分或替补样本。使用现有global/chat/start原参与者，不新增角色。唯一研究变量是把完整评审材料在一个新的可见请求中集中呈现；历史原Task与它不构成受控A/B收益比较。
 - 预测：若独立Luna自行识别真实不一致且区分早先简报审查与最终报告，说明集中上下文下可完成这个语义判断，可据此再设计同Task反馈验证；若漏判，记录该失败，不换模型/添答案/继续追问或重抽。即使通过也不声称原Task已修、因果改善、可靠返工或进化收益。单次能力诊断只排除一个解释，不以它外推可靠率。
 - 登记、输入原件与运行边界见specs/artifacts/2026-09-27-supervision-review/README.md。运输只复用现有source Server、paired stage、native audit、global Chat和原Session消息/用量；300秒真实无活动/poll2、全成本、无用户未设总时长/轮次/费用上限。启动前提交完整登记及运输文件、原输入完整性检查和无凭据本地prepare；实际launch固定最终source commit后再唯一preflight与唯一复核。缺少launch仍未运行。17:45交回规则不变。
+
+### 唯一复核的实际结果
+
+- 登记与运输e37b622f/3add75a7范围push完成，g64-registration-push.log原完整prepush通过；生产源码/角色/包未改。实际2026-09-27 14:53:44.72309上海bun PID19956启动，source3add75a7711f0285b3066fea804e5b8fb06804c8，原exec68797取回exit0；14:54:28.346结算。唯一根.tmp/supervision-review-g64/review-01，日志g64-review-01.log。preflight ses_hVuEzN27depeuDQsmi9f实际credential usable/catalog projected/gpt-5.6-luna/streaming；review ses_hL5Ij8Y60PqJJN7d2gR6/input msg_h2hFzM8Rce6W5BH2Po9G，原final msg_g0VWOw80u00nzi3AGdGw，持久化final-reply settled。全部证据已归档review-01.md/receipt及assessment，未改原result里的not_evaluated。
+- 语义结果是**部分证据，不是全部通过**：Luna自行指出终稿“没有audit”与原audit/rev37矛盾，认为not fully supported as written，保留正确数字、非因果和建议。但它没有明确区分审查対象是早先brief而非最终报告；建议改成report was assessed against supplied audit record，若作为原writer行为陈述仍缺事实支持，不能替它润色后说通过。原conditionally accepted标签保留，operator完整注册结论未通过。
+- 这证明一次集中证据下的发现能力，不证明历史错因就是上下文丢失，不构成历史/当前因果A/B，也没有同Task返工、可靠率或进化收益。既有Chat及memory helper共4次真实流式gpt-5.6-luna/HTTP200，4原native用量：input66116/output1892/reasoning839/cache_read0/total68847，local priced cost0非免费/账单。无业务Task（原DB count0）/Tool调用/作者/候选/Campaign。实际runtimeDisposed/credentialsRemoved true，auth/models已删除。原visible User Message逐字等于登记packet；不冒称存有全部Provider serialized request。
+- 输入准备先误将pretty-printed审查导出字节与原compact身份相比而失败，最终从原DB只读提取并匹配原sha、与生产reader结果逐值一致。派生provenance JSON的自算hash/换行门已删除，仅4份原不可变输入身份参与检查。无凭据prepare03成功、usage0/cleanup true，专项类型和docs通过。prepare即时关服出现scheduler disposing取消日志及Bun显式tsconfig override尾部directory warning保留，没有据此扩基础设施工单；真实review无中断，全部请求/用量完整落账。
+- 下一唯一业务边界仍是反证改变接受决定→同一Task真实返工→按原义务复核。先形成能合法观察该转换的独立完整登记；新增草稿编辑/新增输入后正常交付不算该转换，若自然没有错误则标未触发而不补样本。不得重开review-01/diagnostic-01，不自动改D3或堆一轮机制测试。用户纠偏、此部分结果和未满足目标优先交给17:45恢复的Opus。
