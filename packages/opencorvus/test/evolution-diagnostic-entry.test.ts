@@ -5,6 +5,8 @@ import { Global } from "../src/global"
 import { ModelsDev } from "../src/provider/models"
 import { stageDiagnosticProvider } from "../script/evolution-diagnostic-provider"
 import { CredentialRedactor } from "../script/real-provider-audit"
+import { claimDiagnosticInitialization, DiagnosticInitializationError } from "../script/evolution-diagnostic-initialization"
+import { Database } from "bun:sqlite"
 
 test("diagnostic paired staging preserves the complete runtime catalog and scoped authority", async () => {
   const root = await Global.createTemporaryDirectory("evolution-diagnostic-provider-")
@@ -38,8 +40,8 @@ test("diagnostic preparation executes real isolated startup and settles its owne
   const parent = await Global.createTemporaryDirectory("evolution-diagnostic-entry-")
   const root = path.join(parent, "prepare")
   const script = path.resolve(import.meta.dir, "../script/evolution-diagnostic.ts")
-  const invoke = async () => {
-    const child = Bun.spawn([process.execPath, script, "--prepare", "--run-root", root], { stdout: "pipe", stderr: "pipe" })
+  const invoke = async (extra: string[] = []) => {
+    const child = Bun.spawn([process.execPath, script, "--prepare", "--run-root", root, ...extra], { stdout: "pipe", stderr: "pipe" })
     const [exit, stdout, stderr] = await Promise.all([child.exited, new Response(child.stdout).text(), new Response(child.stderr).text()])
     return { exit, stdout, stderr }
   }
@@ -61,6 +63,49 @@ test("diagnostic preparation executes real isolated startup and settles its owne
     const second = await invoke()
     expect({ exit: second.exit, error: /DiagnosticRunAlreadyExists/.exec(second.stderr)?.[0] }).toEqual({ exit: 1, error: "DiagnosticRunAlreadyExists" })
     expect(JSON.parse(await readFile(path.join(root, "result.json"), "utf8"))).toEqual(receipt)
+    const originalResult = await readFile(path.join(root, "result.json"), "utf8")
+    const originalClaim = await readFile(path.join(root, "claim.json"), "utf8")
+    const resumed = await invoke(["--resume-initialization", "."])
+    if (resumed.exit !== 0) throw new Error(`Preparation recovery failed: ${resumed.stdout}\n${resumed.stderr}`)
+    const continuation = JSON.parse(await readFile(path.join(root, "continuation.json"), "utf8"))
+    const childResult = JSON.parse(await readFile(path.join(root, continuation.receiptDirectory, "result.json"), "utf8"))
+    expect(childResult).toMatchObject({ outcome: "prepared", parentReceiptDirectory: ".", initialTree: receipt.initialTree,
+      target: { packageDigest: receipt.target.packageDigest }, cleanup: receipt.cleanup })
+    expect(continuation.counts).toEqual({ session: 0, engine_task: 0, provider_usage_event: 0, provider_activity_request: 0 })
+    expect(await readFile(path.join(root, "result.json"), "utf8")).toEqual(originalResult)
+    expect(await readFile(path.join(root, "claim.json"), "utf8")).toEqual(originalClaim)
+    const retry = await invoke(["--resume-initialization", "."])
+    expect({ exit: retry.exit, reason: /already_continued/.exec(retry.stderr)?.[0] }).toEqual({ exit: 1, reason: "already_continued" })
+    const request = { root, parent: continuation.receiptDirectory, mode: "prepare" as const, model: receipt.model }
+    const reason = async (run: () => Promise<unknown>) => {
+      try { await run(); return "accepted" } catch (error) {
+        if (!(error instanceof DiagnosticInitializationError)) throw error
+        return error.reason
+      }
+    }
+    expect(await reason(() => claimDiagnosticInitialization({ ...request, parent: "../outside" }))).toEqual("invalid_parent")
+    await writeFile(path.join(root, "launch.json"), JSON.stringify({ phase: "local-test-started-boundary" }), { flag: "wx" })
+    expect(await reason(() => claimDiagnosticInitialization(request))).toEqual("business_boundary_reached")
+    await rm(path.join(root, "launch.json"))
+    // Explicit local usage fixture in the actual prepared schema exercises the original-table check.
+    const db = new Database(path.join(root, "home/data/opencorvus.db"))
+    try {
+      db.query(`INSERT INTO provider_usage_event
+        (id, occurred_at, provider_id, model_id, purpose, input_tokens, output_tokens, reasoning_tokens,
+         cache_read_tokens, cache_write_tokens, total_tokens, cost_usd, billing_status)
+        VALUES ('local-test-usage', ?, 'openai', 'local-test-model', 'other', 1, 1, 0, 0, 0, 2, 0, 'unknown')`).run(Date.now())
+    } finally { db.close() }
+    expect(await reason(() => claimDiagnosticInitialization(request))).toEqual("business_facts_recorded")
+    const fixtureDB = new Database(path.join(root, "home/data/opencorvus.db"))
+    try { fixtureDB.query("DELETE FROM provider_usage_event WHERE id = 'local-test-usage'").run() }
+    finally { fixtureDB.close() }
+    const contenders = await Promise.allSettled([claimDiagnosticInitialization(request), claimDiagnosticInitialization(request)])
+    expect(contenders.map((entry) => entry.status === "fulfilled" ? "claimed" : entry.reason.reason).sort())
+      .toEqual(["already_continued", "claimed"])
+    const successor = JSON.parse(await readFile(path.join(root, continuation.receiptDirectory, "continuation.json"), "utf8"))
+    const accepted = contenders.find((entry) => entry.status === "fulfilled")!
+    if (accepted.status !== "fulfilled") throw new Error("Expected one initialization claimant")
+    expect(successor.receiptDirectory).toEqual(accepted.value.receiptDirectory)
     console.log("G59_PREPARED " + JSON.stringify({ sourceCommit: receipt.sourceCommit, initialTree: receipt.initialTree, cleanup: receipt.cleanup }))
   } finally { await rm(parent, { recursive: true, force: true }) }
 }, 90_000)

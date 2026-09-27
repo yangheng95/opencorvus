@@ -10,10 +10,12 @@ import nativeProviderAudit from "./native-provider-audit-plugin"
 import { latestAuditSnapshotFiles } from "./audit-snapshot"
 import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 import { missionAbortRequest, observeActivityDeadline, settleEvolutionRuntimeBeforeCredentials, taskRoute } from "./expert-squad-evolution-e2e-support"
+import { claimDiagnosticInitialization } from "./evolution-diagnostic-initialization"
 
 const { values } = parseArgs({ args: process.argv.slice(2), strict: true, options: {
   prepare: { type: "boolean" }, run: { type: "boolean" },
   "run-root": { type: "string" }, "auth-source": { type: "string" },
+  "resume-initialization": { type: "string" },
 } })
 assert(values.prepare !== values.run, "Choose exactly one of --prepare or --run")
 const repo = path.resolve(import.meta.dir, "../../..")
@@ -46,20 +48,27 @@ if (values.run) {
   assert.equal(await git(repo, ["status", "--porcelain"]), "", "Real diagnostic requires committed, clean source")
 }
 await fs.mkdir(path.dirname(root), { recursive: true })
-try { await fs.mkdir(root) } catch (error) {
-  if ((error as NodeJS.ErrnoException).code === "EEXIST") throw new Error(`DiagnosticRunAlreadyExists: ${root}`)
-  throw error
+const resumed = values["resume-initialization"] === undefined ? undefined : await claimDiagnosticInitialization({
+  root, parent: values["resume-initialization"], mode: values.run ? "run" : "prepare", model,
+})
+if (!resumed) {
+  try { await fs.mkdir(root) } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "EEXIST") throw new Error(`DiagnosticRunAlreadyExists: ${root}`)
+    throw error
+  }
 }
+const receiptRoot = resumed?.directory ?? root
 async function json(name: string, value: unknown) {
-  await fs.writeFile(path.join(root, name), redactor.redact(JSON.stringify(value, null, 2)) + "\n")
+  await fs.writeFile(path.join(receiptRoot, name), redactor.redact(JSON.stringify(value, null, 2)) + "\n")
 }
 async function event(type: string, detail: unknown) {
-  await fs.appendFile(path.join(root, "controller.jsonl"), redactor.redact(JSON.stringify({ time: new Date().toISOString(), type, detail })) + "\n")
+  await fs.appendFile(path.join(receiptRoot, "controller.jsonl"), redactor.redact(JSON.stringify({ time: new Date().toISOString(), type, detail })) + "\n")
 }
 const result: Record<string, any> = {
   schema: "opencorvus/g58-diagnostic@1", mode: values.run ? "run" : "prepare",
   sourceCommit, pid: process.pid, startedAt: new Date().toISOString(), model,
   inactivityMs, pollIntervalMs, requestCeiling: null, businessVerdict: "not_evaluated",
+  receiptDirectory: resumed?.receiptDirectory ?? ".", ...(resumed ? { parentReceiptDirectory: resumed.parent } : {}),
 }
 await json("claim.json", result)
 let server: { url: URL; stop(force?: boolean): Promise<void> } | undefined
@@ -73,16 +82,19 @@ try {
   for (const directory of [path.join(home, "data"), path.join(home, "config"), coordinator, execution, path.join(root, "managed")]) {
     await fs.mkdir(directory, { recursive: true })
   }
-  for (const directory of [coordinator, execution]) {
-    await git(directory, ["init", "--quiet"])
-    await git(directory, ["config", "user.name", "G58 diagnostic"])
-    await git(directory, ["config", "user.email", "g58@example.invalid"])
+  if (!resumed) {
+    for (const directory of [coordinator, execution]) {
+      await git(directory, ["init", "--quiet"])
+      await git(directory, ["config", "user.name", "G58 diagnostic"])
+      await git(directory, ["config", "user.email", "g58@example.invalid"])
+    }
+    await fs.writeFile(path.join(coordinator, "README.md"), "# G58 diagnostic coordinator\nNo business input or expected answer is stored here.\n")
   }
-  await fs.writeFile(path.join(coordinator, "README.md"), "# G58 diagnostic coordinator\nNo business input or expected answer is stored here.\n")
   const inputFiles: Array<{ path: string; bytes: number; sha256: string }> = []
   for (const name of ["request.md", "metrics.json"]) {
     const bytes = await fs.readFile(path.join(inputRoot, name))
-    await fs.writeFile(path.join(execution, name), bytes, { flag: "wx" })
+    if (resumed) assert.deepEqual(await fs.readFile(path.join(execution, name)), bytes, `Original diagnostic input changed: ${name}`)
+    else await fs.writeFile(path.join(execution, name), bytes, { flag: "wx" })
     inputFiles.push({ path: name, bytes: bytes.length, sha256: createHash("sha256").update(bytes).digest("hex") })
   }
   result.inputFiles = inputFiles
@@ -136,12 +148,15 @@ try {
     await exportUsage!()
     Database.close()
   }
-  for (const directory of [coordinator, execution]) {
-    await ensureGitProjectMetadata(directory)
-    await git(directory, ["add", "."])
-    await git(directory, ["commit", "--quiet", "-m", "Freeze G58 diagnostic input"])
+  if (!resumed) {
+    for (const directory of [coordinator, execution]) {
+      await ensureGitProjectMetadata(directory)
+      await git(directory, ["add", "."])
+      await git(directory, ["commit", "--quiet", "-m", "Freeze G58 diagnostic input"])
+    }
   }
   const initialTree = await executionCapsuleSourceTreeSnapshot(execution)
+  if (resumed) assert.deepEqual(initialTree, resumed.initialTree, "Original complete diagnostic tree changed")
   result.initialTree = workspaceTreeDigest(initialTree)
   await json("initial-tree.json", initialTree)
   await Instance.provide({ directory: coordinator, init: InstanceBootstrap, fn: async () => {
@@ -172,8 +187,8 @@ try {
     "No external business actions or real accounts. The budget has no declared monetary ceiling. Record unknowns and all actual usage.",
     "", "Verbatim target Task request:", await fs.readFile(path.join(execution, "request.md"), "utf8"),
   ].join("\n")
-  await fs.writeFile(path.join(root, "mission-request.md"), missionRequest + "\n")
-  result.missionRequestPath = path.join(root, "mission-request.md")
+  await fs.writeFile(path.join(receiptRoot, "mission-request.md"), missionRequest + "\n")
+  result.missionRequestPath = path.join(receiptRoot, "mission-request.md")
   result.outcome = "prepared"
   result.providerProjection = "not_checked"
   await json("prepared.json", result)
@@ -249,6 +264,6 @@ try {
   }
   result.finishedAt = new Date().toISOString()
   await json("result.json", result)
-  console.log(JSON.stringify({ outcome: result.outcome, root, cleanup: result.cleanup, error: result.error, cleanupError: result.cleanupError }))
+  console.log(JSON.stringify({ outcome: result.outcome, root, receiptRoot, cleanup: result.cleanup, error: result.error, cleanupError: result.cleanupError }))
   process.exitCode = failed ? 1 : 0
 }

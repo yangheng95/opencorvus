@@ -1535,3 +1535,20 @@
 - 单一修复方案：把授权文件读取/成对stage抽到此入口的一个helper；auth仅原OpenAI credential record，models完整原字节运输，先用原ModelsDev.validateExplicitCatalog验证整份源与指定模型。返回只有expiry/provider/model元信息。caller仍在该stage前标记可能部分复制以保证收尾，scope/不刷新/唯一目录原规则不变。一个真实本地file stage测试从原完整catalog读取、写回逐字一致、再用原catalog parser检查指定模型及必需providers；无需凭据真实请求。更新原README中过强“仅OpenAI记录”措辞，保留原失败claim；当前不自动重试该诊断。
 - 修复已经落到唯一stageDiagnosticProvider；本地真实文件运输及原ModelsDev解析检查通过，原完整catalog字节、指定模型、kilo/opencorvus元数据逐值保留，auth只运输OpenAI结构。此用例用明确本地测试OAuth值及测试目录原catalog，不能当真实账号或Luna请求证明。最终14项52断言全绿（g59-catalog-tests.log，entry2/11、audit12/41）；显式脚本类型g59-catalog-types.log、根类型8/8（7cached，g59-catalog-root-types.log）及docs342ops25（g59-catalog-docs.log）通过。无公共API/SDK/DDL/包嵌入改动。
 - 原diagnostic-01初始化失败根及零请求原件完整保留，没有重新运行或更换样本。运行器仍要求唯一新根，当前业务诊断未开始；要继续必须先明确同一已登记初始化的恢复合同并保持原失败收据和唯一业务launch，不能删除claim、覆盖result、换目录或将本地prepare当真实模型验收。整体可靠纠错与进化收益仍未完成。
+
+## G60：同一诊断在业务启动前的初始化恢复
+
+### Recall、影响面与实施前方案
+
+- 从1094abb8/main=origin/clean继续。用户授权修复本地运行器后继续已登记的一次诊断，禁止重抽/替补/覆写历史；12:45上海交回原Opus。已读AGENTS、本文Recall/五段图/G58–59、G58 artifact README、02-data、入口/Provider stage/audit snapshot、原SQLite表与其他真实运行器。使用benchmark-debug-template但不应用重复业务样本循环，无委托。用户仅问GPT-6 Luna可用性，当前5.6 Luna登记保持。
+- 原G59根11:39失败已正常清理。此次再次只读原DB：session/engine_task/provider_usage_event/provider_activity_request均0；原audit所有publisher最新snapshot均0请求；没有launch/preflight/Mission，当前真实命令行无此入口进程。直接触发是唯一root的mkdir拒绝重复；根因是入口把本地初始化claim与业务launch混成只能首次进入，目录运输修好后仍不能沿原诊断继续。未知/已发生模型请求不能以最后error覆盖。不是Task/Mission/Session occurrence异常：生产调度尚未接收任何Session，原路由和停止/终态路径保持。
+- 单一恢复入口为显式--resume-initialization <原收据相对目录>，原首次目录用“.”；只在同一root复用原home/coordinator/execution/DB。原claim/result/initial-tree及审计字节保持；新初始化收据放root下新initializations子目录。每个已结算parent只允许一个append-only continuation.json（exclusive create），指向唯一child；并发重入给明确already-continued错误，不按时间挑最近，不回收未知存活claim。新业务launch仍只在root exclusive create一次，业务已开始/stop/未清理/证据缺失均精确拒绝初始化恢复。
+- 恢复前从原claim+result核对mode/model/pid/start/source、finished/cleanup与注册约束，读取当前原DB四表及全部原audit，要求可证明业务未开始。无原DB或缺audit不能猜0；prepare模式可继续同一已完成无Provider的准备，用于真实checker，run仍只认失败且未launch。input文件从实际execution与原登记源逐字核对，再用原完整tree primitive核对原initial-tree；不重新init/commit或重写输入来抹变化。原包仍由真实manager读取同一冻结digest。
+- 横审范围含入口首次/恢复、prepare/run、清理失败/中断、并发parent、跨root路径、已有launch/原生请求事实；仅诊断transport收据受影响。原Mission/Task/Session创建、model配置、原native usage、调度和业务停止规则不改；不增加Host业务gate/第二费用ledger/新角色，不动旧controller。恢复前结算原本地初始化不消耗新业务样本，仍只允许一份未来业务launch。
+- 验收：原完整prepare启动/停止后沿显式同root恢复再真实Host/package/完整tree/cleanup；原parent收据逐字保持、continuation精确指向child；同parent再次恢复、路径越界、已launch或原DB有请求给明确错误。阶段性file/DB fixture用于错误合同，不能冒称真实模型。完成脚本/root类型/docs/diff/范围commit/pull/outgoing/push后，才可对原diagnostic-01做一次已授权初始化恢复；失败原件保留，不自动循环。若临近交接，先交付可审查实现，不抢占原主管。
+
+### G60实际本地验收与交付边界
+
+- 唯一claimDiagnosticInitialization读取原DB与audit后，exclusive创建parent continuation并分配新收据目录；evolution-diagnostic.ts首次入口与显式恢复共用同一剩余执行路径。原home/coordinator/execution/DB复用，输入只读核对，恢复不再git init/add/commit；完整tree仍用原primitive逐值核对。业务launch仍是root级exclusive文件。未修改业务Role/Task/Session/Mission/Provider core或费用权威。
+- 初次真实准备及恢复均正常启动/关闭实际Host、原包加载、完整初态保留；原parent claim/result逐字相同。原业务launch标记、原实际schema插入的明确local-test usage行、越界parent及重复parent分别返回精确错误；并发两个claim真实争用同一文件，恰一份success/一份already_continued，原continuation指向成功者。用量行只是本地错误合同fixture，不是外部Provider测量；prepare不请求模型。
+- g60-focused-tests.log全部exit0，14项62断言（entry2/21、audit12/41）；此前g60-entry-initial.log2/19为增加并发断言前的中间通过，不重复计数。脚本类型g60-script-types-final.log、根类型8/8（7cached，g60-root-types.log）、docs342ops25（g60-docs.log）通过。没有遇到新的生产调度/终态异常；原业务诊断仍需提交后唯一恢复及真实preflight证明。
