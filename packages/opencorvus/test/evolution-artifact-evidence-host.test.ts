@@ -891,6 +891,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           state: { status: "running", input: {}, time: { start: started + 2 } },
         })
         const scope: TaskToolExecutionScope = {
+          packageToolRef: "evolution-lab/shared/publish-evolution-artifact",
           kind: "task" as const,
           projectID: Instance.project.id,
           projectDirectory: project.path,
@@ -1414,6 +1415,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 // The Trial's own work, committed by its terminal checkpoint.
                 await writeFile(path.join(trialWorktree.directory, "g43-subject.txt"), marker)
                 const trialArtifactExecution = createTaskArtifactStoreExecution({
+                  packageToolRef: "evolution-lab/shared/publish-evolution-artifact",
                   kind: "task",
                   projectID: Instance.project.id,
                   projectDirectory: trialWorktree.directory,
@@ -2934,6 +2936,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           state: { status: "running", input: {}, time: { start: sourceCompleted + 2 } },
         })
         const importedScope = {
+          packageToolRef: "evolution-lab/shared/publish-evolution-artifact",
           kind: "task" as const,
           projectID: Instance.project.id,
           projectDirectory: project.path,
@@ -3302,7 +3305,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.19")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.20")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(
@@ -3371,6 +3374,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         })
         const createExecution = (identity: string) =>
           createTaskArtifactStoreExecution({
+            packageToolRef: "evolution-lab/shared/publish-evolution-artifact",
             kind: "task",
             projectID: Instance.project.id,
             projectDirectory: project.path,
@@ -3666,6 +3670,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           state: { status: "running", input: {}, time: { start: Date.now() } },
         })
         const candidatePublisherScope = {
+          packageToolRef: "evolution-lab/shared/publish-evolution-artifact",
           kind: "task" as const,
           projectID: Instance.project.id,
           projectDirectory: project.path,
@@ -3989,6 +3994,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           state: { status: "running", input: {}, time: { start: sourceCompleted + 2 } },
         })
         const importedScope = {
+          packageToolRef: "evolution-lab/shared/publish-evolution-artifact",
           kind: "task" as const,
           projectID: Instance.project.id,
           projectDirectory: project.path,
@@ -4097,6 +4103,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const evidenceBaseline = await EngineGit.prepare(requireTask(taskID))
         if (evidenceBaseline.error) throw new Error(evidenceBaseline.error)
         const taskArtifactExecution = createTaskArtifactStoreExecution({
+          packageToolRef: "evolution-lab/shared/publish-evolution-artifact",
           kind: "task",
           projectID: Instance.project.id,
           projectDirectory: project.path,
@@ -4348,6 +4355,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           executionCapsuleBinding: await taskProcessBinding(evidenceOwnerTaskID, "d".repeat(64), completed + 1),
         })
         const evidenceOwnerExecution = createTaskArtifactStoreExecution({
+          packageToolRef: "evolution-lab/shared/publish-evolution-artifact",
           kind: "task",
           projectID: Instance.project.id,
           projectDirectory: project.path,
@@ -4442,6 +4450,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           },
         ])
         const retainedExecution = createTaskArtifactStoreExecution({
+          packageToolRef: "evolution-lab/shared/publish-evolution-artifact",
           kind: "task",
           projectID: Instance.project.id,
           projectDirectory: project.path,
@@ -4577,6 +4586,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           },
         })
         const scope: TaskToolExecutionScope = {
+          packageToolRef: "evolution-lab/shared/publish-evolution-artifact",
           kind: "task", projectID: Instance.project.id, projectDirectory: project.path, taskID,
           taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, taskID), sessionID: session.id,
           messageID: "g43-live-subject", toolCallID: "g43-live-subject", toolPartID: "g43-live-subject",

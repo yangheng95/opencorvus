@@ -258,6 +258,14 @@ applied_filters，也不能丢掉完整性事实的作用范围。`unmatched_fil
 不能当空目录。`ArtifactInspectionError`的模型可见消息保留具体expected/received诊断，
 不能只给错误数量而省略可修正的差异。
 
+正式 Artifact 类型的发布权威来自绑定包的可选 `artifact_publishers`：精确类型映射到该包
+已投影的 Tool CapabilityRef，null 保留 Host-only 类型。通用 Tool 与 Package Host 共用的
+canonical publisher 读取 Task 绑定的 immutable package snapshot，并比对真实 runtime
+binding 导出的当前 packageToolRef；模型参数不能声明或覆盖调用者身份。错配返回明确
+expected/actual publisher 错误，不能换另一个 Tool 绕过 typed codec。未声明类型继续原通用
+JSON/身份/来源合同；历史包没有的声明不会从当前安装版本回填，历史产物也不会因此变成 typed。
+此关系只约束来源和类型权威，不代替包的 payload/前驱算法或 Agent 的语义审查。
+
 Evolution Lab 的 typed Artifact publisher 在写入前验证直接语义前驱，而不是把先前的
 `artifact_select` 当成隐式 publication provenance。`failure-attribution` 必须直接绑定且完整读取
 唯一的 `opportunity` Engine Artifact，验证其 Evolution observer producer，并让 payload

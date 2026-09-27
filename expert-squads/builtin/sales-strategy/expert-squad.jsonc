@@ -5,7 +5,7 @@
   "name": "Sales Strategy & Customer Research",
   "label": "Sales Strategy & Customer Research",
   "description": "Builds an attributable customer dossier, parallel opportunity and positioning analyses, an audited sales strategy, and a practical sales playbook.",
-  "version": "2026.09.02.1",
+  "version": "2026.09.27.1",
   "product_pillars": [
     "work"
   ],
@@ -167,5 +167,14 @@
         }
       }
     }
+  },
+  "artifact_publishers": {
+    "sales-strategy/audit": "capability:tool:package:sales-strategy:sales-strategy%2Fshared%2Fpublish-sales-strategy-artifact",
+    "sales-strategy/customer-dossier": "capability:tool:package:sales-strategy:sales-strategy%2Fshared%2Fpublish-sales-strategy-artifact",
+    "sales-strategy/opportunity-analysis": "capability:tool:package:sales-strategy:sales-strategy%2Fshared%2Fpublish-sales-strategy-artifact",
+    "sales-strategy/playbook": "capability:tool:package:sales-strategy:sales-strategy%2Fshared%2Fpublish-sales-strategy-artifact",
+    "sales-strategy/positioning-analysis": "capability:tool:package:sales-strategy:sales-strategy%2Fshared%2Fpublish-sales-strategy-artifact",
+    "sales-strategy/research-charter": "capability:tool:package:sales-strategy:sales-strategy%2Fshared%2Fpublish-sales-strategy-artifact",
+    "sales-strategy/strategy-brief": "capability:tool:package:sales-strategy:sales-strategy%2Fshared%2Fpublish-sales-strategy-artifact"
   }
 }

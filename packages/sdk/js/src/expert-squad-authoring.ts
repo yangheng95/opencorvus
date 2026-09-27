@@ -43,7 +43,13 @@ export const EXPERT_SQUAD_ASSETS_DIRECTORY = "assets"
  * `select`; `engineArtifacts.publish` reaches the same canonical publisher.
  * A domain Artifact consumed by a deterministic package-tool algorithm is a
  * package ABI: one package-owned codec and typed publisher validate it, and
- * every downstream typed publisher completely reads and selects the exact
+ * the manifest's optional `artifact_publishers` maps each exact formal type
+ * to its projected package Tool CapabilityRef. A null entry reserves a
+ * Host-owned type. The canonical Host publisher checks the immutable bound
+ * manifest against the real calling Tool; generic or other package Tools
+ * receive an explicit authority error. Types absent from that manifest keep
+ * the generic contract. Old revisions are not backfilled from newer installs.
+ * Every downstream typed publisher completely reads and selects the exact
  * predecessor locator. Those consumed payloads carry canonical structured values,
  * never mutable project paths that a later consumer rereads. Independent
  * resources and source locators are validated before publication side effects.

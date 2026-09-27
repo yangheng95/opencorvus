@@ -161,8 +161,8 @@ try {
   await json("initial-tree.json", initialTree)
   await Instance.provide({ directory: coordinator, init: InstanceBootstrap, fn: async () => {
     const installed = await ExpertSquadPackageManager.installPayloadPackage({ projectDirectory: coordinator, id: "data-analysis", installationScope: "project" })
-    assert.equal(installed.after.packageDigest, targetDigest, "Installed target differs from the registered G58 package")
     result.target = installed.after
+    assert.equal(installed.after.packageDigest, targetDigest, "Installed target differs from the registered G58 package")
     result.projectID = Instance.project.id
   } })
   server = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })

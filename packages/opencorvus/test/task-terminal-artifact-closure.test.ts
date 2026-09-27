@@ -2,6 +2,7 @@ import { afterEach, expect, spyOn, test } from "bun:test"
 import type { EvidenceLocatorInput } from "@opencorvus-ai/plugin/artifact-catalog"
 import fs from "node:fs/promises"
 import path from "node:path"
+import { ExpertSquadRegistry } from "@/expert-squad/registry"
 import { randomUUID } from "node:crypto"
 import { tool } from "ai"
 import { MockLanguageModelV3, simulateReadableStream } from "ai/test"
@@ -92,13 +93,14 @@ async function taskFixture(directory: string) {
   })
   const taskID = Identifier.ascending("task")
   const now = Date.now()
+  const loadedPackage = await ExpertSquadRegistry.loadPackage(path.resolve(import.meta.dir, "../src/expert-squad/builtin/base"))
   const packageRevision = {
     scope: "built_in" as const,
     projectID: null,
     namespace: "builtin",
     id: "base",
-    version: "2026.08.13.1",
-    packageDigest: "a".repeat(64),
+    version: loadedPackage.manifest.version,
+    packageDigest: loadedPackage.packageDigest,
   }
   const processBinding = await prepareTaskProcessBinding({
     mode: "native",
@@ -137,6 +139,7 @@ async function taskFixture(directory: string) {
     insertTaskProcessBinding({ db, payload: processBinding })
   })
   const scope: TaskToolExecutionScope = Object.freeze({
+    packageToolRef: null,
     kind: "task",
     projectID: Instance.project.id,
     projectDirectory: directory,

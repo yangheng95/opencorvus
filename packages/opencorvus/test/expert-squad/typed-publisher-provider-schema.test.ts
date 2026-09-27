@@ -1,4 +1,7 @@
 import { describe, expect, test } from "bun:test"
+import { payloadPackageSources } from "../../generated/expert-squad-payload"
+import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
+import { CapabilityRefCodec, capabilityRef } from "@opencorvus-ai/util/capability-ref"
 import publishCommercialLegalArtifact from "@squads/commercial-legal/tools/publish-commercial-legal-artifact"
 import publishDataAnalysisArtifact from "@squads/data-analysis/tools/publish-data-analysis-artifact"
 import publishHrOperationsArtifact from "@squads/hr-operations/tools/publish-hr-operations-artifact"
@@ -122,6 +125,15 @@ const publishers = [
 ] as const
 
 describe("built-in typed publisher provider schemas", () => {
+  test("distributed manifests declare every existing typed publisher branch", () => {
+    for (const { artifactTypes } of publishers) {
+      const id = artifactTypes[0].split("/")[0]!
+      const tool = id === "omnichannel-distribution" ? "publish-omnichannel-artifact" : `publish-${id}-artifact`
+      const loaded = ExpertSquadRegistry.loadEmbeddedPackage(payloadPackageSources.find((entry) => entry.id === id && entry.namespace === "builtin")!)
+      const ref = CapabilityRefCodec.encode(capabilityRef({ kind: "tool", source: "package", owner_ref: id, local_ref: `${id}/shared/${tool}` }))
+      expect(loaded.manifest.artifact_publishers).toEqual(Object.fromEntries(artifactTypes.map((type) => [type, ref])))
+    }
+  })
   test("project every published Artifact type as one correlated strict payload branch", () => {
     const projected = publishers.map(({ publisher, artifactTypes }) => {
       const schema = publisher.introspect().inputSchema as {

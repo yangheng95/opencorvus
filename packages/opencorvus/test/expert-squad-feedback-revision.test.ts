@@ -848,6 +848,7 @@ describe("revising an installed expert squad from operator feedback", () => {
         const snapshotCall = await begin("artifact_snapshot", { files: [{ path: "evidence.json", media_type: "application/json" }] })
         const publication = await publishTaskArtifactProjectFiles({
           scope: {
+            packageToolRef: null,
             kind: "task", projectID: Instance.project.id, projectDirectory: project.path, taskID: task.taskID,
             taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, task.taskID), sessionID: session.id,
             messageID: assistant.id, toolCallID: snapshotCall.callID, toolPartID: snapshotCall.id, executionSurface,

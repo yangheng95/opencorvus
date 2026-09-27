@@ -53,6 +53,7 @@ import {
 import type { TaskToolExecutionScope } from "@/tool/task-tool-execution-scope"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Identifier } from "@/id/id"
+import { assertArtifactPublicationAuthority } from "@/expert-squad/artifact-publication-authority"
 
 type EngineCatalogRow = Readonly<{
   id: string
@@ -2077,6 +2078,7 @@ export async function publishExpertArtifact(input: {
   if (!artifact.artifact_type.startsWith(`${input.scope.owner.expertSquadID}/`)) {
     throw new Error(`engineArtifacts.publish artifact_type must be namespaced by ${input.scope.owner.expertSquadID}/`)
   }
+  await assertArtifactPublicationAuthority(input.scope, artifact.artifact_type)
   const resources = [...artifact.resources].sort(compareResource)
   const observedArtifactLocators = [...(input.observedArtifactLocators ?? [])].sort((left, right) =>
     compareCodeUnits(stableJSON(left), stableJSON(right)),

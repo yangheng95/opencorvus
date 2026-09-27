@@ -94,6 +94,8 @@ export function assertExactTaskToolCapabilityAuthority(input: {
 
 export type TaskToolExecutionScope = Readonly<{
   kind: "task"
+  /** Exact current package Tool ref, derived from its runtime binding; Core/MCP calls use null. */
+  packageToolRef: string | null
   projectID: string
   projectDirectory: string
   /** Persisted Session working directory. Projected Build workers execute in
@@ -295,6 +297,7 @@ export async function resolveProjectedTaskToolExecutionScope(input: {
   return Object.freeze({
     kind: "task",
     projectID: execution.projectID,
+    packageToolRef: input.expected.providerKind === "package-tool" ? input.expected.toolRef : null,
     projectDirectory,
     executionDirectory: canonicalDirectory(execution.session.directory),
     taskID: owningTaskID,
@@ -362,6 +365,7 @@ export async function resolveCoreProjectedTaskToolExecutionScope(input: {
   return Object.freeze({
     kind: "task",
     projectID: execution.projectID,
+    packageToolRef: null,
     projectDirectory,
     executionDirectory: canonicalDirectory(execution.session.directory),
     taskID: execution.taskID,

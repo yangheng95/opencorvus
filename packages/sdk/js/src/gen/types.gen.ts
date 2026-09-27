@@ -17804,6 +17804,9 @@ export type ExpertSquadValidateFolderResponses = {
    * Validated expert squad manifest
    */
   200: {
+    artifact_publishers?: {
+      [key: string]: string | null
+    }
     capability_projection: {
       agents: {
         [key: string]: {

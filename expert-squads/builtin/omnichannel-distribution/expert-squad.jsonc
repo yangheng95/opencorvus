@@ -5,7 +5,7 @@
   "name": "Omnichannel Distribution",
   "label": "Omnichannel Distribution",
   "description": "Current channel research, rights-aware adaptation, measurement planning, readiness review, and canonical prepared-not-posted delivery bundles.",
-  "version": "2026.08.30.2",
+  "version": "2026.09.27.1",
   "product_pillars": [
     "work"
   ],
@@ -188,5 +188,15 @@
         }
       }
     }
+  },
+  "artifact_publishers": {
+    "omnichannel-distribution/campaign-brief": "capability:tool:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fpublish-omnichannel-artifact",
+    "omnichannel-distribution/channel-pack": "capability:tool:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fpublish-omnichannel-artifact",
+    "omnichannel-distribution/channel-spec-dossier": "capability:tool:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fpublish-omnichannel-artifact",
+    "omnichannel-distribution/delivery": "capability:tool:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fpublish-omnichannel-artifact",
+    "omnichannel-distribution/distribution-plan": "capability:tool:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fpublish-omnichannel-artifact",
+    "omnichannel-distribution/measurement-plan": "capability:tool:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fpublish-omnichannel-artifact",
+    "omnichannel-distribution/readiness-review": "capability:tool:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fpublish-omnichannel-artifact",
+    "omnichannel-distribution/rights-compliance-matrix": "capability:tool:package:omnichannel-distribution:omnichannel-distribution%2Fshared%2Fpublish-omnichannel-artifact"
   }
 }

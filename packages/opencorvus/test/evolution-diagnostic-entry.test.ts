@@ -36,7 +36,7 @@ test("diagnostic paired staging preserves the complete runtime catalog and scope
   } finally { await rm(root, { recursive: true, force: true }) }
 })
 
-test("diagnostic preparation executes real isolated startup and settles its owned runtime", async () => {
+test("diagnostic preparation preserves its frozen registration across a newer installed package", async () => {
   const parent = await Global.createTemporaryDirectory("evolution-diagnostic-entry-")
   const root = path.join(parent, "prepare")
   const script = path.resolve(import.meta.dir, "../script/evolution-diagnostic.ts")
@@ -47,14 +47,14 @@ test("diagnostic preparation executes real isolated startup and settles its owne
   }
   try {
     const first = await invoke()
-    if (first.exit !== 0) throw new Error(`Preparation failed: ${first.stdout}\n${first.stderr}`)
+    expect(first.exit).toBe(1)
     const receipt = JSON.parse(await readFile(path.join(root, "result.json"), "utf8"))
-    expect(receipt).toMatchObject({ mode: "prepare", outcome: "prepared", model: "openai/gpt-5.6-luna",
+    expect(receipt).toMatchObject({ mode: "prepare", outcome: "failed", model: "openai/gpt-5.6-luna",
       requestCeiling: null, inactivityMs: 300_000, pollIntervalMs: 2_000, businessVerdict: "not_evaluated",
-      providerProjection: "not_checked",
+      error: expect.stringContaining("Installed target differs from the registered G58 package"),
       initialTree: "d285b2ec25c80d6389dee4cfb6092a45a4533157466dbf96caa3ec8f20ac036b",
       cleanup: { runtimeDisposed: true, credentialsRemoved: true },
-      target: { id: "data-analysis", version: "2026.09.02.1", packageDigest: "27141f11209e4891fc2119b3f84a239238c08d8951cd5fefab6143e30f31e0ed" },
+      target: { id: "data-analysis", version: "2026.09.27.1", packageDigest: "c96c5e687dc0fdf2ea4b81a4e3be427d6cfda85889ff09fe2091b229fc5a2fe0" },
     })
     const initial = JSON.parse(await readFile(path.join(root, "initial-tree.json"), "utf8"))
     expect(initial.files.map((file: { path: string }) => file.path)).toEqual([".gitattributes", ".gitignore", "metrics.json", "request.md"])
@@ -66,10 +66,10 @@ test("diagnostic preparation executes real isolated startup and settles its owne
     const originalResult = await readFile(path.join(root, "result.json"), "utf8")
     const originalClaim = await readFile(path.join(root, "claim.json"), "utf8")
     const resumed = await invoke(["--resume-initialization", "."])
-    if (resumed.exit !== 0) throw new Error(`Preparation recovery failed: ${resumed.stdout}\n${resumed.stderr}`)
+    expect(resumed.exit).toBe(1)
     const continuation = JSON.parse(await readFile(path.join(root, "continuation.json"), "utf8"))
     const childResult = JSON.parse(await readFile(path.join(root, continuation.receiptDirectory, "result.json"), "utf8"))
-    expect(childResult).toMatchObject({ outcome: "prepared", parentReceiptDirectory: ".", initialTree: receipt.initialTree,
+    expect(childResult).toMatchObject({ outcome: "failed", error: receipt.error, parentReceiptDirectory: ".", initialTree: receipt.initialTree,
       target: { packageDigest: receipt.target.packageDigest }, cleanup: receipt.cleanup })
     expect(continuation.counts).toEqual({ session: 0, engine_task: 0, provider_usage_event: 0, provider_activity_request: 0 })
     expect(await readFile(path.join(root, "result.json"), "utf8")).toEqual(originalResult)

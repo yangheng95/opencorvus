@@ -89,6 +89,7 @@ function publishCursorArtifact(taskID: string, index: number) {
 
 async function publishCatalogFile(taskID: string, sessionID: string) {
   const files = createTaskArtifactStoreExecution({
+    packageToolRef: null,
     kind: "task",
     projectID: Instance.project.id,
     projectDirectory: Instance.directory,

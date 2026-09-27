@@ -5,7 +5,7 @@
   "name": "Commercial Legal",
   "label": "Commercial Legal",
   "description": "Jurisdiction- and date-bound commercial matter planning, authority research, parallel contract and regulatory analysis, legal strategy, independent review, and canonical reporting.",
-  "version": "2026.08.30.2",
+  "version": "2026.09.27.1",
   "product_pillars": [
     "work"
   ],
@@ -167,5 +167,14 @@
         }
       }
     }
+  },
+  "artifact_publishers": {
+    "commercial-legal/audit": "capability:tool:package:commercial-legal:commercial-legal%2Fshared%2Fpublish-commercial-legal-artifact",
+    "commercial-legal/authority-dossier": "capability:tool:package:commercial-legal:commercial-legal%2Fshared%2Fpublish-commercial-legal-artifact",
+    "commercial-legal/contract-analysis": "capability:tool:package:commercial-legal:commercial-legal%2Fshared%2Fpublish-commercial-legal-artifact",
+    "commercial-legal/legal-strategy": "capability:tool:package:commercial-legal:commercial-legal%2Fshared%2Fpublish-commercial-legal-artifact",
+    "commercial-legal/matter-charter": "capability:tool:package:commercial-legal:commercial-legal%2Fshared%2Fpublish-commercial-legal-artifact",
+    "commercial-legal/regulatory-analysis": "capability:tool:package:commercial-legal:commercial-legal%2Fshared%2Fpublish-commercial-legal-artifact",
+    "commercial-legal/report": "capability:tool:package:commercial-legal:commercial-legal%2Fshared%2Fpublish-commercial-legal-artifact"
   }
 }

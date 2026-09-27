@@ -743,13 +743,3 @@ export const EvolutionPackagePublishableArtifactInputSchema = z.discriminatedUni
 export function parseEvolutionArtifact(type: EvolutionArtifactType, payload: unknown) {
   return EvolutionArtifactSchemas[type].parse(payload)
 }
-
-/**
- * Artifact-type namespaces whose members must be published by their own typed
- * publisher rather than the generic catalog tool. Derived from the schemas
- * above so the Host does not restate a package's namespace as a string
- * literal — it asks the ABI that owns it.
- */
-export const PACKAGE_OWNED_ARTIFACT_TYPE_NAMESPACES: readonly string[] = Object.freeze([
-  ...new Set(Object.keys(EvolutionArtifactSchemas).map((artifactType) => `${artifactType.split("/")[0]}/`)),
-])

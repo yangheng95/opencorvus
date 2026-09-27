@@ -133,7 +133,7 @@ describe("Human Resources Operations expert squad package", () => {
       namespace: "builtin",
       id: "hr-operations",
       name: "Human Resources & Organization Operations",
-      version: "2026.09.02.1",
+      version: "2026.09.27.1",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))
@@ -263,6 +263,7 @@ describe("Human Resources Operations expert squad package", () => {
           state: { status: "running", input: {}, time: { start: started + 1 } },
         })
         const scope: TaskToolExecutionScope = {
+          packageToolRef: publisherRef,
           kind: "task",
           projectID: Instance.project.id,
           projectDirectory: project.path,

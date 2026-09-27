@@ -1,4 +1,3 @@
-import { PACKAGE_OWNED_ARTIFACT_TYPE_NAMESPACES } from "@opencorvus-ai/plugin"
 import {
   ArtifactJSONValueSchema,
   ArtifactReadInputSchema,
@@ -85,30 +84,13 @@ const ARTIFACT_PUBLISH_DESCRIPTION =
   "JSON value, never the transport string. " +
   "The Host derives Task, Session, Agent, active Expert Squad, projection, message, and tool-call provenance; " +
   "the model cannot supply or override them. artifact_type must begin with the active Expert Squad ID followed " +
-  "by '/'. Package-owned strict ABI namespaces such as evolution-lab/ must use their package-owned typed publisher " +
-  "and are rejected here. source_read_refs explicitly selects already-read Artifacts as semantic sources for this output; " +
+  "by '/'. Formal types declared in the bound package's artifact_publishers require their exact typed publisher " +
+  "and cannot be published here. source_read_refs explicitly selects already-read Artifacts as semantic sources for this output; " +
   "pass the artifact_read_ref values directly, without a separate artifact_select call. It defaults to [] when there are no semantic sources. " +
   "Every supplied reference must have been completely read earlier in this physical Turn. resource_set is required; pass null when there are no files. A supplied filesystem resource set must be an exact " +
   "current-Task ref and is verified before commit. " +
   "An exact retry of the same Task-scoped publication atomically reuses the canonical publication; changed JSON, resource set, or sources remain distinct. " +
   "Use this for durable inter-Agent evidence; the visible final message remains narrative and is not Artifact transport."
-
-export class ArtifactPublisherAuthorityError extends Error {
-  readonly code = "PACKAGE_TYPED_PUBLISHER_REQUIRED"
-
-  constructor(readonly artifactType: string) {
-    super(`artifact_publish cannot publish package-owned strict ABI type ${artifactType}; use its typed publisher`)
-    this.name = "ArtifactPublisherAuthorityError"
-  }
-}
-
-export function assertGenericArtifactPublisherAuthority(artifactType: string) {
-  // Asked of the ABI that declares those types, not spelled out here: the Host
-  // used to hardcode one plugin's namespace to arbitrate ownership of it.
-  if (PACKAGE_OWNED_ARTIFACT_TYPE_NAMESPACES.some((namespace) => artifactType.startsWith(namespace))) {
-    throw new ArtifactPublisherAuthorityError(artifactType)
-  }
-}
 
 const CURRENT_PROJECT_ARTIFACT_SNAPSHOT_DESCRIPTION =
   "Publish real files from the canonical current Task primary project as one immutable Task Artifact snapshot. " +
@@ -619,7 +601,6 @@ export const ArtifactPublishTool = Tool.define("artifact_publish", {
   description: ARTIFACT_PUBLISH_DESCRIPTION,
   parameters: ArtifactPublishToolInputSchema,
   async execute(args, ctx) {
-    assertGenericArtifactPublisherAuthority(args.artifact_type)
     const scope = await resolveArtifactWorkerScope(ctx)
     const { payload_json, resource_set, source_read_refs, ...metadata } = args
     const resources = resource_set

@@ -143,7 +143,7 @@ describe("Viral Content Expert Squad package", () => {
       namespace: "builtin",
       id: "viral-content",
       name: "Viral Content",
-      version: "2026.08.30.2",
+      version: "2026.09.27.1",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))
@@ -263,6 +263,7 @@ describe("Viral Content Expert Squad package", () => {
           state: { status: "running", input: {}, time: { start: started + 1 } },
         })
         const scope: TaskToolExecutionScope = {
+          packageToolRef: publisherRef,
           kind: "task",
           projectID: Instance.project.id,
           projectDirectory: project.path,

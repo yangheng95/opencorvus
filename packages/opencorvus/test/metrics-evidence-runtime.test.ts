@@ -252,6 +252,7 @@ describe("Metric scorer exact evidence runtime", () => {
         // it here produced an empty SQL `SET` clause and a syntax error; the
         // lifecycle open above already establishes the start time.
         const execution = createTaskArtifactStoreExecution({
+          packageToolRef: null,
           kind: "task",
           projectID: Instance.project.id,
           projectDirectory: project.path,
@@ -836,6 +837,7 @@ describe("Metric scorer exact evidence runtime", () => {
           }),
         })
         const execution = createTaskArtifactStoreExecution({
+          packageToolRef: null,
           kind: "task",
           projectID: Instance.project.id,
           projectDirectory: projectPath,

@@ -143,6 +143,7 @@ export const ExpertSquadCapabilitySetSchema = z
   .strict()
 
 export const ExpertSquadCapabilitySetsSchema = z.record(ExpertSquadIDSchema, ExpertSquadCapabilitySetSchema)
+export const ExpertSquadArtifactPublishersSchema = z.record(NonBlankStringSchema, EncodedCapabilityRef.nullable())
 
 export const ExpertSquadProjectionCapabilitiesSchema = z.object({
   capability_refs: canonicalCapabilityRefList("capability_refs"),
@@ -231,6 +232,7 @@ export const ExpertSquadManifestV2Schema: z.ZodType<ExpertSquadManifestV2> = z
       })
       .strict(),
     configuration: ExpertSquadConfigurationSchema.optional(),
+    artifact_publishers: ExpertSquadArtifactPublishersSchema.optional(),
     capability_sets: ExpertSquadCapabilitySetsSchema,
     capability_projection: ExpertSquadCapabilityProjectionSchema,
   })
@@ -243,6 +245,22 @@ export const ExpertSquadManifestV2Schema: z.ZodType<ExpertSquadManifestV2> = z
         ([agentID, projection]) => [`agents.${agentID}`, projection] as const,
       ),
     ] as const
+    const projectedRefs = new Set(projections.flatMap(([, projection]) => projection.capability_refs))
+    for (const set of Object.values(manifest.capability_sets)) {
+      for (const ref of set.member_refs) projectedRefs.add(ref)
+    }
+    for (const [artifactType, publisher] of Object.entries(manifest.artifact_publishers ?? {})) {
+      if (!artifactType.startsWith(`${manifest.id}/`) || artifactType.length === manifest.id.length + 1) {
+        context.addIssue({ code: "custom", path: ["artifact_publishers", artifactType],
+          message: `artifact type must belong to ${manifest.id}/ with a nonempty local type` })
+      }
+      if (publisher === null) continue
+      const ref = decodedCapabilityRef(publisher)
+      if (!ref || ref.kind !== "tool" || ref.source !== "package" || ref.owner_ref !== manifest.id || !projectedRefs.has(publisher)) {
+        context.addIssue({ code: "custom", path: ["artifact_publishers", artifactType],
+          message: "artifact publisher must be an explicitly projected tool capability of this package" })
+      }
+    }
     for (const [projectionPath, projection] of projections) {
       for (const [index, encoded] of projection.capability_refs.entries()) {
         const ref = decodedCapabilityRef(encoded)
@@ -332,6 +350,8 @@ export interface ExpertSquadManifestV2 {
     instructions: "selector.md"
   }
   configuration?: ExpertSquadConfiguration
+  /** Exact formal type to package Tool capability; null reserves a Host-owned type. */
+  artifact_publishers?: Record<string, string | null>
   capability_sets: ExpertSquadCapabilitySets
   capability_projection: ExpertSquadCapabilityProjection
 }

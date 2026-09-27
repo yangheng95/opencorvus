@@ -5,7 +5,7 @@
   "name": "Tax Compliance",
   "label": "Tax Compliance",
   "description": "Dated official-authority research, parallel accounting-controls and tax-obligation analysis, remediation planning, independent review, and canonical compliance reporting.",
-  "version": "2026.08.30.2",
+  "version": "2026.09.27.1",
   "product_pillars": [
     "work"
   ],
@@ -167,5 +167,14 @@
         }
       }
     }
+  },
+  "artifact_publishers": {
+    "tax-compliance/accounting-controls-analysis": "capability:tool:package:tax-compliance:tax-compliance%2Fshared%2Fpublish-tax-compliance-artifact",
+    "tax-compliance/audit": "capability:tool:package:tax-compliance:tax-compliance%2Fshared%2Fpublish-tax-compliance-artifact",
+    "tax-compliance/compliance-plan": "capability:tool:package:tax-compliance:tax-compliance%2Fshared%2Fpublish-tax-compliance-artifact",
+    "tax-compliance/engagement-charter": "capability:tool:package:tax-compliance:tax-compliance%2Fshared%2Fpublish-tax-compliance-artifact",
+    "tax-compliance/evidence-dossier": "capability:tool:package:tax-compliance:tax-compliance%2Fshared%2Fpublish-tax-compliance-artifact",
+    "tax-compliance/report": "capability:tool:package:tax-compliance:tax-compliance%2Fshared%2Fpublish-tax-compliance-artifact",
+    "tax-compliance/tax-obligation-analysis": "capability:tool:package:tax-compliance:tax-compliance%2Fshared%2Fpublish-tax-compliance-artifact"
   }
 }

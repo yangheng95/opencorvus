@@ -164,6 +164,7 @@ async function establishProjectedSchedulerSnapshot(input: {
     },
   })
   const scope: TaskToolExecutionScope = Object.freeze({
+    packageToolRef: null,
     kind: "task",
     projectID: Instance.project.id,
     projectDirectory: input.projectPath,
@@ -564,6 +565,7 @@ describe("Task Artifact immutable Git commit publication", () => {
           },
         })
         const scope: TaskToolExecutionScope = Object.freeze({
+          packageToolRef: null,
           kind: "task",
           projectID: Instance.project.id,
           projectDirectory: project.path,

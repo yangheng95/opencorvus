@@ -5,7 +5,7 @@
   "name": "Evolution Lab",
   "label": "Evolution Lab",
   "description": "Target-agnostic evidence, candidate, evaluation, integrity review, and recommendation package for explicit Expert Squad evolution campaigns.",
-  "version": "2026.09.27.19",
+  "version": "2026.09.27.20",
   "product_pillars": [
     "code",
     "work"
@@ -196,5 +196,16 @@
         }
       }
     }
+  },
+  "artifact_publishers": {
+    "evolution-lab/campaign-spec": "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fpublish-evolution-artifact",
+    "evolution-lab/candidate-revision": "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fpublish-evolution-artifact",
+    "evolution-lab/comparison-recommendation": "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fpublish-evolution-artifact",
+    "evolution-lab/evaluation-result": "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fpublish-evolution-artifact",
+    "evolution-lab/failure-attribution": "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fpublish-evolution-artifact",
+    "evolution-lab/integrity-review": "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fpublish-evolution-artifact",
+    "evolution-lab/opportunity": "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fpublish-evolution-artifact",
+    "evolution-lab/promotion-receipt": null,
+    "evolution-lab/run-evidence-bundle": "capability:tool:package:evolution-lab:evolution-lab%2Fshared%2Fpublish-evolution-artifact"
   }
 }

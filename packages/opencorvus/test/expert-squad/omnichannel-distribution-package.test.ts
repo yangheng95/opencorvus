@@ -183,7 +183,7 @@ describe("Omnichannel Distribution Expert Squad package", () => {
       namespace: "builtin",
       id: "omnichannel-distribution",
       name: "Omnichannel Distribution",
-      version: "2026.08.30.2",
+      version: "2026.09.27.1",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))
@@ -303,6 +303,7 @@ describe("Omnichannel Distribution Expert Squad package", () => {
           state: { status: "running", input: {}, time: { start: started + 1 } },
         })
         const scope: TaskToolExecutionScope = {
+          packageToolRef: publisherRef,
           kind: "task",
           projectID: Instance.project.id,
           projectDirectory: project.path,

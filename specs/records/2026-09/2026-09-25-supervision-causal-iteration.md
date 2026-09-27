@@ -1627,3 +1627,44 @@
 - 对G61只读备份的原诊断元数据，用新观察器直接复核（不启动Instance/Server/Provider、不写原DB）：`g62-original-settlement.json`返回failed，Mission原outcome缺失，最新回复明确failed。原assistant `msg_g0VWOOpJF00cB902q5hu`的parent正是`msg_h236mNcpKemb0MsHRVfD`；原MessageAbortedError携带Server.stop/process.shutdown/session-wake-loop。后者是输入Message，不误称assistant。原execution_settled、Task accepted、报告、账本均不改；这个只读结论不是新样本。首次带tsconfig-override的Bun退出0但尾部有内部directory warning，改正常自动解析调用后`g62-original-settlement-verified.log`干净exit0，同一观察结果。
 - 最终18项130断言：terminal authority7/59、blocked1/12、duplex8/38在`g62-settlement-verified.log`全部exit0；真实入口prepare2/21在`g62-focused-final.log`第四文件exit0（其前三文件是前一相同合同运行，不重复加总）。prepare只验证独立source Host/原包/输入/cleanup，无Provider。脚本包含三个入口和共享helper的专项类型通过`g62-script-types-verified.log`；根类型8/8（7cached）与docs342ops25通过，原日志`g62-root-types.log`/`g62-docs.log`。本次没有新业务费用。
 - 下一项仍是G61 D2：先核对全部包类型化发布器、通用publisher与包manifest/安装/实际Host投影的唯一类型权威，显式声明正式类型后按当前caller身份执行完整性合同；不能靠包名前缀、关键词或业务结果造gate。D3 writer前驱文本属于后续独立干预候选，不能并入Host改动冒称进化收益。17:45或以后按原授权交回准确Opus。
+
+## G63 — 包显式正式类型与当前发布工具权威（实施前）
+
+### Recall、根因与影响面
+
+- 起始df8ef2d0/main=origin/main/clean；按用户额度期间授权继续D2，17:45上海交回原Opus。已读AGENTS/Recall/五段图/G61–G62、02-data、SDK manifest-v2/authoring、registry immutable snapshot/load/projection、runtime binding/Task Tool scope、generic Artifact Tool、Plugin Host、唯一publishExpertArtifact和真实包测试；沿全部engineArtifacts.publish/作用域/包安装/公共类型调用搜索。无委托/Provider/旧诊断恢复，D3提示词不并入本干预。
+- 原自然反例无需重抽：data-analysis/report通过通用Tool仅引用输入发布，而真实typed publisher明确要求六前驱。直接原因是generic仅用从Evolution ABI推导的全局namespace名单拒绝；包manifest无显式正式类型→发布能力关系。另一个包Tool也可调用同一Host.publish，单改通用Tool仍留旁路。因此责任点是两个入口共用的canonical publisher，检查真实调用能力和绑定包声明，不做业务判断/来源语义替代。
+- 现TaskToolExecutionScope已验证原Task/Session/Message/call/part、当前runtime contract、immutable package revision、worker descriptor及精确授权能力；但返回时丢掉当前package Tool原ref。provider展示名与canonical tool ref不同，不能从字符串前缀/哈希反推。由真实runtime binding保留packageToolRef（其他Tool明确null），中央publish只消费这一Host事实。包代码不能给RPC参数伪造该字段。
+
+### 实施合同与边界
+
+- 唯一SDK manifest新增可选artifact_publishers字典：精确artifact_type→已声明的本包Tool CapabilityRef；null保留Host-only正式类型，包/通用Tool均不能发布。验证类型属于本包namespace、ref为本包tool且确实投影，原registry继续验证其实际文件。没有独立类型注册表、第二ledger或keyword名单。10个已存在typed publisher包显式登记现有完整类型集；Lab promotion-receipt声明null，原Core安装receipt权威不改。
+- publishExpertArtifact按scope的原packageDigest加载已有不可变包snapshot并核对namespace/id/version，精确查声明，只有当前packageToolRef等于声明ref才继续原字节/来源/幂等事务。通用和不同包Tool给包含expected/actual的ArtifactPublisherAuthorityError；自定义未声明类型继续原generic合同。移除旧全局namespace常量和generic入口前置检查，原真实owner/命名空间校验继续。
+- 这是包版本上的显式合同。未声明的历史snapshot不会被新包声明追溯改写，其未声明类型仍只有原generic数据合同；不能宣称新类型权威保护旧版本或把历史Artifact补成typed。旧Lab按整个前缀拒绝的隐式全局政策被精确声明替换，当前所有正式Lab类型含Host receipt均登记；未知自定义类型不再仅因前缀一概拒绝。原已结束Task/安装包/分数不变，新源包提升版本并仅同步相应嵌入，不自动推广任何已有Task。该边界必须文档明示。
+- 非调度改动：不改Task/Mission/Session/queue/retry/terminal机制；重放使用原immutable binding及同一出版身份，声明不从当前磁盘安装版本漂移。HTTP/DDL无新路由/字段；SDK manifest公开类型与文档需同步，生成响应若实际引用受影响按唯一生成器核对。无UI变动。
+
+### 聚焦真实验收
+
+- SDK正向schema检查实际声明、错误owner/kind/缺能力/外部类型及null保留。原包typed流水线用真实DB/Host验证现有正式输出和六前驱，补generic发布正式report的明确错误、未声明note成功、不同Tool错误及真正publisher正常；当前已解析包snapshot与包升级后固定旧revision分别验证，不改旧诊断。
+- 至少一条进入原Package Node Capsule/真实运行绑定与Host RPC证明caller身份不是模型参数；单元/手工scope夹具只能证明本地合同。现所有TaskToolExecutionScope测试夹具按真实用途补明确Tool ref；需要包身份的旧fake digest夹具改用原loader真实snapshot，不放宽生产校验。生成包逐项核对声明覆盖、目标版本/身份；无外部费用。聚焦测试、类型/docs/diff、范围commit/pull merge审全部outgoing/prepush/push后交付，未证边界如实保留。
+
+### 已发现的固定登记版本边界
+
+- 新10包源/嵌入同步后，原diagnostic-01入口的prepare真实本地检查按原固定digest拒绝当前data-analysis新版本，`g63-registration-boundary-red.log`保留；这是正确的登记边界，不应改原targetDigest或放宽run。原G58目录/Task binding Checker使用当前实际包，仍1/14通过，不是重跑业务诊断。
+- 本轮仅把已安装的实际target身份先写入初始化结果再执行原相等断言，使失败可审查；固定登记值和准入条件不变。过期prepare测试改为该精确mismatch错误/新实际身份/正常cleanup，并继续验证相同零业务初始化链的原件保留、排他continuation和业务边界错误。README明确新源码不满足旧登记，不将准备期失败改称业务样本或增加另一诊断。旧原result和最初包身份只读。
+
+- 首轮Lab完整Host链105秒通过，但新中央检查每次调用完整包加载器，重复准备所有Skill/Tool bundle；其所需事实只有原snapshot manifest。改为registry共用同一snapshot目录/全包digest验证，再直接用原readPackageMetadata读取manifest；完整运行加载器也复用这个验证入口。无缓存、第二manifest解析器或略过包身份。该拆分只减少每次出版不需要的运行物化工作，仍须真实Host链复测，不能把时间差冒称业务收益。
+
+### 实际结果与交付边界
+
+- 当前正式声明共73类型（9个domain包64项，Lab9项），唯一Host-owned promotion-receipt为null。10个manifest与对应源嵌入同步；9包版本2026.09.27.1，Lab2026.09.27.20。g63-package-sync.log列出全部contentDigest，仅原生成器输出的10个目标块/行应用，其他包字节保持；已有base源/嵌入漂移未顺手修改。Lab contentDigest ee13ab8d61aa65102e2b754edb24463f6f1ea6665c2345d5df928177890f75d8，data-analysis contentDigest 51572e75216c1119d4dbff6724f860c6c69aeb7a5a516c12b87c3551b11955d4，后者实际安装packageDigest c96c5e687dc0fdf2ea4b81a4e3be427d6cfda85889ff09fe2091b229fc5a2fe0。没有推广已有Task或改原诊断包。
+- 真正runtime绑定Checker通过原conversation authoring安装声明包、EngineService接受Task（原test hook持有调度）、实际scheduler projection/调用发生/Package Node Capsule/Host RPC。声明Tool出版正式report成功，另一个真实Tool收到expected/actual错误，Host-only类型明确拒绝，未声明note正常发布。明确是本地driver和scheduler package调用，不冒称真实worker模型或业务Campaign。data-analysis原DB/Host完整六前驱链正常；直接generic scope正式report给精确权威错误、typed路径缺六前驱给原错误、generic note仍成功。历史版本测试只用本地复制包的已捕获snapshot，证明当前源恢复新声明后，旧未声明revision仍按自己的合同读取，不冒称历史包已获得保证。
+- 最终去重93项710断言：SDK38/85(g63-sdk-tests.log)；6个domain包18/237(g63-packages-tests.log前六文件)，data-analysis4/39与声明覆盖2/10及Lab9/205(g63-authority-final.log对应成功文件)；native1/5(g63-caller-final.log第一文件)；authority3/14、reference3/12、初始化版本边界2/23、Task terminal/import12/66(g63-publication-consumers-final.log所有文件exit0)；目录Task绑定1/14(g63-registration-boundary-red.log第二文件exit0)。重复运行不累加；名称含final/red的混合日志不能整体称绿。Lab最终大链79.88秒/全文件110.18秒，未改既有120秒窗口；不是外部成本或业务收益。
+- SDK唯一生成器完成；g63-openapi-verified.json逐值核对只在validate-folder响应manifest增加artifact_publishers，其他JSON值相同。根类型8/8、专项脚本/新增测试类型、docs342ops25通过；g63-module-index.log验证1124模块/5700运行边/零SCC/4个clean imports。无DDL/新路由/UI或Provider。
+- 中间错误全部保留：首次SDK dist未重建导致新manifest字段被旧parser拒绝，正常SDK生成/编译后解决；辅助脚本在.tmp误用workspace包导入改为真实相对源码路径；native driver先缺Provider step-start，后提前写assistant使原user文本不可变，现按原因果次序先用户文本→capability occurrence→step-start→Tool；没有放宽生产规则。旧包版本期待、测试误用不存在的plugin子路径与旧replace参数/locator宽类型均按当前契约修正。g63-authority-final.log的authority文件导入失败由最后消费者日志替代，不能混算。原业务诊断和用量不写。
+
+## 用户纠偏 — 后续优先业务闭环
+
+- 用户明确质疑“又开始钻研不重要的问题，抓小放大”。这项批评有证据支持：G63虽修的是原自然反例，但范围扩到10包/47余文件和大量局部检查；持续将机制修补当作主线，仍未给出可靠业务纠错或真实进化收益。当前把已经验证的G63范围收束提交，不再由潜在基础设施疑点自动派生下一轮源码任务。
+- 主验收重新固定为：原始业务义务→真实可核验错误/反证→独立判断改变→同一Task实际修正→复核后的业务结果，以及固定输入/相同源和测量下基线与候选的可比收益。G60数值正确只证明一次普通交付；steward修正来源形状只证明局部协议纠正；G43–63本地检查不代替上述结果。
+- 下一动作先用现有记录做简短整体证据复盘，只保留一个最大的未完成业务环节及能证伪它的最小验证。只有该验证真实执行路径遇到明确阻碍，才继续修基础设施。D3提示前驱冲突不自动升级为下一源码工单；不得为了找失败同义追抽，也不得把新增输入后的正常交付说成纠错。新模型验证仍须完整独立预登记，所有旧样本只读不恢复。必要准备自主推进，17:45或以后把本纠偏和实际事实优先交回原Opus。

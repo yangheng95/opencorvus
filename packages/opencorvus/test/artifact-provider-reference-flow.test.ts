@@ -1,4 +1,6 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
+import path from "node:path"
+import { ExpertSquadRegistry } from "@/expert-squad/registry"
 import {
   EngineArtifactEnvelopeSchema,
   ArtifactReadLocatorSchema,
@@ -281,13 +283,14 @@ describe("provider Artifact references", () => {
         })
         const now = Date.now()
         const taskID = Identifier.ascending("task")
+        const loadedPackage = await ExpertSquadRegistry.loadPackage(path.resolve(import.meta.dir, "../src/expert-squad/builtin/base"))
         const packageRevision = {
           scope: "built_in" as const,
           projectID: null,
           namespace: "builtin",
-          id: "reference-squad",
-          version: "2026.08.13.1",
-          packageDigest: "f".repeat(64),
+          id: "base",
+          version: loadedPackage.manifest.version,
+          packageDigest: loadedPackage.packageDigest,
         }
         persistTask({
           taskID,
@@ -450,7 +453,7 @@ describe("provider Artifact references", () => {
         })
         const publishTool = await ArtifactPublishTool.init()
         const directArgs = publishTool.parameters.parse({
-          artifact_type: "reference-squad/direct-result",
+          artifact_type: "base/direct-result",
           schema_version: 1,
           label: "Direct read source",
           payload_json: '{"status":"complete"}',
@@ -467,6 +470,7 @@ describe("provider Artifact references", () => {
           state: { status: "running", input: directArgs, time: { start: now + 7 } },
         })
         const directScope: TaskToolScope.TaskToolExecutionScope = {
+          packageToolRef: null,
           kind: "task",
           projectID: Instance.project.id,
           projectDirectory: project.path,
@@ -479,7 +483,7 @@ describe("provider Artifact references", () => {
           executionSurface: createToolExecutionSurface({ toolIDs: ["artifact_publish"], permission: [] }),
           owner: {
             kind: "projected-worker",
-            expertSquadID: "reference-squad",
+            expertSquadID: "base",
             packageRevision,
             agentID: "reference-worker",
             projectionHash: "9".repeat(64),

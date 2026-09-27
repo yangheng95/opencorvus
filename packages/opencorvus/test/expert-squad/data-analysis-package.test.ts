@@ -25,6 +25,7 @@ import {
   type DataAnalysisArtifactType,
 } from "@squads/data-analysis/lib/data-analysis/artifacts"
 import publishDataAnalysisArtifact from "@squads/data-analysis/tools/publish-data-analysis-artifact"
+import { publishExpertArtifact } from "../../src/artifact-catalog"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", "data-analysis")
 const skillRefs = ["data-analysis/shared/method", "data-analysis/shared/workflow"]
@@ -134,7 +135,7 @@ describe("Data Analysis expert squad package", () => {
       namespace: "builtin",
       id: "data-analysis",
       name: "Data Analysis & Business Insights",
-      version: "2026.09.02.1",
+      version: "2026.09.27.1",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))
@@ -272,6 +273,7 @@ describe("Data Analysis expert squad package", () => {
             state: { status: "running", input: {}, time: { start: created + 1 } },
           })
           const scope: TaskToolExecutionScope = {
+            packageToolRef: publisherRef,
             kind: "task",
             projectID: Instance.project.id,
             projectDirectory: project.path,
@@ -300,6 +302,19 @@ describe("Data Analysis expert squad package", () => {
             },
           }
           return withTaskScopedPluginToolHost(scope, async (host) => {
+            if (artifactType === "data-analysis/report") {
+              await expect(publishExpertArtifact({ scope: { ...scope, packageToolRef: null }, artifact: {
+                artifact_type: artifactType, schema_version: 1, label: "Report bypass", payload: samples[artifactType],
+                resources: [], source_artifact_locators: [],
+              } })).rejects.toMatchObject({ code: "PACKAGE_TYPED_PUBLISHER_REQUIRED", expectedPublisher: publisherRef, actualPublisher: null })
+              await expect(publishDataAnalysisArtifact.execute({ artifact: { artifact_type: artifactType, payload: samples[artifactType] } as never,
+                resource_set: null, source_artifact_locators: [] }, { host } as never)).rejects.toThrow("requires 6 exact source Artifact locator(s)")
+              const note = await publishExpertArtifact({ scope: { ...scope, packageToolRef: null }, artifact: {
+                artifact_type: "data-analysis/operator-note", schema_version: 1, label: "Generic note", payload: { status: "observed" }, resources: [], source_artifact_locators: [],
+              } })
+              const read = await host.engineArtifacts.read({ locator: note.locator, byte_offset: 0, max_bytes: 65536, delivery: "inline" })
+              expect(JSON.parse(read.chunk.text!).payload).toEqual({ status: "observed" })
+            }
             let resourceSet: ReturnType<typeof TaskArtifactResourceSetLocatorSchema.parse> | null = null
             if (attachReportResource) {
               const stage = await host.taskArtifacts.stage({ trees: ["data-analysis-delivery"] })

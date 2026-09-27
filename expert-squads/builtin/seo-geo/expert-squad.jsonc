@@ -5,7 +5,7 @@
   "name": "SEO & Generative Engine Optimization",
   "label": "SEO & Generative Engine Optimization",
   "description": "Evidence-led search and generative discovery research, technical/content analysis, and prioritized optimization planning.",
-  "version": "2026.08.30.2",
+  "version": "2026.09.27.1",
   "product_pillars": [
     "work"
   ],
@@ -167,5 +167,14 @@
         }
       }
     }
+  },
+  "artifact_publishers": {
+    "seo-geo/audit": "capability:tool:package:seo-geo:seo-geo%2Fshared%2Fpublish-seo-geo-artifact",
+    "seo-geo/discoverability-strategy": "capability:tool:package:seo-geo:seo-geo%2Fshared%2Fpublish-seo-geo-artifact",
+    "seo-geo/discovery-brief": "capability:tool:package:seo-geo:seo-geo%2Fshared%2Fpublish-seo-geo-artifact",
+    "seo-geo/generative-analysis": "capability:tool:package:seo-geo:seo-geo%2Fshared%2Fpublish-seo-geo-artifact",
+    "seo-geo/optimization-plan": "capability:tool:package:seo-geo:seo-geo%2Fshared%2Fpublish-seo-geo-artifact",
+    "seo-geo/search-analysis": "capability:tool:package:seo-geo:seo-geo%2Fshared%2Fpublish-seo-geo-artifact",
+    "seo-geo/source-dossier": "capability:tool:package:seo-geo:seo-geo%2Fshared%2Fpublish-seo-geo-artifact"
   }
 }

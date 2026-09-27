@@ -3,6 +3,7 @@ import { RuntimeTemplateID } from "@/agent/runtime-template-id"
 import { Instance } from "@/project/instance"
 import {
   ExpertSquadCapabilitySetsSchema,
+  ExpertSquadArtifactPublishersSchema,
   ExpertSquadConfigurationSchema,
   ExpertSquadDynamicAgentIDSchema,
   ExpertSquadIDSchema,
@@ -81,6 +82,7 @@ export const ExpertSquadAuthorParameters = z
     version: ExpertSquadVersionSchema,
     product_pillars: ProductPillarsSchema.describe("Product pillars where this Expert Squad is valid."),
     configuration: ExpertSquadConfigurationSchema.optional(),
+    artifact_publishers: ExpertSquadArtifactPublishersSchema.optional().describe("Exact formal Artifact types mapped to this package's projected Tool CapabilityRef; null reserves a Host-owned type. Undeclared types retain the generic publication contract."),
     capability_sets: ExpertSquadCapabilitySetsSchema.default({}),
     expected_current_package_digest: z
       .string()
@@ -159,6 +161,7 @@ export function buildExpertSquadAuthorDefinition(args: z.infer<typeof ExpertSqua
       version: input.version,
       product_pillars: input.product_pillars,
       configuration: input.configuration,
+      artifact_publishers: input.artifact_publishers,
       capability_sets: input.capability_sets,
       readme: "README.md",
       selector: {

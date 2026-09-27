@@ -5,7 +5,7 @@
   "name": "Marketing & Growth Strategy",
   "label": "Marketing & Growth Strategy",
   "description": "Evidence-led audience, channel, experiment, measurement, and campaign planning without guaranteed growth claims.",
-  "version": "2026.08.30.2",
+  "version": "2026.09.27.1",
   "product_pillars": [
     "work"
   ],
@@ -167,5 +167,14 @@
         }
       }
     }
+  },
+  "artifact_publishers": {
+    "marketing-growth/audience-analysis": "capability:tool:package:marketing-growth:marketing-growth%2Fshared%2Fpublish-marketing-growth-artifact",
+    "marketing-growth/audit": "capability:tool:package:marketing-growth:marketing-growth%2Fshared%2Fpublish-marketing-growth-artifact",
+    "marketing-growth/campaign-plan": "capability:tool:package:marketing-growth:marketing-growth%2Fshared%2Fpublish-marketing-growth-artifact",
+    "marketing-growth/channel-analysis": "capability:tool:package:marketing-growth:marketing-growth%2Fshared%2Fpublish-marketing-growth-artifact",
+    "marketing-growth/evidence-dossier": "capability:tool:package:marketing-growth:marketing-growth%2Fshared%2Fpublish-marketing-growth-artifact",
+    "marketing-growth/growth-brief": "capability:tool:package:marketing-growth:marketing-growth%2Fshared%2Fpublish-marketing-growth-artifact",
+    "marketing-growth/growth-strategy": "capability:tool:package:marketing-growth:marketing-growth%2Fshared%2Fpublish-marketing-growth-artifact"
   }
 }

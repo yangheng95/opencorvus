@@ -63,6 +63,7 @@ async function createTask(directory: string, title: string): Promise<TaskFixture
       return {
         taskID,
         scope: Object.freeze({
+          packageToolRef: null,
           kind: "task",
           projectID: Instance.project.id,
           projectDirectory: directory,

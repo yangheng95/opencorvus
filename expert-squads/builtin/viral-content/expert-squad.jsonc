@@ -5,7 +5,7 @@
   "name": "Viral Content",
   "label": "Viral Content",
   "description": "Evidence-backed audience and trend research, testable concepts, complete text-led campaign copy, independent review, and canonical delivery without promised engagement.",
-  "version": "2026.08.30.2",
+  "version": "2026.09.27.1",
   "product_pillars": [
     "work"
   ],
@@ -169,5 +169,14 @@
         }
       }
     }
+  },
+  "artifact_publishers": {
+    "viral-content/audience-dossier": "capability:tool:package:viral-content:viral-content%2Fshared%2Fpublish-viral-content-artifact",
+    "viral-content/campaign-brief": "capability:tool:package:viral-content:viral-content%2Fshared%2Fpublish-viral-content-artifact",
+    "viral-content/concept-set": "capability:tool:package:viral-content:viral-content%2Fshared%2Fpublish-viral-content-artifact",
+    "viral-content/copy-pack": "capability:tool:package:viral-content:viral-content%2Fshared%2Fpublish-viral-content-artifact",
+    "viral-content/delivery": "capability:tool:package:viral-content:viral-content%2Fshared%2Fpublish-viral-content-artifact",
+    "viral-content/review": "capability:tool:package:viral-content:viral-content%2Fshared%2Fpublish-viral-content-artifact",
+    "viral-content/trend-dossier": "capability:tool:package:viral-content:viral-content%2Fshared%2Fpublish-viral-content-artifact"
   }
 }

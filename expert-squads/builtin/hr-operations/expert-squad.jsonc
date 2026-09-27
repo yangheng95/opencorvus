@@ -5,7 +5,7 @@
   "name": "Human Resources & Organization Operations",
   "label": "Human Resources & Organization Operations",
   "description": "Turns aggregate workforce and people-process evidence into parallel workforce and process analyses, an independently audited operating plan, and a canonical Human Resources delivery.",
-  "version": "2026.09.02.1",
+  "version": "2026.09.27.1",
   "product_pillars": [
     "work"
   ],
@@ -167,5 +167,14 @@
         }
       }
     }
+  },
+  "artifact_publishers": {
+    "hr-operations/audit": "capability:tool:package:hr-operations:hr-operations%2Fshared%2Fpublish-hr-operations-artifact",
+    "hr-operations/evidence-dossier": "capability:tool:package:hr-operations:hr-operations%2Fshared%2Fpublish-hr-operations-artifact",
+    "hr-operations/operating-charter": "capability:tool:package:hr-operations:hr-operations%2Fshared%2Fpublish-hr-operations-artifact",
+    "hr-operations/operating-plan": "capability:tool:package:hr-operations:hr-operations%2Fshared%2Fpublish-hr-operations-artifact",
+    "hr-operations/operating-plan-draft": "capability:tool:package:hr-operations:hr-operations%2Fshared%2Fpublish-hr-operations-artifact",
+    "hr-operations/process-analysis": "capability:tool:package:hr-operations:hr-operations%2Fshared%2Fpublish-hr-operations-artifact",
+    "hr-operations/workforce-analysis": "capability:tool:package:hr-operations:hr-operations%2Fshared%2Fpublish-hr-operations-artifact"
   }
 }

@@ -82,6 +82,21 @@ function definition(files: ExpertSquadPackageDefinition["files"] = {}): ExpertSq
 }
 
 describe("expert squad authoring SDK", () => {
+  test("binds exact formal artifact types to projected package publishers", () => {
+    const ref = "capability:tool:package:example-squad:example-squad%2Fshared%2Fpublish"
+    const declared = manifest()
+    declared.capability_projection.agents["example-builder"].capability_refs = [ref]
+    declared.artifact_publishers = { "example-squad/report": ref, "example-squad/receipt": null }
+    expect(ExpertSquadManifestV2Schema.parse(declared).artifact_publishers).toEqual(declared.artifact_publishers)
+    for (const [type, publisher] of [
+      ["other/report", ref], ["example-squad/report", "capability:tool:package:other:publish"],
+      ["example-squad/report", "capability:tool:platform:tool-registry:read"],
+      ["example-squad/report", "capability:tool:package:example-squad:missing"],
+    ]) {
+      const result = ExpertSquadManifestV2Schema.safeParse({ ...declared, artifact_publishers: { [type!]: publisher } })
+      expect(result.success ? "accepted" : result.error.issues[0]!.path[0]).toBe("artifact_publishers")
+    }
+  })
   test("projects discovery to schedulers and workers while reserving publication to workers", () => {
     expect(EXPERT_SQUAD_PLATFORM_ARTIFACT_DISCOVERY_TOOL_IDS).toEqual([
       "artifact_search",

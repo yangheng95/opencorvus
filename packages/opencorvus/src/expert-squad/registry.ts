@@ -1970,7 +1970,7 @@ export namespace ExpertSquadRegistry {
     return loaded
   }
 
-  export async function loadPackageRevisionSnapshot(packageRevisionDigest: string): Promise<LoadedPackage> {
+  async function verifiedPackageRevisionSnapshot(packageRevisionDigest: string) {
     const digest = z
       .string()
       .regex(/^[a-f0-9]{64}$/)
@@ -1983,6 +1983,17 @@ export namespace ExpertSquadRegistry {
     if ((await packageDigest(root)) !== digest) {
       throw new Error(`expert squad immutable package snapshot digest mismatch: ${digest}`)
     }
+    return { root, digest }
+  }
+
+  /** Read declaration authority without materializing the package's executable resources again. */
+  export async function readPackageRevisionManifest(packageRevisionDigest: string): Promise<Manifest> {
+    const { root } = await verifiedPackageRevisionSnapshot(packageRevisionDigest)
+    return (await readPackageMetadata(root, { canonicalFolder: false })).manifest
+  }
+
+  export async function loadPackageRevisionSnapshot(packageRevisionDigest: string): Promise<LoadedPackage> {
+    const { root, digest } = await verifiedPackageRevisionSnapshot(packageRevisionDigest)
     return loadValidatedPackageSnapshot(root, false, digest)
   }
 

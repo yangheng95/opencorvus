@@ -68514,6 +68514,23 @@
                 "schema": {
                   "additionalProperties": false,
                   "properties": {
+                    "artifact_publishers": {
+                      "additionalProperties": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "propertyNames": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
                     "capability_projection": {
                       "additionalProperties": false,
                       "properties": {

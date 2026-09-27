@@ -1,8 +1,13 @@
+import path from "node:path"
+import fs from "node:fs/promises"
+import { Global } from "../src/global"
+import { ExpertSquadRegistry } from "../src/expert-squad/registry"
+import { assertArtifactPublicationAuthority, ArtifactPublisherAuthorityError } from "../src/expert-squad/artifact-publication-authority"
+import type { TaskToolExecutionScope } from "../src/tool/task-tool-execution-scope"
+import { EvolutionArtifactSchemas } from "@opencorvus-ai/plugin"
 import { describe, expect, test } from "bun:test"
 import {
-  ArtifactPublisherAuthorityError,
   artifactSnapshotTransport,
-  assertGenericArtifactPublisherAuthority,
 } from "../src/tool/artifact-catalog"
 import {
   ArtifactReadLocatorSchema,
@@ -11,22 +16,42 @@ import {
 import { TaskArtifactResourceSetLocatorSchema } from "@opencorvus-ai/plugin/task-artifact"
 
 describe("generic Artifact publisher authority", () => {
-  test("maps the Evolution Lab strict ABI namespace to its typed publisher contract", () => {
+  test("preserves the bound undeclared revision after a new declared revision is loaded", async () => {
+    const root = await Global.createTemporaryDirectory("publication-revision-")
     try {
-      assertGenericArtifactPublisherAuthority("evolution-lab/candidate-revision")
-      throw new Error("expected Evolution Lab publisher authority validation to fail")
-    } catch (error) {
-      expect(error).toBeInstanceOf(ArtifactPublisherAuthorityError)
-      expect(error).toMatchObject({
-        name: "ArtifactPublisherAuthorityError",
-        code: "PACKAGE_TYPED_PUBLISHER_REQUIRED",
-        artifactType: "evolution-lab/candidate-revision",
-      })
-    }
+      await fs.cp(path.resolve(import.meta.dir, "../../../expert-squads/builtin/data-analysis"), root, { recursive: true })
+      const file = path.join(root, "expert-squad.jsonc")
+      const original = await fs.readFile(file, "utf8")
+      const manifest = JSON.parse(original)
+      delete manifest.artifact_publishers
+      manifest.version = "2026.09.26.1"
+      await fs.writeFile(file, JSON.stringify(manifest))
+      const undeclared = await ExpertSquadRegistry.loadSourcePackage(root)
+      await fs.writeFile(file, original)
+      const declared = await ExpertSquadRegistry.loadSourcePackage(root)
+      const scopeFor = (loaded: typeof declared) => ({ packageToolRef: null, owner: { packageRevision: {
+        namespace: loaded.namespace, id: loaded.id, version: loaded.manifest.version, packageDigest: loaded.packageDigest,
+      } } } as TaskToolExecutionScope)
+      expect(await assertArtifactPublicationAuthority(scopeFor(undeclared), "data-analysis/report").then(() => "generic")).toBe("generic")
+      await expect(assertArtifactPublicationAuthority(scopeFor(declared), "data-analysis/report"))
+        .rejects.toMatchObject({ code: "PACKAGE_TYPED_PUBLISHER_REQUIRED", expectedPublisher: "data-analysis/shared/publish-data-analysis-artifact" })
+      expect(await assertArtifactPublicationAuthority(scopeFor(undeclared), "data-analysis/report").then(() => "generic")).toBe("generic")
+    } finally { await fs.rm(root, { recursive: true, force: true }) }
   })
-
-  test("accepts an active Squad generic evidence type", () => {
-    expect(assertGenericArtifactPublisherAuthority("records-ediscovery-operations/review-pack")).toBeUndefined()
+  test("reads exact declared publishers from the immutable Lab revision", async () => {
+    const loaded = await ExpertSquadRegistry.loadPackage(path.resolve(import.meta.dir, "../../../expert-squads/builtin/evolution-lab"))
+    expect(Object.keys(loaded.manifest.artifact_publishers!).sort()).toEqual(Object.keys(EvolutionArtifactSchemas).sort())
+    const scope = { packageToolRef: null, owner: { packageRevision: {
+      namespace: loaded.namespace, id: loaded.id, version: loaded.manifest.version, packageDigest: loaded.packageDigest,
+    } } } as TaskToolExecutionScope
+    await expect(assertArtifactPublicationAuthority(scope, "evolution-lab/candidate-revision"))
+      .rejects.toMatchObject({ code: "PACKAGE_TYPED_PUBLISHER_REQUIRED", expectedPublisher: "evolution-lab/shared/publish-evolution-artifact", actualPublisher: null })
+    await expect(assertArtifactPublicationAuthority({ ...scope, packageToolRef: "evolution-lab/shared/collect-run-evidence" }, "evolution-lab/candidate-revision"))
+      .rejects.toBeInstanceOf(ArtifactPublisherAuthorityError)
+    expect(await assertArtifactPublicationAuthority({ ...scope, packageToolRef: "evolution-lab/shared/publish-evolution-artifact" }, "evolution-lab/candidate-revision").then(() => "authorized")).toBe("authorized")
+    await expect(assertArtifactPublicationAuthority({ ...scope, packageToolRef: "evolution-lab/shared/publish-evolution-artifact" }, "evolution-lab/promotion-receipt"))
+      .rejects.toMatchObject({ code: "PACKAGE_TYPED_PUBLISHER_REQUIRED", expectedPublisher: null })
+    expect(await assertArtifactPublicationAuthority(scope, "evolution-lab/operator-note").then(() => "generic")).toBe("generic")
   })
 
   test("returns Host-minted read references with the published snapshot resource set", () => {
@@ -57,7 +82,8 @@ describe("generic Artifact publisher authority", () => {
       snapshot,
       },
       { source: "task_artifact_resource", ref: resource },
-    ].map((locator) => ArtifactReadLocatorSchema.parse(locator))
+    ] as const
+    expectedLocators.forEach((locator) => ArtifactReadLocatorSchema.parse(locator))
     expect(transport.locators).toEqual([
       {
         role: "snapshot",

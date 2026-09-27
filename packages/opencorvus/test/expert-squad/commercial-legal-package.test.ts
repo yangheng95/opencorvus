@@ -225,7 +225,7 @@ describe("Commercial Legal Expert Squad", () => {
       namespace: "builtin",
       id: "commercial-legal",
       name: "Commercial Legal",
-      version: "2026.08.30.2",
+      version: "2026.09.27.1",
       product_pillars: ["work"],
     })
     expect([...source.packageSkills.keys()].sort()).toEqual([...skillRefs].sort())
@@ -382,6 +382,7 @@ describe("Commercial Legal Expert Squad", () => {
         }
 
         const scope = (agentID: keyof typeof roles, suffix: string): TaskToolExecutionScope => ({
+          packageToolRef: publisherRef,
           kind: "task",
           projectID: Instance.project.id,
           projectDirectory: project.path,
