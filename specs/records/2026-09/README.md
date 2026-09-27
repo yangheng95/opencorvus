@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Supervision mechanism consolidation](2026-09-27-supervision-mechanism-consolidation.md)
+
 - [AutomationBench environment clock audit](2026-09-25-automationbench-environment-clock-audit.md)
 
 - [Supervision causal iteration](2026-09-25-supervision-causal-iteration.md)

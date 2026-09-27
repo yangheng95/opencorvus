@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Supervision mechanism consolidation](records/2026-09/2026-09-27-supervision-mechanism-consolidation.md)
+
 - [Reviewer evidence-standard observation](artifacts/2026-09-27-review-evidence/README.md)
 
 - [Complete team feedback observation](artifacts/2026-09-27-team-feedback/README.md)
