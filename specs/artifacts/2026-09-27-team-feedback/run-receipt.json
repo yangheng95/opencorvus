@@ -1,0 +1,79 @@
+{
+  "source": "original immutable launch/result, launcher exit, native audit and provider_usage_event",
+  "root": ".tmp\\team-feedback-20260927\\feedback-01",
+  "sourceCommit": "a6ea550b8c50022036fdd72305884ad73b1f7127",
+  "pid": 59896,
+  "startedAt": "2026-09-27T07:52:23.670Z",
+  "finishedAt": "2026-09-27T09:05:17.438Z",
+  "outcome": "execution_settled",
+  "cleanup": {
+    "runtimeDisposed": true,
+    "credentialsRemoved": true
+  },
+  "launcher": {
+    "exitCode": 0,
+    "finishedAt": "2026-09-27T09:05:17.5936735+00:00",
+    "log": "D:/myhexin-local/opencorvus/.tmp/team-feedback-run.log"
+  },
+  "preflight": {
+    "sessionID": "ses_hH2GC4Sy8wBKcJX1GdYP",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-5.6-luna",
+    "streaming": true
+  },
+  "missionSettlement": {
+    "status": "accepted",
+    "missionID": "b6fc7138760eba83",
+    "sessionID": "ses_-zUTap5Jezz46YO7421Q",
+    "outcome": {
+      "messageID": "msg_g0VWPT7Gx00OvFYK70jj",
+      "toolCallID": "call_hDuLWvSSXw75UDRAoRtTbK20",
+      "toolPartID": "prt_g0VWPT8Wo00jJPh2owKR",
+      "summary": "The single registered NYC 311 diagnostic is accepted. Its audited Markdown memo was read in full, including reconciled July/August totals, borough changes, closure measures, Unspecified handling, reproducibility method, limitations, prioritized follow-ups, and the corrected Bronx +23.41% figure. No candidate, evolution, comparison, external action, live-account access, or data refresh was performed.",
+      "timeRecorded": 1790499910034,
+      "kind": "accepted"
+    },
+    "interruptible": false,
+    "finalReply": {
+      "status": "settled",
+      "responseMessageIDs": [
+        "msg_g0VWPT9YY00BqqYcwRXz"
+      ],
+      "completedAtMs": 1790499916115,
+      "failedReplyIDs": []
+    },
+    "latestReply": {
+      "status": "settled",
+      "responseMessageIDs": [
+        "msg_g0VWPT9YY00BqqYcwRXz"
+      ],
+      "completedAtMs": 1790499916115,
+      "failedReplyIDs": []
+    }
+  },
+  "audit": {
+    "file": "provider-59896-aed53ddc-cfdc-487b-87ab-13da886d4954-631.json",
+    "requests": 315,
+    "statuses": {
+      "200": 315
+    },
+    "models": [
+      "gpt-5.6-luna"
+    ],
+    "allStreaming": true
+  },
+  "usage": {
+    "rows": 312,
+    "totals": {
+      "input_tokens": 2622230,
+      "output_tokens": 117678,
+      "reasoning_tokens": 13663,
+      "cache_read_tokens": 18351104,
+      "cache_write_tokens": 0,
+      "total_tokens": 21104675,
+      "cost_usd": 0
+    },
+    "billingNote": "Local native values are not an invoice; per-request reconciliation and complete external billing remain unknown."
+  }
+}

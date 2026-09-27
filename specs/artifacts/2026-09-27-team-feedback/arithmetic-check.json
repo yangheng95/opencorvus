@@ -1,0 +1,372 @@
+{
+  "method": "independent original-row Decimal aggregation against production-reader verified final Markdown",
+  "numeric_rows_checked": 19,
+  "checks": [
+    {
+      "measure": "workload",
+      "borough": "BRONX",
+      "expected": [
+        "6449",
+        "7959",
+        "1510",
+        "23.41"
+      ],
+      "actual": [
+        "6449",
+        "7959",
+        "1510",
+        "23.41"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "workload",
+      "borough": "BROOKLYN",
+      "expected": [
+        "8164",
+        "9996",
+        "1832",
+        "22.44"
+      ],
+      "actual": [
+        "8164",
+        "9996",
+        "1832",
+        "22.44"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "workload",
+      "borough": "MANHATTAN",
+      "expected": [
+        "4296",
+        "4941",
+        "645",
+        "15.01"
+      ],
+      "actual": [
+        "4296",
+        "4941",
+        "645",
+        "15.01"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "workload",
+      "borough": "QUEENS",
+      "expected": [
+        "6731",
+        "8686",
+        "1955",
+        "29.04"
+      ],
+      "actual": [
+        "6731",
+        "8686",
+        "1955",
+        "29.04"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "workload",
+      "borough": "STATEN ISLAND",
+      "expected": [
+        "1001",
+        "1174",
+        "173",
+        "17.28"
+      ],
+      "actual": [
+        "1001",
+        "1174",
+        "173",
+        "17.28"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "workload",
+      "borough": "TOTAL",
+      "expected": [
+        "26659",
+        "32756",
+        "6097",
+        "22.87"
+      ],
+      "actual": [
+        "26659",
+        "32756",
+        "6097",
+        "22.87"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "closure",
+      "month": "2025-07",
+      "borough": "BRONX",
+      "expected": [
+        "6449",
+        "6403",
+        "99.29",
+        "46",
+        "0.71"
+      ],
+      "actual": [
+        "6449",
+        "6403",
+        "99.29",
+        "46",
+        "0.71"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "closure",
+      "month": "2025-07",
+      "borough": "BROOKLYN",
+      "expected": [
+        "8164",
+        "8145",
+        "99.77",
+        "19",
+        "0.23"
+      ],
+      "actual": [
+        "8164",
+        "8145",
+        "99.77",
+        "19",
+        "0.23"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "closure",
+      "month": "2025-07",
+      "borough": "MANHATTAN",
+      "expected": [
+        "4296",
+        "4288",
+        "99.81",
+        "8",
+        "0.19"
+      ],
+      "actual": [
+        "4296",
+        "4288",
+        "99.81",
+        "8",
+        "0.19"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "closure",
+      "month": "2025-07",
+      "borough": "QUEENS",
+      "expected": [
+        "6731",
+        "6689",
+        "99.38",
+        "42",
+        "0.62"
+      ],
+      "actual": [
+        "6731",
+        "6689",
+        "99.38",
+        "42",
+        "0.62"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "closure",
+      "month": "2025-07",
+      "borough": "STATEN ISLAND",
+      "expected": [
+        "1001",
+        "999",
+        "99.80",
+        "2",
+        "0.20"
+      ],
+      "actual": [
+        "1001",
+        "999",
+        "99.80",
+        "2",
+        "0.20"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "closure",
+      "month": "2025-07",
+      "borough": "Unspecified",
+      "expected": [
+        "18",
+        "18",
+        "100.00",
+        "0",
+        "0.00"
+      ],
+      "actual": [
+        "18",
+        "18",
+        "100.00",
+        "0",
+        "0.00"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "closure",
+      "month": "2025-07",
+      "borough": "TOTAL",
+      "expected": [
+        "26659",
+        "26542",
+        "99.56",
+        "117",
+        "0.44"
+      ],
+      "actual": [
+        "26659",
+        "26542",
+        "99.56",
+        "117",
+        "0.44"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "closure",
+      "month": "2025-08",
+      "borough": "BRONX",
+      "expected": [
+        "7959",
+        "7888",
+        "99.11",
+        "71",
+        "0.89"
+      ],
+      "actual": [
+        "7959",
+        "7888",
+        "99.11",
+        "71",
+        "0.89"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "closure",
+      "month": "2025-08",
+      "borough": "BROOKLYN",
+      "expected": [
+        "9996",
+        "9872",
+        "98.76",
+        "124",
+        "1.24"
+      ],
+      "actual": [
+        "9996",
+        "9872",
+        "98.76",
+        "124",
+        "1.24"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "closure",
+      "month": "2025-08",
+      "borough": "MANHATTAN",
+      "expected": [
+        "4941",
+        "4913",
+        "99.43",
+        "28",
+        "0.57"
+      ],
+      "actual": [
+        "4941",
+        "4913",
+        "99.43",
+        "28",
+        "0.57"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "closure",
+      "month": "2025-08",
+      "borough": "QUEENS",
+      "expected": [
+        "8686",
+        "8541",
+        "98.33",
+        "145",
+        "1.67"
+      ],
+      "actual": [
+        "8686",
+        "8541",
+        "98.33",
+        "145",
+        "1.67"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "closure",
+      "month": "2025-08",
+      "borough": "STATEN ISLAND",
+      "expected": [
+        "1174",
+        "1151",
+        "98.04",
+        "23",
+        "1.96"
+      ],
+      "actual": [
+        "1174",
+        "1151",
+        "98.04",
+        "23",
+        "1.96"
+      ],
+      "matches": true
+    },
+    {
+      "measure": "closure",
+      "month": "2025-08",
+      "borough": "TOTAL",
+      "expected": [
+        "32756",
+        "32365",
+        "98.81",
+        "391",
+        "1.19"
+      ],
+      "actual": [
+        "32756",
+        "32365",
+        "98.81",
+        "391",
+        "1.19"
+      ],
+      "matches": true
+    }
+  ],
+  "later_closure_counts": {
+    "2025-07": 117,
+    "2025-08": 391
+  }
+}

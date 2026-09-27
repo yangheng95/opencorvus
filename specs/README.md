@@ -1,6 +1,7 @@
 # Specs Storage Index
 
 - [Complete team feedback observation](artifacts/2026-09-27-team-feedback/README.md)
+- [Complete team feedback result](artifacts/2026-09-27-team-feedback/assessment.md)
 
 - [G64 independent business-evidence review](artifacts/2026-09-27-supervision-review/README.md)
 

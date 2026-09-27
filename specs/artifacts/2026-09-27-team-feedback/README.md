@@ -1,5 +1,7 @@
 # One complete team feedback observation
 
+Closed result: [independent assessment](assessment.md). The same writer corrected a small self-discovered rounding error, but a source-supported later-closure fact remained incorrectly described as unknown and was accepted. The complete business-feedback goal did not pass. Original Task/Mission acceptance and all historical bytes remain unchanged; do not rerun this root.
+
 ## Recall and question
 
 The user asked us to stop substituting local protocol work and isolated review Chats for useful team behavior. Codex/ZCode references support keeping bounded actors and sending concrete feedback back to the responsible actor. Opencorvus already has these primitives. Commit `1446e775` clarifies the existing data-analysis team's initial stage, later exact-target review and writer continuation responsibilities.

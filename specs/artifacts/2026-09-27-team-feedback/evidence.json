@@ -1,0 +1,1695 @@
+{
+  "authority": "read-only exports of original requests/outcomes/results; not newly delivered messages",
+  "originalToolRecords": [
+    {
+      "sessionID": "ses_-zUTaom1HzzJDsj6ptrZ",
+      "partID": "prt_g0VWPF3fO00MFMz2OMSJ",
+      "time_created": 1790496555999,
+      "request": {
+        "type": "tool-request",
+        "callID": "call_QXD0DC8lXGI2atRSfx83DEGc",
+        "tool": "dispatch_agent",
+        "input": {
+          "dispatch": {
+            "target": "data-analysis-performance-analyst",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "operating-insight-report",
+                "node_id": "data-analysis-performance-analyst"
+              },
+              "use_worktree": false,
+              "input": {
+                "goal_ids": [],
+                "instruction": "Outcome: publish data-analysis/performance-analysis for the frozen NYC 311 residential-noise memo. Scope: use only the accepted data-analysis/data-dossier plus its authoritative request, charter, and metrics sources discovered in the Task Artifact catalog. Analyze cohort totals, borough workloads, July-to-August absolute and percentage changes using July denominators, rankings and ties, and any performance patterns supported by the grouped month-level data. Reconcile calculations independently, preserve Unspecified treatment and denominators, distinguish observed evidence from interpretation, and explicitly state that correlation is not causation. Explain what the data cannot establish about response speed, backlog, actual resolution, staffing, or service quality. Publish the typed artifact with reproducible formulas, tables or structured results, source references, quality checks, and actionable but bounded follow-up questions. Do not refresh external data, infer unsupported values, or modify project files.",
+                "reason": "The accepted normalized dossier is ready, and this independent branch supplies the workload and month-to-month performance evidence required before insight synthesis."
+              }
+            }
+          }
+        },
+        "time": {
+          "start": 1790496551146
+        }
+      },
+      "outcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_h0N3HEluxjSVG6PYTg11",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1790496556406
+        }
+      },
+      "result": {
+        "kind": "json",
+        "value": {
+          "kind": "accepted",
+          "session_id": "ses_hVEsiteW7sDgaFyopTj9",
+          "dispatch_lineage_id": "art_g0VWPF4w000hCBgnjJ2V"
+        }
+      }
+    },
+    {
+      "sessionID": "ses_-zUTaom1HzzJDsj6ptrZ",
+      "partID": "prt_g0VWPGab400pT8d2x0hJ",
+      "time_created": 1790496921873,
+      "request": {
+        "type": "tool-request",
+        "callID": "call_N2UDYZ9SIqvpERZJHh84Xnzr",
+        "tool": "dispatch_agent",
+        "input": {
+          "dispatch": {
+            "target": "data-analysis-segment-analyst",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "operating-insight-report",
+                "node_id": "data-analysis-segment-analyst"
+              },
+              "use_worktree": false,
+              "input": {
+                "goal_ids": [],
+                "instruction": "Outcome: publish data-analysis/segment-analysis for the frozen NYC 311 residential-noise memo. Scope: use only the accepted data-analysis/data-dossier plus the authoritative request, charter, metrics, and performance-analysis sources discovered and completely read from the Task Artifact catalog. Analyze borough and category segments for workload concentration, July-to-August changes, same-month closure counts/shares and remaining counts/shares, including the supplied Unspecified category and the absence of an August Unspecified row. Identify the largest workload and change segments, meaningful concentration patterns, and bounded operational questions. Reconcile figures and denominators independently; distinguish descriptive observation from inference, avoid causation or staffing claims, and state limits on response speed, backlog, actual resolution, and service quality. Publish exactly the typed data-analysis/segment-analysis artifact with reproducible calculations, source references, quality checks, and explicit unknown handling; do not refresh external data or modify project files.",
+                "reason": "The data dossier and performance branch are complete; this independent segment branch is the remaining prerequisite for the insight synthesis join."
+              }
+            }
+          }
+        },
+        "time": {
+          "start": 1790496916058
+        }
+      },
+      "outcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_h7OwZt3xQPP4wZ399bsD",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1790496922312
+        }
+      },
+      "result": {
+        "kind": "json",
+        "value": {
+          "kind": "accepted",
+          "session_id": "ses_hZa8pzWMTW2O6Fozz0n2",
+          "dispatch_lineage_id": "art_g0VWPGc7G00He3WEFjFM"
+        }
+      }
+    },
+    {
+      "sessionID": "ses_-zUTaom1HzzJDsj6ptrZ",
+      "partID": "prt_g0VWPRNLH00EDTuNBh0q",
+      "time_created": 1790499491105,
+      "request": {
+        "type": "tool-request",
+        "callID": "call_7RKHjHh6z6eebEePBOBZi5Mt",
+        "tool": "respond_agent_coordination",
+        "input": {
+          "request_id": "art_g0VWPRJi400JXtOHHm20",
+          "decision": "redispatch",
+          "message": "Correct the Bronx July-to-August percentage in the final report from 23.42% to 23.41%, using the already verified 1,510/6,449 calculation. Preserve all other correct content. Follow the package no-write-after-merge rule: perform the authorized correction in a new delivery Turn, reread and verify the report, commit/merge, snapshot the exact returned primary head, republish the canonical report Artifact and identical document view, and report the resulting evidence.",
+          "reason": "The final report contains one material arithmetic-rounding discrepancy identified against its own exact numerator and denominator; the report writer owns the correction and the same workflow occurrence must continue."
+        },
+        "time": {
+          "start": 1790499486715
+        }
+      },
+      "outcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_heRS6sO0FWo0pWXPCKBF",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1790499491171
+        }
+      },
+      "result": {
+        "kind": "json",
+        "value": "Responded to coordination request art_g0VWPRJi400JXtOHHm20 with a pending redispatch action. response=art_hdMSz2SLwSTVhneznGV1; action=art_hz507iIZtjRunMNp8m13; call dispatch_agent with dispatch.target=data-analysis-report-writer, dispatch.turn.kind=continuation, and dispatch.turn.authority.coordination_action_id=art_hz507iIZtjRunMNp8m13 explicitly."
+      }
+    },
+    {
+      "sessionID": "ses_-zUTaom1HzzJDsj6ptrZ",
+      "partID": "prt_g0VWPRQY300qkj7s9RRC",
+      "time_created": 1790499508960,
+      "request": {
+        "type": "tool-request",
+        "callID": "call_vO55NZfa8MRbTmPtkKqnOhtE",
+        "tool": "dispatch_agent",
+        "input": {
+          "dispatch": {
+            "target": "data-analysis-report-writer",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "continuation",
+              "authority": {
+                "kind": "coordination_action",
+                "coordination_action_id": "art_hz507iIZtjRunMNp8m13"
+              },
+              "guidance": "Apply the single verified arithmetic correction: Bronx July-to-August change is +1,510 and 1,510/6,449 = 23.41448%, therefore display +23.41% to two decimals. Preserve every other verified report claim and limitation. Complete the correction, reread and verify the canonical report, commit/merge, snapshot the exact returned primary head, republish the canonical report Artifact and identical document@1 view, and provide final evidence.",
+              "evidence_locators": [
+                {
+                  "source": "engine_artifact",
+                  "artifact_id": "art_hztguBz1f83okqbeDYaX",
+                  "catalog_revision": 34
+                },
+                {
+                  "source": "engine_artifact",
+                  "artifact_id": "art_hjWSq50cxX58z0Vkn77D",
+                  "catalog_revision": 22
+                },
+                {
+                  "source": "engine_artifact",
+                  "artifact_id": "art_hlMQAMi4ZqQJIiq4REPL",
+                  "catalog_revision": 14
+                },
+                {
+                  "source": "engine_artifact",
+                  "artifact_id": "art_hpst9QxX5u3fzkVLbEXS",
+                  "catalog_revision": 9
+                },
+                {
+                  "source": "task_artifact_snapshot",
+                  "snapshot": {
+                    "schema_version": 2,
+                    "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+                    "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+                    "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+                    "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+                  }
+                }
+              ],
+              "input": {
+                "goal_ids": [],
+                "request": "Correct the final canonical planning memo's Bronx July-to-August percentage from 23.42% to the accurately rounded 23.41% based on 1,510/6,449. Preserve all other verified content and limitations. Reread and verify the report, commit/merge the correction, snapshot the exact returned primary head, republish the canonical data-analysis/report Artifact and identical document@1 view, and provide evidence of the corrected delivered surface.",
+                "reason": "A material arithmetic-rounding discrepancy was found in the already published final report; the existing report writer owns this correction and must revalidate the delivered surface."
+              }
+            }
+          }
+        },
+        "time": {
+          "start": 1790499499039
+        }
+      },
+      "outcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_h5yO97irgmtnc1ZXydvp",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1790499510277
+        }
+      },
+      "result": {
+        "kind": "json",
+        "value": {
+          "kind": "accepted",
+          "session_id": "ses_hDHLDWcodZU8L9Mmajga",
+          "dispatch_lineage_id": "art_g0VWPRT9U00fH8eumaTZ"
+        }
+      }
+    },
+    {
+      "sessionID": "ses_-zUTaom1HzzJDsj6ptrZ",
+      "partID": "prt_g0VWPSYLe00feVxXGPp3",
+      "time_created": 1790499778537,
+      "request": {
+        "type": "tool-request",
+        "callID": "call_N6wK3kwKYgh4tBErfvbuC2d6",
+        "tool": "manage_task",
+        "input": {
+          "summary": "Delivered the audited, reproducible Markdown planning memo for the frozen NYC 311 NYPD Noise - Residential July and August 2025 cohorts. It includes reconciled cohort and borough totals, absolute and July-denominator percentage changes, workload rankings, same-calendar-month recorded closure counts/shares and remaining counts/shares with denominators, explicit Unspecified handling, reproducible method and source references, evidence/assumptions/actions, and limitations on speed, backlog, resolution, quality, staffing, causation, and incidents. The independent audit verified all five synthesized claims with no unresolved factual findings. A final report review corrected the Bronx change rounding to +23.41% (1,510/6,449), preserved all other verified content, revalidated the canonical Markdown after merge, and republished the matching document view.",
+          "evidence_locators": [
+            {
+              "source": "session_message",
+              "session_id": "ses_h1t0lRuqbIe6Gh47d5Cs",
+              "message_id": "msg_g0VWPCPmC00C3h0DFvM2"
+            },
+            {
+              "source": "session_message",
+              "session_id": "ses_hICrStl634JzWwLkCZ6y",
+              "message_id": "msg_g0VWPEtOe00YgJF0ieqR"
+            },
+            {
+              "source": "session_message",
+              "session_id": "ses_hVEsiteW7sDgaFyopTj9",
+              "message_id": "msg_g0VWPGKnf00tMji4qT0d"
+            },
+            {
+              "source": "session_message",
+              "session_id": "ses_hZa8pzWMTW2O6Fozz0n2",
+              "message_id": "msg_g0VWPIoSX0001GN8idmq"
+            },
+            {
+              "source": "session_message",
+              "session_id": "ses_h35s2zJ3awxiBdlz9lZW",
+              "message_id": "msg_g0VWPKw5y00m2r1wiv1c"
+            },
+            {
+              "source": "session_message",
+              "session_id": "ses_h1Qs3cRTUxbGuwiJvBob",
+              "message_id": "msg_g0VWPN1Re00jfsAPOABw"
+            },
+            {
+              "source": "session_message",
+              "session_id": "ses_hDHLDWcodZU8L9Mmajga",
+              "message_id": "msg_g0VWPS44U00BkeYcfGXp"
+            },
+            {
+              "source": "engine_artifact",
+              "artifact_id": "art_hztguBz1f83okqbeDYaX",
+              "catalog_revision": 34
+            },
+            {
+              "source": "engine_artifact",
+              "artifact_id": "art_h0S8nJUr43ydBsez0ZBo",
+              "catalog_revision": 47
+            }
+          ],
+          "deliverable_artifact_locators": [
+            {
+              "source": "engine_artifact",
+              "artifact_id": "art_h0S8nJUr43ydBsez0ZBo",
+              "catalog_revision": 47
+            }
+          ],
+          "accepted_delivery_slice_revision_ids": [],
+          "workflow_id": "operating-insight-report",
+          "action": "complete_task"
+        },
+        "time": {
+          "start": 1790499767350
+        }
+      },
+      "outcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_h015RRPyKm3CbQ93Y2JY",
+        "title": "Task Completed",
+        "metadata": {
+          "opencorvusToolResultControl": {
+            "kind": "immediate_park"
+          }
+        },
+        "time": {
+          "end": 1790499781033
+        }
+      },
+      "result": {
+        "kind": "json",
+        "value": {
+          "title": "Task Completed",
+          "output": "Task tsk_g00VWPBCxD00HpB2NIEq completed: Delivered the audited, reproducible Markdown planning memo for the frozen NYC 311 NYPD Noise - Residential July and August 2025 cohorts. It includes reconciled cohort and borough totals, absolute and July-denominator percentage changes, workload rankings, same-calendar-month recorded closure counts/shares and remaining counts/shares with denominators, explicit Unspecified handling, reproducible method and source references, evidence/assumptions/actions, and limitations on speed, backlog, resolution, quality, staffing, causation, and incidents. The independent audit verified all five synthesized claims with no unresolved factual findings. A final report review corrected the Bronx change rounding to +23.41% (1,510/6,449), preserved all other verified content, revalidated the canonical Markdown after merge, and republished the matching document view..",
+          "metadata": {
+            "opencorvusToolResultControl": {
+              "kind": "immediate_park"
+            }
+          }
+        }
+      }
+    },
+    {
+      "sessionID": "ses_hDHLDWcodZU8L9Mmajga",
+      "partID": "prt_g0VWPPeVM0015Mx6s57R",
+      "time_created": 1790499076115,
+      "request": {
+        "type": "tool-request",
+        "callID": "call_jCE2Rt1YmhsH0boUe6ONklAe",
+        "tool": "merge_back",
+        "input": {},
+        "time": {
+          "start": 1790499076032
+        }
+      },
+      "outcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_h5CLTFtp6hqOxOfVLd5W",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1790499077924
+        }
+      },
+      "result": {
+        "kind": "json",
+        "value": {
+          "status": "merged",
+          "primary_head": "fb72c7c9a7997d9f080b3b24b7692243898acc6c",
+          "primary_branch": "master"
+        }
+      }
+    },
+    {
+      "sessionID": "ses_hDHLDWcodZU8L9Mmajga",
+      "partID": "prt_g0VWPRcQG00CWfZaFrGj",
+      "time_created": 1790499544953,
+      "request": {
+        "type": "tool-request",
+        "callID": "call_zazh117hkQl0aP9wUQvKyptC",
+        "tool": "merge_back",
+        "input": {},
+        "time": {
+          "start": 1790499544684
+        }
+      },
+      "outcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hxE2ulYsXCnksQbI9zKp",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1790499547374
+        }
+      },
+      "result": {
+        "kind": "json",
+        "value": {
+          "status": "merged",
+          "primary_head": "5328e09a8f38d0e1074b4bbd68aba45cba2f1953",
+          "primary_branch": "master"
+        }
+      }
+    },
+    {
+      "sessionID": "ses_-zUTap5Jezz46YO7421Q",
+      "partID": "prt_g0VWPT8Wo00jJPh2owKR",
+      "time_created": 1790499910014,
+      "request": {
+        "type": "tool-request",
+        "callID": "call_hDuLWvSSXw75UDRAoRtTbK20",
+        "tool": "panel_complete_mission",
+        "input": {
+          "summary": "The single registered NYC 311 diagnostic is accepted. Its audited Markdown memo was read in full, including reconciled July/August totals, borough changes, closure measures, Unspecified handling, reproducibility method, limitations, prioritized follow-ups, and the corrected Bronx +23.41% figure. No candidate, evolution, comparison, external action, live-account access, or data refresh was performed.",
+          "task_acceptances": [
+            {
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "evidence_read_refs": [
+                "ar_MyM6HLsK9WQKFlBr",
+                "ar_JmMDqh5t4yJUuW9f"
+              ]
+            }
+          ]
+        },
+        "time": {
+          "start": 1790499906426
+        }
+      },
+      "outcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hcKaN62shmuWEypoZGlU",
+        "title": "Mission completed",
+        "metadata": {
+          "truncated": false
+        },
+        "time": {
+          "end": 1790499910037
+        }
+      },
+      "result": {
+        "kind": "json",
+        "value": {
+          "title": "Mission completed",
+          "output": "{\"summary\":\"The single registered NYC 311 diagnostic is accepted. Its audited Markdown memo was read in full, including reconciled July/August totals, borough changes, closure measures, Unspecified handling, reproducibility method, limitations, prioritized follow-ups, and the corrected Bronx +23.41% figure. No candidate, evolution, comparison, external action, live-account access, or data refresh was performed.\",\"task_acceptances\":[{\"task_id\":\"tsk_g00VWPBCxD00HpB2NIEq\",\"evidence_locators\":[{\"source\":\"engine_artifact\",\"artifact_id\":\"art_g0VWPSbGm00jhV6hBs26\",\"catalog_revision\":50,\"expected_sha256\":\"c6399b9f296ac21754b31e2003db41ad4a62c4fe0283a30ca9e2ca7de98ff1cf\"},{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_h0vgvYzOQqBvmvX6ByTQ\",\"task_id\":\"tsk_g00VWPBCxD00HpB2NIEq\",\"snapshot_id\":\"33ff9924-b664-52eb-a3e9-1b2e18e6276a\",\"manifest_sha256\":\"5edc173ab3e1be6f966f7f7f9f62bcecff8afc502c1f2dacf9550ca02a6202b4\"},\"tree\":\"resources\",\"path\":\"artifacts/data-analysis/report.md\",\"media_type\":\"text/markdown\",\"bytes\":7200,\"sha256\":\"66195766e3d3494b8a117ab338bde726c6d05c43b0644dfad9cc8d492460af00\"}}],\"terminal_lifecycle_reference\":{\"terminalEventID\":\"pev_g0VWPSbq700pjlTiM9JW\"}}],\"kind\":\"mission_completed\",\"mission_id\":\"b6fc7138760eba83\",\"mission_session_id\":\"ses_-zUTap5Jezz46YO7421Q\",\"assistant_message_id\":\"msg_g0VWPT7Gx00OvFYK70jj\",\"tool_call_id\":\"call_hDuLWvSSXw75UDRAoRtTbK20\",\"tool_part_id\":\"prt_g0VWPT8Wo00jJPh2owKR\",\"time_recorded\":1790499910034}",
+          "metadata": {
+            "truncated": false
+          }
+        }
+      }
+    },
+    {
+      "partID": "prt_g0VWPSpdv00FezmbDI30",
+      "request": {
+        "type": "tool-request",
+        "callID": "call_7XQCRc33Rqdbq6xLJjsX789D",
+        "tool": "panel_read_task_artifact",
+        "input": {
+          "reads": [
+            {
+              "artifact_transport_version": 2,
+              "artifact_locator_ref": "al_8LcxHfo1n0dXLaG2",
+              "byte_offset": 0,
+              "max_bytes": 65536,
+              "delivery": "inline",
+              "taskID": "tsk_g00VWPBCxD00HpB2NIEq"
+            },
+            {
+              "artifact_transport_version": 2,
+              "artifact_locator_ref": "al_4jZ7il2nKmnkBuu2",
+              "byte_offset": 0,
+              "max_bytes": 65536,
+              "delivery": "inline",
+              "taskID": "tsk_g00VWPBCxD00HpB2NIEq"
+            }
+          ]
+        },
+        "time": {
+          "start": 1790499833831
+        }
+      },
+      "outcome": {
+        "outcome": "completed",
+        "output": "{\"results\":[{\"request_index\":0,\"value\":{\"locator\":{\"source\":\"engine_artifact\",\"artifact_id\":\"art_g0VWPSbGm00jhV6hBs26\",\"catalog_revision\":50,\"expected_sha256\":\"c6399b9f296ac21754b31e2003db41ad4a62c4fe0283a30ca9e2ca7de98ff1cf\"},\"media_type\":\"application/json\",\"byte_start\":0,\"byte_end\":3255,\"next_offset\":null,\"total_bytes\":3255,\"complete\":true,\"sha256\":\"c6399b9f296ac21754b31e2003db41ad4a62c4fe0283a30ca9e2ca7de98ff1cf\",\"text\":\"{\\\"orchestrator_session_id\\\":\\\"ses_-zUTaom1HzzJDsj6ptrZ\\\",\\\"orchestrator_message_id\\\":\\\"msg_hOsT0JkFSZkzqiUSI3hP\\\",\\\"tool_call_id\\\":\\\"call_N6wK3kwKYgh4tBErfvbuC2d6\\\",\\\"tool_part_id\\\":\\\"prt_g0VWPSYLe00feVxXGPp3\\\",\\\"evidence_locators\\\":[{\\\"source\\\":\\\"session_message\\\",\\\"session_id\\\":\\\"ses_h1t0lRuqbIe6Gh47d5Cs\\\",\\\"message_id\\\":\\\"msg_g0VWPCPmC00C3h0DFvM2\\\"},{\\\"source\\\":\\\"session_message\\\",\\\"session_id\\\":\\\"ses_hICrStl634JzWwLkCZ6y\\\",\\\"message_id\\\":\\\"msg_g0VWPEtOe00YgJF0ieqR\\\"},{\\\"source\\\":\\\"session_message\\\",\\\"session_id\\\":\\\"ses_hVEsiteW7sDgaFyopTj9\\\",\\\"message_id\\\":\\\"msg_g0VWPGKnf00tMji4qT0d\\\"},{\\\"source\\\":\\\"session_message\\\",\\\"session_id\\\":\\\"ses_hZa8pzWMTW2O6Fozz0n2\\\",\\\"message_id\\\":\\\"msg_g0VWPIoSX0001GN8idmq\\\"},{\\\"source\\\":\\\"session_message\\\",\\\"session_id\\\":\\\"ses_h35s2zJ3awxiBdlz9lZW\\\",\\\"message_id\\\":\\\"msg_g0VWPKw5y00m2r1wiv1c\\\"},{\\\"source\\\":\\\"session_message\\\",\\\"session_id\\\":\\\"ses_h1Qs3cRTUxbGuwiJvBob\\\",\\\"message_id\\\":\\\"msg_g0VWPN1Re00jfsAPOABw\\\"},{\\\"source\\\":\\\"session_message\\\",\\\"session_id\\\":\\\"ses_hDHLDWcodZU8L9Mmajga\\\",\\\"message_id\\\":\\\"msg_g0VWPS44U00BkeYcfGXp\\\"},{\\\"source\\\":\\\"engine_artifact\\\",\\\"artifact_id\\\":\\\"art_hztguBz1f83okqbeDYaX\\\",\\\"catalog_revision\\\":34,\\\"expected_sha256\\\":\\\"1ec5290163ab4e41ee43351163359f162eb82baf245ec599826e9eef16ca641a\\\"},{\\\"source\\\":\\\"engine_artifact\\\",\\\"artifact_id\\\":\\\"art_h0S8nJUr43ydBsez0ZBo\\\",\\\"catalog_revision\\\":47,\\\"expected_sha256\\\":\\\"21f463e08ca9d84937d6e3e4a6f543f6ce6f30cb52d16283f044ec47caa068c7\\\"}],\\\"deliverable_artifact_locators\\\":[{\\\"source\\\":\\\"engine_artifact\\\",\\\"artifact_id\\\":\\\"art_h0S8nJUr43ydBsez0ZBo\\\",\\\"catalog_revision\\\":47,\\\"expected_sha256\\\":\\\"21f463e08ca9d84937d6e3e4a6f543f6ce6f30cb52d16283f044ec47caa068c7\\\"}],\\\"terminal_workflow_artifact_locators\\\":[{\\\"source\\\":\\\"engine_artifact\\\",\\\"artifact_id\\\":\\\"art_h0S8nJUr43ydBsez0ZBo\\\",\\\"catalog_revision\\\":47,\\\"expected_sha256\\\":\\\"21f463e08ca9d84937d6e3e4a6f543f6ce6f30cb52d16283f044ec47caa068c7\\\"},{\\\"source\\\":\\\"engine_artifact\\\",\\\"artifact_id\\\":\\\"art_hvvIDAsV8skfny3KHu8C\\\",\\\"catalog_revision\\\":39,\\\"expected_sha256\\\":\\\"804201a8094360b9e9a3501ed07644507bce93996fdef1bdc248aaef1fb1d063\\\"}],\\\"accepted_delivery_slice_revision_ids\\\":[],\\\"workflow_binding\\\":{\\\"kind\\\":\\\"virtual_workflow\\\",\\\"workflow_id\\\":\\\"operating-insight-report\\\",\\\"package_revision\\\":{\\\"scope\\\":\\\"project\\\",\\\"project_id\\\":\\\"prj_h0vgvYzOQqBvmvX6ByTQ\\\",\\\"namespace\\\":\\\"builtin\\\",\\\"id\\\":\\\"data-analysis\\\",\\\"version\\\":\\\"2026.09.27.2\\\",\\\"package_digest\\\":\\\"ecb3aa0e89e113336d2fa7e693834c14973e6d8b9d64df27d29a115f93ef704d\\\"},\\\"nodes\\\":[{\\\"node_id\\\":\\\"data-analysis-data-steward\\\",\\\"agent_id\\\":\\\"data-analysis-data-steward\\\",\\\"depends_on\\\":[\\\"data-analysis-planner\\\"]},{\\\"node_id\\\":\\\"data-analysis-fact-checker\\\",\\\"agent_id\\\":\\\"data-analysis-fact-checker\\\",\\\"depends_on\\\":[\\\"data-analysis-insight-synthesizer\\\"]},{\\\"node_id\\\":\\\"data-analysis-insight-synthesizer\\\",\\\"agent_id\\\":\\\"data-analysis-insight-synthesizer\\\",\\\"depends_on\\\":[\\\"data-analysis-performance-analyst\\\",\\\"data-analysis-segment-analyst\\\"]},{\\\"node_id\\\":\\\"data-analysis-performance-analyst\\\",\\\"agent_id\\\":\\\"data-analysis-performance-analyst\\\",\\\"depends_on\\\":[\\\"data-analysis-data-steward\\\"]},{\\\"node_id\\\":\\\"data-analysis-planner\\\",\\\"agent_id\\\":\\\"data-analysis-planner\\\",\\\"depends_on\\\":[]},{\\\"node_id\\\":\\\"data-analysis-report-writer\\\",\\\"agent_id\\\":\\\"data-analysis-report-writer\\\",\\\"depends_on\\\":[\\\"data-analysis-fact-checker\\\"]},{\\\"node_id\\\":\\\"data-analysis-segment-analyst\\\",\\\"agent_id\\\":\\\"data-analysis-segment-analyst\\\",\\\"depends_on\\\":[\\\"data-analysis-data-steward\\\"]}]},\\\"time_recorded\\\":1790499778566}\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_8LcxHfo1n0dXLaG2\",\"artifact_read_ref\":\"ar_MyM6HLsK9WQKFlBr\",\"taskID\":\"tsk_g00VWPBCxD00HpB2NIEq\",\"terminal_lifecycle_reference\":{\"terminalEventID\":\"pev_g0VWPSbq700pjlTiM9JW\"}}},{\"request_index\":1,\"value\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_h0vgvYzOQqBvmvX6ByTQ\",\"task_id\":\"tsk_g00VWPBCxD00HpB2NIEq\",\"snapshot_id\":\"33ff9924-b664-52eb-a3e9-1b2e18e6276a\",\"manifest_sha256\":\"5edc173ab3e1be6f966f7f7f9f62bcecff8afc502c1f2dacf9550ca02a6202b4\"},\"tree\":\"resources\",\"path\":\"artifacts/data-analysis/report.md\",\"media_type\":\"text/markdown\",\"bytes\":7200,\"sha256\":\"66195766e3d3494b8a117ab338bde726c6d05c43b0644dfad9cc8d492460af00\"}},\"media_type\":\"text/markdown\",\"byte_start\":0,\"byte_end\":7200,\"next_offset\":null,\"total_bytes\":7200,\"complete\":true,\"sha256\":\"66195766e3d3494b8a117ab338bde726c6d05c43b0644dfad9cc8d492460af00\",\"text\":\"# Residential-noise service planning memo\\n\\n## Executive readout\\n\\nThis memo describes the frozen NYC Open Data 311 extract for NYPD `Noise - Residential` requests created in July and August 2025. It is a grouped, month-level extract—not a row-level incident file.\\n\\n- July: **26,659** requests; August: **32,756**; change **+6,097 (+22.87%)**, using July as the percentage denominator.\\n- Brooklyn is the largest workload in both cohorts (8,164 July; 9,996 August).\\n- Queens has the largest absolute increase (**+1,955**) and percentage increase (**+29.04%**) among boroughs present in both months.\\n- Same-calendar-month recorded closure is **26,542/26,659 (99.56%)** in July and **32,365/32,756 (98.81%)** in August. The remaining counts are 117 and 391, respectively.\\n\\nThese are descriptive counts. They do not establish response speed, historical backlog, later closure completeness, actual problem resolution, service quality, staffing, causation, cost, satisfaction, or individual incidents.\\n\\n## Observed workload\\n\\n`N` is the sum of `requests` across all returned status and closed-month groups for the cohort and borough. Change is `August N − July N`; percentage change is `change / July N`.\\n\\n| Borough | July N | August N | Absolute change | % change (July denominator) |\\n|---|---:|---:|---:|---:|\\n| BRONX | 6,449 | 7,959 | +1,510 | +23.41% |\\n| BROOKLYN | 8,164 | 9,996 | +1,832 | +22.44% |\\n| MANHATTAN | 4,296 | 4,941 | +645 | +15.01% |\\n| QUEENS | 6,731 | 8,686 | +1,955 | +29.04% |\\n| STATEN ISLAND | 1,001 | 1,174 | +173 | +17.28% |\\n| Unspecified | 18 | — (no supplied August row) | not computed | not computed |\\n| **Total of supplied rows** | **26,659** | **32,756** | **+6,097** | **+22.87%** |\\n\\nBrooklyn accounts for the largest absolute workload in each month. Queens accounts for the largest increase; Brooklyn is second by absolute increase. The Unspecified category is retained because it is supplied for July. August has no supplied Unspecified row; it is not imputed as zero, and therefore no August-to-July change is asserted for that category.\\n\\n## Same-calendar-month recorded closure\\n\\nFor each cohort/borough, `C` is the sum of `requests` where `closed_month` equals the cohort month, across statuses. `C share = C/N`; `R = N − C`; `R share = R/N`. Percentages are rounded to two decimals and use the displayed cohort/borough `N` as denominator.\\n\\n| Cohort | Borough | N | Same-month C | C share | Remaining R | R share |\\n|---|---|---:|---:|---:|---:|---:|\\n| Jul 2025 | BRONX | 6,449 | 6,403 | 99.29% | 46 | 0.71% |\\n| Jul 2025 | BROOKLYN | 8,164 | 8,145 | 99.77% | 19 | 0.23% |\\n| Jul 2025 | MANHATTAN | 4,296 | 4,288 | 99.81% | 8 | 0.19% |\\n| Jul 2025 | QUEENS | 6,731 | 6,689 | 99.38% | 42 | 0.62% |\\n| Jul 2025 | STATEN ISLAND | 1,001 | 999 | 99.80% | 2 | 0.20% |\\n| Jul 2025 | Unspecified | 18 | 18 | 100.00% | 0 | 0.00% |\\n| **Jul 2025 total** | **supplied rows** | **26,659** | **26,542** | **99.56%** | **117** | **0.44%** |\\n| Aug 2025 | BRONX | 7,959 | 7,888 | 99.11% | 71 | 0.89% |\\n| Aug 2025 | BROOKLYN | 9,996 | 9,872 | 98.76% | 124 | 1.24% |\\n| Aug 2025 | MANHATTAN | 4,941 | 4,913 | 99.43% | 28 | 0.57% |\\n| Aug 2025 | QUEENS | 8,686 | 8,541 | 98.33% | 145 | 1.67% |\\n| Aug 2025 | STATEN ISLAND | 1,174 | 1,151 | 98.04% | 23 | 1.96% |\\n| Aug 2025 | Unspecified | — (no supplied row) | — | — | — | — |\\n| **Aug 2025 total** | **supplied rows** | **32,756** | **32,365** | **98.81%** | **391** | **1.19%** |\\n\\n## Interpretation boundaries\\n\\nThe source defines `cohort_month` as the calendar month of `created_date`, `closed_month` as the calendar month of the agency-recorded `closed_date` (omitted when the closure timestamp is null), and `status` as the value at extraction time rather than a historical month-end status. Consequently:\\n\\n- A same-month closure count says only that a closure month and creation month align at month resolution. It cannot measure hours/days to response or closure, ordering within a month, or service-level performance.\\n- The remaining count is not a historical backlog measure. It includes groups whose closure month is later than creation month and does not show whether they subsequently closed; the extract is frozen at retrieval time.\\n- A recorded closure is not proof that the noise condition was resolved, nor a direct service-quality, satisfaction, or outcome measure.\\n- Aggregated grouped rows contain no identifiers, addresses, individuals, precise timestamps, staffing, cost, or causal design. No staffing, causation, or individual-incident inference is made.\\n\\n## Method and reproducibility\\n\\nSource: NYC Open Data / 311, dataset `erm2-nwe9`, “311 Service Requests from 2020 to Present,” frozen extract retrieved `2026-09-27T07:41:30.376879+00:00`. The supplied query selects `date_trunc_ym(created_date)` as `cohort_month`, `date_trunc_ym(closed_date)` as `closed_month`, `borough`, `status`, and `count(*) AS requests`, filtered to `agency='NYPD'`, `complaint_type='Noise - Residential'`, and created dates from `2025-07-01` inclusive through `2025-09-01` exclusive, grouped by cohort month, closed month, borough, and status. The extract contains 24 grouped rows and preserves all returned borough/status categories.\\n\\nTo reproduce: sum numeric-string `requests` by cohort and borough for `N`; calculate the displayed deltas and July-denominator percentages; then sum rows with equal cohort and closed month for `C`, calculate `R=N-C`, and divide each by the same `N`. Do not substitute a zero for an absent category row.\\n\\n## Evidence, assumptions, and proposed follow-up\\n\\n**Observed evidence.** August supplied-row volume is higher than July, with the largest workload in Brooklyn and the largest increase in Queens. Same-month recorded-closure shares are high in both cohorts but lower overall in August; the extract gives no finer time or outcome detail.\\n\\n**Assumptions.** None beyond arithmetic aggregation of the supplied grouped rows. Percentages are rounded only for display; the supplied numeric strings are treated as counts. Absence of an August Unspecified row is treated as unknown/not supplied, not zero.\\n\\n**Prioritized operational questions and measurements.**\\n\\n1. **First—timing and identity:** Can a future extract provide request IDs plus precise created and closed timestamps, including reopened or status-history events? This would replace month-alignment with response and closure duration distributions and allow deduplication.\\n2. **Second—carryover inventory:** For each cohort, what is the dated status and closure inventory at a defined follow-up date, including still-open and later-closed requests? This would distinguish unresolved carryover from missing/late reporting.\\n3. **Third—validated outcomes:** Which quality or outcome proxy is independently validated (for example, repeat contact, disposition, inspection outcome, or satisfaction), and how is it linked without exposing personal information? This is needed before interpreting a recorded closure as problem resolution or service quality.\\n\\nThese follow-ups are measurement questions, not staffing or causal recommendations. No external action, data refresh, individual contact, or live business-account access is required.\\n\",\"attachment\":false,\"artifact_transport_version\":2,\"artifact_locator_ref\":\"al_4jZ7il2nKmnkBuu2\",\"artifact_read_ref\":\"ar_JmMDqh5t4yJUuW9f\",\"taskID\":\"tsk_g00VWPBCxD00HpB2NIEq\",\"terminal_lifecycle_reference\":{\"terminalEventID\":\"pev_g0VWPSbq700pjlTiM9JW\"}}}],\"complete\":true,\"next_reads\":[]}",
+        "title": "Artifacts (2)",
+        "metadata": {
+          "truncated": false
+        },
+        "time": {
+          "end": 1790499836018
+        }
+      },
+      "result": null
+    }
+  ],
+  "writerCoordination": [
+    {
+      "partID": "prt_g0VWPRHPi00dEu79YSDf",
+      "time_created": 1790499472700,
+      "request": {
+        "type": "tool-request",
+        "callID": "call_3qbwFFo4ogr3zW0BlOCs1uvU",
+        "tool": "request_orchestrator_decision",
+        "input": {
+          "summary": "最终报告存在一个需修正的 Bronx 百分比舍入矛盾",
+          "details": "最终已合并并发布的 artifacts/data-analysis/report.md 将 Bronx July-to-August change 写为 +23.42%。直接用报告自身的精确分子分母计算 1,510/6,449*100=23.41448286556055%，两位小数应为 23.41%。前置 audit 摘要写过 23.42%，但已完整读取的 performance、dossier、segment 分支及直接算术均支持 23.41%。合并后本 Turn 契约禁止再写文件或重做 Git；typed report 和 document view 已按当前不可变提交发布。",
+          "blocking": true,
+          "requested_decision": "是否开启一个新的授权修正 Turn，将 Bronx 百分比从 23.42% 更正为 23.41%，重新提交、合并并重新发布两个最终 Artifact？",
+          "evidence_locators": [
+            {
+              "source": "task_artifact_snapshot",
+              "snapshot": {
+                "schema_version": 2,
+                "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+                "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+                "snapshot_id": "77e4e259-e99c-5bc5-a2d9-6c0481929003",
+                "manifest_sha256": "af6532c99e901cf30375500f189b8cd29840c523f616dd7098461f127891a739"
+              }
+            },
+            {
+              "source": "engine_artifact",
+              "artifact_id": "art_hztguBz1f83okqbeDYaX",
+              "catalog_revision": 34
+            },
+            {
+              "source": "engine_artifact",
+              "artifact_id": "art_hlMQAMi4ZqQJIiq4REPL",
+              "catalog_revision": 14
+            },
+            {
+              "source": "engine_artifact",
+              "artifact_id": "art_hpst9QxX5u3fzkVLbEXS",
+              "catalog_revision": 9
+            },
+            {
+              "source": "engine_artifact",
+              "artifact_id": "art_hEEfamSGmLjgzKOBLmD1",
+              "catalog_revision": 18
+            }
+          ],
+          "severity": "failure"
+        },
+        "time": {
+          "start": 1790499463926
+        }
+      },
+      "outcome": {
+        "outcome": "completed",
+        "output": "{\"coordination_request\":{\"source\":\"coordination_request\",\"request_id\":\"art_g0VWPRJi400JXtOHHm20\"},\"task_id\":\"tsk_g00VWPBCxD00HpB2NIEq\",\"session_id\":\"ses_hDHLDWcodZU8L9Mmajga\",\"blocking\":true,\"completion\":\"coordination_handoff\",\"message\":\"Coordination request recorded. This worker turn is handing control back through its immutable dispatch lineage.\"}",
+        "title": "coordination request",
+        "metadata": {
+          "requestID": "art_g0VWPRJi400JXtOHHm20",
+          "taskID": "tsk_g00VWPBCxD00HpB2NIEq",
+          "sessionID": "ses_hDHLDWcodZU8L9Mmajga",
+          "opencorvusToolResultControl": {
+            "kind": "handoff_drain",
+            "request_id": "art_g0VWPRJi400JXtOHHm20",
+            "dispatch_lineage_id": "art_g0VWPP1gp00zgnjSdCFZ"
+          },
+          "truncated": false
+        },
+        "time": {
+          "end": 1790499472774
+        }
+      }
+    }
+  ],
+  "reviewedArtifacts": {
+    "5": {
+      "artifact_type": "data-analysis/analysis-charter",
+      "schema_version": 1,
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "data-analysis",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+          "namespace": "builtin",
+          "id": "data-analysis",
+          "version": "2026.09.27.2",
+          "package_digest": "ecb3aa0e89e113336d2fa7e693834c14973e6d8b9d64df27d29a115f93ef704d"
+        },
+        "agent_id": "data-analysis-planner",
+        "projection_hash": "4680bae7de7f5fd7b1ae84f0d3b592ed3a9b91d4197dd056bf435afbb0e45102",
+        "session_id": "ses_h1t0lRuqbIe6Gh47d5Cs",
+        "message_id": "msg_g0VWPCFmW00RzQS9KYNN",
+        "tool_call_id": "call_DBOsmR7DKQtBJIpTEgxfWn40"
+      },
+      "payload": {
+        "as_of_date": "2026-09-27T07:41:30.376879+00:00",
+        "summary": "Reproducible charter for July–August 2025 frozen NYC 311 NYPD Noise - Residential cohorts, fixing scope, formulas, denominators, closure measure, unknown handling, limits, and stopping conditions.",
+        "evidence": [
+          {
+            "id": "request.md",
+            "source": "Selected Task Artifact request.md; read ref ar_I7jxvld218TOwLH4",
+            "observed_at": "2026-09-27",
+            "statement": "Requires cohort/borough totals and changes, same-calendar-month closure counts/shares and remaining requests, limitations, reproducibility, and follow-up questions.",
+            "limitation": "Specification, not data."
+          },
+          {
+            "id": "metrics.json",
+            "source": "Selected Task Artifact metrics.json; read ref ar_6A5xN8TPdp0jBgut",
+            "observed_at": "2026-09-27T07:41:30.376879+00:00",
+            "statement": "Frozen NYC Open Data 311 dataset erm2-nwe9 query: agency NYPD, complaint_type Noise - Residential, created_date >= 2025-07-01 and < 2025-09-01, grouped by cohort_month, closed_month, borough, status; 24 grouped rows.",
+            "limitation": "No row identifiers, precise response duration, staffing, cost, satisfaction, direct resolution, or quality fields."
+          },
+          {
+            "id": "definitions",
+            "source": "metrics.json field_definitions/source_limits",
+            "observed_at": "2026-09-27T07:41:30.376879+00:00",
+            "statement": "cohort_month is created calendar month; closed_month is agency-recorded closed calendar month and omitted for null closed_date; borough retains returned categories; status is extraction-time, not historical month-end; requests counts grouped source rows.",
+            "limitation": "Month resolution cannot establish elapsed duration or actual resolution."
+          }
+        ],
+        "findings": [
+          {
+            "claim": "Population is exactly frozen NYPD Noise - Residential rows created in July or August 2025.",
+            "method": "Apply supplied agency, complaint, and half-open date predicate without refresh or broadening.",
+            "result": "Use only cohort_month July/August 2025.",
+            "evidence_ids": [
+              "metrics.json"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "All supplied categories, including Unspecified, are retained.",
+            "method": "Display borough/status source values verbatim; annotate unknowns without recoding or dropping.",
+            "result": "Include all returned borough and status values; complete-grid zero cells, if used, are labeled no supplied rows.",
+            "evidence_ids": [
+              "metrics.json"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "Workload totals sum grouped requests.",
+            "method": "N(m,b)=sum(requests) over every supplied row for cohort m and borough b; N(m)=sum_b N(m,b); parse numeric strings only for arithmetic.",
+            "result": "Report N by cohort/borough and overall.",
+            "evidence_ids": [
+              "request.md",
+              "metrics.json"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "July-to-August change uses absolute and percentage formulas.",
+            "method": "Delta_b=N(Aug,b)-N(Jul,b); pctDelta_b=100*Delta_b/N(Jul,b) when July N>0; same overall formula; zero denominator means not defined.",
+            "result": "Rank largest workloads by N and largest increases/decreases by Delta, including ties.",
+            "evidence_ids": [
+              "request.md"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "Same-calendar-month closure is a recorded-closure measure, not speed or resolution.",
+            "method": "C(m,b)=sum requests where cohort_month=m, borough=b, closed_month=m across statuses; share=100*C/N; remaining R=N-C and share=100*R/N, where N>0.",
+            "result": "Show N, C, C/N, R, and R/N with denominators; do not use status alone.",
+            "evidence_ids": [
+              "request.md",
+              "metrics.json",
+              "definitions"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "Unknown and missing values are not imputed.",
+            "method": "Retain Unspecified categories; retain omitted/null closed_month as missing closure when present; include in N and exclude from C.",
+            "result": "Unknowns remain visible and no unsupported count is fabricated.",
+            "evidence_ids": [
+              "request.md",
+              "metrics.json"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "Only descriptive workload and same-month recorded closure are supported.",
+            "method": "Compare requested interpretation with available fields and month-level resolution.",
+            "result": "Do not infer response speed, historical backlog, later closure completeness, causation, staffing, quality, resolution, or individual incidents.",
+            "evidence_ids": [
+              "metrics.json",
+              "definitions"
+            ],
+            "confidence": "high"
+          }
+        ],
+        "actions": [
+          {
+            "action": "Compute cohort-by-borough workload and July-to-August change tables.",
+            "rationale": "Direct requested outputs using N, Delta, and pctDelta.",
+            "owner": "Operations analyst",
+            "timing": "First pass",
+            "success_measure": "Both cohorts, every supplied category, totals, denominators, and tied rankings shown."
+          },
+          {
+            "action": "Compute same-month closure table.",
+            "rationale": "Direct requested output using C/N and R.",
+            "owner": "Operations analyst",
+            "timing": "First pass",
+            "success_measure": "Each cohort/borough shows N, C, C/N, R, R/N and missing/unknown treatment."
+          },
+          {
+            "action": "Reconcile grouped rows before interpretation.",
+            "rationale": "All supplied grouped requests must flow into totals; discrepancies are documented, not silently corrected.",
+            "owner": "Data steward",
+            "timing": "Before release",
+            "success_measure": "All 24 rows accounted for and numeric parsing consistent."
+          },
+          {
+            "action": "Specify follow-up measurements for speed, backlog, outcome, and quality.",
+            "rationale": "Current input lacks precise durations, status history, pre-period inventory, and outcome fields.",
+            "owner": "Operations analyst and data steward",
+            "timing": "After descriptive memo",
+            "success_measure": "Plan identifies needed timestamps, identifier, status history, inventory, outcome/quality proxy, and privacy controls."
+          }
+        ],
+        "unknowns": [
+          "No row-level request identifiers; duplicate/incident validation unsupported.",
+          "No precise created-to-closed duration; same-month closure is not response speed.",
+          "No historical backlog at 2025-07-01 or complete later closure view; remaining is not backlog.",
+          "Status is extraction-time, not historical month-end or resolution outcome.",
+          "No staffing, cost, satisfaction, causality, quality, or individual-incident fields.",
+          "Extract is frozen at retrieval time; no live refresh authorized.",
+          "If omitted/null closed_month rows exist, they count in N but not C; no count invented beyond supplied rows."
+        ],
+        "details": {
+          "objective": "Specify a bounded reproducible analysis comparing July/August 2025 NYPD Noise - Residential NYC 311 cohorts and same-month recorded closure.",
+          "audience": "Operations analyst and data steward.",
+          "scope": [
+            "Frozen metrics.json only; NYC Open Data / 311 dataset erm2-nwe9.",
+            "agency NYPD; complaint_type Noise - Residential.",
+            "created_date >= 2025-07-01T00:00:00 and < 2025-09-01T00:00:00.",
+            "Retain supplied borough/status categories and grouped requests; month-level fields."
+          ],
+          "decision_questions": [
+            "What is workload by cohort and borough, and which supplied boroughs are largest?",
+            "What are absolute/percentage July-to-August changes by borough and overall?",
+            "For each cohort/borough, how many have closed_month equal to cohort_month, what share of N, and how many remain outside that measure?",
+            "What follow-up fields are needed for speed, backlog, resolution, or quality?"
+          ],
+          "source_policy": [
+            "Use only selected request.md and metrics.json Task Artifacts; no external refresh/live account.",
+            "Treat query metadata, rows, definitions, and limits as authoritative.",
+            "Do not infer missing values, staffing, causation, speed, backlog, resolution, quality, or incidents.",
+            "Preserve retrieval timestamp, scope, and source references."
+          ],
+          "stopping_conditions": [
+            "Stop and report if grouped sums do not reconcile; do not alter rows.",
+            "Stop interpretation at workload and same-month recorded closure; unsupported claims remain limitations.",
+            "Stop if required scope, categories, or counts are absent/ambiguous; request steward clarification.",
+            "Stop after all frozen rows are accounted for, formulas/denominators and unknowns documented, and no external action/refresh occurs."
+          ]
+        }
+      },
+      "resources": [],
+      "observed_artifact_locators": [
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+              "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+            },
+            "tree": "resources",
+            "path": "request.md",
+            "media_type": "text/markdown",
+            "bytes": 1590,
+            "sha256": "c5c2bd0a448a4807ffd9ad5134a00c0f9fee7d6725bec60d03f64c39b0eb3837"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+              "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+            },
+            "tree": "resources",
+            "path": "metrics.json",
+            "media_type": "application/json",
+            "bytes": 7354,
+            "sha256": "a67966c6b276b9e333f181ce60fdae7a553677a3c0ab4f2f1b4303df74539fed"
+          }
+        }
+      ],
+      "source_artifact_locators": [
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+              "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+            },
+            "tree": "resources",
+            "path": "request.md",
+            "media_type": "text/markdown",
+            "bytes": 1590,
+            "sha256": "c5c2bd0a448a4807ffd9ad5134a00c0f9fee7d6725bec60d03f64c39b0eb3837"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+              "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+            },
+            "tree": "resources",
+            "path": "metrics.json",
+            "media_type": "application/json",
+            "bytes": 7354,
+            "sha256": "a67966c6b276b9e333f181ce60fdae7a553677a3c0ab4f2f1b4303df74539fed"
+          }
+        }
+      ]
+    },
+    "18": {
+      "artifact_type": "data-analysis/segment-analysis",
+      "schema_version": 1,
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "data-analysis",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+          "namespace": "builtin",
+          "id": "data-analysis",
+          "version": "2026.09.27.2",
+          "package_digest": "ecb3aa0e89e113336d2fa7e693834c14973e6d8b9d64df27d29a115f93ef704d"
+        },
+        "agent_id": "data-analysis-segment-analyst",
+        "projection_hash": "91050ba173119ae33af9fdd336d7eccd8ae1b7b476151aaab6442f7cb928e283",
+        "session_id": "ses_hZa8pzWMTW2O6Fozz0n2",
+        "message_id": "msg_g0VWPIhgn00neAA2myCo",
+        "tool_call_id": "call_nz4TQqJbu3BBysMHBWcSbC5g"
+      },
+      "payload": {
+        "as_of_date": "2026-09-27",
+        "summary": "Frozen NYC 311 segment analysis: July 26659; August 32756; +6097 (+22.87%). Brooklyn largest; Queens largest increase. Same-month closure July 26542/26659 and August 32365/32756.",
+        "evidence": [
+          {
+            "id": "metrics",
+            "source": "metrics.json",
+            "observed_at": "2026-09-27",
+            "statement": "24 grouped NYPD residential-noise rows.",
+            "limitation": "Grouped month-level data."
+          }
+        ],
+        "findings": [
+          {
+            "claim": "Segments reconcile.",
+            "method": "Sum requests and same-month closed rows.",
+            "result": "July Bronx 6449, Brooklyn 8164, Manhattan 4296, Queens 6731, Staten Island 1001, Unspecified 18; August Bronx 7959, Brooklyn 9996, Manhattan 4941, Queens 8686, Staten Island 1174; no August Unspecified row. July C/R 26542/117; August 32365/391. Brooklyn+Queens shares 55.89% and 57.03%; Queens delta +1955 is largest.",
+            "evidence_ids": [
+              "metrics"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "Limits and follow-ups are explicit.",
+            "method": "Use month-level definitions without inference.",
+            "result": "Same-month closure is not speed, backlog, later closure, resolution, quality, staffing, causation or incident evidence. Obtain precise timestamps/row IDs, status history/opening inventories, and validated outcome/quality proxies. July Unspecified 18; August absent and not imputed.",
+            "evidence_ids": [
+              "metrics"
+            ],
+            "confidence": "high"
+          }
+        ],
+        "actions": [
+          {
+            "action": "Obtain precise timestamps and row IDs.",
+            "rationale": "Measure elapsed duration.",
+            "owner": "Data steward",
+            "timing": "First",
+            "success_measure": "Duration distributions."
+          },
+          {
+            "action": "Obtain status history and inventories.",
+            "rationale": "Measure backlog and later closure.",
+            "owner": "Data steward",
+            "timing": "Second",
+            "success_measure": "Dated measures."
+          },
+          {
+            "action": "Define outcome/quality proxies.",
+            "rationale": "Current fields do not establish them.",
+            "owner": "Operations analyst",
+            "timing": "Third",
+            "success_measure": "Documented definitions and privacy review."
+          }
+        ],
+        "unknowns": [
+          "No row IDs or precise duration.",
+          "No opening backlog or later closure.",
+          "Status extraction-time.",
+          "No staffing, cost, satisfaction, causality, quality or resolution fields.",
+          "August Unspecified absent."
+        ],
+        "details": {
+          "analytical_frame": "Grouped-count descriptive; N=sum requests; C same-month; R=N-C; all 24 rows reconcile.",
+          "comparisons": [
+            "July 26659; August 32756; delta 6097; 22.87%.",
+            "Brooklyn+Queens 55.89% July, 57.03% August."
+          ],
+          "calculations": [
+            "July C=26542,R=117; August C=32365,R=391."
+          ],
+          "implications": [
+            "Monitor segments descriptively only."
+          ]
+        }
+      },
+      "resources": [],
+      "observed_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h2gqRTybmOn9g5Q8fNJs",
+          "catalog_revision": 5,
+          "expected_sha256": "65cb0c8e757339946620fe7d2a91f01646eeab2a9492db97aba83ff9f907a02e"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hlMQAMi4ZqQJIiq4REPL",
+          "catalog_revision": 14,
+          "expected_sha256": "e4af4822cc28551df7b44721a92ec9c6d2de9808897383ee13a6bd464963074b"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hpst9QxX5u3fzkVLbEXS",
+          "catalog_revision": 9,
+          "expected_sha256": "c28421d15d7c408036b5d2129128d64662d199e2ae8fa4c0a290c797519fd6d0"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+              "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+            },
+            "tree": "resources",
+            "path": "request.md",
+            "media_type": "text/markdown",
+            "bytes": 1590,
+            "sha256": "c5c2bd0a448a4807ffd9ad5134a00c0f9fee7d6725bec60d03f64c39b0eb3837"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+              "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+            },
+            "tree": "resources",
+            "path": "metrics.json",
+            "media_type": "application/json",
+            "bytes": 7354,
+            "sha256": "a67966c6b276b9e333f181ce60fdae7a553677a3c0ab4f2f1b4303df74539fed"
+          }
+        }
+      ],
+      "source_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h2gqRTybmOn9g5Q8fNJs",
+          "catalog_revision": 5,
+          "expected_sha256": "65cb0c8e757339946620fe7d2a91f01646eeab2a9492db97aba83ff9f907a02e"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hlMQAMi4ZqQJIiq4REPL",
+          "catalog_revision": 14,
+          "expected_sha256": "e4af4822cc28551df7b44721a92ec9c6d2de9808897383ee13a6bd464963074b"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hpst9QxX5u3fzkVLbEXS",
+          "catalog_revision": 9,
+          "expected_sha256": "c28421d15d7c408036b5d2129128d64662d199e2ae8fa4c0a290c797519fd6d0"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+              "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+            },
+            "tree": "resources",
+            "path": "request.md",
+            "media_type": "text/markdown",
+            "bytes": 1590,
+            "sha256": "c5c2bd0a448a4807ffd9ad5134a00c0f9fee7d6725bec60d03f64c39b0eb3837"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+              "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+            },
+            "tree": "resources",
+            "path": "metrics.json",
+            "media_type": "application/json",
+            "bytes": 7354,
+            "sha256": "a67966c6b276b9e333f181ce60fdae7a553677a3c0ab4f2f1b4303df74539fed"
+          }
+        }
+      ]
+    },
+    "22": {
+      "artifact_type": "data-analysis/insight-brief",
+      "schema_version": 1,
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "data-analysis",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+          "namespace": "builtin",
+          "id": "data-analysis",
+          "version": "2026.09.27.2",
+          "package_digest": "ecb3aa0e89e113336d2fa7e693834c14973e6d8b9d64df27d29a115f93ef704d"
+        },
+        "agent_id": "data-analysis-insight-synthesizer",
+        "projection_hash": "6dbba7c64cbedf5d23f2c82f9101ca414a6ba6b21b66aac1a5af6f25cb4b7b68",
+        "session_id": "ses_h35s2zJ3awxiBdlz9lZW",
+        "message_id": "msg_g0VWPKiqv00A8e3RXT6e",
+        "tool_call_id": "call_5xRBJhTOwXyhWXTE9KrjUmDB"
+      },
+      "payload": {
+        "as_of_date": "2026-09-27T07:41:30.376879+00:00",
+        "summary": "Audited insight: July 2025 N=26,659; August N=32,756; change +6,097 (+22.87%). Brooklyn is largest in both cohorts; Queens has largest absolute and percentage increase. Same-month recorded closure is descriptive: July 26,542/26,659 (99.56%); August 32,365/32,756 (98.81%). All 24 grouped rows reconcile with no numerical discrepancy.",
+        "evidence": [
+          {
+            "id": "metrics",
+            "source": "Frozen Task Artifact metrics.json, NYC Open Data 311 erm2-nwe9",
+            "observed_at": "2026-09-27T07:41:30.376879+00:00",
+            "statement": "Frozen NYPD Noise - Residential query for created dates July-August 2025, grouped by cohort_month, closed_month, borough, status; 24 rows.",
+            "limitation": "Grouped month-level counts only; no row IDs, precise timestamps, staffing, cost, satisfaction, or direct resolution fields."
+          },
+          {
+            "id": "request",
+            "source": "Frozen Task Artifact request.md",
+            "observed_at": "2026-09-27",
+            "statement": "Requires totals, changes, same-month closure, remaining requests, limitations, reproducibility and follow-ups.",
+            "limitation": "Specification, not data."
+          },
+          {
+            "id": "charter",
+            "source": "Accepted data-analysis/analysis-charter, catalog revision 5",
+            "observed_at": "2026-09-27T07:41:30.376879+00:00",
+            "statement": "Defines scope, formulas, denominators, category preservation, Unspecified handling and interpretation boundaries.",
+            "limitation": "Analytical contract."
+          },
+          {
+            "id": "dossier",
+            "source": "Accepted data-analysis/data-dossier, catalog revision 9",
+            "observed_at": "2026-09-27T07:41:30.376879+00:00",
+            "statement": "Reconciles 24 rows and reports totals, changes, closure, remaining counts and gaps.",
+            "limitation": "Normalized predecessor analysis."
+          },
+          {
+            "id": "performance",
+            "source": "Accepted data-analysis/performance-analysis, catalog revision 14",
+            "observed_at": "2026-09-27T07:41:30.376879+00:00",
+            "statement": "Confirms totals, rankings, closure results, limits and follow-ups.",
+            "limitation": "Descriptive grouped-count analysis."
+          },
+          {
+            "id": "segments",
+            "source": "Accepted data-analysis/segment-analysis, catalog revision 18",
+            "observed_at": "2026-09-27",
+            "statement": "Confirms concentration, Queens increase, closure, Unspecified handling and follow-up sequence.",
+            "limitation": "Grouped month-level segment analysis."
+          }
+        ],
+        "findings": [
+          {
+            "claim": "Frozen scope and reconciliation are intact.",
+            "method": "Sum every supplied row by cohort and borough; parse numeric request strings only for arithmetic.",
+            "result": "24 rows reconcile with no discrepancy. July 26,659; August 32,756; Delta=August-July=+6,097; pctDelta=100*6,097/26,659=+22.87%.",
+            "evidence_ids": [
+              "metrics",
+              "charter",
+              "dossier",
+              "performance",
+              "segments"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "Workload concentration and changes are observable, not causal.",
+            "method": "Rank N; Delta=August N-July N; pctDelta=100*Delta/July N.",
+            "result": "July N: Bronx 6,449; Brooklyn 8,164; Manhattan 4,296; Queens 6,731; Staten Island 1,001; Unspecified 18. August N: Bronx 7,959; Brooklyn 9,996; Manhattan 4,941; Queens 8,686; Staten Island 1,174; Unspecified has no supplied row. Brooklyn is largest in both. Brooklyn+Queens shares are 55.89% July and 57.03% August. Changes: Bronx +1,510 (+23.41%); Brooklyn +1,832 (+22.44%); Manhattan +645 (+15.01%); Queens +1,955 (+29.05%); Staten Island +173 (+17.28%); Unspecified -18 (-100.00%) because August has no supplied row. Queens has the largest absolute and percentage increase; no ties for largest workload or absolute increase.",
+            "evidence_ids": [
+              "metrics",
+              "charter",
+              "dossier",
+              "performance",
+              "segments"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "Same-calendar-month recorded closure and remaining counts are reproducible for every positive-denominator cell.",
+            "method": "N=sum(requests); C=sum(requests where closed_month=cohort_month across statuses); closure=C/N; R=N-C; remaining=R/N.",
+            "result": "July N/C/R and closure%, remaining%: Bronx 6,449/6,403/46, 99.29%, 0.71%; Brooklyn 8,164/8,145/19, 99.77%, 0.23%; Manhattan 4,296/4,288/8, 99.81%, 0.19%; Queens 6,731/6,689/42, 99.38%, 0.62%; Staten Island 1,001/999/2, 99.80%, 0.20%; Unspecified 18/18/0, 100.00%, 0.00%; overall 26,659/26,542/117, 99.56%, 0.44%. August: Bronx 7,959/7,888/71, 99.11%, 0.89%; Brooklyn 9,996/9,872/124, 98.76%, 1.24%; Manhattan 4,941/4,913/28, 99.43%, 0.57%; Queens 8,686/8,541/145, 98.33%, 1.67%; Staten Island 1,174/1,151/23, 98.04%, 1.96%; overall 32,756/32,365/391, 98.81%, 1.19%. August Unspecified has no supplied row and is not imputed.",
+            "evidence_ids": [
+              "metrics",
+              "charter",
+              "dossier",
+              "performance",
+              "segments"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "Interpretation stops at workload and recorded month alignment.",
+            "method": "Compare requested claims with supplied fields and month-level temporal resolution.",
+            "result": "C/N only indicates whether agency-recorded closed_month equals cohort_month. It cannot establish response speed, elapsed duration, historical backlog, complete later closure, actual problem resolution, service quality, staffing, cost, satisfaction, causation or individual incidents. R=N-C is not backlog. Status is extraction-time, not historical month-end or outcome state. Correlation is not causation.",
+            "evidence_ids": [
+              "metrics",
+              "charter",
+              "dossier",
+              "performance",
+              "segments",
+              "request"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "Independent branches agree and no unsupported value is needed.",
+            "method": "Cross-check performance and segment branches against dossier and source rows.",
+            "result": "Both branches agree on totals, changes, concentration, closure, remaining counts and Unspecified treatment; no numerical discrepancy remains.",
+            "evidence_ids": [
+              "dossier",
+              "performance",
+              "segments"
+            ],
+            "confidence": "high"
+          }
+        ],
+        "actions": [
+          {
+            "action": "Obtain row-level request identifiers and precise created/closed timestamps.",
+            "rationale": "Month equality cannot distinguish same-day from month-end closure or produce elapsed distributions; identifiers support validation.",
+            "owner": "Data steward",
+            "timing": "Highest priority",
+            "success_measure": "Reproducible duration distributions and missing-timestamp rates by cohort and borough, with privacy controls."
+          },
+          {
+            "action": "Add status history and dated opening-inventory snapshots.",
+            "rationale": "R is not historical backlog and the extract cannot show later closure completeness.",
+            "owner": "Data steward and operations analyst",
+            "timing": "Second priority",
+            "success_measure": "Backlog and later-closure measures have observation dates, cohort linkage and denominators."
+          },
+          {
+            "action": "Define validated outcome and quality proxies with provenance and privacy review.",
+            "rationale": "Closure and extraction-time status do not establish actual resolution or service quality.",
+            "owner": "Operations analyst and data steward",
+            "timing": "Third priority",
+            "success_measure": "Documented definitions, lineage, missingness and approved privacy controls."
+          },
+          {
+            "action": "Monitor Brooklyn and Queens descriptively in the next comparable extract.",
+            "rationale": "They are 55.89% of July and 57.03% of August combined workload, and Queens has the largest increase; this supports monitoring, not staffing or causal action.",
+            "owner": "Operations analyst",
+            "timing": "Next planning cycle",
+            "success_measure": "Same scope, formulas and category handling are reapplied without causal claims."
+          }
+        ],
+        "unknowns": [
+          "No row-level IDs; duplicate or individual-incident validation unsupported.",
+          "No precise duration; same-month closure is not response speed.",
+          "No opening backlog or complete later-closure view; remaining is not backlog.",
+          "Status is extraction-time, not historical month-end or resolution outcome.",
+          "No staffing, cost, satisfaction, causality, quality or direct resolution fields.",
+          "Frozen extract only; no live refresh or external action authorized.",
+          "August has no supplied Unspecified row; no zero or estimate is imputed."
+        ],
+        "details": {
+          "priorities": [
+            "Preserve the reconciled descriptive baseline and monitor Brooklyn/Queens only descriptively.",
+            "Measure elapsed durations before discussing speed.",
+            "Establish dated inventory/status history before discussing backlog or later closure.",
+            "Define validated outcome/quality measures before discussing resolution or quality."
+          ],
+          "tradeoffs": [
+            "Grouped data enable fast reproducible comparison but lack duration, row-level validation and historical state.",
+            "Concentration supports monitoring priority, not staffing or causal claims.",
+            "Absent August Unspecified is reported as no supplied rows, preserving fidelity but preventing a direct borough comparison.",
+            "C/N is auditable but month granularity cannot distinguish rapid from late-in-month closure."
+          ],
+          "recommended_sequence": [
+            "Publish workload/change and C/N-R tables with all supplied categories and denominators.",
+            "Monitor Brooklyn and Queens next cycle under the same scope.",
+            "Acquire precise timestamps and IDs.",
+            "Acquire dated status history and opening inventories.",
+            "Add validated outcome/quality proxies after privacy review."
+          ],
+          "measurement_plan": [
+            "Recompute N, Delta and pctDelta from every grouped row using July denominator.",
+            "Recompute C from closed_month=cohort_month, then R=N-C and both shares; distinguish absent rows from zero.",
+            "For follow-up, report duration distributions and missingness, dated inventories/backlog, later closure completeness, and proxy provenance.",
+            "Treat associations as correlation only, not causation."
+          ]
+        }
+      },
+      "resources": [],
+      "observed_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h2gqRTybmOn9g5Q8fNJs",
+          "catalog_revision": 5,
+          "expected_sha256": "65cb0c8e757339946620fe7d2a91f01646eeab2a9492db97aba83ff9f907a02e"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hEEfamSGmLjgzKOBLmD1",
+          "catalog_revision": 18,
+          "expected_sha256": "f43e303cf7aa5a43c2d0caa58c14e5d6e10255640f3de5313dceb52e8f5024de"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hlMQAMi4ZqQJIiq4REPL",
+          "catalog_revision": 14,
+          "expected_sha256": "e4af4822cc28551df7b44721a92ec9c6d2de9808897383ee13a6bd464963074b"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hpst9QxX5u3fzkVLbEXS",
+          "catalog_revision": 9,
+          "expected_sha256": "c28421d15d7c408036b5d2129128d64662d199e2ae8fa4c0a290c797519fd6d0"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+              "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+            },
+            "tree": "resources",
+            "path": "request.md",
+            "media_type": "text/markdown",
+            "bytes": 1590,
+            "sha256": "c5c2bd0a448a4807ffd9ad5134a00c0f9fee7d6725bec60d03f64c39b0eb3837"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+              "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+            },
+            "tree": "resources",
+            "path": "metrics.json",
+            "media_type": "application/json",
+            "bytes": 7354,
+            "sha256": "a67966c6b276b9e333f181ce60fdae7a553677a3c0ab4f2f1b4303df74539fed"
+          }
+        }
+      ],
+      "source_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h2gqRTybmOn9g5Q8fNJs",
+          "catalog_revision": 5,
+          "expected_sha256": "65cb0c8e757339946620fe7d2a91f01646eeab2a9492db97aba83ff9f907a02e"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hEEfamSGmLjgzKOBLmD1",
+          "catalog_revision": 18,
+          "expected_sha256": "f43e303cf7aa5a43c2d0caa58c14e5d6e10255640f3de5313dceb52e8f5024de"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hlMQAMi4ZqQJIiq4REPL",
+          "catalog_revision": 14,
+          "expected_sha256": "e4af4822cc28551df7b44721a92ec9c6d2de9808897383ee13a6bd464963074b"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hpst9QxX5u3fzkVLbEXS",
+          "catalog_revision": 9,
+          "expected_sha256": "c28421d15d7c408036b5d2129128d64662d199e2ae8fa4c0a290c797519fd6d0"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+              "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+            },
+            "tree": "resources",
+            "path": "request.md",
+            "media_type": "text/markdown",
+            "bytes": 1590,
+            "sha256": "c5c2bd0a448a4807ffd9ad5134a00c0f9fee7d6725bec60d03f64c39b0eb3837"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+              "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+            },
+            "tree": "resources",
+            "path": "metrics.json",
+            "media_type": "application/json",
+            "bytes": 7354,
+            "sha256": "a67966c6b276b9e333f181ce60fdae7a553677a3c0ab4f2f1b4303df74539fed"
+          }
+        }
+      ]
+    },
+    "34": {
+      "artifact_type": "data-analysis/audit",
+      "schema_version": 1,
+      "producer": {
+        "owner_kind": "projected-worker",
+        "expert_squad_id": "data-analysis",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+          "namespace": "builtin",
+          "id": "data-analysis",
+          "version": "2026.09.27.2",
+          "package_digest": "ecb3aa0e89e113336d2fa7e693834c14973e6d8b9d64df27d29a115f93ef704d"
+        },
+        "agent_id": "data-analysis-fact-checker",
+        "projection_hash": "89e2a49f6d125e25bc2b6e28c0f5d9a89d6adb671db4297b5cfb64ff1d5bee9f",
+        "session_id": "ses_h1Qs3cRTUxbGuwiJvBob",
+        "message_id": "msg_g0VWPMt5r002ss2Lct6t",
+        "tool_call_id": "call_cTYXR8P0o7n2KssqH8fkUbFA"
+      },
+      "payload": {
+        "as_of_date": "2026-09-27",
+        "summary": "The synthesized insight brief is factually supported by the frozen extract and accepted predecessor analyses. All five registered claims were verified; no numerical discrepancy or unsupported interpretation was found.",
+        "evidence": [
+          {
+            "id": "brief",
+            "source": "Engine Artifact data-analysis/insight-brief, catalog revision 22",
+            "observed_at": "2026-09-27T07:41:30.376879+00:00",
+            "statement": "The brief reports reconciled totals, changes, rankings, closure measures, limitations, Unspecified handling, and follow-up actions.",
+            "limitation": "Synthesized predecessor artifact."
+          },
+          {
+            "id": "dossier",
+            "source": "Engine Artifact data-analysis/data-dossier, catalog revision 9",
+            "observed_at": "2026-09-27T07:41:30.376879+00:00",
+            "statement": "The dossier independently reconciles all 24 rows and reports the same totals, changes, closure counts, remaining counts, and limits.",
+            "limitation": "Grouped-count predecessor analysis."
+          },
+          {
+            "id": "performance",
+            "source": "Engine Artifact data-analysis/performance-analysis, catalog revision 14",
+            "observed_at": "2026-09-27T07:41:30.376879+00:00",
+            "statement": "The performance branch independently confirms totals, rankings, closure results, Unspecified handling, and interpretation limits.",
+            "limitation": "Descriptive grouped-count analysis."
+          },
+          {
+            "id": "charter",
+            "source": "Engine Artifact data-analysis/analysis-charter, catalog revision 5",
+            "observed_at": "2026-09-27T07:41:30.376879+00:00",
+            "statement": "The charter defines the frozen scope, formulas, denominators, category preservation, and interpretation boundaries used by the brief.",
+            "limitation": "Analytical contract, not additional source rows."
+          }
+        ],
+        "findings": [
+          {
+            "claim": "The brief reconciles both analytical branches and the frozen grouped extract.",
+            "method": "Read the complete brief, dossier, performance analysis, and charter; compare their stated sums and methods.",
+            "result": "Verified: all 24 grouped rows reconcile with no numerical discrepancy, and the branches agree.",
+            "evidence_ids": [
+              "brief",
+              "dossier",
+              "performance",
+              "charter"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "Workload totals, month-to-month changes, and rankings are exact.",
+            "method": "Recompute borough and cohort sums from the frozen rows; compare deltas and July-denominator percentages.",
+            "result": "Verified: July 26,659; August 32,756; change +6,097 (+22.87%). Brooklyn is largest in both cohorts; Queens has the largest absolute and percentage increase. Borough figures and percentages match the source calculations.",
+            "evidence_ids": [
+              "brief",
+              "dossier",
+              "performance"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "Same-month closure and remaining figures use correct denominators and definitions.",
+            "method": "Use C=sum(requests where closed_month equals cohort_month across statuses), share=C/N, and R=N-C; compare every reported cell and overall total.",
+            "result": "Verified: July overall 26,542/26,659 closed same month with 117 remaining; August 32,365/32,756 with 391 remaining. Borough-level values match, including Unspecified July 18/18/0 and no supplied August Unspecified row.",
+            "evidence_ids": [
+              "brief",
+              "dossier",
+              "performance",
+              "charter"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "Unspecified handling and limitations are accurately documented.",
+            "method": "Compare brief treatment with source-preservation rules and charter boundaries.",
+            "result": "Verified: Unspecified is retained; August absence is reported as no supplied row without imputation. The brief correctly states that month alignment cannot establish response speed, historical backlog, later closure completeness, actual resolution, service quality, staffing, cost, satisfaction, causation, or individual incidents.",
+            "evidence_ids": [
+              "brief",
+              "charter",
+              "performance"
+            ],
+            "confidence": "high"
+          },
+          {
+            "claim": "Follow-up actions are prioritized and traceable without unsupported causal or staffing inference.",
+            "method": "Compare brief actions with predecessor analyses and the request's unsupported-interpretation constraints.",
+            "result": "Verified: actions prioritize precise timestamps/IDs, status history and dated inventories, validated outcome/quality proxies, and descriptive monitoring; they do not infer staffing or causation.",
+            "evidence_ids": [
+              "brief",
+              "dossier",
+              "performance",
+              "charter"
+            ],
+            "confidence": "high"
+          }
+        ],
+        "actions": [
+          {
+            "action": "Proceed with the synthesized brief as the factual predecessor for final report writing.",
+            "rationale": "All registered material claims and calculations were independently verified against the frozen source and analytical branches.",
+            "owner": "Report writer",
+            "timing": "Next workflow stage",
+            "success_measure": "Final report preserves the verified figures, formulas, category treatment, and limitations."
+          }
+        ],
+        "unknowns": [
+          "The frozen grouped extract still lacks row identifiers and precise timestamps.",
+          "Historical backlog, later closure completeness, actual problem resolution, service quality, staffing, cost, and satisfaction remain unsupported by the source."
+        ],
+        "details": {
+          "audited_claims": [
+            "Successful publication of the insight brief",
+            "Reconciliation of both analyses",
+            "Exact workload and closure figures",
+            "Unspecified handling and limitations",
+            "Prioritized follow-up actions with traceable predecessor sources"
+          ],
+          "numerical_checks": [
+            "July 26,659; August 32,756; delta +6,097; 6,097/26,659 = 22.87%.",
+            "July same-month C/N/R = 26,542/26,659/117; August = 32,365/32,756/391.",
+            "Borough-level totals, deltas, percentages, closure counts, and remaining counts match the frozen rows."
+          ],
+          "source_checks": [
+            "Complete current brief and predecessor Engine Artifacts were read through their final byte; each read digest matched its catalog expected SHA-256.",
+            "The frozen metrics extract contains 24 grouped rows and the source definitions establish calendar-month resolution and extraction-time status semantics."
+          ],
+          "required_corrections": [],
+          "publication_guidance": "No factual correction is required. Preserve the explicit unknowns and descriptive-only interpretation in the final report."
+        }
+      },
+      "resources": [],
+      "observed_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h2gqRTybmOn9g5Q8fNJs",
+          "catalog_revision": 5,
+          "expected_sha256": "65cb0c8e757339946620fe7d2a91f01646eeab2a9492db97aba83ff9f907a02e"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hjWSq50cxX58z0Vkn77D",
+          "catalog_revision": 22,
+          "expected_sha256": "bde1e99b1920b87f7422c1cb54b20b9aad0c2acad4ff2d9833528c6f59c8bb74"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hlMQAMi4ZqQJIiq4REPL",
+          "catalog_revision": 14,
+          "expected_sha256": "e4af4822cc28551df7b44721a92ec9c6d2de9808897383ee13a6bd464963074b"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hpst9QxX5u3fzkVLbEXS",
+          "catalog_revision": 9,
+          "expected_sha256": "c28421d15d7c408036b5d2129128d64662d199e2ae8fa4c0a290c797519fd6d0"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+              "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+            },
+            "tree": "resources",
+            "path": "metrics.json",
+            "media_type": "application/json",
+            "bytes": 7354,
+            "sha256": "a67966c6b276b9e333f181ce60fdae7a553677a3c0ab4f2f1b4303df74539fed"
+          }
+        }
+      ],
+      "source_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hjWSq50cxX58z0Vkn77D",
+          "catalog_revision": 22,
+          "expected_sha256": "bde1e99b1920b87f7422c1cb54b20b9aad0c2acad4ff2d9833528c6f59c8bb74"
+        }
+      ]
+    },
+    "35": {
+      "observed_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_h2gqRTybmOn9g5Q8fNJs",
+          "catalog_revision": 5,
+          "expected_sha256": "65cb0c8e757339946620fe7d2a91f01646eeab2a9492db97aba83ff9f907a02e"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hjWSq50cxX58z0Vkn77D",
+          "catalog_revision": 22,
+          "expected_sha256": "bde1e99b1920b87f7422c1cb54b20b9aad0c2acad4ff2d9833528c6f59c8bb74"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hlMQAMi4ZqQJIiq4REPL",
+          "catalog_revision": 14,
+          "expected_sha256": "e4af4822cc28551df7b44721a92ec9c6d2de9808897383ee13a6bd464963074b"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hpst9QxX5u3fzkVLbEXS",
+          "catalog_revision": 9,
+          "expected_sha256": "c28421d15d7c408036b5d2129128d64662d199e2ae8fa4c0a290c797519fd6d0"
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "047202a6-4292-559f-a765-c2963eb81266",
+              "manifest_sha256": "0fa1a6ff896093597b9161d05b9186f4d663274ec2747e66458381e8ee890e7c"
+            },
+            "tree": "resources",
+            "path": "metrics.json",
+            "media_type": "application/json",
+            "bytes": 7354,
+            "sha256": "a67966c6b276b9e333f181ce60fdae7a553677a3c0ab4f2f1b4303df74539fed"
+          }
+        }
+      ],
+      "source_artifact_locators": [],
+      "target_session_id": "ses_h35s2zJ3awxiBdlz9lZW",
+      "target_agent": "data-analysis-insight-synthesizer",
+      "target_message_id": "msg_g0VWPKw5y00m2r1wiv1c",
+      "target_message_content_hash": "6d7843a7bd3c8bae7dabf77756ad966eac335697152e664f5d6e6b0e5aafb4e8",
+      "invoked_by_orchestrator_session_id": "ses_-zUTaom1HzzJDsj6ptrZ",
+      "fact_check_session_id": "ses_h1Qs3cRTUxbGuwiJvBob",
+      "review": {
+        "scope": {
+          "target_session_id": "ses_h35s2zJ3awxiBdlz9lZW",
+          "target_agent": "data-analysis-insight-synthesizer",
+          "target_message_id": "msg_g0VWPKw5y00m2r1wiv1c",
+          "target_message_content_hash": "6d7843a7bd3c8bae7dabf77756ad966eac335697152e664f5d6e6b0e5aafb4e8",
+          "items_total": 5,
+          "items_inspected": 5
+        },
+        "verified": [
+          {
+            "claim": "The insight brief reconciles both analytical branches and the frozen grouped extract.",
+            "evidence": [
+              {
+                "kind": "code",
+                "pointer": "engine_artifact:art_hjWSq50cxX58z0Vkn77D@catalog_revision=22",
+                "excerpt": "The brief states all 24 grouped rows reconcile with no numerical discrepancy and cites dossier, performance, and segments."
+              },
+              {
+                "kind": "code",
+                "pointer": "engine_artifact:art_hlMQAMi4ZqQJIiq4REPL@catalog_revision=14",
+                "excerpt": "Performance analysis independently reports all 24 grouped rows reconcile and no discrepancy."
+              },
+              {
+                "kind": "code",
+                "pointer": "engine_artifact:art_hpst9QxX5u3fzkVLbEXS@catalog_revision=9",
+                "excerpt": "Data dossier independently reports July 26,659 and August 32,756 from all supplied rows."
+              }
+            ]
+          },
+          {
+            "claim": "The workload totals, changes, rankings, and closure figures in the brief are numerically exact.",
+            "evidence": [
+              {
+                "kind": "code",
+                "pointer": "engine_artifact:art_hjWSq50cxX58z0Vkn77D@catalog_revision=22",
+                "excerpt": "Brief reports July 26,659; August 32,756; delta +6,097 (+22.87%); Brooklyn largest in both; Queens largest absolute and percentage increase."
+              },
+              {
+                "kind": "code",
+                "pointer": "task_artifact_resource:metrics.json in snapshot 047202a6-4292-559f-a765-c2963eb81266",
+                "excerpt": "Frozen rows sum to July 26,659 and August 32,756; same-month closure groups sum to July 26,542 and August 32,365."
+              },
+              {
+                "kind": "code",
+                "pointer": "engine_artifact:art_hlMQAMi4ZqQJIiq4REPL@catalog_revision=14",
+                "excerpt": "Independent performance analysis gives the same totals, changes, borough ranks, and closure counts."
+              }
+            ]
+          },
+          {
+            "claim": "The brief correctly preserves Unspecified handling and reports the same-month closure measure with correct denominators and remaining counts.",
+            "evidence": [
+              {
+                "kind": "code",
+                "pointer": "engine_artifact:art_hjWSq50cxX58z0Vkn77D@catalog_revision=22",
+                "excerpt": "Brief reports July Unspecified N=18,C=18,R=0 and August has no supplied Unspecified row; no imputation."
+              },
+              {
+                "kind": "code",
+                "pointer": "engine_artifact:art_h2gqRTybmOn9g5Q8fNJs@catalog_revision=5",
+                "excerpt": "Charter defines C as closed_month equal to cohort_month across statuses, closure=C/N, and R=N-C."
+              },
+              {
+                "kind": "code",
+                "pointer": "task_artifact_resource:metrics.json in snapshot 047202a6-4292-559f-a765-c2963eb81266",
+                "excerpt": "Source field definitions state calendar-month creation/closure grouping and retain all returned borough categories."
+              }
+            ]
+          },
+          {
+            "claim": "The brief's limitations are factually supported and avoid unsupported interpretations.",
+            "evidence": [
+              {
+                "kind": "code",
+                "pointer": "engine_artifact:art_hjWSq50cxX58z0Vkn77D@catalog_revision=22",
+                "excerpt": "Brief says C/N only indicates agency-recorded closed_month equals cohort_month and cannot establish response speed, backlog, resolution, staffing, causation, or quality."
+              },
+              {
+                "kind": "code",
+                "pointer": "task_artifact_resource:metrics.json in snapshot 047202a6-4292-559f-a765-c2963eb81266",
+                "excerpt": "Frozen source limits state only month-level timing is supplied and no staffing, cost, satisfaction, or direct problem-resolution measurement exists."
+              },
+              {
+                "kind": "code",
+                "pointer": "engine_artifact:art_h2gqRTybmOn9g5Q8fNJs@catalog_revision=5",
+                "excerpt": "Charter explicitly prohibits inferring speed, backlog, later closure completeness, causation, staffing, quality, resolution, or incidents."
+              }
+            ]
+          },
+          {
+            "claim": "The brief supplies prioritized, source-justified follow-up actions without converting descriptive patterns into causal or staffing claims.",
+            "evidence": [
+              {
+                "kind": "code",
+                "pointer": "engine_artifact:art_hjWSq50cxX58z0Vkn77D@catalog_revision=22",
+                "excerpt": "Brief prioritizes precise timestamps/IDs, status history/inventory, validated outcome/quality proxies, and descriptive monitoring of Brooklyn and Queens."
+              },
+              {
+                "kind": "code",
+                "pointer": "engine_artifact:art_hpst9QxX5u3fzkVLbEXS@catalog_revision=9",
+                "excerpt": "Dossier proposes timestamps/IDs, status history/opening inventory, and validated outcome or quality proxies as follow-ups."
+              }
+            ]
+          }
+        ],
+        "corrected": [],
+        "unresolved": [],
+        "overall_verdict": "clean"
+      }
+    }
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "method": "production readExactArtifact/readTaskArtifactRef",
+  "metadata": "read-only original database backup; original immutable resource files",
+  "authority": {
+    "projectID": "prj_h0vgvYzOQqBvmvX6ByTQ",
+    "projectDirectory": "D:\\myhexin-local\\opencorvus\\.tmp\\team-feedback-20260927\\feedback-01\\execution",
+    "taskID": "tsk_g00VWPBCxD00HpB2NIEq"
+  },
+  "receipts": [
+    {
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_h2gqRTybmOn9g5Q8fNJs",
+        "catalog_revision": 5,
+        "expected_sha256": "65cb0c8e757339946620fe7d2a91f01646eeab2a9492db97aba83ff9f907a02e"
+      },
+      "type": "data-analysis/analysis-charter",
+      "bytes": 10212,
+      "resources": []
+    },
+    {
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hpst9QxX5u3fzkVLbEXS",
+        "catalog_revision": 9,
+        "expected_sha256": "c28421d15d7c408036b5d2129128d64662d199e2ae8fa4c0a290c797519fd6d0"
+      },
+      "type": "data-analysis/data-dossier",
+      "bytes": 11927,
+      "resources": []
+    },
+    {
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hlMQAMi4ZqQJIiq4REPL",
+        "catalog_revision": 14,
+        "expected_sha256": "e4af4822cc28551df7b44721a92ec9c6d2de9808897383ee13a6bd464963074b"
+      },
+      "type": "data-analysis/performance-analysis",
+      "bytes": 10602,
+      "resources": []
+    },
+    {
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hEEfamSGmLjgzKOBLmD1",
+        "catalog_revision": 18,
+        "expected_sha256": "f43e303cf7aa5a43c2d0caa58c14e5d6e10255640f3de5313dceb52e8f5024de"
+      },
+      "type": "data-analysis/segment-analysis",
+      "bytes": 6029,
+      "resources": []
+    },
+    {
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hjWSq50cxX58z0Vkn77D",
+        "catalog_revision": 22,
+        "expected_sha256": "bde1e99b1920b87f7422c1cb54b20b9aad0c2acad4ff2d9833528c6f59c8bb74"
+      },
+      "type": "data-analysis/insight-brief",
+      "bytes": 13122,
+      "resources": []
+    },
+    {
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hztguBz1f83okqbeDYaX",
+        "catalog_revision": 34,
+        "expected_sha256": "1ec5290163ab4e41ee43351163359f162eb82baf245ec599826e9eef16ca641a"
+      },
+      "type": "data-analysis/audit",
+      "bytes": 7931,
+      "resources": []
+    },
+    {
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_g0VWPN52p00rKlWLzpkY",
+        "catalog_revision": 35,
+        "expected_sha256": "dc212340354266e0847e27f39d7886b03faf03c30eb3dc95fcf4c779afb4c089"
+      },
+      "type": "opencorvus/core/fact_check_review",
+      "bytes": 5816,
+      "resources": []
+    },
+    {
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hvvIDAsV8skfny3KHu8C",
+        "catalog_revision": 39,
+        "expected_sha256": "804201a8094360b9e9a3501ed07644507bce93996fdef1bdc248aaef1fb1d063"
+      },
+      "type": "data-analysis/report",
+      "bytes": 8480,
+      "resources": [
+        {
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "77e4e259-e99c-5bc5-a2d9-6c0481929003",
+              "manifest_sha256": "af6532c99e901cf30375500f189b8cd29840c523f616dd7098461f127891a739"
+            },
+            "tree": "resources",
+            "path": "artifacts/data-analysis/report.md",
+            "media_type": "text/markdown",
+            "bytes": 7200,
+            "sha256": "54429e7bfeb50007c0e320f989ccad079295c1a1e31fc868ac8230f5fea5273f"
+          },
+          "bytes": 7200,
+          "output": ".tmp/team-feedback-verified-report-r39.md"
+        }
+      ]
+    },
+    {
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_h0S8nJUr43ydBsez0ZBo",
+        "catalog_revision": 47,
+        "expected_sha256": "21f463e08ca9d84937d6e3e4a6f543f6ce6f30cb52d16283f044ec47caa068c7"
+      },
+      "type": "data-analysis/report",
+      "bytes": 6532,
+      "resources": [
+        {
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h0vgvYzOQqBvmvX6ByTQ",
+              "task_id": "tsk_g00VWPBCxD00HpB2NIEq",
+              "snapshot_id": "33ff9924-b664-52eb-a3e9-1b2e18e6276a",
+              "manifest_sha256": "5edc173ab3e1be6f966f7f7f9f62bcecff8afc502c1f2dacf9550ca02a6202b4"
+            },
+            "tree": "resources",
+            "path": "artifacts/data-analysis/report.md",
+            "media_type": "text/markdown",
+            "bytes": 7200,
+            "sha256": "66195766e3d3494b8a117ab338bde726c6d05c43b0644dfad9cc8d492460af00"
+          },
+          "bytes": 7200,
+          "output": ".tmp/team-feedback-verified-report-r47.md"
+        }
+      ]
+    }
+  ]
+}
