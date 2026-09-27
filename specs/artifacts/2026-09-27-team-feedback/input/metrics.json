@@ -1,0 +1,210 @@
+{
+  "source": {
+    "publisher": "NYC Open Data / 311",
+    "dataset_id": "erm2-nwe9",
+    "dataset_url": "https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2020-to-Present/erm2-nwe9",
+    "url": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?%24select=date_trunc_ym%28created_date%29+AS+cohort_month%2Cdate_trunc_ym%28closed_date%29+AS+closed_month%2Cborough%2Cstatus%2Ccount%28%2A%29+AS+requests&%24where=agency%3D%27NYPD%27+AND+complaint_type%3D%27Noise+-+Residential%27+AND+created_date+%3E%3D+%272025-07-01T00%3A00%3A00%27+AND+created_date+%3C+%272025-09-01T00%3A00%3A00%27&%24group=cohort_month%2Cclosed_month%2Cborough%2Cstatus&%24order=cohort_month%2Cborough%2Cclosed_month%2Cstatus&%24limit=50000",
+    "query": {
+      "$select": "date_trunc_ym(created_date) AS cohort_month,date_trunc_ym(closed_date) AS closed_month,borough,status,count(*) AS requests",
+      "$where": "agency='NYPD' AND complaint_type='Noise - Residential' AND created_date >= '2025-07-01T00:00:00' AND created_date < '2025-09-01T00:00:00'",
+      "$group": "cohort_month,closed_month,borough,status",
+      "$order": "cohort_month,borough,closed_month,status",
+      "$limit": "50000"
+    },
+    "retrieved_at": "2026-09-27T07:41:30.376879+00:00",
+    "response_bytes": 3394,
+    "group_rows": 24,
+    "fields": [
+      "borough",
+      "closed_month",
+      "cohort_month",
+      "requests",
+      "status"
+    ],
+    "http_status": 200,
+    "last_modified": "Sun, 27 Sep 2026 01:59:30 GMT"
+  },
+  "field_definitions": {
+    "cohort_month": "Calendar month of original created_date; month grouping retains no day or time.",
+    "closed_month": "Calendar month of agency-recorded closed_date; omitted when the source closure timestamp is null.",
+    "borough": "Borough field supplied in the source. All returned categories are retained.",
+    "status": "Status value in the source at extraction time, not a stored historical month-end status.",
+    "requests": "Number of original service-request rows in this group. Numeric strings are the original API representation."
+  },
+  "source_limits": [
+    "The original dataset concerns service requests directed to agencies, rather than all 311 contacts.",
+    "The dataset is updated over time. This extract is frozen at the recorded retrieval time.",
+    "No address, individual incident identifier or personal information was selected.",
+    "Only month-level created/closed timing is supplied. The extract contains no staffing, cost, satisfaction or direct problem-resolution measurement."
+  ],
+  "rows": [
+    {
+      "cohort_month": "2025-07-01T00:00:00.000",
+      "closed_month": "2025-07-01T00:00:00.000",
+      "borough": "BRONX",
+      "status": "Closed",
+      "requests": "6402"
+    },
+    {
+      "cohort_month": "2025-07-01T00:00:00.000",
+      "closed_month": "2025-07-01T00:00:00.000",
+      "borough": "BRONX",
+      "status": "Unspecified",
+      "requests": "1"
+    },
+    {
+      "cohort_month": "2025-07-01T00:00:00.000",
+      "closed_month": "2025-08-01T00:00:00.000",
+      "borough": "BRONX",
+      "status": "Closed",
+      "requests": "46"
+    },
+    {
+      "cohort_month": "2025-07-01T00:00:00.000",
+      "closed_month": "2025-07-01T00:00:00.000",
+      "borough": "BROOKLYN",
+      "status": "Closed",
+      "requests": "8145"
+    },
+    {
+      "cohort_month": "2025-07-01T00:00:00.000",
+      "closed_month": "2025-08-01T00:00:00.000",
+      "borough": "BROOKLYN",
+      "status": "Closed",
+      "requests": "19"
+    },
+    {
+      "cohort_month": "2025-07-01T00:00:00.000",
+      "closed_month": "2025-07-01T00:00:00.000",
+      "borough": "MANHATTAN",
+      "status": "Closed",
+      "requests": "4287"
+    },
+    {
+      "cohort_month": "2025-07-01T00:00:00.000",
+      "closed_month": "2025-07-01T00:00:00.000",
+      "borough": "MANHATTAN",
+      "status": "Unspecified",
+      "requests": "1"
+    },
+    {
+      "cohort_month": "2025-07-01T00:00:00.000",
+      "closed_month": "2025-08-01T00:00:00.000",
+      "borough": "MANHATTAN",
+      "status": "Closed",
+      "requests": "8"
+    },
+    {
+      "cohort_month": "2025-07-01T00:00:00.000",
+      "closed_month": "2025-07-01T00:00:00.000",
+      "borough": "QUEENS",
+      "status": "Closed",
+      "requests": "6689"
+    },
+    {
+      "cohort_month": "2025-07-01T00:00:00.000",
+      "closed_month": "2025-08-01T00:00:00.000",
+      "borough": "QUEENS",
+      "status": "Closed",
+      "requests": "42"
+    },
+    {
+      "cohort_month": "2025-07-01T00:00:00.000",
+      "closed_month": "2025-07-01T00:00:00.000",
+      "borough": "STATEN ISLAND",
+      "status": "Closed",
+      "requests": "999"
+    },
+    {
+      "cohort_month": "2025-07-01T00:00:00.000",
+      "closed_month": "2025-08-01T00:00:00.000",
+      "borough": "STATEN ISLAND",
+      "status": "Closed",
+      "requests": "2"
+    },
+    {
+      "cohort_month": "2025-07-01T00:00:00.000",
+      "closed_month": "2025-07-01T00:00:00.000",
+      "borough": "Unspecified",
+      "status": "Closed",
+      "requests": "18"
+    },
+    {
+      "cohort_month": "2025-08-01T00:00:00.000",
+      "closed_month": "2025-08-01T00:00:00.000",
+      "borough": "BRONX",
+      "status": "Closed",
+      "requests": "7887"
+    },
+    {
+      "cohort_month": "2025-08-01T00:00:00.000",
+      "closed_month": "2025-08-01T00:00:00.000",
+      "borough": "BRONX",
+      "status": "Unspecified",
+      "requests": "1"
+    },
+    {
+      "cohort_month": "2025-08-01T00:00:00.000",
+      "closed_month": "2025-09-01T00:00:00.000",
+      "borough": "BRONX",
+      "status": "Closed",
+      "requests": "71"
+    },
+    {
+      "cohort_month": "2025-08-01T00:00:00.000",
+      "closed_month": "2025-08-01T00:00:00.000",
+      "borough": "BROOKLYN",
+      "status": "Closed",
+      "requests": "9872"
+    },
+    {
+      "cohort_month": "2025-08-01T00:00:00.000",
+      "closed_month": "2025-09-01T00:00:00.000",
+      "borough": "BROOKLYN",
+      "status": "Closed",
+      "requests": "124"
+    },
+    {
+      "cohort_month": "2025-08-01T00:00:00.000",
+      "closed_month": "2025-08-01T00:00:00.000",
+      "borough": "MANHATTAN",
+      "status": "Closed",
+      "requests": "4913"
+    },
+    {
+      "cohort_month": "2025-08-01T00:00:00.000",
+      "closed_month": "2025-09-01T00:00:00.000",
+      "borough": "MANHATTAN",
+      "status": "Closed",
+      "requests": "28"
+    },
+    {
+      "cohort_month": "2025-08-01T00:00:00.000",
+      "closed_month": "2025-08-01T00:00:00.000",
+      "borough": "QUEENS",
+      "status": "Closed",
+      "requests": "8541"
+    },
+    {
+      "cohort_month": "2025-08-01T00:00:00.000",
+      "closed_month": "2025-09-01T00:00:00.000",
+      "borough": "QUEENS",
+      "status": "Closed",
+      "requests": "145"
+    },
+    {
+      "cohort_month": "2025-08-01T00:00:00.000",
+      "closed_month": "2025-08-01T00:00:00.000",
+      "borough": "STATEN ISLAND",
+      "status": "Closed",
+      "requests": "1151"
+    },
+    {
+      "cohort_month": "2025-08-01T00:00:00.000",
+      "closed_month": "2025-09-01T00:00:00.000",
+      "borough": "STATEN ISLAND",
+      "status": "Closed",
+      "requests": "23"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "g58-diagnostic-01",
+  "runRoot": ".tmp/evolution-readiness-g58/diagnostic-01",
+  "inputRoot": "specs/artifacts/2026-09-27-evolution-readiness/input",
+  "packageDigest": "27141f11209e4891fc2119b3f84a239238c08d8951cd5fefab6143e30f31e0ed",
+  "model": "openai/gpt-5.6-luna",
+  "inactivityMs": 300000,
+  "pollIntervalMs": 2000
+}

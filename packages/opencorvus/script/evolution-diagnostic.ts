@@ -1,10 +1,11 @@
-/** G58's fixed diagnostic transport. Preparation never submits model work. */
+/** Registered single-Task transport. Preparation never submits model work. */
 import assert from "node:assert/strict"
 import { parseArgs } from "node:util"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
 import { createHash } from "node:crypto"
+import { z } from "zod"
 import { CredentialRedactor, requireProcessProviderAudit } from "./real-provider-audit"
 import nativeProviderAudit from "./native-provider-audit-plugin"
 import { latestAuditSnapshotFiles } from "./audit-snapshot"
@@ -16,21 +17,27 @@ const { values } = parseArgs({ args: process.argv.slice(2), strict: true, option
   prepare: { type: "boolean" }, run: { type: "boolean" },
   "run-root": { type: "string" }, "auth-source": { type: "string" },
   "resume-initialization": { type: "string" },
+  registration: { type: "string" },
 } })
 assert(values.prepare !== values.run, "Choose exactly one of --prepare or --run")
 const repo = path.resolve(import.meta.dir, "../../..")
-const registeredRoot = path.join(repo, ".tmp/evolution-readiness-g58/diagnostic-01")
+assert(values.registration, "A complete explicit --registration is required")
+const registration = z.object({
+  id: z.string().min(1), runRoot: z.string().min(1), inputRoot: z.string().min(1),
+  packageDigest: z.string().regex(/^[a-f0-9]{64}$/), model: z.literal("openai/gpt-5.6-luna"),
+  inactivityMs: z.literal(300_000), pollIntervalMs: z.literal(2_000),
+}).strict().parse(JSON.parse(await fs.readFile(path.resolve(values.registration), "utf8")))
+const registeredRoot = path.resolve(repo, registration.runRoot)
+const rootRelative = path.relative(path.join(repo, ".tmp"), registeredRoot)
+assert(rootRelative && !rootRelative.startsWith("..") && !path.isAbsolute(rootRelative), "Registered run root must be inside this workspace's .tmp directory")
 const root = values.run ? registeredRoot : path.resolve(values["run-root"] ?? "")
 assert(values.run || values["run-root"], "Preparation requires its own --run-root")
 assert(values.run || root !== registeredRoot, "The registered root is reserved for --run")
 assert(!values.run || values["run-root"] === undefined, "Real execution uses the single registered root")
 assert(!values.prepare || values["auth-source"] === undefined, "Preparation does not accept credentials")
-const model = "openai/gpt-5.6-luna"
-const modelID = "gpt-5.6-luna"
-const inactivityMs = 300_000
-const pollIntervalMs = 2_000
-const targetDigest = "27141f11209e4891fc2119b3f84a239238c08d8951cd5fefab6143e30f31e0ed"
-const inputRoot = path.join(repo, "specs/artifacts/2026-09-27-evolution-readiness/input")
+const { model, inactivityMs, pollIntervalMs, packageDigest: targetDigest } = registration
+const modelID = model.split("/")[1]!
+const inputRoot = path.resolve(repo, registration.inputRoot)
 const home = path.join(root, "home")
 const coordinator = path.join(root, "coordinator")
 const execution = path.join(root, "execution")
@@ -49,7 +56,7 @@ if (values.run) {
 }
 await fs.mkdir(path.dirname(root), { recursive: true })
 const resumed = values["resume-initialization"] === undefined ? undefined : await claimDiagnosticInitialization({
-  root, parent: values["resume-initialization"], mode: values.run ? "run" : "prepare", model,
+  root, parent: values["resume-initialization"], mode: values.run ? "run" : "prepare", model, registration,
 })
 if (!resumed) {
   try { await fs.mkdir(root) } catch (error) {
@@ -65,7 +72,7 @@ async function event(type: string, detail: unknown) {
   await fs.appendFile(path.join(receiptRoot, "controller.jsonl"), redactor.redact(JSON.stringify({ time: new Date().toISOString(), type, detail })) + "\n")
 }
 const result: Record<string, any> = {
-  schema: "opencorvus/g58-diagnostic@1", mode: values.run ? "run" : "prepare",
+  schema: "opencorvus/registered-team-diagnostic@1", mode: values.run ? "run" : "prepare", registration,
   sourceCommit, pid: process.pid, startedAt: new Date().toISOString(), model,
   inactivityMs, pollIntervalMs, requestCeiling: null, businessVerdict: "not_evaluated",
   receiptDirectory: resumed?.receiptDirectory ?? ".", ...(resumed ? { parentReceiptDirectory: resumed.parent } : {}),
@@ -85,10 +92,10 @@ try {
   if (!resumed) {
     for (const directory of [coordinator, execution]) {
       await git(directory, ["init", "--quiet"])
-      await git(directory, ["config", "user.name", "G58 diagnostic"])
-      await git(directory, ["config", "user.email", "g58@example.invalid"])
+      await git(directory, ["config", "user.name", "Registered diagnostic"])
+      await git(directory, ["config", "user.email", "diagnostic@example.invalid"])
     }
-    await fs.writeFile(path.join(coordinator, "README.md"), "# G58 diagnostic coordinator\nNo business input or expected answer is stored here.\n")
+    await fs.writeFile(path.join(coordinator, "README.md"), "# Diagnostic coordinator\nNo business input or expected answer is stored here.\n")
   }
   const inputFiles: Array<{ path: string; bytes: number; sha256: string }> = []
   for (const name of ["request.md", "metrics.json"]) {
@@ -152,7 +159,7 @@ try {
     for (const directory of [coordinator, execution]) {
       await ensureGitProjectMetadata(directory)
       await git(directory, ["add", "."])
-      await git(directory, ["commit", "--quiet", "-m", "Freeze G58 diagnostic input"])
+      await git(directory, ["commit", "--quiet", "-m", `Freeze ${registration.id} input`])
     }
   }
   const initialTree = await executionCapsuleSourceTreeSnapshot(execution)
@@ -162,7 +169,7 @@ try {
   await Instance.provide({ directory: coordinator, init: InstanceBootstrap, fn: async () => {
     const installed = await ExpertSquadPackageManager.installPayloadPackage({ projectDirectory: coordinator, id: "data-analysis", installationScope: "project" })
     result.target = installed.after
-    assert.equal(installed.after.packageDigest, targetDigest, "Installed target differs from the registered G58 package")
+    assert.equal(installed.after.packageDigest, targetDigest, "Installed target differs from the registered package")
     result.projectID = Instance.project.id
   } })
   server = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
@@ -178,7 +185,7 @@ try {
   }
   request = fetchJSON
   const missionRequest = [
-    "Execute the single registered G58 local diagnostic. Create exactly one data-analysis Task and no candidate or evolution Task.",
+    `Execute the single registered ${registration.id} diagnostic. Create exactly one data-analysis Task and no candidate or evolution Task.`,
     `Use productPillar=work, promptProfile=data-analysis, expectedPackageDigest=${targetDigest}, model=${model}.`,
     `Set that Task's directory exactly to ${execution}. Its only input files are request.md and metrics.json in that directory.`,
     "Read request.md completely and use its exact text as the Task request. Preserve its public metric definitions and scope.",

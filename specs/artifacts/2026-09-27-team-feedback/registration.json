@@ -1,0 +1,9 @@
+{
+  "id": "nyc311-team-feedback-01",
+  "runRoot": ".tmp/team-feedback-20260927/feedback-01",
+  "inputRoot": "specs/artifacts/2026-09-27-team-feedback/input",
+  "packageDigest": "ecb3aa0e89e113336d2fa7e693834c14973e6d8b9d64df27d29a115f93ef704d",
+  "model": "openai/gpt-5.6-luna",
+  "inactivityMs": 300000,
+  "pollIntervalMs": 2000
+}

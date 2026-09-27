@@ -2,6 +2,7 @@ import assert from "node:assert/strict"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { randomUUID } from "node:crypto"
+import { isDeepStrictEqual } from "node:util"
 import { Database } from "bun:sqlite"
 import { latestAuditSnapshotFiles } from "./audit-snapshot"
 
@@ -20,7 +21,7 @@ async function absent(file: string, reason: string) {
 }
 
 /** Resumes only local initialization; the root's unique business launch remains authoritative. */
-export async function claimDiagnosticInitialization(input: { root: string; parent: string; mode: "run" | "prepare"; model: string }) {
+export async function claimDiagnosticInitialization(input: { root: string; parent: string; mode: "run" | "prepare"; model: string; registration: unknown }) {
   if (input.parent !== "." && !/^initializations\/[a-f0-9-]{36}$/.test(input.parent))
     fail("invalid_parent", "Choose the original receipt directory or an exact initialization receipt")
   const root = await fs.realpath(input.root)
@@ -35,6 +36,9 @@ export async function claimDiagnosticInitialization(input: { root: string; paren
   const result = await read("result.json")
   for (const name of ["schema", "mode", "model", "pid", "startedAt", "sourceCommit"])
     if (claim[name] === undefined || claim[name] !== result[name]) fail("receipt_identity_mismatch", name)
+  if (claim.registration === undefined || !isDeepStrictEqual(claim.registration, result.registration))
+    fail("receipt_identity_mismatch", "registration")
+  if (!isDeepStrictEqual(claim.registration, input.registration)) fail("registration_mismatch", "Original registration differs")
   if (claim.mode !== input.mode || claim.model !== input.model) fail("registration_mismatch", "Mode/model differs from the original claim")
   const eligible = result.outcome === "failed" || (input.mode === "prepare" && result.outcome === "prepared")
   if (!eligible || !Number.isFinite(Date.parse(result.finishedAt)) ||

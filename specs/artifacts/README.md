@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Complete team feedback observation](2026-09-27-team-feedback/README.md): one registered Mission/Task on frozen public NYC 311 data; natural feedback and repair are measured separately from ordinary delivery.
+
 - [G64 independent business-evidence review](2026-09-27-supervision-review/README.md): one preregistered, read-only semantic review of retained evidence; not a replay or proof of repair/evolution.
 
 - [G58 fixed operating-analysis diagnostic preparation](2026-09-27-evolution-readiness/README.md): new fixed synthetic inputs, independent arithmetic expectations, and local Task-directory readiness; no model run or demonstrated evolution gain.

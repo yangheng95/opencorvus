@@ -36,26 +36,30 @@ test("diagnostic paired staging preserves the complete runtime catalog and scope
   } finally { await rm(root, { recursive: true, force: true }) }
 })
 
-test("diagnostic preparation preserves its frozen registration across a newer installed package", async () => {
+test("registered diagnostic prepares the actual package and preserves one initialization authority", async () => {
   const parent = await Global.createTemporaryDirectory("evolution-diagnostic-entry-")
   const root = path.join(parent, "prepare")
   const script = path.resolve(import.meta.dir, "../script/evolution-diagnostic.ts")
+  const registration = path.resolve(import.meta.dir, "../../../specs/artifacts/2026-09-27-team-feedback/registration.json")
   const invoke = async (extra: string[] = []) => {
-    const child = Bun.spawn([process.execPath, script, "--prepare", "--run-root", root, ...extra], { stdout: "pipe", stderr: "pipe" })
+    const child = Bun.spawn([process.execPath, script, "--registration", registration, "--prepare", "--run-root", root, ...extra], { stdout: "pipe", stderr: "pipe" })
     const [exit, stdout, stderr] = await Promise.all([child.exited, new Response(child.stdout).text(), new Response(child.stderr).text()])
     return { exit, stdout, stderr }
   }
   try {
     const first = await invoke()
-    expect(first.exit).toBe(1)
+    expect(first.exit).toBe(0)
     const receipt = JSON.parse(await readFile(path.join(root, "result.json"), "utf8"))
-    expect(receipt).toMatchObject({ mode: "prepare", outcome: "failed", model: "openai/gpt-5.6-luna",
+    expect(receipt).toMatchObject({ mode: "prepare", outcome: "prepared", model: "openai/gpt-5.6-luna",
       requestCeiling: null, inactivityMs: 300_000, pollIntervalMs: 2_000, businessVerdict: "not_evaluated",
-      error: expect.stringContaining("Installed target differs from the registered G58 package"),
-      initialTree: "d285b2ec25c80d6389dee4cfb6092a45a4533157466dbf96caa3ec8f20ac036b",
       cleanup: { runtimeDisposed: true, credentialsRemoved: true },
-      target: { id: "data-analysis", version: "2026.09.27.1", packageDigest: "c96c5e687dc0fdf2ea4b81a4e3be427d6cfda85889ff09fe2091b229fc5a2fe0" },
+      target: { id: "data-analysis", version: "2026.09.27.2", packageDigest: "ecb3aa0e89e113336d2fa7e693834c14973e6d8b9d64df27d29a115f93ef704d" },
     })
+    expect(receipt.registration).toEqual(JSON.parse(await readFile(registration, "utf8")))
+    for (const name of ["request.md", "metrics.json"]) {
+      expect(await readFile(path.join(root, "execution", name), "utf8"))
+        .toEqual(await readFile(path.join(path.dirname(registration), "input", name), "utf8"))
+    }
     const initial = JSON.parse(await readFile(path.join(root, "initial-tree.json"), "utf8"))
     expect(initial.files.map((file: { path: string }) => file.path)).toEqual([".gitattributes", ".gitignore", "metrics.json", "request.md"])
     const usage = JSON.parse(await readFile(path.join(root, "usage.json"), "utf8"))
@@ -66,17 +70,17 @@ test("diagnostic preparation preserves its frozen registration across a newer in
     const originalResult = await readFile(path.join(root, "result.json"), "utf8")
     const originalClaim = await readFile(path.join(root, "claim.json"), "utf8")
     const resumed = await invoke(["--resume-initialization", "."])
-    expect(resumed.exit).toBe(1)
+    expect(resumed.exit).toBe(0)
     const continuation = JSON.parse(await readFile(path.join(root, "continuation.json"), "utf8"))
     const childResult = JSON.parse(await readFile(path.join(root, continuation.receiptDirectory, "result.json"), "utf8"))
-    expect(childResult).toMatchObject({ outcome: "failed", error: receipt.error, parentReceiptDirectory: ".", initialTree: receipt.initialTree,
+    expect(childResult).toMatchObject({ outcome: "prepared", registration: receipt.registration, parentReceiptDirectory: ".", initialTree: receipt.initialTree,
       target: { packageDigest: receipt.target.packageDigest }, cleanup: receipt.cleanup })
     expect(continuation.counts).toEqual({ session: 0, engine_task: 0, provider_usage_event: 0, provider_activity_request: 0 })
     expect(await readFile(path.join(root, "result.json"), "utf8")).toEqual(originalResult)
     expect(await readFile(path.join(root, "claim.json"), "utf8")).toEqual(originalClaim)
     const retry = await invoke(["--resume-initialization", "."])
     expect({ exit: retry.exit, reason: /already_continued/.exec(retry.stderr)?.[0] }).toEqual({ exit: 1, reason: "already_continued" })
-    const request = { root, parent: continuation.receiptDirectory, mode: "prepare" as const, model: receipt.model }
+    const request = { root, parent: continuation.receiptDirectory, mode: "prepare" as const, model: receipt.model, registration: receipt.registration }
     const reason = async (run: () => Promise<unknown>) => {
       try { await run(); return "accepted" } catch (error) {
         if (!(error instanceof DiagnosticInitializationError)) throw error
@@ -84,6 +88,8 @@ test("diagnostic preparation preserves its frozen registration across a newer in
       }
     }
     expect(await reason(() => claimDiagnosticInitialization({ ...request, parent: "../outside" }))).toEqual("invalid_parent")
+    expect(await reason(() => claimDiagnosticInitialization({ ...request, registration: { ...receipt.registration, id: "different-case" } })))
+      .toEqual("registration_mismatch")
     await writeFile(path.join(root, "launch.json"), JSON.stringify({ phase: "local-test-started-boundary" }), { flag: "wx" })
     expect(await reason(() => claimDiagnosticInitialization(request))).toEqual("business_boundary_reached")
     await rm(path.join(root, "launch.json"))
@@ -106,6 +112,13 @@ test("diagnostic preparation preserves its frozen registration across a newer in
     const accepted = contenders.find((entry) => entry.status === "fulfilled")!
     if (accepted.status !== "fulfilled") throw new Error("Expected one initialization claimant")
     expect(successor.receiptDirectory).toEqual(accepted.value.receiptDirectory)
-    console.log("G59_PREPARED " + JSON.stringify({ sourceCommit: receipt.sourceCommit, initialTree: receipt.initialTree, cleanup: receipt.cleanup }))
+    const oldRoot = path.join(parent, "historical-registration")
+    const oldRegistration = path.resolve(import.meta.dir, "../../../specs/artifacts/2026-09-27-evolution-readiness/registration.json")
+    const old = await invoke(["--registration", oldRegistration, "--run-root", oldRoot])
+    expect(old.exit).toBe(1)
+    const oldReceipt = JSON.parse(await readFile(path.join(oldRoot, "result.json"), "utf8"))
+    expect(oldReceipt).toMatchObject({ outcome: "failed", error: expect.stringContaining("Installed target differs from the registered package"),
+      target: { id: receipt.target.id, version: receipt.target.version, packageDigest: receipt.target.packageDigest }, cleanup: receipt.cleanup })
+    console.log("REGISTERED_TEAM_PREPARED " + JSON.stringify({ sourceCommit: receipt.sourceCommit, initialTree: receipt.initialTree, cleanup: receipt.cleanup }))
   } finally { await rm(parent, { recursive: true, force: true }) }
 }, 90_000)

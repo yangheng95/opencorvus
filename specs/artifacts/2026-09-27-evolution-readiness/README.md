@@ -71,6 +71,8 @@ Admission requires a settled failed initialization and successful cleanup, match
 
 ## Diagnostic-01 outcome (2026-09-27)
 
+The current shared transport now requires an explicit `--registration`; [registration.json](registration.json) preserves this historical input/root/package selection. Its business root is closed and must not be restarted. New observations require their own independently registered selection; changing an initialization's registration is an explicit error. The earlier commands above describe the historical execution, not permission to repeat it.
+
 The original catalog-copy initialization failed before any Provider request. After its local repair and the registered initialization recovery, the sole streaming preflight verified `gpt-5.6-luna`; Mission `4e613cd6ee245d3f` created Task `tsk_g00VWOExkC00zV1j3Bzr`. The Task completed and the controller exited 0 at 12:41:44 Shanghai, with owned runtime disposal and copied credentials removed. The current receipts are under `diagnostic-01/initializations/f81ffbbf-2097-4d0c-88b9-dde2837e1eec`; the root's earlier failure receipt remains unchanged.
 
 Independent review through the production Artifact reader verified the immutable 4,581-byte report and the original 7,998-byte audit, using a read-only backup of the original database for reader metadata and the original immutable files. Every supplied count, weighted rate, segment change and July-reference decomposition in the report agrees with the independent arithmetic above. It states the reference weights, small August standard sample and non-causal limits. This supports the numerical result of one unchanged baseline delivery, not a demonstrated evolution improvement.

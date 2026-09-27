@@ -1738,3 +1738,17 @@ Recall：从8abcb06f已push/clean继续，只读当前data-analysis团队及原G
 - 源与嵌入版本2026.09.27.2，contentDigest `4d09ee442a8e915cebf66de9dad62d854e77816b27a9ca8134081406240bcaed`。原生成器输出到临时文件、进程退出后应用确切字节；仅data-analysis payload块与revision行变化，其余包字节及原base漂移保留。没有推广原Task或回填历史包绑定。
 - 原data-analysis-package检查改为实际嵌入安装，核对安装身份与源包一致、实际scheduler和七worker的promptOverlay逐字来自该包；原真实DB/Host六前驱发布链继续通过。`team-feedback-package-tests.log`为4项48断言、0失败、文件exit0。它证明真实配置运输和接口相容，不证明模型理解或第二轮业务合并。`team-feedback-types.log`根类型8/8（7缓存），`team-feedback-docs.log`文档342操作/25组均exit0，diff检查通过。没有Provider请求或新业务样本。
 - 下一验收只针对完整反馈链：在一个独立完整登记的新团队任务中，观察原义务、自然产生的实质错误/反证、针对当前交付的独立判断、反馈回到原执行者、实际修正与复核。若自然无错误，记为未触发；不制造失败、不另开Chat代替、不继续同义抽样。当前仍没有可靠业务纠错或进化收益证据；本次指令澄清不能当作历史漏判唯一原因或候选收益证明。
+
+## 完整团队反馈观察：独立登记与入口准备（实施前）
+
+- Recall：从1446e775已push/clean继续。目标只观察现有团队是否完成真实反证→原执行者修正→复核；使用已读benchmark skill的登记/证据方法，用户禁止重抽优先于其循环要求。旧diagnostic-01/review-01关闭。本轮无委托，不改生产调度/包指令，不把一次观察当可靠率或进化收益。
+- 新业务输入选纽约市官方311公开行政记录，固定NYPD、Noise - Residential、2025年7/8月创建的请求，按创建月/关闭月/borough/下载时status汇总。2026-09-27T07:41:30Z一次读取24组、3394原始bytes，只有公开计数和类别，没有地址/个人信息。保留全部查询结果，不筛选能诱发模型错误的组；与旧人工两层组成效应题不同。公开元数据只定义created/closed/status，关闭不是现实问题解决或人员绩效证明。原下载和查询保留，模型只收到原事实/任务，不收到operator答案。
+- 当前真实阻碍仅运输配置：evolution-diagnostic.ts把旧根、旧输入和旧包身份写死；当前新包会精确身份失败。它已具备单Mission/单Task、原settlement、流式预检、native用量、初始化恢复及cleanup。全仓调用只有该CLI、entry检查和初始化helper，不需要复制第二运行器。修改为必填显式registration JSON，移出这些常量，旧G58登记单独保留；新运行复用同一入口。登记包含唯一根、输入位置、包身份、模型和原无活动/poll配置，claim/result保留原登记，初始化恢复核对同一完整登记，禁止换case借原receipt恢复。
+- 影响面仅此离线CLI/初始化helper/entry检查与两份登记文件/文档索引。没有Host/HTTP/SDK/DDL/角色/运行时并发策略变更；生产生命周期横审不因纯运输参数搬迁重复展开。原相同Session continuation/目标重定向/二次交付按前节已有接口使用，业务正确性由自然团队与独立结果审查判断，不写自动业务gate。既有prepare检查更新为真实新登记安装成功，并保留明确旧版本错误与原零业务恢复合同。
+- 运行及业务判定详见新artifact README。先无凭据prepare真实启动/安装/输入树/cleanup和聚焦检查、专项类型/docs，范围commit/pull merge/outgoing/push；再冻结实际source commit、包、输入、目录后唯一launch。无完整冻结收据不运行Provider。若自然没有实质错误，记未触发；若有错误，分别记录发现/反馈/实际修正/复核，不补样本或operator干预。17:45交回优先，运行中则冻结依赖交给原主管监督同一运行。
+
+### 登记运输的本地验收
+
+- 同一CLI现必填registration；原G58根/输入/包只移入其历史登记，业务根仍不可恢复。新登记完整保存在claim/result，初始化helper在创建continuation前逐值核对claim/result/调用登记，不允许换case。原settlement、真实活动期限、审计/用量和cleanup未变，未新增业务判断。新输入原查询24组全部逐值保留，operator算术仅在独立reference.py，不复制进Task。
+- `team-feedback-entry-verified.log`真实entry/staging 2项29断言exit0；`team-feedback-entry-types.log`专项类型exit0，`team-feedback-registration-docs.log`342操作/25组通过。初轮entry最后错误只是把两个独立安装目录的完整target对象相比；改为原包id/version/packageDigest后原检查通过，未放宽生产校验。身份读取辅助脚本首次误用Bun --tsconfig命令失败，--tsconfig-override实际输出正确身份/exit0但有Bun内部directory warning；真正prepare无该参数，完整安装成功且无该warning，不把辅助读取当实际运行验收。
+- 独立`.tmp/team-feedback-20260927/prepare-01`以真实source Host安装2026.09.27.2/packageDigest ecb3aa0e89e113336d2fa7e693834c14973e6d8b9d64df27d29a115f93ef704d，完整初态2e4cade92def04ceac7df7071e34fd56bf5f28647764ae204d23a9f3f2d651f4，仅四文件；零Session/Task/Provider活动/用量，exit0且cleanup完成。源OAuth只读取类型/到期元信息，当前尚有效且成对models存在；这不替代实际流式预检。此时仍未启动模型。
