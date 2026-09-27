@@ -418,6 +418,10 @@ Run的terminal_event_id由原collector.lifecycle.terminalEventID盖章，非终�
 多份观察缺少原生发生身份为required trial_occurrence，不从时间/摘要回填。单份历史原件仍可读。
 
 Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 metrics store：
+Evolution Comparison的`calculation_inputs.native_measurements`记录当前评分Task已验证的原生结果ID全集，以及相关但尚未被本次Evaluation覆盖的原结果/attempt/Run身份。`metrics.recordedSnapshot`共用原recorded权威验证每个结果，并核对异步资源读取前后原生ID集合不变。相关性来自实际Trial、collector完整字节身份和冻结scorer revision；原持久请求只补入exact Campaign/Run，不将Campaign当排他归属或同Tool/iteration当批次。未发布结果给required unpublished_measurement，原complete receipt可继续发布，部分发生不伪造Evaluation或拼批次。
+
+安装与history共用原生ID集合差异。原receipt immediate事务同步查既有metric表，不异步读manifest、不建第二ledger；rename后新增行使提交回滚，已commit receipt仍先重放。Engine catalog上界与native写入不是同一序列：历史原推荐/输入保持，native差异明确为current_task_live，当前promotion intent不可用；不声称旧catalog cursor冻结了native账本。导入Comparison仅核对目标Task，源Task未运输事实保持未知；历史未记录native快照且当前有原生行也需重新比较，当前空集由原表直接证明。
+
 `engine_metric_spec`、`engine_metric_result` 和 `engine_iteration` 的唯一直接表写入文件
 是 `metrics/store.ts`。任务、agent、engine 或 UI 层不得直接写这些 metrics 表。
 

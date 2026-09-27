@@ -1,4 +1,5 @@
 import z from "zod"
+import { readMetricResultIDs } from "@/metrics/store"
 import {
   canonicalEvolutionJSON,
   EngineArtifactEnvelopeSchema,
@@ -82,6 +83,26 @@ export function missingComparisonMeasurements(input: {
     .toSorted((left, right) => canonicalEvolutionJSON(left).localeCompare(canonicalEvolutionJSON(right)))
 }
 
+/** Engine catalog bounds do not freeze the native ledger. This is explicitly
+ * a live check of the authorized current Task; imports never read source DBs. */
+export function comparisonNativeSnapshotDifference(taskID: string, comparison: Envelope) {
+  const payload = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(comparison.payload)
+  const recorded = payload.calculation_inputs?.native_measurements
+  const expected = recorded?.task_id === taskID ? [...recorded.result_ids].sort() : []
+  const current = readMetricResultIDs(taskID)
+  return JSON.stringify(expected) === JSON.stringify(current) ? undefined : {
+    task_id: taskID, scope: "current_task_live" as const,
+    recorded_task_id: recorded?.task_id ?? null,
+    comparison_result_ids: expected, current_result_ids: current,
+  }
+}
+
+export const EvolutionComparisonNativeMeasurementChangedError = NamedError.create(
+  "EvolutionComparisonNativeMeasurementChangedError",
+  z.object({ taskID: z.string(), comparisonLocator: EngineArtifactLocatorSchema,
+    comparisonResultIDs: z.array(z.string()), currentResultIDs: z.array(z.string()) }),
+)
+
 export const EvolutionComparisonMeasurementChangedError = NamedError.create(
   "EvolutionComparisonMeasurementChangedError",
   z.object({
@@ -149,6 +170,9 @@ export function requireCurrentEvolutionEvidence(input: { taskID: string; compari
     const missingMeasurementLocators = missingComparisonMeasurements({ comparison, measurements, catalog })
     if (missingMeasurementLocators.length)
       throw new EvolutionComparisonMeasurementChangedError({ ...input, missingMeasurementLocators })
+    const nativeDifference = comparisonNativeSnapshotDifference(input.taskID, comparison)
+    if (nativeDifference) throw new EvolutionComparisonNativeMeasurementChangedError({ ...input,
+      comparisonResultIDs: nativeDifference.comparison_result_ids, currentResultIDs: nativeDifference.current_result_ids })
     const missingReviewLocators = missingComparisonReviews({ comparison, measurements, catalog })
     if (missingReviewLocators.length)
       throw new EvolutionComparisonReviewChangedError({ ...input, missingReviewLocators })

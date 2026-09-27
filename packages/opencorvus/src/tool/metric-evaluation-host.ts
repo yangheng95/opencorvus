@@ -13,8 +13,8 @@ import { readTaskArtifact } from "@/artifact-catalog"
 import { readTaskAssistantProducerToolRequest } from "@/engine/producer-turn"
 import { executeMetrics, type MetricSubject, type MetricSubjectWorkspace } from "@/metrics/executor"
 import { canonicalMetricJSON } from "@/metrics/canonical-json"
-import { readSpecsForTask, registerBaselineSpec, readRecordedMetricResult } from "@/metrics/store"
-import { MetricExecutionEvidence } from "@/metrics/types"
+import { readSpecsForTask, registerBaselineSpec, readRecordedMetricResult, readMetricResultsForTask, assertMetricResultIDs } from "@/metrics/store"
+import { MetricExecutionEvidence, type MetricResult } from "@/metrics/types"
 import {
   TaskArtifactGitCommitUnavailableError,
   readTaskArtifactSnapshotManifest,
@@ -146,39 +146,49 @@ export function createMetricEvaluationHost(
   scope: TaskToolExecutionScope,
   taskArtifacts: MetricTaskArtifacts,
 ): MetricEvaluationHost {
+  const projectRecorded = async (row: MetricResult) => {
+    const source = await readTaskArtifactSnapshotManifest({
+      projectID: scope.projectID, projectDirectory: scope.projectDirectory, taskID: scope.taskID,
+      snapshot: row.evidence_ref.snapshot,
+    })
+    const attempt = MetricExecutionEvidence.parse(JSON.parse(
+      new TextDecoder("utf-8", { fatal: true }).decode(await taskArtifacts.read(row.evidence_ref)),
+    ))
+    const spec = readSpecsForTask(scope.taskID).find((item) => item.id === row.metric_spec_id)
+    if (!spec || attempt.task_id !== row.task_id || attempt.metric_spec_id !== row.metric_spec_id ||
+        attempt.iteration !== row.iteration || attempt.evaluator_kind !== spec.evaluator_kind ||
+        row.evidence_fresh !== (attempt.status === "measured") ||
+        row.raw_value !== (attempt.status === "measured" ? attempt.raw_value : null)) {
+      throw new Error("Recorded metric result and its immutable attempt have inconsistent identities or values")
+    }
+    return MetricRecordedObservationSchema.parse({
+      metric_result_id: row.id,
+      task_id: row.task_id, producer: source.manifest.producer, iteration: row.iteration, scorer_id: spec.name,
+      tool_request: source.manifest.producer.owner_kind === "core" ? null : readTaskAssistantProducerToolRequest({
+        taskID: row.task_id,
+        sessionID: source.manifest.producer.session_id,
+        messageID: source.manifest.producer.message_id,
+        toolCallID: source.manifest.producer.tool_call_id,
+      }),
+      scorer_revision: spec.evaluator_config.scorer_revision,
+      subject: attempt.subject.resource, trial_task_id: attempt.subject.trial_task_id,
+      evidence_ref: row.evidence_ref,
+      outcome: attempt.status === "measured"
+        ? { status: "measured", value: row.raw_value }
+        : { status: "unavailable", reason_code: attempt.reason_code },
+    })
+  }
   return Object.freeze({
-    async recorded(input) {
-      const row = readRecordedMetricResult(scope.taskID, input.evidence_ref)
-      const source = await readTaskArtifactSnapshotManifest({
-        projectID: scope.projectID, projectDirectory: scope.projectDirectory, taskID: scope.taskID,
-        snapshot: row.evidence_ref.snapshot,
-      })
-      const attempt = MetricExecutionEvidence.parse(JSON.parse(
-        new TextDecoder("utf-8", { fatal: true }).decode(await taskArtifacts.read(row.evidence_ref)),
-      ))
-      const spec = readSpecsForTask(scope.taskID).find((item) => item.id === row.metric_spec_id)
-      if (!spec || attempt.task_id !== row.task_id || attempt.metric_spec_id !== row.metric_spec_id ||
-          attempt.iteration !== row.iteration || attempt.evaluator_kind !== spec.evaluator_kind ||
-          row.evidence_fresh !== (attempt.status === "measured") ||
-          row.raw_value !== (attempt.status === "measured" ? attempt.raw_value : null)) {
-        throw new Error("Recorded metric result and its immutable attempt have inconsistent identities or values")
-      }
-      return MetricRecordedObservationSchema.parse({
-        metric_result_id: row.id,
-        task_id: row.task_id, producer: source.manifest.producer, iteration: row.iteration, scorer_id: spec.name,
-        tool_request: source.manifest.producer.owner_kind === "core" ? null : readTaskAssistantProducerToolRequest({
-          taskID: row.task_id,
-          sessionID: source.manifest.producer.session_id,
-          messageID: source.manifest.producer.message_id,
-          toolCallID: source.manifest.producer.tool_call_id,
-        }),
-        scorer_revision: spec.evaluator_config.scorer_revision,
-        subject: attempt.subject.resource, trial_task_id: attempt.subject.trial_task_id,
-        evidence_ref: row.evidence_ref,
-        outcome: attempt.status === "measured"
-          ? { status: "measured", value: row.raw_value }
-          : { status: "unavailable", reason_code: attempt.reason_code },
-      })
+    recorded: async (input) => projectRecorded(readRecordedMetricResult(scope.taskID, input.evidence_ref)),
+    async recordedSnapshot() {
+      const rows = readMetricResultsForTask(scope.taskID)
+      const observations = await Promise.all(rows.map(projectRecorded))
+      assertMetricResultIDs(scope.taskID, rows.map((row) => row.id))
+      return { task_id: scope.taskID, observations }
+    },
+    assertRecordedSnapshot(input) {
+      if (input.task_id !== scope.taskID) throw new Error("Native metric snapshot must belong to the current Task")
+      assertMetricResultIDs(scope.taskID, input.result_ids)
     },
     async evaluate(rawInput) {
       const input = MetricEvaluationRequestSchema.parse(rawInput)

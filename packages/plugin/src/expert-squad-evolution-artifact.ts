@@ -4,10 +4,26 @@ import { ArtifactReadLocatorSchema, EngineArtifactLocatorSchema } from "./artifa
 import { EvolutionExactRevisionSchema, EvolutionPromotionReceiptSchema } from "./expert-squad-evolution.js"
 import { MetricScorerSpecSchema } from "./metric-evaluation.js"
 import {
-  TaskArtifactMediaTypeSchema,
+  TaskArtifactMediaTypeSchema, TaskArtifactRefSchema,
   TaskArtifactPortableSegmentSchema,
   TaskArtifactRelativePathSchema,
 } from "./task-artifact.js"
+
+export const EvolutionNativeMeasurementsSchema = z.object({
+  task_id: z.string().min(1),
+  result_ids: z.array(z.string().min(1)),
+  unpublished: z.array(z.object({
+    metric_result_id: z.string().min(1),
+    evidence_ref: TaskArtifactRefSchema,
+    run_locators: z.array(EngineArtifactLocatorSchema).min(1),
+  }).strict()),
+}).strict().superRefine((value, ctx) => {
+  if (new Set(value.result_ids).size !== value.result_ids.length ||
+      new Set(value.unpublished.map((item) => item.metric_result_id)).size !== value.unpublished.length ||
+      value.unpublished.some((item) => !value.result_ids.includes(item.metric_result_id)))
+    ctx.addIssue({ code: "custom", message: "Native measurement identities must be unique members of the recorded snapshot" })
+})
+export type EvolutionNativeMeasurements = z.infer<typeof EvolutionNativeMeasurementsSchema>
 
 // Absent on historical records means the consumed set was not recorded.
 // It must never be inferred from the wider Turn provenance graph.
@@ -17,6 +33,7 @@ export const EvolutionComparisonInputsSchema = z.object({
   runs: z.array(EngineArtifactLocatorSchema),
   evaluations: z.array(EngineArtifactLocatorSchema),
   reviews: z.array(EngineArtifactLocatorSchema),
+  native_measurements: EvolutionNativeMeasurementsSchema.optional(),
 }).strict()
 
 const sha256 = z.string().regex(/^[a-f0-9]{64}$/)

@@ -1,7 +1,14 @@
 import { afterAll, describe, expect, spyOn, test } from "bun:test"
 import { writeExpertSquadPackage, type ExpertSquadPackageDefinition } from "@opencorvus-ai/sdk/expert-squad-authoring"
 import { EngineArtifactEnvelopeSchema, EvolutionArtifactSchemas, createEvolutionArtifactReferences, EvolutionArtifactReferenceError, EvolutionTrialSlotConflictError } from "@opencorvus-ai/plugin"
-import { rm } from "node:fs/promises"
+import { rm, writeFile } from "node:fs/promises"
+import { registerBaselineSpec } from "../src/metrics/store"
+import { createMetricEvaluationHost } from "../src/tool/metric-evaluation-host"
+import { deriveEvolutionNativeMeasurements, type MetricRecordedSnapshot } from "@opencorvus-ai/plugin"
+import { executeMetrics } from "../src/metrics/executor"
+import { createTaskArtifactStoreExecution } from "../src/task-artifact/store"
+import { ProjectRuntimePaths } from "../src/project/runtime-paths"
+import type { TaskToolExecutionScope } from "../src/tool/task-tool-execution-scope"
 import path from "node:path"
 import { Config } from "../src/config/config"
 import { EffectiveConfig } from "../src/config/effective"
@@ -19,7 +26,7 @@ import {
 import { prepareEvolutionPackageMutation, evolutionMutationConfirmationText } from "../src/expert-squad/evolution-mutation-intent"
 import {
   requireCurrentEvolutionEvidence,
-  EvolutionComparisonMeasurementChangedError,
+  EvolutionComparisonMeasurementChangedError, EvolutionComparisonNativeMeasurementChangedError,
   EvolutionComparisonReviewChangedError,
 } from "../src/expert-squad/evolution-review-freshness"
 import { ExpertSquadPackageManager } from "../src/expert-squad/manager"
@@ -960,6 +967,7 @@ describe("authorized expert squad evolution mutation", () => {
               issues: frozenComparison.graph_issues,
             }).toEqual({ recommendation: "promote", intent, issues: [] })
             const reviewSet = [...baselineReviews, ...candidateReviews, revisionReview, lateReview]
+            let recordedNative: MetricRecordedSnapshot = { task_id: operationTask.taskID, observations: [] }
             const publishReconsideration = async () => {
               // Each explicit correction retains its own exact Evaluation scope,
               // even when the evaluations describe the same measured fact.
@@ -973,6 +981,7 @@ describe("authorized expert squad evolution mutation", () => {
                   sources: [evaluation.locator, ...payload.revision.supersedes] }) })
               }
               const value = deriveComparisonRecommendation({
+                nativeMeasurements: deriveEvolutionNativeMeasurements({ snapshot: recordedNative, campaign: campaignPayload, runs: allRuns, evaluations: allEvaluations }),
                 campaign: campaignPayload,
                 campaignLocator: campaign,
                 candidate: candidatePayload,
@@ -1083,7 +1092,91 @@ describe("authorized expert squad evolution mutation", () => {
               expect((await ExpertSquadRegistry.loadPackage(installed.after.targetRoot)).packageDigest).toBe(baselineRevision.package_digest)
               finalRequest = await publishReconsideration()
             }
+            let appendNative: (() => Promise<string>) | undefined
+            if (scenario === "alias-review") {
+              // Real executor/store append in the install-to-receipt window.
+              // This constant scorer and its unrelated subject are explicit
+              // test-driver data, not an autonomous Campaign or shell outcome.
+              registerBaselineSpec({ task_id: operationTask.taskID, scope: "global", goal_id: null,
+                name: "native-membership-checker", description: "Native row commit race", unit: "count",
+                direction: "higher_better", target: 1, floor: 0, weight: 1, observation_class: "diagnostic",
+                evaluator_kind: "query", evaluator_config: { scorer_revision: "9".repeat(64), query: "constant_value", value: 0 } })
+              appendNative = async () => {
+                const messageID = Identifier.ascending("message")
+                const toolPartID = Identifier.ascending("part")
+                const nativeInput = { task_id: operationTask.taskID, iteration: 0, delivery_slice_revision_id: null,
+                  selected_evidence_locators: [], visual_feedback_verification_artifact_locators: [] }
+                await Session.updateMessage({ id: messageID, sessionID: operationTask.session.id, role: "assistant",
+                  author: "evolution-evaluator", parentID: authorization.verified.message_id, time: { created: Date.now() },
+                  modelID: "test", providerID: "test", agent: "evolution-evaluator", path: { cwd: project.path, root: project.path },
+                  cost: 0, tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } }, finish: "stop" })
+                await Session.updatePart({ id: Identifier.ascending("part"), sessionID: operationTask.session.id, messageID, type: "step-start" })
+                await Session.updatePart({ id: toolPartID, sessionID: operationTask.session.id, messageID, type: "tool",
+                  tool: "test-native-metric-query", callID: toolPartID,
+                  state: { status: "running", input: nativeInput, time: { start: Date.now() } } })
+                const nativeScope = { projectID: Instance.project.id,
+                  projectDirectory: project.path, taskID: operationTask.taskID,
+                  taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, operationTask.taskID),
+                  sessionID: operationTask.session.id, messageID, toolCallID: toolPartID,
+                  toolPartID, executionSurface: {}, owner: { kind: "projected-worker",
+                    expertSquadID: "evolution-lab", agentID: "evolution-evaluator", projectionHash: "b".repeat(64),
+                    workerTurnDescriptorID: "native-membership-test", workerTurnDescriptorHash: "c".repeat(64),
+                    packageRevision: { scope: "built_in", projectID: null, namespace: "builtin", id: "evolution-lab",
+                      version: "2026.09.27.15", packageDigest: "a".repeat(64) } },
+                } as unknown as TaskToolExecutionScope
+                const execution = createTaskArtifactStoreExecution(nativeScope)
+                try {
+                  const stage = await execution.stage({ trees: ["input"] })
+                  await writeFile(path.join(stage.treeDirectories.input!, "subject.txt"), "native membership test subject")
+                  const source = await execution.publish(stage, { snapshot_kind: "catalog",
+                    files: [{ tree: "input", path: "subject.txt", media_type: "text/plain" }] })
+                  const outcome = await executeMetrics(nativeInput, {
+                    taskArtifacts: execution,
+                    subject: { identity: { resource: source.artifacts[0]!, trial_task_id: operationTask.taskID,
+                      canonical_sha256: source.artifacts[0]!.sha256,
+                      result: { kind: "live_observation", tree_sha256: source.artifacts[0]!.sha256, time_observed: 1 } },
+                      workspace: async () => ({ status: "unavailable", message: "Constant query has no workspace dependency" }) },
+                    evidenceReader: { read: async () => { throw new Error("Constant query has no selected evidence") } },
+                  })
+                  expect(outcome.results.map((row) => row.raw_value)).toEqual([0])
+                  recordedNative = await createMetricEvaluationHost(nativeScope, execution).recordedSnapshot()
+                  expect(recordedNative.observations.find((item) => item.metric_result_id === outcome.results[0]!.id))
+                    .toMatchObject({ task_id: operationTask.taskID, outcome: { status: "measured", value: 0 },
+                      tool_request: { tool_part_id: toolPartID, tool_name: "test-native-metric-query", input: nativeInput } })
+                  return outcome.results[0]!.id
+                } finally { await execution.close() }
+              }
+              const frozenHistory = await readEvolutionHistory({ namespace: target.namespace, id: target.id, installationScope: "project" })
+              let addedID = ""
+              const restoreNativeHook = ExpertSquadPackageManager.TestHooks.afterTargetInstallBeforeReceiptOnce(async () => { addedID = await appendNative!() })
+              let nativeChange: unknown
+              try { await executeEvolutionPackageMutation(finalRequest) } catch (error) { nativeChange = error }
+              finally { restoreNativeHook() }
+              expect(nativeChange).toBeInstanceOf(EvolutionComparisonNativeMeasurementChangedError)
+              expect((nativeChange as InstanceType<typeof EvolutionComparisonNativeMeasurementChangedError>).data).toEqual({
+                taskID: operationTask.taskID, comparisonLocator: finalRequest.comparisonResultLocator,
+                comparisonResultIDs: [], currentResultIDs: [addedID] })
+              expect((await ExpertSquadRegistry.loadPackage(installed.after.targetRoot)).packageDigest).toBe(baselineRevision.package_digest)
+              const nativeIntent = { operation: "promotion" as const, campaignSpecLocator: campaign, candidateRevisionLocator: candidateArtifact,
+                comparisonResultLocator: finalRequest.comparisonResultLocator, expectedCurrentPackageDigest: baselineRevision.package_digest }
+              await expect(authorizeEvolutionPackageMutation({ taskID: operationTask.taskID, sessionID: operationTask.session.id,
+                intent: nativeIntent, confirmationText: evolutionMutationConfirmationText({ projectID: Instance.project.id, target,
+                  operation: "promotion", beforeDigest: baselineRevision.package_digest, afterDigest: candidateRevision.package_digest,
+                  evidenceSHA256s: [campaign, candidateArtifact, finalRequest.comparisonResultLocator].map((item) => item.expected_sha256) }) }))
+                .rejects.toBeInstanceOf(EvolutionComparisonNativeMeasurementChangedError)
+              const detail = await readEvolutionCampaignDetail({ namespace: target.namespace, id: target.id, installationScope: "project",
+                campaignTaskID: operationTask.taskID, campaignLocator: campaign, candidateLocator: candidateArtifact,
+                comparisonLocator: finalRequest.comparisonResultLocator, catalogRevisionUpper: frozenHistory.catalog_revision_upper })
+              const stale = detail.record.candidates.flatMap((item) => item.comparisons)
+                .find((item) => item.artifact.locator.artifact_id === finalRequest.comparisonResultLocator.artifact_id)!
+              expect({ recommendation: stale.recommendation, intent: stale.promotion_intent,
+                native: stale.graph_issues.filter((item) => item.code === "NATIVE_MEASUREMENT_SNAPSHOT_CHANGED") })
+                .toMatchObject({ recommendation: "promote", intent: null,
+                  native: [{ scope: "current_task_live", comparison_result_ids: [], current_result_ids: [addedID] }] })
+              finalRequest = await publishReconsideration()
+            }
             const committed = await executeEvolutionPackageMutation(finalRequest)
+            if (appendNative) await appendNative()
             expect(committed.receipt.after_digest).toBe(candidateRevision.package_digest)
             recordReview("candidate", candidateEvaluation, 0)
             const replay = await executeEvolutionPackageMutation(finalRequest)

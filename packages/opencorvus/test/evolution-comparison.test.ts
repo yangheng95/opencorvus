@@ -1,4 +1,4 @@
-import { requireEvolutionTrialSlotIdentity, EvolutionTrialSlotConflictError, createEvolutionMeasurementKey } from "@opencorvus-ai/plugin"
+import { deriveEvolutionNativeMeasurements, evolutionNativeRequestedRuns, artifactReadLocatorKey, type MetricRecordedObservation, requireEvolutionTrialSlotIdentity, EvolutionTrialSlotConflictError, createEvolutionMeasurementKey } from "@opencorvus-ai/plugin"
 /**
  * The promotion rule decides on the interval it computes, not on the sign of a
  * point estimate.
@@ -1034,4 +1034,44 @@ test("terminal observations retain native occurrence identity even at the same c
   const unknown = deriveComparisonRecommendation({ ...input, runs: [...input.runs, unrecorded] })
   expect({ recommendation: unknown.recommendation, required: unknown.required_unavailable_dimensions })
     .toEqual({ recommendation: "inconclusive", required: ["trial_occurrence:case-1:baseline:0"] })
+})
+
+
+test("native measurement coverage uses exact subject/scorer facts across Campaigns and preserves independent IDs", () => {
+  const input = comparisonInputs([{ id: "quality", weight: 1, baseline: [0.2, 0.2], candidate: [0.8, 0.8] }])
+  const run = input.runs[0]!
+  const nativeResource = { ...resource, snapshot: { schema_version: 2 as const, project_id: "project",
+    task_id: "owner", snapshot_id: "12345678-1234-4234-8234-123456789abc", manifest_sha256: "d".repeat(64) } }
+  const row: MetricRecordedObservation = { metric_result_id: "native-a", task_id: "owner", iteration: 0,
+    producer: { owner_kind: "core", component_id: "test-driver", operation_id: "native-a" },
+    tool_request: { tool_part_id: "request-a", tool_name: "arbitrary-name-is-not-authority", input: {
+      campaign_spec_locator: { ...input.campaignLocator, artifact_id: "other-campaign" },
+      candidate_revision_locator: null, run_evidence_locator: run.locator } },
+    scorer_id: "quality", scorer_revision: resourceDigest, subject: nativeResource, trial_task_id: run.value.task_id,
+    evidence_ref: { ...nativeResource, path: "attempt-a.json" }, outcome: { status: "measured", value: 0 },
+  }
+  const native = { task_id: "owner", observations: [row, { ...row, metric_result_id: "native-b",
+    evidence_ref: { ...nativeResource, path: "attempt-b.json" } }] }
+  const pending = deriveEvolutionNativeMeasurements({ ...input, snapshot: native })
+  expect(pending.unpublished.map((item) => item.metric_result_id)).toEqual(["native-a", "native-b"])
+  expect(deriveComparisonRecommendation({ ...input, nativeMeasurements: pending }).required_unavailable_dimensions)
+    .toEqual(["unpublished_measurement:owner:native-a", "unpublished_measurement:owner:native-b"])
+  expect(deriveComparisonRecommendation({ ...input, nativeMeasurements: pending }).recommendation).toBe("inconclusive")
+  const covered = { ...input.evaluations[0]!, value: { ...input.evaluations[0]!.value,
+    measurement_identity: { owner_task_id: "owner", scorer_results: [{ scorer_id: "quality", metric_result_id: "native-a" }] } } }
+  expect(deriveEvolutionNativeMeasurements({ ...input, snapshot: native, evaluations: [covered] }).unpublished
+    .map((item) => item.metric_result_id)).toEqual(["native-b"])
+  const unrelated = deriveEvolutionNativeMeasurements({ ...input, snapshot: { task_id: "owner", observations: [
+    { ...row, trial_task_id: "different-trial" }, { ...row, metric_result_id: "other-spec", scorer_revision: "f".repeat(64) },
+  ] } })
+  expect(unrelated).toEqual({ task_id: "owner", result_ids: ["native-a", "other-spec"], unpublished: [] })
+  const originalRequest = { ...row, tool_request: { ...row.tool_request!, input: {
+    campaign_spec_locator: input.campaignLocator, candidate_revision_locator: null, run_evidence_locator: run.locator } } }
+  expect(evolutionNativeRequestedRuns({ ...input, snapshot: { task_id: "owner", observations: [originalRequest] },
+    referenceKey: artifactReadLocatorKey })).toEqual([run])
+  expect(evolutionNativeRequestedRuns({ ...input, snapshot: native, referenceKey: artifactReadLocatorKey })).toEqual([])
+  expect(evolutionNativeRequestedRuns({ ...input, snapshot: { task_id: "owner", observations: [{ ...originalRequest,
+    tool_request: { ...originalRequest.tool_request, input: { ...originalRequest.tool_request.input,
+      candidate_revision_locator: { ...input.candidateLocator, artifact_id: "another-candidate" } } } }] },
+    referenceKey: artifactReadLocatorKey })).toEqual([run])
 })

@@ -2201,6 +2201,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           ;(scope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
           const reusedEvaluations: EngineArtifactLocator[] = []
           const repeatedTrialIDs: string[] = []
+          const reusedReceipts: Array<Record<string, unknown>> = []
           for (const runLocator of [runReceipt.locator, reusedTrialRun.locator]) {
             ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
             const measured = JSON.parse(await executeEvolutionMetricsTool.execute({
@@ -2209,6 +2210,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               visual_feedback_verification_artifact_locators: [],
             } as never, { host } as never))
             repeatedTrialIDs.push(measured.receipt.trial_task_id)
+            reusedReceipts.push(measured.receipt)
             const evaluation = JSON.parse(await executePublishEvolutionArtifact({
               artifact_type: "evolution-lab/evaluation-result", payload: {}, resource_set: measured.resource_set,
               source_artifact_locators: [],
@@ -2242,6 +2244,22 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             collision: [`trial_slot_collision:${trialTaskID}`],
             evaluations: new Set(reusedEvaluations.map((item) => item.artifact_id)),
           })
+          // Reuse the already executed baseline facts under the original
+          // compatible Campaign, transporting their receipts without rescoring.
+          const reusedCurrentEvaluations: EngineArtifactLocator[] = []
+          const reusedCurrentReviews: EngineArtifactLocator[] = []
+          for (const receipt of reusedReceipts) {
+            ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
+            const current = JSON.parse(await publishAlteredReceipt({ ...receipt,
+              campaign_spec_locator: campaignReceipt.locator, run_evidence_locator: runReceipt.locator, repetition: 0 }))
+            reusedCurrentEvaluations.push(current.locator)
+            ;(scope.owner as { agentID: string }).agentID = "evolution-safety-auditor"
+            const review = JSON.parse(await executePublishEvolutionArtifact({ artifact_type: "evolution-lab/integrity-review",
+              payload: { case_id: "case-1", arm: "baseline", repetition: 0, evaluation_result_locator: current.locator,
+                status: "reviewed", findings: [], accepted_limitations: [], unknowns: [] },
+              resource_set: null, source_artifact_locators: [current.locator] }, { host } as never))
+            reusedCurrentReviews.push(review.locator)
+          }
           const originalReviewLocator = EngineArtifactLocatorSchema.parse(integrityReviewReceipt.locator)
           sourceMeasurementImports = [candidateSource.locator, evaluationReceipt.locator, originalReviewLocator, metricEvidenceLocator]
           ;(scope.owner as { agentID: string }).agentID = "evolution-recommendation-owner"
@@ -2339,8 +2357,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               // The Owner selected one measurement; the separately executed second
               // measurement of the same slot is consumed as well.
               evaluations: new Set([evaluationReceipt.locator.artifact_id, evaluationAlias.locator.artifact_id,
-                intactSecond.locator.artifact_id]),
-              reviews: new Set([originalReviewLocator.artifact_id, initialSecondReview.locator.artifact_id]),
+                intactSecond.locator.artifact_id, ...reusedCurrentEvaluations.map((item) => item.artifact_id)]),
+              reviews: new Set([originalReviewLocator.artifact_id, initialSecondReview.locator.artifact_id, ...reusedCurrentReviews.map((item) => item.artifact_id)]),
             })
           expect(comparisonEnvelope.source_artifact_locators.some((item) => item.source === "task_artifact_resource")).toBe(true)
           const facts = Database.use((db) => db.select().from(EngineArtifactTable)
@@ -2660,6 +2678,23 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           expect({ complete: recoveredRead.chunk.complete, receipt: JSON.parse(recoveredRead.chunk.text!) })
             .toEqual({ complete: true, receipt: thirdMeasurement.receipt })
           ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
+          const nativeSnapshot = await host.metrics.recordedSnapshot()
+          expect(nativeSnapshot.observations.find((item) => item.metric_result_id === thirdRecorded.metric_result_id))
+            .toEqual(thirdRecorded)
+          expect(() => host.metrics.assertRecordedSnapshot({ task_id: taskID, result_ids: [] }))
+            .toThrow(`Native metric snapshot changed for Task ${taskID}; read a new snapshot`)
+          const unpublishedComparison = await publishComparison()
+          const unpublishedPayload = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(unpublishedComparison.payload)
+          const nativeInputs = unpublishedPayload.calculation_inputs!.native_measurements!
+          expect(structuredClone(nativeInputs)).toMatchObject({ task_id: taskID,
+            result_ids: nativeSnapshot.observations.map((item) => item.metric_result_id).sort(),
+            unpublished: expect.arrayContaining([{ metric_result_id: thirdRecorded.metric_result_id,
+              evidence_ref: thirdRef, run_locators: expect.arrayContaining([runReceipt.locator]) }]) })
+          expect(unpublishedPayload.required_unavailable_dimensions.filter((item) => item.startsWith("unpublished_measurement:")))
+            .toEqual(nativeInputs.unpublished.map((item) => `unpublished_measurement:${taskID}:${item.metric_result_id}`).sort())
+          expect(unpublishedPayload.recommendation).toBe("inconclusive")
+          expect(evolutionComparisonInputs(unpublishedComparison).native_measurements).toEqual(nativeInputs)
+          ;(scope.owner as { agentID: string }).agentID = "evolution-evaluator"
           const thirdEvaluation = JSON.parse(await executePublishEvolutionArtifact({
             artifact_type: "evolution-lab/evaluation-result", payload: {},
             resource_set: { snapshot: recoveredReceipt.locator.ref.snapshot, tree: recoveredReceipt.locator.ref.tree },
@@ -2672,6 +2707,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             source_artifact_locators: [thirdEvaluation.locator] }, { host } as never)
           const thirdComparison = await publishComparison()
           const thirdComparisonPayload = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(thirdComparison.payload)
+          expect(thirdComparisonPayload.calculation_inputs!.native_measurements!.unpublished).toEqual([])
           expect({ recommendation: thirdComparisonPayload.recommendation,
             conflict: thirdComparisonPayload.required_unavailable_dimensions.filter((item) => item.startsWith("scorer_conflict:")),
             inputs: evolutionComparisonInputs(thirdComparison).evaluations.some((item) => item.artifact_id === thirdEvaluation.locator.artifact_id),
@@ -3210,7 +3246,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     expect(embeddedSource).toBeDefined()
     const embeddedPackage = ExpertSquadRegistry.loadEmbeddedPackage(embeddedSource!)
 
-    expect(embeddedPackage.manifest.version).toBe("2026.09.27.15")
+    expect(embeddedPackage.manifest.version).toBe("2026.09.27.16")
     expect(embeddedPackage.packageDigest).toBe(sourcePackage.packageDigest)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.version).toBe(embeddedPackage.manifest.version)
     expect(generatedExpertSquadRevisions["evolution-lab"]?.contentDigest).toBe(

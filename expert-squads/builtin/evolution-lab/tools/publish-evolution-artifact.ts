@@ -1,5 +1,6 @@
 import {
-  ArtifactReadLocatorSchema,
+  ArtifactReadLocatorSchema, evolutionNativeRequestedRuns, deriveEvolutionNativeMeasurements,
+  type MetricRecordedSnapshot,
   ArtifactSchemaLimits,
   EngineArtifactEnvelopeSchema,
   createEvolutionArtifactReferences,
@@ -130,6 +131,7 @@ type ComparisonEvidence = {
 async function discoverComparisonEvidence(
   selected: readonly ComparisonEvidence[],
   pair: { campaign: EngineArtifactLocator; candidate: EngineArtifactLocator },
+  native: MetricRecordedSnapshot,
   context: ToolContext,
 ) {
   const catalog: ComparisonEvidence[] = []
@@ -169,7 +171,17 @@ async function discoverComparisonEvidence(
   // selected ones; later measurements and Reviews are rechecked by the mutation
   // commit.
   const references = createEvolutionArtifactReferences([...selected, ...catalog])
-  const members = evolutionComparisonMembers({ ...pair, catalog, references })
+  const campaign = EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(
+    selected.find((item) => references.key(item.locator) === references.key(pair.campaign))!.envelope.payload)
+  const requestedRuns = evolutionNativeRequestedRuns({ snapshot: native, campaign,
+    campaignLocator: pair.campaign, candidateLocator: pair.candidate, referenceKey: references.key,
+    runs: catalog.filter((item) => item.envelope.artifact_type === "evolution-lab/run-evidence-bundle")
+      .map((item) => ({ locator: item.locator,
+        value: EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse(item.envelope.payload) })),
+  })
+  const requestedKeys = new Set(requestedRuns.map((run) => references.key(run.locator)))
+  const members = [...evolutionComparisonMembers({ ...pair, catalog, references }),
+    ...catalog.filter((item) => requestedKeys.has(references.key(item.locator)))]
   const measurements = expandEvolutionMeasurementAliases([...selected, ...members], catalog, references.key)
   for (const item of measurements)
     await context.host.engineArtifacts.select({
@@ -865,9 +877,11 @@ export default tool({
         )
       requireEvolutionWorkerProducer(campaigns[0]!.envelope, "evolution-experiment-planner")
       requireEvolutionWorkerProducer(candidates[0]!.envelope, "evolution-candidate-author")
+      const native = await context.host.metrics.recordedSnapshot()
       const evidence = await discoverComparisonEvidence(
         envelopes,
         { campaign: campaigns[0]!.locator, candidate: candidates[0]!.locator },
+        native,
         context,
       )
       envelopes.splice(0, envelopes.length, ...campaigns, ...candidates, ...evidence)
@@ -911,7 +925,22 @@ export default tool({
           locator: item.locator,
           value: EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"].parse(item.envelope.payload),
         }))
+      const nativeMeasurements = deriveEvolutionNativeMeasurements({ snapshot: native, runs, evaluations,
+        campaign: EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(campaigns[0]!.envelope.payload) })
+      for (const observation of nativeMeasurements.unpublished) {
+        const locator = { source: "task_artifact_resource" as const, ref: observation.evidence_ref }
+        let offset = 0
+        for (;;) {
+          const read = await context.host.engineArtifacts.read({ locator, byte_offset: offset, max_bytes: 65_536, delivery: "inline" })
+          if (read.chunk.complete) break
+          if (read.chunk.next_offset === null) throw new Error("Native metric attempt read ended before completion")
+          offset = read.chunk.next_offset
+        }
+        await context.host.engineArtifacts.select({ locator, purpose: "Unpublished native measurement consumed by this comparison" })
+      }
+      context.host.metrics.assertRecordedSnapshot(nativeMeasurements)
       payload = deriveComparisonRecommendation({
+        nativeMeasurements,
         references: createEvolutionArtifactReferences(envelopes),
         campaign: EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(campaigns[0]!.envelope.payload),
         campaignLocator: campaigns[0]!.locator,

@@ -3,7 +3,7 @@ import {
   artifactReadLocatorKey,
   deriveEvolutionSlotObservations,
   evolutionTrialSlotConflicts,
-  type EvolutionAgreedFact,
+  type EvolutionAgreedFact, type EvolutionNativeMeasurements,
   type EvolutionArtifactReferences,
   type EvolutionSlotObservations,
 } from "@opencorvus-ai/plugin"
@@ -292,6 +292,7 @@ export function deriveComparisonRecommendation(input: {
   reviews: readonly Located<Review>[]
   runs: readonly Located<RunEvidence>[]
   references?: Pick<EvolutionArtifactReferences, "key">
+  nativeMeasurements?: EvolutionNativeMeasurements
 }): Comparison {
   const referenceKey = input.references?.key ?? artifactReadLocatorKey
   const { campaign, candidate } = input
@@ -333,6 +334,8 @@ export function deriveComparisonRecommendation(input: {
     evidence: { slots, reviews },
     referenceKey,
   })
+  for (const observation of input.nativeMeasurements?.unpublished ?? [])
+    requiredUnavailable.add(`unpublished_measurement:${input.nativeMeasurements!.task_id}:${observation.metric_result_id}`)
   // One Trial Task cannot stand for two independent matrix slots. Every
   // published measurement is consumed, so the reuse is reported explicitly
   // instead of refusing the comparison that must disclose it.
@@ -556,6 +559,7 @@ export function deriveComparisonRecommendation(input: {
     calculation_inputs: {
       campaign: input.campaignLocator, candidate: input.candidateLocator,
       runs: identities(input.runs), evaluations: identities(input.evaluations), reviews: identities(input.reviews),
+      ...(input.nativeMeasurements ? { native_measurements: input.nativeMeasurements } : {}),
     },
     baseline_revision: campaign.baseline_revision,
     candidate_revision: candidate.candidate_revision,

@@ -161,6 +161,25 @@ export function readResultsForIteration(taskID: string, iteration: number): Metr
   return rows.map((row) => MetricResult.parse({ ...row, evidence_ref: JSON.parse(row.evidence_ref) }))
 }
 
+/** Native membership is independent of the Engine Artifact revision sequence. */
+export function readMetricResultIDs(taskID: string): string[] {
+  return Database.use((db) => db.select({ id: EngineMetricResultTable.id })
+    .from(EngineMetricResultTable).where(eq(EngineMetricResultTable.task_id, taskID)).all())
+    .map((row) => row.id).sort()
+}
+
+export function readMetricResultsForTask(taskID: string): MetricResult[] {
+  return Database.use((db) => db.select().from(EngineMetricResultTable)
+    .where(eq(EngineMetricResultTable.task_id, taskID)).all())
+    .map((row) => MetricResult.parse({ ...row, evidence_ref: JSON.parse(row.evidence_ref) }))
+    .sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0)
+}
+
+export function assertMetricResultIDs(taskID: string, resultIDs: readonly string[]) {
+  if (JSON.stringify(readMetricResultIDs(taskID)) !== JSON.stringify([...resultIDs].sort()))
+    throw new Error(`Native metric snapshot changed for Task ${taskID}; read a new snapshot`)
+}
+
 export function readRecordedMetricResult(taskID: string, evidence: TaskArtifactRef): MetricResult {
   const rows = Database.use((db) => db.select().from(EngineMetricResultTable).where(and(
     eq(EngineMetricResultTable.task_id, taskID),

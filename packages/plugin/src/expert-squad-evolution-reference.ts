@@ -111,7 +111,11 @@ export function evolutionComparisonInputs(envelope: EngineArtifactEnvelope) {
   if (!parsed.success) throw new EvolutionComparisonInputError("invalid_inputs")
   const sources = new Set(evolutionArtifactProvenance(envelope).sources.map(artifactReadLocatorKey))
   const value = parsed.data
-  const locators = [value.campaign, value.candidate, ...value.runs, ...value.evaluations, ...value.reviews]
+  const locators: ArtifactReadLocator[] = [value.campaign, value.candidate, ...value.runs, ...value.evaluations, ...value.reviews,
+    ...(value.native_measurements?.unpublished ?? []).map((item) => ({ source: "task_artifact_resource" as const, ref: item.evidence_ref }))]
+  const runKeys = new Set(value.runs.map(artifactReadLocatorKey))
+  if (value.native_measurements?.unpublished.some((item) => item.run_locators.some((run) => !runKeys.has(artifactReadLocatorKey(run)))))
+    throw new EvolutionComparisonInputError("invalid_inputs")
   for (const locator of locators)
     if (!sources.has(artifactReadLocatorKey(locator))) throw new EvolutionComparisonInputError("undeclared_source", locator)
   return value
@@ -128,6 +132,7 @@ export function resolveEvolutionComparisonInputs<T extends EvolutionReferenceArt
     return { locator, artifact }
   }
   return {
+    nativeMeasurements: inputs.native_measurements,
     campaign: bind(inputs.campaign, "evolution-lab/campaign-spec"),
     candidate: bind(inputs.candidate, "evolution-lab/candidate-revision"),
     runs: inputs.runs.map((item) => bind(item, "evolution-lab/run-evidence-bundle")),

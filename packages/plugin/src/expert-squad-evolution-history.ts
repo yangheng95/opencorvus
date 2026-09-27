@@ -145,6 +145,15 @@ export const EvolutionGraphIssueSchema = z.discriminatedUnion("code", [
     .strict(),
   z
     .object({
+      code: z.literal("NATIVE_MEASUREMENT_SNAPSHOT_CHANGED"),
+      owner: EvolutionHistoryArtifactIdentitySchema,
+      task_id: z.string(),
+      scope: z.literal("current_task_live"),
+      recorded_task_id: z.string().nullable(),
+      comparison_result_ids: z.array(z.string()),
+      current_result_ids: z.array(z.string()),
+    }).strict(),
+  z.object({
       code: z.literal("MEASUREMENT_SNAPSHOT_CHANGED"),
       owner: EvolutionHistoryArtifactIdentitySchema,
       missing_measurement_locators: z.array(EngineArtifactLocatorSchema).min(1),

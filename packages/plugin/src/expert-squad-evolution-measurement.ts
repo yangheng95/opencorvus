@@ -1,4 +1,7 @@
-import { EvolutionArtifactSchemas } from "./expert-squad-evolution-artifact.js"
+import { EvolutionArtifactSchemas, EvolutionNativeMeasurementsSchema } from "./expert-squad-evolution-artifact.js"
+import { EngineArtifactLocatorSchema } from "./artifact-catalog.js"
+import type { MetricRecordedObservation, MetricRecordedSnapshot } from "./metric-evaluation.js"
+import { z } from "zod"
 import { artifactReadLocatorKey, type ArtifactReadLocator, type EngineArtifactEnvelope } from "./artifact-catalog.js"
 import { canonicalEvolutionJSON } from "./expert-squad-evolution.js"
 import type { EvolutionArtifactReferences } from "./expert-squad-evolution-reference.js"
@@ -6,6 +9,76 @@ import type { EvolutionArtifactReferences } from "./expert-squad-evolution-refer
 type LocatedMeasurement = {
   locator: ArtifactReadLocator
   value: { case_id: string; arm: "baseline" | "candidate"; repetition: number }
+}
+
+type NativeCampaign = ReturnType<typeof EvolutionArtifactSchemas["evolution-lab/campaign-spec"]["parse"]>
+type NativeRun = ReturnType<typeof EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"]["parse"]>
+type NativeEvaluation = ReturnType<typeof EvolutionArtifactSchemas["evolution-lab/evaluation-result"]["parse"]>
+type NativeLocatedRun = { locator: z.infer<typeof EngineArtifactLocatorSchema>; value: NativeRun }
+
+/** Actual subject and frozen scorer identity, independent of the Campaign
+ * named by the caller. A baseline observation may serve another Campaign. */
+function nativeMeasuresRun(observation: MetricRecordedObservation, run: NativeRun, campaign: NativeCampaign) {
+  const resource = run.run_evidence_resource
+  return observation.trial_task_id === run.task_id &&
+    observation.subject.sha256 === resource.sha256 && observation.subject.bytes === resource.bytes &&
+    observation.subject.media_type === resource.media_type && campaign.scorers.some((scorer) =>
+      scorer.scorer_id === observation.scorer_id && scorer.scorer_revision === observation.scorer_revision)
+}
+
+/** The persisted request can introduce an exact authorized Run; it cannot
+ * prove a batch or assign every source in a Turn to this Campaign. */
+export function evolutionNativeRequestedRuns(input: {
+  snapshot: MetricRecordedSnapshot
+  campaign: NativeCampaign
+  campaignLocator: z.infer<typeof EngineArtifactLocatorSchema>
+  candidateLocator: z.infer<typeof EngineArtifactLocatorSchema>
+  runs: readonly NativeLocatedRun[]
+  referenceKey: (locator: ArtifactReadLocator) => string
+}): NativeLocatedRun[] {
+  const requestSchema = z.object({
+    campaign_spec_locator: EngineArtifactLocatorSchema,
+    candidate_revision_locator: EngineArtifactLocatorSchema.nullable(),
+    run_evidence_locator: EngineArtifactLocatorSchema,
+  })
+  const selected = new Map<string, NativeLocatedRun>()
+  for (const observation of input.snapshot.observations) {
+    const request = requestSchema.safeParse(observation.tool_request?.input)
+    if (!request.success || input.referenceKey(request.data.campaign_spec_locator) !== input.referenceKey(input.campaignLocator)) continue
+    for (const run of input.runs) {
+      if (run.value.arm === "candidate" && (!request.data.candidate_revision_locator ||
+          input.referenceKey(request.data.candidate_revision_locator) !== input.referenceKey(input.candidateLocator))) continue
+      if (input.referenceKey(run.locator) !== input.referenceKey(request.data.run_evidence_locator) ||
+          !nativeMeasuresRun(observation, run.value, input.campaign)) continue
+      selected.set(artifactReadLocatorKey(run.locator), run)
+    }
+  }
+  return [...selected.values()]
+}
+
+/** A missing Evaluation is a visible incomplete measurement, never an invented
+ * Evaluation or an instruction to rerun a scorer. IDs distinguish every native
+ * result, including partial calls and repeated evaluate calls in one Tool. */
+export function deriveEvolutionNativeMeasurements(input: {
+  snapshot: MetricRecordedSnapshot
+  campaign: NativeCampaign
+  runs: readonly NativeLocatedRun[]
+  evaluations: readonly { value: NativeEvaluation }[]
+}) {
+  const covered = new Set(input.evaluations.flatMap(({ value }) =>
+    value.measurement_identity?.owner_task_id === input.snapshot.task_id
+      ? value.measurement_identity.scorer_results.map((result) => result.metric_result_id) : []))
+  return EvolutionNativeMeasurementsSchema.parse({
+    task_id: input.snapshot.task_id,
+    result_ids: input.snapshot.observations.map((item) => item.metric_result_id).sort(),
+    unpublished: input.snapshot.observations.flatMap((observation) => {
+      const runs = input.runs.filter((run) => nativeMeasuresRun(observation, run.value, input.campaign))
+      return covered.has(observation.metric_result_id) || runs.length === 0 ? [] : [{
+        metric_result_id: observation.metric_result_id, evidence_ref: observation.evidence_ref,
+        run_locators: runs.map((run) => run.locator),
+      }]
+    }).sort((a, b) => a.metric_result_id < b.metric_result_id ? -1 : a.metric_result_id > b.metric_result_id ? 1 : 0),
+  })
 }
 
 /** Native result IDs identify the recorded scorer occurrences; the receipt

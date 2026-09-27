@@ -656,6 +656,7 @@ export function summarizeEvolutionEvidence(facts: readonly EvolutionArtifactFact
   const campaign = EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(campaigns[0]!.payload)
   const candidate = EvolutionArtifactSchemas["evolution-lab/candidate-revision"].parse(candidates[0]!.payload)
   const exactRecommendation = deriveComparisonRecommendation({
+    nativeMeasurements: consumed.nativeMeasurements,
     references,
     campaign,
     campaignLocator: bindings.find((item) => item.source === campaigns[0])!.locator,

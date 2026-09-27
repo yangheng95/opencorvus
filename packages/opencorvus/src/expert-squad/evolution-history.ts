@@ -38,7 +38,7 @@ import { ExpertSquadPackageLocations } from "./locations"
 import { ExpertSquadRegistry } from "./registry"
 import { evolutionMutationConfirmationText } from "./evolution-mutation-intent"
 import { FEEDBACK_REVISION_COMPONENT_ID } from "./feedback-revision"
-import { missingComparisonMeasurements, missingComparisonReviews } from "./evolution-review-freshness"
+import { missingComparisonMeasurements, missingComparisonReviews, comparisonNativeSnapshotDifference } from "./evolution-review-freshness"
 
 type InstallationScope = "project" | "global"
 type Partition = "current" | "historical"
@@ -570,6 +570,10 @@ function buildComparison(input: {
   const resolvable = graphIssues.length === 0
   const missingMeasurements = resolvable ? missingComparisonMeasurements(snapshot) : []
   const missingReviews = resolvable ? missingComparisonReviews(snapshot) : []
+  const nativeDifference = resolvable
+    ? comparisonNativeSnapshotDifference(input.graph.comparison.catalog.taskID, input.graph.comparison.envelope) : undefined
+  if (nativeDifference) graphIssues.push({ code: "NATIVE_MEASUREMENT_SNAPSHOT_CHANGED",
+    owner: artifactIdentity(input.graph.comparison), ...nativeDifference })
   if (missingMeasurements.length)
     graphIssues.push({
       code: "MEASUREMENT_SNAPSHOT_CHANGED",
