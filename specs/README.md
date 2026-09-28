@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [v0.1.17 native and website release repair](records/2026-09/2026-09-28-v0.1.17-release.md)
 - [v0.1.16 native and website release repair](records/2026-09/2026-09-28-v0.1.16-release.md)
 - [v0.1.15 native and website release](records/2026-09/2026-09-28-v0.1.15-release.md)
 

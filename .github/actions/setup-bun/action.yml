@@ -21,11 +21,12 @@ runs:
       with:
         node-version: 22
 
-    - name: Cache Bun dependencies
-      # Archiving the Windows package tree can outlast a completed native build
-      # and exhaust its job deadline. Windows uses the frozen install below.
+    - name: Restore Bun dependencies
+      # Native jobs may use almost their full budget before post-run actions.
+      # Restore here; save explicitly after installation instead of at job exit.
       if: runner.os == 'Linux' || runner.os == 'macOS'
-      uses: actions/cache@v6
+      id: bun-cache
+      uses: actions/cache/restore@v6
       with:
         path: ~/.bun/install/cache
         key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
@@ -120,3 +121,12 @@ runs:
       if: ${{ inputs.prepare_sdk == 'true' }}
       run: bun run --cwd packages/sdk/js build
       shell: bash
+
+    - name: Save Bun dependencies
+      # Intel macOS native rows are long-running and use the restored cache
+      # read-only. Other supported rows save once, before the native build.
+      if: ${{ inputs.install_dependencies == 'true' && (runner.os == 'Linux' || (runner.os == 'macOS' && runner.arch != 'X64')) && steps.bun-cache.outputs.cache-hit != 'true' }}
+      uses: actions/cache/save@v6
+      with:
+        path: ~/.bun/install/cache
+        key: ${{ steps.bun-cache.outputs.cache-primary-key }}
