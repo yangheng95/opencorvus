@@ -54,6 +54,10 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: packages/overlay/src-tauri -> target
+          # The Intel macOS installer already consumes nearly the whole job budget.
+          # Cache restore still helps it; an optional post-job save must not cancel
+          # a successfully packaged and uploaded release artifact.
+          save-if: ${{ inputs.platform != 'darwin-x64' }}
       - name: Verify remaining release budget
         if: ${{ inputs.release-run-id != '' }}
         env:
