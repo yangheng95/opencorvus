@@ -103,28 +103,29 @@ test("activates a new immutable Evolution Lab revision while retaining the prior
   try {
     const current = structuredClone(payloadPackageSources.find((source) => source.id === "evolution-lab"))
     if (!current) throw new Error("Evolution Lab payload source is missing")
+    const currentVersion = ExpertSquadRegistry.loadEmbeddedPackageDeclaration(current).manifest.version
+    const priorVersion = "2026.09.02.1"
     const prior = structuredClone(current)
     prior.files["expert-squad.jsonc"] = prior.files["expert-squad.jsonc"]
-      .replace('"version": "2026.09.06.1"', '"version": "2026.09.02.1"')
+      .replace(`"version": "${currentVersion}"`, `"version": "${priorVersion}"`)
     prior.files["README.md"] = `${prior.files["README.md"]}\nPrior immutable revision fixture.\n`
 
     const priorRoot = path.join(sequenceRoot, "prior")
     const currentRoot = path.join(sequenceRoot, "current")
     const priorSeed = await singlePackagePublication(prior, priorRoot)
     const currentSeed = await singlePackagePublication(current, currentRoot)
-    expect(priorSeed.packages[0]!.identity).toMatchObject({ id: "evolution-lab", version: "2026.09.02.1" })
-    expect(currentSeed.packages[0]!.identity).toMatchObject({ id: "evolution-lab", version: "2026.09.06.1" })
-    expect(priorSeed.packages[0]!.identity.digest).not.toBe(currentSeed.packages[0]!.identity.digest)
+    expect(priorSeed.packages[0]!.identity).toMatchObject({ id: "evolution-lab", version: priorVersion })
+    expect(currentSeed.packages[0]!.identity).toMatchObject({ id: "evolution-lab", version: currentVersion })
 
     const priorPublication = await importWebsiteRegistryPublication(sequenceRegistry, priorSeed, priorRoot)
     const currentPublication = await importWebsiteRegistryPublication(sequenceRegistry, currentSeed, currentRoot)
-    expect(currentPublication).not.toBe(priorPublication)
+    expect(currentPublication).toBe(priorPublication + 1)
     expect(sequenceRegistry.squad("builtin", "evolution-lab")?.identity).toEqual(currentSeed.packages[0]!.identity)
     expect(sequenceRegistry.sqlite.query<{ version: string; package_digest: string }, []>(
       "SELECT version,package_digest FROM squad_revision WHERE namespace='builtin' AND squad_id='evolution-lab' ORDER BY version",
     ).all()).toEqual([
-      { version: "2026.09.02.1", package_digest: priorSeed.packages[0]!.identity.digest },
-      { version: "2026.09.06.1", package_digest: currentSeed.packages[0]!.identity.digest },
+      { version: priorVersion, package_digest: priorSeed.packages[0]!.identity.digest },
+      { version: currentVersion, package_digest: currentSeed.packages[0]!.identity.digest },
     ])
     expect(sequenceRegistry.archive(
       "builtin",

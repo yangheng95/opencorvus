@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [v0.1.15 native and website release](records/2026-09/2026-09-28-v0.1.15-release.md)
+
 - [Four-arm AutomationBench retry](artifacts/2026-09-28-four-arm-benchmark-retry/README.md)
 - [Four-arm run 01 infrastructure result](artifacts/2026-09-28-four-arm-benchmark-retry/run-01-result.md)
 - [Four-arm run 02 registration](artifacts/2026-09-28-four-arm-benchmark-retry/run-02-registration.json)
