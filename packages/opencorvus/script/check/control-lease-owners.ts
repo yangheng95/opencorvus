@@ -71,7 +71,7 @@ const DECLARED_OWNERS: Record<string, Declaration> = {
     targets: ["runtime_process"],
     sites: 1,
     release:
-      "One process-wide ref-counted owner delegates physical acquire, renew and assertion to the shared primitive. Intermediate Project disposal leaves it live; the final reference releases the exact fence as the graceful-exit fact.",
+      "A permanent physical process identity receipt shares the existing storage primitive. OS process-instance observation decides death; Project reference disposal never expires process identity, and no heartbeat renews it.",
   },
   "engine/task-completion-closure.ts": {
     targets: ["lifecycle"],

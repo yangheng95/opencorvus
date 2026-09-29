@@ -23,7 +23,12 @@ import { reenterActiveInstance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { ProtocolStore } from "@/protocol/store"
-import { currentRuntimeOccurrenceID, replaceRuntimeOccurrenceIDForTest } from "@/runtime/process-occurrence"
+import {
+  currentRuntimeOccurrenceID,
+  replaceRuntimeOccurrenceIDForTest,
+  cachedRuntimeProcessOccurrenceObserver,
+  type RuntimeProcessOccurrenceObserver,
+} from "@/runtime/process-occurrence"
 import { RuntimeExecutionSettlement, type RuntimeExecutionReservation } from "@/runtime/execution-settlement"
 import { Message } from "@/session/message"
 import { SessionStatus } from "@/session/status"
@@ -86,9 +91,14 @@ import {
   taskRootIngressSemanticAttemptIDs,
   taskRootIngressSemanticTurnIDs,
 } from "./task-root-ingress-reducer"
-import { TaskControlDriver, type TaskControlScanContext, type TaskControlScanResult } from "./task-control-driver"
+import {
+  TaskControlDriver,
+  TASK_CONTROL_HEARTBEAT_MS,
+  type TaskControlScanContext,
+  type TaskControlScanResult,
+} from "./task-control-driver"
 import { TaskRootIngressIntegrityError } from "./task-root-ingress-integrity"
-import { joinProcessLivenessLease } from "./process-liveness"
+import { joinProcessLiveness, observeProcessLiveness } from "./process-liveness"
 import { currentControlLease } from "./control-lease"
 import { TaskRootIngressError, taskRootDirectory } from "./task-directory"
 import { findDispatchLineageByDispatchID } from "./dispatch-lineage"
@@ -1095,7 +1105,7 @@ async function activate(input: {
       now,
       leaseMilliseconds,
       readEvidence: readTaskRootIngressEvidence,
-      assertControlOwnerInTransaction: (db) => liveness.assertOwnedInTransaction(db, ownerID, Date.now()),
+      assertControlOwnerInTransaction: (db) => liveness.assertOwnedInTransaction(db, ownerID),
     })
     if (!acquired.acquired) {
       reservation.settle()
@@ -1504,13 +1514,9 @@ async function reconcileAbandonedDispatches(
       limit: pageSize,
     }),
   )
+  const observeProcess = cachedRuntimeProcessOccurrenceObserver()
   for (const lineage of page.lineages) {
     const childSessionID = lineage.payload.child_session_id
-    const ownerWakeAt = await dispatchDeliveryOwnerLiveUntil(lineage, Date.now())
-    if (ownerWakeAt !== undefined) {
-      wakeAt = wakeAt === undefined ? ownerWakeAt : Math.min(wakeAt, ownerWakeAt)
-      continue
-    }
     try {
       if (findDispatchSettlementByDispatchID({ taskID, dispatchID: lineage.dispatchID })) {
         recovered += await recoverSettledUndeliveredDispatch({ taskID, lineage })
@@ -1542,6 +1548,11 @@ async function reconcileAbandonedDispatches(
           event: collection.event,
         })
         if (collectionDelivery === "delivered") recovered += 1
+        continue
+      }
+      const ownerWakeAt = await dispatchDeliveryOwnerRecheckAt(lineage, Date.now(), observeProcess)
+      if (ownerWakeAt !== undefined) {
+        wakeAt = wakeAt === undefined ? ownerWakeAt : Math.min(wakeAt, ownerWakeAt)
         continue
       }
       if (await settleAbandonedDispatch({ taskID, lineage })) recovered += 1
@@ -1620,11 +1631,10 @@ async function recoverSettledUndeliveredDispatch(input: {
  *
  * The order matters. This process's own registries are authoritative for its
  * own lineages and answer without a query. For a lineage another process
- * claimed, only that process's liveness lease can answer — its absence from
- * local memory means nothing. Every current lineage has one runtime process
- * owner; predecessor owner shapes belong to an incompatible database epoch.
+ * claimed, the OS observes its registered physical identity. The next poll
+ * time schedules discovery; it never grants authority to declare a peer dead.
  */
-async function dispatchDeliveryOwnerLiveUntil(
+async function dispatchDeliveryOwnerRecheckAt(
   lineage: {
     artifactID: string
     payload: {
@@ -1633,31 +1643,31 @@ async function dispatchDeliveryOwnerLiveUntil(
     }
   },
   now: number,
+  observe: RuntimeProcessOccurrenceObserver,
 ): Promise<number | undefined> {
   const { hasLiveDetachedDispatchPipeline } = await import("@/orchestrator/dispatch-agent-tool")
   const { SessionPrompt } = await import("@/session/prompt")
   const deliveryOwner = lineage.payload.delivery_owner
-  const processExpiry = (occurrenceID: string) => {
-    const lease = currentControlLease("runtime_process", occurrenceID)
-    return lease && lease.expires_at > now ? lease.expires_at : undefined
-  }
+  const recheckAt = now + TASK_CONTROL_HEARTBEAT_MS
+  const processRecheck = (occurrenceID: string) =>
+    observeProcessLiveness(occurrenceID, observe) === "dead_or_reused" ? undefined : recheckAt
   if (hasLiveDetachedDispatchPipeline(lineage.artifactID)) {
-    return processExpiry(deliveryOwner.process_occurrence_id) ?? now + 25
+    return recheckAt
   }
   if (SessionPrompt.hasGeneration(lineage.payload.child_session_id)) {
-    return processExpiry(deliveryOwner.process_occurrence_id) ?? now + 25
+    return recheckAt
   }
   const acceptedAdmission = currentControlLease("dispatch_admission", lineage.artifactID)
   if (acceptedAdmission) {
     const owner = acceptedAdmission.owner_occurrence_id
     if (owner === ownerOccurrenceID()) return undefined
-    return processExpiry(owner)
+    return processRecheck(owner)
   }
   const owner = deliveryOwner.process_occurrence_id
   // This process claimed it and neither registry holds it: the work is gone,
   // and our own memory is the authority on that.
   if (owner === ownerOccurrenceID()) return undefined
-  return processExpiry(owner)
+  return processRecheck(owner)
 }
 
 async function recordAbandonedDispatchSettlement(input: {
@@ -1959,7 +1969,7 @@ const driverState = createInstanceState(
     // Every Project driver joins one process-wide owner. Recovery in another
     // backend reads this row before it may settle our dispatches, so joining
     // and asserting the exact occurrence precedes every scan.
-    const liveness = joinProcessLivenessLease(ownerOccurrenceID())
+    const liveness = joinProcessLiveness(ownerOccurrenceID())
     let heartbeatTraversal: { cursor?: TaskControlProjectFrontierCursor } | undefined
     let heartbeatCheckpoint: TaskControlProjectFrontierCursor | undefined
     return {

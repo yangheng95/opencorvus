@@ -619,7 +619,7 @@ export function recordDispatchLineage(input: {
       },
       artifactID,
     )
-    assertProcessLivenessOwnerInTransaction(db, ownerProcessOccurrenceID, now)
+    assertProcessLivenessOwnerInTransaction(db, ownerProcessOccurrenceID)
     const cancellation = taskCancellationAuthorityExecutionErrorInTransaction(
       db,
       input.origin.taskID,

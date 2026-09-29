@@ -56,7 +56,7 @@ import { McpAuth } from "@/mcp/auth"
 import { ProjectDeletionCleanupAdmissionTestHooks } from "@/project/deletion-cleanup-admission"
 import { ProjectDirectoryAdmission } from "@/project/directory-admission"
 import { createDispatchLineageOrigin } from "@/engine/dispatch-lineage"
-import { joinProcessLivenessLease } from "@/engine/process-liveness"
+import { joinProcessLiveness } from "@/engine/process-liveness"
 import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
 import { insertTaskPackageRevisionBinding } from "@/engine/task-package-revision-binding"
 import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
@@ -1240,7 +1240,7 @@ describe("Project directory integrity", () => {
             })
             .run()
         })
-        const liveness = joinProcessLivenessLease(currentRuntimeOccurrenceID())
+        const liveness = joinProcessLiveness(currentRuntimeOccurrenceID())
         try {
           const lineage = recordTestDispatchLineage({
             origin: createDispatchLineageOrigin({

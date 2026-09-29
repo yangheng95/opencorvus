@@ -1,23 +1,23 @@
 import { afterEach, describe, expect, test } from "bun:test"
+import { currentControlLeaseInTransaction } from "@/engine/control-lease"
+import { EngineTaskTable, EngineControlActivationLeaseTable } from "@/engine/engine.sql"
 import {
-  ControlLeaseFenceLostError,
-  currentControlLeaseInTransaction,
-  releaseControlLease,
-} from "@/engine/control-lease"
-import { EngineTaskTable } from "@/engine/engine.sql"
-import { isProcessOccurrenceLive, joinProcessLivenessLease, PROCESS_LIVENESS_LEASE_MS } from "@/engine/process-liveness"
-import { reconcileTaskControlPlane, TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
-import {
-  acceptTaskRootIngressInTransaction,
-  acquireTaskRootIngressLease,
-  projectTaskRootIngress,
-} from "@/engine/task-root-fact-store"
+  observeProcessLiveness,
+  joinProcessLiveness,
+  ProcessLivenessOwnerUnavailableError,
+} from "@/engine/process-liveness"
+import { reconcileTaskControlPlane } from "@/engine/task-root-ingress-delivery"
+import { acceptTaskRootIngressInTransaction, acquireTaskRootIngressLease } from "@/engine/task-root-fact-store"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
-import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
+import {
+  currentRuntimeOccurrenceID,
+  currentRuntimeProcessOccurrence,
+  ProcessInstanceIDTestHooks,
+} from "@/runtime/process-occurrence"
 import { Session } from "@/session"
-import { Database } from "@/storage/db"
+import { Database, eq } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
@@ -25,168 +25,141 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-describe("runtime process liveness owner", () => {
-  test("keeps one exact process receipt through the first Project disposal and expires it on the last", async () => {
+describe("runtime physical process identity", () => {
+  test("preserves exact identity across two Project lifetimes and reopen", async () => {
     await using first = await memoryProject()
     await using second = await memoryProject()
     const occurrenceID = currentRuntimeOccurrenceID()
-
     await Instance.provide({ directory: first.path, fn: () => reconcileTaskControlPlane() })
-    const firstLease = Database.use((db) => currentControlLeaseInTransaction(db, "runtime_process", occurrenceID))!
-
+    const receipt = Database.use((db) => currentControlLeaseInTransaction(db, "runtime_process", occurrenceID))!
     await Instance.provide({ directory: second.path, fn: () => reconcileTaskControlPlane() })
-    const joinedLease = Database.use((db) => currentControlLeaseInTransaction(db, "runtime_process", occurrenceID))!
-    expect({
-      firstLeaseID: firstLease.id,
-      joinedLeaseID: joinedLease.id,
-      joinedLive: Database.use((db) => isProcessOccurrenceLive(db, occurrenceID, Date.now())),
-    }).toEqual({ firstLeaseID: firstLease.id, joinedLeaseID: firstLease.id, joinedLive: true })
-
     await Instance.provide({ directory: first.path, fn: () => Instance.dispose() })
-    const afterFirstDisposal = Database.use((db) =>
-      currentControlLeaseInTransaction(db, "runtime_process", occurrenceID),
-    )!
-    expect({
-      leaseID: afterFirstDisposal.id,
-      live: Database.use((db) => isProcessOccurrenceLive(db, occurrenceID, Date.now())),
-    }).toEqual({ leaseID: firstLease.id, live: true })
-
+    expect(observeProcessLiveness(occurrenceID)).toBe("exact_live")
     await Instance.provide({ directory: second.path, fn: () => Instance.dispose() })
-    const afterLastDisposal = Database.use((db) =>
-      currentControlLeaseInTransaction(db, "runtime_process", occurrenceID),
-    )!
-    expect({
-      leaseID: afterLastDisposal.id,
-      live: Database.use((db) => isProcessOccurrenceLive(db, occurrenceID, Date.now())),
-    }).toEqual({ leaseID: firstLease.id, live: false })
-
+    expect(observeProcessLiveness(occurrenceID)).toBe("exact_live")
     await Instance.provide({ directory: first.path, fn: () => reconcileTaskControlPlane() })
-    const reopenedLease = Database.use((db) => currentControlLeaseInTransaction(db, "runtime_process", occurrenceID))!
-    expect({
-      ownerOccurrenceID: reopenedLease.owner_occurrence_id,
-      live: Database.use((db) => isProcessOccurrenceLive(db, occurrenceID, Date.now())),
-    }).toEqual({ ownerOccurrenceID: occurrenceID, live: true })
-    await Instance.provide({ directory: first.path, fn: () => Instance.dispose() })
-  })
-
-  test("turns exact process fence loss into an absorbing Task-control refusal", async () => {
-    using _runtime = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime(
-      "runtime:test-process-liveness-fence-loss",
-    )
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const occurrenceID = currentRuntimeOccurrenceID()
-        await reconcileTaskControlPlane()
-        const lease = Database.use((db) => currentControlLeaseInTransaction(db, "runtime_process", occurrenceID))!
-        expect(
-          releaseControlLease({
-            target: "runtime_process",
-            targetID: occurrenceID,
-            leaseID: lease.id,
-            ownerOccurrenceID: occurrenceID,
-            now: Date.now(),
-          }),
-        ).toBe(true)
-
-        let refusal: unknown
-        try {
-          await reconcileTaskControlPlane()
-        } catch (error) {
-          refusal = error
-        }
-        expect(refusal).toMatchObject({ name: ControlLeaseFenceLostError.name })
-      },
+    const reopened = Database.use((db) => currentControlLeaseInTransaction(db, "runtime_process", occurrenceID))!
+    expect({ receipt: reopened.id, identity: JSON.parse(reopened.owner_occurrence_id) }).toEqual({
+      receipt: receipt.id,
+      identity: { ...currentRuntimeProcessOccurrence(), occurrenceID },
     })
-    await Instance.provide({ directory: project.path, fn: () => Instance.dispose() })
-
-    let reopenedRefusal: unknown
-    try {
-      await Instance.provide({ directory: project.path, fn: () => reconcileTaskControlPlane() })
-    } catch (error) {
-      reopenedRefusal = error
-    }
-    expect(reopenedRefusal).toMatchObject({ name: ControlLeaseFenceLostError.name })
   })
 
-  test("asserts the current process fence inside every transaction that admits a Task-root activation", async () => {
+  test("admits real Task activation after time advances across the former process deadline", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        for (const scenario of ["settled", "expired"] as const) {
-          const root = await Session.create({ kind: "root", title: `Atomic liveness admission ${scenario}` })
-          const taskID = Identifier.ascending("task")
-          const projectionNow = scenario === "expired" ? Date.now() - PROCESS_LIVENESS_LEASE_MS - 1 : Date.now()
-          const ingress = Database.immediateTransaction((db) => {
-            db.insert(EngineTaskTable)
-              .values({
-                id: taskID,
-                project_id: Instance.project.id,
-                session_id: root.id,
-                source: "test",
-                product_pillar: "work",
-                title: `Atomic liveness admission ${scenario}`,
-                request: "Fence activation admission to the current process owner",
-                time_created: projectionNow,
-              })
-              .run()
-            appendTaskOpenedInTransaction({
-              db,
-              taskID,
-              sessionID: root.id,
-              now: projectionNow,
-              source: "test.process-liveness-owner",
+        const now = Date.now()
+        const root = await Session.create({ kind: "root", title: "Sleep-safe activation" })
+        const taskID = Identifier.ascending("task")
+        const ingress = Database.immediateTransaction((db) => {
+          db.insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: Instance.project.id,
+              session_id: root.id,
+              source: "test",
+              product_pillar: "work",
+              title: "Sleep-safe activation",
+              request: "Activate after a long clock jump",
+              time_created: now,
             })
-            return acceptTaskRootIngressInTransaction(db, {
-              taskID,
-              executionEpoch: 1,
-              source: "inline",
-              sourceID: `atomic-process-fence-${scenario}`,
-              inlinePayload: { note: "activate only under the current process fence" },
-              semanticTurnLimit: 3,
-              activationLimit: 4,
-              now: projectionNow + 1,
-            })
+            .run()
+          appendTaskOpenedInTransaction({ db, taskID, sessionID: root.id, now, source: "test.process-liveness" })
+          return acceptTaskRootIngressInTransaction(db, {
+            taskID,
+            executionEpoch: 1,
+            source: "inline",
+            sourceID: "sleep-safe-activation",
+            inlinePayload: { note: "continue" },
+            semanticTurnLimit: 3,
+            activationLimit: 4,
+            now,
           })
-          const occurrenceID = `runtime:test-atomic-process-liveness-admission-${scenario}`
-          const liveness = joinProcessLivenessLease(occurrenceID, projectionNow)
-          try {
-            if (scenario === "settled") {
-              expect(
-                releaseControlLease({
-                  target: "runtime_process",
-                  targetID: occurrenceID,
-                  leaseID: liveness.leaseID,
-                  ownerOccurrenceID: occurrenceID,
-                  now: Date.now(),
-                }),
-              ).toBe(true)
-            }
-            let refusal: unknown
-            try {
-              acquireTaskRootIngressLease({
-                ingressID: ingress.id,
-                ownerOccurrenceID: occurrenceID,
-                now: projectionNow,
-                leaseMilliseconds: 60_000,
-                assertControlOwnerInTransaction: (db) =>
-                  liveness.assertOwnedInTransaction(db, occurrenceID, Date.now()),
-              })
-            } catch (error) {
-              refusal = error
-            }
-            expect({
-              scenario,
-              refusal: refusal instanceof Error ? refusal.name : undefined,
-              ingress: projectTaskRootIngress(ingress.id, Date.now()).state,
-            }).toEqual({ scenario, refusal: ControlLeaseFenceLostError.name, ingress: "ready" })
-          } finally {
-            liveness.release()
-          }
+        })
+        const occurrenceID = currentRuntimeOccurrenceID()
+        const liveness = joinProcessLiveness(occurrenceID, now)
+        try {
+          // Change the old storage deadline as well as advancing the admission
+          // clock: physical observation and admission must use identity.
+          Database.use((db) =>
+            db
+              .update(EngineControlActivationLeaseTable)
+              .set({ expires_at: now - 1 })
+              .where(eq(EngineControlActivationLeaseTable.id, liveness.receiptID))
+              .run(),
+          )
+          const admission = acquireTaskRootIngressLease({
+            ingressID: ingress.id,
+            ownerOccurrenceID: occurrenceID,
+            now: now + 8 * 60 * 60 * 1000,
+            leaseMilliseconds: 60_000,
+            assertControlOwnerInTransaction: (db) => liveness.assertOwnedInTransaction(db, occurrenceID),
+          })
+          expect({ acquired: admission.acquired, process: observeProcessLiveness(occurrenceID) }).toEqual({
+            acquired: true,
+            process: "exact_live",
+          })
+        } finally {
+          liveness.release()
         }
+        expect(() => liveness.assertOwned()).toThrow(ProcessLivenessOwnerUnavailableError)
       },
     })
+  })
+
+  test("observes a real child through long-expired timestamps and then its physical exit", async () => {
+    const child = Bun.spawn([process.execPath, "-e", "setInterval(() => {}, 1000)"], {
+      stdout: "ignore",
+      stderr: "pipe",
+    })
+    try {
+      const occurrenceID = "test-live-child"
+      const now = Date.now()
+      Database.use((db) =>
+        db
+          .insert(EngineControlActivationLeaseTable)
+          .values({
+            id: Identifier.ascending("activity"),
+            target: "runtime_process",
+            target_id: occurrenceID,
+            owner_occurrence_id: JSON.stringify({
+              pid: child.pid,
+              processInstanceID: ProcessInstanceIDTestHooks.require(child.pid),
+              occurrenceID,
+            }),
+            time_activated: now - 100_000,
+            expires_at: now - 1,
+          })
+          .run(),
+      )
+      expect(observeProcessLiveness(occurrenceID)).toBe("exact_live")
+      child.kill()
+      await child.exited
+      expect(observeProcessLiveness(occurrenceID)).toBe("dead_or_reused")
+    } finally {
+      if (child.exitCode === null) {
+        child.kill()
+        await child.exited
+      }
+    }
+  })
+
+  test("reports missing physical evidence explicitly and preserves an uncertain OS observation", () => {
+    const occurrenceID = currentRuntimeOccurrenceID()
+    const liveness = joinProcessLiveness(occurrenceID)
+    try {
+      expect(observeProcessLiveness(occurrenceID, () => "unknown_live")).toBe("unknown_live")
+      Database.use((db) => db.insert(EngineControlActivationLeaseTable).values({
+        id: Identifier.ascending("activity"), target: "runtime_process", target_id: "opaque-pre-upgrade-owner",
+        owner_occurrence_id: "opaque-pre-upgrade-owner", time_activated: 1, expires_at: 2,
+      }).run())
+      expect(() => observeProcessLiveness("opaque-pre-upgrade-owner")).toThrow(ProcessLivenessOwnerUnavailableError)
+      expect(() => observeProcessLiveness("missing-owner")).toThrow(ProcessLivenessOwnerUnavailableError)
+      expect(() => liveness.assertOwned("different-occurrence")).toThrow(ProcessLivenessOwnerUnavailableError)
+    } finally {
+      liveness.release()
+    }
   })
 })

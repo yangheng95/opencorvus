@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Runtime process identity across sleep and wake](2026-09-29-runtime-process-sleep-recovery.md)
+
 - [v0.1.17 native and website release repair](2026-09-28-v0.1.17-release.md)
 - [v0.1.16 native and website release repair](2026-09-28-v0.1.16-release.md)
 - [v0.1.15 native and website release](2026-09-28-v0.1.15-release.md)

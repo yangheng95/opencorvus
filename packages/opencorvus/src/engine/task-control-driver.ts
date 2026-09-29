@@ -51,6 +51,8 @@ import { Log } from "@/util/log"
 
 const log = Log.create({ service: "engine.task-control-driver" })
 
+export const TASK_CONTROL_HEARTBEAT_MS = 30_000
+
 export type TaskControlScanResult = {
   /** Physical activations this scan started. */
   activated: number
@@ -191,7 +193,7 @@ export class TaskControlDriver {
     this.now = options.now ?? Date.now
     this.setTimer = options.setTimer ?? defaultTimer
     this.reenter = options.reenter ?? ((fn) => fn())
-    this.heartbeatDelay = options.heartbeatMilliseconds ?? 30_000
+    this.heartbeatDelay = options.heartbeatMilliseconds ?? TASK_CONTROL_HEARTBEAT_MS
     this.liveTasks = options.liveTasks
     this.inputRevision = options.inputRevision
     this.maximumConcurrentScans = options.maximumConcurrentScans ?? Number.MAX_SAFE_INTEGER

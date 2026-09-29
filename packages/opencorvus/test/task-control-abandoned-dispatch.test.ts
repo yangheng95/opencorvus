@@ -1,3 +1,4 @@
+import { childProcessIdentity, recordTestProcessIdentity } from "./fixture/process-liveness"
 import { afterEach, describe, expect, test } from "bun:test"
 import { Config } from "../src/config/config"
 import { WorkerTurnDescriptor } from "../src/agent/worker-turn-descriptor"
@@ -56,9 +57,8 @@ import { executionLifecycleOrderKey } from "../src/session/status"
 import { acceptTaskRootIngressInTransaction, acquireTaskRootIngressLease } from "../src/engine/task-root-fact-store"
 import { appendTaskReopenedInTransaction } from "../src/engine/task-lifecycle"
 import { restartTaskControlProjectFrontier } from "../src/engine/task-root-ingress-disposition"
-import { acquireControlLease } from "../src/engine/control-lease"
 import { TaskControlDriver } from "../src/engine/task-control-driver"
-import { joinProcessLivenessLease } from "../src/engine/process-liveness"
+import { joinProcessLiveness } from "../src/engine/process-liveness"
 import { currentRuntimeOccurrenceID } from "../src/runtime/process-occurrence"
 import {
   exportMysqlTransferSnapshot,
@@ -460,14 +460,7 @@ describe("abandoned dispatch recovery", () => {
           ),
         ).toEqual({ id: descriptor.id })
 
-        const remoteLease = acquireControlLease({
-          target: "runtime_process",
-          targetID: remoteOwnerID,
-          ownerOccurrenceID: remoteOwnerID,
-          now: Date.now(),
-          leaseMilliseconds: 5_000,
-        })
-        if (!remoteLease.acquired) throw new Error("Expected the remote dispatch owner lease")
+        await using remoteProcess = childProcessIdentity(remoteOwnerID)
 
         expect(findDispatchSettlementByDispatchID({ taskID, dispatchID })).toBeUndefined()
 
@@ -496,9 +489,10 @@ describe("abandoned dispatch recovery", () => {
         await reconcileTaskControlPlane(taskID)
         expect(findDispatchSettlementByDispatchID({ taskID, dispatchID })).toBeUndefined()
         expect(taskControlDriverSnapshot()).toContainEqual(
-          expect.objectContaining({ taskID, wakeAt: remoteLease.lease.expires_at }),
+          expect.objectContaining({ taskID, wakeAt: expect.any(Number) }),
         )
-        const recoveryDeadline = Date.now() + 10_000
+        await remoteProcess.exit()
+        const recoveryDeadline = Date.now() + 40_000
         while (!findDispatchSettlementByDispatchID({ taskID, dispatchID }) && Date.now() < recoveryDeadline) {
           await Bun.sleep(25)
         }
@@ -1539,12 +1533,15 @@ describe("abandoned dispatch recovery", () => {
           markDeliveryBlocked()
           await deliveryRelease
         })
+        recordTestProcessIdentity(remoteOwnerID, "dead")
         using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime(
           "runtime:test-old-epoch-recovery",
         )
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
         const recovery = reconcileTaskControlPlane(taskID)
-        await deliveryBlocked
+        await Promise.race([deliveryBlocked, recovery.then(() => {
+          throw new Error("Recovery completed before reaching its expected delivery barrier")
+        })])
         const settlement = findDispatchSettlementByDispatchID({ taskID, dispatchID })
         if (!settlement) throw new Error("Expected settlement before the delivery barrier")
         await ProtocolStore.appendEvent({
@@ -1736,7 +1733,7 @@ describe("abandoned dispatch recovery", () => {
     })
   }, 30_000)
 
-  test("preserves a first-page live-owner expiry across later descriptor pages", async () => {
+  test("preserves physical-owner rechecks across later descriptor pages", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -1887,20 +1884,16 @@ describe("abandoned dispatch recovery", () => {
         let lateDescriptorPageEvidence:
           | { scannedPageSizes: number[]; lateDescriptorRecovered: boolean }
           | undefined
-        const lease = acquireControlLease({
-          target: "runtime_process",
-          targetID: liveOwnerID,
-          ownerOccurrenceID: liveOwnerID,
-          now: Date.now(),
-          leaseMilliseconds: 5_000,
-        })
-        if (!lease.acquired) throw new Error("Expected the paged live-owner lease")
+        recordTestProcessIdentity("runtime:test-late-descriptor-owner", "dead")
+        recordTestProcessIdentity("runtime:test-paged-delivery-failure", "dead")
+        recordTestProcessIdentity("runtime:test-paged-dead-owner:32", "dead")
+        await using liveProcess = childProcessIdentity(liveOwnerID)
         const productionDriver = new TaskControlDriver({
           scan: (requestedTaskID, context) =>
             TaskControlTestHooks.scanTaskControlPlane(requestedTaskID, context),
           initialBackoffMilliseconds: 10_000,
         })
-        const productionLiveness = joinProcessLivenessLease(currentRuntimeOccurrenceID())
+        const productionLiveness = joinProcessLiveness(currentRuntimeOccurrenceID())
         using _productionResources = {
           [Symbol.dispose]() {
             productionDriver.dispose()
@@ -1980,9 +1973,10 @@ describe("abandoned dispatch recovery", () => {
         ).toBe(31)
         const armedWake = productionDriver.snapshot().find((entry) => entry.taskID === taskID)?.wakeAt
         expect(armedWake).toBeDefined()
-        expect(armedWake!).toBeLessThanOrEqual(lease.lease.expires_at)
+        expect(armedWake!).toBeGreaterThan(Date.now())
 
-        const recoveryDeadline = lease.lease.expires_at + 5_000
+        await liveProcess.exit()
+        const recoveryDeadline = armedWake! + 10_000
         let unresolved = 31
         while (unresolved > 0 && Date.now() < recoveryDeadline) {
           await Bun.sleep(25)
@@ -2066,15 +2060,6 @@ describe("abandoned dispatch recovery", () => {
           }),
         })
         const deletedTask = requireTask(deletedTaskID)
-        const deletedOwnerID = `runtime:test-delete-paged-cursor:${Identifier.ascending("call")}`
-        const deletedOwnerLease = acquireControlLease({
-          target: "runtime_process",
-          targetID: deletedOwnerID,
-          ownerOccurrenceID: deletedOwnerID,
-          now: Date.now(),
-          leaseMilliseconds: 60_000,
-        })
-        if (!deletedOwnerLease.acquired) throw new Error("Expected the deleted-Task fixture owner lease")
         for (let index = 0; index < 33; index += 1) {
           const child = await Session.create({
             kind: worker.identity.sessionKind,
@@ -2104,7 +2089,6 @@ describe("abandoned dispatch recovery", () => {
                 adapterInput: { deletedTaskIndex: index },
             }),
             childSessionID: child.id,
-            ownerProcessOccurrenceID: deletedOwnerID,
           })
           await commitAcceptedDispatchDescriptor({
             taskID: deletedTaskID,
@@ -2159,7 +2143,7 @@ describe("abandoned dispatch recovery", () => {
         }).toEqual({ cursorObservedBeforeDeletion: true, cursorRetained: false, driverEntryRetained: false })
       },
     })
-  }, 45_000)
+  }, 75_000)
 
   test("one spent-budget disposition silences every member of the recovered collection", async () => {
     await using project = await memoryProject()
@@ -2366,7 +2350,6 @@ describe("abandoned dispatch recovery", () => {
             adapterInput: {},
           }),
           childSessionID: child.id,
-          ownerProcessOccurrenceID: "runtime:vanished-owner",
         })
         await commitAcceptedDispatchDescriptor({
           taskID,
@@ -2401,7 +2384,6 @@ describe("abandoned dispatch recovery", () => {
             adapterInput: {},
           }),
           childSessionID: sibling.id,
-          ownerProcessOccurrenceID: "runtime:vanished-owner",
         })
         await commitAcceptedDispatchDescriptor({
           taskID,

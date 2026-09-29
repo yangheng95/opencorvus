@@ -70,7 +70,7 @@ import { SessionProcessor } from "../src/session/processor"
 import { SessionLoop } from "../src/session/loop"
 import { SessionRuntimeContractStore } from "../src/session/runtime-contract"
 import { Question } from "../src/question"
-import { joinProcessLivenessLease } from "../src/engine/process-liveness"
+import { joinProcessLiveness } from "../src/engine/process-liveness"
 import { currentRuntimeOccurrenceID } from "../src/runtime/process-occurrence"
 import {
   InvalidToolResultControlError,
@@ -1618,7 +1618,7 @@ describe("single Tool-result turn-control protocol", () => {
             },
           },
         }
-        const deliveryOwner = joinProcessLivenessLease(currentRuntimeOccurrenceID())
+        const deliveryOwner = joinProcessLiveness(currentRuntimeOccurrenceID())
         using _deliveryOwner = { [Symbol.dispose]: () => deliveryOwner.release() }
         const lineageHandle = await OrchestratorToolsTestHooks.openDispatchLineage(surface)({
           taskID: worker.taskID,

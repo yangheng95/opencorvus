@@ -10,7 +10,7 @@ import {
   releaseControlLeaseInTransaction,
   type ControlLease,
 } from "@/engine/control-lease"
-import { joinProcessLivenessLease, type ProcessLivenessReference } from "@/engine/process-liveness"
+import { joinProcessLiveness, type ProcessLivenessReference } from "@/engine/process-liveness"
 import {
   currentRuntimeOccurrenceID,
   currentRuntimeProcessOccurrence,
@@ -244,7 +244,7 @@ export function claimSessionDeletionCleanup(
   observeProcessOccurrence: RuntimeProcessOccurrenceObserver = observeRuntimeProcessOccurrence,
 ): SessionDeletionCleanupClaim {
   validateManifest(plan.manifest, plan.manifestPath)
-  const liveness = joinProcessLivenessLease(currentRuntimeOccurrenceID(), now)
+  const liveness = joinProcessLiveness(currentRuntimeOccurrenceID(), now)
   const process = currentRuntimeProcessOccurrence()
   const fenceOwner = {
     operationID: plan.manifest.operationID,

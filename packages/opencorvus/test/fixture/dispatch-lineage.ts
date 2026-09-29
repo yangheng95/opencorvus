@@ -1,5 +1,5 @@
 import { recordDispatchLineage } from "../../src/engine/dispatch-lineage"
-import { joinProcessLivenessLease } from "../../src/engine/process-liveness"
+import { joinProcessLiveness } from "../../src/engine/process-liveness"
 import { currentRuntimeOccurrenceID } from "../../src/runtime/process-occurrence"
 import { EngineControlActivationLeaseTable, EngineTaskRootIngressTable } from "../../src/engine/engine.sql"
 import { MessageTable, ToolPartRequestTable } from "../../src/session/session.sql"
@@ -109,13 +109,13 @@ export function materializeTestDispatchCreatorOccurrence(
 }
 
 /** Direct engine fixtures do not enter the production Task-control driver.
- * Give their exact lineage commit the same process fence for the duration of
- * its writer transaction, then expire that fixture owner. */
+ * Give their exact lineage commit a registered process identity for the
+ * duration of its writer transaction, then release local admission. */
 export function recordTestDispatchLineage(
   input: Parameters<typeof recordDispatchLineage>[0],
   options: { joinLiveness?: boolean; completeCreatorAssistant?: boolean } = {},
 ) {
-  const liveness = options.joinLiveness === false ? undefined : joinProcessLivenessLease(currentRuntimeOccurrenceID())
+  const liveness = options.joinLiveness === false ? undefined : joinProcessLiveness(currentRuntimeOccurrenceID())
   try {
     materializeTestDispatchCreatorOccurrence(input, { completeAssistant: options.completeCreatorAssistant })
     return recordDispatchLineage(input)

@@ -1,6 +1,6 @@
 import { Config } from "@/config/config"
 import { EngineTaskRootIngressTable } from "@/engine/engine.sql"
-import { joinProcessLivenessLease } from "@/engine/process-liveness"
+import { joinProcessLiveness } from "@/engine/process-liveness"
 import { acquireTaskRootIngressLease } from "@/engine/task-root-fact-store"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { TestHooks as TaskControlTestHooks } from "@/engine/task-root-ingress-delivery"
@@ -273,7 +273,7 @@ async function run() {
 
       const suffix = mode === "execute-blocked" ? "winner" : "peer"
       const ids = occurrenceIDs(suffix)
-      const liveness = joinProcessLivenessLease(currentRuntimeOccurrenceID())
+      const liveness = joinProcessLiveness(currentRuntimeOccurrenceID())
       try {
         using _claimBarrier =
           mode === "execute-blocked"

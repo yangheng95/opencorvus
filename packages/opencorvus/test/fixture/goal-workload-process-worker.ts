@@ -19,7 +19,7 @@ import { Database, count, eq } from "@/storage/db"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
 import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
-import { joinProcessLivenessLease } from "@/engine/process-liveness"
+import { joinProcessLiveness } from "@/engine/process-liveness"
 import { persistEstablishedTask } from "./engine-task"
 import { recordTestDispatchLineage } from "./dispatch-lineage"
 
@@ -346,7 +346,7 @@ async function result() {
       init: async () => {},
       fn: async () => {
         Database.Client()
-        const processLiveness = joinProcessLivenessLease(currentRuntimeOccurrenceID())
+        const processLiveness = joinProcessLiveness(currentRuntimeOccurrenceID())
         try {
           if (mode === "init-publication") {
             const fixture = await createFixture("Cross-process publication")

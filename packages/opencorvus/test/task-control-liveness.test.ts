@@ -12,7 +12,7 @@ import {
   acquireTaskRootIngressLease,
   projectTaskRootIngress,
 } from "@/engine/task-root-fact-store"
-import { joinProcessLivenessLease } from "@/engine/process-liveness"
+import { joinProcessLiveness } from "@/engine/process-liveness"
 import { currentRuntimeOccurrenceID } from "@/runtime/process-occurrence"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import { taskRootIngressWakeInstant } from "@/engine/task-root-ingress-reducer"
@@ -195,7 +195,7 @@ describe("Task-control liveness", () => {
           })
         })
         const owner = currentRuntimeOccurrenceID()
-        const liveness = joinProcessLivenessLease(owner)
+        const liveness = joinProcessLiveness(owner)
         let driver: TaskControlDriver | undefined
         try {
           const leaseNow = Date.now()

@@ -256,10 +256,6 @@ test("an expired claim-window owner is taken over by the same exact outer occurr
     const writable = new SQLite(input.databasePath)
     try {
       writable.run(
-        "UPDATE engine_control_activation_lease SET expires_at=? WHERE target='runtime_process' AND target_id=?",
-        [Date.now() - 1, claim.ownerOccurrenceID],
-      )
-      writable.run(
         "UPDATE engine_control_activation_lease SET expires_at=? WHERE target='dispatch_admission' AND target_id=?",
         [Date.now() - 1, claim.lineageID],
       )
@@ -328,10 +324,6 @@ test("a third backend follows the consumed takeover attempt as delivery owner be
     const writable = new SQLite(input.databasePath)
     try {
       writable.run(
-        "UPDATE engine_control_activation_lease SET expires_at=? WHERE target='runtime_process' AND target_id=?",
-        [Date.now() - 1, firstClaim.ownerOccurrenceID],
-      )
-      writable.run(
         "UPDATE engine_control_activation_lease SET expires_at=? WHERE target='dispatch_admission' AND target_id=?",
         [Date.now() - 1, firstClaim.lineageID],
       )
@@ -393,15 +385,6 @@ test("a third backend follows the consumed takeover attempt as delivery owner be
 
     successor.child.kill()
     await successor.child.exited
-    const expireSuccessor = new SQLite(input.databasePath)
-    try {
-      expireSuccessor.run(
-        "UPDATE engine_control_activation_lease SET expires_at=? WHERE target='runtime_process' AND target_id=?",
-        [Date.now() - 1, successorReceipt.ownerOccurrenceID],
-      )
-    } finally {
-      expireSuccessor.close()
-    }
     await runWorker(worker, "scan", input.projectPath, input.home)
     const recovered = new SQLite(input.databasePath, { readonly: true })
     try {

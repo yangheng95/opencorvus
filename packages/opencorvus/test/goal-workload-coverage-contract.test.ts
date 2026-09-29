@@ -14,7 +14,7 @@ import {
   createDispatchLineageOrigin,
   releaseDispatchAdmissionOnError,
 } from "@/engine/dispatch-lineage"
-import { joinProcessLivenessLease } from "@/engine/process-liveness"
+import { joinProcessLiveness } from "@/engine/process-liveness"
 import { materializeTestDispatchCreatorOccurrence, recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import {
   findDispatchSettlementByDispatchID,
@@ -591,7 +591,7 @@ async function executeProductionWorkloadDispatch(input: {
       },
     })
     if (!dispatchTool.execute) throw new Error("dispatch_agent has no production executor")
-    const processLiveness = joinProcessLivenessLease(currentRuntimeOccurrenceID())
+    const processLiveness = joinProcessLiveness(currentRuntimeOccurrenceID())
     try {
       const firstOutcome = await dispatchTool.execute(
         {
@@ -2088,7 +2088,7 @@ describe("production continuation workload selection", () => {
               },
             },
           }
-          const liveness = joinProcessLivenessLease(currentRuntimeOccurrenceID())
+          const liveness = joinProcessLiveness(currentRuntimeOccurrenceID())
           try {
             const handle = await open(options)
             if (handle.replayOutcome) throw new Error("Expected a live successor")

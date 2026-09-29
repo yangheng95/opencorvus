@@ -306,10 +306,9 @@ export type EngineControlActivationTarget =
    * for one immutable dispatch lineage. The lineage is the logical request;
    * this lease is only its transferable pre-effect executor. */
   | "dispatch_admission"
-  /** One row per live runtime process, renewed while it runs. It owns no work;
-   * it is the durable coordinate that lets one process decide another is gone
-   * without consulting its own memory, which says nothing about a peer sharing
-   * the same database. */
+  /** Durable physical process identity in the existing receipt storage. It
+   * owns no work and has no renewal deadline. Its owner field holds the exact
+   * PID/start identity; peer recovery observes that process through the OS. */
   | "runtime_process"
 
 /** Append-only physical ownership history. Expiry may be renewed by the same

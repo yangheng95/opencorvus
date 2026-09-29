@@ -1,3 +1,4 @@
+import { recordTestProcessIdentity } from "./fixture/process-liveness"
 import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test"
 import { Config } from "../src/config/config"
 import { DispatchOutcome } from "../src/agent/dispatch-outcome"
@@ -12,15 +13,14 @@ import {
 } from "../src/engine/engine.sql"
 
 import {
-  PROCESS_LIVENESS_LEASE_MS,
   ProcessLivenessOwnerUnavailableError,
-  joinProcessLivenessLease,
+  joinProcessLiveness,
 } from "../src/engine/process-liveness"
 import { requireTask } from "../src/engine/store"
 import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
 import { taskRequestSHA256 } from "../src/orchestrator/dispatch-turn-projection"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
-import { reconcileSettledDispatchDelivery, reconcileTaskControlPlane, TestHooks as TaskControlTestHooks } from "../src/engine/task-root-ingress-delivery"
+import { reconcileSettledDispatchDelivery, reconcileTaskControlPlane, taskControlDriverSnapshot, TestHooks as TaskControlTestHooks } from "../src/engine/task-root-ingress-delivery"
 import { taskLifecycleProjection } from "../src/engine/task-lifecycle"
 import { detachDispatchExecution, waitForDetachedDispatchPipelinesForTest } from "../src/orchestrator/dispatch-agent-tool"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
@@ -99,7 +99,7 @@ async function seedPeerOwnedDispatch(projectPath: string, claimOwner = true) {
     projection: { packageRevision: scheduler.packageRevision, virtualWorkflows: scheduler.virtualWorkflows },
     workflowID: null,
   })
-  const liveness = claimOwner ? joinProcessLivenessLease(currentRuntimeOccurrenceID()) : undefined
+  const liveness = claimOwner ? joinProcessLiveness(currentRuntimeOccurrenceID()) : undefined
   let lineage: ReturnType<typeof recordTestDispatchLineage>
   try {
     lineage = recordTestDispatchLineage(
@@ -177,22 +177,6 @@ async function seedPeerOwnedDispatch(projectPath: string, claimOwner = true) {
   return { taskID, dispatchID, child, descriptor, lineage }
 }
 
-function claimPeerLiveness(occurrenceID: string, expiresAt: number) {
-  const timeActivated = Math.min(Date.now(), expiresAt - 1)
-  Database.immediateTransaction((db) => {
-    db.insert(EngineControlActivationLeaseTable)
-      .values({
-        id: Identifier.ascending("activity"),
-        target: "runtime_process",
-        target_id: occurrenceID,
-        owner_occurrence_id: occurrenceID,
-        time_activated: timeActivated,
-        expires_at: expiresAt,
-      })
-      .run()
-  })
-}
-
 function recoveryIngressCount(taskID: string) {
   return Database.use(
     (db) =>
@@ -253,13 +237,13 @@ describe("cross-process dispatch abandonment", () => {
     })
   })
 
-  test("leaves a peer backend's dispatch alone while that peer's liveness lease is current", async () => {
+  test("keeps a live peer's Task active and schedules its physical-owner recheck", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const { taskID, dispatchID, lineage } = await seedPeerOwnedDispatch(project.path)
-        claimPeerLiveness(PEER, Date.now() + PROCESS_LIVENESS_LEASE_MS)
+        recordTestProcessIdentity(PEER, "live")
 
         using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
@@ -270,24 +254,24 @@ describe("cross-process dispatch abandonment", () => {
         // on every heartbeat — the cross-process kill loop this fences.
         expect({
           deliveryOwner: lineage.payload.delivery_owner,
-          settlement: findDispatchSettlementByDispatchID({ taskID, dispatchID }),
-          recoveryIngresses: recoveryIngressCount(taskID),
+          taskStatus: taskLifecycleProjection(taskID).status,
+          scheduled: taskControlDriverSnapshot().find((entry) => entry.taskID === taskID)?.wakeAt,
         }).toEqual({
           deliveryOwner: { kind: "runtime_process", process_occurrence_id: PEER },
-          settlement: undefined,
-          recoveryIngresses: 0,
+          taskStatus: "active",
+          scheduled: expect.any(Number),
         })
       },
     })
   })
 
-  test("settles the same dispatch once the peer's liveness lease has expired", async () => {
+  test("settles the same dispatch once the peer's physical process has exited", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const { taskID, dispatchID } = await seedPeerOwnedDispatch(project.path)
-        claimPeerLiveness(PEER, Date.now() - 1)
+        recordTestProcessIdentity(PEER, "dead")
 
         using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
@@ -315,7 +299,7 @@ describe("cross-process dispatch abandonment", () => {
           const fixture = await seedPeerOwnedDispatch(project.path)
           fixtures.push({ reason, fixture })
         }
-        claimPeerLiveness(PEER, Date.now() - 1)
+        recordTestProcessIdentity(PEER, "dead")
         using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
 
@@ -390,13 +374,15 @@ describe("cross-process dispatch abandonment", () => {
     })
   }, 30_000)
 
-  test("preserves an exact failed lifecycle final Message instead of a later adjacent reply", async () => {
+  test("delivers an exact terminal result with a pre-upgrade opaque owner identity", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const fixture = await seedPeerOwnedDispatch(project.path)
-        claimPeerLiveness(PEER, Date.now() - 1)
+        const historicalOwner = recordTestProcessIdentity(PEER, "dead")
+        Database.use((db) => db.update(EngineControlActivationLeaseTable)
+          .set({ owner_occurrence_id: PEER }).where(eq(EngineControlActivationLeaseTable.id, historicalOwner.id)).run())
         using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:this-backend")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
         const inputMessageID = fixture.descriptor.payload.messageAuthority.user_message_id
@@ -493,7 +479,7 @@ describe("cross-process dispatch abandonment", () => {
       directory: project.path,
       fn: async () => {
         const { taskID, dispatchID, descriptor, child } = await seedPeerOwnedDispatch(project.path)
-        claimPeerLiveness(PEER, Date.now() - 1)
+        recordTestProcessIdentity(PEER, "dead")
         // The outcome is recorded before it is handed over, so a failure in
         // between leaves a settled dispatch that woke nothing. Abandonment
         // recovery cannot see it: by definition it looks for unsettled work.

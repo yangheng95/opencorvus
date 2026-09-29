@@ -3,7 +3,7 @@ import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { DispatchAgentToolTestHooks } from "@/orchestrator/dispatch-agent-tool"
 import { findDispatchLineageByDispatchID } from "@/engine/dispatch-lineage"
 import { selectedWorkflowBinding } from "@/engine/workflow-binding"
-import { joinProcessLivenessLease } from "@/engine/process-liveness"
+import { joinProcessLiveness } from "@/engine/process-liveness"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { EngineTaskRootIngressTable } from "@/engine/engine.sql"
 import { acquireTaskRootIngressLease } from "@/engine/task-root-fact-store"
@@ -273,7 +273,7 @@ async function run() {
         return { mode, taskID: TASK_ID, rootSessionID: root.id, toolPartID: TOOL_PART_ID }
       }
 
-      const liveness = joinProcessLivenessLease(currentRuntimeOccurrenceID())
+      const liveness = joinProcessLiveness(currentRuntimeOccurrenceID())
       try {
         if (mode === "scan") {
           await reconcileTaskControlPlane(TASK_ID)
