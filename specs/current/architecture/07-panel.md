@@ -36,6 +36,9 @@ read the mounted editor state. MCP App actions read the current real Tool
 result; returned resources use the existing Host download protocol and App
 requests retain confirmation. Opening keeps the same mounted renderer and MCP
 authority. A source/data export does not replace a requested PDF or Word file.
+The pure `services/mcp-app-payload.ts` owns MCP App policy serialization and
+bounded download-byte decoding. The renderer and service contracts import that
+same implementation; DOM materialization remains in the browser renderer.
 The shared MCP event-stream owner reconnects after transport failure and replays
 its actual connection boundary to late consumers. Each connection refreshes the
 exact persisted lifecycle; monotonic `timeUpdated` prevents stale reads from

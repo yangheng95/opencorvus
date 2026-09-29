@@ -1,9 +1,6 @@
 import { expect, test } from "bun:test"
 
-;(globalThis as typeof globalThis & { __OPENCORVUS_OVERLAY_VERSION__?: string }).__OPENCORVUS_OVERLAY_VERSION__ = "test"
-const { mcpAppContentSecurityPolicy, mcpAppDownloadBytes } = await import(
-  "../src/components/interactive-artifact/McpAppArtifact"
-)
+import { mcpAppContentSecurityPolicy, mcpAppDownloadBytes } from "../src/services/mcp-app-payload"
 
 test("MCP App content security policy materializes declared capability domains", () => {
   const defaultPolicy = mcpAppContentSecurityPolicy(undefined)
@@ -17,8 +14,10 @@ test("MCP App content security policy materializes declared capability domains",
   )
 })
 
-test("MCP App downloads materialize valid bytes and return typed size errors", () => {
+test("MCP App downloads materialize valid bytes and explicit size errors", () => {
   expect([...mcpAppDownloadBytes({ text: "ok" }, 2)]).toEqual([111, 107])
+  expect([...mcpAppDownloadBytes({ text: "é" }, 2)]).toEqual([195, 169])
+  expect([...mcpAppDownloadBytes({ blob: btoa("abc") }, 3)]).toEqual([97, 98, 99])
   expect(() => mcpAppDownloadBytes({ text: "é" }, 1)).toThrow("exceeds")
   expect(() => mcpAppDownloadBytes({ blob: btoa("abc") }, 2)).toThrow("exceeds")
   expect(() => mcpAppDownloadBytes({}, 20)).toThrow("no text or blob")
