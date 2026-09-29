@@ -139,7 +139,6 @@ upstream_example_id = "{row.get('example_id')}"
 task_contract_sha256 = "{contract_sha256}"
 
 [agent]
-timeout_sec = 3600.0
 user = "root"
 network_mode = "public"
 

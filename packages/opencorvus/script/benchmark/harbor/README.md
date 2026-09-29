@@ -50,3 +50,11 @@ after the workspace is transferred to UID 60001. The verifier always seals the o
 world and score, but emits Harbor `reward.json` only when the Agent's durable disposition is
 `agent_settled`; an adapter timeout therefore remains an exception rather than a displayed
 business zero.
+
+The helper captures the current public Mission/Task evidence whenever observed activity
+changes, before waiting for a terminal outcome. Inactivity or a later API read error keeps
+that last complete observation for diagnosis; reasoning parts and raw Provider requests
+are not exported. This evidence does not confer scoring eligibility. Usage exports include
+connectivity preflight calls as well as Session calls; a missing cost on any row keeps the
+aggregate cost unknown. Generated tasks use the helper's actual-inactivity deadline rather
+than an additional absolute Agent runtime deadline.

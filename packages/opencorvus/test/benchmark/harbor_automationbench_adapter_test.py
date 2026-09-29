@@ -4,12 +4,17 @@ import asyncio
 import importlib.util
 import http.server
 import json
+import os
+import sqlite3
+import stat
 import subprocess
 import sys
 import tempfile
 import threading
 import types
 import unittest
+import urllib.parse
+from contextlib import closing
 from pathlib import Path
 
 
@@ -88,6 +93,9 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="harbor-ab-") as directory:
             task = generator.export_task(Path(directory), "finance", "wave_freelance_invoice", EXTERNAL)
             config = (task / "task.toml").read_text(encoding="utf-8")
+            from harbor.models.task.config import TaskConfig
+
+            self.assertEqual(TaskConfig.model_validate_toml(config).agent.timeout_sec, None)
             dockerfile = (task / "environment" / "Dockerfile").read_text(encoding="utf-8")
             bridge_dockerfile = (task / "environment" / "Bridge.Dockerfile").read_text(encoding="utf-8")
             scorer = (task / "tests" / "score_harbor.py").read_text(encoding="utf-8")
@@ -270,7 +278,7 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
             receipt = module.prepare(root / "bundle", runtime, source)
             copied = root / "bundle" / "node_modules" / "native" / "index.js"
             self.assertTrue(copied.is_file())
-            self.assertFalse((root / "bundle" / "node_modules" / "native").is_symlink())
+            self.assertEqual(stat.S_IFMT((root / "bundle" / "node_modules" / "native").lstat().st_mode), stat.S_IFDIR)
             self.assertIn("node_modules/native/index.js", [row["path"] for row in receipt["files"]])
 
     def test_agent_maps_bundle_link_to_integrity_error(self) -> None:
@@ -339,9 +347,13 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
             }
         ]
         audit = helper.audit_skill_load_order(messages, ["base-developer"])
-        self.assertFalse(audit["passed"])
-        self.assertEqual(audit["benchmark_client_callers"], [])
-        self.assertEqual(len(audit["unknown_client_commands"]), 2)
+        self.assertEqual(
+            audit["unknown_client_commands"],
+            [
+                {"agent_id": "base-developer", "session_id": "s1", "message_index": 0, "part_index": 0},
+                {"agent_id": "base-developer", "session_id": "s1", "message_index": 0, "part_index": 1},
+            ],
+        )
 
     def test_natural_terminal_accepts_truthful_business_failure(self) -> None:
         helper = load_runtime_helper()
@@ -453,6 +465,113 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
             server.shutdown()
             server.server_close()
             thread.join(timeout=2)
+
+
+class HarborFailureEvidenceTest(unittest.TestCase):
+    def test_observer_retains_public_evidence_when_inactivity_or_later_read_fails(self) -> None:
+        for failure in ("inactivity", "later_read"):
+            with self.subTest(failure=failure), tempfile.TemporaryDirectory(prefix="harbor-failure-evidence-") as directory:
+                helper = load_runtime_helper()
+                helper.LOGS = Path(directory) / "logs"
+                helper.HOME = Path(directory) / "home"
+                tool = {"type": "tool", "tool": "panel_create_task", "state": {"status": "error", "error": "creation rejected"}}
+                text = {"type": "text", "text": "The creation error remains unresolved."}
+                transcript = [{
+                    "info": {"id": "m1", "role": "assistant", "sessionID": "s1", "time": {"created": 1}},
+                    "parts": [tool, {"type": "reasoning", "text": "private test reasoning"}, text],
+                }]
+                mission = {"missionID": "m", "sessionID": "s1", "completion": None, "interruptible": True}
+                status = {"status": "inactive", "tasks": [{"taskID": "t", "lifecycleStatus": "failed"}]}
+                board = {"task": {"id": "t", "status": "failed"}}
+                responses = {
+                    "/mission/m/status": status,
+                    "/mission": [mission],
+                    "/session/s1/message": transcript,
+                    "/session/status": {"s1": {"type": "idle"}},
+                    "/task/t/board": board,
+                    "/task/t/transcript": [],
+                    "/task/t/trace": {"events": []},
+                    "/task/t/interactions": [],
+                }
+
+                class Handler(http.server.BaseHTTPRequestHandler):
+                    status_reads = 0
+
+                    def do_GET(self) -> None:
+                        code = 200
+                        route = urllib.parse.urlsplit(self.path).path
+                        payload = responses[route]
+                        if route == "/mission/m/status":
+                            type(self).status_reads += 1
+                            if failure == "later_read" and self.status_reads == 2:
+                                code, payload = 503, {"error": "public observation unavailable"}
+                        body = json.dumps(payload).encode()
+                        self.send_response(code)
+                        self.send_header("content-type", "application/json")
+                        self.send_header("content-length", str(len(body)))
+                        self.end_headers()
+                        self.wfile.write(body)
+
+                    def log_message(self, _format: str, *_args: object) -> None:
+                        return
+
+                server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+                thread = threading.Thread(target=server.serve_forever, daemon=True)
+                thread.start()
+                helper.SERVER = f"http://127.0.0.1:{server.server_port}"
+                old_inactivity = os.environ.get("OPENCORVUS_INACTIVITY_SECONDS")
+                os.environ["OPENCORVUS_INACTIVITY_SECONDS"] = "0" if failure == "inactivity" else "30"
+                try:
+                    expected = "No durable OpenCorvus activity for 0 seconds" if failure == "inactivity" else "503"
+                    with self.assertRaisesRegex(RuntimeError, expected):
+                        helper.wait_for_terminal("m", "s1")
+                    read = lambda name: json.loads((helper.LOGS / name).read_text(encoding="utf-8"))
+                    expected_messages = [{"info": transcript[0]["info"], "parts": [tool, text]}]
+                    self.assertEqual(read("mission-transcript.json"), expected_messages)
+                    self.assertEqual(read("opencorvus-transcript.json"), expected_messages)
+                    self.assertEqual(read("mission-record.json"), mission)
+                    self.assertEqual(read("mission-status.json"), status)
+                    self.assertEqual(read("task-evidence.json"), [{"task_id": "t", "board": board, "transcript": []}])
+                    self.assertEqual(read("last-public-observation.json")["message_count"], 1)
+                    self.assertEqual(read("physical-settlement-audit.json")["violations"], ["runtime_database_missing"])
+                finally:
+                    if old_inactivity is None:
+                        os.environ.pop("OPENCORVUS_INACTIVITY_SECONDS", None)
+                    else:
+                        os.environ["OPENCORVUS_INACTIVITY_SECONDS"] = old_inactivity
+                    server.shutdown()
+                    server.server_close()
+                    thread.join(timeout=2)
+
+    def test_usage_export_accounts_for_connectivity_and_session_calls(self) -> None:
+        helper = load_runtime_helper()
+        with tempfile.TemporaryDirectory(prefix="harbor-usage-") as directory:
+            helper.LOGS = Path(directory) / "logs"
+            helper.HOME = Path(directory) / "home"
+            (helper.HOME / "data").mkdir(parents=True)
+            database = helper.HOME / "data" / "opencorvus.db"
+            with closing(sqlite3.connect(database)) as connection, connection:
+                connection.execute("""CREATE TABLE provider_usage_event (
+                    id TEXT, occurred_at INTEGER, provider_id TEXT, model_id TEXT, purpose TEXT,
+                    input_tokens INTEGER, output_tokens INTEGER, reasoning_tokens INTEGER,
+                    cache_read_tokens INTEGER, cache_write_tokens INTEGER, total_tokens INTEGER,
+                    cost_usd REAL, billing_status TEXT, session_id TEXT, agent_id TEXT)""")
+                connection.executemany(
+                    "INSERT INTO provider_usage_event VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    [
+                        ("preflight", 1, "openai", "gpt-5.6-luna", "provider-connectivity", 8, 2, 0, 0, 0, 10, None, "unpriced", None, None),
+                        ("session", 2, "openai", "gpt-5.6-luna", "session", 80, 20, 0, 0, 0, 100, 0.01, "priced", "s1", "mission"),
+                    ],
+                )
+            rows = helper.capture_runtime_database()
+            saved = json.loads((helper.LOGS / "provider-usage.json").read_text(encoding="utf-8"))
+            self.assertEqual(saved, rows)
+            self.assertEqual([row["id"] for row in rows], ["preflight", "session"])
+            self.assertEqual(helper.token_summary(rows), {
+                "input": 88, "output": 22, "reasoning": 0, "cache_read": 0,
+                "cache_write": 0, "total": 110, "model_calls": 2, "cost_usd": None,
+            })
+            self.assertEqual(helper.provider_usage_audit(rows)["calls"], 2)
 
 
 class HarborAgentSettlementOrderTest(unittest.IsolatedAsyncioTestCase):

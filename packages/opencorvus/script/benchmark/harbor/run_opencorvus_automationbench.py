@@ -384,6 +384,27 @@ def public_observation(observation: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def capture_observation(observation: dict[str, Any]) -> None:
+    """Retain the real public evidence before waiting or failing an attempt."""
+    write_json(LOGS / "mission-status.json", observation["mission_status"])
+    write_json(LOGS / "mission-record.json", observation["mission_record"])
+    write_json(LOGS / "mission-transcript.json", public_messages(observation["mission_transcript"]))
+    write_json(
+        LOGS / "task-evidence.json",
+        [
+            {
+                "task_id": task["task_id"],
+                "board": task["board"],
+                "transcript": public_messages(task["transcript"]),
+            }
+            for task in observation["tasks"]
+        ],
+    )
+    write_json(LOGS / "opencorvus-transcript.json", public_messages(observation["all_transcript"]))
+    write_json(LOGS / "physical-settlement-audit.json", observation["durable_settlement"])
+    write_json(LOGS / "last-public-observation.json", public_observation(observation))
+
+
 def audit_skill_load_order(
     messages: list[dict[str, Any]], occurrence_agents: list[str] | None = None
 ) -> dict[str, Any]:
@@ -714,9 +735,9 @@ def wait_for_terminal(mission_id: str, mission_session_id: str) -> dict[str, Any
     previous = ""
     while True:
         observation = observe(mission_id, mission_session_id)
-        write_json(LOGS / "last-public-observation.json", public_observation(observation))
         signature = activity_signature(observation)
         if signature != previous:
+            capture_observation(observation)
             previous = signature
             deadline = time.monotonic() + inactivity
             print(
@@ -735,7 +756,7 @@ def wait_for_terminal(mission_id: str, mission_session_id: str) -> dict[str, Any
         if natural_terminal(observation):
             time.sleep(5)
             confirmed = observe(mission_id, mission_session_id)
-            write_json(LOGS / "last-public-observation.json", public_observation(confirmed))
+            capture_observation(confirmed)
             if natural_terminal(confirmed) and activity_signature(confirmed) == signature:
                 return confirmed
             previous = activity_signature(confirmed)
@@ -757,7 +778,6 @@ def usage_rows(database: Path) -> list[dict[str, Any]]:
                       cache_read_tokens, cache_write_tokens, total_tokens,
                       cost_usd, billing_status, session_id, agent_id
                FROM provider_usage_event
-               WHERE purpose <> 'provider-connectivity'
                ORDER BY occurred_at, id"""
         ).fetchall()
         return [dict(row) for row in rows]
@@ -785,7 +805,7 @@ def token_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "cache_write": total("cache_write_tokens"),
         "total": total("total_tokens"),
         "model_calls": len(rows),
-        "cost_usd": sum(float(value) for value in costs) if costs else None,
+        "cost_usd": sum(float(value) for value in costs) if rows and len(costs) == len(rows) else None,
     }
 
 
@@ -1018,21 +1038,6 @@ def main() -> int:
         if not wake.get("created") or wake.get("productPillar") != "work":
             raise RuntimeError("Mission wake did not create the expected Work Mission")
         observation = wait_for_terminal(wake["missionID"], wake["sessionID"])
-        write_json(LOGS / "mission-status.json", observation["mission_status"])
-        write_json(LOGS / "mission-record.json", observation["mission_record"])
-        write_json(LOGS / "mission-transcript.json", public_messages(observation["mission_transcript"]))
-        write_json(
-            LOGS / "task-evidence.json",
-            [
-                {
-                    "task_id": task["task_id"],
-                    "board": task["board"],
-                    "transcript": public_messages(task["transcript"]),
-                }
-                for task in observation["tasks"]
-            ],
-        )
-        write_json(LOGS / "opencorvus-transcript.json", public_messages(observation["all_transcript"]))
         occurrence_agents = [
             str(row.get("agent"))
             for row in observation["durable_settlement"].get("occurrences") or []
@@ -1042,7 +1047,6 @@ def main() -> int:
         binding_audit = workflow_audit(observation)
         write_json(LOGS / "skill-load-order-audit.json", load_audit)
         write_json(LOGS / "workflow-binding-audit.json", binding_audit)
-        write_json(LOGS / "physical-settlement-audit.json", observation["durable_settlement"])
     finally:
         if server.poll() is None:
             os.killpg(server.pid, signal.SIGTERM)

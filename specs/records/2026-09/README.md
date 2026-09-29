@@ -1,5 +1,6 @@
 # 2026-09 Records
 
+- [Complete the Harbor comparison benchmarks](2026-09-29-harbor-comparison-completion.md)
 - [Harbor benchmark restart on v0.1.18](2026-09-29-harbor-v0.1.18-restart.md)
 
 - [Runtime process identity across sleep and wake](2026-09-29-runtime-process-sleep-recovery.md)
