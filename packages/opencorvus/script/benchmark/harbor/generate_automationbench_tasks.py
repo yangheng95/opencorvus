@@ -61,8 +61,7 @@ RUN chmod 755 /opt/automationbench-harbor/automationbench_tool.py && install -d 
     && git -C /workspace config user.email "automationbench@example.invalid" \
     && touch /workspace/.gitkeep \
     && git -C /workspace add .gitkeep \
-    && git -C /workspace commit -qm "Initialize Harbor task workspace" \
-    && git config --system --add safe.directory /workspace
+    && git -C /workspace commit -qm "Initialize Harbor task workspace"
 USER root
 '''
 
@@ -82,6 +81,9 @@ def _compose(domain: str, task_name: str) -> str:
       context: .
       dockerfile: Dockerfile
     command: ["sleep", "infinity"]
+    depends_on:
+      bridge:
+        condition: service_healthy
     cap_add: ["SYS_ADMIN", "NET_ADMIN"]
     volumes:
       - benchmark-runtime:/run/automationbench
@@ -89,6 +91,11 @@ def _compose(domain: str, task_name: str) -> str:
     build:
       context: .
       dockerfile: Bridge.Dockerfile
+    healthcheck:
+      test: ["CMD-SHELL", "test -S /run/automationbench/tool.sock && test -S /run/automationbench/admin.sock"]
+      interval: 1s
+      timeout: 5s
+      retries: 120
     environment:
       AUTOMATIONBENCH_DOMAIN: "{domain}"
       AUTOMATIONBENCH_TASK: "{task_name}"
@@ -157,11 +164,6 @@ memory_mb = 8192
 storage_mb = 20480
 network_mode = "public"
 
-[environment.healthcheck]
-command = "test -S /run/automationbench/tool.sock && test -S /run/automationbench/admin.sock"
-interval_sec = 1.0
-timeout_sec = 5.0
-retries = 120
 ''',
         encoding="utf-8",
     )

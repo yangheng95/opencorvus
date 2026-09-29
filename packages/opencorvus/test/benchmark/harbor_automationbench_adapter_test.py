@@ -106,7 +106,13 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
             self.assertIn("util-linux", dockerfile)
             self.assertIn("iptables", dockerfile)
             self.assertIn('git -C /workspace commit -qm "Initialize Harbor task workspace"', dockerfile)
-            self.assertIn("git config --system --add safe.directory /workspace", dockerfile)
+            import yaml
+            compose = yaml.safe_load((task / "environment" / "docker-compose.yaml").read_text(encoding="utf-8"))
+            self.assertEqual(compose["services"]["main"]["depends_on"]["bridge"], {"condition": "service_healthy"})
+            self.assertEqual(compose["services"]["bridge"]["healthcheck"], {
+                "test": ["CMD-SHELL", "test -S /run/automationbench/tool.sock && test -S /run/automationbench/admin.sock"],
+                "interval": "1s", "timeout": "5s", "retries": 120,
+            })
             self.assertIn('cap_add: ["SYS_ADMIN", "NET_ADMIN"]', (task / "environment" / "docker-compose.yaml").read_text(encoding="utf-8"))
             self.assertIn('upstream_example_id = "4014"', config)
             self.assertIn('"task_completed_correctly"', scorer)
@@ -145,7 +151,8 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
         self.assertIn("iptables -C OUTPUT -m owner --uid-owner 60001 -j REJECT", source)
         self.assertIn("ip6tables -C OUTPUT -m owner --uid-owner 60001 -j REJECT", source)
         self.assertIn('"provider_uid\\\":0', source)
-        self.assertIn("setpriv --reuid=60001 --regid=60001 --clear-groups git -C /workspace", source)
+        self.assertIn("chown -R 0:60001 /workspace", source)
+        self.assertIn("GIT_CONFIG_NOSYSTEM=1 git -C /workspace ls-files", source)
         self.assertIn("workspace-contract.json", source)
 
     def test_agent_runtime_config_projects_mission_orchestration_only(self) -> None:
