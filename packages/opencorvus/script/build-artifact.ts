@@ -60,6 +60,7 @@ export function artifactExternalModules(): string[] {
     // CUA means Computer Use Agent. Its generated TypeScript binding resolves
     // a target-specific Node-API library from packaged node_modules at runtime.
     "@trycua/cua-driver",
+    "koffi",
   ]
 }
 
@@ -162,6 +163,9 @@ export function artifactRuntimeNodeModules(target: ArtifactNodeRuntimeTarget): A
     { name: "node-screenshots", runtimeDependencies: nodeScreenshotsNativePackageNames(target) },
   ]
   const cuaRuntimeDependencies = cuaDriverRuntimePackageNames(target)
+  if (target.os === "win32") {
+    modules.push({ name: "koffi", runtimeDependencies: [`@koromix/koffi-win32-${target.arch}`] })
+  }
   if (cuaRuntimeDependencies.length > 0) {
     modules.push({ name: "@trycua/cua-driver", runtimeDependencies: cuaRuntimeDependencies })
   }

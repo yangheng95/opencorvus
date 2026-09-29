@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Computer / Browser guidance and ordered actions](2026-09-30-computer-browser-guidance-and-actions.md)
+
 - [Agent execution redesign: ownership, evidence, convergence and efficiency](2026-09-30-agent-execution-redesign.md)
 
 - [Reference-led navigation and usage design](2026-09-29-reference-navigation-usage-style.md)

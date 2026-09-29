@@ -1,7 +1,9 @@
 import { createHash, randomUUID } from "node:crypto"
 import { PNG } from "pngjs"
-import { ComputerError } from "./errors"
-import type { ComputerBackend, ComputerBackendAction, ComputerBackendActionInput, ComputerPoint } from "./backend"
+import { ComputerError, computerError } from "./errors"
+import type { ComputerBackendObservation, ComputerPoint } from "./backend"
+import { ComputerActions, type ComputerAction, type ComputerControlBackend } from "./actions"
+import { withKeyedLock } from "@/util/lock"
 
 export type ComputerObservation = {
   computerId: string
@@ -28,16 +30,19 @@ export type ObservationBinding = {
 
 export class ComputerController {
   private readonly sessions = new Map<string, Session>()
+  private readonly operations = new Map<string, Promise<unknown>>()
 
-  constructor(private readonly backend: ComputerBackend) {}
+  constructor(private readonly backend: ComputerControlBackend) {}
 
   async create() {
-    const created = await this.backend.create()
-    this.sessions.set(created.computerId, {
-      computerId: created.computerId,
-      displayId: created.displayId,
+    return withKeyedLock(this.operations, "controller", async () => {
+      const created = await this.backend.create()
+      this.sessions.set(created.computerId, {
+        computerId: created.computerId,
+        displayId: created.displayId,
+      })
+      return created
     })
-    return created
   }
 
   private session(computerId: string): Session {
@@ -49,9 +54,15 @@ export class ComputerController {
   }
 
   async observe(input: { computerId: string; displayId: string }): Promise<ComputerObservation> {
-    const session = this.session(input.computerId)
-    this.assertDisplay(session, input.displayId)
-    const observed = await this.backend.observe(input)
+    return withKeyedLock(this.operations, "controller", async () => {
+      const session = this.session(input.computerId)
+      this.assertDisplay(session, input.displayId)
+      const observed = await this.backend.observe(input)
+      return this.recordObservation(session, observed)
+    })
+  }
+
+  private recordObservation(session: Session, observed: ComputerBackendObservation): ComputerObservation {
     if (observed.computerId !== session.computerId || observed.displayId !== session.displayId) {
       throw new ComputerError(
         "COMPUTER_SESSION_IDENTITY_MISMATCH",
@@ -156,39 +167,58 @@ export class ComputerController {
     }
   }
 
-  async act(binding: ObservationBinding, action: ComputerBackendActionInput) {
-    const observation = this.observation(binding)
-    const session = this.session(binding.computerId)
-    if (action.kind === "click") this.point(observation, { x: action.x, y: action.y }, "click point")
-    if (action.kind === "scroll") this.point(observation, { x: action.x, y: action.y }, "scroll point")
-    if (action.kind === "drag") {
-      this.point(observation, action.from, "drag start")
-      this.point(observation, action.to, "drag end")
-    }
-    this.consumeObservation(session, observation)
-    const effect = await this.backend.act({
-      ...action,
-      computerId: binding.computerId,
-      displayId: binding.displayId,
-    } as ComputerBackendAction)
-    return {
-      computerId: binding.computerId,
-      displayId: binding.displayId,
-      observationId: binding.observationId,
-      observationDigest: binding.observationDigest,
-      ...effect,
-    }
+  async act(binding: ObservationBinding, input: ComputerAction[]) {
+    return withKeyedLock(this.operations, "controller", async () => {
+      const actions = ComputerActions.parse(input)
+      const observation = this.observation(binding)
+      const session = this.session(binding.computerId)
+      for (const action of actions) {
+        if (action.kind === "click") this.point(observation, { x: action.x, y: action.y }, "click point")
+        if (action.kind === "scroll") this.point(observation, { x: action.x, y: action.y }, "scroll point")
+        if (action.kind === "drag") {
+          this.point(observation, action.from, "drag start")
+          this.point(observation, action.to, "drag end")
+        }
+      }
+      this.consumeObservation(session, observation)
+      const effect = await this.backend.act({
+        actions,
+        computerId: binding.computerId,
+        displayId: binding.displayId,
+      })
+      const { observation: captured, ...receipt } = effect
+      let next: ComputerObservation | undefined
+      if (captured) {
+        try {
+          next = this.recordObservation(session, captured)
+        } catch (error) {
+          const normalized = computerError(error)
+          receipt.observationError = { code: normalized.code, message: normalized.message, details: normalized.details }
+        }
+      }
+      return {
+        computerId: binding.computerId,
+        displayId: binding.displayId,
+        sourceObservationId: binding.observationId,
+        ...receipt,
+        ...(next ? { observation: next } : {}),
+      }
+    })
   }
 
   async destroy(input: { computerId: string }) {
-    this.session(input.computerId)
-    const result = await this.backend.destroy(input)
-    this.sessions.delete(input.computerId)
-    return { computerId: input.computerId, ...result }
+    return withKeyedLock(this.operations, "controller", async () => {
+      this.session(input.computerId)
+      const result = await this.backend.destroy(input)
+      this.sessions.delete(input.computerId)
+      return { computerId: input.computerId, ...result }
+    })
   }
 
   async close() {
-    await this.backend.close()
-    this.sessions.clear()
+    return withKeyedLock(this.operations, "controller", async () => {
+      await this.backend.close()
+      this.sessions.clear()
+    })
   }
 }

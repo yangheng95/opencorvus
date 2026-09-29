@@ -1,232 +1,151 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { z } from "zod"
-import type { ComputerBackend } from "./backend"
 import { HostComputerBackend } from "./host-client"
-import { ComputerController, type ObservationBinding } from "./controller"
+import { ComputerController, type ComputerObservation } from "./controller"
 import { ComputerError, computerError } from "./errors"
+import { ComputerActions, type ComputerControlBackend } from "./actions"
+import { builtinGuidance } from "../../skill/builtin-guidance"
 
 const ok = <T extends Record<string, unknown>>(data: T) => ({
   content: [{ type: "text" as const, text: JSON.stringify(data) }],
   structuredContent: data,
 })
-
 const fail = (error: unknown) => {
   const normalized = computerError(error)
-  const data = {
-    ok: false,
-    error: {
-      code: normalized.code,
-      message: normalized.message,
-      details: normalized.details,
-    },
-  }
   return {
     isError: true as const,
-    content: [{ type: "text" as const, text: JSON.stringify(data) }],
-    structuredContent: data,
+    ...ok({ ok: false, error: { code: normalized.code, message: normalized.message, details: normalized.details } }),
   }
 }
-
-const bindingSchema = {
-  computer_id: z.string().min(1),
-  display_id: z.string().min(1),
-  observation_id: z.string().min(1),
-  observation_digest: z.string().regex(/^[a-f0-9]{64}$/),
-}
-
-const userAuthority =
-  "Stop before any irreversible external effect and leave the final confirmation or control to the user on the current desktop."
-
-function binding(input: {
-  computer_id: string
-  display_id: string
-  observation_id: string
-  observation_digest: string
-}): ObservationBinding {
+function observationResult(observed: ComputerObservation) {
   return {
-    computerId: input.computer_id,
-    displayId: input.display_id,
-    observationId: input.observation_id,
-    observationDigest: input.observation_digest,
+    computer_id: observed.computerId,
+    display_id: observed.displayId,
+    observation_id: observed.observationId,
+    observation_digest: observed.observationDigest,
+    width: observed.width,
+    height: observed.height,
+    mime_type: "image/png",
   }
 }
+const screenshot = (observed: ComputerObservation) => ({
+  type: "image" as const,
+  data: observed.pngBase64,
+  mimeType: "image/png" as const,
+})
 
-function withError<T extends Record<string, unknown>>(run: () => Promise<T>) {
-  return run().then(ok, fail)
-}
-
-export function createComputerMcpServer(options: { backend?: ComputerBackend } = {}) {
+export function createComputerMcpServer(options: { backend?: ComputerControlBackend } = {}) {
   const server = new McpServer({ name: "opencorvus-computer", version: "1.0.0" })
   const controller = new ComputerController(options.backend ?? HostComputerBackend.fromEnvironment())
-
+  server.registerTool(
+    "help",
+    {
+      description:
+        "Read the computer-use Skill: desktop ownership, observation bindings, ordered action groups, key/coordinate conventions and outcome recovery. Read-only; use before first interaction or when instructions are missing from context.",
+      inputSchema: {},
+    },
+    async () => ok({ skill: "computer-use", instructions: builtinGuidance("computer-use") }),
+  )
   server.registerTool(
     "session_create",
     {
       description:
-        "Establish this Agent run's OpenCorvus-owned CUA Driver session on the user's current desktop. On first use this creates the host-owned desktop session; after human takeover returns control, call this same visible tool to attach the new Agent run to the preserved session before observe. This creates logical Agent authority, not a Virtual Machine or a second desktop.",
+        "Attach this Agent run to its host-native desktop session and return the computer-use Skill instructions. Read the returned guide before input. This controls the current physical desktop. After human takeover returns control, attach again, then observe.",
       inputSchema: {},
     },
-    async () =>
-      withError(async () => {
+    async () => {
+      try {
         const created = await controller.create()
-        return {
+        return ok({
           ok: true,
           computer_id: created.computerId,
           display_id: created.displayId,
           driver_version: created.driverVersion,
-        }
-      }),
+          instructions: builtinGuidance("computer-use"),
+        })
+      } catch (error) {
+        return fail(error)
+      }
+    },
   )
-
   server.registerTool(
     "observe",
     {
       description:
-        "Capture the current desktop. A new Agent run after human takeover must first attach with session_create, then observe before any input. Later input must repeat the exact returned computer, display, observation, and digest identities.",
-      inputSchema: {
-        computer_id: z.string().min(1),
-        display_id: z.string().min(1),
-      },
+        "Capture and inspect the current desktop after session_create. Returns a screenshot and an exact binding for one ordered act group. Use after an uncertain outcome; copy the returned IDs/digest verbatim and use its pixel dimensions for coordinates.",
+      inputSchema: { computer_id: z.string().min(1), display_id: z.string().min(1) },
     },
     async ({ computer_id, display_id }) => {
       try {
         const observed = await controller.observe({ computerId: computer_id, displayId: display_id })
-        const structuredContent = {
-          ok: true,
-          computer_id: observed.computerId,
-          display_id: observed.displayId,
-          observation_id: observed.observationId,
-          observation_digest: observed.observationDigest,
-          width: observed.width,
-          height: observed.height,
-          mime_type: "image/png",
-        }
+        const result = ok({ ok: true, ...observationResult(observed) })
+        return { ...result, content: [screenshot(observed), ...result.content] }
+      } catch (error) {
+        return fail(error)
+      }
+    },
+  )
+  server.registerTool(
+    "act",
+    {
+      description:
+        "Execute an ordered group of predictable desktop inputs under one current observation binding, then return a fresh screenshot/binding. A single input uses a one-element array. End the group where another visual decision is needed. The receipt records the completed prefix and failed action; inspect it before continuing and never replay unknown effects. Respect the user's authorization for irreversible external actions.",
+      inputSchema: {
+        computer_id: z.string().min(1),
+        display_id: z.string().min(1),
+        observation_id: z.string().min(1),
+        observation_digest: z.string().regex(/^[a-f0-9]{64}$/),
+        actions: ComputerActions,
+      },
+    },
+    async (input) => {
+      try {
+        const acted = await controller.act(
+          {
+            computerId: input.computer_id,
+            displayId: input.display_id,
+            observationId: input.observation_id,
+            observationDigest: input.observation_digest,
+          },
+          input.actions,
+        )
+        const result = ok({
+          ok: !acted.failedAction && !acted.observationError,
+          computer_id: acted.computerId,
+          display_id: acted.displayId,
+          source_observation_id: acted.sourceObservationId,
+          completed_actions: acted.completedActions,
+          ...(acted.failedAction ? { failed_action: acted.failedAction } : {}),
+          ...(acted.observationError ? { observation_error: acted.observationError } : {}),
+          ...(acted.observation ? { observation: observationResult(acted.observation) } : {}),
+        })
         return {
-          content: [
-            { type: "image" as const, data: observed.pngBase64, mimeType: "image/png" as const },
-            { type: "text" as const, text: JSON.stringify(structuredContent) },
-          ],
-          structuredContent,
+          ...result,
+          ...(result.structuredContent.ok ? {} : { isError: true as const }),
+          content: [...(acted.observation ? [screenshot(acted.observation)] : []), ...result.content],
         }
       } catch (error) {
         return fail(error)
       }
     },
   )
-
-  server.registerTool(
-    "click",
-    {
-      description: `Send exactly one click to the exact observed desktop. This does not observe or retry. ${userAuthority}`,
-      inputSchema: {
-        ...bindingSchema,
-        x: z.number().int().nonnegative(),
-        y: z.number().int().nonnegative(),
-        button: z.enum(["left", "right"]).default("left"),
-      },
-    },
-    async (input) =>
-      withError(async () => ({
-        ok: true,
-        ...(await controller.act(binding(input), {
-          kind: "click",
-          x: input.x,
-          y: input.y,
-          button: input.button,
-        })),
-      })),
-  )
-
-  server.registerTool(
-    "type_text",
-    {
-      description: `Type exact text into the desktop bound to the exact latest observation. This does not observe or retry. ${userAuthority}`,
-      inputSchema: { ...bindingSchema, text: z.string().max(100_000) },
-    },
-    async (input) =>
-      withError(async () => ({
-        ok: true,
-        ...(await controller.act(binding(input), { kind: "type_text", text: input.text })),
-      })),
-  )
-
-  server.registerTool(
-    "keypress",
-    {
-      description: `Send one explicit key chord to the exact observed desktop. This does not observe or retry. ${userAuthority}`,
-      inputSchema: { ...bindingSchema, keys: z.array(z.string().min(1)).min(1).max(8) },
-    },
-    async (input) =>
-      withError(async () => ({
-        ok: true,
-        ...(await controller.act(binding(input), { kind: "keypress", keys: input.keys })),
-      })),
-  )
-
-  server.registerTool(
-    "scroll",
-    {
-      description: `Scroll once at an exact point on the observed desktop. This does not observe or retry. ${userAuthority}`,
-      inputSchema: {
-        ...bindingSchema,
-        x: z.number().int().nonnegative(),
-        y: z.number().int().nonnegative(),
-        direction: z.enum(["up", "down", "left", "right"]),
-        amount: z.number().int().min(1).max(100),
-      },
-    },
-    async (input) =>
-      withError(async () => ({
-        ok: true,
-        ...(await controller.act(binding(input), {
-          kind: "scroll",
-          x: input.x,
-          y: input.y,
-          direction: input.direction,
-          amount: input.amount,
-        })),
-      })),
-  )
-
-  server.registerTool(
-    "drag",
-    {
-      description: `Send one bounded drag to the exact observed desktop. This does not observe or retry. ${userAuthority}`,
-      inputSchema: {
-        ...bindingSchema,
-        from_x: z.number().int().nonnegative(),
-        from_y: z.number().int().nonnegative(),
-        to_x: z.number().int().nonnegative(),
-        to_y: z.number().int().nonnegative(),
-        duration_ms: z.number().int().min(50).max(10_000).default(500),
-      },
-    },
-    async (input) =>
-      withError(async () => ({
-        ok: true,
-        ...(await controller.act(binding(input), {
-          kind: "drag",
-          from: { x: input.from_x, y: input.from_y },
-          to: { x: input.to_x, y: input.to_y },
-          durationMs: input.duration_ms,
-        })),
-      })),
-  )
-
   server.registerTool(
     "session_destroy",
     {
       description:
-        "End the exact CUA Driver desktop session. This does not disconnect the visible MCP adapter; the same Agent run may establish a new session later with session_create.",
+        "End this exact logical desktop session and return its receipt. The user's apps remain open. The current adapter can create another logical session later.",
       inputSchema: { computer_id: z.string().min(1) },
     },
-    async ({ computer_id }) =>
-      withError(async () => ({ ok: true, ...(await controller.destroy({ computerId: computer_id })) })),
+    async ({ computer_id }) => {
+      try {
+        return ok({ ok: true, ...(await controller.destroy({ computerId: computer_id })) })
+      } catch (error) {
+        return fail(error)
+      }
+    },
   )
-
   return { server, controller }
 }
-
 export function computerToolErrorCode(error: unknown): ComputerError["code"] {
   return computerError(error).code
 }

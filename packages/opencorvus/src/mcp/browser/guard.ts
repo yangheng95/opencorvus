@@ -282,7 +282,7 @@ export const runPointGuard = async (
         risks,
         message:
           decision === "block"
-            ? "Coordinate does not appear to target a valid interaction area. Re-call with force:true to execute anyway."
+            ? "Coordinate does not appear to target a valid interaction area. Observe again and inspect the target, nearby candidates and overlays before choosing a corrected action."
             : undefined,
       } satisfies GuardResult
     },

@@ -1,5 +1,6 @@
 import { z } from "zod"
-import type { ComputerBackend, ComputerBackendAction, ComputerBackendObservation } from "./backend"
+import type { ComputerBackendObservation } from "./backend"
+import { ComputerActionResult, type ComputerActionRequest, type ComputerControlBackend } from "./actions"
 import { ComputerError, ComputerErrorCode } from "./errors"
 
 const HostResponse = z.discriminatedUnion("ok", [
@@ -20,12 +21,11 @@ const HostResponse = z.discriminatedUnion("ok", [
 
 const Created = z.object({ computerId: z.string(), displayId: z.string(), driverVersion: z.string() }).strict()
 const Observed = z.object({ computerId: z.string(), displayId: z.string(), pngBase64: z.string() }).strict()
-const Acted = z.object({ accepted: z.literal(true), backendActionId: z.string() }).strict()
 const Destroyed = z.object({ destroyed: z.literal(true) }).strict()
 
 type OperationEffect = "read" | "effect"
 
-export class HostComputerBackend implements ComputerBackend {
+export class HostComputerBackend implements ComputerControlBackend {
   constructor(
     private readonly endpoint: string,
     private readonly authorization: string,
@@ -104,9 +104,13 @@ export class HostComputerBackend implements ComputerBackend {
     return this.request("observe", { computer_id: input.computerId, display_id: input.displayId }, Observed, "read")
   }
 
-  act(action: ComputerBackendAction) {
-    const { computerId, displayId, kind, ...params } = action
-    return this.request(kind, { ...params, computer_id: computerId, display_id: displayId }, Acted, "effect")
+  act(input: ComputerActionRequest) {
+    return this.request(
+      "act",
+      { actions: input.actions, computer_id: input.computerId, display_id: input.displayId },
+      ComputerActionResult,
+      "effect",
+    )
   }
 
   destroy(input: { computerId: string }) {
