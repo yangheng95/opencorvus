@@ -100,6 +100,20 @@ Assistant、受影响 Tool 与 `session.error` 共用一个
 不同字段。Snapshot patch 等次生 observation 只能附着于该 occurrence，不能替换主 Provider 错误。
 所有合法持久化 Session kind 走同一自动压缩路径，不存在按 kind 禁用的 policy gate。
 
+`session/request-budget.ts` 是普通请求、压缩请求与最终流式请求的共同估算器；system、实际 Tool
+schema、messages 与独立媒体估算采用同一口径。`session/llm.ts` 在 system/parameter hooks 后和每个
+Provider step 发送前复核最终输入容量，使用该请求实际的 output cap。媒体数字是预算估算，
+不冒充供应商的精确图像计费或从错误中学习第二容量阈值。`compaction.reserved` 是组合窗口的
+最低 output reservation，不能低于实际请求 output；独立 input cap 不重复扣减 reservation。
+
+只有正常 `stop`、有最终可见正文且替换后估算 token 少于被替换历史的摘要才可发布 checkpoint。
+达到输出上限、异常终止或不缩小的结果保留为 typed failed assistant/control，上一有效 Session
+memory 与原始历史继续权威。所有摘要识别、持久化与 memory 重建共享这一完成判定。
+默认近期保留预算为可用 prompt 的 25%，上限为触发线；明确配置继续优先。保留边界可以是
+用户消息或已完成、Tool/result 完整配对的 assistant step，选择与重建共用同一判定。
+大 Tool 输出在送入 summarizer 前使用现有精确结果引用与有界 preview，reader 可分页读取原文；
+不是额外的不可见历史替换。历史附件保留可寻址 locator，摘要里的截图/焦点不授予当前桌面状态。
+
 所有 agent 消费同一 Zod 类型：
 
 ```ts

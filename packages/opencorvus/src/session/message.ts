@@ -103,6 +103,18 @@ export namespace Message {
     "CompactionContinuationMissingError",
     z.object({ message: z.string(), sessionID: z.string(), assistantMessageID: z.string() }),
   )
+  export const CompactionSummaryInvalidError = NamedError.create(
+    "CompactionSummaryInvalidError",
+    z.object({
+      message: z.string(),
+      sessionID: z.string(),
+      assistantMessageID: z.string(),
+      reason: z.enum(["incomplete", "not_smaller"]),
+      finish: z.string().optional(),
+      sourceTokens: z.number().optional(),
+      summaryTokens: z.number().optional(),
+    }),
+  )
   /**
    * Predictive-compaction fired but compaction cannot rescue this turn â€”
    * either there is no message history to summarise (`assistantMsgCount=0`
@@ -672,6 +684,7 @@ export namespace Message {
         SnapshotEmptyTreeError.Schema,
         ContextOverflowError.Schema,
         CompactionContinuationMissingError.Schema,
+        CompactionSummaryInvalidError.Schema,
         PromptBudgetOverflowError.Schema,
         ToolSchemaBudgetError.Schema,
         ModelImageInputTooLargeError.Schema,
@@ -1472,6 +1485,18 @@ export namespace Message {
     )
   }
 
+  export function isCompactionTailBoundary(message: Message.WithParts): boolean {
+    if (message.info.role === "user") return true
+    return (
+      message.info.role === "assistant" &&
+      message.info.time.completed !== undefined &&
+      message.parts.some((part) => part.type === "step-start") &&
+      message.parts.every(
+        (part) => part.type !== "tool" || part.state.status === "completed" || part.state.status === "error",
+      )
+    )
+  }
+
   export async function filterCompacted(stream: AsyncIterable<Message.WithParts>) {
     const result = [] as Message.WithParts[]
     const completed = new Map<string, { part: Message.CompactionPart; summaryID: string }>()
@@ -1489,7 +1514,7 @@ export namespace Message {
         if (!retain.tailSatisfied) {
           result.push(msg)
           if (msg.info.id === retain.tailID) {
-            if (msg.info.role !== "user") {
+            if (!isCompactionTailBoundary(msg)) {
               result.splice(retain.afterCompactionIndex)
               retain = undefined
               break
@@ -1529,7 +1554,7 @@ export namespace Message {
           if (part.tail_start_id) {
             const tailIndex = result.findIndex((candidate) => candidate.info.id === part.tail_start_id)
             const tail = tailIndex >= 0 ? result[tailIndex] : undefined
-            if (tail && tail.info.role === "user" && tailIndex > summaryIndex && tailIndex < markerIndex) {
+            if (tail && isCompactionTailBoundary(tail) && tailIndex > summaryIndex && tailIndex < markerIndex) {
               const tailBlock = result.slice(summaryIndex + 1, tailIndex + 1)
               result.splice(0, result.length, ...newer, ...tailBlock, summary, msg)
               break
@@ -1675,7 +1700,11 @@ export namespace Message {
         return e
       case Message.StructuredOutputPayloadError.isInstance(e):
         return e.toObject()
+      case Message.ContextOverflowError.isInstance(e):
+        return e.toObject()
       case Message.CompactionContinuationMissingError.isInstance(e):
+        return e.toObject()
+      case Message.CompactionSummaryInvalidError.isInstance(e):
         return e.toObject()
       case ModelImageInputTooLargeError.isInstance(e):
         return e.toObject()

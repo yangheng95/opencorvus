@@ -33,6 +33,8 @@ import { Auth } from "@/auth"
 import { AgentTrace } from "@/trace"
 import { fingerprintPromptComposition, toolPayloadTexts } from "@/session/prompt-composition"
 import { sessionParentID, taskIDForSession } from "@/engine/task-session-lineage"
+import { RequestBudget } from "./request-budget"
+import { ContextBudget } from "./context-budget"
 
 export namespace LLM {
   const log = Log.create({ service: "llm" })
@@ -270,6 +272,19 @@ export namespace LLM {
     }
     const systemText = system.join("\n")
     const requestMessages = input.messages
+    const capacity = ContextBudget.capacity({
+      config,
+      model: input.model,
+      effectiveOutputTokens: params.maxOutputTokens,
+    })
+    const checkCapacity = (messages: ModelMessage[], activeTools = tools, stepSystem = system) => {
+      const estimate = RequestBudget.estimate({ system: stepSystem, messages, tools: activeTools })
+      if (capacity.status === "known" && estimate.totalTokensEst > capacity.tokens) {
+        throw new Message.ContextOverflowError({
+          message: `Final request exceeds declared prompt capacity: estimated ${estimate.totalTokensEst} tokens, capacity ${capacity.tokens}; system=${estimate.systemTokensEst}, tools=${estimate.toolSchemaTokensEst}, messages=${estimate.messagePayloadTokensEst}, media=${estimate.mediaTokensEst}.`,
+        })
+      }
+    }
 
     if (AgentTrace.isEnabled()) {
       const parentSessionID = sessionParentID(input.sessionID)
@@ -311,7 +326,20 @@ export namespace LLM {
     }
 
     const result = streamText({
-      prepareStep: input.prepareStep,
+      prepareStep: async (step) => {
+        const prepared = await input.prepareStep?.(step)
+        const activeTools = prepared?.activeTools
+          ? Object.fromEntries(prepared.activeTools.map((name) => [name, tools[name]!]))
+          : tools
+        const stepSystem =
+          prepared?.system === undefined
+            ? system
+            : typeof prepared.system === "string"
+              ? [prepared.system]
+              : (Array.isArray(prepared.system) ? prepared.system : [prepared.system]).map((message) => message.content)
+        checkCapacity(prepared?.messages ?? step.messages, activeTools, stepSystem)
+        return prepared
+      },
       onError(event) {
         void input.stream?.onError?.(event)
         const error = Message.fromError(event.error, { providerID: input.model.providerID })

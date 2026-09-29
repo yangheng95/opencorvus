@@ -100,6 +100,7 @@ export type AssistantMessage = {
     | SnapshotEmptyTreeError
     | ContextOverflowError
     | CompactionContinuationMissingError
+    | CompactionSummaryInvalidError
     | PromptBudgetOverflowError
     | ToolSchemaBudgetError
     | ModelImageInputTooLargeError
@@ -349,6 +350,19 @@ export type CompactionPart = {
   type: "compaction"
 }
 
+export type CompactionSummaryInvalidError = {
+  data: {
+    assistantMessageID: string
+    finish?: string
+    message: string
+    reason: "incomplete" | "not_smaller"
+    sessionID: string
+    sourceTokens?: number
+    summaryTokens?: number
+  }
+  name: "CompactionSummaryInvalidError"
+}
+
 export type Config = {
   /**
    * JSON schema reference for configuration validation
@@ -416,7 +430,7 @@ export type Config = {
      */
     auto?: boolean
     /**
-     * Token budget for the verbatim recent-tail retained after compaction.
+     * Token budget for verbatim recent-tail retention. Defaults to 25% of usable prompt capacity, bounded by the compaction trigger; explicit zero retains no tail.
      */
     preserve_recent_tokens?: number
     /**
@@ -424,11 +438,11 @@ export type Config = {
      */
     prune?: boolean
     /**
-     * Token buffer for compaction. Leaves enough window to avoid overflow during compaction.
+     * Minimum combined-window output reservation. The actual request output cap is always reserved; an independent input limit is intersected without subtracting it again.
      */
     reserved?: number
     /**
-     * Number of most recent real user turns to preserve verbatim after compaction. Defaults to 2.
+     * Maximum recent conversation units (user messages or completed assistant steps) considered for verbatim retention. Defaults to 2; tool call/result pairs remain intact.
      */
     tail_turns?: number
     /**
@@ -1541,6 +1555,7 @@ export type EventSessionError = {
       | SnapshotEmptyTreeError
       | ContextOverflowError
       | CompactionContinuationMissingError
+      | CompactionSummaryInvalidError
       | PromptBudgetOverflowError
       | ToolSchemaBudgetError
       | ModelImageInputTooLargeError
@@ -5573,6 +5588,7 @@ export type VisibleMessage =
         | SnapshotEmptyTreeError
         | ContextOverflowError
         | CompactionContinuationMissingError
+        | CompactionSummaryInvalidError
         | PromptBudgetOverflowError
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError
@@ -27792,6 +27808,7 @@ export type SessionCommandResponses = {
         | SnapshotEmptyTreeError
         | ContextOverflowError
         | CompactionContinuationMissingError
+        | CompactionSummaryInvalidError
         | PromptBudgetOverflowError
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError
@@ -29437,6 +29454,7 @@ export type SessionPromptResponses = {
         | SnapshotEmptyTreeError
         | ContextOverflowError
         | CompactionContinuationMissingError
+        | CompactionSummaryInvalidError
         | PromptBudgetOverflowError
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError

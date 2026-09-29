@@ -3,6 +3,14 @@
 Project memory has three explicitly scoped authorities:
 
 1. Session `MEMORY.MD` is a read-only continuation checkpoint produced by successful compaction. Its completed compaction-summary assistant owns the append-only checkpoint Part; the source user Message is never marked or mutated.
+
+   A successful checkpoint requires a normal `stop`, final visible text and a
+   smaller provider-facing replacement. Output-limit or other incomplete
+   summaries and nonshrinking summaries retain typed failure evidence and leave
+   the previous valid memory readable. Memory reconstruction uses the same
+   completion predicate as checkpoint publication and conversation projection.
+   Skill and attachment references are historical locators, not current tool
+   grants, desktop focus or permission authority.
 2. Project `MEMORY.MD` is a read-only Project context maintained exclusively by the fixed hidden `memory` helper agent.
 3. Semantic memory (`note`, `episode`, `fact`, `lesson`, `profile`) is reusable main-agent-managed Project knowledge.
 

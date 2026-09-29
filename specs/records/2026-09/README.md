@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Compaction integrity and request budget repair](2026-09-30-compaction-integrity-and-budget.md)
+
 - [Computer / Browser guidance and ordered actions](2026-09-30-computer-browser-guidance-and-actions.md)
 
 - [Agent execution redesign: ownership, evidence, convergence and efficiency](2026-09-30-agent-execution-redesign.md)

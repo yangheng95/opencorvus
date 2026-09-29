@@ -1632,7 +1632,9 @@ export namespace Config {
             .int()
             .min(0)
             .optional()
-            .describe("Token buffer for compaction. Leaves enough window to avoid overflow during compaction."),
+            .describe(
+              "Minimum combined-window output reservation. The actual request output cap is always reserved; an independent input limit is intersected without subtracting it again.",
+            ),
           threshold: z
             .number()
             .min(0.1)
@@ -1646,13 +1648,17 @@ export namespace Config {
             .int()
             .min(0)
             .optional()
-            .describe("Number of most recent real user turns to preserve verbatim after compaction. Defaults to 2."),
+            .describe(
+              "Maximum recent conversation units (user messages or completed assistant steps) considered for verbatim retention. Defaults to 2; tool call/result pairs remain intact.",
+            ),
           preserve_recent_tokens: z
             .number()
             .int()
             .min(0)
             .optional()
-            .describe("Token budget for the verbatim recent-tail retained after compaction."),
+            .describe(
+              "Token budget for verbatim recent-tail retention. Defaults to 25% of usable prompt capacity, bounded by the compaction trigger; explicit zero retains no tail.",
+            ),
         })
         .optional(),
       assistant: z

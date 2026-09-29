@@ -4,25 +4,35 @@ import { ProviderTransform } from "@/provider/transform"
 import type { Message } from "./message"
 
 export namespace ContextBudget {
-  export const COMPACTION_BUFFER = 20_000
   export const COMPACTION_THRESHOLD_DEFAULT = 0.9
   export const DEFAULT_TAIL_TURNS = 2
   export const MIN_PRESERVE_RECENT_TOKENS = 2_000
-  export const MAX_PRESERVE_RECENT_TOKENS = 8_000
+  export const PRESERVE_RECENT_RATIO = 0.25
 
-  export function usable(input: { config: Config.Info; model: Provider.Model }) {
+  export function capacity(input: { config: Config.Info; model: Provider.Model; effectiveOutputTokens?: number }) {
     const context = input.model.limit.context
-    if (context === 0) return 0
-    const reserved =
-      input.config.compaction?.reserved ?? Math.min(COMPACTION_BUFFER, ProviderTransform.maxOutputTokens(input.model))
-    const usable = input.model.limit.input ? input.model.limit.input - reserved : context - reserved
-    return Math.max(0, usable)
+    const prompt = input.model.limit.input
+    const output = input.effectiveOutputTokens ?? ProviderTransform.maxOutputTokens(input.model)
+    const reserved = Math.max(output, input.config.compaction?.reserved ?? 0)
+    const limits = [
+      context > 0 ? Math.max(0, context - reserved) : undefined,
+      prompt && prompt > 0 ? prompt : undefined,
+    ].filter((value): value is number => value !== undefined)
+    return limits.length ? { status: "known" as const, tokens: Math.min(...limits) } : { status: "unknown" as const }
+  }
+
+  export function usable(input: { config: Config.Info; model: Provider.Model; effectiveOutputTokens?: number }) {
+    const budget = capacity(input)
+    return budget.status === "known" ? budget.tokens : 0
   }
 
   export function preserveRecent(input: { config: Config.Info; model: Provider.Model }) {
     return (
       input.config.compaction?.preserve_recent_tokens ??
-      Math.min(MAX_PRESERVE_RECENT_TOKENS, Math.max(MIN_PRESERVE_RECENT_TOKENS, Math.floor(usable(input) * 0.25)))
+      Math.min(
+        Math.floor(usable(input) * threshold(input)),
+        Math.max(MIN_PRESERVE_RECENT_TOKENS, Math.floor(usable(input) * PRESERVE_RECENT_RATIO)),
+      )
     )
   }
 
@@ -36,9 +46,9 @@ export namespace ContextBudget {
 
   export function predictiveLimit(input: { config: Config.Info; model: Provider.Model }) {
     if (input.config.compaction?.auto === false) return undefined
-    if (input.model.limit.context === 0) return undefined
-    const usableBudget = usable(input)
-    if (usableBudget === 0) return undefined
+    const budget = capacity(input)
+    if (budget.status === "unknown") return undefined
+    const usableBudget = budget.tokens
     const ratio = threshold({ config: input.config })
     return {
       usableBudget,
@@ -53,7 +63,7 @@ export namespace ContextBudget {
     model: Provider.Model
   }) {
     if (input.config.compaction?.auto === false) return false
-    if (input.model.limit.context === 0) return false
+    if (capacity(input).status === "unknown") return false
     return usageCount(input.tokens) >= usable(input) * threshold({ config: input.config })
   }
 }

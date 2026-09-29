@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Compaction integrity and request budget repair](records/2026-09/2026-09-30-compaction-integrity-and-budget.md)
+
 - [Computer / Browser guidance and ordered actions](records/2026-09/2026-09-30-computer-browser-guidance-and-actions.md)
 
 - [Agent execution redesign: ownership, evidence, convergence and efficiency](records/2026-09/2026-09-30-agent-execution-redesign.md)

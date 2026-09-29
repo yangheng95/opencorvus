@@ -234,7 +234,7 @@ export function comparePromptComposition(
 /**
  * Per-Tool payload text in request order.
  *
- * Mirrors `SessionLoop.estimateToolPayload`: name plus description plus the
+ * Mirrors `RequestBudget.estimateToolPayload`: name plus description plus the
  * normalised JSON Schema, which is what the Provider actually receives.
  * Stringifying the raw `inputSchema` wrapper instead would walk a Zod object's
  * internal `_def` graph and produce sizes unrelated to the outgoing request.
