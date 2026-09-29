@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [File editor syntax highlighting](2026-09-30-file-editor-highlighting/README.md): actual light/dark source editing, Markdown fences and saved YAML reopened.
+
 - [Computer / Browser manual acceptance](2026-09-30-computer-browser-guidance/README.md): actual Node Browser and native CUA input, manually inspected result and takeover/return receipt.
 
 - [Composer picker visual review](2026-09-29-popup-layer-simplification/README.md): one-surface menus, plain glyphs, selected states and dark/light screenshots.

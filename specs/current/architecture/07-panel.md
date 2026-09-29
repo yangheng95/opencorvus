@@ -1,5 +1,18 @@
 # 07 — Overlay Panels And Task Evidence
 
+## File editor language support
+
+The existing CodeMirror editor selects syntax by filename using the shared
+`components/ui/code-editor-language.ts` registry. CodeMirror language-data owns
+grammar metadata and cached dynamic loading; Markdown fences use that same
+registry. File, code, notebook and diff surfaces share this language source and
+the existing theme-token palette. Unknown files intentionally remain plain text.
+
+Changing a language reconfigures only the editor's language compartment, keeping
+the draft, selection and undo history. A disposed or superseded view cannot
+accept a late grammar result. The editor displays its language, loading state or
+a retryable highlighting failure; grammar loading never owns file saving.
+
 ## Reference-led navigation and usage
 
 The desktop shell has a fixed icon rail and an independently resizable project
