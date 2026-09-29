@@ -89,11 +89,17 @@ These diagnostics do not convert a failed bundle into success or replace install
 validation. Use the exact-platform debug workflow for native diagnosis; its artifacts
 cannot replace another release run's source-owned publication inputs.
 
+Native GUI upload uses compression level 0 because its installer/archive files are
+already compressed. Long native compile/package jobs have 41-minute infrastructure
+ceilings; canonical runs remain governed by the original 40-minute release deadline,
+including queue, retries, upload and website work. Short setup and validation steps
+retain their bounded operational limits.
+
 Linux compilation runs once per architecture using `package:gui-installer-matrix --build-only`.
 It retains the `package-input` executable in a permission-preserving tar archive, and three
 independent native jobs consume that exact immutable Actions artifact ID to bundle DEB,
-RPM and AppImage in parallel. Each job has its own timer, a 90-minute bound and a retained
-format archive. RPM therefore does not hold up production of the other formats.
+RPM and AppImage in parallel. Each job retains its format archive and shares the original
+release deadline. RPM therefore does not hold up production of the other formats.
 
 RPM uses `script/prepare-rpm-bundler.py` through the shared installer-command owner
 for both local and hosted packaging. It builds the installed Tauri CLI version's exact

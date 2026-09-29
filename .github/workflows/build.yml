@@ -199,7 +199,8 @@ jobs:
           - runner: windows-latest
             platform: windows-x64
     runs-on: ${{ matrix.runner }}
-    timeout-minutes: 30
+    # The original-run deadline covers queue, native work and downstream publication.
+    timeout-minutes: 41
     permissions:
       contents: read
       actions: read

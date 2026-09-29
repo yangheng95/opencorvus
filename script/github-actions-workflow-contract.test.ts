@@ -47,7 +47,7 @@ async function readWorkflow(file: string): Promise<Workflow> {
 }
 
 describe("GitHub Actions workflow contract", () => {
-  test("shared Bun setup installs the frozen graph on every host and archives the Unix download cache", async () => {
+  test("shared Bun setup installs the frozen graph and manages the Unix cache before native work", async () => {
     const setup = Bun.YAML.parse(
       await Bun.file(path.join(workflowRoot, "../actions/setup-bun/action.yml")).text(),
     ) as { inputs: Record<string, { default: string }>; runs: { steps: WorkflowStep[] } }
@@ -59,11 +59,18 @@ describe("GitHub Actions workflow contract", () => {
       shell: "bash",
       env: { HUSKY: "0" },
     })
-    expect(setup.runs.steps.find(({ name }) => name === "Cache Bun dependencies")).toMatchObject({
+    expect(setup.runs.steps.find(({ name }) => name === "Restore Bun dependencies")).toMatchObject({
       if: "runner.os == 'Linux' || runner.os == 'macOS'",
-      uses: "actions/cache@v6",
+      uses: "actions/cache/restore@v6",
       with: { path: "~/.bun/install/cache" },
     })
+    expect(setup.runs.steps.find(({ name }) => name === "Save Bun dependencies")).toMatchObject({
+      if: "${{ inputs.install_dependencies == 'true' && (runner.os == 'Linux' || (runner.os == 'macOS' && runner.arch != 'X64')) && steps.bun-cache.outputs.cache-hit != 'true' }}",
+      uses: "actions/cache/save@v6",
+      with: { path: "~/.bun/install/cache", key: "${{ steps.bun-cache.outputs.cache-primary-key }}" },
+    })
+    const names = setup.runs.steps.map(({ name }) => name)
+    expect(names.indexOf("Save Bun dependencies")).toBeGreaterThan(names.indexOf("Install dependencies"))
   })
 
   test("every native packaging caller grants the reusable workflow's required permissions", async () => {
@@ -107,6 +114,25 @@ describe("GitHub Actions workflow contract", () => {
       })
       expect(result.exitCode, result.stderr.toString()).toBe(scenario.exit)
     }
+  })
+
+  test("native packaging retains the shared deadline owner's full window through artifact upload", async () => {
+    const release = await readWorkflow("build.yml")
+    const overlay = await readWorkflow("package-overlay.yml")
+    for (const job of [release.jobs?.["package-cli"], overlay.jobs?.build, overlay.jobs?.["bundle-linux"]]) {
+      expect(job?.["timeout-minutes"]).toBe(RELEASE_BUDGET_MINUTES + 1)
+    }
+    expect(overlay.jobs?.build?.steps?.find(({ name }) => name === "Upload overlay artifact")?.with).toMatchObject({
+      name: "overlay-${{ inputs.platform }}",
+      "if-no-files-found": "error",
+      "compression-level": 0,
+      overwrite: true,
+    })
+    expect(overlay.jobs?.build?.steps?.find(({ name }) => name === "Verify remaining release budget")).toMatchObject({
+      if: "${{ inputs.release-run-id != '' }}",
+      env: { RELEASE_RUN_ID: "${{ inputs.release-run-id }}" },
+      run: "bun script/release-automation.ts check",
+    })
   })
 
   test("executes the required CI checker for full, documentation, failed and cancelled outcomes", async () => {

@@ -32,7 +32,8 @@ permissions:
 jobs:
   build:
     name: compile (${{ inputs.platform }})
-    timeout-minutes: 25
+    # Infrastructure ceiling only; release-automation owns the original 40-minute budget.
+    timeout-minutes: 41
     runs-on: ${{ inputs.runner }}
     outputs:
       input-artifact-id: ${{ steps.input-upload.outputs.artifact-id }}
@@ -54,9 +55,8 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: packages/overlay/src-tauri -> target
-          # The Intel macOS installer already consumes nearly the whole job budget.
-          # Cache restore still helps it; an optional post-job save must not cancel
-          # a successfully packaged and uploaded release artifact.
+          # Reserve the remaining whole-release budget for publication on Intel macOS.
+          # Cache restore still helps; optional post-job cache save stays off its critical path.
           save-if: ${{ inputs.platform != 'darwin-x64' }}
       - name: Verify remaining release budget
         if: ${{ inputs.release-run-id != '' }}
@@ -100,6 +100,7 @@ jobs:
           name: overlay-${{ inputs.platform }}
           path: packages/overlay/dist-artifacts/${{ inputs.platform }}
           if-no-files-found: error
+          compression-level: 0
           overwrite: true
           retention-days: ${{ inputs.retention-days }}
       - name: Collect failed macOS installer diagnostics
@@ -136,7 +137,7 @@ jobs:
     if: startsWith(inputs.platform, 'linux-')
     needs: build
     runs-on: ${{ inputs.runner }}
-    timeout-minutes: 25
+    timeout-minutes: 41
     strategy:
       fail-fast: false
       matrix:
