@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Harbor benchmark restart on v0.1.18](records/2026-09/2026-09-29-harbor-v0.1.18-restart.md)
+
 - [Runtime process identity across sleep and wake](records/2026-09/2026-09-29-runtime-process-sleep-recovery.md)
 
 - [v0.1.17 native and website release repair](records/2026-09/2026-09-28-v0.1.17-release.md)
