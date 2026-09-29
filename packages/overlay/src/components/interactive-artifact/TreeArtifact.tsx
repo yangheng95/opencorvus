@@ -1,5 +1,6 @@
 import { For, Show, createMemo, createSignal } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
+import type { ArtifactExport } from "../../services/artifact-export"
 import { t } from "../../utils/i18n"
 import { Disclosure } from "../ui/Disclosure"
 import { SearchField } from "../ui/SearchField"
@@ -53,7 +54,7 @@ function TreeBranch(props: {
   )
 }
 
-export function TreeArtifact(props: { payload: TreePayload }) {
+export function TreeArtifact(props: { payload: TreePayload; exportFiles?: () => ArtifactExport[] }) {
   const [filter, setFilter] = createSignal("")
   const byID = createMemo(() => new Map(props.payload.nodes.map((node) => [node.id, node])))
   const childrenByParent = createMemo(() => {
@@ -82,7 +83,7 @@ export function TreeArtifact(props: { payload: TreePayload }) {
   const roots = createMemo(() => (childrenByParent().get(undefined) ?? []).filter((node) => visible().has(node.id)))
 
   return (
-    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Tree">
+    <ArtifactFrame payload={props.payload} exportFiles={props.exportFiles} title={props.payload.title} kind="Tree">
       <div class="msg-artifact-tree__toolbar">
         <SearchField
           value={filter()}

@@ -152,6 +152,7 @@ function ArtifactContentView(props: { title: string; content: ConversationArtifa
   const language = createMemo(() => codeLanguage(props.content.mediaType))
   const objectURL = useObjectURL(() => props.content)
   const filename = () => props.content.filename ?? props.title
+  const originalTextExport = () => [{ filename: filename(), mime: props.content.mediaType, text: props.content.text! }]
   const sharedSource = () => ({
     url: objectURL(),
     mime: props.content.mediaType,
@@ -169,10 +170,11 @@ function ArtifactContentView(props: { title: string; content: ConversationArtifa
       </div>
       <Switch>
         <Match when={parsedJSON() !== undefined}>
-          <TreeArtifact payload={jsonTreePayload(props.title, parsedJSON())} />
+          <TreeArtifact payload={jsonTreePayload(props.title, parsedJSON())} exportFiles={originalTextExport} />
         </Match>
         <Match when={props.content.mediaType === "text/markdown" && props.content.text !== undefined}>
           <DocumentArtifact
+            exportFiles={originalTextExport}
             payload={
               {
                 schemaVersion: "1",
