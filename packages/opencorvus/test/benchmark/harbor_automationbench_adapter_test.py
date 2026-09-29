@@ -158,7 +158,6 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
             config["agent"]["mission"]["permission"],
             {
                 "bash": "deny",
-                "publish_interactive_artifact": "deny",
                 "read": "deny",
                 "glob": "deny",
                 "search_code": "deny",
@@ -358,11 +357,12 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
     def test_natural_terminal_accepts_truthful_business_failure(self) -> None:
         helper = load_runtime_helper()
         observation = {
+            "entrypoint": "mission",
             "mission_status": {
                 "status": "inactive",
                 "tasks": [{"lifecycleStatus": "failed"}],
             },
-            "mission_record": {"completion": None, "interruptible": False},
+            "mission_record": {"outcome": {"kind": "blocked"}, "interruptible": False},
             "durable_settlement": {"passed": True},
         }
         self.assertTrue(helper.natural_terminal(observation))
@@ -585,6 +585,8 @@ class HarborAgentSettlementOrderTest(unittest.IsolatedAsyncioTestCase):
         agent._mount_path = "/opt/opencorvus"
         agent._model = "openai/gpt-5.6-luna"
         agent._profile = "base"
+        agent._entrypoint = "mission"
+        agent._squad_path = None
         agent._workflow = "source-planned-execution-verification"
         agent._inactivity_seconds = 600
         agent.render_instruction = lambda instruction: instruction

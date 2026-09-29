@@ -267,6 +267,17 @@ class BridgeState:
             )
         return ToolExecutionError(HTTPStatus.BAD_REQUEST, public_message)
 
+    def catalog(self, payload: dict[str, Any]) -> str:
+        from automationbench_mcp_tools import public_catalog
+
+        service = payload.get("service")
+        if service is not None and not isinstance(service, str):
+            raise ValueError("service must be a string or null")
+        return self._run_tool(
+            "api_catalog", int(time.time() * 1000), {"service": service},
+            lambda: (public_catalog(service), {"service": service}),
+        )
+
     def search(self, payload: dict[str, Any]) -> str:
         started = int(time.time() * 1000)
 
@@ -446,6 +457,9 @@ def _handler(state: BridgeState, admin_token: str, surface: str):
 
         def do_POST(self) -> None:  # noqa: N802
             try:
+                if surface == "tool" and self.path == "/v1/catalog":
+                    self._json(HTTPStatus.OK, json.loads(state.catalog(self._tool_payload("api_catalog"))))
+                    return
                 if surface == "tool" and self.path == "/v1/search":
                     self._json(HTTPStatus.OK, json.loads(state.search(self._tool_payload("api_search"))))
                     return

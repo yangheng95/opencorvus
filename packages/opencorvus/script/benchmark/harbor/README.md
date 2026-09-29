@@ -58,3 +58,19 @@ are not exported. This evidence does not confer scoring eligibility. Usage expor
 connectivity preflight calls as well as Session calls; a missing cost on any row keeps the
 aggregate cost unknown. Generated tasks use the helper's actual-inactivity deadline rather
 than an additional absolute Agent runtime deadline.
+
+For the Task/Mission × static/evolved comparison, use four Agent configurations with
+`OPENCORVUS_ENTRYPOINT` set to `task` or `mission`, `OPENCORVUS_PROFILE=automationbench`,
+`OPENCORVUS_WORKFLOW=execute-verify`, and `OPENCORVUS_SQUAD_PATH` pointing to the exact
+static or production-authored evolved package directory. Both evolved arms share one
+frozen package. The helper installs it using the public package API and records its
+returned immutable identity. These arms use the existing four AutomationBench MCP tools
+through SDK stdio under UID 60001; their definitions/catalog projection are shared with
+the earlier integration, while Harbor owns their execution queue and world lifecycle.
+The Agent image installs MCP SDK 1.30.0 but does not install the dataset/scorer package.
+
+Task arms enter through `/task`; Mission arms enter through `/mission/wake`. Explicit
+Mission accepted/blocked receipts (including legitimate zero-child outcomes) settle the
+Mission arm. Inactivity alone does not. Mission retains its authorized artifact-publication
+tool required by its completion contract. A Task's completed/failed lifecycle and physical
+settlement are recorded separately from its official business score.

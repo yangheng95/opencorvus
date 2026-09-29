@@ -52,7 +52,9 @@ def render_instruction(prompt: Any) -> str:
 def _dockerfile(domain: str, task_name: str) -> str:
     return '''FROM python:3.13-slim
 RUN apt-get update && apt-get install -y --no-install-recommends git procps curl ca-certificates util-linux iptables && rm -rf /var/lib/apt/lists/*
+RUN pip install --no-cache-dir mcp==1.30.0
 COPY runtime/automationbench_tool.py /opt/automationbench-harbor/automationbench_tool.py
+COPY runtime/automationbench_mcp_tools.py /opt/automationbench-harbor/automationbench_mcp_tools.py
 RUN chmod 755 /opt/automationbench-harbor/automationbench_tool.py && install -d -m 0755 /workspace /run/automationbench \
     && git init -q /workspace \
     && git -C /workspace config user.name "AutomationBench" \
@@ -69,6 +71,7 @@ def _bridge_dockerfile() -> str:
     return f'''FROM python:3.13-slim
 RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && rm -rf /var/lib/apt/lists/* && pip install --no-cache-dir "automation-bench @ git+https://github.com/zapier/AutomationBench@{UPSTREAM_COMMIT}"
 COPY runtime/automationbench_bridge.py /opt/automationbench-harbor/automationbench_bridge.py
+COPY runtime/automationbench_mcp_tools.py /opt/automationbench-harbor/automationbench_mcp_tools.py
 '''
 
 
@@ -165,6 +168,8 @@ retries = 120
     runtime = target / "environment" / "runtime"
     for name in ("automationbench_bridge.py", "automationbench_tool.py"):
         shutil.copy2(source / name, runtime / name)
+    shared_tools = Path(__file__).parents[5] / "packages/inspect-benchmark/src/opencorvus_inspect/automationbench/mcp_tools.py"
+    shutil.copy2(shared_tools, runtime / "automationbench_mcp_tools.py")
     (target / "environment" / "Dockerfile").write_text(_dockerfile(domain, qualified), encoding="utf-8")
     (target / "environment" / "Bridge.Dockerfile").write_text(_bridge_dockerfile(), encoding="utf-8")
     (target / "environment" / "docker-compose.yaml").write_text(

@@ -32,6 +32,13 @@ class OpenCorvusAgent(BaseInstalledAgent):
         self._mount_path = str(kwargs.pop("mount_path", "/opt/opencorvus"))
         self._model = str(kwargs.pop("OPENCORVUS_MODEL", "openai/gpt-5.6-luna"))
         self._profile = str(kwargs.pop("OPENCORVUS_PROFILE", "base"))
+        self._entrypoint = str(kwargs.pop("OPENCORVUS_ENTRYPOINT", "mission"))
+        if self._entrypoint not in {"mission", "task"}:
+            raise ValueError("OpenCorvus entrypoint must be mission or task")
+        squad_path = kwargs.pop("OPENCORVUS_SQUAD_PATH", None)
+        self._squad_path = Path(str(squad_path)) if squad_path else None
+        if self._profile == "automationbench" and self._squad_path is None:
+            raise ValueError("AutomationBench comparison requires an exact Squad source directory")
         self._workflow = str(
             kwargs.pop("OPENCORVUS_WORKFLOW", "source-planned-execution-verification")
         )
@@ -63,7 +70,6 @@ class OpenCorvusAgent(BaseInstalledAgent):
                 "mission": {
                     "permission": {
                         "bash": "deny",
-                        "publish_interactive_artifact": "deny",
                         "read": "deny",
                         "glob": "deny",
                         "search_code": "deny",
@@ -128,6 +134,10 @@ class OpenCorvusAgent(BaseInstalledAgent):
                 raise FileNotFoundError(f"{label} is missing: {path}")
         self._verify_bundle()
         await environment.upload_dir(self._bundle_path, "/opt/opencorvus")
+        if self._squad_path is not None:
+            if not (self._squad_path / "expert-squad.jsonc").is_file():
+                raise FileNotFoundError("Selected Squad source manifest is missing")
+            await environment.upload_dir(self._squad_path, "/opt/opencorvus-squad")
         await environment.upload_file(self._auth_path, "/tmp/opencorvus-auth.json")
         await environment.upload_file(self._models_path, "/tmp/opencorvus-models.json")
         await self.exec_as_root(
@@ -208,6 +218,8 @@ class OpenCorvusAgent(BaseInstalledAgent):
             "OPENCORVUS_CONFIG_CONTENT": json.dumps(self._runtime_config(), separators=(",", ":")),
             "OPENCORVUS_MODEL": self._model,
             "OPENCORVUS_PROFILE": self._profile,
+            "OPENCORVUS_ENTRYPOINT": self._entrypoint,
+            "OPENCORVUS_SQUAD_PATH": "/opt/opencorvus-squad" if self._squad_path is not None else "",
             "OPENCORVUS_WORKFLOW": self._workflow,
             "OPENCORVUS_INACTIVITY_SECONDS": str(self._inactivity_seconds),
             "OPENCORVUS_AGENT_TRACE": "1",
@@ -448,9 +460,9 @@ class OpenCorvusAgent(BaseInstalledAgent):
             )
             step_id += 1
         trajectory = Trajectory(
-            session_id=str(summary.get("mission_session_id") or ""),
+            session_id=str(summary["session_id"]),
             agent=Agent(
-                name="opencorvus-mission-base",
+                name=f"opencorvus-{self._entrypoint}-{self._profile}",
                 version=self._runtime_version,
                 model_name=self._model,
             ),

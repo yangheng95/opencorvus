@@ -3,17 +3,15 @@
 from __future__ import annotations
 
 import asyncio
-import json
 import socket
 from collections.abc import AsyncIterator, Iterator
 from contextlib import asynccontextmanager, contextmanager
-from typing import Any
 
 import uvicorn
-from automationbench.tools.api.search import _load_schemas
 from mcp.server.fastmcp import FastMCP
 
 from .api_session import ApiSession
+from .mcp_tools import public_catalog, register_tools
 
 
 class _Server(uvicorn.Server):
@@ -27,85 +25,7 @@ class _Server(uvicorn.Server):
 async def world_server(world: ApiSession) -> AsyncIterator[str]:
     mcp = FastMCP("automationbench", stateless_http=True, json_response=True)
 
-    @mcp.tool()
-    async def api_catalog(service: str | None = None) -> str:
-        """List real simulated API services or one service's documented operations.
-
-        This is endpoint metadata, not business records. Use api_search for the
-        exact request contract and api_fetch to read actual business data.
-
-        Args:
-            service: Exact service name from the service listing; omit to list services.
-        """
-        schemas = _load_schemas()
-        if service is None:
-            return json.dumps({
-                "services": [
-                    {"name": name, "endpoint_count": len(schema.get("endpoints", []))}
-                    for name, schema in sorted(schemas.items())
-                ]
-            })
-        if service not in schemas:
-            raise ValueError(f"unknown official API service: {service}")
-        schema = schemas[service]
-        return json.dumps({
-            "service": service,
-            "notes": schema.get("notes", ""),
-            "operations": [
-                {
-                    "id": endpoint["id"],
-                    "method": endpoint["method"],
-                    "description": endpoint.get("description", ""),
-                }
-                for endpoint in schema.get("endpoints", [])
-            ],
-        })
-
-    @mcp.tool()
-    async def api_search(query: str, top_k: int = 5) -> str:
-        """Discover official API endpoints and exact request/response contracts.
-
-        Args:
-            query: Service, resource and operation terms; this searches API documentation.
-            top_k: Number of matching endpoint contracts, from 1 through 20.
-        """
-        if not query.strip() or not 1 <= top_k <= 20:
-            raise ValueError("query must be non-empty and top_k must be from 1 through 20")
-        return world.call("api_search", {"query": query, "top_k": top_k})
-
-    @mcp.tool()
-    async def api_fetch(
-        method: str,
-        url: str,
-        params: dict[str, Any] | None = None,
-        body: dict[str, Any] | None = None,
-    ) -> str:
-        """Execute an official simulated business API using its discovered contract.
-
-        Args:
-            method: HTTP method from the discovered API endpoint.
-            url: Exact discovered URL with record identifiers substituted.
-            params: Query parameter object from the discovered endpoint contract.
-            body: Request body object from the discovered endpoint contract.
-        """
-        return world.call(
-            "api_fetch",
-            {
-                "method": method,
-                "url": url,
-                "params": json.dumps(params) if params is not None else None,
-                "body": json.dumps(body) if body is not None else None,
-            },
-        )
-
-    @mcp.tool()
-    async def base64_encode(text: str) -> str:
-        """Encode a string with the official tool, for endpoints requiring encoded content.
-
-        Args:
-            text: Exact content to encode.
-        """
-        return world.call("base64_encode", {"text": text})
+    register_tools(mcp, world.call, public_catalog)
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server: _Server | None = None

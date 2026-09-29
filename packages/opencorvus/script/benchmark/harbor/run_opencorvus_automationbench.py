@@ -29,6 +29,7 @@ SERVER = "http://127.0.0.1:7878"
 SKILL_NAME = "automationbench-api"
 SKILL_REF = f"default/skill/{SKILL_NAME}"
 PROFILE = os.environ.get("OPENCORVUS_PROFILE", "base")
+ENTRYPOINT = os.environ.get("OPENCORVUS_ENTRYPOINT", "mission")
 MODEL = os.environ.get("OPENCORVUS_MODEL", "openai/gpt-5.6-luna")
 WORKFLOW = os.environ.get("OPENCORVUS_WORKFLOW", "source-planned-execution-verification")
 OWNERS = ("orchestrator", "base-planner", "base-developer", "base-tester")
@@ -36,7 +37,6 @@ AGENT_SETTLEMENT = Path("/run/opencorvus-host/agent-settlement.json")
 AGENT_SETTLEMENT_REVOKED = Path("/run/opencorvus-host/agent-settlement-revoked.json")
 MISSION_DENIED_CAPABILITIES = (
     "bash",
-    "publish_interactive_artifact",
     "read",
     "glob",
     "search_code",
@@ -340,6 +340,66 @@ def mount_skill() -> tuple[dict[str, Any], dict[str, Any]]:
     return projected, audit
 
 
+def install_comparison_squad() -> dict[str, Any]:
+    source = os.environ.get("OPENCORVUS_SQUAD_PATH")
+    if not source:
+        raise ValueError("Comparison requires an exact Squad source path")
+    installed = request_json(
+        "/expert-squad/import-folder", method="POST",
+        body={"sourceDirectory": source, "installationScope": "project"},
+    )
+    write_json(LOGS / "squad-installation.json", installed)
+    after = installed.get("after") or {}
+    if after.get("id") != PROFILE:
+        raise RuntimeError(f"Installed Squad identity mismatch: {after.get('id')}")
+    mcp_status = request_json(
+        "/mcp", method="POST", body={"name": "automationbench", "config": {
+            "type": "local", "enabled": True,
+            "command": ["setpriv", "--reuid=60001", "--regid=60001", "--clear-groups",
+                        "python3", "/opt/automationbench-harbor/automationbench_tool.py",
+                        "--config", "/workspace/.automationbench-tool.json", "mcp"],
+        }},
+    )
+    write_json(LOGS / "mcp-preflight.json", mcp_status)
+    if (mcp_status.get("automationbench") or {}).get("status") != "connected":
+        raise RuntimeError("AutomationBench MCP did not connect")
+    return installed
+
+
+def start_execution(instruction: str) -> tuple[str, str]:
+    if PROFILE == "base":
+        request = base_harness_request(instruction) + (
+            "\n\n[OpenCorvus harness notice]\nLoad the exact mounted automationbench-api Skill "
+            "before benchmark operations. Use only the project-local client. "
+            "Harbor runs the official scorer after this Agent settles."
+        )
+    else:
+        request = instruction + (
+            "\n\n[OpenCorvus harness notice]\nUse the provided automationbench MCP tools for "
+            "the simulated business operations. Harbor invokes the official scorer separately."
+        )
+        if ENTRYPOINT == "mission":
+            request += " Delegate domain execution to Tasks owned by the selected Expert Squad."
+    if ENTRYPOINT == "mission":
+        body = {"text": request, "model": MODEL, "productPillar": "work", "expertSquadIDs": [PROFILE]}
+        write_json(LOGS / "mission-wake-request.json", body)
+        created = request_json("/mission/wake", method="POST", body=body)
+        write_json(LOGS / "mission-wake-response.json", created)
+        if not created.get("created") or created.get("productPillar") != "work":
+            raise RuntimeError("Mission wake did not create the expected Work Mission")
+        return created["missionID"], created["sessionID"]
+    if ENTRYPOINT == "task":
+        body = {"request": request, "model": MODEL, "productPillar": "work", "promptProfile": PROFILE,
+                "source": "harbor", "title": "AutomationBench business workflow"}
+        write_json(LOGS / "task-create-request.json", body)
+        created = request_json("/task?init-git=false", method="POST", body=body)
+        write_json(LOGS / "task-create-response.json", created)
+        task_id = created["task_id"]
+        task = request_json(f"/task/{task_id}")
+        return task_id, task["sessionID"]
+    raise ValueError(f"Unsupported entrypoint: {ENTRYPOINT}")
+
+
 def session_id(message: dict[str, Any]) -> str | None:
     info = message.get("info") or {}
     value = info.get("sessionID") or info.get("session_id")
@@ -367,28 +427,31 @@ def public_messages(messages: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def public_observation(observation: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "mission_status": observation["mission_status"],
-        "mission_id": observation["mission_record"].get("missionID"),
-        "mission_completion": observation["mission_record"].get("completion"),
+    result = {
+        "entrypoint": observation["entrypoint"],
         "task_ids": observation["task_ids"],
         "task_statuses": [
-            {
-                "task_id": task["task_id"],
-                "status": (task["board"].get("task") or {}).get("status"),
-            }
+            {"task_id": task["task_id"], "status": (task["board"].get("task") or {}).get("status")}
             for task in observation["tasks"]
         ],
         "message_count": len(observation["all_transcript"]),
         "durable_settlement": observation["durable_settlement"],
     }
+    if observation["entrypoint"] == "mission":
+        result.update(
+            mission_status=observation["mission_status"],
+            mission_id=observation["mission_record"]["missionID"],
+            mission_outcome=observation["mission_record"].get("outcome"),
+        )
+    return result
 
 
 def capture_observation(observation: dict[str, Any]) -> None:
     """Retain the real public evidence before waiting or failing an attempt."""
-    write_json(LOGS / "mission-status.json", observation["mission_status"])
-    write_json(LOGS / "mission-record.json", observation["mission_record"])
-    write_json(LOGS / "mission-transcript.json", public_messages(observation["mission_transcript"]))
+    if observation["entrypoint"] == "mission":
+        write_json(LOGS / "mission-status.json", observation["mission_status"])
+        write_json(LOGS / "mission-record.json", observation["mission_record"])
+        write_json(LOGS / "mission-transcript.json", public_messages(observation["mission_transcript"]))
     write_json(
         LOGS / "task-evidence.json",
         [
@@ -624,69 +687,61 @@ def durable_settlement(task_ids: list[str]) -> dict[str, Any]:
     }
 
 
-def observe(mission_id: str, mission_session_id: str) -> dict[str, Any]:
-    mission_status = request_json(f"/mission/{mission_id}/status")
-    mission_records = request_json("/mission?limit=100")
-    mission_record = next((row for row in mission_records if row.get("missionID") == mission_id), None)
-    if not mission_record:
-        raise RuntimeError(f"Mission record disappeared: {mission_id}")
-    mission_transcript = request_json(f"/session/{mission_session_id}/message")
-    session_status = request_json("/session/status")
-    task_ids = sorted(
-        {
-            str(row.get("taskID"))
-            for row in mission_status.get("tasks") or []
-            if row.get("taskID")
-        }
-    )
-    tasks: list[dict[str, Any]] = []
-    for task_id in task_ids:
-        tasks.append(
-            {
-                "task_id": task_id,
-                "board": request_json(f"/task/{task_id}/board?sync=0"),
-                "transcript": request_json(f"/task/{task_id}/transcript"),
-                "trace": request_json(f"/task/{task_id}/trace"),
-                "interactions": request_json(f"/task/{task_id}/interactions"),
-            }
-        )
+def task_evidence(task_id: str) -> dict[str, Any]:
+    return {
+        "task_id": task_id,
+        "board": request_json(f"/task/{task_id}/board?sync=0"),
+        "transcript": request_json(f"/task/{task_id}/transcript"),
+        "trace": request_json(f"/task/{task_id}/trace"),
+        "interactions": request_json(f"/task/{task_id}/interactions"),
+    }
+
+
+def observe(root_id: str, root_session_id: str) -> dict[str, Any]:
+    observation: dict[str, Any] = {"entrypoint": ENTRYPOINT}
+    if ENTRYPOINT == "mission":
+        mission_status = request_json(f"/mission/{root_id}/status")
+        mission_records = request_json("/mission?limit=100")
+        mission_record = next((row for row in mission_records if row.get("missionID") == root_id), None)
+        if not mission_record:
+            raise RuntimeError(f"Mission record disappeared: {root_id}")
+        mission_transcript = request_json(f"/session/{root_session_id}/message")
+        task_ids = sorted({str(row["taskID"]) for row in mission_status.get("tasks") or []})
+        observation.update(mission_status=mission_status, mission_record=mission_record,
+                           mission_transcript=mission_transcript)
+    elif ENTRYPOINT == "task":
+        task_ids = [root_id]
+        mission_transcript = []
+    else:
+        raise ValueError(f"Unsupported entrypoint: {ENTRYPOINT}")
+    tasks = [task_evidence(task_id) for task_id in task_ids]
     all_transcript = canonical_messages(
         list(mission_transcript) + [message for task in tasks for message in task["transcript"]]
     )
+    session_status = request_json("/session/status")
     durable = durable_settlement(task_ids)
     executing_sessions = sorted(
-        session_id
-        for session_id, status in session_status.items()
+        session_id for session_id, status in session_status.items()
         if (status or {}).get("type") in {"streaming", "retry"}
     )
     if executing_sessions:
         durable["passed"] = False
-        durable["violations"] = [
-            *durable["violations"],
-            f"executing_sessions:{len(executing_sessions)}",
-        ]
+        durable["violations"] = [*durable["violations"], f"executing_sessions:{len(executing_sessions)}"]
     durable["session_status"] = session_status
     durable["executing_sessions"] = executing_sessions
-    return {
-        "mission_status": mission_status,
-        "mission_record": mission_record,
-        "mission_transcript": mission_transcript,
-        "task_ids": task_ids,
-        "tasks": tasks,
-        "all_transcript": all_transcript,
-        "durable_settlement": durable,
-    }
+    observation.update(task_ids=task_ids, tasks=tasks, all_transcript=all_transcript, durable_settlement=durable)
+    return observation
 
 
 def activity_signature(observation: dict[str, Any]) -> str:
     mission_status = {
         key: value
-        for key, value in observation["mission_status"].items()
+        for key, value in observation.get("mission_status", {}).items()
         if key != "generatedAt"
     }
     compact = {
         "mission_status": mission_status,
-        "mission_completion": observation["mission_record"].get("completion"),
+        "mission_outcome": observation.get("mission_record", {}).get("outcome"),
         "messages": [
             (
                 (row.get("info") or {}).get("id"),
@@ -715,26 +770,28 @@ def activity_signature(observation: dict[str, Any]) -> str:
 
 
 def natural_terminal(observation: dict[str, Any]) -> bool:
-    status = observation["mission_status"]
-    task_rows = status.get("tasks") or []
-    return bool(
-        status.get("status") == "inactive"
-        and observation["mission_record"].get("interruptible") is False
-        and task_rows
-        and observation["durable_settlement"].get("passed") is True
-        and all(
-            row.get("lifecycleStatus") in {"completed", "failed", "cancelled"}
-            for row in task_rows
+    if observation["durable_settlement"].get("passed") is not True:
+        return False
+    if observation["entrypoint"] == "task":
+        return bool(observation["tasks"]) and all(
+            task["board"]["task"]["status"] in {"completed", "failed"} for task in observation["tasks"]
         )
+    record = observation["mission_record"]
+    return bool(
+        (record.get("outcome") or {}).get("kind") in {"accepted", "blocked"}
+        and observation["mission_status"].get("status") == "inactive"
+        and record.get("interruptible") is False
+        and all(row.get("lifecycleStatus") in {"completed", "failed"}
+                for row in observation["mission_status"].get("tasks") or [])
     )
 
 
-def wait_for_terminal(mission_id: str, mission_session_id: str) -> dict[str, Any]:
+def wait_for_terminal(root_id: str, root_session_id: str) -> dict[str, Any]:
     inactivity = int(os.environ.get("OPENCORVUS_INACTIVITY_SECONDS", "600"))
     deadline = time.monotonic() + inactivity
     previous = ""
     while True:
-        observation = observe(mission_id, mission_session_id)
+        observation = observe(root_id, root_session_id)
         signature = activity_signature(observation)
         if signature != previous:
             capture_observation(observation)
@@ -744,10 +801,11 @@ def wait_for_terminal(mission_id: str, mission_session_id: str) -> dict[str, Any
                 json.dumps(
                     {
                         "event": "opencorvus_activity",
-                        "mission_id": mission_id,
+                        "root_id": root_id,
+                        "entrypoint": ENTRYPOINT,
                         "task_ids": observation["task_ids"],
                         "messages": len(observation["all_transcript"]),
-                        "status": observation["mission_status"].get("status"),
+                        "status": public_observation(observation),
                     },
                     ensure_ascii=False,
                 ),
@@ -755,7 +813,7 @@ def wait_for_terminal(mission_id: str, mission_session_id: str) -> dict[str, Any
             )
         if natural_terminal(observation):
             time.sleep(5)
-            confirmed = observe(mission_id, mission_session_id)
+            confirmed = observe(root_id, root_session_id)
             capture_observation(confirmed)
             if natural_terminal(confirmed) and activity_signature(confirmed) == signature:
                 return confirmed
@@ -1010,34 +1068,19 @@ def main() -> int:
         write_json(LOGS / "provider-preflight.json", preflight)
         if not preflight.get("ok") or preflight.get("status") != "connected":
             raise RuntimeError("Exact Luna Provider preflight failed")
-        matrix, projection = mount_skill()
-        write_json(LOGS / "skill-mount-matrix.json", matrix)
-        write_json(LOGS / "skill-projection-audit.json", projection)
-        mission_boundary = audit_mission_capability_boundary(request_json("/agent"))
-        write_json(LOGS / "mission-capability-boundary.json", mission_boundary)
-        if not mission_boundary["passed"]:
-            raise RuntimeError(
-                f"Mission capability boundary failed: {mission_boundary['missing_denials']}"
-            )
-        notice = (
-            "\n\n[OpenCorvus harness notice]\n"
-            "This is an official AutomationBench API-mode task. The project-local client is the "
-            "only benchmark tool surface. Load the exact mounted automationbench-api Skill before "
-            "any owner-specific benchmark operation and follow it. Complete the requested simulated "
-            "business workflow; Harbor invokes the official scorer after this Agent settles."
-        )
-        wake_request = {
-            "text": base_harness_request(instruction) + notice,
-            "model": MODEL,
-            "productPillar": "work",
-            "expertSquadIDs": [PROFILE],
-        }
-        write_json(LOGS / "mission-wake-request.json", wake_request)
-        wake = request_json("/mission/wake", method="POST", body=wake_request)
-        write_json(LOGS / "mission-wake-response.json", wake)
-        if not wake.get("created") or wake.get("productPillar") != "work":
-            raise RuntimeError("Mission wake did not create the expected Work Mission")
-        observation = wait_for_terminal(wake["missionID"], wake["sessionID"])
+        if PROFILE == "automationbench":
+            install_comparison_squad()
+        else:
+            matrix, projection = mount_skill()
+            write_json(LOGS / "skill-mount-matrix.json", matrix)
+            write_json(LOGS / "skill-projection-audit.json", projection)
+        if ENTRYPOINT == "mission":
+            mission_boundary = audit_mission_capability_boundary(request_json("/agent"))
+            write_json(LOGS / "mission-capability-boundary.json", mission_boundary)
+            if not mission_boundary["passed"]:
+                raise RuntimeError(f"Mission capability boundary failed: {mission_boundary['missing_denials']}")
+        root_id, root_session_id = start_execution(instruction)
+        observation = wait_for_terminal(root_id, root_session_id)
         occurrence_agents = [
             str(row.get("agent"))
             for row in observation["durable_settlement"].get("occurrences") or []
@@ -1069,8 +1112,10 @@ def main() -> int:
         "model": MODEL,
         "profile": PROFILE,
         "workflow": WORKFLOW,
-        "mission_id": observation["mission_record"].get("missionID"),
-        "mission_session_id": observation["mission_record"].get("sessionID"),
+        "entrypoint": ENTRYPOINT,
+        "root_id": root_id,
+        "session_id": root_session_id,
+        "native_outcome": public_observation(observation),
         "task_ids": observation["task_ids"],
         "task_lifecycle": [
             {

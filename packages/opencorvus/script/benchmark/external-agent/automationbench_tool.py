@@ -45,6 +45,26 @@ def _call(config: dict[str, str], route: str, payload: dict) -> None:
         raise SystemExit(1)
 
 
+def serve_mcp(config: dict[str, str]) -> None:
+    from mcp.server.fastmcp import FastMCP
+    from automationbench_mcp_tools import register_tools
+
+    def request(route: str, payload: dict) -> str:
+        status, text = _request(config, route, payload)
+        if status >= 400:
+            raise RuntimeError(f"AutomationBench HTTP {status}: {text}")
+        return text
+
+    def call(tool: str, payload: dict) -> str:
+        routes = {"api_search": "/v1/search", "api_fetch": "/v1/fetch", "base64_encode": "/v1/base64"}
+        result = request(routes[tool], payload)
+        return json.loads(result)["encoded"] if tool == "base64_encode" else result
+
+    mcp = FastMCP("automationbench")
+    register_tools(mcp, call, lambda service: request("/v1/catalog", {"service": service}))
+    mcp.run(transport="stdio")
+
+
 def _json_argument(value: object | None, field: str) -> str | None:
     if value is None or isinstance(value, str):
         return value
@@ -119,6 +139,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="AutomationBench API-mode tool client")
     parser.add_argument("--config", default=".automationbench-tool.json")
     subparsers = parser.add_subparsers(dest="command", required=True)
+    subparsers.add_parser("mcp", help="Expose the shared official API tools through MCP stdio")
 
     search = subparsers.add_parser("search")
     search.add_argument("query")
@@ -138,7 +159,9 @@ def main() -> None:
 
     args = parser.parse_args()
     config = json.loads(Path(args.config).read_text(encoding="utf-8"))
-    if args.command == "search":
+    if args.command == "mcp":
+        serve_mcp(config)
+    elif args.command == "search":
         _call(config, "/v1/search", {"query": args.query, "top_k": args.top_k})
     elif args.command == "fetch":
         _call(
