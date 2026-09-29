@@ -581,6 +581,19 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
             .map((row: any) => row.state_status),
         ).toEqual(["completed", "completed", "completed"])
       } catch (error) {
+        const diagnostics = taskID ? await Promise.all(sessionIDsForTask(taskID).map(async (sessionID) => ({
+          sessionID,
+          messages: (await Session.messages({ sessionID })).map((message) => ({
+            id: message.info.id, role: message.info.role, agent: message.info.agent,
+            ...(message.info.role === "assistant" ? { finish: message.info.finish, error: message.info.error } : {}),
+            tools: message.parts.flatMap((part) => part.type === "tool" ? [{
+              tool: part.tool, status: part.state.status,
+              ...(part.state.status === "error" ? { failure: part.state.failure } : {}),
+            }] : []),
+          })),
+        }))) : []
+        console.error("RECOVERY_DIAGNOSTICS", JSON.stringify({ missionStep, rootStep, developerStep, testerStep, calls,
+          taskError: taskID ? requireTask(taskID).error : undefined, diagnostics }))
         console.error("RECOVERY_FAILURE", error)
         throw error
       } finally {
