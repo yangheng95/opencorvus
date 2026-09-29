@@ -66,7 +66,7 @@ export function TableArtifact(props: { payload: TablePayload }) {
   })
 
   return (
-    <ArtifactFrame title={props.payload.title} kind="Table">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Table">
       <div class="msg-artifact-table__toolbar">
         <SearchField
           value={filter()}

@@ -9,14 +9,13 @@ import { describeRoute, validator } from "hono-openapi"
 import { resolver } from "hono-openapi"
 import { Instance } from "../../project/instance"
 import { Project } from "../../project/project"
-import { Vcs } from "../../project/vcs"
 import { Worktree } from "../../worktree"
 import { Ownership } from "../../engine/ownership"
 import { WorktreeGC } from "../../worktree/gc"
 import { deleteProject, ProjectDeleteResult } from "../../project/delete"
 import { PersistedProjectContext } from "@/server/persisted-project-context"
 import z from "zod"
-import { errors } from "../error"
+import { errors, OwnedPromptControllersResponse } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
 import { lazy } from "../../util/lazy"
 import { NotFoundError } from "../../storage/db"
@@ -208,6 +207,7 @@ export const ProjectRoutes = lazy(() =>
         description: "Run git init in the current working directory and refresh the active project context.",
         operationId: "project.current.initGit",
         responses: {
+          409: OwnedPromptControllersResponse,
           200: {
             description: "Git initialized",
             content: {
@@ -220,20 +220,12 @@ export const ProjectRoutes = lazy(() =>
         },
       }),
       async (c) => {
+        if (!Project.isGitRepo(Instance.directory) && hasProjectOwnedPromptControllers()) {
+          throw ownedPromptControllersError("Git initialization")
+        }
         const result = await Project.initGit(Instance.directory)
         if (result.created) {
-          const { hasProjectOwnedPromptControllers } = await import("@/engine/runtime")
-          if (hasProjectOwnedPromptControllers()) {
-            // Active sessions prevent a full dispose.  Refresh the cached
-            // project in-place so downstream reads see the new worktree/sandboxes,
-            // then discard the stale VCS state so the next GET /vcs re-initialises
-            // the branch tracker against the newly-created repo.
-            // (Project.isGitRepo probes disk directly — no cache to invalidate.)
-            await Instance.refresh()
-            await Vcs.resetState()
-          } else {
-            await Instance.dispose()
-          }
+          await Instance.dispose()
         }
         return c.json(result)
       },

@@ -211,7 +211,7 @@ Complete the Task only when the whole request is supported. Call `manage_task ac
 
 When completion relies on this Task scheduler's own persisted scheduler conversation, bind that evidence with one `session` locator naming the current Orchestrator Session. A `coordination_request` locator names only an actual `agent_coordination_request` Artifact returned by worker coordination; scheduler Protocol event IDs are not coordination-request evidence.
 
-Use an empty deliverable list only when the Task truthfully produced no Artifact deliverable. Internal lifecycle, ingress, coordination, or error facts are not deliverables unless the operator requested them as the output.
+Deliver the requested usable format: reports/documents as actual PDF, DOCX or other requested files; datasets, code, images and other resources in their appropriate reusable form. Require the responsible producer to create and verify those files and publish their exact resources through the existing Artifact tools. Select those resource locators or their resource-bearing envelope in `deliverable_artifact_locators`. An internal JSON verdict, manifest, summary or acceptance record does not substitute for the requested file. Such records remain completion evidence. Use an empty deliverable list only when no file/resource was produced, and truthfully explain any unmet requested delivery. Do not convert internal evidence into a pretend document or require a document for a task whose result is an external action or code change.
 
 There is no prose-only completion, `deliver`, or host-owned final acceptance object.
 

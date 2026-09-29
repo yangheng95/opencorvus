@@ -137,7 +137,7 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
   })
 
   return (
-    <ArtifactFrame title={props.payload.title} kind="Candlestick">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Candlestick">
       <div
         class="msg-artifact-chart"
         ref={container}

@@ -81,16 +81,6 @@ function resourceIdentity(resource: TaskArtifactRef): string {
 
 type DeclaredTurnOutput = z.infer<typeof ConversationTurnArtifactSummary>["declaredOutputs"][number]
 
-function structuredOutput(input: { locator: ArtifactReadLocator; entry: ArtifactCatalogEntry }): DeclaredTurnOutput {
-  return {
-    declarationLocator: input.locator,
-    producer: input.entry.producer,
-    label: input.entry.label || input.entry.artifact_type || input.entry.kind,
-    ...(input.entry.artifact_type ? { artifactType: input.entry.artifact_type } : {}),
-    resources: [],
-  }
-}
-
 export async function projectDeclaredTurnOutputs(input: {
   taskID: string
   locators: readonly ArtifactReadLocator[]
@@ -130,7 +120,6 @@ export async function projectDeclaredTurnOutputs(input: {
     if (locator.source === "engine_artifact") {
       const row = requireEngineArtifactByLocator({ taskID: input.taskID, locator })
       if (!engineArtifactUsesTransportEnvelope(row.kind)) {
-        outputs.push(structuredOutput({ locator, entry }))
         continue
       }
       const envelope = EngineArtifactEnvelopeSchema.safeParse(row.payload)
@@ -143,11 +132,6 @@ export async function projectDeclaredTurnOutputs(input: {
         )
       }
       if (envelope.data.resources.length === 0) {
-        outputs.push({
-          ...structuredOutput({ locator, entry }),
-          producer: envelope.data.producer,
-          artifactType: envelope.data.artifact_type,
-        })
         continue
       }
       appendResources({

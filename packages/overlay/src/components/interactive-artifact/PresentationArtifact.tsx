@@ -73,7 +73,7 @@ export function PresentationArtifact(props: { payload: PresentationPayload }) {
   })
 
   return (
-    <ArtifactFrame title={props.payload.title} kind="Presentation">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Presentation">
       <div
         class="reveal msg-artifact-presentation"
         data-aspect-ratio={props.payload.aspectRatio}

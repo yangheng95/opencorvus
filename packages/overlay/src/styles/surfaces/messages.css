@@ -71,27 +71,11 @@
   padding-top: var(--ui-gap-3xs);
 }
 
-/* Only the outer title text of a Tool that is currently running or pending
-   inside an active owning Task or standalone conversation uses the neutral
-   traveling wave. Expanded execution content stays static, including the
-   repeated Tool-card header under the disclosure body. Parent execution scope
-   keeps terminal conversations static. Semantic text tones preserve the
-   Codex-style cue without an accent color, while Agent narrative and running
-   Agent cards retain their separate motion owners. */
+/* Each execution group owns activity from its actual card and Tool state,
+   including Mission and subagent conversations. Results remain static. */
 @media (prefers-reduced-motion: no-preference) {
-  .panel[data-conversation-execution-status="active"]
-    :is(
-      .card[data-kind="tool"][data-status="running"]:not(.msg-work-details__body .card) > .card__head .card__title-row,
-      .card[data-kind="tool"][data-status="pending"]:not(.msg-work-details__body .card) > .card__head .card__title-row,
-      .msg-tool[data-status="running"] > .tool-name,
-      .msg-tool[data-status="running"] > .tool-detail,
-      .msg-tool[data-status="pending"] > .tool-name,
-      .msg-tool[data-status="pending"] > .tool-detail,
-      .msg-work-details[data-status="running"] > [data-ui="work-details-toggle"] .msg-work-details__tool-name,
-      .msg-work-details[data-status="running"] > [data-ui="work-details-toggle"] .msg-work-details__tool-detail,
-      .msg-work-details[data-status="pending"] > [data-ui="work-details-toggle"] .msg-work-details__tool-name,
-      .msg-work-details[data-status="pending"] > [data-ui="work-details-toggle"] .msg-work-details__tool-detail
-    ) {
+  .msg-execution-group[data-active="true"] > .msg-execution-group__toggle .msg-execution-group__label,
+  .msg-work-details[data-active="true"] > [data-ui="work-details-toggle"] .msg-work-details__tool-name {
     background: linear-gradient(
       90deg,
       var(--text-muted) 0%,
@@ -112,6 +96,53 @@
     will-change: background-position;
     animation: msg-terminal-activity-wave var(--ui-duration-loop-terminal-wave) linear infinite;
   }
+  .msg-execution-group[data-active="true"] > .msg-execution-group__toggle .msg-execution-group__indicator,
+  .msg-work-details[data-active="true"] > [data-ui="work-details-toggle"] .msg-work-details__tool-icon {
+    animation: msg-tool-pulse var(--ui-duration-loop-terminal-wave) ease-in-out infinite;
+  }
+}
+
+@keyframes msg-tool-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.msg-execution-group {
+  min-width: 0;
+  margin-block: var(--ui-gap-sm);
+}
+.msg-execution-group__toggle {
+  max-width: 100%;
+  gap: var(--ui-gap-sm);
+  color: var(--text-soft);
+}
+.msg-execution-group__indicator {
+  display: inline-flex;
+  flex: none;
+}
+.msg-execution-group__label {
+  color: var(--text);
+}
+.msg-execution-group__current {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.msg-execution-group__status {
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  flex: none;
+}
+.msg-execution-group__items {
+  margin: var(--ui-gap-sm) 0 var(--ui-gap-md) var(--ui-gap-sm);
+  padding-left: var(--ui-gap-lg);
+  border-left: var(--oc-border-width) solid var(--divider-soft);
 }
 
 @keyframes msg-terminal-activity-wave {
@@ -139,7 +170,7 @@
 }
 
 .msg-tool-payload__content {
-  max-height: calc(166px * var(--ui-scale));
+  max-height: calc(360px * var(--ui-scale));
   min-width: 0;
   margin: 0;
   overflow: auto;
@@ -149,11 +180,68 @@
   border-radius: var(--oc-radius-soft);
   background: color-mix(in srgb, var(--surface-inset) 88%, transparent);
   color: var(--text);
-  font-family: var(--mono);
+  font-family: var(--font);
   font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-reading);
   tab-size: 2;
-  white-space: pre;
+  overflow-wrap: anywhere;
+}
+
+.msg-tool-payload__toolbar {
+  display: flex;
+  gap: var(--ui-gap-sm);
+  align-items: center;
+}
+.msg-tool-payload__toolbar > .msg-tool-payload__label {
+  flex: 1;
+}
+.msg-tool-payload[data-expanded="true"] > .msg-tool-payload__content {
+  max-height: none;
+}
+.msg-tool-payload__content pre {
+  margin: 0;
+  font-family: var(--mono);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.msg-tool-object > summary {
+  cursor: pointer;
+  color: var(--text-soft);
+  padding-block: var(--ui-gap-xs);
+}
+.msg-tool-object dl {
+  margin: 0;
+}
+.msg-tool-field {
+  display: grid;
+  grid-template-columns: minmax(0, 28%) minmax(0, 1fr);
+  gap: var(--ui-gap-lg);
+  padding-block: var(--ui-gap-sm);
+  border-bottom: var(--oc-border-width) solid var(--divider-soft);
+}
+.msg-tool-field:last-child {
+  border-bottom: none;
+}
+.msg-tool-field dt {
+  color: var(--text-soft);
+  font-family: var(--mono);
+  font-size: var(--ui-font-caption);
+}
+.msg-tool-field dd {
+  min-width: 0;
+  margin: 0;
+}
+.msg-tool-value {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.msg-tool-field:has(> dd > .msg-tool-object) {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ui-gap-xs);
+}
+.msg-tool-value:is([data-type="number"], [data-type="boolean"]) {
+  font-family: var(--mono);
 }
 
 .msg-browser-evidence {
@@ -1110,11 +1198,18 @@
   min-width: 0;
   margin: var(--ui-gap-lg) 0;
   overflow: hidden;
-  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 78%, var(--text-soft) 22%);
+  border: var(--oc-border-width) solid var(--divider-soft);
   border-radius: var(--oc-radius-large);
   background: var(--surface);
-  box-shadow: 0 calc(8px * var(--ui-scale)) calc(28px * var(--ui-scale))
-    color-mix(in srgb, var(--text-strong) 7%, transparent);
+  box-shadow: 0 calc(2px * var(--ui-scale)) calc(8px * var(--ui-scale)) color-mix(in srgb, var(--text-strong) 3%, transparent);
+}
+
+.msg-tool-complete circle {
+  fill: currentColor;
+}
+
+.msg-tool-complete path {
+  stroke: var(--surface);
 }
 
 .msg-artifact__header {
@@ -1122,16 +1217,17 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--ui-gap-md);
-  min-height: calc(56px * var(--ui-scale));
-  padding: var(--ui-gap-md) var(--ui-gap-xl) var(--ui-gap-md) var(--ui-gap-xl);
+  min-height: calc(48px * var(--ui-scale));
+  padding: var(--ui-gap-sm) var(--ui-gap-lg);
   border-bottom: var(--oc-border-width) solid var(--border);
-  background: color-mix(in srgb, var(--surface) 92%, var(--surface-inset) 8%);
+  background: var(--surface);
 }
 
 .msg-artifact__identity {
-  display: grid;
+  display: flex;
+  align-items: center;
   min-width: 0;
-  gap: var(--ui-gap-3xs);
+  gap: var(--ui-gap-sm);
 }
 
 .msg-artifact__title {
@@ -1146,20 +1242,59 @@
 }
 
 .msg-artifact__kind {
+  flex-shrink: 0;
+  padding: var(--ui-gap-3xs) var(--ui-gap-xs);
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface-inset);
   color: var(--text-soft);
   font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-strong);
-  letter-spacing: 0.035em;
   line-height: var(--ui-line-height-tight);
 }
 
 .msg-artifact__header-trailing,
+.msg-artifact__actions,
 .msg-artifact-app__modes,
 .msg-artifact-app__confirmation-actions {
   display: flex;
   flex: none;
   align-items: center;
   gap: var(--ui-gap-xs);
+}
+
+.msg-artifact__header-trailing {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.msg-artifact__actions {
+  position: relative;
+}
+
+.msg-artifact__actions .oc-button,
+.msg-artifact-app__modes .oc-button {
+  color: var(--text-muted);
+}
+
+.msg-artifact__download-menu {
+  max-width: min(calc(440px * var(--ui-scale)), 90vw);
+}
+
+.msg-artifact__download-menu .oc-menu-item span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.msg-artifact__action-status {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 2;
+  color: var(--text-muted);
+  background: var(--surface);
+  font-size: var(--ui-font-caption);
+  white-space: nowrap;
 }
 
 .msg-artifact__body {

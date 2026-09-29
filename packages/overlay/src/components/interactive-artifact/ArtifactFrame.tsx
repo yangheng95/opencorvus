@@ -1,10 +1,18 @@
-import { createSignal, onCleanup, onMount, type JSX } from "solid-js"
+import { createSignal, onCleanup, onMount, Show, type JSX } from "solid-js"
+import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
+import { artifactExports, type ArtifactExport } from "../../services/artifact-export"
+import { reportError } from "../../services/diagnostics"
 import { t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
+import { Icon } from "../ui/Icon"
+import { ArtifactActions } from "./ArtifactActions"
 
 export function ArtifactFrame(props: {
   title: string
   kind: string
+  payload?: InteractiveArtifactPayload
+  exportFiles?: () => ArtifactExport[]
+  copyText?: () => string | Promise<string>
   class?: string
   artifactID?: string
   expandable?: boolean
@@ -33,7 +41,11 @@ export function ArtifactFrame(props: {
       await frame.requestFullscreen()
     } catch (error) {
       setImmersive(false)
-      throw error
+      reportError({
+        id: "artifact-open",
+        title: t("common.error"),
+        message: error instanceof Error ? error.message : String(error),
+      })
     }
   }
 
@@ -58,6 +70,24 @@ export function ArtifactFrame(props: {
           <h3 class="msg-artifact__title oc-section-heading">{props.title}</h3>
         </div>
         <div class="msg-artifact__header-trailing">
+          <Show when={props.payload || props.exportFiles}>
+            <ArtifactActions
+              files={() => (props.exportFiles ? props.exportFiles() : artifactExports(props.payload!))}
+              copyText={props.copyText}
+              copyLabel={
+                props.payload?.renderer === "mcp-app@1"
+                  ? t("artifact.actions.copy_result")
+                  : props.payload &&
+                      "source" in props.payload &&
+                      typeof props.payload.source === "object" &&
+                      !props.payload.source.mime.startsWith("text/") &&
+                      props.payload.source.mime !== "application/json"
+                    ? t("artifact.actions.copy_name")
+                    : undefined
+              }
+              disabled={props.payload?.renderer === "mcp-app@1" && artifactExports(props.payload).length === 0}
+            />
+          </Show>
           {props.headerActions}
           {expandable() && (
             <Button
@@ -69,6 +99,7 @@ export function ArtifactFrame(props: {
               title={immersiveLabel()}
               onClick={() => void toggleImmersive()}
             >
+              <Icon name={immersive() ? "restore" : "maximize"} size="compact" />
               {immersive() ? t("artifact.workspace.close") : t("artifact.workspace.open")}
             </Button>
           )}

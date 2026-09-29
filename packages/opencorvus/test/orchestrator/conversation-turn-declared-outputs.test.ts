@@ -266,7 +266,7 @@ describe("Conversation Agent-declared output projection", () => {
     ])
   })
 
-  test("projects one exact directly selected resource and one resource-free structured result", async () => {
+  test("projects usable resources while retaining structured evidence in the exact catalog", async () => {
     await using project = await memoryProject()
     const task = await taskFixture(project.path)
     const publication = await publishFiles(task.scope)
@@ -364,33 +364,21 @@ describe("Conversation Agent-declared output projection", () => {
           text: "export const result = true\n",
         })
         const locators = [resourceLocator, structuredLocator, rawCoreLocator]
+        const entries = resolveCompletionArtifactEntries(task.taskID, locators, page.entries)
+        expect(entries.map((entry) => entry.locator)).toEqual(locators)
         return projectDeclaredTurnOutputs({
           taskID: task.taskID,
           locators,
-          entries: resolveCompletionArtifactEntries(task.taskID, locators, page.entries),
+          entries,
         })
       },
     })
 
-    expect(outputs).toHaveLength(3)
+    expect(outputs).toHaveLength(1)
     expect(outputs[0]!.resources.map((resource) => resource.path)).toEqual(["src/result.ts"])
-    expect(outputs[1]).toMatchObject({
-      label: "Decision summary",
-      declarationLocator: structuredLocator,
-      artifactType: "base/decision-summary",
+    expect(outputs[0]).toMatchObject({
       producer: publication.manifest.producer,
-      resources: [],
-    })
-    expect(outputs[2]).toMatchObject({
-      label: "frontend_design-resource-manifest",
-      declarationLocator: rawCoreLocator,
-      artifactType: "opencorvus/core/design_resource_manifest",
-      producer: {
-        owner_kind: "core",
-        component_id: "engine-artifact",
-        operation_id: "design_resource_manifest",
-      },
-      resources: [],
+      resources: [publication.artifacts[1]],
     })
   })
 

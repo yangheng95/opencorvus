@@ -9,7 +9,7 @@ import {
   type McpUiStyles,
 } from "@modelcontextprotocol/ext-apps/app-bridge"
 import { ListToolsRequestSchema, type CallToolResult } from "@modelcontextprotocol/sdk/types.js"
-import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js"
+import { createEffect, createSignal, For, onCleanup, onMount, Show } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import {
   loadSessionInteractiveArtifact,
@@ -27,6 +27,10 @@ import { OVERLAY_VERSION } from "../../utils/version"
 import { Button } from "../ui/Button"
 import { ArtifactFrame } from "./ArtifactFrame"
 import { externalUrl } from "../../utils/external-url"
+import { downloadBlob } from "../../services/file-download"
+import { Icon } from "../ui/Icon"
+import { DropdownMenu } from "../ui/DropdownMenu"
+import { artifactFilename } from "../../services/artifact-export"
 
 type McpAppPayload = Extract<InteractiveArtifactPayload, { renderer: "mcp-app@1" }>
 
@@ -71,11 +75,6 @@ export function secureMcpAppHtml(html: string, csp?: McpUiResourceCsp): string {
   return `<!doctype html>${documentNode.documentElement.outerHTML}`
 }
 
-function safeFilename(value: string): string {
-  const basename = value.split(/[\\/]/).pop()?.trim() || "mcp-app-download"
-  return basename.replace(/[<>:\"|?*\u0000-\u001f]/g, "_").slice(0, 180) || "mcp-app-download"
-}
-
 function bytesFromBase64(value: string): Uint8Array {
   const decoded = atob(value)
   const bytes = new Uint8Array(decoded.length)
@@ -116,16 +115,6 @@ function hostErrorDetail(error: unknown): string {
     }
   }
   return `MCP App request failed with HTTP ${error.status}`
-}
-
-function triggerDownload(blob: Blob, filename: string): void {
-  const url = URL.createObjectURL(blob)
-  const anchor = document.createElement("a")
-  anchor.href = url
-  anchor.download = safeFilename(filename)
-  anchor.rel = "noopener"
-  anchor.click()
-  queueMicrotask(() => URL.revokeObjectURL(url))
 }
 
 function hostStyleContext(): McpUiHostContext["styles"] {
@@ -172,8 +161,10 @@ export function McpAppArtifact(props: {
   let lifecycleQueue = Promise.resolve()
   let lifecycleFingerprint = ""
   let fullInputSent = false
+  let lifecycleTimeUpdated = 0
   let appInitialized = false
-  let latestLifecyclePayload = props.payload
+  const [lifecyclePayload, setLifecyclePayload] = createSignal(props.payload)
+  const [availableModes, setAvailableModes] = createSignal<McpUiDisplayMode[]>(["inline"])
   const maximumHeight = () => props.payload.presentation?.height ?? MCP_APP_DEFAULT_MAX_HEIGHT
   const [height, setHeight] = createSignal(Math.min(360, maximumHeight()))
   const [displayMode, setDisplayMode] = createSignal<McpUiDisplayMode>("inline")
@@ -270,7 +261,7 @@ export function McpAppArtifact(props: {
   }
 
   const deliverToolLifecycle = (payload: McpAppPayload) => {
-    latestLifecyclePayload = payload
+    setLifecyclePayload(payload)
     if (!appInitialized) return
     lifecycleQueue = lifecycleQueue
       .then(async () => {
@@ -359,7 +350,10 @@ export function McpAppArtifact(props: {
         if (totalBytes > MCP_APP_MAX_DOWNLOAD_BYTES) {
           throw new Error(`MCP App download exceeds ${MCP_APP_MAX_DOWNLOAD_BYTES} bytes`)
         }
-        triggerDownload(new Blob([new Uint8Array(payload).buffer], { type: mimeType }), safeFilename(uri))
+        downloadBlob(
+          new Blob([new Uint8Array(payload).buffer], { type: mimeType }),
+          content.type === "resource_link" ? content.name : uri,
+        )
       }
     }
   }
@@ -498,7 +492,8 @@ export function McpAppArtifact(props: {
     bridge.oninitialized = () => {
       appInitialized = true
       setBridgeConnected(true)
-      deliverToolLifecycle(latestLifecyclePayload)
+      setAvailableModes(bridge?.getAppCapabilities()?.availableDisplayModes ?? ["inline"])
+      deliverToolLifecycle(lifecyclePayload())
     }
 
     const appTransport = new PostMessageTransport(frame.contentWindow!, frame.contentWindow!)
@@ -517,15 +512,20 @@ export function McpAppArtifact(props: {
       artifactID: props.artifactID,
       directory: props.directory,
       onEvent(event) {
-        if (event.type === "mcp-app.lifecycle_changed") {
-          if (event.artifactID !== props.artifactID) return
+        if (event.type === "mcp-app.connected" || event.type === "mcp-app.lifecycle_changed") {
+          if (event.type === "mcp-app.lifecycle_changed" && event.artifactID !== props.artifactID) return
           void loadSessionInteractiveArtifact({
             sessionID: props.sessionID,
             artifactID: props.artifactID,
             directory: props.directory,
           })
             .then((artifact) => {
-              if (artifact.payload.renderer === "mcp-app@1") deliverToolLifecycle(artifact.payload)
+              if (teardownPromise || artifact.timeUpdated < lifecycleTimeUpdated) return
+              if (artifact.payload.renderer === "mcp-app@1") {
+                lifecycleTimeUpdated = artifact.timeUpdated
+                setHostError("")
+                deliverToolLifecycle(artifact.payload)
+              }
             })
             .catch((error) => {
               setHostError(hostErrorDetail(error))
@@ -561,6 +561,7 @@ export function McpAppArtifact(props: {
         })
       },
       onError(error) {
+        setHostError(hostErrorDetail(error))
         AppLog.warn("mcp-app", "Capability event stream failed", {
           artifactID: props.artifactID,
           error: String(error),
@@ -610,6 +611,7 @@ export function McpAppArtifact(props: {
 
   return (
     <ArtifactFrame
+      payload={lifecyclePayload()}
       title={props.payload.title}
       kind="MCP App"
       expandable={false}
@@ -621,32 +623,80 @@ export function McpAppArtifact(props: {
       headerActions={
         <Show when={!closed()}>
           <div class="msg-artifact-app__modes" aria-label={t("artifact.mcp_app.display_modes")}>
+            <Show
+              when={(() => {
+                const lifecycle = lifecyclePayload().tool.lifecycle
+                return lifecycle.status === "completed"
+                  ? lifecycle.result.content.filter((item) => item.type === "resource" || item.type === "resource_link")
+                  : []
+              })()}
+            >
+              {(resources) => (
+                <Show when={resources().length > 0}>
+                  <DropdownMenu.Root>
+                    <DropdownMenu.Trigger as={Button} variant="ghost" size="sm" tone="neutral">
+                      <Icon name="attach" size="compact" />
+                      {t("artifact.actions.resources", { count: resources().length })}
+                      <Icon name="chevron-down" size="compact" />
+                    </DropdownMenu.Trigger>
+                    <DropdownMenu.Portal mount={displayMode() !== "inline" ? shell : undefined}>
+                      <DropdownMenu.Content class="msg-artifact__download-menu">
+                        <For each={resources() as McpUiDownloadFileRequest["params"]["contents"]}>
+                          {(resource) => (
+                            <DropdownMenu.Item
+                              onSelect={() =>
+                                void download([resource]).catch((error) => setHostError(hostErrorDetail(error)))
+                              }
+                            >
+                              <Icon name="download" size="compact" />
+                              <span>
+                                {artifactFilename(
+                                  resource.type === "resource_link" ? resource.name : resource.resource.uri,
+                                )}
+                              </span>
+                            </DropdownMenu.Item>
+                          )}
+                        </For>
+                      </DropdownMenu.Content>
+                    </DropdownMenu.Portal>
+                  </DropdownMenu.Root>
+                </Show>
+              )}
+            </Show>
             <Button
               variant="ghost"
               size="mini"
               tone="neutral"
               aria-pressed={displayMode() === "inline"}
+              title={t("artifact.mcp_app.inline")}
+              aria-label={t("artifact.mcp_app.inline")}
               onClick={() => void applyDisplayMode("inline")}
             >
-              {t("artifact.mcp_app.inline")}
+              <Icon name="restore" size="compact" />
             </Button>
             <Button
               variant="ghost"
               size="mini"
               tone="neutral"
               aria-pressed={displayMode() === "fullscreen"}
+              disabled={!availableModes().includes("fullscreen")}
+              title={t("artifact.mcp_app.fullscreen")}
+              aria-label={t("artifact.mcp_app.fullscreen")}
               onClick={() => void applyDisplayMode("fullscreen")}
             >
-              {t("artifact.mcp_app.fullscreen")}
+              <Icon name="maximize" size="compact" />
             </Button>
             <Button
               variant="ghost"
               size="mini"
               tone="neutral"
               aria-pressed={displayMode() === "pip"}
+              disabled={!availableModes().includes("pip")}
+              title={t("artifact.mcp_app.pip")}
+              aria-label={t("artifact.mcp_app.pip")}
               onClick={() => void applyDisplayMode("pip")}
             >
-              {t("artifact.mcp_app.pip")}
+              <Icon name="open-external" size="compact" />
             </Button>
           </div>
         </Show>

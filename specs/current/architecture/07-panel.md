@@ -1,5 +1,47 @@
 # 07 — Overlay Panels And Task Evidence
 
+## Tool activity, delivery inventory, and directory status
+
+Consecutive Tool/Patch runs have one chronological disclosure. Narrative,
+files and interactive artifacts retain their original positions. Each group
+exposes every real Tool result and its outcome; pending/running activity uses
+the owning card's live state, including Mission and subagent cards. Reduced
+motion retains static status. Valid JSON displays expandable values with
+multiline strings intact; full raw content and copy remain available.
+Completed Tool groups and individual calls use a solid circular check with an
+accessible status instead of repeating Completed text.
+
+Interactive Artifact frames expose a shared copy/download/open strip. Downloads
+name their actual format: original attachments, Markdown, CSV, source code,
+patches, notebooks or visualization data. Editable Code and Spreadsheet exports
+read the mounted editor state. MCP App actions read the current real Tool
+result; returned resources use the existing Host download protocol and App
+requests retain confirmation. Opening keeps the same mounted renderer and MCP
+authority. A source/data export does not replace a requested PDF or Word file.
+The shared MCP event-stream owner reconnects after transport failure and replays
+its actual connection boundary to late consumers. Each connection refreshes the
+exact persisted lifecycle; monotonic `timeUpdated` prevents stale reads from
+replacing a newer result. Directory/session ownership isolates shared streams.
+
+Terminal `declaredOutputs` contains published file resources. Resource-free
+engine records remain in the exact catalog `entries` as inspectable evidence;
+they do not count as usable delivery files. Resource cards offer direct download
+and the existing content preview. The environment popover derives its delivery
+inventory from the same current conversation projection, including message-owned
+interactive artifacts, and opens those same exact resources without another
+registry or publication protocol. Missing requested files remain explicit.
+
+Project metadata is scoped by its exact directory and latest request. The panel
+refreshes on opening/scope changes and exposes loading, error and disconnected
+states. Repository file counts and branch/unborn/detached identity come from
+`GET /vcs`; Task change counts appear only with real Task change groups and an
+explicit Task label. Unsupported GitHub CLI status is not fabricated. Client
+startup only observes Git state. The `initGit` preference defaults off and only
+offers a confirmation on explicit directory opening; initialization remains an
+operator action. A non-Git identity mutation with an active project prompt owner
+returns `OwnedPromptControllersError` before disk mutation. Existing Git access
+remains idempotent.
+
 > Current sources: `packages/opencorvus/src/engine/model.ts`,
 > `packages/opencorvus/src/workbench/board.ts`,
 > `packages/overlay/src/store/board.ts`,

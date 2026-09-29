@@ -40,7 +40,7 @@ export function DiffArtifact(props: { payload: DiffPayload }) {
   })
 
   return (
-    <ArtifactFrame title={props.payload.title} kind="Diff">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Diff">
       <div class="msg-artifact-diff__labels">
         <span>{props.payload.originalLabel ?? t("artifact.diff.original")}</span>
         <span>{props.payload.modifiedLabel ?? t("artifact.diff.modified")}</span>

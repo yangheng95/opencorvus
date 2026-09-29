@@ -210,7 +210,7 @@ function PdfPreview(props: { payload: FilePreviewPayload }) {
 
 export function FilePreviewArtifact(props: { payload: FilePreviewPayload }) {
   return (
-    <ArtifactFrame title={props.payload.title} kind="File">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="File">
       <Switch>
         <Match when={props.payload.kind === "pdf"}>
           <PdfPreview payload={props.payload} />

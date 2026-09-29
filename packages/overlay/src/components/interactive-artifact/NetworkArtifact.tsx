@@ -138,7 +138,7 @@ export function NetworkArtifact(props: { payload: NetworkPayload }) {
   })
 
   return (
-    <ArtifactFrame title={props.payload.title} kind="Network">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Network">
       <div class="msg-artifact-network__toolbar">
         <SearchField
           value={filter()}

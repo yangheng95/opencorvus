@@ -213,6 +213,9 @@ export function clearProjectScopeData(): void {
   setBoardStore({
     path: null,
     vcs: null,
+    vcsDirectory: "",
+    vcsLoading: false,
+    vcsError: "",
     changes: [],
     planPreview: "",
     specPreview: "",
@@ -791,12 +794,21 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
   configureApi({ directory: next })
   setBoardStore("pendingTasks", [])
 
-  // Directory switching is the other project-identity ingress beside startup.
-  // Initialize before any project-scoped load can cache a non-Git Instance;
-  // changing Git identity after Mission/Chat execution begins would require an
-  // exclusive refresh behind their long-lived project lease.
+  // The preference offers initialization on an explicit directory opening;
+  // browsing alone never authorizes a repository identity mutation.
   if (settingsStore.initGit) {
-    await initializeProjectDirectoryGit(next, { signal: options.signal })
+    const vcs = await apiJson(`vcs?${new URLSearchParams({ directory: next })}`, { signal: options.signal })
+    if (!ownsWorkspaceSelection(selectionEpoch)) return false
+    if (vcs?.initialized === false) {
+      const choice = await showAppDialog({
+        title: t("git.init"),
+        message: t("git.init_required"),
+        cancel: true,
+        okLabel: t("git.init"),
+      })
+      if (!ownsWorkspaceSelection(selectionEpoch)) return false
+      if (choice.confirmed) await initializeProjectDirectoryGit(next, { signal: options.signal })
+    }
     if (!ownsWorkspaceSelection(selectionEpoch)) return false
   }
 

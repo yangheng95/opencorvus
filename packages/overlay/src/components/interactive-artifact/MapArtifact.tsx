@@ -134,7 +134,7 @@ export function MapArtifact(props: { payload: MapPayload }) {
   })
 
   return (
-    <ArtifactFrame title={props.payload.title} kind="Map">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Map">
       <div class="msg-artifact-map-shell">
         <div
           class="msg-artifact-map"

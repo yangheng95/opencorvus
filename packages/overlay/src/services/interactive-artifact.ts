@@ -1,7 +1,7 @@
 import type { InteractiveArtifactReadSessionArtifactResponses } from "@opencorvus-ai/sdk"
 import { apiJson } from "./api"
 import { directoryScopedPath } from "./task-path"
-import type { StreamHandle } from "./host-transport"
+import { STREAM_RECONNECT_DELAY_MS, type StreamHandle } from "./host-transport"
 import { getHostTransport } from "./host-transport-runtime"
 
 export type InteractiveArtifact = InteractiveArtifactReadSessionArtifactResponses[200]
@@ -71,6 +71,8 @@ type McpAppEventSubscriber = {
 type SharedMcpAppEventStream = {
   handle: StreamHandle
   subscribers: Map<symbol, McpAppEventSubscriber>
+  connectedEvent?: McpAppHostEvent
+  retry?: ReturnType<typeof setTimeout>
 }
 
 const sharedMcpAppEventStreams = new Map<string, SharedMcpAppEventStream>()
@@ -112,45 +114,62 @@ export function openMcpAppHostEventStream(input: {
   onError: (error: unknown) => void
 }): StreamHandle {
   const key = `${input.directory}\u0000${input.sessionID}`
+  const token = Symbol(input.artifactID)
+  const subscriber = { onEvent: input.onEvent, onError: input.onError }
   let shared = sharedMcpAppEventStreams.get(key)
   if (!shared) {
-    const subscribers = new Map<symbol, McpAppEventSubscriber>()
+    const subscribers = new Map<symbol, McpAppEventSubscriber>([[token, subscriber]])
     const next: SharedMcpAppEventStream = {
       subscribers,
       handle: { close() {} },
     }
-    next.handle = getHostTransport().openStream(
-      {
-        path: `session/${encodeURIComponent(input.sessionID)}/interactive-artifact/${encodeURIComponent(input.artifactID)}/mcp-app/events`,
-        query: { directory: input.directory },
-      },
-      {
-        onEvent(data) {
-          try {
-            const value = parseMcpAppHostEvent(data)
-            for (const subscriber of [...subscribers.values()]) subscriber.onEvent(value)
-          } catch (error) {
-            for (const subscriber of [...subscribers.values()]) subscriber.onError(error)
-          }
+    const connect = () => {
+      next.connectedEvent = undefined
+      next.handle = getHostTransport().openStream(
+        {
+          path: `session/${encodeURIComponent(input.sessionID)}/interactive-artifact/${encodeURIComponent(input.artifactID)}/mcp-app/events`,
+          query: { directory: input.directory },
         },
-        onError(error) {
-          for (const subscriber of [...subscribers.values()]) subscriber.onError(error)
-        },
-        onClose(reason) {
-          if (sharedMcpAppEventStreams.get(key) === next) sharedMcpAppEventStreams.delete(key)
-          if (reason !== "consumer-dispose") {
-            for (const subscriber of [...subscribers.values()]) {
-              subscriber.onError(new Error(`MCP App Host event stream closed: ${reason}`))
+        {
+          onEvent(data) {
+            try {
+              const value = parseMcpAppHostEvent(data)
+              if (value.type === "mcp-app.connected") next.connectedEvent = value
+              for (const subscriber of [...subscribers.values()]) subscriber.onEvent(value)
+            } catch (error) {
+              for (const subscriber of [...subscribers.values()]) subscriber.onError(error)
             }
-          }
+          },
+          onError(error) {
+            for (const subscriber of [...subscribers.values()]) subscriber.onError(error)
+          },
+          onClose(reason) {
+            next.connectedEvent = undefined
+            if (sharedMcpAppEventStreams.get(key) === next && subscribers.size > 0) {
+              for (const subscriber of [...subscribers.values()]) {
+                subscriber.onError(new Error(`MCP App Host event stream closed: ${reason}`))
+              }
+              clearTimeout(next.retry)
+              next.retry = setTimeout(connect, STREAM_RECONNECT_DELAY_MS)
+            }
+          },
         },
-      },
-    )
+      )
+    }
     sharedMcpAppEventStreams.set(key, next)
     shared = next
+    connect()
+  } else {
+    shared.subscribers.set(token, subscriber)
+    // Replay the actual connection boundary: a late mounted artifact may have
+    // read its snapshot before a lifecycle event reached this shared stream.
+    if (shared.connectedEvent) {
+      const connectedEvent = shared.connectedEvent
+      queueMicrotask(() => {
+        if (shared!.subscribers.has(token)) subscriber.onEvent(connectedEvent)
+      })
+    }
   }
-  const token = Symbol(input.artifactID)
-  shared.subscribers.set(token, { onEvent: input.onEvent, onError: input.onError })
   let closed = false
   return {
     close(initiator) {
@@ -158,6 +177,7 @@ export function openMcpAppHostEventStream(input: {
       closed = true
       shared!.subscribers.delete(token)
       if (shared!.subscribers.size > 0) return
+      clearTimeout(shared!.retry)
       if (sharedMcpAppEventStreams.get(key) === shared) sharedMcpAppEventStreams.delete(key)
       shared!.handle.close(initiator)
     },

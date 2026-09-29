@@ -34,7 +34,6 @@ import { workspaceRestoreDirectory } from "../store/settings"
 import { selectTask } from "./task"
 import { currentTaskDeepLink, taskDeepLinkFromSearch } from "./task-deep-link"
 import { CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS, loadConfigInfo } from "./config-load"
-import { initializeProjectDirectoryGit } from "./project-git"
 import { setAppStore, type ProjectLoadIssue } from "../store/app"
 import { AppLog } from "../utils/log"
 import { refreshProjectMemory } from "./project-memory"
@@ -131,21 +130,15 @@ async function loadInitialData(
       board: null,
       path: null,
       vcs: null,
+      vcsDirectory: "",
+      vcsLoading: false,
+      vcsError: "",
       changes: [],
     })
     return { loaded: false }
   }
-  // Git must exist before the first project-scoped load can establish an
-  // Instance/project_id. Initializing later can force an identity refresh
-  // behind a live Chat or Mission lease and block conversation hydration.
-  if (settingsStore.initGit) {
-    try {
-      await initializeProjectDirectoryGit(directory)
-    } catch (error) {
-      if (await recoverMissingActiveDirectory(error, directory)) return { loaded: false }
-      throw error
-    }
-  }
+  // Opening a client observes its directory. Git initialization is an explicit
+  // operator action and may change identity while another client owns work.
   const [tasksResult, metaResult] = await Promise.allSettled([loadTasks(), loadMeta()])
   const unavailableDirectoryFailure = [tasksResult, metaResult].find(
     (result): result is PromiseRejectedResult =>

@@ -49,7 +49,7 @@ export function DiagramArtifact(props: { payload: DiagramPayload }) {
   })
 
   return (
-    <ArtifactFrame title={props.payload.title} kind="Diagram">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Diagram">
       <Show when={!error()} fallback={<div class="msg-artifact-render-error">{error()}</div>}>
         <div
           class="msg-artifact-diagram"

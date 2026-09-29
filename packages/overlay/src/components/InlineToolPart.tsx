@@ -15,6 +15,7 @@ import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { t, tc } from "../utils/i18n"
 import { ComputerControlSurface } from "./ComputerControlSurface"
+import { ToolPayload } from "./ToolPayload"
 import {
   conversationDeferredToolState,
   ToolFailureCause,
@@ -95,18 +96,6 @@ function readDeferredToolPart(source: DeferredToolPartSource): Promise<any> {
     deferredToolPartCache.delete(oldest)
   }
   return request
-}
-
-/** Generic tool values are machine payloads, not Markdown prose. Keeping them
- * in one preformatted surface preserves JSON indentation and line boundaries
- * during both streaming and transcript replay. */
-function ToolPayload(props: { label: string; value: string; live?: boolean }) {
-  return (
-    <section class="msg-tool-payload" data-live={props.live ? "true" : undefined}>
-      <div class="msg-tool-payload__label">{props.label}</div>
-      <pre class="msg-tool-payload__content">{props.value}</pre>
-    </section>
-  )
 }
 
 function isRecord(value: unknown): value is Record<string, any> {

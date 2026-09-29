@@ -20,7 +20,7 @@ import { boardStore, activeTaskID, type BoardSource } from "../store/board"
 import { routeSSEEvent, handleEventStreamEvent, handleTaskListNotification } from "./events"
 import { createSelectedTaskRecoveryScheduler } from "./selected-task-recovery"
 import { formatErrorDetails } from "./diagnostics"
-import type { StreamHandle } from "./host-transport"
+import { STREAM_RECONNECT_DELAY_MS, type StreamHandle } from "./host-transport"
 import { getHostTransport } from "./host-transport-runtime"
 import {
   recordConversationRecoveryAborted,
@@ -306,14 +306,6 @@ function refreshComposerModelAfterSelectedStreamConnect(eventType: "task.connect
   })
 }
 
-/**
- * Failure backoff: how long to wait before reopening a stream that dropped for
- * a reason we do not understand — transport error, server restart, watchdog
- * stall. Exported because components/ConnectionBanner.tsx derives its grace
- * period from it: a banner that fires faster than one scheduled reconnect
- * would paint a disconnected state on every routine reopen.
- */
-export const STREAM_RECONNECT_DELAY_MS = 3000
 /**
  * A `task.live_replay_expired` close is not a failure: the server is up, it
  * answered us, and it asked us to reopen with a reset live cursor. Paying the

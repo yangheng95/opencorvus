@@ -18,6 +18,7 @@ const desktopNotificationErrorSubscribers = new Set<(value: string) => void>()
 export default function GeneralPanel() {
   const [desktopNotificationError, setDesktopNotificationError] = createSignal(persistedDesktopNotificationError)
   const [logExporting, setLogExporting] = createSignal(false)
+  const [gitPreferenceError, setGitPreferenceError] = createSignal("")
   const [logExportNotice, setLogExportNotice] = createSignal("")
   const [logExportNoticeStatus, setLogExportNoticeStatus] = createSignal<"active" | "error">("active")
   const receiveDesktopNotificationError = (value: string) => setDesktopNotificationError(value)
@@ -117,6 +118,39 @@ export default function GeneralPanel() {
       </SettingsGroup>
 
       <PermissionsSettingsGroup />
+
+      <SettingsGroup title={t("settings.git_preferences")}>
+        <SettingsRow
+          title={<label for="settings-offer-git-init">{t("settings.offer_git_init")}</label>}
+          desc={t("settings.offer_git_init_hint")}
+          align="center"
+          interactive
+          actions={
+            <Switch
+              inputID="settings-offer-git-init"
+              checked={settingsStore.initGit}
+              onChange={async (enabled) => {
+                setSettingsStore("initGit", enabled)
+                setGitPreferenceError("")
+                try {
+                  await saveSettings({
+                    overrides: { initGit: enabled },
+                    onFailure({ error, confirmed }) {
+                      setSettingsStore("initGit", confirmed.initGit)
+                      setGitPreferenceError(t("settings.save_failed", { error: describeError(error) }))
+                    },
+                  })
+                } catch {
+                  /* The settings owner has reported the exact failure. */
+                }
+              }}
+            />
+          }
+        />
+        <Show when={gitPreferenceError()}>
+          <Feedback tone="error">{gitPreferenceError()}</Feedback>
+        </Show>
+      </SettingsGroup>
 
       <SettingsGroup title={t("settings.section.diagnostics")}>
         <SettingsRow

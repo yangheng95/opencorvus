@@ -67,6 +67,9 @@ export const [boardStore, setBoardStore] = createStore({
   path: null as any,
   /** Git / VCS status object for the active task */
   vcs: null as any,
+  vcsDirectory: "",
+  vcsLoading: false,
+  vcsError: "",
   // ── File changes (mirrors state.changes) ──
   /** File change entries for the current task's working tree */
   changes: [] as any[],

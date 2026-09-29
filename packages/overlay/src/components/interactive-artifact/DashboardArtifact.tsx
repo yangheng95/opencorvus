@@ -173,7 +173,7 @@ export function DashboardArtifact(props: { payload: DashboardPayload }) {
   )
 
   return (
-    <ArtifactFrame title={props.payload.title} kind="Dashboard">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Dashboard">
       <div class="msg-artifact-dashboard">
         <Show when={props.payload.metrics.length}>
           <div class="msg-artifact-dashboard__metrics">

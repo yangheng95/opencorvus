@@ -6,24 +6,26 @@ import { t, tc } from "../utils/i18n"
 import { ConversationArtifactInspector } from "./ConversationArtifactInspector"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
+import { ArtifactResourceDownload } from "./ArtifactResourceDownload"
+import { copyTextReporting } from "../services/clipboard"
 
 const DEFAULT_VISIBLE_OUTPUT_COUNT = 5
 
 type Summary = NonNullable<CardNode["turnArtifacts"]>[number]
 type Entry = Summary["entries"][number]
 type DeclaredOutput = Summary["declaredOutputs"][number]
-type DeclaredOutputRow =
-  | { kind: "resource"; declarations: DeclaredOutput[]; resource: DeclaredOutput["resources"][number] }
-  | { kind: "artifact"; declaration: DeclaredOutput }
+type DeclaredOutputRow = {
+  kind: "resource"
+  declarations: DeclaredOutput[]
+  resource: DeclaredOutput["resources"][number]
+}
 
 function artifactIdentity(entry: Entry): string {
   return `${entry.source}:${JSON.stringify(entry.locator)}`
 }
 
 function outputIdentity(output: DeclaredOutputRow): string {
-  return output.kind === "resource"
-    ? `resource:${JSON.stringify({ source: "task_artifact_resource", ref: output.resource })}`
-    : `artifact:${JSON.stringify(output.declaration.declarationLocator)}`
+  return `resource:${JSON.stringify({ source: "task_artifact_resource", ref: output.resource })}`
 }
 
 function artifactTypeLabel(entry: Entry): string {
@@ -53,26 +55,20 @@ function producerLabel(producer: Record<string, unknown> | null): string {
 }
 
 function outputLocator(output: DeclaredOutputRow): ArtifactReadLocator {
-  return output.kind === "resource"
-    ? ({ source: "task_artifact_resource", ref: output.resource } as ArtifactReadLocator)
-    : (output.declaration.declarationLocator as ArtifactReadLocator)
+  return { source: "task_artifact_resource", ref: output.resource } as ArtifactReadLocator
 }
 
 function outputPrimaryLabel(output: DeclaredOutputRow): string {
-  return output.kind === "resource" ? output.resource.path : output.declaration.label
+  return output.resource.path
 }
 
 function outputSecondaryLabel(output: DeclaredOutputRow): string {
-  if (output.kind === "resource") {
-    return [...new Set(output.declarations.map((declaration) => producerLabel(declaration.producer)))].join(", ")
-  }
-  const producer = producerLabel(output.declaration.producer)
-  const declaration = output.declaration.artifactType || t("chat.artifacts.structured")
-  return `${producer} · ${declaration}`
+  return [...new Set(output.declarations.map((declaration) => producerLabel(declaration.producer)))].join(", ")
 }
 
 function outputMeta(output: DeclaredOutputRow): string {
-  return output.kind === "resource" ? output.resource.media_type : t("chat.artifacts.structured")
+  const extension = output.resource.path.split(".").at(-1)?.toUpperCase()
+  return extension && extension.length <= 8 ? extension : output.resource.media_type
 }
 
 export function ConversationTurnArtifactSummary(props: { summary: Summary; onContentChanged?: () => void }) {
@@ -85,7 +81,6 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
     const resources = new Map<string, Extract<DeclaredOutputRow, { kind: "resource" }>>()
     for (const declaration of props.summary.declaredOutputs) {
       if (declaration.resources.length === 0) {
-        rows.push({ kind: "artifact", declaration })
         continue
       }
       for (const resource of declaration.resources) {
@@ -126,8 +121,8 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
           <Icon name="file-document" size="medium" />
         </span>
         <div class="conversation-artifact-summary__identity">
-          <span class="conversation-artifact-summary__eyebrow">{t("chat.artifacts.label")}</span>
-          <strong>{title()}</strong>
+          <strong>{t("chat.artifacts.label")}</strong>
+          <span class="conversation-artifact-summary__count">{title()}</span>
           <span class="conversation-artifact-summary__file-total">{props.summary.task.title}</span>
         </div>
       </header>
@@ -151,7 +146,6 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
 
       <Show when={outputRows().length > 0}>
         <div class="conversation-artifact-summary__section">
-          <div class="conversation-artifact-summary__section-label">{t("chat.artifacts.declared_outputs")}</div>
           <div class="conversation-artifact-summary__artifacts">
             <For each={visibleOutputs()}>
               {(output) => {
@@ -160,32 +154,42 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
                 const title = outputPrimaryLabel(output)
                 return (
                   <div class="conversation-artifact-summary__artifact-item">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      tone="neutral"
-                      class="conversation-artifact-summary__artifact conversation-artifact-summary__declared-output"
-                      data-output-kind={output.kind}
-                      data-selected={open() ? "true" : undefined}
-                      title={title}
-                      aria-expanded={open()}
-                      onClick={() => {
-                        setOpenOutputID(open() ? "" : identity)
-                        setOpenArtifactID("")
-                        props.onContentChanged?.()
-                      }}
-                    >
-                      <span class="conversation-artifact-summary__row-icon" aria-hidden="true">
-                        <Icon name="file-document" size="compact" />
-                      </span>
-                      <span class="conversation-artifact-summary__artifact-copy">
-                        <strong>{title}</strong>
-                        <span>{outputSecondaryLabel(output)}</span>
-                      </span>
-                      <span class="conversation-artifact-summary__artifact-meta">{outputMeta(output)}</span>
-                      <Icon name={open() ? "chevron-down" : "chevron"} size="compact" />
-                    </Button>
+                    <div class="conversation-artifact-summary__resource-row">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        tone="neutral"
+                        class="conversation-artifact-summary__artifact conversation-artifact-summary__declared-output"
+                        data-output-kind={output.kind}
+                        data-selected={open() ? "true" : undefined}
+                        title={title}
+                        aria-expanded={open()}
+                        onClick={() => {
+                          setOpenOutputID(open() ? "" : identity)
+                          setOpenArtifactID("")
+                          props.onContentChanged?.()
+                        }}
+                      >
+                        <span class="conversation-artifact-summary__format" aria-hidden="true">
+                          {outputMeta(output)}
+                        </span>
+                        <span class="conversation-artifact-summary__artifact-copy">
+                          <strong>{title.split(/[\\/]/).at(-1)}</strong>
+                          <span>{outputSecondaryLabel(output)} · {output.resource.bytes < 1024 ? `${output.resource.bytes} B` : `${(output.resource.bytes / 1024).toFixed(1)} KB`}</span>
+                        </span>
+                        <span class="conversation-artifact-summary__preview-label">{t("artifact.actions.preview")}</span>
+                        <Icon name={open() ? "chevron-down" : "chevron"} size="compact" />
+                      </Button>
+                      <Button variant="ghost" tone="neutral" size="icon" title={t("artifact.actions.copy_name")} aria-label={t("artifact.actions.copy_name")} onClick={() => void copyTextReporting(title, "delivery-name")}>
+                        <Icon name="copy" size="compact" />
+                      </Button>
+                      <ArtifactResourceDownload
+                        taskID={props.summary.task.id}
+                        locator={outputLocator(output)}
+                        filename={title}
+                      />
+                    </div>
                     <Show when={open()}>
                       <ConversationArtifactInspector
                         taskID={props.summary.task.id}

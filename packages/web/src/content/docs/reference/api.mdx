@@ -103,7 +103,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/project/current` | Get current project | `project.current` |
 | PATCH | `/project/current` | Update current project Body: `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.update` |
 | GET | `/project/current/cleanup-candidates` | Inspect current project cleanup candidates Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `project.current.cleanupCandidates` |
-| POST | `/project/current/init-git` | Initialize git in current directory Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.initGit` |
+| POST | `/project/current/init-git` | Initialize git in current directory Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `OwnedPromptControllersError`. | `project.current.initGit` |
 | POST | `/project/current/promote-anonymous` | Convert current anonymous project to a named project Body: `destinationParent`, `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `project.current.promoteAnonymous` |
 | DELETE | `/project/current/worktrees` | Delete a current project worktree Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `project.current.worktrees.delete` |
 | GET | `/project/current/worktrees` | List current project worktrees Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.worktrees` |

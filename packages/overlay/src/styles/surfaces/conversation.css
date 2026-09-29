@@ -779,12 +779,11 @@
   border-radius: var(--oc-radius-large);
   overflow: hidden;
   box-sizing: border-box;
-  background: color-mix(in srgb, var(--surface) 84%, var(--chat-canvas));
-  box-shadow: var(--shadow-md);
+  background: var(--surface);
 }
 
 .conversation-artifact-summary__header {
-  min-height: calc(62px * var(--ui-scale));
+  min-height: calc(56px * var(--ui-scale));
   display: flex;
   align-items: center;
   gap: var(--ui-gap-lg);
@@ -815,8 +814,10 @@
   row-gap: var(--ui-gap-3xs);
 }
 
-.conversation-artifact-summary__eyebrow {
-  flex-basis: 100%;
+.conversation-artifact-summary__count {
+  padding: var(--ui-gap-3xs) var(--ui-gap-sm);
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface-inset);
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-tight);
@@ -832,6 +833,10 @@
 }
 
 .conversation-artifact-summary__file-total {
+  flex-basis: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-tight);
@@ -897,13 +902,6 @@
   border-block-start: var(--oc-border-width) solid var(--divider-soft);
 }
 
-.conversation-artifact-summary__section-label {
-  padding: var(--ui-gap-md) var(--ui-gap-lg) var(--ui-gap-xs);
-  color: var(--text-muted);
-  font-size: var(--ui-font-caption);
-  line-height: var(--ui-line-height-tight);
-}
-
 .conversation-artifact-summary__artifacts,
 .conversation-artifact-summary__files {
   display: grid;
@@ -938,7 +936,28 @@
 }
 
 .conversation-artifact-summary__declared-output {
-  min-height: calc(43px * var(--ui-scale));
+  min-height: calc(62px * var(--ui-scale));
+}
+
+.conversation-artifact-summary__format {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: calc(44px * var(--ui-scale));
+  height: calc(44px * var(--ui-scale));
+  border: var(--oc-border-width) solid var(--divider-soft);
+  border-radius: var(--oc-radius-soft);
+  color: var(--text-muted);
+  background: var(--surface-inset);
+  font-size: var(--ui-font-caption);
+  font-weight: var(--ui-font-weight-strong);
+  overflow: hidden;
+}
+
+.conversation-artifact-summary__preview-label {
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
 }
 
 .conversation-artifact-summary__records {
@@ -1770,6 +1789,67 @@
 .project-runtime-environment-body {
   display: grid;
   gap: var(--ui-gap-3xs);
+}
+
+.project-runtime-directory-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.project-runtime-repository-status {
+  display: grid;
+  gap: var(--ui-gap-xs);
+  padding: var(--ui-gap-xs) var(--ui-gap-sm) var(--ui-gap-sm) var(--ui-gap-2xl);
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  overflow-wrap: anywhere;
+}
+.project-runtime-repository-status[data-tone="bad"] {
+  color: var(--bad);
+}
+.project-runtime-delivery-row {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-xs);
+  min-width: 0;
+}
+.project-runtime-delivery-open.oc-button {
+  flex: 1;
+  min-width: 0;
+  height: auto;
+  min-height: calc(44px * var(--ui-scale));
+  padding-block: var(--ui-gap-xs);
+  line-height: var(--ui-line-height-tight);
+  justify-content: flex-start;
+  text-align: left;
+}
+.project-runtime-delivery-open > span {
+  display: grid;
+  min-width: 0;
+  gap: var(--ui-gap-3xs);
+}
+.project-runtime-delivery-open strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--ui-font-weight-body);
+}
+.project-runtime-delivery-open small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+.conversation-artifact-summary__resource-row {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-3xs);
+  padding-inline-end: var(--ui-gap-sm);
+}
+.conversation-artifact-summary__resource-row > .conversation-artifact-summary__artifact {
+  flex: 1;
+  min-width: 0;
 }
 
 .project-runtime-subagent-section {
@@ -2796,9 +2876,6 @@
 }
 .project-runtime-change-totals [data-tone="bad"] {
   color: var(--bad);
-}
-.project-runtime-github-row {
-  color: var(--text-muted);
 }
 
 .dialog-overlay.project-runtime-local-environment-dialog-overlay,

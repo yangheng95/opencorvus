@@ -20,6 +20,8 @@ import type { StreamCloseInitiator } from "@opencorvus-ai/transport-protocol"
 export type HostKind = "tauri" | "browser"
 
 export const DEFAULT_REQUEST_TIMEOUT_MILLISECONDS = 15_000
+/** Shared delay for stream owners reopening after transport failure. */
+export const STREAM_RECONNECT_DELAY_MS = 3000
 
 // ── Request / Response (HTTP) ──
 

@@ -8,7 +8,8 @@ import type {
   TransportRequest,
 } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
-import { STREAM_RECONNECT_DELAY_MS, startSSE, stopSSE } from "../src/services/sse"
+import { startSSE, stopSSE } from "../src/services/sse"
+import { STREAM_RECONNECT_DELAY_MS } from "../src/services/host-transport"
 import { setBoardStore } from "../src/store/board"
 import { messageStore } from "../src/store/messages"
 

@@ -71,13 +71,13 @@ function parseDisposition(value: string): { attachment: boolean; filename?: stri
 }
 
 async function readChunk(input: {
+  directory: string
   taskID: string
   locator: ArtifactReadLocator
   byteOffset: number
   signal?: AbortSignal
 }): Promise<ArtifactByteChunk> {
-  const directory = activeProjectDirectory()
-  const response = await apiRequest<Uint8Array>(taskScopedPath(input.taskID, directory, "/artifact-read"), {
+  const response = await apiRequest<Uint8Array>(taskScopedPath(input.taskID, input.directory, "/artifact-read"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -109,6 +109,7 @@ export async function loadConversationArtifactContent(input: {
   locator: ArtifactReadLocator
   signal?: AbortSignal
 }): Promise<ConversationArtifactContent> {
+  const directory = activeProjectDirectory()
   let offset = 0
   let mediaType = ""
   let sha256 = ""
@@ -116,7 +117,7 @@ export async function loadConversationArtifactContent(input: {
   const text: string[] = []
   for (;;) {
     input.signal?.throwIfAborted()
-    const chunk = await readChunk({ ...input, byteOffset: offset })
+    const chunk = await readChunk({ ...input, directory, byteOffset: offset })
     if (chunk.byteStart !== offset) throw new Error("Artifact read returned a discontinuous byte range")
     if (!mediaType) mediaType = chunk.mediaType
     if (!sha256) sha256 = chunk.sha256

@@ -25820,6 +25820,15 @@ export type ProjectCurrentInitGitErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Owned prompt controllers prevent this operation
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "OwnedPromptControllersError"
+  }
 }
 
 export type ProjectCurrentInitGitError = ProjectCurrentInitGitErrors[keyof ProjectCurrentInitGitErrors]

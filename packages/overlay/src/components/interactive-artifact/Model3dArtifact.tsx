@@ -61,6 +61,7 @@ export function Model3dArtifact(props: { payload: Model3dPayload }) {
 
   return (
     <ArtifactFrame
+      payload={props.payload}
       title={props.payload.title}
       kind="3D model"
       headerActions={

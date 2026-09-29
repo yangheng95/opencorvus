@@ -2,19 +2,30 @@
 // Solid components for project runtime controls hosted by the chat header.
 
 import { HoverCard } from "./ui/HoverCard"
-import { createEffect, createMemo, createResource, createSignal, For, type JSX, onCleanup, Show } from "solid-js"
+import {
+  createEffect,
+  createMemo,
+  createResource,
+  createSignal,
+  For,
+  type JSX,
+  onCleanup,
+  Show,
+  untrack,
+} from "solid-js"
 import { activeSessionID, activeTaskID, boardStore, loadBoard } from "../store/board"
 import { appStore } from "../store/app"
 import { activeDirectory, browseDirectory, openDirectory, pathRevealLabelKey } from "../services/workspace"
 import {
   commitVcsChanges,
+  loadMeta,
   loadVcsBranches,
   pushVcsBranch,
   streamVcsCommitMessage,
   switchVcsBranch,
   type VcsBranch,
 } from "../services/meta"
-import { t } from "../utils/i18n"
+import { t, tc } from "../utils/i18n"
 import { AppLog } from "../utils/log"
 import { canInitGit, initGitCurrent } from "../utils/git"
 import {
@@ -52,6 +63,7 @@ import { closeNativeMenuSurface, openNativeMenuSurface } from "../services/nativ
 import { settingsStore } from "../store/settings"
 import { rightDockOpen } from "../store/right-dock"
 import { layoutTokenPx } from "../utils/layout-tokens"
+import { createProjectDeliveries } from "./ProjectDeliveries"
 
 const directoryMemo = () => activeDirectory()
 const WORKTREE_PROJECTION_RETRY_MS = 3_000
@@ -114,7 +126,9 @@ interface LocalEnvironmentConfig {
 }
 
 function projectVcsInfo(): ProjectVcsInfo | null {
-  return boardStore.vcs as ProjectVcsInfo | null
+  return appStore.connected && boardStore.vcsDirectory === directoryMemo()
+    ? (boardStore.vcs as ProjectVcsInfo | null)
+    : null
 }
 
 function vcsToneFor(value: ProjectVcsInfo | null): ProjectVcsTone {
@@ -135,6 +149,7 @@ function vcsArrowsFor(value: ProjectVcsInfo | null): string {
 
 export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps) {
   const dir = createMemo(directoryMemo)
+  const deliveries = createProjectDeliveries({ onOpen: () => closeRuntimePanel() })
   const environmentAnchorShift = createMemo(() => {
     settingsStore.zoom
     return layoutTokenPx("--ui-runtime-environment-anchor-shift")
@@ -194,11 +209,31 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const gitTone = createMemo(() => vcsToneFor(vcs()))
   const gitArrows = createMemo(() => vcsArrowsFor(vcs()))
   const gitStatusLabel = createMemo(() => {
+    if (!appStore.connected) return t("project_runtime.disconnected")
+    if (boardStore.vcsLoading) return t("common.loading")
     const value = vcs()
     if (!value) return t("project_runtime.git_unavailable")
     if (!value.initialized) return t("project_runtime.git_uninitialized")
     return value.dirty ? t("vcs.dirty") : t("vcs.clean")
   })
+  const branchLabel = createMemo(
+    () =>
+      vcs()?.branch ||
+      (vcs()?.commit
+        ? t("project_runtime.detached", { commit: vcs()!.commit!.slice(0, 8) })
+        : t("project_runtime.unborn")),
+  )
+  const repositoryCounts = createMemo(() =>
+    [
+      ["project_runtime.staged", vcs()?.staged],
+      ["project_runtime.modified", vcs()?.modified],
+      ["project_runtime.untracked", vcs()?.untracked],
+      ["project_runtime.conflicts", vcs()?.conflicts],
+    ]
+      .filter(([, count]) => Number(count) > 0)
+      .map(([key, count]) => t(String(key), { count }))
+      .join(" · "),
+  )
   const triggerTitle = createMemo(() => t("project_runtime.environment_title"))
   const changeGroups = createMemo(currentChangeGroups)
   const changeGroupsRequestKey = createMemo(() => {
@@ -215,6 +250,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     return resolved?.key === changeGroupsRequestKey() ? resolved.groups : changeGroups()
   })
   const changeTotals = createMemo(() => summarizeChangeGroups(visibleChangeGroups()))
+  const changedFileCount = createMemo(
+    () => new Set(visibleChangeGroups().flatMap((group) => group.changes.map((change) => change.file))).size,
+  )
+  const hasLineChanges = () => changeTotals().additions > 0 || changeTotals().deletions > 0
   const requestSources = createMemo(() => {
     const attachments = (boardStore.board as any)?.task?.attachments
     return Array.isArray(attachments) ? attachments : []
@@ -338,7 +377,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       new Set<RightDockPanel>([
         ...taskScopeShortcuts().map((shortcut) => shortcut.id),
         ...(browserHasInformation() ? (["browser"] as const) : []),
-        ...(changeGroups().length > 0 ? (["diff"] as const) : []),
+        ...(changedFileCount() > 0 ? (["diff"] as const) : []),
         ...(filesHaveInformation() ? (["explorer"] as const) : []),
         ...(cardTreeStore.screenshotItems.length > 0 ? (["screenshots"] as const) : []),
         ...(selectedFileTarget() ? (["file"] as const) : []),
@@ -644,7 +683,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setBranchLoadDirectory(projectDirectory)
     setBranchError("")
     try {
-      const items = await loadVcsBranches()
+      const items = await loadVcsBranches(projectDirectory)
       if (dir().trim() !== projectDirectory) return
       setBranches(items)
     } catch (err) {
@@ -694,12 +733,13 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
           },
         ],
         onDismiss: () => setLocalMenuOpen(false),
-        onError: (error) => reportError({
-          id: "project-runtime-local-menu:close",
-          title: t("common.error"),
-          message: errorMessage(error),
-          details: formatErrorDetails(error),
-        }),
+        onError: (error) =>
+          reportError({
+            id: "project-runtime-local-menu:close",
+            title: t("common.error"),
+            message: errorMessage(error),
+            details: formatErrorDetails(error),
+          }),
         onAction: (itemID) => {
           if (itemID === "local-open") {
             void openDirectory(dir())
@@ -806,7 +846,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setBranchSwitchBusy(branch.name)
     setBranchError("")
     try {
-      await switchVcsBranch(branch.name)
+      await switchVcsBranch(branch.name, projectDirectory)
       if (dir().trim() !== projectDirectory) return
       await syncBranches()
     } catch (err) {
@@ -837,7 +877,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
 
   async function syncWorktrees(options: { requireFresh?: boolean } = {}): Promise<void> {
     const projectDirectory = dir().trim()
-    if (!appStore.connected || !projectDirectory) {
+    if (!appStore.connected || !projectDirectory || vcs()?.initialized !== true) {
       invalidateWorktreeProjection()
       setWorktrees([])
       setWorktreeDirectory("")
@@ -883,11 +923,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   }
 
   function ownsWorktreeProjection(generation: number, projectDirectory: string): boolean {
-    return (
-      generation === worktreeProjectionGeneration &&
-      appStore.connected &&
-      dir().trim() === projectDirectory
-    )
+    return generation === worktreeProjectionGeneration && appStore.connected && dir().trim() === projectDirectory
   }
 
   function scheduleWorktreeProjectionRetry(generation: number, projectDirectory: string): void {
@@ -1063,12 +1099,9 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setGitActionError("")
     setGitActionNotice("")
     commitMessageGenerationKey = ""
-    if (connected) void syncWorktrees()
-    else {
-      setWorktrees([])
-      setWorktreeDirectory("")
-      setError("")
-    }
+    setWorktrees([])
+    setWorktreeDirectory("")
+    setError("")
   })
 
   onCleanup(invalidateWorktreeProjection)
@@ -1104,11 +1137,25 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     openRuntimePanel()
   })
 
-  createEffect((wasOpen: boolean) => {
-    const nextOpen = runtimePanelOpen()
-    if (nextOpen && !wasOpen && appStore.connected) void syncWorktrees()
-    return nextOpen
-  }, false)
+  createEffect(() => {
+    const eligible = runtimePanelOpen() && appStore.connected && vcs()?.initialized === true
+    dir()
+    untrack(() => {
+      if (eligible) void syncWorktrees()
+      else {
+        invalidateWorktreeProjection()
+        setWorktrees([])
+        setWorktreeDirectory("")
+        setError("")
+      }
+    })
+  })
+
+  createEffect(() => {
+    const directory = dir().trim()
+    if (runtimePanelOpen() && appStore.connected && directory)
+      untrack(() => void loadMeta(directory).catch(() => undefined))
+  })
 
   const PanelShell = () => (
     <div class="project-runtime-panel-shell">
@@ -1130,12 +1177,26 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
             <Icon name={panelExpanded() ? "chevron-up" : "chevron"} size="compact" aria-hidden="true" />
           </span>
         </Button>
-        <Show when={!panelExpanded()}>
+        <Show when={!panelExpanded() && changedFileCount() > 0}>
           <span class="project-runtime-change-totals project-runtime-collapsed-totals">
-            <span data-tone="good">+{changeTotals().additions.toLocaleString()}</span>
-            <span data-tone="bad">-{changeTotals().deletions.toLocaleString()}</span>
+            <Show when={hasLineChanges()} fallback={<span>{tc("files.changed", changedFileCount())}</span>}>
+              <span data-tone="good">+{changeTotals().additions.toLocaleString()}</span>
+              <span data-tone="bad">-{changeTotals().deletions.toLocaleString()}</span>
+            </Show>
           </span>
         </Show>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          tone="neutral"
+          title={t("common.refresh")}
+          aria-label={t("common.refresh")}
+          disabled={!appStore.connected || boardStore.vcsLoading || !dir()}
+          onClick={() => void loadMeta(dir()).catch(() => undefined)}
+        >
+          <Icon name="refresh" size="compact" />
+        </Button>
         <Button
           type="button"
           variant="ghost"
@@ -1156,22 +1217,26 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
             class="project-runtime-environment-body project-runtime-menu-region"
             data-ui="project-runtime-environment-details"
           >
-            <Button
-              type="button"
-              variant="ghost"
-              size="md"
-              tone="neutral"
-              class="project-runtime-info-row project-runtime-info-action"
-              data-ui="project-runtime-changes"
-              onClick={openChanges}
-            >
-              <Icon name="files" size="medium" />
-              <span>{t("project_runtime.git_changes")}</span>
-              <span class="project-runtime-change-totals">
-                <span data-tone="good">+{changeTotals().additions.toLocaleString()}</span>
-                <span data-tone="bad">-{changeTotals().deletions.toLocaleString()}</span>
-              </span>
-            </Button>
+            <Show when={changedFileCount() > 0}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="md"
+                tone="neutral"
+                class="project-runtime-info-row project-runtime-info-action"
+                data-ui="project-runtime-changes"
+                onClick={openChanges}
+              >
+                <Icon name="files" size="medium" />
+                <span>{t("project_runtime.task_changes")}</span>
+                <span class="project-runtime-change-totals">
+                  <Show when={hasLineChanges()} fallback={<span>{tc("files.changed", changedFileCount())}</span>}>
+                    <span data-tone="good">+{changeTotals().additions.toLocaleString()}</span>
+                    <span data-tone="bad">-{changeTotals().deletions.toLocaleString()}</span>
+                  </Show>
+                </span>
+              </Button>
+            </Show>
             <Button
               type="button"
               variant="ghost"
@@ -1202,7 +1267,9 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               onClick={() => void openLocalMenu(localMenuAnchor)}
             >
               <Icon name="terminal-powershell" size="medium" />
-              <span>{t("project_runtime.local")}</span>
+              <span class="project-runtime-directory-label">
+                {dir().split(/[\\/]/).filter(Boolean).at(-1) || t("project_runtime.local")}
+              </span>
               <Icon class="project-runtime-info-caret" name="chevron-down" />
             </Button>
             <Show
@@ -1211,7 +1278,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 <div class="project-runtime-info-row" data-ui="project-runtime-git-uninitialized">
                   <Icon name="git-branch" size="medium" />
                   <span>{gitStatusLabel()}</span>
-                  <Show when={canInitGit()}>
+                  <Show when={vcs()?.initialized === false && canInitGit()}>
                     <Button
                       type="button"
                       variant="ghost"
@@ -1237,18 +1304,25 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 class="project-runtime-info-row project-runtime-info-action project-runtime-control-trigger"
                 data-ui="project-runtime-branch"
                 data-expanded={branchMenuOpen() ? "" : undefined}
-                title={vcs()?.branch ?? ""}
-                aria-label={`${t("chat.git.branch")}: ${vcs()?.branch ?? ""}`}
+                title={branchLabel()}
+                aria-label={`${t("chat.git.branch")}: ${branchLabel()}`}
+                disabled={!appStore.connected || !vcs()?.commit}
                 aria-haspopup="menu"
                 aria-expanded={branchMenuOpen()}
                 onClick={() => void openBranchMenu(branchMenuAnchor)}
               >
                 <Icon name="git-branch" size="medium" />
-                <span class="project-runtime-info-value project-runtime-branch-value">{vcs()?.branch ?? ""}</span>
+                <span class="project-runtime-info-value project-runtime-branch-value">{branchLabel()}</span>
                 <Icon class="project-runtime-info-caret" name="chevron-down" />
               </Button>
             </Show>
             <Show when={vcs()?.initialized}>
+              <div class="project-runtime-repository-status" data-tone={gitTone()}>
+                <span>{gitStatusLabel()}</span>
+                <Show when={repositoryCounts()}>
+                  <span>{repositoryCounts()}</span>
+                </Show>
+              </div>
               <Button
                 type="button"
                 variant="ghost"
@@ -1261,6 +1335,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 aria-haspopup="dialog"
                 aria-controls="projectRuntimeGitDialog"
                 onClick={toggleGitAction}
+                disabled={!appStore.connected || boardStore.vcsLoading}
               >
                 <Icon name="git-compare" size="medium" />
                 <span>{t(vcs()?.hasRemote ? "project_runtime.commit_or_push" : "project_runtime.commit")}</span>
@@ -1269,10 +1344,11 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 </Show>
               </Button>
             </Show>
-            <div class="project-runtime-info-row project-runtime-github-row" data-ui="project-runtime-github-cli">
-              <Icon name="web-search" size="medium" />
-              <span>{t("project_runtime.github_unavailable")}</span>
-            </div>
+            <Show when={boardStore.vcsDirectory === dir() && boardStore.vcsError}>
+              <div class="project-runtime-operation-error" role="alert">
+                {boardStore.vcsError}
+              </div>
+            </Show>
             <Show when={branchError() && !branchMenuOpen()}>
               <div
                 class="project-runtime-operation-error"
@@ -1491,6 +1567,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               </Show>
             </div>
           </Show>
+          <deliveries.Inventory />
           <Show when={requestSources().length > 0}>
             <div class="project-runtime-source-section project-runtime-menu-region">
               <div class="project-runtime-menu-region-head project-runtime-source-head oc-section-heading">
@@ -1518,6 +1595,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
 
   return (
     <>
+      <deliveries.Preview />
       <span class="project-runtime-trigger-anchor">
         <HoverCard.Root
           open={runtimePanelOpen()}

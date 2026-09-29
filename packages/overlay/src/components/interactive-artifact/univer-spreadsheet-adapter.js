@@ -4,6 +4,7 @@ import enUS from "@univerjs/preset-sheets-core/locales/en-US"
 import zhCN from "@univerjs/preset-sheets-core/locales/zh-CN"
 import "@univerjs/preset-sheets-core/lib/index.css"
 import { createUniver } from "@univerjs/presets"
+import { artifactCSV, artifactFilename } from "../../services/artifact-export"
 
 function cellCoordinates(address) {
   const letters = address.match(/^[A-Z]+/)?.[0] ?? "A"
@@ -113,5 +114,27 @@ export function mountUniverSpreadsheet(host, payload, language, darkMode) {
   return {
     dispose: () => univer.dispose(),
     setDarkMode: (enabled) => themeService.setDarkMode(enabled),
+    exportFiles: () => {
+      const snapshot = workbook.save()
+      return snapshot.sheetOrder.map((id) => {
+        const sheet = snapshot.sheets[id]
+        const cells = sheet.cellData || {}
+        const lastRow = Math.max(-1, ...Object.keys(cells).map(Number))
+        const lastColumn = Math.max(-1, ...Object.values(cells).flatMap((row) => Object.keys(row).map(Number)))
+        if ((lastRow + 1) * (lastColumn + 1) > 2_000_000)
+          throw new Error("CSV export exceeds 2,000,000 cells. Reduce the used sheet range before exporting.")
+        const rows = Array.from({ length: lastRow + 1 }, (_, row) =>
+          Array.from({ length: lastColumn + 1 }, (_, column) => {
+            const cell = cells[row]?.[column]
+            return cell?.p?.body?.dataStream?.trimEnd() ?? cell?.v ?? cell?.f ?? ""
+          }),
+        )
+        return {
+          filename: `${artifactFilename(payload.title)} - ${artifactFilename(sheet.name)}.csv`,
+          mime: "text/csv;charset=utf-8",
+          text: artifactCSV(rows),
+        }
+      })
+    },
   }
 }

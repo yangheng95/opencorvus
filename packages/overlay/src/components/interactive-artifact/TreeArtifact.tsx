@@ -82,7 +82,7 @@ export function TreeArtifact(props: { payload: TreePayload }) {
   const roots = createMemo(() => (childrenByParent().get(undefined) ?? []).filter((node) => visible().has(node.id)))
 
   return (
-    <ArtifactFrame title={props.payload.title} kind="Tree">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Tree">
       <div class="msg-artifact-tree__toolbar">
         <SearchField
           value={filter()}

@@ -103,7 +103,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/project/current` | Get current project | `project.current` |
 | PATCH | `/project/current` | Update current project 请求体: `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.update` |
 | GET | `/project/current/cleanup-candidates` | Inspect current project cleanup candidates 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `project.current.cleanupCandidates` |
-| POST | `/project/current/init-git` | Initialize git in current directory 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.initGit` |
+| POST | `/project/current/init-git` | Initialize git in current directory 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `OwnedPromptControllersError`. | `project.current.initGit` |
 | POST | `/project/current/promote-anonymous` | Convert current anonymous project to a named project 请求体: `destinationParent`, `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `project.current.promoteAnonymous` |
 | DELETE | `/project/current/worktrees` | Delete a current project worktree 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `project.current.worktrees.delete` |
 | GET | `/project/current/worktrees` | List current project worktrees 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.worktrees` |

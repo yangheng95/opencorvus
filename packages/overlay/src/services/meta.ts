@@ -1,8 +1,7 @@
 // ── Meta Service ──
 // TypeScript port of metadata and diff-normalization functions.
 
-import { setAppStore } from "../store/app"
-import { setPath, setVcs } from "../store/board"
+import { boardStore, setBoardStore, setPath, setVcs } from "../store/board"
 import { settingsStore } from "../store/settings"
 import { AppLog } from "../utils/log"
 import { apiJson } from "./api"
@@ -12,7 +11,7 @@ import {
   VcsCommitMessageStreamEvent,
   type VcsCommitMessageStreamEvent as VcsCommitMessageEvent,
 } from "@opencorvus-ai/transport-protocol"
-import { projectScopedPath } from "./project-directory"
+import { activeProjectDirectory, projectScopedPath } from "./project-directory"
 
 // ── Types ──
 
@@ -57,33 +56,49 @@ export interface VcsCommitMessageStreamOptions {
  * pushes data into the stores. Worktrees remain Task dispatch resources and
  * are not projected as Goal fields.
  */
-export async function loadMeta(): Promise<void> {
+let metaRequest = 0
+
+export async function loadMeta(directory = activeProjectDirectory()): Promise<void> {
   const epoch = settingsStore.directoryEpoch
+  const request = ++metaRequest
+  if (!directory) {
+    setBoardStore({ path: null, vcs: null, vcsDirectory: "", vcsLoading: false, vcsError: "" })
+    return
+  }
+  const isCurrent = () =>
+    request === metaRequest && epoch === settingsStore.directoryEpoch && directory === activeProjectDirectory()
+  setBoardStore({
+    vcsDirectory: directory,
+    vcsLoading: true,
+    vcsError: "",
+    ...(boardStore.vcsDirectory !== directory ? { vcs: null } : {}),
+  })
   try {
-    const [path, vcs] = await Promise.all([apiJson("path"), apiJson("vcs")])
-    if (epoch !== settingsStore.directoryEpoch) return
-    const directory = path && typeof path.directory === "string" ? path.directory.trim() : ""
-    setPath(directory ? { directory } : null)
+    const [path, vcs] = await Promise.all([
+      apiJson(projectScopedPath("path", directory)),
+      apiJson(projectScopedPath("vcs", directory)),
+    ])
+    if (!isCurrent()) return
+    const resolvedDirectory = path && typeof path.directory === "string" ? path.directory.trim() : ""
+    setPath(resolvedDirectory ? { directory: resolvedDirectory } : null)
     setVcs(vcs ?? null)
-    setAppStore("config", (prev: any) => ({
-      ...(prev ?? {}),
-      _metaPath: directory ? { directory } : null,
-      _metaVcs: vcs ?? null,
-    }))
   } catch (e) {
     AppLog.debug("meta", "loadMeta failed", {
       error: String(e),
     })
-    if (epoch !== settingsStore.directoryEpoch) return
+    if (!isCurrent()) return
+    setBoardStore({ vcs: null, vcsError: e instanceof Error ? e.message : String(e) })
     throw e
+  } finally {
+    if (isCurrent()) setBoardStore("vcsLoading", false)
   }
 }
 
 // ── Diff helpers ──
 
 // VCS means Version Control System; these functions own its project-scoped branch request boundary.
-export async function loadVcsBranches(): Promise<VcsBranch[]> {
-  const result = await apiJson("vcs/branches")
+export async function loadVcsBranches(directory = activeProjectDirectory()): Promise<VcsBranch[]> {
+  const result = await apiJson(projectScopedPath("vcs/branches", directory))
   if (!Array.isArray(result)) throw new Error("vcs/branches returned a non-array payload")
   return result.map((item, index) => {
     if (
@@ -100,15 +115,15 @@ export async function loadVcsBranches(): Promise<VcsBranch[]> {
   })
 }
 
-export async function switchVcsBranch(branch: string): Promise<void> {
+export async function switchVcsBranch(branch: string, directory = activeProjectDirectory()): Promise<void> {
   const requested = branch.trim()
   if (!requested) throw new Error("switchVcsBranch requires a branch")
-  await apiJson("vcs/branch", {
+  await apiJson(projectScopedPath("vcs/branch", directory), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ branch: requested }),
   })
-  await loadMeta()
+  if (directory === activeProjectDirectory()) await loadMeta(directory)
 }
 
 export function streamVcsCommitMessage(options: VcsCommitMessageStreamOptions): StreamHandle {

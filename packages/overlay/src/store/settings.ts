@@ -118,7 +118,7 @@ export const DEFAULT_SETTINGS: OverlaySettings = {
   password: "",
   username: "opencorvus",
   projectEditor: "vscode",
-  initGit: true,
+  initGit: false,
   sidebarCollapsed: false,
   sidebarWidth: null,
   rightDockWidth: null,

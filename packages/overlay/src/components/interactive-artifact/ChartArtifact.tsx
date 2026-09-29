@@ -88,7 +88,7 @@ export function ChartArtifact(props: { payload: ChartPayload }) {
   })
 
   return (
-    <ArtifactFrame title={props.payload.title} kind="Chart">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Chart">
       <Show when={!error()} fallback={<div class="msg-artifact-render-error">{error()}</div>}>
         <div
           class="msg-artifact-chart msg-artifact-vega msg-artifact-chart--vega"

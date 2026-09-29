@@ -9,13 +9,9 @@ import { t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { SearchField } from "../ui/SearchField"
 import { ArtifactFrame } from "./ArtifactFrame"
-import { copyTextReporting } from "../../services/clipboard"
+import { plainTerminalOutput } from "../../services/artifact-export"
 
 type TerminalPayload = Extract<InteractiveArtifactPayload, { renderer: "terminal@1" }>
-
-function plainTerminalOutput(value: string): string {
-  return value.replace(/\u001B(?:[@-_][0-?]*[ -/]*[@-~]|\][^\u0007]*(?:\u0007|\u001B\\))/g, "")
-}
 
 function opaqueHexColor(host: HTMLElement, value: string, fallback: string): string {
   const canvas = document.createElement("canvas")
@@ -28,9 +24,7 @@ function opaqueHexColor(host: HTMLElement, value: string, fallback: string): str
   context.fillStyle = value
   context.fillRect(0, 0, 1, 1)
   const [red, green, blue] = context.getImageData(0, 0, 1, 1).data
-  return `#${[red, green, blue]
-    .map((part) => part.toString(16).padStart(2, "0"))
-    .join("")}`
+  return `#${[red, green, blue].map((part) => part.toString(16).padStart(2, "0")).join("")}`
 }
 
 export function TerminalArtifact(props: { payload: TerminalPayload }) {
@@ -63,10 +57,6 @@ export function TerminalArtifact(props: { payload: TerminalPayload }) {
   const findNext = () => {
     if (!query()) return
     search?.findNext(query(), searchOptions())
-  }
-
-  const copy = async () => {
-    await copyTextReporting(terminal?.getSelection() || plain, "artifact-terminal")
   }
 
   const applyTheme = () => {
@@ -120,7 +110,12 @@ export function TerminalArtifact(props: { payload: TerminalPayload }) {
   })
 
   return (
-    <ArtifactFrame title={props.payload.title} kind="Terminal">
+    <ArtifactFrame
+      payload={props.payload}
+      copyText={() => terminal?.getSelection() || plain}
+      title={props.payload.title}
+      kind="Terminal"
+    >
       <div class="msg-artifact-terminal__meta">
         <span>{props.payload.workingDirectory}</span>
         <code>{props.payload.command}</code>
@@ -150,9 +145,6 @@ export function TerminalArtifact(props: { payload: TerminalPayload }) {
         />
         <Button variant="ghost" size="sm" tone="neutral" disabled={!query()} onClick={findNext}>
           {t("artifact.terminal.next_match")}
-        </Button>
-        <Button variant="ghost" size="sm" tone="neutral" onClick={copy}>
-          {t("artifact.code.copy")}
         </Button>
       </div>
       <div

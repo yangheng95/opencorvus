@@ -95,7 +95,7 @@ export function TimelineArtifact(props: { payload: TimelinePayload }) {
   })
 
   return (
-    <ArtifactFrame title={props.payload.title} kind="Timeline">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Timeline">
       <div class="msg-artifact-timeline__toolbar">
         <Button variant="ghost" size="sm" tone="neutral" onClick={() => fitAll(true)}>
           {t("artifact.timeline.fit")}

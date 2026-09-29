@@ -217,17 +217,6 @@ export function App(props: AppProps) {
   const [mailboxHoverPreview, setMailboxHoverPreview] = createSignal(false)
   const [mailboxPinned, setMailboxPinned] = createSignal(false)
   const mailboxVisible = () => mailboxPinned() || mailboxHoverPreview()
-  const conversationExecutionStatus = createMemo(() => {
-    const source = boardStore.selectedSource
-    const board = boardStore.board
-    if (source?.kind === "task") {
-      return board?.task?.id === source.id ? String(board.task.status || "") : ""
-    }
-    if (source?.kind === "session") {
-      return board?.kind === "session" && board.sessionID === source.id ? String(board.status || "") : ""
-    }
-    return ""
-  })
 
   function cancelMailboxHoverOpen(): void {
     if (mailboxHoverOpenTimer !== undefined) window.clearTimeout(mailboxHoverOpenTimer)
@@ -295,7 +284,7 @@ export function App(props: AppProps) {
         </div>
       </header>
 
-      <main class="panel" data-conversation-execution-status={conversationExecutionStatus() || undefined}>
+      <main class="panel">
         <div class="panel-body" id="panelBody">
           <div
             class="left-activity-shell oc-material-glass"

@@ -7,7 +7,7 @@ type MediaPayload = Extract<InteractiveArtifactPayload, { renderer: "media@1" }>
 
 export function MediaArtifact(props: { payload: MediaPayload }) {
   return (
-    <ArtifactFrame title={props.payload.title} kind="Media">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Media">
       <div class="msg-artifact-media">
         <FilePart
           part={{

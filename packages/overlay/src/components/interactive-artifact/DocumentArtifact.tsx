@@ -6,7 +6,7 @@ type DocumentPayload = Extract<InteractiveArtifactPayload, { renderer: "document
 
 export function DocumentArtifact(props: { payload: DocumentPayload }) {
   return (
-    <ArtifactFrame title={props.payload.title} kind="Document">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Document">
       <div class="msg-artifact-document">
         <StaticTextPart text={props.payload.markdown} />
       </div>

@@ -10,7 +10,7 @@ type NotebookPayload = Extract<InteractiveArtifactPayload, { renderer: "notebook
 
 export function NotebookArtifact(props: { payload: NotebookPayload }) {
   return (
-    <ArtifactFrame title={props.payload.title} kind="Notebook">
+    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Notebook">
       <div class="msg-artifact-notebook">
         <For each={props.payload.cells}>
           {(cell) => (
