@@ -38,7 +38,6 @@
   --rail-surface: var(--surface);
   --chat-canvas: var(--bg);
   --workspace-ambient-fill: var(--chat-canvas);
-  --inspector-surface: var(--chat-canvas);
   --body-bg: var(--rail-surface);
   --chrome: rgb(60, 60, 60);
   --border: rgba(255, 255, 255, 0.12);

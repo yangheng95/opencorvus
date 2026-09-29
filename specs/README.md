@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Right Dock theme surface consistency](records/2026-09/2026-09-29-right-dock-theme-surfaces.md)
+
 - [Task follow-up closure and historical report access](records/2026-09/2026-09-29-task-followup-report-convergence.md)
 
 - [General settings and permission history readability](records/2026-09/2026-09-29-general-permission-readability.md)

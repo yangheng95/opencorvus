@@ -532,7 +532,7 @@ export function App(props: AppProps) {
               tabIndex={-1}
             />
             <aside
-              class="right-dock oc-material-glass"
+              class="right-dock"
               id="rightDock"
               data-open="false"
               aria-label={t("right_dock.tools_panel")}

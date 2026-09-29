@@ -226,7 +226,7 @@ code .file-link:focus-visible {
   min-height: 0;
   display: flex;
   border-left: 0;
-  background: var(--surface);
+  background: var(--chat-canvas);
 }
 
 .file-editor-mount > div {
@@ -244,7 +244,7 @@ code .file-link:focus-visible {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--surface);
+  background: var(--chat-canvas);
 }
 
 .file-editor-header {
@@ -254,7 +254,8 @@ code .file-link:focus-visible {
   align-items: center;
   gap: var(--ui-gap-sm);
   padding: 0 var(--ui-gap-sm);
-  background: var(--surface-strong);
+  background: transparent;
+  border-bottom: var(--oc-border-width) solid var(--divider-soft);
 }
 
 .file-editor-title {
@@ -312,7 +313,7 @@ code .file-link:focus-visible {
   flex: 1 1 0;
   min-height: 0;
   width: 100%;
-  background: var(--surface-inset);
+  background: var(--chat-canvas);
   color: var(--text);
   font-family: var(--mono);
   font-size: var(--ui-font-code);
@@ -324,7 +325,7 @@ code .file-link:focus-visible {
 .file-editor-code .cm-editor {
   height: 100%;
   min-height: 0;
-  background: var(--surface-inset);
+  background: var(--chat-canvas);
   color: var(--text);
   font-family: var(--mono);
   font-size: var(--ui-font-code);
@@ -342,7 +343,7 @@ code .file-link:focus-visible {
 }
 
 .file-editor-code .cm-gutters {
-  background: var(--surface-inset);
+  background: var(--chat-canvas);
   color: var(--text-muted);
   border-right: var(--oc-border-width) solid var(--border);
 }
@@ -367,7 +368,7 @@ code .file-link:focus-visible {
   padding: var(--ui-gap-2xl);
   color: var(--text-muted);
   text-align: center;
-  background: var(--surface-inset);
+  background: var(--chat-canvas);
 }
 
 .file-editor-empty > p {
@@ -493,7 +494,9 @@ body[data-resizing="true"] .pane-resizer::after {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  /* The dock remains a layout root while sharing the workspace material. */
+  /* All tools share the reading canvas; controls and cards own smaller surfaces. */
+  background: var(--chat-canvas);
+  color: var(--text);
   border-left: 0;
   opacity: var(--ui-opacity-full);
   transition:

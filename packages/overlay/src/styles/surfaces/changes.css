@@ -53,7 +53,7 @@
 .changes-diff-pane {
   display: flex;
   overflow: hidden;
-  background: var(--surface-inset);
+  background: var(--chat-canvas);
 }
 
 .changes-diff-pane .diff-preview-panel {
@@ -66,7 +66,7 @@
   flex-direction: column;
   overflow: hidden;
   border-left: var(--oc-border-width) solid var(--divider-soft);
-  background: var(--surface);
+  background: var(--chat-canvas);
 }
 
 .changes-diff-pane .diff-preview-panel > .oc-panel__header {

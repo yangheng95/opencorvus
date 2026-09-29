@@ -14,7 +14,6 @@
   --rail-surface: #edf3e9;
   --chat-canvas: #f7faf4;
   --workspace-ambient-fill: transparent;
-  --inspector-surface: transparent;
   --body-bg:
     radial-gradient(ellipse at 0% 15%, rgb(166 197 172 / 0.48), transparent 54%),
     radial-gradient(ellipse at 100% 70%, rgb(209 222 185 / 0.4), transparent 60%), var(--bg);

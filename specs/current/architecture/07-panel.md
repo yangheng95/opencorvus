@@ -180,6 +180,15 @@ Embedded diagram, spreadsheet and MCP app binary light/dark modes read the
 applied CSS color-scheme rather than comparing specific palette names. The static
 frosted material, primitive geometry and interaction semantics stay shared.
 
+The Right Dock uses the same opaque `--chat-canvas` reading/editing surface as
+the conversation. Files, Browser chrome/new-tab/host canvas, editor, Review and
+task-scope panels share that role; toolbars remain transparent over it and use
+the standard dividers. Inset fills belong to controls, raised fills to cards.
+The Dock does not composite workspace glass beneath otherwise transparent tool
+panels. Guest web pages and captured images retain their own content colors.
+The effective palette owner is `html[data-theme]`; body-scoped dark interaction
+washes select descendants of that owner, including Graphite Violet.
+
 ## Typography Hierarchy
 
 Panel typography follows [Overlay typography](overlay-typography.md), which is

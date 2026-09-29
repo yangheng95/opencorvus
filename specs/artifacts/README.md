@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Right Dock theme visual review](2026-09-29-right-dock-theme/README.md): manual before/after screenshots and seven named palette observations.
+
 - [Task report follow-up acceptance](2026-09-29-task-followup-report/README.md): real streaming lifecycle receipts and a manually reviewed desktop report screenshot.
 
 - [Four-arm AutomationBench retry](2026-09-28-four-arm-benchmark-retry/README.md): one registered Luna TS/TE/MS/ME ten-case attempt on frozen `.10/.11` revisions, with new worlds, original scores and explicit early-stop/null accounting.

@@ -166,17 +166,8 @@
   --oc-icon-size: var(--oc-icon-size-standard);
   --oc-control-shadow: none;
 
-  /* Structural layout tokens — non-themed physical constants. Moved
-   * here 2026-05-04 (theme-architecture Step 0) from cascade/dark.css's
-   * `:root, body[data-theme="dark"]` block, which used to be the
-   * implicit dark fallback for any token light/vscode-dark forgot to
-   * redeclare. Lifting these to :root scope retires the leak —
-   * `cascade/*.css` now hold *only* palette tokens scoped to specific
-   * `body[data-theme="..."]` selectors.
-   *
-   * Font-family composition, font roles, weight, tracking, and panel/rail
-   * layout dimensions are theme- and locale-independent. Locale changes copy
-   * and glyph coverage; it cannot redefine application typography roles. */
+  /* Structural layout tokens are theme-independent. Palette colors belong
+   * to :root[data-theme] in cascade/*.css; font and layout geometry stay here. */
   /* SC means Simplified Chinese. The paired families compose Latin and Chinese
    * glyph coverage from locally packaged WOFF2 (Web Open Font Format 2) assets. */
   --font: "Geist Variable", "Noto Sans SC Variable";
@@ -288,21 +279,8 @@
    * card.css have always worked. */
 }
 
-/* Theme-wired tokens MUST live at body scope, not :root. CSS custom
- * properties resolve `var()` references at the scope where they are
- * declared — declaring `--oc-control-bg: var(--surface-inset)` at
- * `:root` freezes the value to whatever `--surface-inset` is on
- * `:root` (the dark default), and `body[data-theme="light"]`
- * overriding `--surface-inset` on `body` does NOT update the
- * already-resolved `--oc-control-bg` that `:root` exported. Putting
- * these declarations on `body` makes the indirection resolve at
- * body scope, where the active `data-theme` palette is in effect.
- *
- * Bug fix history: discovered 2026-05-04 when the cwd dropdown's
- * `--oc-control-bg` rendered as the dark navy `rgba(20, 24, 44,
- * 0.92)` in light + vscode-dark themes despite `--surface-inset`
- * being theme-correct on body. The `:root`-scoped indirection was
- * the cause. */
+/* Derived colors inherit the active :root[data-theme] palette on body.
+ * Keep body-scoped interaction overrides on descendants of that same owner. */
 body {
   /* Interaction washes — the single source for hover/selected feedback on
    * ghost chrome. Derived from --text-strong so the wash always moves the
@@ -336,11 +314,7 @@ body {
    * the per-surface dance. */
   accent-color: var(--accent);
 
-  /* Diff palette derived from the active theme's accent/bad/good
-   * + text-strong tokens. Previously declared at :root in styles.css,
-   * which froze them to the dark-default values; light + vscode-dark
-   * never picked up their own palette. Body scope re-resolves the
-   * var() chain per theme. */
+  /* Diff colors derive from the inherited palette's semantic status colors. */
   /* One colour source per side: added is --good, deleted is --bad. The add
    * half used to draw fg/bg from --accent while --diff-add-row-bg alone used
    * --good, so a single concept carried two hues — and since "modified" is
@@ -372,7 +346,7 @@ body {
    * instead of a one-off card surface. */
 }
 
-body:is([data-theme="dark"], [data-theme="vscode-dark"]) {
+:root:is([data-theme="dark"], [data-theme="vscode-dark"], [data-theme="graphite"]) body {
   --ui-list-hover-bg: color-mix(in srgb, var(--text-strong) 9%, transparent);
   --ui-list-selected-bg: var(--selected-wash);
   --ui-list-selected-hover-bg: color-mix(in srgb, var(--text-strong) 14%, transparent);
