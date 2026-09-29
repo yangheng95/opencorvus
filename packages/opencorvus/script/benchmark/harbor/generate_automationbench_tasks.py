@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -34,7 +35,7 @@ def load_case(domain: str, task_name: str) -> dict[str, Any]:
     raise ValueError(f"AutomationBench task not found: {qualified}")
 
 
-def render_instruction(prompt: Any) -> str:
+def render_instruction(prompt: Any, *, current_time: str | None) -> str:
     if not isinstance(prompt, list):
         raise TypeError("AutomationBench prompt must be a list")
     messages: list[str] = []
@@ -46,7 +47,22 @@ def render_instruction(prompt: Any) -> str:
                 raise TypeError("AutomationBench prompt message must be an object")
         content = str(item.get("content", ""))
         messages.append(f"{str(item.get('role', '')).upper()}:\n{content}")
-    return "\n\n".join(messages) + "\n"
+    if current_time is None:
+        clock = "Simulated business current_time: unspecified in the official sample."
+    else:
+        if not isinstance(current_time, str) or not current_time.strip():
+            raise ValueError("Official current_time must be an ISO 8601 string")
+        try:
+            datetime.fromisoformat(current_time.replace("Z", "+00:00"))
+        except ValueError as error:
+            raise ValueError("Official current_time must be an ISO 8601 string") from error
+        clock = (
+            f"Simulated business current_time: {current_time}\n"
+            "Use this simulated time for relative dates, deadlines and activity windows in "
+            "the business request. The computer's execution date does not change it."
+        )
+    context = "Benchmark environment supplied by Harbor from the official sample:\n" + clock
+    return context + "\n\n" + "\n\n".join(messages) + "\n"
 
 
 def _dockerfile(domain: str, task_name: str) -> str:
@@ -134,7 +150,10 @@ def export_task(output: Path, domain: str, task_name: str, source: Path) -> Path
     )
     (target / "environment" / "runtime").mkdir(parents=True)
     (target / "tests").mkdir()
-    (target / "instruction.md").write_text(render_instruction(row.get("prompt")), encoding="utf-8")
+    current_time = (info.get("initial_state", {}).get("meta") or {}).get("current_time")
+    (target / "instruction.md").write_text(
+        render_instruction(row.get("prompt"), current_time=current_time), encoding="utf-8"
+    )
     (target / "task.toml").write_text(
         f'''version = "1.0"
 

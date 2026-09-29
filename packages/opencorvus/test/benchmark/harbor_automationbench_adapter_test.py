@@ -75,7 +75,11 @@ class HarborAutomationBenchAdapterTest(unittest.TestCase):
                 "content": "Create the invoices. " + generator.STOCK_BUDGET + " Keep exact totals.",
             },
         ]
-        rendered = generator.render_instruction(prompt)
+        rendered = generator.render_instruction(prompt, current_time="2026-02-15T10:00:00Z")
+        self.assertTrue(rendered.startswith(
+            "Benchmark environment supplied by Harbor from the official sample:\n"
+            "Simulated business current_time: 2026-02-15T10:00:00Z\n"
+        ))
         self.assertIn("SYSTEM:\nUse official APIs.", rendered)
         self.assertIn("USER:\nCreate the invoices. " + generator.STOCK_BUDGET + " Keep exact totals.", rendered)
         self.assertEqual(rendered.count(generator.STOCK_BUDGET), 1)
@@ -558,6 +562,20 @@ class HarborFailureEvidenceTest(unittest.TestCase):
             (helper.HOME / "data").mkdir(parents=True)
             database = helper.HOME / "data" / "opencorvus.db"
             with closing(sqlite3.connect(database)) as connection, connection:
+                connection.execute("CREATE TABLE message (id TEXT, session_id TEXT, data TEXT)")
+                connection.execute("CREATE TABLE provider_activity_request (id TEXT, assistant_message_id TEXT, time_created INTEGER)")
+                connection.execute("CREATE TABLE provider_activity_outcome (id TEXT, request_id TEXT, data TEXT, time_created INTEGER)")
+                connection.executemany("INSERT INTO message VALUES (?,?,?)", [
+                    ("m1", "s1", '{"providerID":"openai","modelID":"gpt-5.6-luna"}'),
+                    ("m2", "s1", '{"providerID":"openai","modelID":"gpt-5.6-luna"}'),
+                ])
+                connection.executemany("INSERT INTO provider_activity_request VALUES (?,?,?)", [
+                    ("a1", "m1", 2), ("a2", "m2", 4),
+                ])
+                connection.executemany("INSERT INTO provider_activity_outcome VALUES (?,?,?,?)", [
+                    ("o1", "a1", '{"outcome":"done","attempt_count":1}', 3),
+                    ("o2", "a2", '{"outcome":"failed","attempt_count":3}', 5),
+                ])
                 connection.execute("""CREATE TABLE provider_usage_event (
                     id TEXT, occurred_at INTEGER, provider_id TEXT, model_id TEXT, purpose TEXT,
                     input_tokens INTEGER, output_tokens INTEGER, reasoning_tokens INTEGER,
@@ -576,9 +594,20 @@ class HarborFailureEvidenceTest(unittest.TestCase):
             self.assertEqual([row["id"] for row in rows], ["preflight", "session"])
             self.assertEqual(helper.token_summary(rows), {
                 "input": 88, "output": 22, "reasoning": 0, "cache_read": 0,
-                "cache_write": 0, "total": 110, "model_calls": 2, "cost_usd": None,
+                "cache_write": 0, "total": 110, "usage_records": 2, "cost_usd": None,
             })
-            self.assertEqual(helper.provider_usage_audit(rows)["calls"], 2)
+            self.assertEqual(helper.provider_usage_audit(rows)["usage_records"], 2)
+            self.assertEqual(json.loads((helper.LOGS / "provider-activities.json").read_text()), [
+                {"id": "a1", "assistant_message_id": "m1", "time_created": 2, "session_id": "s1",
+                 "provider_id": "openai", "model_id": "gpt-5.6-luna", "outcome": "done", "attempt_count": 1, "time_settled": 3},
+                {"id": "a2", "assistant_message_id": "m2", "time_created": 4, "session_id": "s1",
+                 "provider_id": "openai", "model_id": "gpt-5.6-luna", "outcome": "failed", "attempt_count": 3, "time_settled": 5},
+            ])
+            self.assertEqual(json.loads((helper.LOGS / "provider-activity-audit.json").read_text()), {
+                "identity_matches": True, "identity_violations": [], "logical_activities": 2,
+                "outcomes": {"done": 1, "failed": 1}, "recorded_attempts": 4,
+                "activities_without_attempt_count": 0, "http_wire_attempts": None, "external_billing": None,
+            })
 
 
 class HarborAgentSettlementOrderTest(unittest.IsolatedAsyncioTestCase):

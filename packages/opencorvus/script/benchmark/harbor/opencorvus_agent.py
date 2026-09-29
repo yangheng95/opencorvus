@@ -418,11 +418,14 @@ class OpenCorvusAgent(BaseInstalledAgent):
         summary = json.loads(summary_path.read_text(encoding="utf-8"))
         transcript = json.loads(transcript_path.read_text(encoding="utf-8"))
         tokens = summary.get("tokens") or {}
-        context.n_input_tokens = int(tokens.get("input") or 0)
-        context.n_output_tokens = int(tokens.get("output") or 0)
+        context.n_input_tokens = sum(int(tokens.get(key) or 0) for key in ("input", "cache_read", "cache_write"))
+        context.n_output_tokens = sum(int(tokens.get(key) or 0) for key in ("output", "reasoning"))
         context.n_cache_tokens = int(tokens.get("cache_read") or 0)
-        if tokens.get("cost_usd") is not None:
-            context.cost_usd = float(tokens["cost_usd"])
+        context.metadata = {
+            "runtime_tokens": tokens,
+            "local_estimated_cost_usd": tokens.get("cost_usd"),
+            "external_billing": "unknown",
+        }
 
         steps: list[Step] = []
         step_id = 1

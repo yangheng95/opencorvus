@@ -76,3 +76,22 @@ Mission accepted/blocked receipts (including legitimate zero-child outcomes) set
 Mission arm. Inactivity alone does not. Mission retains its authorized artifact-publication
 tool required by its completion contract. A Task's completed/failed lifecycle and physical
 settlement are recorded separately from its official business score.
+
+The exporter prepends the official sample's `initial_state.meta.current_time` as visible
+environment context while preserving its original SYSTEM/USER text. Supplied timestamps
+remain exact (including an unspecified timezone); absent dates remain explicitly
+unspecified. The same instruction reaches both entrypoints. The factorial Mission notice
+requires one initial business Task and repair through that same Task.
+
+On observation failure, the helper requests cancellation through the admitted Task's public
+cancel endpoint, or aborts the admitted Mission and cancels its observed active child Tasks.
+It retains responses and the original exception before physical Host cleanup. An API
+acknowledgement is not proof that execution settled. Workflow evidence uses public package
+bindings and successful dispatch subjects, with unobserved subjects identified explicitly.
+
+Accounting exports distinguish usage rows from native logical Provider activities and
+their recorded attempt counts. The latter include failed activities without usage, exposing
+only identity/outcome metadata. HTTP wire attempts and external billing remain unknown.
+Harbor input totals include cached input, and output totals include reasoning; the separate
+runtime token categories and local estimated cost remain metadata. A local zero estimate
+does not become a zero actual bill.

@@ -379,7 +379,11 @@ def start_execution(instruction: str) -> tuple[str, str]:
             "the simulated business operations. Harbor invokes the official scorer separately."
         )
         if ENTRYPOINT == "mission":
-            request += " Delegate domain execution to Tasks owned by the selected Expert Squad."
+            request += (
+                " Create one initial business Task owned by the selected Expert Squad. "
+                "Use that same Task for acceptance and any necessary repair; do not split "
+                "this comparison case into additional business Tasks."
+            )
     if ENTRYPOINT == "mission":
         body = {"text": request, "model": MODEL, "productPillar": "work", "expertSquadIDs": [PROFILE]}
         write_json(LOGS / "mission-wake-request.json", body)
@@ -398,6 +402,50 @@ def start_execution(instruction: str) -> tuple[str, str]:
         task = request_json(f"/task/{task_id}")
         return task_id, task["sessionID"]
     raise ValueError(f"Unsupported entrypoint: {ENTRYPOINT}")
+
+
+def cancel_admitted_execution() -> dict[str, Any]:
+    """Use the real admission receipt and public APIs for this owned execution only."""
+    receipt = LOGS / ("mission-wake-response.json" if ENTRYPOINT == "mission" else "task-create-response.json")
+    result: dict[str, Any] = {"entrypoint": ENTRYPOINT, "admission": "not_confirmed", "actions": []}
+    if not receipt.is_file():
+        return result
+    admitted = read_json_file(receipt)
+    key = "missionID" if ENTRYPOINT == "mission" else "task_id"
+    root_id = admitted[key]
+    result.update(admission="confirmed", root_id=root_id)
+    body = {"surface": "api", "reason": "Harbor observation ended before natural settlement"}
+    actions = result["actions"]
+
+    def call(route: str, *, method: str = "GET") -> Any:
+        action: dict[str, Any] = {"route": route, "method": method}
+        actions.append(action)
+        try:
+            value = request_json(route, method=method, body=body if method == "POST" else None, timeout=30)
+            action.update(status="acknowledged", response=value)
+            return value
+        except Exception as error:
+            action.update(status="error", error_type=type(error).__name__, message=str(error))
+            return None
+
+    if ENTRYPOINT == "mission":
+        observed = read_json_file(LOGS / "last-public-observation.json") if (LOGS / "last-public-observation.json").is_file() else {}
+        known_tasks = set(observed.get("task_ids") or []) if observed.get("mission_id") == root_id else set()
+        call(f"/mission/{root_id}/abort", method="POST")
+        status = call(f"/mission/{root_id}/status")
+        # Both sets come from public observations of this exact Mission.
+        tasks = (status or {}).get("tasks") or []
+        task_ids = sorted(known_tasks | {row["taskID"] for row in tasks})
+    else:
+        task_ids = [root_id]
+    for task_id in task_ids:
+        task = call(f"/task/{task_id}")
+        if task and task.get("status") in {"completed", "failed", "cancelled"}:
+            actions.append({"task_id": task_id, "status": "already_terminal", "native_status": task["status"]})
+        else:
+            call(f"/task/{task_id}/cancel", method="POST")
+    result["request_status"] = "acknowledged" if all(row["status"] != "error" for row in actions) else "incomplete"
+    return result
 
 
 def session_id(message: dict[str, Any]) -> str | None:
@@ -847,7 +895,54 @@ def capture_runtime_database() -> list[dict[str, Any]]:
     source = HOME / "data" / "opencorvus.db"
     rows = usage_rows(source)
     write_json(LOGS / "provider-usage.json", rows)
+    activities = provider_activity_rows(source)
+    write_json(LOGS / "provider-activities.json", activities)
+    write_json(LOGS / "provider-activity-audit.json", provider_activity_audit(activities))
     return rows
+
+
+def provider_activity_rows(database: Path) -> list[dict[str, Any]]:
+    """Export native identities/outcomes only; request payloads and reasoning stay private."""
+    if not database.is_file():
+        return []
+    connection = sqlite3.connect(f"file:{database}?mode=ro", uri=True)
+    connection.row_factory = sqlite3.Row
+    try:
+        rows = connection.execute(
+            """SELECT request.id, request.assistant_message_id,
+                      request.time_created, message.session_id,
+                      json_extract(message.data, '$.providerID') AS provider_id,
+                      json_extract(message.data, '$.modelID') AS model_id,
+                      json_extract(outcome.data, '$.outcome') AS outcome,
+                      json_extract(outcome.data, '$.attempt_count') AS attempt_count,
+                      outcome.time_created AS time_settled
+               FROM provider_activity_request request
+               JOIN message ON message.id = request.assistant_message_id
+               LEFT JOIN provider_activity_outcome outcome ON outcome.request_id = request.id
+               ORDER BY request.time_created, request.id"""
+        ).fetchall()
+        return [dict(row) for row in rows]
+    finally:
+        connection.close()
+
+
+def provider_activity_audit(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    violations = [
+        row["id"] for row in rows
+        if (row.get("provider_id"), row.get("model_id")) != ("openai", "gpt-5.6-luna")
+    ]
+    outcomes: dict[str, int] = {}
+    for row in rows:
+        outcome = row.get("outcome") or "pending"
+        outcomes[outcome] = outcomes.get(outcome, 0) + 1
+    attempts = [row["attempt_count"] for row in rows if row.get("attempt_count") is not None]
+    return {
+        "identity_matches": not violations, "identity_violations": violations,
+        "logical_activities": len(rows), "outcomes": outcomes,
+        "recorded_attempts": sum(attempts),
+        "activities_without_attempt_count": len(rows) - len(attempts),
+        "http_wire_attempts": None, "external_billing": None,
+    }
 
 
 def token_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
@@ -862,7 +957,7 @@ def token_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "cache_read": total("cache_read_tokens"),
         "cache_write": total("cache_write_tokens"),
         "total": total("total_tokens"),
-        "model_calls": len(rows),
+        "usage_records": len(rows),
         "cost_usd": sum(float(value) for value in costs) if rows and len(costs) == len(rows) else None,
     }
 
@@ -880,7 +975,7 @@ def provider_usage_audit(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "passed": not violations,
         "provider": "openai",
         "model": "gpt-5.6-luna",
-        "calls": len(rows),
+        "usage_records": len(rows),
         "violations": violations,
     }
 
@@ -890,17 +985,29 @@ def workflow_audit(observation: dict[str, Any]) -> dict[str, Any]:
     violations = []
     for task in observation["tasks"]:
         board_task = task["board"].get("task") or {}
-        binding = (board_task.get("completionDecision") or {}).get("workflowBinding")
-        selected = binding.get("workflow_id") if isinstance(binding, dict) else None
-        profile = (board_task.get("packageRevisionBinding") or {}).get("id")
+        package = board_task.get("packageRevisionBinding") or {}
+        profile = package.get("id")
+        dispatches = []
+        for message in task.get("transcript") or []:
+            for part in message.get("parts") or []:
+                state = part.get("state") or {}
+                if part.get("type") != "tool" or part.get("tool") != "dispatch_agent" or state.get("status") != "completed":
+                    continue
+                dispatch = (state.get("input") or {}).get("dispatch") or {}
+                turn = dispatch.get("turn") or {}
+                subject = turn.get("workflow_subject")
+                dispatches.append({"call_id": part.get("callID"), "target": dispatch.get("target"),
+                                   "turn_kind": turn.get("kind"), "workflow_subject": subject})
+                if isinstance(subject, dict) and (subject.get("kind") != "virtual_workflow" or subject.get("workflow_id") != WORKFLOW):
+                    violations.append(f"workflow_mismatch:{task['task_id']}:{subject.get('workflow_id')}")
         bindings.append(
-            {"task_id": task["task_id"], "profile": profile, "workflow_binding": binding}
+            {"task_id": task["task_id"], "package": package, "dispatches": dispatches,
+             "workflow_observation": "observed" if any(row["workflow_subject"] for row in dispatches) else "not_observed"}
         )
         if profile != PROFILE:
             violations.append(f"profile_mismatch:{task['task_id']}:{profile}")
-        if not isinstance(binding, dict) or binding.get("kind") != "virtual_workflow" or selected != WORKFLOW:
-            violations.append(f"workflow_mismatch:{task['task_id']}:{selected}")
-    return {"passed": not violations, "bindings": bindings, "violations": violations}
+    return {"identity_matches": not violations, "expected_workflow": WORKFLOW,
+            "bindings": bindings, "violations": violations}
 
 
 def seal_manifest(root: Path) -> None:
@@ -1090,7 +1197,14 @@ def main() -> int:
         binding_audit = workflow_audit(observation)
         write_json(LOGS / "skill-load-order-audit.json", load_audit)
         write_json(LOGS / "workflow-binding-audit.json", binding_audit)
+    except BaseException as error:
+        try:
+            write_json(LOGS / "execution-cancellation.json", cancel_admitted_execution())
+        except Exception as cancellation_error:
+            error.add_note(f"Public cancellation evidence failed: {cancellation_error!r}")
+        raise
     finally:
+        primary_error = sys.exception()
         if server.poll() is None:
             os.killpg(server.pid, signal.SIGTERM)
             try:
@@ -1099,13 +1213,22 @@ def main() -> int:
                 os.killpg(server.pid, signal.SIGKILL)
                 server.wait(timeout=10)
         server_log.close()
-        rows = capture_runtime_database()
+        try:
+            rows = capture_runtime_database()
+        except Exception as export_error:
+            if primary_error is None:
+                raise
+            primary_error.add_note(f"Runtime evidence export failed: {export_error!r}")
+            write_json(LOGS / "runtime-evidence-error.json", {"error_type": type(export_error).__name__, "message": str(export_error)})
 
     tokens = token_summary(rows)
     usage_audit = provider_usage_audit(rows)
     write_json(LOGS / "provider-usage-audit.json", usage_audit)
     if not usage_audit["passed"]:
         raise RuntimeError(f"Provider usage identity failed: {usage_audit['violations']}")
+    activity_audit = read_json_file(LOGS / "provider-activity-audit.json")
+    if not activity_audit["identity_matches"]:
+        raise RuntimeError(f"Provider activity identity failed: {activity_audit['identity_violations']}")
     summary = {
         "schema_version": 1,
         "status": "settled",
