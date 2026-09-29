@@ -1098,6 +1098,7 @@ describe("Light Expert Squad package", () => {
                 inventory_before: [{
                   source: { kind: "dispatch_result", message_id: finalIDs[2]! },
                   before_message_id: historicalEvidenceSelection.message_id,
+                  before_part_id: historicalEvidenceSelection.part_id,
                 }],
                 evidence_reads: [{
                   message_id: historicalEvidenceSelection.message_id,

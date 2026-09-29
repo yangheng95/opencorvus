@@ -1188,7 +1188,7 @@ export namespace PromptProfileResolver {
     return result
   }
 
-  function activeProjectedSchedulerToolIDs(capability: ResolvedSchedulerCapability): string[] {
+  export function activeProjectedSchedulerToolIDs(capability: ResolvedSchedulerCapability): string[] {
     return unique([
       ...capability.builtInToolIDs,
       ...capability.defaultTools.map((entry) => entry.providerName),
@@ -1199,9 +1199,12 @@ export namespace PromptProfileResolver {
   }
 
   export function schedulerRuntimeToolIDs(capability: ResolvedSchedulerCapability): string[] {
-    return activeProjectedSchedulerToolIDs(capability).filter(
-      (toolID) => toolID !== CAPABILITY_SEARCH_TOOL_ID && !TASK_OWNER_REGISTRY_TOOL_IDS.includes(toolID),
-    )
+    return [
+      ...capability.builtInToolIDs.filter(
+        (toolID) => toolID !== CAPABILITY_SEARCH_TOOL_ID && !TASK_OWNER_REGISTRY_TOOL_IDS.includes(toolID),
+      ),
+      ...capability.defaultTools.map((entry) => entry.providerName),
+    ]
   }
 
   export function workerRuntimeToolIDs(capability: ResolvedWorkerCapability): string[] {

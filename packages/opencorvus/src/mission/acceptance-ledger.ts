@@ -152,19 +152,31 @@ type InitializationFailureLookup = (eventID: string) => { taskID: string; execut
 
 function initializationFailureLookup(db: Database.TxOrDb, taskID: string): InitializationFailureLookup {
   return (eventID) => {
-    const event = db.select().from(ProtocolEventTable).where(and(
-      eq(ProtocolEventTable.id, eventID),
-      eq(ProtocolEventTable.aggregate_type, "task"),
-      eq(ProtocolEventTable.aggregate_id, taskID),
-      eq(ProtocolEventTable.type, "task.failed"),
-    )).get()
+    const event = db
+      .select()
+      .from(ProtocolEventTable)
+      .where(
+        and(
+          eq(ProtocolEventTable.id, eventID),
+          eq(ProtocolEventTable.aggregate_type, "task"),
+          eq(ProtocolEventTable.aggregate_id, taskID),
+          eq(ProtocolEventTable.type, "task.failed"),
+        ),
+      )
+      .get()
     const epoch = event?.payload?.execution_epoch
     if (!Number.isSafeInteger(epoch) || Number(epoch) <= 0) return undefined
-    const dispatch = db.select({ id: EngineArtifactTable.id }).from(EngineArtifactTable).where(and(
-      eq(EngineArtifactTable.task_id, taskID),
-      eq(EngineArtifactTable.kind, "dispatch_lineage"),
-      sql`json_extract(${EngineArtifactTable.payload}, '$.execution_epoch') <= ${epoch}`,
-    )).get()
+    const dispatch = db
+      .select({ id: EngineArtifactTable.id })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.task_id, taskID),
+          eq(EngineArtifactTable.kind, "dispatch_lineage"),
+          sql`json_extract(${EngineArtifactTable.payload}, '$.execution_epoch') <= ${epoch}`,
+        ),
+      )
+      .get()
     return dispatch ? undefined : { taskID, executionEpoch: Number(epoch) }
   }
 }
@@ -179,20 +191,29 @@ function requireCriterionResponsibilities(input: {
 }) {
   for (const criterion of input.gap.criteria) {
     const responsibility = criterion.responsibility
+    // The enclosing ledger and reviewed terminal reference already bind the
+    // exact Task owner, including work before any worker dispatch exists.
+    if (responsibility.kind === "task_owner") continue
     if (responsibility.kind === "task_initialization") {
       const reference = responsibility.failure_reference.terminalEventID
       const prior = input.previous?.revision.gap.criteria.find((item) => item.criterion_id === criterion.criterion_id)
       const failure = input.initializationFailureByEventID?.(reference)
-      if (failure?.taskID !== input.taskID ||
-          (!prior && reference !== input.gap.reviewed_terminal_lifecycle_reference.terminalEventID)) {
-        throw new MissionAcceptanceGapIntegrityError(input.taskID,
-          `Acceptance criterion ${criterion.criterion_id} must bind this Task's reviewed failure before its first dispatch.`)
+      if (
+        failure?.taskID !== input.taskID ||
+        (!prior && reference !== input.gap.reviewed_terminal_lifecycle_reference.terminalEventID)
+      ) {
+        throw new MissionAcceptanceGapIntegrityError(
+          input.taskID,
+          `Acceptance criterion ${criterion.criterion_id} must bind this Task's reviewed failure before its first dispatch.`,
+        )
       }
       continue
     }
     if (!input.binding) {
-      throw new MissionAcceptanceGapIntegrityError(input.taskID,
-        `Task ${input.taskID} has no immutable workflow binding for ${responsibility.kind} acceptance responsibility.`)
+      throw new MissionAcceptanceGapIntegrityError(
+        input.taskID,
+        `Task ${input.taskID} has no immutable workflow binding for ${responsibility.kind} acceptance responsibility.`,
+      )
     }
     if (responsibility.kind === "workflow_node") {
       if (input.binding.kind !== "virtual_workflow" || input.binding.workflow_id !== responsibility.workflow_id) {
@@ -209,7 +230,10 @@ function requireCriterionResponsibilities(input: {
       }
       continue
     }
-    if (input.binding.kind !== "direct" || !sameCanonicalValue(input.binding.package_revision, responsibility.package_revision)) {
+    if (
+      input.binding.kind !== "direct" ||
+      !sameCanonicalValue(input.binding.package_revision, responsibility.package_revision)
+    ) {
       throw new MissionAcceptanceGapIntegrityError(
         input.taskID,
         `Acceptance criterion ${criterion.criterion_id} direct responsibility does not match the Task package revision.`,
@@ -264,7 +288,10 @@ function requireOpenTransition(
     )
   }
   if (current.state === "open") {
-    if (!hasNewLocator(current, prior) && current.repair_action.identity_sha256 === prior.repair_action.identity_sha256) {
+    if (
+      !hasNewLocator(current, prior) &&
+      current.repair_action.identity_sha256 === prior.repair_action.identity_sha256
+    ) {
       throw new MissionAcceptanceGapIntegrityError(
         taskID,
         `Repeated criterion ${prior.criterion_id} requires new evidence or a changed canonical repair action.`,
@@ -456,7 +483,11 @@ export function affectedAcceptanceWorkflowNodes(
   gap: MissionAcceptanceGap,
 ): Set<string> {
   if (binding?.kind !== "virtual_workflow") return new Set()
-  if (openAcceptanceCriteria(gap).some((criterion) => criterion.responsibility.kind === "task_initialization")) {
+  if (
+    openAcceptanceCriteria(gap).some((criterion) =>
+      ["task_initialization", "task_owner"].includes(criterion.responsibility.kind),
+    )
+  ) {
     return new Set(binding.nodes.map((node) => node.node_id))
   }
   const affected = new Set(
@@ -505,7 +536,7 @@ export function dispatchConsumesAcceptanceCriterion(input: {
   sourceDispatchLineageArtifactID: string | undefined
   targetAgentID: string
 }): boolean {
-  if (input.responsibility.kind === "task_initialization") return true
+  if (input.responsibility.kind === "task_initialization" || input.responsibility.kind === "task_owner") return true
   if (input.responsibility.kind === "workflow_node") {
     return (
       input.candidateWorkflowNodeID !== null &&
@@ -535,8 +566,13 @@ export function currentTaskAcceptanceRepair(taskID: string): ActiveTaskAcceptanc
     if (!ledger || ledger.revision.execution_epoch !== lifecycle.epoch) return undefined
     const binding = readTaskWorkflowBindingInTransaction(db, taskID)
     if (!binding) {
-      requireCriterionResponsibilities({ taskID, gap: ledger.revision.gap, binding,
-        initializationFailureByEventID: initializationFailureLookup(db, taskID), previous: ledger })
+      requireCriterionResponsibilities({
+        taskID,
+        gap: ledger.revision.gap,
+        binding,
+        initializationFailureByEventID: initializationFailureLookup(db, taskID),
+        previous: ledger,
+      })
     }
     return {
       ...ledger,

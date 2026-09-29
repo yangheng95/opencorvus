@@ -479,7 +479,7 @@ export namespace SessionRuntimeContractStore {
       harnessGrantedRefs(contract.harnessGrants, "execute")
         .filter((ref) => ref.kind === "tool" && ref.owner_ref === `runtime-projection:${identity.agentID}`)
         .map((ref) => ref.local_ref),
-      owner.projectedToolIDs.filter((toolID) => projectedRuntimeToolIDs.has(toolID)),
+      owner.builtInToolIDs.filter((toolID) => projectedRuntimeToolIDs.has(toolID)),
       `Projected skill owner ${identity.agentID} runtime-projection tool IDs`,
     )
     return owner

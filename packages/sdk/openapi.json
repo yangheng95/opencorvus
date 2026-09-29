@@ -71433,6 +71433,10 @@
                               "minLength": 1,
                               "type": "string"
                             },
+                            "before_part_id": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
                             "source": {
                               "oneOf": [
                                 {
@@ -71476,7 +71480,8 @@
                           },
                           "required": [
                             "source",
-                            "before_message_id"
+                            "before_message_id",
+                            "before_part_id"
                           ],
                           "type": "object"
                         },
@@ -72451,6 +72456,20 @@
                                         {
                                           "additionalProperties": false,
                                           "properties": {
+                                            "kind": {
+                                              "const": "task_owner",
+                                              "description": "The accountable owner of this exact reviewed Task. Use for root-produced work; no worker lineage is invented.",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
                                             "failure_reference": {
                                               "additionalProperties": false,
                                               "description": "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
@@ -72661,6 +72680,20 @@
                                         {
                                           "additionalProperties": false,
                                           "properties": {
+                                            "kind": {
+                                              "const": "task_owner",
+                                              "description": "The accountable owner of this exact reviewed Task. Use for root-produced work; no worker lineage is invented.",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
                                             "failure_reference": {
                                               "additionalProperties": false,
                                               "description": "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
@@ -72866,6 +72899,20 @@
                                     },
                                     "responsibility": {
                                       "oneOf": [
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "kind": {
+                                              "const": "task_owner",
+                                              "description": "The accountable owner of this exact reviewed Task. Use for root-produced work; no worker lineage is invented.",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind"
+                                          ],
+                                          "type": "object"
+                                        },
                                         {
                                           "additionalProperties": false,
                                           "properties": {
@@ -73175,6 +73222,20 @@
                                         {
                                           "additionalProperties": false,
                                           "properties": {
+                                            "kind": {
+                                              "const": "task_owner",
+                                              "description": "The accountable owner of this exact reviewed Task. Use for root-produced work; no worker lineage is invented.",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
                                             "failure_reference": {
                                               "additionalProperties": false,
                                               "description": "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
@@ -73385,6 +73446,20 @@
                                         {
                                           "additionalProperties": false,
                                           "properties": {
+                                            "kind": {
+                                              "const": "task_owner",
+                                              "description": "The accountable owner of this exact reviewed Task. Use for root-produced work; no worker lineage is invented.",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
                                             "failure_reference": {
                                               "additionalProperties": false,
                                               "description": "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
@@ -73590,6 +73665,20 @@
                                     },
                                     "responsibility": {
                                       "oneOf": [
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "kind": {
+                                              "const": "task_owner",
+                                              "description": "The accountable owner of this exact reviewed Task. Use for root-produced work; no worker lineage is invented.",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "kind"
+                                          ],
+                                          "type": "object"
+                                        },
                                         {
                                           "additionalProperties": false,
                                           "properties": {

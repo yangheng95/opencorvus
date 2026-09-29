@@ -125,7 +125,7 @@ const definitions = {
   orchestrator: {
     archetype: "host",
     controlSurface: "host",
-    description: "Orchestrator agent. Owns task lifecycle decisions and dispatches projected agents.",
+    description: "Task owner. Owns delivery and lifecycle decisions with explicitly granted tools and scoped projected delegation.",
     promptEditable: false,
     defaultPromptRequired: false,
     promptConfigMode: "none",

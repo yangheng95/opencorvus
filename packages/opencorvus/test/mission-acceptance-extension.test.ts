@@ -37,8 +37,9 @@ afterEach(async () => {
 
 // Public service and real Tool/reconciler contract. The scripted participant is
 // explicit test input, not an LLM. No direct Task/Protocol/ledger table writes.
+for (const responsibilityKind of ["task_initialization", "task_owner"] as const)
 for (const boundary of ["cancelled", "completed"] as const)
-  test(`Mission extension applies in order, rejects stale CAS, and respects ${boundary}`, async () => {
+  test(`Mission ${responsibilityKind} extension applies in order, rejects stale CAS, and respects ${boundary}`, async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -163,7 +164,9 @@ for (const boundary of ["cancelled", "completed"] as const)
             "Local initialization precondition",
           )
           const terminal = requireCurrentTerminalLifecycleReference(taskID)
-          const responsibility = { kind: "task_initialization" as const, failure_reference: terminal }
+          const responsibility = responsibilityKind === "task_owner"
+            ? { kind: "task_owner" as const }
+            : { kind: "task_initialization" as const, failure_reference: terminal }
           const common = {
             responsibility,
             repair_evidence_read_refs: [],

@@ -33,6 +33,15 @@ export const MissionAcceptanceCriterionDisposition = z.enum(["failed", "unresolv
 export const MissionAcceptanceCriterionResponsibilitySchema = z.discriminatedUnion("kind", [
   z
     .object({
+      kind: z
+        .literal("task_owner")
+        .describe(
+          "The accountable owner of this exact reviewed Task. Use for root-produced work; no worker lineage is invented.",
+        ),
+    })
+    .strict(),
+  z
+    .object({
       kind: z.literal("task_initialization"),
       failure_reference: TerminalLifecycleReferenceSchema.describe(
         "Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.",
@@ -239,7 +248,11 @@ function refineInputCriteria(
     references.push(...inputCriterionReadReferences(criterion))
   }
   if (!criteria.some((criterion) => criterion.state === "open")) {
-    context.addIssue({ code: "custom", path: ["criteria"], message: "A Mission acceptance resume requires at least one open criterion." })
+    context.addIssue({
+      code: "custom",
+      path: ["criteria"],
+      message: "A Mission acceptance resume requires at least one open criterion.",
+    })
   }
   if (new Set(references).size !== references.length) {
     context.addIssue({
@@ -249,7 +262,11 @@ function refineInputCriteria(
     })
   }
   if (references.length > 64) {
-    context.addIssue({ code: "custom", path: ["criteria"], message: "One acceptance gap may cite at most 64 Artifact read references." })
+    context.addIssue({
+      code: "custom",
+      path: ["criteria"],
+      message: "One acceptance gap may cite at most 64 Artifact read references.",
+    })
   }
 }
 
@@ -274,7 +291,11 @@ export const MissionAcceptanceGapSchema = z
     const locatorOwners = new Map<string, string>()
     for (const [index, criterion] of gap.criteria.entries()) {
       if (criterionIDs.has(criterion.criterion_id)) {
-        context.addIssue({ code: "custom", path: ["criteria", index, "criterion_id"], message: `Duplicate acceptance criterion ${criterion.criterion_id}.` })
+        context.addIssue({
+          code: "custom",
+          path: ["criteria", index, "criterion_id"],
+          message: `Duplicate acceptance criterion ${criterion.criterion_id}.`,
+        })
       }
       criterionIDs.add(criterion.criterion_id)
       for (const locator of criterionEvidenceLocators(criterion)) {
@@ -292,10 +313,18 @@ export const MissionAcceptanceGapSchema = z
       }
     }
     if (!gap.criteria.some((criterion) => criterion.state === "open")) {
-      context.addIssue({ code: "custom", path: ["criteria"], message: "A Mission acceptance resume requires at least one open criterion." })
+      context.addIssue({
+        code: "custom",
+        path: ["criteria"],
+        message: "A Mission acceptance resume requires at least one open criterion.",
+      })
     }
     if (locatorOwners.size > 64) {
-      context.addIssue({ code: "custom", path: ["criteria"], message: "One acceptance gap may cite at most 64 canonical evidence locators." })
+      context.addIssue({
+        code: "custom",
+        path: ["criteria"],
+        message: "One acceptance gap may cite at most 64 canonical evidence locators.",
+      })
     }
   })
 
@@ -363,6 +392,7 @@ export function acceptanceGapEvidenceLocators(gap: MissionAcceptanceGap): Artifa
 }
 
 function responsibilityText(responsibility: MissionAcceptanceCriterionResponsibility): string {
+  if (responsibility.kind === "task_owner") return "Task accountable owner"
   if (responsibility.kind === "task_initialization") {
     return `Task initialization after failed occurrence ${responsibility.failure_reference.terminalEventID}`
   }

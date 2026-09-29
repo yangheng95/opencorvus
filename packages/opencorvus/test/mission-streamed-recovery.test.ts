@@ -1,3 +1,5 @@
+import { ExpertSquadConversationAuthoring } from "@/expert-squad/conversation-authoring"
+import { buildExpertSquadAuthorDefinition } from "@/tool/expert-squad-author"
 import { afterEach, expect, spyOn, test } from "bun:test"
 import { MockLanguageModelV3, simulateReadableStream } from "ai/test"
 import type { DispatchLineagePayload } from "@/engine/dispatch-lineage-facts"
@@ -45,9 +47,34 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
   await Instance.provide({
     directory: project.path,
     fn: async () => {
+      // This checker exercises recovery of an explicitly delegated two-member
+      // contract. Base's ordinary production now belongs to the Task root.
+      await ExpertSquadConversationAuthoring.author({
+        projectDirectory: project.path, installationScope: "project", replace: false,
+        definition: buildExpertSquadAuthorDefinition({
+          schema_version: 2, namespace: "test", id: "recovery-contract", name: "Delegated Recovery Contract", label: "Delegated Recovery Contract",
+          description: "Verify preservation and independent review across a delegated worker disconnect.",
+          version: "2026.09.30.1", product_pillars: ["work"], readme: "# Delegated recovery contract\n",
+          selector: { summary: "Exercise explicit delegated recovery.", selection_guidance: "Select for the local recovery checker.", instructions: "# Recovery contract\n" },
+          scheduler: { prompt: "Coordinate the declared producer and independent reviewer through the same Task.", capability_refs: [
+            "capability:capability_set:platform:tool-registry:orchestrator-base",
+            "capability:capability_set:platform:tool-registry:scheduler-transport",
+            "capability:tool:platform:tool-registry:dispatch_agent",
+            "capability:tool:platform:tool-registry:manage_task",
+          ] },
+          agents: {
+            "base-developer": { label: "Recovery Producer", description: "Own the assigned durable receipt.", base_role: "build", prompt: "# Base Developer\nProduce the assigned durable receipt and preserve committed effects on continuation.", capability_refs: ["capability:capability_set:platform:tool-registry:build-base"] },
+            "base-tester": { label: "Recovery Reviewer", description: "Independently review the repaired receipt.", base_role: "delegated-worker", prompt: "# Base Tester\nIndependently read and verify the assigned receipt.", capability_refs: ["capability:capability_set:platform:tool-registry:delegated-worker-base"] },
+          },
+          virtual_workflows: { "execution-verification": { label: "Delegated production and review", description: "Explicit producer dependency for this recovery contract.", nodes: {
+            "base-developer": { agent_id: "base-developer", description: "Produce durable receipt", depends_on: [] },
+            "base-tester": { agent_id: "base-tester", description: "Verify repaired receipt", depends_on: ["base-developer"] },
+          } } },
+        }),
+      })
       await Config.updateProjectPatch({
         model: `${model.providerID}/${model.modelID}`,
-        prompt_profile: { active: "base" },
+        prompt_profile: { active: "recovery-contract" },
         provider: {
           [model.providerID]: {
             name: "Recovery transport",
@@ -80,7 +107,7 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
         missionID: "streamed-recovery",
         defaultCwd: project.path,
         productPillar: "work",
-        heldExpertSquadIDs: ["base"],
+        heldExpertSquadIDs: ["recovery-contract"],
       })
       let taskID = ""
       let missionStep = 0
@@ -114,7 +141,7 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
         ])
       const published = (agent: string, phase: string) =>
         call("artifact_publish", {
-          artifact_type: `base/${agent === "developer" ? "development" : "test"}-report`,
+          artifact_type: `recovery-contract/${agent === "developer" ? "development" : "test"}-report`,
           schema_version: 1,
           label: `${agent}-${phase}`,
           payload_json: JSON.stringify({ result: phase, verified: agent === "tester" }),
@@ -320,7 +347,7 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
               title: "Recover delivery and independently verify",
               request:
                 "Publish one durable operation receipt, preserve it across disconnection, and independently verify final delivery.",
-              promptProfile: "base",
+              promptProfile: "recovery-contract",
             })
           if (!taskID)
             throw new Error(`Created Task identity unavailable: ${JSON.stringify(outputs("panel_create_task"))}`)
@@ -330,7 +357,7 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
               queries: [{
                 taskID,
                 page_number: 1,
-                artifact_types: [step === 2 ? "base/development-report" : "base/test-report"],
+                artifact_types: [step === 2 ? "recovery-contract/development-report" : "recovery-contract/test-report"],
               }],
             })
           if (step === 3 || step === 7) {
@@ -339,7 +366,7 @@ test("a Mission recovers a committed side effect, corrects a stale continuation 
             const catalog = batch.results[0].value
             const entries = catalog.entries
             const entry = entries.find(
-              (e: any) => e.artifact_type === (step === 3 ? "base/development-report" : "base/test-report"),
+              (e: any) => e.artifact_type === (step === 3 ? "recovery-contract/development-report" : "recovery-contract/test-report"),
             )
             selectedRef = entry?.artifact_locator_ref
             if (!selectedRef) throw new Error(`Missing real catalog reference: ${JSON.stringify(catalog)}`)

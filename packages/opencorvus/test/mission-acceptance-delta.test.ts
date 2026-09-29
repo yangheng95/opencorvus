@@ -544,6 +544,26 @@ describe("Mission acceptance baseline readiness", () => {
     })
   })
 
+  test("root-owned repair retains Task responsibility before and after review workflow binding", () => {
+    const responsibility = { kind: "task_owner" as const }
+    const original = gap([openCriterion({ responsibility })])
+    const admitted = validateTaskAcceptanceLedgerTransition({
+      taskID: "tsk_owner", gap: original, previous: undefined, workflowBinding: undefined,
+    })
+    expect(admitted.criteria[0]!.responsibility).toEqual(responsibility)
+    const carried = validateTaskAcceptanceLedgerTransition({
+      taskID: "tsk_owner", gap: gap([openCriterion({ responsibility, actionSequence: 2 })]),
+      previous: ledgerProjection(original.criteria), workflowBinding,
+    })
+    expect(carried.criteria[0]!.responsibility).toEqual(responsibility)
+    expect([...affectedAcceptanceWorkflowNodes(workflowBinding, carried)]).toEqual(["planner", "builder", "tester", "publisher"])
+    expect(dispatchConsumesAcceptanceCriterion({
+      binding: workflowBinding, responsibility, candidateWorkflowNodeID: "tester",
+      sourceDispatchLineageArtifactID: undefined, targetAgentID: "tester",
+    })).toBe(true)
+    expect(renderMissionAcceptanceRepairMessage(carried)).toContain("Task accountable owner")
+  })
+
   test("initialization responsibility follows the original failed boundary across workflow selection", () => {
     const responsibility = { kind: "task_initialization" as const, failure_reference: terminal }
     const initial = gap([openCriterion({ responsibility })])

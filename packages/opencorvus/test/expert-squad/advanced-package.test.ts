@@ -190,56 +190,8 @@ describe("built-in interface review workflow authority", () => {
 
   test("projects workflow execution followed by independent verification and a separate research graph", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
-    expect(loaded.promptProfile.agents.orchestrator).toContain("workflow_subject.kind=virtual_workflow")
-    expect(loaded.promptProfile.agents.orchestrator).toContain("read_agent_message")
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "must not add a durable report, evidence package, or coordination Artifact",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "The source-planned workflow's declared `base/implementation-plan` is its only planning Artifact",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "That visible final is the Orchestrator coordination boundary",
-    )
-    expect(loaded.selectorInstructions).toContain("Select `source-planned-execution-verification`")
-    expect(loaded.readmeContent).toContain(
-      "after every `execution_authority` condition and every observed `applicable_constraint` material to that create are resolved",
-    )
-    expect(loaded.readmeContent).toContain(
-      "must give one consistent actor and requested-owner binding",
-    )
-    expect(loaded.selectorInstructions).toContain(
-      "when an irreversible external mutation depends on current source authority absent from the original request",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Planner brief may assign only those source values, source obligations traceable to an exact original-request clause",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "split every requested outcome into current source values and destination expression",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain("`dispatch_agent` accepts exactly `{ dispatch }`")
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "For `manage_task`, follow the exact schema visible in the current Turn",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "deduplicate every evidence locator by its exact source-specific identity",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "material values needed to form the mutation—such as its name, schedule, URL, identifier, exclusion",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "This is a `destination_execution_dependency`, owned by Developer rather than Planner",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "never accept it as `execution_authority` or fail the Task before Developer evaluates the executable path",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain("one per-record obligation matrix")
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "a notification or report cannot replace the authorized mutation",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "first evidence actions to query exact `artifact_types: [\"base/implementation-plan\"]`",
-    )
+    expect(loaded.readmeContent).toContain("direct production")
+    expect(loaded.selectorInstructions).toContain("`execution-verification`")
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "own only read-only facts that the original request or an observed authority makes necessary",
     )
@@ -343,21 +295,6 @@ describe("built-in interface review workflow authority", () => {
     )
     expect(loaded.promptProfile.agents["base-planner"]).toContain(
       "A typed-unavailable route remains closed unless new actionable evidence changes it",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "remove the residual claim during reconciliation and dispatch the resolved operation to Developer",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "do not continue Planner for the same abstract scope",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Name that endpoint, anchor, or classification in the continuation",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "instead of asking for new products or broad source families",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "the operator-authored request inside the original Task input is the complete delivery and acceptance subject",
     )
     expect(loaded.promptProfile.agents["base-developer"]).toContain(
       "Agent-authored delegation may refine only from that intent, current authority, an applicable public contract",
@@ -496,21 +433,6 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "A compound/full-phrase empty query is an incomplete attempt until the same endpoint receives that minimal anchor",
     )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Dispatch Developer for each mutation whose reconciled source obligations are resolved",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "classifies an outcome semantic as a source obligation",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "never waives an explicit approval, prohibition, eligibility, opt-out, retention",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "never waives an explicit approval, prohibition, eligibility, opt-out, retention, or other authority condition",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Other independent mutations whose reconciled source obligations are resolved continue",
-    )
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "ignore incidental related entities",
     )
@@ -569,79 +491,9 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.promptProfile.agents["base-tester"]).toContain(
       "only when the API contract defines that successful response as a synchronous commit",
     )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Never ask a worker to repeat a successful irreversible create",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Before the first worker dispatch, do not search for, load, or inspect that Skill merely to confirm its name",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Never pass a wake Artifact ID to `read_task_message`",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "do not call `artifact_search`, `artifact_read`, or `artifact_select` for `base/implementation-plan`",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "The sum of all `evidence_reads.limit` values in one call is at most 30000 characters",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "when conflicting evidence leaves one material coordination or acceptance question",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain("copy them verbatim into the Tester brief")
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "tell Tester to completely read the same plan as source coordinates",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Planner brief may assign only those source values, source obligations traceable to an exact original-request clause",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Never hypothesize a source taxonomy, policy field, proof channel, platform control",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "use `evidence_reads` to retrieve each complete non-secret output before dispatching Tester",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "A full successful mutation receipt is authoritative operation evidence",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "inspect its causal inventory for every mutation command",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "never select only the final successful receipt",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "or definite later mutation, operation-outcome, or rollback evidence",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain("causal Tool Message and Part identities")
-    expect(loaded.promptProfile.agents.orchestrator).toContain("`evidence_reads`")
-    expect(loaded.promptProfile.agents.orchestrator).toContain("`inventory_next_before`")
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "does not require the same page cursor again",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "do not label that combined shape the uniquely required readback",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain("may prove a final-state obligation")
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "present the original criteria neutrally and supply positive executor observations only as coordinates",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "the Tester independently judges every material negative claim",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "do not search the Artifact catalog for a report that the workflow did not create",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Do not continue Tester against the same exhausted read surface",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain(
-      "Complete only when every original obligation is satisfied",
-    )
-    expect(loaded.promptProfile.agents.orchestrator).toContain("call the real `fail_task` decision")
-    expect(workflowNodes(loaded, "execution-verification")).toEqual({
-      "base-developer": [],
-      "base-tester": ["base-developer"],
-    })
+    expect(workflowNodes(loaded, "execution-verification")).toEqual({ "base-tester": [] })
+    expect(loaded.promptProfile.agents.orchestrator).toContain("Own the original requested outcome directly")
+    expect(loaded.promptProfile.agents.orchestrator).toContain("dispatch_origin")
     expect(workflowNodes(loaded, "source-planned-execution-verification")).toEqual({
       "base-planner": [],
       "base-developer": ["base-planner"],
@@ -712,6 +564,7 @@ describe("built-in interface review workflow authority", () => {
           "glob",
           "publish_interactive_artifact",
           "read",
+          "read_agent_message",
           "search_code",
           "skill",
           "webfetch",
@@ -1014,6 +867,7 @@ describe("built-in interface review workflow authority", () => {
           "artifact_snapshot",
           "capability_search",
           "publish_interactive_artifact",
+          "read_agent_message",
           "bash",
           "glob",
           "read",

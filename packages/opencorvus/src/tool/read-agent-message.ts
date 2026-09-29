@@ -16,7 +16,7 @@ import z from "zod"
 import { Tool } from "./tool"
 import { resolveCoreProjectedTaskToolExecutionScope } from "./task-tool-execution-scope"
 
-const CAUSAL_TOOL_MESSAGE_INVENTORY_LIMIT_PER_FINAL = 16
+const CAUSAL_TOOL_INVENTORY_LIMIT_PER_SOURCE = 16
 const TOOL_INPUT_PREVIEW_CHARS = 240
 const CAUSAL_TOOL_REFERENCE_PREVIEW_CHARS = 160
 const CAUSAL_TOOL_REFERENCE_INDEX_MAX_CHARS = 40_000
@@ -44,7 +44,9 @@ const Sources = z
       seen.add(key)
     })
   })
-const InventoryCursor = z.object({ source: EvidenceSource, before_message_id: z.string().min(1) }).strict()
+const InventoryCursor = z
+  .object({ source: EvidenceSource, before_message_id: z.string().min(1), before_part_id: z.string().min(1) })
+  .strict()
 
 export class TaskEvidenceSourceError extends Error {
   readonly code = "TASK_EVIDENCE_SOURCE_INVALID"
@@ -124,16 +126,6 @@ function orderedBeforeOrAt(
   )
 }
 
-function orderedBefore(
-  candidate: { time: { created: number }; id: string },
-  boundary: { time: { created: number }; id: string },
-) {
-  return (
-    candidate.time.created < boundary.time.created ||
-    (candidate.time.created === boundary.time.created && candidate.id.localeCompare(boundary.id) < 0)
-  )
-}
-
 function safeInputPreview(input: unknown, limit = TOOL_INPUT_PREVIEW_CHARS) {
   const serialized = JSON.stringify(input) ?? "null"
   const redacted = JSON.stringify(ProviderError.redactSensitiveProviderValue(input)) ?? "null"
@@ -163,12 +155,24 @@ function compactCausalToolReferenceIndex(refs: CausalToolReference[]) {
   }
 }
 
-function causalInventoryPage<T extends { info: { time: { created: number }; id: string } }>(messages: T[], before?: T) {
-  const eligible = before ? messages.filter((candidate) => orderedBefore(candidate.info, before.info)) : messages
-  const page = eligible.slice(-CAUSAL_TOOL_MESSAGE_INVENTORY_LIMIT_PER_FINAL)
+function causalInventoryPage<T extends { message_id: string; part_id: string }>(
+  entries: T[],
+  before?: { message_id: string; part_id: string },
+) {
+  const beforeIndex = before
+    ? entries.findIndex((entry) => entry.message_id === before.message_id && entry.part_id === before.part_id)
+    : entries.length
+  if (beforeIndex < 0)
+    throw new TaskEvidenceSourceError("Inventory cursor is not a causal Tool Part of the selected source")
+  const eligible = entries.slice(0, beforeIndex)
+  const page = eligible.slice(-CAUSAL_TOOL_INVENTORY_LIMIT_PER_SOURCE)
+  const first = page[0]
   return {
     page,
-    next_before_message_id: eligible.length > page.length && page[0] ? page[0].info.id : null,
+    next_before:
+      eligible.length > page.length && first
+        ? { before_message_id: first.message_id, before_part_id: first.part_id }
+        : null,
   }
 }
 
@@ -195,7 +199,7 @@ export const ReadAgentMessageTestHooks = Object.freeze({
   causalInventoryPage,
   evidenceOutputChunk,
   compactCausalToolReferenceIndex,
-  causalToolMessageInventoryLimitPerFinal: CAUSAL_TOOL_MESSAGE_INVENTORY_LIMIT_PER_FINAL,
+  causalToolInventoryLimitPerSource: CAUSAL_TOOL_INVENTORY_LIMIT_PER_SOURCE,
   evidenceOutputDefaultChars: EVIDENCE_OUTPUT_DEFAULT_CHARS,
   evidenceOutputMaxCharsPerCall: EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL,
   evidenceReadsDescription: EVIDENCE_READS_DESCRIPTION,
@@ -254,7 +258,7 @@ const READ_AGENT_MESSAGE_DESCRIPTION =
   "or {kind:'dispatch_origin',dispatch_id} for the root's completed Tool facts strictly before that dispatch's Provider step. " +
   "Use current_dispatch_id from your real dispatch context for root evidence. Discover other exact dispatch/result identities in Task dispatch facts. " +
   "Origin facts are historical observations, not a final report or proof of current state. Same-step calls and outcomes at/after the boundary are outside that source; absence does not prove an operation never occurred. " +
-  "The result includes a compact redacted causal Tool index plus detailed pages. If complete=false, follow inventory_next_before. " +
+  "The result includes a compact redacted causal Tool index plus pages of at most 16 Tool Parts per source. If complete=false, follow the exact inventory_next_before Message/Part cursors. " +
   "Read necessary exact message_id/part_id input, output, or failure chunks with evidence_reads and follow next_offset to null. " +
   "This read-only projection preserves Task ownership and causal boundaries; it does not infer success or create artifacts."
 
@@ -297,20 +301,25 @@ export async function readAgentMessages(taskID: string, rawInput: unknown) {
       finish: message.info.finish ?? null,
       time_completed: message.info.time.completed ?? null,
       text: message.parts.flatMap((part) => (part.type === "text" ? [part.text] : [])),
-      tool_facts: message.parts.flatMap((part) =>
-        part.type === "tool"
-          ? [
-              {
-                part_id: part.id,
-                call_id: part.callID,
-                tool_name: part.tool,
-                status: part.state.status,
-                ...safeInputPreview(part.state.input),
-                ...(part.state.status === "completed" ? { stored_output_chars: part.state.output.length } : {}),
-              },
-            ]
-          : [],
-      ),
+      tool_facts_complete:
+        message.parts.filter((part) => part.type === "tool").length <= CAUSAL_TOOL_INVENTORY_LIMIT_PER_SOURCE,
+      tool_facts: message.parts
+        .filter((part) => part.type === "tool")
+        .slice(0, CAUSAL_TOOL_INVENTORY_LIMIT_PER_SOURCE)
+        .flatMap((part) =>
+          part.type === "tool"
+            ? [
+                {
+                  part_id: part.id,
+                  call_id: part.callID,
+                  tool_name: part.tool,
+                  status: part.state.status,
+                  ...safeInputPreview(part.state.input),
+                  ...(part.state.status === "completed" ? { stored_output_chars: part.state.output.length } : {}),
+                },
+              ]
+            : [],
+        ),
     }))
   type CausalToolMessage = {
     source: EvidenceSource
@@ -330,11 +339,14 @@ export async function readAgentMessages(taskID: string, rawInput: unknown) {
     }>
   }
   const cursorBySource = new Map(
-    (inventory_before ?? []).map((cursor) => [sourceKey(cursor.source), cursor.before_message_id]),
+    (inventory_before ?? []).map((cursor) => [
+      sourceKey(cursor.source),
+      { message_id: cursor.before_message_id, part_id: cursor.before_part_id },
+    ]),
   )
   const causalToolMessageInventory: CausalToolMessage[] = []
   const causalToolReferences: CausalToolReference[] = []
-  const inventoryNextBefore: Array<{ source: EvidenceSource; before_message_id: string }> = []
+  const inventoryNextBefore: Array<{ source: EvidenceSource; before_message_id: string; before_part_id: string }> = []
   const causalToolPartSessions = new Map<string, string>()
   for (const selection of selections) {
     const occurrenceMessages = (await Session.messages({ sessionID: selection.session_id }))
@@ -357,16 +369,13 @@ export async function readAgentMessages(taskID: string, rawInput: unknown) {
       .sort(
         (left, right) => left.info.time.created - right.info.time.created || left.info.id.localeCompare(right.info.id),
       )
-    const beforeMessageID = cursorBySource.get(sourceKey(selection.source))
-    const before = beforeMessageID
-      ? occurrenceMessages.find((candidate) => candidate.info.id === beforeMessageID)
-      : undefined
-    if (beforeMessageID && !before) {
-      throw new Error(
-        `Inventory cursor ${beforeMessageID} is not a causal Tool Message for source ${sourceKey(selection.source)}`,
-      )
-    }
-    const inventoryPage = causalInventoryPage(occurrenceMessages, before)
+    const entries = occurrenceMessages.flatMap((candidate) =>
+      candidate.parts.flatMap((part) =>
+        part.type === "tool" ? [{ message_id: candidate.info.id, part_id: part.id }] : [],
+      ),
+    )
+    const inventoryPage = causalInventoryPage(entries, cursorBySource.get(sourceKey(selection.source)))
+    const visibleParts = new Set(inventoryPage.page.map((entry) => `${entry.message_id}\0${entry.part_id}`))
     for (const candidate of occurrenceMessages) {
       for (const part of candidate.parts) {
         if (part.type !== "tool") continue
@@ -383,20 +392,19 @@ export async function readAgentMessages(taskID: string, rawInput: unknown) {
         })
       }
     }
-    if (inventoryPage.next_before_message_id) {
-      inventoryNextBefore.push({
-        source: selection.source,
-        before_message_id: inventoryPage.next_before_message_id,
-      })
-    }
-    for (const candidate of inventoryPage.page) {
+    if (inventoryPage.next_before) inventoryNextBefore.push({ source: selection.source, ...inventoryPage.next_before })
+    for (const candidate of occurrenceMessages) {
+      const visibleToolParts = candidate.parts.filter(
+        (part) => part.type === "tool" && visibleParts.has(`${candidate.info.id}\0${part.id}`),
+      )
+      if (visibleToolParts.length === 0) continue
       const projected: CausalToolMessage = {
         source: selection.source,
         session_id: selection.session_id,
         message_id: candidate.info.id,
         author: candidate.info.agent,
         time_created: candidate.info.time.created,
-        tool_facts: candidate.parts.flatMap((part) => {
+        tool_facts: visibleToolParts.flatMap((part) => {
           if (part.type !== "tool") return []
           return [
             {

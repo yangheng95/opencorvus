@@ -5440,7 +5440,7 @@ export namespace SessionLoop {
     )
     try {
       const projectedToolIDs = PromptProfileResolver.schedulerRuntimeToolIDs(schedulerCapability)
-      if (![...projectedToolIDs, ...schedulerCapability.builtInToolIDs].includes(input.request.toolName)) {
+      if (!PromptProfileResolver.activeProjectedSchedulerToolIDs(schedulerCapability).includes(input.request.toolName)) {
         throw new PermissionAuthority.StaleContinuationError(
           input.request.id,
           `The projected scheduler Tool ${input.request.toolName} changed after restart`,

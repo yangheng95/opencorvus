@@ -180,6 +180,7 @@ test("Mission reads a failed child Task's settled worker report and causal Tool 
       const siblingID = Identifier.ascending("part")
       const lateID = Identifier.ascending("part")
       const coincidentID = Identifier.ascending("part")
+      const bulkIDs = Array.from({ length: 33 }, () => Identifier.ascending("part"))
       Database.use((db) => {
         db.insert(PartTable)
           .values({
@@ -220,6 +221,16 @@ test("Mission reads a failed child Task's settled worker report and causal Tool 
             .run()
         }
       })
+      Database.use((db) => {
+        for (const [slot, id] of bulkIDs.entries()) {
+          db.insert(ToolPartRequestTable).values({ id, message_id: rootMessageID, time_created: now + 1,
+            data: { type: "tool-request", tool: "read", callID: `bulk-${slot}`, input: { slot }, time: { start: now + 1 } },
+          }).run()
+          db.insert(ToolPartOutcomeTable).values({ id: Identifier.ascending("part"), request_part_id: id, time_created: now + 3,
+            data: { outcome: "completed", title: "Source", output: JSON.stringify({ slot }), metadata: {}, time: { end: now + 3 } },
+          }).run()
+        }
+      })
       const originSource = { kind: "dispatch_origin" as const, dispatch_id: lineage.dispatchID }
       const originInput = { sources: [originSource] }
       const originEvidence = JSON.parse(await readAgentMessages(taskID, originInput))
@@ -233,9 +244,17 @@ test("Mission reads a failed child Task's settled worker report and causal Tool 
           before_provider_step: { part_id: boundaryID, time_created: now + 5 },
         },
       ])
-      expect(originEvidence.causal_tool_reference_index.refs.map((ref: { part_id: string }) => ref.part_id)).toEqual([
-        rootReadID,
-      ])
+      expect(new Set(originEvidence.causal_tool_reference_index.refs.map((ref: { part_id: string }) => ref.part_id))).toEqual(new Set([rootReadID, ...bulkIDs]))
+      const visitedParts: string[] = []
+      let page = originEvidence
+      for (;;) {
+        const parts = page.causal_tool_message_inventory.flatMap((message: { tool_facts: Array<{ part_id: string }> }) => message.tool_facts.map((part) => part.part_id))
+        expect(parts.length).toBeLessThanOrEqual(16)
+        visitedParts.push(...parts)
+        if (page.inventory_next_before.length === 0) break
+        page = JSON.parse(await readAgentMessages(taskID, { ...originInput, inventory_before: page.inventory_next_before }))
+      }
+      expect(new Set(visitedParts)).toEqual(new Set([rootReadID, ...bulkIDs]))
       const readOrigin = JSON.parse(
         await readAgentMessages(taskID, {
           ...originInput,

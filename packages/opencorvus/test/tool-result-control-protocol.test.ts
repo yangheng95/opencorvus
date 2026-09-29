@@ -339,6 +339,7 @@ async function projectedSchedulerSurface(input: {
         projectedToolIDs: Object.freeze([...skillProjection.projectedToolIDs, "StructuredOutput"].sort()),
         projectedScheduler: Object.freeze({
           ...skillProjection.projectedScheduler,
+          builtInToolIDs: Object.freeze([...skillProjection.projectedScheduler.builtInToolIDs, "StructuredOutput"].sort()),
           projectedToolIDs: Object.freeze([
             ...skillProjection.projectedScheduler.projectedToolIDs,
             "StructuredOutput",

@@ -4800,6 +4800,7 @@ export class Control extends HeyApiClient {
              */
             inventory_before?: Array<{
               before_message_id: string
+              before_part_id: string
               source:
                 | {
                     kind: "dispatch_result"
@@ -5168,6 +5169,12 @@ export class Control extends HeyApiClient {
                     responsibility:
                       | {
                           /**
+                           * The accountable owner of this exact reviewed Task. Use for root-produced work; no worker lineage is invented.
+                           */
+                          kind: "task_owner"
+                        }
+                      | {
+                          /**
                            * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.
                            */
                           failure_reference: {
@@ -5206,6 +5213,12 @@ export class Control extends HeyApiClient {
                     responsibility:
                       | {
                           /**
+                           * The accountable owner of this exact reviewed Task. Use for root-produced work; no worker lineage is invented.
+                           */
+                          kind: "task_owner"
+                        }
+                      | {
+                          /**
                            * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.
                            */
                           failure_reference: {
@@ -5242,6 +5255,12 @@ export class Control extends HeyApiClient {
                     repair_evidence_read_refs: Array<string>
                     resolution_evidence_read_refs: Array<string>
                     responsibility:
+                      | {
+                          /**
+                           * The accountable owner of this exact reviewed Task. Use for root-produced work; no worker lineage is invented.
+                           */
+                          kind: "task_owner"
+                        }
                       | {
                           /**
                            * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.
@@ -5304,6 +5323,12 @@ export class Control extends HeyApiClient {
                     responsibility:
                       | {
                           /**
+                           * The accountable owner of this exact reviewed Task. Use for root-produced work; no worker lineage is invented.
+                           */
+                          kind: "task_owner"
+                        }
+                      | {
+                          /**
                            * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.
                            */
                           failure_reference: {
@@ -5342,6 +5367,12 @@ export class Control extends HeyApiClient {
                     responsibility:
                       | {
                           /**
+                           * The accountable owner of this exact reviewed Task. Use for root-produced work; no worker lineage is invented.
+                           */
+                          kind: "task_owner"
+                        }
+                      | {
+                          /**
                            * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.
                            */
                           failure_reference: {
@@ -5378,6 +5409,12 @@ export class Control extends HeyApiClient {
                     repair_evidence_read_refs: Array<string>
                     resolution_evidence_read_refs: Array<string>
                     responsibility:
+                      | {
+                          /**
+                           * The accountable owner of this exact reviewed Task. Use for root-produced work; no worker lineage is invented.
+                           */
+                          kind: "task_owner"
+                        }
                       | {
                           /**
                            * Exact failed terminal reference from the reviewed Task before its first dispatch. Use this responsibility when execution failed before any workflow or worker lineage was established; never invent a dispatch lineage. Retain this original reference in later ledger revisions.

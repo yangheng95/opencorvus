@@ -5,7 +5,7 @@
   "name": "Base",
   "label": "Base",
   "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
-  "version": "2026.09.28.1",
+  "version": "2026.09.30.1",
   "product_pillars": [
     "code",
     "work"
@@ -13,7 +13,7 @@
   "readme": "README.md",
   "selector": {
     "summary": "Use Base for one complete Task executed by one capable owner and independently verified against the actual outcome.",
-    "selection_guidance": "Choose execution-verification when delivery has no material dynamic business-source prerequisite before mutation, or when the operation is reversible and one execution owner can safely resolve ordinary current facts. Choose source-planned-execution-verification when an irreversible mutation depends on current source authority absent from the request; classify only traceable execution-authority conditions and applicable constraints, while destination outcome semantics and contract-required execution dependencies remain with Developer. Choose the parallel research workflow only for a useful independent repository/web partition. Specialized or genuinely richer dependencies belong to their domain Squad or Advanced.",
+    "selection_guidance": "Use execution-verification for direct accountable Task-owner delivery and independent review. Use source-planned-execution-verification only for a bounded independent source-authority investigation that must precede delegated production. Use planner-parallel-delivery only for real independently useful research and implementation partitions.",
     "instructions": "selector.md"
   },
   "capability_sets": {
@@ -44,12 +44,24 @@
   "capability_projection": {
     "scheduler": {
       "capability_refs": [
+        "capability:capability_set:package:base:shared-capabilities-1",
         "capability:capability_set:platform:tool-registry:orchestrator-base",
         "capability:capability_set:platform:tool-registry:scheduler-transport",
-        "capability:skill:package:base:base%2Fshared%2Fmethod",
+        "capability:tool:platform:tool-registry:apply_patch",
+        "capability:tool:platform:tool-registry:bash",
+        "capability:tool:platform:tool-registry:browser_preview",
+        "capability:tool:platform:tool-registry:browser_preview_capture",
         "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:edit",
+        "capability:tool:platform:tool-registry:external_code_search",
+        "capability:tool:platform:tool-registry:glob",
         "capability:tool:platform:tool-registry:manage_task",
-        "capability:tool:platform:tool-registry:read"
+        "capability:tool:platform:tool-registry:read",
+        "capability:tool:platform:tool-registry:search_code",
+        "capability:tool:platform:tool-registry:todo",
+        "capability:tool:platform:tool-registry:webfetch",
+        "capability:tool:platform:tool-registry:websearch",
+        "capability:tool:platform:tool-registry:write"
       ],
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md"
@@ -110,19 +122,12 @@
     "virtual_workflows": {
       "execution-verification": {
         "label": "Execution and Independent Verification",
-        "description": "One capable owner discovers, plans, executes, and checks the result; an independent Tester verifies the settled outcome.",
+        "description": "The Task owner produces directly; the independent Tester compares the actual result with original authority.",
         "nodes": {
-          "base-developer": {
-            "agent_id": "base-developer",
-            "description": "Uses projected Skills and executable tools to resolve bounded source facts, plan, execute, and self-check one compact delivery.",
-            "depends_on": []
-          },
           "base-tester": {
             "agent_id": "base-tester",
             "description": "Independently rereads dynamic sources and verifies the settled result criterion by criterion.",
-            "depends_on": [
-              "base-developer"
-            ]
+            "depends_on": []
           }
         }
       },

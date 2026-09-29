@@ -2575,10 +2575,10 @@ export function createOrchestratorTools(input: {
           selectedCriteria.push(criterion)
         }
         if (!existingSessionID) {
-          const initialization = selectedCriteria.every((criterion) => criterion.responsibility.kind === "task_initialization")
+          const rootResponsibility = selectedCriteria.every((criterion) => ["task_initialization", "task_owner"].includes(criterion.responsibility.kind))
           const selectedBinding = activeAcceptanceRepair.workflowBinding
           if ((selectedBinding && !sameSelectedWorkflowBinding(exactWorkflowBinding, selectedBinding)) ||
-              (!initialization && (!selectedBinding || exactWorkflowBinding.kind !== "virtual_workflow"))) {
+              (!rootResponsibility && (!selectedBinding || exactWorkflowBinding.kind !== "virtual_workflow"))) {
             throw new Error("Initial acceptance repair must preserve its selected workflow or recover a validated Task initialization failure.")
           }
         }

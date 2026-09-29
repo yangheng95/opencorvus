@@ -10,19 +10,17 @@ describe("read_agent_message causal evidence projection", () => {
       boundary,
     ])
 
-    const messages = Array.from({ length: 33 }, (_, index) => ({
-      info: { time: { created: index }, id: `msg_${String(index).padStart(2, "0")}` },
-    }))
+    const entries = Array.from({ length: 33 }, (_, index) => ({ message_id: "msg_shared", part_id: `part_${String(index).padStart(2, "0")}` }))
     const visited: string[] = []
-    let before: (typeof messages)[number] | undefined
+    let before: (typeof entries)[number] | undefined
     while (true) {
-      const page = ReadAgentMessageTestHooks.causalInventoryPage(messages, before)
-      visited.push(...page.page.map((message) => message.info.id))
-      if (!page.next_before_message_id) break
-      before = messages.find((message) => message.info.id === page.next_before_message_id)
-      if (!before) throw new Error("Inventory cursor did not resolve")
+      const page = ReadAgentMessageTestHooks.causalInventoryPage(entries, before)
+      expect(page.page.length).toBeLessThanOrEqual(16)
+      visited.push(...page.page.map((entry) => entry.part_id))
+      if (!page.next_before) break
+      before = { message_id: page.next_before.before_message_id, part_id: page.next_before.before_part_id }
     }
-    expect([...new Set(visited)].sort()).toEqual(messages.map((message) => message.info.id).sort())
+    expect([...new Set(visited)].sort()).toEqual(entries.map((entry) => entry.part_id).sort())
   })
 
   test("redacts inventory inputs and chunks large evidence output with a continuation offset", () => {
