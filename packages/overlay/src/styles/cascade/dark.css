@@ -22,25 +22,22 @@
    ───────────────────────────────────────────────────────────── */
 
 :root[data-theme="dark"] {
-  --workspace-glass-bg: rgb(21 23 28 / 0.56);
+  --workspace-glass-bg: rgb(24 24 24 / 0.96);
   --workspace-glass-edge: rgb(255 255 255 / 0.08);
   color-scheme: dark;
   --text-on-accent: #000000;
   --text-on-strong: #000000;
   --text-on-danger: #000000;
-  --bg: #24272e;
+  --bg: #181818;
   --surface: #242424;
   --surface-hover: #303030;
   --surface-inset: #282828;
   --surface-strong: #2c2c2c;
-  --rail-surface: #141414;
-  --chat-canvas: #191a1c;
+  --rail-surface: #171717;
+  --chat-canvas: #181818;
   --workspace-ambient-fill: transparent;
-  --body-bg:
-    radial-gradient(ellipse at 0% 15%, rgb(105 122 155 / 0.22), transparent 54%),
-    radial-gradient(ellipse at 100% 42%, rgb(130 103 125 / 0.18), transparent 56%),
-    radial-gradient(ellipse at 55% 110%, rgb(70 125 121 / 0.16), transparent 64%), var(--bg);
-  --chrome: #202124;
+  --body-bg: var(--bg);
+  --chrome: #181818;
   --border: rgba(255, 255, 255, 0.1);
   --border-hover: rgba(255, 255, 255, 0.18);
   --border-strong: rgba(255, 255, 255, 0.24);

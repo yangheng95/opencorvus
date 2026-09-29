@@ -13,7 +13,7 @@
    ───────────────────────────────────────────────────────────── */
 
 :root[data-theme="light"] {
-  --workspace-glass-bg: rgb(250 251 253 / 0.68);
+  --workspace-glass-bg: rgb(250 250 250 / 0.96);
   --workspace-glass-edge: rgb(255 255 255 / 0.64);
   color-scheme: light;
   --text-on-accent: #ffffff;
@@ -21,19 +21,16 @@
   --text-on-danger: #ffffff;
   /* Static frosted backdrop. Reading surfaces remain opaque; chrome uses
      the shared translucent material rather than sampling moving content. */
-  --bg: #e7e9ef;
+  --bg: #f3f3f3;
   --surface: #ffffff;
   --surface-hover: #f2f2ef;
   --surface-inset: #eeefed;
   --surface-strong: #ffffff;
-  --rail-surface: #f7f7f5;
-  --chat-canvas: #fcfcfb;
+  --rail-surface: #fafafa;
+  --chat-canvas: #ffffff;
   --workspace-ambient-fill: transparent;
-  --body-bg:
-    radial-gradient(ellipse at 0% 15%, rgb(181 197 220 / 0.6), transparent 54%),
-    radial-gradient(ellipse at 100% 42%, rgb(209 191 204 / 0.52), transparent 56%),
-    radial-gradient(ellipse at 55% 110%, rgb(178 204 197 / 0.48), transparent 64%), var(--bg);
-  --chrome: #f7f7f5;
+  --body-bg: var(--bg);
+  --chrome: #f3f3f3;
   --border: rgb(32 32 32 / 0.1);
   --border-hover: rgb(32 32 32 / 0.3);
   --border-strong: rgb(32 32 32 / 0.2);

@@ -52,6 +52,14 @@ export function SidebarVersionLabel() {
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content class="sidebar-account-menu" data-ui="sidebar-account-menu">
+          <div class="sidebar-account-identity">
+            <strong>OpenCorvus</strong>
+            <span>{OPENCORVUS_VERSION_LABEL}</span>
+          </div>
+          <DropdownMenu.Item as="button" type="button" onSelect={() => openConfigDialog("usage")}>
+            <Icon name="usage-metrics" size="medium" />
+            <span>{t("usage.title")}</span>
+          </DropdownMenu.Item>
           <DropdownMenu.Item as="button" type="button" onSelect={() => openConfigDialog("general")}>
             <Icon name="config-general" size="medium" />
             <span>{t("config.title")}</span>

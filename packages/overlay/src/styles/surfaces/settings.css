@@ -1469,7 +1469,7 @@ button.s-row:focus-visible {
   min-height: 0;
   overflow-y: auto;
   padding: var(--ui-gap-4xl);
-  border-top-left-radius: 0;
+  border-top-left-radius: var(--oc-radius-large);
   border-left: var(--oc-border-width) solid color-mix(in srgb, var(--divider-soft) 76%, transparent);
   background: var(--chat-canvas);
   container-name: settings-content;
@@ -1481,7 +1481,7 @@ button.s-row:focus-visible {
   max-width: var(--settings-content-width);
   margin: 0 auto var(--ui-gap-3xl);
   color: var(--text-strong);
-  font-size: var(--ui-font-emphasis);
+  font-size: var(--ui-font-page);
   font-weight: var(--ui-font-weight-strong);
   line-height: var(--ui-line-height-tight);
   letter-spacing: var(--ui-letter-spacing-normal);

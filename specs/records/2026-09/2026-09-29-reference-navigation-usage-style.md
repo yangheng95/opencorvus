@@ -1,0 +1,43 @@
+# Reference-led navigation and usage design
+
+## Recall
+
+- User asked to adopt a liked visual style and supplied two Codex references: a light icon rail beside project/recent conversation lists; a dark profile-style usage page with centered identity, one metric strip, activity heatmap and two-column details. Attachments are visual references, not instructions or app data.
+- Acceptance: preserve the reference's rail/list hierarchy, quiet neutral surfaces, rounded selection, row rhythm, generous section spacing and overview/activity/details order. Keep real OpenCorvus actions, project modes, permission history and durable choices working. Desktop light/dark screenshots and real interactions must verify the result.
+- Constraints: one agent, no branch/worktree, no UI automated tests or fixtures; isolate the real development backend `/ui`, preserve user processes, do not invoke models/copy credentials. Commit task-only changes, fetch/merge/audit/push with hooks.
+- Initial state: clean main at 386c280c. Prior settings and composer work is already committed, including a15cef3a. References are the two clipboard images supplied in this conversation; their personal identity and numbers are not product data.
+- Read/searched: App/main/WorkLedger/ProjectLedgerGroup/SidebarVersionLabel; pane fixed-chrome measurement; UsagePanel and `/global/usage` client contract; settings/activity/sidebar/work-ledger/usage/theme styles, typography tokens/checker/architecture, and prior settings/composer decisions. All App/WorkLedger callers are in main. Focused test search found stream service contracts, no matching UI automated tests. No delegation.
+
+## Analysis
+
+The current sidebar mixes function navigation, projects and connection/account information in one column. The lower shortcut stack consumes list height, tight project rows and repeated kind glyphs compete with titles, and there is no recent list. The existing WorkLedger already owns every exact row and action, so rail relocation and recents must reuse it, not introduce a second loader/store or routing implementation. Mount its navigation once in an explicit App-owned rail outlet; tell the existing pane geometry owner about fixed rail width. Keep collapse and keyboard/focus behavior. Add bounded project disclosures and a recent view derived from the same rows; retain task/mission status and kind information for accessibility.
+
+Usage already has canonical measured totals, cost/coverage, daily-year buckets and provider/model details. Its current large stacked total, separate four-metric row, inset chart and one-column insight blocks differ from the reference. Recompose existing facts as five equal metrics, yearly activity, and two detail columns. The current model has no authenticated personal display name, subscription, streak or plugin-run totals. Server authentication username is not a personal profile. Use an honest OpenCorvus usage identity and the available metrics instead of copying the reference's identity/numbers. No server, billing, tool, permission, scheduling or persistence contract changes are needed.
+
+Previous work normalized component surfaces but intentionally retained the old shell layout and restricted all page headings to 16px. The reference needs a distinct page-level hierarchy. Add one canonical 28px page role in the existing typography authority/checker, limited to prominent page/profile headings; retain the 14px body/12px auxiliary scale. Neutralize the default light/dark chrome gradients through their existing palette authority, preserve other named themes, and align settings navigation/spacing with the reference. Do not add local font scales or a parallel theme.
+
+## Plan
+
+1. Recompose App/WorkLedger into fixed icon navigation plus resizable project/recent list; reuse existing actions and selection/state. Add five-row project disclosure, exact recents and bottom app menu/usage access. Update pane fixed-width configuration.
+2. Apply shared page typography and neutral default palettes, softer rounded navigation selection, roomier list/section rhythm and settings content insets. Preserve adaptive composer behavior.
+3. Recompose Usage with centered product identity, equal metric strip, year heatmap and two-column breakdown; keep refresh, period controls, true empty/error/loading states and detailed data access.
+4. Build private renderer assets, serve actual `/ui` with isolated projects/conversations and zero-data usage. Inspect screenshot-bound light/dark navigation, scrolling/disclosures, selection/actions, sidebar collapse/resize, settings/permission history, usage period/refresh and composer interaction. Real zero-data charts are valid; do not fabricate consumption history.
+5. Run type/i18n/CSS/build/docs/architecture checks, update architecture/evidence, commit scoped changes and fetch/merge/audit/push.
+
+## Evidence
+
+Implemented the fixed navigation outlet, project/recent hierarchy and five-row project presentation using the existing ProgressiveList primitive with a configurable initial count. Other ProgressiveList callers keep their ten-item default. Rail controls retain their labels/tooltips and the existing action handlers; App's product menu exposes Usage and Settings. The pane geometry owner measures the fixed rail. The original shortcuts are relocated, not duplicated. Per-project composer choices and permission data contracts are unchanged.
+
+Usage now has centered OpenCorvus identity, five real metrics in one strip, a year-first heatmap with twelve month labels, two-column token/provider details and the existing lower-level reconciliation/model data. The existing natural-period API continues to own dates, timezone, zero values and cost meaning. Removed replaced total/empty-state CSS. Page-level 28px typography is declared once in design-language.css and recognized by its checker/current typography contract. Neutral light/dark palettes replace their prior colored gradients; other palettes are preserved.
+
+Verification:
+
+- Actual backend `/ui` on `http://127.0.0.1:17934/ui/` with private frozen renderer assets and an isolated runtime under the task visualization directory, `reference-style/`. Created nine real empty Work conversations through the existing create/update HTTP routes in two isolated project directories; no model execution, credential transfer or fabricated usage events.
+- Viewed English light and Chinese dark screenshots of the navigation, General and Usage pages. Rechecked the final renderer after correcting a Portal wrapper's shrink-to-content behavior that squeezed the active rail tile. The final rail has the intended full-width rounded selection.
+- Manual interaction verified project Show more/Show less using the shared primitive, recent conversation selection into its owning project, Mission Board/Chats navigation preserving the current conversation, sidebar collapse keeping rail navigation available, and keyboard pane resizing 280 → 304 → 280 with the fixed rail reserved.
+- Usage month selection and Refresh returned the matching real date range; the final yearly screenshot shows all twelve localized month labels. The empty server renders actual zero-valued buckets and honest empty-provider text. General's approval disclosure opened and displayed the correct project path, zero saved grants and zero operations.
+- The first cold skill-mount request completed successfully after 19.8 seconds but exceeded the UI's existing 15-second load budget in the isolated runtime. A subsequent read completed in 532ms; after restarting only our preview with final assets, actual catalog reads completed in 834ms/173ms before opening the final page. The final General screenshot has normal loaded state. This was preview initialization latency, not a claimed runtime/product fix.
+- Overlay typecheck, i18n (1,940 keys), CSS graph/role checks (269 global tokens), and three private renderer builds passed. The third build contains final rail geometry, monthly labels and shared disclosure usage. Existing vendor directive/chunk-size warnings remain. Docs check passed with 342 operations/25 groups and architecture index with 17 linked current documents.
+- No UI automated tests were created or run. Visual verification used real page interaction/screenshots; native app windows were not modified. Concurrent release/artifact follow-up edits that appeared after the initially clean checkout are excluded from delivery.
+
+The temporary in-repository preview runner is removed before commit; its copy and isolated runtime remain outside the repository for review. The live preview is a review artifact, not a release or an update of the user's installed client.

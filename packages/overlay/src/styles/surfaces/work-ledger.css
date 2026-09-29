@@ -104,7 +104,7 @@
 .work-ledger-section-title {
   margin: var(--ui-gap-md) var(--ui-left-rail-section-inline-inset) var(--ui-gap-xs);
   color: var(--text-muted);
-  font-weight: var(--ui-font-weight-medium);
+  font-weight: var(--ui-font-weight-strong);
   line-height: var(--ui-line-height-tight);
 }
 
@@ -128,7 +128,23 @@
   column-gap: var(--ui-left-rail-row-label-gap);
   padding-inline-start: var(--ui-left-rail-row-control-inline-inset);
   border: 0;
+  min-height: calc(34px * var(--ui-scale));
+  border-radius: var(--oc-radius-large);
   padding-inline-end: calc(var(--ui-left-rail-project-action-half-size) - (var(--work-row-action-size) / 2));
+}
+
+.work-ledger-recents {
+  margin-block: var(--ui-gap-4xl) var(--ui-gap-xl);
+}
+
+.work-ledger-recents .work-ledger-one-list {
+  padding-inline: var(--ui-left-rail-section-inline-inset);
+}
+
+.work-ledger-rows > .oc-progressive-list__toggle.oc-button {
+  --oc-button-color: var(--text-muted);
+  justify-content: flex-start;
+  margin-inline-start: var(--ui-left-rail-row-control-inline-inset);
 }
 
 .work-row:is([data-kind="mission"], [data-kind="chat"]) {
@@ -146,6 +162,7 @@
 
 .work-row .oc-button[data-ui="ledger-row-main"] .work-row-title {
   font-size: var(--ui-font-body);
+  font-weight: var(--ui-font-weight-body);
 }
 
 .work-row .oc-button[data-ui="ledger-row-main"] {

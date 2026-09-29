@@ -12,6 +12,7 @@ import {
   type JSX,
 } from "solid-js"
 import { createStore, reconcile } from "solid-js/store"
+import { Portal } from "solid-js/web"
 import type { WorkLedgerOrganization, WorkLedgerSort } from "@opencorvus-ai/transport-protocol"
 import {
   loadWorkLedger,
@@ -58,6 +59,7 @@ import { Icon, type IconName } from "./ui/Icon"
 import { Badge } from "./ui/Badge"
 import { Button } from "./ui/Button"
 import { LedgerList } from "./LedgerList"
+import { ProgressiveList } from "./ui/ProgressiveList"
 import { LedgerRowMainButton } from "./LedgerRowMainButton"
 import { createProjectLedgerGroupCollapseState, ProjectLedgerGroup } from "./ProjectLedgerGroup"
 import { useTaskRowActionsKeyboard } from "./useTaskRowActionsKeyboard"
@@ -85,6 +87,8 @@ type RenderWorkLedgerTopLevelItemRow = RenderWorkLedgerMissionRow | RenderWorkLe
 type RenderWorkLedgerRow = RenderWorkLedgerProjectRow | RenderWorkLedgerTopLevelItemRow
 
 export interface WorkLedgerProps {
+  navigationMount: HTMLDivElement
+  onOpenConversations: () => void
   primarySurface: "conversation" | "mission-board"
   selectedTaskID?: string
   selectedSessionID?: string
@@ -775,7 +779,11 @@ function WorkLedgerProjectGroupView(props: {
 }) {
   const collapsed = () => props.directoryCollapse.isCollapsed(props.group.directory)
   const renderRows = () => (
-    <For each={props.group.items}>
+    <ProgressiveList
+      items={props.group.items}
+      initialVisibleCount={props.showProjectHeader === false ? 8 : 5}
+      class="work-ledger-rows"
+    >
       {(row) => (
         <WorkLedgerRowView
           row={row}
@@ -796,7 +804,7 @@ function WorkLedgerProjectGroupView(props: {
           onArchiveChat={props.onArchiveChat}
         />
       )}
-    </For>
+    </ProgressiveList>
   )
   return (
     <Show when={props.showProjectHeader !== false} fallback={<div class="work-ledger-one-list">{renderRows()}</div>}>
@@ -1003,6 +1011,15 @@ export function WorkLedger(props: WorkLedgerProps) {
   const pinnedProjects = createMemo(() => groups.filter(isPinnedProjectGroup))
 
   const unpinnedGroups = createMemo(() => groups.filter((group) => !isPinnedProjectGroup(group)))
+  const recentGroup = createMemo<WorkLedgerGroup>(() => ({
+    renderKey: "recent",
+    directory: "",
+    latest: 0,
+    items: groups
+      .flatMap((group) => group.items)
+      .sort((a, b) => b.updated - a.updated)
+      .slice(0, 8),
+  }))
 
   function selected(row: WorkLedgerItemRow): boolean {
     if (props.primarySurface !== "conversation") return false
@@ -1332,84 +1349,102 @@ export function WorkLedger(props: WorkLedgerProps) {
             )
           }
         </LedgerList>
+        <Show when={settingsStore.workLedgerOrganization === "by-project" && recentGroup().items.length > 0}>
+          <section class="work-ledger-recents" aria-label={t("work_ledger.recents")}>
+            <div class="work-ledger-section-title oc-section-heading">{t("work_ledger.recents")}</div>
+            {projectGroupView(recentGroup(), "work-ledger-recents", false)}
+          </section>
+        </Show>
       </div>
-      <div class="sidebar-codex-static-nav sidebar-codex-shortcuts" aria-label={t("work_ledger.shortcuts")}>
-        <WorkLedgerNavigationAction
-          data-ui="work-ledger-mission-board"
-          icon="tasks"
-          label={t("mission_board.navigation")}
-          description={t("mission_board.navigation_description")}
-          active={props.primarySurface === "mission-board"}
-          trailing={<Icon name="arrow-up-right" size="compact" class="mission-board-nav-arrow" />}
-          tooltipDetail={
-            busyMissionLanes().length > 0 ? (
-              <span class="mission-board-nav-summary">
-                <For each={busyMissionLanes()}>
-                  {(lane) => (
-                    <span class="mission-board-nav-summary__lane" data-lane={lane}>
-                      <i aria-hidden="true" />
-                      <strong>{missionCounts()[lane]}</strong>
-                      {t(`mission_board.lane.${lane}`)}
-                    </span>
-                  )}
-                </For>
-              </span>
-            ) : undefined
-          }
-          onClick={() => void props.onOpenMissionBoard()}
-        />
-        <WorkLedgerNavigationAction
-          data-ui="work-ledger-automations"
-          icon="scheduled"
-          label={t("automations.menu")}
-          description={t("work_ledger.tooltip.automations")}
-          onClick={() => openConfigDialog("scheduled")}
-        />
-        <WorkLedgerNavigationAction
-          data-ui="work-ledger-expert-squads"
-          icon="expert-squad"
-          label={t("expert_squad.title")}
-          description={t("work_ledger.tooltip.expert_squads")}
-          onClick={() => openConfigDialog("expert-squad-install")}
-        />
-        <DropdownMenu.Root placement="top-start" fitViewport>
-          <DropdownMenu.Trigger
-            as={Button}
-            type="button"
-            variant="ghost"
-            size="sm"
-            tone="neutral"
-            class="sidebar-codex-action oc-navigation-row"
-          >
-            <Icon name="more-horizontal" size="medium" />
-            <span class="sidebar-codex-action-label">{t("common.more")}</span>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Portal>
-            <DropdownMenu.Content>
-              <DropdownMenu.Item
-                as="button"
-                type="button"
-                disabled={!activeProjectDirectory()}
-                onSelect={startMulticaImportInCurrentDirectory}
-              >
-                <Icon name="download" />
-                {t("multica_import.sidebar_action")}
-              </DropdownMenu.Item>
-              <DropdownMenu.Item as="button" type="button" onSelect={() => openConfigDialog("channel")}>
-                <Icon name="config-channel" />
-                {t("channel.title")}
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Portal>
-        </DropdownMenu.Root>
-        <WorkLedgerNavigationAction
-          data-ui="work-ledger-settings"
-          icon="config-general"
-          label={t("config.title")}
-          description={t("config.title")}
-          onClick={() => openConfigDialog("general")}
-        />
-      </div>
+      <Portal mount={props.navigationMount}>
+        <div class="sidebar-codex-static-nav sidebar-codex-shortcuts" aria-label={t("work_ledger.shortcuts")}>
+          <WorkLedgerNavigationAction
+            data-ui="work-ledger-home"
+            icon="home"
+            label={t("work_ledger.home")}
+            description={t("work_ledger.navigation")}
+            active={props.primarySurface === "conversation"}
+            onClick={props.onOpenConversations}
+          />
+          <WorkLedgerNavigationAction
+            data-ui="work-ledger-mission-board"
+            icon="tasks"
+            label={t("mission_board.navigation")}
+            description={t("mission_board.navigation_description")}
+            active={props.primarySurface === "mission-board"}
+            trailing={<Icon name="arrow-up-right" size="compact" class="mission-board-nav-arrow" />}
+            tooltipDetail={
+              busyMissionLanes().length > 0 ? (
+                <span class="mission-board-nav-summary">
+                  <For each={busyMissionLanes()}>
+                    {(lane) => (
+                      <span class="mission-board-nav-summary__lane" data-lane={lane}>
+                        <i aria-hidden="true" />
+                        <strong>{missionCounts()[lane]}</strong>
+                        {t(`mission_board.lane.${lane}`)}
+                      </span>
+                    )}
+                  </For>
+                </span>
+              ) : undefined
+            }
+            onClick={() => void props.onOpenMissionBoard()}
+          />
+          <WorkLedgerNavigationAction
+            data-ui="work-ledger-automations"
+            icon="scheduled"
+            label={t("automations.menu")}
+            description={t("work_ledger.tooltip.automations")}
+            onClick={() => openConfigDialog("scheduled")}
+          />
+          <WorkLedgerNavigationAction
+            data-ui="work-ledger-expert-squads"
+            icon="expert-squad"
+            label={t("expert_squad.title")}
+            description={t("work_ledger.tooltip.expert_squads")}
+            onClick={() => openConfigDialog("expert-squad-install")}
+          />
+          <DropdownMenu.Root placement="top-start" fitViewport>
+            <DropdownMenu.Trigger
+              as={Button}
+              type="button"
+              variant="ghost"
+              size="sm"
+              tone="neutral"
+              class="sidebar-codex-action oc-navigation-row"
+              aria-label={t("common.more")}
+              title={t("common.more")}
+            >
+              <Icon name="more-horizontal" size="medium" />
+              <span class="sidebar-codex-action-label">{t("common.more")}</span>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Portal>
+              <DropdownMenu.Content>
+                <DropdownMenu.Item
+                  as="button"
+                  type="button"
+                  disabled={!activeProjectDirectory()}
+                  onSelect={startMulticaImportInCurrentDirectory}
+                >
+                  <Icon name="download" />
+                  {t("multica_import.sidebar_action")}
+                </DropdownMenu.Item>
+                <DropdownMenu.Item as="button" type="button" onSelect={() => openConfigDialog("channel")}>
+                  <Icon name="config-channel" />
+                  {t("channel.title")}
+                </DropdownMenu.Item>
+              </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+          </DropdownMenu.Root>
+          <WorkLedgerNavigationAction
+            data-ui="work-ledger-settings"
+            icon="config-general"
+            label={t("config.title")}
+            description={t("config.title")}
+            onClick={() => openConfigDialog("general")}
+          />
+        </div>
+      </Portal>
     </div>
   )
 }

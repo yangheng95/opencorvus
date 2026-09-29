@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Reference-led navigation and usage design](records/2026-09/2026-09-29-reference-navigation-usage-style.md)
+
 - [Simplify layered composer pickers](records/2026-09/2026-09-29-popup-layer-simplification.md)
 
 - [Right Dock theme surface consistency](records/2026-09/2026-09-29-right-dock-theme-surfaces.md)

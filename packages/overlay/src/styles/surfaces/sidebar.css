@@ -71,7 +71,7 @@ body .sidebar-header.oc-surface-header {
 }
 
 .sidebar-codex-primary-nav {
-  padding-bottom: var(--ui-gap-3xs);
+  padding-block: var(--ui-gap-md) var(--ui-gap-xl);
 }
 
 .sidebar-codex-primary-row {
@@ -161,23 +161,11 @@ body .sidebar-header.oc-surface-header {
   justify-content: space-between;
   gap: var(--ui-gap-md);
   padding: var(--ui-gap-lg) var(--ui-left-rail-nav-icon-inset);
-  border-top: var(--oc-border-width) solid var(--divider-soft);
+  border-top: 0;
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
   min-width: 0;
   overflow: hidden;
-}
-
-.chat-version {
-  flex: 1 1 auto;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: var(--ui-gap-lg);
-  min-width: 0;
-  color: var(--text-soft);
-  line-height: var(--ui-line-height-tight);
-  overflow: visible;
 }
 
 .chat-version-copy {
@@ -693,7 +681,7 @@ body .sidebar-header.oc-surface-header {
 }
 
 .project-group + .project-group {
-  margin-top: var(--ui-gap-3xs);
+  margin-top: var(--ui-gap-lg);
 }
 
 .project-group-head {

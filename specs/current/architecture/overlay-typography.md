@@ -2,9 +2,11 @@
 
 `packages/overlay/src/styles/tokens/design-language.css` is the only font-size
 and line-height scale owner for OpenCorvus application chrome. At
-`--ui-scale: 1`, application chrome has three proportional roles and one
+`--ui-scale: 1`, application chrome has four proportional roles and one
 monospace role:
 
+- `--ui-font-page` is 28px for prominent settings page headings and the usage
+  identity heading. It is not a navigation, row, card or dialog-control role.
 - `--ui-font-emphasis` is 16px for rare page, surface, dialog, and empty-state
   headings, plus singular primary totals or product marks that carry the same
   visual emphasis.
@@ -17,8 +19,8 @@ monospace role:
   timestamps, status, counts, and technical metadata; paragraphs, summaries,
   descriptions, empty-state copy, navigation, and primary controls stay body.
 
-Application chrome has no visible text above 16px or below 12px at the default
-scale. Interactive Artifact content may own an internal type system, but the
+Page headings are the sole 28px role; other application chrome stays between
+12px and 16px at the default scale. Interactive Artifact content may own an internal type system, but the
 surrounding OpenCorvus chrome remains on this scale.
 
 Surface styles may own layout, colour, spacing, and context-specific weight,

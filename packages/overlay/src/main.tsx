@@ -2085,9 +2085,11 @@ function OverlayRoot() {
           <Icon name="project-add" size="medium" />
         </Button>
       }
-      workLedger={
+      workLedger={(navigationMount) => (
         <WorkLedger
+          navigationMount={navigationMount}
           primarySurface={primaryWorkspaceSurface()}
+          onOpenConversations={() => setPrimaryWorkspaceSurface("conversation")}
           selectedTaskID={activeTaskID()}
           selectedSessionID={activeSessionID()}
           refreshToken={missionSharedRefreshToken()}
@@ -2129,7 +2131,7 @@ function OverlayRoot() {
           onRenameChat={renameWorkLedgerChat}
           onArchiveChat={archiveWorkLedgerChat}
         />
-      }
+      )}
       mailbox={<MailboxPanel onSelectTask={selectTaskWithUILifecycle} />}
       conversation={(container) => (
         <Conversation

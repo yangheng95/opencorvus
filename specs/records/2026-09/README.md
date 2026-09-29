@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Reference-led navigation and usage design](2026-09-29-reference-navigation-usage-style.md)
+
 - [Simplify layered composer pickers](2026-09-29-popup-layer-simplification.md)
 
 - [Right Dock theme surface consistency](2026-09-29-right-dock-theme-surfaces.md)

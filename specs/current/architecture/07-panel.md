@@ -1,5 +1,23 @@
 # 07 — Overlay Panels And Task Evidence
 
+## Reference-led navigation and usage
+
+The desktop shell has a fixed icon rail and an independently resizable project
+list. WorkLedger mounts its existing navigation once into App's explicit rail
+outlet; the pane geometry owner reserves that rail's measured width. Sidebar
+collapse leaves the rail available. Project groups initially expose five rows
+with a disclosure for the rest. Recents derives eight updated items from the
+same loaded ledger, preserving exact row actions and owning directories.
+
+Usage presents the current server's real aggregate with an OpenCorvus identity,
+five equal metrics, activity grid, and side-by-side token/provider breakdowns.
+Period selection controls the existing usage contract; year is the initial
+view. Empty periods retain their actual zero-valued buckets. Official provider
+comparisons and model detail remain below the primary overview. No personal
+identity, subscription, streak or plugin usage is inferred from server credentials.
+Default light/dark palettes use neutral chrome; named palettes retain their
+own colors. Page typography follows the sole shared typography authority.
+
 ## Tool activity, delivery inventory, and directory status
 
 Consecutive Tool/Patch runs have one chronological disclosure. Narrative,

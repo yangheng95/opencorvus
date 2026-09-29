@@ -6,6 +6,7 @@ const INITIAL_VISIBLE_ITEM_COUNT = 10
 
 export interface ProgressiveListProps<T> {
   items: T[]
+  initialVisibleCount?: number
   children: (item: T, index: Accessor<number>) => JSX.Element
   class?: string
   dataUi?: string
@@ -13,8 +14,9 @@ export interface ProgressiveListProps<T> {
 
 export function ProgressiveList<T>(props: ProgressiveListProps<T>): JSX.Element {
   const [expanded, setExpanded] = createSignal(false)
-  const hasOverflow = () => props.items.length > INITIAL_VISIBLE_ITEM_COUNT
-  const visibleItems = createMemo(() => (expanded() ? props.items : props.items.slice(0, INITIAL_VISIBLE_ITEM_COUNT)))
+  const visibleCount = () => props.initialVisibleCount ?? INITIAL_VISIBLE_ITEM_COUNT
+  const hasOverflow = () => props.items.length > visibleCount()
+  const visibleItems = createMemo(() => (expanded() ? props.items : props.items.slice(0, visibleCount())))
   const className = () => ["oc-progressive-list", props.class].filter(Boolean).join(" ")
 
   return (

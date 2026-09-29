@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-solid"
 import {
+  House,
   Activity,
   ArrowLeft,
   ArrowRight,
@@ -141,6 +142,7 @@ export const LUCIDE_ICON_MAP = {
   "panel-right": { component: PanelRight },
   terminal: { component: Terminal },
   tasks: { component: ListTodo },
+  home: { component: House },
   message: { component: MessageSquare },
   work: { component: BriefcaseBusiness },
   "more-horizontal": { component: MoreHorizontal },

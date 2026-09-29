@@ -179,12 +179,13 @@
    * Consumers now reference `--ui-font-weight-strong` and `0`/literal
    * tracking directly. */
 
-  /* Application typography has three proportional roles and one code role.
+  /* Application typography has four proportional roles and one code role.
    * A component chooses a role; it cannot mint a local size alias or derive
    * an intermediate size. Hierarchy within one role comes from weight,
    * colour, spacing, and containment rather than another one-pixel tier.
    * Interactive Artifact content owns its internal typography separately;
    * the surrounding OpenCorvus chrome still consumes this scale. */
+  --ui-font-page: calc(28px * var(--ui-scale));
   --ui-font-emphasis: calc(16px * var(--ui-scale));
   --ui-font-body: calc(14px * var(--ui-scale));
   --ui-font-code: calc(13px * var(--ui-scale));
@@ -235,7 +236,8 @@
   --oc-brand-claude-code: #d97757;
   --oc-brand-gemini: #8e75b2;
 
-  --ui-rail-width: calc(240px * var(--ui-scale));
+  --ui-navigation-width: calc(56px * var(--ui-scale));
+  --ui-rail-width: calc(280px * var(--ui-scale));
   --ui-rail-min-width: calc(208px * var(--ui-scale));
   --ui-sidebar-width: var(--ui-rail-width);
   --ui-chat-priority-width: calc(640px * var(--ui-scale));

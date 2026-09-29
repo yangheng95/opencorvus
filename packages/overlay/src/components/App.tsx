@@ -33,6 +33,7 @@ import { boardStore } from "../store/board"
 import { appStore } from "../store/app"
 import { cardTreeStore } from "../store/card-tree"
 import { dialogStore } from "../store/dialog"
+import { openConfigDialog } from "../services/config-dialog-control"
 import type { AutomationRunSession } from "../services/automations"
 import type { WorkLedgerItemRow, WorkLedgerTaskRow } from "../services/work-ledger"
 
@@ -186,7 +187,7 @@ function ChatViewTitle(props: {
 export interface AppProps {
   sidebarToggle: JSX.Element
   leftPanelActions: JSX.Element
-  workLedger: JSX.Element
+  workLedger: (navigationMount: HTMLDivElement) => JSX.Element
   mailbox: JSX.Element
   primarySurface: () => "conversation" | "mission-board"
   missionBoard: JSX.Element
@@ -211,6 +212,7 @@ export interface AppProps {
 }
 
 export function App(props: AppProps) {
+  const [navigationMount, setNavigationMount] = createSignal<HTMLDivElement>()
   let chatScroll!: HTMLDivElement
   let mailboxHoverOpenTimer: number | undefined
   let mailboxHoverCloseTimer: number | undefined
@@ -286,6 +288,23 @@ export function App(props: AppProps) {
 
       <main class="panel">
         <div class="panel-body" id="panelBody">
+          <nav class="workspace-navigation" id="workspaceNavigation" aria-label={t("work_ledger.shortcuts")}>
+            <div ref={setNavigationMount} class="workspace-navigation-primary" />
+            <div class="workspace-navigation-bottom">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                tone="neutral"
+                title={t("about.title")}
+                aria-label={t("about.title")}
+                onClick={() => openConfigDialog("about")}
+              >
+                <Icon name="interaction-question" size="medium" />
+              </Button>
+              <SidebarVersionLabel />
+            </div>
+          </nav>
           <div
             class="left-activity-shell oc-material-glass"
             id="leftActivityShell"
@@ -358,7 +377,7 @@ export function App(props: AppProps) {
                 >
                   <div class="sidebar-body">
                     <div class="sidebar-list session-list-panel work-ledger-panel" id="workLedgerPanel">
-                      {props.workLedger}
+                      <Show when={navigationMount()}>{(mount) => props.workLedger(mount())}</Show>
                     </div>
                   </div>
                 </div>
@@ -372,16 +391,11 @@ export function App(props: AppProps) {
                     {props.mailbox}
                   </div>
                 </div>
-                <footer class="sidebar-footer" aria-label={t("sidebar.author")}>
-                  <span class="chat-version">
-                    <span id="solidChatVersion">
-                      <SidebarVersionLabel />
-                    </span>
-                  </span>
-                  <SidebarUpdateButton />
+                <footer class="sidebar-footer" aria-label={t("titlebar.connection_diagnostics")}>
                   <span class="sidebar-connection" id="solidConnBadge">
                     <ConnectionBadge />
                   </span>
+                  <SidebarUpdateButton />
                 </footer>
               </div>
             </aside>

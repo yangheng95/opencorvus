@@ -19,6 +19,11 @@
   flex-direction: column;
   overflow: hidden;
   color: var(--text);
+  border: var(--oc-border-width) solid var(--divider-soft);
+  border-right: 0;
+  border-bottom: 0;
+  border-top-left-radius: var(--oc-radius-large);
+  background: var(--chat-canvas);
   transition:
     flex-basis var(--ui-duration-slow) var(--ui-timing-standard),
     width var(--ui-duration-slow) var(--ui-timing-standard),
@@ -39,7 +44,106 @@
   width: 0;
   min-width: 0;
   max-width: 0;
+  border: 0;
   pointer-events: none;
+}
+
+.workspace-navigation {
+  display: flex;
+  flex: 0 0 var(--ui-navigation-width);
+  width: var(--ui-navigation-width);
+  min-height: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ui-gap-md) var(--ui-gap-sm);
+  background: var(--chrome);
+}
+
+.workspace-navigation-primary,
+.workspace-navigation-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ui-gap-lg);
+  width: 100%;
+}
+
+.workspace-navigation-primary {
+  align-items: stretch;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.workspace-navigation .sidebar-codex-shortcuts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-md);
+  padding: 0;
+  border: 0;
+  width: 100%;
+}
+
+.workspace-navigation .sidebar-codex-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: calc(40px * var(--ui-scale));
+  padding: 0;
+  border-radius: var(--oc-radius-large);
+  color: var(--text-muted);
+}
+
+.workspace-navigation .sidebar-codex-action[data-active="true"] {
+  --oc-button-bg: var(--ui-list-selected-bg);
+  --oc-button-color: var(--text-strong);
+  color: var(--text-strong);
+}
+
+.workspace-navigation .sidebar-codex-action-label,
+.workspace-navigation .chat-version-name,
+.workspace-navigation .chat-version-plan {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.workspace-navigation .sidebar-codex-action-trailing {
+  display: none;
+}
+
+.workspace-navigation .chat-version-copy {
+  display: flex;
+  justify-content: center;
+  width: calc(40px * var(--ui-scale));
+  height: calc(40px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+}
+
+.workspace-navigation .chat-version-avatar {
+  width: calc(30px * var(--ui-scale));
+  height: calc(30px * var(--ui-scale));
+  background: var(--surface-inset);
+  color: var(--text-strong);
+}
+
+.sidebar-account-identity {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ui-gap-xl);
+  padding: var(--ui-gap-md);
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+
+.sidebar-account-identity strong {
+  color: var(--text-strong);
+  font-size: var(--ui-font-body);
 }
 
 .sections[data-collapsed="true"] .side-panel-content {

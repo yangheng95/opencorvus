@@ -54,6 +54,16 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
   const labels = createMemo(() => {
     const buckets = props.data.buckets
     if (buckets.length === 0) return []
+    if (props.data.period === "year") {
+      const month = new Intl.DateTimeFormat(localeTag(), { month: "short", timeZone: props.data.timeZone })
+      const seen = new Set<string>()
+      return buckets.flatMap((bucket, index) => {
+        const label = month.format(bucket.start)
+        if (seen.has(label)) return []
+        seen.add(label)
+        return [{ index, label }]
+      })
+    }
     const last = buckets.length - 1
     return [...new Set([0, Math.round(last / 3), Math.round((last * 2) / 3), last])].map((index) => ({
       index,
@@ -72,6 +82,11 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
     }).format(props.data.buckets[0].start)
     return ({ Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5, Sun: 6 } as Record<string, number>)[day] ?? 0
   })
+  const labelPosition = (index: number) =>
+    props.data.period === "year"
+      ? Math.floor((index + yearOffset()) / 7) /
+        Math.max(1, Math.ceil((props.data.buckets.length + yearOffset()) / 7) - 1)
+      : index / Math.max(1, props.data.buckets.length - 1)
 
   return (
     <div class="usage-activity" data-ui="usage-token-activity">
@@ -99,11 +114,7 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
       </div>
       <div class="usage-activity__labels" aria-hidden="true">
         <For each={labels()}>
-          {(item) => (
-            <span style={{ left: `${(item.index / Math.max(1, props.data.buckets.length - 1)) * 100}%` }}>
-              {item.label}
-            </span>
-          )}
+          {(item) => <span style={{ left: `${labelPosition(item.index) * 100}%` }}>{item.label}</span>}
         </For>
       </div>
       <div class="usage-activity__legend" aria-hidden="true">
@@ -283,7 +294,7 @@ function OfficialSourceCard(props: { source: OfficialUsageSource }) {
 }
 
 export default function UsagePanel() {
-  const [period, setPeriod] = createSignal<UsagePeriod>("month")
+  const [period, setPeriod] = createSignal<UsagePeriod>("year")
   const [revision, setRevision] = createSignal(0)
   const [data, setData] = createSignal<UsageStatistics>()
   const [loading, setLoading] = createSignal(true)
@@ -326,30 +337,11 @@ export default function UsagePanel() {
     <SettingsPanel class="usage-panel" data-ui="usage-panel">
       <section class="usage-hero">
         <div class="usage-hero__copy">
-          <div class="usage-eyebrow">{t("usage.eyebrow")}</div>
-          <p>{t("usage.description")}</p>
-        </div>
-        <div class="usage-hero__controls">
-          <SegmentedControl
-            value={period()}
-            options={PERIODS.map((value) => ({ value, label: t(`usage.period.${value}`) }))}
-            ariaLabel={t("usage.period_aria")}
-            size="sm"
-            onChange={setPeriod}
-          />
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            tone="neutral"
-            class="usage-refresh"
-            aria-label={t("usage.refresh")}
-            title={t("usage.refresh")}
-            disabled={loading()}
-            onClick={() => setRevision((value) => value + 1)}
-          >
-            <Icon name={loading() ? "loading" : "refresh"} class={loading() ? "is-spinning" : undefined} />
-          </Button>
+          <span class="usage-profile-mark" aria-hidden="true">
+            OC
+          </span>
+          <h2>OpenCorvus</h2>
+          <p title={t("usage.description")}>{t("usage.profile_scope")}</p>
         </div>
       </section>
 
@@ -378,17 +370,15 @@ export default function UsagePanel() {
         {(resolved) => (
           <>
             <section class="usage-overview" aria-label={t("usage.summary_aria")}>
-              <div class="usage-total" aria-live="polite">
-                <span class="usage-total__label">{t("usage.total_tokens")}</span>
-                <strong>{exactNumber(resolved().current.summary.tokens.total)}</strong>
-                <span class="usage-total__comparison">{comparisonLabel(resolved().comparison.tokensPercent)}</span>
-                <div class="usage-period-meta">
-                  <span>{dateRange(resolved())}</span>
-                  <span>{resolved().timeZone}</span>
-                  <span>{t("usage.event_time_note")}</span>
-                </div>
-              </div>
               <div class="usage-metrics">
+                <div
+                  class="usage-metric"
+                  aria-live="polite"
+                  title={exactNumber(resolved().current.summary.tokens.total)}
+                >
+                  <strong>{formatTokenCount(resolved().current.summary.tokens.total)}</strong>
+                  <span class="usage-metric__label">{t("usage.total_tokens")}</span>
+                </div>
                 <div class="usage-metric">
                   <strong>{formatTokenCount(peakBucket())}</strong>
                   <span class="usage-metric__label">{t("usage.peak_tokens")}</span>
@@ -407,6 +397,119 @@ export default function UsagePanel() {
                 </div>
               </div>
             </section>
+            <div class="usage-period-meta" title={t("usage.event_time_note")}>
+              <span>{dateRange(resolved())}</span>
+              <span>{resolved().timeZone}</span>
+              <span>{comparisonLabel(resolved().comparison.tokensPercent)}</span>
+            </div>
+
+            <section class="usage-section usage-section--activity">
+              <header class="usage-section__head">
+                <div>
+                  <h2>{t("usage.activity_title")}</h2>
+                  <p>{t("usage.trend_description")}</p>
+                </div>
+                <div class="usage-hero__controls">
+                  <SegmentedControl
+                    class="usage-period-control"
+                    value={period()}
+                    options={PERIODS.map((value) => ({ value, label: t(`usage.period.${value}`) }))}
+                    ariaLabel={t("usage.period_aria")}
+                    size="sm"
+                    onChange={setPeriod}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    tone="neutral"
+                    aria-label={t("usage.refresh")}
+                    title={t("usage.refresh")}
+                    disabled={loading()}
+                    onClick={() => setRevision((value) => value + 1)}
+                  >
+                    <Icon name={loading() ? "loading" : "refresh"} class={loading() ? "is-spinning" : undefined} />
+                  </Button>
+                </div>
+              </header>
+              <UsageActivityGrid data={resolved()} />
+              <Show when={resolved().current.summary.calls === 0}>
+                <p class="usage-coverage-note">{t("usage.empty_body")}</p>
+              </Show>
+            </section>
+
+            <div class="usage-insights">
+              <section class="usage-insight">
+                <header class="usage-section__head">
+                  <div>
+                    <h2>{t("usage.composition_title")}</h2>
+                    <p>
+                      {t("usage.average_per_call", {
+                        value: formatTokenCount(resolved().current.summary.averageTokensPerCall),
+                      })}
+                    </p>
+                  </div>
+                </header>
+                <TokenComposition data={resolved()} />
+                <dl class="usage-coverage-list">
+                  <div>
+                    <dt>
+                      <span class="usage-dot usage-dot--priced" />
+                      {t("usage.coverage_priced")}
+                    </dt>
+                    <dd>{exactNumber(resolved().current.summary.billing.pricedTokens)}</dd>
+                  </div>
+                  <div>
+                    <dt>
+                      <span class="usage-dot usage-dot--unpriced" />
+                      {t("usage.coverage_unpriced")}
+                    </dt>
+                    <dd>{exactNumber(resolved().current.summary.billing.unpricedTokens)}</dd>
+                  </div>
+                  <div>
+                    <dt>
+                      <span class="usage-dot usage-dot--unknown" />
+                      {t("usage.coverage_unknown")}
+                    </dt>
+                    <dd>{exactNumber(resolved().current.summary.billing.unknownTokens)}</dd>
+                  </div>
+                </dl>
+              </section>
+
+              <section class="usage-insight">
+                <header class="usage-section__head">
+                  <div>
+                    <h2>{t("usage.providers_title")}</h2>
+                    <p>{t("usage.providers_description")}</p>
+                  </div>
+                  <span class="usage-section__meta">{resolved().providers.length}</span>
+                </header>
+                <div class="usage-provider-list">
+                  <For each={resolved().providers}>
+                    {(provider) => (
+                      <div class="usage-provider-row">
+                        <div class="usage-provider-row__identity">
+                          <strong>{provider.providerID}</strong>
+                          <span>{t("usage.models_count", { value: String(provider.modelCount) })}</span>
+                        </div>
+                        <div class="usage-provider-row__measure">
+                          <span>{exactNumber(provider.summary.tokens.total)} Token</span>
+                          <span>{formatDetailedCostUSD(provider.summary.costUSD)}</span>
+                        </div>
+                        <div class="usage-provider-row__bar" aria-hidden="true">
+                          <span style={{ width: `${provider.share * 100}%` }} />
+                        </div>
+                      </div>
+                    )}
+                  </For>
+                  <Show when={resolved().providers.length === 0}>
+                    <div class="usage-list-empty">{t("usage.no_provider_data")}</div>
+                  </Show>
+                </div>
+              </section>
+            </div>
+
+            <p class="usage-coverage-note">{t("usage.coverage_note")}</p>
 
             <Show when={visibleOfficialSources().length > 0}>
               <Disclosure.Root class="usage-section usage-section--official">
@@ -425,102 +528,7 @@ export default function UsagePanel() {
                 </Disclosure.Content>
               </Disclosure.Root>
             </Show>
-            <section class="usage-section usage-section--activity">
-              <header class="usage-section__head">
-                <div>
-                  <h2>{t("usage.activity_title")}</h2>
-                  <p>{t("usage.trend_description")}</p>
-                </div>
-                <span class="usage-section__meta">{t(`usage.grain.${resolved().grain}`)}</span>
-              </header>
-              <Show
-                when={resolved().current.summary.calls > 0}
-                fallback={
-                  <div class="usage-empty">
-                    <Icon name="usage-metrics" size="display" />
-                    <strong>{t("usage.empty_title")}</strong>
-                    <span>{t("usage.empty_body")}</span>
-                  </div>
-                }
-              >
-                <UsageActivityGrid data={resolved()} />
-              </Show>
-            </section>
-
             <Show when={resolved().current.summary.calls > 0}>
-              <div class="usage-insights">
-                <section class="usage-insight">
-                  <header class="usage-section__head">
-                    <div>
-                      <h2>{t("usage.composition_title")}</h2>
-                      <p>
-                        {t("usage.average_per_call", {
-                          value: formatTokenCount(resolved().current.summary.averageTokensPerCall),
-                        })}
-                      </p>
-                    </div>
-                  </header>
-                  <TokenComposition data={resolved()} />
-                  <dl class="usage-coverage-list">
-                    <div>
-                      <dt>
-                        <span class="usage-dot usage-dot--priced" />
-                        {t("usage.coverage_priced")}
-                      </dt>
-                      <dd>{exactNumber(resolved().current.summary.billing.pricedTokens)}</dd>
-                    </div>
-                    <div>
-                      <dt>
-                        <span class="usage-dot usage-dot--unpriced" />
-                        {t("usage.coverage_unpriced")}
-                      </dt>
-                      <dd>{exactNumber(resolved().current.summary.billing.unpricedTokens)}</dd>
-                    </div>
-                    <div>
-                      <dt>
-                        <span class="usage-dot usage-dot--unknown" />
-                        {t("usage.coverage_unknown")}
-                      </dt>
-                      <dd>{exactNumber(resolved().current.summary.billing.unknownTokens)}</dd>
-                    </div>
-                  </dl>
-                </section>
-
-                <section class="usage-insight">
-                  <header class="usage-section__head">
-                    <div>
-                      <h2>{t("usage.providers_title")}</h2>
-                      <p>{t("usage.providers_description")}</p>
-                    </div>
-                    <span class="usage-section__meta">{resolved().providers.length}</span>
-                  </header>
-                  <div class="usage-provider-list">
-                    <For each={resolved().providers}>
-                      {(provider) => (
-                        <div class="usage-provider-row">
-                          <div class="usage-provider-row__identity">
-                            <strong>{provider.providerID}</strong>
-                            <span>{t("usage.models_count", { value: String(provider.modelCount) })}</span>
-                          </div>
-                          <div class="usage-provider-row__measure">
-                            <span>{exactNumber(provider.summary.tokens.total)} Token</span>
-                            <span>{formatDetailedCostUSD(provider.summary.costUSD)}</span>
-                          </div>
-                          <div class="usage-provider-row__bar" aria-hidden="true">
-                            <span style={{ width: `${provider.share * 100}%` }} />
-                          </div>
-                        </div>
-                      )}
-                    </For>
-                    <Show when={resolved().providers.length === 0}>
-                      <div class="usage-list-empty">{t("usage.no_provider_data")}</div>
-                    </Show>
-                  </div>
-                </section>
-              </div>
-
-              <p class="usage-coverage-note">{t("usage.coverage_note")}</p>
-
               <section class="usage-section usage-section--models">
                 <header class="usage-section__head">
                   <div>
