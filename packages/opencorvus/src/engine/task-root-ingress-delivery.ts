@@ -2033,8 +2033,8 @@ const driverState = createInstanceState(
   },
   async (state) => {
     state.driver.dispose()
-    // Intermediate Project disposal leaves the process fact live. Only the
-    // final Project reference publishes graceful process exit.
+    // Project disposal releases local admission only. The physical identity
+    // remains observable until the OS proves process exit.
     state.liveness.release()
   },
   "task-control-driver",
