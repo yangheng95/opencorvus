@@ -50,17 +50,7 @@ export function SettingsGroup(props: SettingsGroupProps): JSX.Element {
   ])
   return (
     <section {...rest} class={local.class ? `s-group ${local.class}` : "s-group"} id={local.id}>
-      <Show when={local.title || local.actions}>
-        <header class="s-group-head">
-          <span class="s-group-head-title">{local.title}</span>
-          <Show when={local.actions}>
-            <span class="s-group-head-actions">{local.actions}</span>
-          </Show>
-        </header>
-      </Show>
-      <Show when={local.description}>
-        <div class="s-group-description">{local.description}</div>
-      </Show>
+      <SettingsSectionHeader title={local.title} description={local.description} actions={local.actions} />
       <div class="s-group-body" data-content-inset={local.contentInset ? "true" : undefined}>
         {local.children}
       </div>
@@ -90,20 +80,36 @@ export interface SettingsDetailSectionProps {
   class?: string
 }
 
+export function SettingsSectionHeader(props: {
+  title?: JSX.Element
+  description?: JSX.Element
+  actions?: JSX.Element
+}): JSX.Element {
+  return (
+    <Show when={props.title || props.description || props.actions}>
+      <header class="s-section-head">
+        <Show when={props.title || props.description}>
+          <div class="s-section-copy">
+            <Show when={props.title}>
+              <h2 class="s-section-title">{props.title}</h2>
+            </Show>
+            <Show when={props.description}>
+              <div class="s-section-description">{props.description}</div>
+            </Show>
+          </div>
+        </Show>
+        <Show when={props.actions}>
+          <div class="s-section-actions">{props.actions}</div>
+        </Show>
+      </header>
+    </Show>
+  )
+}
+
 export function SettingsDetailSection(props: SettingsDetailSectionProps): JSX.Element {
   return (
     <section class={props.class ? `s-detail-section ${props.class}` : "s-detail-section"}>
-      <header class="s-detail-section-head">
-        <div class="s-detail-section-copy">
-          <strong class="s-detail-section-title oc-section-heading">{props.title}</strong>
-          <Show when={props.description}>
-            <span class="s-detail-section-description">{props.description}</span>
-          </Show>
-        </div>
-        <Show when={props.actions}>
-          <div class="s-detail-section-actions">{props.actions}</div>
-        </Show>
-      </header>
+      <SettingsSectionHeader title={props.title} description={props.description} actions={props.actions} />
       <SettingsSurface>{props.children}</SettingsSurface>
     </section>
   )

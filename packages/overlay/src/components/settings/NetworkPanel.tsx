@@ -14,6 +14,7 @@ import { Icon } from "../ui/Icon"
 import { Button } from "../ui/Button"
 import { TextField } from "../ui/TextField"
 import { Switch } from "../ui/Switch"
+import { Feedback } from "../ui/Feedback"
 import { SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
 import { ServerConnectionSettingsGroup } from "./ServerConnectionSettingsGroup"
 
@@ -362,28 +363,14 @@ export default function NetworkPanel() {
           </TextField.Root>
         </SettingsRow>
 
-        {error() ? (
-          <div class="provider-form-error" role="alert" aria-live="polite">
-            {error()}
-          </div>
-        ) : null}
+        {error() ? <Feedback tone="error">{error()}</Feedback> : null}
 
-        {statusMessage() ? (
-          <div class="provider-test-result" data-ok="true" role="status" aria-live="polite">
-            <span class="provider-test-result-msg">{statusMessage()}</span>
-          </div>
-        ) : null}
+        {statusMessage() ? <Feedback tone="success">{statusMessage()}</Feedback> : null}
 
         {testResult() ? (
-          <div
-            class="provider-test-result"
-            data-ok={testResult()!.ok ? "true" : "false"}
-            role="status"
-            aria-live="polite"
-            title={testResult()!.targetUrl}
-          >
-            <span class="provider-test-result-msg">{proxyTestMessage(testResult()!)}</span>
-          </div>
+          <Feedback tone={testResult()!.ok ? "success" : "error"} details={testResult()!.targetUrl}>
+            {proxyTestMessage(testResult()!)}
+          </Feedback>
         ) : null}
 
         <SettingsRow

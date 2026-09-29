@@ -94,8 +94,6 @@ export default function GeneralPanel() {
       <Show when={!inSecureContext()}>
         <Feedback>{t("settings.insecure_context")}</Feedback>
       </Show>
-      <PermissionsSettingsGroup />
-
       <SettingsGroup title={t("settings.section.notifications")}>
         <SettingsRow
           title={<label for="settings-desktop-notifications">{t("settings.desktop_notifications_label")}</label>}
@@ -117,6 +115,8 @@ export default function GeneralPanel() {
           </Feedback>
         ) : null}
       </SettingsGroup>
+
+      <PermissionsSettingsGroup />
 
       <SettingsGroup title={t("settings.section.diagnostics")}>
         <SettingsRow

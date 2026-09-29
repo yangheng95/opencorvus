@@ -8,10 +8,6 @@
   align-items: center;
 }
 
-.scheduled-automations-panel {
-  gap: var(--ui-gap-4xl);
-}
-
 .automations-page-intro {
   display: flex;
   align-items: center;
@@ -38,7 +34,6 @@
 .automations-layout {
   display: block;
   min-width: 0;
-  min-height: calc(420px * var(--ui-scale));
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -104,10 +99,10 @@
   width: 100%;
   min-width: 0;
   gap: var(--ui-gap-lg);
-  min-height: calc(70px * var(--ui-scale));
-  padding: var(--ui-gap-lg) calc(42px * var(--ui-scale)) var(--ui-gap-lg) var(--ui-gap-lg);
+  min-height: calc(60px * var(--ui-scale));
+  padding: var(--ui-gap-lg) calc(42px * var(--ui-scale)) var(--ui-gap-lg) 0;
   border: 0;
-  border-radius: var(--oc-radius-soft);
+  border-radius: 0;
   box-shadow: none;
   background: transparent;
   color: var(--text);
@@ -188,9 +183,9 @@
 
 .automation-suggestions h2 {
   margin: 0 0 var(--ui-gap-lg);
-  color: var(--text-muted);
-  font-size: var(--ui-font-emphasis);
-  font-weight: var(--ui-font-weight-medium);
+  color: var(--text-strong);
+  font-size: var(--ui-font-body);
+  font-weight: var(--ui-font-weight-strong);
 }
 
 .automation-suggestion.oc-button {

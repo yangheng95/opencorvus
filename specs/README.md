@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [General settings and permission history readability](records/2026-09/2026-09-29-general-permission-readability.md)
+
 - [Complete the Harbor comparison benchmarks](records/2026-09/2026-09-29-harbor-comparison-completion.md)
 - [Harbor benchmark restart on v0.1.18](records/2026-09/2026-09-29-harbor-v0.1.18-restart.md)
 

@@ -1145,21 +1145,11 @@ export default function ProvidersPanel() {
                       </div>
                       <Show when={testResults().get(row.id)}>
                         {(result) => (
-                          <div
-                            class="provider-test-result"
-                            data-ok={result().ok ? "true" : "false"}
-                            role="status"
-                            aria-live="polite"
-                          >
-                            <span class="provider-test-result-icon" aria-hidden="true">
-                              <Icon name={result().ok ? "status-completed" : "status-failed"} />
-                            </span>
-                            <span class="provider-test-result-msg">
-                              {result().ok
-                                ? result().message || t("provider.test.success")
-                                : result().message || t("provider.test.failed")}
-                            </span>
-                          </div>
+                          <Feedback class="provider-connection-feedback" tone={result().ok ? "success" : "error"}>
+                            {result().ok
+                              ? result().message || t("provider.test.success")
+                              : result().message || t("provider.test.failed")}
+                          </Feedback>
                         )}
                       </Show>
                       <div class="provider-row-models" title={row.modelIds.join(", ")}>
@@ -1287,21 +1277,9 @@ export default function ProvidersPanel() {
               />
             </TextField.Root>
 
-            <Show when={formNotice()}>
-              {(msg) => (
-                <div class="provider-form-notice" role="status" aria-live="polite">
-                  {msg()}
-                </div>
-              )}
-            </Show>
+            <Show when={formNotice()}>{(msg) => <Feedback tone="success">{msg()}</Feedback>}</Show>
 
-            <Show when={formError()}>
-              {(msg) => (
-                <div class="provider-form-error" role="alert" aria-live="polite">
-                  {msg()}
-                </div>
-              )}
-            </Show>
+            <Show when={formError()}>{(msg) => <Feedback tone="error">{msg()}</Feedback>}</Show>
 
             <div class="dialog-actions compact provider-form-actions">
               <Button type="button" variant="outline" size="md" tone="neutral" onClick={cancel}>

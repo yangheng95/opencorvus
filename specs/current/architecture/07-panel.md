@@ -1099,6 +1099,21 @@ the background, while installation requires an explicit restart confirmation.
 
 ### Resource and factual settings layout
 
+SettingsGroup and SettingsDetailSection share SettingsSectionHeader: one title,
+description and action composition, with wrapping text and one separator. The
+shared panel owns section spacing and rows own list density; individual panels
+do not restyle that hierarchy. Settings use flat neutral surfaces, including
+About and Usage. Semantic colors remain for status and analytical graphics.
+Network and Provider result/error notices use the shared Feedback primitive.
+
+General presents Notifications, Permissions and Diagnostics in that order.
+Permission records load on demand under one disclosure. The presentation joins
+the project-scoped ledger by request_id, derives identity from its requested row,
+and shows one expandable operation summary with a localized execution result.
+Request retirement never overrides a known execution outcome. Saved approvals
+resolve their owner from that same ledger; revocation still uses the canonical
+grant endpoint. Full chronological evidence and exact scopes remain expandable.
+
 SettingsRow owns a distinct read-only value slot with a bounded label column and
 a wrapping value column. Long paths never compete with labels as unshrinkable
 button clusters. Settings content has a single reading column: Mission Skills

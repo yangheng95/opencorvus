@@ -361,7 +361,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
     if (!currentDirectory() || !currentTaskID()) {
       return (
         <Feedback
-          tone="warning"
+          tone={currentTaskID() ? "warning" : "neutral"}
           title={currentTaskID() ? t("memory.scope_unavailable_title") : t("memory.task_required_title")}
         >
           {emptyHint()}

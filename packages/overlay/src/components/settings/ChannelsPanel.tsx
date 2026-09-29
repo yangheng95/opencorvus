@@ -329,7 +329,7 @@ export default function ChannelsPanel(props: { directory: string }) {
 
         <SettingsGroup title={t("channel.external_access")} description={t("channel.public_url_hint")} contentInset>
           <div class="extension-head">
-            <TextField.Root as="label">
+            <TextField.Root as="label" class="channel-public-url-field">
               <TextField.Label>{t("channel.public_url")}</TextField.Label>
               {/* Fixed example URL; the locale-sensitive field label/hint already carries the instruction. */}
               <TextField.Input
@@ -399,9 +399,9 @@ export default function ChannelsPanel(props: { directory: string }) {
                         </Show>
                         <Button
                           type="button"
-                          variant="solid"
+                          variant="ghost"
                           size="md"
-                          tone="accent"
+                          tone="neutral"
                           title={t("channel.edit_title")}
                           aria-label={t("channel.edit_title")}
                           onClick={() => openEdit(item.id)}

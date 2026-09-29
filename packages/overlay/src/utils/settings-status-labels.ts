@@ -74,7 +74,7 @@ export function channelConfigurationStatusLabelFromString(status: string): strin
 export function channelConfigurationStatusTone(status: ChannelConfigurationStatus): SettingsStatusTone {
   if (status === "configured") return "ok"
   if (status === "partial") return "warn"
-  if (status === "missing") return "bad"
+  if (status === "missing") return "neutral"
   return "muted"
 }
 

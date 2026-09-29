@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [General settings and permission history readability](2026-09-29-general-permission-readability.md)
+
 - [Complete the Harbor comparison benchmarks](2026-09-29-harbor-comparison-completion.md)
 - [Harbor benchmark restart on v0.1.18](2026-09-29-harbor-v0.1.18-restart.md)
 
