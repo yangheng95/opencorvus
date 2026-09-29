@@ -59,6 +59,7 @@ export interface InteractionData {
 export interface InteractionCardProps {
   interaction: InteractionData
   surface?: "inline" | "dialog"
+  afterReply?: () => void | Promise<unknown>
 }
 
 export function InteractionCard(props: InteractionCardProps) {
@@ -112,7 +113,7 @@ export function InteractionCard(props: InteractionCardProps) {
   })
   const [drafts, setDrafts] = createSignal<string[][]>(initialQuestionDrafts(questions()))
   const replyEndpoint = createMemo<InteractionReplyEndpoint>(() =>
-    props.interaction.replyEndpoint === "question" ? "question" : "interaction",
+    props.interaction.replyEndpoint ?? "interaction",
   )
   const replyTarget = () => ({
     id: props.interaction.id,
@@ -153,7 +154,7 @@ export function InteractionCard(props: InteractionCardProps) {
     queueMicrotask(() => cardElement?.focus())
     try {
       await fn()
-      await loadBoard()
+      await (props.afterReply ? props.afterReply() : loadBoard())
     } catch (err: any) {
       setError(err?.message || String(err))
       queueMicrotask(() => (errorElement ?? cardElement)?.focus())

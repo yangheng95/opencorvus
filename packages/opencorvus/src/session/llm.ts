@@ -155,6 +155,7 @@ export namespace LLM {
       ...providerPrompt,
       // any custom prompt passed into this call
       ...input.system,
+      ...await (await import("@/chat/side-chat")).sideChatSystem(input.sessionID),
     ]
       .filter((x) => x)
       .join("\n")

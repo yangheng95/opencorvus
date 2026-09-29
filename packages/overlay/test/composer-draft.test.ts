@@ -22,13 +22,13 @@ describe("composer draft records", () => {
   test("empty text clears the scoped draft", () => {
     const key = composerDraftKey("mission", "session", "ses_1")
     const records = nextComposerDraftRecords({
-      records: { [key]: { text: "mission note", updated: 100 } },
+      records: { [key]: { text: "mission note", updated: 100 }, other: { text: "another conversation", updated: 90 } },
       key,
       text: "",
       updated: 200,
     })
 
-    expect(records[key]).toBeUndefined()
+    expect(records).toEqual({ other: { text: "another conversation", updated: 90 } })
   })
 
   test("retains the newest scoped drafts when trimming the cache", () => {

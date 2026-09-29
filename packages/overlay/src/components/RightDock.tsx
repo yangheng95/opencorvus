@@ -14,6 +14,7 @@ export type RightDockPanel =
   | "browser"
   | "screenshots"
   | "subagent"
+  | "side-chat"
   | "file"
 
 export interface RightDockPanelMeta {
@@ -58,6 +59,13 @@ const SUBAGENT_PANEL_META: RightDockPanelMeta = {
   tabLabelKey: "right_dock.tool.subagent",
 }
 
+const SIDE_CHAT_PANEL_META: RightDockPanelMeta = {
+  id: "side-chat",
+  icon: "side-chat",
+  labelKey: "side_chat.title",
+  tabLabelKey: "side_chat.title",
+}
+
 // Environment Information is the parent launcher for every Right Dock
 // feature. Visibility remains data-driven in TaskDirBar; this catalog only
 // centralizes identity, order, icon, and labels.
@@ -69,6 +77,7 @@ export const RIGHT_DOCK_ENVIRONMENT_TOOL_CATALOG: readonly RightDockPanelMeta[] 
 const ALL_RIGHT_DOCK_PANELS = [
   ...RIGHT_DOCK_CATALOG.map((meta) => meta.id),
   SUBAGENT_PANEL_META.id,
+  SIDE_CHAT_PANEL_META.id,
   FILE_PANEL_META.id,
 ] as const
 
@@ -77,7 +86,7 @@ const FIXED_RIGHT_DOCK_TABS = new Map<RightDockPanel, RightDockTab>(
 )
 
 const META_BY_ID = Object.fromEntries(
-  [...RIGHT_DOCK_CATALOG, SUBAGENT_PANEL_META, FILE_PANEL_META].map((meta) => [meta.id, meta]),
+  [...RIGHT_DOCK_CATALOG, SUBAGENT_PANEL_META, SIDE_CHAT_PANEL_META, FILE_PANEL_META].map((meta) => [meta.id, meta]),
 ) as Record<RightDockPanel, RightDockPanelMeta>
 
 export function rightDockPanelMeta(id: RightDockPanel): RightDockPanelMeta {

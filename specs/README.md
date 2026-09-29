@@ -2,6 +2,10 @@
 
 - [File editor syntax highlighting](records/2026-09/2026-09-30-file-editor-syntax-highlighting.md)
 
+- [Side chat and quotation](records/2026-09/2026-09-30-side-chat-and-quotation.md)
+
+- [Side chat desktop visual review](artifacts/2026-09-30-side-chat/README.md)
+
 - [Compaction integrity and request budget repair](records/2026-09/2026-09-30-compaction-integrity-and-budget.md)
 
 - [Computer / Browser guidance and ordered actions](records/2026-09/2026-09-30-computer-browser-guidance-and-actions.md)

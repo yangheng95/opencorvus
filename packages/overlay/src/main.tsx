@@ -41,6 +41,10 @@ import {
 import { browserPreviewRevision } from "./services/browser-preview"
 import { ScreenshotBrowserPanel } from "./components/ScreenshotBrowserPanel"
 import { SubagentConversationPanel } from "./components/SubagentConversationPanel"
+import { SideChatPanel, type SideChatRequest } from "./components/SideChatPanel"
+import { QuotationSelection } from "./components/QuotationSelection"
+import { setComposerQuotation } from "./services/composer-draft"
+import type { Quotation } from "./services/quotation"
 import { RightDock, type RightDockPanel, type RightDockTab } from "./components/RightDock"
 import { FileEditorPane } from "./components/FileEditorPane"
 import { MailboxPanel } from "./components/MailboxPanel"
@@ -393,6 +397,7 @@ type CenterWorkbenchPanel =
   | "browser"
   | "screenshots"
   | "subagent"
+  | "side-chat"
   | "file"
 type PrimaryCenterPanel = "task" | "mission" | "chat"
 type PrimaryWorkspaceSurface = "conversation" | "mission-board"
@@ -411,6 +416,7 @@ const CENTER_WORKBENCH_PANEL_ORDER: readonly CenterWorkbenchPanel[] = [
   "browser",
   "screenshots",
   "subagent",
+  "side-chat",
   "file",
 ]
 
@@ -424,6 +430,27 @@ const [browserPreviewPageTitles, setBrowserPreviewPageTitles] = createSignal<Rec
 let primaryBrowserPreviewController: BrowserPreviewPanelController | undefined
 let pendingPrimaryBrowserPreviewNavigation: { url: string } | undefined
 const [selectedSubagentSessionID, setSelectedSubagentSessionID] = createSignal("")
+const [sideChatRequest, setSideChatRequest] = createSignal<SideChatRequest>()
+
+function sideChatSource() {
+  const source = boardStore.selectedSource
+  const sessionID = source?.kind === "session" ? source.id : rootTaskSessionID()
+  const directory = activeDirectory().trim()
+  return sessionID && directory ? { sessionID, directory } : undefined
+}
+
+function quoteInMain(quotation: Quotation) {
+  setComposerQuotation(panelComposerDraftKey(), quotation)
+  queueMicrotask(() => document.querySelector<HTMLTextAreaElement>("#solidChatComposer textarea")?.focus())
+}
+
+function requestSideChat(quotation?: Quotation, prompt?: string) {
+  const source = sideChatSource()
+  if (!source) throw new Error(t("side_chat.source_required"))
+  setSideChatRequest({ source, quotation, prompt })
+  showRightDockForExplicitAction()
+  openCenterWorkbenchPanel("side-chat")
+}
 const [primaryCenterPanel, setPrimaryCenterPanel] = createSignal<PrimaryCenterPanel>("chat")
 const [primaryWorkspaceSurface, setPrimaryWorkspaceSurface] = createSignal<PrimaryWorkspaceSurface>("conversation")
 const [missionSharedRefreshToken, setMissionSharedRefreshToken] = createSignal(0)
@@ -503,6 +530,10 @@ function showRightDockForExplicitAction(): void {
 }
 
 function openRightDockPanel(panel: RightDockPanel): void {
+  if (panel === "side-chat") {
+    requestSideChat()
+    return
+  }
   showRightDockForExplicitAction()
   openCenterWorkbenchPanel(panel)
 }
@@ -1406,6 +1437,7 @@ function getCenterWorkbenchViews(): Record<CenterWorkbenchPanel, HTMLElement | n
     browser: document.getElementById("centerWorkbenchBrowser"),
     screenshots: document.getElementById("centerWorkbenchScreenshots"),
     subagent: document.getElementById("centerWorkbenchSubagent"),
+    "side-chat": document.getElementById("centerWorkbenchSideChat"),
     file: document.getElementById("centerWorkbenchFile"),
   }
 }
@@ -2134,16 +2166,19 @@ function OverlayRoot() {
       )}
       mailbox={<MailboxPanel onSelectTask={selectTaskWithUILifecycle} />}
       conversation={(container) => (
-        <Conversation
-          container={container}
-          homeActive={homeActive()}
-          launcherIntent={composerIntent()}
-          onOpenSubagentConversation={openSubagentConversation}
-        />
+        <QuotationSelection onQuote={quoteInMain} onSideChat={(quotation) => requestSideChat(quotation)}>
+          <Conversation
+            container={container}
+            homeActive={homeActive()}
+            launcherIntent={composerIntent()}
+            onOpenSubagentConversation={openSubagentConversation}
+          />
+        </QuotationSelection>
       )}
       homeActive={homeActive()}
       composer={
         <ChatComposer
+          onSideChat={async (prompt) => requestSideChat(undefined, prompt)}
           enabled={
             canComposeChat() &&
             !missionLauncherSubmitting() &&
@@ -2464,6 +2499,21 @@ function OverlayRoot() {
             </div>
           </TabPanel>
           <TabPanel
+            value="side-chat"
+            class="center-workbench-view"
+            id="centerWorkbenchSideChat"
+            data-workbench-view="side-chat"
+            data-open={String(isCenterWorkbenchPanelOpen("side-chat"))}
+            data-active={String(selectedCenterWorkbenchTab()?.id === "side-chat")}
+          >
+            <SideChatPanel
+              source={sideChatSource()}
+              request={sideChatRequest()}
+              consumeRequest={(request) => setSideChatRequest((current) => current === request ? undefined : current)}
+              onQuoteInMain={quoteInMain}
+            />
+          </TabPanel>
+          <TabPanel
             value="subagent"
             class="center-workbench-view"
             id="centerWorkbenchSubagent"
@@ -2683,6 +2733,11 @@ window.addEventListener("keydown", handleZoomHotkey, listenerOpts)
 window.addEventListener(
   "keydown",
   (e: KeyboardEvent) => {
+    if ((e.ctrlKey || e.metaKey) && e.altKey && e.key.toLowerCase() === "s" && sideChatSource()) {
+      e.preventDefault()
+      requestSideChat()
+      return
+    }
     if (e.key === "F12") {
       e.preventDefault()
       runMainAsync("devtools.toggle", () => toggleDevtools())

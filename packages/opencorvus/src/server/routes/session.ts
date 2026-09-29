@@ -1,4 +1,5 @@
 import { Hono } from "hono"
+import { listSideChats } from "@/chat/side-chat"
 import { streamGlobalSSE } from "../sse"
 import { describeRoute, validator, resolver } from "hono-openapi"
 import z from "zod"
@@ -1802,6 +1803,44 @@ export const SessionRoutes = lazy(() =>
           }),
         )
         return c.json(result.info.role === "assistant" && CompactionHandoff.isValidSummaryMessage(result.info))
+      },
+    )
+    .get(
+      "/:sessionID/side-chat",
+      describeRoute({
+        summary: "List side conversations",
+        operationId: "session.sideChats",
+        responses: {
+          200: {
+            description: "Side conversations for this source",
+            content: { "application/json": { schema: resolver(Session.Info.array()) } },
+          },
+          ...errors(404),
+        },
+      }),
+      validator("param", z.object({ sessionID: Identifier.schema("session") })),
+      async (c) => c.json(await listSideChats(c.req.valid("param").sessionID)),
+    )
+    .post(
+      "/:sessionID/side-chat",
+      describeRoute({
+        summary: "Open side conversation",
+        operationId: "session.createSideChat",
+        description:
+          "Create an independent assistant Session with completed source history as visible reference context. The source may continue running.",
+        responses: {
+          200: {
+            description: "Created side conversation",
+            content: { "application/json": { schema: resolver(Session.Info) } },
+          },
+          ...errors(400, 404),
+        },
+      }),
+      validator("param", z.object({ sessionID: Identifier.schema("session") })),
+      async (c) => {
+        const sessionID = c.req.valid("param").sessionID
+        await assertActiveProjectSession(sessionID)
+        return c.json(await Session.fork({ sessionID, purpose: "side-chat" }))
       },
     )
     // === message read / delete / patch ===

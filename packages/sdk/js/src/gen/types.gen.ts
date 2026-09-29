@@ -29010,6 +29010,7 @@ export type SessionEventsResponse = SessionEventsResponses[keyof SessionEventsRe
 export type SessionForkData = {
   body?: {
     messageID?: string
+    purpose?: "fork" | "side-chat"
   }
   path: {
     sessionID: string
@@ -29879,6 +29880,98 @@ export type SessionShellResponses = {
 }
 
 export type SessionShellResponse = SessionShellResponses[keyof SessionShellResponses]
+
+export type SessionSideChatsData = {
+  body?: never
+  path: {
+    sessionID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/session/{sessionID}/side-chat"
+}
+
+export type SessionSideChatsErrors = {
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type SessionSideChatsError = SessionSideChatsErrors[keyof SessionSideChatsErrors]
+
+export type SessionSideChatsResponses = {
+  /**
+   * Side conversations for this source
+   */
+  200: Array<Session>
+}
+
+export type SessionSideChatsResponse = SessionSideChatsResponses[keyof SessionSideChatsResponses]
+
+export type SessionCreateSideChatData = {
+  body?: never
+  path: {
+    sessionID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/session/{sessionID}/side-chat"
+}
+
+export type SessionCreateSideChatErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type SessionCreateSideChatError = SessionCreateSideChatErrors[keyof SessionCreateSideChatErrors]
+
+export type SessionCreateSideChatResponses = {
+  /**
+   * Created side conversation
+   */
+  200: Session
+}
+
+export type SessionCreateSideChatResponse = SessionCreateSideChatResponses[keyof SessionCreateSideChatResponses]
 
 export type SessionSummarizeData = {
   body: {

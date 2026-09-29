@@ -206,7 +206,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/session/{sessionID}/conversation/history` | Page older session conversation transcript 错误: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation.history` |
 | GET | `/session/{sessionID}/diff` | Get message diff | `session.diff` |
 | GET | `/session/{sessionID}/events` | Subscribe to session events | `session.events` |
-| POST | `/session/{sessionID}/fork` | Fork session 请求体: `messageID`; 错误: `MissionSessionAuthorityError`. | `session.fork` |
+| POST | `/session/{sessionID}/fork` | Fork session 请求体: `messageID`, `purpose`; 错误: `MissionSessionAuthorityError`. | `session.fork` |
 | POST | `/session/{sessionID}/init` | Initialize session 请求体: `messageID`, `modelID`, `providerID`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `PublicSessionPromptIdentityConflictError`. | `session.init` |
 | GET | `/session/{sessionID}/interactive-artifact/{artifactID}` | Read session interactive artifact 错误: `BadRequestError`, `InteractiveArtifactCorruptionError`, `LogFileNotFoundError`, `NotFoundError`. | `interactiveArtifact.readSessionArtifact` |
 | GET | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/events` | Subscribe to MCP App capability changes 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interactiveArtifact.eventsMcpApp` |
@@ -219,6 +219,8 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/session/{sessionID}/message/{messageID}/part/{partID}` | Get message part 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.messagePart` |
 | PATCH | `/session/{sessionID}/message/{messageID}/part/{partID}` | （无说明） 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.update` |
 | POST | `/session/{sessionID}/shell` | Run shell command 请求体: `agent`, `command`, `messageID`, `model`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `PublicSessionExecutionBusyError`, `PublicSessionPromptIdentityConflictError`. | `session.shell` |
+| GET | `/session/{sessionID}/side-chat` | List side conversations 错误: `LogFileNotFoundError`, `NotFoundError`. | `session.sideChats` |
+| POST | `/session/{sessionID}/side-chat` | Open side conversation 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.createSideChat` |
 | POST | `/session/{sessionID}/summarize` | Summarize session 请求体: `auto`, `focus`, `modelID`, `providerID`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.summarize` |
 | GET | `/session/{sessionID}/todo` | Get session todos 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.todo` |
 | GET | `/session/{sessionID}/trace` | Get session AgentTrace events | `session.trace` |

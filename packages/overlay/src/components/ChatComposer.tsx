@@ -105,6 +105,10 @@ import type { ComposerIntent, ConversationTarget, ProductPillar } from "@opencor
 
 // ── Types ──
 
+import { composerQuotation, setComposerQuotation } from "../services/composer-draft"
+import { quotedPrompt } from "../services/quotation"
+import { QuotationChip } from "./QuotationChip"
+
 export interface ChatAttachment {
   kind: ComposerAttachmentKind
   sha: string
@@ -159,6 +163,7 @@ export interface ChatComposerProps {
   resolveAttachmentDirectory: () => Promise<string>
   /** Called when the user clicks the stop button while busy. */
   onStop?: () => void
+  onSideChat?: (prompt: string) => Promise<void>
   formID?: string
   textareaID?: string
   sendID?: string
@@ -586,6 +591,11 @@ export function ChatComposer(props: ChatComposerProps) {
   const [submitting, setSubmitting] = createSignal(false)
   const [uploadingCount, setUploadingCount] = createSignal(0)
   const modelAvailable = createMemo(() => Boolean(appStore.composerModel.trim()))
+  const sideCommand = createMemo(() =>
+    props.onSideChat && !composerQuotation(props.draftKey) && attachments().length === 0
+      ? /^\/side(?:\s+([\s\S]*))?$/.exec(text().trim())
+      : null,
+  )
   const attachmentCounts = createMemo(() => composerAttachmentCounts(attachments()))
   const [savingRunControl, setSavingRunControl] = createSignal<"parallelism" | "unattended" | null>(null)
   const [textareaResizeHeight, setTextareaResizeHeight] = createSignal<number | null>(null)
@@ -1019,14 +1029,21 @@ export function ChatComposer(props: ChatComposerProps) {
     if (submitting()) return
     if (uploadingCount() > 0) return
     if (!props.enabled) return
-    if (!modelAvailable()) return
+    if (!modelAvailable() && !sideCommand()) return
     const trimmed = text().trim()
     if (!trimmed) return
     const sentAttachments = [...attachments()]
     const submittedDraftKey = props.draftKey
+    const quotation = composerQuotation(submittedDraftKey)
     setSubmissionError("")
     setSubmitting(true)
     try {
+      const command = sideCommand()
+      if (command && props.onSideChat) {
+        await props.onSideChat(command[1]?.trim() ?? "")
+        writeDraftText("")
+        return
+      }
       const directives = resolveComposerMentionDirectives(trimmed, mentionCatalog())
       let dispatched = false
       const markDispatched = () => {
@@ -1047,7 +1064,7 @@ export function ChatComposer(props: ChatComposerProps) {
         }
       }
       await props.onSubmit(
-        trimmed,
+        quotedPrompt(trimmed, quotation),
         sentAttachments,
         false,
         {
@@ -1059,6 +1076,10 @@ export function ChatComposer(props: ChatComposerProps) {
       if (!dispatched) throw new Error("Composer submission completed without crossing the dispatch boundary")
     } catch (error) {
       console.error("[ChatComposer] submit failed", error)
+      if (quotation && !composerDraftText(submittedDraftKey) && !composerQuotation(submittedDraftKey)) {
+        setComposerDraft(submittedDraftKey, trimmed)
+        setComposerQuotation(submittedDraftKey, quotation)
+      }
       setSubmissionError(submitErrorMessage(error))
     } finally {
       setSubmitting(false)
@@ -1208,7 +1229,7 @@ export function ChatComposer(props: ChatComposerProps) {
 
   const sendDisabled = createMemo(() => {
     if (stopMode()) return stopping()
-    return submitting() || uploadingCount() > 0 || !props.enabled || !modelAvailable() || !hasText()
+    return submitting() || uploadingCount() > 0 || !props.enabled || (!modelAvailable() && !sideCommand()) || !hasText()
   })
 
   // Surface WHY the send button is disabled in its title — operators
@@ -1218,7 +1239,7 @@ export function ChatComposer(props: ChatComposerProps) {
     if (stopMode()) return t("chat.stop_title")
     if (!props.enabled) return t("chat.disabled_unavailable")
     if (uploadingCount() > 0) return t("chat.attachment_loader.uploading", { count: uploadingCount() })
-    if (!modelAvailable()) return t("chat.disabled_model_required")
+    if (!modelAvailable() && !sideCommand()) return t("chat.disabled_model_required")
     if (!hasText()) return t("chat.disabled_empty")
     return t("chat.send_title")
   }
@@ -1407,6 +1428,11 @@ export function ChatComposer(props: ChatComposerProps) {
 
   return (
     <div class="chat-composer-stack">
+      <Show when={composerQuotation(props.draftKey)}>
+        {(quote) => (
+          <QuotationChip quotation={quote()} onRemove={() => setComposerQuotation(props.draftKey, undefined)} />
+        )}
+      </Show>
       <Show when={submissionError()}>
         {(details) => (
           <Feedback
