@@ -23,9 +23,7 @@ export namespace ComputerMCPBuiltin {
     timeout?: number
   }
 
-  export type ConfiguredDeclaration =
-    | { status: "disabled" }
-    | { status: "enabled"; config: LocalDeclaration }
+  export type ConfiguredDeclaration = { status: "disabled" } | { status: "enabled"; config: LocalDeclaration }
 
   /** One interpretation of the reserved `computer` MCP declaration for every
    * projection consumer. Computer is a host-native provider: a remote MCP
@@ -70,21 +68,15 @@ export namespace ComputerMCPBuiltin {
     })
   }
 
-  const ToolNames = [
-    "session_create",
-    "observe",
-    "click",
-    "type_text",
-    "keypress",
-    "scroll",
-    "drag",
-    "session_destroy",
-  ] as const
+  const ToolNames = ["help", "session_create", "observe", "act", "session_destroy"] as const
 
   export type ToolName = (typeof ToolNames)[number]
   export const ImportableToolNames = Object.freeze([...ToolNames])
   export const ImportableToolRefs = Object.freeze(ToolNames.map((name) => `default/mcp/${ServerName}/tool/${name}`))
-  export const ScreenshotEvidenceToolRefs = Object.freeze([`default/mcp/${ServerName}/tool/observe`])
+  export const ScreenshotEvidenceToolRefs = Object.freeze([
+    `default/mcp/${ServerName}/tool/observe`,
+    `default/mcp/${ServerName}/tool/act`,
+  ])
 
   export function command(
     runtime: {

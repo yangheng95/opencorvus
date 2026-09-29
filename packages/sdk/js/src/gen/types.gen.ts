@@ -100,6 +100,7 @@ export type AssistantMessage = {
     | SnapshotEmptyTreeError
     | ContextOverflowError
     | CompactionContinuationMissingError
+    | CompactionSummaryInvalidError
     | PromptBudgetOverflowError
     | ToolSchemaBudgetError
     | ModelImageInputTooLargeError
@@ -349,6 +350,19 @@ export type CompactionPart = {
   type: "compaction"
 }
 
+export type CompactionSummaryInvalidError = {
+  data: {
+    assistantMessageID: string
+    finish?: string
+    message: string
+    reason: "incomplete" | "not_smaller"
+    sessionID: string
+    sourceTokens?: number
+    summaryTokens?: number
+  }
+  name: "CompactionSummaryInvalidError"
+}
+
 export type Config = {
   /**
    * JSON schema reference for configuration validation
@@ -416,7 +430,7 @@ export type Config = {
      */
     auto?: boolean
     /**
-     * Token budget for the verbatim recent-tail retained after compaction.
+     * Token budget for verbatim recent-tail retention. Defaults to 25% of usable prompt capacity, bounded by the compaction trigger; explicit zero retains no tail.
      */
     preserve_recent_tokens?: number
     /**
@@ -424,11 +438,11 @@ export type Config = {
      */
     prune?: boolean
     /**
-     * Token buffer for compaction. Leaves enough window to avoid overflow during compaction.
+     * Minimum combined-window output reservation. The actual request output cap is always reserved; an independent input limit is intersected without subtracting it again.
      */
     reserved?: number
     /**
-     * Number of most recent real user turns to preserve verbatim after compaction. Defaults to 2.
+     * Maximum recent conversation units (user messages or completed assistant steps) considered for verbatim retention. Defaults to 2; tool call/result pairs remain intact.
      */
     tail_turns?: number
     /**
@@ -1541,6 +1555,7 @@ export type EventSessionError = {
       | SnapshotEmptyTreeError
       | ContextOverflowError
       | CompactionContinuationMissingError
+      | CompactionSummaryInvalidError
       | PromptBudgetOverflowError
       | ToolSchemaBudgetError
       | ModelImageInputTooLargeError
@@ -5573,6 +5588,7 @@ export type VisibleMessage =
         | SnapshotEmptyTreeError
         | ContextOverflowError
         | CompactionContinuationMissingError
+        | CompactionSummaryInvalidError
         | PromptBudgetOverflowError
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError
@@ -27846,6 +27862,7 @@ export type SessionCommandResponses = {
         | SnapshotEmptyTreeError
         | ContextOverflowError
         | CompactionContinuationMissingError
+        | CompactionSummaryInvalidError
         | PromptBudgetOverflowError
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError
@@ -29047,6 +29064,7 @@ export type SessionEventsResponse = SessionEventsResponses[keyof SessionEventsRe
 export type SessionForkData = {
   body?: {
     messageID?: string
+    purpose?: "fork" | "side-chat"
   }
   path: {
     sessionID: string
@@ -29491,6 +29509,7 @@ export type SessionPromptResponses = {
         | SnapshotEmptyTreeError
         | ContextOverflowError
         | CompactionContinuationMissingError
+        | CompactionSummaryInvalidError
         | PromptBudgetOverflowError
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError
@@ -29915,6 +29934,98 @@ export type SessionShellResponses = {
 }
 
 export type SessionShellResponse = SessionShellResponses[keyof SessionShellResponses]
+
+export type SessionSideChatsData = {
+  body?: never
+  path: {
+    sessionID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/session/{sessionID}/side-chat"
+}
+
+export type SessionSideChatsErrors = {
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type SessionSideChatsError = SessionSideChatsErrors[keyof SessionSideChatsErrors]
+
+export type SessionSideChatsResponses = {
+  /**
+   * Side conversations for this source
+   */
+  200: Array<Session>
+}
+
+export type SessionSideChatsResponse = SessionSideChatsResponses[keyof SessionSideChatsResponses]
+
+export type SessionCreateSideChatData = {
+  body?: never
+  path: {
+    sessionID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/session/{sessionID}/side-chat"
+}
+
+export type SessionCreateSideChatErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type SessionCreateSideChatError = SessionCreateSideChatErrors[keyof SessionCreateSideChatErrors]
+
+export type SessionCreateSideChatResponses = {
+  /**
+   * Created side conversation
+   */
+  200: Session
+}
+
+export type SessionCreateSideChatResponse = SessionCreateSideChatResponses[keyof SessionCreateSideChatResponses]
 
 export type SessionSummarizeData = {
   body: {

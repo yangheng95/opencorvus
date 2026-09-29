@@ -78,6 +78,8 @@ import { EngineTaskRootIngressTable, EngineTaskTable } from "@/engine/engine.sql
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { normalizeToolResult } from "./tool-result-normalization"
 import { assertSessionDeletionAdmissionInTransaction } from "./deletion-cleanup"
+import { sideChatIdentity, SideChatSourceError } from "@/chat/side-chat-identity"
+import { EffectiveConfig } from "@/config/effective"
 
 export namespace Session {
   const log = Log.create({ service: "session" })
@@ -384,23 +386,53 @@ export namespace Session {
     z.object({
       sessionID: Identifier.schema("session"),
       messageID: Identifier.schema("message").optional(),
+      purpose: z.enum(["fork", "side-chat"]).optional(),
     }),
     async (input) => {
       const original = await getInProject({ sessionID: input.sessionID, projectID: Instance.project.id })
       if (!original) throw new Error("session not found")
-      const title = getForkedTitle(original.title)
-      // Forking preserves the original physical Session kind while creating a
-      // new Session identity and parent edge. The target Session and its
+      const side = input.purpose === "side-chat"
+      if (side && (sideChatIdentity(original.metadata) || original.time.archived)) {
+        const reason = original.time.archived ? "archived" : "nested"
+        throw new SideChatSourceError({
+          sessionID: original.id,
+          reason,
+          message: `Cannot open a side chat from a ${reason} source.`,
+        })
+      }
+      const title = side ? `Side chat · ${original.title}` : getForkedTitle(original.title)
+      // A normal fork retains execution lineage; a side conversation is an
+      // independent assistant root with a reference to its source. Both use
+      // this single transcript-copy primitive. The target Session and its
       // complete bounded transcript commit in ONE transaction: an interrupted
       // fork leaves nothing visible — no child Session carrying a transcript
       // prefix — so a retry simply runs a whole new fork.
       const prepared = await prepareNext({
-        directory: Instance.directory,
-        parentID: input.sessionID,
-        kind: original.kind,
+        directory: side ? original.directory : Instance.directory,
+        parentID: side ? undefined : input.sessionID,
+        kind: side ? "assistant" : original.kind,
         title,
+        ...(side
+          ? {
+              permission: original.permission,
+              metadata: { configOverlay: (await EffectiveConfig.overlay({ sessionID: original.id })) ?? {} },
+            }
+          : {}),
       })
-      const msgs = await messages({ sessionID: input.sessionID })
+      let msgs = await messages({ sessionID: input.sessionID })
+      if (side) {
+        // A live turn may contain unresolved Tool calls. Fork only through a
+        // completed assistant response, keeping whole real turns as context.
+        const lastComplete = msgs.findLastIndex(
+          (message) =>
+            message.info.role === "assistant" &&
+            !!message.info.time.completed &&
+            !!message.info.finish &&
+            message.info.finish !== "tool-calls" &&
+            message.info.finish !== "unknown",
+        )
+        msgs = msgs.slice(0, lastComplete + 1)
+      }
       const idMap = new Map<string, string>()
       const clones: { info: Message.Info; parts: Message.Part[] }[] = []
 
@@ -416,6 +448,11 @@ export namespace Session {
           sessionID: prepared.id,
           id: newID,
           ...(parentID && { parentID }),
+          ...(msg.info.role === "assistant" && msg.info.acceptedInputMessageIDs
+            ? {
+                acceptedInputMessageIDs: msg.info.acceptedInputMessageIDs.map((id) => idMap.get(id) ?? id),
+              }
+            : {}),
         } as Message.Info
         const clonedParts = msg.parts.map((part) => {
           const { orderKey: _clonedPartOrderKey, ...partInfo } = part
@@ -430,6 +467,12 @@ export namespace Session {
       }
 
       return Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, original.id)
+        if (side)
+          prepared.metadata = {
+            ...prepared.metadata,
+            sideChat: { sourceSessionID: original.id, inheritedMessageIDs: clones.map((clone) => clone.info.id) },
+          }
         const session = persistPreparedNextInTransaction(db, prepared)
         for (const clone of clones) {
           persistMessageWithCommitInTransaction(clone, () => undefined)

@@ -4,6 +4,10 @@
  * state snapshot or domain-specific handoff payload to the message.
  */
 export namespace CompactionHandoff {
+  export function isComplete(finish: unknown) {
+    return finish === "stop"
+  }
+
   export function isValidSummaryMessage(message: {
     role: string
     summary?: boolean
@@ -14,8 +18,7 @@ export namespace CompactionHandoff {
     return (
       message.role === "assistant" &&
       message.summary === true &&
-      typeof message.finish === "string" &&
-      message.finish.length > 0 &&
+      isComplete(message.finish) &&
       !message.error &&
       message.structured === undefined
     )

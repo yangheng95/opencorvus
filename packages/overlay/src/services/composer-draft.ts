@@ -1,7 +1,11 @@
 import { createStore, reconcile } from "solid-js/store"
+import { parseQuotation, type Quotation } from "./quotation"
+import { randomUUID } from "../utils/random-id"
 
 export interface ComposerDraftEntry {
   text: string
+  quotation?: Quotation
+  submission?: { messageID: string; text: string }
   updated: number
 }
 
@@ -34,7 +38,16 @@ export function parseComposerDraftRecords(raw: string | null | undefined): Compo
     const updated = (value as { updated?: unknown }).updated
     if (typeof text !== "string") continue
     if (typeof updated !== "number" || !Number.isFinite(updated) || updated <= 0) continue
-    records[key] = { text, updated }
+    const quotation = parseQuotation((value as { quotation?: unknown }).quotation)
+    const submitted = (value as { submission?: ComposerDraftEntry["submission"] }).submission
+    const submission =
+      submitted &&
+      typeof submitted.messageID === "string" &&
+      submitted.messageID.startsWith("msg_") &&
+      typeof submitted.text === "string"
+        ? { messageID: submitted.messageID, text: submitted.text }
+        : undefined
+    records[key] = { text, updated, ...(quotation ? { quotation } : {}), ...(submission ? { submission } : {}) }
   }
   return records
 }
@@ -44,7 +57,7 @@ export function pruneComposerDraftRecords(
   maxEntries = MAX_COMPOSER_DRAFTS,
 ): ComposerDraftRecords {
   const entries = Object.entries(records)
-    .filter(([, entry]) => entry.text.length > 0)
+    .filter(([, entry]) => entry.text.length > 0 || entry.quotation)
     .sort((left, right) => right[1].updated - left[1].updated)
     .slice(0, Math.max(0, maxEntries))
   return Object.fromEntries(entries)
@@ -60,10 +73,10 @@ export function nextComposerDraftRecords(input: {
   const key = normalizeComposerDraftKey(input.key)
   if (!key) return input.records
   const next: ComposerDraftRecords = { ...input.records }
-  if (input.text.length === 0) {
+  if (input.text.length === 0 && !next[key]?.quotation) {
     delete next[key]
   } else {
-    next[key] = { text: input.text, updated: input.updated }
+    next[key] = { ...next[key], text: input.text, updated: input.updated }
   }
   return pruneComposerDraftRecords(next, input.maxEntries ?? MAX_COMPOSER_DRAFTS)
 }
@@ -123,5 +136,39 @@ export function setComposerDraft(key: string | null | undefined, text: string): 
 }
 
 export function clearComposerDraft(key: string | null | undefined): void {
+  setComposerQuotation(key, undefined)
   setComposerDraft(key, "")
+}
+
+/** Retain one request identity across transport retries, including panel reopen/reload. */
+export function composerSubmission(key: string, text: string): { messageID: string; text: string } {
+  const current = composerDraftStore.drafts[key]
+  if (current?.submission?.text === text) return current.submission
+  const submission = { messageID: `msg_${randomUUID()}`, text }
+  const next = {
+    ...composerDraftStore.drafts,
+    [key]: { ...current, text: current?.text ?? text, updated: Date.now(), submission },
+  }
+  setComposerDraftStore("drafts", reconcile(next))
+  persistComposerDraftRecords(next)
+  return submission
+}
+
+export function composerQuotation(key: string | null | undefined): Quotation | undefined {
+  return composerDraftStore.drafts[normalizeComposerDraftKey(key)]?.quotation
+}
+
+export function setComposerQuotation(key: string | null | undefined, quotation: Quotation | undefined): void {
+  const normalized = normalizeComposerDraftKey(key)
+  if (!normalized) return
+  const next = pruneComposerDraftRecords({
+    ...composerDraftStore.drafts,
+    [normalized]: {
+      text: composerDraftText(key),
+      updated: Date.now(),
+      ...(quotation ? { quotation } : {}),
+    },
+  })
+  setComposerDraftStore("drafts", reconcile(next))
+  persistComposerDraftRecords(next)
 }

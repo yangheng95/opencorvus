@@ -1,5 +1,11 @@
 # Artifact entry points
 
+- [File editor syntax highlighting](2026-09-30-file-editor-highlighting/README.md): actual light/dark source editing, Markdown fences and saved YAML reopened.
+
+- [Side chat desktop visual review](2026-09-30-side-chat/README.md): Chinese dark/light layouts, selection quotation, scoped composers and reference history.
+
+- [Computer / Browser manual acceptance](2026-09-30-computer-browser-guidance/README.md): actual Node Browser and native CUA input, manually inspected result and takeover/return receipt.
+
 - [Composer picker visual review](2026-09-29-popup-layer-simplification/README.md): one-surface menus, plain glyphs, selected states and dark/light screenshots.
 
 - [Right Dock theme visual review](2026-09-29-right-dock-theme/README.md): manual before/after screenshots and seven named palette observations.

@@ -76,7 +76,9 @@ function RenderableCardPart(props: {
   return (
     <Switch fallback={unsupportedPartFallback(part())}>
       <Match when={part()?.type === "text" && (part().text || "").trim()}>
-        <TextPart text={part().text || ""} streaming={props.streaming && part() === props.streamingTextPart} />
+        <div data-quotation-message={part().messageID} data-quotation-session={part().sessionID}>
+          <TextPart text={part().text || ""} streaming={props.streaming && part() === props.streamingTextPart} />
+        </div>
       </Match>
       <Match when={part()?.type === "part-error"}>
         <div class="msg-tool-error" data-part-error-id={part().id || undefined}>

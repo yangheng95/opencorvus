@@ -28,6 +28,7 @@ import { controlPromptProjection, controlToolContext } from "@/control/prompt"
 import { resolveSessionExecutionAuthority, taskIDForSession } from "@/engine/task-session-lineage"
 import { findDispatchLineageByToolExecution } from "@/engine/dispatch-lineage"
 import { ContextBudget } from "./context-budget"
+import { RequestBudget } from "./request-budget"
 import { Instance } from "../project/instance"
 import { InstanceLifecycleContext } from "../project/instance-lifecycle-context"
 import { AttachmentStore } from "@/storage/attachment-store"
@@ -392,7 +393,9 @@ export namespace SessionLoop {
           const decision = declaration
             ? {
                 command: declaration.command,
-                ...(declaration.completionCommits ? { completionCommits: (result: unknown) => declaration.completionCommits!(args, result) } : {}),
+                ...(declaration.completionCommits
+                  ? { completionCommits: (result: unknown) => declaration.completionCommits!(args, result) }
+                  : {}),
                 // A declaration that cannot classify its own input is not a
                 // committed decision; the call will fail on its own terms.
                 commits: (() => {
@@ -825,10 +828,8 @@ export namespace SessionLoop {
     mediaTokensEst: number
     toolSchemaBudgetRatio: number
     minResidueTokens?: number
-    lastFinishedSummary: boolean
   }): PredictiveCompactionDecision {
-    if (input.usableBudget === 0) return { kind: "skip" }
-    if (input.lastFinishedSummary) return { kind: "skip" }
+    if (input.usableBudget === 0) return { kind: "fail-prompt-budget", reason: "post-compaction-still-over" }
     if (input.totalTokensEst <= input.limit) return { kind: "skip" }
 
     if (input.toolSchemaTokensEst > input.usableBudget * input.toolSchemaBudgetRatio) {
@@ -837,13 +838,15 @@ export namespace SessionLoop {
 
     const minResidueTokens = input.minResidueTokens ?? COMPACTION_MIN_RESIDUE_TOKENS
     const nonCompressibleTokens = input.systemTokensEst + input.toolSchemaTokensEst
-    const postCompactionMinTokens = nonCompressibleTokens + minResidueTokens + input.mediaTokensEst
+    // Historical media can leave the next request with the summarized head.
+    // Only the fixed envelope is an unconditional lower bound here.
+    const postCompactionMinTokens = nonCompressibleTokens + minResidueTokens
     if (postCompactionMinTokens > input.limit) {
       return { kind: "fail-prompt-budget", reason: "post-compaction-still-over" }
     }
 
     const overflowTokens = input.totalTokensEst - input.limit
-    if (input.messagePayloadTokensEst < overflowTokens + minResidueTokens) {
+    if (input.messagePayloadTokensEst + input.mediaTokensEst < overflowTokens + minResidueTokens) {
       return { kind: "fail-prompt-budget", reason: "nothing-to-compress" }
     }
 
@@ -916,50 +919,6 @@ export namespace SessionLoop {
     rawJsonSchema: T,
   ): ReturnType<typeof ProviderTransform.schema> {
     return ProviderSchema.normalize(model, rawJsonSchema as never)
-  }
-
-  /**
-   * Provider-normalized estimate of the bytes a tool definition contributes
-   * to the streamText request payload. AI SDK serialises each tool as
-   * `{name, description, parameters: <jsonSchema>}` where the JSON Schema is
-   * obtained via `asSchema(tool.inputSchema).jsonSchema`. Earlier versions
-   * `JSON.stringify`'d the raw `tool.inputSchema` wrapper which, for Zod-
-   * backed tools, walks the Zod object's internal `_def` graph and produces
-   * char counts that bear no relation to the actual outgoing payload — that
-   * inflated count was triggering predictive compaction on context-cold
-   * sessions (see structured-output systemic fix record
-   * §A). Counting `name + description + jsonSchema` keeps the estimate tied
-   * to what the provider really receives. ProviderSchema is the single
-   * schema-normalisation entry point; the estimator never re-runs the
-   * transform and only unwraps the already-normalised schema via
-   * `asSchema(...)`.
-   */
-  export function estimateToolPayload(tools: Record<string, AITool>): { chars: number; tokensEst: number } {
-    let chars = 0
-    let tokensEst = 0
-    for (const [name, item] of Object.entries(tools)) {
-      const description =
-        typeof (item as { description?: unknown }).description === "string"
-          ? (item as { description: string }).description
-          : ""
-      let schemaText = ""
-      const inputSchema = (item as { inputSchema?: unknown }).inputSchema
-      if (inputSchema !== undefined && inputSchema !== null) {
-        try {
-          const jsonSchemaPayload = asSchema(inputSchema as never).jsonSchema
-          schemaText = JSON.stringify(jsonSchemaPayload ?? {})
-        } catch {
-          schemaText = ""
-        }
-      }
-      chars += name.length + description.length + schemaText.length
-      tokensEst += Token.estimate(name) + Token.estimate(description) + Token.estimate(schemaText)
-    }
-    return { chars, tokensEst }
-  }
-
-  export function estimateToolPayloadChars(tools: Record<string, AITool>): number {
-    return estimateToolPayload(tools).chars
   }
 
   export type ProviderToolSource = "registry" | "mcp" | "extra" | "structured"
@@ -1343,122 +1302,6 @@ export namespace SessionLoop {
       })
     })
     return rows.sort((a, b) => b.chars - a.chars).slice(0, limit)
-  }
-
-  type MediaKind = "image" | "pdf" | "audio" | "video"
-
-  export type ModelMessagePayloadEstimate = {
-    messagePayloadChars: number
-    /** Script-aware token estimate for the same serialized payload. `chars` stays
-     *  for operator-facing diagnostics; every budget comparison uses this. */
-    messagePayloadTokensEst: number
-    mediaCounts: Record<MediaKind, number>
-    mediaTokensEst: number
-  }
-
-  const MEDIA_TOKENS_PER_PART: Record<MediaKind, number> = {
-    image: 1_600,
-    pdf: 3_200,
-    audio: 1_600,
-    video: 1_600,
-  }
-
-  function mediaKindFromMime(mime: unknown): MediaKind | undefined {
-    if (typeof mime !== "string") return undefined
-    const normalized = mime.toLowerCase()
-    if (normalized.startsWith("image/")) return "image"
-    if (normalized === "application/pdf") return "pdf"
-    if (normalized.startsWith("audio/")) return "audio"
-    if (normalized.startsWith("video/")) return "video"
-    return undefined
-  }
-
-  function mediaKindFromDataUrl(value: unknown): MediaKind | undefined {
-    if (typeof value !== "string" || !value.startsWith("data:")) return undefined
-    const match = /^data:([^;,]+)/i.exec(value)
-    return mediaKindFromMime(match?.[1])
-  }
-
-  function mediaKindFromPart(part: Record<string, unknown>): MediaKind | undefined {
-    const byMime = mediaKindFromMime(part.mediaType ?? part.mime)
-    if (byMime) return byMime
-
-    const type = typeof part.type === "string" ? part.type.toLowerCase() : ""
-    if (type === "image" || type === "image-data") return "image"
-    if (type === "pdf") return "pdf"
-
-    return (
-      mediaKindFromDataUrl(part.url) ??
-      mediaKindFromDataUrl(part.data) ??
-      mediaKindFromDataUrl(part.image) ??
-      mediaKindFromDataUrl(part.media)
-    )
-  }
-
-  function isMediaPayloadField(key: string): boolean {
-    return key === "url" || key === "data" || key === "image" || key === "media"
-  }
-
-  /**
-   * Estimate text-token pressure without treating inline media bytes as text.
-   * AI SDK model messages carry image/PDF/audio/video parts as data URLs, but
-   * provider tokenization charges those as media inputs, not as base64 prose.
-   * Predictive compaction must therefore sanitize media payload fields before
-   * `JSON.stringify(...).length / 4`, then add a bounded per-media budget.
-   */
-  export function estimateModelMessagePayload(messages: ModelMessage[]): ModelMessagePayloadEstimate {
-    const mediaCounts: Record<MediaKind, number> = {
-      image: 0,
-      pdf: 0,
-      audio: 0,
-      video: 0,
-    }
-
-    const sanitize = (value: unknown): unknown => {
-      if (Array.isArray(value)) return value.map(sanitize)
-
-      if (value && typeof value === "object") {
-        const record = value as Record<string, unknown>
-        const mediaKind = mediaKindFromPart(record)
-        if (mediaKind) mediaCounts[mediaKind]++
-
-        const out: Record<string, unknown> = {}
-        for (const [key, child] of Object.entries(record)) {
-          if (mediaKind && isMediaPayloadField(key) && typeof child === "string") {
-            out[key] = `[${mediaKind} bytes omitted from text-token estimate]`
-            continue
-          }
-          out[key] = sanitize(child)
-        }
-        return out
-      }
-
-      const dataUrlKind = mediaKindFromDataUrl(value)
-      if (dataUrlKind) {
-        mediaCounts[dataUrlKind]++
-        return `[${dataUrlKind} data URL omitted from text-token estimate]`
-      }
-
-      return value
-    }
-
-    let messagePayloadChars = 0
-    let messagePayloadTokensEst = 0
-    try {
-      const serialized = JSON.stringify(sanitize(messages))
-      messagePayloadChars = serialized.length
-      messagePayloadTokensEst = Token.estimate(serialized)
-    } catch {
-      messagePayloadChars = 0
-      messagePayloadTokensEst = 0
-    }
-
-    const mediaTokensEst = Object.entries(mediaCounts).reduce(
-      (sum, [kind, count]) => sum + MEDIA_TOKENS_PER_PART[kind as MediaKind] * count,
-      0,
-    )
-
-    return { messagePayloadChars, messagePayloadTokensEst, mediaCounts, mediaTokensEst }
   }
 
   export async function materializeToolResultAttachments(attachments: unknown): Promise<unknown> {
@@ -1913,6 +1756,7 @@ export namespace SessionLoop {
     dynamicContextText: string
     msgs: Message.WithParts[]
     model: Provider.Model
+    prune?: boolean
   }): Promise<{ system: string[]; systemLabels: string[]; modelMessages: ModelMessage[] }> {
     const system = [...input.system]
     const systemLabels = [...input.systemLabels]
@@ -1923,7 +1767,10 @@ export namespace SessionLoop {
     return {
       system,
       systemLabels,
-      modelMessages: await Message.toModelMessages(SessionCompaction.projectPrunedHistory(input.msgs), input.model),
+      modelMessages: await Message.toModelMessages(
+        input.prune === false ? input.msgs : SessionCompaction.projectPrunedHistory(input.msgs),
+        input.model,
+      ),
     }
   }
 
@@ -2323,6 +2170,7 @@ export namespace SessionLoop {
       dynamicContextText,
       msgs: input.msgs,
       model: input.model,
+      prune: config.compaction?.prune,
     })
 
     const systemChars = system.reduce((sum, s) => sum + s.length, 0)
@@ -2348,9 +2196,9 @@ export namespace SessionLoop {
     // the provider rejects the request. Keep this estimate aligned with the
     // streamText payload shape: model messages and tool definitions are
     // prompt input; system is estimated separately above.
-    const payloadEstimate = estimateModelMessagePayload(modelMessages)
+    const payloadEstimate = RequestBudget.estimateModelMessagePayload(modelMessages)
     const messagePayloadChars = payloadEstimate.messagePayloadChars
-    const toolPayloadEstimate = estimateToolPayload(tools)
+    const toolPayloadEstimate = RequestBudget.estimateToolPayload(tools)
     const toolSchemaChars = toolPayloadEstimate.chars
     const toolSchemaTokensEst = toolPayloadEstimate.tokensEst
     const messagePayloadTokensEst = payloadEstimate.messagePayloadTokensEst
@@ -2420,7 +2268,6 @@ export namespace SessionLoop {
         messagePayloadTokensEst,
         mediaTokensEst,
         toolSchemaBudgetRatio: ratio,
-        lastFinishedSummary: input.lastFinished?.summary === true,
       })
       const toolNames = Object.keys(tools).join(",")
       if (decision.kind === "fail-tool-schema") {

@@ -1,3 +1,4 @@
+import { RequestBudget } from "@/session/request-budget"
 import { describe, expect, test } from "bun:test"
 import { Token } from "../src/util/token"
 import { SessionLoop } from "../src/session/loop"
@@ -44,12 +45,13 @@ describe("predictive compaction decision", () => {
     messagePayloadTokensEst: 80_000,
     mediaTokensEst: 0,
     toolSchemaBudgetRatio: 0.5,
-    lastFinishedSummary: false,
   }
 
-  test("skips when the model reports no context, the last turn summarized, or the estimate fits", () => {
-    expect(SessionLoop.predictiveCompactionDecision({ ...base, usableBudget: 0 })).toEqual({ kind: "skip" })
-    expect(SessionLoop.predictiveCompactionDecision({ ...base, lastFinishedSummary: true })).toEqual({ kind: "skip" })
+  test("reports exhausted known capacity and skips a request that fits", () => {
+    expect(SessionLoop.predictiveCompactionDecision({ ...base, usableBudget: 0 })).toEqual({
+      kind: "fail-prompt-budget",
+      reason: "post-compaction-still-over",
+    })
     expect(SessionLoop.predictiveCompactionDecision({ ...base, totalTokensEst: 80_000 })).toEqual({ kind: "skip" })
   })
 
@@ -58,9 +60,9 @@ describe("predictive compaction decision", () => {
   })
 
   test("fails fast when tool schemas alone overrun their share of the budget", () => {
-    expect(
-      SessionLoop.predictiveCompactionDecision({ ...base, toolSchemaTokensEst: 60_000 }),
-    ).toEqual({ kind: "fail-tool-schema" })
+    expect(SessionLoop.predictiveCompactionDecision({ ...base, toolSchemaTokensEst: 60_000 })).toEqual({
+      kind: "fail-tool-schema",
+    })
   })
 
   test("fails when even a perfect compaction leaves the request over budget", () => {
@@ -74,16 +76,21 @@ describe("predictive compaction decision", () => {
   })
 
   test("fails when the compressible body is smaller than the overflow it must absorb", () => {
-    expect(
-      SessionLoop.predictiveCompactionDecision({ ...base, messagePayloadTokensEst: 8_000 }),
-    ).toEqual({ kind: "fail-prompt-budget", reason: "nothing-to-compress" })
+    expect(SessionLoop.predictiveCompactionDecision({ ...base, messagePayloadTokensEst: 8_000 })).toEqual({
+      kind: "fail-prompt-budget",
+      reason: "nothing-to-compress",
+    })
   })
 
-  test("counts media against the post-compaction floor", () => {
-    expect(SessionLoop.predictiveCompactionDecision({ ...base, mediaTokensEst: 85_000 })).toEqual({
-      kind: "fail-prompt-budget",
-      reason: "post-compaction-still-over",
-    })
+  test("allows historical media to be reduced with the message history", () => {
+    expect(
+      SessionLoop.predictiveCompactionDecision({
+        ...base,
+        totalTokensEst: 120_000,
+        messagePayloadTokensEst: 25_000,
+        mediaTokensEst: 85_000,
+      }),
+    ).toEqual({ kind: "compact" })
   })
 
   test("a Chinese payload reaches the compaction decision the latin ratio would have missed", () => {
@@ -111,18 +118,16 @@ describe("predictive compaction decision", () => {
 
 describe("model message payload estimate", () => {
   test("reports characters and a script-aware token estimate for the same payload", () => {
-    const estimate = SessionLoop.estimateModelMessagePayload([
+    const estimate = RequestBudget.estimateModelMessagePayload([
       { role: "user", content: [{ type: "text", text: "把季度财务报表整理成可复核的资料包" }] },
     ] as never)
 
     expect(estimate.messagePayloadChars).toBeGreaterThan(0)
-    expect(estimate.messagePayloadTokensEst).toBeGreaterThan(
-      Token.estimateCharacters(estimate.messagePayloadChars),
-    )
+    expect(estimate.messagePayloadTokensEst).toBeGreaterThan(Token.estimateCharacters(estimate.messagePayloadChars))
   })
 
   test("keeps inline media out of the text estimate and charges it as media", () => {
-    const estimate = SessionLoop.estimateModelMessagePayload([
+    const estimate = RequestBudget.estimateModelMessagePayload([
       {
         role: "user",
         content: [{ type: "file", mediaType: "image/png", data: `data:image/png;base64,${"A".repeat(50_000)}` }],

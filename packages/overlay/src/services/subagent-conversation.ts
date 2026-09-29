@@ -548,6 +548,15 @@ export async function loadSubagentConversation(input: {
     await apiJson(subagentConversationPath({ ...input, sessionID, directory }), { signal: input.signal }),
     `subagent conversation ${sessionID}`,
   )
+  return parseSubagentConversation({ ...input, sessionID, directory }, payload)
+}
+
+/** Shared hydration parser for HTTP reads and the ordered Session connection snapshot. */
+export function parseSubagentConversation(
+  input: { source: BoardSource; sessionID: string; directory: string },
+  payload: Record<string, any>,
+): SubagentConversationTranscript {
+  const { sessionID } = input
   const transcript = requireArray(payload.transcript, `subagent conversation ${sessionID} transcript`)
   const view = requireObject(payload.view, `subagent conversation ${sessionID} view`)
   const viewMessages = requireArray(view.messages, `subagent conversation ${sessionID} view.messages`)

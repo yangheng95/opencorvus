@@ -804,7 +804,7 @@ unexpected-close 事件作为缓存连接失效的唯一事实：只淘汰同一
 不是 Expert Squad、Mission workflow 或 Browser 的别名。Browser 与 Computer 的已配置声明都只是 capability inventory；
 直接 Chat/Work 的默认 MCP assignment 为空，Project 只有通过显式
 `primary_assistant_capabilities.<agent>.mcp_server_refs` 才激活精确 provider。active Expert Squad 只能通过
-Harness 中精确的 `default/mcp/computer/tool/*` refs 投影同一组平台工具。两种入口都保留相同的八个
+Harness 中精确的 `default/mcp/computer/tool/*` refs 投影同一组平台工具。两种入口都保留相同的五个
 `mcp_tool` identity 和四类 Session permission；Harness visibility 不授予 permission。
 
 Conversation capability catalog 由唯一 `mcp-config` owner 一次发布 configured server 与当前精确投影的
@@ -815,14 +815,22 @@ MCP tool 完整集合，重复 owner 继续失败关闭。`tool` 与 `mcp_tool` 
 每个 Conversation Session 拥有独立的 Computer scoped MCP connection owner；不同 Session 不共享
 controller、CUA Driver logical session 或 observation authority，删除 Session 会关闭精确 owner，而 takeover 只关闭
 Computer owner 并保留上文独立的 Browser owner。每次 `observe`
-形成一个绑定 computer、display、observation、digest 与像素边界的单次 capability；动作在第一次异步
-backend 调用前原子消费它。create、input 与 destroy 都是 effect operation，派发后响应丢失统一返回
+形成一个绑定 computer、display、observation、digest 与像素边界的单次 capability；`act` 在第一次异步
+backend 调用前原子消费它，授权一组有序动作。整组已知坐标先校验，再顺序执行，单动作使用单元素数组。
+回执包含已完成前缀、失败位置及错误；组末采集新截图并形成下一次绑定，采集失败则保留执行回执和采集错误。
+Controller 串行处理观察与输入；Host 通过共享物理桌面锁串行执行各逻辑/Project owner 的整组输入与末尾观察，
+等待后重新校验精确授权，takeover 撤销尚未执行的后续动作并等已进入的动作收敛。锁不宣称隔离其他进程或人工输入。
+create、input 与 destroy 都是 effect operation，派发后响应丢失统一返回
 `COMPUTER_OUTCOME_UNKNOWN`，不得 retry、reconnect replay 或切换 transport。
 
 OpenCorvus 固定依赖并随应用分发 `@trycua/cua-driver`。Host 通过同进程 `CuaDriver.create()` 创建唯一 native
 driver，不发现或启动 daemon、`PATH` executable、Python、Virtual Machine（VM，虚拟机）、guest image、viewer
 或 cloud runtime。Windows 使用 Win32 与 UI Automation（UIA，用户界面自动化）；macOS 使用 Accessibility
 与 Screen Recording 权限，权限归属签名后的 OpenCorvus application identity。产品不提供第二 runtime 或 fallback。
+Windows headless host 在创建 CUA native executor 前通过 Koffi 建立并验证 Per-Monitor V2 DPI（Dots Per Inch，
+显示缩放）进程默认值，使 native worker 继承物理像素坐标契约。已正确设置的 host 原样使用；拒绝或不兼容的
+host 返回 typed backend error。native library/function handles 按宿主生命周期保留。打包闭包包含 Koffi 和
+目标架构 native module；不修改用户显示设置、不猜测缩放倍率、不对截图做补偿裁剪。
 
 每个 scoped owner 在同一物理桌面上启动独立 CUA logical session。`session_create` 返回 host desktop、真实 display
 与 driver version，不承诺虚拟机级进程、凭据或屏幕隔离。`observe` 直接返回当前桌面 PNG（Portable Network
@@ -830,8 +838,18 @@ Graphics，便携式网络图形）Attachment；click、text、key chord、point
 takeover 撤销当前 Agent run capability 并断开其 MCP adapter，桌面与 CUA session 继续存活且由用户直接操作；
 return 生成不同的 run capability，新的 controller 必须先用可见 `session_create` 附着，再 `observe`。显式
 destroy 只结束精确 logical session 并保留当前 adapter 建立下一会话的能力；Session disposal 结束精确 owner，
-只有 host authority disposal 才关闭 application-owned driver。模型面仍只有八个工具，不存在
+只有 host authority disposal 才关闭 application-owned driver。模型面为 `help`、`session_create`、`observe`、`act`、`session_destroy`，不存在
 viewer tool、Browser WebView、文件轮询或 UI-only lifecycle source。
+
+### Browser / Computer 按需操作指南
+
+`skill/builtin/browser-use/SKILL.md` 与 `skill/builtin/computer-use/SKILL.md` 是操作指南唯一源，沿现有 generated
+builtin payload 分发。Skill 元数据供能力发现使用，正文通过实际的 Skill 加载或 provider 工具结果进入上下文。
+两种 provider 的 `session_create` 自然返回对应指南，`help` 可在无需创建会话时按需重读；它们不授予输入权限，
+不依赖 native / Mission / projected harness 是否装载 production `skill`，也不新增强制加载 gate。
+指南规定真实会话标识、当前证据、可预测动作分组、焦点/坐标/滚动单位、错误与不确定结果恢复及结果复核。
+Browser 坐标检查失败要求重新观察目标，不能把 `force:true` 建议为通用重试。底层输入与截图契约由工具 schema
+与执行实现共同维护，Skill 不复制全工具目录，也不要求每个原子动作都经过一次模型截图轮次。
 
 Multica Squad 导入复用同一 MCP client 与 package projection，不创建第二套运行时。mapping 为每个 source
 Agent 显式声明 `base_role`；普通 routing Squad 使用 `{}` workflow 和 Task direct

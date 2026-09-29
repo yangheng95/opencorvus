@@ -23,7 +23,7 @@ const REPLY_TIMEOUT_MS = 30_000
 
 const inflight = new Map<string, Promise<void>>()
 
-export type InteractionReplyEndpoint = "interaction" | "question"
+export type InteractionReplyEndpoint = "interaction" | "question" | "permission"
 export type InteractionReplyTarget = { id: string; directory: string }
 export type PermissionDecision = "allow_once" | "allow_task" | "allow_project"
 
@@ -51,6 +51,16 @@ export async function replyInteraction(
   endpoint: InteractionReplyEndpoint = "interaction",
 ): Promise<void> {
   return lockedRequest(target.id, async () => {
+    if (endpoint === "permission") {
+      if (action === "answer") throw new Error("permission reply requires a permission decision")
+      await apiJson(interactionPath(target, "permission/:id/reply", "permission reply"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ decision: action }),
+        signal: AbortSignal.timeout(REPLY_TIMEOUT_MS),
+      })
+      return
+    }
     if (endpoint === "question") {
       if (action !== "answer") throw new Error(`question reply endpoint does not support ${action}`)
       const answers = Array.isArray(input.answers) ? input.answers : []
@@ -95,6 +105,15 @@ export async function rejectInteraction(
   endpoint: InteractionReplyEndpoint = "interaction",
 ): Promise<void> {
   return lockedRequest(target.id, async () => {
+    if (endpoint === "permission") {
+      await apiJson(interactionPath(target, "permission/:id/reply", "permission reject"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ decision: "deny" }),
+        signal: AbortSignal.timeout(REPLY_TIMEOUT_MS),
+      })
+      return
+    }
     if (endpoint === "question") {
       await apiJson(interactionPath(target, "question/:id/reject", "question reject"), {
         method: "POST",

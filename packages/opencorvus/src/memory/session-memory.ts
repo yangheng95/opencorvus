@@ -1,5 +1,6 @@
 import { Message } from "@/session/message"
 import { MessageStore } from "@/session/message-store"
+import { CompactionHandoff } from "@/session/compaction-handoff"
 
 export namespace SessionMemory {
   export const filename = "MEMORY.MD"
@@ -29,7 +30,7 @@ export namespace SessionMemory {
   export async function read(sessionID: string): Promise<Document | null> {
     for await (const message of MessageStore.stream(sessionID)) {
       if (message.info.role !== "assistant") continue
-      if (message.info.summary !== true || message.info.time.completed === undefined) continue
+      if (!CompactionHandoff.isValidSummaryMessage(message.info) || message.info.time.completed === undefined) continue
       if (!message.parts.some((part) => part.type === "compaction")) continue
       const parent = await MessageStore.get({ sessionID, messageID: message.info.parentID })
       if (parent.info.role !== "user") continue

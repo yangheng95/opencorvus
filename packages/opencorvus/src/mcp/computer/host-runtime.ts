@@ -2,27 +2,17 @@ import { randomUUID } from "node:crypto"
 import { z } from "zod"
 import type { CuaDriverLike } from "@trycua/cua-driver"
 import { createInstanceState } from "@/project/instance-state"
-import {
-  closeCuaDriver,
-  createCuaDriver,
-  CuaComputerBackend,
-  type ComputerBackend,
-  type ComputerBackendAction,
-} from "./backend"
+import { closeCuaDriver, createCuaDriver, CuaComputerBackend, type ComputerBackend } from "./backend"
 import { ComputerError, computerError } from "./errors"
+import { ComputerActions, performComputerActions } from "./actions"
+import { withKeyedLock } from "@/util/lock"
+
+// All logical owners in this process address the same physical desktop.
+const desktopOperations = new Map<string, Promise<unknown>>()
 
 const HostRequest = z
   .object({
-    operation: z.enum([
-      "session_create",
-      "observe",
-      "click",
-      "type_text",
-      "keypress",
-      "scroll",
-      "drag",
-      "session_destroy",
-    ]),
+    operation: z.enum(["session_create", "observe", "act", "session_destroy"]),
     params: z.record(z.string(), z.unknown()),
   })
   .strict()
@@ -34,21 +24,10 @@ const Target = z
   })
   .strict()
 
-const Point = z.object({ x: z.number().int(), y: z.number().int() }).strict()
-
 const HostOperationParams = {
   session_create: z.object({}).strict(),
   observe: Target,
-  click: Target.extend({ x: z.number().int(), y: z.number().int(), button: z.enum(["left", "right"]) }).strict(),
-  type_text: Target.extend({ text: z.string() }).strict(),
-  keypress: Target.extend({ keys: z.array(z.string().min(1)).min(1) }).strict(),
-  scroll: Target.extend({
-    x: z.number().int().nonnegative(),
-    y: z.number().int().nonnegative(),
-    direction: z.enum(["up", "down", "left", "right"]),
-    amount: z.number().int().positive(),
-  }).strict(),
-  drag: Target.extend({ from: Point, to: Point, durationMs: z.number().int().positive() }).strict(),
+  act: Target.extend({ actions: ComputerActions }).strict(),
   session_destroy: z.object({ computer_id: z.string().min(1) }).strict(),
 } satisfies Record<z.infer<typeof HostRequest>["operation"], z.ZodType>
 
@@ -63,6 +42,7 @@ type RuntimeEntry = {
   backend?: ComputerBackend
   identity?: RuntimeIdentity
   automationAuthorization?: string
+  automationAbort?: AbortController
   activeRequests: Set<Promise<unknown>>
 }
 
@@ -100,7 +80,8 @@ function errorResponse(error: unknown, status = 400) {
 async function disposeEntry(entry: RuntimeEntry, destroyDesktopSession: boolean): Promise<void> {
   if (!entry.backend) return
   const operations: Promise<unknown>[] = []
-  if (destroyDesktopSession && entry.identity) operations.push(entry.backend.destroy({ computerId: entry.identity.computerId }))
+  if (destroyDesktopSession && entry.identity)
+    operations.push(entry.backend.destroy({ computerId: entry.identity.computerId }))
   const destroyResults = await Promise.allSettled(operations)
   const closeResult = await Promise.allSettled([entry.backend.close()])
   const failures = [...destroyResults, ...closeResult].flatMap((result) =>
@@ -139,6 +120,7 @@ export class ComputerHostRuntimeAuthority {
     if (entry.automationAuthorization) return entry.automationAuthorization
     const authorization = randomUUID()
     entry.automationAuthorization = authorization
+    entry.automationAbort = new AbortController()
     this.state.authorizations.set(authorization, entry)
     return authorization
   }
@@ -146,6 +128,9 @@ export class ComputerHostRuntimeAuthority {
   private revoke(entry: RuntimeEntry): void {
     if (entry.automationAuthorization) this.state.authorizations.delete(entry.automationAuthorization)
     delete entry.automationAuthorization
+    entry.automationAbort?.abort(
+      new ComputerError("COMPUTER_RUN_REVOKED", "Computer automation run is no longer authoritative"),
+    )
   }
 
   private ensureServer(): ReturnType<typeof Bun.serve> {
@@ -240,7 +225,7 @@ export class ComputerHostRuntimeAuthority {
     }
   }
 
-  private async perform(entry: RuntimeEntry, request: z.infer<typeof HostRequest>) {
+  private async perform(entry: RuntimeEntry, request: z.infer<typeof HostRequest>, signal: AbortSignal) {
     const params = HostOperationParams[request.operation].parse(request.params) as Record<string, unknown>
     const operations: Record<z.infer<typeof HostRequest>["operation"], () => Promise<unknown>> = {
       session_create: async () => {
@@ -252,13 +237,18 @@ export class ComputerHostRuntimeAuthority {
       },
       observe: async () => {
         const target = params as z.infer<typeof Target>
+        this.assertIdentity(this.identity(entry.runtimeScope), {
+          computerId: target.computer_id,
+          displayId: target.display_id,
+        })
         return entry.backend!.observe({ computerId: target.computer_id, displayId: target.display_id })
       },
-      click: () => entry.backend!.act(this.action("click", params)),
-      type_text: () => entry.backend!.act(this.action("type_text", params)),
-      keypress: () => entry.backend!.act(this.action("keypress", params)),
-      scroll: () => entry.backend!.act(this.action("scroll", params)),
-      drag: () => entry.backend!.act(this.action("drag", params)),
+      act: async () => {
+        const group = params as z.infer<typeof HostOperationParams.act>
+        const target = { computerId: group.computer_id, displayId: group.display_id }
+        this.assertIdentity(this.identity(entry.runtimeScope), target)
+        return performComputerActions(entry.backend!, { ...target, actions: group.actions }, signal)
+      },
       session_destroy: async () => {
         const computerId = params.computer_id as string
         const result = await entry.backend!.destroy({ computerId })
@@ -269,16 +259,6 @@ export class ComputerHostRuntimeAuthority {
       },
     }
     return operations[request.operation]()
-  }
-
-  private action(kind: ComputerBackendAction["kind"], params: Record<string, unknown>): ComputerBackendAction {
-    const { computer_id, display_id, ...action } = params
-    return {
-      kind,
-      computerId: computer_id as string,
-      displayId: display_id as string,
-      ...action,
-    } as ComputerBackendAction
   }
 
   async fetch(request: Request): Promise<Response> {
@@ -295,7 +275,20 @@ export class ComputerHostRuntimeAuthority {
     }
     const operation = (async () => {
       const input = HostRequest.parse(await request.json())
-      return this.perform(entry, input)
+      const signal = entry.automationAbort!.signal
+      return withKeyedLock(
+        desktopOperations,
+        "desktop",
+        async () => {
+          if (entry.automationAuthorization !== authorization) {
+            throw new ComputerError("COMPUTER_RUN_REVOKED", "Computer automation run is no longer authoritative")
+          }
+          signal.throwIfAborted()
+          return this.perform(entry, input, signal)
+        },
+        undefined,
+        signal,
+      )
     })()
     entry.activeRequests.add(operation)
     try {
@@ -314,7 +307,7 @@ export class ComputerHostRuntimeAuthority {
     if (!entry) return
     this.revoke(entry)
     await Promise.allSettled([...entry.activeRequests])
-    await disposeEntry(entry, true)
+    await withKeyedLock(desktopOperations, "desktop", () => disposeEntry(entry, true))
     this.state.entries.delete(runtimeScope)
   }
 
@@ -322,7 +315,9 @@ export class ComputerHostRuntimeAuthority {
     const entries = [...this.state.entries.values()]
     for (const entry of entries) this.revoke(entry)
     await Promise.allSettled(entries.flatMap((entry) => [...entry.activeRequests]))
-    const results = await Promise.allSettled(entries.map((entry) => disposeEntry(entry, true)))
+    const results = await Promise.allSettled(
+      entries.map((entry) => withKeyedLock(desktopOperations, "desktop", () => disposeEntry(entry, true))),
+    )
     if (this.state.driver) results.push(...(await Promise.allSettled([closeCuaDriver(this.state.driver)])))
     const failures = results.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
     if (failures.length === 0) {

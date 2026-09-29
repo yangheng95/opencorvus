@@ -350,6 +350,9 @@
                 "$ref": "#/components/schemas/CompactionContinuationMissingError"
               },
               {
+                "$ref": "#/components/schemas/CompactionSummaryInvalidError"
+              },
+              {
                 "$ref": "#/components/schemas/PromptBudgetOverflowError"
               },
               {
@@ -1260,6 +1263,55 @@
         ],
         "type": "object"
       },
+      "CompactionSummaryInvalidError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "assistantMessageID": {
+                "type": "string"
+              },
+              "finish": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "reason": {
+                "enum": [
+                  "incomplete",
+                  "not_smaller"
+                ],
+                "type": "string"
+              },
+              "sessionID": {
+                "type": "string"
+              },
+              "sourceTokens": {
+                "type": "number"
+              },
+              "summaryTokens": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "message",
+              "sessionID",
+              "assistantMessageID",
+              "reason"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "CompactionSummaryInvalidError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "Config": {
         "additionalProperties": false,
         "properties": {
@@ -1393,7 +1445,7 @@
                 "type": "boolean"
               },
               "preserve_recent_tokens": {
-                "description": "Token budget for the verbatim recent-tail retained after compaction.",
+                "description": "Token budget for verbatim recent-tail retention. Defaults to 25% of usable prompt capacity, bounded by the compaction trigger; explicit zero retains no tail.",
                 "maximum": 9007199254740991,
                 "minimum": 0,
                 "type": "integer"
@@ -1403,13 +1455,13 @@
                 "type": "boolean"
               },
               "reserved": {
-                "description": "Token buffer for compaction. Leaves enough window to avoid overflow during compaction.",
+                "description": "Minimum combined-window output reservation. The actual request output cap is always reserved; an independent input limit is intersected without subtracting it again.",
                 "maximum": 9007199254740991,
                 "minimum": 0,
                 "type": "integer"
               },
               "tail_turns": {
-                "description": "Number of most recent real user turns to preserve verbatim after compaction. Defaults to 2.",
+                "description": "Maximum recent conversation units (user messages or completed assistant steps) considered for verbatim retention. Defaults to 2; tool call/result pairs remain intact.",
                 "maximum": 9007199254740991,
                 "minimum": 0,
                 "type": "integer"
@@ -4991,6 +5043,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/CompactionContinuationMissingError"
+                  },
+                  {
+                    "$ref": "#/components/schemas/CompactionSummaryInvalidError"
                   },
                   {
                     "$ref": "#/components/schemas/PromptBudgetOverflowError"
@@ -18944,6 +18999,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/CompactionContinuationMissingError"
+                  },
+                  {
+                    "$ref": "#/components/schemas/CompactionSummaryInvalidError"
                   },
                   {
                     "$ref": "#/components/schemas/PromptBudgetOverflowError"
@@ -96804,6 +96862,9 @@
                               "$ref": "#/components/schemas/CompactionContinuationMissingError"
                             },
                             {
+                              "$ref": "#/components/schemas/CompactionSummaryInvalidError"
+                            },
+                            {
                               "$ref": "#/components/schemas/PromptBudgetOverflowError"
                             },
                             {
@@ -102369,6 +102430,13 @@
                   "messageID": {
                     "pattern": "^msg.*",
                     "type": "string"
+                  },
+                  "purpose": {
+                    "enum": [
+                      "fork",
+                      "side-chat"
+                    ],
+                    "type": "string"
                   }
                 },
                 "type": "object"
@@ -103362,6 +103430,9 @@
                             },
                             {
                               "$ref": "#/components/schemas/CompactionContinuationMissingError"
+                            },
+                            {
+                              "$ref": "#/components/schemas/CompactionSummaryInvalidError"
                             },
                             {
                               "$ref": "#/components/schemas/PromptBudgetOverflowError"
@@ -104540,6 +104611,208 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.session.shell({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/session/{sessionID}/side-chat": {
+      "get": {
+        "operationId": "session.sideChats",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "sessionID",
+            "required": true,
+            "schema": {
+              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Session"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Side conversations for this source"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "NotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "LogFileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Not found"
+          }
+        },
+        "summary": "List side conversations",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.session.sideChats({\n  ...\n})"
+          }
+        ]
+      },
+      "post": {
+        "description": "Create an independent assistant Session with completed source history as visible reference context. The source may continue running.",
+        "operationId": "session.createSideChat",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "sessionID",
+            "required": true,
+            "schema": {
+              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            },
+            "description": "Created side conversation"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "NotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "LogFileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Not found"
+          }
+        },
+        "summary": "Open side conversation",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.session.createSideChat({\n  ...\n})"
           }
         ]
       }

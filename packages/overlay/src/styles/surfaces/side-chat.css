@@ -1,0 +1,173 @@
+.quotation-scope {
+  display: contents;
+}
+.quotation-toolbar {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  gap: var(--ui-gap-xs);
+  padding: var(--ui-gap-xs);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--oc-radius-soft);
+  box-shadow: var(--shadow-md);
+}
+.quotation-chip {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-lg);
+  background: var(--surface-inset);
+  border-radius: var(--oc-radius-soft);
+  color: var(--text-soft);
+  border: 1px solid var(--border);
+}
+.quotation-chip__content {
+  flex: 1;
+  min-width: 0;
+}
+.quotation-chip__content > span {
+  font-size: var(--ui-font-caption);
+  color: var(--text-muted);
+}
+.quotation-chip blockquote {
+  margin: var(--ui-gap-xs) 0 0;
+  padding-left: var(--ui-gap-md);
+  border-left: 2px solid var(--text-muted);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 100px;
+  overflow: auto;
+}
+.side-chat-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--chat-canvas);
+}
+.side-chat-panel__header {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-lg);
+}
+.side-chat-panel__header > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+.side-chat-panel__selection {
+  display: flex;
+  gap: var(--ui-gap-md);
+  align-items: center;
+}
+.side-chat-panel__hint {
+  margin: 0;
+  padding: 0 var(--ui-gap-xl) var(--ui-gap-lg);
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+.side-chat-panel__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--ui-gap-lg) var(--ui-gap-xl);
+}
+.side-chat-panel__empty {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: var(--ui-gap-lg);
+  padding: 48px var(--ui-gap-lg);
+  color: var(--text-soft);
+  text-align: center;
+}
+.side-chat-panel__empty-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--oc-radius-large);
+  color: var(--text-soft);
+  background: var(--surface-inset);
+  border: 1px solid var(--border);
+}
+.side-chat-panel__empty strong {
+  font-size: var(--ui-font-emphasis);
+  font-weight: var(--ui-font-weight-medium);
+  color: var(--text-strong);
+}
+.side-chat-suggestions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--ui-gap-md);
+  margin-top: var(--ui-gap-lg);
+  width: 100%;
+  max-width: 280px;
+}
+.side-chat-suggestions > button {
+  justify-content: space-between;
+}
+.side-chat-panel__empty > span {
+  color: var(--text-muted);
+}
+.side-chat-panel .chat-bubble-shell {
+  width: 100%;
+}
+.side-chat-history {
+  margin-bottom: var(--ui-gap-xl);
+}
+.side-chat-turn {
+  margin-bottom: var(--ui-gap-xl);
+}
+.side-chat-turn__quote {
+  color: var(--text-muted);
+}
+.side-chat-composer {
+  margin: var(--ui-gap-lg);
+  padding: var(--ui-gap-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--oc-radius-large);
+  background: var(--surface-inset);
+}
+.side-chat-composer textarea {
+  width: 100%;
+  resize: none;
+  min-height: 72px;
+}
+.side-chat-composer:focus-within {
+  border-color: var(--border-hover);
+}
+.side-chat-composer .quotation-chip {
+  margin-bottom: var(--ui-gap-md);
+  background: var(--chat-canvas);
+}
+.side-chat-composer__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-gap-md);
+}
+.side-chat-composer__actions > span {
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+.side-chat-status {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-sm);
+}
+.side-chat-status__dot {
+  width: var(--ui-gap-sm);
+  height: var(--ui-gap-sm);
+  border-radius: var(--oc-radius-pill);
+  background: var(--text-muted);
+}
+.side-chat-status[data-connected="true"] .side-chat-status__dot {
+  background: var(--good);
+}
+.side-chat-status[data-running="true"] .side-chat-status__dot {
+  background: var(--accent);
+}

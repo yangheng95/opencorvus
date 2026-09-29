@@ -1,3 +1,4 @@
+import { RequestBudget } from "@/session/request-budget"
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import path from "node:path"
 import { asSchema, type Tool as AITool } from "ai"
@@ -475,7 +476,7 @@ describe("Light Expert Squad package", () => {
                 : rawSchedulerTools[toolID] as AITool,
             ]),
           )
-          const schedulerToolBudget = SessionLoop.estimateToolPayload(projectedSchedulerTools)
+          const schedulerToolBudget = RequestBudget.estimateToolPayload(projectedSchedulerTools)
           expect({
             toolIDs: Object.keys(projectedSchedulerTools),
             withinTokenBudget: schedulerToolBudget.tokensEst <= 40_000,
@@ -485,7 +486,7 @@ describe("Light Expert Squad package", () => {
           })
 
           let processorStarts = 0
-          const workerToolBudgets = new Map<string, ReturnType<typeof SessionLoop.estimateToolPayload>>()
+          const workerToolBudgets = new Map<string, ReturnType<typeof RequestBudget.estimateToolPayload>>()
           const workerPhases = new Map<string, string>()
           const workerProgress = () => JSON.stringify([...workerPhases.entries()].sort(([a], [b]) => a.localeCompare(b)))
           let resolveAllStarted!: () => void
@@ -511,12 +512,12 @@ describe("Light Expert Squad package", () => {
               async process(streamInput: {
                 agentID: string
                 agent: Parameters<typeof SessionLoop.resolveTools>[0]["agent"]
-                tools: Parameters<typeof SessionLoop.estimateToolPayload>[0]
+                tools: Parameters<typeof RequestBudget.estimateToolPayload>[0]
               }) {
                 try {
                   workerPhases.set(assistant.sessionID, "processor-entered")
                   if (Object.hasOwn(agentRoles, streamInput.agentID)) {
-                    workerToolBudgets.set(streamInput.agentID, SessionLoop.estimateToolPayload(streamInput.tools))
+                    workerToolBudgets.set(streamInput.agentID, RequestBudget.estimateToolPayload(streamInput.tools))
                     const common = {
                       config: await EffectiveConfig.effective({ sessionID: assistant.sessionID }),
                       model: providerModel(),

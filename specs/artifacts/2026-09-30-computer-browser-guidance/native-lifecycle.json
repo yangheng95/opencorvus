@@ -1,0 +1,41 @@
+{
+  "created": {
+    "computerId": "host-desktop:opencorvus-86719c15-e531-4bb0-b2c6-fdd3ecfa2b0c",
+    "displayId": "primary",
+    "driverVersion": "0.12.2"
+  },
+  "attached": {
+    "computerId": "host-desktop:opencorvus-86719c15-e531-4bb0-b2c6-fdd3ecfa2b0c",
+    "displayId": "primary",
+    "driverVersion": "0.12.2"
+  },
+  "before": {
+    "width": 2881,
+    "height": 1801
+  },
+  "takeover": {
+    "ownership": "human",
+    "computerId": "host-desktop:opencorvus-86719c15-e531-4bb0-b2c6-fdd3ecfa2b0c",
+    "displayId": "primary",
+    "driverVersion": "0.12.2",
+    "desktopPreserved": true
+  },
+  "oldRun": {
+    "code": "COMPUTER_RUN_REVOKED"
+  },
+  "returned": {
+    "ownership": "agent",
+    "computerId": "host-desktop:opencorvus-86719c15-e531-4bb0-b2c6-fdd3ecfa2b0c",
+    "displayId": "primary",
+    "driverVersion": "0.12.2",
+    "freshObservationRequired": true
+  },
+  "after": {
+    "width": 2881,
+    "height": 1801
+  },
+  "destroyed": {
+    "computerId": "host-desktop:opencorvus-86719c15-e531-4bb0-b2c6-fdd3ecfa2b0c",
+    "destroyed": true
+  }
+}

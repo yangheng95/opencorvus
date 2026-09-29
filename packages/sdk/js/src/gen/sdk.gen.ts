@@ -476,6 +476,8 @@ import type {
   SessionConversationResponses,
   SessionCreateErrors,
   SessionCreateResponses,
+  SessionCreateSideChatErrors,
+  SessionCreateSideChatResponses,
   SessionDeleteErrors,
   SessionDeleteMessageErrors,
   SessionDeleteMessageResponses,
@@ -502,6 +504,8 @@ import type {
   SessionPromptResponses,
   SessionShellErrors,
   SessionShellResponses,
+  SessionSideChatsErrors,
+  SessionSideChatsResponses,
   SessionStatusErrors,
   SessionStatusResponses,
   SessionSummarizeErrors,
@@ -12435,6 +12439,7 @@ export class Session4 extends HeyApiClient {
       sessionID: string
       directory?: string
       messageID?: string
+      purpose?: "fork" | "side-chat"
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -12446,6 +12451,7 @@ export class Session4 extends HeyApiClient {
             { in: "path", key: "sessionID" },
             { in: "query", key: "directory" },
             { in: "body", key: "messageID" },
+            { in: "body", key: "purpose" },
           ],
         },
       ],
@@ -12730,6 +12736,68 @@ export class Session4 extends HeyApiClient {
         ...options?.headers,
         ...params.headers,
       },
+    })
+  }
+
+  /**
+   * List side conversations
+   */
+  public sideChats<ThrowOnError extends boolean = false>(
+    parameters: {
+      sessionID: string
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "sessionID" },
+            { in: "query", key: "directory" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<SessionSideChatsResponses, SessionSideChatsErrors, ThrowOnError>({
+      url: "/session/{sessionID}/side-chat",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Open side conversation
+   *
+   * Create an independent assistant Session with completed source history as visible reference context. The source may continue running.
+   */
+  public createSideChat<ThrowOnError extends boolean = false>(
+    parameters: {
+      sessionID: string
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "sessionID" },
+            { in: "query", key: "directory" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<
+      SessionCreateSideChatResponses,
+      SessionCreateSideChatErrors,
+      ThrowOnError
+    >({
+      url: "/session/{sessionID}/side-chat",
+      ...options,
+      ...params,
     })
   }
 

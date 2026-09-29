@@ -10,6 +10,7 @@ import {
   type ComputerBackendObservation,
 } from "../../src/mcp/computer/backend"
 import { ComputerController } from "../../src/mcp/computer/controller"
+import { performComputerActions, type ComputerControlBackend } from "../../src/mcp/computer/actions"
 import { ConversationCapability } from "../../src/conversation/capability"
 import { HostSessionMcpRuntime } from "../../src/mcp/host-session-runtime"
 import { Config } from "../../src/config/config"
@@ -48,6 +49,16 @@ function pngBase64(width: number, height: number) {
   const image = new PNG({ width, height })
   image.data.fill(255)
   return PNG.sync.write(image).toString("base64")
+}
+
+function controlBackend(backend: ComputerBackend): ComputerControlBackend {
+  return {
+    create: () => backend.create(),
+    observe: (input) => backend.observe(input),
+    act: (input) => performComputerActions(backend, input),
+    destroy: (input) => backend.destroy(input),
+    close: () => backend.close(),
+  }
 }
 
 class RecordingBackend implements ComputerBackend {
@@ -120,13 +131,10 @@ class LifecycleBackend implements ComputerBackend {
 describe("Computer Use exact control contract", () => {
   test("publishes the complete narrow MCP tool reference set", () => {
     expect(ComputerMCPBuiltin.ImportableToolRefs).toEqual([
+      "default/mcp/computer/tool/help",
       "default/mcp/computer/tool/session_create",
       "default/mcp/computer/tool/observe",
-      "default/mcp/computer/tool/click",
-      "default/mcp/computer/tool/type_text",
-      "default/mcp/computer/tool/keypress",
-      "default/mcp/computer/tool/scroll",
-      "default/mcp/computer/tool/drag",
+      "default/mcp/computer/tool/act",
       "default/mcp/computer/tool/session_destroy",
     ])
   })
@@ -415,12 +423,9 @@ describe("Computer Use exact control contract", () => {
     )
     const created = await controller.create()
     const action = controller.act({
-      kind: "click",
       computerId: created.computerId,
       displayId: created.displayId,
-      x: 1,
-      y: 1,
-      button: "left",
+      actions: [{ kind: "click", x: 1, y: 1, button: "left" }],
     })
     await actionStarted
     const takeover = authority
@@ -434,7 +439,7 @@ describe("Computer Use exact control contract", () => {
         return result
       })
     releaseAction()
-    expect(await action).toMatchObject({ accepted: true, backendActionId: "action-quiescence" })
+    expect(await action).toMatchObject({ completedActions: [{ index: 0, kind: "click", backendActionId: "action-quiescence" }], observationError: { code: "COMPUTER_RUN_REVOKED" } })
     expect(await takeover).toMatchObject({ ownership: "human", desktopPreserved: true })
     expect(timeline).toEqual(["agent-input-settled", "human-ownership-published"])
     await authority.destroy(adapter.runtimeScope)
@@ -443,7 +448,7 @@ describe("Computer Use exact control contract", () => {
 
   test("maps an observation-bound click to one exact backend action", async () => {
     const backend = new RecordingBackend()
-    const controller = new ComputerController(backend)
+    const controller = new ComputerController(controlBackend(backend))
     const created = await controller.create()
     const observed = await controller.observe({ computerId: created.computerId, displayId: created.displayId })
     const result = await controller.act(
@@ -453,7 +458,7 @@ describe("Computer Use exact control contract", () => {
         observationId: observed.observationId,
         observationDigest: observed.observationDigest,
       },
-      { kind: "click", x: 3, y: 4, button: "left" },
+      [{ kind: "click", x: 3, y: 4, button: "left" }],
     )
 
     expect(observed).toMatchObject({ width: 8, height: 6 })
@@ -468,19 +473,18 @@ describe("Computer Use exact control contract", () => {
         button: "left",
       },
     ])
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       computerId: "computer-1",
       displayId: "display-1",
-      observationId: observed.observationId,
-      observationDigest: observed.observationDigest,
-      accepted: true,
-      backendActionId: "action-1",
+      sourceObservationId: observed.observationId,
+      completedActions: [{ index: 0, kind: "click", backendActionId: "action-1" }],
+      observation: { width: 10, height: 7 },
     })
   })
 
   test("returns the typed stale-observation contract after a newer screen becomes authoritative", async () => {
     const backend = new RecordingBackend()
-    const controller = new ComputerController(backend)
+    const controller = new ComputerController(controlBackend(backend))
     const created = await controller.create()
     const first = await controller.observe({ computerId: created.computerId, displayId: created.displayId })
     const second = await controller.observe({ computerId: created.computerId, displayId: created.displayId })
@@ -494,14 +498,14 @@ describe("Computer Use exact control contract", () => {
           observationId: first.observationId,
           observationDigest: first.observationDigest,
         },
-        { kind: "type_text", text: "hello" },
+        [{ kind: "type_text", text: "hello" }],
       ),
     ).rejects.toMatchObject({ code: "STALE_OBSERVATION" })
   })
 
-  test("consumes one observation after exactly one accepted backend action", async () => {
+  test("consumes one observation for the submitted group and returns a new bound screen", async () => {
     const backend = new RecordingBackend()
-    const controller = new ComputerController(backend)
+    const controller = new ComputerController(controlBackend(backend))
     const created = await controller.create()
     const observed = await controller.observe({ computerId: created.computerId, displayId: created.displayId })
     const binding = {
@@ -511,11 +515,11 @@ describe("Computer Use exact control contract", () => {
       observationDigest: observed.observationDigest,
     }
 
-    expect(await controller.act(binding, { kind: "keypress", keys: ["ENTER"] })).toMatchObject({
-      accepted: true,
-      backendActionId: "action-1",
+    expect(await controller.act(binding, [{ kind: "keypress", keys: ["ENTER"] }])).toMatchObject({
+      completedActions: [{ index: 0, kind: "keypress", backendActionId: "action-1" }],
+      observation: { width: 10, height: 7 },
     })
-    await expect(controller.act(binding, { kind: "keypress", keys: ["ENTER"] })).rejects.toMatchObject({
+    await expect(controller.act(binding, [{ kind: "keypress", keys: ["ENTER"] }])).rejects.toMatchObject({
       code: "STALE_OBSERVATION",
     })
     expect(backend.actions).toEqual([
@@ -1013,7 +1017,7 @@ describe("Computer Use exact control contract", () => {
 describe("embedded CUA Driver contract", () => {
   test("packages the pinned CUA SDK and exact native libraries for Windows and macOS", () => {
     expect(artifactRuntimeNodeModuleNames({ os: "win32", arch: "x64" })).toEqual(
-      expect.arrayContaining(["@trycua/cua-driver", "@trycua/cua-driver-win32-x64-msvc", "@ubjs/node-win32-x64-msvc"]),
+      expect.arrayContaining(["@trycua/cua-driver", "@trycua/cua-driver-win32-x64-msvc", "@ubjs/node-win32-x64-msvc", "koffi", "@koromix/koffi-win32-x64"]),
     )
     expect(artifactRuntimeNodeModuleNames({ os: "darwin", arch: "arm64" })).toEqual(
       expect.arrayContaining(["@trycua/cua-driver", "@trycua/cua-driver-darwin-arm64", "@ubjs/node-darwin-arm64"]),

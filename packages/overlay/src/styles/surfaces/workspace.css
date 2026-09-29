@@ -310,6 +310,8 @@ code .file-link:focus-visible {
 }
 
 .file-editor-code {
+  display: flex;
+  flex-direction: column;
   flex: 1 1 0;
   min-height: 0;
   width: 100%;
@@ -320,6 +322,25 @@ code .file-link:focus-visible {
   line-height: var(--ui-line-height-normal);
   user-select: text;
   -webkit-user-select: text;
+}
+
+.file-editor-view {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.file-editor-language {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  gap: var(--ui-gap-sm);
+  padding: var(--ui-gap-xs) var(--ui-gap-lg);
+  border-top: var(--oc-border-width) solid var(--border);
+  color: var(--text-muted);
+  font-family: var(--font);
+  font-size: var(--ui-font-caption);
 }
 
 .file-editor-code .cm-editor {

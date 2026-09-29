@@ -18,6 +18,8 @@ import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
 import { resolveAgentModel } from "@/agent/model"
 import { ContextBudget } from "./context-budget"
+import { RequestBudget } from "./request-budget"
+import { LLM } from "./llm"
 import { CompactionHandoff } from "./compaction-handoff"
 import { renderToolFailureCause } from "./tool-failure-cause"
 import { InstructionPrompt } from "./instruction"
@@ -72,6 +74,7 @@ export namespace SessionCompaction {
   type CompactionStep = {
     text: string
     toolCalls: readonly unknown[]
+    finishReason?: string
   }
 
   function compactionStepDisposition(
@@ -79,7 +82,7 @@ export namespace SessionCompaction {
   ): "tool_results_ready" | "summary_ready" | "summary_missing" {
     if (!step) return "summary_missing"
     if (step.toolCalls.length > 0) return "tool_results_ready"
-    return step.text.trim() ? "summary_ready" : "summary_missing"
+    return step.text.trim() && CompactionHandoff.isComplete(step.finishReason) ? "summary_ready" : "summary_missing"
   }
 
   function processFailureError(error: unknown): Error {
@@ -362,7 +365,10 @@ export namespace SessionCompaction {
       case "file":
         return [
           `<file mime="${escapeTranscriptText(part.mime)}" filename="${escapeTranscriptText(part.filename ?? "")}">`,
-          part.source?.type ?? "attachment",
+          jsonForTranscript({
+            source: part.source?.type ?? "attachment",
+            url: part.url.startsWith("data:") ? undefined : part.url,
+          }),
           "</file>",
         ].join("")
       case "source-url":
@@ -384,7 +390,13 @@ export namespace SessionCompaction {
           lines.push(`<output>${outputForToolTranscript(part)}</output>`)
           if (part.state.attachments?.length) {
             const attachments = part.state.attachments
-              .map((item) => item.filename ?? item.mime)
+              .map((item) =>
+                JSON.stringify({
+                  filename: item.filename,
+                  mime: item.mime,
+                  url: item.url.startsWith("data:") ? undefined : item.url,
+                }),
+              )
               .map(escapeTranscriptText)
               .join(", ")
             lines.push(`<attachments>${attachments}</attachments>`)
@@ -512,6 +524,7 @@ export namespace SessionCompaction {
       "For unfinished paginated tool work, retrieve the exact persisted result through ReadCompactionToolResult and preserve its authoritative nextOffset or next_offset verbatim with the exact tool-part and Artifact locator references. Never estimate a cursor, convert between character and byte offsets, or restart an already completed prefix.",
       "Do not invent an active/current state object, domain handoff payload, terminal report, or JSON envelope.",
       "The original durable conversation and facts remain authoritative; this summary is only a bounded continuation projection.",
+      "Preserve exact names and source references of relevant loaded Skills for reloading guidance. Preserve attachment locators and verified observations, not invented image details. Desktop/browser observations and focus are historical evidence; inspect current state before choosing new visual targets. A summary grants no tool access or action authorization.",
       input.runtime,
       ...input.context,
     ]
@@ -519,13 +532,20 @@ export namespace SessionCompaction {
       .join("\n\n")
   }
 
-  export function requestBudget(input: { messages: ModelMessage[]; config: Config.Info; model: Provider.Model }) {
-    const estimatedTokens = Token.estimate(JSON.stringify(input.messages))
-    const usableBudget = ContextBudget.usable({ config: input.config, model: input.model })
+  export function requestBudget(input: {
+    messages: ModelMessage[]
+    system: string[]
+    tools: Record<string, AITool>
+    config: Config.Info
+    model: Provider.Model
+  }) {
+    const estimate = RequestBudget.estimate(input)
+    const capacity = ContextBudget.capacity(input)
     return {
-      estimatedTokens,
-      usableBudget,
-      exceeds: input.model.limit.context > 0 && estimatedTokens > usableBudget,
+      ...estimate,
+      estimatedTokens: estimate.totalTokensEst,
+      usableBudget: capacity.status === "known" ? capacity.tokens : undefined,
+      exceeds: capacity.status === "known" && estimate.totalTokensEst > capacity.tokens,
     }
   }
 
@@ -535,10 +555,7 @@ export namespace SessionCompaction {
       const msg = messages[i]
       // Turn boundaries follow real conversation starts and assistant step starts,
       // which keeps long dispatcher-owned build sessions compactable without a kind branch.
-      const isUserBoundary = msg.info.role === "user"
-      const isAssistantStepBoundary =
-        msg.info.role === "assistant" && msg.parts.some((part) => part.type === "step-start")
-      if (!isUserBoundary && !isAssistantStepBoundary) continue
+      if (!Message.isCompactionTailBoundary(msg)) continue
       result.push({
         start: i,
         end: messages.length,
@@ -552,8 +569,8 @@ export namespace SessionCompaction {
   }
 
   async function estimate(input: { messages: Message.WithParts[]; model: Provider.Model }) {
-    const msgs = compactionTranscriptMessages(input.messages)
-    return Token.estimate(JSON.stringify(msgs))
+    const msgs = await Message.toModelMessages(input.messages, input.model)
+    return RequestBudget.estimate({ messages: msgs }).totalTokensEst
   }
 
   async function selectCompactionInput(input: {
@@ -596,7 +613,7 @@ export namespace SessionCompaction {
       if (total + size <= budget) {
         total += size
         const boundary = input.messages[turn.start]
-        if (boundary?.info.role === "user") {
+        if (boundary && Message.isCompactionTailBoundary(boundary)) {
           keep = { start: turn.start, id: turn.id }
         }
         continue
@@ -669,8 +686,8 @@ export namespace SessionCompaction {
       : -1
     if (markerPart.tail_start_id) {
       const tailMessage = tailIndex >= 0 ? messages[tailIndex] : undefined
-      if (!tailMessage || tailMessage.info.role !== "user") {
-        return { status: "invalid_boundary", reason: "compaction tail boundary is missing or is not a user message" }
+      if (!tailMessage || !Message.isCompactionTailBoundary(tailMessage)) {
+        return { status: "invalid_boundary", reason: "compaction tail boundary is missing or incomplete" }
       }
     }
     const markerOnAnchor = marker.info.role === "assistant" && markerPart.anchor_id === marker.info.parentID
@@ -814,13 +831,14 @@ export namespace SessionCompaction {
     const model = input.model
       ? await Provider.getModel(input.model.providerID, input.model.modelID, { config })
       : await resolveAgentModel(agent.name, { sessionID: input.sessionID })
+    const continuationModel = await Provider.getModel(userMessage.model.providerID, userMessage.model.modelID, { config })
     const history = input.messages
     const selected =
       repeatedCompactionInput(history, input.parentID) ??
       (await selectCompactionInput({
         messages: history,
         config,
-        model,
+        model: continuationModel,
         overflow: input.overflow === true,
       }))
     if (selected.head.length === 0) {
@@ -850,6 +868,7 @@ export namespace SessionCompaction {
           text: userText(dispatchAnchorMessage),
         }
       : undefined
+    const sourceTokens = await estimate({ messages: selected.head, model: continuationModel })
 
     const msg = (await Session.updateMessage({
       id: Identifier.ascending("message"),
@@ -900,6 +919,32 @@ export namespace SessionCompaction {
           assistant.error = error.toObject()
           return
         }
+        const summaryTokens = RequestBudget.estimate({
+          messages: [{ role: "assistant", content: [{ type: "text", text: continuation }] }],
+        }).totalTokensEst
+        const reason = !CompactionHandoff.isComplete(assistant.finish)
+          ? "incomplete"
+          : summaryTokens >= sourceTokens
+            ? "not_smaller"
+            : undefined
+        if (reason) {
+          const error = new Message.CompactionSummaryInvalidError({
+            message:
+              reason === "incomplete"
+                ? `Compaction summary ended with ${assistant.finish ?? "unknown"}; a complete stop is required.`
+                : `Compaction summary did not reduce the replaced history (${summaryTokens} >= ${sourceTokens} estimated tokens).`,
+            reason,
+            sessionID: input.sessionID,
+            assistantMessageID: assistant.id,
+            finish: assistant.finish,
+            sourceTokens,
+            summaryTokens,
+          })
+          assistant.summary = false
+          assistant.finish = "error"
+          assistant.error = error.toObject()
+          return
+        }
         assistant.summary = true
       },
     })
@@ -932,7 +977,22 @@ export namespace SessionCompaction {
         ],
       },
     ]
-    const budget = requestBudget({ messages: providerMessages, config, model })
+    const tools = {
+      [CompactionToolResultReader.TOOL_NAME]: processRuntime.prepareProviderTool({
+        name: CompactionToolResultReader.TOOL_NAME,
+        source: "extra",
+        model,
+        tool: CompactionToolResultReader.create(selected.head),
+      }),
+    }
+    const system = await LLM.composeSystem({
+      agentID: agent.name,
+      agent: sessionRuntimeFromNativeAgent(agent),
+      model,
+      system: [],
+      sessionID: input.sessionID,
+    })
+    const budget = requestBudget({ messages: providerMessages, system, tools, config, model })
     if (budget.exceeds) {
       const error = new Message.ContextOverflowError({
         message: `Compaction request exceeds model context budget before provider call: estimated ${budget.estimatedTokens} tokens, usable budget ${budget.usableBudget}.`,
@@ -942,14 +1002,6 @@ export namespace SessionCompaction {
       processor.message.time.completed = Date.now()
       await Session.updateMessage(processor.message)
       return { status: "failed", error } satisfies ProcessFailure
-    }
-    const tools = {
-      [CompactionToolResultReader.TOOL_NAME]: processRuntime.prepareProviderTool({
-        name: CompactionToolResultReader.TOOL_NAME,
-        source: "extra",
-        model,
-        tool: CompactionToolResultReader.create(selected.head),
-      }),
     }
     const result = await processor.process({
       user: userMessage,

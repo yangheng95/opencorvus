@@ -461,6 +461,19 @@ export function App(props: AppProps) {
                           </div>
                           <div class="chat-header-meta oc-surface-header__actions">
                             <div class="chat-header-actions" data-no-drag="true">
+                              <Show when={boardStore.selectedSource}>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  tone="neutral"
+                                  onClick={() => props.onOpenRightDockPanel("side-chat")}
+                                  aria-label={t("side_chat.title")}
+                                  title={t("side_chat.title")}
+                                  data-ui="open-side-chat"
+                                >
+                                  <Icon name="side-chat" size="medium" />
+                                </Button>
+                              </Show>
                               <Show when={workspaceEditorLaunchersAvailable()}>
                                 <div id="solidChatHeaderEditorLaunchers">
                                   <WorkspaceEditorLaunchers />

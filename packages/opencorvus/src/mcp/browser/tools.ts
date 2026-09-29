@@ -4,6 +4,7 @@ import os from "node:os"
 import path from "node:path"
 import { Global } from "../../global"
 import { z } from "zod"
+import { builtinGuidance } from "../../skill/builtin-guidance"
 import {
   adoptPage,
   clearSuccessfulDownloadRequestDiagnostic,
@@ -167,7 +168,12 @@ type ScreenshotPixelSummary = ModelImagePixelSummary
 export const screenshotPixelSummary = modelImagePixelSummary
 
 // 图片响应：content 放 image 类型（模型可视化）+ 像素摘要文本（防止模型压缩图片后坐标失准），structuredContent 放 base64 数据（script.ts 可编程访问）
-const okImage = (base64: string, width: number, height: number, source: { url: string; viewport: { width: number; height: number } }) => {
+const okImage = (
+  base64: string,
+  width: number,
+  height: number,
+  source: { url: string; viewport: { width: number; height: number } },
+) => {
   const pixelSummary = screenshotPixelSummary(width, height)
   return {
     content: [
@@ -551,10 +557,20 @@ export const registerTools = (server: McpServer, options: BrowserMcpToolOptions)
   // ── Session 生命周期 ──────────────────────────────────────────────────────────
 
   server.registerTool(
+    "help",
+    {
+      description:
+        "Read the browser-use Skill: session/profile ownership, grounded targets, observation boundaries and error recovery. Read-only; use before first interaction or when instructions are missing from context.",
+      inputSchema: {},
+    },
+    async () => ok({ skill: "browser-use", instructions: builtinGuidance("browser-use") }),
+  )
+
+  server.registerTool(
     "session_create",
     {
       description:
-        "创建浏览器 session（Page/tab），返回 sessionId 和 profileId。User Profile 代表一个浏览器用户环境（BrowserContext）；同一 profileId 下创建的多个 session 像同一浏览器的多个 tab，会共享 Cookie、Storage 和登录状态。默认 Chrome CDP 模式下，不传 profileId 会在当前已登录 Chrome 环境中创建 MCP 管理的新 tab；isolated 模式下，不传 profileId 会创建新的隔离用户环境。后续复用同一环境时应传回 profileId；不存在或已过期的 profileId 会报错。",
+        "创建浏览器 session（Page/tab），返回 sessionId、profileId 和 browser-use Skill 指南；先阅读返回指南再交互，help 可按需重读。profileId 代表共享 Cookie/Storage 的用户环境。Chrome CDP 模式在当前 Chrome 环境中新建工具所有的 tab；isolated 模式新建隔离环境。复用环境传回真实 profileId；过期 ID 会报错。",
       inputSchema: {
         profileId: z
           .string()
@@ -599,6 +615,7 @@ export const registerTools = (server: McpServer, options: BrowserMcpToolOptions)
           ),
       },
       outputSchema: {
+        instructions: z.string().describe("Canonical browser-use Skill instructions; read before interaction."),
         sessionId: z.string().describe("会话唯一标识符，后续所有操作均需传入"),
         profileId: z
           .string()
@@ -617,7 +634,11 @@ export const registerTools = (server: McpServer, options: BrowserMcpToolOptions)
           ? await resolveBrowserMcpSessionProxy(undefined)
           : undefined)
       const created = await createSession({ ...args, proxy })
-      return ok({ ...created, liveViewUrl: sessionLiveViewUrl(created.sessionId) })
+      return ok({
+        ...created,
+        liveViewUrl: sessionLiveViewUrl(created.sessionId),
+        instructions: builtinGuidance("browser-use"),
+      })
     },
   )
 
@@ -1192,7 +1213,8 @@ export const registerTools = (server: McpServer, options: BrowserMcpToolOptions)
       error: {
         code: "GUARD_BLOCKED",
         message:
-          guard.message ?? "Coordinate guard blocked this interaction. Re-call with force:true to execute anyway.",
+          guard.message ??
+          "Coordinate guard blocked this interaction. Observe again and inspect the target before choosing a corrected action.",
       },
     })
 
@@ -1200,7 +1222,7 @@ export const registerTools = (server: McpServer, options: BrowserMcpToolOptions)
     "click",
     {
       description:
-        "点击元素。通过 selector（CSS selector）或坐标 {x, y} 二选一定位。selector 模式直接点击；坐标模式会自动执行 guard 检查，低置信度时不点击并返回附近候选。需要强制原始坐标点击时传 force:true。",
+        "点击当前证据中的元素，通过唯一 selector 或视口坐标 {x,y} 定位。坐标检查失败时重新观察并核对目标/遮挡；force:true 仅用于已有当前证据支持的原始坐标操作，不能作为失败后的自动重试。",
       inputSchema: clickInputSchema,
       outputSchema: {
         ok: z.boolean(),
@@ -1280,7 +1302,7 @@ export const registerTools = (server: McpServer, options: BrowserMcpToolOptions)
     "double_click",
     {
       description:
-        "双击元素。通过 selector 或坐标 {x, y} 定位。坐标模式会自动执行 double_click guard；需要强制原始坐标双击时传 force:true。",
+        "双击当前证据中的元素，通过唯一 selector 或视口坐标 {x,y} 定位。坐标检查失败先重新观察；仅在当前证据确认原始坐标操作时使用 force:true。",
       inputSchema: clickInputSchema,
       outputSchema: {
         ok: z.boolean(),
@@ -1346,7 +1368,7 @@ export const registerTools = (server: McpServer, options: BrowserMcpToolOptions)
     "hover",
     {
       description:
-        "移动鼠标并悬停（move + hover）。坐标操作时本质是 mouse.move，同时触发 hover 效果（tooltip、hover 菜单等）。【重要】在使用坐标执行 click / scroll 之前，必须先用此工具将鼠标移到目标坐标，通过截图确认坐标准确后再操作，避免点错位置。",
+        "移动鼠标并悬停，用于展示 tooltip、hover 菜单或核对视觉目标。悬停改变布局时，先观察结果再选择后续目标；坐标应来自当前视口证据。",
       inputSchema: clickInputSchema,
       outputSchema: { ok: z.boolean() },
     },
@@ -1373,7 +1395,8 @@ export const registerTools = (server: McpServer, options: BrowserMcpToolOptions)
   server.registerTool(
     "type",
     {
-      description: "向输入框输入文字。默认先清空再输入（clear=true）。",
+      description:
+        "用 text 替换目标输入框的值。clear=true（默认）会先执行一次 clear；clear=false 仍然是替换，不会追加。selector 必须来自当前页面证据。",
       inputSchema: {
         sessionId: z.string(),
         selector: z.string().describe("目标输入框的 CSS selector"),
@@ -1889,7 +1912,7 @@ export const registerTools = (server: McpServer, options: BrowserMcpToolOptions)
     "scroll",
     {
       description:
-        "在指定坐标处滚动页面。deltaX/deltaY 单位为像素，正值向右/向下，负值向左/向上。用于将屏幕外内容滚入视口后再截图。【坐标操作前必须先用 hover 确认坐标准确】",
+        "在当前视口证据中的坐标处滚动。deltaX/deltaY 单位为像素，正值向右/向下，负值向左/向上。滚动后重新观察再选择新的坐标目标。",
       inputSchema: {
         sessionId: z.string(),
         x: z.number().describe("鼠标位置 X 坐标（页面像素）"),
@@ -1917,7 +1940,7 @@ export const registerTools = (server: McpServer, options: BrowserMcpToolOptions)
     "evaluate",
     {
       description:
-        "在页面中执行 JavaScript 表达式，返回结果。处理无法用 selector 操作的场景（滚动、LocalStorage 读写等）。",
+        "在页面上下文执行 JavaScript 表达式并返回结果；不能访问宿主或 Playwright Page API。用于有明确目的的页面检查/操作。直接修改 DOM 或 storage 不能证明真实用户交互已成功；优先使用已有交互工具。",
       inputSchema: {
         sessionId: z.string(),
         expression: z.string().describe("JavaScript 表达式，与 Playwright page.evaluate(string) 用法一致"),

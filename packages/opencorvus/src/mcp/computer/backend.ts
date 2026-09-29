@@ -2,6 +2,8 @@ import { randomUUID } from "node:crypto"
 import type { CuaDriverLike, ToolResult } from "@trycua/cua-driver"
 import { z } from "zod"
 import { ComputerError, computerError } from "./errors"
+import type { ComputerAction } from "./actions"
+import { prepareComputerHostDpi } from "./windows-dpi"
 
 export type ComputerPoint = { x: number; y: number }
 export type ComputerBackendObservation = {
@@ -10,26 +12,7 @@ export type ComputerBackendObservation = {
   pngBase64: string
 }
 
-export type ComputerBackendAction =
-  | { kind: "click"; computerId: string; displayId: string; x: number; y: number; button: "left" | "right" }
-  | { kind: "type_text"; computerId: string; displayId: string; text: string }
-  | { kind: "keypress"; computerId: string; displayId: string; keys: string[] }
-  | {
-      kind: "scroll"
-      computerId: string
-      displayId: string
-      x: number
-      y: number
-      direction: "up" | "down" | "left" | "right"
-      amount: number
-    }
-  | { kind: "drag"; computerId: string; displayId: string; from: ComputerPoint; to: ComputerPoint; durationMs: number }
-
-export type ComputerBackendActionInput = ComputerBackendAction extends infer Action
-  ? Action extends ComputerBackendAction
-    ? Omit<Action, "computerId" | "displayId">
-    : never
-  : never
+export type ComputerBackendAction = ComputerAction & { computerId: string; displayId: string }
 
 export interface ComputerBackend {
   create(): Promise<{ computerId: string; displayId: string; driverVersion: string }>
@@ -72,6 +55,7 @@ function loadCuaSdk(): Promise<CuaSdk> {
 }
 
 export async function createCuaDriver(): Promise<CuaDriverLike> {
+  await prepareComputerHostDpi()
   const sdk = await loadCuaSdk()
   const driver = sdk.CuaDriver.create(sdk.DriverOptions.new({ claudeCodeCompatibility: false }))
   if (!driver.isAvailable()) {
