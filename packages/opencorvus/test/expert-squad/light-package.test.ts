@@ -897,24 +897,23 @@ describe("Light Expert Squad package", () => {
             validate?: (
               value: unknown,
             ) => Promise<
-              { success: true; value: { message_ids: string[] } } | { success: false; error: Error }
+              { success: true; value: { sources: Array<{ kind: "dispatch_result"; message_id: string }> } } | { success: false; error: Error }
             >
           }
           const providerSchema = providerContract.jsonSchema
-          expect(providerSchema.properties.message_ids).toMatchObject({
+          expect(providerSchema.properties.sources).toMatchObject({
             type: "array",
             minItems: 1,
             maxItems: 8,
-            uniqueItems: true,
           })
           expect(providerSchema.properties.inventory_before).toBeDefined()
           expect(providerSchema.properties.evidence_reads).toBeDefined()
-          expect(await providerContract.validate?.({ message_ids: finalIDs })).toEqual({
+          expect(await providerContract.validate?.({ sources: finalIDs.map((message_id) => ({ kind: "dispatch_result" as const, message_id })) })).toEqual({
             success: true,
-            value: { message_ids: finalIDs },
+            value: { sources: finalIDs.map((message_id) => ({ kind: "dispatch_result" as const, message_id })) },
           })
           const oversizedEvidence = await providerContract.validate?.({
-            message_ids: finalIDs,
+            sources: finalIDs.map((message_id) => ({ kind: "dispatch_result" as const, message_id })),
             evidence_reads: [
               { message_id: finalIDs[0], part_id: "part_a", field: "output", limit: 20_000 },
               { message_id: finalIDs[0], part_id: "part_b", field: "output", limit: 20_000 },
@@ -924,14 +923,14 @@ describe("Light Expert Squad package", () => {
           if (oversizedEvidence?.success === false) {
             expect(oversizedEvidence.error.message).toContain("at most 30000 characters per call")
           }
-          const rejected = await providerContract.validate?.({ message_ids: ["msg_not_a_current_settlement"] })
+          const rejected = await providerContract.validate?.({ sources: [{ kind: "dispatch_result" as const, message_id: "msg_not_a_current_settlement" }] })
           expect(rejected?.success).toBe(false)
           if (rejected?.success === false) {
-            expect(rejected.error.message).toContain("not terminal dispatch settlement authorities")
+            expect(rejected.error.message).toContain("not a terminal dispatch settlement")
           }
           const output = JSON.parse(
             (await reader.execute!(
-              { message_ids: finalIDs },
+              { sources: finalIDs.map((message_id) => ({ kind: "dispatch_result" as const, message_id })) },
               {
                 toolCallId: "read_collection_reports",
                 messages: [],
@@ -968,7 +967,7 @@ describe("Light Expert Squad package", () => {
           const evidenceOutput = JSON.parse(
             (await reader.execute!(
               {
-                message_ids: finalIDs,
+                sources: finalIDs.map((message_id) => ({ kind: "dispatch_result" as const, message_id })),
                 evidence_reads: [{
                   message_id: evidenceSelection.message_id,
                   part_id: evidenceSelection.part_id,
@@ -995,7 +994,7 @@ describe("Light Expert Squad package", () => {
           const inputEvidenceOutput = JSON.parse(
             (await reader.execute!(
               {
-                message_ids: finalIDs,
+                sources: finalIDs.map((message_id) => ({ kind: "dispatch_result" as const, message_id })),
                 evidence_reads: [{
                   message_id: evidenceSelection.message_id,
                   part_id: evidenceSelection.part_id,
@@ -1011,7 +1010,7 @@ describe("Light Expert Squad package", () => {
           await expect(
             reader.execute!(
               {
-                message_ids: finalIDs,
+                sources: finalIDs.map((message_id) => ({ kind: "dispatch_result" as const, message_id })),
                 evidence_reads: [{
                   message_id: "msg_not_a_causal_tool_message",
                   part_id: evidenceSelection.part_id,
@@ -1020,7 +1019,7 @@ describe("Light Expert Squad package", () => {
               },
               { toolCallId: "read_invalid_collection_evidence", messages: [] },
             ),
-          ).rejects.toThrow("not causal to the selected terminal dispatch Messages")
+          ).rejects.toThrow("not causal to the selected sources")
 
           const directDecisionMessageID = Identifier.ascending("message")
           const laterNow = Date.now() + 1_000
@@ -1079,11 +1078,11 @@ describe("Light Expert Squad package", () => {
           const historicalContract = asSchema(historicalReader.inputSchema) as {
             validate?: (
               value: unknown,
-            ) => Promise<{ success: true; value: { message_ids: string[] } } | { success: false; error: Error }>
+            ) => Promise<{ success: true; value: { sources: Array<{ kind: "dispatch_result"; message_id: string }> } } | { success: false; error: Error }>
           }
-          expect(await historicalContract.validate?.({ message_ids: [finalIDs[0]!, finalIDs[2]!] })).toEqual({
+          expect(await historicalContract.validate?.({ sources: [finalIDs[0]!, finalIDs[2]!].map((message_id) => ({ kind: "dispatch_result" as const, message_id })) })).toEqual({
             success: true,
-            value: { message_ids: [finalIDs[0]!, finalIDs[2]!] },
+            value: { sources: [finalIDs[0]!, finalIDs[2]!].map((message_id) => ({ kind: "dispatch_result" as const, message_id })) },
           })
           const historicalEvidenceSelection = output.causal_tool_message_inventory
             .filter((message: { session_id: string }) => message.session_id === dispatches[2]!.session_id)
@@ -1095,9 +1094,9 @@ describe("Light Expert Squad package", () => {
           const historicalEvidenceOutput = JSON.parse(
             (await historicalReader.execute!(
               {
-                message_ids: [finalIDs[0]!, finalIDs[2]!],
+                sources: [finalIDs[0]!, finalIDs[2]!].map((message_id) => ({ kind: "dispatch_result" as const, message_id })),
                 inventory_before: [{
-                  final_message_id: finalIDs[2]!,
+                  source: { kind: "dispatch_result", message_id: finalIDs[2]! },
                   before_message_id: historicalEvidenceSelection.message_id,
                 }],
                 evidence_reads: [{

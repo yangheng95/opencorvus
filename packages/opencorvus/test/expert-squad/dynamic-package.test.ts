@@ -738,7 +738,7 @@ describe("Dynamic Expert Squad package", () => {
             })
           }
           const exactMessages = await readAgentMessage.execute(
-            { message_ids: finalMessages.map((message) => message.messageID) },
+            { sources: finalMessages.map((message) => ({ kind: "dispatch_result" as const, message_id: message.messageID })) },
             {
               toolCallId: Identifier.ascending("call"),
               messages: [],
@@ -822,7 +822,7 @@ describe("Dynamic Expert Squad package", () => {
           })
           await expect(
             readAgentMessage.execute(
-              { message_ids: [foreignFinalID] },
+              { sources: [{ kind: "dispatch_result" as const, message_id: foreignFinalID }] },
               {
                 toolCallId: Identifier.ascending("call"),
                 messages: [],

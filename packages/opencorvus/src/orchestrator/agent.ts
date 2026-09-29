@@ -480,13 +480,7 @@ export namespace Orchestrator {
       schedulerMcpOwner = createComputerRuntimeConnectionOwner(
         computerRuntimeScopeIdentity({ ownerKind: "orchestrator", taskID, sessionID: agentSession.id }),
       )
-      const projectedToolIDs = [
-        ...schedulerCapability.builtInToolIDs.filter((toolID) => toolID !== "capability_search"),
-        ...schedulerCapability.defaultTools.map((entry) => entry.providerName),
-        ...schedulerCapability.packageTools.map((entry) => entry.providerName),
-        ...schedulerCapability.defaultMcpTools.map((entry) => entry.providerName),
-        ...schedulerCapability.packageMcpTools.map((entry) => entry.providerName),
-      ]
+      const projectedToolIDs = PromptProfileResolver.schedulerRuntimeToolIDs(schedulerCapability)
       const builtInToolIDs = new Set(schedulerCapability.builtInToolIDs)
       const materializeBuiltInTool = (toolID: string) =>
         createExactOrchestratorTool({

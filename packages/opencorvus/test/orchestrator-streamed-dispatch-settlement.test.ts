@@ -294,8 +294,8 @@ for (const { collection, selectGoals, delegatedSelection = false } of [
                 const initial = listDispatchLineage(task.id)[0]!
                 const outcome = findDispatchSettlementByDispatchID({ taskID: task.id, dispatchID: initial.dispatchID })!.payload.outcome
                 if (outcome.kind !== "terminal_success") throw new Error("Producer must have a settled participant report")
-                const message_ids = [outcome.final_message_id]
-                if (reviewerStep++ === 0) return toolStream("read_agent_message", { message_ids })
+                const sources = [{ kind: "dispatch_result", message_id: outcome.final_message_id }]
+                if (reviewerStep++ === 0) return toolStream("read_agent_message", { sources })
                 const reads = (await Session.messages({ sessionID: initial.payload.child_session_id })).flatMap(message =>
                   message.parts.flatMap(part => part.type === "tool" && part.tool === "read_agent_message" && part.state.status === "completed"
                     ? [JSON.parse(part.state.output)] : []))
@@ -306,7 +306,7 @@ for (const { collection, selectGoals, delegatedSelection = false } of [
                   expect(last.causal_tool_reference_index.refs).toHaveLength(17)
                   expect(last.causal_tool_message_inventory).toHaveLength(16)
                   expect(last.inventory_next_before).toHaveLength(1)
-                  return toolStream("read_agent_message", { message_ids, inventory_before: last.inventory_next_before })
+                  return toolStream("read_agent_message", { sources, inventory_before: last.inventory_next_before })
                 }
                 const earliest = reads[1].causal_tool_message_inventory[0]
                 const fact = earliest.tool_facts[0]
@@ -316,7 +316,7 @@ for (const { collection, selectGoals, delegatedSelection = false } of [
                     part_id: fact.part_id,
                   })
                   expect(reads[1].causal_tool_message_inventory).toHaveLength(1)
-                  return toolStream("read_agent_message", { message_ids, evidence_reads: [
+                  return toolStream("read_agent_message", { sources, evidence_reads: [
                     { message_id: earliest.message_id, part_id: fact.part_id, field: "input", offset: 0, limit: 120 },
                     { message_id: earliest.message_id, part_id: fact.part_id, field: "output", offset: 0, limit: 8000 },
                   ] })
@@ -325,7 +325,7 @@ for (const { collection, selectGoals, delegatedSelection = false } of [
                 if (!inputRead) throw new Error(JSON.stringify((await Session.messages({ sessionID: initial.payload.child_session_id })).flatMap(message => message.parts.filter(part => part.type === "tool" && part.state.status === "error"))))
                 reviewedInput += inputRead.content
                 reviewedOutput ||= last.evidence_reads.find((read: any) => read.field === "output")?.content ?? ""
-                if (inputRead.next_offset !== null) return toolStream("read_agent_message", { message_ids, evidence_reads: [
+                if (inputRead.next_offset !== null) return toolStream("read_agent_message", { sources, evidence_reads: [
                   { message_id: earliest.message_id, part_id: fact.part_id, field: "input", offset: inputRead.next_offset, limit: 120 },
                 ] })
                 expect(JSON.parse(reviewedInput)).toEqual(producerInput)

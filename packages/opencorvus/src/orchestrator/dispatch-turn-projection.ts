@@ -94,7 +94,9 @@ const AcceptanceRepairObligationSchema = z
       ids.add(criterion.criterion_id)
     }
   })
-export const AcceptanceRepairDispatchSchema = AcceptanceRepairObligationSchema.safeExtend({ checkpoint_required: z.literal(true) })
+export const AcceptanceRepairDispatchSchema = AcceptanceRepairObligationSchema.safeExtend({
+  checkpoint_required: z.literal(true),
+})
 export type AcceptanceRepairDispatch = z.infer<typeof AcceptanceRepairDispatchSchema>
 
 export function acceptanceRepairEvidenceLocators(repair: AcceptanceRepairDispatch): EvidenceLocator[] {
@@ -106,8 +108,13 @@ export function acceptanceRepairEvidenceLocators(repair: AcceptanceRepairDispatc
 export const DispatchTurnSchema = z.discriminatedUnion("kind", [
   DispatchTurnBaseSchema.extend({
     kind: z.literal("initial"),
-    preparation_recovery: z.object({ source_dispatch_id: z.string().min(1), guidance: z.string().min(1) }).strict().optional(),
-    acceptance_repair: AcceptanceRepairObligationSchema.safeExtend({ checkpoint_required: z.literal(false) }).optional(),
+    preparation_recovery: z
+      .object({ source_dispatch_id: z.string().min(1), guidance: z.string().min(1) })
+      .strict()
+      .optional(),
+    acceptance_repair: AcceptanceRepairObligationSchema.safeExtend({
+      checkpoint_required: z.literal(false),
+    }).optional(),
   }).strict(),
   DispatchTurnBaseSchema.extend({
     kind: z.literal("continuation"),
@@ -126,6 +133,11 @@ export function controlTextSHA256(text: string): string {
   return createHash("sha256").update(text).digest("hex")
 }
 
+export function renderDispatchOriginEvidence(turn: DispatchTurn): string {
+  const source = { kind: "dispatch_origin", dispatch_id: turn.current_dispatch_id }
+  return `# Dispatch evidence\ncurrent_dispatch_id: ${turn.current_dispatch_id}\nRead the root's Tool facts preceding this dispatch with read_agent_message sources=[${JSON.stringify(source)}]. These timed facts support independent comparison; they are not a producer verdict or current-state guarantee.`
+}
+
 export function renderDispatchContinuationTurn(input: {
   turn: DispatchTurn
   guidance: string
@@ -134,7 +146,9 @@ export function renderDispatchContinuationTurn(input: {
 }): string | undefined {
   const turn = DispatchTurnSchema.parse(input.turn)
   if (turn.kind === "initial" && !turn.acceptance_repair && !turn.preparation_recovery) return undefined
-  const guidance = (turn.kind === "initial" && turn.preparation_recovery ? turn.preparation_recovery.guidance : input.guidance).trim()
+  const guidance = (
+    turn.kind === "initial" && turn.preparation_recovery ? turn.preparation_recovery.guidance : input.guidance
+  ).trim()
   const evidenceLocators = EvidenceLocatorListSchema.parse(input.evidenceLocators ?? turn.evidence_locators)
   const authority = turn.task_authority
   return [
@@ -147,7 +161,10 @@ export function renderDispatchContinuationTurn(input: {
     "## Dispatch lineage",
     "",
     `- current_dispatch_id: ${turn.current_dispatch_id}`,
-    ...(turn.kind === "initial" && turn.preparation_recovery ? [`- preparation_source_dispatch_id: ${turn.preparation_recovery.source_dispatch_id}`] : []),
+    renderDispatchOriginEvidence(turn),
+    ...(turn.kind === "initial" && turn.preparation_recovery
+      ? [`- preparation_source_dispatch_id: ${turn.preparation_recovery.source_dispatch_id}`]
+      : []),
     ...(turn.kind === "continuation"
       ? [`- source_dispatch_id: ${turn.source_dispatch_id}`, `- child_session_id: ${turn.child_session_id}`]
       : []),
@@ -202,7 +219,10 @@ export function renderDispatchContinuationTurn(input: {
     "",
     "## Current guidance",
     "",
-    guidance || (turn.kind === "initial" ? "Execute this workflow node against the original Task request and current acceptance obligation." : "Continue from the latest visible worker result and current Task evidence."),
+    guidance ||
+      (turn.kind === "initial"
+        ? "Execute this workflow node against the original Task request and current acceptance obligation."
+        : "Continue from the latest visible worker result and current Task evidence."),
     "",
     "## Artifact evidence",
     "",

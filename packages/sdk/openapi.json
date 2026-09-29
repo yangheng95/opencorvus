@@ -71381,7 +71381,7 @@
                         "type": "string"
                       },
                       "evidence_reads": {
-                        "description": "Optional exact input, output, or failure chunks selected from this final's causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. The sum of every limit in one call must be at most 30000 characters. Follow next_offset until null.",
+                        "description": "Optional exact input, output, or failure chunks from the selected sources' causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. The sum of every limit in one call must be at most 30000 characters. Follow next_offset until null.",
                         "items": {
                           "additionalProperties": false,
                           "properties": {
@@ -71433,13 +71433,49 @@
                               "minLength": 1,
                               "type": "string"
                             },
-                            "final_message_id": {
-                              "minLength": 1,
-                              "type": "string"
+                            "source": {
+                              "oneOf": [
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "kind": {
+                                      "const": "dispatch_result",
+                                      "type": "string"
+                                    },
+                                    "message_id": {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "kind",
+                                    "message_id"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "dispatch_id": {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "kind": {
+                                      "const": "dispatch_origin",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "kind",
+                                    "dispatch_id"
+                                  ],
+                                  "type": "object"
+                                }
+                              ]
                             }
                           },
                           "required": [
-                            "final_message_id",
+                            "source",
                             "before_message_id"
                           ],
                           "type": "object"
@@ -71447,11 +71483,47 @@
                         "maxItems": 8,
                         "type": "array"
                       },
-                      "message_ids": {
-                        "description": "One to eight exact terminal worker Message identities from current Task settlements, in result order.",
+                      "sources": {
+                        "description": "One to eight ordered Task evidence sources: a settled worker report or the root Tool facts preceding an exact dispatch.",
                         "items": {
-                          "minLength": 1,
-                          "type": "string"
+                          "oneOf": [
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "kind": {
+                                  "const": "dispatch_result",
+                                  "type": "string"
+                                },
+                                "message_id": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "message_id"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "dispatch_id": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "kind": {
+                                  "const": "dispatch_origin",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "dispatch_id"
+                              ],
+                              "type": "object"
+                            }
+                          ]
                         },
                         "maxItems": 8,
                         "minItems": 1,
@@ -71466,7 +71538,7 @@
                     "required": [
                       "action",
                       "taskID",
-                      "message_ids"
+                      "sources"
                     ],
                     "type": "object"
                   },

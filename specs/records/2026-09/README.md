@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Agent execution redesign implementation](2026-09-30-agent-execution-implementation.md)
+
 - [Agent execution redesign: ownership, evidence, convergence and efficiency](2026-09-30-agent-execution-redesign.md)
 
 - [Reference-led navigation and usage design](2026-09-29-reference-navigation-usage-style.md)

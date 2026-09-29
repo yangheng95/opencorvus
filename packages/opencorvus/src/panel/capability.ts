@@ -341,7 +341,7 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "read_task_dispatch_evidence",
     description:
-      "Read exact real worker final Messages and their causal Tool evidence from dispatch_settlement Artifacts of a failed Task in this Mission. First query the current terminal Task, completely read the relevant dispatch_settlement Artifacts from its catalog, then copy their outcome.final_message_id values into message_ids. The Host binds the current terminal occurrence and Mission ownership; the shared read_agent_message projection validates Task/Session/Message identity, returns paged actual Tool facts and redacts sensitive fields. This is evidence for Mission judgment and same-Task repair, not a Completion Decision or a business-success verdict.",
+      "Read exact real worker final Messages and their causal Tool evidence from dispatch_settlement Artifacts of a failed Task in this Mission. First query the current terminal Task, completely read the relevant dispatch_settlement Artifacts from its catalog, then select sources with kind=dispatch_result and their outcome.final_message_id as message_id; use kind=dispatch_origin with an exact dispatch_id for the root Tool facts preceding that dispatch. The Host binds the current terminal occurrence and Mission ownership; the shared read_agent_message projection validates Task/Session/Message identity, returns paged actual Tool facts and redacts sensitive fields. This is evidence for Mission judgment and same-Task repair, not a Completion Decision or a business-success verdict.",
     kind: "query",
     surfaces: ["panel"],
     params: {

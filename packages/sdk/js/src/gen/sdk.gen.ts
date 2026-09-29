@@ -4786,7 +4786,7 @@ export class Control extends HeyApiClient {
         | {
             action: "read_task_dispatch_evidence"
             /**
-             * Optional exact input, output, or failure chunks selected from this final's causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. The sum of every limit in one call must be at most 30000 characters. Follow next_offset until null.
+             * Optional exact input, output, or failure chunks from the selected sources' causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. The sum of every limit in one call must be at most 30000 characters. Follow next_offset until null.
              */
             evidence_reads?: Array<{
               field: "input" | "output" | "failure"
@@ -4800,12 +4800,29 @@ export class Control extends HeyApiClient {
              */
             inventory_before?: Array<{
               before_message_id: string
-              final_message_id: string
+              source:
+                | {
+                    kind: "dispatch_result"
+                    message_id: string
+                  }
+                | {
+                    dispatch_id: string
+                    kind: "dispatch_origin"
+                  }
             }>
             /**
-             * One to eight exact terminal worker Message identities from current Task settlements, in result order.
+             * One to eight ordered Task evidence sources: a settled worker report or the root Tool facts preceding an exact dispatch.
              */
-            message_ids: Array<string>
+            sources: Array<
+              | {
+                  kind: "dispatch_result"
+                  message_id: string
+                }
+              | {
+                  dispatch_id: string
+                  kind: "dispatch_origin"
+                }
+            >
             /**
              * Current failed child Task in this Mission lineage.
              */

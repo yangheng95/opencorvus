@@ -16,6 +16,8 @@ import { Instance } from "@/project/instance"
 import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
 import { Session } from "@/session"
 import { Database } from "@/storage/db"
+import { PartTable, ToolPartRequestTable, ToolPartOutcomeTable } from "@/session/session.sql"
+import { readAgentMessages, TaskEvidenceSourceError } from "@/tool/read-agent-message"
 import { Tool } from "@/tool/tool"
 import { PanelLeafTools } from "@/tool/panel"
 import { persistEstablishedTask } from "./fixture/engine-task"
@@ -38,7 +40,10 @@ test("Mission reads a failed child Task's settled worker report and causal Tool 
         prompt_profile: { active: "base" },
         mcp: { [BrowserMCPBuiltin.ServerName]: BrowserMCPBuiltin.localConfig() },
       })
-      const scheduler = await PromptProfileResolver.resolveSchedulerCapability({ projectDirectory: project.path, config })
+      const scheduler = await PromptProfileResolver.resolveSchedulerCapability({
+        projectDirectory: project.path,
+        config,
+      })
       const workerCapability = await PromptProfileResolver.resolveWorkerCapability({
         projectDirectory: project.path,
         config,
@@ -144,25 +149,110 @@ test("Mission reads a failed child Task's settled worker report and causal Tool 
         time: { ...workerFinal.time, completed: now + 5 },
         finish: "stop",
       })
-      const lineage = recordTestDispatchLineage({
-        origin: createDispatchLineageOrigin({
-          taskID,
-          orchestratorSessionID: taskRoot.id,
-          orchestratorMessageID: Identifier.ascending("message"),
-          toolPartID: Identifier.ascending("part"),
-          toolCallID: Identifier.ascending("call"),
-          targetAgentID: workerCapability.identity.agentID,
-          projectedWorkerIdentity: workerCapability.identity,
-          workScope: { kind: "task" },
-          workflowBinding: selectedWorkflowBinding({
-            projection: { packageRevision, virtualWorkflows: scheduler.virtualWorkflows },
-            workflowID: null,
+      const lineage = recordTestDispatchLineage(
+        {
+          origin: createDispatchLineageOrigin({
+            taskID,
+            orchestratorSessionID: taskRoot.id,
+            orchestratorMessageID: Identifier.ascending("message"),
+            toolPartID: Identifier.ascending("part"),
+            toolCallID: Identifier.ascending("call"),
+            targetAgentID: workerCapability.identity.agentID,
+            projectedWorkerIdentity: workerCapability.identity,
+            workScope: { kind: "task" },
+            workflowBinding: selectedWorkflowBinding({
+              projection: { packageRevision, virtualWorkflows: scheduler.virtualWorkflows },
+              workflowID: null,
+            }),
+            workflowNodeID: null,
+            adapterInput: {},
           }),
-          workflowNodeID: null,
-          adapterInput: {},
+          childSessionID: worker.id,
+          now: now + 6,
+        },
+        { completeCreatorAssistant: false },
+      )
+      // The root assistant remains active while its reviewer consumes an exact
+      // dispatch-origin boundary. Persist request/outcome timestamps separately.
+      const rootMessageID = lineage.payload.orchestrator_message_id
+      const boundaryID = Identifier.ascending("part")
+      const rootReadID = Identifier.ascending("part")
+      const siblingID = Identifier.ascending("part")
+      const lateID = Identifier.ascending("part")
+      const coincidentID = Identifier.ascending("part")
+      Database.use((db) => {
+        db.insert(PartTable)
+          .values({
+            id: boundaryID,
+            message_id: rootMessageID,
+            session_id: taskRoot.id,
+            time_created: now + 5,
+            data: { type: "step-start" },
+          })
+          .run()
+        for (const [id, start, end, output] of [
+          [rootReadID, now + 1, now + 3, '{"approved_until":"2026-03-31"}'],
+          [siblingID, now + 5, now + 6, "same-step sibling"],
+          [lateID, now + 2, now + 8, "late completion"],
+          [coincidentID, now + 2, now + 5, "unorderable same-millisecond outcome"],
+        ] as const) {
+          db.insert(ToolPartRequestTable)
+            .values({
+              id,
+              message_id: rootMessageID,
+              time_created: start,
+              data: {
+                type: "tool-request",
+                tool: "read",
+                callID: `call-${id}`,
+                input: { source: "approval" },
+                time: { start },
+              },
+            })
+            .run()
+          db.insert(ToolPartOutcomeTable)
+            .values({
+              id: Identifier.ascending("part"),
+              request_part_id: id,
+              time_created: end,
+              data: { outcome: "completed", title: "Source", output, metadata: {}, time: { end } },
+            })
+            .run()
+        }
+      })
+      const originSource = { kind: "dispatch_origin" as const, dispatch_id: lineage.dispatchID }
+      const originInput = { sources: [originSource] }
+      const originEvidence = JSON.parse(await readAgentMessages(taskID, originInput))
+      expect(originEvidence.messages).toEqual([])
+      expect(originEvidence.origins).toEqual([
+        {
+          source: originSource,
+          session_id: taskRoot.id,
+          message_id: rootMessageID,
+          execution_epoch: lineage.payload.execution_epoch,
+          before_provider_step: { part_id: boundaryID, time_created: now + 5 },
+        },
+      ])
+      expect(originEvidence.causal_tool_reference_index.refs.map((ref: { part_id: string }) => ref.part_id)).toEqual([
+        rootReadID,
+      ])
+      const readOrigin = JSON.parse(
+        await readAgentMessages(taskID, {
+          ...originInput,
+          evidence_reads: [{ message_id: rootMessageID, part_id: rootReadID, field: "output" }],
         }),
-        childSessionID: worker.id,
-        now: now + 6,
+      )
+      expect(readOrigin.evidence_reads[0].content).toBe('{"approved_until":"2026-03-31"}')
+      for (const part_id of [siblingID, lateID, coincidentID]) {
+        await expect(
+          readAgentMessages(taskID, {
+            ...originInput,
+            evidence_reads: [{ message_id: rootMessageID, part_id, field: "output" }],
+          }),
+        ).rejects.toBeInstanceOf(TaskEvidenceSourceError)
+      }
+      await expect(readAgentMessages(Identifier.ascending("task"), originInput)).rejects.toMatchObject({
+        code: "TASK_EVIDENCE_SOURCE_INVALID",
       })
       recordDispatchSettlement({
         taskID,
@@ -170,12 +260,16 @@ test("Mission reads a failed child Task's settled worker report and causal Tool 
         outcome: DispatchOutcome.terminal({ sessionID: worker.id, finalMessageID: workerFinal.id }),
         now: now + 6,
       })
-      await terminalTask(requireTask(taskID), {
-        status: "failed",
-        time_started: now,
-        time_completed: now + 7,
-        error: "Source unavailable",
-      }, "Source unavailable")
+      await terminalTask(
+        requireTask(taskID),
+        {
+          status: "failed",
+          time_started: now,
+          time_completed: now + 7,
+          error: "Source unavailable",
+        },
+        "Source unavailable",
+      )
       const terminalReference = requireCurrentTerminalLifecycleReference(taskID)
       const missionInput = await Session.updateMessage({
         id: Identifier.ascending("message"),
@@ -265,18 +359,24 @@ test("Mission reads a failed child Task's settled worker report and causal Tool 
         })
         return JSON.parse((await read.tool.execute(input, context(read.id, callID))).output)
       }
-      const inventory = await executeRead({ taskID, message_ids: [workerFinal.id] }, "read-failed-worker-inventory")
+      const inventory = await executeRead(
+        { taskID, sources: [{ kind: "dispatch_result" as const, message_id: workerFinal.id }] },
+        "read-failed-worker-inventory",
+      )
       expect(inventory).toMatchObject({
         taskID,
         terminal_lifecycle_reference: terminalReference,
         messages: [{ message_id: workerFinal.id, text: [expect.stringContaining("eligible candidate")] }],
         causal_tool_message_inventory: [{ message_id: toolMessage.id }],
       })
-      const evidence = await executeRead({
-        taskID,
-        message_ids: [workerFinal.id],
-        evidence_reads: [{ message_id: toolMessage.id, part_id: toolPart.id, field: "output" }],
-      }, "read-failed-worker-tool-result")
+      const evidence = await executeRead(
+        {
+          taskID,
+          sources: [{ kind: "dispatch_result" as const, message_id: workerFinal.id }],
+          evidence_reads: [{ message_id: toolMessage.id, part_id: toolPart.id, field: "output" }],
+        },
+        "read-failed-worker-tool-result",
+      )
       expect(JSON.parse(evidence.evidence_reads[0].content)).toEqual({ values: [["candidate", "eligible"]] })
 
       const otherMission = await ensureMissionSession({
@@ -316,30 +416,47 @@ test("Mission reads a failed child Task's settled worker report and causal Tool 
         type: "tool",
         callID: otherCallID,
         tool: read.id,
-        state: { status: "running", input: { taskID, message_ids: [workerFinal.id] }, time: { start: now + 15 } },
+        state: {
+          status: "running",
+          input: { taskID, sources: [{ kind: "dispatch_result" as const, message_id: workerFinal.id }] },
+          time: { start: now + 15 },
+        },
       })
-      await expect(read.tool.execute({ taskID, message_ids: [workerFinal.id] }, {
-        ...context(read.id, otherCallID),
-        sessionID: otherMission.id,
-        messageID: otherCaller.id,
-      })).rejects.toThrow(`Cross-Task Artifact source ${taskID} is outside Mission ${otherMission.missionID} lineage`)
+      await expect(
+        read.tool.execute(
+          { taskID, sources: [{ kind: "dispatch_result" as const, message_id: workerFinal.id }] },
+          {
+            ...context(read.id, otherCallID),
+            sessionID: otherMission.id,
+            messageID: otherCaller.id,
+          },
+        ),
+      ).rejects.toThrow(`Cross-Task Artifact source ${taskID} is outside Mission ${otherMission.missionID} lineage`)
 
-      Database.transaction((db) => writeTaskUpdateInTransaction({
-        db,
-        taskID,
-        values: { status: "active", error: null },
-        summary: "Resume the child Task for a fresh source read",
-        now: now + 16,
-      }))
-      Database.transaction((db) => writeTaskUpdateInTransaction({
-        db,
-        taskID,
-        values: { status: "failed", error: "Fresh occurrence failed" },
-        summary: "Fresh terminal evidence is now current",
-        now: now + 17,
-      }))
-      await expect(executeRead({ taskID, message_ids: [workerFinal.id] }, "read-stale-failed-occurrence"))
-        .rejects.toThrow(`panel.read_task_dispatch_evidence terminal occurrence changed for Task ${taskID}`)
+      Database.transaction((db) =>
+        writeTaskUpdateInTransaction({
+          db,
+          taskID,
+          values: { status: "active", error: null },
+          summary: "Resume the child Task for a fresh source read",
+          now: now + 16,
+        }),
+      )
+      Database.transaction((db) =>
+        writeTaskUpdateInTransaction({
+          db,
+          taskID,
+          values: { status: "failed", error: "Fresh occurrence failed" },
+          summary: "Fresh terminal evidence is now current",
+          now: now + 17,
+        }),
+      )
+      await expect(
+        executeRead(
+          { taskID, sources: [{ kind: "dispatch_result" as const, message_id: workerFinal.id }] },
+          "read-stale-failed-occurrence",
+        ),
+      ).rejects.toThrow(`panel.read_task_dispatch_evidence terminal occurrence changed for Task ${taskID}`)
     },
   })
 })

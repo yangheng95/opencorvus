@@ -96,13 +96,18 @@ export const ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS = [
   "evolve_expert_squad_from_feedback",
 ] as const
 
+// Ordinary Task-owner execution uses the same Registry leaves as other
+// authorized participants; only Task lifecycle/dispatch tools have root factories.
+export const TASK_OWNER_REGISTRY_TOOL_IDS: readonly string[] = [
+  "read", "glob", "search_code", "bash", "edit", "write", "apply_patch",
+  "webfetch", "websearch", "external_code_search", "todo",
+  "browser_preview", "browser_preview_capture",
+]
+
 export const ORCHESTRATOR_SCHEDULER_PROJECTABLE_TOOL_IDS = [
   ...ORCHESTRATOR_SCHEDULER_ROLE_BASE_TOOL_IDS,
   "dispatch_agents",
-  "read",
-  "browser_preview",
-  "browser_preview_capture",
-  "bash",
+  ...TASK_OWNER_REGISTRY_TOOL_IDS,
   "multica_catalog",
   "multica_preview",
   "multica_import",

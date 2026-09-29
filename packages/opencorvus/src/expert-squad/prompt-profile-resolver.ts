@@ -1,3 +1,4 @@
+import { TASK_OWNER_REGISTRY_TOOL_IDS } from "@/agent/tool-pool-data"
 import path from "node:path"
 import { createHash, randomUUID } from "node:crypto"
 import { jsonSchema, tool, type Tool as AITool } from "ai"
@@ -1198,7 +1199,9 @@ export namespace PromptProfileResolver {
   }
 
   export function schedulerRuntimeToolIDs(capability: ResolvedSchedulerCapability): string[] {
-    return activeProjectedSchedulerToolIDs(capability).filter((toolID) => toolID !== CAPABILITY_SEARCH_TOOL_ID)
+    return activeProjectedSchedulerToolIDs(capability).filter(
+      (toolID) => toolID !== CAPABILITY_SEARCH_TOOL_ID && !TASK_OWNER_REGISTRY_TOOL_IDS.includes(toolID),
+    )
   }
 
   export function workerRuntimeToolIDs(capability: ResolvedWorkerCapability): string[] {

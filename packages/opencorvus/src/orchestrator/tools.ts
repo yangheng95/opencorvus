@@ -23,7 +23,6 @@ import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { Bus } from "@/bus"
 import { Config } from "@/config/config"
-import { Tool } from "@/tool/tool"
 import { createPublishInteractiveArtifactAiTool } from "@/tool/publish-interactive-artifact"
 import {
   createArtifactReadAiTool,
@@ -81,7 +80,7 @@ import { clarificationTranscriptSection } from "@/engine/helpers"
 import { Event as EngineEvent } from "@/engine/model"
 import { EngineProtocol } from "@/engine/protocol"
 import { findGoal, findInteractionByExternal, listGoals, requireTask, type TaskRow } from "@/engine/store"
-import { resolveSessionExecutionAuthority, sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
+import { sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
 import { requireCurrentTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
 import { sameTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference-schema"
 import type { DesignResourceManifest } from "@/frontend-design/design-resource-manifest"
@@ -112,8 +111,6 @@ import { bindToolDecisionDeclaration, bindToolExecutionMode } from "@/tool/execu
 import { and, Database, eq, NotFoundError } from "@/storage/db"
 import { MessageTable, PartTable, ToolPartRequestTable } from "@/session/session.sql"
 import { timelineOrderKey } from "@/timeline/order"
-import { READ_TOOL_DESCRIPTION, ReadTool, ReadToolParameters } from "@/tool/read"
-import { BrowserPreviewCaptureTool, BrowserPreviewCaptureToolStaticDefinition } from "@/tool/browser-preview-capture"
 import { executeWait } from "@/tool/wait"
 import { WaitToolDescription, WaitToolParameters } from "@/tool/wait-contract"
 import { Log } from "@/util/log"
@@ -167,7 +164,6 @@ import { type TerminalConversationAuthority } from "./terminal-conversation-auth
 import { createReadContextTool } from "./read-context-tool"
 import { createReadAgentMessageTool } from "@/tool/read-agent-message"
 import { createRequirementsStageDispatcher } from "./requirements-stage"
-import { createRuntimeRepairTools } from "./runtime-repair-tools"
 import { cancelDispatchedSession } from "./subagent-cancellation-runtime"
 import { createSubagentCancellationTool } from "./subagent-cancellation-tool"
 import { CancelTaskInputSchema, CompleteTaskInputSchema, FailTaskInputSchema } from "./task-lifecycle-input"
@@ -1186,71 +1182,6 @@ export function createOrchestratorTools(input: {
         throw new Error("Orchestrator production SkillTool was not rebound for this projected scheduler turn.")
       },
     }),
-    read: () => tool({
-      description: READ_TOOL_DESCRIPTION,
-      inputSchema: ReadToolParameters,
-      execute: async (args, options) => {
-        const execution = await requireTaskOrchestratorToolExecutionContext(options, "read", {
-          taskID,
-          agentSessionID: input.agentSessionID,
-        })
-        const abort = (options as { abortSignal?: AbortSignal } | undefined)?.abortSignal
-        if (!abort) throw new Error("read: missing the current streamed tool-call abort signal")
-        const initialized = await ReadTool.init()
-        const executionAuthority = await resolveSessionExecutionAuthority({
-          sessionID: execution.orchestratorSessionID,
-          projectID: Instance.project.id,
-          expected: { kind: "task", taskID },
-        })
-        return await initialized.execute(args, {
-          sessionID: execution.orchestratorSessionID,
-          messageID: execution.orchestratorMessageID,
-          callID: execution.toolCallID,
-          agent: "orchestrator",
-          abort,
-          messages: await Session.messages({ sessionID: execution.orchestratorSessionID }),
-          executionAuthority,
-          executionSurface: Tool.executionSurface(["read"], []),
-          extra: { taskID },
-          metadata() {},
-        })
-      },
-    }),
-    // Independent scheduler visual review: a package may project this so the
-    // Orchestrator itself captures and inspects fresh PNG evidence from a
-    // preview target a worker already persisted, before accepting the Task.
-    // The full Tool result is returned so its image attachments survive into
-    // the model output; returning only `output` would strip the evidence.
-    browser_preview_capture: () => tool({
-      description: BrowserPreviewCaptureToolStaticDefinition.description,
-      inputSchema: BrowserPreviewCaptureToolStaticDefinition.parameters,
-      execute: async (args, options) => {
-        const execution = await requireTaskOrchestratorToolExecutionContext(options, "browser_preview_capture", {
-          taskID,
-          agentSessionID: input.agentSessionID,
-        })
-        const abort = (options as { abortSignal?: AbortSignal } | undefined)?.abortSignal ?? input.signal
-        if (!abort) throw new Error("browser_preview_capture: missing the current streamed tool-call abort signal")
-        const initialized = await BrowserPreviewCaptureTool.init()
-        const executionAuthority = await resolveSessionExecutionAuthority({
-          sessionID: execution.orchestratorSessionID,
-          projectID: Instance.project.id,
-          expected: { kind: "task", taskID },
-        })
-        return await initialized.execute(args, {
-          sessionID: execution.orchestratorSessionID,
-          messageID: execution.orchestratorMessageID,
-          callID: execution.toolCallID,
-          agent: "orchestrator",
-          abort,
-          messages: [],
-          executionAuthority,
-          executionSurface: Tool.executionSurface(["browser_preview_capture"], []),
-          extra: { taskID },
-          metadata() {},
-        })
-      },
-    }),
     requirements: () => tool({
       description:
         "Requirements typed-adapter executor for one exact projected agent. It parses the user's task into REQ-N requirements plus " +
@@ -2226,18 +2157,6 @@ export function createOrchestratorTools(input: {
       buildAgentContextSections,
     }).build,
 
-    browser_preview: () => createRuntimeRepairTools({
-      taskID,
-      agentSessionID: input.agentSessionID,
-      signal: input.signal,
-      requireExecutionContext: requireOrchestratorToolExecutionContext,
-    }).browser_preview,
-    bash: () => createRuntimeRepairTools({
-      taskID,
-      agentSessionID: input.agentSessionID,
-      signal: input.signal,
-      requireExecutionContext: requireOrchestratorToolExecutionContext,
-    }).bash,
 
     wait: () => bindToolExecutionMode(
       tool({

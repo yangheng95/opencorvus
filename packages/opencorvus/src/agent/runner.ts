@@ -131,6 +131,7 @@ import { requireTask } from "@/engine/store"
 import {
   DispatchTurnSchema,
   renderDispatchContinuationTurn,
+  renderDispatchOriginEvidence,
   controlTextSHA256,
   taskRequestSHA256,
   type DispatchTurn,
@@ -1187,9 +1188,9 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
   } else {
     parts = [{ type: "text", text: userText }]
   }
-  if (dispatchTurn?.kind === "initial" && (dispatchTurn.acceptance_repair || dispatchTurn.preparation_recovery)) {
+  if (dispatchTurn?.kind === "initial") {
     const obligation = renderDispatchContinuationTurn({ turn: dispatchTurn, guidance: "" })
-    if (obligation) parts.push({ type: "text", text: obligation })
+    parts.push({ type: "text", text: obligation ?? renderDispatchOriginEvidence(dispatchTurn) })
   }
   // Capability gate for low-level provider-bound callers that still pass
   // explicit file parts. Task-worker agent context should normally use

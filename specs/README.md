@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Agent execution redesign implementation](records/2026-09/2026-09-30-agent-execution-implementation.md)
+
 - [Agent execution redesign: ownership, evidence, convergence and efficiency](records/2026-09/2026-09-30-agent-execution-redesign.md)
 
 - [Reference-led navigation and usage design](records/2026-09/2026-09-29-reference-navigation-usage-style.md)

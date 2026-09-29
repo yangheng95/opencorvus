@@ -71,8 +71,8 @@ for (const { projected, policy } of [true, false].flatMap((projected) =>
             ],
           })
         }
-        const projectedToolIDs = capability.builtInToolIDs.filter(
-          (id) => id !== "capability_search" && (projected || !["artifact_snapshot", "skill"].includes(id)),
+        const projectedToolIDs = PromptProfileResolver.schedulerRuntimeToolIDs(capability).filter(
+          (id) => projected || !["artifact_snapshot", "skill"].includes(id),
         )
         const mcp = MCP.createScopedConnectionOwner(`core-artifact-owner-${session.id}`)
         try {
@@ -180,8 +180,9 @@ for (const { projected, policy } of [true, false].flatMap((projected) =>
           }
           const resolved = await resolveTestCapabilityTools(common)
           expect(typeof resolved.tools.evolve_expert_squad_from_feedback?.execute).toBe("function")
-          expect(resolved.occurrence.payload.permanent_provider_base_definition.provider_names)
-            .toContain("evolve_expert_squad_from_feedback")
+          expect(resolved.occurrence.payload.permanent_provider_base_definition.provider_names).toContain(
+            "evolve_expert_squad_from_feedback",
+          )
           if (policy === "allow" || policy === "skill-deny") {
             expect(resolved.occurrence.payload.permanent_provider_base_definition.provider_names).toContain("skill")
           }
@@ -222,6 +223,19 @@ for (const { projected, policy } of [true, false].flatMap((projected) =>
               .filter((part) => part.type === "tool")
               .map((part) => part.tool),
           ).toEqual(["artifact_snapshot"])
+          expect(resolved.occurrence.ref("read").owner_ref).toBe("tool-registry")
+          const sourceRead = { filePath: path.join(project.path, "sample.txt") }
+          const readResult = (await resolved.tools.read!.execute!(sourceRead, {
+            toolCallId: `call_root_read_${projected}`,
+            messages: [],
+            abortSignal: new AbortController().signal,
+          })) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+          expect(readResult.output).toContain("verified snapshot")
+          await processor.completeRecoveredToolPart({
+            toolCallID: `call_root_read_${projected}`,
+            toolInput: sourceRead,
+            output: readResult,
+          })
           const ref = output.locators.find((entry: { role: string }) => entry.role === "resource").locator.ref
           await fs.writeFile(path.join(project.path, "sample.txt"), "subsequent working file\n")
           expect(

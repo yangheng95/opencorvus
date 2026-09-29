@@ -1,3 +1,7 @@
+import { assistantActionFactScopeInTransaction } from "@/agent/artifact-provenance-facts"
+import { findDispatchLineageByDispatchIDInTransaction } from "@/engine/dispatch-lineage-facts"
+import { Database, and, eq, sql } from "@/storage/db"
+import { MessageTable, ToolPartRequestTable, ToolPartOutcomeTable } from "@/session/session.sql"
 import { taskOwnsDispatchFinalMessage } from "@/engine/dispatch-settlement"
 import { taskIDForSession } from "@/engine/task-session-lineage"
 import { ProviderError } from "@/provider/error"
@@ -18,28 +22,82 @@ const CAUSAL_TOOL_REFERENCE_PREVIEW_CHARS = 160
 const CAUSAL_TOOL_REFERENCE_INDEX_MAX_CHARS = 40_000
 const EVIDENCE_OUTPUT_DEFAULT_CHARS = 8_000
 const EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL = 30_000
-const EVIDENCE_READS_DESCRIPTION = `Optional exact input, output, or failure chunks selected from this final's causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. The sum of every limit in one call must be at most ${EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL} characters. Follow next_offset until null.`
+const EVIDENCE_READS_DESCRIPTION = `Optional exact input, output, or failure chunks from the selected sources' causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. The sum of every limit in one call must be at most ${EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL} characters. Follow next_offset until null.`
 
-const MessageIDs = z
-  .array(z.string().min(1))
+const EvidenceSource = z.discriminatedUnion("kind", [
+  z.object({ kind: z.literal("dispatch_result"), message_id: z.string().min(1) }).strict(),
+  z.object({ kind: z.literal("dispatch_origin"), dispatch_id: z.string().min(1) }).strict(),
+])
+type EvidenceSource = z.infer<typeof EvidenceSource>
+function sourceKey(source: EvidenceSource) {
+  return source.kind === "dispatch_result" ? `result:${source.message_id}` : `origin:${source.dispatch_id}`
+}
+const Sources = z
+  .array(EvidenceSource)
   .min(1)
   .max(8)
-  .superRefine((messageIDs, context) => {
+  .superRefine((sources, context) => {
     const seen = new Set<string>()
-    messageIDs.forEach((messageID, index) => {
-      if (seen.has(messageID)) {
-        context.addIssue({ code: "custom", path: [index], message: "Message identities must be unique" })
-      }
-      seen.add(messageID)
+    sources.forEach((source, index) => {
+      const key = sourceKey(source)
+      if (seen.has(key)) context.addIssue({ code: "custom", path: [index], message: "Evidence sources must be unique" })
+      seen.add(key)
     })
   })
+const InventoryCursor = z.object({ source: EvidenceSource, before_message_id: z.string().min(1) }).strict()
 
-const InventoryCursor = z
-  .object({
-    final_message_id: z.string().min(1),
-    before_message_id: z.string().min(1),
+export class TaskEvidenceSourceError extends Error {
+  readonly code = "TASK_EVIDENCE_SOURCE_INVALID"
+  constructor(detail: string) {
+    super(detail)
+    this.name = "TaskEvidenceSourceError"
+  }
+}
+
+function originEvidence(taskID: string, dispatchID: string) {
+  return Database.use((db) => {
+    const lineage = findDispatchLineageByDispatchIDInTransaction({ db, taskID, dispatchID })
+    if (!lineage) throw new TaskEvidenceSourceError(`Dispatch ${dispatchID} does not belong to Task ${taskID}`)
+    const origin = lineage.payload
+    if (taskIDForSession(origin.orchestrator_session_id) !== taskID) {
+      throw new TaskEvidenceSourceError(`Dispatch ${dispatchID} has an invalid Task Session`)
+    }
+    const scope = assistantActionFactScopeInTransaction(
+      db,
+      origin.orchestrator_session_id,
+      origin.orchestrator_message_id,
+      origin.tool_part_id,
+    )
+    const boundary = scope.before
+    const parts = db
+      .select({ partID: ToolPartRequestTable.id })
+      .from(ToolPartRequestTable)
+      .innerJoin(MessageTable, eq(MessageTable.id, ToolPartRequestTable.message_id))
+      .innerJoin(ToolPartOutcomeTable, eq(ToolPartOutcomeTable.request_part_id, ToolPartRequestTable.id))
+      .where(
+        and(
+          eq(MessageTable.session_id, origin.orchestrator_session_id),
+          sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`,
+          sql`${ToolPartRequestTable.time_created} < ${boundary.timeCreated}`,
+          sql`${ToolPartOutcomeTable.time_created} < ${boundary.timeCreated}`,
+        ),
+      )
+      .all()
+    return { origin, boundary, partIDs: new Set(parts.map((part) => part.partID)) }
   })
-  .strict()
+}
+
+function validateSource(taskID: string, source: EvidenceSource) {
+  if (source.kind === "dispatch_origin") {
+    originEvidence(taskID, source.dispatch_id)
+    return
+  }
+  if (!taskOwnsDispatchFinalMessage({ taskID, messageID: source.message_id })) {
+    throw new TaskEvidenceSourceError(
+      `Message ${source.message_id} is not a terminal dispatch settlement for Task ${taskID}`,
+    )
+  }
+}
 
 const EvidenceRead = z
   .object({
@@ -87,7 +145,7 @@ function safeInputPreview(input: unknown, limit = TOOL_INPUT_PREVIEW_CHARS) {
 }
 
 type CausalToolReference = {
-  final_message_id: string
+  source: EvidenceSource
   message_id: string
   part_id: string
   tool_name: string
@@ -145,8 +203,8 @@ export const ReadAgentMessageTestHooks = Object.freeze({
 
 export const ReadAgentMessageInputSchema = z
   .object({
-    message_ids: MessageIDs.describe(
-      "One to eight exact terminal worker Message identities from current Task settlements, in result order.",
+    sources: Sources.describe(
+      "One to eight ordered Task evidence sources: a settled worker report or the root Tool facts preceding an exact dispatch.",
     ),
     inventory_before: z
       .array(InventoryCursor)
@@ -154,14 +212,14 @@ export const ReadAgentMessageInputSchema = z
       .superRefine((cursors, context) => {
         const seen = new Set<string>()
         cursors.forEach((cursor, index) => {
-          if (seen.has(cursor.final_message_id)) {
+          if (seen.has(sourceKey(cursor.source))) {
             context.addIssue({
               code: "custom",
-              path: [index, "final_message_id"],
-              message: "Each final Message may have only one inventory cursor",
+              path: [index, "source"],
+              message: "Each source may have only one inventory cursor",
             })
           }
-          seen.add(cursor.final_message_id)
+          seen.add(sourceKey(cursor.source))
         })
       })
       .optional()
@@ -192,64 +250,70 @@ export const ReadAgentMessageInputSchema = z
   .strict()
 
 const READ_AGENT_MESSAGE_DESCRIPTION =
-  "Read an ordered batch of exact persisted Agent messages and their tool parts by globally unique message refs from Task dispatch settlements. " +
-  "This is a read-only fact projection: it does not select a latest message, infer success, or materialize an artifact. " +
-  "Discover exact final_message_id values through artifact_search kind=dispatch_settlement and artifact_read of its returned locators. For final worker reports, submit exact Task dispatch settlement final_message_id values in ordered chunks of at most eight, including an earlier settled worker whose evidence remains material after a later dispatch. " +
-  "The result includes a compact, redacted index of exact causal Tool references when it fits its declared bound, plus the paged detailed inventory. If the compact index says complete=false, follow inventory_next_before to discover older references. When a material source or mutation fact is absent from the final text, use only a necessary message_id and part_id returned by the index or inventory in this or an earlier call, select field=input, output, or failure, and paginate with offset/limit until next_offset is null. A completed Tool step is not a final report."
+  "Read exact Task participant evidence. sources accepts {kind:'dispatch_result',message_id} for settled worker reports, " +
+  "or {kind:'dispatch_origin',dispatch_id} for the root's completed Tool facts strictly before that dispatch's Provider step. " +
+  "Use current_dispatch_id from your real dispatch context for root evidence. Discover other exact dispatch/result identities in Task dispatch facts. " +
+  "Origin facts are historical observations, not a final report or proof of current state. Same-step calls and outcomes at/after the boundary are outside that source; absence does not prove an operation never occurred. " +
+  "The result includes a compact redacted causal Tool index plus detailed pages. If complete=false, follow inventory_next_before. " +
+  "Read necessary exact message_id/part_id input, output, or failure chunks with evidence_reads and follow next_offset to null. " +
+  "This read-only projection preserves Task ownership and causal boundaries; it does not infer success or create artifacts."
 
 export async function readAgentMessages(taskID: string, rawInput: unknown) {
-  const { message_ids, inventory_before, evidence_reads } = ReadAgentMessageInputSchema.parse(rawInput)
+  const { sources, inventory_before, evidence_reads } = ReadAgentMessageInputSchema.parse(rawInput)
   for (const cursor of inventory_before ?? []) {
-    if (!message_ids.includes(cursor.final_message_id)) {
-      throw new Error(`Inventory cursor does not name a selected terminal Message: ${cursor.final_message_id}`)
+    if (!sources.some((source) => sourceKey(source) === sourceKey(cursor.source))) {
+      throw new TaskEvidenceSourceError(`Inventory cursor does not name a selected source: ${sourceKey(cursor.source)}`)
     }
   }
-  const finals = await Promise.all(
-    message_ids.map(async (message_id) => {
-      if (!taskOwnsDispatchFinalMessage({ taskID, messageID: message_id })) {
-        throw new Error(`Message ${message_id} is not a terminal dispatch settlement for Task ${taskID}`)
-      }
+  const selections = await Promise.all(
+    sources.map(async (source) => {
+      validateSource(taskID, source)
+      const origin = source.kind === "dispatch_origin" ? originEvidence(taskID, source.dispatch_id) : undefined
+      const message_id = source.kind === "dispatch_result" ? source.message_id : origin!.origin.orchestrator_message_id
       const session_id = Session.messageOccurrenceSessionID(message_id)
-      if (!session_id) throw new Error(`Message ${message_id} is not persisted`)
-      if (taskIDForSession(session_id) !== taskID) {
-        throw new Error(`Message ${message_id} does not belong to Task ${taskID}`)
+      if (!session_id || taskIDForSession(session_id) !== taskID) {
+        throw new TaskEvidenceSourceError(`Message ${message_id} does not belong to Task ${taskID}`)
       }
       const message = await MessageStore.get({ sessionID: session_id, messageID: message_id })
-      if (message.info.role !== "assistant") {
-        throw new Error(`Message ${message_id} is not an assistant final report`)
-      }
+      if (message.info.role !== "assistant")
+        throw new TaskEvidenceSourceError(`Message ${message_id} is not an assistant message`)
       return {
+        source,
+        origin,
         session_id,
         message_id,
         message: message as Message.WithParts & { info: Message.Assistant },
       }
     }),
   )
-  const messages = finals.map(({ session_id, message_id, message }) => ({
-    session_id,
-    message_id,
-    role: message.info.role,
-    author: message.info.author,
-    finish: message.info.finish ?? null,
-    time_completed: message.info.time.completed ?? null,
-    text: message.parts.flatMap((part) => (part.type === "text" ? [part.text] : [])),
-    tool_facts: message.parts.flatMap((part) =>
-      part.type === "tool"
-        ? [
-            {
-              part_id: part.id,
-              call_id: part.callID,
-              tool_name: part.tool,
-              status: part.state.status,
-              ...safeInputPreview(part.state.input),
-              ...(part.state.status === "completed" ? { stored_output_chars: part.state.output.length } : {}),
-            },
-          ]
-        : [],
-    ),
-  }))
+  const messages = selections
+    .filter((selection) => !selection.origin)
+    .map(({ source, session_id, message_id, message }) => ({
+      source,
+      session_id,
+      message_id,
+      role: message.info.role,
+      author: message.info.author,
+      finish: message.info.finish ?? null,
+      time_completed: message.info.time.completed ?? null,
+      text: message.parts.flatMap((part) => (part.type === "text" ? [part.text] : [])),
+      tool_facts: message.parts.flatMap((part) =>
+        part.type === "tool"
+          ? [
+              {
+                part_id: part.id,
+                call_id: part.callID,
+                tool_name: part.tool,
+                status: part.state.status,
+                ...safeInputPreview(part.state.input),
+                ...(part.state.status === "completed" ? { stored_output_chars: part.state.output.length } : {}),
+              },
+            ]
+          : [],
+      ),
+    }))
   type CausalToolMessage = {
-    final_message_id: string
+    source: EvidenceSource
     session_id: string
     message_id: string
     author: string
@@ -265,40 +329,51 @@ export async function readAgentMessages(taskID: string, rawInput: unknown) {
       stored_output_chars?: number
     }>
   }
-  const cursorByFinal = new Map(
-    (inventory_before ?? []).map((cursor) => [cursor.final_message_id, cursor.before_message_id]),
+  const cursorBySource = new Map(
+    (inventory_before ?? []).map((cursor) => [sourceKey(cursor.source), cursor.before_message_id]),
   )
   const causalToolMessageInventory: CausalToolMessage[] = []
   const causalToolReferences: CausalToolReference[] = []
-  const inventoryNextBefore: Array<{ final_message_id: string; before_message_id: string }> = []
-  const causalToolMessageSessions = new Map<string, string>()
-  for (const final of finals) {
-    const occurrenceMessages = (await Session.messages({ sessionID: final.session_id }))
+  const inventoryNextBefore: Array<{ source: EvidenceSource; before_message_id: string }> = []
+  const causalToolPartSessions = new Map<string, string>()
+  for (const selection of selections) {
+    const occurrenceMessages = (await Session.messages({ sessionID: selection.session_id }))
+      .map((candidate) =>
+        selection.origin
+          ? {
+              ...candidate,
+              parts: candidate.parts.filter((part) => part.type === "tool" && selection.origin!.partIDs.has(part.id)),
+            }
+          : candidate,
+      )
       .filter(
         (candidate) =>
           candidate.info.role === "assistant" &&
-          candidate.info.parentID === final.message.info.parentID &&
-          orderedBeforeOrAt(candidate.info, final.message.info) &&
+          (selection.origin ||
+            (candidate.info.parentID === selection.message.info.parentID &&
+              orderedBeforeOrAt(candidate.info, selection.message.info))) &&
           candidate.parts.some((part) => part.type === "tool"),
       )
       .sort(
         (left, right) => left.info.time.created - right.info.time.created || left.info.id.localeCompare(right.info.id),
       )
-    const beforeMessageID = cursorByFinal.get(final.message_id)
+    const beforeMessageID = cursorBySource.get(sourceKey(selection.source))
     const before = beforeMessageID
       ? occurrenceMessages.find((candidate) => candidate.info.id === beforeMessageID)
       : undefined
     if (beforeMessageID && !before) {
-      throw new Error(`Inventory cursor ${beforeMessageID} is not a causal Tool Message for final ${final.message_id}`)
+      throw new Error(
+        `Inventory cursor ${beforeMessageID} is not a causal Tool Message for source ${sourceKey(selection.source)}`,
+      )
     }
     const inventoryPage = causalInventoryPage(occurrenceMessages, before)
     for (const candidate of occurrenceMessages) {
-      causalToolMessageSessions.set(candidate.info.id, final.session_id)
       for (const part of candidate.parts) {
         if (part.type !== "tool") continue
+        causalToolPartSessions.set(`${candidate.info.id}\0${part.id}`, selection.session_id)
         const preview = safeInputPreview(part.state.input, CAUSAL_TOOL_REFERENCE_PREVIEW_CHARS)
         causalToolReferences.push({
-          final_message_id: final.message_id,
+          source: selection.source,
           message_id: candidate.info.id,
           part_id: part.id,
           tool_name: part.tool,
@@ -310,14 +385,14 @@ export async function readAgentMessages(taskID: string, rawInput: unknown) {
     }
     if (inventoryPage.next_before_message_id) {
       inventoryNextBefore.push({
-        final_message_id: final.message_id,
+        source: selection.source,
         before_message_id: inventoryPage.next_before_message_id,
       })
     }
     for (const candidate of inventoryPage.page) {
       const projected: CausalToolMessage = {
-        final_message_id: final.message_id,
-        session_id: final.session_id,
+        source: selection.source,
+        session_id: selection.session_id,
         message_id: candidate.info.id,
         author: candidate.info.agent,
         time_created: candidate.info.time.created,
@@ -340,9 +415,11 @@ export async function readAgentMessages(taskID: string, rawInput: unknown) {
   }
   const evidenceReads = await Promise.all(
     (evidence_reads ?? []).map(async (read) => {
-      const sessionID = causalToolMessageSessions.get(read.message_id)
+      const sessionID = causalToolPartSessions.get(`${read.message_id}\0${read.part_id}`)
       if (!sessionID) {
-        throw new Error(`Evidence Message ${read.message_id} is not causal to the selected terminal dispatch Messages`)
+        throw new TaskEvidenceSourceError(
+          `Evidence Part ${read.part_id} of Message ${read.message_id} is not causal to the selected sources`,
+        )
       }
       const message = await MessageStore.get({ sessionID, messageID: read.message_id })
       const part = message.parts.find((candidate) => candidate.id === read.part_id)
@@ -381,6 +458,22 @@ export async function readAgentMessages(taskID: string, rawInput: unknown) {
   return JSON.stringify(
     {
       messages,
+      origins: selections.flatMap((selection) =>
+        selection.origin
+          ? [
+              {
+                source: selection.source,
+                session_id: selection.session_id,
+                message_id: selection.message_id,
+                execution_epoch: selection.origin.origin.execution_epoch,
+                before_provider_step: {
+                  part_id: selection.origin.boundary.partID,
+                  time_created: selection.origin.boundary.timeCreated,
+                },
+              },
+            ]
+          : [],
+      ),
       causal_tool_reference_index: compactCausalToolReferenceIndex(causalToolReferences),
       causal_tool_message_inventory: causalToolMessageInventory,
       inventory_next_before: inventoryNextBefore,
@@ -396,38 +489,23 @@ export function createReadAgentMessageTool(input: { taskID: string }) {
     cycles: "ref",
     reused: "ref",
   }) as unknown as JSONSchema7
-  const messageIDsProperty = providerJSONSchema.properties?.message_ids as JSONSchema7 | undefined
-  if (messageIDsProperty) {
-    messageIDsProperty.uniqueItems = true
-  }
   const providerInputSchema = jsonSchema<z.infer<typeof ReadAgentMessageInputSchema>>(providerJSONSchema, {
     validate(value) {
       const parsed = ReadAgentMessageInputSchema.safeParse(value)
       if (!parsed.success) return { success: false, error: parsed.error }
-      const unsupported = parsed.data.message_ids.filter(
-        (messageID) => !taskOwnsDispatchFinalMessage({ taskID: input.taskID, messageID }),
-      )
-      if (unsupported.length > 0) {
-        return {
-          success: false,
-          error: new Error(
-            `Message identities are not terminal dispatch settlement authorities for Task ${input.taskID}: ${unsupported.join(", ")}`,
-          ),
+      try {
+        for (const source of parsed.data.sources) validateSource(input.taskID, source)
+        for (const cursor of parsed.data.inventory_before ?? []) {
+          if (!parsed.data.sources.some((source) => sourceKey(source) === sourceKey(cursor.source))) {
+            throw new TaskEvidenceSourceError(
+              `Inventory cursor does not name a selected source: ${sourceKey(cursor.source)}`,
+            )
+          }
         }
+        return { success: true, value: parsed.data }
+      } catch (error) {
+        return { success: false, error: error instanceof Error ? error : new Error(String(error)) }
       }
-      const selectedFinalMessageIDSet = new Set(parsed.data.message_ids)
-      const unsupportedCursors = (parsed.data.inventory_before ?? []).filter(
-        (cursor) => !selectedFinalMessageIDSet.has(cursor.final_message_id),
-      )
-      if (unsupportedCursors.length > 0) {
-        return {
-          success: false,
-          error: new Error(
-            `Inventory cursors do not name selected terminal Messages for Task ${input.taskID}: ${unsupportedCursors.map((cursor) => cursor.final_message_id).join(", ")}`,
-          ),
-        }
-      }
-      return { success: true, value: parsed.data }
     },
   })
 

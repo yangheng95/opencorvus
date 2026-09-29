@@ -1233,7 +1233,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           throw new Error("panel.read_task_dispatch_evidence is only available to a real Mission")
         }
         const mission = await requireMissionSession(ctx.sessionID)
-        const { taskID, message_ids, inventory_before, evidence_reads } = params
+        const { taskID, sources, inventory_before, evidence_reads } = params
         EngineService.requireMissionArtifactSource(taskID, {
           missionID: mission.missionID,
           sessionID: mission.id,
@@ -1252,7 +1252,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           throw new Error(`panel.read_task_dispatch_evidence requires a failed Task occurrence: ${taskID}`)
         }
         const evidence = JSON.parse(
-          await readAgentMessages(taskID, { message_ids, inventory_before, evidence_reads }),
+          await readAgentMessages(taskID, { sources, inventory_before, evidence_reads }),
         )
         const settledReference = requireCurrentTerminalLifecycleReference(taskID)
         if (!sameTerminalLifecycleReference(settledReference, reviewedReference)) {

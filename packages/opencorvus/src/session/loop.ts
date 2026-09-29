@@ -5439,14 +5439,8 @@ export namespace SessionLoop {
       computerRuntimeScopeIdentity({ ownerKind: "orchestrator", taskID, sessionID: input.session.id }),
     )
     try {
-      const projectedToolIDs = [
-        ...schedulerCapability.builtInToolIDs.filter((toolID) => toolID !== CAPABILITY_SEARCH_TOOL_ID),
-        ...schedulerCapability.defaultTools.map((entry) => entry.providerName),
-        ...schedulerCapability.packageTools.map((entry) => entry.providerName),
-        ...schedulerCapability.defaultMcpTools.map((entry) => entry.providerName),
-        ...schedulerCapability.packageMcpTools.map((entry) => entry.providerName),
-      ]
-      if (!projectedToolIDs.includes(input.request.toolName)) {
+      const projectedToolIDs = PromptProfileResolver.schedulerRuntimeToolIDs(schedulerCapability)
+      if (![...projectedToolIDs, ...schedulerCapability.builtInToolIDs].includes(input.request.toolName)) {
         throw new PermissionAuthority.StaleContinuationError(
           input.request.id,
           `The projected scheduler Tool ${input.request.toolName} changed after restart`,
