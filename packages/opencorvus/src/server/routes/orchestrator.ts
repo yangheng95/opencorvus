@@ -827,10 +827,6 @@ export const EngineRoutes = lazy(() =>
       async (c) => {
         const taskID = c.req.valid("param").taskID
         requireRouteTaskInCurrentProject(taskID)
-        const board = taskConversationBoard(taskID)
-        if (board.task.status !== "completed" && board.task.status !== "failed" && board.task.status !== "cancelled") {
-          return c.json([])
-        }
         const transcript = await loadFullTaskTranscript(taskID, { scope: "task" })
         const view = projectConversationView({
           transcript,
@@ -1012,14 +1008,11 @@ export const EngineRoutes = lazy(() =>
           sinceTimestamp: history.hasMore ? history.oldestTimestamp : null,
         })
         const view = projectConversationView({ transcript: historyWindow.transcript, ledgerSessions: agentSessions })
-        const turnArtifacts =
-          board.task.status === "completed" || board.task.status === "failed" || board.task.status === "cancelled"
-            ? await projectTaskTurnArtifacts({
-                taskID,
-                transcript: historyWindow.transcript,
-                view,
-              })
-            : []
+        const turnArtifacts = await projectTaskTurnArtifacts({
+          taskID,
+          transcript: historyWindow.transcript,
+          view,
+        })
         const agentView = projectConversationAgentView(
           globalTranscriptResult.transcript,
           executionProjectionLifecycleEvents(board.executionProjection),

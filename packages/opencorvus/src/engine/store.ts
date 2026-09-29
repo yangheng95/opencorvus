@@ -73,7 +73,7 @@ import { type ArchitectContractGraph } from "@/architect/contract-graph"
 import { requireTaskPackageRevisionBinding } from "./task-package-revision-binding"
 import { parseFrontendResearchBriefArtifactEnvelope } from "@/research/frontend-research-artifact"
 import { resolveDeliverySliceRevisionIdentity, type DeliverySliceRevisionIdentity } from "./delivery-slice"
-import { taskLifecycleProjectionAtInTransaction, taskLifecycleProjectionInTransaction } from "./task-lifecycle"
+import { taskLifecycleProjectionAtInTransaction, taskLifecycleProjectionInTransaction, type TaskLifecycleProjection } from "./task-lifecycle"
 
 type PersistedTaskRow = typeof EngineTaskTable.$inferSelect
 export type TaskRow = PersistedTaskRow & {
@@ -83,6 +83,7 @@ export type TaskRow = PersistedTaskRow & {
   time_updated: number
   error: string | null
   lifecycle_status: "active" | "cancelling" | "completed" | "failed" | "cancelled"
+  execution_lifecycle: TaskLifecycleProjection
   terminal_reason?: "interrupted"
 }
 export type GoalRow = typeof EngineGoalTable.$inferSelect
@@ -251,6 +252,7 @@ export function projectTaskRowInTransaction(db: Database.TxOrDb, row: PersistedT
     time_updated: Math.max(row.time_created, lifecycle.terminalAt ?? lifecycle.openedAt),
     error: lifecycle.status === "failed" || lifecycle.status === "cancelled" ? (lifecycle.terminalError ?? lifecycle.status) : null,
     lifecycle_status: lifecycle.status,
+    execution_lifecycle: lifecycle,
     ...(lifecycle.terminalReason ? { terminal_reason: lifecycle.terminalReason } : {}),
   }
 }
@@ -1376,6 +1378,7 @@ export function viewTask(row: TaskRow, input?: { directory?: string }) {
     title: row.title,
     request: row.request,
     status,
+    executionLifecycle: row.execution_lifecycle,
     terminalReason: taskTerminalReason(row),
     cancellation:
       status === "cancelled" ? taskCancellationProjection(row.id) : pendingTaskCancellationProjection(row.id),
@@ -1425,6 +1428,7 @@ export function viewTaskListTask(row: TaskRow, input?: { directory?: string }) {
     productPillar: row.product_pillar,
     title: row.title,
     status: deriveTaskStatus(row),
+    executionLifecycle: row.execution_lifecycle,
     terminalReason: taskTerminalReason(row),
     priority: row.priority,
     packageRevisionBinding: requireTaskPackageRevisionBinding(row.id),

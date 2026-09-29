@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Task follow-up closure and historical report access](2026-09-29-task-followup-report-convergence.md)
+
 - [General settings and permission history readability](2026-09-29-general-permission-readability.md)
 
 - [Complete the Harbor comparison benchmarks](2026-09-29-harbor-comparison-completion.md)

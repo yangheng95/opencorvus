@@ -4123,9 +4123,9 @@ export namespace EngineService {
    * Reopening is one durable act: a new execution epoch, with the prior
    * terminal occurrence left intact as an immutable fact at its old epoch. The
    * message then lands on the new epoch as ordinary ingress. "Just asking a
-   * question" keeps working without a mode of its own — the Orchestrator already
-   * judges a status-only message as conversation ingress and answers it with
-   * `no_action` (prompt/core/orchestrator-core.txt).
+   * question" needs no mode of its own: the Orchestrator reuses the prior
+   * evidence, delivers its answer and closes this new epoch when no independent
+   * progress remains. An ingress-only no_action receipt does not close it.
    *
    * Cancelled reopens too. Cancellation ends an *occurrence*, which is why the
    * ingress reduction calls it `terminal_inapplicable` for "a cancelled, closed,

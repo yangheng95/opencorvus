@@ -42,7 +42,10 @@ test("Task prompt projection follows exact open, terminal, reopen and cancellati
     expect(renderTaskExecutionFact(active.execution_lifecycle)).toBe(
       `CURRENT TASK LIFECYCLE FACT: task_id=${taskID}; execution_epoch=2; task_status=active; ` +
       `opened_event_id=${reopened.openedEventID}; terminal_event_id=null. ` +
-      "This is the current Task occurrence, distinct from every worker Session lifecycle and every historical Task occurrence.",
+      "This is the current Task occurrence, distinct from every worker Session lifecycle and every historical Task occurrence." +
+      ` PREVIOUS TASK TERMINAL FACT: execution_epoch=1; task_status=completed; terminal_event_id=${terminal.id}.` +
+      " This Task epoch has already been reopened. A report/status answer can reuse verified existing evidence, " +
+      "but when no independent work or wait remains, deliver the answer and make the current epoch's lifecycle decision in this Turn.",
     )
     expect(active).toMatchObject({ status: "active", execution_lifecycle: { epoch: 2, status: "active" } })
     const reconstructed = applyTaskProjectionDelta(completed, renderTaskProjectionDelta(completed, active))

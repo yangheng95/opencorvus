@@ -1,4 +1,5 @@
 import z from "zod"
+import { TaskLifecycleProjectionSchema } from "./task-lifecycle-schema"
 import { InteractionUserInput } from "@/memory/interaction-user-input"
 import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
 import {
@@ -212,6 +213,7 @@ export const Task = z.object({
   title: z.string(),
   request: z.string(),
   status: z.enum(["active", "completed", "failed", "cancelled"]),
+  executionLifecycle: TaskLifecycleProjectionSchema,
   terminalReason: z.enum(["completed", "failed", "cancelled", "interrupted"]).optional(),
   cancellation: TaskCancellationProjection.optional(),
   priority: z.enum(["critical", "high", "normal", "low"]),
@@ -256,6 +258,7 @@ export const TaskListTask = Task.pick({
   productPillar: true,
   title: true,
   status: true,
+  executionLifecycle: true,
   terminalReason: true,
   priority: true,
   packageRevisionBinding: true,

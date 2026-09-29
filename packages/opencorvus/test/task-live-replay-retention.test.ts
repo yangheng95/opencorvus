@@ -1,11 +1,50 @@
-import { expect, test } from "bun:test"
+import { afterEach, expect, test } from "bun:test"
 import { ProtocolStore } from "@/protocol/store"
+import { Instance } from "@/project/instance"
+import { requireTask } from "@/engine/store"
+import { appendTaskReopenedInTransaction } from "@/engine/task-lifecycle"
+import { Database } from "@/storage/db"
+import { createEngineGitCheckpointTask } from "./fixture/engine-git"
+import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+
+afterEach(async () => { await Instance.disposeAll(); await resetMemoryDatabase() })
 
 // The live replay buffer keeps a bounded recent window of ephemeral task
 // events. Everything trimmed out of that window raises a per-task retention
 // floor that is never lowered for the life of the process, so within minutes
 // of a task streaming anything the floor is non-zero permanently.
 const RETENTION_WINDOW_MS = 30_000
+
+for (const terminalType of ["task.completed", "task.failed", "task.cancelled"]) {
+  test(`${terminalType} retires payloads while preserving the live cursor through reopen`, async () => {
+    await using project = await memoryProject()
+    await Instance.provide({ directory: project.path, fn: async () => {
+      const taskID = await createEngineGitCheckpointTask({ projectPath: project.path, title: terminalType })
+      const otherID = await createEngineGitCheckpointTask({ projectPath: project.path, title: "Independent live Task" })
+      const sessionID = requireTask(taskID).session_id!
+      for (let index = 1; index <= 3; index++) dispatchDelta(taskID, index)
+      dispatchDelta(otherID, 1)
+      const cursor = ProtocolStore.currentTaskLiveSequence(taskID)
+      const liveEpoch = ProtocolStore.currentTaskLiveEpoch()
+      await ProtocolStore.appendEvent({ kind: "event", type: terminalType, aggregate: "task",
+        aggregate_id: taskID, session_id: sessionID, source: "test.terminal-live-replay",
+        payload: { execution_epoch: 1 } })
+      expect(ProtocolStore.currentTaskLiveSequence(taskID)).toBe(cursor)
+      expect(ProtocolStore.listTaskLiveEventsAfter(taskID, cursor - 1, { liveEpoch })).toMatchObject({ expired: true })
+      Database.immediateTransaction((db) => appendTaskReopenedInTransaction({
+        db, taskID, sessionID, now: Date.now(), source: "test.reopened-live-replay",
+      }))
+      dispatchDelta(taskID, 4)
+      const replay = ProtocolStore.listTaskLiveEventsAfter(taskID, cursor, { liveEpoch })
+      expect(replay).toMatchObject({ expired: false, events: [{
+        taskID, liveEpoch, liveSequence: cursor + 1, payload: { delta: "delta 4" },
+      }] })
+      expect(ProtocolStore.listTaskLiveEventsAfter(otherID, 0, { liveEpoch })).toMatchObject({
+        expired: false, events: [{ taskID: otherID, liveSequence: 1, payload: { delta: "delta 1" } }],
+      })
+    } })
+  })
+}
 
 function dispatchDelta(taskID: string, index: number): void {
   ProtocolStore.dispatchEphemeral({

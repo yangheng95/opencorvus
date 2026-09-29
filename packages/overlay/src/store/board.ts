@@ -2,7 +2,7 @@
 // Solid reactive store for board + task list data.
 // Replaces direct reads of state.board / state.tasks.
 
-import { createStore } from "solid-js/store"
+import { createStore, reconcile } from "solid-js/store"
 import { batch } from "solid-js"
 import { ApiError, apiJson, apiRequest } from "../services/api"
 import { directoryScopedPath } from "../services/task-path"
@@ -284,7 +284,9 @@ function applyBoardDelta(data: any): boolean {
   for (const key of Object.keys(data)) {
     seenKeys.add(key)
     if (fieldChanged((old as any)[key], data[key])) {
-      setBoardStore("board", key as any, data[key])
+      // Each field is a complete server snapshot. A plain object setter merges
+      // omitted terminal facts into the next epoch instead of removing them.
+      setBoardStore("board", key as any, reconcile(data[key]))
       changed = true
     }
   }

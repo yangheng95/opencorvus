@@ -1180,7 +1180,15 @@ export function renderTaskExecutionFact(lifecycle: TaskLifecycleProjection): str
   return `CURRENT TASK LIFECYCLE FACT: task_id=${lifecycle.taskID}; execution_epoch=${lifecycle.epoch}; ` +
     `task_status=${lifecycle.status}; opened_event_id=${lifecycle.openedEventID}; ` +
     `terminal_event_id=${JSON.stringify(lifecycle.terminalEventID ?? null)}. ` +
-    "This is the current Task occurrence, distinct from every worker Session lifecycle and every historical Task occurrence."
+    "This is the current Task occurrence, distinct from every worker Session lifecycle and every historical Task occurrence." +
+    (lifecycle.previousTerminal
+      ? ` PREVIOUS TASK TERMINAL FACT: execution_epoch=${lifecycle.previousTerminal.epoch}; ` +
+        `task_status=${lifecycle.previousTerminal.status}; terminal_event_id=${lifecycle.previousTerminal.terminalEventID}.` +
+        (lifecycle.status === "active"
+          ? " This Task epoch has already been reopened. A report/status answer can reuse verified existing evidence, " +
+            "but when no independent work or wait remains, deliver the answer and make the current epoch's lifecycle decision in this Turn."
+          : "")
+      : "")
 }
 
 /** Render a TaskDesc as markdown for the Orchestrator system context. */

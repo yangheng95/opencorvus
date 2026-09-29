@@ -21815,6 +21815,26 @@ export type TaskGlobalListResponses = {
       } | null
       task: {
         directory?: string
+        executionLifecycle: {
+          epoch: number
+          openedAt: number
+          openedEventID: string
+          previousTerminal?: {
+            epoch: number
+            status: "completed" | "failed" | "cancelled"
+            terminalAt: number
+            terminalError?: string
+            terminalEventID: string
+            terminalReason?: "interrupted"
+          }
+          requestEventID?: string
+          status: "active" | "cancelling" | "completed" | "failed" | "cancelled"
+          taskID: string
+          terminalAt?: number
+          terminalError?: string
+          terminalEventID?: string
+          terminalReason?: "interrupted"
+        }
         id: string
         orderKey: string
         packageRevisionBinding: {
@@ -31855,6 +31875,26 @@ export type TaskGetResponses = {
     }
     directory?: string
     error?: string
+    executionLifecycle: {
+      epoch: number
+      openedAt: number
+      openedEventID: string
+      previousTerminal?: {
+        epoch: number
+        status: "completed" | "failed" | "cancelled"
+        terminalAt: number
+        terminalError?: string
+        terminalEventID: string
+        terminalReason?: "interrupted"
+      }
+      requestEventID?: string
+      status: "active" | "cancelling" | "completed" | "failed" | "cancelled"
+      taskID: string
+      terminalAt?: number
+      terminalError?: string
+      terminalEventID?: string
+      terminalReason?: "interrupted"
+    }
     id: string
     metadata?: {
       [key: string]: unknown
@@ -32843,6 +32883,26 @@ export type TaskBoardResponses = {
       }
       directory?: string
       error?: string
+      executionLifecycle: {
+        epoch: number
+        openedAt: number
+        openedEventID: string
+        previousTerminal?: {
+          epoch: number
+          status: "completed" | "failed" | "cancelled"
+          terminalAt: number
+          terminalError?: string
+          terminalEventID: string
+          terminalReason?: "interrupted"
+        }
+        requestEventID?: string
+        status: "active" | "cancelling" | "completed" | "failed" | "cancelled"
+        taskID: string
+        terminalAt?: number
+        terminalError?: string
+        terminalEventID?: string
+        terminalReason?: "interrupted"
+      }
       id: string
       metadata?: {
         [key: string]: unknown
@@ -34889,6 +34949,26 @@ export type TaskConversationResponses = {
         }
         directory?: string
         error?: string
+        executionLifecycle: {
+          epoch: number
+          openedAt: number
+          openedEventID: string
+          previousTerminal?: {
+            epoch: number
+            status: "completed" | "failed" | "cancelled"
+            terminalAt: number
+            terminalError?: string
+            terminalEventID: string
+            terminalReason?: "interrupted"
+          }
+          requestEventID?: string
+          status: "active" | "cancelling" | "completed" | "failed" | "cancelled"
+          taskID: string
+          terminalAt?: number
+          terminalError?: string
+          terminalEventID?: string
+          terminalReason?: "interrupted"
+        }
         id: string
         metadata?: {
           [key: string]: unknown
@@ -36844,6 +36924,26 @@ export type TaskProgressResponses = {
       }
       directory?: string
       error?: string
+      executionLifecycle: {
+        epoch: number
+        openedAt: number
+        openedEventID: string
+        previousTerminal?: {
+          epoch: number
+          status: "completed" | "failed" | "cancelled"
+          terminalAt: number
+          terminalError?: string
+          terminalEventID: string
+          terminalReason?: "interrupted"
+        }
+        requestEventID?: string
+        status: "active" | "cancelling" | "completed" | "failed" | "cancelled"
+        taskID: string
+        terminalAt?: number
+        terminalError?: string
+        terminalEventID?: string
+        terminalReason?: "interrupted"
+      }
       id: string
       metadata?: {
         [key: string]: unknown
@@ -37837,6 +37937,26 @@ export type TaskListResponses = {
       } | null
       task: {
         directory?: string
+        executionLifecycle: {
+          epoch: number
+          openedAt: number
+          openedEventID: string
+          previousTerminal?: {
+            epoch: number
+            status: "completed" | "failed" | "cancelled"
+            terminalAt: number
+            terminalError?: string
+            terminalEventID: string
+            terminalReason?: "interrupted"
+          }
+          requestEventID?: string
+          status: "active" | "cancelling" | "completed" | "failed" | "cancelled"
+          taskID: string
+          terminalAt?: number
+          terminalError?: string
+          terminalEventID?: string
+          terminalReason?: "interrupted"
+        }
         id: string
         orderKey: string
         packageRevisionBinding: {

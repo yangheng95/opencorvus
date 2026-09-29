@@ -1,0 +1,47 @@
+{
+  "taskID": "tsk_g00VWc13dB00l0h4IBqI",
+  "model": "openai/gpt-5.6-luna",
+  "streaming": true,
+  "followup": "报告在哪儿？",
+  "epochs": [
+    {
+      "epoch": 2,
+      "status": "completed",
+      "durationMs": 28503,
+      "terminalEventID": "pev_g0VWc2HZP00bUxIy00Pr",
+      "previousTerminal": {
+        "epoch": 1,
+        "status": "completed",
+        "terminalEventID": "pev_g0VWc1wp900pD0dQabso",
+        "terminalAt": 1790685516069
+      }
+    },
+    {
+      "epoch": 3,
+      "status": "completed",
+      "durationMs": 40757,
+      "terminalEventID": "pev_g0VWc4weg00uMSAsLm4C",
+      "previousTerminal": {
+        "epoch": 2,
+        "status": "completed",
+        "terminalEventID": "pev_g0VWc2HZP00bUxIy00Pr",
+        "terminalAt": 1790685595363
+      }
+    },
+    {
+      "epoch": 4,
+      "status": "completed",
+      "durationMs": 27338,
+      "terminalEventID": "pev_g0VWc5EJ700KUxIR7zQO",
+      "previousTerminal": {
+        "epoch": 3,
+        "status": "completed",
+        "terminalEventID": "pev_g0VWc4weg00uMSAsLm4C",
+        "terminalAt": 1790686225162
+      }
+    }
+  ],
+  "livePage": "Same mounted /ui page across epochs 3 and 4; real report card opened without reload",
+  "report": "Published report.md: 486 UTF-8 bytes; 乙 7.50, 甲 6.50; synthetic sample",
+  "scope": "Authorized isolated runtime, original macOS incident database unavailable"
+}

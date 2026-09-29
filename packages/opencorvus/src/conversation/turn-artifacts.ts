@@ -28,6 +28,7 @@ import {
   requireCurrentTerminalLifecycleReference,
 } from "@/engine/terminal-lifecycle-reference"
 import { findTask } from "@/engine/store"
+import { taskTerminalOccurrences } from "@/engine/task-lifecycle"
 
 function exactString(value: unknown): string | undefined {
   return typeof value === "string" && value.length > 0 ? value : undefined
@@ -210,28 +211,6 @@ async function completeTaskCatalog(taskID: string): Promise<{
   return { entries, catalogComplete, providerErrors: [...providerErrors.values()] }
 }
 
-async function taskDelivery(taskID: string) {
-  const task = await EngineService.getTask(taskID)
-  if (task.status !== "completed" && task.status !== "failed" && task.status !== "cancelled") {
-    throw new Error(`Conversation Turn Artifact task ${taskID} is not terminal`)
-  }
-  const locators = (task.completionDecision?.deliverableArtifactLocators ?? []).map((locator: unknown) =>
-    ArtifactReadLocatorSchema.parse(locator),
-  )
-  if (locators.length === 0) {
-    return {
-      task,
-      locators,
-      entries: [] as ArtifactCatalogEntry[],
-      catalogComplete: true,
-      providerErrors: [] as Array<{ source: "engine_artifact" | "task_artifact"; message: string }>,
-    }
-  }
-  const catalog = await completeTaskCatalog(taskID)
-  const entries = resolveCompletionArtifactEntries(taskID, locators, catalog.entries)
-  return { task, locators, entries, catalogComplete: catalog.catalogComplete, providerErrors: catalog.providerErrors }
-}
-
 type MissionChildTaskResultWake = {
   taskID: string
   taskTitle: string
@@ -409,36 +388,48 @@ export async function projectTaskTurnArtifacts(input: {
   transcript: readonly any[]
   view: ConversationView
 }) {
-  const delivery = await taskDelivery(input.taskID)
-  const decisionMessageID = exactString(delivery.task.completionDecision?.orchestratorMessageID)
-  if (!decisionMessageID) return []
-  if (!input.view.messages.some((message) => message.messageID === decisionMessageID)) return []
-  const messageID = decisionMessageID
-  const assistant = input.transcript.find((message) => message?.info?.id === messageID)
-  const userMessageID = exactString(assistant?.info?.parentID)
-  if (!userMessageID) return []
-  return [
-    ConversationTurnArtifactSummary.parse({
-      messageID,
+  // Delivery belongs to the immutable completion occurrence and its real
+  // assistant Message, even while a later operator input is being handled.
+  const task = await EngineService.getTask(input.taskID)
+  const visibleMessageIDs = new Set(input.view.messages.map((message) => message.messageID))
+  const transcriptByID = new Map(input.transcript.map((message) => [message?.info?.id, message]))
+  const owners = taskTerminalOccurrences(input.taskID).flatMap((terminal) => {
+    if (terminal.status !== "completed") return []
+    const decision = findTaskCompletionDecisionForTerminalTime({
+      taskID: input.taskID, timeCompleted: terminal.terminalAt,
+    })
+    if (!decision || !visibleMessageIDs.has(decision.payload.orchestrator_message_id)) return []
+    const assistant = transcriptByID.get(decision.payload.orchestrator_message_id)
+    const userMessageID = exactString(assistant?.info?.parentID)
+    if (assistant?.info?.role !== "assistant" || !userMessageID) return []
+    if (assistant.info.sessionID !== decision.payload.orchestrator_session_id) {
+      throw new Error(`Task ${input.taskID} completion Message has conflicting Session ownership`)
+    }
+    return [{ decision, userMessageID }]
+  })
+  if (owners.length === 0) return []
+  const catalog = owners.some(({ decision }) => decision.payload.deliverable_artifact_locators.length > 0)
+    ? await completeTaskCatalog(input.taskID)
+    : { entries: [], catalogComplete: true, providerErrors: [] }
+  return Promise.all(owners.map(async ({ decision, userMessageID }) => {
+    const locators = decision.payload.deliverable_artifact_locators
+    const entries = resolveCompletionArtifactEntries(input.taskID, locators, catalog.entries)
+    return ConversationTurnArtifactSummary.parse({
+      messageID: decision.payload.orchestrator_message_id,
       userMessageID,
       task: {
-        id: delivery.task.id,
-        title: delivery.task.title,
-        status: delivery.task.status,
-        ...(delivery.task.status === "failed" && delivery.task.error
-          ? { reason: delivery.task.error }
-          : delivery.task.status === "cancelled" && delivery.task.cancellation?.reason
-            ? { reason: delivery.task.cancellation.reason }
-            : {}),
+        id: task.id,
+        title: task.title,
+        status: "completed",
       },
       declaredOutputs: await projectDeclaredTurnOutputs({
-        taskID: delivery.task.id,
-        locators: delivery.locators,
-        entries: delivery.entries,
+        taskID: task.id,
+        locators,
+        entries,
       }),
-      entries: delivery.entries,
-      catalogComplete: delivery.catalogComplete,
-      providerErrors: delivery.providerErrors,
-    }),
-  ]
+      entries,
+      catalogComplete: catalog.catalogComplete,
+      providerErrors: catalog.providerErrors,
+    })
+  }))
 }

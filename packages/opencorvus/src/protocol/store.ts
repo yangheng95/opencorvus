@@ -71,7 +71,7 @@ export function protocolEventRequiresPayloadOrderKey(type: string): boolean {
 
 async function publishEventSideEffects(input: EventInput, event: EventView) {
   if (input.aggregate === "task" && TASK_TERMINAL_EVENT_TYPES.has(input.type)) {
-    clearTaskLiveReplay(input.aggregate_id)
+    retireTaskLiveReplay(input.aggregate_id)
   }
   await dispatchEvent(event)
 }
@@ -427,10 +427,13 @@ function compactTaskLiveReplay(now: number) {
   }
 }
 
-function clearTaskLiveReplay(taskID: string) {
+function retireTaskLiveReplay(taskID: string) {
+  // Terminal Tasks can reopen while the same SSE subscription remains mounted.
+  // Payload retention ends here, but this process's live epoch and its clients'
+  // cursors still own the sequence. Reusing earlier numbers silently drops the
+  // new operator Message, assistant Parts and delivery on those subscriptions.
+  markLiveReplayFloor(taskID, taskLiveSequences.get(taskID) ?? 0)
   taskLiveReplayEvents.delete(taskID)
-  taskLiveSequences.delete(taskID)
-  taskLiveRetentionFloors.delete(taskID)
 }
 
 function ensureTaskLiveReplaySweep() {

@@ -47,10 +47,12 @@ export function createNoActionTool(input: { taskID: string }) {
         description:
           "Resolve the current Orchestrator ingress after fully inspecting it when no dispatch, coordination reply, " +
           "Task or Delivery Slice mutation, operator question, or scheduled external wake is required. Use this after a " +
-          "visible conversation-only status or diagnosis answer, or after reconciling a lifecycle fact while another " +
+          "visible status or report answer on an already terminal Task, or after reconciling an input while another " +
           "worker, scheduled wait, pending Interaction, or accepted successor ingress independently continues the Task. " +
-          "For active execution work with no such authority, finishing all work requires the current Task epoch's " +
-          "manage_task lifecycle decision. A historical completed epoch or completed worker does not close a reopened Task. This " +
+          "For an active Task with no such authority, including a status/report follow-up that reopened a completed Task, " +
+          "answer and deliver the requested content, then use manage_task to close the current epoch from that evidence. " +
+          "Reuse verified existing reports without repeating research. A historical completed epoch or completed worker " +
+          "does not close a reopened Task. This " +
           "records only the current decision receipt: it does not create a timer, Automation, Interaction, worker action, " +
           "Task lifecycle fact, future wake, or durable waiting state. An acceptance ledger remains binding: this receipt settles only the current input, not any criterion. Never use it when current evidence requires a real " +
           "scheduler action.",

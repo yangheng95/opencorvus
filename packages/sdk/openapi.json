@@ -80517,6 +80517,98 @@
                               "directory": {
                                 "type": "string"
                               },
+                              "executionLifecycle": {
+                                "properties": {
+                                  "epoch": {
+                                    "exclusiveMinimum": 0,
+                                    "maximum": 9007199254740991,
+                                    "type": "integer"
+                                  },
+                                  "openedAt": {
+                                    "type": "number"
+                                  },
+                                  "openedEventID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "previousTerminal": {
+                                    "properties": {
+                                      "epoch": {
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 9007199254740991,
+                                        "type": "integer"
+                                      },
+                                      "status": {
+                                        "enum": [
+                                          "completed",
+                                          "failed",
+                                          "cancelled"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      "terminalAt": {
+                                        "type": "number"
+                                      },
+                                      "terminalError": {
+                                        "type": "string"
+                                      },
+                                      "terminalEventID": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "terminalReason": {
+                                        "const": "interrupted",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "epoch",
+                                      "status",
+                                      "terminalEventID",
+                                      "terminalAt"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "requestEventID": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "enum": [
+                                      "active",
+                                      "cancelling",
+                                      "completed",
+                                      "failed",
+                                      "cancelled"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "taskID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "terminalAt": {
+                                    "type": "number"
+                                  },
+                                  "terminalError": {
+                                    "type": "string"
+                                  },
+                                  "terminalEventID": {
+                                    "type": "string"
+                                  },
+                                  "terminalReason": {
+                                    "const": "interrupted",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "taskID",
+                                  "epoch",
+                                  "openedEventID",
+                                  "openedAt",
+                                  "status"
+                                ],
+                                "type": "object"
+                              },
                               "id": {
                                 "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
@@ -80665,6 +80757,7 @@
                               "productPillar",
                               "title",
                               "status",
+                              "executionLifecycle",
                               "priority",
                               "packageRevisionBinding",
                               "time"
@@ -111241,6 +111334,98 @@
                     "error": {
                       "type": "string"
                     },
+                    "executionLifecycle": {
+                      "properties": {
+                        "epoch": {
+                          "exclusiveMinimum": 0,
+                          "maximum": 9007199254740991,
+                          "type": "integer"
+                        },
+                        "openedAt": {
+                          "type": "number"
+                        },
+                        "openedEventID": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "previousTerminal": {
+                          "properties": {
+                            "epoch": {
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991,
+                              "type": "integer"
+                            },
+                            "status": {
+                              "enum": [
+                                "completed",
+                                "failed",
+                                "cancelled"
+                              ],
+                              "type": "string"
+                            },
+                            "terminalAt": {
+                              "type": "number"
+                            },
+                            "terminalError": {
+                              "type": "string"
+                            },
+                            "terminalEventID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "terminalReason": {
+                              "const": "interrupted",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "epoch",
+                            "status",
+                            "terminalEventID",
+                            "terminalAt"
+                          ],
+                          "type": "object"
+                        },
+                        "requestEventID": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "enum": [
+                            "active",
+                            "cancelling",
+                            "completed",
+                            "failed",
+                            "cancelled"
+                          ],
+                          "type": "string"
+                        },
+                        "taskID": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "terminalAt": {
+                          "type": "number"
+                        },
+                        "terminalError": {
+                          "type": "string"
+                        },
+                        "terminalEventID": {
+                          "type": "string"
+                        },
+                        "terminalReason": {
+                          "const": "interrupted",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "taskID",
+                        "epoch",
+                        "openedEventID",
+                        "openedAt",
+                        "status"
+                      ],
+                      "type": "object"
+                    },
                     "id": {
                       "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
@@ -111400,6 +111585,7 @@
                     "title",
                     "request",
                     "status",
+                    "executionLifecycle",
                     "priority",
                     "packageRevisionBinding",
                     "time"
@@ -114541,6 +114727,98 @@
                         "error": {
                           "type": "string"
                         },
+                        "executionLifecycle": {
+                          "properties": {
+                            "epoch": {
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991,
+                              "type": "integer"
+                            },
+                            "openedAt": {
+                              "type": "number"
+                            },
+                            "openedEventID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "previousTerminal": {
+                              "properties": {
+                                "epoch": {
+                                  "exclusiveMinimum": 0,
+                                  "maximum": 9007199254740991,
+                                  "type": "integer"
+                                },
+                                "status": {
+                                  "enum": [
+                                    "completed",
+                                    "failed",
+                                    "cancelled"
+                                  ],
+                                  "type": "string"
+                                },
+                                "terminalAt": {
+                                  "type": "number"
+                                },
+                                "terminalError": {
+                                  "type": "string"
+                                },
+                                "terminalEventID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "terminalReason": {
+                                  "const": "interrupted",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "epoch",
+                                "status",
+                                "terminalEventID",
+                                "terminalAt"
+                              ],
+                              "type": "object"
+                            },
+                            "requestEventID": {
+                              "type": "string"
+                            },
+                            "status": {
+                              "enum": [
+                                "active",
+                                "cancelling",
+                                "completed",
+                                "failed",
+                                "cancelled"
+                              ],
+                              "type": "string"
+                            },
+                            "taskID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "terminalAt": {
+                              "type": "number"
+                            },
+                            "terminalError": {
+                              "type": "string"
+                            },
+                            "terminalEventID": {
+                              "type": "string"
+                            },
+                            "terminalReason": {
+                              "const": "interrupted",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "taskID",
+                            "epoch",
+                            "openedEventID",
+                            "openedAt",
+                            "status"
+                          ],
+                          "type": "object"
+                        },
                         "id": {
                           "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
@@ -114700,6 +114978,7 @@
                         "title",
                         "request",
                         "status",
+                        "executionLifecycle",
                         "priority",
                         "packageRevisionBinding",
                         "time"
@@ -121459,6 +121738,98 @@
                             "error": {
                               "type": "string"
                             },
+                            "executionLifecycle": {
+                              "properties": {
+                                "epoch": {
+                                  "exclusiveMinimum": 0,
+                                  "maximum": 9007199254740991,
+                                  "type": "integer"
+                                },
+                                "openedAt": {
+                                  "type": "number"
+                                },
+                                "openedEventID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "previousTerminal": {
+                                  "properties": {
+                                    "epoch": {
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 9007199254740991,
+                                      "type": "integer"
+                                    },
+                                    "status": {
+                                      "enum": [
+                                        "completed",
+                                        "failed",
+                                        "cancelled"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "terminalAt": {
+                                      "type": "number"
+                                    },
+                                    "terminalError": {
+                                      "type": "string"
+                                    },
+                                    "terminalEventID": {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "terminalReason": {
+                                      "const": "interrupted",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "epoch",
+                                    "status",
+                                    "terminalEventID",
+                                    "terminalAt"
+                                  ],
+                                  "type": "object"
+                                },
+                                "requestEventID": {
+                                  "type": "string"
+                                },
+                                "status": {
+                                  "enum": [
+                                    "active",
+                                    "cancelling",
+                                    "completed",
+                                    "failed",
+                                    "cancelled"
+                                  ],
+                                  "type": "string"
+                                },
+                                "taskID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "terminalAt": {
+                                  "type": "number"
+                                },
+                                "terminalError": {
+                                  "type": "string"
+                                },
+                                "terminalEventID": {
+                                  "type": "string"
+                                },
+                                "terminalReason": {
+                                  "const": "interrupted",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "taskID",
+                                "epoch",
+                                "openedEventID",
+                                "openedAt",
+                                "status"
+                              ],
+                              "type": "object"
+                            },
                             "id": {
                               "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                               "type": "string"
@@ -121618,6 +121989,7 @@
                             "title",
                             "request",
                             "status",
+                            "executionLifecycle",
                             "priority",
                             "packageRevisionBinding",
                             "time"
@@ -129086,6 +129458,98 @@
                         "error": {
                           "type": "string"
                         },
+                        "executionLifecycle": {
+                          "properties": {
+                            "epoch": {
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991,
+                              "type": "integer"
+                            },
+                            "openedAt": {
+                              "type": "number"
+                            },
+                            "openedEventID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "previousTerminal": {
+                              "properties": {
+                                "epoch": {
+                                  "exclusiveMinimum": 0,
+                                  "maximum": 9007199254740991,
+                                  "type": "integer"
+                                },
+                                "status": {
+                                  "enum": [
+                                    "completed",
+                                    "failed",
+                                    "cancelled"
+                                  ],
+                                  "type": "string"
+                                },
+                                "terminalAt": {
+                                  "type": "number"
+                                },
+                                "terminalError": {
+                                  "type": "string"
+                                },
+                                "terminalEventID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "terminalReason": {
+                                  "const": "interrupted",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "epoch",
+                                "status",
+                                "terminalEventID",
+                                "terminalAt"
+                              ],
+                              "type": "object"
+                            },
+                            "requestEventID": {
+                              "type": "string"
+                            },
+                            "status": {
+                              "enum": [
+                                "active",
+                                "cancelling",
+                                "completed",
+                                "failed",
+                                "cancelled"
+                              ],
+                              "type": "string"
+                            },
+                            "taskID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "terminalAt": {
+                              "type": "number"
+                            },
+                            "terminalError": {
+                              "type": "string"
+                            },
+                            "terminalEventID": {
+                              "type": "string"
+                            },
+                            "terminalReason": {
+                              "const": "interrupted",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "taskID",
+                            "epoch",
+                            "openedEventID",
+                            "openedAt",
+                            "status"
+                          ],
+                          "type": "object"
+                        },
                         "id": {
                           "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
@@ -129245,6 +129709,7 @@
                         "title",
                         "request",
                         "status",
+                        "executionLifecycle",
                         "priority",
                         "packageRevisionBinding",
                         "time"
@@ -132582,6 +133047,98 @@
                               "directory": {
                                 "type": "string"
                               },
+                              "executionLifecycle": {
+                                "properties": {
+                                  "epoch": {
+                                    "exclusiveMinimum": 0,
+                                    "maximum": 9007199254740991,
+                                    "type": "integer"
+                                  },
+                                  "openedAt": {
+                                    "type": "number"
+                                  },
+                                  "openedEventID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "previousTerminal": {
+                                    "properties": {
+                                      "epoch": {
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 9007199254740991,
+                                        "type": "integer"
+                                      },
+                                      "status": {
+                                        "enum": [
+                                          "completed",
+                                          "failed",
+                                          "cancelled"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      "terminalAt": {
+                                        "type": "number"
+                                      },
+                                      "terminalError": {
+                                        "type": "string"
+                                      },
+                                      "terminalEventID": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "terminalReason": {
+                                        "const": "interrupted",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "epoch",
+                                      "status",
+                                      "terminalEventID",
+                                      "terminalAt"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "requestEventID": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "enum": [
+                                      "active",
+                                      "cancelling",
+                                      "completed",
+                                      "failed",
+                                      "cancelled"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "taskID": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "terminalAt": {
+                                    "type": "number"
+                                  },
+                                  "terminalError": {
+                                    "type": "string"
+                                  },
+                                  "terminalEventID": {
+                                    "type": "string"
+                                  },
+                                  "terminalReason": {
+                                    "const": "interrupted",
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "taskID",
+                                  "epoch",
+                                  "openedEventID",
+                                  "openedAt",
+                                  "status"
+                                ],
+                                "type": "object"
+                              },
                               "id": {
                                 "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
@@ -132730,6 +133287,7 @@
                               "productPillar",
                               "title",
                               "status",
+                              "executionLifecycle",
                               "priority",
                               "packageRevisionBinding",
                               "time"
