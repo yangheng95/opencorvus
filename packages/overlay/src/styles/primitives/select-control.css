@@ -72,12 +72,17 @@
 }
 
 .oc-select-listbox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-3xs);
+  margin: 0;
   max-height: min(
     calc(260px * var(--ui-scale)),
     calc(var(--ui-overlay-shell-height) - var(--oc-density-control-height))
   );
   overflow: auto;
-  padding: var(--ui-gap-xs);
+  padding: var(--ui-gap-sm);
+  list-style: none;
 }
 
 .oc-select-option {
@@ -128,7 +133,6 @@
 
 .oc-select-option:focus-visible {
   outline: none;
-  box-shadow: inset 0 0 0 var(--oc-border-width) var(--border-hover);
 }
 
 .oc-select-option[data-selected]:is([data-highlighted], :hover, :focus-visible) {
@@ -182,19 +186,11 @@
 }
 
 .oc-select-content[data-variant="composer"] {
-  min-width: calc(188px * var(--ui-scale));
-  padding: var(--ui-gap-md);
+  min-width: calc(176px * var(--ui-scale));
 }
 
 .oc-select-listbox[data-variant="composer"] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ui-gap-3xs);
   max-height: min(calc(240px * var(--ui-scale)), calc(var(--ui-overlay-shell-height) - 32px));
-  padding: var(--ui-gap-sm);
-  border: var(--oc-border-width) solid var(--divider-soft);
-  border-radius: var(--oc-radius-soft);
-  background: color-mix(in srgb, var(--surface-elevated) 86%, transparent);
 }
 
 .oc-select-option[data-variant="composer"] {

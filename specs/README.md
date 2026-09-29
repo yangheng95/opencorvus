@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Simplify layered composer pickers](records/2026-09/2026-09-29-popup-layer-simplification.md)
+
 - [Right Dock theme surface consistency](records/2026-09/2026-09-29-right-dock-theme-surfaces.md)
 
 - [Adaptive composer controls and project preferences](records/2026-09/2026-09-29-composer-width-project-preferences.md)

@@ -114,7 +114,7 @@ contract, and full child history remains in the selected Agent transcript.
 ## Shared visual primitives
 
 The existing design-language tokens own geometry, typography and neutral
-selection. Persistent titlebar, left navigation and right context use one
+selection. Persistent titlebar and left navigation use one
 `oc-material-glass` primitive. Theme palettes provide its translucent fill and
 edge; the body paints the single static ambient background. Readers use the
 canonical opaque conversation surface and popups remain opaque. Material has no
@@ -140,9 +140,9 @@ placeholder; no separate placeholder text layer, decorative caret or rotation
 timer participates in layout. Mention selection still uses the real Composer
 reference catalog and remains available through typing and the reference menu.
 Dock tabs share one neutral selected treatment across all panel kinds. Their
-header is part of the translucent Dock material rather than a second opaque
-slab. Shared empty hints provide low-specificity typography defaults so each
-panel can own its content inset without a late cascade override.
+header shares the Dock's opaque content canvas. Shared empty hints provide
+low-specificity typography defaults so each panel can own its content inset
+without a late cascade override.
 
 The Mission board separates page creation from search/project filters. Its
 canonical five lane order and Mission/Task projections remain unchanged; lanes
@@ -167,6 +167,13 @@ with reduced-motion support and no perpetual animation or live blur. Dialog
 header/body/footer insets share their surface geometry. Screenshot panels retain
 virtualized rows and lazy thumbnail loading, with larger contained previews and
 separate owner/date/count metadata; full-size images still use ImagePreview.
+
+Pickers have one outer popup surface. Select lists own a single inset and do
+not add an inner frame or fill; composer popup variants only change size constraints.
+Model/reference groups use headings and spacing, and option glyphs are plain.
+Selected and focused rows use the shared interaction washes, with check marks
+for single selection and functional checkboxes for multiple selection. Provider
+names/counts, descriptions, role badges and search fields retain their semantics.
 
 ## Color Themes
 

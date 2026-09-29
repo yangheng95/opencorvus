@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Composer picker visual review](2026-09-29-popup-layer-simplification/README.md): one-surface menus, plain glyphs, selected states and dark/light screenshots.
+
 - [Right Dock theme visual review](2026-09-29-right-dock-theme/README.md): manual before/after screenshots and seven named palette observations.
 
 - [Task report follow-up acceptance](2026-09-29-task-followup-report/README.md): real streaming lifecycle receipts and a manually reviewed desktop report screenshot.

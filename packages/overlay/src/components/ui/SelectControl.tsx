@@ -82,7 +82,7 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
           )}
         </Show>
         <Select.ItemIndicator class="oc-select-indicator">
-          <Icon name="status-completed" size="compact" />
+          <Icon name="check" size="compact" />
         </Select.ItemIndicator>
       </Select.Item>
     )

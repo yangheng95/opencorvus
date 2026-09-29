@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Simplify layered composer pickers](2026-09-29-popup-layer-simplification.md)
+
 - [Right Dock theme surface consistency](2026-09-29-right-dock-theme-surfaces.md)
 
 - [Adaptive composer controls and project preferences](2026-09-29-composer-width-project-preferences.md)
