@@ -299,7 +299,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
           as={Button}
           type="button"
           variant="outline"
-          size={props.readOnly && props.activeExpertSquad ? "sm" : "icon"}
+          size="sm"
           tone="neutral"
           class="composer-reference-trigger"
           data-ui={props.readOnly ? "composer-reference-view-trigger" : "composer-reference-select-trigger"}
@@ -308,9 +308,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
           aria-label={triggerLabel()}
         >
           <Icon name={props.activeExpertSquad ? "expert-squad" : "expert-squad-catalog"} size="compact" />
-          <Show when={props.readOnly && props.activeExpertSquad}>
-            <span class="composer-reference-trigger-label">{triggerLabel()}</span>
-          </Show>
+          <span class="composer-reference-trigger-label">{triggerLabel()}</span>
           <Show when={!props.readOnly && selectedCount() > 0}>
             <span class="composer-reference-trigger-count">{selectedCount()}</span>
           </Show>

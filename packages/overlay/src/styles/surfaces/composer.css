@@ -548,9 +548,97 @@
   align-items: center;
   justify-content: flex-start;
   gap: calc(5px * var(--ui-scale) * var(--chat-compose-scale));
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   min-width: 0;
+}
+
+.composer-toolbar-options {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--ui-gap-xs);
+  min-width: 0;
+}
+
+.composer-toolbar-options > .composer-model-selector {
+  margin-inline-start: auto;
+  max-width: calc(200px * var(--ui-scale));
+}
+
+.composer-toolbar-options .composer-reference-selector {
+  max-width: calc(160px * var(--ui-scale));
+}
+
+.composer-toolbar-options[data-presentation="icons"]
+  :is(
+    .composer-mode-option-label,
+    .composer-reference-trigger-label,
+    .composer-permission-label,
+    .composer-context-flag-label,
+    .composer-model-selector-copy
+  ) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
   overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.composer-toolbar-options[data-presentation="icons"]
+  :is(.oc-select-icon, .composer-model-selector [data-ui="composer-model-selector-trigger"] > .oc-icon:last-child) {
+  display: none;
+}
+
+.composer-toolbar-options[data-presentation="icons"]
+  :is(.composer-intent-select, .composer-reference-selector, .composer-model-selector) {
+  flex: 0 0 auto;
+}
+
+.composer-toolbar-popover {
+  width: min(calc(300px * var(--ui-scale)), calc(100vw - 24px));
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  padding: var(--ui-gap-lg);
+}
+
+.composer-toolbar-popover-heading {
+  display: block;
+  margin-bottom: var(--ui-gap-md);
+  color: var(--text-strong);
+  font-size: var(--ui-font-body);
+  font-weight: var(--ui-font-weight-strong);
+}
+
+.composer-toolbar-options[data-presentation="menu"],
+.composer-toolbar-options[data-presentation="menu"] :is(.composer-intent-selects, .composer-context-flags) {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--ui-gap-md);
+}
+
+.composer-toolbar-options[data-presentation="menu"]
+  :is(.composer-intent-select, .composer-reference-selector, .composer-model-selector) {
+  max-width: 100%;
+  margin: 0;
+}
+
+.composer-toolbar-options[data-presentation="menu"]
+  :is(
+    .composer-reference-trigger,
+    .composer-permission-trigger,
+    .composer-model-usage-trigger,
+    [data-ui="composer-model-selector-trigger"]
+  ) {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.composer-toolbar-options[data-presentation="menu"] .composer-context-flag {
+  align-self: flex-start;
 }
 
 .composer-runtime-menu-item {
@@ -829,7 +917,6 @@
   width: 100%;
   min-height: calc(42px * var(--ui-scale));
   padding: var(--ui-gap-sm) var(--ui-gap-md);
-  border-radius: var(--oc-radius-large);
 }
 
 .composer-reference-option[data-read-only="true"] {
@@ -856,11 +943,6 @@
 
 .composer-reference-option[data-reference-kind="action"] {
   margin-top: var(--ui-gap-xs);
-  background: color-mix(in srgb, var(--accent) 6%, transparent);
-}
-
-.composer-reference-option[data-system-role="expert_squad_generator"] {
-  background: color-mix(in srgb, var(--accent) 6%, transparent);
 }
 
 .composer-reference-option[data-reference-kind="action"] .composer-reference-option-selection {
@@ -873,18 +955,11 @@
   height: calc(26px * var(--ui-scale));
   align-items: center;
   justify-content: center;
-  border-radius: var(--oc-radius-soft);
-  background: var(--surface-inset);
   color: var(--text-muted);
 }
 
 .composer-reference-option-icon:is([data-reference-kind="squad"], [data-reference-kind="action"]) {
-  background: color-mix(in srgb, var(--accent) 12%, var(--surface-inset));
   color: var(--accent);
-}
-
-.composer-reference-option-icon[data-system-role="expert_squad_generator"] {
-  background: color-mix(in srgb, var(--accent) 18%, var(--surface-inset));
 }
 
 .composer-reference-option-system-badge {
@@ -1137,33 +1212,6 @@ div:has(> .composer-model-selector-popover) {
   white-space: nowrap;
 }
 
-/* Container query: when the composer container itself drops below
-   520px, hide the send label but keep the loader and selectors in one
-   meta row; each control owns its own truncation. */
-@container (max-width: 520px) {
-  .chat-compose-meta-right .oc-button[data-mode] {
-    --oc-button-padding-x: calc(10px * var(--ui-scale));
-  }
-
-  .chat-send-label {
-    display: none;
-  }
-}
-
-/* Composer container reflow: keep the primary action circular even when the
-   composer narrows; only tighten the internal rhythm. */
-@container (max-width: 760px) {
-  /* breakpoint: --ui-breakpoint-md */
-  .chat-compose-row {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-  }
-
-  .chat-compose-meta-right .oc-button[data-mode] {
-    width: var(--chat-composer-action-size);
-  }
-}
-
 .model-selector-popover {
   min-width: 100%;
   width: min(calc(460px * var(--ui-scale)), calc(var(--ui-overlay-shell-width) - 24px));
@@ -1205,9 +1253,6 @@ div:has(> .composer-model-selector-popover) {
   display: flex;
   flex-direction: column;
   gap: var(--ui-gap-xs);
-  padding: var(--ui-gap-sm);
-  border: 0;
-  background: transparent;
 }
 
 .model-selector-popover-group + .model-selector-popover-group {
@@ -1232,8 +1277,6 @@ div:has(> .composer-model-selector-popover) {
   height: calc(24px * var(--ui-scale));
   align-items: center;
   justify-content: center;
-  border-radius: var(--oc-radius-soft);
-  background: var(--surface-inset);
   color: var(--text-soft);
   font-size: var(--ui-font-caption);
 }
@@ -1291,8 +1334,6 @@ div:has(> .composer-model-selector-popover) {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border-radius: var(--oc-radius-soft);
-  background: var(--surface-inset);
   color: var(--text-muted);
 }
 

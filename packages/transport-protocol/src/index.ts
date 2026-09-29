@@ -994,6 +994,11 @@ export type WorkLedgerOrganization = (typeof WORK_LEDGER_ORGANIZATIONS)[number]
 export const WORK_LEDGER_SORTS = ["priority", "updated", "manual"] as const
 export type WorkLedgerSort = (typeof WORK_LEDGER_SORTS)[number]
 
+export interface ProjectComposerIntent extends ComposerIntent {
+  serverUrl: string
+  directory: string
+}
+
 export interface OverlayPersistedSettings {
   serverUrl: string
   autoServer: boolean
@@ -1015,6 +1020,7 @@ export interface OverlayPersistedSettings {
   workspaceDirectory?: string
   desktopNotifications: boolean
   lastSelectedModel?: string
+  projectComposerIntents?: ProjectComposerIntent[]
 }
 
 export type HostPermission = "granted" | "denied" | "default" | "unsupported"
@@ -1322,6 +1328,7 @@ const OVERLAY_PERSISTED_SETTINGS_KEYS = [
   "workspaceDirectory",
   "desktopNotifications",
   "lastSelectedModel",
+  "projectComposerIntents",
 ] as const
 
 const MAXIMUM_UNSIGNED_32_BIT_INTEGER = 0xffff_ffff
@@ -1366,7 +1373,22 @@ export function isOverlayPersistedSettings(value: unknown): value is OverlayPers
     isOptionalNonBlankString(settings.workspaceTaskID) &&
     isOptionalNonBlankString(settings.workspaceDirectory) &&
     typeof settings.desktopNotifications === "boolean" &&
-    isOptionalNonBlankString(settings.lastSelectedModel)
+    isOptionalNonBlankString(settings.lastSelectedModel) &&
+    (settings.projectComposerIntents === undefined ||
+      (Array.isArray(settings.projectComposerIntents) &&
+        settings.projectComposerIntents.every(
+          (entry) =>
+            !!entry &&
+            typeof entry === "object" &&
+            !Array.isArray(entry) &&
+            Object.keys(entry).every((key) =>
+              ["serverUrl", "directory", "productPillar", "conversationTarget"].includes(key),
+            ) &&
+            isNonBlankString(entry.serverUrl) &&
+            isNonBlankString(entry.directory) &&
+            ["code", "work"].includes(entry.productPillar) &&
+            ["chat", "mission"].includes(entry.conversationTarget),
+        )))
   )
 }
 

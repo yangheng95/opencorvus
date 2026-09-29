@@ -2,6 +2,8 @@
 
 - [Right Dock theme surface consistency](2026-09-29-right-dock-theme-surfaces.md)
 
+- [Adaptive composer controls and project preferences](2026-09-29-composer-width-project-preferences.md)
+
 - [Task follow-up closure and historical report access](2026-09-29-task-followup-report-convergence.md)
 
 - [General settings and permission history readability](2026-09-29-general-permission-readability.md)

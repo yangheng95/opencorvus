@@ -1,6 +1,7 @@
 import { appStore, setAppStore, type ConfigLoadIssue, type ProviderLoadIssue } from "../store/app"
 import { settingsStore } from "../store/settings"
 import { ApiError, apiJsonWithTimeout } from "./api"
+import { activeProjectDirectory } from "./project-directory"
 
 export const CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS = 20_000
 let configInfoLoadSequence = 0
@@ -22,7 +23,10 @@ function directoryOwnedPath(path: string, options: DirectoryOwnedLoadOptions): s
 
 function ownsDirectoryLoad(options: DirectoryOwnedLoadOptions): boolean {
   const directory = String(options.directory || "").trim()
-  return !directory || !options.isCurrentDirectory || options.isCurrentDirectory(directory)
+  return (
+    activeProjectDirectory().trim() === directory &&
+    (!options.isCurrentDirectory || options.isCurrentDirectory(directory))
+  )
 }
 
 function providerInfoRequests(timeoutMilliseconds: number, options: DirectoryOwnedLoadOptions = {}) {
@@ -116,6 +120,8 @@ export async function loadConfigInfo(
   timeoutMilliseconds = CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS,
   options: LoadConfigInfoOptions = {},
 ): Promise<ConfigLoadIssue[]> {
+  options = { ...options, directory: options.directory ?? activeProjectDirectory() }
+  const serverUrl = settingsStore.serverUrl
   const loadSequence = ++configInfoLoadSequence
   const directoryEpoch = settingsStore.directoryEpoch
   const directory = String(options.directory || settingsStore.directory).trim()
@@ -124,7 +130,8 @@ export async function loadConfigInfo(
     apiJsonWithTimeout(directoryOwnedPath("channel", options), timeoutMilliseconds),
   ])
 
-  if (!ownsConfigInfoLoad(loadSequence, directoryEpoch, directory, options)) return []
+  if (settingsStore.serverUrl !== serverUrl || !ownsConfigInfoLoad(loadSequence, directoryEpoch, directory, options))
+    return []
 
   const issues: ConfigLoadIssue[] = []
   let config: Record<string, unknown> | undefined
@@ -161,6 +168,8 @@ export async function loadProviderInfo(
   timeoutMilliseconds = CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS,
   options: DirectoryOwnedLoadOptions = {},
 ): Promise<ProviderLoadIssue[]> {
+  options = { ...options, directory: options.directory ?? activeProjectDirectory() }
+  const serverUrl = settingsStore.serverUrl
   const loadSequence = ++providerInfoLoadSequence
   const directory = String(options.directory || "").trim()
   if (!directory) {
@@ -169,7 +178,12 @@ export async function loadProviderInfo(
       apiJsonWithTimeout("global/providers/auth", timeoutMilliseconds),
       apiJsonWithTimeout("global/config", timeoutMilliseconds),
     ])
-    if (loadSequence !== providerInfoLoadSequence || !ownsDirectoryLoad(options)) return []
+    if (
+      settingsStore.serverUrl !== serverUrl ||
+      loadSequence !== providerInfoLoadSequence ||
+      !ownsDirectoryLoad(options)
+    )
+      return []
     const issues: ProviderLoadIssue[] = []
     let providerCatalog: Record<string, unknown> | undefined
     let providerAuth: Record<string, unknown> | undefined
@@ -216,7 +230,8 @@ export async function loadProviderInfo(
     return settledIssues
   }
   const [catalogResult, authResult] = await Promise.allSettled(providerInfoRequests(timeoutMilliseconds, options))
-  if (loadSequence !== providerInfoLoadSequence || !ownsDirectoryLoad(options)) return []
+  if (settingsStore.serverUrl !== serverUrl || loadSequence !== providerInfoLoadSequence || !ownsDirectoryLoad(options))
+    return []
   const issues: ProviderLoadIssue[] = []
   let providerCatalog: Record<string, unknown> | undefined
   let providerAuth: Record<string, unknown> | undefined

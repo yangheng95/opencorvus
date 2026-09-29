@@ -16,6 +16,8 @@ import {
 } from "solid-js"
 import type { JSX } from "solid-js"
 import { DropdownMenu } from "./ui/DropdownMenu"
+import { Popover } from "./ui/Popover"
+import { settingsStore } from "../store/settings"
 import { Slider } from "./ui/Slider"
 import { t } from "../utils/i18n"
 import { nativeMessage } from "../services/app-dialog"
@@ -524,6 +526,40 @@ export function ChatComposer(props: ChatComposerProps) {
   let textareaRef!: HTMLTextAreaElement
   let mentionPresentationRef: HTMLDivElement | undefined
   let formRef!: HTMLFormElement
+  let toolbarRef!: HTMLDivElement
+  let overflowTrigger: HTMLButtonElement | undefined
+  let overflowContent: HTMLDivElement | undefined
+  const [toolbarLayout, setToolbarLayout] = createSignal<"full" | "icons" | "overflow">("full")
+  const [overflowOpen, setOverflowOpen] = createSignal(false)
+
+  const updateToolbarLayout = () => {
+    if (!toolbarRef) return
+    const width = toolbarRef.getBoundingClientRect().width / currentUIScale()
+    const next = width < 400 ? "overflow" : width < 680 ? "icons" : "full"
+    const relocated = (next === "overflow") !== (toolbarLayout() === "overflow")
+    const restoreFocus =
+      relocated && (toolbarRef.contains(document.activeElement) || overflowContent?.contains(document.activeElement))
+    setToolbarLayout(next)
+    if (next !== "overflow") setOverflowOpen(false)
+    if (restoreFocus)
+      queueMicrotask(() => {
+        const target =
+          next === "overflow"
+            ? overflowTrigger
+            : toolbarRef.querySelector<HTMLButtonElement>(".composer-toolbar-options button")
+        if (target?.isConnected) target.focus()
+      })
+  }
+  onMount(() => {
+    const observer = new ResizeObserver(updateToolbarLayout)
+    observer.observe(toolbarRef)
+    updateToolbarLayout()
+    onCleanup(() => observer.disconnect())
+  })
+  createEffect(() => {
+    settingsStore.zoom
+    updateToolbarLayout()
+  })
 
   const [text, setText] = createSignal("")
   let loadedDraftKey: string | null = null
@@ -549,7 +585,7 @@ export function ChatComposer(props: ChatComposerProps) {
   )
   const [submitting, setSubmitting] = createSignal(false)
   const [uploadingCount, setUploadingCount] = createSignal(0)
-  const [modelAvailable, setModelAvailable] = createSignal(false)
+  const modelAvailable = createMemo(() => Boolean(appStore.composerModel.trim()))
   const attachmentCounts = createMemo(() => composerAttachmentCounts(attachments()))
   const [savingRunControl, setSavingRunControl] = createSignal<"parallelism" | "unattended" | null>(null)
   const [textareaResizeHeight, setTextareaResizeHeight] = createSignal<number | null>(null)
@@ -1229,7 +1265,7 @@ export function ChatComposer(props: ChatComposerProps) {
       {(value) => (
         <span class="composer-mode-option">
           <Icon name={value().icon} size="compact" />
-          <span>{value().label}</span>
+          <span class="composer-mode-option-label">{value().label}</span>
         </span>
       )}
     </Show>
@@ -1241,6 +1277,132 @@ export function ChatComposer(props: ChatComposerProps) {
       </span>
       <span class="composer-picker-option-label">{option.label}</span>
     </span>
+  )
+
+  const renderToolbarOptions = () => (
+    <div class="composer-toolbar-options" data-presentation={toolbarLayout() === "overflow" ? "menu" : toolbarLayout()}>
+      <Show
+        when={props.conversationActive}
+        fallback={
+          <>
+            <div class="composer-intent-selects" data-ui="composer-intent-selects">
+              <SelectControl<ComposerIntentOption<ProductPillar>>
+                class="composer-intent-select"
+                variant="composer"
+                options={productPillarOptions()}
+                value={selectedProductPillar()}
+                onChange={(option) =>
+                  option && props.onComposerIntentChange({ ...props.composerIntent, productPillar: option.value })
+                }
+                optionValue="value"
+                optionTextValue="label"
+                disallowEmptySelection
+                disabled={!props.enabled || props.busy}
+                ariaLabel={t("chat.composer_product_pillar_aria_label")}
+                triggerDataUI="composer-product-pillar-select"
+                triggerTitle={selectedProductPillar()?.label}
+                renderValue={renderIntentValue}
+                renderOptionLabel={renderIntentOption}
+                renderOptionTooltip={(option) => <span>{option.description}</span>}
+              />
+              <SelectControl<ComposerIntentOption<ConversationTarget>>
+                class="composer-intent-select"
+                variant="composer"
+                options={conversationTargetOptions()}
+                value={selectedConversationTarget()}
+                onChange={(option) =>
+                  option && props.onComposerIntentChange({ ...props.composerIntent, conversationTarget: option.value })
+                }
+                optionValue="value"
+                optionTextValue="label"
+                disallowEmptySelection
+                disabled={!props.enabled || props.busy}
+                ariaLabel={t("chat.composer_target_aria_label")}
+                triggerDataUI="composer-conversation-target-select"
+                triggerTitle={selectedConversationTarget()?.label}
+                renderValue={renderIntentValue}
+                renderOptionLabel={renderIntentOption}
+                renderOptionTooltip={(option) => <span>{option.description}</span>}
+              />
+            </div>
+            <ComposerReferenceSelector
+              text={text()}
+              onTextChange={(next) => {
+                writeDraftText(next)
+                setCaretPosition(next.length)
+                queueMicrotask(() => textareaRef?.setSelectionRange(next.length, next.length))
+              }}
+              skills={props.skills}
+              missionSkills={props.missionSkills}
+              expertSquads={props.expertSquads}
+              onExpertSquadQuery={props.onExpertSquadQuery}
+              onInstallMoreExpertSquads={props.onInstallMoreExpertSquads}
+              onMarketExpertSquadQuery={props.onMarketExpertSquadQuery}
+              onInstallMarketExpertSquad={props.onInstallMarketExpertSquad}
+              launchReferences={visibleComposerReferences(text())}
+              readOnly={false}
+              disabled={!props.enabled || props.busy}
+            />
+          </>
+        }
+      >
+        <div class="composer-context-flags" data-ui="composer-context-flags">
+          <Badge
+            class="composer-context-flag composer-context-mode-flag"
+            tone="accent"
+            size="md"
+            data-ui="composer-mode-flag"
+            data-mode={activeComposerIntent().productPillar}
+            title={
+              activeComposerIntent().productPillar === "work"
+                ? t("chat.composer_mode_work_description")
+                : t("chat.composer_mode_code_description")
+            }
+          >
+            <Icon name={activeComposerIntent().productPillar === "work" ? "work" : "terminal"} size="compact" />
+            <span class="composer-context-flag-label">
+              {activeComposerIntent().productPillar === "work"
+                ? t("chat.composer_mode_work")
+                : t("chat.composer_mode_code")}
+            </span>
+          </Badge>
+          <Badge
+            class="composer-context-flag composer-context-target-flag"
+            tone="neutral"
+            size="md"
+            data-ui="composer-target-flag"
+            data-target={activeComposerIntent().conversationTarget}
+          >
+            <Icon
+              name={activeComposerIntent().conversationTarget === "mission" ? "mission" : "message"}
+              size="compact"
+            />
+            <span class="composer-context-flag-label">
+              {activeComposerIntent().conversationTarget === "mission"
+                ? t("chat.composer_target_mission")
+                : t("chat.composer_target_chat")}
+            </span>
+          </Badge>
+          <ComposerReferenceSelector
+            text=""
+            skills={props.skills}
+            missionSkills={props.missionSkills}
+            expertSquads={props.expertSquads}
+            activeExpertSquad={
+              activeComposerIntent().conversationTarget === "mission" ? activeExpertSquad() : undefined
+            }
+            launchReferences={props.launchReferences}
+            readOnly
+          />
+        </div>
+      </Show>
+      {/* Right of the expert-squad selector in both branches. Authorization
+       * mode stays switchable while a task runs: each task freezes the mode
+       * it started with, so the control only governs what is dispatched
+       * next. */}
+      <ComposerPermissionControl disabled={!props.enabled} />
+      <ComposerModelSelector />
+    </div>
   )
 
   return (
@@ -1418,7 +1580,7 @@ export function ChatComposer(props: ChatComposerProps) {
         {/* Compose meta. The drag/resize tip is now a
          * native title on the textarea — appears only on hover so the row
          * stays clean. */}
-        <div class="chat-compose-meta">
+        <div ref={toolbarRef} class="chat-compose-meta" data-layout={toolbarLayout()}>
           <div class="chat-compose-meta-left">
             <ComposerAttachmentLoaders
               disabled={!canAcceptComposerAttachment() || uploadingCount() > 0}
@@ -1433,126 +1595,44 @@ export function ChatComposer(props: ChatComposerProps) {
               onParallelismChange={setParallelism}
               onUnattendedChange={setUnattended}
             />
-            <Show
-              when={props.conversationActive}
-              fallback={
-                <>
-                  <div class="composer-intent-selects" data-ui="composer-intent-selects">
-                    <SelectControl<ComposerIntentOption<ProductPillar>>
-                      class="composer-intent-select"
-                      variant="composer"
-                      options={productPillarOptions()}
-                      value={selectedProductPillar()}
-                      onChange={(option) =>
-                        option && props.onComposerIntentChange({ ...props.composerIntent, productPillar: option.value })
-                      }
-                      optionValue="value"
-                      optionTextValue="label"
-                      disallowEmptySelection
-                      disabled={!props.enabled || props.busy}
-                      ariaLabel={t("chat.composer_product_pillar_aria_label")}
-                      triggerDataUI="composer-product-pillar-select"
-                      renderValue={renderIntentValue}
-                      renderOptionLabel={renderIntentOption}
-                      renderOptionTooltip={(option) => <span>{option.description}</span>}
-                    />
-                    <SelectControl<ComposerIntentOption<ConversationTarget>>
-                      class="composer-intent-select"
-                      variant="composer"
-                      options={conversationTargetOptions()}
-                      value={selectedConversationTarget()}
-                      onChange={(option) =>
-                        option &&
-                        props.onComposerIntentChange({ ...props.composerIntent, conversationTarget: option.value })
-                      }
-                      optionValue="value"
-                      optionTextValue="label"
-                      disallowEmptySelection
-                      disabled={!props.enabled || props.busy}
-                      ariaLabel={t("chat.composer_target_aria_label")}
-                      triggerDataUI="composer-conversation-target-select"
-                      renderValue={renderIntentValue}
-                      renderOptionLabel={renderIntentOption}
-                      renderOptionTooltip={(option) => <span>{option.description}</span>}
-                    />
-                  </div>
-                  <ComposerReferenceSelector
-                    text={text()}
-                    onTextChange={(next) => {
-                      writeDraftText(next)
-                      setCaretPosition(next.length)
-                      queueMicrotask(() => textareaRef?.setSelectionRange(next.length, next.length))
-                    }}
-                    skills={props.skills}
-                    missionSkills={props.missionSkills}
-                    expertSquads={props.expertSquads}
-                    onExpertSquadQuery={props.onExpertSquadQuery}
-                    onInstallMoreExpertSquads={props.onInstallMoreExpertSquads}
-                    onMarketExpertSquadQuery={props.onMarketExpertSquadQuery}
-                    onInstallMarketExpertSquad={props.onInstallMarketExpertSquad}
-                    launchReferences={visibleComposerReferences(text())}
-                    readOnly={false}
-                    disabled={!props.enabled || props.busy}
-                  />
-                </>
-              }
-            >
-              <div class="composer-context-flags" data-ui="composer-context-flags">
-                <Badge
-                  class="composer-context-flag composer-context-mode-flag"
-                  tone="accent"
-                  size="md"
-                  data-ui="composer-mode-flag"
-                  data-mode={activeComposerIntent().productPillar}
-                  title={
-                    activeComposerIntent().productPillar === "work"
-                      ? t("chat.composer_mode_work_description")
-                      : t("chat.composer_mode_code_description")
-                  }
-                >
-                  <Icon name={activeComposerIntent().productPillar === "work" ? "work" : "terminal"} size="compact" />
-                  <span class="composer-context-flag-label">
-                    {activeComposerIntent().productPillar === "work"
-                      ? t("chat.composer_mode_work")
-                      : t("chat.composer_mode_code")}
-                  </span>
-                </Badge>
-                <Badge
-                  class="composer-context-flag composer-context-target-flag"
+            <Show when={toolbarLayout() === "overflow"} fallback={renderToolbarOptions()}>
+              <Popover.Root
+                open={overflowOpen()}
+                onOpenChange={setOverflowOpen}
+                placement="top-start"
+                gutter={8}
+                fitViewport
+              >
+                <Popover.Trigger
+                  as={Button}
+                  ref={(element: HTMLButtonElement) => {
+                    overflowTrigger = element
+                  }}
+                  type="button"
+                  variant="ghost"
+                  size="icon"
                   tone="neutral"
-                  size="md"
-                  data-ui="composer-target-flag"
-                  data-target={activeComposerIntent().conversationTarget}
+                  class="composer-overflow-trigger"
+                  aria-label={t("chat.composer_more_controls")}
+                  title={t("chat.composer_more_controls")}
                 >
-                  <Icon
-                    name={activeComposerIntent().conversationTarget === "mission" ? "mission" : "message"}
-                    size="compact"
-                  />
-                  <span class="composer-context-flag-label">
-                    {activeComposerIntent().conversationTarget === "mission"
-                      ? t("chat.composer_target_mission")
-                      : t("chat.composer_target_chat")}
-                  </span>
-                </Badge>
-                <ComposerReferenceSelector
-                  text=""
-                  skills={props.skills}
-                  missionSkills={props.missionSkills}
-                  expertSquads={props.expertSquads}
-                  activeExpertSquad={activeComposerIntent().conversationTarget === "mission" ? activeExpertSquad() : undefined}
-                  launchReferences={props.launchReferences}
-                  readOnly
-                />
-              </div>
+                  <Icon name="more-horizontal" size="medium" />
+                </Popover.Trigger>
+                <Popover.Portal>
+                  <Popover.Content
+                    ref={(element) => {
+                      overflowContent = element
+                    }}
+                    class="composer-toolbar-popover"
+                  >
+                    <strong class="composer-toolbar-popover-heading">{t("chat.composer_more_controls")}</strong>
+                    {renderToolbarOptions()}
+                  </Popover.Content>
+                </Popover.Portal>
+              </Popover.Root>
             </Show>
-            {/* Right of the expert-squad selector in both branches. Authorization
-             * mode stays switchable while a task runs: each task freezes the mode
-             * it started with, so the control only governs what is dispatched
-             * next. */}
-            <ComposerPermissionControl disabled={!props.enabled} />
           </div>
           <div class="chat-compose-meta-right">
-            <ComposerModelSelector onModelAvailabilityChange={setModelAvailable} />
             <Show when={props.busy && !stopMode()}>
               <Button
                 id={props.stopID ?? "btnTaskInterrupt"}

@@ -81,6 +81,7 @@ EngineInteraction 持久化；进程恢复复用同一 Request 创建时间与�
 - 身份：`username`
 - 开发入口：`projectEditor` · `preferredProjectEditor` · `initGit`
 - 工作区恢复：`directory` · `workspaceTaskID` · `workspaceDirectory`
+- 输入框偏好：`projectComposerIntents` 保存每个 server URL / canonical project directory 的最后一次显式 Code/Work 与 Chat/Mission 选择；历史会话浏览不写入此偏好。权限模式仍只由 Layer 1 的项目 `permission_mode` 保存。
 - 外观：`theme` · `zoom` · `locale` · `sidebarCollapsed`
 - 布局：`sidebarWidth` · `rightDockWidth` · `workLedgerOrganization` · `workLedgerSort`
 - 桌面集成：`desktopNotifications`

@@ -407,6 +407,16 @@ route resolver 直接启动 Mission，前者把精确 Squad identity 写入 Miss
 context。没有结构化 reference 的普通 Code / Work 请求仍进入各自 conversation；
 当用户在自然语言中明确要求启动或转交 Mission 时，primary assistant 使用可见的
 `panel_wake_mission` handoff，禁止用 host 关键字匹配制造第二套路由来源。
+
+Composer toolbar follows its own available width and UI scale: full labels,
+then icons with current-value titles, then one popover containing the same
+controls. Attachments and send/stop stay directly accessible. Model readiness
+comes from the canonical composer model projection even when the popover is
+closed. Per-project explicit launch intent restores from Overlay preferences;
+opening historical Task/Session/Mission occurrences projects their own mode
+without changing that preference. Provider/config read responses must still
+belong to the active server and directory before updating the current view.
+
 Chat 与 Work 共用一个
 right-sidebar conversation session、message、attachment、tool、Skill、Model Context Protocol
 (MCP) server 和 lifecycle 实现；持久化的 `metadata.conversation.experience` 是唯一身份来源，

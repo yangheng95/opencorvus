@@ -1,0 +1,44 @@
+# Adaptive composer controls and project preferences
+
+## Recall
+
+- User: 输入框的控件需要在宽度不够的时候自动缩成图标，再不够就折叠。选择的权限和 work/code 模式，这些 UI 设置也要记住最后一次的选择（同一个项目）。测试 computer use 和 browser use 可以按需申请/加载启用。
+- Acceptance: wide composer shows complete controls, narrower desktop panes show identifiable icon controls, smallest panes keep send/stop and attachment access while placing secondary controls in an accessible disclosure. Resize back restores the same choices. Each project restores its last explicit Code/Work and Chat/Mission selections across reopen/reload, with separate server/project identities. Permission remains the existing durable project configuration and restores accurately after navigation.
+- Constraints: no UI automated tests, source/DOM assertions or browser fixtures. Inspect and interact with real `/ui` pages at several desktop pane widths, then inspect screenshots. Use existing browser tools; native computer use may be loaded if needed. Do not delegate, create branches, touch user processes, copy credentials, invoke models or expand permission policy. Commit task-only changes and fetch/merge/audit/push.
+- Initial state: main includes prior task dda2c9d3. Many unrelated release/conversation/Git-preference changes are active, including store/settings.ts, main-adjacent files, locale files, native Cargo files and spec indexes. Preserve and stage only this task's portions.
+- Read: ChatComposer, ComposerModelSelector, ComposerReferenceSelector, ComposerPermissionControl, SelectControl, Popover, composer styles, main intent navigation, workspace/init/config/config-load/permission-mode/composer-model services, Overlay settings store and browser/native persistence, transport schema, native parser, current configuration/panel/security architecture and prior settings Recall.
+- Searches: all composer intent setters and create routes, all permission mode readers/writers, all config/provider read and mutation entry points, persisted settings TypeScript/Rust schemas and validators, existing project-directory identity helper and targeted tests. No delegation.
+
+## Analysis and impact
+
+The toolbar currently has non-shrinking right controls and overflow:hidden on the left. Two container rules only adjust send-button geometry; text truncation cannot preserve the complete set of controls. Replace clipping with one responsive control composition, icon presentation and an overflow popover, retaining the same handlers and selected values. Resize is local layout state, not a workflow gate or persisted preference. Risks: lost controls, inaccessible icon labels, nested popover focus, draft loss and overflow at zoomed desktop widths.
+
+Composer intent is a main.tsx signal. Explicit changes are not saved, and selecting a project hard-resets DEFAULT_COMPOSER_INTENT. Persist explicit intent in the existing OverlayPersistedSettings document, keyed by server and canonical project directory, and restore it for an unbound project composer. Browsing historical sessions only projects their actual intent; it must not overwrite the preference. The directory-free launcher retains its existing explicit/default behavior. Propagate an explicitly submitted global intent to its newly allocated project. TypeScript and native Rust parsers must share the new optional field; focused non-UI serialization/persistence tests verify current output and project separation.
+
+Permission already PATCHes project Config and must not be copied into Overlay preferences. Config-load audit found loadProviderInfo() treats omitted directory as global and can replace appStore.config with global config while a project is active (Scheduled settings calls it without options). Its empty-directory ownership check also ignores project switches. Normalize reads to the active scope, respect explicit directory-free calls, and require server/directory ownership before projecting results. Audit covers startup/reconnect, Project selection, Task/Session/Mission config projection, settings reload and provider refresh; this is a client projection ownership issue, not evidence of a runtime scheduler/queue/terminal anomaly. Existing authority continues freezing modes per Session. No permission grant, execution or backend API contract changes are intended.
+
+## Plan
+
+1. Add project composer preferences to the single persisted Overlay document and native schema; implement scoped remember/restore through existing saveSettings, preserving other project entries and confirmed state on write failure.
+2. Connect explicit intent selection, project reopening, restored startup and first global submission. Correct project ownership of configuration/provider loads; add focused non-UI positive contract coverage.
+3. Refactor toolbar controls once; use current pane width and UI scale for full/icon/overflow stages, accessible current-value labels and existing Popover controls. Keep send/stop and attachment actions visible. Delete obsolete clipping rules.
+4. Build into a private renderer directory and serve via the development backend `/ui`, since other tasks may rebuild shared dist-vite. Inspect wide/icon/overflow, restored width, menus, project A/B persistence, reload and permission retention on a real isolated runtime. Do not use model/provider calls.
+5. Run relevant types, transport/native persistence checks, i18n/CSS/build/docs checks; review scoped diffs, commit, fetch/merge/audit and push.
+
+## Evidence
+
+Implemented the shared toolbar with full labels at 680 logical pixels and above, icons from 400 to 679, and the existing Popover below 400. Width is measured on the actual composer toolbar and divided by the existing UI scale. Hidden labels remain available to assistive technology; current-value titles identify icon controls. Removed the two obsolete container overrides: their row geometry duplicated the base layout and their narrow send-button padding/hidden label competed with it. Send readiness now reads the shared model projection directly, so closing the folded controls does not disable sending.
+
+The optional `projectComposerIntents` field is accepted, serialized and restored by both transport and native settings contracts. Explicit selections replace one entry per canonical project/server identity. The current save queue retains confirmed per-project values on a reported storage failure. Startup, project navigation and first global project allocation use this preference; historical conversation context remains read-only. Permission remains the real project config. Provider refresh defaults to the active project, and late reads from another server/project cannot replace the current projection.
+
+Validation completed:
+
+- `bun test ./test/project-composer-preferences.test.ts ./test/config-load-ownership.test.ts` in overlay: 6 positive contract tests, 24 assertions passed. These cover serialization, project/server separation, rapid saves, confirmed-state recovery, provider refresh and delayed response ownership; they are not UI tests.
+- `cargo test project_composer_intents -- --nocapture` in overlay/src-tauri: 2 passed, including real temporary-file write/read through the native settings parser and the invalid-mode error contract.
+- Overlay typecheck, i18n and CSS token checks passed. Private Vite renderer builds passed with existing third-party directive/chunk-size warnings.
+- `bun run docs:check`: 342 operations / 25 groups. `bun run check:architecture-index`: 17 indexed current documents, links valid.
+- Real development backend at `http://127.0.0.1:17932/ui/`, isolated runtime and alpha/beta directories, private frozen renderer assets. Browser interactions and screenshots covered full controls, icons, narrow-pane collapse and restored width. Viewed English dark and Chinese light, plus 160% scale. Draft text remained through resize; model selection inside the nested popover worked and Send remained enabled after closing/expanding. No message was submitted and no model execution was needed.
+- Alpha restored Code/Chat/Ask me; beta restored Work/Mission and its existing Full access. Switching projects and reloading restored each selection. Browsing alpha's existing Work session showed its Work context, then returning to the project restored the saved Code preference. Opening Scheduled settings and returning retained Ask me. Only the more restrictive Ask me setting was selected in the review runtime.
+- Native desktop UI was not launched; native persistence was validated by its actual parser/file writer, and visual acceptance used the real browser renderer. No UI automated tests were added or run.
+
+Private review files live outside the repository in the task visualization directory under `composer-review/`; the temporary development runner is removed from the repository before commit. Delivery includes only the files/hunks for this request; concurrent delivery, release, benchmark and Git-initialization edits remain owned by their original tasks.

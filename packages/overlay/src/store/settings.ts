@@ -8,7 +8,7 @@ import { getHostTransport } from "../services/host-transport-runtime"
 import { runtimeStartupTheme, sanitizeThemeForHost, type OverlayThemeID } from "../services/theme-registry"
 import type { PersistedOverlaySettings } from "../services/persisted-overlay-settings"
 import { parsePersistedOverlaySettings } from "../services/persisted-overlay-settings"
-import type { WorkLedgerOrganization, WorkLedgerSort } from "@opencorvus-ai/transport-protocol"
+import type { ProjectComposerIntent, WorkLedgerOrganization, WorkLedgerSort } from "@opencorvus-ai/transport-protocol"
 import { runtimeLocale, sanitizeLocale } from "../utils/i18n"
 
 // ── Types ──
@@ -46,6 +46,7 @@ export interface OverlaySettings {
   desktopNotifications: boolean
   /** Last explicit Composer choice used to initialize new conversations. */
   lastSelectedModel: string
+  projectComposerIntents: ProjectComposerIntent[]
 }
 
 // ── Sanitisers ──
@@ -135,6 +136,7 @@ export const DEFAULT_SETTINGS: OverlaySettings = {
   directoryEpoch: 0,
   desktopNotifications: true,
   lastSelectedModel: "",
+  projectComposerIntents: [],
 }
 
 // ── Store ──
@@ -192,6 +194,7 @@ export function applySettings(input: Partial<OverlaySettings>): void {
     preferredProjectEditor: sanitizeProjectEditor((input as any)?.preferredProjectEditor),
     desktopNotifications: input?.desktopNotifications !== false,
     lastSelectedModel: input?.lastSelectedModel?.trim() ?? DEFAULT_SETTINGS.lastSelectedModel,
+    projectComposerIntents: input?.projectComposerIntents ?? [],
   })
 }
 
@@ -303,6 +306,7 @@ export function bootstrapOverlaySettings(input: Partial<OverlaySettings> = setti
     locale: input.locale ?? DEFAULT_SETTINGS.locale,
     desktopNotifications: input.desktopNotifications ?? DEFAULT_SETTINGS.desktopNotifications,
     lastSelectedModel: input.lastSelectedModel?.trim() || undefined,
+    projectComposerIntents: input.projectComposerIntents?.length ? input.projectComposerIntents : undefined,
     directory: input.savedDirectory || undefined,
     preferredProjectEditor: sanitizeProjectEditor(input.preferredProjectEditor),
     workspaceTaskID,

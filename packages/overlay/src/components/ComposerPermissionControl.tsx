@@ -1,23 +1,5 @@
-// Authorization-mode icon control for the composer's bottom toolbar.
-//
-// The mode decides whether risk-bearing Tool/MCP calls stop for an explicit
-// decision, so it belongs where the operator dispatches work rather than only
-// behind the settings dialog.
-//
-// Geometry and row anatomy are the compose-meta row's, not this control's. The
-// trigger joins the `--composer-pill-height` family and shares one button recipe
-// with `.composer-reference-trigger`, the expert-squad selector it sits beside —
-// so it is 24px with a compact glyph, not the 32px/medium of the attachment `+`
-// and send button at the row's two ends. The menu rows are
-// `.composer-runtime-menu-item`, the same recipe as the parallelism and
-// unattended rows, down to carrying their hint on `title` so every row keeps one
-// line and one control height.
-//
-// Mode reads from the glyph — closed keyhole for `ask`, open for `full_access` —
-// never from color: every other control in this row rests at `--text-muted`, so
-// a tinted icon would be the loudest mark in the composer chrome for what is,
-// most of the time, the default state. Grants and history stay in the settings
-// group, whose paragraphs would turn this menu into a wall of text.
+// The toolbar controls label visibility as its available width changes.
+// The glyph and accessible name preserve the selected authorization mode.
 
 import { createMemo, For } from "solid-js"
 import type { JSX } from "solid-js"
@@ -87,7 +69,7 @@ export function ComposerPermissionControl(props: ComposerPermissionControlProps)
       <DropdownMenu.Trigger
         as={Button}
         variant="outline"
-        size="icon"
+        size="sm"
         tone="neutral"
         type="button"
         class="composer-permission-trigger"
@@ -98,6 +80,7 @@ export function ComposerPermissionControl(props: ComposerPermissionControlProps)
         aria-label={t("chat.permission_mode_aria", { mode: activeLabel() })}
       >
         <Icon name={MODE_ICON[mode()]} size="compact" />
+        <span class="composer-permission-label">{activeLabel()}</span>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content class="composer-attachment-menu">

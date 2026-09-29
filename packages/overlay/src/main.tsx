@@ -62,6 +62,7 @@ import { abortChatRequest, messageStore, setChatAttachments } from "./store/mess
 import { clearConversationUiState } from "./store/conversation-ui"
 import { appStore } from "./store/app"
 import { clearComposerModelProjection, projectComposerModelFromSession } from "./services/composer-model"
+import { projectComposerIntent, rememberProjectComposerIntent } from "./services/project-composer-preferences"
 import { rightDockOpen, setRightDockVisible } from "./store/right-dock"
 import {
   selectTask,
@@ -433,6 +434,15 @@ setWorkLedgerChangeHandler(handleWorkLedgerStreamEvent)
 disposers.push(() => setWorkLedgerChangeHandler(null))
 const [composerIntent, setComposerIntent] = createSignal<ComposerIntent>(DEFAULT_COMPOSER_INTENT)
 
+createEffect(() => {
+  const directory = activeDirectory()
+  const intent = projectComposerIntent(settingsStore.serverUrl, directory)
+  if (directory && !boardStore.selectedSource) {
+    setComposerIntent(intent)
+    setPrimaryCenterPanel(intent.conversationTarget === "mission" ? "mission" : "chat")
+  }
+})
+
 function isCenterWorkbenchPanelOpen(panel: CenterWorkbenchPanel): boolean {
   return centerWorkbenchPanels().some((tab) => tab.panel === panel)
 }
@@ -623,6 +633,7 @@ function handleComposerIntentChange(intent: ComposerIntent): void {
   const currentDraft = composerDraftText(currentDraftKey)
   if (currentDraftKey !== launcherDraftKey && currentDraft) setComposerDraft(launcherDraftKey, currentDraft)
   setComposerIntent(intent)
+  runMainAsync("composer.remember-project-intent", () => rememberProjectComposerIntent(activeDirectory(), intent))
   resetCenterWorkbenchToPrimaryPanel(intent.conversationTarget === "mission" ? "mission" : "chat")
   runMainAsync("composer.mode-clear-source", () => selectTask("", { preserveComposerAttachments: true }))
   focusComposerInput()
@@ -684,8 +695,9 @@ async function startWorkLedgerMulticaImport(directory: string): Promise<void> {
 async function selectWorkLedgerProject(directory: string): Promise<void> {
   const projectDirectory = directory.trim()
   if (!projectDirectory) throw new Error(t("project.new_chat_missing_directory"))
-  setComposerIntent(DEFAULT_COMPOSER_INTENT)
-  resetCenterWorkbenchToPrimaryPanel("chat")
+  const intent = projectComposerIntent(settingsStore.serverUrl, projectDirectory)
+  setComposerIntent(intent)
+  resetCenterWorkbenchToPrimaryPanel(intent.conversationTarget === "mission" ? "mission" : "chat")
   await applyDirectory(projectDirectory, { save: true, restoreWorkspace: false })
   bumpWorkspaceEpoch()
   focusComposerInput()
@@ -2190,9 +2202,15 @@ function OverlayRoot() {
           activeComposerIntent={resolvedActiveComposerIntent()}
           onComposerIntentChange={handleComposerIntentChange}
           resolveAttachmentDirectory={async () => {
+            const intent = { ...composerIntent() }
+            const needsProject = !activeDirectory().trim()
             const sourceDraftKey = panelComposerDraftKey()
             const sourceDraft = composerDraftText(sourceDraftKey)
             const directory = await resolveGlobalComposerProject()
+            if (needsProject)
+              runMainAsync("composer.remember-attachment-project", () =>
+                rememberProjectComposerIntent(directory, intent),
+              )
             const targetDraftKey = panelComposerDraftKey()
             if (sourceDraftKey !== targetDraftKey && sourceDraft && !composerDraftText(targetDraftKey)) {
               setComposerDraft(targetDraftKey, sourceDraft)
@@ -2200,6 +2218,8 @@ function OverlayRoot() {
             return directory
           }}
           onSubmit={async (text, attachments, webSearch, directives, markDispatched) => {
+            const submittedIntent = { ...composerIntent() }
+            const submittedWithoutProject = !activeDirectory().trim()
             const submitRoute = resolveComposerSubmitRoute(directives)
             const intentRoute = resolveComposerIntentRoute(composerIntent(), submitRoute.kind === "mission")
             const metadata = webSearch ? { web_search: true } : {}
@@ -2218,6 +2238,10 @@ function OverlayRoot() {
                   expertSquadIDs: submitRoute.kind === "mission" ? submitRoute.expertSquadIDs : undefined,
                 })
                 await openMissionSession(result, directory, selectionEpoch)
+                if (submittedWithoutProject)
+                  runMainAsync("composer.remember-created-project", () =>
+                    rememberProjectComposerIntent(directory, submittedIntent),
+                  )
                 setMissionSharedRefreshToken((value) => value + 1)
                 return result
               } finally {
@@ -2241,6 +2265,12 @@ function OverlayRoot() {
                     experience,
                     model: appStore.composerModel || undefined,
                   })
+                if (submittedWithoutProject) {
+                  const createdDirectory = activeDirectory().trim()
+                  runMainAsync("composer.remember-created-project", () =>
+                    rememberProjectComposerIntent(createdDirectory, submittedIntent),
+                  )
+                }
                 const result = await panelMessage(text, attachments, metadata, markDispatched)
                 const source = boardStore.selectedSource
                 if (

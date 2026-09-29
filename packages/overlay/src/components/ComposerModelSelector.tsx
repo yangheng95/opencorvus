@@ -298,11 +298,7 @@ function createProviderAccountUsageState(model: () => string, taskID: () => stri
   return { eligible, key, accountUsage, loading }
 }
 
-export interface ComposerModelSelectorProps {
-  onModelAvailabilityChange: (available: boolean) => void
-}
-
-export function ComposerModelSelector(props: ComposerModelSelectorProps) {
+export function ComposerModelSelector() {
   const disclosure = useDisclosure()
   const [slotRef, setSlotRef] = createSignal<HTMLElement>()
   const [providerLoading, setProviderLoading] = createSignal(false)
@@ -311,9 +307,6 @@ export function ComposerModelSelector(props: ComposerModelSelectorProps) {
   let searchInputRef: HTMLInputElement | undefined
   const taskID = createMemo(() => activeTaskID().trim())
   const selectedModel = createMemo(() => appStore.composerModel)
-  createEffect(() => {
-    props.onModelAvailabilityChange(Boolean(selectedModel().trim()))
-  })
   const modelLabel = createMemo(() => {
     const selected = selectedModel()
     if (!selected) return t("model_selector.model_choose")
@@ -399,6 +392,7 @@ export function ComposerModelSelector(props: ComposerModelSelectorProps) {
               title={t("model_selector.model_chip_title", { model: selectedModel() || modelLabel() })}
               aria-label={t("model_selector.model_chip_aria", { model: selectedModel() || modelLabel() })}
             >
+              <Icon class="composer-model-selector-icon" name="config-agent-models" size="compact" />
               <span class="composer-model-selector-copy">
                 <span class="composer-model-selector-value" title={selectedModel() || modelLabel()}>
                   {modelLabel()}

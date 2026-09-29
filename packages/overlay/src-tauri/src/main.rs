@@ -1653,6 +1653,21 @@ struct OverlaySettings {
         deserialize_with = "deserialize_present_value"
     )]
     last_selected_model: Option<String>,
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "deserialize_present_value"
+    )]
+    project_composer_intents: Option<Vec<ProjectComposerIntent>>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct ProjectComposerIntent {
+    server_url: String,
+    directory: String,
+    product_pillar: String,
+    conversation_target: String,
 }
 
 fn overlay_settings_filename() -> &'static str {
@@ -1660,6 +1675,17 @@ fn overlay_settings_filename() -> &'static str {
 }
 
 fn validate_overlay_settings(settings: OverlaySettings) -> Result<OverlaySettings, String> {
+    if let Some(entries) = &settings.project_composer_intents {
+        for entry in entries {
+            if entry.server_url.trim().is_empty()
+                || entry.directory.trim().is_empty()
+                || !["code", "work"].contains(&entry.product_pillar.as_str())
+                || !["chat", "mission"].contains(&entry.conversation_target.as_str())
+            {
+                return Err("overlay settings projectComposerIntents entry is invalid".to_string());
+            }
+        }
+    }
     for (name, value) in [
         ("serverUrl", settings.server_url.as_str()),
         ("username", settings.username.as_str()),
@@ -6549,6 +6575,7 @@ mod tests {
             workspace_directory: Some("C:/repo/workspace".to_string()),
             desktop_notifications: false,
             last_selected_model: Some("openai/gpt-5".to_string()),
+            project_composer_intents: None,
         }
     }
 
@@ -6560,6 +6587,59 @@ mod tests {
         let parsed =
             parse_overlay_settings_text(&text).expect("overlay JSONC settings should parse");
         assert_eq!(parsed, overlay_test_settings());
+    }
+
+    #[test]
+    fn project_composer_intents_round_trip_in_native_settings() {
+        let mut settings = overlay_test_settings();
+        settings.project_composer_intents = Some(vec![
+            ProjectComposerIntent {
+                server_url: "http://127.0.0.1:7878".to_string(),
+                directory: "C:/project-a".to_string(),
+                product_pillar: "work".to_string(),
+                conversation_target: "chat".to_string(),
+            },
+            ProjectComposerIntent {
+                server_url: "http://127.0.0.1:7878".to_string(),
+                directory: "C:/project-b".to_string(),
+                product_pillar: "code".to_string(),
+                conversation_target: "mission".to_string(),
+            },
+        ]);
+        let text = format_overlay_settings_text(&settings).expect("serialize project preferences");
+        assert_eq!(
+            parse_overlay_settings_text(&text).expect("parse project preferences"),
+            settings
+        );
+        let path = std::env::temp_dir().join(format!(
+            "opencorvus-composer-settings-{}.jsonc",
+            std::process::id()
+        ));
+        write_overlay_settings_text(&path, &text).expect("persist project preferences");
+        let restored = parse_overlay_settings_text(
+            &fs::read_to_string(&path).expect("read project preferences"),
+        )
+        .expect("restore project preferences");
+        assert_eq!(
+            restored.project_composer_intents,
+            settings.project_composer_intents
+        );
+        fs::remove_file(path).expect("remove test preferences");
+    }
+
+    #[test]
+    fn project_composer_intents_invalid_mode_has_explicit_error() {
+        let mut settings = overlay_test_settings();
+        settings.project_composer_intents = Some(vec![ProjectComposerIntent {
+            server_url: "http://127.0.0.1:7878".to_string(),
+            directory: "C:/project".to_string(),
+            product_pillar: "invalid".to_string(),
+            conversation_target: "chat".to_string(),
+        }]);
+        assert_eq!(
+            validate_overlay_settings(settings).expect_err("invalid product mode"),
+            "overlay settings projectComposerIntents entry is invalid"
+        );
     }
 
     #[test]
