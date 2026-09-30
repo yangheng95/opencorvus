@@ -1,0 +1,230 @@
+{
+  "version": "0.1.1-beta",
+  "source": "9faeb1c7ba879c94e38b25a0b2614398cc5a795b",
+  "tag": "v0.1.1-beta",
+  "previousSource": "d1f974e58306ea3058e356192e2ffd2de910cafe",
+  "sourceDate": "2026-09-17T19:22:15+08:00",
+  "commits": [
+    {
+      "sha": "9faeb1c7ba879c94e38b25a0b2614398cc5a795b",
+      "date": "2026-09-17T19:22:15+08:00",
+      "subject": "fix: preserve broker identity when a cancelled probe returns a response"
+    },
+    {
+      "sha": "9803f24d01d4a47bf09d1f8e52302537eda54e78",
+      "date": "2026-09-17T19:00:14+08:00",
+      "subject": "test: retain broker takeover diagnostics and allow native focused runs"
+    },
+    {
+      "sha": "5b69a38371c2e822e3c6352748a5bb7068616e06",
+      "date": "2026-09-17T18:02:55+08:00",
+      "subject": "test: verify the exact isolated runner entry path"
+    },
+    {
+      "sha": "14d74c62341a7ce75ea91d186d28854be9fd9641",
+      "date": "2026-09-17T17:43:32+08:00",
+      "subject": "fix: await scheduler execution evidence and complete selected test runs"
+    },
+    {
+      "sha": "d311a4786b0cb6360914beda6270a3f75e4e4c12",
+      "date": "2026-09-17T17:16:19+08:00",
+      "subject": "fix: preserve native release failure diagnostics in the correct runtime"
+    },
+    {
+      "sha": "df88f6cf52d14deacdf54b36a67b4eaecad92fa6",
+      "date": "2026-09-17T17:06:03+08:00",
+      "subject": "fix: select exact test hosts and retain process identity failures"
+    },
+    {
+      "sha": "c15eb2c5f288f2350701caa7b61810a5fbd76e92",
+      "date": "2026-09-17T16:39:07+08:00",
+      "subject": "release: prepare 0.1.1-beta version family"
+    },
+    {
+      "sha": "75213641dbbfcdbdfb9cce97474b445ef832d200",
+      "date": "2026-09-17T16:32:13+08:00",
+      "subject": "fix: make startup schema validation portable and retain failure evidence"
+    },
+    {
+      "sha": "d5347d6cb8cd313aaa74dc15e7f0aedebdaa6471",
+      "date": "2026-09-17T16:12:14+08:00",
+      "subject": "fix: union permanent and revealed capability references"
+    },
+    {
+      "sha": "56eb2069cf9e9c2941770a4136a913e4fc70437e",
+      "date": "2026-09-17T15:28:23+08:00",
+      "subject": "docs: trace historical unfinished tool response with original request evidence"
+    },
+    {
+      "sha": "00a50db3cc6f0fcab0b56faab9cc5eda288d7e1b",
+      "date": "2026-09-17T14:35:20+08:00",
+      "subject": "docs: align remaining acceptance blockers"
+    },
+    {
+      "sha": "e8ddf34fbe7d055f7c1d086a526036567539940b",
+      "date": "2026-09-17T14:34:01+08:00",
+      "subject": "docs: record accepted native repair installation"
+    },
+    {
+      "sha": "5cd79497dd84bd6e308746130d9824c2d52439f5",
+      "date": "2026-09-17T14:28:01+08:00",
+      "subject": "fix: resume task initialization failures through mission acceptance"
+    },
+    {
+      "sha": "8ebcad22fdbb6a0889315977d3a6cec4374e1512",
+      "date": "2026-09-17T12:33:49+08:00",
+      "subject": "fix(overlay): preserve message settlement across card regrouping"
+    },
+    {
+      "sha": "399250922416fefbd6e0c7ef9dc4455e5588eb5b",
+      "date": "2026-09-17T11:55:26+08:00",
+      "subject": "fix(plugin): isolate native module publication by revision"
+    },
+    {
+      "sha": "8b2281e0d3b65f8f50d70438f0aa1f58e7693ab3",
+      "date": "2026-09-17T10:49:23+08:00",
+      "subject": "fix(runtime): fence task activation before prompt shutdown"
+    },
+    {
+      "sha": "8a98641c563ad2be826f70687d7bbb6cc42c43ae",
+      "date": "2026-09-17T10:30:32+08:00",
+      "subject": "fix(runtime): publish pending tool input and acknowledge mission sends"
+    },
+    {
+      "sha": "9f84a640b249486f875c3d1fbf2a6eb956f4672f",
+      "date": "2026-09-17T04:53:55+08:00",
+      "subject": "docs: record final runtime acceptance and delivery blockers"
+    },
+    {
+      "sha": "739c6ddcf7fbe37ce65c0d5018797ef29a6c5e77",
+      "date": "2026-09-17T04:41:38+08:00",
+      "subject": "fix(orchestrator): verify lifecycle facts behind idle decisions"
+    },
+    {
+      "sha": "c79cd29b6a03a9c72915ce00cf85d066b1a6746d",
+      "date": "2026-09-17T04:05:16+08:00",
+      "subject": "fix(review): reobserve repaired surfaces before accepting evidence"
+    },
+    {
+      "sha": "815f02b3aa80f3fae47ad80f13dce09cb84a8738",
+      "date": "2026-09-17T03:41:05+08:00",
+      "subject": "fix(runtime): validate attachment selection before dispatch admission"
+    },
+    {
+      "sha": "4087d952b0b66a9ea957e26cb37e384405d26c0e",
+      "date": "2026-09-17T03:08:11+08:00",
+      "subject": "test(runtime): verify atomic worker admission rollback and recovery"
+    },
+    {
+      "sha": "6220fafdc6add024f9257877b6b4ee0293b6faf2",
+      "date": "2026-09-17T02:55:27+08:00",
+      "subject": "test(runtime): inventory adapter coverage and refresh recovery receipt"
+    },
+    {
+      "sha": "31679fd47cae7ff7314f46abfffbf2b774c50b6d",
+      "date": "2026-09-17T02:34:20+08:00",
+      "subject": "fix(runtime): fence collection preparation failure settlement"
+    },
+    {
+      "sha": "b3cea6889156b26c56570fce8a9c839d88078033",
+      "date": "2026-09-17T01:44:24+08:00",
+      "subject": "fix: preserve browser interaction evidence identity and dimensions"
+    },
+    {
+      "sha": "792cb4047396643eae23efb0639c158d2b850a42",
+      "date": "2026-09-17T01:33:45+08:00",
+      "subject": "fix: settle detached delivery across cancellation boundaries"
+    },
+    {
+      "sha": "0d93c422bedb5d86177d310a35bf59c028dac3f1",
+      "date": "2026-09-17T01:16:50+08:00",
+      "subject": "fix: canonicalize stage tool bindings and observe detached failures"
+    },
+    {
+      "sha": "459647ea00bd0a1ea28e361b207d86e02d6b987d",
+      "date": "2026-09-17T00:40:34+08:00",
+      "subject": "fix: bind design authoring to canonical task artifact directory"
+    },
+    {
+      "sha": "5dd3fb17671881b430100ab2472135adfb819a41",
+      "date": "2026-09-17T00:25:43+08:00",
+      "subject": "fix: refresh task ledger on terminal events and reconnect"
+    },
+    {
+      "sha": "82734cb8d7263984a37c346ec53ce52c46d8f22a",
+      "date": "2026-09-16T23:51:28+08:00",
+      "subject": "test: retain complete runtime source provenance and real interaction evidence"
+    },
+    {
+      "sha": "482655b740d504971edb6ef28f34a3272ece8a3b",
+      "date": "2026-09-16T23:31:16+08:00",
+      "subject": "fix: provide valid isolated Windows profiles for browser acceptance"
+    },
+    {
+      "sha": "f3ae97d8078378601b7102e289b23652ffdea620",
+      "date": "2026-09-16T23:19:10+08:00",
+      "subject": "fix: preserve delay admission across assistant continuation steps"
+    },
+    {
+      "sha": "49f65cb1f288d8a509ee3eca33cd86f2af2b3e25",
+      "date": "2026-09-16T22:47:42+08:00",
+      "subject": "fix: let Mission complete coordination after publishing child Tasks"
+    },
+    {
+      "sha": "a2dd3a89c874748bf193a0b38ee019ba43801d16",
+      "date": "2026-09-16T22:39:20+08:00",
+      "subject": "fix: settle foreground process trees when their root command exits"
+    },
+    {
+      "sha": "1c527e15c6c32cdf2797e09f1d0d1313c18abc75",
+      "date": "2026-09-16T22:18:05+08:00",
+      "subject": "fix: bind Mission completion to current acceptance authority"
+    },
+    {
+      "sha": "67f2d0ac6337c676015bc6fe002cd85f51eda405",
+      "date": "2026-09-16T22:02:04+08:00",
+      "subject": "fix: drain queued Session inputs and enforce semantic stream activity"
+    },
+    {
+      "sha": "f7de53f6ba1940d8574887d100a30df27db95ad1",
+      "date": "2026-09-16T21:31:30+08:00",
+      "subject": "fix: validate continuation authority and reconcile native capability contracts"
+    },
+    {
+      "sha": "7785ff6fb69883c8faa99e8b5cf0fab9fcbd6837",
+      "date": "2026-09-16T20:54:38+08:00",
+      "subject": "fix: retain isolated Mission acceptance and measure durable cancellation"
+    },
+    {
+      "sha": "dc51f79c1e09f44e245eb648e41fea510bdb0588",
+      "date": "2026-09-16T20:44:18+08:00",
+      "subject": "fix: detach accepted ingress execution and validate visual evidence paths"
+    },
+    {
+      "sha": "c69410faaf8e80f6a3e8de72f23366d83f311963",
+      "date": "2026-09-16T20:32:54+08:00",
+      "subject": "fix: audit real-provider lifecycle acceptance and retain evidence"
+    },
+    {
+      "sha": "66a5328af121a4c0fb1c9b5935d59ae95bd7add1",
+      "date": "2026-09-16T19:56:03+08:00",
+      "subject": "fix: settle and resume failed dispatch preparation under lease authority"
+    },
+    {
+      "sha": "2f4b46409a1c77f18d77760ffc8945430374f154",
+      "date": "2026-09-16T16:54:18+08:00",
+      "subject": "fix: preserve dispatch identity and classify semantic outcomes"
+    },
+    {
+      "sha": "89003f8a62bd7816300d584b2cfeaf3ae5355f94",
+      "date": "2026-09-16T15:49:01+08:00",
+      "subject": "docs: diagnose stalled dispatch preparation on beta runtime"
+    },
+    {
+      "sha": "835ea48ed2d687e3b2f50429586b6add38b93e73",
+      "date": "2026-09-16T03:21:42+08:00",
+      "subject": "docs: record verified v0.1.0-beta publication"
+    }
+  ],
+  "stats": ".github/workflows/build-check.yml                  |  10 +\n .github/workflows/build.yml                        |  21 +\n .github/workflows/test.yml                         |  20 +-\n CHANGELOG.md                                       |  16 +\n bun.lock                                           |  16 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n .../native/process-supervisor/src/main.rs          |  20 +\n packages/opencorvus/package.json                   |   2 +-\n packages/opencorvus/script/audit-snapshot.ts       |  38 +\n .../script/check-mission-task-duplex-e2e.ts        | 155 ++--\n .../opencorvus/script/dynamic-expert-squad-e2e.ts  | 572 ++++++++------\n .../script/mission-task-duplex-snapshot.ts         |  21 +-\n .../script/native-provider-audit-plugin.ts         |  26 +\n packages/opencorvus/script/real-provider-audit.ts  | 108 +++\n packages/opencorvus/script/run-tests.ts            |   6 +-\n packages/opencorvus/script/runtime-dispatch-e2e.ts | 266 +++++++\n packages/opencorvus/script/runtime-e2e-scenario.ts |  45 ++\n packages/opencorvus/script/task-control-check.ts   | 167 ++--\n packages/opencorvus/src/agent/prompt-projection.ts |  22 +-\n packages/opencorvus/src/agent/runner.ts            |   2 +-\n .../src/agent/stage-tool-materializer.ts           |  44 +-\n .../opencorvus/src/capability/reveal-receipt.ts    |  21 +-\n packages/opencorvus/src/control/prompt.ts          |   4 +-\n packages/opencorvus/src/engine/describe.ts         |  22 +-\n .../src/engine/dispatch-delivery-disposition.ts    |  11 +\n packages/opencorvus/src/engine/dispatch-lineage.ts |   6 +\n .../opencorvus/src/engine/dispatch-settlement.ts   |  14 +-\n .../src/engine/task-root-ingress-delivery.ts       |  31 +-\n .../src/expert-squad/prompt-profile-resolver.ts    |   3 +-\n packages/opencorvus/src/frontend-design/agent.ts   |  19 +-\n .../src/frontend-design/input-projection.ts        |   9 +\n .../opencorvus/src/frontend-design/output-tools.ts |  53 +-\n packages/opencorvus/src/frontend-design/schema.ts  |  44 +-\n .../opencorvus/src/integrity/fact-projection.ts    |  16 +-\n packages/opencorvus/src/llm/activity.ts            |   6 +-\n packages/opencorvus/src/mcp/browser/monitor.ts     |   2 +-\n packages/opencorvus/src/mcp/browser/screenshot.ts  |  37 +-\n packages/opencorvus/src/mcp/browser/tools.ts       |  20 +-\n packages/opencorvus/src/mcp/materialize.ts         |   8 +\n packages/opencorvus/src/mcp/oauth-callback.ts      |  44 +-\n packages/opencorvus/src/mission/acceptance-gap.ts  |  11 +\n .../opencorvus/src/mission/acceptance-ledger.ts    |  65 +-\n packages/opencorvus/src/mission/board.ts           |  30 +-\n packages/opencorvus/src/orchestrator/agent.ts      |   6 +-\n .../src/orchestrator/decision-tool-names.ts        |  43 +-\n .../src/orchestrator/dispatch-agent-tool.ts        |  22 +-\n .../src/orchestrator/dispatch-agents-tool.ts       |  55 +-\n .../src/orchestrator/dispatch-turn-projection.ts   |   8 +-\n .../opencorvus/src/orchestrator/no-action-tool.ts  |  42 +-\n .../src/orchestrator/projected-adapter-error.ts    |   2 +\n .../src/orchestrator/protocol/message-bridge.ts    |  13 +-\n .../src/orchestrator/runtime-repair-tools.ts       |   1 +\n packages/opencorvus/src/orchestrator/tools.ts      | 196 +++--\n packages/opencorvus/src/panel/capability.ts        |   2 +-\n packages/opencorvus/src/plugin/index.ts            |   6 +-\n .../src/prompt/core/frontend-design-core.txt       |   2 +-\n .../src/prompt/core/integrity-team-core.txt        |  11 +\n .../opencorvus/src/prompt/core/mission-core.txt    |  17 +-\n .../src/prompt/core/orchestrator-core.txt          |   4 +-\n .../opencorvus/src/prompt/core/visual-qa-core.txt  |   2 +\n .../src/prompt/fragments/task-request-scope.ts     |  11 +-\n packages/opencorvus/src/protocol/store.ts          |  11 +\n .../opencorvus/src/runtime/process-occurrence.ts   |  49 +-\n .../src/scheduler/session-delay-admission.ts       |  34 +-\n .../opencorvus/src/server/routes/work-ledger.ts    |   2 +-\n packages/opencorvus/src/server/server.ts           |   4 +-\n packages/opencorvus/src/session/loop.ts            |   3 +\n packages/opencorvus/src/session/message-store.ts   |   9 +\n packages/opencorvus/src/session/processor.ts       |  98 ++-\n packages/opencorvus/src/session/shell-exec.ts      |   1 +\n .../opencorvus/src/shell/process-supervisor.ts     |  38 +-\n packages/opencorvus/src/shell/shell.ts             |   1 +\n packages/opencorvus/src/storage/ddl.ts             | 140 +++-\n packages/opencorvus/src/tool/bash.ts               |   2 +-\n packages/opencorvus/src/tool/execution-mode.ts     |  14 +-\n packages/opencorvus/src/tool/panel.ts              |  15 +-\n packages/opencorvus/src/tool/scheduler-message.ts  |   6 +-\n packages/opencorvus/src/visual-qa/agent.ts         |   1 +\n packages/opencorvus/src/visual-qa/output-tools.ts  |   4 +-\n packages/opencorvus/test/audit-snapshot.test.ts    |  24 +\n .../test/browser-preview/visual-evaluate.test.ts   |  93 ---\n .../native-mission-transport-base.test.ts          |  30 +\n .../test/capability/reveal-receipt.test.ts         |  28 +-\n ...dispatch-occurrence-cross-process-claim.test.ts |  65 ++\n .../test/execution-cancellation-protocol.test.ts   |  21 +\n .../dispatch-occurrence-claim-process-worker.ts    |  46 +-\n .../test/frontend-design-path-authority.test.ts    |  87 +++\n .../test/frontend-visual-sidecar-contract.test.ts  |  50 +-\n packages/opencorvus/test/llm/activity.test.ts      |   4 +-\n .../mcp/oauth-callback-durable-legitimacy.test.ts  |  54 +-\n .../opencorvus/test/mcp/result-provenance.test.ts  | 120 ++-\n .../test/mission-acceptance-delta.test.ts          |  74 +-\n .../test/mission-streamed-recovery.test.ts         |  45 +-\n .../test/mission-task-duplex-snapshot.test.ts      |  35 +-\n packages/opencorvus/test/no-action-tool.test.ts    |  81 +-\n .../test/orchestrator-initial-task-render.test.ts  |   2 +\n ...chestrator-streamed-dispatch-settlement.test.ts | 338 +++++++--\n .../test/panel-mission-terminal-authority.test.ts  |  77 +-\n .../test/process-supervisor-control-plane.test.ts  |  29 +\n .../test/prompt-attachment-selection.test.ts       |  19 +\n .../test/prompt-composition-fingerprint.test.ts    |   3 +-\n .../opencorvus/test/real-provider-audit.test.ts    |  47 ++\n .../opencorvus/test/runtime-e2e-scenario.test.ts   |  42 +\n .../test/runtime-execution-settlement.test.ts      |  35 +\n .../runtime/process-occurrence-evidence.test.ts    |  19 +\n .../scheduler-task-root-message-schema.test.ts     |   3 +-\n .../test/server/work-ledger-event-fanout.test.ts   | 124 +++\n ...session-loop-tool-authority-integration.test.ts |   6 +-\n .../session/processor-llm-activity-retry.test.ts   |   4 +-\n .../session/processor-producer-boundary.test.ts    | 150 ++++\n .../session-loop-execution-occurrence.test.ts      |  77 ++\n .../test/stage-tool-materializer.test.ts           |  51 +-\n .../test/task-control-abandoned-dispatch.test.ts   |  22 +-\n .../task-control-cross-process-dispatch.test.ts    |  51 +-\n .../opencorvus/test/task-control-liveness.test.ts  |  39 +\n .../test/task-control-reconciliation.test.ts       | 249 +-----\n .../test/task-lifecycle-prompt-projection.test.ts  |  68 ++\n .../test/task-live-replay-retention.test.ts        |  32 +\n .../test/task-wait-fire-identity.test.ts           |  57 +-\n .../test/test-runner-runtime-isolation.test.ts     |   7 +-\n .../test/test-runner-selected-files.test.ts        |  42 +\n .../test/tool-decision-coordination.test.ts        |  62 +-\n .../test/tool-result-control-protocol.test.ts      |   9 +-\n packages/opencorvus/tsconfig.json                  |   2 +-\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/overlay/src/services/chat.ts              |   4 +-\n packages/overlay/src/services/sse.ts               |   4 +-\n packages/overlay/src/services/tree-writer.ts       |  70 +-\n .../test/work-ledger-notification-stream.test.ts   |   2 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   4 +-\n packages/sdk/js/src/gen/sdk.gen.ts                 |  27 +\n packages/sdk/js/src/gen/types.gen.ts               |  27 +\n packages/sdk/js/src/server.ts                      |  22 +-\n packages/sdk/js/test/server.test.ts                |   2 +\n packages/sdk/openapi.json                          |  84 ++\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n packages/util/src/test-runtime-environment.ts      |  36 +-\n .../util/test/test-runtime-environment.test.ts     |  58 ++\n script/check-packaged-first-run.ts                 | 201 ++++-\n script/github-actions-workflow-contract.test.ts    |  59 +-\n specs/README.md                                    |   6 +\n specs/current/architecture/02-data.md              |  11 +-\n specs/current/architecture/03-control.md           |   6 +\n specs/current/architecture/04-extensions.md        |  17 +-\n specs/current/architecture/07-panel-reactivity.md  |  31 +\n specs/current/architecture/07-panel.md             |   8 +\n .../architecture/capability-search-runtime.md      |  27 +-\n .../architecture/server-runtime-readiness.md       |  12 +\n specs/current/architecture/task-control-plane.md   |  49 +-\n .../current/architecture/task-runtime-directory.md |   5 +\n .../2026-09/2026-09-15-v0.1.0-beta-release.md      |  11 +\n .../2026-09-16-dispatch-preparation-stall.md       |  37 +\n .../2026-09/2026-09-16-runtime-e2e-acceptance.md   | 843 +++++++++++++++++++++\n .../2026-09/2026-09-17-v0.1.1-beta-release.md      |  95 +++\n specs/records/2026-09/README.md                    |   6 +\n 163 files changed, 5777 insertions(+), 1462 deletions(-)"
+}

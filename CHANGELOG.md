@@ -362,6 +362,10 @@
 - 本版数据库结构指纹发生变化，旧 beta 任务数据库会返回 `SCHEMA_RESET_REQUIRED`，需要显式重置后使用。程序不会自动迁移或删除旧数据；Provider 配置应单独保留。
 - 历史上出现过单次模型响应持续生成工具参数、迟迟无法结束的情况，根因仍在调查。此前候选构建通过的真实任务验收也不能证明该问题已根治。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/9faeb1c7ba879c94e38b25a0b2614398cc5a795b) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/d1f974e58306ea3058e356192e2ffd2de910cafe...9faeb1c7ba879c94e38b25a0b2614398cc5a795b)。
+
 ## 0.1.0beta - 2026-09-15
 
 本版本纳入当前运行时与专家团改进，并修复全新安装环境的 Work/Chat 创建失败，继续使用 beta 更新通道。
