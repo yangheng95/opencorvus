@@ -587,6 +587,10 @@
 - 修复浏览器不提供高熵架构提示时，Windows 主按钮仍停留在 GitHub Release 页面、却显示为直接下载的问题；当发布清单证明该平台只有一个架构时，按钮现在绑定清单排序的当前 EXE。
 - 修复无法安全判定平台或架构时仍把 Release 链接包装成下载动作的问题；此时主按钮会展开当前版本的显式选择菜单。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/b10c5ebc407b6fcefb93a44a27db6b162379c1ea) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/23df4780d31336c97bfaaa2460e8747be70f0d7f...b10c5ebc407b6fcefb93a44a27db6b162379c1ea)。
+
 ## 0.0.53beta - 2026-08-24
 
 本版本修复长时间运行任务的唤醒、活动续期与恢复终态收敛，同时恢复桌面端右侧工作区、工作台重命名和工具详情交互，并同步发布桌面端、命令行二进制和公开网站。

@@ -1,0 +1,35 @@
+{
+  "version": "0.0.54-beta",
+  "source": "b10c5ebc407b6fcefb93a44a27db6b162379c1ea",
+  "tag": "v0.0.54-beta",
+  "previousSource": "23df4780d31336c97bfaaa2460e8747be70f0d7f",
+  "sourceDate": "2026-08-25T01:20:27+08:00",
+  "commits": [
+    {
+      "sha": "b10c5ebc407b6fcefb93a44a27db6b162379c1ea",
+      "date": "2026-08-25T01:20:27+08:00",
+      "subject": "release: prepare v0.0.54 beta"
+    },
+    {
+      "sha": "da61b0653903d04d1eeac7725d5416135f3b9220",
+      "date": "2026-08-25T00:37:40+08:00",
+      "subject": "fix(web): bind downloads to current release asset"
+    },
+    {
+      "sha": "bdd8ad9bcef5f0b7c1afc1bd51b9ce9adaaa203d",
+      "date": "2026-08-25T00:35:21+08:00",
+      "subject": "docs(release): plan v0.0.54 beta"
+    },
+    {
+      "sha": "534f563ecc51a7ff519b2a46d80b5940b393abc2",
+      "date": "2026-08-24T21:29:36+08:00",
+      "subject": "fix(llm): bound stalled stream recovery"
+    },
+    {
+      "sha": "4059d1a69aee01139e1cf67a36fd636cf74a8344",
+      "date": "2026-08-24T11:33:41+08:00",
+      "subject": "docs(release): record v0.0.53 beta publication"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |  15 ++\n bun.lock                                           |  16 +--\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/opencorvus/src/llm/activity.ts            |  60 +++++++-\n .../src/memory/project-memory-organizer.ts         |  37 ++---\n .../opencorvus/src/project/vcs-commit-message.ts   |  36 +++--\n packages/opencorvus/src/session/llm.ts             |   8 +-\n packages/opencorvus/src/session/loop.ts            |   1 +\n packages/opencorvus/src/session/prompt/title.ts    |  48 ++++---\n packages/opencorvus/test/llm/activity.test.ts      | 151 ++++++++++++++++++++-\n .../opencorvus/test/memory/project-memory.test.ts  |  59 ++++----\n .../project/vcs-commit-message-activity.test.ts    |  61 +++++++++\n .../opencorvus/test/session/title-activity.test.ts | 102 ++++++++++++++\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n packages/web/src/components/OcLanding.astro        | 118 ++++++++++++----\n specs/README.md                                    |   4 +\n .../2026-08/2026-08-24-v0.0.53-beta-release.md     |  10 +-\n .../2026-08/2026-08-25-v0.0.54-beta-release.md     |  49 +++++++\n .../2026-08-25-website-version-bound-download.md   |  43 ++++++\n specs/records/2026-08/README.md                    |   4 +\n 31 files changed, 706 insertions(+), 144 deletions(-)"
+}
