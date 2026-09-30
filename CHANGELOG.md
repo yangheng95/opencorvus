@@ -557,6 +557,21 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/8691c972d18486f8c5848b869b184d9c7e6395cb) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/22832f8fb97df24a50c14145fc03bf995db54e42...8691c972d18486f8c5848b869b184d9c7e6395cb)。
 
+## 0.0.55beta - 2026-08-25
+
+### Added
+
+- 官网新增可展开的长程 Mission 案例与协作关系图，呈现 DeBERTa CUDA 研究产物和 AutomationBench 的原始证据入口。
+
+### Security
+
+- 移除桌面渲染器暴露在 window 上的实时设置、应用与看板状态，以及明文服务密码和业务写入函数；生产代码改用类型化模块依赖。
+- 清理依赖这些全局对象的调试入口，收紧渲染器可直接读写的业务边界。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/22832f8fb97df24a50c14145fc03bf995db54e42) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/b10c5ebc407b6fcefb93a44a27db6b162379c1ea...22832f8fb97df24a50c14145fc03bf995db54e42)。
+
 ## 0.0.54beta - 2026-08-25
 
 本版本为共享 LLM 流停滞恢复增加明确上限，并修复公开网站“页面显示新版、主按钮却未绑定精确新版安装包”的下载交互；桌面端、命令行二进制和网站使用同一份 `0.0.54-beta` 发布事实。

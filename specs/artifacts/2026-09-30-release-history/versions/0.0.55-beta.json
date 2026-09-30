@@ -1,0 +1,40 @@
+{
+  "version": "0.0.55-beta",
+  "source": "22832f8fb97df24a50c14145fc03bf995db54e42",
+  "tag": null,
+  "previousSource": "b10c5ebc407b6fcefb93a44a27db6b162379c1ea",
+  "sourceDate": "2026-08-25T20:18:52+08:00",
+  "commits": [
+    {
+      "sha": "22832f8fb97df24a50c14145fc03bf995db54e42",
+      "date": "2026-08-25T20:18:52+08:00",
+      "subject": "release: prepare v0.0.55 beta and close the renderer global surface"
+    },
+    {
+      "sha": "351ae09f7bb577fbebd8acf878627c8be4764b39",
+      "date": "2026-08-25T15:34:44+08:00",
+      "subject": "feat(web): link DeBERTa CUDA artifact"
+    },
+    {
+      "sha": "7ff77af8d8a26e0215aa81c81a74a33203f75bd1",
+      "date": "2026-08-25T14:48:46+08:00",
+      "subject": "feat(web): publish AutomationBench proof"
+    },
+    {
+      "sha": "117c5dc260ed9a0e1e7b240fa287f7a2e63ad38d",
+      "date": "2026-08-25T12:35:01+08:00",
+      "subject": "feat(web): visualize Mission complexity"
+    },
+    {
+      "sha": "2507b0ef7ead9cd5f7817b3d0ae76dbcdbe52b54",
+      "date": "2026-08-25T11:27:41+08:00",
+      "subject": "feat(web): add scalable long Mission cases"
+    },
+    {
+      "sha": "1a279f154c640db926a47b03494316cba479f68a",
+      "date": "2026-08-25T02:39:50+08:00",
+      "subject": "docs(release): record v0.0.54 beta publication"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |   8 +\n bun.lock                                           |  16 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/opencorvus/script/browser-inactivity.ts   |  99 ----\n packages/opencorvus/script/overlay-snap.ts         |  30 --\n packages/opencorvus/script/screenshot-overlay.mjs  | 134 +++++\n packages/opencorvus/script/screenshot-overlay.ts   |  37 --\n packages/overlay/package.json                      |   7 +-\n .../script/check-renderer-public-surface.ts        |  88 +++\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/overlay/src/index.html                    |   2 -\n packages/overlay/src/main.tsx                      |  53 --\n packages/overlay/src/services/chat.ts              |  15 -\n packages/overlay/src/services/task.ts              |  19 +-\n packages/overlay/src/services/workspace.ts         |   7 +-\n packages/overlay/src/store/settings.ts             |  14 -\n packages/overlay/src/utils/i18n.ts                 |   7 +-\n packages/overlay/src/utils/markdown.ts             |   8 -\n .../test/workspace-directory-persistence.test.ts   | 104 ++++\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n packages/web/package.json                          |   5 +-\n packages/web/script/generate-public-market.ts      |  22 +-\n .../web/src/components/OcAutomationBench.astro     | 414 ++++++++++++++\n packages/web/src/components/OcLanding.astro        | 224 ++------\n packages/web/src/components/OcMissionCase.astro    | 595 +++++++++++++++++++++\n packages/web/src/components/OcMissionLanes.astro   | 320 +++++++++++\n .../web/src/components/OcSquadCompositions.astro   |  58 +-\n .../content/docs/concepts/squad-composition.mdx    |  39 +-\n .../web/src/content/docs/operations/benchmark.mdx  |   2 +-\n .../docs/zh-cn/concepts/squad-composition.mdx      |  30 +-\n .../content/docs/zh-cn/operations/benchmark.mdx    |   2 +-\n packages/web/src/content/landing-benchmark.ts      |  44 ++\n packages/web/src/content/landing-copy.ts           | 145 ++++-\n .../src/content/squad-compositions.generated.ts    | 283 +++++++++-\n packages/web/src/content/squad-compositions.ts     | 522 ++++++++++++++++--\n packages/web/src/lib/landing-compositions.ts       | 119 ++++-\n packages/web/test/landing-benchmark.test.ts        |  28 +\n packages/web/test/landing-copy.test.ts             | 412 --------------\n packages/web/test/squad-compositions.test.ts       |  73 +++\n specs/README.md                                    |   6 +\n .../landing-benchmark/automationbench-dark.png     | Bin 0 -> 54174 bytes\n .../landing-benchmark/automationbench-light.png    | Bin 0 -> 69587 bytes\n .../landing-missions/deberta-collapsed-light.png   | Bin 0 -> 75923 bytes\n .../landing-missions/deberta-expanded-dark.png     | Bin 0 -> 72633 bytes\n .../landing-missions/deberta-github-dark.png       | Bin 0 -> 75821 bytes\n .../artifacts/landing-missions/self-paper-dark.png | Bin 0 -> 74608 bytes\n .../landing-missions/self-paper-light.png          | Bin 0 -> 82830 bytes\n .../2026-08-25-landing-automationbench-proof.md    |  52 ++\n .../2026-08-25-landing-deberta-mission-scale.md    |  92 ++++\n .../2026-08/2026-08-25-v0.0.54-beta-release.md     |  10 +-\n specs/records/2026-08/README.md                    |   4 +\n 60 files changed, 3168 insertions(+), 1007 deletions(-)"
+}
