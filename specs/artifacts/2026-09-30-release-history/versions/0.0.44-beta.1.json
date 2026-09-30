@@ -1,0 +1,15 @@
+{
+  "version": "0.0.44-beta.1",
+  "source": "f2d4e0dc0a4808972641eb43c65f3d9c77a7130e",
+  "tag": "v0.0.44-beta.1",
+  "previousSource": "9392dee6db6d9721dcbc174f80c5bc385883bb84",
+  "sourceDate": "2026-08-15T00:17:57+08:00",
+  "commits": [
+    {
+      "sha": "f2d4e0dc0a4808972641eb43c65f3d9c77a7130e",
+      "date": "2026-08-15T00:17:57+08:00",
+      "subject": "fix(release): isolate OfficeCLI packaging smoke"
+    }
+  ],
+  "stats": "bun.lock                                           | 16 ++++----\n packages/channel-config/package.json               |  2 +-\n packages/channel-runtime/package.json              |  2 +-\n .../native/process-supervisor/Cargo.lock           |  2 +-\n .../native/process-supervisor/Cargo.toml           |  2 +-\n packages/opencorvus/package.json                   |  2 +-\n packages/overlay/package.json                      |  2 +-\n packages/overlay/src-tauri/Cargo.lock              |  2 +-\n packages/overlay/src-tauri/Cargo.toml              |  2 +-\n packages/overlay/src-tauri/tauri.conf.json         |  2 +-\n packages/plugin/package.json                       |  2 +-\n packages/sdk/js/package.json                       |  2 +-\n packages/transport-protocol/package.json           |  2 +-\n packages/util/package.json                         |  2 +-\n script/package-native-binary.test.ts               | 46 ++++++++++++++++++++++\n script/package-native-binary.ts                    | 11 +++++-\n .../2026-08/2026-08-14-v0.0.44-beta-release.md     |  9 +++--\n 17 files changed, 82 insertions(+), 26 deletions(-)"
+}

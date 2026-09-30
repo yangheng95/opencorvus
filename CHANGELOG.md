@@ -803,6 +803,16 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/df953b97cc96c43dcff96114fb826176ea9bf2cd) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/f2d4e0dc0a4808972641eb43c65f3d9c77a7130e...df953b97cc96c43dcff96114fb826176ea9bf2cd)。
 
+## 0.0.44beta.1 - 2026-08-15
+
+### Fixed
+
+- 隔离 OfficeCLI 的打包启动检查，修复原生包验收受宿主办公工具环境干扰的问题；检查仍针对实际随包运行时。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/f2d4e0dc0a4808972641eb43c65f3d9c77a7130e) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/9392dee6db6d9721dcbc174f80c5bc385883bb84...f2d4e0dc0a4808972641eb43c65f3d9c77a7130e)。
+
 ## 0.0.38beta - 2026-08-09
 
 ### Added
