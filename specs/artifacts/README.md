@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Parked Task activity](2026-09-30-parked-task-activity/README.md): same-page pause/wake and actual process-restart/reconnect manual evidence.
+
 - [Handoff context readability](2026-09-30-handoff-readability/README.md): new/retained messages, dark/light/narrow reading, natural height and expansion anchoring.
 
 - [Tool disclosure layout correction](2026-09-30-tool-disclosure/README.md): latest-tool titles, direct results, compact spacing and dark/light/side-panel manual review.

@@ -200,7 +200,7 @@ describe("Mission status snapshot", () => {
     })
   }, 60_000)
 
-  test("projects an unowned active Task as a top-level Work Ledger item", async () => {
+  test("projects an unowned active Task awaiting execution as an inactive Work Ledger item", async () => {
     await using project = await tmpdir({ git: true })
     await Instance.provide({
       directory: project.path,
@@ -214,7 +214,7 @@ describe("Mission status snapshot", () => {
           title: "Visible unowned Task",
           directory: project.path,
           lifecycleStatus: "active",
-          activityStatus: "running",
+          activityStatus: "inactive",
           source: "right-sidebar-conversation",
           productPillar: "work",
         })

@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Parked Task activity projection](records/2026-09/2026-09-30-parked-task-activity.md)
+
+- [Parked Task visual acceptance](artifacts/2026-09-30-parked-task-activity/README.md)
+
 - [Handoff context readability](records/2026-09/2026-09-30-handoff-context-readability.md)
 
 - [Handoff context visual acceptance](artifacts/2026-09-30-handoff-readability/README.md)

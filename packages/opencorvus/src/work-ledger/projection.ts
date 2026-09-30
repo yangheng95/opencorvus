@@ -20,7 +20,7 @@ import { Session } from "@/session"
 import { resolveSessionActivityStatus } from "@/session/lifecycle"
 import { SessionTable } from "@/session/session.sql"
 import { Database, eq, sql } from "@/storage/db"
-import { activityFromTaskLifecycle } from "@/status/task-status-snapshot"
+import { activityFromTaskExecution } from "@/status/task-status-snapshot"
 import { rightSidebarConversationExperience } from "@/chat/session"
 import { pendingTaskCancellationProjection } from "@/engine/cancellation-projection"
 import { TASK_OPEN_EVENT_TYPES, TASK_TERMINAL_EVENT_TYPES } from "@/engine/task-lifecycle"
@@ -144,7 +144,7 @@ function workLedgerTaskFromTaskID(taskID: string, pendingInteractions: ReadonlyM
         : pendingTaskCancellationProjection(task.id)
           ? "cancelling"
           : "none",
-    activityStatus: activityFromTaskLifecycle(lifecycleStatus),
+    activityStatus: activityFromTaskExecution(task.id, lifecycleStatus),
     priority: task.priority,
     source: task.source,
     productPillar: task.product_pillar,

@@ -585,6 +585,13 @@ Work Ledger and the selected Conversation header expose one binary activity
 projection for Task and Mission: `Running` while execution is active and
 `Not running` otherwise. A running row may use the shared spinner; an inactive
 row has no success, failure, cancellation, or completion lamp. Raw Task
+`active` lifecycle alone does not imply running: the shared Task projection
+checks current streaming/retry occurrences across its owned Session tree. A
+parked scheduler is inactive unless a descendant is executing. Historical
+lifecycle events do not establish liveness after process restart. Task
+execution-lifecycle publications invalidate the existing global Work Ledger
+stream so pause, wake and settlement update mounted rows and Mission counts.
+Raw Task
 lifecycle remains in the transport only for diagnostics, timestamp validation,
 recovery, and explicit operator cancellation. The interface never converts
 `completed`, `failed`, or `cancelled` into a business status, and Mission

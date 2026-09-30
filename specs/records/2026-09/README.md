@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Parked Task activity projection](2026-09-30-parked-task-activity.md)
+
 - [Handoff context readability](2026-09-30-handoff-context-readability.md)
 
 - [Tool disclosure layout correction](2026-09-30-tool-disclosure-layout.md)

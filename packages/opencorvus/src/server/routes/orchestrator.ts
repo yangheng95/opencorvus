@@ -126,6 +126,7 @@ function taskConversationBoard(taskID: string) {
 }
 
 const TASK_LIST_PROJECTION_EVENT_TYPES = new Set([
+  "agent.execution.lifecycle",
   "task.created",
   "task.updated",
   "task.started",

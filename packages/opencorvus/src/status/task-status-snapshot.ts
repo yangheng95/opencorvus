@@ -2,6 +2,8 @@ import z from "zod"
 import { TaskBoard } from "@/engine/model"
 import { MissionOutcomeFact } from "@/mission/completion"
 import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v2"
+import { listTaskSessionIDs } from "@/engine/task-session-lineage"
+import { SessionStatus } from "@/session/status"
 
 export const TaskActivityState = z.enum(["running", "inactive"])
 
@@ -82,10 +84,17 @@ const TaskStatusBoardProjection = z
   })
   .passthrough()
 
-export function activityFromTaskLifecycle(
+export function activityFromTaskExecution(
+  taskID: string,
   rawStatus: "active" | "completed" | "failed" | "cancelled",
 ): TaskActivityState {
-  return rawStatus === "active" ? "running" : "inactive"
+  if (rawStatus !== "active") return "inactive"
+  // Task lifecycle owns completion, not physical activity. A parked scheduler
+  // may still have a running worker; only current owned Session occurrences
+  // establish liveness, never historical events left over after restart.
+  return listTaskSessionIDs(taskID).some((sessionID) => SessionStatus.isExecuting(SessionStatus.get(sessionID)))
+    ? "running"
+    : "inactive"
 }
 
 function activitySummary(states: TaskActivityState[]): z.infer<typeof TaskActivitySummary> {
@@ -120,7 +129,7 @@ export function taskStatusDetailFromBoard(input: unknown): TaskStatusDetail {
     }),
   )
 
-  const activityStatus = activityFromTaskLifecycle(board.task.status)
+  const activityStatus = activityFromTaskExecution(board.task.id, board.task.status)
   const activity = activitySummary([activityStatus])
   return TaskStatusDetail.parse({
     taskID: board.task.id,

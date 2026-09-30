@@ -4,7 +4,7 @@ import { listMissionTasks, listTaskRows, pendingInteractionCounts, type TaskRow 
 import {
   MissionStatusSnapshot,
   TaskActivityState,
-  activityFromTaskLifecycle,
+  activityFromTaskExecution,
   missionStatusSnapshot,
   taskStatusDetailFromBoard,
 } from "@/status/task-status-snapshot"
@@ -106,7 +106,7 @@ export function projectMissionTasks(session: MissionSession): MissionTaskProject
           : pendingTaskCancellationProjection(task.id)
             ? "cancelling"
             : "none",
-      activityStatus: activityFromTaskLifecycle(lifecycleStatus),
+      activityStatus: activityFromTaskExecution(task.id, lifecycleStatus),
       priority: task.priority,
       source: task.source,
       productPillar: task.product_pillar,
