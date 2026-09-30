@@ -463,7 +463,16 @@
 
 ## 0.0.60beta - 2026-09-05
 
-这是未公开的候选版本。五个平台的桌面端和命令行矩阵全部构建成功，但 GitHub 新建 draft 在 Release inventory 中存在短暂可见性延迟，首次 owner 回读失败；失败 job 续跑时 GitHub 又允许创建同 tag draft，唯一性守卫因此在资产上传前拒绝。重复的同 owner、零资产 draft 已精确移除，原 draft 与 tag 保留为审计证据。后续发布先从完整 inventory 复用 exact-owner draft，仅在已证明缺失时创建，并对创建后的同一 inventory 做有界可见性重试；workflow 级 publication concurrency 防止并行创建竞争。
+这是未公开候选；当时原生矩阵完成，草稿可见性与重复记录问题阻断了后续发布。
+
+### Fixed
+
+- 将草稿发布归属查询改为可读取 draft（草稿）的完整发布清单，修复只面向公开 Release 的标签查询无法读取新草稿的问题。
+- 原生产物继续绑定既有精确标签和源码，后续版本进一步修复草稿创建后的可见性与续跑。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/988128d4e455c099f3959818645b551bfa35dbd9) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/0a4d4180f9cbf8a9c27a8f3c67b72a7609ed466e...988128d4e455c099f3959818645b551bfa35dbd9)。
 
 ## 0.0.59beta - 2026-09-05
 
