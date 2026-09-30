@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [0.1.23 native and website release](records/2026-09/2026-09-30-v0.1.23-release.md)
+
 - [Reference-style project environment panel](records/2026-09/2026-09-30-environment-reference-style.md)
 
 - [Project environment visual review](artifacts/2026-09-30-environment-style/README.md)
