@@ -830,6 +830,26 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/9392dee6db6d9721dcbc174f80c5bc385883bb84) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/5a0f972b1dde004b64572c877caa2f973de82062...9392dee6db6d9721dcbc174f80c5bc385883bb84)。
 
+## 0.0.43beta - 2026-08-14
+
+### Added
+
+- 引入统一产物 Harness，连接类型化内容、快照、工具来源与独立验收；完善任务与 Mission 的证据交接。
+
+### Changed
+
+- 统一 Mission、Task、调度投递、权限和项目记忆的持久化身份，减少重复控制状态。
+
+### Fixed
+
+- 修复任务执行轮次、Mission 关闭/恢复唤醒、进程归属、并发数据库初始化和精确请求重试。
+- Task 与 Work Ledger 终态时间按一致事实投影；缺失或无法取得的验收证据得到明确结算。
+- 修复 Windows 原生工具依赖与跨平台打包的多个阻塞，保留真实失败诊断。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/5a0f972b1dde004b64572c877caa2f973de82062) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/640984800e06cb368ac562284638a5c0fe05635e...5a0f972b1dde004b64572c877caa2f973de82062)。
+
 ## 0.0.38beta - 2026-08-09
 
 ### Added

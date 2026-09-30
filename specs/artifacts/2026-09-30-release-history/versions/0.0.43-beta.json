@@ -1,0 +1,795 @@
+{
+  "version": "0.0.43-beta",
+  "source": "5a0f972b1dde004b64572c877caa2f973de82062",
+  "tag": "v0.0.43-beta",
+  "previousSource": "640984800e06cb368ac562284638a5c0fe05635e",
+  "sourceDate": "2026-08-14T09:13:38+08:00",
+  "commits": [
+    {
+      "sha": "5a0f972b1dde004b64572c877caa2f973de82062",
+      "date": "2026-08-14T09:13:38+08:00",
+      "subject": "test(engine): join workload publication owner"
+    },
+    {
+      "sha": "5840b980f94e443965c019c4c4fbbdcf7bcee279",
+      "date": "2026-08-14T08:09:47+08:00",
+      "subject": "test(engine): share Task creation timestamp"
+    },
+    {
+      "sha": "727172a3a0614543cdc700bea959a7559304e0e4",
+      "date": "2026-08-14T07:56:48+08:00",
+      "subject": "docs(release): record final source convergence"
+    },
+    {
+      "sha": "849ea280ffade2eb412be8dcbc00902433714f02",
+      "date": "2026-08-14T07:53:32+08:00",
+      "subject": "test(shell): accept successful venv path diagnostics"
+    },
+    {
+      "sha": "dc1945cb313791b567d8ace3f1fd4334cc7a7281",
+      "date": "2026-08-14T07:17:59+08:00",
+      "subject": "fix(runtime): converge platform process ownership"
+    },
+    {
+      "sha": "133a898cd6b1d843654587da22d085e0382fda53",
+      "date": "2026-08-14T07:05:37+08:00",
+      "subject": "fix: fence Mission wake activation"
+    },
+    {
+      "sha": "92305a5d7992b554e511324018865252de4ed9a2",
+      "date": "2026-08-14T06:52:22+08:00",
+      "subject": "test: bound cancellation checkpoint convergence"
+    },
+    {
+      "sha": "14bddc18cea1a1b97923b7a989396e0b0fc3cde6",
+      "date": "2026-08-14T06:34:51+08:00",
+      "subject": "fix(ci): pin Windows ripgrep runtime"
+    },
+    {
+      "sha": "a02183ed9edf420d99635d75ad20a018e74be2ed",
+      "date": "2026-08-14T06:25:14+08:00",
+      "subject": "fix(test): align runtime cleanup ownership"
+    },
+    {
+      "sha": "e00d415ab8312dd7803408e88513b0dd52425886",
+      "date": "2026-08-14T06:05:28+08:00",
+      "subject": "fix(test): bound Windows cleanup convergence"
+    },
+    {
+      "sha": "4ed11d44249e3e20ae254af809f50e5d5f6553c9",
+      "date": "2026-08-14T05:51:32+08:00",
+      "subject": "fix(release): converge remaining platform gates"
+    },
+    {
+      "sha": "118b752043f00aeacf60a1124312f3c75966a495",
+      "date": "2026-08-14T05:23:22+08:00",
+      "subject": "fix(release): stabilize cross-platform gates"
+    },
+    {
+      "sha": "2f558386111261b0d10e95d1e474a6f7a3980025",
+      "date": "2026-08-14T04:56:49+08:00",
+      "subject": "fix(db): wait during concurrent initialization"
+    },
+    {
+      "sha": "891880e8de742936250f9ee6ce74093c6c62e9c2",
+      "date": "2026-08-14T04:46:08+08:00",
+      "subject": "test: settle release gate fixtures"
+    },
+    {
+      "sha": "536219536522f40fe6e75c38e9846533edc3b14c",
+      "date": "2026-08-14T04:29:05+08:00",
+      "subject": "test: release lifecycle delivery lease"
+    },
+    {
+      "sha": "791979a2af59075a393528d36159057babb16fa7",
+      "date": "2026-08-14T04:22:32+08:00",
+      "subject": "fix(queue): hand off exact ingress retries"
+    },
+    {
+      "sha": "3c23dea1601cf606ad74dbf274b43f75415fba55",
+      "date": "2026-08-14T03:59:56+08:00",
+      "subject": "test: establish scheduler wait task authority"
+    },
+    {
+      "sha": "9150e6c83624f03ad27899ec6a82d034d76624f7",
+      "date": "2026-08-14T03:48:09+08:00",
+      "subject": "test: establish task-root delivery authority"
+    },
+    {
+      "sha": "d9953642523fa0a804f820052c23b80834054f93",
+      "date": "2026-08-14T03:42:15+08:00",
+      "subject": "test: converge durable authority fixtures"
+    },
+    {
+      "sha": "517a031d4d5f4b5cc6993ea980b73527e687edd5",
+      "date": "2026-08-14T03:30:52+08:00",
+      "subject": "fix(orchestrator): terminalize accepted unavailable evidence"
+    },
+    {
+      "sha": "b9f65a81e30f97e82985bbd6d238c62d7ea056fb",
+      "date": "2026-08-14T03:23:28+08:00",
+      "subject": "test: canonicalize release gate fixtures"
+    },
+    {
+      "sha": "8230a514abe6771926b8d2ece27ee7d91a7a9c2e",
+      "date": "2026-08-14T03:13:43+08:00",
+      "subject": "test: align release gates with current contracts"
+    },
+    {
+      "sha": "93c17cffacff3cd7ee2d21d3a50e13b9371a3164",
+      "date": "2026-08-14T02:56:53+08:00",
+      "subject": "fix(project): converge missing cleanup parents"
+    },
+    {
+      "sha": "e306bd8daf85b511e9d012ab88151793aa1ed7b9",
+      "date": "2026-08-14T02:43:24+08:00",
+      "subject": "release: prepare v0.0.43-beta"
+    },
+    {
+      "sha": "2a1122213df4d39253d0520e1a02f58bf41126eb",
+      "date": "2026-08-14T02:43:01+08:00",
+      "subject": "docs(mission): record closure P0 delivery"
+    },
+    {
+      "sha": "0c7b87fb08da3b763e309eed576d8e451bdfbd46",
+      "date": "2026-08-14T02:39:30+08:00",
+      "subject": "fix(mission): fence closure recovery wakes"
+    },
+    {
+      "sha": "1447c5afd974730775645569dc1c626eec0ea1f8",
+      "date": "2026-08-14T01:31:16+08:00",
+      "subject": "refactor(mission): compact caller receipt identity"
+    },
+    {
+      "sha": "a0b2c4c08c101e81101f51b3f723ca9043d90240",
+      "date": "2026-08-14T01:11:36+08:00",
+      "subject": "refactor(orchestrator): compact control occurrence identity"
+    },
+    {
+      "sha": "d01a2d477870738917420db35292879feb44b364",
+      "date": "2026-08-14T00:45:19+08:00",
+      "subject": "refactor(protocol): compact scheduler delivery identity"
+    },
+    {
+      "sha": "a991a21298452ddd5b86cf3e4cdd1b8be48b45ae",
+      "date": "2026-08-14T00:08:04+08:00",
+      "subject": "refactor(permission): compact durable identities"
+    },
+    {
+      "sha": "20d8e6ce6020579cdcab918602d8713faa009041",
+      "date": "2026-08-13T23:39:32+08:00",
+      "subject": "refactor(memory): compact project memory identity"
+    },
+    {
+      "sha": "b928d12b78425278fcf55bcff003cbdadf6a65db",
+      "date": "2026-08-13T23:22:48+08:00",
+      "subject": "refactor(scheduler): compact task wait fire identity"
+    },
+    {
+      "sha": "c13e66367e82c84e892e794f10988214ea1c6693",
+      "date": "2026-08-13T23:21:03+08:00",
+      "subject": "docs(identity): correct phase ownership"
+    },
+    {
+      "sha": "3cb33689e5a38312e6d2310b0ea1aaab27a94009",
+      "date": "2026-08-13T23:07:26+08:00",
+      "subject": "test(scheduler): bind historical ingress fixtures"
+    },
+    {
+      "sha": "5301786e31b6ddeccc7abd3124b69bd5d96e3106",
+      "date": "2026-08-13T23:06:28+08:00",
+      "subject": "fix(overlay): project mission closure events"
+    },
+    {
+      "sha": "c71879aee4d267daab2cd2561a7d592c56e6a5ca",
+      "date": "2026-08-13T23:06:20+08:00",
+      "subject": "fix(scheduler): fence task execution occurrences"
+    },
+    {
+      "sha": "1dd948536eca6f627bfebb3faad3ff64f2101d91",
+      "date": "2026-08-13T23:00:24+08:00",
+      "subject": "fix(work-ledger): project terminal timing atomically"
+    },
+    {
+      "sha": "823a65b9d5875d99336701bb4ab41fed9f3ce2cd",
+      "date": "2026-08-13T22:20:17+08:00",
+      "subject": "refactor(project): compact durable identity"
+    },
+    {
+      "sha": "ca3162b9c486ff56ddebd087ab0df0dacabab446",
+      "date": "2026-08-13T22:10:00+08:00",
+      "subject": "feat(browser): attach visible MCP to current Chrome"
+    },
+    {
+      "sha": "3a480a460330fe271f21dc88096f87b2b9ac01b0",
+      "date": "2026-08-13T22:02:48+08:00",
+      "subject": "chore: exclude concurrent status work"
+    },
+    {
+      "sha": "a04d7b882396cebd573f9afd7d98b2c8b7108210",
+      "date": "2026-08-13T22:02:01+08:00",
+      "subject": "fix(evolution): correlate imported predecessors"
+    },
+    {
+      "sha": "f7cb5fd0ed6ab2fb7a38d5fbc2731bf518b9b752",
+      "date": "2026-08-13T21:40:39+08:00",
+      "subject": "refactor(artifact): compact idempotent identity"
+    },
+    {
+      "sha": "163ec1f32b227693511c79210bfca37596604eea",
+      "date": "2026-08-13T21:34:44+08:00",
+      "subject": "docs(agent): require cross-scenario scheduler audits"
+    },
+    {
+      "sha": "c5bce715c0027326f5a3c3dd3fed96da24114718",
+      "date": "2026-08-13T20:45:31+08:00",
+      "subject": "test(worktree): bound production ownership check"
+    },
+    {
+      "sha": "afe8f0115270ba621097d03e7704b9443c33dd7f",
+      "date": "2026-08-13T20:41:09+08:00",
+      "subject": "docs(evolution): record compact identity merge"
+    },
+    {
+      "sha": "267df7971c5a13b905c56dd67ca0043828feb10d",
+      "date": "2026-08-13T20:39:20+08:00",
+      "subject": "fix(evolution): correlate package publications"
+    },
+    {
+      "sha": "cdbd926a7c17d1b01798015f6d5dddba41092ae6",
+      "date": "2026-08-13T20:38:26+08:00",
+      "subject": "fix(task): preserve current worker ownership"
+    },
+    {
+      "sha": "a4bda11974b393aec8be97b791a6910e3ee1f29d",
+      "date": "2026-08-13T20:09:55+08:00",
+      "subject": "refactor(identity): compact default issuance"
+    },
+    {
+      "sha": "ea618c524426d9c4276e7aa53aad65a1e46e363a",
+      "date": "2026-08-13T20:04:56+08:00",
+      "subject": "refactor(task): remove host scheduling queue"
+    },
+    {
+      "sha": "fa0b9051c6dd22359cb3166faf46d2eaaec35015",
+      "date": "2026-08-13T19:23:55+08:00",
+      "subject": "docs(identity): define compact reference boundary"
+    },
+    {
+      "sha": "5b824c045f0efefb5cfdfb3a575cb464b3165db5",
+      "date": "2026-08-13T19:21:49+08:00",
+      "subject": "fix(tool): unify turn-control results"
+    },
+    {
+      "sha": "0761916e2d8a9ca226f166af90a3c4fb3e6ce113",
+      "date": "2026-08-13T19:09:41+08:00",
+      "subject": "fix(evolution): bind attribution to opportunity source"
+    },
+    {
+      "sha": "cf62aaea0b2dda116a97fd245af508ceae17ef0c",
+      "date": "2026-08-13T18:50:35+08:00",
+      "subject": "docs(evolution): freeze attribution provenance failure"
+    },
+    {
+      "sha": "9c9888c1b57bc0702b19373fb322929b826dac7b",
+      "date": "2026-08-13T18:31:42+08:00",
+      "subject": "fix(workload): preserve coverage settlement"
+    },
+    {
+      "sha": "d01d8e2eb599215e5e5fb4f7dbe1b4ba3a091ce7",
+      "date": "2026-08-13T18:10:38+08:00",
+      "subject": "fix(artifacts): expose referenced cross-task resources"
+    },
+    {
+      "sha": "21429e0fd083b2638514e80b53b0532f4a8be978",
+      "date": "2026-08-13T17:53:16+08:00",
+      "subject": "feat(browser): add live MCP session view"
+    },
+    {
+      "sha": "abdba1000b61cf91c877c7bb198258c816703c30",
+      "date": "2026-08-13T17:50:29+08:00",
+      "subject": "docs(artifacts): freeze cross-task resource visibility repair"
+    },
+    {
+      "sha": "328c837138242de934b04df3da391d4d4ecb72d5",
+      "date": "2026-08-13T16:40:42+08:00",
+      "subject": "fix(panel): bind artifact refs to terminal occurrence"
+    },
+    {
+      "sha": "b2fdb9080c3949b72eb474bcf0268e0394d94fd5",
+      "date": "2026-08-13T16:28:19+08:00",
+      "subject": "fix(evolution): report post-abort mission status"
+    },
+    {
+      "sha": "05e8e6b5bfa9e06bcbb222be986b6aaa685e876c",
+      "date": "2026-08-13T16:14:29+08:00",
+      "subject": "feat(web): localize and rebalance homepage hero"
+    },
+    {
+      "sha": "313ce075c1d2b182a28259248a4e4dcfe24fc84e",
+      "date": "2026-08-13T16:04:31+08:00",
+      "subject": "fix(artifacts): replace model locator copies with refs"
+    },
+    {
+      "sha": "92ba5bb517a7e78487ba2152dca6fa365dd8c872",
+      "date": "2026-08-13T15:40:47+08:00",
+      "subject": "fix(session): require owned semantic stream progress"
+    },
+    {
+      "sha": "fe9e24ebad01e9fbf29ee5c44c0bdb372a96a6bd",
+      "date": "2026-08-13T15:16:34+08:00",
+      "subject": "docs(evolution): freeze R17b Luna stream stall"
+    },
+    {
+      "sha": "340443c0887162fa2a85b0a9466bd7bbdafa34fd",
+      "date": "2026-08-13T15:10:08+08:00",
+      "subject": "fix(provider): settle cancelled response activity"
+    },
+    {
+      "sha": "825807c47d5d763e6460ceb1486dfe8c98258e6a",
+      "date": "2026-08-13T15:09:10+08:00",
+      "subject": "docs(work): record final zero-intervention acceptance"
+    },
+    {
+      "sha": "f73df243dd002e2ce444fd2c6fb2f0a7e0a0c051",
+      "date": "2026-08-13T14:25:49+08:00",
+      "subject": "fix(work): skip empty OfficeCLI text blocks"
+    },
+    {
+      "sha": "b66507ea85ac7063c779306b82d72d68c888370b",
+      "date": "2026-08-13T14:18:40+08:00",
+      "subject": "docs(agents): bind provider credentials to model projection"
+    },
+    {
+      "sha": "4f35f0bebf10e9911cf705f15dd032296521aee8",
+      "date": "2026-08-13T14:13:18+08:00",
+      "subject": "test(evolution): default isolated acceptance to Terra"
+    },
+    {
+      "sha": "01823f86202617f0c210dd29f915fbffb86b12fb",
+      "date": "2026-08-13T14:06:14+08:00",
+      "subject": "test(queue): prove repeated instance initialization"
+    },
+    {
+      "sha": "1de59f38ea135449542c1a6400143e4ace2711ae",
+      "date": "2026-08-13T14:04:21+08:00",
+      "subject": "fix(task): derive terminal evidence by workflow node"
+    },
+    {
+      "sha": "c33808a1472d44810049e729adcf7a9207afbe6a",
+      "date": "2026-08-13T14:00:57+08:00",
+      "subject": "docs(evolution): record final review boundaries"
+    },
+    {
+      "sha": "00c187c8be1809c52424f6b1a255ecde9a7eea8e",
+      "date": "2026-08-13T13:59:54+08:00",
+      "subject": "fix(queue): restore initialized completion ownership"
+    },
+    {
+      "sha": "a09dd1092adeaeee73bec4f60426fe3106722df6",
+      "date": "2026-08-13T13:57:31+08:00",
+      "subject": "fix(task): require terminal workflow evidence closure"
+    },
+    {
+      "sha": "666a86d85e34a0a966176ca75f56505ef5cf40a5",
+      "date": "2026-08-13T13:49:41+08:00",
+      "subject": "fix(evolution): preserve imported worker authority"
+    },
+    {
+      "sha": "77d94f1da6dc36a93c4d6bd046b0e7a337ce2bb3",
+      "date": "2026-08-13T13:36:13+08:00",
+      "subject": "docs(evolution): record bounded Luna acceptance evidence"
+    },
+    {
+      "sha": "c8c8db7c1b7086b2303edb5416412c51355f0849",
+      "date": "2026-08-13T13:34:29+08:00",
+      "subject": "test(evolution): add isolated Luna acceptance controller"
+    },
+    {
+      "sha": "51e70ec32db681961cd1debce3fa3249f39e8cdd",
+      "date": "2026-08-13T13:32:55+08:00",
+      "subject": "fix(protocol): materialize canonical task review inputs"
+    },
+    {
+      "sha": "1ed149403d593f36a0a0e2a164bb6862ad40bd79",
+      "date": "2026-08-13T13:24:22+08:00",
+      "subject": "refactor(expert-squad): enforce planner worker topology"
+    },
+    {
+      "sha": "4a42e0dfbb59dfecb0f3eb079393eafb7e87dbe6",
+      "date": "2026-08-13T13:17:18+08:00",
+      "subject": "fix(overlay): fence workspace connection state"
+    },
+    {
+      "sha": "03ad43254e4b4b0a5dde2529d5d12406800cb67d",
+      "date": "2026-08-13T13:17:03+08:00",
+      "subject": "fix(overlay): preserve mission squad selection"
+    },
+    {
+      "sha": "85b9d5642ea4a85f88aa9c927bc7ed3af98bf5e0",
+      "date": "2026-08-13T13:14:46+08:00",
+      "subject": "fix(work): render OfficeCLI text with bounded resources"
+    },
+    {
+      "sha": "e749b2c7bb476bd48eebc86b9b33226cc761ee41",
+      "date": "2026-08-13T13:14:36+08:00",
+      "subject": "fix(mission): close execution before wake reuse"
+    },
+    {
+      "sha": "defc088c4ce7bc3785def3ff100e46f553b0bb83",
+      "date": "2026-08-13T13:14:06+08:00",
+      "subject": "fix(overlay): share global notification stream"
+    },
+    {
+      "sha": "e48c3cbdbc39b021fd1a80a896b7c3e95ff697bc",
+      "date": "2026-08-13T13:12:49+08:00",
+      "subject": "fix(server): freeze overlay assets per runtime"
+    },
+    {
+      "sha": "e0a912566be022eab805174e16b8292cb2a2e66e",
+      "date": "2026-08-13T13:10:09+08:00",
+      "subject": "fix(metrics): use canonical stream authority"
+    },
+    {
+      "sha": "ffdeea1e378fac6e043792a1c3d652a9b62712c4",
+      "date": "2026-08-13T13:09:28+08:00",
+      "subject": "fix(work-artifacts): render qualified office output"
+    },
+    {
+      "sha": "781b7a878af8cbb5fae79b3348bef66f7b10d4be",
+      "date": "2026-08-13T13:07:21+08:00",
+      "subject": "fix(evolution): bind frozen campaign authority"
+    },
+    {
+      "sha": "7ab62a16bb9badeee48fd82da0710f6e37c2d199",
+      "date": "2026-08-13T13:05:01+08:00",
+      "subject": "fix(package-tools): settle one-shot workers"
+    },
+    {
+      "sha": "33a5ff7936a23f448318b654b3c45370b0322d4e",
+      "date": "2026-08-13T13:04:28+08:00",
+      "subject": "fix(agent): serialize projected worker turns"
+    },
+    {
+      "sha": "c899e5303b42a644ba3bc551c9945c147ac185a5",
+      "date": "2026-08-13T13:03:51+08:00",
+      "subject": "fix(artifacts): expose canonical resource locators"
+    },
+    {
+      "sha": "2cd42857ddaf829356a0f0a5256004f061b98c53",
+      "date": "2026-08-13T13:01:52+08:00",
+      "subject": "fix(artifacts): preserve immutable project bytes"
+    },
+    {
+      "sha": "fe6fca3a3fcfa1f9010bb0db4b6d14c3d43b8de3",
+      "date": "2026-08-13T12:56:41+08:00",
+      "subject": "fix(task): fence terminal evidence and runtime settlement"
+    },
+    {
+      "sha": "07776385a7a882886d784921c713c99b0b7904d9",
+      "date": "2026-08-13T12:52:29+08:00",
+      "subject": "fix(office): enforce publishable polished delivery"
+    },
+    {
+      "sha": "022d902e6c28e5883ab5a6b18527b5d185a6bc5f",
+      "date": "2026-08-13T12:51:40+08:00",
+      "subject": "refactor(expert-squad): align workflow execution contracts"
+    },
+    {
+      "sha": "1b8fab30063b56ef7ab626c0aee6ee32c93ef6f7",
+      "date": "2026-08-13T11:30:56+08:00",
+      "subject": "fix(build): own terminal fact publication"
+    },
+    {
+      "sha": "32f0c45c899a08c3b94cb67b8ca127cecf97ebdc",
+      "date": "2026-08-13T11:19:30+08:00",
+      "subject": "refactor(agent): unify native registry cache authority"
+    },
+    {
+      "sha": "3defac5047e3eba2fc20b7a4cc29d9e02c0f42e9",
+      "date": "2026-08-13T10:45:01+08:00",
+      "subject": "fix(requirements): preserve coverage settlement"
+    },
+    {
+      "sha": "5300724c22419859baa54af5877f73a6c4fde2c2",
+      "date": "2026-08-13T09:45:26+08:00",
+      "subject": "fix(mission): commit session identity atomically"
+    },
+    {
+      "sha": "b9f92ccf6ea8d6e7f454d9f97b0d1123eb241546",
+      "date": "2026-08-13T09:20:13+08:00",
+      "subject": "docs(expert-squad): preserve GUI sampling evidence"
+    },
+    {
+      "sha": "f3cffed3c88fe53de380221e26c26ee7fa41eeba",
+      "date": "2026-08-13T09:18:05+08:00",
+      "subject": "fix(runtime): converge conversation and project projections"
+    },
+    {
+      "sha": "ac75a7db6d7464b11b390ded4630355a910905f3",
+      "date": "2026-08-13T09:12:55+08:00",
+      "subject": "fix(provider): implement live model refresh"
+    },
+    {
+      "sha": "bc13d10c057c86363f8dffb74ecaff33fdf0b32e",
+      "date": "2026-08-13T09:12:09+08:00",
+      "subject": "fix(project): make identity convergence explicit"
+    },
+    {
+      "sha": "90c6e8ce92a9da75a62245aeb80a984a8641d281",
+      "date": "2026-08-13T08:32:01+08:00",
+      "subject": "fix(fact-check): preserve incomplete review settlement"
+    },
+    {
+      "sha": "bca0d70c798dc84316e88d11a09f45942ab98236",
+      "date": "2026-08-13T08:26:37+08:00",
+      "subject": "docs: index projection and fact-check remediations"
+    },
+    {
+      "sha": "57ac2c6287e76f45807870fa2272854c6c7e1d0c",
+      "date": "2026-08-13T08:23:31+08:00",
+      "subject": "fix(overlay): type projection recovery prerequisites"
+    },
+    {
+      "sha": "3ed88deb13585592e9dc3d4e5bd52c2077e650a1",
+      "date": "2026-08-13T02:51:41+08:00",
+      "subject": "docs(work): record compiled package acceptance"
+    },
+    {
+      "sha": "4958ed243a0b6f01155d0209462089232d136c43",
+      "date": "2026-08-13T02:44:51+08:00",
+      "subject": "fix(work): use valid acceptance conversation"
+    },
+    {
+      "sha": "6ce13a351a0b221601a6f1079b348ce1175d3b73",
+      "date": "2026-08-13T02:39:10+08:00",
+      "subject": "fix(work): harden capability route authority"
+    },
+    {
+      "sha": "5c4dd566fa30a574881508fae408f9af4f02d554",
+      "date": "2026-08-13T02:36:45+08:00",
+      "subject": "fix(scheduler): use global config for automation inactivity"
+    },
+    {
+      "sha": "70eb8650da8ebf6d8986085025760eebd00588c7",
+      "date": "2026-08-13T02:36:12+08:00",
+      "subject": "fix(work): accept pinned runtime chart parts"
+    },
+    {
+      "sha": "875244e6587be7c81e47a35a75d6f44db11f6fee",
+      "date": "2026-08-13T02:25:36+08:00",
+      "subject": "fix(work): identify compiled artifact runtime"
+    },
+    {
+      "sha": "0c187499b4158ac8984d7d281fd81525c2031796",
+      "date": "2026-08-13T02:14:47+08:00",
+      "subject": "fix(config): preserve saved-auth read authority"
+    },
+    {
+      "sha": "d11dd9f68cd878fe10d237c89e7cb1e050591c51",
+      "date": "2026-08-13T01:44:21+08:00",
+      "subject": "feat(web): showcase the OpenCorvus Harness"
+    },
+    {
+      "sha": "4efa1336a47f3babf0c40ce39c84a153dc4e7f82",
+      "date": "2026-08-13T01:34:20+08:00",
+      "subject": "docs: keep push synchronization nonblocking"
+    },
+    {
+      "sha": "f06d34ded7a9a89cdf72f104b42f7cb71da63130",
+      "date": "2026-08-13T01:30:07+08:00",
+      "subject": "docs: bound remote sync retry policy"
+    },
+    {
+      "sha": "02a8c4c18661837b188cf680cd32b08d147b86a0",
+      "date": "2026-08-13T01:27:21+08:00",
+      "subject": "fix(architect): preserve domain-conflict settlement"
+    },
+    {
+      "sha": "bab7ec1a788ccc4ebd510ad527a4b8d45dd21e84",
+      "date": "2026-08-13T01:27:08+08:00",
+      "subject": "docs: clarify e2e startup and push sync rules"
+    },
+    {
+      "sha": "815e4557b1c43a6e7c55eb8b9d9271f82a676b34",
+      "date": "2026-08-13T01:15:58+08:00",
+      "subject": "refactor(conversation): clarify projector ownership"
+    },
+    {
+      "sha": "d928eeb8fe96eb452e2f2dc478777d814de6a0c8",
+      "date": "2026-08-13T01:05:13+08:00",
+      "subject": "refactor(storage): declare application table registry"
+    },
+    {
+      "sha": "3cca3ff03bcadd451bcf568da8aa0961aa5d57c9",
+      "date": "2026-08-13T00:46:42+08:00",
+      "subject": "fix(work): verify unified runtime lock in container"
+    },
+    {
+      "sha": "4c9ed87c2147065b74bebae63844ece4bb936a39",
+      "date": "2026-08-13T00:44:11+08:00",
+      "subject": "docs: index remediation batches 13 through 15"
+    },
+    {
+      "sha": "bd302ad033a8aa3ce490b1570df46dcbf70b7c42",
+      "date": "2026-08-13T00:39:33+08:00",
+      "subject": "fix(sdk): bound server startup diagnostics"
+    },
+    {
+      "sha": "e8a4b3dd58bac3299ac2d5b63b1e5351a4f00ac5",
+      "date": "2026-08-13T00:39:14+08:00",
+      "subject": "refactor(skill): remove unreachable registry fetch"
+    },
+    {
+      "sha": "5846e9eec5e94de5d83f716ab4ad730f72786e6f",
+      "date": "2026-08-13T00:37:50+08:00",
+      "subject": "fix(provider): canonicalize cache identities"
+    },
+    {
+      "sha": "46c69afc0368c96c43093e81a2bf5be9512ec5b2",
+      "date": "2026-08-13T00:36:20+08:00",
+      "subject": "feat(work): add unified artifact harness infrastructure"
+    },
+    {
+      "sha": "df3339cc78f1c75074c7bd2c06e2739daf2346b7",
+      "date": "2026-08-13T00:00:28+08:00",
+      "subject": "fix(test): type isolated child environment as process env"
+    },
+    {
+      "sha": "65f2041e123dc8ec10943c1505466db584386b00",
+      "date": "2026-08-12T23:54:41+08:00",
+      "subject": "fix(runtime): isolate tests and require canonical database schema"
+    },
+    {
+      "sha": "e772a3bef842173e7a5fc2cb0e285414a949603e",
+      "date": "2026-08-12T23:50:28+08:00",
+      "subject": "fix(skill): authenticate source trust identity"
+    },
+    {
+      "sha": "f1b3b1337bda606165b76dafaf832d8d9c7a4a67",
+      "date": "2026-08-12T23:48:56+08:00",
+      "subject": "docs(protocol): record scheduler harness integration"
+    },
+    {
+      "sha": "988299896794d0ddbf05892740ef465457a599d8",
+      "date": "2026-08-12T23:47:40+08:00",
+      "subject": "feat(protocol): teach schedulers duplex communication"
+    },
+    {
+      "sha": "5d95a23110841c9a57998b9e1961db8c5ba67bd7",
+      "date": "2026-08-12T23:46:38+08:00",
+      "subject": "feat(protocol): teach schedulers duplex communication"
+    },
+    {
+      "sha": "2e71f0704d9ee6c622558f85615b1c2b18c79eba",
+      "date": "2026-08-12T23:28:38+08:00",
+      "subject": "refactor(storage): remove dead json namespace"
+    },
+    {
+      "sha": "9e4fb07b8b6ec4d1df1135bfa294660f1d6af9f0",
+      "date": "2026-08-12T23:27:32+08:00",
+      "subject": "fix(skill): publish complete remote cache snapshots"
+    },
+    {
+      "sha": "948395e671b3acff1c8a6a78f0b279f93827c1ee",
+      "date": "2026-08-12T23:27:07+08:00",
+      "subject": "fix(artifact): authenticate catalog cursors"
+    },
+    {
+      "sha": "f2eb138f749e2ef22773c73fa93c5413f0b24bb4",
+      "date": "2026-08-12T23:26:53+08:00",
+      "subject": "Revert \"fix(artifact): authenticate catalog cursors\""
+    },
+    {
+      "sha": "55577d87c9807e7a7dda1b52e9bbccb2e4cf69e3",
+      "date": "2026-08-12T23:25:51+08:00",
+      "subject": "fix(artifact): authenticate catalog cursors"
+    },
+    {
+      "sha": "13212294ca87f9f11157cd6f4650b6bff7bbed39",
+      "date": "2026-08-12T23:25:00+08:00",
+      "subject": "feat(overlay): redesign startup surface"
+    },
+    {
+      "sha": "ddda01ac42b9abfbda788588ea4c17246b44f6ec",
+      "date": "2026-08-12T23:22:31+08:00",
+      "subject": "fix(intent): preserve blocker question settlement"
+    },
+    {
+      "sha": "60a2278ec0174783c700a70caa6ac009ceb07269",
+      "date": "2026-08-12T23:22:05+08:00",
+      "subject": "Revert \"fix(intent): preserve blocker question settlement\""
+    },
+    {
+      "sha": "468fa3ce78ef306b41e1fa27f3417a726671dc5c",
+      "date": "2026-08-12T23:20:02+08:00",
+      "subject": "fix(intent): preserve blocker question settlement"
+    },
+    {
+      "sha": "27c7f5176e22bea748c10008aaee50a7542cc3df",
+      "date": "2026-08-12T23:09:06+08:00",
+      "subject": "fix(research): preserve domain-incomplete settlement"
+    },
+    {
+      "sha": "270d30f982bf60b71ee63e55b30fd5158f484dce",
+      "date": "2026-08-12T23:07:43+08:00",
+      "subject": "fix(project): preserve durable sandbox discovery authority"
+    },
+    {
+      "sha": "19c5b935af5e258f9a4c8e97b4e35d99869bcae7",
+      "date": "2026-08-12T22:36:05+08:00",
+      "subject": "fix(frontend-design): preserve domain-incomplete settlement"
+    },
+    {
+      "sha": "96cfd8f6e1739a820b7048f1b0c2dc5d14552d9c",
+      "date": "2026-08-12T22:31:19+08:00",
+      "subject": "fix(channel): publish only physically started adapters"
+    },
+    {
+      "sha": "1d5740d8740c15b0372b38f5aa285d731a5eb2c2",
+      "date": "2026-08-12T22:25:31+08:00",
+      "subject": "fix(worktree): fail closed on ownership uncertainty"
+    },
+    {
+      "sha": "0336604d94f84ae2cd145ebf3320de060bafdc28",
+      "date": "2026-08-12T22:01:13+08:00",
+      "subject": "fix(upgrade): verify installed executable version"
+    },
+    {
+      "sha": "6f59d5b224ce5b09dfa7b90dbc62b28d08e82b06",
+      "date": "2026-08-12T22:00:55+08:00",
+      "subject": "fix(mcp): redact local process diagnostics"
+    },
+    {
+      "sha": "fc0a42f4ea9703ba94240d768e0244965c56920a",
+      "date": "2026-08-12T21:54:27+08:00",
+      "subject": "fix(runtime): recover durable scheduler delivery"
+    },
+    {
+      "sha": "58ef06ca51f5fecd989c7563fc9e7fa4a63f74f1",
+      "date": "2026-08-12T21:51:04+08:00",
+      "subject": "fix(plugin): publish from immutable staging"
+    },
+    {
+      "sha": "51c3f3dc5652527d2723d024990adc42eef13d9d",
+      "date": "2026-08-12T21:10:43+08:00",
+      "subject": "docs: design unified work artifact harness"
+    },
+    {
+      "sha": "130e51b6b0841d32c386fbf4d31c3cb306c3245e",
+      "date": "2026-08-12T20:22:15+08:00",
+      "subject": "fix(overlay): finish ui ux saturation audit"
+    },
+    {
+      "sha": "20f18339b16b649cc41349ec87259badd65c43cc",
+      "date": "2026-08-12T19:52:42+08:00",
+      "subject": "fix(security): remove unrestricted native file writer"
+    },
+    {
+      "sha": "dbc360d45b1278f59f1e28380e0925b897470f41",
+      "date": "2026-08-12T19:26:34+08:00",
+      "subject": "docs: complete repository code smell audit"
+    },
+    {
+      "sha": "ba81149afd5ccbb90de5bef0727b77ad146d13c7",
+      "date": "2026-08-12T19:02:14+08:00",
+      "subject": "fix(overlay): close ui ux audit follow-ups"
+    },
+    {
+      "sha": "fcddb8f37ecffd09397bc7ca34fd3bcf0caa7c48",
+      "date": "2026-08-12T18:57:43+08:00",
+      "subject": "fix(overlay): converge ui ux interactions and primitives"
+    },
+    {
+      "sha": "6897c59c75fb443934121d7145dcbfff200262ff",
+      "date": "2026-08-12T18:47:54+08:00",
+      "subject": "docs: record repository code smell audit"
+    },
+    {
+      "sha": "9ec994e649d1f4d6f4b1f55556e873760b7cefac",
+      "date": "2026-08-12T18:41:38+08:00",
+      "subject": "refactor(protocol): unify mission task scheduler duplex"
+    }
+  ],
+  "stats": ".github/workflows/build-overlays.yml               |     3 +-\n .github/workflows/build.yml                        |    21 +\n .github/workflows/test.yml                         |     4 +-\n .gitignore                                         |     1 +\n AGENTS.md                                          |     5 +-\n README.md                                          |    17 +\n README.zh-CN.md                                    |    15 +\n bun.lock                                           |    16 +-\n .../academic-paper-review/expert-squad.jsonc       |   108 +-\n .../builtin/actuarial-reserving/expert-squad.jsonc |    77 +-\n .../expert-squad.jsonc                             |    76 +-\n .../agriculture-food-systems/expert-squad.jsonc    |    68 +-\n .../expert-squad.jsonc                             |    77 +-\n .../expert-squad.jsonc                             |    77 +-\n .../expert-squad.jsonc                             |    77 +-\n .../expert-squad.jsonc                             |    76 +-\n .../expert-squad.jsonc                             |    68 +-\n .../battery-safety-reliability/expert-squad.jsonc  |    68 +-\n .../expert-squad.jsonc                             |    68 +-\n .../expert-squad.jsonc                             |    74 +-\n .../builtin/browser-research-acceptance/README.md  |    14 +-\n .../agents/browser-acceptance-reviewer/system.md   |     4 +-\n .../agents/browser-interaction-auditor/system.md   |     1 -\n .../agents/orchestrator/system.md                  |     4 +-\n .../browser-research-acceptance/expert-squad.jsonc |   100 +-\n .../skills/browser-evidence-acceptance/SKILL.md    |     6 +-\n .../chemical-process-safety/expert-squad.jsonc     |    76 +-\n .../climate-risk-adaptation/expert-squad.jsonc     |    68 +-\n .../expert-squad.jsonc                             |    74 +-\n .../expert-squad.jsonc                             |    74 +-\n .../clinical-trial-operations/expert-squad.jsonc   |    78 +-\n .../expert-squad.jsonc                             |    76 +-\n .../cloud-platform-architecture/expert-squad.jsonc |    67 +-\n .../builtin/commercial-legal/expert-squad.jsonc    |     2 +-\n .../lib/commercial-legal/artifacts.ts              |    10 +\n .../tools/publish-commercial-legal-artifact.ts     |    27 +-\n .../expert-squad.jsonc                             |    68 +-\n .../expert-squad.jsonc                             |    74 +-\n .../expert-squad.jsonc                             |    74 +-\n .../expert-squad.jsonc                             |    68 +-\n .../builtin/customer-success/expert-squad.jsonc    |    69 +-\n .../customs-trade-compliance/expert-squad.jsonc    |    77 +-\n .../cybersecurity-assurance/expert-squad.jsonc     |    69 +-\n .../expert-squad.jsonc                             |    74 +-\n .../builtin/data-analysis/expert-squad.jsonc       |     2 +-\n .../data-analysis/lib/data-analysis/artifacts.ts   |     9 +\n .../tools/publish-data-analysis-artifact.ts        |    27 +-\n .../expert-squad.jsonc                             |    71 +-\n .../builtin/deep-research/expert-squad.jsonc       |   221 +-\n .../expert-squad.jsonc                             |    74 +-\n .../expert-squad.jsonc                             |    77 +-\n .../ecommerce-merchandising/expert-squad.jsonc     |    68 +-\n .../education-program-design/expert-squad.jsonc    |    68 +-\n .../expert-squad.jsonc                             |    76 +-\n .../energy-utilities-planning/expert-squad.jsonc   |    68 +-\n .../expert-squad.jsonc                             |    77 +-\n .../builtin/equity-research/expert-squad.jsonc     |   255 +-\n expert-squads/builtin/evolution-lab/README.md      |     2 +-\n .../agents/evolution-candidate-author/system.md    |     4 +-\n .../agents/evolution-evaluator/system.md           |     2 +-\n .../agents/evolution-experiment-planner/system.md  |     4 +-\n .../agents/evolution-failure-analyst/system.md     |     2 +-\n .../agents/evolution-observer/system.md            |     2 +-\n .../evolution-recommendation-owner/system.md       |     2 +-\n .../agents/evolution-safety-auditor/system.md      |     3 +\n .../system.md                                      |     3 -\n .../evolution-lab/agents/orchestrator/system.md    |     8 +-\n .../builtin/evolution-lab/expert-squad.jsonc       |   188 +-\n .../evolution-lab/lib/evolution-lab/artifacts.ts   |     2 +\n .../builtin/evolution-lab/skills/campaign/SKILL.md |     2 +-\n .../evolution-lab/tools/expert-squad-package.ts    |    28 +-\n .../tools/publish-evolution-artifact.ts            |   490 +-\n .../builtin/finance-operations/expert-squad.jsonc  |    69 +-\n .../expert-squad.jsonc                             |    76 +-\n .../builtin/food-safety-quality/expert-squad.jsonc |    68 +-\n .../expert-squad.jsonc                             |    77 +-\n .../expert-squad.jsonc                             |    77 +-\n expert-squads/builtin/frontend-innovate/README.md  |    37 +-\n .../system.md                                      |     2 +-\n .../frontend-innovate-integrity-reviewer/system.md |     5 -\n .../agents/frontend-innovate-planner/system.md     |     3 +\n .../system.md                                      |     4 -\n .../frontend-innovate-solution-architect/system.md |     3 -\n .../frontend-innovate-visual-reviewer/system.md    |     5 -\n .../agents/orchestrator/system.md                  |    11 +-\n .../builtin/frontend-innovate/expert-squad.jsonc   |   279 +-\n .../builtin/frontend-innovate/selector.md          |    89 +-\n expert-squads/builtin/frontend-replica/README.md   |    34 +-\n .../agents/frontend-replica-implementer/system.md  |     4 +-\n .../frontend-replica-integrity-reviewer/system.md  |     8 -\n .../frontend-replica-intent-analyst/system.md      |     2 +-\n .../agents/frontend-replica-planner/system.md      |     3 +\n .../system.md                                      |    11 -\n .../frontend-replica-solution-architect/system.md  |    10 -\n .../frontend-replica-source-researcher/system.md   |     2 +-\n .../frontend-replica-visual-reviewer/system.md     |     8 -\n .../frontend-replica/agents/orchestrator/system.md |    18 +-\n .../builtin/frontend-replica/expert-squad.jsonc    |   289 +-\n expert-squads/builtin/frontend-replica/selector.md |   137 +-\n .../expert-squad.jsonc                             |    68 +-\n .../expert-squad.jsonc                             |    68 +-\n .../healthcare-operations/expert-squad.jsonc       |    68 +-\n .../expert-squad.jsonc                             |    68 +-\n .../builtin/hr-operations/expert-squad.jsonc       |     2 +-\n .../hr-operations/lib/hr-operations/artifacts.ts   |     9 +\n .../tools/publish-hr-operations-artifact.ts        |    27 +-\n .../identity-access-governance/expert-squad.jsonc  |    77 +-\n .../expert-squad.jsonc                             |    68 +-\n .../insurance-claims-operations/expert-squad.jsonc |    68 +-\n .../expert-squad.jsonc                             |    76 +-\n .../knowledge-base-operations/expert-squad.jsonc   |    68 +-\n .../expert-squad.jsonc                             |    68 +-\n .../life-sciences-regulatory/expert-squad.jsonc    |    68 +-\n .../localization-adaptation/expert-squad.jsonc     |    66 +-\n .../manufacturing-quality/expert-squad.jsonc       |    68 +-\n .../expert-squad.jsonc                             |    74 +-\n .../maritime-port-operations/expert-squad.jsonc    |    68 +-\n .../builtin/marketing-growth/expert-squad.jsonc    |     2 +-\n .../lib/marketing-growth/artifacts.ts              |    17 +\n .../tools/publish-marketing-growth-artifact.ts     |     6 +-\n .../materials-failure-analysis/expert-squad.jsonc  |    68 +-\n .../media-rights-clearance/expert-squad.jsonc      |    68 +-\n .../expert-squad.jsonc                             |    74 +-\n .../expert-squad.jsonc                             |    74 +-\n .../expert-squad.jsonc                             |    76 +-\n .../builtin/meeting-knowledge/expert-squad.jsonc   |    69 +-\n .../expert-squad.jsonc                             |    76 +-\n .../expert-squad.jsonc                             |    68 +-\n .../mining-resource-operations/expert-squad.jsonc  |    76 +-\n .../nonprofit-grant-operations/expert-squad.jsonc  |    68 +-\n .../expert-squad.jsonc                             |    68 +-\n .../expert-squad.jsonc                             |    76 +-\n expert-squads/builtin/office-delivery/README.md    |    12 +-\n .../agents/office-delivery-builder/system.md       |    11 +-\n .../agents/office-delivery-planner/system.md       |     3 +\n .../agents/office-format-designer/system.md        |     1 -\n .../agents/office-quality-reviewer/system.md       |     1 -\n .../agents/office-source-analyst/system.md         |     2 +-\n .../office-delivery/agents/orchestrator/system.md  |     4 +-\n .../builtin/office-delivery/expert-squad.jsonc     |   132 +-\n expert-squads/builtin/office-delivery/selector.md  |     6 +-\n .../skills/office-delivery-method/SKILL.md         |    23 +-\n .../omnichannel-distribution/expert-squad.jsonc    |     2 +-\n .../lib/omnichannel-distribution/artifacts.ts      |    10 +\n .../tools/publish-omnichannel-artifact.ts          |    27 +-\n .../expert-squad.jsonc                             |    74 +-\n .../patent-landscape-prior-art/expert-squad.jsonc  |    68 +-\n .../expert-squad.jsonc                             |    68 +-\n .../expert-squad.jsonc                             |    77 +-\n .../expert-squad.jsonc                             |    68 +-\n .../expert-squad.jsonc                             |    68 +-\n .../expert-squad.jsonc                             |    76 +-\n .../expert-squad.jsonc                             |    78 +-\n .../builtin/procurement-vendor/expert-squad.jsonc  |    66 +-\n .../builtin/product-management/expert-squad.jsonc  |    73 +-\n .../builtin/product-video/expert-squad.jsonc       |    71 +-\n .../public-health-surveillance/expert-squad.jsonc  |    68 +-\n .../expert-squad.jsonc                             |    68 +-\n .../expert-squad.jsonc                             |    74 +-\n .../railway-operations-safety/expert-squad.jsonc   |    68 +-\n .../real-estate-due-diligence/expert-squad.jsonc   |    68 +-\n .../expert-squad.jsonc                             |    76 +-\n expert-squads/builtin/review-debug/README.md       |     2 +-\n .../review-debug/agents/orchestrator/system.md     |    16 +-\n .../review-debug-evidence-investigator/system.md   |    12 -\n .../review-debug-integrity-reviewer/system.md      |     5 -\n .../agents/review-debug-planner/system.md          |     3 +\n .../review-debug-visual-investigator/system.md     |    12 -\n .../agents/review-debug-visual-reviewer/system.md  |     5 -\n .../builtin/review-debug/expert-squad.jsonc        |   293 +-\n .../robotics-safety-validation/expert-squad.jsonc  |    77 +-\n .../builtin/sales-strategy/expert-squad.jsonc      |     2 +-\n .../sales-strategy/lib/sales-strategy/artifacts.ts |     9 +\n .../tools/publish-sales-strategy-artifact.ts       |    27 +-\n .../expert-squad.jsonc                             |    68 +-\n .../scientific-research-design/expert-squad.jsonc  |    73 +-\n .../expert-squad.jsonc                             |    77 +-\n .../expert-squad.jsonc                             |    68 +-\n expert-squads/builtin/seo-geo/expert-squad.jsonc   |     2 +-\n .../builtin/seo-geo/lib/seo-geo/artifacts.ts       |    17 +\n .../seo-geo/tools/publish-seo-geo-artifact.ts      |     6 +-\n .../expert-squad.jsonc                             |    76 +-\n .../sports-performance-analysis/expert-squad.jsonc |    68 +-\n expert-squads/builtin/squad-sdk/README.md          |     2 +-\n .../squad-sdk/agents/orchestrator/system.md        |     2 +-\n .../agents/squad-sdk-contract-reviewer/system.md   |     6 +-\n .../agents/squad-sdk-package-architect/system.md   |     3 -\n .../squad-sdk/agents/squad-sdk-planner/system.md   |     3 +\n .../agents/squad-sdk-source-analyst/system.md      |     6 +-\n expert-squads/builtin/squad-sdk/expert-squad.jsonc |   136 +-\n .../builtin/squad-sdk/skills/authoring/SKILL.md    |    16 +-\n .../authoring/references/definition-contract.json  |    32 +-\n .../builtin/squad-sdk/skills/import/SKILL.md       |     2 +-\n .../expert-squad.jsonc                             |    74 +-\n .../supply-chain-logistics/expert-squad.jsonc      |    68 +-\n .../builtin/tax-compliance/expert-squad.jsonc      |     2 +-\n .../tax-compliance/lib/tax-compliance/artifacts.ts |    10 +\n .../tools/publish-tax-compliance-artifact.ts       |    27 +-\n .../telecom-network-assurance/expert-squad.jsonc   |    68 +-\n .../expert-squad.jsonc                             |    74 +-\n .../expert-squad.jsonc                             |    77 +-\n .../veterinary-care-operations/expert-squad.jsonc  |    76 +-\n .../builtin/viral-content/expert-squad.jsonc       |     2 +-\n .../viral-content/lib/viral-content/artifacts.ts   |    10 +\n .../tools/publish-viral-content-artifact.ts        |    27 +-\n .../water-wastewater-operations/expert-squad.jsonc |    68 +-\n package.json                                       |     1 +\n packages/channel-config/package.json               |     2 +-\n packages/channel-runtime/package.json              |     3 +-\n packages/channel-runtime/src/adapters/matrix.ts    |     3 +-\n packages/channel-runtime/src/adapters/signal.ts    |    26 +-\n packages/channel-runtime/src/adapters/telegram.ts  |    17 +-\n packages/channel-runtime/src/core.ts               |   136 +-\n packages/channel-runtime/src/main.ts               |     4 +-\n packages/channel-runtime/test/core-stt.test.ts     |    87 +-\n .../test/mainstream-adapters.test.ts               |    14 +\n .../channel-runtime/test/start-idempotency.test.ts |   281 +-\n .../channel-runtime/test/telegram-adapter.test.ts  |    25 +-\n packages/opencorvus/Dockerfile                     |     4 +-\n .../opencorvus/generated/expert-squad-payload.ts   |   355 +-\n .../native/process-supervisor/Cargo.lock           |     2 +-\n .../native/process-supervisor/Cargo.toml           |     2 +-\n packages/opencorvus/package.json                   |     9 +-\n packages/opencorvus/runtime/officecli.lock.json    |    75 -\n .../runtime/work-artifact-runtimes.lock.json       |   129 +\n .../script/advanced-requirements-grill-e2e.ts      |    53 +-\n packages/opencorvus/script/build-artifact.ts       |    18 +-\n .../script/build-overlay-payload-stamp.ts          |     5 +-\n .../opencorvus/script/build-runtime-binaries.ts    |    92 +-\n packages/opencorvus/script/build.local.ts          |    35 +-\n packages/opencorvus/script/build.ts                |    22 +-\n .../script/check-browser-mcp-live-view.ts          |   234 +\n .../script/check-builtin-expert-squad-topology.ts  |    66 +\n .../script/check-mission-task-duplex-e2e.ts        |   623 +\n .../script/check-work-artifact-profile.ts          |   346 +\n packages/opencorvus/script/check/routes.ts         |    32 +-\n packages/opencorvus/script/docs/render-api-md.ts   |    20 +-\n .../script/expert-squad-evolution-e2e-support.ts   |   544 +-\n .../script/expert-squad-evolution-e2e.ts           |  1507 +\n .../script/finalize-work-artifact-package.ts       |    43 +\n .../opencorvus/script/generate-build-artifacts.ts  |     3 +\n packages/opencorvus/script/generate-openapi.ts     |    25 +-\n .../generate-portable-expert-squad-template.ts     |     7 +-\n .../generate-work-artifact-qualification-matrix.ts |    89 +\n .../script/mission-task-duplex-contract.ts         |   240 +\n ...s-check.ts => permission-modes-check-worker.ts} |   106 +-\n .../script/prepare-test-process-supervisor.ts      |    78 +\n packages/opencorvus/script/run-tests.ts            |    71 +-\n packages/opencorvus/script/run-with-inactivity.ts  |    46 +-\n .../script/runtime-executable-contract.ts          |    74 +-\n .../opencorvus/script/scheduled-automations-e2e.ts |    38 +-\n packages/opencorvus/script/task-control-check.ts   |   353 +-\n .../opencorvus/script/test-process-supervisor.ts   |    21 +\n ...ntime-lock.ts => work-artifact-runtime-lock.ts} |    29 +-\n .../opencorvus/src/agent/artifact-read-facts.ts    |   481 +-\n .../src/agent/dispatch-adapter-contract.ts         |     2 +-\n packages/opencorvus/src/agent/dispatch-outcome.ts  |    61 +\n .../opencorvus/src/agent/helper-agent-registry.ts  |    33 +-\n .../opencorvus/src/agent/host-agent-registry.ts    |    33 +-\n .../src/agent/native-agent-registry-cache.ts       |   153 +\n .../src/agent/native-agent-registry-lifecycle.ts   |    28 +-\n .../src/agent/primary-assistant-registry.ts        |    33 +-\n .../src/agent/projected-worker-turn-queue.ts       |    97 +\n packages/opencorvus/src/agent/runner.ts            |    16 +-\n packages/opencorvus/src/agent/task-review-facts.ts |     9 +-\n .../opencorvus/src/agent/tool-pool-contract.ts     |     5 +-\n packages/opencorvus/src/agent/tool-pool-data.ts    |    16 +-\n .../opencorvus/src/agent/worker-turn-descriptor.ts |    13 +-\n packages/opencorvus/src/artifact-catalog/index.ts  |   297 +-\n packages/opencorvus/src/auth/index.ts              |    57 +-\n packages/opencorvus/src/browser/runtime/index.ts   |   109 +-\n packages/opencorvus/src/build/agent.ts             |   123 +-\n .../src/build/merge-back-publication-authority.ts  |    93 +-\n .../src/build/terminal-fact-publication.ts         |   107 +\n packages/opencorvus/src/bus/index.ts               |    20 +-\n packages/opencorvus/src/channel/supervisor.ts      |    20 +-\n packages/opencorvus/src/cli/cmd/db.ts              |    51 +-\n packages/opencorvus/src/cli/cmd/debug/index.ts     |     2 +\n .../opencorvus/src/cli/cmd/debug/work-artifact.ts  |    24 +\n packages/opencorvus/src/cli/cmd/upgrade.ts         |    16 +-\n packages/opencorvus/src/cli/server-runtime.ts      |     4 +-\n packages/opencorvus/src/cli/upgrade.ts             |     2 +-\n packages/opencorvus/src/config/config.ts           |     9 +-\n packages/opencorvus/src/control/message.ts         |    14 +-\n packages/opencorvus/src/control/prompt.ts          |     1 -\n .../opencorvus/src/conversation/history-window.ts  |    83 +\n .../opencorvus/src/conversation/turn-artifacts.ts  |    60 +-\n packages/opencorvus/src/conversation/view.ts       |    11 +-\n .../src/engine/build-observation-cleanup.ts        |   163 +\n .../opencorvus/src/engine/build-observation-ref.ts |    13 +-\n .../src/engine/cancellation-projection.ts          |    43 +\n .../opencorvus/src/engine/completion-decision.ts   |    98 +-\n packages/opencorvus/src/engine/config.ts           |     6 +\n .../src/engine/cross-task-artifact-import.ts       |   290 +-\n .../src/engine/delivery-slice-membership-facts.ts  |    50 +-\n packages/opencorvus/src/engine/describe.ts         |     8 +-\n packages/opencorvus/src/engine/dispatch-lineage.ts |    60 +-\n .../opencorvus/src/engine/dispatch-settlement.ts   |    73 +\n packages/opencorvus/src/engine/durable-activity.ts |    12 +-\n packages/opencorvus/src/engine/engine.sql.ts       |    31 +-\n .../opencorvus/src/engine/git-project-metadata.ts  |    81 +\n packages/opencorvus/src/engine/git.ts              |    52 +-\n packages/opencorvus/src/engine/host-recovery.ts    |     9 +\n packages/opencorvus/src/engine/model.ts            |    36 +-\n packages/opencorvus/src/engine/ownership.ts        |   821 +-\n packages/opencorvus/src/engine/persist.ts          |   296 +-\n packages/opencorvus/src/engine/pipeline.ts         |    78 +-\n packages/opencorvus/src/engine/queue.ts            |  1331 +-\n .../opencorvus/src/engine/queued-task-ingress.ts   |    52 +-\n packages/opencorvus/src/engine/state.ts            |    73 +-\n packages/opencorvus/src/engine/store.ts            |   188 +-\n .../src/engine/task-completion-closure.ts          |   177 +\n .../src/engine/task-execution-capsule-binding.ts   |    25 +-\n packages/opencorvus/src/engine/task-intent-open.ts |    15 +-\n packages/opencorvus/src/engine/task-status.ts      |    18 +-\n packages/opencorvus/src/engine/task.ts             |    88 +-\n .../src/engine/terminal-lifecycle-reference.ts     |    11 +-\n .../src/execution-capsule/tree-digest.ts           |    19 +-\n .../src/expert-squad/builtin/advanced/README.md    |     2 +-\n .../advanced/agents/requirement-engineer/system.md |     2 +-\n .../builtin/advanced/expert-squad.jsonc            |   302 +-\n .../src/expert-squad/builtin/base/README.md        |    26 +-\n .../builtin/base/agents/base-developer/system.md   |    10 +-\n .../base/agents/base-integrity-reviewer/system.md  |     7 -\n .../builtin/base/agents/base-planner/system.md     |    10 +-\n .../builtin/base/agents/base-researcher/system.md  |     8 +-\n .../builtin/base/agents/base-tester/system.md      |    10 +-\n .../base/agents/base-visual-reviewer/system.md     |     7 -\n .../builtin/base/agents/orchestrator/system.md     |    10 +-\n .../expert-squad/builtin/base/expert-squad.jsonc   |   224 +-\n .../src/expert-squad/builtin/base/selector.md      |     6 +-\n .../opencorvus/src/expert-squad/builtin/index.ts   |     8 +-\n .../expert-squad/builtin/research-studio/README.md |     2 +-\n .../builtin/research-studio/expert-squad.jsonc     |    93 +-\n .../opencorvus/src/expert-squad/catalog-profile.ts |     1 +\n .../src/expert-squad/package-tool-bundle.ts        |    19 +-\n .../src/expert-squad/package-tool-capsule.ts       |    35 +-\n .../opencorvus/src/expert-squad/projection-hash.ts |    39 +-\n .../src/expert-squad/prompt-profile-resolver.ts    |    21 +-\n packages/opencorvus/src/fact-check/index.ts        |     8 +-\n packages/opencorvus/src/fact-check/persist.ts      |    42 +-\n packages/opencorvus/src/fact-check/schema.ts       |    13 +\n packages/opencorvus/src/fact-check/tools.ts        |     2 +-\n .../src/frontend-design/partial-artifact.ts        |     7 +-\n .../src/goal-workload-analyst/output-tools.ts      |    13 +-\n .../src/goal-workload-analyst/publication.ts       |   407 +\n .../opencorvus/src/goal-workload-analyst/types.ts  |   228 +-\n packages/opencorvus/src/id/id.ts                   |   102 +-\n packages/opencorvus/src/index.ts                   |     8 +-\n packages/opencorvus/src/installation/index.ts      |   208 +-\n .../opencorvus/src/integrity/fact-projection.ts    |     2 +-\n packages/opencorvus/src/intent/bundle.ts           |     2 +-\n packages/opencorvus/src/llm/activity.ts            |     6 +-\n packages/opencorvus/src/mcp/browser/index.ts       |   121 +-\n packages/opencorvus/src/mcp/browser/monitor.ts     |    50 +-\n .../opencorvus/src/mcp/browser/node-launcher.ts    |    51 +-\n packages/opencorvus/src/mcp/browser/sessions.ts    |   411 +-\n packages/opencorvus/src/mcp/browser/tools.ts       |   233 +-\n packages/opencorvus/src/mcp/index.ts               |   136 +-\n .../src/mcp/local-process-diagnostics.ts           |   141 +\n .../src/memory/project-memory-organizer.ts         |    25 +-\n packages/opencorvus/src/memory/project-memory.ts   |    86 +-\n packages/opencorvus/src/mission/board.ts           |    75 +-\n .../src/mission/caller-receipt-identity.ts         |    11 +\n packages/opencorvus/src/mission/caller-receipt.ts  |   123 +-\n packages/opencorvus/src/mission/completion.ts      |    48 +-\n .../opencorvus/src/mission/execution-closure.ts    |   368 +\n .../opencorvus/src/mission/process-recovery.ts     |   169 +-\n packages/opencorvus/src/mission/projection.ts      |     8 +-\n packages/opencorvus/src/mission/session.ts         |   109 +-\n .../opencorvus/src/office-artifact/presentation.ts |   829 -\n .../src/office-artifact/runtime/runtime-lock.ts    |    78 -\n packages/opencorvus/src/orchestrator/agent.ts      |   322 +-\n .../src/orchestrator/analyze-intent-tool.ts        |    22 +-\n .../opencorvus/src/orchestrator/architect-stage.ts |    24 +-\n packages/opencorvus/src/orchestrator/build-tool.ts |    37 +-\n .../src/orchestrator/control-message-identity.ts   |    11 +\n .../src/orchestrator/deep-research-stage.ts        |     6 +-\n .../src/orchestrator/dispatch-agent-tool.ts        |    24 +-\n .../src/orchestrator/dispatch-turn-projection.ts   |     2 +-\n packages/opencorvus/src/orchestrator/event.ts      |    11 +-\n .../opencorvus/src/orchestrator/fact-check-tool.ts |    54 +-\n .../src/orchestrator/frontend-design-tool.ts       |    41 +-\n .../src/orchestrator/frontend-research-stage.ts    |     6 +-\n .../src/orchestrator/interaction-tools.ts          |     9 +-\n packages/opencorvus/src/orchestrator/loop.ts       |    18 +-\n .../src/orchestrator/protocol/message-bridge.ts    |    25 +\n .../src/orchestrator/requirements-stage.ts         |    30 +-\n .../src/orchestrator/research-persistence.ts       |    19 +-\n .../src/orchestrator/runtime-repair-tools.ts       |    19 +-\n .../src/orchestrator/task-lifecycle-tools.ts       |   179 +-\n .../opencorvus/src/orchestrator/task-session.ts    |    47 +\n packages/opencorvus/src/orchestrator/tools.ts      |   104 +-\n .../opencorvus/src/orchestrator/visual-qa-stage.ts |     2 +-\n .../src/orchestrator/workload-analysis-tool.ts     |    33 +-\n packages/opencorvus/src/overlay-server.ts          |    13 +-\n packages/opencorvus/src/panel/capability.ts        |    46 +-\n packages/opencorvus/src/panel/task-query.ts        |     4 +-\n packages/opencorvus/src/permission/authority.ts    |   170 +-\n packages/opencorvus/src/permission/invocation.ts   |    11 +-\n packages/opencorvus/src/project/bootstrap.ts       |    18 +-\n .../opencorvus/src/project/deletion-cleanup.ts     |    10 +-\n .../opencorvus/src/project/identity-convergence.ts |   323 +\n packages/opencorvus/src/project/instance.ts        |     9 +-\n packages/opencorvus/src/project/project.sql.ts     |    10 +-\n packages/opencorvus/src/project/project.ts         |   496 +-\n packages/opencorvus/src/project/runtime-paths.ts   |    17 +\n .../opencorvus/src/prompt/core/fact-check-core.txt |     2 +-\n .../opencorvus/src/prompt/core/mission-core.txt    |    33 +-\n .../src/prompt/core/orchestrator-core.txt          |    24 +-\n packages/opencorvus/src/protocol/delivery.ts       |  1435 +\n packages/opencorvus/src/protocol/protocol.sql.ts   |    24 +-\n .../src/protocol/scheduler-drain-signal.ts         |    26 +\n .../opencorvus/src/protocol/scheduler-message.ts   |   488 +\n packages/opencorvus/src/protocol/schema.ts         |   103 +\n packages/opencorvus/src/protocol/session-mirror.ts |     8 +\n .../opencorvus/src/protocol/session-wake-state.ts  |    44 +\n packages/opencorvus/src/protocol/store.ts          |    66 +-\n packages/opencorvus/src/provider/dashscope.ts      |    30 +-\n packages/opencorvus/src/provider/models.ts         |    86 +-\n packages/opencorvus/src/provider/operations.ts     |     1 +\n packages/opencorvus/src/provider/provider.ts       |   236 +-\n packages/opencorvus/src/provider/schema.ts         |    73 +-\n .../src/provider/tool-execution-input.ts           |    11 +-\n packages/opencorvus/src/question/index.ts          |     4 +-\n packages/opencorvus/src/requirements/agent.ts      |    45 +-\n .../src/requirements/input-projection.ts           |     3 +\n .../opencorvus/src/requirements/output-tools.ts    |    67 +-\n packages/opencorvus/src/requirements/types.ts      |   143 +-\n packages/opencorvus/src/runtime/binary-launcher.ts |     8 +-\n packages/opencorvus/src/runtime/compiled-binary.ts |     5 +\n .../opencorvus/src/scheduler/automation-service.ts |    95 +-\n packages/opencorvus/src/scheduler/event-service.ts |   229 +-\n .../src/scheduler/execution-inactivity.ts          |    12 +-\n .../opencorvus/src/scheduler/task-queue-service.ts |     1 +\n .../src/scheduler/task-wait-fire-identity.ts       |     5 +\n packages/opencorvus/src/server/error-handler.ts    |     4 +\n packages/opencorvus/src/server/error.ts            |    48 +-\n packages/opencorvus/src/server/overlay-ui.ts       |   250 +-\n .../opencorvus/src/server/project-route-context.ts |     4 +\n packages/opencorvus/src/server/provider-refresh.ts |     2 +-\n packages/opencorvus/src/server/routes/app.ts       |   104 +-\n packages/opencorvus/src/server/routes/auth.ts      |     4 +-\n packages/opencorvus/src/server/routes/config.ts    |     6 +-\n .../opencorvus/src/server/routes/experimental.ts   |    57 +-\n .../opencorvus/src/server/routes/expert-squad.ts   |     6 +-\n packages/opencorvus/src/server/routes/global.ts    |    24 +-\n packages/opencorvus/src/server/routes/mailbox.ts   |    83 -\n packages/opencorvus/src/server/routes/mission.ts   |   204 +-\n .../opencorvus/src/server/routes/orchestrator.ts   |   243 +-\n .../opencorvus/src/server/routes/permission.ts     |     4 +-\n packages/opencorvus/src/server/routes/project.ts   |    55 +-\n packages/opencorvus/src/server/routes/provider.ts  |     9 +-\n .../server/routes/right-sidebar-conversation.ts    |     3 +-\n packages/opencorvus/src/server/routes/session.ts   |   101 +-\n .../opencorvus/src/server/routes/work-ledger.ts    |    47 +-\n .../src/server/runtime-server-ownership.ts         |    58 +-\n packages/opencorvus/src/server/server.ts           |   100 +-\n packages/opencorvus/src/session/control.ts         |    10 +-\n packages/opencorvus/src/session/index.ts           |    68 +-\n packages/opencorvus/src/session/loop.ts            |   381 +-\n packages/opencorvus/src/session/message-store.ts   |    65 +\n packages/opencorvus/src/session/message.ts         |     9 +\n packages/opencorvus/src/session/processor.ts       |    86 +-\n packages/opencorvus/src/session/prompt/index.ts    |     1 +\n packages/opencorvus/src/session/prompt/parts.ts    |    12 +-\n packages/opencorvus/src/session/prompt/state.ts    |    28 +-\n .../opencorvus/src/session/runtime-contract.ts     |     2 +\n packages/opencorvus/src/session/session.sql.ts     |     3 +\n packages/opencorvus/src/session/status.ts          |    34 +\n .../opencorvus/src/session/tool-result-control.ts  |   124 +-\n .../src/session/tool-result-normalization.ts       |    44 +\n packages/opencorvus/src/session/wake.ts            |   109 +-\n .../opencorvus/src/shell/command-inactivity.ts     |    10 +\n .../opencorvus/src/shell/process-supervisor.ts     |    19 +-\n packages/opencorvus/src/skill/builtin-payload.ts   |    17 +-\n .../skill/builtin/office-artifacts/PROVENANCE.md   |    21 -\n .../src/skill/builtin/office-artifacts/SKILL.md    |    66 -\n .../office-artifacts/references/authoring.md       |    37 -\n .../builtin/office-artifacts/references/review.md  |    27 -\n .../office-artifacts/references/security.md        |    16 -\n .../src/skill/builtin/work-artifacts/PROVENANCE.md |    12 +\n .../src/skill/builtin/work-artifacts/SKILL.md      |    43 +\n .../work-artifacts/references/common-lifecycle.md  |    14 +\n .../references/office-presentation.md              |    28 +\n .../builtin/work-artifacts/references/review.md    |    19 +\n .../builtin/work-artifacts/references/security.md  |    17 +\n packages/opencorvus/src/skill/discovery.ts         |   326 +-\n packages/opencorvus/src/skill/manager.ts           |   123 +-\n packages/opencorvus/src/skill/skill.ts             |     8 +-\n .../opencorvus/src/status/task-status-snapshot.ts  |     6 +-\n .../opencorvus/src/storage/attachment-store.ts     |    76 +-\n packages/opencorvus/src/storage/db.ts              |   550 +-\n packages/opencorvus/src/storage/ddl.ts             |   204 +-\n packages/opencorvus/src/storage/schema-contract.ts |    84 +\n .../opencorvus/src/storage/schema-migration.ts     |   944 -\n packages/opencorvus/src/storage/schema.ts          |   152 +-\n packages/opencorvus/src/storage/storage.ts         |    89 -\n packages/opencorvus/src/task-api/index.ts          |   577 +-\n .../opencorvus/src/task-api/task-root-message.ts   |   136 +\n packages/opencorvus/src/task-artifact/store.ts     |   166 +-\n packages/opencorvus/src/tool/analytics.ts          |    16 +-\n packages/opencorvus/src/tool/artifact-catalog.ts   |   437 +-\n packages/opencorvus/src/tool/batch.ts              |     4 +-\n packages/opencorvus/src/tool/delegate-agent.ts     |     4 +-\n packages/opencorvus/src/tool/execution-mode.ts     |    88 +\n .../opencorvus/src/tool/expert-squad-author.ts     |     4 +-\n .../src/tool/expert-squad-package-host.ts          |   106 +-\n packages/opencorvus/src/tool/global-tools.ts       |    15 +-\n .../opencorvus/src/tool/metric-judge-runner.ts     |     5 +-\n packages/opencorvus/src/tool/office-artifact.ts    |   188 -\n packages/opencorvus/src/tool/panel.ts              |   253 +-\n packages/opencorvus/src/tool/plugin-tool-host.ts   |     2 +-\n packages/opencorvus/src/tool/registry.ts           |    16 +-\n .../src/tool/request-orchestrator-decision.ts      |    21 +-\n packages/opencorvus/src/tool/scheduler-message.ts  |    73 +\n .../src/tool/task-tool-execution-scope.ts          |    69 +-\n packages/opencorvus/src/tool/tool-id-catalog.ts    |    11 +-\n packages/opencorvus/src/tool/tool.ts               |     6 +-\n packages/opencorvus/src/tool/wait.ts               |    15 +-\n packages/opencorvus/src/tool/work-artifact.ts      |   226 +\n packages/opencorvus/src/usage/usage.sql.ts         |     8 +-\n packages/opencorvus/src/util/canonical-cache.ts    |    43 +\n packages/opencorvus/src/util/canonical-digest.ts   |    91 +\n packages/opencorvus/src/util/error-diagnostics.ts  |    43 +\n packages/opencorvus/src/util/lock.ts               |    16 +-\n packages/opencorvus/src/util/process.ts            |    40 +-\n packages/opencorvus/src/util/stream-activity.ts    |    98 +-\n .../src/work-artifact/packaged-acceptance.ts       |    85 +\n .../presentation-inspector-process.ts              |    19 +\n .../work-artifact/presentation-render-process.ts   |   295 +\n .../opencorvus/src/work-artifact/presentation.ts   |  1368 +\n .../src/work-artifact/profile-registry.ts          |    89 +\n .../qualification-matrix.generated.ts              |   131 +\n .../src/work-artifact/qualification-registry.ts    |    60 +\n .../src/work-artifact/runtime/package-manifest.ts  |   301 +\n .../src/work-artifact/runtime/runtime-lock.ts      |   131 +\n .../src/work-artifact/validation-authority.ts      |    86 +\n packages/opencorvus/src/work-ledger/projection.ts  |     6 +-\n packages/opencorvus/src/work/harness.ts            |    19 +-\n packages/opencorvus/src/workbench/board.ts         |    26 +-\n packages/opencorvus/src/worktree/gc.ts             |   160 +-\n packages/opencorvus/src/worktree/index.ts          |   216 +-\n .../src/worktree/managed-session-owner.ts          |    18 +-\n .../src/worktree/ownership-critical-section.ts     |    29 +-\n .../test/active-operator-wake-settlement.test.ts   |  1017 +-\n .../agent-runner-fresh-session-authority.test.ts   |    22 +-\n .../opencorvus/test/algorithm-batch-one.test.ts    |   340 +-\n .../architect-domain-incomplete-settlement.test.ts |   467 +\n .../test/artifact-catalog-cursor.test.ts           |    99 +-\n .../test/artifact-provider-reference-flow.test.ts  |   598 +\n .../test/artifact-publisher-authority.test.ts      |    78 +\n .../artifact-read-facts-provider-input.test.ts     |    50 +-\n .../test/auth-config-read-authority.test.ts        |   256 +\n .../test/browser-mcp-node-bundle.test.ts           |     5 +-\n .../test/build-observation-ref-cleanup.test.ts     |     4 +-\n .../test/build-terminal-fact-publication.test.ts   |   525 +\n .../opencorvus/test/bus-durable-outbox.test.ts     |   130 +-\n packages/opencorvus/test/capability/fuzzy.test.ts  |     4 +-\n .../test/channel-supervisor-start-receipt.test.ts  |    86 +\n .../test/command-inactivity-settlement.test.ts     |    66 +\n .../test/compact-task-identifier.test.ts           |    73 +-\n .../test/conversation-projector-ownership.test.ts  |   113 +\n .../conversation-tool-execution-authority.test.ts  |     5 +-\n .../test/dispatch-agent-managed-lifecycle.test.ts  |   354 +-\n .../dispatch-occurrence-recovery-authority.test.ts |    49 +-\n packages/opencorvus/test/empty-bunfig.toml         |     0\n .../test/engine-git-batched-scale.test.ts          |    12 +-\n .../test/engine-git-batched-transaction.test.ts    |     8 +-\n .../test/engine-git-project-metadata.test.ts       |   161 +\n .../test/engine-interaction-recovery.test.ts       |     5 +-\n .../engine-interrupted-session-recovery.test.ts    |    45 +-\n packages/opencorvus/test/error-diagnostics.test.ts |    23 +\n .../test/evolution-artifact-evidence-host.test.ts  |  1148 +-\n .../test/evolution-lab-package-projection.test.ts  |    17 +-\n .../test/execution-authority-tool-surface.test.ts  |    49 +-\n .../test/expert-squad-evolution-mutation.test.ts   |    21 +-\n .../test/expert-squad/advanced-package.test.ts     |    24 +-\n .../test/expert-squad/catalog-index.test.ts        |    30 +-\n .../expert-squad/commercial-legal-package.test.ts  |    73 +-\n .../expert-squad/data-analysis-package.test.ts     |    43 +-\n .../expert-squad/domain-expansion-packages.test.ts |     4 +-\n .../eighth-domain-expansion-packages.test.ts       |     2 +-\n .../fifth-domain-expansion-packages.test.ts        |     2 +-\n .../fourth-domain-expansion-packages.test.ts       |     2 +-\n .../expert-squad/frontend-replica-package.test.ts  |     7 +-\n .../expert-squad/growth-discovery-packages.test.ts |     4 +-\n .../expert-squad/hr-operations-package.test.ts     |    42 +-\n .../ninth-domain-expansion-packages.test.ts        |     2 +-\n ...ffice-delivery-work-artifact-projection.test.ts |    84 +\n .../omnichannel-distribution-package.test.ts       |   210 +-\n .../package-tool-native-runtime.test.ts            |   157 +-\n .../test/expert-squad/production-route-probe.ts    |    43 +-\n .../random-evolution-e2e-support.test.ts           |   638 +-\n .../expert-squad/research-studio-package.test.ts   |     2 +-\n .../expert-squad/sales-strategy-package.test.ts    |    51 +-\n .../seventh-domain-expansion-packages.test.ts      |     2 +-\n .../sixth-domain-expansion-packages.test.ts        |     2 +-\n .../test/expert-squad/squad-sdk-package.test.ts    |    53 +-\n .../swimlane-10-product-video-package.test.ts      |     4 +-\n .../expert-squad/swimlanes-01-03-packages.test.ts  |    31 +-\n .../expert-squad/swimlanes-04-06-packages.test.ts  |     4 +-\n .../expert-squad/swimlanes-07-09-packages.test.ts  |     6 +-\n .../expert-squad/tax-compliance-package.test.ts    |    71 +-\n .../ten-swimlane-payload-integration.test.ts       |    41 +-\n .../ten-swimlane-production-route-e2e.test.ts      |     6 +-\n .../tenth-domain-expansion-packages.test.ts        |     2 +-\n .../third-domain-expansion-packages.test.ts        |     2 +-\n .../typed-publisher-provider-schema.test.ts        |   159 +\n .../expert-squad/viral-content-package.test.ts     |   144 +-\n ...fact-check-domain-incomplete-settlement.test.ts |   560 +\n packages/opencorvus/test/fixture/engine-git.ts     |     5 +-\n packages/opencorvus/test/fixture/engine-task.ts    |    21 +\n .../test/fixture/goal-workload-process-worker.ts   |   746 +\n .../test/fixture/mission-session-process-worker.ts |    93 +\n .../fixture/tool-result-control-mutation-plugin.ts |    16 +\n ...ool-result-control-permission-process-worker.ts |   320 +\n ...end-design-domain-incomplete-settlement.test.ts |   460 +\n .../test/goal-workload-coverage-contract.test.ts   |  1872 +\n .../test/installation-upgrade-verification.test.ts |   147 +\n .../intent-analysis-blocker-settlement.test.ts     |   458 +\n packages/opencorvus/test/llm/activity.test.ts      |    77 +-\n .../opencorvus/test/lsp-disabled-runtime.test.ts   |    47 -\n .../test/lsp-initialize-lifecycle.test.ts          |     5 +-\n .../test/mcp/browser-live-view-contract.test.ts    |   296 +\n .../test/mcp/browser-projection-contract.test.ts   |    20 +-\n .../opencorvus/test/mcp/computer-contract.test.ts  |     1 -\n .../test/mcp/local-process-diagnostics.test.ts     |   101 +\n .../opencorvus/test/memory/project-memory.test.ts  |   266 +-\n .../test/metrics-evidence-runtime.test.ts          |    23 +-\n .../test/mission-caller-receipt-identity.test.ts   |   359 +\n .../test/mission-durable-activity.test.ts          |    67 +-\n .../test/mission-process-recovery.test.ts          |   260 +-\n .../mission-session-identity-atomicity.test.ts     |   301 +\n .../test/mission-status-snapshot.test.ts           |   125 +\n .../test/mission-task-duplex-contract.test.ts      |   286 +\n .../test/native-agent-registry-cache.test.ts       |   184 +\n .../test/orchestrator-control-message.test.ts      |   284 +-\n .../test/orchestrator-dispatch-guidance.test.ts    |    11 +\n .../orchestrator-mission-resume-provenance.test.ts |     4 +-\n .../orchestrator-mission-root-message-read.test.ts |   408 +-\n ...chestrator-terminal-coordination-schema.test.ts |    98 +\n ...hestrator-unavailable-evidence-contract.test.ts |    16 +\n .../conversation-turn-declared-outputs.test.ts     |   112 +-\n .../test/package-tool-files-capability.test.ts     |    35 +-\n .../test/panel-mission-terminal-authority.test.ts  |   472 +-\n .../opencorvus/test/permission-two-mode.test.ts    |   259 +-\n packages/opencorvus/test/preload.ts                |    59 +-\n .../test/process-authority-runtime.test.ts         |   144 +-\n .../test/project-directory-and-worktree-gc.test.ts |   316 +-\n .../test/project-identity-convergence.test.ts      |   511 +\n .../opencorvus/test/project-route-context.test.ts  |    12 +-\n .../test/project-runtime-task-isolation.test.ts    |    16 +-\n .../test/projected-worker-turn-queue.test.ts       |    42 +\n .../protocol-scheduler-message-delivery.test.ts    |  3615 ++\n .../test/provider-cache-identity.test.ts           |   337 +\n .../test/provider-live-model-refresh.test.ts       |   277 +\n .../test/remote-skill-cache-publication.test.ts    |   230 +\n ...quirements-domain-incomplete-settlement.test.ts |   732 +\n .../research-domain-incomplete-settlement.test.ts  |   435 +\n .../test/root-session-ingress-fifo.test.ts         |   144 +\n .../test/runtime-execution-settlement.test.ts      |    56 +-\n .../test/runtime-server-ownership.test.ts          |    78 +\n .../test/scheduler-claim-and-fire-identity.test.ts |   108 +\n .../test/scheduler-event-durable-fire.test.ts      |   180 +\n .../test/scheduler-execution-inactivity.test.ts    |    98 +\n .../scheduler-message-harness-contract.test.ts     |    37 +\n .../scheduler-task-wait-project-runtime.test.ts    |    80 +-\n .../script/runtime-executable-contract.test.ts     |    85 +\n .../opencorvus/test/security-p0-contracts.test.ts  |     2 -\n .../server-project-event-sse-acceptance.test.ts    |    58 +\n .../server/conversation-capability-route.test.ts   |    74 +\n .../test/server/overlay-ui-frozen-source.test.ts   |   117 +\n .../server/session-conversation-history.test.ts    |    84 +\n .../opencorvus/test/session-error-bridge.test.ts   |    11 +-\n ...on-execution-authority-managed-worktree.test.ts |     5 +-\n .../test/session-loop-provider-tool-input.test.ts  |   168 +-\n ...session-loop-tool-authority-integration.test.ts |   334 +-\n .../session/execution-occurrence-lifecycle.test.ts |    80 +\n .../session/processor-llm-activity-retry.test.ts   |   137 +-\n .../test/session/prompt-owner-capture.test.ts      |    57 +\n .../test/session/session-created-effect.test.ts    |    19 +-\n .../session-loop-execution-occurrence.test.ts      |    26 +\n packages/opencorvus/test/shell-deadline.test.ts    |    10 +-\n .../test/skill-market-builtin-authority.test.ts    |    57 +\n .../test/skill-source-trust-identity.test.ts       |    82 +\n .../test/storage/schema-contract.test.ts           |   248 +\n .../test/storage/schema-migration.test.ts          |   923 -\n .../opencorvus/test/stream-activity-abort.test.ts  |   117 +-\n .../task-artifact-git-commit-publication.test.ts   |   221 +-\n .../test/task-package-revision-binding.test.ts     |   160 +-\n .../test/task-terminal-artifact-closure.test.ts    |  1282 +\n .../test/task-wait-fire-identity.test.ts           |   127 +\n .../test/test-runner-runtime-isolation.test.ts     |   176 +\n .../test/tool-result-control-protocol.test.ts      |  1880 +\n .../opencorvus/test/usage/stream-ledger.test.ts    |    37 +\n .../test/work-artifact/packaged-lifecycle.test.ts  |   138 +\n .../test/work-artifact/presentation-render.test.ts |    97 +\n .../test/work-artifact/qualification.test.ts       |   506 +\n .../work-artifact/task-workspace-authority.test.ts |   132 +\n .../test/work-ledger-interruption-activity.test.ts |    21 +\n .../workflow-node-occurrence-authority.test.ts     |    13 +-\n packages/overlay/package.json                      |     5 +-\n packages/overlay/script/build-docker.ts            |     4 +\n packages/overlay/script/build-overlay.ts           |    10 +\n packages/overlay/script/build.ts                   |    10 +\n packages/overlay/script/check-css-token-usage.ts   |   277 +\n packages/overlay/script/overlay-size-contract.ts   |     2 +-\n packages/overlay/script/run-unit-tests.ts          |    49 +-\n packages/overlay/src-tauri/Cargo.lock              |     2 +-\n packages/overlay/src-tauri/Cargo.toml              |     2 +-\n packages/overlay/src-tauri/src/main.rs             |    40 +-\n packages/overlay/src-tauri/tauri.conf.json         |     4 +-\n packages/overlay/src/components/App.tsx            |    79 +-\n packages/overlay/src/components/AppDialogHost.tsx  |    15 +-\n .../overlay/src/components/BrowserPreviewPanel.tsx |    60 +-\n .../overlay/src/components/ConfigDialogHost.tsx    |    40 +-\n .../overlay/src/components/FileExplorerPanel.tsx   |    13 +\n packages/overlay/src/components/GoalDialogHost.tsx |     2 +-\n packages/overlay/src/components/MailboxPanel.tsx   |    90 +-\n packages/overlay/src/components/MissionBoard.tsx   |   160 +-\n .../overlay/src/components/MissionCreateDialog.tsx |   178 +-\n .../overlay/src/components/ProjectMemoryBanner.tsx |    11 +-\n packages/overlay/src/components/RightDock.tsx      |    27 +-\n packages/overlay/src/components/TaskDirBar.tsx     |    83 +-\n .../overlay/src/components/TaskStatusHeader.tsx    |    40 +-\n packages/overlay/src/components/WorkLedger.tsx     |    63 +-\n .../interactive-artifact/DashboardArtifact.tsx     |    56 +-\n .../interactive-artifact/TerminalArtifact.tsx      |    54 +-\n .../src/components/mailbox-request-owner.ts        |     9 -\n .../src/components/settings/ArchivePanel.tsx       |    21 +-\n .../settings/ExpertSquadEvolutionPanel.tsx         |    23 +-\n .../components/settings/ExpertSquadMarketPanel.tsx |    25 +-\n .../src/components/settings/ExpertSquadPanel.tsx   |     1 +\n .../settings/ScheduledAutomationsPanel.tsx         |   297 +-\n .../src/components/settings/SkillMarketPanel.tsx   |    30 +-\n .../overlay/src/components/settings/layout.tsx     |     2 +\n .../src/components/titlebar/TitlebarNavigation.tsx |    46 +-\n packages/overlay/src/components/ui/Icon.lucide.ts  |     2 +\n packages/overlay/src/components/ui/LinkButton.tsx  |    23 +\n .../overlay/src/components/ui/SegmentedControl.tsx |     8 -\n .../overlay/src/components/ui/SelectControl.tsx    |    19 +-\n packages/overlay/src/components/ui/TextField.tsx   |   127 +-\n packages/overlay/src/i18n/en-US.json               |    48 +-\n packages/overlay/src/i18n/zh-CN.json               |    48 +-\n packages/overlay/src/index.html                    |   353 +-\n packages/overlay/src/main.tsx                      |    95 +-\n packages/overlay/src/native-menu.tsx               |    82 +-\n packages/overlay/src/services/api-state.ts         |     2 +-\n packages/overlay/src/services/app-dialog.ts        |    19 +-\n packages/overlay/src/services/chat.ts              |     6 +-\n .../src/services/clipboard-api-key-prompt.ts       |    20 +-\n packages/overlay/src/services/config.ts            |    47 +-\n packages/overlay/src/services/dialog.ts            |     4 +-\n packages/overlay/src/services/event-policy.ts      |     4 +\n packages/overlay/src/services/events.ts            |    17 +-\n packages/overlay/src/services/extensions.ts        |    19 +-\n packages/overlay/src/services/host-transport.ts    |     2 -\n packages/overlay/src/services/init.ts              |    25 +-\n packages/overlay/src/services/mailbox.ts           |    59 +-\n .../src/services/native-menu-surface-contract.ts   |    36 +\n .../overlay/src/services/native-menu-surface.ts    |   350 +-\n packages/overlay/src/services/project-memory.ts    |    51 -\n packages/overlay/src/services/sse.ts               |   152 +-\n packages/overlay/src/services/task-queue.ts        |    35 -\n packages/overlay/src/services/task.ts              |     3 -\n packages/overlay/src/services/tauri-transport.ts   |     2 -\n packages/overlay/src/services/tree-writer.ts       |    95 +-\n packages/overlay/src/services/workspace.ts         |    52 +-\n packages/overlay/src/store/app.ts                  |     9 +-\n packages/overlay/src/store/board.ts                |     2 +-\n packages/overlay/src/store/dialog.ts               |     4 +\n .../overlay/src/styles/surfaces/automations.css    |    29 +-\n packages/overlay/src/styles/surfaces/card.css      |     2 +-\n packages/overlay/src/styles/surfaces/composer.css  |     6 +-\n .../overlay/src/styles/surfaces/conn-banner.css    |     7 +-\n .../overlay/src/styles/surfaces/conversation.css   |    92 +-\n packages/overlay/src/styles/surfaces/messages.css  |    61 +-\n .../overlay/src/styles/surfaces/mission-board.css  |    40 +-\n packages/overlay/src/styles/surfaces/settings.css  |    72 +-\n packages/overlay/src/styles/surfaces/usage.css     |    42 +-\n .../overlay/src/styles/surfaces/work-ledger.css    |    11 -\n .../overlay/src/styles/tokens/design-language.css  |     6 +-\n packages/overlay/src/utils/log.ts                  |    65 +-\n packages/overlay/src/utils/native.ts               |     6 +\n packages/overlay/src/utils/status-labels.ts        |     2 +-\n packages/overlay/src/utils/status-mapping.ts       |    11 -\n packages/overlay/test/api-error.test.ts            |     9 +-\n packages/overlay/test/app-icon-generation.test.ts  |   225 -\n packages/overlay/test/event-policy.test.ts         |     9 +\n packages/overlay/test/git-init-current.test.ts     |     1 -\n .../test/host-transport-capabilities.test.ts       |    31 -\n .../overlay/test/initial-workspace-restore.test.ts |    36 -\n packages/overlay/test/log-flush-diagnostic.test.ts |    26 +\n .../overlay/test/mailbox-change-stream.test.ts     |   117 -\n .../test/native-menu-surface-contract.test.ts      |    19 +\n .../overlay/test/overlay-size-contract.test.ts     |    11 +\n .../test/projection-prerequisite-recovery.test.ts  |   208 +\n packages/overlay/test/sse-active-elapsed.test.ts   |   191 -\n .../overlay/test/startup-git-bootstrap.test.ts     |    25 -\n packages/overlay/test/task-init-git-retry.test.ts  |   313 -\n packages/overlay/test/task-list-pagination.test.ts |   218 -\n packages/overlay/test/task-queue-service.test.ts   |    53 -\n .../test/work-ledger-notification-stream.test.ts   |    86 +\n packages/plugin/package.json                       |     2 +-\n packages/plugin/script/publish-package.ts          |   214 +\n packages/plugin/script/publish.ts                  |    32 +-\n packages/plugin/src/artifact-catalog.ts            |   140 +-\n .../plugin/src/expert-squad-evolution-artifact.ts  |   140 +-\n packages/plugin/src/expert-squad-package.ts        |    22 +-\n packages/plugin/src/task-run-evidence.ts           |    74 +-\n packages/plugin/test/artifact-catalog.test.ts      |    23 +\n packages/plugin/test/publish-package.test.ts       |   182 +\n packages/sdk/js/package.json                       |     3 +-\n packages/sdk/js/src/expert-squad-authoring.ts      |    93 +-\n packages/sdk/js/src/expert-squad-manifest-v1.ts    |    20 +-\n packages/sdk/js/src/gen/sdk.gen.ts                 |   606 +-\n packages/sdk/js/src/gen/types.gen.ts               |  1575 +-\n packages/sdk/js/src/server-startup-observer.ts     |    75 +\n packages/sdk/js/src/server.ts                      |    79 +-\n .../sdk/js/test/expert-squad-authoring.test.ts     |    20 +-\n .../js/test/expert-squad-topology-analysis.test.ts |    60 +-\n packages/sdk/js/test/server.test.ts                |   107 +-\n packages/sdk/openapi.json                          | 55526 +++++++++----------\n packages/transport-protocol/package.json           |     2 +-\n packages/transport-protocol/src/index.ts           |   104 +-\n packages/transport-protocol/test/contract.test.ts  |   126 +-\n packages/util/package.json                         |     2 +-\n packages/util/src/test-runtime-environment.ts      |   184 +\n .../assets/lander/harness-gallery/code-harness.png |   Bin 0 -> 43556 bytes\n .../lander/harness-gallery/expert-squads.png       |   Bin 0 -> 73242 bytes\n .../lander/harness-gallery/mission-composer.png    |   Bin 0 -> 50083 bytes\n .../assets/lander/harness-gallery/work-harness.png |   Bin 0 -> 43455 bytes\n packages/web/src/components/Lander.astro           |   391 +-\n packages/web/src/components/PublicSiteHeader.astro |    10 +-\n packages/web/src/components/PublicSiteLayout.astro |    60 +-\n packages/web/src/content/docs/agents.mdx           |     2 +-\n packages/web/src/content/docs/reference/api.mdx    |    82 +-\n .../src/content/docs/reference/mission-task.mdx    |    38 +-\n packages/web/src/content/docs/reference/sdk.mdx    |     4 +-\n packages/web/src/content/docs/zh-cn/agents.mdx     |     2 +-\n .../web/src/content/docs/zh-cn/reference/api.mdx   |    82 +-\n .../content/docs/zh-cn/reference/mission-task.mdx  |    28 +-\n .../web/src/content/docs/zh-cn/reference/sdk.mdx   |     4 +-\n .../content/expert-squad-distribution.generated.ts |     6 +-\n packages/web/src/content/landing.ts                |   144 +-\n packages/web/src/content/public-market-zh-01-35.ts |    79 +-\n packages/web/src/content/public-market-zh-36-67.ts |    68 +-\n packages/web/src/content/public-market-zh-68-99.ts |    38 +-\n script/check-release-assets.ts                     |    23 +-\n script/github-actions-workflow-contract.test.ts    |    23 +-\n script/install-windows-ripgrep.ps1                 |    18 +-\n script/package-linux-binary.ts                     |     5 +\n script/package-native-binary.ts                    |   178 +-\n specs/README.md                                    |    72 +\n .../2026-08-12-overlay-ui-ux-baseline.png          |   Bin 0 -> 49962 bytes\n .../2026-08-12-overlay-ui-ux-mailbox-after.png     |   Bin 0 -> 41592 bytes\n ...-08-12-overlay-ui-ux-mailbox-keyboard-after.png |   Bin 0 -> 41874 bytes\n ...26-08-12-overlay-ui-ux-mailbox-search-after.png |   Bin 0 -> 43323 bytes\n .../2026-08-12-overlay-ui-ux-mission-after.png     |   Bin 0 -> 41364 bytes\n .../2026-08-12-overlay-ui-ux-mission-baseline.png  |   Bin 0 -> 46728 bytes\n ...26-08-12-overlay-ui-ux-mission-create-after.png |   Bin 0 -> 56443 bytes\n ...-overlay-ui-ux-mission-create-initial-final.png |   Bin 0 -> 52712 bytes\n ...2-overlay-ui-ux-mission-create-manual-after.png |   Bin 0 -> 54930 bytes\n ...erlay-ui-ux-mission-create-validation-final.png |   Bin 0 -> 54872 bytes\n ...-overlay-ui-ux-mission-error-empty-baseline.png |   Bin 0 -> 42285 bytes\n ...8-12-overlay-ui-ux-mission-error-fixed-dark.png |   Bin 0 -> 41329 bytes\n ...-12-overlay-ui-ux-mission-error-fixed-final.png |   Bin 0 -> 37337 bytes\n ...026-08-12-overlay-ui-ux-mission-error-fixed.png |   Bin 0 -> 39518 bytes\n .../2026-08-12-overlay-ui-ux-scheduled-after-2.png |   Bin 0 -> 61528 bytes\n .../2026-08-12-overlay-ui-ux-scheduled-after.png   |   Bin 0 -> 61528 bytes\n ...6-08-12-overlay-ui-ux-scheduled-error-final.png |   Bin 0 -> 41595 bytes\n .../2026-08-12-overlay-ui-ux-scheduled-final.png   |   Bin 0 -> 58843 bytes\n ...6-08-12-overlay-ui-ux-settings-search-fixed.png |   Bin 0 -> 15777 bytes\n ...6-08-12-overlay-ui-ux-startup-failure-final.png |   Bin 0 -> 9198 bytes\n .../2026-08-12-startup-surface-dark-failure.png    |   Bin 0 -> 26622 bytes\n .../2026-08-12-startup-surface-dark-loading.png    |   Bin 0 -> 25237 bytes\n .../2026-08-12-startup-surface-light-loading.png   |   Bin 0 -> 28201 bytes\n .../2026-08-13-browser-mcp-google-chrome.png       |   Bin 0 -> 158268 bytes\n .../artifacts/2026-08-13-browser-mcp-live-view.png |   Bin 0 -> 68094 bytes\n ...6-08-13-homepage-harness-gallery-en-mission.png |   Bin 0 -> 86675 bytes\n .../2026-08-13-homepage-harness-gallery-en.png     |   Bin 0 -> 84378 bytes\n .../2026-08-13-homepage-harness-gallery-zh-cn.png  |   Bin 0 -> 80410 bytes\n .../2026-08-13-work-capability-connected.png       |   Bin 0 -> 59546 bytes\n .../artifacts/mission-task-duplex-e2e-result.json  |   457 +\n specs/current/architecture/02-data.md              |   461 +\n specs/current/architecture/04-extensions.md        |    91 +-\n specs/current/architecture/06-provider.md          |    12 +-\n specs/current/architecture/task-control-plane.md   |    30 +-\n .../current/architecture/task-runtime-directory.md |    30 +-\n .../2026-08-12-code-smell-remediation-program.md   |   204 +\n ...-12-cs015-plugin-publication-source-mutation.md |    71 +\n ...026-08-12-cs025-artifact-cursor-authenticity.md |    32 +\n ...2026-08-12-cs029-skill-source-trust-identity.md |    39 +\n .../2026-08-12-cs030-delete-dead-json-storage.md   |    24 +\n .../2026-08-12-cs031-provider-cache-identity.md    |    47 +\n .../2026-08-12-cs040-mcp-diagnostic-redaction.md   |   114 +\n ...08-12-cs041-channel-adapter-start-settlement.md |    63 +\n ...12-cs046-project-sandbox-discovery-authority.md |    36 +\n ...frontend-design-domain-incomplete-settlement.md |    71 +\n ...6-08-12-cs053-remote-skill-cache-publication.md |    64 +\n ...-cs054-research-domain-incomplete-settlement.md |    61 +\n ...-12-cs055-intent-blocker-question-settlement.md |    48 +\n ...026-08-12-cs076-upgrade-version-verification.md |   170 +\n ...-local-database-rebuild-and-startup-recovery.md |    56 +-\n ...-mission-task-scheduler-duplex-communication.md |   208 +\n .../2026-08-12-overlay-ui-ux-continuous-audit.md   |   246 +\n ...08-12-random-expert-squad-self-evolution-e2e.md |  2908 +-\n ...08-12-repository-code-smell-continuous-audit.md |  1417 +\n .../2026-08-12-startup-surface-visual-redesign.md  |    79 +\n ...rk-artifact-harness-and-skill-infrastructure.md |   402 +\n ...8-12-work-artifact-harness-p0-implementation.md |   130 +\n .../2026-08/2026-08-13-browser-mcp-live-view.md    |   181 +\n ...08-13-compact-identities-and-host-references.md |   138 +\n ...ross-task-engine-resource-catalog-visibility.md |   109 +\n ...-08-13-cs001-build-terminal-fact-publication.md |    55 +\n ...-cs002-explicit-project-identity-convergence.md |    40 +\n ...-08-13-cs003-atomic-mission-session-identity.md |    96 +\n ...13-cs005-single-tool-result-control-protocol.md |   143 +\n ...2026-08-13-cs006-native-agent-registry-cache.md |    41 +\n ...2026-08-13-cs021-provider-live-model-refresh.md |    54 +\n ...cs027-delete-unconfigurable-skill-registries.md |    62 +\n ...-08-13-cs028-explicit-storage-table-registry.md |    40 +\n ...-cs032-sdk-server-startup-observer-lifecycle.md |    60 +\n ...08-13-cs033-conversation-projector-ownership.md |    38 +\n ...3-cs034-architect-domain-conflict-settlement.md |    36 +\n .../2026-08-13-cs035-auth-config-read-authority.md |    53 +\n ...037-overlay-projection-prerequisite-protocol.md |    36 +\n ...s075-fact-check-domain-incomplete-settlement.md |    40 +\n ...77-requirements-domain-incomplete-settlement.md |    46 +\n ...026-08-13-cs078-workload-coverage-settlement.md |   144 +\n ...08-13-evolution-attribution-source-integrity.md |    81 +\n ...-expert-squad-gui-zero-intervention-sampling.md |   130 +\n ...26-08-13-homepage-harness-gallery-and-readme.md |   101 +\n ...08-13-public-home-locale-and-hero-priorities.md |   121 +\n ...2026-08-13-r17b-luna-tool-input-stream-stall.md |   153 +\n ...scheduled-global-inactivity-config-ownership.md |    75 +\n ...026-08-13-work-capability-unavailable-repair.md |   137 +\n ...8-14-mission-closure-recovery-convergence-p0.md |    84 +\n .../2026-08-14-mission-wake-activation-fence-p0.md |   105 +\n .../2026-08/2026-08-14-v0.0.43-beta-release.md     |    80 +\n specs/records/2026-08/README.md                    |    68 +\n templates/portable-expert-squad-template/README.md |     2 +-\n .../authoring-skill/SKILL.md                       |    16 +-\n .../references/definition-contract.json            |    32 +-\n .../package/README.md                              |     2 +-\n .../package/expert-squad.jsonc                     |     1 +\n 947 files changed, 104094 insertions(+), 48493 deletions(-)"
+}
