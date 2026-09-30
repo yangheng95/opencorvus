@@ -1,0 +1,20 @@
+{
+  "version": "0.0.56-beta.1",
+  "source": "f55fef191afd74352611da0235938a011d6d7766",
+  "tag": null,
+  "previousSource": "8691c972d18486f8c5848b869b184d9c7e6395cb",
+  "sourceDate": "2026-08-29T20:23:53+08:00",
+  "commits": [
+    {
+      "sha": "f55fef191afd74352611da0235938a011d6d7766",
+      "date": "2026-08-29T20:23:53+08:00",
+      "subject": "fix(release): make beta publication recoverable"
+    },
+    {
+      "sha": "368c4ab61527d09a8eeae9dd57b4d51e5551d8c8",
+      "date": "2026-08-29T19:36:39+08:00",
+      "subject": "docs: restore complete bilingual README"
+    }
+  ],
+  "stats": ".github/workflows/build.yml                        | 155 ++++--\n .husky/pre-push                                    |   1 +\n CHANGELOG.md                                       |   4 +-\n README.md                                          | 583 +++++++++++++++++----\n README.zh-CN.md                                    | 535 +++++++++++++++----\n RELEASE.md                                         |  11 +-\n bun.lock                                           |  76 +--\n package.json                                       |   1 +\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n .../opencorvus/script/check/package-topology.ts    | 199 +++++--\n packages/opencorvus/script/release.sh              |  61 +--\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   2 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n script/check-release-mutation-topology.ts          | 194 +++++++\n script/desktop-update-manifest.ts                  | 167 ++++++\n script/generate-desktop-update-manifest.ts         |  38 +-\n script/github-actions-workflow-contract.test.ts    | 202 ++++++-\n script/package-topology-lockfile.test.ts           |  30 ++\n script/release                                     |  69 +--\n script/release-dispatch.test.ts                    | 153 ++++++\n script/release-mutation-topology.test.ts           |  58 ++\n script/settle-desktop-update-channel.test.ts       | 189 +++++++\n script/settle-desktop-update-channel.ts            | 267 ++++++++++\n script/sync-version.test.ts                        |  34 +-\n script/verify-release-identity.test.ts             | 316 +++++++++++\n script/verify-release-identity.ts                  | 490 +++++++++++++++++\n specs/README.md                                    |   2 +-\n .../2026-08/2026-08-29-v0.0.56-beta-release.md     |  48 +-\n specs/records/2026-08/README.md                    |   2 +-\n 39 files changed, 3396 insertions(+), 515 deletions(-)"
+}
