@@ -324,6 +324,10 @@
 
 - 本版相对 `0.1.2-beta` 未修改数据库结构定义。更早 beta 数据库若报告 `SCHEMA_RESET_REQUIRED`，仍需按该版本边界显式处理旧数据；Provider 配置应保留。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/f0d1063affc2e3bedb94fee6ce909e4b20ab9db8) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/57077bf019e5a427e6a37c6d850f926fd47a2665...f0d1063affc2e3bedb94fee6ce909e4b20ab9db8)。
+
 ## 0.1.2beta - 2026-09-18
 
 ### Fixed

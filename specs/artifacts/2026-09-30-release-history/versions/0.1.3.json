@@ -1,0 +1,75 @@
+{
+  "version": "0.1.3",
+  "source": "f0d1063affc2e3bedb94fee6ce909e4b20ab9db8",
+  "tag": "v0.1.3",
+  "previousSource": "57077bf019e5a427e6a37c6d850f926fd47a2665",
+  "sourceDate": "2026-09-19T02:07:23+08:00",
+  "commits": [
+    {
+      "sha": "f0d1063affc2e3bedb94fee6ce909e4b20ab9db8",
+      "date": "2026-09-19T02:07:23+08:00",
+      "subject": "test: bound Light worker waits by actual progress"
+    },
+    {
+      "sha": "6f4eb1ccbff41bed6b4a9d0caa657a7f88c36d17",
+      "date": "2026-09-19T01:50:32+08:00",
+      "subject": "release: prepare stable v0.1.3"
+    },
+    {
+      "sha": "d7ca1ae25de3baa1c978cb4c3e29da3808577aa0",
+      "date": "2026-09-19T01:00:27+08:00",
+      "subject": "docs: record hosted release repair verification"
+    },
+    {
+      "sha": "171ae127d3feaffba38e825feb188749af277f0c",
+      "date": "2026-09-19T00:49:05+08:00",
+      "subject": "fix: repair release unit contracts and reviewed host tooling"
+    },
+    {
+      "sha": "8e43a351096abc5e284ac10036a95ab53b42ace0",
+      "date": "2026-09-19T00:30:39+08:00",
+      "subject": "style(overlay): mute handoff and hide no-action receipts"
+    },
+    {
+      "sha": "96982e4f636aef6f41beeda28cb67b0acbdf4aab",
+      "date": "2026-09-19T00:24:27+08:00",
+      "subject": "fix: preserve expert platform tools in initial capability surface"
+    },
+    {
+      "sha": "295c676bc3fe2d6b5630d29e32ba638b3cd199e1",
+      "date": "2026-09-19T00:11:00+08:00",
+      "subject": "style(overlay): refresh subagent dock reading layout"
+    },
+    {
+      "sha": "e78c08457896bf04aa0e7d121311520f05cc9a64",
+      "date": "2026-09-18T23:43:27+08:00",
+      "subject": "fix(overlay): accept empty live subagent origin source"
+    },
+    {
+      "sha": "a9597b8be303dc20f2e1906b5cafbb27fb9def17",
+      "date": "2026-09-18T18:22:43+08:00",
+      "subject": "docs: record v0.1.2-beta public release verification"
+    },
+    {
+      "sha": "e7ccbd83223eca94d20828c1be29b36aa1f1615a",
+      "date": "2026-09-18T17:25:17+08:00",
+      "subject": "release: prepare 0.1.2-beta version family"
+    },
+    {
+      "sha": "bd867d32d9932855a17c3faf30c8784a677d0f37",
+      "date": "2026-09-18T16:53:11+08:00",
+      "subject": "docs(skill): cover interactions, Missions, and the real Hermes skill root"
+    },
+    {
+      "sha": "3c8cbecd98285dc5d575ecff1f5fabb6e876ca3b",
+      "date": "2026-09-18T16:52:55+08:00",
+      "subject": "fix(overlay): detect a locked overlay binary before building"
+    },
+    {
+      "sha": "1cffbf647ce4f5fc9d63e864f8726ce45e1b6a43",
+      "date": "2026-09-18T16:52:42+08:00",
+      "subject": "feat(cli): reach Mission, Task, Ledger and interactions from a host"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |  27 ++\n bun.lock                                           |  19 +-\n package.json                                       |   1 +\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n .../opencorvus/src/capability/routine-tools.ts     |  12 +-\n packages/opencorvus/src/cli/cmd/attach.ts          | 156 +++++++++++\n packages/opencorvus/src/cli/cmd/ledger.ts          | 136 ++++++++++\n packages/opencorvus/src/cli/cmd/mission.ts         | 293 +++++++++++++++++++++\n packages/opencorvus/src/cli/cmd/permission.ts      | 143 ++++++++++\n packages/opencorvus/src/cli/cmd/question.ts        | 114 ++++++++\n packages/opencorvus/src/cli/cmd/task.ts            | 232 ++++++++++++++++\n packages/opencorvus/src/cli/error.ts               |  17 ++\n packages/opencorvus/src/index.ts                   |  10 +\n packages/opencorvus/src/project/instance.ts        |  11 +-\n packages/opencorvus/src/prompt/core/build-core.txt |   2 +\n .../core-artifact-owner-execution.test.ts          |   4 +\n .../test/capability/task-routine-tools.test.ts     |  63 +++++\n packages/opencorvus/test/cli/attach.test.ts        |  97 +++++++\n .../opencorvus/test/cli/attached-commands.test.ts  | 176 +++++++++++++\n packages/opencorvus/test/cli/ledger-render.test.ts |  69 +++++\n .../test/evolution-artifact-evidence-host.test.ts  |  35 ++-\n .../test/expert-squad/light-package.test.ts        |  44 +++-\n .../test/instance-background-work.test.ts          |  40 +++\n .../test/orchestrator-initial-task-render.test.ts  |   1 +\n .../opencorvus/test/task-root-fact-store.test.ts   |  44 ++--\n packages/overlay/package.json                      |   2 +-\n packages/overlay/script/build-binary-lock.ts       |  18 ++\n packages/overlay/script/build-overlay.ts           |  95 +++++--\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   6 +-\n packages/overlay/src/components/CardParts.tsx      |   6 +-\n packages/overlay/src/components/SourceParts.tsx    |  10 +-\n packages/overlay/src/components/TextPart.tsx       |  13 +-\n .../overlay/src/services/subagent-conversation.ts  |  15 +-\n packages/overlay/src/store/card-tree-stats.ts      |   5 +-\n packages/overlay/src/styles/surfaces/inspector.css | 186 +++++++++++--\n packages/overlay/src/styles/surfaces/messages.css  |   9 +-\n packages/overlay/src/styles/surfaces/workspace.css |  16 ++\n packages/overlay/src/utils/card-tree.ts            |   6 +-\n packages/overlay/src/utils/message-part.ts         |   7 +\n packages/overlay/test/build-binary-lock.test.ts    |  60 +++++\n .../test/build-overlay-windows-path.test.ts        |  35 ---\n .../test/subagent-conversation-service.test.ts     |  40 +++\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/sdk/js/src/client.ts                      |  14 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n .../src/content/docs/integrations/agent-hosts.mdx  |  11 +-\n .../docs/zh-cn/integrations/agent-hosts.mdx        |  11 +-\n .../web/src/content/platform-facts.generated.ts    |   2 +-\n script/desktop-update-manifest.test.ts             |   2 +-\n skills/opencorvus/SKILL.md                         |   9 +-\n skills/opencorvus/references/http-api.md           |  78 ++++++\n skills/opencorvus/references/interactions.md       |  95 +++++++\n skills/opencorvus/references/missions.md           |  83 ++++++\n skills/opencorvus/references/operations.md         |  42 +++\n skills/opencorvus/references/skill-installation.md |  24 +-\n skills/opencorvus/references/troubleshooting.md    |   2 +-\n specs/README.md                                    |  12 +\n specs/current/architecture/03-control.md           |   6 +\n .../architecture/capability-search-runtime.md      |  11 +-\n .../2026-09-18-subagent-dock-visual-refresh.md     |  28 ++\n .../2026-09-18-subagent-live-origin-source.md      |  29 ++\n .../2026-09/2026-09-18-v0.1.2-beta-release.md      |  11 +-\n .../2026-09-19-expert-capability-preservation.md   |  39 +++\n .../2026-09-19-handoff-no-action-presentation.md   |  28 ++\n .../2026-09/2026-09-19-release-unit-test-repair.md |  65 +++++\n specs/records/2026-09/2026-09-19-v0.1.3-release.md |  56 ++++\n specs/records/2026-09/README.md                    |   9 +\n 75 files changed, 2758 insertions(+), 206 deletions(-)"
+}
