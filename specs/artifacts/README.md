@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [0.1.22 public release acceptance](2026-09-30-v0.1.22-release/README.md): real public website visual review and exact release receipts.
+
 - [Parked Task activity](2026-09-30-parked-task-activity/README.md): same-page pause/wake and actual process-restart/reconnect manual evidence.
 
 - [Handoff context readability](2026-09-30-handoff-readability/README.md): new/retained messages, dark/light/narrow reading, natural height and expansion anchoring.
