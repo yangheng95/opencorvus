@@ -2,6 +2,8 @@
 
 - [0.1.23 native and website release](2026-09-30-v0.1.23-release.md)
 
+- [Independent ten-trace Harbor audit](2026-09-30-harbor-independent-trace-audit.md)
+
 - [Reference-style project environment panel](2026-09-30-environment-reference-style.md)
 
 - [Current-runtime Harbor final analysis and settlement](2026-09-30-harbor-current-runtime-restart.md): forty original results, all independent reviews and final report.

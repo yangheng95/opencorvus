@@ -1,0 +1,106 @@
+{
+  "seed": "2026-09-30-independent-trace-audit-10",
+  "method": "one case each, balanced arm assignments, no outcome selection or reroll",
+  "samples": [
+    {
+      "block": 1,
+      "arm": "TS",
+      "case": "hr.candidate_submittal_docs",
+      "trial": "hr-candidate-submittal-docs__dZngBD4",
+      "task_ids": [
+        "tsk_g00VWfNdrR00DiJmpnWv"
+      ],
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/hr-candidate-submittal-docs__dZngBD4"
+    },
+    {
+      "block": 2,
+      "arm": "TE",
+      "case": "sales.create_new_opportunity",
+      "trial": "sales-create-new-opportunity__wNNhgiX",
+      "task_ids": [
+        "tsk_g00VWfSkjz006dIf9kvv"
+      ],
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/sales-create-new-opportunity__wNNhgiX"
+    },
+    {
+      "block": 3,
+      "arm": "MS",
+      "case": "sales.unreliable_label_account_review",
+      "trial": "sales-unreliable-label-account-r__ma8SJBf",
+      "task_ids": [
+        "tsk_g00VWfXMjk00YWHTFeu9"
+      ],
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/sales-unreliable-label-account-r__ma8SJBf"
+    },
+    {
+      "block": 4,
+      "arm": "TS",
+      "case": "operations.sheets_asana_approved_request",
+      "trial": "operations-sheets-asana-approved__6pRbRm5",
+      "task_ids": [
+        "tsk_g00VWfZD3h00dKbr08i3"
+      ],
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/operations-sheets-asana-approved__6pRbRm5"
+    },
+    {
+      "block": 5,
+      "arm": "TE",
+      "case": "hr.probation_review_reminder",
+      "trial": "hr-probation-review-reminder__XDdPgDs",
+      "task_ids": [
+        "tsk_g00VWfdkXO00EqIWEGXr"
+      ],
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/hr-probation-review-reminder__XDdPgDs"
+    },
+    {
+      "block": 6,
+      "arm": "ME",
+      "case": "finance.late_fee_calculation",
+      "trial": "finance-late-fee-calculation__9Z2HtmH",
+      "task_ids": [
+        "tsk_g00VWfh92300d5oS9dxs"
+      ],
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/finance-late-fee-calculation__9Z2HtmH"
+    },
+    {
+      "block": 7,
+      "arm": "ME",
+      "case": "support.zoho_desk_capacity_planning",
+      "trial": "support-zoho-desk-capacity-plann__mktozwA",
+      "task_ids": [
+        "tsk_g00VWfknyR00eLtBQhmM"
+      ],
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/support-zoho-desk-capacity-plann__mktozwA"
+    },
+    {
+      "block": 8,
+      "arm": "TE",
+      "case": "marketing.podcast_episode_promotion",
+      "trial": "marketing-podcast-episode-promot__qEHVrUF",
+      "task_ids": [
+        "tsk_g00VWfmSev00WZEh639x"
+      ],
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/marketing-podcast-episode-promot__qEHVrUF"
+    },
+    {
+      "block": 9,
+      "arm": "ME",
+      "case": "operations.monday_slack_inventory",
+      "trial": "operations-monday-slack-inventor__LAQ6UQy",
+      "task_ids": [
+        "tsk_g00VWfry7O00gXPqtHU1"
+      ],
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/operations-monday-slack-inventor__LAQ6UQy"
+    },
+    {
+      "block": 10,
+      "arm": "MS",
+      "case": "finance.annual_budget_prep",
+      "trial": "finance-annual-budget-prep__gYPARj7",
+      "task_ids": [
+        "tsk_g00VWfwNIU00l2Z5SPkx"
+      ],
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/finance-annual-budget-prep__gYPARj7"
+    }
+  ]
+}

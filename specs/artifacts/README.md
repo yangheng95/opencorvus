@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Independent ten-trace Harbor audit](2026-09-30-harbor-independent-trace-audit/README.md): stratified fixed sampling, fresh-agent original trace review and comparison with the prior report.
+
 - [Project environment visual review](2026-09-30-environment-style/README.md): dark/light overview, independent action menu and collapsed state.
 
 - [Current-runtime Harbor independent comparison](2026-09-30-harbor-runtime-comparison/README.md): forty native results, complete-pair statistics, source/tool review, timing and all known usage limits.
