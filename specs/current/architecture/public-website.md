@@ -45,6 +45,8 @@ This document is the current authority for the `opencorvus.com` runtime, Expert 
 
 ## Product entry points
 
+- Root `CHANGELOG.md` is the sole authored release-history source. The shared util parser normalizes compact/numbered beta identities and validates dated written entries; canonical GitHub publication and static `/changelog/` plus localized history/detail pages consume those same entries. Deleted Release history stays source-linked. Changelog edits trigger the signed website workflow; no separate website history database or copied Markdown authority exists.
+
 - Both homepage locales retain the established hero/terminal and long-horizon visuals,
   with the case gallery beneath the hero, followed by concise start and blog entry. `landing-copy.ts` supplies shared visual copy.
   The gallery contains the tank-game collaboration graph. `execution-graph.ts` and `execution-copy.ts`

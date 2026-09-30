@@ -57,7 +57,7 @@ if [[ "$1" == "-e" ]]; then
   fi
   exit 0
 fi
-if [[ "$1" == "./script/sync-version.ts" && "$3" == "--check" ]]; then
+if [[ "$1" == "./script/check-release-notes.ts" || ( "$1" == "./script/sync-version.ts" && "$3" == "--check" ) ]]; then
   exit 0
 fi
 exit 91

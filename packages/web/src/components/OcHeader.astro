@@ -7,7 +7,7 @@ import config from "../../config.mjs"
 type Props = {
   locale: PublicLocale
   /** Which surface is rendering us. Anchors resolve to the landing page when it is not "home". */
-  current: "home" | "market" | "squad" | "blog"
+  current: "home" | "market" | "squad" | "blog" | "changelog"
   languageHref: string
 }
 
@@ -26,6 +26,7 @@ const anchors = [
   { href: `${anchorBase}#horizon`, label: zh ? "长程" : "Long-horizon" },
   { href: `${anchorBase}#start`, label: zh ? "开始" : "Start" },
   { href: publicPath(locale, "/blog/"), label: zh ? "博客" : "Blog" },
+  { href: publicPath(locale, "/changelog/"), label: zh ? "更新日志" : "Releases" },
 ]
 
 const copy = {

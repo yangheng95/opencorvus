@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Release history and mandatory publication notes](2026-09-30-release-history-backfill.md)
+
 - [Parked Task activity projection](2026-09-30-parked-task-activity.md)
 
 - [Handoff context readability](2026-09-30-handoff-context-readability.md)

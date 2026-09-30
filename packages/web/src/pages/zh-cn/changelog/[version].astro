@@ -1,0 +1,6 @@
+---
+import OcChangelog from "../../../components/OcChangelog.astro"
+import { releaseHistory } from "../../../lib/changelog"
+export function getStaticPaths() { return releaseHistory.map(({ version }) => ({ params: { version } })) }
+---
+<OcChangelog locale="zh-cn" version={Astro.params.version} />

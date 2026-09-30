@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Atomic release-history backfill](2026-09-30-release-history/README.md): per-version source evidence, real page review and public publication receipts.
+
 - [0.1.22 public release acceptance](2026-09-30-v0.1.22-release/README.md): real public website visual review and exact release receipts.
 
 - [Parked Task activity](2026-09-30-parked-task-activity/README.md): same-page pause/wake and actual process-restart/reconnect manual evidence.

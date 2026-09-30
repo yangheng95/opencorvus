@@ -91,6 +91,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: bun script/release-automation.ts check
 
+      - name: Verify written release notes
+        run: bun script/check-release-notes.ts "${{ steps.meta.outputs.version }}"
+
       - name: Verify immutable release identity
         shell: bash
         env:

@@ -1,4 +1,6 @@
 #!/usr/bin/env bun
+import { readFileSync } from "node:fs"
+import { parseChangelog, requireReleaseNotes, renderReleaseNotes } from "../packages/util/src/changelog"
 
 export type GitHubApiResult = {
   exitCode: number
@@ -64,6 +66,7 @@ type ReleasePublicationInput = {
   sourceSHA: string
   runID: string
   prerelease: boolean
+  notes: string
 }
 
 export type ReleasePublicationOwnership = {
@@ -331,6 +334,9 @@ async function readPublicationOwner(
       `Release publication ${tag} is not owned by workflow run ${input.runID} at ${input.sourceSHA}`,
     )
   }
+  if (release.body !== `${expected}\n\n${input.notes}`) {
+    throw new ReleasePublicationError("release_publication_invalid", `Release publication ${tag} differs from its authored release notes`)
+  }
   if (release.prerelease !== input.prerelease) {
     throw new ReleasePublicationError(
       "release_publication_prerelease_mismatch",
@@ -431,13 +437,11 @@ export async function enforceReleasePublication(
     "-f",
     `name=${tag}`,
     "-f",
-    `body=${publicationReceipt(input)}`,
+    `body=${publicationReceipt(input)}\n\n${input.notes}`,
     "-F",
     "draft=true",
     "-F",
     `prerelease=${String(input.prerelease)}`,
-    "-F",
-    "generate_release_notes=true",
   ])
   const status = httpStatus(create)
   if (!((status === 201 && create.exitCode === 0) || status === 422)) throw apiFailure(endpoint, create)
@@ -510,6 +514,7 @@ if (import.meta.main) {
             sourceSHA,
             runID: requiredEnvironment("RELEASE_RUN_ID"),
             prerelease: requiredBoolean("PRERELEASE"),
+            notes: renderReleaseNotes(requireReleaseNotes(parseChangelog(readFileSync(new URL("../CHANGELOG.md", import.meta.url), "utf8")), version)),
           })
         : await enforceReleaseIdentity(mode, {
             repository,

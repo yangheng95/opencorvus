@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Release history and mandatory publication notes](records/2026-09/2026-09-30-release-history-backfill.md)
+
+- [Release-history evidence](artifacts/2026-09-30-release-history/README.md)
+
 - [Parked Task activity projection](records/2026-09/2026-09-30-parked-task-activity.md)
 
 - [Parked Task visual acceptance](artifacts/2026-09-30-parked-task-activity/README.md)

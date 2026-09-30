@@ -41,6 +41,7 @@ if [[ "$HEAD_SHA" != "$UPSTREAM_SHA" ]]; then
 fi
 
 bun ./script/sync-version.ts "$VERSION" --check
+bun ./script/check-release-notes.ts "$VERSION"
 
 echo "Dispatching build.yml for v$VERSION from $REPOSITORY:$REMOTE_BRANCH@$HEAD_SHA"
 gh workflow run build.yml \

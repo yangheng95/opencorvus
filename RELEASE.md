@@ -26,10 +26,13 @@ bun run version:check
 
 ## Changelog
 
-- [CHANGELOG.md](/CHANGELOG.md) is the single user-facing version history from `0.0.35beta` onward. It is a release record, not a second version source.
+- [CHANGELOG.md](/CHANGELOG.md) is the single authored version history from `0.0.35beta` onward, including deleted Release pages and numbered beta attempts. The initial entry describes the complete baseline feature set; subsequent entries describe their version changes and link to exact historical source evidence.
 - Record user-visible work under `未发布` as it lands. Use the standard `Added`, `Changed`, `Fixed`, `Removed`, and `Security` categories when they apply.
 - Before dispatching a release, move the accumulated entries into a dated compact product version such as `0.0.36beta - YYYY-MM-DD`, then leave a new empty `未发布` section.
 - Keep compact product versions in the changelog; package and native metadata continue to use canonical SemVer such as `0.0.36-beta`.
+- Every version must have dated written notes before local, tag or manual release admission. The canonical publication owner copies those exact notes into the GitHub Release body with its ownership receipt and verifies them before publication. Automatic compare-link notes are retired.
+- The website's `/changelog/` and `/zh-cn/changelog/` history/detail pages read this same file at build time. Changelog changes trigger the existing signed website deployment. GitHub and website publication are both required release deliverables; a repository-only entry does not complete a new release.
+- Historical notes survive Release/installer removal. Backfill each version newest to oldest in an individually reviewable commit; update retained Release bodies without changing their source, assets or publication state. Historical entries link to source when the original Release is unavailable.
 
 ## Canonical CI Workflow
 

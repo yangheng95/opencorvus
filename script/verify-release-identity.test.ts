@@ -13,6 +13,7 @@ import {
 const sourceSHA = "1".repeat(40)
 const tagObjectSHA = "2".repeat(40)
 const repository = "owner/repository"
+const notes = "## 0.0.57beta - 2026-08-29\n\n### Fixed\n\n- 修复版本发布。"
 
 function responses(...results: GitHubApiResult[]): GitHubApiRequest {
   let index = 0
@@ -32,7 +33,7 @@ function response(input: Partial<GitHubApiResult>): GitHubApiResult {
 }
 
 function releaseBody(runID: string, ownerSHA = sourceSHA): string {
-  return `<!-- opencorvus-release-owner-v1 run-id=${runID} source-sha=${ownerSHA} -->\n\n## Generated notes`
+  return `<!-- opencorvus-release-owner-v1 run-id=${runID} source-sha=${ownerSHA} -->\n\n${notes}`
 }
 
 function publicationRecord(runID: string, draft = true, ownerSHA = sourceSHA, prerelease = true) {
@@ -163,7 +164,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "claim-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         recordingResponses(
           requests,
           response({ stdout: "[]" }),
@@ -190,13 +191,11 @@ describe("immutable release identity", () => {
       "-f",
       "name=v0.0.57-beta",
       "-f",
-      `body=${releaseBody("1001").split("\n", 1)[0]}`,
+      `body=${releaseBody("1001")}`,
       "-F",
       "draft=true",
       "-F",
       "prerelease=true",
-      "-F",
-      "generate_release_notes=true",
     ])
     expect(requests[2]).toEqual(["api", `repos/${repository}/releases?per_page=100&page=1`])
     expect(requests).toHaveLength(3)
@@ -207,7 +206,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "claim-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         responses(
           response({ stdout: "[]" }),
           response({ stdout: "HTTP/2.0 201 Created\n" }),
@@ -233,7 +232,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "claim-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         recordingResponses(
           requests,
           response({ stdout: "[]" }),
@@ -264,7 +263,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "claim-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         recordingResponses(
           requests,
           ...missingInventory,
@@ -290,7 +289,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "claim-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         recordingResponses(
           requests,
           response({ stdout: "[]" }),
@@ -306,7 +305,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "verify-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         responses(response({ stdout: "[]" })),
       ),
     ).rejects.toMatchObject<Partial<ReleasePublicationError>>({ code: "release_publication_missing" })
@@ -318,7 +317,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "verify-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         recordingResponses(
           requests,
           response({ stdout: JSON.stringify(unrelated) }),
@@ -339,7 +338,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "verify-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         responses(
           response({
             stdout: JSON.stringify([publicationRecord("1001"), ...unrelated.slice(1)]),
@@ -355,7 +354,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "claim-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         recordingResponses(requests, response({ exitCode: 1, stderr: "gh: Service Unavailable (HTTP 503)\n" })),
       ),
     ).rejects.toMatchObject<Partial<ReleaseIdentityError>>({ code: "github_api_failure", status: 503 })
@@ -369,7 +368,7 @@ describe("immutable release identity", () => {
       await expect(
         enforceReleasePublication(
           "claim-publication",
-          { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+          { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
           recordingResponses(requests, response({ stdout: body })),
         ),
       ).rejects.toMatchObject<Partial<ReleasePublicationError>>({ code: "release_publication_invalid" })
@@ -381,7 +380,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "claim-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         responses(releaseRecord("1001")),
       ),
     ).resolves.toEqual({
@@ -396,7 +395,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "claim-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "2002", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "2002", prerelease: true, notes },
         responses(releaseRecord("1001")),
       ),
     ).rejects.toMatchObject<Partial<ReleasePublicationError>>({ code: "release_publication_owner_mismatch" })
@@ -406,7 +405,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "verify-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         responses(releaseRecord("1001", false)),
       ),
     ).rejects.toMatchObject<Partial<ReleasePublicationError>>({ code: "release_publication_not_draft" })
@@ -416,7 +415,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "settle-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         responses(
           releaseRecord("1001"),
           response({ stdout: "HTTP/2.0 200 OK\n" }),
@@ -435,7 +434,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "settle-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         responses(
           releaseRecord("1001"),
           response({ exitCode: 1, stderr: "connection closed after request" }),
@@ -449,7 +448,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "settle-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         responses(releaseRecord("1001", false)),
       ),
     ).resolves.toMatchObject({ kind: "publication-settled", runID: "1001" })
@@ -459,7 +458,7 @@ describe("immutable release identity", () => {
     await expect(
       enforceReleasePublication(
         "settle-publication",
-        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true },
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
         responses(releaseRecord("1001", false, sourceSHA, false)),
       ),
     ).rejects.toMatchObject<Partial<ReleasePublicationError>>({

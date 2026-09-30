@@ -1,0 +1,591 @@
+{
+  "capturedAt": "2026-09-30T04:04:40.902Z",
+  "versions": [
+    {
+      "version": "0.1.22",
+      "commit": "1de814728820f3d00579e8293b26f832bf604550",
+      "date": "2026-09-30T11:00:08+08:00",
+      "subject": "release: prepare 0.1.22 installers and website metadata",
+      "tag": "v0.1.22",
+      "source": "1de814728820f3d00579e8293b26f832bf604550",
+      "release": {
+        "id": 399686268,
+        "tag": "v0.1.22",
+        "draft": false,
+        "prerelease": false,
+        "publishedAt": "2026-09-30T03:33:08Z",
+        "body": "<!-- opencorvus-release-owner-v1 run-id=36662764237 source-sha=1de814728820f3d00579e8293b26f832bf604550 -->\n\n**Full Changelog**: https://github.com/yangheng95/opencorvus/compare/v0.1.21...v0.1.22",
+        "url": "https://github.com/yangheng95/opencorvus/releases/tag/v0.1.22"
+      }
+    },
+    {
+      "version": "0.1.21",
+      "commit": "b255ed5b6787d863b167ecc9d65cfe3fe6e8e6cb",
+      "date": "2026-09-29T23:34:49+08:00",
+      "subject": "fix(release): preserve the shared native publication deadline",
+      "tag": "v0.1.21",
+      "source": "b255ed5b6787d863b167ecc9d65cfe3fe6e8e6cb",
+      "release": {
+        "id": 399293192,
+        "tag": "v0.1.21",
+        "draft": false,
+        "prerelease": false,
+        "publishedAt": "2026-09-29T16:05:42Z",
+        "body": "<!-- opencorvus-release-owner-v1 run-id=36591794910 source-sha=b255ed5b6787d863b167ecc9d65cfe3fe6e8e6cb -->\n\n**Full Changelog**: https://github.com/yangheng95/opencorvus/compare/v0.1.20...v0.1.21",
+        "url": "https://github.com/yangheng95/opencorvus/releases/tag/v0.1.21"
+      }
+    },
+    {
+      "version": "0.1.20",
+      "commit": "97a3a6807fe40fc045a354c17c99b256a2f0f2a8",
+      "date": "2026-09-29T22:51:20+08:00",
+      "subject": "fix(overlay): preserve original files in preview exports",
+      "tag": "v0.1.20",
+      "source": "97a3a6807fe40fc045a354c17c99b256a2f0f2a8",
+      "release": {
+        "id": 399254025,
+        "tag": "v0.1.20",
+        "draft": true,
+        "prerelease": false,
+        "publishedAt": null,
+        "body": "<!-- opencorvus-release-owner-v1 run-id=36586082538 source-sha=97a3a6807fe40fc045a354c17c99b256a2f0f2a8 -->\n\n**Full Changelog**: https://github.com/yangheng95/opencorvus/compare/v0.1.19...v0.1.20",
+        "url": "https://github.com/yangheng95/opencorvus/releases/tag/untagged-62a5f05bb58d7588d9e7"
+      }
+    },
+    {
+      "version": "0.1.19",
+      "commit": "386c280caffe4de04b38069ff0918d77ab6a5059",
+      "date": "2026-09-29T22:04:36+08:00",
+      "subject": "fix(overlay): restore readable tools and usable artifact delivery",
+      "tag": "v0.1.19",
+      "source": "386c280caffe4de04b38069ff0918d77ab6a5059",
+      "release": {
+        "id": 399212968,
+        "tag": "v0.1.19",
+        "draft": true,
+        "prerelease": false,
+        "publishedAt": null,
+        "body": "<!-- opencorvus-release-owner-v1 run-id=36580346474 source-sha=386c280caffe4de04b38069ff0918d77ab6a5059 -->\n\n**Full Changelog**: https://github.com/yangheng95/opencorvus/compare/v0.1.18...v0.1.19",
+        "url": "https://github.com/yangheng95/opencorvus/releases/tag/untagged-35fb10b93ad072e53c22"
+      }
+    },
+    {
+      "version": "0.1.18",
+      "commit": "cca50888d07198ba68e4493ed29821eef088d170",
+      "date": "2026-09-29T15:54:12+08:00",
+      "subject": "fix(runtime): preserve physical process identity across sleep for v0.1.18",
+      "tag": "v0.1.18",
+      "source": "cca50888d07198ba68e4493ed29821eef088d170",
+      "release": {
+        "id": 398929562,
+        "tag": "v0.1.18",
+        "draft": false,
+        "prerelease": false,
+        "publishedAt": "2026-09-29T08:23:09Z",
+        "body": "<!-- opencorvus-release-owner-v1 run-id=36539720513 source-sha=cca50888d07198ba68e4493ed29821eef088d170 -->\n\n**Full Changelog**: https://github.com/yangheng95/opencorvus/compare/v0.1.17...v0.1.18",
+        "url": "https://github.com/yangheng95/opencorvus/releases/tag/v0.1.18"
+      }
+    },
+    {
+      "version": "0.1.17",
+      "commit": "b1d01e71e7c56a62cd97baf3bb3bc11bf173fff9",
+      "date": "2026-09-28T19:22:27+08:00",
+      "subject": "Make Bun cache settlement safe for native release and prepare v0.1.17",
+      "tag": "v0.1.17",
+      "source": "b1d01e71e7c56a62cd97baf3bb3bc11bf173fff9",
+      "release": {
+        "id": 398184067,
+        "tag": "v0.1.17",
+        "draft": false,
+        "prerelease": false,
+        "publishedAt": "2026-09-28T11:43:59Z",
+        "body": "<!-- opencorvus-release-owner-v1 run-id=36415481679 source-sha=b1d01e71e7c56a62cd97baf3bb3bc11bf173fff9 -->\n\n**Full Changelog**: https://github.com/yangheng95/opencorvus/compare/v0.1.16...v0.1.17",
+        "url": "https://github.com/yangheng95/opencorvus/releases/tag/v0.1.17"
+      }
+    },
+    {
+      "version": "0.1.16",
+      "commit": "f4be7e43b3ae0c8c0afcb7d5e708e071ac5e74f8",
+      "date": "2026-09-28T18:35:35+08:00",
+      "subject": "Repair macOS release cache timeout and prepare v0.1.16",
+      "tag": "v0.1.16",
+      "source": "f4be7e43b3ae0c8c0afcb7d5e708e071ac5e74f8",
+      "release": null
+    },
+    {
+      "version": "0.1.15",
+      "commit": "dd999804c984360146231386550c2cf17e7ab0e0",
+      "date": "2026-09-28T17:48:04+08:00",
+      "subject": "Prepare v0.1.15 native and website release",
+      "tag": "v0.1.15",
+      "source": "dd999804c984360146231386550c2cf17e7ab0e0",
+      "release": null
+    },
+    {
+      "version": "0.1.14",
+      "commit": "b9a72f4134de3a582dcf55cb09b6c1b299f8b3d1",
+      "date": "2026-09-24T01:56:00+08:00",
+      "subject": "Prepare OpenCorvus 0.1.14 release",
+      "tag": "v0.1.14",
+      "source": "b9a72f4134de3a582dcf55cb09b6c1b299f8b3d1",
+      "release": {
+        "id": 394923990,
+        "tag": "v0.1.14",
+        "draft": false,
+        "prerelease": false,
+        "publishedAt": "2026-09-23T18:24:12Z",
+        "body": "<!-- opencorvus-release-owner-v1 run-id=35899399268 source-sha=b9a72f4134de3a582dcf55cb09b6c1b299f8b3d1 -->\n\n**Full Changelog**: https://github.com/yangheng95/opencorvus/compare/v0.1.13...v0.1.14",
+        "url": "https://github.com/yangheng95/opencorvus/releases/tag/v0.1.14"
+      }
+    },
+    {
+      "version": "0.1.13",
+      "commit": "0778b617cebd64168453b5e0ba256540d3d3f1c5",
+      "date": "2026-09-23T12:51:47+08:00",
+      "subject": "release: prepare v0.1.13 after synchronized tool regression checks",
+      "tag": "v0.1.13",
+      "source": "6ebed7625c8db3780652deb48e2f6329725b4aac",
+      "release": null
+    },
+    {
+      "version": "0.1.12",
+      "commit": "22aac022183544b7944c56c8c6bc677bcbb925bb",
+      "date": "2026-09-22T14:29:52+08:00",
+      "subject": "chore(release): prepare v0.1.12",
+      "tag": "v0.1.12",
+      "source": "5c615ae5c84ac65348914a753c4fcbd53c2bd962",
+      "release": null
+    },
+    {
+      "version": "0.1.11",
+      "commit": "6817a581e55eaff616c1a731869309849f2926d8",
+      "date": "2026-09-22T09:48:41+08:00",
+      "subject": "chore(release): prepare v0.1.11 and align artifact checks",
+      "tag": "v0.1.11",
+      "source": "6817a581e55eaff616c1a731869309849f2926d8",
+      "release": null
+    },
+    {
+      "version": "0.1.10",
+      "commit": "6b6c78e015dad99cd464976165ff48e256a197ed",
+      "date": "2026-09-21T10:40:31+08:00",
+      "subject": "build: package 0.1.10 with aligned native service version",
+      "tag": "v0.1.10",
+      "source": "8bd7c75332676b44312159210904c1ff67604cc4",
+      "release": null
+    },
+    {
+      "version": "0.1.9",
+      "commit": "40f22e0f01724fa7f528b719299e931857f758b9",
+      "date": "2026-09-20T19:55:00+08:00",
+      "subject": "chore: prepare 0.1.9 main fixes release",
+      "tag": "v0.1.9",
+      "source": "161bf0bfff0ff6deaa3e5d369f72a3ee26a5202a",
+      "release": null
+    },
+    {
+      "version": "0.1.8",
+      "commit": "c2b2af390eaed1d0d1088680c88b195ee30f82dc",
+      "date": "2026-09-20T17:57:57+08:00",
+      "subject": "fix: settle Windows admission controls and prepare 0.1.8",
+      "tag": "v0.1.8",
+      "source": "36772e0533f65c645a0067909835aeb075fb4900",
+      "release": null
+    },
+    {
+      "version": "0.1.7",
+      "commit": "581feef4e29295568e908eb06b8e4964d978087f",
+      "date": "2026-09-20T01:12:22+08:00",
+      "subject": "fix: replace obsolete bundled squads and prepare 0.1.7",
+      "tag": null,
+      "source": "581feef4e29295568e908eb06b8e4964d978087f",
+      "release": null
+    },
+    {
+      "version": "0.1.6",
+      "commit": "03097deac6fdc7afe9fd29e46b6274a9b09e4fee",
+      "date": "2026-09-19T21:49:17+08:00",
+      "subject": "release: prepare 0.1.6 with merged OAuth and attachment fixes",
+      "tag": "v0.1.6",
+      "source": "a6e0ae3c25ea47024b796b0661d976c8fdfcf31e",
+      "release": null
+    },
+    {
+      "version": "0.1.5",
+      "commit": "6775a92aa80f0436fabd49f97a4380e38200b5c9",
+      "date": "2026-09-19T21:17:04+08:00",
+      "subject": "fix(auth): resume owned OAuth flows and release pending cancellations for 0.1.5",
+      "tag": "v0.1.5",
+      "source": "6775a92aa80f0436fabd49f97a4380e38200b5c9",
+      "release": null
+    },
+    {
+      "version": "0.1.4",
+      "commit": "3010ea34c1b99fe35bf9f36840f5dfb9000f5b7a",
+      "date": "2026-09-19T18:48:10+08:00",
+      "subject": "release: prepare 0.1.4 native binaries with opt-in website deployment",
+      "tag": null,
+      "source": "3010ea34c1b99fe35bf9f36840f5dfb9000f5b7a",
+      "release": null
+    },
+    {
+      "version": "0.1.3",
+      "commit": "6f4eb1ccbff41bed6b4a9d0caa657a7f88c36d17",
+      "date": "2026-09-19T01:50:32+08:00",
+      "subject": "release: prepare stable v0.1.3",
+      "tag": "v0.1.3",
+      "source": "f0d1063affc2e3bedb94fee6ce909e4b20ab9db8",
+      "release": null
+    },
+    {
+      "version": "0.1.2-beta",
+      "commit": "e7ccbd83223eca94d20828c1be29b36aa1f1615a",
+      "date": "2026-09-18T17:25:17+08:00",
+      "subject": "release: prepare 0.1.2-beta version family",
+      "tag": "v0.1.2-beta",
+      "source": "57077bf019e5a427e6a37c6d850f926fd47a2665",
+      "release": null
+    },
+    {
+      "version": "0.1.1-beta",
+      "commit": "c15eb2c5f288f2350701caa7b61810a5fbd76e92",
+      "date": "2026-09-17T16:39:07+08:00",
+      "subject": "release: prepare 0.1.1-beta version family",
+      "tag": "v0.1.1-beta",
+      "source": "9faeb1c7ba879c94e38b25a0b2614398cc5a795b",
+      "release": null
+    },
+    {
+      "version": "0.1.0-beta",
+      "commit": "60d3e5c8f0efbf2791148319db68d7037190585f",
+      "date": "2026-09-15T21:59:06+08:00",
+      "subject": "release: prepare v0.1.0-beta with first-run binary checks",
+      "tag": "v0.1.0-beta",
+      "source": "d1f974e58306ea3058e356192e2ffd2de910cafe",
+      "release": null
+    },
+    {
+      "version": "0.0.64-beta",
+      "commit": "5b11c32e5b5e914cfda9979b12d67c6ed1170714",
+      "date": "2026-09-11T09:20:09+08:00",
+      "subject": "chore(release): prepare 0.0.64-beta with patched dependencies",
+      "tag": "v0.0.64-beta",
+      "source": "5b11c32e5b5e914cfda9979b12d67c6ed1170714",
+      "release": {
+        "id": 386746687,
+        "tag": "v0.0.64-beta",
+        "draft": false,
+        "prerelease": true,
+        "publishedAt": "2026-09-11T05:58:39Z",
+        "body": "<!-- opencorvus-release-owner-v1 run-id=34554547209 source-sha=5b11c32e5b5e914cfda9979b12d67c6ed1170714 -->\n\n**Full Changelog**: https://github.com/yangheng95/opencorvus/compare/v0.0.63-beta...v0.0.64-beta",
+        "url": "https://github.com/yangheng95/opencorvus/releases/tag/v0.0.64-beta"
+      }
+    },
+    {
+      "version": "0.0.63-beta",
+      "commit": "e7858085d662588839c8cc2cbe8c141b382806be",
+      "date": "2026-09-06T16:23:58+08:00",
+      "subject": "release: prepare v0.0.63-beta",
+      "tag": "v0.0.63-beta",
+      "source": "752d8b3d27dfc3a95ba7ef2956efd69250683fa7",
+      "release": null
+    },
+    {
+      "version": "0.0.62-beta",
+      "commit": "63b52453f233ba6b1eeeac6bd2eb8c7007c6af3a",
+      "date": "2026-09-06T11:51:34+08:00",
+      "subject": "release: prepare v0.0.62-beta",
+      "tag": "v0.0.62-beta",
+      "source": "63b52453f233ba6b1eeeac6bd2eb8c7007c6af3a",
+      "release": null
+    },
+    {
+      "version": "0.0.61-beta",
+      "commit": "22ce8838a043c3cd8c0a0107ef5cee2aa238c059",
+      "date": "2026-09-05T09:21:30+08:00",
+      "subject": "fix(release): make draft publication resumable",
+      "tag": "v0.0.61-beta",
+      "source": "22ce8838a043c3cd8c0a0107ef5cee2aa238c059",
+      "release": null
+    },
+    {
+      "version": "0.0.60-beta",
+      "commit": "988128d4e455c099f3959818645b551bfa35dbd9",
+      "date": "2026-09-05T07:55:13+08:00",
+      "subject": "fix(release): recover draft publication ownership",
+      "tag": "v0.0.60-beta",
+      "source": "988128d4e455c099f3959818645b551bfa35dbd9",
+      "release": null
+    },
+    {
+      "version": "0.0.59-beta",
+      "commit": "0a4d4180f9cbf8a9c27a8f3c67b72a7609ed466e",
+      "date": "2026-09-05T06:43:48+08:00",
+      "subject": "chore(release): prepare 0.0.59 beta",
+      "tag": "v0.0.59-beta",
+      "source": "0a4d4180f9cbf8a9c27a8f3c67b72a7609ed466e",
+      "release": null
+    },
+    {
+      "version": "0.0.58-beta",
+      "commit": "9ec721646a98db96fe4be5f5bcdee9f746ba6be4",
+      "date": "2026-08-29T23:08:53+08:00",
+      "subject": "fix(release): resolve workspace source exports",
+      "tag": "v0.0.58-beta",
+      "source": "42e6d28c7cc565f2cbe00fbfb0ba1966db9eb67a",
+      "release": null
+    },
+    {
+      "version": "0.0.57-beta",
+      "commit": "fc390c86cb18f4d7ba74b3e763070c7b81ef1361",
+      "date": "2026-08-29T20:55:26+08:00",
+      "subject": "chore(release): select 0.0.57 beta",
+      "tag": "v0.0.57-beta",
+      "source": "fc390c86cb18f4d7ba74b3e763070c7b81ef1361",
+      "release": null
+    },
+    {
+      "version": "0.0.56-beta.1",
+      "commit": "f55fef191afd74352611da0235938a011d6d7766",
+      "date": "2026-08-29T20:23:53+08:00",
+      "subject": "fix(release): make beta publication recoverable",
+      "tag": null,
+      "source": "f55fef191afd74352611da0235938a011d6d7766",
+      "release": null
+    },
+    {
+      "version": "0.0.56-beta",
+      "commit": "8691c972d18486f8c5848b869b184d9c7e6395cb",
+      "date": "2026-08-29T16:13:26+08:00",
+      "subject": "chore(release): prepare v0.0.56 beta",
+      "tag": "v0.0.56-beta",
+      "source": "8691c972d18486f8c5848b869b184d9c7e6395cb",
+      "release": null
+    },
+    {
+      "version": "0.0.55-beta",
+      "commit": "22832f8fb97df24a50c14145fc03bf995db54e42",
+      "date": "2026-08-25T20:18:52+08:00",
+      "subject": "release: prepare v0.0.55 beta and close the renderer global surface",
+      "tag": null,
+      "source": "22832f8fb97df24a50c14145fc03bf995db54e42",
+      "release": null
+    },
+    {
+      "version": "0.0.54-beta",
+      "commit": "b10c5ebc407b6fcefb93a44a27db6b162379c1ea",
+      "date": "2026-08-25T01:20:27+08:00",
+      "subject": "release: prepare v0.0.54 beta",
+      "tag": "v0.0.54-beta",
+      "source": "b10c5ebc407b6fcefb93a44a27db6b162379c1ea",
+      "release": null
+    },
+    {
+      "version": "0.0.53-beta",
+      "commit": "23df4780d31336c97bfaaa2460e8747be70f0d7f",
+      "date": "2026-08-24T10:11:32+08:00",
+      "subject": "release: prepare v0.0.53 beta",
+      "tag": "v0.0.53-beta",
+      "source": "23df4780d31336c97bfaaa2460e8747be70f0d7f",
+      "release": null
+    },
+    {
+      "version": "0.0.52-beta",
+      "commit": "d2b6fef84c158f3e92479f15da3ecd6cb82facd1",
+      "date": "2026-08-22T22:12:31+08:00",
+      "subject": "release: prepare v0.0.52 beta",
+      "tag": "v0.0.52-beta",
+      "source": "d2b6fef84c158f3e92479f15da3ecd6cb82facd1",
+      "release": null
+    },
+    {
+      "version": "0.0.51-beta",
+      "commit": "b8ae8da542113d969037e5af094b7c44b7535cf4",
+      "date": "2026-08-22T03:01:39+08:00",
+      "subject": "release: prepare v0.0.51 beta",
+      "tag": "v0.0.51-beta",
+      "source": "06ccca072ae3dac3522438628c8ef77176c74b93",
+      "release": null
+    },
+    {
+      "version": "0.0.50-beta",
+      "commit": "a7f173cb69b488b72448ef35e5a87745bc4f6503",
+      "date": "2026-08-21T01:36:18+08:00",
+      "subject": "release: prepare v0.0.50 beta",
+      "tag": "v0.0.50-beta",
+      "source": "a7f173cb69b488b72448ef35e5a87745bc4f6503",
+      "release": null
+    },
+    {
+      "version": "0.0.49-beta",
+      "commit": "6c93d5cd868bcf0375078d14102841031692a14b",
+      "date": "2026-08-19T19:10:36+08:00",
+      "subject": "release: bump to 0.0.49-beta",
+      "tag": "v0.0.49-beta",
+      "source": "0a6c203a320e411b16aac804db164498a9a56b97",
+      "release": null
+    },
+    {
+      "version": "0.0.48-beta",
+      "commit": "8c76928b475a8a5cb5116517a560c23be0aecfb7",
+      "date": "2026-08-19T14:03:16+08:00",
+      "subject": "release: bump to 0.0.48-beta",
+      "tag": "v0.0.48-beta",
+      "source": "ffa867ae02f9d0a1b9f6ab4cafd0432f0f2a4f5d",
+      "release": null
+    },
+    {
+      "version": "0.0.47-beta",
+      "commit": "8cc11b023cca07df4fa8e4cbd4a854699312f241",
+      "date": "2026-08-18T22:51:34+08:00",
+      "subject": "release: bump to 0.0.47-beta",
+      "tag": "v0.0.47-beta",
+      "source": "10b548e8c35e0858b58292c0fa871c7d4f32fb53",
+      "release": null
+    },
+    {
+      "version": "0.0.46-beta",
+      "commit": "9d41a3f3c02782e668efa7792014e0589db24d07",
+      "date": "2026-08-18T12:18:23+08:00",
+      "subject": "release: bump to 0.0.46-beta",
+      "tag": "v0.0.46-beta",
+      "source": "9d41a3f3c02782e668efa7792014e0589db24d07",
+      "release": null
+    },
+    {
+      "version": "0.0.45-beta",
+      "commit": "df953b97cc96c43dcff96114fb826176ea9bf2cd",
+      "date": "2026-08-15T22:49:25+08:00",
+      "subject": "release: bump to 0.0.45-beta",
+      "tag": null,
+      "source": "df953b97cc96c43dcff96114fb826176ea9bf2cd",
+      "release": null
+    },
+    {
+      "version": "0.0.44-beta.1",
+      "commit": "f2d4e0dc0a4808972641eb43c65f3d9c77a7130e",
+      "date": "2026-08-15T00:17:57+08:00",
+      "subject": "fix(release): isolate OfficeCLI packaging smoke",
+      "tag": "v0.0.44-beta.1",
+      "source": "f2d4e0dc0a4808972641eb43c65f3d9c77a7130e",
+      "release": null
+    },
+    {
+      "version": "0.0.44-beta",
+      "commit": "42d4fe09a51a666e0d8b204008779c8f97752b72",
+      "date": "2026-08-14T20:18:37+08:00",
+      "subject": "release: bump to 0.0.44-beta",
+      "tag": "v0.0.44-beta",
+      "source": "9392dee6db6d9721dcbc174f80c5bc385883bb84",
+      "release": null
+    },
+    {
+      "version": "0.0.43-beta",
+      "commit": "e306bd8daf85b511e9d012ab88151793aa1ed7b9",
+      "date": "2026-08-14T02:43:24+08:00",
+      "subject": "release: prepare v0.0.43-beta",
+      "tag": "v0.0.43-beta",
+      "source": "5a0f972b1dde004b64572c877caa2f973de82062",
+      "release": null
+    },
+    {
+      "version": "0.0.42-beta",
+      "commit": "640984800e06cb368ac562284638a5c0fe05635e",
+      "date": "2026-08-12T17:52:06+08:00",
+      "subject": "release: repair actions and prepare v0.0.42-beta",
+      "tag": null,
+      "source": "640984800e06cb368ac562284638a5c0fe05635e",
+      "release": null
+    },
+    {
+      "version": "0.0.40-beta",
+      "commit": "9652cff4da8e45e547b4a85a5e4c93570cf1a10e",
+      "date": "2026-08-11T18:42:29+08:00",
+      "subject": "release: bump to v0.0.40-beta",
+      "tag": "v0.0.40-beta",
+      "source": "9652cff4da8e45e547b4a85a5e4c93570cf1a10e",
+      "release": null
+    },
+    {
+      "version": "0.0.39-beta",
+      "commit": "6f8e5be59af0724b361afe31a3965955985b9128",
+      "date": "2026-08-10T20:44:41+08:00",
+      "subject": "release: bump and package v0.0.39-beta",
+      "tag": null,
+      "source": "6f8e5be59af0724b361afe31a3965955985b9128",
+      "release": null
+    },
+    {
+      "version": "0.0.38-beta",
+      "commit": "3026d8551d0e79e04363c2d481abf0cf33ba5a8d",
+      "date": "2026-08-09T22:33:22+08:00",
+      "subject": "release: prepare v0.0.38-beta",
+      "tag": "v0.0.38-beta",
+      "source": "2c86f25c1264b99eea8b4890fca7c357b1d78e48",
+      "release": null
+    },
+    {
+      "version": "0.0.37-beta",
+      "commit": "f2992c554b50f35bb26818dc354b81b10fb256b6",
+      "date": "2026-08-08T23:31:52+08:00",
+      "subject": "release: v0.0.37-beta",
+      "tag": "v0.0.37-beta",
+      "source": "3522bc534c9762a462fb51daacef5b788a1219a9",
+      "release": null
+    },
+    {
+      "version": "0.0.36-beta",
+      "commit": "565ef8d79b048e4b30c13b633f7fa76b0f51a4fd",
+      "date": "2026-08-08T10:03:27+08:00",
+      "subject": "chore(release): prepare v0.0.36-beta",
+      "tag": null,
+      "source": "565ef8d79b048e4b30c13b633f7fa76b0f51a4fd",
+      "release": null
+    },
+    {
+      "version": "0.0.35-beta.4",
+      "commit": "08381d24b36f5c743d5eb71144fe56ea92513caa",
+      "date": "2026-08-08T05:04:12+08:00",
+      "subject": "chore(release): prepare v0.0.35-beta.4",
+      "tag": null,
+      "source": "08381d24b36f5c743d5eb71144fe56ea92513caa",
+      "release": null
+    },
+    {
+      "version": "0.0.35-beta.3",
+      "commit": "2d3ec81e426d5e40419cfe88fe6394a7410f7501",
+      "date": "2026-08-08T04:05:19+08:00",
+      "subject": "chore(release): prepare v0.0.35-beta.3",
+      "tag": null,
+      "source": "2d3ec81e426d5e40419cfe88fe6394a7410f7501",
+      "release": null
+    },
+    {
+      "version": "0.0.35-beta.2",
+      "commit": "b1cedfa539eb5533c98acf2e3d51479173bb6060",
+      "date": "2026-08-08T03:51:30+08:00",
+      "subject": "chore(release): prepare v0.0.35-beta.2",
+      "tag": null,
+      "source": "b1cedfa539eb5533c98acf2e3d51479173bb6060",
+      "release": null
+    },
+    {
+      "version": "0.0.35-beta.1",
+      "commit": "81fb867782966a14f2a5b9b94cd3007c2ff63c62",
+      "date": "2026-08-08T03:18:21+08:00",
+      "subject": "chore(release): prepare v0.0.35-beta.1",
+      "tag": null,
+      "source": "81fb867782966a14f2a5b9b94cd3007c2ff63c62",
+      "release": null
+    },
+    {
+      "version": "0.0.35-beta",
+      "commit": "65d0bfc983ca7ed301a83354f27e5cf5f1b19a19",
+      "date": "2026-08-07T23:29:50+08:00",
+      "subject": "OpenCorvus v0.0.35beta",
+      "tag": null,
+      "source": "65d0bfc983ca7ed301a83354f27e5cf5f1b19a19",
+      "release": null
+    }
+  ]
+}
