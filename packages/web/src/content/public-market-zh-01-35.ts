@@ -523,7 +523,8 @@ export const publicMarketZhTranslations01To35 = {
   },
   "builtin/base": {
     label: "Base",
-    description: "Base 由执行方完成发现、规划和实际交付，再由独立测试方检查结果；有独立研究需要时才增加规划与并行研究。",
+    description:
+      "Base 由任务负责人直接完成发现、规划和实际交付，再由独立测试方检查结果；有独立来源调查或研究需要时才委托规划与开发或并行研究。",
     selectorSummary: "适用于一个执行责任方完成、独立 Tester 验收的一项完整 Task；真实独立研究可选用并行研究图。",
     agents: {
       "base-researcher": {
@@ -532,7 +533,7 @@ export const publicMarketZhTranslations01To35 = {
       },
       "base-planner": {
         label: "Base 规划师",
-        description: "仅在需要并行研究时规划共享输入与责任，分配独立研究、执行和验证工作。",
+        description: "开展有界的独立来源权限调查，或在需要并行研究时规划共享输入与责任，分配独立研究、执行和验证工作。",
       },
       "base-developer": {
         label: "Base 开发工程师",
@@ -546,15 +547,15 @@ export const publicMarketZhTranslations01To35 = {
     workflows: {
       "execution-verification": {
         label: "执行与独立验证",
-        description: "执行责任方完成发现、规划与交付，再独立验证实际结果。",
+        description: "任务负责人直接完成发现、规划与交付，独立测试方依据原始要求验证实际结果。",
         nodes: {
-          "base-developer": "使用投影的 Skill 与可执行工具发现动态来源并完成请求的交付。",
           "base-tester": "独立重读动态来源，并按每项标准验证已结算结果。",
         },
       },
       "source-planned-execution-verification": {
         label: "来源规划、执行与独立验证",
-        description: "通过有界的来源调查明确执行权限和适用约束，执行前提已满足的不可逆操作，再独立核对来源分类与最终结果。",
+        description:
+          "通过有界的来源调查明确执行权限和适用约束，执行前提已满足的不可逆操作，再独立核对来源分类与最终结果。",
         nodes: {
           "base-planner": "区分执行权限条件、适用约束与开发方负责的结果语义，在操作前查清可追溯的来源要求。",
           "base-developer": "依据原始要求核对各项操作的来源分类，完成前提已满足的授权操作，并交付完整的执行回执。",
@@ -563,7 +564,8 @@ export const publicMarketZhTranslations01To35 = {
       },
       "planner-parallel-delivery": {
         label: "规划师、并行 Worker 与验证",
-        description: "一个 Planner 先固定任务分区，研究与实现 worker 随后在同一 frontier 并行工作，再由测试 worker 验证已结算的结果。",
+        description:
+          "一个 Planner 先固定任务分区，研究与实现 worker 随后在同一 frontier 并行工作，再由测试 worker 验证已结算的结果。",
         nodes: {
           "base-planner": "发布完整 Task 分区、共享输入、路径所有权与验收分配。",
           "base-researcher": "执行计划中的只读证据调查分区。",

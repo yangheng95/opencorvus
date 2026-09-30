@@ -8,6 +8,8 @@
 
 - [Handoff context visual acceptance](artifacts/2026-09-30-handoff-readability/README.md)
 
+- [Latest-source native and website release preparation](records/2026-09/2026-09-30-v0.1.22-release.md)
+
 - [Tool disclosure layout correction](records/2026-09/2026-09-30-tool-disclosure-layout.md)
 
 - [Tool disclosure visual evidence](artifacts/2026-09-30-tool-disclosure/README.md)

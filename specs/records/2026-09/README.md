@@ -4,6 +4,8 @@
 
 - [Handoff context readability](2026-09-30-handoff-context-readability.md)
 
+- [Latest-source native and website release preparation](2026-09-30-v0.1.22-release.md)
+
 - [Tool disclosure layout correction](2026-09-30-tool-disclosure-layout.md)
 
 - [Current-runtime Harbor full comparison restart](2026-09-30-harbor-current-runtime-restart.md)
