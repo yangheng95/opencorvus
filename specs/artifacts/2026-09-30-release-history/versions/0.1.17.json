@@ -1,0 +1,15 @@
+{
+  "version": "0.1.17",
+  "source": "b1d01e71e7c56a62cd97baf3bb3bc11bf173fff9",
+  "tag": "v0.1.17",
+  "previousSource": "f4be7e43b3ae0c8c0afcb7d5e708e071ac5e74f8",
+  "sourceDate": "2026-09-28T19:22:27+08:00",
+  "commits": [
+    {
+      "sha": "b1d01e71e7c56a62cd97baf3bb3bc11bf173fff9",
+      "date": "2026-09-28T19:22:27+08:00",
+      "subject": "Make Bun cache settlement safe for native release and prepare v0.1.17"
+    }
+  ],
+  "stats": ".github/actions/setup-bun/action.yml               | 18 +++++++++++----\n .github/workflows/build.yml                        |  2 +-\n CHANGELOG.md                                       |  4 ++--\n bun.lock                                           | 16 ++++++-------\n packages/channel-config/package.json               |  2 +-\n packages/channel-runtime/package.json              |  2 +-\n .../native/process-supervisor/Cargo.lock           |  2 +-\n .../native/process-supervisor/Cargo.toml           |  2 +-\n packages/opencorvus/package.json                   |  2 +-\n packages/overlay/package.json                      |  2 +-\n packages/overlay/src-tauri/Cargo.lock              |  2 +-\n packages/overlay/src-tauri/Cargo.toml              |  2 +-\n packages/overlay/src-tauri/tauri.conf.json         |  4 ++--\n packages/plugin/package.json                       |  2 +-\n packages/sdk/js/package.json                       |  2 +-\n packages/transport-protocol/package.json           |  2 +-\n packages/util/package.json                         |  2 +-\n specs/README.md                                    |  1 +\n .../records/2026-09/2026-09-28-v0.1.16-release.md  |  2 +-\n .../records/2026-09/2026-09-28-v0.1.17-release.md  | 26 ++++++++++++++++++++++\n specs/records/2026-09/README.md                    |  1 +\n 21 files changed, 68 insertions(+), 30 deletions(-)"
+}
