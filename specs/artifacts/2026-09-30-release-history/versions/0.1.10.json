@@ -1,0 +1,770 @@
+{
+  "version": "0.1.10",
+  "source": "8bd7c75332676b44312159210904c1ff67604cc4",
+  "tag": "v0.1.10",
+  "previousSource": "161bf0bfff0ff6deaa3e5d369f72a3ee26a5202a",
+  "sourceDate": "2026-09-21T18:37:52+08:00",
+  "commits": [
+    {
+      "sha": "8bd7c75332676b44312159210904c1ff67604cc4",
+      "date": "2026-09-21T18:37:52+08:00",
+      "subject": "fix(release): grant nested packaging workflow read permissions"
+    },
+    {
+      "sha": "51011f971d2c0c46e16d7f133fc31c2686d75c34",
+      "date": "2026-09-21T18:33:41+08:00",
+      "subject": "fix(release): automate native and website publication within one deadline"
+    },
+    {
+      "sha": "39eb69ea297fcfc491aa7481582f7dd869d0fb20",
+      "date": "2026-09-21T16:20:07+08:00",
+      "subject": "feat(artifacts): batch catalog queries and exact evidence reads"
+    },
+    {
+      "sha": "8b182bc31b92974a75d3e65de78ae4b3b49a7ac2",
+      "date": "2026-09-21T15:35:08+08:00",
+      "subject": "fix(cli): settle run occurrences and serialize config catalog ownership"
+    },
+    {
+      "sha": "186a7241973dd4ffcb0435ed8b250a1ce30f5aec",
+      "date": "2026-09-21T15:10:15+08:00",
+      "subject": "fix: verify native RPM payload through official bindings"
+    },
+    {
+      "sha": "295158e83cf00c609062f87f5cc22080101c6899",
+      "date": "2026-09-21T14:49:38+08:00",
+      "subject": "fix: preserve exact upstream RPM dependency graph"
+    },
+    {
+      "sha": "6db1230240d447361d810a7b68aa0a3e584a8651",
+      "date": "2026-09-21T14:43:28+08:00",
+      "subject": "fix: repair RPM bundler short-write hashing"
+    },
+    {
+      "sha": "624a0fed5f9e6145af7509598920933259a5fe5a",
+      "date": "2026-09-21T13:24:56+08:00",
+      "subject": "docs: record qualified 0.1.10 publication run"
+    },
+    {
+      "sha": "b2d1ae0e5212abbf6ae1dbd88abf67f3d9bfd719",
+      "date": "2026-09-21T13:03:28+08:00",
+      "subject": "test: align coordination continuation fixture for 0.1.10 release"
+    },
+    {
+      "sha": "6b6c78e015dad99cd464976165ff48e256a197ed",
+      "date": "2026-09-21T10:40:31+08:00",
+      "subject": "build: package 0.1.10 with aligned native service version"
+    },
+    {
+      "sha": "8b0c7d4e9ef7b0ea2a5d7ee6def5700ad80d4430",
+      "date": "2026-09-21T10:13:57+08:00",
+      "subject": "fix(orchestrator): carry explicit input through worker continuations"
+    },
+    {
+      "sha": "3cfe9cb6564e9d8347f562f0229aff34bf0740e2",
+      "date": "2026-09-21T01:07:45+08:00",
+      "subject": "build: prepare 0.1.9 Windows local packages"
+    },
+    {
+      "sha": "3c9d16a4e42d7f74e666e2da6071a301cfdcf9ec",
+      "date": "2026-09-21T00:08:24+08:00",
+      "subject": "docs: record verified 0.1.9 native and website delivery"
+    },
+    {
+      "sha": "f6d97a15b64f1bf60a529fa08c1f6f9dd7c88fb6",
+      "date": "2026-09-20T22:59:14+08:00",
+      "subject": "docs: record 0.1.8 delivery and 0.1.9 release binding"
+    },
+    {
+      "sha": "4e02bc63d1cb1415e0ce89c422d365251d915847",
+      "date": "2026-08-25T22:20:32+08:00",
+      "subject": "fix(benchmark): verify WorkBuddy skill and score evidence"
+    },
+    {
+      "sha": "ddab2f195412dd50fe724c6a7bb2290cbe6fc9ec",
+      "date": "2026-08-25T21:36:38+08:00",
+      "subject": "fix(benchmark): preserve WorkBuddy trial evidence"
+    },
+    {
+      "sha": "adb619e96638035f53ccde16d44d63fa16790fb3",
+      "date": "2026-08-25T20:40:28+08:00",
+      "subject": "fix(benchmark): harden WorkBuddy chain recovery"
+    },
+    {
+      "sha": "0c303005ac11e9df0aaf4e3490d5f2758e2b434e",
+      "date": "2026-08-25T17:27:34+08:00",
+      "subject": "feat(web): publish bilingual Mission film"
+    },
+    {
+      "sha": "4799f0f113af797c1d10aa5469785b6730deb401",
+      "date": "2026-08-25T17:27:01+08:00",
+      "subject": "feat(video): add locale-aware V5R masters"
+    },
+    {
+      "sha": "eed62fbedab951d0bde90dd524e19b6b31caacfa",
+      "date": "2026-08-25T15:30:41+08:00",
+      "subject": "feat(video): prioritize narration and add benchmark proof"
+    },
+    {
+      "sha": "5f15bcce371703c169245cfdce7b541363781bff",
+      "date": "2026-08-25T15:07:34+08:00",
+      "subject": "fix(benchmark): upload WorkBuddy instruction"
+    },
+    {
+      "sha": "0acdee8094b6c243afcdebea50e987d09548f5fb",
+      "date": "2026-08-25T14:53:58+08:00",
+      "subject": "fix(benchmark): isolate WorkBuddy provider projection"
+    },
+    {
+      "sha": "da3abbef4bda45b1749036f5cf8e7b6434d639a8",
+      "date": "2026-08-25T14:18:16+08:00",
+      "subject": "fix(benchmark): load WorkBuddy image into Docker"
+    },
+    {
+      "sha": "c92066de08d9e4baee5e12e20ca961311c09962f",
+      "date": "2026-08-25T14:09:31+08:00",
+      "subject": "fix(benchmark): emit mountable WorkBuddy image"
+    },
+    {
+      "sha": "1045197430fdf2b38c0639fbebb799625a26f98f",
+      "date": "2026-08-25T14:00:08+08:00",
+      "subject": "fix(benchmark): route Harbor to Docker Desktop"
+    },
+    {
+      "sha": "8c8629ba974faa2da448018d72fc9e8f37ad794d",
+      "date": "2026-08-25T13:52:01+08:00",
+      "subject": "feat(video): enrich V5R motion and sound design"
+    },
+    {
+      "sha": "039edf1e5ae4651b54bba0407353d09daf8c928c",
+      "date": "2026-08-25T13:47:58+08:00",
+      "subject": "fix(benchmark): stream WorkBuddy image context"
+    },
+    {
+      "sha": "f8fde6abb0ab23ec53a757593e47d157a6365e7f",
+      "date": "2026-08-25T13:42:39+08:00",
+      "subject": "fix(benchmark): launch Docker from Windows mount"
+    },
+    {
+      "sha": "9781e42bc2a6ce6df85aab3dcd4374c08cc12a31",
+      "date": "2026-08-25T13:38:08+08:00",
+      "subject": "fix(benchmark): package native WorkBuddy runtime"
+    },
+    {
+      "sha": "5bf9ec4490bb6d5de8e200bfb3e54ba988b7b8c0",
+      "date": "2026-08-25T13:25:03+08:00",
+      "subject": "feat(video): deliver reviewed V5R hybrid explainer"
+    },
+    {
+      "sha": "c2a5447cd424eeaf1dfaaccbabe635d3e0eeedc6",
+      "date": "2026-08-25T13:05:15+08:00",
+      "subject": "fix(benchmark): build SDK before WorkBuddy CLI"
+    },
+    {
+      "sha": "ae107078d0739d4410c44f38aff040613c1e26f5",
+      "date": "2026-08-25T12:55:20+08:00",
+      "subject": "fix(benchmark): package CLI runtime for WorkBuddy"
+    },
+    {
+      "sha": "0793a60f7c437d96ca324638738b3268a4e6d740",
+      "date": "2026-08-25T12:51:20+08:00",
+      "subject": "fix(benchmark): isolate Linux package install"
+    },
+    {
+      "sha": "1a8a4fc76a74e97f9854b55819ee41047cf5045d",
+      "date": "2026-08-25T12:47:37+08:00",
+      "subject": "fix(benchmark): project Linux workspace links"
+    },
+    {
+      "sha": "8ebe335c436f4a172d398e9175e170b6a3afbb59",
+      "date": "2026-08-25T12:43:24+08:00",
+      "subject": "fix(benchmark): pass bench source identity into WSL"
+    },
+    {
+      "sha": "d1167c0d1da28e6e4ffa451c5ea023260dff2b1a",
+      "date": "2026-08-25T12:38:48+08:00",
+      "subject": "feat(benchmark): add WorkBuddy Mission adapter"
+    },
+    {
+      "sha": "aece3726d5d4ac2ae0bbb7fa95afb762fb5be100",
+      "date": "2026-08-25T11:25:11+08:00",
+      "subject": "feat(benchmark): require WorkBuddy runtime skill"
+    },
+    {
+      "sha": "e8cdd1be4d280399bbb953562000b430f4e59fe7",
+      "date": "2026-08-25T09:11:55+08:00",
+      "subject": "fix(benchmark): preserve scorer and deadline edge activity"
+    },
+    {
+      "sha": "33b75551b1e0fe44f3ba7f5979cfd16acda8e5b3",
+      "date": "2026-08-25T08:26:48+08:00",
+      "subject": "feat(video): produce H3 live-type Mission explainer"
+    },
+    {
+      "sha": "20b3df440fe401f2c31fb5b35fde1e2cdcc721d0",
+      "date": "2026-08-25T07:43:36+08:00",
+      "subject": "docs(benchmark): record case 94 provider rejection"
+    },
+    {
+      "sha": "1594e613f30d68974cb12f6d12bc92261b2ed714",
+      "date": "2026-08-25T06:23:41+08:00",
+      "subject": "fix(runtime): preserve stalled stream diagnostics"
+    },
+    {
+      "sha": "eda297e174877e2a11d06c9b915d99a8d80de96b",
+      "date": "2026-08-25T06:22:37+08:00",
+      "subject": "bench: seal pre-teardown stream activity evidence"
+    },
+    {
+      "sha": "ce9cb3c18f22bed09e2e894f664a3757b502dd82",
+      "date": "2026-08-25T06:22:28+08:00",
+      "subject": "fix(runtime): preserve stalled stream diagnostics"
+    },
+    {
+      "sha": "1284d70bfe530ad778cf5106ee404f6e5ee44c69",
+      "date": "2026-08-25T05:41:56+08:00",
+      "subject": "docs(benchmark): record case 87 stream stall"
+    },
+    {
+      "sha": "c2fce4fb865b932a4f55e21eb42d46b0c50dbbda",
+      "date": "2026-08-25T04:11:28+08:00",
+      "subject": "fix(runtime): settle aborted session publications"
+    },
+    {
+      "sha": "74956a2ebf5964c35373f06c8fecaa27e302da89",
+      "date": "2026-08-25T04:08:44+08:00",
+      "subject": "docs(benchmark): record session publication stall"
+    },
+    {
+      "sha": "8c71fe5913b103362131b5b99e1a1468da3eed3f",
+      "date": "2026-08-25T04:08:33+08:00",
+      "subject": "fix(runtime): settle aborted session publications"
+    },
+    {
+      "sha": "4ff990d29ecb6b0f57f2ede9d9f7058f61a5f293",
+      "date": "2026-08-25T00:31:32+08:00",
+      "subject": "fix(web): bind downloads to current release asset"
+    },
+    {
+      "sha": "041418589aa77e97973e16885766abf7161cefc2",
+      "date": "2026-08-24T23:13:28+08:00",
+      "subject": "fix(benchmark): bind restricted shells to case ranges"
+    },
+    {
+      "sha": "fd93bc3fc0617a98dff2fce70554c4c7fa054fbf",
+      "date": "2026-08-24T22:58:29+08:00",
+      "subject": "docs(video): align explainer with website visual system"
+    },
+    {
+      "sha": "9db95f1395ff6529d1d5d79e4c16367e928c6981",
+      "date": "2026-08-24T21:36:05+08:00",
+      "subject": "docs(video): expand collage explainer to 4m40s"
+    },
+    {
+      "sha": "019a5c4026e5234d3dd7c7adb0bb15f468e16a3e",
+      "date": "2026-08-24T21:35:41+08:00",
+      "subject": "fix(benchmark): configure WSL proxy authority"
+    },
+    {
+      "sha": "08f8f4c9830ac5cf3d8f6e58e3565f0c3c1c1eca",
+      "date": "2026-08-24T21:27:32+08:00",
+      "subject": "docs(benchmark): record stalled stream recovery"
+    },
+    {
+      "sha": "4f1a9a55385c2aead95fce23c6f8f737bd6f5f4f",
+      "date": "2026-08-24T21:27:31+08:00",
+      "subject": "fix(llm): bound stalled stream recovery"
+    },
+    {
+      "sha": "8ee73dbf1cd8539424947045592c988d3ca48c68",
+      "date": "2026-08-24T21:26:33+08:00",
+      "subject": "docs(video): plan paper collage explainer v6"
+    },
+    {
+      "sha": "2044cfb12b7b041b3bf9f02737664cf0efd10fde",
+      "date": "2026-08-24T20:18:24+08:00",
+      "subject": "feat(video): deliver desktop mission promo candidate"
+    },
+    {
+      "sha": "f095922ab847d7df7e5b8268c8d191ae3b11133a",
+      "date": "2026-08-24T19:34:07+08:00",
+      "subject": "fix(benchmark): bind recovery to selected candidates"
+    },
+    {
+      "sha": "eebf5565d6fe8dd92a955f8d74ae0e4c63c09b73",
+      "date": "2026-08-24T19:10:55+08:00",
+      "subject": "fix(benchmark): reuse sealed partial batch candidates"
+    },
+    {
+      "sha": "976cb62abb15c7751fb25cae7acb89845c32446a",
+      "date": "2026-08-24T18:24:56+08:00",
+      "subject": "fix(benchmark): run ten cases from one coordinator"
+    },
+    {
+      "sha": "7a41f6d40b01017b3e644e4a359d0b253bde9242",
+      "date": "2026-08-24T17:55:55+08:00",
+      "subject": "docs(video): fix shot table markdown"
+    },
+    {
+      "sha": "3c96ceb1f30a866afd392133c161dd9462c020d1",
+      "date": "2026-08-24T17:55:20+08:00",
+      "subject": "docs(video): restart storyboard with H3 skill gates"
+    },
+    {
+      "sha": "7885de8c1f377a4e528282ff46517cd8edc294f1",
+      "date": "2026-08-24T17:01:22+08:00",
+      "subject": "bench: wait for serialized catalog replay"
+    },
+    {
+      "sha": "e7c9d1203b19daecc33bf6b4273f890637e28ee3",
+      "date": "2026-08-24T16:55:27+08:00",
+      "subject": "bench: run ten Base cases concurrently"
+    },
+    {
+      "sha": "075fa1e860e335cb7407d581f813e5248965b254",
+      "date": "2026-08-24T16:21:34+08:00",
+      "subject": "feat(video): lock consistent cartoon cast for H3"
+    },
+    {
+      "sha": "8995b3d50002fd50ca0f819d985717b3e331f730",
+      "date": "2026-08-24T15:00:36+08:00",
+      "subject": "fix(video): reject dark promo direction safely"
+    },
+    {
+      "sha": "f97a6c6b06696828fa790ff92cf69370963d532c",
+      "date": "2026-08-24T14:57:47+08:00",
+      "subject": "bench: preserve sealed shell provenance"
+    },
+    {
+      "sha": "3acc9393406472b077dfcc89b2fc78f0f6f4bc03",
+      "date": "2026-08-24T14:35:46+08:00",
+      "subject": "bench: admit unique-case isolation UIDs"
+    },
+    {
+      "sha": "18464167eba5ea597e5f8f61b47885f3d06b73c7",
+      "date": "2026-08-24T13:59:30+08:00",
+      "subject": "bench: extend AutomationBench to 600 unique cases"
+    },
+    {
+      "sha": "e712118cd07eed9cf704ca64a499db62dc0de298",
+      "date": "2026-08-24T13:28:12+08:00",
+      "subject": "Revert \"bench: extend Luna Base matrix to 600 slots\""
+    },
+    {
+      "sha": "12b90ddbbcb9583134b0ef1bbba5ab9505b64f6f",
+      "date": "2026-08-24T13:03:54+08:00",
+      "subject": "bench: extend Luna Base matrix to 600 slots"
+    },
+    {
+      "sha": "d7b4f1804436865d498d0201dcbb379ec43ddf36",
+      "date": "2026-08-24T13:02:21+08:00",
+      "subject": "feat(video): redraw mission evidence and brand cards"
+    },
+    {
+      "sha": "f387cda0e335d4ce69312eec8dcf881158a2f52c",
+      "date": "2026-08-24T12:37:40+08:00",
+      "subject": "docs(video): ground mission narrative in case evidence"
+    },
+    {
+      "sha": "09c5cb85e94a53f0f74c95daf2d6e46602ce91c4",
+      "date": "2026-08-24T12:14:15+08:00",
+      "subject": "bench(automationbench): run Luna Mission Advanced matrix"
+    },
+    {
+      "sha": "417f1ebd02ef94f1710b874547ac6cfc78728573",
+      "date": "2026-08-24T11:52:52+08:00",
+      "subject": "docs(video): replace papercraft with AI technology direction"
+    },
+    {
+      "sha": "735dd48096cd6ed206a21f5b87deceb0146ff4af",
+      "date": "2026-08-24T11:42:03+08:00",
+      "subject": "docs(video): approve papercraft preview direction"
+    },
+    {
+      "sha": "4ecca403aaba41f851eb448791c9152e336feef0",
+      "date": "2026-08-24T11:15:09+08:00",
+      "subject": "docs(video): reject relay style and add work scenarios"
+    },
+    {
+      "sha": "79e8c5e87f4bb1fc11b157237efe2a117c9c462a",
+      "date": "2026-08-24T10:39:21+08:00",
+      "subject": "docs(video): normalize promo brief formatting"
+    },
+    {
+      "sha": "845cb631e0763c23bf082492af0e2ac32e706760",
+      "date": "2026-08-24T10:38:48+08:00",
+      "subject": "feat(video): gate H3 mission promo preproduction"
+    },
+    {
+      "sha": "ce7c38e06bb2f0c6eb3fe2e8a40866ca999834ce",
+      "date": "2026-08-24T00:29:22+08:00",
+      "subject": "bench(automationbench): close action-log readback loops"
+    },
+    {
+      "sha": "72b2802f548be6a4f32c23a8c9f30ab08856d004",
+      "date": "2026-08-23T23:03:10+08:00",
+      "subject": "bench(automationbench): run Sol Mission Base matrix"
+    },
+    {
+      "sha": "55141e6b0e0c4282ddafa772b4d08f42f10d74c3",
+      "date": "2026-08-23T20:40:31+08:00",
+      "subject": "docs(benchmark): record batch nine liveness incident"
+    },
+    {
+      "sha": "7e59e77ed44db8de8961519fd47fca5e436476d3",
+      "date": "2026-08-23T20:40:22+08:00",
+      "subject": "fix(orchestrator): close resumed task occurrences"
+    },
+    {
+      "sha": "fb57c43b45a8b534c7169f269b5b1f5c89ff9e65",
+      "date": "2026-08-23T16:05:32+08:00",
+      "subject": "fix(benchmark): redact provider batch receipts"
+    },
+    {
+      "sha": "0786d24139d412cf7de8dd93d73797995b927b48",
+      "date": "2026-08-23T16:05:18+08:00",
+      "subject": "fix(provider): redact transient diagnostics"
+    },
+    {
+      "sha": "4aebe63c0071683f2749541c38ce9d261bca3681",
+      "date": "2026-08-23T14:02:27+08:00",
+      "subject": "fix(benchmark): seal complete task traces"
+    },
+    {
+      "sha": "d344a697505aed2daaa2982698bdc1d65fad727c",
+      "date": "2026-08-23T08:29:32+08:00",
+      "subject": "fix(benchmark): honor durable scheduled wake deadlines"
+    },
+    {
+      "sha": "0f62a823a863a5a641abf1015bc677c499e81acc",
+      "date": "2026-08-23T08:29:23+08:00",
+      "subject": "fix(scheduler): expose stable delayed wake settlement"
+    },
+    {
+      "sha": "08003c2c1ebaa8f4d4c3543fb026b55a7b21a698",
+      "date": "2026-08-23T00:52:03+08:00",
+      "subject": "fix(expert-squad): repair scientific mission completion"
+    },
+    {
+      "sha": "ffb985feda1f615fc548f949a2f953d762113fcc",
+      "date": "2026-08-22T22:43:48+08:00",
+      "subject": "docs(specs): converge merged August index"
+    },
+    {
+      "sha": "87f9e23218f16a8394a027ac611c7d90ce7fdb50",
+      "date": "2026-08-22T22:35:36+08:00",
+      "subject": "fix(storage): retire settled database connections gracefully"
+    },
+    {
+      "sha": "2312e0ec8283d9c5e057fce9c0ada0811fe3173a",
+      "date": "2026-08-22T22:33:09+08:00",
+      "subject": "fix(benchmark): bind batches to the frozen Bun runtime"
+    },
+    {
+      "sha": "a955367fc7477404d3ddfc4f70635495845e1993",
+      "date": "2026-08-22T22:32:45+08:00",
+      "subject": "fix(storage): retire settled database connections gracefully"
+    },
+    {
+      "sha": "4f650526f38c1d264246eebbc98b44ffb680e13a",
+      "date": "2026-08-22T19:36:44+08:00",
+      "subject": "bench: preserve authority effects in Mission r3"
+    },
+    {
+      "sha": "81331e9cb85715ed4496813490a6c4d4e1af5e34",
+      "date": "2026-08-22T19:33:07+08:00",
+      "subject": "fix: preserve authority effects through acceptance"
+    },
+    {
+      "sha": "6dfa0f840f08ddcfd4c9fcfa4f49278371bd36ca",
+      "date": "2026-08-22T16:23:43+08:00",
+      "subject": "benchmark: preserve Mission usage without Task trace"
+    },
+    {
+      "sha": "45d8e6e96bdddd490afb1045d4e797559673921c",
+      "date": "2026-08-22T15:52:51+08:00",
+      "subject": "benchmark: run Luna Base through Mission intake"
+    },
+    {
+      "sha": "a784cb1b082846369937a0f5459a8df1cd961819",
+      "date": "2026-08-22T15:52:39+08:00",
+      "subject": "fix(protocol): expose scheduler session delivery settlement"
+    },
+    {
+      "sha": "89c32f881dd39952ca025c72f496d6fe5eade0f5",
+      "date": "2026-08-22T14:06:44+08:00",
+      "subject": "benchmark: switch primary run to Terra Advanced"
+    },
+    {
+      "sha": "63a2f7b733bde557ff37e945cec3716f32272564",
+      "date": "2026-08-22T10:25:13+08:00",
+      "subject": "fix(benchmark): enforce adversarial acceptance"
+    },
+    {
+      "sha": "afa16299bc80bd8555ae6a2be6ef561a4317a628",
+      "date": "2026-08-22T10:19:16+08:00",
+      "subject": "fix(squads): make acceptance adversarial"
+    },
+    {
+      "sha": "c36c46c291f86385b9c48a463a84d6df81717253",
+      "date": "2026-08-22T02:19:27+08:00",
+      "subject": "fix(benchmark): verify runtime skill adherence"
+    },
+    {
+      "sha": "a11a0830085f46cdb68a3d08eb29dc7d4d9c3f71",
+      "date": "2026-08-22T01:24:00+08:00",
+      "subject": "fix(benchmark): treat SaaS tools as seeded simulations"
+    },
+    {
+      "sha": "24908f43816ff04445b5352bbbea4a70798a09ff",
+      "date": "2026-08-22T01:23:36+08:00",
+      "subject": "fix(expert-squad): derive external actions from bounded authority"
+    },
+    {
+      "sha": "f88f91dd251759833ed94252cb64ef5c0a73096d",
+      "date": "2026-08-21T23:44:36+08:00",
+      "subject": "fix(benchmark): mount skills on exact execution owners"
+    },
+    {
+      "sha": "88e8c69c1c63842ea936824459b90f84fb9c1712",
+      "date": "2026-08-21T23:44:08+08:00",
+      "subject": "fix(expert-squad): align acceptance with agent capabilities"
+    },
+    {
+      "sha": "4b723fa6ec44a9b6fe1f0918022d647511f7dc2c",
+      "date": "2026-08-21T22:14:33+08:00",
+      "subject": "fix(orchestrator): stabilize prompt owner projection"
+    },
+    {
+      "sha": "21e33cc85c4bc650e3f67881617c2727d45c3497",
+      "date": "2026-08-21T19:23:27+08:00",
+      "subject": "fix(benchmark): distinguish request attempts from usage"
+    },
+    {
+      "sha": "a062fa79b1ef33f30a301875315ab6d8e387b40a",
+      "date": "2026-08-21T18:34:59+08:00",
+      "subject": "docs(benchmark): start prompt comparison round"
+    },
+    {
+      "sha": "2a927661569172d6faee151148e795f7224e186e",
+      "date": "2026-08-21T18:34:52+08:00",
+      "subject": "fix(orchestrator): keep runtime system labels aligned"
+    },
+    {
+      "sha": "0743edc0164df218721b93632b24fc1d38249674",
+      "date": "2026-08-21T18:07:12+08:00",
+      "subject": "fix(expert-squad): strengthen scheduler template acceptance"
+    },
+    {
+      "sha": "740aa785c5845105f9430f3bf88c0ac8d2e5b120",
+      "date": "2026-08-21T17:58:56+08:00",
+      "subject": "fix(expert-squad): decompose acceptance criteria"
+    },
+    {
+      "sha": "209135ff64633c3476b8d6cb7ce618dd46c84a25",
+      "date": "2026-08-21T17:45:16+08:00",
+      "subject": "fix(benchmark): make context economics evidence actionable"
+    },
+    {
+      "sha": "40006d3a71386a923fb2dad8e8cdf461bf3aa642",
+      "date": "2026-08-21T17:22:18+08:00",
+      "subject": "feat(orchestrator): give the live Task render its own system part"
+    },
+    {
+      "sha": "7e01caea20e6eb86275b2222c78cf2d3d64216e5",
+      "date": "2026-08-21T16:54:27+08:00",
+      "subject": "docs(specs): retract Phase 1a and measure the race it was avoiding"
+    },
+    {
+      "sha": "8d065af28ef44fc19278184ae65f6ec8d776ecc2",
+      "date": "2026-08-21T16:44:06+08:00",
+      "subject": "docs(specs): re-sequence Phase 1 after the transport review"
+    },
+    {
+      "sha": "834c457ef42fa7f32066b0fdd0294fb62c0e8ef1",
+      "date": "2026-08-21T16:27:04+08:00",
+      "subject": "docs(specs): settle the Phase 1 runtime-context transport"
+    },
+    {
+      "sha": "1dc3352c6dcd0c1623867dc74bc9588d12ebe112",
+      "date": "2026-08-21T16:22:10+08:00",
+      "subject": "feat(benchmark): observe context economics from sealed evidence"
+    },
+    {
+      "sha": "17e669ee5da24610a833656e685baa707231eeee",
+      "date": "2026-08-21T16:21:56+08:00",
+      "subject": "feat(session): fingerprint the prompt composition of every Provider request"
+    },
+    {
+      "sha": "80b0de99be3d6620bb4be40f9e45a06b765f24b6",
+      "date": "2026-08-21T16:05:49+08:00",
+      "subject": "docs(specs): plan the Orchestrator context economics work"
+    },
+    {
+      "sha": "9bd2640ce98fddae59cc8879b0dbf43cd8b9089e",
+      "date": "2026-08-21T14:45:06+08:00",
+      "subject": "fix(benchmark): show adopted candidate metrics"
+    },
+    {
+      "sha": "82ff6ab74a804c5f5482f72a407e36b117f3ace1",
+      "date": "2026-08-21T14:16:03+08:00",
+      "subject": "fix(benchmark): show adopted recovery candidates"
+    },
+    {
+      "sha": "b7f8d2ad0ddd1a01dd71ff6d12e04ae383b3566f",
+      "date": "2026-08-21T13:23:37+08:00",
+      "subject": "fix(benchmark): preserve clean failed-batch candidates"
+    },
+    {
+      "sha": "1599ef35eb15578b79a3f9769a0b24901adfc572",
+      "date": "2026-08-21T13:23:26+08:00",
+      "subject": "fix(session): keep committed decisions at execution boundary"
+    },
+    {
+      "sha": "bb6b0af915af2558c943b3c9197e37f326adeb97",
+      "date": "2026-08-21T12:47:19+08:00",
+      "subject": "docs(benchmark): record the decision-scope fault and the batch it invalidated"
+    },
+    {
+      "sha": "1ec2501d82a225f15c9ab5b381862739135c952c",
+      "date": "2026-08-21T12:47:13+08:00",
+      "subject": "fix(session): scope the turn decision claim to its assistant Message"
+    },
+    {
+      "sha": "0ba8935c0ad40f496160a1e6a5729bc83ead489d",
+      "date": "2026-08-21T12:20:26+08:00",
+      "subject": "fix(benchmark): gate eligibility on the Host fault record"
+    },
+    {
+      "sha": "1b2c45241f9d1cc01df63a4c5d70824c46be7c66",
+      "date": "2026-08-21T09:34:19+08:00",
+      "subject": "fix(benchmark): never rerun verified slots"
+    },
+    {
+      "sha": "31966d624139fcac1462d6372a74d8143fc06f27",
+      "date": "2026-08-21T09:25:24+08:00",
+      "subject": "fix(benchmark): finish Base before Advanced"
+    },
+    {
+      "sha": "54337f852623b6759028128adf6da37f18341ea9",
+      "date": "2026-08-21T08:34:02+08:00",
+      "subject": "docs(benchmark): record paired batch invalidation"
+    },
+    {
+      "sha": "ed2b337784e19a08a6011f9e49e3f6caf501c46f",
+      "date": "2026-08-21T08:34:01+08:00",
+      "subject": "fix(harness): continue scheduling after goal mutations"
+    },
+    {
+      "sha": "09e43ec6a5b88ad74dbe9b287b1a6a6be680f245",
+      "date": "2026-08-21T02:21:18+08:00",
+      "subject": "fix(benchmark): refresh dashboard on active lease"
+    },
+    {
+      "sha": "363dc1487a6fb481c8e7dbac642391234c7cc8b0",
+      "date": "2026-08-21T02:07:48+08:00",
+      "subject": "fix(benchmark): verify live dashboard candidates"
+    },
+    {
+      "sha": "d89741509a315959aa59415855b63c50c96c9ec7",
+      "date": "2026-08-21T02:02:10+08:00",
+      "subject": "feat(benchmark): publish live paired results page"
+    },
+    {
+      "sha": "86b3ef6720447cb8ab08c5abce8d14c6868a3366",
+      "date": "2026-08-21T01:28:16+08:00",
+      "subject": "fix(benchmark): seal dispatched Skill coverage"
+    },
+    {
+      "sha": "20f1bba6eef88480c88774591791ff6d091edb1a",
+      "date": "2026-08-21T01:27:58+08:00",
+      "subject": "fix(harness): verify external delivery through mounted workers"
+    },
+    {
+      "sha": "050fa043f2c6688aa96c81f5bc84fb7b53d21662",
+      "date": "2026-08-21T00:57:17+08:00",
+      "subject": "feat(benchmark): continue Luna with Base only"
+    },
+    {
+      "sha": "23c29d169026e7572b904f26533ddf1f1eba58ff",
+      "date": "2026-08-20T23:54:12+08:00",
+      "subject": "fix(benchmark): roll five-case trial slots"
+    },
+    {
+      "sha": "4f4946fa99f758c5ed62ca9e27b2043c6e251020",
+      "date": "2026-08-20T22:47:30+08:00",
+      "subject": "test(harness): align Base package revision"
+    },
+    {
+      "sha": "83239e9bb1e975c4cd0ad99e823e151e550fbe56",
+      "date": "2026-08-20T22:47:00+08:00",
+      "subject": "fix(benchmark): seal terminal execution quiescence"
+    },
+    {
+      "sha": "e191e370a76ad577c2574e86e18a5409db9d6d77",
+      "date": "2026-08-20T22:46:45+08:00",
+      "subject": "fix(harness): verify settled delivery evidence"
+    },
+    {
+      "sha": "51e9d82006db1da92fd95c594f8e1c974dde7651",
+      "date": "2026-08-20T19:59:25+08:00",
+      "subject": "docs(benchmark): require Node sidecar runtime"
+    },
+    {
+      "sha": "367a1a0cdc1144dbefb702662915a53fd25d4a92",
+      "date": "2026-08-20T19:41:53+08:00",
+      "subject": "fix(benchmark): authorize both host Git runtimes"
+    },
+    {
+      "sha": "c9766d28ae471b09db830fb1fce496353bfc8a7e",
+      "date": "2026-08-20T19:37:32+08:00",
+      "subject": "fix(benchmark): preserve redacted runtime failures"
+    },
+    {
+      "sha": "deb6028565e385608864fc7805553aa55c3d444b",
+      "date": "2026-08-20T19:30:39+08:00",
+      "subject": "fix(benchmark): configure isolated engine Git"
+    },
+    {
+      "sha": "6caa73b9fe2d2b1953d0ba68af48d53da71a0bae",
+      "date": "2026-08-20T19:20:12+08:00",
+      "subject": "fix(benchmark): authorize host VCS for agent projects"
+    },
+    {
+      "sha": "36912d3a589b0c4250b5cb48cd69ce7d0722f4f0",
+      "date": "2026-08-20T19:09:32+08:00",
+      "subject": "fix(benchmark): expose agent project traversal roots"
+    },
+    {
+      "sha": "fb9dd05fc8efe310d5533e419c21ff636433026c",
+      "date": "2026-08-20T18:59:40+08:00",
+      "subject": "feat(benchmark): add reproducible AutomationBench harness"
+    },
+    {
+      "sha": "9a81613f633bec17d0f5964721c82db49a130b43",
+      "date": "2026-08-20T14:49:11+08:00",
+      "subject": "fix(benchmark): seal cleanup failures before cataloging"
+    },
+    {
+      "sha": "385d0faf10d149cbc1047cb8508efa1a18692df0",
+      "date": "2026-08-20T14:47:19+08:00",
+      "subject": "style(benchmark): normalize tool client EOF"
+    },
+    {
+      "sha": "73b1b68a0f84bbba9b9f2ebd2de3a7edea799a80",
+      "date": "2026-08-20T14:46:37+08:00",
+      "subject": "feat(benchmark): preserve AutomationBench round evidence"
+    },
+    {
+      "sha": "7c2dcbfe3bd93d84d4d9c43afeb8bca4cff957bc",
+      "date": "2026-08-20T14:35:26+08:00",
+      "subject": "fix(provider): apply physical hooks to helper streams"
+    },
+    {
+      "sha": "8ed42e5535beafda9ec20edf17102fe53b1167db",
+      "date": "2026-08-18T16:51:00+08:00",
+      "subject": "archive: uncommitted mission-closure-p0 worktree as of 2026-08-14"
+    }
+  ],
+  "stats": ".gitattributes                                     |    5 +\n .github/workflows/build-overlays.yml               |    1 +\n .github/workflows/build.yml                        |  104 +-\n .github/workflows/deploy-opencorvus-com.yml        |  154 +-\n .github/workflows/package-overlay.yml              |   71 +-\n .gitignore                                         |    1 +\n CHANGELOG.md                                       |   19 +\n RELEASE.md                                         |    8 +-\n bun.lock                                           |   16 +-\n docs/packaging.md                                  |   33 +-\n .../scientific-research-design/expert-squad.jsonc  |    6 +-\n packages/channel-config/package.json               |    2 +-\n packages/channel-runtime/package.json              |    2 +-\n .../opencorvus/generated/expert-squad-payload.ts   |    2 +-\n .../opencorvus/generated/expert-squad-revisions.ts |    2 +-\n .../native/process-supervisor/Cargo.lock           |    2 +-\n .../native/process-supervisor/Cargo.toml           |    2 +-\n packages/opencorvus/package.json                   |    2 +-\n packages/opencorvus/script/artifact-batch-check.ts |  265 +\n .../automationbench-case-set-600.json              | 5427 ++++++++++++++++\n .../script/benchmark/external-agent/contract.ts    |   27 +\n .../load-automationbench-environment.sh            |   32 +\n .../external-agent/render-trajectory-figure.ts     |   48 +\n .../write-automationbench-dashboard.ts             |  565 ++\n packages/opencorvus/script/cli-run-check.ts        |  287 +\n packages/opencorvus/script/task-control-check.ts   |   35 +-\n .../src/agent/artifact-provenance-facts.ts         |  450 +-\n .../opencorvus/src/agent/artifact-read-facts.ts    |    6 +-\n packages/opencorvus/src/agent/runner.ts            |   12 +-\n packages/opencorvus/src/bus/global.ts              |   47 +-\n packages/opencorvus/src/bus/index.ts               |  153 +-\n .../opencorvus/src/capability/routine-tools.ts     |   11 +-\n packages/opencorvus/src/cli/cmd/run-client.ts      |   23 +\n packages/opencorvus/src/cli/cmd/run.ts             |  674 +-\n packages/opencorvus/src/cli/run-error.ts           |   41 +\n packages/opencorvus/src/config/config.ts           |  160 +-\n .../src/engine/delivery-slice-membership-facts.ts  |    3 +-\n .../src/engine/dispatch-collection-contract.ts     |    1 +\n .../src/expert-squad/prompt-profile-resolver.ts    |    4 +-\n .../src/goal-workload-analyst/output-tools.ts      |    5 +-\n packages/opencorvus/src/index.ts                   |   16 +-\n .../dispatch-adapter-execution-context.ts          |    1 +\n .../src/orchestrator/dispatch-agent-tool.ts        |   17 +-\n .../src/orchestrator/dispatch-turn-projection.ts   |   11 +\n .../src/orchestrator/interaction-tools.ts          |    8 +-\n .../src/orchestrator/protocol/message-bridge.ts    |  100 +-\n packages/opencorvus/src/orchestrator/tools.ts      |   16 +-\n packages/opencorvus/src/panel/capability.ts        |   42 +-\n .../src/permission/pending-projection.ts           |    3 +-\n .../opencorvus/src/prompt/core/mission-core.txt    |    8 +-\n .../src/prompt/core/orchestrator-core.txt          |    8 +-\n packages/opencorvus/src/session/index.ts           |   62 +-\n packages/opencorvus/src/session/processor.ts       |  115 +-\n packages/opencorvus/src/session/status.ts          |   17 +-\n packages/opencorvus/src/skill/reference-lock.ts    |   16 +-\n packages/opencorvus/src/storage/db.ts              |   28 +-\n packages/opencorvus/src/tool/artifact-batch.ts     |  162 +\n packages/opencorvus/src/tool/artifact-catalog.ts   |   99 +-\n packages/opencorvus/src/tool/panel.ts              |  270 +-\n packages/opencorvus/src/util/stream-activity.ts    |   25 +\n packages/opencorvus/test/artifact-batch.test.ts    |  141 +\n .../test/artifact-provider-reference-flow.test.ts  |  246 +-\n .../artifact-read-facts-provider-input.test.ts     |   79 +-\n .../automationbench_scorer_replay_test.py          |  120 +\n .../test/benchmark/complete-trace-evidence.test.ts |  193 +\n .../test/benchmark/external-agent-contract.test.ts | 2140 +++++++\n packages/opencorvus/test/cli/run-client.test.ts    |   23 +-\n packages/opencorvus/test/cli/run-error.test.ts     |   28 +\n packages/opencorvus/test/cli/run-transport.test.ts |  152 +\n .../test/config-catalog-lock-order.test.ts         |   44 +\n .../test/config-skill-recovery-lock-order.test.ts  |   55 +\n .../expert-squad/domain-expansion-packages.test.ts |   11 +-\n .../opencorvus/test/fixture/dispatch-lineage.ts    |   11 +-\n .../test/fixture/skill-replacement-child.ts        |   21 +\n .../test/goal-workload-coverage-contract.test.ts   |  298 +-\n ...chestrator-streamed-dispatch-settlement.test.ts |   41 +-\n .../test/panel-mission-terminal-authority.test.ts  |  316 +-\n .../test/persistent-instance-publication.test.ts   |  236 +\n ...quirements-domain-incomplete-settlement.test.ts |  150 +-\n .../test/session-loop-provider-tool-input.test.ts  |   20 +-\n .../session/processor-llm-activity-retry.test.ts   |  235 +\n .../test/storage/schema-contract.test.ts           |   14 +\n .../test/stream-activity-pause-bound.test.ts       |   32 +-\n .../test/tool-result-control-protocol.test.ts      |  213 +-\n packages/overlay/package.json                      |    2 +-\n packages/overlay/script/build.ts                   |    4 +-\n packages/overlay/script/installer-bundler.ts       |   16 +\n packages/overlay/src-tauri/Cargo.lock              |    2 +-\n packages/overlay/src-tauri/Cargo.toml              |    2 +-\n packages/overlay/src-tauri/tauri.conf.json         |    4 +-\n packages/plugin/package.json                       |    2 +-\n packages/plugin/src/artifact-catalog.ts            |   69 +\n packages/plugin/src/artifact-producer.ts           |    2 +\n packages/sdk/js/package.json                       |    2 +-\n packages/sdk/js/src/gen/sdk.gen.ts                 |  185 +-\n packages/sdk/js/src/gen/types.gen.ts               |  185 +-\n packages/sdk/openapi.json                          |  448 +-\n packages/transport-protocol/package.json           |    2 +-\n packages/util/package.json                         |    2 +-\n .../media/opencorvus-mission-v5r-en-US-poster.jpg  |  Bin 0 -> 161279 bytes\n .../public/media/opencorvus-mission-v5r-en-US.mp4  |  Bin 0 -> 21932471 bytes\n .../media/opencorvus-mission-v5r-zh-CN-poster.jpg  |  Bin 0 -> 156766 bytes\n .../public/media/opencorvus-mission-v5r-zh-CN.mp4  |  Bin 0 -> 21436523 bytes\n packages/web/src/content/docs/reference/api.mdx    |    2 +-\n .../web/src/content/docs/zh-cn/reference/api.mdx   |    2 +-\n patches/rpm-0.16.0-short-write.patch               |   14 +\n script/check-rpm-package.py                        |  106 +\n script/check-rpm-package.test.py                   |   68 +\n script/github-actions-workflow-contract.test.ts    |  102 +-\n script/installer-bundler.test.ts                   |   13 +\n script/package-local.test.ts                       |   13 +-\n script/package-local.ts                            |   19 +-\n script/prepare-rpm-bundler.py                      |  170 +\n script/prepare-rpm-bundler.test.py                 |   56 +\n script/release-automation.test.ts                  |  169 +\n script/release-automation.ts                       |  236 +\n script/verify-release-identity.ts                  |    2 +-\n script/video/minimax-h3-mission-promo/.gitignore   |    2 +\n script/video/minimax-h3-mission-promo/README.md    |   97 +\n .../assets/character-story/README.md               |   18 +\n .../assets/character-story/character-bible-v1.png  |  Bin 0 -> 1515115 bytes\n .../assets/character-story/character-card-v3.png   |  Bin 0 -> 1410811 bytes\n .../keyframes-v4/S01-home-start.png                |  Bin 0 -> 2065206 bytes\n .../keyframes-v4/S07-user-project-manager.png      |  Bin 0 -> 1904722 bytes\n .../assets/character-story/scene-cards-v3.png      |  Bin 0 -> 2119532 bytes\n .../character-story/user-pain-keyframe-v1.png      |  Bin 0 -> 2001429 bytes\n .../official-logo-light-4x.png                     |  Bin 0 -> 14014 bytes\n .../assets/promo-redraw/README.md                  |   33 +\n .../assets/promo-redraw/architecture-plate-v1.png  |  Bin 0 -> 1952446 bytes\n .../assets/promo-redraw/architecture-promo-v1.png  |  Bin 0 -> 2192027 bytes\n .../assets/promo-redraw/architecture-promo-v1.svg  |   86 +\n .../assets/promo-redraw/brand-opener-v1.png        |  Bin 0 -> 682059 bytes\n .../assets/promo-redraw/brand-opener-v1.svg        |   36 +\n .../assets/promo-redraw/brand-outro-v1.png         |  Bin 0 -> 224045 bytes\n .../assets/promo-redraw/brand-outro-v1.svg         |   56 +\n .../assets/promo-redraw/lifecycle-plate-v1.png     |  Bin 0 -> 1769448 bytes\n .../assets/promo-redraw/lifecycle-plate-v2.png     |  Bin 0 -> 1740075 bytes\n .../assets/promo-redraw/lifecycle-promo-v1.png     |  Bin 0 -> 2278640 bytes\n .../assets/promo-redraw/lifecycle-promo-v1.svg     |   81 +\n .../compose-live-type-v9.py                        |  627 ++\n .../compose-tech-blog-v10.py                       |  319 +\n .../compose-v5c-cartoon-trials.py                  |  132 +\n .../creative-brief-v2.zh-CN.md                     |  191 +\n .../desktop-brief-v5.zh-CN.md                      |   43 +\n .../desktop-script-v5.zh-CN.md                     |   37 +\n .../desktop-storyboard-v5.zh-CN.json               |  139 +\n .../desktop-storyboard-v5r.en-US.json              |   88 +\n .../desktop-storyboard-v5r.zh-CN.json              |   88 +\n .../minimax-h3-mission-promo/generate-local-h3.py  |  605 ++\n .../minimax-h3-mission-promo/install-local-h3.ps1  |  150 +\n .../install-video-restoration.ps1                  |   42 +\n .../local-5090-profile.json                        |   21 +\n .../preproduction-v3.zh-CN.md                      |   95 +\n .../minimax-h3-mission-promo/produce-desktop-v5.py |  921 +++\n .../produce-desktop-v5r.py                         | 1508 +++++\n script/video/minimax-h3-mission-promo/produce.py   | 1184 ++++\n .../prompts/style-test-relay-factory.txt           |    5 +\n .../render-promotional-figures.mjs                 |   51 +\n .../minimax-h3-mission-promo/requirements.txt      |    2 +\n .../standard-shot-table-v3.zh-CN.md                |   42 +\n .../standard-shot-table-v4.zh-CN.md                |   45 +\n .../minimax-h3-mission-promo/storyboard.zh-CN.json |  174 +\n .../test_compose_live_type_v9.py                   |   58 +\n .../test_compose_tech_blog_v10.py                  |   46 +\n .../test_compose_v5c_cartoon_trials.py             |   24 +\n .../test_generate_local_h3.py                      |  203 +\n .../test_produce_desktop_v5r.py                    |  188 +\n .../text-storyboards-v4.zh-CN.md                   | 1690 +++++\n .../v10-tech-blog-opening-manifest.json            |   62 +\n .../v5c-cartoon-take-gates.json                    |  126 +\n .../v5c-cartoon-task-metaphor-trials.json          |  134 +\n .../v9-live-type-runtime-edit-plan.json            |  128 +\n .../v9-live-type-runtime-manifest.json             |  532 ++\n .../v9-live-type-runtime-shot-table.md             |   68 +\n skills/automationbench-experiment/SKILL.md         |   83 +\n .../automationbench-experiment/agents/openai.yaml  |    4 +\n specs/README.md                                    |   42 +\n .../automationbench-case-set.json                  |  475 ++\n .../evidence-catalog.json                          | 1080 ++++\n .../figures/development-pre-qa/luna-advanced.png   |  Bin 0 -> 120628 bytes\n .../figures/development-pre-qa/luna-base.png       |  Bin 0 -> 207452 bytes\n .../figures/luna-advanced-trajectory.png           |  Bin 0 -> 98127 bytes\n .../figures/luna-advanced-trajectory.svg           |   12 +\n .../figures/luna-base-trajectory.png               |  Bin 0 -> 142415 bytes\n .../figures/luna-base-trajectory.svg               |   12 +\n .../leaderboard.md                                 |   39 +\n .../automationbench-events.jsonl                   |   54 +\n .../evidence-manifest.json                         |   31 +\n .../opencorvus-trace.json                          | 1528 +++++\n .../result.json                                    |  154 +\n .../trajectory.json                                | 1134 ++++\n .../trajectory.svg                                 |   12 +\n .../automationbench-events.jsonl                   |  146 +\n .../evidence-manifest.json                         |   31 +\n .../opencorvus-trace.json                          | 6770 ++++++++++++++++++++\n .../sales-sales-multi_hop_lookup-base/result.json  |  157 +\n .../trajectory.json                                | 3365 ++++++++++\n .../trajectory.svg                                 |   12 +\n .../automationbench-events.jsonl                   |    0\n .../evidence-manifest.json                         |   16 +\n .../sales-sales-multi_hop_lookup-base/failure.json |   26 +\n .../paper-artifact-manifest.json                   |   26 +\n .../run-dispositions.json                          |   13 +\n .../automationbench-events.jsonl                   |  150 +\n .../evidence-manifest.json                         |   36 +\n .../sales-sales-multi_hop_lookup-base/failure.json |   26 +\n .../opencorvus-trace.json                          | 6678 +++++++++++++++++++\n .../sales-sales-multi_hop_lookup-base/result.json  |  153 +\n .../trajectory.json                                | 3061 +++++++++\n .../trajectory.svg                                 |   12 +\n ...2026-08-23-scientific-mission-fix-completed.png |  Bin 0 -> 75359 bytes\n .../2026-08-25-benchmark-history/README.md         |   11 +\n .../2026-08-25-benchmark-history/manifest.json     |  130 +\n .../external-agent/run-luna-mission-advanced-50.sh |  102 +\n .../run-luna-mission-base-cases-51-600.sh          |  128 +\n .../external-agent/run-sol-mission-base-50.sh      |   80 +\n .../benchmark/workbuddy/catalog_chain_proof.py     |  292 +\n .../configs/harnesses/opencorvus/_defaults.yaml    |   18 +\n .../configs/harnesses/opencorvus/docker/Dockerfile |    2 +\n .../opencorvus/versions/chain-proof-r1.yaml        |    3 +\n .../jobs/opencorvus-luna-code-chain-proof.yaml     |   32 +\n .../workbuddy/configs/models/opencorvus-luna.yaml  |    7 +\n .../benchmark/workbuddy/docker-volume-lifecycle.sh |   56 +\n .../script/benchmark/workbuddy/opencorvus_agent.py |  331 +\n .../benchmark/workbuddy/prepare-chain-proof.sh     |  248 +\n .../script/benchmark/workbuddy/run-chain-proof.sh  |  553 ++\n .../benchmark/workbuddy/run_opencorvus_trial.py    |  940 +++\n .../workbuddy/workbuddy-harness-adapter.patch      |   18 +\n .../workbuddy/workbuddy-verifier-download.patch    |   13 +\n .../workbuddy-verifier-upload-permission.patch     |   14 +\n .../workbuddy/workbuddybench-code.SKILL.md         |   30 +\n .../test/benchmark/workbuddy_adapter_test.py       |  707 ++\n .../workbuddy_process_cleanup_container_test.py    |   49 +\n ...workbuddy_supervisor_recovery_container_test.py |  299 +\n .../workbuddy_verifier_upload_permission_test.py   |   57 +\n .../packages/opencorvus/tsconfig.benchmark.json    |   21 +\n .../skills/workbuddybench-experiment/SKILL.md      |   43 +\n .../workbuddybench-experiment/agents/openai.yaml   |    4 +\n .../2026-08-25-cartoon-artifact-reference.png      |  Bin 0 -> 15582 bytes\n .../2026-08-25-cartoon-context-end-clean-v1.png    |  Bin 0 -> 1000158 bytes\n .../2026-08-25-cartoon-context-start-clean-v1.png  |  Bin 0 -> 1011673 bytes\n .../2026-08-25-cartoon-creator-pain-end-v1.png     |  Bin 0 -> 170798 bytes\n ...-08-25-cartoon-mission-compass-reference-v2.png |  Bin 0 -> 16358 bytes\n ...toon-research-development-handoff-reference.png |  Bin 0 -> 94171 bytes\n .../2026-08-25-cartoon-robot-reference.png         |  Bin 0 -> 11673 bytes\n .../2026-08-25-cartoon-single-agent-reference.png  |  Bin 0 -> 305873 bytes\n .../2026-08-25-cartoon-squad-chain-reference.png   |  Bin 0 -> 128553 bytes\n .../2026-08-25-cartoon-task-metaphor-reference.png |  Bin 0 -> 239864 bytes\n .../2026-08-25-opencorvus-story-reference.html     | 3077 +++++++++\n specs/artifacts/README.md                          |    2 +\n specs/current/architecture/07-panel.md             |    6 +-\n .../architecture/server-runtime-readiness.md       |   34 +\n specs/current/architecture/task-control-plane.md   |    2 +\n .../2026-08-20-external-agent-benchmark-pilot.md   |  479 ++\n .../2026-08-21-orchestrator-context-economics.md   |  521 ++\n ...utomationbench-adversarial-acceptance-repair.md |  483 ++\n .../2026-08-22-deberta-absa-multi-squad-mission.md |  164 +\n .../2026-08-24-character-led-product-video-v8.md   |  115 +\n .../2026-08-24-minimax-h3-mission-promo-video.md   |  233 +\n .../2026-08-24-paper-collage-explainer-v6.md       |  239 +\n .../2026-08/2026-08-24-site-native-explainer-v7.md |  150 +\n ...4-sol-base-restricted-shell-authority-repair.md |   45 +\n .../2026-08-25-bilingual-v5r-website-video.md      |   70 +\n .../2026-08-25-cartoon-task-metaphor-video-v5c.md  |  120 +\n .../2026-08/2026-08-25-desktop-video-v5r.md        |  153 +\n .../2026-08-25-live-type-runtime-video-v9.md       |  142 +\n .../2026-08-25-tech-blog-mission-video-v10.md      |  122 +\n ...-08-25-workbuddybench-luna-mission-base-code.md |  139 +\n specs/records/2026-08/README.md                    |   20 +\n specs/records/2026-09/2026-09-20-v0.1.8-release.md |   12 +-\n specs/records/2026-09/2026-09-20-v0.1.9-release.md |   24 +-\n .../2026-09/2026-09-21-artifact-batch-reads.md     |   44 +\n .../2026-09-21-automatic-native-website-release.md |   55 +\n specs/records/2026-09/2026-09-21-cli-run-p0.md     |   75 +\n .../2026-09-21-dispatch-continuation-input.md      |   87 +\n .../2026-09/2026-09-21-rpm-short-write-repair.md   |   39 +\n .../2026-09/2026-09-21-v0.1.10-local-package.md    |   39 +\n .../records/2026-09/2026-09-21-v0.1.10-release.md  |   58 +\n .../2026-09/2026-09-21-v0.1.9-local-build.md       |   31 +\n specs/records/2026-09/README.md                    |   16 +\n 280 files changed, 60917 insertions(+), 2032 deletions(-)"
+}

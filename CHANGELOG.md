@@ -218,6 +218,10 @@
 - 修复任务控制验收把首个工作者的完成事件误当作最终验收事件的问题。
 - 本地安装包的内置服务与桌面元数据统一使用产品版本，避免服务显示分支开发版本号。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/8bd7c75332676b44312159210904c1ff67604cc4) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/161bf0bfff0ff6deaa3e5d369f72a3ee26a5202a...8bd7c75332676b44312159210904c1ff67604cc4)。
+
 ## 0.1.9 - 2026-09-20
 
 ### Fixed
