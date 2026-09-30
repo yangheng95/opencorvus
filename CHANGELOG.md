@@ -921,7 +921,7 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/2c86f25c1264b99eea8b4890fca7c357b1d78e48) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/3522bc534c9762a462fb51daacef5b788a1219a9...2c86f25c1264b99eea8b4890fca7c357b1d78e48)。
 
-## 0.0.37beta - 2026-08-08
+## 0.0.37beta - 2026-08-09
 
 ### Added
 
@@ -936,6 +936,10 @@
 
 - 在共享启动流程中显式初始化原生 Task 进程模式，保持命令行与桌面打包运行一致。
 - 打开模型选择框时刷新模型，进入 Providers 时刷新 Provider；刷新失败写入应用日志并保留界面可用性。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/3522bc534c9762a462fb51daacef5b788a1219a9) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/565ef8d79b048e4b30c13b633f7fa76b0f51a4fd...3522bc534c9762a462fb51daacef5b788a1219a9)。
 
 ## 0.0.35beta - 2026-08-07
 

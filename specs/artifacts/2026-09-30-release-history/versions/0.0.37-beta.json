@@ -1,0 +1,85 @@
+{
+  "version": "0.0.37-beta",
+  "source": "3522bc534c9762a462fb51daacef5b788a1219a9",
+  "tag": "v0.0.37-beta",
+  "previousSource": "565ef8d79b048e4b30c13b633f7fa76b0f51a4fd",
+  "sourceDate": "2026-08-09T00:08:59+08:00",
+  "commits": [
+    {
+      "sha": "3522bc534c9762a462fb51daacef5b788a1219a9",
+      "date": "2026-08-09T00:08:59+08:00",
+      "subject": "fix(release): stage macOS updater archives"
+    },
+    {
+      "sha": "f2992c554b50f35bb26818dc354b81b10fb256b6",
+      "date": "2026-08-08T23:31:52+08:00",
+      "subject": "release: v0.0.37-beta"
+    },
+    {
+      "sha": "54fcb0ba483af160c6a3ace7d1f392ea19673038",
+      "date": "2026-08-08T23:30:25+08:00",
+      "subject": "feat(overlay): refresh providers and models on open"
+    },
+    {
+      "sha": "9a482447a43c730740900c09f3dde388d6329fbb",
+      "date": "2026-08-08T22:44:04+08:00",
+      "subject": "fix: initialize task process mode in shared bootstrap"
+    },
+    {
+      "sha": "2d55fa366dded92098a35e86de0cb3c93e3e9a62",
+      "date": "2026-08-08T22:16:33+08:00",
+      "subject": "docs: simplify agent guidelines"
+    },
+    {
+      "sha": "86aa61b737dccdd5aaff9552b07de1e437e8f901",
+      "date": "2026-08-08T18:44:38+08:00",
+      "subject": "docs: correct cross-machine squad handoff"
+    },
+    {
+      "sha": "502b85b434f5caba5b82b881f5360b1b1870fbf8",
+      "date": "2026-08-08T18:03:52+08:00",
+      "subject": "chore(sdk): regenerate compaction error schema"
+    },
+    {
+      "sha": "75c34fa9a0052e7bd03dbeb5aae61f14c057dd74",
+      "date": "2026-08-08T17:59:25+08:00",
+      "subject": "docs: record DeepSeek squad handoff context"
+    },
+    {
+      "sha": "f1f4722f90521f005c3e7af1fcf4ab7e3e8755f0",
+      "date": "2026-08-08T17:34:40+08:00",
+      "subject": "fix: complete compaction tool continuations"
+    },
+    {
+      "sha": "98e7563aa91880f56757ee19f54b1d62df8804ce",
+      "date": "2026-08-08T16:10:04+08:00",
+      "subject": "fix: harden expert squad generation contracts"
+    },
+    {
+      "sha": "5a656ad98a65788f4b2a535b685e2a4456214dcc",
+      "date": "2026-08-08T14:23:18+08:00",
+      "subject": "feat: add signed desktop hot updates"
+    },
+    {
+      "sha": "a94d80c3e36f725eee097f545f0fd915cff13f21",
+      "date": "2026-08-08T13:23:03+08:00",
+      "subject": "fix(engine): batch raw Git checkpoints"
+    },
+    {
+      "sha": "e8a1adc714c2657ad60e8a372d7abc3b46558df3",
+      "date": "2026-08-08T13:20:10+08:00",
+      "subject": "fix: repair algorithm ownership and identity invariants"
+    },
+    {
+      "sha": "b051fbf2f520ec3d44e2a46ace9f603c660121b2",
+      "date": "2026-08-08T11:25:30+08:00",
+      "subject": "ML实施专家团 Source Analysis"
+    },
+    {
+      "sha": "1f78ffec65d4efc80d02271f53eba026e161dbb2",
+      "date": "2026-08-08T10:52:52+08:00",
+      "subject": "Checkpoint before ML实施专家团 Source Analysis"
+    }
+  ],
+  "stats": ".github/workflows/build.yml                        |  28 +-\n AGENTS.md                                          |  67 ++\n CHANGELOG.md                                       |  14 +-\n README.md                                          |   3 +-\n README.zh-CN.md                                    |   3 +-\n bun.lock                                           |  16 +-\n docs/packaging.md                                  |  35 +-\n .../squad-sdk/agents/orchestrator/system.md        |   6 +-\n .../agents/squad-sdk-contract-reviewer/system.md   |   2 +-\n .../agents/squad-sdk-package-architect/system.md   |   2 +-\n expert-squads/builtin/squad-sdk/expert-squad.jsonc |   2 +-\n .../builtin/squad-sdk/skills/authoring/SKILL.md    |   4 +-\n .../builtin/squad-sdk/skills/import/SKILL.md       |   6 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n .../opencorvus/src/agent/helper-agent-registry.ts  |   1 +\n packages/opencorvus/src/agent/runner.ts            |  12 +-\n .../src/browser-preview/dev-server-command.ts      |   9 +-\n packages/opencorvus/src/browser-preview/extract.ts |   9 +-\n packages/opencorvus/src/browser-preview/persist.ts | 146 ++--\n packages/opencorvus/src/browser-preview/target.ts  |  23 -\n .../opencorvus/src/browser-preview/url-identity.ts |  24 +\n packages/opencorvus/src/build/agent.ts             |  13 +-\n packages/opencorvus/src/engine/engine.sql.ts       |  19 +\n packages/opencorvus/src/engine/git-process.ts      | 338 ++++++--\n packages/opencorvus/src/engine/git.ts              | 965 ++++++++++++++++-----\n packages/opencorvus/src/engine/ownership.ts        | 145 +++-\n packages/opencorvus/src/engine/state.ts            |   5 +-\n .../src/engine/task-execution-capsule-binding.ts   |  37 +-\n .../src/execution-capsule/tree-digest.ts           | 364 +++++++-\n .../opencorvus/src/expert-squad/builtin/index.ts   |  15 +-\n .../builtin/research-studio/expert-squad.jsonc     |   2 +-\n packages/opencorvus/src/id/id.ts                   |  88 +-\n packages/opencorvus/src/index.ts                   |   2 -\n packages/opencorvus/src/memory/search.ts           |  19 +-\n packages/opencorvus/src/memory/session-memory.ts   |   9 +-\n packages/opencorvus/src/orchestrator/tools.ts      |   7 -\n packages/opencorvus/src/runtime/shims.ts           |  13 +-\n .../src/runtime/task-process-deployment.ts         |   5 +\n .../opencorvus/src/scheduler/automation-service.ts |  43 +-\n packages/opencorvus/src/scheduler/recurrence.ts    |  47 +-\n .../opencorvus/src/scheduler/task-queue-service.ts | 149 ++--\n .../src/server/routes/browser-preview.ts           |   6 +-\n packages/opencorvus/src/session/compaction.ts      | 107 ++-\n packages/opencorvus/src/session/control.ts         |  14 +-\n packages/opencorvus/src/session/index.ts           |  78 +-\n packages/opencorvus/src/session/loop.ts            | 133 ++-\n packages/opencorvus/src/session/message.ts         |  47 +-\n packages/opencorvus/src/session/prompt/parts.ts    |  41 +-\n packages/opencorvus/src/session/prompt/state.ts    | 119 ++-\n .../opencorvus/src/storage/schema-migration.ts     |  33 +\n packages/opencorvus/src/storage/schema.ts          |   1 +\n packages/opencorvus/src/tool/browser-preview.ts    |   4 +-\n packages/opencorvus/src/util/process.ts            | 118 ++-\n packages/opencorvus/src/worktree/gc.ts             |  28 +-\n packages/opencorvus/src/worktree/index.ts          | 219 ++++-\n .../src/worktree/ownership-critical-section.ts     |  68 ++\n .../opencorvus/test/algorithm-batch-one.test.ts    | 290 +++++++\n .../test/algorithm-repair-contracts.test.ts        |  59 ++\n .../browser-preview/target-persistence.test.ts     |  56 ++\n .../conversation-tool-execution-authority.test.ts  | 113 +++\n .../test/engine-git-batched-raw-import.test.ts     |  91 ++\n .../test/engine-git-batched-scale.test.ts          |  71 ++\n .../test/engine-git-batched-transaction.test.ts    | 555 ++++++++++++\n .../test/engine-git-safe-environment.test.ts       | 290 +++++--\n .../test/execution-capsule-source-tree.test.ts     | 231 ++++-\n .../expert-squad/research-studio-package.test.ts   |  15 +-\n .../test/expert-squad/squad-sdk-package.test.ts    | 117 ++-\n packages/opencorvus/test/fixture/engine-git.ts     |  44 +\n packages/opencorvus/test/fixture/memory.ts         |   2 +-\n .../test/memory/search-filter-order.test.ts        |  45 +\n .../opencorvus/test/memory/session-memory.test.ts  | 745 +++++++++++++++-\n .../test/process-streaming-input.test.ts           |  69 ++\n .../test/scheduler-claim-and-fire-identity.test.ts | 184 ++++\n .../test/storage/schema-migration.test.ts          |  73 +-\n .../test/task-process-deployment-bootstrap.test.ts |  45 +\n packages/overlay/package.json                      |   2 +-\n packages/overlay/script/build.ts                   |  27 +\n packages/overlay/src-tauri/Cargo.lock              | 309 ++++++-\n packages/overlay/src-tauri/Cargo.toml              |   3 +-\n .../src-tauri/gen/schemas/acl-manifests.json       |   2 +-\n .../src-tauri/gen/schemas/desktop-schema.json      |  54 ++\n .../src-tauri/gen/schemas/windows-schema.json      |  54 ++\n packages/overlay/src-tauri/src/main.rs             | 317 ++++++-\n packages/overlay/src-tauri/tauri.conf.json         |   9 +-\n .../src/components/ComposerModelSelector.tsx       |  23 +-\n .../overlay/src/components/ConfigDialogHost.tsx    |   2 +\n .../src/components/settings/DesktopUpdatePanel.tsx | 114 +++\n .../src/components/settings/ProvidersPanel.tsx     |  30 +-\n packages/overlay/src/i18n/en-US.json               |  17 +\n packages/overlay/src/i18n/zh-CN.json               |  17 +\n packages/overlay/src/main.tsx                      |   6 +-\n packages/overlay/src/services/desktop-update.ts    | 165 ++++\n packages/overlay/src/services/host-transport.ts    |   6 +\n packages/overlay/src/services/provider-refresh.ts  |  70 ++\n packages/overlay/src/services/tauri-transport.ts   |   6 +\n .../test/host-transport-capabilities.test.ts       |   3 +\n packages/overlay/test/provider-refresh.test.ts     |  97 +++\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/sdk/js/src/gen/types.gen.ts               |  14 +\n packages/sdk/openapi.json                          |  47 +\n packages/transport-protocol/package.json           |   2 +-\n packages/transport-protocol/src/index.ts           |   7 +\n packages/util/package.json                         |   2 +-\n script/check-release-assets.ts                     |  12 +-\n script/desktop-update-channel.ts                   |  16 +\n script/desktop-update-manifest.test.ts             |  90 ++\n script/generate-desktop-update-manifest.ts         | 101 +++\n script/github-actions-workflow-contract.test.ts    |  16 +-\n script/package-gui-installer-matrix.test.ts        |  52 ++\n script/package-gui-installer-matrix.ts             |  44 +-\n script/release-asset-contract.test.ts              |  80 +-\n script/release-asset-contract.ts                   |  41 +\n script/stage-release-upload-assets.test.ts         |  20 +-\n script/stage-release-upload-assets.ts              |  19 +-\n ...026-08-08-agents-general-rules-consolidation.md |  43 +\n ...08-machine-learning-implementation-squad-e2e.md | 362 ++++++++\n 121 files changed, 8204 insertions(+), 919 deletions(-)"
+}
