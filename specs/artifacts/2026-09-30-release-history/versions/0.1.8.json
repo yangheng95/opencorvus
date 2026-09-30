@@ -1,0 +1,90 @@
+{
+  "version": "0.1.8",
+  "source": "36772e0533f65c645a0067909835aeb075fb4900",
+  "tag": "v0.1.8",
+  "previousSource": "581feef4e29295568e908eb06b8e4964d978087f",
+  "sourceDate": "2026-09-20T19:01:23+08:00",
+  "commits": [
+    {
+      "sha": "36772e0533f65c645a0067909835aeb075fb4900",
+      "date": "2026-09-20T19:01:23+08:00",
+      "subject": "fix: reject ineffective hash acceptance and evidence-free retries"
+    },
+    {
+      "sha": "32779375e124c66cfe1e26cdff7880910b461a0f",
+      "date": "2026-09-20T18:49:37+08:00",
+      "subject": "test: remove stale built-in squad revision pins"
+    },
+    {
+      "sha": "c2b2af390eaed1d0d1088680c88b195ee30f82dc",
+      "date": "2026-09-20T17:57:57+08:00",
+      "subject": "fix: settle Windows admission controls and prepare 0.1.8"
+    },
+    {
+      "sha": "cf57d1994df7c6797152d62419fcd22d852486cc",
+      "date": "2026-09-20T13:23:49+08:00",
+      "subject": "docs: record mission authoring repair deployment"
+    },
+    {
+      "sha": "6ff82ac4c426b72b9137ec8a5c575ed263143d79",
+      "date": "2026-09-20T13:06:12+08:00",
+      "subject": "fix(mission): allow authored task assignments"
+    },
+    {
+      "sha": "2f3509e8e876fa21cfdfe2ed2cfb4491a3653ba2",
+      "date": "2026-09-20T12:18:55+08:00",
+      "subject": "docs: verify repaired desktop restart"
+    },
+    {
+      "sha": "8df5f4c232d5c42d77d357783eed63a530ce848a",
+      "date": "2026-09-20T11:56:20+08:00",
+      "subject": "docs: record continuation repair build verification"
+    },
+    {
+      "sha": "9378aa57e9e9badd6dbb4a121db0ba747f6b405f",
+      "date": "2026-09-20T11:41:21+08:00",
+      "subject": "fix: unify worker continuation input and recovery authority"
+    },
+    {
+      "sha": "1a41c7fd697fc26440435282d1adbe9c620b28d5",
+      "date": "2026-09-20T10:39:59+08:00",
+      "subject": "docs: record authorized original-PRD case launch"
+    },
+    {
+      "sha": "01c773933117eda9b7ce225f2c2486fdec5ee3df",
+      "date": "2026-09-20T10:22:57+08:00",
+      "subject": "docs: record repaired runtime and fresh-case approval boundary"
+    },
+    {
+      "sha": "7b662d3f525af22d7036bdf6f7375af4210bdcd3",
+      "date": "2026-09-20T10:07:45+08:00",
+      "subject": "fix: preserve PRD sources and use browser node liveness"
+    },
+    {
+      "sha": "98f4e2854788318aa9b21b56cf23204e78832db9",
+      "date": "2026-09-20T03:08:56+08:00",
+      "subject": "fix: recover disconnected session mcp owners"
+    },
+    {
+      "sha": "f33c13a399fac96e7325bd2a442d513187a57c87",
+      "date": "2026-09-20T02:03:38+08:00",
+      "subject": "test: use native filesystem paths for Node sidecar fixtures"
+    },
+    {
+      "sha": "8a6058f58d7cd62ed620c239f6ffb1a1449f949f",
+      "date": "2026-09-20T01:49:48+08:00",
+      "subject": "ci: isolate dependency audit from verification and tests"
+    },
+    {
+      "sha": "1b1a0e0bfcd9e663a742b978202919e7b5a993f9",
+      "date": "2026-09-20T01:38:26+08:00",
+      "subject": "docs: record 0.1.7 visual acceptance and audit wait"
+    },
+    {
+      "sha": "d357969eaadffe0da78ae3ec01773b024b499982",
+      "date": "2026-09-20T01:16:14+08:00",
+      "subject": "docs: record 0.1.7 visual acceptance blocker"
+    }
+  ],
+  "stats": ".github/workflows/test.yml                         |  30 +-\n AGENTS.md                                          |   2 +\n CHANGELOG.md                                       |   8 +-\n bun.lock                                           |  16 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../opencorvus/generated/expert-squad-revisions.ts |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n .../script/benchmark/external-agent/contract.ts    |   4 +-\n .../harbor/run_opencorvus_automationbench.py       |   2 +-\n .../opencorvus/src/agent/dispatch-adapter-input.ts |  18 -\n packages/opencorvus/src/agent/dispatch-outcome.ts  |   6 +-\n packages/opencorvus/src/agent/prompt-projection.ts |  11 +\n packages/opencorvus/src/agent/runner.ts            |  10 +-\n .../opencorvus/src/browser-preview/liveness.ts     |  89 ++---\n .../src/browser/runtime/node-executor.ts           |   2 +-\n packages/opencorvus/src/build/agent.ts             |   3 +\n packages/opencorvus/src/build/types.ts             |   2 +-\n .../opencorvus/src/delegated-worker/context.ts     |   5 +-\n .../opencorvus/src/engine/dispatch-settlement.ts   |  24 ++\n .../opencorvus/src/engine/task-request-source.ts   | 265 --------------\n .../advanced/agents/requirement-engineer/system.md |   2 +\n .../builtin/advanced/expert-squad.jsonc            |   2 +-\n packages/opencorvus/src/intent/bundle.ts           |  15 +-\n packages/opencorvus/src/intent/request-prompt.ts   |   4 +-\n packages/opencorvus/src/mcp/index.ts               |  28 +-\n packages/opencorvus/src/orchestrator/agent.ts      |   8 +-\n .../src/orchestrator/analyze-intent-tool.ts        |   7 +-\n .../opencorvus/src/orchestrator/architect-stage.ts |   4 +-\n packages/opencorvus/src/orchestrator/build-tool.ts |   3 +-\n .../src/orchestrator/dispatch-agent-tool.ts        |   8 +-\n .../src/orchestrator/requirements-stage.ts         |   4 +-\n packages/opencorvus/src/orchestrator/tools.ts      |   4 +-\n packages/opencorvus/src/panel/capability.ts        |   2 +-\n .../opencorvus/src/prompt/core/mission-core.txt    |   8 +-\n .../src/prompt/core/orchestrator-core.txt          |   7 +-\n .../src/prompt/core/requirements-core.txt          |   4 +-\n .../prompt/fragments/build-runtime-discipline.ts   |   2 +-\n .../src/prompt/fragments/task-request-scope.ts     |   4 +-\n .../prompt/fragments/verification-discipline.ts    |   9 +\n .../opencorvus/src/requirements/output-tools.ts    |   3 +-\n packages/opencorvus/src/requirements/types.ts      |   8 +-\n packages/opencorvus/src/session/llm.ts             |  10 +-\n .../storage/task-creation-identity-validation.ts   |  63 +---\n packages/opencorvus/src/task-api/task-creator.ts   | 126 +------\n .../architect-domain-incomplete-settlement.test.ts |   1 -\n .../automationbench-skill-contract.test.ts         |   6 +-\n .../test/build-terminal-fact-publication.test.ts   |  68 +++-\n .../test/delegated-worker-source-routing.test.ts   |   2 +\n .../test/engine-interaction-recovery.test.ts       |   4 +-\n .../test/expert-squad/advanced-package.test.ts     |   2 -\n .../intent-analysis-blocker-settlement.test.ts     |   6 +-\n .../opencorvus/test/intent-request-prompt.test.ts  |   6 +-\n .../mcp/scoped-connection-owner-recovery.test.ts   |  76 ++++\n .../test/mission-scope-partition-policy.test.ts    |  16 +-\n .../mission-task-creation-opened-fence.test.ts     | 110 +++++-\n ...chestrator-streamed-dispatch-settlement.test.ts | 398 ++++++++++++++++++---\n .../test/process-authority-runtime.test.ts         |  28 ++\n ...ected-worker-continuation-compatibility.test.ts |  12 +-\n .../test/prompt-composition-fingerprint.test.ts    |  49 ++-\n ...quirements-domain-incomplete-settlement.test.ts |  53 ++-\n .../opencorvus/test/task-request-source.test.ts    | 397 --------------------\n .../test/verification-discipline.test.ts           |  76 ++++\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n packages/util/src/process-node.ts                  |   4 +\n packages/util/test/node-runtime.test.ts            |  38 +-\n packages/util/test/process.test.ts                 |  46 +++\n script/github-actions-workflow-contract.test.ts    |  72 ++--\n specs/README.md                                    |  12 +\n .../2026-09-20-browser-prd-case/README.md          |  30 ++\n .../artifacts/2026-09-20-browser-prd-case/case.ts  |  98 +++++\n .../2026-09-20-browser-prd-case/receipt.json       |  27 ++\n specs/artifacts/README.md                          |   2 +\n specs/current/architecture/04-extensions.md        |  13 +-\n specs/current/architecture/task-control-plane.md   |  12 +-\n ...09-20-browser-preview-prd-execution-fidelity.md |  61 ++++\n .../2026-09/2026-09-20-meaningful-verification.md  |  43 +++\n ...26-09-20-mission-append-browser-mcp-recovery.md | 109 ++++++\n .../2026-09-20-mission-request-authoring.md        |  43 +++\n specs/records/2026-09/2026-09-20-v0.1.7-release.md |  62 +++-\n specs/records/2026-09/2026-09-20-v0.1.8-release.md |  50 +++\n ...9-20-worker-continuation-attachment-recovery.md |  48 +++\n specs/records/2026-09/README.md                    |  12 +\n 92 files changed, 1813 insertions(+), 1141 deletions(-)"
+}
