@@ -1,0 +1,25 @@
+{
+  "version": "0.1.5",
+  "source": "6775a92aa80f0436fabd49f97a4380e38200b5c9",
+  "tag": "v0.1.5",
+  "previousSource": "3010ea34c1b99fe35bf9f36840f5dfb9000f5b7a",
+  "sourceDate": "2026-09-19T21:17:04+08:00",
+  "commits": [
+    {
+      "sha": "6775a92aa80f0436fabd49f97a4380e38200b5c9",
+      "date": "2026-09-19T21:17:04+08:00",
+      "subject": "fix(auth): resume owned OAuth flows and release pending cancellations for 0.1.5"
+    },
+    {
+      "sha": "02879c12008646b01f2cfcea13411bcadb74cbdd",
+      "date": "2026-09-19T20:20:58+08:00",
+      "subject": "docs: record verified 0.1.4 startup repair and pending release replacement"
+    },
+    {
+      "sha": "d7833f734a2503a337b67647f239d36c17d328c1",
+      "date": "2026-09-19T20:13:19+08:00",
+      "subject": "fix(sdk): observe startup receipts from durable file state"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |   5 +-\n bun.lock                                           |  16 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/opencorvus/src/cli/cmd/auth.ts            |   5 +-\n packages/opencorvus/src/provider/auth.ts           | 231 +++++++++++++------\n packages/opencorvus/src/server/routes/global.ts    |  27 +++\n packages/opencorvus/src/server/routes/provider.ts  |  27 +++\n .../test/provider-cli-auth-occurrence.test.ts      | 101 +++++++++\n .../opencorvus/test/provider-oauth-flow.test.ts    | 118 +++++++++-\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n .../src/components/settings/ProvidersPanel.tsx     |   7 +-\n packages/overlay/src/i18n/en-US.json               |   2 +\n packages/overlay/src/i18n/zh-CN.json               |   2 +\n packages/overlay/src/services/llm.ts               |  20 +-\n packages/overlay/test/llm-auth-cancel.test.ts      |  68 +++++-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/sdk/js/src/gen/sdk.gen.ts                 |  86 ++++++++\n packages/sdk/js/src/gen/types.gen.ts               | 100 +++++++++\n packages/sdk/js/src/startup-receipt.ts             |  70 ++++--\n packages/sdk/js/test/startup-receipt.test.ts       | 109 ++++++++-\n packages/sdk/openapi.json                          | 245 +++++++++++++++++++++\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n packages/web/src/content/docs/reference/api.mdx    |   2 +\n .../web/src/content/docs/zh-cn/reference/api.mdx   |   2 +\n specs/README.md                                    |   2 +\n specs/current/architecture/06-provider.md          |   8 +-\n .../architecture/server-runtime-readiness.md       |   7 +\n specs/records/2026-09/2026-09-19-v0.1.4-release.md | 107 +++++++++\n .../2026-09/2026-09-19-v0.1.5-oauth-release.md     |  66 ++++++\n specs/records/2026-09/README.md                    |   2 +\n 39 files changed, 1339 insertions(+), 124 deletions(-)"
+}
