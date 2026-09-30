@@ -1,5 +1,9 @@
 # 2026-09 Records
 
+- [Tool disclosure layout correction](2026-09-30-tool-disclosure-layout.md)
+
+- [Current-runtime Harbor full comparison restart](2026-09-30-harbor-current-runtime-restart.md)
+
 - [Agent execution redesign implementation](2026-09-30-agent-execution-implementation.md)
 
 - [File editor syntax highlighting](2026-09-30-file-editor-syntax-highlighting.md)

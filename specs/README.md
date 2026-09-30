@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Tool disclosure layout correction](records/2026-09/2026-09-30-tool-disclosure-layout.md)
+
+- [Current-runtime Harbor full comparison restart](records/2026-09/2026-09-30-harbor-current-runtime-restart.md)
+
 - [Agent execution redesign implementation](records/2026-09/2026-09-30-agent-execution-implementation.md)
 
 - [File editor syntax highlighting](records/2026-09/2026-09-30-file-editor-syntax-highlighting.md)
