@@ -705,6 +705,10 @@
 - Overlay 不再在每一个流式片段到达时重新推导整段会话。
 - Overlay 启动包从 2.89 MB 降到 1.70 MB：七个 artifact 渲染器与代码编辑器改为按需加载。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/0a6c203a320e411b16aac804db164498a9a56b97) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/ffa867ae02f9d0a1b9f6ab4cafd0432f0f2a4f5d...0a6c203a320e411b16aac804db164498a9a56b97)。
+
 ## 0.0.48beta - 2026-08-19
 
 本版本汇总自 `0.0.46beta` 发布以来的全部用户可见改动。`0.0.47beta` 发布过二进制，但没有单列条目，其改动一并计入本节。

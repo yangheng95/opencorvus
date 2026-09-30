@@ -1,0 +1,95 @@
+{
+  "version": "0.0.49-beta",
+  "source": "0a6c203a320e411b16aac804db164498a9a56b97",
+  "tag": "v0.0.49-beta",
+  "previousSource": "ffa867ae02f9d0a1b9f6ab4cafd0432f0f2a4f5d",
+  "sourceDate": "2026-08-19T20:10:19+08:00",
+  "commits": [
+    {
+      "sha": "0a6c203a320e411b16aac804db164498a9a56b97",
+      "date": "2026-08-19T20:10:19+08:00",
+      "subject": "docs(specs): record the second repair round on the evolution chain"
+    },
+    {
+      "sha": "4ffe0cd7e07936c68510213b0d1663e1d4560aec",
+      "date": "2026-08-19T20:09:03+08:00",
+      "subject": "docs(specs): commit the records left uncommitted alongside that work"
+    },
+    {
+      "sha": "0ddff7b3956f4ec3ce6b2ebf75746d58b88b57f1",
+      "date": "2026-08-19T20:07:44+08:00",
+      "subject": "chore: pick up the in-flight work left in the worktree"
+    },
+    {
+      "sha": "009f718917240621ad6d137a15da33664c713ca7",
+      "date": "2026-08-19T19:58:54+08:00",
+      "subject": "test(web): check the extension role counts individually, not just their sum"
+    },
+    {
+      "sha": "edec33066b9dfadcbe53f788dbbdca33eeaaac5c",
+      "date": "2026-08-19T19:51:22+08:00",
+      "subject": "test(web): make the README figure check actually constrain the figures"
+    },
+    {
+      "sha": "b8236c2ce4e0a9d8b5334624575dabcb76c73468",
+      "date": "2026-08-19T19:36:45+08:00",
+      "subject": "fix(overlay): give a sub-agent one place in the surfaces it appears in"
+    },
+    {
+      "sha": "90c99bb1849bf2a2cfdc11745058d08e201f6094",
+      "date": "2026-08-19T19:34:15+08:00",
+      "subject": "docs: fix what the review caught — broken links and six overstated claims"
+    },
+    {
+      "sha": "2cde74f606b0ad5a3bd39fcdbb2b6d0cd7c692ac",
+      "date": "2026-08-19T19:32:34+08:00",
+      "subject": "fix(protocol): let a Mission hear from its own Task again"
+    },
+    {
+      "sha": "50e61b7db632c0a7fc98487d078542373ffbca7f",
+      "date": "2026-08-19T19:20:07+08:00",
+      "subject": "fix(web): give the hero a headline that fits on two lines"
+    },
+    {
+      "sha": "6c93d5cd868bcf0375078d14102841031692a14b",
+      "date": "2026-08-19T19:10:36+08:00",
+      "subject": "release: bump to 0.0.49-beta"
+    },
+    {
+      "sha": "0d575de561e3d66479349a303a6bd41dc03d256a",
+      "date": "2026-08-19T19:10:20+08:00",
+      "subject": "perf(overlay): load the artifact renderers and the editor on the artifact"
+    },
+    {
+      "sha": "995f751f929545071a702b4753adec7c875ea30d",
+      "date": "2026-08-19T19:07:59+08:00",
+      "subject": "docs: say what this is for — long-horizon work, and squads that revise"
+    },
+    {
+      "sha": "ed3da8f06002dd4c0d63d3ebddd43b2552dba805",
+      "date": "2026-08-19T18:43:28+08:00",
+      "subject": "perf(overlay): stop re-deriving the whole conversation on every streamed part"
+    },
+    {
+      "sha": "b008cd395f4ab91a716e9c1f34d40c21961bf6a4",
+      "date": "2026-08-19T17:27:42+08:00",
+      "subject": "docs: measure what the Overlay actually spends its time on"
+    },
+    {
+      "sha": "5f41e59f817eb3d36d835f9a3262d88c420808e7",
+      "date": "2026-08-19T17:13:33+08:00",
+      "subject": "fix(server): give Work Ledger row pins the Project they belong to"
+    },
+    {
+      "sha": "8da95c85ab4abd13660c3263b9a7a1a1580fde46",
+      "date": "2026-08-19T16:24:32+08:00",
+      "subject": "docs: make the README demo actually play"
+    },
+    {
+      "sha": "f6a8aa7e1b69cb2630b617f5408496249ed15ab2",
+      "date": "2026-08-19T16:20:06+08:00",
+      "subject": "fix(release): tag the Release at the commit it was built from"
+    }
+  ],
+  "stats": ".github/workflows/build.yml                        |   8 +\n CHANGELOG.md                                       |  32 ++\n README.md                                          | 134 ++++++-\n README.zh-CN.md                                    | 114 +++++-\n bun.lock                                           |  16 +-\n docs/website-restyle-plan.md                       |   7 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/opencorvus/src/engine/control-lease.ts    |  28 ++\n packages/opencorvus/src/protocol/delivery.ts       |  17 +-\n .../opencorvus/src/protocol/session-wake-state.ts  |   8 +-\n packages/opencorvus/src/tool/artifact-catalog.ts   |  23 +-\n .../evolution-chain-host-defect-repairs.test.ts    | 114 ++++++\n .../global-router-project-owned-routes.test.ts     | 141 +++++++\n .../opencorvus/test/project-route-context.test.ts  |  14 +\n .../test/scheduler-wake-message-identity.test.ts   | 147 +++++++\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   6 +-\n .../overlay/src/components/ConfigDialogHost.tsx    |  42 +-\n .../components/ConversationArtifactInspector.tsx   |  15 +-\n packages/overlay/src/components/FileEditorPane.tsx |   7 +-\n .../src/components/InteractiveArtifactPart.tsx     |  33 +-\n .../src/components/SubagentConversationPanel.tsx   |  22 +-\n packages/overlay/src/services/tree-writer.ts       | 208 ++++++++--\n packages/overlay/src/store/card-tree.ts            |   9 +\n packages/overlay/src/styles/surfaces/titlebar.css  |  10 +-\n .../overlay/src/utils/subagent-presentation.ts     |  29 +-\n .../overlay/test/subagent-session-records.test.ts  |  99 +++++\n .../tree-writer-incremental-projection.test.ts     | 239 ++++++++++++\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/sdk/js/src/gen/sdk.gen.ts                 |  15 +-\n packages/sdk/js/src/gen/types.gen.ts               |  14 +-\n packages/sdk/js/src/route-policy.ts                |  27 +-\n packages/sdk/openapi.json                          |  20 +\n packages/transport-protocol/package.json           |   2 +-\n packages/transport-protocol/src/index.ts           |  27 +-\n packages/transport-protocol/test/contract.test.ts  |  38 ++\n packages/util/package.json                         |   2 +-\n packages/web/astro.config.mjs                      |   4 +-\n packages/web/public/media/opencorvus-demo.gif      | Bin 0 -> 3199154 bytes\n packages/web/script/generate-public-market.ts      |  84 ++++\n packages/web/src/assets/lander/captured.json       |  10 +-\n packages/web/src/components/OcHeader.astro         |  10 +-\n packages/web/src/components/OcLanding.astro        | 376 +++++++++++++++++-\n .../web/src/components/OcSquadCompositions.astro   | 130 +++++++\n .../web/src/content/docs/concepts/long-horizon.mdx |  88 +++++\n .../content/docs/concepts/squad-composition.mdx    |  68 ++++\n .../src/content/docs/expert-squads/evolution.mdx   |  97 +++++\n .../content/docs/zh-cn/concepts/long-horizon.mdx   |  71 ++++\n .../docs/zh-cn/concepts/squad-composition.mdx      |  57 +++\n .../content/docs/zh-cn/expert-squads/evolution.mdx |  81 ++++\n packages/web/src/content/landing-copy.ts           | 223 ++++++++++-\n packages/web/src/content/landing.ts                | 424 ---------------------\n .../src/content/squad-compositions.generated.ts    | 270 +++++++++++++\n packages/web/src/content/squad-compositions.ts     | 230 +++++++++++\n packages/web/src/lib/landing-compositions.ts       | 101 +++++\n packages/web/test/landing-copy.test.ts             | 162 +++++++-\n script/github-actions-workflow-contract.test.ts    |  26 ++\n specs/README.md                                    |   8 +\n ...-19-long-horizon-and-evolution-repositioning.md | 183 +++++++++\n ...2026-08-19-overlay-performance-investigation.md | 106 ++++++\n ...2026-08-19-overlay-projection-incremental-p0.md | 109 ++++++\n ...26-08-19-overlay-startup-bundle-and-markdown.md | 119 ++++++\n ...2026-08-19-subagent-session-occurrence-dedup.md |  56 +++\n ...mission-scheduler-message-message-row-decode.md | 282 ++++++++++++++\n ...08-19-work-ledger-item-pin-project-authority.md |  63 +++\n ...026-08-19-xiaohongshu-long-horizon-promotion.md |  86 +++++\n specs/records/2026-08/README.md                    |   8 +\n 74 files changed, 4617 insertions(+), 602 deletions(-)"
+}
