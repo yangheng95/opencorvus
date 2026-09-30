@@ -1,0 +1,1075 @@
+{
+  "version": "0.0.56-beta",
+  "source": "8691c972d18486f8c5848b869b184d9c7e6395cb",
+  "tag": "v0.0.56-beta",
+  "previousSource": "22832f8fb97df24a50c14145fc03bf995db54e42",
+  "sourceDate": "2026-08-29T16:13:26+08:00",
+  "commits": [
+    {
+      "sha": "8691c972d18486f8c5848b869b184d9c7e6395cb",
+      "date": "2026-08-29T16:13:26+08:00",
+      "subject": "chore(release): prepare v0.0.56 beta"
+    },
+    {
+      "sha": "4e3c9b7d680ae27272ee3006a71d2cb2701e7b3e",
+      "date": "2026-08-29T14:47:01+08:00",
+      "subject": "fix(provider): serialize native OpenAI tool calls"
+    },
+    {
+      "sha": "a6c704e1514359cd441e4794874dba75fdb8624c",
+      "date": "2026-08-29T13:21:48+08:00",
+      "subject": "fix(project): close bootstrap and identity authority gaps"
+    },
+    {
+      "sha": "9be16db54599070a33f295624c98c83676bb4dbb",
+      "date": "2026-08-29T11:34:29+08:00",
+      "subject": "test(agent): align worker coordination fixture"
+    },
+    {
+      "sha": "850417c63492a88a11adbd88ab55d1b2f157f71f",
+      "date": "2026-08-29T11:14:12+08:00",
+      "subject": "fix(mission): align panel action coordination"
+    },
+    {
+      "sha": "8457d6f89886783a1cfaa3a953728cfebf153f58",
+      "date": "2026-08-29T09:41:19+08:00",
+      "subject": "refactor(overlay): retire dormant architecture surfaces"
+    },
+    {
+      "sha": "d449506219ce474286b446f1c126545c1b97d240",
+      "date": "2026-08-29T09:08:11+08:00",
+      "subject": "fix(mcp): unify native session runtime ownership"
+    },
+    {
+      "sha": "9ebe35c620de37f1c19e3db505552e38a47694b3",
+      "date": "2026-08-29T06:54:44+08:00",
+      "subject": "refactor(scheduler): compose global conversation runtime"
+    },
+    {
+      "sha": "a305e5bd6e971b11100e5cecf0c35d499c78b51d",
+      "date": "2026-08-29T06:23:35+08:00",
+      "subject": "refactor(task-api): inject execution directory initializer"
+    },
+    {
+      "sha": "b0814e121ba5ea55af2f6d7aaf35c8dbf7ecb999",
+      "date": "2026-08-29T05:40:30+08:00",
+      "subject": "refactor(protocol): inject session wake delivery port"
+    },
+    {
+      "sha": "3fbfbfdf0a06eff976c13d8637f445327a733486",
+      "date": "2026-08-29T05:00:05+08:00",
+      "subject": "refactor(protocol): bind task delivery materializer"
+    },
+    {
+      "sha": "25900cad83281d473752bbac00b67d710bf06e49",
+      "date": "2026-08-29T04:41:11+08:00",
+      "subject": "refactor(orchestrator): inject scheduler message sender"
+    },
+    {
+      "sha": "d95983c83230aa2937d5e357aefd0b6d995b975c",
+      "date": "2026-08-29T04:12:41+08:00",
+      "subject": "fix(mcp): bind provider kind to server authority"
+    },
+    {
+      "sha": "543194127588fbbed92faf5ee8420ae7c60c094f",
+      "date": "2026-08-29T04:00:33+08:00",
+      "subject": "refactor(scheduler): inject event session wake owner"
+    },
+    {
+      "sha": "1703afeee097ae24c613a82e89eaaef84a6d3075",
+      "date": "2026-08-29T03:22:18+08:00",
+      "subject": "refactor(scheduler): isolate delayed wake schedules"
+    },
+    {
+      "sha": "05d43738476860c51bc00e3a0a446b7218ab9d9a",
+      "date": "2026-08-29T02:56:38+08:00",
+      "subject": "refactor(orchestrator): isolate wait composition"
+    },
+    {
+      "sha": "66659806cd108aafa7fdf448c2a0170a7c1d7757",
+      "date": "2026-08-29T01:56:37+08:00",
+      "subject": "fix(mission): close acceptance baseline gaps"
+    },
+    {
+      "sha": "06bb64670d84a5b75e0ec611946929134e0290aa",
+      "date": "2026-08-29T01:46:12+08:00",
+      "subject": "feat(expert-squad): add light advisory team"
+    },
+    {
+      "sha": "a4ed569de0c571726f81a57292e8cfd72608e706",
+      "date": "2026-08-29T00:43:16+08:00",
+      "subject": "refactor(expert-squad): isolate evolution mutation intent"
+    },
+    {
+      "sha": "cb6995a800618b35ea54c4834f78dd71874ae44d",
+      "date": "2026-08-29T00:17:16+08:00",
+      "subject": "feat(mission): persist acceptance delta closure"
+    },
+    {
+      "sha": "2d8727d522e60c58fa964bdf5bb69e7d184a0e91",
+      "date": "2026-08-28T23:15:55+08:00",
+      "subject": "refactor(build): remove stale prompt dependency"
+    },
+    {
+      "sha": "ea8ec4fa1cc4f433ad2293ee79db6041e5dac00f",
+      "date": "2026-08-28T22:38:56+08:00",
+      "subject": "refactor(engine): isolate task file references"
+    },
+    {
+      "sha": "87b104691d7f9cdabadabdc52528cd274ff85f22",
+      "date": "2026-08-28T22:04:48+08:00",
+      "subject": "refactor(protocol): isolate scheduler wake reason"
+    },
+    {
+      "sha": "5b452b0419513a2cee5fa5e3df5b454183b2fe8e",
+      "date": "2026-08-28T21:46:45+08:00",
+      "subject": "refactor(engine): isolate task state ownership"
+    },
+    {
+      "sha": "13bbe48b9744a7911f047442f8893503dc26465d",
+      "date": "2026-08-28T21:25:00+08:00",
+      "subject": "refactor(engine): isolate exact artifact version facts"
+    },
+    {
+      "sha": "a40e95534d852b7a27bd9b9f546e95d17f699384",
+      "date": "2026-08-28T20:59:58+08:00",
+      "subject": "refactor(engine): isolate completion decision reads"
+    },
+    {
+      "sha": "50dfc8570ace60a545273d4371393b00b0f37a77",
+      "date": "2026-08-28T20:38:19+08:00",
+      "subject": "refactor(agent): isolate artifact provenance facts"
+    },
+    {
+      "sha": "f7646e0cc49080e477da0b6fae4259531b6de351",
+      "date": "2026-08-28T19:55:22+08:00",
+      "subject": "refactor(session): isolate durable tool outcomes"
+    },
+    {
+      "sha": "3be47dd1c31191e12aafa9bccfeac24c0e867036",
+      "date": "2026-08-28T19:37:38+08:00",
+      "subject": "refactor(agent): isolate worker turn facts"
+    },
+    {
+      "sha": "58959b0ec0e65f092a3898bb8c85d6ae99e5ac08",
+      "date": "2026-08-28T19:22:59+08:00",
+      "subject": "refactor(storage): isolate workload integrity"
+    },
+    {
+      "sha": "61db5e4db107a8490f11b4d1a2a8fe537c12d053",
+      "date": "2026-08-28T19:03:47+08:00",
+      "subject": "refactor(engine): erase membership storage edge"
+    },
+    {
+      "sha": "f23356c69007df3407741ae22f7e84c2eb86eae8",
+      "date": "2026-08-28T18:48:11+08:00",
+      "subject": "refactor(engine): isolate dispatch lineage facts"
+    },
+    {
+      "sha": "cdc13fc7f57a3c22d532f20b947d13132f27ed45",
+      "date": "2026-08-28T18:27:15+08:00",
+      "subject": "refactor(engine): move prompt ownership projection"
+    },
+    {
+      "sha": "2ce9fdcd431d84189ccff13b7f44e2681158a2f7",
+      "date": "2026-08-28T17:57:39+08:00",
+      "subject": "refactor(git): erase supervisor type edge"
+    },
+    {
+      "sha": "6c61dcdf1423b691ddb003eeb7df4c5f0e1388df",
+      "date": "2026-08-28T17:39:50+08:00",
+      "subject": "fix(overlay): converge install handoff startup"
+    },
+    {
+      "sha": "6c901ad2c52c64320e47933bb3acab8fba233915",
+      "date": "2026-08-28T17:31:25+08:00",
+      "subject": "refactor(plugin): remove Copilot model self reference"
+    },
+    {
+      "sha": "cf0e577b41b94c9fc624de4e57cb4b8aba79a049",
+      "date": "2026-08-28T17:13:32+08:00",
+      "subject": "refactor(protocol): isolate design resource intent"
+    },
+    {
+      "sha": "2c1b258e37855e3a4e4dc133a7c3a2a58f63913c",
+      "date": "2026-08-28T16:46:58+08:00",
+      "subject": "docs(overlay): record typography acceptance"
+    },
+    {
+      "sha": "ae755f2954ca33663b5979ddb4d7e05609c293ea",
+      "date": "2026-08-28T16:44:53+08:00",
+      "subject": "fix(overlay): converge panel typography roles"
+    },
+    {
+      "sha": "8dec83c6f8ce4838048e2a688486fc68d7813c91",
+      "date": "2026-08-28T15:31:07+08:00",
+      "subject": "refactor(protocol): isolate task-root message schema"
+    },
+    {
+      "sha": "611aa2e0403f6c819fb6f53211b5fd9001aa534a",
+      "date": "2026-08-28T14:42:32+08:00",
+      "subject": "docs(api): record global chat final verification"
+    },
+    {
+      "sha": "75757d958357b81818f99b69910f7edbe41a7a81",
+      "date": "2026-08-28T14:26:52+08:00",
+      "subject": "fix(runtime): bind managed server to exact parent occurrence"
+    },
+    {
+      "sha": "34ecb65bf5d2b2fa213a5c70d51e7f36d25bf61d",
+      "date": "2026-08-28T13:40:08+08:00",
+      "subject": "fix(session): make prompt ownership cross-process"
+    },
+    {
+      "sha": "de0019c4efe9a1081fc1e515e1be2196f43f917e",
+      "date": "2026-08-28T12:31:55+08:00",
+      "subject": "feat(api): add idempotent global chat start"
+    },
+    {
+      "sha": "960193766f4b87516997eaa927123afa46c35dfe",
+      "date": "2026-08-28T10:31:50+08:00",
+      "subject": "fix(project): make directory ownership durable"
+    },
+    {
+      "sha": "04971f0fb01b4790d8496752cdc8fba6e8e3c289",
+      "date": "2026-08-28T07:29:17+08:00",
+      "subject": "fix(mcp): reconcile durable OAuth renewal writes"
+    },
+    {
+      "sha": "17db21916038b139b1a24b048a717433ed9cc97b",
+      "date": "2026-08-28T04:45:24+08:00",
+      "subject": "fix(bun): publish immutable package revisions"
+    },
+    {
+      "sha": "b18a39a0da35164967803e5957bdf6eb41413483",
+      "date": "2026-08-28T03:30:25+08:00",
+      "subject": "fix(conversation): require explicit MCP activation"
+    },
+    {
+      "sha": "9fbecdfa28474f9bf4a0c90f369fefd85c07fb88",
+      "date": "2026-08-28T03:01:52+08:00",
+      "subject": "docs: correct README evidence boundaries"
+    },
+    {
+      "sha": "08d9445e25cb3e02de4cb5521b8109c24af6b1cd",
+      "date": "2026-08-28T02:51:39+08:00",
+      "subject": "refactor(process): converge structured process ownership"
+    },
+    {
+      "sha": "9a9d70a5ca95ad0295d4310923fa2b7b8fdac0b4",
+      "date": "2026-08-28T01:15:13+08:00",
+      "subject": "docs: cut README to one screen"
+    },
+    {
+      "sha": "467cc2b31ef50b1fed5eae079e79e9a4ef939623",
+      "date": "2026-08-28T01:00:03+08:00",
+      "subject": "fix(benchmark): bound task creation observation"
+    },
+    {
+      "sha": "d5a105ee3d414c91aae00c1eea1a9d64cc8cef26",
+      "date": "2026-08-28T00:37:36+08:00",
+      "subject": "docs: rebuild README around checkable evidence"
+    },
+    {
+      "sha": "d87a374a316d0c92f4fda575fc1d701db06ca313",
+      "date": "2026-08-28T00:04:18+08:00",
+      "subject": "docs(overlay): finalize dock lifecycle evidence"
+    },
+    {
+      "sha": "f6c8fd97489507af58b7179ab135a1e12ab78b7a",
+      "date": "2026-08-27T23:59:53+08:00",
+      "subject": "fix(overlay): dispose hidden dock panels"
+    },
+    {
+      "sha": "d89b92cd1b96c04aa1206ca9da41a765a227fd08",
+      "date": "2026-08-27T23:52:44+08:00",
+      "subject": "fix: converge child agent activity and message density"
+    },
+    {
+      "sha": "97f05b21cddc4b6f3d9991cdc43e87c7b08aa661",
+      "date": "2026-08-27T21:58:02+08:00",
+      "subject": "fix: converge message panel transport"
+    },
+    {
+      "sha": "11188e6e90a45d5e72f374c432f18b28461121ee",
+      "date": "2026-08-27T21:32:09+08:00",
+      "subject": "fix(mcp): reserve browser provider identity"
+    },
+    {
+      "sha": "d77447db829f6cda223b2eef8aee6d41b76f110d",
+      "date": "2026-08-27T20:59:40+08:00",
+      "subject": "fix(mcp): converge durable oauth callback broker"
+    },
+    {
+      "sha": "bf34e002c3c47ddd0c3286d4c5da50cdb791a0a8",
+      "date": "2026-08-27T15:46:26+08:00",
+      "subject": "fix(provider): journal credential exchanges"
+    },
+    {
+      "sha": "830204e0d7a94b4db489c6c64ef6188a44cab649",
+      "date": "2026-08-27T13:04:50+08:00",
+      "subject": "fix(config): converge shared backend generations"
+    },
+    {
+      "sha": "cfd1af3d4d33bb5aa9c8c5fd4f15129ecb53b72d",
+      "date": "2026-08-27T11:26:14+08:00",
+      "subject": "fix(work-ledger): show tasks without mission roots"
+    },
+    {
+      "sha": "0c4b9f8d4c6677706556e85d1c8f621a9b16c45d",
+      "date": "2026-08-27T10:52:34+08:00",
+      "subject": "fix(session): fence shell execution recovery"
+    },
+    {
+      "sha": "1ae3a0e14da6464352bfc5014508e8a8146dd1f9",
+      "date": "2026-08-27T08:47:16+08:00",
+      "subject": "fix(session): settle delivered reply batches"
+    },
+    {
+      "sha": "06b260b8b866cddb7188de8ed64de66b48a601d9",
+      "date": "2026-08-27T07:34:06+08:00",
+      "subject": "fix(provider): make refresh explicitly user-owned"
+    },
+    {
+      "sha": "26b050ee138c2901ca3a48d4645583cdf0d9b4cb",
+      "date": "2026-08-27T07:07:46+08:00",
+      "subject": "fix(permission): retain project ledger authority"
+    },
+    {
+      "sha": "d8742373b58f34c005ddb6aa4a89335e04d4ab9f",
+      "date": "2026-08-27T06:06:07+08:00",
+      "subject": "fix(provider): unify auth occurrence ownership"
+    },
+    {
+      "sha": "ff56a7b148f468d9c34f877b6b69e9884f3989e1",
+      "date": "2026-08-27T05:30:53+08:00",
+      "subject": "chore(sdk): refresh task request schema"
+    },
+    {
+      "sha": "7d5b05c7138a162c1f9d5cbef338b52586611302",
+      "date": "2026-08-27T05:26:40+08:00",
+      "subject": "fix(task): serialize global request creation"
+    },
+    {
+      "sha": "28de775a6f84f9742e8becdd4ca1b54d0791cb47",
+      "date": "2026-08-27T04:51:43+08:00",
+      "subject": "fix(mcp): unify oauth callback settlement"
+    },
+    {
+      "sha": "bbd93826ddf22abbe34b723d2252e15a272f16a6",
+      "date": "2026-08-27T03:41:10+08:00",
+      "subject": "fix(config): serialize dependency generations"
+    },
+    {
+      "sha": "f5aa8a92e87916f8cb252d35f308e31d6ac55620",
+      "date": "2026-08-27T03:11:02+08:00",
+      "subject": "fix(session): unify durable lifecycle projection"
+    },
+    {
+      "sha": "15b51a394d94ff663a45db9718ee03e5f62ddc71",
+      "date": "2026-08-27T02:27:42+08:00",
+      "subject": "fix(runtime): own process liveness once"
+    },
+    {
+      "sha": "b53de4a27b45b1e701a74b41a35bf460c7948c41",
+      "date": "2026-08-27T01:53:43+08:00",
+      "subject": "refactor(runtime): unify task control leases"
+    },
+    {
+      "sha": "3ff728181917fea0fea2df827ac870f0cc5af3c0",
+      "date": "2026-08-27T01:19:57+08:00",
+      "subject": "test(runtime): restore production bootstrap evidence"
+    },
+    {
+      "sha": "efe83c1b97faca3a8cdc8e6ac95f509811d927df",
+      "date": "2026-08-27T01:11:06+08:00",
+      "subject": "docs(specs): record the round-16 disposition"
+    },
+    {
+      "sha": "1e0d9236cb6c3387bc71c7dbe00db6b083b57a66",
+      "date": "2026-08-27T01:10:34+08:00",
+      "subject": "fix(mcp,conversation): round-16 review repairs"
+    },
+    {
+      "sha": "354a7305fb4c6f06dcea8a82a489844607aa4c77",
+      "date": "2026-08-27T00:58:27+08:00",
+      "subject": "fix(runtime): close reviewed architecture debt gaps"
+    },
+    {
+      "sha": "273ceb3af093a00c9b36531a63cd1c35db430f91",
+      "date": "2026-08-27T00:42:26+08:00",
+      "subject": "docs(specs): record ARC-018's re-landing, ARC-003 and the LSP deletion"
+    },
+    {
+      "sha": "aa55c6a11fa06f9de6582862fd5a6ec77ad77ca3",
+      "date": "2026-08-27T00:41:28+08:00",
+      "subject": "feat(lsp): delete the Language Server Protocol subsystem"
+    },
+    {
+      "sha": "a1b2105126b84e6652b1d3195d371c8f5d35dd87",
+      "date": "2026-08-27T00:28:52+08:00",
+      "subject": "fix(mcp,conversation): a Conversation owns the Browser runtime it creates"
+    },
+    {
+      "sha": "793d55113e3352a6c359b18239f6833374e82188",
+      "date": "2026-08-27T00:13:32+08:00",
+      "subject": "docs(specs): record Mission Task convergence evidence"
+    },
+    {
+      "sha": "fe9fdd842a4d4c8804b4bd87eb39b034539b1bf7",
+      "date": "2026-08-27T00:12:31+08:00",
+      "subject": "fix(session): converge Mission Task causal ordering"
+    },
+    {
+      "sha": "823b4aba28ffe8fba8cb0b36575f75a7a3ea870e",
+      "date": "2026-08-27T00:04:56+08:00",
+      "subject": "fix(mcp): an OAuth state is spendable exactly once, and the listener asks the store"
+    },
+    {
+      "sha": "90fe418453c1654245ff37160e2122a8911561e4",
+      "date": "2026-08-26T23:50:30+08:00",
+      "subject": "Checkpoint before 落盘论文仓库基线与交付边界"
+    },
+    {
+      "sha": "c6e1569e88c7e8054d2e00a79cb5af73a58ceaca",
+      "date": "2026-08-26T23:42:36+08:00",
+      "subject": "建立论文交付基线与仓库证据矩阵"
+    },
+    {
+      "sha": "651ccc0b146f3b194aab82919644a8f61a2b70a4",
+      "date": "2026-08-26T23:38:34+08:00",
+      "subject": "docs(specs): record the round-15 rejection and reopen ARC-018's listener half"
+    },
+    {
+      "sha": "1339035a8658b3cb2099aa43805b483a2d32927c",
+      "date": "2026-08-26T23:37:52+08:00",
+      "subject": "fix(sdk): the generation intent's packageRoot is load-bearing"
+    },
+    {
+      "sha": "7fe88a687092260094ac4aa3953479a0cf55fe9c",
+      "date": "2026-08-26T23:26:28+08:00",
+      "subject": "Revert \"fix(mcp): the OAuth callback's legitimacy is a durable fact, not an empty map\""
+    },
+    {
+      "sha": "2679f9076f8d6ba5e4bf9ff87999dd2ef19e3908",
+      "date": "2026-08-26T23:23:57+08:00",
+      "subject": "docs(specs): record the two ledger gaps this record was hiding"
+    },
+    {
+      "sha": "7092b5f5da636b723f512fdbb979c456cef1c21b",
+      "date": "2026-08-26T23:19:20+08:00",
+      "subject": "docs(specs): record ARC-001's collapse to one Computer authority"
+    },
+    {
+      "sha": "a1ff4da7f69f7e356bcbf8b983cafba087d88fae",
+      "date": "2026-08-26T23:17:19+08:00",
+      "subject": "Checkpoint before 建立论文交付基线与仓库证据矩阵"
+    },
+    {
+      "sha": "702e030d437a03f6fee6280179870d8ae60fd0d1",
+      "date": "2026-08-26T23:13:25+08:00",
+      "subject": "Checkpoint before 建立论文交付基线与仓库证据矩阵"
+    },
+    {
+      "sha": "4e2b1f456c0db39f69622b17afff4fb25d946dfe",
+      "date": "2026-08-26T23:11:10+08:00",
+      "subject": "fix(session,overlay): close stream and board authority gaps"
+    },
+    {
+      "sha": "808396d9a24cb1eac3d4f68bab159b671e012caa",
+      "date": "2026-08-26T23:01:26+08:00",
+      "subject": "docs(specs): close ARC-018's listener half"
+    },
+    {
+      "sha": "eb162d11f4aa069fc8270f3d549dd6494d51e6ae",
+      "date": "2026-08-26T23:00:54+08:00",
+      "subject": "fix(mcp): the OAuth callback's legitimacy is a durable fact, not an empty map"
+    },
+    {
+      "sha": "a0732507641d3b6413e86e8ec8eff7ac03362d90",
+      "date": "2026-08-26T22:54:08+08:00",
+      "subject": "fix(sdk,server): round-14 review repairs"
+    },
+    {
+      "sha": "953581ad559ff999fe6c19bca3769c50551e8200",
+      "date": "2026-08-26T22:24:52+08:00",
+      "subject": "feat(server): declare the query parameters these routes read"
+    },
+    {
+      "sha": "487cff7f4297ebd4327aca826dfd6273c81d2df4",
+      "date": "2026-08-26T22:13:37+08:00",
+      "subject": "docs(specs): record ARC-034 and the closed round-13 gaps"
+    },
+    {
+      "sha": "d5baa10978f394cdd42a0d0226d2724fa43349f2",
+      "date": "2026-08-26T22:12:01+08:00",
+      "subject": "fix(server): the task event stream declares the cursors it reads"
+    },
+    {
+      "sha": "61852102b463c08052a501216a41cb6052225c34",
+      "date": "2026-08-26T22:07:45+08:00",
+      "subject": "fix(bun,config): close the round-13 recorded gaps in the install receipt"
+    },
+    {
+      "sha": "1ab26c2e5529a6a6577a52f47cca580b289ab8e9",
+      "date": "2026-08-26T22:00:17+08:00",
+      "subject": "fix(sdk): a generation publishes all of its outputs or none"
+    },
+    {
+      "sha": "ba5f7e1a07613d08228e10266d656c6801dc87dc",
+      "date": "2026-08-26T21:47:01+08:00",
+      "subject": "docs(web,specs): correct the LSP pages and the round-13 record claims"
+    },
+    {
+      "sha": "4d62d214d824b9fd80a50bb7c4551d881773d58c",
+      "date": "2026-08-26T21:44:13+08:00",
+      "subject": "fix(channel-runtime,bun,config,engine): round-13 review repairs"
+    },
+    {
+      "sha": "0d4ed43c1cb9fce9aa274f3d79c9118e3eb9ae38",
+      "date": "2026-08-26T21:36:29+08:00",
+      "subject": "docs(specs): record ARC-028 and stage 7 status"
+    },
+    {
+      "sha": "e65a066807531946da19005aa6942dce726fdf1c",
+      "date": "2026-08-26T21:35:00+08:00",
+      "subject": "fix(util,transport-protocol,sdk): break the SDK/transport topology cycle"
+    },
+    {
+      "sha": "18378b2a367ebdd368e797f7ac77a3a5c455ba3d",
+      "date": "2026-08-26T21:29:47+08:00",
+      "subject": "docs(specs): record ARC-031 and the environment-blocked verifications"
+    },
+    {
+      "sha": "a080599945c65f215ad5970e43670622058c8110",
+      "date": "2026-08-26T21:27:25+08:00",
+      "subject": "fix(channel-runtime,opencorvus): one Channel composition root, consumed as a package"
+    },
+    {
+      "sha": "1b097de9b014411c232362aeab699c662eda7013",
+      "date": "2026-08-26T21:19:27+08:00",
+      "subject": "docs(specs): record stage 7 progress and ARC-021's second owner"
+    },
+    {
+      "sha": "b7cf9284a01b718010d986adf5cd112bbf00e8de",
+      "date": "2026-08-26T21:17:50+08:00",
+      "subject": "fix(server): remove the two public endpoints that could only answer empty"
+    },
+    {
+      "sha": "1f52b298a19bc88b652bc7342c3b9d9ce98a6548",
+      "date": "2026-08-26T21:12:21+08:00",
+      "subject": "fix(task-api,server): the Board's sync promise is deleted, not ignored"
+    },
+    {
+      "sha": "b0e7f3b87302baa99242ae255e3a7dacf553ed57",
+      "date": "2026-08-26T21:08:48+08:00",
+      "subject": "fix(channel-runtime): a bundle is parsed whole before its window is claimed"
+    },
+    {
+      "sha": "3ddcbeb233b99a0534b82f75a59efc06573b6a38",
+      "date": "2026-08-26T21:04:53+08:00",
+      "subject": "fix(config,bun): both install owners share one readiness authority"
+    },
+    {
+      "sha": "80c847a83fcc2473e7d3caf91444896c60dbb7fd",
+      "date": "2026-08-26T20:55:32+08:00",
+      "subject": "fix(specs,script,bun,browser): round-12 low findings and the dead specs links"
+    },
+    {
+      "sha": "4ebee45076e2a9f156f86de47f55a5511fded128",
+      "date": "2026-08-26T20:50:01+08:00",
+      "subject": "feat(overlay): link the brand to the homepage"
+    },
+    {
+      "sha": "79922388d1b1c6d7ebd77d7d7e8b6aa1866e0116",
+      "date": "2026-08-26T20:48:00+08:00",
+      "subject": "fix(cli,browser): a managed launch settles its receipt on every terminal exit"
+    },
+    {
+      "sha": "5c63e7da3c5e6409a61c43293ac239f1e229d2be",
+      "date": "2026-08-26T20:44:13+08:00",
+      "subject": "docs(specs): record session cutover delivery"
+    },
+    {
+      "sha": "fe386ffbbb919dad1a5c0b3d88839f1009aa4eb7",
+      "date": "2026-08-26T20:43:22+08:00",
+      "subject": "fix(channel-runtime): a missing placeholder is dropped, and UNC paths survive"
+    },
+    {
+      "sha": "12ec09780e4c7d83c2af55481c8719178bd4d71c",
+      "date": "2026-08-26T20:41:05+08:00",
+      "subject": "fix(session): converge first message at stream cutover"
+    },
+    {
+      "sha": "196bea8584232ce4ba7d219f1ecc3d0ae941499c",
+      "date": "2026-08-26T20:37:40+08:00",
+      "subject": "fix(engine): worktree ownership observes an occurrence, not a number"
+    },
+    {
+      "sha": "e9da6535f3fc9c5e0f30d78db68f841c3873171d",
+      "date": "2026-08-26T20:31:45+08:00",
+      "subject": "fix(browser): settle one signal cleanup receipt"
+    },
+    {
+      "sha": "03a69c86ab0ab78497be9a462cbb8ebc551547b1",
+      "date": "2026-08-26T20:23:07+08:00",
+      "subject": "fix(bun,util,sdk): round-12 review repairs to the publication receipts"
+    },
+    {
+      "sha": "26ed3e6a470104c3cfc8106e9ee971c9ad40953b",
+      "date": "2026-08-26T19:53:38+08:00",
+      "subject": "fix(mcp,session): result semantics come from the provider, not the payload"
+    },
+    {
+      "sha": "3bcd59e80a8ac518a5dd7b71805b94c64ea3fc9d",
+      "date": "2026-08-26T19:42:02+08:00",
+      "subject": "docs(specs): record ARC-002, ARC-004, ARC-005, ARC-024 slice and ARC-035"
+    },
+    {
+      "sha": "99527d80d80f7cd09cbb69eebd5d680895e9e87e",
+      "date": "2026-08-26T19:39:48+08:00",
+      "subject": "fix(mcp): a scoped owner settles the Computer session it owns"
+    },
+    {
+      "sha": "184dc35a0bd0251de2771796bae3d9f3cedae48b",
+      "date": "2026-08-26T19:33:37+08:00",
+      "subject": "fix(browser): crossing into an isolated browser is a stated policy"
+    },
+    {
+      "sha": "5f959c770244ee08acd2ed7fb253b91d9191c7ec",
+      "date": "2026-08-26T19:28:43+08:00",
+      "subject": "fix(specs,script): every current architecture authority is reachable"
+    },
+    {
+      "sha": "f1d634fc2e7128fc60066e2bfdc8216826c2f028",
+      "date": "2026-08-26T19:23:15+08:00",
+      "subject": "fix(channel-runtime): a configured command is parsed, not split on whitespace"
+    },
+    {
+      "sha": "6b9cf0016bc6c23b079ea83038f91952bb031e96",
+      "date": "2026-08-26T19:18:34+08:00",
+      "subject": "fix(browser): one signal owner per process, one cleanup receipt"
+    },
+    {
+      "sha": "c01d96cd3cf7ec335fc8d5fb7987b48546dd894e",
+      "date": "2026-08-26T17:28:34+08:00",
+      "subject": "fix(skill): publish catalog replacement as one occurrence"
+    },
+    {
+      "sha": "4a7a06ab79ae17bea7d777b4104d950a2809172a",
+      "date": "2026-08-26T15:46:42+08:00",
+      "subject": "docs(specs): record ARC-021, ARC-023 and ARC-025"
+    },
+    {
+      "sha": "46daee24a17ce358939b991d43c91e6a3887a5d0",
+      "date": "2026-08-26T15:41:12+08:00",
+      "subject": "fix(sdk,cli): server readiness is a framed receipt, not a log regex"
+    },
+    {
+      "sha": "4969ea731cc8fa619f96c5a972e283111a4fc4a8",
+      "date": "2026-08-26T15:35:29+08:00",
+      "subject": "feat(benchmark): add extensible Inspect suite framework"
+    },
+    {
+      "sha": "551d86a4e884932f2a02e1bbddd9e3c694eaaf51",
+      "date": "2026-08-26T15:28:20+08:00",
+      "subject": "fix(project): publish promotion behind an exact durable fence"
+    },
+    {
+      "sha": "0b76b08f75b36e9347a99d89164e38dafe3961a0",
+      "date": "2026-08-26T15:16:19+08:00",
+      "subject": "fix(server,runtime): the managed watchdog binds a parent occurrence"
+    },
+    {
+      "sha": "27a7085b1e79f6564334307bc1a91fe080838aca",
+      "date": "2026-08-26T15:08:18+08:00",
+      "subject": "fix(bun,util): a cached package is Ready only with its completeness receipt"
+    },
+    {
+      "sha": "a9ab0ab37f932ab5b77e1d01cbee26c3d59a0074",
+      "date": "2026-08-26T14:59:58+08:00",
+      "subject": "docs(specs): record stage 4 and the eleventh review disposition"
+    },
+    {
+      "sha": "3f8b6ad3bf7f57d969c4df74b5f2ea6b9114829b",
+      "date": "2026-08-26T14:58:06+08:00",
+      "subject": "fix(mission,tool): a Mission Session is published carrying its own model"
+    },
+    {
+      "sha": "212b69289cafc65582cf8117323674202a20858f",
+      "date": "2026-08-26T14:14:03+08:00",
+      "subject": "fix(mcp): the credential store's own identity retires credentials"
+    },
+    {
+      "sha": "504daf566802d2e8f7e4be66eb0762a4fc54cca1",
+      "date": "2026-08-26T14:03:54+08:00",
+      "subject": "fix(worktree): git linkage stops meaning readiness"
+    },
+    {
+      "sha": "0fafde6ab9f02a6260d3eb000089819696540e4a",
+      "date": "2026-08-26T14:03:31+08:00",
+      "subject": "fix(project,util): fence the promotion journal with identity, digests and a lock"
+    },
+    {
+      "sha": "20d1bcd215540248151a20e9974ac3cce2921267",
+      "date": "2026-08-26T13:39:54+08:00",
+      "subject": "fix(project,util): anonymous promotion runs under a durable publication journal"
+    },
+    {
+      "sha": "a32d10df44610277c49bb561f53498a1bd0a5698",
+      "date": "2026-08-26T13:11:08+08:00",
+      "subject": "test(session,task-api): prove aggregate rollback boundaries"
+    },
+    {
+      "sha": "19a9066148b6ddc0134393c682838fd0ccf17e67",
+      "date": "2026-08-26T12:33:11+08:00",
+      "subject": "feat(skill): add runtime market search and exact install"
+    },
+    {
+      "sha": "0eb29f62d0e1b1f3bcf0f7c88c4d56026fc66acb",
+      "date": "2026-08-26T12:25:49+08:00",
+      "subject": "docs(specs): record stage 3 — aggregate database boundaries"
+    },
+    {
+      "sha": "1df9e2f4b71e9bf13c9fe6ece9f78528f6469d15",
+      "date": "2026-08-26T12:23:19+08:00",
+      "subject": "fix(task-api,session): operator message acceptance is one transaction"
+    },
+    {
+      "sha": "ecb0c61489d58dcf17c16f177d277e71b5a3fbab",
+      "date": "2026-08-26T12:03:11+08:00",
+      "subject": "docs(specs): record session history acceptance"
+    },
+    {
+      "sha": "0f0150c0f0f945670b27a99b567e5e7414b51e37",
+      "date": "2026-08-26T12:00:41+08:00",
+      "subject": "fix(overlay): page older session history"
+    },
+    {
+      "sha": "6f0713c3ddb8b53a132ccbb72d3084326751a8d4",
+      "date": "2026-08-26T11:07:27+08:00",
+      "subject": "docs(specs): close bounded search repair record"
+    },
+    {
+      "sha": "c7e010e2a258108cfc212ea00a7e53a1465e01d9",
+      "date": "2026-08-26T11:03:06+08:00",
+      "subject": "fix(tool): bound search code execution"
+    },
+    {
+      "sha": "25ac2f4e6150e574b9220c4582a126be122cdee1",
+      "date": "2026-08-26T11:01:32+08:00",
+      "subject": "fix(mcp,session,server): round-10 review repairs"
+    },
+    {
+      "sha": "32d6aae011f6945fa9e3dfd3b3d12ae5439b2ffa",
+      "date": "2026-08-26T10:45:08+08:00",
+      "subject": "fix(engine,task-api): the root Session commits inside the Task aggregate transaction"
+    },
+    {
+      "sha": "72a068a67f6e214690fe3011dc5534ddf73b90c9",
+      "date": "2026-08-26T10:39:16+08:00",
+      "subject": "docs(paper): record delivery verification boundary"
+    },
+    {
+      "sha": "c2a8c07a65f6242c4d639ea8e9d85a3dace07958",
+      "date": "2026-08-26T10:35:03+08:00",
+      "subject": "docs(paper): establish internal evidence foundation"
+    },
+    {
+      "sha": "7786b642d7ed4572ed31ed6a0710521a6a89239d",
+      "date": "2026-08-26T10:33:11+08:00",
+      "subject": "fix(session,chat): fork and conversation creation are single transactions"
+    },
+    {
+      "sha": "107ed86f760dd419052b755869c639f1e6fad0c3",
+      "date": "2026-08-26T10:21:15+08:00",
+      "subject": "Checkpoint before 核验仓库证据与实验基础"
+    },
+    {
+      "sha": "46259f0259057bd970cf64b8b8218dee986c9de9",
+      "date": "2026-08-26T10:17:45+08:00",
+      "subject": "fix(server,session): a public Session execution requires its caller-minted occurrence"
+    },
+    {
+      "sha": "3485ce44e1f28e05320fca80aa598588ea8c716e",
+      "date": "2026-08-26T10:04:34+08:00",
+      "subject": "核验仓库证据与实验基础"
+    },
+    {
+      "sha": "a77e8f68918480035faafcdae5b2498125186d4c",
+      "date": "2026-08-26T09:15:24+08:00",
+      "subject": "Checkpoint before 核验仓库证据与实验基础"
+    },
+    {
+      "sha": "0af8eb4b23fd8af0e5f01e1ec96fe2702ce03489",
+      "date": "2026-08-26T08:39:51+08:00",
+      "subject": "docs(specs): record ARC-016/017/018, the ARC-019 boundary, and round 9"
+    },
+    {
+      "sha": "b2f8e8530bf38ba2be98e0a2ef18ac0599263c7a",
+      "date": "2026-08-26T03:42:32+08:00",
+      "subject": "fix(provider,engine): round-9 review repairs"
+    },
+    {
+      "sha": "47aec912716f824f011c2daa52f8cfefb50dc86b",
+      "date": "2026-08-26T03:42:08+08:00",
+      "subject": "fix(mcp): a callback process finishes OAuth from the durable facts alone"
+    },
+    {
+      "sha": "1660ac21d5713011c185cc26e463ec8a474e59ac",
+      "date": "2026-08-26T03:28:10+08:00",
+      "subject": "fix(mcp): the credential commits before the definition it serves"
+    },
+    {
+      "sha": "88c2d810769c30c1cb3c1ba2c1f8a72f6f4275c3",
+      "date": "2026-08-26T03:21:11+08:00",
+      "subject": "fix(engine,task): a global Task request owns one Project across replays"
+    },
+    {
+      "sha": "a87b5ad760a37eac0d7e633ca30c2840be2b8493",
+      "date": "2026-08-26T03:04:16+08:00",
+      "subject": "fix(provider): an OAuth authorization is a durable flow occurrence"
+    },
+    {
+      "sha": "8647a42300d2b646d6233358c402ce9eb85791b1",
+      "date": "2026-08-26T02:51:20+08:00",
+      "subject": "docs(benchmark): record final delivery checks"
+    },
+    {
+      "sha": "826da85f417d628fae57e9d88fd733af2c089096",
+      "date": "2026-08-26T02:49:11+08:00",
+      "subject": "fix(memory,server): the Organizer runs behind the request, not inside it"
+    },
+    {
+      "sha": "fa56a29ccf486bbea81168ed92a6af201e5380fd",
+      "date": "2026-08-26T02:44:51+08:00",
+      "subject": "feat(benchmark): add Inspect AI OpenCorvus adapter"
+    },
+    {
+      "sha": "cdabaec0ceac6b510582458238702d684d6280b4",
+      "date": "2026-08-26T02:35:10+08:00",
+      "subject": "fix(llm): recover semantic stream stalls"
+    },
+    {
+      "sha": "cbb7ae1ce54150b4cd2a6f3d18b71c3b561eeede",
+      "date": "2026-08-26T02:10:44+08:00",
+      "subject": "docs(specs): record ARC-038's Bus-half repair and its commit attribution"
+    },
+    {
+      "sha": "a88f8e7e86b96b7f2a8f3cde141b067ff40dfd85",
+      "date": "2026-08-26T01:32:51+08:00",
+      "subject": "Checkpoint before 撰写 OpenCorvus 学术论文"
+    },
+    {
+      "sha": "15ced3c108ecb1ecb08185cc6f48f27000239cfb",
+      "date": "2026-08-26T00:56:22+08:00",
+      "subject": "docs(specs): record open PR backlog disposition"
+    },
+    {
+      "sha": "18661e57fa219f4bc1f559b2aa247ea398c03147",
+      "date": "2026-08-25T16:38:11Z",
+      "subject": "chore(deps): bump ajv from 8.18.0 to 8.20.0"
+    },
+    {
+      "sha": "083052a38e6a3b4537ae4551b8ac05206a910823",
+      "date": "2026-08-26T00:28:21+08:00",
+      "subject": "docs(changelog): record the lifecycle occurrence API and lease convergence"
+    },
+    {
+      "sha": "6e0a4b1a5a4d29f0abb14843e54bb0e5df83c08d",
+      "date": "2026-08-26T00:25:22+08:00",
+      "subject": "fix(mcp,server): a credential lease is established, and a lifecycle is admitted"
+    },
+    {
+      "sha": "d451f8ec6cf6acf91f057e480f13375c0da98a88",
+      "date": "2026-08-25T23:52:40+08:00",
+      "subject": "fix(mcp): make the credential revision a revocation generation"
+    },
+    {
+      "sha": "faed42893ddc441f614f93a24e3502c3cf6ebd33",
+      "date": "2026-08-25T23:12:58+08:00",
+      "subject": "chore(test): remove a measurement scratch file committed by mistake"
+    },
+    {
+      "sha": "ab2860df2e281def4b8898712a51f86d69681733",
+      "date": "2026-08-25T23:12:41+08:00",
+      "subject": "fix(config,engine): close the last lease owners and make the fact lock safe"
+    },
+    {
+      "sha": "8f3ec47271ae85c1880034f8dd8c7b40959b8e74",
+      "date": "2026-08-25T21:41:59+08:00",
+      "subject": "fix(engine): gate the control-lease owners and close the two the sweep missed"
+    },
+    {
+      "sha": "9d98e521472bf003e07a39438fd73b914f56b31e",
+      "date": "2026-08-25T21:10:11+08:00",
+      "subject": "docs(specs): record the three-run permission-matrix evidence for ARC-038"
+    },
+    {
+      "sha": "9b8b81bbb994fed9a57d9593c4875170fe2875bf",
+      "date": "2026-08-25T21:09:31+08:00",
+      "subject": "fix(engine): complete the lease sweep and stop masking errors while releasing"
+    },
+    {
+      "sha": "0c4a9a1cd0cc99623bbee023eaf4c6a17feceae3",
+      "date": "2026-08-25T20:49:36+08:00",
+      "subject": "fix(engine): make every control-lease owner hand its lease back"
+    },
+    {
+      "sha": "291fe326fdaadf983c373cca08594c94f2f1dae5",
+      "date": "2026-08-25T20:19:40+08:00",
+      "subject": "fix(scheduler,permission): end control leases with their settlement receipts"
+    },
+    {
+      "sha": "454b357ba390c2adb05a2c8b8e99d951afea7ad7",
+      "date": "2026-08-25T17:29:50+08:00",
+      "subject": "feat(web): publish bilingual Mission film"
+    },
+    {
+      "sha": "52904c36ef1a348100182484342e82dc80f98833",
+      "date": "2026-08-25T11:04:28+08:00",
+      "subject": "refactor(overlay): one clipboard writer, one identifier source"
+    },
+    {
+      "sha": "0f883224173dd93da0573ffe426e679880531f3b",
+      "date": "2026-08-25T10:45:10+08:00",
+      "subject": "fix(overlay): boot and explain itself outside a secure context"
+    },
+    {
+      "sha": "e2dddaeffbb5f94a9d6dc8cf0ac064cc05ab4b2b",
+      "date": "2026-08-25T09:53:37+08:00",
+      "subject": "fix(overlay): open the authorization page from a real click"
+    },
+    {
+      "sha": "61f943172b259be9be5652b55a721e9f585b46bc",
+      "date": "2026-08-25T01:43:44+08:00",
+      "subject": "feat(overlay): implement open-url on the browser host"
+    },
+    {
+      "sha": "768b39f1ba534bada1802d50a42a6dbb85af1dae",
+      "date": "2026-08-25T01:16:20+08:00",
+      "subject": "feat(overlay): give the browser host a usable path action"
+    },
+    {
+      "sha": "8adf31e223237c75c822761357c7f1228e784ff6",
+      "date": "2026-08-24T23:53:29+08:00",
+      "subject": "fix(overlay): pair the last hover-only card states with focus"
+    },
+    {
+      "sha": "53e303deaa03f9a252c9bd70aa50c26ac847ccc3",
+      "date": "2026-08-24T23:52:04+08:00",
+      "subject": "fix(overlay): scale the last four viewport gutters"
+    },
+    {
+      "sha": "c2144b49083f221c93e9e3f8cb05cbb0e9053a6e",
+      "date": "2026-08-24T23:51:00+08:00",
+      "subject": "fix(overlay): let surface headers give way at the title, not the buttons"
+    },
+    {
+      "sha": "b1e9df888b1e8478de941b524abd154d2abe881c",
+      "date": "2026-08-24T23:49:01+08:00",
+      "subject": "fix(overlay): even out the remaining interaction states"
+    },
+    {
+      "sha": "8c8a5ee1ebbeb405a70ff1519d8e69c9d1b72b81",
+      "date": "2026-08-24T23:46:46+08:00",
+      "subject": "fix(overlay): reinstate the titlebar's compact menu labels"
+    },
+    {
+      "sha": "abf602d1c301cb249f7e4f829b09949e60bcaa76",
+      "date": "2026-08-24T23:43:28+08:00",
+      "subject": "fix(overlay): stop badges, scopes and mention rows spilling their boxes"
+    },
+    {
+      "sha": "23cc85228b29d340a9cbd201931038199c915253",
+      "date": "2026-08-24T23:41:07+08:00",
+      "subject": "fix(overlay): restore keyboard focus rings, and make rail hovers darken"
+    },
+    {
+      "sha": "e8b9a843cafdff465f92e857c24638d697efffe3",
+      "date": "2026-08-24T23:36:47+08:00",
+      "subject": "fix(overlay): make the workspace avatar's initials readable on light"
+    },
+    {
+      "sha": "3deb34bfb0767c4ac66d0cbd040a61f6337d8462",
+      "date": "2026-08-24T23:30:32+08:00",
+      "subject": "fix(overlay): restore the primary button, and stop the palette covering the menubar"
+    },
+    {
+      "sha": "edf420854f501658fd3bd2712b6dc2d3073b09f4",
+      "date": "2026-08-24T23:23:51+08:00",
+      "subject": "test(overlay): guard the design-language invariants again"
+    },
+    {
+      "sha": "ab17c617c76778c749f07abc9ecc1428ad5e6a01",
+      "date": "2026-08-24T23:20:00+08:00",
+      "subject": "refactor(overlay): return inline mixes to the tokens they duplicate"
+    },
+    {
+      "sha": "23ff3cbf1ba310057c5e0d0aeb5378f2797ff663",
+      "date": "2026-08-24T23:14:59+08:00",
+      "subject": "fix(overlay): give the diff palette one colour per side"
+    },
+    {
+      "sha": "0fca75bd085061a08b1093fc4f12f3705d6543fd",
+      "date": "2026-08-24T23:11:13+08:00",
+      "subject": "refactor(overlay): retire the parallel agent-stage palette"
+    },
+    {
+      "sha": "6dda4b2193bad82071d40323e3b054c9edad83eb",
+      "date": "2026-08-24T23:05:34+08:00",
+      "subject": "fix(overlay): let the startup theme survive boot"
+    },
+    {
+      "sha": "108bbf58790f593fb24ae91b284604c8f8b89c4f",
+      "date": "2026-08-24T22:46:29+08:00",
+      "subject": "refactor(overlay): collapse line-height literals onto a 5-rung ladder"
+    },
+    {
+      "sha": "cefe892893574ec64b57863dd368c261be3a08c0",
+      "date": "2026-08-24T22:44:07+08:00",
+      "subject": "refactor(overlay): collapse spacing literals onto a 9-rung ladder"
+    },
+    {
+      "sha": "fec7adafb9ae892c57fe0a07b3b6b39469b44adc",
+      "date": "2026-08-24T22:37:21+08:00",
+      "subject": "style(overlay): even out the type scale; make vscode-dark shadows cast"
+    },
+    {
+      "sha": "1c330df4b9f32544441c4e27316472a85aa36881",
+      "date": "2026-08-24T22:27:03+08:00",
+      "subject": "style(overlay): restore the light value ramp; unify the subtle ladder"
+    },
+    {
+      "sha": "0ef8328615c03fc9b71ec36668f3386d94154a8a",
+      "date": "2026-08-24T22:06:14+08:00",
+      "subject": "style(overlay): flatten the decorative surface gradients"
+    },
+    {
+      "sha": "175aafc22835907b410334e947c4c10dbf42de44",
+      "date": "2026-08-24T22:02:26+08:00",
+      "subject": "style(overlay): retire the last highlight-tone bevels"
+    },
+    {
+      "sha": "2fcbae3fe972cc373edfd6e546547d8e0e32a97e",
+      "date": "2026-08-24T21:47:40+08:00",
+      "subject": "style(overlay): calm the reading surfaces"
+    },
+    {
+      "sha": "f1aa15f1443553c0a7113e0336776b59664d398a",
+      "date": "2026-08-24T21:40:05+08:00",
+      "subject": "style(overlay): flatten light-theme materials; retire dead gradient tokens"
+    },
+    {
+      "sha": "fb176c0bcab794e114673683ff9e872cb33e51dd",
+      "date": "2026-08-10T16:01:39Z",
+      "subject": "chore(deps): bump yargs from 18.0.0 to 18.1.0"
+    },
+    {
+      "sha": "d6a55b451012a0c8bbd9593cea6de5f2393bf968",
+      "date": "2026-08-09T19:05:21Z",
+      "subject": "chore(deps): bump @codemirror/lang-html from 6.4.11 to 6.4.12"
+    }
+  ],
+  "stats": ".github/workflows/build.yml                        |   29 +-\n .gitignore                                         |    4 +\n .husky/pre-push                                    |    8 +\n CHANGELOG.md                                       |   38 +\n CODEBASE_STRUCTURE.md                              |    2 +-\n CONTRIBUTING.md                                    |    2 +-\n README.md                                          |  582 +-\n README.zh-CN.md                                    |  534 +-\n THIRD_PARTY_NOTICES.md                             |   31 +\n bun.lock                                           |   63 +-\n expert-squads/builtin/light/README.md              |    9 +\n .../light/agents/light-investigator/system.md      |    7 +\n .../builtin/light/agents/light-planner/system.md   |    9 +\n .../builtin/light/agents/orchestrator/system.md    |    9 +\n expert-squads/builtin/light/expert-squad.jsonc     |   97 +\n expert-squads/builtin/light/selector.md            |    7 +\n expert-squads/builtin/light/skills/method/SKILL.md |   68 +\n knip.config.js                                     |    8 +\n package.json                                       |    8 +-\n packages/channel-config/package.json               |    2 +-\n packages/channel-runtime/package.json              |    3 +-\n packages/channel-runtime/src/bootstrap.ts          |  114 +\n packages/channel-runtime/src/bundled-env.ts        |   62 +-\n packages/channel-runtime/src/index.ts              |    2 +\n packages/channel-runtime/src/main.ts               |  106 +-\n .../channel-runtime/src/stt/providers/local-cli.ts |  329 +-\n .../test/bootstrap-composition.test.ts             |   52 +\n packages/channel-runtime/test/bundled-env.test.ts  |   81 +-\n .../test/local-cli-command-parsing.test.ts         |   61 +\n .../channel-runtime/test/local-cli-stt.test.ts     |   87 +-\n packages/inspect-benchmark/.gitignore              |    7 +\n packages/inspect-benchmark/LICENSES/Apache-2.0.txt |  201 +\n packages/inspect-benchmark/LICENSES/MIT.txt        |   21 +\n packages/inspect-benchmark/README.md               |  268 +\n packages/inspect-benchmark/THIRD_PARTY_NOTICES.md  |   21 +\n packages/inspect-benchmark/pyproject.toml          |   55 +\n .../src/opencorvus_inspect/__init__.py             |   55 +\n .../src/opencorvus_inspect/_registry.py            |    9 +\n .../src/opencorvus_inspect/adapter.py              |  572 ++\n .../src/opencorvus_inspect/benchmark/__init__.py   |   43 +\n .../src/opencorvus_inspect/benchmark/apodex.py     |  351 +\n .../src/opencorvus_inspect/benchmark/catalog.py    |   83 +\n .../src/opencorvus_inspect/benchmark/dataset.py    |  265 +\n .../src/opencorvus_inspect/benchmark/definition.py |  179 +\n .../src/opencorvus_inspect/benchmark/judge.py      |   52 +\n .../src/opencorvus_inspect/benchmark/scoring.py    |   74 +\n .../src/opencorvus_inspect/benchmark/task.py       |  175 +\n .../opencorvus_inspect/examples/apodex-smoke.jsonl |    1 +\n .../src/opencorvus_inspect/examples/smoke.jsonl    |    1 +\n .../src/opencorvus_inspect/py.typed                |    1 +\n .../src/opencorvus_inspect/scorer.py               |   48 +\n .../src/opencorvus_inspect/solver.py               |  153 +\n .../src/opencorvus_inspect/task.py                 |   54 +\n packages/inspect-benchmark/tests/test_adapter.py   |  231 +\n .../inspect-benchmark/tests/test_apodex_scorers.py |  112 +\n .../tests/test_benchmark_catalog.py                |   64 +\n .../tests/test_benchmark_dataset.py                |  110 +\n .../inspect-benchmark/tests/test_benchmark_task.py |  159 +\n .../inspect-benchmark/tests/test_inspect_eval.py   |   77 +\n packages/inspect-benchmark/tests/test_judge.py     |   93 +\n packages/inspect-benchmark/tests/test_solver.py    |   95 +\n .../tests/test_suite_inspect_eval.py               |  146 +\n packages/inspect-benchmark/tests/test_task.py      |   28 +\n .../opencorvus/generated/expert-squad-payload.ts   |   13 +\n .../generated/expert-squad-search-localization.ts  |    4 +\n .../native/process-supervisor/Cargo.lock           |    2 +-\n .../native/process-supervisor/Cargo.toml           |    2 +-\n .../native/process-supervisor/src/main.rs          |   51 +-\n packages/opencorvus/package.json                   |   16 +-\n .../opencorvus/script/check/architecture-index.ts  |  106 +\n .../script/check/control-lease-owners.ts           |  200 +\n .../opencorvus/script/check/module-topology.ts     |  362 +\n .../opencorvus/script/check/package-topology.ts    |   97 +\n .../script/control-state-redundancy-check.ts       |    7 +\n packages/opencorvus/script/docs/i18n.json          |    4 +-\n .../script/permission-modes-check-worker.ts        |   17 +-\n .../opencorvus/script/scheduled-automations-e2e.ts |    1 +\n packages/opencorvus/script/task-control-check.ts   |   41 +-\n packages/opencorvus/src/acp/agent.ts               |    3 +\n .../src/agent/artifact-provenance-facts.ts         |  771 +++\n .../opencorvus/src/agent/artifact-read-facts.ts    |  694 +-\n .../opencorvus/src/agent/dispatch-adapter-input.ts |    2 +-\n .../src/agent/native-agent-permissions.ts          |    1 -\n .../src/agent/native-agent-registry-cache.ts       |   33 +-\n .../src/agent/primary-assistant-registry.ts        |    1 -\n packages/opencorvus/src/agent/runner.ts            |   34 +-\n packages/opencorvus/src/agent/tool-pool-data.ts    |    5 +-\n .../src/agent/worker-turn-descriptor-facts.ts      |  184 +\n .../opencorvus/src/agent/worker-turn-descriptor.ts |  157 +-\n .../src/architect/selected-artifact-roles.ts       |    2 +-\n packages/opencorvus/src/artifact-catalog/index.ts  |  200 +-\n packages/opencorvus/src/auth/index.ts              |  134 +-\n packages/opencorvus/src/browser/runtime/index.ts   |   47 +-\n packages/opencorvus/src/build/agent.ts             |   33 +-\n packages/opencorvus/src/bun/index.ts               |  208 +-\n packages/opencorvus/src/bun/install-receipt.ts     |  440 ++\n packages/opencorvus/src/bun/registry.ts            |   16 +-\n packages/opencorvus/src/bus/index.ts               |   70 +-\n packages/opencorvus/src/channel/ingress.ts         |   33 +-\n packages/opencorvus/src/channel/supervisor.ts      |   84 +-\n .../opencorvus/src/chat/global-chat-service.ts     |   27 +-\n packages/opencorvus/src/chat/global-chat-start.ts  |  275 +\n packages/opencorvus/src/chat/session.ts            |   12 +-\n packages/opencorvus/src/cli/cmd/auth.ts            |  141 +-\n packages/opencorvus/src/cli/cmd/github.ts          |   15 +-\n packages/opencorvus/src/cli/cmd/mcp.ts             |   62 +-\n packages/opencorvus/src/cli/cmd/run.ts             |    3 +\n packages/opencorvus/src/cli/cmd/serve.ts           |   93 +-\n packages/opencorvus/src/cli/cmd/session.ts         |    6 +-\n packages/opencorvus/src/cli/server-runtime.ts      |   29 +-\n packages/opencorvus/src/config/config.ts           | 1085 ++-\n packages/opencorvus/src/config/update-global.ts    |   41 +-\n packages/opencorvus/src/conversation/capability.ts |   86 +-\n .../src/conversation/default-capability.ts         |    7 -\n packages/opencorvus/src/conversation/transport.ts  |  161 +\n .../opencorvus/src/conversation/turn-artifacts.ts  |    9 +-\n .../opencorvus/src/engine/agent-coordination.ts    |    3 +-\n .../src/engine/build-observation-cleanup.ts        |   40 +-\n .../src/engine/build-observation-content.ts        |    4 +-\n .../src/engine/completion-decision-facts.ts        |  108 +\n .../src/engine/completion-decision-read.ts         |   20 +\n .../opencorvus/src/engine/completion-decision.ts   |  112 +-\n packages/opencorvus/src/engine/control-lease.ts    |  188 +-\n .../src/engine/cross-task-artifact-import.ts       |   10 +-\n .../src/engine/delivery-slice-membership-facts.ts  |    3 +-\n packages/opencorvus/src/engine/describe.ts         |    7 +-\n .../src/engine/dispatch-lineage-facts.ts           |  121 +\n packages/opencorvus/src/engine/dispatch-lineage.ts |  126 +-\n .../src/engine/engine-artifact-version-facts.ts    |  215 +\n packages/opencorvus/src/engine/engine.sql.ts       |    4 +-\n packages/opencorvus/src/engine/evidence-locator.ts |    3 +-\n packages/opencorvus/src/engine/index.ts            |    7 +-\n packages/opencorvus/src/engine/model.ts            |  131 +-\n packages/opencorvus/src/engine/ownership.ts        |   49 +-\n packages/opencorvus/src/engine/persist.ts          |   22 +-\n packages/opencorvus/src/engine/pipeline.ts         |   19 +-\n packages/opencorvus/src/engine/process-liveness.ts |  241 +-\n packages/opencorvus/src/engine/runtime.ts          |   25 +\n packages/opencorvus/src/engine/store.ts            |   66 +-\n .../src/engine/task-completion-closure.ts          |   82 +-\n .../opencorvus/src/engine/task-control-driver.ts   |   18 +-\n .../opencorvus/src/engine/task-creation-owner.ts   |   68 +-\n .../opencorvus/src/engine/task-file-reference.ts   |  144 +\n packages/opencorvus/src/engine/task-intent-open.ts |    6 +-\n .../opencorvus/src/engine/task-project-read.ts     |   20 +\n .../opencorvus/src/engine/task-root-fact-store.ts  |   99 +-\n .../src/engine/task-root-ingress-delivery.ts       |  117 +-\n .../src/engine/task-root-ingress-reducer.ts        |    4 +-\n .../opencorvus/src/engine/task-session-lineage.ts  |   51 +-\n .../engine/terminal-lifecycle-reference-schema.ts  |    7 +\n .../src/engine/terminal-lifecycle-reference.ts     |    7 -\n .../opencorvus/src/engine/user-upload-parts.ts     |   36 +\n .../src/engine/workflow-binding-facts.ts           |   33 +-\n .../opencorvus/src/execution-capsule/runtime.ts    |    2 -\n .../opencorvus/src/expert-squad/configuration.ts   |   22 +-\n .../src/expert-squad/evolution-history.ts          |    4 +-\n .../src/expert-squad/evolution-mutation-intent.ts  |  258 +\n .../src/expert-squad/evolution-mutation.ts         |  278 +-\n .../opencorvus/src/expert-squad/install-lock.ts    |   12 +-\n .../src/expert-squad/mutation-authorization.ts     |    2 +-\n .../src/expert-squad/prompt-profile-resolver.ts    |   31 +-\n packages/opencorvus/src/flag/flag.ts               |    3 -\n .../frontend-design/design-resource-manifest.ts    |   11 +-\n .../src/goal-workload-analyst/publication.ts       |  157 +-\n .../goal-workload-analyst/relational-integrity.ts  |  170 +\n packages/opencorvus/src/installation/index.ts      |   45 +-\n .../opencorvus/src/integrity/fact-projection.ts    |    2 +-\n .../src/interactive-artifact/mcp-app-host.ts       |    1 +\n packages/opencorvus/src/llm/activity.ts            |   14 +-\n packages/opencorvus/src/lsp/catalog.ts             |   41 -\n packages/opencorvus/src/lsp/client.ts              |  420 --\n packages/opencorvus/src/lsp/index.ts               |  726 --\n packages/opencorvus/src/lsp/language.ts            |  120 -\n packages/opencorvus/src/lsp/schema.ts              |   46 -\n packages/opencorvus/src/lsp/server.ts              | 2319 -------\n packages/opencorvus/src/mcp/auth.ts                | 1227 +++-\n packages/opencorvus/src/mcp/browser/builtin.ts     |   62 +-\n packages/opencorvus/src/mcp/browser/index.ts       |   25 +\n .../opencorvus/src/mcp/browser/permission-plan.ts  |    4 -\n packages/opencorvus/src/mcp/browser/sessions.ts    |  208 +-\n packages/opencorvus/src/mcp/computer/builtin.ts    |   67 +\n .../opencorvus/src/mcp/computer/permission-plan.ts |    4 -\n .../opencorvus/src/mcp/computer/runtime-owner.ts   |   14 +\n .../opencorvus/src/mcp/computer/runtime-scope.ts   |    4 +-\n .../opencorvus/src/mcp/host-session-runtime.ts     |  162 +\n packages/opencorvus/src/mcp/index.ts               | 1456 +++-\n packages/opencorvus/src/mcp/materialize.ts         |   29 +-\n packages/opencorvus/src/mcp/oauth-callback.ts      |  763 +-\n packages/opencorvus/src/mcp/oauth-log.ts           |   11 +-\n packages/opencorvus/src/mcp/oauth-provider.ts      |  308 +-\n packages/opencorvus/src/mcp/provider-kind.ts       |   28 +\n .../src/memory/project-memory-organizer.ts         |   54 +-\n packages/opencorvus/src/metrics/executor.ts        |    2 +-\n .../src/mission/acceptance-checkpoint.ts           |  125 +\n packages/opencorvus/src/mission/acceptance-gap.ts  |  395 ++\n .../opencorvus/src/mission/acceptance-ledger.ts    |  494 ++\n .../opencorvus/src/mission/execution-closure.ts    |   85 +-\n packages/opencorvus/src/mission/session.ts         |   16 +-\n packages/opencorvus/src/orchestrator/agent.ts      |  644 +-\n .../opencorvus/src/orchestrator/architect-stage.ts |    2 +-\n .../src/orchestrator/dispatch-agent-tool.ts        |   81 +-\n .../src/orchestrator/dispatch-turn-projection.ts   |   61 +\n packages/opencorvus/src/orchestrator/event.ts      |    9 +-\n .../src/orchestrator/frontend-design-tool.ts       |    6 +-\n .../src/orchestrator/interaction-tools.ts          |    8 +-\n .../opencorvus/src/orchestrator/no-action-tool.ts  |   19 +-\n .../src/orchestrator/protocol/message-bridge.ts    |  155 +-\n .../src/orchestrator/runtime-repair-tools.ts       |   42 -\n packages/opencorvus/src/orchestrator/task-event.ts |   94 +-\n .../src/orchestrator/task-lifecycle-tools.ts       |    2 +-\n .../terminal-conversation-authority.ts             |    4 +-\n packages/opencorvus/src/orchestrator/tools.ts      | 1350 ++--\n packages/opencorvus/src/panel/capability.ts        |   31 +-\n packages/opencorvus/src/panel/task-query.ts        |   12 +\n packages/opencorvus/src/permission/authority.ts    |   75 +-\n packages/opencorvus/src/permission/invocation.ts   |   45 +-\n .../opencorvus/src/permission/permission.sql.ts    |    5 +-\n .../opencorvus/src/permission/project-authority.ts |   71 +\n packages/opencorvus/src/plugin/digitalocean.ts     |   13 +-\n .../src/plugin/github-copilot/copilot.ts           |  128 +-\n .../opencorvus/src/plugin/github-copilot/models.ts |    2 +-\n packages/opencorvus/src/plugin/gitlab.ts           |  251 +\n packages/opencorvus/src/plugin/index.ts            |   80 +-\n packages/opencorvus/src/plugin/oauth-lifecycle.ts  |   38 +-\n packages/opencorvus/src/plugin/openai/codex.ts     |   53 +-\n packages/opencorvus/src/plugin/snowflake-cortex.ts |   60 +-\n packages/opencorvus/src/plugin/xai.ts              |   41 +-\n packages/opencorvus/src/project/bootstrap.ts       |   23 +-\n packages/opencorvus/src/project/delete.ts          |   32 +-\n .../src/project/deletion-cleanup-admission.ts      |   65 +\n .../opencorvus/src/project/deletion-cleanup.ts     |   84 +-\n .../opencorvus/src/project/deletion-registry.ts    |   34 +-\n .../opencorvus/src/project/directory-admission.ts  |  354 +\n .../opencorvus/src/project/identity-convergence.ts |   65 +-\n .../src/project/implicit-project-creation.ts       |  359 +\n .../opencorvus/src/project/implicit-project.ts     |  992 ++-\n .../opencorvus/src/project/instance-context.ts     |    1 +\n packages/opencorvus/src/project/instance.ts        |  108 +-\n packages/opencorvus/src/project/project.sql.ts     |  111 +-\n packages/opencorvus/src/project/project.ts         |  705 +-\n .../opencorvus/src/project/promotion-journal.ts    |  186 +\n .../opencorvus/src/prompt/core/mission-core.txt    |    2 +-\n .../src/prompt/core/orchestrator-core.txt          |    2 +-\n packages/opencorvus/src/protocol/delivery.ts       |    4 +-\n .../src/protocol/design-resource-intent.ts         |   12 +\n .../src/protocol/scheduler-event-wake-reason.ts    |   16 +\n .../src/protocol/scheduler-message-wake-reason.ts  |   18 +\n .../opencorvus/src/protocol/scheduler-message.ts   |   48 +-\n packages/opencorvus/src/protocol/session-mirror.ts |   83 +-\n .../opencorvus/src/protocol/session-wake-state.ts  |   10 +-\n packages/opencorvus/src/protocol/store.ts          |    4 +-\n .../src/protocol/task-root-message-schema.ts       |   29 +\n packages/opencorvus/src/provider/account-usage.ts  |    8 +-\n packages/opencorvus/src/provider/auth.ts           |  441 +-\n .../opencorvus/src/provider/credential-exchange.ts |  384 ++\n packages/opencorvus/src/provider/models.ts         |    6 +-\n .../opencorvus/src/provider/oauth-flow-store.ts    |  706 ++\n packages/opencorvus/src/provider/provider.ts       |   31 +-\n packages/opencorvus/src/provider/removal.ts        |    5 -\n .../opencorvus/src/provider/tool-call-policy.ts    |    5 +\n packages/opencorvus/src/provider/transform.ts      |   34 +-\n packages/opencorvus/src/provider/vendor.ts         |   15 +-\n .../src/research/evidence-ref-projection.ts        |    2 +-\n .../opencorvus/src/runtime/process-occurrence.ts   |   53 +-\n .../opencorvus/src/scheduler/automation-service.ts |  692 +-\n .../src/scheduler/delayed-wake-schedule.ts         |  104 +\n .../opencorvus/src/scheduler/event-projection.ts   |   10 +-\n packages/opencorvus/src/scheduler/event-service.ts |  512 +-\n .../src/scheduler/execution-inactivity.ts          |   29 +-\n packages/opencorvus/src/server/error-handler.ts    |    7 +\n packages/opencorvus/src/server/error.ts            |    8 +\n .../opencorvus/src/server/lifecycle-occurrence.ts  |  119 +\n .../src/server/managed-server-lifecycle.ts         |   30 +-\n packages/opencorvus/src/server/parent-watchdog.ts  |   66 +-\n packages/opencorvus/src/server/routes/app.ts       |  132 +-\n .../opencorvus/src/server/routes/attachment.ts     |   11 +-\n packages/opencorvus/src/server/routes/channel.ts   |   13 +-\n packages/opencorvus/src/server/routes/computer.ts  |    6 +-\n packages/opencorvus/src/server/routes/config.ts    |   13 -\n packages/opencorvus/src/server/routes/file.ts      |   31 -\n packages/opencorvus/src/server/routes/global.ts    |  112 +-\n packages/opencorvus/src/server/routes/mission.ts   |   39 +-\n .../opencorvus/src/server/routes/orchestrator.ts   |  152 +-\n packages/opencorvus/src/server/routes/provider.ts  |   32 +-\n .../server/routes/right-sidebar-conversation.ts    |   12 +-\n packages/opencorvus/src/server/routes/session.ts   |  685 +-\n packages/opencorvus/src/server/routes/skill.ts     |   56 +-\n .../opencorvus/src/server/routes/work-ledger.ts    |    2 +-\n packages/opencorvus/src/server/server.ts           |    7 +-\n packages/opencorvus/src/server/shutdown.ts         |   14 +-\n packages/opencorvus/src/session/command-exec.ts    |   14 +-\n packages/opencorvus/src/session/compaction.ts      |   69 +-\n packages/opencorvus/src/session/control.ts         |   46 +-\n packages/opencorvus/src/session/index.ts           |  337 +-\n packages/opencorvus/src/session/initialize.ts      |    6 +-\n packages/opencorvus/src/session/llm.ts             |    5 +-\n packages/opencorvus/src/session/loop.ts            |  540 +-\n packages/opencorvus/src/session/message-store.ts   |  331 +-\n packages/opencorvus/src/session/message.ts         |   40 +-\n packages/opencorvus/src/session/processor.ts       |   69 +-\n packages/opencorvus/src/session/prompt/index.ts    |   17 +-\n packages/opencorvus/src/session/prompt/owner.ts    |  105 +\n packages/opencorvus/src/session/prompt/parts.ts    |   12 +-\n packages/opencorvus/src/session/prompt/run.ts      |   65 +\n packages/opencorvus/src/session/prompt/state.ts    |  149 +-\n packages/opencorvus/src/session/range.ts           |   25 +\n packages/opencorvus/src/session/session.sql.ts     |   22 +\n packages/opencorvus/src/session/shell-exec.ts      |  656 +-\n .../opencorvus/src/session/status-publication.ts   |   30 +-\n packages/opencorvus/src/session/status.ts          |   22 +-\n .../opencorvus/src/session/tool-outcome-facts.ts   |   30 +\n packages/opencorvus/src/session/tool-part-facts.ts |   28 +-\n packages/opencorvus/src/session/wake.ts            |   37 +-\n .../opencorvus/src/shell/process-supervisor.ts     |  245 +-\n packages/opencorvus/src/skill/manager.ts           |  930 ++-\n packages/opencorvus/src/skill/market.ts            |  321 +\n .../src/skill/replacement-publication.ts           |  176 +\n packages/opencorvus/src/skill/skill.ts             |   68 +-\n packages/opencorvus/src/snapshot/index.ts          |   12 +-\n packages/opencorvus/src/storage/db.ts              |   34 +-\n packages/opencorvus/src/storage/ddl.ts             |   55 +\n .../src/storage/fact-kernel-migration.ts           |  121 +\n packages/opencorvus/src/storage/schema.ts          |   37 +-\n .../src/storage/session-prompt-owner-migration.ts  |   20 +\n packages/opencorvus/src/system-terminal/index.ts   |   63 +-\n .../opencorvus/src/task-api/global-task-service.ts |   51 +\n packages/opencorvus/src/task-api/index.ts          |  541 +-\n .../opencorvus/src/task-api/task-root-message.ts   |   31 +-\n packages/opencorvus/src/tool/batch.ts              |    4 +-\n packages/opencorvus/src/tool/execution-mode.ts     |   16 +-\n .../tool/expert-squad-feedback-revision-tool.ts    |    5 +-\n packages/opencorvus/src/tool/global-tools.ts       |    4 +-\n packages/opencorvus/src/tool/grep.ts               |  290 +-\n packages/opencorvus/src/tool/grep.txt              |    4 +-\n packages/opencorvus/src/tool/panel.ts              |  104 +-\n packages/opencorvus/src/tool/skill-market.ts       |   93 +\n packages/opencorvus/src/tool/tool-id-catalog.ts    |    7 +-\n packages/opencorvus/src/tool/tool.ts               |    4 +-\n packages/opencorvus/src/tool/wait.ts               |    6 +-\n packages/opencorvus/src/util/canonical-digest.ts   |    5 +\n packages/opencorvus/src/util/filesystem.ts         |   31 +-\n packages/opencorvus/src/util/git.ts                |    2 +-\n packages/opencorvus/src/util/lock.ts               |   54 +\n packages/opencorvus/src/util/process-facade.ts     |  114 +\n packages/opencorvus/src/util/process-lock.ts       |   64 +\n packages/opencorvus/src/util/process.ts            |  439 +-\n packages/opencorvus/src/util/rename-no-replace.ts  |   28 +\n .../src/visual-qa/annotated-screenshot.ts          |    2 +-\n packages/opencorvus/src/visual-qa/evidence.ts      |    3 +-\n .../opencorvus/src/work-artifact/presentation.ts   |   20 +-\n .../src/work-artifact/runtime/package-manifest.ts  |   17 +-\n packages/opencorvus/src/work-ledger/projection.ts  |   95 +-\n packages/opencorvus/src/work/harness.ts            |    3 +-\n packages/opencorvus/src/workbench/board.ts         |    4 +-\n packages/opencorvus/src/worktree/index.ts          |   90 +-\n packages/opencorvus/src/worktree/readiness.ts      |  161 +\n .../agent-runner-fresh-session-authority.test.ts   |    5 +-\n .../opencorvus/test/algorithm-batch-one.test.ts    |  185 +-\n .../architect-domain-incomplete-settlement.test.ts |    5 +-\n .../test/artifact-catalog-cursor.test.ts           |    5 +-\n .../test/artifact-provider-reference-flow.test.ts  |    4 +-\n .../opencorvus/test/batch-live-progress.test.ts    |  101 +\n .../test/browser-mcp-node-bundle.test.ts           |    4 +-\n .../test/build-terminal-fact-publication.test.ts   |   48 +-\n .../test/bun-immutable-package-publication.test.ts |  541 ++\n .../test/channel-ingress-fact-storage.test.ts      |   25 +\n .../test/config-dependency-readiness.test.ts       |  381 +\n .../test/config-peer-convergence.test.ts           |  674 ++\n .../test/control-lease-settlement.test.ts          |  238 +\n .../conversation-tool-execution-authority.test.ts  |   14 +-\n .../test/conversation-transport-projection.test.ts |  299 +\n ...dispatch-adapter-design-resource-intent.test.ts |   35 +\n .../dispatch-occurrence-recovery-authority.test.ts |    5 +-\n .../test/durable-publication-store.test.ts         |  222 +\n .../test/engine-interaction-recovery.test.ts       |    4 +-\n .../engine-interrupted-session-recovery.test.ts    |   17 +-\n .../test/engine-prompt-runtime-projection.test.ts  |  103 +\n .../test/event-fire-claim-attempt.test.ts          |  102 +\n .../test/evolution-artifact-evidence-host.test.ts  |   32 +-\n .../evolution-chain-host-defect-repairs.test.ts    |    4 +-\n .../test/evolution-feedback-revision.test.ts       |    2 +-\n .../test/execution-authority-tool-surface.test.ts  |   79 +-\n .../execution-capsule-runtime-descriptor.test.ts   |   39 +\n .../test/execution-progress-inactivity.test.ts     |   81 +\n .../test/expert-squad-evolution-mutation.test.ts   |   10 +-\n .../test/expert-squad-feedback-revision.test.ts    |   21 +-\n .../expert-squad/commercial-legal-package.test.ts  |    5 +-\n .../expert-squad/data-analysis-package.test.ts     |    4 +-\n .../expert-squad/hr-operations-package.test.ts     |    4 +-\n .../test/expert-squad/light-package.test.ts        |  576 ++\n .../omnichannel-distribution-package.test.ts       |    4 +-\n .../package-tool-native-runtime.test.ts            |    4 +-\n .../expert-squad/sales-strategy-package.test.ts    |    4 +-\n .../expert-squad/tax-compliance-package.test.ts    |    5 +-\n .../expert-squad/viral-content-package.test.ts     |    4 +-\n ...fact-check-domain-incomplete-settlement.test.ts |    5 +-\n .../test/fact-kernel-schema-migration.test.ts      |  149 +-\n .../test/fixture/browser-signal-console-driver.ts  |   61 +\n .../test/fixture/browser-signal-owner-child.ts     |  102 +\n .../test/fixture/bun-package-publication-child.ts  |   62 +\n .../opencorvus/test/fixture/config-peer-writer.ts  |   31 +\n .../test/fixture/current-test-child-environment.ts |   32 +\n .../test/fixture/durable-publication-child.ts      |   39 +\n packages/opencorvus/test/fixture/engine-git.ts     |    4 +-\n .../test/fixture/gated-shell-hard-crash-worker.ts  |   22 +\n .../fixture/global-chat-start-process-worker.ts    |  169 +\n .../fixture/global-task-request-process-worker.ts  |   76 +\n .../test/fixture/goal-workload-process-worker.ts   |    5 +-\n .../fixture/implicit-project-creation-child.ts     |  278 +\n .../test/fixture/managed-parent-child-worker.ts    |   34 +\n .../test/fixture/managed-parent-launcher-worker.ts |   33 +\n .../fixture/mcp-oauth-callback-broker-worker.ts    |   12 +\n .../fixture/mcp-oauth-callback-finishing-worker.ts |   21 +\n .../fixture/mcp-oauth-callback-one-shot-worker.ts  |    9 +\n .../mcp-oauth-callback-stalling-broker-worker.ts   |   32 +\n .../fixture/mcp-oauth-callback-terminal-worker.ts  |   14 +\n .../fixture/mcp-oauth-callback-waiter-worker.ts    |   21 +\n .../message-causal-frontier-process-worker.ts      |   74 +\n .../test/fixture/process-instance-id-contract.json |   15 +\n .../test/fixture/project-promotion-child.ts        |  173 +\n .../test/fixture/provider-oauth-exchange-worker.ts |   58 +\n .../fixture/session-message-pair-process-worker.ts |  199 +\n .../fixture/session-prompt-owner-process-worker.ts |  212 +\n .../test/fixture/skill-replacement-child.ts        |  230 +\n ...ool-result-control-permission-process-worker.ts |    7 +-\n .../fixtures/shared-database-backend-process.ts    |    5 +-\n ...end-design-domain-incomplete-settlement.test.ts |    5 +-\n .../test/global-chat-start-process.test.ts         |  225 +\n .../global-router-project-owned-routes.test.ts     |    4 +-\n .../test/global-task-request-replay.test.ts        |  312 +\n .../test/goal-workload-coverage-contract.test.ts   |   19 +-\n .../test/instance-background-work.test.ts          |   79 +\n ...tance-nested-provide-during-preparation.test.ts |  133 +-\n .../intent-analysis-blocker-settlement.test.ts     |    5 +-\n packages/opencorvus/test/llm/activity.test.ts      |  124 +-\n .../test/lsp-initialize-lifecycle.test.ts          |  200 -\n .../test/managed-parent-lifecycle-process.test.ts  |   94 +\n .../test/mcp/auth-durable-revision.test.ts         |  211 +\n .../mcp/browser-configured-declaration.test.ts     |  121 +\n .../mcp/browser-conversation-ownership.test.ts     |  159 +\n .../test/mcp/browser-launch-policy.test.ts         |   56 +\n .../test/mcp/browser-live-view-contract.test.ts    |   83 +-\n .../test/mcp/browser-signal-ownership.test.ts      |  245 +\n .../mcp/computer-configured-declaration.test.ts    |  139 +\n .../opencorvus/test/mcp/computer-contract.test.ts  |  148 +-\n .../test/mcp/computer-scope-ownership.test.ts      |  220 +\n .../test/mcp/configure-credential-order.test.ts    |  323 +\n .../test/mcp/durable-oauth-finish.test.ts          | 2523 +++++++\n .../test/mcp/host-session-runtime.test.ts          |  263 +\n .../mcp/oauth-callback-durable-legitimacy.test.ts  | 1881 +++++\n .../test/mcp/oauth-state-single-use.test.ts        |  121 +\n .../test/mcp/provider-kind-identity.test.ts        |   31 +\n .../opencorvus/test/mcp/result-provenance.test.ts  |   90 +\n .../test/mcp/static-credential-contract.test.ts    |    6 +-\n .../test/memory/organizer-background.test.ts       |   95 +\n .../opencorvus/test/memory/project-memory.test.ts  |   65 +-\n .../opencorvus/test/memory/session-memory.test.ts  |   31 +-\n .../test/metrics-evidence-runtime.test.ts          |    4 +-\n .../test/mission-acceptance-delta.test.ts          |  602 ++\n .../test/mission-durable-activity.test.ts          |    5 +-\n .../test/mission-message-origin-projection.test.ts |    4 +-\n .../test/mission-public-session-authority.test.ts  |    6 +-\n .../test/mission-status-snapshot.test.ts           |  165 +-\n .../test/mission/session-initial-overlay.test.ts   |   83 +\n .../module-topology-archive-extraction.test.ts     |   31 +\n ...module-topology-clean-import-diagnostic.test.ts |   29 +\n .../test/openai-codex-auth-required.test.ts        |    2 +-\n .../test/orchestrator-initial-task-render.test.ts  |  104 +-\n .../orchestrator-mission-resume-provenance.test.ts |   44 +-\n .../orchestrator-mission-root-message-read.test.ts |    8 +-\n ...chestrator-streamed-dispatch-settlement.test.ts |  251 +\n ...chestrator-terminal-coordination-schema.test.ts |    3 +\n .../orchestrator-tool-surface-contract.test.ts     |  118 +-\n .../conversation-turn-declared-outputs.test.ts     |   14 +-\n .../opencorvus/test/ownership-occurrence.test.ts   |   46 +\n .../test/package-install-receipt.test.ts           |  429 ++\n .../test/panel-mission-terminal-authority.test.ts  |  279 +-\n .../test/parent-watchdog-occurrence.test.ts        |  114 +\n .../opencorvus/test/permission-two-mode.test.ts    |  127 +-\n .../opencorvus/test/plugin-process-facade.test.ts  |   59 +\n .../test/process-authority-runtime.test.ts         |    6 +-\n .../opencorvus/test/process-liveness-owner.test.ts |  192 +\n .../test/process-supervisor-control-plane.test.ts  |    3 +-\n .../test/project-directory-and-worktree-gc.test.ts |  272 +-\n .../test/project-identity-convergence.test.ts      |  176 +-\n .../test/project-implicit-creation-journal.test.ts | 1101 +++\n .../test/project-instance-lock-liveness.test.ts    |   67 +-\n .../test/project-promotion-journal.test.ts         | 1012 +++\n .../test/provider-cache-identity.test.ts           |  139 +-\n .../test/provider-cli-auth-occurrence.test.ts      |  504 ++\n .../opencorvus/test/provider-oauth-flow.test.ts    | 1567 +++++\n .../test/provider-tool-call-policy.test.ts         |   78 +\n ...quirements-domain-incomplete-settlement.test.ts |    5 +-\n .../research-domain-incomplete-settlement.test.ts  |    5 +-\n .../test/runtime-startup-recovery.test.ts          |    8 +\n .../test/scheduler-claim-and-fire-identity.test.ts |  183 +-\n .../test/scheduler-event-durable-fire.test.ts      |   82 +\n .../scheduler-task-root-message-schema.test.ts     |  492 ++\n .../scheduler-task-wait-project-runtime.test.ts    |    5 +-\n .../opencorvus/test/security-p0-runtime.test.ts    |   70 +-\n .../test/server-lifecycle-occurrence.test.ts       |   99 +\n .../server/channel-attachment-signature.test.ts    |   43 +\n .../server/conversation-capability-route.test.ts   |   63 +-\n .../server/conversation-initial-overlay.test.ts    |   67 +\n .../test/server/global-chat-start.test.ts          |  333 +\n .../server/session-command-idempotency.test.ts     |  202 +\n .../session-event-connection-snapshot.test.ts      |  896 +++\n .../test/server/session-message-part-read.test.ts  |   79 +\n .../session-prompt-cross-process-owner.test.ts     |  953 +++\n .../test/server/session-prompt-idempotency.test.ts |  517 +-\n .../test/server/session-shell-idempotency.test.ts  | 1057 +++\n .../opencorvus/test/session-error-bridge.test.ts   |   14 +-\n ...on-execution-authority-managed-worktree.test.ts |    4 +-\n .../test/session-loop-provider-tool-input.test.ts  |  173 +-\n ...session-loop-tool-authority-integration.test.ts |   15 +-\n .../session-prompt-owner-schema-migration.test.ts  |   63 +\n .../session/execution-occurrence-lifecycle.test.ts |    4 +-\n .../test/session/fork-atomic-transcript.test.ts    |  220 +\n .../test/session/message-causal-frontier.test.ts   |  245 +\n .../message-store-conversation-activity.test.ts    |  131 +\n .../session/processor-llm-activity-retry.test.ts   |   53 +-\n .../test/session/session-created-effect.test.ts    |    3 +-\n .../session/task-root-multistep-assistant.test.ts  |   15 +\n .../test/settled-terminal-publication.test.ts      |  181 +\n .../opencorvus/test/shared-json-fact-lock.test.ts  |  110 +\n packages/opencorvus/test/shell-deadline.test.ts    |   14 +-\n .../test/skill-market-builtin-authority.test.ts    |  419 +-\n .../test/skill-replacement-publication.test.ts     |  426 ++\n .../task-artifact-git-commit-publication.test.ts   |   26 +-\n .../test/task-control-abandoned-dispatch.test.ts   |   10 +-\n .../task-control-cross-process-dispatch.test.ts    |    5 +-\n .../test/task-control-reconciliation.test.ts       |    4 +\n .../test/task-creation-atomic-root-session.test.ts |  179 +\n .../test/task-event-projection-contract.test.ts    |   17 +-\n .../test/task-file-reference-owner.test.ts         |   86 +\n .../test/task-live-replay-retention.test.ts        |    8 +-\n .../test/task-message-atomic-acceptance.test.ts    |  190 +\n .../test/task-package-revision-binding.test.ts     |    5 +-\n .../opencorvus/test/task-root-fact-store.test.ts   |    2 +\n .../test/task-terminal-artifact-closure.test.ts    |   18 +-\n .../test/task-wait-fire-identity.test.ts           |  230 +-\n .../test/test-runner-runtime-isolation.test.ts     |   91 +-\n .../test/tool-decision-coordination.test.ts        |   91 +-\n .../test/tool-result-control-protocol.test.ts      |   27 +-\n .../tool/search-code-bounded-execution.test.ts     |  573 ++\n .../workflow-node-occurrence-authority.test.ts     |    5 +-\n .../opencorvus/test/worktree-readiness.test.ts     |  111 +\n packages/overlay/package.json                      |    6 +-\n packages/overlay/script/check-css-token-usage.ts   |  544 +-\n packages/overlay/script/migrate-spacing-ladder.ts  |  169 +\n packages/overlay/src-tauri/Cargo.lock              |    2 +-\n packages/overlay/src-tauri/Cargo.toml              |    4 +-\n packages/overlay/src-tauri/src/main.rs             |  251 +-\n packages/overlay/src-tauri/tauri.conf.json         |    4 +-\n packages/overlay/src/components/App.tsx            |   10 +-\n packages/overlay/src/components/AppDialogHost.tsx  |   41 +-\n .../overlay/src/components/BrowserPreviewPanel.tsx |    3 +-\n packages/overlay/src/components/CommandPalette.tsx |    2 +-\n .../src/components/ComposerModelSelector.tsx       |   19 +-\n packages/overlay/src/components/Conversation.tsx   |   89 +-\n .../src/components/ConversationTurnControl.tsx     |    4 +-\n .../overlay/src/components/FileChangesPanel.tsx    |   59 +-\n packages/overlay/src/components/InlineToolPart.tsx |  118 +-\n packages/overlay/src/components/LogViewer.tsx      |   36 +-\n .../overlay/src/components/ProjectLedgerGroup.tsx  |    3 +-\n packages/overlay/src/components/RightDock.tsx      |   58 +-\n packages/overlay/src/components/TaskDirBar.tsx     |    8 +-\n packages/overlay/src/components/TerminalPanel.tsx  |  243 -\n packages/overlay/src/components/WorkLedger.tsx     |    8 +-\n .../src/components/WorkspaceEditorLaunchers.tsx    |   37 +-\n .../interactive-artifact/CodeArtifact.tsx          |    3 +-\n .../interactive-artifact/DiagramArtifact.tsx       |    3 +-\n .../interactive-artifact/McpAppArtifact.tsx        |   11 +-\n .../interactive-artifact/PresentationArtifact.css  |  129 +\n .../interactive-artifact/PresentationArtifact.tsx  |    1 +\n .../interactive-artifact/TerminalArtifact.tsx      |    3 +-\n .../components/settings/ExpertSquadMarketPanel.tsx |    4 +\n .../src/components/settings/GeneralPanel.tsx       |    6 +-\n .../src/components/settings/MemoryContextPanel.tsx |    1 +\n .../src/components/settings/MissionSkillPanel.tsx  |   38 +-\n .../src/components/settings/ProvidersPanel.tsx     |   17 +-\n .../src/components/settings/SkillMarketPanel.tsx   |  242 +-\n .../src/components/titlebar/TitlebarBrand.tsx      |    9 +-\n .../overlay/src/hooks/use-card-head-actions.ts     |    8 +-\n packages/overlay/src/i18n/en-US.json               |   30 +-\n packages/overlay/src/i18n/zh-CN.json               |   30 +-\n packages/overlay/src/index.html                    |   64 +-\n packages/overlay/src/main.tsx                      |  146 +-\n packages/overlay/src/services/app-dialog.ts        |   14 +-\n .../overlay/src/services/browser-preview-link.ts   |   31 -\n .../overlay/src/services/browser-preview-native.ts |    7 +\n packages/overlay/src/services/chat.ts              |    5 +-\n packages/overlay/src/services/clipboard.ts         |   41 +\n .../src/services/conversation-history-path.ts      |   24 +\n packages/overlay/src/services/conversation.ts      |  124 +-\n packages/overlay/src/services/dialog.ts            |    2 +-\n packages/overlay/src/services/event-policy.ts      |    3 -\n packages/overlay/src/services/events.ts            |   25 +-\n .../src/services/expert-squad-install-handoff.ts   |   80 +-\n .../src/services/expert-squad-market-catalog.ts    |   54 -\n packages/overlay/src/services/extensions.ts        |   67 +\n packages/overlay/src/services/host-transport.ts    |   11 +-\n packages/overlay/src/services/llm.ts               |   35 +-\n .../overlay/src/services/selected-stream-cursor.ts |   12 +-\n .../overlay/src/services/selected-task-recovery.ts |    2 +-\n packages/overlay/src/services/sse.ts               |   27 +-\n packages/overlay/src/services/sync.ts              |   50 -\n .../overlay/src/services/task-runtime-activity.ts  |    6 -\n packages/overlay/src/services/task.ts              |   11 +-\n packages/overlay/src/services/tauri-transport.ts   |   32 +-\n packages/overlay/src/services/terminal.ts          |  108 -\n packages/overlay/src/services/theme-registry.ts    |   16 +\n packages/overlay/src/services/theme.ts             |    2 +-\n packages/overlay/src/services/tree-writer.ts       |   11 +\n packages/overlay/src/services/work-ledger.ts       |    2 +-\n packages/overlay/src/services/workspace.ts         |   69 +-\n packages/overlay/src/store/board.ts                |   39 +-\n packages/overlay/src/store/conversation-agents.ts  |  270 +-\n packages/overlay/src/store/settings.ts             |    8 +-\n packages/overlay/src/styles/cascade/base.css       |   23 +-\n packages/overlay/src/styles/cascade/dark.css       |   41 +-\n packages/overlay/src/styles/cascade/light.css      |  112 +-\n packages/overlay/src/styles/cascade/typography.css |   10 +-\n .../overlay/src/styles/cascade/vscode-dark.css     |   54 +-\n packages/overlay/src/styles/primitives/badge.css   |   16 +-\n packages/overlay/src/styles/primitives/button.css  |   45 +-\n .../overlay/src/styles/primitives/disclosure.css   |   10 +-\n .../src/styles/primitives/dropdown-menu.css        |   12 +-\n .../overlay/src/styles/primitives/file-row.css     |   12 +-\n packages/overlay/src/styles/primitives/listbox.css |    2 +-\n packages/overlay/src/styles/primitives/section.css |   15 +-\n .../src/styles/primitives/segmented-control.css    |    6 +-\n .../src/styles/primitives/select-control.css       |   28 +-\n .../src/styles/primitives/selection-control.css    |    9 +-\n packages/overlay/src/styles/primitives/tabs.css    |    9 +-\n .../overlay/src/styles/primitives/text-field.css   |   18 +-\n packages/overlay/src/styles/primitives/tooltip.css |   16 +-\n packages/overlay/src/styles/surfaces/activity.css  |   66 +-\n .../overlay/src/styles/surfaces/automations.css    |  140 +-\n packages/overlay/src/styles/surfaces/card.css      |  412 +-\n packages/overlay/src/styles/surfaces/changes.css   |   70 +-\n .../overlay/src/styles/surfaces/chat-bubble.css    |   99 +-\n packages/overlay/src/styles/surfaces/cmdk.css      |   44 +-\n packages/overlay/src/styles/surfaces/composer.css  |  291 +-\n .../overlay/src/styles/surfaces/conn-banner.css    |    6 +-\n .../overlay/src/styles/surfaces/conversation.css   |  476 +-\n packages/overlay/src/styles/surfaces/dialog.css    |   87 +-\n packages/overlay/src/styles/surfaces/diff.css      |   14 +-\n .../overlay/src/styles/surfaces/empty-state.css    |   10 +-\n packages/overlay/src/styles/surfaces/header.css    |   34 +-\n .../overlay/src/styles/surfaces/inline-pill.css    |    6 +-\n packages/overlay/src/styles/surfaces/inspector.css |  393 +-\n packages/overlay/src/styles/surfaces/mailbox.css   |   88 +-\n packages/overlay/src/styles/surfaces/markdown.css  |   74 +-\n packages/overlay/src/styles/surfaces/messages.css  |  524 +-\n .../overlay/src/styles/surfaces/mission-board.css  |  101 +-\n .../overlay/src/styles/surfaces/native-menu.css    |   40 +-\n packages/overlay/src/styles/surfaces/settings.css  |  769 +--\n packages/overlay/src/styles/surfaces/sidebar.css   |  143 +-\n packages/overlay/src/styles/surfaces/terminal.css  |   64 -\n packages/overlay/src/styles/surfaces/titlebar.css  |   91 +-\n packages/overlay/src/styles/surfaces/usage.css     |  193 +-\n .../overlay/src/styles/surfaces/work-ledger.css    |   71 +-\n packages/overlay/src/styles/surfaces/workspace.css |   56 +-\n .../overlay/src/styles/tokens/design-language.css  |  137 +-\n packages/overlay/src/utils/external-url.ts         |   37 +\n packages/overlay/src/utils/native.ts               |    7 +-\n packages/overlay/src/utils/path.ts                 |   19 -\n packages/overlay/src/utils/random-id.ts            |   33 +\n packages/overlay/src/utils/secure-context.ts       |   30 +\n .../overlay/test/app-dialog-link-action.test.ts    |   61 +\n .../test/browser-open-url-transport.test.ts        |   97 +\n .../test/build-overlay-windows-path.test.ts        |    4 +-\n .../overlay/test/clipboard-single-writer.test.ts   |   75 +\n .../test/composer-expert-squad-catalog.test.ts     |   76 +-\n .../test/conversation-agent-live-activity.test.ts  |  431 ++\n .../overlay/test/conversation-history-path.test.ts |   24 +\n .../expert-squad-install-handoff-bridge.test.ts    |  239 +-\n packages/overlay/test/external-url-gate.test.ts    |   56 +\n .../test/host-transport-capabilities.test.ts       |    6 +\n packages/overlay/test/llm-auth-cancel.test.ts      |    1 +\n .../test/llm-provider-auth-select-source.test.ts   |  385 --\n packages/overlay/test/path-util.test.ts            |   53 -\n packages/overlay/test/random-uuid.test.ts          |   77 +\n .../overlay/test/reveal-path-host-action.test.ts   |   89 +\n packages/overlay/test/secure-context.test.ts       |   64 +\n packages/overlay/test/task-path.test.ts            |    4 +-\n .../overlay/test/terminal-output-stream.test.ts    |   81 -\n packages/plugin/package.json                       |   60 +-\n packages/plugin/script/publish-package.ts          |   49 +-\n packages/plugin/script/publish.ts                  |   26 -\n packages/plugin/src/artifact-catalog.ts            |   41 +-\n .../plugin/src/expert-squad-evolution-artifact.ts  |    8 +-\n .../plugin/src/expert-squad-evolution-history.ts   |   10 +-\n .../plugin/src/expert-squad-evolution-integrity.ts |    7 +-\n packages/plugin/src/expert-squad-evolution.ts      |   13 +-\n packages/plugin/src/expert-squad-package.ts        |    4 +-\n packages/plugin/src/index.ts                       |   48 +-\n packages/plugin/src/metric-evaluation.ts           |    4 +-\n packages/plugin/src/shell.ts                       |  136 -\n packages/plugin/src/task-artifact.ts               |    4 +-\n packages/plugin/src/task-run-evidence.ts           |    4 +-\n packages/plugin/src/tool.ts                        |   38 +-\n packages/plugin/src/workspace-tree.ts              |   43 +-\n packages/plugin/test/hooks.type-test.ts            |   21 -\n packages/plugin/test/publish-package.test.ts       |   39 +-\n packages/plugin/tsconfig.json                      |    4 +-\n packages/plugin/tsconfig.type-tests.json           |    8 -\n packages/sdk/js/example/example.ts                 |    2 +\n packages/sdk/js/package.json                       |    4 +-\n packages/sdk/js/script/generation-transaction.ts   |  179 +-\n packages/sdk/js/script/publish-manifest.ts         |   57 -\n packages/sdk/js/script/publish.ts                  |   35 -\n packages/sdk/js/src/expert-squad-manifest-v1.ts    |    7 +-\n packages/sdk/js/src/gen/sdk.gen.ts                 |  622 +-\n packages/sdk/js/src/gen/types.gen.ts               | 1613 ++++-\n packages/sdk/js/src/index.ts                       |    1 +\n packages/sdk/js/src/route-policy.ts                |    4 +\n ...artup-observer.ts => server-diagnostic-tail.ts} |   29 +-\n packages/sdk/js/src/server.ts                      |  460 +-\n packages/sdk/js/src/startup-receipt.ts             |  107 +\n .../generation-transaction-process-worker.ts       |   55 +\n .../sdk/js/test/generation-transaction.test.ts     |  294 +\n packages/sdk/js/test/server.test.ts                |  578 +-\n packages/sdk/js/test/startup-receipt.test.ts       |  113 +\n packages/sdk/openapi.json                          | 7266 +++++++++++++++-----\n packages/transport-protocol/package.json           |    4 +-\n packages/transport-protocol/src/index.ts           |   83 +-\n packages/transport-protocol/test/contract.test.ts  |   19 +-\n .../test/source-message-parts.test.ts              |    6 +\n packages/util/package.json                         |   27 +-\n packages/util/src/durable-publication.ts           |  398 ++\n packages/util/src/process-node.ts                  |  690 ++\n packages/util/src/process.ts                       |  632 ++\n packages/util/src/product-pillar.ts                |   15 +\n packages/util/src/runtime-directories.ts           |    2 +-\n packages/util/src/runtime-paths.ts                 |    2 +-\n packages/util/test/process.test.ts                 |  520 ++\n packages/util/tsconfig.build.json                  |   13 +\n packages/web/astro.config.mjs                      |    1 -\n .../web/public/media/opencorvus-demo-poster.jpg    |  Bin 123414 -> 0 bytes\n packages/web/public/media/opencorvus-demo.gif      |  Bin 3199154 -> 0 bytes\n packages/web/public/media/opencorvus-demo.mp4      |  Bin 7077401 -> 0 bytes\n .../media/opencorvus-mission-v5r-en-US-poster.jpg  |  Bin 0 -> 161279 bytes\n .../public/media/opencorvus-mission-v5r-en-US.mp4  |  Bin 0 -> 21932471 bytes\n .../media/opencorvus-mission-v5r-zh-CN-poster.jpg  |  Bin 0 -> 156766 bytes\n .../public/media/opencorvus-mission-v5r-zh-CN.mp4  |  Bin 0 -> 21436523 bytes\n packages/web/src/assets/lander/captured.json       |   58 +-\n packages/web/src/components/OcDemoVideo.astro      |   78 +-\n packages/web/src/content/docs/cli.mdx              |    2 +-\n packages/web/src/content/docs/lsp.mdx              |   10 +-\n packages/web/src/content/docs/plugins.mdx          |    2 +-\n packages/web/src/content/docs/reference/api.mdx    |   31 +-\n packages/web/src/content/docs/reference/cli.mdx    |    2 +-\n packages/web/src/content/docs/reference/env.mdx    |    1 -\n packages/web/src/content/docs/reference/sdk.mdx    |   45 +-\n packages/web/src/content/docs/skills.mdx           |   23 +-\n packages/web/src/content/docs/zh-cn/cli.mdx        |    2 +-\n packages/web/src/content/docs/zh-cn/lsp.mdx        |   10 +-\n packages/web/src/content/docs/zh-cn/plugins.mdx    |    2 +-\n .../web/src/content/docs/zh-cn/reference/api.mdx   |   31 +-\n .../web/src/content/docs/zh-cn/reference/cli.mdx   |    2 +-\n .../web/src/content/docs/zh-cn/reference/env.mdx   |    1 -\n .../web/src/content/docs/zh-cn/reference/sdk.mdx   |   45 +-\n packages/web/src/content/docs/zh-cn/skills.mdx     |   43 +-\n packages/web/src/content/landing-copy.ts           |   20 +-\n packages/web/src/content/public-market-zh-36-67.ts |   16 +\n script/github-actions-workflow-contract.test.ts    |    3 +\n script/public-package-release.ts                   |  290 +\n specs/README.md                                    |   64 +-\n .../desktop-open-in-file-manager.png               |  Bin 0 -> 208769 bytes\n .../dialog-link-action.png                         |  Bin 0 -> 200750 bytes\n .../insecure-origin-copy-failure-zh.png            |  Bin 0 -> 158423 bytes\n .../insecure-origin-copy-failure.png               |  Bin 0 -> 171990 bytes\n .../insecure-origin-general-notice-zh.png          |  Bin 0 -> 250958 bytes\n .../insecure-origin-general-notice.png             |  Bin 0 -> 264787 bytes\n .../web-copy-path-confirmation.png                 |  Bin 0 -> 165825 bytes\n .../web-settings-general.png                       |  Bin 0 -> 237694 bytes\n .../2026-08-28-overlay-typography-mission.png      |  Bin 0 -> 54267 bytes\n .../2026-08-28-overlay-typography-usage.png        |  Bin 0 -> 43947 bytes\n .../cases/seven-role-data-analysis/README.md       |    7 +\n .../seven-role-data-analysis/dependency-graph.json |   11 +\n .../seven-role-data-analysis/event-ledger.json     |   23 +\n .../evidence/claim-evidence-matrix.json            |   22 +\n .../evidence/claim-evidence-matrix.md              |   24 +\n .../evidence/expert-squad-inventory.json           |   11 +\n .../evidence/implementation-status-matrix.json     |    9 +\n .../evidence/self-evolution-evidence.json          |   17 +\n .../experiments/automationbench/README.md          |    7 +\n .../experiments/automationbench/audit.json         |   19 +\n .../experiments/automationbench/run-ledger.json    |    7 +\n specs/artifacts/opencorvus-paper/figures/README.md |    5 +\n .../figures/architecture-inputs.json               |   30 +\n .../figures/experiment-inputs.json                 |    9 +\n .../integration/acceptance-ledger.json             |   36 +\n .../integration/foundation-manifest.json           |   17 +\n .../integration/material-boundaries.json           |   20 +\n specs/artifacts/pr-triage/README.md                |    3 +\n .../artifacts/pr-triage/pr13-file-editor-html.png  |  Bin 0 -> 99505 bytes\n .../2026-08-26-board-refresh-real-ui.jpg           |  Bin 0 -> 29023 bytes\n .../2026-08-26-work-first-message-visible.png      |  Bin 0 -> 57008 bytes\n ...composer-model-selector-stable-read-real-ui.png |  Bin 0 -> 58210 bytes\n .../2026-08-27-provider-auth-real-ui.png           |  Bin 0 -> 51853 bytes\n ...026-08-27-provider-explicit-refresh-real-ui.png |  Bin 0 -> 62658 bytes\n ...7-provider-explicit-refresh-request-evidence.md |   49 +\n ...7-provider-explicit-refresh-settled-real-ui.png |  Bin 0 -> 60870 bytes\n specs/current/architecture/02-data.md              |   81 +-\n specs/current/architecture/03-control.md           |  307 +\n specs/current/architecture/04-extensions.md        |  241 +-\n specs/current/architecture/05-config.md            |  213 +\n specs/current/architecture/06-provider.md          |   60 +\n specs/current/architecture/07-panel-reactivity.md  |  280 +\n specs/current/architecture/07-panel.md             |  957 +++\n .../architecture/17-code-work-agent-platform.md    | 1235 ++++\n specs/current/architecture/README.md               |   46 +-\n specs/current/architecture/overlay-typography.md   |   43 +\n specs/current/architecture/security-permission.md  |    4 +-\n specs/current/architecture/task-control-plane.md   |   36 +-\n .../2026-08-25-architecture-debt-remediation.md    | 1489 ++++\n .../2026-08/2026-08-25-open-pull-request-triage.md |   82 +\n ...-25-web-host-path-actions-and-settings-audit.md |  808 +++\n ...08-26-extensible-inspect-benchmark-framework.md |  156 +\n .../2026-08-26-inspect-ai-benchmark-adapter.md     |  185 +\n ...-26-mission-stream-interruption-retry-budget.md |   58 +\n ...sion-task-causal-order-and-close-convergence.md |  120 +\n ...6-08-26-opencorvus-paper-foundation-evidence.md |   99 +\n ...26-08-26-runtime-skill-market-search-install.md |  137 +\n ...6-08-26-search-code-bounded-execution-repair.md |  112 +\n ...ssion-conversation-history-visibility-repair.md |  133 +\n ...6-session-stream-message-cutover-convergence.md |  178 +\n ...essage-panel-agent-activity-and-type-density.md |  250 +\n ...message-panel-stream-and-payload-convergence.md |  250 +\n ...ock-lifecycle-and-virtual-bottom-convergence.md |  288 +\n ...26-08-27-work-ledger-unowned-task-visibility.md |   64 +\n ...8-28-arc-008-conversation-mcp-context-budget.md |   24 +\n ...-08-28-arc-021-immutable-package-publication.md |   28 +\n .../2026-08/2026-08-28-global-chat-start-api.md    |  224 +\n .../2026-08-28-inspect-browsecomp-luna-smoke.md    |  154 +\n .../2026-08-28-mission-acceptance-delta-closure.md |  191 +\n ...lay-expert-squad-handoff-startup-convergence.md |  221 +\n ...6-08-28-overlay-panel-typography-convergence.md |  130 +\n ...26-08-28-remaining-architecture-debt-closure.md |  440 ++\n .../2026-08/2026-08-29-light-expert-squad.md       |  134 +\n ...-08-29-mission-acceptance-baseline-readiness.md |  230 +\n .../2026-08/2026-08-29-v0.0.56-beta-release.md     |   58 +\n specs/records/2026-08/README.md                    |   54 +\n 846 files changed, 88282 insertions(+), 21358 deletions(-)"
+}

@@ -534,6 +534,29 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/f55fef191afd74352611da0235938a011d6d7766) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/8691c972d18486f8c5848b869b184d9c7e6395cb...f55fef191afd74352611da0235938a011d6d7766)。
 
+## 0.0.56beta - 2026-08-29
+
+这是集中整合架构与能力改进的候选版本；其改动随后进入后续公开版本。
+
+### Added
+
+- 新增全局 Chat，支持在项目任务之外开展持续对话；新增运行时 Skill Market 与 Inspect AI benchmark（评测）接入。
+- 新增 Light 轻量咨询团队，用于只读咨询、证据调查、比较和规划。
+
+### Changed
+
+- 统一 Task、Mission、Session、Provider、MCP、调度、持久化与桌面工作台的责任与组合边界，清理重复状态和废弃入口。
+- 任务、需求、验收、产物与工具结果通过类型化事实和精确来源交接，专业能力按已授权的引用提供。
+
+### Fixed
+
+- 修复跨项目初始化和身份归属、原生 OpenAI 工具调用序列化、MCP 会话运行时归属，以及 Mission 验收和唤醒恢复的多个共享问题。
+- 原生 SDK、util、plugin 和依赖投影与候选版本同步；安装预检使用实际打包输出。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/8691c972d18486f8c5848b869b184d9c7e6395cb) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/22832f8fb97df24a50c14145fc03bf995db54e42...8691c972d18486f8c5848b869b184d9c7e6395cb)。
+
 ## 0.0.54beta - 2026-08-25
 
 本版本为共享 LLM 流停滞恢复增加明确上限，并修复公开网站“页面显示新版、主按钮却未绑定精确新版安装包”的下载交互；桌面端、命令行二进制和网站使用同一份 `0.0.54-beta` 发布事实。
