@@ -406,6 +406,10 @@
 
 - 将 `qs`、`svgo` 与 `@ai-sdk/provider-utils` 分别锁定到 `6.16.0`、`4.1.0` 与 `4.0.38`，采用上游对查询数组限额、SVG（Scalable Vector Graphics，可缩放矢量图形）清理及响应读取限额的修复；`@ai-sdk/provider` 同步到配套的 `3.0.14`，统一适配器错误类型。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/5b11c32e5b5e914cfda9979b12d67c6ed1170714) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/752d8b3d27dfc3a95ba7ef2956efd69250683fa7...5b11c32e5b5e914cfda9979b12d67c6ed1170714)。
+
 ## 0.0.63beta - 2026-09-06
 
 本版本替代已生成二进制但网站未完成激活的 `0.0.62-beta`。旧 tag 与 Release 保持不可变；本版本在新的 source identity 上重新执行完整原生矩阵、更新清单和网站发布。数据库继续只接受当前 pre-release schema epoch，不增加历史 migration、兼容 reader 或线上注册表绕行。

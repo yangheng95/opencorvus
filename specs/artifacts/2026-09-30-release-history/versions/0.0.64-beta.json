@@ -1,0 +1,645 @@
+{
+  "version": "0.0.64-beta",
+  "source": "5b11c32e5b5e914cfda9979b12d67c6ed1170714",
+  "tag": "v0.0.64-beta",
+  "previousSource": "752d8b3d27dfc3a95ba7ef2956efd69250683fa7",
+  "sourceDate": "2026-09-11T09:20:09+08:00",
+  "commits": [
+    {
+      "sha": "5b11c32e5b5e914cfda9979b12d67c6ed1170714",
+      "date": "2026-09-11T09:20:09+08:00",
+      "subject": "chore(release): prepare 0.0.64-beta with patched dependencies"
+    },
+    {
+      "sha": "1e7ad7075d6e1e15983444b72736d42933feffad",
+      "date": "2026-09-11T03:01:17+08:00",
+      "subject": "docs: record verified PoC paper website deployment"
+    },
+    {
+      "sha": "29d3d87af3c0f7a0b6351298c81357609b79f6d9",
+      "date": "2026-09-11T02:48:32+08:00",
+      "subject": "feat(web): publish compiled PoC paper with construction status"
+    },
+    {
+      "sha": "623ff94fbbb76aa6eecc09c5d708b727ff84b9cd",
+      "date": "2026-09-11T01:51:32+08:00",
+      "subject": "revert: move five paper commits off main"
+    },
+    {
+      "sha": "e125b1e918cc62df1e08168433dff4efee224684",
+      "date": "2026-09-11T00:26:46+08:00",
+      "subject": "docs: report existing AutomationBench preliminary results"
+    },
+    {
+      "sha": "a5c96e14375e86a9041c91d99f086d8e7568336e",
+      "date": "2026-09-10T23:19:27+08:00",
+      "subject": "docs: address fresh independent academic review"
+    },
+    {
+      "sha": "0650017115f1108e3187c3dc928fedb9a7e10318",
+      "date": "2026-09-10T22:31:22+08:00",
+      "subject": "docs: develop expert organization paper with scientific figures"
+    },
+    {
+      "sha": "1ecb0818b7a7482ebceeccd3702e339dc2c08778",
+      "date": "2026-09-10T16:00:08+08:00",
+      "subject": "docs: add research manuscript and official ICLR template"
+    },
+    {
+      "sha": "a1d8229726eedcbfc653cdc2cde9ec4419b9a527",
+      "date": "2026-09-10T14:39:20+08:00",
+      "subject": "docs: define rigorous OpenCorvus paper research plan"
+    },
+    {
+      "sha": "bd2d6bd18eda05f35326adc231289e56d0a2dfcf",
+      "date": "2026-09-10T14:07:59+08:00",
+      "subject": "docs: record confirmed real-case pilot publication"
+    },
+    {
+      "sha": "d70a3be5ccc6715888e2eecaf2187c34912013c8",
+      "date": "2026-09-10T13:54:23+08:00",
+      "subject": "docs: prepare real-case outreach with accurate publication status"
+    },
+    {
+      "sha": "b1b85a08d5b8182b3aa8b4c790ec4ba6acccf6e9",
+      "date": "2026-09-10T13:30:38+08:00",
+      "subject": "fix(specs): close architecture index reachability"
+    },
+    {
+      "sha": "621caa86df5516b3ddf24f7c03420a4af862ac98",
+      "date": "2026-09-10T13:23:35+08:00",
+      "subject": "docs: lead adoption with verified real case"
+    },
+    {
+      "sha": "9482c81134de727e651ab50c95fa0d8b56c5833f",
+      "date": "2026-09-10T12:41:58+08:00",
+      "subject": "docs: publish reviewed Luna real-project repair evidence"
+    },
+    {
+      "sha": "59623b1a49311716aaa45d00b27c48fd29479022",
+      "date": "2026-09-10T10:34:20+08:00",
+      "subject": "docs: record pinned source case environment and reproduction"
+    },
+    {
+      "sha": "1d0d6b2cf2d317ccac687c43a4ecab22f28f5d50",
+      "date": "2026-09-10T10:05:12+08:00",
+      "subject": "docs: qualify real import workflow case with control"
+    },
+    {
+      "sha": "de1d3cdf33c41ea9f8f3e879802f4e3636a52c29",
+      "date": "2026-09-10T09:46:51+08:00",
+      "subject": "fix(web): align sample archive with zip writer types"
+    },
+    {
+      "sha": "601204429ca265e48b2dcacd9808c38a266ffdcd",
+      "date": "2026-09-10T09:40:59+08:00",
+      "subject": "feat(web): redesign bilingual product delivery video"
+    },
+    {
+      "sha": "707f771513bc8d2a2d3d7b31e596ba27fc4ed3b1",
+      "date": "2026-09-10T09:14:03+08:00",
+      "subject": "docs: withdraw toy campaign and define outcome-led positioning"
+    },
+    {
+      "sha": "78b8f267e011499b9e78d4df01ce3985eee4cc85",
+      "date": "2026-09-10T08:53:17+08:00",
+      "subject": "feat(web): provide a direct first-use sample download"
+    },
+    {
+      "sha": "ea4dd6fa2c60348a4e3e2617d5efccda8551a77e",
+      "date": "2026-09-10T08:44:51+08:00",
+      "subject": "docs: guide first use through the workbench"
+    },
+    {
+      "sha": "af2647765a2d3c449db86de949a34d7aa7ecb83c",
+      "date": "2026-09-10T08:27:28+08:00",
+      "subject": "docs: publish inspectable Luna first-result deliverable"
+    },
+    {
+      "sha": "b6aee4a3ee3523bd4078e3df27671a2c7561b069",
+      "date": "2026-09-10T08:20:02+08:00",
+      "subject": "docs: refocus founder execution on first-user adoption"
+    },
+    {
+      "sha": "3581ea662f8e161386a75fe343821aa1ec7c32ff",
+      "date": "2026-09-10T08:06:32+08:00",
+      "subject": "fix: serialize MCP broker stall checker trigger"
+    },
+    {
+      "sha": "77e7664d924152038ae96161214ab5347efcbb38",
+      "date": "2026-09-10T07:08:55+08:00",
+      "subject": "fix: update browser target security dependencies"
+    },
+    {
+      "sha": "987b28f4d4697b86fd59a8349ad6ac31c15ff794",
+      "date": "2026-09-10T05:55:58+08:00",
+      "subject": "fix: bound Effect TOML dependency nesting"
+    },
+    {
+      "sha": "18fc5b84e3f74f22e8e13ac13beb1cfa48d01192",
+      "date": "2026-09-10T04:58:44+08:00",
+      "subject": "fix: update Astro TOML parser security dependency"
+    },
+    {
+      "sha": "1411c66ac6a1173b79ddb88d17c8651fe427f427",
+      "date": "2026-09-10T03:57:36+08:00",
+      "subject": "fix: update fast-uri schema resolver security dependency"
+    },
+    {
+      "sha": "c6ff9b12d30eaf84281d6f80659ec78c1b4698ec",
+      "date": "2026-09-10T03:06:43+08:00",
+      "subject": "fix(deps): patch Hono request parser vulnerabilities"
+    },
+    {
+      "sha": "4940ee970d187835fd8f8d253f0cba6c8dc58963",
+      "date": "2026-09-10T02:55:13+08:00",
+      "subject": "docs: record isolated map authentication blocker"
+    },
+    {
+      "sha": "2374684b44105a064048c39027606a7256bdb3b8",
+      "date": "2026-09-10T02:42:47+08:00",
+      "subject": "test: bound OAuth disposal synchronization phases"
+    },
+    {
+      "sha": "2867120b040d58dce90ffbfc34222e001bd76e17",
+      "date": "2026-09-10T02:33:26+08:00",
+      "subject": "fix(deps): patch MapLibre attribution sanitizer"
+    },
+    {
+      "sha": "5087cbfe9c3f26132a32038b6a74caa456b4e7ea",
+      "date": "2026-09-10T02:18:26+08:00",
+      "subject": "fix(deps): enforce YAML empty-merge work budget"
+    },
+    {
+      "sha": "5eb62d89d1fef310724888af08f150fa9ee6f6d3",
+      "date": "2026-09-10T02:10:46+08:00",
+      "subject": "fix(web): align Node adapter with Astro startup API"
+    },
+    {
+      "sha": "da7ff54e5fedc70753a63896083d825942aa9937",
+      "date": "2026-09-10T01:55:07+08:00",
+      "subject": "docs: record reviewed security website promotion"
+    },
+    {
+      "sha": "4a75982cfe773df12d78649930d0648c1152f01c",
+      "date": "2026-09-10T01:49:27+08:00",
+      "subject": "fix(ci): scope Ubuntu prerequisites to the signed distro archive"
+    },
+    {
+      "sha": "956a0731feaf8855aa06ce4d192493b663665323",
+      "date": "2026-09-10T01:37:48+08:00",
+      "subject": "fix(deps): patch Astro and Sharp image vulnerabilities"
+    },
+    {
+      "sha": "ac19b5b0b6a40bb0aa3d7a36a32bbe7b4239b996",
+      "date": "2026-09-10T01:25:30+08:00",
+      "subject": "docs: record restored dependency review service"
+    },
+    {
+      "sha": "cd022c1cf03e3538506d320e7686b9ef41a2fcad",
+      "date": "2026-09-10T01:01:19+08:00",
+      "subject": "docs: align public positioning and live squad catalog"
+    },
+    {
+      "sha": "197da8d7d20a7814c2d4bc80b4f2b1e7a28c6a17",
+      "date": "2026-09-10T00:44:37+08:00",
+      "subject": "test(capability): replay a non-routine extension across processes"
+    },
+    {
+      "sha": "19eaa435c88d1fe9d7fe455bc18f27416eab8bca",
+      "date": "2026-09-10T00:38:05+08:00",
+      "subject": "docs: connect prepared pilot posts to published feedback issue"
+    },
+    {
+      "sha": "f7096321f4f5ae8497abfdb643863465d9b53ed9",
+      "date": "2026-09-10T00:31:39+08:00",
+      "subject": "fix(auth): preserve exchanging OAuth executors during pending renewal"
+    },
+    {
+      "sha": "caa00b58de255e0f30722f7cbb287802401d8202",
+      "date": "2026-09-10T00:22:48+08:00",
+      "subject": "docs: record published Windows CLI and bundled UI acceptance"
+    },
+    {
+      "sha": "afefccec15352e8bb14cdffe46bc30d509d2e120",
+      "date": "2026-09-10T00:14:05+08:00",
+      "subject": "docs: align platform table with routine capability contract"
+    },
+    {
+      "sha": "8ca3161b513ca7167469af3b8d60121e64cb2d27",
+      "date": "2026-09-10T00:04:26+08:00",
+      "subject": "test(mcp): align owner recovery with routine capabilities"
+    },
+    {
+      "sha": "9b6684cfc1cfad6db62e0bc211a26d4983ae61c9",
+      "date": "2026-09-09T22:46:02+08:00",
+      "subject": "fix(web): respect hidden market results and theme contrast"
+    },
+    {
+      "sha": "5cb7456476ae6262eae35d72fb26cebea39544a3",
+      "date": "2026-09-09T22:18:51+08:00",
+      "subject": "test(web): separate runtime checks from visual acceptance"
+    },
+    {
+      "sha": "c788dc19645771a60fe6f39f04f16e6ebeebd18c",
+      "date": "2026-09-09T22:02:42+08:00",
+      "subject": "test(catalog): align Mission search with routine tool base"
+    },
+    {
+      "sha": "e88c28d5d20395ec81ca2ff88cdbbea15f57622e",
+      "date": "2026-09-09T21:26:07+08:00",
+      "subject": "test(scheduler): control finite automation due-time boundaries"
+    },
+    {
+      "sha": "fad953e3867c4812debb373624921da246c31076",
+      "date": "2026-09-09T21:17:07+08:00",
+      "subject": "fix(overlay): include stream request identity in task diagnostics"
+    },
+    {
+      "sha": "70df9fbbf652afe28ebaf7f4e212241d05c999aa",
+      "date": "2026-09-09T20:46:28+08:00",
+      "subject": "fix: retain stream request provenance in task board incidents"
+    },
+    {
+      "sha": "371928f43aa3aee472f7dcdce8e3d594cd94f81d",
+      "date": "2026-09-09T20:33:09+08:00",
+      "subject": "fix: preserve provider request identity in session failures"
+    },
+    {
+      "sha": "14df36af9bb8034dbcda4440b7ad6c6ba9867fad",
+      "date": "2026-09-09T20:18:09+08:00",
+      "subject": "docs: trace provider failure request attribution gap"
+    },
+    {
+      "sha": "82c4943bcaab5f142fc15a1d050b03c7710e4775",
+      "date": "2026-09-09T20:06:04+08:00",
+      "subject": "test: align initial tool surface with routine capability grants"
+    },
+    {
+      "sha": "9fa53a7c2b1e193cc7fa2b4affaa51d7e57e096d",
+      "date": "2026-09-09T19:57:42+08:00",
+      "subject": "fix: retain authorized session cleanup ownership through commit"
+    },
+    {
+      "sha": "96668bfd15c8267be874a59cfc1cd5ff499bcea4",
+      "date": "2026-09-09T19:39:31+08:00",
+      "subject": "docs: record completed Luna first task and follow-up acceptance"
+    },
+    {
+      "sha": "15d9925784d66d1b021da604ceaec041664a5f39",
+      "date": "2026-09-09T19:35:36+08:00",
+      "subject": "fix: complete routine capability prompt and package generation closure"
+    },
+    {
+      "sha": "81ee774f5b62e58a650e17cd3c8be1fde1bae337",
+      "date": "2026-09-09T19:16:50+08:00",
+      "subject": "fix: expose granted routine tools in the initial prompt"
+    },
+    {
+      "sha": "f841a6baa0d6b9a294c95807cf5a0ff2e6443869",
+      "date": "2026-09-09T16:38:42+08:00",
+      "subject": "fix: preserve projected Core artifact tool authority"
+    },
+    {
+      "sha": "f9bb1b23dbcf8b68b539ee577fd5f9a569592d5c",
+      "date": "2026-09-09T16:19:38+08:00",
+      "subject": "docs: plan routine capability prompt and execution repair"
+    },
+    {
+      "sha": "ae3f8e4fe5ebc5610b20f762e08072e2103ceccc",
+      "date": "2026-09-09T15:45:58+08:00",
+      "subject": "docs: record real subscription task acceptance failures"
+    },
+    {
+      "sha": "4740fcd2f9fcb66393d95f9d4714741144ffabac",
+      "date": "2026-09-09T15:26:05+08:00",
+      "subject": "docs: record isolated subscription auth preparation"
+    },
+    {
+      "sha": "c5b4fb88b27bcbcd56c0c3966fb9878e560999c5",
+      "date": "2026-09-09T14:40:08+08:00",
+      "subject": "test: budget outer writers for expanded process workload"
+    },
+    {
+      "sha": "115dc249363edd816883a40b105acc3a9d2778e2",
+      "date": "2026-09-09T14:20:22+08:00",
+      "subject": "docs: record public first-task pilot and writer timing evidence"
+    },
+    {
+      "sha": "0ed53a3d77779a17d7548d974a028d4e5f582765",
+      "date": "2026-09-09T14:06:40+08:00",
+      "subject": "fix: preserve exact persisted directory occurrences"
+    },
+    {
+      "sha": "cced68acb21fa8b8d2b2d7cb8084befdfc7c9f2f",
+      "date": "2026-09-09T10:34:15+08:00",
+      "subject": "docs: plan exact persisted directory identity recovery"
+    },
+    {
+      "sha": "f0ca17a81acbe78583ebd0c7373904b9ec02954d",
+      "date": "2026-09-09T10:12:55+08:00",
+      "subject": "fix: preserve exact task artifact filesystem identities"
+    },
+    {
+      "sha": "c6d49484081c49d82cef6e532e056705396b2e2b",
+      "date": "2026-09-09T09:57:54+08:00",
+      "subject": "fix: preserve exact identity while reading preview artifacts"
+    },
+    {
+      "sha": "7a278fca3d69b5d7954f1107a8d444c03686938d",
+      "date": "2026-09-09T09:41:18+08:00",
+      "subject": "fix: preserve exact filesystem identity in project discovery"
+    },
+    {
+      "sha": "928e0ad2e5056d17fa3225158181fbb797cb8236",
+      "date": "2026-09-09T08:16:02+08:00",
+      "subject": "test: report selected file on runner failure"
+    },
+    {
+      "sha": "f2cbde83d826195d6c895bae693bc92c53f09b37",
+      "date": "2026-09-09T08:03:29+08:00",
+      "subject": "test: diagnose Task writers exiting before readiness"
+    },
+    {
+      "sha": "40a2911612d04ec4a2296c4871b049c38a3fcf2f",
+      "date": "2026-09-09T07:45:07+08:00",
+      "subject": "docs: record hosted lifecycle failure evidence and limits"
+    },
+    {
+      "sha": "be52018aa9cd54597874ebb6492282254048c736",
+      "date": "2026-09-09T07:08:31+08:00",
+      "subject": "docs: surface native prerequisites before source installation"
+    },
+    {
+      "sha": "4410c838a145c624d9fbed7501eab92241c2a7e6",
+      "date": "2026-09-09T06:59:25+08:00",
+      "subject": "docs: give README first task a concrete deliverable"
+    },
+    {
+      "sha": "958cc811936ea2b2774af836327be05aef67c0fb",
+      "date": "2026-09-09T06:53:18+08:00",
+      "subject": "docs: verify atomic replacement contracts on Linux"
+    },
+    {
+      "sha": "c7e9e69278e6b02518ee40ff771fbe64af2bec18",
+      "date": "2026-09-09T06:43:50+08:00",
+      "subject": "fix: preserve active readers during Windows atomic replacement"
+    },
+    {
+      "sha": "3d4d2f1863c9518eab94691eedcb196b8cbc7f61",
+      "date": "2026-09-09T06:31:31+08:00",
+      "subject": "docs: reproduce Windows atomic replacement with active readers"
+    },
+    {
+      "sha": "51c697c0839013d2d181485173f988c1c42bcdc7",
+      "date": "2026-09-09T06:23:11+08:00",
+      "subject": "test: observe committed oauth lease renewals"
+    },
+    {
+      "sha": "788980e7eecc1a86be91d6876fa296a28eb14f93",
+      "date": "2026-09-09T06:09:08+08:00",
+      "subject": "docs: explain Windows contributor native toolchain setup"
+    },
+    {
+      "sha": "bd01daa647e6b0ccdafed74d78fb2724b2391a96",
+      "date": "2026-09-09T06:03:40+08:00",
+      "subject": "docs: record shared database question recovery isolation"
+    },
+    {
+      "sha": "afdbe5a31d15bae093a4a8cd24ba418d46a70cea",
+      "date": "2026-09-09T05:56:52+08:00",
+      "subject": "test: recover question replies across actual process exit"
+    },
+    {
+      "sha": "1fa242e385e311e7077ec1611b111593e0ddf94d",
+      "date": "2026-09-09T05:48:48+08:00",
+      "subject": "docs: preserve historical review wording"
+    },
+    {
+      "sha": "b8ddd85c2035463de791b1c6ed95f7ea106c1524",
+      "date": "2026-09-09T05:47:47+08:00",
+      "subject": "test: retain writer fixture files through a durable source owner"
+    },
+    {
+      "sha": "3bb0c7f976ed49515b15104805ce2a9695f2cfad",
+      "date": "2026-09-09T05:39:19+08:00",
+      "subject": "docs: record concurrent question reply integration evidence"
+    },
+    {
+      "sha": "ba7c8562073d4c2d71ae76171f778b4dc9d57722",
+      "date": "2026-09-09T05:31:13+08:00",
+      "subject": "fix: reserve durable bus publication writers before reads"
+    },
+    {
+      "sha": "31ba6344c67156742513f37a9a6f7b137a5784f4",
+      "date": "2026-09-09T05:14:38+08:00",
+      "subject": "fix: reserve interaction outcome writers before reads"
+    },
+    {
+      "sha": "f37e6d808e3edec78624d9582cce07d69fb5bf84",
+      "date": "2026-09-09T05:00:23+08:00",
+      "subject": "fix: reserve ordinary task ingress writer before lifecycle reads"
+    },
+    {
+      "sha": "1c1e566156d0e8047c84e08631666faf7d203fc7",
+      "date": "2026-09-09T04:50:54+08:00",
+      "subject": "fix: reserve process shutdown handoff writer before reads"
+    },
+    {
+      "sha": "10cf7eb19f00e0a4c4fa179ed2288d50b7150049",
+      "date": "2026-09-09T04:39:56+08:00",
+      "subject": "fix: reserve task completion lease writers before reads"
+    },
+    {
+      "sha": "6f3450f6f3a937772becd56411b00913378049b9",
+      "date": "2026-09-09T04:23:58+08:00",
+      "subject": "test: verify task file references across writer processes"
+    },
+    {
+      "sha": "497defad74315b8038156a952efc2d74f086ba88",
+      "date": "2026-09-09T04:16:32+08:00",
+      "subject": "fix: serialize scheduler enqueue and preserve replay identity"
+    },
+    {
+      "sha": "d87bf334130e6ca97b8ad69cb5382acc1b09e053",
+      "date": "2026-09-09T04:03:27+08:00",
+      "subject": "test: surface mission recovery worker exit diagnostics"
+    },
+    {
+      "sha": "134739a6cfd9d1ad98f98e0f16d51d572b9b97ea",
+      "date": "2026-09-09T03:53:39+08:00",
+      "subject": "test: align protocol settlement error with immediate writer"
+    },
+    {
+      "sha": "a1ff21fced1f6de148be63ec1c58529dd38ea6b3",
+      "date": "2026-09-09T03:48:15+08:00",
+      "subject": "fix: merge task file references under the writer transaction"
+    },
+    {
+      "sha": "3e998a82889e6a5b3caeff8751c22214c84ac23c",
+      "date": "2026-09-09T03:38:31+08:00",
+      "subject": "fix: reserve task state writer before lifecycle reads"
+    },
+    {
+      "sha": "4ade2561f6c3c5758802619e05084eff591adbf4",
+      "date": "2026-09-09T03:29:22+08:00",
+      "subject": "fix: serialize mailbox replay and acknowledgement writers"
+    },
+    {
+      "sha": "874c46a1b75ce0bf5bed583346895ba39c4daf4e",
+      "date": "2026-09-09T03:19:19+08:00",
+      "subject": "fix: reserve browser preview target writers before lookup"
+    },
+    {
+      "sha": "e58dd0d636a2fa3f442e2d2a64b53c0ac4b73814",
+      "date": "2026-09-09T03:10:33+08:00",
+      "subject": "fix: serialize task rewind and artifact update writers"
+    },
+    {
+      "sha": "0959d2e2ce80988ae19d94d56ed978b95f6da640",
+      "date": "2026-09-09T03:00:23+08:00",
+      "subject": "fix: reserve protocol event writer before sequence reads"
+    },
+    {
+      "sha": "be0a427d279f24d41b40dee65807caaf0442cdb5",
+      "date": "2026-09-09T02:43:04+08:00",
+      "subject": "docs: prepare bounded early-pilot invitation"
+    },
+    {
+      "sha": "904d7997bbd8947cbecae0cd3acde617fd080b21",
+      "date": "2026-09-09T02:25:44+08:00",
+      "subject": "docs: reconcile operating queue with delivered evidence"
+    },
+    {
+      "sha": "2153d61afddee3a17926e4b1e0d8d4f6e25b8334",
+      "date": "2026-09-09T02:18:46+08:00",
+      "subject": "chore(deps): resolve minimatch 10.2.6 across the workspace"
+    },
+    {
+      "sha": "934efb13d449eb934ddf4b51f2bc15158b4de05a",
+      "date": "2026-09-09T02:02:06+08:00",
+      "subject": "test: release hydration runtime before fixture cleanup"
+    },
+    {
+      "sha": "daf14b999bbe002a9840747b0b690065bc81be4f",
+      "date": "2026-09-09T01:55:07+08:00",
+      "subject": "test: capture standalone session lifecycle diagnostics"
+    },
+    {
+      "sha": "606c986040a132bebda3f89f34cad4e6a35ad574",
+      "date": "2026-09-09T01:26:40+08:00",
+      "subject": "fix: route download links to the installer controls"
+    },
+    {
+      "sha": "0cbaebc6feebb33b515da70a34ff3eb9b6b72313",
+      "date": "2026-09-09T01:06:10+08:00",
+      "subject": "fix: build SDK before website artifact generation"
+    },
+    {
+      "sha": "9cb1464a4db5ee85fc71ad5b10fad551ce591519",
+      "date": "2026-09-09T00:34:36+08:00",
+      "subject": "docs: explain safe handling of prerelease database refusal"
+    },
+    {
+      "sha": "fe2c70a0e42c92a5685df797955d0021eade8ea4",
+      "date": "2026-09-09T00:27:37+08:00",
+      "subject": "docs: audit public-entry promotion readiness"
+    },
+    {
+      "sha": "25dbc6d3d436ac6bb1f7fd2f4667aba48911200a",
+      "date": "2026-09-09T00:20:44+08:00",
+      "subject": "fix(auth): bound initial device authorization requests"
+    },
+    {
+      "sha": "1d9f85c96d3dece31d88a12f0e759d26fe9d5382",
+      "date": "2026-09-09T00:08:40+08:00",
+      "subject": "docs: prepare bilingual first-result communication cards"
+    },
+    {
+      "sha": "c6b429b8e1ac70d0d5539658c0f44605a9510f2a",
+      "date": "2026-09-08T23:57:45+08:00",
+      "subject": "docs: add a reproducible first-result sample and follow-up"
+    },
+    {
+      "sha": "0cf2e62c0737a7c173989cb8e89390a7e34508e8",
+      "date": "2026-09-08T23:46:46+08:00",
+      "subject": "fix(provider): cap pending authorization ownership lifetime"
+    },
+    {
+      "sha": "c38f440a46d2a3e2b662bdeaccaff7100cb35e1b",
+      "date": "2026-09-08T23:29:47+08:00",
+      "subject": "fix(provider): retain browser authorization deadline through exchange"
+    },
+    {
+      "sha": "6e77264301d5993e3a45732b0b362fdbed2cdab2",
+      "date": "2026-09-08T23:17:42+08:00",
+      "subject": "fix(provider): bound built-in device authorization lifetime"
+    },
+    {
+      "sha": "295fc3695144977af49e1863aa0173cb992b9e92",
+      "date": "2026-09-08T23:12:19+08:00",
+      "subject": "fix(expert-squad): bound discovery diagnostics before validation"
+    },
+    {
+      "sha": "7f40aa71b79680f6add12f1b13e30036b47adab1",
+      "date": "2026-09-08T22:51:14+08:00",
+      "subject": "fix(provider): preserve active OAuth executors during admission"
+    },
+    {
+      "sha": "2b8ae0f77bef4f9d5e2475c2ed5fae377de75804",
+      "date": "2026-09-08T22:36:32+08:00",
+      "subject": "docs: record first-use evidence and live auth lifecycle mismatch"
+    },
+    {
+      "sha": "f10497de49192d935f14ce4d1b77099e0bae190c",
+      "date": "2026-09-08T22:04:30+08:00",
+      "subject": "docs: repair contributor entry points and validation guidance"
+    },
+    {
+      "sha": "cbc125a32e9fe7535d462ab4dee22fcf863518b9",
+      "date": "2026-09-08T21:54:45+08:00",
+      "subject": "docs: add audited bilingual public case brief"
+    },
+    {
+      "sha": "31942088f12872037a33579bdd5a2b8ffd862bab",
+      "date": "2026-09-08T21:36:05+08:00",
+      "subject": "docs: align first-use and continuation with current task contracts"
+    },
+    {
+      "sha": "a5e73dba922c1fecc98e0bcb0b68d05cb6d86046",
+      "date": "2026-09-08T21:08:46+08:00",
+      "subject": "docs: establish founder operations and repair support entry points"
+    },
+    {
+      "sha": "89d67e0fa3180da5f5594031304dab9a8071b2ab",
+      "date": "2026-09-08T19:05:13+08:00",
+      "subject": "fix: compact feedback and workload artifact identities"
+    },
+    {
+      "sha": "03ec8f23c8d1186c5689df14e443a5440a1faad4",
+      "date": "2026-09-08T12:28:36+08:00",
+      "subject": "fix: complete interrupted terminal artifact identity work"
+    },
+    {
+      "sha": "5a032ee36b4601c88a5328983b779037dcc969b5",
+      "date": "2026-09-08T10:29:50+08:00",
+      "subject": "fix(log): await asynchronous file flush completion"
+    },
+    {
+      "sha": "c634044f4931aa783b696d571dbf48dec09401d9",
+      "date": "2026-09-08T10:20:00+08:00",
+      "subject": "fix(engine): retain semantic deadlines across scan retries"
+    },
+    {
+      "sha": "8ca89252eba90c5d92b5d184883e87e8b27d3036",
+      "date": "2026-09-08T09:51:45+08:00",
+      "subject": "test: inherit finite budgets across isolated runtime cases"
+    },
+    {
+      "sha": "8e2b7f3a3a1a09ec7c9a55a56c77cdc431ae7bc2",
+      "date": "2026-09-08T09:29:55+08:00",
+      "subject": "test: restore finite worktree GC ownership budget"
+    }
+  ],
+  "stats": ".github/pull_request_template.md                   |    4 +-\n .github/workflows/build-check.yml                  |    3 +-\n .github/workflows/build-overlays.yml               |    3 +-\n .github/workflows/build.yml                        |    7 +-\n .github/workflows/deploy-opencorvus-com.yml        |    6 +-\n .github/workflows/test.yml                         |    3 +-\n CHANGELOG.md                                       |   20 +\n CONTRIBUTING.md                                    |   81 +-\n README.md                                          |   55 +-\n README.zh-CN.md                                    |   48 +-\n SUPPORT.md                                         |   26 +-\n bun.lock                                           |  229 +--\n docs/website-restyle-plan.md                       |   10 +-\n examples/README.md                                 |  197 +++\n examples/parcel-notes/package.json                 |   12 +\n examples/parcel-notes/src/index.js                 |    4 +\n examples/parcel-notes/test/output.test.js          |   11 +\n expert-squads/builtin/light/README.md              |    2 +-\n .../light/agents/light-investigator/system.md      |    2 +-\n .../builtin/light/agents/light-planner/system.md   |    4 +-\n .../builtin/light/agents/orchestrator/system.md    |    4 +-\n expert-squads/builtin/light/expert-squad.jsonc     |    2 +-\n package.json                                       |   25 +-\n packages/channel-config/package.json               |    2 +-\n packages/channel-runtime/package.json              |    2 +-\n .../opencorvus/generated/expert-squad-payload.ts   |   10 +-\n .../opencorvus/generated/expert-squad-revisions.ts |    2 +-\n .../native/process-supervisor/Cargo.lock           |    2 +-\n .../native/process-supervisor/Cargo.toml           |    2 +-\n packages/opencorvus/package.json                   |   10 +-\n packages/opencorvus/script/run-tests.ts            |    1 +\n .../src/agent/primary-assistant-registry.ts        |    2 +-\n packages/opencorvus/src/agent/runner.ts            |    2 +\n .../src/browser-preview/artifact-file.ts           |   28 +-\n packages/opencorvus/src/browser-preview/persist.ts |    4 +-\n .../src/browser-preview/region-comparison.ts       |    2 +-\n .../src/browser-preview/scroll-slice-comparison.ts |    2 +-\n .../src/build/terminal-fact-publication.ts         |    7 +-\n packages/opencorvus/src/bus/index.ts               |    4 +-\n .../opencorvus/src/capability/reveal-receipt.ts    |  115 +-\n .../opencorvus/src/capability/routine-tools.ts     |   72 +\n packages/opencorvus/src/control/prompt.ts          |    2 +-\n packages/opencorvus/src/engine/artifact.ts         |    2 +-\n packages/opencorvus/src/engine/event-log.ts        |   11 +-\n packages/opencorvus/src/engine/interaction.ts      |    6 +-\n packages/opencorvus/src/engine/mailbox.ts          |    8 +-\n packages/opencorvus/src/engine/model.ts            |    2 +\n packages/opencorvus/src/engine/rewind.ts           |  104 +-\n packages/opencorvus/src/engine/state.ts            |    2 +-\n .../opencorvus/src/engine/task-control-driver.ts   |   35 +-\n .../opencorvus/src/engine/task-file-reference.ts   |   21 +-\n .../src/engine/task-root-ingress-delivery.ts       |    6 +-\n .../src/expert-squad/evolution-mutation.ts         |   64 +-\n .../src/expert-squad/feedback-revision.ts          |   17 +-\n packages/opencorvus/src/expert-squad/registry.ts   |   13 +-\n .../opencorvus/src/frontend-design/output-tools.ts |    2 +-\n .../frontend-design/visual-region-binding-tool.ts  |    2 +-\n .../goal-workload-analyst/relational-integrity.ts  |    7 +-\n packages/opencorvus/src/orchestrator/agent.ts      |    2 +\n .../src/orchestrator/task-lifecycle-tools.ts       |    4 +-\n packages/opencorvus/src/plugin/digitalocean.ts     |    8 +-\n .../src/plugin/github-copilot/copilot.ts           |  130 +-\n packages/opencorvus/src/plugin/gitlab.ts           |   38 +-\n packages/opencorvus/src/plugin/oauth-lifecycle.ts  |   75 +-\n packages/opencorvus/src/plugin/openai/codex.ts     |  125 +-\n packages/opencorvus/src/plugin/snowflake-cortex.ts |    7 +-\n packages/opencorvus/src/plugin/xai.ts              |   64 +-\n .../src/project/deletion-cleanup-admission.ts      |    5 +-\n .../opencorvus/src/project/deletion-cleanup.ts     |   56 +-\n .../opencorvus/src/project/directory-admission.ts  |   19 +-\n packages/opencorvus/src/project/project.ts         |    4 +-\n .../opencorvus/src/project/worktree-deletion.ts    |   14 +-\n .../opencorvus/src/prompt/core/mission-core.txt    |    4 +-\n .../src/prompt/core/orchestrator-core.txt          |    4 +-\n packages/opencorvus/src/protocol/delivery.ts       |    3 +-\n .../opencorvus/src/protocol/scheduler-message.ts   |    2 +-\n packages/opencorvus/src/protocol/store.ts          |    4 +-\n packages/opencorvus/src/provider/auth.ts           |   28 +-\n .../opencorvus/src/provider/credential-exchange.ts |    4 +-\n .../opencorvus/src/provider/oauth-flow-store.ts    |   59 +-\n .../opencorvus/src/session/deletion-cleanup.ts     |   43 +-\n packages/opencorvus/src/session/events.ts          |    2 +\n packages/opencorvus/src/session/llm.ts             |    7 +\n packages/opencorvus/src/session/loop.ts            |  177 ++-\n .../opencorvus/src/session/model-image-input.ts    |    2 +-\n packages/opencorvus/src/session/stream-request.ts  |   12 +\n .../opencorvus/src/storage/attachment-store.ts     |    2 +-\n packages/opencorvus/src/storage/db.ts              |   38 +-\n packages/opencorvus/src/task-api/index.ts          |   64 +-\n packages/opencorvus/src/task-artifact/store.ts     |   35 +-\n packages/opencorvus/src/tool/capability-search.ts  |    7 +-\n packages/opencorvus/src/tool/execution-surface.ts  |    6 +-\n .../src/tool/task-tool-execution-scope.ts          |    5 +-\n packages/opencorvus/src/util/filesystem.ts         |    7 +-\n packages/opencorvus/src/util/log.ts                |   12 +-\n packages/opencorvus/src/util/rename-no-replace.ts  |   55 +-\n .../src/visual-qa/annotated-screenshot.ts          |    2 +-\n .../src/work-artifact/packaged-acceptance.ts       |    2 +-\n .../work-artifact/presentation-render-process.ts   |    2 +-\n .../opencorvus/src/work-artifact/presentation.ts   |    2 +-\n packages/opencorvus/src/workbench/board.ts         |    4 +\n packages/opencorvus/src/workspace/lifecycle.ts     |    4 +-\n packages/opencorvus/src/worktree/index.ts          |   56 +-\n .../test/artifact-catalog-cursor.test.ts           |    2 +-\n .../test/artifact-provider-reference-flow.test.ts  |    6 +-\n .../test/browser-authorization-lifetime.test.ts    |  133 ++\n .../test/browser-preview-artifact-identity.test.ts |   38 +\n .../test/browser-target-dependencies.test.ts       |   39 +\n .../test/build-terminal-fact-publication.test.ts   |   81 +-\n .../test/bus-writer-cross-process.test.ts          |   88 ++\n ...capability-search-processor-idempotency.test.ts |   23 +-\n .../test/capability/catalog-binding.test.ts        |   26 +-\n .../opencorvus/test/capability/catalog.test.ts     |    4 +-\n .../core-artifact-owner-execution.test.ts          |  188 +++\n .../capability/native-mcp-search-execution.test.ts |   58 +-\n .../native-mission-transport-base.test.ts          |  180 +--\n .../test/capability/reveal-owner.test.ts           |    4 +-\n .../test/capability/reveal-receipt.test.ts         |   59 +-\n .../test/capability/skill-reveal.test.ts           |   34 +-\n .../structured-output-base-budget.test.ts          |   87 +-\n .../test/capability/tool-definition-budget.test.ts |    6 +-\n .../test/device-authorization-lifetime.test.ts     |  261 ++++\n .../test/evolution-artifact-evidence-host.test.ts  |    8 +-\n .../test/evolution-lab-package-projection.test.ts  |    2 +-\n .../test/execution-authority-tool-surface.test.ts  |    6 +-\n .../test/expert-squad-evolution-mutation.test.ts   |   33 +-\n .../test/expert-squad-feedback-revision.test.ts    |   95 +-\n .../test/expert-squad-manager-cas.test.ts          |    2 +-\n .../test/expert-squad/catalog-index.test.ts        |   57 +-\n .../expert-squad/commercial-legal-package.test.ts  |    4 +-\n .../test/expert-squad/discovery-diagnostic.test.ts |  122 ++\n .../domain-expansion-production-route-e2e.test.ts  |    2 +-\n .../test/expert-squad/dynamic-package.test.ts      |    4 +-\n .../test/expert-squad/light-package.test.ts        |   18 +-\n .../omnichannel-distribution-package.test.ts       |    4 +-\n .../package-tool-native-runtime.test.ts            |    2 +-\n .../test/expert-squad/squad-sdk-package.test.ts    |    2 +-\n .../expert-squad/tax-compliance-package.test.ts    |    4 +-\n .../ten-swimlane-payload-integration.test.ts       |    2 +-\n .../ten-swimlane-production-route-e2e.test.ts      |    2 +-\n ...d-domain-expansion-production-route-e2e.test.ts |    2 +-\n .../expert-squad/viral-content-package.test.ts     |    4 +-\n .../test/fixture/capability-occurrence.ts          |   43 +-\n .../capability-search-processor-replay-worker.ts   |   31 +-\n .../mcp-oauth-callback-stalling-broker-worker.ts   |   19 +-\n ...-mission-transport-permission-process-worker.ts |   63 +-\n .../test/fixture/protocol-append-process-worker.ts |   38 +\n .../fixture/question-process-recovery-worker.ts    |  104 ++\n .../test/fixture/rejected-local-stream.ts          |   89 ++\n .../fixture/scheduler-writer-process-worker.ts     |  188 +++\n .../session-deletion-cleanup-process-worker.ts     |   31 +-\n .../fixture/task-outer-writer-process-worker.ts    |  564 ++++++++\n .../opencorvus/test/fixture/wide-file-identity.ts  |   42 +\n .../test/frontmatter-yaml-engine.test.ts           |    9 +\n .../test/goal-workload-coverage-contract.test.ts   |   41 +-\n packages/opencorvus/test/http-query-parser.test.ts |   14 +\n .../test/interaction-writer-cross-process.test.ts  |   83 ++\n packages/opencorvus/test/log-lifecycle.test.ts     |   86 +-\n .../opencorvus/test/mailbox-cross-process.test.ts  |  115 ++\n .../test/mcp/durable-oauth-finish.test.ts          |   67 +-\n .../test/mcp/host-session-runtime.test.ts          |   45 +-\n .../mcp/oauth-callback-durable-legitimacy.test.ts  |    8 +\n .../test/mcp/query-parser-limits.test.ts           |   34 +\n .../opencorvus/test/memory/session-memory.test.ts  |   18 +-\n .../test/mission-durable-activity.test.ts          |    6 +-\n .../test/mission-process-recovery-driver.test.ts   |   57 +-\n .../test/mission-public-session-authority.test.ts  |    2 +-\n .../test/orchestrator-initial-task-render.test.ts  |   66 +-\n ...chestrator-streamed-dispatch-settlement.test.ts |   60 +-\n .../test/package-tool-files-capability.test.ts     |    4 +-\n .../test/pending-authorization-deadline.test.ts    |  228 +++\n .../test/permission-transport-hydration.test.ts    |    6 +-\n .../test/project-directory-and-worktree-gc.test.ts |    2 +-\n .../project-directory-exact-occurrence.test.ts     |  351 +++++\n .../test/project-filesystem-identity.test.ts       |   57 +\n .../test/protocol-append-cross-process.test.ts     |   59 +\n .../provider-error-request-attribution.test.ts     |   68 +\n .../opencorvus/test/provider-oauth-flow.test.ts    |  164 ++-\n .../test/question-process-recovery.test.ts         |   78 ++\n .../test/runtime-execution-settlement.test.ts      |    2 +-\n .../opencorvus/test/runtime-image-codec.test.ts    |   17 +\n .../test/runtime/host-mcp-memory-metrics.test.ts   |    2 +-\n .../test/scheduler-automation-remediation.test.ts  |   33 +-\n .../scheduler-message-harness-contract.test.ts     |   17 +-\n .../test/scheduler-writer-cross-process.test.ts    |   90 ++\n .../session-prompt-cross-process-owner.test.ts     |   12 +-\n .../session-deletion-cleanup-cross-process.test.ts |   12 +-\n .../test/session-deletion-cleanup.test.ts          |   77 +-\n ...session-loop-tool-authority-integration.test.ts |    4 +-\n .../task-artifact-git-commit-publication.test.ts   |   31 +-\n .../opencorvus/test/task-control-liveness.test.ts  |  318 ++++-\n .../test/task-file-reference-owner.test.ts         |   35 +\n .../test/task-outer-writer-cross-process.test.ts   |  270 ++++\n .../test/task-package-revision-binding.test.ts     |   12 +-\n .../opencorvus/test/test-runner-failure.test.ts    |   39 +\n packages/opencorvus/test/toml-dependency.test.ts   |   30 +\n .../test/tool-result-control-protocol.test.ts      |    2 +-\n .../util/filesystem-atomic-replacement.test.ts     |   49 +\n .../test/util/provider-response-limits.test.ts     |  128 ++\n .../opencorvus/test/workspace-lifecycle.test.ts    |   12 +-\n packages/overlay/package.json                      |    4 +-\n packages/overlay/src-tauri/Cargo.lock              |    2 +-\n packages/overlay/src-tauri/Cargo.toml              |    2 +-\n packages/overlay/src-tauri/tauri.conf.json         |    4 +-\n packages/overlay/src/utils/debug-info.ts           |    8 +-\n packages/overlay/test/session-debug.test.ts        |  153 --\n packages/plugin/package.json                       |    2 +-\n packages/sdk/js/package.json                       |    2 +-\n packages/sdk/js/src/gen/types.gen.ts               |   21 +\n packages/sdk/openapi.json                          |   99 ++\n packages/transport-protocol/package.json           |    2 +-\n packages/util/package.json                         |    2 +-\n packages/web/README.md                             |    2 +\n packages/web/astro.config.mjs                      |    4 +-\n packages/web/package.json                          |   11 +-\n .../media/opencorvus-delivery-v1-en-US-poster.jpg  |  Bin 0 -> 201608 bytes\n .../public/media/opencorvus-delivery-v1-en-US.mp4  |  Bin 0 -> 2459299 bytes\n .../media/opencorvus-delivery-v1-zh-CN-poster.jpg  |  Bin 0 -> 178499 bytes\n .../public/media/opencorvus-delivery-v1-zh-CN.mp4  |  Bin 0 -> 2382915 bytes\n .../media/opencorvus-mission-v5r-en-US-poster.jpg  |  Bin 161279 -> 0 bytes\n .../public/media/opencorvus-mission-v5r-en-US.mp4  |  Bin 21932471 -> 0 bytes\n .../media/opencorvus-mission-v5r-zh-CN-poster.jpg  |  Bin 156766 -> 0 bytes\n .../public/media/opencorvus-mission-v5r-zh-CN.mp4  |  Bin 21436523 -> 0 bytes\n packages/web/public/papers/opencorvus-poc.pdf      |  Bin 0 -> 4472337 bytes\n packages/web/qa/restyle/shoot.ts                   |  234 ----\n packages/web/script/sharp.d.ts                     |   38 -\n packages/web/src/assets/lander/captured.json       |   58 +-\n packages/web/src/components/MarketplacePage.astro  |    8 +-\n packages/web/src/components/OcDemoVideo.astro      |    4 +-\n packages/web/src/components/OcFooter.astro         |    5 +-\n packages/web/src/components/OcHeader.astro         |    9 +-\n packages/web/src/components/OcLanding.astro        |    5 +-\n packages/web/src/components/OcResearchPaper.astro  |   97 ++\n packages/web/src/components/SquadDetailPage.astro  |    2 +-\n .../src/content/docs/reference/mission-task.mdx    |   16 +-\n packages/web/src/content/docs/start/install.mdx    |   80 +-\n packages/web/src/content/docs/start/quickstart.mdx |  222 ++-\n .../content/docs/zh-cn/reference/mission-task.mdx  |   17 +-\n .../web/src/content/docs/zh-cn/start/install.mdx   |   76 +-\n .../src/content/docs/zh-cn/start/quickstart.mdx    |  204 ++-\n packages/web/src/content/landing-copy.ts           |   16 +-\n .../web/src/pages/examples/parcel-notes.zip.ts     |   23 +\n packages/web/src/styles/tokens.css                 |    6 +-\n packages/web/test/brand-assets.test.ts             |   67 -\n packages/web/test/first-result-download.test.ts    |   45 +\n packages/web/test/lander-assets.test.ts            |  100 --\n packages/web/test/landing-benchmark.test.ts        |   28 -\n packages/web/test/style-discipline.test.ts         |  192 ---\n packages/web/test/tokens.parity.test.ts            |  199 ---\n packages/web/test/toml-parser.test.ts              |   29 +\n packages/web/test/website-runtime-smoke.ts         |   53 -\n script/github-actions-workflow-contract.test.ts    |   12 +\n script/install-ubuntu-packages.sh                  |   26 +\n skills/opencorvus/references/http-api.md           |   14 +-\n skills/opencorvus/references/operations.md         |    2 +-\n skills/opencorvus/references/sources.md            |    4 +-\n skills/opencorvus/references/troubleshooting.md    |    2 +-\n specs/README.md                                    |   20 +\n .../2026-09-08-founder-case-brief/README.md        |   42 +\n .../2026-09-08-founder-case-brief/build.py         |  177 +++\n .../2026-09-08-founder-case-brief/case-facts.json  |  184 +++\n .../opencorvus-case-brief-en-zh.pdf                |  Bin 0 -> 111015 bytes\n .../2026-09-09-first-result-media/README.md        |  262 ++++\n .../accepted-result/docs/first-result.md           |   59 +\n .../accepted-result/package.json                   |   12 +\n .../accepted-result/src/index.js                   |    4 +\n .../accepted-result/test/output.test.js            |   11 +\n .../2026-09-09-first-result-media/build.mjs        |   69 +\n .../first-result-en.png                            |  Bin 0 -> 110324 bytes\n .../first-result-en.svg                            |   25 +\n .../first-result-zh.png                            |  Bin 0 -> 113832 bytes\n .../first-result-zh.svg                            |   25 +\n specs/artifacts/2026-09-10-import-case/README.md   |   61 +\n specs/artifacts/2026-09-10-import-case/RESULT.md   |   45 +\n specs/artifacts/2026-09-10-import-case/SOCIAL.md   |   80 ++\n .../accepted-result/Recall.md                      |   19 +\n .../accepted-result/UPSTREAM-LICENSE               |    7 +\n .../accepted-result/delivery.md                    |   87 ++\n .../accepted-result/implementation-plan.md         |   29 +\n .../accepted-result/manifest.json                  |   44 +\n .../accepted-result/repair.patch                   |  446 ++++++\n .../artifacts/2026-09-10-import-case/baseline.csv  |    2 +\n .../2026-09-10-import-case/preview-divergence.csv  |    3 +\n specs/artifacts/2026-09-10-website-story/README.md |   27 +\n specs/artifacts/2026-09-10-website-story/build.py  |  258 ++++\n .../2026-09-10-website-story/en-US-contact.jpg     |  Bin 0 -> 542564 bytes\n .../2026-09-10-website-story/en-US-render.json     |   48 +\n .../narration/en-US/01.mp3                         |  Bin 0 -> 60768 bytes\n .../narration/en-US/02.mp3                         |  Bin 0 -> 58464 bytes\n .../narration/en-US/03.mp3                         |  Bin 0 -> 66384 bytes\n .../narration/en-US/04.mp3                         |  Bin 0 -> 75312 bytes\n .../narration/en-US/05.mp3                         |  Bin 0 -> 66096 bytes\n .../narration/en-US/06.mp3                         |  Bin 0 -> 67392 bytes\n .../narration/en-US/07.mp3                         |  Bin 0 -> 70128 bytes\n .../narration/en-US/08.mp3                         |  Bin 0 -> 62064 bytes\n .../narration/zh-CN/01.mp3                         |  Bin 0 -> 57888 bytes\n .../narration/zh-CN/02.mp3                         |  Bin 0 -> 63504 bytes\n .../narration/zh-CN/03.mp3                         |  Bin 0 -> 61776 bytes\n .../narration/zh-CN/04.mp3                         |  Bin 0 -> 70560 bytes\n .../narration/zh-CN/05.mp3                         |  Bin 0 -> 57312 bytes\n .../narration/zh-CN/06.mp3                         |  Bin 0 -> 57456 bytes\n .../narration/zh-CN/07.mp3                         |  Bin 0 -> 73296 bytes\n .../narration/zh-CN/08.mp3                         |  Bin 0 -> 61488 bytes\n .../artifacts/2026-09-10-website-story/story.json  |  334 +++++\n .../2026-09-10-website-story/zh-CN-contact.jpg     |  Bin 0 -> 484057 bytes\n .../2026-09-10-website-story/zh-CN-render.json     |   48 +\n specs/artifacts/README.md                          |   13 +\n specs/current/architecture/02-data.md              |   13 +\n specs/current/architecture/03-control.md           |    8 +\n specs/current/architecture/04-extensions.md        |    4 +-\n specs/current/architecture/06-provider.md          |   23 +\n .../architecture/17-code-work-agent-platform.md    |    2 +-\n specs/current/architecture/README.md               |   12 +\n .../architecture/capability-search-runtime.md      |   79 +-\n specs/current/architecture/public-website.md       |    2 +-\n .../architecture/server-runtime-readiness.md       |   12 +-\n specs/current/architecture/task-control-plane.md   |    4 +-\n .../current/architecture/task-runtime-directory.md |    1 +\n ...08-13-compact-identities-and-host-references.md |    5 +\n .../2026-09-05-technical-direction-remediation.md  |  275 +++-\n .../2026-09-08-discovery-diagnostic-overflow.md    |   36 +\n .../2026-09/2026-09-08-founder-operations.md       | 1462 ++++++++++++++++++++\n .../2026-09-08-interrupted-task-reconciliation.md  |   75 +\n .../2026-09/2026-09-11-v0.0.64-beta-release.md     |   49 +\n .../2026-09/2026-09-11-website-poc-paper.md        |   51 +\n specs/records/2026-09/README.md                    |   16 +\n 326 files changed, 12400 insertions(+), 2741 deletions(-)"
+}
