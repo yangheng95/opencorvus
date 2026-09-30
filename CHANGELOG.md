@@ -281,6 +281,22 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/6775a92aa80f0436fabd49f97a4380e38200b5c9) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/3010ea34c1b99fe35bf9f36840f5dfb9000f5b7a...6775a92aa80f0436fabd49f97a4380e38200b5c9)。
 
+## 0.1.4 - 2026-09-19
+
+### Added
+
+- 官网新增按任务输入、调用模型和协作关系呈现的案例画廊，并将案例、机制与研究资料整理为中英文博客。
+
+### Changed
+
+- 精简首页内容，突出长程任务与专家团协作；改进协作图、导航和原有产品视觉。
+- 子 agent 流式更新保持会话卡片稳定；缩紧停靠区标签间距，调整宽度后仍能看到当前选中会话。
+- 原生发布与网站部署使用明确的触发选项，保持正式版安装包版本一致。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/3010ea34c1b99fe35bf9f36840f5dfb9000f5b7a) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/f0d1063affc2e3bedb94fee6ce909e4b20ab9db8...3010ea34c1b99fe35bf9f36840f5dfb9000f5b7a)。
+
 ## 0.1.3 - 2026-09-19
 
 ### Added
