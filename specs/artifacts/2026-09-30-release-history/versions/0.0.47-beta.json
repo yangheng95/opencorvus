@@ -1,0 +1,120 @@
+{
+  "version": "0.0.47-beta",
+  "source": "10b548e8c35e0858b58292c0fa871c7d4f32fb53",
+  "tag": "v0.0.47-beta",
+  "previousSource": "9d41a3f3c02782e668efa7792014e0589db24d07",
+  "sourceDate": "2026-08-19T08:09:35+08:00",
+  "commits": [
+    {
+      "sha": "10b548e8c35e0858b58292c0fa871c7d4f32fb53",
+      "date": "2026-08-19T08:09:35+08:00",
+      "subject": "fix(release): describe the platforms a Release has instead of refusing it"
+    },
+    {
+      "sha": "707840162a406650b4dd6a0c2286fb7fc0954965",
+      "date": "2026-08-19T01:33:13+08:00",
+      "subject": "ci: publish a Release with whatever built instead of discarding nine platforms"
+    },
+    {
+      "sha": "74521b98c2cb20efd56afbdced4c9e2158598abd",
+      "date": "2026-08-19T01:28:53+08:00",
+      "subject": "ci: retry apt against a stalling mirror instead of waiting it out"
+    },
+    {
+      "sha": "8bb63fad8a576a18cb3e227e5ea2539ad3ce271e",
+      "date": "2026-08-19T01:08:11+08:00",
+      "subject": "ci: bound every apt install so a release cannot hang on one"
+    },
+    {
+      "sha": "ef08dd9e8ccccba53541e28d5f95af906f1aa573",
+      "date": "2026-08-18T23:42:27+08:00",
+      "subject": "test: build evolution and Mission receipt fixtures the way the Host now allows"
+    },
+    {
+      "sha": "8f6c42da54bb36fcd4deba396ba41ff7bd552c53",
+      "date": "2026-08-18T23:00:57+08:00",
+      "subject": "fix(generate): let repository tooling live beside the built-in packages"
+    },
+    {
+      "sha": "8cc11b023cca07df4fa8e4cbd4a854699312f241",
+      "date": "2026-08-18T22:51:34+08:00",
+      "subject": "release: bump to 0.0.47-beta"
+    },
+    {
+      "sha": "b5fcb40b61a1df72c7a760d2f52171fa04e85eba",
+      "date": "2026-08-18T22:49:01+08:00",
+      "subject": "chore(opencorvus): land in-flight tsconfig change"
+    },
+    {
+      "sha": "02ce7a11f6feab3a80dca778774780c7e722cfb3",
+      "date": "2026-08-18T22:48:39+08:00",
+      "subject": "docs: land in-flight audits, scripts and CI config"
+    },
+    {
+      "sha": "eff136fab789b6071c394d643753ba722e52e12c",
+      "date": "2026-08-18T22:48:10+08:00",
+      "subject": "test: pin revision switching, the delivery fence and the append claim"
+    },
+    {
+      "sha": "49b9f76bc564659e55eb740993a79af7c2af9aa9",
+      "date": "2026-08-18T22:47:58+08:00",
+      "subject": "feat(overlay): reach the Squad Market from the composer selector"
+    },
+    {
+      "sha": "fccdd8c454aed1fdd42fcf13bf19703898776147",
+      "date": "2026-08-18T22:47:31+08:00",
+      "subject": "refactor(core): land remaining in-flight src work"
+    },
+    {
+      "sha": "3c9822df545165d3bbb1b81de91f7bf788edb8b6",
+      "date": "2026-08-18T22:47:07+08:00",
+      "subject": "refactor(acceptance): land in-flight acceptance, artifact and review-stage work"
+    },
+    {
+      "sha": "e325e27393720a08875ff0366578891e151cfe3c",
+      "date": "2026-08-18T22:46:57+08:00",
+      "subject": "refactor(browser-preview): land in-flight visual verification move"
+    },
+    {
+      "sha": "66d4ab3c98b806cd1a91c3efef38d3bdc88339dc",
+      "date": "2026-08-18T22:46:37+08:00",
+      "subject": "fix(runtime): land in-flight session, scheduler, engine and storage work"
+    },
+    {
+      "sha": "eb22ff4976c3dadd4ae36fef34ea1deb7d5892f4",
+      "date": "2026-08-18T22:46:26+08:00",
+      "subject": "feat(evolution-lab): tell the candidate author how a revision changes behavior"
+    },
+    {
+      "sha": "a059383211431ea1fbeeab09c5ccfc15d6f9a07b",
+      "date": "2026-08-18T22:46:16+08:00",
+      "subject": "feat(orchestrator): tell the scheduler what each projected worker can call"
+    },
+    {
+      "sha": "4ad35afaecfd463d93b86a2d8f1331017ac89ddf",
+      "date": "2026-08-18T22:45:45+08:00",
+      "subject": "feat(evolution): reach any revision a squad has had, and let feedback revise the manifest"
+    },
+    {
+      "sha": "3a048265c887614fa13b06faefd842aff504d3fb",
+      "date": "2026-08-18T22:06:38+08:00",
+      "subject": "fix(overlay): let the Mission Board row use the shared tooltip"
+    },
+    {
+      "sha": "bd32e27f20ffb1fd81fc730747de4d89e8b7beb5",
+      "date": "2026-08-18T16:45:39+08:00",
+      "subject": "rescue: land Mission public Session authority on the beta line"
+    },
+    {
+      "sha": "d384e5836e17abc77a636289a53a1ec3b734aef4",
+      "date": "2026-08-18T16:27:00+08:00",
+      "subject": "fix(protocol): own the native command kind enumeration"
+    },
+    {
+      "sha": "5d12a275d04e98feacd2c18f11349cc7baca8381",
+      "date": "2026-08-18T13:44:18+08:00",
+      "subject": "fix(work-artifact): keep the acceptance assistant in flight"
+    }
+  ],
+  "stats": ".github/workflows/build-check.yml                  |   10 +-\n .github/workflows/build-overlays.yml               |   10 +-\n .github/workflows/build.yml                        |   76 +-\n .github/workflows/test.yml                         |   10 +-\n .github/workflows/typecheck.yml                    |   11 +-\n bun.lock                                           |   16 +-\n docs/algorithm-layer-antipatterns.md               |  193 ++\n ...rithm-layer-architecture-antipatterns-round2.md |  450 +++++\n docs/algorithm-layer-architecture-antipatterns.md  | 1309 +++++++++++++\n ...lgorithm-layer-architecture-remediation-plan.md |  178 ++\n docs/evolution-gate-audit.md                       |  114 ++\n expert-squads/builtin/evolution-lab/README.md      |    2 +-\n .../agents/evolution-candidate-author/system.md    |    4 +-\n .../agents/evolution-evaluator/system.md           |    2 +-\n .../agents/evolution-experiment-planner/system.md  |    2 +-\n .../evolution-lab/agents/orchestrator/system.md    |    2 +-\n .../builtin/evolution-lab/expert-squad.jsonc       |    2 +-\n .../evolution-lab/lib/evolution-lab/artifacts.ts   |    2 +\n .../lib/evolution-lab/candidate-integrity.ts       |  Bin 8213 -> 446 bytes\n .../evolution-lab/lib/evolution-lab/comparison.ts  |  272 ++-\n expert-squads/builtin/evolution-lab/selector.md    |    2 +-\n .../builtin/evolution-lab/skills/campaign/SKILL.md |    2 +-\n .../tools/publish-evolution-artifact.ts            |  302 ++-\n .../tools/publish-marketing-growth-artifact.ts     |    7 +-\n .../seo-geo/tools/publish-seo-geo-artifact.ts      |    7 +-\n expert-squads/tsconfig.json                        |   17 +\n package.json                                       |    5 +-\n packages/channel-config/package.json               |    2 +-\n packages/channel-runtime/package.json              |    2 +-\n .../opencorvus/generated/expert-squad-payload.ts   |   28 +-\n .../native/process-supervisor/Cargo.lock           |    2 +-\n .../native/process-supervisor/Cargo.toml           |    2 +-\n packages/opencorvus/package.json                   |    2 +-\n .../script/generate-expert-squad-payload.ts        |   10 +-\n packages/opencorvus/script/task-control-check.ts   |   14 +-\n packages/opencorvus/src/acceptance/checks/index.ts |   30 -\n .../opencorvus/src/acceptance/contract-audit.ts    |  762 --------\n .../opencorvus/src/acceptance/prebuilt-scorer.ts   |    2 +-\n packages/opencorvus/src/acceptance/types.ts        |   44 +-\n .../src/acceptance/visual-feedback-verification.ts |  205 +-\n .../src/agent/dispatch-adapter-contract.ts         |   64 +\n packages/opencorvus/src/agent/tool-pool-data.ts    |    6 +\n packages/opencorvus/src/architect/index.ts         |    2 -\n packages/opencorvus/src/architect/output-tools.ts  |  107 +-\n packages/opencorvus/src/browser-preview/persist.ts |   71 +-\n .../src/browser-preview/region-comparison.ts       |   12 +-\n .../src/browser-preview/region-schema.ts           |   13 +-\n .../src/browser-preview/scroll-slice-comparison.ts |    4 +-\n .../src/browser-preview/verification-core.ts       |   10 +-\n .../browser-preview/verification-test-harness.ts   |    6 +-\n .../visual/errors.ts                               |    0\n .../visual/evaluate.ts                             |   15 +-\n packages/opencorvus/src/browser/runtime/index.ts   |    9 +-\n .../opencorvus/src/capability/discovery-filler.ts  |   24 +\n packages/opencorvus/src/capability/fuzzy.ts        |   54 +-\n .../opencorvus/src/capability/provider-action.ts   |   70 -\n packages/opencorvus/src/capability/rules.ts        |   38 +-\n packages/opencorvus/src/cli/cmd/session.ts         |    9 +\n packages/opencorvus/src/config/config.ts           |    4 +-\n packages/opencorvus/src/control/message.ts         |   22 +-\n packages/opencorvus/src/engine/describe.ts         |    7 +-\n packages/opencorvus/src/engine/persist.ts          |    3 +\n packages/opencorvus/src/evidence/ref.ts            |   39 -\n .../src/evidence/reference-comparison.ts           |   21 -\n .../src/expert-squad/evolution-history.ts          |  294 +++\n .../src/expert-squad/evolution-mutation.ts         |  150 +-\n .../src/expert-squad/feedback-revision.ts          |  369 ++++\n .../opencorvus/src/expert-squad/install-lock.ts    |   24 +-\n packages/opencorvus/src/expert-squad/manager.ts    |    7 +-\n .../src/expert-squad/mutation-authorization.ts     |   64 +-\n .../src/expert-squad/package-inspection.ts         |   75 +\n ...fact-projection.ts => discovery-instruction.ts} |    0\n packages/opencorvus/src/fact-check/index.ts        |    2 +-\n packages/opencorvus/src/fact-check/schema.ts       |    5 +\n packages/opencorvus/src/frontend-design/index.ts   |    3 -\n .../src/frontend-design/tools/text-compare.ts      |  120 --\n packages/opencorvus/src/frontend-research/index.ts |    1 -\n .../opencorvus/src/goal-workload-analyst/index.ts  |    3 -\n .../src/goal-workload-analyst/input-projection.ts  |    7 +-\n .../src/goal-workload-analyst/output-tools.ts      |   25 +-\n packages/opencorvus/src/integrity/index.ts         |   34 -\n .../opencorvus/src/integrity/review-artifact.ts    |   13 +\n packages/opencorvus/src/integrity/review-prompt.ts |  304 +++\n .../stream.ts => integrity/review-stream.ts}       |    0\n .../opencorvus/src/integrity/review-validation.ts  |  289 +++\n packages/opencorvus/src/integrity/team-agent.ts    |  629 +-----\n packages/opencorvus/src/intent-analysis/index.ts   |    9 -\n .../opencorvus/src/intent-analysis/output-tools.ts |   18 +-\n packages/opencorvus/src/intent-analysis/types.ts   |   24 +-\n packages/opencorvus/src/llm/activity.ts            |   67 +-\n packages/opencorvus/src/llm/api.ts                 |    2 +-\n .../opencorvus/src/{session => llm}/repair-hint.ts |    0\n packages/opencorvus/src/mcp/browser/guard.ts       |    2 +\n packages/opencorvus/src/memory/index.ts            |   57 +-\n packages/opencorvus/src/memory/injection.ts        |    1 -\n .../src/memory/project-memory-organizer.ts         |    9 +-\n packages/opencorvus/src/memory/project-memory.ts   |   14 +-\n packages/opencorvus/src/memory/search.ts           |  136 +-\n packages/opencorvus/src/memory/types.ts            |   25 +\n packages/opencorvus/src/metrics/executor.ts        |   34 +-\n packages/opencorvus/src/metrics/index.ts           |    4 -\n packages/opencorvus/src/metrics/metrics.sql.ts     |   26 -\n packages/opencorvus/src/metrics/score.ts           |  147 --\n packages/opencorvus/src/metrics/store.ts           |   90 +-\n packages/opencorvus/src/metrics/types.ts           |   16 -\n .../src/mission/public-session-authority.ts        |   97 +\n packages/opencorvus/src/orchestrator/agent.ts      |   41 +-\n .../src/orchestrator/analyze-intent-tool.ts        |    3 +-\n .../src/orchestrator/deep-research-stage.ts        |   10 +-\n .../src/orchestrator/dispatch-agent-tool.ts        |   32 +-\n .../opencorvus/src/orchestrator/error-envelope.ts  |   26 -\n .../src/orchestrator/frontend-research-stage.ts    |   10 +-\n .../src/orchestrator/integrity-review-stage.ts     |    1 +\n .../src/orchestrator/research-persistence.ts       |   56 +-\n .../src/orchestrator/stage-input-digest.ts         |    7 -\n .../src/orchestrator/stateful-tool-names.ts        |   36 -\n .../src/orchestrator/tool-execution-context.ts     |   43 +-\n packages/opencorvus/src/orchestrator/tools.ts      |  181 +-\n packages/opencorvus/src/permission/invocation.ts   |    1 +\n packages/opencorvus/src/project/bootstrap.ts       |    4 +-\n packages/opencorvus/src/project/gc.ts              |    1 -\n .../src/prompt/core/orchestrator-core.txt          |    1 +\n .../opencorvus/src/protocol/scheduler-message.ts   |    1 -\n .../opencorvus/src/protocol/session-wake-state.ts  |   29 +-\n packages/opencorvus/src/provider/models.ts         |   16 +-\n packages/opencorvus/src/provider/removal.ts        |    4 +-\n packages/opencorvus/src/quicknote/index.ts         |   28 -\n packages/opencorvus/src/requirements/index.ts      |    2 -\n packages/opencorvus/src/requirements/types.ts      |   29 -\n packages/opencorvus/src/research/index.ts          |   34 -\n packages/opencorvus/src/runtime/visual-page.ts     |  197 +-\n .../opencorvus/src/scheduler/automation-service.ts |   26 +-\n .../opencorvus/src/scheduler/event-projection.ts   |   12 +-\n packages/opencorvus/src/scheduler/event-service.ts |   24 +-\n .../src/scheduler/execution-inactivity.ts          |   25 +-\n packages/opencorvus/src/scheduler/index.ts         |   87 +-\n .../src/scheduler/task-wake-composition.ts         |   18 -\n .../opencorvus/src/scheduler/task-wake-runtime.ts  |   30 -\n packages/opencorvus/src/server/error-handler.ts    |    1 +\n packages/opencorvus/src/server/routes/panel.ts     |    9 +-\n packages/opencorvus/src/server/routes/session.ts   |   79 +-\n packages/opencorvus/src/session/llm.ts             |    2 +-\n packages/opencorvus/src/session/loop.ts            |  179 +-\n packages/opencorvus/src/session/message.ts         |   61 +-\n packages/opencorvus/src/session/processor.ts       |    8 +-\n .../src/session/provider-activity-facts.ts         |   86 +\n packages/opencorvus/src/session/wake.ts            |   13 +\n .../opencorvus/src/storage/attachment-store.ts     |    4 +-\n packages/opencorvus/src/storage/ddl.ts             |   20 +-\n packages/opencorvus/src/storage/mysql-transfer.ts  |   13 +-\n packages/opencorvus/src/storage/schema.ts          |    4 +-\n packages/opencorvus/src/task-artifact/store.ts     |    9 +-\n packages/opencorvus/src/tool/artifact-catalog.ts   |    5 +-\n .../catalog.ts => tool/capability-catalog.ts}      |    6 +-\n packages/opencorvus/src/tool/capability-search.ts  |    2 +-\n packages/opencorvus/src/tool/delegate-agent.ts     |   10 +-\n .../tool/expert-squad-feedback-revision-tool.ts    |   64 +\n .../src/tool/expert-squad-package-host.ts          |   73 +-\n packages/opencorvus/src/tool/panel.ts              |    5 +\n packages/opencorvus/src/tool/tool-id-catalog.ts    |    1 +\n packages/opencorvus/src/tool/truncation.ts         |    1 -\n packages/opencorvus/src/util/pixel-stats.ts        |   64 +-\n packages/opencorvus/src/util/process-lock.ts       |   91 +\n packages/opencorvus/src/util/token.ts              |   61 +-\n packages/opencorvus/src/visual-qa/index.ts         |   12 -\n .../src/work-artifact/packaged-acceptance.ts       |   13 +-\n .../src/work-artifact/profile-registry.ts          |   23 +-\n .../src/work-artifact/qualification-registry.ts    |    3 -\n .../src/work-artifact/runtime/package-manifest.ts  |   12 +-\n .../src/work-artifact/validation-authority.ts      |   90 +-\n packages/opencorvus/src/work-ledger/projection.ts  |   24 +-\n packages/opencorvus/src/work/harness.ts            |    3 +\n packages/opencorvus/src/worktree/gc.ts             |    1 -\n .../test/browser-preview/visual-evaluate.test.ts   |   93 +\n .../opencorvus/test/capability/catalog.test.ts     |    2 +-\n packages/opencorvus/test/capability/fuzzy.test.ts  |   25 +\n packages/opencorvus/test/capability/rules.test.ts  |   41 +\n .../test/context-budget-decision.test.ts           |  136 ++\n .../engine-interrupted-session-recovery.test.ts    |  264 ++-\n .../test/evolution-artifact-evidence-host.test.ts  |  223 ++-\n .../evolution-candidate-manifest-surface.test.ts   |  114 +-\n .../opencorvus/test/evolution-comparison.test.ts   |  464 +++--\n .../test/evolution-feedback-revision.test.ts       |  139 ++\n .../test/evolution-lab-package-projection.test.ts  |    4 +-\n .../test/expert-squad-evolution-mutation.test.ts   |  171 +-\n .../test/expert-squad-feedback-revision.test.ts    |  699 +++++++\n .../test/expert-squad-payload-sync.test.ts         |   54 +\n .../test/expert-squad/catalog-index.test.ts        |    2 +-\n .../expert-squad/commercial-legal-package.test.ts  |    4 +-\n .../expert-squad/data-analysis-package.test.ts     |    4 +-\n .../expert-squad/growth-discovery-packages.test.ts |    4 +-\n .../expert-squad/hr-operations-package.test.ts     |    4 +-\n .../omnichannel-distribution-package.test.ts       |    4 +-\n .../random-evolution-e2e-support.test.ts           |    3 +-\n .../expert-squad/sales-strategy-package.test.ts    |    4 +-\n .../expert-squad/tax-compliance-package.test.ts    |    4 +-\n .../typed-publisher-provider-schema.test.ts        |   18 +-\n .../expert-squad/viral-content-package.test.ts     |    4 +-\n ...fact-check-domain-incomplete-settlement.test.ts |   15 +-\n .../test/fixture/goal-workload-process-worker.ts   |    2 -\n ...ool-result-control-permission-process-worker.ts |    2 -\n .../test/integrity/review-validation.test.ts       |  164 ++\n .../opencorvus/test/mcp/computer-contract.test.ts  |    2 +-\n .../test/memory/search-filter-order.test.ts        |   63 +\n .../opencorvus/test/memory/search-ranking.test.ts  |   94 +\n .../test/metrics-evidence-runtime.test.ts          |   25 +-\n .../test/mission-caller-receipt-identity.test.ts   |   59 +-\n .../test/mission-public-session-authority.test.ts  |  288 +++\n ...chestrator-terminal-coordination-schema.test.ts |  110 +-\n .../opencorvus/test/pixel-content-ratio.test.ts    |   86 +\n packages/opencorvus/test/preload.ts                |    2 -\n .../test/provider-activity-fact-storage.test.ts    |   95 +-\n ...quirements-domain-incomplete-settlement.test.ts |   98 +-\n .../research-domain-incomplete-settlement.test.ts  |    6 +-\n .../test/task-control-reconciliation.test.ts       |    9 +-\n .../test/task-root-decision-repair.test.ts         |   52 +\n .../test/task-root-message-delivery-fence.test.ts  |  151 ++\n .../test/tool-request-conflict-host-fault.test.ts  |   38 +-\n packages/opencorvus/test/util/process-lock.test.ts |  115 ++\n .../test/work-artifact/packaged-lifecycle.test.ts  |   12 +-\n .../test/work-artifact/qualification.test.ts       |    9 +-\n packages/opencorvus/tsconfig.json                  |    5 +-\n packages/overlay/package.json                      |    2 +-\n packages/overlay/src-tauri/Cargo.lock              |    2 +-\n packages/overlay/src-tauri/Cargo.toml              |    2 +-\n packages/overlay/src-tauri/tauri.conf.json         |    4 +-\n packages/overlay/src/components/ChatComposer.tsx   |    6 +-\n .../src/components/ComposerReferenceSelector.tsx   |  120 +-\n .../overlay/src/components/ConfigDialogHost.tsx    |    4 +-\n packages/overlay/src/components/WorkLedger.tsx     |   47 +-\n .../settings/ExpertSquadEvolutionPanel.tsx         |  203 +-\n .../src/components/titlebar/TitlebarMenubar.tsx    |   81 +-\n packages/overlay/src/components/ui/Icon.lucide.ts  |    2 +\n packages/overlay/src/components/ui/Tooltip.tsx     |    9 +-\n packages/overlay/src/i18n/en-US.json               |   17 +-\n packages/overlay/src/i18n/zh-CN.json               |   17 +-\n packages/overlay/src/main.tsx                      |   29 +\n packages/overlay/src/services/chat.ts              |   50 +-\n packages/overlay/src/services/expert-squad.ts      |    2 +\n packages/overlay/src/services/host-transport.ts    |    2 +-\n packages/overlay/src/services/task.ts              |   17 +\n packages/overlay/src/store/messages.ts             |    1 +\n packages/overlay/src/styles/primitives/tooltip.css |    7 +\n packages/overlay/src/styles/surfaces/composer.css  |   33 +\n .../overlay/src/styles/surfaces/mission-board.css  |   54 +-\n packages/overlay/src/styles/surfaces/settings.css  |   83 +\n .../test/host-transport-capabilities.test.ts       |   35 +-\n packages/plugin/package.json                       |    2 +-\n packages/plugin/src/artifact-catalog.ts            |   21 +-\n .../plugin/src/expert-squad-evolution-artifact.ts  |  124 +-\n .../plugin/src/expert-squad-evolution-history.ts   |   78 +\n .../plugin/src/expert-squad-evolution-integrity.ts |  332 ++++\n packages/plugin/src/expert-squad-evolution.ts      |   23 +-\n packages/plugin/src/metric-evaluation.ts           |  111 +-\n packages/plugin/src/task-artifact.ts               |    7 +-\n packages/plugin/src/tool.ts                        |   10 +-\n packages/sdk/js/package.json                       |    2 +-\n packages/sdk/js/src/gen/sdk.gen.ts                 |   50 +-\n packages/sdk/js/src/gen/types.gen.ts               |  461 ++++-\n packages/sdk/openapi.json                          | 2048 +++++++++++++++++++-\n packages/transport-protocol/package.json           |    2 +-\n packages/transport-protocol/src/index.ts           |   46 +\n packages/util/package.json                         |    2 +-\n packages/web/src/components/OcLanding.astro        |  335 +++-\n packages/web/src/content/docs/reference/api.mdx    |   22 +-\n .../web/src/content/docs/zh-cn/reference/api.mdx   |   22 +-\n packages/web/src/content/landing-copy.ts           |   47 +-\n packages/web/src/lib/landing-downloads.ts          |   94 +\n packages/web/src/styles/tokens.css                 |    5 +\n packages/web/test/landing-copy.test.ts             |    1 +\n script/desktop-update-manifest.test.ts             |   50 +\n script/generate-desktop-update-manifest.ts         |   25 +-\n script/github-actions-workflow-contract.test.ts    |   15 +-\n specs/README.md                                    |    2 +\n ...26-08-14-mission-public-session-authority-p0.md |   95 +\n .../2026-08-14-mission-wake-activation-fence-p0.md |    2 +-\n specs/records/2026-08/README.md                    |    2 +\n 277 files changed, 14081 insertions(+), 4755 deletions(-)"
+}

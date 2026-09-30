@@ -750,6 +750,26 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/ffa867ae02f9d0a1b9f6ab4cafd0432f0f2a4f5d) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/10b548e8c35e0858b58292c0fa871c7d4f32fb53...ffa867ae02f9d0a1b9f6ab4cafd0432f0f2a4f5d)。
 
+## 0.0.47beta - 2026-08-19
+
+### Added
+
+- 从输入栏的专家团选择器进入市场；专家团演化可查看已有版本，并通过反馈修订清单。
+
+### Changed
+
+- 编排器获得当前工作者真实可调用能力的投影，完善验收、产物和审查阶段的交接。
+- 当时的发布流程保留成功平台的文件，并在说明中列出缺失平台；完整矩阵要求在后续发布流程中继续收敛。
+
+### Fixed
+
+- 修复 Mission 与其 Task 的公开会话通信、验收助手执行收敛及运行时恢复。
+- 对 Linux 打包依赖安装设置有界等待和镜像重试，避免单一依赖下载无限阻塞发布。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/10b548e8c35e0858b58292c0fa871c7d4f32fb53) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/9d41a3f3c02782e668efa7792014e0589db24d07...10b548e8c35e0858b58292c0fa871c7d4f32fb53)。
+
 ## 0.0.46beta - 2026-08-18
 
 本版本汇总自 `0.0.44beta` 发布以来的全部用户可见改动。`0.0.45beta` 只是分支版本基线，没有发布过二进制，因此不单列条目。
