@@ -867,6 +867,26 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/640984800e06cb368ac562284638a5c0fe05635e) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/9652cff4da8e45e547b4a85a5e4c93570cf1a10e...640984800e06cb368ac562284638a5c0fe05635e)。
 
+## 0.0.40beta - 2026-08-11
+
+### Added
+
+- 扩充多个专业领域的专家团，覆盖业务、研究、工程和行业分析；完善自包含团队的创作与质量契约。
+- 官网提供同步版本的下载页、外部 Agent 宿主说明和可选播放的 Mission 概念演示。
+
+### Changed
+
+- 精简公开产品路径，改进响应布局、字体和导航；桌面端可复制有来源依据的诊断信息。
+
+### Fixed
+
+- 修复调度执行归属、持久恢复、提示词清理与 Windows 输出中断后的 Mission 继续执行。
+- 任务标识更紧凑，仍保留精确持久化身份与可追溯关系。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/9652cff4da8e45e547b4a85a5e4c93570cf1a10e) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/6f8e5be59af0724b361afe31a3965955985b9128...9652cff4da8e45e547b4a85a5e4c93570cf1a10e)。
+
 ## 0.0.38beta - 2026-08-09
 
 ### Added
