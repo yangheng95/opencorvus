@@ -1,0 +1,85 @@
+{
+  "version": "0.0.51-beta",
+  "source": "06ccca072ae3dac3522438628c8ef77176c74b93",
+  "tag": "v0.0.51-beta",
+  "previousSource": "a7f173cb69b488b72448ef35e5a87745bc4f6503",
+  "sourceDate": "2026-08-22T03:28:31+08:00",
+  "commits": [
+    {
+      "sha": "06ccca072ae3dac3522438628c8ef77176c74b93",
+      "date": "2026-08-22T03:28:31+08:00",
+      "subject": "fix(release): canonicalize expert squad package bytes"
+    },
+    {
+      "sha": "b8ae8da542113d969037e5af094b7c44b7535cf4",
+      "date": "2026-08-22T03:01:39+08:00",
+      "subject": "release: prepare v0.0.51 beta"
+    },
+    {
+      "sha": "0ac8384ade6461c4660324c38b643bd6d7441a7c",
+      "date": "2026-08-22T01:25:54+08:00",
+      "subject": "fix(expert-squad): derive external actions from bounded authority"
+    },
+    {
+      "sha": "80b8af2d56f6cb9f4cd7e34fb7fafcbb7886c43c",
+      "date": "2026-08-22T01:08:01+08:00",
+      "subject": "docs: plan v0.0.51 beta release"
+    },
+    {
+      "sha": "e357036a80810c9025fcd4b84fc2479a63813062",
+      "date": "2026-08-21T23:47:18+08:00",
+      "subject": "fix(expert-squad): align acceptance with agent capabilities"
+    },
+    {
+      "sha": "fdd314491a8fb92fb663e41addfe909db4eedd0c",
+      "date": "2026-08-21T22:19:31+08:00",
+      "subject": "fix(orchestrator): stabilize prompt owner projection"
+    },
+    {
+      "sha": "540e228e0ecf7e22b94ccbfd3187e4af117f2bef",
+      "date": "2026-08-21T18:38:19+08:00",
+      "subject": "fix(orchestrator): keep runtime system labels aligned"
+    },
+    {
+      "sha": "a09d649cfddc66d4dc73d6f98293aa52e8c3e928",
+      "date": "2026-08-21T18:38:16+08:00",
+      "subject": "feat(session): label runtime prompt composition"
+    },
+    {
+      "sha": "c8b5f888208b8fd203deeb1a924c89f23b538598",
+      "date": "2026-08-21T18:37:48+08:00",
+      "subject": "feat(orchestrator): give the live Task render its own system part"
+    },
+    {
+      "sha": "dc7ce50c16328e1f250bc99869b944b501455c67",
+      "date": "2026-08-21T18:37:48+08:00",
+      "subject": "feat(session): fingerprint the prompt composition of every Provider request"
+    },
+    {
+      "sha": "f5500d2cc53d4865a56d427a626c57c76a36c923",
+      "date": "2026-08-21T18:09:11+08:00",
+      "subject": "fix(expert-squad): strengthen scheduler template acceptance"
+    },
+    {
+      "sha": "09b3523301b67421e1b45d7d3c46a3068984a12b",
+      "date": "2026-08-21T18:09:00+08:00",
+      "subject": "fix(expert-squad): decompose acceptance criteria"
+    },
+    {
+      "sha": "633e08bd6517b86f201bfec49bd25d8a632f8b61",
+      "date": "2026-08-21T13:27:50+08:00",
+      "subject": "fix(session): retain assistant turn decision authority"
+    },
+    {
+      "sha": "05cc2074d6f705c03dc8ab15177ec0e0bf0f2dd8",
+      "date": "2026-08-21T08:34:18+08:00",
+      "subject": "fix(harness): continue scheduling after goal mutations"
+    },
+    {
+      "sha": "6a74ac2e1da193e916b7a24cb726e349188692c8",
+      "date": "2026-08-21T02:39:53+08:00",
+      "subject": "docs: record v0.0.50 beta publication"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |  16 ++\n bun.lock                                           |  16 +-\n expert-squads/builtin/squad-sdk/expert-squad.jsonc |   2 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../opencorvus/generated/expert-squad-revisions.ts |   6 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n .../script/check-builtin-expert-squad-topology.ts  |  15 +-\n .../script/expert-squad-package-file-bytes.ts      |  14 ++\n .../script/generate-expert-squad-payload.ts        |  16 +-\n .../script/generate-expert-squad-revisions.ts      | Bin 11095 -> 11012 bytes\n .../generate-portable-expert-squad-template.ts     |  19 +-\n packages/opencorvus/src/engine/describe.ts         |  11 +-\n .../src/expert-squad/builtin/advanced/README.md    |  18 +-\n .../agents/implementation-engineer/system.md       |   4 +-\n .../builtin/advanced/agents/orchestrator/system.md |  12 +-\n .../advanced/agents/requirement-engineer/system.md |   6 +-\n .../advanced/agents/solution-architect/system.md   |   2 +-\n .../agents/system-integrity-reviewer/system.md     |   4 +-\n .../advanced/agents/test-engineer/system.md        |   4 +-\n .../builtin/advanced/expert-squad.jsonc            |  91 +++++++-\n .../src/expert-squad/builtin/advanced/selector.md  |   2 +\n .../src/expert-squad/builtin/base/README.md        |  18 +-\n .../builtin/base/agents/base-developer/system.md   |   8 +-\n .../builtin/base/agents/base-planner/system.md     |  12 +-\n .../builtin/base/agents/base-researcher/system.md  |   4 +-\n .../builtin/base/agents/base-tester/system.md      |   8 +-\n .../builtin/base/agents/orchestrator/system.md     |  12 +-\n .../expert-squad/builtin/base/expert-squad.jsonc   |  52 ++++-\n .../src/expert-squad/builtin/base/selector.md      |   4 +-\n packages/opencorvus/src/orchestrator/agent.ts      |  46 +++-\n .../src/orchestrator/decision-tool-names.ts        |  44 ++++\n packages/opencorvus/src/session/llm.ts             |  23 ++\n packages/opencorvus/src/session/loop.ts            |  71 ++++--\n .../opencorvus/src/session/prompt-composition.ts   | 260 +++++++++++++++++++++\n .../opencorvus/src/session/runtime-contract.ts     |  15 +-\n packages/opencorvus/src/tool/execution-mode.ts     |  36 ++-\n packages/opencorvus/src/trace/index.ts             |   7 +\n .../test/expert-squad-revision-stamping.test.ts    |  44 +++-\n .../test/expert-squad/advanced-package.test.ts     | 171 +++++++++++++-\n .../test/expert-squad/catalog-index.test.ts        |  13 +-\n .../test/expert-squad/squad-sdk-package.test.ts    |   2 +-\n .../test/orchestrator-initial-task-render.test.ts  |  28 ++-\n .../test/portable-expert-squad-template.test.ts    |  44 ++++\n .../test/prompt-composition-fingerprint.test.ts    | 208 +++++++++++++++++\n ...session-loop-tool-authority-integration.test.ts |  93 +++++++-\n .../test/task-control-reconciliation.test.ts       |  80 +++++++\n .../test/tool-decision-coordination.test.ts        | 117 +++++++++-\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n specs/README.md                                    |   2 +\n specs/current/architecture/04-extensions.md        |   6 +-\n .../2026-08/2026-08-21-v0.0.50-beta-release.md     |   5 +-\n .../2026-08/2026-08-22-v0.0.51-beta-release.md     |  35 +++\n specs/records/2026-08/README.md                    |   2 +\n .../agents/close-integrity-reviewer/system.md      |   2 +\n .../agents/discrepancy-fact-checker/system.md      |   2 +\n .../agents/exception-remediation-builder/system.md |   2 +\n .../package/agents/ledger-requirements/system.md   |   1 +\n .../package/agents/orchestrator/system.md          |   8 +\n .../primary-reconciliation-builder/system.md       |   2 +\n .../package/expert-squad.jsonc                     |   2 +-\n 70 files changed, 1596 insertions(+), 179 deletions(-)"
+}

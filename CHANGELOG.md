@@ -643,6 +643,10 @@
 - 修复运行时 prompt 标签、Prompt composition 指纹和实际 Agent/Session 归因可能不一致，导致 Provider 调用证据无法稳定复核的问题。
 - 修复 `squad-sdk` 当前包字节仍声明旧 revision，以及 revision digest 读取平台相关 checkout 换行符、使 Windows 与 Linux 对同一提交生成不同基线的问题；生成器现在与 package payload 共用 UTF‑8/LF 规范字节。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/06ccca072ae3dac3522438628c8ef77176c74b93) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/a7f173cb69b488b72448ef35e5a87745bc4f6503...06ccca072ae3dac3522438628c8ef77176c74b93)。
+
 ## 0.0.50beta - 2026-08-21
 
 本版本修复多 Agent Harness 在外部业务系统交付中的 Skill 投影与独立验收链路，并同步发布桌面端、命令行二进制和公开网站。
