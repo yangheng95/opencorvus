@@ -1,0 +1,15 @@
+{
+  "version": "0.0.61-beta",
+  "source": "22ce8838a043c3cd8c0a0107ef5cee2aa238c059",
+  "tag": "v0.0.61-beta",
+  "previousSource": "988128d4e455c099f3959818645b551bfa35dbd9",
+  "sourceDate": "2026-09-05T09:21:30+08:00",
+  "commits": [
+    {
+      "sha": "22ce8838a043c3cd8c0a0107ef5cee2aa238c059",
+      "date": "2026-09-05T09:21:30+08:00",
+      "subject": "fix(release): make draft publication resumable"
+    }
+  ],
+  "stats": ".github/workflows/build.yml                        |   5 +\n CHANGELOG.md                                       |  12 +-\n README.md                                          |   2 +-\n README.zh-CN.md                                    |   2 +-\n bun.lock                                           |  16 +--\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n script/github-actions-workflow-contract.test.ts    |   5 +\n script/verify-release-identity.test.ts             | 134 +++++++++++++++++++--\n script/verify-release-identity.ts                  |  30 ++++-\n specs/README.md                                    |   2 +-\n .../2026-09/2026-09-05-v0.0.60-beta-release.md     |  29 ++++-\n .../2026-09/2026-09-05-v0.0.61-beta-release.md     |  50 ++++++++\n specs/records/2026-09/README.md                    |   1 +\n 25 files changed, 270 insertions(+), 46 deletions(-)"
+}

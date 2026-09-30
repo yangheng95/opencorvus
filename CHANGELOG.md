@@ -446,23 +446,20 @@
 
 ## 0.0.61beta - 2026-09-05
 
-本版本从最后一个公开版本 `0.0.54-beta` 继续发布，包含下方未公开候选的全部改动，并完成其后的调度架构收敛、Search-native 能力迁移与 Light 专家团验收。桌面端、命令行、更新清单和公开网站都绑定到同一份 `0.0.61-beta` 源码；产品版本只允许 `major.minor.patch` 三段数字以及可选的 `beta` 标签，不再接受 `beta.1` 一类第四段编号。
-
-### Changed
-
-- Task、Mission、Session、Wait、Automation、Project 与 Work 的创建、派发、唤醒、重试、恢复、关闭和保留统一绑定到持久化 occurrence 与明确的租约/结算事实；跨进程接管使用同一事实来源，不再由进程内回调或时间猜测决定。
-- Expert Squad 能力引用迁移到类型化、occurrence-bound 的 Search-native 目录；Light 调度器只获得清单显式授权的 7 个 Tool，worker 仍使用平台统一 transport，安装继续遵循下一回合才激活的边界。
-- Mission 接受与最终关闭绑定到精确输入、Task epoch、证据 lineage、最终 artifact 和可见 assistant response；worker 报告只接受本轮已派发 Session 的精确消息引用。
+这是承接此前未公开候选的版本，保留其功能并完成发布控制面的修复。
 
 ### Fixed
 
-- 修复并发 collection wake、重复派发、跨 Project 容量竞争、延迟消息、Automation recurrence/retry、Task wait ingress、关闭后 archive/delete，以及进程退出恢复中的重复、遗漏和错误接管。
-- 修复并行 worker 结果逐条读取造成的额外 Turn：编排器现在一次读取精确的 `message_ids` 集合，并在单次 completion 中核对完整派发集合。
-- 修复 Light 咨询在来源约束、工具预算和并行调查上的漂移；真实四成员咨询以一次派发、四个重叠 Provider Session、一次批量读取和一次完成收敛，没有 Tool 失败或 operator correction。
+- 草稿发布从完整 Release inventory（发布清单）读取并校验唯一的工作流运行/源码归属；存在同一归属草稿时恢复它，刚创建的草稿采用有界可见性重试。
+- 重跑同一发布继续使用既有身份，避免重复草稿和由此引起的安装包上传失败。
 
-### Performance
+### Changed
 
-- Automation、Wait 与 recovery 热路径改为带索引的有界分页/批量 reducer；查询次数按页而不是按定义、Fire 或历史记录增长。
+- 汇入 0.0.55beta 至 0.0.60beta 已实现的渲染安全、全局对话、Light 咨询、动态团队、运行时与调度改进；对应改动在各候选记录中分别说明。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/22ce8838a043c3cd8c0a0107ef5cee2aa238c059) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/988128d4e455c099f3959818645b551bfa35dbd9...22ce8838a043c3cd8c0a0107ef5cee2aa238c059)。
 
 ## 0.0.60beta - 2026-09-05
 
