@@ -164,6 +164,10 @@
 - 修复 Chat 和 Mission 的通用预置工具被额外白名单隐藏的问题；已授权的搜索、记忆、计划、定时和任务控制工具直接提供给模型，专业与扩展能力继续按需加载。
 - 修复 Inspect 评测的项目配置入口、长完成摘要读取、流式活动观察、轮询时限校验和评分策略检查；同轮评测固定专家团源版本，避免后续样本读到变化中的配置。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/6ebed7625c8db3780652deb48e2f6329725b4aac) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/5c615ae5c84ac65348914a753c4fcbd53c2bd962...6ebed7625c8db3780652deb48e2f6329725b4aac)。
+
 ## 0.1.12 - 2026-09-22
 
 ### Changed

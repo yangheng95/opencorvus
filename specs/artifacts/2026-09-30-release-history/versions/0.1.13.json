@@ -1,0 +1,85 @@
+{
+  "version": "0.1.13",
+  "source": "6ebed7625c8db3780652deb48e2f6329725b4aac",
+  "tag": "v0.1.13",
+  "previousSource": "5c615ae5c84ac65348914a753c4fcbd53c2bd962",
+  "sourceDate": "2026-09-23T17:33:52+08:00",
+  "commits": [
+    {
+      "sha": "6ebed7625c8db3780652deb48e2f6329725b4aac",
+      "date": "2026-09-23T17:33:52+08:00",
+      "subject": "test: distinguish memory helper requests by their complete system prompt"
+    },
+    {
+      "sha": "e2d035b5d54d3928e2b8263902642d437f09f04c",
+      "date": "2026-09-23T17:32:41+08:00",
+      "subject": "fix: report Windows updater installer launch failures"
+    },
+    {
+      "sha": "ffc5203110f80b82728f8e4b49bac3f2db4cfbe1",
+      "date": "2026-09-23T17:24:37+08:00",
+      "subject": "docs: note desktop updater and packaging repairs for 0.1.13"
+    },
+    {
+      "sha": "986995c13e21c6f4ccaee877112fe1ab36d38d89",
+      "date": "2026-09-23T17:22:02+08:00",
+      "subject": "docs: record native installer repair qualification"
+    },
+    {
+      "sha": "d415ba2c1f53efc7d8a0d43c1f5e1ade72f6a2fd",
+      "date": "2026-09-23T17:19:20+08:00",
+      "subject": "fix: check and prepare signed desktop updates automatically"
+    },
+    {
+      "sha": "31acc4e8280c64280dd64a34efb19e45a3bd1200",
+      "date": "2026-09-23T17:05:57+08:00",
+      "subject": "fix: avoid Windows dependency cache archive timeouts"
+    },
+    {
+      "sha": "3a4c4656b54a707ba385ab85538787ba4aae5f1d",
+      "date": "2026-09-23T13:23:24+08:00",
+      "subject": "fix: expose native installer diagnostics and target macOS verification"
+    },
+    {
+      "sha": "2c7ff43d06ad675f38198f3d414251f08aa2ad99",
+      "date": "2026-09-23T13:13:41+08:00",
+      "subject": "docs: record Darwin x64 DMG packaging failure evidence"
+    },
+    {
+      "sha": "0778b617cebd64168453b5e0ba256540d3d3f1c5",
+      "date": "2026-09-23T12:51:47+08:00",
+      "subject": "release: prepare v0.1.13 after synchronized tool regression checks"
+    },
+    {
+      "sha": "2ac4cba8fbcb7a7a99d0fb59eeb843da21e6718e",
+      "date": "2026-09-23T12:39:04+08:00",
+      "subject": "docs: synchronize consolidated tool contracts across authoring and architecture"
+    },
+    {
+      "sha": "aadbb4f8bfd2e2db52799d9e6309859d5816bc2e",
+      "date": "2026-09-23T12:26:11+08:00",
+      "subject": "refactor: consolidate general checklist and panel tools"
+    },
+    {
+      "sha": "9ef176239ebb9d1c8ec664c08958dbb718a90867",
+      "date": "2026-09-23T11:56:34+08:00",
+      "subject": "fix: remember conversation models and expose built-in tools directly"
+    },
+    {
+      "sha": "6a0baa04c980cb604af3b5be1a679ad86c915783",
+      "date": "2026-09-22T19:06:13+08:00",
+      "subject": "fix: observe live Task streaming in Inspect benchmarks"
+    },
+    {
+      "sha": "7c725353d91ac78fd81558ecc780b85f7aad0914",
+      "date": "2026-09-22T18:47:47+08:00",
+      "subject": "fix: close Inspect benchmark admission and observation gaps"
+    },
+    {
+      "sha": "35dbcd02f6f3bb675024f0e571660c036b349b8d",
+      "date": "2026-09-22T18:17:23+08:00",
+      "subject": "feat: add Inspect AutomationBench engine and expert squad"
+    }
+  ],
+  "stats": ".github/actions/setup-bun/action.yml               |   3 +\n .github/workflows/build-overlays.yml               |  35 ++-\n .github/workflows/package-overlay.yml              |  22 +-\n AGENTS.md                                          |   1 +\n CHANGELOG.md                                       |  19 ++\n bun.lock                                           |  16 +-\n docs/packaging.md                                  |  27 +-\n expert-squads/builtin/automationbench/README.md    |  21 ++\n .../agents/automationbench-executor/system.md      |  32 +++\n .../agents/automationbench-verifier/system.md      |  21 ++\n .../automationbench/agents/orchestrator/system.md  |  19 ++\n .../builtin/automationbench/expert-squad.jsonc     |  71 +++++\n expert-squads/builtin/automationbench/selector.md  |   7 +\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n packages/inspect-benchmark/README.md               | 117 ++++++++-\n packages/inspect-benchmark/pyproject.toml          |  14 +-\n .../src/opencorvus_inspect/_registry.py            |  12 +-\n .../src/opencorvus_inspect/adapter.py              | 197 +++++++++-----\n .../opencorvus_inspect/automationbench/__init__.py |   1 +\n .../opencorvus_inspect/automationbench/check.py    | 200 ++++++++++++++\n .../src/opencorvus_inspect/automationbench/mcp.py  | 112 ++++++++\n .../src/opencorvus_inspect/automationbench/task.py | 287 +++++++++++++++++++++\n .../opencorvus_inspect/automationbench/world.py    | 207 +++++++++++++++\n .../examples/automationbench-smoke.json            |   9 +\n .../src/opencorvus_inspect/solver.py               |  50 ++--\n .../inspect-benchmark/tests/project_admission.py   |  42 +++\n packages/inspect-benchmark/tests/test_adapter.py   |  58 +++--\n .../tests/test_automationbench.py                  | 227 ++++++++++++++++\n .../inspect-benchmark/tests/test_benchmark_task.py |   2 +-\n .../inspect-benchmark/tests/test_inactivity.py     | 167 ++++++++++++\n packages/inspect-benchmark/tests/test_judge.py     |   3 -\n packages/inspect-benchmark/tests/test_solver.py    |   7 +-\n .../opencorvus/generated/expert-squad-payload.ts   |  12 +\n .../opencorvus/generated/expert-squad-revisions.ts |   1 +\n .../generated/expert-squad-search-localization.ts  |   4 +\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n .../script/benchmark/harbor/opencorvus_agent.py    |   3 +-\n .../harbor/run_opencorvus_automationbench.py       |   3 +-\n packages/opencorvus/src/acp/agent.ts               |   4 +-\n .../src/agent/native-agent-permissions.ts          |   3 +-\n .../src/agent/primary-assistant-registry.ts        |   6 +-\n packages/opencorvus/src/agent/prompt/explore.txt   |   2 +-\n packages/opencorvus/src/agent/tool-pool-data.ts    |  23 +-\n .../opencorvus/src/capability/routine-tools.ts     |  13 +-\n packages/opencorvus/src/chat/session.ts            |   3 +-\n packages/opencorvus/src/cli/cmd/github.ts          |   3 +-\n packages/opencorvus/src/cli/cmd/run.ts             |  18 +-\n packages/opencorvus/src/config/config.ts           |   3 +-\n .../src/mission-skill/builtin-payload.ts           |   2 +-\n .../src/mission-skill/builtin/general/SKILL.md     |   6 +-\n .../opencorvus/src/orchestrator/explore-tool.ts    |   3 +-\n packages/opencorvus/src/panel/action-ids.ts        |  31 +--\n packages/opencorvus/src/panel/capability.ts        |  99 +++----\n packages/opencorvus/src/panel/task-query.ts        |  39 ++-\n packages/opencorvus/src/permission/invocation.ts   |   3 +-\n .../opencorvus/src/prompt/core/fact-check-core.txt |   2 +-\n .../opencorvus/src/prompt/core/mission-core.txt    |   8 +-\n packages/opencorvus/src/session/prompt/system.txt  |  12 +-\n packages/opencorvus/src/tool/bash.txt              |   4 +-\n packages/opencorvus/src/tool/global-tools.ts       |   5 +-\n packages/opencorvus/src/tool/panel.ts              | 213 ++++++---------\n packages/opencorvus/src/tool/todo.ts               |  39 +--\n packages/opencorvus/src/tool/todo.txt              |   7 +\n packages/opencorvus/src/tool/todowrite.txt         | 166 ------------\n packages/opencorvus/src/tool/tool-id-catalog.ts    |   3 +-\n packages/opencorvus/src/tool/websearch.txt         |   9 +-\n packages/opencorvus/src/work/harness.ts            |   4 +-\n .../test/automationbench-expert-squad.test.ts      |  30 +++\n .../test/automationbench-project-admission.test.ts | 123 +++++++++\n .../harbor_automationbench_adapter_test.py         |   3 +-\n .../capability/native-mcp-search-execution.test.ts |  24 +-\n .../native-mission-transport-base.test.ts          |  17 +-\n .../test/capability/skill-reveal.test.ts           |  24 +-\n .../test/capability/task-routine-tools.test.ts     |  38 +++\n .../test/controlled-streaming-provider.test.ts     |  53 ++++\n .../test/execution-authority-tool-surface.test.ts  |  13 +-\n .../test/expert-squad/catalog-index.test.ts        |  15 +-\n .../test/fixture/controlled-streaming-provider.ts  |  22 +-\n .../test/global-chat-start-process.test.ts         |  10 +-\n .../test/inspect-task-live-observation.test.ts     | 157 +++++++++++\n .../test/mcp/host-session-runtime.test.ts          |  50 +++-\n .../test/panel-mission-terminal-authority.test.ts  |  12 +-\n ...session-loop-tool-authority-integration.test.ts | 130 ++++------\n .../test/tool/consolidated-tools.test.ts           | 218 ++++++++++++++++\n packages/overlay/package.json                      |   2 +-\n packages/overlay/script/installer-bundler.ts       |   6 +-\n packages/overlay/src-tauri/Cargo.lock              |  49 +++-\n packages/overlay/src-tauri/Cargo.toml              |   4 +-\n packages/overlay/src-tauri/src/main.rs             |  30 ++-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n .../src/components/ComposerModelSelector.tsx       |   4 -\n packages/overlay/src/components/InlineToolPart.tsx |   6 +-\n packages/overlay/src/main.tsx                      |   5 +-\n packages/overlay/src/services/composer-model.ts    |  36 ++-\n packages/overlay/src/services/desktop-update.ts    |  87 +++++--\n packages/overlay/src/services/init.ts              |   2 +\n packages/overlay/src/services/task.ts              |   3 +-\n packages/overlay/src/services/workspace.ts         |   6 +-\n packages/overlay/src/store/card-tree-stats.ts      |   2 +-\n packages/overlay/src/store/settings.ts             |   5 +\n packages/overlay/src/utils/card-tree.ts            |   4 +-\n packages/overlay/src/utils/todos.ts                |   2 +-\n packages/overlay/src/utils/tool-card-node.ts       |   3 +-\n packages/overlay/src/utils/tool.ts                 |   2 +-\n packages/overlay/test/inline-style-csp.test.ts     |  51 ----\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/sdk/js/src/gen/sdk.gen.ts                 |  81 +++---\n packages/sdk/js/src/gen/types.gen.ts               |  84 +++---\n packages/sdk/openapi.json                          | 220 ++++++++--------\n packages/transport-protocol/package.json           |   2 +-\n packages/transport-protocol/src/index.ts           |   5 +-\n packages/transport-protocol/test/contract.test.ts  |   7 +\n packages/util/package.json                         |   2 +-\n packages/web/src/content/docs/acp.mdx              |   2 +-\n packages/web/src/content/docs/agents.mdx           |   2 +\n packages/web/src/content/docs/reference/api.mdx    |   2 +-\n packages/web/src/content/docs/tools.mdx            |  42 ++-\n packages/web/src/content/docs/zh-cn/acp.mdx        |   2 +-\n packages/web/src/content/docs/zh-cn/agents.mdx     |   2 +\n .../web/src/content/docs/zh-cn/reference/api.mdx   |   2 +-\n packages/web/src/content/docs/zh-cn/tools.mdx      |  42 ++-\n packages/web/src/content/public-market-zh-01-35.ts |  25 ++\n script/desktop-update-service.test.ts              |  65 +++++\n script/github-actions-workflow-contract.test.ts    |  33 +++\n script/installer-bundler.test.ts                   |   2 +-\n script/overlay-build-selection.test.ts             |  32 +++\n script/overlay-build-selection.ts                  |  23 ++\n specs/README.md                                    |  20 ++\n .../2026-09-22-inspect-automationbench/README.md   |  37 +++\n .../local-check.eval                               | Bin 0 -> 31806 bytes\n .../rescored.eval                                  | Bin 0 -> 31800 bytes\n .../residual-audit.json                            |  38 +++\n .../residual-local-check.eval                      | Bin 0 -> 31032 bytes\n .../residual-rescored.eval                         | Bin 0 -> 31818 bytes\n .../summary.json                                   |  34 +++\n specs/artifacts/README.md                          |   2 +\n specs/current/architecture/02-data.md              |   2 +-\n specs/current/architecture/03-control.md           |   4 +-\n specs/current/architecture/04-extensions.md        |   9 +\n specs/current/architecture/06-provider.md          |   2 +-\n specs/current/architecture/07-panel.md             |  36 ++-\n .../architecture/17-code-work-agent-platform.md    |  68 ++---\n specs/current/architecture/README.md               |   4 +-\n .../architecture/capability-search-runtime.md      |  27 +-\n specs/current/architecture/inspect-benchmark.md    |  56 ++++\n .../2026-09-22-inspect-automationbench-engine.md   |  55 ++++\n ...09-22-inspect-automationbench-residual-audit.md |  42 +++\n .../2026-09/2026-09-23-composer-model-memory.md    |  33 +++\n .../2026-09-23-conversation-web-evidence.md        |  55 ++++\n .../2026-09/2026-09-23-darwin-dmg-repair.md        |  81 ++++++\n .../2026-09/2026-09-23-desktop-updater-repair.md   |  43 +++\n .../2026-09-23-tool-consolidation-round-one.md     |  59 +++++\n .../2026-09-23-tool-consolidation-sync-audit.md    |  53 ++++\n .../2026-09-23-v0.1.13-darwin-x64-investigation.md |  32 +++\n .../records/2026-09/2026-09-23-v0.1.13-release.md  |  32 +++\n specs/records/2026-09/README.md                    |  20 ++\n 160 files changed, 4367 insertions(+), 1182 deletions(-)"
+}
