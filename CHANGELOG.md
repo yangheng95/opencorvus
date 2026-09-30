@@ -983,6 +983,18 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/b1cedfa539eb5533c98acf2e3d51479173bb6060) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/81fb867782966a14f2a5b9b94cd3007c2ff63c62...b1cedfa539eb5533c98acf2e3d51479173bb6060)。
 
+## 0.0.35beta.1 - 2026-08-08
+
+### Fixed
+
+- 恢复桌面停止控制和排队活动展示，明确对话工具的执行授权，改善 Provider 取消后的运行结算。
+- 原生消费者构建前先生成 SDK（Software Development Kit，软件开发工具包）；桌面与命令行平台矩阵携带已验证的 Bun 编译运行时。
+- 修复 GitHub Actions 工作流与独立安装包分发，补齐 Hermes 和 OpenClaw 的 Skill 控制说明。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/81fb867782966a14f2a5b9b94cd3007c2ff63c62) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/65d0bfc983ca7ed301a83354f27e5cf5f1b19a19...81fb867782966a14f2a5b9b94cd3007c2ff63c62)。
+
 ## 0.0.35beta - 2026-08-07
 
 - 本版本是更新日志的记录起点；更早版本不在此倒推补录。
