@@ -787,6 +787,22 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/9d41a3f3c02782e668efa7792014e0589db24d07) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/df953b97cc96c43dcff96114fb826176ea9bf2cd...9d41a3f3c02782e668efa7792014e0589db24d07)。
 
+## 0.0.45beta - 2026-08-15
+
+### Changed
+
+- 执行状态以不可变运行事实为依据，统一任务决策、接纳、取消和关闭的责任边界。
+
+### Fixed
+
+- 修复 Task 根执行的多步骤回复、决策修正、并行接纳、无动作暂停与信箱重放的收敛。
+- 修复 Task 向 Mission 发布、项目删除与数据库约束、权限继续执行中的故障处理。
+- 网站部署等待实际就绪后再结算，避免服务尚未可用便报告部署完成。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/df953b97cc96c43dcff96114fb826176ea9bf2cd) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/f2d4e0dc0a4808972641eb43c65f3d9c77a7130e...df953b97cc96c43dcff96114fb826176ea9bf2cd)。
+
 ## 0.0.38beta - 2026-08-09
 
 ### Added

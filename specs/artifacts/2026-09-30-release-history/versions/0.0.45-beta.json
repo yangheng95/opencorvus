@@ -1,0 +1,110 @@
+{
+  "version": "0.0.45-beta",
+  "source": "df953b97cc96c43dcff96114fb826176ea9bf2cd",
+  "tag": null,
+  "previousSource": "f2d4e0dc0a4808972641eb43c65f3d9c77a7130e",
+  "sourceDate": "2026-08-15T22:49:25+08:00",
+  "commits": [
+    {
+      "sha": "df953b97cc96c43dcff96114fb826176ea9bf2cd",
+      "date": "2026-08-15T22:49:25+08:00",
+      "subject": "release: bump to 0.0.45-beta"
+    },
+    {
+      "sha": "704e4d7db37d0e1e9d3cd78329752786d0a43105",
+      "date": "2026-08-15T22:40:46+08:00",
+      "subject": "fix task-root decision repair and recovery"
+    },
+    {
+      "sha": "ab1fd8cd764811bf18bd2b9cd64281f9b2b6d2e4",
+      "date": "2026-08-15T20:26:11+08:00",
+      "subject": "chore sync scheduler debug api artifacts"
+    },
+    {
+      "sha": "6136e513bcf86590ba379a16a5ef15c1d957cab2",
+      "date": "2026-08-15T20:23:04+08:00",
+      "subject": "fix scheduler no-action and mailbox replay convergence"
+    },
+    {
+      "sha": "dd1f81e9df4601b460da95348eb7c8ca05ba0a1d",
+      "date": "2026-08-15T18:54:48+08:00",
+      "subject": "docs(specs): record full-worktree batched delivery"
+    },
+    {
+      "sha": "698bb0bb10b0de37e6a0a40b73567f215cdbdad2",
+      "date": "2026-08-15T18:53:58+08:00",
+      "subject": "fix(orchestrator): converge parallel decision ingress"
+    },
+    {
+      "sha": "da2d60f46912e2d95d46cf742d8751e49d7c651d",
+      "date": "2026-08-15T18:53:20+08:00",
+      "subject": "docs(release): record v0.0.44 deployment evidence"
+    },
+    {
+      "sha": "fcdfe1c3b01d0e5b405588770d670778884be652",
+      "date": "2026-08-15T18:52:52+08:00",
+      "subject": "chore(git): classify binary office artifacts"
+    },
+    {
+      "sha": "78888e40f021d1f2536af90dfa5e94afd5fbc3eb",
+      "date": "2026-08-15T18:52:20+08:00",
+      "subject": "fix(storage): converge project deletion and schema triggers"
+    },
+    {
+      "sha": "86fbe0bca12c63251bb24c5a505a40fcdd1bd996",
+      "date": "2026-08-15T18:51:05+08:00",
+      "subject": "fix(permission): isolate continuation recovery faults"
+    },
+    {
+      "sha": "8a8a659a42b5251b7ace1502210693bbe68f52ee",
+      "date": "2026-08-15T17:40:26+08:00",
+      "subject": "fix task-root multi-step assistant convergence"
+    },
+    {
+      "sha": "cb3c84d0b712029cf175241d8ecb67d6100c163b",
+      "date": "2026-08-15T16:05:40+08:00",
+      "subject": "fix(orchestrator): converge Mission Task publication"
+    },
+    {
+      "sha": "9847769c4b1a70f212b383536f7d23c624898a0d",
+      "date": "2026-08-15T13:31:32+08:00",
+      "subject": "fix(session): bridge normalized tool facts"
+    },
+    {
+      "sha": "627146cc34553296d69eeabea05509c20d48a4be",
+      "date": "2026-08-15T12:27:16+08:00",
+      "subject": "refactor(control): converge execution state on immutable facts"
+    },
+    {
+      "sha": "c4fe3fc50bbbf167b608cc6f7ba05bbff9d8791e",
+      "date": "2026-08-15T03:10:08+08:00",
+      "subject": "docs(architecture): define zero-redundancy control kernel"
+    },
+    {
+      "sha": "dd3c18a782f1b3b2f5fbaf1e150fba679be97a7d",
+      "date": "2026-08-15T03:09:23+08:00",
+      "subject": "docs(deploy): record successful website activation"
+    },
+    {
+      "sha": "739191e92a9158b800fe61261abf79e04acb34f8",
+      "date": "2026-08-15T03:07:45+08:00",
+      "subject": "fix(deploy): wait for website readiness"
+    },
+    {
+      "sha": "2ce93fcb64d53b9bdd5ee8f9b098b2450a69c1b5",
+      "date": "2026-08-15T01:26:26+08:00",
+      "subject": "docs(deploy): record RackNerd activation recovery"
+    },
+    {
+      "sha": "640bb73d4a56a15aedb75c0344d44c6ecaacfeca",
+      "date": "2026-08-15T00:40:17+08:00",
+      "subject": "revert: remove promotion video playbook"
+    },
+    {
+      "sha": "4fb3e903c294e2f1ce9aa2deaafd4d2f087822ef",
+      "date": "2026-08-15T00:37:30+08:00",
+      "subject": "docs: add OpenCorvus promotion video playbook"
+    }
+  ],
+  "stats": ".gitattributes                                     |   11 +\n bun.lock                                           |   16 +-\n deploy/racknerd/README.md                          |   53 +\n deploy/racknerd/opencorvus-activate-release        |   19 +-\n .../racknerd/test-opencorvus-activate-release.sh   |   24 +\n package.json                                       |    1 +\n packages/channel-config/package.json               |    2 +-\n packages/channel-runtime/package.json              |    2 +-\n packages/channel-runtime/src/adapter.ts            |    2 +-\n packages/channel-runtime/src/adapters/dingtalk.ts  |    3 +-\n packages/channel-runtime/src/adapters/discord.ts   |    1 +\n packages/channel-runtime/src/adapters/feishu.ts    |    1 +\n .../channel-runtime/src/adapters/googlechat.ts     |    1 +\n packages/channel-runtime/src/adapters/line.ts      |    1 +\n packages/channel-runtime/src/adapters/matrix.ts    |    1 +\n .../channel-runtime/src/adapters/mattermost.ts     |    3 +-\n packages/channel-runtime/src/adapters/msteams.ts   |    3 +-\n packages/channel-runtime/src/adapters/signal.ts    |    7 +-\n packages/channel-runtime/src/adapters/telegram.ts  |    3 +\n packages/channel-runtime/src/adapters/wecom.ts     |    3 +-\n packages/channel-runtime/src/adapters/whatsapp.ts  |    1 +\n packages/channel-runtime/src/core.ts               |    1 +\n .../test/core-channel-protocol.test.ts             |    3 +\n .../test/core-session-isolation.test.ts            |    1 +\n packages/channel-runtime/test/core-stt.test.ts     |    2 +\n .../channel-runtime/test/start-idempotency.test.ts |    7 +-\n .../native/process-supervisor/Cargo.lock           |    2 +-\n .../native/process-supervisor/Cargo.toml           |    2 +-\n packages/opencorvus/package.json                   |    3 +-\n .../script/control-state-redundancy-check.ts       |  465 +++\n .../script/expert-squad-evolution-e2e-support.ts   |    8 +-\n packages/opencorvus/script/task-control-check.ts   |   81 +-\n .../opencorvus/src/agent/artifact-read-facts.ts    |   76 +-\n .../src/agent/persisted-session-identity.ts        |    2 +-\n packages/opencorvus/src/agent/task-review-facts.ts |   16 +-\n packages/opencorvus/src/architect/agent.ts         |   50 +-\n .../src/architect/output-tool-turn-identity.ts     |   54 +\n packages/opencorvus/src/artifact-catalog/index.ts  |   13 +-\n packages/opencorvus/src/browser-preview/persist.ts |    3 -\n packages/opencorvus/src/build/agent.ts             |   19 +-\n packages/opencorvus/src/bus/bus.sql.ts             |   77 +-\n packages/opencorvus/src/bus/global.ts              |    5 +-\n packages/opencorvus/src/bus/index.ts               |  377 +-\n packages/opencorvus/src/channel/channel.sql.ts     |   30 +-\n packages/opencorvus/src/channel/ingress.ts         |  172 +-\n .../opencorvus/src/conversation/turn-artifacts.ts  |   38 +-\n .../src/engine/build-observation-cleanup.ts        |  261 +-\n .../opencorvus/src/engine/cancellation-origin.ts   |   20 +-\n .../src/engine/cancellation-projection.ts          |   39 +-\n packages/opencorvus/src/engine/check-config.ts     |  140 +\n .../opencorvus/src/engine/completion-decision.ts   |    9 +-\n packages/opencorvus/src/engine/control-lease.ts    |   77 +\n .../src/engine/cross-task-artifact-import.ts       |    7 +-\n packages/opencorvus/src/engine/describe.ts         |   83 +-\n packages/opencorvus/src/engine/dispatch-lineage.ts |   35 +-\n packages/opencorvus/src/engine/durable-activity.ts |   52 +-\n packages/opencorvus/src/engine/engine.sql.ts       |  247 +-\n packages/opencorvus/src/engine/git.ts              |  335 +-\n packages/opencorvus/src/engine/helpers.ts          |   22 +-\n packages/opencorvus/src/engine/index.ts            |    1 +\n .../opencorvus/src/engine/interaction-request.ts   |   64 +-\n packages/opencorvus/src/engine/interaction.ts      |  139 +-\n packages/opencorvus/src/engine/mailbox-event.ts    |   73 +\n packages/opencorvus/src/engine/mailbox.ts          |  137 +-\n packages/opencorvus/src/engine/model.ts            |  267 +-\n packages/opencorvus/src/engine/persist.ts          |   25 +-\n packages/opencorvus/src/engine/pipeline.ts         |   49 +-\n packages/opencorvus/src/engine/producer-turn.ts    |   35 +-\n packages/opencorvus/src/engine/progress.ts         |    5 +-\n packages/opencorvus/src/engine/protocol.ts         |   32 +-\n packages/opencorvus/src/engine/rewind.ts           |   57 +-\n packages/opencorvus/src/engine/state.ts            |  756 +---\n packages/opencorvus/src/engine/store.ts            |  454 ++-\n .../src/engine/task-completion-closure.ts          |  174 +-\n .../src/engine/task-execution-capsule-binding.ts   |   12 +-\n packages/opencorvus/src/engine/task-intent-open.ts |   34 +-\n packages/opencorvus/src/engine/task-lifecycle.ts   |  171 +\n .../opencorvus/src/engine/task-root-fact-store.ts  |  684 ++++\n .../src/engine/task-root-ingress-delivery.ts       | 4258 +++++--------------\n .../src/engine/task-root-ingress-policy-read.ts    |   20 +\n .../src/engine/task-root-ingress-reducer.ts        |  268 ++\n .../src/engine/task-root-ingress-source.ts         |   38 +\n .../opencorvus/src/engine/task-root-ingress.ts     |  348 --\n packages/opencorvus/src/engine/task-status.ts      |   39 +-\n packages/opencorvus/src/engine/task.ts             |   81 +-\n .../engine/terminal-lifecycle-reference-schema.ts  |    4 -\n .../src/engine/terminal-lifecycle-reference.ts     |  102 +-\n .../engine/terminal-task-conversation-runner.ts    |  355 --\n .../src/engine/workflow-node-occurrence.ts         |   80 +-\n packages/opencorvus/src/engine/writer.ts           |    8 +-\n .../src/expert-squad/mutation-authorization.ts     |    6 +-\n .../src/memory/interaction-user-input.ts           |   11 +\n .../src/memory/project-memory-organizer.ts         |    2 +-\n packages/opencorvus/src/memory/project-memory.ts   |   14 +-\n packages/opencorvus/src/mission/board.ts           |   27 +-\n .../opencorvus/src/mission/caller-participant.ts   |    2 +-\n packages/opencorvus/src/mission/completion.ts      |    2 +-\n .../opencorvus/src/mission/execution-closure.ts    |  284 +-\n packages/opencorvus/src/mission/session.ts         |    6 +-\n packages/opencorvus/src/orchestrator/agent.ts      |  155 +-\n .../opencorvus/src/orchestrator/architect-stage.ts |    2 -\n .../src/orchestrator/control-message-identity.ts   |   17 +-\n .../src/orchestrator/decision-tool-names.ts        |    1 +\n .../orchestrator/delivery-slice-contract-tools.ts  |    5 +-\n .../src/orchestrator/dispatch-agent-tool.ts        |   11 +-\n packages/opencorvus/src/orchestrator/loop.ts       |   42 +-\n .../opencorvus/src/orchestrator/no-action-tool.ts  |   37 +\n .../src/orchestrator/protocol/message-bridge.ts    |  108 +-\n .../src/orchestrator/requirements-stage.ts         |    3 -\n packages/opencorvus/src/orchestrator/task-event.ts |    9 +-\n .../src/orchestrator/task-lifecycle-tools.ts       |   73 +-\n .../terminal-conversation-authority.ts             |   53 +-\n packages/opencorvus/src/orchestrator/tools.ts      |   44 +-\n packages/opencorvus/src/panel/capability.ts        |    2 +-\n packages/opencorvus/src/permission/authority.ts    |  422 +-\n packages/opencorvus/src/permission/decision.ts     |    7 +\n packages/opencorvus/src/permission/invocation.ts   |    6 +-\n .../opencorvus/src/permission/permission.sql.ts    |   73 +-\n packages/opencorvus/src/project/bootstrap.ts       |   70 +-\n packages/opencorvus/src/project/delete.ts          |    8 +\n .../opencorvus/src/project/identity-convergence.ts |   37 +-\n packages/opencorvus/src/project/instance.ts        |   14 +-\n .../opencorvus/src/prompt/core/mission-core.txt    |    8 +-\n .../src/prompt/core/orchestrator-core.txt          |   10 +-\n .../opencorvus/src/protocol/delivery-projection.ts |   41 +\n packages/opencorvus/src/protocol/delivery.ts       |  643 ++-\n .../src/protocol/lifecycle-projection.ts           |   41 +\n packages/opencorvus/src/protocol/protocol.sql.ts   |   98 +-\n packages/opencorvus/src/protocol/schema.ts         |   20 +-\n packages/opencorvus/src/protocol/store.ts          |  231 +-\n packages/opencorvus/src/question/index.ts          |  209 +-\n .../opencorvus/src/runtime/execution-settlement.ts |    2 +-\n .../src/scheduler/automation-projection.ts         |   84 +\n .../opencorvus/src/scheduler/automation-service.ts |  741 ++--\n .../opencorvus/src/scheduler/automation.sql.ts     |   94 +-\n .../opencorvus/src/scheduler/event-projection.ts   |  120 +\n packages/opencorvus/src/scheduler/event-service.ts |  487 +--\n packages/opencorvus/src/scheduler/event.sql.ts     |  104 +-\n .../opencorvus/src/server/routes/orchestrator.ts   |   31 +-\n packages/opencorvus/src/server/routes/session.ts   |   16 -\n packages/opencorvus/src/server/server.ts           |   37 +-\n packages/opencorvus/src/session/compaction.ts      |   63 +-\n packages/opencorvus/src/session/control.ts         |  241 +-\n packages/opencorvus/src/session/events.ts          |    2 +-\n packages/opencorvus/src/session/index.ts           |  476 ++-\n packages/opencorvus/src/session/loop.ts            |  288 +-\n packages/opencorvus/src/session/message-store.ts   |  184 +-\n packages/opencorvus/src/session/message.ts         |   28 +-\n packages/opencorvus/src/session/processor.ts       |   41 +-\n .../src/session/provider-activity-facts.ts         |   57 +\n .../opencorvus/src/session/runtime-contract.ts     |   11 +-\n packages/opencorvus/src/session/session.sql.ts     |  184 +-\n .../opencorvus/src/session/tool-failure-cause.ts   |    2 +-\n packages/opencorvus/src/session/tool-part-facts.ts |  150 +\n .../opencorvus/src/storage/attachment-reference.ts |   14 +\n .../opencorvus/src/storage/attachment-store.ts     |   57 +-\n packages/opencorvus/src/storage/db.ts              |   52 +-\n packages/opencorvus/src/storage/ddl.ts             |  585 +++\n .../src/storage/fact-kernel-migration.ts           |  990 +++++\n packages/opencorvus/src/storage/schema-contract.ts |   88 +-\n packages/opencorvus/src/storage/schema.ts          |   75 +-\n packages/opencorvus/src/task-api/index.ts          |  556 +--\n .../opencorvus/src/task-api/task-root-message.ts   |   18 +-\n packages/opencorvus/src/tool/analytics.ts          |   47 +-\n packages/opencorvus/src/tool/diagnostic-value.ts   |   38 +\n packages/opencorvus/src/tool/mission-state.ts      |    6 +-\n packages/opencorvus/src/tool/panel.ts              |   31 +-\n .../src/tool/result-attachment-materialization.ts  |   40 +-\n .../opencorvus/src/tool/task-run-evidence-host.ts  |   38 +-\n .../opencorvus/src/tool/task-tool-invocation.ts    |    4 +-\n .../src/work-artifact/validation-authority.ts      |   18 +-\n packages/opencorvus/src/work-ledger/projection.ts  |    2 +-\n packages/opencorvus/src/workbench/board.ts         |   58 +-\n packages/opencorvus/src/workbench/brief.ts         |    6 +-\n .../test/active-operator-wake-settlement.test.ts   | 4313 +-------------------\n .../agent-runner-fresh-session-authority.test.ts   |   97 +-\n .../test/artifact-provider-reference-flow.test.ts  |   14 +-\n .../artifact-read-facts-provider-input.test.ts     |    9 +-\n .../test/build-terminal-fact-publication.test.ts   |  139 +-\n .../opencorvus/test/bus-durable-outbox.test.ts     |   26 +-\n .../test/channel-ingress-fact-storage.test.ts      |   68 +\n .../test/dispatch-agent-managed-lifecycle.test.ts  | 1637 +-------\n .../test/engine-git-fact-reconciliation.test.ts    |   97 +\n .../test/engine-interaction-recovery.test.ts       |   94 +-\n .../test/evolution-artifact-evidence-host.test.ts  |  124 +-\n .../random-evolution-e2e-support.test.ts           |   44 +-\n .../test/fact-kernel-schema-migration.test.ts      |  466 +++\n ...ool-result-control-permission-process-worker.ts |    2 +-\n .../mailbox-protocol-envelope-projection.test.ts   |  165 +\n .../opencorvus/test/memory/project-memory.test.ts  |    1 +\n .../opencorvus/test/memory/session-memory.test.ts  |  102 +-\n .../test/mission-process-recovery.test.ts          |  108 +-\n packages/opencorvus/test/no-action-tool.test.ts    |   29 +\n .../test/orchestrator-control-message.test.ts      |    3 +-\n .../test/orchestrator-initial-task-render.test.ts  |  307 ++\n .../orchestrator-mission-resume-provenance.test.ts |   10 +-\n .../orchestrator-mission-root-message-read.test.ts |   81 +-\n ...chestrator-terminal-coordination-schema.test.ts |   32 +-\n .../test/panel-mission-terminal-authority.test.ts  |  147 +-\n .../test/permission-continuation-recovery.test.ts  |  238 ++\n .../opencorvus/test/permission-two-mode.test.ts    |  362 +-\n .../test/project-directory-and-worktree-gc.test.ts |  227 +-\n .../test/project-identity-convergence.test.ts      |   37 +-\n .../test/protocol-delivery-fact-storage.test.ts    |   81 +\n .../opencorvus/test/protocol-fact-sequence.test.ts |   59 +\n .../protocol-scheduler-message-delivery.test.ts    | 3772 +----------------\n .../test/provider-activity-fact-storage.test.ts    |  108 +\n .../test/root-session-ingress-fifo.test.ts         |  144 -\n .../test/runtime-execution-settlement.test.ts      |   68 +-\n .../test/runtime-server-ownership.test.ts          |   12 +-\n .../test/scheduler-claim-and-fire-identity.test.ts |  928 +----\n .../test/scheduler-event-durable-fire.test.ts      | 1981 +--------\n .../opencorvus/test/scheduler-fact-control.test.ts |  175 +\n .../scheduler-task-wait-project-runtime.test.ts    |  204 +-\n ...session-loop-tool-authority-integration.test.ts |  206 +-\n .../session/task-root-multistep-assistant.test.ts  |  276 ++\n .../test/storage/schema-contract.test.ts           |   84 +-\n .../test/task-control-reconciliation.test.ts       | 1065 +++++\n .../test/task-event-projection-contract.test.ts    |  275 ++\n .../test/task-package-revision-binding.test.ts     |   16 +-\n packages/opencorvus/test/task-rewind-fact.test.ts  |   63 +\n .../opencorvus/test/task-root-fact-store.test.ts   |  265 ++\n .../test/task-root-ingress-reducer.test.ts         |  205 +\n .../test/task-terminal-artifact-closure.test.ts    |   57 +-\n .../test/task-wait-fire-identity.test.ts           |  126 +-\n .../opencorvus/test/tool-part-fact-storage.test.ts |  189 +\n .../test/tool-result-control-protocol.test.ts      |   99 +-\n .../workflow-node-occurrence-authority.test.ts     |    6 +-\n packages/overlay/package.json                      |    2 +-\n packages/overlay/src-tauri/Cargo.lock              |    2 +-\n packages/overlay/src-tauri/Cargo.toml              |    2 +-\n packages/overlay/src-tauri/src/main.rs             |   14 +-\n packages/overlay/src-tauri/tauri.conf.json         |    4 +-\n packages/overlay/src/components/App.tsx            |    1 +\n .../overlay/src/components/CardHeaderChrome.tsx    |    8 +-\n packages/overlay/src/components/ChatBubble.tsx     |   35 +-\n packages/overlay/src/components/ChatComposer.tsx   |   43 +-\n packages/overlay/src/components/TracePanel.tsx     |    3 +-\n packages/overlay/src/i18n/en-US.json               |    7 +-\n packages/overlay/src/i18n/zh-CN.json               |    7 +-\n packages/overlay/src/main.tsx                      |   39 +-\n packages/overlay/src/services/chat.ts              |    5 +\n packages/overlay/src/services/event-policy.ts      |    4 +\n packages/overlay/src/services/host-transport.ts    |    2 +\n packages/overlay/src/services/session-debug.ts     |   18 +\n packages/overlay/src/services/tauri-transport.ts   |    7 +\n packages/overlay/src/services/tree-writer.ts       |   19 +-\n packages/overlay/src/utils/debug-info.ts           |   56 +-\n .../test/notification-host-transports.test.ts      |   44 +-\n packages/overlay/test/session-debug.test.ts        |   97 +-\n packages/plugin/package.json                       |    2 +-\n packages/sdk/js/package.json                       |    2 +-\n packages/sdk/js/src/gen/sdk.gen.ts                 |   49 +-\n packages/sdk/js/src/gen/types.gen.ts               |  177 +-\n packages/sdk/openapi.json                          |  709 +++-\n packages/transport-protocol/package.json           |    2 +-\n packages/transport-protocol/src/index.ts           |    3 +\n packages/transport-protocol/test/contract.test.ts  |    1 +\n packages/util/package.json                         |    2 +-\n packages/web/src/content/docs/reference/api.mdx    |    1 +\n .../web/src/content/docs/zh-cn/reference/api.mdx   |    1 +\n specs/README.md                                    |   24 +\n ...2026-08-15-mission-task-publication-mission.png |  Bin 0 -> 57695 bytes\n .../2026-08-15-mission-task-publication-task.png   |  Bin 0 -> 55097 bytes\n specs/current/architecture/security-permission.md  |    1 +\n specs/current/architecture/task-control-plane.md   |  214 +-\n ...1-scheduler-liveness-and-control-convergence.md |    2 +-\n .../2026-08/2026-08-14-v0.0.44-beta-release.md     |   23 +-\n .../2026-08-15-full-worktree-batched-delivery.md   |   63 +\n ...-mission-task-publication-convergence-repair.md |   87 +\n ...-tool-part-bridge-and-diagnostic-copy-repair.md |   79 +\n ...ission-continuation-recovery-fault-isolation.md |   88 +\n ...task-mailbox-envelope-projection-convergence.md |   66 +\n ...root-decision-repair-and-stage-tool-identity.md |  106 +\n .../2026-08-15-task-root-fact-reduction-kernel.md  |  323 ++\n ...15-task-root-multistep-assistant-convergence.md |   84 +\n .../2026-08-15-task-root-no-action-convergence.md  |   81 +\n ...task-root-parallel-decision-lock-convergence.md |   57 +\n .../2026-08/2026-08-15-v0.0.45-beta-branch-bump.md |   27 +\n specs/records/2026-08/README.md                    |   23 +\n 280 files changed, 19443 insertions(+), 23498 deletions(-)"
+}
