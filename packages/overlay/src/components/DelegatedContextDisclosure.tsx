@@ -1,6 +1,7 @@
 import { Show, type JSX } from "solid-js"
 import { conversationDisclosureExpanded, setConversationDisclosureExpanded } from "../store/conversation-ui"
 import { t } from "../utils/i18n"
+import { pauseAutoScrollForReading } from "../utils/dom-utils"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 
@@ -19,6 +20,7 @@ export function DelegatedContextDisclosure(props: { id: string; children: JSX.El
         aria-label={t("transcript.delegated_context")}
         onClick={(event) => {
           event.stopPropagation()
+          if (!expanded()) pauseAutoScrollForReading(event.currentTarget)
           setConversationDisclosureExpanded(props.id, !expanded())
         }}
       >

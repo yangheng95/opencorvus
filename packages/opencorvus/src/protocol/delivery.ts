@@ -552,14 +552,25 @@ export function renderSchedulerParticipantMessage(input: {
   }
   const sourceLabel =
     source.kind === "task_scheduler" ? `Task scheduler ${source.task_id}` : `Mission scheduler ${source.mission_id}`
+  const subject = input.subject.replace(/[\\`*_[\]<>]/g, "\\$&")
   return [
-    `Scheduler ${kind} from ${sourceLabel}.`,
-    `event_id: ${input.eventID}`,
-    `thread_id: ${input.threadID}`,
-    ...(input.replyTo ? [`reply_to: ${input.replyTo}`] : []),
-    `subject: ${input.subject}`,
-    "message:",
+    `**${subject}**`,
+    `Scheduler ${kind} · ${source.kind === "task_scheduler" ? "Task scheduler" : "Mission scheduler"}`,
     input.message,
+    "---",
+    "#### Delivery references",
+    "```json\n" +
+      JSON.stringify(
+        {
+          source: sourceLabel,
+          event_id: input.eventID,
+          thread_id: input.threadID,
+          ...(input.replyTo ? { reply_to: input.replyTo } : {}),
+        },
+        null,
+        2,
+      ) +
+      "\n```",
     ...(kind === "request"
       ? [`Reply through scheduler_message with kind=reply and reply_to=${input.eventID}.`]
       : kind === "reply"
@@ -567,7 +578,7 @@ export function renderSchedulerParticipantMessage(input: {
             `This correlated reply resolves request ${input.replyTo}; process it now and do not keep waiting for that request.`,
           ]
         : []),
-  ].join("\n")
+  ].join("\n\n")
 }
 
 export function taskSchedulerEndpoint(taskID: string): Extract<SchedulerEndpoint, { kind: "task_scheduler" }> {

@@ -1083,11 +1083,10 @@
 }
 
 .msg-delegated-context {
-  --delegated-context-body-height: calc(224px * var(--ui-scale));
   --transcript-activity-icon-size: var(--oc-icon-size-compact);
 
   display: flex;
-  width: auto;
+  width: 100%;
   min-width: 0;
   flex-direction: column;
   align-items: flex-start;
@@ -1142,14 +1141,24 @@
 }
 
 .msg-delegated-context__body {
-  width: min(100%, calc(760px * var(--ui-scale)));
-  height: var(--delegated-context-body-height);
+  box-sizing: border-box;
+  width: 100%;
   min-width: 0;
   margin: 0;
-  padding: var(--ui-gap-xs) 0 0 var(--ui-gap-2xl);
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  padding: var(--ui-gap-xs) 0 var(--ui-gap-xs) var(--ui-gap-lg);
+  border-left: var(--oc-border-width) solid var(--divider-soft);
+  overflow-wrap: anywhere;
+}
+
+/* Context is authored input, including line-oriented protocol records.
+ * Preserve those boundaries without parsing or replacing persisted text. */
+.msg-delegated-context__body .msg-text :is(p, li) {
+  white-space: pre-line;
+}
+
+.msg-delegated-context__body .msg-text pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .msg-artifact {

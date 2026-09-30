@@ -57,6 +57,12 @@ import { escapeHtml } from "./markdown"
  */
 const BOTTOM_TOLERANCE = 8
 const PROGRAM_TOLERANCE = 2
+const TRANSCRIPT_READING_EVENT = "opencorvus:transcript-reading"
+
+/** An explicit disclosure opens content for reading, independently of new output. */
+export function pauseAutoScrollForReading(element: HTMLElement): void {
+  element.dispatchEvent(new Event(TRANSCRIPT_READING_EVENT, { bubbles: true }))
+}
 
 export interface AutoScrollOptions {
   isTracking: () => boolean
@@ -82,6 +88,15 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   let observedContentElements = new Set<Element>()
 
   const contentResizeObserver = new ResizeObserver(() => scheduleFollowScroll())
+
+  function onReadingIntent(event: Event) {
+    // Only the nearest transcript owns this operator intent.
+    event.stopPropagation()
+    programScrollTarget = null
+    expectedTop = el.scrollTop
+    opts.onUserScrollUp()
+    syncFollowLockAttribute()
+  }
 
   function syncObservedContentElements() {
     const nextElements = new Set(Array.from(el.children))
@@ -223,6 +238,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   el.addEventListener("wheel", onWheel, { passive: true })
+  el.addEventListener(TRANSCRIPT_READING_EVENT, onReadingIntent)
   el.addEventListener("keydown", onKeyDown)
   el.addEventListener("pointerdown", onPointerDown)
   el.addEventListener("touchstart", onTouchStart, { passive: true })
@@ -246,6 +262,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
     cleanup: () => {
       disposed = true
       el.removeEventListener("wheel", onWheel)
+      el.removeEventListener(TRANSCRIPT_READING_EVENT, onReadingIntent)
       el.removeEventListener("keydown", onKeyDown)
       el.removeEventListener("pointerdown", onPointerDown)
       el.removeEventListener("touchstart", onTouchStart)

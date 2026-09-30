@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Handoff context readability](2026-09-30-handoff-context-readability.md)
+
 - [Tool disclosure layout correction](2026-09-30-tool-disclosure-layout.md)
 
 - [Current-runtime Harbor full comparison restart](2026-09-30-harbor-current-runtime-restart.md)

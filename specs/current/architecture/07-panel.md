@@ -63,6 +63,17 @@ own colors. Page typography follows the sole shared typography authority.
 
 ## Tool activity, delivery inventory, and directory status
 
+Handoff context keeps its existing disclosure state and reads at natural height
+within the conversation width. Authored paragraph line boundaries and long
+identifiers remain readable in main/child transcripts and progress previews.
+An explicit expansion releases the nearest transcript's existing follow mode
+before layout grows, preserving the operator's reading position.
+The canonical scheduler participant message places its subject and unchanged
+body before grouped delivery references. Task and Mission consume that same
+persisted Markdown; the Overlay neither parses protocol keywords nor creates
+a separate display-only message. Historical messages retain their original
+ordering and content.
+
 Consecutive Tool/Patch runs have one chronological disclosure, labelled by the
 latest actual Tool name and its summary. One expansion directly exposes all
 results in order; multiple results have static identities rather than nested
