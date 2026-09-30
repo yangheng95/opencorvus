@@ -1,0 +1,15 @@
+{
+  "version": "0.1.21",
+  "source": "b255ed5b6787d863b167ecc9d65cfe3fe6e8e6cb",
+  "tag": "v0.1.21",
+  "previousSource": "97a3a6807fe40fc045a354c17c99b256a2f0f2a8",
+  "sourceDate": "2026-09-29T23:34:49+08:00",
+  "commits": [
+    {
+      "sha": "b255ed5b6787d863b167ecc9d65cfe3fe6e8e6cb",
+      "date": "2026-09-29T23:34:49+08:00",
+      "subject": "fix(release): preserve the shared native publication deadline"
+    }
+  ],
+  "stats": ".github/workflows/build.yml                        |  3 +-\n .github/workflows/package-overlay.yml              | 11 ++++----\n CHANGELOG.md                                       |  3 +-\n RELEASE.md                                         |  2 +-\n bun.lock                                           | 16 +++++------\n docs/packaging.md                                  | 10 +++++--\n packages/channel-config/package.json               |  2 +-\n packages/channel-runtime/package.json              |  2 +-\n .../native/process-supervisor/Cargo.lock           |  2 +-\n .../native/process-supervisor/Cargo.toml           |  2 +-\n packages/opencorvus/package.json                   |  2 +-\n packages/overlay/package.json                      |  2 +-\n packages/overlay/src-tauri/Cargo.lock              |  2 +-\n packages/overlay/src-tauri/Cargo.toml              |  2 +-\n packages/overlay/src-tauri/tauri.conf.json         |  4 +--\n packages/plugin/package.json                       |  2 +-\n packages/sdk/js/package.json                       |  2 +-\n packages/transport-protocol/package.json           |  2 +-\n packages/util/package.json                         |  2 +-\n script/github-actions-workflow-contract.test.ts    | 32 ++++++++++++++++++++--\n ...26-09-29-conversation-delivery-status-repair.md |  8 ++++++\n 21 files changed, 78 insertions(+), 35 deletions(-)"
+}
