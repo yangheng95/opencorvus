@@ -141,6 +141,10 @@
 - 修复子 Agent 下拉选择器在活动更新时自动收起，并缩短进展卡片预览；完整会话仍可打开。
 - 修复 Work Ledger 行操作可能误触停止任务的问题：菜单触发区保持稳定，停止 Chat、Mission 或 Task 前显示对应名称的确认对话框。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/b9a72f4134de3a582dcf55cb09b6c1b299f8b3d1) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/6ebed7625c8db3780652deb48e2f6329725b4aac...b9a72f4134de3a582dcf55cb09b6c1b299f8b3d1)。
+
 ## 0.1.13 - 2026-09-23
 
 ### Added

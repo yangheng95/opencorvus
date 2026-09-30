@@ -1,0 +1,45 @@
+{
+  "version": "0.1.14",
+  "source": "b9a72f4134de3a582dcf55cb09b6c1b299f8b3d1",
+  "tag": "v0.1.14",
+  "previousSource": "6ebed7625c8db3780652deb48e2f6329725b4aac",
+  "sourceDate": "2026-09-24T01:56:00+08:00",
+  "commits": [
+    {
+      "sha": "b9a72f4134de3a582dcf55cb09b6c1b299f8b3d1",
+      "date": "2026-09-24T01:56:00+08:00",
+      "subject": "Prepare OpenCorvus 0.1.14 release"
+    },
+    {
+      "sha": "6797043055438c97ef61c21243b7108aca9c381b",
+      "date": "2026-09-24T01:46:23+08:00",
+      "subject": "Hide active expert squad name in Chat composer"
+    },
+    {
+      "sha": "cea55650b89c25f5c1546ee8c13bdc5ee5fda94e",
+      "date": "2026-09-24T01:09:24+08:00",
+      "subject": "Redesign About and Usage settings surfaces"
+    },
+    {
+      "sha": "bde89a790ee70d00e0d9bb4f017db9ff42f1c124",
+      "date": "2026-09-24T00:39:41+08:00",
+      "subject": "Prevent accidental Work Ledger task cancellation"
+    },
+    {
+      "sha": "73758539a389edecc4959de8166fcdc9fd258291",
+      "date": "2026-09-24T00:02:50+08:00",
+      "subject": "Fix subagent selector stability and compact progress cards"
+    },
+    {
+      "sha": "68dda5a5a93fd4ba5c9acdbeeed5352e22c9d2c6",
+      "date": "2026-09-23T18:24:16+08:00",
+      "subject": "docs: record published 0.1.13 and missed aggregate deadline"
+    },
+    {
+      "sha": "f32fe679fcc9fa6ff40a1e734f167cb4554ea6a9",
+      "date": "2026-09-23T17:38:38+08:00",
+      "subject": "docs: record authorized v0.1.13 release restart"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |  13 ++\n bun.lock                                           |  16 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/overlay/src/components/ChatComposer.tsx   |   2 +-\n .../overlay/src/components/ConfigDialogHost.tsx    | 141 ++++++-------\n .../src/components/SubagentConversationPanel.tsx   |  25 ++-\n .../src/components/SubagentProgressGrid.tsx        |   4 +-\n packages/overlay/src/components/WorkLedger.tsx     | 214 ++++++++++---------\n .../src/components/settings/DesktopUpdatePanel.tsx |   2 +-\n .../src/components/settings/ProvidersPanel.tsx     |   2 +\n .../overlay/src/components/settings/UsagePanel.tsx |  61 +++---\n packages/overlay/src/i18n/en-US.json               |  26 ++-\n packages/overlay/src/i18n/zh-CN.json               |  26 ++-\n packages/overlay/src/styles/surfaces/settings.css  | 228 +++++++++++++++------\n packages/overlay/src/styles/surfaces/usage.css     | 154 ++++++--------\n .../overlay/src/styles/surfaces/work-ledger.css    | 133 ++----------\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n specs/README.md                                    |   8 +\n specs/current/architecture/07-panel.md             |  31 ++-\n .../2026-09/2026-09-23-darwin-dmg-repair.md        |  17 ++\n .../2026-09/2026-09-23-desktop-updater-repair.md   |   4 +\n .../2026-09-23-subagent-selector-and-preview.md    |  29 +++\n .../2026-09-24-about-usage-visual-redesign.md      |  35 ++++\n .../records/2026-09/2026-09-24-v0.1.14-release.md  |  30 +++\n .../2026-09/2026-09-24-work-ledger-stop-safety.md  |  29 +++\n specs/records/2026-09/README.md                    |   8 +\n 37 files changed, 718 insertions(+), 548 deletions(-)"
+}
