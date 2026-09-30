@@ -917,6 +917,10 @@
 - 将 workspace 的 Bun 类型依赖和独立决策站点的包管理器规范统一到 Bun `1.3.14`，重新生成依赖锁定结果并移除旧 Bun 类型 package。
 - 退役旧 benchmark 执行树及其专用测试与 CI job，把仍在使用的浏览器停滞检测迁移到当前脚本路径，并保留 Host MCP（Model Context Protocol，模型上下文协议）的真实连接统计契约。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/2c86f25c1264b99eea8b4890fca7c357b1d78e48) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/3522bc534c9762a462fb51daacef5b788a1219a9...2c86f25c1264b99eea8b4890fca7c357b1d78e48)。
+
 ## 0.0.37beta - 2026-08-08
 
 ### Added
