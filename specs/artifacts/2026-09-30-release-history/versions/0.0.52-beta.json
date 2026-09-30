@@ -1,0 +1,40 @@
+{
+  "version": "0.0.52-beta",
+  "source": "d2b6fef84c158f3e92479f15da3ecd6cb82facd1",
+  "tag": "v0.0.52-beta",
+  "previousSource": "06ccca072ae3dac3522438628c8ef77176c74b93",
+  "sourceDate": "2026-08-22T22:12:31+08:00",
+  "commits": [
+    {
+      "sha": "d2b6fef84c158f3e92479f15da3ecd6cb82facd1",
+      "date": "2026-08-22T22:12:31+08:00",
+      "subject": "release: prepare v0.0.52 beta"
+    },
+    {
+      "sha": "2f4f8dda2ff373984c73368e712ba1c3a60a6ece",
+      "date": "2026-08-22T19:33:26+08:00",
+      "subject": "fix: preserve authority effects through acceptance"
+    },
+    {
+      "sha": "7406f2138e1bd16e35c97d89b81ff59da4f9d44a",
+      "date": "2026-08-22T15:54:41+08:00",
+      "subject": "fix(protocol): expose scheduler session delivery settlement"
+    },
+    {
+      "sha": "eb924acafc228b3afa0239de578bb5c0f7fa56d5",
+      "date": "2026-08-22T10:19:37+08:00",
+      "subject": "fix(squads): make acceptance adversarial"
+    },
+    {
+      "sha": "865c69c9f3a7d14553317afa545e61c1120dbc60",
+      "date": "2026-08-22T05:09:24+08:00",
+      "subject": "docs(release): record v0.0.51 beta publication"
+    },
+    {
+      "sha": "499f16d6fe7eb4e816ab06ffa4e369af7a5534b1",
+      "date": "2026-08-22T04:59:41+08:00",
+      "subject": "fix(web): project current expert squad workflows"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |  14 +\n bun.lock                                           |  16 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../opencorvus/generated/expert-squad-revisions.ts |   4 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/opencorvus/src/config/config.ts           |   2 +-\n .../src/expert-squad/builtin/advanced/README.md    |   6 +-\n .../agents/implementation-engineer/system.md       |   4 +-\n .../builtin/advanced/agents/orchestrator/system.md |   6 +-\n .../advanced/agents/requirement-engineer/system.md |   4 +-\n .../advanced/agents/solution-architect/system.md   |   2 +-\n .../advanced/agents/source-investigator/system.md  |   2 +-\n .../agents/system-integrity-reviewer/system.md     |   4 +-\n .../advanced/agents/test-engineer/system.md        |   6 +-\n .../builtin/advanced/expert-squad.jsonc            |  20 +-\n .../src/expert-squad/builtin/base/README.md        |  10 +-\n .../builtin/base/agents/base-developer/system.md   |   6 +-\n .../builtin/base/agents/base-planner/system.md     |   8 +-\n .../builtin/base/agents/base-tester/system.md      |   8 +-\n .../builtin/base/agents/orchestrator/system.md     |   8 +-\n .../expert-squad/builtin/base/expert-squad.jsonc   |   7 +-\n .../src/expert-squad/prompt-profile-resolver.ts    |   3 +-\n .../opencorvus/src/prompt/core/mission-core.txt    |   2 +\n packages/opencorvus/src/protocol/delivery.ts       |  61 ++++\n packages/opencorvus/src/server/routes/skill.ts     |   2 +-\n packages/opencorvus/src/skill/mount-config.ts      |   6 +-\n packages/opencorvus/src/skill/mounts.ts            |  44 ++-\n .../test/expert-squad/advanced-package.test.ts     | 261 +++++++++++++++++-\n .../test/expert-squad/catalog-index.test.ts        |   2 +-\n .../expert-squad/data-analysis-package.test.ts     | 306 ++++++++++-----------\n .../test/mission-scope-partition-policy.test.ts    |   3 +\n .../test/protocol-delivery-fact-storage.test.ts    |  92 +++++++\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/sdk/js/src/gen/sdk.gen.ts                 |   6 +-\n packages/sdk/js/src/gen/types.gen.ts               |   6 +-\n packages/sdk/openapi.json                          |  52 +++-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n .../web/src/content/docs/concepts/architecture.mdx |   2 +-\n .../content/docs/zh-cn/concepts/architecture.mdx   |   2 +-\n .../content/expert-squad-distribution.generated.ts |   4 +-\n .../web/src/content/featured-squads.generated.ts   |  10 +-\n packages/web/src/content/public-market-zh-01-35.ts |  32 ++-\n specs/README.md                                    |   4 +\n .../2026-08-22-data-analysis-demo-completed.png    | Bin 0 -> 84037 bytes\n .../2026-08-22-data-analysis-demo-parallel.png     | Bin 0 -> 108360 bytes\n .../2026-08-22-data-analysis-demo-report.png       | Bin 0 -> 96819 bytes\n ...2026-08-22-data-analysis-demo-submit-openai.png | Bin 0 -> 108146 bytes\n .../2026-08-22-data-analysis-demo-submit.png       | Bin 0 -> 106356 bytes\n specs/current/architecture/04-extensions.md        |  10 +\n .../2026-08/2026-08-22-v0.0.51-beta-release.md     |   9 +-\n .../2026-08/2026-08-22-v0.0.52-beta-release.md     |  46 ++++\n ...8-22-website-data-analysis-expert-squad-demo.md |  93 +++++++\n specs/records/2026-08/README.md                    |   4 +\n 62 files changed, 941 insertions(+), 286 deletions(-)"
+}

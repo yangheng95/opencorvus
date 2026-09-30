@@ -623,6 +623,10 @@
 - 修复调度器在 Agent Session 已完成、但父级尚未收到终态投递时缺少持久化结算事实的问题；协议现在公开可复核的 Session delivery settlement。
 - 修复验收链在接收交付声明时可能丢失权威来源和效果证据，导致后续接受判断无法证明原始要求的问题。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/d2b6fef84c158f3e92479f15da3ecd6cb82facd1) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/06ccca072ae3dac3522438628c8ef77176c74b93...d2b6fef84c158f3e92479f15da3ecd6cb82facd1)。
+
 ## 0.0.51beta - 2026-08-22
 
 本版本继续修复多 Agent Harness 的调度、工具分配和外部业务系统验收质量，并同步发布桌面端、命令行二进制和公开网站。
