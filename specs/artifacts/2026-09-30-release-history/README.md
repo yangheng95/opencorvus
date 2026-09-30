@@ -14,5 +14,8 @@
 - `settings-baseline-light.png`, `settings-baseline-dark-middle.png`, `settings-baseline-dark-lower.png`: manually read baseline introduction, tools/integrations and final capability groups in the desktop settings column.
 - `settings-about-light.png`: About's release-notes entry; its button was clicked and the current-version detail was verified.
 - `settings-validation.json`: isolated service, build/type/design/i18n and backend contract evidence; screenshots provide the visual acceptance.
+- `public-deployment.json`: successful signed website workflow 36674176850 for exact source fe9f9f491812aa5e5c9372bbd1d6d809ef2ff07d, public route availability and owned-service cleanup.
+- `public-history-light.png`, `public-history-dark.png`: final production 58-version index after deployment, manually viewed in both themes.
+- `public-baseline-top.png`, `public-baseline-middle.png`, `public-baseline-tools.png`, `public-baseline-integrations.png`, `public-baseline-lower.png`: final production baseline detail, manually navigated and read through its capability groups/source links/footer.
 
-Root CHANGELOG.md is the authored content authority. Current/deleted Release history is source-linked; unavailable installer/publication evidence is not reconstructed from a version name alone. Final public screenshots and readback receipts will be registered here after deployment.
+Root CHANGELOG.md is the authored content authority. Current/deleted Release history is source-linked; unavailable installer/publication evidence is not reconstructed from a version name alone. Public website and GitHub backfill are delivered. The desktop Settings feature is recorded under Unreleased for the next canonical installer; immutable v0.1.22 binaries were published before this feature and remain unchanged.

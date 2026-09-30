@@ -1,0 +1,112 @@
+{
+  "checkedAt": "2026-09-30T05:46:21.956Z",
+  "sourceSHA": "fe9f9f491812aa5e5c9372bbd1d6d809ef2ff07d",
+  "workflow": {
+    "id": 36674176850,
+    "url": "https://github.com/yangheng95/opencorvus/actions/runs/36674176850",
+    "status": "completed",
+    "conclusion": "success",
+    "createdAt": "2026-09-30T05:36:20Z",
+    "updatedAt": "2026-09-30T05:42:28Z",
+    "jobs": [
+      {
+        "name": "website deadline",
+        "conclusion": "success",
+        "startedAt": "2026-09-30T05:36:23Z",
+        "completedAt": "2026-09-30T05:42:27Z"
+      },
+      {
+        "name": "resolve immutable website source",
+        "conclusion": "success",
+        "startedAt": "2026-09-30T05:36:23Z",
+        "completedAt": "2026-09-30T05:36:49Z"
+      },
+      {
+        "name": "canonical archive (ubuntu-latest)",
+        "conclusion": "success",
+        "startedAt": "2026-09-30T05:36:51Z",
+        "completedAt": "2026-09-30T05:37:37Z"
+      },
+      {
+        "name": "canonical archive (windows-latest)",
+        "conclusion": "success",
+        "startedAt": "2026-09-30T05:36:52Z",
+        "completedAt": "2026-09-30T05:40:51Z"
+      },
+      {
+        "name": "build and verify database-backed release",
+        "conclusion": "success",
+        "startedAt": "2026-09-30T05:36:52Z",
+        "completedAt": "2026-09-30T05:40:02Z"
+      },
+      {
+        "name": "canonical archive (macos-latest)",
+        "conclusion": "success",
+        "startedAt": "2026-09-30T05:36:55Z",
+        "completedAt": "2026-09-30T05:38:05Z"
+      },
+      {
+        "name": "sign and deploy RackNerd release",
+        "conclusion": "success",
+        "startedAt": "2026-09-30T05:40:55Z",
+        "completedAt": "2026-09-30T05:42:17Z"
+      },
+      {
+        "name": "website result",
+        "conclusion": "success",
+        "startedAt": "2026-09-30T05:42:19Z",
+        "completedAt": "2026-09-30T05:42:22Z"
+      }
+    ]
+  },
+  "publicReadback": [
+    {
+      "url": "https://opencorvus.com/zh-cn/changelog/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "checkedAt": "2026-09-30T05:46:21.956Z"
+    },
+    {
+      "url": "https://opencorvus.com/changelog/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "checkedAt": "2026-09-30T05:46:21.952Z"
+    },
+    {
+      "url": "https://opencorvus.com/zh-cn/changelog/0.1.22/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "checkedAt": "2026-09-30T05:46:21.734Z"
+    },
+    {
+      "url": "https://opencorvus.com/zh-cn/changelog/0.0.35-beta/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "checkedAt": "2026-09-30T05:46:21.589Z"
+    },
+    {
+      "url": "https://opencorvus.com/zh-cn/changelog/0.0.35-beta.4/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "checkedAt": "2026-09-30T05:46:21.592Z"
+    }
+  ],
+  "manualVisualAcceptance": [
+    "public index in light and dark: 58 versions, source-linked history",
+    "version navigation and full 0.0.35beta detail",
+    "full baseline introduction, team/model/tools, artifact/persistence/integrations and boundary sections"
+  ],
+  "localServicesStopped": {
+    "core": {
+      "port": 7887,
+      "pid": 66968,
+      "mechanism": "POST /shutdown; admitted and exited 0; zero process-owned prompts"
+    },
+    "website": {
+      "port": 4328,
+      "pid": 57004,
+      "mechanism": "Astro dev stop"
+    }
+  },
+  "installedBinaryBoundary": "The desktop Settings change is committed under Unreleased; existing immutable v0.1.22 installers were not rebuilt."
+}
