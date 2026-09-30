@@ -52,6 +52,28 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/97a3a6807fe40fc045a354c17c99b256a2f0f2a8) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/386c280caffe4de04b38069ff0918d77ab6a5059...97a3a6807fe40fc045a354c17c99b256a2f0f2a8)。
 
+## 0.1.19 - 2026-09-29
+
+### Added
+
+- 为交互产物提供复制、按实际格式下载和打开操作；代码、表格和 MCP（Model Context Protocol，模型上下文协议）应用保留真实内容与资源下载入口。
+
+### Changed
+
+- 重整工具调用、结构化输出与交付卡片，支持原始内容、全文展开和复制；文件名、格式与交付操作更突出。
+- 统一设置、权限历史、右侧停靠区和输入栏的布局与主题；简化多层选择菜单，并保存项目内的选择。
+
+### Fixed
+
+- 修复环境状态跨目录残留、GitHub CLI 状态误报、二进制文件的虚假行数，以及非 Git 目录反复查询工作树的问题。
+- 项目启动只读取目录状态，Git 初始化由显式操作触发；活动会话占用项目时明确报告 Git 身份变更冲突。
+- 修复完成后的报告跟进与历史交付展示，保留每次执行轮次的实际文件；MCP 卡片在晚打开或断线恢复后读取最新持久化结果。
+- 改进 Harbor 评测中的工作区归属、原生桥接就绪、时钟传递和失败/用量证据记录。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/386c280caffe4de04b38069ff0918d77ab6a5059) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/cca50888d07198ba68e4493ed29821eef088d170...386c280caffe4de04b38069ff0918d77ab6a5059)。
+
 ## 0.1.18 - 2026-09-29
 
 ### Fixed

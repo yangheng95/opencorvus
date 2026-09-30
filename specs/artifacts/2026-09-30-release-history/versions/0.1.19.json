@@ -1,0 +1,100 @@
+{
+  "version": "0.1.19",
+  "source": "386c280caffe4de04b38069ff0918d77ab6a5059",
+  "tag": "v0.1.19",
+  "previousSource": "cca50888d07198ba68e4493ed29821eef088d170",
+  "sourceDate": "2026-09-29T22:04:36+08:00",
+  "commits": [
+    {
+      "sha": "386c280caffe4de04b38069ff0918d77ab6a5059",
+      "date": "2026-09-29T22:04:36+08:00",
+      "subject": "fix(overlay): restore readable tools and usable artifact delivery"
+    },
+    {
+      "sha": "6af79015168c9525c19b7a5b9c4b2ffa656c12db",
+      "date": "2026-09-29T22:01:43+08:00",
+      "subject": "docs(benchmark): freeze corrected complete Harbor comparison"
+    },
+    {
+      "sha": "c2bf87daa739c75ee3c121cbfbb96b822ff21150",
+      "date": "2026-09-29T21:54:13+08:00",
+      "subject": "fix(benchmark): preserve official clock and runtime control evidence"
+    },
+    {
+      "sha": "c93eee0f56f8ce53114242186c6b409bb9e62939",
+      "date": "2026-09-29T21:53:21+08:00",
+      "subject": "fix(overlay): simplify layered picker surfaces"
+    },
+    {
+      "sha": "a15cef3adc1dc5d1aa3b30746d42f2b77ee4373e",
+      "date": "2026-09-29T21:48:06+08:00",
+      "subject": "fix(overlay): adapt composer controls and retain project choices"
+    },
+    {
+      "sha": "4fe8e0aa1f3a331a69c4caf5d3c33e7e8498fb1a",
+      "date": "2026-09-29T21:36:20+08:00",
+      "subject": "fix(overlay): unify right dock theme surfaces"
+    },
+    {
+      "sha": "fde517863a02a59fd888a3b33eb98717addafae8",
+      "date": "2026-09-29T21:11:06+08:00",
+      "subject": "docs(benchmark): record clock propagation gap and complete protocol audit scope"
+    },
+    {
+      "sha": "3266f9e897e26f47aac4a22010c4dd652cba51e0",
+      "date": "2026-09-29T20:59:25+08:00",
+      "subject": "fix(task): close report follow-ups and preserve live delivery across epochs"
+    },
+    {
+      "sha": "dda2c9d378750b3dcc620fb2964a19fb7cf1a8ed",
+      "date": "2026-09-29T20:55:57+08:00",
+      "subject": "fix(overlay): unify settings design and summarize permission history"
+    },
+    {
+      "sha": "53fece02aa510dc905ea0468f45e0f48634f0f69",
+      "date": "2026-09-29T20:02:15+08:00",
+      "subject": "fix(benchmark): align workspace ownership and native bridge readiness"
+    },
+    {
+      "sha": "8bd229676dd055d1d8a0a3197a54aef966348517",
+      "date": "2026-09-29T19:41:45+08:00",
+      "subject": "docs(benchmark): freeze evolved candidate and complete forty-slot matrix"
+    },
+    {
+      "sha": "f099353b5754035051fd606a2fa34bf6f43679f1",
+      "date": "2026-09-29T19:29:58+08:00",
+      "subject": "docs(benchmark): record verified integration and live candidate author"
+    },
+    {
+      "sha": "4548f4def8ec7bb054505670a0f0a3e8b653c89f",
+      "date": "2026-09-29T19:19:33+08:00",
+      "subject": "feat(benchmark): run native Task and Mission arms through Harbor MCP"
+    },
+    {
+      "sha": "c9ec9f985acc662e4076b9c6c2e78f41ffbfca41",
+      "date": "2026-09-29T18:55:59+08:00",
+      "subject": "fix(benchmark): retain Harbor failure evidence and complete usage"
+    },
+    {
+      "sha": "1888e3e460c961c057d65501f40b2401613fef6e",
+      "date": "2026-09-29T18:10:25+08:00",
+      "subject": "docs(benchmark): record failed Harbor trial and evidence gap"
+    },
+    {
+      "sha": "ce05238068bd5f389f81ca0df8639d21576f5d53",
+      "date": "2026-09-29T17:56:01+08:00",
+      "subject": "docs(benchmark): record Harbor runtime preflight and active trial"
+    },
+    {
+      "sha": "bc14203ae6e741c71ef14ea04b2d11ddecb1979b",
+      "date": "2026-09-29T17:45:57+08:00",
+      "subject": "docs(benchmark): register Harbor restart on v0.1.18"
+    },
+    {
+      "sha": "2ce8f8f66ac011bdb00655c73c259c737cee76a6",
+      "date": "2026-09-29T16:32:32+08:00",
+      "subject": "docs(runtime): record verified v0.1.18 release and process lifetime"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |  20 +\n bun.lock                                           |  16 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../src/opencorvus_inspect/automationbench/mcp.py  |  84 +--\n .../automationbench/mcp_tools.py                   |  98 ++++\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n .../external-agent/automationbench_bridge.py       |  14 +\n .../external-agent/automationbench_tool.py         |  25 +-\n .../opencorvus/script/benchmark/harbor/README.md   |  51 +-\n .../harbor/generate_automationbench_tasks.py       |  47 +-\n .../script/benchmark/harbor/opencorvus_agent.py    |  38 +-\n .../harbor/run_opencorvus_automationbench.py       | 426 ++++++++++-----\n .../opencorvus/src/conversation/turn-artifacts.ts  | 105 ++--\n packages/opencorvus/src/engine/describe.ts         |  10 +-\n packages/opencorvus/src/engine/model.ts            |   3 +\n packages/opencorvus/src/engine/store.ts            |   6 +-\n .../opencorvus/src/engine/task-lifecycle-schema.ts |  27 +\n packages/opencorvus/src/engine/task-lifecycle.ts   |  70 ++-\n .../src/engine/task-root-ingress-delivery.ts       |   4 +-\n .../src/expert-squad/prompt-profile-resolver.ts    |   1 +\n .../opencorvus/src/orchestrator/no-action-tool.ts  |   8 +-\n .../src/orchestrator/task-lifecycle-input.ts       |   2 +-\n .../opencorvus/src/prompt/core/mission-core.txt    |   2 +\n .../src/prompt/core/orchestrator-core.txt          |  12 +-\n packages/opencorvus/src/protocol/store.ts          |  11 +-\n .../opencorvus/src/server/routes/orchestrator.ts   |  17 +-\n packages/opencorvus/src/server/routes/project.ts   |  20 +-\n packages/opencorvus/src/task-api/index.ts          |   6 +-\n .../harbor_automationbench_adapter_test.py         | 175 +++++-\n .../benchmark/harbor_factorial_contract_test.py    | 242 +++++++++\n .../conversation-turn-declared-outputs.test.ts     |  26 +-\n .../test/server/project-git-initialization.test.ts | 101 ++++\n .../test/task-historical-report-delivery.test.ts   | 216 ++++++++\n .../test/task-lifecycle-prompt-projection.test.ts  |   5 +-\n .../test/task-live-replay-retention.test.ts        |  41 +-\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/src/main.rs             |  80 +++\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/overlay/src/components/App.tsx            |  15 +-\n .../src/components/ArtifactResourceDownload.tsx    |  43 ++\n packages/overlay/src/components/CardParts.tsx      | 102 +++-\n packages/overlay/src/components/ChatComposer.tsx   | 316 ++++++-----\n .../src/components/ComposerModelSelector.tsx       |  10 +-\n .../src/components/ComposerPermissionControl.tsx   |  25 +-\n .../src/components/ComposerReferenceSelector.tsx   |   6 +-\n .../overlay/src/components/ConnectionBanner.tsx    |   2 +-\n .../components/ConversationTurnArtifactSummary.tsx |  98 ++--\n packages/overlay/src/components/InlineToolPart.tsx |  13 +-\n packages/overlay/src/components/MemoryPanel.tsx    |   2 +-\n .../overlay/src/components/ProjectDeliveries.tsx   | 158 ++++++\n packages/overlay/src/components/TaskDirBar.tsx     | 192 +++++--\n packages/overlay/src/components/ToolPayload.tsx    | 109 ++++\n .../interactive-artifact/ArtifactActions.tsx       | 114 ++++\n .../interactive-artifact/ArtifactFrame.tsx         |  35 +-\n .../interactive-artifact/CandlestickArtifact.tsx   |   2 +-\n .../interactive-artifact/ChartArtifact.tsx         |   2 +-\n .../interactive-artifact/CodeArtifact.tsx          |  23 +-\n .../interactive-artifact/DashboardArtifact.tsx     |   2 +-\n .../interactive-artifact/DiagramArtifact.tsx       |   2 +-\n .../interactive-artifact/DiffArtifact.tsx          |   2 +-\n .../interactive-artifact/DocumentArtifact.tsx      |   2 +-\n .../interactive-artifact/FilePreviewArtifact.tsx   |   2 +-\n .../interactive-artifact/MapArtifact.tsx           |   2 +-\n .../interactive-artifact/McpAppArtifact.tsx        | 102 +++-\n .../interactive-artifact/MediaArtifact.tsx         |   2 +-\n .../interactive-artifact/Model3dArtifact.tsx       |   1 +\n .../interactive-artifact/NetworkArtifact.tsx       |   2 +-\n .../interactive-artifact/NotebookArtifact.tsx      |   2 +-\n .../interactive-artifact/PresentationArtifact.tsx  |   2 +-\n .../interactive-artifact/SpreadsheetArtifact.tsx   |  12 +-\n .../interactive-artifact/TableArtifact.tsx         |   2 +-\n .../interactive-artifact/TerminalArtifact.tsx      |  24 +-\n .../interactive-artifact/TimelineArtifact.tsx      |   2 +-\n .../interactive-artifact/TreeArtifact.tsx          |   2 +-\n .../univer-spreadsheet-adapter.js                  |  23 +\n .../src/components/settings/ChannelsPanel.tsx      |   6 +-\n .../src/components/settings/GeneralPanel.tsx       |  38 +-\n .../src/components/settings/NetworkPanel.tsx       |  25 +-\n .../src/components/settings/PermissionsPanel.tsx   | 407 +++++++++++---\n .../src/components/settings/ProvidersPanel.tsx     |  36 +-\n .../overlay/src/components/settings/layout.tsx     |  48 +-\n .../overlay/src/components/ui/SelectControl.tsx    |   2 +-\n packages/overlay/src/i18n/en-US.json               | 109 +++-\n packages/overlay/src/i18n/zh-CN.json               | 110 +++-\n packages/overlay/src/main.tsx                      |  34 +-\n packages/overlay/src/services/artifact-export.ts   | 218 ++++++++\n packages/overlay/src/services/config-load.ts       |  23 +-\n .../overlay/src/services/conversation-artifact.ts  |   7 +-\n packages/overlay/src/services/file-download.ts     |  21 +\n packages/overlay/src/services/host-transport.ts    |   2 +\n packages/overlay/src/services/init.ts              |  17 +-\n .../overlay/src/services/interactive-artifact.ts   |  76 ++-\n packages/overlay/src/services/meta.ts              |  53 +-\n .../src/services/project-composer-preferences.ts   |  45 ++\n packages/overlay/src/services/sse.ts               |  10 +-\n packages/overlay/src/services/workspace.ts         |  22 +-\n packages/overlay/src/store/board.ts                |   9 +-\n packages/overlay/src/store/settings.ts             |   8 +-\n packages/overlay/src/styles/cascade/dark.css       |   1 -\n packages/overlay/src/styles/cascade/graphite.css   |   1 -\n packages/overlay/src/styles/cascade/ivory.css      |   1 -\n packages/overlay/src/styles/cascade/light.css      |   1 -\n packages/overlay/src/styles/cascade/mist.css       |   1 -\n packages/overlay/src/styles/cascade/sage.css       |   1 -\n .../overlay/src/styles/cascade/vscode-dark.css     |   1 -\n .../src/styles/primitives/select-control.css       |  18 +-\n .../overlay/src/styles/surfaces/automations.css    |  17 +-\n packages/overlay/src/styles/surfaces/changes.css   |   4 +-\n packages/overlay/src/styles/surfaces/composer.css  | 137 +++--\n .../overlay/src/styles/surfaces/conversation.css   | 109 +++-\n packages/overlay/src/styles/surfaces/inspector.css |  22 +-\n packages/overlay/src/styles/surfaces/messages.css  | 199 +++++--\n packages/overlay/src/styles/surfaces/settings.css  | 369 +++++++------\n packages/overlay/src/styles/surfaces/usage.css     |  48 +-\n packages/overlay/src/styles/surfaces/workspace.css |  19 +-\n .../overlay/src/styles/tokens/design-language.css  |  38 +-\n packages/overlay/src/utils/debug-info.ts           |  10 +-\n .../overlay/src/utils/settings-status-labels.ts    |   2 +-\n packages/overlay/test/artifact-export.test.ts      |  99 ++++\n .../overlay/test/config-load-ownership.test.ts     |  73 +++\n .../test/conversation-artifact-scope.test.ts       |  48 ++\n packages/overlay/test/mcp-app-stream.test.ts       |  89 ++++\n packages/overlay/test/meta-project-scope.test.ts   |  82 +++\n .../test/project-composer-preferences.test.ts      |  92 ++++\n ...selected-task-stream-live-replay-reopen.test.ts |   3 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/sdk/js/src/gen/types.gen.ts               | 129 +++++\n packages/sdk/openapi.json                          | 585 +++++++++++++++++++++\n packages/transport-protocol/package.json           |   2 +-\n packages/transport-protocol/src/index.ts           |  24 +-\n packages/util/package.json                         |   2 +-\n packages/web/src/content/docs/reference/api.mdx    |   2 +-\n .../web/src/content/docs/zh-cn/reference/api.mdx   |   2 +-\n specs/README.md                                    |  15 +\n .../README.md                                      |  30 ++\n .../after-dark-chat-menu.png                       | Bin 0 -> 40127 bytes\n .../after-dark-model-menu.png                      | Bin 0 -> 56216 bytes\n .../after-dark-product-menu.png                    | Bin 0 -> 43252 bytes\n .../after-dark-reference-menu.png                  | Bin 0 -> 61118 bytes\n .../after-dark-reference-selected.png              | Bin 0 -> 59907 bytes\n .../after-ivory-chat-menu.png                      | Bin 0 -> 42440 bytes\n .../after-ivory-model-selected.png                 | Bin 0 -> 53854 bytes\n .../after-ivory-settings-select.png                | Bin 0 -> 48695 bytes\n .../after-menu-detail.png                          | Bin 0 -> 4379 bytes\n .../before-chat-menu.png                           | Bin 0 -> 40844 bytes\n .../before-model-menu.png                          | Bin 0 -> 54612 bytes\n .../before-reference-menu.png                      | Bin 0 -> 66521 bytes\n .../user-reference.png                             | Bin 0 -> 11089 bytes\n .../2026-09-29-right-dock-theme/README.md          |  32 ++\n .../after-dark-browser.png                         | Bin 0 -> 44919 bytes\n .../after-graphite-editor.png                      | Bin 0 -> 49147 bytes\n .../after-ivory-browser.png                        | Bin 0 -> 44778 bytes\n .../after-ivory-files.png                          | Bin 0 -> 48254 bytes\n .../after-light-goals.png                          | Bin 0 -> 46291 bytes\n .../after-light-screenshots.png                    | Bin 0 -> 47587 bytes\n .../after-mist-editor.png                          | Bin 0 -> 48111 bytes\n .../after-sage-files.png                           | Bin 0 -> 47017 bytes\n .../after-system-review.png                        | Bin 0 -> 45216 bytes\n .../after-vscode-requirements.png                  | Bin 0 -> 42887 bytes\n .../before-dark-browser.png                        | Bin 0 -> 43274 bytes\n .../before-ivory-browser.png                       | Bin 0 -> 42991 bytes\n .../before-ivory-files.png                         | Bin 0 -> 32620 bytes\n .../2026-09-29-task-followup-report/README.md      |   9 +\n .../report-live-desktop.png                        | Bin 0 -> 73349 bytes\n .../2026-09-29-task-followup-report/result.json    |  47 ++\n specs/artifacts/README.md                          |   6 +\n specs/current/architecture/05-config.md            |   4 +\n specs/current/architecture/07-panel.md             |  91 +++-\n specs/current/architecture/task-control-plane.md   |  10 +-\n ...026-09-29-composer-width-project-preferences.md |  44 ++\n ...26-09-29-conversation-delivery-status-repair.md |  78 +++\n .../2026-09-29-general-permission-readability.md   |  65 +++\n .../2026-09-29-harbor-comparison-completion.md     | 139 +++++\n .../2026-09/2026-09-29-harbor-v0.1.18-restart.md   |  50 ++\n .../2026-09-29-popup-layer-simplification.md       |  40 ++\n .../2026-09-29-right-dock-theme-surfaces.md        |  37 ++\n .../2026-09-29-runtime-process-sleep-recovery.md   |  13 +-\n .../2026-09-29-task-followup-report-convergence.md |  41 ++\n specs/records/2026-09/README.md                    |  15 +\n 185 files changed, 6313 insertions(+), 1498 deletions(-)"
+}
