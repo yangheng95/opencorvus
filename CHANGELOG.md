@@ -23,6 +23,10 @@
 - 补齐电脑操作按需指南与有序动作说明，分离桌面端 MCP 载荷服务契约。
 - 修正网站中文 Base 工作流元数据，使其与当前单一独立测试节点一致，恢复市场生成与 Registry 生命周期检查。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/1de814728820f3d00579e8293b26f832bf604550) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/b255ed5b6787d863b167ecc9d65cfe3fe6e8e6cb...1de814728820f3d00579e8293b26f832bf604550)。
+
 ## 0.1.21 - 2026-09-29
 
 ### Added

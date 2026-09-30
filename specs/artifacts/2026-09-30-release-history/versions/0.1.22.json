@@ -1,0 +1,100 @@
+{
+  "version": "0.1.22",
+  "source": "1de814728820f3d00579e8293b26f832bf604550",
+  "tag": "v0.1.22",
+  "previousSource": "b255ed5b6787d863b167ecc9d65cfe3fe6e8e6cb",
+  "sourceDate": "2026-09-30T11:00:08+08:00",
+  "commits": [
+    {
+      "sha": "1de814728820f3d00579e8293b26f832bf604550",
+      "date": "2026-09-30T11:00:08+08:00",
+      "subject": "release: prepare 0.1.22 installers and website metadata"
+    },
+    {
+      "sha": "06e331148b6256c8dfd0bada21c01d9aeea099e8",
+      "date": "2026-09-30T10:58:19+08:00",
+      "subject": "docs: record first five Harbor outcome audits"
+    },
+    {
+      "sha": "83be14a85af7a9583b14fdc16d5ca63809142742",
+      "date": "2026-09-30T10:44:35+08:00",
+      "subject": "fix(status): derive Task activity from live execution and refresh on park"
+    },
+    {
+      "sha": "823b66b83b64cf60743b29ba211a3898ac36e655",
+      "date": "2026-09-30T10:34:19+08:00",
+      "subject": "fix(overlay): make handoff context readable and preserve reading position"
+    },
+    {
+      "sha": "e7301c56f6fb7d82cbbb459876c6517b01c6a6a1",
+      "date": "2026-09-30T10:23:51+08:00",
+      "subject": "docs: record current-runtime Harbor launch"
+    },
+    {
+      "sha": "fa1eae955cc90d308aab781dfaa73ee4ca1eb293",
+      "date": "2026-09-30T10:19:10+08:00",
+      "subject": "docs: qualify current-runtime Harbor restart"
+    },
+    {
+      "sha": "eb371376551dc7c973dbdf9f5108c8773367be2a",
+      "date": "2026-09-30T09:57:03+08:00",
+      "subject": "fix(overlay): flatten tool disclosures and show latest call"
+    },
+    {
+      "sha": "42d54ca263c3b855145042c9049be7244a5f75e5",
+      "date": "2026-09-30T09:54:20+08:00",
+      "subject": "docs: register current-runtime Harbor comparison preparation"
+    },
+    {
+      "sha": "042334332f3ce1bae59b266bea604a2d815a2d09",
+      "date": "2026-09-30T09:47:09+08:00",
+      "subject": "Checkpoint before 发布新版网站与原生二进制"
+    },
+    {
+      "sha": "a0a879ed759f980e6d72c9df7a10b51bb2d8f1a2",
+      "date": "2026-09-30T02:42:38+08:00",
+      "subject": "test: preserve Mission recovery diagnostics and integration results"
+    },
+    {
+      "sha": "4b54a44d7f97d697db5b209d481961cf86c902e3",
+      "date": "2026-09-30T02:33:04+08:00",
+      "subject": "feat: enable accountable Base delivery and evidence-scoped repair"
+    },
+    {
+      "sha": "3d77ee1ccc633cb3af1643b515b44b4e6d1b1198",
+      "date": "2026-09-30T02:27:32+08:00",
+      "subject": "feat(chat): add independent side conversations and quotations"
+    },
+    {
+      "sha": "cb11bf7d25be3a50ebefcd31f5e5ee322401f7bb",
+      "date": "2026-09-30T02:21:13+08:00",
+      "subject": "feat(editor): load syntax highlighting by file language"
+    },
+    {
+      "sha": "d8d980dcb62d702fb07b2c3c38e3bccc55864de2",
+      "date": "2026-09-30T01:56:27+08:00",
+      "subject": "fix(compaction): validate checkpoints and unify request budgets"
+    },
+    {
+      "sha": "d3fbef6198c4d67c979805a5e0095f27fc0fd452",
+      "date": "2026-09-30T01:36:02+08:00",
+      "subject": "refactor: unify Task evidence and root tool execution"
+    },
+    {
+      "sha": "385b1d5da155dc4d30d494073377151a387e9997",
+      "date": "2026-09-30T01:30:03+08:00",
+      "subject": "fix(computer): add on-demand guides and ordered desktop actions"
+    },
+    {
+      "sha": "21e3386fcd5132e9e4428d70e22c62e3d7dc252a",
+      "date": "2026-09-30T00:35:31+08:00",
+      "subject": "docs: redesign agent ownership and evidence-driven execution"
+    },
+    {
+      "sha": "15b584a7a9a14bae898bb67bf1ef67fdd91a0c5d",
+      "date": "2026-09-30T00:22:12+08:00",
+      "subject": "fix(overlay): isolate MCP payload service contracts"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |   19 +\n bun.lock                                           |  131 +-\n packages/channel-config/package.json               |    2 +-\n packages/channel-runtime/package.json              |    2 +-\n .../src/opencorvus_inspect/automationbench/mcp.py  |  134 +-\n .../automationbench/mcp_tools.py                   |  196 +-\n .../opencorvus/generated/expert-squad-revisions.ts |    2 +-\n .../native/process-supervisor/Cargo.lock           |    2 +-\n .../native/process-supervisor/Cargo.toml           |    2 +-\n packages/opencorvus/package.json                   |    3 +-\n .../script/benchmark/harbor/opencorvus_agent.py    |  984 ++++-----\n .../harbor/run_opencorvus_automationbench.py       | 2300 ++++++++++----------\n packages/opencorvus/script/build-artifact.ts       |    4 +\n .../script/check-mission-task-duplex-e2e.ts        | 1760 +++++++--------\n .../script/mission-task-duplex-snapshot.ts         |  972 ++++-----\n .../script/replay-compaction-errors-validator.ts   |  197 +-\n packages/opencorvus/src/agent/role-contract.ts     |    2 +-\n packages/opencorvus/src/agent/runner.ts            |    5 +-\n packages/opencorvus/src/agent/tool-pool-data.ts    |   13 +-\n packages/opencorvus/src/chat/side-chat-identity.ts |   29 +\n packages/opencorvus/src/chat/side-chat.ts          |   31 +\n packages/opencorvus/src/config/config.ts           |   12 +-\n .../src/expert-squad/builtin/base/README.md        |   36 +-\n .../builtin/base/agents/base-tester/system.md      |    2 +\n .../builtin/base/agents/orchestrator/system.md     |   40 +-\n .../expert-squad/builtin/base/expert-squad.jsonc   |   31 +-\n .../src/expert-squad/builtin/base/selector.md      |   10 +-\n .../builtin/base/skills/method/SKILL.md            |   18 +-\n .../src/expert-squad/prompt-profile-resolver.ts    |   10 +-\n packages/opencorvus/src/mcp/browser/builtin.ts     |    1 +\n packages/opencorvus/src/mcp/browser/guard.ts       |    2 +-\n packages/opencorvus/src/mcp/browser/tools.ts       |   43 +-\n packages/opencorvus/src/mcp/computer/actions.ts    |   91 +\n packages/opencorvus/src/mcp/computer/backend.ts    |   24 +-\n packages/opencorvus/src/mcp/computer/builtin.ts    |   20 +-\n packages/opencorvus/src/mcp/computer/controller.ts |  108 +-\n .../opencorvus/src/mcp/computer/host-client.ts     |   16 +-\n .../opencorvus/src/mcp/computer/host-runtime.ts    |   93 +-\n packages/opencorvus/src/mcp/computer/tools.ts      |  253 +--\n .../opencorvus/src/mcp/computer/windows-dpi.ts     |   56 +\n packages/opencorvus/src/memory/session-memory.ts   |    3 +-\n packages/opencorvus/src/mission/acceptance-gap.ts  |   40 +-\n .../opencorvus/src/mission/acceptance-ledger.ts    |   82 +-\n packages/opencorvus/src/mission/projection.ts      |    4 +-\n packages/opencorvus/src/orchestrator/agent.ts      |    8 +-\n .../src/orchestrator/dispatch-turn-projection.ts   |   32 +-\n .../src/orchestrator/runtime-repair-tools.ts       |  184 --\n packages/opencorvus/src/orchestrator/tools.ts      |   87 +-\n packages/opencorvus/src/panel/capability.ts        |    2 +-\n .../src/prompt/core/delegated-worker-core.txt      |    2 +-\n .../opencorvus/src/prompt/core/mission-core.txt    |    3 +\n .../src/prompt/core/orchestrator-core.txt          |   30 +-\n packages/opencorvus/src/protocol/delivery.ts       |   25 +-\n packages/opencorvus/src/server/error-handler.ts    |    1 +\n .../opencorvus/src/server/routes/orchestrator.ts   |    1 +\n packages/opencorvus/src/server/routes/session.ts   |   39 +\n .../opencorvus/src/session/compaction-handoff.ts   |    7 +-\n packages/opencorvus/src/session/compaction.ts      |  108 +-\n packages/opencorvus/src/session/context-budget.ts  |   36 +-\n packages/opencorvus/src/session/index.ts           |   57 +-\n packages/opencorvus/src/session/llm.ts             |   31 +-\n packages/opencorvus/src/session/loop.ts            |  197 +-\n packages/opencorvus/src/session/message.ts         |   33 +-\n .../opencorvus/src/session/prompt-composition.ts   |  520 ++---\n packages/opencorvus/src/session/request-budget.ts  |  150 ++\n .../opencorvus/src/session/runtime-contract.ts     |    2 +-\n packages/opencorvus/src/skill/builtin-guidance.ts  |    8 +\n packages/opencorvus/src/skill/builtin-payload.ts   |   12 +\n .../src/skill/builtin/browser-use/SKILL.md         |   32 +\n .../src/skill/builtin/computer-use/SKILL.md        |   35 +\n .../opencorvus/src/status/task-status-snapshot.ts  |   15 +-\n packages/opencorvus/src/tool/panel.ts              |    4 +-\n packages/opencorvus/src/tool/read-agent-message.ts |  356 +--\n packages/opencorvus/src/work-ledger/projection.ts  |    4 +-\n .../test/artifact-publisher-authority.test.ts      |  144 +-\n .../core-artifact-owner-execution.test.ts          |   22 +-\n .../opencorvus/test/compaction-integrity.test.ts   |  600 +++++\n .../test/context-budget-decision.test.ts           |   45 +-\n .../test/expert-squad/advanced-package.test.ts     |  160 +-\n .../expert-squad/commercial-legal-package.test.ts  |  904 ++++----\n .../expert-squad/data-analysis-package.test.ts     |  788 +++----\n .../test/expert-squad/dynamic-package.test.ts      |    4 +-\n .../expert-squad/hr-operations-package.test.ts     |  852 ++++----\n .../test/expert-squad/light-package.test.ts        |   45 +-\n .../omnichannel-distribution-package.test.ts       |  912 ++++----\n .../expert-squad/sales-strategy-package.test.ts    |  850 ++++----\n .../expert-squad/tax-compliance-package.test.ts    |  970 ++++-----\n .../expert-squad/viral-content-package.test.ts     |  790 +++----\n .../test/mcp/computer-action-groups.test.ts        |  318 +++\n .../opencorvus/test/mcp/computer-contract.test.ts  |   56 +-\n packages/opencorvus/test/mcp/computer-dpi.test.ts  |   43 +\n .../test/mission-acceptance-delta.test.ts          |   20 +\n .../test/mission-acceptance-extension.test.ts      |    7 +-\n .../test/mission-status-snapshot.test.ts           |    4 +-\n .../test/mission-streamed-recovery.test.ts         |   52 +-\n .../test/mission-task-duplex-snapshot.test.ts      | 1570 ++++++-------\n ...chestrator-streamed-dispatch-settlement.test.ts |   10 +-\n .../panel-failed-task-dispatch-evidence.test.ts    |  240 +-\n .../read-agent-message-evidence-contract.test.ts   |   38 +-\n .../test/scheduler-participant-message.test.ts     |   34 +\n packages/opencorvus/test/server/side-chat.test.ts  |  155 ++\n .../test/task-execution-activity.test.ts           |  261 +++\n .../test/task-owner-direct-delivery.test.ts        |  274 +++\n .../test/tool-result-control-protocol.test.ts      |    1 +\n packages/overlay/package.json                      |   10 +-\n packages/overlay/src-tauri/Cargo.lock              |    2 +-\n packages/overlay/src-tauri/Cargo.toml              |    2 +-\n packages/overlay/src-tauri/tauri.conf.json         |    4 +-\n packages/overlay/src/components/App.tsx            |   13 +\n packages/overlay/src/components/CardParts.tsx      |  212 +-\n packages/overlay/src/components/ChatComposer.tsx   |   34 +-\n .../src/components/DelegatedContextDisclosure.tsx  |    2 +\n .../overlay/src/components/InteractionCard.tsx     |    5 +-\n packages/overlay/src/components/QuotationChip.tsx  |   26 +\n .../overlay/src/components/QuotationSelection.tsx  |   91 +\n packages/overlay/src/components/RightDock.tsx      |   11 +-\n packages/overlay/src/components/SideChatPanel.tsx  |  440 ++++\n .../interactive-artifact/DiffArtifact.tsx          |   40 +-\n .../interactive-artifact/McpAppArtifact.tsx        |   55 +-\n packages/overlay/src/components/ui/CodeEditor.tsx  |  Bin 6041 -> 6473 bytes\n packages/overlay/src/components/ui/Icon.lucide.ts  |    4 +\n .../src/components/ui/code-editor-language.ts      |   34 +\n packages/overlay/src/i18n/en-US.json               |   31 +-\n packages/overlay/src/i18n/zh-CN.json               |   31 +-\n packages/overlay/src/index.html                    |    1 +\n packages/overlay/src/main.tsx                      |   67 +-\n packages/overlay/src/services/composer-draft.ts    |   55 +-\n packages/overlay/src/services/interaction-reply.ts |   21 +-\n packages/overlay/src/services/mcp-app-payload.ts   |   52 +\n packages/overlay/src/services/quotation.ts         |   29 +\n packages/overlay/src/services/side-chat.ts         |  150 ++\n .../overlay/src/services/subagent-conversation.ts  |    9 +\n .../overlay/src/styles/surfaces/chat-bubble.css    |   13 +-\n packages/overlay/src/styles/surfaces/messages.css  |  159 +-\n packages/overlay/src/styles/surfaces/side-chat.css |  173 ++\n packages/overlay/src/styles/surfaces/workspace.css |   21 +\n packages/overlay/src/utils/dom-utils.ts            |   17 +\n packages/overlay/test/code-editor-reveal.test.ts   |   79 -\n packages/overlay/test/composer-draft.test.ts       |    4 +-\n .../overlay/test/mcp-app-payload-contract.test.ts  |    9 +-\n packages/overlay/test/quotation.test.ts            |   39 +\n packages/overlay/test/side-chat-transport.test.ts  |  110 +\n packages/plugin/package.json                       |    2 +-\n packages/sdk/js/package.json                       |    2 +-\n packages/sdk/js/src/gen/sdk.gen.ts                 |  130 +-\n packages/sdk/js/src/gen/types.gen.ts               |  179 +-\n packages/sdk/openapi.json                          |  458 +++-\n packages/transport-protocol/package.json           |    2 +-\n packages/util/package.json                         |    2 +-\n packages/web/src/content/docs/agents.mdx           |    2 +\n packages/web/src/content/docs/reference/api.mdx    |    6 +-\n packages/web/src/content/docs/zh-cn/agents.mdx     |    2 +\n .../web/src/content/docs/zh-cn/reference/api.mdx   |    6 +-\n .../content/expert-squad-distribution.generated.ts |    4 +-\n packages/web/src/content/public-market-zh-01-35.ts |   14 +-\n specs/README.md                                    |   30 +\n .../artifacts/2026-09-27-review-evidence/README.md |   84 +-\n .../publisher-outcomes.json                        |  172 +-\n .../review-evidence.json                           |  216 +-\n .../2026-09-27-review-evidence/run-receipt.json    |  146 +-\n .../decision-evidence.json                         |  332 +--\n .../2026-09-27-supervision-review/packet.json      |   52 +-\n .../2026-09-27-supervision-review/provenance.json  |   48 +-\n .../review-01-receipt.json                         |  254 +--\n .../2026-09-27-team-feedback/input/metrics.json    |  420 ++--\n .../2026-09-27-team-feedback/source-receipt.json   |   44 +-\n .../2026-09-29-task-followup-report/result.json    |   94 +-\n .../2026-09-30-computer-browser-guidance/README.md |    9 +\n .../native-input-result.png                        |  Bin 0 -> 32014 bytes\n .../native-lifecycle.json                          |   41 +\n .../packaged-native.json                           |    5 +\n .../2026-09-30-file-editor-highlighting/README.md  |   22 +\n .../markdown-dark.png                              |  Bin 0 -> 60186 bytes\n .../rust-dark.png                                  |  Bin 0 -> 52633 bytes\n .../rust-light.png                                 |  Bin 0 -> 52143 bytes\n .../yaml-saved.png                                 |  Bin 0 -> 51733 bytes\n .../2026-09-30-handoff-readability/README.md       |   11 +\n .../current-dark.jpg                               |  Bin 0 -> 101923 bytes\n .../current-light.jpg                              |  Bin 0 -> 101249 bytes\n .../existing-dark.jpg                              |  Bin 0 -> 87332 bytes\n .../2026-09-30-handoff-readability/narrow-dark.jpg |  Bin 0 -> 142359 bytes\n .../2026-09-30-handoff-readability/short-dark.jpg  |  Bin 0 -> 56188 bytes\n .../2026-09-30-parked-task-activity/README.md      |   28 +\n .../after-restart.png                              |  Bin 0 -> 42143 bytes\n .../2026-09-30-parked-task-activity/parked.png     |  Bin 0 -> 42143 bytes\n .../2026-09-30-parked-task-activity/resumed.png    |  Bin 0 -> 42351 bytes\n .../2026-09-30-parked-task-activity/running.png    |  Bin 0 -> 42360 bytes\n specs/artifacts/2026-09-30-side-chat/README.md     |   31 +\n .../2026-09-30-side-chat/desktop-dark.png          |  Bin 0 -> 73424 bytes\n .../2026-09-30-side-chat/desktop-light.png         |  Bin 0 -> 71080 bytes\n .../2026-09-30-side-chat/pending-question.png      |  Bin 0 -> 69422 bytes\n .../artifacts/2026-09-30-tool-disclosure/README.md |   25 +\n .../2026-09-30-tool-disclosure/desktop-dark.png    |  Bin 0 -> 48892 bytes\n .../2026-09-30-tool-disclosure/desktop-light.png   |  Bin 0 -> 46690 bytes\n .../2026-09-30-tool-disclosure/expanded-dark.png   |  Bin 0 -> 55400 bytes\n .../2026-09-30-tool-disclosure/side-panel-dark.png |  Bin 0 -> 68392 bytes\n specs/artifacts/README.md                          |   12 +\n specs/current/architecture/04-extensions.md        |   45 +-\n specs/current/architecture/06-provider.md          |   14 +\n specs/current/architecture/07-panel.md             |   74 +-\n specs/current/architecture/project-memory.md       |    8 +\n ...26-09-29-conversation-delivery-status-repair.md |   17 +\n .../2026-09-30-agent-execution-implementation.md   |  131 ++\n .../2026-09/2026-09-30-agent-execution-redesign.md |  251 +++\n .../2026-09-30-compaction-integrity-and-budget.md  |   40 +\n ...-09-30-computer-browser-guidance-and-actions.md |   72 +\n .../2026-09-30-file-editor-syntax-highlighting.md  |   34 +\n .../2026-09-30-handoff-context-readability.md      |   36 +\n .../2026-09-30-harbor-current-runtime-restart.md   |   89 +\n .../2026-09/2026-09-30-parked-task-activity.md     |   33 +\n .../2026-09/2026-09-30-side-chat-and-quotation.md  |   57 +\n .../2026-09/2026-09-30-tool-disclosure-layout.md   |   32 +\n .../records/2026-09/2026-09-30-v0.1.22-release.md  |   40 +\n specs/records/2026-09/README.md                    |   22 +\n 214 files changed, 15630 insertions(+), 10280 deletions(-)"
+}
