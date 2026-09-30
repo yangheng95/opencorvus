@@ -1,0 +1,25 @@
+{
+  "version": "0.0.58-beta",
+  "source": "42e6d28c7cc565f2cbe00fbfb0ba1966db9eb67a",
+  "tag": "v0.0.58-beta",
+  "previousSource": "fc390c86cb18f4d7ba74b3e763070c7b81ef1361",
+  "sourceDate": "2026-08-29T23:23:57+08:00",
+  "commits": [
+    {
+      "sha": "42e6d28c7cc565f2cbe00fbfb0ba1966db9eb67a",
+      "date": "2026-08-29T23:23:57+08:00",
+      "subject": "feat(expert-squad): add dynamic runtime team"
+    },
+    {
+      "sha": "9ec721646a98db96fe4be5f5bcdee9f746ba6be4",
+      "date": "2026-08-29T23:08:53+08:00",
+      "subject": "fix(release): resolve workspace source exports"
+    },
+    {
+      "sha": "eb191fec5cfd11af29818218a76bf5f073fcc2b2",
+      "date": "2026-08-29T22:26:25+08:00",
+      "subject": "docs: record FrontierScience Luna smoke"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |   4 +-\n bun.lock                                           |  16 +-\n expert-squads/builtin/dynamic/README.md            |   7 +\n .../dynamic/agents/dynamic-builder/system.md       |   5 +\n .../dynamic/agents/dynamic-generalist/system.md    |   5 +\n .../builtin/dynamic/agents/orchestrator/system.md  |   9 +\n expert-squads/builtin/dynamic/expert-squad.jsonc   | 108 +++\n expert-squads/builtin/dynamic/selector.md          |   7 +\n .../builtin/dynamic/skills/method/SKILL.md         |  47 ++\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../opencorvus/generated/expert-squad-payload.ts   |  13 +\n .../generated/expert-squad-search-localization.ts  |   4 +\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n .../test/expert-squad/dynamic-package.test.ts      | 781 +++++++++++++++++++++\n .../expert-squad/market-discovery-chain.test.ts    |  43 +-\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n .../test/workspace-source-resolution.test.ts       |  27 +\n packages/overlay/vite.config.ts                    |   3 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n packages/web/src/content/public-market-zh-01-35.ts |  17 +\n specs/README.md                                    |   4 +\n .../2026-08/2026-08-29-dynamic-expert-squad.md     | 159 +++++\n ...inspect-frontier-science-research-luna-smoke.md | 214 ++++++\n .../2026-08/2026-08-29-v0.0.56-beta-release.md     |  31 +-\n specs/records/2026-08/README.md                    |   4 +\n 34 files changed, 1482 insertions(+), 54 deletions(-)"
+}

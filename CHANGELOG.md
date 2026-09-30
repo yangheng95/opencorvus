@@ -498,49 +498,19 @@
 
 ## 0.0.58beta - 2026-08-29
 
-这是未公开的候选版本，记录当时已完成的全仓架构债清理与真实 Mission 调度验收：统一 Task、Mission、Session、Provider、MCP、调度器、持久化与 Overlay 的事实和组合边界；新增全局 Chat、运行时 Skill Market、Inspect AI benchmark 适配与 Light 专家团。SDK、util 与 plugin 的源码包元数据同步到同一候选版本并通过打包安装预检；npm registry 发布不属于该候选范围。`v0.0.56-beta` 因 frozen lockfile 漂移在共享依赖安装阶段失败关闭，`v0.0.57-beta` 又因干净 runner 的 Overlay 未选择工作区 `source` export condition 而在打包阶段失败关闭；这些标签与 `v0.0.58-beta` 均保留为不可变审计证据，其改动由 `0.0.61-beta` 公开发布。
-
-### Security
-
-- 桌面端渲染进程不再向 `window` 暴露实时设置、应用和看板 store、明文服务器密码，以及目录切换、任务加载/选择、看板加载和设置持久化等业务写入入口；相关生产代码改为直接使用类型化模块导入。渲染进程中的任意脚本或开发者工具表达式因此无法再读取服务器密码或触发这些业务写入。
+这是未公开候选，承接前一候选的架构与能力改进。
 
 ### Added
 
-- 新增 `GET /lifecycle/{occurrenceID}`：`server.shutdown` 与 `server.restart` 现在同步受理为一次带稳定标识的生命周期 occurrence，响应携带 `occurrenceID`；受理后处理器被清除或失败会把该 occurrence 结算为 `failed` 并附精确错误，重复请求收敛到在途 occurrence，冲突的另一种转换以 409 拒绝并返回在途 occurrence 标识。关机成功即进程退出，无法自证，故没有 `succeeded` 状态。
-- 新增幂等的全局 Chat start API：一次请求原子创建可见 Chat、持久化首条真实用户消息并返回 canonical Session 流坐标；相同请求重放收敛到同一对话和同一回合。
-- 新增运行时 Skill Market 搜索、检查与 exact-hash 托管安装链；外部内容在安装前后校验同一 SHA-256，安装仅影响下一回合，不会热挂载到当前执行。
-- 新增 Inspect AI benchmark 注册表和 OpenCorvus Task 适配器，以及面向咨询、调查和澄清问题的两角色 Light 专家团；二者都复用现有 Task/Session runtime，不引入第二套 Agent 执行器。
-
-### Changed
-
-- Mission acceptance 现在由 revisioned ledger、criterion 状态、Task execution epoch、obligation/evidence 绑定和受影响 lineage continuation 共同决定；调度、恢复、重试和最终关闭使用同一套持久化事实。
-- Session prompt owner、运行时 package publication、Task root ingress、scheduler wake、artifact provenance 与 execution directory 等跨进程边界迁移到各自单一 owner，并由 module topology 与 architecture checker 防止重新形成反向依赖或双源。
-- 原生 OpenAI/Azure 在带 Tool 的单个 Provider step 内关闭并行 function calls；独立 Session、Task、Agent 与 Project 仍可并发。Provider schema 保留开放 JSON record 语义，canonical Zod schema 继续负责执行前校验与默认值物化。
-- Overlay 的 Mission/Task/Session 消息统一走 subscribe-before-snapshot 与同一 causal frontier，实时增量和重连 hydration 收敛到同一 Message/Part lineage；较早历史可继续分页读取，大型折叠 Tool payload 延迟到显式展开。
-- Provider plugin 的能力改为最小权限 ABI：运行期 OAuth refresh 必须通过 `PluginInput.credentials.refresh` 进入引擎持久化 exchange occurrence；plugin 不再获得完整 SDK client，只获得受管 credential 操作与只读 Session facts。非网络 API credential metadata 只通过带 observed-key 比较的窄更新接口写入。OAuth credential alias 从 callback success 的动态 `provider` 字段迁移为 method-level 静态 `credentialProvider` 声明；外部 plugin 必须在 authorize 前声明真实 credential target。
-- MCP（Model Context Protocol，模型上下文协议）OAuth 凭据引入持久化租约代：一次授权流程在开始时建立租约，流程内的多次写入共用这一代；吊销或新流程铸新代后，旧持有者的写入被精确拒绝，包括由同一数据根上另一后端执行的吊销。删除后重建的凭据不再可能被删除前的持有者写入。
-- 调度器、总线、权限、构建清理、会话控制、任务取消收敛等全部控制租约持有方现在与其结算收据同事务归还租约；新增 `check:control-lease-owners` 守卫（pre-push 运行），任何新增取租约位置必须声明其释放路径。
-- 共享 JSON 事实文件（全局/项目配置、Provider 凭据、MCP 凭据、专家团配置）的读改写迁移到跨进程锁内，多后端并发写不再丢失更新。
-- Provider OAuth 授权成为持久化流程 occurrence：`ProviderAuthAuthorization` 新增必填 `flowID`，CLI、Overlay 与两个回调路由都必须携带它以精确结算对应流程；pending executor 持有可续租的 Provider-wide owner，另一授权在其存活期间得到 409 而不会替换或泄漏其 loopback/device executor。回调对方法不匹配、已结算、不可执行分别返回具名错误（`ProviderAuthOauthFlowMismatch`、`ProviderAuthOauthFlowAlreadySettled`、`ProviderAuthOauthFlowNotExecutable`）。CLI 不再直接执行 plugin callback 或写凭据，`auth/execute` 也只接受 API credential method。
-- 公共 Session 执行变更（`session.prompt`、`session.command`、`session.shell`）现在必须携带调用方铸造的稳定请求 occurrence——输入消息标识 `messageID`（`session.shell` 的公共 schema 新增该字段）；服务器不再在省略时代铸标识。相同标识与指纹的重试收敛到首次 occurrence：prompt/command 返回或续跑既有回合，shell 直接返回持久 occurrence、绝不重复执行命令；同一标识配不同请求体以 409 `PublicSessionPromptIdentityConflictError` 拒绝（command/shell 路由新增该冲突响应）。`session.shell` 的响应 schema 修正为与实际一致的 `{info, parts}`。
-- Browser 附着失败不再隐式降级到独立浏览器：附着与独立是两个浏览器身份（不同 Cookie、不同登录态），跨越这条边界现在必须由配置显式声明。默认的 `OPENCORVUS_BROWSER_MODE=chrome` 在 Chrome 不可附着时以具名错误失败并给出精确原因；接受在另一身份下工作需设置 `OPENCORVUS_BROWSER_MODE=chrome_or_isolated`；直接选择 `isolated` 仍是独立模式。此前依赖静默回退的部署会明确失败，直到声明策略。
-- 托管服务器就绪改为机器可读的启动收据：SDK 通过 `--startup-receipt`/`--startup-occurrence` 向服务器交付一次性收据通道，并只依据其中的框架化事实结算启动（绑定 URL 或精确的终态错误），标准输出仅作诊断。SDK `0.0.55-beta` 与不认识这两个参数的旧版 `opencorvus` 二进制不兼容，需成对升级。
+- 新增 Dynamic 动态专家团，按当前请求生成成员分工和工作流说明，供运行时组织工作。
 
 ### Fixed
 
-- 修复 Mission 创建 Task、Task 完成投递、父级唤醒、acceptance repair 与终态关闭之间可能出现重复 occurrence、遗漏回执、错误重开或 head-of-line starvation 的共享调度缺陷；真实 `openai/gpt-5.6-terra` Mission 以一个 Task、一个 epoch 和 planner/developer/tester 各一次完成，Provider、Tool 与 Bus 逐项全成功结算。
-- 修复 OpenAI 在复杂 Panel surface 上同一并行批次内产生部分 canonical、部分嵌套 `parameters` 输入的问题；最终 artifact reads 逐次使用同一 flat schema，不再产生 `tool-input-invalid` 与下一 Turn 重试。
-- 修复 Conversation/Session 首次连接、重连、旧消息分页、飞行中 operator message、child-Agent activity 和 Work Ledger hierarchy 的多处投影分叉；真实参与者消息保持完整可见，Standalone 与 Mission-owned Task 各自只出现一次。
-- GitLab Provider auth 不再加载会自行刷新并写入 OpenCode `auth.json` 的旧 npm plugin；仓库内适配器把 OAuth 首次交换、运行期 refresh 与 Personal Access Token（PAT，个人访问令牌）提交全部交还中央 Provider auth authority，并保留原 MIT 来源声明。错误 state 的 loopback 请求只得到固定 400，不会终止合法的在途授权。
-- 修复 Provider 初次 OAuth 授权与运行期 token refresh 在远端交换成功、`auth.json` 提交前进程退出时丢失 minted credential 且无精确事实的问题：Project、global、CLI、内置 plugin 与 account-usage 共用 Provider-wide renewable owner，按 `exchanging → credential_ready → consumed` 持久化；`auth.json` 的 generation/tombstone 与输出 digest 同时证明精确提交并阻止 ABA 覆盖，owner 过期时收敛为成功或 `exchange_uncertain`。结果不确定的 rotating refresh fence 在原 credential generation 仍有效时不按时间淘汰，因此不会在 24 小时后重新交换同一 refresh token。
-- 修复全局任务创建的请求重放会重复分配项目与任务的问题：请求身份现在在项目分配之前全局解析，重放返回首次提交的同一 `{task_id, project_id, directory}`，冲突重放由既有的项目内幂等检查拒绝。
-- 修复 MCP `configure` 被打断会留下"有定义无凭据"的半配置服务器的问题：密钥现在先暂存（staged）、定义提交后再晋升为生效凭据，前一定义正在使用的密钥在其退役提交之前绝不被销毁；任何窗口的崩溃都由下一次项目配置提交的凭据对账收敛——匹配已提交定义的暂存密钥被晋升，不匹配的被丢弃。
-- 修复 MCP OAuth 授权发起进程死亡后回调无法完成的问题：回调进程现在可仅凭持久事实（凭据租约、OAuth state、PKCE verifier）重建流程并完成兑换，全部写入仍以原租约代为栅栏。
-- 修复会话回合执行期间发送的用户消息持久化失败（HTTP 500）的问题：飞行中标记 `pendingDelivery` 此前写在深冻结的物化快照上而抛出 TypeError，现在写在持久化副本上；回合中到达的消息重新可以入队并在回合边界投递。
+- 原生 Overlay 打包选择工作区 source export condition（源码导出条件），修复干净 runner 无法解析 SDK、util 与 plugin 源码导出的问题。
 
-### Removed
+### 记录依据
 
-- 移除渲染进程遗留的全局诊断 ABI（Application Binary Interface，应用程序二进制接口）：`window.__ocNextChatMetadata` 聊天元数据注入入口、`window.__overlayTest` 与 `window.__ocOverlayTiming` 超时覆盖、`window.__overlayInitSettled` 就绪标记、`window.__ocMarkdownRenderPrewarmPending` 预热计数、无调用方的 `window.openWorkspaceDiff`，以及由 `?acceptance-locale` 查询参数写入、可在正式版本中覆盖界面语言的 `__OPENCORVUS_LOCALE__` 入口。这些入口在当前仓库中已无任何写入方或读取方。渲染进程现在只保留一个显式声明的全局（启动接管握手），并由 `bun run --cwd packages/overlay check:renderer-surface` 作为构建后的正向契约守卫。
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/42e6d28c7cc565f2cbe00fbfb0ba1966db9eb67a) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/fc390c86cb18f4d7ba74b3e763070c7b81ef1361...42e6d28c7cc565f2cbe00fbfb0ba1966db9eb67a)。
 
 ## 0.0.54beta - 2026-08-25
 
