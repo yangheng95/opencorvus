@@ -1,8 +1,17 @@
 # 更新日志
 
-本文记录 OpenCorvus 从 `0.0.35beta` 开始的版本变化。格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)；产品版本使用 `0.0.35beta` 形式，代码元数据使用对应的 SemVer（Semantic Versioning，语义化版本）形式 `0.0.35-beta`。
+本文从 `0.0.35beta` 的完整功能基线开始，逐版本记录新增、调整与修复，也保留已删除发布页和未公开候选的记录。历史日期取自保留的版本源码，原始发布状态以相应回执为准。格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)；产品版本使用 `0.0.35beta` 形式，代码元数据使用对应的 SemVer（Semantic Versioning，语义化版本）形式 `0.0.35-beta`。
 
 ## 未发布
+
+### Added
+
+- 官网新增按版本浏览的更新日志及单版详情，补齐从 0.0.35beta 到 0.1.22 的历史与原始来源。
+- 设置新增更新日志：默认查看当前安装版本，搜索历史版本与功能内容，离线阅读完整说明，并从关于页直接进入。
+
+### Changed
+
+- 每次发布要求先编写更新日志；GitHub Release 和网站使用根目录的同一份版本说明，保留发布归属与原始来源。
 
 ## 0.1.22 - 2026-09-30
 

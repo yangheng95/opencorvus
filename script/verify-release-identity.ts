@@ -335,7 +335,10 @@ async function readPublicationOwner(
     )
   }
   if (release.body !== `${expected}\n\n${input.notes}`) {
-    throw new ReleasePublicationError("release_publication_invalid", `Release publication ${tag} differs from its authored release notes`)
+    throw new ReleasePublicationError(
+      "release_publication_invalid",
+      `Release publication ${tag} differs from its authored release notes`,
+    )
   }
   if (release.prerelease !== input.prerelease) {
     throw new ReleasePublicationError(
@@ -375,6 +378,12 @@ export async function enforceReleasePublication(
   request: GitHubApiRequest = runGitHubApi,
   wait: (milliseconds: number) => Promise<unknown> = Bun.sleep,
 ): Promise<ReleasePublicationOwnership> {
+  if (!input.notes.trim()) {
+    throw new ReleasePublicationError(
+      "release_publication_invalid",
+      `Written release notes are required for ${input.version}`,
+    )
+  }
   if (mode === "verify-publication") return verifyDraftPublicationOwner(input, request)
 
   if (mode === "settle-publication") {
@@ -514,7 +523,12 @@ if (import.meta.main) {
             sourceSHA,
             runID: requiredEnvironment("RELEASE_RUN_ID"),
             prerelease: requiredBoolean("PRERELEASE"),
-            notes: renderReleaseNotes(requireReleaseNotes(parseChangelog(readFileSync(new URL("../CHANGELOG.md", import.meta.url), "utf8")), version)),
+            notes: renderReleaseNotes(
+              requireReleaseNotes(
+                parseChangelog(readFileSync(new URL("../CHANGELOG.md", import.meta.url), "utf8")),
+                version,
+              ),
+            ),
           })
         : await enforceReleaseIdentity(mode, {
             repository,

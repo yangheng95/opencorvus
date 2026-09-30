@@ -38,12 +38,34 @@ describe("authored release history", () => {
     )
   })
   test("reports the missing dated version as a typed publication error", () => {
-    expect(() => requireReleaseNotes(parseChangelog(source), "0.1.23")).toThrow(expect.objectContaining({ code: "release_notes_missing" }))
+    expect(() => requireReleaseNotes(parseChangelog(source), "0.1.23")).toThrow(
+      expect.objectContaining({ code: "release_notes_missing" }),
+    )
   })
   test("reports duplicate canonical identities as a typed error", () => {
-    expect(() => parseChangelog(source + "\n## 0.0.35-beta - 2026-08-07\n\n- 重复记录。\n")).toThrow(expect.objectContaining({ code: "changelog_duplicate_version" }))
+    expect(() => parseChangelog(source + "\n## 0.0.35-beta - 2026-08-07\n\n- 重复记录。\n")).toThrow(
+      expect.objectContaining({ code: "changelog_duplicate_version" }),
+    )
   })
   test("reports impossible calendar dates as a typed error", () => {
-    expect(() => parseChangelog("## 0.1.22 - 2026-02-30\n\n- 更新。\n")).toThrow(expect.objectContaining({ code: "changelog_invalid" }))
+    expect(() => parseChangelog("## 0.1.22 - 2026-02-30\n\n- 更新。\n")).toThrow(
+      expect.objectContaining({ code: "changelog_invalid" }),
+    )
+  })
+  test("retains literal headings inside fenced code examples in the authored body", () => {
+    const text = "## 0.1.22 - 2026-09-30\n\n### Added\n\n- 新增使用示例。\n\n```md\n## 示例标题\n```\n"
+    expect(parseChangelog(text)).toEqual([
+      {
+        version: "0.1.22",
+        displayVersion: "0.1.22",
+        date: "2026-09-30",
+        markdown: "### Added\n\n- 新增使用示例。\n\n```md\n## 示例标题\n```",
+      },
+    ])
+  })
+  test("reports a dated section without written content as a typed error", () => {
+    expect(() => parseChangelog("## 0.1.22 - 2026-09-30\n\n### Fixed\n")).toThrow(
+      expect.objectContaining({ code: "changelog_invalid" }),
+    )
   })
 })

@@ -24,6 +24,7 @@ const MemoryContextPanel = lazy(async () => ({
   default: (await import("./settings/MemoryContextPanel")).MemoryContextPanel,
 }))
 const DesktopUpdatePanel = lazy(() => import("./settings/DesktopUpdatePanel"))
+const ReleaseNotesPanel = lazy(() => import("./settings/ReleaseNotesPanel"))
 const UsagePanel = lazy(() => import("./settings/UsagePanel"))
 import { SettingsEmpty, SettingsPanel, SettingsRow, SettingsSurface } from "./settings/layout"
 import { Dialog } from "./ui/Dialog"
@@ -86,6 +87,7 @@ const SECTION_ICONS: Record<ConfigDialogTab, IconName> = {
   usage: "usage-metrics",
   scheduled: "scheduled",
   archive: "archive",
+  changelog: "file-document",
   about: "info-circle",
 }
 
@@ -133,7 +135,7 @@ const CONFIG_NAV_GROUPS: Array<{ labelKey: string; tabs: ConfigTabDef[] }> = [
     tabs: ["archive"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
   },
 ]
-const ABOUT_CONFIG_TAB = CONFIG_TABS.find((tab) => tab.id === "about") as ConfigTabDef
+const PRODUCT_INFO_TABS = ["changelog", "about"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!)
 
 const ABOUT_LINKS: Array<{ href: string; icon: IconName; label: () => string }> = [
   { href: PROJECT_URL, icon: "github", label: () => t("about.source_code") },
@@ -176,6 +178,8 @@ function activePanelBodyID(tab: ConfigDialogTab): string {
       return "scheduledAutomationsBody"
     case "archive":
       return "archiveBody"
+    case "changelog":
+      return "changelogBody"
     case "about":
       return "aboutBody"
   }
@@ -373,6 +377,8 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
         return <ScheduledAutomationsPanel onOpenSession={props.onOpenAutomationSession} />
       case "archive":
         return <ArchivePanel />
+      case "changelog":
+        return <ReleaseNotesPanel />
       case "about":
         return (
           <SettingsPanel class="about-panel">
@@ -383,16 +389,28 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
                   <span class="about-hero__eyebrow">{t("about.product_label")}</span>
                   <strong>OpenCorvus</strong>
                   <span class="about-hero__byline">
-                    {t("about.by")} <a href={AUTHOR_GITHUB_URL} target="_blank" rel="noopener noreferrer">杨恒</a>
+                    {t("about.by")}{" "}
+                    <a href={AUTHOR_GITHUB_URL} target="_blank" rel="noopener noreferrer">
+                      杨恒
+                    </a>
                   </span>
                 </div>
-                <span class="about-hero__version">{t("about.rt_overlay")} · v{OVERLAY_VERSION}</span>
+                <span class="about-hero__version">
+                  {t("about.rt_overlay")} · v{OVERLAY_VERSION}
+                </span>
               </div>
               <p>{t("about.self_built")}</p>
               <nav class="about-hero__links" aria-label={t("about.links")}>
                 <For each={ABOUT_LINKS}>
                   {(link) => (
-                    <LinkButton variant="outline" size="sm" tone="neutral" href={link.href} target="_blank" rel="noopener noreferrer">
+                    <LinkButton
+                      variant="outline"
+                      size="sm"
+                      tone="neutral"
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <Icon name={link.icon} size="compact" />
                       {link.label()}
                     </LinkButton>
@@ -432,6 +450,17 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
                 </Disclosure.Content>
               </Disclosure.Root>
             </section>
+            <SettingsSurface>
+              <SettingsRow
+                title={t("releases.title")}
+                desc={t("releases.about_description")}
+                actions={
+                  <Button variant="outline" size="sm" tone="neutral" onClick={() => switchConfigTab("changelog")}>
+                    {t("releases.read")}
+                  </Button>
+                }
+              />
+            </SettingsSurface>
             <DesktopUpdatePanel />
             <Disclosure.Root class="about-disclosure about-shortcuts">
               <Disclosure.Trigger indicatorPosition="end">{t("about.shortcuts")}</Disclosure.Trigger>
@@ -559,19 +588,21 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
                   </>
                 )}
               </For>
-              <Show when={visibleConfigTabIDs().has("about")}>
-                <Tab
-                  value="about"
-                  size="md"
-                  tone="neutral"
-                  data-config-tab="about"
-                  id={configTabID("about")}
-                  aria-controls={configPanelID("about")}
-                >
-                  <Icon class="config-nav-icon" name={ABOUT_CONFIG_TAB.icon} size="medium" />
-                  <span>{t(ABOUT_CONFIG_TAB.labelKey)}</span>
-                </Tab>
-              </Show>
+              <For each={PRODUCT_INFO_TABS.filter((tab) => visibleConfigTabIDs().has(tab.id))}>
+                {(tab) => (
+                  <Tab
+                    value={tab.id}
+                    size="md"
+                    tone="neutral"
+                    data-config-tab={tab.id}
+                    id={configTabID(tab.id)}
+                    aria-controls={configPanelID(tab.id)}
+                  >
+                    <Icon class="config-nav-icon" name={tab.icon} size="medium" />
+                    <span>{t(tab.labelKey)}</span>
+                  </Tab>
+                )}
+              </For>
             </TabList>
           </nav>
           <div

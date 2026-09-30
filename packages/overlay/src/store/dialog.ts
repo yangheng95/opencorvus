@@ -18,6 +18,7 @@ export type ConfigDialogTab =
   | "usage"
   | "scheduled"
   | "archive"
+  | "changelog"
   | "about"
 
 export interface ConfigSection {
@@ -70,6 +71,11 @@ export const CONFIG_SECTIONS: readonly ConfigSection[] = [
     searchTerms: ["usage", "tokens", "cost", "billing", "statistics", "用量", "令牌", "计费", "统计"],
   },
   { id: "archive", labelKey: "archive.title" },
+  {
+    id: "changelog",
+    labelKey: "releases.title",
+    searchTerms: ["release", "changelog", "version", "history", "更新", "版本", "日志"],
+  },
   { id: "about", labelKey: "about.title" },
 ]
 

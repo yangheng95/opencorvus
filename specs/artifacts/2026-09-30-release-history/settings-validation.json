@@ -1,0 +1,33 @@
+{
+  "verifiedAt": "2026-09-30T05:33:59.947Z",
+  "ui": "http://127.0.0.1:7887/ui/",
+  "mode": "core development with built overlay; isolated runtime and user home; no provider request",
+  "versions": 58,
+  "backend": {
+    "tests": 37,
+    "assertions": 82,
+    "files": [
+      "packages/util/test/changelog.test.ts",
+      "script/verify-release-identity.test.ts",
+      "script/release-dispatch.test.ts"
+    ]
+  },
+  "checks": [
+    "overlay typecheck",
+    "overlay build plus renderer public surface",
+    "overlay CSS design token checker",
+    "overlay i18n: 2 locales / 1980 keys",
+    "root notes: 0.1.22 / 58 versions",
+    "docs:check: 344 operations / 25 groups",
+    "website full check/build and final Astro build"
+  ],
+  "manualInteractions": [
+    "Settings Release notes opens current 0.1.22",
+    "All versions displays 58 versions descending",
+    "Search 0.0.35beta displays 5 distinct versions",
+    "Select 0.0.35beta and read all capability groups",
+    "About entry opens current version",
+    "Change isolated appearance to Dark and Chinese; repeat history/baseline reading"
+  ],
+  "installerBoundary": "Existing v0.1.22 immutable binaries were published before this Settings feature. Feature is recorded under Unreleased for the next canonical package."
+}

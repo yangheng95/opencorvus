@@ -1289,3 +1289,10 @@ updates first; exact server and workspace facts plus keyboard shortcuts remain
 available in disclosures. Usage gives the measured Token total and selected
 calendar period one dominant summary, keeps supporting metrics compact, and
 preserves official Provider reconciliation as a separate compare-only section.
+
+Release notes is a canonical CONFIG_SECTIONS entry with an About action. Its
+lazy panel bundles root CHANGELOG.md through the shared util parser and uses the
+existing safe Markdown renderer. It starts at the installed Overlay version;
+searchable descending history and selected details use the same single-column
+list-to-detail pattern. Website and GitHub links supplement the offline reading
+surface rather than providing another content/cache authority.

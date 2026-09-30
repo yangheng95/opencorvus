@@ -23,13 +23,13 @@ const otherLocale = zh ? "root" : "zh-cn"
       {!zh && <p class="oc-text-caption oc-text-description">Release notes are authored in Chinese.</p>}
       {!entry && <div class="history-actions"><a class="oc-btn oc-btn-primary oc-btn-m" href={`${historyHref}${entries[0]?.version}/`}>{zh ? "查看最新版本" : "Latest release"} · {entries[0]?.displayVersion}</a><span class="oc-text-caption oc-text-description">{entries.length} {zh ? "个版本" : "versions"}</span></div>}
     </header>
-    <div class="history-grid">
+    <div class={entry ? "history-grid history-detail" : "history-grid"}>
       {!entry && <aside aria-label={zh ? "按版本浏览" : "Browse versions"}><p class="oc-eyebrow">{zh ? "从新到旧" : "Newest first"}</p><nav>{entries.map((item) => <a href={`#v${item.version}`}><span>{item.displayVersion}</span><time datetime={item.date}>{item.date}</time></a>)}</nav></aside>}
       <div class="release-list">
         {entries.map((item, index) => <article id={`v${item.version}`} class="release-entry oc-anchor">
           <div class="release-meta"><time datetime={item.date}>{item.date}</time>{index === 0 && !entry && <span class="latest-label">{zh ? "最新" : "Latest"}</span>}</div>
           {!entry && <h2 class="oc-text-subtitle"><a href={`${historyHref}${item.version}/`}>{item.displayVersion}<span aria-hidden="true">↗</span></a></h2>}
-          {entry || index === 0 ? <div class="release-copy" set:html={item.html} /> : <><p class="oc-text-body oc-text-description">{item.summary}</p><a class="oc-link release-read" href={`${historyHref}${item.version}/`}>{zh ? "阅读完整更新" : "Read release notes"} →</a></>}
+          {entry || index === 0 ? <div class="release-copy" lang="zh-CN" set:html={item.html} /> : <><div class="release-copy release-summary oc-text-description" lang="zh-CN" set:html={item.summaryHtml} /><a class="oc-link release-read" href={`${historyHref}${item.version}/`}>{zh ? "阅读完整更新" : "Read release notes"} →</a></>}
         </article>)}
       </div>
     </div>
@@ -43,19 +43,19 @@ const otherLocale = zh ? "root" : "zh-cn"
   .back-link { display: inline-block; margin-top: var(--oc-space-4); }
   .history-actions { display: flex; align-items: center; gap: var(--oc-space-4); margin-top: var(--oc-space-6); }
   .history-grid { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: var(--oc-space-8); margin-top: var(--oc-space-6); }
-  .history-grid:has(> .release-list:only-child) { display: block; max-width: 820px; }
+  .history-grid.history-detail { display: block; max-width: 820px; }
   aside { position: sticky; top: var(--oc-space-10); align-self: start; max-height: calc(100vh - var(--oc-space-12)); overflow-y: auto; }
   aside nav { display: flex; flex-direction: column; gap: var(--oc-space-1); margin-top: var(--oc-space-4); }
   aside a { display: flex; justify-content: space-between; gap: var(--oc-space-2); padding-block: var(--oc-space-2); text-decoration: none; color: var(--oc-color-text-secondary); font-size: 13px; }
   aside a:hover { color: var(--oc-color-text-primary); }
-  aside time { color: var(--oc-color-text-tertiary); font-size: 11px; }
+  aside time { color: var(--oc-color-text-description); font-size: 11px; }
   .release-entry { padding-block: var(--oc-space-7); border-top: 1px solid var(--oc-color-border-subtle); }
   .release-entry:first-child { padding-top: 0; border-top: 0; }
   .release-meta { display: flex; gap: var(--oc-space-3); align-items: center; color: var(--oc-color-text-secondary); font-size: 13px; }
   .latest-label { padding: var(--oc-space-1) var(--oc-space-2); border-radius: var(--oc-radius-sm); background: var(--oc-color-surface-3); color: var(--oc-color-text-primary); }
   h2 { margin-block: var(--oc-space-3) var(--oc-space-4); }
   h2 a { display: flex; justify-content: space-between; gap: var(--oc-space-4); text-decoration: none; color: inherit; }
-  h2 span { color: var(--oc-color-text-tertiary); font-size: 18px; }
+  h2 span { color: var(--oc-color-text-description); font-size: 18px; }
   .release-read { display: inline-block; margin-top: var(--oc-space-4); }
   .release-copy { font-size: 16px; line-height: 1.85; overflow-wrap: anywhere; }
   .release-copy :global(h3) { font-size: 18px; margin-block: var(--oc-space-6) var(--oc-space-3); }
@@ -65,5 +65,6 @@ const otherLocale = zh ? "root" : "zh-cn"
   .release-copy :global(p) { margin-block: var(--oc-space-4); }
   .release-copy :global(a) { color: inherit; text-underline-offset: 3px; }
   .release-copy :global(code) { font-family: var(--oc-font-mono); font-size: 0.88em; background: var(--oc-color-surface-3); padding: 2px 5px; border-radius: var(--oc-radius-sm); }
+  .release-summary :global(p) { margin: 0; }
   @media (max-width: 767px) { .history-grid { grid-template-columns: 1fr; } aside { display: none; } .history-actions { flex-wrap: wrap; } }
 </style>

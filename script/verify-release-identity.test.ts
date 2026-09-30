@@ -53,6 +53,29 @@ function releaseRecord(runID: string, draft = true, ownerSHA = sourceSHA, prerel
 }
 
 describe("immutable release identity", () => {
+  test("maps empty publication notes to the written-notes error contract", async () => {
+    await expect(
+      enforceReleasePublication(
+        "claim-publication",
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes: "" },
+        responses(),
+      ),
+    ).rejects.toMatchObject({
+      code: "release_publication_invalid",
+      message: "Written release notes are required for 0.0.57-beta",
+    })
+  })
+  test("maps drifted authored notes on the exact draft owner to a publication error", async () => {
+    const record = publicationRecord("1001")
+    record.body += "\n\n不同的版本说明。"
+    await expect(
+      enforceReleasePublication(
+        "verify-publication",
+        { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
+        responses(response({ stdout: JSON.stringify([record]) })),
+      ),
+    ).rejects.toMatchObject({ code: "release_publication_invalid" })
+  })
   test("accepts a lightweight tag owned by the exact build source", async () => {
     await expect(
       verifyReleaseIdentity(
@@ -257,9 +280,7 @@ describe("immutable release identity", () => {
   test("preserves the 422 API failure after bounded inventory visibility is exhausted", async () => {
     const requests: string[][] = []
     const delays: number[] = []
-    const missingInventory = [
-      response({ stdout: "[]" }),
-    ]
+    const missingInventory = [response({ stdout: "[]" })]
     await expect(
       enforceReleasePublication(
         "claim-publication",
@@ -318,11 +339,7 @@ describe("immutable release identity", () => {
       enforceReleasePublication(
         "verify-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
-        recordingResponses(
-          requests,
-          response({ stdout: JSON.stringify(unrelated) }),
-          releaseRecord("1001"),
-        ),
+        recordingResponses(requests, response({ stdout: JSON.stringify(unrelated) }), releaseRecord("1001")),
       ),
     ).resolves.toEqual({
       kind: "publication-owned",
@@ -416,11 +433,7 @@ describe("immutable release identity", () => {
       enforceReleasePublication(
         "settle-publication",
         { repository, version: "0.0.57-beta", sourceSHA, runID: "1001", prerelease: true, notes },
-        responses(
-          releaseRecord("1001"),
-          response({ stdout: "HTTP/2.0 200 OK\n" }),
-          releaseRecord("1001", false),
-        ),
+        responses(releaseRecord("1001"), response({ stdout: "HTTP/2.0 200 OK\n" }), releaseRecord("1001", false)),
       ),
     ).resolves.toEqual({
       kind: "publication-settled",
