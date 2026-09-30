@@ -266,6 +266,10 @@
 
 - 修复 Mission 携带已上传文件或文件夹发送消息时的 `unrecognized_keys` 错误；首次发送与后续回复统一按接口契约提交附件引用。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/a6e0ae3c25ea47024b796b0661d976c8fdfcf31e) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/6775a92aa80f0436fabd49f97a4380e38200b5c9...a6e0ae3c25ea47024b796b0661d976c8fdfcf31e)。
+
 ## 0.1.5 - 2026-09-19
 
 ### Fixed

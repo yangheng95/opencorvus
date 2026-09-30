@@ -1,0 +1,45 @@
+{
+  "version": "0.1.6",
+  "source": "a6e0ae3c25ea47024b796b0661d976c8fdfcf31e",
+  "tag": "v0.1.6",
+  "previousSource": "6775a92aa80f0436fabd49f97a4380e38200b5c9",
+  "sourceDate": "2026-09-19T21:54:18+08:00",
+  "commits": [
+    {
+      "sha": "a6e0ae3c25ea47024b796b0661d976c8fdfcf31e",
+      "date": "2026-09-19T21:54:18+08:00",
+      "subject": "docs: record authorized architecture backup and recovered release checks"
+    },
+    {
+      "sha": "4192547c3f02f992588d1d743b832e36e1f4461d",
+      "date": "2026-09-19T21:52:13+08:00",
+      "subject": "docs: record 0.1.6 validation and local architecture blocker"
+    },
+    {
+      "sha": "03097deac6fdc7afe9fd29e46b6274a9b09e4fee",
+      "date": "2026-09-19T21:49:17+08:00",
+      "subject": "release: prepare 0.1.6 with merged OAuth and attachment fixes"
+    },
+    {
+      "sha": "e9f514430f6ab2fe64cd128420175a871280af19",
+      "date": "2026-09-19T21:35:31+08:00",
+      "subject": "docs: record attachment fix delivery and push blocker"
+    },
+    {
+      "sha": "34a92aece3b369ff04050ac6b90f47c95456e7c2",
+      "date": "2026-09-19T21:33:26+08:00",
+      "subject": "fix(overlay): project Mission attachment request fields"
+    },
+    {
+      "sha": "35fc4730190ec2ebf5a80afb4ca3801dcce4ed9a",
+      "date": "2026-09-19T21:32:52+08:00",
+      "subject": "docs: remove mandatory independent agent review"
+    },
+    {
+      "sha": "0e037648caef3eafba44fe82407e2467202ed230",
+      "date": "2026-09-11T14:37:33+08:00",
+      "subject": "docs(release): record verified 0.0.64-beta publication"
+    }
+  ],
+  "stats": "AGENTS.md                                          |   9 +-\n CHANGELOG.md                                       |   6 +\n bun.lock                                           |  16 +--\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n .../test/server/mission-attachment-ingress.test.ts | 123 +++++++++++++++++++++\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/overlay/src/services/mission.ts           |  10 +-\n .../mission-lifecycle-request-settlement.test.ts   |  49 ++++++++\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n script/release-dispatch.test.ts                    |   4 +-\n specs/README.md                                    |   4 +\n .../2026-09/2026-09-11-v0.0.64-beta-release.md     |  56 ++++++++++\n ...-09-19-mission-attachment-request-projection.md |  57 ++++++++++\n specs/records/2026-09/2026-09-19-v0.1.6-release.md |  54 +++++++++\n specs/records/2026-09/README.md                    |   4 +\n 25 files changed, 390 insertions(+), 30 deletions(-)"
+}
