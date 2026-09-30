@@ -1,0 +1,20 @@
+{
+  "version": "0.1.20",
+  "source": "97a3a6807fe40fc045a354c17c99b256a2f0f2a8",
+  "tag": "v0.1.20",
+  "previousSource": "386c280caffe4de04b38069ff0918d77ab6a5059",
+  "sourceDate": "2026-09-29T22:51:20+08:00",
+  "commits": [
+    {
+      "sha": "97a3a6807fe40fc045a354c17c99b256a2f0f2a8",
+      "date": "2026-09-29T22:51:20+08:00",
+      "subject": "fix(overlay): preserve original files in preview exports"
+    },
+    {
+      "sha": "d5e2b23bf1262a3072a9ddfe5c47636a473afbe5",
+      "date": "2026-09-29T22:46:51+08:00",
+      "subject": "feat(overlay): align navigation and usage with reference design"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |   3 +-\n bun.lock                                           |  16 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/overlay/package.json                      |   2 +-\n packages/overlay/script/check-css-token-usage.ts   |   2 +\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/overlay/src/components/App.tsx            |  32 ++-\n .../components/ConversationArtifactInspector.tsx   |   4 +-\n .../overlay/src/components/SidebarVersionLabel.tsx |   8 +\n packages/overlay/src/components/WorkLedger.tsx     | 193 ++++++++------\n .../interactive-artifact/DocumentArtifact.tsx      |   5 +-\n .../interactive-artifact/TreeArtifact.tsx          |   5 +-\n .../overlay/src/components/settings/UsagePanel.tsx | 278 +++++++++++----------\n packages/overlay/src/components/ui/Icon.lucide.ts  |   2 +\n .../overlay/src/components/ui/ProgressiveList.tsx  |   6 +-\n packages/overlay/src/i18n/en-US.json               |   4 +-\n packages/overlay/src/i18n/zh-CN.json               |   4 +-\n packages/overlay/src/main.tsx                      |   6 +-\n packages/overlay/src/services/pane.ts              |   2 +-\n packages/overlay/src/styles/cascade/dark.css       |  15 +-\n packages/overlay/src/styles/cascade/light.css      |  15 +-\n packages/overlay/src/styles/surfaces/activity.css  | 104 ++++++++\n packages/overlay/src/styles/surfaces/settings.css  |   4 +-\n packages/overlay/src/styles/surfaces/sidebar.css   |  18 +-\n packages/overlay/src/styles/surfaces/usage.css     | 133 ++++------\n .../overlay/src/styles/surfaces/work-ledger.css    |  19 +-\n .../overlay/src/styles/tokens/design-language.css  |   6 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n specs/README.md                                    |   2 +\n specs/current/architecture/07-panel.md             |  18 ++\n specs/current/architecture/overlay-typography.md   |   8 +-\n ...26-09-29-conversation-delivery-status-repair.md |   8 +\n .../2026-09-29-reference-navigation-usage-style.md |  43 ++++\n specs/records/2026-09/README.md                    |   2 +\n 43 files changed, 614 insertions(+), 379 deletions(-)"
+}

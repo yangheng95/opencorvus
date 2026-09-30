@@ -38,6 +38,20 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/b255ed5b6787d863b167ecc9d65cfe3fe6e8e6cb) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/97a3a6807fe40fc045a354c17c99b256a2f0f2a8...b255ed5b6787d863b167ecc9d65cfe3fe6e8e6cb)。
 
+## 0.1.20 - 2026-09-29
+
+### Changed
+
+- 调整工作区导航和用量统计的信息布局，统一常用入口、选中状态与阅读层级。
+
+### Fixed
+
+- JSON 和 Markdown 预览的复制、下载保留原始内容与实际文件名，不再导出用于展示的包装文本。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/97a3a6807fe40fc045a354c17c99b256a2f0f2a8) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/386c280caffe4de04b38069ff0918d77ab6a5059...97a3a6807fe40fc045a354c17c99b256a2f0f2a8)。
+
 ## 0.1.18 - 2026-09-29
 
 ### Fixed
