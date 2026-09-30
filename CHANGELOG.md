@@ -476,7 +476,25 @@
 
 ## 0.0.59beta - 2026-09-05
 
-这是未公开的候选版本。五个平台的桌面端和命令行矩阵全部构建成功，但发布汇总在读取刚创建的 draft Release 时错误使用了只适用于公开 Release 的 tag endpoint，因此在任何资产上传、更新通道结算或网站部署前失败关闭。`v0.0.59-beta` tag 与 draft 保留为不可变审计证据；发布控制面改为从可见 draft 的唯一 Release inventory 读取并校验精确 owner，修正后由后续候选重新执行完整发布。
+这是未公开候选，记录 0.0.58beta 之后的运行时与调度改动；发布汇总在读取新草稿时失败。
+
+### Changed
+
+- Task、Mission、Session、等待与定时任务使用持久化执行轮次、精确请求归属和租约/结算记录处理接纳、唤醒、重试与恢复。
+- 并行工作者的最终报告按明确消息集合批量读取；Light 咨询按分配的来源和工具预算组织调查与最终报告。
+
+### Fixed
+
+- 修复终态 Task 关闭尾部、等待信号、定时任务重试与信箱投递中的重复、遗漏和错误接管。
+- 能力搜索公开有界覆盖范围，统一空筛选和已激活 Skill 引用的读取；Mission 完成核对精确证据与实际最终回复。
+
+### Performance
+
+- 等待、定时与恢复查询采用索引和有界分页/批量处理，减少随定义和历史记录增长的重复读取。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/0a4d4180f9cbf8a9c27a8f3c67b72a7609ed466e) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/42e6d28c7cc565f2cbe00fbfb0ba1966db9eb67a...0a4d4180f9cbf8a9c27a8f3c67b72a7609ed466e)。
 
 ## 0.0.58beta - 2026-08-29
 

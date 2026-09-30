@@ -1,0 +1,335 @@
+{
+  "version": "0.0.59-beta",
+  "source": "0a4d4180f9cbf8a9c27a8f3c67b72a7609ed466e",
+  "tag": "v0.0.59-beta",
+  "previousSource": "42e6d28c7cc565f2cbe00fbfb0ba1966db9eb67a",
+  "sourceDate": "2026-09-05T06:43:48+08:00",
+  "commits": [
+    {
+      "sha": "0a4d4180f9cbf8a9c27a8f3c67b72a7609ed466e",
+      "date": "2026-09-05T06:43:48+08:00",
+      "subject": "chore(release): prepare 0.0.59 beta"
+    },
+    {
+      "sha": "481596ffa23e9ee2c7ede1171879ec259ef61b10",
+      "date": "2026-09-05T06:03:07+08:00",
+      "subject": "fix(orchestrator): constrain worker report authorities"
+    },
+    {
+      "sha": "6c5647f5761ac0a428f074c418714516d05eebc0",
+      "date": "2026-09-05T04:59:13+08:00",
+      "subject": "fix(orchestrator): batch exact worker message reads"
+    },
+    {
+      "sha": "442f98f1bf03036b499c2712761b996095665f02",
+      "date": "2026-09-05T04:26:23+08:00",
+      "subject": "fix(orchestrator): flatten collection dispatch schema"
+    },
+    {
+      "sha": "bcccf1fb945b96722865a8032d3451424fb670a0",
+      "date": "2026-09-05T04:13:10+08:00",
+      "subject": "fix(orchestrator): converge dispatch collection wakes"
+    },
+    {
+      "sha": "94e135262851592851ebd52adfdd10d0a4ad05fb",
+      "date": "2026-09-05T02:08:52+08:00",
+      "subject": "fix(capability): expose bounded search coverage"
+    },
+    {
+      "sha": "435f1e48fe6c0b6973cf81419c2d24052714d588",
+      "date": "2026-09-05T01:55:46+08:00",
+      "subject": "docs(release): record approved 0.0.59 beta delivery plan"
+    },
+    {
+      "sha": "2ad041e011c7391fce33a9568637739ffb356178",
+      "date": "2026-09-05T01:44:06+08:00",
+      "subject": "fix(light): ground advisory reports in assigned sources"
+    },
+    {
+      "sha": "82b0739074585115ab44e4017ed0ba2bed68f39d",
+      "date": "2026-09-05T01:04:59+08:00",
+      "subject": "fix(runtime): settle terminal task prompt tails on shutdown"
+    },
+    {
+      "sha": "39d124efd4ea72f32f90fa6d83f068d1d2e1e6d7",
+      "date": "2026-09-05T00:51:14+08:00",
+      "subject": "fix(capability): interpret empty search filters consistently"
+    },
+    {
+      "sha": "cc67555ac17309386b39867c04972d77aabda0bb",
+      "date": "2026-09-05T00:25:11+08:00",
+      "subject": "fix(light): project exact settled reports for consultation"
+    },
+    {
+      "sha": "f205fa054daa48cf725bf47137f8909646dd1ea7",
+      "date": "2026-09-05T00:02:46+08:00",
+      "subject": "fix(skill): resolve activated names from frozen descriptors"
+    },
+    {
+      "sha": "740514cf60df71e0f2ce99c9cb881aa239802666",
+      "date": "2026-09-04T23:24:09+08:00",
+      "subject": "test(light): bind current dispatch creator fixtures"
+    },
+    {
+      "sha": "dbc867f10637a3af894e03a02101168984744a4e",
+      "date": "2026-09-04T22:54:53+08:00",
+      "subject": "docs(mission): record clean final-response acceptance"
+    },
+    {
+      "sha": "7a2fc56f8473462fb870b8116bac8d843296c2e5",
+      "date": "2026-09-04T22:38:19+08:00",
+      "subject": "fix(checker): await exact Mission final response settlement"
+    },
+    {
+      "sha": "a769b12363e3923ac730b7a3097433b3c8a96a15",
+      "date": "2026-09-04T22:16:27+08:00",
+      "subject": "docs(mission): record real duplex acceptance boundaries"
+    },
+    {
+      "sha": "a97eed21233bc0d50a04a98e5fdab9ccd84b107e",
+      "date": "2026-09-04T21:51:11+08:00",
+      "subject": "fix(mission): verify retained-evidence trajectory"
+    },
+    {
+      "sha": "029304700c033d754add1d203316611bebfb24b3",
+      "date": "2026-09-04T20:47:36+08:00",
+      "subject": "fix(mission): bind completion to exact evidence"
+    },
+    {
+      "sha": "d51dc38cde73ee36e63338da55b1432e54cfb792",
+      "date": "2026-09-04T18:32:48+08:00",
+      "subject": "fix(mission): bind atomic state snapshots"
+    },
+    {
+      "sha": "0da07fa208abbdcfdb6875e212e4b80c609af3bf",
+      "date": "2026-09-03T17:34:05+08:00",
+      "subject": "test(mission): record scheduling trajectory evidence"
+    },
+    {
+      "sha": "f54bfe501ed9494bb3d8dbb96fc29669b40d0e74",
+      "date": "2026-09-03T17:13:49+08:00",
+      "subject": "fix(mission): bind native transport authority"
+    },
+    {
+      "sha": "ff9a8d4d114ac7ae681e4657c7bf78e7cc074b75",
+      "date": "2026-09-03T13:52:15+08:00",
+      "subject": "fix(mission): group terminal capability reveals"
+    },
+    {
+      "sha": "b104c84d03b023940cb5b6aeefa41b7b935baec0",
+      "date": "2026-09-03T12:34:12+08:00",
+      "subject": "fix(mission): close exact-source terminal reconciliation"
+    },
+    {
+      "sha": "cc0e86a70119f0d277612ea3d141ffaff8d597a1",
+      "date": "2026-09-03T11:45:23+08:00",
+      "subject": "test(mission): bind final artifact to input occurrence"
+    },
+    {
+      "sha": "04404da4e642f3fb3fa76554895a349bd7983a1e",
+      "date": "2026-09-03T10:57:27+08:00",
+      "subject": "fix(capability): preserve mission search authority"
+    },
+    {
+      "sha": "c0b5f7620342961ed82824c520779bc1b417522c",
+      "date": "2026-09-03T09:48:17+08:00",
+      "subject": "fix(mission): bind final reconciliation authorities"
+    },
+    {
+      "sha": "ae1f6fe1d877a4cb71db6dc34abb693c27407d73",
+      "date": "2026-09-03T08:27:25+08:00",
+      "subject": "fix(checker): track durable duplex activity"
+    },
+    {
+      "sha": "f7f3bded4129576c3b9aefe7e29776af484e587b",
+      "date": "2026-09-03T07:50:08+08:00",
+      "subject": "fix(mission): close interactive completion evidence"
+    },
+    {
+      "sha": "acdb3e6adb09b43471c454d1d921372d0f93a929",
+      "date": "2026-09-03T06:26:45+08:00",
+      "subject": "fix(mission): bound scheduler wake reconciliation"
+    },
+    {
+      "sha": "cd7904714395e34a38f9d21434ba70123c8e19b5",
+      "date": "2026-09-03T05:32:09+08:00",
+      "subject": "fix(scheduler): bind automation attempts to lease grants"
+    },
+    {
+      "sha": "d79435f5075c1cb19f67ad9ff06a148516b0ea12",
+      "date": "2026-09-03T00:33:25+08:00",
+      "subject": "fix(scheduler): bound event fire frontiers"
+    },
+    {
+      "sha": "e03e4649620ec079aa1956e772be9e84b6c423ae",
+      "date": "2026-09-02T21:31:56+08:00",
+      "subject": "docs(architecture): reconcile scheduling ledger"
+    },
+    {
+      "sha": "551733a6831deda453430c189de19f10a2a87463",
+      "date": "2026-09-02T21:05:33+08:00",
+      "subject": "fix(orchestrator): make coordination occurrences immutable"
+    },
+    {
+      "sha": "5f29648659dced0900f0ddb2445f39bd52bc1b84",
+      "date": "2026-09-02T13:03:00+08:00",
+      "subject": "fix(runtime): bound shared execution capacity"
+    },
+    {
+      "sha": "4abdaea58fd4e677cb481fdc7a684c7b5b7b790b",
+      "date": "2026-09-02T11:10:50+08:00",
+      "subject": "fix(orchestrator): bound durable recovery facts"
+    },
+    {
+      "sha": "7f725d0defb2a76fcb67dec5771d005a7c08b2fc",
+      "date": "2026-09-01T23:57:28+08:00",
+      "subject": "fix(workspace): fence durable lifecycle children"
+    },
+    {
+      "sha": "79ff01b64296c1acd0561b05ed923cb8b96ec831",
+      "date": "2026-09-01T20:25:10+08:00",
+      "subject": "refactor(scheduling): make dispatch lineage workflow authority"
+    },
+    {
+      "sha": "8c305720e7b3a0bd27a1335b110d54350dcd0c53",
+      "date": "2026-09-01T20:12:42+08:00",
+      "subject": "fix(worktree): fence durable directory mutations"
+    },
+    {
+      "sha": "aa6b4a20aa4bbf956432ab457784dfdecc9368a8",
+      "date": "2026-09-01T14:33:23+08:00",
+      "subject": "fix(project): settle build observation children"
+    },
+    {
+      "sha": "c98bf06c1a66a48e04bfdf898578e7b5d9831a7e",
+      "date": "2026-09-01T11:37:02+08:00",
+      "subject": "fix(project): fence multi-root deletion occurrences"
+    },
+    {
+      "sha": "81606d1dc7cbdb6202fbaca27894ca67b28eef7b",
+      "date": "2026-09-01T09:02:08+08:00",
+      "subject": "fix(retention): fence session deletion boundaries"
+    },
+    {
+      "sha": "af354ef8bd845a8669852bf3eb7091265f03e17b",
+      "date": "2026-08-31T22:48:26+08:00",
+      "subject": "refactor creation identity around current schema epoch"
+    },
+    {
+      "sha": "3905ed8eaebdf4c89b4ed6cee04a821cf00b34d3",
+      "date": "2026-08-31T09:01:20+08:00",
+      "subject": "docs(spec): record scheduler repair delivery"
+    },
+    {
+      "sha": "0e335444098a9c1489470b6cb804d9db2fb55f98",
+      "date": "2026-08-31T08:59:23+08:00",
+      "subject": "fix(scheduler): preserve busy session occurrences"
+    },
+    {
+      "sha": "dca0ca22094806f2022f1fc83f5481ee71a66435",
+      "date": "2026-08-31T04:06:29+08:00",
+      "subject": "fix search-native module boundaries"
+    },
+    {
+      "sha": "c1380d9962b5ad3c68a3f85c332d53fb9986acea",
+      "date": "2026-08-31T03:43:20+08:00",
+      "subject": "fix search-native recovery contracts"
+    },
+    {
+      "sha": "ba38035d294b0ec25319ec709006f3db1d2fdce6",
+      "date": "2026-08-31T03:25:16+08:00",
+      "subject": "fix scheduler occurrence convergence"
+    },
+    {
+      "sha": "5a33d07f511f84f832687fc34122e16fa7d04eb3",
+      "date": "2026-08-31T03:01:58+08:00",
+      "subject": "refactor capability harness to search-native execution"
+    },
+    {
+      "sha": "114ad71d7be17f3afce33f9ef9669b8294f40c75",
+      "date": "2026-08-30T21:02:59+08:00",
+      "subject": "test(light): reconcile search-native catalog integration"
+    },
+    {
+      "sha": "ee6b5f5b0b0917da2f40455775f7da129cfb9ce9",
+      "date": "2026-08-30T20:34:26+08:00",
+      "subject": "refactor expert squad capabilities to typed refs"
+    },
+    {
+      "sha": "97092b9d36f14c6f7fade8d64014a8096aff636b",
+      "date": "2026-08-30T20:33:15+08:00",
+      "subject": "fix(light): bound consultation frontier and tool budget"
+    },
+    {
+      "sha": "a8d8617d819359e3b991c4dd54493bcd3b58e191",
+      "date": "2026-08-30T19:53:24+08:00",
+      "subject": "fix: reconcile mission scheduling lifecycle"
+    },
+    {
+      "sha": "139fff2f90240fbcb04ae32a3f22eb03f17ba399",
+      "date": "2026-08-30T18:22:05+08:00",
+      "subject": "refactor capability catalog into occurrence-bound search"
+    },
+    {
+      "sha": "36fdc049501ce78db69763a4d4af2ead65a79fe0",
+      "date": "2026-08-30T15:21:18+08:00",
+      "subject": "refactor capability catalog ownership"
+    },
+    {
+      "sha": "c768dfdc7f8d19b0666a66b0a15ecf7abefd2371",
+      "date": "2026-08-30T13:05:19+08:00",
+      "subject": "fix(check): materialize workspace topology snapshot"
+    },
+    {
+      "sha": "de6eb2f203959a4f6d45537154574a66d2b0d61d",
+      "date": "2026-08-30T12:53:24+08:00",
+      "subject": "fix(specs): scope architecture index validation"
+    },
+    {
+      "sha": "fbeaa1070184ea31f8b489871ae323ab667b2a7f",
+      "date": "2026-08-30T12:44:45+08:00",
+      "subject": "dsw-33987 docs: plan search-native capability harness"
+    },
+    {
+      "sha": "34ab15e9539ffdc5948fc89262ab750a1587d681",
+      "date": "2026-08-30T10:38:12+08:00",
+      "subject": "fix(orchestrator): fence canonical dispatch occurrences"
+    },
+    {
+      "sha": "58c200e813a89b29deced00af518310c6d3bc658",
+      "date": "2026-08-30T06:16:43+08:00",
+      "subject": "fix(engine): require exact dispatch delivery owner"
+    },
+    {
+      "sha": "af143d43e197ff1f929714580e352b595b0f82a4",
+      "date": "2026-08-30T04:42:12+08:00",
+      "subject": "refactor(session): remove task decision host gate"
+    },
+    {
+      "sha": "fc8d498582c8c3ae5e8b6dab2c9476d323747cb8",
+      "date": "2026-08-30T04:18:17+08:00",
+      "subject": "refactor(session): break dynamic recovery cycles"
+    },
+    {
+      "sha": "3ab09f436e9b41664ad06f38b6124637a9ec5be0",
+      "date": "2026-08-30T04:01:00+08:00",
+      "subject": "chore(sdk): sync terminal message authority"
+    },
+    {
+      "sha": "bc90758f1948f48a802543c0f59ded2dd5fb7c2b",
+      "date": "2026-08-30T03:57:44+08:00",
+      "subject": "fix(dynamic): make frontier dispatch durable and exact"
+    },
+    {
+      "sha": "24ebd46c234af74478cd83c6ecdb77b89846836b",
+      "date": "2026-08-30T03:19:59+08:00",
+      "subject": "docs: audit scheduling architecture complexity"
+    },
+    {
+      "sha": "e9bba0f41f9d8d094d9cc3bf2e7069c8da0b7075",
+      "date": "2026-08-30T00:44:30+08:00",
+      "subject": "fix(release): build runtime packages before native artifacts"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |   22 +-\n CODEBASE_STRUCTURE.md                              |    2 +-\n README.md                                          |    2 +-\n README.zh-CN.md                                    |    2 +-\n bun.lock                                           |   18 +-\n ...rithm-layer-architecture-antipatterns-round2.md |   16 +-\n docs/algorithm-layer-architecture-antipatterns.md  |   16 +-\n ...lgorithm-layer-architecture-remediation-plan.md |    6 +-\n docs/state-audit.md                                |    2 +-\n .../academic-paper-review/expert-squad.jsonc       |  218 +-\n .../builtin/actuarial-reserving/expert-squad.jsonc |  152 +-\n .../expert-squad.jsonc                             |  152 +-\n .../agriculture-food-systems/expert-squad.jsonc    |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  130 +-\n .../battery-safety-reliability/expert-squad.jsonc  |  130 +-\n .../expert-squad.jsonc                             |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../browser-research-acceptance/expert-squad.jsonc |  108 +-\n .../chemical-process-safety/expert-squad.jsonc     |  152 +-\n .../climate-risk-adaptation/expert-squad.jsonc     |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  152 +-\n .../clinical-trial-operations/expert-squad.jsonc   |  152 +-\n .../expert-squad.jsonc                             |  152 +-\n .../cloud-platform-architecture/expert-squad.jsonc |  130 +-\n .../builtin/commercial-legal/expert-squad.jsonc    |  219 +-\n .../expert-squad.jsonc                             |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  130 +-\n .../builtin/customer-success/expert-squad.jsonc    |  130 +-\n .../customs-trade-compliance/expert-squad.jsonc    |  152 +-\n .../cybersecurity-assurance/expert-squad.jsonc     |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../agents/data-analysis-report-writer/system.md   |    2 +-\n .../builtin/data-analysis/expert-squad.jsonc       |  221 +-\n .../expert-squad.jsonc                             |  130 +-\n .../agents/deep-research-report-writer/system.md   |    2 +-\n .../builtin/deep-research/expert-squad.jsonc       |  183 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  152 +-\n .../builtin/dynamic/agents/orchestrator/system.md  |    8 +-\n expert-squads/builtin/dynamic/expert-squad.jsonc   |  139 +-\n .../builtin/dynamic/skills/method/SKILL.md         |    2 +-\n .../ecommerce-merchandising/expert-squad.jsonc     |  130 +-\n .../education-program-design/expert-squad.jsonc    |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../energy-utilities-planning/expert-squad.jsonc   |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../agents/equity-report-writer/system.md          |    2 +-\n .../builtin/equity-research/expert-squad.jsonc     |  206 +-\n .../agents/evolution-candidate-author/system.md    |    2 +-\n .../evolution-recommendation-owner/system.md       |    2 +-\n .../builtin/evolution-lab/expert-squad.jsonc       |  236 +-\n .../builtin/finance-operations/expert-squad.jsonc  |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../builtin/food-safety-quality/expert-squad.jsonc |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  152 +-\n .../builtin/frontend-innovate/expert-squad.jsonc   |  287 +-\n .../builtin/frontend-replica/expert-squad.jsonc    |  251 +-\n .../expert-squad.jsonc                             |  130 +-\n .../expert-squad.jsonc                             |  130 +-\n .../healthcare-operations/expert-squad.jsonc       |  130 +-\n .../expert-squad.jsonc                             |  130 +-\n .../system.md                                      |    2 +-\n .../builtin/hr-operations/expert-squad.jsonc       |  221 +-\n .../identity-access-governance/expert-squad.jsonc  |  152 +-\n .../expert-squad.jsonc                             |  130 +-\n .../insurance-claims-operations/expert-squad.jsonc |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../knowledge-base-operations/expert-squad.jsonc   |  130 +-\n .../expert-squad.jsonc                             |  130 +-\n .../life-sciences-regulatory/expert-squad.jsonc    |  130 +-\n expert-squads/builtin/light/README.md              |    2 +-\n .../light/agents/light-investigator/system.md      |    2 +-\n .../builtin/light/agents/light-planner/system.md   |    4 +-\n .../builtin/light/agents/orchestrator/system.md    |   10 +-\n expert-squads/builtin/light/expert-squad.jsonc     |  114 +-\n expert-squads/builtin/light/skills/method/SKILL.md |    8 +-\n .../localization-adaptation/expert-squad.jsonc     |  130 +-\n .../manufacturing-quality/expert-squad.jsonc       |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../maritime-port-operations/expert-squad.jsonc    |  130 +-\n .../builtin/marketing-growth/expert-squad.jsonc    |  221 +-\n .../materials-failure-analysis/expert-squad.jsonc  |  130 +-\n .../media-rights-clearance/expert-squad.jsonc      |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  152 +-\n .../builtin/meeting-knowledge/expert-squad.jsonc   |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  130 +-\n .../mining-resource-operations/expert-squad.jsonc  |  152 +-\n .../nonprofit-grant-operations/expert-squad.jsonc  |  130 +-\n .../expert-squad.jsonc                             |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../builtin/office-delivery/expert-squad.jsonc     |  120 +-\n .../omnichannel-distribution/expert-squad.jsonc    |  257 +-\n .../expert-squad.jsonc                             |  152 +-\n .../patent-landscape-prior-art/expert-squad.jsonc  |  130 +-\n .../expert-squad.jsonc                             |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  130 +-\n .../expert-squad.jsonc                             |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  152 +-\n .../builtin/procurement-vendor/expert-squad.jsonc  |  130 +-\n .../builtin/product-management/expert-squad.jsonc  |  130 +-\n .../builtin/product-video/expert-squad.jsonc       |  130 +-\n .../public-health-surveillance/expert-squad.jsonc  |  130 +-\n .../expert-squad.jsonc                             |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../railway-operations-safety/expert-squad.jsonc   |  130 +-\n .../real-estate-due-diligence/expert-squad.jsonc   |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../builtin/review-debug/expert-squad.jsonc        |  165 +-\n .../robotics-safety-validation/expert-squad.jsonc  |  152 +-\n .../agents/sales-playbook-writer/system.md         |    2 +-\n .../builtin/sales-strategy/expert-squad.jsonc      |  221 +-\n .../expert-squad.jsonc                             |  130 +-\n .../scientific-research-design/expert-squad.jsonc  |  135 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  130 +-\n expert-squads/builtin/seo-geo/expert-squad.jsonc   |  221 +-\n .../expert-squad.jsonc                             |  152 +-\n .../sports-performance-analysis/expert-squad.jsonc |  130 +-\n expert-squads/builtin/squad-sdk/expert-squad.jsonc |  142 +-\n .../builtin/squad-sdk/skills/authoring/SKILL.md    |    8 +-\n .../references/authoring-quality-method.md         |    2 +-\n .../authoring/references/definition-contract.json  |   31 +-\n .../expert-squad.jsonc                             |  152 +-\n .../supply-chain-logistics/expert-squad.jsonc      |  130 +-\n .../builtin/tax-compliance/expert-squad.jsonc      |  219 +-\n .../telecom-network-assurance/expert-squad.jsonc   |  130 +-\n .../expert-squad.jsonc                             |  152 +-\n .../expert-squad.jsonc                             |  152 +-\n .../veterinary-care-operations/expert-squad.jsonc  |  152 +-\n .../builtin/viral-content/expert-squad.jsonc       |  231 +-\n .../water-wastewater-operations/expert-squad.jsonc |  130 +-\n packages/channel-config/package.json               |    2 +-\n packages/channel-runtime/package.json              |    2 +-\n .../opencorvus/generated/expert-squad-payload.ts   |  262 +-\n .../opencorvus/generated/expert-squad-revisions.ts |  240 +-\n .../native/process-supervisor/Cargo.lock           |    2 +-\n .../native/process-supervisor/Cargo.toml           |    2 +-\n packages/opencorvus/package.json                   |    3 +-\n packages/opencorvus/script/build-artifact.ts       |    1 +\n .../script/check-mission-task-duplex-e2e.ts        |  298 +-\n .../opencorvus/script/check/architecture-index.ts  |   31 +-\n .../script/check/control-lease-owners.ts           |   30 +-\n .../opencorvus/script/check/module-topology.ts     |   63 +-\n .../script/control-state-redundancy-check.ts       |  105 +-\n packages/opencorvus/script/dynamic-e2e-contract.ts |  168 +\n .../opencorvus/script/dynamic-expert-squad-e2e.ts  |  686 ++++\n .../generate-portable-expert-squad-template.ts     |   56 +-\n .../script/mission-task-duplex-contract.ts         |    2 +-\n .../script/mission-task-duplex-snapshot.ts         |  544 +++\n .../script/permission-modes-check-worker.ts        |  413 +-\n .../opencorvus/script/scheduled-automations-e2e.ts |   10 +-\n .../src/agent/artifact-provenance-facts.ts         |  387 +-\n .../opencorvus/src/agent/artifact-read-facts.ts    |   42 +-\n packages/opencorvus/src/agent/context-tools.ts     |   23 +-\n .../src/agent/coordination-runtime-tools.ts        |   30 -\n .../src/agent/dispatch-adapter-contract.ts         |   11 +\n packages/opencorvus/src/agent/dispatch-outcome.ts  |   42 +-\n .../src/agent/dispatch-stage-tool-factory.ts       |  262 ++\n .../opencorvus/src/agent/exact-tool-factory.ts     |   14 +\n packages/opencorvus/src/agent/filter-tools.ts      |   25 -\n .../src/agent/platform-capability-sets.ts          |  101 +\n .../src/agent/primary-assistant-registry.ts        |    8 +-\n packages/opencorvus/src/agent/prompt/explore.txt   |    2 +-\n packages/opencorvus/src/agent/retrieval-tools.ts   |    5 -\n packages/opencorvus/src/agent/runner.ts            |  197 +-\n .../src/agent/stage-tool-materializer.ts           |   19 +-\n packages/opencorvus/src/agent/task-review-facts.ts |   13 +-\n packages/opencorvus/src/agent/tool-pool-data.ts    |   36 +-\n .../src/agent/worker-turn-descriptor-facts.ts      |    9 +-\n .../opencorvus/src/agent/worker-turn-descriptor.ts |   94 +-\n packages/opencorvus/src/architect/agent.ts         |   23 +-\n packages/opencorvus/src/architect/output-tools.ts  |   39 +-\n packages/opencorvus/src/browser-preview/persist.ts |   74 +-\n packages/opencorvus/src/build/agent.ts             |   53 +-\n .../src/build/merge-back-publication-authority.ts  |    6 +-\n packages/opencorvus/src/bus/index.ts               |   44 +-\n .../opencorvus/src/capability/caller-authority.ts  |   16 +\n .../opencorvus/src/capability/catalog-binding.ts   |  880 ++++\n packages/opencorvus/src/capability/catalog.ts      |  609 +++\n packages/opencorvus/src/capability/descriptor.ts   |  343 ++\n .../src/capability/harness-projection.ts           |  172 +-\n packages/opencorvus/src/capability/reveal-owner.ts |  551 +++\n .../opencorvus/src/capability/reveal-receipt.ts    |  571 +++\n packages/opencorvus/src/channel/ingress.ts         |   37 -\n .../opencorvus/src/chat/global-chat-service.ts     |   34 +-\n packages/opencorvus/src/chat/global-chat-start.ts  |  247 +-\n packages/opencorvus/src/chat/session.ts            |   20 +-\n packages/opencorvus/src/cli/cmd/session.ts         |   31 +-\n packages/opencorvus/src/cli/server-runtime.ts      |   13 +-\n packages/opencorvus/src/config/config.ts           |   37 +-\n packages/opencorvus/src/control/message.ts         |    2 +-\n packages/opencorvus/src/control/prompt.ts          |   13 +-\n packages/opencorvus/src/conversation/capability.ts |   88 +-\n packages/opencorvus/src/delegated-worker/agent.ts  |    2 +-\n .../opencorvus/src/delegated-worker/context.ts     |    2 +-\n .../src/engine/agent-coordination-errors.ts        |   36 +\n .../src/engine/agent-coordination-facts.ts         |  410 ++\n .../src/engine/agent-coordination-redispatch.ts    |   15 +\n .../opencorvus/src/engine/agent-coordination.ts    | 1892 ++++-----\n .../src/engine/build-observation-cleanup.ts        |   41 +-\n .../opencorvus/src/engine/cancellation-origin.ts   |   12 +\n .../opencorvus/src/engine/cancellation-scope.ts    |   40 +-\n packages/opencorvus/src/engine/channel-binding.ts  |    6 +-\n packages/opencorvus/src/engine/codebase-tools.ts   |   16 +-\n packages/opencorvus/src/engine/control-lease.ts    |   70 +-\n packages/opencorvus/src/engine/describe.ts         |   98 +-\n .../src/engine/dispatch-collection-contract.ts     |  182 +\n .../src/engine/dispatch-delivery-disposition.ts    |  932 +++++\n .../src/engine/dispatch-lineage-facts.ts           |  114 +-\n packages/opencorvus/src/engine/dispatch-lineage.ts |  836 +++-\n .../opencorvus/src/engine/dispatch-settlement.ts   |  267 +-\n packages/opencorvus/src/engine/engine.sql.ts       |  357 +-\n packages/opencorvus/src/engine/execution-abort.ts  |    3 +\n packages/opencorvus/src/engine/git.ts              |   26 +-\n .../src/engine/global-creation-target.ts           |  230 ++\n packages/opencorvus/src/engine/host-recovery.ts    |  223 +-\n packages/opencorvus/src/engine/index.ts            |    1 -\n .../opencorvus/src/engine/interaction-request.ts   |   87 +-\n packages/opencorvus/src/engine/interaction.ts      |   99 +-\n packages/opencorvus/src/engine/model.ts            |   27 +-\n .../opencorvus/src/engine/panel-creation-fact.ts   |   48 +\n packages/opencorvus/src/engine/pipeline.ts         |   33 +-\n packages/opencorvus/src/engine/process-liveness.ts |   22 +\n .../opencorvus/src/engine/process-recovery-fact.ts |   26 +-\n packages/opencorvus/src/engine/state.ts            |   10 +-\n packages/opencorvus/src/engine/store.ts            |  101 +-\n .../opencorvus/src/engine/task-control-driver.ts   |  205 +-\n .../src/engine/task-creation-contract.ts           |  358 ++\n .../opencorvus/src/engine/task-creation-creator.ts |   54 +\n .../opencorvus/src/engine/task-creation-facts.ts   |   88 +\n .../opencorvus/src/engine/task-creation-owner.ts   |   92 -\n .../opencorvus/src/engine/task-creation-request.ts |  260 ++\n .../src/engine/task-execution-capsule-binding.ts   |   71 +-\n .../src/engine/task-package-revision-binding.ts    |   39 +-\n .../opencorvus/src/engine/task-project-error.ts    |   22 +\n .../opencorvus/src/engine/task-root-fact-store.ts  |  258 +-\n .../src/engine/task-root-ingress-delivery.ts       | 1554 +++++---\n .../src/engine/task-root-ingress-disposition.ts    |  570 +++\n .../src/engine/task-root-ingress-identity.ts       |   29 +\n .../src/engine/task-root-ingress-reducer.ts        |   20 +-\n packages/opencorvus/src/engine/task-wait.ts        |  454 +++\n packages/opencorvus/src/engine/workflow-binding.ts |   47 +-\n .../src/engine/workflow-node-occurrence.ts         |  234 --\n packages/opencorvus/src/engine/writer.ts           |    4 +-\n .../src/expert-squad/builtin/advanced/README.md    |    2 +-\n .../builtin/advanced/expert-squad.jsonc            |  428 +-\n .../expert-squad/builtin/base/expert-squad.jsonc   |  208 +-\n .../agents/research-studio-writer/system.md        |    2 +-\n .../builtin/research-studio/expert-squad.jsonc     |  146 +-\n .../src/expert-squad/capability-grants.ts          |  248 ++\n .../opencorvus/src/expert-squad/catalog-profile.ts |   34 +-\n packages/opencorvus/src/expert-squad/catalog.ts    |   16 +-\n .../src/expert-squad/feedback-revision.ts          |    5 +-\n packages/opencorvus/src/expert-squad/manager.ts    |   55 +-\n .../opencorvus/src/expert-squad/multica-import.ts  |   51 +-\n .../src/expert-squad/prompt-profile-resolver.ts    | 1488 ++-----\n .../opencorvus/src/expert-squad/protocol-schema.ts |    8 +-\n packages/opencorvus/src/expert-squad/registry.ts   |  164 +-\n packages/opencorvus/src/explore/agent.ts           |    2 +-\n packages/opencorvus/src/fact-check/index.ts        |   27 +-\n packages/opencorvus/src/fact-check/tools.ts        |    9 +-\n packages/opencorvus/src/frontend-design/agent.ts   |  155 +-\n .../opencorvus/src/frontend-design/output-tools.ts |   77 +-\n .../frontend-design/visual-region-binding-tool.ts  |   18 +-\n .../opencorvus/src/goal-workload-analyst/agent.ts  |   22 +-\n .../src/goal-workload-analyst/output-tools.ts      |   10 +-\n .../opencorvus/src/integrity/acceptance-tools.ts   |   24 +-\n packages/opencorvus/src/integrity/team-agent.ts    |  115 +-\n packages/opencorvus/src/intent-analysis/agent.ts   |   40 +-\n .../opencorvus/src/intent-analysis/output-tools.ts |   15 +-\n packages/opencorvus/src/intent/bundle.ts           |   40 +-\n .../src/interactive-artifact/mcp-app-host.ts       |   45 +-\n .../src/interactive-artifact/mcp-app-lifecycle.ts  |   57 +\n .../opencorvus/src/interactive-artifact/schema.ts  |  107 +-\n packages/opencorvus/src/llm/activity.ts            |    5 +-\n .../opencorvus/src/mcp/browser/node-launcher.ts    |   26 +-\n packages/opencorvus/src/mcp/computer/builtin.ts    |    9 +\n .../opencorvus/src/mcp/host-session-runtime.ts     |  374 +-\n packages/opencorvus/src/mcp/index.ts               | 1293 ++++--\n .../src/memory/project-memory-organizer.ts         |   10 +-\n packages/opencorvus/src/memory/project-memory.ts   |    2 +-\n .../src/mission-skill/builtin-payload.ts           |    2 +-\n .../src/mission-skill/builtin/general/SKILL.md     |   15 +-\n packages/opencorvus/src/mission-skill/catalog.ts   |   66 +-\n packages/opencorvus/src/mission-skill/runtime.ts   |   73 +-\n packages/opencorvus/src/mission/board.ts           |  100 +-\n packages/opencorvus/src/mission/completion.ts      |   17 +-\n .../src/mission/execution-close-effects.ts         |  289 ++\n .../src/mission/execution-closure-schema.ts        |   16 +\n .../opencorvus/src/mission/execution-closure.ts    | 1406 +++++--\n .../opencorvus/src/mission/operator-wake-reason.ts |   14 +\n .../src/mission/process-recovery-facts.ts          |   96 +\n .../opencorvus/src/mission/process-recovery.ts     |  546 ++-\n packages/opencorvus/src/mission/retention-facts.ts |  115 +\n packages/opencorvus/src/mission/retention.ts       |  370 ++\n packages/opencorvus/src/mission/schema.ts          |    2 +-\n packages/opencorvus/src/mission/session.ts         |  191 +-\n packages/opencorvus/src/orchestrator/agent.ts      |  109 +-\n .../src/orchestrator/analyze-intent-tool.ts        |    2 +-\n .../opencorvus/src/orchestrator/architect-stage.ts |   35 +-\n packages/opencorvus/src/orchestrator/build-tool.ts |   13 +-\n .../src/orchestrator/control-message-identity.ts   |   20 +-\n .../src/orchestrator/decision-tool-names.ts        |    3 +-\n .../src/orchestrator/deep-research-stage.ts        |    3 +-\n .../src/orchestrator/delegated-worker-tool.ts      |    2 +-\n .../orchestrator/delivery-slice-contract-tools.ts  |  159 +-\n .../dispatch-adapter-execution-context.ts          |   33 +-\n .../src/orchestrator/dispatch-agent-tool.ts        |  276 +-\n .../src/orchestrator/dispatch-agents-contract.ts   |    1 +\n .../src/orchestrator/dispatch-agents-recovery.ts   |  133 +\n .../src/orchestrator/dispatch-agents-tool.ts       |  329 ++\n .../opencorvus/src/orchestrator/explore-tool.ts    |    2 +-\n .../opencorvus/src/orchestrator/fact-check-tool.ts |    2 +-\n .../src/orchestrator/frontend-design-tool.ts       |    2 +-\n .../src/orchestrator/frontend-research-stage.ts    |    3 +-\n .../src/orchestrator/integrity-review-stage.ts     |    3 +-\n .../src/orchestrator/read-agent-message-tool.ts    |  136 +-\n .../src/orchestrator/requirements-stage.ts         |   19 +-\n .../orchestrator/subagent-cancellation-runtime.ts  |   13 +\n .../src/orchestrator/task-lifecycle-input.ts       |    2 +-\n .../src/orchestrator/task-lifecycle-tools.ts       |   66 +-\n .../src/orchestrator/tool-execution-context.ts     |   12 +\n packages/opencorvus/src/orchestrator/tools.ts      | 1195 ++++--\n .../opencorvus/src/orchestrator/visual-qa-stage.ts |    3 +-\n .../src/orchestrator/workload-analysis-tool.ts     |    2 +-\n packages/opencorvus/src/panel/action-ids.ts        |   90 +\n packages/opencorvus/src/panel/capability.ts        |   86 +-\n packages/opencorvus/src/permission/authority.ts    |  453 ++-\n packages/opencorvus/src/permission/invocation.ts   |    7 +-\n .../opencorvus/src/permission/permission.sql.ts    |   22 +-\n packages/opencorvus/src/plugin/index.ts            |  385 +-\n packages/opencorvus/src/project/delete.ts          |  247 +-\n .../src/project/deletion-cleanup-admission.ts      |    2 +-\n .../opencorvus/src/project/deletion-cleanup.ts     |  519 ++-\n .../opencorvus/src/project/deletion-registry.ts    |   53 +-\n .../opencorvus/src/project/directory-admission.ts  |  167 +-\n .../src/project/global-creation-allocation.ts      |  555 +++\n .../opencorvus/src/project/identity-convergence.ts |   16 +-\n .../opencorvus/src/project/implicit-project.ts     |   18 +-\n packages/opencorvus/src/project/project.sql.ts     |   89 +-\n packages/opencorvus/src/project/project.ts         |  271 +-\n packages/opencorvus/src/project/runtime-paths.ts   |   18 +-\n .../opencorvus/src/project/worktree-deletion.ts    |  321 ++\n .../opencorvus/src/prompt/core/mission-core.txt    |   40 +-\n .../src/prompt/core/orchestrator-core.txt          |   12 +-\n .../fragments/interactive-artifact-guidance.ts     |   32 +-\n .../src/prompt/fragments/task-request-scope.ts     |    2 +-\n packages/opencorvus/src/protocol/delivery.ts       |  675 +++-\n packages/opencorvus/src/protocol/protocol.sql.ts   |   37 +-\n .../opencorvus/src/protocol/scheduler-message.ts   |  401 +-\n packages/opencorvus/src/protocol/schema.ts         |    7 -\n .../opencorvus/src/protocol/session-wake-state.ts  |   20 +\n packages/opencorvus/src/protocol/store.ts          |   95 +-\n packages/opencorvus/src/provider/provider.ts       |   64 +-\n packages/opencorvus/src/question/index.ts          |   40 +-\n packages/opencorvus/src/requirements/agent.ts      |   43 +-\n .../opencorvus/src/requirements/output-tools.ts    |   19 +-\n packages/opencorvus/src/research/agent.ts          |   75 +-\n packages/opencorvus/src/research/output-tools.ts   |   62 +-\n .../src/runtime/durable-execution-capacity.ts      |  208 +\n .../src/runtime/execution-capacity.sql.ts          |   33 +\n .../opencorvus/src/runtime/execution-capacity.ts   |   30 +\n .../src/scheduler/automation-fire-frontier.ts      |  182 +\n .../src/scheduler/automation-projection.ts         | 1045 ++++-\n .../opencorvus/src/scheduler/automation-service.ts | 2127 +++++++---\n .../opencorvus/src/scheduler/automation.sql.ts     |  205 +-\n .../src/scheduler/delayed-wake-schedule.ts         |  102 +-\n .../opencorvus/src/scheduler/event-projection.ts   |  475 ++-\n packages/opencorvus/src/scheduler/event-service.ts |  610 ++-\n packages/opencorvus/src/scheduler/event.sql.ts     |   70 +-\n .../src/scheduler/mission-reservation.ts           |   74 +\n .../src/scheduler/session-delay-admission.ts       |  196 +\n .../opencorvus/src/scheduler/tool-occurrence.ts    |   89 +\n packages/opencorvus/src/scheduler/tool-recovery.ts |  155 +\n packages/opencorvus/src/server/error-handler.ts    |   19 +-\n packages/opencorvus/src/server/error.ts            |   13 +-\n .../opencorvus/src/server/routes/experimental.ts   |    8 +-\n packages/opencorvus/src/server/routes/global.ts    |   64 +-\n packages/opencorvus/src/server/routes/mission.ts   |  257 +-\n .../opencorvus/src/server/routes/orchestrator.ts   |   42 +-\n .../server/routes/right-sidebar-conversation.ts    |   20 +-\n packages/opencorvus/src/server/routes/session.ts   |   33 +-\n packages/opencorvus/src/session/completed-reply.ts |   51 +\n packages/opencorvus/src/session/control.ts         |  220 +-\n .../opencorvus/src/session/deletion-cleanup.ts     |  806 ++++\n packages/opencorvus/src/session/index.ts           |  278 +-\n packages/opencorvus/src/session/loop.ts            | 2074 +++++++---\n packages/opencorvus/src/session/message.ts         |   29 +\n .../src/session/mission-process-recovery-schema.ts |   42 +\n .../src/session/persisted-wake-replay.ts           |    9 +\n .../session/process-execution-interrupted-error.ts |   11 +\n packages/opencorvus/src/session/processor.ts       |   96 +-\n packages/opencorvus/src/session/prompt/owner.ts    |  210 +-\n packages/opencorvus/src/session/prompt/parts.ts    |   21 +-\n packages/opencorvus/src/session/prompt/state.ts    |   34 +-\n .../src/session/provider-activity-facts.ts         |    1 +\n .../src/session/runtime-contract-validation.ts     |   15 +-\n .../opencorvus/src/session/runtime-contract.ts     |  225 +-\n .../opencorvus/src/session/runtime-tool-owner.ts   |  134 +\n packages/opencorvus/src/session/session.sql.ts     |  101 +-\n packages/opencorvus/src/session/status.ts          |    1 +\n packages/opencorvus/src/session/text-mime.ts       |   16 +-\n .../opencorvus/src/session/tool-outcome-facts.ts   |   23 +-\n .../src/session/tool-result-normalization.ts       |    7 +-\n packages/opencorvus/src/session/wake-reason.ts     |   39 +\n packages/opencorvus/src/session/wake.ts            |  179 +-\n packages/opencorvus/src/skill/manager.ts           |   46 +-\n packages/opencorvus/src/skill/mounts.ts            |    3 +\n .../opencorvus/src/status/task-status-snapshot.ts  |    2 +-\n packages/opencorvus/src/storage/db.ts              |  115 +-\n packages/opencorvus/src/storage/ddl.ts             | 3157 ++++++++++++++-\n .../src/storage/fact-kernel-migration.ts           | 1116 ------\n packages/opencorvus/src/storage/mysql-transfer.ts  |  602 ++-\n packages/opencorvus/src/storage/schema-contract.ts |   64 +-\n packages/opencorvus/src/storage/schema.ts          |   46 +-\n .../src/storage/session-prompt-owner-migration.ts  |   20 -\n .../storage/task-creation-identity-validation.ts   |  564 +++\n .../opencorvus/src/task-api/global-task-request.ts |   46 +\n .../opencorvus/src/task-api/global-task-service.ts |  271 +-\n packages/opencorvus/src/task-api/index.ts          | 1501 ++++---\n packages/opencorvus/src/task-api/task-creator.ts   |  147 +-\n packages/opencorvus/src/timeline/order.ts          |    3 +-\n packages/opencorvus/src/tool/batch.ts              |  275 --\n packages/opencorvus/src/tool/batch.txt             |   24 -\n packages/opencorvus/src/tool/capability-catalog.ts |  515 ---\n .../opencorvus/src/tool/capability-inventory.ts    |   19 +\n .../src/tool/capability-runtime-catalog.ts         |  918 +++++\n packages/opencorvus/src/tool/capability-search.ts  |   96 +-\n .../src/tool/control-plane-tool-composition.ts     |    2 +-\n .../src/tool/control-plane-tool-provider.ts        |   16 +-\n packages/opencorvus/src/tool/delegate-agent.ts     |    4 +-\n packages/opencorvus/src/tool/execution-surface.ts  |    4 +\n .../opencorvus/src/tool/expert-squad-author.ts     |   71 +-\n .../tool/expert-squad-feedback-revision-tool.ts    |    2 +-\n packages/opencorvus/src/tool/global-tools.ts       |   30 +-\n packages/opencorvus/src/tool/mission-state.ts      |  467 ++-\n packages/opencorvus/src/tool/panel.ts              |  593 ++-\n .../tool/projected-task-tool-runtime-binding.ts    |   49 +\n .../opencorvus/src/tool/provider-name-authority.ts |   71 +\n .../src/tool/publish-interactive-artifact.ts       |   13 +-\n packages/opencorvus/src/tool/registry.ts           |  152 +-\n .../src/tool/request-orchestrator-decision.ts      |    1 +\n packages/opencorvus/src/tool/schedule.ts           |   87 +-\n packages/opencorvus/src/tool/skill.ts              |    7 -\n .../src/tool/task-tool-execution-scope.ts          |  172 +-\n .../opencorvus/src/tool/task-tool-invocation.ts    |    1 +\n packages/opencorvus/src/tool/tool-id-catalog.ts    |    9 +-\n packages/opencorvus/src/tool/wait-result.ts        |   27 +\n packages/opencorvus/src/tool/wait.ts               |   62 +-\n packages/opencorvus/src/util/base64.ts             |   32 +\n packages/opencorvus/src/util/filesystem.ts         |    6 +-\n packages/opencorvus/src/util/queue.ts              |  118 +\n packages/opencorvus/src/util/rename-no-replace.ts  |   20 +-\n packages/opencorvus/src/util/stream-activity.ts    |   92 +-\n packages/opencorvus/src/visual-qa/agent.ts         |  144 +-\n packages/opencorvus/src/visual-qa/output-tools.ts  |   32 +-\n packages/opencorvus/src/work/harness.ts            |    4 +-\n packages/opencorvus/src/workbench/board.ts         |    3 +-\n packages/opencorvus/src/workspace/lifecycle.ts     |  694 ++++\n packages/opencorvus/src/workspace/workspace.sql.ts |   35 +-\n packages/opencorvus/src/workspace/workspace.ts     |  621 ++-\n packages/opencorvus/src/worktree/index.ts          | 1342 +++++--\n .../src/worktree/ownership-critical-section.ts     |   21 +-\n .../agent-coordination-immutable-facts.test.ts     |  340 ++\n .../agent-runner-fresh-session-authority.test.ts   |   75 +-\n .../opencorvus/test/algorithm-batch-one.test.ts    |  664 ++-\n .../architect-domain-incomplete-settlement.test.ts |   62 +-\n .../test/architecture-index-scope.test.ts          |   38 +\n .../artifact-read-facts-provider-input.test.ts     |  184 +-\n .../opencorvus/test/batch-live-progress.test.ts    |  209 -\n .../test/browser-mcp-node-bundle.test.ts           |   66 +\n .../browser-preview/target-persistence.test.ts     |   91 +-\n .../test/build-terminal-fact-publication.test.ts   |  183 +-\n ...capability-search-processor-idempotency.test.ts |  247 ++\n .../test/capability/catalog-binding.test.ts        | 1124 ++++++\n .../opencorvus/test/capability/catalog.test.ts     |  948 ++++-\n .../capability/native-mcp-search-execution.test.ts |  492 +++\n .../native-mission-transport-base.test.ts          |  976 +++++\n .../projected-mcp-calltime-stale.test.ts           |  290 ++\n .../test/capability/reveal-owner.test.ts           |  829 ++++\n .../test/capability/reveal-receipt.test.ts         |  391 ++\n .../test/capability/runtime-tool-owner.test.ts     |  322 ++\n .../test/capability/skill-reveal.test.ts           |  145 +\n .../structured-output-base-budget.test.ts          |  133 +\n .../capability/task-tool-exact-authority.test.ts   |   49 +\n .../test/capability/tool-definition-budget.test.ts |  484 +++\n .../test/delegated-worker-source-routing.test.ts   |   24 +\n ...ivery-slice-contract-atomic-publication.test.ts |  184 +\n .../destructive-control-event-independence.test.ts |    1 +\n .../test/dispatch-admission-fence.test.ts          |   86 +\n .../test/dispatch-agent-detachment.test.ts         |    2 +-\n .../opencorvus/test/dispatch-agents-tool.test.ts   |  335 ++\n ...dispatch-occurrence-cross-process-claim.test.ts |  372 ++\n .../dispatch-occurrence-recovery-authority.test.ts |   15 +-\n .../test/durable-execution-capacity.test.ts        |   50 +\n .../opencorvus/test/dynamic-e2e-contract.test.ts   |  127 +\n .../test/engine-interaction-recovery.test.ts       | 1265 +++++-\n .../engine-interrupted-session-recovery.test.ts    |    8 +-\n .../opencorvus/test/event-current-frontier.test.ts |  670 ++++\n .../test/event-fire-claim-attempt.test.ts          |    7 +-\n .../evolution-candidate-manifest-surface.test.ts   |   53 +-\n .../test/evolution-lab-package-projection.test.ts  |   49 +-\n .../test/execution-authority-tool-surface.test.ts  |   68 +-\n .../test/execution-cancellation-protocol.test.ts   |   52 +\n .../test/execution-capacity-config.test.ts         |   40 +\n .../test/expert-squad-evolution-mutation.test.ts   |   20 +-\n .../test/expert-squad-feedback-revision.test.ts    |   33 +-\n .../test/expert-squad-manager-cas.test.ts          |   20 +-\n .../test/expert-squad/advanced-package.test.ts     |   49 +-\n .../test/expert-squad/capability-grant-fixture.ts  |   38 +\n .../test/expert-squad/capability-grants.test.ts    |  284 ++\n .../expert-squad/catalog-capability-fixture.ts     |   29 +\n .../test/expert-squad/catalog-index.test.ts        |  206 +-\n .../expert-squad/commercial-legal-package.test.ts  |   24 +-\n .../expert-squad/data-analysis-package.test.ts     |    4 +-\n .../expert-squad/domain-expansion-packages.test.ts |   14 +-\n .../domain-expansion-payload-integration.test.ts   |    4 +-\n .../domain-expansion-production-route-probe.ts     |    5 +-\n .../test/expert-squad/dynamic-package.test.ts      |  554 +--\n .../eighth-domain-expansion-packages.test.ts       |   10 +-\n ...th-domain-expansion-payload-integration.test.ts |    4 +-\n ...ghth-domain-expansion-production-route-probe.ts |    5 +-\n .../equity-research-skill-closure.test.ts          |    5 +-\n .../fifth-domain-expansion-packages.test.ts        |   10 +-\n ...th-domain-expansion-payload-integration.test.ts |    4 +-\n ...ifth-domain-expansion-production-route-probe.ts |    5 +-\n .../fourth-domain-expansion-packages.test.ts       |   10 +-\n ...th-domain-expansion-payload-integration.test.ts |    4 +-\n ...urth-domain-expansion-production-route-probe.ts |    5 +-\n .../expert-squad/frontend-replica-package.test.ts  |    4 +-\n .../expert-squad/growth-discovery-packages.test.ts |    6 +-\n .../expert-squad/hr-operations-package.test.ts     |   22 +-\n .../test/expert-squad/light-package.test.ts        |  569 ++-\n .../ninth-domain-expansion-packages.test.ts        |   10 +-\n ...th-domain-expansion-payload-integration.test.ts |    4 +-\n ...inth-domain-expansion-production-route-probe.ts |    5 +-\n ...ffice-delivery-work-artifact-projection.test.ts |    9 +-\n .../omnichannel-distribution-package.test.ts       |   24 +-\n .../on-demand-payload-production-route-e2e.test.ts |    4 +-\n .../on-demand-payload-production-route-probe.ts    |    7 +-\n .../package-snapshot-publication-process-worker.ts |   31 +\n .../package-snapshot-publication.test.ts           |   63 +-\n .../test/expert-squad/production-route-probe.ts    |   13 +-\n .../random-evolution-e2e-support.test.ts           |    6 +-\n .../expert-squad/research-studio-package.test.ts   |   10 +-\n .../expert-squad/sales-strategy-package.test.ts    |   22 +-\n .../seventh-domain-expansion-packages.test.ts      |   10 +-\n ...th-domain-expansion-payload-integration.test.ts |    4 +-\n ...enth-domain-expansion-production-route-probe.ts |    5 +-\n .../shipped-skill-completeness.test.ts             |    7 +-\n .../sixth-domain-expansion-packages.test.ts        |   10 +-\n ...th-domain-expansion-payload-integration.test.ts |    4 +-\n ...ixth-domain-expansion-production-route-probe.ts |    5 +-\n .../test/expert-squad/squad-sdk-package.test.ts    |   40 +-\n .../swimlane-10-product-video-package.test.ts      |    6 +-\n .../expert-squad/swimlanes-01-03-packages.test.ts  |   14 +-\n .../expert-squad/swimlanes-04-06-packages.test.ts  |   14 +-\n .../expert-squad/swimlanes-07-09-packages.test.ts  |    8 +-\n .../expert-squad/tax-compliance-package.test.ts    |   24 +-\n .../ten-swimlane-payload-integration.test.ts       |   20 +-\n .../tenth-domain-expansion-packages.test.ts        |   10 +-\n ...th-domain-expansion-payload-integration.test.ts |    4 +-\n ...enth-domain-expansion-production-route-probe.ts |    5 +-\n .../third-domain-expansion-packages.test.ts        |   10 +-\n ...rd-domain-expansion-payload-integration.test.ts |    4 +-\n ...hird-domain-expansion-production-route-probe.ts |    5 +-\n .../expert-squad/viral-content-package.test.ts     |   24 +-\n ...fact-check-domain-incomplete-settlement.test.ts |   69 +-\n .../test/fact-kernel-schema-migration.test.ts      |  612 ---\n .../browser-mcp-node-bundle-process-worker.ts      |   33 +\n .../test/fixture/capability-occurrence.ts          |  257 ++\n .../fixture/capability-reveal-process-worker.ts    |  105 +\n .../capability-search-processor-replay-worker.ts   |   95 +\n .../test/fixture/controlled-streaming-provider.ts  |   98 +\n .../opencorvus/test/fixture/conversation-mcp.ts    |   38 +\n packages/opencorvus/test/fixture/db.ts             |    4 -\n .../opencorvus/test/fixture/dispatch-lineage.ts    |  128 +\n .../dispatch-occurrence-claim-process-worker.ts    |  364 ++\n packages/opencorvus/test/fixture/engine-task.ts    |   74 +-\n packages/opencorvus/test/fixture/expert-squad.ts   |    5 +-\n .../fixture/global-chat-start-process-worker.ts    |  125 +-\n .../fixture/global-task-request-process-worker.ts  |  151 +-\n .../test/fixture/goal-workload-process-worker.ts   |   36 +-\n packages/opencorvus/test/fixture/memory.ts         |    8 +-\n ...sion-execution-reconciliation-process-worker.ts |  272 ++\n packages/opencorvus/test/fixture/mission-opened.ts |   66 +\n .../mission-process-recovery-driver-worker.ts      |  278 ++\n .../mission-state-migration-process-worker.ts      |   32 +\n .../test/fixture/mission-state-process-worker.ts   |   59 +\n ...-mission-transport-permission-process-worker.ts |  360 ++\n .../test/fixture/operator-steer-process-worker.ts  |   38 +\n .../test/fixture/panel-creation-process-worker.ts  |  180 +\n .../fixture/provider-capacity-process-worker.ts    |   90 +\n .../opencorvus/test/fixture/runtime-tool-owner.ts  |   38 +\n .../scheduler-busy-session-process-worker.ts       |  149 +\n .../test/fixture/search-native-mcp-server.mjs      |  104 +\n .../session-deletion-cleanup-process-worker.ts     |   69 +\n .../task-creation-channel-process-worker.ts        |  133 +\n .../task-wait-ingress-race-process-worker.ts       |  380 ++\n ...ool-result-control-permission-process-worker.ts |  107 +-\n .../workflow-node-admission-process-worker.ts      |  293 ++\n .../fixture/workspace-lifecycle-process-worker.ts  |   36 +\n .../worktree-registration-process-worker.ts        |   27 +\n ...end-design-domain-incomplete-settlement.test.ts |   14 +-\n .../test/global-chat-start-process.test.ts         |   44 +-\n .../test/global-task-request-replay.test.ts        |  953 +++--\n .../test/goal-workload-coverage-contract.test.ts   |  140 +-\n .../intent-analysis-blocker-settlement.test.ts     |   12 +-\n .../intent-bundle-committed-projection.test.ts     |  140 +\n .../test/interactive-artifact-tool-schema.test.ts  |  142 +\n .../test/mcp-app-lifecycle-owner.test.ts           |  183 +\n .../mcp/browser-configured-declaration.test.ts     |    6 +-\n .../mcp/browser-conversation-ownership.test.ts     |   60 +-\n .../test/mcp/browser-projection-contract.test.ts   |   47 +-\n .../mcp/computer-configured-declaration.test.ts    |   37 +-\n .../opencorvus/test/mcp/computer-contract.test.ts  |  301 +-\n .../test/mcp/durable-oauth-finish.test.ts          |    2 +-\n .../test/mcp/host-session-runtime.test.ts          |  337 +-\n .../opencorvus/test/memory/project-memory.test.ts  |  240 +-\n .../test/mission-durable-activity.test.ts          |  605 ++-\n ...-execution-cross-process-reconciliation.test.ts |  426 ++\n .../test/mission-execution-wake-occurrence.test.ts |  429 ++\n .../test/mission-message-origin-projection.test.ts |   14 +-\n .../test/mission-process-recovery-driver.test.ts   |  653 +++\n .../test/mission-process-recovery.test.ts          |  862 ++--\n .../mission-session-identity-atomicity.test.ts     |   58 +-\n .../test/mission-status-snapshot.test.ts           |    4 +-\n .../mission-task-creation-opened-fence.test.ts     |  527 +++\n .../test/mission-task-duplex-snapshot.test.ts      |  770 ++++\n .../test/orchestrator-dispatch-guidance.test.ts    |   11 +\n .../test/orchestrator-initial-task-render.test.ts  |   27 +-\n .../orchestrator-mission-resume-provenance.test.ts |   21 +-\n ...chestrator-streamed-dispatch-settlement.test.ts |  121 +-\n ...chestrator-terminal-coordination-schema.test.ts |    2 +-\n .../orchestrator-tool-surface-contract.test.ts     |   52 +-\n .../panel-creation-occurrence-recovery.test.ts     |  190 +\n .../test/panel-creation-process-recovery.test.ts   |   72 +\n .../test/panel-mission-terminal-authority.test.ts  |  539 ++-\n .../test/permission-continuation-recovery.test.ts  |   24 +\n .../opencorvus/test/permission-two-mode.test.ts    |  159 +-\n packages/opencorvus/test/plugin-revision.test.ts   |  288 ++\n .../opencorvus/test/process-liveness-owner.test.ts |    2 +-\n .../test/process-recovery-fact-compat.test.ts      |   48 -\n .../test/process-recovery-fact-contract.test.ts    |   29 +\n .../test/process-shutdown-task-lifecycle.test.ts   |  102 +\n .../test/project-directory-and-worktree-gc.test.ts |  950 ++++-\n .../test/project-identity-convergence.test.ts      |   62 +\n .../prompt/interactive-artifact-guidance.test.ts   |   14 +-\n .../test/provider-activity-fact-storage.test.ts    |   17 +-\n .../test/provider-cache-identity.test.ts           |  273 +-\n .../test/provider-tool-name-authority.test.ts      |   88 +\n ...quirements-domain-incomplete-settlement.test.ts |   51 +-\n .../research-domain-incomplete-settlement.test.ts  |    5 +-\n .../test/runtime-execution-settlement.test.ts      |   27 +-\n .../test/runtime-startup-recovery.test.ts          |   60 +\n .../scheduler-busy-session-cross-process.test.ts   |  198 +\n .../test/scheduler-claim-and-fire-identity.test.ts | 1769 +++++++-\n .../test/scheduler-event-durable-fire.test.ts      |  569 ++-\n .../opencorvus/test/scheduler-fact-control.test.ts |   18 +-\n .../scheduler-message-harness-contract.test.ts     |   45 +-\n .../test/scheduler-skill-loading-policy.test.ts    |   40 +\n .../scheduler-task-root-message-schema.test.ts     |  828 +++-\n .../scheduler-task-wait-project-runtime.test.ts    |   52 -\n .../test/scheduler-tool-recovery.test.ts           |  552 +++\n .../test/scheduling-occurrence-ddl-lineage.test.ts | 1086 +++++\n .../server/conversation-capability-route.test.ts   |   18 +-\n .../test/server/global-chat-start.test.ts          |  213 +-\n .../session-prompt-cross-process-owner.test.ts     |  142 +-\n .../session-deletion-cleanup-cross-process.test.ts |  100 +\n .../test/session-deletion-cleanup.test.ts          | 1203 ++++++\n .../test/session-loop-provider-tool-input.test.ts  |  162 +-\n ...session-loop-tool-authority-integration.test.ts |  773 +++-\n .../session-prompt-owner-schema-migration.test.ts  |   63 -\n .../opencorvus/test/session-tree-bounded.test.ts   |   82 +\n .../session/processor-llm-activity-retry.test.ts   |   16 +\n .../session-loop-execution-occurrence.test.ts      |   17 +\n .../test/stage-tool-materializer.test.ts           |    8 +-\n .../test/storage/schema-contract.test.ts           |  639 ++-\n .../opencorvus/test/stream-activity-abort.test.ts  |   17 +-\n .../task-artifact-git-commit-publication.test.ts   |   23 +-\n .../test/task-control-abandoned-dispatch.test.ts   | 2663 ++++++++++++-\n .../task-control-cancellation-convergence.test.ts  |  120 +\n .../task-control-cross-process-dispatch.test.ts    |  581 ++-\n .../test/task-control-integrity-blocked.test.ts    |   55 +-\n .../opencorvus/test/task-control-liveness.test.ts  |  621 ++-\n .../test/task-control-reconciliation.test.ts       |  881 +++-\n .../test/task-control-sweep-scope.test.ts          |  127 +-\n .../test/task-creation-atomic-root-session.test.ts |   26 +\n .../task-creation-channel-cross-process.test.ts    |  121 +\n .../test/task-creation-claim-intersection.test.ts  |  231 ++\n .../test/task-creation-tool-lineage.test.ts        |  342 ++\n .../test/task-package-revision-binding.test.ts     |   65 +-\n .../test/task-root-decision-repair.test.ts         |   52 -\n .../test/task-root-ingress-reducer.test.ts         |   13 +\n .../test/task-terminal-artifact-closure.test.ts    |  102 +-\n .../test/task-wait-cross-process-race.test.ts      |  284 ++\n .../test/task-wait-current-prompt.test.ts          |  275 ++\n .../test/task-wait-fire-identity.test.ts           | 1381 +++++--\n .../test/tool-decision-coordination.test.ts        |    8 +\n .../test/tool-result-control-protocol.test.ts      | 1878 +++++++--\n .../test/visual-qa-turn-graph-commit.test.ts       |    7 +-\n .../opencorvus/test/work-conserving-queue.test.ts  |   48 +\n .../workflow-node-cross-process-admission.test.ts  |  207 +\n .../workflow-node-occurrence-authority.test.ts     |   30 +-\n .../opencorvus/test/workspace-lifecycle.test.ts    |  899 +++++\n packages/overlay/package.json                      |    2 +-\n packages/overlay/src-tauri/Cargo.lock              |    2 +-\n packages/overlay/src-tauri/Cargo.toml              |    2 +-\n packages/overlay/src-tauri/tauri.conf.json         |    4 +-\n packages/overlay/src/components/Card.tsx           |    9 +-\n packages/overlay/src/components/ChatBubble.tsx     |   19 +-\n .../overlay/src/components/OperatorSteerBox.tsx    |  117 +-\n .../src/components/settings/ExpertSquadPanel.tsx   |  125 +-\n packages/overlay/src/services/task.ts              |    3 +-\n packages/plugin/package.json                       |    3 +-\n .../plugin/src/expert-squad-evolution-integrity.ts |   98 +-\n packages/sdk/js/package.json                       |   12 +-\n packages/sdk/js/src/expert-squad-authoring.ts      |   63 +-\n ...-manifest-v1.ts => expert-squad-manifest-v2.ts} |  123 +-\n packages/sdk/js/src/gen/sdk.gen.ts                 |  127 +-\n packages/sdk/js/src/gen/types.gen.ts               |  647 ++-\n .../js/test/expert-squad-authoring-cleanup.test.ts |   56 +-\n .../sdk/js/test/expert-squad-authoring.test.ts     |   43 +-\n .../js/test/expert-squad-topology-analysis.test.ts |   29 +-\n packages/sdk/js/test/product-pillar.test.ts        |    2 +-\n .../repository-squad-fact-turn-calibration.test.ts |    6 +-\n .../sdk/js/test/research-studio-authoring.test.ts  |   18 +-\n .../sdk/js/test/review-debug-collaboration.test.ts |    6 +-\n packages/sdk/openapi.json                          | 2485 +++++++-----\n packages/transport-protocol/package.json           |    2 +-\n packages/util/package.json                         |    2 +-\n .../ref.ts => util/src/capability-ref.ts}          |   26 +-\n packages/web/package.json                          |    1 +\n packages/web/src/content/docs/agents.mdx           |   14 +-\n packages/web/src/content/docs/reference/api.mdx    |   31 +-\n packages/web/src/content/docs/reference/sdk.mdx    |    4 +-\n packages/web/src/content/docs/zh-cn/agents.mdx     |   14 +-\n .../web/src/content/docs/zh-cn/reference/api.mdx   |   31 +-\n .../web/src/content/docs/zh-cn/reference/sdk.mdx   |    4 +-\n packages/web/src/lib/expert-squad-facts.ts         |   54 +-\n script/package-build-environment.ts                |   26 +\n script/package-gui-installer-matrix.test.ts        |   28 +\n script/package-gui-installer-matrix.ts             |   28 +-\n script/package-native-binary.test.ts               |   13 +-\n script/package-native-binary.ts                    |    8 +-\n script/release-version.ts                          |   13 +-\n script/sync-version.test.ts                        |   14 +-\n script/sync-version.ts                             |   13 +-\n specs/README.md                                    |   33 +-\n .../b2-current-schema-operator-steer-accepted.jpg  |  Bin 0 -> 100643 bytes\n .../2026-09/b2-current-schema-worker-page.jpg      |  Bin 0 -> 45987 bytes\n .../2026-09/b2-operator-steer-retry-accepted.jpg   |  Bin 0 -> 64461 bytes\n specs/current/architecture/02-data.md              |  112 +-\n specs/current/architecture/03-control.md           |   60 +-\n specs/current/architecture/04-extensions.md        |   79 +-\n specs/current/architecture/05-config.md            |   10 +-\n specs/current/architecture/06-provider.md          |   16 +-\n specs/current/architecture/07-panel.md             |   55 +-\n .../architecture/17-code-work-agent-platform.md    |  201 +-\n specs/current/architecture/README.md               |   13 +-\n .../architecture/capability-search-runtime.md      |  251 ++\n specs/current/architecture/project-memory.md       |    8 +\n specs/current/architecture/security-permission.md  |    2 +-\n .../architecture/server-runtime-readiness.md       |   14 +-\n specs/current/architecture/task-control-plane.md   |  152 +-\n .../current/architecture/task-runtime-directory.md |    5 +\n .../2026-08/2026-08-29-v0.0.56-beta-release.md     |    2 +\n ...ynamic-frontier-reliability-and-token-budget.md |  193 +\n ...6-08-30-light-consulting-runtime-remediation.md |  990 +++++\n .../2026-08-30-scheduling-algorithm-razor-audit.md |  605 +++\n ...26-08-30-scheduling-architecture-remediation.md |  891 +++++\n ...30-search-native-capability-harness-refactor.md |  805 ++++\n ...2026-08-30-search-native-capability-phase-a1.md |  163 +\n ...2026-08-30-search-native-capability-phase-a2.md |  223 ++\n .../2026-08-30-search-native-capability-phase-b.md |  224 ++\n ...2026-08-30-search-native-capability-phase-cd.md |  214 +\n ...6-08-31-scheduled-busy-occurrence-e2e-repair.md |  122 +\n specs/records/2026-08/README.md                    |   13 +\n ...026-09-01-scheduling-razor-remediation-cut-8.md | 4213 ++++++++++++++++++++\n ...26-09-02-scheduling-razor-remediation-cut-8c.md |  211 +\n .../2026-09/2026-09-05-v0.0.59-beta-release.md     |  112 +\n specs/records/2026-09/README.md                    |    5 +\n templates/portable-expert-squad-template/README.md |    4 +-\n .../authoring-skill/SKILL.md                       |    8 +-\n .../references/authoring-quality-method.md         |    2 +-\n .../references/definition-contract.json            |   31 +-\n .../package/README.md                              |    2 +-\n .../package/expert-squad.jsonc                     |  199 +-\n 801 files changed, 107976 insertions(+), 33692 deletions(-)"
+}
