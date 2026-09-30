@@ -1,0 +1,790 @@
+{
+  "version": "0.1.15",
+  "source": "dd999804c984360146231386550c2cf17e7ab0e0",
+  "tag": "v0.1.15",
+  "previousSource": "b9a72f4134de3a582dcf55cb09b6c1b299f8b3d1",
+  "sourceDate": "2026-09-28T17:48:04+08:00",
+  "commits": [
+    {
+      "sha": "dd999804c984360146231386550c2cf17e7ab0e0",
+      "date": "2026-09-28T17:48:04+08:00",
+      "subject": "Prepare v0.1.15 native and website release"
+    },
+    {
+      "sha": "6d3b211ce86cde927248f988abcad519632b0397",
+      "date": "2026-09-28T01:15:16+08:00",
+      "subject": "Record original four-arm retry scores and early stop"
+    },
+    {
+      "sha": "8c7bc21c549ba6328dd5877cdec9c36237e894b7",
+      "date": "2026-09-28T00:40:31+08:00",
+      "subject": "Accept Inspect CLI parsed clock in AutomationBench task"
+    },
+    {
+      "sha": "6b7180c20f2bbee8efc24c66cab3a50eb7a4e5b5",
+      "date": "2026-09-28T00:29:21+08:00",
+      "subject": "Register one fresh four-arm AutomationBench retry"
+    },
+    {
+      "sha": "e3880e9a83af6009ba8dd571ae1d0d5f265a3dc6",
+      "date": "2026-09-27T23:10:50+08:00",
+      "subject": "Correct supervision root-cause claims after independent review"
+    },
+    {
+      "sha": "1ee4424026dceda0f69f1977041dcb69c776c1f8",
+      "date": "2026-09-27T22:58:53+08:00",
+      "subject": "Stop carrying stated unknowns forward unchecked in template squads"
+    },
+    {
+      "sha": "f4309419078ef5aac472bd754b2dda5f41d8bc1c",
+      "date": "2026-09-27T21:40:17+08:00",
+      "subject": "Withdraw broad mechanism inventory as an implementation plan"
+    },
+    {
+      "sha": "5c2be19c4924450322eb44912b4cff2af6d695e0",
+      "date": "2026-09-27T21:12:32+08:00",
+      "subject": "Consolidate supervision mechanism review and coordinated repair plan"
+    },
+    {
+      "sha": "1eb20fc0c05c0f0882222aa25fbc9b881a308993",
+      "date": "2026-09-27T19:23:39+08:00",
+      "subject": "Unify data-analysis publication arguments in one artifact"
+    },
+    {
+      "sha": "af1b41811ac614ef71e2835c67eb75e68874fe72",
+      "date": "2026-09-27T19:00:51+08:00",
+      "subject": "Record reviewer evidence-standard observation result"
+    },
+    {
+      "sha": "14574871a4c694c235232f6a5e35f21912db18b2",
+      "date": "2026-09-27T18:08:14+08:00",
+      "subject": "Register one reviewer evidence-standard observation"
+    },
+    {
+      "sha": "2e0da6b657d082fbd8d783415a4b0bcaafc8bcc4",
+      "date": "2026-09-27T17:20:59+08:00",
+      "subject": "Record team feedback repair and missed closure interpretation"
+    },
+    {
+      "sha": "a6ea550b8c50022036fdd72305884ad73b1f7127",
+      "date": "2026-09-27T15:50:41+08:00",
+      "subject": "Register one complete team feedback observation"
+    },
+    {
+      "sha": "1446e775578bb1fd2cd87ff47e09588f8448486c",
+      "date": "2026-09-27T15:35:55+08:00",
+      "subject": "Clarify data-analysis feedback and current-report review"
+    },
+    {
+      "sha": "c40e3e9c25ba2d3c867df840b1954d0e4bd5e4fc",
+      "date": "2026-09-27T15:20:24+08:00",
+      "subject": "docs: map the existing team feedback path and review scopes"
+    },
+    {
+      "sha": "8abcb06ff0b22927acd3e7a73b49a0aa44f8ed1f",
+      "date": "2026-09-27T15:09:59+08:00",
+      "subject": "docs: recalibrate team orchestration against Codex and ZCode"
+    },
+    {
+      "sha": "b4b239fd9b8a37ee368faf775c7d26cd3ec785c8",
+      "date": "2026-09-27T14:58:33+08:00",
+      "subject": "docs: record partial independent business-review result"
+    },
+    {
+      "sha": "3add75a7711f0285b3066fea804e5b8fb06804c8",
+      "date": "2026-09-27T14:52:18+08:00",
+      "subject": "test: restrict review integrity checks to original immutable evidence"
+    },
+    {
+      "sha": "e37b622f627b0e82e576354c4ba02e0bdaf3d1bd",
+      "date": "2026-09-27T14:51:22+08:00",
+      "subject": "test: register one independent review of retained business evidence"
+    },
+    {
+      "sha": "a0ab608787c6d258700cbd978c528bc8ef5ff364",
+      "date": "2026-09-27T14:34:16+08:00",
+      "subject": "fix: enforce declared package artifact publisher authority"
+    },
+    {
+      "sha": "df8ef2d02226e88e6d196035e9785343f1dd1582",
+      "date": "2026-09-27T13:47:50+08:00",
+      "subject": "fix: wait for authoritative Mission acceptance and final response"
+    },
+    {
+      "sha": "08b57d19107f68f80cb130cc7a69c56167b367dc",
+      "date": "2026-09-27T13:26:19+08:00",
+      "subject": "fix: expose exact artifact search scope and inspection diagnostics"
+    },
+    {
+      "sha": "0ab857369b6296dca2b3c5dae2f12c68eb86c182",
+      "date": "2026-09-27T12:00:22+08:00",
+      "subject": "fix: resume a settled diagnostic initialization without replacing evidence"
+    },
+    {
+      "sha": "1094abb87870559c66a63a7f596e18b66af7fd11",
+      "date": "2026-09-27T11:48:55+08:00",
+      "subject": "fix: preserve complete model catalog for isolated diagnostic"
+    },
+    {
+      "sha": "594670201bc477ef107eeee7f3acf6327ee6c9f5",
+      "date": "2026-09-27T11:37:17+08:00",
+      "subject": "feat(evolution): add isolated fixed diagnostic entry"
+    },
+    {
+      "sha": "75de77a807a237524a3c7a6a690c1b2424eb853c",
+      "date": "2026-09-27T11:14:02+08:00",
+      "subject": "test(evolution): freeze diagnostic inputs and verify execution directories"
+    },
+    {
+      "sha": "d30935ca553b68bc068e31ff5ae6d863ffdd1065",
+      "date": "2026-09-27T10:59:28+08:00",
+      "subject": "fix(evolution): preserve undeclared monetary ceilings"
+    },
+    {
+      "sha": "f99d76bc6304b0986e1f7e87b566147711706dd2",
+      "date": "2026-09-27T10:38:25+08:00",
+      "subject": "fix(evolution): await native snapshot validation across tool RPC"
+    },
+    {
+      "sha": "ba29d3545bd979ea525f64f929f538df6e4aaa76",
+      "date": "2026-09-27T10:19:25+08:00",
+      "subject": "fix(evolution): assign measurement recovery to the evaluator"
+    },
+    {
+      "sha": "2e4d6364bb890e37958881b2f5a9e4e6dabf83b4",
+      "date": "2026-09-27T10:13:21+08:00",
+      "subject": "fix(evolution): account for unpublished native measurements"
+    },
+    {
+      "sha": "0caab3dea9cec23f9dcc88c4e9bfd163e435c73c",
+      "date": "2026-09-27T09:33:48+08:00",
+      "subject": "feat(metrics): expose the exact recorded tool request"
+    },
+    {
+      "sha": "a27b6a2de5a49a5732d24a3ab8b80695c6fdd313",
+      "date": "2026-09-27T09:16:21+08:00",
+      "subject": "fix(evolution): expose completed metric receipts for recovery"
+    },
+    {
+      "sha": "a98e58269c38afdf8227ad73d711e50f51815854",
+      "date": "2026-09-27T08:50:44+08:00",
+      "subject": "fix(evolution): consume complete published measurement cohorts"
+    },
+    {
+      "sha": "b31dada625533000255a62f98c0a9603a9e928ec",
+      "date": "2026-09-27T07:28:03+08:00",
+      "subject": "fix(evolution): align prompts with measurement identity and evidence sets"
+    },
+    {
+      "sha": "2301c65b9d858fde931f5458c77af09dd928522c",
+      "date": "2026-09-27T07:09:53+08:00",
+      "subject": "fix(evolution): identify measurement aliases by native scorer results"
+    },
+    {
+      "sha": "6cbf9b21ba2548eff3c13f403baa7ab8cfe5bcc1",
+      "date": "2026-09-27T06:41:17+08:00",
+      "subject": "fix(evolution): count each Trial in one comparison slot"
+    },
+    {
+      "sha": "0e292128e9bf3b00593190fd74ef7195cdc19ee1",
+      "date": "2026-09-27T06:15:51+08:00",
+      "subject": "fix(evolution): preserve exact comparison calculation inputs"
+    },
+    {
+      "sha": "d32af8fcc59ea61158a0fa2e17502b634f442173",
+      "date": "2026-09-27T05:48:59+08:00",
+      "subject": "fix(evolution): resolve imported evidence in one Task reference context"
+    },
+    {
+      "sha": "8cd519bc038ec24eae49a6359e28347f8f31929b",
+      "date": "2026-09-27T04:59:50+08:00",
+      "subject": "fix(artifacts): preserve source lineage across repeated Task imports"
+    },
+    {
+      "sha": "b1df7e0eb01b17ce84501ff589f6a0ba5d1c6714",
+      "date": "2026-09-27T04:33:49+08:00",
+      "subject": "fix(metrics): preserve a single Tool origin per evaluation receipt"
+    },
+    {
+      "sha": "673b3a22788b40ea043a48d0328dc998b8e1d9bf",
+      "date": "2026-09-27T04:09:26+08:00",
+      "subject": "fix(metrics): authenticate evaluation receipts against recorded results"
+    },
+    {
+      "sha": "bc76455a0dca5ef8bfc3d029be2439de4da44b4d",
+      "date": "2026-09-27T03:36:29+08:00",
+      "subject": "fix(metrics): evaluate frozen Trial subjects through exact resources"
+    },
+    {
+      "sha": "2c6b507d412bc5f4a69dcd98a3c952862a513c73",
+      "date": "2026-09-27T02:36:50+08:00",
+      "subject": "Verify frozen Trial materialization with the real metric executor"
+    },
+    {
+      "sha": "4e27605081c6af24448337f1ee09998a8caa3dac",
+      "date": "2026-09-27T02:31:28+08:00",
+      "subject": "Define immutable metric subject ownership and reuse boundaries"
+    },
+    {
+      "sha": "647e718c344d691ace15f6fbfe4156fd70a155e8",
+      "date": "2026-09-27T02:23:32+08:00",
+      "subject": "Record real Trial metric subject mismatch and repair boundary"
+    },
+    {
+      "sha": "b12a09694b40bdea463fac74380b6673a8aff928",
+      "date": "2026-09-27T02:16:45+08:00",
+      "subject": "Freeze Trial usage in the canonical run evidence snapshot"
+    },
+    {
+      "sha": "76d7b4d8c4ee758cea5bd938036fc7a74d452b68",
+      "date": "2026-09-27T01:49:16+08:00",
+      "subject": "Close Review evidence across exact measurement publication aliases"
+    },
+    {
+      "sha": "62a38d0e91b9fcbf11a151dd3ab5a8f2b9d79824",
+      "date": "2026-09-27T01:27:20+08:00",
+      "subject": "Distinguish identical measurement aliases from conflicting observations"
+    },
+    {
+      "sha": "75086b27a017a9f408be056da1cefaa185f83189",
+      "date": "2026-09-27T01:04:07+08:00",
+      "subject": "Recheck current Review evidence at evolution promotion commit"
+    },
+    {
+      "sha": "ea67e623e57882489014d6c874237072ae23e893",
+      "date": "2026-09-27T00:42:13+08:00",
+      "subject": "Discover complete Review evidence and preserve explicit revisions"
+    },
+    {
+      "sha": "ce3788b5152e55ad724a6cab8b123cf867cedc27",
+      "date": "2026-09-27T00:05:13+08:00",
+      "subject": "Record H-B exposure boundary and unchanged business outcome"
+    },
+    {
+      "sha": "b9e1743fb7b118b55459b783d1ae1ecf3ead406e",
+      "date": "2026-09-26T23:40:21+08:00",
+      "subject": "Record H-B execution preparation and frozen-run boundaries"
+    },
+    {
+      "sha": "13ca6344b746a689a5a7fb1162d42af1f2d973fa",
+      "date": "2026-09-26T23:38:21+08:00",
+      "subject": "Stamp comparison recommendations from authoritative predecessor evidence"
+    },
+    {
+      "sha": "e3910e401711c927888be4cd9bca8d0729be2950",
+      "date": "2026-09-26T23:17:22+08:00",
+      "subject": "Separate Task observation values from lifecycle reads"
+    },
+    {
+      "sha": "9010d5d7e4c109a7f2382d455402d233e9f25165",
+      "date": "2026-09-26T22:54:11+08:00",
+      "subject": "Preserve Opus continuation designs and verified delivery blockers"
+    },
+    {
+      "sha": "3d2c5283d949fa7102ed798726bb1c747fd80329",
+      "date": "2026-09-26T22:35:33+08:00",
+      "subject": "Synchronize supervision tool and API contract projections"
+    },
+    {
+      "sha": "4ae54dbe378796986e1eb17e5248d336ea41ac69",
+      "date": "2026-09-26T21:49:06+08:00",
+      "subject": "Restore LF endings changed by automated checkpoint 2a55323e"
+    },
+    {
+      "sha": "5bd440ea5a696f4ac03dfa259e5868b87a20a786",
+      "date": "2026-09-26T19:33:11+08:00",
+      "subject": "Record Opus global resolution plan and quota checkpoint"
+    },
+    {
+      "sha": "6f93d3f89877edeb35f2ca24af5a4c3ab389f84b",
+      "date": "2026-09-26T17:02:22+08:00",
+      "subject": "Report auditor-declared unobserved review dimensions in evolution comparisons"
+    },
+    {
+      "sha": "7955e02f2bfdbc5fb663b156c308ef7f3bba6ef7",
+      "date": "2026-09-26T12:23:44+08:00",
+      "subject": "Stamp Trial run facts from the usage ledger instead of Evaluator claims"
+    },
+    {
+      "sha": "23bb9386ee2b2c876c88154fb738dfebff9a3f95",
+      "date": "2026-09-26T08:34:49+08:00",
+      "subject": "Treat unavailable Trial outcomes as inconclusive in evolution comparisons"
+    },
+    {
+      "sha": "4a57f0f91daa96472dfa22c6360b4068a8c0bb5c",
+      "date": "2026-09-25T23:18:01+08:00",
+      "subject": "Bound source discovery noise and judgment failure"
+    },
+    {
+      "sha": "e2a31895a9c7147b92025908a111fb8b62a6f66d",
+      "date": "2026-09-25T23:06:55+08:00",
+      "subject": "Update mechanism decision after expectation-first result"
+    },
+    {
+      "sha": "f9fbff717b91adaf01298cc648454a596f0c466b",
+      "date": "2026-09-25T23:05:53+08:00",
+      "subject": "Document outgoing evidence for failed expectation-first repair"
+    },
+    {
+      "sha": "b7ddcf8513d99a31ed102ef07034b30198d2e1b9",
+      "date": "2026-09-25T23:03:26+08:00",
+      "subject": "Record expectation-first business repair diagnosis"
+    },
+    {
+      "sha": "0a8780f3173972b6bce5f3ef54195e91c3477dd5",
+      "date": "2026-09-25T22:33:01+08:00",
+      "subject": "Preregister one expectation-before-execution diagnosis"
+    },
+    {
+      "sha": "677fa71130500c070eb9d7aa211cd1b252f06332",
+      "date": "2026-09-25T22:24:15+08:00",
+      "subject": "Specify and check expectation-first workflow without model execution"
+    },
+    {
+      "sha": "d38291949f119914534dea44b75c16f1dd324344",
+      "date": "2026-09-25T21:54:05+08:00",
+      "subject": "Consolidate cross-trajectory mechanism limits and research choice"
+    },
+    {
+      "sha": "4396553c44af585425327f79f9d12c5d2ff9b11e",
+      "date": "2026-09-25T21:45:33+08:00",
+      "subject": "Record failed fixed-state repair and method-handoff limits"
+    },
+    {
+      "sha": "8560c039c7830f705b89398c2f098da24f16453a",
+      "date": "2026-09-25T21:15:43+08:00",
+      "subject": "Register isolated recovery of the zero-sample repair startup"
+    },
+    {
+      "sha": "9eee9b1eb0ea850cb33260a16a3651e5c2350ab1",
+      "date": "2026-09-25T21:09:57+08:00",
+      "subject": "Register native Inspect solvers with frozen business time"
+    },
+    {
+      "sha": "d24c215c27a6a56cc03e80f65929815edfd7b5a6",
+      "date": "2026-09-25T20:57:14+08:00",
+      "subject": "Prepare a single attributed business repair diagnosis"
+    },
+    {
+      "sha": "d5871ffd6a54dd11b2d5f9e0a66ceec0a121a58c",
+      "date": "2026-09-25T20:38:55+08:00",
+      "subject": "Share simulated API state across official and development environments"
+    },
+    {
+      "sha": "ba7f2c353e26864b2a9d13499221f444d5599429",
+      "date": "2026-09-25T20:20:41+08:00",
+      "subject": "Bound fixed-state business repair design and verifier identifiability"
+    },
+    {
+      "sha": "e90bc09bcdb20b5241f01aafb16c80a4d85094c9",
+      "date": "2026-09-25T20:05:38+08:00",
+      "subject": "Bound archived review inputs and native verifier feasibility"
+    },
+    {
+      "sha": "ba89e5cb5ebe0c98100b23315409a21be3007e90",
+      "date": "2026-09-25T20:03:10+08:00",
+      "subject": "Freeze AutomationBench business clock across input world and replay"
+    },
+    {
+      "sha": "a550f822db182a36b010a588aa2dc49acaef4d17",
+      "date": "2026-09-25T19:48:23+08:00",
+      "subject": "Record method handoff outcomes without claiming correction gains"
+    },
+    {
+      "sha": "fe233643e8bfbea3cd46dc81ed6123fec5720c84",
+      "date": "2026-09-25T19:13:46+08:00",
+      "subject": "Record verifier methods before comparing business outcomes"
+    },
+    {
+      "sha": "ecd105292c7d9d5006d928da80dbdc6cb68c1cc3",
+      "date": "2026-09-25T19:05:20+08:00",
+      "subject": "Specify a single method-first verification intervention"
+    },
+    {
+      "sha": "64c441821f5c8635e6164a6bb1fe8790e7be7a94",
+      "date": "2026-09-25T18:53:25+08:00",
+      "subject": "Observe registered evidence in outgoing Provider inputs"
+    },
+    {
+      "sha": "50dcb47a2cb0db856f809907cf17acb1c21dde94",
+      "date": "2026-09-25T17:57:58+08:00",
+      "subject": "Apply Mission acceptance extensions at the root input lease"
+    },
+    {
+      "sha": "b1bfe19ed9d758df3f33946efd3296fc0a7ee9d8",
+      "date": "2026-09-25T17:14:20+08:00",
+      "subject": "Separate input settlement from open acceptance obligations"
+    },
+    {
+      "sha": "cb0c4857c8df39447dc0438236a8fc10a39923f4",
+      "date": "2026-09-25T16:57:52+08:00",
+      "subject": "Restore Mission acceptance resume identity from durable ingress receipts"
+    },
+    {
+      "sha": "bf4d768c1ba353bbb5e0260703c2206e1ec2e97e",
+      "date": "2026-09-25T16:45:04+08:00",
+      "subject": "Preserve unaffected open criteria in evidenced acceptance revisions"
+    },
+    {
+      "sha": "373f4169024e93a00b76649471397b85be9b6b4e",
+      "date": "2026-09-25T16:34:39+08:00",
+      "subject": "Allow Mission to inspect active Task artifacts with occurrence-bound evidence"
+    },
+    {
+      "sha": "283f392a94467c87c50f2b29ed22f847c230b406",
+      "date": "2026-09-25T15:57:44+08:00",
+      "subject": "Reproduce active Mission repair review boundaries"
+    },
+    {
+      "sha": "c7f5f16496a86d52cbefd5b23911302eb8dc3b4e",
+      "date": "2026-09-25T15:43:47+08:00",
+      "subject": "Separate repair scope from acceptance evidence judgment"
+    },
+    {
+      "sha": "35af55444aea47b4a68c781bcf58fecb1cf8c8b6",
+      "date": "2026-09-25T15:32:10+08:00",
+      "subject": "Audit acceptance handoffs with explicit counterexamples"
+    },
+    {
+      "sha": "c1b67734c6217db4d2bf9a4980d66a59184846d5",
+      "date": "2026-09-25T15:03:34+08:00",
+      "subject": "Continue global acceptance mechanism audit after failed probe"
+    },
+    {
+      "sha": "a4669013770f6aab59f2e40329a8bce02ee312f3",
+      "date": "2026-09-25T14:32:41+08:00",
+      "subject": "Record Luna Mission false acceptance and close causal probe"
+    },
+    {
+      "sha": "56758d7fd7076b2cc60e04f8a2842d1f8a080924",
+      "date": "2026-09-25T14:03:21+08:00",
+      "subject": "Switch bounded Mission diagnostic back to Luna"
+    },
+    {
+      "sha": "49f145e11729c3d7da458ec6a3cbb5a5ae979961",
+      "date": "2026-09-25T13:48:57+08:00",
+      "subject": "Record cross-case feedback audit and bounded Mission probe"
+    },
+    {
+      "sha": "38757446198f0cfe93ab4fbb26d31490de65f200",
+      "date": "2026-09-25T13:36:45+08:00",
+      "subject": "Honor blocking integrity findings in evolution comparisons"
+    },
+    {
+      "sha": "7633774407af5e8c4c8c6c310fb8a28cd2a5df84",
+      "date": "2026-09-25T13:10:23+08:00",
+      "subject": "Plan evidence-led unattended supervision iteration"
+    },
+    {
+      "sha": "81d4bf4ed5a313f16cb8aca278f2fbd2260ee029",
+      "date": "2026-09-25T12:34:12+08:00",
+      "subject": "Stop Sol trial and record evidence-based retrospective"
+    },
+    {
+      "sha": "240b52b69d24afaa443c8544ceada7b7a4176632",
+      "date": "2026-09-25T11:50:09+08:00",
+      "subject": "Run factorial trial with an exact Sol model and frozen squads"
+    },
+    {
+      "sha": "24c8f194ec5667e7173da07dafdcd89c8d3ac312",
+      "date": "2026-09-25T11:40:01+08:00",
+      "subject": "Record independent eligibility checker result and rubric ambiguity"
+    },
+    {
+      "sha": "354a64ff14987f71591e772d4e10c97642ce4447",
+      "date": "2026-09-25T11:28:54+08:00",
+      "subject": "Check eligibility before AutomationBench business writes"
+    },
+    {
+      "sha": "755b064ab332d24e91120164eeb8677e67afe0f1",
+      "date": "2026-09-25T11:07:19+08:00",
+      "subject": "Close AutomationBench computed sources and stop severe paired loss"
+    },
+    {
+      "sha": "890a78c5f32589dd1459587642ed40932359b1f1",
+      "date": "2026-09-25T09:48:24+08:00",
+      "subject": "Stop factorial trials on preregistered paired regression"
+    },
+    {
+      "sha": "cbd1e32e3da194fd21b7253b3e837a60d52014df",
+      "date": "2026-09-25T09:33:56+08:00",
+      "subject": "Record validated guideline probe and next paired trial gate"
+    },
+    {
+      "sha": "c2a6c5b38faee0de1e2ae3c1140262126c5c87d4",
+      "date": "2026-09-25T09:23:04+08:00",
+      "subject": "Search current workflow guidance before implicit process decisions"
+    },
+    {
+      "sha": "b4fb839aa5f9fab588b1afb16f29d8227b0e818e",
+      "date": "2026-09-25T09:09:46+08:00",
+      "subject": "Project complete bounded causal Tool references to Task reviewers"
+    },
+    {
+      "sha": "dc95547e2d0e07639c5b0dd7c6b9b65aba11fa28",
+      "date": "2026-09-25T08:25:33+08:00",
+      "subject": "Record source catalog diagnostic and validation limits"
+    },
+    {
+      "sha": "26cf3d450ad5c32942d3870c7f69863e5403ce2d",
+      "date": "2026-09-25T08:24:56+08:00",
+      "subject": "Preserve corrective source chain in AutomationBench audit handoffs"
+    },
+    {
+      "sha": "fcfcfdd3fa27e577bce12cceb5577ed0053546a3",
+      "date": "2026-09-25T08:10:11+08:00",
+      "subject": "Expose official API service catalog to AutomationBench agents"
+    },
+    {
+      "sha": "a6d33a89a6d3dbed27eb0f7e9485f11c2710f63a",
+      "date": "2026-09-25T08:10:03+08:00",
+      "subject": "Settle pending Question publications before protocol shutdown"
+    },
+    {
+      "sha": "bac17bdd6301e929d6c97502fb7f804276555ca4",
+      "date": "2026-09-25T06:51:25+08:00",
+      "subject": "Retain known AutomationBench squad after failed repairs"
+    },
+    {
+      "sha": "58e102f69a88f14ec0394743b07d9b05d3642078",
+      "date": "2026-09-25T06:27:32+08:00",
+      "subject": "Search authoritative source classes before AutomationBench writes"
+    },
+    {
+      "sha": "c7a023ee8079f8be6d36234fa3cd78ecf01b4c54",
+      "date": "2026-09-25T06:10:22+08:00",
+      "subject": "Review AutomationBench sources before business mutations"
+    },
+    {
+      "sha": "4629d6c18171b71be1b3f2d54f8354d69222e2bb",
+      "date": "2026-09-25T05:55:21+08:00",
+      "subject": "Reconcile source precedence in AutomationBench squad"
+    },
+    {
+      "sha": "82c78079e9d96c8aa87cf13f95dd6592d5dc94c7",
+      "date": "2026-09-25T05:45:24+08:00",
+      "subject": "Document formal-6 regression mechanism audit"
+    },
+    {
+      "sha": "af5213a27464b11dfe5728d7fc6f94a0b37dc930",
+      "date": "2026-09-25T03:53:53+08:00",
+      "subject": "Initialize Mission benchmark projects and preserve settled outcomes"
+    },
+    {
+      "sha": "d362e9a94bdcf0d430a7ba2a11a5e460000f6372",
+      "date": "2026-09-25T03:13:20+08:00",
+      "subject": "Settle evidenced blocked Missions and score completed worlds"
+    },
+    {
+      "sha": "c9aa1f18e8d05235bb3b68caec05139625ce4884",
+      "date": "2026-09-25T01:58:21+08:00",
+      "subject": "Expose failed Task evidence to Mission and preserve revision order"
+    },
+    {
+      "sha": "81227bd83671f41e4169d432c6b8276b42d97edd",
+      "date": "2026-09-25T01:10:36+08:00",
+      "subject": "Stop factorial trial when frozen source changes"
+    },
+    {
+      "sha": "2a55323e1891b736d0479e55dfb481b4fd00148c",
+      "date": "2026-09-25T01:03:44+08:00",
+      "subject": "Checkpoint before Submit Meridian candidates"
+    },
+    {
+      "sha": "4888dcccae6beec8bde33c24cad64db8c116d6bd",
+      "date": "2026-09-25T00:50:48+08:00",
+      "subject": "Record repaired squad author checkpoint"
+    },
+    {
+      "sha": "f2f56fa3a93ee38a10afda5b810485a88ce1dba4",
+      "date": "2026-09-25T00:38:19+08:00",
+      "subject": "Audit failed AutomationBench tasks and strengthen source review"
+    },
+    {
+      "sha": "fc26177a60cb5fece33437decd3f4a825d374799",
+      "date": "2026-09-25T00:09:15+08:00",
+      "subject": "Register confusion matrix and full post-repair retest"
+    },
+    {
+      "sha": "044db2d3084dbda92fa141c732f3eae3ad9ca9f6",
+      "date": "2026-09-24T23:58:11+08:00",
+      "subject": "Diagnose Mission blocked outcome timeout from terminal evidence"
+    },
+    {
+      "sha": "8f5a4f1cbfbcdfcc9b95ce41770547997e404637",
+      "date": "2026-09-24T23:07:56+08:00",
+      "subject": "Record first factorial block timeouts without rescore"
+    },
+    {
+      "sha": "24730ea1761acdebd58101a63d9150132f120dc0",
+      "date": "2026-09-24T22:50:00+08:00",
+      "subject": "Record frozen E1 and concurrent trial launch"
+    },
+    {
+      "sha": "5f8ee78985121b14793820d0886a1368b085beca",
+      "date": "2026-09-24T22:38:41+08:00",
+      "subject": "Add isolated concurrent factorial trial runner"
+    },
+    {
+      "sha": "6e4de2755d7616c66d296628f32905f2947288dd",
+      "date": "2026-09-24T22:27:50+08:00",
+      "subject": "feat: add real Mission AutomationBench trial entry"
+    },
+    {
+      "sha": "6befbf30709a9df3e939223e8d3ad58149d62f33",
+      "date": "2026-09-24T21:55:26+08:00",
+      "subject": "docs: design Luna Mission Task factorial trials"
+    },
+    {
+      "sha": "02d5bc8b33aaa0e7d57f99be7be99123cc52abb8",
+      "date": "2026-09-24T21:43:08+08:00",
+      "subject": "fix: preserve supervision contracts and expose causal evidence"
+    },
+    {
+      "sha": "abc44da1efdd047b977b2b8324b588f208fd031b",
+      "date": "2026-09-24T21:00:18+08:00",
+      "subject": "docs: trace late-fee preservation acceptance failure"
+    },
+    {
+      "sha": "1dab9a09a5bd05d7da72200ae75f4f967c68243c",
+      "date": "2026-09-24T20:55:05+08:00",
+      "subject": "docs: audit actual supervision topology and acceptance gaps"
+    },
+    {
+      "sha": "3da4d4ea348115dc26724ff3bdb2c930a2f26f92",
+      "date": "2026-09-24T20:41:13+08:00",
+      "subject": "docs: record v6 source-discovery regressions"
+    },
+    {
+      "sha": "f40fb33e37105afc3e7155b3f4f8405b48e9fc72",
+      "date": "2026-09-24T20:22:33+08:00",
+      "subject": "docs: start immutable v6 ten-case evaluation"
+    },
+    {
+      "sha": "44b748e57d1ea2a3e2e17ce095e1ca30777d130a",
+      "date": "2026-09-24T19:43:03+08:00",
+      "subject": "docs: verify live feedback evolution and close isolated run"
+    },
+    {
+      "sha": "cd95365f26a645b25fd299b4b11ea32de138431c",
+      "date": "2026-09-24T19:35:26+08:00",
+      "subject": "docs: record live evolution author validation checkpoint"
+    },
+    {
+      "sha": "aa61ea445c2e0f2e663d20c2d2cfba27fb990a8c",
+      "date": "2026-09-24T19:27:38+08:00",
+      "subject": "fix(evolution): apply exact edits with verified evidence provenance"
+    },
+    {
+      "sha": "00e066af40fc5ad1c62a76a8674d230d0e4138b7",
+      "date": "2026-09-24T18:42:00+08:00",
+      "subject": "docs: close third AutomationBench evolution with paired evidence"
+    },
+    {
+      "sha": "b431a156b5c1a58187a4ee1c270cfe6884db5246",
+      "date": "2026-09-24T18:34:36+08:00",
+      "subject": "docs: correct provenance of agent-selected request budget"
+    },
+    {
+      "sha": "cb2923a181f80f01d0255767de8df93ea168a8a2",
+      "date": "2026-09-24T18:08:22+08:00",
+      "subject": "docs: record midpoint verifier findings and budget review"
+    },
+    {
+      "sha": "03dd9370da753c3ac173a3e4d41ef5535b26fd95",
+      "date": "2026-09-24T17:56:31+08:00",
+      "subject": "docs: retain third-round podcast regression evidence"
+    },
+    {
+      "sha": "1529adb95f34e218da091130129b69b36a3292f7",
+      "date": "2026-09-24T17:40:46+08:00",
+      "subject": "docs: audit squad evolution evidence and mutation gaps"
+    },
+    {
+      "sha": "c8505fe76af272037e1080c8da88133e02844dad",
+      "date": "2026-09-24T17:32:16+08:00",
+      "subject": "docs: record third Luna candidate measurement start"
+    },
+    {
+      "sha": "20da7265da780124b3518111a764ac50f7d14b62",
+      "date": "2026-09-24T17:24:05+08:00",
+      "subject": "docs: checkpoint third AutomationBench authoring run"
+    },
+    {
+      "sha": "c920aa5d75a33b9166208bb44a49061fd0a3c243",
+      "date": "2026-09-24T17:20:49+08:00",
+      "subject": "fix(evolution): ground revisions in decision counterexamples"
+    },
+    {
+      "sha": "174c1d6b5fec73c200d2dfb20d9429e08850c63b",
+      "date": "2026-09-24T16:33:51+08:00",
+      "subject": "docs: close second AutomationBench evolution with retained errors"
+    },
+    {
+      "sha": "3fd4a91752dd53ec4a351f42887509c077a1f22c",
+      "date": "2026-09-24T16:15:15+08:00",
+      "subject": "docs: retain second permission failure and scored regression"
+    },
+    {
+      "sha": "68291c7dae8f81e41d2d9da67a418cf0005fb343",
+      "date": "2026-09-24T16:02:04+08:00",
+      "subject": "docs: record shared runtime failure in second benchmark iteration"
+    },
+    {
+      "sha": "bf88f58203d0500a410f98ff43c588afdfe24a84",
+      "date": "2026-09-24T15:28:42+08:00",
+      "subject": "docs: checkpoint second candidate ten-case measurement"
+    },
+    {
+      "sha": "548e96b45518e81e0dcdb2af759fd32949d50d81",
+      "date": "2026-09-24T15:21:34+08:00",
+      "subject": "docs: checkpoint second AutomationBench authoring run"
+    },
+    {
+      "sha": "cd61a28490b94298770fc48ff56106dabdb6ece8",
+      "date": "2026-09-24T15:18:47+08:00",
+      "subject": "fix(evolution): preserve working operational prerequisites"
+    },
+    {
+      "sha": "21944851cca9eecd4b01fb14816e7bc8814f586c",
+      "date": "2026-09-24T15:08:56+08:00",
+      "subject": "docs: record AutomationBench self-evolution paired outcome"
+    },
+    {
+      "sha": "9fd8ad568826c99390b851aa8fb2f7dbdccaaa01",
+      "date": "2026-09-24T13:53:16+08:00",
+      "subject": "docs: record completed baseline and start immutable candidate trial"
+    },
+    {
+      "sha": "4fdc1c807b90f280b8bc01f82e863d134b0be0c3",
+      "date": "2026-09-24T13:39:19+08:00",
+      "subject": "docs: record Luna-authored squad candidate and immutable provenance"
+    },
+    {
+      "sha": "e6bef5d9b7192d50b964be65ca24892c6f88b54e",
+      "date": "2026-09-24T13:34:41+08:00",
+      "subject": "improve: guide squad evolution with causal evidence and regression checks"
+    },
+    {
+      "sha": "1e4e10dc8437ff143d719dafac8dd5d180cbf694",
+      "date": "2026-09-24T13:04:49+08:00",
+      "subject": "fix(bench): project official simulated time into AutomationBench requests"
+    },
+    {
+      "sha": "9beb3c327040f610829c58f016b351c25e239f20",
+      "date": "2026-09-24T12:37:24+08:00",
+      "subject": "bench: resume Luna probe and add paired evolution reporting"
+    },
+    {
+      "sha": "1cda3b251dab02b153e200b4f8da34ae0c253780",
+      "date": "2026-09-24T12:15:49+08:00",
+      "subject": "bench: freeze ten-case evolution probe and protect copied OAuth authority"
+    },
+    {
+      "sha": "03194426df83b1c754d683c3c485e8b5ad8ef345",
+      "date": "2026-09-24T11:33:30+08:00",
+      "subject": "bench: calibrate AutomationBench squad and measure Luna pilot"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |    12 +\n bun.lock                                           |    16 +-\n docs/evolution-gate-audit.md                       |     8 +-\n expert-squads/builtin/automationbench/README.md    |     3 +-\n .../agents/automationbench-executor/system.md      |    73 +-\n .../agents/automationbench-verifier/system.md      |    88 +-\n .../automationbench/agents/orchestrator/system.md  |    42 +-\n .../builtin/automationbench/expert-squad.jsonc     |     4 +-\n .../builtin/commercial-legal/expert-squad.jsonc    |    11 +-\n expert-squads/builtin/data-analysis/README.md      |     6 +-\n .../agents/data-analysis-data-steward/system.md    |     2 +-\n .../agents/data-analysis-fact-checker/system.md    |    12 +-\n .../data-analysis-insight-synthesizer/system.md    |     2 +-\n .../data-analysis-performance-analyst/system.md    |     2 +-\n .../agents/data-analysis-planner/system.md         |     2 +-\n .../agents/data-analysis-report-writer/system.md   |     6 +-\n .../agents/data-analysis-segment-analyst/system.md |     2 +-\n .../data-analysis/agents/orchestrator/system.md    |     8 +-\n .../builtin/data-analysis/expert-squad.jsonc       |    13 +-\n .../data-analysis/lib/data-analysis/artifacts.ts   |    21 +-\n .../builtin/data-analysis/skills/workflow/SKILL.md |     6 +-\n .../tools/publish-data-analysis-artifact.ts        |    13 +-\n expert-squads/builtin/evolution-lab/README.md      |    29 +\n .../agents/evolution-evaluator/system.md           |     4 +-\n .../agents/evolution-experiment-planner/system.md  |     2 +\n .../agents/evolution-observer/system.md            |     2 +\n .../evolution-recommendation-owner/system.md       |    11 +-\n .../agents/evolution-safety-auditor/system.md      |     6 +-\n .../evolution-lab/agents/orchestrator/system.md    |     4 +-\n .../builtin/evolution-lab/expert-squad.jsonc       |    15 +-\n .../evolution-lab/lib/evolution-lab/artifacts.ts   |     7 +\n .../evolution-lab/lib/evolution-lab/comparison.ts  |   369 +-\n .../lib/evolution-lab/metric-context.ts            |   122 +\n .../builtin/evolution-lab/skills/campaign/SKILL.md |     6 +-\n .../campaign/references/artifact-ownership.md      |     6 +-\n .../tools/execute-evolution-metrics.ts             |   145 +-\n .../tools/publish-evolution-artifact.ts            |   391 +-\n .../human-resources-evidence-curator/system.md     |     2 +-\n .../agents/human-resources-fact-checker/system.md  |     2 +-\n .../system.md                                      |     2 +-\n .../human-resources-operations-planner/system.md   |     2 +-\n .../organization-operations-synthesizer/system.md  |     2 +-\n .../agents/people-process-analyst/system.md        |     2 +-\n .../agents/workforce-analyst/system.md             |     2 +-\n .../builtin/hr-operations/expert-squad.jsonc       |    11 +-\n .../builtin/marketing-growth/expert-squad.jsonc    |    11 +-\n .../omnichannel-distribution/expert-squad.jsonc    |    12 +-\n .../agents/sales-customer-researcher/system.md     |     2 +-\n .../agents/sales-opportunity-analyst/system.md     |     2 +-\n .../agents/sales-playbook-writer/system.md         |     2 +-\n .../agents/sales-positioning-analyst/system.md     |     2 +-\n .../agents/sales-strategy-fact-checker/system.md   |     2 +-\n .../agents/sales-strategy-planner/system.md        |     2 +-\n .../agents/sales-strategy-synthesizer/system.md    |     2 +-\n .../builtin/sales-strategy/expert-squad.jsonc      |    11 +-\n expert-squads/builtin/seo-geo/expert-squad.jsonc   |    11 +-\n .../builtin/tax-compliance/expert-squad.jsonc      |    11 +-\n .../builtin/viral-content/expert-squad.jsonc       |    11 +-\n packages/channel-config/package.json               |     2 +-\n packages/channel-runtime/package.json              |     2 +-\n packages/inspect-benchmark/README.md               |    52 +-\n packages/inspect-benchmark/pyproject.toml          |     2 +-\n .../script/run_factorial_trials.py                 |   685 +\n .../src/opencorvus_inspect/_registry.py            |     2 +\n .../src/opencorvus_inspect/adapter.py              |   257 +-\n .../automationbench/api_session.py                 |    95 +\n .../opencorvus_inspect/automationbench/check.py    |     6 +-\n .../automationbench/development.py                 |   114 +\n .../automationbench/development_task.py            |    78 +\n .../automationbench/environment.py                 |   101 +\n .../src/opencorvus_inspect/automationbench/mcp.py  |    41 +-\n .../src/opencorvus_inspect/automationbench/task.py |   158 +-\n .../opencorvus_inspect/automationbench/world.py    |   106 +-\n .../src/opencorvus_inspect/scorer.py               |    24 +\n .../src/opencorvus_inspect/solver.py               |    15 +-\n .../tests/test_automationbench.py                  |   215 +-\n .../tests/test_automationbench_development.py      |   448 +\n .../inspect-benchmark/tests/test_benchmark_task.py |     2 +-\n .../tests/test_factorial_source_freeze.py          |   145 +\n .../tests/test_mission_adapter.py                  |   297 +\n .../opencorvus/generated/expert-squad-payload.ts   |   109 +-\n .../opencorvus/generated/expert-squad-revisions.ts |    24 +-\n .../native/process-supervisor/Cargo.lock           |     2 +-\n .../native/process-supervisor/Cargo.toml           |     2 +-\n packages/opencorvus/package.json                   |     2 +-\n .../script/automationbench-factorial-host.ts       |   144 +\n .../script/benchmark/external-agent/contract.ts    |    16 +-\n .../external-agent/run-automationbench.ts          |     2 +-\n .../script/check-mission-task-duplex-e2e.ts        |    26 +-\n .../script/evolution-diagnostic-initialization.ts  |    79 +\n .../script/evolution-diagnostic-provider.ts        |    26 +\n packages/opencorvus/script/evolution-diagnostic.ts |   281 +\n .../script/expert-squad-evolution-e2e-support.ts   |    63 +-\n .../script/expert-squad-evolution-e2e.ts           |    20 +-\n packages/opencorvus/script/mission-settlement.ts   |   149 +\n .../script/mission-task-duplex-snapshot.ts         |    73 +-\n .../script/native-provider-audit-plugin.ts         |    20 +-\n packages/opencorvus/script/real-provider-audit.ts  |   196 +-\n .../src/agent/artifact-provenance-facts.ts         |    51 +-\n .../opencorvus/src/agent/artifact-read-facts.ts    |    70 +-\n .../src/agent/dispatch-adapter-contract.ts         |    25 +-\n .../opencorvus/src/agent/dispatch-adapter-input.ts |    12 +-\n .../src/agent/platform-capability-sets.ts          |    25 +-\n packages/opencorvus/src/agent/task-review-facts.ts |    31 +-\n .../opencorvus/src/agent/tool-pool-contract.ts     |     4 +-\n packages/opencorvus/src/artifact-catalog/index.ts  |     5 +\n .../opencorvus/src/capability/routine-tools.ts     |     3 +\n .../opencorvus/src/delegated-worker/context.ts     |    43 +-\n .../src/engine/cross-task-artifact-import.ts       |     5 +\n packages/opencorvus/src/engine/engine.sql.ts       |     2 +\n packages/opencorvus/src/engine/producer-turn.ts    |    25 +-\n .../src/engine/task-artifact-observation-schema.ts |    53 +\n .../src/engine/task-artifact-observation.ts        |    34 +\n .../opencorvus/src/engine/task-root-fact-store.ts  |    15 +\n .../src/engine/task-root-ingress-delivery.ts       |   146 +-\n .../src/engine/task-root-ingress-disposition.ts    |     3 +-\n .../src/engine/task-root-ingress-reducer.ts        |     7 +-\n .../src/engine/task-root-ingress-source.ts         |     1 +\n .../expert-squad/artifact-publication-authority.ts |    41 +\n .../builtin/base/agents/orchestrator/system.md     |     2 +\n .../expert-squad/builtin/base/expert-squad.jsonc   |     2 +-\n .../src/expert-squad/evolution-history.ts          |   340 +-\n .../src/expert-squad/evolution-mutation-intent.ts  |    23 +-\n .../src/expert-squad/evolution-mutation.ts         |    57 +-\n .../src/expert-squad/evolution-review-freshness.ts |   180 +\n .../src/expert-squad/feedback-revision.ts          |   191 +-\n packages/opencorvus/src/expert-squad/manager.ts    |    13 +\n packages/opencorvus/src/expert-squad/registry.ts   |    13 +-\n packages/opencorvus/src/metrics/executor.ts        |    36 +-\n packages/opencorvus/src/metrics/store.ts           |    34 +-\n packages/opencorvus/src/metrics/types.ts           |    28 +-\n .../src/mission-skill/builtin-payload.ts           |     2 +-\n .../src/mission-skill/builtin/general/SKILL.md     |     3 +\n .../opencorvus/src/mission/acceptance-extension.ts |   234 +\n packages/opencorvus/src/mission/acceptance-gap.ts  |     9 +\n .../opencorvus/src/mission/acceptance-ledger.ts    |    11 +\n .../src/mission/acceptance-resume-receipt.ts       |    56 +\n packages/opencorvus/src/mission/board.ts           |   139 +-\n packages/opencorvus/src/mission/completion.ts      |    46 +\n packages/opencorvus/src/mission/projection.ts      |     7 +-\n packages/opencorvus/src/orchestrator/agent.ts      |    29 +-\n .../src/orchestrator/delegated-worker-tool.ts      |    19 +-\n .../src/orchestrator/dispatch-turn-projection.ts   |     3 +-\n packages/opencorvus/src/orchestrator/event.ts      |    36 +-\n .../src/orchestrator/interaction-tools.ts          |     9 +-\n .../opencorvus/src/orchestrator/no-action-tool.ts  |     9 +-\n .../src/orchestrator/read-agent-message-tool.ts    |   394 -\n .../src/orchestrator/task-lifecycle-input.ts       |     2 +-\n packages/opencorvus/src/orchestrator/tools.ts      |     7 +-\n packages/opencorvus/src/panel/action-ids.ts        |     6 +\n packages/opencorvus/src/panel/capability.ts        |    55 +-\n packages/opencorvus/src/panel/task-query.ts        |     2 +\n packages/opencorvus/src/permission/invocation.ts   |     1 +\n .../src/prompt/core/delegated-worker-core.txt      |     5 +-\n .../opencorvus/src/prompt/core/mission-core.txt    |    16 +-\n .../src/prompt/core/orchestrator-core.txt          |     8 +-\n packages/opencorvus/src/server/server.ts           |    12 +-\n .../opencorvus/src/status/task-status-snapshot.ts  |     4 +\n packages/opencorvus/src/storage/ddl.ts             |    34 +-\n packages/opencorvus/src/task-api/index.ts          |   213 +-\n packages/opencorvus/src/task-artifact/store.ts     |   248 +-\n packages/opencorvus/src/tool/artifact-catalog.ts   |    29 +-\n .../opencorvus/src/tool/expert-squad-author.ts     |     3 +\n .../tool/expert-squad-feedback-revision-tool.ts    |    28 +-\n packages/opencorvus/src/tool/global-tools.ts       |     3 +\n .../opencorvus/src/tool/metric-evaluation-host.ts  |   123 +-\n packages/opencorvus/src/tool/panel.ts              |   415 +-\n packages/opencorvus/src/tool/read-agent-message.ts |   469 +\n .../opencorvus/src/tool/task-run-evidence-host.ts  |    18 +-\n .../src/tool/task-tool-execution-scope.ts          |     4 +\n packages/opencorvus/src/tool/tool-id-catalog.ts    |     2 +\n .../test/artifact-catalog-cursor.test.ts           |   105 +\n .../test/artifact-provider-reference-flow.test.ts  |    14 +-\n .../test/artifact-publisher-authority.test.ts      |    60 +-\n .../artifact-read-facts-provider-input.test.ts     |    75 +-\n .../test/automationbench-expert-squad.test.ts      |     1 +\n .../test/automationbench-project-admission.test.ts |     1 +\n .../artifact-publication-execution.test.ts         |   236 +\n .../native-mission-transport-base.test.ts          |     3 +\n .../test/capability/tool-definition-budget.test.ts |     3 +-\n .../test/delegated-worker-source-routing.test.ts   |    32 +-\n .../test/dispatch-adapter-subject-contract.test.ts |    67 +\n .../test/evolution-artifact-evidence-host.test.ts  |  1964 +-\n .../test/evolution-campaign-readiness.test.ts      |   109 +\n .../opencorvus/test/evolution-comparison.test.ts   |   796 +-\n .../test/evolution-diagnostic-entry.test.ts        |   129 +\n .../test/evolution-lab-package-projection.test.ts  |    23 +-\n .../opencorvus/test/evolution-reference.test.ts    |   127 +\n .../test/expert-squad-evolution-mutation.test.ts   |   715 +-\n .../test/expert-squad-feedback-revision.test.ts    |   337 +-\n .../test/expert-squad/catalog-index.test.ts        |     3 +\n .../expert-squad/commercial-legal-package.test.ts  |     3 +-\n .../expert-squad/data-analysis-package.test.ts     |    63 +-\n .../test/expert-squad/dynamic-package.test.ts      |     3 +-\n .../expert-squad/hr-operations-package.test.ts     |     6 +-\n .../test/expert-squad/light-package.test.ts        |     7 +-\n .../omnichannel-distribution-package.test.ts       |     3 +-\n .../package-tool-native-runtime.test.ts            |    27 +\n .../random-evolution-e2e-support.test.ts           |    46 +-\n .../expert-squad/sales-strategy-package.test.ts    |     6 +-\n .../expert-squad/tax-compliance-package.test.ts    |     3 +-\n .../typed-publisher-provider-schema.test.ts        |    18 +-\n .../expert-squad/viral-content-package.test.ts     |     3 +-\n .../test/fixture/task-root-status-input.ts         |   101 +\n .../test/mcp/host-session-runtime.test.ts          |     3 +\n .../test/metrics-evidence-runtime.test.ts          |   201 +-\n .../test/mission-acceptance-delta.test.ts          |    47 +-\n .../test/mission-acceptance-extension.test.ts      |   502 +\n .../test/mission-active-repair-boundary.test.ts    |   422 +\n .../test/mission-task-duplex-snapshot.test.ts      |    14 +-\n .../orchestrator-mission-resume-provenance.test.ts |    13 +-\n .../orchestrator-mission-root-message-read.test.ts |     4 +-\n ...chestrator-streamed-dispatch-settlement.test.ts |   105 +-\n .../conversation-turn-declared-outputs.test.ts     |     1 +\n .../panel-failed-task-dispatch-evidence.test.ts    |   345 +\n .../test/panel-mission-blocked-outcome.test.ts     |   262 +\n .../test/panel-mission-terminal-authority.test.ts  |   187 +-\n .../test/process-shutdown-task-lifecycle.test.ts   |    32 +\n .../read-agent-message-evidence-contract.test.ts   |    34 +-\n .../opencorvus/test/real-provider-audit.test.ts    |   255 +-\n .../scheduler-message-harness-contract.test.ts     |    10 +-\n .../test/server/conversation-artifact-read.test.ts |     1 +\n .../test/session-loop-provider-tool-input.test.ts  |     1 +\n ...session-loop-tool-authority-integration.test.ts |     3 +\n .../task-artifact-git-commit-publication.test.ts   |   167 +-\n .../test/task-root-input-lease-boundary.test.ts    |   116 +\n .../test/task-terminal-artifact-closure.test.ts    |    80 +-\n packages/overlay/package.json                      |     2 +-\n packages/overlay/src-tauri/Cargo.lock              |     2 +-\n packages/overlay/src-tauri/Cargo.toml              |     2 +-\n packages/overlay/src-tauri/tauri.conf.json         |     4 +-\n packages/overlay/src/components/MissionBoard.tsx   |     2 +-\n .../settings/ExpertSquadEvolutionPanel.tsx         |     2 +-\n packages/overlay/src/i18n/en-US.json               |     1 +\n packages/overlay/src/i18n/zh-CN.json               |     1 +\n packages/plugin/package.json                       |     2 +-\n packages/plugin/src/artifact-catalog.ts            |    26 +-\n .../plugin/src/expert-squad-evolution-artifact.ts  |   117 +-\n .../plugin/src/expert-squad-evolution-history.ts   |    58 +-\n .../src/expert-squad-evolution-measurement.ts      |   417 +\n .../plugin/src/expert-squad-evolution-reference.ts |   142 +\n .../plugin/src/expert-squad-evolution-review.ts    |    75 +\n packages/plugin/src/expert-squad-evolution.ts      |     7 +\n packages/plugin/src/metric-evaluation.ts           |    48 +-\n packages/plugin/src/task-run-evidence.ts           |    15 +-\n packages/plugin/src/tool.ts                        |     3 +\n packages/plugin/test/artifact-catalog.test.ts      |     7 +\n packages/sdk/js/package.json                       |     2 +-\n packages/sdk/js/src/expert-squad-authoring.ts      |     8 +-\n packages/sdk/js/src/expert-squad-manifest-v2.ts    |    20 +\n packages/sdk/js/src/gen/sdk.gen.ts                 |   194 +-\n packages/sdk/js/src/gen/types.gen.ts               |  6790 ++-\n .../sdk/js/test/expert-squad-authoring.test.ts     |    15 +\n packages/sdk/openapi.json                          | 40911 +++++++++++++------\n packages/transport-protocol/package.json           |     2 +-\n packages/util/package.json                         |     2 +-\n packages/web/src/content/docs/reference/api.mdx    |     2 +-\n .../web/src/content/docs/zh-cn/reference/api.mdx   |     2 +-\n .../content/expert-squad-distribution.generated.ts |    10 +-\n .../web/src/content/platform-facts.generated.ts    |     2 +-\n packages/web/test/website-registry.test.ts         |    15 +-\n specs/README.md                                    |    49 +\n .../README.md                                      |    15 +\n .../clock-handoff-evidence.json                    |    28 +\n .../compare.py                                     |   154 +\n .../credential-handoff-evidence.json               |    54 +\n .../host-ready.json                                |    27 +\n .../input-defect-cancellations.json                |   117 +\n .../input-defective-rescored.eval                  |   Bin 0 -> 203017 bytes\n .../input-defective-summary.json                   |  1057 +\n .../input-defective.eval                           |   Bin 0 -> 210123 bytes\n .../preflight-expiry-check.json                    |    19 +\n .../preflight-initial.json                         |    19 +\n .../probe-manifest.json                            |    56 +\n .../provider-audit.json                            |     6 +\n .../provider-input-defective.json                  |  1402 +\n .../test_compare.py                                |   108 +\n .../README.md                                      |    19 +\n .../REPORT.md                                      |    66 +\n .../calibration-policy-probe.json                  |   121 +\n .../calibration-rescored.eval                      |   Bin 0 -> 107775 bytes\n .../calibration-summary.json                       |   615 +\n .../calibration.eval                               |   Bin 0 -> 109987 bytes\n .../combine.py                                     |   130 +\n .../host-first.json                                |    24 +\n .../host-recovery.json                             |    25 +\n .../host.ts                                        |   123 +\n .../observe.py                                     |   139 +\n .../operator-cancellations.json                    |    49 +\n .../pilot-first-rescored.eval                      |   Bin 0 -> 186278 bytes\n .../pilot-first-summary.json                       |  1060 +\n .../pilot-first.eval                               |   Bin 0 -> 191407 bytes\n .../pilot-manifest.json                            |    36 +\n .../pilot-summary.json                             |  1781 +\n .../provider-first.json                            |  2911 ++\n .../provider-recovery.json                         |  1162 +\n .../recovery-manifest.json                         |    21 +\n .../recovery-rescored.eval                         |   Bin 0 -> 114159 bytes\n .../recovery-summary.json                          |   794 +\n .../recovery.eval                                  |   Bin 0 -> 116433 bytes\n .../summarize.py                                   |   160 +\n .../README.md                                      |   108 +\n .../archive-review-ingress.md                      |    80 +\n .../archive-review-input.json                      |   408 +\n .../blind-expectation.patch                        |    76 +\n .../check-blind-expectation.ts                     |   115 +\n .../check-expectation-first.ts                     |   115 +\n .../comparison-evidence-in-progress.patch          |   433 +\n .../comparison.schema.json                         |    88 +\n .../expectation-first-design.md                    |   104 +\n .../expectation-first.patch                        |   225 +\n .../fixed-state-repair-design.md                   |   189 +\n .../handoff-design.md                              |    91 +\n .../hb-01-preregistration.md                       |    76 +\n .../hb-01-results.md                               |   127 +\n .../he-01-results.md                               |   138 +\n .../ht-01-preregistration.md                       |   106 +\n .../ht-01-results.md                               |   109 +\n .../input-observation.md                           |    76 +\n .../input-probes.json                              |    14 +\n .../mechanism-decision.md                          |   128 +\n .../method-handoff.md                              |   167 +\n .../prepare-repair-input.py                        |   105 +\n .../probe.py                                       |   103 +\n .../repair-01-preregistration.md                   |   121 +\n .../repair-01-results.md                           |   125 +\n .../results.json                                   |   149 +\n .../run-repair-01.py                               |   249 +\n .../source-dependency-boundary.md                  |    58 +\n .../vectors.json                                   |   116 +\n .../verifier-method-handoff.patch                  |    44 +\n .../2026-09-27-evolution-readiness/README.md       |    82 +\n .../2026-09-27-evolution-readiness/arithmetic.py   |    45 +\n .../input/metrics.json                             |    10 +\n .../input/request.md                               |    13 +\n .../registration.json                              |     9 +\n .../artifacts/2026-09-27-review-evidence/README.md |    42 +\n .../2026-09-27-review-evidence/assessment.md       |    38 +\n .../publisher-outcomes.json                        |    87 +\n .../2026-09-27-review-evidence/registration.json   |     9 +\n .../2026-09-27-review-evidence/report-snapshot.md  |    64 +\n .../review-evidence.json                           |   109 +\n .../2026-09-27-review-evidence/run-receipt.json    |    74 +\n .../2026-09-27-supervision-review/README.md        |    37 +\n .../2026-09-27-supervision-review/assessment.md    |    23 +\n .../2026-09-27-supervision-review/audit.json       |     1 +\n .../decision-evidence.json                         |   166 +\n .../2026-09-27-supervision-review/metrics.json     |    10 +\n .../2026-09-27-supervision-review/packet.json      |    27 +\n .../2026-09-27-supervision-review/provenance.json  |    24 +\n .../2026-09-27-supervision-review/report.md        |    58 +\n .../2026-09-27-supervision-review/request.md       |     7 +\n .../review-01-receipt.json                         |   127 +\n .../2026-09-27-supervision-review/review-01.md     |    25 +\n .../artifacts/2026-09-27-supervision-review/run.ts |   149 +\n .../source-request.md                              |    13 +\n specs/artifacts/2026-09-27-team-feedback/README.md |    46 +\n .../2026-09-27-team-feedback/arithmetic-check.json |   372 +\n .../2026-09-27-team-feedback/assessment.md         |    63 +\n .../2026-09-27-team-feedback/evidence.json         |  1695 +\n .../2026-09-27-team-feedback/input/metrics.json    |   210 +\n .../2026-09-27-team-feedback/input/request.md      |    11 +\n .../2026-09-27-team-feedback/reader-receipt.json   |   148 +\n .../2026-09-27-team-feedback/reference.py          |    36 +\n .../2026-09-27-team-feedback/registration.json     |     9 +\n .../2026-09-27-team-feedback/report-r39.md         |    78 +\n .../2026-09-27-team-feedback/report-r47.md         |    78 +\n .../2026-09-27-team-feedback/run-receipt.json      |    79 +\n .../2026-09-27-team-feedback/source-receipt.json   |    22 +\n .../2026-09-27-team-feedback/source-response.json  |    24 +\n .../2026-09-28-four-arm-benchmark-retry/README.md  |    23 +\n .../registration.json                              |    30 +\n .../run-01-result.md                               |    19 +\n .../run-02-registration.json                       |    31 +\n .../run-02-result.md                               |    41 +\n specs/artifacts/README.md                          |    31 +\n specs/current/architecture/02-data.md              |   177 +\n specs/current/architecture/04-extensions.md        |    12 +-\n specs/current/architecture/06-provider.md          |     5 +\n specs/current/architecture/07-panel.md             |    26 +-\n specs/current/architecture/inspect-benchmark.md    |    46 +\n specs/current/architecture/task-control-plane.md   |    35 +-\n .../2026-09-24-automationbench-self-evolution.md   |   418 +\n .../2026-09-24-expert-squad-evolution-algorithm.md |   155 +\n ...-24-inspect-automationbench-luna-calibration.md |    59 +\n ...026-09-24-luna-mission-task-factorial-trials.md |   547 +\n .../2026-09-24-supervision-acceptance-repair.md    |    55 +\n ...9-25-automationbench-environment-clock-audit.md |    45 +\n .../2026-09-25-supervision-causal-iteration.md     |  1863 +\n ...26-09-27-supervision-mechanism-consolidation.md |   100 +\n .../records/2026-09/2026-09-28-v0.1.15-release.md  |    35 +\n specs/records/2026-09/README.md                    |    29 +\n 392 files changed, 72826 insertions(+), 18159 deletions(-)"
+}

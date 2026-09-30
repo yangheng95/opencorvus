@@ -107,6 +107,27 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/f4be7e43b3ae0c8c0afcb7d5e708e071ac5e74f8) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/dd999804c984360146231386550c2cf17e7ab0e0...f4be7e43b3ae0c8c0afcb7d5e708e071ac5e74f8)。
 
+## 0.1.15 - 2026-09-28
+
+### Added
+
+- 为专家团演化增加隔离诊断入口，固定模型目录、试验对象和测量来源，并提供完整的工具请求检查记录。
+
+### Changed
+
+- 演化比较保留未发布、不可用和无法判定的结果；每次试验归入明确的比较槽，推广决定重新核对当前审查证据。
+- 数据分析团队把报告发布参数统一为一个结构化产物，保留来源和正式发布授权。
+
+### Fixed
+
+- Mission 验收与后续修正读取当前 Task 的完成、产物和审查证据，保留仍未满足的要求，避免早期摘要覆盖后续事实。
+- 产物发布按包内声明的生产者权限执行；反复导入、测量别名与用量回执保留精确来源和执行身份。
+- 修复 AutomationBench 时钟解析、冻结试验、评分输入和跨 Task 测量证据读取中的归属问题。记录的评测结果不作为普遍性能提升保证。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/dd999804c984360146231386550c2cf17e7ab0e0) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/b9a72f4134de3a582dcf55cb09b6c1b299f8b3d1...dd999804c984360146231386550c2cf17e7ab0e0)。
+
 ## 0.1.14 - 2026-09-24
 
 ### Changed
