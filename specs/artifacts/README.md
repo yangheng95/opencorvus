@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Project environment visual review](2026-09-30-environment-style/README.md): dark/light overview, independent action menu and collapsed state.
+
 - [Current-runtime Harbor independent comparison](2026-09-30-harbor-runtime-comparison/README.md): forty native results, complete-pair statistics, source/tool review, timing and all known usage limits.
 
 - [Persistent navigation rail](2026-09-30-navigation-rail/README.md): Scheduled, settings, Expert Squads, page transitions and actual parent/child mount inspection.

@@ -1,5 +1,7 @@
 # 2026-09 Records
 
+- [Reference-style project environment panel](2026-09-30-environment-reference-style.md)
+
 - [Current-runtime Harbor final analysis and settlement](2026-09-30-harbor-current-runtime-restart.md): forty original results, all independent reviews and final report.
 
 - [Persistent navigation rail across pages](2026-09-30-persistent-navigation-rail.md)

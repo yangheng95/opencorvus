@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Reference-style project environment panel](records/2026-09/2026-09-30-environment-reference-style.md)
+
+- [Project environment visual review](artifacts/2026-09-30-environment-style/README.md)
+
 - [Current-runtime Harbor independent final comparison](artifacts/2026-09-30-harbor-runtime-comparison/README.md)
 
 - [Persistent navigation rail across pages](records/2026-09/2026-09-30-persistent-navigation-rail.md)

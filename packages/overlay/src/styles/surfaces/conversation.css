@@ -1700,7 +1700,7 @@
 }
 
 .project-runtime-panel-shell {
-  --project-runtime-panel-head-row-height: calc(42px * var(--ui-scale));
+  --project-runtime-panel-head-row-height: calc(32px * var(--ui-scale));
   --project-runtime-category-row-height: calc(32px * var(--ui-scale));
   --project-runtime-category-inline-inset: calc(2px * var(--ui-scale));
   --project-runtime-category-action-size: calc(26px * var(--ui-scale));
@@ -1720,7 +1720,7 @@
   box-sizing: border-box;
   display: grid;
   gap: 0;
-  padding: var(--ui-gap-lg) var(--ui-gap-xl);
+  padding: var(--ui-gap-xl) var(--ui-gap-2xl);
   font-family: var(--font);
 }
 
@@ -1781,8 +1781,8 @@
 }
 
 .project-runtime-menu-region + .project-runtime-menu-region {
-  margin-top: var(--ui-gap-sm);
-  padding-top: var(--ui-gap-sm);
+  margin-top: var(--ui-gap-lg);
+  padding-top: var(--ui-gap-lg);
   border-top: var(--oc-border-width) solid var(--project-runtime-divider-color);
 }
 
@@ -1791,15 +1791,27 @@
   gap: var(--ui-gap-3xs);
 }
 
-.project-runtime-directory-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.project-runtime-project-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--ui-gap-md);
+}
+
+.project-runtime-branch-trigger.oc-button {
+  display: flex;
+  justify-content: flex-start;
+  color: var(--text-muted);
+}
+
+.project-runtime-local-control.oc-button {
+  color: var(--text-muted);
 }
 .project-runtime-repository-status {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--ui-gap-xs);
-  padding: var(--ui-gap-xs) var(--ui-gap-sm) var(--ui-gap-sm) var(--ui-gap-2xl);
+  padding: var(--ui-gap-xs) 0;
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
   overflow-wrap: anywhere;
@@ -1858,17 +1870,16 @@
 }
 
 .project-runtime-subagent-summary.oc-button {
-  --oc-button-height: calc(28px * var(--ui-scale));
+  --oc-button-height: calc(36px * var(--ui-scale));
   --oc-button-padding-x: 0;
   --oc-button-bg: transparent;
   --oc-button-border: 0 solid transparent;
   --oc-button-shadow: none;
 
-  display: grid;
-  grid-template-columns: var(--project-runtime-leading-icon-column) minmax(0, 1fr) auto;
+  display: flex;
   gap: var(--project-runtime-leading-gap);
   width: 100%;
-  justify-content: stretch;
+  justify-content: flex-start;
   text-align: left;
 }
 
@@ -1880,6 +1891,18 @@
   background: transparent;
 }
 
+.project-runtime-subagent-avatars {
+  --chat-avatar-inline-size: var(--project-runtime-icon-size);
+  --chat-avatar-ring-outset: 0px;
+
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-xs);
+  min-width: var(--chat-avatar-inline-size);
+  max-width: 40%;
+  overflow: hidden;
+}
+
 .project-runtime-subagent-working {
   min-width: 0;
   overflow: hidden;
@@ -1889,10 +1912,9 @@
 }
 
 .project-runtime-subagent-done {
-  margin-left: auto;
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
-  text-align: right;
+  white-space: nowrap;
 }
 
 .project-runtime-category.oc-section {
@@ -2583,6 +2605,19 @@
   box-sizing: border-box;
   overflow: auto;
   z-index: var(--ui-z-overlay);
+  border-radius: var(--oc-radius-xl);
+}
+
+.project-runtime-actions-menu.oc-menu {
+  min-width: calc(240px * var(--ui-scale));
+  padding: var(--ui-gap-md);
+  border-radius: var(--oc-radius-xl);
+}
+
+.project-runtime-actions-menu .oc-menu-item {
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-md);
+  font-size: var(--ui-font-body);
 }
 
 .project-runtime-status-panel:not([data-closed]) {
@@ -2628,7 +2663,7 @@
   min-width: 0;
   min-height: var(--project-runtime-panel-head-row-height);
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) var(--project-runtime-trailing-control-size);
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
   gap: var(--ui-gap-md);
   padding: 0;
@@ -2636,15 +2671,17 @@
 }
 
 .oc-button.project-runtime-panel-trailing-control {
-  --oc-button-height: var(--project-runtime-trailing-control-size);
+  --oc-button-height: var(--project-runtime-panel-head-row-height);
+  --oc-button-bg: var(--hover-wash);
 
-  width: var(--project-runtime-trailing-control-size);
-  min-width: var(--project-runtime-trailing-control-size);
-  height: var(--project-runtime-trailing-control-size);
+  width: var(--oc-button-height);
+  min-width: var(--oc-button-height);
+  height: var(--oc-button-height);
+  border-radius: var(--oc-radius-pill);
   display: inline-flex;
   grid-column: 3;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   justify-self: end;
 }
 
@@ -2706,6 +2743,7 @@
 .project-runtime-panel-title-group > .oc-icon {
   width: calc(16px * var(--ui-scale));
   height: calc(16px * var(--ui-scale));
+  opacity: var(--ui-opacity-dim);
 }
 
 .task-progress.project-runtime-goals-category {
@@ -2788,7 +2826,7 @@
 
 .project-runtime-info-row {
   min-width: 0;
-  min-height: calc(28px * var(--ui-scale));
+  min-height: calc(36px * var(--ui-scale));
   display: grid;
   grid-template-columns: var(--project-runtime-leading-icon-column) minmax(0, 1fr) auto;
   align-items: center;
@@ -2799,7 +2837,7 @@
 }
 
 .project-runtime-info-action.oc-button {
-  --oc-button-height: calc(28px * var(--ui-scale));
+  --oc-button-height: calc(36px * var(--ui-scale));
   --oc-button-padding-x: var(--project-runtime-info-inline-inset);
   --oc-button-gap: var(--project-runtime-info-leading-gap);
   --oc-button-bg: transparent;
@@ -2850,10 +2888,8 @@
 }
 
 .project-runtime-branch-value {
-  grid-column: 2;
-  justify-self: start;
   max-width: 100%;
-  color: var(--text-strong);
+  color: var(--text-muted);
   text-align: left;
 }
 
@@ -3061,7 +3097,7 @@
 }
 
 .project-runtime-source-list {
-  --project-runtime-list-row-height: calc(24px * var(--ui-scale));
+  --project-runtime-list-row-height: calc(32px * var(--ui-scale));
   --project-runtime-list-row-gap: calc(1px * var(--ui-scale));
 
   display: grid;

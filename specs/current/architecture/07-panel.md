@@ -425,11 +425,11 @@ The Environment Popover owns an independent content disclosure inside the
 still-open Popover. Its collapsed header keeps the canonical
 `summarizeChangeGroups(currentChangeGroups())` additions and deletions visible;
 it does not copy or recompute diff totals. Expanded project changes, local
-directory, branch, commit/push, and Git host facts belong directly to
+directory, branch, and Git host facts belong directly to
 Environment Information and do not acquire a synthetic Runtime parent.
 
 Goals, Requirements, Workspace, and Tools are peer classifications below the
-Environment Information header. The header title and every peer
+project-name header. The header title and every peer
 classification consume the shared body role. Named Goal rows, Worktrees,
 Tools, Sources, and operation feedback also use body; compact counts, status,
 and technical metadata use caption. Every classification and named region uses
@@ -437,7 +437,7 @@ one regular, muted, 32px title-row recipe, and every category indicator
 occupies the same far-edge 16px column with a quiet resting opacity. Environment facts,
 Subagents, classified task resources, and Sources are sibling menu regions;
 every adjacent region is separated by the same quiet one-pixel border and
-compact six-pixel block inset. All title and content text in the Environment
+shared large-gap block inset. All title and content text in the Environment
 Popover starts from one global leading text axis; leading icons occupy the
 reserved column to its left. Goals owns its existing summary, fold action, and
 canonical Goal rows directly; Requirements is a direct classified launcher;
@@ -452,7 +452,9 @@ evidence remain the only sources for which rows exist.
 The conditional Subagents menu region reads the selected conversation's
 canonical child-session records through the same conversation-Agent projection
 used by the main progress grid, Agent Rail, and aggregate `Squad agents` Right
-Dock. It shows active and terminal counts in one compact row. Activating that
+Dock. It shows real role avatars with active and terminal counts in one compact
+row. The decorative avatar strip is clipped to available width; the complete
+counts and existing Dock remain authoritative. Activating that
 row selects an exact real child `sessionID` before opening the existing Dock;
 the Environment surface never creates a generic unselected Subagent panel, a
 second session list, or another transcript source.
@@ -500,9 +502,17 @@ Classification titles reserve no leading icon slot. Collapsible title controls
 and direct launchers share that trailing column; functional icons belong only
 to body rows on the left side of the global text axis. Category glyphs remain
 quietly visible at rest, strengthen on hover or keyboard focus, and never move
-the title text. The Environment add action occupies the primary header's
-dedicated trailing column independently of category indicators or collapsed
-totals. Classification title rows retain transparent hover/focus chrome;
+the title text. The project-name header retains the independent disclosure and
+collapsed totals, with one circular ellipsis command trigger at its far edge.
+Its shared DropdownMenu is owned by the mounted Environment content and anchored
+to the whole panel, opening beside it with viewport collision handling. Setup,
+switch folder, add tool, refresh and commit/push keep their existing action owners.
+The menu uses owner-aware native-surface occlusion and releases that owner on
+close/unmount. Local directory and branch menus keep their native surface
+transport. Changes, branch facts, Subagents and actual Task Sources precede
+conditional resource classifications and deliveries; Sources has no decorative
+add action. The panel and command menu use the shared extra-large radius as
+explicitly rounded macro surfaces. Classification title rows retain transparent hover/focus chrome;
 interaction is communicated by text and the stable trailing affordance rather
 than a one-off rounded background wash. The launcher home predicate excludes
 every selected Session as well as every selected Task, so opening an empty
@@ -516,7 +526,7 @@ configured helper model. `/vcs/commit` stages the complete current working tree
 and commits the exact displayed message; `/vcs/push` publishes through the
 branch's configured upstream. Each completed mutation reloads canonical VCS
 information instead of maintaining optimistic branch or dirty-state copies in
-the Overlay. The Environment row is only the trigger: the current branch,
+the Overlay. The Environment command menu is only the trigger: the current branch,
 streamed editable subject, regenerate control, and applicable Commit / Commit &
 Push / Push actions live in the shared modal Dialog primitive, never in an
 inline expansion or a second VCS surface.

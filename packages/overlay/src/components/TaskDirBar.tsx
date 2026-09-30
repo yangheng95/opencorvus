@@ -47,6 +47,8 @@ import { focusGoalSummary } from "../services/goal-summary-focus"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { cardTreeStore } from "../store/card-tree"
 import { Icon } from "./ui/Icon"
+import { Avatar } from "./Avatar"
+import { DropdownMenu } from "./ui/DropdownMenu"
 import { FilePart } from "./FilePart"
 import { Button } from "./ui/Button"
 import { RIGHT_DOCK_ENVIRONMENT_TOOL_CATALOG, rightDockPanelMeta, type RightDockPanel } from "./RightDock"
@@ -60,6 +62,7 @@ import { conversationAgentRecordsForSource } from "../store/conversation-agents"
 import { isSubagentActivityRecord } from "../utils/subagent-presentation"
 import { isAgentActivityTerminalStatus } from "../utils/agent-activity"
 import { closeNativeMenuSurface, openNativeMenuSurface } from "../services/native-menu-surface"
+import { occludeNativeSurfaces, revealNativeSurfaces } from "../services/native-surface-occlusion"
 import { settingsStore } from "../store/settings"
 import { rightDockOpen } from "../store/right-dock"
 import { layoutTokenPx } from "../utils/layout-tokens"
@@ -149,6 +152,7 @@ function vcsArrowsFor(value: ProjectVcsInfo | null): string {
 
 export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps) {
   const dir = createMemo(directoryMemo)
+  const projectName = createMemo(() => dir().split(/[\\/]/).filter(Boolean).at(-1) || t("project_runtime.local"))
   const deliveries = createProjectDeliveries({ onOpen: () => closeRuntimePanel() })
   const environmentAnchorShift = createMemo(() => {
     settingsStore.zoom
@@ -157,6 +161,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const [panelOpen, setPanelOpen] = createSignal(false)
   const [panelPinned, setPanelPinned] = createSignal(false)
   const [panelExpanded, setPanelExpanded] = createSignal(true)
+  let panelShell!: HTMLDivElement
   const [localMenuOpen, setLocalMenuOpen] = createSignal(false)
   const localMenuOwner = "project-runtime-local"
   let localMenuAnchor!: HTMLButtonElement
@@ -657,8 +662,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     closeRuntimePanel()
   }
 
-  function openRightDockAddMenu(event: MouseEvent): void {
-    event.stopPropagation()
+  function openRightDockAddMenu(): void {
     closeRuntimePanel()
     props.onOpenRightDockAddMenu()
   }
@@ -1110,6 +1114,12 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     if (!props.anchorVisible) closeRuntimePanel()
   })
 
+  createEffect(() => {
+    if (runtimePanelOpen()) return
+    setLocalMenuOpen(false)
+    setBranchMenuOpen(false)
+  })
+
   createEffect((wasOpen: boolean) => {
     const open = rightDockOpen()
     if (open && !wasOpen) closeRuntimePanel()
@@ -1157,8 +1167,104 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       untrack(() => void loadMeta(directory).catch(() => undefined))
   })
 
+  const ActionsMenu = () => {
+    const [open, setOpen] = createSignal(false)
+    const owner = "project-runtime-actions"
+    let generation = 0
+    const handleError = (error: unknown) => {
+      reportError({
+        id: owner,
+        title: t("common.error"),
+        message: errorMessage(error),
+        details: formatErrorDetails(error),
+      })
+    }
+    async function changeOpen(next: boolean): Promise<void> {
+      const current = ++generation
+      if (!next) {
+        setOpen(false)
+        await revealNativeSurfaces(owner)
+        return
+      }
+      setPanelPinned(true)
+      setLocalMenuOpen(false)
+      setBranchMenuOpen(false)
+      await occludeNativeSurfaces(owner)
+      if (generation === current) setOpen(true)
+    }
+    onCleanup(() => {
+      generation++
+      void revealNativeSurfaces(owner).catch(handleError)
+    })
+    createEffect(() => {
+      dir()
+      void changeOpen(false).catch(handleError)
+    })
+    return (
+      <DropdownMenu.Root
+        open={open()}
+        onOpenChange={(next) => void changeOpen(next).catch(handleError)}
+        placement="left-start"
+        getAnchorRect={() => panelShell.getBoundingClientRect()}
+        gutter={12}
+        fitViewport
+      >
+        <DropdownMenu.Trigger
+          as={Button}
+          type="button"
+          variant="ghost"
+          size="icon"
+          tone="neutral"
+          class="project-runtime-panel-trailing-control"
+          data-ui="project-runtime-actions"
+          title={t("common.more")}
+          aria-label={`${projectName()}: ${t("common.more")}`}
+        >
+          <Icon name="more-horizontal" size="medium" />
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Portal>
+          <DropdownMenu.Content class="project-runtime-actions-menu">
+            <DropdownMenu.Item as="button" type="button" onSelect={openLocalEnvironmentEditor}>
+              <Icon name="plus" />
+              {t("project_runtime.local_environment_create")}
+            </DropdownMenu.Item>
+            <DropdownMenu.Item as="button" type="button" onSelect={() => void browseDirectory()}>
+              <Icon name="folder" />
+              {t("cwd.browse")}
+            </DropdownMenu.Item>
+            <DropdownMenu.Item as="button" type="button" onSelect={openRightDockAddMenu}>
+              <Icon name="plus" />
+              {t("right_dock.add")}
+            </DropdownMenu.Item>
+            <DropdownMenu.Separator />
+            <Show when={vcs()?.initialized}>
+              <DropdownMenu.Item
+                as="button"
+                type="button"
+                disabled={!appStore.connected || boardStore.vcsLoading}
+                onSelect={toggleGitAction}
+              >
+                <Icon name="git-compare" />
+                {t(vcs()?.hasRemote ? "project_runtime.commit_or_push" : "project_runtime.commit")}
+              </DropdownMenu.Item>
+            </Show>
+            <DropdownMenu.Item
+              as="button"
+              type="button"
+              disabled={!appStore.connected || boardStore.vcsLoading || !dir()}
+              onSelect={() => void loadMeta(dir()).catch(() => undefined)}
+            >
+              <Icon name="refresh" />
+              {t("common.refresh")}
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Portal>
+      </DropdownMenu.Root>
+    )
+  }
+
   const PanelShell = () => (
-    <div class="project-runtime-panel-shell">
+    <div ref={panelShell} class="project-runtime-panel-shell">
       <div class="project-runtime-panel-head">
         <Button
           type="button"
@@ -1170,10 +1276,11 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
           data-ui="project-runtime-panel-disclosure"
           aria-expanded={panelExpanded()}
           aria-controls="projectRuntimeExpandedBody"
+          title={dir()}
           onClick={() => setPanelExpanded((value) => !value)}
         >
           <span class="project-runtime-panel-title-group">
-            <span class="project-runtime-panel-title oc-section-heading">{t("project_runtime.environment_title")}</span>
+            <span class="project-runtime-panel-title oc-section-heading">{projectName()}</span>
             <Icon name={panelExpanded() ? "chevron-up" : "chevron"} size="compact" aria-hidden="true" />
           </span>
         </Button>
@@ -1185,39 +1292,12 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
             </Show>
           </span>
         </Show>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          tone="neutral"
-          title={t("common.refresh")}
-          aria-label={t("common.refresh")}
-          disabled={!appStore.connected || boardStore.vcsLoading || !dir()}
-          onClick={() => void loadMeta(dir()).catch(() => undefined)}
-        >
-          <Icon name="refresh" size="compact" />
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          tone="neutral"
-          class="project-runtime-panel-trailing-control"
-          data-ui="project-runtime-local-environment-open"
-          title={t("project_runtime.local_environment_create")}
-          aria-label={t("project_runtime.local_environment_create")}
-          onClick={openLocalEnvironmentEditor}
-        >
-          <Icon name="plus" size="medium" />
-        </Button>
+        <ActionsMenu />
       </div>
       <Show when={panelExpanded()}>
         <div class="project-runtime-expanded-body" id="projectRuntimeExpandedBody">
-          <div
-            class="project-runtime-environment-body project-runtime-menu-region"
-            data-ui="project-runtime-environment-details"
-          >
-            <Show when={changedFileCount() > 0}>
+          <Show when={changedFileCount() > 0}>
+            <div class="project-runtime-menu-region">
               <Button
                 type="button"
                 variant="ghost"
@@ -1236,113 +1316,83 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                   </Show>
                 </span>
               </Button>
-            </Show>
-            <Button
-              type="button"
-              variant="ghost"
-              size="md"
-              tone="neutral"
-              class="project-runtime-info-row project-runtime-info-action"
-              data-ui="project-runtime-add-tool"
-              title={t("right_dock.add")}
-              aria-label={t("right_dock.add")}
-              onClick={openRightDockAddMenu}
-            >
-              <Icon name="plus" size="medium" />
-              <span>{t("right_dock.add")}</span>
-            </Button>
-            <Button
-              ref={localMenuAnchor}
-              type="button"
-              variant="ghost"
-              size="md"
-              tone="neutral"
-              class="project-runtime-info-row project-runtime-info-action project-runtime-control-trigger"
-              data-ui="project-runtime-local"
-              data-expanded={localMenuOpen() ? "" : undefined}
-              title={dir()}
-              aria-label={`${t("project_runtime.local")}: ${dir()}`}
-              aria-haspopup="menu"
-              aria-expanded={localMenuOpen()}
-              onClick={() => void openLocalMenu(localMenuAnchor)}
-            >
-              <Icon name="terminal-powershell" size="medium" />
-              <span class="project-runtime-directory-label">
-                {dir().split(/[\\/]/).filter(Boolean).at(-1) || t("project_runtime.local")}
-              </span>
-              <Icon class="project-runtime-info-caret" name="chevron-down" />
-            </Button>
-            <Show
-              when={vcs()?.initialized}
-              fallback={
-                <div class="project-runtime-info-row" data-ui="project-runtime-git-uninitialized">
-                  <Icon name="git-branch" size="medium" />
-                  <span>{gitStatusLabel()}</span>
-                  <Show when={vcs()?.initialized === false && canInitGit()}>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="mini"
-                      tone="accent"
-                      data-ui="project-init-git"
-                      data-busy={gitBusy() ? "true" : "false"}
-                      disabled={gitBusy()}
-                      onClick={(event) => void handleInitGit(event)}
-                    >
-                      <span>{gitBusy() ? t("common.loading") : t("git.init")}</span>
-                    </Button>
-                  </Show>
-                </div>
-              }
-            >
+            </div>
+          </Show>
+          <div
+            class="project-runtime-environment-body project-runtime-menu-region"
+            data-ui="project-runtime-environment-details"
+          >
+            <div class="project-runtime-project-row">
+              <Show
+                when={vcs()?.initialized}
+                fallback={
+                  <div class="project-runtime-info-row" data-ui="project-runtime-git-uninitialized">
+                    <Icon name="git-branch" size="medium" />
+                    <span>{gitStatusLabel()}</span>
+                    <Show when={vcs()?.initialized === false && canInitGit()}>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="mini"
+                        tone="accent"
+                        data-ui="project-init-git"
+                        data-busy={gitBusy() ? "true" : "false"}
+                        disabled={gitBusy()}
+                        onClick={(event) => void handleInitGit(event)}
+                      >
+                        <span>{gitBusy() ? t("common.loading") : t("git.init")}</span>
+                      </Button>
+                    </Show>
+                  </div>
+                }
+              >
+                <Button
+                  ref={branchMenuAnchor}
+                  type="button"
+                  variant="ghost"
+                  size="md"
+                  tone="neutral"
+                  class="project-runtime-info-action project-runtime-control-trigger project-runtime-branch-trigger"
+                  data-ui="project-runtime-branch"
+                  data-expanded={branchMenuOpen() ? "" : undefined}
+                  title={`${branchLabel()} · ${gitStatusLabel()}`}
+                  aria-label={`${t("chat.git.branch")}: ${branchLabel()}`}
+                  disabled={!appStore.connected || !vcs()?.commit}
+                  aria-haspopup="menu"
+                  aria-expanded={branchMenuOpen()}
+                  onClick={() => void openBranchMenu(branchMenuAnchor)}
+                >
+                  <span class="project-runtime-info-value project-runtime-branch-value">{branchLabel()}</span>
+                  <Icon class="project-runtime-info-caret" name="chevron" />
+                </Button>
+              </Show>
               <Button
-                ref={branchMenuAnchor}
+                ref={localMenuAnchor}
                 type="button"
                 variant="ghost"
-                size="md"
+                size="icon"
                 tone="neutral"
-                class="project-runtime-info-row project-runtime-info-action project-runtime-control-trigger"
-                data-ui="project-runtime-branch"
-                data-expanded={branchMenuOpen() ? "" : undefined}
-                title={branchLabel()}
-                aria-label={`${t("chat.git.branch")}: ${branchLabel()}`}
-                disabled={!appStore.connected || !vcs()?.commit}
+                class="project-runtime-local-control"
+                data-ui="project-runtime-local"
+                title={dir()}
+                aria-label={`${t("project_runtime.local")}: ${dir()}`}
                 aria-haspopup="menu"
-                aria-expanded={branchMenuOpen()}
-                onClick={() => void openBranchMenu(branchMenuAnchor)}
+                aria-expanded={localMenuOpen()}
+                onClick={() => void openLocalMenu(localMenuAnchor)}
               >
-                <Icon name="git-branch" size="medium" />
-                <span class="project-runtime-info-value project-runtime-branch-value">{branchLabel()}</span>
-                <Icon class="project-runtime-info-caret" name="chevron-down" />
+                <Icon name="more-horizontal" size="medium" />
               </Button>
-            </Show>
-            <Show when={vcs()?.initialized}>
+            </div>
+            <Show when={vcs()?.initialized && (repositoryCounts() || gitArrows())}>
               <div class="project-runtime-repository-status" data-tone={gitTone()}>
                 <span>{gitStatusLabel()}</span>
                 <Show when={repositoryCounts()}>
                   <span>{repositoryCounts()}</span>
                 </Show>
-              </div>
-              <Button
-                type="button"
-                variant="ghost"
-                size="md"
-                tone="neutral"
-                class="project-runtime-info-row project-runtime-info-action project-runtime-control-trigger"
-                data-ui="project-runtime-commit-push"
-                data-expanded={gitActionOpen() ? "" : undefined}
-                aria-expanded={gitActionOpen()}
-                aria-haspopup="dialog"
-                aria-controls="projectRuntimeGitDialog"
-                onClick={toggleGitAction}
-                disabled={!appStore.connected || boardStore.vcsLoading}
-              >
-                <Icon name="git-compare" size="medium" />
-                <span>{t(vcs()?.hasRemote ? "project_runtime.commit_or_push" : "project_runtime.commit")}</span>
                 <Show when={gitArrows()}>
-                  <span class="project-runtime-info-value">{gitArrows()}</span>
+                  <span>{gitArrows()}</span>
                 </Show>
-              </Button>
+              </div>
             </Show>
             <Show when={boardStore.vcsDirectory === dir() && boardStore.vcsError}>
               <div class="project-runtime-operation-error" role="alert">
@@ -1389,22 +1439,49 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 variant="ghost"
                 size="sm"
                 tone="neutral"
-                class="project-runtime-subagent-summary project-runtime-section-title-row"
+                class="project-runtime-subagent-summary"
                 data-ui="project-runtime-subagent-summary"
                 aria-label={`${t("project_runtime.subagents")}: ${t("project_runtime.subagents_working", {
                   count: workingSubagentCount(),
                 })}, ${t("project_runtime.subagents_done", { count: doneSubagentCount() })}`}
                 onClick={openSubagentSummary}
               >
-                <Icon name="config-agent-models" size="compact" />
-                <span class="project-runtime-subagent-working">
-                  {t("project_runtime.subagents_working", { count: workingSubagentCount() })}
+                <span class="project-runtime-subagent-avatars" aria-hidden="true">
+                  <For each={subagentRecords()}>
+                    {(record) => <Avatar role={record.stage} status={record.status} />}
+                  </For>
                 </span>
-                <span class="project-runtime-subagent-done">
-                  {t("project_runtime.subagents_done", { count: doneSubagentCount() })}
-                </span>
+                <Show when={workingSubagentCount() > 0}>
+                  <span class="project-runtime-subagent-working">
+                    {t("project_runtime.subagents_working", { count: workingSubagentCount() })}
+                  </span>
+                </Show>
+                <Show when={doneSubagentCount() > 0}>
+                  <span class="project-runtime-subagent-done">
+                    {t("project_runtime.subagents_done", { count: doneSubagentCount() })}
+                  </span>
+                </Show>
               </Button>
             </section>
+          </Show>
+          <Show when={requestSources().length > 0}>
+            <div class="project-runtime-source-section project-runtime-menu-region">
+              <div class="project-runtime-menu-region-head project-runtime-source-head oc-section-heading">
+                <span>{t("project_runtime.sources")}</span>
+              </div>
+              <div class="project-runtime-source-list project-runtime-bounded-list" data-runtime-list="sources">
+                <For each={requestSources()}>
+                  {(part) => (
+                    <div class="project-runtime-source-row" title={part.filename || part.url || ""}>
+                      <div class="project-runtime-source-thumb">
+                        <FilePart part={part} />
+                      </div>
+                      <span>{part.filename || part.url || ""}</span>
+                    </div>
+                  )}
+                </For>
+              </div>
+            </div>
           </Show>
           <Show when={hasRuntimeResourceSections()}>
             <div class="project-runtime-resource-sections project-runtime-menu-region">
@@ -1568,26 +1645,6 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
             </div>
           </Show>
           <deliveries.Inventory />
-          <Show when={requestSources().length > 0}>
-            <div class="project-runtime-source-section project-runtime-menu-region">
-              <div class="project-runtime-menu-region-head project-runtime-source-head oc-section-heading">
-                <span>{t("project_runtime.sources")}</span>
-                <Icon name="plus" size="medium" aria-hidden="true" />
-              </div>
-              <div class="project-runtime-source-list project-runtime-bounded-list" data-runtime-list="sources">
-                <For each={requestSources()}>
-                  {(part) => (
-                    <div class="project-runtime-source-row" title={part.filename || part.url || ""}>
-                      <div class="project-runtime-source-thumb">
-                        <FilePart part={part} />
-                      </div>
-                      <span>{part.filename || part.url || ""}</span>
-                    </div>
-                  )}
-                </For>
-              </div>
-            </div>
-          </Show>
         </div>
       </Show>
     </div>
