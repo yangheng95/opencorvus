@@ -96,6 +96,17 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/b1d01e71e7c56a62cd97baf3bb3bc11bf173fff9) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/f4be7e43b3ae0c8c0afcb7d5e708e071ac5e74f8...b1d01e71e7c56a62cd97baf3bb3bc11bf173fff9)。
 
+## 0.1.16 - 2026-09-28
+
+### Fixed
+
+- 改善 macOS Intel 发布任务的缓存处理，为安装包完成后的上传与网站部署保留整体发布预算。
+- 保留原生打包失败诊断，继续使用同一平台矩阵与发布身份校验。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/f4be7e43b3ae0c8c0afcb7d5e708e071ac5e74f8) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/dd999804c984360146231386550c2cf17e7ab0e0...f4be7e43b3ae0c8c0afcb7d5e708e071ac5e74f8)。
+
 ## 0.1.14 - 2026-09-24
 
 ### Changed

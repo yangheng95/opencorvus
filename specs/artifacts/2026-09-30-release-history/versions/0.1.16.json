@@ -1,0 +1,15 @@
+{
+  "version": "0.1.16",
+  "source": "f4be7e43b3ae0c8c0afcb7d5e708e071ac5e74f8",
+  "tag": "v0.1.16",
+  "previousSource": "dd999804c984360146231386550c2cf17e7ab0e0",
+  "sourceDate": "2026-09-28T18:35:35+08:00",
+  "commits": [
+    {
+      "sha": "f4be7e43b3ae0c8c0afcb7d5e708e071ac5e74f8",
+      "date": "2026-09-28T18:35:35+08:00",
+      "subject": "Repair macOS release cache timeout and prepare v0.1.16"
+    }
+  ],
+  "stats": ".github/workflows/package-overlay.yml              |  4 ++++\n CHANGELOG.md                                       |  3 ++-\n bun.lock                                           | 16 ++++++-------\n packages/channel-config/package.json               |  2 +-\n packages/channel-runtime/package.json              |  2 +-\n .../native/process-supervisor/Cargo.lock           |  2 +-\n .../native/process-supervisor/Cargo.toml           |  2 +-\n packages/opencorvus/package.json                   |  2 +-\n packages/overlay/package.json                      |  2 +-\n packages/overlay/src-tauri/Cargo.lock              |  2 +-\n packages/overlay/src-tauri/Cargo.toml              |  2 +-\n packages/overlay/src-tauri/tauri.conf.json         |  4 ++--\n packages/plugin/package.json                       |  2 +-\n packages/sdk/js/package.json                       |  2 +-\n packages/transport-protocol/package.json           |  2 +-\n packages/util/package.json                         |  2 +-\n .../content/expert-squad-distribution.generated.ts |  6 ++---\n specs/README.md                                    |  1 +\n .../records/2026-09/2026-09-28-v0.1.15-release.md  |  4 +++-\n .../records/2026-09/2026-09-28-v0.1.16-release.md  | 26 ++++++++++++++++++++++\n specs/records/2026-09/README.md                    |  1 +\n 21 files changed, 62 insertions(+), 27 deletions(-)"
+}
