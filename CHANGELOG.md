@@ -850,6 +850,23 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/5a0f972b1dde004b64572c877caa2f973de82062) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/640984800e06cb368ac562284638a5c0fe05635e...5a0f972b1dde004b64572c877caa2f973de82062)。
 
+## 0.0.42beta - 2026-08-12
+
+### Added
+
+- 提供项目记忆与权限模式的界面入口；新增 Provider 用量看板和模型服务计量信息。
+- 官网专家团 Registry（注册表）使用数据库发布，生成内容、精确版本与签名资源按同一份事实提供。
+- Mission 创建可获得市场专家团建议，Provider 凭据输入得到明确提示。
+
+### Fixed
+
+- 统一权限、项目与记忆的责任边界，修复无执行方唤醒、定时运行回复结算及持久化唤醒竞争。
+- 修复运行时存活、交付汇总、网站精确标签源码和发布检查；改善公开导航、品牌图标与下载入口。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/640984800e06cb368ac562284638a5c0fe05635e) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/9652cff4da8e45e547b4a85a5e4c93570cf1a10e...640984800e06cb368ac562284638a5c0fe05635e)。
+
 ## 0.0.38beta - 2026-08-09
 
 ### Added
