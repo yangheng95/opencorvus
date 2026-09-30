@@ -1,0 +1,380 @@
+{
+  "version": "0.1.0-beta",
+  "source": "d1f974e58306ea3058e356192e2ffd2de910cafe",
+  "tag": "v0.1.0-beta",
+  "previousSource": "5b11c32e5b5e914cfda9979b12d67c6ed1170714",
+  "sourceDate": "2026-09-16T00:01:59+08:00",
+  "commits": [
+    {
+      "sha": "d1f974e58306ea3058e356192e2ffd2de910cafe",
+      "date": "2026-09-16T00:01:59+08:00",
+      "subject": "test: synchronize published squad revision expectations"
+    },
+    {
+      "sha": "1c0cb15eab83647818670c0e92f2f56064b3dde4",
+      "date": "2026-09-15T23:19:05+08:00",
+      "subject": "test: align dynamic result read with settlement authority"
+    },
+    {
+      "sha": "c9f6618bac7d82ff2fa2813b1b65dafe57f9891e",
+      "date": "2026-09-15T22:45:40+08:00",
+      "subject": "test: preserve causal control input during compaction fixture"
+    },
+    {
+      "sha": "dc3dc21d0d9d2176404e1c73824ae7bb7f5eb594",
+      "date": "2026-09-15T22:21:15+08:00",
+      "subject": "fix(release): align catalog metadata and causal test fixtures"
+    },
+    {
+      "sha": "60d3e5c8f0efbf2791148319db68d7037190585f",
+      "date": "2026-09-15T21:59:06+08:00",
+      "subject": "release: prepare v0.1.0-beta with first-run binary checks"
+    },
+    {
+      "sha": "a8865f4de1853d43710b5dcd35c0f246006d9543",
+      "date": "2026-09-15T20:30:29+08:00",
+      "subject": "fix(config): materialize defaults for absent global source"
+    },
+    {
+      "sha": "19011684e5c20527c66f78554d57a6af28ab045e",
+      "date": "2026-09-15T00:19:19+08:00",
+      "subject": "fix(benchmark): require valid Harbor agent settlement"
+    },
+    {
+      "sha": "b02d7d20552cde4cdc7378ef7950fbb35f290f63",
+      "date": "2026-09-14T23:30:38+08:00",
+      "subject": "fix(benchmark): close Harbor Docker runtime boundary"
+    },
+    {
+      "sha": "fdb795d1b49e3b56430c4de4d2ee70633d5d0228",
+      "date": "2026-09-14T22:57:13+08:00",
+      "subject": "feat(benchmark): run AutomationBench through Harbor"
+    },
+    {
+      "sha": "5a4ea6c560fc2fb8893e0a7eee2c1efe0eade887",
+      "date": "2026-09-14T19:25:34+08:00",
+      "subject": "fix(base): preserve executable outcome closure"
+    },
+    {
+      "sha": "eff5665bd8198d82e4eca351ef4a4da99f98e1ed",
+      "date": "2026-09-14T18:43:50+08:00",
+      "subject": "docs(bench): record v42 case gate"
+    },
+    {
+      "sha": "01955d74e158ae427d2b6d90f48f2837e10c1508",
+      "date": "2026-09-14T18:18:09+08:00",
+      "subject": "fix(base): preserve complete source values"
+    },
+    {
+      "sha": "678a8c1f0077b8b5b0f6e12ad9d7b67623b5f65a",
+      "date": "2026-09-14T17:45:55+08:00",
+      "subject": "perf(base): converge evidence frontiers"
+    },
+    {
+      "sha": "18e1564a051e49d27b56f3dcd72818335ee1aded",
+      "date": "2026-09-14T16:58:50+08:00",
+      "subject": "fix(panel): normalize initial message offsets"
+    },
+    {
+      "sha": "a3ee0a42ff8c7c93885587cbb1ddbaafb0e0bf43",
+      "date": "2026-09-14T16:21:13+08:00",
+      "subject": "perf(mission): batch terminal evidence reads"
+    },
+    {
+      "sha": "027f68a3859108a6a92782b3ee0b135d7e344ccd",
+      "date": "2026-09-14T15:07:40+08:00",
+      "subject": "fix(base): close abstract guidance coverage"
+    },
+    {
+      "sha": "ad785212cae4906bb20e96dd52e401020f5fcf75",
+      "date": "2026-09-14T14:36:34+08:00",
+      "subject": "fix(base): validate destination ownership before mutation"
+    },
+    {
+      "sha": "2d4c0091df7fd67ffd13b04f5d0c001017af074e",
+      "date": "2026-09-14T13:27:39+08:00",
+      "subject": "fix(base): distinguish source authority from outcomes"
+    },
+    {
+      "sha": "e302d10e8138d712512f11a6fd0b25ca056b7186",
+      "date": "2026-09-14T12:28:23+08:00",
+      "subject": "fix(engine): keep task evidence reads acyclic"
+    },
+    {
+      "sha": "9a922319927c832631c3b3b8a0c982e9bde4e828",
+      "date": "2026-09-14T12:24:29+08:00",
+      "subject": "chore(sdk): regenerate mission message action"
+    },
+    {
+      "sha": "39028c299cdaad6b939ca02973347385fd5d15c7",
+      "date": "2026-09-14T12:16:44+08:00",
+      "subject": "fix(mission): read terminal task evidence exactly"
+    },
+    {
+      "sha": "8e948e96fd920ffe95c885b12d94986bd1ca33c3",
+      "date": "2026-09-14T10:02:22+08:00",
+      "subject": "docs(benchmark): record v34 provider preflight block"
+    },
+    {
+      "sha": "53125b301313aacad457a40eb5c54c58cbe3fb31",
+      "date": "2026-09-14T09:50:45+08:00",
+      "subject": "fix(session): preserve user authority in provider prompts"
+    },
+    {
+      "sha": "4266a6d871fb952308a71e5bd03b688ec4356afb",
+      "date": "2026-09-14T06:53:30+08:00",
+      "subject": "fix(mission): bind task requests to user authority"
+    },
+    {
+      "sha": "a1ccb61de80dbba92b6830643245da493733c7d5",
+      "date": "2026-09-14T05:17:28+08:00",
+      "subject": "fix(base): make source discovery recall first"
+    },
+    {
+      "sha": "a73277baab140cdf336f1f71b4b56786fe5ef588",
+      "date": "2026-09-14T04:39:15+08:00",
+      "subject": "fix(agent): preserve user semantics across task delegation"
+    },
+    {
+      "sha": "191d116e791213350d7177fbf5da01b59ffea5ca",
+      "date": "2026-09-14T03:59:19+08:00",
+      "subject": "fix(base): normalize source rule coverage"
+    },
+    {
+      "sha": "01e65cf243391370360e08f4e0400bb176e187da",
+      "date": "2026-09-14T03:34:50+08:00",
+      "subject": "fix(base): close source facts before mutation"
+    },
+    {
+      "sha": "d23ca129dd525079110c73cd4e962c0823a1e225",
+      "date": "2026-09-14T02:52:47+08:00",
+      "subject": "fix(base): require source planning before irreversible actions"
+    },
+    {
+      "sha": "385df5f2dfafad7ca4873c1d9ed35eae15e9c9f3",
+      "date": "2026-09-14T02:25:11+08:00",
+      "subject": "fix(llm): align semantic activity with published progress"
+    },
+    {
+      "sha": "b7b43c7c311ef16f117155bd1b3b9d3b9e7c04fe",
+      "date": "2026-09-14T01:59:54+08:00",
+      "subject": "fix(base): scale orchestration to semantic work"
+    },
+    {
+      "sha": "bebb7c116cec2d0d5a4110dc74352946102cd79f",
+      "date": "2026-09-14T01:04:24+08:00",
+      "subject": "fix(base): verify external mutations from raw receipts"
+    },
+    {
+      "sha": "fa91105867dde240099d0c41cb088fe8e0d54569",
+      "date": "2026-09-14T00:33:31+08:00",
+      "subject": "fix(base): preserve delivery semantics across source planning"
+    },
+    {
+      "sha": "1c76f439f50edc6f3cf9f93314a5209ba617e4b7",
+      "date": "2026-09-14T00:01:38+08:00",
+      "subject": "fix(base): bound source-planned execution roles"
+    },
+    {
+      "sha": "3117436344fd85834248e93dd723814ba1b18711",
+      "date": "2026-09-13T23:27:56+08:00",
+      "subject": "reduce source workflow coordination"
+    },
+    {
+      "sha": "1b70d8e76fa51a6ded949333dc49386d4f780da1",
+      "date": "2026-09-13T23:02:34+08:00",
+      "subject": "add pre-mutation source planning"
+    },
+    {
+      "sha": "00814f5c7152faacd390d32aef3baa8b47cc099f",
+      "date": "2026-09-13T22:39:21+08:00",
+      "subject": "tighten benchmark source discovery"
+    },
+    {
+      "sha": "7a04d4d8d56fcdb715624e121ca6f34fc5760e0f",
+      "date": "2026-09-13T22:06:16+08:00",
+      "subject": "fix benchmark evidence recovery"
+    },
+    {
+      "sha": "93c48fef85d42932e4aa42b5432ed3d8dd8b3ea4",
+      "date": "2026-09-13T21:22:54+08:00",
+      "subject": "fix(benchmark): cancel settled operation deadlines"
+    },
+    {
+      "sha": "13950d1740c8c378de21c5b2f75dd1108d3db786",
+      "date": "2026-09-13T20:51:48+08:00",
+      "subject": "fix(orchestrator): expose causal worker evidence"
+    },
+    {
+      "sha": "e5f3e9d1864cf72b4adf76efa57faf74d4405ef0",
+      "date": "2026-09-13T19:27:44+08:00",
+      "subject": "fix benchmark source query semantics"
+    },
+    {
+      "sha": "b9adf241d7f5840d52b703684a463a2a5d165264",
+      "date": "2026-09-13T19:05:10+08:00",
+      "subject": "fix benchmark evidence handoff semantics"
+    },
+    {
+      "sha": "8ef2a1f97562b100e7f7df15ccbe640543719918",
+      "date": "2026-09-13T18:42:28+08:00",
+      "subject": "fix benchmark final-state evidence semantics"
+    },
+    {
+      "sha": "1eb12f5357e533b8a9edee345138c971a3fb5726",
+      "date": "2026-09-13T18:13:08+08:00",
+      "subject": "perf(base): carry verification coordinates"
+    },
+    {
+      "sha": "b90f90582a23bf804a3b1ac0e0b8e323318f1405",
+      "date": "2026-09-13T17:50:00+08:00",
+      "subject": "fix(runtime): bound acceptance repair evidence"
+    },
+    {
+      "sha": "5669a2e8ad1fb2d633c50ac0c2178b1ed654fb6f",
+      "date": "2026-09-13T16:54:27+08:00",
+      "subject": "perf(base): reuse external verification coordinates"
+    },
+    {
+      "sha": "20c0a37182789385da0bad5dff872ac3bfa37912",
+      "date": "2026-09-13T16:17:01+08:00",
+      "subject": "fix(runtime): project explicit task skills"
+    },
+    {
+      "sha": "d9eff707a58f1e94d5cbe4b21362a6849ddeb3c0",
+      "date": "2026-09-13T14:48:55+08:00",
+      "subject": "fix(base): remove redundant task setup"
+    },
+    {
+      "sha": "cbd35d889d52709ac2497c05d8a3568f70cf375c",
+      "date": "2026-09-13T14:28:17+08:00",
+      "subject": "fix(benchmark): enforce real skill activation"
+    },
+    {
+      "sha": "6e7b35cbdd7787be2a0a37f103a918a8d76419a0",
+      "date": "2026-09-13T13:52:35+08:00",
+      "subject": "fix(base): close external mutation evidence"
+    },
+    {
+      "sha": "283ef0fe4cea29088ab501140b4ad598658e7fc6",
+      "date": "2026-09-13T13:13:43+08:00",
+      "subject": "fix(benchmark): bound Base evidence loops"
+    },
+    {
+      "sha": "867e42ed3a14a3959fa518024a481428735d85d8",
+      "date": "2026-09-13T11:49:45+08:00",
+      "subject": "fix base benchmark coordination overhead"
+    },
+    {
+      "sha": "c54688833a476b593f539ce1690c6c29007d9a0e",
+      "date": "2026-09-13T10:50:59+08:00",
+      "subject": "document corrected benchmark viewer catalog"
+    },
+    {
+      "sha": "b2fb372477d83b80176131ede941b89ca24d7c92",
+      "date": "2026-09-13T05:35:54+08:00",
+      "subject": "fix benchmark settlement and termination contracts"
+    },
+    {
+      "sha": "536d69cdf2d040b339073b5a728af5ce8f4027a5",
+      "date": "2026-09-13T04:13:14+08:00",
+      "subject": "fix(benchmark): select the restricted shell by case range"
+    },
+    {
+      "sha": "75f48ef37eeefdbca23b62bc9872c28dd5950a15",
+      "date": "2026-09-13T03:39:57+08:00",
+      "subject": "fix(benchmark): validate evidence against the selected case manifest"
+    },
+    {
+      "sha": "51b780ee715aba2d80e30eaf5a89bae1ed62f3cb",
+      "date": "2026-09-13T02:40:47+08:00",
+      "subject": "fix(skill): finalize projected loaders with effective execution policy"
+    },
+    {
+      "sha": "227654a8645bf75028c79ea73db36cee4616f940",
+      "date": "2026-09-13T02:07:48+08:00",
+      "subject": "docs(benchmark): audit complete Luna comparison pilot and runtime update"
+    },
+    {
+      "sha": "00ccc5e09f1bee33b1ced2aaa3fd974585312f86",
+      "date": "2026-09-13T01:21:57+08:00",
+      "subject": "fix(benchmark): verify write-ahead lineage and collection member receipts"
+    },
+    {
+      "sha": "cd22e4324466071ee8c41f5c5cac71a5be20b666",
+      "date": "2026-09-13T00:48:54+08:00",
+      "subject": "fix(benchmark): audit current Mission completion occurrences"
+    },
+    {
+      "sha": "a176ce7e4ec60d3cf26b45afaa5c061c02e0790f",
+      "date": "2026-09-13T00:22:03+08:00",
+      "subject": "docs(benchmark): record current-source Luna comparison launch"
+    },
+    {
+      "sha": "134d34336cdb19c90d96ac49640c0746556a3f0f",
+      "date": "2026-09-13T00:09:51+08:00",
+      "subject": "docs(benchmark): record canonical runtime installation and recovery verification"
+    },
+    {
+      "sha": "b463c413437a0cdbf042885dc7c928344501cc46",
+      "date": "2026-09-12T23:51:14+08:00",
+      "subject": "fix(runtime): recover benchmark turns through canonical production source"
+    },
+    {
+      "sha": "38c12ae10761f920f8d1df15127790e51ecdd4ff",
+      "date": "2026-09-12T22:09:14+08:00",
+      "subject": "fix(runtime): admit unstarted workflow nodes during acceptance repair"
+    },
+    {
+      "sha": "2e378d10b8ad369ddb6bbee1656ee8a74853f29d",
+      "date": "2026-09-12T20:14:44+08:00",
+      "subject": "fix(benchmark): verify actual execution conditions against sealed lineage"
+    },
+    {
+      "sha": "467abf897b8f924d7f8840fda97bb826e53cace5",
+      "date": "2026-09-12T19:08:14+08:00",
+      "subject": "fix(base): clarify workflow selection for independent verification"
+    },
+    {
+      "sha": "f69c7cfdbd0165b99fb5bd0482f08da978ad0b88",
+      "date": "2026-09-12T17:56:17+08:00",
+      "subject": "fix(benchmark): preserve semantic stream progress evidence"
+    },
+    {
+      "sha": "0fb9406c259b1b764c2829e0fa9c8fd3e81dc6a3",
+      "date": "2026-09-12T17:01:47+08:00",
+      "subject": "fix(runtime): prioritize outcomes and simplify Base coordination"
+    },
+    {
+      "sha": "185dc630ab0e296a88185e36a55bd04529d577d9",
+      "date": "2026-09-12T15:05:54+08:00",
+      "subject": "fix(protocol): decouple scheduler send receipts from recipient execution"
+    },
+    {
+      "sha": "3c7f792982a5c5b525744442d41d91a662113cd8",
+      "date": "2026-09-12T14:06:55+08:00",
+      "subject": "feat(benchmark): show live Luna and Base reproduction results"
+    },
+    {
+      "sha": "98b33b7095128c5fb72e08988d5b919ae9c6c844",
+      "date": "2026-09-12T13:23:12+08:00",
+      "subject": "docs(benchmark): record authenticated Luna reproduction launch"
+    },
+    {
+      "sha": "cb156b3bd2bca08d65fb247d54c4e4b0b9d86b1d",
+      "date": "2026-09-12T11:42:56+08:00",
+      "subject": "fix(docs): repair paper branch architecture index"
+    },
+    {
+      "sha": "ed9c98449293d961a573a7d934536f65857b6c66",
+      "date": "2026-09-12T11:40:03+08:00",
+      "subject": "feat(benchmark): prepare matched Luna and Base reproduction"
+    },
+    {
+      "sha": "781c30c7b43f0992d436c962ef67267a81dea82e",
+      "date": "2026-09-11T01:45:11+08:00",
+      "subject": "docs: record authorized paper branch relocation"
+    }
+  ],
+  "stats": ".gitignore                                         |    1 +\n CHANGELOG.md                                       |   16 +\n bun.lock                                           |   16 +-\n .../agents/office-delivery-builder/system.md       |    2 +-\n .../builtin/office-delivery/expert-squad.jsonc     |    2 +-\n expert-squads/builtin/review-debug/README.md       |    2 +-\n .../builtin/review-debug/expert-squad.jsonc        |    2 +-\n .../agents/squad-sdk-contract-reviewer/system.md   |    2 +-\n .../squad-sdk/agents/squad-sdk-planner/system.md   |    2 +-\n expert-squads/builtin/squad-sdk/expert-squad.jsonc |    6 +-\n .../builtin/squad-sdk/skills/authoring/SKILL.md    |   10 +-\n .../builtin/squad-sdk/skills/import/SKILL.md       |    4 +-\n packages/channel-config/package.json               |    2 +-\n packages/channel-runtime/package.json              |    2 +-\n .../opencorvus/generated/expert-squad-payload.ts   |    8 +-\n .../opencorvus/generated/expert-squad-revisions.ts |   12 +-\n .../native/process-supervisor/Cargo.lock           |    2 +-\n .../native/process-supervisor/Cargo.toml           |    2 +-\n packages/opencorvus/package.json                   |    2 +-\n .../external-agent/automationbench-api.SKILL.md    |   72 +\n .../external-agent/automationbench-case-set.json   |  475 +++\n .../external-agent/automationbench_bridge.py       |  551 +++\n .../external-agent/automationbench_tool.py         |  156 +\n .../catalog-automationbench-evidence.ts            | 1207 ++++++\n .../script/benchmark/external-agent/contract.ts    | 3557 ++++++++++++++++++\n .../diagnose-automationbench-bridge.ts             |  208 ++\n .../diagnose-automationbench-isolation.ts          |  160 +\n .../freeze_automationbench_case_set.py             |  226 ++\n .../install-automationbench-restricted-shells.sh   |   32 +\n .../redact-automationbench-batch-receipt.ts        |   63 +\n .../redact-automationbench-evidence.ts             |  128 +\n .../external-agent/restricted-agent-shell-base.sh  |   43 +\n .../external-agent/restricted-agent-shell.sh       |   43 +\n .../external-agent/restricted-shell-evidence.ts    |   29 +\n .../external-agent/run-automationbench-batch.ts    |  691 ++++\n .../external-agent/run-automationbench.ts          | 2344 ++++++++++++\n .../benchmark/external-agent/runtime-evidence.ts   |  176 +\n .../benchmark/external-agent/source-evidence.ts    |   59 +\n .../external-agent/terminal-cost-evidence.ts       |  104 +\n .../external-agent/test_automationbench_tool.py    |  155 +\n .../benchmark/external-agent/trace-evidence.ts     |   51 +\n .../verify-automationbench-evidence.ts             |  846 +++++\n .../external-agent/verify-selected-case-set.ts     |   22 +\n .../verify_automationbench_replay.py               |  155 +\n .../opencorvus/script/benchmark/harbor/README.md   |   52 +\n .../harbor/generate_automationbench_tasks.py       |  194 +\n .../script/benchmark/harbor/job-base-case2.yaml    |   21 +\n .../script/benchmark/harbor/opencorvus_agent.py    |  486 +++\n .../benchmark/harbor/prepare_opencorvus_bundle.py  |  104 +\n .../harbor/run_opencorvus_automationbench.py       | 1127 ++++++\n .../script/benchmark/harbor/score_harbor.py        |   77 +\n .../opencorvus/script/benchmark/harbor/test.sh     |    5 +\n packages/opencorvus/script/benchmark/tsconfig.json |    6 +\n packages/opencorvus/script/build.ts                |    5 +\n .../script/check-builtin-expert-squad-topology.ts  |   12 +-\n .../src/agent/artifact-provenance-facts.ts         |   41 -\n .../opencorvus/src/agent/artifact-read-facts.ts    |   10 -\n packages/opencorvus/src/agent/runner.ts            |   39 +-\n packages/opencorvus/src/artifact-catalog/index.ts  |   23 +-\n .../opencorvus/src/capability/reveal-receipt.ts    |   47 +-\n .../opencorvus/src/capability/routine-tools.ts     |    1 +\n packages/opencorvus/src/config/config.ts           |    4 +-\n packages/opencorvus/src/conversation/capability.ts |    5 +-\n .../src/engine/completion-decision-read.ts         |   34 +\n .../src/engine/dispatch-collection-contract.ts     |   35 +-\n .../opencorvus/src/engine/dispatch-settlement.ts   |  223 +-\n .../opencorvus/src/engine/task-creation-request.ts |    3 +\n .../opencorvus/src/engine/task-request-source.ts   |  265 ++\n .../src/expert-squad/builtin/advanced/README.md    |    2 +-\n .../advanced/agents/test-engineer/system.md        |    4 +-\n .../builtin/advanced/expert-squad.jsonc            |    2 +-\n .../src/expert-squad/builtin/base/README.md        |   27 +-\n .../builtin/base/agents/base-developer/system.md   |   22 +-\n .../builtin/base/agents/base-planner/system.md     |   23 +-\n .../builtin/base/agents/base-researcher/system.md  |    4 +-\n .../builtin/base/agents/base-tester/system.md      |   22 +-\n .../builtin/base/agents/orchestrator/system.md     |   38 +-\n .../expert-squad/builtin/base/expert-squad.jsonc   |   44 +-\n .../src/expert-squad/builtin/base/selector.md      |   12 +-\n .../builtin/base/skills/method/SKILL.md            |   16 +-\n .../expert-squad/builtin/research-studio/README.md |    2 +-\n .../builtin/research-studio/expert-squad.jsonc     |    2 +-\n .../src/expert-squad/prompt-profile-resolver.ts    |    2 +-\n packages/opencorvus/src/intent/request-prompt.ts   |    6 +-\n packages/opencorvus/src/llm/activity.ts            |    9 +-\n .../src/mission-skill/builtin-payload.ts           |    2 +-\n .../src/mission-skill/builtin/general/SKILL.md     |    1 +\n .../opencorvus/src/mission/acceptance-ledger.ts    |    2 +-\n packages/opencorvus/src/orchestrator/agent.ts      |    2 +-\n packages/opencorvus/src/orchestrator/build-tool.ts |    4 +-\n .../dispatch-adapter-execution-context.ts          |    1 +\n .../src/orchestrator/dispatch-agent-tool.ts        |   72 +-\n .../src/orchestrator/dispatch-turn-projection.ts   |   24 +-\n .../opencorvus/src/orchestrator/no-action-tool.ts  |    2 +-\n .../src/orchestrator/read-agent-message-tool.ts    |  379 +-\n packages/opencorvus/src/orchestrator/tools.ts      |   11 +-\n packages/opencorvus/src/panel/action-ids.ts        |    2 +\n packages/opencorvus/src/panel/capability.ts        |   52 +-\n packages/opencorvus/src/permission/shell-scope.ts  |   15 +\n packages/opencorvus/src/prompt/core/build-core.txt |    2 +\n .../src/prompt/core/delegated-worker-core.txt      |    2 +\n .../opencorvus/src/prompt/core/mission-core.txt    |   70 +-\n .../src/prompt/core/orchestrator-core.txt          |    6 +-\n .../src/prompt/fragments/task-request-scope.ts     |    1 +\n .../opencorvus/src/protocol/scheduler-message.ts   |   52 +-\n packages/opencorvus/src/provider/error.ts          |  152 +-\n .../src/session/compaction-tool-result-reader.ts   |    4 +-\n packages/opencorvus/src/session/index.ts           |   23 +-\n packages/opencorvus/src/session/llm.ts             |    5 +-\n packages/opencorvus/src/session/loop.ts            |  461 ++-\n packages/opencorvus/src/session/processor.ts       |   74 +-\n packages/opencorvus/src/skill/mounts.ts            |   23 +-\n packages/opencorvus/src/storage/db.ts              |   31 +-\n packages/opencorvus/src/storage/mysql-transfer.ts  |    3 +-\n packages/opencorvus/src/storage/schema-contract.ts |   23 +-\n .../opencorvus/src/storage/sqlite-statement.ts     |   32 +\n .../storage/task-creation-identity-validation.ts   |   62 +\n packages/opencorvus/src/task-api/index.ts          |   13 +-\n packages/opencorvus/src/task-api/task-creator.ts   |  119 +-\n packages/opencorvus/src/tool/artifact-catalog.ts   |   49 +-\n packages/opencorvus/src/tool/external-directory.ts |   29 +-\n packages/opencorvus/src/tool/panel.ts              |  200 +\n packages/opencorvus/src/tool/skill.ts              |   29 +-\n .../test/accepted-input-part-immutability.test.ts  |   88 +\n .../agent-runner-fresh-session-authority.test.ts   |   39 +-\n .../test/artifact-provider-reference-flow.test.ts  |  244 +-\n .../automationbench-skill-contract.test.ts         |  155 +\n .../test/benchmark/batch-settlement.test.ts        |  408 +++\n .../test/benchmark/case-set-authority.test.ts      |   76 +\n .../harbor_automationbench_adapter_test.py         |  537 +++\n .../benchmark/mission-completion-audit.test.ts     |   94 +\n .../benchmark/operation-deadline-lifecycle.test.ts |   50 +\n .../test/benchmark/process-lifecycle.test.ts       |   35 +\n .../test/benchmark/runtime-source-identity.test.ts |   34 +\n .../test/benchmark/skill-runtime-adherence.test.ts |  197 +\n .../core-artifact-owner-execution.test.ts          |  104 +-\n .../native-mission-transport-base.test.ts          |   13 +\n .../test/capability/reveal-receipt.test.ts         |   50 +-\n .../test/capability/skill-reveal.test.ts           |  118 +-\n .../test/capability/tool-definition-budget.test.ts |    7 +-\n .../opencorvus/test/config-global-defaults.test.ts |   59 +\n .../test/expert-squad/advanced-package.test.ts     |  555 ++-\n .../test/expert-squad/catalog-index.test.ts        |   33 +-\n .../test/expert-squad/dynamic-package.test.ts      |    2 +-\n .../test/expert-squad/light-package.test.ts        |  141 +-\n .../expert-squad/research-studio-package.test.ts   |    2 +-\n .../test/expert-squad/squad-sdk-package.test.ts    |    4 +-\n .../expert-squad/swimlanes-01-03-packages.test.ts  |    2 +-\n .../fixture/benchmark-operation-deadline-worker.ts |   14 +\n .../test/fixture/benchmark-termination-worker.ts   |   18 +\n .../test/fixture/capability-occurrence.ts          |   40 +-\n ...-mission-transport-permission-process-worker.ts |   26 +-\n ...end-design-domain-incomplete-settlement.test.ts |   15 +-\n .../opencorvus/test/intent-request-prompt.test.ts  |   21 +\n packages/opencorvus/test/llm/activity.test.ts      |   37 +-\n .../test/mcp/host-session-runtime.test.ts          |    1 +\n .../opencorvus/test/memory/session-memory.test.ts  |   14 -\n .../test/mission-acceptance-delta.test.ts          |   41 +\n .../test/mission-scope-partition-policy.test.ts    |   27 +\n .../test/mission-streamed-recovery.test.ts         |  541 +++\n .../mission-task-creation-opened-fence.test.ts     |  110 +-\n .../test/panel-mission-terminal-authority.test.ts  |    8 +\n .../test/panel-task-completion-message.test.ts     |  520 +++\n .../test/provider-error-redaction.test.ts          |  103 +-\n .../read-agent-message-evidence-contract.test.ts   |   76 +\n .../scheduler-message-harness-contract.test.ts     |   15 +-\n .../scheduler-task-root-message-schema.test.ts     |   45 +-\n ...session-loop-tool-authority-integration.test.ts |   64 +-\n .../test/session-user-authority-projection.test.ts |  142 +\n .../session/processor-llm-activity-retry.test.ts   |    3 +-\n .../session/processor-producer-boundary.test.ts    |  225 ++\n .../test/storage/schema-contract.test.ts           |   15 +-\n .../opencorvus/test/task-control-liveness.test.ts  |   61 +-\n .../test/task-creation-tool-lineage.test.ts        |   14 +-\n .../test/task-process-file-boundary.test.ts        |   32 +\n .../opencorvus/test/task-request-source.test.ts    |  397 ++\n .../test/tool-result-control-protocol.test.ts      |    8 +\n packages/overlay/package.json                      |    2 +-\n packages/overlay/src-tauri/Cargo.lock              |    2 +-\n packages/overlay/src-tauri/Cargo.toml              |    2 +-\n packages/overlay/src-tauri/tauri.conf.json         |    4 +-\n packages/plugin/package.json                       |    2 +-\n packages/sdk/js/package.json                       |    2 +-\n packages/sdk/js/src/gen/sdk.gen.ts                 |   32 +\n packages/sdk/js/src/gen/types.gen.ts               |   32 +\n packages/sdk/openapi.json                          |   62 +\n packages/transport-protocol/package.json           |    2 +-\n packages/util/package.json                         |    2 +-\n packages/web/src/content/docs/agents.mdx           |    2 +-\n packages/web/src/content/docs/reference/api.mdx    |    2 +-\n packages/web/src/content/docs/reference/sdk.mdx    |    2 +-\n packages/web/src/content/docs/zh-cn/agents.mdx     |    2 +-\n .../web/src/content/docs/zh-cn/reference/api.mdx   |    2 +-\n .../web/src/content/docs/zh-cn/reference/sdk.mdx   |    2 +-\n .../content/expert-squad-distribution.generated.ts |   10 +-\n .../web/src/content/featured-squads.generated.ts   |   24 +-\n packages/web/src/content/public-market-zh-01-35.ts |   26 +-\n script/benchmark/analyze_base_stage_effects.py     |  156 +\n script/benchmark/audit_execution_condition.py      |  413 +++\n .../check-native-automationbench-world.py          |   53 +\n script/benchmark/measure_publication_overhead.py   |  134 +\n script/benchmark/native-automationbench-world.py   |   64 +\n script/benchmark/native-run-contract.test.ts       |  190 +\n script/benchmark/native-run-contract.ts            |   76 +\n script/benchmark/process-lifecycle.ts              |  106 +\n script/benchmark/recover-automationbench.py        |  154 +\n script/benchmark/reproduction-dashboard.html       |   36 +\n script/benchmark/reproduction_dashboard.py         |  264 ++\n .../benchmark/run-native-automationbench-batch.ts  |  248 ++\n script/benchmark/run-native-automationbench.ts     |  217 ++\n .../benchmark/test_analyze_base_stage_effects.py   |   49 +\n script/benchmark/test_audit_execution_condition.py |  368 ++\n script/benchmark/test_case_set_identity.py         |   58 +\n .../benchmark/test_measure_publication_overhead.py |   74 +\n script/benchmark/test_recover_automationbench.py   |   34 +\n script/benchmark/test_reproduction_dashboard.py    |   83 +\n script/check-packaged-first-run.ts                 |   83 +\n specs/README.md                                    |   20 +\n specs/artifacts/README.md                          |    2 +\n specs/artifacts/opencorvus-paper/README.md         |   11 +\n .../experiments/luna-base-2026-09-12/README.md     |  145 +\n .../base-workflow-subject-clarification.patch      |   72 +\n .../luna-base-2026-09-12/case-manifest.json        |  926 +++++\n .../current-source-base-quality-root-cause.json    |   98 +\n .../current-source-batch-settlement-audit.json     |   87 +\n .../current-source-benchmark-freeze.json           |   56 +\n .../current-source-benchmark-launch.json           |  112 +\n ...current-source-completion-audit-correction.json |  220 ++\n .../current-source-first-five-condition-audit.json |  519 +++\n .../current-source-first-five-diagnostic.md        |   37 +\n .../current-source-first-five-runtime-audits.json  | 3827 ++++++++++++++++++++\n ...current-source-first-five-score-cost-audit.json | 1282 +++++++\n .../current-source-first-four-condition-audit.json |  394 ++\n .../current-source-full-100-launch.json            |  485 +++\n .../current-source-full-100-manifest-audit.json    |  166 +\n .../current-source-full-100-native-resume.json     |  128 +\n .../current-source-installation.json               |   69 +\n .../current-source-native-first-five-audit.json    |  603 +++\n .../current-source-post-batch-runtime-update.json  |   23 +\n .../current-source-restricted-shell-selection.json |   87 +\n .../current-source-skill-runtime-installation.json |   46 +\n .../historical-score-audit.json                    |   41 +\n .../historical-score-cases.jsonl                   |  102 +\n .../native-case-001-receipt.json                   |  115 +\n .../luna-base-2026-09-12/native-world-check.json   |   25 +\n .../outcome-first-execution-condition-audit.json   |  420 +++\n .../outcome-first-runtime-receipt.json             |   21 +\n .../outcome-first-runtime.patch                    | 1469 ++++++++\n .../outcome-first-score-audit.json                 |   27 +\n .../outcome-first-score-cases.jsonl                |    4 +\n .../luna-base-2026-09-12/provider-preflight.json   |   10 +\n .../publication-overhead-baseline-first-five.json  |  237 ++\n .../publication-overhead-baseline-first-two.json   |  101 +\n .../scheduler-fix-first-five-score-audit.json      |  188 +\n .../scheduler-send-enqueue-receipt.patch           |  339 ++\n .../stream-progress-observer-receipt.json          |   17 +\n .../stream-progress-observer.patch                 |  535 +++\n .../opencorvus-paper/manuscript/.gitignore         |   10 +\n .../opencorvus-paper/manuscript/README.md          |   34 +\n .../manuscript/chapters/01-introduction.tex        |   30 +\n .../manuscript/chapters/02-model.tex               |   47 +\n .../manuscript/chapters/03-design.tex              |   82 +\n .../manuscript/chapters/04-analysis.tex            |   36 +\n .../manuscript/chapters/05-evaluation.tex          |   48 +\n .../manuscript/chapters/06-discussion.tex          |   23 +\n .../manuscript/chapters/07-artifact.tex            |   41 +\n .../opencorvus-paper/manuscript/citation-audit.md  |   25 +\n .../opencorvus-paper/manuscript/figures/README.md  |   24 +\n .../manuscript/figures/architecture.png            |  Bin 0 -> 1319394 bytes\n .../manuscript/figures/architecture.tex            |    6 +\n .../manuscript/figures/evolution.png               |  Bin 0 -> 1505552 bytes\n .../manuscript/figures/evolution.tex               |    6 +\n .../manuscript/figures/prompts.json                |   60 +\n .../manuscript/figures/specialization.png          |  Bin 0 -> 1485556 bytes\n .../manuscript/figures/specialization.tex          |    6 +\n .../artifacts/opencorvus-paper/manuscript/main.pdf |  Bin 0 -> 4472337 bytes\n .../artifacts/opencorvus-paper/manuscript/main.tex |   50 +\n .../opencorvus-paper/manuscript/references.bib     |  129 +\n .../opencorvus-paper/manuscript/source-map.md      |   47 +\n .../opencorvus-paper/manuscript/validation.md      |  142 +\n .../artifacts/opencorvus-paper/templates/README.md |    5 +\n .../opencorvus-paper/templates/iclr2027/.gitignore |    1 +\n .../opencorvus-paper/templates/iclr2027/README.md  |   17 +\n .../templates/iclr2027/iclr-2027-style-files.zip   |  Bin 0 -> 39348 bytes\n specs/current/architecture/04-extensions.md        |   19 +-\n specs/current/architecture/05-config.md            |    3 +\n specs/current/architecture/06-provider.md          |    2 +\n .../architecture/17-code-work-agent-platform.md    |    8 +-\n specs/current/architecture/README.md               |   12 -\n .../architecture/capability-search-runtime.md      |   47 +-\n specs/current/architecture/task-control-plane.md   |   58 +-\n .../2026-09/2026-09-08-founder-operations.md       |   20 +\n .../2026-09/2026-09-10-opencorvus-paper-plan.md    |  396 ++\n .../2026-09-12-benchmark-runtime-readiness.md      |  300 ++\n .../2026-09/2026-09-12-luna-base-reproduction.md   |  586 +++\n .../2026-09-12-outcome-first-runtime-correction.md |   45 +\n .../2026-09/2026-09-15-global-config-defaults.md   |   42 +\n .../2026-09-15-overlay-current-branch-package.md   |   44 +\n .../2026-09/2026-09-15-v0.1.0-beta-release.md      |   52 +\n specs/records/2026-09/README.md                    |   16 +\n .../authoring-skill/SKILL.md                       |   10 +-\n 301 files changed, 39622 insertions(+), 1467 deletions(-)"
+}

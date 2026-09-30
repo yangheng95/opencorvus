@@ -366,7 +366,7 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/9faeb1c7ba879c94e38b25a0b2614398cc5a795b) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/d1f974e58306ea3058e356192e2ffd2de910cafe...9faeb1c7ba879c94e38b25a0b2614398cc5a795b)。
 
-## 0.1.0beta - 2026-09-15
+## 0.1.0beta - 2026-09-16
 
 本版本纳入当前运行时与专家团改进，并修复全新安装环境的 Work/Chat 创建失败，继续使用 beta 更新通道。
 
@@ -381,6 +381,10 @@
 - Base 专家团补齐源数据发现、完整事实覆盖、执行结果和外部修改验收的提示词约束。
 - 新增原生二进制首次使用检查：隔离无凭据运行目录，通过真实 HTTP（Hypertext Transfer Protocol，超文本传输协议）创建 Work/Chat，并在重启后核对持久化会话；桌面内嵌后端和命令行包共用此检查。
 - 纳入 AutomationBench 的 Harbor 运行适配与验收记录；这些记录不等同于本次发布的新模型评测结论。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/d1f974e58306ea3058e356192e2ffd2de910cafe) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/5b11c32e5b5e914cfda9979b12d67c6ed1170714...d1f974e58306ea3058e356192e2ffd2de910cafe)。
 
 ## 0.0.64beta - 2026-09-11
 
