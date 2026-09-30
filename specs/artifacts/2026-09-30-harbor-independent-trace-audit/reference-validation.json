@@ -1,0 +1,134 @@
+{
+  "method": "Exact public transcript identity membership for each independent case, not semantic verification or source digests",
+  "rows": [
+    {
+      "block": 1,
+      "trial": "hr-candidate-submittal-docs__dZngBD4",
+      "call_references": 11,
+      "calls_resolved": 11,
+      "unresolved_calls": [],
+      "message_references_resolved": [],
+      "unresolved_messages": [],
+      "session_references": 2,
+      "unresolved_sessions": []
+    },
+    {
+      "block": 2,
+      "trial": "sales-create-new-opportunity__wNNhgiX",
+      "call_references": 10,
+      "calls_resolved": 10,
+      "unresolved_calls": [],
+      "message_references_resolved": [],
+      "unresolved_messages": [],
+      "session_references": 2,
+      "unresolved_sessions": []
+    },
+    {
+      "block": 3,
+      "trial": "sales-unreliable-label-account-r__ma8SJBf",
+      "call_references": 10,
+      "calls_resolved": 10,
+      "unresolved_calls": [],
+      "message_references_resolved": [],
+      "unresolved_messages": [],
+      "session_references": 2,
+      "unresolved_sessions": []
+    },
+    {
+      "block": 4,
+      "trial": "operations-sheets-asana-approved__6pRbRm5",
+      "call_references": 9,
+      "calls_resolved": 9,
+      "unresolved_calls": [],
+      "message_references_resolved": [],
+      "unresolved_messages": [],
+      "session_references": 2,
+      "unresolved_sessions": []
+    },
+    {
+      "block": 5,
+      "trial": "hr-probation-review-reminder__XDdPgDs",
+      "call_references": 8,
+      "calls_resolved": 8,
+      "unresolved_calls": [],
+      "message_references_resolved": [],
+      "unresolved_messages": [],
+      "session_references": 2,
+      "unresolved_sessions": []
+    },
+    {
+      "block": 6,
+      "trial": "finance-late-fee-calculation__9Z2HtmH",
+      "call_references": 6,
+      "calls_resolved": 6,
+      "unresolved_calls": [],
+      "message_references_resolved": [
+        "msg_g0VWfibHK00RWnE3IYsx"
+      ],
+      "unresolved_messages": [],
+      "session_references": 2,
+      "unresolved_sessions": []
+    },
+    {
+      "block": 7,
+      "trial": "support-zoho-desk-capacity-plann__mktozwA",
+      "call_references": 7,
+      "calls_resolved": 7,
+      "unresolved_calls": [],
+      "message_references_resolved": [],
+      "unresolved_messages": [],
+      "session_references": 2,
+      "unresolved_sessions": []
+    },
+    {
+      "block": 8,
+      "trial": "marketing-podcast-episode-promot__qEHVrUF",
+      "call_references": 6,
+      "calls_resolved": 6,
+      "unresolved_calls": [],
+      "message_references_resolved": [],
+      "unresolved_messages": [],
+      "session_references": 2,
+      "unresolved_sessions": []
+    },
+    {
+      "block": 9,
+      "trial": "operations-monday-slack-inventor__LAQ6UQy",
+      "call_references": 7,
+      "calls_resolved": 7,
+      "unresolved_calls": [],
+      "message_references_resolved": [],
+      "unresolved_messages": [],
+      "session_references": 2,
+      "unresolved_sessions": []
+    },
+    {
+      "block": 10,
+      "trial": "finance-annual-budget-prep__gYPARj7",
+      "call_references": 9,
+      "calls_resolved": 9,
+      "unresolved_calls": [],
+      "message_references_resolved": [],
+      "unresolved_messages": [],
+      "session_references": 2,
+      "unresolved_sessions": []
+    }
+  ],
+  "post_revision": {
+    "all_output_unique_calls": 85,
+    "resolved_calls": 85,
+    "unresolved_calls": [],
+    "official_tool_events": 429,
+    "official_score_events": 10,
+    "runtime_contract_error_occurrences": [
+      {
+        "block": 9,
+        "event": "pev_g0VWftKAx00zs5Ue3NOK",
+        "sequence": 103,
+        "emitted_at": 1790742569102,
+        "input": "msg_hYTdw8Q8FEFmjUT2zNEZ",
+        "session": "ses_-zUTK816izzWemxFUlSo"
+      }
+    ]
+  }
+}
