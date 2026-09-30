@@ -1,0 +1,207 @@
+{
+  "protocol": "opencorvus/website-downloads@1",
+  "version": "0.1.23",
+  "publishedAt": "2026-09-30T07:18:44.000Z",
+  "releaseUrl": "https://github.com/yangheng95/opencorvus/releases/tag/v0.1.23",
+  "prerelease": false,
+  "assets": [
+    {
+      "id": "desktop-windows-x64-msi",
+      "product": "desktop",
+      "platform": "windows",
+      "architecture": "x64",
+      "format": "MSI",
+      "fileName": "OpenCorvus_0.1.23_x64_en-US.msi",
+      "bytes": 195596288,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_x64_en-US.msi",
+      "compatible": false
+    },
+    {
+      "id": "desktop-windows-x64-exe",
+      "product": "desktop",
+      "platform": "windows",
+      "architecture": "x64",
+      "format": "EXE",
+      "fileName": "OpenCorvus_0.1.23_x64-setup.exe",
+      "bytes": 195066859,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_x64-setup.exe",
+      "compatible": false
+    },
+    {
+      "id": "desktop-macos-x64-dmg",
+      "product": "desktop",
+      "platform": "macos",
+      "architecture": "x64",
+      "format": "DMG",
+      "fileName": "OpenCorvus_0.1.23_x64.dmg",
+      "bytes": 194116674,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_x64.dmg",
+      "compatible": false
+    },
+    {
+      "id": "desktop-macos-arm64-dmg",
+      "product": "desktop",
+      "platform": "macos",
+      "architecture": "arm64",
+      "format": "DMG",
+      "fileName": "OpenCorvus_0.1.23_aarch64.dmg",
+      "bytes": 184324455,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_aarch64.dmg",
+      "compatible": false
+    },
+    {
+      "id": "desktop-linux-x64-appimage",
+      "product": "desktop",
+      "platform": "linux",
+      "architecture": "x64",
+      "format": "AppImage",
+      "fileName": "OpenCorvus_0.1.23_amd64.AppImage",
+      "bytes": 282925560,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_amd64.AppImage",
+      "compatible": false
+    },
+    {
+      "id": "desktop-linux-x64-deb",
+      "product": "desktop",
+      "platform": "linux",
+      "architecture": "x64",
+      "format": "DEB",
+      "fileName": "OpenCorvus_0.1.23_amd64.deb",
+      "bytes": 207277140,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_amd64.deb",
+      "compatible": false
+    },
+    {
+      "id": "desktop-linux-x64-rpm",
+      "product": "desktop",
+      "platform": "linux",
+      "architecture": "x64",
+      "format": "RPM",
+      "fileName": "OpenCorvus-0.1.23-1.x86_64.rpm",
+      "bytes": 207276639,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus-0.1.23-1.x86_64.rpm",
+      "compatible": false
+    },
+    {
+      "id": "desktop-linux-arm64-appimage",
+      "product": "desktop",
+      "platform": "linux",
+      "architecture": "arm64",
+      "format": "AppImage",
+      "fileName": "OpenCorvus_0.1.23_aarch64.AppImage",
+      "bytes": 279632392,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_aarch64.AppImage",
+      "compatible": false
+    },
+    {
+      "id": "desktop-linux-arm64-deb",
+      "product": "desktop",
+      "platform": "linux",
+      "architecture": "arm64",
+      "format": "DEB",
+      "fileName": "OpenCorvus_0.1.23_arm64.deb",
+      "bytes": 205692976,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_arm64.deb",
+      "compatible": false
+    },
+    {
+      "id": "desktop-linux-arm64-rpm",
+      "product": "desktop",
+      "platform": "linux",
+      "architecture": "arm64",
+      "format": "RPM",
+      "fileName": "OpenCorvus-0.1.23-1.aarch64.rpm",
+      "bytes": 205693364,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus-0.1.23-1.aarch64.rpm",
+      "compatible": false
+    },
+    {
+      "id": "cli-windows-x64-tar-gz",
+      "product": "cli",
+      "platform": "windows",
+      "architecture": "x64",
+      "format": "TAR.GZ",
+      "fileName": "opencorvus-windows-x64.tar.gz",
+      "bytes": 143116964,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-windows-x64.tar.gz",
+      "compatible": false
+    },
+    {
+      "id": "cli-windows-x64-tar-gz-compatible",
+      "product": "cli",
+      "platform": "windows",
+      "architecture": "x64",
+      "format": "TAR.GZ",
+      "fileName": "opencorvus-windows-x64-baseline.tar.gz",
+      "bytes": 142777635,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-windows-x64-baseline.tar.gz",
+      "compatible": true
+    },
+    {
+      "id": "cli-macos-x64-tar-gz",
+      "product": "cli",
+      "platform": "macos",
+      "architecture": "x64",
+      "format": "TAR.GZ",
+      "fileName": "opencorvus-darwin-x64.tar.gz",
+      "bytes": 142596347,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-darwin-x64.tar.gz",
+      "compatible": false
+    },
+    {
+      "id": "cli-macos-x64-tar-gz-compatible",
+      "product": "cli",
+      "platform": "macos",
+      "architecture": "x64",
+      "format": "TAR.GZ",
+      "fileName": "opencorvus-darwin-x64-baseline.tar.gz",
+      "bytes": 142601975,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-darwin-x64-baseline.tar.gz",
+      "compatible": true
+    },
+    {
+      "id": "cli-macos-arm64-tar-gz",
+      "product": "cli",
+      "platform": "macos",
+      "architecture": "arm64",
+      "format": "TAR.GZ",
+      "fileName": "opencorvus-darwin-arm64.tar.gz",
+      "bytes": 135652110,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-darwin-arm64.tar.gz",
+      "compatible": false
+    },
+    {
+      "id": "cli-linux-x64-tar-gz",
+      "product": "cli",
+      "platform": "linux",
+      "architecture": "x64",
+      "format": "TAR.GZ",
+      "fileName": "opencorvus-linux-x64.tar.gz",
+      "bytes": 153526594,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-linux-x64.tar.gz",
+      "compatible": false
+    },
+    {
+      "id": "cli-linux-x64-tar-gz-compatible",
+      "product": "cli",
+      "platform": "linux",
+      "architecture": "x64",
+      "format": "TAR.GZ",
+      "fileName": "opencorvus-linux-x64-baseline.tar.gz",
+      "bytes": 153150048,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-linux-x64-baseline.tar.gz",
+      "compatible": true
+    },
+    {
+      "id": "cli-linux-arm64-tar-gz",
+      "product": "cli",
+      "platform": "linux",
+      "architecture": "arm64",
+      "format": "TAR.GZ",
+      "fileName": "opencorvus-linux-arm64.tar.gz",
+      "bytes": 152709885,
+      "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-linux-arm64.tar.gz",
+      "compatible": false
+    }
+  ]
+}

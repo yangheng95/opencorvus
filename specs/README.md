@@ -2,6 +2,8 @@
 
 - [0.1.23 native and website release](records/2026-09/2026-09-30-v0.1.23-release.md)
 
+- [0.1.23 release evidence](artifacts/2026-09-30-v0.1.23-release/README.md)
+
 - [Independent ten-trace Harbor audit](records/2026-09/2026-09-30-harbor-independent-trace-audit.md)
 
 - [Independent audit evidence](artifacts/2026-09-30-harbor-independent-trace-audit/README.md)

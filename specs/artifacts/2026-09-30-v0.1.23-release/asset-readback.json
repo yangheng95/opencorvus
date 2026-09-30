@@ -1,0 +1,205 @@
+[
+  {
+    "name": "latest.json",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/latest.json",
+    "status": 200,
+    "bytes": 3042,
+    "expectedBytes": 3042
+  },
+  {
+    "name": "LICENSE",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/LICENSE",
+    "status": 200,
+    "bytes": 1066,
+    "expectedBytes": 1066
+  },
+  {
+    "name": "OpenCorvus-0.1.23-1.aarch64.rpm",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus-0.1.23-1.aarch64.rpm",
+    "status": 200,
+    "bytes": 205693364,
+    "expectedBytes": 205693364
+  },
+  {
+    "name": "OpenCorvus-0.1.23-1.x86_64.rpm",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus-0.1.23-1.x86_64.rpm",
+    "status": 200,
+    "bytes": 207276639,
+    "expectedBytes": 207276639
+  },
+  {
+    "name": "opencorvus-darwin-arm64.tar.gz",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-darwin-arm64.tar.gz",
+    "status": 200,
+    "bytes": 135652110,
+    "expectedBytes": 135652110
+  },
+  {
+    "name": "opencorvus-darwin-x64-baseline.tar.gz",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-darwin-x64-baseline.tar.gz",
+    "status": 200,
+    "bytes": 142601975,
+    "expectedBytes": 142601975
+  },
+  {
+    "name": "opencorvus-darwin-x64.tar.gz",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-darwin-x64.tar.gz",
+    "status": 200,
+    "bytes": 142596347,
+    "expectedBytes": 142596347
+  },
+  {
+    "name": "opencorvus-linux-arm64.tar.gz",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-linux-arm64.tar.gz",
+    "status": 200,
+    "bytes": 152709885,
+    "expectedBytes": 152709885
+  },
+  {
+    "name": "opencorvus-linux-x64-baseline.tar.gz",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-linux-x64-baseline.tar.gz",
+    "status": 200,
+    "bytes": 153150048,
+    "expectedBytes": 153150048
+  },
+  {
+    "name": "opencorvus-linux-x64.tar.gz",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-linux-x64.tar.gz",
+    "status": 200,
+    "bytes": 153526594,
+    "expectedBytes": 153526594
+  },
+  {
+    "name": "opencorvus-windows-x64-baseline.tar.gz",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-windows-x64-baseline.tar.gz",
+    "status": 200,
+    "bytes": 142777635,
+    "expectedBytes": 142777635
+  },
+  {
+    "name": "opencorvus-windows-x64.tar.gz",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/opencorvus-windows-x64.tar.gz",
+    "status": 200,
+    "bytes": 143116964,
+    "expectedBytes": 143116964
+  },
+  {
+    "name": "OpenCorvus_0.1.23_aarch64.app.tar.gz",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_aarch64.app.tar.gz",
+    "status": 200,
+    "bytes": 183844321,
+    "expectedBytes": 183844321
+  },
+  {
+    "name": "OpenCorvus_0.1.23_aarch64.app.tar.gz.sig",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_aarch64.app.tar.gz.sig",
+    "status": 200,
+    "bytes": 408,
+    "expectedBytes": 408
+  },
+  {
+    "name": "OpenCorvus_0.1.23_aarch64.AppImage",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_aarch64.AppImage",
+    "status": 200,
+    "bytes": 279632392,
+    "expectedBytes": 279632392
+  },
+  {
+    "name": "OpenCorvus_0.1.23_aarch64.AppImage.sig",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_aarch64.AppImage.sig",
+    "status": 200,
+    "bytes": 428,
+    "expectedBytes": 428
+  },
+  {
+    "name": "OpenCorvus_0.1.23_aarch64.dmg",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_aarch64.dmg",
+    "status": 200,
+    "bytes": 184324455,
+    "expectedBytes": 184324455
+  },
+  {
+    "name": "OpenCorvus_0.1.23_amd64.AppImage",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_amd64.AppImage",
+    "status": 200,
+    "bytes": 282925560,
+    "expectedBytes": 282925560
+  },
+  {
+    "name": "OpenCorvus_0.1.23_amd64.AppImage.sig",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_amd64.AppImage.sig",
+    "status": 200,
+    "bytes": 424,
+    "expectedBytes": 424
+  },
+  {
+    "name": "OpenCorvus_0.1.23_amd64.deb",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_amd64.deb",
+    "status": 200,
+    "bytes": 207277140,
+    "expectedBytes": 207277140
+  },
+  {
+    "name": "OpenCorvus_0.1.23_arm64.deb",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_arm64.deb",
+    "status": 200,
+    "bytes": 205692976,
+    "expectedBytes": 205692976
+  },
+  {
+    "name": "OpenCorvus_0.1.23_x64-setup.exe",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_x64-setup.exe",
+    "status": 200,
+    "bytes": 195066859,
+    "expectedBytes": 195066859
+  },
+  {
+    "name": "OpenCorvus_0.1.23_x64-setup.exe.sig",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_x64-setup.exe.sig",
+    "status": 200,
+    "bytes": 424,
+    "expectedBytes": 424
+  },
+  {
+    "name": "OpenCorvus_0.1.23_x64.app.tar.gz",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_x64.app.tar.gz",
+    "status": 200,
+    "bytes": 193549180,
+    "expectedBytes": 193549180
+  },
+  {
+    "name": "OpenCorvus_0.1.23_x64.app.tar.gz.sig",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_x64.app.tar.gz.sig",
+    "status": 200,
+    "bytes": 408,
+    "expectedBytes": 408
+  },
+  {
+    "name": "OpenCorvus_0.1.23_x64.dmg",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_x64.dmg",
+    "status": 200,
+    "bytes": 194116674,
+    "expectedBytes": 194116674
+  },
+  {
+    "name": "OpenCorvus_0.1.23_x64_en-US.msi",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/OpenCorvus_0.1.23_x64_en-US.msi",
+    "status": 200,
+    "bytes": 195596288,
+    "expectedBytes": 195596288
+  },
+  {
+    "name": "SHA256SUMS",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/SHA256SUMS",
+    "status": 200,
+    "bytes": 2720,
+    "expectedBytes": 2720
+  },
+  {
+    "name": "THIRD_PARTY_NOTICES.md",
+    "url": "https://github.com/yangheng95/opencorvus/releases/download/v0.1.23/THIRD_PARTY_NOTICES.md",
+    "status": 200,
+    "bytes": 3523,
+    "expectedBytes": 3523
+  }
+]

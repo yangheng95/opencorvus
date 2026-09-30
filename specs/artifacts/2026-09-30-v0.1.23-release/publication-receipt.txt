@@ -1,0 +1,9 @@
+2026-09-30T07:18:43.3688719Z   IDENTITY_MODE: settle-publication
+2026-09-30T07:18:45.8192345Z Release identity v0.1.23 publication was settled by run 36680947118 at f4d0d81e52e6b766218fff10dacae5fbc9fc5803
+2026-09-30T07:18:51.8449437Z ##[group]Run bun script/release-automation.ts dispatch-website
+2026-09-30T07:18:51.8449923Z [36;1mbun script/release-automation.ts dispatch-website[0m
+2026-09-30T07:18:54.3803908Z Website workflow: https://github.com/yangheng95/opencorvus/actions/runs/36682984218
+2026-09-30T07:18:54.3859762Z ##[group]Run bun script/release-automation.ts wait-website
+2026-09-30T07:18:54.3860164Z [36;1mbun script/release-automation.ts wait-website[0m
+2026-09-30T07:18:54.3895410Z   WEBSITE_RUN_ID: 36682984218
+2026-09-30T07:27:55.9127004Z Website run 36682984218 completed successfully within the release budget
