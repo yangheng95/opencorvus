@@ -249,6 +249,17 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/36772e0533f65c645a0067909835aeb075fb4900) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/581feef4e29295568e908eb06b8e4964d978087f...36772e0533f65c645a0067909835aeb075fb4900)。
 
+## 0.1.7 - 2026-09-20
+
+### Fixed
+
+- 修复旧格式内置专家团无法读取或更新、已安装列表出现大量 unrecognized_keys 的问题；内置团队更新到当前包，原内容保留备份，第三方自定义包按其实际契约处理。
+- 修复 Windows 并发测试目录清理和共享依赖准备顺序；Linux 安装包按 DEB、RPM、AppImage 格式使用可独立核验的打包任务。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/581feef4e29295568e908eb06b8e4964d978087f) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/a6e0ae3c25ea47024b796b0661d976c8fdfcf31e...581feef4e29295568e908eb06b8e4964d978087f)。
+
 ## 0.1.6 - 2026-09-19
 
 ### Fixed

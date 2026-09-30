@@ -1,0 +1,35 @@
+{
+  "version": "0.1.7",
+  "source": "581feef4e29295568e908eb06b8e4964d978087f",
+  "tag": null,
+  "previousSource": "a6e0ae3c25ea47024b796b0661d976c8fdfcf31e",
+  "sourceDate": "2026-09-20T01:12:22+08:00",
+  "commits": [
+    {
+      "sha": "581feef4e29295568e908eb06b8e4964d978087f",
+      "date": "2026-09-20T01:12:22+08:00",
+      "subject": "fix: replace obsolete bundled squads and prepare 0.1.7"
+    },
+    {
+      "sha": "166c0c37c188feda2d119e292ad760365d0b603d",
+      "date": "2026-09-19T23:58:13+08:00",
+      "subject": "ci: consolidate checks and repair Windows test cleanup"
+    },
+    {
+      "sha": "8344b69a19bf02de583b0ca3484a30ac9bbda417",
+      "date": "2026-09-19T23:21:28+08:00",
+      "subject": "docs: record 0.1.6 public acceptance and split-build validation"
+    },
+    {
+      "sha": "47c1f21cb434a825ba172d4306e3c468b9716038",
+      "date": "2026-09-19T23:15:51+08:00",
+      "subject": "build: split Linux installer formats into reusable native jobs"
+    },
+    {
+      "sha": "73cc4ce6d5b76d145aad9ab7d6da0574d6438267",
+      "date": "2026-09-19T22:07:11+08:00",
+      "subject": "docs: record 0.1.6 dispatch and authorized background follow-up"
+    }
+  ],
+  "stats": ".github/actions/setup-overlay-runtime/action.yml   |  23 +\n .github/workflows/build-check.yml                  |  78 ---\n .github/workflows/build-overlays.yml               | 109 +---\n .github/workflows/build.yml                        |  96 +---\n .github/workflows/codeql.yml                       |   7 +\n .github/workflows/generate.yml                     |  30 --\n .github/workflows/package-overlay.yml              | 193 +++++++\n .github/workflows/security.yml                     |  43 --\n .github/workflows/test.yml                         | 190 +++++--\n .github/workflows/typecheck.yml                    |  40 --\n CHANGELOG.md                                       |  14 +\n RELEASE.md                                         |   6 +\n bun.lock                                           |  17 +-\n docs/packaging.md                                  |  45 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/opencorvus/script/run-tests.ts            |  12 +-\n packages/opencorvus/src/expert-squad/manager.ts    | 100 +++-\n packages/opencorvus/src/expert-squad/registry.ts   |  58 ++-\n .../opencorvus/src/server/project-route-context.ts |   2 +\n .../opencorvus/src/server/routes/expert-squad.ts   | 119 +++--\n .../test/expert-squad/discovery-diagnostic.test.ts |   8 +-\n .../expert-squad/obsolete-bundled-repair.test.ts   | 230 +++++++++\n .../opencorvus/test/project-route-context.test.ts  |   7 +\n .../test/test-runner-selected-files.test.ts        |  37 +-\n packages/overlay/package.json                      |   2 +-\n packages/overlay/script/build.ts                   |  93 ++--\n packages/overlay/script/release-build-options.ts   |  16 +\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n .../src/components/settings/ExpertSquadPanel.tsx   |  25 +\n packages/overlay/src/i18n/en-US.json               |   2 +\n packages/overlay/src/i18n/zh-CN.json               |   2 +\n packages/overlay/src/services/expert-squad.ts      |  10 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/sdk/js/src/expert-squad-manifest-v2.ts    |  12 +-\n packages/sdk/js/src/gen/sdk.gen.ts                 |  25 +\n packages/sdk/js/src/gen/types.gen.ts               | 162 ++++++\n packages/sdk/openapi.json                          | 567 +++++++++++++++++++++\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   3 +-\n packages/util/src/process.ts                       |   9 +-\n packages/util/src/runtime-directories.ts           |  21 +-\n packages/util/src/test-runtime-environment.ts      |  14 +-\n packages/util/test/process.test.ts                 |  79 +++\n packages/util/test/runtime-directories.test.ts     |  64 +++\n packages/web/src/content/docs/reference/api.mdx    |   1 +\n .../web/src/content/docs/zh-cn/reference/api.mdx   |   1 +\n script/ci-scope.test.ts                            |  56 ++\n script/ci-scope.ts                                 |  33 ++\n script/github-actions-workflow-contract.test.ts    | 345 ++++++++++---\n script/package-gui-installer-matrix.test.ts        |  79 +++\n script/package-gui-installer-matrix.ts             |  27 +-\n script/release-dispatch.test.ts                    |  49 +-\n specs/README.md                                    |   6 +\n specs/current/architecture/04-extensions.md        |   8 +\n .../2026-09-19-ci-consolidation-test-cleanup.md    |  57 +++\n .../2026-09-19-linux-installer-job-split.md        |  46 ++\n specs/records/2026-09/2026-09-19-v0.1.6-release.md |  29 +-\n specs/records/2026-09/2026-09-20-v0.1.7-release.md |  60 +++\n specs/records/2026-09/README.md                    |   6 +\n 66 files changed, 2718 insertions(+), 679 deletions(-)"
+}
