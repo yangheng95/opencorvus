@@ -3,8 +3,8 @@ import type { CardNode } from "../store/card-tree"
 import { TextPart } from "./TextPart"
 import { InteractionCard } from "./InteractionCard"
 import { FilePart } from "./FilePart"
-import { describeCurrentToolPart, describeToolPart, shortRelativePath } from "../utils/tool"
-import { selectedTaskDirectory } from "../store/board"
+import { describeToolPart, shortRelativePath, type ToolDisplayModel } from "../utils/tool"
+import { boardStore, selectedTaskDirectory } from "../store/board"
 import { toolToCardNode } from "../utils/tool-card-node"
 import { t } from "../utils/i18n"
 import {
@@ -169,102 +169,43 @@ function CitationAwareBodyParts(props: PartCollectionProps) {
   )
 }
 
-function ExecutionEventRun(props: PartCollectionProps) {
-  const key = createMemo(() => `group:${executionDisclosureKey(props.parts)}`)
-  const expanded = () => cardExpanded(key(), false)
-  const tools = createMemo(() =>
-    props.parts.map((part) => describeToolPart(part, selectedTaskDirectory())).filter(Boolean),
-  )
-  const current = createMemo(() => describeCurrentToolPart(props.parts, selectedTaskDirectory()))
-  const activeCount = () => tools().filter((tool) => tool?.status === "pending" || tool?.status === "running").length
-  const errorCount = () => tools().filter((tool) => tool?.status === "error").length
-  const active = () => Boolean(props.streaming && activeCount() > 0)
+function ExecutionToolIdentity(props: { tool: ToolDisplayModel }) {
   return (
-    <section class="msg-execution-group" data-active={active() ? "true" : undefined}>
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        tone="neutral"
-        class="msg-execution-group__toggle"
-        data-chrome="text-disclosure"
-        aria-expanded={expanded()}
-        onClick={() => setCardExpanded(key(), !expanded())}
-      >
-        <span class="msg-execution-group__indicator" title={!activeCount() && !errorCount() ? t("task.status.completed") : undefined}>
-          <Icon name={active() ? "status-active" : errorCount() ? "status-failed" : activeCount() ? "scheduled" : "status-completed"} class={!activeCount() && !errorCount() ? "msg-tool-complete" : undefined} size="compact" />
-        </span>
-        <span class="msg-execution-group__label">
-          {tools().length === 0
-            ? t("transcript.execution_patch", { count: props.parts.length })
-            : tools().length === 1
-              ? t("tool.single_call")
-              : t("card.activity.tools", { count: tools().length })}
-        </span>
-        <Show when={active()}>
-          <span class="msg-execution-group__current">{current()?.label}</span>
-        </Show>
-        <span class="msg-execution-group__status">
-          {active()
-            ? t("tool.group_running", { count: activeCount() })
-            : errorCount()
-              ? t("tool.group_errors", { count: errorCount() })
-              : activeCount() > 0
-                ? t("checks.pending")
-                : ""}
-        </span>
-        <Icon name={expanded() ? "chevron-down" : "chevron"} size="compact" />
-      </Button>
-      <Show when={expanded()}>
-        <div class="msg-execution-group__items">
-          <Index each={props.parts}>
-            {(part) => (
-              <Show
-                when={workPartKind(part()) === "tool"}
-                fallback={
-                  <div class="msg-work-details__event" data-event-kind={workPartKind(part())}>
-                    <div class="msg-work-details__event-content">
-                      <RenderableCardPart
-                        part={part()}
-                        depth={props.depth}
-                        streaming={props.streaming}
-                        renderNestedCard={props.renderNestedCard}
-                      />
-                    </div>
-                  </div>
-                }
-              >
-                <ExecutionToolDisclosure {...props} part={part()} />
-              </Show>
-            )}
-          </Index>
-        </div>
+    <>
+      <span class="msg-work-details__tool-icon" aria-hidden="true">
+        <Icon name={props.tool.icon} size="compact" />
+      </span>
+      <span class="msg-transcript-disclosure__label msg-work-details__tool-name">{props.tool.label}</span>
+      <Show when={props.tool.detail}>
+        <span class="msg-work-details__tool-detail">{props.tool.detail}</span>
       </Show>
-    </section>
+    </>
   )
 }
 
-function ExecutionToolDisclosure(props: PartCollectionProps & { part: any }) {
-  const disclosureKey = createMemo(() => executionDisclosureKey([props.part]))
-  const expanded = () => cardExpanded(disclosureKey(), false)
-  const currentTool = createMemo(() => describeCurrentToolPart([props.part], selectedTaskDirectory()))
-  const summary = createMemo(() => {
-    const tool = currentTool()
-    if (!tool) return ""
-    return [tool.label, tool.detail].filter(Boolean).join(t("card.meta_separator"))
-  })
-
+function ExecutionEventRun(props: PartCollectionProps) {
+  const key = createMemo(() => executionDisclosureKey(props.parts))
+  const expanded = () => cardExpanded(key(), false)
+  const directory = () =>
+    boardStore.selectedSource?.kind === "task" ? selectedTaskDirectory() : boardStore.selectedSource?.directory || ""
+  const tools = createMemo(() =>
+    props.parts.map((part) => describeToolPart(part, directory())).filter((tool) => tool !== null),
+  )
+  // Identity follows chronology; an earlier pending call must not rename the
+  // latest call. Activity and errors still represent every result in the run.
+  const latest = () => tools().at(-1)
+  const activeCount = () => tools().filter((tool) => tool.status === "pending" || tool.status === "running").length
+  const errorCount = () => tools().filter((tool) => tool.status === "error").length
+  const active = () => Boolean(props.streaming && activeCount() > 0)
+  const summary = () =>
+    latest()
+      ? [latest()!.label, latest()!.detail].filter(Boolean).join(t("card.meta_separator"))
+      : t("transcript.execution_patch", { count: props.parts.length })
   return (
     <section
       class="msg-work-details"
       data-expanded={expanded() ? "true" : "false"}
-      data-status={currentTool()?.status}
-      data-tool={currentTool()?.label}
-      data-active={
-        props.streaming && (currentTool()?.status === "running" || currentTool()?.status === "pending")
-          ? "true"
-          : undefined
-      }
+      data-active={active() ? "true" : undefined}
     >
       <Button
         type="button"
@@ -276,40 +217,81 @@ function ExecutionToolDisclosure(props: PartCollectionProps & { part: any }) {
         aria-expanded={expanded()}
         aria-label={summary()}
         title={summary()}
-        onClick={(event) => {
-          event.stopPropagation()
-          setCardExpanded(disclosureKey(), !expanded())
-        }}
+        onClick={() => setCardExpanded(key(), !expanded())}
       >
-        <Show when={currentTool()} fallback={<span class="msg-transcript-disclosure__label">{summary()}</span>}>
-          {(tool) => (
-            <>
-              <span class="msg-work-details__tool-icon" aria-hidden="true">
-                <Icon name={tool().icon} size="compact" />
-              </span>
-              <span class="msg-transcript-disclosure__label msg-work-details__tool-name">{tool().label}</span>
-              <Show when={tool().detail}>
-                <span class="msg-work-details__tool-detail">{tool().detail}</span>
-              </Show>
-            </>
-          )}
+        <Show when={latest()} fallback={<span class="msg-transcript-disclosure__label">{summary()}</span>}>
+          {(tool) => <ExecutionToolIdentity tool={tool()} />}
         </Show>
         <span class="msg-work-details__status">
-          <Show when={currentTool()?.status === "completed"} fallback={currentTool()?.statusLabel}>
-            <Icon name="status-completed" class="msg-tool-complete" size="compact" title={t("task.status.completed")} decorative={false} />
+          <Show when={activeCount()}>
+            {active() ? t("tool.group_running", { count: activeCount() }) : t("checks.pending")}
+          </Show>
+          <Show when={errorCount()}>
+            <span data-status="error">{t("tool.group_errors", { count: errorCount() })}</span>
+          </Show>
+          <Show when={!activeCount() && !errorCount()}>
+            <Icon
+              name="status-completed"
+              class="msg-tool-complete"
+              size="compact"
+              title={t("task.status.completed")}
+              decorative={false}
+            />
           </Show>
         </span>
         <span class="msg-transcript-disclosure__marker">
-          <Icon name={expanded() ? "chevron-down" : "chevron"} />
+          <Icon name={expanded() ? "chevron-down" : "chevron"} size="compact" />
         </span>
       </Button>
       <Show when={expanded()}>
         <div class="msg-work-details__body">
-          <div class="msg-work-details__event" data-event-kind="tool">
-            <div class="msg-work-details__event-content">
-              <InlineToolPart part={props.part} mode="body" />
-            </div>
-          </div>
+          <Index each={props.parts}>
+            {(part) => {
+              const tool = createMemo(() => describeToolPart(part(), directory()))
+              return (
+                <div class="msg-work-details__event" data-event-kind={workPartKind(part())}>
+                  <Show
+                    when={tool()}
+                    fallback={
+                      <RenderableCardPart
+                        part={part()}
+                        depth={props.depth}
+                        streaming={props.streaming}
+                        renderNestedCard={props.renderNestedCard}
+                      />
+                    }
+                  >
+                    {(display) => (
+                      <>
+                        <Show when={props.parts.length > 1}>
+                          <div
+                            class="msg-work-details__event-header"
+                            title={[display().label, display().detail].filter(Boolean).join(t("card.meta_separator"))}
+                          >
+                            <ExecutionToolIdentity tool={display()} />
+                            <span class="msg-work-details__status">
+                              <Show when={display().status === "completed"} fallback={display().statusLabel}>
+                                <Icon
+                                  name="status-completed"
+                                  class="msg-tool-complete"
+                                  size="compact"
+                                  title={t("task.status.completed")}
+                                  decorative={false}
+                                />
+                              </Show>
+                            </span>
+                          </div>
+                        </Show>
+                        <div class="msg-work-details__event-content">
+                          <InlineToolPart part={part()} mode="body" />
+                        </div>
+                      </>
+                    )}
+                  </Show>
+                </div>
+              )
+            }}
+          </Index>
         </div>
       </Show>
     </section>

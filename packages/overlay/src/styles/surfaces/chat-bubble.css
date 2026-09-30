@@ -469,16 +469,21 @@
   gap: 0;
 }
 
-.chat-bubble-row[data-kind="agent"] .card-message-run > .msg-text:has(+ .msg-work-details) > :last-child,
 .chat-bubble-row[data-kind="agent"]
   .card-message-run
-  > .msg-text:has(+ .msg-work-details)
+  > [data-quotation-message]:has(+ .msg-work-details)
+  > .msg-text
+  > :last-child,
+.chat-bubble-row[data-kind="agent"]
+  .card-message-run
+  > [data-quotation-message]:has(+ .msg-work-details)
+  > .msg-text
   > .md-frozen-block:last-child
   > :last-child {
   margin-bottom: 0;
 }
 
-.chat-bubble-row[data-kind="agent"] .card-message-run > .msg-text + .msg-work-details {
+.chat-bubble-row[data-kind="agent"] .card-message-run > [data-quotation-message] + .msg-work-details {
   margin-top: var(--conversation-transcript-run-gap);
 }
 
@@ -562,11 +567,13 @@
 .chat-bubble-row[data-kind="agent"]
   .card-message-run:has(> .msg-work-details)
   + .card-message-run
+  > [data-quotation-message]
   > .msg-text
   > :first-child,
 .chat-bubble-row[data-kind="agent"]
   .card-message-run:has(> .msg-work-details)
   + .card-message-run
+  > [data-quotation-message]
   > .msg-text
   > .md-frozen-block:first-child
   > :first-child {

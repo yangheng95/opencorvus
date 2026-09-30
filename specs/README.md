@@ -2,6 +2,8 @@
 
 - [Tool disclosure layout correction](records/2026-09/2026-09-30-tool-disclosure-layout.md)
 
+- [Tool disclosure visual evidence](artifacts/2026-09-30-tool-disclosure/README.md)
+
 - [Current-runtime Harbor full comparison restart](records/2026-09/2026-09-30-harbor-current-runtime-restart.md)
 
 - [Agent execution redesign implementation](records/2026-09/2026-09-30-agent-execution-implementation.md)

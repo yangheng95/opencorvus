@@ -74,7 +74,6 @@
 /* Each execution group owns activity from its actual card and Tool state,
    including Mission and subagent conversations. Results remain static. */
 @media (prefers-reduced-motion: no-preference) {
-  .msg-execution-group[data-active="true"] > .msg-execution-group__toggle .msg-execution-group__label,
   .msg-work-details[data-active="true"] > [data-ui="work-details-toggle"] .msg-work-details__tool-name {
     background: linear-gradient(
       90deg,
@@ -96,7 +95,6 @@
     will-change: background-position;
     animation: msg-terminal-activity-wave var(--ui-duration-loop-terminal-wave) linear infinite;
   }
-  .msg-execution-group[data-active="true"] > .msg-execution-group__toggle .msg-execution-group__indicator,
   .msg-work-details[data-active="true"] > [data-ui="work-details-toggle"] .msg-work-details__tool-icon {
     animation: msg-tool-pulse var(--ui-duration-loop-terminal-wave) ease-in-out infinite;
   }
@@ -110,39 +108,6 @@
   50% {
     opacity: 0.35;
   }
-}
-
-.msg-execution-group {
-  min-width: 0;
-  margin-block: var(--ui-gap-sm);
-}
-.msg-execution-group__toggle {
-  max-width: 100%;
-  gap: var(--ui-gap-sm);
-  color: var(--text-soft);
-}
-.msg-execution-group__indicator {
-  display: inline-flex;
-  flex: none;
-}
-.msg-execution-group__label {
-  color: var(--text);
-}
-.msg-execution-group__current {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.msg-execution-group__status {
-  color: var(--text-muted);
-  font-size: var(--ui-font-caption);
-  flex: none;
-}
-.msg-execution-group__items {
-  margin: var(--ui-gap-sm) 0 var(--ui-gap-md) var(--ui-gap-sm);
-  padding-left: var(--ui-gap-lg);
-  border-left: var(--oc-border-width) solid var(--divider-soft);
 }
 
 @keyframes msg-terminal-activity-wave {
@@ -1097,12 +1062,6 @@
   --transcript-activity-row-height: var(--oc-density-chip-height);
   --transcript-tool-foreground: color-mix(in srgb, var(--text-muted) 92%, transparent);
   --transcript-tool-foreground-hover: var(--text-muted);
-  --transcript-tool-surface: light-dark(
-    color-mix(in srgb, var(--conversation-card-background) 74%, var(--surface-strong)),
-    color-mix(in srgb, var(--conversation-card-background) 96%, var(--surface-strong))
-  );
-  --transcript-tool-header-surface: var(--conversation-card-background);
-  --transcript-tool-border: var(--border);
 
   display: flex;
   width: 100%;
@@ -1201,7 +1160,8 @@
   border: var(--oc-border-width) solid var(--divider-soft);
   border-radius: var(--oc-radius-large);
   background: var(--surface);
-  box-shadow: 0 calc(2px * var(--ui-scale)) calc(8px * var(--ui-scale)) color-mix(in srgb, var(--text-strong) 3%, transparent);
+  box-shadow: 0 calc(2px * var(--ui-scale)) calc(8px * var(--ui-scale))
+    color-mix(in srgb, var(--text-strong) 3%, transparent);
 }
 
 .msg-tool-complete circle {
@@ -2208,8 +2168,7 @@
 }
 
 .msg-transcript-disclosure__marker .oc-icon,
-.msg-work-details__tool-icon .oc-icon,
-.msg-work-details__body .card[data-kind="tool"] > .card__head .card__icon .oc-icon {
+.msg-work-details__tool-icon .oc-icon {
   --oc-icon-render-size: var(--transcript-activity-icon-size);
 }
 
@@ -2225,7 +2184,7 @@
 
 .msg-work-details__tool-name {
   flex: none;
-  max-width: calc(220px * var(--ui-scale));
+  max-width: min(50%, calc(220px * var(--ui-scale)));
   color: inherit;
 }
 
@@ -2234,6 +2193,9 @@
 }
 
 .msg-work-details__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-gap-sm);
   margin: 0;
   flex: none;
   color: var(--text-muted);
@@ -2242,12 +2204,18 @@
   letter-spacing: var(--ui-letter-spacing-loose);
 }
 
+.msg-work-details__status [data-status="error"] {
+  color: var(--bad);
+}
+
 .msg-work-details__body {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: var(--ui-gap-lg);
   min-width: 0;
-  padding: 0;
+  margin-block: var(--ui-gap-sm) var(--ui-gap-md);
+  padding-inline-start: var(--ui-gap-lg);
+  border-inline-start: var(--oc-border-width) solid var(--divider-soft);
 }
 
 .msg-work-details__event {
@@ -2259,69 +2227,19 @@
   min-width: 0;
 }
 
-.chat-bubble .msg-work-details__body .card[data-kind="tool"].card--collapsed {
-  width: 100%;
-  margin: 0;
-  border: 0 solid transparent;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  overflow: visible;
+.msg-work-details__event-header {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-sm);
+  min-width: 0;
+  margin-bottom: var(--ui-gap-sm);
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
 }
 
-.chat-bubble .msg-work-details__body .card[data-kind="tool"].card--collapsed > .card__head {
-  min-height: var(--transcript-activity-row-height);
-  padding: 0;
-  border-bottom: 0 solid transparent;
-  border-radius: 0;
-  background: transparent;
-  color: var(--transcript-tool-foreground);
-  font-size: var(--ui-font-body);
-  line-height: var(--ui-line-height-normal);
-}
-
-.chat-bubble .msg-work-details__body .card[data-kind="tool"].card--collapsed > .card__head:hover,
-.chat-bubble .msg-work-details__body .card[data-kind="tool"].card--collapsed > .card__head:focus-within {
-  background: transparent;
-  color: var(--transcript-tool-foreground-hover);
-}
-
-.chat-bubble .msg-work-details__body .card[data-kind="tool"].card--collapsed :is(.card__title, .card__subtitle) {
-  color: inherit;
-  line-height: inherit;
-}
-
-.chat-bubble .msg-work-details__body .card[data-kind="tool"].card--expanded {
-  width: 100%;
-  margin: var(--ui-gap-sm) 0 var(--ui-gap-md);
-  border: var(--oc-border-width) solid var(--transcript-tool-border);
-  border-radius: var(--oc-radius-soft);
-  background: var(--transcript-tool-surface);
-  box-shadow: none;
-  overflow: hidden;
-}
-
-.chat-bubble .msg-work-details__body .card[data-kind="tool"].card--expanded > .card__head {
-  min-height: calc(34px * var(--ui-scale));
-  padding: var(--ui-gap-md) var(--ui-gap-lg);
-  border-bottom: var(--oc-border-width) solid var(--transcript-tool-border);
-  background: var(--transcript-tool-header-surface);
-  color: var(--transcript-tool-foreground-hover);
-  font-size: var(--ui-font-body);
-  line-height: var(--ui-line-height-normal);
-}
-
-.chat-bubble .msg-work-details__body .card[data-kind="tool"].card--expanded > .card__head:hover,
-.chat-bubble .msg-work-details__body .card[data-kind="tool"].card--expanded > .card__head:focus-within {
-  background: color-mix(in srgb, var(--transcript-tool-surface) 64%, var(--transcript-tool-header-surface));
-}
-
-.chat-bubble .msg-work-details__body .card[data-kind="tool"].card--expanded .card__subtitle {
-  display: none;
-}
-
-.chat-bubble .msg-work-details__body .card[data-kind="tool"].card--expanded > .card__body {
-  padding: var(--ui-gap-md) var(--ui-gap-lg) var(--ui-gap-lg);
+.msg-work-details__event + .msg-work-details__event {
+  padding-top: var(--ui-gap-lg);
+  border-top: var(--oc-border-width) solid var(--divider-soft);
 }
 
 .msg-patch {

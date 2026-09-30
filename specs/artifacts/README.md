@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Tool disclosure layout correction](2026-09-30-tool-disclosure/README.md): latest-tool titles, direct results, compact spacing and dark/light/side-panel manual review.
+
 - [File editor syntax highlighting](2026-09-30-file-editor-highlighting/README.md): actual light/dark source editing, Markdown fences and saved YAML reopened.
 
 - [Side chat desktop visual review](2026-09-30-side-chat/README.md): Chinese dark/light layouts, selection quotation, scoped composers and reference history.

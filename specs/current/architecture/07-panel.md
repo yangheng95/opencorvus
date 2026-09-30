@@ -63,9 +63,13 @@ own colors. Page typography follows the sole shared typography authority.
 
 ## Tool activity, delivery inventory, and directory status
 
-Consecutive Tool/Patch runs have one chronological disclosure. Narrative,
-files and interactive artifacts retain their original positions. Each group
-exposes every real Tool result and its outcome; pending/running activity uses
+Consecutive Tool/Patch runs have one chronological disclosure, labelled by the
+latest actual Tool name and its summary. One expansion directly exposes all
+results in order; multiple results have static identities rather than nested
+per-Tool toggles. Narrative, sources, files and interactive artifacts retain
+their original positions. Each run exposes every real Tool result and its outcome;
+pending/running activity and earlier errors stay visible independently of the
+latest Tool's identity. Activity uses
 the owning card's live state, including Mission and subagent cards. Reduced
 motion retains static status. Valid JSON displays expandable values with
 multiline strings intact; full raw content and copy remain available.
