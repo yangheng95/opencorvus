@@ -605,6 +605,10 @@
 - 修复恢复执行的 Task occurrence 在子 Session 已终止后仍无法收敛父级终态的问题。
 - 修复 Overlay 右侧 Dock 的切换与新增菜单交互、Work Ledger 双击重命名，以及工具披露需要点击两次才能展开的问题。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/23df4780d31336c97bfaaa2460e8747be70f0d7f) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/d2b6fef84c158f3e92479f15da3ecd6cb82facd1...23df4780d31336c97bfaaa2460e8747be70f0d7f)。
+
 ## 0.0.52beta - 2026-08-22
 
 本版本收敛专家团工作流的公开投影、交付结算与独立验收权威链路，并同步发布桌面端、命令行二进制和公开网站。

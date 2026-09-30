@@ -1,0 +1,60 @@
+{
+  "version": "0.0.53-beta",
+  "source": "23df4780d31336c97bfaaa2460e8747be70f0d7f",
+  "tag": "v0.0.53-beta",
+  "previousSource": "d2b6fef84c158f3e92479f15da3ecd6cb82facd1",
+  "sourceDate": "2026-08-24T10:11:32+08:00",
+  "commits": [
+    {
+      "sha": "23df4780d31336c97bfaaa2460e8747be70f0d7f",
+      "date": "2026-08-24T10:11:32+08:00",
+      "subject": "release: prepare v0.0.53 beta"
+    },
+    {
+      "sha": "e8e6ca456b59dc61c00c1441b1f663c12d6d8b28",
+      "date": "2026-08-24T02:21:55+08:00",
+      "subject": "docs: audit repository architecture debt to saturation"
+    },
+    {
+      "sha": "de332363b735b7552bfc7c0e327636ada089543b",
+      "date": "2026-08-24T00:37:53+08:00",
+      "subject": "fix(overlay): restore right dock interactions"
+    },
+    {
+      "sha": "80e342a8d935e95fda743737ba688d2d85976917",
+      "date": "2026-08-24T00:34:44+08:00",
+      "subject": "fix(overlay): restore work ledger double-click rename"
+    },
+    {
+      "sha": "428cc543f790014a8af877a10f7be5e54af036b5",
+      "date": "2026-08-24T00:18:38+08:00",
+      "subject": "fix(overlay): make tool disclosures open in one click"
+    },
+    {
+      "sha": "ef640bd7ad01cd8d0ef2815c8a18712c57fc500d",
+      "date": "2026-08-23T20:42:08+08:00",
+      "subject": "fix(orchestrator): close resumed task occurrences"
+    },
+    {
+      "sha": "b06828b410b450cc544fe7ec7dc6b0c9f81986e0",
+      "date": "2026-08-23T16:07:31+08:00",
+      "subject": "fix(provider): redact transient diagnostics"
+    },
+    {
+      "sha": "d487629a884529e21622c64a8f108a98719b06bb",
+      "date": "2026-08-23T12:49:04+08:00",
+      "subject": "chore(sdk): regenerate tool activity config"
+    },
+    {
+      "sha": "9d7fc934d16b66501b0283dbb2d4e97238b556aa",
+      "date": "2026-08-23T12:45:59+08:00",
+      "subject": "fix(session): renew tool pauses from durable progress"
+    },
+    {
+      "sha": "8591d7538d47a7c92a5d77e7c917aab5e39b4324",
+      "date": "2026-08-23T08:31:39+08:00",
+      "subject": "fix(scheduler): expose stable delayed wake settlement"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |  14 +\n bun.lock                                           |  16 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n .../script/control-state-redundancy-check.ts       |   6 +\n .../script/permission-modes-check-worker.ts        |  12 +-\n packages/opencorvus/src/config/config.ts           |  10 +-\n packages/opencorvus/src/engine/config.ts           |   6 +\n packages/opencorvus/src/engine/durable-activity.ts |  33 +-\n packages/opencorvus/src/orchestrator/agent.ts      |   5 +-\n .../src/prompt/core/orchestrator-core.txt          |   4 +\n packages/opencorvus/src/provider/error.ts          |  71 +++-\n .../responses/openai-responses-language-model.ts   |   3 +-\n packages/opencorvus/src/provider/provider.ts       |   2 +-\n .../opencorvus/src/scheduler/automation-service.ts |  68 ++++\n packages/opencorvus/src/session/index.ts           |  81 +++++\n packages/opencorvus/src/session/loop.ts            |  18 +-\n packages/opencorvus/src/session/processor.ts       |   4 +-\n packages/opencorvus/src/session/session.sql.ts     |  29 ++\n packages/opencorvus/src/session/status.ts          |   5 +\n .../opencorvus/src/session/tool-failure-cause.ts   |  43 +--\n packages/opencorvus/src/session/tool-part-facts.ts |  17 +-\n packages/opencorvus/src/storage/ddl.ts             |  31 ++\n .../src/storage/fact-kernel-migration.ts           |   2 +\n packages/opencorvus/src/storage/schema.ts          |   3 +\n packages/opencorvus/src/tool/bash.ts               | 104 +++++-\n packages/opencorvus/src/tool/batch.ts              |  20 +-\n packages/opencorvus/src/util/log.ts                |   4 +-\n packages/opencorvus/src/util/stream-activity.ts    |  13 +-\n .../opencorvus/test/bash-live-progress.test.ts     |  78 +++++\n .../opencorvus/test/batch-live-progress.test.ts    | 108 ++++++\n .../test/execution-progress-inactivity.test.ts     |   2 +\n .../test/fact-kernel-schema-migration.test.ts      |   1 +\n packages/opencorvus/test/log-lifecycle.test.ts     |  20 ++\n .../test/mission-durable-activity.test.ts          |  55 ++-\n .../orchestrator-mission-resume-provenance.test.ts |   2 +\n .../test/provider-error-redaction.test.ts          |  60 ++++\n .../scheduler-message-harness-contract.test.ts     |   4 +\n ...session-loop-tool-authority-integration.test.ts |  97 ++++++\n .../test/storage/schema-contract.test.ts           |   3 +-\n .../test/stream-activity-pause-bound.test.ts       |  29 ++\n .../test/task-wait-fire-identity.test.ts           | 162 +++++++++\n .../opencorvus/test/tool-part-fact-storage.test.ts |  26 +-\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/overlay/src/components/App.tsx            |   2 +-\n packages/overlay/src/components/CardParts.tsx      |  74 ++--\n .../src/components/ConversationAgentRail.tsx       |  23 +-\n packages/overlay/src/components/InlineToolPart.tsx |  65 +++-\n packages/overlay/src/components/RightDock.tsx      | 246 ++++++-------\n packages/overlay/src/components/WorkLedger.tsx     |  10 +\n packages/overlay/src/styles/surfaces/workspace.css |  13 +\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/sdk/js/src/gen/types.gen.ts               |   6 +-\n packages/sdk/js/src/route-policy.ts                |   8 +-\n packages/sdk/openapi.json                          |   8 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/transport-protocol/src/index.ts           |  34 +-\n packages/transport-protocol/test/contract.test.ts  |  17 +\n packages/util/package.json                         |   2 +-\n specs/README.md                                    |  12 +\n .../2026-08-24-tool-disclosure-child-dock.png      | Bin 0 -> 111815 bytes\n .../2026-08-24-tool-disclosure-single-owner.png    | Bin 0 -> 124370 bytes\n ...026-08-24-work-ledger-mission-rename-dialog.png | Bin 0 -> 51107 bytes\n .../2026-08-24-work-ledger-task-rename-dialog.png  | Bin 0 -> 52960 bytes\n specs/current/architecture/task-control-plane.md   |   2 +\n ...26-08-23-tool-disclosure-single-owner-repair.md | 114 ++++++\n ...8-23-tool-pause-durable-progress-convergence.md | 166 +++++++++\n ...epository-architecture-debt-saturation-audit.md | 388 +++++++++++++++++++++\n ...-right-dock-subagent-navigation-and-add-menu.md |  93 +++++\n .../2026-08/2026-08-24-v0.0.53-beta-release.md     |  43 +++\n ...08-24-work-ledger-double-click-rename-repair.md |  80 +++++\n specs/records/2026-08/README.md                    |  12 +\n 79 files changed, 2397 insertions(+), 318 deletions(-)"
+}
