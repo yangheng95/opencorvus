@@ -1,0 +1,105 @@
+{
+  "version": "0.0.48-beta",
+  "source": "ffa867ae02f9d0a1b9f6ab4cafd0432f0f2a4f5d",
+  "tag": "v0.0.48-beta",
+  "previousSource": "10b548e8c35e0858b58292c0fa871c7d4f32fb53",
+  "sourceDate": "2026-08-19T14:49:29+08:00",
+  "commits": [
+    {
+      "sha": "ffa867ae02f9d0a1b9f6ab4cafd0432f0f2a4f5d",
+      "date": "2026-08-19T14:49:29+08:00",
+      "subject": "docs: put the recorded run at the top of both READMEs"
+    },
+    {
+      "sha": "8a7a8fcf74b57047980d09e58e65c5e8c0016753",
+      "date": "2026-08-19T14:45:47+08:00",
+      "subject": "fix(web): let the English headline promise what the Chinese one does"
+    },
+    {
+      "sha": "43c22328f960b5ff86f046100b29797ad61f980a",
+      "date": "2026-08-19T14:39:01+08:00",
+      "subject": "docs: record the three fixes that landed after the 0.0.48beta bump"
+    },
+    {
+      "sha": "9866512280389c7b2a8bfc07158cca9d2889f42f",
+      "date": "2026-08-19T14:38:35+08:00",
+      "subject": "fix(release): normalize the dispatched version before any job reads it"
+    },
+    {
+      "sha": "d733f90077ead3beb118b90b1213b0c51c29a754",
+      "date": "2026-08-19T14:38:32+08:00",
+      "subject": "fix(overlay): read Task identity from the protocol envelope too"
+    },
+    {
+      "sha": "a9bf815c5f41cec1ae5d7b0efe17d81e1cb0f7df",
+      "date": "2026-08-19T14:31:17+08:00",
+      "subject": "feat(web): count page views instead of asking readers to opt in"
+    },
+    {
+      "sha": "8c76928b475a8a5cb5116517a560c23be0aecfb7",
+      "date": "2026-08-19T14:03:16+08:00",
+      "subject": "release: bump to 0.0.48-beta"
+    },
+    {
+      "sha": "14694350eb11f45b5045b6551470bff9a2b29b9b",
+      "date": "2026-08-19T14:01:10+08:00",
+      "subject": "feat(web): show one real run instead of twenty stills"
+    },
+    {
+      "sha": "52a66876f835b511f319c2b771592e39da735aff",
+      "date": "2026-08-19T11:35:11+08:00",
+      "subject": "fix(web): let the hero recordings play themselves"
+    },
+    {
+      "sha": "b6619551357b7a64a130765cf1d2096ae1a8ce91",
+      "date": "2026-08-19T11:35:04+08:00",
+      "subject": "docs: answer whether the harness is built on another agent"
+    },
+    {
+      "sha": "0eef2ea34a12982a1dde49b95a028c522b542131",
+      "date": "2026-08-19T11:34:44+08:00",
+      "subject": "feat(overlay): say who wrote this, and how to reach them"
+    },
+    {
+      "sha": "104b0750e6e64e9b7d0e574cfed3cc1125508839",
+      "date": "2026-08-19T11:34:26+08:00",
+      "subject": "fix(overlay): put the chart export menu back behind its toggle"
+    },
+    {
+      "sha": "103f69e40610b070cb75101f52cf07aa26edd4c8",
+      "date": "2026-08-19T11:34:14+08:00",
+      "subject": "fix(overlay): give the terminal a selection colour it can read"
+    },
+    {
+      "sha": "ba0c8bdf94a168535a432c06fbdd0e60bb9bc856",
+      "date": "2026-08-19T10:49:01+08:00",
+      "subject": "fix(overlay): hand the candlestick chart colors its library can parse"
+    },
+    {
+      "sha": "546d8ee80b52d10e590d9bb9e42e4542acf1409d",
+      "date": "2026-08-19T10:25:44+08:00",
+      "subject": "chore(web): regenerate site facts against current sources"
+    },
+    {
+      "sha": "dba09fbc75d2ee337aa6bbb6d6e81c5be748def3",
+      "date": "2026-08-19T10:25:32+08:00",
+      "subject": "feat(web): install a squad from the page instead of handing over a ZIP"
+    },
+    {
+      "sha": "91bd31cf56f743a967f74ada8fd9dbeb8b262115",
+      "date": "2026-08-19T10:23:37+08:00",
+      "subject": "feat(overlay): install an update from the sidebar in one click"
+    },
+    {
+      "sha": "5ba59e4e1436c2432181c57cf6f27a607a13b1ae",
+      "date": "2026-08-19T09:16:28+08:00",
+      "subject": "fix(squads): bump the two built-in packages whose bytes changed"
+    },
+    {
+      "sha": "ad1ae51e7425d76eede588708fdb6353526b19cf",
+      "date": "2026-08-19T08:58:25+08:00",
+      "subject": "feat(web): show what OpenCorvus actually hands you, on the front page"
+    }
+  ],
+  "stats": ".github/workflows/build.yml                        |  11 +-\n CHANGELOG.md                                       |  37 +++++\n README.md                                          |  15 ++\n README.zh-CN.md                                    |  14 ++\n bun.lock                                           |  16 +-\n .../builtin/marketing-growth/expert-squad.jsonc    |   2 +-\n expert-squads/builtin/seo-geo/expert-squad.jsonc   |   2 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../opencorvus/generated/expert-squad-payload.ts   |   4 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/src/main.rs             |  20 ++-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n .../overlay/src/components/ConfigDialogHost.tsx    |  37 ++++-\n .../overlay/src/components/SidebarUpdateButton.tsx |  88 ++++++-----\n .../overlay/src/components/SidebarVersionLabel.tsx |   3 +-\n packages/overlay/src/components/TerminalPanel.tsx  |   3 +-\n .../interactive-artifact/CandlestickArtifact.tsx   |  28 ++--\n .../components/interactive-artifact/theme-color.ts |   7 +-\n .../interactive-artifact/vega-embed-policy.ts      |   6 +\n .../src/components/settings/DesktopUpdatePanel.tsx |  42 ++---\n packages/overlay/src/i18n/en-US.json               |   3 +\n packages/overlay/src/i18n/zh-CN.json               |   3 +\n packages/overlay/src/services/desktop-update.ts    |  46 +++++-\n packages/overlay/src/services/theme.ts             |  26 ++++\n packages/overlay/src/services/tree-writer.ts       |  30 +++-\n packages/overlay/src/utils/project-links.ts        |   9 ++\n .../overlay/test/tree-writer-review-stream.test.ts |  87 +++++++++++\n packages/overlay/test/vega-embed-policy.test.ts    |   4 +\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n .../web/public/media/opencorvus-demo-poster.jpg    | Bin 0 -> 123414 bytes\n packages/web/public/media/opencorvus-demo.mp4      | Bin 0 -> 7077401 bytes\n packages/web/script/website-registry-control.ts    |   8 +-\n packages/web/src/assets/lander/captured.json       |  25 ++-\n packages/web/src/components/Footer.astro           |   4 +-\n packages/web/src/components/OcDemoVideo.astro      | 139 +++++++++++++++++\n packages/web/src/components/OcFooter.astro         |   4 +-\n packages/web/src/components/OcLanding.astro        |  52 ++++++-\n packages/web/src/components/SquadDetailPage.astro  |  84 +++++++++-\n packages/web/src/components/ViewCount.astro        | 129 +++++++++++++++\n packages/web/src/components/VisitorCount.astro     | 173 ---------------------\n .../content/expert-squad-distribution.generated.ts |   4 +-\n .../web/src/content/featured-squads.generated.ts   |   4 +-\n packages/web/src/content/landing-copy.ts           |  42 ++++-\n .../web/src/content/platform-facts.generated.ts    |   2 +-\n packages/web/src/lib/site-views.ts                 |  40 +++++\n packages/web/src/lib/site-visitors.ts              |  73 ---------\n packages/web/src/lib/website-registry.ts           | 144 +++++------------\n packages/web/src/pages/api/site/v1/views/index.ts  |  12 ++\n .../web/src/pages/api/site/v1/visitors/current.ts  |  14 --\n .../web/src/pages/api/site/v1/visitors/index.ts    |  62 --------\n .../web/src/pages/market/[namespace]/[id].astro    |   8 +-\n .../src/pages/zh-cn/market/[namespace]/[id].astro  |   8 +-\n packages/web/test/lander-assets.test.ts            |  16 +-\n packages/web/test/landing-copy.test.ts             |   4 +-\n packages/web/test/website-registry.test.ts         |  76 ++++-----\n packages/web/test/website-runtime-smoke.ts         | 146 ++++-------------\n script/github-actions-workflow-contract.test.ts    |  30 ++++\n ...2026-08-19-artifact-gallery-landing-carousel.md | 108 +++++++++++++\n ...6-08-19-landing-demo-video-replaces-carousel.md | 119 ++++++++++++++\n specs/records/2026-08/README.md                    |   3 +\n 69 files changed, 1345 insertions(+), 759 deletions(-)"
+}

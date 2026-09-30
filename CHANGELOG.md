@@ -746,6 +746,10 @@
 - 修复原生命令种类枚举存在手抄副本。
 - 修复两个内置专家团在已发布版本号下更换了工具字节，导致站点注册表导入失败。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/ffa867ae02f9d0a1b9f6ab4cafd0432f0f2a4f5d) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/10b548e8c35e0858b58292c0fa871c7d4f32fb53...ffa867ae02f9d0a1b9f6ab4cafd0432f0f2a4f5d)。
+
 ## 0.0.46beta - 2026-08-18
 
 本版本汇总自 `0.0.44beta` 发布以来的全部用户可见改动。`0.0.45beta` 只是分支版本基线，没有发布过二进制，因此不单列条目。
