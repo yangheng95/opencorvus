@@ -232,6 +232,10 @@
 - 能力恢复提示根据当前实际可调用工具指向协调、提问或设置入口，区分角色授权、操作批准、认证和执行故障。
 - 同步专家团生成的版本记录，修复持续集成中的生成产物不一致。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/161bf0bfff0ff6deaa3e5d369f72a3ee26a5202a) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/36772e0533f65c645a0067909835aeb075fb4900...161bf0bfff0ff6deaa3e5d369f72a3ee26a5202a)。
+
 ## 0.1.8 - 2026-09-20
 
 ### Fixed

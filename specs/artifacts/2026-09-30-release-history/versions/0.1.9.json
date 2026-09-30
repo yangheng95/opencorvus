@@ -1,0 +1,30 @@
+{
+  "version": "0.1.9",
+  "source": "161bf0bfff0ff6deaa3e5d369f72a3ee26a5202a",
+  "tag": "v0.1.9",
+  "previousSource": "36772e0533f65c645a0067909835aeb075fb4900",
+  "sourceDate": "2026-09-20T20:55:21+08:00",
+  "commits": [
+    {
+      "sha": "161bf0bfff0ff6deaa3e5d369f72a3ee26a5202a",
+      "date": "2026-09-20T20:55:21+08:00",
+      "subject": "fix(artifacts): validate referenced snapshot catalog completeness"
+    },
+    {
+      "sha": "40f22e0f01724fa7f528b719299e931857f758b9",
+      "date": "2026-09-20T19:55:00+08:00",
+      "subject": "chore: prepare 0.1.9 main fixes release"
+    },
+    {
+      "sha": "0e5c37a9d437d7c08841eafc83dc2627b8fc30fe",
+      "date": "2026-09-20T19:37:49+08:00",
+      "subject": "fix: repair browser evidence publication and capability recovery"
+    },
+    {
+      "sha": "5c3ed33fbe32fd031685fbed929642e9f38215ac",
+      "date": "2026-09-20T19:27:09+08:00",
+      "subject": "docs: record authorized frozen 0.1.8 release source"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |  10 ++\n bun.lock                                           |  16 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../opencorvus/generated/expert-squad-revisions.ts |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/opencorvus/src/artifact-catalog/index.ts  |  26 ++-\n .../src/browser-preview/region-comparison.ts       |  61 +++----\n .../opencorvus/src/capability/recovery-guidance.ts |  18 ++\n packages/opencorvus/src/capability/reveal-owner.ts |  29 +++-\n .../opencorvus/src/capability/routine-tools.ts     |   3 +\n .../src/expert-squad/builtin/advanced/README.md    |   2 +\n .../builtin/advanced/expert-squad.jsonc            |  12 +-\n .../builtin/advanced/skills/method/SKILL.md        |   2 +\n packages/opencorvus/src/task-artifact/store.ts     | 189 +++++++++++++++------\n .../src/tool/request-orchestrator-decision.ts      |   2 +-\n packages/opencorvus/src/visual-qa/agent.ts         |   1 +\n .../capability/advanced-browser-grants.test.ts     |  54 ++++++\n .../test/capability/recovery-guidance.test.ts      |  17 ++\n .../test/capability/reveal-owner.test.ts           |   8 +-\n .../opencorvus/test/fixture/directory-watcher.mjs  |  38 +++++\n .../task-artifact-git-commit-publication.test.ts   | 124 ++++++++++++++\n .../test/task-terminal-artifact-closure.test.ts    |  57 +++++--\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n specs/README.md                                    |   4 +\n .../2026-09-20-browser-acceptance/01-home.png      | Bin 0 -> 444380 bytes\n .../2026-09-20-browser-acceptance/02-playing.png   | Bin 0 -> 342953 bytes\n .../2026-09-20-browser-acceptance/03-fishing.png   | Bin 0 -> 182342 bytes\n .../2026-09-20-browser-acceptance/04-paused.png    | Bin 0 -> 179688 bytes\n .../2026-09-20-browser-acceptance/README.md        |  28 +++\n .../publication-review.json                        |  77 +++++++++\n specs/artifacts/README.md                          |   2 +\n specs/current/architecture/02-data.md              |  12 +-\n ...-09-20-browser-acceptance-publication-repair.md |  49 ++++++\n specs/records/2026-09/2026-09-20-v0.1.8-release.md |  11 +-\n specs/records/2026-09/2026-09-20-v0.1.9-release.md |  57 +++++++\n specs/records/2026-09/README.md                    |   4 +\n 46 files changed, 788 insertions(+), 155 deletions(-)"
+}
