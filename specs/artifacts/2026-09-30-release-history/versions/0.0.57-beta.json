@@ -1,0 +1,15 @@
+{
+  "version": "0.0.57-beta",
+  "source": "fc390c86cb18f4d7ba74b3e763070c7b81ef1361",
+  "tag": "v0.0.57-beta",
+  "previousSource": "f55fef191afd74352611da0235938a011d6d7766",
+  "sourceDate": "2026-08-29T20:55:26+08:00",
+  "commits": [
+    {
+      "sha": "fc390c86cb18f4d7ba74b3e763070c7b81ef1361",
+      "date": "2026-08-29T20:55:26+08:00",
+      "subject": "chore(release): select 0.0.57 beta"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |  4 +-\n bun.lock                                           | 16 +++----\n packages/channel-config/package.json               |  2 +-\n packages/channel-runtime/package.json              |  2 +-\n .../native/process-supervisor/Cargo.lock           |  2 +-\n .../native/process-supervisor/Cargo.toml           |  2 +-\n packages/opencorvus/package.json                   |  2 +-\n packages/overlay/package.json                      |  2 +-\n packages/overlay/src-tauri/Cargo.lock              |  2 +-\n packages/overlay/src-tauri/Cargo.toml              |  2 +-\n packages/overlay/src-tauri/tauri.conf.json         |  4 +-\n packages/plugin/package.json                       |  2 +-\n packages/sdk/js/package.json                       |  2 +-\n packages/transport-protocol/package.json           |  2 +-\n packages/util/package.json                         |  2 +-\n script/release-dispatch.test.ts                    |  8 ++--\n script/settle-desktop-update-channel.test.ts       | 24 +++++-----\n script/verify-release-identity.test.ts             | 56 +++++++++++-----------\n specs/README.md                                    |  2 +-\n .../2026-08/2026-08-29-v0.0.56-beta-release.md     | 24 +++++-----\n specs/records/2026-08/README.md                    |  2 +-\n 21 files changed, 83 insertions(+), 81 deletions(-)"
+}

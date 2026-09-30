@@ -512,6 +512,17 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/42e6d28c7cc565f2cbe00fbfb0ba1966db9eb67a) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/fc390c86cb18f4d7ba74b3e763070c7b81ef1361...42e6d28c7cc565f2cbe00fbfb0ba1966db9eb67a)。
 
+## 0.0.57beta - 2026-08-29
+
+### Changed
+
+- 将下一次原生打包候选统一为 0.0.57-beta，沿用 0.0.56beta 及其编号候选的产品功能和发布恢复改动。
+- 本次版本提交集中在版本投影，没有单独增加产品功能；随后干净环境打包暴露的源码导出问题在 0.0.58beta 修复。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/fc390c86cb18f4d7ba74b3e763070c7b81ef1361) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/f55fef191afd74352611da0235938a011d6d7766...fc390c86cb18f4d7ba74b3e763070c7b81ef1361)。
+
 ## 0.0.54beta - 2026-08-25
 
 本版本为共享 LLM 流停滞恢复增加明确上限，并修复公开网站“页面显示新版、主按钮却未绑定精确新版安装包”的下载交互；桌面端、命令行二进制和网站使用同一份 `0.0.54-beta` 发布事实。
