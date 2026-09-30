@@ -1,0 +1,70 @@
+{
+  "version": "0.0.62-beta",
+  "source": "63b52453f233ba6b1eeeac6bd2eb8c7007c6af3a",
+  "tag": "v0.0.62-beta",
+  "previousSource": "22ce8838a043c3cd8c0a0107ef5cee2aa238c059",
+  "sourceDate": "2026-09-06T11:51:34+08:00",
+  "commits": [
+    {
+      "sha": "63b52453f233ba6b1eeeac6bd2eb8c7007c6af3a",
+      "date": "2026-09-06T11:51:34+08:00",
+      "subject": "release: prepare v0.0.62-beta"
+    },
+    {
+      "sha": "05605e697e89e184b446f7fc30f44a65ccec7254",
+      "date": "2026-09-05T23:22:38+08:00",
+      "subject": "fix(scheduler): converge bounded admission and exact occurrence settlement"
+    },
+    {
+      "sha": "a2c63df5293a49165b7608527696e0b4ccca1704",
+      "date": "2026-09-05T19:38:47+08:00",
+      "subject": "docs(scheduler): record iterative scheduling razor re-audit"
+    },
+    {
+      "sha": "5f367d1f30d802e3927914158c6e6722e6485736",
+      "date": "2026-09-05T15:25:56+08:00",
+      "subject": "fix(light): author exact capability activation refs"
+    },
+    {
+      "sha": "152001585cd44f733333cb4f21a98cb7168388ed",
+      "date": "2026-09-05T14:02:12+08:00",
+      "subject": "fix(capability): clarify direct exact reveal authority"
+    },
+    {
+      "sha": "7c19c4240debc86f5ecd3947dda85d01fb8fd295",
+      "date": "2026-09-05T13:36:37+08:00",
+      "subject": "fix(release): admit publication before native builds"
+    },
+    {
+      "sha": "4feef0369a6919bdb9ba758e847c6faecda0f056",
+      "date": "2026-09-05T12:26:55+08:00",
+      "subject": "docs(release): reconcile final runtime and website evidence"
+    },
+    {
+      "sha": "f46d84a6ea5f5fa7ce24d17fabc8ba474654c7eb",
+      "date": "2026-09-05T12:08:21+08:00",
+      "subject": "fix(web): serve mutable releases without stale validators"
+    },
+    {
+      "sha": "e172118fb7c2fe93ddab6ade1cb753fa862e8bea",
+      "date": "2026-09-05T11:30:47+08:00",
+      "subject": "fix(web): derive platform facts from current tool catalog"
+    },
+    {
+      "sha": "ed92a5f37fd9c07681706f31a62afe52397c406c",
+      "date": "2026-09-05T11:07:28+08:00",
+      "subject": "fix(expert-squad): compile plugin closure from source exports"
+    },
+    {
+      "sha": "d846b9b12194f59e5dd4faa127b1646653f590c2",
+      "date": "2026-09-05T10:41:04+08:00",
+      "subject": "fix(web): declare root util workspace dependency"
+    },
+    {
+      "sha": "c30b929870856a18c2f10fb98bfaee7b1335552d",
+      "date": "2026-09-05T10:28:45+08:00",
+      "subject": "fix(web): run archive checks in owning workspaces"
+    }
+  ],
+  "stats": ".github/workflows/build.yml                        |  48 +-\n .github/workflows/deploy-opencorvus-com.yml        |  16 +\n CHANGELOG.md                                       |  16 +\n RELEASE.md                                         |  20 +-\n bun.lock                                           |  18 +-\n deploy/racknerd/Caddyfile                          |  16 +-\n deploy/racknerd/caddy-cache.test.mjs               | 145 +++++\n expert-squads/builtin/dynamic/expert-squad.jsonc   |   2 +-\n .../tools/publish-evolution-artifact.ts            |   4 +-\n expert-squads/builtin/light/README.md              |   2 +\n .../light/agents/light-investigator/system.md      |  11 +-\n .../builtin/light/agents/light-planner/system.md   |  13 +-\n .../builtin/light/agents/orchestrator/system.md    |  12 +-\n expert-squads/builtin/light/expert-squad.jsonc     |   2 +-\n package.json                                       |   4 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../opencorvus/generated/expert-squad-payload.ts   |  14 +-\n .../opencorvus/generated/expert-squad-revisions.ts |   4 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/opencorvus/script/run-tests.ts            |   2 +-\n .../opencorvus/script/scheduled-automations-e2e.ts |  47 +-\n packages/opencorvus/src/engine/control-lease.ts    |  67 +--\n packages/opencorvus/src/engine/git.ts              |  14 +-\n packages/opencorvus/src/engine/host-recovery.ts    |  77 ++-\n .../opencorvus/src/engine/task-control-driver.ts   | 229 +++++---\n .../src/engine/task-root-ingress-delivery.ts       |  31 +-\n .../src/expert-squad/package-tool-bundle.ts        |   1 +\n packages/opencorvus/src/mission/session.ts         |   2 +\n packages/opencorvus/src/project/bootstrap.ts       |   9 +-\n .../opencorvus/src/project/identity-convergence.ts |  95 ++--\n .../src/project/independent-project-owner.ts       |   1 +\n packages/opencorvus/src/project/instance.ts        | 103 ++--\n .../opencorvus/src/protocol/scheduler-message.ts   | 427 +++++++++-----\n .../src/scheduler/automation-fire-frontier.ts      |  62 ++-\n .../src/scheduler/automation-projection.ts         |  93 +++-\n .../opencorvus/src/scheduler/automation-service.ts | 253 +++++----\n .../opencorvus/src/scheduler/event-projection.ts   |  10 +-\n packages/opencorvus/src/scheduler/event-service.ts | 242 +++++---\n packages/opencorvus/src/scheduler/event.sql.ts     |  15 +-\n packages/opencorvus/src/scheduler/recurrence.ts    |  57 +-\n packages/opencorvus/src/server/error-handler.ts    |   1 +\n packages/opencorvus/src/server/routes/global.ts    |   4 +-\n packages/opencorvus/src/server/routes/session.ts   |  56 +-\n packages/opencorvus/src/session/prompt/owner.ts    |   4 +\n packages/opencorvus/src/session/wake.ts            |   1 +\n packages/opencorvus/src/storage/ddl.ts             |   4 +-\n packages/opencorvus/src/storage/mysql-transfer.ts  |  33 +-\n packages/opencorvus/src/tool/capability-search.ts  |   2 +-\n packages/opencorvus/src/tool/execution-mode.ts     |  47 +-\n packages/opencorvus/src/tool/schedule.ts           |  76 +--\n packages/opencorvus/src/util/queue.ts              |  31 +-\n .../agent-runner-fresh-session-authority.test.ts   |   2 +-\n .../opencorvus/test/algorithm-batch-one.test.ts    |   4 +-\n .../architect-domain-incomplete-settlement.test.ts |  68 ++-\n .../test/build-terminal-fact-publication.test.ts   |  40 +-\n ...dispatch-occurrence-cross-process-claim.test.ts |   6 +-\n .../test/engine-git-batched-scale.test.ts          |   2 +-\n .../test/engine-git-batched-transaction.test.ts    |  21 +-\n .../test/engine-git-fact-reconciliation.test.ts    |  34 ++\n .../test/engine-interaction-recovery.test.ts       |   2 +-\n .../engine-interrupted-session-recovery.test.ts    |  85 ++-\n .../test/event-backlog-and-deletion.test.ts        | 293 ++++++++++\n .../opencorvus/test/event-current-frontier.test.ts |  29 +-\n .../test/evolution-artifact-evidence-host.test.ts  | 226 +++++---\n .../test/execution-authority-tool-surface.test.ts  |   3 +-\n .../test/expert-squad/advanced-package.test.ts     |   1 +\n .../test/expert-squad/dynamic-package.test.ts      |   4 +-\n .../test/expert-squad/light-package.test.ts        |  69 ++-\n .../package-replacement-recovery.test.ts           |  13 +-\n .../fixture/implicit-project-creation-child.ts     |  13 +-\n .../fixture/session-message-pair-process-worker.ts |  26 +-\n .../workflow-node-admission-process-worker.ts      | 115 +++-\n ...end-design-domain-incomplete-settlement.test.ts |  75 +--\n .../test/instance-background-work.test.ts          |  83 +++\n .../intent-analysis-blocker-settlement.test.ts     |  95 ++--\n .../mcp/browser-conversation-ownership.test.ts     |   4 +-\n .../test/mcp/browser-signal-ownership.test.ts      |   2 +-\n .../test/orchestrator-control-message.test.ts      |  33 +-\n .../test/orchestrator-initial-task-render.test.ts  |  13 +-\n ...chestrator-streamed-dispatch-settlement.test.ts | 313 +++++++++++\n .../test/package-tool-files-capability.test.ts     |  93 +++-\n .../test/project-implicit-creation-journal.test.ts |  26 +-\n .../test/provider-cache-identity.test.ts           |  16 +-\n ...quirements-domain-incomplete-settlement.test.ts |  34 +-\n .../research-domain-incomplete-settlement.test.ts  |  34 +-\n .../test/scheduler-automation-remediation.test.ts  | 364 ++++++++++++\n .../test/scheduler-claim-and-fire-identity.test.ts |  33 +-\n .../test/scheduler-recurrence-contract.test.ts     | 133 +++++\n .../scheduler-task-root-message-schema.test.ts     | 401 +++++++++++++-\n .../test/scheduler-tool-recovery.test.ts           |  56 ++\n .../test/scheduling-razor-primitives.test.ts       | 422 ++++++++++++++\n .../test/server/conversation-artifact-read.test.ts |  52 +-\n .../server/session-command-idempotency.test.ts     |   7 +\n .../session-event-connection-snapshot.test.ts      |  41 +-\n .../test/server/session-shell-idempotency.test.ts  |  97 ++++\n .../opencorvus/test/session-error-bridge.test.ts   |  54 +-\n ...on-execution-authority-managed-worktree.test.ts |  12 +-\n .../session-loop-execution-occurrence.test.ts      |   2 +-\n .../test/session/source-persistence.test.ts        |   5 +-\n .../test/task-control-abandoned-dispatch.test.ts   |   6 +-\n .../opencorvus/test/task-control-liveness.test.ts  |  66 ++-\n .../test/task-control-sweep-scope.test.ts          |  26 +-\n .../test/task-event-projection-contract.test.ts    | 112 +++-\n .../test/task-message-atomic-acceptance.test.ts    |  21 +\n .../test/task-wait-fire-identity.test.ts           |  50 +-\n .../workflow-node-cross-process-admission.test.ts  |  14 +-\n .../workflow-node-occurrence-authority.test.ts     |  18 +-\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n .../settings/ScheduledAutomationsPanel.tsx         |   1 +\n packages/overlay/src/services/automations.ts       |   6 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/sdk/js/src/gen/types.gen.ts               |  39 +-\n packages/sdk/openapi.json                          | 121 +++-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n packages/web/script/generate-platform-facts.ts     |  15 +-\n packages/web/src/content/docs/reference/api.mdx    |   6 +-\n packages/web/src/content/docs/tools.mdx            |   5 +-\n .../web/src/content/docs/zh-cn/reference/api.mdx   |   6 +-\n packages/web/src/content/docs/zh-cn/tools.mdx      |   5 +-\n .../web/src/content/platform-facts.generated.ts    |   4 +-\n packages/web/src/content/platform-facts.ts         |   6 +-\n packages/web/test/platform-facts.test.ts           | 112 ++--\n patches/rrule@2.8.1.patch                          | 614 +++++++++++++++++++++\n script/github-actions-workflow-contract.test.ts    |  59 +-\n script/verify-release-identity.test.ts             |  85 +--\n script/verify-release-identity.ts                  |  12 +-\n specs/README.md                                    |  10 +-\n specs/current/architecture/03-control.md           |  44 +-\n .../architecture/capability-search-runtime.md      |   7 +\n specs/current/architecture/public-website.md       |   1 +\n specs/current/architecture/security-permission.md  |   2 +-\n specs/current/architecture/task-control-plane.md   |  14 +-\n ...26-08-30-scheduling-architecture-remediation.md |   2 +-\n .../2026-09/2026-09-05-scheduling-razor-reaudit.md | 241 ++++++++\n .../2026-09-05-scheduling-razor-remediation.md     | 102 ++++\n .../2026-09-05-technical-direction-remediation.md  | 335 +++++++++++\n .../2026-09/2026-09-05-v0.0.59-beta-release.md     |  18 +-\n .../2026-09/2026-09-05-v0.0.60-beta-release.md     |   7 +-\n .../2026-09/2026-09-05-v0.0.61-beta-release.md     | 334 ++++++++++-\n .../2026-09/2026-09-05-v0.0.62-beta-release.md     |  53 ++\n specs/records/2026-09/README.md                    |   7 +\n 149 files changed, 6946 insertions(+), 1667 deletions(-)"
+}

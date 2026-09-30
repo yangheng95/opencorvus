@@ -424,7 +424,7 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/752d8b3d27dfc3a95ba7ef2956efd69250683fa7) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/63b52453f233ba6b1eeeac6bd2eb8c7007c6af3a...752d8b3d27dfc3a95ba7ef2956efd69250683fa7)。
 
-## 0.0.62beta - 2026-09-05
+## 0.0.62beta - 2026-09-06
 
 本版本在 `0.0.61-beta` 的不可变发布基础上同步最新源码，修复干净环境的发布前检查，并重新发布完整桌面端、命令行、更新清单和公开网站。数据库继续采用当前 pre-release schema epoch：不新增历史 migration 或兼容 reader，不兼容的旧数据库需要显式重置。
 
@@ -439,6 +439,10 @@
 - 修复 Dynamic 专家团内容与 revision 记录漂移，确保 canonical generator 在干净 runner 上保持零差异。
 - 修复 Architect 与跨进程 workflow-node 测试夹具未建立真实 Task-root ingress、Orchestrator Tool occurrence 和 dispatch-lineage 顺序的问题，使 CI 验证当前数据库约束而不是旧的宽松夹具。
 - 修复网站 package-tool 源码 export 解析、公开工具事实、下载页面缓存验证器和 immutable Squad 路径匹配；普通刷新会读取当前发布版本，同时内容寻址资源继续使用长期 immutable 缓存。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/63b52453f233ba6b1eeeac6bd2eb8c7007c6af3a) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/22ce8838a043c3cd8c0a0107ef5cee2aa238c059...63b52453f233ba6b1eeeac6bd2eb8c7007c6af3a)。
 
 ## 0.0.61beta - 2026-09-05
 
