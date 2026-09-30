@@ -973,6 +973,16 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/2d3ec81e426d5e40419cfe88fe6394a7410f7501) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/b1cedfa539eb5533c98acf2e3d51479173bb6060...2d3ec81e426d5e40419cfe88fe6394a7410f7501)。
 
+## 0.0.35beta.2 - 2026-08-08
+
+### Fixed
+
+- Windows 原生包携带真实的 ripgrep 可执行文件，修复把错误内容当成搜索运行时打包的问题。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/b1cedfa539eb5533c98acf2e3d51479173bb6060) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/81fb867782966a14f2a5b9b94cd3007c2ff63c62...b1cedfa539eb5533c98acf2e3d51479173bb6060)。
+
 ## 0.0.35beta - 2026-08-07
 
 - 本版本是更新日志的记录起点；更早版本不在此倒推补录。

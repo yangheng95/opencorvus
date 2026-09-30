@@ -1,0 +1,20 @@
+{
+  "version": "0.0.35-beta.2",
+  "source": "b1cedfa539eb5533c98acf2e3d51479173bb6060",
+  "tag": null,
+  "previousSource": "81fb867782966a14f2a5b9b94cd3007c2ff63c62",
+  "sourceDate": "2026-08-08T03:51:30+08:00",
+  "commits": [
+    {
+      "sha": "b1cedfa539eb5533c98acf2e3d51479173bb6060",
+      "date": "2026-08-08T03:51:30+08:00",
+      "subject": "chore(release): prepare v0.0.35-beta.2"
+    },
+    {
+      "sha": "26be31dc3addc43db758e441d4a9806ffd56e137",
+      "date": "2026-08-08T03:51:16+08:00",
+      "subject": "fix(ci): package real Windows ripgrep binary"
+    }
+  ],
+  "stats": ".github/workflows/build.yml                             | 10 ++++------\n bun.lock                                                | 16 ++++++++--------\n packages/channel-config/package.json                    |  2 +-\n packages/channel-runtime/package.json                   |  2 +-\n .../opencorvus/native/process-supervisor/Cargo.lock     |  2 +-\n .../opencorvus/native/process-supervisor/Cargo.toml     |  2 +-\n packages/opencorvus/package.json                        |  2 +-\n packages/overlay/package.json                           |  2 +-\n packages/overlay/src-tauri/Cargo.lock                   |  2 +-\n packages/overlay/src-tauri/Cargo.toml                   |  2 +-\n packages/overlay/src-tauri/tauri.conf.json              |  2 +-\n packages/plugin/package.json                            |  2 +-\n packages/sdk/js/package.json                            |  2 +-\n packages/transport-protocol/package.json                |  2 +-\n packages/util/package.json                              |  2 +-\n script/github-actions-workflow-contract.test.ts         | 13 +++++++++++++\n script/install-windows-ripgrep.ps1                      | 17 +++++++++++++++++\n 17 files changed, 55 insertions(+), 27 deletions(-)"
+}
