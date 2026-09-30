@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Current-runtime Harbor independent final comparison](artifacts/2026-09-30-harbor-runtime-comparison/README.md)
+
 - [Persistent navigation rail across pages](records/2026-09/2026-09-30-persistent-navigation-rail.md)
 
 - [Persistent navigation rail visual and mount evidence](artifacts/2026-09-30-navigation-rail/README.md)

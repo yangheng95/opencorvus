@@ -1,0 +1,3139 @@
+{
+  "authority": "Read-only statistical derivation; official results remain in the native Harbor trial files. No rescoring or imputation.",
+  "job_uuid": "99d7f618-5177-46f0-accb-d8fea4f19c62",
+  "frozen_runtime_source": "a0a879ed759f980e6d72c9df7a10b51bb2d8f1a2",
+  "harbor_version": "0.23.0",
+  "local_linux_version": "0.1.21",
+  "official_automationbench_commit": "4a8e1061254004d9dac807054eed33fad7d1ff14",
+  "native_headline": {
+    "strict": 0.2,
+    "partial": 0.621765873015873,
+    "denominator": 40,
+    "missing_reward_treatment": "Harbor maps None to zero for this headline only"
+  },
+  "scored_only": {
+    "scored": 39,
+    "unscored": 1,
+    "strict_successes": 8,
+    "strict_mean": 0.20512820512820512,
+    "partial_mean": 0.6377085877085877
+  },
+  "contrasts": {
+    "TE-TS": {
+      "complete_pairs": 9,
+      "strict_mean_difference": 0.1111111111111111,
+      "partial_mean_difference": 0.20238095238095238,
+      "included_blocks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    "ME-MS": {
+      "complete_pairs": 10,
+      "strict_mean_difference": 0.0,
+      "partial_mean_difference": -0.06857142857142856,
+      "included_blocks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    "MS-TS": {
+      "complete_pairs": 10,
+      "strict_mean_difference": 0.0,
+      "partial_mean_difference": 0.125,
+      "included_blocks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    "ME-TE": {
+      "complete_pairs": 9,
+      "strict_mean_difference": -0.1111111111111111,
+      "partial_mean_difference": -0.13968253968253969,
+      "included_blocks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        10
+      ]
+    }
+  },
+  "interaction": {
+    "complete_cases": 9,
+    "included_blocks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      7,
+      8,
+      9,
+      10
+    ],
+    "mean_difference": {
+      "strict": -0.1111111111111111,
+      "partial": -0.2785714285714286
+    }
+  },
+  "native_acceptance_vs_official": [
+    {
+      "native_accepted": false,
+      "official_strict_pass": false,
+      "count": 9
+    },
+    {
+      "native_accepted": false,
+      "official_strict_pass": true,
+      "count": 1
+    },
+    {
+      "native_accepted": true,
+      "official_strict_pass": false,
+      "count": 22
+    },
+    {
+      "native_accepted": true,
+      "official_strict_pass": true,
+      "count": 7
+    }
+  ],
+  "activity_roles": {
+    "orchestrator": 423,
+    "automationbench-executor": 1293,
+    "automationbench-verifier": 1149,
+    "mission": 566
+  },
+  "activity_outcomes": {
+    "done": 3430,
+    "aborted": 1
+  },
+  "logical_activities": 3431,
+  "recorded_attempts": 3435,
+  "core_tool_status_counts": {
+    "error": 98,
+    "completed": 3176
+  },
+  "official_tool_events": 1501,
+  "current_usage": {
+    "usage_records": 3530,
+    "input_tokens": 20835549,
+    "output_tokens": 677505,
+    "reasoning_tokens": 135747,
+    "cache_read_tokens": 121875968,
+    "cache_write_tokens": 0,
+    "total_tokens": 143524769
+  },
+  "cost_scopes": [
+    {
+      "scope": "prior_single_case_restart",
+      "available_files": 1,
+      "unavailable_files": 0,
+      "usage_records": 13,
+      "recorded_tokens": {
+        "input_tokens": 52352,
+        "output_tokens": 4047,
+        "reasoning_tokens": 818,
+        "cache_read_tokens": 249344,
+        "cache_write_tokens": 0,
+        "total_tokens": 306561
+      },
+      "local_estimated_cost_usd": 0.0,
+      "external_billing": null,
+      "models": [
+        {
+          "provider": "openai",
+          "model": "gpt-5.6-luna",
+          "usage_records": 13
+        }
+      ],
+      "purposes": {
+        "session": 13
+      },
+      "limitation": "Original exporter omitted connectivity usage; that preflight and actual bill remain unknown."
+    },
+    {
+      "scope": "single_candidate_author",
+      "available_files": 1,
+      "unavailable_files": 0,
+      "usage_records": 44,
+      "recorded_tokens": {
+        "input_tokens": 236999,
+        "output_tokens": 12715,
+        "reasoning_tokens": 1741,
+        "cache_read_tokens": 4732928,
+        "cache_write_tokens": 0,
+        "total_tokens": 4984383
+      },
+      "local_estimated_cost_usd": 0.0,
+      "external_billing": null,
+      "models": [
+        {
+          "provider": "openai",
+          "model": "gpt-5.6-luna",
+          "usage_records": 44
+        }
+      ],
+      "purposes": {
+        "session": 44
+      },
+      "limitation": "44 observed HTTP records are separately retained; usage rows alone are not a wire-call ledger."
+    },
+    {
+      "scope": "first_infrastructure_attempt",
+      "available_files": 3,
+      "unavailable_files": 1,
+      "usage_records": 16,
+      "recorded_tokens": {
+        "input_tokens": 80677,
+        "output_tokens": 3590,
+        "reasoning_tokens": 1258,
+        "cache_read_tokens": 280320,
+        "cache_write_tokens": 0,
+        "total_tokens": 365845
+      },
+      "local_estimated_cost_usd": 0.0,
+      "external_billing": null,
+      "models": [
+        {
+          "provider": "openai",
+          "model": "gpt-5.6-luna",
+          "usage_records": 16
+        }
+      ],
+      "purposes": {
+        "provider-connectivity": 3,
+        "session": 13
+      },
+      "limitation": "Missing usage receipts are not zero expense; unstarted slots incur no measured run here."
+    },
+    {
+      "scope": "protocol_limited_12",
+      "available_files": 12,
+      "unavailable_files": 0,
+      "usage_records": 1277,
+      "recorded_tokens": {
+        "input_tokens": 7714062,
+        "output_tokens": 243840,
+        "reasoning_tokens": 47544,
+        "cache_read_tokens": 46487296,
+        "cache_write_tokens": 0,
+        "total_tokens": 54492742
+      },
+      "local_estimated_cost_usd": 0.0,
+      "external_billing": null,
+      "models": [
+        {
+          "provider": "openai",
+          "model": "gpt-5.6-luna",
+          "usage_records": 1277
+        }
+      ],
+      "purposes": {
+        "provider-connectivity": 12,
+        "session": 1265
+      },
+      "limitation": "Missing usage receipts are not zero expense; unstarted slots incur no measured run here."
+    },
+    {
+      "scope": "prior_completed_40",
+      "available_files": 40,
+      "unavailable_files": 0,
+      "usage_records": 3346,
+      "recorded_tokens": {
+        "input_tokens": 17473616,
+        "output_tokens": 651581,
+        "reasoning_tokens": 128914,
+        "cache_read_tokens": 109829888,
+        "cache_write_tokens": 0,
+        "total_tokens": 128083999
+      },
+      "local_estimated_cost_usd": 0.0,
+      "external_billing": null,
+      "models": [
+        {
+          "provider": "openai",
+          "model": "gpt-5.6-luna",
+          "usage_records": 3346
+        }
+      ],
+      "purposes": {
+        "provider-connectivity": 40,
+        "session": 3306
+      },
+      "limitation": "Missing usage receipts are not zero expense; unstarted slots incur no measured run here."
+    },
+    {
+      "scope": "current_runtime_40",
+      "available_files": 40,
+      "unavailable_files": 0,
+      "usage_records": 3530,
+      "recorded_tokens": {
+        "input_tokens": 20835549,
+        "output_tokens": 677505,
+        "reasoning_tokens": 135747,
+        "cache_read_tokens": 121875968,
+        "cache_write_tokens": 0,
+        "total_tokens": 143524769
+      },
+      "local_estimated_cost_usd": 0.0,
+      "external_billing": null,
+      "models": [
+        {
+          "provider": "openai",
+          "model": "gpt-5.6-luna",
+          "usage_records": 3530
+        }
+      ],
+      "purposes": {
+        "provider-connectivity": 40,
+        "session": 3490
+      },
+      "limitation": "Missing usage receipts are not zero expense; unstarted slots incur no measured run here."
+    }
+  ],
+  "historical_usage_records": 8226,
+  "historical_recorded_tokens": 331758299,
+  "qualification": {
+    "usage_records": 0,
+    "logical_activities": 1,
+    "recorded_attempts": 1,
+    "external_egress": "rejected during native protocol qualification",
+    "external_billing": null
+  },
+  "http_wire_attempts": null,
+  "external_billing": null,
+  "aborted_stream_completion_usage": null,
+  "timing": {
+    "job_wall_seconds": 9459.081754922867,
+    "slot_occupancy": 0.9353096227954841,
+    "sum_phase_seconds": {
+      "environment_setup": 864.3662812709808,
+      "agent_setup": 2189.35756111145,
+      "agent_execution": 31396.167162179947,
+      "verifier": 172.1890799999237
+    },
+    "median_phase_seconds": {
+      "environment_setup": 14.82045042514801,
+      "agent_setup": 38.895928382873535,
+      "agent_execution": 723.2843039035797,
+      "verifier": 2.408088445663452
+    },
+    "provider_activity_union_seconds": 27055.75500011444,
+    "outer_mcp_union_seconds": 1797.41299533844,
+    "simulator_processing_union_seconds": 19.31800866127014,
+    "simulator_processing_median_seconds": 0.002,
+    "logical_activities_min_median_max": [
+      2,
+      84.5,
+      173
+    ],
+    "session_input_plus_cache_tokens_min_median_max": [
+      744,
+      37501.0,
+      119144
+    ],
+    "cache_read_fraction_of_recorded_prompt_tokens": 0.8540023297489018
+  },
+  "slots": [
+    {
+      "block": 1,
+      "arm": "TS",
+      "case": "hr.candidate_submittal_docs",
+      "example_id": 5034,
+      "trial": "hr-candidate-submittal-docs__dZngBD4",
+      "task_ids": [
+        "tsk_g00VWfNdrR00DiJmpnWv"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.0,
+      "native_acceptance": false,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfNdrR00DiJmpnWv",
+          "status": "failed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 116,
+        "input_tokens": 884246,
+        "output_tokens": 20167,
+        "reasoning_tokens": 3518,
+        "cache_read_tokens": 5031680,
+        "cache_write_tokens": 0,
+        "total_tokens": 5939611,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 116
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 115
+        }
+      },
+      "logical_activities": 114,
+      "recorded_attempts": 115,
+      "activity_roles": {
+        "orchestrator": 11,
+        "automationbench-executor": 46,
+        "automationbench-verifier": 57
+      },
+      "core_tool_status_counts": {
+        "error": 4,
+        "completed": 106
+      },
+      "official_tool_events": 60,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T02:21:53.530791Z",
+      "finished_at": "2026-09-30T02:49:10.470707Z",
+      "phase_seconds": {
+        "environment_setup": 19.658236026763916,
+        "agent_setup": 71.6937620639801,
+        "agent_execution": 1534.5402898788452,
+        "verifier": 2.253922939300537
+      },
+      "provider_activity_union_seconds": 1380.5780007839203,
+      "outer_mcp_union_seconds": 56.30399942398071,
+      "simulator_processing_union_seconds": 1.1729998588562012,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/hr-candidate-submittal-docs__dZngBD4"
+    },
+    {
+      "block": 1,
+      "arm": "TE",
+      "case": "hr.candidate_submittal_docs",
+      "example_id": 5034,
+      "trial": "hr-candidate-submittal-docs__ybJgG8H",
+      "task_ids": [
+        "tsk_g00VWfNf2J00Zj66QWXn"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.7142857142857143,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfNf2J00Zj66QWXn",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 75,
+        "input_tokens": 321316,
+        "output_tokens": 12696,
+        "reasoning_tokens": 2572,
+        "cache_read_tokens": 2214912,
+        "cache_write_tokens": 0,
+        "total_tokens": 2551496,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 75
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 74
+        }
+      },
+      "logical_activities": 73,
+      "recorded_attempts": 73,
+      "activity_roles": {
+        "orchestrator": 5,
+        "automationbench-executor": 46,
+        "automationbench-verifier": 22
+      },
+      "core_tool_status_counts": {
+        "completed": 71
+      },
+      "official_tool_events": 55,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T02:21:53.662116Z",
+      "finished_at": "2026-09-30T02:35:22.627011Z",
+      "phase_seconds": {
+        "environment_setup": 26.56591010093689,
+        "agent_setup": 69.79110717773438,
+        "agent_execution": 699.9141671657562,
+        "verifier": 2.711915969848633
+      },
+      "provider_activity_union_seconds": 588.7129986286163,
+      "outer_mcp_union_seconds": 76.48000025749207,
+      "simulator_processing_union_seconds": 0.879000186920166,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/hr-candidate-submittal-docs__ybJgG8H"
+    },
+    {
+      "block": 1,
+      "arm": "MS",
+      "case": "hr.candidate_submittal_docs",
+      "example_id": 5034,
+      "trial": "hr-candidate-submittal-docs__b7w9Aii",
+      "task_ids": [
+        "tsk_g00VWfNwqI00AI0D3FJ2"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.5,
+      "native_acceptance": false,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfNwqI00AI0D3FJ2",
+          "status": "failed"
+        }
+      ],
+      "mission_outcome_kind": "blocked",
+      "usage": {
+        "usage_records": 87,
+        "input_tokens": 421670,
+        "output_tokens": 18305,
+        "reasoning_tokens": 3578,
+        "cache_read_tokens": 2671104,
+        "cache_write_tokens": 0,
+        "total_tokens": 3114657,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 87
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 86
+        }
+      },
+      "logical_activities": 84,
+      "recorded_attempts": 84,
+      "activity_roles": {
+        "mission": 14,
+        "orchestrator": 6,
+        "automationbench-executor": 33,
+        "automationbench-verifier": 31
+      },
+      "core_tool_status_counts": {
+        "completed": 78,
+        "error": 2
+      },
+      "official_tool_events": 48,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T02:21:53.684929Z",
+      "finished_at": "2026-09-30T02:42:57.377182Z",
+      "phase_seconds": {
+        "environment_setup": 26.022318124771118,
+        "agent_setup": 76.91911482810974,
+        "agent_execution": 1148.8161849975586,
+        "verifier": 2.2015380859375
+      },
+      "provider_activity_union_seconds": 1026.1199986934662,
+      "outer_mcp_union_seconds": 61.53500056266785,
+      "simulator_processing_union_seconds": 0.6760001182556152,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/hr-candidate-submittal-docs__b7w9Aii"
+    },
+    {
+      "block": 1,
+      "arm": "ME",
+      "case": "hr.candidate_submittal_docs",
+      "example_id": 5034,
+      "trial": "hr-candidate-submittal-docs__3hwRNnN",
+      "task_ids": [
+        "tsk_g00VWfO3dr00XZ0s2VlD"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.7142857142857143,
+      "native_acceptance": false,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfO3dr00XZ0s2VlD",
+          "status": "failed"
+        }
+      ],
+      "mission_outcome_kind": "blocked",
+      "usage": {
+        "usage_records": 176,
+        "input_tokens": 1175103,
+        "output_tokens": 30471,
+        "reasoning_tokens": 5904,
+        "cache_read_tokens": 7386112,
+        "cache_write_tokens": 0,
+        "total_tokens": 8597590,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 176
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 175
+        }
+      },
+      "logical_activities": 173,
+      "recorded_attempts": 173,
+      "activity_roles": {
+        "mission": 44,
+        "orchestrator": 14,
+        "automationbench-executor": 63,
+        "automationbench-verifier": 52
+      },
+      "core_tool_status_counts": {
+        "completed": 163,
+        "error": 2
+      },
+      "official_tool_events": 82,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T02:21:53.707537Z",
+      "finished_at": "2026-09-30T02:46:32.251299Z",
+      "phase_seconds": {
+        "environment_setup": 39.91330409049988,
+        "agent_setup": 72.26449012756348,
+        "agent_execution": 1353.5213010311127,
+        "verifier": 2.4289820194244385
+      },
+      "provider_activity_union_seconds": 1155.5899984836578,
+      "outer_mcp_union_seconds": 134.50700044631958,
+      "simulator_processing_union_seconds": 0.8819999694824219,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/hr-candidate-submittal-docs__3hwRNnN"
+    },
+    {
+      "block": 2,
+      "arm": "TS",
+      "case": "sales.create_new_opportunity",
+      "example_id": 9,
+      "trial": "sales-create-new-opportunity__NsDrWiy",
+      "task_ids": [
+        "tsk_g00VWfQwrM00uqxfdt9i"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.0,
+      "native_acceptance": false,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfQwrM00uqxfdt9i",
+          "status": "failed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 96,
+        "input_tokens": 601438,
+        "output_tokens": 15821,
+        "reasoning_tokens": 4174,
+        "cache_read_tokens": 2732288,
+        "cache_write_tokens": 0,
+        "total_tokens": 3353721,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 96
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 95
+        }
+      },
+      "logical_activities": 94,
+      "recorded_attempts": 94,
+      "activity_roles": {
+        "orchestrator": 14,
+        "automationbench-executor": 35,
+        "automationbench-verifier": 45
+      },
+      "core_tool_status_counts": {
+        "completed": 89,
+        "error": 1
+      },
+      "official_tool_events": 54,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T02:35:22.654202Z",
+      "finished_at": "2026-09-30T02:50:34.956100Z",
+      "phase_seconds": {
+        "environment_setup": 19.144179105758667,
+        "agent_setup": 48.0856499671936,
+        "agent_execution": 834.0686409473419,
+        "verifier": 2.4145960807800293
+      },
+      "provider_activity_union_seconds": 720.996999502182,
+      "outer_mcp_union_seconds": 57.1990008354187,
+      "simulator_processing_union_seconds": 0.5179996490478516,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/sales-create-new-opportunity__NsDrWiy"
+    },
+    {
+      "block": 2,
+      "arm": "TE",
+      "case": "sales.create_new_opportunity",
+      "example_id": 9,
+      "trial": "sales-create-new-opportunity__wNNhgiX",
+      "task_ids": [
+        "tsk_g00VWfSkjz006dIf9kvv"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.0,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfSkjz006dIf9kvv",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 114,
+        "input_tokens": 657218,
+        "output_tokens": 16780,
+        "reasoning_tokens": 3451,
+        "cache_read_tokens": 4623872,
+        "cache_write_tokens": 0,
+        "total_tokens": 5301321,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 114
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 113
+        }
+      },
+      "logical_activities": 112,
+      "recorded_attempts": 112,
+      "activity_roles": {
+        "orchestrator": 9,
+        "automationbench-executor": 54,
+        "automationbench-verifier": 49
+      },
+      "core_tool_status_counts": {
+        "completed": 108
+      },
+      "official_tool_events": 73,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T02:42:57.410596Z",
+      "finished_at": "2026-09-30T02:58:51.463761Z",
+      "phase_seconds": {
+        "environment_setup": 13.870589971542358,
+        "agent_setup": 37.32708811759949,
+        "agent_execution": 891.4844028949738,
+        "verifier": 2.7335917949676514
+      },
+      "provider_activity_union_seconds": 763.3570010662079,
+      "outer_mcp_union_seconds": 78.83199977874756,
+      "simulator_processing_union_seconds": 0.957000732421875,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/sales-create-new-opportunity__wNNhgiX"
+    },
+    {
+      "block": 2,
+      "arm": "MS",
+      "case": "sales.create_new_opportunity",
+      "example_id": 9,
+      "trial": "sales-create-new-opportunity__v8LuSno",
+      "task_ids": [
+        "tsk_g00VWfTvPQ00uoTdyo46"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.0,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfTvPQ00uoTdyo46",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": "accepted",
+      "usage": {
+        "usage_records": 86,
+        "input_tokens": 411855,
+        "output_tokens": 16152,
+        "reasoning_tokens": 2802,
+        "cache_read_tokens": 2642176,
+        "cache_write_tokens": 0,
+        "total_tokens": 3072985,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 86
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 85
+        }
+      },
+      "logical_activities": 83,
+      "recorded_attempts": 83,
+      "activity_roles": {
+        "mission": 26,
+        "orchestrator": 14,
+        "automationbench-executor": 19,
+        "automationbench-verifier": 24
+      },
+      "core_tool_status_counts": {
+        "completed": 79,
+        "error": 1
+      },
+      "official_tool_events": 25,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T02:46:32.284426Z",
+      "finished_at": "2026-09-30T02:58:52.996410Z",
+      "phase_seconds": {
+        "environment_setup": 18.463042974472046,
+        "agent_setup": 34.37700796127319,
+        "agent_execution": 677.0538539886475,
+        "verifier": 2.2103981971740723
+      },
+      "provider_activity_union_seconds": 594.8419985771179,
+      "outer_mcp_union_seconds": 29.621999502182007,
+      "simulator_processing_union_seconds": 0.32399964332580566,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/sales-create-new-opportunity__v8LuSno"
+    },
+    {
+      "block": 2,
+      "arm": "ME",
+      "case": "sales.create_new_opportunity",
+      "example_id": 9,
+      "trial": "sales-create-new-opportunity__uQcTPRX",
+      "task_ids": [
+        "tsk_g00VWfUZOl00NHtDjwBz"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.0,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfUZOl00NHtDjwBz",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": "accepted",
+      "usage": {
+        "usage_records": 170,
+        "input_tokens": 1098985,
+        "output_tokens": 26035,
+        "reasoning_tokens": 6969,
+        "cache_read_tokens": 6650112,
+        "cache_write_tokens": 0,
+        "total_tokens": 7782101,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 170
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 169
+        }
+      },
+      "logical_activities": 167,
+      "recorded_attempts": 167,
+      "activity_roles": {
+        "mission": 54,
+        "orchestrator": 17,
+        "automationbench-executor": 43,
+        "automationbench-verifier": 53
+      },
+      "core_tool_status_counts": {
+        "completed": 158,
+        "error": 1
+      },
+      "official_tool_events": 52,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T02:49:10.508916Z",
+      "finished_at": "2026-09-30T03:10:33.837719Z",
+      "phase_seconds": {
+        "environment_setup": 13.384047031402588,
+        "agent_setup": 32.79799795150757,
+        "agent_execution": 1226.2353830337524,
+        "verifier": 2.1796369552612305
+      },
+      "provider_activity_union_seconds": 1090.0590012073517,
+      "outer_mcp_union_seconds": 64.29200005531311,
+      "simulator_processing_union_seconds": 0.6189994812011719,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/sales-create-new-opportunity__uQcTPRX"
+    },
+    {
+      "block": 3,
+      "arm": "TS",
+      "case": "sales.unreliable_label_account_review",
+      "example_id": 1203,
+      "trial": "sales-unreliable-label-account-r__4DYFquW",
+      "task_ids": [
+        "tsk_g00VWfUf58005zelN80G"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.8571428571428571,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfUf58005zelN80G",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 53,
+        "input_tokens": 241538,
+        "output_tokens": 12503,
+        "reasoning_tokens": 1805,
+        "cache_read_tokens": 1815040,
+        "cache_write_tokens": 0,
+        "total_tokens": 2070886,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 53
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 52
+        }
+      },
+      "logical_activities": 51,
+      "recorded_attempts": 51,
+      "activity_roles": {
+        "orchestrator": 13,
+        "automationbench-executor": 21,
+        "automationbench-verifier": 17
+      },
+      "core_tool_status_counts": {
+        "error": 3,
+        "completed": 46
+      },
+      "official_tool_events": 17,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T02:50:34.988062Z",
+      "finished_at": "2026-09-30T03:00:43.663883Z",
+      "phase_seconds": {
+        "environment_setup": 13.912574052810669,
+        "agent_setup": 32.65379810333252,
+        "agent_execution": 515.2577049732208,
+        "verifier": 7.972480058670044
+      },
+      "provider_activity_union_seconds": 437.4360001087189,
+      "outer_mcp_union_seconds": 32.05299949645996,
+      "simulator_processing_union_seconds": 0.24099993705749512,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/sales-unreliable-label-account-r__4DYFquW"
+    },
+    {
+      "block": 3,
+      "arm": "TE",
+      "case": "sales.unreliable_label_account_review",
+      "example_id": 1203,
+      "trial": "sales-unreliable-label-account-r__kfC9HMG",
+      "task_ids": [
+        "tsk_g00VWfX3bm00R0Pp7CRn"
+      ],
+      "state": "scored",
+      "strict": 1.0,
+      "partial": 1.0,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfX3bm00R0Pp7CRn",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 47,
+        "input_tokens": 234142,
+        "output_tokens": 9508,
+        "reasoning_tokens": 2310,
+        "cache_read_tokens": 1321984,
+        "cache_write_tokens": 0,
+        "total_tokens": 1567944,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 47
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 46
+        }
+      },
+      "logical_activities": 45,
+      "recorded_attempts": 45,
+      "activity_roles": {
+        "orchestrator": 6,
+        "automationbench-executor": 21,
+        "automationbench-verifier": 18
+      },
+      "core_tool_status_counts": {
+        "error": 2,
+        "completed": 41
+      },
+      "official_tool_events": 22,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T02:58:51.496868Z",
+      "finished_at": "2026-09-30T03:08:32.246588Z",
+      "phase_seconds": {
+        "environment_setup": 18.096282958984375,
+        "agent_setup": 97.20580005645752,
+        "agent_execution": 454.4289491176605,
+        "verifier": 2.2633249759674072
+      },
+      "provider_activity_union_seconds": 388.0560007095337,
+      "outer_mcp_union_seconds": 36.94200015068054,
+      "simulator_processing_union_seconds": 0.26199960708618164,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/sales-unreliable-label-account-r__kfC9HMG"
+    },
+    {
+      "block": 3,
+      "arm": "MS",
+      "case": "sales.unreliable_label_account_review",
+      "example_id": 1203,
+      "trial": "sales-unreliable-label-account-r__ma8SJBf",
+      "task_ids": [
+        "tsk_g00VWfXMjk00YWHTFeu9"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.8571428571428571,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfXMjk00YWHTFeu9",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": "accepted",
+      "usage": {
+        "usage_records": 90,
+        "input_tokens": 441217,
+        "output_tokens": 21152,
+        "reasoning_tokens": 3504,
+        "cache_read_tokens": 2945280,
+        "cache_write_tokens": 0,
+        "total_tokens": 3411153,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 90
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 89
+        }
+      },
+      "logical_activities": 87,
+      "recorded_attempts": 87,
+      "activity_roles": {
+        "mission": 26,
+        "orchestrator": 10,
+        "automationbench-executor": 32,
+        "automationbench-verifier": 19
+      },
+      "core_tool_status_counts": {
+        "completed": 82,
+        "error": 2
+      },
+      "official_tool_events": 34,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T02:58:53.030857Z",
+      "finished_at": "2026-09-30T03:14:13.037158Z",
+      "phase_seconds": {
+        "environment_setup": 22.51349711418152,
+        "agent_setup": 99.63019490242004,
+        "agent_execution": 787.0572741031647,
+        "verifier": 2.184966802597046
+      },
+      "provider_activity_union_seconds": 693.5939989089966,
+      "outer_mcp_union_seconds": 65.66799974441528,
+      "simulator_processing_union_seconds": 0.4870002269744873,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/sales-unreliable-label-account-r__ma8SJBf"
+    },
+    {
+      "block": 3,
+      "arm": "ME",
+      "case": "sales.unreliable_label_account_review",
+      "example_id": 1203,
+      "trial": "sales-unreliable-label-account-r__By6Tt8F",
+      "task_ids": [
+        "tsk_g00VWfXfS300N4TFoW8I"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.8571428571428571,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfXfS300N4TFoW8I",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": "accepted",
+      "usage": {
+        "usage_records": 60,
+        "input_tokens": 331627,
+        "output_tokens": 16323,
+        "reasoning_tokens": 3078,
+        "cache_read_tokens": 1647872,
+        "cache_write_tokens": 0,
+        "total_tokens": 1998900,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 60
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 59
+        }
+      },
+      "logical_activities": 57,
+      "recorded_attempts": 57,
+      "activity_roles": {
+        "mission": 15,
+        "orchestrator": 7,
+        "automationbench-executor": 18,
+        "automationbench-verifier": 17
+      },
+      "core_tool_status_counts": {
+        "completed": 49,
+        "error": 5
+      },
+      "official_tool_events": 17,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:00:43.692356Z",
+      "finished_at": "2026-09-30T03:12:15.213042Z",
+      "phase_seconds": {
+        "environment_setup": 23.36703395843506,
+        "agent_setup": 61.12009286880493,
+        "agent_execution": 596.1291708946228,
+        "verifier": 2.24924898147583
+      },
+      "provider_activity_union_seconds": 524.7829995155334,
+      "outer_mcp_union_seconds": 34.7449996471405,
+      "simulator_processing_union_seconds": 0.23100042343139648,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/sales-unreliable-label-account-r__By6Tt8F"
+    },
+    {
+      "block": 4,
+      "arm": "TS",
+      "case": "operations.sheets_asana_approved_request",
+      "example_id": 1223,
+      "trial": "operations-sheets-asana-approved__6pRbRm5",
+      "task_ids": [
+        "tsk_g00VWfZD3h00dKbr08i3"
+      ],
+      "state": "scored",
+      "strict": 1.0,
+      "partial": 1.0,
+      "native_acceptance": false,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfZD3h00dKbr08i3",
+          "status": "failed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 66,
+        "input_tokens": 524006,
+        "output_tokens": 11595,
+        "reasoning_tokens": 4716,
+        "cache_read_tokens": 2062848,
+        "cache_write_tokens": 0,
+        "total_tokens": 2603165,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 66
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 65
+        }
+      },
+      "logical_activities": 64,
+      "recorded_attempts": 64,
+      "activity_roles": {
+        "orchestrator": 10,
+        "automationbench-executor": 31,
+        "automationbench-verifier": 23
+      },
+      "core_tool_status_counts": {
+        "completed": 56,
+        "error": 4
+      },
+      "official_tool_events": 27,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:08:32.288784Z",
+      "finished_at": "2026-09-30T03:19:25.618457Z",
+      "phase_seconds": {
+        "environment_setup": 14.788311958312988,
+        "agent_setup": 40.079249143600464,
+        "agent_execution": 587.6760981082916,
+        "verifier": 2.238802909851074
+      },
+      "provider_activity_union_seconds": 517.9889996051788,
+      "outer_mcp_union_seconds": 17.359000205993652,
+      "simulator_processing_union_seconds": 0.38000059127807617,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/operations-sheets-asana-approved__6pRbRm5"
+    },
+    {
+      "block": 4,
+      "arm": "TE",
+      "case": "operations.sheets_asana_approved_request",
+      "example_id": 1223,
+      "trial": "operations-sheets-asana-approved__uRBUB8L",
+      "task_ids": [
+        "tsk_g00VWfZiKB00XF0glett"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.7142857142857143,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfZiKB00XF0glett",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 112,
+        "input_tokens": 917253,
+        "output_tokens": 21051,
+        "reasoning_tokens": 4824,
+        "cache_read_tokens": 4755456,
+        "cache_write_tokens": 0,
+        "total_tokens": 5698584,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 112
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 111
+        }
+      },
+      "logical_activities": 110,
+      "recorded_attempts": 110,
+      "activity_roles": {
+        "orchestrator": 16,
+        "automationbench-executor": 44,
+        "automationbench-verifier": 50
+      },
+      "core_tool_status_counts": {
+        "error": 4,
+        "completed": 100
+      },
+      "official_tool_events": 44,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:10:33.858035Z",
+      "finished_at": "2026-09-30T03:28:08.774896Z",
+      "phase_seconds": {
+        "environment_setup": 13.787170171737671,
+        "agent_setup": 38.810051918029785,
+        "agent_execution": 989.2720007896423,
+        "verifier": 2.859555959701538
+      },
+      "provider_activity_union_seconds": 885.5439999103546,
+      "outer_mcp_union_seconds": 45.468000650405884,
+      "simulator_processing_union_seconds": 0.5139997005462646,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/operations-sheets-asana-approved__uRBUB8L"
+    },
+    {
+      "block": 4,
+      "arm": "MS",
+      "case": "operations.sheets_asana_approved_request",
+      "example_id": 1223,
+      "trial": "operations-sheets-asana-approved__kM8o68d",
+      "task_ids": [
+        "tsk_g00VWfaL1g00YPZbCEqm"
+      ],
+      "state": "scored",
+      "strict": 1.0,
+      "partial": 1.0,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfaL1g00YPZbCEqm",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": "accepted",
+      "usage": {
+        "usage_records": 88,
+        "input_tokens": 388587,
+        "output_tokens": 15783,
+        "reasoning_tokens": 4574,
+        "cache_read_tokens": 2886656,
+        "cache_write_tokens": 0,
+        "total_tokens": 3295600,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 88
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 87
+        }
+      },
+      "logical_activities": 85,
+      "recorded_attempts": 85,
+      "activity_roles": {
+        "mission": 21,
+        "orchestrator": 9,
+        "automationbench-executor": 25,
+        "automationbench-verifier": 30
+      },
+      "core_tool_status_counts": {
+        "completed": 82
+      },
+      "official_tool_events": 36,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:12:15.243358Z",
+      "finished_at": "2026-09-30T03:24:21.252177Z",
+      "phase_seconds": {
+        "environment_setup": 14.501103162765503,
+        "agent_setup": 36.82750988006592,
+        "agent_execution": 663.8632919788361,
+        "verifier": 2.1304988861083984
+      },
+      "provider_activity_union_seconds": 590.7380003929138,
+      "outer_mcp_union_seconds": 25.926999807357788,
+      "simulator_processing_union_seconds": 0.6670000553131104,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/operations-sheets-asana-approved__kM8o68d"
+    },
+    {
+      "block": 4,
+      "arm": "ME",
+      "case": "operations.sheets_asana_approved_request",
+      "example_id": 1223,
+      "trial": "operations-sheets-asana-approved__rpqLdLZ",
+      "task_ids": [
+        "tsk_g00VWfaoK2006GMPfcfZ"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.0,
+      "native_acceptance": false,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfaoK2006GMPfcfZ",
+          "status": "failed"
+        }
+      ],
+      "mission_outcome_kind": "blocked",
+      "usage": {
+        "usage_records": 79,
+        "input_tokens": 390275,
+        "output_tokens": 16196,
+        "reasoning_tokens": 3301,
+        "cache_read_tokens": 2373120,
+        "cache_write_tokens": 0,
+        "total_tokens": 2782892,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 79
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 78
+        }
+      },
+      "logical_activities": 76,
+      "recorded_attempts": 76,
+      "activity_roles": {
+        "mission": 22,
+        "orchestrator": 8,
+        "automationbench-executor": 24,
+        "automationbench-verifier": 22
+      },
+      "core_tool_status_counts": {
+        "completed": 69,
+        "error": 3
+      },
+      "official_tool_events": 23,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:14:13.071439Z",
+      "finished_at": "2026-09-30T03:27:20.027690Z",
+      "phase_seconds": {
+        "environment_setup": 13.454249858856201,
+        "agent_setup": 34.13563919067383,
+        "agent_execution": 715.692489862442,
+        "verifier": 3.1930789947509766
+      },
+      "provider_activity_union_seconds": 568.2680010795593,
+      "outer_mcp_union_seconds": 15.950000286102295,
+      "simulator_processing_union_seconds": 0.3829996585845947,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/operations-sheets-asana-approved__rpqLdLZ"
+    },
+    {
+      "block": 5,
+      "arm": "TS",
+      "case": "hr.probation_review_reminder",
+      "example_id": 5019,
+      "trial": "hr-probation-review-reminder__jWTzDwt",
+      "task_ids": [
+        "tsk_g00VWfbvfI00pyIeiIVM"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.2,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfbvfI00pyIeiIVM",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 65,
+        "input_tokens": 311645,
+        "output_tokens": 11379,
+        "reasoning_tokens": 2328,
+        "cache_read_tokens": 2341376,
+        "cache_write_tokens": 0,
+        "total_tokens": 2666728,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 65
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 64
+        }
+      },
+      "logical_activities": 63,
+      "recorded_attempts": 63,
+      "activity_roles": {
+        "orchestrator": 13,
+        "automationbench-executor": 26,
+        "automationbench-verifier": 24
+      },
+      "core_tool_status_counts": {
+        "completed": 60,
+        "error": 1
+      },
+      "official_tool_events": 34,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:19:25.653300Z",
+      "finished_at": "2026-09-30T03:29:35.294130Z",
+      "phase_seconds": {
+        "environment_setup": 13.819658041000366,
+        "agent_setup": 35.77703094482422,
+        "agent_execution": 548.9454309940338,
+        "verifier": 2.209606885910034
+      },
+      "provider_activity_union_seconds": 472.5200011730194,
+      "outer_mcp_union_seconds": 37.425999879837036,
+      "simulator_processing_union_seconds": 0.4720005989074707,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/hr-probation-review-reminder__jWTzDwt"
+    },
+    {
+      "block": 5,
+      "arm": "TE",
+      "case": "hr.probation_review_reminder",
+      "example_id": 5019,
+      "trial": "hr-probation-review-reminder__XDdPgDs",
+      "task_ids": [
+        "tsk_g00VWfdkXO00EqIWEGXr"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.4,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfdkXO00EqIWEGXr",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 83,
+        "input_tokens": 616282,
+        "output_tokens": 14835,
+        "reasoning_tokens": 2501,
+        "cache_read_tokens": 2697728,
+        "cache_write_tokens": 0,
+        "total_tokens": 3331346,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 83
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 82
+        }
+      },
+      "logical_activities": 81,
+      "recorded_attempts": 81,
+      "activity_roles": {
+        "orchestrator": 11,
+        "automationbench-executor": 34,
+        "automationbench-verifier": 36
+      },
+      "core_tool_status_counts": {
+        "error": 3,
+        "completed": 74
+      },
+      "official_tool_events": 41,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:24:21.398173Z",
+      "finished_at": "2026-09-30T03:38:50.549222Z",
+      "phase_seconds": {
+        "environment_setup": 14.630932092666626,
+        "agent_setup": 173.0037989616394,
+        "agent_execution": 669.6592149734497,
+        "verifier": 2.880871057510376
+      },
+      "provider_activity_union_seconds": 584.8320004940033,
+      "outer_mcp_union_seconds": 45.43600058555603,
+      "simulator_processing_union_seconds": 0.3950004577636719,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/hr-probation-review-reminder__XDdPgDs"
+    },
+    {
+      "block": 5,
+      "arm": "MS",
+      "case": "hr.probation_review_reminder",
+      "example_id": 5019,
+      "trial": "hr-probation-review-reminder__hXh3GSj",
+      "task_ids": [
+        "tsk_g00VWfeFq900V61zGQEZ"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.2,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfeFq900V61zGQEZ",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": "accepted",
+      "usage": {
+        "usage_records": 173,
+        "input_tokens": 1009911,
+        "output_tokens": 32279,
+        "reasoning_tokens": 6402,
+        "cache_read_tokens": 6604288,
+        "cache_write_tokens": 0,
+        "total_tokens": 7652880,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 173
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 172
+        }
+      },
+      "logical_activities": 170,
+      "recorded_attempts": 170,
+      "activity_roles": {
+        "mission": 35,
+        "orchestrator": 19,
+        "automationbench-executor": 60,
+        "automationbench-verifier": 56
+      },
+      "core_tool_status_counts": {
+        "completed": 156,
+        "error": 7
+      },
+      "official_tool_events": 84,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:27:20.054073Z",
+      "finished_at": "2026-09-30T03:52:06.091067Z",
+      "phase_seconds": {
+        "environment_setup": 16.915477991104126,
+        "agent_setup": 38.981804847717285,
+        "agent_execution": 1419.3195910453796,
+        "verifier": 2.185481071472168
+      },
+      "provider_activity_union_seconds": 1263.2209990024567,
+      "outer_mcp_union_seconds": 119.2579984664917,
+      "simulator_processing_union_seconds": 0.5760014057159424,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/hr-probation-review-reminder__hXh3GSj"
+    },
+    {
+      "block": 5,
+      "arm": "ME",
+      "case": "hr.probation_review_reminder",
+      "example_id": 5019,
+      "trial": "hr-probation-review-reminder__xmirdxY",
+      "task_ids": [
+        "tsk_g00VWfePwr001YxjaLNJ"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.0,
+      "native_acceptance": false,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfePwr001YxjaLNJ",
+          "status": "failed"
+        }
+      ],
+      "mission_outcome_kind": "blocked",
+      "usage": {
+        "usage_records": 62,
+        "input_tokens": 317369,
+        "output_tokens": 12687,
+        "reasoning_tokens": 2605,
+        "cache_read_tokens": 1670912,
+        "cache_write_tokens": 0,
+        "total_tokens": 2003573,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 62
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 61
+        }
+      },
+      "logical_activities": 59,
+      "recorded_attempts": 59,
+      "activity_roles": {
+        "mission": 17,
+        "orchestrator": 6,
+        "automationbench-executor": 16,
+        "automationbench-verifier": 20
+      },
+      "core_tool_status_counts": {
+        "completed": 55
+      },
+      "official_tool_events": 23,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:28:08.797342Z",
+      "finished_at": "2026-09-30T03:37:31.888918Z",
+      "phase_seconds": {
+        "environment_setup": 15.957754850387573,
+        "agent_setup": 34.18902802467346,
+        "agent_execution": 501.5337619781494,
+        "verifier": 2.401580810546875
+      },
+      "provider_activity_union_seconds": 444.07799887657166,
+      "outer_mcp_union_seconds": 14.631999731063843,
+      "simulator_processing_union_seconds": 0.31799983978271484,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/hr-probation-review-reminder__xmirdxY"
+    },
+    {
+      "block": 6,
+      "arm": "TS",
+      "case": "finance.late_fee_calculation",
+      "example_id": 4030,
+      "trial": "finance-late-fee-calculation__bcPnATr",
+      "task_ids": [
+        "tsk_g00VWfeTX5007kUoogGA"
+      ],
+      "state": "scored",
+      "strict": 1.0,
+      "partial": 1.0,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfeTX5007kUoogGA",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 56,
+        "input_tokens": 398701,
+        "output_tokens": 11799,
+        "reasoning_tokens": 2284,
+        "cache_read_tokens": 1550336,
+        "cache_write_tokens": 0,
+        "total_tokens": 1963120,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 56
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 55
+        }
+      },
+      "logical_activities": 54,
+      "recorded_attempts": 54,
+      "activity_roles": {
+        "orchestrator": 9,
+        "automationbench-executor": 29,
+        "automationbench-verifier": 16
+      },
+      "core_tool_status_counts": {
+        "error": 4,
+        "completed": 48
+      },
+      "official_tool_events": 30,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:29:35.416112Z",
+      "finished_at": "2026-09-30T03:38:51.788822Z",
+      "phase_seconds": {
+        "environment_setup": 13.655944108963013,
+        "agent_setup": 33.71417999267578,
+        "agent_execution": 496.7908480167389,
+        "verifier": 2.888577938079834
+      },
+      "provider_activity_union_seconds": 428.946001291275,
+      "outer_mcp_union_seconds": 32.99799990653992,
+      "simulator_processing_union_seconds": 0.254000186920166,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/finance-late-fee-calculation__bcPnATr"
+    },
+    {
+      "block": 6,
+      "arm": "TE",
+      "case": "finance.late_fee_calculation",
+      "example_id": 4030,
+      "trial": "finance-late-fee-calculation__SvRh7Px",
+      "task_ids": [
+        "tsk_g00VWfgZMr00CiT9PxYE"
+      ],
+      "state": "unscored",
+      "strict": null,
+      "partial": null,
+      "native_acceptance": null,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfgZMr00CiT9PxYE",
+          "status": "active"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 3,
+        "input_tokens": 18215,
+        "output_tokens": 873,
+        "reasoning_tokens": 240,
+        "cache_read_tokens": 20224,
+        "cache_write_tokens": 0,
+        "total_tokens": 39552,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 3
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 2
+        }
+      },
+      "logical_activities": 2,
+      "recorded_attempts": 2,
+      "activity_roles": {
+        "orchestrator": 2
+      },
+      "core_tool_status_counts": {
+        "completed": 1
+      },
+      "official_tool_events": 0,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:37:31.922865Z",
+      "finished_at": "2026-09-30T03:44:30.698316Z",
+      "phase_seconds": {
+        "environment_setup": 20.863935947418213,
+        "agent_setup": 44.38267111778259,
+        "agent_execution": 341.9150002002716,
+        "verifier": 2.6408541202545166
+      },
+      "provider_activity_union_seconds": 320.7109999656677,
+      "outer_mcp_union_seconds": 0,
+      "simulator_processing_union_seconds": 0,
+      "agent_cost_usd": null,
+      "exception_type": "NonZeroAgentExitCodeError",
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": false,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/finance-late-fee-calculation__SvRh7Px"
+    },
+    {
+      "block": 6,
+      "arm": "MS",
+      "case": "finance.late_fee_calculation",
+      "example_id": 4030,
+      "trial": "finance-late-fee-calculation__rSHjuF8",
+      "task_ids": [
+        "tsk_g00VWfh6kI004Vj2j08B"
+      ],
+      "state": "scored",
+      "strict": 1.0,
+      "partial": 1.0,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfh6kI004Vj2j08B",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": "accepted",
+      "usage": {
+        "usage_records": 93,
+        "input_tokens": 485357,
+        "output_tokens": 19330,
+        "reasoning_tokens": 2932,
+        "cache_read_tokens": 2989568,
+        "cache_write_tokens": 0,
+        "total_tokens": 3497187,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 93
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 92
+        }
+      },
+      "logical_activities": 90,
+      "recorded_attempts": 90,
+      "activity_roles": {
+        "mission": 34,
+        "orchestrator": 11,
+        "automationbench-executor": 23,
+        "automationbench-verifier": 22
+      },
+      "core_tool_status_counts": {
+        "completed": 85,
+        "error": 1
+      },
+      "official_tool_events": 28,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:38:50.582772Z",
+      "finished_at": "2026-09-30T03:52:03.261179Z",
+      "phase_seconds": {
+        "environment_setup": 16.42006802558899,
+        "agent_setup": 44.08283996582031,
+        "agent_execution": 721.3171288967133,
+        "verifier": 2.2301650047302246
+      },
+      "provider_activity_union_seconds": 647.0519995689392,
+      "outer_mcp_union_seconds": 45.82800030708313,
+      "simulator_processing_union_seconds": 0.2219996452331543,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/finance-late-fee-calculation__rSHjuF8"
+    },
+    {
+      "block": 6,
+      "arm": "ME",
+      "case": "finance.late_fee_calculation",
+      "example_id": 4030,
+      "trial": "finance-late-fee-calculation__9Z2HtmH",
+      "task_ids": [
+        "tsk_g00VWfh92300d5oS9dxs"
+      ],
+      "state": "scored",
+      "strict": 1.0,
+      "partial": 1.0,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfh92300d5oS9dxs",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": "accepted",
+      "usage": {
+        "usage_records": 100,
+        "input_tokens": 448595,
+        "output_tokens": 19592,
+        "reasoning_tokens": 3078,
+        "cache_read_tokens": 3354880,
+        "cache_write_tokens": 0,
+        "total_tokens": 3826145,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 100
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 99
+        }
+      },
+      "logical_activities": 97,
+      "recorded_attempts": 97,
+      "activity_roles": {
+        "mission": 28,
+        "orchestrator": 8,
+        "automationbench-executor": 41,
+        "automationbench-verifier": 20
+      },
+      "core_tool_status_counts": {
+        "completed": 93
+      },
+      "official_tool_events": 38,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:38:51.829031Z",
+      "finished_at": "2026-09-30T03:53:36.559336Z",
+      "phase_seconds": {
+        "environment_setup": 20.65701913833618,
+        "agent_setup": 44.145873069763184,
+        "agent_execution": 809.0348761081696,
+        "verifier": 2.190877914428711
+      },
+      "provider_activity_union_seconds": 711.4219999313354,
+      "outer_mcp_union_seconds": 46.790000438690186,
+      "simulator_processing_union_seconds": 0.3430006504058838,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/finance-late-fee-calculation__9Z2HtmH"
+    },
+    {
+      "block": 7,
+      "arm": "TS",
+      "case": "support.zoho_desk_capacity_planning",
+      "example_id": 1585,
+      "trial": "support-zoho-desk-capacity-plann__JtBY8mC",
+      "task_ids": [
+        "tsk_g00VWfiIQZ00a6KBAc7M"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.9444444444444444,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfiIQZ00a6KBAc7M",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 97,
+        "input_tokens": 851672,
+        "output_tokens": 17648,
+        "reasoning_tokens": 3434,
+        "cache_read_tokens": 3980032,
+        "cache_write_tokens": 0,
+        "total_tokens": 4852786,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 97
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 96
+        }
+      },
+      "logical_activities": 95,
+      "recorded_attempts": 95,
+      "activity_roles": {
+        "orchestrator": 11,
+        "automationbench-executor": 43,
+        "automationbench-verifier": 41
+      },
+      "core_tool_status_counts": {
+        "error": 4,
+        "completed": 87
+      },
+      "official_tool_events": 46,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:44:30.851607Z",
+      "finished_at": "2026-09-30T03:59:24.798742Z",
+      "phase_seconds": {
+        "environment_setup": 16.210773944854736,
+        "agent_setup": 42.2888720035553,
+        "agent_execution": 823.0860471725464,
+        "verifier": 3.6770520210266113
+      },
+      "provider_activity_union_seconds": 720.7339994907379,
+      "outer_mcp_union_seconds": 57.959999799728394,
+      "simulator_processing_union_seconds": 0.4120001792907715,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/support-zoho-desk-capacity-plann__JtBY8mC"
+    },
+    {
+      "block": 7,
+      "arm": "TE",
+      "case": "support.zoho_desk_capacity_planning",
+      "example_id": 1585,
+      "trial": "support-zoho-desk-capacity-plann__z7g5Xca",
+      "task_ids": [
+        "tsk_g00VWfkBRn00nrd5wXk0"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.9444444444444444,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfkBRn00nrd5wXk0",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 56,
+        "input_tokens": 295375,
+        "output_tokens": 10967,
+        "reasoning_tokens": 2172,
+        "cache_read_tokens": 1638400,
+        "cache_write_tokens": 0,
+        "total_tokens": 1946914,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 56
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 55
+        }
+      },
+      "logical_activities": 54,
+      "recorded_attempts": 54,
+      "activity_roles": {
+        "orchestrator": 5,
+        "automationbench-executor": 30,
+        "automationbench-verifier": 19
+      },
+      "core_tool_status_counts": {
+        "completed": 48,
+        "error": 4
+      },
+      "official_tool_events": 31,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:52:03.297786Z",
+      "finished_at": "2026-09-30T04:01:17.146007Z",
+      "phase_seconds": {
+        "environment_setup": 15.733500003814697,
+        "agent_setup": 43.419727087020874,
+        "agent_execution": 483.84091997146606,
+        "verifier": 2.272777795791626
+      },
+      "provider_activity_union_seconds": 426.4480001926422,
+      "outer_mcp_union_seconds": 48.107999324798584,
+      "simulator_processing_union_seconds": 0.3690011501312256,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/support-zoho-desk-capacity-plann__z7g5Xca"
+    },
+    {
+      "block": 7,
+      "arm": "MS",
+      "case": "support.zoho_desk_capacity_planning",
+      "example_id": 1585,
+      "trial": "support-zoho-desk-capacity-plann__hMZkWSk",
+      "task_ids": [
+        "tsk_g00VWfkTXI00b5BUydPH"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.9444444444444444,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfkTXI00b5BUydPH",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": "accepted",
+      "usage": {
+        "usage_records": 82,
+        "input_tokens": 382347,
+        "output_tokens": 18397,
+        "reasoning_tokens": 2891,
+        "cache_read_tokens": 2659072,
+        "cache_write_tokens": 0,
+        "total_tokens": 3062707,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 82
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 81
+        }
+      },
+      "logical_activities": 79,
+      "recorded_attempts": 79,
+      "activity_roles": {
+        "mission": 14,
+        "orchestrator": 12,
+        "automationbench-executor": 32,
+        "automationbench-verifier": 21
+      },
+      "core_tool_status_counts": {
+        "completed": 75
+      },
+      "official_tool_events": 36,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:52:06.113837Z",
+      "finished_at": "2026-09-30T04:05:24.514193Z",
+      "phase_seconds": {
+        "environment_setup": 18.05183696746826,
+        "agent_setup": 43.954192876815796,
+        "agent_execution": 725.2514789104462,
+        "verifier": 2.4461679458618164
+      },
+      "provider_activity_union_seconds": 648.8330006599426,
+      "outer_mcp_union_seconds": 42.28899931907654,
+      "simulator_processing_union_seconds": 0.4070005416870117,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/support-zoho-desk-capacity-plann__hMZkWSk"
+    },
+    {
+      "block": 7,
+      "arm": "ME",
+      "case": "support.zoho_desk_capacity_planning",
+      "example_id": 1585,
+      "trial": "support-zoho-desk-capacity-plann__mktozwA",
+      "task_ids": [
+        "tsk_g00VWfknyR00eLtBQhmM"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.9444444444444444,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfknyR00eLtBQhmM",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": "accepted",
+      "usage": {
+        "usage_records": 99,
+        "input_tokens": 438318,
+        "output_tokens": 19481,
+        "reasoning_tokens": 2825,
+        "cache_read_tokens": 3130368,
+        "cache_write_tokens": 0,
+        "total_tokens": 3590992,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 99
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 98
+        }
+      },
+      "logical_activities": 96,
+      "recorded_attempts": 96,
+      "activity_roles": {
+        "mission": 27,
+        "orchestrator": 11,
+        "automationbench-executor": 34,
+        "automationbench-verifier": 24
+      },
+      "core_tool_status_counts": {
+        "completed": 91,
+        "error": 1
+      },
+      "official_tool_events": 40,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:53:36.592456Z",
+      "finished_at": "2026-09-30T04:07:09.220954Z",
+      "phase_seconds": {
+        "environment_setup": 13.412491083145142,
+        "agent_setup": 36.17069602012634,
+        "agent_execution": 751.6346201896667,
+        "verifier": 2.5431599617004395
+      },
+      "provider_activity_union_seconds": 666.5969998836517,
+      "outer_mcp_union_seconds": 42.235999584198,
+      "simulator_processing_union_seconds": 0.45200014114379883,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/support-zoho-desk-capacity-plann__mktozwA"
+    },
+    {
+      "block": 8,
+      "arm": "TS",
+      "case": "marketing.podcast_episode_promotion",
+      "example_id": 1125,
+      "trial": "marketing-podcast-episode-promot__xEkoZUp",
+      "task_ids": [
+        "tsk_g00VWflzar00TiDm0kdf"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.8571428571428571,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWflzar00TiDm0kdf",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 56,
+        "input_tokens": 261482,
+        "output_tokens": 9159,
+        "reasoning_tokens": 1774,
+        "cache_read_tokens": 1527552,
+        "cache_write_tokens": 0,
+        "total_tokens": 1799967,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 56
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 55
+        }
+      },
+      "logical_activities": 54,
+      "recorded_attempts": 54,
+      "activity_roles": {
+        "orchestrator": 10,
+        "automationbench-executor": 22,
+        "automationbench-verifier": 22
+      },
+      "core_tool_status_counts": {
+        "error": 2,
+        "completed": 50
+      },
+      "official_tool_events": 30,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T03:59:24.932908Z",
+      "finished_at": "2026-09-30T04:07:57.379271Z",
+      "phase_seconds": {
+        "environment_setup": 14.241935014724731,
+        "agent_setup": 33.759273052215576,
+        "agent_execution": 451.78872513771057,
+        "verifier": 3.088901996612549
+      },
+      "provider_activity_union_seconds": 390.4130003452301,
+      "outer_mcp_union_seconds": 29.191999435424805,
+      "simulator_processing_union_seconds": 0.3579998016357422,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/marketing-podcast-episode-promot__xEkoZUp"
+    },
+    {
+      "block": 8,
+      "arm": "TE",
+      "case": "marketing.podcast_episode_promotion",
+      "example_id": 1125,
+      "trial": "marketing-podcast-episode-promot__qEHVrUF",
+      "task_ids": [
+        "tsk_g00VWfmSev00WZEh639x"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.8571428571428571,
+      "native_acceptance": false,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfmSev00WZEh639x",
+          "status": "failed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 103,
+        "input_tokens": 731022,
+        "output_tokens": 16784,
+        "reasoning_tokens": 4037,
+        "cache_read_tokens": 3493120,
+        "cache_write_tokens": 0,
+        "total_tokens": 4244963,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 103
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 102
+        }
+      },
+      "logical_activities": 101,
+      "recorded_attempts": 101,
+      "activity_roles": {
+        "orchestrator": 13,
+        "automationbench-executor": 49,
+        "automationbench-verifier": 39
+      },
+      "core_tool_status_counts": {
+        "completed": 93,
+        "error": 4
+      },
+      "official_tool_events": 58,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T04:01:17.180219Z",
+      "finished_at": "2026-09-30T04:16:03.393777Z",
+      "phase_seconds": {
+        "environment_setup": 13.384014129638672,
+        "agent_setup": 32.8530170917511,
+        "agent_execution": 828.1974442005157,
+        "verifier": 2.6706318855285645
+      },
+      "provider_activity_union_seconds": 723.6369996070862,
+      "outer_mcp_union_seconds": 52.314000368118286,
+      "simulator_processing_union_seconds": 0.6080007553100586,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/marketing-podcast-episode-promot__qEHVrUF"
+    },
+    {
+      "block": 8,
+      "arm": "MS",
+      "case": "marketing.podcast_episode_promotion",
+      "example_id": 1125,
+      "trial": "marketing-podcast-episode-promot__AY495Yz",
+      "task_ids": [
+        "tsk_g00VWfnloI00nLOSSXIH"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.8571428571428571,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfnloI00nLOSSXIH",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": "accepted",
+      "usage": {
+        "usage_records": 138,
+        "input_tokens": 740187,
+        "output_tokens": 25715,
+        "reasoning_tokens": 4293,
+        "cache_read_tokens": 5932544,
+        "cache_write_tokens": 0,
+        "total_tokens": 6702739,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 138
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 137
+        }
+      },
+      "logical_activities": 135,
+      "recorded_attempts": 137,
+      "activity_roles": {
+        "mission": 40,
+        "orchestrator": 11,
+        "automationbench-executor": 37,
+        "automationbench-verifier": 47
+      },
+      "core_tool_status_counts": {
+        "completed": 122,
+        "error": 7
+      },
+      "official_tool_events": 40,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T04:05:24.550489Z",
+      "finished_at": "2026-09-30T04:24:58.674468Z",
+      "phase_seconds": {
+        "environment_setup": 13.667220115661621,
+        "agent_setup": 43.14893198013306,
+        "agent_execution": 1106.2678999900818,
+        "verifier": 2.146373987197876
+      },
+      "provider_activity_union_seconds": 985.6360003948212,
+      "outer_mcp_union_seconds": 37.98200035095215,
+      "simulator_processing_union_seconds": 0.5189998149871826,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/marketing-podcast-episode-promot__AY495Yz"
+    },
+    {
+      "block": 8,
+      "arm": "ME",
+      "case": "marketing.podcast_episode_promotion",
+      "example_id": 1125,
+      "trial": "marketing-podcast-episode-promot__JD7pRJw",
+      "task_ids": [
+        "tsk_g00VWfoAbI00V91ljMOo"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.8571428571428571,
+      "native_acceptance": false,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfoAbI00V91ljMOo",
+          "status": "failed"
+        }
+      ],
+      "mission_outcome_kind": "blocked",
+      "usage": {
+        "usage_records": 132,
+        "input_tokens": 782571,
+        "output_tokens": 22396,
+        "reasoning_tokens": 4807,
+        "cache_read_tokens": 4663296,
+        "cache_write_tokens": 0,
+        "total_tokens": 5473070,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 132
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 131
+        }
+      },
+      "logical_activities": 129,
+      "recorded_attempts": 130,
+      "activity_roles": {
+        "mission": 50,
+        "orchestrator": 13,
+        "automationbench-executor": 43,
+        "automationbench-verifier": 23
+      },
+      "core_tool_status_counts": {
+        "completed": 120,
+        "error": 3
+      },
+      "official_tool_events": 40,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T04:07:09.256881Z",
+      "finished_at": "2026-09-30T04:22:02.381991Z",
+      "phase_seconds": {
+        "environment_setup": 13.275170087814331,
+        "agent_setup": 37.4234938621521,
+        "agent_execution": 831.599359035492,
+        "verifier": 2.2250730991363525
+      },
+      "provider_activity_union_seconds": 736.007999420166,
+      "outer_mcp_union_seconds": 36.24399995803833,
+      "simulator_processing_union_seconds": 0.48000073432922363,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/marketing-podcast-episode-promot__JD7pRJw"
+    },
+    {
+      "block": 9,
+      "arm": "TS",
+      "case": "operations.monday_slack_inventory",
+      "example_id": 1210,
+      "trial": "operations-monday-slack-inventor__W9QTqaT",
+      "task_ids": [
+        "tsk_g00VWfo92Y007MUxLFkw"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.0,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfo92Y007MUxLFkw",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 61,
+        "input_tokens": 308306,
+        "output_tokens": 12714,
+        "reasoning_tokens": 2239,
+        "cache_read_tokens": 1830400,
+        "cache_write_tokens": 0,
+        "total_tokens": 2153659,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 61
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 60
+        }
+      },
+      "logical_activities": 59,
+      "recorded_attempts": 59,
+      "activity_roles": {
+        "orchestrator": 11,
+        "automationbench-executor": 26,
+        "automationbench-verifier": 22
+      },
+      "core_tool_status_counts": {
+        "completed": 55,
+        "error": 2
+      },
+      "official_tool_events": 32,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T04:07:57.500732Z",
+      "finished_at": "2026-09-30T04:17:39.977446Z",
+      "phase_seconds": {
+        "environment_setup": 13.91556692123413,
+        "agent_setup": 33.860722064971924,
+        "agent_execution": 523.5851058959961,
+        "verifier": 2.445668935775757
+      },
+      "provider_activity_union_seconds": 455.39300084114075,
+      "outer_mcp_union_seconds": 33.77299928665161,
+      "simulator_processing_union_seconds": 0.32399988174438477,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/operations-monday-slack-inventor__W9QTqaT"
+    },
+    {
+      "block": 9,
+      "arm": "TE",
+      "case": "operations.monday_slack_inventory",
+      "example_id": 1210,
+      "trial": "operations-monday-slack-inventor__EsuZyJ7",
+      "task_ids": [
+        "tsk_g00VWfqCHX00LZRhIu9s"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.75,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfqCHX00LZRhIu9s",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 60,
+        "input_tokens": 270153,
+        "output_tokens": 11685,
+        "reasoning_tokens": 2878,
+        "cache_read_tokens": 2188800,
+        "cache_write_tokens": 0,
+        "total_tokens": 2473516,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 60
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 59
+        }
+      },
+      "logical_activities": 58,
+      "recorded_attempts": 58,
+      "activity_roles": {
+        "orchestrator": 14,
+        "automationbench-executor": 21,
+        "automationbench-verifier": 23
+      },
+      "core_tool_status_counts": {
+        "error": 6,
+        "completed": 50
+      },
+      "official_tool_events": 26,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T04:16:03.415863Z",
+      "finished_at": "2026-09-30T04:25:54.334073Z",
+      "phase_seconds": {
+        "environment_setup": 14.852588891983032,
+        "agent_setup": 37.77171587944031,
+        "agent_execution": 526.8034279346466,
+        "verifier": 2.3310868740081787
+      },
+      "provider_activity_union_seconds": 466.6789996623993,
+      "outer_mcp_union_seconds": 24.608998775482178,
+      "simulator_processing_union_seconds": 0.42400097846984863,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/operations-monday-slack-inventor__EsuZyJ7"
+    },
+    {
+      "block": 9,
+      "arm": "MS",
+      "case": "operations.monday_slack_inventory",
+      "example_id": 1210,
+      "trial": "operations-monday-slack-inventor__dqVHbrB",
+      "task_ids": [
+        "tsk_g00VWfqmHP00iV2055gI"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.75,
+      "native_acceptance": false,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfqmHP00iV2055gI",
+          "status": "failed"
+        }
+      ],
+      "mission_outcome_kind": "blocked",
+      "usage": {
+        "usage_records": 130,
+        "input_tokens": 877564,
+        "output_tokens": 22450,
+        "reasoning_tokens": 5129,
+        "cache_read_tokens": 5183488,
+        "cache_write_tokens": 0,
+        "total_tokens": 6088631,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 130
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 129
+        }
+      },
+      "logical_activities": 127,
+      "recorded_attempts": 127,
+      "activity_roles": {
+        "mission": 28,
+        "orchestrator": 9,
+        "automationbench-executor": 52,
+        "automationbench-verifier": 38
+      },
+      "core_tool_status_counts": {
+        "completed": 119,
+        "error": 3
+      },
+      "official_tool_events": 54,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T04:17:40.015955Z",
+      "finished_at": "2026-09-30T04:40:39.236237Z",
+      "phase_seconds": {
+        "environment_setup": 13.58560299873352,
+        "agent_setup": 34.335659980773926,
+        "agent_execution": 1143.8284289836884,
+        "verifier": 22.61304497718811
+      },
+      "provider_activity_union_seconds": 913.5600008964539,
+      "outer_mcp_union_seconds": 46.17599964141846,
+      "simulator_processing_union_seconds": 0.7330009937286377,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/operations-monday-slack-inventor__dqVHbrB"
+    },
+    {
+      "block": 9,
+      "arm": "ME",
+      "case": "operations.monday_slack_inventory",
+      "example_id": 1210,
+      "trial": "operations-monday-slack-inventor__LAQ6UQy",
+      "task_ids": [
+        "tsk_g00VWfry7O00gXPqtHU1"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.75,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfry7O00gXPqtHU1",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": "accepted",
+      "usage": {
+        "usage_records": 94,
+        "input_tokens": 541567,
+        "output_tokens": 17845,
+        "reasoning_tokens": 3758,
+        "cache_read_tokens": 3023872,
+        "cache_write_tokens": 0,
+        "total_tokens": 3587042,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 94
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 93
+        }
+      },
+      "logical_activities": 91,
+      "recorded_attempts": 91,
+      "activity_roles": {
+        "mission": 31,
+        "orchestrator": 16,
+        "automationbench-executor": 24,
+        "automationbench-verifier": 20
+      },
+      "core_tool_status_counts": {
+        "completed": 82,
+        "error": 3
+      },
+      "official_tool_events": 29,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T04:22:02.417502Z",
+      "finished_at": "2026-09-30T04:40:23.941083Z",
+      "phase_seconds": {
+        "environment_setup": 13.721755981445312,
+        "agent_setup": 33.74664902687073,
+        "agent_execution": 873.7754440307617,
+        "verifier": 11.8004310131073
+      },
+      "provider_activity_union_seconds": 664.1830010414124,
+      "outer_mcp_union_seconds": 26.59399914741516,
+      "simulator_processing_union_seconds": 0.40399980545043945,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/operations-monday-slack-inventor__LAQ6UQy"
+    },
+    {
+      "block": 10,
+      "arm": "TS",
+      "case": "finance.annual_budget_prep",
+      "example_id": 4078,
+      "trial": "finance-annual-budget-prep__xoSR6kn",
+      "task_ids": [
+        "tsk_g00VWfsQ6400GLw36rzu"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.7,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfsQ6400GLw36rzu",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 43,
+        "input_tokens": 244375,
+        "output_tokens": 9869,
+        "reasoning_tokens": 2104,
+        "cache_read_tokens": 983040,
+        "cache_write_tokens": 0,
+        "total_tokens": 1239388,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 43
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 42
+        }
+      },
+      "logical_activities": 41,
+      "recorded_attempts": 41,
+      "activity_roles": {
+        "orchestrator": 6,
+        "automationbench-executor": 16,
+        "automationbench-verifier": 19
+      },
+      "core_tool_status_counts": {
+        "error": 1,
+        "completed": 38
+      },
+      "official_tool_events": 19,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T04:24:58.795350Z",
+      "finished_at": "2026-09-30T04:34:53.763671Z",
+      "phase_seconds": {
+        "environment_setup": 13.506819009780884,
+        "agent_setup": 33.63010382652283,
+        "agent_execution": 490.525545835495,
+        "verifier": 17.830615043640137
+      },
+      "provider_activity_union_seconds": 359.6819996833801,
+      "outer_mcp_union_seconds": 23.51900005340576,
+      "simulator_processing_union_seconds": 0.265000581741333,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/finance-annual-budget-prep__xoSR6kn"
+    },
+    {
+      "block": 10,
+      "arm": "TE",
+      "case": "finance.annual_budget_prep",
+      "example_id": 4078,
+      "trial": "finance-annual-budget-prep__bkNgQ6P",
+      "task_ids": [
+        "tsk_g00VWfsegv0032NaVtx1"
+      ],
+      "state": "scored",
+      "strict": 1.0,
+      "partial": 1.0,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfsegv0032NaVtx1",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": null,
+      "usage": {
+        "usage_records": 42,
+        "input_tokens": 263429,
+        "output_tokens": 11272,
+        "reasoning_tokens": 1598,
+        "cache_read_tokens": 950528,
+        "cache_write_tokens": 0,
+        "total_tokens": 1226827,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 42
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 41
+        }
+      },
+      "logical_activities": 40,
+      "recorded_attempts": 40,
+      "activity_roles": {
+        "orchestrator": 7,
+        "automationbench-executor": 16,
+        "automationbench-verifier": 17
+      },
+      "core_tool_status_counts": {
+        "error": 2,
+        "completed": 36
+      },
+      "official_tool_events": 17,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T04:25:54.373265Z",
+      "finished_at": "2026-09-30T04:37:11.631474Z",
+      "phase_seconds": {
+        "environment_setup": 13.585370063781738,
+        "agent_setup": 33.25091600418091,
+        "agent_execution": 575.0546579360962,
+        "verifier": 25.527792930603027
+      },
+      "provider_activity_union_seconds": 390.52099990844727,
+      "outer_mcp_union_seconds": 22.09600019454956,
+      "simulator_processing_union_seconds": 0.26600074768066406,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/finance-annual-budget-prep__bkNgQ6P"
+    },
+    {
+      "block": 10,
+      "arm": "MS",
+      "case": "finance.annual_budget_prep",
+      "example_id": 4078,
+      "trial": "finance-annual-budget-prep__gYPARj7",
+      "task_ids": [
+        "tsk_g00VWfwNIU00l2Z5SPkx"
+      ],
+      "state": "scored",
+      "strict": 0.0,
+      "partial": 0.7,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfwNIU00l2Z5SPkx",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": "accepted",
+      "usage": {
+        "usage_records": 98,
+        "input_tokens": 658149,
+        "output_tokens": 25185,
+        "reasoning_tokens": 4113,
+        "cache_read_tokens": 3018240,
+        "cache_write_tokens": 0,
+        "total_tokens": 3705687,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 98
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 97
+        }
+      },
+      "logical_activities": 95,
+      "recorded_attempts": 95,
+      "activity_roles": {
+        "mission": 16,
+        "orchestrator": 15,
+        "automationbench-executor": 32,
+        "automationbench-verifier": 32
+      },
+      "core_tool_status_counts": {
+        "completed": 83,
+        "error": 4
+      },
+      "official_tool_events": 29,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T04:34:53.860336Z",
+      "finished_at": "2026-09-30T04:59:32.200194Z",
+      "phase_seconds": {
+        "environment_setup": 163.93925714492798,
+        "agent_setup": 177.61847710609436,
+        "agent_execution": 1125.8225009441376,
+        "verifier": 2.3466551303863525
+      },
+      "provider_activity_union_seconds": 902.4380009174347,
+      "outer_mcp_union_seconds": 46.44599962234497,
+      "simulator_processing_union_seconds": 0.8499999046325684,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/finance-annual-budget-prep__gYPARj7"
+    },
+    {
+      "block": 10,
+      "arm": "ME",
+      "case": "finance.annual_budget_prep",
+      "example_id": 4078,
+      "trial": "finance-annual-budget-prep__HtcbvUT",
+      "task_ids": [
+        "tsk_g00VWfwQ8x00997Jz19a"
+      ],
+      "state": "scored",
+      "strict": 1.0,
+      "partial": 1.0,
+      "native_acceptance": true,
+      "native_task_states": [
+        {
+          "task_id": "tsk_g00VWfwQ8x00997Jz19a",
+          "status": "completed"
+        }
+      ],
+      "mission_outcome_kind": "accepted",
+      "usage": {
+        "usage_records": 89,
+        "input_tokens": 542481,
+        "output_tokens": 22626,
+        "reasoning_tokens": 4245,
+        "cache_read_tokens": 2683392,
+        "cache_write_tokens": 0,
+        "total_tokens": 3252744,
+        "local_cost_usd": 0.0,
+        "external_billing": "unknown",
+        "model_counts": {
+          "gpt-5.6-luna": 89
+        },
+        "purpose_counts": {
+          "provider-connectivity": 1,
+          "session": 88
+        }
+      },
+      "logical_activities": 86,
+      "recorded_attempts": 86,
+      "activity_roles": {
+        "mission": 24,
+        "orchestrator": 11,
+        "automationbench-executor": 32,
+        "automationbench-verifier": 19
+      },
+      "core_tool_status_counts": {
+        "completed": 78,
+        "error": 2
+      },
+      "official_tool_events": 27,
+      "official_score_events": 1,
+      "started_at": "2026-09-30T04:37:11.692695Z",
+      "finished_at": "2026-09-30T04:56:49.756923Z",
+      "phase_seconds": {
+        "environment_setup": 54.91973805427551,
+        "agent_setup": 160.12933206558228,
+        "agent_execution": 951.5785000324249,
+        "verifier": 2.3690919876098633
+      },
+      "provider_activity_union_seconds": 805.5469996929169,
+      "outer_mcp_union_seconds": 52.62400031089783,
+      "simulator_processing_union_seconds": 0.6740000247955322,
+      "agent_cost_usd": null,
+      "exception_type": null,
+      "process_cleanup_passed": true,
+      "credential_audit_passed": true,
+      "physical_settlement_audit_passed": true,
+      "source_directory": ".tmp/harbor-factorial-20260930/jobs/harbor-factorial-runtime-a0a879ed-20260930/finance-annual-budget-prep__HtcbvUT"
+    }
+  ]
+}
