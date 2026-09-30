@@ -1,0 +1,20 @@
+{
+  "version": "0.0.35-beta.3",
+  "source": "2d3ec81e426d5e40419cfe88fe6394a7410f7501",
+  "tag": null,
+  "previousSource": "b1cedfa539eb5533c98acf2e3d51479173bb6060",
+  "sourceDate": "2026-08-08T04:05:19+08:00",
+  "commits": [
+    {
+      "sha": "2d3ec81e426d5e40419cfe88fe6394a7410f7501",
+      "date": "2026-08-08T04:05:19+08:00",
+      "subject": "chore(release): prepare v0.0.35-beta.3"
+    },
+    {
+      "sha": "8dc9b156b8f557dd1fda63e5db6f490a31670c3d",
+      "date": "2026-08-08T04:05:07+08:00",
+      "subject": "fix(package): verify Windows archives from local directory"
+    }
+  ],
+  "stats": "bun.lock                                                 | 16 ++++++++--------\n packages/channel-config/package.json                     |  2 +-\n packages/channel-runtime/package.json                    |  2 +-\n packages/opencorvus/native/process-supervisor/Cargo.lock |  2 +-\n packages/opencorvus/native/process-supervisor/Cargo.toml |  2 +-\n packages/opencorvus/package.json                         |  2 +-\n packages/overlay/package.json                            |  2 +-\n packages/overlay/src-tauri/Cargo.lock                    |  2 +-\n packages/overlay/src-tauri/Cargo.toml                    |  2 +-\n packages/overlay/src-tauri/tauri.conf.json               |  2 +-\n packages/plugin/package.json                             |  2 +-\n packages/sdk/js/package.json                             |  2 +-\n packages/transport-protocol/package.json                 |  2 +-\n packages/util/package.json                               |  2 +-\n script/package-native-binary.test.ts                     | 11 ++++++++++-\n script/package-native-binary.ts                          | 10 +++++++++-\n 16 files changed, 40 insertions(+), 23 deletions(-)"
+}
