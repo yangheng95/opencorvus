@@ -952,6 +952,17 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/565ef8d79b048e4b30c13b633f7fa76b0f51a4fd) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/08381d24b36f5c743d5eb71144fe56ea92513caa...565ef8d79b048e4b30c13b633f7fa76b0f51a4fd)。
 
+## 0.0.35beta.4 - 2026-08-08
+
+### Fixed
+
+- 按 SemVer（Semantic Versioning，语义化版本）正确标记 beta 预发布，避免候选版本被当成正式版本。
+- 桌面、命令行与原生元数据统一使用本次编号候选。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/08381d24b36f5c743d5eb71144fe56ea92513caa) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/2d3ec81e426d5e40419cfe88fe6394a7410f7501...08381d24b36f5c743d5eb71144fe56ea92513caa)。
+
 ## 0.0.35beta - 2026-08-07
 
 - 本版本是更新日志的记录起点；更早版本不在此倒推补录。

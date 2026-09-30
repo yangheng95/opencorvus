@@ -1,0 +1,20 @@
+{
+  "version": "0.0.35-beta.4",
+  "source": "08381d24b36f5c743d5eb71144fe56ea92513caa",
+  "tag": null,
+  "previousSource": "2d3ec81e426d5e40419cfe88fe6394a7410f7501",
+  "sourceDate": "2026-08-08T05:04:12+08:00",
+  "commits": [
+    {
+      "sha": "08381d24b36f5c743d5eb71144fe56ea92513caa",
+      "date": "2026-08-08T05:04:12+08:00",
+      "subject": "chore(release): prepare v0.0.35-beta.4"
+    },
+    {
+      "sha": "ca6b9dd1f1a6b2f284d3f36b41e91b752378aa41",
+      "date": "2026-08-08T05:03:23+08:00",
+      "subject": "fix(release): mark semantic prereleases"
+    }
+  ],
+  "stats": ".github/workflows/build.yml                        |  7 ++++++-\n bun.lock                                           | 16 ++++++++--------\n packages/channel-config/package.json               |  2 +-\n packages/channel-runtime/package.json              |  2 +-\n .../native/process-supervisor/Cargo.lock           |  2 +-\n .../native/process-supervisor/Cargo.toml           |  2 +-\n packages/opencorvus/package.json                   |  2 +-\n packages/overlay/package.json                      |  2 +-\n packages/overlay/src-tauri/Cargo.lock              |  2 +-\n packages/overlay/src-tauri/Cargo.toml              |  2 +-\n packages/overlay/src-tauri/tauri.conf.json         |  2 +-\n packages/plugin/package.json                       |  2 +-\n packages/sdk/js/package.json                       |  2 +-\n packages/transport-protocol/package.json           |  2 +-\n packages/util/package.json                         |  2 +-\n script/github-actions-workflow-contract.test.ts    | 22 ++++++++++++++++++++++\n script/sync-version.test.ts                        | 10 ++++++++++\n script/sync-version.ts                             | 10 +++++++++-\n 18 files changed, 68 insertions(+), 23 deletions(-)"
+}
