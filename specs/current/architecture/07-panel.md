@@ -92,12 +92,26 @@ results in order; multiple results have static identities rather than nested
 per-Tool toggles. Narrative, sources, files and interactive artifacts retain
 their original positions. Each run exposes every real Tool result and its outcome;
 pending/running activity and earlier errors stay visible independently of the
-latest Tool's identity. Activity uses
+latest Tool's identity. Expanded Tools expose their persisted arguments through
+a compact payload control, output or structured evidence, and explicit pending,
+running or empty-result information. Trace data uses the code typography role;
+the disclosure identity uses caption. Sources keep their chronological position
+behind the shared native Disclosure, initially collapsed with a count; operator
+expansion state and exact source links remain available. Activity uses
 the owning card's live state, including Mission and subagent cards. Reduced
 motion retains static status. Valid JSON displays expandable values with
 multiline strings intact; full raw content and copy remain available.
 Completed Tool groups and individual calls use a solid circular check with an
 accessible status instead of repeating Completed text.
+
+Transcript prose and document artifacts share one module-worker Markdown
+renderer. The existing Marked lexer/renderer retains reference links, lists,
+tables, fences and copy/file-link attributes. Parsing and highlighting occur
+off-thread; top-level HTML blocks mount over animation frames. Latest updates
+are coalesced by text owner, stale replies are discarded, disposal releases the
+owner, and stable blocks keep their DOM identity. Full document Markdown is
+not clipped at the trace-preview limit. Worker errors remain visible instead
+of starting a synchronous parser path. Transcript prewarming is removed.
 
 Interactive Artifact frames expose a shared copy/download/open strip. Downloads
 name their actual format: original attachments, Markdown, CSV, source code,

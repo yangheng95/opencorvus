@@ -1,139 +1,113 @@
-import { createEffect, createSignal } from "solid-js"
+import { batch, createEffect, createSignal, onCleanup } from "solid-js"
+import { createMarkdownRenderer } from "../services/markdown-render"
+import { localeTag } from "../utils/i18n"
+import { appStore } from "../store/app"
 
 export const STREAMING_ACTIVE_TEXT_LIMIT = 12_000
-const STREAMING_TRUNCATION_PREFIX = "... "
-
-interface BlockScanState {
-  completed: string[]
-  currentLines: string[]
-  pendingLine: string
-  inFence: boolean
-}
-
-function emptyBlockScanState(): BlockScanState {
-  return {
-    completed: [],
-    currentLines: [],
-    pendingLine: "",
-    inFence: false,
-  }
-}
-
-function currentBlockText(state: BlockScanState): string {
-  if (state.pendingLine) return [...state.currentLines, state.pendingLine].join("\n")
-  return state.currentLines.join("\n")
-}
-
-function processBlockLine(state: BlockScanState, line: string): void {
-  if (line.trimStart().startsWith("```")) {
-    state.inFence = !state.inFence
-    state.currentLines.push(line)
-    return
-  }
-  if (state.inFence) {
-    state.currentLines.push(line)
-    return
-  }
-  if (line.trim() === "") {
-    const block = state.currentLines.join("\n")
-    if (block.trim()) state.completed.push(block)
-    state.currentLines = []
-    return
-  }
-  state.currentLines.push(line)
-}
-
-function appendBlockText(state: BlockScanState, tail: string): BlockScanState {
-  const next: BlockScanState = {
-    completed: state.completed.slice(),
-    currentLines: state.currentLines.slice(),
-    pendingLine: state.pendingLine,
-    inFence: state.inFence,
-  }
-  let input = next.pendingLine + tail
-  next.pendingLine = ""
-  let newlineIndex = input.indexOf("\n")
-  while (newlineIndex >= 0) {
-    processBlockLine(next, input.slice(0, newlineIndex))
-    input = input.slice(newlineIndex + 1)
-    newlineIndex = input.indexOf("\n")
-  }
-  next.pendingLine = input
-  return next
-}
-
-function scanBlocks(text: string): BlockScanState {
-  return appendBlockText(emptyBlockScanState(), text)
-}
-
-function blocksFromScan(state: BlockScanState): string[] {
-  const active = currentBlockText(state)
-  return active ? [...state.completed, active] : state.completed
-}
 
 export function visibleStreamingText(text: string, limit = STREAMING_ACTIVE_TEXT_LIMIT): string {
   const source = String(text || "")
   const n = Math.max(0, Math.floor(Number(limit) || 0))
-  if (source.length <= n) return source
-  return `${STREAMING_TRUNCATION_PREFIX}${source.slice(-n)}`
+  return source.length <= n ? source : `... ${source.slice(-n)}`
 }
 
-export function createStreamingTextPartModel(
-  props: { text: string; streaming?: boolean },
-  renderMarkdownBlock: (source: string) => string,
-) {
+/** Parse/highlight off-thread; commit bounded batches after browser paints.
+ * Frozen HTML strings retain their Solid For identity across updates. */
+export function createStreamingTextPartModel(props: { text: string; streaming?: boolean }) {
   const [frozenHtml, setFrozenHtml] = createSignal<string[]>([])
   const [activeText, setActiveText] = createSignal("")
-  const controller = new StreamingTextPartController(renderMarkdownBlock)
+  const [pending, setPending] = createSignal(false)
+  const [error, setError] = createSignal("")
+  let revision = 0
+  let requestFrame = 0
+  let mountFrame = 0
+  let target: string[] = []
+  let complete = false
+  let receivedRevision = 0
+  let disposed = false
+  let latestText = ""
+  let latestLocale = ""
+  let latestStreaming = false
 
-  createEffect(() => {
-    const next = controller.update(props.text || "", props.streaming === true)
-    setFrozenHtml(next.frozenHtml)
-    setActiveText(next.activeText)
+  const mount = () => {
+    mountFrame = 0
+    if (disposed) return
+    const current = frozenHtml()
+    let prefix = 0
+    while (prefix < current.length && prefix < target.length && current[prefix] === target[prefix]) prefix++
+    const next = current.slice(0, prefix)
+    const deadline = performance.now() + 4
+    for (let index = prefix; index < target.length && index < prefix + 16; index++) {
+      next.push(target[index])
+      setFrozenHtml(next.slice())
+      if (performance.now() >= deadline) break
+    }
+    if (complete && prefix === target.length && current.length !== target.length) setFrozenHtml(target.slice())
+    if (frozenHtml().length < target.length) mountFrame = requestAnimationFrame(mount)
+    else if (complete) setPending(false)
+  }
+  const renderer = createMarkdownRenderer((reply, request) => {
+    if (disposed) return
+    const currentSource = request.locale === latestLocale && latestText.startsWith(request.text) && request.streaming === latestStreaming
+    if (reply.revision !== -1 && !currentSource) return
+    if (reply.error) {
+      setError(reply.error)
+      setPending(false)
+      return
+    }
+    // Older append-only snapshots still contain valid completed blocks. Keep
+    // displaying them while the coalesced latest request finishes off-thread.
+    setError("")
+    if (receivedRevision !== reply.revision) {
+      target = []
+      receivedRevision = reply.revision
+    }
+    target.splice(reply.start, target.length - reply.start, ...reply.html)
+    complete = reply.done && reply.revision === revision
+    setActiveText(visibleStreamingText(reply.activeText))
+    if (!mountFrame) mountFrame = requestAnimationFrame(mount)
   })
 
-  return { frozenHtml, activeText }
-}
-
-export class StreamingTextPartController {
-  private frozenSources: string[] = []
-  private lastText = ""
-  private scanState = emptyBlockScanState()
-  private html: string[] = []
-  activeText = ""
-
-  constructor(private readonly renderMarkdownBlock: (source: string) => string) {}
-
-  update(text: string, streaming: boolean): { frozenHtml: string[]; activeText: string } {
-    if (text.startsWith(this.lastText)) {
-      this.scanState = appendBlockText(this.scanState, text.slice(this.lastText.length))
-    } else {
-      this.scanState = scanBlocks(text)
-      this.frozenSources = []
-      this.html = []
+  createEffect(() => {
+    const text = props.text || ""
+    const streaming = props.streaming === true
+    appStore.localeSeq
+    latestLocale = localeTag()
+    latestStreaming = streaming
+    const append = text.startsWith(latestText)
+    latestText = text
+    revision++
+    complete = false
+    if (requestFrame) cancelAnimationFrame(requestFrame)
+    if (!append && mountFrame) {
+      cancelAnimationFrame(mountFrame)
+      mountFrame = 0
     }
-    this.lastText = text
+    batch(() => {
+      setPending(Boolean(text))
+      setError("")
+      if (!text) {
+        target = []
+        setFrozenHtml([])
+        setActiveText("")
+      }
+    })
+    requestFrame = requestAnimationFrame(() => {
+      requestFrame = 0
+      try {
+        renderer.render(text, streaming, revision)
+      } catch (reason) {
+        setError(String(reason))
+        setPending(false)
+      }
+    })
+  })
 
-    const blocks = blocksFromScan(this.scanState)
-    const total = blocks.length
-    const frozenCount = streaming ? Math.max(0, total - 1) : total
-    const nextFrozenSources = blocks.slice(0, frozenCount)
-
-    const cacheStillValid =
-      this.frozenSources.length <= nextFrozenSources.length &&
-      this.frozenSources.every((source, index) => source === nextFrozenSources[index])
-    if (!cacheStillValid) {
-      this.frozenSources = nextFrozenSources
-      this.html = nextFrozenSources.map((source) => this.renderMarkdownBlock(source))
-    } else if (nextFrozenSources.length > this.frozenSources.length) {
-      const additions = nextFrozenSources
-        .slice(this.frozenSources.length)
-        .map((source) => this.renderMarkdownBlock(source))
-      this.frozenSources = nextFrozenSources
-      this.html = [...this.html, ...additions]
-    }
-
-    this.activeText = streaming && total > 0 ? visibleStreamingText(blocks[total - 1]) : ""
-    return { frozenHtml: this.html, activeText: this.activeText }
-  }
+  onCleanup(() => {
+    disposed = true
+    cancelAnimationFrame(requestFrame)
+    cancelAnimationFrame(mountFrame)
+    renderer.dispose()
+  })
+  return { frozenHtml, activeText, pending, error }
 }

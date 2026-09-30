@@ -1,6 +1,6 @@
 // ── Markdown Renderer (powered by marked + highlight.js) ──
 
-import { marked } from "marked"
+import { marked, type Token, type TokensList } from "marked"
 import { LinkifyIt } from "linkify-it"
 import hljs from "highlight.js/lib/core"
 import langTS from "highlight.js/lib/languages/typescript"
@@ -34,14 +34,10 @@ export const CODE_BLOCK_RENDER_CHAR_LIMIT = 120_000
 export const CODE_BLOCK_RENDER_LINE_LIMIT = 2_000
 export const MARKDOWN_DATA_IMAGE_CHAR_LIMIT = 120_000
 const MARKDOWN_RENDER_CACHE_LIMIT = 512
-const MARKDOWN_PREWARM_SOURCE_CHAR_LIMIT = 4_000
 const RENDER_CLIP_NOTICE = "\n\n[Overlay display clipped; full content remains available in the task trace.]"
 const DATA_IMAGE_MARKDOWN_RE = /!\[([^\]]*)\]\((data:image\/(?:png|jpe?g|gif|webp|avif);base64,[^)]+)\)/gi
 const plainUrlLinkifier = new LinkifyIt({ fuzzyEmail: false, fuzzyIP: false })
 const markdownRenderCache = new Map<string, string>()
-let markdownPrewarmEpoch = 0
-let markdownPrewarmAnimationHandle: number | null = null
-let markdownPrewarmTimer: ReturnType<typeof setTimeout> | null = null
 
 // Register languages (selective import keeps bundle small)
 const LANGUAGES: [string, any][] = [
@@ -381,46 +377,13 @@ export function renderMarkdown(text: string): string {
   return rendered
 }
 
-export function cancelMarkdownRenderPrewarm(): void {
-  markdownPrewarmEpoch += 1
-  if (typeof window !== "undefined" && markdownPrewarmAnimationHandle !== null) {
-    window.cancelAnimationFrame(markdownPrewarmAnimationHandle)
-  }
-  if (markdownPrewarmTimer !== null) clearTimeout(markdownPrewarmTimer)
-  markdownPrewarmAnimationHandle = null
-  markdownPrewarmTimer = null
+/** Worker documents preserve the full source and lexer-wide link context. */
+export function lexMarkdown(text: string): TokensList {
+  return marked.lexer(text)
 }
 
-export function prewarmMarkdownRenderCache(sources: readonly string[]): void {
-  if (typeof window === "undefined") return
-  cancelMarkdownRenderPrewarm()
-  const unique: string[] = []
-  const seen = new Set<string>()
-  for (const item of sources) {
-    const source = String(item || "")
-    if (source.length > MARKDOWN_PREWARM_SOURCE_CHAR_LIMIT || !source.trim() || seen.has(source)) continue
-    seen.add(source)
-    unique.push(source)
-    if (unique.length >= MARKDOWN_RENDER_CACHE_LIMIT) break
-  }
-  const epoch = ++markdownPrewarmEpoch
-  let index = 0
-  const runAfterPaint = () => {
-    if (epoch !== markdownPrewarmEpoch) return
-    renderMarkdown(unique[index]!)
-    index += 1
-    if (index < unique.length) scheduleNext()
-  }
-  const scheduleNext = () => {
-    markdownPrewarmAnimationHandle = window.requestAnimationFrame(() => {
-      markdownPrewarmAnimationHandle = null
-      markdownPrewarmTimer = setTimeout(() => {
-        markdownPrewarmTimer = null
-        runAfterPaint()
-      }, 0)
-    })
-  }
-  if (unique.length > 0) scheduleNext()
+export function renderMarkdownToken(token: Token): string {
+  return marked.parser([token]) as string
 }
 
 /** Alias for renderMarkdown — used by some callers. */

@@ -49,7 +49,7 @@ function PayloadValue(props: { value: unknown; depth: number }) {
 
 /** Lossless output disclosure: JSON values preserve multiline strings; raw
  * bytes remain available for copying and inspection. Nested bodies mount on demand. */
-export function ToolPayload(props: { label: string; value: string; live?: boolean }) {
+export function ToolPayload(props: { label: string; value: string; live?: boolean; collapsed?: boolean }) {
   const [raw, setRaw] = createSignal(false)
   const [expanded, setExpanded] = createSignal(false)
   const parsed = createMemo(() => {
@@ -99,11 +99,13 @@ export function ToolPayload(props: { label: string; value: string; live?: boolea
           <Icon name="copy" size="compact" />
         </Button>
       </div>
-      <div class="msg-tool-payload__content">
-        <Show when={parsed() && !raw()} fallback={<pre>{props.value}</pre>}>
-          <PayloadValue value={parsed()!.value} depth={0} />
-        </Show>
-      </div>
+      <Show when={!props.collapsed || expanded()}>
+        <div class="msg-tool-payload__content">
+          <Show when={parsed() && !raw()} fallback={<pre>{props.value}</pre>}>
+            <PayloadValue value={parsed()!.value} depth={0} />
+          </Show>
+        </div>
+      </Show>
     </section>
   )
 }

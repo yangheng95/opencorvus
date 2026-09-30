@@ -1,5 +1,9 @@
 # 2026-09 Records
 
+- [Transcript disclosures and nonblocking Markdown rendering](2026-09-30-transcript-disclosure-and-markdown-rendering.md)
+
+- [Transcript visual review](../../artifacts/2026-09-30-transcript-rendering/README.md)
+
 - [Evidence-preserving worker continuation](2026-09-30-evidence-preserving-continuation.md)
 
 - [0.1.23 native and website release](2026-09-30-v0.1.23-release.md)

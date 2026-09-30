@@ -460,8 +460,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     return sessionID && computerID && displayID ? { sessionID, computerID, displayID } : null
   })
   const showPlainOutput = createMemo(() => {
-    if (status() !== "completed" || !output() || readView()) return false
-    if (browserEvidence()) return false
+    if (status() !== "completed" || !output().trim() || readView()) return false
     if (showStructuredOutput()) return /<diagnostics\b/i.test(output())
     return !codeResult()
   })
@@ -469,12 +468,9 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     if (status() === "pending" || !SHELL_TOOLS.has(key())) return ""
     return detail()
   })
-  const fallbackToolPayload = createMemo(() => {
-    if (deferredSource() && !persistedPart()) return null
-    const hasVisibleBody = Boolean(
+  const hasResultBody = createMemo(() =>
+    Boolean(
       (todoItems()?.length ?? 0) > 0 ||
-        (status() !== "completed" && raw() && !todoItems()) ||
-        visibleShellCommand() ||
         showStructuredOutput() ||
         codeResult() ||
         readView()?.note ||
@@ -484,17 +480,10 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
         attachments().length > 0 ||
         showPlainOutput() ||
         (status() === "error" && error()),
-    )
-    if (hasVisibleBody) return null
-    const currentState = state()
-    if (hasToolPayloadValue(currentState.metadata)) {
-      return { label: t("tool.output"), value: toolPayloadText(currentState.metadata) }
-    }
-    if (Object.prototype.hasOwnProperty.call(currentState, "input")) {
-      return { label: t("tool.input"), value: toolPayloadText(currentState.input) }
-    }
-    return null
-  })
+    ),
+  )
+  const bodyReady = () => !persistedPart.loading && !persistedPart.error && (!deferredSource() || !!persistedPart())
+  const inputPayload = () => status() === "pending" && raw() ? raw() : toolPayloadText(state().input)
 
   const showChip = () => mode() !== "body"
   const showBody = () => mode() === "block" || mode() === "body"
@@ -523,13 +512,24 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
         <Show when={persistedPart.error}>
           <div class="msg-tool-error">{String(persistedPart.error?.message || persistedPart.error)}</div>
         </Show>
+        <Show when={bodyReady()}>
+          <Show when={hasToolPayloadValue(state().input) || raw()} fallback={<div class="msg-tool-state">{t("tool.no_arguments")}</div>}>
+            <ToolPayload label={t("tool.input")} value={inputPayload()} live={status() === "pending"} collapsed />
+          </Show>
+          <Show when={status() === "pending" || status() === "running"}>
+            <div class="msg-tool-state" role="status">{t(status() === "pending" ? "tool.receiving_input" : "tool.awaiting_result")}</div>
+          </Show>
+          <Show when={status() === "completed" && !hasResultBody()}>
+            <div class="msg-tool-state">{t("tool.empty_result")}</div>
+            <Show when={hasToolPayloadValue(state().metadata)}>
+              <ToolPayload label={t("tool.metadata")} value={toolPayloadText(state().metadata)} collapsed />
+            </Show>
+          </Show>
+        </Show>
         <Show
           when={todoItems() && todoItems()!.length > 0}
           fallback={
             <>
-              <Show when={status() !== "completed" && raw() && !todoItems()}>
-                <ToolPayload label={t("tool.input")} value={raw()} live />
-              </Show>
               <Show when={visibleShellCommand()}>
                 {(command) => (
                   <div class="msg-tool-command">
@@ -586,13 +586,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
                 </section>
               </Show>
               <Show when={showPlainOutput()}>
-                {(_) => {
-                  const text = output()
-                  return <ToolPayload label={t("tool.output")} value={text} />
-                }}
-              </Show>
-              <Show when={fallbackToolPayload()}>
-                {(payload) => <ToolPayload label={payload().label} value={payload().value} />}
+                <ToolPayload label={t("tool.output")} value={output()} />
               </Show>
             </>
           }

@@ -1,23 +1,14 @@
 /** @jsxImportSource solid-js */
-import { createMemo, For, Show, type JSX } from "solid-js"
-import { renderMarkdown } from "../utils/markdown"
+import { For, Show, type JSX } from "solid-js"
+import { t } from "../utils/i18n"
 import { createStreamingTextPartModel } from "./text-part-model"
 
 function isStandaloneSourceFileMarkup(html: string): boolean {
   return /^&lt;source-file\b[\s\S]*\/&gt;$/.test(html.trim())
 }
 
-/**
- * Incremental streaming markdown renderer.
- * Splits text at double-newline block boundaries. Completed blocks are
- * rendered once and frozen — their DOM is never touched again. While the
- * owning card is running, the trailing "active" block is shown as raw text
- * so every delta is visible immediately without synchronous markdown parsing.
- *
- * Result: streaming deltas write text nodes only; markdown parsing happens
- * once for completed blocks and once for the final active block when the
- * card leaves the running state.
- */
+/** Worker-backed Markdown with stable completed blocks and a raw live tail.
+ * DOM insertion is spread across frames for both streaming and loaded text. */
 
 export function TextPart(props: { text: string; streaming?: boolean; trailing?: JSX.Element }) {
   return <StreamingMarkdownPart text={props.text} streaming={props.streaming} trailing={props.trailing} />
@@ -30,7 +21,7 @@ export function StreamingMarkdownPart(props: {
   activeTextClassName?: string
   trailing?: JSX.Element
 }) {
-  const { frozenHtml, activeText } = createStreamingTextPartModel(props, renderMarkdown)
+  const { frozenHtml, activeText, pending, error } = createStreamingTextPartModel(props)
 
   return (
     <div class={props.className || "msg-text"}>
@@ -46,16 +37,17 @@ export function StreamingMarkdownPart(props: {
         <div class={props.activeTextClassName || "md-active-text"}>{activeText()}</div>
       </Show>
       {props.trailing}
+      <Show when={pending() && !activeText()}>
+        <div class="msg-markdown-state" role="status">{t("markdown.rendering")}</div>
+      </Show>
+      <Show when={error()}>
+        <div class="msg-tool-error" role="alert">{t("markdown.render_failed", { message: error() })}</div>
+      </Show>
     </div>
   )
 }
 
-/**
- * Non-streaming variant: renders the full text as markdown in one pass.
- * Used for static content that will never receive incremental updates
- * (e.g. board spec panel, loaded transcript messages).
- */
+/** Static documents share the same asynchronous renderer as streamed prose. */
 export function StaticTextPart(props: { text: string }) {
-  const html = createMemo(() => renderMarkdown(props.text))
-  return <div class="msg-text" innerHTML={html()} />
+  return <StreamingMarkdownPart text={props.text} />
 }

@@ -12,7 +12,6 @@ import {
   resetWriter,
   validateConversationBoardInteractions,
 } from "./tree-writer"
-import { cancelMarkdownRenderPrewarm, prewarmMarkdownRenderCache } from "../utils/markdown"
 import {
   boardStore,
   setBoardStore,
@@ -62,7 +61,6 @@ type HistoryState = {
 
 const INITIAL_CONVERSATION_TAIL_LIMIT = 80
 const CONVERSATION_HISTORY_PAGE_LIMIT = 160
-const MARKDOWN_PREWARM_MESSAGE_LIMIT = 24
 
 let replayEpoch = 0
 let replayAbort: AbortController | null = null
@@ -108,7 +106,6 @@ export function cancelConversationReplay(): void {
   replayEpoch += 1
   historyEpoch += 1
   tailMergeEpoch += 1
-  cancelMarkdownRenderPrewarm()
   replayAbort?.abort(new DOMException("Conversation replay superseded", "AbortError"))
   historyAbort?.abort(new DOMException("Conversation history superseded", "AbortError"))
   tailMergeAbort?.abort(new DOMException("Conversation tail merge superseded", "AbortError"))
@@ -407,22 +404,6 @@ function commitConversationEvents(input: {
   })
 }
 
-function prewarmTranscriptMarkdown(transcript: readonly unknown[]): void {
-  const sources: string[] = []
-  const firstCandidate = Math.max(0, transcript.length - MARKDOWN_PREWARM_MESSAGE_LIMIT)
-  for (let messageIndex = firstCandidate; messageIndex < transcript.length; messageIndex += 1) {
-    const message = transcript[messageIndex]
-    const parts = Array.isArray((message as any)?.parts) ? (message as any).parts : []
-    for (const part of parts) {
-      const type = String(part?.type || "")
-      if (type !== "text" && type !== "reasoning") continue
-      const text = String(part?.text || "")
-      if (text) sources.push(text)
-    }
-  }
-  prewarmMarkdownRenderCache(sources)
-}
-
 function sourceKey(source: BoardSource): string {
   return `${source.kind}:${source.id}`
 }
@@ -472,7 +453,6 @@ export function mergeSessionConnectionSnapshot(
       commitPreparedConversationView(preparedConversation)
     })
   })
-  prewarmTranscriptMarkdown(transcript)
   historySource = source
   historyState = history
 }
@@ -734,7 +714,6 @@ export async function hydrateConversation(
         throw error
       }
     })
-    prewarmTranscriptMarkdown(transcript)
     historySource = source
     historyState = history
     if (source.kind === "task") {
@@ -838,7 +817,6 @@ export async function mergeLatestConversationTail(
     })
     historySource = { kind: "task", id: selectedTaskID }
     historyState = history
-    prewarmTranscriptMarkdown(transcript)
     recordHydratedSelectedTaskActivity({
       board,
       events,
@@ -936,7 +914,6 @@ export async function loadOlderConversationHistory(
         throw error
       }
     })
-    prewarmTranscriptMarkdown(transcript)
     assertActiveHistory(source, epoch, controller.signal)
     historyState = nextHistory
     return true
@@ -999,7 +976,6 @@ export async function loadConversationSessionHistory(
         throw error
       }
     })
-    prewarmTranscriptMarkdown(transcript)
     assertActiveSessionHistory(selectedTaskID, epoch, signal)
     return true
   } catch (error) {

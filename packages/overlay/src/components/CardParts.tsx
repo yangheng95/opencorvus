@@ -169,15 +169,24 @@ function CitationAwareBodyParts(props: PartCollectionProps) {
   )
 }
 
+function toolIdentityDetail(tool: ToolDisplayModel): string {
+  return tool.detail.toLowerCase() === tool.label.toLowerCase() ? "" : tool.detail
+}
+
+function toolIdentitySummary(tool: ToolDisplayModel): string {
+  return [tool.label, toolIdentityDetail(tool)].filter(Boolean).join(t("card.meta_separator"))
+}
+
 function ExecutionToolIdentity(props: { tool: ToolDisplayModel }) {
+  const detail = () => toolIdentityDetail(props.tool)
   return (
     <>
       <span class="msg-work-details__tool-icon" aria-hidden="true">
         <Icon name={props.tool.icon} size="compact" />
       </span>
       <span class="msg-transcript-disclosure__label msg-work-details__tool-name">{props.tool.label}</span>
-      <Show when={props.tool.detail}>
-        <span class="msg-work-details__tool-detail">{props.tool.detail}</span>
+      <Show when={detail()}>
+        <span class="msg-work-details__tool-detail">{detail()}</span>
       </Show>
     </>
   )
@@ -199,7 +208,7 @@ function ExecutionEventRun(props: PartCollectionProps) {
   const active = () => Boolean(props.streaming && activeCount() > 0)
   const summary = () =>
     latest()
-      ? [latest()!.label, latest()!.detail].filter(Boolean).join(t("card.meta_separator"))
+      ? toolIdentitySummary(latest()!)
       : t("transcript.execution_patch", { count: props.parts.length })
   return (
     <section
@@ -266,7 +275,7 @@ function ExecutionEventRun(props: PartCollectionProps) {
                         <Show when={props.parts.length > 1}>
                           <div
                             class="msg-work-details__event-header"
-                            title={[display().label, display().detail].filter(Boolean).join(t("card.meta_separator"))}
+                            title={toolIdentitySummary(display())}
                           >
                             <ExecutionToolIdentity tool={display()} />
                             <span class="msg-work-details__status">

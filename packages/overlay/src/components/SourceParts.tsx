@@ -1,14 +1,18 @@
-import { For, Match, Switch } from "solid-js"
+import { For, Match, Show, Switch } from "solid-js"
 import { boardStore, selectedTaskDirectory } from "../store/board"
 import { openFileEditor, openSourceFileEditor } from "../services/file-workbench"
 import { relativePathFrom, shortRelativePath } from "../utils/tool"
 import { t } from "../utils/i18n"
 import { Icon } from "./ui/Icon"
 import { Tooltip } from "./ui/Tooltip"
+import { Disclosure } from "./ui/Disclosure"
+import { cardExpanded, setCardExpanded } from "../store/conversation-ui"
 
 export type ConversationSourcePart = {
   type: "source-url" | "source-document" | "source-file"
   sourceId: string
+  sessionID?: string
+  messageID?: string
   title?: string
   provider?: string
   snippet?: string
@@ -136,15 +140,28 @@ function SourceChip(props: { source: ConversationSourcePart; index: number }) {
 }
 
 export function SourceParts(props: { sources: ConversationSourcePart[] }) {
+  const key = () => {
+    const first = props.sources[0]
+    return `sources:${first?.sessionID || ""}:${first?.messageID || ""}:${first?.sourceId || ""}`
+  }
+  const expanded = () => cardExpanded(key(), false)
   return (
-    <section class="msg-sources" aria-label={t("chat.sources")} data-ui="message-sources">
-      <div class="msg-sources__heading">
+    <Disclosure.Root
+      class="msg-sources"
+      aria-label={t("chat.sources")}
+      data-ui="message-sources"
+      open={expanded()}
+      onOpenChange={(open) => setCardExpanded(key(), open)}
+    >
+      <Disclosure.Trigger class="msg-sources__heading">
         <span>{t("chat.sources")}</span>
         <span class="msg-sources__count">{props.sources.length}</span>
-      </div>
-      <div class="msg-sources__list">
-        <For each={props.sources}>{(source, index) => <SourceChip source={source} index={index()} />}</For>
-      </div>
-    </section>
+      </Disclosure.Trigger>
+      <Show when={expanded()}>
+        <Disclosure.Content class="msg-sources__list">
+          <For each={props.sources}>{(source, index) => <SourceChip source={source} index={index()} />}</For>
+        </Disclosure.Content>
+      </Show>
+    </Disclosure.Root>
   )
 }

@@ -5,6 +5,12 @@
   word-break: break-word;
 }
 
+.msg-markdown-state {
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-normal);
+}
+
 .msg-tool + .msg-text,
 .msg-patch + .msg-text {
   margin-top: var(--ui-gap-md);
@@ -146,8 +152,8 @@
   background: color-mix(in srgb, var(--surface-inset) 88%, transparent);
   color: var(--text);
   font-family: var(--font);
-  font-size: var(--ui-font-body);
-  line-height: var(--ui-line-height-reading);
+  font-size: var(--ui-font-code);
+  line-height: var(--ui-line-height-normal);
   tab-size: 2;
   overflow-wrap: anywhere;
 }
@@ -166,6 +172,8 @@
 .msg-tool-payload__content pre {
   margin: 0;
   font-family: var(--mono);
+  font-size: var(--ui-font-code);
+  line-height: var(--ui-line-height-normal);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
@@ -951,15 +959,13 @@
 }
 
 .msg-sources {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
+  align-items: flex-start;
   gap: var(--ui-gap-xs) var(--ui-gap-md);
   min-width: 0;
   margin-block: var(--ui-gap-md);
 }
 
-.msg-sources__heading {
+.msg-sources.oc-disclosure > .msg-sources__heading {
   display: inline-flex;
   align-items: center;
   gap: var(--ui-gap-xs);
@@ -967,6 +973,8 @@
   font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-body);
   line-height: var(--ui-line-height-tight);
+  width: auto;
+  padding-inline: 0;
 }
 
 .msg-sources__count {
@@ -980,6 +988,7 @@
   flex-wrap: wrap;
   gap: var(--ui-gap-sm);
   min-width: 0;
+  padding-inline-start: var(--ui-gap-lg);
 }
 
 .msg-source-chip {
@@ -2137,7 +2146,7 @@
   min-width: 0;
   justify-content: flex-start;
   text-align: left;
-  font-size: var(--ui-font-body);
+  font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-normal);
   transition: color var(--ui-duration-base) var(--ui-timing-standard);
 }
@@ -2192,8 +2201,8 @@
 }
 
 .msg-work-details__tool-name {
-  flex: none;
-  max-width: min(50%, calc(220px * var(--ui-scale)));
+  flex: 0 1 auto;
+  max-width: calc(220px * var(--ui-scale));
   color: inherit;
 }
 
@@ -2234,6 +2243,14 @@
 
 .msg-work-details__event-content {
   min-width: 0;
+  font-size: var(--ui-font-code);
+}
+
+.msg-tool-state {
+  color: var(--text-muted);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-normal);
+  padding-block: var(--ui-gap-xs);
 }
 
 .msg-work-details__event-header {

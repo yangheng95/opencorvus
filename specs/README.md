@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Transcript disclosures and nonblocking Markdown rendering](records/2026-09/2026-09-30-transcript-disclosure-and-markdown-rendering.md)
+
+- [Transcript visual review](artifacts/2026-09-30-transcript-rendering/README.md)
+
 - [Evidence-preserving worker continuation](records/2026-09/2026-09-30-evidence-preserving-continuation.md)
 
 - [0.1.23 native and website release](records/2026-09/2026-09-30-v0.1.23-release.md)
