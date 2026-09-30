@@ -88,6 +88,7 @@ import { EffectiveConfig } from "@/config/effective"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
+import { selectedDispatchReportPrompt } from "@/tool/read-agent-message"
 import type { PromptInput as SessionPromptInput } from "@/session/prompt/schema"
 import {
   materializeUserMessage,
@@ -1163,10 +1164,18 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
 
   // ── 3. Build user prompt parts ───────────────────────────────────────
   const continuationGuidance = input.continuationPrompt?.trim()
+  const selectedReportPrompt =
+    continuationGuidance && dispatchTurn?.kind === "continuation"
+      ? await selectedDispatchReportPrompt(input.taskID, dispatchTurn.evidence_locators)
+      : undefined
   // Materialization, the visible Part and its authority digest must consume
   // the same text, including attachments added since the preceding Turn.
   const continuationText = continuationGuidance
-    ? [continuationGuidance, attachmentPromptSection(requireTask(input.taskID).attachments ?? undefined)]
+    ? [
+        continuationGuidance,
+        selectedReportPrompt,
+        attachmentPromptSection(requireTask(input.taskID).attachments ?? undefined),
+      ]
         .filter(Boolean)
         .join("\n\n")
     : undefined

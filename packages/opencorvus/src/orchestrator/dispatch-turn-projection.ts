@@ -156,7 +156,7 @@ export function renderDispatchContinuationTurn(input: {
     "",
     turn.kind === "initial"
       ? "Execute this previously unstarted node of the Task workflow. Apply the original Task request and the current acceptance obligation below."
-      : "Continue the existing physical worker Session and its original Task contract. This Turn contains only current guidance and immutable locators; do not reinterpret it as a new Task or repeat the complete request.",
+      : "Continue the existing physical worker Session and its original Task contract. Current guidance, immutable locators and any attributed report quotations are incremental inputs, not a new Task or replacement for the original request.",
     "",
     "## Dispatch lineage",
     "",

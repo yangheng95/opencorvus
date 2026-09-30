@@ -44,6 +44,7 @@ import { waitForDetachedDispatchPipelinesForTest } from "@/orchestrator/dispatch
 import { controlTextSHA256, renderDispatchContinuationTurn } from "@/orchestrator/dispatch-turn-projection"
 import { attachmentPromptSection } from "@/agent/prompt-projection"
 import { AttachmentStore } from "@/storage/attachment-store"
+import { projectSelectedDispatchReportQuotes, selectedDispatchReportPrompt, TaskEvidenceSourceError } from "@/tool/read-agent-message"
 import { appendTaskAttachment } from "@/engine/task-file-reference"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -156,6 +157,8 @@ for (const { collection, selectGoals, delegatedSelection = false } of [
         const workerPrompts: unknown[] = []
         const guidance =
           "Continue the exact requirements with the original attachment and preserve pending browser acceptance."
+        const discoveredSourceReport = "Discovered source ss_subs: email, name, subscribed_date, notes. Prior send has a receipt; explicit opt-in interpretation remains disputed."
+        const reportText = `${discoveredSourceReport}\n{\"Authorization\":\"Bearer SYNTHETIC_CONTINUATION_CANARY\"}\n${"Attributable historical report. ".repeat(400)}`
         const toolStream = (toolName: string, input: unknown) => ({
           stream: simulateReadableStream({
             chunks: [
@@ -248,7 +251,7 @@ for (const { collection, selectGoals, delegatedSelection = false } of [
                     authority: { kind: "prior_dispatch", continuation_dispatch_id: initial.dispatchID },
                     guidance,
                     ...(selectGoals ? { input: { goal_ids: [goalID], reason: "Review the newly selected current Goal", ...(delegatedSelection ? { instruction: "Review the exact preceding participant evidence" } : {}) } } : {}),
-                    evidence_locators: [],
+                    evidence_locators: [{ source: "session_message", session_id: initial.payload.child_session_id, message_id: findDispatchSettlementByDispatchID({ taskID: task.id, dispatchID: initial.dispatchID })!.payload.outcome.final_message_id! }],
                   }),
                 )
               }
@@ -274,7 +277,7 @@ for (const { collection, selectGoals, delegatedSelection = false } of [
                     },
                     guidance,
                     ...(selectGoals ? { input: { goal_ids: [goalID], reason: "Review the newly selected current Goal", ...(delegatedSelection ? { instruction: "Review the exact preceding participant evidence" } : {}) } } : {}),
-                    evidence_locators: [],
+                    evidence_locators: [{ source: "session_message", session_id: initial.payload.child_session_id, message_id: findDispatchSettlementByDispatchID({ taskID: task.id, dispatchID: initial.dispatchID })!.payload.outcome.final_message_id! }],
                   }),
                 )
               }
@@ -341,7 +344,7 @@ for (const { collection, selectGoals, delegatedSelection = false } of [
                   {
                     type: "text-delta",
                     id: "worker",
-                    delta: "Requirements defined; real browser acceptance remains downstream work.",
+                    delta: phase === 1 ? reportText : "Requirements defined; real browser acceptance remains downstream work.",
                   },
                   { type: "text-end", id: "worker" },
                   { type: "finish", finishReason: { unified: "stop", raw: "stop" }, usage },
@@ -437,8 +440,28 @@ for (const { collection, selectGoals, delegatedSelection = false } of [
             ...(adapterID === "delegated_worker" ? [delegatedWorkerAcceptanceSection(
               latest.payload.delivery_slice_revision_ids.map(goalID => requireCurrentGoalContext({ taskID, goalID }).goal.goal),
             )] : []),
+            await selectedDispatchReportPrompt(taskID, descriptor.payload.dispatchTurn!.evidence_locators),
             attachmentPromptSection(requireTask(taskID).attachments ?? undefined),
-          ].join("\n\n")
+          ].filter(Boolean).join("\n\n")
+          const reportQuotes = (await projectSelectedDispatchReportQuotes(taskID, descriptor.payload.dispatchTurn!.evidence_locators))!
+          const finalID = findDispatchSettlementByDispatchID({ taskID, dispatchID: lineages[0]!.dispatchID })!.payload.outcome.final_message_id!
+          expect(reportQuotes.reports).toHaveLength(1)
+          expect(reportQuotes.reports[0]).toMatchObject({
+            source: { kind: "dispatch_result", message_id: finalID },
+            session_id: descriptor.sessionID,
+            message_id: finalID,
+            author: expect.any(String),
+            time_completed: expect.any(Number),
+            text_part_ids: [expect.any(String)],
+            text: { redacted: true, offset: 0, end: 8000, next_offset: 8000 },
+          })
+          expect(reportQuotes.reports[0]!.text.content).toStartWith(discoveredSourceReport)
+          expect(reportQuotes.reports[0]!.text.content).toContain('{"Authorization":"<redacted>"}')
+          expect(expectedText).toContain("a coordinator's candidate answer remains a hypothesis")
+          expect(JSON.stringify(workerPrompts[1])).toContain(discoveredSourceReport)
+          const scopeError = await projectSelectedDispatchReportQuotes(Identifier.ascending("task"), descriptor.payload.dispatchTurn!.evidence_locators).catch(error => error)
+          expect(scopeError).toBeInstanceOf(TaskEvidenceSourceError)
+          expect(scopeError).toMatchObject({ code: "TASK_EVIDENCE_SOURCE_INVALID" })
           expect(requireTask(taskID).attachments?.map((attachment) => attachment.filename)).toEqual([
             "original-prd.md",
             "followup.txt",
