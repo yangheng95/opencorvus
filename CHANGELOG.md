@@ -813,6 +813,23 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/f2d4e0dc0a4808972641eb43c65f3d9c77a7130e) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/9392dee6db6d9721dcbc174f80c5bc385883bb84...f2d4e0dc0a4808972641eb43c65f3d9c77a7130e)。
 
+## 0.0.44beta - 2026-08-15
+
+### Changed
+
+- 默认启用浏览器和电脑操作能力，实际调用仍受角色授权与操作权限约束。
+- 会话显示当前公开提示词消息，便于检查模型获得的真实上下文。
+
+### Fixed
+
+- 修复已提交请求决策、取消、项目删除、Mission 关闭和记忆订阅的归属与结算。
+- 引用文件保留在右侧停靠区，修复被替代的 Mission 发送请求和命令截止时间原因的展示。
+- 原生归档按精确源码/产物身份完成，打包与单元检查采用各自清晰的执行边界。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/9392dee6db6d9721dcbc174f80c5bc385883bb84) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/5a0f972b1dde004b64572c877caa2f973de82062...9392dee6db6d9721dcbc174f80c5bc385883bb84)。
+
 ## 0.0.38beta - 2026-08-09
 
 ### Added
