@@ -1,0 +1,50 @@
+{
+  "version": "0.1.12",
+  "source": "5c615ae5c84ac65348914a753c4fcbd53c2bd962",
+  "tag": "v0.1.12",
+  "previousSource": "6817a581e55eaff616c1a731869309849f2926d8",
+  "sourceDate": "2026-09-22T16:07:39+08:00",
+  "commits": [
+    {
+      "sha": "5c615ae5c84ac65348914a753c4fcbd53c2bd962",
+      "date": "2026-09-22T16:07:39+08:00",
+      "subject": "docs: record authorized v0.1.12 release restart"
+    },
+    {
+      "sha": "09bfaad77b012524fab0ddc4e29747fee79b65e9",
+      "date": "2026-09-22T15:46:54+08:00",
+      "subject": "fix: bind artifact qualification to packaged Windows supervisor"
+    },
+    {
+      "sha": "7b46354a8b237f94f23260dda822e4e59bd370b3",
+      "date": "2026-09-22T15:06:31+08:00",
+      "subject": "docs: record scoped Actions history cleanup"
+    },
+    {
+      "sha": "22aac022183544b7944c56c8c6bc677bcbb925bb",
+      "date": "2026-09-22T14:29:52+08:00",
+      "subject": "chore(release): prepare v0.1.12"
+    },
+    {
+      "sha": "3b2cd53ab3f659ccbf4235b1960072ece49dff29",
+      "date": "2026-09-22T14:21:51+08:00",
+      "subject": "feat(ui): add ivory sage mist and graphite color themes"
+    },
+    {
+      "sha": "8d1b31c9c203fb5253641f691fe0f7328e103e0c",
+      "date": "2026-09-22T13:37:36+08:00",
+      "subject": "fix(ui): move subagent scrolling to the conversation and polish overlays"
+    },
+    {
+      "sha": "221822844437874cc6e8831779caf2e475389596",
+      "date": "2026-09-22T11:45:16+08:00",
+      "subject": "fix(release): allow forty minutes for unattended publication"
+    },
+    {
+      "sha": "54f0d35a5c11948a26768fa95eabe297073f6a8d",
+      "date": "2026-09-22T10:24:04+08:00",
+      "subject": "docs(release): record v0.1.11 publication and deadline outcome"
+    }
+  ],
+  "stats": ".github/workflows/build.yml                        |  4 +-\n .github/workflows/deploy-opencorvus-com.yml        |  2 +-\n CHANGELOG.md                                       |  8 +++\n RELEASE.md                                         | 10 ++-\n bun.lock                                           | 16 ++---\n packages/channel-config/package.json               |  2 +-\n packages/channel-runtime/package.json              |  2 +-\n .../native/process-supervisor/Cargo.lock           |  2 +-\n .../native/process-supervisor/Cargo.toml           |  2 +-\n packages/opencorvus/package.json                   |  2 +-\n .../script/check-work-artifact-profile.ts          | 16 ++++-\n packages/overlay/package.json                      |  2 +-\n packages/overlay/script/check-css-token-usage.ts   | 10 ++-\n packages/overlay/src-tauri/Cargo.lock              |  2 +-\n packages/overlay/src-tauri/Cargo.toml              |  2 +-\n packages/overlay/src-tauri/src/main.rs             | 32 ++++++++-\n packages/overlay/src-tauri/tauri.conf.json         |  4 +-\n packages/overlay/src/components/Conversation.tsx   | 11 ++-\n .../src/components/ScreenshotBrowserPanel.tsx      | 24 ++++---\n .../src/components/SubagentProgressGrid.tsx        | 19 +-----\n .../interactive-artifact/DiagramArtifact.tsx       |  4 +-\n .../interactive-artifact/McpAppArtifact.tsx        |  8 +--\n .../interactive-artifact/SpreadsheetArtifact.tsx   | 11 +--\n .../src/components/titlebar/TitlebarMenubar.tsx    |  4 ++\n packages/overlay/src/i18n/en-US.json               |  8 +++\n packages/overlay/src/i18n/zh-CN.json               |  8 +++\n packages/overlay/src/index.html                    | 11 ++-\n packages/overlay/src/native-menu.html              |  4 ++\n packages/overlay/src/services/native-menu.ts       |  4 ++\n packages/overlay/src/services/theme-registry.ts    |  6 +-\n packages/overlay/src/services/theme.ts             | 11 ++-\n packages/overlay/src/store/app.ts                  |  5 +-\n packages/overlay/src/styles/cascade/graphite.css   | 79 ++++++++++++++++++++++\n packages/overlay/src/styles/cascade/ivory.css      | 79 ++++++++++++++++++++++\n packages/overlay/src/styles/cascade/mist.css       | 79 ++++++++++++++++++++++\n packages/overlay/src/styles/cascade/sage.css       | 79 ++++++++++++++++++++++\n .../src/styles/primitives/dropdown-menu.css        |  2 +-\n packages/overlay/src/styles/primitives/popover.css | 33 ++++++++-\n .../src/styles/primitives/select-control.css       |  6 +-\n packages/overlay/src/styles/surfaces/activity.css  | 58 +++++++++++-----\n .../overlay/src/styles/surfaces/conversation.css   | 54 +--------------\n packages/overlay/src/styles/surfaces/dialog.css    | 43 ++++++++----\n packages/overlay/src/styles/surfaces/messages.css  | 23 ++++---\n packages/overlay/src/styles/surfaces/titlebar.css  | 16 +++++\n .../overlay/src/styles/tokens/design-language.css  |  4 ++\n .../overlay/test/overlay-size-contract.test.ts     | 11 ---\n packages/plugin/package.json                       |  2 +-\n packages/sdk/js/package.json                       |  2 +-\n packages/transport-protocol/package.json           |  2 +-\n packages/transport-protocol/src/index.ts           | 11 ++-\n packages/transport-protocol/test/contract.test.ts  | 10 +++\n packages/util/package.json                         |  2 +-\n script/github-actions-workflow-contract.test.ts    |  5 ++\n script/release-automation.test.ts                  | 36 ++++++++--\n script/release-automation.ts                       |  9 +--\n specs/README.md                                    | 12 ++++\n specs/current/architecture/07-panel.md             | 43 +++++++++---\n .../2026-09-22-actions-retention-cleanup.md        | 31 +++++++++\n .../2026-09-22-additional-workspace-themes.md      | 34 ++++++++++\n ...026-09-22-subagent-scroll-and-overlay-polish.md | 47 +++++++++++++\n .../2026-09-22-unattended-release-40-minutes.md    | 36 ++++++++++\n .../records/2026-09/2026-09-22-v0.1.11-release.md  | 22 ++++++\n .../records/2026-09/2026-09-22-v0.1.12-release.md  | 24 +++++++\n ...6-09-22-v0.1.12-windows-qualification-repair.md | 44 ++++++++++++\n specs/records/2026-09/README.md                    | 12 ++++\n 65 files changed, 988 insertions(+), 218 deletions(-)"
+}
