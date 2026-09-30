@@ -1,0 +1,15 @@
+{
+  "version": "0.1.18",
+  "source": "cca50888d07198ba68e4493ed29821eef088d170",
+  "tag": "v0.1.18",
+  "previousSource": "b1d01e71e7c56a62cd97baf3bb3bc11bf173fff9",
+  "sourceDate": "2026-09-29T15:54:12+08:00",
+  "commits": [
+    {
+      "sha": "cca50888d07198ba68e4493ed29821eef088d170",
+      "date": "2026-09-29T15:54:12+08:00",
+      "subject": "fix(runtime): preserve physical process identity across sleep for v0.1.18"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |   7 +\n bun.lock                                           |  16 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n .../script/check/control-lease-owners.ts           |   2 +-\n packages/opencorvus/src/engine/dispatch-lineage.ts |   2 +-\n packages/opencorvus/src/engine/engine.sql.ts       |   7 +-\n packages/opencorvus/src/engine/process-liveness.ts | 278 ++++++++------------\n .../opencorvus/src/engine/task-control-driver.ts   |   4 +-\n .../src/engine/task-root-ingress-delivery.ts       |  54 ++--\n .../opencorvus/src/session/deletion-cleanup.ts     |   4 +-\n ...dispatch-occurrence-cross-process-claim.test.ts |  17 --\n .../opencorvus/test/fixture/dispatch-lineage.ts    |   8 +-\n .../dispatch-occurrence-claim-process-worker.ts    |   4 +-\n .../test/fixture/goal-workload-process-worker.ts   |   4 +-\n .../opencorvus/test/fixture/process-liveness.ts    |  47 ++++\n .../workflow-node-admission-process-worker.ts      |   4 +-\n .../test/goal-workload-coverage-contract.test.ts   |   6 +-\n .../opencorvus/test/process-liveness-owner.test.ts | 279 ++++++++++-----------\n .../test/project-directory-and-worktree-gc.test.ts |   4 +-\n .../test/server/process-sleep-recovery.test.ts     |  54 ++++\n .../test/task-control-abandoned-dispatch.test.ts   |  58 ++---\n .../task-control-cross-process-dispatch.test.ts    |  50 ++--\n .../opencorvus/test/task-control-liveness.test.ts  |   4 +-\n .../test/tool-result-control-protocol.test.ts      |   4 +-\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n specs/README.md                                    |   2 +\n specs/current/architecture/task-control-plane.md   |   2 +-\n .../2026-09-29-runtime-process-sleep-recovery.md   |  40 +++\n specs/records/2026-09/README.md                    |   2 +\n 40 files changed, 504 insertions(+), 487 deletions(-)"
+}
