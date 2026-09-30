@@ -661,6 +661,10 @@
 - 修复 `universal-build` 能解析 Expert Squad Skill、却不出现在 Skill mount matrix 中的双源问题；matrix 现在同时覆盖 scheduler-only 与 package-projected Agent，并标明能力由 package 还是 platform 提供。
 - 修复 Advanced 外部系统任务可能直接派给通用 worker、绕过计划交付和独立测试的问题。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/a7f173cb69b488b72448ef35e5a87745bc4f6503) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/0a6c203a320e411b16aac804db164498a9a56b97...a7f173cb69b488b72448ef35e5a87745bc4f6503)。
+
 ## 0.0.49beta - 2026-08-19
 
 本版本把公开站与 README 的主张收敛到长程任务与自进化上，并汇总自 `0.0.48beta` 发布以来的用户可见改动。

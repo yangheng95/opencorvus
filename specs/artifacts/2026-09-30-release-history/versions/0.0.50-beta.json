@@ -1,0 +1,85 @@
+{
+  "version": "0.0.50-beta",
+  "source": "a7f173cb69b488b72448ef35e5a87745bc4f6503",
+  "tag": "v0.0.50-beta",
+  "previousSource": "0a6c203a320e411b16aac804db164498a9a56b97",
+  "sourceDate": "2026-08-21T01:36:18+08:00",
+  "commits": [
+    {
+      "sha": "a7f173cb69b488b72448ef35e5a87745bc4f6503",
+      "date": "2026-08-21T01:36:18+08:00",
+      "subject": "release: prepare v0.0.50 beta"
+    },
+    {
+      "sha": "65d8229f5954a0c435c797f00e545e1096b54481",
+      "date": "2026-08-21T01:32:50+08:00",
+      "subject": "fix(harness): verify external delivery through mounted workers"
+    },
+    {
+      "sha": "70780a343078489fb2f39eca4b0ea4e6ab3e2010",
+      "date": "2026-08-20T22:48:45+08:00",
+      "subject": "test(harness): align Base package revision"
+    },
+    {
+      "sha": "b441b2595d9713dc51ffdc0888e7a5d65df59e2b",
+      "date": "2026-08-20T22:48:45+08:00",
+      "subject": "fix(harness): verify settled delivery evidence"
+    },
+    {
+      "sha": "8ad43f76ee6651de0e58ae725276b77fcf10fcda",
+      "date": "2026-08-20T14:37:08+08:00",
+      "subject": "fix(provider): apply physical hooks to helper streams"
+    },
+    {
+      "sha": "114cb5278ef354ab0cbf1fe65a822c2968ed9d78",
+      "date": "2026-08-20T11:24:57+08:00",
+      "subject": "fix(browser): start the CDP Chrome instead of waiting for one"
+    },
+    {
+      "sha": "e45e789724102722d4245b6294f0c8b6f5739e47",
+      "date": "2026-08-20T11:24:35+08:00",
+      "subject": "fix(overlay): show the macOS menubar with the accelerators AppKit installs"
+    },
+    {
+      "sha": "ca6ed43a170e775eb893c4e62447bfaaeee85966",
+      "date": "2026-08-20T00:29:28+08:00",
+      "subject": "feat(squads): stamp a package's version when its bytes move"
+    },
+    {
+      "sha": "bce69c372255af0e2cd9b09f0edfbbb59ce902f4",
+      "date": "2026-08-20T00:14:36+08:00",
+      "subject": "fix(deploy): probe and route the endpoint the site actually serves"
+    },
+    {
+      "sha": "992241194e14cf5e3f9c62f5e7602315f8e0bb84",
+      "date": "2026-08-19T23:57:09+08:00",
+      "subject": "fix(web): make the atomic-swap precondition something reset-v1 guarantees"
+    },
+    {
+      "sha": "65ac4bebd14cff537e9550812661dda6424a6466",
+      "date": "2026-08-19T21:13:30+08:00",
+      "subject": "fix(squad-sdk): bump the revision its changed bytes require"
+    },
+    {
+      "sha": "8c6260973ac15a41681dbdebc97e870f8a596f08",
+      "date": "2026-08-19T21:04:58+08:00",
+      "subject": "fix(overlay): keep Tauri out of style-src so packaged styles still apply"
+    },
+    {
+      "sha": "70ebbc34c213e9f43d84e792baf0075d1b5c6a22",
+      "date": "2026-08-19T20:44:29+08:00",
+      "subject": "refactor(plugin): let a package name its sources by selecting them"
+    },
+    {
+      "sha": "3990cc648ddf3ddb82f358af8dd9f846011c8b34",
+      "date": "2026-08-19T20:29:22+08:00",
+      "subject": "fix(project): stop project open from failing the Task it is recovering"
+    },
+    {
+      "sha": "e3f28cb80b692bc6607282bdb378d6789a909f5d",
+      "date": "2026-08-19T20:14:31+08:00",
+      "subject": "docs: round out the 0.0.49beta entry with what the release actually carries"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |  22 +++\n bun.lock                                           |  16 +-\n deploy/racknerd/Caddyfile                          |   8 +-\n deploy/racknerd/opencorvus-activate-release        |  12 +-\n .../racknerd/test-opencorvus-activate-release.sh   |   2 +-\n .../builtin/commercial-legal/expert-squad.jsonc    |   2 +-\n .../tools/publish-commercial-legal-artifact.ts     |   1 -\n .../builtin/data-analysis/expert-squad.jsonc       |   2 +-\n .../tools/publish-data-analysis-artifact.ts        |   1 -\n .../builtin/evolution-lab/expert-squad.jsonc       |   2 +-\n .../tools/publish-evolution-artifact.ts            |   1 -\n .../builtin/hr-operations/expert-squad.jsonc       |   2 +-\n .../tools/publish-hr-operations-artifact.ts        |   1 -\n .../builtin/marketing-growth/expert-squad.jsonc    |   2 +-\n .../tools/publish-marketing-growth-artifact.ts     |   1 -\n .../omnichannel-distribution/expert-squad.jsonc    |   2 +-\n .../tools/publish-omnichannel-artifact.ts          |   1 -\n .../builtin/sales-strategy/expert-squad.jsonc      |   2 +-\n .../tools/publish-sales-strategy-artifact.ts       |   1 -\n expert-squads/builtin/seo-geo/expert-squad.jsonc   |   2 +-\n .../seo-geo/tools/publish-seo-geo-artifact.ts      |   1 -\n expert-squads/builtin/squad-sdk/expert-squad.jsonc |   2 +-\n .../builtin/squad-sdk/skills/authoring/SKILL.md    |   4 +-\n .../authoring/references/definition-contract.json  |  42 +++--\n .../builtin/tax-compliance/expert-squad.jsonc      |   2 +-\n .../tools/publish-tax-compliance-artifact.ts       |   1 -\n .../builtin/viral-content/expert-squad.jsonc       |   2 +-\n .../tools/publish-viral-content-artifact.ts        |   1 -\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../opencorvus/generated/expert-squad-payload.ts   |  40 ++---\n .../opencorvus/generated/expert-squad-revisions.ts | 130 ++++++++++++++\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n .../script/check-builtin-expert-squad-topology.ts  |  55 ++++--\n .../script/generate-expert-squad-revisions.ts      | Bin 0 -> 11095 bytes\n packages/opencorvus/src/browser/runtime/index.ts   | 189 ++++++++++++++++++++-\n .../opencorvus/src/engine/completion-decision.ts   |  69 ++++----\n .../src/expert-squad/builtin/advanced/README.md    |   2 +-\n .../builtin/advanced/agents/orchestrator/system.md |   6 +\n .../advanced/agents/test-engineer/system.md        |   2 +-\n .../builtin/advanced/expert-squad.jsonc            |   2 +-\n .../src/expert-squad/builtin/base/README.md        |  14 +-\n .../builtin/base/agents/base-developer/system.md   |   2 +-\n .../builtin/base/agents/base-planner/system.md     |   4 +-\n .../builtin/base/agents/base-tester/system.md      |   8 +-\n .../builtin/base/agents/orchestrator/system.md     |   8 +-\n .../expert-squad/builtin/base/expert-squad.jsonc   |  18 +-\n .../src/expert-squad/builtin/base/selector.md      |   4 +-\n .../src/expert-squad/prompt-profile-resolver.ts    |   9 +-\n packages/opencorvus/src/llm/api.ts                 |   6 +\n packages/opencorvus/src/mcp/browser/sessions.ts    |  36 +++-\n .../src/orchestrator/task-lifecycle-input.ts       |  56 ++++++\n .../src/orchestrator/task-lifecycle-tools.ts       |  44 +----\n packages/opencorvus/src/orchestrator/tools.ts      |   9 +-\n packages/opencorvus/src/plugin/cloudflare.ts       |   5 +-\n .../src/plugin/github-copilot/copilot.ts           |  47 ++---\n packages/opencorvus/src/plugin/index.ts            |  56 +++++-\n packages/opencorvus/src/plugin/openai/codex.ts     |  10 +-\n packages/opencorvus/src/project/instance.ts        |  24 +++\n packages/opencorvus/src/session/llm.ts             |  72 ++++++--\n packages/opencorvus/src/skill/mounts.ts            |  13 +-\n packages/opencorvus/src/tool/plugin-tool-host.ts   |  16 +-\n packages/opencorvus/src/usage/index.ts             |   4 +\n packages/opencorvus/src/usage/usage.sql.ts         |   8 +\n .../test/expert-squad-revision-stamping.test.ts    | 123 ++++++++++++++\n .../test/expert-squad/advanced-package.test.ts     | 131 ++++++++++++--\n .../test/expert-squad/catalog-index.test.ts        |   2 +-\n ...tance-nested-provide-during-preparation.test.ts |  63 +++++++\n .../test/mcp/browser-live-view-contract.test.ts    |  51 +++++-\n .../test/provider-helper-chat-hooks.test.ts        | 158 +++++++++++++++++\n .../test/storage/schema-contract.test.ts           |  12 +-\n .../test/task-terminal-artifact-closure.test.ts    |  72 ++++----\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |  11 +-\n .../src/components/titlebar/TitlebarMenubar.tsx    |  67 ++++++--\n packages/overlay/src/styles/surfaces/titlebar.css  |  27 ++-\n packages/overlay/test/inline-style-csp.test.ts     |  51 ++++++\n packages/plugin/package.json                       |   2 +-\n packages/plugin/src/artifact-catalog.ts            |   9 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/sdk/js/src/gen/types.gen.ts               |   2 +\n packages/sdk/js/src/route-policy.ts                |   8 +-\n packages/sdk/openapi.json                          |  16 ++\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n packages/web/src/content/docs/agents.mdx           |   2 +-\n packages/web/src/content/docs/zh-cn/agents.mdx     |   2 +-\n .../content/expert-squad-distribution.generated.ts |   4 +-\n .../web/src/content/featured-squads.generated.ts   |  12 +-\n packages/web/src/content/public-market-zh-01-35.ts |   8 +-\n packages/web/src/lib/website-registry.ts           |  52 +++++-\n packages/web/test/website-registry.test.ts         |  77 +++++++++\n script/generate.ts                                 |   9 +\n script/generated-artifacts.ts                      |   1 +\n specs/current/architecture/04-extensions.md        |  10 +-\n ...mission-scheduler-message-message-row-decode.md | 109 +++++++++---\n .../2026-08/2026-08-21-v0.0.50-beta-release.md     |  37 ++++\n specs/records/2026-08/README.md                    |   2 +\n .../authoring-skill/SKILL.md                       |   4 +-\n .../references/definition-contract.json            |  42 +++--\n 104 files changed, 1893 insertions(+), 411 deletions(-)"
+}
