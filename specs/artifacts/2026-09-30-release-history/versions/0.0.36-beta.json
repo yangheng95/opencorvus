@@ -1,0 +1,25 @@
+{
+  "version": "0.0.36-beta",
+  "source": "565ef8d79b048e4b30c13b633f7fa76b0f51a4fd",
+  "tag": null,
+  "previousSource": "08381d24b36f5c743d5eb71144fe56ea92513caa",
+  "sourceDate": "2026-08-08T10:03:27+08:00",
+  "commits": [
+    {
+      "sha": "565ef8d79b048e4b30c13b633f7fa76b0f51a4fd",
+      "date": "2026-08-08T10:03:27+08:00",
+      "subject": "chore(release): prepare v0.0.36-beta"
+    },
+    {
+      "sha": "1f7976f8b706454ca47621fb675fd4bbd3da2931",
+      "date": "2026-08-08T09:44:20+08:00",
+      "subject": "fix(overlay): render Vega artifacts under strict CSP"
+    },
+    {
+      "sha": "0f177c69a2625576195da5bf006944571c6f86a6",
+      "date": "2026-08-08T09:27:27+08:00",
+      "subject": "fix(ci): repair clean-runner tests and release triggers"
+    }
+  ],
+  "stats": ".github/actions/setup-bun/action.yml               |   9 +\n .github/workflows/build.yml                        |  22 +--\n .github/workflows/test.yml                         |  23 +++\n bun.lock                                           |  16 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n packages/channel-runtime/test/core-prompt.test.ts  |  21 ---\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/opencorvus/script/build-artifact.ts       |  12 ++\n packages/opencorvus/script/build.local.ts          |   8 +-\n packages/opencorvus/script/build.ts                |   8 +-\n .../script/check-browser-mcp-node-bundle.ts        |  18 ++\n .../opencorvus/src/mcp/browser/node-launcher.ts    |  60 +++---\n .../test/browser-mcp-node-bundle.test.ts           |  34 ++--\n .../test/engine-git-safe-environment.test.ts       | 121 +-----------\n .../test/execution-capsule-file-worker.test.ts     |  58 +-----\n .../test/expert-squad-evolution-launcher.test.ts   |   2 +-\n packages/opencorvus/test/read-lsp-warmup.test.ts   |   8 +\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n .../interactive-artifact/ChartArtifact.tsx         |  22 +--\n .../interactive-artifact/DashboardArtifact.tsx     |  22 +--\n .../interactive-artifact/vega-embed-policy.ts      |  34 ++++\n .../components/interactive-artifact/vega-embed.css | 203 +++++++++++++++++++++\n packages/overlay/test/vega-embed-policy.test.ts    |  31 ++++\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n script/github-actions-workflow-contract.test.ts    |  45 ++++-\n 34 files changed, 493 insertions(+), 312 deletions(-)"
+}

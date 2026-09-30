@@ -941,6 +941,17 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/3522bc534c9762a462fb51daacef5b788a1219a9) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/565ef8d79b048e4b30c13b633f7fa76b0f51a4fd...3522bc534c9762a462fb51daacef5b788a1219a9)。
 
+## 0.0.36beta - 2026-08-08
+
+### Fixed
+
+- 在严格 CSP（Content Security Policy，内容安全策略）下正确渲染 Vega 交互图表。
+- 修复干净构建环境的测试准备与发布触发条件，统一候选版本投影。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/565ef8d79b048e4b30c13b633f7fa76b0f51a4fd) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/08381d24b36f5c743d5eb71144fe56ea92513caa...565ef8d79b048e4b30c13b633f7fa76b0f51a4fd)。
+
 ## 0.0.35beta - 2026-08-07
 
 - 本版本是更新日志的记录起点；更早版本不在此倒推补录。
