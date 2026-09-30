@@ -887,6 +887,25 @@
 
 - [版本源码](https://github.com/yangheng95/opencorvus/tree/9652cff4da8e45e547b4a85a5e4c93570cf1a10e) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/6f8e5be59af0724b361afe31a3965955985b9128...9652cff4da8e45e547b4a85a5e4c93570cf1a10e)。
 
+## 0.0.39beta - 2026-08-10
+
+### Added
+
+- 新增托管专家团市场与统一来源，扩展研究、办公及业务团队；网站研究来源持久化供后续引用与核对。
+
+### Fixed
+
+- 修复任务取消、项目刷新后的能力检查、运行时状态隔离和本地恢复打包。
+- 调整专家团产物与研究路径契约，控制目录检索的上下文范围并修复有顺序要求的交付发布。
+
+### Removed
+
+- 关闭当时不再使用的 LSP（Language Server Protocol，语言服务器协议）运行路径。
+
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/6f8e5be59af0724b361afe31a3965955985b9128) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/2c86f25c1264b99eea8b4890fca7c357b1d78e48...6f8e5be59af0724b361afe31a3965955985b9128)。
+
 ## 0.0.38beta - 2026-08-09
 
 ### Added
