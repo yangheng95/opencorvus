@@ -1,0 +1,75 @@
+{
+  "version": "0.0.63-beta",
+  "source": "752d8b3d27dfc3a95ba7ef2956efd69250683fa7",
+  "tag": "v0.0.63-beta",
+  "previousSource": "63b52453f233ba6b1eeeac6bd2eb8c7007c6af3a",
+  "sourceDate": "2026-09-07T08:14:58+08:00",
+  "commits": [
+    {
+      "sha": "752d8b3d27dfc3a95ba7ef2956efd69250683fa7",
+      "date": "2026-09-07T08:14:58+08:00",
+      "subject": "ci: bootstrap SDK before release generation"
+    },
+    {
+      "sha": "e46ff05f57039a1718da42a912324a97c78f1082",
+      "date": "2026-09-07T06:37:07+08:00",
+      "subject": "test: diagnose session standby convergence"
+    },
+    {
+      "sha": "5b93a565f004569b82883ea785b0995aabfba220",
+      "date": "2026-09-07T05:16:26+08:00",
+      "subject": "test: harden cross-platform release synchronization"
+    },
+    {
+      "sha": "9a0180d282d90f7c48671054a4818abc12ff6b15",
+      "date": "2026-09-07T02:57:08+08:00",
+      "subject": "test: await task control sweep convergence"
+    },
+    {
+      "sha": "3e836a5e7a20f64b77322d93504fa8afb5f93b3c",
+      "date": "2026-09-07T02:09:31+08:00",
+      "subject": "fix: close cross-platform release blockers"
+    },
+    {
+      "sha": "d9d18c8b97951d1713de00364818ffcc62928085",
+      "date": "2026-09-06T23:54:29+08:00",
+      "subject": "fix: close final cross-platform unit gates"
+    },
+    {
+      "sha": "ebf80ea19ee31d1a6efad76e8d295518bbe0e35f",
+      "date": "2026-09-06T22:44:25+08:00",
+      "subject": "test: canonicalize fixture process ownership path"
+    },
+    {
+      "sha": "74922a0b638e529c3e9023153dce91aa50ab66da",
+      "date": "2026-09-06T21:42:13+08:00",
+      "subject": "fix: close cross-platform release CI races"
+    },
+    {
+      "sha": "653aa6245e04d1fda91e6f3fbaeb6176e0cebcdd",
+      "date": "2026-09-06T19:36:03+08:00",
+      "subject": "fix: canonicalize published plugin module paths"
+    },
+    {
+      "sha": "33bf5b0e177cd220526c221137b6a9948bfc3c6e",
+      "date": "2026-09-06T19:00:48+08:00",
+      "subject": "fix: close cross-platform release CI blockers"
+    },
+    {
+      "sha": "0adcea5ff7dc35a6541b1b5e6f57f6423b63ed82",
+      "date": "2026-09-06T17:44:01+08:00",
+      "subject": "fix: converge cross-platform release CI"
+    },
+    {
+      "sha": "b0648e8a66562c4312234b30b8ae8368b87ef2d4",
+      "date": "2026-09-06T16:42:36+08:00",
+      "subject": "test: normalize package tool source identity"
+    },
+    {
+      "sha": "e7858085d662588839c8cc2cbe8c141b382806be",
+      "date": "2026-09-06T16:23:58+08:00",
+      "subject": "release: prepare v0.0.63-beta"
+    }
+  ],
+  "stats": ".github/workflows/build.yml                        |  10 +\n .github/workflows/deploy-opencorvus-com.yml        |   6 +\n .github/workflows/test.yml                         |   6 +\n CHANGELOG.md                                       |  10 +\n bun.lock                                           |  16 +-\n .../builtin/evolution-lab/expert-squad.jsonc       |   2 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../opencorvus/generated/expert-squad-payload.ts   |   2 +-\n .../opencorvus/generated/expert-squad-revisions.ts |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/opencorvus/script/run-tests.ts            |   5 +-\n packages/opencorvus/src/engine/engine.sql.ts       |  26 +-\n .../src/engine/global-creation-target.ts           |   2 +-\n .../opencorvus/src/engine/task-creation-facts.ts   |  12 +-\n .../src/engine/task-execution-capsule-binding.ts   |  13 +-\n .../src/engine/task-process-binding-contract.ts    |  82 ++++\n .../opencorvus/src/mission/process-recovery.ts     |  20 +-\n packages/opencorvus/src/plugin/index.ts            |   4 +-\n packages/opencorvus/src/project/delete.ts          |   3 +-\n .../opencorvus/src/project/deletion-cleanup.ts     |   7 +-\n packages/opencorvus/src/project/project.ts         |   4 +-\n .../opencorvus/src/scheduler/automation-service.ts | 416 +++++++++++--------\n packages/opencorvus/src/server/routes/session.ts   |  56 ++-\n packages/opencorvus/src/session/prompt/owner.ts    | 250 +++++++----\n .../src/session/provider-activity-facts.ts         |   6 +-\n packages/opencorvus/src/session/shell-exec.ts      |   4 +\n .../opencorvus/src/storage/attachment-store.ts     | 104 +++--\n packages/opencorvus/src/storage/db.ts              |  37 +-\n .../storage/task-creation-identity-validation.ts   |  11 +-\n packages/opencorvus/src/task-api/index.ts          |   2 +-\n .../opencorvus/src/tool/task-run-evidence-host.ts  |   2 +-\n packages/opencorvus/src/worktree/index.ts          |  42 +-\n .../src/worktree/ownership-critical-section.ts     |  55 ++-\n .../opencorvus/test/algorithm-batch-one.test.ts    |  58 +++\n .../test/capability/catalog-binding.test.ts        |  45 ++\n .../test/evolution-artifact-evidence-host.test.ts  |   2 +-\n .../test/evolution-lab-package-projection.test.ts  |   4 +-\n .../test/fixture/browser-signal-console-driver.ts  |  61 ---\n .../test/fixture/browser-signal-owner-child.ts     | 102 -----\n .../dispatch-occurrence-claim-process-worker.ts    |  11 +-\n packages/opencorvus/test/fixture/engine-task.ts    |   2 +-\n .../fixture/global-task-request-process-worker.ts  |   3 +-\n packages/opencorvus/test/fixture/json-barrier.ts   |  22 +\n .../fixture/mcp-oauth-callback-broker-worker.ts    |   4 +-\n .../fixture/mcp-oauth-callback-finishing-worker.ts |   4 +-\n .../fixture/mcp-oauth-callback-one-shot-worker.ts  |   4 +-\n .../mcp-oauth-callback-stalling-broker-worker.ts   |   9 +-\n .../fixture/mcp-oauth-callback-waiter-worker.ts    |  13 +-\n packages/opencorvus/test/fixture/memory.ts         |   7 +-\n ...sion-execution-reconciliation-process-worker.ts |  27 +-\n .../mission-process-recovery-driver-worker.ts      |  15 +-\n .../provider-activity-writer-process-worker.ts     |  51 +++\n .../session-deletion-cleanup-process-worker.ts     |   5 +-\n .../fixture/session-message-pair-process-worker.ts |  21 +-\n .../fixture/session-prompt-owner-process-worker.ts |  60 ++-\n .../test/fixture/skill-replacement-child.ts        |   3 +-\n .../task-wait-ingress-race-process-worker.ts       |   5 +-\n .../workflow-node-admission-process-worker.ts      |   7 +-\n .../test/global-task-request-replay.test.ts        |  53 ++-\n .../test/mcp/browser-signal-ownership.test.ts      | 245 -----------\n .../test/mcp/durable-oauth-finish.test.ts          |  13 +-\n .../mcp/oauth-callback-durable-legitimacy.test.ts  |  13 +-\n .../test/memory-project-lifecycle.test.ts          |  29 ++\n .../test/package-tool-files-capability.test.ts     |   4 +-\n .../test/panel-creation-process-recovery.test.ts   |  61 ++-\n packages/opencorvus/test/plugin-revision.test.ts   |  32 +-\n .../test/project-directory-and-worktree-gc.test.ts |  42 ++\n .../test/project-identity-convergence.test.ts      |   3 +-\n .../test/project-promotion-journal.test.ts         |  87 +++-\n .../test/provider-activity-fact-storage.test.ts    | 124 +++++-\n .../scheduler-task-root-message-schema.test.ts     |  24 +-\n .../session-prompt-cross-process-owner.test.ts     | 128 +++++-\n .../test/server/session-prompt-idempotency.test.ts |  34 +-\n .../test/server/session-shell-idempotency.test.ts  |  13 +-\n .../test/session/prompt-owner-capture.test.ts      |  62 +++\n packages/opencorvus/test/shell-deadline.test.ts    |  13 +-\n .../test/storage/schema-contract.test.ts           | 461 +++++++++++++++++----\n .../test/task-control-abandoned-dispatch.test.ts   |   5 +-\n .../test/task-control-sweep-scope.test.ts          |  28 +-\n .../test/task-creation-tool-lineage.test.ts        |   2 +-\n .../test/task-process-deployment-bootstrap.test.ts |  40 ++\n .../test/test-runner-runtime-isolation.test.ts     |   2 +-\n .../opencorvus/test/workspace-lifecycle.test.ts    |   4 +-\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n .../script/generate-expert-squad-distribution.ts   |   4 +-\n packages/web/test/website-registry.test.ts         |  97 +++++\n script/generate.ts                                 |   3 +-\n script/github-actions-workflow-contract.test.ts    |  37 +-\n specs/README.md                                    |   2 +\n .../2026-09/2026-09-05-v0.0.62-beta-release.md     |   2 +-\n .../2026-09-06-v0.0.63-beta-release-repair.md      | 133 ++++++\n specs/records/2026-09/README.md                    |   2 +\n 102 files changed, 2480 insertions(+), 1112 deletions(-)"
+}
