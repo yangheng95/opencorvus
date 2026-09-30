@@ -305,257 +305,266 @@ export function App(props: AppProps) {
               <SidebarVersionLabel />
             </div>
           </nav>
-          <div
-            class="left-activity-shell oc-material-glass"
-            id="leftActivityShell"
-            onMouseEnter={cancelMailboxHoverClose}
-            onMouseLeave={scheduleMailboxHoverPreviewClose}
-          >
-            <div class="workspace-contextbar" id="workspaceContextbar" data-tauri-drag-region>
-              <div class="titlebar-brand">
-                <div id="solidTitlebarBrand">
-                  <TitlebarBrand />
-                </div>
-              </div>
-              <div class="titlebar-context-spacer" data-tauri-drag-region />
-              <div class="workspace-context-actions" data-no-drag="true">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  tone="neutral"
-                  class="workspace-command-action workspace-command-search"
-                  data-chrome="icon-action"
-                  data-ui="work-ledger-search-toggle"
-                  hidden={mailboxVisible()}
-                  title={t("cmdk.placeholder")}
-                  aria-label={t("cmdk.placeholder")}
-                  onClick={() => window.dispatchEvent(new CustomEvent("oc:open-command-palette"))}
-                >
-                  <Icon name="search" size="medium" />
-                </Button>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  tone="neutral"
-                  class="workspace-command-action workspace-command-mailbox"
-                  data-chrome="icon-action"
-                  data-ui="mailbox-toggle"
-                  data-active={String(mailboxVisible())}
-                  title={t("mailbox.title")}
-                  aria-label={t("mailbox.title")}
-                  aria-controls="leftPanelMailbox"
-                  aria-expanded={mailboxVisible()}
-                  onMouseEnter={scheduleMailboxHoverPreview}
-                  onClick={toggleMailbox}
-                >
-                  <Icon name="mailbox" size="medium" />
-                </Button>
-              </div>
-            </div>
-            <aside class="sidebar" id="sidebar" data-collapsed="false">
-              <div class="side-panel-content sidebar-content">
-                <div class="sidebar-header oc-surface-header">
-                  <div class="sidebar-title oc-surface-header__title" id="leftPanelTitle">
-                    {mailboxVisible() ? t("mailbox.title") : t("work_ledger.title")}
-                  </div>
-                  <div
-                    class="sidebar-header-actions oc-surface-header__actions"
-                    id="solidLeftPanelActions"
-                    data-active={String(!mailboxVisible())}
-                    hidden={mailboxVisible()}
-                  >
-                    {props.leftPanelActions}
-                  </div>
-                </div>
-                <div
-                  class="side-activity-body sidebar-activity-body"
-                  id="leftPanelWork"
-                  data-side-activity="work"
-                  data-active={String(!mailboxVisible())}
-                >
-                  <div class="sidebar-body">
-                    <div class="sidebar-list session-list-panel work-ledger-panel" id="workLedgerPanel">
-                      <Show when={navigationMount()}>{(mount) => props.workLedger(mount())}</Show>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="side-activity-body sidebar-activity-body"
-                  id="leftPanelMailbox"
-                  data-side-activity="mailbox"
-                  data-active={String(mailboxVisible())}
-                >
-                  <div id="solidMailboxMount" class="mailbox-panel-mount">
-                    {props.mailbox}
-                  </div>
-                </div>
-                <footer class="sidebar-footer" aria-label={t("titlebar.connection_diagnostics")}>
-                  <span class="sidebar-connection" id="solidConnBadge">
-                    <ConnectionBadge />
-                  </span>
-                  <SidebarUpdateButton />
-                </footer>
-              </div>
-            </aside>
-          </div>
-          <div
-            class="pane-resizer pane-resizer-left"
-            id="leftPaneResizer"
-            role="separator"
-            aria-orientation="vertical"
-            aria-label={t("workspace.resize_left_panel")}
-            aria-controls="sidebar workspaceMain"
-            aria-valuemin="0"
-            aria-valuemax="0"
-            aria-valuenow="0"
-            tabIndex={0}
-          />
-          <div class="workspace-main" id="workspaceMain">
-            <div class="conversation-workspace" id="conversationWorkspace">
-              <section class="center-workbench" id="centerWorkbench" data-open="false">
-                <div class="center-workbench-body">
-                  <div
-                    class="center-workbench-view"
-                    id="centerWorkbenchConversation"
-                    data-workbench-view="conversation"
-                    data-open={String(props.primarySurface() === "conversation")}
-                    data-active={String(props.primarySurface() === "conversation")}
-                  >
-                    <div id="solidConversationAgentRailMount" class="conversation-agent-rail-host">
-                      <ConversationAgentRail onOpenSubagentConversation={props.onOpenSubagentConversation} />
-                    </div>
-                    <div class="center-workbench-activity chat-conversation-activity">
-                      <section class="chat" id="chatSection" data-empty-chat-home={String(props.homeActive)}>
-                        <div
-                          class="task-switch-progress"
-                          id="taskSwitchProgress"
-                          aria-label={t("workspace.loading_task")}
-                          aria-busy="false"
-                          data-active="false"
-                        />
-                        <header class="chat-header oc-surface-header">
-                          <div class="chat-header-main oc-surface-header__main">
-                            <span class="chat-title-icon" id="solidChatTitleIcon" aria-hidden="true">
-                              <Icon
-                                name={
-                                  props.conversationExperience()
-                                    ? conversationExperienceIcon(props.conversationExperience()!)
-                                    : "file-document"
-                                }
-                                size="medium"
-                              />
-                            </span>
-                            <ChatViewTitle
-                              title={props.conversationTitle}
-                              item={props.conversationItem}
-                              onCopyDebug={props.onCopyConversationDebug}
-                              onPinnedChange={props.onConversationPinnedChange}
-                              onRename={props.onRenameConversationItem}
-                              onArchive={props.onArchiveConversationItem}
-                            />
-                            <div class="chat-header-status" id="solidTaskStatusMount">
-                              <TaskStatusHeader />
-                            </div>
-                          </div>
-                          <div class="chat-header-meta oc-surface-header__actions">
-                            <div class="chat-header-actions" data-no-drag="true">
-                              <Show when={boardStore.selectedSource}>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  tone="neutral"
-                                  onClick={() => props.onOpenRightDockPanel("side-chat")}
-                                  aria-label={t("side_chat.title")}
-                                  title={t("side_chat.title")}
-                                  data-ui="open-side-chat"
-                                >
-                                  <Icon name="side-chat" size="medium" />
-                                </Button>
-                              </Show>
-                              <Show when={workspaceEditorLaunchersAvailable()}>
-                                <div id="solidChatHeaderEditorLaunchers">
-                                  <WorkspaceEditorLaunchers />
-                                </div>
-                              </Show>
-                              <div id="solidChatHeaderRuntimeActions">
-                                <ProjectRuntimeToolbarActions
-                                  anchorVisible={
-                                    props.primarySurface() === "conversation" &&
-                                    !props.homeActive &&
-                                    !dialogStore.config.open
-                                  }
-                                  onOpenRightDockPanel={props.onOpenRightDockPanel}
-                                  onOpenSubagentConversation={props.onOpenSubagentConversation}
-                                  onOpenRightDockAddMenu={props.onOpenRightDockAddMenu}
-                                  trailingAction={
-                                    <div id="solidChatHeaderRightDockToggle">
-                                      <ChatHeaderRightDockToggle />
-                                    </div>
-                                  }
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </header>
-                        <div class="chat-content-frame" id="chatContentFrame">
-                          <div class="chat-message-pane" id="chatMessagePane">
-                            <div class="conversation-body" id="conversationBody">
-                              <div class="conversation-scroll-shell">
-                                <div
-                                  class="chat-scroll session-content"
-                                  id="chatScroll"
-                                  aria-label={t("chat.title")}
-                                  tabIndex={0}
-                                  ref={chatScroll}
-                                >
-                                  {props.conversation(chatScroll)}
-                                </div>
-                                <div class="chat-home-composition" id="chatHomeComposition">
-                                  <div id="solidChatHomePromptMount" />
-                                  <div id="solidChatComposer">{props.composer}</div>
-                                  <div id="solidChatHomeAfterMount" />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </section>
-                    </div>
-                  </div>
-                  <div
-                    class="center-workbench-view"
-                    id="centerWorkbenchMissionBoard"
-                    data-workbench-view="mission-board"
-                    data-open={String(props.primarySurface() === "mission-board")}
-                    data-active={String(props.primarySurface() === "mission-board")}
-                  >
-                    <div class="center-workbench-activity mission-board-activity">{props.missionBoard}</div>
-                  </div>
-                </div>
-              </section>
-            </div>
+          <div class="workspace-page-stack" id="workspacePageStack">
             <div
-              class="right-dock-resizer"
-              id="rightDockResizer"
-              data-open="false"
-              role="separator"
-              aria-orientation="vertical"
-              aria-label={t("workspace.resize_right_panel")}
-              aria-controls="rightDock"
-              aria-hidden="true"
-              tabIndex={-1}
-            />
-            <aside
-              class="right-dock"
-              id="rightDock"
-              data-open="false"
-              aria-label={t("right_dock.tools_panel")}
-              aria-hidden="true"
+              class="workspace-primary-page"
+              data-active={String(!dialogStore.config.open)}
+              inert={dialogStore.config.open}
             >
-              {props.rightDock}
-            </aside>
+              <div
+                class="left-activity-shell oc-material-glass"
+                id="leftActivityShell"
+                onMouseEnter={cancelMailboxHoverClose}
+                onMouseLeave={scheduleMailboxHoverPreviewClose}
+              >
+                <div class="workspace-contextbar" id="workspaceContextbar" data-tauri-drag-region>
+                  <div class="titlebar-brand">
+                    <div id="solidTitlebarBrand">
+                      <TitlebarBrand />
+                    </div>
+                  </div>
+                  <div class="titlebar-context-spacer" data-tauri-drag-region />
+                  <div class="workspace-context-actions" data-no-drag="true">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      tone="neutral"
+                      class="workspace-command-action workspace-command-search"
+                      data-chrome="icon-action"
+                      data-ui="work-ledger-search-toggle"
+                      hidden={mailboxVisible()}
+                      title={t("cmdk.placeholder")}
+                      aria-label={t("cmdk.placeholder")}
+                      onClick={() => window.dispatchEvent(new CustomEvent("oc:open-command-palette"))}
+                    >
+                      <Icon name="search" size="medium" />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      tone="neutral"
+                      class="workspace-command-action workspace-command-mailbox"
+                      data-chrome="icon-action"
+                      data-ui="mailbox-toggle"
+                      data-active={String(mailboxVisible())}
+                      title={t("mailbox.title")}
+                      aria-label={t("mailbox.title")}
+                      aria-controls="leftPanelMailbox"
+                      aria-expanded={mailboxVisible()}
+                      onMouseEnter={scheduleMailboxHoverPreview}
+                      onClick={toggleMailbox}
+                    >
+                      <Icon name="mailbox" size="medium" />
+                    </Button>
+                  </div>
+                </div>
+                <aside class="sidebar" id="sidebar" data-collapsed="false">
+                  <div class="side-panel-content sidebar-content">
+                    <div class="sidebar-header oc-surface-header">
+                      <div class="sidebar-title oc-surface-header__title" id="leftPanelTitle">
+                        {mailboxVisible() ? t("mailbox.title") : t("work_ledger.title")}
+                      </div>
+                      <div
+                        class="sidebar-header-actions oc-surface-header__actions"
+                        id="solidLeftPanelActions"
+                        data-active={String(!mailboxVisible())}
+                        hidden={mailboxVisible()}
+                      >
+                        {props.leftPanelActions}
+                      </div>
+                    </div>
+                    <div
+                      class="side-activity-body sidebar-activity-body"
+                      id="leftPanelWork"
+                      data-side-activity="work"
+                      data-active={String(!mailboxVisible())}
+                    >
+                      <div class="sidebar-body">
+                        <div class="sidebar-list session-list-panel work-ledger-panel" id="workLedgerPanel">
+                          <Show when={navigationMount()}>{(mount) => props.workLedger(mount())}</Show>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="side-activity-body sidebar-activity-body"
+                      id="leftPanelMailbox"
+                      data-side-activity="mailbox"
+                      data-active={String(mailboxVisible())}
+                    >
+                      <div id="solidMailboxMount" class="mailbox-panel-mount">
+                        {props.mailbox}
+                      </div>
+                    </div>
+                    <footer class="sidebar-footer" aria-label={t("titlebar.connection_diagnostics")}>
+                      <span class="sidebar-connection" id="solidConnBadge">
+                        <ConnectionBadge />
+                      </span>
+                      <SidebarUpdateButton />
+                    </footer>
+                  </div>
+                </aside>
+              </div>
+              <div
+                class="pane-resizer pane-resizer-left"
+                id="leftPaneResizer"
+                role="separator"
+                aria-orientation="vertical"
+                aria-label={t("workspace.resize_left_panel")}
+                aria-controls="sidebar workspaceMain"
+                aria-valuemin="0"
+                aria-valuemax="0"
+                aria-valuenow="0"
+                tabIndex={0}
+              />
+              <div class="workspace-main" id="workspaceMain">
+                <div class="conversation-workspace" id="conversationWorkspace">
+                  <section class="center-workbench" id="centerWorkbench" data-open="false">
+                    <div class="center-workbench-body">
+                      <div
+                        class="center-workbench-view"
+                        id="centerWorkbenchConversation"
+                        data-workbench-view="conversation"
+                        data-open={String(props.primarySurface() === "conversation")}
+                        data-active={String(props.primarySurface() === "conversation")}
+                      >
+                        <div id="solidConversationAgentRailMount" class="conversation-agent-rail-host">
+                          <ConversationAgentRail onOpenSubagentConversation={props.onOpenSubagentConversation} />
+                        </div>
+                        <div class="center-workbench-activity chat-conversation-activity">
+                          <section class="chat" id="chatSection" data-empty-chat-home={String(props.homeActive)}>
+                            <div
+                              class="task-switch-progress"
+                              id="taskSwitchProgress"
+                              aria-label={t("workspace.loading_task")}
+                              aria-busy="false"
+                              data-active="false"
+                            />
+                            <header class="chat-header oc-surface-header">
+                              <div class="chat-header-main oc-surface-header__main">
+                                <span class="chat-title-icon" id="solidChatTitleIcon" aria-hidden="true">
+                                  <Icon
+                                    name={
+                                      props.conversationExperience()
+                                        ? conversationExperienceIcon(props.conversationExperience()!)
+                                        : "file-document"
+                                    }
+                                    size="medium"
+                                  />
+                                </span>
+                                <ChatViewTitle
+                                  title={props.conversationTitle}
+                                  item={props.conversationItem}
+                                  onCopyDebug={props.onCopyConversationDebug}
+                                  onPinnedChange={props.onConversationPinnedChange}
+                                  onRename={props.onRenameConversationItem}
+                                  onArchive={props.onArchiveConversationItem}
+                                />
+                                <div class="chat-header-status" id="solidTaskStatusMount">
+                                  <TaskStatusHeader />
+                                </div>
+                              </div>
+                              <div class="chat-header-meta oc-surface-header__actions">
+                                <div class="chat-header-actions" data-no-drag="true">
+                                  <Show when={boardStore.selectedSource}>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      tone="neutral"
+                                      onClick={() => props.onOpenRightDockPanel("side-chat")}
+                                      aria-label={t("side_chat.title")}
+                                      title={t("side_chat.title")}
+                                      data-ui="open-side-chat"
+                                    >
+                                      <Icon name="side-chat" size="medium" />
+                                    </Button>
+                                  </Show>
+                                  <Show when={workspaceEditorLaunchersAvailable()}>
+                                    <div id="solidChatHeaderEditorLaunchers">
+                                      <WorkspaceEditorLaunchers />
+                                    </div>
+                                  </Show>
+                                  <div id="solidChatHeaderRuntimeActions">
+                                    <ProjectRuntimeToolbarActions
+                                      anchorVisible={
+                                        props.primarySurface() === "conversation" &&
+                                        !props.homeActive &&
+                                        !dialogStore.config.open
+                                      }
+                                      onOpenRightDockPanel={props.onOpenRightDockPanel}
+                                      onOpenSubagentConversation={props.onOpenSubagentConversation}
+                                      onOpenRightDockAddMenu={props.onOpenRightDockAddMenu}
+                                      trailingAction={
+                                        <div id="solidChatHeaderRightDockToggle">
+                                          <ChatHeaderRightDockToggle />
+                                        </div>
+                                      }
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </header>
+                            <div class="chat-content-frame" id="chatContentFrame">
+                              <div class="chat-message-pane" id="chatMessagePane">
+                                <div class="conversation-body" id="conversationBody">
+                                  <div class="conversation-scroll-shell">
+                                    <div
+                                      class="chat-scroll session-content"
+                                      id="chatScroll"
+                                      aria-label={t("chat.title")}
+                                      tabIndex={0}
+                                      ref={chatScroll}
+                                    >
+                                      {props.conversation(chatScroll)}
+                                    </div>
+                                    <div class="chat-home-composition" id="chatHomeComposition">
+                                      <div id="solidChatHomePromptMount" />
+                                      <div id="solidChatComposer">{props.composer}</div>
+                                      <div id="solidChatHomeAfterMount" />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                        </div>
+                      </div>
+                      <div
+                        class="center-workbench-view"
+                        id="centerWorkbenchMissionBoard"
+                        data-workbench-view="mission-board"
+                        data-open={String(props.primarySurface() === "mission-board")}
+                        data-active={String(props.primarySurface() === "mission-board")}
+                      >
+                        <div class="center-workbench-activity mission-board-activity">{props.missionBoard}</div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+                <div
+                  class="right-dock-resizer"
+                  id="rightDockResizer"
+                  data-open="false"
+                  role="separator"
+                  aria-orientation="vertical"
+                  aria-label={t("workspace.resize_right_panel")}
+                  aria-controls="rightDock"
+                  aria-hidden="true"
+                  tabIndex={-1}
+                />
+                <aside
+                  class="right-dock"
+                  id="rightDock"
+                  data-open="false"
+                  aria-label={t("right_dock.tools_panel")}
+                  aria-hidden="true"
+                >
+                  {props.rightDock}
+                </aside>
+              </div>
+            </div>
+            <ConfigDialogHost onOpenAutomationSession={props.onOpenAutomationSession} />
           </div>
         </div>
       </main>
@@ -569,9 +578,6 @@ export function App(props: AppProps) {
       </div>
       <div id="appDialogHost">
         <AppDialogHost />
-      </div>
-      <div id="configDialogHost">
-        <ConfigDialogHost onOpenAutomationSession={props.onOpenAutomationSession} />
       </div>
       <div id="sessionDialogHost">
         <SessionDialogHost />

@@ -162,7 +162,7 @@ import {
   renameProjectRecord,
 } from "./services/workspace"
 import { openGoalDialog } from "./services/dialog"
-import { openConfigDialog } from "./services/config-dialog-control"
+import { closeConfigDialog, openConfigDialog } from "./services/config-dialog-control"
 import { installClipboardApiKeyPrompt } from "./services/clipboard-api-key-prompt"
 import { cardTreeStore } from "./store/card-tree"
 import { composerDraftKey, composerDraftText, setComposerDraft } from "./services/composer-draft"
@@ -2121,11 +2121,21 @@ function OverlayRoot() {
         <WorkLedger
           navigationMount={navigationMount}
           primarySurface={primaryWorkspaceSurface()}
-          onOpenConversations={() => setPrimaryWorkspaceSurface("conversation")}
+          onOpenConversations={() =>
+            runMainAsync("work-ledger.open-conversations", async () => {
+              await closeConfigDialog()
+              setPrimaryWorkspaceSurface("conversation")
+            })
+          }
           selectedTaskID={activeTaskID()}
           selectedSessionID={activeSessionID()}
           refreshToken={missionSharedRefreshToken()}
-          onOpenMissionBoard={openMissionBoard}
+          onOpenMissionBoard={() =>
+            runMainAsync("work-ledger.open-mission-board", async () => {
+              await closeConfigDialog()
+              openMissionBoard()
+            })
+          }
           onSelectMission={(row) => runMainAsync("work-ledger.select-mission", () => openWorkLedgerMission(row))}
           onSelectTask={(row) => runMainAsync("work-ledger.select-task", () => selectWorkLedgerTask(row))}
           onSelectChat={(row) => runMainAsync("work-ledger.select-chat", () => openWorkLedgerChat(row))}

@@ -55,6 +55,7 @@ export function openConfigDialog(
   section?: string,
 ): Promise<void> {
   return occludeNativeSurfaces("config-dialog").then(() => {
+    setDialogStore("config", "search", "")
     if (section) focusConfigSection(section)
     setDialogStore("config", "open", true)
   })
@@ -62,6 +63,7 @@ export function openConfigDialog(
 
 export async function closeConfigDialog(): Promise<void> {
   cancelConfigSectionFocusFrame()
+  setDialogStore("config", "search", "")
   setDialogStore("config", "open", false)
   await revealNativeSurfaces("config-dialog")
 }

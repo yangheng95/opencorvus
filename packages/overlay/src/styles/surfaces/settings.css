@@ -1259,43 +1259,22 @@ button.s-row:focus-visible {
   overflow: auto;
 }
 
-/* ── Settings dialog shell + sidebar nav ─────────────────── */
+/* ── Settings page + sidebar nav ─────────────────────────── */
 
-.dialog-overlay.config-dialog-overlay {
-  background: transparent;
-}
-
-#configDialog.dialog-fullscreen {
-  top: var(--ui-titlebar-height);
-  height: calc(var(--ui-overlay-shell-height) - var(--ui-titlebar-height));
-  z-index: var(--ui-z-overlay);
-}
-
-#configDialog .dialog-form {
+.config-page {
   --settings-content-width: calc(880px * var(--ui-scale));
   --settings-surface-base: var(--surface);
   --settings-surface-hover: color-mix(in srgb, var(--surface-hover) 82%, var(--surface));
   --settings-surface-muted: color-mix(in srgb, var(--surface-hover) 58%, var(--surface));
   --settings-surface-emphasis: color-mix(in srgb, var(--surface-strong) 84%, var(--surface));
-  min-height: min(calc(620px * var(--ui-scale)), calc(var(--ui-overlay-shell-height) - calc(80px * var(--ui-scale))));
-  background: var(--surface);
-}
-
-#configDialog.dialog-fullscreen .dialog-form {
+  grid-area: 1 / 1;
+  display: flex;
+  min-width: 0;
   min-height: 0;
+  overflow: hidden;
   background: var(--surface);
   contain: layout paint style;
   isolation: isolate;
-}
-
-#configDialog.dialog-fullscreen .dialog-form > .dialog-header {
-  display: none;
-}
-
-#configDialog .dialog-title {
-  font-size: var(--ui-font-body);
-  font-weight: var(--ui-font-weight-medium);
-  letter-spacing: var(--ui-letter-spacing-normal);
 }
 
 /* `.config-dialog-layout` only adds flex layout; the shared CSS-
@@ -1309,18 +1288,6 @@ button.s-row:focus-visible {
   min-height: 0;
   overflow: hidden;
   background: var(--rail-surface);
-  /* Cap with the dialog's own max-height (minus header / actions) so
-   * tabs with long lists still scroll inside instead of overflowing
-   * the modal. The 120px reservation covers the header + close button
-   * row plus the dialog's own padding. */
-  max-height: calc(
-    min(calc(var(--ui-overlay-shell-height) - calc(80px * var(--ui-scale))), calc(620px * var(--ui-scale))) -
-      calc(120px * var(--ui-scale))
-  );
-}
-
-#configDialog.dialog-fullscreen .config-dialog-layout {
-  max-height: none;
 }
 
 /* Sidebar nav rail: Codex-style settings navigation with a quiet grey

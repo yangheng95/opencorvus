@@ -31,6 +31,7 @@ import {
   type WorkLedgerTaskRow,
 } from "../services/work-ledger"
 import { openConfigDialog } from "../services/config-dialog-control"
+import { dialogStore } from "../store/dialog"
 import { showAppDialog } from "../services/app-dialog"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { appStore } from "../store/app"
@@ -1363,7 +1364,7 @@ export function WorkLedger(props: WorkLedgerProps) {
             icon="home"
             label={t("work_ledger.home")}
             description={t("work_ledger.navigation")}
-            active={props.primarySurface === "conversation"}
+            active={!dialogStore.config.open && props.primarySurface === "conversation"}
             onClick={props.onOpenConversations}
           />
           <WorkLedgerNavigationAction
@@ -1371,7 +1372,7 @@ export function WorkLedger(props: WorkLedgerProps) {
             icon="tasks"
             label={t("mission_board.navigation")}
             description={t("mission_board.navigation_description")}
-            active={props.primarySurface === "mission-board"}
+            active={!dialogStore.config.open && props.primarySurface === "mission-board"}
             trailing={<Icon name="arrow-up-right" size="compact" class="mission-board-nav-arrow" />}
             tooltipDetail={
               busyMissionLanes().length > 0 ? (
@@ -1395,6 +1396,7 @@ export function WorkLedger(props: WorkLedgerProps) {
             icon="scheduled"
             label={t("automations.menu")}
             description={t("work_ledger.tooltip.automations")}
+            active={dialogStore.config.open && dialogStore.config.activeTab === "scheduled"}
             onClick={() => openConfigDialog("scheduled")}
           />
           <WorkLedgerNavigationAction
@@ -1402,6 +1404,9 @@ export function WorkLedger(props: WorkLedgerProps) {
             icon="expert-squad"
             label={t("expert_squad.title")}
             description={t("work_ledger.tooltip.expert_squads")}
+            active={
+              dialogStore.config.open && ["expert-squad-install", "expert-squad"].includes(dialogStore.config.activeTab)
+            }
             onClick={() => openConfigDialog("expert-squad-install")}
           />
           <DropdownMenu.Root placement="top-start" fitViewport>
@@ -1441,6 +1446,10 @@ export function WorkLedger(props: WorkLedgerProps) {
             icon="config-general"
             label={t("config.title")}
             description={t("config.title")}
+            active={
+              dialogStore.config.open &&
+              !["scheduled", "expert-squad-install", "expert-squad"].includes(dialogStore.config.activeTab)
+            }
             onClick={() => openConfigDialog("general")}
           />
         </div>

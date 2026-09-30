@@ -51,6 +51,18 @@ outlet; the pane geometry owner reserves that rail's measured width. Sidebar
 collapse leaves the rail available. Project groups initially expose five rows
 with a disclosure for the rest. Recents derives eight updated items from the
 same loaded ledger, preserving exact row actions and owning directories.
+App owns the single mounted navigation rail beside a bounded page stack. The
+project/conversation/dock row and settings region are sibling pages inside
+that stack; Scheduled, Expert Squads and all other settings pages render inline,
+without a body-level Dialog Portal. The underlying primary page stays mounted
+but hidden and inert while settings is open. Rail active state derives from the
+open config tab or primary surface; Chats/Mission Board navigation closes the
+config page through its existing native-surface reveal lifecycle before opening
+the selected primary surface. Settings owns search focus, scoped Escape/Back
+and focus restoration; nested action dialogs keep the shared modal primitive.
+The config store owns the one settings-search query. Explicit page-open and
+close actions clear that query so a rail selection opens its exact target even
+when the preceding page was filtered.
 
 Usage presents the current server's real aggregate with an OpenCorvus identity,
 five equal metrics, activity grid, and side-by-side token/provider breakdowns.

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Persistent navigation rail](2026-09-30-navigation-rail/README.md): Scheduled, settings, Expert Squads, page transitions and actual parent/child mount inspection.
+
 - [Atomic release-history backfill](2026-09-30-release-history/README.md): per-version source evidence, real page review and public publication receipts.
 
 - [0.1.22 public release acceptance](2026-09-30-v0.1.22-release/README.md): real public website visual review and exact release receipts.

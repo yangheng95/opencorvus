@@ -489,6 +489,27 @@ body[data-resizing="true"] .pane-resizer::after {
   position: relative;
 }
 
+.workspace-page-stack {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.workspace-primary-page {
+  grid-area: 1 / 1;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+}
+
+.workspace-primary-page[data-active="false"] {
+  visibility: hidden;
+}
+
 .sections,
 .task-scope-panel,
 .config-dialog-layout {

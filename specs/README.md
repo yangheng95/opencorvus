@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Persistent navigation rail across pages](records/2026-09/2026-09-30-persistent-navigation-rail.md)
+
+- [Persistent navigation rail visual and mount evidence](artifacts/2026-09-30-navigation-rail/README.md)
+
 - [Release history and mandatory publication notes](records/2026-09/2026-09-30-release-history-backfill.md)
 
 - [Release-history evidence](artifacts/2026-09-30-release-history/README.md)

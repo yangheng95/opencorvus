@@ -1,7 +1,7 @@
-import { For, Show, createEffect, createMemo, createSignal, lazy, onCleanup } from "solid-js"
+import { For, Show, createEffect, createMemo, lazy, on, onCleanup } from "solid-js"
 import type { JSX } from "solid-js"
 // Settings panels are the largest components in the app and none of them render
-// until the operator opens this dialog and selects their tab, so they load on
+// until the operator opens this page and selects their tab, so they load on
 // that click instead of riding in the startup bundle.
 const ExpertSquadPanel = lazy(() => import("./settings/ExpertSquadPanel"))
 const ExpertSquadMarketPanel = lazy(() => import("./settings/ExpertSquadMarketPanel"))
@@ -27,7 +27,6 @@ const DesktopUpdatePanel = lazy(() => import("./settings/DesktopUpdatePanel"))
 const ReleaseNotesPanel = lazy(() => import("./settings/ReleaseNotesPanel"))
 const UsagePanel = lazy(() => import("./settings/UsagePanel"))
 import { SettingsEmpty, SettingsPanel, SettingsRow, SettingsSurface } from "./settings/layout"
-import { Dialog } from "./ui/Dialog"
 import { Disclosure } from "./ui/Disclosure"
 import { Button } from "./ui/Button"
 import { LinkButton } from "./ui/LinkButton"
@@ -38,7 +37,7 @@ import { boardStore } from "../store/board"
 import { settingsStore } from "../store/settings"
 import { closeConfigDialog, setConfigSidebarWidth, switchConfigTab } from "../services/config-dialog-control"
 import { activeProjectDirectory } from "../services/project-directory"
-import { dialogStore, CONFIG_SECTIONS, type ConfigDialogTab } from "../store/dialog"
+import { dialogStore, setDialogStore, CONFIG_SECTIONS, type ConfigDialogTab } from "../store/dialog"
 import { getHostTransport } from "../services/host-transport-runtime"
 import { t } from "../utils/i18n"
 import {
@@ -67,7 +66,7 @@ interface ConfigTabDef {
   badgeID?: string
 }
 
-// Per-section icons (and badge anchors) are dialog chrome and stay local;
+// Per-section icons (and badge anchors) are settings-page chrome and stay local;
 // the section list, labels, and order come from CONFIG_SECTIONS
 // (store/dialog.ts — single source). CONFIG_TABS merges the two.
 const SECTION_ICONS: Record<ConfigDialogTab, IconName> = {
@@ -312,7 +311,8 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
     return rows
   })
   const activeConfigTab = createMemo(() => dialogStore.config.activeTab)
-  const [settingsSearch, setSettingsSearch] = createSignal("")
+  const settingsSearch = () => dialogStore.config.search
+  const setSettingsSearch = (value: string) => setDialogStore("config", "search", value)
   let settingsSearchInput: HTMLInputElement | undefined
   const normalizedSettingsSearch = createMemo(() => settingsSearch().trim().toLowerCase())
   const visibleConfigTabs = createMemo(() => {
@@ -338,10 +338,31 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
     const active = effectiveActiveTab()
     return active ? t(CONFIG_TAB_BY_ID.get(active)!.labelKey) : t("config.title")
   })
-  const closeSettings = () => {
-    setSettingsSearch("")
-    return closeConfigDialog()
-  }
+  const closeSettings = closeConfigDialog
+  let page: HTMLElement | undefined
+  let returnFocus: HTMLElement | undefined
+  createEffect(
+    on(
+      () => dialogStore.config.open,
+      (open, previous) => {
+        if (open) {
+          returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : undefined
+          queueMicrotask(() => {
+            if (dialogStore.config.open) settingsSearchInput?.focus()
+          })
+          return
+        }
+        if (
+          previous &&
+          returnFocus?.isConnected &&
+          (document.activeElement === document.body || page?.contains(document.activeElement))
+        ) {
+          returnFocus.focus()
+        }
+        returnFocus = undefined
+      },
+    ),
+  )
 
   const renderActivePanel = (tab: ConfigDialogTab) => {
     switch (tab) {
@@ -518,21 +539,19 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
   }
 
   return (
-    <Dialog
-      id="configDialog"
-      open={dialogStore.config.open}
-      fullscreen={true}
-      modal={false}
-      backdropClose={false}
-      overlayClass="config-dialog-overlay"
-      title={activeConfigTitle()}
-      onOpenAutoFocus={(event) => {
-        event.preventDefault()
-        settingsSearchInput?.focus()
-      }}
-      onClose={closeSettings}
-    >
-      <Show when={dialogStore.config.open}>
+    <Show when={dialogStore.config.open}>
+      <section
+        ref={page}
+        id="configDialog"
+        class="config-page"
+        aria-label={activeConfigTitle()}
+        onKeyDown={(event) => {
+          if (event.key !== "Escape" || event.defaultPrevented) return
+          event.preventDefault()
+          event.stopPropagation()
+          void closeSettings()
+        }}
+      >
         <Tabs
           value={effectiveActiveTab() ?? activeConfigTab()}
           onValueChange={switchConfigTab}
@@ -645,7 +664,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
             </Show>
           </div>
         </Tabs>
-      </Show>
-    </Dialog>
+      </section>
+    </Show>
   )
 }

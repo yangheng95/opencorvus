@@ -100,6 +100,7 @@ export interface GoalDialogState {
 
 export interface ConfigDialogState {
   open: boolean
+  search: string
   activeTab: ConfigDialogTab
   sidebarWidth: number | null
 }
@@ -149,6 +150,7 @@ const DEFAULT_DIALOG_STATE: DialogState = {
   },
   config: {
     open: false,
+    search: "",
     activeTab: "general",
     sidebarWidth: null,
   },

@@ -1,0 +1,53 @@
+{
+  "activeRail": [
+    "Scheduled"
+  ],
+  "pageBounds": {
+    "bottom": 925.703125,
+    "height": 889.703125,
+    "left": 56,
+    "right": 1440,
+    "top": 36,
+    "width": 1384,
+    "x": 56,
+    "y": 36
+  },
+  "pageParents": [
+    "configDialog",
+    "workspacePageStack",
+    "panelBody",
+    "panel",
+    "overlayAppHost",
+    "BODY",
+    "HTML"
+  ],
+  "primaryInert": true,
+  "primaryParents": [
+    "workspace-primary-page",
+    "workspacePageStack",
+    "panelBody",
+    "panel",
+    "overlayAppHost",
+    "BODY",
+    "HTML"
+  ],
+  "primaryVisibility": "hidden",
+  "railBounds": {
+    "bottom": 925.703125,
+    "height": 889.703125,
+    "left": 0,
+    "right": 56,
+    "top": 36,
+    "width": 56,
+    "x": 0,
+    "y": 36
+  },
+  "railParents": [
+    "workspaceNavigation",
+    "panelBody",
+    "panel",
+    "overlayAppHost",
+    "BODY",
+    "HTML"
+  ]
+}
