@@ -342,6 +342,10 @@
 
 - 本版数据库结构指纹发生变化。旧 beta 任务数据库会返回 `SCHEMA_RESET_REQUIRED`，需要显式重置后使用；这是预发布数据边界，不是保留任务数据的原地迁移。Provider 配置存放在独立配置面，应在重置时保留。
 
+### 记录依据
+
+- [版本源码](https://github.com/yangheng95/opencorvus/tree/57077bf019e5a427e6a37c6d850f926fd47a2665) · [本版提交记录](https://github.com/yangheng95/opencorvus/compare/9faeb1c7ba879c94e38b25a0b2614398cc5a795b...57077bf019e5a427e6a37c6d850f926fd47a2665)。
+
 ## 0.1.1beta - 2026-09-17
 
 ### Fixed

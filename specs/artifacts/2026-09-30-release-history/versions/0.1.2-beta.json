@@ -1,0 +1,50 @@
+{
+  "version": "0.1.2-beta",
+  "source": "57077bf019e5a427e6a37c6d850f926fd47a2665",
+  "tag": "v0.1.2-beta",
+  "previousSource": "9faeb1c7ba879c94e38b25a0b2614398cc5a795b",
+  "sourceDate": "2026-09-18T17:18:09+08:00",
+  "commits": [
+    {
+      "sha": "57077bf019e5a427e6a37c6d850f926fd47a2665",
+      "date": "2026-09-18T17:18:09+08:00",
+      "subject": "release: prepare 0.1.2-beta version family"
+    },
+    {
+      "sha": "b09dc5ed6928626bc2a8acaadbf9fcb27e8a88f1",
+      "date": "2026-09-18T13:07:15+08:00",
+      "subject": "fix interaction ownership after project deletion"
+    },
+    {
+      "sha": "6bca62955fc7f238dea27f0c9a7939225631d267",
+      "date": "2026-09-18T12:05:30+08:00",
+      "subject": "fix: clear deleted project UI context"
+    },
+    {
+      "sha": "d7d2698a761206f95dd196f2186ba8110605dbf2",
+      "date": "2026-09-18T10:14:19+08:00",
+      "subject": "fix: delete projects with worker descriptors"
+    },
+    {
+      "sha": "c5805bb335a861749532c583f11217830e87361d",
+      "date": "2026-09-18T09:38:21+08:00",
+      "subject": "fix: detect terminated Windows process owners"
+    },
+    {
+      "sha": "02f0e23a033d0d970ce8af61986e4c080c601427",
+      "date": "2026-09-18T02:24:31+08:00",
+      "subject": "docs: record attachment cleanup verification"
+    },
+    {
+      "sha": "b9cf0a838182f9771000a5f984dfc3434643a5bf",
+      "date": "2026-09-18T02:15:03+08:00",
+      "subject": "fix: isolate attachments and bind subagent transcripts"
+    },
+    {
+      "sha": "1d9fe773354f7ce2aa429d529c8fb27e1e44ca47",
+      "date": "2026-09-17T22:33:24+08:00",
+      "subject": "docs: record v0.1.1-beta public release verification [skip ci]"
+    }
+  ],
+  "stats": "CHANGELOG.md                                       |  14 ++\n bun.lock                                           |  16 +-\n packages/channel-config/package.json               |   2 +-\n packages/channel-runtime/package.json              |   2 +-\n .../native/process-supervisor/Cargo.lock           |   2 +-\n .../native/process-supervisor/Cargo.toml           |   2 +-\n packages/opencorvus/package.json                   |   2 +-\n packages/opencorvus/src/engine/engine.sql.ts       |   7 +-\n .../opencorvus/src/engine/interaction-request.ts   |  28 +++\n packages/opencorvus/src/engine/store.ts            |  23 +-\n .../src/engine/task-root-ingress-delivery.ts       |  25 +-\n packages/opencorvus/src/project/delete.ts          |  10 +-\n .../opencorvus/src/project/identity-convergence.ts |  15 --\n packages/opencorvus/src/project/instance.ts        |  14 +-\n .../opencorvus/src/runtime/process-occurrence.ts   |  13 +-\n .../opencorvus/src/storage/attachment-store.ts     | 164 +------------\n .../test/engine-interaction-recovery.test.ts       |  46 ++++\n .../test/project-directory-and-worktree-gc.test.ts | 268 ++++++++++++++++++++-\n .../test/project-identity-convergence.test.ts      |  30 ---\n .../runtime/process-occurrence-evidence.test.ts    |  46 ++++\n .../test/task-control-reconciliation.test.ts       |  62 +++++\n .../test/task-file-reference-owner.test.ts         |  71 ++++++\n packages/overlay/package.json                      |   2 +-\n packages/overlay/src-tauri/Cargo.lock              |   2 +-\n packages/overlay/src-tauri/Cargo.toml              |   2 +-\n packages/overlay/src-tauri/tauri.conf.json         |   4 +-\n .../src/components/SubagentConversationPanel.tsx   |   4 +-\n packages/overlay/src/main.tsx                      |   4 +-\n packages/overlay/src/services/api.ts               |  24 +-\n packages/overlay/src/services/init.ts              |  61 ++++-\n packages/overlay/src/services/workspace.ts         |  46 +++-\n packages/plugin/package.json                       |   2 +-\n packages/sdk/js/package.json                       |   2 +-\n packages/transport-protocol/package.json           |   2 +-\n packages/util/package.json                         |   2 +-\n specs/README.md                                    |  14 ++\n specs/current/architecture/02-data.md              |  28 +--\n .../2026-09/2026-09-17-v0.1.1-beta-release.md      |  27 +++\n ...026-09-18-attachment-store-authority-removal.md |  27 +++\n .../2026-09-18-deleted-project-ui-convergence.md   |  29 +++\n ...-18-interaction-owner-after-project-deletion.md |  35 +++\n .../2026-09-18-project-delete-worker-descriptor.md |  34 +++\n .../2026-09-18-subagent-dock-session-switch.md     |  26 ++\n .../2026-09/2026-09-18-v0.1.2-beta-release.md      |  29 +++\n ...26-09-18-windows-terminated-process-liveness.md |  57 +++++\n specs/records/2026-09/README.md                    |  14 ++\n 46 files changed, 1027 insertions(+), 312 deletions(-)"
+}
