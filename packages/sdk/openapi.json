@@ -71439,7 +71439,7 @@
                         "type": "string"
                       },
                       "evidence_reads": {
-                        "description": "Optional exact input, output, or failure chunks from the selected sources' causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. The sum of every limit in one call must be at most 30000 characters. Follow next_offset until null.",
+                        "description": "Optional exact input, output, or failure chunks from the selected sources' causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. Each omitted limit requests 8000 characters, even for a short field. The sum of every effective limit in one call must be at most 30000 characters. At most 3 reads fit with all limits omitted. For 4–8 reads, explicitly allocate limits within that total; eight reads can each request 3750 characters. Follow next_offset until null.",
                         "items": {
                           "additionalProperties": false,
                           "properties": {
@@ -71453,6 +71453,7 @@
                             },
                             "limit": {
                               "default": 8000,
+                              "description": "Requested character budget for this chunk; omission consumes 8000 of the 30000-character aggregate call budget.",
                               "maximum": 30000,
                               "minimum": 1,
                               "type": "integer"
@@ -88206,6 +88207,26 @@
                         },
                         "name": {
                           "const": "MissionExecutionWakeInputConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "MissionDispatchDraftConflictError",
                           "type": "string"
                         }
                       },
