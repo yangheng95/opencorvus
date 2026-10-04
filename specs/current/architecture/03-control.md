@@ -161,6 +161,24 @@ ownership 保证 reply 命中创建该 pending occurrence 的同一物理 owner�
 > **只**是 local action 类型，没有对应的 mutation capability，请勿当作可向后端发送的 action。
 > 历史版本提到的 `export_session_html` 现仍未注册。
 
+## Mission operator draft acceptance
+
+`mission.dispatch` binds one pending operator draft to the deterministic
+Session/source/request Message. A replay reads that Message's accepted text
+after validating its opened occurrence and Project lineage; mutable draft
+metadata is not replay authority. New acceptance consumes the exact current
+draft in the same immediate transaction as the User Message, Parts, controls,
+config overlay and opened authority. A changed or missing draft returns
+`MissionDispatchDraftConflictError` (409) and rolls back that acceptance.
+Existing-Message replay retains later drafts, and activation never clears a
+draft afterward. Other Mission wake entry points do not consume drafts.
+
+The existing Session metadata writer remains the single owner. Draft setters
+read the current row inside that transaction before replacing the Mission
+subobject, preserving concurrent metadata rather than rebuilding a stale
+Session snapshot. Request input/model and closed-occurrence conflicts retain
+their exact existing contracts across retry and restart.
+
 ## channel 子系统
 
 **代码**：`src/channel/`

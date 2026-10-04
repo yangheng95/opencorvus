@@ -928,14 +928,16 @@ export function WorkLedger(props: WorkLedgerProps) {
       setGroups(reconcile(nextGroups, { key: "renderKey", merge: true }))
       setOneListGroups(
         reconcile(
-          [
-            {
-              renderKey: "one-list",
-              directory: "",
-              latest: oneListItems.reduce((latest, row) => Math.max(latest, row.updated), 0),
-              items: oneListItems,
-            },
-          ],
+          oneListItems.length > 0
+            ? [
+                {
+                  renderKey: "one-list",
+                  directory: "",
+                  latest: oneListItems.reduce((latest, row) => Math.max(latest, row.updated), 0),
+                  items: oneListItems,
+                },
+              ]
+            : [],
           { key: "renderKey", merge: true },
         ),
       )

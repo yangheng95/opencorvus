@@ -1,0 +1,1829 @@
+{
+  "preflight": {
+    "sessionID": "ses_hu8G8PHoCK6F5bPwPdeZ",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "operatorPrompt": "Prove actual causal Tool evidence transfer for READER-b9c3aad68b. This is a small read-only execution and independent historical-evidence verification task.\nAn execution worker must perform four separate shell Tool invocations, each printing exactly one of these distinct markers: READER-b9c3aad68b-A, READER-b9c3aad68b-B, READER-b9c3aad68b-C, READER-b9c3aad68b-D. After those four actual executions, the worker finishes and reports its real evidence. No repository change or extra deliverable file is requested.\nA different real participant (the coordinator may verify) must inspect that worker's settled dispatch_result through the production read_agent_message Tool. Discover exact Message/Part identities from its actual causal inventory. In one evidence_reads call, obtain eight chunks: the input and output fields of each of the four shell occurrences. Choose your own offsets and limits using the published Tool schema.\nVerify and report every original command and exact output marker from those historical fields. Rerunning commands, reading files or trusting the worker narrative alone does not satisfy this evidence-transfer request. Do not fabricate Message IDs, Tool outputs or source locators.\nComplete the Task only after actual eight-field reading succeeds. The final visible report must include all four markers and the exact producing participant Message references; retain those real producer and verification references in the Completion Decision. The independent reader's own report should state its exact source and read Tool Part identity.",
+  "taskID": "tsk_g00VX6PxYq00ajeVFhc4",
+  "latest": {
+    "lifecycle": "completed",
+    "tools": [
+      {
+        "id": "prt_g0VX6Q1UL0035Xz5YfuB",
+        "tool": "dispatch_agent",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Q5Un00lAUuelYJE",
+        "tool": "bash",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Q7IV00wiVgs23mo",
+        "tool": "bash",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Q9Ld00lKBUEWKsy",
+        "tool": "bash",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6QDlP00u05zqMiMJ",
+        "tool": "bash",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6QMbi00BIQy737tK",
+        "tool": "read_agent_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6QOjF00vbWKvC8IZ",
+        "tool": "read_agent_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6QV8B00f6KRi1gM2",
+        "tool": "dispatch_agent",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6QaP600Bh46vrkGL",
+        "tool": "dispatch_agent",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6QfNm00LY7E7wV7l",
+        "tool": "read_agent_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Qh3L000tBMeQa5G",
+        "tool": "read_agent_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Qlyz00NfI6ML8NO",
+        "tool": "read_agent_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6R05G00Q4szLmpRI",
+        "tool": "read_agent_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6R2wa00whMelX5ho",
+        "tool": "read_agent_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6RCJi00z4HjRef4o",
+        "tool": "manage_task",
+        "status": "completed"
+      }
+    ]
+  },
+  "readerPartID": "prt_g0VX6QOjF00vbWKvC8IZ",
+  "actualInput": {
+    "sources": [
+      {
+        "kind": "dispatch_result",
+        "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+      }
+    ],
+    "evidence_reads": [
+      {
+        "message_id": "msg_g0VX6Q3s400ptONOalo3",
+        "part_id": "prt_g0VX6Q5Un00lAUuelYJE",
+        "field": "input",
+        "offset": 0,
+        "limit": 1000
+      },
+      {
+        "message_id": "msg_g0VX6Q3s400ptONOalo3",
+        "part_id": "prt_g0VX6Q5Un00lAUuelYJE",
+        "field": "output",
+        "offset": 0,
+        "limit": 1000
+      },
+      {
+        "message_id": "msg_g0VX6Q64H00FUPVfvv18",
+        "part_id": "prt_g0VX6Q7IV00wiVgs23mo",
+        "field": "input",
+        "offset": 0,
+        "limit": 1000
+      },
+      {
+        "message_id": "msg_g0VX6Q64H00FUPVfvv18",
+        "part_id": "prt_g0VX6Q7IV00wiVgs23mo",
+        "field": "output",
+        "offset": 0,
+        "limit": 1000
+      },
+      {
+        "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr",
+        "part_id": "prt_g0VX6Q9Ld00lKBUEWKsy",
+        "field": "input",
+        "offset": 0,
+        "limit": 1000
+      },
+      {
+        "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr",
+        "part_id": "prt_g0VX6Q9Ld00lKBUEWKsy",
+        "field": "output",
+        "offset": 0,
+        "limit": 1000
+      },
+      {
+        "message_id": "msg_g0VX6Q9st00QhZy1rkOU",
+        "part_id": "prt_g0VX6QDlP00u05zqMiMJ",
+        "field": "input",
+        "offset": 0,
+        "limit": 1000
+      },
+      {
+        "message_id": "msg_g0VX6Q9st00QhZy1rkOU",
+        "part_id": "prt_g0VX6QDlP00u05zqMiMJ",
+        "field": "output",
+        "offset": 0,
+        "limit": 1000
+      }
+    ]
+  },
+  "actualOutput": {
+    "messages": [
+      {
+        "source": {
+          "kind": "dispatch_result",
+          "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+        },
+        "session_id": "ses_h127B5KOCT7PMrjafAot",
+        "message_id": "msg_g0VX6QEIp00dooEW4S0Q",
+        "role": "assistant",
+        "author": "base-developer",
+        "finish": "stop",
+        "time_completed": 1791134616304,
+        "text": [
+          "Executed exactly four separate shell calls, without reruns:\n\n| Original command | Observed output |\n|---|---|\n| `printf '%s\\n' 'READER-b9c3aad68b-A'` | `READER-b9c3aad68b-A` |\n| `printf '%s\\n' 'READER-b9c3aad68b-B'` | `READER-b9c3aad68b-B` |\n| `printf '%s\\n' 'READER-b9c3aad68b-C'` | `READER-b9c3aad68b-C` |\n| `printf '%s\\n' 'READER-b9c3aad68b-D'` | `READER-b9c3aad68b-D` |\n\nEach call printed only its required marker. No repository files were read or written, no deliverable files were created, and no business state was mutated.\n\n**Execution is finished; overall verification remains pending.** The coordinator must inspect this worker’s settled `dispatch_result`, discover the actual producing Message/Part identities, and retrieve all eight historical input/output fields in one `evidence_reads` call. Those identities are not exposed in the shell results above, so I have not invented references or claimed Task completion."
+        ],
+        "tool_facts_complete": true,
+        "tool_facts": []
+      }
+    ],
+    "origins": [],
+    "causal_tool_reference_index": {
+      "complete": true,
+      "tool_count": 4,
+      "refs": [
+        {
+          "source": {
+            "kind": "dispatch_result",
+            "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+          },
+          "message_id": "msg_g0VX6Q3s400ptONOalo3",
+          "part_id": "prt_g0VX6Q5Un00lAUuelYJE",
+          "tool_name": "bash",
+          "status": "completed",
+          "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-b9c3aad68b-A'\",\"timeout\":10000,\"description\":\"Print the first required evidence marker\",\"background\":false}",
+          "input_preview_truncated": false
+        },
+        {
+          "source": {
+            "kind": "dispatch_result",
+            "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+          },
+          "message_id": "msg_g0VX6Q64H00FUPVfvv18",
+          "part_id": "prt_g0VX6Q7IV00wiVgs23mo",
+          "tool_name": "bash",
+          "status": "completed",
+          "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-b9c3aad68b-B'\",\"timeout\":10000,\"description\":\"Print the second required evidence marker\",\"background\":false}",
+          "input_preview_truncated": false
+        },
+        {
+          "source": {
+            "kind": "dispatch_result",
+            "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+          },
+          "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr",
+          "part_id": "prt_g0VX6Q9Ld00lKBUEWKsy",
+          "tool_name": "bash",
+          "status": "completed",
+          "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-b9c3aad68b-C'\",\"timeout\":10000,\"description\":\"Print the third required evidence marker\",\"background\":false}",
+          "input_preview_truncated": false
+        },
+        {
+          "source": {
+            "kind": "dispatch_result",
+            "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+          },
+          "message_id": "msg_g0VX6Q9st00QhZy1rkOU",
+          "part_id": "prt_g0VX6QDlP00u05zqMiMJ",
+          "tool_name": "bash",
+          "status": "completed",
+          "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-b9c3aad68b-D'\",\"timeout\":10000,\"description\":\"Print the fourth required evidence marker\",\"background\":false}",
+          "input_preview_truncated": false
+        }
+      ]
+    },
+    "causal_tool_message_inventory": [
+      {
+        "source": {
+          "kind": "dispatch_result",
+          "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+        },
+        "session_id": "ses_h127B5KOCT7PMrjafAot",
+        "message_id": "msg_g0VX6Q3s400ptONOalo3",
+        "author": "base-developer",
+        "time_created": 1791134555988,
+        "tool_facts": [
+          {
+            "part_id": "prt_g0VX6Q5Un00lAUuelYJE",
+            "call_id": "call_0CK90UcapW6DxmKpXFzvDdn1",
+            "tool_name": "bash",
+            "status": "completed",
+            "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-b9c3aad68b-A'\",\"timeout\":10000,\"description\":\"Print the first required evidence marker\",\"background\":false}",
+            "input_chars": 142,
+            "input_preview_truncated": false,
+            "stored_output_chars": 20
+          }
+        ]
+      },
+      {
+        "source": {
+          "kind": "dispatch_result",
+          "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+        },
+        "session_id": "ses_h127B5KOCT7PMrjafAot",
+        "message_id": "msg_g0VX6Q64H00FUPVfvv18",
+        "author": "base-developer",
+        "time_created": 1791134564433,
+        "tool_facts": [
+          {
+            "part_id": "prt_g0VX6Q7IV00wiVgs23mo",
+            "call_id": "call_YiwGMriSFQhcWsSNYyc8bmDo",
+            "tool_name": "bash",
+            "status": "completed",
+            "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-b9c3aad68b-B'\",\"timeout\":10000,\"description\":\"Print the second required evidence marker\",\"background\":false}",
+            "input_chars": 143,
+            "input_preview_truncated": false,
+            "stored_output_chars": 20
+          }
+        ]
+      },
+      {
+        "source": {
+          "kind": "dispatch_result",
+          "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+        },
+        "session_id": "ses_h127B5KOCT7PMrjafAot",
+        "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr",
+        "author": "base-developer",
+        "time_created": 1791134571630,
+        "tool_facts": [
+          {
+            "part_id": "prt_g0VX6Q9Ld00lKBUEWKsy",
+            "call_id": "call_GM8OOF1VPSqcnfqh5PmIVyKh",
+            "tool_name": "bash",
+            "status": "completed",
+            "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-b9c3aad68b-C'\",\"timeout\":10000,\"description\":\"Print the third required evidence marker\",\"background\":false}",
+            "input_chars": 142,
+            "input_preview_truncated": false,
+            "stored_output_chars": 20
+          }
+        ]
+      },
+      {
+        "source": {
+          "kind": "dispatch_result",
+          "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+        },
+        "session_id": "ses_h127B5KOCT7PMrjafAot",
+        "message_id": "msg_g0VX6Q9st00QhZy1rkOU",
+        "author": "base-developer",
+        "time_created": 1791134579103,
+        "tool_facts": [
+          {
+            "part_id": "prt_g0VX6QDlP00u05zqMiMJ",
+            "call_id": "call_LQ9Wigy4UdFrkc07lmuf1fR5",
+            "tool_name": "bash",
+            "status": "completed",
+            "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-b9c3aad68b-D'\",\"timeout\":10000,\"description\":\"Print the fourth required evidence marker\",\"background\":false}",
+            "input_chars": 143,
+            "input_preview_truncated": false,
+            "stored_output_chars": 20
+          }
+        ]
+      }
+    ],
+    "inventory_next_before": [],
+    "evidence_reads": [
+      {
+        "message_id": "msg_g0VX6Q3s400ptONOalo3",
+        "part_id": "prt_g0VX6Q5Un00lAUuelYJE",
+        "call_id": "call_0CK90UcapW6DxmKpXFzvDdn1",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "input",
+        "source": "message-part-input",
+        "redacted": false,
+        "total_chars": 142,
+        "sha256": "ce103e87ccec27e9e99aef8e97b3808a8dd2d7fccc18d1c00966f3cf9ae5b971",
+        "offset": 0,
+        "end": 142,
+        "next_offset": null,
+        "content": "{\"command\":\"printf '%s\\\\n' 'READER-b9c3aad68b-A'\",\"timeout\":10000,\"description\":\"Print the first required evidence marker\",\"background\":false}"
+      },
+      {
+        "message_id": "msg_g0VX6Q3s400ptONOalo3",
+        "part_id": "prt_g0VX6Q5Un00lAUuelYJE",
+        "call_id": "call_0CK90UcapW6DxmKpXFzvDdn1",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "output",
+        "source": "message-part-output",
+        "redacted": false,
+        "total_chars": 20,
+        "sha256": "122d74e7bec82efe224721b404123c0a2c5724fa0e1e91abb6b21e0260c0d300",
+        "offset": 0,
+        "end": 20,
+        "next_offset": null,
+        "content": "READER-b9c3aad68b-A\n"
+      },
+      {
+        "message_id": "msg_g0VX6Q64H00FUPVfvv18",
+        "part_id": "prt_g0VX6Q7IV00wiVgs23mo",
+        "call_id": "call_YiwGMriSFQhcWsSNYyc8bmDo",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "input",
+        "source": "message-part-input",
+        "redacted": false,
+        "total_chars": 143,
+        "sha256": "ed055df67a44b003975b6d9af63ce476e601abeb84988a7dd35ed9f44eca627a",
+        "offset": 0,
+        "end": 143,
+        "next_offset": null,
+        "content": "{\"command\":\"printf '%s\\\\n' 'READER-b9c3aad68b-B'\",\"timeout\":10000,\"description\":\"Print the second required evidence marker\",\"background\":false}"
+      },
+      {
+        "message_id": "msg_g0VX6Q64H00FUPVfvv18",
+        "part_id": "prt_g0VX6Q7IV00wiVgs23mo",
+        "call_id": "call_YiwGMriSFQhcWsSNYyc8bmDo",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "output",
+        "source": "message-part-output",
+        "redacted": false,
+        "total_chars": 20,
+        "sha256": "a8d16ba9142703ae1aa1c70caa060406e289c5f06c69619a46443c7eed1e2964",
+        "offset": 0,
+        "end": 20,
+        "next_offset": null,
+        "content": "READER-b9c3aad68b-B\n"
+      },
+      {
+        "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr",
+        "part_id": "prt_g0VX6Q9Ld00lKBUEWKsy",
+        "call_id": "call_GM8OOF1VPSqcnfqh5PmIVyKh",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "input",
+        "source": "message-part-input",
+        "redacted": false,
+        "total_chars": 142,
+        "sha256": "96574e14d9dc471e8525b56222cb18321e452da1e0e0ae31b3893c83d12e573f",
+        "offset": 0,
+        "end": 142,
+        "next_offset": null,
+        "content": "{\"command\":\"printf '%s\\\\n' 'READER-b9c3aad68b-C'\",\"timeout\":10000,\"description\":\"Print the third required evidence marker\",\"background\":false}"
+      },
+      {
+        "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr",
+        "part_id": "prt_g0VX6Q9Ld00lKBUEWKsy",
+        "call_id": "call_GM8OOF1VPSqcnfqh5PmIVyKh",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "output",
+        "source": "message-part-output",
+        "redacted": false,
+        "total_chars": 20,
+        "sha256": "169ef0109652d2b798dcf7f5788b946ec209b413e34f8ee15c91da552c695ae3",
+        "offset": 0,
+        "end": 20,
+        "next_offset": null,
+        "content": "READER-b9c3aad68b-C\n"
+      },
+      {
+        "message_id": "msg_g0VX6Q9st00QhZy1rkOU",
+        "part_id": "prt_g0VX6QDlP00u05zqMiMJ",
+        "call_id": "call_LQ9Wigy4UdFrkc07lmuf1fR5",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "input",
+        "source": "message-part-input",
+        "redacted": false,
+        "total_chars": 143,
+        "sha256": "a29458abd4d4a74b3e0353c2f717dc49f2e7b39008315d06f6e941111e4efe9a",
+        "offset": 0,
+        "end": 143,
+        "next_offset": null,
+        "content": "{\"command\":\"printf '%s\\\\n' 'READER-b9c3aad68b-D'\",\"timeout\":10000,\"description\":\"Print the fourth required evidence marker\",\"background\":false}"
+      },
+      {
+        "message_id": "msg_g0VX6Q9st00QhZy1rkOU",
+        "part_id": "prt_g0VX6QDlP00u05zqMiMJ",
+        "call_id": "call_LQ9Wigy4UdFrkc07lmuf1fR5",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "output",
+        "source": "message-part-output",
+        "redacted": false,
+        "total_chars": 20,
+        "sha256": "7bb94810c3ba17d098abe2a8e6aefb4f3b2cbf04ceb094f8c0a9a38bf6863a47",
+        "offset": 0,
+        "end": 20,
+        "next_offset": null,
+        "content": "READER-b9c3aad68b-D\n"
+      }
+    ]
+  },
+  "byteComparisons": [
+    {
+      "messageID": "msg_g0VX6Q3s400ptONOalo3",
+      "partID": "prt_g0VX6Q5Un00lAUuelYJE",
+      "field": "input",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-A",
+      "utf8Bytes": 142,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6Q3s400ptONOalo3",
+      "partID": "prt_g0VX6Q5Un00lAUuelYJE",
+      "field": "output",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-A",
+      "utf8Bytes": 20,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6Q64H00FUPVfvv18",
+      "partID": "prt_g0VX6Q7IV00wiVgs23mo",
+      "field": "input",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-B",
+      "utf8Bytes": 143,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6Q64H00FUPVfvv18",
+      "partID": "prt_g0VX6Q7IV00wiVgs23mo",
+      "field": "output",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-B",
+      "utf8Bytes": 20,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6Q7wM00PsRmJT9Xr",
+      "partID": "prt_g0VX6Q9Ld00lKBUEWKsy",
+      "field": "input",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-C",
+      "utf8Bytes": 142,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6Q7wM00PsRmJT9Xr",
+      "partID": "prt_g0VX6Q9Ld00lKBUEWKsy",
+      "field": "output",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-C",
+      "utf8Bytes": 20,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6Q9st00QhZy1rkOU",
+      "partID": "prt_g0VX6QDlP00u05zqMiMJ",
+      "field": "input",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-D",
+      "utf8Bytes": 143,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6Q9st00QhZy1rkOU",
+      "partID": "prt_g0VX6QDlP00u05zqMiMJ",
+      "field": "output",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-D",
+      "utf8Bytes": 20,
+      "exactBytes": true
+    }
+  ],
+  "status": "passed",
+  "sourceMessageID": "msg_g0VX6QEIp00dooEW4S0Q",
+  "sourceSessionID": "ses_h127B5KOCT7PMrjafAot",
+  "readerSessionID": "ses_-zUSta1VQzzSnlhirMxu",
+  "readerMessageID": "msg_hWtuYpNe6RikodLEf6nO",
+  "completionDecision": {
+    "id": "art_g0VX6RJVm00FxrVY8Ps3",
+    "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+    "kind": "task_completion_decision",
+    "label": "TaskCompletionDecision",
+    "payload": {
+      "orchestrator_session_id": "ses_-zUSta1VQzzSnlhirMxu",
+      "orchestrator_message_id": "msg_hsb1j3nkkb3emGKGsry4",
+      "tool_call_id": "call_BwdZCXBLaJykYMLBmNk41SR0",
+      "tool_part_id": "prt_g0VX6RCJi00z4HjRef4o",
+      "evidence_locators": [
+        {
+          "source": "session_message",
+          "session_id": "ses_h127B5KOCT7PMrjafAot",
+          "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_h127B5KOCT7PMrjafAot",
+          "message_id": "msg_g0VX6Q3s400ptONOalo3"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_h127B5KOCT7PMrjafAot",
+          "message_id": "msg_g0VX6Q64H00FUPVfvv18"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_h127B5KOCT7PMrjafAot",
+          "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_h127B5KOCT7PMrjafAot",
+          "message_id": "msg_g0VX6Q9st00QhZy1rkOU"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hNWDKRvBOL2oPgyCd1Xi",
+          "message_id": "msg_g0VX6Qn7B0032XgKzFrg"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hNWDKRvBOL2oPgyCd1Xi",
+          "message_id": "msg_g0VX6QfoR00OyVoS8C5p"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_-zUSta1VQzzSnlhirMxu",
+          "message_id": "msg_hWtuYpNe6RikodLEf6nO"
+        },
+        {
+          "source": "session",
+          "session_id": "ses_-zUSta1VQzzSnlhirMxu"
+        }
+      ],
+      "deliverable_artifact_locators": [],
+      "terminal_workflow_artifact_locators": [],
+      "accepted_delivery_slice_revision_ids": [],
+      "workflow_binding": {
+        "kind": "direct",
+        "package_revision": {
+          "scope": "built_in",
+          "project_id": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.09.30.1",
+          "package_digest": "f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"
+        }
+      },
+      "time_recorded": 1791134854434
+    },
+    "payload_sha256": "1c34fc12fadd21d1ed5ccea3f4288ae7fb1e2a484f76b2465e93601c9748e5ca",
+    "payload_bytes": 1537,
+    "payload_block_sha256s": [
+      "1c34fc12fadd21d1ed5ccea3f4288ae7fb1e2a484f76b2465e93601c9748e5ca"
+    ],
+    "payload_block_index_sha256": "2e0370264a20732c75d87664c23d91e9f4ecb1c2408fefa71fa6c5570c3da8a7",
+    "catalog_artifact_type": "opencorvus/core/task_completion_decision",
+    "catalog_schema_diagnostic": null,
+    "catalog_producer": {
+      "owner_kind": "core",
+      "component_id": "engine-artifact",
+      "operation_id": "task_completion_decision"
+    },
+    "catalog_import_source_task_id": null,
+    "catalog_resource_count": 0,
+    "catalog_resource_media_types": [],
+    "catalog_search_text": "opencorvus/core/task_completion_decision\nengine-artifact\ntask_completion_decision",
+    "catalog_search_text_truncated": false,
+    "catalog_metadata_sha256": "a622dcf843046e21c1577912bcd54774ad1577916662dd813671cc3507f16287",
+    "catalog_revision": 10,
+    "time_created": 1791134854434,
+    "time_updated": 1791134854434
+  },
+  "completionReferences": {
+    "producer": {
+      "source": "session_message",
+      "session_id": "ses_h127B5KOCT7PMrjafAot",
+      "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+    },
+    "reader": {
+      "owner": "orchestrator",
+      "session_id": "ses_-zUSta1VQzzSnlhirMxu",
+      "message_id": "msg_hsb1j3nkkb3emGKGsry4",
+      "read_message_id": "msg_hWtuYpNe6RikodLEf6nO"
+    }
+  },
+  "schemaObservations": [
+    {
+      "requestIndex": 3,
+      "observedAt": 1791134536270,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 3,
+      "observedAt": 1791134536270,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 4,
+      "observedAt": 1791134556554,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 4,
+      "observedAt": 1791134556554,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 5,
+      "observedAt": 1791134564818,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 5,
+      "observedAt": 1791134564818,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 6,
+      "observedAt": 1791134571963,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 6,
+      "observedAt": 1791134571963,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 7,
+      "observedAt": 1791134579409,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 7,
+      "observedAt": 1791134579409,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 8,
+      "observedAt": 1791134587787,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 8,
+      "observedAt": 1791134587787,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 9,
+      "observedAt": 1791134596772,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 9,
+      "observedAt": 1791134596772,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 10,
+      "observedAt": 1791134619202,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 10,
+      "observedAt": 1791134619202,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 11,
+      "observedAt": 1791134630135,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 11,
+      "observedAt": 1791134630135,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 12,
+      "observedAt": 1791134650476,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 12,
+      "observedAt": 1791134650476,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 13,
+      "observedAt": 1791134673116,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 13,
+      "observedAt": 1791134673116,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 14,
+      "observedAt": 1791134694627,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 14,
+      "observedAt": 1791134694627,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 15,
+      "observedAt": 1791134702211,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 15,
+      "observedAt": 1791134702211,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 16,
+      "observedAt": 1791134720702,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 16,
+      "observedAt": 1791134720702,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 17,
+      "observedAt": 1791134730296,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 17,
+      "observedAt": 1791134730296,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 18,
+      "observedAt": 1791134771007,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 18,
+      "observedAt": 1791134771007,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 19,
+      "observedAt": 1791134781961,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 19,
+      "observedAt": 1791134781961,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 20,
+      "observedAt": 1791134796899,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 20,
+      "observedAt": 1791134796899,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    }
+  ],
+  "schemaObservationOrder": {
+    "toolStartedAt": 1791134636165,
+    "before": [
+      {
+        "requestIndex": 3,
+        "observedAt": 1791134536270,
+        "leadMilliseconds": 99895
+      },
+      {
+        "requestIndex": 3,
+        "observedAt": 1791134536270,
+        "leadMilliseconds": 99895
+      },
+      {
+        "requestIndex": 4,
+        "observedAt": 1791134556554,
+        "leadMilliseconds": 79611
+      },
+      {
+        "requestIndex": 4,
+        "observedAt": 1791134556554,
+        "leadMilliseconds": 79611
+      },
+      {
+        "requestIndex": 5,
+        "observedAt": 1791134564818,
+        "leadMilliseconds": 71347
+      },
+      {
+        "requestIndex": 5,
+        "observedAt": 1791134564818,
+        "leadMilliseconds": 71347
+      },
+      {
+        "requestIndex": 6,
+        "observedAt": 1791134571963,
+        "leadMilliseconds": 64202
+      },
+      {
+        "requestIndex": 6,
+        "observedAt": 1791134571963,
+        "leadMilliseconds": 64202
+      },
+      {
+        "requestIndex": 7,
+        "observedAt": 1791134579409,
+        "leadMilliseconds": 56756
+      },
+      {
+        "requestIndex": 7,
+        "observedAt": 1791134579409,
+        "leadMilliseconds": 56756
+      },
+      {
+        "requestIndex": 8,
+        "observedAt": 1791134587787,
+        "leadMilliseconds": 48378
+      },
+      {
+        "requestIndex": 8,
+        "observedAt": 1791134587787,
+        "leadMilliseconds": 48378
+      },
+      {
+        "requestIndex": 9,
+        "observedAt": 1791134596772,
+        "leadMilliseconds": 39393
+      },
+      {
+        "requestIndex": 9,
+        "observedAt": 1791134596772,
+        "leadMilliseconds": 39393
+      },
+      {
+        "requestIndex": 10,
+        "observedAt": 1791134619202,
+        "leadMilliseconds": 16963
+      },
+      {
+        "requestIndex": 10,
+        "observedAt": 1791134619202,
+        "leadMilliseconds": 16963
+      },
+      {
+        "requestIndex": 11,
+        "observedAt": 1791134630135,
+        "leadMilliseconds": 6030
+      },
+      {
+        "requestIndex": 11,
+        "observedAt": 1791134630135,
+        "leadMilliseconds": 6030
+      }
+    ]
+  },
+  "model": "openai/gpt-6.1-sol",
+  "maxRequests": 256,
+  "nonce": "READER-b9c3aad68b",
+  "evidenceRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 2446,
+        "body_sha256": "0fc57fb964222b4f7aabe75ca25eabfb7da0ecf809dc5503e40c8cd9616bb6cf",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": []
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 155593,
+        "body_sha256": "eff40195c1a299e6a8eca7a51be466f7da53e22d52b4c52344cbb5e22d392654",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": []
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 4054,
+        "body_sha256": "47f039b13ec79c59616cef51c4bedc2d4b301c877a32575feb7a89445c8ecdd7",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": []
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 249973,
+        "body_sha256": "be1908fc507fb90ecb48680999ad37f2b3f23f948bcc6dd26916aead9a27ea9d",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 151668,
+        "body_sha256": "a172aa190da66443d55eca6d2f2020dd848aa99ab9eb1f336c68d739ffaf95f4",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 152339,
+        "body_sha256": "bf74b743452f11cee36e37af2396f950f984e9caaf59c4c8101d8b64f0cce829",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 152699,
+        "body_sha256": "88202a5bec28900719f21156a03bf942680b0f5d04fb5bab243baa3c302c395c",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 153058,
+        "body_sha256": "388a68c3f717b2697ea98ae1c4c761b6123a7087ab9230d8adbc3954a92688b3",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 503
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 153058,
+        "body_sha256": "388a68c3f717b2697ea98ae1c4c761b6123a7087ab9230d8adbc3954a92688b3",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 153418,
+        "body_sha256": "ce530a470852017eb4ac0158d32afaa2f06f2cc4fcba92869a2dee53403624da",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 262388,
+        "body_sha256": "ae2b70e0c264ec2180543f20fa43c6cce10996530cd1b229a65c8b9f81852656",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 270398,
+        "body_sha256": "2b31d8c49b24d2ec10c9cc859a8fcade47881539bbf665ccd78e536cb2c4d2a1",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 284782,
+        "body_sha256": "99f6d71347ecae24be912948a881e3a8b83534e6396a5e0b386e080428e2518f",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 289585,
+        "body_sha256": "6571003fe5ffb6c5fc74ded965d52d54e51bd3aab09e90bb62dec95c69066529",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 141426,
+        "body_sha256": "252f226304aa2314d788c7f89ddeaafc4d31338809d5b0ab92480ab015720769",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 156120,
+        "body_sha256": "856e8cf5bd43413cc3646565829cfcccbf16410477aeaeb0b186bb9c9401c589",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 170504,
+        "body_sha256": "a1f0bf5ae5bf1108cd38f3e23a8d4d8662f528ac0ddf9fabaecb24c7d093fcb8",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 195776,
+        "body_sha256": "fda57898603817f72363edbf9d862bae1534b5dccbe48227d0cfc7487af51d5a",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 297663,
+        "body_sha256": "50a251c9ac9752a5d6647ed78f7cfd5b847675f913b52e31498b63cea367381e",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 307828,
+        "body_sha256": "9c22d19c11551224c6032feb250aaf02ec04a351cfb224d8be2e32b641498a6c",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 337878,
+        "body_sha256": "50505967f5ba8b3a8a4fbcf6c5f97bcff8ee1f0024eb8888320816225a8e252f",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    }
+  ],
+  "requestObservationTimes": [
+    1791134524311,
+    1791134525070,
+    1791134532484,
+    1791134536270,
+    1791134556554,
+    1791134564818,
+    1791134571963,
+    1791134579409,
+    1791134587787,
+    1791134596772,
+    1791134619202,
+    1791134630135,
+    1791134650476,
+    1791134673116,
+    1791134694627,
+    1791134702211,
+    1791134720702,
+    1791134730296,
+    1791134771007,
+    1791134781961,
+    1791134796899
+  ],
+  "credentialCleanup": "passed",
+  "cleanupErrors": []
+}

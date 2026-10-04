@@ -55,22 +55,37 @@ export function missionTaskDuplexReconciliationEvidence(input: {
   const publication = publications.length === 1 && publications[0]!.state.status === "completed"
     ? publications[0]!
     : undefined
+  const batchEntries = (tool: string, key: "queries" | "reads", taskID: string) => parts
+    .filter((part) => part.tool === tool)
+    .flatMap((part) => {
+      const requests = part.args?.[key]
+      if (!Array.isArray(requests)) return []
+      return requests.flatMap((request, requestIndex) => {
+        if (!request || typeof request !== "object" || request.taskID !== taskID) return []
+        let value: unknown
+        try {
+          const results = JSON.parse(part.state.output ?? "{}").results
+          if (Array.isArray(results)) {
+            const matches = results.filter((result) => result?.request_index === requestIndex)
+            if (matches.length === 1) value = matches[0]?.value
+          }
+        } catch { /* Invalid batch output cannot establish read authority. */ }
+        return [{ part, requestIndex, value }]
+      })
+    })
   const tasks = input.taskIDs.map((taskID) => {
     const queries = parts.filter((part) => part.tool === "panel_query_task" &&
       Array.isArray(part.args?.taskIDs) && part.args.taskIDs.includes(taskID))
-    const catalogs = parts.filter((part) => part.tool === "panel_query_task_artifacts" && part.args?.taskID === taskID)
-    const reads = parts.filter((part) => part.tool === "panel_read_task_artifact" && part.args?.taskID === taskID)
-    const read = reads.length === 1 && reads[0]!.state.status === "completed" ? reads[0]! : undefined
+    const catalogs = batchEntries("panel_query_task_artifacts", "queries", taskID)
+    const reads = batchEntries("panel_read_task_artifact", "reads", taskID)
+    const read = reads.length === 1 && reads[0]!.part.state.status === "completed" ? reads[0]! : undefined
     let readReference: string | undefined
-    if (read?.state.output) {
-      try {
-        const raw = JSON.parse(read.state.output)
-        const parsed = PanelArtifactReadReferenceFactSchema.safeParse(raw)
+    if (read) {
+        const parsed = PanelArtifactReadReferenceFactSchema.safeParse(read.value)
         if (parsed.success && parsed.data.taskID === taskID && parsed.data.complete &&
           parsed.data.byte_start === 0 && parsed.data.byte_end === parsed.data.total_bytes) {
           readReference = parsed.data.artifact_read_ref
         }
-      } catch { /* A malformed output cannot prove a complete read. */ }
     }
     const acceptances = completion?.success
       ? completion.data.task_acceptances.filter((acceptance) => acceptance.task_id === taskID)
@@ -78,10 +93,11 @@ export function missionTaskDuplexReconciliationEvidence(input: {
     const retainedReadAccepted = readReference !== undefined && acceptances.length === 1 &&
       acceptances[0]!.evidence_read_refs.length === 1 && acceptances[0]!.evidence_read_refs[0] === readReference
     const causalOrder = queries.length === 1 && catalogs.length === 1 && read !== undefined &&
-      queries[0]!.state.status === "completed" && catalogs[0]!.state.status === "completed" &&
-      endsBefore(queries[0]!, catalogs[0]!) &&
-      endsBefore(catalogs[0]!, read) && publication !== undefined &&
-      endsBefore(read, publication)
+      queries[0]!.state.status === "completed" && catalogs[0]!.part.state.status === "completed" &&
+      catalogs[0]!.value !== undefined &&
+      endsBefore(queries[0]!, catalogs[0]!.part) &&
+      endsBefore(catalogs[0]!.part, read.part) && publication !== undefined &&
+      endsBefore(read.part, publication)
     return {
       taskID,
       queryCount: queries.length,
@@ -469,18 +485,12 @@ export function observeMissionTaskDuplexActivity(input: {
   }
 }
 
-export function missionTaskDuplexToolHealth(
+export function missionTaskDuplexToolOutcomes(
   toolParts: readonly ReturnType<typeof projectToolPartInTransaction>[],
 ) {
   const visible = toolParts.filter((part) => part !== undefined)
-  return {
-    failedToolPartIDs: visible
-      .filter((part) => part.state.status === "error")
-      .map((part) => part.id)
-      .sort(),
-    runningToolPartIDs: visible
-      .filter((part) => part.state.status === "running")
-      .map((part) => part.id)
-      .sort(),
-  }
+  return visible.map((part) => ({
+    id: part.id, tool: part.tool, status: part.state.status,
+    ...(part.state.status === "error" ? { failure: part.state.failure } : {}),
+  })).sort((left, right) => left.id.localeCompare(right.id))
 }

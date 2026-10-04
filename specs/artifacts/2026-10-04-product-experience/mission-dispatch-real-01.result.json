@@ -1,0 +1,2869 @@
+{
+  "model": "openai/gpt-6.1-sol",
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N",
+  "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+  "operatorPrompt": "For acceptance DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445, report the sum of 137 and 249 and the difference between 249 and 137. Return both numeric results in the conversation. This is the complete requested deliverable.",
+  "authority": {
+    "credential": "available",
+    "projectedModel": "gpt-6.1-sol",
+    "copiedProviders": [
+      "openai"
+    ],
+    "pairedModels": true
+  },
+  "preflight": {
+    "sessionID": "ses_hZm7ZpVy7tmtF9licm3p",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "draft": {
+    "status": 200,
+    "body": {
+      "missionID": "06e9afdd6066d8a0",
+      "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+      "title": "Atomic manual draft acceptance",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project",
+      "created": 1791136276691,
+      "updated": 1791136276726,
+      "interruptible": false,
+      "productPillar": "work",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "For acceptance DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445, report the sum of 137 and 249 and the difference between 249 and 137. Return both numeric results in the conversation. This is the complete requested deliverable."
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  },
+  "dispatch": {
+    "status": 200,
+    "body": {
+      "missionID": "06e9afdd6066d8a0",
+      "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+      "created": false,
+      "productPillar": "work"
+    }
+  },
+  "reply": {
+    "info": {
+      "author": "mission",
+      "role": "assistant",
+      "time": {
+        "created": 1791136348235,
+        "completed": 1791136356219
+      },
+      "parentID": "msg_hndVIiLdaq12Ml2kxk6R",
+      "acceptedInputMessageIDs": [
+        "msg_hndVIiLdaq12Ml2kxk6R"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "mission",
+      "path": {
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project",
+        "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project"
+      },
+      "cost": 0,
+      "tokens": {
+        "total": 41481,
+        "input": 335,
+        "output": 58,
+        "reasoning": 0,
+        "cache": {
+          "read": 41088,
+          "write": 0
+        }
+      },
+      "billing": {
+        "status": "priced"
+      },
+      "finish": "stop",
+      "orderKey": "v1:0001791136348235:0000000000000030:0000000000000000:message:msg_g0VX6Xa7H00vfpuZjNgC",
+      "id": "msg_g0VX6Xa7H00vfpuZjNgC",
+      "sessionID": "ses_-zUStSiUezzWmyTcteEF"
+    },
+    "parts": [
+      {
+        "id": "prt_g0VX6XaG500vneNHvWDQ",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+        "messageID": "msg_g0VX6Xa7H00vfpuZjNgC",
+        "orderKey": "v1:0001791136348782:0000000000000031:0000000000000000:part:prt_g0VX6XaG500vneNHvWDQ",
+        "type": "step-start"
+      },
+      {
+        "id": "prt_g0VX6XbWt00mPixttVUF",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+        "messageID": "msg_g0VX6Xa7H00vfpuZjNgC",
+        "orderKey": "v1:0001791136353667:0000000000000031:0000000000000000:part:prt_g0VX6XbWt00mPixttVUF",
+        "type": "text",
+        "text": "For acceptance **DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445**:\n\n- Sum: 137 + 249 = **386**\n- Difference: 249 − 137 = **112**",
+        "time": {
+          "start": 1791136355991,
+          "end": 1791136355991
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0fe34f672f763104016ac2926174dc87d0aa726dc7dbf9c10f",
+            "phase": "final_answer"
+          }
+        }
+      },
+      {
+        "id": "prt_g0VX6XcAH00T39LQ1FNT",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+        "messageID": "msg_g0VX6Xa7H00vfpuZjNgC",
+        "orderKey": "v1:0001791136356110:0000000000000031:0000000000000000:part:prt_g0VX6XcAH00T39LQ1FNT",
+        "type": "step-finish",
+        "reason": "stop",
+        "cost": 0,
+        "tokens": {
+          "total": 41481,
+          "input": 335,
+          "output": 58,
+          "reasoning": 0,
+          "cache": {
+            "read": 41088,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    ]
+  },
+  "executionState": {
+    "type": "idle"
+  },
+  "messages": [
+    {
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1791136276817
+        },
+        "agent": "mission",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "wake_reason": {
+            "source": "mission.operator",
+            "missionID": "06e9afdd6066d8a0",
+            "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+            "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+            "openedEventID": "pev_haSloL0Pk0zF668uOHaK"
+          },
+          "surface": "panel",
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "mission.operator",
+            "literalText": "For acceptance DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445, report the sum of 137 and 249 and the difference between 249 and 137. Return both numeric results in the conversation. This is the complete requested deliverable."
+          }
+        },
+        "orderKey": "v1:0001791136276817:0000000000000030:0000000000000000:message:msg_hndVIiLdaq12Ml2kxk6R",
+        "id": "msg_hndVIiLdaq12Ml2kxk6R",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF"
+      },
+      "parts": [
+        {
+          "id": "prt_hu5oTJk4eGUnVwd9DJhn",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_hndVIiLdaq12Ml2kxk6R",
+          "orderKey": "v1:0001791136276821:0000000000000031:0000000000000000:part:prt_hu5oTJk4eGUnVwd9DJhn",
+          "type": "text",
+          "text": "For acceptance DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445, report the sum of 137 and 249 and the difference between 249 and 137. Return both numeric results in the conversation. This is the complete requested deliverable.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hjJax75ej6gpH3egAagk/62f03fd981f60fc7a9a5f034bc0fd2de28b660e2fc378a13c9fb9a918bd0199e.json",
+            "catalog_snapshot_hash": "62f03fd981f60fc7a9a5f034bc0fd2de28b660e2fc378a13c9fb9a918bd0199e"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791136277047,
+          "completed": 1791136284363
+        },
+        "parentID": "msg_hndVIiLdaq12Ml2kxk6R",
+        "acceptedInputMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 38787,
+          "input": 38745,
+          "output": 42,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791136277047:0000000000000030:0000000000000000:message:msg_g0VX6XHb500GIcLE1JMF",
+        "id": "msg_g0VX6XHb500GIcLE1JMF",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6XI4w002qlsIkowL",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XHb500GIcLE1JMF",
+          "orderKey": "v1:0001791136278899:0000000000000031:0000000000000000:part:prt_g0VX6XI4w002qlsIkowL",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6XJ1x00zg89C4z4i",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XHb500GIcLE1JMF",
+          "orderKey": "v1:0001791136282557:0000000000000031:0000000000000000:part:prt_g0VX6XJ1x00zg89C4z4i",
+          "type": "text",
+          "text": "I’ll calculate both results and return them here with your acceptance reference.",
+          "time": {
+            "start": 1791136283753,
+            "end": 1791136283753
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_0a809ab2f588c736016ac2921a5aa487d0a615cdeb845547ce",
+              "phase": "commentary"
+            }
+          }
+        },
+        {
+          "id": "prt_g0VX6XJLK00jDnRsHfki",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XHb500GIcLE1JMF",
+          "type": "tool",
+          "callID": "call_9x5BUYuf3jLrkmhK2MNnZwR5",
+          "tool": "mission_state",
+          "state": {
+            "status": "completed",
+            "input": {
+              "action": "snapshot"
+            },
+            "output": "{\"revision\":\"d24e63003d5a28d6c30564e2bf6c7daa12564f1f60c2e6692aab8e7c59621e70\",\"files\":[{\"file\":\"frontier.md\",\"exists\":false,\"bytes\":0,\"content\":\"\"},{\"file\":\"tasks.md\",\"exists\":false,\"bytes\":0,\"content\":\"\"},{\"file\":\"handoff.md\",\"exists\":false,\"bytes\":0,\"content\":\"\"},{\"file\":\"notes.md\",\"exists\":false,\"bytes\":0,\"content\":\"\"}]}",
+            "title": "mission_state snapshot 06e9afdd6066d8a0",
+            "metadata": {
+              "missionID": "06e9afdd6066d8a0",
+              "revision": "d24e63003d5a28d6c30564e2bf6c7daa12564f1f60c2e6692aab8e7c59621e70",
+              "count": 0,
+              "bytes": 0,
+              "truncated": false
+            },
+            "time": {
+              "start": 1791136283758,
+              "end": 1791136284311
+            }
+          },
+          "orderKey": "v1:0001791136284258:0000000000000031:0000000000000000:part:prt_g0VX6XJLK00jDnRsHfki"
+        },
+        {
+          "id": "prt_g0VX6XJUK00wS7Iu9U95",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XHb500GIcLE1JMF",
+          "orderKey": "v1:0001791136284317:0000000000000031:0000000000000000:part:prt_g0VX6XJUK00wS7Iu9U95",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 38787,
+            "input": 38745,
+            "output": 42,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791136284394,
+          "completed": 1791136290943
+        },
+        "parentID": "msg_hndVIiLdaq12Ml2kxk6R",
+        "acceptedInputMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 38986,
+          "input": 389,
+          "output": 69,
+          "reasoning": 0,
+          "cache": {
+            "read": 38528,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791136284394:0000000000000030:0000000000000000:message:msg_g0VX6XJVa007UUGnKT32",
+        "id": "msg_g0VX6XJVa007UUGnKT32",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6XJaG00QE5dSopuN",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XJVa007UUGnKT32",
+          "orderKey": "v1:0001791136284684:0000000000000031:0000000000000000:part:prt_g0VX6XJaG00QE5dSopuN",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6XKTO00h0Ivb5i0y",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XJVa007UUGnKT32",
+          "type": "tool",
+          "callID": "call_aEVi6005qMNf5QX0lBT9nkJY",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "arithmetic calculation numeric results"
+              ],
+              "kinds": [
+                "expert_squad"
+              ],
+              "next_owner_kinds": [
+                "create_task_with_expert_squad"
+              ],
+              "owner_refs": [],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "product_pillar": "work",
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"62f03fd981f60fc7a9a5f034bc0fd2de28b660e2fc378a13c9fb9a918bd0199e\",\n  \"catalog_revision\": \"ba084a86f7664a9208815c96380f3e80f40bc19f9245a196ac9448b071d0f6a2\",\n  \"caller\": \"mission\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 139486,\n  \"active_payload_tokens\": 34290,\n  \"visible_expert_squad_count\": 1,\n  \"held_expert_squad_count\": 1,\n  \"product_pillar\": \"work\",\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 1,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Use the callable question to ask the operator for the exact missing configuration or authorized scope decision. The answer itself does not change frozen role grants.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "62f03fd981f60fc7a9a5f034bc0fd2de28b660e2fc378a13c9fb9a918bd0199e",
+              "catalog_revision": "ba084a86f7664a9208815c96380f3e80f40bc19f9245a196ac9448b071d0f6a2",
+              "caller": "mission",
+              "result_count": 0,
+              "reveal_revision": 1,
+              "active_ref_count": 0,
+              "active_payload_chars": 139486,
+              "active_payload_tokens": 34290,
+              "visible_expert_squad_count": 1,
+              "held_expert_squad_count": 1,
+              "product_pillar": "work",
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_hndVIiLdaq12Ml2kxk6R",
+                "search_call_id": "call_aEVi6005qMNf5QX0lBT9nkJY",
+                "prior_revision": 0,
+                "revision": 1,
+                "harness_projection_hash": "9bd364d34eae986c81b7ba8bcb542200225a824879df7ad3a65fa1fc06eb1a92",
+                "catalog_snapshot_ref": "/attachment/prj_hjJax75ej6gpH3egAagk/62f03fd981f60fc7a9a5f034bc0fd2de28b660e2fc378a13c9fb9a918bd0199e.json",
+                "catalog_snapshot_hash": "62f03fd981f60fc7a9a5f034bc0fd2de28b660e2fc378a13c9fb9a918bd0199e",
+                "materialization_fingerprint": "72eff971764d30927c468fcb3a05ab6c14927c6941013df3706ac94e27e6a14d",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "857c9071435dde38f7ff02d53d2cb20a6fd4c21358d986fa8b358912c3c05172",
+                "active_payload_chars": 139486,
+                "active_payload_tokens": 34290
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1791136288102,
+              "end": 1791136290853
+            }
+          },
+          "orderKey": "v1:0001791136290717:0000000000000031:0000000000000000:part:prt_g0VX6XKTO00h0Ivb5i0y"
+        },
+        {
+          "id": "prt_g0VX6XLC200VfkWvo4H4",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XJVa007UUGnKT32",
+          "orderKey": "v1:0001791136290871:0000000000000031:0000000000000000:part:prt_g0VX6XLC200VfkWvo4H4",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 38986,
+            "input": 389,
+            "output": 69,
+            "reasoning": 0,
+            "cache": {
+              "read": 38528,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791136290973,
+          "completed": 1791136297137
+        },
+        "parentID": "msg_hndVIiLdaq12Ml2kxk6R",
+        "acceptedInputMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 39577,
+          "input": 14569,
+          "output": 31,
+          "reasoning": 17,
+          "cache": {
+            "read": 24960,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791136290973:0000000000000030:0000000000000000:message:msg_g0VX6XLDh005nxlUyX44",
+        "id": "msg_g0VX6XLDh005nxlUyX44",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6XLI700C6GugeIvG",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XLDh005nxlUyX44",
+          "orderKey": "v1:0001791136291247:0000000000000031:0000000000000000:part:prt_g0VX6XLI700C6GugeIvG",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6XM9B00bh3nFkXX1",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XLDh005nxlUyX44",
+          "orderKey": "v1:0001791136294538:0000000000000031:0000000000000000:part:prt_g0VX6XM9B00bh3nFkXX1",
+          "type": "reasoning",
+          "text": "",
+          "metadata": {
+            "openai": {
+              "itemId": "rs_09b24f596206c6a5016ac29226542887d0bdaac5b874a395f8",
+              "reasoningEncryptedContent": "gAAAAABqwpIoYf_B8R_U5FZJh8nHyYK0wYqfxwb1_keVzCfP39gjuEBQYWn6s7xhq2RE1T-VobooDCxlHVS3xh-OA8CNXQQYIL-Ttfm2ny8HdIGMhLR7SqklWeZjwqVMOv-Q_xFQcrIVHgpt5OgB1r3psQSzuXP7aTNz4GifeFxCua2PursHmhSY2Fg8ms2-992pYhWA-O0hDtXmOHV6YFjSHGZC2LHwQQ9MlPtYyTh22mGR70uSo_WqgU5_DUPdyDn2r8uUBvH8vtkLKsTwxT25lcR2MYK1hoV35F8nPjzetwUYthA-rfd22PnGeTHIUotoM3tEoNqckqKGnvBKhNQs1iqXyTTUG__tAllLoFXbLvzx8foj5j48oHY9JnxXEPQmYP3kUNj0vDY9OKGy_iWuEslyf5GeCAkAlOWkCw8rx4l3AB3dPAN-p1u5k_yIC6kfMGCyFsVF8gFJzGhL1Dv9Eq5FLa9N7b8WI80lX8LHvOTa2zTDlBVTGgrpUztqJf4SSnOXtKosooACbzYJWYjawj-yR8TaUq47MOZszQk-xl1LlDmN1u6QiSBSSt8vohptxOYSAbmLlzlCDYAm3iiOxddubDVqZ5G5bNa8V0wZ2wQJSuagWkH_yP5wMDw6sYlNsrtHa-gY1jkyM7kpPhp3G6tHbWaDhnO6LcFXeuAEBijPeq58TT5tkCz6mIZrr4x_Fy6K-jUjIk5V8eDlp7sg0PFU0Vb1zzDN0qMU8ppAkzZ2hrkrj4FwsGcqmOzG2AFooCrxnarjaTA4TzKCdY9VNSDAy6cmb25U1JkaWB6FJYwIGOCKmJeffh2LbpKEreajlwZcOxNP1_5RrMXn_eTaGxK2f5gsCvf9u26JvqC-8nokiNotM3Km8quSdtJrcGIEMH2ztmiAw9D4PazsemtIKEGIgt3yoPm89RQ8JIlwHVG2xS98xd127KJeyX9vb8jma5XXH7htoQ7IPhsW49cAboZDUqfSIWPQo-BUz4IMilXt_fUKT4lnMFI0p8-AeaN-vU7mesqJTsbzP_Fg1Gdkrg7rXixsWFYXc1KuCUDf7_lgqZ8YbLha57rFSkO329zHwd6mOY816ePh6PocZ0Wm-Ay305LgOwZVZg4cxV996js7sEH8GXVHEDIYuj9kI3aCdCtIXMIVTaAoA64EkmMJGh8j6wfpHMYNr4wjxG__e72EMWs7d4FDNVsS6eO7AlXb8YD2OeTTPyoDyasTUxBWTOZp-x3GCyJz2hdFDDG5h-XMTJBT9JZhSbjn_TbZic_tr9OOJrJaGwI7hgn7oXdYbjNe8iV56nOqn2rg8Y2MnQO1cPe59xGAnyJWjQ5rzq3jy3ShWsif2iAjSo5twchBEOTkRZ9Txuibr1UnWYST-CgSgu9NcP0="
+            }
+          },
+          "time": {
+            "start": 1791136294537,
+            "end": 1791136296497
+          }
+        },
+        {
+          "id": "prt_g0VX6XMf800mFEQKNRZL",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XLDh005nxlUyX44",
+          "type": "tool",
+          "callID": "call_VuZoGNfyJ20lJw7GzU2C06lO",
+          "tool": "panel_query_task",
+          "state": {
+            "status": "completed",
+            "input": {
+              "includeInteractions": false
+            },
+            "output": "{\"tasks\":[]}",
+            "title": "Mission Tasks",
+            "metadata": {
+              "truncated": false,
+              "count": 0,
+              "missionID": "06e9afdd6066d8a0"
+            },
+            "time": {
+              "start": 1791136296518,
+              "end": 1791136297034
+            }
+          },
+          "orderKey": "v1:0001791136297021:0000000000000031:0000000000000000:part:prt_g0VX6XMf800mFEQKNRZL"
+        },
+        {
+          "id": "prt_g0VX6XMnu00Wc3qJ7hR6",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XLDh005nxlUyX44",
+          "orderKey": "v1:0001791136297064:0000000000000031:0000000000000000:part:prt_g0VX6XMnu00Wc3qJ7hR6",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 39577,
+            "input": 14569,
+            "output": 31,
+            "reasoning": 17,
+            "cache": {
+              "read": 24960,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791136297168,
+          "completed": 1791136304572
+        },
+        "parentID": "msg_hndVIiLdaq12Ml2kxk6R",
+        "acceptedInputMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 39657,
+          "input": 297,
+          "output": 64,
+          "reasoning": 0,
+          "cache": {
+            "read": 39296,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791136297168:0000000000000030:0000000000000000:message:msg_g0VX6XMpc007s257oBZn",
+        "id": "msg_g0VX6XMpc007s257oBZn",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6XMuN00OX9a2BHFO",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XMpc007s257oBZn",
+          "orderKey": "v1:0001791136297464:0000000000000031:0000000000000000:part:prt_g0VX6XMuN00OX9a2BHFO",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6XO9100Vp7FtNCJ8",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XMpc007s257oBZn",
+          "type": "tool",
+          "callID": "call_bGPc2jirosAC3Oj3OwS73zwb",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                ""
+              ],
+              "kinds": [
+                "expert_squad"
+              ],
+              "next_owner_kinds": [
+                "create_task_with_expert_squad"
+              ],
+              "owner_refs": [],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "product_pillar": "work",
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"62f03fd981f60fc7a9a5f034bc0fd2de28b660e2fc378a13c9fb9a918bd0199e\",\n  \"catalog_revision\": \"ba084a86f7664a9208815c96380f3e80f40bc19f9245a196ac9448b071d0f6a2\",\n  \"caller\": \"mission\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [],\n  \"active_payload_chars\": 139486,\n  \"active_payload_tokens\": 34290,\n  \"visible_expert_squad_count\": 1,\n  \"held_expert_squad_count\": 1,\n  \"product_pillar\": \"work\",\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 1,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"base\"\n      },\n      \"name\": \"Base\",\n      \"description\": \"Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.\",\n      \"aliases\": [\n        \"Base\",\n        \"base\"\n      ],\n      \"discoverable_by\": [\n        \"mission\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"base\"\n      },\n      \"catalog_revision\": \"ba084a86f7664a9208815c96380f3e80f40bc19f9245a196ac9448b071d0f6a2\",\n      \"score\": null\n    }\n  ]\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "62f03fd981f60fc7a9a5f034bc0fd2de28b660e2fc378a13c9fb9a918bd0199e",
+              "catalog_revision": "ba084a86f7664a9208815c96380f3e80f40bc19f9245a196ac9448b071d0f6a2",
+              "caller": "mission",
+              "result_count": 1,
+              "reveal_revision": 2,
+              "active_ref_count": 0,
+              "active_payload_chars": 139486,
+              "active_payload_tokens": 34290,
+              "visible_expert_squad_count": 1,
+              "held_expert_squad_count": 1,
+              "product_pillar": "work",
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_hndVIiLdaq12Ml2kxk6R",
+                "search_call_id": "call_bGPc2jirosAC3Oj3OwS73zwb",
+                "prior_revision": 1,
+                "revision": 2,
+                "harness_projection_hash": "9bd364d34eae986c81b7ba8bcb542200225a824879df7ad3a65fa1fc06eb1a92",
+                "catalog_snapshot_ref": "/attachment/prj_hjJax75ej6gpH3egAagk/62f03fd981f60fc7a9a5f034bc0fd2de28b660e2fc378a13c9fb9a918bd0199e.json",
+                "catalog_snapshot_hash": "62f03fd981f60fc7a9a5f034bc0fd2de28b660e2fc378a13c9fb9a918bd0199e",
+                "materialization_fingerprint": "df49785a7b2149cdf1139a5604358df113f316590691618cdb626be77c333285",
+                "result_refs": [
+                  {
+                    "kind": "expert_squad",
+                    "source": "platform",
+                    "owner_ref": "expert-squad-registry",
+                    "local_ref": "base"
+                  }
+                ],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "857c9071435dde38f7ff02d53d2cb20a6fd4c21358d986fa8b358912c3c05172",
+                "active_payload_chars": 139486,
+                "active_payload_tokens": 34290
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1791136302215,
+              "end": 1791136304350
+            }
+          },
+          "orderKey": "v1:0001791136304226:0000000000000031:0000000000000000:part:prt_g0VX6XO9100Vp7FtNCJ8"
+        },
+        {
+          "id": "prt_g0VX6XOjg00qoVSBaBHE",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XMpc007s257oBZn",
+          "orderKey": "v1:0001791136304489:0000000000000031:0000000000000000:part:prt_g0VX6XOjg00qoVSBaBHE",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 39657,
+            "input": 297,
+            "output": 64,
+            "reasoning": 0,
+            "cache": {
+              "read": 39296,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791136304608,
+          "completed": 1791136317862
+        },
+        "parentID": "msg_hndVIiLdaq12Ml2kxk6R",
+        "acceptedInputMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 40231,
+          "input": 681,
+          "output": 91,
+          "reasoning": 35,
+          "cache": {
+            "read": 39424,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791136304608:0000000000000030:0000000000000000:message:msg_g0VX6XOlc00t3EjOpoxQ",
+        "id": "msg_g0VX6XOlc00t3EjOpoxQ",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6XOq500GEs0L8w6N",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XOlc00t3EjOpoxQ",
+          "orderKey": "v1:0001791136304885:0000000000000031:0000000000000000:part:prt_g0VX6XOq500GEs0L8w6N",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6XQpi00lvjWDYl3Z",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XOlc00t3EjOpoxQ",
+          "orderKey": "v1:0001791136312550:0000000000000031:0000000000000000:part:prt_g0VX6XQpi00lvjWDYl3Z",
+          "type": "reasoning",
+          "text": "",
+          "metadata": {
+            "openai": {
+              "itemId": "rs_08a938553ef9e35e016ac29238577c87d0864a7f55f40fd842",
+              "reasoningEncryptedContent": "gAAAAABqwpI6aVLIqKfq_y27roE-DqvfFbYS_0hwZCff8WEqtpzCAsqZiakNe_LCz1Qm5I5kUvUpozDVLjdn0qXqEIyNjuFoJub7UWrgMKnPGoQYUDGBGzO7Q9a7yLMJBYk1mgZmTLp-1nohIygyuughz9YQD7DUt73v-ibObeN15Xpc3AJ3EGZn82g1tZf4CXL1Z1PvQVgSYI0BrUomFCAZCrsAtytRGcdkc_T24pa5h4Ei-sLvTApgjVeXtUWQzpDNqfJeto3FLEtsfb5G5w_Rn7r8xisKvD5NciCd3zA8eSsPY9yIZGX4G1Cd1YU08C5pVDoOoo9pBKwVIXKtvDflWILyxnn5kBh-u1MU-TQ9tMojTTHlTIIsKm7MHy5n65YcaLzvvJ_3Z6ZSkLLrXk6_msEygmegPFxfwkhLOfH3HHEHfVUMqJ7m_HBbKwbLR1uzYP2xcnMVSdALz-G8aoGib0_kymVqakJUTYHM0zVqMdA-aUJ4f9WAyCfrDFJKiHmCZdi7wKNUDhVauHLn7GLrF4wiG9UzOGtobrmYVCYPj-Gf0Bxfy2Tj69d29ekZ7O_dVvgtvV1aB9FWevYjTIOnYkGvklBZ769kH0nFFdg5s1YBv0mRQPejBkEQQ-R4V8-6lSCzZcohQvgxWd_pXt_Imqi95cDCdP6g5lFAh0GVSpummEJhNhpWjCLb3Z8X_lL0n7KuRONgCBnIirC5Jkg9JZYF314ewDVGPm3e51XWjqZf78Cucs6ArW4-8nPam6dM57_K0jzkizSCiu8OKB-qmmYZ4WNAZll9DNuv_zLBtbaO1bYO91ljyx1x66RVrEJFXHqj_ZI0XdhHWK38k5i1S2hSaNIKx26fMK7Ww9Q6rMfdRQurWC7rQdDFtSGpeSyBNIjrlKIgdv5DFPObwXbmDzaZuvb45EtEwH61Sdp-DmwuBvS6zt_EQvzO7I16tVEZe3BAwxhiG-ikvbC_7oK26VNabqqpXOcLdkAXTpUAQziqt-L1l5XFkgKOqkuiHikjU7d_rXN_XtqcrhPp0sZbm68kENX6752d78tIASDnoyVGYnQhYaWYPIQQ3--q4c2itwWa0Lmdt820edn8iGSAnuG0c7h_jWYJ10Q_TisOJ8R5TRQrp4sfh8UNmk5OlsRhBxxzxpoOVA9xTxwZsk67TupsGsIdGSF-4B8tsZsGT0Uzk8HQIOrPO7IEG32e4cdvCyH2-v08B7FZQ40Nobnc7dA2zK2X6AoiKsl2s8oo9n7PGBijZw8Zyn9bBrdRwflrwPAvtEs66qU2Dskk-F3LtZdGVmaqWxK7onDKQszfWu0ZWb25s_Z3aW88uQJwHbLqMaoUIPQdIWu-JHNzU0dXWwmucdNXfR1o6hf4RpIHfnQUyOEOqox8pMtVsVkQ2I2_7DanLv3noOKDkUxWDV5XbcUhkuX2DVeEM5nrvVidJZggr-sYRXr_eO8Vx1zPnDODyamGZho5B_BSAxhkNJhUnBIe8Aak2xa1pnQE0KC9naJtITn9hxNcfudMJKW5NpP-d7El-uaO_uBvghUP27rnFNdAsw05yA=="
+            }
+          },
+          "time": {
+            "start": 1791136312550,
+            "end": 1791136314468
+          }
+        },
+        {
+          "id": "prt_g0VX6XRKk00ffSoPWWg6",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XOlc00t3EjOpoxQ",
+          "type": "tool",
+          "callID": "call_nVYjAHWV02l2YViGdMlKWH7O",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                ""
+              ],
+              "kinds": [
+                "expert_squad"
+              ],
+              "next_owner_kinds": [
+                "create_task_with_expert_squad"
+              ],
+              "owner_refs": [],
+              "exact_refs": [
+                {
+                  "kind": "expert_squad",
+                  "source": "platform",
+                  "owner_ref": "expert-squad-registry",
+                  "local_ref": "base"
+                }
+              ],
+              "deactivate_refs": [],
+              "product_pillar": "work",
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"62f03fd981f60fc7a9a5f034bc0fd2de28b660e2fc378a13c9fb9a918bd0199e\",\n  \"catalog_revision\": \"ba084a86f7664a9208815c96380f3e80f40bc19f9245a196ac9448b071d0f6a2\",\n  \"caller\": \"mission\",\n  \"reveal_revision\": 3,\n  \"active_refs\": [\n    {\n      \"kind\": \"expert_squad\",\n      \"source\": \"platform\",\n      \"owner_ref\": \"expert-squad-registry\",\n      \"local_ref\": \"base\"\n    }\n  ],\n  \"active_payload_chars\": 139486,\n  \"active_payload_tokens\": 34290,\n  \"visible_expert_squad_count\": 1,\n  \"held_expert_squad_count\": 1,\n  \"product_pillar\": \"work\",\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 1,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"base\"\n      },\n      \"name\": \"Base\",\n      \"description\": \"Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.\",\n      \"aliases\": [\n        \"Base\",\n        \"base\"\n      ],\n      \"discoverable_by\": [\n        \"mission\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"base\"\n      },\n      \"catalog_revision\": \"ba084a86f7664a9208815c96380f3e80f40bc19f9245a196ac9448b071d0f6a2\",\n      \"score\": null\n    }\n  ]\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "62f03fd981f60fc7a9a5f034bc0fd2de28b660e2fc378a13c9fb9a918bd0199e",
+              "catalog_revision": "ba084a86f7664a9208815c96380f3e80f40bc19f9245a196ac9448b071d0f6a2",
+              "caller": "mission",
+              "result_count": 1,
+              "reveal_revision": 3,
+              "active_ref_count": 1,
+              "active_payload_chars": 139486,
+              "active_payload_tokens": 34290,
+              "visible_expert_squad_count": 1,
+              "held_expert_squad_count": 1,
+              "product_pillar": "work",
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_hndVIiLdaq12Ml2kxk6R",
+                "search_call_id": "call_nVYjAHWV02l2YViGdMlKWH7O",
+                "prior_revision": 2,
+                "revision": 3,
+                "harness_projection_hash": "9bd364d34eae986c81b7ba8bcb542200225a824879df7ad3a65fa1fc06eb1a92",
+                "catalog_snapshot_ref": "/attachment/prj_hjJax75ej6gpH3egAagk/62f03fd981f60fc7a9a5f034bc0fd2de28b660e2fc378a13c9fb9a918bd0199e.json",
+                "catalog_snapshot_hash": "62f03fd981f60fc7a9a5f034bc0fd2de28b660e2fc378a13c9fb9a918bd0199e",
+                "materialization_fingerprint": "758b927282371e4ac5cd5feb7ffd080cfe7c0bcc6aef0272d4ebe41a3d7aca51",
+                "result_refs": [
+                  {
+                    "kind": "expert_squad",
+                    "source": "platform",
+                    "owner_ref": "expert-squad-registry",
+                    "local_ref": "base"
+                  }
+                ],
+                "deactivate_refs": [],
+                "activated": [
+                  {
+                    "requested_ref": {
+                      "kind": "expert_squad",
+                      "source": "platform",
+                      "owner_ref": "expert-squad-registry",
+                      "local_ref": "base"
+                    },
+                    "executable_ref": {
+                      "kind": "tool",
+                      "source": "platform",
+                      "owner_ref": "tool-registry",
+                      "local_ref": "panel_create_task"
+                    },
+                    "provider_name": "panel_create_task",
+                    "definition": {
+                      "name": "panel_create_task",
+                      "description": "Create one outcome-complete Task, optionally binding it to a channel thread. Mission creates another Task only for a genuinely different fixed Expert Squad, accepted external Task evidence or operator-authority boundary, or an explicit operator request for a separate lifecycle.",
+                      "input_schema": {
+                        "$schema": "http://json-schema.org/draft-07/schema#",
+                        "type": "object",
+                        "required": [
+                          "title",
+                          "request",
+                          "productPillar",
+                          "directory",
+                          "request_id",
+                          "artifact_sources",
+                          "model",
+                          "promptProfile",
+                          "expectedPackageDigest",
+                          "checks",
+                          "channel",
+                          "thread",
+                          "platform",
+                          "allow_create"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "title": {
+                            "description": "Short task title shown in the project board.",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 80
+                          },
+                          "request": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 32000,
+                            "description": "A clear, actionable assignment authored for this Task. You may paraphrase, organize and clarify the user request and add necessary implementation guidance while preserving the intended outcome, applicable constraints and scope. Distinguish your execution approach from user requirements or permissions. Canonical attachments are forwarded separately; rendered attachment indexes are references to source material, not new user instructions."
+                          },
+                          "productPillar": {
+                            "anyOf": [
+                              {
+                                "description": "Product pillar for direct panel-UI creation. Mission and conversation callers inherit their persisted pillar.",
+                                "type": "string",
+                                "enum": [
+                                  "code",
+                                  "work"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "directory": {
+                            "anyOf": [
+                              {
+                                "description": "Absolute execution repository for the new Task. Sessions, tools, artifacts, and git operations use this directory while Task storage remains in the caller project.",
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "request_id": {
+                            "anyOf": [
+                              {
+                                "description": "External request ID used for idempotent task creation.",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "artifact_sources": {
+                            "anyOf": [
+                              {
+                                "description": "Mission-only cross-Task delivery authorities. For a completed source, provide only {authority:'completion_decision',source_task_id}; the Host imports the complete current deliverable set without copied locator IDs. For failed/cancelled recovery, provide {authority:'terminal_lifecycle',source_task_id,locator}.",
+                                "maxItems": 64,
+                                "type": "array",
+                                "items": {
+                                  "oneOf": [
+                                    {
+                                      "type": "object",
+                                      "required": [
+                                        "authority",
+                                        "source_task_id"
+                                      ],
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "authority": {
+                                          "type": "string",
+                                          "const": "completion_decision"
+                                        },
+                                        "source_task_id": {
+                                          "type": "string",
+                                          "minLength": 1,
+                                          "maxLength": 512
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "type": "object",
+                                      "required": [
+                                        "authority",
+                                        "source_task_id",
+                                        "locator"
+                                      ],
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "authority": {
+                                          "type": "string",
+                                          "const": "terminal_lifecycle"
+                                        },
+                                        "source_task_id": {
+                                          "type": "string",
+                                          "minLength": 1,
+                                          "maxLength": 512
+                                        },
+                                        "locator": {
+                                          "oneOf": [
+                                            {
+                                              "type": "object",
+                                              "required": [
+                                                "source",
+                                                "artifact_id",
+                                                "catalog_revision",
+                                                "expected_sha256"
+                                              ],
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "source": {
+                                                  "type": "string",
+                                                  "const": "engine_artifact"
+                                                },
+                                                "artifact_id": {
+                                                  "type": "string",
+                                                  "minLength": 1,
+                                                  "maxLength": 512
+                                                },
+                                                "catalog_revision": {
+                                                  "type": "integer",
+                                                  "exclusiveMinimum": 0,
+                                                  "maximum": 9007199254740991
+                                                },
+                                                "expected_sha256": {
+                                                  "type": "string",
+                                                  "pattern": "^[a-f0-9]{64}$"
+                                                }
+                                              }
+                                            },
+                                            {
+                                              "type": "object",
+                                              "required": [
+                                                "source",
+                                                "snapshot"
+                                              ],
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "source": {
+                                                  "type": "string",
+                                                  "const": "task_artifact_snapshot"
+                                                },
+                                                "snapshot": {
+                                                  "type": "object",
+                                                  "required": [
+                                                    "schema_version",
+                                                    "project_id",
+                                                    "task_id",
+                                                    "snapshot_id",
+                                                    "manifest_sha256"
+                                                  ],
+                                                  "additionalProperties": false,
+                                                  "properties": {
+                                                    "schema_version": {
+                                                      "type": "number",
+                                                      "const": 2
+                                                    },
+                                                    "project_id": {
+                                                      "type": "string",
+                                                      "minLength": 1
+                                                    },
+                                                    "task_id": {
+                                                      "type": "string",
+                                                      "minLength": 1
+                                                    },
+                                                    "snapshot_id": {
+                                                      "type": "string",
+                                                      "format": "uuid",
+                                                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                                                    },
+                                                    "manifest_sha256": {
+                                                      "type": "string",
+                                                      "pattern": "^[a-f0-9]{64}$"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            {
+                                              "type": "object",
+                                              "required": [
+                                                "source",
+                                                "ref"
+                                              ],
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "source": {
+                                                  "type": "string",
+                                                  "const": "task_artifact_resource"
+                                                },
+                                                "ref": {
+                                                  "type": "object",
+                                                  "required": [
+                                                    "snapshot",
+                                                    "tree",
+                                                    "path",
+                                                    "media_type",
+                                                    "bytes",
+                                                    "sha256"
+                                                  ],
+                                                  "additionalProperties": false,
+                                                  "properties": {
+                                                    "snapshot": {
+                                                      "type": "object",
+                                                      "required": [
+                                                        "schema_version",
+                                                        "project_id",
+                                                        "task_id",
+                                                        "snapshot_id",
+                                                        "manifest_sha256"
+                                                      ],
+                                                      "additionalProperties": false,
+                                                      "properties": {
+                                                        "schema_version": {
+                                                          "type": "number",
+                                                          "const": 2
+                                                        },
+                                                        "project_id": {
+                                                          "type": "string",
+                                                          "minLength": 1
+                                                        },
+                                                        "task_id": {
+                                                          "type": "string",
+                                                          "minLength": 1
+                                                        },
+                                                        "snapshot_id": {
+                                                          "type": "string",
+                                                          "format": "uuid",
+                                                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                                                        },
+                                                        "manifest_sha256": {
+                                                          "type": "string",
+                                                          "pattern": "^[a-f0-9]{64}$"
+                                                        }
+                                                      }
+                                                    },
+                                                    "tree": {
+                                                      "type": "string",
+                                                      "minLength": 1
+                                                    },
+                                                    "path": {
+                                                      "type": "string",
+                                                      "minLength": 1
+                                                    },
+                                                    "media_type": {
+                                                      "type": "string",
+                                                      "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$"
+                                                    },
+                                                    "bytes": {
+                                                      "type": "integer",
+                                                      "minimum": 0,
+                                                      "maximum": 9007199254740991
+                                                    },
+                                                    "sha256": {
+                                                      "type": "string",
+                                                      "pattern": "^[a-f0-9]{64}$"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "model": {
+                            "anyOf": [
+                              {
+                                "description": "Model reference in provider/model format for the new task.",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "promptProfile": {
+                            "description": "Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose a held ID returned by capability_search and may inspect it with expert_squad_inspect. Non-Mission callers may omit it to inherit their effective prompt_profile.active.",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 64,
+                            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+                          },
+                          "expectedPackageDigest": {
+                            "anyOf": [
+                              {
+                                "description": "Optional compare-and-swap assertion for the exact immutable expert-squad package revision resolved at Task creation.",
+                                "type": "string",
+                                "pattern": "^[a-f0-9]{64}$"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "checks": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "description": "Executable Host verification configuration. Workflow IDs, phase names, sequencing, planning metadata, and evidence do not belong here.",
+                                "properties": {
+                                  "build": {
+                                    "anyOf": [
+                                      {
+                                        "description": "Explicit build commands, or false to disable discovered build commands.",
+                                        "anyOf": [
+                                          {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            }
+                                          },
+                                          {
+                                            "type": "boolean",
+                                            "const": false
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "test": {
+                                    "anyOf": [
+                                      {
+                                        "description": "Explicit test commands, or false to disable discovered test commands.",
+                                        "anyOf": [
+                                          {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            }
+                                          },
+                                          {
+                                            "type": "boolean",
+                                            "const": false
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "lint": {
+                                    "anyOf": [
+                                      {
+                                        "description": "Explicit lint commands, or false to disable discovered lint commands.",
+                                        "anyOf": [
+                                          {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            }
+                                          },
+                                          {
+                                            "type": "boolean",
+                                            "const": false
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "verify_cmd": {
+                                    "anyOf": [
+                                      {
+                                        "description": "Explicit end-to-end verification commands, or false to disable them.",
+                                        "anyOf": [
+                                          {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            }
+                                          },
+                                          {
+                                            "type": "boolean",
+                                            "const": false
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "startup": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "command",
+                                          "ready_url",
+                                          "ready_text",
+                                          "timeout_ms",
+                                          "warmup_ms",
+                                          "require_exit_zero",
+                                          "mode"
+                                        ],
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "command": {
+                                            "type": "string",
+                                            "minLength": 1
+                                          },
+                                          "ready_url": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string",
+                                                "format": "uri"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "ready_text": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "timeout_ms": {
+                                            "anyOf": [
+                                              {
+                                                "type": "integer",
+                                                "exclusiveMinimum": 0,
+                                                "maximum": 9007199254740991
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "warmup_ms": {
+                                            "anyOf": [
+                                              {
+                                                "type": "integer",
+                                                "exclusiveMinimum": 0,
+                                                "maximum": 9007199254740991
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "require_exit_zero": {
+                                            "anyOf": [
+                                              {
+                                                "type": "boolean"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "mode": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string",
+                                                "enum": [
+                                                  "soft",
+                                                  "strict"
+                                                ]
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "artifact": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "require_changed_files": {
+                                            "anyOf": [
+                                              {
+                                                "type": "boolean"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "min_changed_files": {
+                                            "anyOf": [
+                                              {
+                                                "type": "integer",
+                                                "minimum": 0,
+                                                "maximum": 9007199254740991
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "require_diff": {
+                                            "anyOf": [
+                                              {
+                                                "type": "boolean"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "require_summary": {
+                                            "anyOf": [
+                                              {
+                                                "type": "boolean"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "mode": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string",
+                                                "enum": [
+                                                  "soft",
+                                                  "strict"
+                                                ]
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "require_changed_files",
+                                          "min_changed_files",
+                                          "require_diff",
+                                          "require_summary",
+                                          "mode"
+                                        ]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "visual": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "target",
+                                          "url",
+                                          "require_text",
+                                          "require_title",
+                                          "timeout_ms",
+                                          "mode"
+                                        ],
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "target": {
+                                            "type": "string",
+                                            "const": "web"
+                                          },
+                                          "url": {
+                                            "type": "string",
+                                            "format": "uri"
+                                          },
+                                          "require_text": {
+                                            "anyOf": [
+                                              {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "string"
+                                                }
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "require_title": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "timeout_ms": {
+                                            "anyOf": [
+                                              {
+                                                "type": "integer",
+                                                "exclusiveMinimum": 0,
+                                                "maximum": 9007199254740991
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "mode": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string",
+                                                "enum": [
+                                                  "soft",
+                                                  "strict"
+                                                ]
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "playwright": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "target",
+                                          "url",
+                                          "browser",
+                                          "executable_path",
+                                          "wait_for_selector",
+                                          "wait_for_text",
+                                          "require_text",
+                                          "require_title",
+                                          "full_page",
+                                          "viewport",
+                                          "timeout_ms",
+                                          "mode"
+                                        ],
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "target": {
+                                            "type": "string",
+                                            "const": "web"
+                                          },
+                                          "url": {
+                                            "type": "string",
+                                            "format": "uri"
+                                          },
+                                          "browser": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string",
+                                                "enum": [
+                                                  "chrome",
+                                                  "edge",
+                                                  "chromium"
+                                                ]
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "executable_path": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "wait_for_selector": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "wait_for_text": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "require_text": {
+                                            "anyOf": [
+                                              {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "string"
+                                                }
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "require_title": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "full_page": {
+                                            "anyOf": [
+                                              {
+                                                "type": "boolean"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "viewport": {
+                                            "anyOf": [
+                                              {
+                                                "type": "object",
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                  "width": {
+                                                    "anyOf": [
+                                                      {
+                                                        "type": "integer",
+                                                        "exclusiveMinimum": 0,
+                                                        "maximum": 9007199254740991
+                                                      },
+                                                      {
+                                                        "type": "null"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "height": {
+                                                    "anyOf": [
+                                                      {
+                                                        "type": "integer",
+                                                        "exclusiveMinimum": 0,
+                                                        "maximum": 9007199254740991
+                                                      },
+                                                      {
+                                                        "type": "null"
+                                                      }
+                                                    ]
+                                                  }
+                                                },
+                                                "required": [
+                                                  "width",
+                                                  "height"
+                                                ]
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "timeout_ms": {
+                                            "anyOf": [
+                                              {
+                                                "type": "integer",
+                                                "exclusiveMinimum": 0,
+                                                "maximum": 9007199254740991
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "mode": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string",
+                                                "enum": [
+                                                  "soft",
+                                                  "strict"
+                                                ]
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "ui_review": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "required": [
+                                          "target",
+                                          "url",
+                                          "prompt",
+                                          "focus",
+                                          "timeout_ms",
+                                          "mode"
+                                        ],
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "target": {
+                                            "type": "string",
+                                            "const": "web"
+                                          },
+                                          "url": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string",
+                                                "format": "uri"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "prompt": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "focus": {
+                                            "anyOf": [
+                                              {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "layout",
+                                                    "hierarchy",
+                                                    "clarity",
+                                                    "navigation",
+                                                    "feedback",
+                                                    "accessibility"
+                                                  ]
+                                                }
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "timeout_ms": {
+                                            "anyOf": [
+                                              {
+                                                "type": "integer",
+                                                "exclusiveMinimum": 0,
+                                                "maximum": 9007199254740991
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "mode": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string",
+                                                "enum": [
+                                                  "soft",
+                                                  "strict"
+                                                ]
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "code_quality": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "enabled": {
+                                            "anyOf": [
+                                              {
+                                                "type": "boolean"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "prompt": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "max_diffs": {
+                                            "anyOf": [
+                                              {
+                                                "type": "integer",
+                                                "exclusiveMinimum": 0,
+                                                "maximum": 9007199254740991
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "mode": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string",
+                                                "enum": [
+                                                  "soft",
+                                                  "strict"
+                                                ]
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "enabled",
+                                          "prompt",
+                                          "max_diffs",
+                                          "mode"
+                                        ]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "code_review": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "enabled": {
+                                            "anyOf": [
+                                              {
+                                                "type": "boolean"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "prompt": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "max_diffs": {
+                                            "anyOf": [
+                                              {
+                                                "type": "integer",
+                                                "exclusiveMinimum": 0,
+                                                "maximum": 9007199254740991
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "mode": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string",
+                                                "enum": [
+                                                  "soft",
+                                                  "strict"
+                                                ]
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "enabled",
+                                          "prompt",
+                                          "max_diffs",
+                                          "mode"
+                                        ]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "dead_code_review": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "enabled": {
+                                            "anyOf": [
+                                              {
+                                                "type": "boolean"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "prompt": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "max_diffs": {
+                                            "anyOf": [
+                                              {
+                                                "type": "integer",
+                                                "exclusiveMinimum": 0,
+                                                "maximum": 9007199254740991
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "mode": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string",
+                                                "enum": [
+                                                  "soft",
+                                                  "strict"
+                                                ]
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "enabled",
+                                          "prompt",
+                                          "max_diffs",
+                                          "mode"
+                                        ]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "judge": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "enabled": {
+                                            "anyOf": [
+                                              {
+                                                "type": "boolean"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "prompt": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "mode": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string",
+                                                "enum": [
+                                                  "soft",
+                                                  "strict"
+                                                ]
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "enabled",
+                                          "prompt",
+                                          "mode"
+                                        ]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "spec_check": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "enabled": {
+                                            "anyOf": [
+                                              {
+                                                "type": "boolean"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "prompt": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "mode": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string",
+                                                "enum": [
+                                                  "soft",
+                                                  "strict"
+                                                ]
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "enabled",
+                                          "prompt",
+                                          "mode"
+                                        ]
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "timeout_ms": {
+                                    "anyOf": [
+                                      {
+                                        "type": "integer",
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 9007199254740991
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "build",
+                                  "test",
+                                  "lint",
+                                  "verify_cmd",
+                                  "startup",
+                                  "artifact",
+                                  "visual",
+                                  "playwright",
+                                  "ui_review",
+                                  "code_quality",
+                                  "code_review",
+                                  "dead_code_review",
+                                  "judge",
+                                  "spec_check",
+                                  "timeout_ms"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "channel": {
+                            "anyOf": [
+                              {
+                                "description": "External channel identifier to bind to the new task.",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "thread": {
+                            "anyOf": [
+                              {
+                                "description": "External thread identifier to bind to the new task.",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "platform": {
+                            "anyOf": [
+                              {
+                                "description": "Channel platform for an external task binding.",
+                                "type": "string",
+                                "enum": [
+                                  "slack",
+                                  "telegram",
+                                  "discord",
+                                  "feishu",
+                                  "whatsapp",
+                                  "googlechat",
+                                  "msteams",
+                                  "line",
+                                  "matrix",
+                                  "mattermost",
+                                  "signal",
+                                  "wecom",
+                                  "dingtalk",
+                                  "clickclack",
+                                  "imessage",
+                                  "irc",
+                                  "nextcloud-talk",
+                                  "nostr",
+                                  "qqbot",
+                                  "raft",
+                                  "reef",
+                                  "sms",
+                                  "synology-chat",
+                                  "tlon",
+                                  "twitch",
+                                  "zalo",
+                                  "zalouser"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "allow_create": {
+                            "anyOf": [
+                              {
+                                "description": "Set false to return without creating a task.",
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "strict": false
+                    },
+                    "definition_digest": "df1fdd385f192979f952749ea1d5450ebf0dbba5c070c7d3040c511e994c9b98",
+                    "payload_chars": 14017,
+                    "payload_tokens": 3490,
+                    "materializer_binding_digest": "38047f40bb4926b99342a20d74b639e657d256f9ec47105792a73dde32fe1756"
+                  }
+                ],
+                "active_refs": [
+                  {
+                    "kind": "expert_squad",
+                    "source": "platform",
+                    "owner_ref": "expert-squad-registry",
+                    "local_ref": "base"
+                  }
+                ],
+                "active_definition_digest": "857c9071435dde38f7ff02d53d2cb20a6fd4c21358d986fa8b358912c3c05172",
+                "active_payload_chars": 139486,
+                "active_payload_tokens": 34290
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1791136314474,
+              "end": 1791136317736
+            }
+          },
+          "orderKey": "v1:0001791136317578:0000000000000031:0000000000000000:part:prt_g0VX6XRKk00ffSoPWWg6"
+        },
+        {
+          "id": "prt_g0VX6XSC900o4wlzkwfG",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XOlc00t3EjOpoxQ",
+          "orderKey": "v1:0001791136317787:0000000000000031:0000000000000000:part:prt_g0VX6XSC900o4wlzkwfG",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 40231,
+            "input": 681,
+            "output": 91,
+            "reasoning": 35,
+            "cache": {
+              "read": 39424,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791136317894,
+          "completed": 1791136338010
+        },
+        "parentID": "msg_hndVIiLdaq12Ml2kxk6R",
+        "acceptedInputMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 41151,
+          "input": 785,
+          "output": 430,
+          "reasoning": 0,
+          "cache": {
+            "read": 39936,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791136317894:0000000000000030:0000000000000000:message:msg_g0VX6XSDu002UpqL3Lia",
+        "id": "msg_g0VX6XSDu002UpqL3Lia",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6XSIG00Rsu3c1wks",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XSDu002UpqL3Lia",
+          "orderKey": "v1:0001791136318164:0000000000000031:0000000000000000:part:prt_g0VX6XSIG00Rsu3c1wks",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6XTdB00dT6gCHSzP",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XSDu002UpqL3Lia",
+          "type": "tool",
+          "callID": "call_fZn5xXof4W08oTluMc8jlois",
+          "tool": "mission_state",
+          "state": {
+            "status": "completed",
+            "input": {
+              "action": "commit",
+              "base_revision": "d24e63003d5a28d6c30564e2bf6c7daa12564f1f60c2e6692aab8e7c59621e70",
+              "updates": [
+                {
+                  "file": "frontier.md",
+                  "content": "## Mission contract\nObjective: Report two numeric results in the conversation for acceptance DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445.\nIn scope: sum 137 + 249 and difference 249 - 137.\nOut of scope: any additional work or file delivery.\nHard constraints: Both numeric results must appear in the conversation.\nDone when:\n- Done-1: Both calculations verified by terminal Task evidence and reported in conversation.\n\n## Expert Squad authority\nSelection source: all installed\nSelected stage owners:\n- base\n\n## Stage arithmetic: Report both arithmetic results\nSatisfies: Done-1\nOutcome: Both requested numeric results verified.\nOwner: base\nSelection evidence: Compact outcome delivery with capability-matched execution and independent verification.\nDepends on: none\nExecution scope: conversation; no project mutations\nOwned surfaces/resources: numeric calculation evidence only\nRequired inputs: operator numbers and operation order\nDeliverables: sum and difference\nAcceptance: Correct numeric results for both expressions.\nAcceptance evidence: pending\nTask: not dispatched\nNext consumers: final acceptance\nParallel rationale: One coherent two-result arithmetic response; no separate resource lifecycles.\nOpen facts: none\n"
+                },
+                {
+                  "file": "tasks.md",
+                  "content": "# Stage-to-Task bindings\nNo bindings yet.\n"
+                },
+                {
+                  "file": "handoff.md",
+                  "content": "On next ordinary wake, reconcile the calculation Task and report both results; publish final outcome and complete Mission after reading terminal evidence.\n"
+                },
+                {
+                  "file": "notes.md",
+                  "content": "The complete requested scope is two elementary arithmetic results. No project edits, research, or additional delivery surfaces are needed.\n"
+                }
+              ]
+            },
+            "output": "{\"revision\":\"c14bee3aa42d15df7ff10d1c330b26981f5704f05b3a5b74c85ec6d9e2871a45\",\"files\":[{\"file\":\"frontier.md\",\"bytes\":1221},{\"file\":\"tasks.md\",\"bytes\":42},{\"file\":\"handoff.md\",\"bytes\":155},{\"file\":\"notes.md\",\"bytes\":139}]}",
+            "title": "mission_state commit 06e9afdd6066d8a0",
+            "metadata": {
+              "missionID": "06e9afdd6066d8a0",
+              "revision": "c14bee3aa42d15df7ff10d1c330b26981f5704f05b3a5b74c85ec6d9e2871a45",
+              "count": 4,
+              "bytes": 1557,
+              "truncated": false
+            },
+            "time": {
+              "start": 1791136323305,
+              "end": 1791136337734
+            }
+          },
+          "orderKey": "v1:0001791136337710:0000000000000031:0000000000000000:part:prt_g0VX6XTdB00dT6gCHSzP"
+        },
+        {
+          "id": "prt_g0VX6XXR1004FypB9XaP",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XSDu002UpqL3Lia",
+          "orderKey": "v1:0001791136337930:0000000000000031:0000000000000000:part:prt_g0VX6XXR1004FypB9XaP",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 41151,
+            "input": 785,
+            "output": 430,
+            "reasoning": 0,
+            "cache": {
+              "read": 39936,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791136338064,
+          "completed": 1791136348177
+        },
+        "parentID": "msg_hndVIiLdaq12Ml2kxk6R",
+        "acceptedInputMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 41358,
+          "input": 672,
+          "output": 110,
+          "reasoning": 0,
+          "cache": {
+            "read": 40576,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791136338064:0000000000000030:0000000000000000:message:msg_g0VX6XXTD003JDaLQy92",
+        "id": "msg_g0VX6XXTD003JDaLQy92",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6XXZL00Jbc1QJ7VU",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XXTD003JDaLQy92",
+          "orderKey": "v1:0001791136338444:0000000000000031:0000000000000000:part:prt_g0VX6XXZL00Jbc1QJ7VU",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6XYko00CCm5gcyhs",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XXTD003JDaLQy92",
+          "type": "tool",
+          "callID": "call_HBBKHXTu7RwwlZeEGvz5ikLH",
+          "tool": "panel_create_task",
+          "state": {
+            "status": "completed",
+            "input": {
+              "title": "Verify both arithmetic results",
+              "request": "For acceptance DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445, compute and verify the sum of 137 and 249 and the difference 249 minus 137. Return both numeric results clearly. These two results are the complete requested deliverable; do not edit project files or expand scope. Mission owns reporting in the operator conversation.",
+              "promptProfile": "base"
+            },
+            "output": "{\"kind\":\"created\",\"task_id\":\"tsk_g00VX6XZrR00iAX4n6as\",\"artifact_import_mappings\":[],\"message\":\"Task accepted: `tsk_g00VX6XZrR00iAX4n6as`\"}",
+            "title": "Task created",
+            "metadata": {
+              "truncated": false
+            },
+            "time": {
+              "start": 1791136342998,
+              "end": 1791136348006
+            }
+          },
+          "orderKey": "v1:0001791136347015:0000000000000031:0000000000000000:part:prt_g0VX6XYko00CCm5gcyhs"
+        },
+        {
+          "id": "prt_g0VX6Xa3h00V5oWwL1z1",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6XXTD003JDaLQy92",
+          "orderKey": "v1:0001791136348014:0000000000000031:0000000000000000:part:prt_g0VX6Xa3h00V5oWwL1z1",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 41358,
+            "input": 672,
+            "output": 110,
+            "reasoning": 0,
+            "cache": {
+              "read": 40576,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791136348235,
+          "completed": 1791136356219
+        },
+        "parentID": "msg_hndVIiLdaq12Ml2kxk6R",
+        "acceptedInputMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 41481,
+          "input": 335,
+          "output": 58,
+          "reasoning": 0,
+          "cache": {
+            "read": 41088,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001791136348235:0000000000000030:0000000000000000:message:msg_g0VX6Xa7H00vfpuZjNgC",
+        "id": "msg_g0VX6Xa7H00vfpuZjNgC",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6XaG500vneNHvWDQ",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6Xa7H00vfpuZjNgC",
+          "orderKey": "v1:0001791136348782:0000000000000031:0000000000000000:part:prt_g0VX6XaG500vneNHvWDQ",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6XbWt00mPixttVUF",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6Xa7H00vfpuZjNgC",
+          "orderKey": "v1:0001791136353667:0000000000000031:0000000000000000:part:prt_g0VX6XbWt00mPixttVUF",
+          "type": "text",
+          "text": "For acceptance **DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445**:\n\n- Sum: 137 + 249 = **386**\n- Difference: 249 − 137 = **112**",
+          "time": {
+            "start": 1791136355991,
+            "end": 1791136355991
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_0fe34f672f763104016ac2926174dc87d0aa726dc7dbf9c10f",
+              "phase": "final_answer"
+            }
+          }
+        },
+        {
+          "id": "prt_g0VX6XcAH00T39LQ1FNT",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "messageID": "msg_g0VX6Xa7H00vfpuZjNgC",
+          "orderKey": "v1:0001791136356110:0000000000000031:0000000000000000:part:prt_g0VX6XcAH00T39LQ1FNT",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 41481,
+            "input": 335,
+            "output": 58,
+            "reasoning": 0,
+            "cache": {
+              "read": 41088,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    }
+  ],
+  "replay": {
+    "status": 200,
+    "body": {
+      "missionID": "06e9afdd6066d8a0",
+      "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+      "created": false,
+      "productPillar": "work"
+    }
+  },
+  "retainedDraft": {
+    "text": "Exact next draft after DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445; retain this punctuation: A → B."
+  },
+  "closure": {
+    "missionID": "06e9afdd6066d8a0",
+    "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+    "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+    "eventID": "pev_haSloL0Pk0zF668uOHaK",
+    "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+    "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+    "state": "opened",
+    "source": "mission.dispatch"
+  },
+  "sendObservations": [
+    {
+      "requestIndex": 2,
+      "observedAt": 1791136277065,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "closure": {
+          "missionID": "06e9afdd6066d8a0",
+          "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+          "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+          "eventID": "pev_haSloL0Pk0zF668uOHaK",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 3,
+      "observedAt": 1791136278924,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "closure": {
+          "missionID": "06e9afdd6066d8a0",
+          "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+          "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+          "eventID": "pev_haSloL0Pk0zF668uOHaK",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 4,
+      "observedAt": 1791136283526,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "closure": {
+          "missionID": "06e9afdd6066d8a0",
+          "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+          "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+          "eventID": "pev_haSloL0Pk0zF668uOHaK",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 5,
+      "observedAt": 1791136284695,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "closure": {
+          "missionID": "06e9afdd6066d8a0",
+          "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+          "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+          "eventID": "pev_haSloL0Pk0zF668uOHaK",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 6,
+      "observedAt": 1791136291282,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "closure": {
+          "missionID": "06e9afdd6066d8a0",
+          "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+          "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+          "eventID": "pev_haSloL0Pk0zF668uOHaK",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 7,
+      "observedAt": 1791136297480,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "closure": {
+          "missionID": "06e9afdd6066d8a0",
+          "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+          "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+          "eventID": "pev_haSloL0Pk0zF668uOHaK",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 8,
+      "observedAt": 1791136304902,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "closure": {
+          "missionID": "06e9afdd6066d8a0",
+          "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+          "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+          "eventID": "pev_haSloL0Pk0zF668uOHaK",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 9,
+      "observedAt": 1791136318180,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "closure": {
+          "missionID": "06e9afdd6066d8a0",
+          "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+          "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+          "eventID": "pev_haSloL0Pk0zF668uOHaK",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 10,
+      "observedAt": 1791136338456,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "closure": {
+          "missionID": "06e9afdd6066d8a0",
+          "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+          "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+          "eventID": "pev_haSloL0Pk0zF668uOHaK",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 11,
+      "observedAt": 1791136348807,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "closure": {
+          "missionID": "06e9afdd6066d8a0",
+          "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+          "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+          "eventID": "pev_haSloL0Pk0zF668uOHaK",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 12,
+      "observedAt": 1791136353636,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hndVIiLdaq12Ml2kxk6R"
+        ],
+        "closure": {
+          "missionID": "06e9afdd6066d8a0",
+          "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+          "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+          "eventID": "pev_haSloL0Pk0zF668uOHaK",
+          "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+          "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    }
+  ],
+  "status": "passed",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    }
+  ],
+  "credentialCleanup": "passed",
+  "cleanupErrors": []
+}

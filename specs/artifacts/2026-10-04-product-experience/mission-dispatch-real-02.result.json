@@ -1,0 +1,328 @@
+{
+  "model": "openai/gpt-6.1-sol",
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oBgNjl\\runner-6068-hWZwAh\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-Fhqbcc",
+  "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+  "operatorPrompt": "For acceptance DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe, report the sum of 137 and 249 and the difference between 249 and 137. Return both numeric results in the conversation. This is the complete requested deliverable.",
+  "authority": {
+    "credential": "available",
+    "projectedModel": "gpt-6.1-sol",
+    "copiedProviders": [
+      "openai"
+    ],
+    "pairedModels": true
+  },
+  "preflight": {
+    "sessionID": "ses_hbwikCyhXr9dK4RLw5i8",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "draft": {
+    "status": 200,
+    "body": {
+      "missionID": "e3bd8cdd1f6d5244",
+      "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+      "title": "Atomic manual draft acceptance",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oBgNjl\\runner-6068-hWZwAh\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-Fhqbcc\\project",
+      "created": 1791136799386,
+      "updated": 1791136799419,
+      "interruptible": false,
+      "productPillar": "work",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "For acceptance DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe, report the sum of 137 and 249 and the difference between 249 and 137. Return both numeric results in the conversation. This is the complete requested deliverable."
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  },
+  "dispatch": {
+    "status": 200,
+    "body": {
+      "missionID": "e3bd8cdd1f6d5244",
+      "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+      "created": false,
+      "productPillar": "work"
+    }
+  },
+  "latest": {
+    "tasks": [],
+    "ownedPrompts": [
+      "ses_hbwikCyhXr9dK4RLw5i8",
+      "ses_-zUStQWW5zz8xKtJjZjL"
+    ],
+    "state": {
+      "type": "idle"
+    }
+  },
+  "firstModelOutput": {
+    "messageID": "msg_g0VX6ZTZQ00flJfeAjp1",
+    "observedAt": 1791136810571,
+    "requestCount": 5
+  },
+  "replay": {
+    "status": 200,
+    "body": {
+      "missionID": "e3bd8cdd1f6d5244",
+      "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+      "created": false,
+      "productPillar": "work"
+    }
+  },
+  "retainedDraft": {
+    "text": "Exact next draft after DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe; retain this punctuation: A → B."
+  },
+  "status": "failed",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    }
+  ],
+  "sendObservations": [
+    {
+      "requestIndex": 2,
+      "observedAt": 1791136799747,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hPkuVBWHpXGyxsHdHynD"
+        ],
+        "closure": {
+          "missionID": "e3bd8cdd1f6d5244",
+          "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+          "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+          "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+          "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+          "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 3,
+      "observedAt": 1791136801390,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hPkuVBWHpXGyxsHdHynD"
+        ],
+        "closure": {
+          "missionID": "e3bd8cdd1f6d5244",
+          "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+          "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+          "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+          "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+          "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 4,
+      "observedAt": 1791136807312,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hPkuVBWHpXGyxsHdHynD"
+        ],
+        "closure": {
+          "missionID": "e3bd8cdd1f6d5244",
+          "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+          "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+          "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+          "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+          "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 5,
+      "observedAt": 1791136811112,
+      "facts": {
+        "draftDisposition": "pending",
+        "acceptedMessageIDs": [
+          "msg_hPkuVBWHpXGyxsHdHynD"
+        ],
+        "closure": {
+          "missionID": "e3bd8cdd1f6d5244",
+          "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+          "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+          "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+          "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+          "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 6,
+      "observedAt": 1791136818340,
+      "facts": {
+        "draftDisposition": "pending",
+        "acceptedMessageIDs": [
+          "msg_hPkuVBWHpXGyxsHdHynD"
+        ],
+        "closure": {
+          "missionID": "e3bd8cdd1f6d5244",
+          "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+          "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+          "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+          "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+          "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 7,
+      "observedAt": 1791136824672,
+      "facts": {
+        "draftDisposition": "pending",
+        "acceptedMessageIDs": [
+          "msg_hPkuVBWHpXGyxsHdHynD"
+        ],
+        "closure": {
+          "missionID": "e3bd8cdd1f6d5244",
+          "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+          "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+          "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+          "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+          "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 8,
+      "observedAt": 1791136842147,
+      "facts": {
+        "draftDisposition": "pending",
+        "acceptedMessageIDs": [
+          "msg_hPkuVBWHpXGyxsHdHynD"
+        ],
+        "closure": {
+          "missionID": "e3bd8cdd1f6d5244",
+          "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+          "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+          "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+          "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+          "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 9,
+      "observedAt": 1791136852569,
+      "facts": {
+        "draftDisposition": "pending",
+        "acceptedMessageIDs": [
+          "msg_hPkuVBWHpXGyxsHdHynD"
+        ],
+        "closure": {
+          "missionID": "e3bd8cdd1f6d5244",
+          "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+          "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+          "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+          "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+          "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 10,
+      "observedAt": 1791136864773,
+      "facts": {
+        "draftDisposition": "pending",
+        "acceptedMessageIDs": [
+          "msg_hPkuVBWHpXGyxsHdHynD"
+        ],
+        "closure": {
+          "missionID": "e3bd8cdd1f6d5244",
+          "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+          "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+          "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+          "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+          "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    }
+  ],
+  "error": {
+    "name": "Error",
+    "message": "MISSION_DISPATCH_INACTIVITY",
+    "stack": "Error\n    at D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\script\\mission-dispatch-e2e.ts:279:56\n    at processTicksAndRejections (unknown:7:39)"
+  },
+  "credentialCleanup": "passed",
+  "cleanupErrors": []
+}

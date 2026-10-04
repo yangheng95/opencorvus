@@ -1,0 +1,168 @@
+[
+  {
+    "id": "prt_g0VX66Jle00LqXWuilsf",
+    "messageID": "msg_g0VX66IIx00J9o5dkFVf",
+    "sessionID": "ses_hCwpNYBZ4hXoR1Oeu315",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_pK5BVHJ4eGfSsMwHxWUmvNDQ",
+      "tool": "read_agent_message",
+      "input": {
+        "sources": [
+          {
+            "kind": "dispatch_origin",
+            "dispatch_id": "art_hd70OSdfpYPovhbMwzj1"
+          }
+        ],
+        "evidence_reads": [
+          {
+            "message_id": "msg_hzkGNXmKUqYmOHKx9tQ2",
+            "part_id": "prt_g0VX65Ykd00xy3CovMY6",
+            "field": "input"
+          },
+          {
+            "message_id": "msg_hzkGNXmKUqYmOHKx9tQ2",
+            "part_id": "prt_g0VX65Ykd00xy3CovMY6",
+            "field": "output"
+          },
+          {
+            "message_id": "msg_hVqyzU5hwpgOUYLxV3vN",
+            "part_id": "prt_g0VX663pl00Gf0rCdmWH",
+            "field": "output"
+          },
+          {
+            "message_id": "msg_hVqyzU5hwpgOUYLxV3vN",
+            "part_id": "prt_g0VX6660U00YmOGGZzMi",
+            "field": "input"
+          },
+          {
+            "message_id": "msg_hVqyzU5hwpgOUYLxV3vN",
+            "part_id": "prt_g0VX6660U00YmOGGZzMi",
+            "field": "output"
+          },
+          {
+            "message_id": "msg_hVqyzU5hwpgOUYLxV3vN",
+            "part_id": "prt_g0VX668ri00gXkjziOtL",
+            "field": "input"
+          },
+          {
+            "message_id": "msg_hVqyzU5hwpgOUYLxV3vN",
+            "part_id": "prt_g0VX668ri00gXkjziOtL",
+            "field": "output"
+          },
+          {
+            "message_id": "msg_hzkGNXmKUqYmOHKx9tQ2",
+            "part_id": "prt_g0VX65bP200Y8wpBucbx",
+            "field": "output",
+            "limit": 1000
+          }
+        ]
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0432d06b5e4f16ca016ac278fa38c887d0bd61f385aed82186"
+        }
+      },
+      "time": {
+        "start": 1791129850534
+      }
+    },
+    "outcome": {
+      "outcome": "failed",
+      "failure": {
+        "kind": "tool-input-invalid",
+        "name": "tool-input-invalid",
+        "message": "Invalid input for tool read_agent_message: Type validation failed: Value: {\"sources\":[{\"kind\":\"dispatch_origin\",\"dispatch_id\":\"art_hd70OSdfpYPovhbMwzj1\"}],\"evidence_reads\":[{\"message_id\":\"msg_hzkGNXmKUqYmOHKx9tQ2\",\"part_id\":\"prt_g0VX65Ykd00xy3CovMY6\",\"field\":\"input\"},{\"message_id\":\"msg_hzkGNXmKUqYmOHKx9tQ2\",\"part_id\":\"prt_g0VX65Ykd00xy3CovMY6\",\"field\":\"output\"},{\"message_id\":\"msg_hVqyzU5hwpgOUYLxV3vN\",\"part_id\":\"prt_g0VX663pl00Gf0rCdmWH\",\"field\":\"output\"},{\"message_id\":\"msg_hVqyzU5hwpgOUYLxV3vN\",\"part_id\":\"prt_g0VX6660U00YmOGGZzMi\",\"field\":\"input\"},{\"message_id\":\"msg_hVqyzU5hwpgOUYLxV3vN\",\"part_id\":\"prt_g0VX6660U00YmOGGZzMi\",\"field\":\"output\"},{\"message_id\":\"msg_hVqyzU5hwpgOUYLxV3vN\",\"part_id\":\"prt_g0VX668ri00gXkjziOtL\",\"field\":\"input\"},{\"message_id\":\"msg_hVqyzU5hwpgOUYLxV3vN\",\"part_id\":\"prt_g0VX668ri00gXkjziOtL\",\"field\":\"output\"},{\"message_id\":\"msg_hzkGNXmKUqYmOHKx9tQ2\",\"part_id\":\"prt_g0VX65bP200Y8wpBucbx\",\"field\":\"output\",\"limit\":1000}]}.\nError message: [\n  {\n    \"code\": \"custom\",\n    \"message\": \"Evidence reads may request at most 30000 characters per call\",\n    \"path\": [\n      \"evidence_reads\"\n    ]\n  }\n]",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-input-invalid",
+        "data": {
+          "toolCallId": "call_pK5BVHJ4eGfSsMwHxWUmvNDQ",
+          "toolName": "read_agent_message"
+        }
+      },
+      "time": {
+        "end": 1791129861744
+      }
+    }
+  },
+  {
+    "id": "prt_g0VX66UuZ00eNLjI7ZUx",
+    "messageID": "msg_g0VX66TSR00npHneI7F0",
+    "sessionID": "ses_h8EnFhnByjzup5bL6WDc",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_Ib16BaHPTFXHbumSQTmmY8Eg",
+      "tool": "read_agent_message",
+      "input": {
+        "sources": [
+          {
+            "kind": "dispatch_origin",
+            "dispatch_id": "art_hmTfEfDxyK76ksC1E0bq"
+          }
+        ],
+        "evidence_reads": [
+          {
+            "message_id": "msg_hVtXvdyNrGwfwjSVKIwZ",
+            "part_id": "prt_g0VX65fqA00Ba7LQELJi",
+            "field": "input"
+          },
+          {
+            "message_id": "msg_hVtXvdyNrGwfwjSVKIwZ",
+            "part_id": "prt_g0VX65fqA00Ba7LQELJi",
+            "field": "output"
+          },
+          {
+            "message_id": "msg_h9RKHi4bkjLOdewzBSL9",
+            "part_id": "prt_g0VX65wfE00V3t1sUa1u",
+            "field": "output"
+          },
+          {
+            "message_id": "msg_h9RKHi4bkjLOdewzBSL9",
+            "part_id": "prt_g0VX65ylb00H8uBRTjRR",
+            "field": "input"
+          },
+          {
+            "message_id": "msg_h9RKHi4bkjLOdewzBSL9",
+            "part_id": "prt_g0VX65ylb00H8uBRTjRR",
+            "field": "output"
+          },
+          {
+            "message_id": "msg_h9RKHi4bkjLOdewzBSL9",
+            "part_id": "prt_g0VX661MK00JNjmf3Qhw",
+            "field": "input"
+          },
+          {
+            "message_id": "msg_h9RKHi4bkjLOdewzBSL9",
+            "part_id": "prt_g0VX661MK00JNjmf3Qhw",
+            "field": "output"
+          }
+        ]
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_09095dbd7207edff016ac279251b9c87d08e781ec841563b58"
+        }
+      },
+      "time": {
+        "start": 1791129893371
+      }
+    },
+    "outcome": {
+      "outcome": "failed",
+      "failure": {
+        "kind": "tool-input-invalid",
+        "name": "tool-input-invalid",
+        "message": "Invalid input for tool read_agent_message: Type validation failed: Value: {\"sources\":[{\"kind\":\"dispatch_origin\",\"dispatch_id\":\"art_hmTfEfDxyK76ksC1E0bq\"}],\"evidence_reads\":[{\"message_id\":\"msg_hVtXvdyNrGwfwjSVKIwZ\",\"part_id\":\"prt_g0VX65fqA00Ba7LQELJi\",\"field\":\"input\"},{\"message_id\":\"msg_hVtXvdyNrGwfwjSVKIwZ\",\"part_id\":\"prt_g0VX65fqA00Ba7LQELJi\",\"field\":\"output\"},{\"message_id\":\"msg_h9RKHi4bkjLOdewzBSL9\",\"part_id\":\"prt_g0VX65wfE00V3t1sUa1u\",\"field\":\"output\"},{\"message_id\":\"msg_h9RKHi4bkjLOdewzBSL9\",\"part_id\":\"prt_g0VX65ylb00H8uBRTjRR\",\"field\":\"input\"},{\"message_id\":\"msg_h9RKHi4bkjLOdewzBSL9\",\"part_id\":\"prt_g0VX65ylb00H8uBRTjRR\",\"field\":\"output\"},{\"message_id\":\"msg_h9RKHi4bkjLOdewzBSL9\",\"part_id\":\"prt_g0VX661MK00JNjmf3Qhw\",\"field\":\"input\"},{\"message_id\":\"msg_h9RKHi4bkjLOdewzBSL9\",\"part_id\":\"prt_g0VX661MK00JNjmf3Qhw\",\"field\":\"output\"}]}.\nError message: [\n  {\n    \"code\": \"custom\",\n    \"message\": \"Evidence reads may request at most 30000 characters per call\",\n    \"path\": [\n      \"evidence_reads\"\n    ]\n  }\n]",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-input-invalid",
+        "data": {
+          "toolCallId": "call_Ib16BaHPTFXHbumSQTmmY8Eg",
+          "toolName": "read_agent_message"
+        }
+      },
+      "time": {
+        "end": 1791129902522
+      }
+    }
+  }
+]

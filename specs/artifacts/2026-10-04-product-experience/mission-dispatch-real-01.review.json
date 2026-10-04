@@ -1,0 +1,361 @@
+{
+  "status": "atomic-dispatch-and-replay-passed",
+  "reportedStatus": "passed",
+  "source": ".tmp-product-experience/mission-dispatch-real-01.result.json",
+  "runtime": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-WHSA5e\\runner-55312-KYfvpM\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-2MPY8N",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    }
+  ],
+  "observations": [
+    {
+      "requestIndex": 2,
+      "observedAt": 1791136277065,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hndVIiLdaq12Ml2kxk6R"
+      ],
+      "closure": {
+        "missionID": "06e9afdd6066d8a0",
+        "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+        "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+        "eventID": "pev_haSloL0Pk0zF668uOHaK",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+        "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 3,
+      "observedAt": 1791136278924,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hndVIiLdaq12Ml2kxk6R"
+      ],
+      "closure": {
+        "missionID": "06e9afdd6066d8a0",
+        "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+        "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+        "eventID": "pev_haSloL0Pk0zF668uOHaK",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+        "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 4,
+      "observedAt": 1791136283526,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hndVIiLdaq12Ml2kxk6R"
+      ],
+      "closure": {
+        "missionID": "06e9afdd6066d8a0",
+        "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+        "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+        "eventID": "pev_haSloL0Pk0zF668uOHaK",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+        "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 5,
+      "observedAt": 1791136284695,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hndVIiLdaq12Ml2kxk6R"
+      ],
+      "closure": {
+        "missionID": "06e9afdd6066d8a0",
+        "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+        "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+        "eventID": "pev_haSloL0Pk0zF668uOHaK",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+        "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 6,
+      "observedAt": 1791136291282,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hndVIiLdaq12Ml2kxk6R"
+      ],
+      "closure": {
+        "missionID": "06e9afdd6066d8a0",
+        "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+        "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+        "eventID": "pev_haSloL0Pk0zF668uOHaK",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+        "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 7,
+      "observedAt": 1791136297480,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hndVIiLdaq12Ml2kxk6R"
+      ],
+      "closure": {
+        "missionID": "06e9afdd6066d8a0",
+        "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+        "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+        "eventID": "pev_haSloL0Pk0zF668uOHaK",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+        "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 8,
+      "observedAt": 1791136304902,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hndVIiLdaq12Ml2kxk6R"
+      ],
+      "closure": {
+        "missionID": "06e9afdd6066d8a0",
+        "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+        "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+        "eventID": "pev_haSloL0Pk0zF668uOHaK",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+        "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 9,
+      "observedAt": 1791136318180,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hndVIiLdaq12Ml2kxk6R"
+      ],
+      "closure": {
+        "missionID": "06e9afdd6066d8a0",
+        "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+        "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+        "eventID": "pev_haSloL0Pk0zF668uOHaK",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+        "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 10,
+      "observedAt": 1791136338456,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hndVIiLdaq12Ml2kxk6R"
+      ],
+      "closure": {
+        "missionID": "06e9afdd6066d8a0",
+        "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+        "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+        "eventID": "pev_haSloL0Pk0zF668uOHaK",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+        "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 11,
+      "observedAt": 1791136348807,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hndVIiLdaq12Ml2kxk6R"
+      ],
+      "closure": {
+        "missionID": "06e9afdd6066d8a0",
+        "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+        "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+        "eventID": "pev_haSloL0Pk0zF668uOHaK",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+        "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 12,
+      "observedAt": 1791136353636,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hndVIiLdaq12Ml2kxk6R"
+      ],
+      "closure": {
+        "missionID": "06e9afdd6066d8a0",
+        "requestID": "DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445",
+        "requestFingerprint": "1ea1afed9e404f6c08e6dbbef49595d755bd7c35274ac95eb3633ef319970655",
+        "eventID": "pev_haSloL0Pk0zF668uOHaK",
+        "sessionID": "ses_-zUStSiUezzWmyTcteEF",
+        "operationID": "befaa033-1ccb-5cce-8a08-fe92885eb6db",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    }
+  ],
+  "acceptedMessageID": "msg_hndVIiLdaq12Ml2kxk6R",
+  "replyText": "I’ll calculate both results and return them here with your acceptance reference.\nFor acceptance **DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445**:\n\n- Sum: 137 + 249 = **386**\n- Difference: 249 − 137 = **112**",
+  "retainedDraft": {
+    "text": "Exact next draft after DISPATCH-9c57b784-0006-40c0-b7a2-e27d02607445; retain this punctuation: A → B."
+  },
+  "lifecycle": [
+    {
+      "taskID": "tsk_g00VX6XZrR00iAX4n6as",
+      "events": [
+        {
+          "type": "artifact.persisted",
+          "payload": "{\"artifactID\":\"art_g0VX6Xa1v00llYkAnREE\",\"kind\":\"task_package_revision_binding\",\"catalogRevision\":1}",
+          "emitted_at": 1791136347927
+        },
+        {
+          "type": "artifact.persisted",
+          "payload": "{\"artifactID\":\"art_g0VX6Xa2L00VMz5DVLJG\",\"kind\":\"task_execution_capsule_binding\",\"catalogRevision\":2}",
+          "emitted_at": 1791136347947
+        },
+        {
+          "type": "task.execution.opened",
+          "payload": "{\"execution_epoch\":1}",
+          "emitted_at": 1791136347253
+        },
+        {
+          "type": "task.created",
+          "payload": "{\"summary\":\"Task started\"}",
+          "emitted_at": 1791136347954
+        },
+        {
+          "type": "agent.execution.lifecycle",
+          "payload": "{\"inputMessageID\":\"msg_task-root-control_art_hoYWqgJOYsDNeTXRL9Vr_art_hoYWqgJOYsDNeTXRL9Vr\",\"status\":{\"type\":\"streaming\"}}",
+          "emitted_at": 1791136353447
+        },
+        {
+          "type": "agent.execution.lifecycle",
+          "payload": "{\"inputMessageID\":\"msg_task-root-control_art_hoYWqgJOYsDNeTXRL9Vr_art_hoYWqgJOYsDNeTXRL9Vr\",\"status\":{\"type\":\"streaming\"}}",
+          "emitted_at": 1791136353592
+        },
+        {
+          "type": "agent.execution.lifecycle",
+          "payload": "{\"inputMessageID\":\"msg_task-root-control_art_hoYWqgJOYsDNeTXRL9Vr_art_hoYWqgJOYsDNeTXRL9Vr\",\"status\":{\"type\":\"idle\"}}",
+          "emitted_at": 1791136356716
+        },
+        {
+          "type": "session.error",
+          "payload": "{\"error\":{\"name\":\"MessageAbortedError\",\"data\":{\"message\":\"Orchestrator execution signal aborted\",\"cancellation\":{\"actor\":\"orchestrator\",\"source\":\"orchestrator.abort_cascade\",\"surface\":\"orchestrator\",\"requestID\":\"6d7ef2fb-60a1-427f-9c4a-463d192497e4\",\"reason\":\"Orchestrator execution signal aborted\",\"targetSessionID\":\"ses_-zUStSOndzzXyVClgGbr\",\"taskID\":\"tsk_g00VX6XZrR00iAX4n6as\"}}},\"failureOccurrence\":{\"session_id\":\"ses_-zUStSOndzzXyVClgGbr\",\"assistant_message_id\":\"msg_hMzyKCSkw3FxrJ3Wua7N\",\"error_name\":\"MessageAbortedError\"},\"summary\":\"Orchestrator execution signal aborted\"}",
+          "emitted_at": 1791136356758
+        },
+        {
+          "type": "artifact.persisted",
+          "payload": "{\"artifactID\":\"art_g0VX6XcL300ZQWSHzWWp\",\"kind\":\"task-infrastructure-error\",\"catalogRevision\":3}",
+          "emitted_at": 1791136356792
+        },
+        {
+          "type": "task.infrastructure.failed",
+          "payload": "{\"component\":\"process-recovery\",\"operation\":\"handoff-process-owned-task-execution\",\"summary\":\"process-recovery infrastructure failure\",\"details\":\"Server.stop graceful runtime shutdown\",\"evidenceLocators\":[{\"source\":\"engine_artifact\",\"artifact_id\":\"art_g0VX6XcL300ZQWSHzWWp\",\"catalog_revision\":3,\"expected_sha256\":\"4c90722fcea3d06f910caf5d6a85cea68dd7a17170d13045ff34854fd5caa053\"}]}",
+          "emitted_at": 1791136356795
+        },
+        {
+          "type": "agent.execution.lifecycle",
+          "payload": "{\"inputMessageID\":\"msg_task-root-control_art_hoYWqgJOYsDNeTXRL9Vr_art_hoYWqgJOYsDNeTXRL9Vr\",\"status\":{\"type\":\"idle\"}}",
+          "emitted_at": 1791136356853
+        },
+        {
+          "type": "agent.execution.lifecycle",
+          "payload": "{\"inputMessageID\":\"msg_task-root-control_art_hoYWqgJOYsDNeTXRL9Vr_art_hoYWqgJOYsDNeTXRL9Vr\",\"status\":{\"type\":\"terminal\",\"reason\":\"aborted\",\"error\":\"Orchestrator execution signal aborted\"}}",
+          "emitted_at": 1791136357104
+        },
+        {
+          "type": "artifact.persisted",
+          "payload": "{\"artifactID\":\"art_g0VX6XcQZ003fi5LovQQ\",\"kind\":\"orchestrator-stream-error\",\"catalogRevision\":4}",
+          "emitted_at": 1791136357133
+        }
+      ]
+    }
+  ],
+  "credentialCleanup": [
+    {
+      "name": "auth.json",
+      "disposition": "removed"
+    },
+    {
+      "name": "models.json",
+      "disposition": "removed"
+    }
+  ],
+  "scope": "01 ends after the Mission turn returns idle. Its naturally created child Task's physical orchestrator was aborted by checker cleanup; durable Task remains opened and this result does not prove Task or Mission terminal completion."
+}

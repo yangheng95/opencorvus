@@ -683,6 +683,7 @@ async function openWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
 }
 
 async function openGlobalComposer(intent: ComposerIntent): Promise<void> {
+  await closeConfigDialog()
   await openGlobalChatLauncher()
   handleComposerIntentChange(intent)
 }
@@ -2030,6 +2031,8 @@ function OverlayRoot() {
           onDeleteMission={deleteMissionBoardMission}
         />
       }
+      onNewChat={() => openGlobalComposer(DEFAULT_COMPOSER_INTENT)}
+      onSelectMission={openWorkLedgerMission}
       onSelectTask={selectTaskWithUILifecycle}
       onSelectChat={(sessionID, directory, experience) =>
         selectConversationWithUILifecycle(sessionID, directory, experience)
@@ -2570,6 +2573,7 @@ function OverlayRoot() {
           </TabPanel>
           <TabPanel
             value="file"
+            forceMount={fileWorkbenchOpen()}
             class="center-workbench-view"
             id="centerWorkbenchFile"
             data-workbench-view="file"

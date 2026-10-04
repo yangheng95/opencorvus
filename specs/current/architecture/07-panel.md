@@ -2,6 +2,15 @@
 
 ## File editor language support
 
+Every accepted explicit file-open request advances the existing reveal revision,
+including a repeated range-free request for the current resource. The main
+workbench consumes that revision to reveal a hidden Dock. Repeated resource
+identity preserves the editor draft and loaded content; line citations also
+retain their existing exact range reveal behavior.
+The file pane uses the existing forced tab mount so hiding the Dock or selecting
+another tool retains that single draft owner and its navigation guard. Closing
+the file still clears the canonical target after the guard resolves.
+
 The existing CodeMirror editor selects syntax by filename using the shared
 `components/ui/code-editor-language.ts` registry. CodeMirror language-data owns
 grammar metadata and cached dynamic loading; Markdown fences use that same
@@ -45,6 +54,13 @@ draft across transport retries and reloads.
 
 ## Reference-led navigation and usage
 
+The renderer shell uses its actual viewport width and height as the sole bounds
+for panes, dialogs, and popovers. Native minimum window dimensions remain owned
+by Tauri; they are not injected as HTML body minimums or an aspect-ratio cap.
+Browser desktop windows, including a 900-pixel viewport, retain reachable
+Composer controls through the existing measured toolbar presentation and pane
+geometry owners. No automatic zoom or alternate renderer is involved.
+
 The desktop shell has a fixed icon rail and an independently resizable project
 list. WorkLedger mounts its existing navigation once into App's explicit rail
 outlet; the pane geometry owner reserves that rail's measured width. Sidebar
@@ -63,6 +79,12 @@ and focus restoration; nested action dialogs keep the shared modal primitive.
 The config store owns the one settings-search query. Explicit page-open and
 close actions clear that query so a rail selection opens its exact target even
 when the preceding page was filtered.
+
+Command palette ledger selections close the settings page through that same
+reveal lifecycle before selecting the exact Mission, Task or conversation.
+Global New chat actions from the rail, palette and titlebar all enter main's
+single global Composer lifecycle: close Settings, open the directory-free
+workspace, apply the default chat intent and reset the primary center surface.
 
 Usage presents the current server's real aggregate with an OpenCorvus identity,
 five equal metrics, activity grid, and side-by-side token/provider breakdowns.
@@ -1273,6 +1295,12 @@ skills, Model Context Protocol providers, channels, permissions, and expert
 squads. `prompt_profile.active` remains the only active expert-squad selection
 source. Settings does not define agent-team order, a package workflow, or a
 second active profile.
+Channel edits require the currently selected project and show the existing
+workspace selection hint in the directory-free launcher. Shared Skill/MCP
+resource pages use the same loading lifecycle on first entry and manual reload;
+Skill issue projection checks its owning directory before committing the result.
+Channel rows use generated ChannelListResponse and display configuration status
+and runtime status separately; missing configuration is not runtime availability.
 
 The desktop updater checks the compiled signed release channel at app startup,
 on visibility return, and hourly while visible, independently of backend

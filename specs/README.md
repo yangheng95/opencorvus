@@ -1,5 +1,11 @@
 # Specs Storage Index
 
+- [Current-version product experience and functional repair](records/2026-10/2026-10-04-product-experience.md)
+
+- [Product experience screenshots and real model evidence](artifacts/2026-10-04-product-experience/README.md)
+
+- [October 2026 records](records/2026-10/README.md)
+
 - [Transcript disclosures and nonblocking Markdown rendering](records/2026-09/2026-09-30-transcript-disclosure-and-markdown-rendering.md)
 
 - [Transcript visual review](artifacts/2026-09-30-transcript-rendering/README.md)

@@ -1,0 +1,164 @@
+[
+  {
+    "id": "slack",
+    "status": "missing",
+    "runtime_status": "disabled",
+    "runtime_detail": "No managed channel runtime configured."
+  },
+  {
+    "id": "telegram",
+    "status": "missing",
+    "runtime_status": "disabled",
+    "runtime_detail": "No managed channel runtime configured."
+  },
+  {
+    "id": "discord",
+    "status": "missing",
+    "runtime_status": "disabled",
+    "runtime_detail": "No managed channel runtime configured."
+  },
+  {
+    "id": "feishu",
+    "status": "missing",
+    "runtime_status": "disabled",
+    "runtime_detail": "No managed channel runtime configured."
+  },
+  {
+    "id": "whatsapp",
+    "status": "missing",
+    "runtime_status": "disabled",
+    "runtime_detail": "No managed channel runtime configured."
+  },
+  {
+    "id": "googlechat",
+    "status": "missing",
+    "runtime_status": "disabled",
+    "runtime_detail": "No managed channel runtime configured."
+  },
+  {
+    "id": "msteams",
+    "status": "missing",
+    "runtime_status": "disabled",
+    "runtime_detail": "No managed channel runtime configured."
+  },
+  {
+    "id": "line",
+    "status": "missing",
+    "runtime_status": "disabled",
+    "runtime_detail": "No managed channel runtime configured."
+  },
+  {
+    "id": "matrix",
+    "status": "missing",
+    "runtime_status": "disabled",
+    "runtime_detail": "No managed channel runtime configured."
+  },
+  {
+    "id": "mattermost",
+    "status": "missing",
+    "runtime_status": "disabled",
+    "runtime_detail": "No managed channel runtime configured."
+  },
+  {
+    "id": "signal",
+    "status": "missing",
+    "runtime_status": "disabled",
+    "runtime_detail": "No managed channel runtime configured."
+  },
+  {
+    "id": "wecom",
+    "status": "missing",
+    "runtime_status": "disabled",
+    "runtime_detail": "No managed channel runtime configured."
+  },
+  {
+    "id": "dingtalk",
+    "status": "missing",
+    "runtime_status": "disabled",
+    "runtime_detail": "No managed channel runtime configured."
+  },
+  {
+    "id": "clickclack",
+    "status": "missing",
+    "runtime_status": "unavailable",
+    "runtime_detail": "The provider requires the OpenClaw application runtime instead of a thin standalone contract."
+  },
+  {
+    "id": "imessage",
+    "status": "missing",
+    "runtime_status": "unavailable",
+    "runtime_detail": "The provider is not published through a stable package runtime contract."
+  },
+  {
+    "id": "irc",
+    "status": "missing",
+    "runtime_status": "unavailable",
+    "runtime_detail": "The provider requires the OpenClaw application runtime instead of a thin standalone contract."
+  },
+  {
+    "id": "nextcloud-talk",
+    "status": "missing",
+    "runtime_status": "unavailable",
+    "runtime_detail": "The provider requires the OpenClaw application runtime instead of a thin standalone contract."
+  },
+  {
+    "id": "nostr",
+    "status": "missing",
+    "runtime_status": "unavailable",
+    "runtime_detail": "The provider requires the OpenClaw application runtime instead of a thin standalone contract."
+  },
+  {
+    "id": "qqbot",
+    "status": "missing",
+    "runtime_status": "unavailable",
+    "runtime_detail": "The provider requires the OpenClaw application runtime instead of a thin standalone contract."
+  },
+  {
+    "id": "raft",
+    "status": "missing",
+    "runtime_status": "unavailable",
+    "runtime_detail": "The provider requires the OpenClaw application runtime instead of a thin standalone contract."
+  },
+  {
+    "id": "reef",
+    "status": "missing",
+    "runtime_status": "unavailable",
+    "runtime_detail": "The provider is not published through a stable package runtime contract."
+  },
+  {
+    "id": "sms",
+    "status": "missing",
+    "runtime_status": "unavailable",
+    "runtime_detail": "The provider requires the OpenClaw application runtime instead of a thin standalone contract."
+  },
+  {
+    "id": "synology-chat",
+    "status": "missing",
+    "runtime_status": "unavailable",
+    "runtime_detail": "The provider requires the OpenClaw application runtime instead of a thin standalone contract."
+  },
+  {
+    "id": "tlon",
+    "status": "missing",
+    "runtime_status": "unavailable",
+    "runtime_detail": "The provider requires the OpenClaw application runtime instead of a thin standalone contract."
+  },
+  {
+    "id": "twitch",
+    "status": "missing",
+    "runtime_status": "unavailable",
+    "runtime_detail": "The provider requires the OpenClaw application runtime instead of a thin standalone contract."
+  },
+  {
+    "id": "zalo",
+    "status": "missing",
+    "runtime_status": "unavailable",
+    "runtime_detail": "The provider requires the OpenClaw application runtime instead of a thin standalone contract."
+  },
+  {
+    "id": "zalouser",
+    "status": "missing",
+    "runtime_status": "unavailable",
+    "runtime_detail": "The provider requires the OpenClaw application runtime instead of a thin standalone contract."
+  }
+]

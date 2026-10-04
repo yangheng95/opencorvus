@@ -1,0 +1,28 @@
+{
+  "ready": true,
+  "status": "accepted",
+  "completionObserved": true,
+  "creationCount": 2,
+  "publicationCount": 1,
+  "completionCount": 1,
+  "tasks": [
+    {
+      "taskID": "tsk_g00VX65VMb002wnCU621",
+      "queryCount": 1,
+      "catalogCount": 1,
+      "readCount": 1,
+      "readReference": "ar_zeAdbZopkKC6K-OA",
+      "retainedReadAccepted": true,
+      "causalOrder": true
+    },
+    {
+      "taskID": "tsk_g00VX65ajK00uebK7XyU",
+      "queryCount": 1,
+      "catalogCount": 1,
+      "readCount": 1,
+      "readReference": "ar_utWKdm-cCxaRvS3d",
+      "retainedReadAccepted": true,
+      "causalOrder": true
+    }
+  ]
+}

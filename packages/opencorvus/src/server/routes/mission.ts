@@ -57,6 +57,7 @@ import {
 } from "@opencorvus-ai/transport-protocol"
 import {
   closeMissionExecutionOperation,
+  acceptedMissionDispatchPrompt,
   currentMissionExecutionClosure,
   missionOperatorAttachmentInputs,
   missionOperatorWakeReason,
@@ -542,6 +543,7 @@ export function MissionRoutes() {
             "MissionExecutionClosingError",
             "MissionExecutionWakeClosedError",
             "MissionExecutionWakeInputConflictError",
+            "MissionDispatchDraftConflictError",
           ),
           503: AuthReadUnavailableResponse,
         },
@@ -552,7 +554,9 @@ export function MissionRoutes() {
         const missionID = c.req.valid("param").missionID
         const input = c.req.valid("json")
         const session = await missionRouteSession(missionID)
-        const pendingPrompt = missionPendingPrompt(session)
+        const requestID = input.requestID ?? resolveRequestID(c)
+        const acceptedPrompt = await acceptedMissionDispatchPrompt({ missionID, sessionID: session.id, requestID })
+        const pendingPrompt = acceptedPrompt ?? missionPendingPrompt(session)
         if (!pendingPrompt) {
           return c.json(badRequestBody(`Mission ${missionID} has no pending operator prompt.`), 400)
         }
@@ -577,7 +581,7 @@ export function MissionRoutes() {
           missionID,
           sessionID: session.id,
           source: "mission.dispatch",
-          requestID: input.requestID ?? resolveRequestID(c),
+          requestID,
           acceptedInput: {
             text: pendingPrompt.text,
             model: input.model ?? null,
@@ -604,9 +608,6 @@ export function MissionRoutes() {
               ownerLifecycle: admission.ownerLifecycle,
             })
           },
-        })
-        await setMissionPendingPrompt({
-          session: await Session.get(session.id),
         })
         return c.json(
           MissionWakeResult.parse({

@@ -2,17 +2,11 @@ import { defaultClientConditions, defineConfig, type Plugin } from "vite"
 import solidPlugin from "vite-plugin-solid"
 import path from "path"
 import fs from "fs"
-import {
-  OVERLAY_SIZE_CONTRACT_MARKER,
-  readOverlaySizeContract,
-  renderOverlaySizeContractStyle,
-} from "./script/overlay-size-contract"
 
 const overlayPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, "package.json"), "utf8")) as {
   version: string
 }
 const overlayVersion = overlayPackage.version
-const overlaySizeContract = readOverlaySizeContract(path.resolve(__dirname, "src-tauri", "tauri.conf.json"))
 const codeMirrorDedupePackages = [
   "@codemirror/autocomplete",
   "@codemirror/commands",
@@ -59,23 +53,9 @@ function injectOverlayVersion(): Plugin {
   }
 }
 
-function injectOverlaySizeContract(): Plugin {
-  return {
-    name: "inject-overlay-size-contract",
-    transformIndexHtml(html, context) {
-      const normalizedFilename = context.filename.replaceAll("\\", "/")
-      if (!normalizedFilename.endsWith("/index.html")) return html
-      if (!html.includes(OVERLAY_SIZE_CONTRACT_MARKER)) {
-        throw new Error("index.html is missing the overlay size contract marker.")
-      }
-      return html.replace(OVERLAY_SIZE_CONTRACT_MARKER, renderOverlaySizeContractStyle(overlaySizeContract))
-    },
-  }
-}
-
 export default defineConfig({
   base: "./",
-  plugins: [solidPlugin(), injectOverlayVersion(), injectOverlaySizeContract(), copyStaticAssets(["i18n", "licenses"])],
+  plugins: [solidPlugin(), injectOverlayVersion(), copyStaticAssets(["i18n", "licenses"])],
   define: {
     __OPENCORVUS_OVERLAY_VERSION__: JSON.stringify(overlayVersion),
     __OPENCORVUS_BUILD_PLATFORM__: JSON.stringify(process.platform),

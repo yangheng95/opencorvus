@@ -1,0 +1,141 @@
+{
+  "status": "passed",
+  "model": "openai/gpt-6.1-sol",
+  "requestCount": 21,
+  "requestTimestampCount": 21,
+  "actualModels": [
+    "gpt-6.1-sol"
+  ],
+  "streaming": [
+    true
+  ],
+  "httpStatuses": [
+    200,
+    503
+  ],
+  "taskID": "tsk_g00VX6PxYq00ajeVFhc4",
+  "readerPartID": "prt_g0VX6QOjF00vbWKvC8IZ",
+  "sourceSessionID": "ses_h127B5KOCT7PMrjafAot",
+  "readerSessionID": "ses_-zUSta1VQzzSnlhirMxu",
+  "completionReferences": {
+    "producer": {
+      "source": "session_message",
+      "session_id": "ses_h127B5KOCT7PMrjafAot",
+      "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+    },
+    "reader": {
+      "owner": "orchestrator",
+      "session_id": "ses_-zUSta1VQzzSnlhirMxu",
+      "message_id": "msg_hsb1j3nkkb3emGKGsry4",
+      "read_message_id": "msg_hWtuYpNe6RikodLEf6nO"
+    }
+  },
+  "selectorCount": 8,
+  "effectiveLimitTotal": 8000.0,
+  "schemaObservationCount": 36,
+  "toolStartedAt": 1791134636165,
+  "closestPriorSchemaObservation": {
+    "requestIndex": 11,
+    "observedAt": 1791134630135,
+    "leadMilliseconds": 6030
+  },
+  "schemaPointers": [
+    {
+      "requestIndex": 11,
+      "observedAt": 1791134630135,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 11,
+      "observedAt": 1791134630135,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    }
+  ],
+  "byteComparisons": [
+    {
+      "messageID": "msg_g0VX6Q3s400ptONOalo3",
+      "partID": "prt_g0VX6Q5Un00lAUuelYJE",
+      "field": "input",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-A",
+      "utf8Bytes": 142,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6Q3s400ptONOalo3",
+      "partID": "prt_g0VX6Q5Un00lAUuelYJE",
+      "field": "output",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-A",
+      "utf8Bytes": 20,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6Q64H00FUPVfvv18",
+      "partID": "prt_g0VX6Q7IV00wiVgs23mo",
+      "field": "input",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-B",
+      "utf8Bytes": 143,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6Q64H00FUPVfvv18",
+      "partID": "prt_g0VX6Q7IV00wiVgs23mo",
+      "field": "output",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-B",
+      "utf8Bytes": 20,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6Q7wM00PsRmJT9Xr",
+      "partID": "prt_g0VX6Q9Ld00lKBUEWKsy",
+      "field": "input",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-C",
+      "utf8Bytes": 142,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6Q7wM00PsRmJT9Xr",
+      "partID": "prt_g0VX6Q9Ld00lKBUEWKsy",
+      "field": "output",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-C",
+      "utf8Bytes": 20,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6Q9st00QhZy1rkOU",
+      "partID": "prt_g0VX6QDlP00u05zqMiMJ",
+      "field": "input",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-D",
+      "utf8Bytes": 143,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6Q9st00QhZy1rkOU",
+      "partID": "prt_g0VX6QDlP00u05zqMiMJ",
+      "field": "output",
+      "limit": 1000,
+      "marker": "READER-b9c3aad68b-D",
+      "utf8Bytes": 20,
+      "exactBytes": true
+    }
+  ],
+  "credentialCleanup": "passed"
+}

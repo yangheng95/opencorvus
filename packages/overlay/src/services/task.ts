@@ -597,6 +597,7 @@ export async function submitMessage(
           throw new Error(`Mission Work Ledger identity is unavailable for Session ${selectedSource.id}`)
         }
         return await wakeMission({
+          requestID,
           missionID: mission.missionID,
           directory: mission.directory,
           productPillar: mission.productPillar,

@@ -106,9 +106,6 @@ const HOST_RUNTIME_TOKEN_OWNERS = new Map<string, string[]>([
   ["--native-menu-maximum-height", ["src/native-menu.tsx"]],
   ["--screenshot-browser-columns", ["src/components/ScreenshotBrowserPanel.tsx"]],
   ["--ui-left-rail-scrollbar-gutter-x", ["src/main.tsx"]],
-  ["--ui-overlay-min-aspect-ratio", ["script/overlay-size-contract.ts"]],
-  ["--ui-overlay-min-height", ["script/overlay-size-contract.ts"]],
-  ["--ui-overlay-min-width", ["script/overlay-size-contract.ts"]],
   ["--ui-scale", ["src/services/theme.ts", "src/native-menu.tsx"]],
   ["--work-row-child-insertion-index", ["src/components/WorkLedger.tsx"]],
 ])

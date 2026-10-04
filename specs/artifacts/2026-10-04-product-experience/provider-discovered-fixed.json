@@ -1,0 +1,19 @@
+{
+  "api": "http://127.0.0.1:17879/v1",
+  "name": "Experience discovered catalog",
+  "env": [],
+  "models": {
+    "local:latest": {
+      "name": "local:latest",
+      "temperature": false,
+      "tool_call": true,
+      "options": {}
+    },
+    "qwen3-next:80b": {
+      "name": "qwen3-next:80b",
+      "temperature": false,
+      "tool_call": true,
+      "options": {}
+    }
+  }
+}

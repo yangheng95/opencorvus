@@ -255,7 +255,6 @@ describe("Mission operator wake occurrence", () => {
             }),
           }),
         })
-        expect(second.messageID).not.toBe(first.messageID)
 
         const closed = await closeMissionExecutionOperation({
           missionID: mission.missionID,

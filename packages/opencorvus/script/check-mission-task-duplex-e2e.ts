@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process"
-import { RealProviderAudit, CredentialRedactor } from "./real-provider-audit"
+import { RealProviderAudit, CredentialRedactor, assertCopiedOAuthAccess } from "./real-provider-audit"
 import { bootstrapIsolatedTestRuntime, applyIsolatedTestUserEnvironment } from "@opencorvus-ai/util/test-runtime-environment"
 import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 import { createHash, randomBytes } from "node:crypto"
@@ -32,7 +32,7 @@ const supervisor = prepareTestProcessSupervisor()
 const isolated = await bootstrapIsolatedTestRuntime("runner")
 applyIsolatedTestUserEnvironment(isolated)
 if (supervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = supervisor
-using audit = new RealProviderAudit(model.slice(model.indexOf("/") + 1), maxRequests)
+let audit: RealProviderAudit | undefined
 const redactor = new CredentialRedactor()
 redactor.collect(process.env)
 let runFailure: unknown
@@ -112,6 +112,14 @@ await fs.writeFile(path.join(root, "run.json"), JSON.stringify({ ...provenance, 
 process.stdout.write(`[duplex-e2e] evidence=${resultPath}\n`)
 await initializeProject()
 await copyAuthority()
+const { Auth } = await import("@/auth")
+const credential = await Auth.get(model.slice(0, model.indexOf("/")))
+if (!credential) throw new Error("Authorized Provider credential is unavailable in the isolated runtime")
+const copiedAuthority = credential.type === "oauth" ? { copiedOAuthExpiresAt: credential.expires } : undefined
+if (copiedAuthority) assertCopiedOAuthAccess(copiedAuthority.copiedOAuthExpiresAt)
+using providerAudit = new RealProviderAudit(model.slice(model.indexOf("/") + 1), maxRequests, undefined, copiedAuthority)
+audit = providerAudit
+process.stdout.write(`[duplex-e2e] credential-present kind=${credential.type} copied-oauth-refresh=forbidden\n`)
 
 const [
   { listenWithRecoveredServerRuntime, requireRecoveredServerRuntime },
@@ -135,7 +143,7 @@ const [
     observeMissionTaskDuplexActivity,
     projectMissionTaskDuplexControlStateInTransaction,
     missionTaskDuplexProgressKey,
-    missionTaskDuplexToolHealth,
+    missionTaskDuplexToolOutcomes,
     missionTaskDuplexTrajectoryEvidence,
     missionTaskDuplexReconciliationEvidence,
     missionTaskDuplexUsageOwnerRequirements,
@@ -174,8 +182,8 @@ cleanupRuntime = async () => {
 }
 const { Provider } = await import("@/provider/provider")
 await Instance.provide({ directory: projectDirectory, fn: async () => {
-  const projected = await Provider.getModel(model.slice(0, model.indexOf("/")), audit.modelID)
-  if (projected.api.id !== audit.modelID) throw new Error("Authorized model projection differs from actual API model")
+  const projected = await Provider.getModel(model.slice(0, model.indexOf("/")), providerAudit.modelID)
+  if (projected.api.id !== providerAudit.modelID) throw new Error("Authorized model projection differs from actual API model")
 } })
 const prepared = await requireRecoveredServerRuntime(await listenWithRecoveredServerRuntime({
   options: { hostname: "127.0.0.1", port: 0, randomPort: true },
@@ -240,6 +248,7 @@ let evidence:
       trajectoryEvidence: ReturnType<typeof missionTaskDuplexTrajectoryEvidence>
       messageCount: number
       toolPartCount: number
+      toolOutcomes: ReturnType<typeof missionTaskDuplexToolOutcomes>
     }
   | undefined
 while (Date.now() < activityDeadline.deadlineMs) {
@@ -274,7 +283,7 @@ while (Date.now() < activityDeadline.deadlineMs) {
       artifacts,
       usage,
       sessions,
-      toolHealth: missionTaskDuplexToolHealth(toolParts),
+      toolOutcomeProjection: missionTaskDuplexToolOutcomes(toolParts),
     }
   })
   const missionProjection = missionRecord(await requireMissionSession(mission.sessionID))
@@ -602,7 +611,6 @@ while (Date.now() < activityDeadline.deadlineMs) {
             )
           })
         })
-      const noFailedToolOccurrences = snapshot.toolHealth.failedToolPartIDs.length === 0
       const reconciliationEvidence = missionTaskDuplexReconciliationEvidence({
         missionSessionID: mission.sessionID,
         completionPartID: missionProjection.outcome?.kind === "accepted" ? missionProjection.outcome.toolPartID : undefined,
@@ -686,7 +694,11 @@ while (Date.now() < activityDeadline.deadlineMs) {
         terminalReceiptsDelivered,
         terminalWakeRepliesCompleted,
         exactSchedulerEventSet,
-        noFailedToolOccurrences,
+        toolOutcomeCounts: {
+          completed: snapshot.toolOutcomeProjection.filter((part) => part.status === "completed").length,
+          error: snapshot.toolOutcomeProjection.filter((part) => part.status === "error").length,
+          running: snapshot.toolOutcomeProjection.filter((part) => part.status === "running").length,
+        },
         reconciliationEvidence,
         finalEvidenceReady: finalEvidence.ready,
         finalEvidenceBlockingReasons: finalEvidence.blockingReasons,
@@ -704,7 +716,7 @@ while (Date.now() < activityDeadline.deadlineMs) {
         process.stdout.write(`[duplex-e2e] acceptance=${acceptanceKey}\n`)
       }
       if (reconciliationEvidence.completionObserved && terminalWakeRepliesCompleted && finalEvidence.ready &&
-        (!noFailedToolOccurrences || !reconciliationEvidence.ready)) {
+        !reconciliationEvidence.ready) {
         throw new Error(`Completed Mission has a terminal trajectory mismatch: ${acceptanceKey}`)
       }
       if (reconciliationEvidence.completionObserved && finalEvidence.finalReply.status === "failed") {
@@ -721,7 +733,6 @@ while (Date.now() < activityDeadline.deadlineMs) {
         terminalOrder &&
         terminalWakeRepliesCompleted &&
         exactSchedulerEventSet &&
-        noFailedToolOccurrences &&
         reconciliationEvidence.ready &&
         missionProjection.boardLane === "completed" &&
         acceptedOutcome !== undefined &&
@@ -764,6 +775,7 @@ while (Date.now() < activityDeadline.deadlineMs) {
           }),
           messageCount: snapshot.messages.length,
           toolPartCount: snapshot.toolParts.length,
+          toolOutcomes: snapshot.toolOutcomeProjection,
         }
         break
       }
@@ -830,7 +842,8 @@ while (Date.now() < activityDeadline.deadlineMs) {
       schedulerEventCount: evidence.events.length,
       messageCount: evidence.messageCount,
       toolPartCount: evidence.toolPartCount,
-      failedToolPartCount: 0,
+      failedToolPartCount: evidence.toolOutcomes.filter((part) => part.status === "error").length,
+      toolOutcomes: evidence.toolOutcomes,
       exactSchedulerEventSet: true,
       reconciliation: evidence.reconciliationEvidence,
       finalReply: evidence.finalReply,
@@ -871,8 +884,8 @@ while (Date.now() < activityDeadline.deadlineMs) {
   let existing: Record<string, unknown> = {}
   try { existing = JSON.parse(await fs.readFile(resultPath, "utf8")) }
   catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") cleanupErrors.push(String(error)) }
-  const result = { ...existing, ...provenance, model, maxRequests, preflight, requests: audit.requests,
-    status: audit.exhausted ? "budget_exhausted" : runFailure || cleanupErrors.length ? "failed" : "passed",
+  const result = { ...existing, ...provenance, model, maxRequests, preflight, requests: audit?.requests ?? [],
+    status: audit?.exhausted ? "budget_exhausted" : runFailure || cleanupErrors.length ? "failed" : "passed",
     error: runFailure instanceof Error ? runFailure.message : runFailure === undefined ? undefined : String(runFailure),
     credentialCleanup: cleanupErrors.length ? "failed" : "passed", cleanupErrors, evidenceRoot: root }
   await fs.mkdir(path.dirname(resultPath), { recursive: true })

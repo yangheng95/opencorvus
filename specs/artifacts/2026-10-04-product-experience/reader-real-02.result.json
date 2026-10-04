@@ -1,0 +1,1745 @@
+{
+  "preflight": {
+    "sessionID": "ses_hBSP2i9Y6lhOG82gHBBt",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "operatorPrompt": "Prove actual causal Tool evidence transfer for READER-7fee96520e. This is a small read-only execution and independent historical-evidence verification task.\nAn execution worker must perform four separate shell Tool invocations, each printing exactly one of these distinct markers: READER-7fee96520e-A, READER-7fee96520e-B, READER-7fee96520e-C, READER-7fee96520e-D. After those four actual executions, the worker finishes and reports its real evidence. No repository change or extra deliverable file is requested.\nA different real participant (the coordinator may verify) must inspect that worker's settled dispatch_result through the production read_agent_message Tool. Discover exact Message/Part identities from its actual causal inventory. In one evidence_reads call, obtain eight chunks: the input and output fields of each of the four shell occurrences. Choose your own offsets and limits using the published Tool schema.\nVerify and report every original command and exact output marker from those historical fields. Rerunning commands, reading files or trusting the worker narrative alone does not satisfy this evidence-transfer request. Do not fabricate Message IDs, Tool outputs or source locators.\nComplete the Task only after actual eight-field reading succeeds. The final visible report must include all four markers and the exact producing participant Message references; retain those real producer and verification references in the Completion Decision. The independent reader's own report should state its exact source and read Tool Part identity.",
+  "taskID": "tsk_g00VX6IQOT00nAimzlF8",
+  "latest": {
+    "lifecycle": "completed",
+    "tools": [
+      {
+        "id": "prt_g0VX6IUru002naxONLWP",
+        "tool": "dispatch_agent",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6IYbz00xiBwcioky",
+        "tool": "bash",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6IaV700TglgDBE9I",
+        "tool": "bash",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6IbsR00DTCirxXNr",
+        "tool": "bash",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6IdVP00G57rqdHSR",
+        "tool": "bash",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6IjYh00AwGMLz4z5",
+        "tool": "read_agent_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Ilw600MQVJlkb3b",
+        "tool": "read_agent_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Iseo00CNu4gE289",
+        "tool": "dispatch_agent",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Iwug007oRXILiYz",
+        "tool": "dispatch_agent",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6J0ln00nUgXzqBeg",
+        "tool": "read_agent_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6J2L100I4s0P83Df",
+        "tool": "read_agent_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6J5u600t24NN9Ewk",
+        "tool": "artifact_publish",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6JLb300CiTyTWNbq",
+        "tool": "read_agent_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6JNHX00dwZJ1m0TT",
+        "tool": "artifact_search",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6JQ4C00XCBmgF6Ux",
+        "tool": "artifact_read",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6JTHl003wGtTbrps",
+        "tool": "artifact_select",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6JapV004Ip7PJsaL",
+        "tool": "manage_task",
+        "status": "completed"
+      }
+    ]
+  },
+  "readerPartID": "prt_g0VX6Ilw600MQVJlkb3b",
+  "actualInput": {
+    "sources": [
+      {
+        "kind": "dispatch_result",
+        "message_id": "msg_g0VX6IdzU00Ng8C1a0Af"
+      }
+    ],
+    "evidence_reads": [
+      {
+        "message_id": "msg_g0VX6IX2q00rNQqkbH1d",
+        "part_id": "prt_g0VX6IYbz00xiBwcioky",
+        "field": "input",
+        "offset": 0,
+        "limit": 3750
+      },
+      {
+        "message_id": "msg_g0VX6IX2q00rNQqkbH1d",
+        "part_id": "prt_g0VX6IYbz00xiBwcioky",
+        "field": "output",
+        "offset": 0,
+        "limit": 3750
+      },
+      {
+        "message_id": "msg_g0VX6IZMO00HEPJFqDEM",
+        "part_id": "prt_g0VX6IaV700TglgDBE9I",
+        "field": "input",
+        "offset": 0,
+        "limit": 3750
+      },
+      {
+        "message_id": "msg_g0VX6IZMO00HEPJFqDEM",
+        "part_id": "prt_g0VX6IaV700TglgDBE9I",
+        "field": "output",
+        "offset": 0,
+        "limit": 3750
+      },
+      {
+        "message_id": "msg_g0VX6IawD00H0qAxh5ph",
+        "part_id": "prt_g0VX6IbsR00DTCirxXNr",
+        "field": "input",
+        "offset": 0,
+        "limit": 3750
+      },
+      {
+        "message_id": "msg_g0VX6IawD00H0qAxh5ph",
+        "part_id": "prt_g0VX6IbsR00DTCirxXNr",
+        "field": "output",
+        "offset": 0,
+        "limit": 3750
+      },
+      {
+        "message_id": "msg_g0VX6IcPk00ftLGspyAr",
+        "part_id": "prt_g0VX6IdVP00G57rqdHSR",
+        "field": "input",
+        "offset": 0,
+        "limit": 3750
+      },
+      {
+        "message_id": "msg_g0VX6IcPk00ftLGspyAr",
+        "part_id": "prt_g0VX6IdVP00G57rqdHSR",
+        "field": "output",
+        "offset": 0,
+        "limit": 3750
+      }
+    ]
+  },
+  "actualOutput": {
+    "messages": [
+      {
+        "source": {
+          "kind": "dispatch_result",
+          "message_id": "msg_g0VX6IdzU00Ng8C1a0Af"
+        },
+        "session_id": "ses_hwsUy6lP83Jnkc349EhW",
+        "message_id": "msg_g0VX6IdzU00Ng8C1a0Af",
+        "role": "assistant",
+        "author": "base-developer",
+        "finish": "stop",
+        "time_completed": 1791132801142,
+        "text": [
+          "Executed exactly four separate shell Tool invocations:\n\n| Actual command | Observed output (followed by a newline) |\n|---|---|\n| `printf '%s\\n' 'READER-7fee96520e-A'` | `READER-7fee96520e-A` |\n| `printf '%s\\n' 'READER-7fee96520e-B'` | `READER-7fee96520e-B` |\n| `printf '%s\\n' 'READER-7fee96520e-C'` | `READER-7fee96520e-C` |\n| `printf '%s\\n' 'READER-7fee96520e-D'` | `READER-7fee96520e-D` |\n\nNo extra shell calls, repository changes, files, or deliverables were made.\n\nThe execution portion is finished; **the overall evidence-transfer task is not yet complete**. A different participant must inspect this worker’s settled `dispatch_result`, discover the actual producing Message/Part identities, and retrieve all eight historical input/output fields in one `evidence_reads` call. Those identities were not exposed in my Tool results, so I have not fabricated references or claimed independent verification."
+        ],
+        "tool_facts_complete": true,
+        "tool_facts": []
+      }
+    ],
+    "origins": [],
+    "causal_tool_reference_index": {
+      "complete": true,
+      "tool_count": 4,
+      "refs": [
+        {
+          "source": {
+            "kind": "dispatch_result",
+            "message_id": "msg_g0VX6IdzU00Ng8C1a0Af"
+          },
+          "message_id": "msg_g0VX6IX2q00rNQqkbH1d",
+          "part_id": "prt_g0VX6IYbz00xiBwcioky",
+          "tool_name": "bash",
+          "status": "completed",
+          "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-7fee96520e-A'\",\"description\":\"Print the required distinct evidence marker A\",\"background\":false}",
+          "input_preview_truncated": false
+        },
+        {
+          "source": {
+            "kind": "dispatch_result",
+            "message_id": "msg_g0VX6IdzU00Ng8C1a0Af"
+          },
+          "message_id": "msg_g0VX6IZMO00HEPJFqDEM",
+          "part_id": "prt_g0VX6IaV700TglgDBE9I",
+          "tool_name": "bash",
+          "status": "completed",
+          "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-7fee96520e-B'\",\"description\":\"Print the required distinct evidence marker B\",\"background\":false}",
+          "input_preview_truncated": false
+        },
+        {
+          "source": {
+            "kind": "dispatch_result",
+            "message_id": "msg_g0VX6IdzU00Ng8C1a0Af"
+          },
+          "message_id": "msg_g0VX6IawD00H0qAxh5ph",
+          "part_id": "prt_g0VX6IbsR00DTCirxXNr",
+          "tool_name": "bash",
+          "status": "completed",
+          "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-7fee96520e-C'\",\"description\":\"Print the required distinct evidence marker C\",\"background\":false}",
+          "input_preview_truncated": false
+        },
+        {
+          "source": {
+            "kind": "dispatch_result",
+            "message_id": "msg_g0VX6IdzU00Ng8C1a0Af"
+          },
+          "message_id": "msg_g0VX6IcPk00ftLGspyAr",
+          "part_id": "prt_g0VX6IdVP00G57rqdHSR",
+          "tool_name": "bash",
+          "status": "completed",
+          "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-7fee96520e-D'\",\"description\":\"Print the required distinct evidence marker D\",\"background\":false}",
+          "input_preview_truncated": false
+        }
+      ]
+    },
+    "causal_tool_message_inventory": [
+      {
+        "source": {
+          "kind": "dispatch_result",
+          "message_id": "msg_g0VX6IdzU00Ng8C1a0Af"
+        },
+        "session_id": "ses_hwsUy6lP83Jnkc349EhW",
+        "message_id": "msg_g0VX6IX2q00rNQqkbH1d",
+        "author": "base-developer",
+        "time_created": 1791132761508,
+        "tool_facts": [
+          {
+            "part_id": "prt_g0VX6IYbz00xiBwcioky",
+            "call_id": "call_Orx65MzaDV8xwnFYhsX6pLyV",
+            "tool_name": "bash",
+            "status": "completed",
+            "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-7fee96520e-A'\",\"description\":\"Print the required distinct evidence marker A\",\"background\":false}",
+            "input_chars": 131,
+            "input_preview_truncated": false,
+            "stored_output_chars": 20
+          }
+        ]
+      },
+      {
+        "source": {
+          "kind": "dispatch_result",
+          "message_id": "msg_g0VX6IdzU00Ng8C1a0Af"
+        },
+        "session_id": "ses_hwsUy6lP83Jnkc349EhW",
+        "message_id": "msg_g0VX6IZMO00HEPJFqDEM",
+        "author": "base-developer",
+        "time_created": 1791132770408,
+        "tool_facts": [
+          {
+            "part_id": "prt_g0VX6IaV700TglgDBE9I",
+            "call_id": "call_j9VCCCRdVbCabdl7zHKJIWgk",
+            "tool_name": "bash",
+            "status": "completed",
+            "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-7fee96520e-B'\",\"description\":\"Print the required distinct evidence marker B\",\"background\":false}",
+            "input_chars": 131,
+            "input_preview_truncated": false,
+            "stored_output_chars": 20
+          }
+        ]
+      },
+      {
+        "source": {
+          "kind": "dispatch_result",
+          "message_id": "msg_g0VX6IdzU00Ng8C1a0Af"
+        },
+        "session_id": "ses_hwsUy6lP83Jnkc349EhW",
+        "message_id": "msg_g0VX6IawD00H0qAxh5ph",
+        "author": "base-developer",
+        "time_created": 1791132776473,
+        "tool_facts": [
+          {
+            "part_id": "prt_g0VX6IbsR00DTCirxXNr",
+            "call_id": "call_NF4b7dbjVoMDOvvbsav6tZ8T",
+            "tool_name": "bash",
+            "status": "completed",
+            "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-7fee96520e-C'\",\"description\":\"Print the required distinct evidence marker C\",\"background\":false}",
+            "input_chars": 131,
+            "input_preview_truncated": false,
+            "stored_output_chars": 20
+          }
+        ]
+      },
+      {
+        "source": {
+          "kind": "dispatch_result",
+          "message_id": "msg_g0VX6IdzU00Ng8C1a0Af"
+        },
+        "session_id": "ses_hwsUy6lP83Jnkc349EhW",
+        "message_id": "msg_g0VX6IcPk00ftLGspyAr",
+        "author": "base-developer",
+        "time_created": 1791132782148,
+        "tool_facts": [
+          {
+            "part_id": "prt_g0VX6IdVP00G57rqdHSR",
+            "call_id": "call_uKFhOn3b2D1lYxfY8bGY2KAL",
+            "tool_name": "bash",
+            "status": "completed",
+            "input_preview": "{\"command\":\"printf '%s\\\\n' 'READER-7fee96520e-D'\",\"description\":\"Print the required distinct evidence marker D\",\"background\":false}",
+            "input_chars": 131,
+            "input_preview_truncated": false,
+            "stored_output_chars": 20
+          }
+        ]
+      }
+    ],
+    "inventory_next_before": [],
+    "evidence_reads": [
+      {
+        "message_id": "msg_g0VX6IX2q00rNQqkbH1d",
+        "part_id": "prt_g0VX6IYbz00xiBwcioky",
+        "call_id": "call_Orx65MzaDV8xwnFYhsX6pLyV",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "input",
+        "source": "message-part-input",
+        "redacted": false,
+        "total_chars": 131,
+        "sha256": "2948d9086df6e565bd7d4f1c60feaa3adbbab19426a8e7f416f127863554d998",
+        "offset": 0,
+        "end": 131,
+        "next_offset": null,
+        "content": "{\"command\":\"printf '%s\\\\n' 'READER-7fee96520e-A'\",\"description\":\"Print the required distinct evidence marker A\",\"background\":false}"
+      },
+      {
+        "message_id": "msg_g0VX6IX2q00rNQqkbH1d",
+        "part_id": "prt_g0VX6IYbz00xiBwcioky",
+        "call_id": "call_Orx65MzaDV8xwnFYhsX6pLyV",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "output",
+        "source": "message-part-output",
+        "redacted": false,
+        "total_chars": 20,
+        "sha256": "0983c4bb81ee907b776a94c23a1d630c85641cce8f7e55090d8dff91adbe2a7d",
+        "offset": 0,
+        "end": 20,
+        "next_offset": null,
+        "content": "READER-7fee96520e-A\n"
+      },
+      {
+        "message_id": "msg_g0VX6IZMO00HEPJFqDEM",
+        "part_id": "prt_g0VX6IaV700TglgDBE9I",
+        "call_id": "call_j9VCCCRdVbCabdl7zHKJIWgk",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "input",
+        "source": "message-part-input",
+        "redacted": false,
+        "total_chars": 131,
+        "sha256": "a452994b658ab2112cb8318ab70150b02d473d5430ac942a99b1cfef58130d05",
+        "offset": 0,
+        "end": 131,
+        "next_offset": null,
+        "content": "{\"command\":\"printf '%s\\\\n' 'READER-7fee96520e-B'\",\"description\":\"Print the required distinct evidence marker B\",\"background\":false}"
+      },
+      {
+        "message_id": "msg_g0VX6IZMO00HEPJFqDEM",
+        "part_id": "prt_g0VX6IaV700TglgDBE9I",
+        "call_id": "call_j9VCCCRdVbCabdl7zHKJIWgk",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "output",
+        "source": "message-part-output",
+        "redacted": false,
+        "total_chars": 20,
+        "sha256": "d4204a98dabe8ef9f30d9a7a579da734248cb7d77d4bfb135d3b90af3b4d4395",
+        "offset": 0,
+        "end": 20,
+        "next_offset": null,
+        "content": "READER-7fee96520e-B\n"
+      },
+      {
+        "message_id": "msg_g0VX6IawD00H0qAxh5ph",
+        "part_id": "prt_g0VX6IbsR00DTCirxXNr",
+        "call_id": "call_NF4b7dbjVoMDOvvbsav6tZ8T",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "input",
+        "source": "message-part-input",
+        "redacted": false,
+        "total_chars": 131,
+        "sha256": "2211dd0d8c1aef98ac468946a3e54f57fcfbc8563b09eea173d2604b0dde1b0d",
+        "offset": 0,
+        "end": 131,
+        "next_offset": null,
+        "content": "{\"command\":\"printf '%s\\\\n' 'READER-7fee96520e-C'\",\"description\":\"Print the required distinct evidence marker C\",\"background\":false}"
+      },
+      {
+        "message_id": "msg_g0VX6IawD00H0qAxh5ph",
+        "part_id": "prt_g0VX6IbsR00DTCirxXNr",
+        "call_id": "call_NF4b7dbjVoMDOvvbsav6tZ8T",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "output",
+        "source": "message-part-output",
+        "redacted": false,
+        "total_chars": 20,
+        "sha256": "dd6229a8534d007e21a87fb6f8752350652d9c1d1fd6c398f7f46263b9c475fa",
+        "offset": 0,
+        "end": 20,
+        "next_offset": null,
+        "content": "READER-7fee96520e-C\n"
+      },
+      {
+        "message_id": "msg_g0VX6IcPk00ftLGspyAr",
+        "part_id": "prt_g0VX6IdVP00G57rqdHSR",
+        "call_id": "call_uKFhOn3b2D1lYxfY8bGY2KAL",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "input",
+        "source": "message-part-input",
+        "redacted": false,
+        "total_chars": 131,
+        "sha256": "93bb71e93f236fb0c0358d2e20009424c17cc7be9c1fb1291948b308bf86d0af",
+        "offset": 0,
+        "end": 131,
+        "next_offset": null,
+        "content": "{\"command\":\"printf '%s\\\\n' 'READER-7fee96520e-D'\",\"description\":\"Print the required distinct evidence marker D\",\"background\":false}"
+      },
+      {
+        "message_id": "msg_g0VX6IcPk00ftLGspyAr",
+        "part_id": "prt_g0VX6IdVP00G57rqdHSR",
+        "call_id": "call_uKFhOn3b2D1lYxfY8bGY2KAL",
+        "tool_name": "bash",
+        "status": "completed",
+        "field": "output",
+        "source": "message-part-output",
+        "redacted": false,
+        "total_chars": 20,
+        "sha256": "880ef172c6112294eb71bead552e9afcb00b34ef84e2de86e3d1bf8384ff838a",
+        "offset": 0,
+        "end": 20,
+        "next_offset": null,
+        "content": "READER-7fee96520e-D\n"
+      }
+    ]
+  },
+  "byteComparisons": [
+    {
+      "messageID": "msg_g0VX6IX2q00rNQqkbH1d",
+      "partID": "prt_g0VX6IYbz00xiBwcioky",
+      "field": "input",
+      "limit": 3750,
+      "marker": "READER-7fee96520e-A",
+      "utf8Bytes": 131,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6IX2q00rNQqkbH1d",
+      "partID": "prt_g0VX6IYbz00xiBwcioky",
+      "field": "output",
+      "limit": 3750,
+      "marker": "READER-7fee96520e-A",
+      "utf8Bytes": 20,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6IZMO00HEPJFqDEM",
+      "partID": "prt_g0VX6IaV700TglgDBE9I",
+      "field": "input",
+      "limit": 3750,
+      "marker": "READER-7fee96520e-B",
+      "utf8Bytes": 131,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6IZMO00HEPJFqDEM",
+      "partID": "prt_g0VX6IaV700TglgDBE9I",
+      "field": "output",
+      "limit": 3750,
+      "marker": "READER-7fee96520e-B",
+      "utf8Bytes": 20,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6IawD00H0qAxh5ph",
+      "partID": "prt_g0VX6IbsR00DTCirxXNr",
+      "field": "input",
+      "limit": 3750,
+      "marker": "READER-7fee96520e-C",
+      "utf8Bytes": 131,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6IawD00H0qAxh5ph",
+      "partID": "prt_g0VX6IbsR00DTCirxXNr",
+      "field": "output",
+      "limit": 3750,
+      "marker": "READER-7fee96520e-C",
+      "utf8Bytes": 20,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6IcPk00ftLGspyAr",
+      "partID": "prt_g0VX6IdVP00G57rqdHSR",
+      "field": "input",
+      "limit": 3750,
+      "marker": "READER-7fee96520e-D",
+      "utf8Bytes": 131,
+      "exactBytes": true
+    },
+    {
+      "messageID": "msg_g0VX6IcPk00ftLGspyAr",
+      "partID": "prt_g0VX6IdVP00G57rqdHSR",
+      "field": "output",
+      "limit": 3750,
+      "marker": "READER-7fee96520e-D",
+      "utf8Bytes": 20,
+      "exactBytes": true
+    }
+  ],
+  "status": "passed",
+  "sourceMessageID": "msg_g0VX6IdzU00Ng8C1a0Af",
+  "sourceSessionID": "ses_hwsUy6lP83Jnkc349EhW",
+  "readerSessionID": "ses_-zUSthYWGzz0VmbE24li",
+  "readerMessageID": "msg_hGvJZof9BE8dttMaxeq4",
+  "completionDecision": {
+    "id": "art_g0VX6JhuW0060QJEy4Vk",
+    "task_id": "tsk_g00VX6IQOT00nAimzlF8",
+    "kind": "task_completion_decision",
+    "label": "TaskCompletionDecision",
+    "payload": {
+      "orchestrator_session_id": "ses_-zUSthYWGzz0VmbE24li",
+      "orchestrator_message_id": "msg_h7h1tugiMm52zpG0RHOM",
+      "tool_call_id": "call_9mD1lSa0q3g53IiKsbjnYPZF",
+      "tool_part_id": "prt_g0VX6JapV004Ip7PJsaL",
+      "evidence_locators": [
+        {
+          "source": "session",
+          "session_id": "ses_-zUSthYWGzz0VmbE24li"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hwsUy6lP83Jnkc349EhW",
+          "message_id": "msg_g0VX6IdzU00Ng8C1a0Af"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hwsUy6lP83Jnkc349EhW",
+          "message_id": "msg_g0VX6IX2q00rNQqkbH1d"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hwsUy6lP83Jnkc349EhW",
+          "message_id": "msg_g0VX6IZMO00HEPJFqDEM"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hwsUy6lP83Jnkc349EhW",
+          "message_id": "msg_g0VX6IawD00H0qAxh5ph"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hwsUy6lP83Jnkc349EhW",
+          "message_id": "msg_g0VX6IcPk00ftLGspyAr"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_-zUSthYWGzz0VmbE24li",
+          "message_id": "msg_hGvJZof9BE8dttMaxeq4"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_h1lGk7qxJDThbgCuiJJl",
+          "message_id": "msg_g0VX6JCtK00k2EjRS7Mb"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_h1lGk7qxJDThbgCuiJJl",
+          "message_id": "msg_g0VX6J1JQ00bMKPJVDaJ"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hBbYLReO32sWLjcHfEe9",
+          "catalog_revision": 9,
+          "expected_sha256": "3c716041422bfb39fcc360aada7066d27db104dc73e54cb04e55349340f0e48b"
+        }
+      ],
+      "deliverable_artifact_locators": [],
+      "terminal_workflow_artifact_locators": [],
+      "accepted_delivery_slice_revision_ids": [],
+      "workflow_binding": {
+        "kind": "direct",
+        "package_revision": {
+          "scope": "built_in",
+          "project_id": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.09.30.1",
+          "package_digest": "f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"
+        }
+      },
+      "time_recorded": 1791133041595
+    },
+    "payload_sha256": "fd86c4a78e51e6c140f37aa9ec63a90653cbf6483838740743a8d59c5b7ae1f6",
+    "payload_bytes": 1713,
+    "payload_block_sha256s": [
+      "fd86c4a78e51e6c140f37aa9ec63a90653cbf6483838740743a8d59c5b7ae1f6"
+    ],
+    "payload_block_index_sha256": "0d166d60b47587982d56acdf4f84b0c842eedf5bb88cc2a28f64b8c01615e951",
+    "catalog_artifact_type": "opencorvus/core/task_completion_decision",
+    "catalog_schema_diagnostic": null,
+    "catalog_producer": {
+      "owner_kind": "core",
+      "component_id": "engine-artifact",
+      "operation_id": "task_completion_decision"
+    },
+    "catalog_import_source_task_id": null,
+    "catalog_resource_count": 0,
+    "catalog_resource_media_types": [],
+    "catalog_search_text": "opencorvus/core/task_completion_decision\nengine-artifact\ntask_completion_decision",
+    "catalog_search_text_truncated": false,
+    "catalog_metadata_sha256": "dea3859d658b0a0970ade87a77a9abf8ec274b05ba437c7b440116352c04d493",
+    "catalog_revision": 11,
+    "time_created": 1791133041595,
+    "time_updated": 1791133041595
+  },
+  "completionReferences": {
+    "producer": {
+      "source": "session_message",
+      "session_id": "ses_hwsUy6lP83Jnkc349EhW",
+      "message_id": "msg_g0VX6IdzU00Ng8C1a0Af"
+    },
+    "reader": {
+      "owner": "orchestrator",
+      "session_id": "ses_-zUSthYWGzz0VmbE24li",
+      "message_id": "msg_h7h1tugiMm52zpG0RHOM",
+      "read_message_id": "msg_hGvJZof9BE8dttMaxeq4"
+    }
+  },
+  "schemaObservations": [
+    {
+      "requestIndex": 3,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 3,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 4,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 4,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 5,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 5,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 6,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 6,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 7,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 7,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 8,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 8,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 9,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 9,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 10,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 10,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 11,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 11,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 12,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 12,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 13,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 13,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 14,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 14,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 15,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 15,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 16,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 16,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 17,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 17,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 18,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 18,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 19,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 19,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 20,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 20,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    },
+    {
+      "requestIndex": 21,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 21,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    }
+  ],
+  "model": "openai/gpt-6.1-sol",
+  "maxRequests": 256,
+  "nonce": "READER-7fee96520e",
+  "evidenceRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2rFccq\\runner-42388-3Ml0e4\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-zofMbT",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 2446,
+        "body_sha256": "def8c26ce0fcb2f1d9426161eb4aa6e027c1d2dd374ccb151d71fb6724b29d99",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": []
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 155593,
+        "body_sha256": "e0eccdf6d5ef9853f6004a8e4083d3af2478ce795e4244717d6f26d5624d1f66",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": []
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 4054,
+        "body_sha256": "fa23c0a727a2887ec21b65084ceba8e4b1fa38ce126728f29cda9975d7af6eed",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": []
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 249973,
+        "body_sha256": "933a61a63a79478072daae762c0c005a08ca0f27406fb3e04f329afe33fce1a7",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 151234,
+        "body_sha256": "0d2759e13133b1e434d81cdf994524e79bfc96a93e16639cc1196aa0e01fc5cc",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 151873,
+        "body_sha256": "9e4574f6d27ab946681bdddecfdeca680ad2946f13abeabbcbe167d421df9e05",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 152219,
+        "body_sha256": "9456bebb9c16827fd0b28932dd886e5a0596339dfa0891d6324c3ad81266dfb6",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 152565,
+        "body_sha256": "306b556c75ed75de4291efe60a17a58bb948bd1afd67e58a5a72b975e1d50c24",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 152911,
+        "body_sha256": "72b1bc61678a2cb8b8f855fd2c620302a0ac6468a6e4ee5fadba8c49f0b8a673",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 261323,
+        "body_sha256": "17abefda220ddf7382ee9b6aeed34310f6cab35a0c0c1222ac8b78b053420391",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 269172,
+        "body_sha256": "4af8d11967b98a8ed01fd08df02dac9959fd7fc91a17741138f88e5edf749b88",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 283325,
+        "body_sha256": "6a52a2f754b371d1ed2a7775a7ba0a461c90cfa2927de096ff5fb2c74bf298ce",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 287788,
+        "body_sha256": "511b59b45a811425b113d210b0c64ad5b0b5b33fa96ec75f0a188f4bbbc52ec8",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 140815,
+        "body_sha256": "5cee1b9b13a54cfb8e71e7acd3dcea883ac1548acddc6760a8791c29ab61b228",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 155290,
+        "body_sha256": "617f2cd9667490bf5527962c97cb3405b1d0175b2ca6108b606120e713d6298e",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 180234,
+        "body_sha256": "56ffbb087a1248500d543860490ea1f21960f6b96849ba3960d16a86064d9120",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 185949,
+        "body_sha256": "c01cc89d4dfeeff9c4bdfac11b5ae22616cdaf702bd35a561f340c32abbf06d1",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/15/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/15/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 294053,
+        "body_sha256": "64b529d5d7124cceb079601f2f349e9eaa5095ea0a1bd9056e747b0ccc4bdc97",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 302671,
+        "body_sha256": "965cefcb9d31e59b8836af5b44728f900597e7056e78472d7b1d39f1b97111df",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 305357,
+        "body_sha256": "53570483af2de340f7f8977c2608ff0493b4b0ba1cea793f109fa5dfc13c30ac",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 310325,
+        "body_sha256": "358c650f5c1b96aab1a9ffc7c4be808cc5d647aae12ff4087837210f13361c67",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "input_evidence": {
+        "body_utf8_bytes": 311285,
+        "body_sha256": "c0c5b72df360bfa2bf87089554c3c0ee2bfd355a3edaeca1922819078f8f6878",
+        "probes": [
+          {
+            "id": "reader-budget-schema",
+            "text_utf8_bytes": 505,
+            "text_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d",
+            "matches": [
+              {
+                "json_pointer": "/tools/23/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 789,
+                "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+              },
+              {
+                "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+                "pointer_redacted": false,
+                "message_role": null,
+                "role_json_pointer": null,
+                "decoded_value_utf8_start": 0,
+                "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+              }
+            ]
+          }
+        ]
+      },
+      "status": 200
+    }
+  ],
+  "credentialCleanup": "passed",
+  "cleanupErrors": []
+}

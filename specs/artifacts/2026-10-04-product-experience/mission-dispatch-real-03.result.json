@@ -1,0 +1,1274 @@
+{
+  "model": "openai/gpt-6.1-sol",
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr",
+  "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+  "operatorPrompt": "For acceptance DISPATCH-77371338-2362-45b0-8d6f-b6de55598563, report the sum of 137 and 249 and the difference between 249 and 137. Return both numeric results in the conversation. This is the complete requested deliverable.",
+  "authority": {
+    "credential": "available",
+    "projectedModel": "gpt-6.1-sol",
+    "copiedProviders": [
+      "openai"
+    ],
+    "pairedModels": true
+  },
+  "preflight": {
+    "sessionID": "ses_hhViTYxKNdAw0D0QpsGk",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "draft": {
+    "status": 200,
+    "body": {
+      "missionID": "6e1955f2d73f2836",
+      "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+      "title": "Atomic manual draft acceptance",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project",
+      "created": 1791137149585,
+      "updated": 1791137149617,
+      "interruptible": false,
+      "productPillar": "work",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "For acceptance DISPATCH-77371338-2362-45b0-8d6f-b6de55598563, report the sum of 137 and 249 and the difference between 249 and 137. Return both numeric results in the conversation. This is the complete requested deliverable."
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  },
+  "dispatch": {
+    "status": 200,
+    "body": {
+      "missionID": "6e1955f2d73f2836",
+      "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+      "created": false,
+      "productPillar": "work"
+    }
+  },
+  "latest": {
+    "tasks": [],
+    "ownedPrompts": [
+      "ses_hhViTYxKNdAw0D0QpsGk",
+      "ses_-zUStP3PjzzDaAvKVjaJ"
+    ],
+    "promptExecutions": [
+      {
+        "sessionID": "ses_hhViTYxKNdAw0D0QpsGk",
+        "disposition": "settled"
+      },
+      {
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "disposition": "settled"
+      }
+    ],
+    "state": {
+      "type": "idle"
+    }
+  },
+  "firstModelOutput": {
+    "messageID": "msg_g0VX6bBaa008OnOYpX4k",
+    "observedAt": 1791137215971,
+    "requestCount": 11
+  },
+  "replay": {
+    "status": 200,
+    "body": {
+      "missionID": "6e1955f2d73f2836",
+      "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+      "created": false,
+      "productPillar": "work"
+    }
+  },
+  "retainedDraft": {
+    "text": "Exact next draft after DISPATCH-77371338-2362-45b0-8d6f-b6de55598563; retain this punctuation: A → B."
+  },
+  "reply": {
+    "info": {
+      "author": "mission",
+      "role": "assistant",
+      "time": {
+        "created": 1791137207264,
+        "completed": 1791137215759
+      },
+      "parentID": "msg_hEQHdSfI2QNtVUnuXqdu",
+      "acceptedInputMessageIDs": [
+        "msg_hEQHdSfI2QNtVUnuXqdu"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "mission",
+      "path": {
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project",
+        "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project"
+      },
+      "cost": 0,
+      "tokens": {
+        "total": 40544,
+        "input": 423,
+        "output": 57,
+        "reasoning": 0,
+        "cache": {
+          "read": 40064,
+          "write": 0
+        }
+      },
+      "billing": {
+        "status": "priced"
+      },
+      "finish": "stop",
+      "orderKey": "v1:0001791137207264:0000000000000030:0000000000000000:message:msg_g0VX6bBaa008OnOYpX4k",
+      "id": "msg_g0VX6bBaa008OnOYpX4k",
+      "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ"
+    },
+    "parts": [
+      {
+        "id": "prt_g0VX6bBfe00zhmUHXmuA",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "messageID": "msg_g0VX6bBaa008OnOYpX4k",
+        "orderKey": "v1:0001791137207578:0000000000000031:0000000000000000:part:prt_g0VX6bBfe00zhmUHXmuA",
+        "type": "step-start"
+      },
+      {
+        "id": "prt_g0VX6bD9R00ocy4oeW1r",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "messageID": "msg_g0VX6bBaa008OnOYpX4k",
+        "orderKey": "v1:0001791137213269:0000000000000031:0000000000000000:part:prt_g0VX6bD9R00ocy4oeW1r",
+        "type": "text",
+        "text": "For acceptance **DISPATCH-77371338-2362-45b0-8d6f-b6de55598563**:\n\n- Sum: 137 + 249 = **386**\n- Difference: 249 − 137 = **112**",
+        "time": {
+          "start": 1791137215580,
+          "end": 1791137215580
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0be34e881496c9d1016ac295bcfa6c87d086ab18d62c5fe7da",
+            "phase": "final_answer"
+          }
+        }
+      },
+      {
+        "id": "prt_g0VX6bDmr00QBlclyuPS",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "messageID": "msg_g0VX6bBaa008OnOYpX4k",
+        "orderKey": "v1:0001791137215714:0000000000000031:0000000000000000:part:prt_g0VX6bDmr00QBlclyuPS",
+        "type": "step-finish",
+        "reason": "stop",
+        "cost": 0,
+        "tokens": {
+          "total": 40544,
+          "input": 423,
+          "output": 57,
+          "reasoning": 0,
+          "cache": {
+            "read": 40064,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    ]
+  },
+  "executionState": {
+    "type": "idle"
+  },
+  "messages": [
+    {
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1791137149706
+        },
+        "agent": "mission",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "wake_reason": {
+            "source": "mission.operator",
+            "missionID": "6e1955f2d73f2836",
+            "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+            "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+            "openedEventID": "pev_hcxfoZeWjwkTZY0pYAmR"
+          },
+          "surface": "panel",
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "mission.operator",
+            "literalText": "For acceptance DISPATCH-77371338-2362-45b0-8d6f-b6de55598563, report the sum of 137 and 249 and the difference between 249 and 137. Return both numeric results in the conversation. This is the complete requested deliverable."
+          }
+        },
+        "orderKey": "v1:0001791137149706:0000000000000030:0000000000000000:message:msg_hEQHdSfI2QNtVUnuXqdu",
+        "id": "msg_hEQHdSfI2QNtVUnuXqdu",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ"
+      },
+      "parts": [
+        {
+          "id": "prt_h6JzStrFmdXOvqz5yCua",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_hEQHdSfI2QNtVUnuXqdu",
+          "orderKey": "v1:0001791137149711:0000000000000031:0000000000000000:part:prt_h6JzStrFmdXOvqz5yCua",
+          "type": "text",
+          "text": "For acceptance DISPATCH-77371338-2362-45b0-8d6f-b6de55598563, report the sum of 137 and 249 and the difference between 249 and 137. Return both numeric results in the conversation. This is the complete requested deliverable.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hxbHLdLrteybN5FFcxqG/3603da1c8bc3101ff230fec1e701e5b35a56663797e02c8b99be73e44de237f6.json",
+            "catalog_snapshot_hash": "3603da1c8bc3101ff230fec1e701e5b35a56663797e02c8b99be73e44de237f6"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791137149924,
+          "completed": 1791137158696
+        },
+        "parentID": "msg_hEQHdSfI2QNtVUnuXqdu",
+        "acceptedInputMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 38814,
+          "input": 38744,
+          "output": 23,
+          "reasoning": 47,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791137149924:0000000000000030:0000000000000000:message:msg_g0VX6awfk00hrzosT5HW",
+        "id": "msg_g0VX6awfk00hrzosT5HW",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6ax6w00lnkC8kJVC",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6awfk00hrzosT5HW",
+          "orderKey": "v1:0001791137151610:0000000000000031:0000000000000000:part:prt_g0VX6ax6w00lnkC8kJVC",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6ayA7002joJ7tGlK",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6awfk00hrzosT5HW",
+          "orderKey": "v1:0001791137155652:0000000000000031:0000000000000000:part:prt_g0VX6ayA7002joJ7tGlK",
+          "type": "reasoning",
+          "text": "",
+          "metadata": {
+            "openai": {
+              "itemId": "rs_052cc61ae1272c3e016ac2958371c887d0b80a6272761091d7",
+              "reasoningEncryptedContent": "gAAAAABqwpWFpgp1SM12TY3BnGiDgD7xQoczc7e3Cu2ho4-o8IJpHhkXOG1jHPAITGViNGrEpsFCqKzoMEx34yYPJgCg-XV2zyAiIcs8otXatePJOHbG5Me8LcKiWd6DPwxlgvFZJxpzF0lX58VjNLvBNdLWCyGon3qOCEVaaR6d_P_HNMJhouts3_H_URLMc95BzJeneklJ_QEmv9sFMycd7mQdFTF6wwFF6GYFXEfb8XBVih2jlNWjo2sNni9Q2D_aPn6NNMLrmbhIAbW1GJYkVnZCPeNHhjx_xvXthjGJ1CJX_I4mfmG8T1v4grvi3Af7Q_Iu08qbKUoG-NcMKUzlcO002AtOhIwC4XieIEcM2pzpkxeyq442vsqyiTb9J_q4jhywSw_S0G1qJfFSxwAtWU2mHyGKatUVdVEaxaVfIo2Okazl_fn2LcGZyRqIHSF6tLQ2ZfqeosYotsQPbJrQ5B_qI-PbudkSJrD4-f6YMm7Y5MtTvotSSoWtllKAEVCkykzOkhDogmWf7Id_XiFmyg9iWC9mOx8cPWITnsbZM5R-VqWzbsC-yN3FU4S423qPJU6l4A-Bhm6hhf0UXNNyus8Y3YQK_2uq33v3qD73nyi5zZ7WmcjqkOzej4At9GW-96AnGFOuma9F5wy0nRj51mFw90Ftc3NB2aGec8tK48z3OPlBFZHMcjowi6MNudTAdODEnPHgdzmmHBitd3gribuUal2ATeyE8UQsnOwYmo3OFt_1SL0otnbcrE9BFBlYcNxj-UQE-VNt5ommK3dDuOjOMna27YcCzavwGkhwHNjFn255OBvWLXiGjQbk2Caogd0m5cx1DNx7238mR5BLp5sM-bwzmC39nKgNnOYh1xTnsBa3mPD_3V0rJlkHKRckBF8UKWBVri8NH-8vw1ocvgzTFjJVUGAL3hZwqLxrxTwKgt6zMMSthjJGBKyrDpx9v3xODVBnThhwEv_7gw77vT50ID1QfX04c5y0dcs9hLDrgSN0se19_SHa5htQr18RSyQg3I8Dk2qA-MLWDSN9cZ3rNvhQEFyiQLXuiMnGRreavlPNau4lS8gwoSp-9A0HBxeXM-zTqtCNtRduUqzmoxFnY8ZoBfX8Yy6Ek2vkB8v2jthZRl8sPZpjNFPHD67bNdDAextXhkAWE5FfTOXE-bxVjMWsO_vwRTuwJPzKPZADi0xuTzUsFZjgQ6ufoQ7ZLmn6zzATSNaVeoa31dQu6ZVD9Kg7T9vR7Lgo2UMzpNqpLkK3vNiZzZ7Udy3gmLW_XHxmHQsKZipZhTfcMBb_7rWWJQgPErAccShB6XQqvUeItrZPNdm9mFz-fpePvCA5KEu6U8GConiM3CNs73H2F9Rqw7TTUGq1h-7YWtJzTeLy_0JQl1CsJawioymY3-n4kMAPjSWpcQt4vZrgx7dNULrP_aAoXMOfsABDQc6d1K0b9o2q-0JKcrmEy8d60GABt3P77LQqydK9niB1uc85wYzxJM8PwMqEMOb4C8WQNw2TAdK6WEJeCBkPV-2eej-FblquzYHOsNn_41kAzow5ImjhkXqIpjQb3vjy9RBWtuGQcOq1NjhjZ-P76q719IzjLOjUAw9sWcxlSaBR0_YEYI5s8MkpUK9EPZ9eDTMnkUcLZk62y84="
+            }
+          },
+          "time": {
+            "start": 1791137155651,
+            "end": 1791137158084
+          }
+        },
+        {
+          "id": "prt_g0VX6aynR00DxyUCQBlc",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6awfk00hrzosT5HW",
+          "type": "tool",
+          "callID": "call_Kqlt8Gh4jj7aeev4RLVn71jP",
+          "tool": "mission_state",
+          "state": {
+            "status": "completed",
+            "input": {
+              "action": "snapshot"
+            },
+            "output": "{\"revision\":\"d24e63003d5a28d6c30564e2bf6c7daa12564f1f60c2e6692aab8e7c59621e70\",\"files\":[{\"file\":\"frontier.md\",\"exists\":false,\"bytes\":0,\"content\":\"\"},{\"file\":\"tasks.md\",\"exists\":false,\"bytes\":0,\"content\":\"\"},{\"file\":\"handoff.md\",\"exists\":false,\"bytes\":0,\"content\":\"\"},{\"file\":\"notes.md\",\"exists\":false,\"bytes\":0,\"content\":\"\"}]}",
+            "title": "mission_state snapshot 6e1955f2d73f2836",
+            "metadata": {
+              "missionID": "6e1955f2d73f2836",
+              "revision": "d24e63003d5a28d6c30564e2bf6c7daa12564f1f60c2e6692aab8e7c59621e70",
+              "count": 0,
+              "bytes": 0,
+              "truncated": false
+            },
+            "time": {
+              "start": 1791137158089,
+              "end": 1791137158649
+            }
+          },
+          "orderKey": "v1:0001791137158600:0000000000000031:0000000000000000:part:prt_g0VX6aynR00DxyUCQBlc"
+        },
+        {
+          "id": "prt_g0VX6aywY00W24FeCrWv",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6awfk00hrzosT5HW",
+          "orderKey": "v1:0001791137158655:0000000000000031:0000000000000000:part:prt_g0VX6aywY00W24FeCrWv",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 38814,
+            "input": 38744,
+            "output": 23,
+            "reasoning": 47,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791137158725,
+          "completed": 1791137166068
+        },
+        "parentID": "msg_hEQHdSfI2QNtVUnuXqdu",
+        "acceptedInputMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 39013,
+          "input": 416,
+          "output": 69,
+          "reasoning": 0,
+          "cache": {
+            "read": 38528,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791137158725:0000000000000030:0000000000000000:message:msg_g0VX6ayxh00Sp4ZzRXaX",
+        "id": "msg_g0VX6ayxh00Sp4ZzRXaX",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6az2p00QMiIuI41t",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6ayxh00Sp4ZzRXaX",
+          "orderKey": "v1:0001791137159043:0000000000000031:0000000000000000:part:prt_g0VX6az2p00QMiIuI41t",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6b0Cc009rpBULNqv",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6ayxh00Sp4ZzRXaX",
+          "type": "tool",
+          "callID": "call_EwIQ5HbetELWrXGcJXqBvpMq",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "arithmetic calculation numeric results"
+              ],
+              "kinds": [
+                "expert_squad"
+              ],
+              "next_owner_kinds": [
+                "create_task_with_expert_squad"
+              ],
+              "owner_refs": [],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "product_pillar": "work",
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"3603da1c8bc3101ff230fec1e701e5b35a56663797e02c8b99be73e44de237f6\",\n  \"catalog_revision\": \"072315472ceff2e37482417dcc007d730eb30b813e506a449b2f7710ceb4d679\",\n  \"caller\": \"mission\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 139486,\n  \"active_payload_tokens\": 34290,\n  \"visible_expert_squad_count\": 1,\n  \"held_expert_squad_count\": 1,\n  \"product_pillar\": \"work\",\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 1,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Use the callable question to ask the operator for the exact missing configuration or authorized scope decision. The answer itself does not change frozen role grants.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "3603da1c8bc3101ff230fec1e701e5b35a56663797e02c8b99be73e44de237f6",
+              "catalog_revision": "072315472ceff2e37482417dcc007d730eb30b813e506a449b2f7710ceb4d679",
+              "caller": "mission",
+              "result_count": 0,
+              "reveal_revision": 1,
+              "active_ref_count": 0,
+              "active_payload_chars": 139486,
+              "active_payload_tokens": 34290,
+              "visible_expert_squad_count": 1,
+              "held_expert_squad_count": 1,
+              "product_pillar": "work",
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_hEQHdSfI2QNtVUnuXqdu",
+                "search_call_id": "call_EwIQ5HbetELWrXGcJXqBvpMq",
+                "prior_revision": 0,
+                "revision": 1,
+                "harness_projection_hash": "559bc02cdb847a86b145a18880285bfadec31e2b9e8d5b9a2d28a3b9d736add5",
+                "catalog_snapshot_ref": "/attachment/prj_hxbHLdLrteybN5FFcxqG/3603da1c8bc3101ff230fec1e701e5b35a56663797e02c8b99be73e44de237f6.json",
+                "catalog_snapshot_hash": "3603da1c8bc3101ff230fec1e701e5b35a56663797e02c8b99be73e44de237f6",
+                "materialization_fingerprint": "55f7a14e1d53575d708534490094a687f814ec81a6c0076ba55de835418ba38a",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "10196bfd062ca82f6624692dded25ee1c51228da4593e85e7a4ca673abdfe9e0",
+                "active_payload_chars": 139486,
+                "active_payload_tokens": 34290
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1791137163494,
+              "end": 1791137165966
+            }
+          },
+          "orderKey": "v1:0001791137165845:0000000000000031:0000000000000000:part:prt_g0VX6b0Cc009rpBULNqv"
+        },
+        {
+          "id": "prt_g0VX6b0r80095SvYDLAA",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6ayxh00Sp4ZzRXaX",
+          "orderKey": "v1:0001791137166008:0000000000000031:0000000000000000:part:prt_g0VX6b0r80095SvYDLAA",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 39013,
+            "input": 416,
+            "output": 69,
+            "reasoning": 0,
+            "cache": {
+              "read": 38528,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791137166104,
+          "completed": 1791137172689
+        },
+        "parentID": "msg_hEQHdSfI2QNtVUnuXqdu",
+        "acceptedInputMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 39577,
+          "input": 14588,
+          "output": 29,
+          "reasoning": 0,
+          "cache": {
+            "read": 24960,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791137166104:0000000000000030:0000000000000000:message:msg_g0VX6b0si00f2ZXprvFq",
+        "id": "msg_g0VX6b0si00f2ZXprvFq",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6b0xB00P2IxSZyyL",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6b0si00f2ZXprvFq",
+          "orderKey": "v1:0001791137166381:0000000000000031:0000000000000000:part:prt_g0VX6b0xB00P2IxSZyyL",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6b2Gs00Oqq1wqzr9",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6b0si00f2ZXprvFq",
+          "type": "tool",
+          "callID": "call_rlI0xi5kHTwqsgio41yPiBkV",
+          "tool": "panel_query_task",
+          "state": {
+            "status": "completed",
+            "input": {
+              "includeInteractions": false
+            },
+            "output": "{\"tasks\":[]}",
+            "title": "Mission Tasks",
+            "metadata": {
+              "truncated": false,
+              "count": 0,
+              "missionID": "6e1955f2d73f2836"
+            },
+            "time": {
+              "start": 1791137171446,
+              "end": 1791137172429
+            }
+          },
+          "orderKey": "v1:0001791137172416:0000000000000031:0000000000000000:part:prt_g0VX6b2Gs00Oqq1wqzr9"
+        },
+        {
+          "id": "prt_g0VX6b2Zm00wt4tWJg0R",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6b0si00f2ZXprvFq",
+          "orderKey": "v1:0001791137172620:0000000000000031:0000000000000000:part:prt_g0VX6b2Zm00wt4tWJg0R",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 39577,
+            "input": 14588,
+            "output": 29,
+            "reasoning": 0,
+            "cache": {
+              "read": 24960,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791137172722,
+          "completed": 1791137190665
+        },
+        "parentID": "msg_hEQHdSfI2QNtVUnuXqdu",
+        "acceptedInputMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 39960,
+          "input": 169,
+          "output": 353,
+          "reasoning": 14,
+          "cache": {
+            "read": 39424,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791137172722:0000000000000030:0000000000000000:message:msg_g0VX6b2bS00xLMTwgY1T",
+        "id": "msg_g0VX6b2bS00xLMTwgY1T",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6b2gp00u23Uz1g2K",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6b2bS00xLMTwgY1T",
+          "orderKey": "v1:0001791137173055:0000000000000031:0000000000000000:part:prt_g0VX6b2gp00u23Uz1g2K",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6b42x00YHnywyutM",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6b2bS00xLMTwgY1T",
+          "orderKey": "v1:0001791137178271:0000000000000031:0000000000000000:part:prt_g0VX6b42x00YHnywyutM",
+          "type": "reasoning",
+          "text": "",
+          "metadata": {
+            "openai": {
+              "itemId": "rs_04356350e9c2f5c5016ac2959a1e0087d0a222227745d1ace6",
+              "reasoningEncryptedContent": "gAAAAABqwpWbJSplf4ns0hMhaBNBJUn76hYzZFQqZ-YOPgjwehMqk2B5D0asWcnFYunX0xBy9zrqmOIV6kJn6FoC4yh4t180pL182jjxQpk9vjyC1bNpVsYMe-g6lRuS0aws3nxtZv5KbkEWk5hE7JvXBhuZb3g_wmIjohDsBUDUgziVd0njNYzrBGJf9hvuz8yztpv-WPBBi-gtlhoPweERTyUIus_Kl_YowZ5-qUQXIZBYQp1uG2XX-0VtF6vXv2N4rQOBqxOJwgbKi3yTYnGbFSnY8r1gvf4Rb_qH7q-lI1I_H1ww5PwIYMJ9Qb_QubaU5tSGmV1INKj-MMMsgQOItgreNMHrSz2LsS_Ugbb3H5cEjZgwa-0VcFMeepRxrFuc6PD2oszl9xZ-NQ8bsWO3WhSvTZDh9W4xCq8VGAa-GJem42QjGyfeBIHDDZEAA-xzASm7jAiyWA3XaBdoPUreXaiD-4OBHjz-u8BZcLaT9Do-CHcbS6yFEUBxpb3YBZBqozNJS_24Wi8fGgbCqJZOiUdeXNwKEvhr2LdQwqhMG7X1AcKDN6FC8V3G2nq09MmB3T8Oay97bZ9cdsVC9VsgYnRU7ckp9CMxqryzWO8FPxqKLbOrfncpJpjxmvlyoNjo8WYdNlf6xJvoKQGM0T1AM8dgoD4lfG4BNQCoR1N9_pUNXx0RF2kk2xgZsOtLBeYkgBOtrQ52YvCE2xs5MNNDwOYWTEhtjBrUy618E6y8vx-NwImUa3J1YFuYMKCQB4AuO0OrzngKm2QY023tlrtvDtDZhwCOir-Ilz-7xQmyMNn2lwY_fAIPT_elX9wFex9d7BL1uCorrRs1x_rmCzC4SyaD3mHn-kywWoZ-RsqPd6LtvqNqYwkpvQnWWVAl0Cd-vQ434NRGo6uX401ZrJFZ6rHV674SCZjUtg5DmLXn4BYjeWbSylfwISICuTlesVCVnyTgTYQH6kpc-7E4fH7ShOuCqRMO2zriVv-V_BcMI08CM2lRukIWtxqoQDSsfFRcVwr0k3Ro2_uIe6ikGdISzcRseqeWhzcovdi35mnUdOas4qcBSDuwZvSphLnPkazSMlD0oh00KcjiRaqV9QSjf6jOpQBtDkiizBRKPEqurbrr-G-qgnMTIJmgx3p3oqmYXEFbl_Pv-_w7BEQV5ixv_n-VXoaYhZUXuEN4SrO6qdMoesf-f_TUtNDjrjU5qZIUxm1r80DQdNQxnuSIOFWUMa0CImclEn55jd8NkGa3jfX6MMqvZMk7rRsps6-P026m_DQhpZSK6aWP38YNh_cykiVn84Hbb267MnMgq9Roc4RIzuNuBpuZf2MyvjKVzDwJ4_lj_wLN5wroJE8ar26dhO7Rc7KWI2exQ9CPhBTlvkOlYhLtvMg="
+            }
+          },
+          "time": {
+            "start": 1791137178271,
+            "end": 1791137179183
+          }
+        },
+        {
+          "id": "prt_g0VX6b4Hk00917RQEKjX",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6b2bS00xLMTwgY1T",
+          "type": "tool",
+          "callID": "call_SnbunXFIRJMdiDzn7GW0ZOkB",
+          "tool": "mission_state",
+          "state": {
+            "status": "completed",
+            "input": {
+              "action": "commit",
+              "base_revision": "d24e63003d5a28d6c30564e2bf6c7daa12564f1f60c2e6692aab8e7c59621e70",
+              "updates": [
+                {
+                  "file": "frontier.md",
+                  "content": "## Mission contract\nObjective: Return both arithmetic results in the conversation for acceptance DISPATCH-77371338-2362-45b0-8d6f-b6de55598563.\nIn scope: 137 + 249; 249 - 137.\nOut of scope: All additional deliverables or domain execution.\nHard constraints: Both numeric results must appear in the conversation.\nDone when:\n- Done-1: Conversation reports sum 386.\n- Done-2: Conversation reports difference 112.\n\n## Expert Squad authority\nSelection source: all installed\nSelected stage owners: none; bounded direct operator response, no domain delivery Task required.\n\n## Outcome\nDirect arithmetic: 137 + 249 = 386; 249 - 137 = 112. No stage dependencies or parallel branches. Publish the outcome presentation and return both numbers directly."
+                },
+                {
+                  "file": "tasks.md",
+                  "content": "No child Tasks. This is a bounded arithmetic response."
+                },
+                {
+                  "file": "handoff.md",
+                  "content": "Publish outcome presentation, settle bounded Mission with no child Tasks, and return 386 and 112 in conversation."
+                },
+                {
+                  "file": "notes.md",
+                  "content": "The operator expressly limits the complete requested deliverable to two numeric results in conversation. No research, implementation, file delivery, or specialist execution is needed."
+                }
+              ]
+            },
+            "output": "{\"revision\":\"392aee0105e3a9e5434a36ceee7b7032b9bd1adcc955d689ff19c7028639e13e\",\"files\":[{\"file\":\"frontier.md\",\"bytes\":740},{\"file\":\"tasks.md\",\"bytes\":54},{\"file\":\"handoff.md\",\"bytes\":113},{\"file\":\"notes.md\",\"bytes\":183}]}",
+            "title": "mission_state commit 6e1955f2d73f2836",
+            "metadata": {
+              "missionID": "6e1955f2d73f2836",
+              "revision": "392aee0105e3a9e5434a36ceee7b7032b9bd1adcc955d689ff19c7028639e13e",
+              "count": 4,
+              "bytes": 1090,
+              "truncated": false
+            },
+            "time": {
+              "start": 1791137179188,
+              "end": 1791137190151
+            }
+          },
+          "orderKey": "v1:0001791137190119:0000000000000031:0000000000000000:part:prt_g0VX6b4Hk00917RQEKjX"
+        },
+        {
+          "id": "prt_g0VX6b7Fl00ohxFzQqgJ",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6b2bS00xLMTwgY1T",
+          "orderKey": "v1:0001791137190598:0000000000000031:0000000000000000:part:prt_g0VX6b7Fl00ohxFzQqgJ",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 39960,
+            "input": 169,
+            "output": 353,
+            "reasoning": 14,
+            "cache": {
+              "read": 39424,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791137190697,
+          "completed": 1791137199375
+        },
+        "parentID": "msg_hEQHdSfI2QNtVUnuXqdu",
+        "acceptedInputMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 40178,
+          "input": 630,
+          "output": 124,
+          "reasoning": 0,
+          "cache": {
+            "read": 39424,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791137190697:0000000000000030:0000000000000000:message:msg_g0VX6b7HN007rlwRL938",
+        "id": "msg_g0VX6b7HN007rlwRL938",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6b7MC00vTUBmes7s",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6b7HN007rlwRL938",
+          "orderKey": "v1:0001791137190996:0000000000000031:0000000000000000:part:prt_g0VX6b7MC00vTUBmes7s",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6b8a700TxjEn7VSe",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6b7HN007rlwRL938",
+          "type": "tool",
+          "callID": "call_SmgE6cKFWe0k3QAFfC3BIOWY",
+          "tool": "publish_interactive_artifact",
+          "state": {
+            "status": "completed",
+            "input": {
+              "artifact": {
+                "schemaVersion": "1",
+                "title": "Arithmetic results",
+                "content": {
+                  "renderer": "document@1",
+                  "markdown": "For acceptance **DISPATCH-77371338-2362-45b0-8d6f-b6de55598563**:\n\n- **Sum:** 137 + 249 = **386**\n- **Difference:** 249 − 137 = **112**\n\nBoth requested calculations are satisfied directly. No delegated work, dependencies, additional deliverables, or unresolved limitations."
+                }
+              }
+            },
+            "output": "{\"artifactID\":\"art_g0VX6b9Vc0073q81eYgy\",\"renderer\":\"document@1\"}",
+            "title": "Arithmetic results",
+            "metadata": {
+              "artifactID": "art_g0VX6b9Vc0073q81eYgy",
+              "renderer": "document@1",
+              "truncated": false
+            },
+            "time": {
+              "start": 1791137195703,
+              "end": 1791137199271
+            }
+          },
+          "orderKey": "v1:0001791137199249:0000000000000031:0000000000000000:part:prt_g0VX6b8a700TxjEn7VSe"
+        },
+        {
+          "id": "prt_g0VX6b9Vd00kavw5bZYW",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6b7HN007rlwRL938",
+          "orderKey": "v1:0001791137199275:0000000000000031:0000000000000000:part:prt_g0VX6b9Vd00kavw5bZYW",
+          "type": "interactive-artifact",
+          "artifactID": "art_g0VX6b9Vc0073q81eYgy"
+        },
+        {
+          "id": "prt_g0VX6b9Wa007yvvZuUiN",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6b7HN007rlwRL938",
+          "orderKey": "v1:0001791137199329:0000000000000031:0000000000000000:part:prt_g0VX6b9Wa007yvvZuUiN",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 40178,
+            "input": 630,
+            "output": 124,
+            "reasoning": 0,
+            "cache": {
+              "read": 39424,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791137199445,
+          "completed": 1791137207188
+        },
+        "parentID": "msg_hEQHdSfI2QNtVUnuXqdu",
+        "acceptedInputMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 40298,
+          "input": 282,
+          "output": 80,
+          "reasoning": 0,
+          "cache": {
+            "read": 39936,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791137199445:0000000000000030:0000000000000000:message:msg_g0VX6b9YT00iw8SmGaVc",
+        "id": "msg_g0VX6b9YT00iw8SmGaVc",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6b9dG00mVpTsPI7q",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6b9YT00iw8SmGaVc",
+          "orderKey": "v1:0001791137199742:0000000000000031:0000000000000000:part:prt_g0VX6b9dG00mVpTsPI7q",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6bAx500t8lnIEUyN",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6b9YT00iw8SmGaVc",
+          "type": "tool",
+          "callID": "call_9hsTn9O6ja1kMDkokZayu10w",
+          "tool": "panel_complete_mission",
+          "state": {
+            "status": "completed",
+            "input": {
+              "summary": "For acceptance DISPATCH-77371338-2362-45b0-8d6f-b6de55598563: 137 + 249 = 386; 249 − 137 = 112. Both results are provided in the conversation presentation and direct response.",
+              "task_acceptances": []
+            },
+            "output": "{\"summary\":\"For acceptance DISPATCH-77371338-2362-45b0-8d6f-b6de55598563: 137 + 249 = 386; 249 − 137 = 112. Both results are provided in the conversation presentation and direct response.\",\"task_acceptances\":[],\"kind\":\"mission_completed\",\"mission_id\":\"6e1955f2d73f2836\",\"mission_session_id\":\"ses_-zUStP3PjzzDaAvKVjaJ\",\"assistant_message_id\":\"msg_g0VX6b9YT00iw8SmGaVc\",\"tool_call_id\":\"call_9hsTn9O6ja1kMDkokZayu10w\",\"tool_part_id\":\"prt_g0VX6bAx500t8lnIEUyN\",\"time_recorded\":1791137206935}",
+            "title": "Mission completed",
+            "metadata": {
+              "truncated": false
+            },
+            "time": {
+              "start": 1791137204815,
+              "end": 1791137206939
+            }
+          },
+          "orderKey": "v1:0001791137206922:0000000000000031:0000000000000000:part:prt_g0VX6bAx500t8lnIEUyN"
+        },
+        {
+          "id": "prt_g0VX6bBYe0019WRZRnli",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6b9YT00iw8SmGaVc",
+          "orderKey": "v1:0001791137207146:0000000000000031:0000000000000000:part:prt_g0VX6bBYe0019WRZRnli",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 40298,
+            "input": 282,
+            "output": 80,
+            "reasoning": 0,
+            "cache": {
+              "read": 39936,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1791137207264,
+          "completed": 1791137215759
+        },
+        "parentID": "msg_hEQHdSfI2QNtVUnuXqdu",
+        "acceptedInputMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 40544,
+          "input": 423,
+          "output": 57,
+          "reasoning": 0,
+          "cache": {
+            "read": 40064,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001791137207264:0000000000000030:0000000000000000:message:msg_g0VX6bBaa008OnOYpX4k",
+        "id": "msg_g0VX6bBaa008OnOYpX4k",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX6bBfe00zhmUHXmuA",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6bBaa008OnOYpX4k",
+          "orderKey": "v1:0001791137207578:0000000000000031:0000000000000000:part:prt_g0VX6bBfe00zhmUHXmuA",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX6bD9R00ocy4oeW1r",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6bBaa008OnOYpX4k",
+          "orderKey": "v1:0001791137213269:0000000000000031:0000000000000000:part:prt_g0VX6bD9R00ocy4oeW1r",
+          "type": "text",
+          "text": "For acceptance **DISPATCH-77371338-2362-45b0-8d6f-b6de55598563**:\n\n- Sum: 137 + 249 = **386**\n- Difference: 249 − 137 = **112**",
+          "time": {
+            "start": 1791137215580,
+            "end": 1791137215580
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_0be34e881496c9d1016ac295bcfa6c87d086ab18d62c5fe7da",
+              "phase": "final_answer"
+            }
+          }
+        },
+        {
+          "id": "prt_g0VX6bDmr00QBlclyuPS",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "messageID": "msg_g0VX6bBaa008OnOYpX4k",
+          "orderKey": "v1:0001791137215714:0000000000000031:0000000000000000:part:prt_g0VX6bDmr00QBlclyuPS",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 40544,
+            "input": 423,
+            "output": 57,
+            "reasoning": 0,
+            "cache": {
+              "read": 40064,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    }
+  ],
+  "settlement": {
+    "tasks": [],
+    "promptExecutions": [
+      {
+        "sessionID": "ses_hhViTYxKNdAw0D0QpsGk",
+        "disposition": "settled"
+      },
+      {
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "disposition": "settled"
+      }
+    ],
+    "promptDisposition": "settled",
+    "observedAt": 1791137216018
+  },
+  "closure": {
+    "missionID": "6e1955f2d73f2836",
+    "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+    "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+    "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+    "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+    "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+    "state": "opened",
+    "source": "mission.dispatch"
+  },
+  "sendObservations": [
+    {
+      "requestIndex": 2,
+      "observedAt": 1791137149941,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "closure": {
+          "missionID": "6e1955f2d73f2836",
+          "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+          "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+          "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 3,
+      "observedAt": 1791137151628,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "closure": {
+          "missionID": "6e1955f2d73f2836",
+          "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+          "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+          "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 4,
+      "observedAt": 1791137157573,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "closure": {
+          "missionID": "6e1955f2d73f2836",
+          "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+          "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+          "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 5,
+      "observedAt": 1791137159060,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "closure": {
+          "missionID": "6e1955f2d73f2836",
+          "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+          "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+          "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 6,
+      "observedAt": 1791137166398,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "closure": {
+          "missionID": "6e1955f2d73f2836",
+          "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+          "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+          "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 7,
+      "observedAt": 1791137173066,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "closure": {
+          "missionID": "6e1955f2d73f2836",
+          "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+          "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+          "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 8,
+      "observedAt": 1791137191012,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "closure": {
+          "missionID": "6e1955f2d73f2836",
+          "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+          "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+          "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 9,
+      "observedAt": 1791137199759,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "closure": {
+          "missionID": "6e1955f2d73f2836",
+          "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+          "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+          "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    },
+    {
+      "requestIndex": 10,
+      "observedAt": 1791137207596,
+      "facts": {
+        "draftDisposition": "consumed",
+        "acceptedMessageIDs": [
+          "msg_hEQHdSfI2QNtVUnuXqdu"
+        ],
+        "closure": {
+          "missionID": "6e1955f2d73f2836",
+          "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+          "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+          "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+          "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+          "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+          "state": "opened",
+          "source": "mission.dispatch"
+        }
+      }
+    }
+  ],
+  "status": "passed",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    }
+  ],
+  "credentialCleanup": "passed",
+  "cleanupErrors": []
+}

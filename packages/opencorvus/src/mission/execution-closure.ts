@@ -3,7 +3,7 @@ import z from "zod"
 import { ProtocolStore, type ProtocolEventView } from "@/protocol/store"
 import { ProtocolDeliveryReceiptTable, ProtocolEventTable, ProtocolInboxTable } from "@/protocol/protocol.sql"
 import { schedulerWakeMessageMatchesInTransaction } from "@/protocol/session-wake-state"
-import { Database, and, asc, desc, eq, gt, lt, sql } from "@/storage/db"
+import { Database, NotFoundError, and, asc, desc, eq, gt, lt, sql } from "@/storage/db"
 import { Identifier } from "@/id/id"
 import { NamedError } from "@opencorvus-ai/util/error"
 import {
@@ -24,6 +24,8 @@ import { Log } from "@/util/log"
 import { canonicalDigestSource, canonicalJSONValue } from "@/util/canonical-digest"
 import { Config } from "@/config/config"
 import { Session } from "@/session"
+import { consumeMissionPendingPromptInTransaction } from "./session"
+import { MessageStore } from "@/session/message-store"
 import { Instance } from "@/project/instance"
 import type { UserMessagePersistenceHooks } from "@/session/prompt/parts"
 import { PersistedWakeReplay } from "@/session/persisted-wake-replay"
@@ -557,7 +559,7 @@ function missionExecutionWakeAdmission(
     requestID: string
     requestFingerprint: string
     acceptedInput: z.output<typeof MissionOperatorAcceptedInput>
-    commitConfigInTransaction: (db: Database.TxOrDb) => void
+    commitInputInTransaction: (db: Database.TxOrDb) => void
   },
 ): MissionOperatorWakeAdmission
 function missionExecutionWakeAdmission(
@@ -572,7 +574,7 @@ function missionExecutionWakeAdmission(
     requestID: string
     requestFingerprint: string
     acceptedInput: z.output<typeof MissionOperatorAcceptedInput>
-    commitConfigInTransaction: (db: Database.TxOrDb) => void
+    commitInputInTransaction: (db: Database.TxOrDb) => void
   },
 ): MissionExecutionWakeAdmission {
   const input = {
@@ -676,7 +678,7 @@ function missionExecutionWakeAdmission(
       })
     },
     commitBundle: () => {
-      if (!messageExistedBeforeBundle) Database.use((db) => operator?.commitConfigInTransaction(db))
+      if (!messageExistedBeforeBundle) Database.use((db) => operator?.commitInputInTransaction(db))
     },
     ownerPreflight: (db) => assertMissionExecutionWakeAdmissionInTransaction(db, input),
     ownerLifecycle,
@@ -785,6 +787,38 @@ function exactOperatorRequestClosure(input: {
   })
 }
 
+function operatorRequestIdentityKey(input: {
+  sessionID: string
+  source: "mission.dispatch" | "mission.wake"
+  requestID: string
+}) {
+  return `mission-operator-request\0${input.sessionID}\0${input.source}\0${input.requestID}`
+}
+
+/** Read a consumed draft from its canonical accepted request, including after restart. */
+export async function acceptedMissionDispatchPrompt(input: {
+  missionID: string
+  sessionID: string
+  requestID: string
+}): Promise<{ text: string } | undefined> {
+  await Session.assertLineageInProject({ sessionID: input.sessionID, projectID: Instance.project.id })
+  const identityKey = operatorRequestIdentityKey({ ...input, source: "mission.dispatch" })
+  const messageID = Identifier.deterministic("message", `${identityKey}\0message`)
+  const message = await MessageStore.get({ sessionID: input.sessionID, messageID }).catch((error) => {
+    if (NotFoundError.isInstance(error)) return undefined
+    throw error
+  })
+  if (!message) return undefined
+  const exact = exactOperatorRequestClosure({ ...input, source: "mission.dispatch", messageID })
+  if (!exact || exact.opened.missionID !== input.missionID) {
+    throw new Error(`Mission dispatch Message ${messageID} has no matching opened authority`)
+  }
+  const textPartID = Identifier.deterministic("part", `${identityKey}\0text`)
+  const part = message.parts.find((part) => part.id === textPartID)
+  if (part?.type !== "text") throw new Error(`Mission dispatch Message ${messageID} has no accepted prompt Part`)
+  return { text: part.text }
+}
+
 function prepareOperatorWakeAdmission(input: {
   missionID: string
   sessionID: string
@@ -792,10 +826,10 @@ function prepareOperatorWakeAdmission(input: {
   requestID: string
   requestFingerprint: string
   acceptedInput: z.output<typeof MissionOperatorAcceptedInput>
-  commitConfigInTransaction: (db: Database.TxOrDb) => void
+  commitInputInTransaction: (db: Database.TxOrDb) => void
 }): MissionOperatorWakeAdmission {
   const occurrenceIdentityKey = `mission-operator-wake\0${input.sessionID}\0${input.source}\0${input.requestID}\0${input.requestFingerprint}`
-  const requestIdentityKey = `mission-operator-request\0${input.sessionID}\0${input.source}\0${input.requestID}`
+  const requestIdentityKey = operatorRequestIdentityKey(input)
   const plannedOpenedEventID = Identifier.deterministic("protocol_event", `${occurrenceIdentityKey}\0opened`)
   const plannedMessageID = Identifier.deterministic("message", `${requestIdentityKey}\0message`)
   const exactRequest = exactOperatorRequestClosure({
@@ -949,8 +983,16 @@ export async function openMissionExecutionWithWake<Receipt extends { activation:
     ...input,
     acceptedInput,
     requestFingerprint: operatorAcceptedInputFingerprint(acceptedInput),
-    commitConfigInTransaction: (db) => {
+    commitInputInTransaction: (db) => {
       preparedConfig.commitInTransaction(db)
+      if (input.source === "mission.dispatch") {
+        consumeMissionPendingPromptInTransaction(db, {
+          sessionID: input.sessionID,
+          missionID: input.missionID,
+          requestID: input.requestID,
+          text: acceptedInput.text,
+        })
+      }
     },
   })
   await beforeOperatorWakeBundleCommitForTest?.({ ...input, admission })

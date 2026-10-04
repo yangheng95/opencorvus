@@ -96,7 +96,7 @@ export function rightDockPanelMeta(id: RightDockPanel): RightDockPanelMeta {
 export interface RightDockProps {
   /** Open tool tabs, in tab order (active tab is last). */
   tabs: Accessor<RightDockTab[]>
-  /** Whether the Dock body subtree is mounted. Tab metadata remains available while closed. */
+  /** Whether the Dock is visible. Open file drafts retain their tab mount while hidden. */
   open: Accessor<boolean>
   /** Currently active (visible) tab. */
   active: Accessor<string | null>
@@ -110,7 +110,7 @@ export interface RightDockProps {
   overflowMenuOpen: Accessor<boolean>
   onOverflowMenuOpenChange: (open: boolean) => void
   titleForTab?: (tab: RightDockTab) => string | undefined
-  /** Panel view bodies. Kobalte mounts only the selected body. */
+  /** Panel view bodies. Kobalte mounts selected bodies and explicitly retained file drafts. */
   children: JSX.Element
 }
 
@@ -242,7 +242,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
       nextBlankBrowserTab().id,
     ]
   }
-  const tabsValue = () => props.active() ?? nextBlankBrowserTab().id
+  const tabsValue = () => (props.open() ? props.active() : null) ?? nextBlankBrowserTab().id
   const tabForID = (tabID: string): RightDockTab => {
     const openTab = props.tabs().find((tab) => tab.id === tabID)
     if (openTab) return openTab
@@ -489,8 +489,8 @@ export function RightDock(props: RightDockProps): JSX.Element {
               </For>
             </div>
           </div>
-          {props.children}
         </Show>
+        {props.children}
       </div>
     </Tabs>
   )

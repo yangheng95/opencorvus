@@ -1,0 +1,259 @@
+{
+  "status": "atomic-dispatch-and-replay-passed",
+  "reportedStatus": "passed",
+  "source": ".tmp-product-experience/mission-dispatch-real-03.result.json",
+  "runtime": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oD3y9Y\\runner-35412-P1qav9\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-1rlQIr",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    }
+  ],
+  "observations": [
+    {
+      "requestIndex": 2,
+      "observedAt": 1791137149941,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hEQHdSfI2QNtVUnuXqdu"
+      ],
+      "closure": {
+        "missionID": "6e1955f2d73f2836",
+        "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+        "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+        "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 3,
+      "observedAt": 1791137151628,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hEQHdSfI2QNtVUnuXqdu"
+      ],
+      "closure": {
+        "missionID": "6e1955f2d73f2836",
+        "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+        "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+        "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 4,
+      "observedAt": 1791137157573,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hEQHdSfI2QNtVUnuXqdu"
+      ],
+      "closure": {
+        "missionID": "6e1955f2d73f2836",
+        "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+        "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+        "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 5,
+      "observedAt": 1791137159060,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hEQHdSfI2QNtVUnuXqdu"
+      ],
+      "closure": {
+        "missionID": "6e1955f2d73f2836",
+        "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+        "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+        "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 6,
+      "observedAt": 1791137166398,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hEQHdSfI2QNtVUnuXqdu"
+      ],
+      "closure": {
+        "missionID": "6e1955f2d73f2836",
+        "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+        "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+        "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 7,
+      "observedAt": 1791137173066,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hEQHdSfI2QNtVUnuXqdu"
+      ],
+      "closure": {
+        "missionID": "6e1955f2d73f2836",
+        "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+        "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+        "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 8,
+      "observedAt": 1791137191012,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hEQHdSfI2QNtVUnuXqdu"
+      ],
+      "closure": {
+        "missionID": "6e1955f2d73f2836",
+        "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+        "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+        "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 9,
+      "observedAt": 1791137199759,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hEQHdSfI2QNtVUnuXqdu"
+      ],
+      "closure": {
+        "missionID": "6e1955f2d73f2836",
+        "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+        "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+        "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 10,
+      "observedAt": 1791137207596,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hEQHdSfI2QNtVUnuXqdu"
+      ],
+      "closure": {
+        "missionID": "6e1955f2d73f2836",
+        "requestID": "DISPATCH-77371338-2362-45b0-8d6f-b6de55598563",
+        "requestFingerprint": "2b9446ff42e1259167f6a85669cceb557c8e0d61ae8d42a5d266a0cf8f5090c2",
+        "eventID": "pev_hcxfoZeWjwkTZY0pYAmR",
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "operationID": "6a8d1505-f984-5008-b58f-4f9a7aa98489",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    }
+  ],
+  "acceptedMessageID": "msg_hEQHdSfI2QNtVUnuXqdu",
+  "replyText": "For acceptance **DISPATCH-77371338-2362-45b0-8d6f-b6de55598563**:\n\n- Sum: 137 + 249 = **386**\n- Difference: 249 − 137 = **112**",
+  "retainedDraft": {
+    "text": "Exact next draft after DISPATCH-77371338-2362-45b0-8d6f-b6de55598563; retain this punctuation: A → B."
+  },
+  "lifecycle": [],
+  "settlement": {
+    "tasks": [],
+    "promptExecutions": [
+      {
+        "sessionID": "ses_hhViTYxKNdAw0D0QpsGk",
+        "disposition": "settled"
+      },
+      {
+        "sessionID": "ses_-zUStP3PjzzDaAvKVjaJ",
+        "disposition": "settled"
+      }
+    ],
+    "promptDisposition": "settled",
+    "observedAt": 1791137216018
+  },
+  "credentialCleanup": [
+    {
+      "name": "auth.json",
+      "disposition": "removed"
+    },
+    {
+      "name": "models.json",
+      "disposition": "removed"
+    }
+  ],
+  "scope": "Final checker verifies actual child Task completion and shared physical prompt settlement; idle standby ownership is retained by design."
+}

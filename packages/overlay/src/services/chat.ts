@@ -229,6 +229,7 @@ export async function promptSessionMessage(input: {
       const model = input.model ? `${input.model.providerID}/${input.model.modelID}` : currentOpenCorvusModel()
       input.onDispatch?.()
       return await wakeMission({
+        requestID,
         missionID: mission.missionID,
         directory: mission.directory,
         productPillar: mission.productPillar,

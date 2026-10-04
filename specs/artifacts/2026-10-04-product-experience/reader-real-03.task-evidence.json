@@ -1,0 +1,2915 @@
+{
+  "messages": [
+    {
+      "id": "msg_g0VX6PyXn00EQRAHdpPx",
+      "session_id": "ses_-zUSta1VQzzSnlhirMxu",
+      "time_created": 1791134535511,
+      "time_updated": 1791134535519,
+      "data": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1791134535511
+        },
+        "agent": "orchestrator",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "orderKey": "v1:0001791134535511:0000000000000030:0000000000000000:message:msg_g0VX6PyXn00EQRAHdpPx"
+      }
+    },
+    {
+      "id": "msg_task-root-control_art_h6fkSNppNodnfsIpYMIw_art_h6fkSNppNodnfsIpYMIw",
+      "session_id": "ses_-zUSta1VQzzSnlhirMxu",
+      "time_created": 1791134535513,
+      "time_updated": 1791134535525,
+      "data": {
+        "author": "orchestrator",
+        "role": "user",
+        "time": {
+          "created": 1791134535513
+        },
+        "agent": "orchestrator",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "orchestrator_control_ingress": {
+            "ingress_id": "art_h6fkSNppNodnfsIpYMIw",
+            "predecessor_id": "art_h6fkSNppNodnfsIpYMIw"
+          }
+        },
+        "orderKey": "v1:0001791134535513:0000000000000030:0000000000000000:message:msg_task-root-control_art_h6fkSNppNodnfsIpYMIw_art_h6fkSNppNodnfsIpYMIw"
+      }
+    },
+    {
+      "id": "msg_hzBHpPQUwwWAPqwETWtG",
+      "session_id": "ses_-zUSta1VQzzSnlhirMxu",
+      "time_created": 1791134535672,
+      "time_updated": 1791134556115,
+      "data": {
+        "author": "orchestrator",
+        "role": "assistant",
+        "time": {
+          "created": 1791134535672,
+          "completed": 1791134556113
+        },
+        "parentID": "msg_task-root-control_art_h6fkSNppNodnfsIpYMIw_art_h6fkSNppNodnfsIpYMIw",
+        "acceptedInputMessageIDs": [
+          "msg_g0VX6PyXn00EQRAHdpPx",
+          "msg_task-root-control_art_h6fkSNppNodnfsIpYMIw_art_h6fkSNppNodnfsIpYMIw"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "orchestrator",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 48598,
+          "input": 48139,
+          "output": 313,
+          "reasoning": 146,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "activationID": "act_g0VX6Pxju0024IALOqRF",
+        "orderKey": "v1:0001791134535672:0000000000000030:0000000000000000:message:msg_hzBHpPQUwwWAPqwETWtG"
+      }
+    },
+    {
+      "id": "msg_g0VX6Q3o700VzgyFBiDi",
+      "session_id": "ses_h127B5KOCT7PMrjafAot",
+      "time_created": 1791134555750,
+      "time_updated": 1791134555764,
+      "data": {
+        "author": "orchestrator",
+        "role": "user",
+        "time": {
+          "created": 1791134555750
+        },
+        "agent": "base-developer",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "surface": "panel",
+          "workerTurnDescriptor": {
+            "id": "wtd_g0VX6Q3oL008Biot5PWR",
+            "hash": "d1a44d05d8e478f46e31b44b6deac60d0391772e3f434a5faecd4c563a5a9e18"
+          }
+        },
+        "orderKey": "v1:0001791134555750:0000000000000030:0000000000000000:message:msg_g0VX6Q3o700VzgyFBiDi"
+      }
+    },
+    {
+      "id": "msg_g0VX6Q3s400ptONOalo3",
+      "session_id": "ses_h127B5KOCT7PMrjafAot",
+      "time_created": 1791134555988,
+      "time_updated": 1791134564394,
+      "data": {
+        "author": "base-developer",
+        "role": "assistant",
+        "time": {
+          "created": 1791134555988,
+          "completed": 1791134564393
+        },
+        "parentID": "msg_g0VX6Q3o700VzgyFBiDi",
+        "acceptedInputMessageIDs": [
+          "msg_g0VX6Q3o700VzgyFBiDi"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "base-developer",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 28943,
+          "input": 28835,
+          "output": 108,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791134555988:0000000000000030:0000000000000000:message:msg_g0VX6Q3s400ptONOalo3"
+      }
+    },
+    {
+      "id": "msg_g0VX6Q64H00FUPVfvv18",
+      "session_id": "ses_h127B5KOCT7PMrjafAot",
+      "time_created": 1791134564433,
+      "time_updated": 1791134571538,
+      "data": {
+        "author": "base-developer",
+        "role": "assistant",
+        "time": {
+          "created": 1791134564433,
+          "completed": 1791134571537
+        },
+        "parentID": "msg_g0VX6Q3o700VzgyFBiDi",
+        "acceptedInputMessageIDs": [
+          "msg_g0VX6Q3o700VzgyFBiDi"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "base-developer",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 29028,
+          "input": 293,
+          "output": 63,
+          "reasoning": 0,
+          "cache": {
+            "read": 28672,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791134564433:0000000000000030:0000000000000000:message:msg_g0VX6Q64H00FUPVfvv18"
+      }
+    },
+    {
+      "id": "msg_g0VX6Q7wM00PsRmJT9Xr",
+      "session_id": "ses_h127B5KOCT7PMrjafAot",
+      "time_created": 1791134571630,
+      "time_updated": 1791134579065,
+      "data": {
+        "author": "base-developer",
+        "role": "assistant",
+        "time": {
+          "created": 1791134571630,
+          "completed": 1791134579064
+        },
+        "parentID": "msg_g0VX6Q3o700VzgyFBiDi",
+        "acceptedInputMessageIDs": [
+          "msg_g0VX6Q3o700VzgyFBiDi"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "base-developer",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 29113,
+          "input": 250,
+          "output": 63,
+          "reasoning": 0,
+          "cache": {
+            "read": 28800,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791134571630:0000000000000030:0000000000000000:message:msg_g0VX6Q7wM00PsRmJT9Xr"
+      }
+    },
+    {
+      "id": "msg_g0VX6Q9st00QhZy1rkOU",
+      "session_id": "ses_h127B5KOCT7PMrjafAot",
+      "time_created": 1791134579103,
+      "time_updated": 1791134596010,
+      "data": {
+        "author": "base-developer",
+        "role": "assistant",
+        "time": {
+          "created": 1791134579103,
+          "completed": 1791134596008
+        },
+        "parentID": "msg_g0VX6Q3o700VzgyFBiDi",
+        "acceptedInputMessageIDs": [
+          "msg_g0VX6Q3o700VzgyFBiDi"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "base-developer",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 29198,
+          "input": 207,
+          "output": 63,
+          "reasoning": 0,
+          "cache": {
+            "read": 28928,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791134579103:0000000000000030:0000000000000000:message:msg_g0VX6Q9st00QhZy1rkOU"
+      }
+    },
+    {
+      "id": "msg_g0VX6QEIp00dooEW4S0Q",
+      "session_id": "ses_h127B5KOCT7PMrjafAot",
+      "time_created": 1791134596087,
+      "time_updated": 1791134616305,
+      "data": {
+        "author": "base-developer",
+        "role": "assistant",
+        "time": {
+          "created": 1791134596087,
+          "completed": 1791134616304
+        },
+        "parentID": "msg_g0VX6Q3o700VzgyFBiDi",
+        "acceptedInputMessageIDs": [
+          "msg_g0VX6Q3o700VzgyFBiDi"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "base-developer",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 29485,
+          "input": 292,
+          "output": 265,
+          "reasoning": 0,
+          "cache": {
+            "read": 28928,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001791134596087:0000000000000030:0000000000000000:message:msg_g0VX6QEIp00dooEW4S0Q"
+      }
+    },
+    {
+      "id": "msg_task-root-control_art_hizQQLhQoo9p7n1hPSWh_art_hizQQLhQoo9p7n1hPSWh",
+      "session_id": "ses_-zUSta1VQzzSnlhirMxu",
+      "time_created": 1791134618304,
+      "time_updated": 1791134618718,
+      "data": {
+        "author": "orchestrator",
+        "role": "user",
+        "time": {
+          "created": 1791134618304
+        },
+        "agent": "orchestrator",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "orchestrator_control_ingress": {
+            "ingress_id": "art_hizQQLhQoo9p7n1hPSWh",
+            "predecessor_id": "art_hizQQLhQoo9p7n1hPSWh"
+          }
+        },
+        "orderKey": "v1:0001791134618304:0000000000000030:0000000000000000:message:msg_task-root-control_art_hizQQLhQoo9p7n1hPSWh_art_hizQQLhQoo9p7n1hPSWh"
+      }
+    },
+    {
+      "id": "msg_hWtuYpNe6RikodLEf6nO",
+      "session_id": "ses_-zUSta1VQzzSnlhirMxu",
+      "time_created": 1791134618446,
+      "time_updated": 1791134694500,
+      "data": {
+        "orderKey": "v1:0001791134618446:0000000000000030:0000000000000000:message:msg_hWtuYpNe6RikodLEf6nO",
+        "author": "orchestrator",
+        "role": "assistant",
+        "time": {
+          "created": 1791134618446,
+          "completed": 1791134694497
+        },
+        "parentID": "msg_task-root-control_art_hizQQLhQoo9p7n1hPSWh_art_hizQQLhQoo9p7n1hPSWh",
+        "acceptedInputMessageIDs": [
+          "msg_task-root-control_art_hizQQLhQoo9p7n1hPSWh_art_hizQQLhQoo9p7n1hPSWh"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "orchestrator",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 220147,
+          "input": 28573,
+          "output": 1321,
+          "reasoning": 45,
+          "cache": {
+            "read": 190208,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "activationID": "act_g0VX6QK1z00fNGzIRgZ3"
+      }
+    },
+    {
+      "id": "msg_g0VX6Qdib00KSX3kaAKg",
+      "session_id": "ses_hNWDKRvBOL2oPgyCd1Xi",
+      "time_created": 1791134693789,
+      "time_updated": 1791134693803,
+      "data": {
+        "author": "orchestrator",
+        "role": "user",
+        "time": {
+          "created": 1791134693789
+        },
+        "agent": "base-tester",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "surface": "panel",
+          "workerTurnDescriptor": {
+            "id": "wtd_g0VX6Qdio0002jby6T8M",
+            "hash": "233dfafb632b734e9e70185bdffd29a6e732a85c4379a8f208456d2825ea1c99"
+          }
+        },
+        "orderKey": "v1:0001791134693789:0000000000000030:0000000000000000:message:msg_g0VX6Qdib00KSX3kaAKg"
+      }
+    },
+    {
+      "id": "msg_g0VX6Qdlm00VuMPBtMuP",
+      "session_id": "ses_hNWDKRvBOL2oPgyCd1Xi",
+      "time_created": 1791134693982,
+      "time_updated": 1791134701746,
+      "data": {
+        "author": "base-tester",
+        "role": "assistant",
+        "time": {
+          "created": 1791134693982,
+          "completed": 1791134701746
+        },
+        "parentID": "msg_g0VX6Qdib00KSX3kaAKg",
+        "acceptedInputMessageIDs": [
+          "msg_g0VX6Qdib00KSX3kaAKg"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "base-tester",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 26924,
+          "input": 26810,
+          "output": 114,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791134693982:0000000000000030:0000000000000000:message:msg_g0VX6Qdlm00VuMPBtMuP"
+      }
+    },
+    {
+      "id": "msg_g0VX6QfoR00OyVoS8C5p",
+      "session_id": "ses_hNWDKRvBOL2oPgyCd1Xi",
+      "time_created": 1791134701835,
+      "time_updated": 1791134720279,
+      "data": {
+        "author": "base-tester",
+        "role": "assistant",
+        "time": {
+          "created": 1791134701835,
+          "completed": 1791134720278
+        },
+        "parentID": "msg_g0VX6Qdib00KSX3kaAKg",
+        "acceptedInputMessageIDs": [
+          "msg_g0VX6Qdib00KSX3kaAKg"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "base-tester",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 31106,
+          "input": 4032,
+          "output": 450,
+          "reasoning": 0,
+          "cache": {
+            "read": 26624,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791134701835:0000000000000030:0000000000000000:message:msg_g0VX6QfoR00OyVoS8C5p"
+      }
+    },
+    {
+      "id": "msg_g0VX6Qkcd00htvjRoD6q",
+      "session_id": "ses_hNWDKRvBOL2oPgyCd1Xi",
+      "time_created": 1791134720323,
+      "time_updated": 1791134729862,
+      "data": {
+        "author": "base-tester",
+        "role": "assistant",
+        "time": {
+          "created": 1791134720323,
+          "completed": 1791134729862
+        },
+        "parentID": "msg_g0VX6Qdib00KSX3kaAKg",
+        "acceptedInputMessageIDs": [
+          "msg_g0VX6Qdib00KSX3kaAKg"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "base-tester",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 35073,
+          "input": 4460,
+          "output": 149,
+          "reasoning": 0,
+          "cache": {
+            "read": 30464,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791134720323:0000000000000030:0000000000000000:message:msg_g0VX6Qkcd00htvjRoD6q"
+      }
+    },
+    {
+      "id": "msg_g0VX6Qn7B0032XgKzFrg",
+      "session_id": "ses_hNWDKRvBOL2oPgyCd1Xi",
+      "time_created": 1791134729905,
+      "time_updated": 1791134769856,
+      "data": {
+        "author": "base-tester",
+        "role": "assistant",
+        "time": {
+          "created": 1791134729905,
+          "completed": 1791134769855
+        },
+        "parentID": "msg_g0VX6Qdib00KSX3kaAKg",
+        "acceptedInputMessageIDs": [
+          "msg_g0VX6Qdib00KSX3kaAKg"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "base-tester",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 43079,
+          "input": 7219,
+          "output": 1044,
+          "reasoning": 0,
+          "cache": {
+            "read": 34816,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001791134729905:0000000000000030:0000000000000000:message:msg_g0VX6Qn7B0032XgKzFrg"
+      }
+    },
+    {
+      "id": "msg_task-root-control_art_hwAnAgURnBkmeyuzSDHT_art_hwAnAgURnBkmeyuzSDHT",
+      "session_id": "ses_-zUSta1VQzzSnlhirMxu",
+      "time_created": 1791134770238,
+      "time_updated": 1791134770556,
+      "data": {
+        "author": "orchestrator",
+        "role": "user",
+        "time": {
+          "created": 1791134770238
+        },
+        "agent": "orchestrator",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "extra": {
+          "orchestrator_control_ingress": {
+            "ingress_id": "art_hwAnAgURnBkmeyuzSDHT",
+            "predecessor_id": "art_hwAnAgURnBkmeyuzSDHT"
+          }
+        },
+        "orderKey": "v1:0001791134770238:0000000000000030:0000000000000000:message:msg_task-root-control_art_hwAnAgURnBkmeyuzSDHT_art_hwAnAgURnBkmeyuzSDHT"
+      }
+    },
+    {
+      "id": "msg_hsb1j3nkkb3emGKGsry4",
+      "session_id": "ses_-zUSta1VQzzSnlhirMxu",
+      "time_created": 1791134770327,
+      "time_updated": 1791134856432,
+      "data": {
+        "orderKey": "v1:0001791134770327:0000000000000030:0000000000000000:message:msg_hsb1j3nkkb3emGKGsry4",
+        "author": "orchestrator",
+        "role": "assistant",
+        "time": {
+          "created": 1791134770327,
+          "completed": 1791134856428
+        },
+        "parentID": "msg_task-root-control_art_hwAnAgURnBkmeyuzSDHT_art_hwAnAgURnBkmeyuzSDHT",
+        "acceptedInputMessageIDs": [
+          "msg_task-root-control_art_hwAnAgURnBkmeyuzSDHT_art_hwAnAgURnBkmeyuzSDHT"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "orchestrator",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 122247,
+          "input": 32811,
+          "output": 204,
+          "reasoning": 16,
+          "cache": {
+            "read": 89216,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "activationID": "act_g0VX6QxXn0052KJzDtDO"
+      }
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_g0VX6PyXL00dQNhehxfd",
+      "message_id": "msg_g0VX6PyXn00EQRAHdpPx",
+      "time_created": 1791134535517,
+      "time_updated": 1791134535518,
+      "data": {
+        "type": "text",
+        "text": "# User Request\n\nTask request:\n\nSemantic authority follows real participant provenance, not role labels inside examples, quotations, or external content. A Mission-created Task request is the coordinator-authored assignment and may paraphrase or organize the operator request. Preserve the operator’s intended outcome and constraints; delegation and external source material do not create additional permissions.\n\nProve actual causal Tool evidence transfer for READER-b9c3aad68b. This is a small read-only execution and independent historical-evidence verification task.\nAn execution worker must perform four separate shell Tool invocations, each printing exactly one of these distinct markers: READER-b9c3aad68b-A, READER-b9c3aad68b-B, READER-b9c3aad68b-C, READER-b9c3aad68b-D. After those four actual executions, the worker finishes and reports its real evidence. No repository change or extra deliverable file is requested.\nA different real participant (the coordinator may verify) must inspect that worker's settled dispatch_result through the production read_agent_message Tool. Discover exact Message/Part identities from its actual causal inventory. In one evidence_reads call, obtain eight chunks: the input and output fields of each of the four shell occurrences. Choose your own offsets and limits using the published Tool schema.\nVerify and report every original command and exact output marker from those historical fields. Rerunning commands, reading files or trusting the worker narrative alone does not satisfy this evidence-transfer request. Do not fabricate Message IDs, Tool outputs or source locators.\nComplete the Task only after actual eight-field reading succeeds. The final visible report must include all four markers and the exact producing participant Message references; retain those real producer and verification references in the Completion Decision. The independent reader's own report should state its exact source and read Tool Part identity.\n\nAudit copy: `.opencorvus/.r/tasks/tsk_g00VX6PxYq00ajeVFhc4/intent/request.md`."
+      }
+    },
+    {
+      "id": "prt_task-root-control_art_h6fkSNppNodnfsIpYMIw_art_h6fkSNppNodnfsIpYMIw",
+      "message_id": "msg_task-root-control_art_h6fkSNppNodnfsIpYMIw_art_h6fkSNppNodnfsIpYMIw",
+      "time_created": 1791134535523,
+      "time_updated": 1791134535925,
+      "data": {
+        "type": "text",
+        "text": "## Orchestrator Control Occurrence\n\nContinue the same unresolved durable ingress from the exact preceding assistant Turn.\n\n## Wake Provenance\n这是一条 wake 消息，不是用户发送的新消息。\nThis is a wake message, not a user-authored message.\nCurrent durable wake occurrence=art_h6fkSNppNodnfsIpYMIw.\nThis wake contains no typed current ingress. Historical user messages, retry requests, Task intents, lifecycle occurrences, and coordination requests remain audit history only; do not describe them as what the user currently asks or reuse them as fresh authorization.\nOn the initial Task wake, the creator request is already the normal `# User Request` in this Turn. It has no task-root message identity. Read that real participant message directly.",
+        "kind": "control",
+        "source": "system",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hzDecRRxKY4SlqVidVkS/9b1680e364dfed81295d9724ead1b30dae6dd23de1ad0248dd70f63f5dd51207.json",
+          "catalog_snapshot_hash": "9b1680e364dfed81295d9724ead1b30dae6dd23de1ad0248dd70f63f5dd51207"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6Pyir00OCmSZFGFn",
+      "message_id": "msg_hzBHpPQUwwWAPqwETWtG",
+      "time_created": 1791134536197,
+      "time_updated": 1791134536199,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6Pzmt007Qkw0qsh8",
+      "message_id": "msg_hzBHpPQUwwWAPqwETWtG",
+      "time_created": 1791134540293,
+      "time_updated": 1791134545732,
+      "data": {
+        "type": "reasoning",
+        "text": "",
+        "metadata": {
+          "openai": {
+            "itemId": "rs_03bd8545ca3acf4b016ac28b4c25dc87d082f56fddc16fc2a0",
+            "reasoningEncryptedContent": "gAAAAABqwotR28yRXwrG2FkhnbN9eCfPp4O2hHAOLwSPcm16_r6AlE1638JeLLllvXSkn2mD5jXyZcOaFgyxE9huD_oXmRFrBYsmzAnL4B2SOxLYpZOQswN70RjZ46apki6cnkdUYbhzjxuUXkyODAZB_Ae4Yz9hTewnR1Gay3NSyCxbTRzVQAeNkvLrKI0Im9UJrG-9JyqMaPa-I2bEfkEmViaDFyk0kyGQ7w0nE1ClYdsJ1QnIINuiZBd4krtNuvjj1LEVQo_EzcOnuAyOT4M5ToQVEi7wEmw0ppMT66G1Gbs__58VtjnW5ZHTzny1vtmf1chFT0TmuUSLY_byBfJiHJW219fp_jG6Ij6Blm8T1QcvH-8PTGf6B6t1MA25xwdlBJO4rs_hGFZG9nNZcE1oeOS9zrTX-ul3Zktv7Jl_nbSDcNxix-gpboQK-q02QDL_PinjqqVYgs8Zilc63s2yJA8Y9fMz66vf0Yrp3qe4mmYJtfTcR7Ry56oKz_PJX2WJne08bQZmySWx6BjMU1dxclRCNF33YcEawz4Q2wzzA9jFe9mJcQqNP3iukZBIAICy9KoivVcqvw8D3tUn6LMDhT5VZ7DJ35UT97ma7KL41NQLuSUaSjPQZUcB2XVwJKkL6HgrzU9mMnKcL4ct6zjrGC1PdeAqrAEzZsjzd_MgVN5la4Ew3-IEthO_Q30sAC_GReNaZMiE_ViQDAzWPK-zlsIyw_2n-tNjl-0wmgGuGacoKll-BwnVAXGzE0_f8Ge42JuzMIqjAukl-sl9zrp3udJt7jEGaJXg_OrOfpApPKcafd7Xm47XMkUrZbBoQ5tHe2B_aG2qqMqzJGrCacJfc-BRevu_oVOtHLFR5lq1JD6teVyiAdszqgLhbTQCGBEFJerCPKG58TJmtXbwdCfMM3LFGPIGe4KJ-KOLXLN5CFWMzZ0ksSeScQdUg8mBpuhn9z8lmFYFqjzXyV2X04KRi3qkMn7_cThMmbUKUX1QzpcELwSl7q26-w5l13sjjSzhZVVtlOvJcRMF2oF9h_COO15BhVH5yjP76zWmBIZXjp_Q5y1z55Sbw_akl_0lU3akfiTJrCMpx85OWkAU3849M7Za25vEGST77Q4pShQ-4PAUqwUtJTi4pSrTf2dLJudphLDhawdSKYaGu3I3gx0MHjNUKffUBJUpGtlHODFre0dUuMZwvF7Wyq6v6-10qIr2j9ezwRGyr9TQXAqgjf7y_PAtP-mE_7eyrtEgeAMObRgTZ-lIn0GTI41eZfR4jMRdTYxLxtAaVomMiL6CRPh-yw475cCbC-QgT8LFwiFMcR_nV-uRkdfNaLvrIQv28Fq1wBumCyRxOej7tpyWfgl7NnnnTz1WJ2CPnaa3s-mv4SnOIs2RqE4xpApUw8P30clFy9UXhQYyT0u0V7095s2zn4b4nox-uoI07nYvBYYnmiJwX9XAu2OlnoCcGy1rLxLD2cPbWYVk13Mp1Pf7EjExT1LcrJNW218tgjKUPulvAGMKiXUUF67CA8YhKKtc_J7gn5heYBXALHFqRytipNZY8GBqh_7XIF5ELOlYHtszq80SLJmk0H1Ikj8Ykxxd8AEYcdVhQ3eUvNFl75pwWb5OnQ7vuhxqOat8NG8qFv5BBqxmF59kBBD0aIZJHDiblCWKjyfZFV_jldGdQZNieYiZowG3s2_DEBPPkEX4H8rNfbciCwXBF7y1x7B4cGduBx5thx_3S1UkA3WHO9K4aDVWiSRRyI3VR6M-X7lFfDQaO933ZmcCF7u0mq1EpktQYefuviQGrQeYmx1wxKMNsSpKcZxhpSUfn1XZ8esaHRzMUBNjN_9Gj30OKQZe8cwWG50_T_MAjfURb0T8nYCSKDR3AqDAWieaCqxOnDOw0zlDyFlRAbdh405XzC2SE1SeX8msgphxkSMBKfwsAklVlNiwTiu6NFuno_cWu5D7GiUOI6eJh34tegDRN9c-iAyn4GpyZCRps2sgejfwMI3WghdnP4ipAOF7SQNy5HvjwlVljTSNSoAVjjlmZMgH0yZ8DJd5u9zyib8RmSb5lcT2PuwusnOzTy5NZrjcIJd3U7BKB1u-gQLL8MHL-CSz3Qf2AGDTELp7K9jVkuwcEg_NZSHKkr3T5PaDU5e1RBXrO8Nsi060oMGz50TFLsIkLfICuOaaf87-UYR6vMIyKCK4mu1ediniOkVBHjdqKq7IO_6rC_SHVrGIELqG1ayRS5TfI45oqyB4U-0EDa7eJDB6vGlvLQDr31JszYX4NASUbDmdi43Z3DQ9DHdOm8kUlW2fY5SH1PJYqY4Crn-IGIAs_Smgjpl9IBYJsZdNHzHNThKnySwT1i6kASw-_lqK-_hfZrmh5Cbo22KqJ23HbrVWV07mOvvLWIoQYI7_OMoWSzN6x0UZew7x76k3bRp7LJXvxa4j3xXTGikguDCd8XK73xG0yMdAtJbIQVxvEqHfVfXv1JoybH8CIo-R82y23iHNzMaqG04CiQfNPgI0guQDUOaMO6yDjkexng=="
+          }
+        },
+        "time": {
+          "start": 1791134540292,
+          "end": 1791134545730
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6Q1Ci00eGK7Ba22T",
+      "message_id": "msg_hzBHpPQUwwWAPqwETWtG",
+      "time_created": 1791134545736,
+      "time_updated": 1791134546825,
+      "data": {
+        "type": "text",
+        "text": "I’ll have an execution participant run the four separate marker commands, then inspect the original command inputs and outputs from its recorded evidence—not rerun them. An independent reviewer will check the evidence transfer before I close the task.",
+        "time": {
+          "start": 1791134546822,
+          "end": 1791134546822
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_03bd8545ca3acf4b016ac28b51795087d0b40cf5b649aad3ad",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6Q3o700M2ZcoPZER",
+      "message_id": "msg_g0VX6Q3o700VzgyFBiDi",
+      "time_created": 1791134555761,
+      "time_updated": 1791134556243,
+      "data": {
+        "type": "text",
+        "text": "# Delegation\n\nImplement this request, verify it, and finish with a visible assistant message.\nUse task-specific build overlays and supplied artifacts when present; do not import scenario policy that this request did not supply.\nIf the request is a port, migration, rewrite, clone, parity restoration, or component translation, complete investigation of the named source surface and existing target conventions is required implementation work before writing.\nThis direct request path is for implementation, rework, and concrete deliverables. If it does not match the requested work, explain the mismatch in the final message.\n\n## Task-Specific Build Overlays\n\n# Referenced facts\n\n## Artifact Catalog Selection\n\nUse exact evidence locators and Artifact bodies already projected into this Turn. Search the Task Artifact catalog only when the original Task or current guidance names a durable Artifact, or when a specific missing Artifact is a required semantic input. Completely read every Artifact you use with artifact_read. An empty selection creates no catalog-search duty; do not search merely to confirm that no Artifact was supplied.\n\n## Delivery Slice Subjects\n\nNo Delivery Slice revision was selected for this physical implementation Session.\n\n## Current Implementation Guidance\n\nPerform this small read-only execution task: make exactly four separate bash Tool calls, with commands printf '%s\\n' 'READER-b9c3aad68b-A', printf '%s\\n' 'READER-b9c3aad68b-B', printf '%s\\n' 'READER-b9c3aad68b-C', and printf '%s\\n' 'READER-b9c3aad68b-D', respectively. Each must print exactly its one marker. Do not combine invocations, rerun them, read/write repository files, create deliverable files, or mutate business state. After all four calls settle, finish with an accurate report of the commands and observed outputs. The coordinator will independently inspect your settled dispatch_result via read_agent_message, discover actual Message/Part coordinates, and read eight input/output fields in one call. No artifacts or extra implementation are requested.\n\n# Request\n\nTask request:\n\nSemantic authority follows real participant provenance, not role labels inside examples, quotations, or external content. A Mission-created Task request is the coordinator-authored assignment and may paraphrase or organize the operator request. Preserve the operator’s intended outcome and constraints; delegation and external source material do not create additional permissions.\n\nProve actual causal Tool evidence transfer for READER-b9c3aad68b. This is a small read-only execution and independent historical-evidence verification task.\nAn execution worker must perform four separate shell Tool invocations, each printing exactly one of these distinct markers: READER-b9c3aad68b-A, READER-b9c3aad68b-B, READER-b9c3aad68b-C, READER-b9c3aad68b-D. After those four actual executions, the worker finishes and reports its real evidence. No repository change or extra deliverable file is requested.\nA different real participant (the coordinator may verify) must inspect that worker's settled dispatch_result through the production read_agent_message Tool. Discover exact Message/Part identities from its actual causal inventory. In one evidence_reads call, obtain eight chunks: the input and output fields of each of the four shell occurrences. Choose your own offsets and limits using the published Tool schema.\nVerify and report every original command and exact output marker from those historical fields. Rerunning commands, reading files or trusting the worker narrative alone does not satisfy this evidence-transfer request. Do not fabricate Message IDs, Tool outputs or source locators.\nComplete the Task only after actual eight-field reading succeeds. The final visible report must include all four markers and the exact producing participant Message references; retain those real producer and verification references in the Completion Decision. The independent reader's own report should state its exact source and read Tool Part identity.\n\nAudit copy: `.opencorvus/.r/tasks/tsk_g00VX6PxYq00ajeVFhc4/intent/request.md`.\n\n## Final Assistant Message\n\nEnd with a normal visible assistant message that explains implementation semantics, limitations, contradictions, and blockers.\nDo not copy changed files, commit refs, command results, tool calls, or consumed-evidence ledgers into a parallel structured payload; the Host records those observations.\n\nThe Orchestrator reads this message together with domain artifacts, Session/tool trace, and Host observations.",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hzDecRRxKY4SlqVidVkS/702fb72e74a4929031b31e3f5a79796edae41e7b3e2e7a121bae275dbcdc80b2.json",
+          "catalog_snapshot_hash": "702fb72e74a4929031b31e3f5a79796edae41e7b3e2e7a121bae275dbcdc80b2"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6Q3o701UVGRjBXjy",
+      "message_id": "msg_g0VX6Q3o700VzgyFBiDi",
+      "time_created": 1791134555763,
+      "time_updated": 1791134555764,
+      "data": {
+        "type": "text",
+        "text": "# Dispatch evidence\ncurrent_dispatch_id: art_h6GQ9q4EMfjFI2kA5jYV\nRead the root's Tool facts preceding this dispatch with read_agent_message sources=[{\"kind\":\"dispatch_origin\",\"dispatch_id\":\"art_h6GQ9q4EMfjFI2kA5jYV\"}]. These timed facts support independent comparison; they are not a producer verdict or current-state guarantee."
+      }
+    },
+    {
+      "id": "prt_g0VX6Q3qb00DSRhXLEYK",
+      "message_id": "msg_hzBHpPQUwwWAPqwETWtG",
+      "time_created": 1791134555899,
+      "time_updated": 1791134555901,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 48598,
+          "input": 48139,
+          "output": 313,
+          "reasoning": 146,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6Q40E00ANRKCGCqq",
+      "message_id": "msg_g0VX6Q3s400ptONOalo3",
+      "time_created": 1791134556494,
+      "time_updated": 1791134556496,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6Q52R00EFyQiTtAR",
+      "message_id": "msg_g0VX6Q3s400ptONOalo3",
+      "time_created": 1791134560476,
+      "time_updated": 1791134562229,
+      "data": {
+        "type": "text",
+        "text": "I’ll run the four specified commands as separate shell calls and report their observed outputs. The coordinator will then verify the historical input/output evidence independently; I won’t read or modify repository files.",
+        "time": {
+          "start": 1791134562228,
+          "end": 1791134562228
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0331884a081afb4c016ac28b60434487d0ade4291870053c39",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6Q62i0057boY2Dhr",
+      "message_id": "msg_g0VX6Q3s400ptONOalo3",
+      "time_created": 1791134564337,
+      "time_updated": 1791134564338,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 28943,
+          "input": 28835,
+          "output": 108,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6Q69d00YZzjWgUPl",
+      "message_id": "msg_g0VX6Q64H00FUPVfvv18",
+      "time_created": 1791134564765,
+      "time_updated": 1791134564767,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6Q7u100AmrBEjJXB",
+      "message_id": "msg_g0VX6Q64H00FUPVfvv18",
+      "time_created": 1791134571487,
+      "time_updated": 1791134571488,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 29028,
+          "input": 293,
+          "output": 63,
+          "reasoning": 0,
+          "cache": {
+            "read": 28672,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6Q80m00RuzYsOHBV",
+      "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr",
+      "time_created": 1791134571904,
+      "time_updated": 1791134571906,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6Q9qj00d1ILzECWT",
+      "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr",
+      "time_created": 1791134578970,
+      "time_updated": 1791134578971,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 29113,
+          "input": 250,
+          "output": 63,
+          "reasoning": 0,
+          "cache": {
+            "read": 28800,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6QC8300m2D6WGxDP",
+      "message_id": "msg_g0VX6Q9st00QhZy1rkOU",
+      "time_created": 1791134587731,
+      "time_updated": 1791134587732,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6QEGM00FtNwdUU69",
+      "message_id": "msg_g0VX6Q9st00QhZy1rkOU",
+      "time_created": 1791134595935,
+      "time_updated": 1791134595937,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 29198,
+          "input": 207,
+          "output": 63,
+          "reasoning": 0,
+          "cache": {
+            "read": 28928,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6QESI00qPwdEvP2X",
+      "message_id": "msg_g0VX6QEIp00dooEW4S0Q",
+      "time_created": 1791134596674,
+      "time_updated": 1791134596676,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6QG7d00zV8Hr3ViB",
+      "message_id": "msg_g0VX6QEIp00dooEW4S0Q",
+      "time_created": 1791134603081,
+      "time_updated": 1791134615930,
+      "data": {
+        "type": "text",
+        "text": "Executed exactly four separate shell calls, without reruns:\n\n| Original command | Observed output |\n|---|---|\n| `printf '%s\\n' 'READER-b9c3aad68b-A'` | `READER-b9c3aad68b-A` |\n| `printf '%s\\n' 'READER-b9c3aad68b-B'` | `READER-b9c3aad68b-B` |\n| `printf '%s\\n' 'READER-b9c3aad68b-C'` | `READER-b9c3aad68b-C` |\n| `printf '%s\\n' 'READER-b9c3aad68b-D'` | `READER-b9c3aad68b-D` |\n\nEach call printed only its required marker. No repository files were read or written, no deliverable files were created, and no business state was mutated.\n\n**Execution is finished; overall verification remains pending.** The coordinator must inspect this worker’s settled `dispatch_result`, discover the actual producing Message/Part identities, and retrieve all eight historical input/output fields in one `evidence_reads` call. Those identities are not exposed in the shell results above, so I have not invented references or claimed Task completion.",
+        "time": {
+          "start": 1791134615929,
+          "end": 1791134615929
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_05a313d03f74125a016ac28b8abc0887d0b9addbc07e956e6c",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6QJXe001p2U2tGsH",
+      "message_id": "msg_g0VX6QEIp00dooEW4S0Q",
+      "time_created": 1791134616228,
+      "time_updated": 1791134616228,
+      "data": {
+        "type": "step-finish",
+        "reason": "stop",
+        "cost": 0,
+        "tokens": {
+          "total": 29485,
+          "input": 292,
+          "output": 265,
+          "reasoning": 0,
+          "cache": {
+            "read": 28928,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_task-root-control_art_hizQQLhQoo9p7n1hPSWh_art_hizQQLhQoo9p7n1hPSWh",
+      "message_id": "msg_task-root-control_art_hizQQLhQoo9p7n1hPSWh_art_hizQQLhQoo9p7n1hPSWh",
+      "time_created": 1791134618310,
+      "time_updated": 1791134618720,
+      "data": {
+        "type": "text",
+        "text": "## Orchestrator Control Occurrence\n\nContinue the same unresolved durable ingress from the exact preceding assistant Turn.\n\n## Wake Provenance\n这是一条 wake 消息，不是用户发送的新消息。\nThis is a wake message, not a user-authored message.\nCurrent durable wake occurrence=art_hizQQLhQoo9p7n1hPSWh.\nCURRENT LIFECYCLE CONTROL FACT: event_id=pev_g0VX6QJae00tIs1KhbDA; session_id=ses_h127B5KOCT7PMrjafAot; dispatch_id=art_h6GQ9q4EMfjFI2kA5jYV; input_message_id=msg_g0VX6Q3o700VzgyFBiDi; authoritative_status=terminal/completed; final_message_id=\"msg_g0VX6QEIp00dooEW4S0Q\"; physical_turn_state=settled; emitted_at=2026-10-04T17:23:36.411Z; summary=\"agent.execution.lifecycle\"; error=null. This exact terminal lifecycle fact triggered the current wake. The referenced worker is not streaming, running, or awaiting completion. Any earlier assistant text or wait reason that described this dispatch as nonterminal is expired historical context; this terminal fact satisfies that wait, so never repeat, extend, or reschedule it for this dispatch. The current visible control Turn is authored by the orchestrator and does not quote or impersonate the worker. When final_message_id is non-null, read that exact participant Message rather than selecting another Message from Session history. Use this canonical fact with the current workflow, dispatch lineage, and Artifact snapshot without replacing those authorities, then record the next scheduling or lifecycle decision with its matching real tool call before this decision pass ends.\nOnly the current ingress facts listed above authorize this wake. Other historical messages, retry intents, and coordination requests remain audit evidence, not additional current requests.",
+        "kind": "control",
+        "source": "system",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hzDecRRxKY4SlqVidVkS/9b1680e364dfed81295d9724ead1b30dae6dd23de1ad0248dd70f63f5dd51207.json",
+          "catalog_snapshot_hash": "9b1680e364dfed81295d9724ead1b30dae6dd23de1ad0248dd70f63f5dd51207"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6QKIK00Rm8SQGHsq",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "time_created": 1791134619120,
+      "time_updated": 1791134619123,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6QN1V0044tC10q1h",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "time_created": 1791134629611,
+      "time_updated": 1791134629613,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 50831,
+          "input": 20965,
+          "output": 42,
+          "reasoning": 0,
+          "cache": {
+            "read": 29824,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6QN8m00ql2aVNuMp",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "time_created": 1791134630060,
+      "time_updated": 1791134630062,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6QSJm00x0aEFQtBs",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "time_created": 1791134649963,
+      "time_updated": 1791134649965,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 53386,
+          "input": 2376,
+          "output": 450,
+          "reasoning": 0,
+          "cache": {
+            "read": 50560,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6QSQh00wwDrHiHLK",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "time_created": 1791134650391,
+      "time_updated": 1791134650394,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6QUJU00nrVl0U8q0",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "time_created": 1791134657632,
+      "time_updated": 1791134658793,
+      "data": {
+        "type": "reasoning",
+        "text": "",
+        "metadata": {
+          "openai": {
+            "itemId": "rs_03dc52f595088f0f016ac28bc1627487d0be5b25948e984ece",
+            "reasoningEncryptedContent": "gAAAAABqwovCa8WaNXmYqOrLsM_IKY6MjvcoWGZv4DEmLDXccLtFzu795liRow9HedzVAoH924qJJGEwB9MnyRMy6znYM1EL_ONFjVIsVfb3NpPT69tzPRXLWMkylqsjRJo4i9Q4LRpHC8CQBp5h4iBs9NM7dqRtb0rxmUQN6F4d9NnXh93vd3bs4DW8wm6uGbemG-O0RFLkZC9RpKYa1UhuWbvS5_jn-BmamF47QlryidHkZx85kW6uBZcbyVq1uVsQ_IwuiESef48DsB3Mnq38swzkbCpeR4VYEclAHnlSEKpmw2zeQMkc99WC89GjxGUqZLQuVBUTee4fIa-E9wXaA95BoKI6GtFB3UeAIrpKGePyvOH84N0sXl-heULxTybGY4wbWaOeyJUW5Cptlp_1tOrR4QoPRRz-dEfU3fwsbFW5xvWOox3z9Y9bdqoAUQ3wEqfmo3jxcAX4BC7d0EDUF_7kYU5_xaAdslbWFX9DecblyrEVUghIiE7cVTHxSb2IlozDogw8M_9IzLG0doelqoQLQiTHoXPrG23SPmaltuumjjEl-R4zScvc2zdILPX26GIApDhhnLO58cw0CFu-Lx5CVk80oKK84sosJuzkjNl9TaqA1ZoTNGMnpt30THf08ahROivHF9i2m0TZaqERKHSIZghRbAi2hfTDZRX5Gdz9w10d909Nz-9tmRTP_bH9OmjayfWyR_p4TGWVPi4V1j7sEpt7wi9rZG1QH5Yc8UmkGp0f9T3un6xH6PM4u0oAFSrACU1j6c7nw33tiXALUhbfsD3tIDFAttjBCxz5CV-NJKiiUT9XT8y7rp_nxHB1436TGHkxelPxKykIC8OMa2oxFfCJrsWtUcy3XH9sRzIcU0Mr8K6t4To4s0xpvFZEsq5mV9DlFYUVR1f6VWqBphLKrPs9MrAiYLx2ByoT8yOsyllscAhAiv4RR5PBZz6NpvIphI6H6akav78d2-f5uyqkgKN2WHzesuWXMi7PUDfjdL5jG0ZCzgPq4uueOBpAdHSPRFhJjR0eG8H3Te7TxcNyXtz9vMBLiEOWZiBmQAJLRRtKOVFrFh4QqOklwkL20jX-cuem3-Pylpdj9HG36OtTlZXn_wAp-zvpBIQozfPXMWShn9LO03MC_nGVwD0HIQX8NDbfsbTXoW0UQ7rCFLIncufj0Op9FwpqhhJNPXohFNJ52FtrKISjnam30PczKpnsDetNC24eIQ2GT38ykhJH_wcYnm_BBez8K5R-wzJy7aRP-60QUOUGN8EPw7YwF2T7Aham39Z7P6fE0bA7TRSvw2GuxG0Nn3Pe1jhMD9MgAW67DIXc_5a2hFQaoaOyc9LUWiUOo_pxSFfV9BkhEdznhmVSrfVMPwSFMxwiXC9xTM_3IiOQZP9PmH8JJGOAVb2-fCj5e7VkcQUBvomMoZw4dYzV2TvGphVLhn1legYPhcp_mJEOhfZCrigYI4rP3uOEHMzqnw-SLFr0Dec78aKXcia0dCKQOFSe6U3l5e7dMqmL-cIaSXfGssQdulonuwH4_xMld5iztVFi4gUZEPr6-Wu3Sw=="
+          }
+        },
+        "time": {
+          "start": 1791134657632,
+          "end": 1791134658791
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6QUcL00LXPQxSl33",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "time_created": 1791134658801,
+      "time_updated": 1791134660752,
+      "data": {
+        "type": "text",
+        "text": "The single eight-field read succeeded: all four original commands and outputs were returned in full, and each output is its required marker followed by one newline. I’m now asking the independent reviewer to confirm the evidence and record the exact read-call reference.",
+        "time": {
+          "start": 1791134660749,
+          "end": 1791134660749
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_03dc52f595088f0f016ac28bc288f887d0ac9121f236b8fe35",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6QYC400ucUhUe52r",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "time_created": 1791134672550,
+      "time_updated": 1791134672552,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 57693,
+          "input": 4468,
+          "output": 453,
+          "reasoning": 36,
+          "cache": {
+            "read": 52736,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6QYJz00DzCSdTa7F",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "time_created": 1791134673039,
+      "time_updated": 1791134673042,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6QaH100L2fw4q4rb",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "time_created": 1791134680543,
+      "time_updated": 1791134681039,
+      "data": {
+        "type": "reasoning",
+        "text": "",
+        "metadata": {
+          "openai": {
+            "itemId": "rs_0ec3d479a6368704016ac28bd8491487d0beb2239714718e96",
+            "reasoningEncryptedContent": "gAAAAABqwovYDWViCH4x3RecFMIS8s0jEJsb5gIVJo-X-zwFBu4WZU3MwOLNZKhVZJWT9lJc7tU5zx7UT-pXKf8Kmfh7-SeMpl7w--AtVvPiFL_NFdQi3KyxRuppXkcxng_bHkJAa6aERPW3qJE2uvgiB0TT0rmXJ-bAvV6pOuhja5_ONyXr_uee8Q-hggOkCwRA5RhTLKWlrtsjCsauotN9npFmt-2itZ1Wk1CmVaih4z4g1nqpzRz5RYVycQ9F4uWtiYlZH_NjFFJL_NoCsKy_gpG7XYNi28da4NAeIwQfD_IJpVlnjjP_GNnenxkHyhi4X5Cw8EtCL1CgzGDu7lNBdWhvHH-2sFV6B_xLzVBSi47klZxyrXBFCbQIqsLYiWv6b3-chuxkHyL_-z9czvB-d8sK3zNsT5YGVMjaAAhHjZTZoN1ym6Ae80CHaS4Q4ArmgAe-xc0eitMhDedLUs4716CYbAhjOpEOEHPaVwpeBM3FuwWcfciW-Lqx5eb8UCsiCQXVaVPypJaE-7qeuC9boJTVBEzFCeCm028e0MfCsaD1V-7uHQpGUrjf6ZglTbXz_O6RS6Si2udd4Wd03nX2UZQxqMV7EbZcEWaFenUeiuEJDhTXHIoCj9XCf4BNOhEeEziTss3d0g5rcxJ_8PhdmUwqwLaH412JcFwDWtC1hy1BNoU_UyrqZLS6eHk2n2H2ku6H7PD8dwFtpZI2vmJlmQeGpIJpguAoCbIPR_2WhKXrRso5R2lHT8wREpAhTtJhdRKguasTAysspJemT6C8SjrYRVHzlvwHv9fqaNhLk_6ZPVOPnGIRNmOCFwSkulBmadwehGXmRZgdkFhZViE4OAC6iYNsVvmtQRzk0VI9JI7lHZ0BWAh9G3rqNMRIk-gZHUOGwsgkuENB1kYKc9s2hTZvjsgJa0I7OqfkQd54CQmA-eqdtOv9vnRdHnMs2Wg4_sICKZkuLzIahUB0NBNzFhsM2M2TCNXaiY9_PQX4EbSSa00ZJKO9cXImvDdx28AyDs5Q-t9S75UaMRv64msGRcRdlKsG46nbY1Kj2xsEoiqNsjwbWaWp-nExUupilCsJw8bVZmStbA49ay80507K04o64CnVPL_1sJaF-XdQyzNCa9FCXKU8EVLk2Azbqh2ErRkwO2ZcifA2tW6shKRax33tWemWFAvNOMYFoUYv_vaByGPnxmJxl9jbyuq9JBheBqONSF05PRN6Lh9Ww9vuCStSyiahklZvZUeOSiX87Y9v_08QeK3VDTbs3VDxOlgFjH73hLUGyI8ISrC1jMUiPVdJOmufDq0HRz9mZjDc2cnyIvCHU2A="
+          }
+        },
+        "time": {
+          "start": 1791134680543,
+          "end": 1791134681036
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6Qdib00A8j6LSUq0",
+      "message_id": "msg_g0VX6Qdib00KSX3kaAKg",
+      "time_created": 1791134693800,
+      "time_updated": 1791134694161,
+      "data": {
+        "type": "text",
+        "text": "Complete the following delegated instruction using the capabilities exposed in this session.\n\n## Delegated instruction\nIndependently verify the original request: prove actual causal Tool evidence transfer for READER-b9c3aad68b via four separate shell invocations outputting markers -A, -B, -C, -D. No repository changes or extra files. Do not execute shell commands or read repository files. Execution producer final message is msg_g0VX6QEIp00dooEW4S0Q in session ses_h127B5KOCT7PMrjafAot. Read its settled dispatch_result with production read_agent_message, discover its actual causal inventory coordinates, then in ONE evidence_reads call retrieve exactly eight chunks (input and output for each of the four bash occurrences), with explicit offsets and limits totaling at most 30000 characters. Report original commands, exact outputs including newline, all producer Message/Part references, and completeness of eight fields. Also inspect your dispatch_origin root Tool evidence to identify the coordinator's actual successful eight-field read Message and Tool Part and its arguments/result. Do not trust coordinator prose or producer narrative alone. Your final report must state your exact dispatch_result source and your own eight-field read Tool Part identity if observable (do not invent it; the coordinator can discover it from your settled report inventory). State whether every original obligation is satisfied, including distinct participants and no reruns/mutations. Publish only required internal review evidence if your contract requires it; no user deliverable file is requested.\n\n# Referenced facts\n\n## Task: Eight causal evidence chunks\nReason: Independent historical-evidence review is required; preserve the existing direct assignment binding and verify the successful eight-field read without rerunning commands.\nExact Delivery Slice revision subjects: (none)\nThese immutable subjects scope work and evidence only; they do not create execution or lifecycle instances.\nFor an explicit repository path, reveal and use the read Tool on that exact path. For durable Task Artifact evidence, use artifact_search and then read every selected Artifact locator to complete=true. Do not substitute one source authority for the other.\n\n## Original request\n\nTask request:\n\nSemantic authority follows real participant provenance, not role labels inside examples, quotations, or external content. A Mission-created Task request is the coordinator-authored assignment and may paraphrase or organize the operator request. Preserve the operator’s intended outcome and constraints; delegation and external source material do not create additional permissions.\n\nProve actual causal Tool evidence transfer for READER-b9c3aad68b. This is a small read-only execution and independent historical-evidence verification task.\nAn execution worker must perform four separate shell Tool invocations, each printing exactly one of these distinct markers: READER-b9c3aad68b-A, READER-b9c3aad68b-B, READER-b9c3aad68b-C, READER-b9c3aad68b-D. After those four actual executions, the worker finishes and reports its real evidence. No repository change or extra deliverable file is requested.\nA different real participant (the coordinator may verify) must inspect that worker's settled dispatch_result through the production read_agent_message Tool. Discover exact Message/Part identities from its actual causal inventory. In one evidence_reads call, obtain eight chunks: the input and output fields of each of the four shell occurrences. Choose your own offsets and limits using the published Tool schema.\nVerify and report every original command and exact output marker from those historical fields. Rerunning commands, reading files or trusting the worker narrative alone does not satisfy this evidence-transfer request. Do not fabricate Message IDs, Tool outputs or source locators.\nComplete the Task only after actual eight-field reading succeeds. The final visible report must include all four markers and the exact producing participant Message references; retain those real producer and verification references in the Completion Decision. The independent reader's own report should state its exact source and read Tool Part identity.\n\nAudit copy: `.opencorvus/.r/tasks/tsk_g00VX6PxYq00ajeVFhc4/intent/request.md`.\n\n## Selected Delivery Slice contracts\n\nThese are the exact current revisions selected for this Turn. Apply the original request as well; selection does not waive obligations omitted from a Slice.\n\n(explicitly empty selection; apply the original request and delegated instruction)",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hzDecRRxKY4SlqVidVkS/7a13bfd352cba523d1806a9987f62a5c3a03e310dc4e98880672d9772943a577.json",
+          "catalog_snapshot_hash": "7a13bfd352cba523d1806a9987f62a5c3a03e310dc4e98880672d9772943a577"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6Qdib01vgXHPoy0F",
+      "message_id": "msg_g0VX6Qdib00KSX3kaAKg",
+      "time_created": 1791134693801,
+      "time_updated": 1791134693802,
+      "data": {
+        "type": "text",
+        "text": "# Dispatch evidence\ncurrent_dispatch_id: art_husAc327ypgPIKyTLjdk\nRead the root's Tool facts preceding this dispatch with read_agent_message sources=[{\"kind\":\"dispatch_origin\",\"dispatch_id\":\"art_husAc327ypgPIKyTLjdk\"}]. These timed facts support independent comparison; they are not a producer verdict or current-state guarantee."
+      }
+    },
+    {
+      "id": "prt_g0VX6Qdrc00xyRHMMWK0",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "time_created": 1791134694345,
+      "time_updated": 1791134694347,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 58237,
+          "input": 764,
+          "output": 376,
+          "reasoning": 9,
+          "cache": {
+            "read": 57088,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6QduT00rBhmDG0KL",
+      "message_id": "msg_g0VX6Qdlm00VuMPBtMuP",
+      "time_created": 1791134694522,
+      "time_updated": 1791134694522,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6Qemf00szq5FQr4Z",
+      "message_id": "msg_g0VX6Qdlm00VuMPBtMuP",
+      "time_created": 1791134697881,
+      "time_updated": 1791134700178,
+      "data": {
+        "type": "text",
+        "text": "I’ll verify the four executions from the producer’s recorded tool fields, without rerunning commands or reading files. I’ll also inspect the coordinator’s pre-dispatch evidence to confirm its eight-field read and capture the exact references.",
+        "time": {
+          "start": 1791134700177,
+          "end": 1791134700177
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0d0a3ef3b82faa1b016ac28be9ab1887d0917f989c93068412",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6QfmD002CI8nL5pX",
+      "message_id": "msg_g0VX6Qdlm00VuMPBtMuP",
+      "time_created": 1791134701699,
+      "time_updated": 1791134701699,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 26924,
+          "input": 26810,
+          "output": 114,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6Qftb008NdNu4J5o",
+      "message_id": "msg_g0VX6QfoR00OyVoS8C5p",
+      "time_created": 1791134702155,
+      "time_updated": 1791134702156,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6Qkaz00y3jLZZe41",
+      "message_id": "msg_g0VX6QfoR00OyVoS8C5p",
+      "time_created": 1791134720223,
+      "time_updated": 1791134720224,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 31106,
+          "input": 4032,
+          "output": 450,
+          "reasoning": 0,
+          "cache": {
+            "read": 26624,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6Qkhs00xMCoRkh5b",
+      "message_id": "msg_g0VX6Qkcd00htvjRoD6q",
+      "time_created": 1791134720649,
+      "time_updated": 1791134720650,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6Qn5l00p7iAZ45uq",
+      "message_id": "msg_g0VX6Qkcd00htvjRoD6q",
+      "time_created": 1791134729819,
+      "time_updated": 1791134729819,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 35073,
+          "input": 4460,
+          "output": 149,
+          "reasoning": 0,
+          "cache": {
+            "read": 30464,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6QnCW006g9cD0fxH",
+      "message_id": "msg_g0VX6Qn7B0032XgKzFrg",
+      "time_created": 1791134730237,
+      "time_updated": 1791134730238,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6Qod600mu3nWadKg",
+      "message_id": "msg_g0VX6Qn7B0032XgKzFrg",
+      "time_created": 1791134735728,
+      "time_updated": 1791134769579,
+      "data": {
+        "type": "text",
+        "text": "**Verification PASS:** the four executions and historical eight-field evidence transfer are independently confirmed. No execution or evidence discrepancy was found.\n\n### Source and execution evidence\n\nI used production `read_agent_message` with the exact source:\n\n```json\n{\"kind\":\"dispatch_result\",\"message_id\":\"msg_g0VX6QEIp00dooEW4S0Q\"}\n```\n\nThe settled producer is **base-developer**, session `ses_h127B5KOCT7PMrjafAot`. Its complete causal inventory contains exactly four completed `bash` occurrences.\n\nExact outputs below use JSON string notation: `\\n` represents the actual trailing newline, not literal backslash-and-n characters.\n\n| Original command | Exact output | Producing Message | Producing Tool Part |\n|---|---|---|---|\n| `printf '%s\\n' 'READER-b9c3aad68b-A'` | `\"READER-b9c3aad68b-A\\n\"` | `msg_g0VX6Q3s400ptONOalo3` | `prt_g0VX6Q5Un00lAUuelYJE` |\n| `printf '%s\\n' 'READER-b9c3aad68b-B'` | `\"READER-b9c3aad68b-B\\n\"` | `msg_g0VX6Q64H00FUPVfvv18` | `prt_g0VX6Q7IV00wiVgs23mo` |\n| `printf '%s\\n' 'READER-b9c3aad68b-C'` | `\"READER-b9c3aad68b-C\\n\"` | `msg_g0VX6Q7wM00PsRmJT9Xr` | `prt_g0VX6Q9Ld00lKBUEWKsy` |\n| `printf '%s\\n' 'READER-b9c3aad68b-D'` | `\"READER-b9c3aad68b-D\\n\"` | `msg_g0VX6Q9st00QhZy1rkOU` | `prt_g0VX6QDlP00u05zqMiMJ` |\n\n### My independent eight-field read\n\nAfter discovering those coordinates from the actual inventory, I retrieved **exactly eight chunks in one call**: each occurrence’s `input` and `output`, all with explicit `offset: 0` and `limit: 1000`. The aggregate requested limit was **8,000 characters**, below 30,000.\n\nAll eight fields were unredacted and complete: `end == total_chars` and `next_offset: null`. Input lengths were **142, 143, 142, 143** characters; each output was **20** characters. No continuation was needed.\n\n**My own eight-field read Tool Part identity is not exposed in this turn’s returned evidence.** I cannot state it without inventing it. The coordinator can discover it from my settled report’s causal inventory; it is my second `read_agent_message` invocation, containing the eight entries above.\n\n### Coordinator’s successful read independently confirmed\n\nI also inspected the exact source:\n\n```json\n{\"kind\":\"dispatch_origin\",\"dispatch_id\":\"art_husAc327ypgPIKyTLjdk\"}\n```\n\nThe coordinator’s successful historical read is:\n\n- **Session:** `ses_-zUSta1VQzzSnlhirMxu`\n- **Message:** `msg_hWtuYpNe6RikodLEf6nO`\n- **Tool Part:** `prt_g0VX6QOjF00vbWKvC8IZ`\n- **Call:** `call_K3Csrt73dYj6sDABq6ewzZ75`\n\nI read that Tool Part’s complete arguments and result—not coordinator prose. Its arguments selected the same settled producer source and requested all eight input/output fields at `offset: 0`, `limit: 1000` each. Its completed result contains all eight exact fields shown above, each with `next_offset: null`. The coordinator’s input and output were themselves fully retrieved: **1,055** and **11,574** characters respectively.\n\n### Obligations and remaining closure\n\n- **Satisfied:** four distinct shell invocations, correct markers and trailing newlines, settled producer, actual inventory discovery, and complete eight-field transfer in a single call.\n- **Satisfied:** distinct participants—producer `base-developer`, coordinator `orchestrator`, and this independent reviewer `base-tester`.\n- **Satisfied within the complete inspected causal scope:** no reruns, repository reads/writes, extra files, or business mutations. The producer’s only recorded tools were the four print-only commands. I invoked only historical evidence reads.\n- **No contradicted obligations.**\n- **Administrative closure remains with the coordinator:** discover and retain my own read Tool Part identity and preserve the producer and verification references in the Completion Decision. That decision is not observable in the pre-dispatch evidence.\n\n**I accept the execution and evidence-transfer outcome.** Task terminal closure remains the coordinator’s responsibility.",
+        "time": {
+          "start": 1791134769577,
+          "end": 1791134769577
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_03a9c02f1f70cd36016ac28c0f84b487d0b96d67073f60e60d",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6QxUd00PfMJQcMLx",
+      "message_id": "msg_g0VX6Qn7B0032XgKzFrg",
+      "time_created": 1791134769800,
+      "time_updated": 1791134769801,
+      "data": {
+        "type": "step-finish",
+        "reason": "stop",
+        "cost": 0,
+        "tokens": {
+          "total": 43079,
+          "input": 7219,
+          "output": 1044,
+          "reasoning": 0,
+          "cache": {
+            "read": 34816,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_task-root-control_art_hwAnAgURnBkmeyuzSDHT_art_hwAnAgURnBkmeyuzSDHT",
+      "message_id": "msg_task-root-control_art_hwAnAgURnBkmeyuzSDHT_art_hwAnAgURnBkmeyuzSDHT",
+      "time_created": 1791134770243,
+      "time_updated": 1791134770558,
+      "data": {
+        "type": "text",
+        "text": "## Orchestrator Control Occurrence\n\nContinue the same unresolved durable ingress from the exact preceding assistant Turn.\n\n## Wake Provenance\n这是一条 wake 消息，不是用户发送的新消息。\nThis is a wake message, not a user-authored message.\nCurrent durable wake occurrence=art_hwAnAgURnBkmeyuzSDHT.\nCURRENT LIFECYCLE CONTROL FACT: event_id=pev_g0VX6QxWn00PqSLlBRj3; session_id=ses_hNWDKRvBOL2oPgyCd1Xi; dispatch_id=art_husAc327ypgPIKyTLjdk; input_message_id=msg_g0VX6Qdib00KSX3kaAKg; authoritative_status=terminal/completed; final_message_id=\"msg_g0VX6Qn7B0032XgKzFrg\"; physical_turn_state=settled; emitted_at=2026-10-04T17:26:09.933Z; summary=\"agent.execution.lifecycle\"; error=null. This exact terminal lifecycle fact triggered the current wake. The referenced worker is not streaming, running, or awaiting completion. Any earlier assistant text or wait reason that described this dispatch as nonterminal is expired historical context; this terminal fact satisfies that wait, so never repeat, extend, or reschedule it for this dispatch. The current visible control Turn is authored by the orchestrator and does not quote or impersonate the worker. When final_message_id is non-null, read that exact participant Message rather than selecting another Message from Session history. Use this canonical fact with the current workflow, dispatch lineage, and Artifact snapshot without replacing those authorities, then record the next scheduling or lifecycle decision with its matching real tool call before this decision pass ends.\nOnly the current ingress facts listed above authorize this wake. Other historical messages, retry intents, and coordination requests remain audit evidence, not additional current requests.",
+        "kind": "control",
+        "source": "system",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hzDecRRxKY4SlqVidVkS/9b1680e364dfed81295d9724ead1b30dae6dd23de1ad0248dd70f63f5dd51207.json",
+          "catalog_snapshot_hash": "9b1680e364dfed81295d9724ead1b30dae6dd23de1ad0248dd70f63f5dd51207"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6Qxmw00YONH4ENv9",
+      "message_id": "msg_hsb1j3nkkb3emGKGsry4",
+      "time_created": 1791134770934,
+      "time_updated": 1791134770936,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6R0W9003oI70jC5D",
+      "message_id": "msg_hsb1j3nkkb3emGKGsry4",
+      "time_created": 1791134781427,
+      "time_updated": 1791134781430,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 59652,
+          "input": 29783,
+          "output": 45,
+          "reasoning": 0,
+          "cache": {
+            "read": 29824,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6R0dN00XlgrF4pLr",
+      "message_id": "msg_hsb1j3nkkb3emGKGsry4",
+      "time_created": 1791134781873,
+      "time_updated": 1791134781876,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6R2jg0010KzkOvm4",
+      "message_id": "msg_hsb1j3nkkb3emGKGsry4",
+      "time_created": 1791134789952,
+      "time_updated": 1791134790749,
+      "data": {
+        "type": "reasoning",
+        "text": "",
+        "metadata": {
+          "openai": {
+            "itemId": "rs_0f263dc079283bc3016ac28c45bd2c87d0818d1aa226e2c26c",
+            "reasoningEncryptedContent": "gAAAAABqwoxGlNLZOCuB2lW9fXXwa_6TFPn35Zf36gimS1Z9gL0Tid4rguxSBZon2D5iXSXd7LfVwZjQyXV3zEcjEw0QLZIraeiAbiLpr-1MXe7KdVpkXLYnCvLiuEt67BPhT0-a8lGfuvi_ONwU1ypALr0-Pz3i1-l77UkWuVFY21ko49wa8sPkGy-9c7vz8Xt4-vOO9ujzpTuaVbhEra06NDkeReZVPmbuK1lsdRZCbsZgpc5pCyncecWKii_NmSXF0_fvBQYJrD-wKDdWAUEpWPcMy1ApA4w4w0a9RWOGs1kWGS_2KB3ts9bwKKogo7PYMsPOeYjC070Rx0aii32Rj01e_ZXFCiEWYrXC2GRUq2n5Xwbn9ZWrgQMlWg-I68LrlhjJl4Gx98XopRejuvyBhxPR-iutq5OeHr3fRKGNCXkxYVDNuGwzzRTeKhfMe4DIuR6YhJzMpZM7QKkM20vEkDg_XR_CIdj7LBz5ZHeN41JuaH9_3uhU6CpQYtSlZdgFpcCuRpuJSJCXcCPh7jnkiTFnSvgxSME9WV1Hi6c9lswq8SaTp4BimWUjJoA8ocyg8zLLLAzxDXoW86NQn0aIB7o8H16tazAKb-yiALSABx-h_5-TlB6ARvipMXyhd3dOBUiAOeIwBqlx6KC760Jr4U72pPjZCfFBXYdYXripZSsnhZBTHvAEXz_beR53vXz5G3h7szXYsOMuB6a9oJzbYL6QaXpD3D1-h8uDrSEra4ExL9Nfofi3gSEeMqa5SzyH-pQ5oOVwa5xY-wgW0bN6Pelg9vyAVbetReyGLqQm4vyFW4A95X7rl6R-Q0kpZyHPBvRad0m_uSz5jYLpJYi-3i9FjrY3bHB7OpLdZEuSkF2iF1mhtd1ckDcEUTo9PTst1h9ynvbKgyZ2qiV3YkQFtD-VxjFsgRygAF1QNlB72d3Acpqi9K78i7GP0BjQQqpirkCXtDiu2G9Z991kEfbYTHeOtf2Zaya5GiCHt_0jMo3ybHbEA_sbvGvxL1MBa0HVY5QjpW9n8qp1GGU3dsxfewW6-u4cSl3VGEVEk068A3WiFJwSB-e5KMdQT6ENoqXWCYuoijNcsrAcq4OzZnzkt_Ei1WjLTdiFm6EY6q5wd9fR8Tr1Suklnmkm2YCSG-STkaf5l7XCmBppSPrpTjchXpz6bHeij7abKYGvkM5VSBxTS_dkabK8zklTe7hrOb9eX64uZqoMJp8HHFEA5vtKcaaq8Wudv5OLyvy00Ag-5v9_Om8kTtma-u2nEA0kS4Hp9WYNj2cAApveuvgNOsdyFCZV3LZyEEKziJtWJyVLK5x-eVk_EbqDWZ-RxbA75fYCtZ4rEzxcazNfaPyn-1a3MSg6Pt6AFw=="
+          }
+        },
+        "time": {
+          "start": 1791134789952,
+          "end": 1791134790746
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6R4PF00RPUPpqYqu",
+      "message_id": "msg_hsb1j3nkkb3emGKGsry4",
+      "time_created": 1791134796375,
+      "time_updated": 1791134796378,
+      "data": {
+        "type": "step-finish",
+        "reason": "tool-calls",
+        "cost": 0,
+        "tokens": {
+          "total": 62595,
+          "input": 3028,
+          "output": 159,
+          "reasoning": 16,
+          "cache": {
+            "read": 59392,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6R4WZ008o3o1O04u",
+      "message_id": "msg_hsb1j3nkkb3emGKGsry4",
+      "time_created": 1791134796827,
+      "time_updated": 1791134796830,
+      "data": {
+        "type": "step-start"
+      }
+    },
+    {
+      "id": "prt_g0VX6R6x900bv328sl9E",
+      "message_id": "msg_hsb1j3nkkb3emGKGsry4",
+      "time_created": 1791134806163,
+      "time_updated": 1791134806784,
+      "data": {
+        "type": "reasoning",
+        "text": "",
+        "metadata": {
+          "openai": {
+            "itemId": "rs_0a0d85323d4312ef016ac28c55a82c87d097722296b4ef4aaa",
+            "reasoningEncryptedContent": "gAAAAABqwoxWZobUOWUTyjZGHKMFmZP4O6u16FcQAePsLuKVw3f3Xd8mzwPAIokm01-_7QECDmlS_pN75G39Jn4j0JKt1H7f4cDUJ_Lf65PMMYvg9_HpXd6BhkvmCCy4hcubcLxSSFpOMmMXBU3H5CiFnzu0yYdFvyZnf6FyYcJdg9y2E6Np0tcU3gQ3_PPMo6ztVD16R0qs8vFTUA7hTUCWQHqtV4QGsJlrObB5ZiH443YQzS4xe_4ZEWJRlhmOusnPqAOJ0kWlcEBrM7werwYXG9OPEKmQ3yrdclkTi0DBWz4L0BcsAcqDkxAeav1Sff9UzbyE9YMQQnz72uUjDqGubMxeQ9jAzM0q-PPf78mwTjg4Sc28vqPmFh1Uq02AyyoD5q39NUZm9voE8ofaomYGr2VIZcJH95i203goGsmHCRx2q6GT2tM-VAlUYMDjJxR2OP7ALoOr8fwQHse56CO9wvKm5WlOq9bkEmezJiXa8x8b4PWk1oteHheMOb9LIZ3tG4DVH0F__5gISpAPaR3PEwMd0xVLrQ1EqmDfVTjK4O5klY1F3vtx1QQ-c9radiqmWJWsGa2yV595D3hmvw-S3NLtfHKUqSGt2U9spppAFOUSC46sq_4dREgzhNTbvQN5mbkACe71cOzWt1qgU2t6ErpV6fma7Yu-7UnqnpMc6aqTnHkWkYcEee3AGIhT3o5g1ZQD7lZLQOeNqN9AdHvNRZ4AiCS_ctYdTEG3wZ1M8Q2eQCeQ8qXbBCDpdQBfCVDHP3-XuAw0TsW0Z8ImDwwGWGCwiwjJD_sSxqc_XvnCTyCxHc4DKVEyZgfK5lbeZxi6RR7OPZVtTJGR2SJw1ZMnCXnlS6wKLNvyEzzmsNqeIKLixph3C_W8hpepCn0ENvNnV7FhAbelzy1xKiOfm2djgFhD6wkV7gV5lgUKwURVgRL6oQsTGo8KeJDKgAvWKsuGRwfGtgyl4n6PWJYFVG_0V2H1ejjFQ4z8jevrTl148OqeNxeos8t-pq2wP6B_-2mcZnl-nSD4X0zicR8RMOmAwrn6-LqGWD1qTD56RfEl-1J3mr1RlTrI7ePad6GzMHNtMt2EBjzdG0lY4ZWLkFujfrqFktAMDPb0x3zhBc3uQLvtsSzKEJoQNEJxGcKGY2p3wDG5jFxKoKkqZSHU7WKITSD72WXKSqHVPTArSaafcnazqrhEQsaSKmQlLBdotNNhAukIysZvx-NzKOuU-FPDI_UWTbdPv2XAHvf1D7OcV-XusPMWPEmnxO4aYG-b5awg_FeWBxElX77my5IPYEOGDaHbRHU4EUBNM-plf7rzZqX9kqXBRirVyDyZo5Nm7qrgdoB9pacTd9asLX5QcLrfjP-wyGnM6PROnN1M0tsSwMKgLwfRZ6eAShWeh84__wOstrOvAr5_smUPOK8PFZyDi88xthRgIHW9lU47OucWINkhkVy3ecbvG5nlI2m832-pKVJV7oDruBdk3JUFTBc7xOnP2l7L-w=="
+          }
+        },
+        "time": {
+          "start": 1791134806163,
+          "end": 1791134806781
+        }
+      }
+    },
+    {
+      "id": "prt_g0VX6R77D00oCzVfDvOC",
+      "message_id": "msg_hsb1j3nkkb3emGKGsry4",
+      "time_created": 1791134806787,
+      "time_updated": 1791134826777,
+      "data": {
+        "type": "text",
+        "text": "## Verified: actual causal evidence transfer\n\nThe execution participant made **four separate shell calls**. Both the coordinator and a different independent reader retrieved all **eight historical input/output fields in a single `read_agent_message` call**, using coordinates discovered from the producer’s actual causal inventory.\n\nOutputs below use JSON notation; `\\n` means one actual trailing newline.\n\n| Original command | Exact output | Producing Message reference | Producing Tool Part |\n|---|---|---|---|\n| `printf '%s\\n' 'READER-b9c3aad68b-A'` | `\"READER-b9c3aad68b-A\\n\"` | `msg_g0VX6Q3s400ptONOalo3` | `prt_g0VX6Q5Un00lAUuelYJE` |\n| `printf '%s\\n' 'READER-b9c3aad68b-B'` | `\"READER-b9c3aad68b-B\\n\"` | `msg_g0VX6Q64H00FUPVfvv18` | `prt_g0VX6Q7IV00wiVgs23mo` |\n| `printf '%s\\n' 'READER-b9c3aad68b-C'` | `\"READER-b9c3aad68b-C\\n\"` | `msg_g0VX6Q7wM00PsRmJT9Xr` | `prt_g0VX6Q9Ld00lKBUEWKsy` |\n| `printf '%s\\n' 'READER-b9c3aad68b-D'` | `\"READER-b9c3aad68b-D\\n\"` | `msg_g0VX6Q9st00QhZy1rkOU` | `prt_g0VX6QDlP00u05zqMiMJ` |\n\n### Independent reader’s evidence references\n\nThese exact references identify the historical source and the successful read—not reconstructed or rerun results:\n\n- **Source:** `{\"kind\":\"dispatch_result\",\"message_id\":\"msg_g0VX6QEIp00dooEW4S0Q\"}`\n- **Reader’s eight-field read Message:** `msg_g0VX6QfoR00OyVoS8C5p`\n- **Reader’s eight-field read Tool Part:** `prt_g0VX6Qh3L000tBMeQa5G`\n- **Reader’s final report:** `msg_g0VX6Qn7B0032XgKzFrg`\n- **Coordinator’s eight-field read:** Message `msg_hWtuYpNe6RikodLEf6nO`, Tool Part `prt_g0VX6QOjF00vbWKvC8IZ`\n\nEach of the eight fields was read at offset **0**, limit **1,000**, and returned in full with `next_offset: null`. I also inspected the independent reader’s complete read arguments and result, confirming its eight-field transfer directly.\n\nThe complete inspected execution inventory contains only the four print commands: **no reruns, repository reads/writes, or extra deliverable files**. Producer and verification references are being retained in the completion decision.",
+        "time": {
+          "start": 1791134826774,
+          "end": 1791134826774
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0a0d85323d4312ef016ac28c56924487d0b4d2fc449eefc33a",
+            "phase": "commentary"
+          }
+        }
+      }
+    }
+  ],
+  "toolRequests": [
+    {
+      "id": "prt_g0VX6Q1UL0035Xz5YfuB",
+      "message_id": "msg_hzBHpPQUwwWAPqwETWtG",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_C7fRx22XTdfEMWvNm5BN1zM3",
+        "tool": "dispatch_agent",
+        "input": {
+          "dispatch": {
+            "target": "base-developer",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "direct"
+              },
+              "use_worktree": false,
+              "input": {
+                "goal_ids": [],
+                "request": "Perform this small read-only execution task: make exactly four separate bash Tool calls, with commands printf '%s\\n' 'READER-b9c3aad68b-A', printf '%s\\n' 'READER-b9c3aad68b-B', printf '%s\\n' 'READER-b9c3aad68b-C', and printf '%s\\n' 'READER-b9c3aad68b-D', respectively. Each must print exactly its one marker. Do not combine invocations, rerun them, read/write repository files, create deliverable files, or mutate business state. After all four calls settle, finish with an accurate report of the commands and observed outputs. The coordinator will independently inspect your settled dispatch_result via read_agent_message, discover actual Message/Part coordinates, and read eight input/output fields in one call. No artifacts or extra implementation are requested.",
+                "reason": "The request requires a real execution worker distinct from the historical-evidence reader."
+              }
+            }
+          }
+        },
+        "time": {
+          "start": 1791134546829
+        }
+      },
+      "time_created": 1791134554289
+    },
+    {
+      "id": "prt_g0VX6Q5Un00lAUuelYJE",
+      "message_id": "msg_g0VX6Q3s400ptONOalo3",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_0CK90UcapW6DxmKpXFzvDdn1",
+        "tool": "bash",
+        "input": {
+          "command": "printf '%s\\n' 'READER-b9c3aad68b-A'",
+          "timeout": 10000,
+          "description": "Print the first required evidence marker",
+          "background": false
+        },
+        "time": {
+          "start": 1791134562233
+        }
+      },
+      "time_created": 1791134564093
+    },
+    {
+      "id": "prt_g0VX6Q7IV00wiVgs23mo",
+      "message_id": "msg_g0VX6Q64H00FUPVfvv18",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_YiwGMriSFQhcWsSNYyc8bmDo",
+        "tool": "bash",
+        "input": {
+          "command": "printf '%s\\n' 'READER-b9c3aad68b-B'",
+          "timeout": 10000,
+          "description": "Print the second required evidence marker",
+          "background": false
+        },
+        "time": {
+          "start": 1791134569159
+        }
+      },
+      "time_created": 1791134571203
+    },
+    {
+      "id": "prt_g0VX6Q9Ld00lKBUEWKsy",
+      "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_GM8OOF1VPSqcnfqh5PmIVyKh",
+        "tool": "bash",
+        "input": {
+          "command": "printf '%s\\n' 'READER-b9c3aad68b-C'",
+          "timeout": 10000,
+          "description": "Print the third required evidence marker",
+          "background": false
+        },
+        "time": {
+          "start": 1791134577041
+        }
+      },
+      "time_created": 1791134578789
+    },
+    {
+      "id": "prt_g0VX6QDlP00u05zqMiMJ",
+      "message_id": "msg_g0VX6Q9st00QhZy1rkOU",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_LQ9Wigy4UdFrkc07lmuf1fR5",
+        "tool": "bash",
+        "input": {
+          "command": "printf '%s\\n' 'READER-b9c3aad68b-D'",
+          "timeout": 10000,
+          "description": "Print the fourth required evidence marker",
+          "background": false
+        },
+        "time": {
+          "start": 1791134594015
+        }
+      },
+      "time_created": 1791134595724
+    },
+    {
+      "id": "prt_g0VX6QMbi00BIQy737tK",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_QRIMWvYmKE2isD5LK3zUBzKB",
+        "tool": "read_agent_message",
+        "input": {
+          "sources": [
+            {
+              "kind": "dispatch_result",
+              "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+            }
+          ]
+        },
+        "time": {
+          "start": 1791134628010
+        }
+      },
+      "time_created": 1791134629356
+    },
+    {
+      "id": "prt_g0VX6QOjF00vbWKvC8IZ",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_K3Csrt73dYj6sDABq6ewzZ75",
+        "tool": "read_agent_message",
+        "input": {
+          "sources": [
+            {
+              "kind": "dispatch_result",
+              "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+            }
+          ],
+          "evidence_reads": [
+            {
+              "message_id": "msg_g0VX6Q3s400ptONOalo3",
+              "part_id": "prt_g0VX6Q5Un00lAUuelYJE",
+              "field": "input",
+              "offset": 0,
+              "limit": 1000
+            },
+            {
+              "message_id": "msg_g0VX6Q3s400ptONOalo3",
+              "part_id": "prt_g0VX6Q5Un00lAUuelYJE",
+              "field": "output",
+              "offset": 0,
+              "limit": 1000
+            },
+            {
+              "message_id": "msg_g0VX6Q64H00FUPVfvv18",
+              "part_id": "prt_g0VX6Q7IV00wiVgs23mo",
+              "field": "input",
+              "offset": 0,
+              "limit": 1000
+            },
+            {
+              "message_id": "msg_g0VX6Q64H00FUPVfvv18",
+              "part_id": "prt_g0VX6Q7IV00wiVgs23mo",
+              "field": "output",
+              "offset": 0,
+              "limit": 1000
+            },
+            {
+              "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr",
+              "part_id": "prt_g0VX6Q9Ld00lKBUEWKsy",
+              "field": "input",
+              "offset": 0,
+              "limit": 1000
+            },
+            {
+              "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr",
+              "part_id": "prt_g0VX6Q9Ld00lKBUEWKsy",
+              "field": "output",
+              "offset": 0,
+              "limit": 1000
+            },
+            {
+              "message_id": "msg_g0VX6Q9st00QhZy1rkOU",
+              "part_id": "prt_g0VX6QDlP00u05zqMiMJ",
+              "field": "input",
+              "offset": 0,
+              "limit": 1000
+            },
+            {
+              "message_id": "msg_g0VX6Q9st00QhZy1rkOU",
+              "part_id": "prt_g0VX6QDlP00u05zqMiMJ",
+              "field": "output",
+              "offset": 0,
+              "limit": 1000
+            }
+          ]
+        },
+        "time": {
+          "start": 1791134636165
+        }
+      },
+      "time_created": 1791134649896
+    },
+    {
+      "id": "prt_g0VX6QV8B00f6KRi1gM2",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_C5w7ex0yjKMz0KxZIeys6U8W",
+        "tool": "dispatch_agent",
+        "input": {
+          "dispatch": {
+            "target": "base-tester",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "virtual_workflow",
+                "workflow_id": "execution-verification",
+                "node_id": "base-tester"
+              },
+              "use_worktree": false,
+              "input": {
+                "goal_ids": [],
+                "instruction": "Independently verify the original request: prove actual causal Tool evidence transfer for READER-b9c3aad68b via four separate shell invocations outputting markers -A, -B, -C, -D. No repository changes or extra files. Do not execute shell commands or read repository files. Execution producer final message is msg_g0VX6QEIp00dooEW4S0Q in session ses_h127B5KOCT7PMrjafAot. Read its settled dispatch_result with production read_agent_message, discover its actual causal inventory coordinates, then in ONE evidence_reads call retrieve exactly eight chunks (input and output for each of the four bash occurrences), with explicit offsets and limits totaling at most 30000 characters. Report original commands, exact outputs including newline, all producer Message/Part references, and completeness of eight fields. Also inspect your dispatch_origin root Tool evidence to identify the coordinator's actual successful eight-field read Message and Tool Part and its arguments/result. Do not trust coordinator prose or producer narrative alone. Your final report must state your exact dispatch_result source and your own eight-field read Tool Part identity if observable (do not invent it; the coordinator can discover it from your settled report inventory). State whether every original obligation is satisfied, including distinct participants and no reruns/mutations. Publish only required internal review evidence if your contract requires it; no user deliverable file is requested.",
+                "reason": "The four executions are settled and the coordinator has successfully read all eight historical fields; independent review must verify the original request and identify the exact verification Tool Part."
+              }
+            }
+          }
+        },
+        "time": {
+          "start": 1791134660775
+        }
+      },
+      "time_created": 1791134672508
+    },
+    {
+      "id": "prt_g0VX6QaP600Bh46vrkGL",
+      "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_Or5xrcMLjefuzTkSLHdiF8t8",
+        "tool": "dispatch_agent",
+        "input": {
+          "dispatch": {
+            "target": "base-tester",
+            "work_scope": {
+              "kind": "task"
+            },
+            "turn": {
+              "kind": "initial",
+              "workflow_subject": {
+                "kind": "direct"
+              },
+              "use_worktree": false,
+              "input": {
+                "goal_ids": [],
+                "instruction": "Independently verify the original request: prove actual causal Tool evidence transfer for READER-b9c3aad68b via four separate shell invocations outputting markers -A, -B, -C, -D. No repository changes or extra files. Do not execute shell commands or read repository files. Execution producer final message is msg_g0VX6QEIp00dooEW4S0Q in session ses_h127B5KOCT7PMrjafAot. Read its settled dispatch_result with production read_agent_message, discover its actual causal inventory coordinates, then in ONE evidence_reads call retrieve exactly eight chunks (input and output for each of the four bash occurrences), with explicit offsets and limits totaling at most 30000 characters. Report original commands, exact outputs including newline, all producer Message/Part references, and completeness of eight fields. Also inspect your dispatch_origin root Tool evidence to identify the coordinator's actual successful eight-field read Message and Tool Part and its arguments/result. Do not trust coordinator prose or producer narrative alone. Your final report must state your exact dispatch_result source and your own eight-field read Tool Part identity if observable (do not invent it; the coordinator can discover it from your settled report inventory). State whether every original obligation is satisfied, including distinct participants and no reruns/mutations. Publish only required internal review evidence if your contract requires it; no user deliverable file is requested.",
+                "reason": "Independent historical-evidence review is required; preserve the existing direct assignment binding and verify the successful eight-field read without rerunning commands."
+              }
+            }
+          }
+        },
+        "time": {
+          "start": 1791134681044
+        }
+      },
+      "time_created": 1791134693629
+    },
+    {
+      "id": "prt_g0VX6QfNm00LY7E7wV7l",
+      "message_id": "msg_g0VX6Qdlm00VuMPBtMuP",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_Drbap1SIxlHwwFIejNRRQVdA",
+        "tool": "read_agent_message",
+        "input": {
+          "sources": [
+            {
+              "kind": "dispatch_result",
+              "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+            },
+            {
+              "kind": "dispatch_origin",
+              "dispatch_id": "art_husAc327ypgPIKyTLjdk"
+            }
+          ]
+        },
+        "time": {
+          "start": 1791134700182
+        }
+      },
+      "time_created": 1791134701568
+    },
+    {
+      "id": "prt_g0VX6Qh3L000tBMeQa5G",
+      "message_id": "msg_g0VX6QfoR00OyVoS8C5p",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_plffTDycGL9TOpAh8lhuvntN",
+        "tool": "read_agent_message",
+        "input": {
+          "sources": [
+            {
+              "kind": "dispatch_result",
+              "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+            }
+          ],
+          "evidence_reads": [
+            {
+              "message_id": "msg_g0VX6Q3s400ptONOalo3",
+              "part_id": "prt_g0VX6Q5Un00lAUuelYJE",
+              "field": "input",
+              "offset": 0,
+              "limit": 1000
+            },
+            {
+              "message_id": "msg_g0VX6Q3s400ptONOalo3",
+              "part_id": "prt_g0VX6Q5Un00lAUuelYJE",
+              "field": "output",
+              "offset": 0,
+              "limit": 1000
+            },
+            {
+              "message_id": "msg_g0VX6Q64H00FUPVfvv18",
+              "part_id": "prt_g0VX6Q7IV00wiVgs23mo",
+              "field": "input",
+              "offset": 0,
+              "limit": 1000
+            },
+            {
+              "message_id": "msg_g0VX6Q64H00FUPVfvv18",
+              "part_id": "prt_g0VX6Q7IV00wiVgs23mo",
+              "field": "output",
+              "offset": 0,
+              "limit": 1000
+            },
+            {
+              "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr",
+              "part_id": "prt_g0VX6Q9Ld00lKBUEWKsy",
+              "field": "input",
+              "offset": 0,
+              "limit": 1000
+            },
+            {
+              "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr",
+              "part_id": "prt_g0VX6Q9Ld00lKBUEWKsy",
+              "field": "output",
+              "offset": 0,
+              "limit": 1000
+            },
+            {
+              "message_id": "msg_g0VX6Q9st00QhZy1rkOU",
+              "part_id": "prt_g0VX6QDlP00u05zqMiMJ",
+              "field": "input",
+              "offset": 0,
+              "limit": 1000
+            },
+            {
+              "message_id": "msg_g0VX6Q9st00QhZy1rkOU",
+              "part_id": "prt_g0VX6QDlP00u05zqMiMJ",
+              "field": "output",
+              "offset": 0,
+              "limit": 1000
+            }
+          ]
+        },
+        "time": {
+          "start": 1791134706603
+        }
+      },
+      "time_created": 1791134720002
+    },
+    {
+      "id": "prt_g0VX6Qlyz00NfI6ML8NO",
+      "message_id": "msg_g0VX6Qkcd00htvjRoD6q",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_JYp6SMXxw1L7YIHHBSIrwSed",
+        "tool": "read_agent_message",
+        "input": {
+          "sources": [
+            {
+              "kind": "dispatch_origin",
+              "dispatch_id": "art_husAc327ypgPIKyTLjdk"
+            }
+          ],
+          "evidence_reads": [
+            {
+              "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+              "part_id": "prt_g0VX6QOjF00vbWKvC8IZ",
+              "field": "input",
+              "offset": 0,
+              "limit": 2000
+            },
+            {
+              "message_id": "msg_hWtuYpNe6RikodLEf6nO",
+              "part_id": "prt_g0VX6QOjF00vbWKvC8IZ",
+              "field": "output",
+              "offset": 0,
+              "limit": 12000
+            }
+          ]
+        },
+        "time": {
+          "start": 1791134725553
+        }
+      },
+      "time_created": 1791134729675
+    },
+    {
+      "id": "prt_g0VX6R05G00Q4szLmpRI",
+      "message_id": "msg_hsb1j3nkkb3emGKGsry4",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_uKIfcixh5Gscd5EzLk19Jv1B",
+        "tool": "read_agent_message",
+        "input": {
+          "sources": [
+            {
+              "kind": "dispatch_result",
+              "message_id": "msg_g0VX6Qn7B0032XgKzFrg"
+            }
+          ]
+        },
+        "time": {
+          "start": 1791134779758
+        }
+      },
+      "time_created": 1791134781061
+    },
+    {
+      "id": "prt_g0VX6R2wa00whMelX5ho",
+      "message_id": "msg_hsb1j3nkkb3emGKGsry4",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_Xr7WmjfXtn3qFhNtR9to787R",
+        "tool": "read_agent_message",
+        "input": {
+          "sources": [
+            {
+              "kind": "dispatch_result",
+              "message_id": "msg_g0VX6Qn7B0032XgKzFrg"
+            }
+          ],
+          "evidence_reads": [
+            {
+              "message_id": "msg_g0VX6QfoR00OyVoS8C5p",
+              "part_id": "prt_g0VX6Qh3L000tBMeQa5G",
+              "field": "input",
+              "offset": 0,
+              "limit": 2000
+            },
+            {
+              "message_id": "msg_g0VX6QfoR00OyVoS8C5p",
+              "part_id": "prt_g0VX6Qh3L000tBMeQa5G",
+              "field": "output",
+              "offset": 0,
+              "limit": 12000
+            }
+          ]
+        },
+        "time": {
+          "start": 1791134790752
+        }
+      },
+      "time_created": 1791134795488
+    },
+    {
+      "id": "prt_g0VX6RCJi00z4HjRef4o",
+      "message_id": "msg_hsb1j3nkkb3emGKGsry4",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_BwdZCXBLaJykYMLBmNk41SR0",
+        "tool": "manage_task",
+        "input": {
+          "summary": "Proved actual causal Tool evidence transfer for READER-b9c3aad68b. Producer session ses_h127B5KOCT7PMrjafAot executed exactly four separate bash calls: printf '%s\\n' 'READER-b9c3aad68b-A', -B, -C, -D with the full respective marker literals; exact outputs were the corresponding marker plus one newline. Actual producing Message/Part pairs: msg_g0VX6Q3s400ptONOalo3/prt_g0VX6Q5Un00lAUuelYJE; msg_g0VX6Q64H00FUPVfvv18/prt_g0VX6Q7IV00wiVgs23mo; msg_g0VX6Q7wM00PsRmJT9Xr/prt_g0VX6Q9Ld00lKBUEWKsy; msg_g0VX6Q9st00QhZy1rkOU/prt_g0VX6QDlP00u05zqMiMJ. Exact historical source was dispatch_result msg_g0VX6QEIp00dooEW4S0Q. Coordinator successfully retrieved all eight historical fields in one read_agent_message call at msg_hWtuYpNe6RikodLEf6nO/prt_g0VX6QOjF00vbWKvC8IZ. Independent reader session ses_hNWDKRvBOL2oPgyCd1Xi discovered the same actual inventory and successfully retrieved eight fields in one call at msg_g0VX6QfoR00OyVoS8C5p/prt_g0VX6Qh3L000tBMeQa5G; coordinator inspected that call's complete 1055-character input and 11574-character result. All eight fields used offset 0/limit 1000 and were complete, unredacted, next_offset null. Independent report msg_g0VX6Qn7B0032XgKzFrg confirms all original obligations with no discrepancies and independently inspected coordinator's successful read. Reader's initially unavailable own Part identity was resolved from its settled causal inventory and included in the visible report. Complete scoped execution inventory shows only four print commands and review inventory only historical reads, with no reruns or repository mutations. No deliverable file was requested or produced. Both participants are settled and no work remains running. Full visible report includes all commands, exact marker outputs, producer Message/Part references, and source/read identities.",
+          "evidence_locators": [
+            {
+              "source": "session_message",
+              "session_id": "ses_h127B5KOCT7PMrjafAot",
+              "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+            },
+            {
+              "source": "session_message",
+              "session_id": "ses_h127B5KOCT7PMrjafAot",
+              "message_id": "msg_g0VX6Q3s400ptONOalo3"
+            },
+            {
+              "source": "session_message",
+              "session_id": "ses_h127B5KOCT7PMrjafAot",
+              "message_id": "msg_g0VX6Q64H00FUPVfvv18"
+            },
+            {
+              "source": "session_message",
+              "session_id": "ses_h127B5KOCT7PMrjafAot",
+              "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr"
+            },
+            {
+              "source": "session_message",
+              "session_id": "ses_h127B5KOCT7PMrjafAot",
+              "message_id": "msg_g0VX6Q9st00QhZy1rkOU"
+            },
+            {
+              "source": "session_message",
+              "session_id": "ses_hNWDKRvBOL2oPgyCd1Xi",
+              "message_id": "msg_g0VX6Qn7B0032XgKzFrg"
+            },
+            {
+              "source": "session_message",
+              "session_id": "ses_hNWDKRvBOL2oPgyCd1Xi",
+              "message_id": "msg_g0VX6QfoR00OyVoS8C5p"
+            },
+            {
+              "source": "session_message",
+              "session_id": "ses_-zUSta1VQzzSnlhirMxu",
+              "message_id": "msg_hWtuYpNe6RikodLEf6nO"
+            },
+            {
+              "source": "session",
+              "session_id": "ses_-zUSta1VQzzSnlhirMxu"
+            }
+          ],
+          "deliverable_artifact_locators": [],
+          "accepted_delivery_slice_revision_ids": [],
+          "workflow_id": null,
+          "action": "complete_task"
+        },
+        "time": {
+          "start": 1791134826782
+        }
+      },
+      "time_created": 1791134854414
+    }
+  ],
+  "toolOutcomes": [
+    {
+      "id": "prt_hpwVDQ6tshHgJt7ri9Po",
+      "request_part_id": "prt_g0VX6Q1UL0035Xz5YfuB",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hfqalL2KSZnY85KiyPAJ",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1791134555889
+        }
+      },
+      "time_created": 1791134555890
+    },
+    {
+      "id": "prt_hFp87dRE8gFvbM5ytD3z",
+      "request_part_id": "prt_g0VX6Q5Un00lAUuelYJE",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_h2wPQb2ErNKbdMmPvEnT",
+        "title": "Print the first required evidence marker",
+        "metadata": {
+          "refused": false,
+          "command": "printf '%s\\n' 'READER-b9c3aad68b-A'",
+          "output": "READER-b9c3aad68b-A\n",
+          "output_bytes": 20,
+          "exit": 0,
+          "pid": null,
+          "background": false,
+          "description": "Print the first required evidence marker",
+          "truncated": false
+        },
+        "time": {
+          "end": 1791134564328
+        }
+      },
+      "time_created": 1791134564328
+    },
+    {
+      "id": "prt_hvuFyrRCFI2RQQZCK9EF",
+      "request_part_id": "prt_g0VX6Q7IV00wiVgs23mo",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hJc6BlgQ5OjMYdefXQ0o",
+        "title": "Print the second required evidence marker",
+        "metadata": {
+          "refused": false,
+          "command": "printf '%s\\n' 'READER-b9c3aad68b-B'",
+          "output": "READER-b9c3aad68b-B\n",
+          "output_bytes": 20,
+          "exit": 0,
+          "pid": null,
+          "background": false,
+          "description": "Print the second required evidence marker",
+          "truncated": false
+        },
+        "time": {
+          "end": 1791134571368
+        }
+      },
+      "time_created": 1791134571368
+    },
+    {
+      "id": "prt_hQ1LvBNwuc2t3taaSoLw",
+      "request_part_id": "prt_g0VX6Q9Ld00lKBUEWKsy",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hy2wU0kBtVugv19GqDkF",
+        "title": "Print the third required evidence marker",
+        "metadata": {
+          "refused": false,
+          "command": "printf '%s\\n' 'READER-b9c3aad68b-C'",
+          "output": "READER-b9c3aad68b-C\n",
+          "output_bytes": 20,
+          "exit": 0,
+          "pid": null,
+          "background": false,
+          "description": "Print the third required evidence marker",
+          "truncated": false
+        },
+        "time": {
+          "end": 1791134578963
+        }
+      },
+      "time_created": 1791134578963
+    },
+    {
+      "id": "prt_hUAVnZMWQ886pt6BGuGn",
+      "request_part_id": "prt_g0VX6QDlP00u05zqMiMJ",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hlnp0GyotS68ud4RbgGu",
+        "title": "Print the fourth required evidence marker",
+        "metadata": {
+          "refused": false,
+          "command": "printf '%s\\n' 'READER-b9c3aad68b-D'",
+          "output": "READER-b9c3aad68b-D\n",
+          "output_bytes": 20,
+          "exit": 0,
+          "pid": null,
+          "background": false,
+          "description": "Print the fourth required evidence marker",
+          "truncated": false
+        },
+        "time": {
+          "end": 1791134595927
+        }
+      },
+      "time_created": 1791134595927
+    },
+    {
+      "id": "prt_hzrLaZGNnrnWCvmO2hiW",
+      "request_part_id": "prt_g0VX6QMbi00BIQy737tK",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hfNAyxhEiDHKiuTqLsA6",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1791134629382
+        }
+      },
+      "time_created": 1791134629382
+    },
+    {
+      "id": "prt_h2AE9431ZfnB0NNfRKuL",
+      "request_part_id": "prt_g0VX6QOjF00vbWKvC8IZ",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hwlldXHVQVQh3GSHaW62",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1791134649956
+        }
+      },
+      "time_created": 1791134649956
+    },
+    {
+      "id": "prt_hRGU4pxVNbCPlT18vjII",
+      "request_part_id": "prt_g0VX6QV8B00f6KRi1gM2",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_h5KDtRKLxMCSK3lBtexg",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1791134672542
+        }
+      },
+      "time_created": 1791134672542
+    },
+    {
+      "id": "prt_huVRHcsBR4lD8Rmk67iV",
+      "request_part_id": "prt_g0VX6QaP600Bh46vrkGL",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hRgQA54R3oRKqpa98QxB",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1791134693954
+        }
+      },
+      "time_created": 1791134693954
+    },
+    {
+      "id": "prt_h20ij6JY9MF2GEeIcPMi",
+      "request_part_id": "prt_g0VX6QfNm00LY7E7wV7l",
+      "data": {
+        "outcome": "completed",
+        "output": "{\n  \"messages\": [\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n      },\n      \"session_id\": \"ses_h127B5KOCT7PMrjafAot\",\n      \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\",\n      \"role\": \"assistant\",\n      \"author\": \"base-developer\",\n      \"finish\": \"stop\",\n      \"time_completed\": 1791134616304,\n      \"text\": [\n        \"Executed exactly four separate shell calls, without reruns:\\n\\n| Original command | Observed output |\\n|---|---|\\n| `printf '%s\\\\n' 'READER-b9c3aad68b-A'` | `READER-b9c3aad68b-A` |\\n| `printf '%s\\\\n' 'READER-b9c3aad68b-B'` | `READER-b9c3aad68b-B` |\\n| `printf '%s\\\\n' 'READER-b9c3aad68b-C'` | `READER-b9c3aad68b-C` |\\n| `printf '%s\\\\n' 'READER-b9c3aad68b-D'` | `READER-b9c3aad68b-D` |\\n\\nEach call printed only its required marker. No repository files were read or written, no deliverable files were created, and no business state was mutated.\\n\\n**Execution is finished; overall verification remains pending.** The coordinator must inspect this worker’s settled `dispatch_result`, discover the actual producing Message/Part identities, and retrieve all eight historical input/output fields in one `evidence_reads` call. Those identities are not exposed in the shell results above, so I have not invented references or claimed Task completion.\"\n      ],\n      \"tool_facts_complete\": true,\n      \"tool_facts\": []\n    }\n  ],\n  \"origins\": [\n    {\n      \"source\": {\n        \"kind\": \"dispatch_origin\",\n        \"dispatch_id\": \"art_husAc327ypgPIKyTLjdk\"\n      },\n      \"session_id\": \"ses_-zUSta1VQzzSnlhirMxu\",\n      \"message_id\": \"msg_hWtuYpNe6RikodLEf6nO\",\n      \"execution_epoch\": 1,\n      \"before_provider_step\": {\n        \"part_id\": \"prt_g0VX6QYJz00DzCSdTa7F\",\n        \"time_created\": 1791134673039\n      }\n    }\n  ],\n  \"causal_tool_reference_index\": {\n    \"complete\": true,\n    \"tool_count\": 8,\n    \"refs\": [\n      {\n        \"source\": {\n          \"kind\": \"dispatch_result\",\n          \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n        },\n        \"message_id\": \"msg_g0VX6Q3s400ptONOalo3\",\n        \"part_id\": \"prt_g0VX6Q5Un00lAUuelYJE\",\n        \"tool_name\": \"bash\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-A'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the first required evidence marker\\\",\\\"background\\\":false}\",\n        \"input_preview_truncated\": false\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_result\",\n          \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n        },\n        \"message_id\": \"msg_g0VX6Q64H00FUPVfvv18\",\n        \"part_id\": \"prt_g0VX6Q7IV00wiVgs23mo\",\n        \"tool_name\": \"bash\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-B'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the second required evidence marker\\\",\\\"background\\\":false}\",\n        \"input_preview_truncated\": false\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_result\",\n          \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n        },\n        \"message_id\": \"msg_g0VX6Q7wM00PsRmJT9Xr\",\n        \"part_id\": \"prt_g0VX6Q9Ld00lKBUEWKsy\",\n        \"tool_name\": \"bash\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-C'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the third required evidence marker\\\",\\\"background\\\":false}\",\n        \"input_preview_truncated\": false\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_result\",\n          \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n        },\n        \"message_id\": \"msg_g0VX6Q9st00QhZy1rkOU\",\n        \"part_id\": \"prt_g0VX6QDlP00u05zqMiMJ\",\n        \"tool_name\": \"bash\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-D'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the fourth required evidence marker\\\",\\\"background\\\":false}\",\n        \"input_preview_truncated\": false\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_origin\",\n          \"dispatch_id\": \"art_husAc327ypgPIKyTLjdk\"\n        },\n        \"message_id\": \"msg_hzBHpPQUwwWAPqwETWtG\",\n        \"part_id\": \"prt_g0VX6Q1UL0035Xz5YfuB\",\n        \"tool_name\": \"dispatch_agent\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"dispatch\\\":{\\\"target\\\":\\\"base-developer\\\",\\\"work_scope\\\":{\\\"kind\\\":\\\"task\\\"},\\\"turn\\\":{\\\"kind\\\":\\\"initial\\\",\\\"workflow_subject\\\":{\\\"kind\\\":\\\"direct\\\"},\\\"use_worktree\\\":false,\\\"input\\\":{\",\n        \"input_preview_truncated\": true\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_origin\",\n          \"dispatch_id\": \"art_husAc327ypgPIKyTLjdk\"\n        },\n        \"message_id\": \"msg_hWtuYpNe6RikodLEf6nO\",\n        \"part_id\": \"prt_g0VX6QMbi00BIQy737tK\",\n        \"tool_name\": \"read_agent_message\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"sources\\\":[{\\\"kind\\\":\\\"dispatch_result\\\",\\\"message_id\\\":\\\"msg_g0VX6QEIp00dooEW4S0Q\\\"}]}\",\n        \"input_preview_truncated\": false\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_origin\",\n          \"dispatch_id\": \"art_husAc327ypgPIKyTLjdk\"\n        },\n        \"message_id\": \"msg_hWtuYpNe6RikodLEf6nO\",\n        \"part_id\": \"prt_g0VX6QOjF00vbWKvC8IZ\",\n        \"tool_name\": \"read_agent_message\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"sources\\\":[{\\\"kind\\\":\\\"dispatch_result\\\",\\\"message_id\\\":\\\"msg_g0VX6QEIp00dooEW4S0Q\\\"}],\\\"evidence_reads\\\":[{\\\"message_id\\\":\\\"msg_g0VX6Q3s400ptONOalo3\\\",\\\"part_id\\\":\\\"prt_g0VX6Q\",\n        \"input_preview_truncated\": true\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_origin\",\n          \"dispatch_id\": \"art_husAc327ypgPIKyTLjdk\"\n        },\n        \"message_id\": \"msg_hWtuYpNe6RikodLEf6nO\",\n        \"part_id\": \"prt_g0VX6QV8B00f6KRi1gM2\",\n        \"tool_name\": \"dispatch_agent\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"dispatch\\\":{\\\"target\\\":\\\"base-tester\\\",\\\"work_scope\\\":{\\\"kind\\\":\\\"task\\\"},\\\"turn\\\":{\\\"kind\\\":\\\"initial\\\",\\\"workflow_subject\\\":{\\\"kind\\\":\\\"virtual_workflow\\\",\\\"workflow_id\\\":\\\"execution\",\n        \"input_preview_truncated\": true\n      }\n    ]\n  },\n  \"causal_tool_message_inventory\": [\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n      },\n      \"session_id\": \"ses_h127B5KOCT7PMrjafAot\",\n      \"message_id\": \"msg_g0VX6Q3s400ptONOalo3\",\n      \"author\": \"base-developer\",\n      \"time_created\": 1791134555988,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VX6Q5Un00lAUuelYJE\",\n          \"call_id\": \"call_0CK90UcapW6DxmKpXFzvDdn1\",\n          \"tool_name\": \"bash\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-A'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the first required evidence marker\\\",\\\"background\\\":false}\",\n          \"input_chars\": 142,\n          \"input_preview_truncated\": false,\n          \"stored_output_chars\": 20\n        }\n      ]\n    },\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n      },\n      \"session_id\": \"ses_h127B5KOCT7PMrjafAot\",\n      \"message_id\": \"msg_g0VX6Q64H00FUPVfvv18\",\n      \"author\": \"base-developer\",\n      \"time_created\": 1791134564433,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VX6Q7IV00wiVgs23mo\",\n          \"call_id\": \"call_YiwGMriSFQhcWsSNYyc8bmDo\",\n          \"tool_name\": \"bash\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-B'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the second required evidence marker\\\",\\\"background\\\":false}\",\n          \"input_chars\": 143,\n          \"input_preview_truncated\": false,\n          \"stored_output_chars\": 20\n        }\n      ]\n    },\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n      },\n      \"session_id\": \"ses_h127B5KOCT7PMrjafAot\",\n      \"message_id\": \"msg_g0VX6Q7wM00PsRmJT9Xr\",\n      \"author\": \"base-developer\",\n      \"time_created\": 1791134571630,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VX6Q9Ld00lKBUEWKsy\",\n          \"call_id\": \"call_GM8OOF1VPSqcnfqh5PmIVyKh\",\n          \"tool_name\": \"bash\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-C'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the third required evidence marker\\\",\\\"background\\\":false}\",\n          \"input_chars\": 142,\n          \"input_preview_truncated\": false,\n          \"stored_output_chars\": 20\n        }\n      ]\n    },\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n      },\n      \"session_id\": \"ses_h127B5KOCT7PMrjafAot\",\n      \"message_id\": \"msg_g0VX6Q9st00QhZy1rkOU\",\n      \"author\": \"base-developer\",\n      \"time_created\": 1791134579103,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VX6QDlP00u05zqMiMJ\",\n          \"call_id\": \"call_LQ9Wigy4UdFrkc07lmuf1fR5\",\n          \"tool_name\": \"bash\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-D'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the fourth required evidence marker\\\",\\\"background\\\":false}\",\n          \"input_chars\": 143,\n          \"input_preview_truncated\": false,\n          \"stored_output_chars\": 20\n        }\n      ]\n    },\n    {\n      \"source\": {\n        \"kind\": \"dispatch_origin\",\n        \"dispatch_id\": \"art_husAc327ypgPIKyTLjdk\"\n      },\n      \"session_id\": \"ses_-zUSta1VQzzSnlhirMxu\",\n      \"message_id\": \"msg_hzBHpPQUwwWAPqwETWtG\",\n      \"author\": \"orchestrator\",\n      \"time_created\": 1791134535672,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VX6Q1UL0035Xz5YfuB\",\n          \"call_id\": \"call_C7fRx22XTdfEMWvNm5BN1zM3\",\n          \"tool_name\": \"dispatch_agent\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"dispatch\\\":{\\\"target\\\":\\\"base-developer\\\",\\\"work_scope\\\":{\\\"kind\\\":\\\"task\\\"},\\\"turn\\\":{\\\"kind\\\":\\\"initial\\\",\\\"workflow_subject\\\":{\\\"kind\\\":\\\"direct\\\"},\\\"use_worktree\\\":false,\\\"input\\\":{\\\"goal_ids\\\":[],\\\"request\\\":\\\"Perform this small read-only execution task: make exact\",\n          \"input_chars\": 1061,\n          \"input_preview_truncated\": true,\n          \"stored_output_chars\": 108\n        }\n      ]\n    },\n    {\n      \"source\": {\n        \"kind\": \"dispatch_origin\",\n        \"dispatch_id\": \"art_husAc327ypgPIKyTLjdk\"\n      },\n      \"session_id\": \"ses_-zUSta1VQzzSnlhirMxu\",\n      \"message_id\": \"msg_hWtuYpNe6RikodLEf6nO\",\n      \"author\": \"orchestrator\",\n      \"time_created\": 1791134618446,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VX6QMbi00BIQy737tK\",\n          \"call_id\": \"call_QRIMWvYmKE2isD5LK3zUBzKB\",\n          \"tool_name\": \"read_agent_message\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"sources\\\":[{\\\"kind\\\":\\\"dispatch_result\\\",\\\"message_id\\\":\\\"msg_g0VX6QEIp00dooEW4S0Q\\\"}]}\",\n          \"input_chars\": 80,\n          \"input_preview_truncated\": false,\n          \"stored_output_chars\": 6918\n        },\n        {\n          \"part_id\": \"prt_g0VX6QOjF00vbWKvC8IZ\",\n          \"call_id\": \"call_K3Csrt73dYj6sDABq6ewzZ75\",\n          \"tool_name\": \"read_agent_message\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"sources\\\":[{\\\"kind\\\":\\\"dispatch_result\\\",\\\"message_id\\\":\\\"msg_g0VX6QEIp00dooEW4S0Q\\\"}],\\\"evidence_reads\\\":[{\\\"message_id\\\":\\\"msg_g0VX6Q3s400ptONOalo3\\\",\\\"part_id\\\":\\\"prt_g0VX6Q5Un00lAUuelYJE\\\",\\\"field\\\":\\\"input\\\",\\\"offset\\\":0,\\\"limit\\\":1000},{\\\"message_id\\\":\\\"msg_g0VX\",\n          \"input_chars\": 1055,\n          \"input_preview_truncated\": true,\n          \"stored_output_chars\": 11574\n        },\n        {\n          \"part_id\": \"prt_g0VX6QV8B00f6KRi1gM2\",\n          \"call_id\": \"call_C5w7ex0yjKMz0KxZIeys6U8W\",\n          \"tool_name\": \"dispatch_agent\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"dispatch\\\":{\\\"target\\\":\\\"base-tester\\\",\\\"work_scope\\\":{\\\"kind\\\":\\\"task\\\"},\\\"turn\\\":{\\\"kind\\\":\\\"initial\\\",\\\"workflow_subject\\\":{\\\"kind\\\":\\\"virtual_workflow\\\",\\\"workflow_id\\\":\\\"execution-verification\\\",\\\"node_id\\\":\\\"base-tester\\\"},\\\"use_worktree\\\":false,\\\"input\\\":{\\\"goal_ids\\\"\",\n          \"input_chars\": 1952,\n          \"input_preview_truncated\": true,\n          \"stored_output_chars\": 585\n        }\n      ]\n    }\n  ],\n  \"inventory_next_before\": [],\n  \"evidence_reads\": []\n}",
+        "title": "Task participant evidence",
+        "metadata": {
+          "truncated": false
+        },
+        "time": {
+          "end": 1791134701594
+        }
+      },
+      "time_created": 1791134701594
+    },
+    {
+      "id": "prt_hxt7aOCKdN8C7wi2R2vq",
+      "request_part_id": "prt_g0VX6Qh3L000tBMeQa5G",
+      "data": {
+        "outcome": "completed",
+        "output": "{\n  \"messages\": [\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n      },\n      \"session_id\": \"ses_h127B5KOCT7PMrjafAot\",\n      \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\",\n      \"role\": \"assistant\",\n      \"author\": \"base-developer\",\n      \"finish\": \"stop\",\n      \"time_completed\": 1791134616304,\n      \"text\": [\n        \"Executed exactly four separate shell calls, without reruns:\\n\\n| Original command | Observed output |\\n|---|---|\\n| `printf '%s\\\\n' 'READER-b9c3aad68b-A'` | `READER-b9c3aad68b-A` |\\n| `printf '%s\\\\n' 'READER-b9c3aad68b-B'` | `READER-b9c3aad68b-B` |\\n| `printf '%s\\\\n' 'READER-b9c3aad68b-C'` | `READER-b9c3aad68b-C` |\\n| `printf '%s\\\\n' 'READER-b9c3aad68b-D'` | `READER-b9c3aad68b-D` |\\n\\nEach call printed only its required marker. No repository files were read or written, no deliverable files were created, and no business state was mutated.\\n\\n**Execution is finished; overall verification remains pending.** The coordinator must inspect this worker’s settled `dispatch_result`, discover the actual producing Message/Part identities, and retrieve all eight historical input/output fields in one `evidence_reads` call. Those identities are not exposed in the shell results above, so I have not invented references or claimed Task completion.\"\n      ],\n      \"tool_facts_complete\": true,\n      \"tool_facts\": []\n    }\n  ],\n  \"origins\": [],\n  \"causal_tool_reference_index\": {\n    \"complete\": true,\n    \"tool_count\": 4,\n    \"refs\": [\n      {\n        \"source\": {\n          \"kind\": \"dispatch_result\",\n          \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n        },\n        \"message_id\": \"msg_g0VX6Q3s400ptONOalo3\",\n        \"part_id\": \"prt_g0VX6Q5Un00lAUuelYJE\",\n        \"tool_name\": \"bash\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-A'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the first required evidence marker\\\",\\\"background\\\":false}\",\n        \"input_preview_truncated\": false\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_result\",\n          \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n        },\n        \"message_id\": \"msg_g0VX6Q64H00FUPVfvv18\",\n        \"part_id\": \"prt_g0VX6Q7IV00wiVgs23mo\",\n        \"tool_name\": \"bash\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-B'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the second required evidence marker\\\",\\\"background\\\":false}\",\n        \"input_preview_truncated\": false\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_result\",\n          \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n        },\n        \"message_id\": \"msg_g0VX6Q7wM00PsRmJT9Xr\",\n        \"part_id\": \"prt_g0VX6Q9Ld00lKBUEWKsy\",\n        \"tool_name\": \"bash\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-C'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the third required evidence marker\\\",\\\"background\\\":false}\",\n        \"input_preview_truncated\": false\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_result\",\n          \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n        },\n        \"message_id\": \"msg_g0VX6Q9st00QhZy1rkOU\",\n        \"part_id\": \"prt_g0VX6QDlP00u05zqMiMJ\",\n        \"tool_name\": \"bash\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-D'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the fourth required evidence marker\\\",\\\"background\\\":false}\",\n        \"input_preview_truncated\": false\n      }\n    ]\n  },\n  \"causal_tool_message_inventory\": [\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n      },\n      \"session_id\": \"ses_h127B5KOCT7PMrjafAot\",\n      \"message_id\": \"msg_g0VX6Q3s400ptONOalo3\",\n      \"author\": \"base-developer\",\n      \"time_created\": 1791134555988,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VX6Q5Un00lAUuelYJE\",\n          \"call_id\": \"call_0CK90UcapW6DxmKpXFzvDdn1\",\n          \"tool_name\": \"bash\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-A'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the first required evidence marker\\\",\\\"background\\\":false}\",\n          \"input_chars\": 142,\n          \"input_preview_truncated\": false,\n          \"stored_output_chars\": 20\n        }\n      ]\n    },\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n      },\n      \"session_id\": \"ses_h127B5KOCT7PMrjafAot\",\n      \"message_id\": \"msg_g0VX6Q64H00FUPVfvv18\",\n      \"author\": \"base-developer\",\n      \"time_created\": 1791134564433,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VX6Q7IV00wiVgs23mo\",\n          \"call_id\": \"call_YiwGMriSFQhcWsSNYyc8bmDo\",\n          \"tool_name\": \"bash\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-B'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the second required evidence marker\\\",\\\"background\\\":false}\",\n          \"input_chars\": 143,\n          \"input_preview_truncated\": false,\n          \"stored_output_chars\": 20\n        }\n      ]\n    },\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n      },\n      \"session_id\": \"ses_h127B5KOCT7PMrjafAot\",\n      \"message_id\": \"msg_g0VX6Q7wM00PsRmJT9Xr\",\n      \"author\": \"base-developer\",\n      \"time_created\": 1791134571630,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VX6Q9Ld00lKBUEWKsy\",\n          \"call_id\": \"call_GM8OOF1VPSqcnfqh5PmIVyKh\",\n          \"tool_name\": \"bash\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-C'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the third required evidence marker\\\",\\\"background\\\":false}\",\n          \"input_chars\": 142,\n          \"input_preview_truncated\": false,\n          \"stored_output_chars\": 20\n        }\n      ]\n    },\n    {\n      \"source\": {\n        \"kind\": \"dispatch_result\",\n        \"message_id\": \"msg_g0VX6QEIp00dooEW4S0Q\"\n      },\n      \"session_id\": \"ses_h127B5KOCT7PMrjafAot\",\n      \"message_id\": \"msg_g0VX6Q9st00QhZy1rkOU\",\n      \"author\": \"base-developer\",\n      \"time_created\": 1791134579103,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VX6QDlP00u05zqMiMJ\",\n          \"call_id\": \"call_LQ9Wigy4UdFrkc07lmuf1fR5\",\n          \"tool_name\": \"bash\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-D'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the fourth required evidence marker\\\",\\\"background\\\":false}\",\n          \"input_chars\": 143,\n          \"input_preview_truncated\": false,\n          \"stored_output_chars\": 20\n        }\n      ]\n    }\n  ],\n  \"inventory_next_before\": [],\n  \"evidence_reads\": [\n    {\n      \"message_id\": \"msg_g0VX6Q3s400ptONOalo3\",\n      \"part_id\": \"prt_g0VX6Q5Un00lAUuelYJE\",\n      \"call_id\": \"call_0CK90UcapW6DxmKpXFzvDdn1\",\n      \"tool_name\": \"bash\",\n      \"status\": \"completed\",\n      \"field\": \"input\",\n      \"source\": \"message-part-input\",\n      \"redacted\": false,\n      \"total_chars\": 142,\n      \"sha256\": \"ce103e87ccec27e9e99aef8e97b3808a8dd2d7fccc18d1c00966f3cf9ae5b971\",\n      \"offset\": 0,\n      \"end\": 142,\n      \"next_offset\": null,\n      \"content\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-A'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the first required evidence marker\\\",\\\"background\\\":false}\"\n    },\n    {\n      \"message_id\": \"msg_g0VX6Q3s400ptONOalo3\",\n      \"part_id\": \"prt_g0VX6Q5Un00lAUuelYJE\",\n      \"call_id\": \"call_0CK90UcapW6DxmKpXFzvDdn1\",\n      \"tool_name\": \"bash\",\n      \"status\": \"completed\",\n      \"field\": \"output\",\n      \"source\": \"message-part-output\",\n      \"redacted\": false,\n      \"total_chars\": 20,\n      \"sha256\": \"122d74e7bec82efe224721b404123c0a2c5724fa0e1e91abb6b21e0260c0d300\",\n      \"offset\": 0,\n      \"end\": 20,\n      \"next_offset\": null,\n      \"content\": \"READER-b9c3aad68b-A\\n\"\n    },\n    {\n      \"message_id\": \"msg_g0VX6Q64H00FUPVfvv18\",\n      \"part_id\": \"prt_g0VX6Q7IV00wiVgs23mo\",\n      \"call_id\": \"call_YiwGMriSFQhcWsSNYyc8bmDo\",\n      \"tool_name\": \"bash\",\n      \"status\": \"completed\",\n      \"field\": \"input\",\n      \"source\": \"message-part-input\",\n      \"redacted\": false,\n      \"total_chars\": 143,\n      \"sha256\": \"ed055df67a44b003975b6d9af63ce476e601abeb84988a7dd35ed9f44eca627a\",\n      \"offset\": 0,\n      \"end\": 143,\n      \"next_offset\": null,\n      \"content\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-B'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the second required evidence marker\\\",\\\"background\\\":false}\"\n    },\n    {\n      \"message_id\": \"msg_g0VX6Q64H00FUPVfvv18\",\n      \"part_id\": \"prt_g0VX6Q7IV00wiVgs23mo\",\n      \"call_id\": \"call_YiwGMriSFQhcWsSNYyc8bmDo\",\n      \"tool_name\": \"bash\",\n      \"status\": \"completed\",\n      \"field\": \"output\",\n      \"source\": \"message-part-output\",\n      \"redacted\": false,\n      \"total_chars\": 20,\n      \"sha256\": \"a8d16ba9142703ae1aa1c70caa060406e289c5f06c69619a46443c7eed1e2964\",\n      \"offset\": 0,\n      \"end\": 20,\n      \"next_offset\": null,\n      \"content\": \"READER-b9c3aad68b-B\\n\"\n    },\n    {\n      \"message_id\": \"msg_g0VX6Q7wM00PsRmJT9Xr\",\n      \"part_id\": \"prt_g0VX6Q9Ld00lKBUEWKsy\",\n      \"call_id\": \"call_GM8OOF1VPSqcnfqh5PmIVyKh\",\n      \"tool_name\": \"bash\",\n      \"status\": \"completed\",\n      \"field\": \"input\",\n      \"source\": \"message-part-input\",\n      \"redacted\": false,\n      \"total_chars\": 142,\n      \"sha256\": \"96574e14d9dc471e8525b56222cb18321e452da1e0e0ae31b3893c83d12e573f\",\n      \"offset\": 0,\n      \"end\": 142,\n      \"next_offset\": null,\n      \"content\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-C'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the third required evidence marker\\\",\\\"background\\\":false}\"\n    },\n    {\n      \"message_id\": \"msg_g0VX6Q7wM00PsRmJT9Xr\",\n      \"part_id\": \"prt_g0VX6Q9Ld00lKBUEWKsy\",\n      \"call_id\": \"call_GM8OOF1VPSqcnfqh5PmIVyKh\",\n      \"tool_name\": \"bash\",\n      \"status\": \"completed\",\n      \"field\": \"output\",\n      \"source\": \"message-part-output\",\n      \"redacted\": false,\n      \"total_chars\": 20,\n      \"sha256\": \"169ef0109652d2b798dcf7f5788b946ec209b413e34f8ee15c91da552c695ae3\",\n      \"offset\": 0,\n      \"end\": 20,\n      \"next_offset\": null,\n      \"content\": \"READER-b9c3aad68b-C\\n\"\n    },\n    {\n      \"message_id\": \"msg_g0VX6Q9st00QhZy1rkOU\",\n      \"part_id\": \"prt_g0VX6QDlP00u05zqMiMJ\",\n      \"call_id\": \"call_LQ9Wigy4UdFrkc07lmuf1fR5\",\n      \"tool_name\": \"bash\",\n      \"status\": \"completed\",\n      \"field\": \"input\",\n      \"source\": \"message-part-input\",\n      \"redacted\": false,\n      \"total_chars\": 143,\n      \"sha256\": \"a29458abd4d4a74b3e0353c2f717dc49f2e7b39008315d06f6e941111e4efe9a\",\n      \"offset\": 0,\n      \"end\": 143,\n      \"next_offset\": null,\n      \"content\": \"{\\\"command\\\":\\\"printf '%s\\\\\\\\n' 'READER-b9c3aad68b-D'\\\",\\\"timeout\\\":10000,\\\"description\\\":\\\"Print the fourth required evidence marker\\\",\\\"background\\\":false}\"\n    },\n    {\n      \"message_id\": \"msg_g0VX6Q9st00QhZy1rkOU\",\n      \"part_id\": \"prt_g0VX6QDlP00u05zqMiMJ\",\n      \"call_id\": \"call_LQ9Wigy4UdFrkc07lmuf1fR5\",\n      \"tool_name\": \"bash\",\n      \"status\": \"completed\",\n      \"field\": \"output\",\n      \"source\": \"message-part-output\",\n      \"redacted\": false,\n      \"total_chars\": 20,\n      \"sha256\": \"7bb94810c3ba17d098abe2a8e6aefb4f3b2cbf04ceb094f8c0a9a38bf6863a47\",\n      \"offset\": 0,\n      \"end\": 20,\n      \"next_offset\": null,\n      \"content\": \"READER-b9c3aad68b-D\\n\"\n    }\n  ]\n}",
+        "title": "Task participant evidence",
+        "metadata": {
+          "truncated": false
+        },
+        "time": {
+          "end": 1791134720029
+        }
+      },
+      "time_created": 1791134720029
+    },
+    {
+      "id": "prt_heVVMPfrp2jIyv69k5m0",
+      "request_part_id": "prt_g0VX6Qlyz00NfI6ML8NO",
+      "data": {
+        "outcome": "completed",
+        "output": "{\n  \"messages\": [],\n  \"origins\": [\n    {\n      \"source\": {\n        \"kind\": \"dispatch_origin\",\n        \"dispatch_id\": \"art_husAc327ypgPIKyTLjdk\"\n      },\n      \"session_id\": \"ses_-zUSta1VQzzSnlhirMxu\",\n      \"message_id\": \"msg_hWtuYpNe6RikodLEf6nO\",\n      \"execution_epoch\": 1,\n      \"before_provider_step\": {\n        \"part_id\": \"prt_g0VX6QYJz00DzCSdTa7F\",\n        \"time_created\": 1791134673039\n      }\n    }\n  ],\n  \"causal_tool_reference_index\": {\n    \"complete\": true,\n    \"tool_count\": 4,\n    \"refs\": [\n      {\n        \"source\": {\n          \"kind\": \"dispatch_origin\",\n          \"dispatch_id\": \"art_husAc327ypgPIKyTLjdk\"\n        },\n        \"message_id\": \"msg_hzBHpPQUwwWAPqwETWtG\",\n        \"part_id\": \"prt_g0VX6Q1UL0035Xz5YfuB\",\n        \"tool_name\": \"dispatch_agent\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"dispatch\\\":{\\\"target\\\":\\\"base-developer\\\",\\\"work_scope\\\":{\\\"kind\\\":\\\"task\\\"},\\\"turn\\\":{\\\"kind\\\":\\\"initial\\\",\\\"workflow_subject\\\":{\\\"kind\\\":\\\"direct\\\"},\\\"use_worktree\\\":false,\\\"input\\\":{\",\n        \"input_preview_truncated\": true\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_origin\",\n          \"dispatch_id\": \"art_husAc327ypgPIKyTLjdk\"\n        },\n        \"message_id\": \"msg_hWtuYpNe6RikodLEf6nO\",\n        \"part_id\": \"prt_g0VX6QMbi00BIQy737tK\",\n        \"tool_name\": \"read_agent_message\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"sources\\\":[{\\\"kind\\\":\\\"dispatch_result\\\",\\\"message_id\\\":\\\"msg_g0VX6QEIp00dooEW4S0Q\\\"}]}\",\n        \"input_preview_truncated\": false\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_origin\",\n          \"dispatch_id\": \"art_husAc327ypgPIKyTLjdk\"\n        },\n        \"message_id\": \"msg_hWtuYpNe6RikodLEf6nO\",\n        \"part_id\": \"prt_g0VX6QOjF00vbWKvC8IZ\",\n        \"tool_name\": \"read_agent_message\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"sources\\\":[{\\\"kind\\\":\\\"dispatch_result\\\",\\\"message_id\\\":\\\"msg_g0VX6QEIp00dooEW4S0Q\\\"}],\\\"evidence_reads\\\":[{\\\"message_id\\\":\\\"msg_g0VX6Q3s400ptONOalo3\\\",\\\"part_id\\\":\\\"prt_g0VX6Q\",\n        \"input_preview_truncated\": true\n      },\n      {\n        \"source\": {\n          \"kind\": \"dispatch_origin\",\n          \"dispatch_id\": \"art_husAc327ypgPIKyTLjdk\"\n        },\n        \"message_id\": \"msg_hWtuYpNe6RikodLEf6nO\",\n        \"part_id\": \"prt_g0VX6QV8B00f6KRi1gM2\",\n        \"tool_name\": \"dispatch_agent\",\n        \"status\": \"completed\",\n        \"input_preview\": \"{\\\"dispatch\\\":{\\\"target\\\":\\\"base-tester\\\",\\\"work_scope\\\":{\\\"kind\\\":\\\"task\\\"},\\\"turn\\\":{\\\"kind\\\":\\\"initial\\\",\\\"workflow_subject\\\":{\\\"kind\\\":\\\"virtual_workflow\\\",\\\"workflow_id\\\":\\\"execution\",\n        \"input_preview_truncated\": true\n      }\n    ]\n  },\n  \"causal_tool_message_inventory\": [\n    {\n      \"source\": {\n        \"kind\": \"dispatch_origin\",\n        \"dispatch_id\": \"art_husAc327ypgPIKyTLjdk\"\n      },\n      \"session_id\": \"ses_-zUSta1VQzzSnlhirMxu\",\n      \"message_id\": \"msg_hzBHpPQUwwWAPqwETWtG\",\n      \"author\": \"orchestrator\",\n      \"time_created\": 1791134535672,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VX6Q1UL0035Xz5YfuB\",\n          \"call_id\": \"call_C7fRx22XTdfEMWvNm5BN1zM3\",\n          \"tool_name\": \"dispatch_agent\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"dispatch\\\":{\\\"target\\\":\\\"base-developer\\\",\\\"work_scope\\\":{\\\"kind\\\":\\\"task\\\"},\\\"turn\\\":{\\\"kind\\\":\\\"initial\\\",\\\"workflow_subject\\\":{\\\"kind\\\":\\\"direct\\\"},\\\"use_worktree\\\":false,\\\"input\\\":{\\\"goal_ids\\\":[],\\\"request\\\":\\\"Perform this small read-only execution task: make exact\",\n          \"input_chars\": 1061,\n          \"input_preview_truncated\": true,\n          \"stored_output_chars\": 108\n        }\n      ]\n    },\n    {\n      \"source\": {\n        \"kind\": \"dispatch_origin\",\n        \"dispatch_id\": \"art_husAc327ypgPIKyTLjdk\"\n      },\n      \"session_id\": \"ses_-zUSta1VQzzSnlhirMxu\",\n      \"message_id\": \"msg_hWtuYpNe6RikodLEf6nO\",\n      \"author\": \"orchestrator\",\n      \"time_created\": 1791134618446,\n      \"tool_facts\": [\n        {\n          \"part_id\": \"prt_g0VX6QMbi00BIQy737tK\",\n          \"call_id\": \"call_QRIMWvYmKE2isD5LK3zUBzKB\",\n          \"tool_name\": \"read_agent_message\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"sources\\\":[{\\\"kind\\\":\\\"dispatch_result\\\",\\\"message_id\\\":\\\"msg_g0VX6QEIp00dooEW4S0Q\\\"}]}\",\n          \"input_chars\": 80,\n          \"input_preview_truncated\": false,\n          \"stored_output_chars\": 6918\n        },\n        {\n          \"part_id\": \"prt_g0VX6QOjF00vbWKvC8IZ\",\n          \"call_id\": \"call_K3Csrt73dYj6sDABq6ewzZ75\",\n          \"tool_name\": \"read_agent_message\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"sources\\\":[{\\\"kind\\\":\\\"dispatch_result\\\",\\\"message_id\\\":\\\"msg_g0VX6QEIp00dooEW4S0Q\\\"}],\\\"evidence_reads\\\":[{\\\"message_id\\\":\\\"msg_g0VX6Q3s400ptONOalo3\\\",\\\"part_id\\\":\\\"prt_g0VX6Q5Un00lAUuelYJE\\\",\\\"field\\\":\\\"input\\\",\\\"offset\\\":0,\\\"limit\\\":1000},{\\\"message_id\\\":\\\"msg_g0VX\",\n          \"input_chars\": 1055,\n          \"input_preview_truncated\": true,\n          \"stored_output_chars\": 11574\n        },\n        {\n          \"part_id\": \"prt_g0VX6QV8B00f6KRi1gM2\",\n          \"call_id\": \"call_C5w7ex0yjKMz0KxZIeys6U8W\",\n          \"tool_name\": \"dispatch_agent\",\n          \"status\": \"completed\",\n          \"input_preview\": \"{\\\"dispatch\\\":{\\\"target\\\":\\\"base-tester\\\",\\\"work_scope\\\":{\\\"kind\\\":\\\"task\\\"},\\\"turn\\\":{\\\"kind\\\":\\\"initial\\\",\\\"workflow_subject\\\":{\\\"kind\\\":\\\"virtual_workflow\\\",\\\"workflow_id\\\":\\\"execution-verification\\\",\\\"node_id\\\":\\\"base-tester\\\"},\\\"use_worktree\\\":false,\\\"input\\\":{\\\"goal_ids\\\"\",\n          \"input_chars\": 1952,\n          \"input_preview_truncated\": true,\n          \"stored_output_chars\": 585\n        }\n      ]\n    }\n  ],\n  \"inventory_next_before\": [],\n  \"evidence_reads\": [\n    {\n      \"message_id\": \"msg_hWtuYpNe6RikodLEf6nO\",\n      \"part_id\": \"prt_g0VX6QOjF00vbWKvC8IZ\",\n      \"call_id\": \"call_K3Csrt73dYj6sDABq6ewzZ75\",\n      \"tool_name\": \"read_agent_message\",\n      \"status\": \"completed\",\n      \"field\": \"input\",\n      \"source\": \"message-part-input\",\n      \"redacted\": false,\n      \"total_chars\": 1055,\n      \"sha256\": \"77d950d68f52a664a00366e5069ea6cbf8ba414cd2dbc915b4c43f3f8dbc702d\",\n      \"offset\": 0,\n      \"end\": 1055,\n      \"next_offset\": null,\n      \"content\": \"{\\\"sources\\\":[{\\\"kind\\\":\\\"dispatch_result\\\",\\\"message_id\\\":\\\"msg_g0VX6QEIp00dooEW4S0Q\\\"}],\\\"evidence_reads\\\":[{\\\"message_id\\\":\\\"msg_g0VX6Q3s400ptONOalo3\\\",\\\"part_id\\\":\\\"prt_g0VX6Q5Un00lAUuelYJE\\\",\\\"field\\\":\\\"input\\\",\\\"offset\\\":0,\\\"limit\\\":1000},{\\\"message_id\\\":\\\"msg_g0VX6Q3s400ptONOalo3\\\",\\\"part_id\\\":\\\"prt_g0VX6Q5Un00lAUuelYJE\\\",\\\"field\\\":\\\"output\\\",\\\"offset\\\":0,\\\"limit\\\":1000},{\\\"message_id\\\":\\\"msg_g0VX6Q64H00FUPVfvv18\\\",\\\"part_id\\\":\\\"prt_g0VX6Q7IV00wiVgs23mo\\\",\\\"field\\\":\\\"input\\\",\\\"offset\\\":0,\\\"limit\\\":1000},{\\\"message_id\\\":\\\"msg_g0VX6Q64H00FUPVfvv18\\\",\\\"part_id\\\":\\\"prt_g0VX6Q7IV00wiVgs23mo\\\",\\\"field\\\":\\\"output\\\",\\\"offset\\\":0,\\\"limit\\\":1000},{\\\"message_id\\\":\\\"msg_g0VX6Q7wM00PsRmJT9Xr\\\",\\\"part_id\\\":\\\"prt_g0VX6Q9Ld00lKBUEWKsy\\\",\\\"field\\\":\\\"input\\\",\\\"offset\\\":0,\\\"limit\\\":1000},{\\\"message_id\\\":\\\"msg_g0VX6Q7wM00PsRmJT9Xr\\\",\\\"part_id\\\":\\\"prt_g0VX6Q9Ld00lKBUEWKsy\\\",\\\"field\\\":\\\"output\\\",\\\"offset\\\":0,\\\"limit\\\":1000},{\\\"message_id\\\":\\\"msg_g0VX6Q9st00QhZy1rkOU\\\",\\\"part_id\\\":\\\"prt_g0VX6QDlP00u05zqMiMJ\\\",\\\"field\\\":\\\"input\\\",\\\"offset\\\":0,\\\"limit\\\":1000},{\\\"message_id\\\":\\\"msg_g0VX6Q9st00QhZy1rkOU\\\",\\\"part_id\\\":\\\"prt_g0VX6QDlP00u05zqMiMJ\\\",\\\"field\\\":\\\"output\\\",\\\"offset\\\":0,\\\"limit\\\":1000}]}\"\n    },\n    {\n      \"message_id\": \"msg_hWtuYpNe6RikodLEf6nO\",\n      \"part_id\": \"prt_g0VX6QOjF00vbWKvC8IZ\",\n      \"call_id\": \"call_K3Csrt73dYj6sDABq6ewzZ75\",\n      \"tool_name\": \"read_agent_message\",\n      \"status\": \"completed\",\n      \"field\": \"output\",\n      \"source\": \"message-part-output\",\n      \"redacted\": false,\n      \"total_chars\": 11574,\n      \"sha256\": \"92d32eb466719f409d8b4c77a3cc5ff246fdeab36be3666e9a2c1e9e47f9159a\",\n      \"offset\": 0,\n      \"end\": 11574,\n      \"next_offset\": null,\n      \"content\": \"{\\n  \\\"messages\\\": [\\n    {\\n      \\\"source\\\": {\\n        \\\"kind\\\": \\\"dispatch_result\\\",\\n        \\\"message_id\\\": \\\"msg_g0VX6QEIp00dooEW4S0Q\\\"\\n      },\\n      \\\"session_id\\\": \\\"ses_h127B5KOCT7PMrjafAot\\\",\\n      \\\"message_id\\\": \\\"msg_g0VX6QEIp00dooEW4S0Q\\\",\\n      \\\"role\\\": \\\"assistant\\\",\\n      \\\"author\\\": \\\"base-developer\\\",\\n      \\\"finish\\\": \\\"stop\\\",\\n      \\\"time_completed\\\": 1791134616304,\\n      \\\"text\\\": [\\n        \\\"Executed exactly four separate shell calls, without reruns:\\\\n\\\\n| Original command | Observed output |\\\\n|---|---|\\\\n| `printf '%s\\\\\\\\n' 'READER-b9c3aad68b-A'` | `READER-b9c3aad68b-A` |\\\\n| `printf '%s\\\\\\\\n' 'READER-b9c3aad68b-B'` | `READER-b9c3aad68b-B` |\\\\n| `printf '%s\\\\\\\\n' 'READER-b9c3aad68b-C'` | `READER-b9c3aad68b-C` |\\\\n| `printf '%s\\\\\\\\n' 'READER-b9c3aad68b-D'` | `READER-b9c3aad68b-D` |\\\\n\\\\nEach call printed only its required marker. No repository files were read or written, no deliverable files were created, and no business state was mutated.\\\\n\\\\n**Execution is finished; overall verification remains pending.** The coordinator must inspect this worker’s settled `dispatch_result`, discover the actual producing Message/Part identities, and retrieve all eight historical input/output fields in one `evidence_reads` call. Those identities are not exposed in the shell results above, so I have not invented references or claimed Task completion.\\\"\\n      ],\\n      \\\"tool_facts_complete\\\": true,\\n      \\\"tool_facts\\\": []\\n    }\\n  ],\\n  \\\"origins\\\": [],\\n  \\\"causal_tool_reference_index\\\": {\\n    \\\"complete\\\": true,\\n    \\\"tool_count\\\": 4,\\n    \\\"refs\\\": [\\n      {\\n        \\\"source\\\": {\\n          \\\"kind\\\": \\\"dispatch_result\\\",\\n          \\\"message_id\\\": \\\"msg_g0VX6QEIp00dooEW4S0Q\\\"\\n        },\\n        \\\"message_id\\\": \\\"msg_g0VX6Q3s400ptONOalo3\\\",\\n        \\\"part_id\\\": \\\"prt_g0VX6Q5Un00lAUuelYJE\\\",\\n        \\\"tool_name\\\": \\\"bash\\\",\\n        \\\"status\\\": \\\"completed\\\",\\n        \\\"input_preview\\\": \\\"{\\\\\\\"command\\\\\\\":\\\\\\\"printf '%s\\\\\\\\\\\\\\\\n' 'READER-b9c3aad68b-A'\\\\\\\",\\\\\\\"timeout\\\\\\\":10000,\\\\\\\"description\\\\\\\":\\\\\\\"Print the first required evidence marker\\\\\\\",\\\\\\\"background\\\\\\\":false}\\\",\\n        \\\"input_preview_truncated\\\": false\\n      },\\n      {\\n        \\\"source\\\": {\\n          \\\"kind\\\": \\\"dispatch_result\\\",\\n          \\\"message_id\\\": \\\"msg_g0VX6QEIp00dooEW4S0Q\\\"\\n        },\\n        \\\"message_id\\\": \\\"msg_g0VX6Q64H00FUPVfvv18\\\",\\n        \\\"part_id\\\": \\\"prt_g0VX6Q7IV00wiVgs23mo\\\",\\n        \\\"tool_name\\\": \\\"bash\\\",\\n        \\\"status\\\": \\\"completed\\\",\\n        \\\"input_preview\\\": \\\"{\\\\\\\"command\\\\\\\":\\\\\\\"printf '%s\\\\\\\\\\\\\\\\n' 'READER-b9c3aad68b-B'\\\\\\\",\\\\\\\"timeout\\\\\\\":10000,\\\\\\\"description\\\\\\\":\\\\\\\"Print the second required evidence marker\\\\\\\",\\\\\\\"background\\\\\\\":false}\\\",\\n        \\\"input_preview_truncated\\\": false\\n      },\\n      {\\n        \\\"source\\\": {\\n          \\\"kind\\\": \\\"dispatch_result\\\",\\n          \\\"message_id\\\": \\\"msg_g0VX6QEIp00dooEW4S0Q\\\"\\n        },\\n        \\\"message_id\\\": \\\"msg_g0VX6Q7wM00PsRmJT9Xr\\\",\\n        \\\"part_id\\\": \\\"prt_g0VX6Q9Ld00lKBUEWKsy\\\",\\n        \\\"tool_name\\\": \\\"bash\\\",\\n        \\\"status\\\": \\\"completed\\\",\\n        \\\"input_preview\\\": \\\"{\\\\\\\"command\\\\\\\":\\\\\\\"printf '%s\\\\\\\\\\\\\\\\n' 'READER-b9c3aad68b-C'\\\\\\\",\\\\\\\"timeout\\\\\\\":10000,\\\\\\\"description\\\\\\\":\\\\\\\"Print the third required evidence marker\\\\\\\",\\\\\\\"background\\\\\\\":false}\\\",\\n        \\\"input_preview_truncated\\\": false\\n      },\\n      {\\n        \\\"source\\\": {\\n          \\\"kind\\\": \\\"dispatch_result\\\",\\n          \\\"message_id\\\": \\\"msg_g0VX6QEIp00dooEW4S0Q\\\"\\n        },\\n        \\\"message_id\\\": \\\"msg_g0VX6Q9st00QhZy1rkOU\\\",\\n        \\\"part_id\\\": \\\"prt_g0VX6QDlP00u05zqMiMJ\\\",\\n        \\\"tool_name\\\": \\\"bash\\\",\\n        \\\"status\\\": \\\"completed\\\",\\n        \\\"input_preview\\\": \\\"{\\\\\\\"command\\\\\\\":\\\\\\\"printf '%s\\\\\\\\\\\\\\\\n' 'READER-b9c3aad68b-D'\\\\\\\",\\\\\\\"timeout\\\\\\\":10000,\\\\\\\"description\\\\\\\":\\\\\\\"Print the fourth required evidence marker\\\\\\\",\\\\\\\"background\\\\\\\":false}\\\",\\n        \\\"input_preview_truncated\\\": false\\n      }\\n    ]\\n  },\\n  \\\"causal_tool_message_inventory\\\": [\\n    {\\n      \\\"source\\\": {\\n        \\\"kind\\\": \\\"dispatch_result\\\",\\n        \\\"message_id\\\": \\\"msg_g0VX6QEIp00dooEW4S0Q\\\"\\n      },\\n      \\\"session_id\\\": \\\"ses_h127B5KOCT7PMrjafAot\\\",\\n      \\\"message_id\\\": \\\"msg_g0VX6Q3s400ptONOalo3\\\",\\n      \\\"author\\\": \\\"base-developer\\\",\\n      \\\"time_created\\\": 1791134555988,\\n      \\\"tool_facts\\\": [\\n        {\\n          \\\"part_id\\\": \\\"prt_g0VX6Q5Un00lAUuelYJE\\\",\\n          \\\"call_id\\\": \\\"call_0CK90UcapW6DxmKpXFzvDdn1\\\",\\n          \\\"tool_name\\\": \\\"bash\\\",\\n          \\\"status\\\": \\\"completed\\\",\\n          \\\"input_preview\\\": \\\"{\\\\\\\"command\\\\\\\":\\\\\\\"printf '%s\\\\\\\\\\\\\\\\n' 'READER-b9c3aad68b-A'\\\\\\\",\\\\\\\"timeout\\\\\\\":10000,\\\\\\\"description\\\\\\\":\\\\\\\"Print the first required evidence marker\\\\\\\",\\\\\\\"background\\\\\\\":false}\\\",\\n          \\\"input_chars\\\": 142,\\n          \\\"input_preview_truncated\\\": false,\\n          \\\"stored_output_chars\\\": 20\\n        }\\n      ]\\n    },\\n    {\\n      \\\"source\\\": {\\n        \\\"kind\\\": \\\"dispatch_result\\\",\\n        \\\"message_id\\\": \\\"msg_g0VX6QEIp00dooEW4S0Q\\\"\\n      },\\n      \\\"session_id\\\": \\\"ses_h127B5KOCT7PMrjafAot\\\",\\n      \\\"message_id\\\": \\\"msg_g0VX6Q64H00FUPVfvv18\\\",\\n      \\\"author\\\": \\\"base-developer\\\",\\n      \\\"time_created\\\": 1791134564433,\\n      \\\"tool_facts\\\": [\\n        {\\n          \\\"part_id\\\": \\\"prt_g0VX6Q7IV00wiVgs23mo\\\",\\n          \\\"call_id\\\": \\\"call_YiwGMriSFQhcWsSNYyc8bmDo\\\",\\n          \\\"tool_name\\\": \\\"bash\\\",\\n          \\\"status\\\": \\\"completed\\\",\\n          \\\"input_preview\\\": \\\"{\\\\\\\"command\\\\\\\":\\\\\\\"printf '%s\\\\\\\\\\\\\\\\n' 'READER-b9c3aad68b-B'\\\\\\\",\\\\\\\"timeout\\\\\\\":10000,\\\\\\\"description\\\\\\\":\\\\\\\"Print the second required evidence marker\\\\\\\",\\\\\\\"background\\\\\\\":false}\\\",\\n          \\\"input_chars\\\": 143,\\n          \\\"input_preview_truncated\\\": false,\\n          \\\"stored_output_chars\\\": 20\\n        }\\n      ]\\n    },\\n    {\\n      \\\"source\\\": {\\n        \\\"kind\\\": \\\"dispatch_result\\\",\\n        \\\"message_id\\\": \\\"msg_g0VX6QEIp00dooEW4S0Q\\\"\\n      },\\n      \\\"session_id\\\": \\\"ses_h127B5KOCT7PMrjafAot\\\",\\n      \\\"message_id\\\": \\\"msg_g0VX6Q7wM00PsRmJT9Xr\\\",\\n      \\\"author\\\": \\\"base-developer\\\",\\n      \\\"time_created\\\": 1791134571630,\\n      \\\"tool_facts\\\": [\\n        {\\n          \\\"part_id\\\": \\\"prt_g0VX6Q9Ld00lKBUEWKsy\\\",\\n          \\\"call_id\\\": \\\"call_GM8OOF1VPSqcnfqh5PmIVyKh\\\",\\n          \\\"tool_name\\\": \\\"bash\\\",\\n          \\\"status\\\": \\\"completed\\\",\\n          \\\"input_preview\\\": \\\"{\\\\\\\"command\\\\\\\":\\\\\\\"printf '%s\\\\\\\\\\\\\\\\n' 'READER-b9c3aad68b-C'\\\\\\\",\\\\\\\"timeout\\\\\\\":10000,\\\\\\\"description\\\\\\\":\\\\\\\"Print the third required evidence marker\\\\\\\",\\\\\\\"background\\\\\\\":false}\\\",\\n          \\\"input_chars\\\": 142,\\n          \\\"input_preview_truncated\\\": false,\\n          \\\"stored_output_chars\\\": 20\\n        }\\n      ]\\n    },\\n    {\\n      \\\"source\\\": {\\n        \\\"kind\\\": \\\"dispatch_result\\\",\\n        \\\"message_id\\\": \\\"msg_g0VX6QEIp00dooEW4S0Q\\\"\\n      },\\n      \\\"session_id\\\": \\\"ses_h127B5KOCT7PMrjafAot\\\",\\n      \\\"message_id\\\": \\\"msg_g0VX6Q9st00QhZy1rkOU\\\",\\n      \\\"author\\\": \\\"base-developer\\\",\\n      \\\"time_created\\\": 1791134579103,\\n      \\\"tool_facts\\\": [\\n        {\\n          \\\"part_id\\\": \\\"prt_g0VX6QDlP00u05zqMiMJ\\\",\\n          \\\"call_id\\\": \\\"call_LQ9Wigy4UdFrkc07lmuf1fR5\\\",\\n          \\\"tool_name\\\": \\\"bash\\\",\\n          \\\"status\\\": \\\"completed\\\",\\n          \\\"input_preview\\\": \\\"{\\\\\\\"command\\\\\\\":\\\\\\\"printf '%s\\\\\\\\\\\\\\\\n' 'READER-b9c3aad68b-D'\\\\\\\",\\\\\\\"timeout\\\\\\\":10000,\\\\\\\"description\\\\\\\":\\\\\\\"Print the fourth required evidence marker\\\\\\\",\\\\\\\"background\\\\\\\":false}\\\",\\n          \\\"input_chars\\\": 143,\\n          \\\"input_preview_truncated\\\": false,\\n          \\\"stored_output_chars\\\": 20\\n        }\\n      ]\\n    }\\n  ],\\n  \\\"inventory_next_before\\\": [],\\n  \\\"evidence_reads\\\": [\\n    {\\n      \\\"message_id\\\": \\\"msg_g0VX6Q3s400ptONOalo3\\\",\\n      \\\"part_id\\\": \\\"prt_g0VX6Q5Un00lAUuelYJE\\\",\\n      \\\"call_id\\\": \\\"call_0CK90UcapW6DxmKpXFzvDdn1\\\",\\n      \\\"tool_name\\\": \\\"bash\\\",\\n      \\\"status\\\": \\\"completed\\\",\\n      \\\"field\\\": \\\"input\\\",\\n      \\\"source\\\": \\\"message-part-input\\\",\\n      \\\"redacted\\\": false,\\n      \\\"total_chars\\\": 142,\\n      \\\"sha256\\\": \\\"ce103e87ccec27e9e99aef8e97b3808a8dd2d7fccc18d1c00966f3cf9ae5b971\\\",\\n      \\\"offset\\\": 0,\\n      \\\"end\\\": 142,\\n      \\\"next_offset\\\": null,\\n      \\\"content\\\": \\\"{\\\\\\\"command\\\\\\\":\\\\\\\"printf '%s\\\\\\\\\\\\\\\\n' 'READER-b9c3aad68b-A'\\\\\\\",\\\\\\\"timeout\\\\\\\":10000,\\\\\\\"description\\\\\\\":\\\\\\\"Print the first required evidence marker\\\\\\\",\\\\\\\"background\\\\\\\":false}\\\"\\n    },\\n    {\\n      \\\"message_id\\\": \\\"msg_g0VX6Q3s400ptONOalo3\\\",\\n      \\\"part_id\\\": \\\"prt_g0VX6Q5Un00lAUuelYJE\\\",\\n      \\\"call_id\\\": \\\"call_0CK90UcapW6DxmKpXFzvDdn1\\\",\\n      \\\"tool_name\\\": \\\"bash\\\",\\n      \\\"status\\\": \\\"completed\\\",\\n      \\\"field\\\": \\\"output\\\",\\n      \\\"source\\\": \\\"message-part-output\\\",\\n      \\\"redacted\\\": false,\\n      \\\"total_chars\\\": 20,\\n      \\\"sha256\\\": \\\"122d74e7bec82efe224721b404123c0a2c5724fa0e1e91abb6b21e0260c0d300\\\",\\n      \\\"offset\\\": 0,\\n      \\\"end\\\": 20,\\n      \\\"next_offset\\\": null,\\n      \\\"content\\\": \\\"READER-b9c3aad68b-A\\\\n\\\"\\n    },\\n    {\\n      \\\"message_id\\\": \\\"msg_g0VX6Q64H00FUPVfvv18\\\",\\n      \\\"part_id\\\": \\\"prt_g0VX6Q7IV00wiVgs23mo\\\",\\n      \\\"call_id\\\": \\\"call_YiwGMriSFQhcWsSNYyc8bmDo\\\",\\n      \\\"tool_name\\\": \\\"bash\\\",\\n      \\\"status\\\": \\\"completed\\\",\\n      \\\"field\\\": \\\"input\\\",\\n      \\\"source\\\": \\\"message-part-input\\\",\\n      \\\"redacted\\\": false,\\n      \\\"total_chars\\\": 143,\\n      \\\"sha256\\\": \\\"ed055df67a44b003975b6d9af63ce476e601abeb84988a7dd35ed9f44eca627a\\\",\\n      \\\"offset\\\": 0,\\n      \\\"end\\\": 143,\\n      \\\"next_offset\\\": null,\\n      \\\"content\\\": \\\"{\\\\\\\"command\\\\\\\":\\\\\\\"printf '%s\\\\\\\\\\\\\\\\n' 'READER-b9c3aad68b-B'\\\\\\\",\\\\\\\"timeout\\\\\\\":10000,\\\\\\\"description\\\\\\\":\\\\\\\"Print the second required evidence marker\\\\\\\",\\\\\\\"background\\\\\\\":false}\\\"\\n    },\\n    {\\n      \\\"message_id\\\": \\\"msg_g0VX6Q64H00FUPVfvv18\\\",\\n      \\\"part_id\\\": \\\"prt_g0VX6Q7IV00wiVgs23mo\\\",\\n      \\\"call_id\\\": \\\"call_YiwGMriSFQhcWsSNYyc8bmDo\\\",\\n      \\\"tool_name\\\": \\\"bash\\\",\\n      \\\"status\\\": \\\"completed\\\",\\n      \\\"field\\\": \\\"output\\\",\\n      \\\"source\\\": \\\"message-part-output\\\",\\n      \\\"redacted\\\": false,\\n      \\\"total_chars\\\": 20,\\n      \\\"sha256\\\": \\\"a8d16ba9142703ae1aa1c70caa060406e289c5f06c69619a46443c7eed1e2964\\\",\\n      \\\"offset\\\": 0,\\n      \\\"end\\\": 20,\\n      \\\"next_offset\\\": null,\\n      \\\"content\\\": \\\"READER-b9c3aad68b-B\\\\n\\\"\\n    },\\n    {\\n      \\\"message_id\\\": \\\"msg_g0VX6Q7wM00PsRmJT9Xr\\\",\\n      \\\"part_id\\\": \\\"prt_g0VX6Q9Ld00lKBUEWKsy\\\",\\n      \\\"call_id\\\": \\\"call_GM8OOF1VPSqcnfqh5PmIVyKh\\\",\\n      \\\"tool_name\\\": \\\"bash\\\",\\n      \\\"status\\\": \\\"completed\\\",\\n      \\\"field\\\": \\\"input\\\",\\n      \\\"source\\\": \\\"message-part-input\\\",\\n      \\\"redacted\\\": false,\\n      \\\"total_chars\\\": 142,\\n      \\\"sha256\\\": \\\"96574e14d9dc471e8525b56222cb18321e452da1e0e0ae31b3893c83d12e573f\\\",\\n      \\\"offset\\\": 0,\\n      \\\"end\\\": 142,\\n      \\\"next_offset\\\": null,\\n      \\\"content\\\": \\\"{\\\\\\\"command\\\\\\\":\\\\\\\"printf '%s\\\\\\\\\\\\\\\\n' 'READER-b9c3aad68b-C'\\\\\\\",\\\\\\\"timeout\\\\\\\":10000,\\\\\\\"description\\\\\\\":\\\\\\\"Print the third required evidence marker\\\\\\\",\\\\\\\"background\\\\\\\":false}\\\"\\n    },\\n    {\\n      \\\"message_id\\\": \\\"msg_g0VX6Q7wM00PsRmJT9Xr\\\",\\n      \\\"part_id\\\": \\\"prt_g0VX6Q9Ld00lKBUEWKsy\\\",\\n      \\\"call_id\\\": \\\"call_GM8OOF1VPSqcnfqh5PmIVyKh\\\",\\n      \\\"tool_name\\\": \\\"bash\\\",\\n      \\\"status\\\": \\\"completed\\\",\\n      \\\"field\\\": \\\"output\\\",\\n      \\\"source\\\": \\\"message-part-output\\\",\\n      \\\"redacted\\\": false,\\n      \\\"total_chars\\\": 20,\\n      \\\"sha256\\\": \\\"169ef0109652d2b798dcf7f5788b946ec209b413e34f8ee15c91da552c695ae3\\\",\\n      \\\"offset\\\": 0,\\n      \\\"end\\\": 20,\\n      \\\"next_offset\\\": null,\\n      \\\"content\\\": \\\"READER-b9c3aad68b-C\\\\n\\\"\\n    },\\n    {\\n      \\\"message_id\\\": \\\"msg_g0VX6Q9st00QhZy1rkOU\\\",\\n      \\\"part_id\\\": \\\"prt_g0VX6QDlP00u05zqMiMJ\\\",\\n      \\\"call_id\\\": \\\"call_LQ9Wigy4UdFrkc07lmuf1fR5\\\",\\n      \\\"tool_name\\\": \\\"bash\\\",\\n      \\\"status\\\": \\\"completed\\\",\\n      \\\"field\\\": \\\"input\\\",\\n      \\\"source\\\": \\\"message-part-input\\\",\\n      \\\"redacted\\\": false,\\n      \\\"total_chars\\\": 143,\\n      \\\"sha256\\\": \\\"a29458abd4d4a74b3e0353c2f717dc49f2e7b39008315d06f6e941111e4efe9a\\\",\\n      \\\"offset\\\": 0,\\n      \\\"end\\\": 143,\\n      \\\"next_offset\\\": null,\\n      \\\"content\\\": \\\"{\\\\\\\"command\\\\\\\":\\\\\\\"printf '%s\\\\\\\\\\\\\\\\n' 'READER-b9c3aad68b-D'\\\\\\\",\\\\\\\"timeout\\\\\\\":10000,\\\\\\\"description\\\\\\\":\\\\\\\"Print the fourth required evidence marker\\\\\\\",\\\\\\\"background\\\\\\\":false}\\\"\\n    },\\n    {\\n      \\\"message_id\\\": \\\"msg_g0VX6Q9st00QhZy1rkOU\\\",\\n      \\\"part_id\\\": \\\"prt_g0VX6QDlP00u05zqMiMJ\\\",\\n      \\\"call_id\\\": \\\"call_LQ9Wigy4UdFrkc07lmuf1fR5\\\",\\n      \\\"tool_name\\\": \\\"bash\\\",\\n      \\\"status\\\": \\\"completed\\\",\\n      \\\"field\\\": \\\"output\\\",\\n      \\\"source\\\": \\\"message-part-output\\\",\\n      \\\"redacted\\\": false,\\n      \\\"total_chars\\\": 20,\\n      \\\"sha256\\\": \\\"7bb94810c3ba17d098abe2a8e6aefb4f3b2cbf04ceb094f8c0a9a38bf6863a47\\\",\\n      \\\"offset\\\": 0,\\n      \\\"end\\\": 20,\\n      \\\"next_offset\\\": null,\\n      \\\"content\\\": \\\"READER-b9c3aad68b-D\\\\n\\\"\\n    }\\n  ]\\n}\"\n    }\n  ]\n}",
+        "title": "Task participant evidence",
+        "metadata": {
+          "truncated": false
+        },
+        "time": {
+          "end": 1791134729706
+        }
+      },
+      "time_created": 1791134729706
+    },
+    {
+      "id": "prt_hGsPzndbH1x3rLla2azk",
+      "request_part_id": "prt_g0VX6R05G00Q4szLmpRI",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hS8230OfQRxBMf9ZGJLJ",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1791134781080
+        }
+      },
+      "time_created": 1791134781080
+    },
+    {
+      "id": "prt_hwIqh5bLzUdlLdcF6RZj",
+      "request_part_id": "prt_g0VX6R2wa00whMelX5ho",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_h9JK6jaBIkYl1Cbzs1xQ",
+        "title": "",
+        "metadata": {},
+        "time": {
+          "end": 1791134795513
+        }
+      },
+      "time_created": 1791134795513
+    },
+    {
+      "id": "prt_hIiL82gA7wCUWlZuIvcM",
+      "request_part_id": "prt_g0VX6RCJi00z4HjRef4o",
+      "data": {
+        "outcome": "completed",
+        "resultAttemptID": "per_h48k02gAjdEaPEyiLusN",
+        "title": "Task Completed",
+        "metadata": {
+          "opencorvusToolResultControl": {
+            "kind": "immediate_park"
+          }
+        },
+        "time": {
+          "end": 1791134856421
+        }
+      },
+      "time_created": 1791134856421
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "art_g0VX6PxhG0018slg53hj",
+      "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+      "kind": "task_package_revision_binding",
+      "label": "Task package revision binding",
+      "payload": {
+        "protocol": "task-package-revision-binding-v1",
+        "package_revision": {
+          "scope": "built_in",
+          "project_id": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.09.30.1",
+          "package_digest": "f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"
+        },
+        "creation_expected_package_digest": null,
+        "time_created": 1791134531732
+      },
+      "payload_sha256": "08456d85ad8636aacaf23640c943666a3c3ba658c16305de5f99e57efb6e7f50",
+      "payload_bytes": 317,
+      "payload_block_sha256s": [
+        "08456d85ad8636aacaf23640c943666a3c3ba658c16305de5f99e57efb6e7f50"
+      ],
+      "payload_block_index_sha256": "32f9f9f21b263a0490fa677b7c167f6aa31e197ab73ee410b611d800504d275b",
+      "catalog_artifact_type": "opencorvus/core/task_package_revision_binding",
+      "catalog_schema_diagnostic": null,
+      "catalog_producer": {
+        "owner_kind": "core",
+        "component_id": "engine-artifact",
+        "operation_id": "task_package_revision_binding"
+      },
+      "catalog_import_source_task_id": null,
+      "catalog_resource_count": 0,
+      "catalog_resource_media_types": [],
+      "catalog_search_text": "opencorvus/core/task_package_revision_binding\nengine-artifact\ntask_package_revision_binding",
+      "catalog_search_text_truncated": false,
+      "catalog_metadata_sha256": "ce61ee95654d1cfc43da973101be1850c03af7e3f81911089297e485dfc09586",
+      "catalog_revision": 1,
+      "time_created": 1791134531732,
+      "time_updated": 1791134531732
+    },
+    {
+      "id": "art_g0VX6PxhZ005vDu6iMAK",
+      "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+      "kind": "task_execution_capsule_binding",
+      "label": "Task process authority binding",
+      "payload": {
+        "protocol": "task-native-process-binding-v2",
+        "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+        "project_id": "prj_hzDecRRxKY4SlqVidVkS",
+        "package_revision_sha256": "f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf",
+        "mode": "native",
+        "logical_workspace_root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project",
+        "workspace_root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pKZb5N\\runner-21324-dsllrI\\runtime-root\\tmp\\opencorvus-evidence-reader-e2e-Wwlbro\\project",
+        "initial_tree_sha256": "fd4b56572735ed944c4c779a7857b4a138c7ce9defeade5a01110e9277522669",
+        "time_created": 1791134531732
+      },
+      "payload_sha256": "24ca9d981945ceca1a2b9d789bbc44d5942b94d1cc40394931ac9620635f442d",
+      "payload_bytes": 705,
+      "payload_block_sha256s": [
+        "24ca9d981945ceca1a2b9d789bbc44d5942b94d1cc40394931ac9620635f442d"
+      ],
+      "payload_block_index_sha256": "9e56a9d243333e06059034f237b80d4ca858f270b75b1dc79924f8347c260e0f",
+      "catalog_artifact_type": "opencorvus/core/task_execution_capsule_binding",
+      "catalog_schema_diagnostic": null,
+      "catalog_producer": {
+        "owner_kind": "core",
+        "component_id": "engine-artifact",
+        "operation_id": "task_execution_capsule_binding"
+      },
+      "catalog_import_source_task_id": null,
+      "catalog_resource_count": 0,
+      "catalog_resource_media_types": [],
+      "catalog_search_text": "opencorvus/core/task_execution_capsule_binding\nengine-artifact\ntask_execution_capsule_binding",
+      "catalog_search_text_truncated": false,
+      "catalog_metadata_sha256": "8b4b0522213a5b057f4da4f75ff565631c51fcf91a51e52b7ac32a0ffbe131e3",
+      "catalog_revision": 2,
+      "time_created": 1791134531732,
+      "time_updated": 1791134531732
+    },
+    {
+      "id": "art_g0VX6Q3RD00XJ3QVJJpx",
+      "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+      "kind": "dispatch_lineage",
+      "label": "dispatch-lineage",
+      "payload": {
+        "dispatch_id": "art_h6GQ9q4EMfjFI2kA5jYV",
+        "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+        "execution_epoch": 1,
+        "orchestrator_session_id": "ses_-zUSta1VQzzSnlhirMxu",
+        "orchestrator_message_id": "msg_hzBHpPQUwwWAPqwETWtG",
+        "tool_part_id": "prt_g0VX6Q1UL0035Xz5YfuB",
+        "tool_call_id": "call_C7fRx22XTdfEMWvNm5BN1zM3",
+        "tool_name": "dispatch_agent",
+        "child_session_id": "ses_h127B5KOCT7PMrjafAot",
+        "target_agent_id": "base-developer",
+        "projected_worker_identity": {
+          "agentID": "base-developer",
+          "baseRole": "build",
+          "sessionKind": "build",
+          "dispatchAdapterID": "build",
+          "runtimeTemplateABIVersion": 1,
+          "dispatchAdapterABIVersion": 1,
+          "projectionHash": "b0c374059bfdc2a2ca3db533672ef55dd94660a5b471335579b449d80a7ba964"
+        },
+        "work_scope": {
+          "kind": "task"
+        },
+        "delivery_slice_revision_ids": [],
+        "workflow_binding": {
+          "kind": "direct",
+          "package_revision": {
+            "scope": "built_in",
+            "project_id": null,
+            "namespace": "builtin",
+            "id": "base",
+            "version": "2026.09.30.1",
+            "package_digest": "f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"
+          }
+        },
+        "workflow_node_id": null,
+        "workflow_occurrence_id": "art_h6GQ9q4EMfjFI2kA5jYV",
+        "delivery_owner": {
+          "kind": "runtime_process",
+          "process_occurrence_id": "7d21d26b-a8be-4216-8e2e-6a7b5f5450e4"
+        },
+        "adapter_input": {
+          "goal_ids": [],
+          "request": "Perform this small read-only execution task: make exactly four separate bash Tool calls, with commands printf '%s\\n' 'READER-b9c3aad68b-A', printf '%s\\n' 'READER-b9c3aad68b-B', printf '%s\\n' 'READER-b9c3aad68b-C', and printf '%s\\n' 'READER-b9c3aad68b-D', respectively. Each must print exactly its one marker. Do not combine invocations, rerun them, read/write repository files, create deliverable files, or mutate business state. After all four calls settle, finish with an accurate report of the commands and observed outputs. The coordinator will independently inspect your settled dispatch_result via read_agent_message, discover actual Message/Part coordinates, and read eight input/output fields in one call. No artifacts or extra implementation are requested.",
+          "reason": "The request requires a real execution worker distinct from the historical-evidence reader."
+        },
+        "time_created": 1791134554323
+      },
+      "payload_sha256": "66cbc29448cdfd3fe7d7e8d1a5c20186d726cb558bab34ea6ccf17e55a2f1825",
+      "payload_bytes": 2102,
+      "payload_block_sha256s": [
+        "66cbc29448cdfd3fe7d7e8d1a5c20186d726cb558bab34ea6ccf17e55a2f1825"
+      ],
+      "payload_block_index_sha256": "a0ceef1fc886f5d3cf23edc08eba467482e8f98d93f0a074bda564a5bc9b4992",
+      "catalog_artifact_type": "opencorvus/core/dispatch_lineage",
+      "catalog_schema_diagnostic": null,
+      "catalog_producer": {
+        "owner_kind": "core",
+        "component_id": "engine-artifact",
+        "operation_id": "dispatch_lineage"
+      },
+      "catalog_import_source_task_id": null,
+      "catalog_resource_count": 0,
+      "catalog_resource_media_types": [],
+      "catalog_search_text": "opencorvus/core/dispatch_lineage\nengine-artifact\ndispatch_lineage",
+      "catalog_search_text_truncated": false,
+      "catalog_metadata_sha256": "d0a5f3dbaf7869034f7ddc6ec991614d24991b02e737f891538692fb1f8f524c",
+      "catalog_revision": 3,
+      "time_created": 1791134554323,
+      "time_updated": 1791134554323
+    },
+    {
+      "id": "art_hVUFb6jP2Kqf6cSk2F1M",
+      "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+      "kind": "task_root_ingress_disposition",
+      "label": "task-root-ingress-disposition",
+      "payload": {
+        "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+        "ingress_id": "art_h6fkSNppNodnfsIpYMIw",
+        "execution_epoch": 1,
+        "disposition": "resolved",
+        "evidence_ids": [
+          "prt_g0VX6Q1UL0035Xz5YfuB"
+        ],
+        "decision_occurrence": {
+          "assistant_message_id": "msg_hzBHpPQUwwWAPqwETWtG",
+          "control_message_id": "msg_task-root-control_art_h6fkSNppNodnfsIpYMIw_art_h6fkSNppNodnfsIpYMIw",
+          "predecessor_id": "art_h6fkSNppNodnfsIpYMIw",
+          "activation_id": "act_g0VX6Pxju0024IALOqRF"
+        },
+        "time_created": 1791134556151
+      },
+      "payload_sha256": "74f2c90003f81d57117d111e912c04bc1bbd155b7ea94e740abac690194757f2",
+      "payload_bytes": 452,
+      "payload_block_sha256s": [
+        "74f2c90003f81d57117d111e912c04bc1bbd155b7ea94e740abac690194757f2"
+      ],
+      "payload_block_index_sha256": "913dc590f337404b81fb74d1e51c29b94d2beeb20f912d29e65088eee3dba4cc",
+      "catalog_artifact_type": "opencorvus/core/task_root_ingress_disposition",
+      "catalog_schema_diagnostic": null,
+      "catalog_producer": {
+        "owner_kind": "core",
+        "component_id": "engine-artifact",
+        "operation_id": "task_root_ingress_disposition"
+      },
+      "catalog_import_source_task_id": null,
+      "catalog_resource_count": 0,
+      "catalog_resource_media_types": [],
+      "catalog_search_text": "opencorvus/core/task_root_ingress_disposition\nengine-artifact\ntask_root_ingress_disposition",
+      "catalog_search_text_truncated": false,
+      "catalog_metadata_sha256": "eab23372c0f4f721cbfefdd80b4866b35dcdb9f46f6721891c8a9503dcc8babb",
+      "catalog_revision": 4,
+      "time_created": 1791134556151,
+      "time_updated": 1791134556151
+    },
+    {
+      "id": "art_hk8f78GBEob9S1ggFlNU",
+      "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+      "kind": "build_host_observation",
+      "label": "git-workspace",
+      "payload": {
+        "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+        "session_id": "ses_h127B5KOCT7PMrjafAot",
+        "final_message_id": "msg_g0VX6QEIp00dooEW4S0Q",
+        "execution_mode": "current_project",
+        "contribution_commit_ref": null,
+        "published_commit_ref": null,
+        "primary_base_commit_ref": "e1ee4eecfd96",
+        "primary_terminal_commit_ref": "e1ee4eecfd96",
+        "diff_base_ref": "db089b836a05f2e2437eacf839714c3936149280",
+        "diff_head_ref": "db089b836a05f2e2437eacf839714c3936149280",
+        "diffs": [],
+        "observed_artifact_locators": [],
+        "source_artifact_locators": []
+      },
+      "payload_sha256": "ca576f063f680ea661726fa6449a1e09b6eec198dfc27b17852c65e934d7d19c",
+      "payload_bytes": 495,
+      "payload_block_sha256s": [
+        "ca576f063f680ea661726fa6449a1e09b6eec198dfc27b17852c65e934d7d19c"
+      ],
+      "payload_block_index_sha256": "a53c6d21aa6c3e016ffc6923452e3325f0c836744cbc5a96502026b08b7a362a",
+      "catalog_artifact_type": "opencorvus/core/build_host_observation",
+      "catalog_schema_diagnostic": null,
+      "catalog_producer": {
+        "owner_kind": "core",
+        "component_id": "engine-artifact",
+        "operation_id": "build_host_observation"
+      },
+      "catalog_import_source_task_id": null,
+      "catalog_resource_count": 0,
+      "catalog_resource_media_types": [],
+      "catalog_search_text": "opencorvus/core/build_host_observation\nengine-artifact\nbuild_host_observation",
+      "catalog_search_text_truncated": false,
+      "catalog_metadata_sha256": "ef1f66aa31e7c8dcd509bcdcf3c0d1297ad31f0ea5865aebe2525f3b6fea4538",
+      "catalog_revision": 5,
+      "time_created": 1791134618032,
+      "time_updated": 1791134618032
+    },
+    {
+      "id": "art_g0VX6QK1A00lc9S0TRVn",
+      "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+      "kind": "dispatch_settlement",
+      "label": "dispatch-settlement",
+      "payload": {
+        "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+        "dispatch_lineage_id": "art_g0VX6Q3RD00XJ3QVJJpx",
+        "dispatch_id": "art_h6GQ9q4EMfjFI2kA5jYV",
+        "session_id": "ses_h127B5KOCT7PMrjafAot",
+        "outcome": {
+          "session_id": "ses_h127B5KOCT7PMrjafAot",
+          "final_message_id": "msg_g0VX6QEIp00dooEW4S0Q",
+          "kind": "terminal_success"
+        },
+        "time_created": 1791134618055
+      },
+      "payload_sha256": "50575c63f9706d0a7c792e9270e147113c5f4fd823997463769c79e0e14eadf0",
+      "payload_bytes": 321,
+      "payload_block_sha256s": [
+        "50575c63f9706d0a7c792e9270e147113c5f4fd823997463769c79e0e14eadf0"
+      ],
+      "payload_block_index_sha256": "018bdd76c6b8a0e1ef90e2f990c8c7b8d33c5245986be230ea4000a8e101d21b",
+      "catalog_artifact_type": "opencorvus/core/dispatch_settlement",
+      "catalog_schema_diagnostic": null,
+      "catalog_producer": {
+        "owner_kind": "core",
+        "component_id": "engine-artifact",
+        "operation_id": "dispatch_settlement"
+      },
+      "catalog_import_source_task_id": null,
+      "catalog_resource_count": 0,
+      "catalog_resource_media_types": [],
+      "catalog_search_text": "opencorvus/core/dispatch_settlement\nengine-artifact\ndispatch_settlement",
+      "catalog_search_text_truncated": false,
+      "catalog_metadata_sha256": "741b62599ee401cd4124a3f73edf48f2391965c15d0206fce0f1c1a471b17532",
+      "catalog_revision": 6,
+      "time_created": 1791134618055,
+      "time_updated": 1791134618055
+    },
+    {
+      "id": "art_g0VX6QdgN00tW9TOLebj",
+      "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+      "kind": "dispatch_lineage",
+      "label": "dispatch-lineage",
+      "payload": {
+        "dispatch_id": "art_husAc327ypgPIKyTLjdk",
+        "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+        "execution_epoch": 1,
+        "orchestrator_session_id": "ses_-zUSta1VQzzSnlhirMxu",
+        "orchestrator_message_id": "msg_hWtuYpNe6RikodLEf6nO",
+        "tool_part_id": "prt_g0VX6QaP600Bh46vrkGL",
+        "tool_call_id": "call_Or5xrcMLjefuzTkSLHdiF8t8",
+        "tool_name": "dispatch_agent",
+        "child_session_id": "ses_hNWDKRvBOL2oPgyCd1Xi",
+        "target_agent_id": "base-tester",
+        "projected_worker_identity": {
+          "agentID": "base-tester",
+          "baseRole": "delegated-worker",
+          "sessionKind": "delegated-worker",
+          "dispatchAdapterID": "delegated_worker",
+          "runtimeTemplateABIVersion": 1,
+          "dispatchAdapterABIVersion": 1,
+          "projectionHash": "3cb8004fab1eb72cccea9e73d2408bbc7c3ee536dd125b9812054f2adbec1bb4"
+        },
+        "work_scope": {
+          "kind": "task"
+        },
+        "delivery_slice_revision_ids": [],
+        "workflow_binding": {
+          "kind": "direct",
+          "package_revision": {
+            "scope": "built_in",
+            "project_id": null,
+            "namespace": "builtin",
+            "id": "base",
+            "version": "2026.09.30.1",
+            "package_digest": "f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"
+          }
+        },
+        "workflow_node_id": null,
+        "workflow_occurrence_id": "art_husAc327ypgPIKyTLjdk",
+        "delivery_owner": {
+          "kind": "runtime_process",
+          "process_occurrence_id": "7d21d26b-a8be-4216-8e2e-6a7b5f5450e4"
+        },
+        "adapter_input": {
+          "goal_ids": [],
+          "instruction": "Independently verify the original request: prove actual causal Tool evidence transfer for READER-b9c3aad68b via four separate shell invocations outputting markers -A, -B, -C, -D. No repository changes or extra files. Do not execute shell commands or read repository files. Execution producer final message is msg_g0VX6QEIp00dooEW4S0Q in session ses_h127B5KOCT7PMrjafAot. Read its settled dispatch_result with production read_agent_message, discover its actual causal inventory coordinates, then in ONE evidence_reads call retrieve exactly eight chunks (input and output for each of the four bash occurrences), with explicit offsets and limits totaling at most 30000 characters. Report original commands, exact outputs including newline, all producer Message/Part references, and completeness of eight fields. Also inspect your dispatch_origin root Tool evidence to identify the coordinator's actual successful eight-field read Message and Tool Part and its arguments/result. Do not trust coordinator prose or producer narrative alone. Your final report must state your exact dispatch_result source and your own eight-field read Tool Part identity if observable (do not invent it; the coordinator can discover it from your settled report inventory). State whether every original obligation is satisfied, including distinct participants and no reruns/mutations. Publish only required internal review evidence if your contract requires it; no user deliverable file is requested.",
+          "reason": "Independent historical-evidence review is required; preserve the existing direct assignment binding and verify the successful eight-field read without rerunning commands."
+        },
+        "time_created": 1791134693647
+      },
+      "payload_sha256": "a1cc4cf977c23cbcc2d4764de17352c61ef5afdf50cac8a31b17f790502dba40",
+      "payload_bytes": 2919,
+      "payload_block_sha256s": [
+        "a1cc4cf977c23cbcc2d4764de17352c61ef5afdf50cac8a31b17f790502dba40"
+      ],
+      "payload_block_index_sha256": "13659f48adb761e136b567060ee4b84fb3e4c84633d595aa1a808786beee58ea",
+      "catalog_artifact_type": "opencorvus/core/dispatch_lineage",
+      "catalog_schema_diagnostic": null,
+      "catalog_producer": {
+        "owner_kind": "core",
+        "component_id": "engine-artifact",
+        "operation_id": "dispatch_lineage"
+      },
+      "catalog_import_source_task_id": null,
+      "catalog_resource_count": 0,
+      "catalog_resource_media_types": [],
+      "catalog_search_text": "opencorvus/core/dispatch_lineage\nengine-artifact\ndispatch_lineage",
+      "catalog_search_text_truncated": false,
+      "catalog_metadata_sha256": "95e62078ffe8587eff6b9790f1e0a5d34dd931270bc492cd1eb00121f242c9e2",
+      "catalog_revision": 7,
+      "time_created": 1791134693647,
+      "time_updated": 1791134693647
+    },
+    {
+      "id": "art_h6JXA4mhKbQLEmebsdwK",
+      "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+      "kind": "task_root_ingress_disposition",
+      "label": "task-root-ingress-disposition",
+      "payload": {
+        "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+        "ingress_id": "art_hizQQLhQoo9p7n1hPSWh",
+        "execution_epoch": 1,
+        "disposition": "resolved",
+        "evidence_ids": [
+          "prt_g0VX6QaP600Bh46vrkGL"
+        ],
+        "decision_occurrence": {
+          "assistant_message_id": "msg_hWtuYpNe6RikodLEf6nO",
+          "control_message_id": "msg_task-root-control_art_hizQQLhQoo9p7n1hPSWh_art_hizQQLhQoo9p7n1hPSWh",
+          "predecessor_id": "art_hizQQLhQoo9p7n1hPSWh",
+          "activation_id": "act_g0VX6QK1z00fNGzIRgZ3"
+        },
+        "time_created": 1791134694547
+      },
+      "payload_sha256": "0b37212da8c9bf1c5a0b85c926e57825aa763d91bb9dca2ae00d15b0ed1967ff",
+      "payload_bytes": 452,
+      "payload_block_sha256s": [
+        "0b37212da8c9bf1c5a0b85c926e57825aa763d91bb9dca2ae00d15b0ed1967ff"
+      ],
+      "payload_block_index_sha256": "fa0f69a43676afce8c6a5d6ea984cc03b269c513da34436686c5c5b8c5ca8833",
+      "catalog_artifact_type": "opencorvus/core/task_root_ingress_disposition",
+      "catalog_schema_diagnostic": null,
+      "catalog_producer": {
+        "owner_kind": "core",
+        "component_id": "engine-artifact",
+        "operation_id": "task_root_ingress_disposition"
+      },
+      "catalog_import_source_task_id": null,
+      "catalog_resource_count": 0,
+      "catalog_resource_media_types": [],
+      "catalog_search_text": "opencorvus/core/task_root_ingress_disposition\nengine-artifact\ntask_root_ingress_disposition",
+      "catalog_search_text_truncated": false,
+      "catalog_metadata_sha256": "7fb97454057434528860ff892648de7f9b57638f8dcfe3d27a50025c19edf2aa",
+      "catalog_revision": 8,
+      "time_created": 1791134694547,
+      "time_updated": 1791134694547
+    },
+    {
+      "id": "art_g0VX6QxWy00FpZAnBrhL",
+      "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+      "kind": "dispatch_settlement",
+      "label": "dispatch-settlement",
+      "payload": {
+        "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+        "dispatch_lineage_id": "art_g0VX6QdgN00tW9TOLebj",
+        "dispatch_id": "art_husAc327ypgPIKyTLjdk",
+        "session_id": "ses_hNWDKRvBOL2oPgyCd1Xi",
+        "outcome": {
+          "session_id": "ses_hNWDKRvBOL2oPgyCd1Xi",
+          "final_message_id": "msg_g0VX6Qn7B0032XgKzFrg",
+          "kind": "terminal_success"
+        },
+        "time_created": 1791134769944
+      },
+      "payload_sha256": "14962148d7df1b71d1106748c7a1ab6db59190c6bad1d50906a0f62eac25aa4b",
+      "payload_bytes": 321,
+      "payload_block_sha256s": [
+        "14962148d7df1b71d1106748c7a1ab6db59190c6bad1d50906a0f62eac25aa4b"
+      ],
+      "payload_block_index_sha256": "c52f5367d35e3ad25547a2d59c006a9273a4acf3c8522d74f89756755c238229",
+      "catalog_artifact_type": "opencorvus/core/dispatch_settlement",
+      "catalog_schema_diagnostic": null,
+      "catalog_producer": {
+        "owner_kind": "core",
+        "component_id": "engine-artifact",
+        "operation_id": "dispatch_settlement"
+      },
+      "catalog_import_source_task_id": null,
+      "catalog_resource_count": 0,
+      "catalog_resource_media_types": [],
+      "catalog_search_text": "opencorvus/core/dispatch_settlement\nengine-artifact\ndispatch_settlement",
+      "catalog_search_text_truncated": false,
+      "catalog_metadata_sha256": "4bdba5bd93a6d17357133e9cbb1699d76ac11ebf88a8a5356db054e381da36eb",
+      "catalog_revision": 9,
+      "time_created": 1791134769944,
+      "time_updated": 1791134769944
+    },
+    {
+      "id": "art_g0VX6RJVm00FxrVY8Ps3",
+      "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+      "kind": "task_completion_decision",
+      "label": "TaskCompletionDecision",
+      "payload": {
+        "orchestrator_session_id": "ses_-zUSta1VQzzSnlhirMxu",
+        "orchestrator_message_id": "msg_hsb1j3nkkb3emGKGsry4",
+        "tool_call_id": "call_BwdZCXBLaJykYMLBmNk41SR0",
+        "tool_part_id": "prt_g0VX6RCJi00z4HjRef4o",
+        "evidence_locators": [
+          {
+            "source": "session_message",
+            "session_id": "ses_h127B5KOCT7PMrjafAot",
+            "message_id": "msg_g0VX6QEIp00dooEW4S0Q"
+          },
+          {
+            "source": "session_message",
+            "session_id": "ses_h127B5KOCT7PMrjafAot",
+            "message_id": "msg_g0VX6Q3s400ptONOalo3"
+          },
+          {
+            "source": "session_message",
+            "session_id": "ses_h127B5KOCT7PMrjafAot",
+            "message_id": "msg_g0VX6Q64H00FUPVfvv18"
+          },
+          {
+            "source": "session_message",
+            "session_id": "ses_h127B5KOCT7PMrjafAot",
+            "message_id": "msg_g0VX6Q7wM00PsRmJT9Xr"
+          },
+          {
+            "source": "session_message",
+            "session_id": "ses_h127B5KOCT7PMrjafAot",
+            "message_id": "msg_g0VX6Q9st00QhZy1rkOU"
+          },
+          {
+            "source": "session_message",
+            "session_id": "ses_hNWDKRvBOL2oPgyCd1Xi",
+            "message_id": "msg_g0VX6Qn7B0032XgKzFrg"
+          },
+          {
+            "source": "session_message",
+            "session_id": "ses_hNWDKRvBOL2oPgyCd1Xi",
+            "message_id": "msg_g0VX6QfoR00OyVoS8C5p"
+          },
+          {
+            "source": "session_message",
+            "session_id": "ses_-zUSta1VQzzSnlhirMxu",
+            "message_id": "msg_hWtuYpNe6RikodLEf6nO"
+          },
+          {
+            "source": "session",
+            "session_id": "ses_-zUSta1VQzzSnlhirMxu"
+          }
+        ],
+        "deliverable_artifact_locators": [],
+        "terminal_workflow_artifact_locators": [],
+        "accepted_delivery_slice_revision_ids": [],
+        "workflow_binding": {
+          "kind": "direct",
+          "package_revision": {
+            "scope": "built_in",
+            "project_id": null,
+            "namespace": "builtin",
+            "id": "base",
+            "version": "2026.09.30.1",
+            "package_digest": "f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"
+          }
+        },
+        "time_recorded": 1791134854434
+      },
+      "payload_sha256": "1c34fc12fadd21d1ed5ccea3f4288ae7fb1e2a484f76b2465e93601c9748e5ca",
+      "payload_bytes": 1537,
+      "payload_block_sha256s": [
+        "1c34fc12fadd21d1ed5ccea3f4288ae7fb1e2a484f76b2465e93601c9748e5ca"
+      ],
+      "payload_block_index_sha256": "2e0370264a20732c75d87664c23d91e9f4ecb1c2408fefa71fa6c5570c3da8a7",
+      "catalog_artifact_type": "opencorvus/core/task_completion_decision",
+      "catalog_schema_diagnostic": null,
+      "catalog_producer": {
+        "owner_kind": "core",
+        "component_id": "engine-artifact",
+        "operation_id": "task_completion_decision"
+      },
+      "catalog_import_source_task_id": null,
+      "catalog_resource_count": 0,
+      "catalog_resource_media_types": [],
+      "catalog_search_text": "opencorvus/core/task_completion_decision\nengine-artifact\ntask_completion_decision",
+      "catalog_search_text_truncated": false,
+      "catalog_metadata_sha256": "a622dcf843046e21c1577912bcd54774ad1577916662dd813671cc3507f16287",
+      "catalog_revision": 10,
+      "time_created": 1791134854434,
+      "time_updated": 1791134854434
+    },
+    {
+      "id": "art_h7EqwJtBnhUTvstD6uuD",
+      "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+      "kind": "task_root_ingress_disposition",
+      "label": "task-root-ingress-disposition",
+      "payload": {
+        "task_id": "tsk_g00VX6PxYq00ajeVFhc4",
+        "ingress_id": "art_hwAnAgURnBkmeyuzSDHT",
+        "execution_epoch": 1,
+        "disposition": "terminal_inapplicable",
+        "evidence_ids": [
+          "pev_g0VX6RK0000tD30Z9Hxh"
+        ],
+        "time_created": 1791134856499
+      },
+      "payload_sha256": "557486b306b9449e3f12742ffc6f80268f45d134c730ed0dee19e0fa3dee124e",
+      "payload_bytes": 209,
+      "payload_block_sha256s": [
+        "557486b306b9449e3f12742ffc6f80268f45d134c730ed0dee19e0fa3dee124e"
+      ],
+      "payload_block_index_sha256": "043c2db95e31a57abafe1ba8f481fe99cdd110502a4ba9e8ab2f29c3cd0acc39",
+      "catalog_artifact_type": "opencorvus/core/task_root_ingress_disposition",
+      "catalog_schema_diagnostic": null,
+      "catalog_producer": {
+        "owner_kind": "core",
+        "component_id": "engine-artifact",
+        "operation_id": "task_root_ingress_disposition"
+      },
+      "catalog_import_source_task_id": null,
+      "catalog_resource_count": 0,
+      "catalog_resource_media_types": [],
+      "catalog_search_text": "opencorvus/core/task_root_ingress_disposition\nengine-artifact\ntask_root_ingress_disposition",
+      "catalog_search_text_truncated": false,
+      "catalog_metadata_sha256": "a50c9aca9281b3c7a3539c1d4a24da42aabccf185397fbc4379f6c9f8c8aac5c",
+      "catalog_revision": 11,
+      "time_created": 1791134856499,
+      "time_updated": 1791134856499
+    }
+  ]
+}

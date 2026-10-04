@@ -25,7 +25,7 @@ const CAUSAL_TOOL_REFERENCE_INDEX_MAX_CHARS = 40_000
 const EVIDENCE_OUTPUT_DEFAULT_CHARS = 8_000
 const EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL = 30_000
 const EVIDENCE_SOURCE_LIMIT = 8
-const EVIDENCE_READS_DESCRIPTION = `Optional exact input, output, or failure chunks from the selected sources' causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. The sum of every limit in one call must be at most ${EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL} characters. Follow next_offset until null.`
+const EVIDENCE_READS_DESCRIPTION = `Optional exact input, output, or failure chunks from the selected sources' causal inventory in this or an earlier call. Copy returned message_id and part_id values exactly. Each omitted limit requests ${EVIDENCE_OUTPUT_DEFAULT_CHARS} characters, even for a short field. The sum of every effective limit in one call must be at most ${EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL} characters. At most ${Math.floor(EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL / EVIDENCE_OUTPUT_DEFAULT_CHARS)} reads fit with all limits omitted. For 4–8 reads, explicitly allocate limits within that total; eight reads can each request ${Math.floor(EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL / 8)} characters. Follow next_offset until null.`
 
 const EvidenceSource = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("dispatch_result"), message_id: z.string().min(1) }).strict(),
@@ -115,7 +115,8 @@ const EvidenceRead = z
       .int()
       .min(1)
       .max(EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL)
-      .default(EVIDENCE_OUTPUT_DEFAULT_CHARS),
+      .default(EVIDENCE_OUTPUT_DEFAULT_CHARS)
+      .describe(`Requested character budget for this chunk; omission consumes ${EVIDENCE_OUTPUT_DEFAULT_CHARS} of the ${EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL}-character aggregate call budget.`),
   })
   .strict()
 
@@ -314,7 +315,12 @@ export const ReadAgentMessageInputSchema = z
         if (requestedChars > EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL) {
           context.addIssue({
             code: "custom",
-            message: `Evidence reads may request at most ${EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL} characters per call`,
+            message: `Evidence reads requested ${requestedChars} characters; the aggregate maximum is ${EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL}. Each omitted limit requests ${EVIDENCE_OUTPUT_DEFAULT_CHARS}; explicitly allocate per-read limits within the aggregate budget.`,
+            params: {
+              requested_total: requestedChars,
+              default_limit: EVIDENCE_OUTPUT_DEFAULT_CHARS,
+              max_total: EVIDENCE_OUTPUT_MAX_CHARS_PER_CALL,
+            },
           })
         }
       })
@@ -329,7 +335,7 @@ const READ_AGENT_MESSAGE_DESCRIPTION =
   "Use current_dispatch_id from your real dispatch context for root evidence. Discover other exact dispatch/result identities in Task dispatch facts. " +
   "Origin facts are historical observations, not a final report or proof of current state. Same-step calls and outcomes at/after the boundary are outside that source; absence does not prove an operation never occurred. " +
   "The result includes a compact redacted causal Tool index plus pages of at most 16 Tool Parts per source. If complete=false, follow the exact inventory_next_before Message/Part cursors. " +
-  "Read necessary exact message_id/part_id input, output, or failure chunks with evidence_reads and follow next_offset to null. " +
+  EVIDENCE_READS_DESCRIPTION + " " +
   "This read-only projection preserves Task ownership and causal boundaries; it does not infer success or create artifacts."
 
 export async function readAgentMessages(taskID: string, rawInput: unknown) {

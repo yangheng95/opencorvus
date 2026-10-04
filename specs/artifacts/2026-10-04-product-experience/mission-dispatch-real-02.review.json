@@ -1,0 +1,244 @@
+{
+  "status": "atomic-dispatch-and-replay-passed",
+  "reportedStatus": "failed",
+  "source": ".tmp-product-experience/mission-dispatch-real-02.result.json",
+  "runtime": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-oBgNjl\\runner-6068-hWZwAh\\runtime-root\\tmp\\opencorvus-mission-dispatch-e2e-Fhqbcc",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    }
+  ],
+  "observations": [
+    {
+      "requestIndex": 2,
+      "observedAt": 1791136799747,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hPkuVBWHpXGyxsHdHynD"
+      ],
+      "closure": {
+        "missionID": "e3bd8cdd1f6d5244",
+        "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+        "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+        "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+        "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+        "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 3,
+      "observedAt": 1791136801390,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hPkuVBWHpXGyxsHdHynD"
+      ],
+      "closure": {
+        "missionID": "e3bd8cdd1f6d5244",
+        "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+        "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+        "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+        "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+        "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 4,
+      "observedAt": 1791136807312,
+      "draftDisposition": "consumed",
+      "acceptedMessageIDs": [
+        "msg_hPkuVBWHpXGyxsHdHynD"
+      ],
+      "closure": {
+        "missionID": "e3bd8cdd1f6d5244",
+        "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+        "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+        "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+        "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+        "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 5,
+      "observedAt": 1791136811112,
+      "draftDisposition": "pending",
+      "acceptedMessageIDs": [
+        "msg_hPkuVBWHpXGyxsHdHynD"
+      ],
+      "closure": {
+        "missionID": "e3bd8cdd1f6d5244",
+        "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+        "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+        "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+        "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+        "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 6,
+      "observedAt": 1791136818340,
+      "draftDisposition": "pending",
+      "acceptedMessageIDs": [
+        "msg_hPkuVBWHpXGyxsHdHynD"
+      ],
+      "closure": {
+        "missionID": "e3bd8cdd1f6d5244",
+        "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+        "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+        "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+        "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+        "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 7,
+      "observedAt": 1791136824672,
+      "draftDisposition": "pending",
+      "acceptedMessageIDs": [
+        "msg_hPkuVBWHpXGyxsHdHynD"
+      ],
+      "closure": {
+        "missionID": "e3bd8cdd1f6d5244",
+        "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+        "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+        "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+        "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+        "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 8,
+      "observedAt": 1791136842147,
+      "draftDisposition": "pending",
+      "acceptedMessageIDs": [
+        "msg_hPkuVBWHpXGyxsHdHynD"
+      ],
+      "closure": {
+        "missionID": "e3bd8cdd1f6d5244",
+        "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+        "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+        "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+        "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+        "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 9,
+      "observedAt": 1791136852569,
+      "draftDisposition": "pending",
+      "acceptedMessageIDs": [
+        "msg_hPkuVBWHpXGyxsHdHynD"
+      ],
+      "closure": {
+        "missionID": "e3bd8cdd1f6d5244",
+        "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+        "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+        "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+        "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+        "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    },
+    {
+      "requestIndex": 10,
+      "observedAt": 1791136864773,
+      "draftDisposition": "pending",
+      "acceptedMessageIDs": [
+        "msg_hPkuVBWHpXGyxsHdHynD"
+      ],
+      "closure": {
+        "missionID": "e3bd8cdd1f6d5244",
+        "requestID": "DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe",
+        "requestFingerprint": "b725b3d226df008ad8334a68848169b82d7779c8a8facab64d0e928d3cbecf98",
+        "eventID": "pev_hO4mK2UFZ16Bidf8QEYS",
+        "sessionID": "ses_-zUStQWW5zz8xKtJjZjL",
+        "operationID": "f48a7f16-c118-5514-a54d-d23783eb9306",
+        "state": "opened",
+        "source": "mission.dispatch"
+      }
+    }
+  ],
+  "acceptedMessageID": "msg_hPkuVBWHpXGyxsHdHynD",
+  "replyText": "I’ll calculate both results and report them here for the specified acceptance.\nFor acceptance **DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe**:\n\n- Sum: 137 + 249 = **386**\n- Difference: 249 − 137 = **112**",
+  "retainedDraft": {
+    "text": "Exact next draft after DISPATCH-260afca2-d9ae-4e99-9d4d-ee0d85167bbe; retain this punctuation: A → B."
+  },
+  "lifecycle": [],
+  "credentialCleanup": [
+    {
+      "name": "auth.json",
+      "disposition": "removed"
+    },
+    {
+      "name": "models.json",
+      "disposition": "removed"
+    }
+  ],
+  "scope": "02 retained normal standby owners and incorrectly waited for owner disposal. Its arithmetic reply and atomic/replay facts are valid; the checker reported inactivity, not a product scheduling failure."
+}

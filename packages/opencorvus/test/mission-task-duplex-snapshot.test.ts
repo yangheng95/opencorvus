@@ -22,7 +22,7 @@ import {
   missionTaskDuplexFinalEvidenceState,
   missionTaskDuplexActivityKey,
   missionTaskDuplexProgressKey,
-  missionTaskDuplexToolHealth,
+  missionTaskDuplexToolOutcomes,
   missionTaskDuplexTrajectoryEvidence,
   missionTaskDuplexReconciliationEvidence,
   missionTaskDuplexUsageOwnerRequirements,
@@ -43,7 +43,7 @@ describe("Mission Task duplex snapshot", () => {
       const session = await ensureMissionSession({ missionID: "historical-completion", defaultCwd: project.path,
         productPillar: "work", heldExpertSquadIDs: ["base"] })
       const now = Date.now()
-      const inputs = []
+      const inputs: string[] = []
       for (const [index, status] of [{ type: "idle" }, { type: "streaming" }].entries()) {
         const input = await Session.updateMessage({ id: Identifier.ascending("message"), sessionID: session.id,
           role: "user", author: "user", time: { created: now + index }, agent: "mission",
@@ -64,7 +64,7 @@ describe("Mission Task duplex snapshot", () => {
     const part = (tool: string, input: Record<string, unknown>, start: number, output = "{}") => ({
       id: `${tool}:${start}`, sessionID: "mission", tool, state: { status: "completed", input, output, time: { start, end: start + 1 } },
     })
-    const readOutput = (taskID: string, readRef: string) => JSON.stringify({
+    const readOutput = (taskID: string, readRef: string) => JSON.stringify({ results: [{ request_index: 0, value: {
       taskID,
       terminal_lifecycle_reference: { terminalEventID: `terminal-${taskID}` },
       artifact_transport_version: 2,
@@ -73,16 +73,16 @@ describe("Mission Task duplex snapshot", () => {
       locator: { source: "engine_artifact", artifact_id: `artifact-${taskID}`, catalog_revision: 1, expected_sha256: "a".repeat(64) },
       media_type: "application/json", byte_start: 0, byte_end: 1, next_offset: null, total_bytes: 1,
       complete: true, sha256: "a".repeat(64), text: "x", attachment: false,
-    })
+    } }] })
     const parts = [
       part("panel_create_task", { title: "B" }, 1),
       part("panel_create_task", { title: "A" }, 3),
       part("panel_query_task", { taskIDs: ["B"] }, 5),
-      part("panel_query_task_artifacts", { taskID: "B", page_number: 1 }, 7),
-      part("panel_read_task_artifact", { taskID: "B" }, 9, readOutput("B", "ar_1234567890abcdeB")),
+      part("panel_query_task_artifacts", { queries: [{ taskID: "B", page_number: 1 }] }, 7, '{"results":[{"request_index":0,"value":{"entries":[]}}]}'),
+      part("panel_read_task_artifact", { reads: [{ taskID: "B" }] }, 9, readOutput("B", "ar_1234567890abcdeB")),
       part("panel_query_task", { taskIDs: ["A"] }, 11),
-      part("panel_query_task_artifacts", { taskID: "A", page_number: 1 }, 13),
-      part("panel_read_task_artifact", { taskID: "A" }, 15, readOutput("A", "ar_1234567890abcdeA")),
+      part("panel_query_task_artifacts", { queries: [{ taskID: "A", page_number: 1 }] }, 13, '{"results":[{"request_index":0,"value":{"entries":[]}}]}'),
+      part("panel_read_task_artifact", { reads: [{ taskID: "A" }] }, 15, readOutput("A", "ar_1234567890abcdeA")),
       part("publish_interactive_artifact", {}, 17),
       part("panel_complete_mission", {
         summary: "Both exact terminal occurrences accepted",
@@ -102,13 +102,31 @@ describe("Mission Task duplex snapshot", () => {
         readReference: `ar_1234567890abcde${taskID}`, retainedReadAccepted: true, causalOrder: true,
       })),
     })
-    const repeated = evaluate([...parts, part("panel_read_task_artifact", { taskID: "A" }, 19, readOutput("A", "ar_abcdefghijklmnop"))])
+    const batched = evaluate([
+      parts[0]!, parts[1]!,
+      part("panel_query_task", { taskIDs: ["A", "B"] }, 5),
+      part("panel_query_task_artifacts", { queries: [{ taskID: "B" }, { taskID: "A" }] }, 7,
+        JSON.stringify({ results: [{ request_index: 1, value: { entries: [] } }, { request_index: 0, value: { entries: [] } }] })),
+      part("panel_read_task_artifact", { reads: [{ taskID: "A" }, { taskID: "B" }] }, 9,
+        JSON.stringify({ results: [
+          { request_index: 1, value: JSON.parse(readOutput("B", "ar_1234567890abcdeB")).results[0].value },
+          { request_index: 0, value: JSON.parse(readOutput("A", "ar_1234567890abcdeA")).results[0].value },
+        ] })),
+      parts[8]!, parts[9]!,
+    ])
+    expect({ status: batched.status, references: batched.tasks.map((task) => task.readReference) }).toEqual({
+      status: "accepted", references: ["ar_1234567890abcdeA", "ar_1234567890abcdeB"],
+    })
+    const repeated = evaluate([...parts, part("panel_read_task_artifact", { reads: [{ taskID: "A" }] }, 19, readOutput("A", "ar_abcdefghijklmnop"))])
     expect({ status: repeated.status, counts: repeated.tasks.map(({ taskID, readCount }) => ({ taskID, readCount })) }).toEqual({
       status: "trajectory_mismatch", counts: [{ taskID: "A", readCount: 2 }, { taskID: "B", readCount: 1 }],
     })
     const premature = evaluate(parts.map((item) => item.tool === "publish_interactive_artifact"
       ? part(item.tool, item.state.input, 6) : item))
     expect(premature.status).toBe("trajectory_mismatch")
+    const wrongIndex = evaluate(parts.map((item) => item.tool === "panel_read_task_artifact"
+      ? { ...item, state: { ...item.state, output: item.state.output.replace('"request_index":0', '"request_index":1') } } : item))
+    expect(wrongIndex.status).toBe("trajectory_mismatch")
     const pendingSnapshot = parts.map((item) => item.tool === "panel_complete_mission"
       ? { ...item, state: { ...item.state, status: "running" } } : item)
     expect([evaluate(pendingSnapshot).status, evaluate().status]).toEqual(["pending_completion", "accepted"])
@@ -781,10 +799,9 @@ describe("Mission Task duplex snapshot", () => {
             },
           },
         ])
-        expect(missionTaskDuplexToolHealth(snapshot.toolParts)).toEqual({
-          failedToolPartIDs: [],
-          runningToolPartIDs: [],
-        })
+        expect(missionTaskDuplexToolOutcomes(snapshot.toolParts)).toEqual([
+          { id: toolPartID, tool: "scheduler_message", status: "completed" },
+        ])
         expect(missionTaskDuplexProgressKey({
           ...snapshot,
           schedulerEventCount: 1,

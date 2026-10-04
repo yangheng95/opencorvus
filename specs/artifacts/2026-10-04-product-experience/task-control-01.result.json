@@ -1,0 +1,250 @@
+{
+  "maxRequests": 256,
+  "budgetScope": "all-phases-cumulative",
+  "observedRequests": 45,
+  "accountingComplete": true,
+  "status": "passed",
+  "credentialCleanup": "passed",
+  "phases": [
+    {
+      "phase": "seed-ingress",
+      "status": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true
+        }
+      ]
+    },
+    {
+      "phase": "seed-cancellation",
+      "status": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true
+        }
+      ]
+    },
+    {
+      "phase": "verify",
+      "status": "passed",
+      "requests": []
+    }
+  ]
+}

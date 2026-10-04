@@ -1,0 +1,92 @@
+{
+  "conversations": [
+    {
+      "title": "只用一行中文回答：29 × 31 等于多少？不需要工具。",
+      "sessionID": "ses_-zUStfnfhzzKJbpWV3PZ",
+      "conversation": {
+        "experience": "chat",
+        "surface": "right-sidebar"
+      },
+      "assistantMessages": [
+        {
+          "text": [
+            "29 × 31 = 899。"
+          ],
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "messageID": "msg_g0VX6KCaR00HqVrugMOx",
+          "time": {
+            "created": 1791133159523,
+            "completed": 1791133164730
+          }
+        }
+      ]
+    },
+    {
+      "title": "计算 17 × 23，用中文一行给出答案，不需要调用工具。",
+      "sessionID": "ses_-zUStsIonzz1XUs9hyk4",
+      "conversation": {
+        "experience": "work",
+        "surface": "right-sidebar"
+      },
+      "assistantMessages": [
+        {
+          "text": [
+            "17 × 23 = 391。"
+          ],
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "messageID": "msg_g0VX67hVL00MNCM0Lx5x",
+          "time": {
+            "created": 1791130180107,
+            "completed": 1791130188775
+          }
+        },
+        {
+          "text": [],
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "messageID": "msg_g0VX68ZzG003dAQI60sT",
+          "time": {
+            "created": 1791130389538,
+            "completed": 1791130396996
+          }
+        },
+        {
+          "text": [],
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "messageID": "msg_g0VX68bwi00RhN5CZTLI",
+          "time": {
+            "created": 1791130397068,
+            "completed": 1791130406299
+          }
+        },
+        {
+          "text": [],
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "messageID": "msg_g0VX68eMl00Ds1cy5g99",
+          "time": {
+            "created": 1791130406371,
+            "completed": 1791130414297
+          }
+        },
+        {
+          "text": [
+            "已创建并核对内容，文件保留在当前隔离项目中：[查看 acceptance-note.md](acceptance-note.md)。"
+          ],
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "messageID": "msg_g0VX68gRl00o3emZGCUn",
+          "time": {
+            "created": 1791130414369,
+            "completed": 1791130421871
+          }
+        }
+      ]
+    }
+  ],
+  "fileContent": "# 产品体验验收\n\n- 配置模型\n- 发送对话\n- 查看交付\n- 文件重复打开时保留草稿\n",
+  "channelPublicURL": "http://127.0.0.1:17878"
+}

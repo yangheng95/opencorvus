@@ -4,13 +4,19 @@ import { Feedback } from "../ui/Feedback"
 // Allows adding, editing, and removing OpenAI-compatible providers
 // via the opencorvus config system (PATCH /config → provider field).
 
-import { createEffect, createMemo, createSignal, For, on, Show } from "solid-js"
+import { createEffect, createMemo, createSignal, createUniqueId, For, on, onCleanup, Show } from "solid-js"
 import { t } from "../../utils/i18n"
 import { appStore, dismissProviderAuth, setAppStore } from "../../store/app"
 import { updateConfig, updateGlobalConfig } from "../../services/config"
 import { apiJson, ApiError } from "../../services/api"
 import { loadProviderInfo } from "../../services/config-load"
 import { requestProviderCatalogRefresh, requestProviderModelsRefresh } from "../../services/provider-refresh"
+import {
+  applyProviderForm,
+  providerFormValues,
+  providerModelIDs,
+  type ProviderFormValues,
+} from "../../services/provider-form"
 import { matchesSearchParts } from "../../services/text-search"
 import { activeDirectory } from "../../services/workspace"
 import {
@@ -59,7 +65,7 @@ interface ProviderModel {
   tool_call: boolean
 }
 
-interface CustomProvider {
+interface CustomProvider extends Record<string, unknown> {
   name: string
   api: string
   env: string[]
@@ -78,6 +84,7 @@ interface AuthMutationResult {
 const VISIBLE_MODEL_SUMMARY_LIMIT = 8
 
 export default function ProvidersPanel() {
+  const modelsLabelID = createUniqueId()
   const [saving, setSaving] = createSignal(false)
   const [editing, setEditing] = createSignal<string | null>(null)
   const [showAdd, setShowAdd] = createSignal(false)
@@ -353,7 +360,31 @@ export default function ProvidersPanel() {
   const [formApiKey, setFormApiKey] = createSignal("")
   const [formModels, setFormModels] = createSignal("")
   const [formDirectory, setFormDirectory] = createSignal<string | null>(null)
-  const [formBaseConfig, setFormBaseConfig] = createSignal<Record<string, unknown> | null>(null)
+  const [formInitialValues, setFormInitialValues] = createSignal<ProviderFormValues | null>(null)
+  let formOccurrence = 0
+  let discoveryRevision = 0
+
+  function invalidateDiscovery() {
+    discoveryRevision += 1
+    setDiscoveringModels(false)
+    setFormNotice(null)
+  }
+
+  function currentFormValues(): ProviderFormValues {
+    return { name: formName(), api: formApi(), env: formEnvKey(), models: formModels() }
+  }
+
+  onCleanup(() => {
+    formOccurrence += 1
+    discoveryRevision += 1
+  })
+  createEffect(
+    on(
+      () => activeDirectory().trim(),
+      () => cancel(),
+      { defer: true },
+    ),
+  )
 
   function providerConfigs(): Record<string, any> {
     const cfg = appStore.config
@@ -403,6 +434,9 @@ export default function ProvidersPanel() {
   }
 
   function resetForm() {
+    formOccurrence += 1
+    invalidateDiscovery()
+    setSaving(false)
     setFormId("")
     setFormName("")
     setFormApi("")
@@ -410,7 +444,7 @@ export default function ProvidersPanel() {
     setFormApiKey("")
     setFormModels("")
     setFormDirectory(null)
-    setFormBaseConfig(null)
+    setFormInitialValues(null)
     setFormError(null)
     setFormNotice(null)
   }
@@ -418,7 +452,6 @@ export default function ProvidersPanel() {
   function startAdd() {
     resetForm()
     setFormDirectory(activeDirectory().trim())
-    setFormBaseConfig({})
     setEditing(null)
     setShowAdd(true)
   }
@@ -426,36 +459,19 @@ export default function ProvidersPanel() {
   function startEdit(id: string) {
     const p = configProviders()[id]
     if (!p) return
+    resetForm()
+    const values = providerFormValues(p)
     setFormDirectory(activeDirectory().trim())
-    setFormBaseConfig(providerConfigWithoutApiKey(id))
+    setFormInitialValues(values)
     setFormId(id)
-    setFormName(p.name || "")
-    setFormApi(p.api || "")
-    setFormEnvKey(p.env?.[0] || "")
-    setFormApiKey("")
-    const modelStr = Object.entries(p.models || {})
-      .map(([mid, m]) => `${mid}:${m.name || mid}`)
-      .join("\n")
-    setFormModels(modelStr)
+    setFormName(values.name)
+    setFormApi(values.api)
+    setFormEnvKey(values.env)
+    setFormModels(values.models)
     setEditing(id)
     setShowAdd(true)
     setFormError(null)
     setFormNotice(null)
-  }
-
-  function parseModels(text: string): Record<string, ProviderModel> {
-    const models: Record<string, ProviderModel> = {}
-    for (const line of text.split("\n")) {
-      const trimmed = line.trim()
-      if (!trimmed) continue
-      const colonIdx = trimmed.indexOf(":")
-      const id = colonIdx > 0 ? trimmed.slice(0, colonIdx).trim() : trimmed
-      const name = colonIdx > 0 ? trimmed.slice(colonIdx + 1).trim() : id
-      if (id) {
-        models[id] = { name: name || id, tool_call: true }
-      }
-    }
-    return models
   }
 
   function sanitizeProviderId(value: string): string {
@@ -496,6 +512,9 @@ export default function ProvidersPanel() {
       setFormError(t("provider.form.error.api_required"))
       return
     }
+    const occurrence = formOccurrence
+    const revision = ++discoveryRevision
+    const ownsResponse = () => occurrence === formOccurrence && revision === discoveryRevision
     setDiscoveringModels(true)
     try {
       const path = directory
@@ -510,6 +529,7 @@ export default function ProvidersPanel() {
           providerID: formProviderId() || undefined,
         }),
       })) as { ok: boolean; models: string[]; count: number; error?: string }
+      if (!ownsResponse()) return
       if (!result.ok) {
         setFormError(t("provider.form.discover.failed", { reason: result.error || "unknown" }))
         return
@@ -517,18 +537,19 @@ export default function ProvidersPanel() {
       setFormModels(result.models.join("\n"))
       setFormNotice(t("provider.form.discover.success", { count: result.count }))
     } catch (e) {
-      setFormError(t("provider.form.discover.failed", { reason: describeFailure(e) }))
+      if (ownsResponse()) setFormError(t("provider.form.discover.failed", { reason: describeFailure(e) }))
     } finally {
-      setDiscoveringModels(false)
+      if (ownsResponse()) setDiscoveringModels(false)
     }
   }
 
   async function handleSave() {
+    if (saving()) return
     setFormError(null)
     setFormNotice(null)
     const directory = formDirectory()
-    const baseConfig = formBaseConfig()
-    if (directory === null || baseConfig === null) {
+    const initial = formInitialValues()
+    if (directory === null) {
       setFormError(t("provider.form.error.scope_missing"))
       return
     }
@@ -541,33 +562,24 @@ export default function ProvidersPanel() {
       setFormError(t("provider.form.error.api_required"))
       return
     }
-    const models = parseModels(formModels())
-    if (Object.keys(models).length === 0) {
+    const values = currentFormValues()
+    if (providerModelIDs(values.models).length === 0) {
       setFormError(t("provider.form.error.models_required"))
       return
     }
 
+    const apiKey = formApiKey().trim()
+    const occurrence = formOccurrence
+    const ownsForm = () => occurrence === formOccurrence
+    invalidateDiscovery()
     setSaving(true)
     let configCommitted = false
     let credentialIssues: AuthMutationResult["issues"] = []
     try {
-      const provider: CustomProvider = {
-        name: formName().trim() || id,
-        api: formApi().trim().replace(/\/+$/, ""),
-        env: formEnvKey().trim() ? [formEnvKey().trim()] : [],
-        options:
-          baseConfig.options && typeof baseConfig.options === "object" && !Array.isArray(baseConfig.options)
-            ? { ...(baseConfig.options as Record<string, unknown>) }
-            : {},
-        models,
-      }
-      const apiKey = formApiKey().trim()
-      if (provider.options && Object.keys(provider.options).length === 0) delete provider.options
-
       await updateActiveProviderConfig(directory, (cfg) => {
         removeDisabledProvider(cfg, id)
         cfg.provider = cfg.provider || {}
-        cfg.provider[id] = provider
+        cfg.provider[id] = applyProviderForm({ id, current: cfg.provider[id], initial, values })
       })
       configCommitted = true
       if (apiKey) {
@@ -577,9 +589,11 @@ export default function ProvidersPanel() {
           body: JSON.stringify({ type: "api", key: apiKey }),
         })) as AuthMutationResult
         credentialIssues = authResult.issues
+        await updateActiveProviderConfig(directory, (cfg) => removeProjectApiKeyOverride(cfg, id))
         await refreshAuthState(directory)
       }
 
+      if (!ownsForm()) return
       setShowAdd(false)
       resetForm()
       setEditing(null)
@@ -592,6 +606,7 @@ export default function ProvidersPanel() {
       }
     } catch (e) {
       console.error("[providers] save failed", e)
+      if (!ownsForm()) return
       if (configCommitted) {
         setShowAdd(false)
         resetForm()
@@ -601,26 +616,12 @@ export default function ProvidersPanel() {
         setFormError(t("provider.form.error.save_failed", { reason: describeFailure(e) }))
       }
     } finally {
-      setSaving(false)
+      if (ownsForm()) setSaving(false)
     }
   }
 
   function providerConfig(id: string): any {
     return providerConfigs()[id]
-  }
-
-  function providerConfigWithoutApiKey(id: string): Record<string, unknown> {
-    const current = providerConfig(id)
-    if (!current || typeof current !== "object" || Array.isArray(current)) return {}
-    const next = { ...current } as Record<string, unknown>
-    const options =
-      next.options && typeof next.options === "object" && !Array.isArray(next.options)
-        ? { ...(next.options as Record<string, unknown>) }
-        : null
-    if (options && Object.hasOwn(options, "apiKey")) delete options.apiKey
-    if (options && Object.keys(options).length > 0) next.options = options
-    else delete next.options
-    return next
   }
 
   function removeProjectApiKeyOverride(cfg: Record<string, any>, providerId: string): void {
@@ -1181,7 +1182,10 @@ export default function ProvidersPanel() {
                 required
                 placeholder={t("provider.form.api_placeholder", { value: "https://my-gateway.com/v1" })}
                 value={formApi()}
-                onInput={(e) => setFormApi(e.currentTarget.value)}
+                onInput={(e) => {
+                  invalidateDiscovery()
+                  setFormApi(e.currentTarget.value)
+                }}
                 onBlur={(e) => {
                   const v = e.currentTarget.value.trim()
                   e.currentTarget.setCustomValidity(
@@ -1202,7 +1206,10 @@ export default function ProvidersPanel() {
                     : t("provider.api_key.placeholder_empty")
                 }
                 value={formApiKey()}
-                onInput={(e) => setFormApiKey(e.currentTarget.value)}
+                onInput={(e) => {
+                  invalidateDiscovery()
+                  setFormApiKey(e.currentTarget.value)
+                }}
               />
             </TextField.Root>
 
@@ -1222,7 +1229,10 @@ export default function ProvidersPanel() {
                       type="text"
                       placeholder={t("provider.form.id_placeholder", { value: "opentoken" })}
                       value={formId()}
-                      onInput={(e) => setFormId(e.currentTarget.value)}
+                      onInput={(e) => {
+                        invalidateDiscovery()
+                        setFormId(e.currentTarget.value)
+                      }}
                     />
                   </TextField.Root>
                 </Show>
@@ -1233,7 +1243,10 @@ export default function ProvidersPanel() {
                     type="text"
                     placeholder={t("provider.form.name_placeholder", { value: "OpenToken CN2" })}
                     value={formName()}
-                    onInput={(e) => setFormName(e.currentTarget.value)}
+                    onInput={(e) => {
+                      invalidateDiscovery()
+                      setFormName(e.currentTarget.value)
+                    }}
                   />
                 </TextField.Root>
 
@@ -1243,14 +1256,18 @@ export default function ProvidersPanel() {
                     type="text"
                     placeholder={t("provider.form.env_placeholder", { value: "OPENTOKEN_API_KEY" })}
                     value={formEnvKey()}
-                    onInput={(e) => setFormEnvKey(e.currentTarget.value)}
+                    onInput={(e) => {
+                      invalidateDiscovery()
+                      setFormEnvKey(e.currentTarget.value)
+                    }}
                   />
                 </TextField.Root>
               </Disclosure.Content>
             </Disclosure.Root>
 
-            <TextField.Root as="label">
-              <TextField.Label>{t("provider.form.models_label")}</TextField.Label>
+            <TextField.Root>
+              <TextField.Label id={modelsLabelID}>{t("provider.form.models_label")}</TextField.Label>
+              <TextField.Description class="provider-form-hint">{t("provider.form.models_hint")}</TextField.Description>
               <div class="provider-model-field-head">
                 <Button
                   type="button"
@@ -1267,12 +1284,13 @@ export default function ProvidersPanel() {
               </div>
               <AutoGrowTextarea
                 class="provider-models-textarea"
+                aria-labelledby={modelsLabelID}
                 rows={4}
-                placeholder={"gpt-5.4-mini:GPT-5.4 Mini\ngpt-5.4:GPT-5.4"}
+                placeholder={"gpt-5.4-mini\nqwen3-next:80b"}
                 value={formModels()}
                 onInput={(e) => {
+                  invalidateDiscovery()
                   setFormModels(e.currentTarget.value)
-                  setFormNotice(null)
                 }}
               />
             </TextField.Root>

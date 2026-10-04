@@ -20,14 +20,15 @@ import { Show, createEffect, createMemo, createSignal, on, onCleanup, onMount } 
 import { applyLocalePreference } from "../services/locale-preference"
 import { applyThemePreference } from "../services/theme-preference"
 import { themeOptionsForCurrentHost } from "../services/theme-registry"
-import { browseDirectory, openGlobalChatLauncher } from "../services/workspace"
+import { browseDirectory } from "../services/workspace"
 import {
   loadWorkLedger,
   type WorkLedgerChatRow,
+  type WorkLedgerMissionRow,
   type WorkLedgerRow,
   type WorkLedgerTaskRow,
 } from "../services/work-ledger"
-import { openConfigDialog } from "../services/config-dialog-control"
+import { closeConfigDialog, openConfigDialog } from "../services/config-dialog-control"
 import { CONFIG_SECTIONS } from "../store/dialog"
 import { t } from "../utils/i18n"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
@@ -61,18 +62,20 @@ const LOCALES: Array<{ id: string; label: string }> = [
   { id: "zh-CN", label: "中文 (简体)" },
 ]
 
-type PaletteLedgerRow = WorkLedgerChatRow | WorkLedgerTaskRow
+type PaletteLedgerRow = WorkLedgerChatRow | WorkLedgerTaskRow | WorkLedgerMissionRow
 
 function paletteLedgerRows(rows: readonly WorkLedgerRow[]): PaletteLedgerRow[] {
   const entries: PaletteLedgerRow[] = []
   for (const row of rows) {
+    if (row.kind === "project") continue
+    entries.push(row)
     if (row.kind === "mission") entries.push(...row.tasks)
-    if (row.kind === "task" || row.kind === "chat") entries.push(row)
   }
   return entries
 }
 
 function rowCommandIcon(row: PaletteLedgerRow): IconName {
+  if (row.kind === "mission") return "mission"
   if (row.kind === "task") return "workflow"
   return "avatar-assistant"
 }
@@ -86,6 +89,8 @@ function rowCommandHint(row: PaletteLedgerRow): string {
 }
 
 export function CommandPalette(props: {
+  onNewChat: () => Promise<void>
+  onSelectMission: (row: WorkLedgerMissionRow) => Promise<void>
   onSelectTask: (taskID: string, directory: string) => Promise<void>
   onSelectChat: (sessionID: string, directory: string, experience: "chat" | "work") => Promise<void>
 }) {
@@ -114,6 +119,11 @@ export function CommandPalette(props: {
         keywords: `${row.id} ${row.directory} ${row.kind}`,
         icon: rowCommandIcon(row),
         run: async () => {
+          await closeConfigDialog()
+          if (row.kind === "mission") {
+            await props.onSelectMission(row)
+            return
+          }
           if (row.kind === "chat") {
             await props.onSelectChat(row.sessionID, row.directory, row.experience)
             return
@@ -124,15 +134,15 @@ export function CommandPalette(props: {
     }
 
     cmds.push({
-      id: "task:new",
-      label: t("cmdk.suggested.new_task"),
+      id: "chat:new",
+      label: t("work_ledger.new_chat"),
       hint: "",
       shortcut: "Ctrl+N",
       group: t("cmdk.group.suggested"),
       keywords: "new chat quick chat create",
       icon: "edit",
       visibleWhenEmpty: true,
-      run: openGlobalChatLauncher,
+      run: props.onNewChat,
     })
 
     cmds.push({

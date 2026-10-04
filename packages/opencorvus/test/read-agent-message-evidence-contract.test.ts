@@ -1,7 +1,29 @@
 import { describe, expect, test } from "bun:test"
-import { ReadAgentMessageTestHooks } from "../src/tool/read-agent-message"
+import { ReadAgentMessageInputSchema, ReadAgentMessageTestHooks } from "../src/tool/read-agent-message"
 
 describe("read_agent_message causal evidence projection", () => {
+  test("reports effective budgets for omitted limits and accepts eight explicitly allocated chunks", () => {
+    const sources = [{ kind: "dispatch_origin", dispatch_id: "art_current" }]
+    const reads = Array.from({ length: 8 }, (_, index) => ({ message_id: "msg_origin", part_id: `prt_${index}`, field: "output" }))
+    for (const [evidence_reads, requested_total] of [
+      [reads.slice(0, 7), 56_000],
+      [[...reads.slice(0, 7), { ...reads[7], limit: 1000 }], 57_000],
+    ] as const) {
+      const parsed = ReadAgentMessageInputSchema.safeParse({ sources, evidence_reads })
+      if (parsed.success) throw new Error("Expected the aggregate evidence budget error")
+      expect(parsed.error.issues).toEqual([{
+        code: "custom", path: ["evidence_reads"],
+        message: `Evidence reads requested ${requested_total} characters; the aggregate maximum is 30000. Each omitted limit requests 8000; explicitly allocate per-read limits within the aggregate budget.`,
+        params: { requested_total, default_limit: 8000, max_total: 30000 },
+      }])
+    }
+    const allocated = ReadAgentMessageInputSchema.parse({ sources, evidence_reads: reads.map((read) => ({ ...read, limit: 3750 })) })
+    expect(allocated.evidence_reads?.map(({ limit, offset }) => ({ limit, offset }))).toEqual(
+      Array.from({ length: 8 }, () => ({ limit: 3750, offset: 0 })),
+    )
+    expect(ReadAgentMessageInputSchema.parse({ sources, evidence_reads: reads.slice(0, 3) }).evidence_reads?.map((read) => read.limit)).toEqual([8000, 8000, 8000])
+  })
+
   test("pages every causal Tool Message and fences equal-time messages by persisted identity", () => {
     const boundary = { time: { created: 100 }, id: "msg_m" }
     const candidates = [{ time: { created: 100 }, id: "msg_a" }, boundary, { time: { created: 100 }, id: "msg_z" }]
@@ -26,7 +48,7 @@ describe("read_agent_message causal evidence projection", () => {
   test("redacts inventory inputs and chunks large evidence output with a continuation offset", () => {
     expect(ReadAgentMessageTestHooks.evidenceOutputMaxCharsPerCall).toBe(30_000)
     expect(ReadAgentMessageTestHooks.evidenceReadsDescription).toContain(
-      "The sum of every limit in one call must be at most 30000 characters",
+      "The sum of every effective limit in one call must be at most 30000 characters",
     )
     expect(ReadAgentMessageTestHooks.evidenceReadsDescription).toContain(
       "Copy returned message_id and part_id values exactly",

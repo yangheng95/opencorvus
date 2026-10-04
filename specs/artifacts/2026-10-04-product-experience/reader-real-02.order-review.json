@@ -1,0 +1,90 @@
+{
+  "status": "causal-order-upper-bound-supported",
+  "directPerRequestTimestampAvailable": false,
+  "qualification": "Original run did not record request timestamps. This is a causal counting upper bound, not a fabricated observation time or a request-to-log ordinal match.",
+  "reasoning": "Each distinct persisted producer assistant response has its own production streaming invocation. By completion of four such responses at least four audited model requests have already been sent. Audit request index 3 is the fourth send, so it was sent no later than that fourth completion, which precedes the eight-field Tool start.",
+  "requestIndex": 3,
+  "observedSchemaPointers": [
+    {
+      "requestIndex": 3,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 789,
+      "value_sha256": "336b87e02c01205d8ec8b768429b3ac1f605bef333c71bfcc83554d0baef0ce7"
+    },
+    {
+      "requestIndex": 3,
+      "probeID": "reader-budget-schema",
+      "json_pointer": "/tools/23/parameters/properties/evidence_reads/anyOf/0/description",
+      "pointer_redacted": false,
+      "message_role": null,
+      "role_json_pointer": null,
+      "decoded_value_utf8_start": 0,
+      "value_sha256": "797b17d3dd3b71eb4f6ccd14fb52cc5b82a7c5560cdd28334f0b179b3556939d"
+    }
+  ],
+  "readerPartID": "prt_g0VX6Ilw600MQVJlkb3b",
+  "toolStartedAt": 1791132818750,
+  "requestSentNoLaterThan": 1791132788113,
+  "minimumLeadMilliseconds": 30637,
+  "independentProducerMessageFacts": [
+    {
+      "messageID": "msg_g0VX6IX2q00rNQqkbH1d",
+      "sessionID": "ses_hwsUy6lP83Jnkc349EhW",
+      "providerID": "openai",
+      "modelID": "gpt-6.1-sol",
+      "completedAt": 1791132770370
+    },
+    {
+      "messageID": "msg_g0VX6IZMO00HEPJFqDEM",
+      "sessionID": "ses_hwsUy6lP83Jnkc349EhW",
+      "providerID": "openai",
+      "modelID": "gpt-6.1-sol",
+      "completedAt": 1791132776423
+    },
+    {
+      "messageID": "msg_g0VX6IawD00H0qAxh5ph",
+      "sessionID": "ses_hwsUy6lP83Jnkc349EhW",
+      "providerID": "openai",
+      "modelID": "gpt-6.1-sol",
+      "completedAt": 1791132782108
+    },
+    {
+      "messageID": "msg_g0VX6IcPk00ftLGspyAr",
+      "sessionID": "ses_hwsUy6lP83Jnkc349EhW",
+      "providerID": "openai",
+      "modelID": "gpt-6.1-sol",
+      "completedAt": 1791132788113
+    }
+  ],
+  "supportingProductionStreamLogs": [
+    {
+      "time": "2026-10-04T16:52:42.055Z",
+      "sessionID": "ses_hwsUy6lP83Jnkc349EhW",
+      "modelID": "gpt-6.1-sol"
+    },
+    {
+      "time": "2026-10-04T16:52:50.682Z",
+      "sessionID": "ses_hwsUy6lP83Jnkc349EhW",
+      "modelID": "gpt-6.1-sol"
+    },
+    {
+      "time": "2026-10-04T16:52:56.779Z",
+      "sessionID": "ses_hwsUy6lP83Jnkc349EhW",
+      "modelID": "gpt-6.1-sol"
+    },
+    {
+      "time": "2026-10-04T16:53:02.448Z",
+      "sessionID": "ses_hwsUy6lP83Jnkc349EhW",
+      "modelID": "gpt-6.1-sol"
+    },
+    {
+      "time": "2026-10-04T16:53:08.443Z",
+      "sessionID": "ses_hwsUy6lP83Jnkc349EhW",
+      "modelID": "gpt-6.1-sol"
+    }
+  ]
+}

@@ -690,7 +690,8 @@ export namespace Session {
     patch: z.record(z.string(), z.any()),
   })
 
-  function mergeMetadataInTransaction(db: Database.TxOrDb, input: z.output<typeof MetadataPatchInput>): Info {
+  export function mergeMetadataInTransaction(db: Database.TxOrDb, input: z.output<typeof MetadataPatchInput>): Info {
+    Database.requireActiveTransaction("Session.mergeMetadataInTransaction")
     assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
     const row = db.select().from(SessionTable).where(eq(SessionTable.id, input.sessionID)).get()
     if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })

@@ -175,13 +175,13 @@ function sameFileEditorTarget(left: FileEditorTarget | null, right: FileEditorTa
 function commitFileEditorTarget(target: FileEditorTarget | null): void {
   setSelectedFileTarget(target)
   setFileWorkbenchOpen(!!target)
-  if (target?.range) setFileEditorRevealRevision((current) => current + 1)
+  if (target) setFileEditorRevealRevision((current) => current + 1)
 }
 
 async function requestFileEditorTarget(target: FileEditorTarget | null): Promise<boolean> {
   const current = selectedFileTarget()
   if (sameFileEditorTarget(current, target)) {
-    if (target?.range) setFileEditorRevealRevision((revision) => revision + 1)
+    if (target) setFileEditorRevealRevision((revision) => revision + 1)
     return true
   }
   if (current && target && sameFileEditorResource(current, target)) {

@@ -24,6 +24,17 @@ import z from "zod"
 
 export type MissionSession = Session.Info & { missionID: string; productPillar: ProductPillar }
 
+export const MissionDispatchDraftConflictError = NamedError.create(
+  "MissionDispatchDraftConflictError",
+  z.object({
+    message: z.string(),
+    missionID: MissionID,
+    sessionID: z.string(),
+    requestID: z.string(),
+    reason: z.enum(["changed", "missing"]),
+  }),
+)
+
 export const MissionExpertSquadSnapshotMismatchError = NamedError.create(
   "MissionExpertSquadSnapshotMismatchError",
   z.object({
@@ -152,14 +163,50 @@ export async function setMissionPendingPrompt(input: {
   if (input.session.kind !== "mission") {
     throw new Error(`Session ${input.session.id} is not a Mission session.`)
   }
-  const metadata = (input.session.metadata ?? {}) as Record<string, unknown>
+  return Database.immediateTransaction((db) =>
+    updateMissionPendingPromptInTransaction(db, {
+      sessionID: input.session.id,
+      pendingPrompt: input.pendingPrompt,
+    }),
+  )
+}
+
+function updateMissionPendingPromptInTransaction(
+  db: Database.TxOrDb,
+  input: {
+    sessionID: string
+    pendingPrompt?: MissionPendingPrompt
+    consume?: { missionID: string; requestID: string; text: string }
+  },
+): Session.Info {
+  Database.requireActiveTransaction("updateMissionPendingPromptInTransaction")
+  const row = db.select().from(SessionTable).where(eq(SessionTable.id, input.sessionID)).get()
+  if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
+  const session = Session.fromRow(row)
+  if (session.kind !== "mission") throw new Error(`Session ${input.sessionID} is not a Mission session.`)
+  const metadata = (session.metadata ?? {}) as Record<string, unknown>
   const mission = metadata.mission
   if (!mission || typeof mission !== "object" || Array.isArray(mission)) {
-    throw new Error(`Mission session ${input.session.id} is missing metadata.mission.`)
+    throw new Error(`Mission session ${input.sessionID} is missing metadata.mission.`)
+  }
+  if (input.consume) {
+    if ((mission as Record<string, unknown>).id !== input.consume.missionID) {
+      throw new Error("Mission dispatch draft identity changed")
+    }
+    const pending = missionPendingPrompt(session)
+    if (pending?.text !== input.consume.text) {
+      throw new MissionDispatchDraftConflictError({
+        message: "Mission pending draft changed before dispatch acceptance; submit the current draft with a new or unaccepted request identity.",
+        missionID: input.consume.missionID,
+        sessionID: input.sessionID,
+        requestID: input.consume.requestID,
+        reason: pending ? "changed" : "missing",
+      })
+    }
   }
   const { pendingPrompt: _consumedPendingPrompt, ...currentMission } = mission as Record<string, unknown>
-  return Session.mergeMetadata({
-    sessionID: input.session.id,
+  return Session.mergeMetadataInTransaction(db, {
+    sessionID: input.sessionID,
     patch: {
       mission: {
         ...currentMission,
@@ -167,6 +214,13 @@ export async function setMissionPendingPrompt(input: {
       },
     },
   })
+}
+
+export function consumeMissionPendingPromptInTransaction(
+  db: Database.TxOrDb,
+  input: { sessionID: string; missionID: string; requestID: string; text: string },
+): Session.Info {
+  return updateMissionPendingPromptInTransaction(db, { sessionID: input.sessionID, consume: input })
 }
 
 async function ensureMissionRuntimeDirectory(input: {

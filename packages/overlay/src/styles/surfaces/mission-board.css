@@ -387,6 +387,7 @@ body {
 
 .mission-board-card__actions {
   display: flex;
+  flex-wrap: wrap;
   min-height: calc(44px * var(--ui-scale));
   align-items: center;
   justify-content: space-between;

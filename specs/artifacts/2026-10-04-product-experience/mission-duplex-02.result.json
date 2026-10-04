@@ -1,0 +1,1146 @@
+{
+  "ok": true,
+  "model": "openai/gpt-6.1-sol",
+  "nonce": "DUPLEX-a7b2a3c087",
+  "harnessDiscovery": {
+    "operatorPromptStyle": "outcome_only",
+    "schedulerToolSelectedByModels": true,
+    "correlatedMissionRequestAcknowledged": true,
+    "exactEndpointCorrelationAndOrder": {
+      "exactEndpoints": true,
+      "correlatedReplies": 3,
+      "recipientFIFO": true,
+      "semanticOrder": true
+    },
+    "terminalOrder": {
+      "terminalNotificationsAfterDone": true
+    }
+  },
+  "missionID": "22077f69998df446",
+  "missionSessionID": "ses_-zUStq8wHzznhYTq7eid",
+  "taskAID": "tsk_g00VX6ALT700GfHoi711",
+  "taskBID": "tsk_g00VX6AH2a00GbBY1lNF",
+  "terminal": true,
+  "sourceToolPartIDs": [
+    "prt_g0VX6AOMS00K0RbX1l6j",
+    "prt_g0VX6AJWA00vnSdsIofu",
+    "prt_g0VX6ARaR008CcRlO58G",
+    "prt_g0VX6AXXo00J8BBHCKXP",
+    "prt_g0VX6AZfY00KmG49LdBU",
+    "prt_g0VX6Aefe00bC13pbuR9",
+    "prt_g0VX6Ajge00FwhBfwRyc",
+    "prt_g0VX6AmFV00gVYmuuYSX",
+    "prt_g0VX6Agqv004D7f7ETHy",
+    "prt_g0VX6As3B00qjHLguWAt"
+  ],
+  "missionAckMessageID": "msg_g0VX6BD3f0082NPlTuf4",
+  "missionCompletion": {
+    "messageID": "msg_g0VX6BpjF00qIy2oiuXa",
+    "toolCallID": "call_FP7Cbzog0bCLEyKOveR1WHRN",
+    "toolPartID": "prt_g0VX6BrKV005zqdZjyG6",
+    "summary": "Proved autonomous Mission-to-Task, Task-to-Mission and sibling duplex coordination for DUPLEX-a7b2a3c087 with exactly Duplex responder B and Duplex initiator A, launched in that order. Direct nonce-bearing readiness, ordered correlated START_PEER acknowledgement, PEER_CONFIRM answer and DECISION answer led to B_DONE and A_DONE; A_DONE was acknowledged in the next normal response. Each child's current canonical terminal evidence was fully reconciled once, full read references retained, and the final interactive proof summary published. No operator relay, history polling, additional Task or project mutation was used.",
+    "timeRecorded": 1791131178025,
+    "kind": "accepted"
+  },
+  "finalArtifactID": "art_g0VX6BpH000rgWiP24K7",
+  "trajectory": {
+    "schedulerEventCount": 12,
+    "messageCount": 60,
+    "toolPartCount": 40,
+    "failedToolPartCount": 0,
+    "toolOutcomes": [
+      {
+        "id": "prt_g0VX69tMF00Kuv90beYD",
+        "tool": "mission_state",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX69vAD00tB3hf9qrN",
+        "tool": "capability_search",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX69xNh00VZE2xMaTj",
+        "tool": "panel_query_task",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX69zIL00fofmSfJ0R",
+        "tool": "capability_search",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6A1zM0037AfyMWq4",
+        "tool": "panel_expert_squad_inspect",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6A3mt00F4hVm7nTr",
+        "tool": "mission_state",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Ac3300CCQbFEk1y",
+        "tool": "no_action",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AcOz00W89c6gO95",
+        "tool": "read_task_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Aefe00bC13pbuR9",
+        "tool": "scheduler_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AEQt00NAeAsAHV0",
+        "tool": "panel_create_task",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Agqv004D7f7ETHy",
+        "tool": "scheduler_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AhJS00yxxv9ysWw",
+        "tool": "read_task_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AIex00MS6gdDSD3",
+        "tool": "panel_create_task",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Ajge00FwhBfwRyc",
+        "tool": "scheduler_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AJWA00vnSdsIofu",
+        "tool": "scheduler_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AkW800lvgZel53R",
+        "tool": "manage_task",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AMC900l8OO0y5j1",
+        "tool": "no_action",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AmFV00gVYmuuYSX",
+        "tool": "scheduler_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AmIE005lZFl4f0U",
+        "tool": "no_action",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AOMS00K0RbX1l6j",
+        "tool": "scheduler_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Ap7H00lXo6ZkZQI",
+        "tool": "read_task_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AQdN00gK7ZZbFYn",
+        "tool": "no_action",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AqjG00eA08kOAWJ",
+        "tool": "panel_query_task",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6ARaR008CcRlO58G",
+        "tool": "scheduler_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6As3B00qjHLguWAt",
+        "tool": "scheduler_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AsSV00qARUoAfv3",
+        "tool": "panel_query_task_artifacts",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AV1f00gj8SfqAp5",
+        "tool": "read_task_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Av7y00zFpEzZB55",
+        "tool": "panel_read_task_artifact",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AwWi00RuJZTfUt0",
+        "tool": "manage_task",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Awzo00INxL7Wuoo",
+        "tool": "panel_read_task_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AXXo00J8BBHCKXP",
+        "tool": "scheduler_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6AZfY00KmG49LdBU",
+        "tool": "scheduler_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6Azy800YTpglLLDA",
+        "tool": "mission_state",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6BH6I007TuJgRBfy",
+        "tool": "panel_query_task",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6BhBl003AY2Jy8a6",
+        "tool": "publish_interactive_artifact",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6BJ0Y00DXUnWHWIK",
+        "tool": "panel_query_task_artifacts",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6BMju00xMuIWymUh",
+        "tool": "panel_read_task_artifact",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6BPsW00oWhjvM7Kt",
+        "tool": "panel_read_task_message",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6BrKV005zqdZjyG6",
+        "tool": "panel_complete_mission",
+        "status": "completed"
+      },
+      {
+        "id": "prt_g0VX6BTVi002BJjDhxMI",
+        "tool": "mission_state",
+        "status": "completed"
+      }
+    ],
+    "exactSchedulerEventSet": true,
+    "reconciliation": {
+      "ready": true,
+      "status": "accepted",
+      "completionObserved": true,
+      "creationCount": 2,
+      "publicationCount": 1,
+      "completionCount": 1,
+      "tasks": [
+        {
+          "taskID": "tsk_g00VX6ALT700GfHoi711",
+          "queryCount": 1,
+          "catalogCount": 1,
+          "readCount": 1,
+          "readReference": "ar_i1RdvG6d1PdtY-3h",
+          "retainedReadAccepted": true,
+          "causalOrder": true
+        },
+        {
+          "taskID": "tsk_g00VX6AH2a00GbBY1lNF",
+          "queryCount": 1,
+          "catalogCount": 1,
+          "readCount": 1,
+          "readReference": "ar_jkIAnM0eGEjMe5KQ",
+          "retainedReadAccepted": true,
+          "causalOrder": true
+        }
+      ]
+    },
+    "finalReply": {
+      "status": "settled",
+      "responseMessageIDs": [
+        "msg_g0VX6BtE80035wioLXQx"
+      ],
+      "completedAtMs": 1791131186497,
+      "failedReplyIDs": []
+    },
+    "phaseTiming": {
+      "milestones": {
+        "missionCreatedAtMs": 1791130693490,
+        "firstTaskCreatedAtMs": 1791130793364,
+        "firstSchedulerEventAtMs": 1791130805194,
+        "lastSchedulerEventAtMs": 1791130962075,
+        "tasksTerminalAtMs": 1791130962075,
+        "missionCompletedAtMs": 1791131178025
+      },
+      "durationsMs": {
+        "missionToFirstTask": 99874,
+        "missionToFirstSchedulerEvent": 111704,
+        "schedulerEventWindow": 156881,
+        "taskLifecycleWindow": 168711,
+        "tasksTerminalToMissionCompletion": 215950,
+        "missionToCompletion": 484535
+      }
+    },
+    "toolCallsByAgent": [
+      {
+        "agentID": "mission",
+        "totalCalls": 22,
+        "tools": [
+          {
+            "tool": "capability_search",
+            "count": 2
+          },
+          {
+            "tool": "mission_state",
+            "count": 4
+          },
+          {
+            "tool": "panel_complete_mission",
+            "count": 1
+          },
+          {
+            "tool": "panel_create_task",
+            "count": 2
+          },
+          {
+            "tool": "panel_expert_squad_inspect",
+            "count": 1
+          },
+          {
+            "tool": "panel_query_task",
+            "count": 3
+          },
+          {
+            "tool": "panel_query_task_artifacts",
+            "count": 2
+          },
+          {
+            "tool": "panel_read_task_artifact",
+            "count": 2
+          },
+          {
+            "tool": "panel_read_task_message",
+            "count": 2
+          },
+          {
+            "tool": "publish_interactive_artifact",
+            "count": 1
+          },
+          {
+            "tool": "scheduler_message",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "agentID": "orchestrator",
+        "totalCalls": 18,
+        "tools": [
+          {
+            "tool": "manage_task",
+            "count": 2
+          },
+          {
+            "tool": "no_action",
+            "count": 4
+          },
+          {
+            "tool": "read_task_message",
+            "count": 4
+          },
+          {
+            "tool": "scheduler_message",
+            "count": 8
+          }
+        ]
+      }
+    ],
+    "toolActionsByAgent": [
+      {
+        "agentID": "mission",
+        "actions": [
+          {
+            "action": "mission_state:commit",
+            "count": 3
+          },
+          {
+            "action": "mission_state:snapshot",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "agentID": "orchestrator",
+        "actions": [
+          {
+            "action": "manage_task:complete_task",
+            "count": 2
+          }
+        ]
+      }
+    ]
+  },
+  "usageByAgent": [
+    {
+      "agentID": "memory",
+      "calls": 2,
+      "inputTokens": 1906,
+      "outputTokens": 1264,
+      "reasoningTokens": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "totalTokens": 3170
+    },
+    {
+      "agentID": "mission",
+      "calls": 31,
+      "inputTokens": 130438,
+      "outputTokens": 7360,
+      "reasoningTokens": 64,
+      "cacheReadTokens": 1305856,
+      "cacheWriteTokens": 0,
+      "totalTokens": 1443718
+    },
+    {
+      "agentID": "orchestrator",
+      "calls": 18,
+      "inputTokens": 188257,
+      "outputTokens": 2291,
+      "reasoningTokens": 44,
+      "cacheReadTokens": 726400,
+      "cacheWriteTokens": 0,
+      "totalTokens": 916992
+    }
+  ],
+  "turnArtifactMessageIDs": [
+    "msg_g0VX6BAnL00tvXOZi1Dg",
+    "msg_g0VX6BtE80035wioLXQx"
+  ],
+  "events": [
+    {
+      "id": "pev_hNPne7BMs2uDpmt0iYfg",
+      "sequence": 18,
+      "emittedAt": 1791130805194,
+      "kind": "notification",
+      "subject": "READY_B DUPLEX-a7b2a3c087",
+      "threadID": "scheduler-message:ses_-zUStphrrzzMBtp5e2GT:msg_hdzoCnnJq8bpFlqWrARo:call_FYwnuGnZdrjwPaczoTXfrZFK",
+      "source": {
+        "kind": "task_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "task_id": "tsk_g00VX6AH2a00GbBY1lNF",
+        "root_session_id": "ses_-zUStpip1zzwKeP1YSqc"
+      },
+      "target": {
+        "kind": "mission_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "mission_id": "22077f69998df446",
+        "session_id": "ses_-zUStq8wHzznhYTq7eid"
+      },
+      "replyTo": null,
+      "correlationID": "scheduler-message:ses_-zUStphrrzzMBtp5e2GT:msg_hdzoCnnJq8bpFlqWrARo:call_FYwnuGnZdrjwPaczoTXfrZFK"
+    },
+    {
+      "id": "pev_h8QoiNUOkTYw0L1Qxb0g",
+      "sequence": 24,
+      "emittedAt": 1791130824741,
+      "kind": "notification",
+      "subject": "READY_A DUPLEX-a7b2a3c087",
+      "threadID": "scheduler-message:ses_-zUStpdMlzzu2FZCRVyO:msg_hEfwgLOLeY7KtIZmWErO:call_5xeAKY0iaoOxzvXZ7KqMWGhN",
+      "source": {
+        "kind": "task_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "task_id": "tsk_g00VX6ALT700GfHoi711",
+        "root_session_id": "ses_-zUStpeR0zzt1ct690Yc"
+      },
+      "target": {
+        "kind": "mission_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "mission_id": "22077f69998df446",
+        "session_id": "ses_-zUStq8wHzznhYTq7eid"
+      },
+      "replyTo": null,
+      "correlationID": "scheduler-message:ses_-zUStpdMlzzu2FZCRVyO:msg_hEfwgLOLeY7KtIZmWErO:call_5xeAKY0iaoOxzvXZ7KqMWGhN"
+    },
+    {
+      "id": "pev_hlzBkDQACOYKTjDkhTmh",
+      "sequence": 11,
+      "emittedAt": 1791130839154,
+      "kind": "request",
+      "subject": "START_PEER DUPLEX-a7b2a3c087",
+      "threadID": "scheduler-message:ses_-zUStq8wHzznhYTq7eid:msg_g0VX6AQ8x00yfWGdtJML:call_PZODNnBfU4RyfkrRqHGJW2jh",
+      "source": {
+        "kind": "mission_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "mission_id": "22077f69998df446",
+        "session_id": "ses_-zUStq8wHzznhYTq7eid"
+      },
+      "target": {
+        "kind": "task_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "task_id": "tsk_g00VX6ALT700GfHoi711",
+        "root_session_id": "ses_-zUStpeR0zzt1ct690Yc"
+      },
+      "replyTo": null,
+      "correlationID": "scheduler-message:ses_-zUStq8wHzznhYTq7eid:msg_g0VX6AQ8x00yfWGdtJML:call_PZODNnBfU4RyfkrRqHGJW2jh"
+    },
+    {
+      "id": "pev_h0YXgqw5ncFJKOOpBfXp",
+      "sequence": 31,
+      "emittedAt": 1791130859651,
+      "kind": "reply",
+      "subject": "START_PEER acknowledged DUPLEX-a7b2a3c087",
+      "threadID": "scheduler-message:ses_-zUStq8wHzznhYTq7eid:msg_g0VX6AQ8x00yfWGdtJML:call_PZODNnBfU4RyfkrRqHGJW2jh",
+      "source": {
+        "kind": "task_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "task_id": "tsk_g00VX6ALT700GfHoi711",
+        "root_session_id": "ses_-zUStpeR0zzt1ct690Yc"
+      },
+      "target": {
+        "kind": "mission_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "mission_id": "22077f69998df446",
+        "session_id": "ses_-zUStq8wHzznhYTq7eid"
+      },
+      "replyTo": "pev_hlzBkDQACOYKTjDkhTmh",
+      "correlationID": "scheduler-message:ses_-zUStq8wHzznhYTq7eid:msg_g0VX6AQ8x00yfWGdtJML:call_PZODNnBfU4RyfkrRqHGJW2jh"
+    },
+    {
+      "id": "pev_h4V1hM54ZVEjVSjOoJPp",
+      "sequence": 11,
+      "emittedAt": 1791130869055,
+      "kind": "request",
+      "subject": "PEER_CONFIRM DUPLEX-a7b2a3c087",
+      "threadID": "scheduler-message:ses_-zUStpdMlzzu2FZCRVyO:msg_hTB7aCQdkzs0mhd0IKa7:call_7pUMu6NVXsIq7mBacMPdKWIF",
+      "source": {
+        "kind": "task_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "task_id": "tsk_g00VX6ALT700GfHoi711",
+        "root_session_id": "ses_-zUStpeR0zzt1ct690Yc"
+      },
+      "target": {
+        "kind": "task_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "task_id": "tsk_g00VX6AH2a00GbBY1lNF",
+        "root_session_id": "ses_-zUStpip1zzwKeP1YSqc"
+      },
+      "replyTo": null,
+      "correlationID": "scheduler-message:ses_-zUStpdMlzzu2FZCRVyO:msg_hTB7aCQdkzs0mhd0IKa7:call_7pUMu6NVXsIq7mBacMPdKWIF"
+    },
+    {
+      "id": "pev_hIRZ5mGOs3Gbss2yerHS",
+      "sequence": 22,
+      "emittedAt": 1791130887639,
+      "kind": "reply",
+      "subject": "PEER_CONFIRM confirmed DUPLEX-a7b2a3c087",
+      "threadID": "scheduler-message:ses_-zUStpdMlzzu2FZCRVyO:msg_hTB7aCQdkzs0mhd0IKa7:call_7pUMu6NVXsIq7mBacMPdKWIF",
+      "source": {
+        "kind": "task_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "task_id": "tsk_g00VX6AH2a00GbBY1lNF",
+        "root_session_id": "ses_-zUStpip1zzwKeP1YSqc"
+      },
+      "target": {
+        "kind": "task_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "task_id": "tsk_g00VX6ALT700GfHoi711",
+        "root_session_id": "ses_-zUStpeR0zzt1ct690Yc"
+      },
+      "replyTo": "pev_h4V1hM54ZVEjVSjOoJPp",
+      "correlationID": "scheduler-message:ses_-zUStpdMlzzu2FZCRVyO:msg_hTB7aCQdkzs0mhd0IKa7:call_7pUMu6NVXsIq7mBacMPdKWIF"
+    },
+    {
+      "id": "pev_hMtYEXKOvYh6BJQtYZTA",
+      "sequence": 35,
+      "emittedAt": 1791130896409,
+      "kind": "notification",
+      "subject": "B_DONE DUPLEX-a7b2a3c087",
+      "threadID": "scheduler-message:ses_-zUStphrrzzMBtp5e2GT:msg_hwpOMQCacxQ8X8VJpLlB:call_qW9CyJ2uiZdCHOsFou53P7CF",
+      "source": {
+        "kind": "task_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "task_id": "tsk_g00VX6AH2a00GbBY1lNF",
+        "root_session_id": "ses_-zUStpip1zzwKeP1YSqc"
+      },
+      "target": {
+        "kind": "mission_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "mission_id": "22077f69998df446",
+        "session_id": "ses_-zUStq8wHzznhYTq7eid"
+      },
+      "replyTo": null,
+      "correlationID": "scheduler-message:ses_-zUStphrrzzMBtp5e2GT:msg_hwpOMQCacxQ8X8VJpLlB:call_qW9CyJ2uiZdCHOsFou53P7CF"
+    },
+    {
+      "id": "pev_hKFxVSyhptbb6oi8Sl2v",
+      "sequence": 39,
+      "emittedAt": 1791130907265,
+      "kind": "request",
+      "subject": "DECISION DUPLEX-a7b2a3c087",
+      "threadID": "scheduler-message:ses_-zUStpdMlzzu2FZCRVyO:msg_hUBTkRY6wt8gnfRI0zFk:call_nwgvQpMZ389NVnPsiVNFTCNn",
+      "source": {
+        "kind": "task_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "task_id": "tsk_g00VX6ALT700GfHoi711",
+        "root_session_id": "ses_-zUStpeR0zzt1ct690Yc"
+      },
+      "target": {
+        "kind": "mission_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "mission_id": "22077f69998df446",
+        "session_id": "ses_-zUStq8wHzznhYTq7eid"
+      },
+      "replyTo": null,
+      "correlationID": "scheduler-message:ses_-zUStpdMlzzu2FZCRVyO:msg_hUBTkRY6wt8gnfRI0zFk:call_nwgvQpMZ389NVnPsiVNFTCNn"
+    },
+    {
+      "id": "pev_hYVV4C1iEBCLqWc0JJ17",
+      "sequence": 42,
+      "emittedAt": 1791130914939,
+      "kind": "notification",
+      "subject": "Task tsk_g00VX6AH2a00GbBY1lNF completed",
+      "threadID": "task:tsk_g00VX6AH2a00GbBY1lNF:lifecycle",
+      "source": {
+        "kind": "task_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "task_id": "tsk_g00VX6AH2a00GbBY1lNF",
+        "root_session_id": "ses_-zUStpip1zzwKeP1YSqc"
+      },
+      "target": {
+        "kind": "mission_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "mission_id": "22077f69998df446",
+        "session_id": "ses_-zUStq8wHzznhYTq7eid"
+      },
+      "replyTo": null,
+      "correlationID": "pev_g0VX6An8O000DWlThDLl"
+    },
+    {
+      "id": "pev_he0xa2eyjcUico2RXpn6",
+      "sequence": 29,
+      "emittedAt": 1791130917627,
+      "kind": "reply",
+      "subject": "DECISION confirmed DUPLEX-a7b2a3c087",
+      "threadID": "scheduler-message:ses_-zUStpdMlzzu2FZCRVyO:msg_hUBTkRY6wt8gnfRI0zFk:call_nwgvQpMZ389NVnPsiVNFTCNn",
+      "source": {
+        "kind": "mission_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "mission_id": "22077f69998df446",
+        "session_id": "ses_-zUStq8wHzznhYTq7eid"
+      },
+      "target": {
+        "kind": "task_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "task_id": "tsk_g00VX6ALT700GfHoi711",
+        "root_session_id": "ses_-zUStpeR0zzt1ct690Yc"
+      },
+      "replyTo": "pev_hKFxVSyhptbb6oi8Sl2v",
+      "correlationID": "scheduler-message:ses_-zUStpdMlzzu2FZCRVyO:msg_hUBTkRY6wt8gnfRI0zFk:call_nwgvQpMZ389NVnPsiVNFTCNn"
+    },
+    {
+      "id": "pev_hpSGQkvOEGqQUMYoZnkC",
+      "sequence": 50,
+      "emittedAt": 1791130940870,
+      "kind": "notification",
+      "subject": "A_DONE DUPLEX-a7b2a3c087",
+      "threadID": "scheduler-message:ses_-zUStpdMlzzu2FZCRVyO:msg_hYbScLaTcq7ODM3zaFef:call_UtVI38JNZA7jY6EPKFHdMBqp",
+      "source": {
+        "kind": "task_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "task_id": "tsk_g00VX6ALT700GfHoi711",
+        "root_session_id": "ses_-zUStpeR0zzt1ct690Yc"
+      },
+      "target": {
+        "kind": "mission_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "mission_id": "22077f69998df446",
+        "session_id": "ses_-zUStq8wHzznhYTq7eid"
+      },
+      "replyTo": null,
+      "correlationID": "scheduler-message:ses_-zUStpdMlzzu2FZCRVyO:msg_hYbScLaTcq7ODM3zaFef:call_UtVI38JNZA7jY6EPKFHdMBqp"
+    },
+    {
+      "id": "pev_hWtspaubCuwif7KjM2Cm",
+      "sequence": 57,
+      "emittedAt": 1791130962075,
+      "kind": "notification",
+      "subject": "Task tsk_g00VX6ALT700GfHoi711 completed",
+      "threadID": "task:tsk_g00VX6ALT700GfHoi711:lifecycle",
+      "source": {
+        "kind": "task_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "task_id": "tsk_g00VX6ALT700GfHoi711",
+        "root_session_id": "ses_-zUStpeR0zzt1ct690Yc"
+      },
+      "target": {
+        "kind": "mission_scheduler",
+        "project_id": "prj_hYHxEiIBbgG2BPvO4DfE",
+        "mission_id": "22077f69998df446",
+        "session_id": "ses_-zUStq8wHzznhYTq7eid"
+      },
+      "replyTo": null,
+      "correlationID": "pev_g0VX6AzRt0011Du3b2d2"
+    }
+  ],
+  "inboxes": [
+    {
+      "id": "pib_hSE2b5Zd4ObVrZokh7fH",
+      "eventID": "pev_hNPne7BMs2uDpmt0iYfg",
+      "actor": "session",
+      "actorID": "ses_-zUStq8wHzznhYTq7eid",
+      "status": "delivered",
+      "attempt": 1,
+      "deliveryResult": {
+        "kind": "session_wake",
+        "message_id": "msg_hhTw2zZ8kn92htDCvyXq"
+      }
+    },
+    {
+      "id": "pib_hhESGPaAB7yWjCXBscZp",
+      "eventID": "pev_h8QoiNUOkTYw0L1Qxb0g",
+      "actor": "session",
+      "actorID": "ses_-zUStq8wHzznhYTq7eid",
+      "status": "delivered",
+      "attempt": 1,
+      "deliveryResult": {
+        "kind": "session_wake",
+        "message_id": "msg_hJ4b3kzjgBPzA5Or1Bfz"
+      }
+    },
+    {
+      "id": "pib_h8mCjQGRQO9U9ioNYHIf",
+      "eventID": "pev_hlzBkDQACOYKTjDkhTmh",
+      "actor": "task",
+      "actorID": "tsk_g00VX6ALT700GfHoi711",
+      "status": "delivered",
+      "attempt": 1,
+      "deliveryResult": {
+        "kind": "task_ingress",
+        "message_id": "msg_hlHcRCm4XUVnYk9lctqW",
+        "ingress_id": "art_hVjqPG0SOsTCsqWYySN9"
+      }
+    },
+    {
+      "id": "pib_hpa5oJvHzmZHSsGX87Ru",
+      "eventID": "pev_h0YXgqw5ncFJKOOpBfXp",
+      "actor": "session",
+      "actorID": "ses_-zUStq8wHzznhYTq7eid",
+      "status": "delivered",
+      "attempt": 1,
+      "deliveryResult": {
+        "kind": "session_wake",
+        "message_id": "msg_hY2ApFCfv7J0ixHxGlX0"
+      }
+    },
+    {
+      "id": "pib_hnTXliOrhf7Azzbnzi51",
+      "eventID": "pev_h4V1hM54ZVEjVSjOoJPp",
+      "actor": "task",
+      "actorID": "tsk_g00VX6AH2a00GbBY1lNF",
+      "status": "delivered",
+      "attempt": 1,
+      "deliveryResult": {
+        "kind": "task_ingress",
+        "message_id": "msg_hwtcrPXSvfyKYVDP1TTw",
+        "ingress_id": "art_hJtL0R9onn3sd0smVeBh"
+      }
+    },
+    {
+      "id": "pib_hdGTSnWzfBYiJdC1VeXl",
+      "eventID": "pev_hIRZ5mGOs3Gbss2yerHS",
+      "actor": "task",
+      "actorID": "tsk_g00VX6ALT700GfHoi711",
+      "status": "delivered",
+      "attempt": 1,
+      "deliveryResult": {
+        "kind": "task_ingress",
+        "message_id": "msg_h8OuWPYvCNIOmaKMayQ0",
+        "ingress_id": "art_hatYajqUr8hDusbx0X4E"
+      }
+    },
+    {
+      "id": "pib_hkFLlPndhahYH0YFZHYW",
+      "eventID": "pev_hMtYEXKOvYh6BJQtYZTA",
+      "actor": "session",
+      "actorID": "ses_-zUStq8wHzznhYTq7eid",
+      "status": "delivered",
+      "attempt": 1,
+      "deliveryResult": {
+        "kind": "session_wake",
+        "message_id": "msg_hKZdILILUnFIQEEFbf8r"
+      }
+    },
+    {
+      "id": "pib_hod16qOhTyhscwWkhwra",
+      "eventID": "pev_hKFxVSyhptbb6oi8Sl2v",
+      "actor": "session",
+      "actorID": "ses_-zUStq8wHzznhYTq7eid",
+      "status": "delivered",
+      "attempt": 1,
+      "deliveryResult": {
+        "kind": "session_wake",
+        "message_id": "msg_hRUQKDyMWLTqolksXIKV"
+      }
+    },
+    {
+      "id": "pib_h84MmoVMbEJ8DgKnSD2r",
+      "eventID": "pev_hYVV4C1iEBCLqWc0JJ17",
+      "actor": "session",
+      "actorID": "ses_-zUStq8wHzznhYTq7eid",
+      "status": "delivered",
+      "attempt": 1,
+      "deliveryResult": {
+        "kind": "session_wake",
+        "message_id": "msg_hoWs46PjUuuorR5s5rly"
+      }
+    },
+    {
+      "id": "pib_hBvCEz4KZGc60ylSNMXG",
+      "eventID": "pev_he0xa2eyjcUico2RXpn6",
+      "actor": "task",
+      "actorID": "tsk_g00VX6ALT700GfHoi711",
+      "status": "delivered",
+      "attempt": 1,
+      "deliveryResult": {
+        "kind": "task_ingress",
+        "message_id": "msg_harvwrGyLfDD26LGtBHD",
+        "ingress_id": "art_hyO35A2iIJMZLGHCBYat"
+      }
+    },
+    {
+      "id": "pib_hvuY4rXiElNilRvXiJK3",
+      "eventID": "pev_hpSGQkvOEGqQUMYoZnkC",
+      "actor": "session",
+      "actorID": "ses_-zUStq8wHzznhYTq7eid",
+      "status": "delivered",
+      "attempt": 1,
+      "deliveryResult": {
+        "kind": "session_wake",
+        "message_id": "msg_hjbK0hkFz3Rw1Snh3AYI"
+      }
+    },
+    {
+      "id": "pib_hc4ueuWZh83sc942DibN",
+      "eventID": "pev_hWtspaubCuwif7KjM2Cm",
+      "actor": "session",
+      "actorID": "ses_-zUStq8wHzznhYTq7eid",
+      "status": "delivered",
+      "attempt": 1,
+      "deliveryResult": {
+        "kind": "session_wake",
+        "message_id": "msg_h9cyqwnyEiy8buokoGJA"
+      }
+    }
+  ],
+  "sourceSHA": "911c4cf7d185856c832a088c98e1f304e7573b68",
+  "sourceDiffSHA256": "4e499bc49b2f44107758974a8885730d049acfa3129911bca371d539114f2bfe",
+  "checkerSHA256": "7ffde5185929d8bff36da187fd0c6c3719b5cbee2cedd24d5e7700ae1b732d70",
+  "auditSHA256": "8f7707b452fbfa5cba0d7367542b4dd87fe238eb1e6ad4ea435460cd4795f33b",
+  "runtime": {
+    "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "bun": "1.3.14"
+  },
+  "maxRequests": 512,
+  "preflight": {
+    "sessionID": "ses_hVp3jAfMvHCshyDdQhW0",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    }
+  ],
+  "status": "passed",
+  "credentialCleanup": "passed",
+  "cleanupErrors": [],
+  "evidenceRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dUBLe9\\runner-22340-w1qlHG\\runtime-root\\tmp\\opencorvus-mission-task-duplex-e2e-qJSZvU"
+}

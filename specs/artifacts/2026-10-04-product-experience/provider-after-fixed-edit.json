@@ -1,0 +1,40 @@
+{
+  "api": "http://127.0.0.1:17879/v1",
+  "name": "Experience verified edit",
+  "env": [
+    "EXPERIENCE_FIRST",
+    "EXPERIENCE_SECOND"
+  ],
+  "npm": "@ai-sdk/openai-compatible",
+  "models": {
+    "stable": {
+      "name": "Stable model",
+      "temperature": false,
+      "tool_call": true,
+      "limit": {
+        "context": 16000,
+        "output": 2048
+      },
+      "options": {}
+    },
+    "qwen3-next:80b": {
+      "name": "Qwen exact name",
+      "temperature": false,
+      "tool_call": false,
+      "limit": {
+        "context": 32000,
+        "output": 4096
+      },
+      "options": {},
+      "variants": {
+        "thinking": {
+          "reasoningEffort": "high"
+        }
+      }
+    }
+  },
+  "whitelist": [
+    "qwen3-next:80b",
+    "stable"
+  ]
+}

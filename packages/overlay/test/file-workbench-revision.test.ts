@@ -16,6 +16,26 @@ afterEach(async () => {
   __setHostTransportForTest(undefined)
 })
 
+test("every accepted range-free open emits a reveal revision with its exact resource target", async () => {
+  const beforeOpen = fileEditorRevealRevision()
+  expect(await openFileEditor("acceptance-note.md", { directory: "/repo" })).toBe(true)
+  const target = selectedFileTarget()
+  expect({ target, revision: fileEditorRevealRevision() }).toEqual({
+    target: { directory: "/repo", path: "acceptance-note.md" },
+    revision: beforeOpen + 1,
+  })
+  expect(await openFileEditor("acceptance-note.md", { directory: "/repo" })).toBe(true)
+  expect({ target: selectedFileTarget(), revision: fileEditorRevealRevision() }).toEqual({
+    target,
+    revision: beforeOpen + 2,
+  })
+  expect(await openFileEditor("next-note.md", { directory: "/repo" })).toBe(true)
+  expect({ target: selectedFileTarget(), revision: fileEditorRevealRevision() }).toEqual({
+    target: { directory: "/repo", path: "next-note.md" },
+    revision: beforeOpen + 3,
+  })
+})
+
 test("file editor navigation retains and updates the exact cited line range", async () => {
   await openFileEditor("src/source.ts", { directory: "/repo" }, { startLine: 12, endLine: 18 })
 

@@ -7,7 +7,7 @@ import { openDocumentationEntry } from "../../services/documentation"
 import { openConfigDialog } from "../../services/config-dialog-control"
 import { applyZoom, sanitizeZoom, toggleDevtools } from "../../services/theme"
 import { themeOptionsForCurrentHost } from "../../services/theme-registry"
-import { browseDirectory, closeProject, openGlobalChatLauncher } from "../../services/workspace"
+import { browseDirectory, closeProject } from "../../services/workspace"
 import { quitOverlay } from "../../services/window"
 import { getHostTransport } from "../../services/host-transport-runtime"
 import { installNativeMenuListener, type NativeMenuActionID, usesNativeMacosMenu } from "../../services/native-menu"
@@ -202,7 +202,7 @@ function MenuRange(props: {
   )
 }
 
-export function TitlebarMenubar() {
+export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
   const [openMenu, setOpenMenu] = createSignal<MenuID | null>(null)
   const [autoFocusMenu, setAutoFocusMenu] = createSignal(false)
   let rootRef: HTMLDivElement | undefined
@@ -347,7 +347,7 @@ export function TitlebarMenubar() {
 
   async function startNewChat() {
     closeMenu()
-    await openGlobalChatLauncher()
+    await props.onNewChat()
   }
 
   async function openFolder() {

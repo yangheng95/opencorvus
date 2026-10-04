@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Current-version product experience](2026-10-04-product-experience/README.md): actual desktop interactions, verified repairs and authorized GPT-6.1 Sol Task/Mission/evidence-reader acceptance.
+
 - [0.1.23 release evidence](2026-09-30-v0.1.23-release/README.md): bundled notes and canonical native/website publication.
 
 - [Independent ten-trace Harbor audit](2026-09-30-harbor-independent-trace-audit/README.md): stratified fixed sampling, fresh-agent original trace review and comparison with the prior report.

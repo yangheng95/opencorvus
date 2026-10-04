@@ -94,12 +94,10 @@ html {
 }
 
 body {
-  --ui-overlay-viewport-width: max(100vw, var(--ui-overlay-min-width));
-  --ui-overlay-shell-height: max(
-    var(--ui-overlay-min-height),
-    min(100vh, calc(var(--ui-overlay-viewport-width) / var(--ui-overlay-min-aspect-ratio)))
-  );
-  --ui-overlay-shell-width: max(var(--ui-overlay-min-width), var(--ui-overlay-viewport-width));
+  /* Native minimum window dimensions belong to the host. Every renderer uses
+   * its actual viewport so shared pane and popup geometry stays reachable. */
+  --ui-overlay-shell-width: 100vw;
+  --ui-overlay-shell-height: 100vh;
 
   font-family: var(--font);
   font-size: var(--ui-font-body);
@@ -115,8 +113,8 @@ body {
   container: overlay-shell / inline-size;
   width: var(--ui-overlay-shell-width);
   margin: 0 auto;
-  min-width: var(--ui-overlay-min-width);
-  min-height: var(--ui-overlay-min-height);
+  min-width: 0;
+  min-height: 0;
   height: var(--ui-overlay-shell-height);
   display: flex;
   flex-direction: column;

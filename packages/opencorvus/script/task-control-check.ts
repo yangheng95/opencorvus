@@ -1,7 +1,7 @@
 import { orchestratorControlOccurrenceIdentity } from "../src/orchestrator/control-message-identity"
 import { execFileSync } from "node:child_process"
 import { createHash } from "node:crypto"
-import { CredentialRedactor, RealProviderAudit } from "./real-provider-audit"
+import { CredentialRedactor, RealProviderAudit, assertCopiedOAuthAccess } from "./real-provider-audit"
 import fs from "node:fs/promises"
 import { writeFileSync } from "node:fs"
 import os from "node:os"
@@ -378,7 +378,13 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
   const selectedModel = process.env[MODEL]!.trim()
   const separator = selectedModel.indexOf("/")
   if (separator <= 0) throw new Error("Authorized model must name Provider/model")
-  using audit = new RealProviderAudit(selectedModel.slice(separator + 1), Number(process.env.TASK_CONTROL_CHECK_MAX_REQUESTS ?? "256"))
+  const { Auth } = await import("@/auth")
+  const credential = await Auth.get(selectedModel.slice(0, separator))
+  if (!credential) throw new Error("Authorized Provider credential is unavailable in the isolated runtime")
+  const copiedAuthority = credential.type === "oauth" ? { copiedOAuthExpiresAt: credential.expires } : undefined
+  if (copiedAuthority) assertCopiedOAuthAccess(copiedAuthority.copiedOAuthExpiresAt)
+  using audit = new RealProviderAudit(selectedModel.slice(separator + 1), Number(process.env.TASK_CONTROL_CHECK_MAX_REQUESTS ?? "256"), undefined, copiedAuthority)
+  process.stdout.write(`[task-control phase] ${phase} credential-present kind=${credential.type} copied-oauth-refresh=forbidden\n`)
   const [
     { Provider },
     { SessionStatus },

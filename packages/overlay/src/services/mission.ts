@@ -242,6 +242,7 @@ export async function wakeMission(input: MissionWakeInput): Promise<MissionWakeR
   if (!text) throw new Error("wakeMission: text is required")
   const body = {
     text,
+    ...(input.requestID !== undefined ? { requestID: input.requestID } : {}),
     productPillar: input.productPillar,
     ...(input.missionID ? { missionID: input.missionID } : {}),
     ...(input.model ? { model: input.model } : {}),
@@ -296,8 +297,10 @@ export async function createMissionDraft(input: MissionDraftInput): Promise<Miss
 export async function dispatchMission(
   target: MissionActionTarget,
   model?: string,
+  requestID?: string,
 ): Promise<MissionDispatchResponse> {
   const body = {
+    ...(requestID !== undefined ? { requestID } : {}),
     ...(model?.trim() ? { model: model.trim() } : {}),
   } satisfies NonNullable<MissionDispatchData["body"]>
   return await apiJson<MissionDispatchResponse>(

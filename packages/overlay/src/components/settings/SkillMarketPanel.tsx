@@ -331,17 +331,22 @@ function SharedResourceManagementPanel(props: {
   async function reloadCurrentPanel(options: { directory?: string } = {}) {
     const directory = options.directory ?? currentDirectory()
     if (!directory) {
+      setLoading(false)
+      setSkillLoadIssues([])
       setPanelNotice(t("workspace.no_directory"), "warn")
       return
     }
     setLoading(true)
+    setSkillLoadIssues([])
     setNotice("")
     try {
       if (props.mode === "mcp") {
         await refreshMcpStatus({ directory })
       } else {
         await loadInstalledSkills({ directory, isCurrentDirectory: sourceMatchesDirectory })
-        setSkillLoadIssues(await loadSkillIssues({ directory, isCurrentDirectory: sourceMatchesDirectory }))
+        const issues = await loadSkillIssues({ directory, isCurrentDirectory: sourceMatchesDirectory })
+        if (!sourceMatchesDirectory(directory)) return
+        setSkillLoadIssues(issues)
       }
       if (!sourceMatchesDirectory(directory)) return
     } catch (e) {
@@ -596,22 +601,14 @@ function SharedResourceManagementPanel(props: {
   createEffect(() => {
     if (props.mode !== "skill" || props.active !== true) return
     const directory = currentDirectory()
-    if (!directory) {
-      setPanelNotice(t("workspace.no_directory"), "warn")
-      return
-    }
-
-    setNotice("")
-    loadInstalledSkills({ directory, isCurrentDirectory: sourceMatchesDirectory }).catch((e) => {
-      if (sourceMatchesDirectory(directory)) setPanelNotice(e instanceof Error ? e.message : String(e))
-    })
+    void reloadCurrentPanel({ directory })
   })
 
   createEffect(() => {
     if (props.mode !== "mcp" || props.active !== true) return
     const directory = currentDirectory()
     if (!directory) {
-      setPanelNotice(t("workspace.no_directory"), "warn")
+      void reloadCurrentPanel({ directory })
       return
     }
 
@@ -620,11 +617,10 @@ function SharedResourceManagementPanel(props: {
         if (sourceMatchesDirectory(directory)) setPanelNotice(e instanceof Error ? e.message : String(e))
       })
     }
-    setNotice("")
+    void reloadCurrentPanel({ directory })
     const interval = createVisibilityInterval(refresh, MCP_STATUS_REFRESH_INTERVAL_MS, {
       onVisible: refresh,
     })
-    refresh()
     interval.start()
 
     onCleanup(() => {
@@ -1006,7 +1002,14 @@ function SharedResourceManagementPanel(props: {
               </form>
             </Show>
             <div class="extension-list" id="skillList">
-              <Show when={poolSkills().length > 0} fallback={<div class="empty-hint">{t("skill.none_custom")}</div>}>
+              <Show
+                when={poolSkills().length > 0}
+                fallback={
+                  <Show when={!loading()}>
+                    <div class="empty-hint">{t("skill.none_custom")}</div>
+                  </Show>
+                }
+              >
                 <For each={poolSkills()}>
                   {(item) => (
                     <Disclosure.Root class="skill-installed-item">
@@ -1277,7 +1280,14 @@ function SharedResourceManagementPanel(props: {
               actions={<Badge tone="neutral">{mcpEntries().length}</Badge>}
             >
               <div id="mcpList">
-                <Show when={mcpEntries().length > 0} fallback={<div class="empty-hint">{t("mcp.none")}</div>}>
+                <Show
+                  when={mcpEntries().length > 0}
+                  fallback={
+                    <Show when={!loading()}>
+                      <div class="empty-hint">{t("mcp.none")}</div>
+                    </Show>
+                  }
+                >
                   <For each={mcpEntries()}>
                     {([name, item]) => {
                       const status = item?.status

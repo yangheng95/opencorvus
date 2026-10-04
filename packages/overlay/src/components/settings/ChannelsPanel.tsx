@@ -1,4 +1,5 @@
 import { Feedback } from "../ui/Feedback"
+import type { ChannelListResponse } from "@opencorvus-ai/sdk"
 // Solid.js component for channel configuration.
 // Data source: appStore.channels + appStore.config (populated by loadConfigInfo).
 // Save: channel config via PATCH /config (same as pre-Solid original).
@@ -19,23 +20,18 @@ import { Switch } from "../ui/Switch"
 import {
   channelConfigurationStatusLabelFromString,
   channelConfigurationStatusToneFromString,
+  type SettingsStatusTone,
 } from "../../utils/settings-status-labels"
 import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
 
-interface ChannelField {
-  key: string
-  label: string
-  type: "text" | "secret" | "boolean" | string
-  placeholder?: string
-}
-
-interface ChannelEntry {
-  id: string
-  name: string
-  docs_url: string
-  summary: string
-  status: string
-  fields: ChannelField[]
+type ChannelEntry = ChannelListResponse[number]
+const CHANNEL_RUNTIME_TONES: Record<ChannelEntry["runtime_status"], SettingsStatusTone> = {
+  disabled: "muted",
+  unavailable: "muted",
+  starting: "warn",
+  running: "ok",
+  stopped: "neutral",
+  error: "bad",
 }
 
 type ChannelSaveKind = "channel" | "public-url"
@@ -327,95 +323,100 @@ export default function ChannelsPanel(props: { directory: string }) {
         </For>
         <Show when={notice() && noticeFormIdentity() === "catalog"}>{noticeState()}</Show>
 
-        <SettingsGroup title={t("channel.external_access")} description={t("channel.public_url_hint")} contentInset>
-          <div class="extension-head">
-            <TextField.Root as="label" class="channel-public-url-field">
-              <TextField.Label>{t("channel.public_url")}</TextField.Label>
-              {/* Fixed example URL; the locale-sensitive field label/hint already carries the instruction. */}
-              <TextField.Input
-                type="url"
-                pattern="https?://.+"
-                placeholder="https://opencorvus.example.com"
-                value={localPublicUrl()}
-                onInput={(e) => setLocalPublicUrl(e.currentTarget.value)}
-                onBlur={(e) => {
-                  const v = e.currentTarget.value.trim()
-                  e.currentTarget.setCustomValidity(
-                    v && !/^https?:\/\/.+/i.test(v) ? t("channel.public_url_invalid") : "",
-                  )
-                }}
-              />
-            </TextField.Root>
-            <div class="dialog-actions compact">
-              <Button
-                type="button"
-                variant="solid"
-                size="md"
-                tone="accent"
-                onClick={handleSavePublicUrl}
-                disabled={savePending("public-url")}
-              >
-                {t("common.save")}
-              </Button>
+        <Show when={props.directory.trim()} fallback={<SettingsEmpty>{t("workspace.no_directory")}</SettingsEmpty>}>
+          <SettingsGroup title={t("channel.external_access")} description={t("channel.public_url_hint")} contentInset>
+            <div class="extension-head">
+              <TextField.Root as="label" class="channel-public-url-field">
+                <TextField.Label>{t("channel.public_url")}</TextField.Label>
+                {/* Fixed example URL; the locale-sensitive field label/hint already carries the instruction. */}
+                <TextField.Input
+                  type="url"
+                  pattern="https?://.+"
+                  placeholder="https://opencorvus.example.com"
+                  value={localPublicUrl()}
+                  onInput={(e) => setLocalPublicUrl(e.currentTarget.value)}
+                  onBlur={(e) => {
+                    const v = e.currentTarget.value.trim()
+                    e.currentTarget.setCustomValidity(
+                      v && !/^https?:\/\/.+/i.test(v) ? t("channel.public_url_invalid") : "",
+                    )
+                  }}
+                />
+              </TextField.Root>
+              <div class="dialog-actions compact">
+                <Button
+                  type="button"
+                  variant="solid"
+                  size="md"
+                  tone="accent"
+                  onClick={handleSavePublicUrl}
+                  disabled={savePending("public-url")}
+                >
+                  {t("common.save")}
+                </Button>
+              </div>
             </div>
-          </div>
-        </SettingsGroup>
+          </SettingsGroup>
 
-        <SettingsGroup title={t("channel.available_channels")}>
-          <Show when={channels().length > 0} fallback={<SettingsEmpty>{t("channel.none")}</SettingsEmpty>}>
-            <div id="channelList">
-              <For each={channels()}>
-                {(item) => (
-                  <SettingsRow
-                    class="channel-settings-row"
-                    title={<strong>{item.name}</strong>}
-                    desc={item.summary}
-                    meta={
-                      <small class="channel-doc-credit">
-                        {t("channel.tutorial_credit", { source: "OpenClaw Docs" })}
-                      </small>
-                    }
-                    interactive
-                    actions={
-                      <div class="channel-row-actions">
-                        <Badge tone={channelConfigurationStatusToneFromString(item.status)}>
-                          {channelConfigurationStatusLabelFromString(item.status)}
-                        </Badge>
-                        <Show when={canOpenTutorialDocs()}>
+          <SettingsGroup title={t("channel.available_channels")}>
+            <Show when={channels().length > 0} fallback={<SettingsEmpty>{t("channel.none")}</SettingsEmpty>}>
+              <div id="channelList">
+                <For each={channels()}>
+                  {(item) => (
+                    <SettingsRow
+                      class="channel-settings-row"
+                      title={<strong>{item.name}</strong>}
+                      desc={item.summary}
+                      meta={
+                        <small class="channel-doc-credit">
+                          {t("channel.tutorial_credit", { source: "OpenClaw Docs" })}
+                        </small>
+                      }
+                      interactive
+                      actions={
+                        <div class="channel-row-actions">
+                          <Badge tone={channelConfigurationStatusToneFromString(item.status)}>
+                            {channelConfigurationStatusLabelFromString(item.status)}
+                          </Badge>
+                          <Badge tone={CHANNEL_RUNTIME_TONES[item.runtime_status]} title={item.runtime_detail}>
+                            {t(`channel.runtime.${item.runtime_status}`)}
+                          </Badge>
+                          <Show when={canOpenTutorialDocs()}>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="md"
+                              tone="neutral"
+                              title={t("channel.tutorial_hint")}
+                              aria-label={t("channel.tutorial_hint")}
+                              disabled={
+                                tutorialOwner()?.target === item.docs_url && tutorialOwner()?.formIdentity === "catalog"
+                              }
+                              onClick={(event) => void openTutorial(item.docs_url, event.currentTarget)}
+                            >
+                              {t("channel.tutorial")}
+                            </Button>
+                          </Show>
                           <Button
                             type="button"
                             variant="ghost"
                             size="md"
                             tone="neutral"
-                            title={t("channel.tutorial_hint")}
-                            aria-label={t("channel.tutorial_hint")}
-                            disabled={
-                              tutorialOwner()?.target === item.docs_url && tutorialOwner()?.formIdentity === "catalog"
-                            }
-                            onClick={(event) => void openTutorial(item.docs_url, event.currentTarget)}
+                            title={t("channel.edit_title")}
+                            aria-label={t("channel.edit_title")}
+                            onClick={() => openEdit(item.id)}
                           >
-                            {t("channel.tutorial")}
+                            {t("common.edit")}
                           </Button>
-                        </Show>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="md"
-                          tone="neutral"
-                          title={t("channel.edit_title")}
-                          aria-label={t("channel.edit_title")}
-                          onClick={() => openEdit(item.id)}
-                        >
-                          {t("common.edit")}
-                        </Button>
-                      </div>
-                    }
-                  />
-                )}
-              </For>
-            </div>
-          </Show>
-        </SettingsGroup>
+                        </div>
+                      }
+                    />
+                  )}
+                </For>
+              </div>
+            </Show>
+          </SettingsGroup>
+        </Show>
       </SettingsPanel>
 
       <Show when={editingEntry() !== null && editingOwner()?.directory === props.directory.trim()}>

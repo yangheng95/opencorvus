@@ -1,0 +1,21 @@
+{
+  "api": "http://127.0.0.1:17879/v1",
+  "name": "Experience renamed only",
+  "env": [
+    "EXPERIENCE_FIRST"
+  ],
+  "models": {
+    "qwen3-next": {
+      "name": "80b:Qwen exact name",
+      "temperature": false,
+      "tool_call": true,
+      "options": {}
+    },
+    "stable": {
+      "name": "Stable model",
+      "temperature": false,
+      "tool_call": true,
+      "options": {}
+    }
+  }
+}

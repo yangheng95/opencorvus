@@ -35,7 +35,7 @@ import { cardTreeStore } from "../store/card-tree"
 import { dialogStore } from "../store/dialog"
 import { openConfigDialog } from "../services/config-dialog-control"
 import type { AutomationRunSession } from "../services/automations"
-import type { WorkLedgerItemRow, WorkLedgerTaskRow } from "../services/work-ledger"
+import type { WorkLedgerItemRow, WorkLedgerMissionRow, WorkLedgerTaskRow } from "../services/work-ledger"
 
 const MAILBOX_HOVER_OPEN_DELAY_MILLISECONDS = 180
 
@@ -199,6 +199,8 @@ export interface AppProps {
   onOpenRightDockPanel: (panel: RightDockPanel) => void
   onOpenSubagentConversation: (sessionID: string) => void
   onOpenRightDockAddMenu: () => void
+  onNewChat: () => Promise<void>
+  onSelectMission: (row: WorkLedgerMissionRow) => Promise<void>
   onSelectTask: (taskID: string, directory: string) => Promise<void>
   onSelectChat: (sessionID: string, directory: string, experience: "chat" | "work") => Promise<void>
   conversationExperience: () => "chat" | "work" | undefined
@@ -278,7 +280,7 @@ export function App(props: AppProps) {
               <TitlebarNavigation />
             </div>
             <div id="solidTitlebarMenu">
-              <TitlebarMenubar />
+              <TitlebarMenubar onNewChat={props.onNewChat} />
             </div>
           </div>
           <div class="titlebar-spacer" data-tauri-drag-region />
@@ -574,7 +576,12 @@ export function App(props: AppProps) {
       </div>
       <ProjectMemoryBanner />
       <div id="commandPaletteHost">
-        <CommandPalette onSelectTask={props.onSelectTask} onSelectChat={props.onSelectChat} />
+        <CommandPalette
+          onNewChat={props.onNewChat}
+          onSelectMission={props.onSelectMission}
+          onSelectTask={props.onSelectTask}
+          onSelectChat={props.onSelectChat}
+        />
       </div>
       <div id="appDialogHost">
         <AppDialogHost />
