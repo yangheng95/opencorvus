@@ -510,7 +510,9 @@ export namespace AutomationService {
     return {
       id: row.id,
       name: row.name,
-      target: targetForRow(row),
+      target: Database.use((db) =>
+        targetForRevision(db, { revisionID: row.revision_id, scope: row.scope, sessionID: row.session_id }),
+      ),
       recurrence: row.recurrence,
       executionMode: row.execution_mode,
       model:
@@ -525,21 +527,27 @@ export namespace AutomationService {
     }
   }
 
-  function targetForRow(row: typeof AutomationTable.$inferSelect): AutomationTarget {
-    if (row.scope === "session" && row.session_id) return { scope: "session", sessionId: row.session_id }
-    if (row.scope === "global") return { scope: "global" }
-    if (row.scope === "project") {
-      const projectIds = Database.use((db) =>
-        db
-          .select({ projectID: AutomationProjectTargetTable.project_id })
-          .from(AutomationProjectTargetTable)
-          .where(eq(AutomationProjectTargetTable.automation_revision_id, row.id))
-          .orderBy(AutomationProjectTargetTable.position, AutomationProjectTargetTable.project_id)
-          .all(),
-      ).map((target) => target.projectID)
+  function targetForRevision(
+    db: Database.TxOrDb,
+    input: {
+      revisionID: string
+      scope: typeof AutomationTable.$inferSelect.scope
+      sessionID: string | null
+    },
+  ): AutomationTarget {
+    if (input.scope === "session" && input.sessionID) return { scope: "session", sessionId: input.sessionID }
+    if (input.scope === "global") return { scope: "global" }
+    if (input.scope === "project") {
+      const projectIds = db
+        .select({ projectID: AutomationProjectTargetTable.project_id })
+        .from(AutomationProjectTargetTable)
+        .where(eq(AutomationProjectTargetTable.automation_revision_id, input.revisionID))
+        .orderBy(AutomationProjectTargetTable.position, AutomationProjectTargetTable.project_id)
+        .all()
+        .map((target) => target.projectID)
       return { scope: "project", projectIds }
     }
-    throw new Error(`Automation ${row.id} has invalid public target`)
+    throw new Error(`Automation revision ${input.revisionID} has invalid public target`)
   }
 
   function definitionReceiptInTransaction(
@@ -549,25 +557,7 @@ export namespace AutomationService {
     if (row.kind !== "recurring" || !row.recurrence) {
       throw new Error(`Automation revision ${row.id} is not a public recurring definition`)
     }
-    const target: AutomationTarget =
-      row.scope === "session" && row.session_id
-        ? { scope: "session", sessionId: row.session_id }
-        : row.scope === "global"
-          ? { scope: "global" }
-          : row.scope === "project"
-            ? {
-                scope: "project",
-                projectIds: db
-                  .select({ projectID: AutomationProjectTargetTable.project_id })
-                  .from(AutomationProjectTargetTable)
-                  .where(eq(AutomationProjectTargetTable.automation_revision_id, row.id))
-                  .orderBy(AutomationProjectTargetTable.position, AutomationProjectTargetTable.project_id)
-                  .all()
-                  .map((entry) => entry.projectID),
-              }
-            : (() => {
-                throw new Error(`Automation revision ${row.id} has invalid public target`)
-              })()
+    const target = targetForRevision(db, { revisionID: row.id, scope: row.scope, sessionID: row.session_id })
     return {
       id: row.definition_id,
       revisionId: row.id,
@@ -737,7 +727,9 @@ export namespace AutomationService {
         automationID: input.id,
       })
     }
-    const currentTarget = targetForRow(current)
+    const currentTarget = Database.use((db) =>
+      targetForRevision(db, { revisionID: current.revision_id, scope: current.scope, sessionID: current.session_id }),
+    )
     const next = {
       name: input.name ?? current.name,
       target: input.target ?? currentTarget,
@@ -2459,7 +2451,9 @@ export namespace AutomationService {
   }
 
   async function executionTargets(job: AutomationRow): Promise<ExecutionTarget[]> {
-    const target = targetForRow(job)
+    const target = Database.use((db) =>
+      targetForRevision(db, { revisionID: job.revision_id, scope: job.scope, sessionID: job.session_id }),
+    )
     if (target.scope === "session") {
       const session = await Session.get(target.sessionId).catch((error) => {
         if (error instanceof NotFoundError) return undefined

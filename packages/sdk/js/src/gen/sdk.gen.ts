@@ -4155,12 +4155,13 @@ export class File_ extends HeyApiClient {
   /**
    * Write file
    *
-   * Write text content to an existing editable file in the project directory.
+   * Write text content to an existing editable file only when expectedRevision matches its loaded content and physical identity.
    */
   public write<ThrowOnError extends boolean = false>(
     parameters: {
       directory?: string
       content: string
+      expectedRevision: string
       path: string
     },
     options?: Options<never, ThrowOnError>,
@@ -4172,6 +4173,7 @@ export class File_ extends HeyApiClient {
           args: [
             { in: "query", key: "directory" },
             { in: "body", key: "content" },
+            { in: "body", key: "expectedRevision" },
             { in: "body", key: "path" },
           ],
         },

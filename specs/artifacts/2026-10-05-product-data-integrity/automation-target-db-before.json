@@ -1,0 +1,67 @@
+[
+  {
+    "id": "atm_g0VX8MR3n00AuTOo70l8",
+    "definition_id": "atm_g0VX8MR3n00AuTOo70l8",
+    "revision": 1,
+    "scope": "global",
+    "status": "active",
+    "name": "Data integrity race A",
+    "session_id": null,
+    "physicalRevisionTargets": []
+  },
+  {
+    "id": "atm_g0VX8MR4400Qevua5ouv",
+    "definition_id": "atm_g0VX8MR3n00AuTOo70l8",
+    "revision": 2,
+    "scope": "global",
+    "status": "paused",
+    "name": "Data integrity race A",
+    "session_id": null,
+    "physicalRevisionTargets": []
+  },
+  {
+    "id": "atm_g0VX8NhRh00y5WAc5nZ2",
+    "definition_id": "atm_g0VX8MR3n00AuTOo70l8",
+    "revision": 3,
+    "scope": "project",
+    "status": "paused",
+    "name": "B authored edit must target B",
+    "session_id": null,
+    "physicalRevisionTargets": [
+      {
+        "project_id": "prj_hroPEGg17GAZWxDZ7MR7",
+        "position": 0
+      }
+    ]
+  },
+  {
+    "id": "atm_g0VX8MR4A002Lr4J7nut",
+    "definition_id": "atm_g0VX8MR4A002Lr4J7nut",
+    "revision": 1,
+    "scope": "project",
+    "status": "active",
+    "name": "Data integrity race B",
+    "session_id": null,
+    "physicalRevisionTargets": [
+      {
+        "project_id": "prj_hroPEGg17GAZWxDZ7MR7",
+        "position": 0
+      }
+    ]
+  },
+  {
+    "id": "atm_g0VX8MR4M00mmQpHeTqL",
+    "definition_id": "atm_g0VX8MR4A002Lr4J7nut",
+    "revision": 2,
+    "scope": "project",
+    "status": "paused",
+    "name": "Data integrity race B",
+    "session_id": null,
+    "physicalRevisionTargets": [
+      {
+        "project_id": "prj_hroPEGg17GAZWxDZ7MR7",
+        "position": 0
+      }
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "path": "ui-conflict.md",
+  "afterShortcut": "# Saved after reload\nThe current revision allows this edit.",
+  "expectedSavedContent": "# Saved after reload\nThe current revision allows this edit.",
+  "externalBeforeSave": "# External current version\nWritten after editor load.\n",
+  "preservedDraftBeforeReload": "# Local authored draft\nKeep this draft on conflict.",
+  "serverPort": 17885,
+  "sourceBundle": "main-DzIfSfbS.js"
+}

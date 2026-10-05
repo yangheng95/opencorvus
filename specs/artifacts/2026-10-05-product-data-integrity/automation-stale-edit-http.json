@@ -1,0 +1,115 @@
+{
+  "startedAt": "2026-10-05T02:09:21.560Z",
+  "id": "atm_g0VX8XwyD0022GOmuYMK",
+  "requests": [
+    {
+      "time": "2026-10-05T02:09:21.602Z",
+      "origin": "http://127.0.0.1:17887",
+      "route": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8XwyD0022GOmuYMK",
+        "name": "global peer pair 2 writer 0",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:09:21.616Z",
+      "origin": "http://127.0.0.1:17888",
+      "route": "/global/automations/atm_g0VX8XwyD0022GOmuYMK",
+      "method": "PATCH",
+      "input": {
+        "prompt": "New prompt authored by the second editor after the first editor opened."
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8XwyD0022GOmuYMK",
+        "name": "global peer pair 2 writer 0",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "New prompt authored by the second editor after the first editor opened.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:09:21.624Z",
+      "origin": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8XwyD0022GOmuYMK",
+      "method": "PATCH",
+      "input": {
+        "name": "Only the name was edited in the older form",
+        "target": {
+          "scope": "global"
+        },
+        "executionMode": "local",
+        "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+        "model": null,
+        "reasoningEffort": null
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8XwyD0022GOmuYMK",
+        "name": "Only the name was edited in the older form",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:09:21.634Z",
+      "origin": "http://127.0.0.1:17888",
+      "route": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8XwyD0022GOmuYMK",
+        "name": "Only the name was edited in the older form",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    }
+  ]
+}

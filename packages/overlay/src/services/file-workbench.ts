@@ -1,4 +1,5 @@
 import { createSignal } from "solid-js"
+import type { FileContent as SdkFileContent } from "@opencorvus-ai/sdk"
 import { uint8ToBase64 } from "@opencorvus-ai/transport-protocol"
 import { apiJson } from "./api"
 import { projectScopedPath } from "./project-directory"
@@ -11,13 +12,7 @@ export interface FileNode {
   ignored: boolean
 }
 
-export interface FileContent {
-  type: "text" | "binary"
-  content: string
-  diff?: string
-  encoding?: "base64"
-  mimeType?: string
-}
+export type FileContent = SdkFileContent
 
 export interface FileUploadPayload {
   name: string
@@ -225,7 +220,22 @@ export function closeFileEditor(): Promise<boolean> {
   return requestFileEditorTarget(null)
 }
 
-export function updateOpenFilePathAfterMove(previousPath: string, nextPath: string, scope: FileOperationScope): void {
+async function admitFileMutation(path: string, scope: FileOperationScope): Promise<void> {
+  const target = selectedFileTarget()
+  if (!target || target.sourceAbsolutePath || target.directory !== scope.directory.trim()) return
+  if (descendantSuffix(target.path, path) === null) return
+  const generation = ++fileEditorNavigationGeneration
+  const allowed = fileEditorBeforeNavigate ? await fileEditorBeforeNavigate() : true
+  if (
+    !allowed ||
+    generation !== fileEditorNavigationGeneration ||
+    !sameFileEditorResource(target, selectedFileTarget())
+  ) {
+    throw new DOMException("File mutation cancelled or superseded", "AbortError")
+  }
+}
+
+function updateOpenFilePathAfterMove(previousPath: string, nextPath: string, scope: FileOperationScope): void {
   const target = selectedFileTarget()
   if (!target || target.sourceAbsolutePath || target.directory !== scope.directory.trim()) return
   const suffix = descendantSuffix(target.path, previousPath)
@@ -237,9 +247,9 @@ export function updateOpenFilePathAfterMove(previousPath: string, nextPath: stri
   setFileWorkbenchOpen(true)
 }
 
-export function closeFileEditorIfDeleted(path: string, scope: FileOperationScope): void {
+function closeFileEditorIfDeleted(path: string, scope: FileOperationScope): void {
   const target = selectedFileTarget()
-  if (!target || target.directory !== scope.directory.trim()) return
+  if (!target || target.sourceAbsolutePath || target.directory !== scope.directory.trim()) return
   if (descendantSuffix(target.path, path) === null) return
   fileEditorNavigationGeneration += 1
   commitFileEditorTarget(null)
@@ -298,11 +308,13 @@ export async function createFileItem(input: FileCreateRequest, scope: FileOperat
 }
 
 export async function moveFileItem(path: string, newPath: string, scope: FileOperationScope): Promise<FileMoveResult> {
+  await admitFileMutation(path, scope)
   const result = (await apiJson(projectScopedPath("file/item", scope.directory), {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ path, newPath }),
   })) as FileMoveResult
+  updateOpenFilePathAfterMove(result.previousPath, result.path, scope)
   bumpFileWorkbenchRevision()
   return result
 }
@@ -318,9 +330,11 @@ export async function copyFileItem(path: string, newPath: string, scope: FileOpe
 }
 
 export async function deleteFileItem(path: string, scope: FileOperationScope): Promise<FileDeleteResult> {
+  await admitFileMutation(path, scope)
   const result = (await apiJson(fileQueryPath("file/item", { path }, scope), {
     method: "DELETE",
   })) as FileDeleteResult
+  closeFileEditorIfDeleted(result.path, scope)
   bumpFileWorkbenchRevision()
   return result
 }

@@ -1,0 +1,111 @@
+[
+  {
+    "time": "2026-10-05T02:18:35.508Z",
+    "event": "request",
+    "id": 480,
+    "method": "GET",
+    "path": "/global/automations",
+    "hold": true
+  },
+  {
+    "time": "2026-10-05T02:18:35.52Z",
+    "event": "held",
+    "id": 480,
+    "method": "GET",
+    "path": "/global/automations",
+    "status": 200,
+    "bytes": 2532,
+    "elapsedMs": 12
+  },
+  {
+    "time": "2026-10-05T02:18:47.571Z",
+    "event": "request",
+    "id": 483,
+    "method": "GET",
+    "path": "/global/automations/atm_g0VX8MR4A002Lr4J7nut/runs",
+    "hold": false
+  },
+  {
+    "time": "2026-10-05T02:18:47.575Z",
+    "event": "response",
+    "id": 483,
+    "method": "GET",
+    "path": "/global/automations/atm_g0VX8MR4A002Lr4J7nut/runs",
+    "status": 200,
+    "elapsedMs": 4
+  },
+  {
+    "time": "2026-10-05T02:18:47.583Z",
+    "event": "request",
+    "id": 484,
+    "method": "GET",
+    "path": "/global/automations/atm_g0VX8MR4A002Lr4J7nut/runs",
+    "hold": false
+  },
+  {
+    "time": "2026-10-05T02:18:47.587Z",
+    "event": "response",
+    "id": 484,
+    "method": "GET",
+    "path": "/global/automations/atm_g0VX8MR4A002Lr4J7nut/runs",
+    "status": 200,
+    "elapsedMs": 4
+  },
+  {
+    "time": "2026-10-05T02:18:47.588Z",
+    "event": "held-client-cancelled",
+    "id": 480,
+    "path": "/global/automations"
+  },
+  {
+    "time": "2026-10-05T02:18:59.676Z",
+    "event": "request",
+    "id": 487,
+    "method": "PATCH",
+    "path": "/global/automations/atm_g0VX8MR4A002Lr4J7nut",
+    "hold": false
+  },
+  {
+    "time": "2026-10-05T02:18:59.684Z",
+    "event": "response",
+    "id": 487,
+    "method": "PATCH",
+    "path": "/global/automations/atm_g0VX8MR4A002Lr4J7nut",
+    "status": 200,
+    "elapsedMs": 8
+  },
+  {
+    "time": "2026-10-05T02:18:59.692Z",
+    "event": "request",
+    "id": 488,
+    "method": "GET",
+    "path": "/global/automations",
+    "hold": false
+  },
+  {
+    "time": "2026-10-05T02:18:59.705Z",
+    "event": "response",
+    "id": 488,
+    "method": "GET",
+    "path": "/global/automations",
+    "status": 200,
+    "elapsedMs": 13
+  },
+  {
+    "time": "2026-10-05T02:18:59.72Z",
+    "event": "request",
+    "id": 489,
+    "method": "GET",
+    "path": "/global/automations/atm_g0VX8MR4A002Lr4J7nut/runs",
+    "hold": false
+  },
+  {
+    "time": "2026-10-05T02:18:59.724Z",
+    "event": "response",
+    "id": 489,
+    "method": "GET",
+    "path": "/global/automations/atm_g0VX8MR4A002Lr4J7nut/runs",
+    "status": 200,
+    "elapsedMs": 4
+  }
+]

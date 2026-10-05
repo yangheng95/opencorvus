@@ -1,0 +1,63 @@
+[
+  {
+    "time": "2026-10-05T01:24:38.509Z",
+    "event": "request",
+    "id": 80,
+    "method": "GET",
+    "path": "/global/automations",
+    "hold": true
+  },
+  {
+    "time": "2026-10-05T01:24:38.522Z",
+    "event": "held",
+    "id": 80,
+    "method": "GET",
+    "path": "/global/automations",
+    "status": 200,
+    "bytes": 2565,
+    "elapsedMs": 13
+  },
+  {
+    "time": "2026-10-05T01:25:40.114Z",
+    "event": "released",
+    "id": 80,
+    "method": "GET",
+    "path": "/global/automations",
+    "status": 200,
+    "bytes": 2565
+  },
+  {
+    "time": "2026-10-05T01:25:45.816Z",
+    "event": "request",
+    "id": 92,
+    "method": "PATCH",
+    "path": "/global/automations/atm_g0VX8MR3n00AuTOo70l8",
+    "hold": false
+  },
+  {
+    "time": "2026-10-05T01:25:45.826Z",
+    "event": "response",
+    "id": 92,
+    "method": "PATCH",
+    "path": "/global/automations/atm_g0VX8MR3n00AuTOo70l8",
+    "status": 200,
+    "elapsedMs": 10
+  },
+  {
+    "time": "2026-10-05T01:25:45.832Z",
+    "event": "request",
+    "id": 93,
+    "method": "GET",
+    "path": "/global/automations",
+    "hold": false
+  },
+  {
+    "time": "2026-10-05T01:25:45.847Z",
+    "event": "response",
+    "id": 93,
+    "method": "GET",
+    "path": "/global/automations",
+    "status": 200,
+    "elapsedMs": 15
+  }
+]

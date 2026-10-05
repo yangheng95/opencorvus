@@ -15,6 +15,19 @@ Ctrl/Cmd+S within the file pane invokes that same dirty/save/error owner and
 prevents the browser's Save Page action. It is not a global shortcut or a second
 filesystem writer. CodeMirror retains its existing search and undo keymaps.
 
+Editable project file reads expose an opaque revision of the same read bytes and
+canonical physical resource. Both file save actions send that exact revision to
+the single conditional HTTP writer. A typed conflict preserves the authored
+draft and loaded baseline. Reload uses the same unsaved decision owner and only
+publishes a successful response still owned by the resource, generation and
+draft revision; failed or superseded reads retain input. Save-and-leave errors
+remain visible inside its decision dialog.
+
+Explorer move/rename/delete asks that same file owner before mutating an opened
+resource or its ancestor. The file-workbench service reconciles every successful
+physical result immediately. Explorer refreshes all completed members even when
+a later batch member fails, without owning a second editor target mapping.
+
 The existing CodeMirror editor selects syntax by filename using the shared
 `components/ui/code-editor-language.ts` registry. CodeMirror language-data owns
 grammar metadata and cached dynamic loading; Markdown fences use that same
@@ -41,6 +54,13 @@ recurrence components that the basic fields cannot express retain their complete
 authored rule in the current advanced editor. Explicit calendar changes use the
 chosen anchor, rather than resetting it to the save date. Weekly review's Friday
 is suggestion data passed through that same weekly field.
+
+Scheduled editing owns an opening definition snapshot; the edit flag derives
+from it. Submit uses its exact ID, original recurrence and session target, and
+captures authored fields before resolving project identities. Background list
+refreshes own list data only and cannot change navigation. User navigation
+invalidates old list requests. Missing edit targets retain the form and report
+an explicit error rather than becoming new definitions.
 
 The host-wide automation editor labels retained model and reasoning identities
 explicitly when they are absent from the active project's connected catalog.

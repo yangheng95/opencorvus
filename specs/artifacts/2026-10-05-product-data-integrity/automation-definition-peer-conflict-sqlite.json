@@ -1,0 +1,799 @@
+{
+  "definitions": [
+    {
+      "id": "atm_g0VX8XwyD0022GOmuYMK",
+      "revisions": [
+        {
+          "id": "atm_g0VX8XwyD0022GOmuYMK",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 1,
+          "scope": "global",
+          "status": "active",
+          "name": "Paused global definition conflict",
+          "time_created": 1791165988756
+        },
+        {
+          "id": "atm_g0VX8Xwyg00ABq8d3AqL",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 2,
+          "scope": "global",
+          "status": "paused",
+          "name": "Paused global definition conflict",
+          "time_created": 1791165988781
+        },
+        {
+          "id": "atm_g0VX8XwzJ00dqVCMQWEf",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 3,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 1 left",
+          "time_created": 1791165988801
+        },
+        {
+          "id": "atm_g0VX8Xwzc00E0LBQ3zBq",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 4,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 1 right",
+          "time_created": 1791165988842
+        },
+        {
+          "id": "atm_g0VX8Xwzp00ejM3N2uY5",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 5,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 2 left",
+          "time_created": 1791165988855
+        },
+        {
+          "id": "atm_g0VX8Xwzw00g0K1PehXq",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 6,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 2 right",
+          "time_created": 1791165988862
+        },
+        {
+          "id": "atm_g0VX8Xx0K006okKihs6F",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 7,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 3 left",
+          "time_created": 1791165988886
+        },
+        {
+          "id": "atm_g0VX8Xx0S0045V1KkPq7",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 8,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 3 right",
+          "time_created": 1791165988893
+        },
+        {
+          "id": "atm_g0VX8Xx0d00PkMqRgQYn",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 9,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 4 left",
+          "time_created": 1791165988905
+        },
+        {
+          "id": "atm_g0VX8Xx0i0022RO1KGnQ",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 10,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 4 right",
+          "time_created": 1791165988911
+        },
+        {
+          "id": "atm_g0VX8Xx0t00RtD01SeI6",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 11,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 5 left",
+          "time_created": 1791165988921
+        },
+        {
+          "id": "atm_g0VX8Xx0z00gBFQp21Ea",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 12,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 5 right",
+          "time_created": 1791165988927
+        },
+        {
+          "id": "atm_g0VX8Xx1K00wgB2stBYh",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 13,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 6 left",
+          "time_created": 1791165988948
+        },
+        {
+          "id": "atm_g0VX8Xx1Q00rByJjgkik",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 14,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 6 right",
+          "time_created": 1791165988955
+        },
+        {
+          "id": "atm_g0VX8Xx1b00bGeOn2Kr7",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 15,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 7 left",
+          "time_created": 1791165988965
+        },
+        {
+          "id": "atm_g0VX8Xx1g00NIgb4OUwr",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 16,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 7 right",
+          "time_created": 1791165988970
+        },
+        {
+          "id": "atm_g0VX8Xx1q00hXng9drV7",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 17,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 8 left",
+          "time_created": 1791165988981
+        },
+        {
+          "id": "atm_g0VX8Xx1y00nZAgZ4BEa",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 18,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 8 right",
+          "time_created": 1791165988988
+        },
+        {
+          "id": "atm_g0VX8Xx2900laeaJE8J7",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 19,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 9 left",
+          "time_created": 1791165988999
+        },
+        {
+          "id": "atm_g0VX8Xx2G00bdo0nzvrh",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 20,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 9 right",
+          "time_created": 1791165989005
+        },
+        {
+          "id": "atm_g0VX8Xx2O00dTBJJ7CRy",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 21,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 10 left",
+          "time_created": 1791165989014
+        },
+        {
+          "id": "atm_g0VX8Xx2Y00xPrKIpbxW",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 22,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 10 right",
+          "time_created": 1791165989024
+        },
+        {
+          "id": "atm_g0VX8Xx2h002QmbHYoN3",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 23,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 11 left",
+          "time_created": 1791165989032
+        },
+        {
+          "id": "atm_g0VX8Xx2s00O15qAlNHc",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 24,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 11 right",
+          "time_created": 1791165989044
+        },
+        {
+          "id": "atm_g0VX8Xx2z00G6SisnYu9",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 25,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 12 left",
+          "time_created": 1791165989052
+        },
+        {
+          "id": "atm_g0VX8Xx3A00c1xBapopo",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 26,
+          "scope": "global",
+          "status": "paused",
+          "name": "global pair 12 right",
+          "time_created": 1791165989062
+        },
+        {
+          "id": "atm_g0VX8YJWA00Ti6GBfUr2",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 27,
+          "scope": "global",
+          "status": "paused",
+          "name": "global peer pair 1 writer 0",
+          "time_created": 1791166075428
+        },
+        {
+          "id": "atm_g0VX8YJWV00FkUVKPo57",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 28,
+          "scope": "global",
+          "status": "paused",
+          "name": "global peer pair 1 writer 1",
+          "time_created": 1791166075447
+        },
+        {
+          "id": "atm_g0VX8YJWe00HxdjWbNdq",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 29,
+          "scope": "global",
+          "status": "paused",
+          "name": "global peer pair 2 writer 0",
+          "time_created": 1791166075457
+        }
+      ],
+      "fires": [
+        {
+          "id": "cal_automation_01d1050f0ab5957795cb3bc1f1d41f52",
+          "automation_revision_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "origin": "scheduled",
+          "scheduled_due_at": 4102416000000
+        }
+      ],
+      "attemptCount": 0,
+      "runCount": 0,
+      "leases": []
+    },
+    {
+      "id": "atm_g0VX8Xx3N001205jB5yS",
+      "revisions": [
+        {
+          "id": "atm_g0VX8Xx3N001205jB5yS",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 1,
+          "scope": "project",
+          "status": "active",
+          "name": "Paused project definition conflict",
+          "time_created": 1791165989077
+        },
+        {
+          "id": "atm_g0VX8Xx3W00fC6j1WEd2",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 2,
+          "scope": "project",
+          "status": "paused",
+          "name": "Paused project definition conflict",
+          "time_created": 1791165989084
+        },
+        {
+          "id": "atm_g0VX8Xx3i00Zrtt2uUrY",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 3,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 1 left",
+          "time_created": 1791165989097
+        },
+        {
+          "id": "atm_g0VX8Xx3o00C44Y7jvl5",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 4,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 1 right",
+          "time_created": 1791165989102
+        },
+        {
+          "id": "atm_g0VX8Xx410002ouON5qC",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 5,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 2 left",
+          "time_created": 1791165989115
+        },
+        {
+          "id": "atm_g0VX8Xx4700bon7q6ze5",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 6,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 2 right",
+          "time_created": 1791165989121
+        },
+        {
+          "id": "atm_g0VX8Xx4L00Pyw4BCkva",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 7,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 3 left",
+          "time_created": 1791165989134
+        },
+        {
+          "id": "atm_g0VX8Xx4R00Vfd9yPUmd",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 8,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 3 right",
+          "time_created": 1791165989141
+        },
+        {
+          "id": "atm_g0VX8Xx4c005TdOt3sSr",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 9,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 4 left",
+          "time_created": 1791165989152
+        },
+        {
+          "id": "atm_g0VX8Xx4i00DXd7SecdF",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 10,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 4 right",
+          "time_created": 1791165989158
+        },
+        {
+          "id": "atm_g0VX8Xx4t00SD3akUpOX",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 11,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 5 left",
+          "time_created": 1791165989170
+        },
+        {
+          "id": "atm_g0VX8Xx4z004vp1apfOA",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 12,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 5 right",
+          "time_created": 1791165989175
+        },
+        {
+          "id": "atm_g0VX8Xx59002DCEngjHx",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 13,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 6 left",
+          "time_created": 1791165989186
+        },
+        {
+          "id": "atm_g0VX8Xx5F00Scc8FYdTQ",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 14,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 6 right",
+          "time_created": 1791165989192
+        },
+        {
+          "id": "atm_g0VX8Xx5R00u7wWLwnpN",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 15,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 7 left",
+          "time_created": 1791165989203
+        },
+        {
+          "id": "atm_g0VX8Xx5W00zAwcWWfGy",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 16,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 7 right",
+          "time_created": 1791165989208
+        },
+        {
+          "id": "atm_g0VX8Xx5h00LVS9Giusn",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 17,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 8 left",
+          "time_created": 1791165989219
+        },
+        {
+          "id": "atm_g0VX8Xx5n00YL4XPkhAA",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 18,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 8 right",
+          "time_created": 1791165989225
+        },
+        {
+          "id": "atm_g0VX8Xx5w00Sa5GGyO9z",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 19,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 9 left",
+          "time_created": 1791165989234
+        },
+        {
+          "id": "atm_g0VX8Xx6100jABUaA057",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 20,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 9 right",
+          "time_created": 1791165989239
+        },
+        {
+          "id": "atm_g0VX8Xx6800TG9xO1iTl",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 21,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 10 left",
+          "time_created": 1791165989247
+        },
+        {
+          "id": "atm_g0VX8Xx6J00MtwxdeYCj",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 22,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 10 right",
+          "time_created": 1791165989257
+        },
+        {
+          "id": "atm_g0VX8Xx6R00RN5MaRMXT",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 23,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 11 left",
+          "time_created": 1791165989265
+        },
+        {
+          "id": "atm_g0VX8Xx6a00fFHItHkel",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 24,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 11 right",
+          "time_created": 1791165989275
+        },
+        {
+          "id": "atm_g0VX8Xx6i00lbnCXLxxs",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 25,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 12 left",
+          "time_created": 1791165989283
+        },
+        {
+          "id": "atm_g0VX8Xx6t005u0c6v241",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 26,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 12 right",
+          "time_created": 1791165989293
+        },
+        {
+          "id": "atm_g0VX8YJXE00CV6JbE6Cx",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 27,
+          "scope": "project",
+          "status": "paused",
+          "name": "project peer pair 1 writer 1",
+          "time_created": 1791166075493
+        }
+      ],
+      "fires": [
+        {
+          "id": "cal_automation_64a8b10a9a9f7b1384a8876f309be31a",
+          "automation_revision_id": "atm_g0VX8Xx3N001205jB5yS",
+          "origin": "scheduled",
+          "scheduled_due_at": 4102416000000
+        }
+      ],
+      "attemptCount": 0,
+      "runCount": 0,
+      "leases": []
+    },
+    {
+      "id": "atm_g0VX8Xx7700tH2kQ93i9",
+      "revisions": [
+        {
+          "id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 1,
+          "scope": "session",
+          "status": "active",
+          "name": "Paused session definition conflict",
+          "time_created": 1791165989308
+        },
+        {
+          "id": "atm_g0VX8Xx7F00xgLSlLRNR",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 2,
+          "scope": "session",
+          "status": "paused",
+          "name": "Paused session definition conflict",
+          "time_created": 1791165989316
+        },
+        {
+          "id": "atm_g0VX8Xx7P00PZo1cilVy",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 3,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 1 left",
+          "time_created": 1791165989326
+        },
+        {
+          "id": "atm_g0VX8Xx7U00Jqth9E73x",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 4,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 1 right",
+          "time_created": 1791165989331
+        },
+        {
+          "id": "atm_g0VX8Xx7e00jaH5pZYh1",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 5,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 2 left",
+          "time_created": 1791165989341
+        },
+        {
+          "id": "atm_g0VX8Xx7j00Z0xuAxZ0F",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 6,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 2 right",
+          "time_created": 1791165989345
+        },
+        {
+          "id": "atm_g0VX8Xx7q00B8YR06bB7",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 7,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 3 left",
+          "time_created": 1791165989353
+        },
+        {
+          "id": "atm_g0VX8Xx8000qiXGHNps6",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 8,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 3 right",
+          "time_created": 1791165989362
+        },
+        {
+          "id": "atm_g0VX8Xx8800EqVXewlxK",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 9,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 4 left",
+          "time_created": 1791165989370
+        },
+        {
+          "id": "atm_g0VX8Xx8G00IOBu95bGF",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 10,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 4 right",
+          "time_created": 1791165989379
+        },
+        {
+          "id": "atm_g0VX8Xx8P00Uz18yBeKK",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 11,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 5 left",
+          "time_created": 1791165989387
+        },
+        {
+          "id": "atm_g0VX8Xx8Y00ED9Tw2u4a",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 12,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 5 right",
+          "time_created": 1791165989396
+        },
+        {
+          "id": "atm_g0VX8Xx8f00smU6bg6PA",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 13,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 6 left",
+          "time_created": 1791165989404
+        },
+        {
+          "id": "atm_g0VX8Xx8p00u1ku42fT6",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 14,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 6 right",
+          "time_created": 1791165989413
+        },
+        {
+          "id": "atm_g0VX8Xx8w00kxYjq0zh8",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 15,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 7 left",
+          "time_created": 1791165989421
+        },
+        {
+          "id": "atm_g0VX8Xx9600U3zKqhKbI",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 16,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 7 right",
+          "time_created": 1791165989430
+        },
+        {
+          "id": "atm_g0VX8Xx9E00VoDo1BA6e",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 17,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 8 left",
+          "time_created": 1791165989438
+        },
+        {
+          "id": "atm_g0VX8Xx9N00zLxgxbKj0",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 18,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 8 right",
+          "time_created": 1791165989448
+        },
+        {
+          "id": "atm_g0VX8Xx9V00VtZiLIsRR",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 19,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 9 left",
+          "time_created": 1791165989456
+        },
+        {
+          "id": "atm_g0VX8Xx9f00aKX7lF6x5",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 20,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 9 right",
+          "time_created": 1791165989466
+        },
+        {
+          "id": "atm_g0VX8Xx9n00eYtUJbemf",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 21,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 10 left",
+          "time_created": 1791165989473
+        },
+        {
+          "id": "atm_g0VX8Xx9w00Vaj7FdGQj",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 22,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 10 right",
+          "time_created": 1791165989482
+        },
+        {
+          "id": "atm_g0VX8XxA500RJchr1aJ9",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 23,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 11 left",
+          "time_created": 1791165989491
+        },
+        {
+          "id": "atm_g0VX8XxAD00IxSMs1Hfq",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 24,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 11 right",
+          "time_created": 1791165989500
+        },
+        {
+          "id": "atm_g0VX8XxAM00uo7AyP6Pg",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 25,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 12 left",
+          "time_created": 1791165989508
+        },
+        {
+          "id": "atm_g0VX8XxAU00r9cf3SPPp",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 26,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 12 right",
+          "time_created": 1791165989517
+        },
+        {
+          "id": "atm_g0VX8YJXm00dhHhETr0F",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 27,
+          "scope": "session",
+          "status": "paused",
+          "name": "session peer pair 1 writer 0",
+          "time_created": 1791166075528
+        }
+      ],
+      "fires": [
+        {
+          "id": "cal_automation_a8f59db49010ee00caef89cc51ede59e",
+          "automation_revision_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "origin": "scheduled",
+          "scheduled_due_at": 4102416000000
+        }
+      ],
+      "attemptCount": 0,
+      "runCount": 0,
+      "leases": []
+    }
+  ]
+}

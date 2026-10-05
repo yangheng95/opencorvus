@@ -1,0 +1,790 @@
+{
+  "startedAt": "2026-10-05T01:43:13.815Z",
+  "origin": "http://127.0.0.1:17886",
+  "rows": [
+    {
+      "route": "/project/current?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Ftarget-revision%2Fproject-a",
+      "method": "GET",
+      "status": 200,
+      "value": {
+        "id": "prj_hyoTA4JBMFSbkYBNB7EO",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\target-revision\\project-a",
+        "sandboxes": [],
+        "time": {
+          "created": 1791164572181,
+          "updated": 1791164572181
+        }
+      }
+    },
+    {
+      "route": "/project/current?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Ftarget-revision%2Fproject-b",
+      "method": "GET",
+      "status": 200,
+      "value": {
+        "id": "prj_hooJ2fQbwJlRGCp0hur1",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\target-revision\\project-b",
+        "sandboxes": [],
+        "time": {
+          "created": 1791164572917,
+          "updated": 1791164572917
+        }
+      }
+    },
+    {
+      "route": "/session?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Ftarget-revision%2Fproject-a",
+      "method": "POST",
+      "input": {
+        "kind": "root",
+        "title": "Target revision scope only"
+      },
+      "status": 200,
+      "value": {
+        "id": "ses_-zUSrXtuDzzqa6H54q1L",
+        "slug": "stellar-wizard",
+        "version": "local",
+        "projectID": "prj_hyoTA4JBMFSbkYBNB7EO",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\target-revision\\project-a",
+        "title": "Target revision scope only",
+        "kind": "root",
+        "time": {
+          "created": 1791164593855,
+          "updated": 1791164593855
+        }
+      }
+    },
+    {
+      "route": "/global/automations",
+      "method": "POST",
+      "input": {
+        "name": "Physical revision target HTTP qualification",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "prompt": "Configuration-only qualification; keep paused."
+      },
+      "status": 201,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Physical revision target HTTP qualification",
+        "nextRun": 4070908800000
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "status": "paused"
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Physical revision target HTTP qualification",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1",
+            "prj_hyoTA4JBMFSbkYBNB7EO"
+          ]
+        }
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Physical revision target HTTP qualification",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1",
+            "prj_hyoTA4JBMFSbkYBNB7EO"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "name": "Qualified project target"
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified project target",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1",
+            "prj_hyoTA4JBMFSbkYBNB7EO"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "status": "paused"
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified project target",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1",
+            "prj_hyoTA4JBMFSbkYBNB7EO"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "value": [
+        {
+          "id": "atm_g0VX8S66X00JZmHF18s2",
+          "name": "Qualified project target",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hooJ2fQbwJlRGCp0hur1",
+              "prj_hyoTA4JBMFSbkYBNB7EO"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only qualification; keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      ]
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        }
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified project target",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "name": "Qualified project target"
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified project target",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "status": "paused"
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified project target",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "value": [
+        {
+          "id": "atm_g0VX8S66X00JZmHF18s2",
+          "name": "Qualified project target",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hooJ2fQbwJlRGCp0hur1"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only qualification; keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      ]
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrXtuDzzqa6H54q1L"
+        }
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified project target",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrXtuDzzqa6H54q1L"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "name": "Qualified session target"
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified session target",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrXtuDzzqa6H54q1L"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "status": "paused"
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified session target",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrXtuDzzqa6H54q1L"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "value": [
+        {
+          "id": "atm_g0VX8S66X00JZmHF18s2",
+          "name": "Qualified session target",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_-zUSrXtuDzzqa6H54q1L"
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only qualification; keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      ]
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hyoTA4JBMFSbkYBNB7EO"
+          ]
+        }
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified session target",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hyoTA4JBMFSbkYBNB7EO"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "name": "Qualified project target"
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified project target",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hyoTA4JBMFSbkYBNB7EO"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "status": "paused"
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified project target",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hyoTA4JBMFSbkYBNB7EO"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "value": [
+        {
+          "id": "atm_g0VX8S66X00JZmHF18s2",
+          "name": "Qualified project target",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hyoTA4JBMFSbkYBNB7EO"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only qualification; keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      ]
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "target": {
+          "scope": "global"
+        }
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified project target",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "name": "Qualified global target"
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified global target",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "status": "paused"
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified global target",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "value": [
+        {
+          "id": "atm_g0VX8S66X00JZmHF18s2",
+          "name": "Qualified global target",
+          "target": {
+            "scope": "global"
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only qualification; keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      ]
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hyoTA4JBMFSbkYBNB7EO",
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        }
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified global target",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hyoTA4JBMFSbkYBNB7EO",
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "name": "Qualified project target"
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified project target",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hyoTA4JBMFSbkYBNB7EO",
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8S66X00JZmHF18s2",
+      "method": "PATCH",
+      "input": {
+        "status": "paused"
+      },
+      "status": 200,
+      "value": {
+        "id": "atm_g0VX8S66X00JZmHF18s2",
+        "name": "Qualified project target",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hyoTA4JBMFSbkYBNB7EO",
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only qualification; keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "route": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "value": [
+        {
+          "id": "atm_g0VX8S66X00JZmHF18s2",
+          "name": "Qualified project target",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hyoTA4JBMFSbkYBNB7EO",
+              "prj_hooJ2fQbwJlRGCp0hur1"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only qualification; keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      ]
+    }
+  ],
+  "automationID": "atm_g0VX8S66X00JZmHF18s2",
+  "expectedFinalTarget": {
+    "scope": "project",
+    "projectIds": [
+      "prj_hyoTA4JBMFSbkYBNB7EO",
+      "prj_hooJ2fQbwJlRGCp0hur1"
+    ]
+  },
+  "completedAt": "2026-10-05T01:43:14.125Z"
+}

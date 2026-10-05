@@ -1,0 +1,94 @@
+[
+  {
+    "time": "2026-10-05T02:15:48.518Z",
+    "event": "request",
+    "id": 453,
+    "method": "GET",
+    "path": "/global/automations",
+    "hold": true
+  },
+  {
+    "time": "2026-10-05T02:15:48.53Z",
+    "event": "held",
+    "id": 453,
+    "method": "GET",
+    "path": "/global/automations",
+    "status": 200,
+    "bytes": 2519,
+    "elapsedMs": 12
+  },
+  {
+    "time": "2026-10-05T02:16:16.039Z",
+    "event": "held-client-cancelled",
+    "id": 453,
+    "path": "/global/automations"
+  },
+  {
+    "time": "2026-10-05T02:16:16.308Z",
+    "event": "request",
+    "id": 456,
+    "method": "GET",
+    "path": "/global/automations/atm_g0VX8MR4A002Lr4J7nut/runs",
+    "hold": false
+  },
+  {
+    "time": "2026-10-05T02:16:16.316Z",
+    "event": "response",
+    "id": 456,
+    "method": "GET",
+    "path": "/global/automations/atm_g0VX8MR4A002Lr4J7nut/runs",
+    "status": 200,
+    "elapsedMs": 8
+  },
+  {
+    "time": "2026-10-05T02:16:38.066Z",
+    "event": "request",
+    "id": 462,
+    "method": "PATCH",
+    "path": "/global/automations/atm_g0VX8MR4A002Lr4J7nut",
+    "hold": false
+  },
+  {
+    "time": "2026-10-05T02:16:38.078Z",
+    "event": "response",
+    "id": 462,
+    "method": "PATCH",
+    "path": "/global/automations/atm_g0VX8MR4A002Lr4J7nut",
+    "status": 200,
+    "elapsedMs": 12
+  },
+  {
+    "time": "2026-10-05T02:16:38.086Z",
+    "event": "request",
+    "id": 463,
+    "method": "GET",
+    "path": "/global/automations",
+    "hold": false
+  },
+  {
+    "time": "2026-10-05T02:16:38.101Z",
+    "event": "response",
+    "id": 463,
+    "method": "GET",
+    "path": "/global/automations",
+    "status": 200,
+    "elapsedMs": 15
+  },
+  {
+    "time": "2026-10-05T02:16:38.12Z",
+    "event": "request",
+    "id": 464,
+    "method": "GET",
+    "path": "/global/automations/atm_g0VX8MR4A002Lr4J7nut/runs",
+    "hold": false
+  },
+  {
+    "time": "2026-10-05T02:16:38.123Z",
+    "event": "response",
+    "id": 464,
+    "method": "GET",
+    "path": "/global/automations/atm_g0VX8MR4A002Lr4J7nut/runs",
+    "status": 200,
+    "elapsedMs": 3
+  }
+]

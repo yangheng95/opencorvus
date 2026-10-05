@@ -1,6 +1,7 @@
 import { Feedback } from "../ui/Feedback"
 import { createEffect, createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
 import { activeSessionID, rootTaskSessionID } from "../../store/board"
+import { ApiError } from "../../services/api"
 import {
   automationTimeZoneOptions,
   automationRecurrenceDefaults,
@@ -174,7 +175,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const saving = createMemo(() => mutationOwner()?.kind === "save")
   const busyAction = createMemo(() => mutationOwner()?.id ?? "")
   const [error, setError] = createSignal<AutomationError | null>(null)
-  const [editing, setEditing] = createSignal(false)
+  const [editTarget, setEditTarget] = createSignal<AutomationView | null>(null)
+  const editing = () => editTarget() !== null
   const [creating, setCreating] = createSignal(false)
   const [projects, setProjects] = createSignal<DiscoveredProject[]>([])
   const [search, setSearch] = createSignal("")
@@ -320,7 +322,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const selectedTimeZoneOption = createMemo(() => timeZoneOptions.find((option) => option.value === timeZone()) ?? null)
   const showForm = createMemo(() => editing() || creating())
   const sessionTargetID = createMemo(() => {
-    const target = selected()?.target
+    const target = editTarget()?.target ?? selected()?.target
     if (target?.scope === "session") return target.sessionId
     return activeSessionID() || rootTaskSessionID()
   })
@@ -366,9 +368,11 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       const items = await listAutomations(request.signal)
       if (request.signal.aborted) return
       setAutomations(items)
-      const nextID = preferredID && items.some((item) => item.id === preferredID) ? preferredID : ""
-      setSelectedID(nextID)
-      if (!nextID) setRunState({ automationID: "", status: "idle", items: [] })
+      if (!options.background) {
+        const nextID = preferredID && items.some((item) => item.id === preferredID) ? preferredID : ""
+        setSelectedID(nextID)
+        if (!nextID) setRunState({ automationID: "", status: "idle", items: [] })
+      }
     } catch (cause) {
       if (!request.signal.aborted) {
         setError({
@@ -380,6 +384,12 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     } finally {
       if (!request.signal.aborted && !options.background) setLoading(false)
     }
+  }
+
+  function invalidateListNavigation(): void {
+    listRequest?.abort()
+    listRequest = undefined
+    setLoading(false)
   }
 
   async function loadRuns(automationID: string): Promise<void> {
@@ -405,10 +415,11 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
 
   function selectAutomation(id: string): void {
     if (busyAction()) return
+    invalidateListNavigation()
     rememberListFocus()
     setSelectedID(id)
     setCreating(false)
-    setEditing(false)
+    setEditTarget(null)
     setError(null)
     void loadRuns(id)
     focusAfterRender(() => detailBackButton)
@@ -416,16 +427,18 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
 
   function beginCreate(): void {
     if (loading() || busyAction()) return
+    invalidateListNavigation()
     rememberListFocus()
     resetForm()
     setSelectedID("")
     setCreating(true)
-    setEditing(false)
+    setEditTarget(null)
     focusAfterRender(() => formNameInput)
   }
 
   function beginSuggestion(suggestion: AutomationSuggestion): void {
     if (loading() || busyAction()) return
+    invalidateListNavigation()
     rememberListFocus()
     resetForm()
     setName(suggestion.name)
@@ -435,16 +448,17 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setTime(suggestion.time)
     setSelectedID("")
     setCreating(true)
-    setEditing(false)
+    setEditTarget(null)
     focusAfterRender(() => formNameInput)
   }
 
   function returnToList(): void {
     if (busyAction()) return
+    invalidateListNavigation()
     setSelectedID("")
     setRunState({ automationID: "", status: "idle", items: [] })
     setCreating(false)
-    setEditing(false)
+    setEditTarget(null)
     setError(null)
     focusListReturn()
   }
@@ -459,18 +473,20 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     if (busyAction()) return
     const automation = selected()
     if (!automation) return
+    invalidateListNavigation()
     const active = document.activeElement
     if (active instanceof HTMLElement) detailReturnFocusElement = active
     resetForm(automation)
-    setEditing(true)
+    setEditTarget(automation)
     setCreating(false)
     focusAfterRender(() => formNameInput)
   }
 
   function cancelForm(): void {
     if (busyAction()) return
+    invalidateListNavigation()
     if (editing() && selectedID()) {
-      setEditing(false)
+      setEditTarget(null)
       setError(null)
       focusAfterRender(() => (detailReturnFocusElement?.isConnected ? detailReturnFocusElement : detailBackButton))
       return
@@ -491,66 +507,79 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     event.preventDefault()
     if (busyAction()) return
     setError(null)
-    if (scope() === "session" && !sessionTargetID()) {
-      setError({ message: t("automations.error.session_required") })
+    const current = editTarget()
+    if (current && !automations().some((item) => item.id === current.id)) {
+      setError({ message: t("automations.error.edit_target_missing") })
       return
     }
-    if (scope() === "project" && selectedProjectDirectories().length === 0) {
-      setError({ message: t("automations.error.project_required") })
+    if (!current && !creating()) {
+      setError({ message: t("automations.error.edit_target_missing") })
       return
     }
-
-    const current = selected()
-    let recurrence: string | undefined
-    try {
-      const recurrenceInput = {
+    const form = {
+      name: name().trim(),
+      prompt: prompt().trim(),
+      scope: scope(),
+      sessionID: sessionTargetID(),
+      projectDirectories: [...selectedProjectDirectories()],
+      executionMode: executionMode(),
+      recurrence: {
         preset: preset(),
         startDate: startDate(),
         weekday: weekday(),
         time: time(),
         timeZone: timeZone().trim(),
         customRule: advancedRule(),
-      }
-      recurrence =
-        editing() && current
-          ? automationRecurrenceUpdate(current.recurrence, recurrenceInput)
-          : buildAutomationRecurrence(recurrenceInput)
+      },
+      model: providerID() && modelID() ? { providerID: providerID().trim(), modelID: modelID().trim() } : undefined,
+      reasoningEffort: reasoningEffort().trim(),
+    }
+    if (form.scope === "session" && !form.sessionID) {
+      setError({ message: t("automations.error.session_required") })
+      return
+    }
+    if (form.scope === "project" && form.projectDirectories.length === 0) {
+      setError({ message: t("automations.error.project_required") })
+      return
+    }
+
+    let recurrence: string | undefined
+    try {
+      recurrence = current
+        ? automationRecurrenceUpdate(current.recurrence, form.recurrence)
+        : buildAutomationRecurrence(form.recurrence)
     } catch (cause) {
       setError({ message: errorText(cause) })
       return
     }
 
-    const owner: AutomationMutationOwner = { kind: "save", id: selectedID() || "new" }
+    const owner: AutomationMutationOwner = { kind: "save", id: current?.id ?? "new" }
     setMutationOwner(owner)
     try {
-      const model =
-        providerID() && modelID() ? { providerID: providerID().trim(), modelID: modelID().trim() } : undefined
       const target: AutomationTarget =
-        scope() === "session"
-          ? { scope: "session", sessionId: sessionTargetID()! }
-          : scope() === "project"
+        form.scope === "session"
+          ? { scope: "session", sessionId: form.sessionID! }
+          : form.scope === "project"
             ? {
                 scope: "project",
-                projectIds: [
-                  ...new Set(await Promise.all(selectedProjectDirectories().map(resolveAutomationProjectID))),
-                ],
+                projectIds: [...new Set(await Promise.all(form.projectDirectories.map(resolveAutomationProjectID)))],
               }
             : { scope: "global" }
       const base = {
-        name: name().trim(),
+        name: form.name,
         target,
         ...(recurrence !== undefined ? { recurrence } : {}),
-        executionMode: scope() === "session" ? ("local" as const) : executionMode(),
-        prompt: prompt().trim(),
-        ...(model ? { model } : {}),
-        ...(reasoningEffort().trim() ? { reasoningEffort: reasoningEffort().trim() } : {}),
+        executionMode: form.scope === "session" ? ("local" as const) : form.executionMode,
+        prompt: form.prompt,
+        ...(form.model ? { model: form.model } : {}),
+        ...(form.reasoningEffort ? { reasoningEffort: form.reasoningEffort } : {}),
       }
       let preferredID: string
-      if (editing() && current) {
+      if (current) {
         await updateAutomation(current.id, {
           ...base,
-          model: model ?? null,
-          reasoningEffort: reasoningEffort().trim() || null,
+          model: form.model ?? null,
+          reasoningEffort: form.reasoningEffort || null,
         })
         preferredID = current.id
       } else {
@@ -558,12 +587,18 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
         preferredID = created.id
       }
       setCreating(false)
-      setEditing(false)
+      setEditTarget(null)
       await load(preferredID)
       await loadRuns(preferredID)
       focusAfterRender(() => detailBackButton)
     } catch (cause) {
-      setError({ message: errorText(cause) })
+      setError({
+        message:
+          current && cause instanceof ApiError && cause.status === 404 &&
+          cause.path === `/global/automations/${encodeURIComponent(current.id)}`
+            ? t("automations.error.edit_target_missing")
+            : errorText(cause),
+      })
     } finally {
       if (mutationOwner() === owner) setMutationOwner(null)
     }
@@ -606,7 +641,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
         setSelectedID("")
         setRunState({ automationID: "", status: "idle", items: [] })
         setCreating(false)
-        setEditing(false)
+        setEditTarget(null)
       }
       await load()
       if (removingSelected || removingFocusedRow) focusListReturn()

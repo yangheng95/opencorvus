@@ -1,0 +1,203 @@
+{
+  "time": "2026-10-05T01:28:54.837Z",
+  "actions": [
+    {
+      "route": "/global/automations",
+      "method": "GET",
+      "result": {
+        "status": 200,
+        "body": [
+          {
+            "id": "atm_g0VX8MR3n00AuTOo70l8",
+            "name": "B authored edit must target B",
+            "target": {
+              "scope": "project",
+              "projectIds": []
+            },
+            "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+            "executionMode": "local",
+            "model": null,
+            "reasoningEffort": null,
+            "prompt": "Disposable automation B for configuration-only integrity review. Do not manually run.",
+            "status": "paused",
+            "lastRun": null,
+            "nextRun": 4102416000000,
+            "failureCount": 0,
+            "lastError": null
+          },
+          {
+            "id": "atm_g0VX8MR4A002Lr4J7nut",
+            "name": "Data integrity race B",
+            "target": {
+              "scope": "project",
+              "projectIds": [
+                "prj_hroPEGg17GAZWxDZ7MR7"
+              ]
+            },
+            "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+            "executionMode": "local",
+            "model": null,
+            "reasoningEffort": null,
+            "prompt": "Disposable automation B for configuration-only integrity review. Do not manually run.",
+            "status": "paused",
+            "lastRun": null,
+            "nextRun": 4102416000000,
+            "failureCount": 0,
+            "lastError": null
+          }
+        ]
+      }
+    },
+    {
+      "route": "/project/current?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject",
+      "method": "GET",
+      "result": {
+        "status": 200,
+        "body": {
+          "id": "prj_hpQ1vPqjRVCv0S4FJnDQ",
+          "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\project",
+          "time": {
+            "created": 1791157859662,
+            "updated": 1791157859662
+          },
+          "sandboxes": []
+        }
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8MR3n00AuTOo70l8",
+      "method": "PATCH",
+      "request": {
+        "name": "A name-only projection probe"
+      },
+      "result": {
+        "status": 500,
+        "body": {
+          "name": "UnknownError",
+          "data": {
+            "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+          }
+        }
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8MR4A002Lr4J7nut",
+      "method": "PATCH",
+      "request": {
+        "status": "paused",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hpQ1vPqjRVCv0S4FJnDQ"
+          ]
+        }
+      },
+      "result": {
+        "status": 200,
+        "body": {
+          "id": "atm_g0VX8MR4A002Lr4J7nut",
+          "name": "Data integrity race B",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hroPEGg17GAZWxDZ7MR7"
+            ]
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Disposable automation B for configuration-only integrity review. Do not manually run.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      }
+    },
+    {
+      "route": "/global/automations",
+      "method": "GET",
+      "result": {
+        "status": 200,
+        "body": [
+          {
+            "id": "atm_g0VX8MR3n00AuTOo70l8",
+            "name": "B authored edit must target B",
+            "target": {
+              "scope": "project",
+              "projectIds": []
+            },
+            "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+            "executionMode": "local",
+            "model": null,
+            "reasoningEffort": null,
+            "prompt": "Disposable automation B for configuration-only integrity review. Do not manually run.",
+            "status": "paused",
+            "lastRun": null,
+            "nextRun": 4102416000000,
+            "failureCount": 0,
+            "lastError": null
+          },
+          {
+            "id": "atm_g0VX8MR4A002Lr4J7nut",
+            "name": "Data integrity race B",
+            "target": {
+              "scope": "project",
+              "projectIds": [
+                "prj_hroPEGg17GAZWxDZ7MR7"
+              ]
+            },
+            "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+            "executionMode": "local",
+            "model": null,
+            "reasoningEffort": null,
+            "prompt": "Disposable automation B for configuration-only integrity review. Do not manually run.",
+            "status": "paused",
+            "lastRun": null,
+            "nextRun": 4102416000000,
+            "failureCount": 0,
+            "lastError": null
+          }
+        ]
+      }
+    },
+    {
+      "route": "/global/automations/atm_g0VX8MR4A002Lr4J7nut",
+      "method": "PATCH",
+      "request": {
+        "status": "paused",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hroPEGg17GAZWxDZ7MR7"
+          ]
+        }
+      },
+      "result": {
+        "status": 200,
+        "body": {
+          "id": "atm_g0VX8MR4A002Lr4J7nut",
+          "name": "Data integrity race B",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hroPEGg17GAZWxDZ7MR7"
+            ]
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Disposable automation B for configuration-only integrity review. Do not manually run.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      }
+    }
+  ]
+}

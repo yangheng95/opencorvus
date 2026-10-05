@@ -180,7 +180,8 @@ export const FileRoutes = lazy(() =>
       "/file/content",
       describeRoute({
         summary: "Write file",
-        description: "Write text content to an existing editable file in the project directory.",
+        description:
+          "Write text content to an existing editable file only when expectedRevision matches its loaded content and physical identity.",
         operationId: "file.write",
         responses: {
           200: {
@@ -192,6 +193,7 @@ export const FileRoutes = lazy(() =>
             },
           },
           ...errors(400, 404, 500),
+          409: namedErrorResponse("File changed since it was loaded", "FileWriteConflictError"),
         },
       }),
       validator(
@@ -199,11 +201,12 @@ export const FileRoutes = lazy(() =>
         z.object({
           path: z.string(),
           content: z.string(),
+          expectedRevision: File.ContentRevision,
         }),
       ),
       async (c) => {
         const input = c.req.valid("json")
-        const content = await File.writeText(input.path, input.content)
+        const content = await File.writeText(input.path, input.content, input.expectedRevision)
         return c.json(content)
       },
     )

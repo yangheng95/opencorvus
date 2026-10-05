@@ -1,0 +1,340 @@
+{
+  "startedAt": "2026-10-05T02:07:55.382Z",
+  "peers": [
+    "http://127.0.0.1:17887",
+    "http://127.0.0.1:17888"
+  ],
+  "definitions": [
+    {
+      "id": "atm_g0VX8XwyD0022GOmuYMK",
+      "scope": "global",
+      "before": {
+        "id": "atm_g0VX8XwyD0022GOmuYMK",
+        "name": "global pair 12 right",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "pairs": [
+        {
+          "pair": 1,
+          "results": [
+            {
+              "origin": "http://127.0.0.1:17887",
+              "startedAt": "2026-10-05T02:07:55.423Z",
+              "completedAt": "2026-10-05T02:07:55.438Z",
+              "input": {
+                "name": "global peer pair 1 writer 0"
+              },
+              "status": 200,
+              "body": {
+                "id": "atm_g0VX8XwyD0022GOmuYMK",
+                "name": "global peer pair 1 writer 0",
+                "target": {
+                  "scope": "global"
+                },
+                "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+                "executionMode": "local",
+                "model": null,
+                "reasoningEffort": null,
+                "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+                "status": "paused",
+                "lastRun": null,
+                "nextRun": 4102416000000,
+                "failureCount": 0,
+                "lastError": null
+              }
+            },
+            {
+              "origin": "http://127.0.0.1:17888",
+              "startedAt": "2026-10-05T02:07:55.425Z",
+              "completedAt": "2026-10-05T02:07:55.456Z",
+              "input": {
+                "name": "global peer pair 1 writer 1"
+              },
+              "status": 200,
+              "body": {
+                "id": "atm_g0VX8XwyD0022GOmuYMK",
+                "name": "global peer pair 1 writer 1",
+                "target": {
+                  "scope": "global"
+                },
+                "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+                "executionMode": "local",
+                "model": null,
+                "reasoningEffort": null,
+                "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+                "status": "paused",
+                "lastRun": null,
+                "nextRun": 4102416000000,
+                "failureCount": 0,
+                "lastError": null
+              }
+            }
+          ]
+        },
+        {
+          "pair": 2,
+          "results": [
+            {
+              "origin": "http://127.0.0.1:17887",
+              "startedAt": "2026-10-05T02:07:55.457Z",
+              "completedAt": "2026-10-05T02:07:55.466Z",
+              "input": {
+                "name": "global peer pair 2 writer 0"
+              },
+              "status": 200,
+              "body": {
+                "id": "atm_g0VX8XwyD0022GOmuYMK",
+                "name": "global peer pair 2 writer 0",
+                "target": {
+                  "scope": "global"
+                },
+                "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+                "executionMode": "local",
+                "model": null,
+                "reasoningEffort": null,
+                "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+                "status": "paused",
+                "lastRun": null,
+                "nextRun": 4102416000000,
+                "failureCount": 0,
+                "lastError": null
+              }
+            },
+            {
+              "origin": "http://127.0.0.1:17888",
+              "startedAt": "2026-10-05T02:07:55.457Z",
+              "completedAt": "2026-10-05T02:07:55.473Z",
+              "input": {
+                "name": "global peer pair 2 writer 1"
+              },
+              "status": 409,
+              "body": {
+                "name": "AutomationRunningConflictError",
+                "data": {
+                  "message": "Automation atm_g0VX8XwyD0022GOmuYMK began running before its update could commit",
+                  "automationID": "atm_g0VX8XwyD0022GOmuYMK"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "after": {
+        "id": "atm_g0VX8XwyD0022GOmuYMK",
+        "name": "global peer pair 2 writer 0",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "id": "atm_g0VX8Xx3N001205jB5yS",
+      "scope": "project",
+      "before": {
+        "id": "atm_g0VX8Xx3N001205jB5yS",
+        "name": "project pair 12 right",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hyoTA4JBMFSbkYBNB7EO"
+          ]
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "pairs": [
+        {
+          "pair": 1,
+          "results": [
+            {
+              "origin": "http://127.0.0.1:17887",
+              "startedAt": "2026-10-05T02:07:55.488Z",
+              "completedAt": "2026-10-05T02:07:55.514Z",
+              "input": {
+                "name": "project peer pair 1 writer 0"
+              },
+              "status": 409,
+              "body": {
+                "name": "AutomationRunningConflictError",
+                "data": {
+                  "message": "Automation atm_g0VX8Xx3N001205jB5yS began running before its update could commit",
+                  "automationID": "atm_g0VX8Xx3N001205jB5yS"
+                }
+              }
+            },
+            {
+              "origin": "http://127.0.0.1:17888",
+              "startedAt": "2026-10-05T02:07:55.488Z",
+              "completedAt": "2026-10-05T02:07:55.500Z",
+              "input": {
+                "name": "project peer pair 1 writer 1"
+              },
+              "status": 200,
+              "body": {
+                "id": "atm_g0VX8Xx3N001205jB5yS",
+                "name": "project peer pair 1 writer 1",
+                "target": {
+                  "scope": "project",
+                  "projectIds": [
+                    "prj_hyoTA4JBMFSbkYBNB7EO"
+                  ]
+                },
+                "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+                "executionMode": "local",
+                "model": null,
+                "reasoningEffort": null,
+                "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+                "status": "paused",
+                "lastRun": null,
+                "nextRun": 4102416000000,
+                "failureCount": 0,
+                "lastError": null
+              }
+            }
+          ]
+        }
+      ],
+      "after": {
+        "id": "atm_g0VX8Xx3N001205jB5yS",
+        "name": "project peer pair 1 writer 1",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hyoTA4JBMFSbkYBNB7EO"
+          ]
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "id": "atm_g0VX8Xx7700tH2kQ93i9",
+      "scope": "session",
+      "before": {
+        "id": "atm_g0VX8Xx7700tH2kQ93i9",
+        "name": "session pair 12 right",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrS32Zzz5BNKa6Qau"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "pairs": [
+        {
+          "pair": 1,
+          "results": [
+            {
+              "origin": "http://127.0.0.1:17887",
+              "startedAt": "2026-10-05T02:07:55.529Z",
+              "completedAt": "2026-10-05T02:07:55.535Z",
+              "input": {
+                "name": "session peer pair 1 writer 0"
+              },
+              "status": 200,
+              "body": {
+                "id": "atm_g0VX8Xx7700tH2kQ93i9",
+                "name": "session peer pair 1 writer 0",
+                "target": {
+                  "scope": "session",
+                  "sessionId": "ses_-zUSrS32Zzz5BNKa6Qau"
+                },
+                "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+                "executionMode": "local",
+                "model": null,
+                "reasoningEffort": null,
+                "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+                "status": "paused",
+                "lastRun": null,
+                "nextRun": 4102416000000,
+                "failureCount": 0,
+                "lastError": null
+              }
+            },
+            {
+              "origin": "http://127.0.0.1:17888",
+              "startedAt": "2026-10-05T02:07:55.529Z",
+              "completedAt": "2026-10-05T02:07:55.541Z",
+              "input": {
+                "name": "session peer pair 1 writer 1"
+              },
+              "status": 409,
+              "body": {
+                "name": "AutomationRunningConflictError",
+                "data": {
+                  "message": "Automation atm_g0VX8Xx7700tH2kQ93i9 began running before its update could commit",
+                  "automationID": "atm_g0VX8Xx7700tH2kQ93i9"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "after": {
+        "id": "atm_g0VX8Xx7700tH2kQ93i9",
+        "name": "session peer pair 1 writer 0",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrS32Zzz5BNKa6Qau"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    }
+  ],
+  "completedAt": "2026-10-05T02:07:55.548Z"
+}

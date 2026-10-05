@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Continuous product data integrity iteration](2026-10-05-product-data-integrity/README.md): actual authored-work preservation investigations and verified repairs.
+
 - [Current-version product experience](2026-10-04-product-experience/README.md): actual desktop interactions, verified repairs and authorized GPT-6.1 Sol Task/Mission/evidence-reader acceptance.
 
 - [0.1.23 release evidence](2026-09-30-v0.1.23-release/README.md): bundled notes and canonical native/website publication.

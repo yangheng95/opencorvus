@@ -1,0 +1,57 @@
+[
+  {
+    "id": "atm_g0VX8MR4R00NF7fpPd9O",
+    "name": "Data integrity race C",
+    "target": {
+      "scope": "global"
+    },
+    "recurrence": "DTSTART:20261005T012437Z\nRRULE:FREQ=DAILY",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Disposable automation C for configuration-only integrity review. Do not manually run.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 1791163477000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_g0VX8MR3n00AuTOo70l8",
+    "name": "B authored edit must target B",
+    "target": {
+      "scope": "project",
+      "projectIds": []
+    },
+    "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Disposable automation B for configuration-only integrity review. Do not manually run.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4102416000000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_g0VX8MR4A002Lr4J7nut",
+    "name": "Data integrity race B",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hroPEGg17GAZWxDZ7MR7"
+      ]
+    },
+    "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Disposable automation B for configuration-only integrity review. Do not manually run.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4102416000000,
+    "failureCount": 0,
+    "lastError": null
+  }
+]

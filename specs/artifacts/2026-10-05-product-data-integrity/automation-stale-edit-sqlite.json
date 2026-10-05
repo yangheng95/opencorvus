@@ -1,0 +1,106 @@
+{
+  "capturedAt": "2026-10-05T02:13:16.846560+00:00",
+  "definitions": [
+    {
+      "id": "atm_g0VX8XwyD0022GOmuYMK",
+      "latestRevisions": [
+        {
+          "id": "atm_g0VX8YfwG00lMbS9XE8d",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 31,
+          "scope": "global",
+          "status": "paused",
+          "name": "Only the name was edited in the older form",
+          "prompt": "Configuration-only concurrent writer probe. Keep paused."
+        },
+        {
+          "id": "atm_g0VX8YfwA00CPIsJl7xD",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 30,
+          "scope": "global",
+          "status": "paused",
+          "name": "global peer pair 2 writer 0",
+          "prompt": "New prompt authored by the second editor after the first editor opened."
+        },
+        {
+          "id": "atm_g0VX8YJWe00HxdjWbNdq",
+          "definition_id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revision": 29,
+          "scope": "global",
+          "status": "paused",
+          "name": "global peer pair 2 writer 0",
+          "prompt": "Configuration-only concurrent writer probe. Keep paused."
+        }
+      ],
+      "leases": []
+    },
+    {
+      "id": "atm_g0VX8Xx3N001205jB5yS",
+      "latestRevisions": [
+        {
+          "id": "atm_g0VX8YJXE00CV6JbE6Cx",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 27,
+          "scope": "project",
+          "status": "paused",
+          "name": "project peer pair 1 writer 1",
+          "prompt": "Configuration-only concurrent writer probe. Keep paused."
+        },
+        {
+          "id": "atm_g0VX8Xx6t005u0c6v241",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 26,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 12 right",
+          "prompt": "Configuration-only concurrent writer probe. Keep paused."
+        },
+        {
+          "id": "atm_g0VX8Xx6i00lbnCXLxxs",
+          "definition_id": "atm_g0VX8Xx3N001205jB5yS",
+          "revision": 25,
+          "scope": "project",
+          "status": "paused",
+          "name": "project pair 12 left",
+          "prompt": "Configuration-only concurrent writer probe. Keep paused."
+        }
+      ],
+      "leases": []
+    },
+    {
+      "id": "atm_g0VX8Xx7700tH2kQ93i9",
+      "latestRevisions": [
+        {
+          "id": "atm_g0VX8YJXm00dhHhETr0F",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 27,
+          "scope": "session",
+          "status": "paused",
+          "name": "session peer pair 1 writer 0",
+          "prompt": "Configuration-only concurrent writer probe. Keep paused."
+        },
+        {
+          "id": "atm_g0VX8XxAU00r9cf3SPPp",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 26,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 12 right",
+          "prompt": "Configuration-only concurrent writer probe. Keep paused."
+        },
+        {
+          "id": "atm_g0VX8XxAM00uo7AyP6Pg",
+          "definition_id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revision": 25,
+          "scope": "session",
+          "status": "paused",
+          "name": "session pair 12 left",
+          "prompt": "Configuration-only concurrent writer probe. Keep paused."
+        }
+      ],
+      "leases": []
+    }
+  ],
+  "databaseRunCount": 0,
+  "databaseAttemptCount": 0
+}

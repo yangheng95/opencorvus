@@ -1,0 +1,25 @@
+{
+  "time": "2026-10-05T01:44:48.132Z",
+  "status": 200,
+  "current": {
+    "id": "atm_g0VX8S66X00JZmHF18s2",
+    "name": "Qualified project target",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hyoTA4JBMFSbkYBNB7EO",
+        "prj_hooJ2fQbwJlRGCp0hur1"
+      ]
+    },
+    "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Configuration-only qualification; keep paused.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4070908800000,
+    "failureCount": 0,
+    "lastError": null
+  }
+}

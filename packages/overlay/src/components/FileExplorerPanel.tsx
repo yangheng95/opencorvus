@@ -16,7 +16,6 @@ import { Virtualizer, type CustomContainerComponentProps, type CustomItemCompone
 import { apiJson } from "../services/api"
 import { showAppDialog } from "../services/app-dialog"
 import {
-  closeFileEditorIfDeleted,
   copyFileItem,
   createFileItem,
   deleteFileItem,
@@ -24,7 +23,6 @@ import {
   moveFileItem,
   openFileEditor,
   selectedFileTarget,
-  updateOpenFilePathAfterMove,
   uploadDroppedFiles,
   type FileCopyResult,
   type FileMoveResult,
@@ -648,17 +646,21 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     }
     await runMutation("move", scope, async () => {
       const moved: FileMoveResult[] = []
-      for (const item of targets) {
-        const nextPath = joinExplorerPath(targetDir, item.name)
-        if (nextPath === item.path) continue
-        moved.push(await moveFileItem(item.path, nextPath, scope))
+      try {
+        for (const item of targets) {
+          const nextPath = joinExplorerPath(targetDir, item.name)
+          if (nextPath === item.path) continue
+          moved.push(await moveFileItem(item.path, nextPath, scope))
+        }
+      } finally {
+        if (moved.length > 0) {
+          const message =
+            moved.length === 1
+              ? t("explorer.move_success", { path: moved[0]?.path ?? "" })
+              : t("explorer.move_many_success", { count: moved.length, target: targetDir || "." })
+          await applyMoveResults(moved, message, scope)
+        }
       }
-      if (moved.length === 0) return
-      const message =
-        moved.length === 1
-          ? t("explorer.move_success", { path: moved[0]?.path ?? "" })
-          : t("explorer.move_many_success", { count: moved.length, target: targetDir || "." })
-      await applyMoveResults(moved, message, scope)
     })
   }
 
@@ -706,7 +708,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     try {
       await fn()
     } catch (error) {
-      if (ownsMutationOperation() && ownsExplorerOperation(scope)) setMutationError(mutationErrorMessage(error))
+      if (!(error instanceof DOMException && error.name === "AbortError") &&
+          ownsMutationOperation() && ownsExplorerOperation(scope)) {
+        setMutationError(mutationErrorMessage(error))
+      }
     } finally {
       if (ownsMutationOperation()) setMutationOperation(null)
     }
@@ -798,7 +803,6 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       const previousParent = parentPath(normalizedPrevious)
       const nextParent = parentPath(normalizedNext)
       updateExpandedPathsAfterMove(normalizedPrevious, normalizedNext)
-      updateOpenFilePathAfterMove(normalizedPrevious, normalizedNext, scope)
       refreshTargets.push(previousParent, nextParent, result.node.type === "directory" ? normalizedNext : "")
       cacheTargets.push(previousParent, nextParent, normalizedPrevious, normalizedNext)
       subtreeTargets.push(normalizedPrevious)
@@ -1123,33 +1127,39 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const targets = topLevelActionSelections(items)
     await runMutation("delete", scope, async () => {
       const deletedPaths: string[] = []
-      for (const item of targets) {
-        const deleted = await deleteFileItem(item.path, scope)
-        deletedPaths.push(normalizeExplorerPath(deleted.path))
-      }
-      if (!ownsExplorerOperation(scope)) return
-      const parents = deletedPaths.map(parentPath)
-      for (const deletedPath of deletedPaths) closeFileEditorIfDeleted(deletedPath, scope)
-      setExpandedPaths((prev) => {
-        const next = new Set<string>()
-        for (const path of prev) {
-          if (!deletedPaths.some((deletedPath) => isPathOrDescendant(path, deletedPath))) next.add(path)
+      try {
+        for (const item of targets) {
+          const deleted = await deleteFileItem(item.path, scope)
+          deletedPaths.push(normalizeExplorerPath(deleted.path))
         }
-        next.add("")
-        return next
-      })
-      clearSelection()
-      clearDirectoryCaches([...parents, ...deletedPaths], deletedPaths)
-      await refreshDirectories(parents)
-      if (!ownsExplorerOperation(scope)) return
-      await refreshActiveSearchResults()
-      if (!ownsExplorerOperation(scope)) return
-      setMutationSuccess(
-        deletedPaths.length === 1
-          ? t("explorer.delete_success", { path: deletedPaths[0] ?? "" })
-          : t("explorer.delete_many_success", { count: deletedPaths.length }),
-      )
+      } finally {
+        if (deletedPaths.length > 0) await applyDeleteResults(deletedPaths, scope)
+      }
     })
+  }
+
+  async function applyDeleteResults(deletedPaths: string[], scope: FileOperationScope): Promise<void> {
+    if (!ownsExplorerOperation(scope)) return
+    const parents = deletedPaths.map(parentPath)
+    setExpandedPaths((prev) => {
+      const next = new Set<string>()
+      for (const path of prev) {
+        if (!deletedPaths.some((deletedPath) => isPathOrDescendant(path, deletedPath))) next.add(path)
+      }
+      next.add("")
+      return next
+    })
+    clearSelection()
+    clearDirectoryCaches([...parents, ...deletedPaths], deletedPaths)
+    await refreshDirectories(parents)
+    if (!ownsExplorerOperation(scope)) return
+    await refreshActiveSearchResults()
+    if (!ownsExplorerOperation(scope)) return
+    setMutationSuccess(
+      deletedPaths.length === 1
+        ? t("explorer.delete_success", { path: deletedPaths[0] ?? "" })
+        : t("explorer.delete_many_success", { count: deletedPaths.length }),
+    )
   }
 
   async function confirmDeleteItems(items: ExplorerSelection[]): Promise<void> {

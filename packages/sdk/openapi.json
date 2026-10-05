@@ -7487,6 +7487,10 @@
             ],
             "type": "object"
           },
+          "revision": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
           "type": {
             "enum": [
               "text",
@@ -69199,7 +69203,7 @@
         ]
       },
       "patch": {
-        "description": "Write text content to an existing editable file in the project directory.",
+        "description": "Write text content to an existing editable file only when expectedRevision matches its loaded content and physical identity.",
         "operationId": "file.write",
         "parameters": [
           {
@@ -69220,13 +69224,18 @@
                   "content": {
                     "type": "string"
                   },
+                  "expectedRevision": {
+                    "pattern": "^[a-f0-9]{64}$",
+                    "type": "string"
+                  },
                   "path": {
                     "type": "string"
                   }
                 },
                 "required": [
                   "path",
-                  "content"
+                  "content",
+                  "expectedRevision"
                 ],
                 "type": "object"
               }
@@ -69305,6 +69314,33 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "FileWriteConflictError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "File changed since it was loaded"
           },
           "500": {
             "content": {

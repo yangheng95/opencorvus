@@ -1,5 +1,5 @@
 import { createEffect, createMemo, createResource, createSignal, lazy, onCleanup, Show } from "solid-js"
-import { apiJson } from "../services/api"
+import { ApiError, apiJson } from "../services/api"
 import {
   closeFileEditor,
   fileEditorRevealRevision,
@@ -18,6 +18,7 @@ import { Icon } from "./ui/Icon"
 const CodeEditor = lazy(async () => ({ default: (await import("./ui/CodeEditor")).CodeEditor }))
 import { Button } from "./ui/Button"
 import { Dialog } from "./ui/Dialog"
+import { Feedback } from "./ui/Feedback"
 
 function fileContentPath(target: FileEditorTarget): string {
   const query = new URLSearchParams({
@@ -32,12 +33,16 @@ async function readFileContent(target: FileEditorTarget | null): Promise<FileCon
   return (await apiJson(fileContentPath(target))) as FileContent
 }
 
-async function writeFileContent(target: FileEditorTarget, content: string): Promise<FileContent> {
+async function writeFileContent(
+  target: FileEditorTarget,
+  content: string,
+  expectedRevision: string,
+): Promise<FileContent> {
   if (target.sourceAbsolutePath) throw new Error("Absolute source files are read-only")
   return (await apiJson(projectScopedPath("file/content", target.directory), {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ path: target.path, content }),
+    body: JSON.stringify({ path: target.path, content, expectedRevision }),
   })) as FileContent
 }
 
@@ -46,6 +51,14 @@ function canEdit(content: FileContent | null | undefined): boolean {
 }
 
 function errorMessage(error: unknown): string {
+  if (
+    error instanceof ApiError &&
+    error.status === 409 &&
+    error.body &&
+    typeof error.body === "object" &&
+    (error.body as { name?: unknown }).name === "FileWriteConflictError"
+  )
+    return t("file_editor.save_conflict")
   return error instanceof Error ? error.message : String(error)
 }
 
@@ -68,16 +81,19 @@ function sameFileResourceTarget(left: FileEditorTarget | null, right: FileEditor
 
 export function FileEditorPane() {
   const [draft, setDraft] = createSignal("")
-  const [savedContent, setSavedContent] = createSignal("")
+  const [savedBaseline, setSavedBaseline] = createSignal<Pick<FileContent, "content" | "revision"> | null>(null)
   const [saving, setSaving] = createSignal(false)
+  const [reloading, setReloading] = createSignal(false)
   const [error, setError] = createSignal("")
   const [loadError, setLoadError] = createSignal("")
   const [leaveDialogOpen, setLeaveDialogOpen] = createSignal(false)
   const [leaveSaving, setLeaveSaving] = createSignal(false)
+  const [leaveReason, setLeaveReason] = createSignal<"leave" | "reload">("leave")
   let pendingLeaveDecision: Promise<boolean> | undefined
   let settleLeaveDecision: ((allowed: boolean) => void) | undefined
   let draftRevision = 0
   let saveGeneration = 0
+  let reloadGeneration = 0
   let activeTargetIdentity = ""
 
   const contentTarget = createMemo(
@@ -95,19 +111,16 @@ export function FileEditorPane() {
     { equals: sameFileResourceTarget },
   )
 
-  const [content] = createResource(
-    contentTarget,
-    async (target) => {
-      try {
-        const next = await readFileContent(target)
-        if (target && ownsFileTarget(target)) setLoadError("")
-        return next
-      } catch (err) {
-        if (target && ownsFileTarget(target)) setLoadError(errorMessage(err))
-        return null
-      }
-    },
-  )
+  const [content, { mutate: setContent }] = createResource(contentTarget, async (target) => {
+    try {
+      const next = await readFileContent(target)
+      if (target && ownsFileTarget(target)) setLoadError("")
+      return next
+    } catch (err) {
+      if (target && ownsFileTarget(target)) setLoadError(errorMessage(err))
+      return null
+    }
+  })
 
   createEffect(() => {
     const current = selectedFileTarget()
@@ -115,8 +128,10 @@ export function FileEditorPane() {
     if (identity === activeTargetIdentity) return
     activeTargetIdentity = identity
     saveGeneration += 1
+    reloadGeneration += 1
     draftRevision += 1
     setSaving(false)
+    setReloading(false)
   })
 
   createEffect(() => {
@@ -125,11 +140,11 @@ export function FileEditorPane() {
     draftRevision += 1
     if (!canEdit(next)) {
       setDraft("")
-      setSavedContent("")
+      setSavedBaseline(null)
       return
     }
     setDraft(next!.content)
-    setSavedContent(next!.content)
+    setSavedBaseline({ content: next!.content, revision: next!.revision })
   })
 
   const target = createMemo(() => selectedFileTarget())
@@ -137,20 +152,25 @@ export function FileEditorPane() {
   const contentLoadError = createMemo(() => loadError())
   const textContent = createMemo(() => canEdit(content()))
   const writable = createMemo(() => textContent() && !target()?.sourceAbsolutePath)
-  const dirty = createMemo(() => writable() && draft() !== savedContent())
+  const dirty = createMemo(() => writable() && draft() !== savedBaseline()?.content)
 
   const save = async (): Promise<boolean> => {
     const file = target()
-    if (!file || !writable() || !dirty() || saving()) return !dirty()
+    if (!file || !writable() || !dirty() || saving() || reloading()) return !dirty()
+    const expectedRevision = savedBaseline()?.revision
+    if (!expectedRevision) {
+      setError(t("file_editor.revision_required"))
+      return false
+    }
     const submittedDraft = draft()
     const submittedRevision = draftRevision
     const requestGeneration = ++saveGeneration
     setSaving(true)
     setError("")
     try {
-      const next = await writeFileContent(file, submittedDraft)
+      const next = await writeFileContent(file, submittedDraft, expectedRevision)
       if (requestGeneration !== saveGeneration || !ownsFileTarget(file)) return false
-      setSavedContent(next.content)
+      setSavedBaseline({ content: next.content, revision: next.revision })
       const ownsSubmittedDraft = draftRevision === submittedRevision
       if (ownsSubmittedDraft) setDraft(next.content)
       return ownsSubmittedDraft
@@ -175,9 +195,10 @@ export function FileEditorPane() {
     settle?.(allowed)
   }
 
-  const decideBeforeNavigate = (): Promise<boolean> => {
+  const decideBeforeNavigate = (reason: "leave" | "reload" = "leave"): Promise<boolean> => {
     if (!dirty()) return Promise.resolve(true)
     if (pendingLeaveDecision) return pendingLeaveDecision
+    setLeaveReason(reason)
     setLeaveDialogOpen(true)
     pendingLeaveDecision = new Promise<boolean>((resolve) => {
       settleLeaveDecision = resolve
@@ -187,9 +208,36 @@ export function FileEditorPane() {
 
   const unregisterBeforeNavigate = registerFileEditorBeforeNavigate(decideBeforeNavigate)
   onCleanup(() => {
+    reloadGeneration += 1
+    saveGeneration += 1
     unregisterBeforeNavigate()
     finishLeaveDecision(false)
   })
+
+  const reload = async (): Promise<void> => {
+    const file = target()
+    if (!file || saving() || reloading()) return
+    const generation = ++reloadGeneration
+    if (!(await decideBeforeNavigate("reload"))) return
+    if (generation !== reloadGeneration || !ownsFileTarget(file)) return
+    const requestedDraftRevision = draftRevision
+    setReloading(true)
+    setError("")
+    try {
+      const next = await readFileContent(file)
+      if (generation !== reloadGeneration || !ownsFileTarget(file)) return
+      if (draftRevision !== requestedDraftRevision) {
+        setError(t("file_editor.reload_edited"))
+        return
+      }
+      setLoadError("")
+      setContent(next)
+    } catch (cause) {
+      if (generation === reloadGeneration && ownsFileTarget(file)) setError(errorMessage(cause))
+    } finally {
+      if (generation === reloadGeneration && ownsFileTarget(file)) setReloading(false)
+    }
+  }
 
   const saveAndLeave = async () => {
     if (leaveSaving()) return
@@ -245,10 +293,23 @@ export function FileEditorPane() {
             data-dirty={dirty() ? "true" : "false"}
             title={`${t("common.save")} (Ctrl/Cmd+S)`}
             aria-keyshortcuts="Control+s Meta+s"
-            disabled={!dirty() || saving()}
+            disabled={!dirty() || saving() || reloading()}
             onClick={() => void save()}
           >
             {saving() ? t("common.saving") : t("common.save")}
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            tone="neutral"
+            data-ui="file-editor-reload"
+            disabled={saving() || reloading() || content.loading}
+            title={t("file_editor.reload")}
+            aria-label={t("file_editor.reload")}
+            onClick={() => void reload()}
+          >
+            <Icon name={reloading() ? "loading" : "refresh"} />
           </Button>
           <Button
             type="button"
@@ -321,7 +382,9 @@ export function FileEditorPane() {
         open={leaveDialogOpen()}
         title={t("file_editor.unsaved")}
         backdropClose={false}
-        onClose={() => finishLeaveDecision(false)}
+        onClose={() => {
+          if (!leaveSaving()) finishLeaveDecision(false)
+        }}
         footer={
           <>
             <Button
@@ -330,6 +393,7 @@ export function FileEditorPane() {
               size="md"
               tone="neutral"
               data-ui="file-editor-leave-cancel"
+              disabled={leaveSaving()}
               onClick={() => finishLeaveDecision(false)}
             >
               {t("common.cancel")}
@@ -343,7 +407,7 @@ export function FileEditorPane() {
               data-ui="file-editor-discard"
               onClick={() => finishLeaveDecision(true)}
             >
-              {t("file_editor.discard")}
+              {t(leaveReason() === "reload" ? "file_editor.discard_reload" : "file_editor.discard")}
             </Button>
             <Button
               type="button"
@@ -359,7 +423,14 @@ export function FileEditorPane() {
           </>
         }
       >
-        <p>{t("file_editor.unsaved_message", { path: path() })}</p>
+        <p>
+          {t(leaveReason() === "reload" ? "file_editor.reload_unsaved_message" : "file_editor.unsaved_message", {
+            path: path(),
+          })}
+        </p>
+        <Show when={error()}>
+          <Feedback tone="error">{error()}</Feedback>
+        </Show>
       </Dialog>
     </section>
   )

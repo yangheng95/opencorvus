@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Continuous product iteration: protecting authored work](records/2026-10/2026-10-05-product-data-integrity.md)
+
+- [Product data integrity evidence](artifacts/2026-10-05-product-data-integrity/README.md)
+
 - [Product iteration: editable Mission drafts and workbench usability](records/2026-10/2026-10-05-product-iteration.md)
 
 - [Product iteration evidence](artifacts/2026-10-05-product-iteration/README.md)

@@ -1,0 +1,113 @@
+[
+  {
+    "id": "atm_g0VX8MR4R00NF7fpPd9O",
+    "name": "Data integrity race C",
+    "target": {
+      "scope": "global"
+    },
+    "recurrence": "DTSTART:20261005T021834Z\nRRULE:FREQ=DAILY",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Disposable automation C for configuration-only integrity review. Do not manually run.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 1791166714000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_g0VX86eZe00d2WSF70mn",
+    "name": "未来周六 15:30 验收计划（已编辑）",
+    "target": {
+      "scope": "global"
+    },
+    "recurrence": "DTSTART:20261219T153000Z\nRRULE:FREQ=WEEKLY;BYDAY=SA",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "复盘本周项目工作，整理包含进展、风险和后续步骤的简洁状态更新。",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 1797694200000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_g0VX81XNs00rqu9I5xwD",
+    "name": "项目模型保存展示（新表单）",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hroPEGg17GAZWxDZ7MR7"
+      ]
+    },
+    "recurrence": "DTSTART;TZID=Asia/Shanghai:20261225T090000\nRRULE:FREQ=DAILY",
+    "executionMode": "local",
+    "model": {
+      "providerID": "iteration",
+      "modelID": "exact:retained"
+    },
+    "reasoningEffort": null,
+    "prompt": "Read the disposable model catalog notes.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 1798160400000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_g0VX80Sem00LJwa2X10V",
+    "name": "未来周五：保留开始日期和秒数",
+    "target": {
+      "scope": "global"
+    },
+    "recurrence": "DTSTART;TZID=Asia/Shanghai:20261225T160037\nRRULE:FREQ=WEEKLY;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Read the disposable acceptance notes.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 1798185637000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_g0VX8MR3n00AuTOo70l8",
+    "name": "Data integrity race A",
+    "target": {
+      "scope": "global"
+    },
+    "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Owned A identity must remain unchanged.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4102416000000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_g0VX8MR4A002Lr4J7nut",
+    "name": "B preserved after empty selection refresh",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hroPEGg17GAZWxDZ7MR7"
+      ]
+    },
+    "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Disposable automation B for configuration-only integrity review. Do not manually run.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4102416000000,
+    "failureCount": 0,
+    "lastError": null
+  }
+]

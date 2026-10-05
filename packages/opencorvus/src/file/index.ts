@@ -1,7 +1,6 @@
 import { Bus } from "@/bus"
 import { BusEvent } from "@/bus/bus-event"
 import z from "zod"
-import { $ } from "bun"
 import { formatPatch, structuredPatch } from "diff"
 import path from "path"
 import fs from "fs"
@@ -15,8 +14,10 @@ import { Ripgrep } from "./ripgrep"
 import fuzzysort from "fuzzysort"
 import { Global } from "../global"
 import { NamedError } from "@opencorvus-ai/util/error"
-import { randomUUID } from "node:crypto"
+import { createHash, randomUUID } from "node:crypto"
 import { withKeyedLock } from "../util/lock"
+import { CROSS_PROCESS_LOCK_RETRY, SHARED_JSON_FACT_QUEUE_TIMEOUT_MS, withProcessLock } from "../util/process-lock"
+import { hostGit } from "../util/git"
 
 export namespace File {
   const log = Log.create({ service: "file" })
@@ -49,10 +50,16 @@ export namespace File {
     })
   export type Node = z.infer<typeof Node>
 
+  export const ContentRevision = z
+    .string()
+    .regex(/^[a-f0-9]{64}$/)
+    .describe("Opaque revision of the exact loaded file bytes and canonical physical resource identity.")
+
   export const Content = z
     .object({
       type: z.enum(["text", "binary"]),
       content: z.string(),
+      revision: ContentRevision.optional(),
       diff: z.string().optional(),
       patch: z
         .object({
@@ -221,6 +228,11 @@ export namespace File {
       path: z.string(),
       message: z.string(),
     }),
+  )
+
+  export const WriteConflictError = NamedError.create(
+    "FileWriteConflictError",
+    z.object({ path: z.string(), message: z.string() }),
   )
 
   const binaryExtensions = new Set([
@@ -682,15 +694,6 @@ export namespace File {
     }
   }
 
-  async function readFileText(file: string, full: string): Promise<string> {
-    try {
-      return await Filesystem.readText(full)
-    } catch (error) {
-      if (isMissingPathError(error)) throw fileNotFound({ path: file })
-      throw error
-    }
-  }
-
   const state = createInstanceState(
     async () => {
       type Entry = { files: string[]; dirs: string[] }
@@ -794,11 +797,10 @@ export namespace File {
   export async function status() {
     if (!Project.isGitRepo(Instance.directory)) return []
 
-    const diffOutput = await $`git -c core.fsmonitor=false -c core.quotepath=false diff --numstat HEAD`
-      .cwd(Instance.directory)
-      .quiet()
-      .nothrow()
-      .text()
+    const diffOutput = (await hostGit(
+      ["-c", "core.fsmonitor=false", "-c", "core.quotepath=false", "diff", "--numstat", "HEAD"],
+      { cwd: Instance.directory, timeoutProfile: "default" },
+    )).text()
 
     const changedFiles: Info[] = []
 
@@ -815,12 +817,10 @@ export namespace File {
       }
     }
 
-    const untrackedOutput =
-      await $`git -c core.fsmonitor=false -c core.quotepath=false ls-files --others --exclude-standard`
-        .cwd(Instance.directory)
-        .quiet()
-        .nothrow()
-        .text()
+    const untrackedOutput = (await hostGit(
+      ["-c", "core.fsmonitor=false", "-c", "core.quotepath=false", "ls-files", "--others", "--exclude-standard"],
+      { cwd: Instance.directory, timeoutProfile: "default" },
+    )).text()
 
     if (untrackedOutput.trim()) {
       const untrackedFiles = untrackedOutput.trim().split("\n")
@@ -841,12 +841,10 @@ export namespace File {
     }
 
     // Get deleted files
-    const deletedOutput =
-      await $`git -c core.fsmonitor=false -c core.quotepath=false diff --name-only --diff-filter=D HEAD`
-        .cwd(Instance.directory)
-        .quiet()
-        .nothrow()
-        .text()
+    const deletedOutput = (await hostGit(
+      ["-c", "core.fsmonitor=false", "-c", "core.quotepath=false", "diff", "--name-only", "--diff-filter=D", "HEAD"],
+      { cwd: Instance.directory, timeoutProfile: "default" },
+    )).text()
 
     if (deletedOutput.trim()) {
       const deletedFiles = deletedOutput.trim().split("\n")
@@ -869,7 +867,11 @@ export namespace File {
     })
   }
 
-  async function readResolvedContent(file: string, full: string): Promise<Content> {
+  function contentRevision(identity: string, bytes: Uint8Array): string {
+    return createHash("sha256").update(identity).update("\0").update(bytes).digest("hex")
+  }
+
+  async function readResolvedContent(file: string, full: string, identity?: string): Promise<Content> {
     await statReadableFile(file, full)
     await assertReadableFile(file, full)
 
@@ -900,7 +902,12 @@ export namespace File {
       return { type: "text", content, mimeType, encoding: "base64" }
     }
 
-    return { type: "text", content: await readFileText(file, full) }
+    const bytes = await readFileBytes(file, full)
+    return {
+      type: "text",
+      content: bytes.toString("utf8"),
+      ...(identity === undefined ? {} : { revision: contentRevision(identity, bytes) }),
+    }
   }
 
   export async function readSource(file: string): Promise<Content> {
@@ -919,48 +926,73 @@ export namespace File {
       throw new Error(`Access denied: path escapes project directory`)
     }
 
-    const result = await readResolvedContent(file, full)
+    const physical = await realpathIfExists(full)
+    if (!physical) throw fileNotFound({ path: file })
+    if (!(await isPathAllowed(physical))) throw new Error(`Access denied: path escapes project directory`)
+    const result = await readResolvedContent(file, physical, normalizeCanonicalPath(physical))
     if (result.type !== "text" || result.encoding) return result
     const content = result.content
 
     if (Project.isGitRepo(Instance.directory)) {
-      let diff = await $`git -c core.fsmonitor=false diff ${file}`.cwd(Instance.directory).quiet().nothrow().text()
+      let diff = (await hostGit(["-c", "core.fsmonitor=false", "diff", "--", file], {
+        cwd: Instance.directory, timeoutProfile: "default",
+      })).text()
       if (!diff.trim())
-        diff = await $`git -c core.fsmonitor=false diff --staged ${file}`
-          .cwd(Instance.directory)
-          .quiet()
-          .nothrow()
-          .text()
+        diff = (await hostGit(["-c", "core.fsmonitor=false", "diff", "--staged", "--", file], {
+          cwd: Instance.directory, timeoutProfile: "default",
+        })).text()
       if (diff.trim()) {
-        const original = await $`git show HEAD:${file}`.cwd(Instance.directory).quiet().nothrow().text()
+        const original = (await hostGit(["show", `HEAD:${file}`], {
+          cwd: Instance.directory, timeoutProfile: "default",
+        })).text()
         const patch = structuredPatch(file, file, original, content, "old", "new", {
           context: Infinity,
           ignoreWhitespace: true,
         })
         const diff = formatPatch(patch)
-        return { type: "text", content, patch, diff }
+        return { ...result, patch, diff }
       }
     }
     return result
   }
 
-  export async function writeText(file: string, content: string): Promise<Content> {
+  export async function writeText(file: string, content: string, expectedRevision: string): Promise<Content> {
     using _ = log.time("writeText", { file })
     const full = path.join(Instance.directory, file)
-
+    ContentRevision.parse(expectedRevision)
     await assertAllowedFilePath({ file, fullPath: full })
-    const existing = await statReadableFile(file, full)
-
-    const text = isTextByExtension(file) || isTextByName(file)
-    if (isBinaryByExtension(file) && !text) {
-      throw fileInvalidPath({ path: file, message: `Cannot edit binary file: ${file}` })
-    }
-
-    return withKeyedLock(writeLocks, full, async () => {
-      await Filesystem.writeAtomic(full, content, existing.mode & 0o777)
-      await notifyEdited([file])
-      return read(file)
-    })
+    const physical = await realpathIfExists(full)
+    if (!physical) throw fileNotFound({ path: file })
+    await assertAllowedFilePath({ file, fullPath: physical })
+    const identity = normalizeCanonicalPath(physical)
+    const conflict = () =>
+      new WriteConflictError({
+        path: file,
+        message: `File changed since it was loaded: ${file}. Reload the current file before saving.`,
+      })
+    return withKeyedLock(
+      writeLocks,
+      identity,
+      () =>
+        withProcessLock(identity, { realpath: false, retries: CROSS_PROCESS_LOCK_RETRY }, async () => {
+          await assertAllowedFilePath({ file, fullPath: full })
+          const currentPhysical = await realpathIfExists(full)
+          if (!currentPhysical) throw fileNotFound({ path: file })
+          await assertAllowedFilePath({ file, fullPath: currentPhysical })
+          if (normalizeCanonicalPath(currentPhysical) !== identity) throw conflict()
+          const existing = await statReadableFile(file, currentPhysical)
+          const current = await readResolvedContent(file, currentPhysical, identity)
+          if (current.type !== "text" || current.encoding) {
+            throw fileInvalidPath({ path: file, message: `Cannot edit binary file: ${file}` })
+          }
+          if (current.revision !== expectedRevision) throw conflict()
+          await Filesystem.writeAtomic(currentPhysical, content, existing.mode & 0o777)
+          await notifyEdited([file])
+          // Describe this commit even when an external writer changes the file during notification.
+          return { type: "text" as const, content, revision: contentRevision(identity, Buffer.from(content, "utf8")) }
+        }),
+      SHARED_JSON_FACT_QUEUE_TIMEOUT_MS,
+    )
   }
 
   function relativePathFor(fullPath: string): string {

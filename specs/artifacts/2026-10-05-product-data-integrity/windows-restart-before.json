@@ -1,0 +1,76 @@
+{
+  "observedAt": "2026-10-05T01:58:07.8431062Z",
+  "original": {
+    "schemaVersion": 1,
+    "occurrenceID": "restart-audit-02",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:17888",
+    "pid": 76236
+  },
+  "replacement": {
+    "schemaVersion": 1,
+    "occurrenceID": "restart-audit-02",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:17888",
+    "pid": 45284
+  },
+  "admission": {
+    "ok": true,
+    "occurrenceID": "cal_g0VX8Vjlw00r0peCwjQJ"
+  },
+  "request": {
+    "kind": "command",
+    "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "args": [
+      "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+      "serve",
+      "--hostname",
+      "127.0.0.1",
+      "--port",
+      "17888",
+      "--project-dir",
+      "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\restart-audit-02\\project",
+      "--startup-receipt",
+      "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\restart-audit-02\\startup.json",
+      "--startup-occurrence",
+      "restart-audit-02",
+      "--print-logs"
+    ],
+    "detached": true,
+    "cwd": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus",
+    "ready_file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\restart-audit-02\\home\\tmp\\supervisor-jwoNFG\\ready.json",
+    "request_id": "109e773d-3620-40de-b955-86f577ad6614",
+    "launch_failed_file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\restart-audit-02\\home\\tmp\\supervisor-jwoNFG\\launch-failed.json",
+    "cancel_file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\restart-audit-02\\home\\tmp\\supervisor-jwoNFG\\cancel",
+    "settled_file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\restart-audit-02\\home\\tmp\\supervisor-jwoNFG\\settled.json",
+    "owner_pid": 76236,
+    "owner_process_instance_id": "win32:639267622342266150",
+    "runtime_occurrence_id": "6dfe865a-7712-4828-a096-e2e84bc4cc94"
+  },
+  "helper": {
+    "protocol": 1,
+    "request_id": "109e773d-3620-40de-b955-86f577ad6614",
+    "helper_pid": 49644,
+    "helper_process_instance_id": "win32:639267622614396923",
+    "runtime_occurrence_id": "6dfe865a-7712-4828-a096-e2e84bc4cc94"
+  },
+  "ready": {
+    "protocol": 2,
+    "request_id": "109e773d-3620-40de-b955-86f577ad6614",
+    "helper_pid": 49644,
+    "target_pid": 45284,
+    "target_process_instance_id": "win32:639267622614890539",
+    "runtime_occurrence_id": "6dfe865a-7712-4828-a096-e2e84bc4cc94"
+  },
+  "settled": {
+    "protocol": 1,
+    "request_id": "109e773d-3620-40de-b955-86f577ad6614",
+    "helper_pid": 49644,
+    "target_pid": 45284,
+    "active_processes": 0,
+    "runtime_occurrence_id": "6dfe865a-7712-4828-a096-e2e84bc4cc94"
+  },
+  "cancelFilePresent": false,
+  "processes": [],
+  "listeners": []
+}

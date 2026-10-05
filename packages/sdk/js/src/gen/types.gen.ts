@@ -2157,6 +2157,7 @@ export type FileContent = {
     oldFileName: string
     oldHeader?: string
   }
+  revision?: string
   type: "text" | "binary"
 }
 
@@ -18007,6 +18008,7 @@ export type FileReadResponse = FileReadResponses[keyof FileReadResponses]
 export type FileWriteData = {
   body: {
     content: string
+    expectedRevision: string
     path: string
   }
   path?: never
@@ -18040,6 +18042,15 @@ export type FileWriteErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * File changed since it was loaded
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "FileWriteConflictError"
+  }
   /**
    * Internal server error
    */

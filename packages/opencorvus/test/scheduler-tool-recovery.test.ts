@@ -119,6 +119,49 @@ async function executeAndRecover(
 }
 
 describe("schedule Tool exact lost-response recovery", () => {
+  test("retargeted Tool receipts, replay and the public list use their exact revision membership", async () => {
+    await using first = await memoryProject("target-tool-first")
+    await using second = await memoryProject("target-tool-second")
+    const secondID = await Instance.provide({ directory: second.path, fn: () => Instance.project.id })
+    await Instance.provide({
+      directory: first.path,
+      fn: async () => {
+        const firstID = Instance.project.id
+        const session = await Session.create({ kind: "root", title: "Target revision Tool receipt" })
+        const create = await persistedScheduleRequest(session.id, {
+          action: "create",
+          name: "Tool revision membership",
+          scope: "global",
+          recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          prompt: "Target receipt only",
+        })
+        const created = JSON.parse((await executeAndRecover(session.id, create)).output)
+        const update = await persistedScheduleRequest(session.id, {
+          action: "update",
+          automationId: created.automationId,
+          scope: "project",
+          projectIds: [secondID, firstID],
+        })
+        const accepted = await executeAndRecover(session.id, update)
+        expect(JSON.parse(accepted.output).target).toEqual({ scope: "project", projectIds: [secondID, firstID] })
+        expect(AutomationService.list().find((row) => row.id === created.automationId)?.target).toEqual({
+          scope: "project",
+          projectIds: [secondID, firstID],
+        })
+        await AutomationService.update({
+          id: created.automationId,
+          status: "paused",
+          target: { scope: "project", projectIds: [firstID] },
+        })
+        expect(await recoverScheduledToolPart(update.part)).toEqual(accepted)
+        expect(AutomationService.list().find((row) => row.id === created.automationId)?.target).toEqual({
+          scope: "project",
+          projectIds: [firstID],
+        })
+      },
+    })
+  }, 60_000)
+
   test("a paused manual Tool retries the same persisted occurrence at a later admission time", async () => {
     await using project = await memoryProject()
     await Instance.provide({

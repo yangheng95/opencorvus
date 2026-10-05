@@ -1,0 +1,308 @@
+{
+  "status": "passed",
+  "databasePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XylrOL\\runner-48812-Xnatdl\\runtime-root\\tmp\\opencorvus-automation-target-real-dfrUcu\\runtime\\data\\opencorvus.db",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    }
+  ],
+  "credentialCleanupObserved": {
+    "authPresent": false,
+    "modelsPresent": false
+  },
+  "reviewed": [
+    {
+      "label": "A-to-B",
+      "memberships": [
+        {
+          "id": "atm_g0VX8Si1m00snqfx933n",
+          "revision": 1,
+          "status": "active",
+          "projects": [
+            "prj_hwjXPkX9IRr7lv3TRf3X"
+          ]
+        },
+        {
+          "id": "atm_g0VX8Si2500Sf7whOo0U",
+          "revision": 2,
+          "status": "paused",
+          "projects": [
+            "prj_hwjXPkX9IRr7lv3TRf3X"
+          ]
+        },
+        {
+          "id": "atm_g0VX8Si2z00uRLbeEGO7",
+          "revision": 3,
+          "status": "paused",
+          "projects": [
+            "prj_h1EJpOvmyIz3MgvHqaVf"
+          ]
+        }
+      ],
+      "fire": {
+        "id": "atm_g0VX8Si3I00769Co5Z5f",
+        "automation_revision_id": "atm_g0VX8Si2z00uRLbeEGO7",
+        "scheduled_due_at": 1791164739769,
+        "origin": "manual_api",
+        "tool_part_id": null,
+        "input_digest": null,
+        "time_created": 1791164739769
+      },
+      "run": {
+        "id": "atr_automation_43a31ab9d61fae36ca5c81bcc69892df",
+        "automation_revision_id": "atm_g0VX8Si2z00uRLbeEGO7",
+        "fire_id": "atm_g0VX8Si3I00769Co5Z5f",
+        "target_project_id": "prj_h1EJpOvmyIz3MgvHqaVf",
+        "mission_opened_event_id": null,
+        "mission_disposition": null,
+        "mission_closure_event_id": null,
+        "started_at": 1791164739769
+      },
+      "receipts": [
+        {
+          "id": "atm_g0VX8Sl8q00eOmRStDv3",
+          "run_id": "atr_automation_43a31ab9d61fae36ca5c81bcc69892df",
+          "outcome": "succeeded",
+          "disposition": null,
+          "closure_event_id": null,
+          "retry_at": null,
+          "error": null,
+          "time_created": 1791164751646
+        }
+      ],
+      "session": {
+        "id": "ses_automation_1e402d3a9c96a130af7a56a481eed607",
+        "project_id": "prj_h1EJpOvmyIz3MgvHqaVf",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XylrOL\\runner-48812-Xnatdl\\runtime-root\\tmp\\opencorvus-automation-target-real-dfrUcu\\project-B",
+        "kind": "assistant"
+      },
+      "acceptedMessage": {
+        "id": "msg_automation_1e402d3a9c96a130af7a56a481eed607",
+        "session_id": "ses_automation_1e402d3a9c96a130af7a56a481eed607",
+        "time_created": 1791164739829,
+        "time_updated": 1791164739834,
+        "data": {
+          "author": "orchestrator",
+          "role": "user",
+          "time": {
+            "created": 1791164739829
+          },
+          "agent": "coding",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "scheduler.automation",
+              "jobID": "atm_g0VX8Si1m00snqfx933n",
+              "jobName": "Real target A-to-B",
+              "fireID": "atm_g0VX8Si3I00769Co5Z5f",
+              "scope": "project",
+              "recurrence": "DTSTART:20271005T014539Z\nRRULE:FREQ=DAILY"
+            }
+          },
+          "orderKey": "v1:0001791164739829:0000000000000030:0000000000000000:message:msg_automation_1e402d3a9c96a130af7a56a481eed607"
+        }
+      },
+      "actualTools": [
+        {
+          "id": "prt_g0VX8SjF500noJncVgoE",
+          "request": {
+            "type": "tool-request",
+            "callID": "call_55Y4bQ8GTMEcBKnalYSWeHa2",
+            "tool": "read",
+            "input": {
+              "filePath": "target.txt"
+            },
+            "time": {
+              "start": 1791164744347
+            }
+          },
+          "outcome": {
+            "outcome": "completed",
+            "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XylrOL\\runner-48812-Xnatdl\\runtime-root\\tmp\\opencorvus-automation-target-real-dfrUcu\\project-B\\target.txt</path>\n<type>file</type>\n<content>1: TARGET-B-cf9bcd1c-f324-4b74-ac8d-b5929b7b7800\n\n(End of file - total 1 lines)\n</content>",
+            "title": "target.txt",
+            "metadata": {
+              "preview": "TARGET-B-cf9bcd1c-f324-4b74-ac8d-b5929b7b7800",
+              "truncated": false,
+              "loaded": [],
+              "lines": 1,
+              "totalLines": 1
+            },
+            "time": {
+              "end": 1791164745157
+            }
+          }
+        }
+      ],
+      "final": {
+        "id": "msg_g0VX8SjUL00oNuHH3B8l",
+        "text": "Marker: `TARGET-B-cf9bcd1c-f324-4b74-ac8d-b5929b7b7800`\n\nAbsolute directory: `C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XylrOL\\runner-48812-Xnatdl\\runtime-root\\tmp\\opencorvus-automation-target-real-dfrUcu\\project-B`"
+      },
+      "promptDispositionFromLiveOwner": "settled"
+    },
+    {
+      "label": "ordered-A-B-to-B",
+      "memberships": [
+        {
+          "id": "atm_g0VX8SlE600532eHFA0m",
+          "revision": 1,
+          "status": "active",
+          "projects": [
+            "prj_hwjXPkX9IRr7lv3TRf3X",
+            "prj_h1EJpOvmyIz3MgvHqaVf"
+          ]
+        },
+        {
+          "id": "atm_g0VX8SlEN00j8ja5YZ42",
+          "revision": 2,
+          "status": "paused",
+          "projects": [
+            "prj_hwjXPkX9IRr7lv3TRf3X",
+            "prj_h1EJpOvmyIz3MgvHqaVf"
+          ]
+        },
+        {
+          "id": "atm_g0VX8SlEZ00Fz1JX6MZj",
+          "revision": 3,
+          "status": "paused",
+          "projects": [
+            "prj_h1EJpOvmyIz3MgvHqaVf"
+          ]
+        }
+      ],
+      "fire": {
+        "id": "atm_g0VX8SlEh00yCa1z2xeG",
+        "automation_revision_id": "atm_g0VX8SlEZ00Fz1JX6MZj",
+        "scheduled_due_at": 1791164752009,
+        "origin": "manual_api",
+        "tool_part_id": null,
+        "input_digest": null,
+        "time_created": 1791164752009
+      },
+      "run": {
+        "id": "atr_automation_a0379ac8878efd9ece43f149b8b610bf",
+        "automation_revision_id": "atm_g0VX8SlEZ00Fz1JX6MZj",
+        "fire_id": "atm_g0VX8SlEh00yCa1z2xeG",
+        "target_project_id": "prj_h1EJpOvmyIz3MgvHqaVf",
+        "mission_opened_event_id": null,
+        "mission_disposition": null,
+        "mission_closure_event_id": null,
+        "started_at": 1791164752009
+      },
+      "receipts": [
+        {
+          "id": "atm_g0VX8Sog300nlYqpJtcl",
+          "run_id": "atr_automation_a0379ac8878efd9ece43f149b8b610bf",
+          "outcome": "succeeded",
+          "disposition": null,
+          "closure_event_id": null,
+          "retry_at": null,
+          "error": null,
+          "time_created": 1791164765238
+        }
+      ],
+      "session": {
+        "id": "ses_automation_bc953c64774d7190bc81ad299a9aee32",
+        "project_id": "prj_h1EJpOvmyIz3MgvHqaVf",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XylrOL\\runner-48812-Xnatdl\\runtime-root\\tmp\\opencorvus-automation-target-real-dfrUcu\\project-B",
+        "kind": "assistant"
+      },
+      "acceptedMessage": {
+        "id": "msg_automation_bc953c64774d7190bc81ad299a9aee32",
+        "session_id": "ses_automation_bc953c64774d7190bc81ad299a9aee32",
+        "time_created": 1791164752093,
+        "time_updated": 1791164752096,
+        "data": {
+          "author": "orchestrator",
+          "role": "user",
+          "time": {
+            "created": 1791164752093
+          },
+          "agent": "coding",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "scheduler.automation",
+              "jobID": "atm_g0VX8SlE600532eHFA0m",
+              "jobName": "Real target ordered-A-B-to-B",
+              "fireID": "atm_g0VX8SlEh00yCa1z2xeG",
+              "scope": "project",
+              "recurrence": "DTSTART:20271005T014539Z\nRRULE:FREQ=DAILY"
+            }
+          },
+          "orderKey": "v1:0001791164752093:0000000000000030:0000000000000000:message:msg_automation_bc953c64774d7190bc81ad299a9aee32"
+        }
+      },
+      "actualTools": [
+        {
+          "id": "prt_g0VX8SmRW00L9z7mCM1A",
+          "request": {
+            "type": "tool-request",
+            "callID": "call_nZ6nyhSC2eW2XgmttuxGJYVD",
+            "tool": "read",
+            "input": {
+              "filePath": "target.txt",
+              "offset": 1,
+              "limit": 2000
+            },
+            "time": {
+              "start": 1791164756650
+            }
+          },
+          "outcome": {
+            "outcome": "completed",
+            "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XylrOL\\runner-48812-Xnatdl\\runtime-root\\tmp\\opencorvus-automation-target-real-dfrUcu\\project-B\\target.txt</path>\n<type>file</type>\n<content>1: TARGET-B-cf9bcd1c-f324-4b74-ac8d-b5929b7b7800\n\n(End of file - total 1 lines)\n</content>",
+            "title": "target.txt",
+            "metadata": {
+              "preview": "TARGET-B-cf9bcd1c-f324-4b74-ac8d-b5929b7b7800",
+              "truncated": false,
+              "loaded": [],
+              "lines": 1,
+              "totalLines": 1
+            },
+            "time": {
+              "end": 1791164757412
+            }
+          }
+        }
+      ],
+      "final": {
+        "id": "msg_g0VX8Smhm00YtzWaVSmL",
+        "text": "Marker: `TARGET-B-cf9bcd1c-f324-4b74-ac8d-b5929b7b7800`\n\nAbsolute directory: `C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XylrOL\\runner-48812-Xnatdl\\runtime-root\\tmp\\opencorvus-automation-target-real-dfrUcu\\project-B`"
+      },
+      "promptDispositionFromLiveOwner": "settled"
+    }
+  ]
+}
