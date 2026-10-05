@@ -1,5 +1,10 @@
 # Connection workspace authority investigation
 
+- [Actual Sol sequential Edit and Composer plan](live-sol-edit-composer-e2e-plan.md) and [Root manual review](root-sol-edit-composer-manual-review.md): actual6 file operations,58 final bytes,12 streamed Sol200 requests; real before/after processing,settled,reopened/offline screenshots. Composer source/types/i18n/build pass; original Skills timeout and active leased cancellation remain open.
+- [Composer independent review](composer-guidance-independent-review.md): derived availability preserves current dispatch/attachment/model/Stop owners; actual before/after target visual qualification separated from unexercised combinations.
+- [File chronology implementation proposal](file-change-chronology-implementation-proposal.md) and [actual03 causal qualification](file-change-actual03-causal-qualification.md): real Review initial→middle versus final disk, missing accepted batch in live/history tree, no unsupported creation-net claim. Implementation remains next scope.
+- [Leased cancellation policy proposal](leased-cancellation-policy-proposal.md): immutable acquisition attempt versus receipt-derived genuine failure budget, exact lease handback and committed acknowledgement precedence; no B implementation/active-restart qualification.
+
 ## Current root real-page checkpoint
 
 Root's Cff, D5, DVw and DoU manual checkpoints retain separate actual screenshot,
@@ -23,6 +28,10 @@ statements and screenshots retain their original provenance.
 - [Work mode experience](live-sol-write-mode-experience-review.md): actual default Work/Chat identity is correct; two source-document wording drifts remain separate.
 - [Continuous file endpoints](live-file-change-endpoint-review.md): subsequent source-backed live aggregate stale-after finding; chronology/duplicate observation and actual Review reproduction pending.
 - [Active leased cancellation](leased-recipient-cancellation-review.md): remaining delivery retry-budget and background fault-classification audit; standby exit cannot qualify active/restart behavior.
+- [File chronology continuation](file-change-chronology-continuation-review.md): actual Part creation order, canonical path-only Patch facts and bounded causal aggregation proposal; real Review reproduction remains pending.
+- [Composer busy guidance](composer-disabled-guidance-stream-review.md): accepted submit-busy can incorrectly select setup guidance; precise stream transition/Stop behavior still needs actual screenshots.
+
+Later Instance slice A changes only the expected cancellation predicate and preserves the existing warning message/sanitization. `instance-background-diagnostics-test-frozen.log` records17positive tests/41assertions; formal and explicit source+queue/four-checker types pass. First six warning-case failures are retained and actually exercised the original predicate after a missed text edit. This is local real Instance/helper qualification, not actual active leased/SQLite/restart or ordinary service fault-after-abort evidence. c59cf33b/native03 belongs to the preceding frozen snapshot; this subsequent slice has separate source/test evidence.
 
 - `next-provider-panel-audit.md`: original bounded Provider/auth, model-selector, Network and Channels plan; its later implementation and qualification sections record the completed source work and separate actual limits.
 

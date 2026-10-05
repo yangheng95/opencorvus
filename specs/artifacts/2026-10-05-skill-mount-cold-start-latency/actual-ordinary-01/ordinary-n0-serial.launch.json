@@ -1,0 +1,39 @@
+{
+  "count": 0,
+  "mode": "serial",
+  "occurrenceID": "1a1c21bd-5049-4c73-911f-cc0a950ad793",
+  "files": 0,
+  "bytes": 0,
+  "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-01",
+  "projects": {
+    "a": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-01\\project-a",
+    "b": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-01\\project-b"
+  },
+  "observations": [],
+  "preflight": "loopback port bind/close succeeded",
+  "command": {
+    "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "args": [
+      "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+      "serve",
+      "--hostname",
+      "127.0.0.1",
+      "--port",
+      "17955",
+      "--startup-receipt",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-skill-mount-cold-start-latency\\actual-ordinary-01\\ordinary-n0-serial.startup.json",
+      "--startup-occurrence",
+      "1a1c21bd-5049-4c73-911f-cc0a950ad793",
+      "--parent-pid",
+      "47108",
+      "--parent-process-instance-id",
+      "win32:639268273442622875",
+      "--print-logs",
+      "--log-level",
+      "DEBUG",
+      "--project-dir",
+      "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-01\\project-a"
+    ],
+    "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-01\\launch"
+  }
+}

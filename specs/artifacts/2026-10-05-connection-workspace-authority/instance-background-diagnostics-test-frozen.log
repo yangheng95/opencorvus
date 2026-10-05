@@ -1,0 +1,27 @@
+[1/1] START test/instance-background-work.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) instance background work > retains the source fault diagnostic after owner cancellation and joins physical cleanup [2309.47ms]
+(pass) instance background work > retains the same text fault diagnostic after owner cancellation and joins physical cleanup [2042.86ms]
+(pass) instance background work > retains the instance admission fault diagnostic after owner cancellation and joins physical cleanup [1741.74ms]
+(pass) instance background work > retains the database admission fault diagnostic after owner cancellation and joins physical cleanup [1567.94ms]
+(pass) instance background work > retains the mixed fault diagnostic after owner cancellation and joins physical cleanup [1593.99ms]
+(pass) instance background work > retains the cleanup fault diagnostic after owner cancellation and joins physical cleanup [1595.70ms]
+(pass) instance background work > settles exact external owner reason %s after complete unwind [1751.55ms]
+(pass) instance background work > settles exact external owner reason %s after complete unwind [1768.32ms]
+(pass) instance background work > settles exact external owner reason external primitive after complete unwind [1744.83ms]
+(pass) instance background work > global disposal cancels scheduled owners across projects before draining their leases [4151.45ms]
+(pass) instance background work > settles nested background registration from a abort listener after teardown closes admission [1542.74ms]
+(pass) instance background work > settles nested background registration from a draining owner after teardown closes admission [1549.76ms]
+(pass) instance background work > keeps an admitted background lease valid through its complete cancellation settlement [1558.09ms]
+(pass) instance background work > returns a settled completion when teardown races background admission [1661.49ms]
+(pass) instance background work > background work keeps a valid instance context for as long as it runs [1996.86ms]
+(pass) instance background work > instance disposal cancels in-flight background work instead of waiting for it [1694.01ms]
+(pass) instance background work > work scheduled and completed before disposal leaves nothing for disposal to cancel [1647.16ms]
+
+ 17 pass
+ 0 fail
+ 41 expect() calls
+Ran 17 tests across 1 file. [33.42s]
+[1/1] DONE test/instance-background-work.test.ts exit=0 duration=33.62s

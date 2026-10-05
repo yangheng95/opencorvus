@@ -1,0 +1,62 @@
+===================================================================
+--- specs/artifacts/2026-10-05-skill-mount-cold-start-latency/ordinary-checker-cold-order-before.ts.txt
++++ packages/opencorvus/script/skill-mount-cold-start-check.ts
+@@ -490,21 +490,8 @@
+     assert.equal(healthBody.healthy, true)
+     assert.equal(path.resolve(healthBody.paths.data), path.resolve(runtime ? input.root : path.join(input.root, "runtime"), "data"))
+     assert.equal(path.resolve(healthBody.paths.home), runtime ? path.join(runtime.processRoot, "home") : path.join(input.root, "home"))
+     fact.health = { status: health.status, requestID: health.headers.get("x-opencorvus-request-id"), ...healthBody }
+-    if (inputPolicy.profile === "ordinary") {
+-      const boundaries: Record<string, unknown>[] = []
+-      for (const side of ["a", "b"] as const) {
+-        const boundaryURL = new URL("/project/current", baseURL)
+-        boundaryURL.searchParams.set("directory", input.projects[side])
+-        const boundaryResponse = await fetch(boundaryURL, { signal: transportRequestSignal({}) })
+-        assert.equal(boundaryResponse.status, 200, "Actual public Project boundary HTTP status")
+-        const worktree = ordinaryProjectBoundary(await boundaryResponse.json(), input.projects[side])
+-        boundaries.push({ side, status: boundaryResponse.status,
+-          requestID: boundaryResponse.headers.get("x-opencorvus-request-id"), directory: input.projects[side], worktree })
+-      }
+-      fact.projectBoundary = boundaries
+-    }
+     fact.metadataFiles = Object.fromEntries(
+       await Promise.all(
+         ["auth.json", "models.json"].map(async (name) => {
+           const stat = await fs.stat(path.join(runtime ? input.root : path.join(input.root, "runtime"), "data", name)).catch((error: NodeJS.ErrnoException) => {
+@@ -556,16 +543,34 @@
+         .slice(offset)
+         .filter((row) => row.service === "server" && row.path === "/skill/mounts" && row.status === "started")
+       fact.cancelRequestID = candidates.length === 1 ? candidates[0].requestID : null
+       if (!completed) controller.abort(new DOMException("Owned caller cancellation", "AbortError"))
+-      fact.cancelOutcome = await first
+-      assert.equal(fact.cancelOutcome && (fact.cancelOutcome as { outcome: string }).outcome, "caller-aborted",
++      const cancelResult = await first
++      fact.cancelOutcome = {
++        outcome: cancelResult.outcome,
++        ...("requestID" in cancelResult ? { requestID: cancelResult.requestID } : {}),
++        ...("value" in cancelResult ? { projection: cancelResult.value } : {}),
++      }
++      assert.equal(cancelResult.outcome, "caller-aborted",
+         "Actual initializer cancellation must be exercised; naturally completed request is not cancellation coverage")
+       await Promise.all([read("post-cancel-a", "a"), read("parallel-b", "b")])
+       await read("settled-a", "a")
+     } else {
+       await Promise.all([read("first-parallel-a1", "a"), read("first-parallel-a2", "a"), read("first-parallel-b", "b")])
+     }
++    if (inputPolicy.profile === "ordinary") {
++      const boundaries: Record<string, unknown>[] = []
++      for (const side of ["a", "b"] as const) {
++        const boundaryURL = new URL("/project/current", baseURL)
++        boundaryURL.searchParams.set("directory", input.projects[side])
++        const boundaryResponse = await fetch(boundaryURL, { signal: transportRequestSignal({}) })
++        assert.equal(boundaryResponse.status, 200, "Actual public Project boundary HTTP status")
++        const worktree = ordinaryProjectBoundary(await boundaryResponse.json(), input.projects[side])
++        boundaries.push({ side, status: boundaryResponse.status,
++          requestID: boundaryResponse.headers.get("x-opencorvus-request-id"), directory: input.projects[side], worktree })
++      }
++      fact.projectBoundary = boundaries
++    }
+     fact.status = fact.clientDeadlineFailed ? "client-deadline-failed" : "http-completed"
+   } catch (error) {
+     fact.status = "failed"
+     fact.failure = {

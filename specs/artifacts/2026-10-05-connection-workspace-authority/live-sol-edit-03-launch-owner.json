@@ -1,0 +1,61 @@
+{
+  "observedAtUtc": "2026-10-05T20:08:20.4704251Z",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\runtime",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\project",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\evidence",
+  "evidencePrefix": "live-sol-edit-03",
+  "receipt": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\startup.json",
+  "occurrence": "live-sol-edit-03-78c8e204-2c8a-49b4-8a47-e75148132f3d",
+  "port": 17956,
+  "owner": {
+    "ProcessId": 17008,
+    "ParentProcessId": 30712,
+    "CreationDate": "2026-10-06T04:08:20.106485+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\startup.json 17956 live-sol-edit-03-78c8e204-2c8a-49b4-8a47-e75148132f3d C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\functional-selection.json"
+  },
+  "observedProcessChain": [
+    {
+      "ProcessId": 17008,
+      "ParentProcessId": 30712,
+      "CreationDate": "2026-10-06T04:08:20.106485+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\startup.json 17956 live-sol-edit-03-78c8e204-2c8a-49b4-8a47-e75148132f3d C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\functional-selection.json"
+    }
+  ],
+  "functionalSelectionPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\functional-selection.json",
+  "handleAdmissionMilliseconds": 600000,
+  "environmentNames": [
+    "APPDATA",
+    "ComSpec",
+    "HOME",
+    "HOMEDRIVE",
+    "HOMEPATH",
+    "LANG",
+    "LC_ALL",
+    "LC_CTYPE",
+    "LOCALAPPDATA",
+    "OPENCORVUS_CONFIG_CONTENT",
+    "OPENCORVUS_DISABLE_AUTOUPDATE",
+    "OPENCORVUS_DISABLE_EXTERNAL_SKILLS",
+    "OPENCORVUS_HOME",
+    "PATH",
+    "PATHEXT",
+    "SystemRoot",
+    "TEMP",
+    "TMP",
+    "TMPDIR",
+    "USERPROFILE",
+    "WINDIR",
+    "XDG_CACHE_HOME",
+    "XDG_CONFIG_HOME",
+    "XDG_DATA_HOME",
+    "XDG_STATE_HOME"
+  ],
+  "requestBudget": 12,
+  "inactivityMilliseconds": 180000,
+  "sourcePair": "Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper",
+  "cleanup": "Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure",
+  "uiAutomation": "None"
+}

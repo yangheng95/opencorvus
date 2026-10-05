@@ -1,0 +1,14 @@
+===================================================================
+--- specs/artifacts/2026-10-05-skill-mount-cold-start-latency/ordinary-checker-label-before.ts.txt
++++ packages/opencorvus/script/skill-mount-cold-start-check.ts
+@@ -636,9 +636,9 @@
+         initializations: initializations.length,
+         dispositions: diagnostics
+           .filter((row) => row.phase === "state.read" && row.status === "completed")
+           .map((row) => row.disposition),
+-        startupInitializations: initializations.filter((row) => row.http?.requestID === null).length,
++        httpUnattributedInitializations: initializations.filter((row) => row.http?.requestID === null).length,
+       }
+       assert(
+         initializations.length > 0,
+         "Actual initializers must be observed; HTTP success alone is not timing qualification",

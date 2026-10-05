@@ -1,0 +1,1539 @@
+{
+  "count": 0,
+  "mode": "restart-parallel",
+  "occurrenceID": "876a1b86-a005-408e-a52c-89877cdc7f7c",
+  "files": 0,
+  "bytes": 0,
+  "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-03",
+  "projects": {
+    "a": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-03\\project-a",
+    "b": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-03\\project-b"
+  },
+  "observations": [
+    {
+      "label": "cancel-observation-a",
+      "side": "a",
+      "status": 200,
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "elapsedMilliseconds": 152.5676999999996,
+      "projection": {
+        "scope": "project",
+        "activeProfile": "base",
+        "totalSkills": 7,
+        "sources": {
+          "unknown": 1,
+          "builtin": 6
+        },
+        "risks": {
+          "low": 6,
+          "medium": 1
+        },
+        "agents": [
+          {
+            "id": "orchestrator",
+            "role": "orchestrator"
+          },
+          {
+            "id": "universal-build",
+            "role": "build"
+          },
+          {
+            "id": "base-developer",
+            "role": "build"
+          },
+          {
+            "id": "base-planner",
+            "role": "delegated-worker"
+          },
+          {
+            "id": "base-researcher",
+            "role": "explore"
+          },
+          {
+            "id": "base-tester",
+            "role": "delegated-worker"
+          }
+        ],
+        "grants": [
+          {
+            "agent": "orchestrator",
+            "grants": 7
+          },
+          {
+            "agent": "universal-build",
+            "grants": 6
+          },
+          {
+            "agent": "base-developer",
+            "grants": 7
+          },
+          {
+            "agent": "base-planner",
+            "grants": 7
+          },
+          {
+            "agent": "base-researcher",
+            "grants": 7
+          },
+          {
+            "agent": "base-tester",
+            "grants": 7
+          }
+        ],
+        "unmounted": 6
+      },
+      "sourceAdmission": "accepted",
+      "sourceCategories": {
+        "package-resource": 1,
+        "builtin": 6
+      }
+    }
+  ],
+  "preflight": "loopback port bind/close succeeded",
+  "command": {
+    "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "args": [
+      "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+      "serve",
+      "--hostname",
+      "127.0.0.1",
+      "--port",
+      "17955",
+      "--startup-receipt",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-skill-mount-cold-start-latency\\actual-ordinary-03\\ordinary-n0-restart-parallel.startup.json",
+      "--startup-occurrence",
+      "876a1b86-a005-408e-a52c-89877cdc7f7c",
+      "--parent-pid",
+      "20292",
+      "--parent-process-instance-id",
+      "win32:639268279214726628",
+      "--print-logs",
+      "--log-level",
+      "DEBUG",
+      "--project-dir",
+      "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-03\\project-a"
+    ],
+    "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-03\\launch"
+  },
+  "owner": {
+    "pid": 40800,
+    "processInstanceID": "win32:639268279302164328",
+    "occurrenceID": "c1889421-d921-4f3b-8bd0-c9cc863ab11d"
+  },
+  "actualChild": {
+    "ProcessId": 40800,
+    "ParentProcessId": 37408,
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CreationDate": "/Date(1791231130216)/"
+  },
+  "helperOwner": {
+    "pid": 37408,
+    "processInstanceID": "win32:639268279301579377",
+    "occurrenceID": "4b3c78c1-e3b2-4f6b-9ed2-f6a707f1ab79"
+  },
+  "actualHelper": {
+    "ProcessId": 37408,
+    "ParentProcessId": 20292,
+    "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3f665b2bfd616ca5\\debug\\opencorvus-process-supervisor.exe",
+    "CreationDate": "/Date(1791231130157)/"
+  },
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "876a1b86-a005-408e-a52c-89877cdc7f7c",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:17955",
+    "pid": 40800
+  },
+  "health": {
+    "status": 200,
+    "requestID": "4d1fc57f-38e1-4f06-b424-d8b02ef08f6a",
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-03\\runtime\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-03\\runtime\\data",
+      "home": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-03\\home"
+    }
+  },
+  "projectBoundary": [
+    {
+      "side": "a",
+      "status": 200,
+      "requestID": "ddb87729-f754-4d5f-ab23-fe221d515338",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-03\\project-a",
+      "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-03\\project-a"
+    },
+    {
+      "side": "b",
+      "status": 200,
+      "requestID": "2d746966-b89b-4c57-b50e-778cccd1da4a",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-03\\project-b",
+      "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-03\\project-b"
+    }
+  ],
+  "metadataFiles": {
+    "auth.json": {
+      "present": false
+    },
+    "models.json": {
+      "present": false
+    }
+  },
+  "modelCatalogProvenance": {
+    "present": false,
+    "expectedProducer": "canonical ModelsDev.provisionDefaultCatalog in fresh owned runtime",
+    "observedProvision": false,
+    "observation": "Metadata only; no contents read, copied catalog, projected Sol or Provider generation qualification"
+  },
+  "cancelRequestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+  "cancelOutcome": {
+    "outcome": "completed",
+    "value": {
+      "scope": "project",
+      "activeProfile": "base",
+      "totalSkills": 7,
+      "sources": {
+        "unknown": 1,
+        "builtin": 6
+      },
+      "risks": {
+        "low": 6,
+        "medium": 1
+      },
+      "agents": [
+        {
+          "id": "orchestrator",
+          "role": "orchestrator"
+        },
+        {
+          "id": "universal-build",
+          "role": "build"
+        },
+        {
+          "id": "base-developer",
+          "role": "build"
+        },
+        {
+          "id": "base-planner",
+          "role": "delegated-worker"
+        },
+        {
+          "id": "base-researcher",
+          "role": "explore"
+        },
+        {
+          "id": "base-tester",
+          "role": "delegated-worker"
+        }
+      ],
+      "grants": [
+        {
+          "agent": "orchestrator",
+          "grants": 7
+        },
+        {
+          "agent": "universal-build",
+          "grants": 6
+        },
+        {
+          "agent": "base-developer",
+          "grants": 7
+        },
+        {
+          "agent": "base-planner",
+          "grants": 7
+        },
+        {
+          "agent": "base-researcher",
+          "grants": 7
+        },
+        {
+          "agent": "base-tester",
+          "grants": 7
+        }
+      ],
+      "unmounted": 6
+    },
+    "completeProjection": {
+      "scope": "project",
+      "active_profile": "base",
+      "projection_hash": "2b0709b3f33f7d770f38af6f51bd786bda0de40edbe30c53a2fd36a3837906f6",
+      "projected_tool_ids": [
+        "apply_patch",
+        "artifact_publish",
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "cancel_subagent",
+        "capability_search",
+        "default_mcp_tool__default_mcp_browser_tool_check__813cebb36bb5",
+        "default_mcp_tool__default_mcp_browser_tool_click__9575932c3940",
+        "default_mcp_tool__default_mcp_browser_tool_diagnostics_get__a73cc6c3a80f",
+        "default_mcp_tool__default_mcp_browser_tool_hover__6e999ef0e911",
+        "default_mcp_tool__default_mcp_browser_tool_navigate__e8e09fd0bbb6",
+        "default_mcp_tool__default_mcp_browser_tool_observe__24f9c323dc60",
+        "default_mcp_tool__default_mcp_browser_tool_press_key__875359282976",
+        "default_mcp_tool__default_mcp_browser_tool_screenshot__5e452c497541",
+        "default_mcp_tool__default_mcp_browser_tool_scroll__408b306eb1cf",
+        "default_mcp_tool__default_mcp_browser_tool_select_option__267f1f29d261",
+        "default_mcp_tool__default_mcp_browser_tool_session_create__fc7bf513f2c9",
+        "default_mcp_tool__default_mcp_browser_tool_session_destroy__c959e9e62a35",
+        "default_mcp_tool__default_mcp_browser_tool_type__dd2e3762ab1c",
+        "default_mcp_tool__default_mcp_browser_tool_uncheck__a56aeb4485e6",
+        "default_mcp_tool__default_mcp_browser_tool_viewport_set__242e046d81ca",
+        "default_mcp_tool__default_mcp_browser_tool_wait_for_load__cf0cb2e6a2df",
+        "default_mcp_tool__default_mcp_browser_tool_wait_for_select__6f2d1ae3fbe1",
+        "dispatch_agent",
+        "edit",
+        "evolve_expert_squad_from_feedback",
+        "external_code_search",
+        "glob",
+        "manage_task",
+        "memory",
+        "mission_state",
+        "no_action",
+        "panel_query_task",
+        "planner",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "request_orchestrator_decision",
+        "respond_agent_coordination",
+        "schedule",
+        "scheduler_message",
+        "search_code",
+        "send_mailbox_message",
+        "skill",
+        "todo",
+        "wait",
+        "webfetch",
+        "websearch",
+        "write"
+      ],
+      "projected_agents": [
+        "base-developer",
+        "base-planner",
+        "base-researcher",
+        "base-tester"
+      ],
+      "virtual_workflows": {
+        "execution-verification": {
+          "label": "Execution and Independent Verification",
+          "description": "The Task owner produces directly; the independent Tester compares the actual result with original authority.",
+          "nodes": {
+            "base-tester": {
+              "agent_id": "base-tester",
+              "description": "Independently rereads dynamic sources and verifies the settled result criterion by criterion.",
+              "depends_on": []
+            }
+          }
+        },
+        "source-planned-execution-verification": {
+          "label": "Source Planning, Execution, and Independent Verification",
+          "description": "Classify traceable source authority and applicable constraints through a bounded minimal-anchor worklist, execute each irreversible mutation whose real prerequisites are resolved, then independently verify the classification and settled outcome.",
+          "nodes": {
+            "base-planner": {
+              "agent_id": "base-planner",
+              "description": "Separates execution-authority conditions, applicable constraints, and Developer-owned outcome semantics and destination execution dependencies; resolves traceable source obligations through a bounded minimal-anchor worklist before mutation.",
+              "depends_on": []
+            },
+            "base-developer": {
+              "agent_id": "base-developer",
+              "description": "Reconciles per-operation source classes with original authority, owns destination discovery for operations whose real prerequisites are resolved, performs the authorized mutation, and hands off the complete Host-recorded receipt.",
+              "depends_on": [
+                "base-planner"
+              ]
+            },
+            "base-tester": {
+              "agent_id": "base-tester",
+              "description": "Independently checks source classifications and coordinates against original authority, then maps applicable rules and outcome semantics to the raw mutation receipt and any correct same-record destination read.",
+              "depends_on": [
+                "base-developer"
+              ]
+            }
+          }
+        },
+        "planner-parallel-delivery": {
+          "label": "Planner, Parallel Workers, and Verification",
+          "description": "Publish one bounded Task plan, run the research and implementation partitions in the same dependency-ready frontier, then verify the settled result.",
+          "nodes": {
+            "base-planner": {
+              "agent_id": "base-planner",
+              "description": "Publishes the complete Task-element inventory, stable acceptance criteria, shared inputs, owned paths, and acceptance allocation.",
+              "depends_on": []
+            },
+            "base-researcher": {
+              "agent_id": "base-researcher",
+              "description": "Executes the plan's evidence and repository research partition.",
+              "depends_on": [
+                "base-planner"
+              ]
+            },
+            "base-developer": {
+              "agent_id": "base-developer",
+              "description": "Executes the plan's implementation partition and its implementation-owned checks.",
+              "depends_on": [
+                "base-planner"
+              ]
+            },
+            "base-tester": {
+              "agent_id": "base-tester",
+              "description": "Executes every planned acceptance criterion against the settled result and records criterion-by-criterion evidence.",
+              "depends_on": [
+                "base-developer"
+              ]
+            }
+          }
+        }
+      },
+      "selector_skill_names": [
+        "advanced-expert-squad",
+        "research-studio-expert-squad",
+        "squad-sdk-expert-squad"
+      ],
+      "production_skill_names": [
+        "base-delivery-method"
+      ],
+      "projected_skill_names": [
+        "base-delivery-method"
+      ],
+      "skills": [
+        {
+          "name": "base-delivery-method",
+          "description": "Deliver one authorized outcome with an accountable owner and independent evidence comparison.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": false,
+          "location": "opencorvus-expert-squad-skill://builtin/base/shared/method?sha256=d65ede5b5b46660ab0d547a04d33ffc7eee54ce7df565158d7b9d2946d484bc6",
+          "content": "\n# Base delivery method\n\nStart from the original request, genuine corrections, permissions and current authoritative facts. For each requested operation identify its selection rule, source values, permitted effect, destination, preservation conditions and required evidence. A plan allocates this work; it cannot invent another acceptance criterion. An explicit policy, update or exception must be reconciled before its dependent operation.\n\nThe Task owner executes ordinary delivery directly and chooses execution-verification for independent Tester review. A separate source investigation or parallel specialist partition needs a real independence, expertise or resource reason; honor every node of the chosen richer workflow. Keep one accountable owner and one Task identity across repair.\n\nRead authoritative records using actual API contracts, exact known coordinates and sufficient query/pagination scope. A service directory is not a business record. Empty search results prove only that query's result; a narrower undocumented query is not proof of absence. Prefer the smallest next read that distinguishes the unresolved explanations. New source dependencies come from the request, an applicable contract or actual evidence, not from speculation about unlimited unnamed rules.\n\nBefore irreversible effects close the actual permission, eligibility and source prerequisites. A necessary subordinate API operation belongs to the authorized execution only when the public contract requires it, values follow from resolved authority and it introduces no independent business choice or permission. A notification or report does not replace a requested state mutation; an advisory request does not itself authorize mutation.\n\nKeep actual inputs and complete receipts, including unintended and residual effects. Never replay a successful create as repair. For an uncertain result use supported idempotency or an authoritative outcome lookup; otherwise retain uncertainty. A later correction does not erase an earlier effect. Each participant owns its actual file changes and scoped commit; preserve other work.\n\nIndependent review reconstructs expected outcomes from original authority and compares raw facts. Use exact dispatch_origin or dispatch_result sources through read_agent_message. Historical reads and full synchronous receipts prove their fields and time; current-state claims need current evidence, and completeness/absence claims need adequate scope. Reuse unaltered evidence when its assumptions remain valid. A producer's checklist or PASS is a claim, not authority.\n\nRepair names the unmet original obligation, counterevidence, next useful action and correct effects to preserve. Continue the same responsible lineage; review the affected obligation closure and new contradictions. Do not repeat discovery or coordination without a changed fact or actionable question. Enter the existing visible wait path for genuine external dependencies. Report an irreducible original gap truthfully instead of declaring success or maintaining an empty loop.\n\nUse focused positive checks and actual delivered surfaces. UI verification requires real pages and screenshots with no automated UI tests. Publish durable artifacts only when requested or required by a real downstream contract; normal Tool facts already have durable provenance.\n",
+          "bundle": {
+            "key": "d65ede5b5b46660ab0d547a04d33ffc7eee54ce7df565158d7b9d2946d484bc6",
+            "skill": "---\nname: base-delivery-method\ndescription: Deliver one authorized outcome with an accountable owner and independent evidence comparison.\n---\n\n# Base delivery method\n\nStart from the original request, genuine corrections, permissions and current authoritative facts. For each requested operation identify its selection rule, source values, permitted effect, destination, preservation conditions and required evidence. A plan allocates this work; it cannot invent another acceptance criterion. An explicit policy, update or exception must be reconciled before its dependent operation.\n\nThe Task owner executes ordinary delivery directly and chooses execution-verification for independent Tester review. A separate source investigation or parallel specialist partition needs a real independence, expertise or resource reason; honor every node of the chosen richer workflow. Keep one accountable owner and one Task identity across repair.\n\nRead authoritative records using actual API contracts, exact known coordinates and sufficient query/pagination scope. A service directory is not a business record. Empty search results prove only that query's result; a narrower undocumented query is not proof of absence. Prefer the smallest next read that distinguishes the unresolved explanations. New source dependencies come from the request, an applicable contract or actual evidence, not from speculation about unlimited unnamed rules.\n\nBefore irreversible effects close the actual permission, eligibility and source prerequisites. A necessary subordinate API operation belongs to the authorized execution only when the public contract requires it, values follow from resolved authority and it introduces no independent business choice or permission. A notification or report does not replace a requested state mutation; an advisory request does not itself authorize mutation.\n\nKeep actual inputs and complete receipts, including unintended and residual effects. Never replay a successful create as repair. For an uncertain result use supported idempotency or an authoritative outcome lookup; otherwise retain uncertainty. A later correction does not erase an earlier effect. Each participant owns its actual file changes and scoped commit; preserve other work.\n\nIndependent review reconstructs expected outcomes from original authority and compares raw facts. Use exact dispatch_origin or dispatch_result sources through read_agent_message. Historical reads and full synchronous receipts prove their fields and time; current-state claims need current evidence, and completeness/absence claims need adequate scope. Reuse unaltered evidence when its assumptions remain valid. A producer's checklist or PASS is a claim, not authority.\n\nRepair names the unmet original obligation, counterevidence, next useful action and correct effects to preserve. Continue the same responsible lineage; review the affected obligation closure and new contradictions. Do not repeat discovery or coordination without a changed fact or actionable question. Enter the existing visible wait path for genuine external dependencies. Report an irreducible original gap truthfully instead of declaring success or maintaining an empty loop.\n\nUse focused positive checks and actual delivered surfaces. UI verification requires real pages and screenshots with no automated UI tests. Publish durable artifacts only when requested or required by a real downstream contract; normal Tool facts already have durable provenance.\n",
+            "files": {}
+          },
+          "priority": 0,
+          "required_tools": [],
+          "source_type": "unknown",
+          "trust": "local",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "deny",
+          "policy": "deny",
+          "managed": false,
+          "writable": false,
+          "ref": "base/shared/method",
+          "projection_source": "package"
+        },
+        {
+          "name": "browser-use",
+          "description": "Research and operate rendered web pages through OpenCorvus Browser tools, including authenticated workflows and visual inspection.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:browser-use",
+          "content": "\n# Browser Use\n\nUse Browser tools for rendered web state and interactions. Use native Computer tools for desktop interfaces outside the page. All names below are local tool names within the current Browser provider; use the callable names actually exposed by your harness.\n\n## Initialize and retain identity\n\n`session_create` returns `sessionId`, `profileId`, `browserMode` and `liveViewUrl`. Retain these exact values. Chrome DevTools Protocol (CDP) mode uses the current Chrome login environment but creates a tool-owned tab; isolated mode creates a separate browser environment. Configuration selects the mode. A launch/debugging error is not permission to change it or attach another browser.\n\nUse `navigate` with the intended URL, then `observe` to inspect the current page. `tabs` manages only tool-owned tabs; selection returns the `sessionId` that subsequent calls must use. Reuse `profileId` only when another tab should share that environment. User-owned tabs are not part of this tab inventory.\n\n## Ground actions and verify useful boundaries\n\n`observe` combines a screenshot, URL/title, a bounded Document Object Model (DOM) summary and diagnostics. Its text/element list is a sample, not a complete inventory, and suggested selectors may match several elements. Choose targets from current page evidence; use `count`, scoped selectors, `get_attribute` or a targeted read when needed. Never invent selectors from a desired label.\n\nPrefer a grounded selector for normal page controls. Use viewport coordinates for visual targets. After scrolling, navigation, a dialog or layout change, obtain fresh evidence before choosing new coordinates. `hover` can reveal menus/tooltips; inspect the result when that changes the intended target. Scrolling uses pixel deltas at a viewport point.\n\nKeep predictable actions together when the callable tool interface supports ordered execution. Observe at decision boundaries and inspect the final result; there is no universal requirement to screenshot after each input. Keyboard tools act on current focus, so establish the intended field first. `type` replaces the field value, including when `clear` is false; `clear` only controls the preliminary clear step.\n\n## Diagnose instead of guessing\n\n- A blocked coordinate interaction returns target/nearby evidence. Re-observe and correct the target. `force:true` is only for an intentionally chosen raw-coordinate action supported by current evidence, never an automatic retry strategy.\n- For selector ambiguity or absence, inspect the current state and refine the selector. If an iframe owns the target, inspect `frames` and use the exposed frame tools.\n- For a closed page or disconnected session, use `session_status` when exposed and read the exact result. Create a new session only after confirming the old one is unavailable; reestablish navigation/login state deliberately. Never replay submissions after a timeout without checking their actual outcome.\n- Use `diagnostics_get` for page/network failures and the specific wait tool for an expected transition. Repeating the same call without new evidence does not diagnose it.\n- `evaluate` executes a page expression, not a host script or a Playwright Page API. Use it for targeted inspection or an explicitly intended page operation; direct DOM/storage changes are not evidence that a user interaction worked.\n\nRespect task authorization for forms, uploads, downloads and external effects. Inspect actual screenshots for visual claims. `session_destroy` closes the tool-owned tab; in isolated mode, the final tab normally releases its login environment. `help` reloads these instructions without launching or changing a browser.\n",
+          "priority": 0,
+          "required_tools": [],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false,
+          "ref": "default/skill/browser-use",
+          "projection_source": "default"
+        },
+        {
+          "name": "computer-use",
+          "description": "Operate native desktop apps through OpenCorvus Computer tools when the task requires their visible interface.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:computer-use",
+          "content": "\n# Computer Use\n\nUse the Computer tools for native desktop interfaces. Use Browser tools for web pages when available. These tools control the current physical desktop; logical sessions do not provide separate desktops.\n\n## Start from evidence\n\n- `session_create` establishes this run's desktop authority and returns `computer_id` and `display_id`. After the user returns control, call it again to attach the new run, then `observe`.\n- `observe` returns the actual screenshot, dimensions and an exact observation identity. Inspect the image and select the intended app/control before input. Coordinates are integer pixels in that returned image, starting at its top left.\n- Copy all four binding fields into `act`: `computer_id`, `display_id`, `observation_id`, `observation_digest`. The digest binds the screenshot; copy it verbatim.\n\n## Group predictable actions\n\n`act` accepts an ordered `actions` array. Each action has `kind`: `click`, `type_text`, `keypress`, `scroll`, or `drag`. The current tool schema defines their parameters. For example, after observing a known search field, a short group can click it and type a query. A single action uses a one-element array.\n\nGroup actions whose targets and effects are already understood. End the group when the next decision depends on a new page, dialog, focus change or uncertain result. Choose the group size from current evidence; a screenshot/model round trip is not required between every input. Actions run sequentially and the result includes a fresh screenshot when capture succeeds.\n\n- `type_text` sends literal text to the focused control. Use `keypress` for control keys; `keys: [\"CTRL\", \"A\"]` is a chord, not two sequential presses.\n- `scroll.amount` is a count of lines, unlike Browser pixel deltas. Its point selects the scroll region.\n- `drag` takes `from`, `to` pixel points and `durationMs`.\n- One observation authorizes one entire group and is consumed at dispatch. Inspect the returned observation and use its new binding for the next group.\n\n## Read results before continuing\n\nThe receipt identifies the completed prefix and any failed action by zero-based index. Stop on failure and inspect the returned screen. `COMPUTER_OUTCOME_UNKNOWN` means the failing action may have happened; never replay the group blindly. A transport failure can leave the whole group's outcome unknown: call `observe` and decide from the actual state. If capture failed, explicitly observe again before input.\n\nInput dispatch can finish before the application paints its final state. A fresh screenshot is a point-in-time observation, not a rendering-complete guarantee. If text or a transition is still appearing, observe again instead of repeating the input.\n\n`STALE_OBSERVATION` requires a fresh observation. `COMPUTER_INPUT_OUT_OF_BOUNDS` requires correcting coordinates using the current image dimensions. `COMPUTER_RUN_REVOKED` means the user owns control; wait for return rather than retrying input. For backend errors, read the exact diagnostic; a locked desktop or unavailable native driver needs resolution, not alternate input transports.\n\nRespect the user's authorized scope and leave irreversible external effects for explicit confirmation. Stop on unexpected authentication, permission or target changes. Finish by inspecting the actual requested result. `session_destroy` ends this logical session; it does not close the user's apps. `help` reloads these instructions without interacting with the desktop.\n",
+          "priority": 0,
+          "required_tools": [],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false,
+          "ref": "default/skill/computer-use",
+          "projection_source": "default"
+        },
+        {
+          "name": "design-taste-frontend",
+          "description": "Apply context-aware visual judgment to frontend product design and redesign work. Infer the design language from the accepted brief and evidence, use mature design systems, avoid generic generated-interface patterns, and finish through real rendered-page inspection.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:design-taste-frontend",
+          "content": "\n# Design Taste for Frontend\n\nUse this Skill to improve the visual judgment of a frontend design or redesign while preserving the active Task contract. It is an OpenCorvus adaptation of Leonxlnx's Taste Skill.\n\nThe accepted Product Requirements, active Expert Squad instructions, design-system authority, evidence, target platform, and explicit user constraints remain authoritative. This Skill refines design decisions inside those boundaries. It does not invent product scope, override a referenced design system, turn inspiration into parity authority, or broaden a desktop task into mobile delivery.\n\n## 1. Read the design situation\n\nBefore producing markup, styles, or components, derive a short design read from current evidence:\n\n- product or page job;\n- primary audience and their decision context;\n- information density and interaction complexity;\n- existing brand, token, component, and asset authority;\n- explicit visual references and what each reference is allowed to influence;\n- accessibility, performance, regulatory, and platform constraints;\n- greenfield, preserve-redesign, overhaul-redesign, or reference-parity mode as declared by the active Task.\n\nState the design read in one concise sentence. If two materially different design directions remain equally plausible and the missing choice cannot be recovered from Task evidence, ask one focused question. Otherwise proceed.\n\nFor redesigns, first inventory the existing information architecture, navigation, conversion or work paths, content blocks, tokens, typography, spacing, component patterns, interaction states, accessibility behavior, and performance-sensitive surfaces. Preserve accepted structure and identity unless the Task explicitly replaces them.\n\n## 2. Set the three contextual dials\n\nRecord three values on a one-to-ten scale for this delivery:\n\n- `DESIGN_VARIANCE`: compositional experimentation and asymmetry;\n- `MOTION_INTENSITY`: the amount and depth of purposeful motion;\n- `VISUAL_DENSITY`: information and control density per viewport.\n\nInfer the values from the design read rather than using a universal baseline. A financial workstation can require high density and restrained variance; an editorial campaign can require lower density and more expressive composition. The values describe a decision, not configuration that overrides the accepted design system.\n\nUse the dials consistently across every surface in scope. Shared navigation, typography, color, spacing, radius, elevation, iconography, motion, and state treatment must form one system.\n\n## 3. Choose the real foundation\n\nInspect the repository and accepted design authority before choosing implementation primitives.\n\n- Reuse the product's current component library and tokens when they are authoritative.\n- When the Task names a mature design system, use its official maintained package and primitives.\n- When no system is prescribed, choose one maintained component foundation compatible with the existing stack and customize it through a coherent token layer.\n- Verify dependencies in the repository before importing them.\n- Keep one icon family and one component-system authority per delivery.\n- Do not redraw standard controls, icons, focus behavior, dialogs, menus, or form primitives when the selected library already owns them.\n\nFramework, styling, rendering, data, and state decisions come from the repository. This Skill does not force React, Next.js, Tailwind, a particular animation library, dark mode, or responsive scope.\n\n## 4. Build a recognizable composition\n\nCreate hierarchy through proportion, alignment, grouping, contrast, rhythm, and negative space before adding decoration.\n\n### Typography\n\n- Give each surface one obvious primary reading path.\n- Keep display text within a deliberate measure and line count appropriate to its role.\n- Use an intentional type scale, line height, and weight system; inspect descenders, truncation, wrapping, and numeric alignment in the rendered result.\n- Preserve brand typography when it is authoritative. Otherwise select type for audience, content density, language coverage, and legibility rather than novelty.\n- Use emphasis within the same family unless the design language has a justified pairing.\n\n### Color and material\n\n- Derive color from brand or design-system authority. When no authority exists, choose one coherent neutral family and one purposeful accent relationship.\n- Keep semantic colors stable across surfaces and states.\n- Use elevation, borders, cards, translucency, gradients, and texture only when they communicate hierarchy or product meaning.\n- Verify text, controls, focus indicators, charts, form states, and overlays against the real background.\n\n### Layout and density\n\n- Vary composition according to information meaning, not to manufacture novelty.\n- Do not repeat the same card grid, split section, centered heading, eyebrow label, or left-right alternation across the entire experience.\n- Use containers only when they express grouping or elevation. Prefer alignment, separators, and spacing when those carry the hierarchy.\n- Dense products still need grouping and scan paths; spacious products still need enough evidence and imagery to feel complete.\n- Size navigation, controls, tables, charts, and empty/loading/error states for their real content rather than demo copy.\n- Keep desktop navigation and primary actions stable, legible, and unclipped at the accepted viewport.\n\n### Content and assets\n\n- Use approved real assets and actual product content available through Task evidence.\n- Match asset aspect ratio, crop, resolution, and visual treatment to its exact region.\n- Do not substitute generic company names, fake metrics, fabricated testimonials, decorative fake screenshots, or unlabeled placeholder blocks for required evidence.\n- When required assets or content are unavailable, record the exact blocker instead of manufacturing a substitute.\n\n## 5. Design complete interaction states\n\nEvery interactive component in scope needs a coherent normal, hover, active, focus, disabled, loading, empty, success, and error treatment when that state exists in the product contract.\n\n- Keep labels stable for the same action across navigation, page content, dialogs, and footers.\n- Keep primary actions visually dominant without duplicating the same intent.\n- Place form labels, help, validation, and errors where users can associate them with the owning control.\n- Preserve keyboard order, visible focus, semantic structure, and accessible names.\n- Make charts, status colors, and icon-only actions understandable without relying on color alone.\n- Keep state feedback adjacent to the action or data it describes.\n\n## 6. Use motion with purpose\n\nMotion must explain hierarchy, continuity, causality, progress, or spatial change.\n\n- Match motion depth to `MOTION_INTENSITY` and the product context.\n- Prefer compositor-friendly transform and opacity changes.\n- Use the repository's established motion solution and clean up every listener, timeline, observer, and animation context.\n- Keep continuous pointer or scroll values outside render-state update loops.\n- Respect reduced-motion preferences and preserve the same information and actions in the reduced experience.\n- Avoid perpetual decoration, competing animation systems, scroll hijacking without a product reason, and motion that delays primary work.\n\n## 7. Remove generated-interface tells\n\nChallenge any result that could have been produced from a generic template without reading the Task:\n\n- default purple glow or mesh used without brand authority;\n- a centered headline followed by equal cards on every surface;\n- repeated small uppercase labels above every heading;\n- arbitrary pills, glass panels, gradients, or shadows used as decoration;\n- empty bento cells or filler regions created to complete a pattern;\n- identical section composition repeated with different copy;\n- oversized headings that destroy information density or push primary actions below the accepted viewport;\n- random type-family changes, mixed radius systems, mixed icon families, or drifting accent colors;\n- static success-only mockups without real product states;\n- dense interfaces reduced to disconnected marketing cards.\n\nDo not replace one cliché with another. Every correction must trace to audience, content, product behavior, design authority, or visible evidence.\n\n## 8. Rendered pre-flight review\n\nThe design is unfinished until it has been opened as a real page at the Task's accepted desktop viewport and personally inspected.\n\n1. Render the actual current implementation or design source through the repository's real preview path.\n2. Exercise the primary navigation and every material state in scope.\n3. Capture fresh Task-scoped screenshots for the relevant surfaces and states.\n4. Inspect hierarchy, density, alignment, spacing, wrapping, clipping, contrast, asset quality, control states, focus, scroll behavior, motion, and cross-surface consistency.\n5. Compare the result with the accepted Product Requirements and design authority, using references only for the influence explicitly granted by the Task.\n6. Fix every confirmed visual defect and repeat the real-page inspection with fresh evidence.\n\nCompletion requires a coherent product-specific system, real content and states, and current rendered evidence. A build, typecheck, static source review, or clean console is supporting evidence, not visual acceptance.\n",
+          "priority": 0,
+          "required_tools": [],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false,
+          "ref": "default/skill/design-taste-frontend",
+          "projection_source": "default"
+        },
+        {
+          "name": "grill-me",
+          "description": "Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:grill-me",
+          "content": "\nInterview me relentlessly about every aspect of this until we reach a shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.\n\nAsk the questions one at a time, waiting for feedback on each question before continuing. Asking multiple questions at once is bewildering.\n\nIf a *fact* can be found by exploring the environment (filesystem, tools, etc.), look it up rather than asking me. The *decisions*, though, are mine — put each one to me and wait for my answer.\n\nDo not act on it until I confirm we have reached a shared understanding.\n",
+          "priority": 0,
+          "required_tools": [],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false,
+          "ref": "default/skill/grill-me",
+          "projection_source": "default"
+        },
+        {
+          "name": "research-report",
+          "description": "Produce a multi-source research report — comparison matrix, capability survey, market analysis, recommendation document — backed by `websearch` (and `webfetch` only after `websearch` returns a concrete URL). Activate when the deliverable is a markdown report rather than running software, and the work is fundamentally synthesising prose from external sources rather than writing code. Signals — the brief asks for 报告 / 调研 / 对比 / 分析 / 综述 / 功能矩阵 / 评估 / 建议 / report / comparison / matrix / analysis / survey / recommendation; or compares named third-party products / platforms / vendors; or asks for a structured insight + recommendation document. Do NOT activate for code tasks, even when the code happens to consume third-party APIs.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:research-report",
+          "content": "\n# Research Report Skill\n\nYou produce a **multi-source research report** as a single markdown file. The report is the deliverable — there is no code to compile, no UI to render, no test suite to satisfy beyond \"the file exists with the required sections and the claims trace back to real sources\".\n\n## Tool boundary — do NOT pick the wrong one\n\n- `websearch` — open-ended multi-source synthesis. THIS is your primary tool. Use it for product comparisons, capability matrices, ecosystem surveys, anything where the answer requires aggregating information from sources you cannot enumerate up-front.\n- `webfetch` — pull the full content of a specific URL. ONLY call after `websearch` has returned a concrete URL whose deeper content you actually need. Never invent URLs.\n- `external_code_search` — narrow programming questions about a specific library / SDK / API. NOT for product / vendor / competitor research, even when the subject is third-party software. If you find yourself reaching for it on a research task, you are about to call the wrong tool.\n\nIf the brief is research-shaped (the activation signals above) and you call `external_code_search`, you have misread the task. Stop, switch to `websearch`.\n\n## Process\n\n1. **Read the brief verbatim.** Identify (a) the subjects to compare or analyse, (b) the dimensions or sections the report must cover, (c) the audience and the expected output shape (matrix, narrative, mixed). The brief is the contract — do not silently broaden or narrow scope.\n\n2. **Plan the search queries.** One query per subject + at least one cross-cutting / industry-overview query. For an N-way comparison, plan AT LEAST `N + 1` distinct `websearch` calls. Vary the angle (official capability, third-party review, user feedback, recent news) so you are not just reading one source's framing N times.\n\n3. **Search.** Run the planned `websearch` calls. Read the snippets. Note which result URLs are worth fetching in full vs. which give you enough from the snippet alone. Cite the source URL inline next to each non-trivial claim — vendor name, version, date, or specific capability assertion.\n\n4. **Webfetch ONLY when needed.** If a `websearch` result is highly relevant but the snippet is too short for what you need (e.g. a feature matrix, a pricing page, a deep technical doc), call `webfetch` on that exact URL. Do not webfetch every search result reflexively.\n\n5. **Synthesise and write the report.** Produce a single markdown file at the path the Task request specifies (typically `report.md` under the Task directory). The report should contain whatever sections the brief calls for; a comparison-shaped brief typically wants:\n   - **概述 / Overview** — one paragraph framing what is being compared and why.\n   - **功能矩阵 / Capability Matrix** — a markdown table with subjects as columns and dimensions as rows, with concise per-cell entries and a citation footnote where a claim is non-obvious.\n   - **关键洞察 / Key Insights** — bulleted observations that emerge from the matrix, each insight backed by one or more matrix cells.\n   - **建议 / Recommendations** — actionable, prioritised, scoped to the audience the brief named (product team, engineering, leadership, …).\n   - **参考 / References** — the canonical URL list, deduplicated.\n     Adapt the section names + ordering to the brief's language. If the brief explicitly enumerates sections, follow that enumeration verbatim.\n\n6. **Self-check before reporting done.** Re-read the report yourself. Every non-obvious claim should have a citation; every section the brief asked for should exist; the recommendations should be concrete enough to act on. Do not pad with filler if a section has nothing real to say — say so explicitly and move on.\n\n## What success looks like\n\n- A single markdown file at the declared path (e.g. `report.md`).\n- The brief's required sections all present.\n- Every non-trivial factual claim cites a source URL discovered via `websearch` / `webfetch`.\n- The matrix (if applicable) is filled in completely — no \"TBD\" cells; if a value cannot be found, the cell explicitly says so and gives the closest indirect signal.\n- Recommendations are prioritised, scoped, and reference the matrix rows they are drawn from.\n\n## What success is NOT\n\n- Generic vendor brochures rephrased into Chinese / English. The whole point of a research report is the synthesis — comparing, contrasting, and recommending — not paraphrasing one source.\n- Inventing URLs, version numbers, or capability claims. If `websearch` returns nothing useful for a claim, say so in the report — do not fabricate.\n- A `.tsx` / `.ts` file. The deliverable is markdown.\n- Multiple files, build outputs, or a test suite. There is no software to test; the acceptance evidence is the report itself.\n",
+          "auto_detect": {
+            "task_signals": {
+              "request_text_any": [
+                "报告",
+                "调研",
+                "对比",
+                "综述",
+                "功能矩阵",
+                "评估",
+                "建议",
+                "report",
+                "comparison",
+                "matrix",
+                "survey",
+                "recommendation"
+              ]
+            }
+          },
+          "priority": 55,
+          "required_tools": [
+            "websearch",
+            "webfetch"
+          ],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false,
+          "ref": "default/skill/research-report",
+          "projection_source": "default"
+        },
+        {
+          "name": "work-artifacts",
+          "description": "Create, inspect, validate, review, and deliver enabled structured Work Artifacts through the single OpenCorvus Work Artifact Harness. Use for presentation and other document, PDF, spreadsheet, data, image, archive, OCR, or media requests only when the mounted profile registry exposes that format. The current P0 profile creates new PPTX presentations with adapter-input isolation; it does not claim an operating-system network sandbox, edit existing presentations, or provide DOCX, XLSX, PDF, OCR, archive, image, data, or media production yet.",
+          "aliases": [
+            "structured artifact production",
+            "presentation authoring",
+            "PowerPoint PPTX",
+            "工作产物生成",
+            "演示文稿制作"
+          ],
+          "metadata": {
+            "opencorvus.profile-set": "work-artifacts@1"
+          },
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:work-artifacts",
+          "content": "\n# Work Artifacts\n\nProduce the requested editable file as the deliverable and use fresh derived\nrenders as review evidence. Never substitute an outline, HTML page, screenshot\ncollection, or semantic Interactive Artifact for the requested source file.\n\n## Workflow\n\n1. Read `references/common-lifecycle.md`.\n2. For the currently qualified PPTX profile, read\n   `references/office-presentation.md` before authoring.\n3. Call `work_artifact_author` with an exact qualified `profile` and a complete\n   typed plan.\n4. Inspect the returned canonical attachment with `work_artifact_inspect`.\n5. Validate that exact attachment with `work_artifact_validate`.\n6. Inspect every fresh render. Repair the typed authoring plan and repeat the\n   full lifecycle when a render is incomplete or visually weak.\n7. Read `references/review.md` and resolve confirmed review findings.\n8. Give `work_artifact_deliver` the exact final validation receipt. Delivery\n   revalidates and rerenders the candidate; only the current authorized Work\n   conversation or Expert Squad delivery owner publishes it.\n\nRead `references/security.md` before using user-supplied images or handling a\nrequest involving external links, macros, embedded objects, media, templates,\nor an existing file.\n",
+          "priority": 0,
+          "required_tools": [
+            "work_artifact_inspect",
+            "work_artifact_author",
+            "work_artifact_validate",
+            "work_artifact_deliver"
+          ],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "medium",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": true,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false,
+          "ref": "default/skill/work-artifacts",
+          "projection_source": "default"
+        }
+      ],
+      "agents": [
+        {
+          "agent_id": "orchestrator",
+          "base_role": "orchestrator",
+          "label": "Base",
+          "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
+          "capability_owner": "package",
+          "skill_mountable": true,
+          "skill_tool_available": true,
+          "projected_tool_ids": [
+            "artifact_read",
+            "artifact_search",
+            "artifact_select",
+            "artifact_snapshot",
+            "cancel_subagent",
+            "capability_search",
+            "evolve_expert_squad_from_feedback",
+            "no_action",
+            "publish_interactive_artifact",
+            "question",
+            "read_agent_message",
+            "read_context",
+            "read_task_message",
+            "respond_agent_coordination",
+            "scheduler_message",
+            "skill",
+            "wait",
+            "apply_patch",
+            "bash",
+            "browser_preview",
+            "browser_preview_capture",
+            "dispatch_agent",
+            "edit",
+            "external_code_search",
+            "glob",
+            "manage_task",
+            "read",
+            "search_code",
+            "todo",
+            "webfetch",
+            "websearch",
+            "write",
+            "default_mcp_tool__default_mcp_browser_tool_check__813cebb36bb5",
+            "default_mcp_tool__default_mcp_browser_tool_click__9575932c3940",
+            "default_mcp_tool__default_mcp_browser_tool_diagnostics_get__a73cc6c3a80f",
+            "default_mcp_tool__default_mcp_browser_tool_hover__6e999ef0e911",
+            "default_mcp_tool__default_mcp_browser_tool_navigate__e8e09fd0bbb6",
+            "default_mcp_tool__default_mcp_browser_tool_observe__24f9c323dc60",
+            "default_mcp_tool__default_mcp_browser_tool_press_key__875359282976",
+            "default_mcp_tool__default_mcp_browser_tool_screenshot__5e452c497541",
+            "default_mcp_tool__default_mcp_browser_tool_scroll__408b306eb1cf",
+            "default_mcp_tool__default_mcp_browser_tool_select_option__267f1f29d261",
+            "default_mcp_tool__default_mcp_browser_tool_session_create__fc7bf513f2c9",
+            "default_mcp_tool__default_mcp_browser_tool_session_destroy__c959e9e62a35",
+            "default_mcp_tool__default_mcp_browser_tool_type__dd2e3762ab1c",
+            "default_mcp_tool__default_mcp_browser_tool_uncheck__a56aeb4485e6",
+            "default_mcp_tool__default_mcp_browser_tool_viewport_set__242e046d81ca",
+            "default_mcp_tool__default_mcp_browser_tool_wait_for_load__cf0cb2e6a2df",
+            "default_mcp_tool__default_mcp_browser_tool_wait_for_select__6f2d1ae3fbe1"
+          ]
+        },
+        {
+          "agent_id": "universal-build",
+          "base_role": "build",
+          "label": "Universal Build",
+          "description": "Repairs concrete repository defects and completes bounded implementation work that no narrower package-owned agent contract owns.",
+          "capability_owner": "platform",
+          "skill_mountable": true,
+          "skill_tool_available": true,
+          "projected_tool_ids": [
+            "apply_patch",
+            "artifact_publish",
+            "artifact_read",
+            "artifact_search",
+            "artifact_select",
+            "artifact_snapshot",
+            "bash",
+            "browser_preview",
+            "browser_preview_capture",
+            "capability_search",
+            "edit",
+            "external_code_search",
+            "glob",
+            "memory",
+            "mission_state",
+            "planner",
+            "publish_interactive_artifact",
+            "question",
+            "read",
+            "read_agent_message",
+            "request_orchestrator_decision",
+            "schedule",
+            "search_code",
+            "send_mailbox_message",
+            "skill",
+            "todo",
+            "webfetch",
+            "websearch",
+            "write"
+          ]
+        },
+        {
+          "agent_id": "base-developer",
+          "base_role": "build",
+          "label": "Base Developer",
+          "description": "Owns destination discovery, actual repository or external-state delivery, complete mutation-receipt handoff, and self-checks.",
+          "capability_owner": "package",
+          "skill_mountable": true,
+          "skill_tool_available": true,
+          "projected_tool_ids": [
+            "apply_patch",
+            "artifact_publish",
+            "artifact_read",
+            "artifact_search",
+            "artifact_select",
+            "artifact_snapshot",
+            "bash",
+            "browser_preview",
+            "browser_preview_capture",
+            "capability_search",
+            "default_mcp_tool__default_mcp_browser_tool_check__813cebb36bb5",
+            "default_mcp_tool__default_mcp_browser_tool_click__9575932c3940",
+            "default_mcp_tool__default_mcp_browser_tool_diagnostics_get__a73cc6c3a80f",
+            "default_mcp_tool__default_mcp_browser_tool_hover__6e999ef0e911",
+            "default_mcp_tool__default_mcp_browser_tool_navigate__e8e09fd0bbb6",
+            "default_mcp_tool__default_mcp_browser_tool_observe__24f9c323dc60",
+            "default_mcp_tool__default_mcp_browser_tool_press_key__875359282976",
+            "default_mcp_tool__default_mcp_browser_tool_screenshot__5e452c497541",
+            "default_mcp_tool__default_mcp_browser_tool_scroll__408b306eb1cf",
+            "default_mcp_tool__default_mcp_browser_tool_select_option__267f1f29d261",
+            "default_mcp_tool__default_mcp_browser_tool_session_create__fc7bf513f2c9",
+            "default_mcp_tool__default_mcp_browser_tool_session_destroy__c959e9e62a35",
+            "default_mcp_tool__default_mcp_browser_tool_type__dd2e3762ab1c",
+            "default_mcp_tool__default_mcp_browser_tool_uncheck__a56aeb4485e6",
+            "default_mcp_tool__default_mcp_browser_tool_viewport_set__242e046d81ca",
+            "default_mcp_tool__default_mcp_browser_tool_wait_for_load__cf0cb2e6a2df",
+            "default_mcp_tool__default_mcp_browser_tool_wait_for_select__6f2d1ae3fbe1",
+            "edit",
+            "external_code_search",
+            "glob",
+            "memory",
+            "mission_state",
+            "planner",
+            "publish_interactive_artifact",
+            "question",
+            "read",
+            "read_agent_message",
+            "request_orchestrator_decision",
+            "schedule",
+            "search_code",
+            "send_mailbox_message",
+            "skill",
+            "todo",
+            "webfetch",
+            "websearch",
+            "write"
+          ]
+        },
+        {
+          "agent_id": "base-planner",
+          "base_role": "delegated-worker",
+          "label": "Base Planner",
+          "description": "Classifies and resolves only traceable pre-mutation execution authority and applicable source constraints, while leaving destination outcome semantics and contract-required execution dependencies to Developer, or allocates a justified parallel research and implementation partition.",
+          "capability_owner": "package",
+          "skill_mountable": true,
+          "skill_tool_available": true,
+          "projected_tool_ids": [
+            "artifact_publish",
+            "artifact_read",
+            "artifact_search",
+            "artifact_select",
+            "artifact_snapshot",
+            "bash",
+            "capability_search",
+            "external_code_search",
+            "glob",
+            "publish_interactive_artifact",
+            "read",
+            "read_agent_message",
+            "search_code",
+            "skill",
+            "webfetch",
+            "websearch"
+          ]
+        },
+        {
+          "agent_id": "base-researcher",
+          "base_role": "explore",
+          "label": "Base Researcher",
+          "description": "Performs read-oriented repository and relevant external research and publishes the canonical Base research report.",
+          "capability_owner": "package",
+          "skill_mountable": false,
+          "skill_tool_available": false,
+          "projected_tool_ids": [
+            "artifact_publish",
+            "artifact_read",
+            "artifact_search",
+            "artifact_select",
+            "artifact_snapshot",
+            "capability_search",
+            "external_code_search",
+            "glob",
+            "memory",
+            "panel_query_task",
+            "publish_interactive_artifact",
+            "read",
+            "read_agent_message",
+            "request_orchestrator_decision",
+            "search_code",
+            "send_mailbox_message",
+            "webfetch",
+            "websearch"
+          ]
+        },
+        {
+          "agent_id": "base-tester",
+          "base_role": "delegated-worker",
+          "label": "Base Tester",
+          "description": "Independently maps original requirements and source rules to the settled result, including raw Host-recorded mutation receipts when no correct same-record read exists.",
+          "capability_owner": "package",
+          "skill_mountable": true,
+          "skill_tool_available": true,
+          "projected_tool_ids": [
+            "apply_patch",
+            "artifact_publish",
+            "artifact_read",
+            "artifact_search",
+            "artifact_select",
+            "artifact_snapshot",
+            "bash",
+            "browser_preview",
+            "capability_search",
+            "default_mcp_tool__default_mcp_browser_tool_check__813cebb36bb5",
+            "default_mcp_tool__default_mcp_browser_tool_click__9575932c3940",
+            "default_mcp_tool__default_mcp_browser_tool_diagnostics_get__a73cc6c3a80f",
+            "default_mcp_tool__default_mcp_browser_tool_hover__6e999ef0e911",
+            "default_mcp_tool__default_mcp_browser_tool_navigate__e8e09fd0bbb6",
+            "default_mcp_tool__default_mcp_browser_tool_observe__24f9c323dc60",
+            "default_mcp_tool__default_mcp_browser_tool_press_key__875359282976",
+            "default_mcp_tool__default_mcp_browser_tool_screenshot__5e452c497541",
+            "default_mcp_tool__default_mcp_browser_tool_scroll__408b306eb1cf",
+            "default_mcp_tool__default_mcp_browser_tool_select_option__267f1f29d261",
+            "default_mcp_tool__default_mcp_browser_tool_session_create__fc7bf513f2c9",
+            "default_mcp_tool__default_mcp_browser_tool_session_destroy__c959e9e62a35",
+            "default_mcp_tool__default_mcp_browser_tool_type__dd2e3762ab1c",
+            "default_mcp_tool__default_mcp_browser_tool_uncheck__a56aeb4485e6",
+            "default_mcp_tool__default_mcp_browser_tool_viewport_set__242e046d81ca",
+            "default_mcp_tool__default_mcp_browser_tool_wait_for_load__cf0cb2e6a2df",
+            "default_mcp_tool__default_mcp_browser_tool_wait_for_select__6f2d1ae3fbe1",
+            "edit",
+            "external_code_search",
+            "glob",
+            "memory",
+            "publish_interactive_artifact",
+            "question",
+            "read",
+            "read_agent_message",
+            "request_orchestrator_decision",
+            "search_code",
+            "send_mailbox_message",
+            "skill",
+            "todo",
+            "webfetch",
+            "websearch",
+            "write"
+          ]
+        }
+      ],
+      "matrix": [
+        {
+          "agent_id": "orchestrator",
+          "base_role": "orchestrator",
+          "grants": [
+            {
+              "expert_squad_id": "base",
+              "agent_id": "orchestrator",
+              "base_role": "orchestrator",
+              "ref": "base/shared/method",
+              "source": "package",
+              "name": "base-delivery-method",
+              "manifest_grant": true,
+              "project_override": null,
+              "session_override": null,
+              "effective": true,
+              "enabled": true
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "orchestrator",
+              "base_role": "orchestrator",
+              "ref": "default/skill/browser-use",
+              "source": "default",
+              "name": "browser-use",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "orchestrator",
+              "base_role": "orchestrator",
+              "ref": "default/skill/computer-use",
+              "source": "default",
+              "name": "computer-use",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "orchestrator",
+              "base_role": "orchestrator",
+              "ref": "default/skill/design-taste-frontend",
+              "source": "default",
+              "name": "design-taste-frontend",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "orchestrator",
+              "base_role": "orchestrator",
+              "ref": "default/skill/grill-me",
+              "source": "default",
+              "name": "grill-me",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "orchestrator",
+              "base_role": "orchestrator",
+              "ref": "default/skill/research-report",
+              "source": "default",
+              "name": "research-report",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "orchestrator",
+              "base_role": "orchestrator",
+              "ref": "default/skill/work-artifacts",
+              "source": "default",
+              "name": "work-artifacts",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            }
+          ]
+        },
+        {
+          "agent_id": "universal-build",
+          "base_role": "build",
+          "grants": [
+            {
+              "expert_squad_id": "base",
+              "agent_id": "universal-build",
+              "base_role": "build",
+              "ref": "default/skill/browser-use",
+              "source": "default",
+              "name": "browser-use",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "universal-build",
+              "base_role": "build",
+              "ref": "default/skill/computer-use",
+              "source": "default",
+              "name": "computer-use",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "universal-build",
+              "base_role": "build",
+              "ref": "default/skill/design-taste-frontend",
+              "source": "default",
+              "name": "design-taste-frontend",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "universal-build",
+              "base_role": "build",
+              "ref": "default/skill/grill-me",
+              "source": "default",
+              "name": "grill-me",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "universal-build",
+              "base_role": "build",
+              "ref": "default/skill/research-report",
+              "source": "default",
+              "name": "research-report",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "universal-build",
+              "base_role": "build",
+              "ref": "default/skill/work-artifacts",
+              "source": "default",
+              "name": "work-artifacts",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            }
+          ]
+        },
+        {
+          "agent_id": "base-developer",
+          "base_role": "build",
+          "grants": [
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-developer",
+              "base_role": "build",
+              "ref": "base/shared/method",
+              "source": "package",
+              "name": "base-delivery-method",
+              "manifest_grant": true,
+              "project_override": null,
+              "session_override": null,
+              "effective": true,
+              "enabled": true
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-developer",
+              "base_role": "build",
+              "ref": "default/skill/browser-use",
+              "source": "default",
+              "name": "browser-use",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-developer",
+              "base_role": "build",
+              "ref": "default/skill/computer-use",
+              "source": "default",
+              "name": "computer-use",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-developer",
+              "base_role": "build",
+              "ref": "default/skill/design-taste-frontend",
+              "source": "default",
+              "name": "design-taste-frontend",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-developer",
+              "base_role": "build",
+              "ref": "default/skill/grill-me",
+              "source": "default",
+              "name": "grill-me",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-developer",
+              "base_role": "build",
+              "ref": "default/skill/research-report",
+              "source": "default",
+              "name": "research-report",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-developer",
+              "base_role": "build",
+              "ref": "default/skill/work-artifacts",
+              "source": "default",
+              "name": "work-artifacts",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            }
+          ]
+        },
+        {
+          "agent_id": "base-planner",
+          "base_role": "delegated-worker",
+          "grants": [
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-planner",
+              "base_role": "delegated-worker",
+              "ref": "base/shared/method",
+              "source": "package",
+              "name": "base-delivery-method",
+              "manifest_grant": true,
+              "project_override": null,
+              "session_override": null,
+              "effective": true,
+              "enabled": true
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-planner",
+              "base_role": "delegated-worker",
+              "ref": "default/skill/browser-use",
+              "source": "default",
+              "name": "browser-use",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-planner",
+              "base_role": "delegated-worker",
+              "ref": "default/skill/computer-use",
+              "source": "default",
+              "name": "computer-use",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-planner",
+              "base_role": "delegated-worker",
+              "ref": "default/skill/design-taste-frontend",
+              "source": "default",
+              "name": "design-taste-frontend",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-planner",
+              "base_role": "delegated-worker",
+              "ref": "default/skill/grill-me",
+              "source": "default",
+              "name": "grill-me",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-planner",
+              "base_role": "delegated-worker",
+              "ref": "default/skill/research-report",
+              "source": "default",
+              "name": "research-report",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-planner",
+              "base_role": "delegated-worker",
+              "ref": "default/skill/work-artifacts",
+              "source": "default",
+              "name": "work-artifacts",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            }
+          ]
+        },
+        {
+          "agent_id": "base-researcher",
+          "base_role": "explore",
+          "grants": [
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-researcher",
+              "base_role": "explore",
+              "ref": "base/shared/method",
+              "source": "package",
+              "name": "base-delivery-method",
+              "manifest_grant": true,
+              "project_override": null,
+              "session_override": null,
+              "effective": true,
+              "enabled": false,
+              "reason": "skill_tool_unavailable"
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-researcher",
+              "base_role": "explore",
+              "ref": "default/skill/browser-use",
+              "source": "default",
+              "name": "browser-use",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-researcher",
+              "base_role": "explore",
+              "ref": "default/skill/computer-use",
+              "source": "default",
+              "name": "computer-use",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-researcher",
+              "base_role": "explore",
+              "ref": "default/skill/design-taste-frontend",
+              "source": "default",
+              "name": "design-taste-frontend",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-researcher",
+              "base_role": "explore",
+              "ref": "default/skill/grill-me",
+              "source": "default",
+              "name": "grill-me",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-researcher",
+              "base_role": "explore",
+              "ref": "default/skill/research-report",
+              "source": "default",
+              "name": "research-report",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-researcher",
+              "base_role": "explore",
+              "ref": "default/skill/work-artifacts",
+              "source": "default",
+              "name": "work-artifacts",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            }
+          ]
+        },
+        {
+          "agent_id": "base-tester",
+          "base_role": "delegated-worker",
+          "grants": [
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-tester",
+              "base_role": "delegated-worker",
+              "ref": "base/shared/method",
+              "source": "package",
+              "name": "base-delivery-method",
+              "manifest_grant": true,
+              "project_override": null,
+              "session_override": null,
+              "effective": true,
+              "enabled": true
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-tester",
+              "base_role": "delegated-worker",
+              "ref": "default/skill/browser-use",
+              "source": "default",
+              "name": "browser-use",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-tester",
+              "base_role": "delegated-worker",
+              "ref": "default/skill/computer-use",
+              "source": "default",
+              "name": "computer-use",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-tester",
+              "base_role": "delegated-worker",
+              "ref": "default/skill/design-taste-frontend",
+              "source": "default",
+              "name": "design-taste-frontend",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-tester",
+              "base_role": "delegated-worker",
+              "ref": "default/skill/grill-me",
+              "source": "default",
+              "name": "grill-me",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-tester",
+              "base_role": "delegated-worker",
+              "ref": "default/skill/research-report",
+              "source": "default",
+              "name": "research-report",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            },
+            {
+              "expert_squad_id": "base",
+              "agent_id": "base-tester",
+              "base_role": "delegated-worker",
+              "ref": "default/skill/work-artifacts",
+              "source": "default",
+              "name": "work-artifacts",
+              "manifest_grant": false,
+              "project_override": null,
+              "session_override": null,
+              "effective": false,
+              "enabled": null
+            }
+          ]
+        }
+      ],
+      "unmounted_count": 6
+    },
+    "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682"
+  },
+  "status": "failed",
+  "failure": {
+    "type": "AssertionError",
+    "message": "Actual initializer cancellation must be exercised; naturally completed request is not cancellation coverage\n+ actual - expected\n\n+ 'completed'\n- 'caller-aborted'\n"
+  },
+  "shutdown": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "occurrenceID": "cal_g0VXCxIeF00eXrtcVUjJ"
+    }
+  },
+  "disposal": {
+    "occurrenceID": "876a1b86-a005-408e-a52c-89877cdc7f7c",
+    "pid": 40800,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "terminal": {
+    "occurrenceID": "876a1b86-a005-408e-a52c-89877cdc7f7c",
+    "pid": 40800,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalOwner": "dead_or_reused",
+  "physicalHelper": "dead_or_reused",
+  "finalPort": "free",
+  "diagnosticRows": 198,
+  "timing": {
+    "diagnosticRows": 192,
+    "initializations": 7,
+    "dispositions": [
+      "creator",
+      "creator",
+      "cached-settled",
+      "creator",
+      "creator",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "creator",
+      "cached-settled",
+      "cached-settled",
+      "creator",
+      "creator",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled"
+    ],
+    "startupInitializations": 7
+  }
+}

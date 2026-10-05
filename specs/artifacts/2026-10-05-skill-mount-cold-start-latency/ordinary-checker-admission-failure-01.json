@@ -1,0 +1,16 @@
+{
+  "observedAtUtc": "2026-10-05T19:56:17.9053878Z",
+  "outcome": "pre-runtime ancestor admission failed",
+  "runRootExists": false,
+  "outputExists": false,
+  "foundMetadata": [
+    {
+      "path": "C:\\.opencorvus",
+      "directory": true,
+      "attributes": "Directory, Compressed"
+    }
+  ],
+  "contentsRead": false,
+  "processStarted": false,
+  "boundary": "Source scope review precedes any private ancestor read or original-check rerun"
+}

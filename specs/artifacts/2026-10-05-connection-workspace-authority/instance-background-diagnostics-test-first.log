@@ -1,0 +1,168 @@
+[1/1] START test/instance-background-work.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+67 |           },
+68 |         })
+69 |         expect(trace).toEqual([`cleanup:${projectID}`, "completion", "disposed"])
+70 |         expect(ownerReason).toBeInstanceOf(Error)
+71 |         expect(fault).toBeInstanceOf(Error)
+72 |         expect(warn.mock.calls.find((call) => call[1]?.label === label)).toEqual([
+                                                                              ^
+error: expect(received).toEqual(expected)
+
+- [
+-   "instance background work did not complete",
+-   {
+-     "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-pXOsw3\test-75456-4XTpqS\fixtures\memory-5BE8Db",
+-     "error": "source fault after cancellation",
+-     "label": "diagnostic-source",
+-   },
+- ]
++ undefined
+
+- Expected  - 8
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-background-work.test.ts:72:74)
+(fail) instance background work > retains the source fault diagnostic after owner cancellation and joins physical cleanup [2100.30ms]
+67 |           },
+68 |         })
+69 |         expect(trace).toEqual([`cleanup:${projectID}`, "completion", "disposed"])
+70 |         expect(ownerReason).toBeInstanceOf(Error)
+71 |         expect(fault).toBeInstanceOf(Error)
+72 |         expect(warn.mock.calls.find((call) => call[1]?.label === label)).toEqual([
+                                                                              ^
+error: expect(received).toEqual(expected)
+
+- [
+-   "instance background work did not complete",
+-   {
+-     "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-pXOsw3\test-75456-4XTpqS\fixtures\memory-NdkQiQ",
+-     "error": "Instance background work cancelled: instance teardown",
+-     "label": "diagnostic-same text",
+-   },
+- ]
++ undefined
+
+- Expected  - 8
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-background-work.test.ts:72:74)
+(fail) instance background work > retains the same text fault diagnostic after owner cancellation and joins physical cleanup [1482.57ms]
+67 |           },
+68 |         })
+69 |         expect(trace).toEqual([`cleanup:${projectID}`, "completion", "disposed"])
+70 |         expect(ownerReason).toBeInstanceOf(Error)
+71 |         expect(fault).toBeInstanceOf(Error)
+72 |         expect(warn.mock.calls.find((call) => call[1]?.label === label)).toEqual([
+                                                                              ^
+error: expect(received).toEqual(expected)
+
+- [
+-   "instance background work did not complete",
+-   {
+-     "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-pXOsw3\test-75456-4XTpqS\fixtures\memory-y1Lhaz",
+-     "error": "Instance process admission is closed during runtime settlement",
+-     "label": "diagnostic-instance admission",
+-   },
+- ]
++ undefined
+
+- Expected  - 8
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-background-work.test.ts:72:74)
+(fail) instance background work > retains the instance admission fault diagnostic after owner cancellation and joins physical cleanup [1507.29ms]
+67 |           },
+68 |         })
+69 |         expect(trace).toEqual([`cleanup:${projectID}`, "completion", "disposed"])
+70 |         expect(ownerReason).toBeInstanceOf(Error)
+71 |         expect(fault).toBeInstanceOf(Error)
+72 |         expect(warn.mock.calls.find((call) => call[1]?.label === label)).toEqual([
+                                                                              ^
+error: expect(received).toEqual(expected)
+
+- [
+-   "instance background work did not complete",
+-   {
+-     "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-pXOsw3\test-75456-4XTpqS\fixtures\memory-QtgcQu",
+-     "error": "diagnostic fixture rejected because database effect admission is closed during runtime settlement",
+-     "label": "diagnostic-database admission",
+-   },
+- ]
++ undefined
+
+- Expected  - 8
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-background-work.test.ts:72:74)
+(fail) instance background work > retains the database admission fault diagnostic after owner cancellation and joins physical cleanup [1575.09ms]
+67 |           },
+68 |         })
+69 |         expect(trace).toEqual([`cleanup:${projectID}`, "completion", "disposed"])
+70 |         expect(ownerReason).toBeInstanceOf(Error)
+71 |         expect(fault).toBeInstanceOf(Error)
+72 |         expect(warn.mock.calls.find((call) => call[1]?.label === label)).toEqual([
+                                                                              ^
+error: expect(received).toEqual(expected)
+
+- [
+-   "instance background work did not complete",
+-   {
+-     "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-pXOsw3\test-75456-4XTpqS\fixtures\memory-WIHoqy",
+-     "error": "mixed cancellation and independent faults",
+-     "label": "diagnostic-mixed",
+-   },
+- ]
++ undefined
+
+- Expected  - 8
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-background-work.test.ts:72:74)
+(fail) instance background work > retains the mixed fault diagnostic after owner cancellation and joins physical cleanup [1686.73ms]
+67 |           },
+68 |         })
+69 |         expect(trace).toEqual([`cleanup:${projectID}`, "completion", "disposed"])
+70 |         expect(ownerReason).toBeInstanceOf(Error)
+71 |         expect(fault).toBeInstanceOf(Error)
+72 |         expect(warn.mock.calls.find((call) => call[1]?.label === label)).toEqual([
+                                                                              ^
+error: expect(received).toEqual(expected)
+
+- [
+-   "instance background work did not complete",
+-   {
+-     "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-pXOsw3\test-75456-4XTpqS\fixtures\memory-GwjMtS",
+-     "error": "cleanup fault after cancellation",
+-     "label": "diagnostic-cleanup",
+-   },
+- ]
++ undefined
+
+- Expected  - 8
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-background-work.test.ts:72:74)
+(fail) instance background work > retains the cleanup fault diagnostic after owner cancellation and joins physical cleanup [1442.71ms]
+(pass) instance background work > settles exact external owner reason %s after complete unwind [1426.20ms]
+(pass) instance background work > settles exact external owner reason %s after complete unwind [1526.85ms]
+(pass) instance background work > settles exact external owner reason external primitive after complete unwind [1461.29ms]
+(pass) instance background work > global disposal cancels scheduled owners across projects before draining their leases [3907.52ms]
+(pass) instance background work > settles nested background registration from a abort listener after teardown closes admission [1504.32ms]
+(pass) instance background work > settles nested background registration from a draining owner after teardown closes admission [1558.83ms]
+(pass) instance background work > keeps an admitted background lease valid through its complete cancellation settlement [1449.69ms]
+(pass) instance background work > returns a settled completion when teardown races background admission [1459.55ms]
+(pass) instance background work > background work keeps a valid instance context for as long as it runs [1610.14ms]
+(pass) instance background work > instance disposal cancels in-flight background work instead of waiting for it [1581.15ms]
+(pass) instance background work > work scheduled and completed before disposal leaves nothing for disposal to cancel [1547.00ms]
+
+ 11 pass
+ 6 fail
+ 40 expect() calls
+Ran 17 tests across 1 file. [30.12s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-background-work.test.ts
+[1/1] DONE test/instance-background-work.test.ts exit=1 duration=30.30s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\instance-background-work.test.ts

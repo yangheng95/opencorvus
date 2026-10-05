@@ -39,3 +39,5 @@
 
 - [Product iteration: editable Mission drafts and workbench usability](2026-10-05-product-iteration.md)
 - [Current-version product experience and functional repair](2026-10-04-product-experience.md)
+
+The connection authority record also indexes the continued actual Sol sequential Edit/Composer checkpoint and pending causal Review repair. The Skill record indexes preserved ordinary diagnostic failures and actual04/05 Skills-first unconnected qualification; original19.456s latency remains unresolved.

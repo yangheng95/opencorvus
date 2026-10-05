@@ -149,9 +149,9 @@ export interface ComposerSubmitDirectives {
 
 export interface ChatComposerProps {
   /**
-   * Whether the composer should be interactive.
+   * Availability derived by the existing connection and launcher owners.
    */
-  enabled: boolean
+  availability: "ready" | "submitting" | "unavailable"
   /**
    * Whether a task is active (in-flight request or interruptable task status).
    * When true the send button becomes a stop button.
@@ -525,6 +525,7 @@ function utf8ByteLength(value: string): number {
 // ── Component ──
 
 export function ChatComposer(props: ChatComposerProps) {
+  const composerEnabled = createMemo(() => props.availability === "ready")
   let textareaRef!: HTMLTextAreaElement
   let mentionPresentationRef: HTMLDivElement | undefined
   let formRef!: HTMLFormElement
@@ -661,7 +662,7 @@ export function ChatComposer(props: ChatComposerProps) {
     ),
   }))
   const activeMentionQuery = createMemo(() => {
-    if (!focused() || !props.enabled || props.busy) return null
+    if (!focused() || !composerEnabled() || props.busy) return null
     return findComposerMentionQuery(text(), caretPosition())
   })
   createEffect<string>((previousQuery) => {
@@ -738,7 +739,7 @@ export function ChatComposer(props: ChatComposerProps) {
   const stopping = () => props.stopping === true
 
   createEffect(() => {
-    setComposerAttachmentInputEnabled(props.enabled)
+    setComposerAttachmentInputEnabled(composerEnabled())
   })
   onCleanup(() => setComposerAttachmentInputEnabled(false))
 
@@ -1027,7 +1028,7 @@ export function ChatComposer(props: ChatComposerProps) {
     if (fileEditorReserved()) return
     if (submitting()) return
     if (uploadingCount() > 0) return
-    if (!props.enabled) return
+    if (!composerEnabled()) return
     if (!modelAvailable() && !sideCommand()) return
     const trimmed = text().trim()
     if (!trimmed) return
@@ -1133,7 +1134,7 @@ export function ChatComposer(props: ChatComposerProps) {
     }
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault()
-      if (!props.enabled || primaryAction() === "stop") return
+      if (!composerEnabled() || primaryAction() === "stop") return
       formRef?.requestSubmit()
     }
   }
@@ -1234,20 +1235,26 @@ export function ChatComposer(props: ChatComposerProps) {
   )
   const stopMode = createMemo(() => primaryAction() === "stop")
 
-  const sendDisabled = createMemo(() => {
-    if (stopMode()) return stopping()
-    return submitting() || uploadingCount() > 0 || !props.enabled || (!modelAvailable() && !sideCommand()) || !hasText()
+  const sendDisabledReason = createMemo(() => {
+    if (stopMode()) return stopping() ? "stopping" : undefined
+    if (submitting() || props.availability === "submitting") return "submitting"
+    if (uploadingCount() > 0) return "uploading"
+    if (!composerEnabled()) return "unavailable"
+    if (!modelAvailable() && !sideCommand()) return "model-required"
+    if (!hasText()) return "empty"
+    return undefined
   })
+  const sendDisabled = () => sendDisabledReason() !== undefined
 
-  // Surface WHY the send button is disabled in its title — operators
-  // were left guessing whether grey meant "task busy", "no text yet", or
-  // "permissions blocked". Order matches sendDisabled's predicate.
+  // Explain the same state that owns Send availability. Stop keeps its precedence.
   const sendTitle = () => {
     if (stopMode()) return t("chat.stop_title")
-    if (!props.enabled) return t("chat.disabled_unavailable")
-    if (uploadingCount() > 0) return t("chat.attachment_loader.uploading", { count: uploadingCount() })
-    if (!modelAvailable() && !sideCommand()) return t("chat.disabled_model_required")
-    if (!hasText()) return t("chat.disabled_empty")
+    const reason = sendDisabledReason()
+    if (reason === "submitting") return t("chat.disabled_submitting")
+    if (reason === "uploading") return t("chat.attachment_loader.uploading", { count: uploadingCount() })
+    if (reason === "unavailable") return t("chat.disabled_unavailable")
+    if (reason === "model-required") return t("chat.disabled_model_required")
+    if (reason === "empty") return t("chat.disabled_empty")
     return t("chat.send_title")
   }
   const sendAriaLabel = () => (stopMode() ? t("chat.stop_label") : t("chat.send_label"))
@@ -1325,7 +1332,7 @@ export function ChatComposer(props: ChatComposerProps) {
                 optionValue="value"
                 optionTextValue="label"
                 disallowEmptySelection
-                disabled={!props.enabled || props.busy}
+                disabled={!composerEnabled() || props.busy}
                 ariaLabel={t("chat.composer_product_pillar_aria_label")}
                 triggerDataUI="composer-product-pillar-select"
                 triggerTitle={selectedProductPillar()?.label}
@@ -1344,7 +1351,7 @@ export function ChatComposer(props: ChatComposerProps) {
                 optionValue="value"
                 optionTextValue="label"
                 disallowEmptySelection
-                disabled={!props.enabled || props.busy}
+                disabled={!composerEnabled() || props.busy}
                 ariaLabel={t("chat.composer_target_aria_label")}
                 triggerDataUI="composer-conversation-target-select"
                 triggerTitle={selectedConversationTarget()?.label}
@@ -1369,7 +1376,7 @@ export function ChatComposer(props: ChatComposerProps) {
               onInstallMarketExpertSquad={props.onInstallMarketExpertSquad}
               launchReferences={visibleComposerReferences(text())}
               readOnly={false}
-              disabled={!props.enabled || props.busy}
+              disabled={!composerEnabled() || props.busy}
             />
           </>
         }
@@ -1428,7 +1435,7 @@ export function ChatComposer(props: ChatComposerProps) {
        * mode stays switchable while a task runs: each task freezes the mode
        * it started with, so the control only governs what is dispatched
        * next. */}
-      <ComposerPermissionControl disabled={!props.enabled} />
+      <ComposerPermissionControl disabled={!composerEnabled()} />
       <ComposerModelSelector />
     </div>
   )
@@ -1578,9 +1585,13 @@ export function ChatComposer(props: ChatComposerProps) {
               id={props.textareaID ?? "chatTextarea"}
               class="chat-textarea"
               rows={1}
-              disabled={!props.enabled || fileEditorReserved()}
+              disabled={!composerEnabled() || fileEditorReserved()}
               placeholder={
-                props.enabled ? props.placeholder?.trim() || t("chat.placeholder") : t("chat.placeholder_disabled")
+                props.availability === "submitting"
+                  ? t("chat.placeholder_submitting")
+                  : composerEnabled()
+                    ? props.placeholder?.trim() || t("chat.placeholder")
+                    : t("chat.placeholder_disabled")
               }
               title={t("chat.tip")}
               value={text()}

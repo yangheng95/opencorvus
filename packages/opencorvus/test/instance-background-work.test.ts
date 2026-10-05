@@ -1,6 +1,8 @@
-import { afterAll, describe, expect, test } from "bun:test"
-import { Instance, runInstanceBackgroundWork } from "@/project/instance"
+import { afterAll, describe, expect, spyOn, test } from "bun:test"
+import { Instance, InstanceProcessAdmissionClosedError, runInstanceBackgroundWork } from "@/project/instance"
 import { Scheduler } from "@/scheduler"
+import { DatabaseEffectAdmissionClosedError } from "@/storage/db"
+import { Log } from "@/util/log"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterAll(resetMemoryDatabase)
@@ -14,6 +16,104 @@ async function waitFor(predicate: () => boolean, timeoutMs = 5_000): Promise<voi
 }
 
 describe("instance background work", () => {
+  test.each(["source", "same text", "instance admission", "database admission", "mixed", "cleanup"])(
+    "retains the %s fault diagnostic after owner cancellation and joins physical cleanup",
+    async (kind) => {
+      await using project = await memoryProject()
+      const admitted = Promise.withResolvers<void>()
+      const cancelled = Promise.withResolvers<void>()
+      const release = Promise.withResolvers<void>()
+      const trace: string[] = []
+      const label = `diagnostic-${kind}`
+      const warn = spyOn(Log.Default, "warn")
+      let fault: Error | undefined
+      let ownerReason: unknown
+      try {
+        const projectID = await Instance.provide({
+          directory: project.path,
+          fn: async () => {
+            const id = Instance.project.id
+            const completion = runInstanceBackgroundWork(label, async (signal) => {
+              signal.addEventListener("abort", () => {
+                ownerReason = signal.reason
+                cancelled.resolve()
+              }, { once: true })
+              admitted.resolve()
+              await cancelled.promise
+              fault = kind === "same text" ? new Error((ownerReason as Error).message)
+                : kind === "instance admission" ? new InstanceProcessAdmissionClosedError()
+                : kind === "database admission" ? new DatabaseEffectAdmissionClosedError("diagnostic fixture")
+                : kind === "mixed" ? new AggregateError([
+                  ownerReason, new InstanceProcessAdmissionClosedError(),
+                  new DatabaseEffectAdmissionClosedError("diagnostic fixture"), new Error("independent source fault"),
+                ], "mixed cancellation and independent faults")
+                : new Error(`${kind} fault after cancellation`)
+              try {
+                if (kind === "cleanup") throw ownerReason
+                throw fault
+              } finally {
+                await release.promise
+                trace.push(`cleanup:${Instance.project.id}`)
+                if (kind === "cleanup") throw fault
+              }
+            }).then(() => { trace.push("completion") })
+            await admitted.promise
+            const disposal = Instance.dispose().then(() => { trace.push("disposed") })
+            await cancelled.promise
+            release.resolve()
+            await completion
+            await disposal
+            return id
+          },
+        })
+        expect(trace).toEqual([`cleanup:${projectID}`, "completion", "disposed"])
+        expect(ownerReason).toBeInstanceOf(Error)
+        expect(fault).toBeInstanceOf(Error)
+        expect(warn.mock.calls.find((call) => call[1]?.label === label)).toEqual([
+          "instance background work did not complete",
+          { label, directory: project.path, error: fault!.message },
+        ])
+      } finally {
+        release.resolve()
+        warn.mockRestore()
+      }
+    },
+    30_000,
+  )
+
+  test.each([new Error("external cancellation"), new InstanceProcessAdmissionClosedError(), "external primitive"])(
+    "settles exact external owner reason %s after complete unwind",
+    async (reason) => {
+      await using project = await memoryProject()
+      const owner = new AbortController()
+      const admitted = Promise.withResolvers<void>()
+      const cancelled = Promise.withResolvers<void>()
+      const release = Promise.withResolvers<void>()
+      const trace: string[] = []
+      let observed: unknown
+      const projectID = await Instance.provide({ directory: project.path, fn: async () => {
+        const id = Instance.project.id
+        const completion = runInstanceBackgroundWork("exact-owner", async (signal) => {
+          signal.addEventListener("abort", () => cancelled.resolve(), { once: true })
+          admitted.resolve()
+          await cancelled.promise
+          try { signal.throwIfAborted() } catch (error) { observed = error; throw error }
+          finally { await release.promise; trace.push(`cleanup:${Instance.project.id}`) }
+        }, owner.signal).then(() => { trace.push("completion") })
+        await admitted.promise
+        owner.abort(reason)
+        await cancelled.promise
+        release.resolve()
+        await completion
+        await Instance.dispose()
+        trace.push("disposed")
+        return id
+      } })
+      expect(observed).toBe(reason)
+      expect(trace).toEqual([`cleanup:${projectID}`, "completion", "disposed"])
+    },
+    30_000,
+  )
   test("global disposal cancels scheduled owners across projects before draining their leases", async () => {
     await using first = await memoryProject("scheduled-disposal-first")
     await using second = await memoryProject("scheduled-disposal-second")
@@ -158,6 +258,7 @@ describe("instance background work", () => {
   test("instance disposal cancels in-flight background work instead of waiting for it", async () => {
     await using project = await memoryProject()
     let cancelled: unknown
+    let ownerReason: unknown
     let started = false
     await Instance.provide({
       directory: project.path,
@@ -167,7 +268,10 @@ describe("instance background work", () => {
           // Without the teardown cancellation this never resolves, and the
           // background lease is exactly what disposal would wait on forever.
           await new Promise<never>((_resolve, reject) => {
-            signal.addEventListener("abort", () => reject(signal.reason), { once: true })
+            signal.addEventListener("abort", () => {
+              ownerReason = signal.reason
+              reject(signal.reason)
+            }, { once: true })
           }).catch((reason) => {
             cancelled = reason
             throw reason
@@ -182,6 +286,7 @@ describe("instance background work", () => {
     expect(Date.now() - disposalStarted).toBeLessThan(10_000)
     await waitFor(() => cancelled !== undefined)
     expect(String(cancelled)).toContain("Instance background work cancelled")
+    expect(cancelled).toBe(ownerReason)
   }, 30_000)
 
   test("work scheduled and completed before disposal leaves nothing for disposal to cancel", async () => {

@@ -5,10 +5,16 @@
 - [Actual Sol Write and UI receipt qualification](artifacts/2026-10-05-connection-workspace-authority/root-live-sol-write-manual-review.md)
 - [Continuous file-result endpoint audit](artifacts/2026-10-05-connection-workspace-authority/live-file-change-endpoint-review.md)
 - [Active leased cancellation audit](artifacts/2026-10-05-connection-workspace-authority/leased-recipient-cancellation-review.md)
+- [File-change chronology contract audit](artifacts/2026-10-05-connection-workspace-authority/file-change-chronology-continuation-review.md)
+- [Composer submit-busy guidance audit](artifacts/2026-10-05-connection-workspace-authority/composer-disabled-guidance-stream-review.md)
+- [Actual Sol Edit and Composer repair review](artifacts/2026-10-05-connection-workspace-authority/root-sol-edit-composer-manual-review.md)
+- [Actual sequential file-change causal audit](artifacts/2026-10-05-connection-workspace-authority/file-change-actual03-causal-qualification.md)
 
 - [Skill mount cold-start latency qualification](records/2026-10/2026-10-05-skill-mount-cold-start-latency.md)
 - [Skill mount latency evidence](artifacts/2026-10-05-skill-mount-cold-start-latency/README.md)
 - [Actual Sol Skills timeout recurrence](artifacts/2026-10-05-skill-mount-cold-start-latency/actual-write02-timeout-review.md)
+- [Ordinary Skill cold-path diagnostic preparation](artifacts/2026-10-05-skill-mount-cold-start-latency/ordinary-cold-path-next-diagnostic-plan.md)
+- [Root ordinary cold-path results](artifacts/2026-10-05-skill-mount-cold-start-latency/ordinary-results-manual-review.md)
 
 - [Server base URL contract and recoverable authoring](records/2026-10/2026-10-05-server-base-url-contract.md)
 - [Server base URL investigation and owned before evidence](artifacts/2026-10-05-server-base-url-contract/README.md)

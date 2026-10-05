@@ -1,6 +1,10 @@
 # Skill mount cold-start latency evidence
 
+- [Root ordinary results](ordinary-results-manual-review.md): original guard/actual01/02/03 failures retained; Skills-first actual04 and current-report actual05 each10accepted+1realcancel, physical settlement. These are unconnected baselines, not original19.456s resolution.
+- [Actual01](actual-ordinary-01/README.md),[actual02](actual-ordinary-02/README.md),[actual03](actual-ordinary-03/README.md),[actual04](actual-ordinary-04/README.md),[actual05](actual-ordinary-05/README.md): each actual raw outcome has its own scope. Current report names HTTP-null initialization as unattributed; original04 label stays historical.
+
 - [Actual Sol Write02 timeout recurrence](actual-write02-timeout-review.md): real first mount19.456s, client15s timeout and late backend200, warm244/498ms; exact ordinary launcher external-compatibility discovery disabled, safe slow phase still unknown. This is further investigation, not a latency repair.
+- [Ordinary cold-path diagnostic preparation](ordinary-cold-path-next-diagnostic-plan.md): one existing checker with explicit ordinary versus fixture input, original15s client timeout plus bounded exact-request backend observation; nine pure contracts/full strict types pass, actual05 Skills-first unconnected HTTP qualification passes; original authenticated/UI timeout remains unresolved.
 
 - [Actual01 HTTP-only qualification and timing failure](actual-01/README.md): unchanged raw results plus independent missing-DEBUG diagnosis.
 - [Actual02 qualified HTTP timings](actual-02/README.md): six real source occurrences, request/initializer ownership and balanced spans,27 HTTP200 plus one caller abort, independent physical cleanup. Original19.675s latency remains unresolved.

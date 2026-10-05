@@ -1,5 +1,17 @@
 # 07 — Overlay Panels And Task Evidence
 
+## Composer availability
+
+The main Composer owner derives ready, submitting or unavailable from the existing
+connection/workspace admission and launcher submission signals. ChatComposer
+derives interactivity from ready at the same dispatch, attachment, mention and
+textarea boundaries. Submission is transient processing, not missing workspace or
+model configuration. Send's disabled reason and help share one derivation from
+the existing local submission, upload, availability, model and draft facts.
+Active-work Stop retains precedence and only its existing stopping state disables
+it. Availability is a derived presentation value, not a second state, model owner
+or dispatch policy; directory-free Chat remains a valid ready context.
+
 ## File editor language support
 
 Every accepted explicit file-open request advances the existing reveal revision,

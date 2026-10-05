@@ -1,0 +1,331 @@
+[
+  {
+    "id": "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62",
+    "parentID": null,
+    "accepted": null,
+    "role": "user",
+    "finish": null,
+    "parts": [
+      {
+        "id": "prt_g0VXCwh8Z00Ug0VePvOX",
+        "type": "text",
+        "orderKey": "v1:0001791230991442:0000000000000031:0000000000000000:part:prt_g0VXCwh8Z00Ug0VePvOX",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      }
+    ]
+  },
+  {
+    "id": "msg_g0VXCwhBl005KNbCsSk5",
+    "parentID": "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62",
+    "accepted": [
+      "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62"
+    ],
+    "role": "assistant",
+    "finish": "tool-calls",
+    "parts": [
+      {
+        "id": "prt_g0VXCwhMU00cGtpq4Od4",
+        "type": "step-start",
+        "orderKey": "v1:0001791230992303:0000000000000031:0000000000000000:part:prt_g0VXCwhMU00cGtpq4Od4",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      },
+      {
+        "id": "prt_g0VXCwiM900SfJcrmCeO",
+        "type": "tool",
+        "orderKey": "v1:0001791230997721:0000000000000031:0000000000000000:part:prt_g0VXCwiM900SfJcrmCeO",
+        "tool": "write",
+        "callID": "call_0nnTWDmpxkRBQi2tTcjmNYmC",
+        "status": "completed",
+        "time": {
+          "start": 1791230996125,
+          "end": 1791230997760
+        }
+      },
+      {
+        "id": "prt_g0VXCwion00cFLhPqi2X",
+        "type": "step-finish",
+        "orderKey": "v1:0001791230997901:0000000000000031:0000000000000000:part:prt_g0VXCwion00cFLhPqi2X",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      }
+    ]
+  },
+  {
+    "id": "msg_g0VXCwiqo00jPNjrPZhm",
+    "parentID": "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62",
+    "accepted": [
+      "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62"
+    ],
+    "role": "assistant",
+    "finish": "tool-calls",
+    "parts": [
+      {
+        "id": "prt_g0VXCwiwJ00VaWImIm7y",
+        "type": "step-start",
+        "orderKey": "v1:0001791230998367:0000000000000031:0000000000000000:part:prt_g0VXCwiwJ00VaWImIm7y",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      },
+      {
+        "id": "prt_g0VXCwkoU00dU7HuXOuS",
+        "type": "tool",
+        "orderKey": "v1:0001791231007011:0000000000000031:0000000000000000:part:prt_g0VXCwkoU00dU7HuXOuS",
+        "tool": "read",
+        "callID": "call_9DJeSNiJVByc8qVuNI2cpTPF",
+        "status": "completed",
+        "time": {
+          "start": 1791231005570,
+          "end": 1791231007038
+        }
+      },
+      {
+        "id": "prt_g0VXCwlCH00qaFo14QX5",
+        "type": "source-file",
+        "orderKey": "v1:0001791231007046:0000000000000031:0000000000000000:part:prt_g0VXCwlCH00qaFo14QX5",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      },
+      {
+        "id": "prt_g0VXCwlF4005wnIzz1lK",
+        "type": "step-finish",
+        "orderKey": "v1:0001791231007218:0000000000000031:0000000000000000:part:prt_g0VXCwlF4005wnIzz1lK",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      }
+    ]
+  },
+  {
+    "id": "msg_g0VXCwlHh00ge118UqXM",
+    "parentID": "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62",
+    "accepted": [
+      "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62"
+    ],
+    "role": "assistant",
+    "finish": "tool-calls",
+    "parts": [
+      {
+        "id": "prt_g0VXCwlN000HxdwZ2pLO",
+        "type": "step-start",
+        "orderKey": "v1:0001791231007710:0000000000000031:0000000000000000:part:prt_g0VXCwlN000HxdwZ2pLO",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      },
+      {
+        "id": "prt_g0VXCwmEn00vqqimiM7C",
+        "type": "tool",
+        "orderKey": "v1:0001791231012409:0000000000000031:0000000000000000:part:prt_g0VXCwmEn00vqqimiM7C",
+        "tool": "edit",
+        "callID": "call_YQkFzieqKxJPP1u5eJwJZfiU",
+        "status": "completed",
+        "time": {
+          "start": 1791231011045,
+          "end": 1791231012450
+        }
+      },
+      {
+        "id": "prt_g0VXCwmdx00n408aQg3x",
+        "type": "step-finish",
+        "orderKey": "v1:0001791231012605:0000000000000031:0000000000000000:part:prt_g0VXCwmdx00n408aQg3x",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      }
+    ]
+  },
+  {
+    "id": "msg_g0VXCwmfq00SGMJ8oBQr",
+    "parentID": "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62",
+    "accepted": [
+      "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62"
+    ],
+    "role": "assistant",
+    "finish": "tool-calls",
+    "parts": [
+      {
+        "id": "prt_g0VXCwmkh00I2rxo4T8o",
+        "type": "step-start",
+        "orderKey": "v1:0001791231013023:0000000000000031:0000000000000000:part:prt_g0VXCwmkh00I2rxo4T8o",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      },
+      {
+        "id": "prt_g0VXCwnkc00mnhLowUvc",
+        "type": "tool",
+        "orderKey": "v1:0001791231018097:0000000000000031:0000000000000000:part:prt_g0VXCwnkc00mnhLowUvc",
+        "tool": "read",
+        "callID": "call_t9qwmU1uj4eggki8f1c6ZVoE",
+        "status": "completed",
+        "time": {
+          "start": 1791231016862,
+          "end": 1791231018114
+        }
+      },
+      {
+        "id": "prt_g0VXCwo4t00lNp00RFNA",
+        "type": "source-file",
+        "orderKey": "v1:0001791231018119:0000000000000031:0000000000000000:part:prt_g0VXCwo4t00lNp00RFNA",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      },
+      {
+        "id": "prt_g0VXCwo4x00T4EyuJgme",
+        "type": "step-finish",
+        "orderKey": "v1:0001791231018123:0000000000000031:0000000000000000:part:prt_g0VXCwo4x00T4EyuJgme",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      }
+    ]
+  },
+  {
+    "id": "msg_g0VXCwo6y00aLuV7Li9V",
+    "parentID": "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62",
+    "accepted": [
+      "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62"
+    ],
+    "role": "assistant",
+    "finish": "tool-calls",
+    "parts": [
+      {
+        "id": "prt_g0VXCwoBm0056IgGGwV5",
+        "type": "step-start",
+        "orderKey": "v1:0001791231018546:0000000000000031:0000000000000000:part:prt_g0VXCwoBm0056IgGGwV5",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      },
+      {
+        "id": "prt_g0VXCwpGL00Hz7OjHJt5",
+        "type": "tool",
+        "orderKey": "v1:0001791231024335:0000000000000031:0000000000000000:part:prt_g0VXCwpGL00Hz7OjHJt5",
+        "tool": "edit",
+        "callID": "call_IG5xXhqZjgdZ8WhUkOheVzqd",
+        "status": "completed",
+        "time": {
+          "start": 1791231022673,
+          "end": 1791231024372
+        }
+      },
+      {
+        "id": "prt_g0VXCwphs00wuZuXP1OO",
+        "type": "step-finish",
+        "orderKey": "v1:0001791231024381:0000000000000031:0000000000000000:part:prt_g0VXCwphs00wuZuXP1OO",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      }
+    ]
+  },
+  {
+    "id": "msg_g0VXCwpkJ00DZbn4eXwd",
+    "parentID": "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62",
+    "accepted": [
+      "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62"
+    ],
+    "role": "assistant",
+    "finish": "tool-calls",
+    "parts": [
+      {
+        "id": "prt_g0VXCwppe00X2UnFlCoS",
+        "type": "step-start",
+        "orderKey": "v1:0001791231024862:0000000000000031:0000000000000000:part:prt_g0VXCwppe00X2UnFlCoS",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      },
+      {
+        "id": "prt_g0VXCwqll00YSC49T3Zg",
+        "type": "tool",
+        "orderKey": "v1:0001791231029667:0000000000000031:0000000000000000:part:prt_g0VXCwqll00YSC49T3Zg",
+        "tool": "read",
+        "callID": "call_0IOnM9UdCXBT1F0W3Yzop75y",
+        "status": "completed",
+        "time": {
+          "start": 1791231028465,
+          "end": 1791231029707
+        }
+      },
+      {
+        "id": "prt_g0VXCwr5s00XmIQ0PQC4",
+        "type": "source-file",
+        "orderKey": "v1:0001791231029713:0000000000000031:0000000000000000:part:prt_g0VXCwr5s00XmIQ0PQC4",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      },
+      {
+        "id": "prt_g0VXCwr8H00MSglPAN8X",
+        "type": "step-finish",
+        "orderKey": "v1:0001791231029861:0000000000000031:0000000000000000:part:prt_g0VXCwr8H00MSglPAN8X",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      }
+    ]
+  },
+  {
+    "id": "msg_g0VXCwrB7002DZwOT4Nn",
+    "parentID": "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62",
+    "accepted": [
+      "msg_99148640-43a1-41e8-a80a-3b4ca2f64b62"
+    ],
+    "role": "assistant",
+    "finish": "stop",
+    "parts": [
+      {
+        "id": "prt_g0VXCwrID00R9OiHnkex",
+        "type": "step-start",
+        "orderKey": "v1:0001791231030477:0000000000000031:0000000000000000:part:prt_g0VXCwrID00R9OiHnkex",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      },
+      {
+        "id": "prt_g0VXCwsAs0009uZJVg5I",
+        "type": "text",
+        "orderKey": "v1:0001791231033866:0000000000000031:0000000000000000:part:prt_g0VXCwsAs0009uZJVg5I",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      },
+      {
+        "id": "prt_g0VXCwu5000uUj7X8IVF",
+        "type": "step-finish",
+        "orderKey": "v1:0001791231041190:0000000000000031:0000000000000000:part:prt_g0VXCwu5000uUj7X8IVF",
+        "tool": null,
+        "callID": null,
+        "status": null,
+        "time": null
+      }
+    ]
+  }
+]

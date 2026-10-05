@@ -1,0 +1,9 @@
+{
+  "productionExactSingleExpression": true,
+  "scope": [
+    "packages/opencorvus/src/project/instance.ts",
+    "packages/opencorvus/test/instance-background-work.test.ts"
+  ],
+  "baseline": "Root clean delivered c59cf33b",
+  "gitCommandUsed": false
+}

@@ -1174,7 +1174,7 @@ export function runInstanceBackgroundWork(
     }),
   )
     .catch((error) => {
-      if (signal.aborted) return
+      if (signal.aborted && error === signal.reason) return
       Log.Default.warn("instance background work did not complete", {
         label,
         directory,

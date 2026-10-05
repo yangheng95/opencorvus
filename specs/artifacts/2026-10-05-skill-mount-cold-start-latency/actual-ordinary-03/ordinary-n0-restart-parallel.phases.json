@@ -1,0 +1,3607 @@
+[
+  {
+    "service": "server",
+    "requestID": "4d1fc57f-38e1-4f06-b424-d8b02ef08f6a",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "started",
+    "time": "2026-10-05T20:12:14.617Z"
+  },
+  {
+    "service": "server",
+    "requestID": "4d1fc57f-38e1-4f06-b424-d8b02ef08f6a",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1,
+    "time": "2026-10-05T20:12:14.618Z"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.674Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.total",
+    "spanID": "40800:1",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.674Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.admission",
+    "spanID": "40800:2",
+    "parentSpanID": "40800:1",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.676Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 2,
+    "phase": "catalog.admission",
+    "spanID": "40800:2",
+    "parentSpanID": "40800:1",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.677Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.held",
+    "spanID": "40800:3",
+    "parentSpanID": "40800:1",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.677Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.recovery",
+    "spanID": "40800:4",
+    "parentSpanID": "40800:3",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.677Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.recovery",
+    "spanID": "40800:4",
+    "parentSpanID": "40800:3",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.678Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:5",
+    "parentSpanID": "40800:3",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.679Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "40800:6",
+    "parentSpanID": "40800:5",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.679Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "config.load",
+    "spanID": "40800:7",
+    "parentSpanID": "40800:6",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.704Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 25,
+    "phase": "config.load",
+    "spanID": "40800:7",
+    "parentSpanID": "40800:6",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.704Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "config.verify",
+    "spanID": "40800:8",
+    "parentSpanID": "40800:6",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.704Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "config.verify",
+    "spanID": "40800:8",
+    "parentSpanID": "40800:6",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.705Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 26,
+    "phase": "state.initialize",
+    "spanID": "40800:6",
+    "parentSpanID": "40800:5",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "aggregates": {},
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.705Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 27,
+    "phase": "state.read",
+    "spanID": "40800:5",
+    "parentSpanID": "40800:3",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "creator",
+    "initializerID": "40800:6",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.725Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.reentrant",
+    "spanID": "40800:9",
+    "parentSpanID": "40800:3",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.725Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.revision",
+    "spanID": "40800:10",
+    "parentSpanID": "40800:9",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.725Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.revision",
+    "spanID": "40800:10",
+    "parentSpanID": "40800:9",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.726Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.config-reset",
+    "spanID": "40800:11",
+    "parentSpanID": "40800:9",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.727Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "catalog.config-reset",
+    "spanID": "40800:11",
+    "parentSpanID": "40800:9",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.727Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.inventory-reset",
+    "spanID": "40800:12",
+    "parentSpanID": "40800:9",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.727Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.inventory-reset",
+    "spanID": "40800:12",
+    "parentSpanID": "40800:9",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.728Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:13",
+    "parentSpanID": "40800:9",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "inventory",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.728Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "40800:14",
+    "parentSpanID": "40800:13",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "inventory",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.728Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "inventory.config",
+    "spanID": "40800:15",
+    "parentSpanID": "40800:14",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.729Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "inventory.config",
+    "spanID": "40800:15",
+    "parentSpanID": "40800:14",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.729Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "inventory.skills",
+    "spanID": "40800:16",
+    "parentSpanID": "40800:14",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.729Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.reentrant",
+    "spanID": "40800:17",
+    "parentSpanID": "40800:16",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.729Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.revision",
+    "spanID": "40800:18",
+    "parentSpanID": "40800:17",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.730Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "catalog.revision",
+    "spanID": "40800:18",
+    "parentSpanID": "40800:17",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.730Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:19",
+    "parentSpanID": "40800:17",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "skill",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.730Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "40800:20",
+    "parentSpanID": "40800:19",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "skill",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.730Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.reentrant",
+    "spanID": "40800:21",
+    "parentSpanID": "40800:20",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.730Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.revision",
+    "spanID": "40800:22",
+    "parentSpanID": "40800:21",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.730Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.revision",
+    "spanID": "40800:22",
+    "parentSpanID": "40800:21",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.730Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.reentrant",
+    "spanID": "40800:21",
+    "parentSpanID": "40800:20",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.731Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.builtins",
+    "spanID": "40800:23",
+    "parentSpanID": "40800:20",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.738Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 7,
+    "phase": "skill.builtins",
+    "spanID": "40800:23",
+    "parentSpanID": "40800:20",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.738Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.config-directories",
+    "spanID": "40800:24",
+    "parentSpanID": "40800:20",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.739Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:25",
+    "parentSpanID": "40800:24",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.739Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "40800:26",
+    "parentSpanID": "40800:25",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.739Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "config.load",
+    "spanID": "40800:27",
+    "parentSpanID": "40800:26",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.751Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 12,
+    "phase": "config.load",
+    "spanID": "40800:27",
+    "parentSpanID": "40800:26",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.751Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "config.verify",
+    "spanID": "40800:28",
+    "parentSpanID": "40800:26",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.752Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "config.verify",
+    "spanID": "40800:28",
+    "parentSpanID": "40800:26",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.752Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 13,
+    "phase": "state.initialize",
+    "spanID": "40800:26",
+    "parentSpanID": "40800:25",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "aggregates": {},
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.752Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 13,
+    "phase": "state.read",
+    "spanID": "40800:25",
+    "parentSpanID": "40800:24",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "creator",
+    "initializerID": "40800:26",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.752Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 14,
+    "phase": "skill.config-directories",
+    "spanID": "40800:24",
+    "parentSpanID": "40800:20",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.752Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.explicit-scan",
+    "spanID": "40800:29",
+    "parentSpanID": "40800:20",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.755Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 3,
+    "phase": "skill.explicit-scan",
+    "spanID": "40800:29",
+    "parentSpanID": "40800:20",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.755Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.explicit-scan",
+    "spanID": "40800:30",
+    "parentSpanID": "40800:20",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.760Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 5,
+    "phase": "skill.explicit-scan",
+    "spanID": "40800:30",
+    "parentSpanID": "40800:20",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.760Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.config",
+    "spanID": "40800:31",
+    "parentSpanID": "40800:20",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.760Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:32",
+    "parentSpanID": "40800:31",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.760Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:32",
+    "parentSpanID": "40800:31",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:26",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.761Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "skill.config",
+    "spanID": "40800:31",
+    "parentSpanID": "40800:20",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.761Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 31,
+    "phase": "state.initialize",
+    "spanID": "40800:20",
+    "parentSpanID": "40800:19",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "skill",
+    "aggregates": {},
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.761Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 31,
+    "phase": "state.read",
+    "spanID": "40800:19",
+    "parentSpanID": "40800:17",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "skill",
+    "disposition": "creator",
+    "initializerID": "40800:20",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.761Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 32,
+    "phase": "catalog.reentrant",
+    "spanID": "40800:17",
+    "parentSpanID": "40800:16",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.761Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 32,
+    "phase": "inventory.skills",
+    "spanID": "40800:16",
+    "parentSpanID": "40800:14",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.761Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "inventory.projection",
+    "spanID": "40800:33",
+    "parentSpanID": "40800:14",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.762Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "inventory.projection",
+    "spanID": "40800:33",
+    "parentSpanID": "40800:14",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.762Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 34,
+    "phase": "state.initialize",
+    "spanID": "40800:14",
+    "parentSpanID": "40800:13",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "inventory",
+    "aggregates": {},
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.762Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 34,
+    "phase": "state.read",
+    "spanID": "40800:13",
+    "parentSpanID": "40800:9",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "inventory",
+    "disposition": "creator",
+    "initializerID": "40800:14",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.765Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 40,
+    "phase": "catalog.reentrant",
+    "spanID": "40800:9",
+    "parentSpanID": "40800:3",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.765Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 88,
+    "phase": "catalog.held",
+    "spanID": "40800:3",
+    "parentSpanID": "40800:1",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.765Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.release",
+    "spanID": "40800:34",
+    "parentSpanID": "40800:1",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.765Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.release",
+    "spanID": "40800:34",
+    "parentSpanID": "40800:1",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.765Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 91,
+    "phase": "catalog.total",
+    "spanID": "40800:1",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.776Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:35",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.776Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:35",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:26",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.779Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:36",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.779Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:36",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:26",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.781Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:37",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.781Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:37",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:26",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.940Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:38",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:14.940Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:38",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:26",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.001Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:39",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.001Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:39",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:26",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.135Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:40",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.135Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:40",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:26",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.198Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.total",
+    "spanID": "40800:41",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.198Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.admission",
+    "spanID": "40800:42",
+    "parentSpanID": "40800:41",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.200Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 2,
+    "phase": "catalog.admission",
+    "spanID": "40800:42",
+    "parentSpanID": "40800:41",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.200Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.held",
+    "spanID": "40800:43",
+    "parentSpanID": "40800:41",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.200Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.recovery",
+    "spanID": "40800:44",
+    "parentSpanID": "40800:43",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.200Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.recovery",
+    "spanID": "40800:44",
+    "parentSpanID": "40800:43",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.201Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:45",
+    "parentSpanID": "40800:43",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.201Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "40800:46",
+    "parentSpanID": "40800:45",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.201Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "config.load",
+    "spanID": "40800:47",
+    "parentSpanID": "40800:46",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.217Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 16,
+    "phase": "config.load",
+    "spanID": "40800:47",
+    "parentSpanID": "40800:46",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.217Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "config.verify",
+    "spanID": "40800:48",
+    "parentSpanID": "40800:46",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.217Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "config.verify",
+    "spanID": "40800:48",
+    "parentSpanID": "40800:46",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.217Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 16,
+    "phase": "state.initialize",
+    "spanID": "40800:46",
+    "parentSpanID": "40800:45",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "aggregates": {},
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.217Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 16,
+    "phase": "state.read",
+    "spanID": "40800:45",
+    "parentSpanID": "40800:43",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "creator",
+    "initializerID": "40800:46",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.221Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.reentrant",
+    "spanID": "40800:49",
+    "parentSpanID": "40800:43",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.221Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.revision",
+    "spanID": "40800:50",
+    "parentSpanID": "40800:49",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.227Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 6,
+    "phase": "catalog.revision",
+    "spanID": "40800:50",
+    "parentSpanID": "40800:49",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.231Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:51",
+    "parentSpanID": "40800:49",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "inventory",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.231Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "40800:52",
+    "parentSpanID": "40800:51",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "inventory",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.231Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "inventory.config",
+    "spanID": "40800:53",
+    "parentSpanID": "40800:52",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.232Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "inventory.config",
+    "spanID": "40800:53",
+    "parentSpanID": "40800:52",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.232Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "inventory.skills",
+    "spanID": "40800:54",
+    "parentSpanID": "40800:52",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.232Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.reentrant",
+    "spanID": "40800:55",
+    "parentSpanID": "40800:54",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.232Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.revision",
+    "spanID": "40800:56",
+    "parentSpanID": "40800:55",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.232Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.revision",
+    "spanID": "40800:56",
+    "parentSpanID": "40800:55",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.232Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:57",
+    "parentSpanID": "40800:55",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "skill",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.233Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "40800:58",
+    "parentSpanID": "40800:57",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "skill",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.233Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.reentrant",
+    "spanID": "40800:59",
+    "parentSpanID": "40800:58",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.233Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.revision",
+    "spanID": "40800:60",
+    "parentSpanID": "40800:59",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.233Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.revision",
+    "spanID": "40800:60",
+    "parentSpanID": "40800:59",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.233Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.reentrant",
+    "spanID": "40800:59",
+    "parentSpanID": "40800:58",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.233Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.builtins",
+    "spanID": "40800:61",
+    "parentSpanID": "40800:58",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.235Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 2,
+    "phase": "skill.builtins",
+    "spanID": "40800:61",
+    "parentSpanID": "40800:58",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.236Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.config-directories",
+    "spanID": "40800:62",
+    "parentSpanID": "40800:58",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.236Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:63",
+    "parentSpanID": "40800:62",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.236Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:63",
+    "parentSpanID": "40800:62",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:46",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.236Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "skill.config-directories",
+    "spanID": "40800:62",
+    "parentSpanID": "40800:58",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.236Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.explicit-scan",
+    "spanID": "40800:64",
+    "parentSpanID": "40800:58",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.241Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 5,
+    "phase": "skill.explicit-scan",
+    "spanID": "40800:64",
+    "parentSpanID": "40800:58",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.241Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.explicit-scan",
+    "spanID": "40800:65",
+    "parentSpanID": "40800:58",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.242Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "skill.explicit-scan",
+    "spanID": "40800:65",
+    "parentSpanID": "40800:58",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.242Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.config",
+    "spanID": "40800:66",
+    "parentSpanID": "40800:58",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.242Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:67",
+    "parentSpanID": "40800:66",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.242Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:67",
+    "parentSpanID": "40800:66",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:46",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.243Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "skill.config",
+    "spanID": "40800:66",
+    "parentSpanID": "40800:58",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.243Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 10,
+    "phase": "state.initialize",
+    "spanID": "40800:58",
+    "parentSpanID": "40800:57",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "skill",
+    "aggregates": {},
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.243Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 11,
+    "phase": "state.read",
+    "spanID": "40800:57",
+    "parentSpanID": "40800:55",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "skill",
+    "disposition": "creator",
+    "initializerID": "40800:58",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.243Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 11,
+    "phase": "catalog.reentrant",
+    "spanID": "40800:55",
+    "parentSpanID": "40800:54",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.243Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 11,
+    "phase": "inventory.skills",
+    "spanID": "40800:54",
+    "parentSpanID": "40800:52",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.243Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "inventory.projection",
+    "spanID": "40800:68",
+    "parentSpanID": "40800:52",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.243Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "inventory.projection",
+    "spanID": "40800:68",
+    "parentSpanID": "40800:52",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.243Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 12,
+    "phase": "state.initialize",
+    "spanID": "40800:52",
+    "parentSpanID": "40800:51",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "inventory",
+    "aggregates": {},
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.243Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 12,
+    "phase": "state.read",
+    "spanID": "40800:51",
+    "parentSpanID": "40800:49",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "inventory",
+    "disposition": "creator",
+    "initializerID": "40800:52",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.244Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 23,
+    "phase": "catalog.reentrant",
+    "spanID": "40800:49",
+    "parentSpanID": "40800:43",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.244Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 44,
+    "phase": "catalog.held",
+    "spanID": "40800:43",
+    "parentSpanID": "40800:41",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.244Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.release",
+    "spanID": "40800:69",
+    "parentSpanID": "40800:41",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.244Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.release",
+    "spanID": "40800:69",
+    "parentSpanID": "40800:41",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.244Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 46,
+    "phase": "catalog.total",
+    "spanID": "40800:41",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.248Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:70",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.248Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:70",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:46",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.249Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:71",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.249Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:71",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:46",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.250Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:72",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.250Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:72",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:46",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.386Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:73",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.386Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:73",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:46",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.448Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:74",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.448Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:74",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:46",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.449Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:75",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.449Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:75",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:26",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.452Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:76",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.452Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:76",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:46",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "service": "server",
+    "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "started",
+    "time": "2026-10-05T20:12:15.462Z"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.462Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "request",
+    "spanID": "40800:77",
+    "parentSpanID": "http:bc887c6f-6405-45fd-b593-a86767d2a682",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.464Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.config",
+    "spanID": "40800:78",
+    "parentSpanID": "40800:77",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.464Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:79",
+    "parentSpanID": "40800:78",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.464Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:79",
+    "parentSpanID": "40800:78",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:26",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.465Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "matrix.config",
+    "spanID": "40800:78",
+    "parentSpanID": "40800:77",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.465Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.inventory",
+    "spanID": "40800:80",
+    "parentSpanID": "40800:77",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.465Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.total",
+    "spanID": "40800:81",
+    "parentSpanID": "40800:80",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.465Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.admission",
+    "spanID": "40800:82",
+    "parentSpanID": "40800:81",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.467Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 2,
+    "phase": "catalog.admission",
+    "spanID": "40800:82",
+    "parentSpanID": "40800:81",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.467Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.held",
+    "spanID": "40800:83",
+    "parentSpanID": "40800:81",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.467Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.recovery",
+    "spanID": "40800:84",
+    "parentSpanID": "40800:83",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.467Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.recovery",
+    "spanID": "40800:84",
+    "parentSpanID": "40800:83",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.467Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.revision",
+    "spanID": "40800:85",
+    "parentSpanID": "40800:83",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.468Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "catalog.revision",
+    "spanID": "40800:85",
+    "parentSpanID": "40800:83",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.468Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:86",
+    "parentSpanID": "40800:83",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "inventory",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.468Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:86",
+    "parentSpanID": "40800:83",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "inventory",
+    "disposition": "cached-settled",
+    "initializerID": "40800:14",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.469Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 2,
+    "phase": "catalog.held",
+    "spanID": "40800:83",
+    "parentSpanID": "40800:81",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.469Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.release",
+    "spanID": "40800:87",
+    "parentSpanID": "40800:81",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.470Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "catalog.release",
+    "spanID": "40800:87",
+    "parentSpanID": "40800:81",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.470Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 5,
+    "phase": "catalog.total",
+    "spanID": "40800:81",
+    "parentSpanID": "40800:80",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.470Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 5,
+    "phase": "matrix.inventory",
+    "spanID": "40800:80",
+    "parentSpanID": "40800:77",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.470Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.projection",
+    "spanID": "40800:88",
+    "parentSpanID": "40800:77",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.470Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.package",
+    "spanID": "40800:89",
+    "parentSpanID": "40800:88",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.471Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.skills",
+    "spanID": "40800:90",
+    "parentSpanID": "40800:88",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.471Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "projection.skills",
+    "spanID": "40800:90",
+    "parentSpanID": "40800:88",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.570Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 100,
+    "phase": "projection.package",
+    "spanID": "40800:89",
+    "parentSpanID": "40800:88",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.571Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.capabilities",
+    "spanID": "40800:91",
+    "parentSpanID": "40800:88",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.585Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 14,
+    "phase": "projection.capabilities",
+    "spanID": "40800:91",
+    "parentSpanID": "40800:88",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.585Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.selectors",
+    "spanID": "40800:92",
+    "parentSpanID": "40800:88",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.591Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 6,
+    "phase": "projection.selectors",
+    "spanID": "40800:92",
+    "parentSpanID": "40800:88",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.593Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 123,
+    "phase": "matrix.projection",
+    "spanID": "40800:88",
+    "parentSpanID": "40800:77",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.593Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.registry",
+    "spanID": "40800:93",
+    "parentSpanID": "40800:77",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.596Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 3,
+    "phase": "matrix.registry",
+    "spanID": "40800:93",
+    "parentSpanID": "40800:77",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.596Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.assembly",
+    "spanID": "40800:94",
+    "parentSpanID": "40800:77",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.605Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 9,
+    "phase": "matrix.assembly",
+    "spanID": "40800:94",
+    "parentSpanID": "40800:77",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.606Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 144,
+    "phase": "request",
+    "spanID": "40800:77",
+    "parentSpanID": "http:bc887c6f-6405-45fd-b593-a86767d2a682",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "service": "server",
+    "requestID": "bc887c6f-6405-45fd-b593-a86767d2a682",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 144,
+    "time": "2026-10-05T20:12:15.606Z"
+  },
+  {
+    "service": "server",
+    "requestID": "9d6feb26-9719-4424-ba49-bd72210786bc",
+    "method": "POST",
+    "path": "/shutdown",
+    "status": "started",
+    "time": "2026-10-05T20:12:15.630Z"
+  },
+  {
+    "service": "server",
+    "requestID": "9d6feb26-9719-4424-ba49-bd72210786bc",
+    "method": "POST",
+    "path": "/shutdown",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1,
+    "time": "2026-10-05T20:12:15.631Z"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.646Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:95",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.646Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:95",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:26",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.646Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "40800:96",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T20:12:15.646Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "40800:96",
+    "processOccurrenceID": "45727cf7-2a42-47d9-851f-506a6990beb0",
+    "http": {
+      "requestID": null,
+      "requestSettled": false
+    },
+    "origin": "startup-or-unattributed",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "40800:46",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  }
+]

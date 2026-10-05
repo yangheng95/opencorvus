@@ -1,0 +1,41 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+file:///D:/myhexin-local/opencorvus/packages/opencorvus/script/skill-mount-cold-start-check.ts:57
+export class OrdinaryProjectBoundaryError extends Error {
+  constructor(readonly expected: string, readonly actual: unknown) {
+                       ^^^^^^^^^^^^^^^^
+    super("Actual public Project worktree differs from the fresh owned Project boundary")
+
+
+SyntaxError [ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX]: TypeScript parameter property is not supported in strip-only mode
+    at parseTypeScript (node:internal/modules/typescript:68:40)
+    at processTypeScriptCode (node:internal/modules/typescript:146:42)
+    at stripTypeScriptModuleTypes (node:internal/modules/typescript:209:22)
+    at ModuleLoader.<anonymous> (node:internal/modules/esm/translators:634:29)
+    at #translate (node:internal/modules/esm/loader:451:20)
+    at afterLoad (node:internal/modules/esm/loader:507:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:512:12)
+    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:555:36)
+    at afterResolve (node:internal/modules/esm/loader:603:52)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:609:12) {
+  code: 'ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX'
+}
+
+Node.js v25.7.0
+✖ packages\opencorvus\script\skill-mount-cold-start-contract.test.ts (115.5686ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 123.5123
+
+✖ failing tests:
+
+test at packages\opencorvus\script\skill-mount-cold-start-contract.test.ts:1:1
+✖ packages\opencorvus\script\skill-mount-cold-start-contract.test.ts (115.5686ms)
+  'test failed'

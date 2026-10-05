@@ -2462,11 +2462,12 @@ function OverlayRoot() {
       composer={
         <ChatComposer
           onSideChat={async (prompt) => requestSideChat(undefined, prompt)}
-          enabled={
-            canComposeChat() &&
-            !missionLauncherSubmitting() &&
-            !expertSquadLauncherSubmitting() &&
-            !assistantLauncherSubmitting()
+          availability={
+            !canComposeChat()
+              ? "unavailable"
+              : missionLauncherSubmitting() || expertSquadLauncherSubmitting() || assistantLauncherSubmitting()
+                ? "submitting"
+                : "ready"
           }
           busy={
             !!messageStore.chatRequest || isTaskInterruptable() || workLedgerSessionInterruptible(activeSessionID())

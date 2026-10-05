@@ -1,0 +1,332 @@
+diff --git a/packages/opencorvus/src/project/instance.ts b/packages/opencorvus/src/project/instance.ts
+index dd67cff0..35fe284f 100644
+--- a/packages/opencorvus/src/project/instance.ts
++++ b/packages/opencorvus/src/project/instance.ts
+@@ -1174,7 +1174,7 @@ export function runInstanceBackgroundWork(
+     }),
+   )
+     .catch((error) => {
+-      if (signal.aborted) return
++      if (signal.aborted && error === signal.reason) return
+       Log.Default.warn("instance background work did not complete", {
+         label,
+         directory,
+diff --git a/packages/opencorvus/test/instance-background-work.test.ts b/packages/opencorvus/test/instance-background-work.test.ts
+index 37cac0ee..e469769d 100644
+--- a/packages/opencorvus/test/instance-background-work.test.ts
++++ b/packages/opencorvus/test/instance-background-work.test.ts
+@@ -1,6 +1,8 @@
+-import { afterAll, describe, expect, test } from "bun:test"
+-import { Instance, runInstanceBackgroundWork } from "@/project/instance"
++import { afterAll, describe, expect, spyOn, test } from "bun:test"
++import { Instance, InstanceProcessAdmissionClosedError, runInstanceBackgroundWork } from "@/project/instance"
+ import { Scheduler } from "@/scheduler"
++import { DatabaseEffectAdmissionClosedError } from "@/storage/db"
++import { Log } from "@/util/log"
+ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+ 
+ afterAll(resetMemoryDatabase)
+@@ -14,6 +16,104 @@ async function waitFor(predicate: () => boolean, timeoutMs = 5_000): Promise<voi
+ }
+ 
+ describe("instance background work", () => {
++  test.each(["source", "same text", "instance admission", "database admission", "mixed", "cleanup"])(
++    "retains the %s fault diagnostic after owner cancellation and joins physical cleanup",
++    async (kind) => {
++      await using project = await memoryProject()
++      const admitted = Promise.withResolvers<void>()
++      const cancelled = Promise.withResolvers<void>()
++      const release = Promise.withResolvers<void>()
++      const trace: string[] = []
++      const label = `diagnostic-${kind}`
++      const warn = spyOn(Log.Default, "warn")
++      let fault: Error | undefined
++      let ownerReason: unknown
++      try {
++        const projectID = await Instance.provide({
++          directory: project.path,
++          fn: async () => {
++            const id = Instance.project.id
++            const completion = runInstanceBackgroundWork(label, async (signal) => {
++              signal.addEventListener("abort", () => {
++                ownerReason = signal.reason
++                cancelled.resolve()
++              }, { once: true })
++              admitted.resolve()
++              await cancelled.promise
++              fault = kind === "same text" ? new Error((ownerReason as Error).message)
++                : kind === "instance admission" ? new InstanceProcessAdmissionClosedError()
++                : kind === "database admission" ? new DatabaseEffectAdmissionClosedError("diagnostic fixture")
++                : kind === "mixed" ? new AggregateError([
++                  ownerReason, new InstanceProcessAdmissionClosedError(),
++                  new DatabaseEffectAdmissionClosedError("diagnostic fixture"), new Error("independent source fault"),
++                ], "mixed cancellation and independent faults")
++                : new Error(`${kind} fault after cancellation`)
++              try {
++                if (kind === "cleanup") throw ownerReason
++                throw fault
++              } finally {
++                await release.promise
++                trace.push(`cleanup:${Instance.project.id}`)
++                if (kind === "cleanup") throw fault
++              }
++            }).then(() => { trace.push("completion") })
++            await admitted.promise
++            const disposal = Instance.dispose().then(() => { trace.push("disposed") })
++            await cancelled.promise
++            release.resolve()
++            await completion
++            await disposal
++            return id
++          },
++        })
++        expect(trace).toEqual([`cleanup:${projectID}`, "completion", "disposed"])
++        expect(ownerReason).toBeInstanceOf(Error)
++        expect(fault).toBeInstanceOf(Error)
++        expect(warn.mock.calls.find((call) => call[1]?.label === label)).toEqual([
++          "instance background work did not complete",
++          { label, directory: project.path, error: fault!.message },
++        ])
++      } finally {
++        release.resolve()
++        warn.mockRestore()
++      }
++    },
++    30_000,
++  )
++
++  test.each([new Error("external cancellation"), new InstanceProcessAdmissionClosedError(), "external primitive"])(
++    "settles exact external owner reason %s after complete unwind",
++    async (reason) => {
++      await using project = await memoryProject()
++      const owner = new AbortController()
++      const admitted = Promise.withResolvers<void>()
++      const cancelled = Promise.withResolvers<void>()
++      const release = Promise.withResolvers<void>()
++      const trace: string[] = []
++      let observed: unknown
++      const projectID = await Instance.provide({ directory: project.path, fn: async () => {
++        const id = Instance.project.id
++        const completion = runInstanceBackgroundWork("exact-owner", async (signal) => {
++          signal.addEventListener("abort", () => cancelled.resolve(), { once: true })
++          admitted.resolve()
++          await cancelled.promise
++          try { signal.throwIfAborted() } catch (error) { observed = error; throw error }
++          finally { await release.promise; trace.push(`cleanup:${Instance.project.id}`) }
++        }, owner.signal).then(() => { trace.push("completion") })
++        await admitted.promise
++        owner.abort(reason)
++        await cancelled.promise
++        release.resolve()
++        await completion
++        await Instance.dispose()
++        trace.push("disposed")
++        return id
++      } })
++      expect(observed).toBe(reason)
++      expect(trace).toEqual([`cleanup:${projectID}`, "completion", "disposed"])
++    },
++    30_000,
++  )
+   test("global disposal cancels scheduled owners across projects before draining their leases", async () => {
+     await using first = await memoryProject("scheduled-disposal-first")
+     await using second = await memoryProject("scheduled-disposal-second")
+@@ -158,6 +258,7 @@ describe("instance background work", () => {
+   test("instance disposal cancels in-flight background work instead of waiting for it", async () => {
+     await using project = await memoryProject()
+     let cancelled: unknown
++    let ownerReason: unknown
+     let started = false
+     await Instance.provide({
+       directory: project.path,
+@@ -167,7 +268,10 @@ describe("instance background work", () => {
+           // Without the teardown cancellation this never resolves, and the
+           // background lease is exactly what disposal would wait on forever.
+           await new Promise<never>((_resolve, reject) => {
+-            signal.addEventListener("abort", () => reject(signal.reason), { once: true })
++            signal.addEventListener("abort", () => {
++              ownerReason = signal.reason
++              reject(signal.reason)
++            }, { once: true })
+           }).catch((reason) => {
+             cancelled = reason
+             throw reason
+@@ -182,6 +286,7 @@ describe("instance background work", () => {
+     expect(Date.now() - disposalStarted).toBeLessThan(10_000)
+     await waitFor(() => cancelled !== undefined)
+     expect(String(cancelled)).toContain("Instance background work cancelled")
++    expect(cancelled).toBe(ownerReason)
+   }, 30_000)
+ 
+   test("work scheduled and completed before disposal leaves nothing for disposal to cancel", async () => {
+diff --git a/packages/overlay/src/components/ChatComposer.tsx b/packages/overlay/src/components/ChatComposer.tsx
+index c24eefad..81ed0b0a 100644
+--- a/packages/overlay/src/components/ChatComposer.tsx
++++ b/packages/overlay/src/components/ChatComposer.tsx
+@@ -149,9 +149,9 @@ export interface ComposerSubmitDirectives {
+ 
+ export interface ChatComposerProps {
+   /**
+-   * Whether the composer should be interactive.
++   * Availability derived by the existing connection and launcher owners.
+    */
+-  enabled: boolean
++  availability: "ready" | "submitting" | "unavailable"
+   /**
+    * Whether a task is active (in-flight request or interruptable task status).
+    * When true the send button becomes a stop button.
+@@ -525,6 +525,7 @@ function utf8ByteLength(value: string): number {
+ // ── Component ──
+ 
+ export function ChatComposer(props: ChatComposerProps) {
++  const composerEnabled = createMemo(() => props.availability === "ready")
+   let textareaRef!: HTMLTextAreaElement
+   let mentionPresentationRef: HTMLDivElement | undefined
+   let formRef!: HTMLFormElement
+@@ -661,7 +662,7 @@ export function ChatComposer(props: ChatComposerProps) {
+     ),
+   }))
+   const activeMentionQuery = createMemo(() => {
+-    if (!focused() || !props.enabled || props.busy) return null
++    if (!focused() || !composerEnabled() || props.busy) return null
+     return findComposerMentionQuery(text(), caretPosition())
+   })
+   createEffect<string>((previousQuery) => {
+@@ -738,7 +739,7 @@ export function ChatComposer(props: ChatComposerProps) {
+   const stopping = () => props.stopping === true
+ 
+   createEffect(() => {
+-    setComposerAttachmentInputEnabled(props.enabled)
++    setComposerAttachmentInputEnabled(composerEnabled())
+   })
+   onCleanup(() => setComposerAttachmentInputEnabled(false))
+ 
+@@ -1027,7 +1028,7 @@ export function ChatComposer(props: ChatComposerProps) {
+     if (fileEditorReserved()) return
+     if (submitting()) return
+     if (uploadingCount() > 0) return
+-    if (!props.enabled) return
++    if (!composerEnabled()) return
+     if (!modelAvailable() && !sideCommand()) return
+     const trimmed = text().trim()
+     if (!trimmed) return
+@@ -1133,7 +1134,7 @@ export function ChatComposer(props: ChatComposerProps) {
+     }
+     if (e.key === "Enter" && !e.shiftKey) {
+       e.preventDefault()
+-      if (!props.enabled || primaryAction() === "stop") return
++      if (!composerEnabled() || primaryAction() === "stop") return
+       formRef?.requestSubmit()
+     }
+   }
+@@ -1234,20 +1235,26 @@ export function ChatComposer(props: ChatComposerProps) {
+   )
+   const stopMode = createMemo(() => primaryAction() === "stop")
+ 
+-  const sendDisabled = createMemo(() => {
+-    if (stopMode()) return stopping()
+-    return submitting() || uploadingCount() > 0 || !props.enabled || (!modelAvailable() && !sideCommand()) || !hasText()
++  const sendDisabledReason = createMemo(() => {
++    if (stopMode()) return stopping() ? "stopping" : undefined
++    if (submitting() || props.availability === "submitting") return "submitting"
++    if (uploadingCount() > 0) return "uploading"
++    if (!composerEnabled()) return "unavailable"
++    if (!modelAvailable() && !sideCommand()) return "model-required"
++    if (!hasText()) return "empty"
++    return undefined
+   })
++  const sendDisabled = () => sendDisabledReason() !== undefined
+ 
+-  // Surface WHY the send button is disabled in its title — operators
+-  // were left guessing whether grey meant "task busy", "no text yet", or
+-  // "permissions blocked". Order matches sendDisabled's predicate.
++  // Explain the same state that owns Send availability. Stop keeps its precedence.
+   const sendTitle = () => {
+     if (stopMode()) return t("chat.stop_title")
+-    if (!props.enabled) return t("chat.disabled_unavailable")
+-    if (uploadingCount() > 0) return t("chat.attachment_loader.uploading", { count: uploadingCount() })
+-    if (!modelAvailable() && !sideCommand()) return t("chat.disabled_model_required")
+-    if (!hasText()) return t("chat.disabled_empty")
++    const reason = sendDisabledReason()
++    if (reason === "submitting") return t("chat.disabled_submitting")
++    if (reason === "uploading") return t("chat.attachment_loader.uploading", { count: uploadingCount() })
++    if (reason === "unavailable") return t("chat.disabled_unavailable")
++    if (reason === "model-required") return t("chat.disabled_model_required")
++    if (reason === "empty") return t("chat.disabled_empty")
+     return t("chat.send_title")
+   }
+   const sendAriaLabel = () => (stopMode() ? t("chat.stop_label") : t("chat.send_label"))
+@@ -1325,7 +1332,7 @@ export function ChatComposer(props: ChatComposerProps) {
+                 optionValue="value"
+                 optionTextValue="label"
+                 disallowEmptySelection
+-                disabled={!props.enabled || props.busy}
++                disabled={!composerEnabled() || props.busy}
+                 ariaLabel={t("chat.composer_product_pillar_aria_label")}
+                 triggerDataUI="composer-product-pillar-select"
+                 triggerTitle={selectedProductPillar()?.label}
+@@ -1344,7 +1351,7 @@ export function ChatComposer(props: ChatComposerProps) {
+                 optionValue="value"
+                 optionTextValue="label"
+                 disallowEmptySelection
+-                disabled={!props.enabled || props.busy}
++                disabled={!composerEnabled() || props.busy}
+                 ariaLabel={t("chat.composer_target_aria_label")}
+                 triggerDataUI="composer-conversation-target-select"
+                 triggerTitle={selectedConversationTarget()?.label}
+@@ -1369,7 +1376,7 @@ export function ChatComposer(props: ChatComposerProps) {
+               onInstallMarketExpertSquad={props.onInstallMarketExpertSquad}
+               launchReferences={visibleComposerReferences(text())}
+               readOnly={false}
+-              disabled={!props.enabled || props.busy}
++              disabled={!composerEnabled() || props.busy}
+             />
+           </>
+         }
+@@ -1428,7 +1435,7 @@ export function ChatComposer(props: ChatComposerProps) {
+        * mode stays switchable while a task runs: each task freezes the mode
+        * it started with, so the control only governs what is dispatched
+        * next. */}
+-      <ComposerPermissionControl disabled={!props.enabled} />
++      <ComposerPermissionControl disabled={!composerEnabled()} />
+       <ComposerModelSelector />
+     </div>
+   )
+@@ -1578,9 +1585,13 @@ export function ChatComposer(props: ChatComposerProps) {
+               id={props.textareaID ?? "chatTextarea"}
+               class="chat-textarea"
+               rows={1}
+-              disabled={!props.enabled || fileEditorReserved()}
++              disabled={!composerEnabled() || fileEditorReserved()}
+               placeholder={
+-                props.enabled ? props.placeholder?.trim() || t("chat.placeholder") : t("chat.placeholder_disabled")
++                props.availability === "submitting"
++                  ? t("chat.placeholder_submitting")
++                  : composerEnabled()
++                    ? props.placeholder?.trim() || t("chat.placeholder")
++                    : t("chat.placeholder_disabled")
+               }
+               title={t("chat.tip")}
+               value={text()}
+diff --git a/packages/overlay/src/main.tsx b/packages/overlay/src/main.tsx
+index a2b09fe3..5627001d 100644
+--- a/packages/overlay/src/main.tsx
++++ b/packages/overlay/src/main.tsx
+@@ -2462,11 +2462,12 @@ function OverlayRoot() {
+       composer={
+         <ChatComposer
+           onSideChat={async (prompt) => requestSideChat(undefined, prompt)}
+-          enabled={
+-            canComposeChat() &&
+-            !missionLauncherSubmitting() &&
+-            !expertSquadLauncherSubmitting() &&
+-            !assistantLauncherSubmitting()
++          availability={
++            !canComposeChat()
++              ? "unavailable"
++              : missionLauncherSubmitting() || expertSquadLauncherSubmitting() || assistantLauncherSubmitting()
++                ? "submitting"
++                : "ready"
+           }
+           busy={
+             !!messageStore.chatRequest || isTaskInterruptable() || workLedgerSessionInterruptible(activeSessionID())

@@ -1,0 +1,25 @@
+bun test v1.3.14 (0d9b296a)
+
+test\instance-background-work.test.ts:
+(pass) instance background work > retains the source fault diagnostic after owner cancellation and joins physical cleanup [2504.25ms]
+(pass) instance background work > retains the same text fault diagnostic after owner cancellation and joins physical cleanup [1621.36ms]
+(pass) instance background work > retains the instance admission fault diagnostic after owner cancellation and joins physical cleanup [1665.15ms]
+(pass) instance background work > retains the database admission fault diagnostic after owner cancellation and joins physical cleanup [1428.58ms]
+(pass) instance background work > retains the mixed fault diagnostic after owner cancellation and joins physical cleanup [1457.22ms]
+(pass) instance background work > retains the cleanup fault diagnostic after owner cancellation and joins physical cleanup [1469.50ms]
+(pass) instance background work > settles exact external owner reason %s after complete unwind [1466.45ms]
+(pass) instance background work > settles exact external owner reason %s after complete unwind [1466.43ms]
+(pass) instance background work > settles exact external owner reason external primitive after complete unwind [1486.63ms]
+(pass) instance background work > global disposal cancels scheduled owners across projects before draining their leases [3830.33ms]
+(pass) instance background work > settles nested background registration from a abort listener after teardown closes admission [1444.21ms]
+(pass) instance background work > settles nested background registration from a draining owner after teardown closes admission [1464.46ms]
+(pass) instance background work > keeps an admitted background lease valid through its complete cancellation settlement [1546.39ms]
+(pass) instance background work > returns a settled completion when teardown races background admission [1476.71ms]
+(pass) instance background work > background work keeps a valid instance context for as long as it runs [1762.49ms]
+(pass) instance background work > instance disposal cancels in-flight background work instead of waiting for it [1515.89ms]
+(pass) instance background work > work scheduled and completed before disposal leaves nothing for disposal to cancel [1497.67ms]
+
+ 17 pass
+ 0 fail
+ 41 expect() calls
+Ran 17 tests across 1 file. [30.65s]

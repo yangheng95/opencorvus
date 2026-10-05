@@ -1,0 +1,208 @@
+{
+  "status": "failed",
+  "startedAt": "2026-10-05T20:06:21.398Z",
+  "output": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-skill-mount-cold-start-latency\\actual-ordinary-02",
+  "parent": {
+    "pid": 75280,
+    "processInstanceID": "win32:639268275790038030",
+    "occurrenceID": "cec5b36a-050c-4144-a530-a7095b9f2ad4"
+  },
+  "port": 17955,
+  "inputPolicy": {
+    "profile": "ordinary",
+    "output": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-skill-mount-cold-start-latency\\actual-ordinary-02",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-02",
+    "port": 17955
+  },
+  "cases": [
+    {
+      "count": 0,
+      "mode": "serial",
+      "occurrenceID": "1ee8b5fc-505b-4f5b-be9d-9444bb4a48d0",
+      "files": 0,
+      "bytes": 0,
+      "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-02",
+      "projects": {
+        "a": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-02\\project-a",
+        "b": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-02\\project-b"
+      },
+      "observations": [],
+      "preflight": "loopback port bind/close succeeded",
+      "command": {
+        "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "args": [
+          "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+          "serve",
+          "--hostname",
+          "127.0.0.1",
+          "--port",
+          "17955",
+          "--startup-receipt",
+          "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-skill-mount-cold-start-latency\\actual-ordinary-02\\ordinary-n0-serial.startup.json",
+          "--startup-occurrence",
+          "1ee8b5fc-505b-4f5b-be9d-9444bb4a48d0",
+          "--parent-pid",
+          "75280",
+          "--parent-process-instance-id",
+          "win32:639268275790038030",
+          "--print-logs",
+          "--log-level",
+          "DEBUG",
+          "--project-dir",
+          "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-02\\project-a"
+        ],
+        "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-02\\launch"
+      },
+      "owner": {
+        "pid": 64340,
+        "processInstanceID": "win32:639268275815086114",
+        "occurrenceID": "2f4a95a8-430e-4d12-86bb-5954e25b675e"
+      },
+      "actualChild": {
+        "ProcessId": 64340,
+        "ParentProcessId": 57648,
+        "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "CreationDate": "/Date(1791230781508)/"
+      },
+      "helperOwner": {
+        "pid": 57648,
+        "processInstanceID": "win32:639268275814557327",
+        "occurrenceID": "32900fd4-dc90-442f-89ab-509fdf31f47c"
+      },
+      "actualHelper": {
+        "ProcessId": 57648,
+        "ParentProcessId": 75280,
+        "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3f665b2bfd616ca5\\debug\\opencorvus-process-supervisor.exe",
+        "CreationDate": "/Date(1791230781455)/"
+      },
+      "startup": {
+        "schemaVersion": 1,
+        "occurrenceID": "1ee8b5fc-505b-4f5b-be9d-9444bb4a48d0",
+        "outcome": "listening",
+        "url": "http://127.0.0.1:17955",
+        "pid": 64340
+      },
+      "health": {
+        "status": 200,
+        "requestID": "80557359-d375-45c4-b2e0-d501c7bb105a",
+        "healthy": true,
+        "version": "local",
+        "paths": {
+          "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-02\\runtime\\data\\opencorvus.db",
+          "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-02\\runtime\\data",
+          "home": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-02\\home"
+        }
+      },
+      "projectBoundary": [
+        {
+          "side": "a",
+          "status": 200,
+          "requestID": "9d8ac61f-98dd-40c8-8cd5-e9ec3fba2b74",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-02\\project-a",
+          "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-02\\project-a"
+        },
+        {
+          "side": "b",
+          "status": 200,
+          "requestID": "3d618992-0551-48b2-8d9b-4f5083663f1f",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-02\\project-b",
+          "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-02\\project-b"
+        }
+      ],
+      "metadataFiles": {
+        "auth.json": {
+          "present": false
+        },
+        "models.json": {
+          "present": false
+        }
+      },
+      "modelCatalogProvenance": {
+        "present": false,
+        "expectedProducer": "canonical ModelsDev.provisionDefaultCatalog in fresh owned runtime",
+        "observedProvision": false,
+        "observation": "Metadata only; no contents read, copied catalog, projected Sol or Provider generation qualification"
+      },
+      "status": "failed",
+      "failure": {
+        "type": "AssertionError",
+        "message": "Unexpected outside-owned Skill source requires review"
+      },
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VXCvpvl00sp9V4A0KF"
+        }
+      },
+      "disposal": {
+        "occurrenceID": "1ee8b5fc-505b-4f5b-be9d-9444bb4a48d0",
+        "pid": 64340,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "terminal": {
+        "occurrenceID": "1ee8b5fc-505b-4f5b-be9d-9444bb4a48d0",
+        "pid": 64340,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalOwner": "dead_or_reused",
+      "physicalHelper": "dead_or_reused",
+      "finalPort": "free",
+      "diagnosticRows": 276,
+      "timing": {
+        "diagnosticRows": 270,
+        "initializations": 11,
+        "dispositions": [
+          "creator",
+          "creator",
+          "cached-settled",
+          "creator",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "creator",
+          "cached-settled",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "creator",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "creator",
+          "cached-settled",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled"
+        ],
+        "startupInitializations": 11
+      }
+    }
+  ],
+  "qualification": "Actual ordinary fresh UNCONNECTED source HTTP; empty configuration, default builtins/catalog policy, compatibility disabled; no authorized Sol/preflight/UI qualification",
+  "error": {
+    "type": "AssertionError",
+    "message": "Unexpected outside-owned Skill source requires review"
+  },
+  "completedAt": "2026-10-05T20:06:27.080Z",
+  "cleanup": "Owned ordinary root retained for Root physical review; no automatic directory deletion"
+}

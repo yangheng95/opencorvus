@@ -1,0 +1,1221 @@
+===================================================================
+--- specs/artifacts/2026-10-05-skill-mount-cold-start-latency/ordinary-checker-before.ts.txt
++++ packages/opencorvus/script/skill-mount-cold-start-check.ts
+@@ -1,490 +1,661 @@
+-/** Real isolated source HTTP timing; no Provider, UI, synthetic delay or alternative Skill owner. */
+-import assert from "node:assert/strict"
+-import fs from "node:fs/promises"
+-import { createWriteStream } from "node:fs"
+-import { finished } from "node:stream/promises"
+-import path from "node:path"
+-import net from "node:net"
+-import { setTimeout as delay } from "node:timers/promises"
+-import { NodeProcess } from "@opencorvus-ai/util/process-node"
+-import type { ProcessHandle, ProcessTerminalReceipt, ProcessByteSource } from "@opencorvus-ai/util/process"
+-import {
+-  bootstrapIsolatedTestRuntime,
+-  isolatedTestChildEnvironment,
+-  removeIsolatedTestRuntime,
+-} from "@opencorvus-ai/util/test-runtime-environment"
+-import { expectedTestProcessSupervisor } from "./test-process-supervisor"
+-import { transportRequestSignal } from "../../overlay/src/services/host-transport"
+-import type { SkillMount } from "../src/skill/mounts"
+-
+-const outputIndex = process.argv.indexOf("--output")
+-assert(outputIndex >= 0 && process.argv[outputIndex + 1], "--output <new-owned-directory> is required")
+-const output = path.resolve(process.argv[outputIndex + 1]!)
+-await fs.mkdir(path.dirname(output), { recursive: true })
+-await fs.mkdir(output)
+-const helper = expectedTestProcessSupervisor()
+-assert(helper && (await fs.stat(helper)).isFile(), "Existing native test supervisor is required; no implicit build")
+-const hostKeys = new Set(["path", "systemroot", "windir", "comspec", "pathext", "lang", "lc_all"])
+-for (const key of Object.keys(process.env)) if (!hostKeys.has(key.toLowerCase())) delete process.env[key]
+-const runtime = await bootstrapIsolatedTestRuntime("test")
+-process.env.OPENCORVUS_PROCESS_SUPERVISOR = helper
+-const childEnvironment = isolatedTestChildEnvironment(runtime)
+-const { currentRuntimeProcessOccurrence, observedProcessOccurrence, observeRuntimeProcessOccurrence } = await import(
+-  "../src/runtime/process-occurrence"
+-)
+-const parent = currentRuntimeProcessOccurrence()
+-const port = 17947
+-const packageRoot = path.resolve(import.meta.dir, "..")
+-const result: Record<string, unknown> = {
+-  status: "running",
+-  startedAt: new Date().toISOString(),
+-  output,
+-  parent,
+-  port,
+-  runtime,
+-  cases: [],
+-  qualification:
+-    "Actual isolated source HTTP and diagnostic phases; no UI/Provider/model or original human Skill-tree reproduction",
+-}
+-const cases = result.cases as Array<Record<string, unknown>>
+-type Row = Record<string, any>
+-
+-async function portFree() {
+-  const probe = net.createServer()
+-  await new Promise<void>((resolve, reject) => {
+-    probe.once("error", reject)
+-    probe.listen(port, "127.0.0.1", () => probe.close((error) => (error ? reject(error) : resolve())))
+-  })
+-}
+-
+-async function processFact(pid: number) {
+-  const script = `Get-CimInstance Win32_Process -Filter 'ProcessId=${pid}'|Select-Object ProcessId,ParentProcessId,ExecutablePath,CreationDate|ConvertTo-Json -Compress`
+-  const query = await NodeProcess.run({
+-    command: {
+-      executable: "powershell.exe",
+-      args: ["-NoProfile", "-NonInteractive", "-EncodedCommand", Buffer.from(script, "utf16le").toString("base64")],
+-    },
+-    ownership: "owned_tree",
+-    timeoutMs: 15_000,
+-  })
+-  assert.equal(query.receipt.exitCode, 0)
+-  return JSON.parse(new TextDecoder().decode(query.stdout)) as {
+-    ProcessId: number
+-    ParentProcessId: number
+-    ExecutablePath: string
+-    CreationDate: string
+-  }
+-}
+-
+-async function fixture(count: number) {
+-  const root = path.join(runtime.runtimeRoot, "skill-mount-latency", `n${String(count).padStart(2, "0")}`)
+-  const projects = { a: path.join(root, "project-a"), b: path.join(root, "project-b") }
+-  const names = { a: [] as string[], b: [] as string[] }
+-  let bytes = 0
+-  let files = 0
+-  for (const side of ["a", "b"] as const) {
+-    await fs.mkdir(projects[side], { recursive: true })
+-    for (let i = 0; i < count; i++) {
+-      const name = `owned-${side}-${String(i).padStart(2, "0")}`
+-      names[side].push(name)
+-      const directory = path.join(projects[side], ".opencorvus", "skills", name)
+-      await fs.mkdir(directory, { recursive: true })
+-      const text = `---\nname: ${name}\ndescription: Owned ${side} fixture ${i}.\n---\n\nOwned timing fixture.\n`
+-      await fs.writeFile(path.join(directory, "SKILL.md"), text, { flag: "wx" })
+-      bytes += Buffer.byteLength(text)
+-      files++
+-      for (const part of ["scripts", "agents", "references", "templates"]) {
+-        await fs.mkdir(path.join(directory, part))
+-        await fs.writeFile(path.join(directory, part, "owned.txt"), "Owned harmless text.\n", { flag: "wx" })
+-        bytes += Buffer.byteLength("Owned harmless text.\n")
+-        files++
+-      }
+-    }
+-  }
+-  await fs.mkdir(path.join(root, "launch"))
+-  return { root, projects, names, count, files, bytes }
+-}
+-
+-async function occurrence(input: Awaited<ReturnType<typeof fixture>>, mode: "serial" | "restart-parallel") {
+-  await portFree()
+-  const occurrenceID = crypto.randomUUID()
+-  const prefix = `n${input.count}-${mode}`
+-  const receiptPath = path.join(output, `${prefix}.startup.json`)
+-  const serverLog = path.join(output, `${prefix}.server.log`)
+-  const writer = createWriteStream(serverLog, { flags: "wx" })
+-  const writerFinished = finished(writer)
+-  const rows: Row[] = []
+-  const observations: Array<Record<string, unknown>> = []
+-  const fact: Record<string, unknown> = {
+-    count: input.count,
+-    mode,
+-    occurrenceID,
+-    files: input.files,
+-    bytes: input.bytes,
+-    root: input.root,
+-    projects: input.projects,
+-    observations,
+-    preflight: "loopback port bind/close succeeded",
+-  }
+-  cases.push(fact)
+-  console.log(
+-    JSON.stringify({
+-      phase: "owned-preflight",
+-      count: input.count,
+-      mode,
+-      root: input.root,
+-      port,
+-      occurrenceID,
+-      helper,
+-    }),
+-  )
+-  let child: ProcessHandle | undefined
+-  let terminal: ProcessTerminalReceipt | undefined
+-  let owner: ReturnType<typeof observedProcessOccurrence>
+-  let helperOwner: ReturnType<typeof observedProcessOccurrence>
+-  let drained: Promise<void[]> | undefined
+-  let settlement: Promise<void> | undefined
+-  let ready = false
+-  let baseURL = ""
+-  const drain = async (source: ProcessByteSource | null) => {
+-    if (!source) return
+-    let pending = ""
+-    const decoder = new TextDecoder()
+-    for await (const chunk of source) {
+-      writer.write(chunk)
+-      pending += decoder.decode(chunk, { stream: true })
+-      const lines = pending.split(/\r?\n/)
+-      pending = lines.pop() ?? ""
+-      for (const line of lines) {
+-        if (!line.startsWith("{")) continue
+-        try {
+-          rows.push(JSON.parse(line))
+-        } catch {
+-          /* CLI also emits non-JSON diagnostics. */
+-        }
+-      }
+-    }
+-  }
+-  const projection = (matrix: SkillMount.Matrix, side: "a" | "b") => {
+-    assert.equal(matrix.scope, "project")
+-    assert(Array.isArray(matrix.skills) && Array.isArray(matrix.agents) && Array.isArray(matrix.matrix))
+-    const fixtureNames = new Set([...input.names.a, ...input.names.b])
+-    const actual = matrix.skills
+-      .filter((skill) => fixtureNames.has(skill.name))
+-      .map((skill) => ({ name: skill.name, ref: skill.ref, risk: skill.risk }))
+-      .sort((a, b) => a.name.localeCompare(b.name))
+-    assert.deepEqual(
+-      actual,
+-      input.names[side].map((name) => ({
+-        name,
+-        ref: `default/skill/${name}`,
+-        risk: { level: "high", has_scripts: true, has_agents: true, has_references: true, has_templates: true },
+-      })),
+-    )
+-    return {
+-      scope: matrix.scope,
+-      activeProfile: matrix.active_profile,
+-      fixtureSkills: actual,
+-      totalSkills: matrix.skills.length,
+-      agents: matrix.agents.map((agent) => agent.agent_id),
+-      grants: matrix.matrix.map((row) => ({ agent: row.agent_id, grants: row.grants.length })),
+-    }
+-  }
+-  const read = async (label: string, side: "a" | "b", signal?: AbortSignal) => {
+-    const started = performance.now()
+-    const url = new URL("/skill/mounts", baseURL)
+-    url.searchParams.set("directory", input.projects[side])
+-    try {
+-      const response = await fetch(url, { signal: transportRequestSignal({ signal }) })
+-      const requestID = response.headers.get("x-opencorvus-request-id")
+-      const body = (await response.json()) as SkillMount.Matrix
+-      observations.push({
+-        label,
+-        side,
+-        status: response.status,
+-        requestID,
+-        elapsedMilliseconds: performance.now() - started,
+-      })
+-      assert.equal(response.status, 200, `${label} HTTP status`)
+-      assert(requestID, "Actual HTTP request identity")
+-      const value = projection(body, side)
+-      Object.assign(observations.at(-1)!, { projection: value })
+-      return { outcome: "completed" as const, value, requestID }
+-    } catch (error) {
+-      if (signal?.aborted && error instanceof DOMException && error.name === "AbortError") {
+-        observations.push({
+-          label,
+-          side,
+-          outcome: "caller-aborted",
+-          errorType: "AbortError",
+-          elapsedMilliseconds: performance.now() - started,
+-        })
+-        return { outcome: "caller-aborted" as const }
+-      }
+-      throw error
+-    }
+-  }
+-  try {
+-    const args = [
+-      path.join(packageRoot, "src/index.ts"),
+-      "serve",
+-      "--hostname",
+-      "127.0.0.1",
+-      "--port",
+-      String(port),
+-      "--startup-receipt",
+-      receiptPath,
+-      "--startup-occurrence",
+-      occurrenceID,
+-      "--parent-pid",
+-      String(parent.pid),
+-      "--parent-process-instance-id",
+-      parent.processInstanceID,
+-      "--print-logs",
+-      "--log-level",
+-      "DEBUG",
+-    ]
+-    fact.command = { executable: process.execPath, args, cwd: path.join(input.root, "launch") }
+-    await fs.writeFile(path.join(output, `${prefix}.launch.json`), JSON.stringify(fact, null, 2), { flag: "wx" })
+-    child = await NodeProcess.spawn({
+-      command: { executable: process.execPath, args },
+-      cwd: path.join(input.root, "launch"),
+-      ownership: "owned_tree",
+-      occurrenceID,
+-      windowsHide: true,
+-      stdin: "ignore",
+-      stdout: "pipe",
+-      stderr: "pipe",
+-      env: {
+-        ...childEnvironment,
+-        OPENCORVUS_HOME: input.root,
+-        OPENCORVUS_DISABLE_EXTERNAL_SKILLS: "1",
+-        OPENCORVUS_DISABLE_AUTOUPDATE: "1",
+-      },
+-    })
+-    drained = Promise.all([drain(child.stdout), drain(child.stderr)])
+-    settlement = child.settled.then((receipt) => {
+-      terminal = receipt
+-    })
+-    owner = observedProcessOccurrence(child.pid)
+-    assert(owner, "Physical source child fingerprint")
+-    fact.owner = owner
+-    fact.actualChild = await processFact(child.pid)
+-    const actualChild = fact.actualChild as Awaited<ReturnType<typeof processFact>>
+-    helperOwner = observedProcessOccurrence(actualChild.ParentProcessId)
+-    assert(helperOwner, "Physical helper fingerprint")
+-    fact.helperOwner = helperOwner
+-    const actualHelper = await processFact(helperOwner.pid)
+-    fact.actualHelper = actualHelper
+-    assert.equal(
+-      (await fs.realpath(actualHelper.ExecutablePath)).toLowerCase(),
+-      (await fs.realpath(helper!)).toLowerCase(),
+-    )
+-    const deadline = Date.now() + 35_000
+-    while (Date.now() < deadline) {
+-      if (terminal) throw new Error("Owned server exited before startup receipt")
+-      try {
+-        const receipt = JSON.parse(await fs.readFile(receiptPath, "utf8"))
+-        assert.equal(receipt.occurrenceID, occurrenceID)
+-        assert.equal(receipt.pid, child.pid)
+-        assert.equal(receipt.outcome, "listening")
+-        baseURL = receipt.url
+-        assert.equal(new URL(baseURL).origin, `http://127.0.0.1:${port}`)
+-        fact.startup = receipt
+-        ready = true
+-        break
+-      } catch (error) {
+-        if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
+-      }
+-      await delay(100)
+-    }
+-    assert(ready, "Owned server startup receipt deadline")
+-    assert.equal(observeRuntimeProcessOccurrence(owner), "exact_live")
+-    const health = await fetch(`${baseURL}/global/health`, { signal: transportRequestSignal({}) })
+-    assert.equal(health.status, 200)
+-    const healthBody = (await health.json()) as { healthy: boolean; paths: { data: string; home: string } }
+-    assert.equal(healthBody.healthy, true)
+-    assert.equal(path.resolve(healthBody.paths.data), path.resolve(input.root, "data"))
+-    assert.equal(path.resolve(healthBody.paths.home), path.join(runtime.processRoot, "home"))
+-    fact.health = { status: health.status, requestID: health.headers.get("x-opencorvus-request-id"), ...healthBody }
+-    fact.metadataFiles = Object.fromEntries(
+-      await Promise.all(
+-        ["auth.json", "models.json"].map(async (name) => {
+-          const stat = await fs.stat(path.join(input.root, "data", name)).catch((error: NodeJS.ErrnoException) => {
+-            if (error.code === "ENOENT") return undefined
+-            throw error
+-          })
+-          return [name, stat ? { present: true, size: stat.size } : { present: false }] as const
+-        }),
+-      ),
+-    )
+-    if (mode === "serial") {
+-      const first = await read("first-a", "a")
+-      const warm = await read("warm-a", "a")
+-      assert.equal(first.outcome, "completed")
+-      assert.equal(warm.outcome, "completed")
+-      assert.deepEqual(warm.value, first.value)
+-      await read("first-b", "b")
+-      await Promise.all([read("parallel-a1", "a"), read("parallel-a2", "a"), read("parallel-b", "b")])
+-    } else if (input.count === 32) {
+-      const controller = new AbortController()
+-      const offset = rows.length
+-      let completed = false
+-      const first = read("cancel-observation-a", "a", controller.signal).finally(() => {
+-        completed = true
+-      })
+-      const deadline = Date.now() + 15_000
+-      while (
+-        !completed &&
+-        Date.now() < deadline &&
+-        !rows
+-          .slice(offset)
+-          .some(
+-            (row) =>
+-              row.service === "skill-read-diagnostics" && row.phase === "state.initialize" && row.status === "started",
+-          )
+-      )
+-        await delay(10)
+-      const candidates = rows
+-        .slice(offset)
+-        .filter((row) => row.service === "server" && row.path === "/skill/mounts" && row.status === "started")
+-      fact.cancelRequestID = candidates.length === 1 ? candidates[0].requestID : null
+-      if (!completed) controller.abort(new DOMException("Owned caller cancellation", "AbortError"))
+-      fact.cancelOutcome = await first
+-      await Promise.all([read("post-cancel-a", "a"), read("parallel-b", "b")])
+-      await read("settled-a", "a")
+-    } else {
+-      await Promise.all([read("first-parallel-a1", "a"), read("first-parallel-a2", "a"), read("first-parallel-b", "b")])
+-    }
+-    fact.status = "http-completed"
+-  } catch (error) {
+-    fact.status = "failed"
+-    fact.failure = {
+-      type: error instanceof Error ? error.name : typeof error,
+-      message: error instanceof Error ? error.message : String(error),
+-    }
+-    throw error
+-  } finally {
+-    try {
+-      if (child) {
+-        if (ready && !terminal) {
+-          const response = await fetch(`${baseURL}/shutdown`, { method: "POST", signal: transportRequestSignal({}) })
+-          fact.shutdown = { status: response.status, body: await response.json() }
+-          await Promise.race([settlement, delay(20_000, undefined, { ref: false })])
+-        }
+-      }
+-    } finally {
+-      try {
+-        if (child) {
+-          fact.disposal = await child.dispose()
+-          terminal = await child.settled
+-          await drained
+-        }
+-      } finally {
+-        writer.end()
+-        await writerFinished
+-      }
+-      fact.terminal = terminal
+-      fact.physicalOwner = owner ? observeRuntimeProcessOccurrence(owner) : "unavailable"
+-      fact.physicalHelper = helperOwner ? observeRuntimeProcessOccurrence(helperOwner) : "unavailable"
+-      await portFree()
+-      fact.finalPort = "free"
+-      const selected = rows
+-        .filter(
+-          (row) =>
+-            row.service === "skill-read-diagnostics" ||
+-            (row.service === "server" &&
+-              row.message === "request" &&
+-              ["/skill/mounts", "/global/health", "/shutdown"].includes(row.path)),
+-        )
+-        .map((row) =>
+-          row.service === "skill-read-diagnostics"
+-            ? row
+-            : {
+-                service: row.service,
+-                requestID: row.requestID,
+-                method: row.method,
+-                path: row.path,
+-                status: row.status,
+-                statusCode: row.statusCode,
+-                duration: row.duration,
+-                time: row.time,
+-              },
+-        )
+-      await fs.writeFile(path.join(output, `${prefix}.phases.json`), JSON.stringify(selected, null, 2), { flag: "wx" })
+-      fact.diagnosticRows = selected.length
+-      const diagnostics = selected.filter((row) => row.service === "skill-read-diagnostics")
+-      const initializations = diagnostics.filter(
+-        (row) => row.phase === "state.initialize" && row.status === "completed",
+-      )
+-      fact.timing = {
+-        diagnosticRows: diagnostics.length,
+-        initializations: initializations.length,
+-        dispositions: diagnostics
+-          .filter((row) => row.phase === "state.read" && row.status === "completed")
+-          .map((row) => row.disposition),
+-        startupInitializations: initializations.filter((row) => row.http?.requestID === null).length,
+-      }
+-      assert(
+-        initializations.length > 0,
+-        "Actual initializers must be observed; HTTP success alone is not timing qualification",
+-      )
+-      for (const observation of observations.filter((entry) => entry.status === 200)) {
+-        const requestEvents = diagnostics.filter(
+-          (row) => row.phase === "request" && row.http?.requestID === observation.requestID,
+-        )
+-        assert.deepEqual(
+-          requestEvents.map((row) => row.status),
+-          ["started", "completed"],
+-          "Actual HTTP request identity must correlate with balanced diagnostics",
+-        )
+-      }
+-      const started = diagnostics
+-        .filter((row) => row.status === "started")
+-        .map((row) => row.spanID)
+-        .sort()
+-      const completed = diagnostics
+-        .filter((row) => row.status === "completed")
+-        .map((row) => row.spanID)
+-        .sort()
+-      assert.deepEqual(completed, started, "Real diagnostic phases settle exactly their started spans")
+-      await fs.writeFile(path.join(output, `${prefix}.result.json`), JSON.stringify(fact, null, 2), { flag: "wx" })
+-      assert.equal(terminal?.exitCode, 0)
+-      assert.equal(terminal?.reason, "exited")
+-      assert.equal(fact.physicalOwner, "dead_or_reused")
+-      assert.equal(fact.physicalHelper, "dead_or_reused")
+-      console.log(
+-        JSON.stringify({
+-          phase: "owned-settled",
+-          count: input.count,
+-          mode,
+-          exitCode: terminal?.exitCode,
+-          owner: fact.physicalOwner,
+-          helper: fact.physicalHelper,
+-          port: fact.finalPort,
+-        }),
+-      )
+-    }
+-  }
+-}
+-
+-try {
+-  for (const count of [0, 1, 32]) {
+-    const input = await fixture(count)
+-    await occurrence(input, "serial")
+-    await occurrence(input, "restart-parallel")
+-  }
+-  result.status = "passed"
+-} catch (error) {
+-  result.status = "failed"
+-  result.error = {
+-    type: error instanceof Error ? error.name : typeof error,
+-    message: error instanceof Error ? error.message : String(error),
+-  }
+-  process.exitCode = 1
+-} finally {
+-  result.completedAt = new Date().toISOString()
+-  await fs.writeFile(path.join(output, "result.json"), JSON.stringify(result, null, 2), { flag: "wx" })
+-  await removeIsolatedTestRuntime(runtime)
+-}
+-console.log(JSON.stringify({ status: result.status, output, cases: cases.length }))
++/** Real isolated source HTTP timing; no Provider, UI, synthetic delay or alternative Skill owner. */
++import assert from "node:assert/strict"
++import fs from "node:fs/promises"
++import { createWriteStream } from "node:fs"
++import { finished } from "node:stream/promises"
++import path from "node:path"
++import net from "node:net"
++import { setTimeout as delay } from "node:timers/promises"
++import type { ProcessHandle, ProcessTerminalReceipt, ProcessByteSource } from "@opencorvus-ai/util/process"
++import type { SkillMount } from "../src/skill/mounts"
++
++export type BenchmarkInput = { profile: "fixture" | "ordinary"; output: string; runRoot?: string; port: number }
++export function ordinaryConfigurationInput(): string {
++  return "{}"
++}
++export function benchmarkInput(args: readonly string[]): BenchmarkInput {
++  const allowed = new Set(["--profile", "--output", "--run-root", "--port"])
++  for (let index = 0; index < args.length; index += 2) {
++    assert(allowed.has(args[index]), `Unknown benchmark argument ${args[index]}`)
++    assert(args[index + 1] && !args[index + 1].startsWith("--"), `Missing value for ${args[index]}`)
++    assert.equal(args.indexOf(args[index]), index, `Duplicate benchmark argument ${args[index]}`)
++  }
++  const value = (name: string) => {
++    const index = args.indexOf(name)
++    return index < 0 ? undefined : args[index + 1]
++  }
++  const profile = value("--profile")
++  assert(profile === "fixture" || profile === "ordinary", "--profile fixture|ordinary is required")
++  const output = value("--output")
++  assert(output, "--output <fresh-evidence-directory> is required")
++  const runRoot = value("--run-root")
++  if (profile === "ordinary") assert(runRoot, "ordinary requires --run-root <fresh-owned-root>")
++  const port = Number(value("--port") ?? "17947")
++  assert(Number.isInteger(port) && port > 0 && port <= 65535, "Valid loopback port is required")
++  return { profile, output: path.resolve(output), ...(runRoot ? { runRoot: path.resolve(runRoot) } : {}), port }
++}
++export function observedRequestID(rows: readonly Record<string, any>[], responseID?: string | null): string {
++  const starts = rows.filter((row) => row.service === "server" && row.path === "/skill/mounts" && row.status === "started")
++  if (responseID) {
++    assert(starts.some((row) => row.requestID === responseID), "Response request identity must have an observed start")
++    return responseID
++  }
++  assert.equal(starts.length, 1, "Uncorrelated concurrent request starts cannot identify a timeout")
++  assert.equal(typeof starts[0].requestID, "string")
++  return starts[0].requestID
++}
++export function clientFailure(error: unknown): "client-timeout" | "caller-aborted" {
++  assert(error instanceof Error, "Typed client error required")
++  if (error.name === "TimeoutError") return "client-timeout"
++  if (error.name === "AbortError") return "caller-aborted"
++  throw error
++}
++export function backendReceipt(rows: readonly Record<string, any>[], requestID: string) {
++  const completed = rows.filter((row) => row.service === "server" && row.requestID === requestID && row.status === "completed")
++  assert(completed.length <= 1, "Exact request must have one backend completion")
++  const row = completed[0]
++  return row ? { outcome: "settled" as const, status: row.statusCode as number, duration: row.duration as number } : undefined
++}
++export class OrdinaryProjectBoundaryError extends Error {
++  readonly expected: string
++  readonly actual: unknown
++  constructor(expected: string, actual: unknown) {
++    super("Actual public Project worktree differs from the fresh owned Project boundary")
++    this.name = "OrdinaryProjectBoundaryError"
++    this.expected = expected
++    this.actual = actual
++  }
++}
++export function ordinaryProjectBoundary(project: unknown, directory: string): string {
++  const worktree = project && typeof project === "object" && "worktree" in project ? project.worktree : undefined
++  if (typeof worktree !== "string" || path.resolve(worktree) !== path.resolve(directory)) {
++    throw new OrdinaryProjectBoundaryError(path.resolve(directory), worktree)
++  }
++  return path.resolve(worktree)
++}
++export function safeMatrixCounts(matrix: Pick<SkillMount.Matrix, "scope" | "active_profile" | "skills" | "agents" | "matrix" | "unmounted_count">) {
++  const sources: Record<string, number> = {}
++  const risks: Record<string, number> = {}
++  for (const skill of matrix.skills) {
++    sources[skill.source_type] = (sources[skill.source_type] ?? 0) + 1
++    risks[skill.risk.level] = (risks[skill.risk.level] ?? 0) + 1
++  }
++  return { scope: matrix.scope, activeProfile: matrix.active_profile, totalSkills: matrix.skills.length,
++    sources, risks, agents: matrix.agents.map((agent) => ({ id: agent.agent_id, role: agent.base_role })),
++    grants: matrix.matrix.map((row) => ({ agent: row.agent_id, grants: row.grants.length })), unmounted: matrix.unmounted_count }
++}
++
++async function main() {
++const { NodeProcess } = await import("@opencorvus-ai/util/process-node")
++const { bootstrapIsolatedTestRuntime, isolatedTestChildEnvironment, removeIsolatedTestRuntime } = await import("@opencorvus-ai/util/test-runtime-environment")
++const { expectedTestProcessSupervisor } = await import("./test-process-supervisor")
++const { transportRequestSignal } = await import("../../overlay/src/services/host-transport")
++const inputPolicy = benchmarkInput(process.argv.slice(2))
++const output = inputPolicy.output
++const helper = expectedTestProcessSupervisor()
++assert(helper && (await fs.stat(helper)).isFile(), "Existing native test supervisor is required; no implicit build")
++const hostKeys = new Set(["path", "systemroot", "windir", "comspec", "pathext", "lang", "lc_all"])
++for (const key of Object.keys(process.env)) if (!hostKeys.has(key.toLowerCase())) delete process.env[key]
++const runtime = inputPolicy.profile === "fixture" ? await bootstrapIsolatedTestRuntime("test") : undefined
++if (!runtime) {
++  assert(inputPolicy.runRoot)
++  await fs.mkdir(inputPolicy.runRoot)
++  for (const name of ["runtime", "home", "appdata", "localappdata", "temp", "xdg-config", "xdg-data", "xdg-cache", "xdg-state"])
++    await fs.mkdir(path.join(inputPolicy.runRoot, name))
++  for (const name of ["opencorvus.json", "opencorvus.jsonc"])
++    assert.equal(await fs.stat(path.join("C:/ProgramData/opencorvus", name)).then(() => true, (error: NodeJS.ErrnoException) => {
++      if (error.code === "ENOENT") return false
++      throw error
++    }), false, "Unexpected managed configuration requires review")
++}
++process.env.OPENCORVUS_PROCESS_SUPERVISOR = helper
++const childEnvironment = runtime ? isolatedTestChildEnvironment(runtime) : {
++  ...process.env,
++  HOME: path.join(inputPolicy.runRoot!, "home"), USERPROFILE: path.join(inputPolicy.runRoot!, "home"),
++  HOMEDRIVE: path.parse(inputPolicy.runRoot!).root.replace(/[\\/]+$/, ""),
++  HOMEPATH: path.join(inputPolicy.runRoot!, "home").slice(2),
++  APPDATA: path.join(inputPolicy.runRoot!, "appdata"), LOCALAPPDATA: path.join(inputPolicy.runRoot!, "localappdata"),
++  TEMP: path.join(inputPolicy.runRoot!, "temp"), TMP: path.join(inputPolicy.runRoot!, "temp"), TMPDIR: path.join(inputPolicy.runRoot!, "temp"),
++  XDG_CONFIG_HOME: path.join(inputPolicy.runRoot!, "xdg-config"), XDG_DATA_HOME: path.join(inputPolicy.runRoot!, "xdg-data"),
++  XDG_CACHE_HOME: path.join(inputPolicy.runRoot!, "xdg-cache"), XDG_STATE_HOME: path.join(inputPolicy.runRoot!, "xdg-state"),
++  OPENCORVUS_CONFIG_CONTENT: ordinaryConfigurationInput(),
++}
++Object.assign(process.env, childEnvironment, {
++  OPENCORVUS_HOME: runtime ? runtime.runtimeRoot : path.join(inputPolicy.runRoot!, "runtime"),
++  OPENCORVUS_DISABLE_EXTERNAL_SKILLS: "1",
++  OPENCORVUS_DISABLE_AUTOUPDATE: "1",
++})
++if (!runtime) {
++  const proxyAdmission = await NodeProcess.run({
++    command: { executable: "powershell.exe", args: ["-NoProfile", "-NonInteractive", "-Command",
++      "$p=Get-ItemProperty -LiteralPath 'HKCU:/Software/Microsoft/Windows/CurrentVersion/Internet Settings' -ErrorAction SilentlyContinue; if(($p.ProxyServer -match '@') -or $p.AutoConfigURL){exit 2}; exit 0"] },
++    ownership: "owned_tree", timeoutMs: 15_000,
++  })
++  assert.equal(proxyAdmission.receipt.exitCode, 0, "Proxy credential/PAC input requires separate review; values suppressed")
++}
++const { SkillMount } = await import("../src/skill/mounts")
++await fs.mkdir(path.dirname(output), { recursive: true })
++await fs.mkdir(output)
++const { currentRuntimeProcessOccurrence, observedProcessOccurrence, observeRuntimeProcessOccurrence } = await import(
++  "../src/runtime/process-occurrence"
++)
++const parent = currentRuntimeProcessOccurrence()
++const port = inputPolicy.port
++const packageRoot = path.resolve(import.meta.dir, "..")
++const result: Record<string, unknown> = {
++  status: "running",
++  startedAt: new Date().toISOString(),
++  output,
++  parent,
++  port,
++  runtime,
++  inputPolicy,
++  cases: [],
++  qualification:
++    inputPolicy.profile === "ordinary"
++      ? "Actual ordinary fresh UNCONNECTED source HTTP; empty configuration, default builtins/catalog policy, compatibility disabled; no authorized Sol/preflight/UI qualification"
++      : "Actual isolated fixture source HTTP; no ordinary source-set qualification",
++}
++const cases = result.cases as Array<Record<string, unknown>>
++type Row = Record<string, any>
++
++async function portFree() {
++  const probe = net.createServer()
++  await new Promise<void>((resolve, reject) => {
++    probe.once("error", reject)
++    probe.listen(port, "127.0.0.1", () => probe.close((error) => (error ? reject(error) : resolve())))
++  })
++}
++
++async function processFact(pid: number) {
++  const script = `Get-CimInstance Win32_Process -Filter 'ProcessId=${pid}'|Select-Object ProcessId,ParentProcessId,ExecutablePath,CreationDate|ConvertTo-Json -Compress`
++  const query = await NodeProcess.run({
++    command: {
++      executable: "powershell.exe",
++      args: ["-NoProfile", "-NonInteractive", "-EncodedCommand", Buffer.from(script, "utf16le").toString("base64")],
++    },
++    ownership: "owned_tree",
++    timeoutMs: 15_000,
++  })
++  assert.equal(query.receipt.exitCode, 0)
++  return JSON.parse(new TextDecoder().decode(query.stdout)) as {
++    ProcessId: number
++    ParentProcessId: number
++    ExecutablePath: string
++    CreationDate: string
++  }
++}
++
++async function fixture(count: number) {
++  const root = runtime ? path.join(runtime.runtimeRoot, "skill-mount-latency", `n${String(count).padStart(2, "0")}`) : inputPolicy.runRoot!
++  const projects = { a: path.join(root, "project-a"), b: path.join(root, "project-b") }
++  const names = { a: [] as string[], b: [] as string[] }
++  let bytes = 0
++  let files = 0
++  for (const side of ["a", "b"] as const) {
++    await fs.mkdir(projects[side], { recursive: true })
++    for (let i = 0; i < count; i++) {
++      const name = `owned-${side}-${String(i).padStart(2, "0")}`
++      names[side].push(name)
++      const directory = path.join(projects[side], ".opencorvus", "skills", name)
++      await fs.mkdir(directory, { recursive: true })
++      const text = `---\nname: ${name}\ndescription: Owned ${side} fixture ${i}.\n---\n\nOwned timing fixture.\n`
++      await fs.writeFile(path.join(directory, "SKILL.md"), text, { flag: "wx" })
++      bytes += Buffer.byteLength(text)
++      files++
++      for (const part of ["scripts", "agents", "references", "templates"]) {
++        await fs.mkdir(path.join(directory, part))
++        await fs.writeFile(path.join(directory, part, "owned.txt"), "Owned harmless text.\n", { flag: "wx" })
++        bytes += Buffer.byteLength("Owned harmless text.\n")
++        files++
++      }
++    }
++  }
++  await fs.mkdir(path.join(root, "launch"))
++  return { root, projects, names, count, files, bytes }
++}
++
++async function occurrence(input: Awaited<ReturnType<typeof fixture>>, mode: "serial" | "restart-parallel") {
++  await portFree()
++  const occurrenceID = crypto.randomUUID()
++  const prefix = `${inputPolicy.profile}-n${input.count}-${mode}`
++  const receiptPath = path.join(output, `${prefix}.startup.json`)
++  const serverLog = path.join(output, `${prefix}.server.log`)
++  const writer = createWriteStream(serverLog, { flags: "wx" })
++  const writerFinished = finished(writer)
++  const rows: Row[] = []
++  const observations: Array<Record<string, unknown>> = []
++  const fact: Record<string, unknown> = {
++    count: input.count,
++    mode,
++    occurrenceID,
++    files: input.files,
++    bytes: input.bytes,
++    root: input.root,
++    projects: input.projects,
++    observations,
++    preflight: "loopback port bind/close succeeded",
++  }
++  cases.push(fact)
++  console.log(
++    JSON.stringify({
++      phase: "owned-preflight",
++      count: input.count,
++      mode,
++      root: input.root,
++      port,
++      occurrenceID,
++      helper,
++    }),
++  )
++  let child: ProcessHandle | undefined
++  let terminal: ProcessTerminalReceipt | undefined
++  let owner: ReturnType<typeof observedProcessOccurrence>
++  let helperOwner: ReturnType<typeof observedProcessOccurrence>
++  let drained: Promise<void[]> | undefined
++  let settlement: Promise<void> | undefined
++  let ready = false
++  let baseURL = ""
++  const drain = async (source: ProcessByteSource | null) => {
++    if (!source) return
++    let pending = ""
++    const decoder = new TextDecoder()
++    for await (const chunk of source) {
++      writer.write(chunk)
++      pending += decoder.decode(chunk, { stream: true })
++      const lines = pending.split(/\r?\n/)
++      pending = lines.pop() ?? ""
++      for (const line of lines) {
++        if (!line.startsWith("{")) continue
++        try {
++          rows.push(JSON.parse(line))
++        } catch {
++          /* CLI also emits non-JSON diagnostics. */
++        }
++      }
++    }
++  }
++  const projection = (matrix: SkillMount.Matrix, side: "a" | "b") => {
++    assert.equal(matrix.scope, "project")
++    if (inputPolicy.profile === "ordinary") return safeMatrixCounts(matrix)
++    assert(Array.isArray(matrix.skills) && Array.isArray(matrix.agents) && Array.isArray(matrix.matrix))
++    const fixtureNames = new Set([...input.names.a, ...input.names.b])
++    const actual = matrix.skills
++      .filter((skill) => fixtureNames.has(skill.name))
++      .map((skill) => ({ name: skill.name, ref: skill.ref, risk: skill.risk }))
++      .sort((a, b) => a.name.localeCompare(b.name))
++    assert.deepEqual(
++      actual,
++      input.names[side].map((name) => ({
++        name,
++        ref: `default/skill/${name}`,
++        risk: { level: "high", has_scripts: true, has_agents: true, has_references: true, has_templates: true },
++      })),
++    )
++    return {
++      scope: matrix.scope,
++      activeProfile: matrix.active_profile,
++      fixtureSkills: actual,
++      totalSkills: matrix.skills.length,
++      agents: matrix.agents.map((agent) => agent.agent_id),
++      grants: matrix.matrix.map((row) => ({ agent: row.agent_id, grants: row.grants.length })),
++    }
++  }
++  const convergeBackend = async (requestID: string) => {
++    const convergenceDeadline = Date.now() + 60_000
++    while (Date.now() < convergenceDeadline && !backendReceipt(rows, requestID)) await delay(25)
++    return backendReceipt(rows, requestID)
++  }
++  const read = async (label: string, side: "a" | "b", signal?: AbortSignal, refresh = false) => {
++    const offset = rows.length
++    const started = performance.now()
++    const url = new URL("/skill/mounts", baseURL)
++    url.searchParams.set("directory", input.projects[side])
++    if (refresh) url.searchParams.set("refresh", "true")
++    let responseRequestID: string | null = null
++    try {
++      const response = await fetch(url, { signal: transportRequestSignal({ signal }) })
++      const requestID = response.headers.get("x-opencorvus-request-id")
++      responseRequestID = requestID
++      const body = SkillMount.Matrix.parse(await response.json())
++      if (inputPolicy.profile === "ordinary") {
++        assert(body.skills.every((skill) => skill.builtin ||
++          (skill.location.startsWith(input.root + path.sep) || skill.location.startsWith(input.root.replaceAll("\\", "/") + "/"))),
++          "Unexpected outside-owned Skill source requires review")
++      }
++      observations.push({
++        label,
++        side,
++        status: response.status,
++        requestID,
++        elapsedMilliseconds: performance.now() - started,
++      })
++      assert.equal(response.status, 200, `${label} HTTP status`)
++      assert(requestID, "Actual HTTP request identity")
++      const value = projection(body, side)
++      Object.assign(observations.at(-1)!, { projection: value })
++      return { outcome: "completed" as const, value, completeProjection: body, requestID }
++    } catch (error) {
++      const outcome = clientFailure(error)
++      if (outcome === "caller-aborted") assert(signal?.aborted, "Caller abort must have an actual cancelled signal")
++      const observation: Record<string, unknown> = { label, side, outcome, errorType: (error as Error).name,
++        elapsedMilliseconds: performance.now() - started, clientAccepted: false }
++      observations.push(observation)
++      let requestID: string
++      try {
++        requestID = observedRequestID(rows.slice(offset), responseRequestID)
++      } catch (correlationError) {
++        observation.backend = { outcome: "unknown-request-identity", reason: (correlationError as Error).message }
++        const candidateIDs = [...new Set(rows.slice(offset)
++          .filter((row) => row.service === "server" && row.path === "/skill/mounts" && row.status === "started")
++          .map((row) => String(row.requestID)))]
++        observation.unattributedBackendCandidates = await Promise.all(candidateIDs.map(async (id) => ({
++          requestID: id, receipt: await convergeBackend(id) ?? { outcome: "convergence-deadline" },
++        })))
++        fact.clientDeadlineFailed = true
++        process.exitCode = 1
++        return { outcome: "unknown-request-identity" as const }
++      }
++      observation.requestID = requestID
++      const settled = await convergeBackend(requestID)
++      observation.backend = settled ?? { outcome: "convergence-deadline" }
++      assert(settled, "Exact timed-out request backend convergence deadline")
++      if (outcome === "client-timeout") { fact.clientDeadlineFailed = true; process.exitCode = 1 }
++      return { outcome, requestID }
++
++    }
++  }
++  try {
++    const args = [
++      path.join(packageRoot, "src/index.ts"),
++      "serve",
++      "--hostname",
++      "127.0.0.1",
++      "--port",
++      String(port),
++      "--startup-receipt",
++      receiptPath,
++      "--startup-occurrence",
++      occurrenceID,
++      "--parent-pid",
++      String(parent.pid),
++      "--parent-process-instance-id",
++      parent.processInstanceID,
++      "--print-logs",
++      "--log-level",
++      "DEBUG",
++    ]
++    if (inputPolicy.profile === "ordinary") args.push("--project-dir", input.projects.a)
++    fact.command = { executable: process.execPath, args, cwd: path.join(input.root, "launch") }
++    await fs.writeFile(path.join(output, `${prefix}.launch.json`), JSON.stringify(fact, null, 2), { flag: "wx" })
++    child = await NodeProcess.spawn({
++      command: { executable: process.execPath, args },
++      cwd: path.join(input.root, "launch"),
++      ownership: "owned_tree",
++      occurrenceID,
++      windowsHide: true,
++      stdin: "ignore",
++      stdout: "pipe",
++      stderr: "pipe",
++      env: {
++        ...childEnvironment,
++        OPENCORVUS_HOME: runtime ? input.root : path.join(input.root, "runtime"),
++        OPENCORVUS_DISABLE_EXTERNAL_SKILLS: "1",
++        OPENCORVUS_DISABLE_AUTOUPDATE: "1",
++      },
++    })
++    drained = Promise.all([drain(child.stdout), drain(child.stderr)])
++    settlement = child.settled.then((receipt) => {
++      terminal = receipt
++    })
++    owner = observedProcessOccurrence(child.pid)
++    assert(owner, "Physical source child fingerprint")
++    fact.owner = owner
++    fact.actualChild = await processFact(child.pid)
++    const actualChild = fact.actualChild as Awaited<ReturnType<typeof processFact>>
++    helperOwner = observedProcessOccurrence(actualChild.ParentProcessId)
++    assert(helperOwner, "Physical helper fingerprint")
++    fact.helperOwner = helperOwner
++    const actualHelper = await processFact(helperOwner.pid)
++    fact.actualHelper = actualHelper
++    assert.equal(
++      (await fs.realpath(actualHelper.ExecutablePath)).toLowerCase(),
++      (await fs.realpath(helper!)).toLowerCase(),
++    )
++    const deadline = Date.now() + 35_000
++    while (Date.now() < deadline) {
++      if (terminal) throw new Error("Owned server exited before startup receipt")
++      try {
++        const receipt = JSON.parse(await fs.readFile(receiptPath, "utf8"))
++        assert.equal(receipt.occurrenceID, occurrenceID)
++        assert.equal(receipt.pid, child.pid)
++        assert.equal(receipt.outcome, "listening")
++        baseURL = receipt.url
++        assert.equal(new URL(baseURL).origin, `http://127.0.0.1:${port}`)
++        fact.startup = receipt
++        ready = true
++        break
++      } catch (error) {
++        if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
++      }
++      await delay(100)
++    }
++    assert(ready, "Owned server startup receipt deadline")
++    assert.equal(observeRuntimeProcessOccurrence(owner), "exact_live")
++    const health = await fetch(`${baseURL}/global/health`, { signal: transportRequestSignal({}) })
++    assert.equal(health.status, 200)
++    const healthBody = (await health.json()) as { healthy: boolean; paths: { data: string; home: string } }
++    assert.equal(healthBody.healthy, true)
++    assert.equal(path.resolve(healthBody.paths.data), path.resolve(runtime ? input.root : path.join(input.root, "runtime"), "data"))
++    assert.equal(path.resolve(healthBody.paths.home), runtime ? path.join(runtime.processRoot, "home") : path.join(input.root, "home"))
++    fact.health = { status: health.status, requestID: health.headers.get("x-opencorvus-request-id"), ...healthBody }
++    if (inputPolicy.profile === "ordinary") {
++      const boundaries: Record<string, unknown>[] = []
++      for (const side of ["a", "b"] as const) {
++        const boundaryURL = new URL("/project/current", baseURL)
++        boundaryURL.searchParams.set("directory", input.projects[side])
++        const boundaryResponse = await fetch(boundaryURL, { signal: transportRequestSignal({}) })
++        assert.equal(boundaryResponse.status, 200, "Actual public Project boundary HTTP status")
++        const worktree = ordinaryProjectBoundary(await boundaryResponse.json(), input.projects[side])
++        boundaries.push({ side, status: boundaryResponse.status,
++          requestID: boundaryResponse.headers.get("x-opencorvus-request-id"), directory: input.projects[side], worktree })
++      }
++      fact.projectBoundary = boundaries
++    }
++    fact.metadataFiles = Object.fromEntries(
++      await Promise.all(
++        ["auth.json", "models.json"].map(async (name) => {
++          const stat = await fs.stat(path.join(runtime ? input.root : path.join(input.root, "runtime"), "data", name)).catch((error: NodeJS.ErrnoException) => {
++            if (error.code === "ENOENT") return undefined
++            throw error
++          })
++          return [name, stat ? { present: true, size: stat.size } : { present: false }] as const
++        }),
++      ),
++    )
++    if (inputPolicy.profile === "ordinary") {
++      const metadata = fact.metadataFiles as Record<string, { present: boolean; size?: number }>
++      assert.deepEqual(metadata["auth.json"], { present: false },
++        "Fresh unconnected diagnostic runtime must contain no auth credential")
++      fact.modelCatalogProvenance = {
++        ...metadata["models.json"], expectedProducer: "canonical ModelsDev.provisionDefaultCatalog in fresh owned runtime",
++        observedProvision: rows.some((row) => row.service === "models.dev" && row.message === "provisioned bundled model catalog" &&
++          typeof row.source === "string" && path.resolve(row.source) === path.resolve(input.root, "runtime", "data", "models.json")),
++        observation: "Metadata only; no contents read, copied catalog, projected Sol or Provider generation qualification",
++      }
++    }
++    if (mode === "serial") {
++      const first = await read("first-a", "a")
++      const warm = await read("warm-a", "a")
++      if (first.outcome === "completed" && warm.outcome === "completed") assert.deepEqual(warm.completeProjection, first.completeProjection)
++      await read("first-b", "b")
++      await Promise.all([read("parallel-a1", "a"), read("parallel-a2", "a"), read("parallel-b", "b")])
++      if (inputPolicy.profile === "ordinary") await read("refresh-a", "a", undefined, true)
++    } else if (input.count === 32 || inputPolicy.profile === "ordinary") {
++      const controller = new AbortController()
++      const offset = rows.length
++      let completed = false
++      const first = read("cancel-observation-a", "a", controller.signal).finally(() => {
++        completed = true
++      })
++      const deadline = Date.now() + 15_000
++      while (
++        !completed &&
++        Date.now() < deadline &&
++        !rows
++          .slice(offset)
++          .some(
++            (row) =>
++              row.service === "skill-read-diagnostics" && row.phase === "state.initialize" && row.status === "started",
++          )
++      )
++        await delay(10)
++      const candidates = rows
++        .slice(offset)
++        .filter((row) => row.service === "server" && row.path === "/skill/mounts" && row.status === "started")
++      fact.cancelRequestID = candidates.length === 1 ? candidates[0].requestID : null
++      if (!completed) controller.abort(new DOMException("Owned caller cancellation", "AbortError"))
++      fact.cancelOutcome = await first
++      assert.equal(fact.cancelOutcome && (fact.cancelOutcome as { outcome: string }).outcome, "caller-aborted",
++        "Actual initializer cancellation must be exercised; naturally completed request is not cancellation coverage")
++      await Promise.all([read("post-cancel-a", "a"), read("parallel-b", "b")])
++      await read("settled-a", "a")
++    } else {
++      await Promise.all([read("first-parallel-a1", "a"), read("first-parallel-a2", "a"), read("first-parallel-b", "b")])
++    }
++    fact.status = fact.clientDeadlineFailed ? "client-deadline-failed" : "http-completed"
++  } catch (error) {
++    fact.status = "failed"
++    fact.failure = {
++      type: error instanceof Error ? error.name : typeof error,
++      message: error instanceof Error ? error.message : String(error),
++    }
++    throw error
++  } finally {
++    try {
++      if (child) {
++        if (ready && !terminal) {
++          const response = await fetch(`${baseURL}/shutdown`, { method: "POST", signal: transportRequestSignal({}) })
++          fact.shutdown = { status: response.status, body: await response.json() }
++          await Promise.race([settlement, delay(20_000, undefined, { ref: false })])
++        }
++      }
++    } finally {
++      try {
++        if (child) {
++          fact.disposal = await child.dispose()
++          terminal = await child.settled
++          await drained
++        }
++      } finally {
++        writer.end()
++        await writerFinished
++      }
++      fact.terminal = terminal
++      fact.physicalOwner = owner ? observeRuntimeProcessOccurrence(owner) : "unavailable"
++      fact.physicalHelper = helperOwner ? observeRuntimeProcessOccurrence(helperOwner) : "unavailable"
++      await portFree()
++      fact.finalPort = "free"
++      const selected = rows
++        .filter(
++          (row) =>
++            row.service === "skill-read-diagnostics" ||
++            (row.service === "server" &&
++              row.message === "request" &&
++              ["/skill/mounts", "/global/health", "/shutdown"].includes(row.path)),
++        )
++        .map((row) =>
++          row.service === "skill-read-diagnostics"
++            ? row
++            : {
++                service: row.service,
++                requestID: row.requestID,
++                method: row.method,
++                path: row.path,
++                status: row.status,
++                statusCode: row.statusCode,
++                duration: row.duration,
++                time: row.time,
++              },
++        )
++      await fs.writeFile(path.join(output, `${prefix}.phases.json`), JSON.stringify(selected, null, 2), { flag: "wx" })
++      fact.diagnosticRows = selected.length
++      const diagnostics = selected.filter((row) => row.service === "skill-read-diagnostics")
++      const initializations = diagnostics.filter(
++        (row) => row.phase === "state.initialize" && row.status === "completed",
++      )
++      fact.timing = {
++        diagnosticRows: diagnostics.length,
++        initializations: initializations.length,
++        dispositions: diagnostics
++          .filter((row) => row.phase === "state.read" && row.status === "completed")
++          .map((row) => row.disposition),
++        startupInitializations: initializations.filter((row) => row.http?.requestID === null).length,
++      }
++      assert(
++        initializations.length > 0,
++        "Actual initializers must be observed; HTTP success alone is not timing qualification",
++      )
++      for (const observation of observations.filter((entry) => entry.status === 200)) {
++        const requestEvents = diagnostics.filter(
++          (row) => row.phase === "request" && row.http?.requestID === observation.requestID,
++        )
++        assert.deepEqual(
++          requestEvents.map((row) => row.status),
++          ["started", "completed"],
++          "Actual HTTP request identity must correlate with balanced diagnostics",
++        )
++      }
++      const started = diagnostics
++        .filter((row) => row.status === "started")
++        .map((row) => row.spanID)
++        .sort()
++      const completed = diagnostics
++        .filter((row) => row.status === "completed")
++        .map((row) => row.spanID)
++        .sort()
++      assert.deepEqual(completed, started, "Real diagnostic phases settle exactly their started spans")
++      await fs.writeFile(path.join(output, `${prefix}.result.json`), JSON.stringify(fact, null, 2), { flag: "wx" })
++      assert.equal(terminal?.exitCode, 0)
++      assert.equal(terminal?.reason, "exited")
++      assert.equal(fact.physicalOwner, "dead_or_reused")
++      assert.equal(fact.physicalHelper, "dead_or_reused")
++      console.log(
++        JSON.stringify({
++          phase: "owned-settled",
++          count: input.count,
++          mode,
++          exitCode: terminal?.exitCode,
++          owner: fact.physicalOwner,
++          helper: fact.physicalHelper,
++          port: fact.finalPort,
++        }),
++      )
++    }
++  }
++}
++
++try {
++  for (const count of inputPolicy.profile === "fixture" ? [0, 1, 32] : [0]) {
++    const input = await fixture(count)
++    await occurrence(input, "serial")
++    await occurrence(input, "restart-parallel")
++  }
++  result.status = cases.some((item) => item.clientDeadlineFailed) ? "failed" : "passed"
++} catch (error) {
++  result.status = "failed"
++  result.error = {
++    type: error instanceof Error ? error.name : typeof error,
++    message: error instanceof Error ? error.message : String(error),
++  }
++  process.exitCode = 1
++} finally {
++  result.completedAt = new Date().toISOString()
++  if (!runtime) result.cleanup = "Owned ordinary root retained for Root physical review; no automatic directory deletion"
++  await fs.writeFile(path.join(output, "result.json"), JSON.stringify(result, null, 2), { flag: "wx" })
++  if (runtime) await removeIsolatedTestRuntime(runtime)
++}
++console.log(JSON.stringify({ status: result.status, output, cases: cases.length }))
++
++}
++if (import.meta.main) await main()
+===================================================================
+--- /dev/null
++++ packages/opencorvus/script/skill-mount-cold-start-contract.test.ts
+@@ -0,0 +1,62 @@
++import { test } from "node:test"
++import assert from "node:assert/strict"
++import path from "node:path"
++import { backendReceipt, benchmarkInput, clientFailure, observedRequestID, ordinaryConfigurationInput, ordinaryProjectBoundary, OrdinaryProjectBoundaryError, safeMatrixCounts } from "./skill-mount-cold-start-check.ts"
++
++test("ordinary and fixture are explicit distinct inputs", () => {
++  assert.deepEqual(benchmarkInput(["--profile", "ordinary", "--output", "evidence", "--run-root", "owned", "--port", "17955"]), {
++    profile: "ordinary", output: path.resolve("evidence"), runRoot: path.resolve("owned"), port: 17955,
++  })
++  assert.deepEqual(benchmarkInput(["--profile", "fixture", "--output", "evidence"]), {
++    profile: "fixture", output: path.resolve("evidence"), port: 17947,
++  })
++})
++test("ordinary unconnected input supplies the empty configuration object", () => {
++  assert.equal(ordinaryConfigurationInput(), "{}")
++  assert.deepEqual(JSON.parse(ordinaryConfigurationInput()), {})
++})
++test("invalid input reports the precise admission contract", () => {
++  assert.throws(() => benchmarkInput(["--profile", "ordinary", "--output", "evidence"]), /ordinary requires --run-root/)
++  assert.throws(() => benchmarkInput(["--profile", "fixture", "--output", "evidence", "--profile", "ordinary"]), /Duplicate benchmark argument/)
++})
++test("timeout, caller cancellation and original typed errors remain distinct", () => {
++  assert.equal(clientFailure(new DOMException("deadline", "TimeoutError")), "client-timeout")
++  assert.equal(clientFailure(new DOMException("cancel", "AbortError")), "caller-aborted")
++  const original = new TypeError("schema contract")
++  assert.throws(() => clientFailure(original), (actual) => actual === original)
++})
++test("exact response identity and sole serial admission correlate observations", () => {
++  const rows = ["first", "second"].map((requestID) => ({ service: "server", path: "/skill/mounts", status: "started", requestID }))
++  assert.equal(observedRequestID(rows, "first"), "first")
++  assert.equal(observedRequestID(rows.slice(1)), "second")
++  assert.throws(() => observedRequestID(rows), /Uncorrelated concurrent request starts/)
++})
++test("safe complete-source counts preserve all supplied categories and role grants", () => {
++  const skill = (source_type: string, level: string) => ({ source_type, risk: { level } })
++  const input = {
++    scope: "project", active_profile: "base", skills: [skill("builtin", "low"), skill("builtin", "low"), skill("config_path", "high")],
++    agents: [{ agent_id: "root", base_role: "orchestrator" }], matrix: [{ agent_id: "root", grants: [{}, {}] }], unmounted_count: 1,
++  } as unknown as Parameters<typeof safeMatrixCounts>[0]
++  assert.deepEqual(safeMatrixCounts(input), { scope: "project", activeProfile: "base", totalSkills: 3,
++    sources: { builtin: 2, config_path: 1 }, risks: { low: 2, high: 1 }, agents: [{ id: "root", role: "orchestrator" }],
++    grants: [{ agent: "root", grants: 2 }], unmounted: 1 })
++})
++test("late HTTP200 remains an exact backend receipt beside a client timeout", () => {
++  const client = clientFailure(new DOMException("15s expired", "TimeoutError"))
++  const rows = [{ service: "server", requestID: "owned-original", status: "completed", statusCode: 200, duration: 19456 }]
++  assert.deepEqual({ client, backend: backendReceipt(rows, "owned-original") }, {
++    client: "client-timeout", backend: { outcome: "settled", status: 200, duration: 19456 },
++  })
++})
++test("public fresh nonGit Project establishes its exact configuration boundary", () => {
++  const directory = path.resolve("owned/project-a")
++  assert.equal(ordinaryProjectBoundary({ id: "owned-project", worktree: directory }, directory), directory)
++  const actual = path.resolve("outside-worktree")
++  assert.throws(() => ordinaryProjectBoundary({ worktree: actual }, directory), (error) => {
++    assert(error instanceof OrdinaryProjectBoundaryError)
++    assert.equal(error.name, "OrdinaryProjectBoundaryError")
++    assert.equal(error.expected, directory)
++    assert.equal(error.actual, actual)
++    return true
++  })
++})

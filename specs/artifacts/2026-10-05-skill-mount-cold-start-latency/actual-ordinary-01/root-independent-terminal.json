@@ -1,0 +1,38 @@
+{
+  "observedAtUtc": "2026-10-05T20:03:41.2174932Z",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-01",
+  "pidChecks": [
+    {
+      "pid": 47108,
+      "live": false,
+      "creation": null
+    },
+    {
+      "pid": 63368,
+      "live": false,
+      "creation": null
+    },
+    {
+      "pid": 75452,
+      "live": false,
+      "creation": null
+    }
+  ],
+  "listenerCount": 0,
+  "pairMetadata": [
+    {
+      "name": "auth.json",
+      "present": false,
+      "size": null,
+      "lastWriteUtc": null
+    },
+    {
+      "name": "models.json",
+      "present": true,
+      "size": 2001983,
+      "lastWriteUtc": "2026-10-05T20:02:31.3669259Z"
+    }
+  ],
+  "contentRead": false,
+  "qualification": "PublicProject400 before Skills; canonical bootstrap provisions models catalog; no copied pair/model request/UI"
+}

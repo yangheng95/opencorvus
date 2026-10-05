@@ -1,0 +1,167 @@
+{
+  "observedAtUtc": "2026-10-05T20:33:08.7377708Z",
+  "resultStatus": "passed",
+  "physical": [
+    {
+      "pid": 11700,
+      "originalLive": false,
+      "currentCreation": null
+    },
+    {
+      "pid": 61988,
+      "originalLive": false,
+      "currentCreation": null
+    },
+    {
+      "pid": 54244,
+      "originalLive": false,
+      "currentCreation": null
+    },
+    {
+      "pid": 72472,
+      "originalLive": false,
+      "currentCreation": null
+    },
+    {
+      "pid": 9968,
+      "originalLive": false,
+      "currentCreation": null
+    }
+  ],
+  "listenerCount": 0,
+  "phases": [
+    {
+      "mode": "serial",
+      "rows": 560,
+      "pairs": 280,
+      "httpUnattributed": 7,
+      "observations": 7,
+      "accepted": 7,
+      "cancel": 0,
+      "sourceSummary": {
+        "scope": "project",
+        "activeProfile": "base",
+        "totalSkills": 7,
+        "sources": {
+          "unknown": 1,
+          "builtin": 6
+        },
+        "risks": {
+          "low": 6,
+          "medium": 1
+        },
+        "agents": [
+          {
+            "id": "orchestrator",
+            "role": "orchestrator"
+          },
+          {
+            "id": "universal-build",
+            "role": "build"
+          },
+          {
+            "id": "base-developer",
+            "role": "build"
+          },
+          {
+            "id": "base-planner",
+            "role": "delegated-worker"
+          },
+          {
+            "id": "base-researcher",
+            "role": "explore"
+          },
+          {
+            "id": "base-tester",
+            "role": "delegated-worker"
+          }
+        ],
+        "grants": [
+          {
+            "agent": "orchestrator",
+            "grants": 7
+          },
+          {
+            "agent": "universal-build",
+            "grants": 6
+          },
+          {
+            "agent": "base-developer",
+            "grants": 7
+          },
+          {
+            "agent": "base-planner",
+            "grants": 7
+          },
+          {
+            "agent": "base-researcher",
+            "grants": 7
+          },
+          {
+            "agent": "base-tester",
+            "grants": 7
+          }
+        ],
+        "unmounted": 6
+      },
+      "currentBoundary": [
+        {
+          "side": "a",
+          "status": 200,
+          "requestID": "be6faaf7-9f81-4fb9-b525-08e7c6f892eb",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-05\\project-a",
+          "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-05\\project-a"
+        },
+        {
+          "side": "b",
+          "status": 200,
+          "requestID": "fcb3cf6d-b789-4eb7-86dd-bee3ce00c550",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-05\\project-b",
+          "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-05\\project-b"
+        }
+      ],
+      "terminal": {
+        "occurrenceID": "38b23436-99a5-49e4-b077-a511c5d35630",
+        "pid": 61988,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      }
+    },
+    {
+      "mode": "restart-parallel",
+      "rows": 296,
+      "pairs": 148,
+      "httpUnattributed": 0,
+      "observations": 4,
+      "accepted": 3,
+      "cancel": 1,
+      "sourceSummary": null,
+      "currentBoundary": [
+        {
+          "side": "a",
+          "status": 200,
+          "requestID": "91bef568-4432-4069-8bf2-2f84b0e01919",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-05\\project-a",
+          "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-05\\project-a"
+        },
+        {
+          "side": "b",
+          "status": 200,
+          "requestID": "e2e93f01-51a7-411a-bf89-3c5ee40a179f",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-05\\project-b",
+          "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-05\\project-b"
+        }
+      ],
+      "terminal": {
+        "occurrenceID": "e8dba2c3-2d8e-4ea0-8c88-72607e48c335",
+        "pid": 72472,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      }
+    }
+  ],
+  "runRootRetained": true,
+  "boundary": "Current HTTP-null metric is unattributed; startup chronology is not inferred. Real unconnected input/noAuth/noUI/noProvider, original timeout unresolved"
+}

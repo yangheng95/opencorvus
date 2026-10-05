@@ -1,0 +1,118 @@
+{
+  "count": 0,
+  "mode": "serial",
+  "occurrenceID": "1a1c21bd-5049-4c73-911f-cc0a950ad793",
+  "files": 0,
+  "bytes": 0,
+  "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-01",
+  "projects": {
+    "a": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-01\\project-a",
+    "b": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-01\\project-b"
+  },
+  "observations": [],
+  "preflight": "loopback port bind/close succeeded",
+  "command": {
+    "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "args": [
+      "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+      "serve",
+      "--hostname",
+      "127.0.0.1",
+      "--port",
+      "17955",
+      "--startup-receipt",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-skill-mount-cold-start-latency\\actual-ordinary-01\\ordinary-n0-serial.startup.json",
+      "--startup-occurrence",
+      "1a1c21bd-5049-4c73-911f-cc0a950ad793",
+      "--parent-pid",
+      "47108",
+      "--parent-process-instance-id",
+      "win32:639268273442622875",
+      "--print-logs",
+      "--log-level",
+      "DEBUG",
+      "--project-dir",
+      "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-01\\project-a"
+    ],
+    "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-01\\launch"
+  },
+  "owner": {
+    "pid": 63368,
+    "processInstanceID": "win32:639268273468546321",
+    "occurrenceID": "4a3cd50b-0143-4c35-a24b-f28392c22f94"
+  },
+  "actualChild": {
+    "ProcessId": 63368,
+    "ParentProcessId": 75452,
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CreationDate": "/Date(1791230546854)/"
+  },
+  "helperOwner": {
+    "pid": 75452,
+    "processInstanceID": "win32:639268273468057283",
+    "occurrenceID": "14f51f18-cda7-4430-b1bc-ca34041ee16d"
+  },
+  "actualHelper": {
+    "ProcessId": 75452,
+    "ParentProcessId": 47108,
+    "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3f665b2bfd616ca5\\debug\\opencorvus-process-supervisor.exe",
+    "CreationDate": "/Date(1791230546805)/"
+  },
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "1a1c21bd-5049-4c73-911f-cc0a950ad793",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:17955",
+    "pid": 63368
+  },
+  "health": {
+    "status": 200,
+    "requestID": "e38a42db-2abc-4f4d-8038-6cb8157f7c98",
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-01\\runtime\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-01\\runtime\\data",
+      "home": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\skill-mount-ordinary-01\\home"
+    }
+  },
+  "status": "failed",
+  "failure": {
+    "type": "AssertionError",
+    "message": "Actual public Project boundary HTTP status\n\n400 !== 200\n"
+  },
+  "shutdown": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "occurrenceID": "cal_g0VXCuqhm00HXMtLj0Ds"
+    }
+  },
+  "disposal": {
+    "occurrenceID": "1a1c21bd-5049-4c73-911f-cc0a950ad793",
+    "pid": 63368,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "terminal": {
+    "occurrenceID": "1a1c21bd-5049-4c73-911f-cc0a950ad793",
+    "pid": 63368,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalOwner": "dead_or_reused",
+  "physicalHelper": "dead_or_reused",
+  "finalPort": "free",
+  "diagnosticRows": 24,
+  "timing": {
+    "diagnosticRows": 20,
+    "initializations": 1,
+    "dispositions": [
+      "creator",
+      "cached-settled"
+    ],
+    "startupInitializations": 1
+  }
+}
