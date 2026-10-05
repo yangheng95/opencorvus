@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { supervisedHostProcessFacade } from "../src/util/process-facade"
+import { supervisedHostProcessFacade, supervisedTaskProcessFacade } from "../src/util/process-facade"
 import { ProcessSupervisor } from "../src/shell/process-supervisor"
 
 describe("Plugin structured process capability", () => {
@@ -21,7 +21,29 @@ describe("Plugin structured process capability", () => {
       reason: "exited",
       exitCode: 0,
     })
-    expect(ProcessSupervisor.metricsSnapshot().owners[owner]).toBeUndefined()
+  })
+
+  test("host detached capability preserves real stdin/output and exact terminal receipt", async () => {
+    const result = await supervisedHostProcessFacade("plugin:detached-transport").run({
+      command: { executable: process.execPath, args: ["-e", "process.stdin.pipe(process.stdout)"] },
+      ownership: "detached", occurrenceID: "detached-input", input: "detached bytes", timeoutMs: 5000,
+    })
+    expect({ output: new TextDecoder().decode(result.stdout), receipt: result.receipt }).toMatchObject({
+      output: "detached bytes", receipt: { occurrenceID: "detached-input", reason: "exited", exitCode: 0 },
+    })
+    await expect(supervisedTaskProcessFacade({ taskID: "task-boundary", cwd: process.cwd() }, "task").spawn({
+      command: { executable: process.execPath, args: [] }, ownership: "detached",
+    })).rejects.toThrow("Task process execution cannot detach from Task settlement")
+  })
+
+  test("host detached control cancellation settles the actual process occurrence", async () => {
+    const handle = await supervisedHostProcessFacade("plugin:detached-cancel").spawn({
+      command: { executable: process.execPath, args: ["-e", "setInterval(() => {}, 1000)"] },
+      ownership: "detached", occurrenceID: "detached-cancel", stdout: "ignore", stderr: "ignore",
+    })
+    const receipt = await handle.terminate("aborted")
+    expect(receipt).toMatchObject({ occurrenceID: "detached-cancel", pid: handle.pid, reason: "aborted" })
+    expect(await handle.settled).toMatchObject({ occurrenceID: "detached-cancel", pid: handle.pid, reason: "aborted" })
   })
 
   test("projects the supervisor's exact signal terminal fact", async () => {

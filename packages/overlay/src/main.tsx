@@ -504,9 +504,16 @@ function assertUserNavigationCurrent(selectionEpoch: number): void {
   if (!ownsWorkspaceSelection(selectionEpoch)) throw new DOMException("Workspace navigation superseded", "AbortError")
 }
 
+function revealCurrentConversationFromBoard(): void {
+  if (primaryWorkspaceSurface() === "mission-board") setPrimaryWorkspaceSurface("conversation")
+}
+
 async function selectTaskWithUILifecycle(taskID: string, directory: string): Promise<void> {
   const admission = await requestWorkspaceSelection({ kind: "task", id: taskID, directory })
-  if (admission.kind === "unchanged") return
+  if (admission.kind === "unchanged") {
+    revealCurrentConversationFromBoard()
+    return
+  }
   await closeConfigDialog()
   assertUserNavigationCurrent(admission.epoch)
   const row = workLedgerActiveItem({ taskID, sessionID: undefined })
@@ -530,7 +537,10 @@ async function selectConversationWithUILifecycle(
     sessionKind: "conversation",
     experience,
   })
-  if (admission.kind === "unchanged") return
+  if (admission.kind === "unchanged") {
+    revealCurrentConversationFromBoard()
+    return
+  }
   await closeConfigDialog()
   assertUserNavigationCurrent(admission.epoch)
   setComposerIntent({ productPillar: productPillarFromConversationExperience(experience), conversationTarget: "chat" })
@@ -1227,7 +1237,7 @@ async function openExpertSquadMarketForProject(projectDirectory?: string): Promi
   } else if (!requestedDirectory && !activeDirectory().trim()) {
     const admission = await requestWorkspaceSelection()
     if (admission.kind === "unchanged") return
-    await resolveGlobalComposerProject({ kind: "admitted", selectionEpoch: admission.epoch })
+    await resolveGlobalComposerProject({ kind: "admitted", selectionEpoch: admission.epoch }).promise
   }
   await openConfigDialog("expert-squad-install")
 }
@@ -1339,7 +1349,10 @@ async function openMissionWithUILifecycle(
     directory,
     sessionKind: "mission",
   })
-  if (admission.kind === "unchanged") return
+  if (admission.kind === "unchanged") {
+    revealCurrentConversationFromBoard()
+    return
+  }
   await closeConfigDialog()
   assertUserNavigationCurrent(admission.epoch)
   resetCenterWorkbenchToPrimaryPanel("mission")
@@ -2271,6 +2284,7 @@ function OverlayRoot() {
             homeActive={homeActive()}
             launcherIntent={composerIntent()}
             onOpenSubagentConversation={openSubagentConversation}
+            onOpenMissionBoard={openMissionBoard}
           />
         </QuotationSelection>
       )}
@@ -2339,23 +2353,28 @@ function OverlayRoot() {
           onComposerIntentChange={(intent) =>
             runUserNavigation("composer.mode-change", () => handleComposerIntentChange(intent))
           }
-          resolveAttachmentDirectory={async (selectionEpoch) => {
+          resolveAttachmentDirectory={(selectionEpoch) => {
             const intent = { ...composerIntent() }
             const needsProject = !activeDirectory().trim()
             const sourceDraftKey = panelComposerDraftKey()
             const sourceDraft = composerDraftText(sourceDraftKey)
-            const resolution = await resolveGlobalComposerProject({ kind: "attachment", selectionEpoch })
-            assertUserNavigationCurrent(resolution.selectionEpoch)
-            const { directory } = resolution
-            if (needsProject)
-              runMainAsync("composer.remember-attachment-project", () =>
-                rememberProjectComposerIntent(directory, intent),
-              )
-            const targetDraftKey = panelComposerDraftKey()
-            if (sourceDraftKey !== targetDraftKey && sourceDraft && !composerDraftText(targetDraftKey)) {
-              setComposerDraft(targetDraftKey, sourceDraft)
+            const operation = resolveGlobalComposerProject({ kind: "attachment", selectionEpoch })
+            return {
+              ...operation,
+              promise: operation.promise.then((resolution) => {
+                assertUserNavigationCurrent(resolution.selectionEpoch)
+                const { directory } = resolution
+                if (needsProject)
+                  runMainAsync("composer.remember-attachment-project", () =>
+                    rememberProjectComposerIntent(directory, intent),
+                  )
+                const targetDraftKey = panelComposerDraftKey()
+                if (sourceDraftKey !== targetDraftKey && sourceDraft && !composerDraftText(targetDraftKey)) {
+                  setComposerDraft(targetDraftKey, sourceDraft)
+                }
+                return resolution
+              }),
             }
-            return resolution
           }}
           onSubmit={async (text, attachments, webSearch, directives, markDispatched) => {
             const submittedIntent = { ...composerIntent() }

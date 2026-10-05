@@ -1,0 +1,14 @@
+{
+  "status": "failed",
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-9nG57x\\runner-68984-TvCiQR\\restart-check",
+  "helper": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3fe6f8de1484939a\\debug\\opencorvus-process-supervisor.exe",
+  "cases": [],
+  "error": {
+    "name": "AssertionError",
+    "message": "Standalone checker launcher must itself be outside a Job\n\ntrue !== false\n",
+    "stack": "AssertionError [ERR_ASSERTION]: Standalone checker launcher must itself be outside a Job\n\ntrue !== false\n\n    at D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\script\\server-restart-e2e.ts:48:10\n    at processTicksAndRejections (native:7:39)"
+  },
+  "limits": [
+    "Credential-free Windows HTTP/physical ownership qualification; POSIX and Docker unverified"
+  ]
+}

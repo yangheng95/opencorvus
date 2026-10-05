@@ -71,7 +71,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/log/export` | Export log support bundle | `log.export` |
 | GET | `/log/files` | List log files | `log.files` |
 | GET | `/log/tail` | Read recent logs Errors: `LogFileNotFoundError`, `NotFoundError`. | `log.tail` |
-| POST | `/restart` | Restart the server | `server.restart` |
+| POST | `/restart` | Restart the server Errors: `ServerRestartUnavailableError`. | `server.restart` |
 | POST | `/shutdown` | Shutdown the server | `server.shutdown` |
 
 ### Authentication

@@ -1,0 +1,197 @@
+{
+  "status": "passed",
+  "source": "D:/myhexin-local/opencorvus/.tmp-product-iteration/data-integrity/server-restart-real-10.result.json",
+  "cases": [
+    {
+      "mode": "standalone",
+      "status": "passed"
+    },
+    {
+      "mode": "standalone-peer",
+      "status": "passed"
+    },
+    {
+      "mode": "managed-parent",
+      "status": "passed"
+    },
+    {
+      "mode": "owned-tree",
+      "status": "passed"
+    },
+    {
+      "mode": "helper-unavailable",
+      "status": "passed"
+    },
+    {
+      "mode": "sdk-owned-tree",
+      "status": "passed"
+    },
+    {
+      "mode": "failed-replacement",
+      "status": "passed"
+    },
+    {
+      "mode": "failed-replacement",
+      "status": "passed"
+    },
+    {
+      "mode": "failed-replacement",
+      "status": "passed"
+    },
+    {
+      "mode": "failed-replacement",
+      "status": "passed"
+    },
+    {
+      "mode": "committed-transfer-control-and-orphan",
+      "status": "passed"
+    },
+    {
+      "mode": "owner-death-before-ready",
+      "status": "passed"
+    }
+  ],
+  "physical": [
+    {
+      "occurrenceID": "ae73135f-14e9-4709-aa8b-0ed4a1ffa7d5",
+      "pid": 68044,
+      "processInstanceID": "win32:639267732630921875",
+      "label": "standalone",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "occurrenceID": "d7dcc23b-c7b1-4568-b0d4-66f7ecea4c05",
+      "pid": 65444,
+      "processInstanceID": "win32:639267732670728335",
+      "label": "standalone",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "pid": 69428,
+      "processInstanceID": "win32:639267732670353495",
+      "occurrenceID": "native-helper",
+      "label": "native-helper",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "occurrenceID": "99d9364b-e717-4c53-acc2-e4288a758c60",
+      "pid": 65972,
+      "processInstanceID": "win32:639267732731637294",
+      "label": "standalone",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "pid": 48960,
+      "processInstanceID": "win32:639267732731154533",
+      "occurrenceID": "native-helper",
+      "label": "native-helper",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "occurrenceID": "3a6ae344-469a-424f-b208-c5e3b40b04c6",
+      "pid": 73372,
+      "processInstanceID": "win32:639267732630921866",
+      "label": "standalone-peer",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "occurrenceID": "eadd3ddc-313f-4a1f-b87b-555275973fe7",
+      "pid": 64344,
+      "processInstanceID": "win32:639267732670881480",
+      "label": "standalone-peer",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "pid": 66468,
+      "processInstanceID": "win32:639267732670496966",
+      "occurrenceID": "native-helper",
+      "label": "native-helper",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "occurrenceID": "dedd32ff-4d29-499e-9b8f-a4d2a7a46d07",
+      "pid": 65404,
+      "processInstanceID": "win32:639267732729984170",
+      "label": "standalone-peer",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "pid": 35140,
+      "processInstanceID": "win32:639267732729525242",
+      "occurrenceID": "native-helper",
+      "label": "native-helper",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "pid": 62980,
+      "processInstanceID": "win32:639267732797882072",
+      "occurrenceID": "checker:managed-parent",
+      "label": "managed-parent",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "pid": 71160,
+      "processInstanceID": "win32:639267732841530754",
+      "occurrenceID": "checker:owned-tree",
+      "label": "owned-tree",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "pid": 76592,
+      "processInstanceID": "win32:639267732892291496",
+      "occurrenceID": "checker:helper-unavailable",
+      "label": "helper-unavailable",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "pid": 8008,
+      "processInstanceID": "win32:639267732935277434",
+      "occurrenceID": "fdbdd13e-8fd8-4465-b0e7-e1bd2080777d",
+      "inJob": true,
+      "label": "sdk-owned-tree",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "occurrenceID": "2f730a33-b633-4307-b7ee-3c274908aa9f",
+      "pid": 69972,
+      "processInstanceID": "win32:639267732621581457",
+      "label": "committed-transfer-control-and-orphan",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "occurrenceID": "51a7c48f-1159-4080-906f-51dde609af8f",
+      "pid": 67184,
+      "processInstanceID": "win32:639267733003523431",
+      "label": "committed-transfer-control-and-orphan",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "pid": 45420,
+      "processInstanceID": "win32:639267733003087246",
+      "occurrenceID": "native-helper",
+      "label": "native-helper",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "pid": 76272,
+      "processInstanceID": "win32:639267733019732227",
+      "occurrenceID": "bba1d4b8-b966-4a7e-9d14-5814f219937e",
+      "label": "owner-death-before-ready",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "pid": 66224,
+      "processInstanceID": "win32:639267733027994864",
+      "occurrenceID": "68eb4523-dbcf-4e37-ba1f-c95bddd97ad4",
+      "label": "owner-death-before-ready",
+      "disposition": "dead_or_reused"
+    },
+    {
+      "pid": 75840,
+      "processInstanceID": "win32:639267733027567447",
+      "occurrenceID": "native-helper",
+      "label": "native-helper",
+      "disposition": "dead_or_reused"
+    }
+  ]
+}

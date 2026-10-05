@@ -1,0 +1,84 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\composer-upload-lifetime.test.ts:
+(pass) parallel file and folder operations finish their own live tokens [0.93ms]
+(pass) external selection expires old inputs and their late finally preserves a new batch [0.19ms]
+(pass) a failing input settles its own token while another live input retains count and membership [0.42ms]
+(pass) component disposal releases its collection and has an explicit terminal registration error [0.25ms]
+
+packages\overlay\test\global-composer-project.test.ts:
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) concurrent attachment inputs share one admission, anonymous Project and complete receipt [7.91ms]
+(pass) a shared cancelled decision returns AbortError to every input and retains its original facts [0.59ms]
+(pass) a newer admission sequence invalidates same-lineage joins before the public epoch changes [0.60ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) an old completion preserves a replacement allocation and its concurrent join [1.81ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) same-lineage inputs join until directory activation finishes even after directory becomes visible [1.47ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) admitted Mission input consumes its exact epoch and established attachment input returns that owner [1.07ms]
+(pass) a late allocation response reports AbortError and retains a newer established Project [0.39ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) a live upload follows its own admission epoch and remains current after its allocation pointer settles [1.55ms]
+(pass) a rejected operation remains an observable named rejection with terminal currentness [0.16ms]
+(pass) an allocation failure retains its current error identity until its live input settles [0.31ms]
+
+packages\overlay\test\workspace-admission.test.ts:
+(pass) cancelled admission retains the exact source, file and public epoch [2.67ms]
+(pass) a failed save decision retains the authored target with its typed failure [0.31ms]
+(pass) approved admission closes the file and produces exactly one new selection epoch [0.21ms]
+(pass) a committed background fact supersedes a waiting decision while retaining its file owner [0.32ms]
+(pass) the latest user request consumes a shared decision and owns the sole new epoch [0.25ms]
+(pass) selecting the current ready source invalidates an older navigation and preserves the draft [0.36ms]
+(pass) explicitly revealing the same file supersedes an outstanding close [0.30ms]
+(pass) the null-target fast path respects the external commit predicate [0.24ms]
+(pass) a superseded composer allocation returns AbortError even when another source has a directory [0.14ms]
+(pass) dirty state reads the registered owner and follows its lifetime [0.09ms]
+(pass) ready Task, Chat and Mission identities include their directory and matching view [0.27ms]
+(pass) a prior Task error leaves the ready current Chat and Mission selectable as unchanged [0.29ms]
+
+packages\overlay\test\attachment-upload.test.ts:
+(pass) composer attachment upload > uploads a file as raw binary and returns only the canonical reference [1.10ms]
+(pass) composer attachment upload > uploads captured clipboard bytes after the transient source lifetime ends [0.28ms]
+(pass) composer attachment upload > uploads payloads larger than the retired 10 MiB composer limit [29.25ms]
+(pass) composer attachment upload > creates one directory reference request without reading child files [0.58ms]
+
+ 30 pass
+ 0 fail
+ 92 expect() calls
+Ran 30 tests across 4 files. [1242.00ms]

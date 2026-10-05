@@ -1,5 +1,13 @@
 # Artifact entry points
 
+- [Windows restart actual evidence](2026-10-05-windows-restart-ownership-transfer/README.md): twelve actual source scenarios, exact process settlement, SDK boundary and retained failures.
+
+- [Composer upload lifetime evidence](2026-10-05-composer-upload-lifetime/README.md): real delayed responses, anonymous activation and established-project/navigation controls.
+
+- [Dependency remediation baseline evidence](2026-10-05-dependency-remediation/README.md): exact seven repository alerts, actual failing 39-advisory Bun audit and official advisory detail.
+
+- [Mission draft context evidence](2026-10-05-mission-draft-context/README.md): real saved-draft blank-page investigation and qualification.
+
 - [Authoring admission evidence](2026-10-05-authoring-admission/README.md): actual conditional definition execution, navigation and page-departure qualification.
 
 - [Continuous product data integrity iteration](2026-10-05-product-data-integrity/README.md): actual authored-work preservation investigations and verified repairs.

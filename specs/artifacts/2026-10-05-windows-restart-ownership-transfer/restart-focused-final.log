@@ -1,0 +1,72 @@
+[1/4] START test/server-lifecycle-occurrence.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) server lifecycle occurrence > an admitted shutdown carries a stable identity and executes the registered handler [45.94ms]
+(pass) server lifecycle occurrence > admission without a registered handler returns unavailable [0.37ms]
+(pass) server lifecycle occurrence > a handler that fails after admission settles the occurrence as failed with the exact error [43.38ms]
+(pass) server lifecycle occurrence > a handler cleared between admission and execution fails the occurrence instead of silently no-opping [32.94ms]
+(pass) server lifecycle occurrence > a repeated request converges on the live occurrence and a conflicting transition is refused with it [0.61ms]
+(pass) server lifecycle occurrence > restart captures its accepted handler while a concurrent shutdown owns availability [0.38ms]
+(pass) server lifecycle occurrence > restart availability exposes the exact managed ownership refusal [0.19ms]
+(pass) server lifecycle occurrence > accepted restart executes its captured owner after registry release [45.06ms]
+
+ 8 pass
+ 0 fail
+ 13 expect() calls
+Ran 8 tests across 1 file. [1.76s]
+[1/4] DONE test/server-lifecycle-occurrence.test.ts exit=0 duration=1.99s
+[2/4] START test/plugin-process-facade.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Plugin structured process capability > runs structured argv through the central supervisor and settles its owner [221.06ms]
+(pass) Plugin structured process capability > host detached capability preserves real stdin/output and exact terminal receipt [100.60ms]
+(pass) Plugin structured process capability > host detached control cancellation settles the actual process occurrence [24.82ms]
+(pass) Plugin structured process capability > projects the supervisor's exact signal terminal fact [0.62ms]
+
+ 4 pass
+ 0 fail
+ 7 expect() calls
+Ran 4 tests across 1 file. [1.68s]
+[2/4] DONE test/plugin-process-facade.test.ts exit=0 duration=1.89s
+[3/4] START test/windows-orphan-artifact-recovery.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) transferred Windows requests follow the exact successor's live and unknown dispositions [59.82ms]
+(pass) successor recovery removes only exact prior/dead request and workspace occurrences [2465.26ms]
+(pass) successor recovery rejects conflicting and wrongly identified pre-target settlement evidence [2312.68ms]
+
+ 3 pass
+ 0 fail
+ 16 expect() calls
+Ran 3 tests across 1 file. [6.24s]
+[3/4] DONE test/windows-orphan-artifact-recovery.test.ts exit=0 duration=6.45s
+[4/4] START test/process-supervisor-control-plane.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) ProcessSupervisor control-plane authority > foreground shell reclaims its child tree and returns the root command exit [238.10ms]
+(pass) ProcessSupervisor control-plane authority > background shell retains its owned child tree until explicit disposal [397.54ms]
+(pass) ProcessSupervisor control-plane authority > Shell.run returns the foreground root exit after child cleanup [196.14ms]
+(pass) ProcessSupervisor control-plane authority > reclaims a descendant listener after the exact Windows owner process dies [1343.89ms]
+(pass) ProcessSupervisor control-plane authority > returns strict disposal only after physical exit and output settlement [45.21ms]
+(pass) ProcessSupervisor control-plane authority > retains the exact live owner until output settlement finishes [12.86ms]
+(pass) ProcessSupervisor control-plane authority > keeps physical ownership after an early output control failure [18.46ms]
+(pass) ProcessSupervisor control-plane authority > retains shutdown ownership when physical settlement proof is unavailable [5.26ms]
+(pass) ProcessSupervisor control-plane authority > reclaims the exact durable request when the dead helper's kill-on-close job proves settlement [5143.26ms]
+(pass) ProcessSupervisor control-plane authority > settles a Windows command that fails before target creation with explicit active-process-zero evidence [94.47ms]
+(pass) ProcessSupervisor control-plane authority > accepts proven process exit even when auxiliary disposal settlement is delayed [0.54ms]
+(pass) ProcessSupervisor control-plane authority > returns a fast command's real nonzero exit after the native readiness handshake [234.27ms]
+(pass) ProcessSupervisor control-plane authority > inherits the target environment without serializing it into the Windows request [195.75ms]
+(pass) ProcessSupervisor control-plane authority > executes a control-plane process while the Task Capsule runtime is configured [644.35ms]
+(pass) ProcessSupervisor control-plane authority > bounds a live Windows ripgrep stream without an unhandled output-settlement rejection [328.34ms]
+(pass) ProcessSupervisor control-plane authority > observes ripgrep stderr rejection before a bounded consumer exits [35.64ms]
+(pass) ProcessSupervisor control-plane authority > observes a deterministic Windows output-stream rejection at handle creation [1547.59ms]
+
+ 17 pass
+ 0 fail
+ 35 expect() calls
+Ran 17 tests across 1 file. [11.92s]
+[4/4] DONE test/process-supervisor-control-plane.test.ts exit=0 duration=12.11s

@@ -22,8 +22,9 @@ import { Icon } from "./ui/Icon"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Button } from "./ui/Button"
 import { StatusIndicator } from "./ui/StatusIndicator"
-import { projectDirectoryLabel } from "../utils/project-directory"
+import { projectDirectoryKey, projectDirectoryLabel } from "../utils/project-directory"
 import { retrySelectedTaskSelection } from "../services/task"
+import { missionBoardStore } from "../services/mission-board"
 import {
   buildSubagentConversationItems,
   isSubagentActivityRecord,
@@ -394,6 +395,7 @@ export function Conversation(props: {
   homeActive: boolean
   launcherIntent: ComposerIntent
   onOpenSubagentConversation: (sessionID: string) => void
+  onOpenMissionBoard: () => void
 }) {
   const el = props.container
   let scrollController: AutoScrollController | undefined
@@ -410,6 +412,30 @@ export function Conversation(props: {
   const [homeAfterMount, setHomeAfterMount] = createSignal<HTMLElement | null>(null)
   const isSessionSource = () => boardStore.selectedSource?.kind === "session"
   const sessionBoard = () => (isSessionSource() ? (boardStore.board as any) : null)
+  const emptyMissionSource = createMemo(() => {
+    const source = boardStore.selectedSource
+    const board = boardStore.board
+    if (
+      source?.kind !== "session" ||
+      source.sessionKind !== "mission" ||
+      board?.kind !== "session" ||
+      board.sessionID !== source.id ||
+      boardStore.taskSwitching ||
+      hasItems()
+    )
+      return null
+    return source
+  })
+  const savedMissionRequest = createMemo(() => {
+    const source = emptyMissionSource()
+    if (!source || missionBoardStore.loading || missionBoardStore.error) return null
+    const directory = projectDirectoryKey(source.directory || "")
+    return (
+      missionBoardStore.records.find(
+        (mission) => mission.sessionID === source.id && projectDirectoryKey(mission.directory) === directory,
+      )?.pendingPrompt ?? null
+    )
+  })
   const currentTaskID = () => (isSessionSource() ? "" : String(activeTaskID() || boardStore.board?.task?.id || ""))
   const taskContextItem = () => {
     if (isSessionSource()) return null
@@ -572,6 +598,7 @@ export function Conversation(props: {
       End: () => el.scrollTo({ top: el.scrollHeight, behavior: "smooth" }),
     }
     const onHistoryKeyDown = (event: KeyboardEvent) => {
+      if (event.target !== el || event.defaultPrevented) return
       if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
       const scroll = keyboardScrollActions[event.key]
       if (!scroll) return
@@ -686,6 +713,42 @@ export function Conversation(props: {
 
   return (
     <>
+      <Show when={emptyMissionSource()}>
+        <section class="chat-empty mission-empty-context" aria-label={t("mission.conversation.context")}>
+          <div class="chat-empty-marker" aria-hidden="true">
+            <Icon name="mission" size="large" />
+          </div>
+          <div class="mission-empty-context__body">
+            <span class="chat-empty-kicker">
+              {savedMissionRequest() ? t("mission_board.create.manual_draft") : t("chat.empty")}
+            </span>
+            <h2 class="chat-empty-title">{sessionBoard()?.title || emptyMissionSource()?.id}</h2>
+            <Show when={savedMissionRequest()} keyed>
+              {(request) => (
+                <div
+                  class="mission-empty-context__request"
+                  role="region"
+                  aria-label={t("mission.conversation.saved_request")}
+                  tabIndex={0}
+                >
+                  {request.text}
+                </div>
+              )}
+            </Show>
+            <p class="mission-empty-context__hint">
+              {savedMissionRequest()
+                ? t("mission.conversation.draft_hint")
+                : t("mission.conversation.empty_hint")}
+            </p>
+            <div class="chat-empty-actions">
+              <Button type="button" variant="outline" size="sm" tone="neutral" onClick={props.onOpenMissionBoard}>
+                <Icon name="mission" size="compact" />
+                {t("mission_board.title")}
+              </Button>
+            </div>
+          </div>
+        </section>
+      </Show>
       <Show when={taskContextID() && selectedTaskLoadError()} keyed>
         {(failure) => (
           <div class="chat-empty chat-empty--task chat-empty--task-error" role="alert">

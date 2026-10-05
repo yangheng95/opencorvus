@@ -1,0 +1,73 @@
+[1/4] START test/managed-parent-lifecycle-process.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) managed backend follows one launcher-minted parent occurrence > the real child shuts down once after its exact parent exits [578.83ms]
+
+ 1 pass
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [1.94s]
+[1/4] DONE test/managed-parent-lifecycle-process.test.ts exit=0 duration=2.11s
+[2/4] START test/runtime-startup-recovery.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) runtime startup recovery > projects application environment into a fresh restart process occurrence [2.45ms]
+(pass) runtime startup recovery > binds the ACP listener after preparing the current process occurrence [244.65ms]
+(pass) runtime startup recovery > serves health while the owned application recovery is still running [27.36ms]
+(pass) runtime startup recovery > recovers a ready sibling project while another project remains held [0.58ms]
+(pass) runtime startup recovery > keeps each Project recovery queue independent when one Project exhausts its slots [1.55ms]
+(pass) runtime startup recovery > settles failed foundational preparation and prepares the next attempt [8.55ms]
+(pass) runtime startup recovery > keeps an application recovery failure observable after listener readiness [23.36ms]
+(pass) runtime startup recovery > stops a published listener before propagating required recovery failure [17.56ms]
+(pass) runtime startup recovery > stops a published listener when post-bind poller initialization fails [11.70ms]
+(pass) runtime startup recovery > cancels held application recovery before joining it during settlement [3.16ms]
+(pass) runtime startup recovery > completes one graceful listener stop through a transient settlement cleanup failure [38.82ms]
+(pass) runtime startup recovery > continues the exact graceful-stop receipt after the commit decision [50.87ms]
+
+ 12 pass
+ 0 fail
+ 23 expect() calls
+Ran 12 tests across 1 file. [3.09s]
+[2/4] DONE test/runtime-startup-recovery.test.ts exit=0 duration=3.27s
+[3/4] START test/runtime-execution-settlement.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) runtime execution settlement authority > fences and cancels Task activation before Session prompt settlement, then admits rollback [164.42ms]
+(pass) runtime execution settlement authority > returns shutdown cancellation and admits a successor after owner release [0.66ms]
+(pass) runtime execution settlement authority > reports the exact active Instance authority and converges on the same settlement gate [1625.34ms]
+(pass) runtime execution settlement authority > publishes terminal protocol evidence while an owned execution is being terminated [2.36ms]
+(pass) runtime execution settlement authority > classifies a wake rejected by the production server settlement reason [1.61ms]
+(pass) runtime execution settlement authority > cancels an unfinished protocol subscriber after terminal facts are fenced [1.23ms]
+(pass) runtime execution settlement authority > bounds Project Git lock inactivity and admits settlement after the held lifecycle exits [79.30ms]
+(pass) runtime execution settlement authority > retains process occurrence across protocol inactivity and converges after late settlement [62.26ms]
+(pass) runtime execution settlement authority > cancels the physical owner and settles the gate after the owner exits [0.37ms]
+(pass) runtime execution settlement authority > returns the typed admission error while a settlement phase owns the kind [0.11ms]
+(pass) runtime execution settlement authority > reopens admission under the same gate token and starts the registered durable rescan [0.13ms]
+(pass) runtime execution settlement authority > restores every owned admission and reports an aggregate when one reopen listener fails [0.33ms]
+(pass) runtime execution settlement authority > drains existing database lifecycle effects then returns a typed error until admission reopens [0.98ms]
+(pass) runtime execution settlement authority > rejects a Protocol append before insertion while database settlement owns new access [1528.37ms]
+(pass) runtime execution settlement authority > blocks late Instance creation with a typed error and admits a fresh owner after handoff release [901.20ms]
+(pass) runtime execution settlement authority > settles a durable Session wake loop before the runtime gate releases ownership [1534.56ms]
+(pass) runtime execution settlement authority > bounds a held Message bridge lifecycle and retains the process occurrence after late settlement [180.12ms]
+
+ 17 pass
+ 0 fail
+ 32 expect() calls
+Ran 17 tests across 1 file. [8.43s]
+[3/4] DONE test/runtime-execution-settlement.test.ts exit=0 duration=8.60s
+[4/4] START test/process-shutdown-task-lifecycle.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) hands off active occurrences in a mixed lifecycle batch across two Projects [3759.60ms]
+(pass) real listener shutdown settles a terminal Task Prompt tail and retains its completed occurrence [2037.90ms]
+(pass) real listener shutdown publishes pending Question abandonments across two Projects before protocol admission closes [3611.49ms]
+
+ 3 pass
+ 0 fail
+ 8 expect() calls
+Ran 3 tests across 1 file. [11.57s]
+[4/4] DONE test/process-shutdown-task-lifecycle.test.ts exit=0 duration=11.75s

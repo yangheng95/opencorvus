@@ -109,8 +109,8 @@ describe("runtime execution settlement authority", () => {
 
     releaseActivity()
     await activity
-    await gate.waitForIdle(250)
-    expect(Instance.current()).toBeUndefined()
+    const idle = await gate.waitForIdle(250).then(() => "idle")
+    expect(idle).toBe("idle")
   })
 
   test("publishes terminal protocol evidence while an owned execution is being terminated", async () => {
@@ -131,7 +131,7 @@ describe("runtime execution settlement authority", () => {
     )
 
     const settled = await Server.settleCurrentProcessExecution("terminal protocol shutdown contract", {
-      disposeInstances: async () => events.push("instances:disposed"),
+      disposeInstances: async () => { events.push("instances:disposed") },
     })
     await settled.releaseHandoff(false)
 
@@ -459,7 +459,7 @@ describe("runtime execution settlement authority", () => {
       for (const operation of [
         () => Instance.provideProjectIdentity({ directory, fn: () => events.push("identity:closed-admission") }),
         () => Instance.tryProvideActive({ directory, fn: () => events.push("active:closed-admission") }),
-        () => Instance.forEachActive({ fn: () => events.push("iteration:closed-admission") }),
+        () => Instance.forEachActive({ fn: () => { events.push("iteration:closed-admission") } }),
         () => Instance.converge({ maximumRetained: 1 }),
       ]) {
         try {

@@ -1,7 +1,7 @@
 import { spawn, spawnSync, type ChildProcess } from "child_process"
 import { createHash, randomUUID } from "crypto"
 import fs from "fs/promises"
-import { readFileSync } from "node:fs"
+import { readFileSync, openSync, closeSync, readSync, fstatSync } from "node:fs"
 import os from "os"
 import path from "path"
 import { PassThrough } from "node:stream"
@@ -18,6 +18,9 @@ import { Lock } from "@/util/lock"
 import { awaitWithAbort } from "@/util/abort"
 import { cachedRuntimeProcessOccurrenceObserver, currentRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
 import type { RuntimeProcessOccurrenceObserver } from "@/runtime/process-occurrence"
+import type { RuntimeProcessOccurrenceInfo } from "@/runtime/process-occurrence"
+import { NodeProcess } from "@opencorvus-ai/util/process-node"
+import z from "zod"
 
 const SIGKILL_TIMEOUT_MS = 200
 
@@ -43,6 +46,99 @@ async function rethrowWithCleanup(
 }
 
 export namespace ProcessSupervisor {
+  export type DetachedCommandContext = Readonly<{
+    requestID: string
+    root: string
+    owner: RuntimeProcessOccurrenceInfo
+    diagnosticPath: string
+  }>
+  const detachedContexts = new WeakSet<DetachedCommandContext>()
+  const OwnerSchema = z.object({ occurrenceID: z.string().min(1), pid: z.number().int().positive(), processInstanceID: z.string().min(1) }).strict()
+  const TransferReceiptSchema = z.object({
+    protocol: z.literal(1), request_id: z.string().min(1), outcome: z.literal("committed"),
+    previous_owner: OwnerSchema, successor: OwnerSchema,
+    helper: z.object({ pid: z.number().int().positive(), processInstanceID: z.string().min(1) }).strict(),
+  }).strict()
+  export type NativeTransferReceipt = z.infer<typeof TransferReceiptSchema>
+  function sameOwner(left: RuntimeProcessOccurrenceInfo, right: RuntimeProcessOccurrenceInfo) {
+    return left.pid === right.pid && left.processInstanceID === right.processInstanceID && left.occurrenceID === right.occurrenceID
+  }
+  function parseTransferReceipt(value: unknown, request: DurableWindowsRequest, ready: WindowsReadyMarker, helper: WindowsHelperMarker, applicationReady: unknown) {
+    const receipt = TransferReceiptSchema.parse(value)
+    const application = z.object({ protocol: z.literal(1), request_id: z.string(), successor: OwnerSchema, url: z.string().min(1) }).strict().parse(applicationReady)
+    if (request.detached !== true || !ready.detached || receipt.request_id !== request.request_id
+      || !sameOwner(receipt.previous_owner, { pid: request.owner_pid, processInstanceID: request.owner_process_instance_id, occurrenceID: request.runtime_occurrence_id })
+      || receipt.successor.pid !== ready.target_pid || receipt.successor.processInstanceID !== ready.target_process_instance_id
+      || receipt.helper.pid !== helper.helper_pid || receipt.helper.processInstanceID !== helper.helper_process_instance_id
+      || application.request_id !== request.request_id || !sameOwner(application.successor, receipt.successor)) {
+      throw new Error("Native transfer receipt does not match its exact request/helper/target")
+    }
+    return receipt
+  }
+  function diagnosticTail(file: string) {
+    let fd: number | undefined
+    try {
+      fd = openSync(file, "r")
+      const size = fstatSync(fd).size
+      const bytes = Buffer.alloc(Math.min(8192, size))
+      readSync(fd, bytes, 0, bytes.length, Math.max(0, size - bytes.length))
+      return bytes.toString("utf8")
+    } catch { return "Detached diagnostic log unavailable" }
+    finally { if (fd !== undefined) closeSync(fd) }
+  }
+  export type OwnershipRelease = { kind: "native_transfer"; receipt: NativeTransferReceipt }
+    | { kind: "local_detached_release"; previousOwner: RuntimeProcessOccurrenceInfo; successor: RuntimeProcessOccurrenceInfo }
+  export class ProcessOwnershipConflictError extends Error {
+    override readonly name = "ProcessOwnershipConflictError"
+  }
+  export class ProcessOwnershipTransferredError extends Error {
+    override readonly name = "ProcessOwnershipTransferredError"
+    constructor(readonly release: OwnershipRelease) { super("Process ownership has transferred to the successor") }
+  }
+  export class ProcessOwnershipUncertainError extends Error {
+    override readonly name = "ProcessOwnershipUncertainError"
+    constructor(readonly context: DetachedCommandContext, options?: ErrorOptions) {
+      super(`Detached process ownership is uncertain for request ${context.requestID}`, options)
+    }
+  }
+  export async function createDetachedCommandContext(): Promise<DetachedCommandContext> {
+    const requestID = randomUUID()
+    await fs.mkdir(Global.Path.log, { recursive: true })
+    const context = Object.freeze({ requestID, root: await Global.createTemporaryDirectory("supervisor-"),
+      owner: Object.freeze({ ...currentRuntimeProcessOccurrence() }), diagnosticPath: path.join(Global.Path.log, `restart-${requestID}.log`) })
+    detachedContexts.add(context)
+    return context
+  }
+  export class DetachedCommandAvailabilityError extends Error {
+    override readonly name = "DetachedCommandAvailabilityError"
+    constructor(readonly reason: "containing_job" | "ownership_unobservable" | "helper_protocol_unavailable", message: string, options?: ErrorOptions) {
+      super(message, options)
+    }
+  }
+  export async function assertDetachedCommandAvailable(): Promise<void> {
+    if (process.platform !== "win32") return
+    const helper = await resolveWindowsHelper()
+    if (!helper) throw new DetachedCommandAvailabilityError("helper_protocol_unavailable", "Windows process supervisor helper is required")
+    const result = await NodeProcess.run({ command: { executable: helper, args: ["--detached-capability"] },
+      ownership: "detached", timeoutMs: 15_000, maxOutputBytes: 4096, nothrow: true }).catch(cause => {
+        throw new DetachedCommandAvailabilityError("ownership_unobservable", "Detached helper capability could not be observed", { cause })
+      })
+    if (result.receipt.exitCode !== 0) throw new DetachedCommandAvailabilityError("helper_protocol_unavailable", `Windows process supervisor detached capability exited with code ${result.receipt.exitCode}`)
+    const capability = (() => {
+      try { return z.object({ protocol: z.literal(3), containment: z.enum(["independent", "contained", "unobservable"]) }).strict().parse(JSON.parse(new TextDecoder().decode(result.stdout))) }
+      catch (cause) { throw new DetachedCommandAvailabilityError("helper_protocol_unavailable", "Windows process supervisor protocol 3 detached capability is required", { cause }) }
+    })()
+    if (capability.containment === "contained") throw new DetachedCommandAvailabilityError("containing_job", "Restart this backend through its containing process owner")
+    if (capability.containment === "unobservable") throw new DetachedCommandAvailabilityError("ownership_unobservable", "Detached helper inherited containment could not be observed")
+  }
+  async function validateDetachedContext(context: DetachedCommandContext) {
+    if (!detachedContexts.has(context) || context.owner.pid !== process.pid || context.owner.occurrenceID !== currentRuntimeProcessOccurrence().occurrenceID
+      || path.dirname(context.root) !== path.resolve(Global.Path.temporary)
+      || path.dirname(await fs.realpath(context.root)) !== await fs.realpath(Global.Path.temporary)) {
+      throw new Error("Detached command context does not belong to this physical runtime")
+    }
+    detachedContexts.delete(context)
+  }
   export type TaskCancellationRole = "mandatory" | "auxiliary"
 
   export interface SpawnOptions {
@@ -72,7 +168,7 @@ export namespace ProcessSupervisor {
     signal?: AbortSignal
     deadlineAt?: number
     /** Launch a replacement process outside the current supervisor's native cleanup job. */
-    detached?: boolean
+    detached?: DetachedCommandContext
     terminateChildrenOnRootExit?: boolean
   }
 
@@ -96,6 +192,7 @@ export namespace ProcessSupervisor {
     terminate(): Promise<void>
     dispose(): Promise<void>
     unref(): void
+    transferOwnership?(successor: RuntimeProcessOccurrenceInfo): Promise<OwnershipRelease>
   }
 
   export const TERMINATION_CLEANUP_TIMEOUT_MS = 5_000
@@ -782,20 +879,26 @@ export namespace ProcessSupervisor {
         const raw = await readJsonFile(path.join(requestDir, "request.json"))
         if (raw === undefined) throw new Error("request.json is missing")
         const request = parseDurableWindowsRequest(raw, requestDir)
-        if (request.runtime_occurrence_id === input.currentOccurrenceID) {
+        const transferValue = await readJsonFile(path.join(requestDir, "transfer-receipt.json"))
+        const helper = await readWindowsHelperMarker(requestDir, request)
+        const transfer = transferValue === undefined ? undefined : parseTransferReceipt(transferValue, request,
+          parseWindowsReadyMarker({ text: await fs.readFile(request.ready_file, "utf8"), requestID: request.request_id,
+            runtimeOccurrenceID: request.runtime_occurrence_id, helperPID: helper?.helper_pid }),
+          helper ?? (() => { throw new Error("Transferred request is missing its helper identity") })(),
+          await readJsonFile(path.join(requestDir, "restart-ready.json")))
+        const effectiveOwner = transfer?.successor ?? {
+          pid: request.owner_pid, processInstanceID: request.owner_process_instance_id, occurrenceID: request.runtime_occurrence_id,
+        }
+        if (effectiveOwner.occurrenceID === input.currentOccurrenceID) {
           result.retainedCurrent += 1
           continue
         }
-        const observation = observeProcessOccurrence({
-          pid: request.owner_pid,
-          processInstanceID: request.owner_process_instance_id,
-          occurrenceID: request.runtime_occurrence_id,
-        })
+        const observation = observeProcessOccurrence(effectiveOwner)
         if (observation !== "dead_or_reused") {
-          result.retainedLive += 1
+          if (observation === "unknown_live") result.retainedUnknown += 1
+          else result.retainedLive += 1
           continue
         }
-        const helper = await readWindowsHelperMarker(requestDir, request)
         if (
           helper &&
           observeProcessOccurrence({
@@ -834,7 +937,7 @@ export namespace ProcessSupervisor {
         }
         // The helper may still be alive, or predates durable helper identity:
         // hand it the request's own cancel authority and wait for its proof.
-        await fs.writeFile(request.cancel_file, request.request_id, "utf8")
+        if (!transfer) await fs.writeFile(request.cancel_file, request.request_id, "utf8")
         const deadline = Math.min(
           Date.now() + (input.timeoutMilliseconds ?? TERMINATION_CLEANUP_TIMEOUT_MS),
           budgetDeadline,
@@ -1021,19 +1124,36 @@ process.stdin.resume()
   async function defaultSpawnCommand(opts: CommandSpawnOptions): Promise<Handle> {
     if (process.platform === "win32") return await spawnWindowsCommand(opts)
     if (opts.detached) {
-      const proc = spawn(opts.executable, opts.args, {
+      await validateDetachedContext(opts.detached)
+      const diagnostic = await fs.open(opts.detached.diagnosticPath, "a")
+      let proc: ChildProcess
+      try { proc = spawn(opts.executable, opts.args, {
         cwd: opts.cwd,
         env: opts.env,
         shell: false,
-        stdio: [opts.stdin ?? "ignore", "pipe", "pipe"],
+        stdio: ["ignore", diagnostic.fd, diagnostic.fd],
         detached: true,
         windowsHide: true,
-      })
-      return await initializedChildHandle(proc, `Detached command process '${opts.executable}'`, {
+      }) } finally { await diagnostic.close() }
+      const handle = await initializedChildHandle(proc, `Detached command process '${opts.executable}'`, {
         cleanupProcessGroup: false,
         terminateChildrenOnRootExit: opts.terminateChildrenOnRootExit,
         gracefulTerminationMs: opts.gracefulTerminationMs,
       })
+      let release: OwnershipRelease | undefined
+      const assertOwned = () => { if (release) throw new ProcessOwnershipTransferredError(release) }
+      return { ...handle,
+        terminate: async () => { assertOwned(); await handle.terminate() },
+        dispose: async () => { assertOwned(); await handle.dispose() },
+        async transferOwnership(successor) {
+          if (release) {
+            if (!sameOwner(release.kind === "native_transfer" ? release.receipt.successor : release.successor, successor)) throw new ProcessOwnershipConflictError("Detached successor identity conflicts with committed release")
+            return release
+          }
+          if (successor.pid !== handle.pid || cachedRuntimeProcessOccurrenceObserver()(successor) !== "exact_live") throw new ProcessOwnershipConflictError("Detached successor identity does not match the live target")
+          return release = { kind: "local_detached_release", previousOwner: opts.detached!.owner, successor: { ...successor } }
+        },
+      }
     }
     return spawnUnixCommand(opts)
   }
@@ -1043,7 +1163,7 @@ process.stdin.resume()
   }
 
   function trackLiveHandle(
-    opts: { cwd?: string; owner?: string; detached?: boolean; taskCancellationRole?: TaskCancellationRole },
+    opts: { cwd?: string; owner?: string; detached?: DetachedCommandContext; taskCancellationRole?: TaskCancellationRole },
     handle: Handle,
     taskID?: string,
   ): Handle {
@@ -1051,6 +1171,7 @@ process.stdin.resume()
     const cwd = opts.cwd ? normalizeCwd(opts.cwd) : undefined
     const owner = opts.owner?.trim() || "unclassified"
     let unregistered = false
+    let ownershipReleased = false
     const unregister = () => {
       if (unregistered) return
       unregistered = true
@@ -1072,9 +1193,15 @@ process.stdin.resume()
         await handle.dispose()
       },
       unref: () => {
+        if (opts.detached && !ownershipReleased) throw new Error("Detached ownership must be explicitly transferred before unref")
         handle.unref()
-        if (opts.detached) unregister()
       },
+      ...(handle.transferOwnership ? { transferOwnership: async (successor: RuntimeProcessOccurrenceInfo) => {
+        const release = await handle.transferOwnership!(successor)
+        ownershipReleased = true
+        unregister()
+        return release
+      } } : {}),
     }
     liveHandles.set(id, {
       id,
@@ -1436,12 +1563,13 @@ process.stdin.resume()
       stdin: opts.stdin,
       env,
       signal: opts.signal,
+      detached: opts.detached,
       request: (readyPath, requestID) => ({
         kind: "command",
         ...(opts.terminateChildrenOnRootExit ? { terminate_children_on_root_exit: true } : {}),
         executable,
         args: opts.args,
-        detached: opts.detached ?? false,
+        detached: Boolean(opts.detached),
         cwd: opts.cwd,
         ready_file: readyPath,
         request_id: requestID,
@@ -1461,20 +1589,22 @@ process.stdin.resume()
     stdin?: "ignore" | "pipe"
     env: NodeJS.ProcessEnv
     signal?: AbortSignal
+    detached?: DetachedCommandContext
     request: (readyPath: string, requestID: string) => Record<string, unknown>
   }): Promise<Handle> {
     const helper = await resolveWindowsHelper()
     if (!helper) {
       throw new Error("Windows process supervisor helper is required for process-tree cleanup")
     }
-    const requestDir = await Global.createTemporaryDirectory("supervisor-")
+    if (opts.detached) await validateDetachedContext(opts.detached)
+    const requestDir = opts.detached?.root ?? await Global.createTemporaryDirectory("supervisor-")
     const requestPath = path.join(requestDir, "request.json")
     const readyPath = path.join(requestDir, "ready.json")
     const launchFailedPath = path.join(requestDir, "launch-failed.json")
     const cancelPath = path.join(requestDir, "cancel")
     const settledPath = path.join(requestDir, "settled.json")
-    const requestID = randomUUID()
-    const runtimeOwner = currentRuntimeProcessOccurrence()
+    const requestID = opts.detached?.requestID ?? randomUUID()
+    const runtimeOwner = opts.detached?.owner ?? currentRuntimeProcessOccurrence()
     let terminateChildrenOnRootExit = false
     try {
       const request = {
@@ -1488,16 +1618,17 @@ process.stdin.resume()
       }
       terminateChildrenOnRootExit = (request as Record<string, unknown>).terminate_children_on_root_exit === true
       windowsRequestObserver?.(request)
-      await fs.writeFile(requestPath, JSON.stringify(request), "utf8")
+      await Filesystem.writeDurableAtomicIfAbsent(requestPath, JSON.stringify(request))
     } catch (error) {
       await rethrowWithCleanup(error, "Windows process supervisor request creation and cleanup failed", [
         () => fs.rm(requestDir, { recursive: true, force: true }),
       ])
     }
     let proc: ChildProcess
+    const diagnostic = opts.detached ? await fs.open(opts.detached.diagnosticPath, "a") : undefined
     try {
       proc = spawn(helper, ["--request", requestPath], {
-        stdio: [opts.stdin ?? "ignore", "pipe", "pipe"],
+        stdio: diagnostic ? ["ignore", diagnostic.fd, diagnostic.fd] : [opts.stdin ?? "ignore", "pipe", "pipe"],
         env: opts.env,
         detached: true,
         windowsHide: true,
@@ -1506,6 +1637,8 @@ process.stdin.resume()
       return await rethrowWithCleanup(error, "Windows process supervisor spawn and request cleanup failed", [
         () => fs.rm(requestDir, { recursive: true, force: true }),
       ])
+    } finally {
+      await diagnostic?.close()
     }
     if (!proc.pid) {
       const spawnFailure = await childSpawnFailure(proc, "Windows process supervisor helper")
@@ -1583,7 +1716,7 @@ process.stdin.resume()
     }
     const helperStdout = proc.stdout
     const helperStderr = proc.stderr
-    if (!helperStdout || !helperStderr) {
+    if (!opts.detached && (!helperStdout || !helperStderr)) {
       return await rethrowWithCleanup(
         new Error("Windows process supervisor did not expose stdout/stderr pipes"),
         "Windows process supervisor pipe validation and cleanup failed",
@@ -1596,8 +1729,8 @@ process.stdin.resume()
         ],
       )
     }
-    const stdout = new PassThrough()
-    const stderr = new PassThrough()
+    const stdout = helperStdout ? new PassThrough() : null
+    const stderr = helperStderr ? new PassThrough() : null
     const outputFailures: Error[] = []
     const observedOutputErrors = new Set<unknown>()
     const recordOutputFailure = (channel: string, error: unknown) => {
@@ -1615,10 +1748,10 @@ process.stdin.resume()
       recordOutputFailure(channel, failure)
       destination.destroy(failure)
     }
-    stdout.on("error", (error) => recordOutputFailure("stdout", error))
-    stderr.on("error", (error) => recordOutputFailure("stderr", error))
-    helperStdout.on("error", forwardSourceFailure("stdout", stdout))
-    helperStderr.on("error", forwardSourceFailure("stderr", stderr))
+    stdout?.on("error", (error) => recordOutputFailure("stdout", error))
+    stderr?.on("error", (error) => recordOutputFailure("stderr", error))
+    if (stdout) helperStdout!.on("error", forwardSourceFailure("stdout", stdout))
+    if (stderr) helperStderr!.on("error", forwardSourceFailure("stderr", stderr))
     const startupStdout: Buffer[] = []
     const startupStderr: Buffer[] = []
     const captureStdout = (chunk: Buffer | string) => {
@@ -1628,20 +1761,20 @@ process.stdin.resume()
       startupStderr.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
     }
     const detachStartupCapture = () => {
-      helperStdout.removeListener("data", captureStdout)
-      helperStderr.removeListener("data", captureStderr)
+      helperStdout?.removeListener("data", captureStdout)
+      helperStderr?.removeListener("data", captureStderr)
     }
-    const startupDetails = () =>
+    const startupDetails = () => opts.detached ? diagnosticTail(opts.detached.diagnosticPath) :
       [Buffer.concat(startupStderr).toString().trim(), Buffer.concat(startupStdout).toString().trim()]
         .filter(Boolean)
         .join("\n")
-    helperStdout.on("data", captureStdout)
-    helperStderr.on("data", captureStderr)
-    helperStdout.pipe(stdout)
-    helperStderr.pipe(stderr)
+    helperStdout?.on("data", captureStdout)
+    helperStderr?.on("data", captureStderr)
+    if (stdout) helperStdout!.pipe(stdout)
+    if (stderr) helperStderr!.pipe(stderr)
     let pid: number
     try {
-      windowsOutputObserver?.(helperStdout, helperStderr)
+      if (helperStdout && helperStderr) windowsOutputObserver?.(helperStdout, helperStderr)
       pid = await waitForReadyMarker({
         readyPath,
         requestID,
@@ -1654,6 +1787,7 @@ process.stdin.resume()
         outputFailures: () => outputFailures,
         signal: opts.signal,
         terminateChildrenOnRootExit,
+        detached: Boolean(opts.detached),
       })
       readyTargetPID = pid
     } catch (error) {
@@ -1673,6 +1807,24 @@ process.stdin.resume()
     detachStartupCapture()
 
     let helperExited = false
+    let ownershipRelease: OwnershipRelease | undefined
+    const detachedRequest = opts.detached ? parseDurableWindowsRequest(await readJsonFile(requestPath), requestDir) : undefined
+    const detachedReady = opts.detached ? parseWindowsReadyMarker({ text: await fs.readFile(readyPath, "utf8"), requestID,
+      runtimeOccurrenceID: runtimeOwner.occurrenceID, helperPID: helperHandle.pid }) : undefined
+    const detachedHelper = opts.detached ? await readWindowsHelperMarker(requestDir, detachedRequest!) : undefined
+    const observeTransfer = async () => {
+      if (ownershipRelease || !opts.detached) return ownershipRelease
+      const value = await readJsonFile(path.join(requestDir, "transfer-receipt.json"))
+      if (value === undefined) return
+      if (!detachedHelper) throw new Error("Detached request helper identity is unavailable")
+      ownershipRelease = { kind: "native_transfer", receipt: parseTransferReceipt(value, detachedRequest!, detachedReady!, detachedHelper,
+        await readJsonFile(path.join(requestDir, "restart-ready.json"))) }
+      return ownershipRelease
+    }
+    const assertOwned = async () => {
+      const release = await observeTransfer()
+      if (release) throw new ProcessOwnershipTransferredError(release)
+    }
     const helperExitOutcome = helperHandle.exited.then(
       (code) => {
         helperExited = true
@@ -1727,6 +1879,7 @@ process.stdin.resume()
     const terminate = () => {
       if (termination) return termination
       const attempt = (async () => {
+        await assertOwned()
         if (helperExited) return
         await requestCancellation()
       })()
@@ -1741,6 +1894,17 @@ process.stdin.resume()
     const dispose = () => {
       if (disposal) return disposal
       const attempt = (async () => {
+        await assertOwned()
+        if (opts.detached) {
+          await requestCancellation()
+          const deadline = Date.now() + TERMINATION_CLEANUP_TIMEOUT_MS
+          while (!helperExited) {
+            await assertOwned()
+            if (Date.now() >= deadline) throw new ProcessOwnershipUncertainError(opts.detached)
+            await Bun.sleep(20)
+          }
+          await assertOwned()
+        }
         const helperResult = await Promise.allSettled([
           helperExited ? helperHandle.dispose() : cancelAndSettleHelper(),
         ]).then(([result]) => result!)
@@ -1769,7 +1933,7 @@ process.stdin.resume()
     const settled = (async () => {
       const [physical, output] = await Promise.allSettled([exited, outputSettled])
       const cleanup =
-        physical.status === "fulfilled"
+        physical.status === "fulfilled" && !opts.detached
           ? await Promise.allSettled([cleanupRequestDirectory()]).then(([result]) => result!)
           : undefined
       const failures = [
@@ -1794,6 +1958,32 @@ process.stdin.resume()
       settled,
       terminate,
       dispose,
+      ...(opts.detached ? { transferOwnership: async (successor: RuntimeProcessOccurrenceInfo): Promise<OwnershipRelease> => {
+        if (successor.pid !== pid || successor.processInstanceID !== detachedReady!.target_process_instance_id || !successor.occurrenceID) {
+          throw new ProcessOwnershipConflictError("Detached successor identity does not match its native target")
+        }
+        const existing = await observeTransfer()
+        if (existing) {
+          if (existing.kind !== "native_transfer" || !sameOwner(existing.receipt.successor, successor)) throw new ProcessOwnershipConflictError("Detached successor conflicts with committed transfer")
+          return existing
+        }
+        const intent = { protocol: 1, request_id: requestID, expected_owner: runtimeOwner, successor }
+        const intentPath = path.join(requestDir, "transfer-request.json")
+        await Filesystem.writeDurableAtomicIfAbsent(intentPath, JSON.stringify(intent))
+        if (JSON.stringify(await readJsonFile(intentPath)) !== JSON.stringify(intent)) throw new ProcessOwnershipConflictError("Detached transfer request conflicts with existing intent")
+        const deadline = Date.now() + TERMINATION_CLEANUP_TIMEOUT_MS
+        while (Date.now() < deadline) {
+          const release = await observeTransfer()
+          if (release) return release
+          if (helperExited) { await exited; throw new Error("Detached target settled before ownership transfer") }
+          await Bun.sleep(20)
+        }
+        try { await dispose() } catch (error) {
+          if (error instanceof ProcessOwnershipTransferredError) return error.release
+          throw new ProcessOwnershipUncertainError(opts.detached!, { cause: error })
+        }
+        throw new Error("Detached target settled after transfer timeout")
+      } } : {}),
     }
   }
 
@@ -1998,7 +2188,8 @@ process.stdin.resume()
   }
 
   type WindowsReadyMarker = {
-    protocol: 2
+    protocol: 3
+    detached: boolean
     request_id: string
     helper_pid: number
     target_pid: number
@@ -2120,6 +2311,7 @@ process.stdin.resume()
     const marker = value as Record<string, unknown>
     const keys = Object.keys(marker).sort()
     const expectedKeys = [
+      "detached",
       "helper_pid",
       "protocol",
       "request_id",
@@ -2131,7 +2323,7 @@ process.stdin.resume()
     if (keys.length !== expectedKeys.length || keys.some((key, index) => key !== expectedKeys[index])) {
       throw new Error("Windows process supervisor ready marker has unexpected fields")
     }
-    if (marker.protocol !== 2) throw new Error("Windows process supervisor ready marker has invalid protocol")
+    if (marker.protocol !== 3 || typeof marker.detached !== "boolean") throw new Error("Windows process supervisor ready marker requires protocol 3 and detached acknowledgement")
     if (Object.hasOwn(marker, "terminate_children_on_root_exit") && typeof marker.terminate_children_on_root_exit !== "boolean") {
       throw new Error("Windows process supervisor ready marker has invalid foreground capability")
     }
@@ -2212,6 +2404,7 @@ process.stdin.resume()
     outputFailures: () => readonly Error[]
     signal?: AbortSignal
     terminateChildrenOnRootExit: boolean
+    detached: boolean
   }): Promise<number> {
     const startupIdentity = `request_id=${input.requestID} helper_pid=${input.helperPID} helper_path=${input.helperPath} ready_path=${input.readyPath}`
     let exitCode: number | undefined
@@ -2238,6 +2431,7 @@ process.stdin.resume()
         if ((marker.terminate_children_on_root_exit === true) !== input.terminateChildrenOnRootExit) {
           throw new Error("Windows process supervisor did not acknowledge the requested foreground capability")
         }
+        if (marker.detached !== input.detached) throw new Error("Windows process supervisor did not acknowledge detached ownership")
         return marker
       } catch (error) {
         if (errorCode(error) === "ENOENT") return undefined

@@ -24,7 +24,8 @@ import { nativeMessage } from "../services/app-dialog"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { messageStore, setChatAttachments } from "../store/messages"
 import { boardStore } from "../store/board"
-import { ownsWorkspaceSelection, type GlobalComposerProjectResolution } from "../services/workspace"
+import { createComposerUploadLifetime, type ComposerUploadToken } from "../services/composer-upload-lifetime"
+import { ownsWorkspaceSelection, type ComposerProjectOperation } from "../services/workspace"
 import type { ConversationExperience } from "../store/conversation-session"
 import {
   canAcceptComposerAttachment,
@@ -162,7 +163,7 @@ export interface ChatComposerProps {
     markDispatched: () => void,
   ) => void | Promise<void>
   /** Resolve and activate the Project that owns a real attachment upload. */
-  resolveAttachmentDirectory: (selectionEpoch: number) => Promise<GlobalComposerProjectResolution>
+  resolveAttachmentDirectory: (selectionEpoch: number) => ComposerProjectOperation
   /** Called when the user clicks the stop button while busy. */
   onStop?: () => void
   onSideChat?: (prompt: string) => Promise<void>
@@ -591,7 +592,9 @@ export function ChatComposer(props: ChatComposerProps) {
     ),
   )
   const [submitting, setSubmitting] = createSignal(false)
-  const [uploadingCount, setUploadingCount] = createSignal(0)
+  const uploads = createComposerUploadLifetime()
+  const uploadingCount = uploads.count
+  onCleanup(uploads.dispose)
   const modelAvailable = createMemo(() => Boolean(appStore.composerModel.trim()))
   const sideCommand = createMemo(() =>
     props.onSideChat && !composerQuotation(props.draftKey) && attachments().length === 0
@@ -826,44 +829,6 @@ export function ChatComposer(props: ChatComposerProps) {
     writeText(draft)
   })
 
-  let attachmentUploadGeneration = 0
-  function invalidateAttachmentUploads(): void {
-    attachmentUploadGeneration += 1
-    setUploadingCount(0)
-  }
-
-  createEffect(
-    on(
-      () => `${normalizeComposerDraftKey(props.draftKey)}\u0000${activeProjectDirectory()}`,
-      invalidateAttachmentUploads,
-      { defer: true },
-    ),
-  )
-  onCleanup(invalidateAttachmentUploads)
-
-  function captureAttachmentUploadOwner(): {
-    draftKey: string
-    directory: string
-    generation: number
-    selectionEpoch: number
-  } {
-    return {
-      draftKey: normalizeComposerDraftKey(props.draftKey),
-      directory: activeProjectDirectory(),
-      generation: attachmentUploadGeneration,
-      selectionEpoch: boardStore.selectEpoch,
-    }
-  }
-
-  function ownsAttachmentUpload(owner: ReturnType<typeof captureAttachmentUploadOwner>): boolean {
-    return (
-      owner.generation === attachmentUploadGeneration &&
-      ownsWorkspaceSelection(owner.selectionEpoch) &&
-      owner.draftKey === normalizeComposerDraftKey(props.draftKey) &&
-      owner.directory === activeProjectDirectory()
-    )
-  }
-
   // ── Auto-grow textarea ──
   // Content-driven height (capped, then scroll) is owned by the shared
   // <AutoGrowTextarea> primitive. The drag handle below still sets
@@ -900,22 +865,17 @@ export function ChatComposer(props: ChatComposerProps) {
     const sourceName = displayName || file.name
     const mime = file.type || "application/octet-stream"
     const filename = chooseAttachmentFilename(sourceName, mime)
-    setUploadingCount((count) => count + 1)
-    let owner: ReturnType<typeof captureAttachmentUploadOwner> | undefined
+    let token: ComposerUploadToken | undefined
     try {
-      const inputOwner = captureAttachmentUploadOwner()
+      const originEpoch = boardStore.selectEpoch
       const capturedInput = captureComposerFile(file)
-      const projectResolution = props.resolveAttachmentDirectory(inputOwner.selectionEpoch)
-      const [captured, resolution] = await Promise.all([capturedInput, projectResolution])
-      if (!ownsWorkspaceSelection(resolution.selectionEpoch))
-        throw new DOMException("Attachment input superseded", "AbortError")
+      const operation = props.resolveAttachmentDirectory(originEpoch)
+      token = uploads.register(operation)
+      const [captured, resolution] = await Promise.all([capturedInput, operation.promise])
+      if (!uploads.isCurrent(token)) throw new DOMException("Attachment input superseded", "AbortError")
       const { directory } = resolution
-      owner = captureAttachmentUploadOwner()
-      if (owner.directory !== directory) {
-        throw new Error("Attachment Project activation did not establish the resolved directory")
-      }
-      const reference = await uploadComposerBytes({ ...captured, filename, directory: owner.directory })
-      if (!ownsAttachmentUpload(owner)) return
+      const reference = await uploadComposerBytes({ ...captured, filename, directory })
+      if (!uploads.isCurrent(token)) return
       if (composerAttachmentCapacity(attachments(), "file") === 0) {
         showComposerMessage(
           "attachment-file-limit",
@@ -930,14 +890,18 @@ export function ChatComposer(props: ChatComposerProps) {
       setAttachments((prev) => [...prev, { ...reference, kind: "file" }])
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") return
-      if (owner && !ownsAttachmentUpload(owner)) return
+      if (token && (!uploads.has(token) || !ownsWorkspaceSelection(token.operation.selectionEpoch()))) return
       console.warn("[ChatComposer] attachment upload failed for", sourceName, err)
-      showComposerMessage("attachment-upload-failed", t("chat.attach_upload_failed", { name: sourceName }), {
-        title: t("chat.attach_upload_failed_title"),
-        kind: "error",
-      })
+      showComposerMessage(
+        "attachment-upload-failed",
+        t("chat.attach_upload_failed", { name: sourceName, error: composerDialogErrorMessage(err) }),
+        {
+          title: t("chat.attach_upload_failed_title"),
+          kind: "error",
+        },
+      )
     } finally {
-      if (!owner || ownsAttachmentUpload(owner)) setUploadingCount((count) => Math.max(0, count - 1))
+      if (token) uploads.finish(token)
     }
   }
 
@@ -974,25 +938,18 @@ export function ChatComposer(props: ChatComposerProps) {
       )
       return
     }
-    let uploadStarted = false
-    const pickerOwner = captureAttachmentUploadOwner()
-    let owner: ReturnType<typeof captureAttachmentUploadOwner> | undefined
+    const pickerEpoch = boardStore.selectEpoch
+    const pickerDirectory = activeProjectDirectory()
+    let token: ComposerUploadToken | undefined
     try {
-      const selectedPath = await pickDirectory(pickerOwner.directory || undefined)
-      if (!selectedPath) return
-      if (!ownsAttachmentUpload(pickerOwner)) return
-      setUploadingCount((count) => count + 1)
-      uploadStarted = true
-      const resolution = await props.resolveAttachmentDirectory(pickerOwner.selectionEpoch)
-      if (!ownsWorkspaceSelection(resolution.selectionEpoch))
-        throw new DOMException("Directory attachment superseded", "AbortError")
-      const { directory } = resolution
-      owner = captureAttachmentUploadOwner()
-      if (owner.directory !== directory) {
-        throw new Error("Attachment Project activation did not establish the resolved directory")
-      }
-      const reference = await uploadComposerDirectoryReference(selectedPath, owner.directory)
-      if (!ownsAttachmentUpload(owner)) return
+      const selectedPath = await pickDirectory(pickerDirectory || undefined)
+      if (!selectedPath || !ownsWorkspaceSelection(pickerEpoch)) return
+      const operation = props.resolveAttachmentDirectory(pickerEpoch)
+      token = uploads.register(operation)
+      const { directory } = await operation.promise
+      if (!uploads.isCurrent(token)) throw new DOMException("Directory attachment superseded", "AbortError")
+      const reference = await uploadComposerDirectoryReference(selectedPath, directory)
+      if (!uploads.isCurrent(token)) return
       if (composerAttachmentCapacity(attachments(), "folder") === 0) {
         showComposerMessage(
           "attachment-folder-limit",
@@ -1007,7 +964,7 @@ export function ChatComposer(props: ChatComposerProps) {
       setAttachments((prev) => [...prev, { ...reference, kind: "folder", mime: DIRECTORY_REFERENCE_MIME }])
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") return
-      if (owner && !ownsAttachmentUpload(owner)) return
+      if (token && (!uploads.has(token) || !ownsWorkspaceSelection(token.operation.selectionEpoch()))) return
       showComposerMessage(
         "attachment-folder-failed",
         t("chat.attach_folder_failed", { error: composerDialogErrorMessage(err) }),
@@ -1017,9 +974,7 @@ export function ChatComposer(props: ChatComposerProps) {
         },
       )
     } finally {
-      if (uploadStarted && (!owner || ownsAttachmentUpload(owner))) {
-        setUploadingCount((count) => Math.max(0, count - 1))
-      }
+      if (token) uploads.finish(token)
     }
   }
 

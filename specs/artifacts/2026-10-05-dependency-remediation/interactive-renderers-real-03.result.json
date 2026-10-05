@@ -1,0 +1,213 @@
+{
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-G7Ro9j\\runner-67000-ZgkpVN\\runtime-root\\tmp\\opencorvus-renderers-real-8xbp39",
+  "pid": 67000,
+  "model": "openai/gpt-6.1-sol",
+  "reviewStop": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-G7Ro9j\\runner-67000-ZgkpVN\\runtime-root\\tmp\\opencorvus-renderers-real-8xbp39\\review.stop",
+  "maxRequests": 12,
+  "inactivityMs": 180000,
+  "authority": {
+    "credential": "available",
+    "projectedModel": "gpt-6.1-sol",
+    "pairedModels": true
+  },
+  "pageURL": "http://127.0.0.1:51102/ui/",
+  "preflight": {
+    "sessionID": "ses_htTDRmjSnIk7Q0MymhSs",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "chat": {
+    "requestID": "d74d5d57-dc27-4ce9-8306-3751cb027116",
+    "session": {
+      "id": "ses_hUpQFmifu3IYEUXctCJG",
+      "slug": "stellar-cabin",
+      "projectID": "prj_h7mJIkURGlTdnNdJ5aZN",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-G7Ro9j\\runner-67000-ZgkpVN\\runtime-root\\tmp\\opencorvus-renderers-real-8xbp39\\home\\data\\projects\\2026\\10\\05\\922398cf-e077-4e7a-be29-cd40dc4eccf1",
+      "title": "请为依赖升级的真实视觉验收发布两个交互产物。通过实际 publish_interactive_artifact 工具分别发布：1) diagram@1，标...",
+      "version": "local",
+      "kind": "assistant",
+      "metadata": {
+        "globalChatStart": {
+          "version": 2,
+          "requestID": "d74d5d57-dc27-4ce9-8306-3751cb027116",
+          "requestFingerprint": "ac392fcc0ad73e80076d9357d73e8b2e60179c80a87096e830c558aa63fe8ff2",
+          "messageID": "msg_hueTcaT8SYqJz4ydGwwz"
+        },
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        },
+        "configOverlay": {
+          "model": "openai/gpt-6.1-sol",
+          "prompt_profile": {
+            "active": "base"
+          }
+        }
+      },
+      "time": {
+        "created": 1791177666154,
+        "updated": 1791177666289
+      },
+      "permission": [
+        {
+          "permission": "delegate_agent",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_query_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_query_task_artifacts",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_create_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_wake_mission",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_wake_work",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_send_task_message",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_respond_interaction",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_cancel_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_update_checks",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_select_workspace",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_update_goal",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_delete_goal",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "question",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "bash",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "read",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "glob",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "search_code",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "edit",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "write",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "apply_patch",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "todo",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "schedule",
+          "pattern": "*",
+          "action": "allow"
+        }
+      ]
+    },
+    "messageID": "msg_hueTcaT8SYqJz4ydGwwz"
+  },
+  "credentialCleanup": "passed",
+  "cleanupErrors": [],
+  "error": {
+    "name": "AssertionError",
+    "message": "Persistent Chat retains the actual accepted Message owner",
+    "stack": "AssertionError [ERR_ASSERTION]: Persistent Chat retains the actual accepted Message owner\n    at D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\script\\interactive-renderers-real.ts:113:7\n    at processTicksAndRejections (native:7:39)"
+  },
+  "status": "failed",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    }
+  ]
+}

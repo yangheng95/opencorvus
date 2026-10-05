@@ -10,6 +10,7 @@ import {
   type ServerShutdownRequest,
 } from "../../server/shutdown"
 import { recordCurrentProcessShutdownRequest } from "../../runtime/process-occurrence"
+import { ProcessSupervisor } from "../../shell/process-supervisor"
 import {
   childRestartHandoff,
   beginRestartHandoff,
@@ -17,7 +18,7 @@ import {
   waitForReleasedListener,
   waitForRestartBind,
 } from "../../server/restart-handoff"
-import { clearServerRestartHandler, registerServerRestartHandler } from "../../server/restart"
+import { clearServerRestartHandler, registerServerRestartHandler, type RestartHandler } from "../../server/restart"
 import { stopServerWithTimeout } from "../../server/stop"
 import { ManagedServerLifecycle } from "../../server/managed-server-lifecycle"
 import {
@@ -197,7 +198,7 @@ async function handleServeCommandInner(args: ArgumentsCamelCase<ServeOptions>) {
     })
   } catch (recoveryError) {
     if (childHandoff) {
-      sendRestartHandoffMessage(
+      await sendRestartHandoffMessage(
         { type: "failed", error: recoveryError instanceof Error ? recoveryError.message : String(recoveryError) },
         childHandoff,
       )
@@ -286,12 +287,12 @@ async function handleServeCommandInner(args: ArgumentsCamelCase<ServeOptions>) {
     void shutdown.then(
       () => {
         clearServerShutdownHandler(requestShutdown)
-        clearServerRestartHandler(requestRestart)
+        clearServerRestartHandler(restartHandler)
         setTimeout(() => process.exit(0), 0)
       },
       (error) => {
         clearServerShutdownHandler(requestShutdown)
-        clearServerRestartHandler(requestRestart)
+        clearServerRestartHandler(restartHandler)
         console.error("[serve] shutdown failed:", error)
         setTimeout(() => process.exit(1), 0)
       },
@@ -371,7 +372,7 @@ async function handleServeCommandInner(args: ArgumentsCamelCase<ServeOptions>) {
         processExecutionSettlement = undefined
       },
     }).then(({ drained }) => {
-      clearServerRestartHandler(requestRestart)
+      clearServerRestartHandler(restartHandler)
       void drained.then(
         () => {
           void requestShutdown({ source: "internal-restart", reason })
@@ -388,7 +389,19 @@ async function handleServeCommandInner(args: ArgumentsCamelCase<ServeOptions>) {
     })
     return operation
   }
-  registerServerRestartHandler(requestRestart)
+  const restartHandler: RestartHandler = {
+    async availability() {
+      if (managed) return { available: false, reason: "managed_parent", message: "Restart this managed backend through its launcher" }
+      if (process.pid === 1) return { available: false, reason: "init_process", message: "Restart this init process through its container or service owner" }
+      if (process.platform === "win32") {
+        try { await ProcessSupervisor.assertDetachedCommandAvailable() }
+        catch (error) { return { available: false, reason: error instanceof ProcessSupervisor.DetachedCommandAvailabilityError ? error.reason : "ownership_unobservable", message: String(error) } }
+      }
+      return { available: true }
+    },
+    execute: requestRestart,
+  }
+  registerServerRestartHandler(restartHandler)
 
   const signals: NodeJS.Signals[] =
     process.platform === "win32" ? ["SIGINT", "SIGTERM", "SIGBREAK"] : ["SIGINT", "SIGTERM"]
@@ -424,7 +437,7 @@ async function handleServeCommandInner(args: ArgumentsCamelCase<ServeOptions>) {
   }
 
   if (childHandoff) {
-    sendRestartHandoffMessage({ type: "ready", url: serverUrl }, childHandoff)
+    await sendRestartHandoffMessage({ type: "ready", url: serverUrl }, childHandoff)
   }
 
   await new Promise(() => {})

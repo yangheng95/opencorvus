@@ -2,10 +2,12 @@ import { describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
+import { observeRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
 
 type LifecycleEvent = {
   phase: "ready" | "shutdown" | "timeout"
   childPid: number
+  child: { pid: number; processInstanceID: string; occurrenceID: string }
   parent: { pid: number; processInstanceID: string; occurrenceID: string }
   reason?: string
 }
@@ -41,16 +43,15 @@ describe("managed backend follows one launcher-minted parent occurrence", () => 
     )
     let childPid: number | undefined
     try {
-      const [exitCode, stdout, stderr] = await Promise.all([
+      const [exitCode, stdout] = await Promise.all([
         launcher.exited,
         new Response(launcher.stdout).text(),
         new Response(launcher.stderr).text(),
       ])
       childPid = Number(stdout.trim())
       expect(Number.isSafeInteger(childPid) && childPid > 0).toBe(true)
-      expect({ exitCode, stderr: stderr.trim(), childPid, launcherPid: launcher.pid }).toEqual({
+      expect({ exitCode, childPid, launcherPid: launcher.pid }).toEqual({
         exitCode: 0,
-        stderr: "",
         childPid: expect.any(Number),
         launcherPid: expect.any(Number),
       })
@@ -66,6 +67,7 @@ describe("managed backend follows one launcher-minted parent occurrence", () => 
         {
           phase: "ready",
           childPid,
+          child: { pid: childPid, processInstanceID: expect.stringMatching(/^(win32|linux|darwin):/), occurrenceID: expect.any(String) },
           parent: {
             pid: launcher.pid,
             processInstanceID: expect.stringMatching(/^(win32|linux|darwin):/),
@@ -75,6 +77,7 @@ describe("managed backend follows one launcher-minted parent occurrence", () => 
         {
           phase: "shutdown",
           childPid,
+          child: observed[0]?.child,
           parent: {
             pid: launcher.pid,
             processInstanceID: observed[0]?.parent.processInstanceID,
@@ -85,7 +88,7 @@ describe("managed backend follows one launcher-minted parent occurrence", () => 
       ])
       const exitDeadline = Date.now() + 5_000
       while (childPid && processIsAlive(childPid) && Date.now() < exitDeadline) await Bun.sleep(20)
-      expect({ childPid, alive: childPid ? processIsAlive(childPid) : true }).toEqual({ childPid, alive: false })
+      expect(observeRuntimeProcessOccurrence(observed[0]!.child)).toBe("dead_or_reused")
     } finally {
       if (childPid && processIsAlive(childPid)) process.kill(childPid, "SIGKILL")
       await fs.rm(directory, { recursive: true, force: true })

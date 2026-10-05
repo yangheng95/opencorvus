@@ -1,0 +1,24 @@
+[
+  {
+    "stage": "module loaded",
+    "pid": 38464,
+    "inJob": false
+  },
+  {
+    "stage": "spawnSync bun version",
+    "pid": 38464,
+    "inJob": true
+  },
+  {
+    "stage": "child",
+    "detached": false,
+    "pid": 67184,
+    "inJob": true
+  },
+  {
+    "stage": "child",
+    "detached": true,
+    "pid": 73772,
+    "inJob": false
+  }
+]

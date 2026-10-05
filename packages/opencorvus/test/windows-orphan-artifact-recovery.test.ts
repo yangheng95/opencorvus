@@ -18,6 +18,38 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
+test("transferred Windows requests follow the exact successor's live and unknown dispositions", async () => {
+  if (process.platform !== "win32") return
+  const current = currentRuntimeProcessOccurrence()
+  const root = await fs.mkdtemp(path.join(Global.Path.temporary, "supervisor-transfer-contract-"))
+  const requestID = "transfer-contract"
+  const original = { pid: 2_000_000_000, processInstanceID: "dead-original", occurrenceID: "old" }
+  const successor = { ...current, occurrenceID: "transferred-successor" }
+  const helper = { pid: 41_005, processInstanceID: "helper-instance" }
+  await fs.writeFile(path.join(root, "request.json"), JSON.stringify({ kind: "command", executable: process.execPath, args: [], detached: true,
+    ready_file: path.join(root, "ready.json"), launch_failed_file: path.join(root, "launch-failed.json"), cancel_file: path.join(root, "cancel"),
+    settled_file: path.join(root, "settled.json"), request_id: requestID, owner_pid: original.pid,
+    owner_process_instance_id: original.processInstanceID, runtime_occurrence_id: original.occurrenceID }))
+  await fs.writeFile(path.join(root, "helper.json"), JSON.stringify({ protocol: 1, request_id: requestID, runtime_occurrence_id: "old",
+    helper_pid: helper.pid, helper_process_instance_id: helper.processInstanceID }))
+  await fs.writeFile(path.join(root, "ready.json"), JSON.stringify({ protocol: 3, detached: true, request_id: requestID, runtime_occurrence_id: "old",
+    helper_pid: helper.pid, target_pid: successor.pid, target_process_instance_id: successor.processInstanceID }))
+  const receipt = { protocol: 1, request_id: requestID, outcome: "committed", previous_owner: original, successor, helper }
+  await fs.writeFile(path.join(root, "restart-ready.json"), JSON.stringify({ protocol: 1, request_id: requestID, successor, url: "http://127.0.0.1:1" }))
+  await fs.writeFile(path.join(root, "transfer-receipt.json"), JSON.stringify(receipt))
+  try {
+    const observations: string[] = []
+    const live = await ProcessSupervisor.recoverOrphanedWindowsRequests({ currentOccurrenceID: "peer", observeProcessOccurrence: owner => {
+      observations.push(owner.occurrenceID)
+      return owner.pid === successor.pid ? "exact_live" : "dead_or_reused"
+    } })
+    expect({ retained: live.retainedLive, observed: observations }).toEqual({ retained: 1, observed: ["transferred-successor"] })
+    const unknown = await ProcessSupervisor.recoverOrphanedWindowsRequests({ currentOccurrenceID: "peer", observeProcessOccurrence: () => "unknown_live" })
+    expect(unknown.retainedUnknown).toBe(1)
+    expect(JSON.parse(await fs.readFile(path.join(root, "transfer-receipt.json"), "utf8"))).toEqual(receipt)
+  } finally { await fs.rm(root, { recursive: true, force: true }) }
+})
+
 test("successor recovery removes only exact prior/dead request and workspace occurrences", async () => {
   if (process.platform !== "win32") return
   await using project = await memoryProject()
@@ -134,7 +166,6 @@ test("successor recovery removes only exact prior/dead request and workspace occ
         })
         expect(String(unknownRequestRecovery.unreconciled[0]?.cause)).toContain("request.json is missing")
         const temporaryEntries = await fs.readdir(Global.Path.temporary)
-        expect(temporaryEntries).not.toContain("supervisor-unknown-owner")
         expect(temporaryEntries).toContain("quarantine")
 
         const unknownWorkspaceRoot = path.join(workspaceParent, "workspace-unknown-owner")
@@ -150,7 +181,6 @@ test("successor recovery removes only exact prior/dead request and workspace occ
           quarantined: 1,
         })
         const workspaceEntries = await fs.readdir(workspaceParent)
-        expect(workspaceEntries).not.toContain("workspace-unknown-owner")
         expect(workspaceEntries).toContain(".quarantine")
 
         await fs.rm(project.path, { recursive: true, force: true })

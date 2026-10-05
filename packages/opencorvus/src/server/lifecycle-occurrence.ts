@@ -1,7 +1,7 @@
 import z from "zod"
 import { Identifier } from "@/id/id"
 import { Log } from "@/util/log"
-import { canRestartServer, startServerRestart } from "./restart"
+import { serverRestartHandler, type RestartUnavailableReason } from "./restart"
 import { hasServerShutdownHandler, requestServerShutdown, type ServerShutdownRequest } from "./shutdown"
 
 /**
@@ -49,7 +49,7 @@ export type ServerLifecycleOccurrence = {
 
 export type ServerLifecycleAdmission =
   | { admitted: true; occurrence: ServerLifecycleOccurrence }
-  | { admitted: false; reason: "unavailable" }
+  | { admitted: false; reason: "unavailable"; detail?: { reason: RestartUnavailableReason; message: string } }
   | { admitted: false; reason: "conflicting_lifecycle"; live: ServerLifecycleOccurrence }
 
 const occurrences = new Map<string, ServerLifecycleOccurrence>()
@@ -102,13 +102,21 @@ export function admitServerShutdown(request: ServerShutdownRequest): ServerLifec
   })
 }
 
-export function admitServerRestart(reason: string): ServerLifecycleAdmission {
-  if (!canRestartServer()) return { admitted: false, reason: "unavailable" }
-  return admit("restart", async () => {
-    if (!(await startServerRestart(reason))) {
-      throw new Error("Server restart handler was cleared after admission")
-    }
-  })
+export async function admitServerRestart(reason: string): Promise<ServerLifecycleAdmission> {
+  const current = () : ServerLifecycleAdmission | undefined => live?.state === "executing"
+    ? live.kind === "restart" ? { admitted: true, occurrence: live }
+      : { admitted: false, reason: "conflicting_lifecycle", live } : undefined
+  const existing = current()
+  if (existing) return existing
+  const handler = serverRestartHandler()
+  if (!handler) return { admitted: false, reason: "unavailable" }
+  const availability = await handler.availability()
+  const concurrent = current()
+  if (concurrent) return concurrent
+  if (!availability.available) return { admitted: false, reason: "unavailable", detail: { reason: availability.reason, message: availability.message } }
+  if (handler !== serverRestartHandler()) return { admitted: false, reason: "unavailable",
+    detail: { reason: "handler_unavailable", message: "Restart owner changed during availability observation" } }
+  return admit("restart", () => handler.execute(reason))
 }
 
 export const ServerLifecycleTestHooks = {

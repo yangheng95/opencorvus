@@ -91,6 +91,8 @@ interface GlobalComposerProjectAllocation {
   originEpoch: number
   epoch: number
   sequence: number
+  phase: "pending" | "fulfilled" | "rejected"
+  operation: ComposerProjectOperation
   promise: Promise<GlobalComposerProjectResolution>
 }
 let globalComposerProjectAllocation: GlobalComposerProjectAllocation | null = null
@@ -364,62 +366,95 @@ function assertComposerProjectAllocationCurrent(owner: GlobalComposerProjectAllo
     throw new DOMException("Global Composer Project allocation superseded", "AbortError")
 }
 
-export async function resolveGlobalComposerProject(
-  request: GlobalComposerProjectRequest,
-): Promise<GlobalComposerProjectResolution> {
-  const existing = globalComposerProjectAllocation
-  if (
-    existing &&
-    (existing.epoch === request.selectionEpoch ||
-      (request.kind === "attachment" && existing.originEpoch === request.selectionEpoch))
-  ) {
-    assertComposerProjectAllocationCurrent(existing)
-    return existing.promise
-  }
-  if (!ownsWorkspaceSelection(request.selectionEpoch))
-    throw new DOMException("Global Composer Project creation superseded", "AbortError")
-  const current = activeDirectory().trim()
-  if (current) return { directory: current, selectionEpoch: request.selectionEpoch }
+export interface ComposerProjectOperation {
+  readonly promise: Promise<GlobalComposerProjectResolution>
+  readonly selectionEpoch: () => number
+  readonly isCurrent: () => boolean
+}
 
-  // Install the sole owner before its microtask starts admission. Every file
-  // in a clipboard/drop batch can start capturing transient bytes first.
-  const owner: GlobalComposerProjectAllocation = {
-    originEpoch: request.selectionEpoch,
-    epoch: request.selectionEpoch,
-    sequence: workspaceAdmissionSequence,
-    promise: Promise.resolve().then(async () => {
-      assertComposerProjectAllocationCurrent(owner)
-      if (request.kind === "attachment") {
-        await admitWorkspaceSelection(undefined, {
-          requested: (sequence) => {
-            owner.sequence = sequence
-          },
-          committed: (epoch) => {
-            owner.epoch = epoch
-          },
-        })
-        assertComposerProjectAllocationCurrent(owner)
-      }
-      const directory = await createAnonymousProject()
-      assertComposerProjectAllocationCurrent(owner)
-      const activated = await applyDirectory(directory, {
-        save: false,
-        persist: false,
-        restoreWorkspace: false,
-        selectionEpoch: owner.epoch,
-      })
-      assertComposerProjectAllocationCurrent(owner)
-      if (!activated) {
-        throw new DOMException("Global Composer Project activation superseded", "AbortError")
-      }
-      return { directory, selectionEpoch: owner.epoch }
-    }),
-  }
-  globalComposerProjectAllocation = owner
+function rejectedComposerProjectOperation(selectionEpoch: number, error: unknown): ComposerProjectOperation {
+  return { promise: Promise.reject(error), selectionEpoch: () => selectionEpoch, isCurrent: () => false }
+}
+
+export function resolveGlobalComposerProject(request: GlobalComposerProjectRequest): ComposerProjectOperation {
   try {
-    return await owner.promise
-  } finally {
-    if (globalComposerProjectAllocation === owner) globalComposerProjectAllocation = null
+    const existing = globalComposerProjectAllocation
+    if (
+      existing &&
+      (existing.epoch === request.selectionEpoch ||
+        (request.kind === "attachment" && existing.originEpoch === request.selectionEpoch))
+    ) {
+      assertComposerProjectAllocationCurrent(existing)
+      return existing.operation
+    }
+    if (!ownsWorkspaceSelection(request.selectionEpoch))
+      throw new DOMException("Global Composer Project creation superseded", "AbortError")
+    const current = activeDirectory().trim()
+    if (current)
+      return {
+        promise: Promise.resolve({ directory: current, selectionEpoch: request.selectionEpoch }),
+        selectionEpoch: () => request.selectionEpoch,
+        isCurrent: () => ownsWorkspaceSelection(request.selectionEpoch),
+      }
+
+    // Install the sole owner synchronously, before admission can migrate its
+    // epoch. Inputs share both its pending Promise and accepted identity.
+    const owner: GlobalComposerProjectAllocation = {
+      originEpoch: request.selectionEpoch,
+      epoch: request.selectionEpoch,
+      sequence: workspaceAdmissionSequence,
+      phase: "pending",
+      get operation() {
+        return operation
+      },
+      promise: Promise.resolve().then(async () => {
+        try {
+          assertComposerProjectAllocationCurrent(owner)
+          if (request.kind === "attachment") {
+            await admitWorkspaceSelection(undefined, {
+              requested: (sequence) => {
+                owner.sequence = sequence
+              },
+              committed: (epoch) => {
+                owner.epoch = epoch
+              },
+            })
+            assertComposerProjectAllocationCurrent(owner)
+          }
+          const directory = await createAnonymousProject()
+          assertComposerProjectAllocationCurrent(owner)
+          const activated = await applyDirectory(directory, {
+            save: false,
+            persist: false,
+            restoreWorkspace: false,
+            selectionEpoch: owner.epoch,
+          })
+          assertComposerProjectAllocationCurrent(owner)
+          if (!activated) throw new DOMException("Global Composer Project activation superseded", "AbortError")
+          owner.phase = "fulfilled"
+          return { directory, selectionEpoch: owner.epoch }
+        } catch (error) {
+          owner.phase = "rejected"
+          throw error
+        } finally {
+          if (globalComposerProjectAllocation === owner) globalComposerProjectAllocation = null
+        }
+      }),
+    }
+    const operation: ComposerProjectOperation = {
+      promise: owner.promise,
+      selectionEpoch: () => owner.epoch,
+      isCurrent: () =>
+        ownsWorkspaceSelection(owner.epoch) &&
+        (owner.phase === "fulfilled" ||
+          (owner.phase === "pending" &&
+            globalComposerProjectAllocation === owner &&
+            owner.sequence === workspaceAdmissionSequence)),
+    }
+    globalComposerProjectAllocation = owner
+    return operation
+  } catch (error) {
+    return rejectedComposerProjectOperation(request.selectionEpoch, error)
   }
 }
 
@@ -436,7 +471,7 @@ export async function resolveGlobalComposerSubmissionContext(
   selectionEpoch: number,
 ): Promise<GlobalComposerSubmissionContext> {
   const model = appStore.composerModel.trim() || undefined
-  const { directory } = await resolveGlobalComposerProject({ kind: "admitted", selectionEpoch })
+  const { directory } = await resolveGlobalComposerProject({ kind: "admitted", selectionEpoch }).promise
   return { directory, model }
 }
 

@@ -1,0 +1,744 @@
+{
+  "status": "passed",
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check",
+  "helper": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3f665b2bfd616ca5\\debug\\opencorvus-process-supervisor.exe",
+  "cases": [
+    {
+      "mode": "standalone",
+      "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone\\home",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone\\project",
+      "originalPID": 68732,
+      "originalOwner": {
+        "pid": 68732,
+        "processInstanceID": "win32:639267728656688491",
+        "occurrenceID": "checker:standalone"
+      },
+      "launchReceipt": {
+        "ReturnValue": 0,
+        "ProcessId": 68732,
+        "owner": {
+          "pid": 68732,
+          "processInstanceID": "win32:639267728656688491",
+          "occurrenceID": "checker:standalone"
+        }
+      },
+      "restarts": [
+        {
+          "accepted": {
+            "status": 200,
+            "body": {
+              "ok": true,
+              "occurrenceID": "cal_g0VX9EFdc00Yr5HV3i63"
+            }
+          },
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone\\home\\tmp\\supervisor-4wKN7m",
+          "transfer": {
+            "protocol": 1,
+            "request_id": "002fe4b1-7c75-459f-9527-d902a6bc4e6e",
+            "outcome": "committed",
+            "previous_owner": {
+              "occurrenceID": "2553bbe7-2f4e-4a8e-8b5b-53886a540e07",
+              "pid": 68732,
+              "processInstanceID": "win32:639267728656688491"
+            },
+            "successor": {
+              "occurrenceID": "170dfafa-b595-47d5-8e1f-3e6c4ae6dd33",
+              "pid": 42316,
+              "processInstanceID": "win32:639267728704220835"
+            },
+            "helper": {
+              "pid": 38464,
+              "processInstanceID": "win32:639267728703830995"
+            }
+          },
+          "ready": {
+            "protocol": 3,
+            "detached": true,
+            "request_id": "002fe4b1-7c75-459f-9527-d902a6bc4e6e",
+            "helper_pid": 38464,
+            "target_pid": 42316,
+            "target_process_instance_id": "win32:639267728704220835",
+            "runtime_occurrence_id": "2553bbe7-2f4e-4a8e-8b5b-53886a540e07"
+          },
+          "applicationReady": {
+            "protocol": 1,
+            "request_id": "002fe4b1-7c75-459f-9527-d902a6bc4e6e",
+            "successor": {
+              "pid": 42316,
+              "processInstanceID": "win32:639267728704220835",
+              "occurrenceID": "170dfafa-b595-47d5-8e1f-3e6c4ae6dd33"
+            },
+            "url": "http://127.0.0.1:52077"
+          },
+          "health": {
+            "status": 200,
+            "body": {
+              "healthy": true,
+              "version": "local",
+              "paths": {
+                "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone\\home\\data\\opencorvus.db",
+                "data": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone\\home\\data",
+                "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone\\home"
+              }
+            }
+          },
+          "read": {
+            "status": 200,
+            "body": {
+              "type": "text",
+              "content": "before-standalone\n",
+              "revision": "3955ac2e987618ac33c51ef5839da8f1b64cf60b26f5eac8e40410f9d20cf0e1"
+            }
+          },
+          "saved": {
+            "status": 200,
+            "body": {
+              "type": "text",
+              "content": "saved-after-1\n",
+              "revision": "adad5d9f361f7c443fd91c30b196f5dae7236edc5eb4c0149d18fb69ae01c46a"
+            }
+          },
+          "predecessorDisposition": "dead_or_reused"
+        },
+        {
+          "accepted": {
+            "status": 200,
+            "body": {
+              "ok": true,
+              "occurrenceID": "cal_g0VX9EH1l00DUUu5MG65"
+            }
+          },
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone\\home\\tmp\\supervisor-Qazg5y",
+          "transfer": {
+            "protocol": 1,
+            "request_id": "3f7a39d3-9ba4-4534-bfea-8a55a9c71600",
+            "outcome": "committed",
+            "previous_owner": {
+              "occurrenceID": "170dfafa-b595-47d5-8e1f-3e6c4ae6dd33",
+              "pid": 42316,
+              "processInstanceID": "win32:639267728704220835"
+            },
+            "successor": {
+              "occurrenceID": "48c489e8-4883-49f7-aacc-ce175f761715",
+              "pid": 69276,
+              "processInstanceID": "win32:639267728757730118"
+            },
+            "helper": {
+              "pid": 12076,
+              "processInstanceID": "win32:639267728757239574"
+            }
+          },
+          "ready": {
+            "protocol": 3,
+            "detached": true,
+            "request_id": "3f7a39d3-9ba4-4534-bfea-8a55a9c71600",
+            "helper_pid": 12076,
+            "target_pid": 69276,
+            "target_process_instance_id": "win32:639267728757730118",
+            "runtime_occurrence_id": "170dfafa-b595-47d5-8e1f-3e6c4ae6dd33"
+          },
+          "applicationReady": {
+            "protocol": 1,
+            "request_id": "3f7a39d3-9ba4-4534-bfea-8a55a9c71600",
+            "successor": {
+              "pid": 69276,
+              "processInstanceID": "win32:639267728757730118",
+              "occurrenceID": "48c489e8-4883-49f7-aacc-ce175f761715"
+            },
+            "url": "http://127.0.0.1:52077"
+          },
+          "health": {
+            "status": 200,
+            "body": {
+              "healthy": true,
+              "version": "local",
+              "paths": {
+                "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone\\home\\data\\opencorvus.db",
+                "data": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone\\home\\data",
+                "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone\\home"
+              }
+            }
+          },
+          "read": {
+            "status": 200,
+            "body": {
+              "type": "text",
+              "content": "saved-after-1\n",
+              "revision": "adad5d9f361f7c443fd91c30b196f5dae7236edc5eb4c0149d18fb69ae01c46a"
+            }
+          },
+          "saved": {
+            "status": 200,
+            "body": {
+              "type": "text",
+              "content": "saved-after-2\n",
+              "revision": "e5566e768496ff77026b0d2dd4862d5e2011e71d59894fd875cd9acf68e08279"
+            }
+          },
+          "predecessorDisposition": "dead_or_reused"
+        }
+      ],
+      "launcherStarted": {
+        "pid": 68732,
+        "processInstanceID": "win32:639267728656688491",
+        "occurrenceID": "2553bbe7-2f4e-4a8e-8b5b-53886a540e07",
+        "inJob": false
+      },
+      "startup": {
+        "schemaVersion": 1,
+        "occurrenceID": "restart-standalone",
+        "outcome": "listening",
+        "url": "http://127.0.0.1:52077",
+        "pid": 68732
+      },
+      "lastAdmission": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9EH1l00DUUu5MG65"
+        }
+      },
+      "status": "passed",
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9EIKq00tCrU61dg6"
+        }
+      },
+      "successorSettlement": {
+        "protocol": 1,
+        "request_id": "3f7a39d3-9ba4-4534-bfea-8a55a9c71600",
+        "helper_pid": 12076,
+        "target_pid": 69276,
+        "active_processes": 0,
+        "runtime_occurrence_id": "170dfafa-b595-47d5-8e1f-3e6c4ae6dd33"
+      },
+      "originalDisposition": "dead_or_reused",
+      "launcherTerminal": {
+        "pid": 68732,
+        "processInstanceID": "win32:639267728656688491",
+        "occurrenceID": "2553bbe7-2f4e-4a8e-8b5b-53886a540e07",
+        "exitCode": 0
+      }
+    },
+    {
+      "mode": "standalone-peer",
+      "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone-peer\\home",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone-peer\\project",
+      "originalPID": 68980,
+      "originalOwner": {
+        "pid": 68980,
+        "processInstanceID": "win32:639267728656980151",
+        "occurrenceID": "checker:standalone-peer"
+      },
+      "launchReceipt": {
+        "ReturnValue": 0,
+        "ProcessId": 68980,
+        "owner": {
+          "pid": 68980,
+          "processInstanceID": "win32:639267728656980151",
+          "occurrenceID": "checker:standalone-peer"
+        }
+      },
+      "restarts": [
+        {
+          "accepted": {
+            "status": 200,
+            "body": {
+              "ok": true,
+              "occurrenceID": "cal_g0VX9EFeT00vOMUrCANi"
+            }
+          },
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone-peer\\home\\tmp\\supervisor-FhDMxJ",
+          "transfer": {
+            "protocol": 1,
+            "request_id": "ba4070ca-5c68-4334-bfd8-d23921c94b16",
+            "outcome": "committed",
+            "previous_owner": {
+              "occurrenceID": "266e149e-d760-43ff-b2e7-25ab0eea3ec3",
+              "pid": 68980,
+              "processInstanceID": "win32:639267728656980151"
+            },
+            "successor": {
+              "occurrenceID": "3f102124-58f9-4909-9aec-5094b899a031",
+              "pid": 9744,
+              "processInstanceID": "win32:639267728704727383"
+            },
+            "helper": {
+              "pid": 75400,
+              "processInstanceID": "win32:639267728704326891"
+            }
+          },
+          "ready": {
+            "protocol": 3,
+            "detached": true,
+            "request_id": "ba4070ca-5c68-4334-bfd8-d23921c94b16",
+            "helper_pid": 75400,
+            "target_pid": 9744,
+            "target_process_instance_id": "win32:639267728704727383",
+            "runtime_occurrence_id": "266e149e-d760-43ff-b2e7-25ab0eea3ec3"
+          },
+          "applicationReady": {
+            "protocol": 1,
+            "request_id": "ba4070ca-5c68-4334-bfd8-d23921c94b16",
+            "successor": {
+              "pid": 9744,
+              "processInstanceID": "win32:639267728704727383",
+              "occurrenceID": "3f102124-58f9-4909-9aec-5094b899a031"
+            },
+            "url": "http://127.0.0.1:52078"
+          },
+          "health": {
+            "status": 200,
+            "body": {
+              "healthy": true,
+              "version": "local",
+              "paths": {
+                "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone-peer\\home\\data\\opencorvus.db",
+                "data": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone-peer\\home\\data",
+                "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone-peer\\home"
+              }
+            }
+          },
+          "read": {
+            "status": 200,
+            "body": {
+              "type": "text",
+              "content": "before-standalone-peer\n",
+              "revision": "51af12b79af4d09aed2193ba869231d1a74c103daa3cd0742e1a3dd5107d0ccc"
+            }
+          },
+          "saved": {
+            "status": 200,
+            "body": {
+              "type": "text",
+              "content": "saved-after-1\n",
+              "revision": "1c88fe7b3a0cf9f0bfe979a31dc4a4e8b23b4ed6b58b611f943db089aeca43d3"
+            }
+          },
+          "predecessorDisposition": "dead_or_reused"
+        },
+        {
+          "accepted": {
+            "status": 200,
+            "body": {
+              "ok": true,
+              "occurrenceID": "cal_g0VX9EH3E00Z6LCBgGb4"
+            }
+          },
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone-peer\\home\\tmp\\supervisor-glImtX",
+          "transfer": {
+            "protocol": 1,
+            "request_id": "d79ccd7f-5321-4bc8-8063-33cb7d69dd05",
+            "outcome": "committed",
+            "previous_owner": {
+              "occurrenceID": "3f102124-58f9-4909-9aec-5094b899a031",
+              "pid": 9744,
+              "processInstanceID": "win32:639267728704727383"
+            },
+            "successor": {
+              "occurrenceID": "9e6029f9-5399-407b-9e87-e7b8b4399afa",
+              "pid": 35252,
+              "processInstanceID": "win32:639267728758656784"
+            },
+            "helper": {
+              "pid": 4580,
+              "processInstanceID": "win32:639267728758189934"
+            }
+          },
+          "ready": {
+            "protocol": 3,
+            "detached": true,
+            "request_id": "d79ccd7f-5321-4bc8-8063-33cb7d69dd05",
+            "helper_pid": 4580,
+            "target_pid": 35252,
+            "target_process_instance_id": "win32:639267728758656784",
+            "runtime_occurrence_id": "3f102124-58f9-4909-9aec-5094b899a031"
+          },
+          "applicationReady": {
+            "protocol": 1,
+            "request_id": "d79ccd7f-5321-4bc8-8063-33cb7d69dd05",
+            "successor": {
+              "pid": 35252,
+              "processInstanceID": "win32:639267728758656784",
+              "occurrenceID": "9e6029f9-5399-407b-9e87-e7b8b4399afa"
+            },
+            "url": "http://127.0.0.1:52078"
+          },
+          "health": {
+            "status": 200,
+            "body": {
+              "healthy": true,
+              "version": "local",
+              "paths": {
+                "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone-peer\\home\\data\\opencorvus.db",
+                "data": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone-peer\\home\\data",
+                "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\standalone-peer\\home"
+              }
+            }
+          },
+          "read": {
+            "status": 200,
+            "body": {
+              "type": "text",
+              "content": "saved-after-1\n",
+              "revision": "1c88fe7b3a0cf9f0bfe979a31dc4a4e8b23b4ed6b58b611f943db089aeca43d3"
+            }
+          },
+          "saved": {
+            "status": 200,
+            "body": {
+              "type": "text",
+              "content": "saved-after-2\n",
+              "revision": "4c3fbeddb8335d5999078b96232a695c0df9f39962e65ee7f188addd8a214ca7"
+            }
+          },
+          "predecessorDisposition": "dead_or_reused"
+        }
+      ],
+      "launcherStarted": {
+        "pid": 68980,
+        "processInstanceID": "win32:639267728656980151",
+        "occurrenceID": "266e149e-d760-43ff-b2e7-25ab0eea3ec3",
+        "inJob": false
+      },
+      "startup": {
+        "schemaVersion": 1,
+        "occurrenceID": "restart-standalone-peer",
+        "outcome": "listening",
+        "url": "http://127.0.0.1:52078",
+        "pid": 68980
+      },
+      "lastAdmission": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9EH3E00Z6LCBgGb4"
+        }
+      },
+      "status": "passed",
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9EIJY00zxCpa4IC5"
+        }
+      },
+      "successorSettlement": {
+        "protocol": 1,
+        "request_id": "d79ccd7f-5321-4bc8-8063-33cb7d69dd05",
+        "helper_pid": 4580,
+        "target_pid": 35252,
+        "active_processes": 0,
+        "runtime_occurrence_id": "3f102124-58f9-4909-9aec-5094b899a031"
+      },
+      "originalDisposition": "dead_or_reused",
+      "launcherTerminal": {
+        "pid": 68980,
+        "processInstanceID": "win32:639267728656980151",
+        "occurrenceID": "266e149e-d760-43ff-b2e7-25ab0eea3ec3",
+        "exitCode": 0
+      }
+    },
+    {
+      "mode": "managed-parent",
+      "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\managed-parent\\home",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\managed-parent\\project",
+      "originalPID": 71392,
+      "originalOwner": {
+        "pid": 71392,
+        "processInstanceID": "win32:639267728818500942",
+        "occurrenceID": "checker:managed-parent"
+      },
+      "launchReceipt": {
+        "ReturnValue": 0,
+        "ProcessId": 71392,
+        "owner": {
+          "pid": 71392,
+          "processInstanceID": "win32:639267728818500942",
+          "occurrenceID": "checker:managed-parent"
+        }
+      },
+      "restarts": [],
+      "launcherStarted": {
+        "pid": 71392,
+        "processInstanceID": "win32:639267728818500942",
+        "occurrenceID": "dc223398-e48d-40b6-9efc-ed2566f9f9c6",
+        "inJob": false
+      },
+      "startup": {
+        "schemaVersion": 1,
+        "occurrenceID": "restart-managed-parent",
+        "outcome": "listening",
+        "url": "http://127.0.0.1:52133",
+        "pid": 71392
+      },
+      "refused": {
+        "status": 503,
+        "body": {
+          "ok": false,
+          "name": "ServerRestartUnavailableError",
+          "data": {
+            "reason": "managed_parent",
+            "message": "Restart this managed backend through its launcher"
+          }
+        }
+      },
+      "continuedHealth": {
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\managed-parent\\home\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\managed-parent\\home\\data",
+            "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\managed-parent\\home"
+          }
+        }
+      },
+      "status": "passed",
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9EJXD00Nj513XDz1"
+        }
+      },
+      "originalDisposition": "dead_or_reused",
+      "launcherTerminal": {
+        "pid": 71392,
+        "processInstanceID": "win32:639267728818500942",
+        "occurrenceID": "dc223398-e48d-40b6-9efc-ed2566f9f9c6",
+        "exitCode": 0
+      }
+    },
+    {
+      "mode": "owned-tree",
+      "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\owned-tree\\home",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\owned-tree\\project",
+      "originalPID": 13944,
+      "originalOwner": {
+        "pid": 13944,
+        "processInstanceID": "win32:639267728855220057",
+        "occurrenceID": "checker:owned-tree"
+      },
+      "restarts": [],
+      "startup": {
+        "schemaVersion": 1,
+        "occurrenceID": "restart-owned-tree",
+        "outcome": "listening",
+        "url": "http://127.0.0.1:52152",
+        "pid": 13944
+      },
+      "refused": {
+        "status": 503,
+        "body": {
+          "ok": false,
+          "name": "ServerRestartUnavailableError",
+          "data": {
+            "reason": "containing_job",
+            "message": "DetachedCommandAvailabilityError: Restart this backend through its containing process owner"
+          }
+        }
+      },
+      "continuedHealth": {
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\owned-tree\\home\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\owned-tree\\home\\data",
+            "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\owned-tree\\home"
+          }
+        }
+      },
+      "status": "passed",
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9EKY000jo10b6cqE"
+        }
+      },
+      "originalDisposition": "dead_or_reused",
+      "launcherTerminal": {
+        "occurrenceID": "c41903bf-9b8f-4158-a31b-73d246fc3cb7",
+        "pid": 13944,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      }
+    },
+    {
+      "mode": "helper-unavailable",
+      "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\helper-unavailable\\home",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\helper-unavailable\\project",
+      "originalPID": 59332,
+      "originalOwner": {
+        "pid": 59332,
+        "processInstanceID": "win32:639267728899266062",
+        "occurrenceID": "checker:helper-unavailable"
+      },
+      "launchReceipt": {
+        "ReturnValue": 0,
+        "ProcessId": 59332,
+        "owner": {
+          "pid": 59332,
+          "processInstanceID": "win32:639267728899266062",
+          "occurrenceID": "checker:helper-unavailable"
+        }
+      },
+      "restarts": [],
+      "launcherStarted": {
+        "pid": 59332,
+        "processInstanceID": "win32:639267728899266062",
+        "occurrenceID": "c2b2a7a0-ce17-4aac-8059-c6df1530d621",
+        "inJob": false
+      },
+      "startup": {
+        "schemaVersion": 1,
+        "occurrenceID": "restart-helper-unavailable",
+        "outcome": "listening",
+        "url": "http://127.0.0.1:52154",
+        "pid": 59332
+      },
+      "refused": {
+        "status": 503,
+        "body": {
+          "ok": false,
+          "name": "ServerRestartUnavailableError",
+          "data": {
+            "reason": "helper_protocol_unavailable",
+            "message": "DetachedCommandAvailabilityError: Windows process supervisor protocol 3 detached capability is required"
+          }
+        }
+      },
+      "continuedHealth": {
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\helper-unavailable\\home\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\helper-unavailable\\home\\data",
+            "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\helper-unavailable\\home"
+          }
+        }
+      },
+      "status": "passed",
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9ELhW00ZiQRJAj3B"
+        }
+      },
+      "originalDisposition": "dead_or_reused",
+      "launcherTerminal": {
+        "pid": 59332,
+        "processInstanceID": "win32:639267728899266062",
+        "occurrenceID": "c2b2a7a0-ce17-4aac-8059-c6df1530d621",
+        "exitCode": 0
+      }
+    },
+    {
+      "mode": "sdk-owned-tree",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\sdk-owned-tree",
+      "owner": {
+        "pid": 58024,
+        "processInstanceID": "win32:639267728938887059",
+        "occurrenceID": "a4d43ac4-2f33-491c-a69c-c955a9d132ad",
+        "inJob": true
+      },
+      "url": "http://127.0.0.1:52175",
+      "refused": {
+        "status": 503,
+        "body": {
+          "ok": false,
+          "name": "ServerRestartUnavailableError",
+          "data": {
+            "reason": "containing_job",
+            "message": "DetachedCommandAvailabilityError: Restart this backend through its containing process owner"
+          }
+        }
+      },
+      "health": {
+        "status": 200,
+        "body": {
+          "healthy": true,
+          "version": "local",
+          "paths": {
+            "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\sdk-owned-tree\\home\\data\\opencorvus.db",
+            "data": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\sdk-owned-tree\\home\\data",
+            "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\sdk-owned-tree\\home"
+          }
+        }
+      },
+      "physicalDisposition": "dead_or_reused",
+      "status": "passed"
+    },
+    {
+      "mode": "failed-replacement",
+      "command": [
+        "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "-e",
+        "process.exit(23)"
+      ],
+      "port": 62470,
+      "restored": true,
+      "error": {
+        "name": "Error",
+        "message": "Restart replacement exited before transfer with code 23"
+      },
+      "status": "passed"
+    },
+    {
+      "mode": "failed-replacement",
+      "command": [
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\missing-executable.exe"
+      ],
+      "port": 62472,
+      "restored": true,
+      "error": {
+        "name": "Error",
+        "message": "Windows process supervisor exited before publishing readiness for command 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\missing-executable.exe' (exit=125; request_id=dedde96a-1e3f-4820-8e93-85ac8e623532 helper_pid=71056 helper_path=D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3f665b2bfd616ca5\\debug\\opencorvus-process-supervisor.exe ready_path=C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\runtime-root\\tmp\\supervisor-25QWP2\\ready.json)\nopencorvus process supervisor failed: CreateProcessW failed for C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-NRhiuA\\runner-74240-Ap1eHm\\restart-check\\missing-executable.exe (win32=2)\n"
+      },
+      "status": "passed"
+    },
+    {
+      "mode": "failed-replacement",
+      "command": [
+        "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "-e",
+        "const h=await import(\"D:/myhexin-local/opencorvus/packages/opencorvus/src/server/restart-handoff.ts\");const c=h.childRestartHandoff();await h.waitForRestartBind(c);await h.sendRestartHandoffMessage({type:'failed',error:'actual child startup failure'},c);await new Promise(()=>{});"
+      ],
+      "port": 62474,
+      "restored": true,
+      "error": {
+        "name": "Error",
+        "message": "actual child startup failure"
+      },
+      "status": "passed"
+    },
+    {
+      "mode": "failed-replacement",
+      "command": [
+        "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "-e",
+        "const h=await import(\"D:/myhexin-local/opencorvus/packages/opencorvus/src/server/restart-handoff.ts\");const c=h.childRestartHandoff();await h.waitForRestartBind(c);const fs=await import('node:fs/promises');const o=JSON.parse(await fs.readFile(c.root+'/restart-waiting.json','utf8'));await fs.writeFile(c.root+'/restart-failed.json',JSON.stringify({protocol:1,request_id:c.requestID,successor:{...o.successor,occurrenceID:'different-child-occurrence'},error:'wrong occurrence'}));await new Promise(()=>{});"
+      ],
+      "port": 62486,
+      "restored": true,
+      "error": {
+        "name": "RestartHandoffEvidenceError",
+        "message": "Restart failure does not match its complete waiting occurrence"
+      },
+      "status": "passed"
+    }
+  ],
+  "limits": [
+    "Credential-free Windows HTTP/physical ownership qualification; POSIX and Docker unverified"
+  ]
+}

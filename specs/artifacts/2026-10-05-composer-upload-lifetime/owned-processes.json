@@ -1,0 +1,17 @@
+[
+  {
+    "ProcessId": 72368,
+    "ParentProcessId": 61796,
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17889 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  {
+    "ProcessId": 49912,
+    "ParentProcessId": 61796,
+    "CommandLine": "\"C:\\Program Files\\nodejs\\node.exe\" D:/myhexin-local/opencorvus/.tmp-product-experience/upload-count-20261005/proxy.cjs"
+  },
+  {
+    "ProcessId": 66920,
+    "ParentProcessId": 75676,
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17889 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  }
+]

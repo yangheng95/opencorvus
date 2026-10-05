@@ -1,0 +1,23 @@
+{
+  "packageTopology": {
+    "status": "passed",
+    "workspacePackages": 10
+  },
+  "moduleTopology": {
+    "status": "passed",
+    "modules": 1130,
+    "runtimeEdges": 5731,
+    "cleanImports": 4
+  },
+  "sdkImports": {
+    "status": "passed"
+  },
+  "architectureIndex": {
+    "status": "passed",
+    "documents": 17
+  },
+  "docsCheck": {
+    "status": "failed",
+    "reason": "Parallel Windows restart route adds ServerRestartUnavailableError; both generated API markdown line74 still have old summary. Parent owns canonical regeneration; dependency agent did not edit generated docs."
+  }
+}

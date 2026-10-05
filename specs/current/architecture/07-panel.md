@@ -23,12 +23,18 @@ source while retaining the independently scoped file owner and tools.
 Concurrent global Composer attachments share the existing single allocation
 owner across admission, anonymous Project creation and complete activation.
 Inputs capture their source epoch and begin transient byte capture immediately.
-The resolver explicitly accepts either attachment admission or an already
-admitted epoch, and returns the exact directory/accepted epoch receipt. Its
+The resolver synchronously returns one readonly operation whose Promise yields
+the exact directory/accepted epoch receipt. It explicitly accepts either
+attachment admission or an already admitted epoch. Its
 pointer, current admission sequence and workspace epoch must still agree;
 same-lineage inputs join before a half-activated directory can return early.
-Old completion releases only its own owner. Receipt and upload-owner validation
-keep late input bound to the Project that accepted it.
+Fulfilled operations remain current for their accepted epoch after the allocation
+pointer is released. File and folder inputs register their identity before
+awaiting; the Composer derives indexing count and Send availability from that
+single live collection. Completion removes only its own token. Receipt and
+operation validation keep late input bound to the Project that accepted it.
+Current failures retain their own error feedback even when allocation rejects;
+actual workspace navigation expires old input effects.
 
 The registered file owner exposes its existing dirty memo for browser exit.
 Only dirty pages register cancellable beforeunload confirmation. Actual page
@@ -70,6 +76,15 @@ editor snapshots exact Mission/directory and original pending text when opened;
 Board refreshes do not replace its authored input. Save uses `mission.editDraft`
 and the shared refresh lifecycle. Typed conflicts preserve entered text for
 review/copy; cancellation and saving do not dispatch an execution.
+
+A hydrated empty Mission conversation reads its exact Session/directory record
+from that same loaded Mission Board store. Its saved pending request is a
+read-only context section outside the message tree, with the existing Board
+action for editing or starting. Loading, failed or mismatched list data does not
+supply draft text. Long requests retain native focused-region keyboard scrolling;
+the parent history keymap owns only its directly focused viewport. Opening the
+already selected source from the Board reveals that conversation without another
+selection epoch, hydration or file-owner transition.
 
 Scheduled automation basic fields own an explicit start date, time, time zone
 and weekly day. The date/weekday of today are creation defaults only; changing

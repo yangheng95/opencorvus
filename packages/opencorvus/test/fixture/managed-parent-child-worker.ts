@@ -1,5 +1,6 @@
 import fs from "node:fs"
 import { ManagedServerLifecycle } from "../../src/server/managed-server-lifecycle"
+import { currentRuntimeProcessOccurrence } from "../../src/runtime/process-occurrence"
 
 const [ledger, rawPid, processInstanceID, occurrenceID] = process.argv.slice(2)
 if (!ledger || !rawPid || !processInstanceID || !occurrenceID) {
@@ -13,7 +14,7 @@ const admitted = ManagedServerLifecycle.parentInput({
 if (!admitted) throw new Error("Managed parent child fixture did not receive a parent occurrence")
 
 const append = (event: Record<string, unknown>) => {
-  fs.appendFileSync(ledger, `${JSON.stringify({ ...event, childPid: process.pid, parent: admitted.parent })}\n`, "utf8")
+  fs.appendFileSync(ledger, `${JSON.stringify({ ...event, childPid: process.pid, child: currentRuntimeProcessOccurrence(), parent: admitted.parent })}\n`, "utf8")
 }
 
 let lifecycle: ManagedServerLifecycle.Handle

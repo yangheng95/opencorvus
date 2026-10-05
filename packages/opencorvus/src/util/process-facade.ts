@@ -6,7 +6,7 @@ import {
   type ProcessByteSource,
   type ProcessTerminalReceipt,
 } from "@opencorvus-ai/util/process"
-import { nodeProcessByteSink, nodeProcessByteSource } from "@opencorvus-ai/util/process-node"
+import { nodeProcessByteSink, nodeProcessByteSource, spawnNodeProcess } from "@opencorvus-ai/util/process-node"
 import type { ProcessSupervisor as ProcessSupervisorContract } from "@/shell/process-supervisor"
 
 function terminalReceipt(
@@ -40,6 +40,7 @@ function supervisedProcessFacade(input: { owner: string; task?: SupervisedTaskId
     if (input.task && request.ownership === "detached") {
       throw new Error("Task process execution cannot detach from Task settlement")
     }
+    if (request.ownership === "detached") return spawnNodeProcess(request)
     // Plugin initialization participates in Config/Provider discovery. Loading
     // the concrete supervisor at module evaluation would create an application
     // cycle through that discovery graph. The injected capability stays an
@@ -55,7 +56,6 @@ function supervisedProcessFacade(input: { owner: string; task?: SupervisedTaskId
       stdin: request.stdin,
       owner: input.owner,
       gracefulTerminationMs: request.gracefulTerminationMs,
-      detached: request.ownership === "detached",
       signal: request.controlSignal,
     }
     const handle = input.task

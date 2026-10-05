@@ -1,0 +1,595 @@
+{
+  "exitCode": 1,
+  "stderr": "\u001b[0m\u001b[1mbun audit \u001b[0m\u001b[2mv1.3.14 (0d9b296a)\u001b[0m\n",
+  "advisories": {
+    "@grpc/grpc-js": [
+      {
+        "id": 1240622,
+        "url": "https://github.com/advisories/GHSA-m9gg-hp2v-232j",
+        "title": "@grpc/grpc-js: In certain configurations, getAuthContext can return unauthorized certificates as though they were authorized",
+        "severity": "high",
+        "vulnerable_versions": ">=1.14.0 <1.14.5",
+        "cwe": [
+          "CWE-295"
+        ],
+        "cvss": {
+          "score": 7.4,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        }
+      },
+      {
+        "id": 1240624,
+        "url": "https://github.com/advisories/GHSA-f596-whhp-79r4",
+        "title": "@grpc/grpc-js: The server transmits some error messages thrown by method handlers to the client in status messages",
+        "severity": "low",
+        "vulnerable_versions": ">=1.14.0 <1.14.5",
+        "cwe": [
+          "CWE-550"
+        ],
+        "cvss": {
+          "score": 3.7,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
+        }
+      }
+    ],
+    "axios": [
+      {
+        "id": 1240628,
+        "url": "https://github.com/advisories/GHSA-m8m8-qj5v-23w3",
+        "title": "Axios: Node HTTP adapter prototype-pollution gadget allows request socket hijack via inherited createConnection",
+        "severity": "high",
+        "vulnerable_versions": ">=1.15.2 <1.20.0",
+        "cwe": [
+          "CWE-441",
+          "CWE-1321"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240629,
+        "url": "https://github.com/advisories/GHSA-44g4-m2mj-wpvx",
+        "title": "Axios: CIDR-form NO_PROXY entries are ignored, causing proxy exclusion bypass for internal IP ranges",
+        "severity": "moderate",
+        "vulnerable_versions": ">=1.15.0 <1.20.0",
+        "cwe": [
+          "CWE-693"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240600,
+        "url": "https://github.com/advisories/GHSA-vh66-26gq-q6x8",
+        "title": "Axios: Prototype pollution gadget in fetch adapter can alter outbound requests",
+        "severity": "moderate",
+        "vulnerable_versions": ">=1.7.0 <1.20.0",
+        "cwe": [
+          "CWE-1321"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240601,
+        "url": "https://github.com/advisories/GHSA-9fr6-4gfg-395g",
+        "title": "Axios: Prototype-Pollution Gadget in the Default Instance Allows Inherited Object.prototype.method to Override HTTP Method",
+        "severity": "moderate",
+        "vulnerable_versions": ">=1.0.0 <1.20.0",
+        "cwe": [
+          "CWE-1321"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240603,
+        "url": "https://github.com/advisories/GHSA-c29m-xwm3-cm6r",
+        "title": "Axios: ReDoS in fromDataURI data: URL parser freezes the Node event loop (DoS)",
+        "severity": "high",
+        "vulnerable_versions": ">=1.16.1 <1.20.0",
+        "cwe": [
+          "CWE-1333"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240604,
+        "url": "https://github.com/advisories/GHSA-mghh-pgcx-3jjj",
+        "title": "Axios: ReDoS (O(N\u00b2)) in shouldBypassProxy host normalization, reachable via untrusted redirect Location",
+        "severity": "high",
+        "vulnerable_versions": ">=1.15.0 <1.20.0",
+        "cwe": [
+          "CWE-400",
+          "CWE-1333"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240605,
+        "url": "https://github.com/advisories/GHSA-x97p-jq2g-jp4f",
+        "title": "Axios: Prototype Pollution Gadget in axios toFormData Options",
+        "severity": "high",
+        "vulnerable_versions": ">=1.15.1 <1.20.0",
+        "cwe": [
+          "CWE-1321"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240607,
+        "url": "https://github.com/advisories/GHSA-3pq3-5fj3-cg6v",
+        "title": "Axios: HTTP/2 adapter bypasses configured DNS lookup and proxy controls",
+        "severity": "high",
+        "vulnerable_versions": ">=1.13.0 <1.20.0",
+        "cwe": [
+          "CWE-918"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240608,
+        "url": "https://github.com/advisories/GHSA-542g-h47m-68v8",
+        "title": "Axios: Denial of Service via Unhandled 'error' Event in HTTP/2 ClientHttp2Session Initialization",
+        "severity": "high",
+        "vulnerable_versions": ">=1.13.0 <1.20.0",
+        "cwe": [
+          "CWE-400"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240626,
+        "url": "https://github.com/advisories/GHSA-j8rh-479h-cp32",
+        "title": "Axios: Header Injection via Inherited headers After Minimal Interceptor",
+        "severity": "moderate",
+        "vulnerable_versions": ">=1.0.0 <1.20.0",
+        "cwe": [
+          "CWE-74",
+          "CWE-1321"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240627,
+        "url": "https://github.com/advisories/GHSA-4hqw-qxg8-jxx2",
+        "title": "Axios: Fetch Adapter Header Injection via Inherited FormData getHeaders",
+        "severity": "moderate",
+        "vulnerable_versions": ">=1.12.0 <1.20.0",
+        "cwe": [
+          "CWE-74",
+          "CWE-693",
+          "CWE-1321"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240634,
+        "url": "https://github.com/advisories/GHSA-r4gj-5m52-g5wh",
+        "title": "Axios: maxRedirects: 0 is not enforced by the fetch adapter, allowing redirect-based SSRF",
+        "severity": "high",
+        "vulnerable_versions": ">=1.17.0 <1.20.0",
+        "cwe": [
+          "CWE-441",
+          "CWE-601"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      }
+    ],
+    "brace-expansion": [
+      {
+        "id": 1240107,
+        "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+        "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+        "severity": "high",
+        "vulnerable_versions": ">=4.0.0 <5.0.11",
+        "cwe": [
+          "CWE-400",
+          "CWE-674"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1240111,
+        "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+        "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+        "severity": "high",
+        "vulnerable_versions": ">=4.0.0 <5.0.10",
+        "cwe": [
+          "CWE-400",
+          "CWE-674"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1240103,
+        "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+        "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+        "severity": "moderate",
+        "vulnerable_versions": ">=4.0.0 <5.0.12",
+        "cwe": [
+          "CWE-400",
+          "CWE-407"
+        ],
+        "cvss": {
+          "score": 5.3,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        }
+      }
+    ],
+    "braces": [
+      {
+        "id": 1240992,
+        "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+        "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+        "severity": "high",
+        "vulnerable_versions": "<=3.0.3",
+        "cwe": [
+          "CWE-674"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      }
+    ],
+    "devalue": [
+      {
+        "id": 1240870,
+        "url": "https://github.com/advisories/GHSA-j22f-vq7h-c4qm",
+        "title": "devalue: `stringify`/`uneval` serialize shared memory",
+        "severity": "high",
+        "vulnerable_versions": ">=5.1.0 <=5.9.2",
+        "cwe": [
+          "CWE-200",
+          "CWE-226"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        }
+      },
+      {
+        "id": 1240871,
+        "url": "https://github.com/advisories/GHSA-hx4r-w6wj-j8fg",
+        "title": "devalue: Residual sparse-array CPU amplification in uneval",
+        "severity": "moderate",
+        "vulnerable_versions": "<=5.9.2",
+        "cwe": [
+          "CWE-400",
+          "CWE-407"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240872,
+        "url": "https://github.com/advisories/GHSA-mcm9-63f2-9j32",
+        "title": "devalue: Repeated primitive strings cause quadratic expansion in uneval",
+        "severity": "high",
+        "vulnerable_versions": "<=5.9.2",
+        "cwe": [
+          "CWE-400",
+          "CWE-409"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240873,
+        "url": "https://github.com/advisories/GHSA-wf3x-273g-mvxv",
+        "title": "devalue: Sparse arrays emitted by uneval cause eager allocation when evaluated",
+        "severity": "low",
+        "vulnerable_versions": ">=1.0.0 <=5.9.2",
+        "cwe": [
+          "CWE-400",
+          "CWE-789"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240874,
+        "url": "https://github.com/advisories/GHSA-x5rw-q4pp-hg5g",
+        "title": "devalue: stringifyAsync can cause an unhandled rejection despite a caught returned promise",
+        "severity": "high",
+        "vulnerable_versions": ">=5.8.0 <=5.9.2",
+        "cwe": [
+          "CWE-248",
+          "CWE-755"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240875,
+        "url": "https://github.com/advisories/GHSA-4q55-j62x-fr9h",
+        "title": "devalue: Malformed null-prototype object keys bypass __proto__ rejection via property-key coercion",
+        "severity": "moderate",
+        "vulnerable_versions": "<=5.9.2",
+        "cwe": [
+          "CWE-1321"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      }
+    ],
+    "dompurify": [
+      {
+        "id": 1240621,
+        "url": "https://github.com/advisories/GHSA-p98j-92pf-mc4p",
+        "title": "DOMPurify: IN_PLACE: node-removing afterSanitize hook leaves detached subtree event handlers armed, causing DOM XSS",
+        "severity": "low",
+        "vulnerable_versions": ">=3.4.13 <=3.4.15",
+        "cwe": [
+          "CWE-79"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      }
+    ],
+    "fast-uri": [
+      {
+        "id": 1239942,
+        "url": "https://github.com/advisories/GHSA-qw65-cvwx-89v3",
+        "title": "fast-uri vulnerable to authority injection via an unvalidated port in serialize",
+        "severity": "high",
+        "vulnerable_versions": ">=4.0.0 <4.1.4",
+        "cwe": [
+          "CWE-116"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        }
+      },
+      {
+        "id": 1239945,
+        "url": "https://github.com/advisories/GHSA-58mr-gqgx-xq4g",
+        "title": "fast-uri vulnerable to host confusion via an unclosed bracket in the URI authority",
+        "severity": "high",
+        "vulnerable_versions": "=4.1.3",
+        "cwe": [
+          "CWE-436"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        }
+      },
+      {
+        "id": 1240090,
+        "url": "https://github.com/advisories/GHSA-hrr3-gc8f-f4qj",
+        "title": "fast-uri vulnerable to inconsistent host case normalization via percent-encoded octets",
+        "severity": "moderate",
+        "vulnerable_versions": ">=4.0.0 <4.1.5",
+        "cwe": [
+          "CWE-178"
+        ],
+        "cvss": {
+          "score": 4.8,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        }
+      },
+      {
+        "id": 1240093,
+        "url": "https://github.com/advisories/GHSA-jvvf-x445-j334",
+        "title": "fast-uri vulnerable to mailto header injection via percent-encoded field-name desynchronization",
+        "severity": "moderate",
+        "vulnerable_versions": ">=4.1.3 <4.1.5",
+        "cwe": [
+          "CWE-172",
+          "CWE-436"
+        ],
+        "cvss": {
+          "score": 4.8,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        }
+      }
+    ],
+    "hono": [
+      {
+        "id": 1240640,
+        "url": "https://github.com/advisories/GHSA-hxh3-vqpv-xpqv",
+        "title": "hono/jsx renders plain strings unescaped in boundary components, leading to XSS",
+        "severity": "moderate",
+        "vulnerable_versions": "<4.13.7",
+        "cwe": [
+          "CWE-79"
+        ],
+        "cvss": {
+          "score": 4.7,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        }
+      }
+    ],
+    "http-cache-semantics": [
+      {
+        "id": 1240991,
+        "url": "https://github.com/advisories/GHSA-ch52-4w7c-c8xp",
+        "title": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+        "severity": "high",
+        "vulnerable_versions": "<=4.2.0",
+        "cwe": [
+          "CWE-524"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        }
+      }
+    ],
+    "ip-address": [
+      {
+        "id": 1239948,
+        "url": "https://github.com/advisories/GHSA-rpw4-54j3-4h4q",
+        "title": "ip-address: Address6.isLinkLocal() recognizes fe80::/64 rather than fe80::/10, allowing SSRF and trust-boundary bypass to on-link hosts",
+        "severity": "moderate",
+        "vulnerable_versions": "<=10.5.0",
+        "cwe": [
+          "CWE-697",
+          "CWE-918"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1239949,
+        "url": "https://github.com/advisories/GHSA-2vr4-cq9g-pvrc",
+        "title": "ip-address: no classifier recognizes the NAT64 local-use range 64:ff9b:1::/48, allowing SSRF and trust-boundary bypass",
+        "severity": "moderate",
+        "vulnerable_versions": ">=10.2.0 <=10.5.0",
+        "cwe": [
+          "CWE-918"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240097,
+        "url": "https://github.com/advisories/GHSA-j6r3-76f7-8jcv",
+        "title": "ip-address: isInSubnet() and isHostInSubnet() compare addresses of different families as if they shared an address space, allowing an allowlist check to admit an address outside its range",
+        "severity": "moderate",
+        "vulnerable_versions": "<=10.7.0",
+        "cwe": [
+          "CWE-697",
+          "CWE-843"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1240098,
+        "url": "https://github.com/advisories/GHSA-h3mg-xc3c-68pw",
+        "title": "ip-address: Address6 builds a parse diagnostic proportional to the input with no length bound, allowing a single long string to stall or crash the process",
+        "severity": "moderate",
+        "vulnerable_versions": "<=10.7.0",
+        "cwe": [
+          "CWE-400",
+          "CWE-770"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      }
+    ],
+    "moment": [
+      {
+        "id": 1240099,
+        "url": "https://github.com/advisories/GHSA-4p3w-j4w9-5jqw",
+        "title": "moment vulnerable to Path Traversal via crafted non-string locale name",
+        "severity": "moderate",
+        "vulnerable_versions": ">=2.29.2 <2.31.0",
+        "cwe": [
+          "CWE-27"
+        ],
+        "cvss": {
+          "score": 5.9,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N"
+        }
+      }
+    ],
+    "undici": [
+      {
+        "id": 1239934,
+        "url": "https://github.com/advisories/GHSA-3wwx-pv8p-q78v",
+        "title": "undici vulnerable to Denial of Service via unhandled error in WebSocket permessage-deflate decompression",
+        "severity": "moderate",
+        "vulnerable_versions": ">=6.25.0 <6.28.1",
+        "cwe": [
+          "CWE-248"
+        ],
+        "cvss": {
+          "score": 5.9,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1240039,
+        "url": "https://github.com/advisories/GHSA-r53p-7pc4-xj5r",
+        "title": "undici vulnerable to downstream response splitting via retry interceptor",
+        "severity": "low",
+        "vulnerable_versions": "<6.28.1",
+        "cwe": [
+          "CWE-444"
+        ],
+        "cvss": {
+          "score": 3.7,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        }
+      },
+      {
+        "id": 1240042,
+        "url": "https://github.com/advisories/GHSA-rfgv-xxqx-mfg5",
+        "title": "undici vulnerable to Denial of Service via unrequested WebSocket subprotocol",
+        "severity": "high",
+        "vulnerable_versions": ">=6.7.0 <6.28.1",
+        "cwe": [
+          "CWE-248",
+          "CWE-252"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      }
+    ]
+  }
+}

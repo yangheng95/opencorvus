@@ -8974,7 +8974,7 @@ export class Server extends HeyApiClient {
   /**
    * Restart the server
    *
-   * Spawn a new server process with the same arguments, then exit.
+   * Admit a standalone server replacement with the same arguments. Managed, contained or init processes must restart through their existing launcher.
    */
   public restart<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
     return (options?.client ?? this.client).post<ServerRestartResponses, ServerRestartErrors, ThrowOnError>({

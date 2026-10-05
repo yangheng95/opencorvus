@@ -1,0 +1,366 @@
+{
+  "status": "passed",
+  "reviewedAt": "2026-10-05T04:41:11.351242+00:00",
+  "databasePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dtQ1it\\runner-63484-be5ag9\\runtime-root\\tmp\\opencorvus-automation-target-real-O3hjEV\\runtime\\data\\opencorvus.db",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    }
+  ],
+  "providerOutcomes": {
+    "attempts": 6,
+    "statusCounts": {
+      "200": 6
+    }
+  },
+  "credentialCleanupObserved": {
+    "authPresent": false,
+    "modelsPresent": false
+  },
+  "reviewed": [
+    {
+      "label": "A-to-B",
+      "memberships": [
+        {
+          "id": "atm_g0VX99bEL00D5P0Lc3Wm",
+          "revision": 1,
+          "status": "active",
+          "prompt": "Read target.txt in your current working directory. Report its exact marker verbatim and the absolute directory you read it from. This is a read-only check; that report is the complete requested result.",
+          "projects": [
+            "prj_hMRLHjP8NiqNmaf8FDB5"
+          ]
+        },
+        {
+          "id": "atm_g0VX99bEn00wOAuyGFPr",
+          "revision": 2,
+          "status": "paused",
+          "prompt": "Read target.txt in your current working directory. Report its exact marker verbatim and the absolute directory you read it from. This is a read-only check; that report is the complete requested result.",
+          "projects": [
+            "prj_hMRLHjP8NiqNmaf8FDB5"
+          ]
+        },
+        {
+          "id": "atm_g0VX99bFu00t2SVuj8ev",
+          "revision": 3,
+          "status": "paused",
+          "prompt": "Read target.txt in your current working directory. Report its exact marker verbatim and the absolute directory you read it from. This is a read-only check; that report is the complete requested result.",
+          "projects": [
+            "prj_hxjrNJWmAXFYbemYT6CI"
+          ]
+        }
+      ],
+      "fire": {
+        "id": "atm_g0VX99bG700HyGxLFX43",
+        "automation_revision_id": "atm_g0VX99bFu00t2SVuj8ev",
+        "scheduled_due_at": 1791174961760,
+        "origin": "manual_api",
+        "tool_part_id": null,
+        "input_digest": null,
+        "time_created": 1791174961760
+      },
+      "run": {
+        "id": "atr_automation_0ff64d9cc53930f71553eeae62c00de3",
+        "automation_revision_id": "atm_g0VX99bFu00t2SVuj8ev",
+        "fire_id": "atm_g0VX99bG700HyGxLFX43",
+        "target_project_id": "prj_hxjrNJWmAXFYbemYT6CI",
+        "mission_opened_event_id": null,
+        "mission_disposition": null,
+        "mission_closure_event_id": null,
+        "started_at": 1791174961760
+      },
+      "receipts": [
+        {
+          "id": "atm_g0VX99eUQ003L0nUhzEp",
+          "run_id": "atr_automation_0ff64d9cc53930f71553eeae62c00de3",
+          "outcome": "succeeded",
+          "disposition": null,
+          "closure_event_id": null,
+          "retry_at": null,
+          "error": null,
+          "time_created": 1791174974180
+        }
+      ],
+      "attemptReceipts": [
+        {
+          "attempt_id": "atm_h53c7PSCJFqo5weNOSJn",
+          "outcome": "reserved",
+          "retry_at": null,
+          "error": null,
+          "time_created": 1791174961760
+        }
+      ],
+      "session": {
+        "id": "ses_automation_bfd4967a06631144d0c6f7a7ed06baca",
+        "project_id": "prj_hxjrNJWmAXFYbemYT6CI",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dtQ1it\\runner-63484-be5ag9\\runtime-root\\tmp\\opencorvus-automation-target-real-O3hjEV\\project-B",
+        "kind": "assistant"
+      },
+      "acceptedMessage": {
+        "id": "msg_automation_bfd4967a06631144d0c6f7a7ed06baca",
+        "session_id": "ses_automation_bfd4967a06631144d0c6f7a7ed06baca",
+        "data": {
+          "author": "orchestrator",
+          "role": "user",
+          "time": {
+            "created": 1791174961820
+          },
+          "agent": "coding",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "scheduler.automation",
+              "jobID": "atm_g0VX99bEL00D5P0Lc3Wm",
+              "jobName": "Real target A-to-B",
+              "fireID": "atm_g0VX99bG700HyGxLFX43",
+              "scope": "project",
+              "recurrence": "DTSTART:20271005T043601Z\nRRULE:FREQ=DAILY"
+            }
+          },
+          "orderKey": "v1:0001791174961820:0000000000000030:0000000000000000:message:msg_automation_bfd4967a06631144d0c6f7a7ed06baca"
+        }
+      },
+      "actualReads": [
+        {
+          "id": "prt_g0VX99cZy00uELmvf3Id",
+          "request": {
+            "type": "tool-request",
+            "callID": "call_BdvV9SB0YbR3pem8MRZlEAHr",
+            "tool": "read",
+            "input": {
+              "filePath": "target.txt",
+              "offset": 1,
+              "limit": 2000
+            },
+            "time": {
+              "start": 1791174966838
+            }
+          },
+          "outcome": {
+            "outcome": "completed",
+            "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dtQ1it\\runner-63484-be5ag9\\runtime-root\\tmp\\opencorvus-automation-target-real-O3hjEV\\project-B\\target.txt</path>\n<type>file</type>\n<content>1: TARGET-B-da5d3400-cd33-40c1-85c8-93df86c9f030\n\n(End of file - total 1 lines)\n</content>",
+            "title": "target.txt",
+            "metadata": {
+              "preview": "TARGET-B-da5d3400-cd33-40c1-85c8-93df86c9f030",
+              "truncated": false,
+              "loaded": [],
+              "lines": 1,
+              "totalLines": 1
+            },
+            "time": {
+              "end": 1791174967992
+            }
+          }
+        }
+      ],
+      "finalReplies": [
+        {
+          "id": "msg_g0VX99cu700KpYrdnP6g",
+          "modelID": "gpt-6.1-sol",
+          "completedAt": 1791174974153,
+          "text": "\nMarker: `TARGET-B-da5d3400-cd33-40c1-85c8-93df86c9f030`\n\nAbsolute directory: `C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dtQ1it\\runner-63484-be5ag9\\runtime-root\\tmp\\opencorvus-automation-target-real-O3hjEV\\project-B`\n"
+        }
+      ],
+      "activationLeases": [
+        {
+          "id": "cal_g0VX99bG600C4aH8IgOS",
+          "target": "automation",
+          "target_id": "atm_g0VX99bEL00D5P0Lc3Wm",
+          "owner_occurrence_id": "manual:63484:1791174961760",
+          "time_activated": 1791174961760,
+          "expires_at": 1791174974180
+        }
+      ]
+    },
+    {
+      "label": "ordered-A-B-to-B",
+      "memberships": [
+        {
+          "id": "atm_g0VX99eV800HIzJScJ3z",
+          "revision": 1,
+          "status": "active",
+          "prompt": "Read target.txt in your current working directory. Report its exact marker verbatim and the absolute directory you read it from. This is a read-only check; that report is the complete requested result.",
+          "projects": [
+            "prj_hMRLHjP8NiqNmaf8FDB5",
+            "prj_hxjrNJWmAXFYbemYT6CI"
+          ]
+        },
+        {
+          "id": "atm_g0VX99eVR00Teu4gsrF3",
+          "revision": 2,
+          "status": "paused",
+          "prompt": "Read target.txt in your current working directory. Report its exact marker verbatim and the absolute directory you read it from. This is a read-only check; that report is the complete requested result.",
+          "projects": [
+            "prj_hMRLHjP8NiqNmaf8FDB5",
+            "prj_hxjrNJWmAXFYbemYT6CI"
+          ]
+        },
+        {
+          "id": "atm_g0VX99eVg00pWsKhk57T",
+          "revision": 3,
+          "status": "paused",
+          "prompt": "Read target.txt in your current working directory. Report its exact marker verbatim and the absolute directory you read it from. This is a read-only check; that report is the complete requested result.",
+          "projects": [
+            "prj_hxjrNJWmAXFYbemYT6CI"
+          ]
+        }
+      ],
+      "fire": {
+        "id": "atm_g0VX99eVr00XPMbEGymq",
+        "automation_revision_id": "atm_g0VX99eVg00pWsKhk57T",
+        "scheduled_due_at": 1791174974268,
+        "origin": "manual_api",
+        "tool_part_id": null,
+        "input_digest": null,
+        "time_created": 1791174974268
+      },
+      "run": {
+        "id": "atr_automation_3e52dacf94af54204e94ca5d629f965d",
+        "automation_revision_id": "atm_g0VX99eVg00pWsKhk57T",
+        "fire_id": "atm_g0VX99eVr00XPMbEGymq",
+        "target_project_id": "prj_hxjrNJWmAXFYbemYT6CI",
+        "mission_opened_event_id": null,
+        "mission_disposition": null,
+        "mission_closure_event_id": null,
+        "started_at": 1791174974268
+      },
+      "receipts": [
+        {
+          "id": "atm_g0VX99hvE00rWjaYj0wh",
+          "run_id": "atr_automation_3e52dacf94af54204e94ca5d629f965d",
+          "outcome": "succeeded",
+          "disposition": null,
+          "closure_event_id": null,
+          "retry_at": null,
+          "error": null,
+          "time_created": 1791174987375
+        }
+      ],
+      "attemptReceipts": [
+        {
+          "attempt_id": "atm_hDuzizPc4Hm4c0kfB1ai",
+          "outcome": "reserved",
+          "retry_at": null,
+          "error": null,
+          "time_created": 1791174974268
+        }
+      ],
+      "session": {
+        "id": "ses_automation_33e235caa5beb71f09030e452bc22279",
+        "project_id": "prj_hxjrNJWmAXFYbemYT6CI",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dtQ1it\\runner-63484-be5ag9\\runtime-root\\tmp\\opencorvus-automation-target-real-O3hjEV\\project-B",
+        "kind": "assistant"
+      },
+      "acceptedMessage": {
+        "id": "msg_automation_33e235caa5beb71f09030e452bc22279",
+        "session_id": "ses_automation_33e235caa5beb71f09030e452bc22279",
+        "data": {
+          "author": "orchestrator",
+          "role": "user",
+          "time": {
+            "created": 1791174974329
+          },
+          "agent": "coding",
+          "model": {
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol"
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "scheduler.automation",
+              "jobID": "atm_g0VX99eV800HIzJScJ3z",
+              "jobName": "Real target ordered-A-B-to-B",
+              "fireID": "atm_g0VX99eVr00XPMbEGymq",
+              "scope": "project",
+              "recurrence": "DTSTART:20271005T043601Z\nRRULE:FREQ=DAILY"
+            }
+          },
+          "orderKey": "v1:0001791174974329:0000000000000030:0000000000000000:message:msg_automation_33e235caa5beb71f09030e452bc22279"
+        }
+      },
+      "actualReads": [
+        {
+          "id": "prt_g0VX99fu600VXL2SVD1q",
+          "request": {
+            "type": "tool-request",
+            "callID": "call_AhOxnPZkSp4VcUdMIA26peRk",
+            "tool": "read",
+            "input": {
+              "filePath": "target.txt"
+            },
+            "time": {
+              "start": 1791174979618
+            }
+          },
+          "outcome": {
+            "outcome": "completed",
+            "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dtQ1it\\runner-63484-be5ag9\\runtime-root\\tmp\\opencorvus-automation-target-real-O3hjEV\\project-B\\target.txt</path>\n<type>file</type>\n<content>1: TARGET-B-da5d3400-cd33-40c1-85c8-93df86c9f030\n\n(End of file - total 1 lines)\n</content>",
+            "title": "target.txt",
+            "metadata": {
+              "preview": "TARGET-B-da5d3400-cd33-40c1-85c8-93df86c9f030",
+              "truncated": false,
+              "loaded": [],
+              "lines": 1,
+              "totalLines": 1
+            },
+            "time": {
+              "end": 1791174980375
+            }
+          }
+        }
+      ],
+      "finalReplies": [
+        {
+          "id": "msg_g0VX99gAd00yzWyFEE43",
+          "modelID": "gpt-6.1-sol",
+          "completedAt": 1791174987310,
+          "text": "\nMarker: `TARGET-B-da5d3400-cd33-40c1-85c8-93df86c9f030`\n\nAbsolute directory: `C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dtQ1it\\runner-63484-be5ag9\\runtime-root\\tmp\\opencorvus-automation-target-real-O3hjEV\\project-B`\n"
+        }
+      ],
+      "activationLeases": [
+        {
+          "id": "cal_g0VX99eVq00APThrfiJ2",
+          "target": "automation",
+          "target_id": "atm_g0VX99eV800HIzJScJ3z",
+          "owner_occurrence_id": "manual:63484:1791174974268",
+          "time_activated": 1791174974268,
+          "expires_at": 1791174987375
+        }
+      ]
+    }
+  ],
+  "processObservation": {
+    "pid": 63484,
+    "state": "absent"
+  },
+  "qualification": "Independent exact04 read-only SQLite/file-existence/PID review. Request metadata comes from retained actual Provider audit; no credential contents read. Run receipts own succeeded terminal outcome; Fire-attempt receipt remains reserved after successful target reservation, as current contract specifies. Manual API real-model coverage does not prove all scheduler paths or resolve residual dependency advisories."
+}

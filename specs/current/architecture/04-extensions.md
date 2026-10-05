@@ -85,6 +85,13 @@ use `ProcessSupervisor`'s durable occurrence/helper identity fence. A detached B
 that ownership explicitly and unrefs only after successful spawn. PTY, Execution Capsule and process-occurrence probes
 remain below this facade as platform adapters; they are not an alternate public command capability.
 
+The core plugin ProcessFacade routes explicitly detached host commands through
+that same canonical Node adapter. Managed host/Task commands retain the durable
+core supervisor; Task commands cannot detach from their execution owner. Server
+replacement is the core supervisor's exact prepared detached context plus
+explicit transfer contract in [Server runtime readiness](server-runtime-readiness.md),
+rather than a generic unref shortcut.
+
 Foreground shell owners explicitly set `terminateChildrenOnRootExit`. Once the root command exits, its supervised
 descendants are reclaimed before the exact physical settlement receipt is published, retaining the root exit code.
 This prevents foreground cleanup from waiting on a descendant that cleanup itself must stop. Background launchers

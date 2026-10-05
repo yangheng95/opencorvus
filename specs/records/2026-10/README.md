@@ -1,6 +1,12 @@
 # 2026-10 Records
 
-- [Windows restart ownership transfer: qualified failure and proposed repair](2026-10-05-windows-restart-ownership-transfer.md)
+- [Composer upload lifetime across Project activation](2026-10-05-composer-upload-lifetime.md)
+
+- [Dependency remediation: exact alerts and bounded upgrades](2026-10-05-dependency-remediation.md)
+
+- [Mission draft context in an empty conversation](2026-10-05-mission-draft-context.md)
+
+- [Windows restart ownership transfer: qualified failure, repair and acceptance](2026-10-05-windows-restart-ownership-transfer.md)
 
 - [Continuous iteration: admitting changes to authored work](2026-10-05-authoring-admission.md)
 

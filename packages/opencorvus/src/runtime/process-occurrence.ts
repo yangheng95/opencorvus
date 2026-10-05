@@ -129,6 +129,25 @@ function windowsProcessInstanceID(pid: number): string | undefined {
   }
 }
 
+/** Physical containment of this process, never a launcher-name heuristic. */
+export function currentWindowsProcessIsInJob(): boolean {
+  if (process.platform !== "win32") throw new Error("Windows Job observation requires Windows")
+  const { dlopen, FFIType, ptr } = require("bun:ffi") as typeof import("bun:ffi")
+  const kernel32 = dlopen("kernel32.dll", {
+    GetCurrentProcess: { args: [], returns: FFIType.ptr },
+    IsProcessInJob: { args: [FFIType.ptr, FFIType.ptr, FFIType.ptr], returns: FFIType.i32 },
+  })
+  try {
+    const result = Buffer.alloc(4)
+    if (!kernel32.symbols.IsProcessInJob(kernel32.symbols.GetCurrentProcess(), null, ptr(result))) {
+      throw new Error("Current Windows process Job containment is unobservable")
+    }
+    return result.readInt32LE() !== 0
+  } finally {
+    kernel32.close()
+  }
+}
+
 function readProcessInstanceID(pid: number): string | undefined {
   if (process.platform === "linux") {
     const stat = fs.readFileSync(`/proc/${pid}/stat`, "utf8")

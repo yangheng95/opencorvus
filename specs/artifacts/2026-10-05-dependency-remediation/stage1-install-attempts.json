@@ -1,0 +1,45 @@
+{
+  "normalInstall": {
+    "exitCode": 0,
+    "packagesInstalled": 24
+  },
+  "peerCorrectionInstall": {
+    "exitCode": 0,
+    "packagesInstalled": 4
+  },
+  "forceFrozenInstall": {
+    "exitCode": 1,
+    "packagesInstalled": 3421,
+    "durationSeconds": 87.94,
+    "errors": [
+      {
+        "code": "EBUSY",
+        "package": "@parcel/watcher-win32-x64@2.5.1",
+        "operation": "copyfile"
+      },
+      {
+        "code": "EBUSY",
+        "package": "@img/sharp-win32-x64@0.35.4",
+        "operation": "copyfile"
+      },
+      {
+        "code": "EBUSY",
+        "package": "node-screenshots-win32-x64-msvc@0.2.8",
+        "operation": "copyfile"
+      }
+    ]
+  },
+  "qualification": "Actual resolver results must be verified after successful relinking; frozen lock versions alone do not qualify the runtime.",
+  "forceFrozenRetry": {
+    "exitCode": 0,
+    "packagesInstalled": 3427,
+    "durationSeconds": 56.8,
+    "precondition": "Root and experience supplied graceful owned backend/proxy physical completion receipts; no user processes operated."
+  },
+  "finalFrozenInstall": {
+    "exitCode": 0,
+    "checkedInstalls": 1734,
+    "packages": 1979,
+    "result": "no changes"
+  }
+}

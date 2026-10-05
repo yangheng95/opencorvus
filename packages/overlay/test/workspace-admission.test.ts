@@ -155,9 +155,9 @@ test("a superseded composer allocation returns AbortError even when another sour
   setBoardStore("selectedSource", { ...sourceA })
   const previousEpoch = boardStore.selectEpoch
   beginWorkspaceSelection()
-  await expect(resolveGlobalComposerProject({ kind: "admitted", selectionEpoch: previousEpoch })).rejects.toMatchObject(
-    { name: "AbortError" },
-  )
+  await expect(
+    resolveGlobalComposerProject({ kind: "admitted", selectionEpoch: previousEpoch }).promise,
+  ).rejects.toMatchObject({ name: "AbortError" })
   expect(boardStore.selectedSource).toEqual(sourceA)
 })
 

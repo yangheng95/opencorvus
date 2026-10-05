@@ -1477,6 +1477,46 @@
   opacity: var(--ui-opacity-subtle);
 }
 
+.mission-empty-context {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  width: min(100%, calc(680px * var(--ui-scale)));
+  opacity: var(--ui-opacity-full);
+  text-align: left;
+}
+
+.mission-empty-context__body {
+  display: grid;
+  gap: var(--ui-gap-md);
+  min-width: 0;
+}
+
+.mission-empty-context .chat-empty-title {
+  margin: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.mission-empty-context__request {
+  max-block-size: calc(240px * var(--ui-scale));
+  overflow: auto;
+  padding: var(--ui-gap-lg);
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface);
+  color: var(--text);
+  line-height: var(--ui-line-height-normal);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.mission-empty-context__hint {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: var(--ui-line-height-normal);
+}
+
 /* Task-aware empty-state children. The shell `.chat-empty--task` itself
    is owned by composer.css; these descendants belong to the conversation
    content copy and icon. */

@@ -1,0 +1,22 @@
+[
+  {
+    "stage": "module loaded",
+    "pid": 50304,
+    "inJob": false
+  },
+  {
+    "stage": "spawnSync bun version",
+    "pid": 50304,
+    "inJob": true
+  },
+  {
+    "stage": "spawn async bun version",
+    "pid": 50304,
+    "inJob": true
+  },
+  {
+    "stage": "production shims",
+    "pid": 50304,
+    "inJob": true
+  }
+]

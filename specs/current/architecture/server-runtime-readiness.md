@@ -14,6 +14,30 @@ runtime event coalescing can omit that final notification. Observation stops
 on the validated receipt, failure, or caller cancellation; each launch keeps
 its own directory and occurrence identity. Startup deadlines remain unchanged.
 
+Standalone restart first observes the exact current launch boundary. The public
+route returns an admitted lifecycle occurrence or a named503 refusal; managed
+parents, PID1 and inherited non-independent containment retain their launcher's
+restart owner. Windows observes the canonical detached helper's actual inherited
+Job containment through one strict protocol3 capability operation, then repeats
+that physical check in the real helper. The host's own silent-breakaway child
+management Job is not an external lifecycle owner. Job flags are never relaxed.
+
+Restart prepares one supervisor request context and uses durable waiting, bind,
+ready and failed files in that same root. Facts bind the full predecessor and
+successor occurrences, native request and exact listener. Independent diagnostic
+file descriptors replace the predecessor's console pipes. After readiness, only
+the native helper's immutable committed transfer receipt releases the old
+controller's cancellation/owner-death authority. Physical exit, output settlement
+and active-zero retain their original meanings. Before commit, cancellation or
+owner death settles the target; after commit, an old cancel observes the typed
+ownership-transfer result. Failed pre-transfer startup proves physical cleanup
+before restoring the original listener. Uncertain ownership retains evidence.
+
+Windows orphan recovery preserves a committed successor whose exact occurrence
+is live or unobservable, then reclaims its root after physical terminal facts.
+POSIX keeps its existing detached process behavior with the same file handshake
+and explicit local release; it does not fabricate a native transfer receipt.
+
 The server runtime has two ordered recovery phases and one listener:
 
 1. Bounded process-local integrity recovery observes the current physical process occurrence, settles orphaned supervised requests and isolated workspaces, reconciles Project deletion artifacts and maintenance fences, and initializes global automation scheduling.

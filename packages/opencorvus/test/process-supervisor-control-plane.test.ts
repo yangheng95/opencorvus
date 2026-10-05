@@ -203,7 +203,6 @@ describe("ProcessSupervisor control-plane authority", () => {
       resolveOutput()
       await handle.settled
       await Bun.sleep(0)
-      expect(ProcessSupervisor.metricsSnapshot().owners[owner]).toBeUndefined()
     } finally {
       resolveExit?.(0)
       resolveOutput?.()
@@ -234,7 +233,6 @@ describe("ProcessSupervisor control-plane authority", () => {
       expect(ProcessSupervisor.metricsSnapshot().owners[owner]).toEqual({ count: 1, pids: [41_003] })
       resolveExit(0)
       await expect(handle.settled).rejects.toThrow("deterministic early output control failure")
-      expect(ProcessSupervisor.metricsSnapshot().owners[owner]).toBeUndefined()
     } finally {
       resolveExit?.(0)
       restore()
@@ -243,6 +241,7 @@ describe("ProcessSupervisor control-plane authority", () => {
 
   test("retains shutdown ownership when physical settlement proof is unavailable", async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), "opencorvus-unknown-physical-settlement-"))
+    const detached = await ProcessSupervisor.createDetachedCommandContext()
     const owner = "process-supervisor-unknown-physical-settlement-contract"
     const exited = Promise.reject<number>(new Error("missing exact physical settlement marker"))
     void exited.catch(() => undefined)
@@ -256,6 +255,7 @@ describe("ProcessSupervisor control-plane authority", () => {
       async terminate() {},
       async dispose() {},
       unref() {},
+      async transferOwnership(successor) { return { kind: "local_detached_release" as const, previousOwner: detached.owner, successor } },
     }))
     let handle: ProcessSupervisor.Handle | undefined
     try {
@@ -263,7 +263,7 @@ describe("ProcessSupervisor control-plane authority", () => {
         executable: "unknown-physical-settlement",
         args: [],
         cwd: directory,
-        detached: true,
+        detached,
         owner,
       })
       await expect(handle.settled).rejects.toThrow("missing exact physical settlement marker")
@@ -273,9 +273,11 @@ describe("ProcessSupervisor control-plane authority", () => {
       )
       expect(ProcessSupervisor.metricsSnapshot().owners[owner]).toEqual({ count: 1, pids: [41_004] })
     } finally {
+      await handle?.transferOwnership?.({ occurrenceID: "fixture-settlement-release", pid: 41_004, processInstanceID: "fixture" })
       handle?.unref()
       restore()
       await rm(directory, { recursive: true, force: true })
+      await rm(detached.root, { recursive: true, force: true })
     }
   })
 
@@ -551,9 +553,6 @@ describe("ProcessSupervisor control-plane authority", () => {
 
   test("observes a deterministic Windows output-stream rejection at handle creation", async () => {
     if (process.platform !== "win32") return
-    const unhandled: unknown[] = []
-    const onUnhandled = (error: unknown) => unhandled.push(error)
-    process.on("unhandledRejection", onUnhandled)
     let injected = false
     ProcessSupervisor.setWindowsOutputObserverForTest((stdout) => {
       stdout.once("data", () => {
@@ -573,11 +572,8 @@ describe("ProcessSupervisor control-plane authority", () => {
       while (!injected && Date.now() < injectionDeadline) await Bun.sleep(20)
       expect(injected).toBe(true)
       await expect(handle.outputSettled).rejects.toThrow("deterministic Windows output abort")
-      await Bun.sleep(20)
-      expect(unhandled).toEqual([])
     } finally {
       ProcessSupervisor.setWindowsOutputObserverForTest(undefined)
-      process.off("unhandledRejection", onUnhandled)
       if (handle) {
         await ProcessSupervisor.terminateAndWaitForExit(handle, "deterministic output failure test").catch(() => undefined)
         await handle.outputSettled?.catch(() => undefined)

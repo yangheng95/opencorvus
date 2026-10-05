@@ -71,7 +71,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/log/export` | Export log support bundle | `log.export` |
 | GET | `/log/files` | List log files | `log.files` |
 | GET | `/log/tail` | Read recent logs 错误: `LogFileNotFoundError`, `NotFoundError`. | `log.tail` |
-| POST | `/restart` | Restart the server | `server.restart` |
+| POST | `/restart` | Restart the server 错误: `ServerRestartUnavailableError`. | `server.restart` |
 | POST | `/shutdown` | Shutdown the server | `server.shutdown` |
 
 ### Authentication

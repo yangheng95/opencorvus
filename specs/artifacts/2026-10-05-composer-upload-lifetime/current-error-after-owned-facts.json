@@ -1,0 +1,32 @@
+{
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data",
+      "home": "C:\\Users\\hengu"
+    }
+  },
+  "project": {
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\projects\\2026\\10\\05\\cfbb7b4c-447b-4c04-be9a-0fa437c00910",
+    "project": {
+      "id": "prj_hHetAklVlojwQlEbjjxC",
+      "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\projects\\2026\\10\\05\\cfbb7b4c-447b-4c04-be9a-0fa437c00910",
+      "time": {
+        "created": 1791178203078,
+        "updated": 1791178203078
+      },
+      "sandboxes": []
+    }
+  },
+  "process": {
+    "ProcessId": 32812,
+    "ParentProcessId": 55136,
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17889 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "launcher": 37340,
+  "bundle": "main-gB7qPYaU.js",
+  "obstruction": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\projects\\2026\\10\\05\\cfbb7b4c-447b-4c04-be9a-0fa437c00910\\.opencorvus\\.r\\project\\attachments",
+  "marker": "owned-current-error-after-obstruction-20261005"
+}

@@ -1,0 +1,126 @@
+{
+  "review": "diagnostic_and_manual_evidence_not_corrected_checker_acceptance",
+  "reviewedAt": "2026-10-05T05:21:35.410764+00:00",
+  "sourceResult": ".tmp-product-iteration/data-integrity/interactive-renderers-real-02.result.json",
+  "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6AYlcM\\runner-69760-ukCCxI\\runtime-root\\tmp\\opencorvus-renderers-real-l54nbM\\home\\data\\opencorvus.db",
+  "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+  "inputMessageID": "msg_hDlsF8kU5jan7cG0gFzG",
+  "messages": [
+    {
+      "id": "msg_hDlsF8kU5jan7cG0gFzG",
+      "role": "user",
+      "parentID": null,
+      "time": {
+        "created": 1791176813351
+      },
+      "finish": null,
+      "error": null,
+      "acceptedInputMessageIDs": null
+    },
+    {
+      "id": "msg_g0VX9HMzn00hzTqUQdyD",
+      "role": "assistant",
+      "parentID": "msg_hDlsF8kU5jan7cG0gFzG",
+      "time": {
+        "created": 1791176813559,
+        "completed": 1791176820671
+      },
+      "finish": "tool-calls",
+      "error": null,
+      "acceptedInputMessageIDs": [
+        "msg_hDlsF8kU5jan7cG0gFzG"
+      ]
+    },
+    {
+      "id": "msg_g0VX9HOr500v3wvCf7Y3",
+      "role": "assistant",
+      "parentID": "msg_hDlsF8kU5jan7cG0gFzG",
+      "time": {
+        "created": 1791176820707,
+        "completed": 1791176829875
+      },
+      "finish": "tool-calls",
+      "error": null,
+      "acceptedInputMessageIDs": [
+        "msg_hDlsF8kU5jan7cG0gFzG"
+      ]
+    },
+    {
+      "id": "msg_g0VX9HRFV00o5wlC1QsL",
+      "role": "assistant",
+      "parentID": "msg_hDlsF8kU5jan7cG0gFzG",
+      "time": {
+        "created": 1791176829909,
+        "completed": 1791176835500
+      },
+      "finish": "stop",
+      "error": null,
+      "acceptedInputMessageIDs": [
+        "msg_hDlsF8kU5jan7cG0gFzG"
+      ]
+    }
+  ],
+  "artifactReferences": [
+    {
+      "partID": "prt_g0VX9HOmb00zV4hOSFv5",
+      "messageID": "msg_g0VX9HMzn00hzTqUQdyD",
+      "artifactID": "art_g0VX9HOma00z6N1pmPgW"
+    },
+    {
+      "partID": "prt_g0VX9HRE400Tyk6u6bTh",
+      "messageID": "msg_g0VX9HOr500v3wvCf7Y3",
+      "artifactID": "art_g0VX9HRE3008XYQeFPxf"
+    }
+  ],
+  "replyIdleProtocolEvent": {
+    "id": "pev_g0VX9HSiD002FRz0DQT0",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_hU0dsqDoX38yGHDZNVzf",
+    "seq": 7,
+    "emitted_at": 1791176835532,
+    "payload": {
+      "inputMessageID": "msg_hDlsF8kU5jan7cG0gFzG",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  "wakeControlEvents": [
+    {
+      "id": "sctl_huXHNGyfA9TiZIMYPw4",
+      "kind": "wake_reason",
+      "event_kind": "consumed"
+    }
+  ],
+  "standbyLogs": [
+    {
+      "level": "info",
+      "time": "2026-10-05T05:07:15.528Z",
+      "service": "session.prompt",
+      "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+      "logDomain": "session",
+      "message": "entering standby"
+    }
+  ],
+  "ownerObservedBeforeRootRetirement": {
+    "generation": "cal_g0VX9HMyV00w6MzXSsWe",
+    "pid": 69760,
+    "processInstanceID": "win32:639267735961688499",
+    "occurrenceID": "ca7ce2eb-fa32-43f6-b205-0efb78876a52",
+    "physicalObservation": "exact_live",
+    "observationSource": "read-only SQLite Session prompt owner plus production observeRuntimeProcessOccurrence during this audit, before root-owned public abort"
+  },
+  "currentOwnerRowsAtReviewWrite": [],
+  "sourceContract": {
+    "checkerMistake": "interactive-renderers-real.ts:112 awaited SessionPromptState.waitForFinish after a completed reply",
+    "controllerLifetime": "session/prompt/state.ts:773 returns match.finished; terminatePromptResources settles it at finish, after physical owner release",
+    "standby": "session/loop.ts:1698 registers next wake, publishes idle; 3352 awaits future wake outside active Instance activity",
+    "replyReceipt": "session/wake.ts:460 settles exact reply, 461 joins the long-lived physical loop for runtime settlement",
+    "existingCorrectCaller": "orchestrator/agent.ts:931 uses waitForExecutionSettlement with exact input and AbortSignal; its success comment explicitly excludes awaiting persistent standby controller",
+    "cleanup": "server/server.ts:1084 Server.stop calls settleCurrentProcessExecution then Instance disposal and runtime handoff release"
+  },
+  "conclusion": "The accepted reply and artifacts finished naturally; reusable standby is intentional. The checker selected the whole-controller lifetime instead of the exact accepted reply settlement. No product scheduling/terminal defect established.",
+  "retirement": "Root alone owns public-abort retirement after manual UI review. This review does not send input, invoke a model, cancel a Session or stop a process.",
+  "credentials": "No auth/models content read or copied by this audit."
+}

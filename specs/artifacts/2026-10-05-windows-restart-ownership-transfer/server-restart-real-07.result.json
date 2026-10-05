@@ -1,0 +1,137 @@
+{
+  "status": "failed",
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yk4lrJ\\runner-1400-PPmQTa\\restart-check",
+  "helper": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3d2a8a15e953fd3e\\debug\\opencorvus-process-supervisor.exe",
+  "cases": [
+    {
+      "mode": "standalone",
+      "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yk4lrJ\\runner-1400-PPmQTa\\restart-check\\standalone\\home",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yk4lrJ\\runner-1400-PPmQTa\\restart-check\\standalone\\project",
+      "originalPID": 64500,
+      "originalOwner": {
+        "pid": 64500,
+        "processInstanceID": "win32:639267721694721881",
+        "occurrenceID": "checker:standalone"
+      },
+      "launchReceipt": {
+        "ReturnValue": 0,
+        "ProcessId": 64500,
+        "owner": {
+          "pid": 64500,
+          "processInstanceID": "win32:639267721694721881",
+          "occurrenceID": "checker:standalone"
+        }
+      },
+      "restarts": [],
+      "launcherStarted": {
+        "pid": 64500,
+        "processInstanceID": "win32:639267721694721881",
+        "occurrenceID": "c9317f0c-01c7-46c1-a6b3-3dfc11457ec0",
+        "inJob": false
+      },
+      "startup": {
+        "schemaVersion": 1,
+        "occurrenceID": "restart-standalone",
+        "outcome": "listening",
+        "url": "http://127.0.0.1:64824",
+        "pid": 64500
+      },
+      "lastAdmission": {
+        "status": 503,
+        "body": {
+          "ok": false,
+          "name": "ServerRestartUnavailableError",
+          "data": {
+            "reason": "containing_job",
+            "message": "Restart this backend through its containing process owner"
+          }
+        }
+      },
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9BKN300r7GuVmcJd"
+        }
+      },
+      "originalDisposition": "dead_or_reused",
+      "launcherTerminal": {
+        "pid": 64500,
+        "processInstanceID": "win32:639267721694721881",
+        "occurrenceID": "c9317f0c-01c7-46c1-a6b3-3dfc11457ec0",
+        "exitCode": 0
+      }
+    },
+    {
+      "mode": "standalone-peer",
+      "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yk4lrJ\\runner-1400-PPmQTa\\restart-check\\standalone-peer\\home",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yk4lrJ\\runner-1400-PPmQTa\\restart-check\\standalone-peer\\project",
+      "originalPID": 59444,
+      "originalOwner": {
+        "pid": 59444,
+        "processInstanceID": "win32:639267721695188180",
+        "occurrenceID": "checker:standalone-peer"
+      },
+      "launchReceipt": {
+        "ReturnValue": 0,
+        "ProcessId": 59444,
+        "owner": {
+          "pid": 59444,
+          "processInstanceID": "win32:639267721695188180",
+          "occurrenceID": "checker:standalone-peer"
+        }
+      },
+      "restarts": [],
+      "launcherStarted": {
+        "pid": 59444,
+        "processInstanceID": "win32:639267721695188180",
+        "occurrenceID": "a3d292aa-7721-432b-9484-9fdd32008ab6",
+        "inJob": false
+      },
+      "startup": {
+        "schemaVersion": 1,
+        "occurrenceID": "restart-standalone-peer",
+        "outcome": "listening",
+        "url": "http://127.0.0.1:64825",
+        "pid": 59444
+      },
+      "lastAdmission": {
+        "status": 503,
+        "body": {
+          "ok": false,
+          "name": "ServerRestartUnavailableError",
+          "data": {
+            "reason": "containing_job",
+            "message": "Restart this backend through its containing process owner"
+          }
+        }
+      },
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9BKN3003otlwPgid"
+        }
+      },
+      "originalDisposition": "dead_or_reused",
+      "launcherTerminal": {
+        "pid": 59444,
+        "processInstanceID": "win32:639267721695188180",
+        "occurrenceID": "a3d292aa-7721-432b-9484-9fdd32008ab6",
+        "exitCode": 0
+      }
+    }
+  ],
+  "error": {
+    "name": "AggregateError",
+    "message": "Parallel isolated restart qualification failed",
+    "stack": "AggregateError: Parallel isolated restart qualification failed\n    at D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\script\\server-restart-e2e.ts:212:34\n    at processTicksAndRejections (native:7:39)",
+    "causes": [
+      "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n503 !== 200\n",
+      "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n503 !== 200\n"
+    ]
+  },
+  "limits": [
+    "Credential-free Windows HTTP/physical ownership qualification; POSIX and Docker unverified"
+  ]
+}

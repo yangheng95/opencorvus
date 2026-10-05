@@ -1,0 +1,158 @@
+{
+  "source": "actual public GET after manual UI interactions",
+  "asset": "main-CwPDxKlv.js",
+  "cases": [
+    {
+      "conversation": {
+        "board": {
+          "kind": "session",
+          "sessionID": "ses_-zUSrzfsJzzr3voQ34zz",
+          "status": "idle",
+          "composerReferences": {
+            "skillNames": [],
+            "missionSkillNames": [],
+            "expertSquadIDs": []
+          },
+          "title": "可修改的验收草稿",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\project",
+          "changes": []
+        },
+        "pendingQuestions": [],
+        "transcript": [],
+        "events": [],
+        "view": {
+          "topLevelSessionIDs": [],
+          "sessions": [],
+          "messages": []
+        },
+        "turnArtifacts": [],
+        "agentView": {
+          "topLevelExecutionIDs": [],
+          "sessions": [
+            {
+              "sessionID": "ses_-zUSrzfsJzzr3voQ34zz",
+              "agentID": "mission",
+              "orderKey": "v1:0001791157974604:0000000000000050:0000000000000000:session:ses_-zUSrzfsJzzr3voQ34zz",
+              "stage": "mission",
+              "messageIDs": [],
+              "firstMessageTime": 1791157974604,
+              "lastMessageTime": 1791159254205,
+              "firstObservedAt": 1791157974604,
+              "lastObservedAt": 1791159254205,
+              "status": "idle",
+              "activity": [],
+              "todos": [],
+              "todoUpdatedAt": 0,
+              "placement": "top_level"
+            }
+          ],
+          "messages": []
+        },
+        "history": {
+          "oldestTimestamp": null,
+          "oldestOrderKey": null,
+          "oldestMessageID": null,
+          "hasMore": false,
+          "limit": 80
+        }
+      },
+      "mission": {
+        "missionID": "75a71748784f4120",
+        "sessionID": "ses_-zUSrzfsJzzr3voQ34zz",
+        "title": "可修改的验收草稿",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\project",
+        "created": 1791157974604,
+        "updated": 1791159254205,
+        "interruptible": false,
+        "productPillar": "code",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "请返回 18×7 的准确结果，并说明这是修改后保存的请求。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    },
+    {
+      "conversation": {
+        "board": {
+          "kind": "session",
+          "sessionID": "ses_-zUSrdtqlzzpHCuBTPko",
+          "status": "idle",
+          "composerReferences": {
+            "skillNames": [],
+            "missionSkillNames": [],
+            "expertSquadIDs": []
+          },
+          "title": "导航验收目标 B",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\model-project",
+          "changes": []
+        },
+        "pendingQuestions": [],
+        "transcript": [],
+        "events": [],
+        "view": {
+          "topLevelSessionIDs": [],
+          "sessions": [],
+          "messages": []
+        },
+        "turnArtifacts": [],
+        "agentView": {
+          "topLevelExecutionIDs": [],
+          "sessions": [
+            {
+              "sessionID": "ses_-zUSrdtqlzzpHCuBTPko",
+              "agentID": "mission",
+              "orderKey": "v1:0001791163164100:0000000000000050:0000000000000000:session:ses_-zUSrdtqlzzpHCuBTPko",
+              "stage": "mission",
+              "messageIDs": [],
+              "firstMessageTime": 1791163164100,
+              "lastMessageTime": 1791175837984,
+              "firstObservedAt": 1791163164100,
+              "lastObservedAt": 1791175837984,
+              "status": "idle",
+              "activity": [],
+              "todos": [],
+              "todoUpdatedAt": 0,
+              "placement": "top_level"
+            }
+          ],
+          "messages": []
+        },
+        "history": {
+          "oldestTimestamp": null,
+          "oldestOrderKey": null,
+          "oldestMessageID": null,
+          "hasMore": false,
+          "limit": 80
+        }
+      },
+      "mission": {
+        "missionID": "0b75986431b29515",
+        "sessionID": "ses_-zUSrdtqlzzpHCuBTPko",
+        "title": "导航验收目标 B",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\model-project",
+        "created": 1791163164100,
+        "updated": 1791175837984,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "This is an unexecuted navigation acceptance draft."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    }
+  ]
+}

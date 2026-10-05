@@ -83,7 +83,8 @@ export function nodeProcessByteSource(stream: NodeJS.ReadableStream | null): Pro
 }
 
 type WindowsReadyMarker = Readonly<{
-  protocol: 2
+  protocol: 3
+  detached: boolean
   request_id: string
   helper_pid: number
   target_pid: number
@@ -231,7 +232,7 @@ async function resolveWindowsExecutable(
 function parseWindowsReadyMarker(text: string, requestID: string, helperPID: number): WindowsReadyMarker {
   const marker = JSON.parse(text) as Partial<WindowsReadyMarker>
   if (
-    marker.protocol !== 2 ||
+    marker.protocol !== 3 || marker.detached !== false ||
     marker.request_id !== requestID ||
     marker.runtime_occurrence_id !== requestID ||
     marker.helper_pid !== helperPID ||
@@ -558,7 +559,7 @@ export function nodeProcessByteSink(stream: NodeJS.WritableStream | null): Proce
   }
 }
 
-async function spawnNodeProcess(request: ProcessSpawnerRequest): Promise<ProcessSpawnedHandle> {
+export async function spawnNodeProcess(request: ProcessSpawnerRequest): Promise<ProcessSpawnedHandle> {
   const command = request.command
   if (!command.executable.trim()) throw new Error("Process executable is required")
   const ownership = request.ownership ?? "owned_process"

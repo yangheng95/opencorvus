@@ -1,0 +1,129 @@
+{
+  "status": "failed",
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8OZh6D\\runner-20292-df6c8r\\restart-check",
+  "helper": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-06dd81b860115380\\debug\\opencorvus-process-supervisor.exe",
+  "cases": [
+    {
+      "mode": "standalone",
+      "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8OZh6D\\runner-20292-df6c8r\\restart-check\\standalone\\home",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8OZh6D\\runner-20292-df6c8r\\restart-check\\standalone\\project",
+      "originalPID": 71076,
+      "originalOwner": {
+        "pid": 71076,
+        "processInstanceID": "win32:639267727066036779",
+        "occurrenceID": "checker:standalone"
+      },
+      "launchReceipt": {
+        "ReturnValue": 0,
+        "ProcessId": 71076,
+        "owner": {
+          "pid": 71076,
+          "processInstanceID": "win32:639267727066036779",
+          "occurrenceID": "checker:standalone"
+        }
+      },
+      "restarts": [],
+      "launcherStarted": {
+        "pid": 71076,
+        "processInstanceID": "win32:639267727066036779",
+        "occurrenceID": "377a5566-5e38-49e5-bca3-b89bb1ca4c5e",
+        "inJob": false
+      },
+      "startup": {
+        "schemaVersion": 1,
+        "occurrenceID": "restart-standalone",
+        "outcome": "listening",
+        "url": "http://127.0.0.1:53716",
+        "pid": 71076
+      },
+      "lastAdmission": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9DaDN00N2szUy7rr"
+        }
+      },
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9Di2M0013d6ropT6"
+        }
+      },
+      "originalDisposition": "dead_or_reused",
+      "launcherTerminal": {
+        "pid": 71076,
+        "processInstanceID": "win32:639267727066036779",
+        "occurrenceID": "377a5566-5e38-49e5-bca3-b89bb1ca4c5e",
+        "exitCode": 0
+      }
+    },
+    {
+      "mode": "standalone-peer",
+      "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8OZh6D\\runner-20292-df6c8r\\restart-check\\standalone-peer\\home",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8OZh6D\\runner-20292-df6c8r\\restart-check\\standalone-peer\\project",
+      "originalPID": 36096,
+      "originalOwner": {
+        "pid": 36096,
+        "processInstanceID": "win32:639267727066013503",
+        "occurrenceID": "checker:standalone-peer"
+      },
+      "launchReceipt": {
+        "ReturnValue": 0,
+        "ProcessId": 36096,
+        "owner": {
+          "pid": 36096,
+          "processInstanceID": "win32:639267727066013503",
+          "occurrenceID": "checker:standalone-peer"
+        }
+      },
+      "restarts": [],
+      "launcherStarted": {
+        "pid": 36096,
+        "processInstanceID": "win32:639267727066013503",
+        "occurrenceID": "67f70c51-1b28-4f4d-913e-c6dc9d1c2206",
+        "inJob": false
+      },
+      "startup": {
+        "schemaVersion": 1,
+        "occurrenceID": "restart-standalone-peer",
+        "outcome": "listening",
+        "url": "http://127.0.0.1:53715",
+        "pid": 36096
+      },
+      "lastAdmission": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9DaD600BJr6SVHCv"
+        }
+      },
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9Di1I00F8LOWczFM"
+        }
+      },
+      "originalDisposition": "dead_or_reused",
+      "launcherTerminal": {
+        "pid": 36096,
+        "processInstanceID": "win32:639267727066013503",
+        "occurrenceID": "67f70c51-1b28-4f4d-913e-c6dc9d1c2206",
+        "exitCode": 0
+      }
+    }
+  ],
+  "error": {
+    "name": "AggregateError",
+    "message": "Parallel isolated restart qualification failed",
+    "stack": "AggregateError: Parallel isolated restart qualification failed\n    at D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\script\\server-restart-e2e.ts:212:34\n    at processTicksAndRejections (native:7:39)",
+    "causes": [
+      "Error: Timed out: committed native transfer",
+      "Error: Timed out: committed native transfer"
+    ]
+  },
+  "limits": [
+    "Credential-free Windows HTTP/physical ownership qualification; POSIX and Docker unverified"
+  ]
+}

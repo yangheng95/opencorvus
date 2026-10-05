@@ -1,0 +1,78 @@
+{
+  "upstream": "https://registry.npmjs.org/drizzle-orm/1.0.0-beta.20",
+  "mode": "Read-only upstream tarball source and existing patch context inspection; no ORM install or patch migration performed.",
+  "files": [
+    {
+      "file": "bun-sqlite/session.cjs",
+      "available": true,
+      "hunks": [
+        {
+          "contextMatches": true,
+          "oldLineCount": 9
+        },
+        {
+          "contextMatches": true,
+          "oldLineCount": 7
+        },
+        {
+          "contextMatches": false,
+          "oldLineCount": 38
+        },
+        {
+          "contextMatches": true,
+          "oldLineCount": 9
+        }
+      ]
+    },
+    {
+      "file": "bun-sqlite/session.d.cts",
+      "available": true,
+      "hunks": [
+        {
+          "contextMatches": true,
+          "oldLineCount": 7
+        },
+        {
+          "contextMatches": true,
+          "oldLineCount": 8
+        }
+      ]
+    },
+    {
+      "file": "bun-sqlite/session.d.ts",
+      "available": true,
+      "hunks": [
+        {
+          "contextMatches": true,
+          "oldLineCount": 7
+        },
+        {
+          "contextMatches": true,
+          "oldLineCount": 8
+        }
+      ]
+    },
+    {
+      "file": "bun-sqlite/session.js",
+      "available": true,
+      "hunks": [
+        {
+          "contextMatches": true,
+          "oldLineCount": 9
+        },
+        {
+          "contextMatches": true,
+          "oldLineCount": 7
+        },
+        {
+          "contextMatches": false,
+          "oldLineCount": 38
+        },
+        {
+          "contextMatches": true,
+          "oldLineCount": 9
+        }
+      ]
+    }
+  ]
+}

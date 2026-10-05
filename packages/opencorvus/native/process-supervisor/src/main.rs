@@ -25,7 +25,7 @@ mod windows_helper {
             JobObjects::{
                 CreateJobObjectW, JobObjectBasicAccountingInformation,
                 JobObjectExtendedLimitInformation, QueryInformationJobObject,
-                SetInformationJobObject, TerminateJobObject,
+                SetInformationJobObject, TerminateJobObject, IsProcessInJob,
                 JOBOBJECT_BASIC_ACCOUNTING_INFORMATION, JOBOBJECT_EXTENDED_LIMIT_INFORMATION,
                 JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE,
             },
@@ -107,6 +107,7 @@ mod windows_helper {
     #[derive(Serialize)]
     struct ReadyMarker<'a> {
         protocol: u32,
+        detached: bool,
         request_id: &'a str,
         helper_pid: u32,
         target_pid: u32,
@@ -114,6 +115,97 @@ mod windows_helper {
         runtime_occurrence_id: &'a str,
         #[serde(skip_serializing_if = "Option::is_none")]
         terminate_children_on_root_exit: Option<bool>,
+    }
+
+    const READY_PROTOCOL: u32 = 3;
+
+    #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+    #[serde(rename_all = "camelCase", deny_unknown_fields)]
+    struct ProcessOwner {
+        #[serde(rename = "occurrenceID")]
+        occurrence_id: String,
+        pid: u32,
+        #[serde(rename = "processInstanceID")]
+        process_instance_id: String,
+    }
+
+    #[derive(Deserialize)]
+    #[serde(deny_unknown_fields)]
+    struct TransferRequest {
+        protocol: u32,
+        request_id: String,
+        expected_owner: ProcessOwner,
+        successor: ProcessOwner,
+    }
+
+    #[derive(Deserialize)]
+    #[serde(deny_unknown_fields)]
+    struct RestartReady {
+        protocol: u32,
+        request_id: String,
+        successor: ProcessOwner,
+        url: String,
+    }
+
+    #[derive(Serialize)]
+    struct TransferReceipt<'a> {
+        protocol: u32,
+        request_id: &'a str,
+        outcome: &'static str,
+        previous_owner: &'a ProcessOwner,
+        successor: &'a ProcessOwner,
+        helper: TransferHelper<'a>,
+    }
+
+    #[derive(Serialize)]
+    #[serde(rename_all = "camelCase")]
+    struct TransferHelper<'a> {
+        pid: u32,
+        #[serde(rename = "processInstanceID")]
+        process_instance_id: &'a str,
+    }
+
+    fn commit_transfer_if_requested(
+        request: &LaunchRequest,
+        target: &SuspendedTarget,
+        target_identity: &str,
+        helper_identity: &str,
+    ) -> Result<bool, String> {
+        if !request.detached { return Ok(false); }
+        let root = std::path::Path::new(&request.ready_file).parent()
+            .ok_or_else(|| "Transfer request root is unavailable".to_string())?;
+        let body = match fs::read(root.join("transfer-request.json")) {
+            Ok(body) => body,
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => return Ok(false),
+            Err(error) => return Err(format!("Read transfer request failed: {error}")),
+        };
+        let transfer: TransferRequest = serde_json::from_slice(&body)
+            .map_err(|error| format!("Invalid transfer request: {error}"))?;
+        let owner = ProcessOwner { occurrence_id: request.runtime_occurrence_id.clone(),
+            pid: request.owner_pid, process_instance_id: request.owner_process_instance_id.clone() };
+        if transfer.protocol != 1 || transfer.request_id != request.request_id
+            || transfer.expected_owner != owner || transfer.successor.pid != target.pid
+            || transfer.successor.process_instance_id != target_identity
+            || transfer.successor.occurrence_id.is_empty()
+        { return Err("Transfer request identity does not match its physical owner/target".into()); }
+        let ready: RestartReady = serde_json::from_slice(&fs::read(root.join("restart-ready.json"))
+            .map_err(|error| format!("Read application Ready failed: {error}"))?)
+            .map_err(|error| format!("Invalid application Ready: {error}"))?;
+        if ready.protocol != 1 || ready.request_id != request.request_id
+            || ready.successor != transfer.successor || ready.url.is_empty()
+        { return Err("Transfer request does not match application Ready".into()); }
+        let receipt = TransferReceipt { protocol: 1, request_id: &request.request_id, outcome: "committed",
+            previous_owner: &owner, successor: &transfer.successor,
+            helper: TransferHelper { pid: unsafe { GetCurrentProcessId() }, process_instance_id: helper_identity } };
+        let destination = root.join("transfer-receipt.json");
+        if destination.exists() { return Err("Transfer receipt already exists before native commit".into()); }
+        let temporary = root.join(format!("transfer-receipt.{}.tmp", unsafe { GetCurrentProcessId() }));
+        let mut file = fs::File::create(&temporary).map_err(|error| format!("Create transfer receipt failed: {error}"))?;
+        serde_json::to_writer(&mut file, &receipt).map_err(|error| format!("Write transfer receipt failed: {error}"))?;
+        file.sync_all().map_err(|error| format!("Flush transfer receipt failed: {error}"))?;
+        drop(file);
+        fs::rename(temporary, destination).map_err(|error| format!("Commit transfer receipt failed: {error}"))?;
+        Ok(true)
     }
 
     #[derive(Serialize)]
@@ -605,6 +697,17 @@ mod windows_helper {
                 observed_owner_instance_id, request.owner_process_instance_id
             ));
         }
+        if request.detached {
+            let mut contained = 0;
+            if unsafe { IsProcessInJob(GetCurrentProcess(), null_mut(), &mut contained) } == 0 {
+                publish_pre_target_settlement_marker(&request)?;
+                return Err("Detached helper inherited Job containment could not be observed".into());
+            }
+            if contained != 0 {
+                publish_pre_target_settlement_marker(&request)?;
+                return Err("Detached helper remains inside an inherited containing Job".into());
+            }
+        }
         let standard_handles = inherited_standard_handles()?;
         let target = match create_suspended_target(&request, Some(&standard_handles)) {
             Ok(target) => target,
@@ -630,6 +733,7 @@ mod windows_helper {
             target.pid,
             &target_instance_id,
             request.terminate_children_on_root_exit,
+            request.detached,
         ) {
             return Err(settle_target_after_failure(error, &request, &target));
         }
@@ -644,6 +748,7 @@ mod windows_helper {
         }
 
         let mut cancellation_applied = false;
+        let mut transferred = false;
         loop {
             let waited = unsafe { WaitForSingleObject(target.process.0, 20) };
             if waited == WAIT_OBJECT_0 {
@@ -657,6 +762,7 @@ mod windows_helper {
                     &target,
                 ));
             }
+            if transferred { continue; }
             let owner_dead = unsafe { WaitForSingleObject(owner.0, 0) } == WAIT_OBJECT_0;
             if owner_dead || cancellation_requested(&request.cancel_file) {
                 if let Some(job) = target.job.as_ref() {
@@ -665,6 +771,11 @@ mod windows_helper {
                     terminate_process_handle(target.process.0, target.pid)?;
                     cancellation_applied = true;
                 }
+            } else if !cancellation_applied {
+                transferred = match commit_transfer_if_requested(&request, &target, &target_instance_id, &helper_instance_id) {
+                    Ok(committed) => committed,
+                    Err(error) => return Err(settle_target_after_failure(error, &request, &target)),
+                };
             }
         }
         let mut code = 1u32;
@@ -743,11 +854,13 @@ mod windows_helper {
         target_pid: u32,
         target_process_instance_id: &str,
         terminate_children_on_root_exit: bool,
+        detached: bool,
     ) -> Result<(), String> {
         let helper_pid = unsafe { GetCurrentProcessId() };
         let temporary_file = format!("{ready_file}.{helper_pid}.tmp");
         let marker = ReadyMarker {
-            protocol: 2,
+            protocol: READY_PROTOCOL,
+            detached,
             request_id,
             helper_pid,
             target_pid,
@@ -988,6 +1101,27 @@ mod windows_helper {
         };
 
         #[test]
+        fn transfer_codecs_preserve_canonical_process_occurrence_id_fields() {
+            let owner = serde_json::json!({"occurrenceID":"old-runtime","pid":41,"processInstanceID":"win32:101"});
+            let successor = serde_json::json!({"occurrenceID":"new-runtime","pid":42,"processInstanceID":"win32:102"});
+            let request: TransferRequest = serde_json::from_value(serde_json::json!({
+                "protocol":1,"request_id":"request-1","expected_owner":owner,"successor":successor
+            })).expect("decode current transfer request");
+            assert_eq!(request.expected_owner, ProcessOwner { occurrence_id:"old-runtime".into(), pid:41, process_instance_id:"win32:101".into() });
+            let ready: RestartReady = serde_json::from_value(serde_json::json!({
+                "protocol":1,"request_id":"request-1","successor":successor,"url":"http://127.0.0.1:17888"
+            })).expect("decode current application Ready");
+            assert_eq!(ready.successor, request.successor);
+            let receipt = TransferReceipt { protocol:1, request_id:"request-1", outcome:"committed",
+                previous_owner:&request.expected_owner, successor:&request.successor,
+                helper:TransferHelper { pid:43, process_instance_id:"win32:103" } };
+            assert_eq!(serde_json::to_value(receipt).expect("encode committed receipt"), serde_json::json!({
+                "protocol":1,"request_id":"request-1","outcome":"committed","previous_owner":owner,
+                "successor":successor,"helper":{"pid":43,"processInstanceID":"win32:103"}
+            }));
+        }
+
+        #[test]
         fn dropping_job_terminates_target_before_resume() {
             let executable = env::current_exe().expect("resolve current test executable");
             let request = LaunchRequest {
@@ -1132,6 +1266,13 @@ mod windows_helper {
     pub fn main() {
         let mut args = env::args().skip(1);
         match (args.next().as_deref(), args.next()) {
+            (Some("--detached-capability"), None) => {
+                let mut contained = 0;
+                let observed = unsafe { IsProcessInJob(GetCurrentProcess(), null_mut(), &mut contained) };
+                let containment = if observed == 0 { "unobservable" } else if contained != 0 { "contained" } else { "independent" };
+                println!("{}", serde_json::json!({ "protocol": READY_PROTOCOL, "containment": containment }));
+                std::process::exit(0);
+            }
             (Some("--version"), None) => {
                 println!("{}", env!("CARGO_PKG_VERSION"));
                 std::process::exit(0);

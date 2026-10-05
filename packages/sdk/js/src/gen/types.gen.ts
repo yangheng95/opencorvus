@@ -27365,10 +27365,21 @@ export type ServerRestartErrors = {
     ok: boolean
   }
   /**
-   * Shutdown handler unavailable
+   * Restart unavailable for this physical process owner
    */
   503: {
-    ok: boolean
+    data: {
+      message: string
+      reason:
+        | "handler_unavailable"
+        | "managed_parent"
+        | "init_process"
+        | "containing_job"
+        | "ownership_unobservable"
+        | "helper_protocol_unavailable"
+    }
+    name: "ServerRestartUnavailableError"
+    ok: false
   }
 }
 

@@ -1,0 +1,30 @@
+{
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data",
+      "home": "C:\\Users\\hengu"
+    }
+  },
+  "project": {
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\projects\\2026\\10\\05\\44127cf0-1bec-435e-b443-3eec8c8d8f9a",
+    "project": {
+      "id": "prj_hWOkI7dTdxaPwAQ5GYG8",
+      "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\projects\\2026\\10\\05\\44127cf0-1bec-435e-b443-3eec8c8d8f9a",
+      "time": {
+        "created": 1791176357761,
+        "updated": 1791176357761
+      },
+      "sandboxes": []
+    }
+  },
+  "process": {
+    "ProcessId": 75296,
+    "ParentProcessId": 45524,
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17889 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "bundle": "main-CwPDxKlv.js",
+  "helperProtocol": 3
+}

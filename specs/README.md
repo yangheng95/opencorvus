@@ -1,6 +1,16 @@
 # Specs Storage Index
 
-- [Windows restart ownership transfer: qualified failure and proposed repair](records/2026-10/2026-10-05-windows-restart-ownership-transfer.md)
+- [Composer upload lifetime across Project activation](records/2026-10/2026-10-05-composer-upload-lifetime.md)
+- [Composer upload lifetime evidence](artifacts/2026-10-05-composer-upload-lifetime/README.md)
+
+- [Dependency remediation: exact alerts and bounded upgrades](records/2026-10/2026-10-05-dependency-remediation.md)
+- [Dependency remediation baseline evidence](artifacts/2026-10-05-dependency-remediation/README.md)
+
+- [Mission draft context in an empty conversation](records/2026-10/2026-10-05-mission-draft-context.md)
+- [Mission draft context evidence](artifacts/2026-10-05-mission-draft-context/README.md)
+
+- [Windows restart ownership transfer: qualified failure, repair and acceptance](records/2026-10/2026-10-05-windows-restart-ownership-transfer.md)
+- [Windows restart actual evidence](artifacts/2026-10-05-windows-restart-ownership-transfer/README.md)
 
 - [Continuous iteration: admitting changes to authored work](records/2026-10/2026-10-05-authoring-admission.md)
 

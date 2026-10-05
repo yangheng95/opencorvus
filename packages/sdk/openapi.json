@@ -95929,7 +95929,7 @@
     },
     "/restart": {
       "post": {
-        "description": "Spawn a new server process with the same arguments, then exit.",
+        "description": "Admit a standalone server replacement with the same arguments. Managed, contained or init processes must restart through their existing launcher.",
         "operationId": "server.restart",
         "responses": {
           "200": {
@@ -95979,18 +95979,48 @@
               "application/json": {
                 "schema": {
                   "properties": {
+                    "data": {
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        },
+                        "reason": {
+                          "enum": [
+                            "handler_unavailable",
+                            "managed_parent",
+                            "init_process",
+                            "containing_job",
+                            "ownership_unobservable",
+                            "helper_protocol_unavailable"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "reason",
+                        "message"
+                      ],
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "ServerRestartUnavailableError",
+                      "type": "string"
+                    },
                     "ok": {
+                      "const": false,
                       "type": "boolean"
                     }
                   },
                   "required": [
-                    "ok"
+                    "ok",
+                    "name",
+                    "data"
                   ],
                   "type": "object"
                 }
               }
             },
-            "description": "Shutdown handler unavailable"
+            "description": "Restart unavailable for this physical process owner"
           }
         },
         "summary": "Restart the server",

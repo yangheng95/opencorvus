@@ -1,0 +1,58 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\global-composer-project.test.ts:
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) concurrent attachment inputs share one admission, anonymous Project and complete receipt [8.25ms]
+(pass) a shared cancelled decision returns AbortError to every input and retains its original facts [0.41ms]
+(pass) a newer admission sequence invalidates same-lineage joins before the public epoch changes [0.41ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) an old completion preserves a replacement allocation and its concurrent join [1.24ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) same-lineage inputs join until directory activation finishes even after directory becomes visible [1.22ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) admitted Mission input consumes its exact epoch and established attachment input returns that owner [0.93ms]
+(pass) a late allocation response reports AbortError and retains a newer established Project [0.35ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) a live upload follows its own admission epoch and remains current after its allocation pointer settles [1.87ms]
+(pass) a rejected operation remains an observable named rejection with terminal currentness [0.23ms]
+(pass) an allocation failure retains its current error identity until its live input settles [0.49ms]
+
+ 10 pass
+ 0 fail
+ 29 expect() calls
+Ran 10 tests across 1 file. [1.54s]

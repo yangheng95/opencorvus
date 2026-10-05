@@ -1,0 +1,720 @@
+{
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6AYlcM\\runner-69760-ukCCxI\\runtime-root\\tmp\\opencorvus-renderers-real-l54nbM",
+  "pid": 69760,
+  "model": "openai/gpt-6.1-sol",
+  "reviewStop": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6AYlcM\\runner-69760-ukCCxI\\runtime-root\\tmp\\opencorvus-renderers-real-l54nbM\\review.stop",
+  "maxRequests": 12,
+  "inactivityMs": 180000,
+  "authority": {
+    "credential": "available",
+    "projectedModel": "gpt-6.1-sol",
+    "pairedModels": true
+  },
+  "pageURL": "http://127.0.0.1:62025/ui/",
+  "preflight": {
+    "sessionID": "ses_hFz4cnEwXMsubrivHTNK",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "chat": {
+    "requestID": "99813ea5-f42a-47bc-98ec-7a156a676c8a",
+    "session": {
+      "id": "ses_hU0dsqDoX38yGHDZNVzf",
+      "slug": "sunny-lagoon",
+      "projectID": "prj_hAkVLYxAJISelti3QvCm",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6AYlcM\\runner-69760-ukCCxI\\runtime-root\\tmp\\opencorvus-renderers-real-l54nbM\\home\\data\\projects\\2026\\10\\05\\75d41a16-2946-446a-accc-3818383de09d",
+      "title": "请为依赖升级的真实视觉验收发布两个交互产物。通过实际 publish_interactive_artifact 工具分别发布：1) diagram@1，标...",
+      "version": "local",
+      "kind": "assistant",
+      "metadata": {
+        "globalChatStart": {
+          "version": 2,
+          "requestID": "99813ea5-f42a-47bc-98ec-7a156a676c8a",
+          "requestFingerprint": "ac392fcc0ad73e80076d9357d73e8b2e60179c80a87096e830c558aa63fe8ff2",
+          "messageID": "msg_hDlsF8kU5jan7cG0gFzG"
+        },
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        },
+        "configOverlay": {
+          "model": "openai/gpt-6.1-sol",
+          "prompt_profile": {
+            "active": "base"
+          }
+        }
+      },
+      "time": {
+        "created": 1791176813312,
+        "updated": 1791176813453
+      },
+      "permission": [
+        {
+          "permission": "delegate_agent",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_query_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_query_task_artifacts",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_create_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_wake_mission",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_wake_work",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_send_task_message",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_respond_interaction",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_cancel_task",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_update_checks",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_select_workspace",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_update_goal",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "panel_delete_goal",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "question",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "bash",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "read",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "glob",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "search_code",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "edit",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "write",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "apply_patch",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "todo",
+          "pattern": "*",
+          "action": "allow"
+        },
+        {
+          "permission": "schedule",
+          "pattern": "*",
+          "action": "allow"
+        }
+      ]
+    },
+    "messageID": "msg_hDlsF8kU5jan7cG0gFzG"
+  },
+  "messages": [
+    {
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1791176813351
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "wake_reason": {
+            "source": "api.chat",
+            "requestID": "99813ea5-f42a-47bc-98ec-7a156a676c8a",
+            "requestFingerprint": "ac392fcc0ad73e80076d9357d73e8b2e60179c80a87096e830c558aa63fe8ff2"
+          },
+          "surface": "right-sidebar",
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "api.chat",
+            "literalText": "请为依赖升级的真实视觉验收发布两个交互产物。通过实际 publish_interactive_artifact 工具分别发布：1) diagram@1，标题『依赖升级流程』，Mermaid flowchart LR：基线检查→升级依赖→真实验收；使用中文节点。2) timeline@1，标题『验收时间线』，三个 point 项：2026-10-05T01:00:00Z 基线检查、02:00:00Z 升级依赖、03:00:00Z 真实验收。均用 schemaVersion 1。完成两次发布后用一句话回复，正常结束本次 Chat。只发布这两个产物，不启动 Task 或 Mission。"
+          },
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001791176813351:0000000000000030:0000000000000000:message:msg_hDlsF8kU5jan7cG0gFzG",
+        "id": "msg_hDlsF8kU5jan7cG0gFzG",
+        "sessionID": "ses_hU0dsqDoX38yGHDZNVzf"
+      },
+      "parts": [
+        {
+          "id": "prt_hkxKRNf5JgN692HfpgaU",
+          "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+          "messageID": "msg_hDlsF8kU5jan7cG0gFzG",
+          "orderKey": "v1:0001791176813354:0000000000000031:0000000000000000:part:prt_hkxKRNf5JgN692HfpgaU",
+          "type": "text",
+          "text": "请为依赖升级的真实视觉验收发布两个交互产物。通过实际 publish_interactive_artifact 工具分别发布：1) diagram@1，标题『依赖升级流程』，Mermaid flowchart LR：基线检查→升级依赖→真实验收；使用中文节点。2) timeline@1，标题『验收时间线』，三个 point 项：2026-10-05T01:00:00Z 基线检查、02:00:00Z 升级依赖、03:00:00Z 真实验收。均用 schemaVersion 1。完成两次发布后用一句话回复，正常结束本次 Chat。只发布这两个产物，不启动 Task 或 Mission。",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hAkVLYxAJISelti3QvCm/a40e7043974196da7c2e5e64c609ca1c5662de8b7a613608ecaa82e8e5e7ba80.json",
+            "catalog_snapshot_hash": "a40e7043974196da7c2e5e64c609ca1c5662de8b7a613608ecaa82e8e5e7ba80"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1791176813559,
+          "completed": 1791176820671
+        },
+        "parentID": "msg_hDlsF8kU5jan7cG0gFzG",
+        "acceptedInputMessageIDs": [
+          "msg_hDlsF8kU5jan7cG0gFzG"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6AYlcM\\runner-69760-ukCCxI\\runtime-root\\tmp\\opencorvus-renderers-real-l54nbM\\home\\data\\projects\\2026\\10\\05\\75d41a16-2946-446a-accc-3818383de09d",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6AYlcM\\runner-69760-ukCCxI\\runtime-root\\tmp\\opencorvus-renderers-real-l54nbM\\home\\data\\projects\\2026\\10\\05\\75d41a16-2946-446a-accc-3818383de09d"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 28947,
+          "input": 28879,
+          "output": 68,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791176813559:0000000000000030:0000000000000000:message:msg_g0VX9HMzn00hzTqUQdyD",
+        "id": "msg_g0VX9HMzn00hzTqUQdyD",
+        "sessionID": "ses_hU0dsqDoX38yGHDZNVzf"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX9HN7500zh5zGmv9m",
+          "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+          "messageID": "msg_g0VX9HMzn00hzTqUQdyD",
+          "orderKey": "v1:0001791176814012:0000000000000031:0000000000000000:part:prt_g0VX9HN7500zh5zGmv9m",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX9HOJ500yQcx6usni",
+          "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+          "messageID": "msg_g0VX9HMzn00hzTqUQdyD",
+          "type": "tool",
+          "callID": "call_xvGY7e170Yd3ajrWc9LEfa2l",
+          "tool": "publish_interactive_artifact",
+          "state": {
+            "status": "completed",
+            "input": {
+              "artifact": {
+                "schemaVersion": "1",
+                "title": "依赖升级流程",
+                "content": {
+                  "renderer": "diagram@1",
+                  "source": "flowchart LR\n  baseline[基线检查] --> upgrade[升级依赖] --> acceptance[真实验收]"
+                }
+              }
+            },
+            "output": "{\"artifactID\":\"art_g0VX9HOma00z6N1pmPgW\",\"renderer\":\"diagram@1\"}",
+            "title": "依赖升级流程",
+            "metadata": {
+              "artifactID": "art_g0VX9HOma00z6N1pmPgW",
+              "renderer": "diagram@1",
+              "truncated": false
+            },
+            "time": {
+              "start": 1791176818599,
+              "end": 1791176820433
+            }
+          },
+          "orderKey": "v1:0001791176820410:0000000000000031:0000000000000000:part:prt_g0VX9HOJ500yQcx6usni"
+        },
+        {
+          "id": "prt_g0VX9HOmb00zV4hOSFv5",
+          "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+          "messageID": "msg_g0VX9HMzn00hzTqUQdyD",
+          "orderKey": "v1:0001791176820438:0000000000000031:0000000000000000:part:prt_g0VX9HOmb00zV4hOSFv5",
+          "type": "interactive-artifact",
+          "artifactID": "art_g0VX9HOma00z6N1pmPgW"
+        },
+        {
+          "id": "prt_g0VX9HOpj00dWGHMBfHx",
+          "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+          "messageID": "msg_g0VX9HMzn00hzTqUQdyD",
+          "orderKey": "v1:0001791176820625:0000000000000031:0000000000000000:part:prt_g0VX9HOpj00dWGHMBfHx",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 28947,
+            "input": 28879,
+            "output": 68,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1791176820707,
+          "completed": 1791176829875
+        },
+        "parentID": "msg_hDlsF8kU5jan7cG0gFzG",
+        "acceptedInputMessageIDs": [
+          "msg_hDlsF8kU5jan7cG0gFzG"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6AYlcM\\runner-69760-ukCCxI\\runtime-root\\tmp\\opencorvus-renderers-real-l54nbM\\home\\data\\projects\\2026\\10\\05\\75d41a16-2946-446a-accc-3818383de09d",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6AYlcM\\runner-69760-ukCCxI\\runtime-root\\tmp\\opencorvus-renderers-real-l54nbM\\home\\data\\projects\\2026\\10\\05\\75d41a16-2946-446a-accc-3818383de09d"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 29123,
+          "input": 315,
+          "output": 136,
+          "reasoning": 0,
+          "cache": {
+            "read": 28672,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001791176820707:0000000000000030:0000000000000000:message:msg_g0VX9HOr500v3wvCf7Y3",
+        "id": "msg_g0VX9HOr500v3wvCf7Y3",
+        "sessionID": "ses_hU0dsqDoX38yGHDZNVzf"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX9HOvv00Jvc2T7Gr9",
+          "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+          "messageID": "msg_g0VX9HOr500v3wvCf7Y3",
+          "orderKey": "v1:0001791176821007:0000000000000031:0000000000000000:part:prt_g0VX9HOvv00Jvc2T7Gr9",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX9HQD600ey8NQJa7F",
+          "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+          "messageID": "msg_g0VX9HOr500v3wvCf7Y3",
+          "type": "tool",
+          "callID": "call_NihAHx7Z7v4Z2vWUWXdBkMFJ",
+          "tool": "publish_interactive_artifact",
+          "state": {
+            "status": "completed",
+            "input": {
+              "artifact": {
+                "schemaVersion": "1",
+                "title": "验收时间线",
+                "content": {
+                  "renderer": "timeline@1",
+                  "groups": [],
+                  "items": [
+                    {
+                      "id": "baseline",
+                      "content": "基线检查",
+                      "kind": "point",
+                      "start": "2026-10-05T01:00:00Z"
+                    },
+                    {
+                      "id": "upgrade",
+                      "content": "升级依赖",
+                      "kind": "point",
+                      "start": "2026-10-05T02:00:00Z"
+                    },
+                    {
+                      "id": "acceptance",
+                      "content": "真实验收",
+                      "kind": "point",
+                      "start": "2026-10-05T03:00:00Z"
+                    }
+                  ]
+                }
+              }
+            },
+            "output": "{\"artifactID\":\"art_g0VX9HRE3008XYQeFPxf\",\"renderer\":\"timeline@1\"}",
+            "title": "验收时间线",
+            "metadata": {
+              "artifactID": "art_g0VX9HRE3008XYQeFPxf",
+              "renderer": "timeline@1",
+              "truncated": false
+            },
+            "time": {
+              "start": 1791176825916,
+              "end": 1791176829822
+            }
+          },
+          "orderKey": "v1:0001791176829810:0000000000000031:0000000000000000:part:prt_g0VX9HQD600ey8NQJa7F"
+        },
+        {
+          "id": "prt_g0VX9HRE400Tyk6u6bTh",
+          "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+          "messageID": "msg_g0VX9HOr500v3wvCf7Y3",
+          "orderKey": "v1:0001791176829825:0000000000000031:0000000000000000:part:prt_g0VX9HRE400Tyk6u6bTh",
+          "type": "interactive-artifact",
+          "artifactID": "art_g0VX9HRE3008XYQeFPxf"
+        },
+        {
+          "id": "prt_g0VX9HREE00AVGBh9Tt0",
+          "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+          "messageID": "msg_g0VX9HOr500v3wvCf7Y3",
+          "orderKey": "v1:0001791176829831:0000000000000031:0000000000000000:part:prt_g0VX9HREE00AVGBh9Tt0",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 29123,
+            "input": 315,
+            "output": 136,
+            "reasoning": 0,
+            "cache": {
+              "read": 28672,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1791176829909,
+          "completed": 1791176835500
+        },
+        "parentID": "msg_hDlsF8kU5jan7cG0gFzG",
+        "acceptedInputMessageIDs": [
+          "msg_hDlsF8kU5jan7cG0gFzG"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6AYlcM\\runner-69760-ukCCxI\\runtime-root\\tmp\\opencorvus-renderers-real-l54nbM\\home\\data\\projects\\2026\\10\\05\\75d41a16-2946-446a-accc-3818383de09d",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6AYlcM\\runner-69760-ukCCxI\\runtime-root\\tmp\\opencorvus-renderers-real-l54nbM\\home\\data\\projects\\2026\\10\\05\\75d41a16-2946-446a-accc-3818383de09d"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 29482,
+          "input": 8450,
+          "output": 40,
+          "reasoning": 0,
+          "cache": {
+            "read": 20992,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001791176829909:0000000000000030:0000000000000000:message:msg_g0VX9HRFV00o5wlC1QsL",
+        "id": "msg_g0VX9HRFV00o5wlC1QsL",
+        "sessionID": "ses_hU0dsqDoX38yGHDZNVzf"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VX9HRKI00rf1kM3RCh",
+          "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+          "messageID": "msg_g0VX9HRFV00o5wlC1QsL",
+          "orderKey": "v1:0001791176830206:0000000000000031:0000000000000000:part:prt_g0VX9HRKI00rf1kM3RCh",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VX9HSGF00ea4Wq2bhX",
+          "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+          "messageID": "msg_g0VX9HRFV00o5wlC1QsL",
+          "orderKey": "v1:0001791176833799:0000000000000031:0000000000000000:part:prt_g0VX9HSGF00ea4Wq2bhX",
+          "type": "text",
+          "text": "已发布「依赖升级流程」和「验收时间线」两个交互产物，可查看流程图并通过时间线控件浏览三个验收节点。",
+          "time": {
+            "start": 1791176835222,
+            "end": 1791176835222
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_07e0c3ed3b66a3f4016ac33081a4b487d0b895b26d82848c49",
+              "phase": "final_answer"
+            }
+          }
+        },
+        {
+          "id": "prt_g0VX9HSgn00er1IX6Jk5",
+          "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+          "messageID": "msg_g0VX9HRFV00o5wlC1QsL",
+          "orderKey": "v1:0001791176835446:0000000000000031:0000000000000000:part:prt_g0VX9HSgn00er1IX6Jk5",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 29482,
+            "input": 8450,
+            "output": 40,
+            "reasoning": 0,
+            "cache": {
+              "read": 20992,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "priced"
+          }
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "artifactID": "art_g0VX9HOma00z6N1pmPgW",
+      "messageID": "msg_g0VX9HMzn00hzTqUQdyD",
+      "part": {
+        "id": "prt_g0VX9HOmb00zV4hOSFv5",
+        "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+        "messageID": "msg_g0VX9HMzn00hzTqUQdyD",
+        "orderKey": "v1:0001791176820438:0000000000000031:0000000000000000:part:prt_g0VX9HOmb00zV4hOSFv5",
+        "type": "interactive-artifact",
+        "artifactID": "art_g0VX9HOma00z6N1pmPgW"
+      },
+      "artifact": {
+        "id": "art_g0VX9HOma00z6N1pmPgW",
+        "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+        "messageID": "msg_g0VX9HMzn00hzTqUQdyD",
+        "payload": {
+          "schemaVersion": "1",
+          "title": "依赖升级流程",
+          "renderer": "diagram@1",
+          "source": "flowchart LR\n  baseline[基线检查] --> upgrade[升级依赖] --> acceptance[真实验收]"
+        },
+        "timeCreated": 1791176820428,
+        "timeUpdated": 1791176820428
+      },
+      "payload": {
+        "schemaVersion": "1",
+        "title": "依赖升级流程",
+        "renderer": "diagram@1",
+        "source": "flowchart LR\n  baseline[基线检查] --> upgrade[升级依赖] --> acceptance[真实验收]"
+      }
+    },
+    {
+      "artifactID": "art_g0VX9HRE3008XYQeFPxf",
+      "messageID": "msg_g0VX9HOr500v3wvCf7Y3",
+      "part": {
+        "id": "prt_g0VX9HRE400Tyk6u6bTh",
+        "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+        "messageID": "msg_g0VX9HOr500v3wvCf7Y3",
+        "orderKey": "v1:0001791176829825:0000000000000031:0000000000000000:part:prt_g0VX9HRE400Tyk6u6bTh",
+        "type": "interactive-artifact",
+        "artifactID": "art_g0VX9HRE3008XYQeFPxf"
+      },
+      "artifact": {
+        "id": "art_g0VX9HRE3008XYQeFPxf",
+        "sessionID": "ses_hU0dsqDoX38yGHDZNVzf",
+        "messageID": "msg_g0VX9HOr500v3wvCf7Y3",
+        "payload": {
+          "schemaVersion": "1",
+          "title": "验收时间线",
+          "renderer": "timeline@1",
+          "groups": [],
+          "items": [
+            {
+              "id": "baseline",
+              "content": "基线检查",
+              "kind": "point",
+              "start": "2026-10-05T01:00:00Z"
+            },
+            {
+              "id": "upgrade",
+              "content": "升级依赖",
+              "kind": "point",
+              "start": "2026-10-05T02:00:00Z"
+            },
+            {
+              "id": "acceptance",
+              "content": "真实验收",
+              "kind": "point",
+              "start": "2026-10-05T03:00:00Z"
+            }
+          ]
+        },
+        "timeCreated": 1791176829819,
+        "timeUpdated": 1791176829819
+      },
+      "payload": {
+        "schemaVersion": "1",
+        "title": "验收时间线",
+        "renderer": "timeline@1",
+        "groups": [],
+        "items": [
+          {
+            "id": "baseline",
+            "content": "基线检查",
+            "kind": "point",
+            "start": "2026-10-05T01:00:00Z"
+          },
+          {
+            "id": "upgrade",
+            "content": "升级依赖",
+            "kind": "point",
+            "start": "2026-10-05T02:00:00Z"
+          },
+          {
+            "id": "acceptance",
+            "content": "真实验收",
+            "kind": "point",
+            "start": "2026-10-05T03:00:00Z"
+          }
+        ]
+      }
+    }
+  ],
+  "execution": {
+    "type": "idle"
+  },
+  "backendQualification": "passed",
+  "reviewDisposition": "root_requested_cleanup",
+  "credentialCleanup": "passed",
+  "cleanupErrors": [],
+  "status": "backend_passed_manual_review_separate",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200
+    }
+  ]
+}

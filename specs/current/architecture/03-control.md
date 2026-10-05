@@ -125,15 +125,14 @@ dispatch continuation 的唯一当前契约见 [Task control plane](task-control
 由该契约的 reducer（归约器）和当前 lease（租约）决定可执行性。该概览不另行定义
 Retry/Replan 协议、可变 Task row 生命周期或兼容旧 wait writer。
 
-`Database.Path()` 同时是物理 Server runtime 的唯一 ownership scope。每个 `Server.listen`
-在初始化全局服务、绑定 listener 或恢复 started Task 前取得该数据库的进程级租约；同一进程的多个
-listener 共享同一 Question、Permission、Bus、Instance 和数据库 runtime，因此只增加引用计数，
-不同进程则得到带 database/PID 证据的 typed ownership conflict。现有 restart handoff 在父进程
-停止 listener 接入但保留租约、清算全部本进程执行、释放最后一个租约并确认 socket 可重新绑定后，
-才创建 replacement 取得同一租约并绑定；并行开发必须
-使用显式隔离的 `OPENCORVUS_HOME`，不能让不同 binary/projection 共用生产数据库。数据库中的
-Interaction row 是 durable 可见投影，不替代 Question/Permission 的进程内 waiter owner；唯一 runtime
-ownership 保证 reply 命中创建该 pending occurrence 的同一物理 owner。
+物理 Server readiness、共享数据库协调与 restart handoff 的唯一当前契约见
+[Server runtime readiness](server-runtime-readiness.md)。多个物理 backend 可共享同一 SQLite
+数据库，通过精确进程 occurrence、Project durable fence、Task activation lease 与事务协调；
+`Server.listen` 不另行创建数据库路径级 host lock。同一进程内 listener 共用 Question、Permission、
+Bus、Instance 与数据库 runtime。restart 清算该物理进程的执行并移交其独立 listener；Windows
+native committed receipt 才能解除原 owner 对继任进程的取消权。隔离体验与并行开发继续使用独立
+`OPENCORVUS_HOME`，避免改动生产数据。Interaction row 是 durable 可见事实，不替代
+Question/Permission 的进程内 waiter；reply 必须到达创建该 pending occurrence 的精确物理 owner。
 
 ## 对话层 — ControlMessage + Panel Capability
 

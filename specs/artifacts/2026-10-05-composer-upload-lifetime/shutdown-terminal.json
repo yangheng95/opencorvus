@@ -1,0 +1,10 @@
+{
+  "listeners": [],
+  "processes": [],
+  "logTail": [
+    "overlay UI available at http://127.0.0.1:17889/ui/",
+    "[serve] runtime project recovery attempted=0 initialized=0 mission_attempted=0 mission_woken=0 mission_completed=0 failures=0",
+    "[serve] shutdown requested via http-client: http.shutdown",
+    "[serve] settled process-owned prompts sessions=0 toolParts=0"
+  ]
+}

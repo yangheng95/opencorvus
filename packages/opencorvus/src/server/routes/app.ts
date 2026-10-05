@@ -55,6 +55,7 @@ import {
   serverLifecycleOccurrence,
 } from "../lifecycle-occurrence"
 import { AppDocumentation } from "./documentation"
+import { RestartUnavailableReason } from "../restart"
 import { requestID, serverErrorResponse } from "../error-handler"
 import { writeVcsCommitMessageStreamError } from "../vcs-stream-error"
 import { Event as ServerEvent, payload as serverEventPayload } from "../event"
@@ -241,7 +242,7 @@ export function AppRoutes(root: Hono) {
       "/restart",
       describeRoute({
         summary: "Restart the server",
-        description: "Spawn a new server process with the same arguments, then exit.",
+        description: "Admit a standalone server replacement with the same arguments. Managed, contained or init processes must restart through their existing launcher.",
         operationId: "server.restart",
         responses: {
           200: {
@@ -260,15 +261,23 @@ export function AppRoutes(root: Hono) {
               },
             },
           },
-          503: ShutdownUnavailableResponse,
+          503: {
+            description: "Restart unavailable for this physical process owner",
+            content: { "application/json": { schema: resolver(z.object({ ok: z.literal(false), name: z.literal("ServerRestartUnavailableError"),
+              data: z.object({ reason: RestartUnavailableReason, message: z.string() }) })) } },
+          },
         },
       }),
       async (c) => {
-        const admission = admitServerRestart("server.restart")
+        const admission = await admitServerRestart("server.restart")
         if (!admission.admitted) {
           if (admission.reason === "unavailable") {
-            log.warn("restart requested without registered restart handler")
-            return c.json({ ok: false }, 503)
+            log.warn("restart unavailable for current process owner", admission.detail
+              ? { reason: admission.detail.reason, detail: admission.detail.message }
+              : { reason: "handler_unavailable" })
+            return c.json({ ok: false, name: "ServerRestartUnavailableError", data: admission.detail ?? {
+              reason: "handler_unavailable", message: "Server restart handler is unavailable",
+            } }, 503)
           }
           log.warn("restart refused by a live lifecycle occurrence", { live: admission.live })
           return c.json({ ok: false, occurrenceID: admission.live.id }, 409)

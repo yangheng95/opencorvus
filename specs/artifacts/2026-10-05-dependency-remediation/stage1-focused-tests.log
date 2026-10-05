@@ -1,0 +1,29 @@
+bun test v1.3.14 (0d9b296a)
+
+test\dependency-patch-contract.test.ts:
+(pass) patched glob dependencies enumerate exact nested brace selections [14.77ms]
+(pass) the real Node proxy owner delivers exact streamed HTTP data and disposes its dispatcher [316.90ms]
+(pass) the installed search-engine Axios dependency preserves exact HTTP response data [108.45ms]
+(pass) AJV's installed URI implementation serializes valid authorities and rejects malformed ports [4.35ms]
+(pass) Astro's installed serializer round-trips shared content values and dates [151.78ms]
+
+test\file-watcher-runtime-isolation.test.ts:
+(pass) a terminal native watcher reports its diagnostic and releases its complete subscription group [5.63ms]
+(pass) branch refresh represents repository removal as the undefined branch state [2721.34ms]
+
+test\tool\search-code-bounded-execution.test.ts:
+(pass) search_code bounded execution > keeps repository ignore boundaries when include is broad [3261.70ms]
+(pass) search_code bounded execution > filters ignored-aware candidates before narrow content searches consume the shared output budget [2805.12ms]
+(pass) search_code bounded execution > preserves partial enumeration results across argument batches under one deadline and output budget [1948.20ms]
+(pass) search_code bounded execution > shares one retained-output budget across enumeration and successive content batches [1923.55ms]
+(pass) search_code bounded execution > returns a typed regex failure even when include selects no candidates [2197.76ms]
+(pass) search_code bounded execution > rejects include complexity that cannot be matched completely [1905.19ms]
+(pass) search_code bounded execution > returns typed incomplete errors when partial enumeration cannot establish a match [2030.63ms]
+(pass) search_code bounded execution > terminates and settles an over-budget command with a typed execution error [1674.92ms]
+
+ 15 pass
+ 0 fail
+ 21 expect() calls
+Ran 15 tests across 3 files. [22.43s]
+
+exitCode=0
