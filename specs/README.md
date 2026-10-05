@@ -2476,6 +2476,12 @@ The current connection-workspace authority record also includes metadata selecti
 
 - [Git initialization selection and accepted-result review](artifacts/2026-10-05-connection-workspace-authority/root-review-git-init-selection.md): current-source findings and proposed local qualification; implementation remains pending Root authorization.
 
-- [Expanded Tool input/output detail boundary review](artifacts/2026-10-05-connection-workspace-authority/root-review-tool-detail-label.md): actual saved Read screenshot and independent request/outcome contract analysis; source-only minimal label recommendation, implementation and next real visual qualification pending Root.
+- [Expanded Tool input/output detail boundary review](artifacts/2026-10-05-connection-workspace-authority/root-review-tool-detail-label.md): original actual Read ambiguity, independent input/output provenance and Root's bounded implementation admission.
+- [Root Read detail manual qualification](artifacts/2026-10-05-connection-workspace-authority/root-tool-detail-manual-review.md): DoU actual screenshots, qualified payload copies/reloaded history, physical cleanup and precise remaining limits.
+- [Next bounded Tool result review](artifacts/2026-10-05-connection-workspace-authority/next-product-result-review.md): source-qualified completed Write receipt omission; actual exploration and repair remain pending Root.
 
 - [Live Sol Prompt-controller guard audit](artifacts/2026-10-05-connection-workspace-authority/live-sol-owned-prompt-guard-audit.md): shared ownership/standby/terminal/recovery audit; actual owner classification remains pending Root evidence.
+
+- [Push alert residual review](artifacts/2026-10-05-dependency-remediation/push-alert-residual-review-2026-10-06.md): read-only current graph/advisory reconciliation of the moderate/low GitHub summary.
+- [Rand/PHF candidate plan](artifacts/2026-10-05-dependency-remediation/rand-phf-candidate-plan.md): unique parent source/API and true native lookup acceptance; proposed source replacement remains pending Root.
+- [GLib backport candidate plan](artifacts/2026-10-05-dependency-remediation/glib-backport-candidate-plan.md): official iterator correction and coherent Linux delivery/qualification; no implementation or platform pass.

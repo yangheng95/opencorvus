@@ -1,0 +1,77 @@
+{
+  "observedAtUtc": "2026-10-05T17:03:21.2839573Z",
+  "purpose": "Actual completed persisted Read presentation",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "tool-detail-ui-01-b7afd8c8-4cd9-4dc5-b180-45a7f7d2e851",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:17952",
+    "pid": 55452
+  },
+  "listener": {
+    "ProcessId": 55452,
+    "ParentProcessId": 71448,
+    "CreationDate": "2026-10-06T01:02:23.216898+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17952 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-cli-01/project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\tool-detail-ui-01\\startup.json --startup-occurrence tool-detail-ui-01-b7afd8c8-4cd9-4dc5-b180-45a7f7d2e851 --log-level INFO"
+  },
+  "parent": {
+    "ProcessId": 71448,
+    "ParentProcessId": 70804,
+    "CreationDate": "2026-10-06T01:02:23.184035+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17952 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-cli-01/project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\tool-detail-ui-01\\startup.json --startup-occurrence tool-detail-ui-01-b7afd8c8-4cd9-4dc5-b180-45a7f7d2e851 --log-level INFO"
+  },
+  "launcher": {
+    "ProcessId": 70804,
+    "ParentProcessId": 39112,
+    "CreationDate": "2026-10-06T01:02:23.113957+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17952 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-cli-01/project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\tool-detail-ui-01\\startup.json --startup-occurrence tool-detail-ui-01-b7afd8c8-4cd9-4dc5-b180-45a7f7d2e851 --log-level INFO"
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-cli-01\\runtime\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-cli-01\\runtime\\data",
+      "home": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\tool-detail-ui-01\\home"
+    }
+  },
+  "assets": [
+    "main-DoU7wrLG.js",
+    "main-BX09nL6b.css"
+  ],
+  "environmentNames": [
+    "APPDATA",
+    "ComSpec",
+    "HOME",
+    "HOMEDRIVE",
+    "HOMEPATH",
+    "LANG",
+    "LC_ALL",
+    "LC_CTYPE",
+    "LOCALAPPDATA",
+    "OPENCORVUS_DISABLE_AUTOUPDATE",
+    "OPENCORVUS_DISABLE_EXTERNAL_SKILLS",
+    "OPENCORVUS_HOME",
+    "PATH",
+    "PATHEXT",
+    "SystemRoot",
+    "TEMP",
+    "TMP",
+    "TMPDIR",
+    "USERPROFILE",
+    "WINDIR",
+    "XDG_CACHE_HOME",
+    "XDG_CONFIG_HOME",
+    "XDG_DATA_HOME",
+    "XDG_STATE_HOME"
+  ],
+  "runtime": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-cli-01/runtime",
+  "project": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-cli-01/project",
+  "authExists": false,
+  "modelsExists": false,
+  "credentialStaging": "None",
+  "boundary": "Actual startup, ownership, healthy runtime and served assets; UI/manual screenshot acceptance follows separately."
+}

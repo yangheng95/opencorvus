@@ -2,13 +2,16 @@
 
 ## Current root real-page checkpoint
 
-Root's Cff, D5 and DVw manual checkpoints retain separate actual screenshot,
-disk and request evidence; the final DVw ordinary Sol run has actual Read/reply,
-reopened history and five exact streamed model requests. All five owned services
-physically exited, and the copied OpenAI entry and complete catalog were removed
-together. The final Root section below records exact qualification and remaining
-limits. Original investigation/readiness statements retain their historical
-phase; no earlier image is relabeled as a later build.
+Root's Cff, D5, DVw and DoU manual checkpoints retain separate actual screenshot,
+disk and request evidence. DVw's ordinary Sol run has actual Read/reply, reopened
+history and five exact streamed model requests. DoU qualifies the completed Read
+Input/Output presentation, actual payload copies and reloaded owned history with
+no new Provider request. All six owned services physically exited; the copied
+OpenAI entry and complete catalog remain absent. Original phase statements and
+screenshots retain their original provenance.
+
+- [Root Read detail manual qualification](root-tool-detail-manual-review.md): all seven actual screenshots, two qualified copy receipts, structural checks, physical cleanup and precise failed-action/parser boundaries. The selected image is tool-detail-ui-05-raw-input-output.png.
+- [Next bounded result review](next-product-result-review.md): source-qualified completed Write receipt omission; actual Write exploration and repair remain pending Root.
 
 - `next-provider-panel-audit.md`: original bounded Provider/auth, model-selector, Network and Channels plan; its later implementation and qualification sections record the completed source work and separate actual limits.
 

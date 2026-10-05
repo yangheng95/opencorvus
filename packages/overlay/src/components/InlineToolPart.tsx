@@ -504,6 +504,10 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
   )
   const bodyReady = () => !persistedPart.loading && !persistedPart.error && (!deferredSource() || !!persistedPart())
   const inputPayload = () => (status() === "pending" && raw() ? raw() : toolPayloadText(state().input))
+  const hasReadOutputBody = () =>
+    status() === "completed" &&
+    FILE_READ_TOOLS.has(key()) &&
+    Boolean((codeResult() && !showStructuredOutput()) || readView()?.note || readView()?.reminder)
 
   const showChip = () => mode() !== "body"
   const showBody = () => mode() === "block" || mode() === "body"
@@ -568,18 +572,30 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
               <Show when={showStructuredOutput()}>
                 <ToolDiffList items={toolDiffs()!} />
               </Show>
-              <Show when={codeResult() && !showStructuredOutput()}>
-                <div class="msg-tool-code md-content" innerHTML={codeResult()!.html} />
-              </Show>
-              <Show when={readView()?.note}>
-                <div class="msg-read-meta">{readView()!.note}</div>
-              </Show>
-              <Show when={readView()?.reminder}>
-                <section class="msg-read-reminder">
-                  <div class="msg-read-reminder__label">{t("tool.loaded_instructions")}</div>
-                  <div class="msg-read-reminder__body">
-                    <StaticTextPart text={readView()!.reminder!} />
-                  </div>
+              <Show
+                when={hasReadOutputBody()}
+                fallback={
+                  <Show when={codeResult() && !showStructuredOutput() && !FILE_READ_TOOLS.has(key())}>
+                    <div class="msg-tool-code md-content" innerHTML={codeResult()!.html} />
+                  </Show>
+                }
+              >
+                <section class="msg-tool-payload" aria-label={t("tool.output")}>
+                  <div class="msg-tool-payload__label">{t("tool.output")}</div>
+                  <Show when={codeResult() && !showStructuredOutput()}>
+                    <div class="msg-tool-code md-content" innerHTML={codeResult()!.html} />
+                  </Show>
+                  <Show when={readView()?.note}>
+                    <div class="msg-read-meta">{readView()!.note}</div>
+                  </Show>
+                  <Show when={readView()?.reminder}>
+                    <section class="msg-read-reminder">
+                      <div class="msg-read-reminder__label">{t("tool.loaded_instructions")}</div>
+                      <div class="msg-read-reminder__body">
+                        <StaticTextPart text={readView()!.reminder!} />
+                      </div>
+                    </section>
+                  </Show>
                 </section>
               </Show>
               <Show when={browserEvidence()}>
