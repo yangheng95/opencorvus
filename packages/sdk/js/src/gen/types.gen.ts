@@ -2157,6 +2157,9 @@ export type FileContent = {
     oldFileName: string
     oldHeader?: string
   }
+  /**
+   * Opaque revision of the exact loaded file bytes and canonical physical resource identity.
+   */
   revision?: string
   type: "text" | "binary"
 }
@@ -18008,6 +18011,9 @@ export type FileReadResponse = FileReadResponses[keyof FileReadResponses]
 export type FileWriteData = {
   body: {
     content: string
+    /**
+     * Opaque revision of the exact loaded file bytes and canonical physical resource identity.
+     */
     expectedRevision: string
     path: string
   }

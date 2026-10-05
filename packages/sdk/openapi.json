@@ -7488,6 +7488,7 @@
             "type": "object"
           },
           "revision": {
+            "description": "Opaque revision of the exact loaded file bytes and canonical physical resource identity.",
             "pattern": "^[a-f0-9]{64}$",
             "type": "string"
           },
@@ -69225,6 +69226,7 @@
                     "type": "string"
                   },
                   "expectedRevision": {
+                    "description": "Opaque revision of the exact loaded file bytes and canonical physical resource identity.",
                     "pattern": "^[a-f0-9]{64}$",
                     "type": "string"
                   },
