@@ -4,8 +4,43 @@ import { TextWriter, Uint8ArrayReader, ZipReader } from "@zip.js/zip.js"
 import { Log } from "../src/util/log"
 import { buildLogSupportBundle } from "../src/util/log-support-bundle"
 import { APICallError } from "ai"
+import path from "node:path"
+import { NodeProcess } from "@opencorvus-ai/util/process-node"
 
 describe("Log lifecycle", () => {
+  test("DEBUG policy reaches the real print-mode file and stderr destinations", async () => {
+    const result = await NodeProcess.run({
+      command: { executable: process.execPath, args: [path.join(import.meta.dir, "fixture/log-debug-child.ts")] },
+      ownership: "owned_tree",
+      windowsHide: true,
+      timeoutMs: 30_000,
+    })
+    expect(result.receipt.reason).toBe("exited")
+    expect(result.receipt.exitCode).toBe(0)
+    const file = JSON.parse(new TextDecoder().decode(result.stdout).trim()).fileRecords
+    const stderr = new TextDecoder()
+      .decode(result.stderr)
+      .trim()
+      .split(/\r?\n/)
+      .filter((line) => line.startsWith("{"))
+      .map((line) => JSON.parse(line))
+      .filter((row) => row.service === "log-debug-real-child")
+    const projection = (rows: Array<Record<string, unknown>>) =>
+      rows.map((row) => ({
+        level: row.level,
+        message: row.message,
+        status: row.status ?? null,
+        count: row.count ?? null,
+      }))
+    const expected = [
+      { level: "debug", message: "actual debug payload", status: null, count: 7 },
+      { level: "debug", message: "actual debug timer", status: "started", count: null },
+      { level: "debug", message: "actual debug timer", status: "completed", count: null },
+    ]
+    expect(projection(file)).toEqual(expected)
+    expect(projection(stderr)).toEqual(expected)
+  })
+
   test.each([false, true])("flush joins the actual in-flight file write with print=%s", async (print) => {
     await Log.init({ print, dev: true })
     const marker = `in-flight-file-write-${print}`
@@ -16,7 +51,7 @@ describe("Log lifecycle", () => {
       complete = resolve
     })
     let intercepted = false
-    using _write = spyOn(fs, "write").mockImplementation((...args: any[]) => {
+    const interceptedWrite = (...args: any[]) => {
       if (args[0] !== 2 && typeof args[1] === "string" && args[1].includes(marker) && !intercepted) {
         intercepted = true
         const callback = args.at(-1)
@@ -29,7 +64,8 @@ describe("Log lifecycle", () => {
         return
       }
       write(...args)
-    })
+    }
+    using _write = spyOn(fs, "write").mockImplementation(interceptedWrite as typeof fs.write)
     try {
       Log.create({ service: "log-flush-order" }).info(marker)
       await Log.flush()
@@ -71,7 +107,8 @@ describe("Log lifecycle", () => {
     const zip = new ZipReader(new Uint8ArrayReader(bundle.bytes))
     try {
       const entry = (await zip.getEntries()).find((entry) => entry.filename === current.rawPath)
-      if (!entry || !("getData" in entry)) throw new Error("Expected the exported raw log entry")
+      if (!entry || !("getData" in entry) || typeof entry.getData !== "function")
+        throw new Error("Expected the exported raw log entry")
       const raw = await entry.getData(new TextWriter())
       const records = raw
         .trim()

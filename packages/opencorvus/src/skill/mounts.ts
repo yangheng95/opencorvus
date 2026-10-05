@@ -9,6 +9,7 @@ import { HostAgentRegistry } from "@/agent/host-agent-registry"
 import { PromptProfile } from "@/agent/prompt-profile"
 import { ExpertSquadVirtualWorkflowsSchema } from "@/expert-squad/protocol-schema"
 import { Config } from "@/config/config"
+import { SkillReadDiagnostics } from "./read-diagnostics"
 import { EffectiveConfig } from "@/config/effective"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { compareCanonicalStrings } from "@/expert-squad/projection-hash"
@@ -447,14 +448,18 @@ export namespace SkillMount {
   }): Promise<Matrix> {
     if (input?.refresh) await SkillManager.refreshDiscoveryState()
     const scope = input?.sessionID ? "session" : "project"
-    const [effectiveConfig, projectConfig, projectDirectory, sessionOverlay] = input?.sessionID
-      ? await Promise.all([
-          EffectiveConfig.effective({ sessionID: input.sessionID }),
-          EffectiveConfig.base({ sessionID: input.sessionID }),
-          EffectiveConfig.capabilityProjectDirectory({ sessionID: input.sessionID }),
-          EffectiveConfig.overlay({ sessionID: input.sessionID }),
-        ])
-      : await Config.get().then((config) => [config, config, Instance.project.worktree, undefined] as const)
+    const [effectiveConfig, projectConfig, projectDirectory, sessionOverlay] = await SkillReadDiagnostics.phase(
+      "matrix.config",
+      () =>
+        input?.sessionID
+          ? Promise.all([
+              EffectiveConfig.effective({ sessionID: input.sessionID }),
+              EffectiveConfig.base({ sessionID: input.sessionID }),
+              EffectiveConfig.capabilityProjectDirectory({ sessionID: input.sessionID }),
+              EffectiveConfig.overlay({ sessionID: input.sessionID }),
+            ])
+          : Config.get().then((config) => [config, config, Instance.project.worktree, undefined] as const),
+    )
     const packageRevision = input?.sessionID ? taskPackageRevisionForSession(input.sessionID) : undefined
     const activeExpertSquadID = packageRevision?.id ?? PromptProfile.activeID(effectiveConfig)
     if (input?.sessionID && input.expertSquadID && input.expertSquadID !== activeExpertSquadID) {
@@ -467,111 +472,118 @@ export namespace SkillMount {
       projectionExpertSquadID === activeExpertSquadID
         ? effectiveConfig
         : { ...effectiveConfig, prompt_profile: { active: projectionExpertSquadID } }
-    const installed = await SkillManager.installed()
-    const projection = await PromptProfileResolver.resolveSkillProjection({
-      projectDirectory,
-      config: projectionConfig,
-      defaultSkills: installed,
-      packageRevision,
-    })
+    const installed = await SkillReadDiagnostics.phase("matrix.inventory", () => SkillManager.installed())
+    const projection = await SkillReadDiagnostics.phase("matrix.projection", () =>
+      PromptProfileResolver.resolveSkillProjection({
+        projectDirectory,
+        config: projectionConfig,
+        defaultSkills: installed,
+        packageRevision,
+      }),
+    )
     const rows: MatrixRow[] = []
     const agents: AgentEntry[] = []
     const scheduler = projection.projectedScheduler
     const schedulerRuntime = sessionRuntimeFromNativeAgent(
-      await HostAgentRegistry.get("orchestrator", { config: projectionConfig }),
+      await SkillReadDiagnostics.phase("matrix.registry", () =>
+        HostAgentRegistry.get("orchestrator", { config: projectionConfig }),
+      ),
     )
-    const schedulerToolIDs = new Set(scheduler.projectedToolIDs)
-    agents.push({
-      agent_id: scheduler.identity.agentID,
-      base_role: scheduler.identity.baseRole,
-      label: scheduler.label,
-      ...(scheduler.description ? { description: scheduler.description } : {}),
-      capability_owner: "package",
-      skill_mountable: true,
-      skill_tool_available: agentCanUseSkillTool({ runtime: schedulerRuntime, projectedToolIDs: schedulerToolIDs }),
-      projected_tool_ids: [...scheduler.projectedToolIDs],
-    })
-    rows.push({
-      agent_id: scheduler.identity.agentID,
-      base_role: scheduler.identity.baseRole,
-      grants: relationsForAgent({
-        projection,
-        projected: scheduler,
-        runtime: schedulerRuntime,
-        projectConfig,
-        sessionOverlay,
-        effectiveConfig,
-      }),
-    })
-    // Scheduler-only agents first: `PromptProfileResolver` already resolves their production Skill
-    // grants and `resolve()` already serves their turn surface, but omitting them here meant an
-    // operator could not mount a Skill onto the one worker an Advanced Task most often dispatches
-    // directly, and any audit reading this matrix silently reported full coverage without them.
-    for (const projected of [...projection.schedulerOnlyAgents, ...projection.projectedAgents]) {
-      const template = RuntimeTemplateRegistry.get(projected.identity.baseRole)
-      const overrides = runtimeOverrideLayers(effectiveConfig, {
-        expertSquadID: projection.expertSquadID,
-        agentID: projected.identity.agentID,
-        baseRole: projected.identity.baseRole,
-      })
-      const runtime = sessionRuntimeFromProjectedTemplate({
-        template,
-        templateOverride: overrides.template,
-        projectedAgentOverride: overrides.projectedAgent,
-      })
-      const projectedToolIDs = new Set(projected.projectedToolIDs)
-      const mountable = RuntimeTemplateRegistry.get(projected.identity.baseRole).skillMountable
+    return SkillReadDiagnostics.phase("matrix.assembly", () => {
+      const schedulerToolIDs = new Set(scheduler.projectedToolIDs)
       agents.push({
-        agent_id: projected.identity.agentID,
-        base_role: projected.identity.baseRole,
-        label: projected.label,
-        ...(projected.description ? { description: projected.description } : {}),
-        capability_owner: projected.capabilityOwner,
-        skill_mountable: mountable,
-        skill_tool_available: agentCanUseSkillTool({ runtime, projectedToolIDs }),
-        projected_tool_ids: [...projected.projectedToolIDs],
+        agent_id: scheduler.identity.agentID,
+        base_role: scheduler.identity.baseRole,
+        label: scheduler.label,
+        ...(scheduler.description ? { description: scheduler.description } : {}),
+        capability_owner: "package",
+        skill_mountable: true,
+        skill_tool_available: agentCanUseSkillTool({ runtime: schedulerRuntime, projectedToolIDs: schedulerToolIDs }),
+        projected_tool_ids: [...scheduler.projectedToolIDs],
       })
       rows.push({
-        agent_id: projected.identity.agentID,
-        base_role: projected.identity.baseRole,
+        agent_id: scheduler.identity.agentID,
+        base_role: scheduler.identity.baseRole,
         grants: relationsForAgent({
           projection,
-          projected,
-          runtime,
+          projected: scheduler,
+          runtime: schedulerRuntime,
           projectConfig,
           sessionOverlay,
           effectiveConfig,
         }),
       })
-    }
-    const poolByRef = new Map<string, PoolSkill>()
-    for (const skill of installed) {
-      const ref = defaultSkillRefFromName(skill.name)
-      poolByRef.set(ref, poolSkill(skill, ref, "default"))
-    }
-    for (const grant of projection.productionSkills) {
-      if (grant.source !== "package" || poolByRef.has(grant.ref)) continue
-      poolByRef.set(grant.ref, poolSkill(grant.skill, grant.ref, "package"))
-    }
-    const skills = [...poolByRef.values()].sort((left, right) => compareCanonicalStrings(left.ref, right.ref))
-    const effectiveRefs = new Set(
-      rows.flatMap((row) => row.grants.filter((grant) => grant.effective).map((grant) => grant.ref)),
-    )
-    return Matrix.parse({
-      scope,
-      active_profile: projection.expertSquadID,
-      projection_hash: projection.projectionHash,
-      projected_tool_ids: projection.projectedToolIDs,
-      projected_agents: projection.projectedAgentIDs,
-      virtual_workflows: projection.projectedScheduler.virtualWorkflows,
-      selector_skill_names: projection.selectorSkillNames,
-      production_skill_names: projection.productionSkillNames,
-      projected_skill_names: projection.projectedSkillNames,
-      skills,
-      agents,
-      matrix: rows,
-      unmounted_count: skills.filter((skill) => skill.projection_source === "default" && !effectiveRefs.has(skill.ref))
-        .length,
+      // Scheduler-only agents first: `PromptProfileResolver` already resolves their production Skill
+      // grants and `resolve()` already serves their turn surface, but omitting them here meant an
+      // operator could not mount a Skill onto the one worker an Advanced Task most often dispatches
+      // directly, and any audit reading this matrix silently reported full coverage without them.
+      for (const projected of [...projection.schedulerOnlyAgents, ...projection.projectedAgents]) {
+        const template = RuntimeTemplateRegistry.get(projected.identity.baseRole)
+        const overrides = runtimeOverrideLayers(effectiveConfig, {
+          expertSquadID: projection.expertSquadID,
+          agentID: projected.identity.agentID,
+          baseRole: projected.identity.baseRole,
+        })
+        const runtime = sessionRuntimeFromProjectedTemplate({
+          template,
+          templateOverride: overrides.template,
+          projectedAgentOverride: overrides.projectedAgent,
+        })
+        const projectedToolIDs = new Set(projected.projectedToolIDs)
+        const mountable = RuntimeTemplateRegistry.get(projected.identity.baseRole).skillMountable
+        agents.push({
+          agent_id: projected.identity.agentID,
+          base_role: projected.identity.baseRole,
+          label: projected.label,
+          ...(projected.description ? { description: projected.description } : {}),
+          capability_owner: projected.capabilityOwner,
+          skill_mountable: mountable,
+          skill_tool_available: agentCanUseSkillTool({ runtime, projectedToolIDs }),
+          projected_tool_ids: [...projected.projectedToolIDs],
+        })
+        rows.push({
+          agent_id: projected.identity.agentID,
+          base_role: projected.identity.baseRole,
+          grants: relationsForAgent({
+            projection,
+            projected,
+            runtime,
+            projectConfig,
+            sessionOverlay,
+            effectiveConfig,
+          }),
+        })
+      }
+      const poolByRef = new Map<string, PoolSkill>()
+      for (const skill of installed) {
+        const ref = defaultSkillRefFromName(skill.name)
+        poolByRef.set(ref, poolSkill(skill, ref, "default"))
+      }
+      for (const grant of projection.productionSkills) {
+        if (grant.source !== "package" || poolByRef.has(grant.ref)) continue
+        poolByRef.set(grant.ref, poolSkill(grant.skill, grant.ref, "package"))
+      }
+      const skills = [...poolByRef.values()].sort((left, right) => compareCanonicalStrings(left.ref, right.ref))
+      const effectiveRefs = new Set(
+        rows.flatMap((row) => row.grants.filter((grant) => grant.effective).map((grant) => grant.ref)),
+      )
+      return Matrix.parse({
+        scope,
+        active_profile: projection.expertSquadID,
+        projection_hash: projection.projectionHash,
+        projected_tool_ids: projection.projectedToolIDs,
+        projected_agents: projection.projectedAgentIDs,
+        virtual_workflows: projection.projectedScheduler.virtualWorkflows,
+        selector_skill_names: projection.selectorSkillNames,
+        production_skill_names: projection.productionSkillNames,
+        projected_skill_names: projection.projectedSkillNames,
+        skills,
+        agents,
+        matrix: rows,
+        unmounted_count: skills.filter(
+          (skill) => skill.projection_source === "default" && !effectiveRefs.has(skill.ref),
+        ).length,
+      })
     })
   }
 

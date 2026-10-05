@@ -25,6 +25,7 @@ import { createInstanceState } from "@/project/instance-state"
 import { Context } from "@/util/context"
 import { SkillMarket } from "./market"
 import { SkillCatalogConfigurationEffect, SkillReplacementPublication } from "./replacement-publication"
+import { SkillReadDiagnostics } from "./read-diagnostics"
 
 const MANIFEST = ".opencorvus-skill-source.json"
 const log = Log.create({ service: "skill-manager" })
@@ -291,67 +292,78 @@ export namespace SkillManager {
   }
 
   const installedInventoryState = createInstanceState(
-    async () => {
-      const global = await Config.getGlobal()
-      const configuredPaths = (global.skills?.paths ?? []).map(resolveSource)
-      const configuredUrls = global.skills?.urls ?? []
-      const root = managedRoot()
-      const cache = Discovery.dir()
+    () =>
+      SkillReadDiagnostics.initialize("inventory", async () => {
+        const global = await SkillReadDiagnostics.phase("inventory.config", () => Config.getGlobal())
+        const configuredPaths = (global.skills?.paths ?? []).map(resolveSource)
+        const configuredUrls = global.skills?.urls ?? []
+        const root = managedRoot()
+        const cache = Discovery.dir()
 
-      return await Promise.all(
-        (await Skill.all()).map(async (skill) => {
-          const dir = skill.builtin ? undefined : path.dirname(skill.location)
-          const remoteSource = dir ? await Discovery.publishedSnapshotSource(dir) : undefined
-          const manifest = !skill.builtin && dir ? await readManifest(dir, root, cache) : undefined
-          const sourceType = skill.builtin
-            ? "builtin"
-            : remoteSource
-              ? "config_url"
-              : dir
-                ? sourceTypeFor(dir, configuredPaths, cache, manifest?.kind)
-                : "builtin"
-          const trust = trustFor(skill, remoteSource ?? manifest?.source)
-          const risk = skill.builtin
-            ? Skill.builtinRisk(skill.name)
-            : dir
-              ? await riskFor(dir, trust)
-              : {
-                  level: "low" as const,
-                  has_scripts: false,
-                  has_agents: false,
-                  has_references: false,
-                  has_templates: false,
-                }
-          return {
-            ...skill,
-            dir,
-            source_type:
-              manifest?.kind === "market"
-                ? ("managed_market" as const)
-                : manifest?.kind === "git"
-                  ? ("managed_git" as const)
-                  : manifest?.kind === "url"
-                    ? ("config_url" as const)
-                    : sourceType,
-            source:
-              (manifest?.kind === "market" ? manifest.market_id : undefined) ??
-              remoteSource ??
-              manifest?.source ??
-              (sourceType === "config_path"
-                ? configuredPaths.find((item) => Filesystem.contains(item, dir!))
-                : undefined) ??
-              (sourceType === "config_url" && configuredUrls.length === 1 ? configuredUrls[0] : undefined),
-            market_id: manifest?.kind === "market" ? manifest.market_id : undefined,
-            market_hash: manifest?.kind === "market" ? manifest.hash : undefined,
-            trust,
-            risk,
-            recommended_policy: recommendedPolicy(trust, risk),
-            managed: !!dir && Filesystem.contains(root, dir),
-            writable: !remoteSource && !skill.builtin && !!dir && (await Filesystem.isDir(dir)),
-          }
-        }),
-      )
-    },
+        const skills = await SkillReadDiagnostics.phase("inventory.skills", () => Skill.all())
+        return await SkillReadDiagnostics.phase("inventory.projection", () =>
+          Promise.all(
+            skills.map(async (skill) => {
+              const dir = skill.builtin ? undefined : path.dirname(skill.location)
+              const remoteSource = dir
+                ? await SkillReadDiagnostics.aggregate("inventory.provenance", () =>
+                    Discovery.publishedSnapshotSource(dir),
+                  )
+                : undefined
+              const manifest =
+                !skill.builtin && dir
+                  ? await SkillReadDiagnostics.aggregate("inventory.manifest", () => readManifest(dir, root, cache))
+                  : undefined
+              const sourceType = skill.builtin
+                ? "builtin"
+                : remoteSource
+                  ? "config_url"
+                  : dir
+                    ? sourceTypeFor(dir, configuredPaths, cache, manifest?.kind)
+                    : "builtin"
+              const trust = trustFor(skill, remoteSource ?? manifest?.source)
+              const risk = skill.builtin
+                ? Skill.builtinRisk(skill.name)
+                : dir
+                  ? await riskFor(dir, trust)
+                  : {
+                      level: "low" as const,
+                      has_scripts: false,
+                      has_agents: false,
+                      has_references: false,
+                      has_templates: false,
+                    }
+              return {
+                ...skill,
+                dir,
+                source_type:
+                  manifest?.kind === "market"
+                    ? ("managed_market" as const)
+                    : manifest?.kind === "git"
+                      ? ("managed_git" as const)
+                      : manifest?.kind === "url"
+                        ? ("config_url" as const)
+                        : sourceType,
+                source:
+                  (manifest?.kind === "market" ? manifest.market_id : undefined) ??
+                  remoteSource ??
+                  manifest?.source ??
+                  (sourceType === "config_path"
+                    ? configuredPaths.find((item) => Filesystem.contains(item, dir!))
+                    : undefined) ??
+                  (sourceType === "config_url" && configuredUrls.length === 1 ? configuredUrls[0] : undefined),
+                market_id: manifest?.kind === "market" ? manifest.market_id : undefined,
+                market_hash: manifest?.kind === "market" ? manifest.hash : undefined,
+                trust,
+                risk,
+                recommended_policy: recommendedPolicy(trust, risk),
+                managed: !!dir && Filesystem.contains(root, dir),
+                writable: !remoteSource && !skill.builtin && !!dir && (await Filesystem.isDir(dir)),
+              }
+            }),
+          ),
+        )
+      }),
     undefined,
     "installed-skill-inventory",
   )
@@ -367,13 +379,13 @@ export namespace SkillManager {
 
   async function installedAtPublication(publicationRevision: string) {
     if (installedPublicationRevision !== publicationRevision) {
-      await installedInventoryState.resetAll()
+      await SkillReadDiagnostics.phase("catalog.inventory-reset", () => installedInventoryState.resetAll())
       installedPublicationRevision = publicationRevision
     }
     const global = await Config.getGlobal()
     const rules = CapabilityRules.fromConfig({ skill: global.skill_policy ?? {} })
     return Installed.array().parse(
-      (await installedInventoryState()).map((skill) => ({
+      (await SkillReadDiagnostics.readState("inventory", installedInventoryState)).map((skill) => ({
         ...skill,
         policy: CapabilityRules.evaluate("skill", skill.name, rules).action,
       })),
@@ -406,10 +418,10 @@ export namespace SkillManager {
    * order: catalog owner, then config-file owner. Open replacement recovery
    * runs before a later global config mutation can inspect or change Skills. */
   export async function withCatalogMutationOwner<T>(mutate: () => Promise<T>): Promise<T> {
-    if (replacementContext.tryUse()) return mutate()
+    if (replacementContext.tryUse()) return SkillReadDiagnostics.phase("catalog.reentrant", mutate)
     return SkillReplacementPublication.withCatalogOwner(() =>
       replacementContext.provide(true, async () => {
-        await recoverOpenSkillReplacement()
+        await SkillReadDiagnostics.phase("catalog.recovery", recoverOpenSkillReplacement)
         return mutate()
       }),
     )
@@ -418,7 +430,7 @@ export namespace SkillManager {
   async function observeCatalogPublicationRevision(revision: string) {
     if (observedCatalogPublicationRevision !== revision) {
       Config.global.reset()
-      await Config.state.resetAll()
+      await SkillReadDiagnostics.phase("catalog.config-reset", () => Config.state.resetAll())
       observedCatalogPublicationRevision = revision
     }
     return revision
@@ -428,12 +440,20 @@ export namespace SkillManager {
    * owner through the reader's complete filesystem/config projection. */
   export async function withCatalogProjection<T>(project: (revision: string) => Promise<T>): Promise<T> {
     if (replacementContext.tryUse()) {
-      return project(await observeCatalogPublicationRevision(await SkillReplacementPublication.revision()))
+      return SkillReadDiagnostics.phase("catalog.reentrant", async () =>
+        project(
+          await observeCatalogPublicationRevision(
+            await SkillReadDiagnostics.phase("catalog.revision", () => SkillReplacementPublication.revision()),
+          ),
+        ),
+      )
     }
     return SkillReplacementPublication.withCatalogOwner(() =>
       replacementContext.provide(true, async () => {
-        await recoverOpenSkillReplacement()
-        const revision = await observeCatalogPublicationRevision(await SkillReplacementPublication.revision())
+        await SkillReadDiagnostics.phase("catalog.recovery", recoverOpenSkillReplacement)
+        const revision = await observeCatalogPublicationRevision(
+          await SkillReadDiagnostics.phase("catalog.revision", () => SkillReplacementPublication.revision()),
+        )
         return project(revision)
       }),
     )
@@ -1038,26 +1058,30 @@ function trustForGitHubRepository(owner: string, repo: string): z.infer<typeof S
 
 async function riskFor(dir: string, trust: z.infer<typeof SkillManager.Trust>) {
   const [scripts, agents, references, templates] = await Promise.all([
-    Glob.scan("{script,scripts}/**/*", { cwd: dir, absolute: true, include: "file", dot: true, symlink: true }).catch(
-      () => [],
-    ),
-    Glob.scan("{agent,agents}/**/*", { cwd: dir, absolute: true, include: "file", dot: true, symlink: true }).catch(
-      () => [],
-    ),
-    Glob.scan("{reference,references}/**/*", {
-      cwd: dir,
-      absolute: true,
-      include: "file",
-      dot: true,
-      symlink: true,
-    }).catch(() => []),
-    Glob.scan("{template,templates,asset,assets}/**/*", {
-      cwd: dir,
-      absolute: true,
-      include: "file",
-      dot: true,
-      symlink: true,
-    }).catch(() => []),
+    SkillReadDiagnostics.aggregate("risk.scripts", () =>
+      Glob.scan("{script,scripts}/**/*", { cwd: dir, absolute: true, include: "file", dot: true, symlink: true }),
+    ).catch(() => []),
+    SkillReadDiagnostics.aggregate("risk.agents", () =>
+      Glob.scan("{agent,agents}/**/*", { cwd: dir, absolute: true, include: "file", dot: true, symlink: true }),
+    ).catch(() => []),
+    SkillReadDiagnostics.aggregate("risk.references", () =>
+      Glob.scan("{reference,references}/**/*", {
+        cwd: dir,
+        absolute: true,
+        include: "file",
+        dot: true,
+        symlink: true,
+      }),
+    ).catch(() => []),
+    SkillReadDiagnostics.aggregate("risk.templates", () =>
+      Glob.scan("{template,templates,asset,assets}/**/*", {
+        cwd: dir,
+        absolute: true,
+        include: "file",
+        dot: true,
+        symlink: true,
+      }),
+    ).catch(() => []),
   ])
   const hasScripts = scripts.length > 0
   const hasAgents = agents.length > 0

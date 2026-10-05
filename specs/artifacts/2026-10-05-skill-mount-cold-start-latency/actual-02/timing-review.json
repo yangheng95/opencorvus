@@ -1,0 +1,947 @@
+{
+  "qualification": "isolated real HTTP timing; original19.675s not reproduced",
+  "cases": [
+    {
+      "case": "n0-restart-parallel.result",
+      "requests": [
+        {
+          "label": "first-parallel-a1",
+          "status": 200,
+          "outcome": null,
+          "ms": 442.6,
+          "requestID": "d0a3d2c9-cd6f-4dd0-bcec-b7cef0a7acef"
+        },
+        {
+          "label": "first-parallel-a2",
+          "status": 200,
+          "outcome": null,
+          "ms": 462.37,
+          "requestID": "00a5eadf-95f1-4c88-8142-5cbd3bd85f02"
+        },
+        {
+          "label": "first-parallel-b",
+          "status": 200,
+          "outcome": null,
+          "ms": 514.75,
+          "requestID": "4b531ec7-623d-4426-8d73-92c1b73efa10"
+        }
+      ],
+      "firstRequestStages": [
+        {
+          "phase": "request",
+          "ms": 439,
+          "state": null
+        },
+        {
+          "phase": "matrix.projection",
+          "ms": 171,
+          "state": null
+        },
+        {
+          "phase": "projection.package",
+          "ms": 147,
+          "state": null
+        },
+        {
+          "phase": "catalog.total",
+          "ms": 46,
+          "state": null
+        },
+        {
+          "phase": "matrix.inventory",
+          "ms": 46,
+          "state": null
+        },
+        {
+          "phase": "matrix.config",
+          "ms": 41,
+          "state": null
+        },
+        {
+          "phase": "config.load",
+          "ms": 39,
+          "state": null
+        },
+        {
+          "phase": "state.initialize",
+          "ms": 39,
+          "state": "config"
+        },
+        {
+          "phase": "state.read",
+          "ms": 39,
+          "state": "config"
+        },
+        {
+          "phase": "catalog.held",
+          "ms": 34,
+          "state": null
+        }
+      ],
+      "initializers": [
+        {
+          "spanID": "76472:7",
+          "stateLabel": "config",
+          "duration": 39,
+          "aggregates": {}
+        },
+        {
+          "spanID": "76472:43",
+          "stateLabel": "config",
+          "duration": 9,
+          "aggregates": {}
+        },
+        {
+          "spanID": "76472:37",
+          "stateLabel": "skill",
+          "duration": 20,
+          "aggregates": {}
+        },
+        {
+          "spanID": "76472:31",
+          "stateLabel": "inventory",
+          "duration": 27,
+          "aggregates": {}
+        }
+      ],
+      "dispositions": {
+        "creator": 8,
+        "join-pending": 1,
+        "cached-settled": 3
+      },
+      "cancelTerminal": []
+    },
+    {
+      "case": "n0-serial.result",
+      "requests": [
+        {
+          "label": "first-a",
+          "status": 200,
+          "outcome": null,
+          "ms": 374.08,
+          "requestID": "7847c3af-6302-4621-b38f-472952840fa4"
+        },
+        {
+          "label": "warm-a",
+          "status": 200,
+          "outcome": null,
+          "ms": 98.79,
+          "requestID": "5d3f4452-540b-4ce7-98e8-62005848d489"
+        },
+        {
+          "label": "first-b",
+          "status": 200,
+          "outcome": null,
+          "ms": 144.75,
+          "requestID": "f693527e-b875-4b59-8ca6-9e560ec45c4c"
+        },
+        {
+          "label": "parallel-a1",
+          "status": 200,
+          "outcome": null,
+          "ms": 107.48,
+          "requestID": "e0901a37-33b2-4c10-b8b5-9f1db233743c"
+        },
+        {
+          "label": "parallel-a2",
+          "status": 200,
+          "outcome": null,
+          "ms": 182.83,
+          "requestID": "f9d0044f-0372-463f-99d6-fac26f84c92f"
+        },
+        {
+          "label": "parallel-b",
+          "status": 200,
+          "outcome": null,
+          "ms": 255.83,
+          "requestID": "f2e2d971-6cd3-4c9f-95f9-3b517daba06a"
+        }
+      ],
+      "firstRequestStages": [
+        {
+          "phase": "request",
+          "ms": 370,
+          "state": null
+        },
+        {
+          "phase": "matrix.projection",
+          "ms": 141,
+          "state": null
+        },
+        {
+          "phase": "projection.package",
+          "ms": 117,
+          "state": null
+        },
+        {
+          "phase": "matrix.inventory",
+          "ms": 39,
+          "state": null
+        },
+        {
+          "phase": "catalog.total",
+          "ms": 38,
+          "state": null
+        },
+        {
+          "phase": "catalog.held",
+          "ms": 34,
+          "state": null
+        },
+        {
+          "phase": "state.read",
+          "ms": 28,
+          "state": "inventory"
+        },
+        {
+          "phase": "state.initialize",
+          "ms": 27,
+          "state": "inventory"
+        },
+        {
+          "phase": "matrix.config",
+          "ms": 26,
+          "state": null
+        },
+        {
+          "phase": "inventory.skills",
+          "ms": 26,
+          "state": null
+        }
+      ],
+      "initializers": [
+        {
+          "spanID": "73188:4",
+          "stateLabel": "config",
+          "duration": 24,
+          "aggregates": {}
+        },
+        {
+          "spanID": "73188:28",
+          "stateLabel": "config",
+          "duration": 9,
+          "aggregates": {}
+        },
+        {
+          "spanID": "73188:22",
+          "stateLabel": "skill",
+          "duration": 21,
+          "aggregates": {}
+        },
+        {
+          "spanID": "73188:16",
+          "stateLabel": "inventory",
+          "duration": 27,
+          "aggregates": {}
+        }
+      ],
+      "dispositions": {
+        "creator": 7,
+        "cached-settled": 11
+      },
+      "cancelTerminal": []
+    },
+    {
+      "case": "n1-restart-parallel.result",
+      "requests": [
+        {
+          "label": "first-parallel-b",
+          "status": 200,
+          "outcome": null,
+          "ms": 445.89,
+          "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88"
+        },
+        {
+          "label": "first-parallel-a1",
+          "status": 200,
+          "outcome": null,
+          "ms": 496.8,
+          "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926"
+        },
+        {
+          "label": "first-parallel-a2",
+          "status": 200,
+          "outcome": null,
+          "ms": 559.73,
+          "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f"
+        }
+      ],
+      "firstRequestStages": [
+        {
+          "phase": "request",
+          "ms": 438,
+          "state": null
+        },
+        {
+          "phase": "matrix.projection",
+          "ms": 164,
+          "state": null
+        },
+        {
+          "phase": "projection.package",
+          "ms": 139,
+          "state": null
+        },
+        {
+          "phase": "catalog.total",
+          "ms": 52,
+          "state": null
+        },
+        {
+          "phase": "matrix.inventory",
+          "ms": 52,
+          "state": null
+        },
+        {
+          "phase": "matrix.config",
+          "ms": 48,
+          "state": null
+        },
+        {
+          "phase": "catalog.held",
+          "ms": 48,
+          "state": null
+        },
+        {
+          "phase": "config.load",
+          "ms": 46,
+          "state": null
+        },
+        {
+          "phase": "state.initialize",
+          "ms": 46,
+          "state": "config"
+        },
+        {
+          "phase": "state.read",
+          "ms": 46,
+          "state": "config"
+        }
+      ],
+      "initializers": [
+        {
+          "spanID": "75300:6",
+          "stateLabel": "config",
+          "duration": 46,
+          "aggregates": {}
+        },
+        {
+          "spanID": "75300:43",
+          "stateLabel": "config",
+          "duration": 10,
+          "aggregates": {}
+        },
+        {
+          "spanID": "75300:37",
+          "stateLabel": "skill",
+          "duration": 26,
+          "aggregates": {
+            "skill.parse": {
+              "count": 1,
+              "items": 0,
+              "duration": 0.5844999999999345,
+              "maximum": 0.5844999999999345,
+              "rejected": 0
+            }
+          }
+        },
+        {
+          "spanID": "75300:31",
+          "stateLabel": "inventory",
+          "duration": 40,
+          "aggregates": {
+            "inventory.provenance": {
+              "count": 1,
+              "items": 0,
+              "duration": 0.34869999999955326,
+              "maximum": 0.34869999999955326,
+              "rejected": 0
+            },
+            "inventory.manifest": {
+              "count": 1,
+              "items": 0,
+              "duration": 5.1042999999999665,
+              "maximum": 5.1042999999999665,
+              "rejected": 0
+            },
+            "risk.scripts": {
+              "count": 1,
+              "items": 1,
+              "duration": 2.0214999999998327,
+              "maximum": 2.0214999999998327,
+              "rejected": 0
+            },
+            "risk.agents": {
+              "count": 1,
+              "items": 1,
+              "duration": 1.646600000000035,
+              "maximum": 1.646600000000035,
+              "rejected": 0
+            },
+            "risk.references": {
+              "count": 1,
+              "items": 1,
+              "duration": 1.4241000000001804,
+              "maximum": 1.4241000000001804,
+              "rejected": 0
+            },
+            "risk.templates": {
+              "count": 1,
+              "items": 1,
+              "duration": 1.2080000000005384,
+              "maximum": 1.2080000000005384,
+              "rejected": 0
+            }
+          }
+        }
+      ],
+      "dispositions": {
+        "creator": 8,
+        "join-pending": 1,
+        "cached-settled": 3
+      },
+      "cancelTerminal": []
+    },
+    {
+      "case": "n1-serial.result",
+      "requests": [
+        {
+          "label": "first-a",
+          "status": 200,
+          "outcome": null,
+          "ms": 396.3,
+          "requestID": "1e5c82c8-6976-441c-812c-7e1e37ca9beb"
+        },
+        {
+          "label": "warm-a",
+          "status": 200,
+          "outcome": null,
+          "ms": 111.13,
+          "requestID": "3bb3979f-bf71-44e8-8b3e-ededa577580c"
+        },
+        {
+          "label": "first-b",
+          "status": 200,
+          "outcome": null,
+          "ms": 157.59,
+          "requestID": "5226b293-4e15-4cfc-b18f-2ff97e20cb2e"
+        },
+        {
+          "label": "parallel-a1",
+          "status": 200,
+          "outcome": null,
+          "ms": 156.36,
+          "requestID": "5684d44d-6db5-404b-aef7-3af4cf8c830a"
+        },
+        {
+          "label": "parallel-a2",
+          "status": 200,
+          "outcome": null,
+          "ms": 214.65,
+          "requestID": "c80c4b8f-a5aa-486e-99d6-994158135204"
+        },
+        {
+          "label": "parallel-b",
+          "status": 200,
+          "outcome": null,
+          "ms": 236.12,
+          "requestID": "71a11bf5-97d7-4fb7-bd7a-5d701e6cdc4a"
+        }
+      ],
+      "firstRequestStages": [
+        {
+          "phase": "request",
+          "ms": 395,
+          "state": null
+        },
+        {
+          "phase": "matrix.projection",
+          "ms": 139,
+          "state": null
+        },
+        {
+          "phase": "projection.package",
+          "ms": 116,
+          "state": null
+        },
+        {
+          "phase": "matrix.inventory",
+          "ms": 55,
+          "state": null
+        },
+        {
+          "phase": "catalog.total",
+          "ms": 54,
+          "state": null
+        },
+        {
+          "phase": "catalog.held",
+          "ms": 45,
+          "state": null
+        },
+        {
+          "phase": "state.initialize",
+          "ms": 37,
+          "state": "inventory"
+        },
+        {
+          "phase": "state.read",
+          "ms": 37,
+          "state": "inventory"
+        },
+        {
+          "phase": "matrix.config",
+          "ms": 32,
+          "state": null
+        },
+        {
+          "phase": "state.initialize",
+          "ms": 31,
+          "state": "config"
+        }
+      ],
+      "initializers": [
+        {
+          "spanID": "67296:4",
+          "stateLabel": "config",
+          "duration": 31,
+          "aggregates": {}
+        },
+        {
+          "spanID": "67296:28",
+          "stateLabel": "config",
+          "duration": 12,
+          "aggregates": {}
+        },
+        {
+          "spanID": "67296:22",
+          "stateLabel": "skill",
+          "duration": 30,
+          "aggregates": {
+            "skill.parse": {
+              "count": 1,
+              "items": 0,
+              "duration": 3.971299999999246,
+              "maximum": 3.971299999999246,
+              "rejected": 0
+            }
+          }
+        },
+        {
+          "spanID": "67296:16",
+          "stateLabel": "inventory",
+          "duration": 37,
+          "aggregates": {
+            "inventory.provenance": {
+              "count": 1,
+              "items": 0,
+              "duration": 0.3275999999996202,
+              "maximum": 0.3275999999996202,
+              "rejected": 0
+            },
+            "inventory.manifest": {
+              "count": 1,
+              "items": 0,
+              "duration": 1.1066000000000713,
+              "maximum": 1.1066000000000713,
+              "rejected": 0
+            },
+            "risk.scripts": {
+              "count": 1,
+              "items": 1,
+              "duration": 2.041400000000067,
+              "maximum": 2.041400000000067,
+              "rejected": 0
+            },
+            "risk.agents": {
+              "count": 1,
+              "items": 1,
+              "duration": 1.6935000000003129,
+              "maximum": 1.6935000000003129,
+              "rejected": 0
+            },
+            "risk.references": {
+              "count": 1,
+              "items": 1,
+              "duration": 1.444499999999607,
+              "maximum": 1.444499999999607,
+              "rejected": 0
+            },
+            "risk.templates": {
+              "count": 1,
+              "items": 1,
+              "duration": 1.2323999999998705,
+              "maximum": 1.2323999999998705,
+              "rejected": 0
+            }
+          }
+        }
+      ],
+      "dispositions": {
+        "creator": 7,
+        "cached-settled": 11
+      },
+      "cancelTerminal": []
+    },
+    {
+      "case": "n32-restart-parallel.result",
+      "requests": [
+        {
+          "label": "cancel-observation-a",
+          "status": null,
+          "outcome": "caller-aborted",
+          "ms": 181.44,
+          "requestID": null
+        },
+        {
+          "label": "parallel-b",
+          "status": 200,
+          "outcome": null,
+          "ms": 644.65,
+          "requestID": "b53a2af8-c973-4bf6-b250-bae3498a36f0"
+        },
+        {
+          "label": "post-cancel-a",
+          "status": 200,
+          "outcome": null,
+          "ms": 705.65,
+          "requestID": "881c8708-368c-40fe-b6cc-bfde5a0911b9"
+        },
+        {
+          "label": "settled-a",
+          "status": 200,
+          "outcome": null,
+          "ms": 117.91,
+          "requestID": "95a65390-6d60-4cf9-a44c-da89b0a78893"
+        }
+      ],
+      "firstRequestStages": [
+        {
+          "phase": "request",
+          "ms": 698,
+          "state": null
+        },
+        {
+          "phase": "matrix.projection",
+          "ms": 289,
+          "state": null
+        },
+        {
+          "phase": "projection.package",
+          "ms": 260,
+          "state": null
+        },
+        {
+          "phase": "catalog.total",
+          "ms": 169,
+          "state": null
+        },
+        {
+          "phase": "matrix.inventory",
+          "ms": 169,
+          "state": null
+        },
+        {
+          "phase": "catalog.held",
+          "ms": 151,
+          "state": null
+        },
+        {
+          "phase": "state.initialize",
+          "ms": 132,
+          "state": "inventory"
+        },
+        {
+          "phase": "state.read",
+          "ms": 132,
+          "state": "inventory"
+        },
+        {
+          "phase": "catalog.reentrant",
+          "ms": 67,
+          "state": null
+        },
+        {
+          "phase": "inventory.skills",
+          "ms": 67,
+          "state": null
+        }
+      ],
+      "initializers": [
+        {
+          "spanID": "44724:4",
+          "stateLabel": "config",
+          "duration": 42,
+          "aggregates": {}
+        },
+        {
+          "spanID": "44724:39",
+          "stateLabel": "config",
+          "duration": 14,
+          "aggregates": {}
+        },
+        {
+          "spanID": "44724:33",
+          "stateLabel": "skill",
+          "duration": 66,
+          "aggregates": {
+            "skill.parse": {
+              "count": 32,
+              "items": 0,
+              "duration": 18.451599999998507,
+              "maximum": 5.537099999999555,
+              "rejected": 0
+            }
+          }
+        },
+        {
+          "spanID": "44724:23",
+          "stateLabel": "inventory",
+          "duration": 132,
+          "aggregates": {
+            "inventory.provenance": {
+              "count": 32,
+              "items": 0,
+              "duration": 82.90280000000075,
+              "maximum": 4.292300000000068,
+              "rejected": 0
+            },
+            "inventory.manifest": {
+              "count": 32,
+              "items": 0,
+              "duration": 726.2414000000017,
+              "maximum": 37.00789999999961,
+              "rejected": 0
+            },
+            "risk.scripts": {
+              "count": 32,
+              "items": 32,
+              "duration": 874.128999999999,
+              "maximum": 39.995599999999286,
+              "rejected": 0
+            },
+            "risk.agents": {
+              "count": 32,
+              "items": 32,
+              "duration": 868.5189,
+              "maximum": 39.43079999999918,
+              "rejected": 0
+            },
+            "risk.references": {
+              "count": 32,
+              "items": 32,
+              "duration": 863.4289000000035,
+              "maximum": 39.093300000000454,
+              "rejected": 0
+            },
+            "risk.templates": {
+              "count": 32,
+              "items": 32,
+              "duration": 858.9319999999998,
+              "maximum": 38.92320000000018,
+              "rejected": 0
+            }
+          }
+        }
+      ],
+      "dispositions": {
+        "creator": 7,
+        "join-pending": 1,
+        "cached-settled": 6
+      },
+      "cancelTerminal": [
+        {
+          "service": "server",
+          "requestID": "60c2117f-61b4-4201-a805-267396150f47",
+          "method": "GET",
+          "path": "/skill/mounts",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 698,
+          "time": "2026-10-05T12:40:01.854Z"
+        }
+      ]
+    },
+    {
+      "case": "n32-serial.result",
+      "requests": [
+        {
+          "label": "first-a",
+          "status": 200,
+          "outcome": null,
+          "ms": 503.02,
+          "requestID": "3c87da83-11f5-4810-8d33-41411116ad6f"
+        },
+        {
+          "label": "warm-a",
+          "status": 200,
+          "outcome": null,
+          "ms": 103.24,
+          "requestID": "ed6d9764-41dd-4eed-9221-8645a2093de2"
+        },
+        {
+          "label": "first-b",
+          "status": 200,
+          "outcome": null,
+          "ms": 263.53,
+          "requestID": "74f9be24-8691-4f35-81bd-e76c93aeb310"
+        },
+        {
+          "label": "parallel-a1",
+          "status": 200,
+          "outcome": null,
+          "ms": 162.92,
+          "requestID": "38119ee8-8031-4469-9463-30e46c45f684"
+        },
+        {
+          "label": "parallel-a2",
+          "status": 200,
+          "outcome": null,
+          "ms": 211.57,
+          "requestID": "0be73034-f524-4e77-9699-c3580e03e1be"
+        },
+        {
+          "label": "parallel-b",
+          "status": 200,
+          "outcome": null,
+          "ms": 235.37,
+          "requestID": "748be533-292f-4890-b2f3-90d9a777e40e"
+        }
+      ],
+      "firstRequestStages": [
+        {
+          "phase": "request",
+          "ms": 499,
+          "state": null
+        },
+        {
+          "phase": "matrix.inventory",
+          "ms": 145,
+          "state": null
+        },
+        {
+          "phase": "catalog.total",
+          "ms": 144,
+          "state": null
+        },
+        {
+          "phase": "matrix.projection",
+          "ms": 142,
+          "state": null
+        },
+        {
+          "phase": "catalog.held",
+          "ms": 135,
+          "state": null
+        },
+        {
+          "phase": "state.read",
+          "ms": 120,
+          "state": "inventory"
+        },
+        {
+          "phase": "state.initialize",
+          "ms": 119,
+          "state": "inventory"
+        },
+        {
+          "phase": "projection.package",
+          "ms": 117,
+          "state": null
+        },
+        {
+          "phase": "catalog.reentrant",
+          "ms": 62,
+          "state": null
+        },
+        {
+          "phase": "inventory.skills",
+          "ms": 62,
+          "state": null
+        }
+      ],
+      "initializers": [
+        {
+          "spanID": "25396:4",
+          "stateLabel": "config",
+          "duration": 27,
+          "aggregates": {}
+        },
+        {
+          "spanID": "25396:28",
+          "stateLabel": "config",
+          "duration": 12,
+          "aggregates": {}
+        },
+        {
+          "spanID": "25396:22",
+          "stateLabel": "skill",
+          "duration": 61,
+          "aggregates": {
+            "skill.parse": {
+              "count": 32,
+              "items": 0,
+              "duration": 15.576900000000933,
+              "maximum": 4.287199999999757,
+              "rejected": 0
+            }
+          }
+        },
+        {
+          "spanID": "25396:16",
+          "stateLabel": "inventory",
+          "duration": 119,
+          "aggregates": {
+            "inventory.provenance": {
+              "count": 32,
+              "items": 0,
+              "duration": 83.16240000000289,
+              "maximum": 4.53690000000006,
+              "rejected": 0
+            },
+            "inventory.manifest": {
+              "count": 32,
+              "items": 0,
+              "duration": 671.0613999999978,
+              "maximum": 34.41469999999936,
+              "rejected": 0
+            },
+            "risk.scripts": {
+              "count": 32,
+              "items": 32,
+              "duration": 809.6596000000036,
+              "maximum": 36.92860000000019,
+              "rejected": 0
+            },
+            "risk.agents": {
+              "count": 32,
+              "items": 32,
+              "duration": 804.3545000000004,
+              "maximum": 36.59200000000055,
+              "rejected": 0
+            },
+            "risk.references": {
+              "count": 32,
+              "items": 32,
+              "duration": 799.658199999998,
+              "maximum": 36.40310000000045,
+              "rejected": 0
+            },
+            "risk.templates": {
+              "count": 32,
+              "items": 32,
+              "duration": 795.429799999999,
+              "maximum": 36.24459999999999,
+              "rejected": 0
+            }
+          }
+        }
+      ],
+      "dispositions": {
+        "creator": 7,
+        "cached-settled": 11
+      },
+      "cancelTerminal": []
+    }
+  ]
+}

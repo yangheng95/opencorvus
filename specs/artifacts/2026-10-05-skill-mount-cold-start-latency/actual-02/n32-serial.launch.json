@@ -1,0 +1,37 @@
+{
+  "count": 32,
+  "mode": "serial",
+  "occurrenceID": "05ab5452-dcba-4312-af73-ef06300a07bf",
+  "files": 320,
+  "bytes": 10540,
+  "root": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n32",
+  "projects": {
+    "a": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n32\\project-a",
+    "b": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n32\\project-b"
+  },
+  "observations": [],
+  "preflight": "loopback port bind/close succeeded",
+  "command": {
+    "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "args": [
+      "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+      "serve",
+      "--hostname",
+      "127.0.0.1",
+      "--port",
+      "17947",
+      "--startup-receipt",
+      "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\skill-mount-latency-02\\n32-serial.startup.json",
+      "--startup-occurrence",
+      "05ab5452-dcba-4312-af73-ef06300a07bf",
+      "--parent-pid",
+      "40608",
+      "--parent-process-instance-id",
+      "win32:639268007713102145",
+      "--print-logs",
+      "--log-level",
+      "DEBUG"
+    ],
+    "cwd": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n32\\launch"
+  }
+}

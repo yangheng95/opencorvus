@@ -1,0 +1,146 @@
+[
+  {
+    "service": "server",
+    "requestID": "c96cbbf4-094f-46a1-ae5b-03c6b2c686d6",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "started",
+    "time": "2026-10-05T12:28:34.680Z"
+  },
+  {
+    "service": "server",
+    "requestID": "c96cbbf4-094f-46a1-ae5b-03c6b2c686d6",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2,
+    "time": "2026-10-05T12:28:34.682Z"
+  },
+  {
+    "service": "server",
+    "requestID": "7a1a1ad1-d73b-4c3f-9759-cd3015069d98",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "started",
+    "time": "2026-10-05T12:28:34.684Z"
+  },
+  {
+    "service": "server",
+    "requestID": "7a1a1ad1-d73b-4c3f-9759-cd3015069d98",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 368,
+    "time": "2026-10-05T12:28:35.052Z"
+  },
+  {
+    "service": "server",
+    "requestID": "d6a2139f-a174-47ff-9ae8-c0be2df9c261",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "started",
+    "time": "2026-10-05T12:28:35.057Z"
+  },
+  {
+    "service": "server",
+    "requestID": "d6a2139f-a174-47ff-9ae8-c0be2df9c261",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 113,
+    "time": "2026-10-05T12:28:35.170Z"
+  },
+  {
+    "service": "server",
+    "requestID": "09e7a24a-3b3e-46f9-bdbf-7bfc7e9b0cc0",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "started",
+    "time": "2026-10-05T12:28:35.172Z"
+  },
+  {
+    "service": "server",
+    "requestID": "09e7a24a-3b3e-46f9-bdbf-7bfc7e9b0cc0",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 149,
+    "time": "2026-10-05T12:28:35.322Z"
+  },
+  {
+    "service": "server",
+    "requestID": "0031f3ec-af2e-4e34-bb19-d9112ba5540f",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "started",
+    "time": "2026-10-05T12:28:35.326Z"
+  },
+  {
+    "service": "server",
+    "requestID": "2ba2ba5e-e9e0-4e73-a3ad-20882cbd8f43",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "started",
+    "time": "2026-10-05T12:28:35.328Z"
+  },
+  {
+    "service": "server",
+    "requestID": "65f8746c-8752-4434-8964-e41136580e89",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "started",
+    "time": "2026-10-05T12:28:35.328Z"
+  },
+  {
+    "service": "server",
+    "requestID": "0031f3ec-af2e-4e34-bb19-d9112ba5540f",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 159,
+    "time": "2026-10-05T12:28:35.485Z"
+  },
+  {
+    "service": "server",
+    "requestID": "65f8746c-8752-4434-8964-e41136580e89",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 209,
+    "time": "2026-10-05T12:28:35.537Z"
+  },
+  {
+    "service": "server",
+    "requestID": "2ba2ba5e-e9e0-4e73-a3ad-20882cbd8f43",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 247,
+    "time": "2026-10-05T12:28:35.575Z"
+  },
+  {
+    "service": "server",
+    "requestID": "d472aa80-87aa-4242-a854-bcc9a11536d7",
+    "method": "POST",
+    "path": "/shutdown",
+    "status": "started",
+    "time": "2026-10-05T12:28:35.580Z"
+  },
+  {
+    "service": "server",
+    "requestID": "d472aa80-87aa-4242-a854-bcc9a11536d7",
+    "method": "POST",
+    "path": "/shutdown",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1,
+    "time": "2026-10-05T12:28:35.581Z"
+  }
+]

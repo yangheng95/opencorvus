@@ -1,0 +1,7 @@
+# Attempt01: HTTP passed, timing unqualified
+
+The [unchanged raw result](result.json) says passed for28 actual HTTP mount reads across six source occurrences (N=0,1,32, each serial and retained-root restart). Correct authored Project fixture projection and all physical cleanup checks passed. Maximum observed request duration was541.85ms. The cancellation candidate completed normally before cancellation; no abort success is claimed.
+
+[Independent review](independent-review.json) records the qualification failure: selected phase files contain ordinary server request records but zero DEBUG diagnostic records. The CLI was actually invoked with `--print-logs --log-level DEBUG`; existing Log.init supplies two level-less Pino multistream sinks whose default is INFO, filtering DEBUG from both destinations. These successful HTTP results cannot establish internal phase timings or resolve the original19.675s observation. Raw result/logs are preserved, not relabelled or overwritten.
+
+All six recorded child/helper pairs exited normally and were observed dead_or_reused;17947 was free after each occurrence. The actual bootstrap cleanup authority removed its temporary owner tree. The checker itself eventually exited0; an unnecessary20s referenced race timer explains its short post-result lifetime and is recorded for repair. No user configuration, credentials, Provider, UI or model was involved.

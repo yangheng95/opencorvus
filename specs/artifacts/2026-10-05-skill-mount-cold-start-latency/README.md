@@ -1,6 +1,10 @@
 # Skill mount cold-start latency evidence
 
-Plan-only investigation; see [record](../../records/2026-10/2026-10-05-skill-mount-cold-start-latency.md).
+- [Actual01 HTTP-only qualification and timing failure](actual-01/README.md): unchanged raw results plus independent missing-DEBUG diagnosis.
+- [Actual02 qualified HTTP timings](actual-02/README.md): six real source occurrences, request/initializer ownership and balanced spans,27 HTTP200 plus one caller abort, independent physical cleanup. Original19.675s latency remains unresolved.
+- `skill-read-log-tests-02.*.log`: final10 positive tests/45 assertions, including real DEBUG file/stderr and actual State ownership. `skill-read-log-typecheck-01.*.log` and `skill-read-log-explicit-02.*.log` both exit0. Earlier test/type failures and exact source-scoped fixes remain in the adjacent numbered logs.
+
+See the [record](../../records/2026-10/2026-10-05-skill-mount-cold-start-latency.md) for current approved implementation/results. The following original plan-only evidence and limitations remain historical inputs.
 
 - [Selected owned rows](selected-owned-rows.json): allowlisted fields from the settings review's existing owned pair02 server/client log projection. Filesystem-path rows and other raw fields are excluded; this is a selected projection, not complete logs or fresh requests.
 - [Input notes](input-notes.md): provenance, precise timing and isolation limits.

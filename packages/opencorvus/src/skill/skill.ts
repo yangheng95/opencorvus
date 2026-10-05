@@ -20,6 +20,7 @@ import { builtinSkillSources } from "./builtin-payload"
 import type { BuiltinSkillFile } from "./builtin-source"
 import { SkillPlatform } from "./platform"
 import { MissionSkillRoots } from "@/mission-skill/roots"
+import { SkillReadDiagnostics } from "./read-diagnostics"
 
 export namespace Skill {
   const log = Log.create({ service: "skill" })
@@ -464,37 +465,38 @@ export namespace Skill {
     }
 
     // Register immutable descriptor content without filesystem work. Supporting files materialize only on exact load.
-    for (const raw of builtins()) {
-      const md = ConfigMarkdown.parseText(raw.skill, `builtin skill ${raw.name}`)
-      const parsed = parseDefinition(md.data, "builtin skill")
-      if (parsed.name !== raw.name) {
-        throw new InvalidError({
-          path: `builtin:${raw.name}`,
-          message: `Built-in Skill descriptor identity ${JSON.stringify(raw.name)} does not match frontmatter name ${JSON.stringify(parsed.name)}.`,
+    SkillReadDiagnostics.phase("skill.builtins", () => {
+      for (const raw of builtins()) {
+        const md = ConfigMarkdown.parseText(raw.skill, `builtin skill ${raw.name}`)
+        const parsed = parseDefinition(md.data, "builtin skill")
+        if (parsed.name !== raw.name) {
+          throw new InvalidError({
+            path: `builtin:${raw.name}`,
+            message: `Built-in Skill descriptor identity ${JSON.stringify(raw.name)} does not match frontmatter name ${JSON.stringify(parsed.name)}.`,
+          })
+        }
+        if (isExpired(parsed)) continue
+        registerStrict(skills, {
+          name: parsed.name,
+          description: parsed.description,
+          aliases: [...parsed.aliases],
+          license: parsed.license,
+          compatibility: parsed.compatibility,
+          metadata: parsed.metadata,
+          platforms: parsed.platforms,
+          builtin: true,
+          location: `builtin:${parsed.name}`,
+          content: md.content,
+          auto_detect: parsed.auto_detect,
+          priority: parsed.priority,
+          required_tools: parsed.required_tools,
+          expires_at: parsed.expires_at,
         })
       }
-      if (isExpired(parsed)) continue
-      registerStrict(skills, {
-        name: parsed.name,
-        description: parsed.description,
-        aliases: [...parsed.aliases],
-        license: parsed.license,
-        compatibility: parsed.compatibility,
-        metadata: parsed.metadata,
-        platforms: parsed.platforms,
-        builtin: true,
-        location: `builtin:${parsed.name}`,
-        content: md.content,
-        auto_detect: parsed.auto_detect,
-        priority: parsed.priority,
-        required_tools: parsed.required_tools,
-        expires_at: parsed.expires_at,
-      })
-    }
-
+    })
     const readSkill = async (match: string): Promise<Info | undefined> => {
       if (isMissionSkillLocation(match, projectScope?.directory)) return
-      const md = await ConfigMarkdown.parse(match)
+      const md = await SkillReadDiagnostics.aggregate("skill.parse", () => ConfigMarkdown.parse(match))
       const parsed = parseDefinition(md.data, match)
       if (isExpired(parsed)) return
 
@@ -673,7 +675,7 @@ export namespace Skill {
       for (const dir of EXTERNAL_DIRS) {
         const root = path.join(Global.Path.home, dir)
         if (!(await Filesystem.isDir(root))) continue
-        await scanExternal(root, "global")
+        await SkillReadDiagnostics.phase("skill.external-global", () => scanExternal(root, "global"))
       }
 
       if (projectScope) {
@@ -682,24 +684,26 @@ export namespace Skill {
           start: projectScope.directory,
           stop: projectScope.worktree,
         })) {
-          await scanExternal(root, "project")
+          await SkillReadDiagnostics.phase("skill.external-project", () => scanExternal(root, "project"))
         }
       }
     }
 
     // Scan .opencorvus/skill/ directories
     const configDirectories = projectScope
-      ? await Config.directories()
+      ? await SkillReadDiagnostics.phase("skill.config-directories", () => Config.directories())
       : [Global.Path.config, ...(Flag.OPENCORVUS_CONFIG_DIR ? [Flag.OPENCORVUS_CONFIG_DIR] : [])]
     for (const dir of configDirectories) {
       let matches: string[]
       try {
-        matches = await Glob.scan(OPENCORVUS_SKILL_PATTERN, {
-          cwd: dir,
-          absolute: true,
-          include: "file",
-          symlink: true,
-        })
+        matches = await SkillReadDiagnostics.phase("skill.explicit-scan", () =>
+          Glob.scan(OPENCORVUS_SKILL_PATTERN, {
+            cwd: dir,
+            absolute: true,
+            include: "file",
+            symlink: true,
+          }),
+        )
       } catch (error) {
         warn({
           kind: "explicit_skill_scan_failed",
@@ -714,7 +718,9 @@ export namespace Skill {
     }
 
     // Scan additional skill paths from config
-    const config = projectScope ? await Config.get() : await Config.getGlobal()
+    const config = await SkillReadDiagnostics.phase("skill.config", () =>
+      projectScope ? Config.get() : Config.getGlobal(),
+    )
     for (const skillPath of config.skills?.paths ?? []) {
       const expanded = skillPath.startsWith("~/") ? path.join(os.homedir(), skillPath.slice(2)) : skillPath
       const resolved = path.isAbsolute(expanded)
@@ -730,13 +736,15 @@ export namespace Skill {
       }
       let matches: string[]
       try {
-        matches = await Glob.scan(SKILL_PATTERN, {
-          cwd: resolved,
-          absolute: true,
-          include: "file",
-          dot: true,
-          symlink: true,
-        })
+        matches = await SkillReadDiagnostics.phase("skill.configured-scan", () =>
+          Glob.scan(SKILL_PATTERN, {
+            cwd: resolved,
+            absolute: true,
+            include: "file",
+            dot: true,
+            symlink: true,
+          }),
+        )
       } catch (error) {
         warn({
           kind: "explicit_skill_scan_failed",
@@ -754,12 +762,14 @@ export namespace Skill {
     for (const url of config.skills?.urls ?? []) {
       let list: string[]
       try {
-        list = await Discovery.pull(url, (message) =>
-          warn({
-            kind: "skill_source_failed",
-            path: url,
-            message,
-          }),
+        list = await SkillReadDiagnostics.phase("skill.remote", () =>
+          Discovery.pull(url, (message) =>
+            warn({
+              kind: "skill_source_failed",
+              path: url,
+              message,
+            }),
+          ),
         )
       } catch (error) {
         warn({
@@ -819,26 +829,27 @@ export namespace Skill {
   }
 
   export const state = createInstanceState(
-    async () => {
-      const revision = await publicationRevision()
-      return {
-        ...(await loadCatalogState({
-          directory: Instance.directory,
-          worktree: Instance.worktree,
-        })),
-        publicationRevision: revision,
-      }
-    },
+    () =>
+      SkillReadDiagnostics.initialize("skill", async () => {
+        const revision = await publicationRevision()
+        return {
+          ...(await loadCatalogState({
+            directory: Instance.directory,
+            worktree: Instance.worktree,
+          })),
+          publicationRevision: revision,
+        }
+      }),
     undefined,
     "skill",
   )
 
   async function catalogState() {
     return withPublicationProjection(async (revision) => {
-      const current = await state()
+      const current = await SkillReadDiagnostics.readState("skill", state)
       if (current.publicationRevision === revision) return current
       await state.reset()
-      return state()
+      return SkillReadDiagnostics.readState("skill", state)
     })
   }
 

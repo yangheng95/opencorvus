@@ -1,0 +1,38 @@
+$ bun script/run-tests.ts ./test/skill-read-diagnostics.test.ts
+
+test\isolated-test-entry.test.ts:
+28 |   const initialized = (await rows([null]))
+29 |     .slice(before)
+30 |     .filter((entry) => entry.phase === "state.initialize" && entry.status === "completed")
+31 |   expect(
+32 |     initialized.map((entry) => ({ origin: entry.origin, request: entry.httpRequestID, outcome: entry.outcome })),
+33 |   ).toEqual([{ origin: "startup-or-unattributed", request: null, outcome: "fulfilled" }])
+         ^
+error: expect(received).toEqual(expected)
+
+- [
+-   {
+-     "origin": "startup-or-unattributed",
+-     "outcome": "fulfilled",
+-     "request": null,
+-   },
+- ]
++ []
+
+- Expected  - 7
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-read-diagnostics.test.ts:33:5)
+(fail) startup initialization and late causal work have their actual request lifetime [27.15ms]
+(pass) diagnostics retain actual State promise identity and one creator with distinct join and cache reads [24.90ms]
+(pass) diagnostics preserve the original State rejection and observe its successful new initializer on retry [13.03ms]
+(pass) catalog diagnostics preserve real durable owner results and balanced failure phases [31.69ms]
+
+ 3 pass
+ 1 fail
+ 26 expect() calls
+Ran 4 tests across 1 file. [1143.00ms]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-read-diagnostics.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-read-diagnostics.test.ts
+error: script "test" exited with code 1

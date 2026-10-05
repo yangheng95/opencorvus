@@ -1,0 +1,2537 @@
+{
+  "count": 32,
+  "mode": "serial",
+  "occurrenceID": "05ab5452-dcba-4312-af73-ef06300a07bf",
+  "files": 320,
+  "bytes": 10540,
+  "root": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n32",
+  "projects": {
+    "a": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n32\\project-a",
+    "b": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n32\\project-b"
+  },
+  "observations": [
+    {
+      "label": "first-a",
+      "side": "a",
+      "status": 200,
+      "requestID": "3c87da83-11f5-4810-8d33-41411116ad6f",
+      "elapsedMilliseconds": 503.022399999998,
+      "projection": {
+        "scope": "project",
+        "activeProfile": "base",
+        "fixtureSkills": [
+          {
+            "name": "owned-a-00",
+            "ref": "default/skill/owned-a-00",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-01",
+            "ref": "default/skill/owned-a-01",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-02",
+            "ref": "default/skill/owned-a-02",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-03",
+            "ref": "default/skill/owned-a-03",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-04",
+            "ref": "default/skill/owned-a-04",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-05",
+            "ref": "default/skill/owned-a-05",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-06",
+            "ref": "default/skill/owned-a-06",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-07",
+            "ref": "default/skill/owned-a-07",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-08",
+            "ref": "default/skill/owned-a-08",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-09",
+            "ref": "default/skill/owned-a-09",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-10",
+            "ref": "default/skill/owned-a-10",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-11",
+            "ref": "default/skill/owned-a-11",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-12",
+            "ref": "default/skill/owned-a-12",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-13",
+            "ref": "default/skill/owned-a-13",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-14",
+            "ref": "default/skill/owned-a-14",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-15",
+            "ref": "default/skill/owned-a-15",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-16",
+            "ref": "default/skill/owned-a-16",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-17",
+            "ref": "default/skill/owned-a-17",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-18",
+            "ref": "default/skill/owned-a-18",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-19",
+            "ref": "default/skill/owned-a-19",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-20",
+            "ref": "default/skill/owned-a-20",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-21",
+            "ref": "default/skill/owned-a-21",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-22",
+            "ref": "default/skill/owned-a-22",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-23",
+            "ref": "default/skill/owned-a-23",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-24",
+            "ref": "default/skill/owned-a-24",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-25",
+            "ref": "default/skill/owned-a-25",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-26",
+            "ref": "default/skill/owned-a-26",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-27",
+            "ref": "default/skill/owned-a-27",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-28",
+            "ref": "default/skill/owned-a-28",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-29",
+            "ref": "default/skill/owned-a-29",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-30",
+            "ref": "default/skill/owned-a-30",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-31",
+            "ref": "default/skill/owned-a-31",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          }
+        ],
+        "totalSkills": 39,
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "base-developer",
+          "base-planner",
+          "base-researcher",
+          "base-tester"
+        ],
+        "grants": [
+          {
+            "agent": "orchestrator",
+            "grants": 39
+          },
+          {
+            "agent": "universal-build",
+            "grants": 38
+          },
+          {
+            "agent": "base-developer",
+            "grants": 39
+          },
+          {
+            "agent": "base-planner",
+            "grants": 39
+          },
+          {
+            "agent": "base-researcher",
+            "grants": 39
+          },
+          {
+            "agent": "base-tester",
+            "grants": 39
+          }
+        ]
+      }
+    },
+    {
+      "label": "warm-a",
+      "side": "a",
+      "status": 200,
+      "requestID": "ed6d9764-41dd-4eed-9221-8645a2093de2",
+      "elapsedMilliseconds": 103.23600000000079,
+      "projection": {
+        "scope": "project",
+        "activeProfile": "base",
+        "fixtureSkills": [
+          {
+            "name": "owned-a-00",
+            "ref": "default/skill/owned-a-00",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-01",
+            "ref": "default/skill/owned-a-01",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-02",
+            "ref": "default/skill/owned-a-02",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-03",
+            "ref": "default/skill/owned-a-03",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-04",
+            "ref": "default/skill/owned-a-04",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-05",
+            "ref": "default/skill/owned-a-05",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-06",
+            "ref": "default/skill/owned-a-06",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-07",
+            "ref": "default/skill/owned-a-07",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-08",
+            "ref": "default/skill/owned-a-08",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-09",
+            "ref": "default/skill/owned-a-09",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-10",
+            "ref": "default/skill/owned-a-10",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-11",
+            "ref": "default/skill/owned-a-11",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-12",
+            "ref": "default/skill/owned-a-12",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-13",
+            "ref": "default/skill/owned-a-13",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-14",
+            "ref": "default/skill/owned-a-14",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-15",
+            "ref": "default/skill/owned-a-15",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-16",
+            "ref": "default/skill/owned-a-16",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-17",
+            "ref": "default/skill/owned-a-17",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-18",
+            "ref": "default/skill/owned-a-18",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-19",
+            "ref": "default/skill/owned-a-19",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-20",
+            "ref": "default/skill/owned-a-20",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-21",
+            "ref": "default/skill/owned-a-21",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-22",
+            "ref": "default/skill/owned-a-22",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-23",
+            "ref": "default/skill/owned-a-23",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-24",
+            "ref": "default/skill/owned-a-24",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-25",
+            "ref": "default/skill/owned-a-25",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-26",
+            "ref": "default/skill/owned-a-26",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-27",
+            "ref": "default/skill/owned-a-27",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-28",
+            "ref": "default/skill/owned-a-28",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-29",
+            "ref": "default/skill/owned-a-29",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-30",
+            "ref": "default/skill/owned-a-30",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-31",
+            "ref": "default/skill/owned-a-31",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          }
+        ],
+        "totalSkills": 39,
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "base-developer",
+          "base-planner",
+          "base-researcher",
+          "base-tester"
+        ],
+        "grants": [
+          {
+            "agent": "orchestrator",
+            "grants": 39
+          },
+          {
+            "agent": "universal-build",
+            "grants": 38
+          },
+          {
+            "agent": "base-developer",
+            "grants": 39
+          },
+          {
+            "agent": "base-planner",
+            "grants": 39
+          },
+          {
+            "agent": "base-researcher",
+            "grants": 39
+          },
+          {
+            "agent": "base-tester",
+            "grants": 39
+          }
+        ]
+      }
+    },
+    {
+      "label": "first-b",
+      "side": "b",
+      "status": 200,
+      "requestID": "74f9be24-8691-4f35-81bd-e76c93aeb310",
+      "elapsedMilliseconds": 263.5294000000031,
+      "projection": {
+        "scope": "project",
+        "activeProfile": "base",
+        "fixtureSkills": [
+          {
+            "name": "owned-b-00",
+            "ref": "default/skill/owned-b-00",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-01",
+            "ref": "default/skill/owned-b-01",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-02",
+            "ref": "default/skill/owned-b-02",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-03",
+            "ref": "default/skill/owned-b-03",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-04",
+            "ref": "default/skill/owned-b-04",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-05",
+            "ref": "default/skill/owned-b-05",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-06",
+            "ref": "default/skill/owned-b-06",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-07",
+            "ref": "default/skill/owned-b-07",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-08",
+            "ref": "default/skill/owned-b-08",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-09",
+            "ref": "default/skill/owned-b-09",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-10",
+            "ref": "default/skill/owned-b-10",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-11",
+            "ref": "default/skill/owned-b-11",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-12",
+            "ref": "default/skill/owned-b-12",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-13",
+            "ref": "default/skill/owned-b-13",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-14",
+            "ref": "default/skill/owned-b-14",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-15",
+            "ref": "default/skill/owned-b-15",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-16",
+            "ref": "default/skill/owned-b-16",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-17",
+            "ref": "default/skill/owned-b-17",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-18",
+            "ref": "default/skill/owned-b-18",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-19",
+            "ref": "default/skill/owned-b-19",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-20",
+            "ref": "default/skill/owned-b-20",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-21",
+            "ref": "default/skill/owned-b-21",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-22",
+            "ref": "default/skill/owned-b-22",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-23",
+            "ref": "default/skill/owned-b-23",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-24",
+            "ref": "default/skill/owned-b-24",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-25",
+            "ref": "default/skill/owned-b-25",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-26",
+            "ref": "default/skill/owned-b-26",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-27",
+            "ref": "default/skill/owned-b-27",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-28",
+            "ref": "default/skill/owned-b-28",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-29",
+            "ref": "default/skill/owned-b-29",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-30",
+            "ref": "default/skill/owned-b-30",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-31",
+            "ref": "default/skill/owned-b-31",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          }
+        ],
+        "totalSkills": 39,
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "base-developer",
+          "base-planner",
+          "base-researcher",
+          "base-tester"
+        ],
+        "grants": [
+          {
+            "agent": "orchestrator",
+            "grants": 39
+          },
+          {
+            "agent": "universal-build",
+            "grants": 38
+          },
+          {
+            "agent": "base-developer",
+            "grants": 39
+          },
+          {
+            "agent": "base-planner",
+            "grants": 39
+          },
+          {
+            "agent": "base-researcher",
+            "grants": 39
+          },
+          {
+            "agent": "base-tester",
+            "grants": 39
+          }
+        ]
+      }
+    },
+    {
+      "label": "parallel-a1",
+      "side": "a",
+      "status": 200,
+      "requestID": "38119ee8-8031-4469-9463-30e46c45f684",
+      "elapsedMilliseconds": 162.92439999999988,
+      "projection": {
+        "scope": "project",
+        "activeProfile": "base",
+        "fixtureSkills": [
+          {
+            "name": "owned-a-00",
+            "ref": "default/skill/owned-a-00",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-01",
+            "ref": "default/skill/owned-a-01",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-02",
+            "ref": "default/skill/owned-a-02",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-03",
+            "ref": "default/skill/owned-a-03",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-04",
+            "ref": "default/skill/owned-a-04",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-05",
+            "ref": "default/skill/owned-a-05",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-06",
+            "ref": "default/skill/owned-a-06",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-07",
+            "ref": "default/skill/owned-a-07",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-08",
+            "ref": "default/skill/owned-a-08",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-09",
+            "ref": "default/skill/owned-a-09",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-10",
+            "ref": "default/skill/owned-a-10",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-11",
+            "ref": "default/skill/owned-a-11",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-12",
+            "ref": "default/skill/owned-a-12",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-13",
+            "ref": "default/skill/owned-a-13",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-14",
+            "ref": "default/skill/owned-a-14",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-15",
+            "ref": "default/skill/owned-a-15",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-16",
+            "ref": "default/skill/owned-a-16",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-17",
+            "ref": "default/skill/owned-a-17",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-18",
+            "ref": "default/skill/owned-a-18",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-19",
+            "ref": "default/skill/owned-a-19",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-20",
+            "ref": "default/skill/owned-a-20",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-21",
+            "ref": "default/skill/owned-a-21",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-22",
+            "ref": "default/skill/owned-a-22",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-23",
+            "ref": "default/skill/owned-a-23",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-24",
+            "ref": "default/skill/owned-a-24",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-25",
+            "ref": "default/skill/owned-a-25",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-26",
+            "ref": "default/skill/owned-a-26",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-27",
+            "ref": "default/skill/owned-a-27",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-28",
+            "ref": "default/skill/owned-a-28",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-29",
+            "ref": "default/skill/owned-a-29",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-30",
+            "ref": "default/skill/owned-a-30",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-31",
+            "ref": "default/skill/owned-a-31",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          }
+        ],
+        "totalSkills": 39,
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "base-developer",
+          "base-planner",
+          "base-researcher",
+          "base-tester"
+        ],
+        "grants": [
+          {
+            "agent": "orchestrator",
+            "grants": 39
+          },
+          {
+            "agent": "universal-build",
+            "grants": 38
+          },
+          {
+            "agent": "base-developer",
+            "grants": 39
+          },
+          {
+            "agent": "base-planner",
+            "grants": 39
+          },
+          {
+            "agent": "base-researcher",
+            "grants": 39
+          },
+          {
+            "agent": "base-tester",
+            "grants": 39
+          }
+        ]
+      }
+    },
+    {
+      "label": "parallel-a2",
+      "side": "a",
+      "status": 200,
+      "requestID": "0be73034-f524-4e77-9699-c3580e03e1be",
+      "elapsedMilliseconds": 211.57420000000275,
+      "projection": {
+        "scope": "project",
+        "activeProfile": "base",
+        "fixtureSkills": [
+          {
+            "name": "owned-a-00",
+            "ref": "default/skill/owned-a-00",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-01",
+            "ref": "default/skill/owned-a-01",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-02",
+            "ref": "default/skill/owned-a-02",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-03",
+            "ref": "default/skill/owned-a-03",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-04",
+            "ref": "default/skill/owned-a-04",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-05",
+            "ref": "default/skill/owned-a-05",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-06",
+            "ref": "default/skill/owned-a-06",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-07",
+            "ref": "default/skill/owned-a-07",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-08",
+            "ref": "default/skill/owned-a-08",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-09",
+            "ref": "default/skill/owned-a-09",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-10",
+            "ref": "default/skill/owned-a-10",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-11",
+            "ref": "default/skill/owned-a-11",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-12",
+            "ref": "default/skill/owned-a-12",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-13",
+            "ref": "default/skill/owned-a-13",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-14",
+            "ref": "default/skill/owned-a-14",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-15",
+            "ref": "default/skill/owned-a-15",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-16",
+            "ref": "default/skill/owned-a-16",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-17",
+            "ref": "default/skill/owned-a-17",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-18",
+            "ref": "default/skill/owned-a-18",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-19",
+            "ref": "default/skill/owned-a-19",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-20",
+            "ref": "default/skill/owned-a-20",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-21",
+            "ref": "default/skill/owned-a-21",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-22",
+            "ref": "default/skill/owned-a-22",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-23",
+            "ref": "default/skill/owned-a-23",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-24",
+            "ref": "default/skill/owned-a-24",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-25",
+            "ref": "default/skill/owned-a-25",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-26",
+            "ref": "default/skill/owned-a-26",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-27",
+            "ref": "default/skill/owned-a-27",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-28",
+            "ref": "default/skill/owned-a-28",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-29",
+            "ref": "default/skill/owned-a-29",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-30",
+            "ref": "default/skill/owned-a-30",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-a-31",
+            "ref": "default/skill/owned-a-31",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          }
+        ],
+        "totalSkills": 39,
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "base-developer",
+          "base-planner",
+          "base-researcher",
+          "base-tester"
+        ],
+        "grants": [
+          {
+            "agent": "orchestrator",
+            "grants": 39
+          },
+          {
+            "agent": "universal-build",
+            "grants": 38
+          },
+          {
+            "agent": "base-developer",
+            "grants": 39
+          },
+          {
+            "agent": "base-planner",
+            "grants": 39
+          },
+          {
+            "agent": "base-researcher",
+            "grants": 39
+          },
+          {
+            "agent": "base-tester",
+            "grants": 39
+          }
+        ]
+      }
+    },
+    {
+      "label": "parallel-b",
+      "side": "b",
+      "status": 200,
+      "requestID": "748be533-292f-4890-b2f3-90d9a777e40e",
+      "elapsedMilliseconds": 235.36899999999878,
+      "projection": {
+        "scope": "project",
+        "activeProfile": "base",
+        "fixtureSkills": [
+          {
+            "name": "owned-b-00",
+            "ref": "default/skill/owned-b-00",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-01",
+            "ref": "default/skill/owned-b-01",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-02",
+            "ref": "default/skill/owned-b-02",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-03",
+            "ref": "default/skill/owned-b-03",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-04",
+            "ref": "default/skill/owned-b-04",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-05",
+            "ref": "default/skill/owned-b-05",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-06",
+            "ref": "default/skill/owned-b-06",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-07",
+            "ref": "default/skill/owned-b-07",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-08",
+            "ref": "default/skill/owned-b-08",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-09",
+            "ref": "default/skill/owned-b-09",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-10",
+            "ref": "default/skill/owned-b-10",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-11",
+            "ref": "default/skill/owned-b-11",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-12",
+            "ref": "default/skill/owned-b-12",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-13",
+            "ref": "default/skill/owned-b-13",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-14",
+            "ref": "default/skill/owned-b-14",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-15",
+            "ref": "default/skill/owned-b-15",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-16",
+            "ref": "default/skill/owned-b-16",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-17",
+            "ref": "default/skill/owned-b-17",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-18",
+            "ref": "default/skill/owned-b-18",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-19",
+            "ref": "default/skill/owned-b-19",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-20",
+            "ref": "default/skill/owned-b-20",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-21",
+            "ref": "default/skill/owned-b-21",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-22",
+            "ref": "default/skill/owned-b-22",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-23",
+            "ref": "default/skill/owned-b-23",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-24",
+            "ref": "default/skill/owned-b-24",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-25",
+            "ref": "default/skill/owned-b-25",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-26",
+            "ref": "default/skill/owned-b-26",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-27",
+            "ref": "default/skill/owned-b-27",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-28",
+            "ref": "default/skill/owned-b-28",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-29",
+            "ref": "default/skill/owned-b-29",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-30",
+            "ref": "default/skill/owned-b-30",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          },
+          {
+            "name": "owned-b-31",
+            "ref": "default/skill/owned-b-31",
+            "risk": {
+              "level": "high",
+              "has_scripts": true,
+              "has_agents": true,
+              "has_references": true,
+              "has_templates": true
+            }
+          }
+        ],
+        "totalSkills": 39,
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "base-developer",
+          "base-planner",
+          "base-researcher",
+          "base-tester"
+        ],
+        "grants": [
+          {
+            "agent": "orchestrator",
+            "grants": 39
+          },
+          {
+            "agent": "universal-build",
+            "grants": 38
+          },
+          {
+            "agent": "base-developer",
+            "grants": 39
+          },
+          {
+            "agent": "base-planner",
+            "grants": 39
+          },
+          {
+            "agent": "base-researcher",
+            "grants": 39
+          },
+          {
+            "agent": "base-tester",
+            "grants": 39
+          }
+        ]
+      }
+    }
+  ],
+  "preflight": "loopback port bind/close succeeded",
+  "command": {
+    "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "args": [
+      "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+      "serve",
+      "--hostname",
+      "127.0.0.1",
+      "--port",
+      "17947",
+      "--startup-receipt",
+      "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\skill-mount-latency-02\\n32-serial.startup.json",
+      "--startup-occurrence",
+      "05ab5452-dcba-4312-af73-ef06300a07bf",
+      "--parent-pid",
+      "40608",
+      "--parent-process-instance-id",
+      "win32:639268007713102145",
+      "--print-logs",
+      "--log-level",
+      "DEBUG"
+    ],
+    "cwd": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n32\\launch"
+  },
+  "owner": {
+    "pid": 25396,
+    "processInstanceID": "win32:639268007917648284",
+    "occurrenceID": "5c1ae120-1e22-4df5-b91b-fb59a08edd12"
+  },
+  "actualChild": {
+    "ProcessId": 25396,
+    "ParentProcessId": 75436,
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CreationDate": "/Date(1791203991764)/"
+  },
+  "helperOwner": {
+    "pid": 75436,
+    "processInstanceID": "win32:639268007917175517",
+    "occurrenceID": "769efe5d-784a-4e4a-b8f7-8ffd497499d9"
+  },
+  "actualHelper": {
+    "ProcessId": 75436,
+    "ParentProcessId": 40608,
+    "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3f665b2bfd616ca5\\debug\\opencorvus-process-supervisor.exe",
+    "CreationDate": "/Date(1791203991717)/"
+  },
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "05ab5452-dcba-4312-af73-ef06300a07bf",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:17947",
+    "pid": 25396
+  },
+  "health": {
+    "status": 200,
+    "requestID": "805cb874-b4a7-4ffe-98bc-ccd333a8c925",
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n32\\data\\opencorvus.db",
+      "data": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n32\\data",
+      "home": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\home"
+    }
+  },
+  "metadataFiles": {
+    "auth.json": {
+      "present": false
+    },
+    "models.json": {
+      "present": false
+    }
+  },
+  "status": "http-completed",
+  "shutdown": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "occurrenceID": "cal_g0VXB7Qbz00cCUoyJbi1"
+    }
+  },
+  "disposal": {
+    "occurrenceID": "05ab5452-dcba-4312-af73-ef06300a07bf",
+    "pid": 25396,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "terminal": {
+    "occurrenceID": "05ab5452-dcba-4312-af73-ef06300a07bf",
+    "pid": 25396,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalOwner": "dead_or_reused",
+  "physicalHelper": "dead_or_reused",
+  "finalPort": "free",
+  "diagnosticRows": 322,
+  "timing": {
+    "diagnosticRows": 306,
+    "initializations": 7,
+    "dispositions": [
+      "creator",
+      "creator",
+      "cached-settled",
+      "creator",
+      "creator",
+      "cached-settled",
+      "cached-settled",
+      "creator",
+      "cached-settled",
+      "cached-settled",
+      "creator",
+      "creator",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled",
+      "cached-settled"
+    ],
+    "startupInitializations": 0
+  }
+}

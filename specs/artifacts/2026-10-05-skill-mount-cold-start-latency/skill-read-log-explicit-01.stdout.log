@@ -1,0 +1,4 @@
+packages/opencorvus/test/log-lifecycle.test.ts(54,58): error TS2345: Argument of type '(...args: any[]) => void' is not assignable to parameter of type 'typeof write'.
+  Property '__promisify__' is missing in type '(...args: any[]) => void' but required in type 'typeof write'.
+packages/opencorvus/test/log-lifecycle.test.ts(110,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+packages/opencorvus/test/log-lifecycle.test.ts(110,25): error TS18048: 'entry.getData' is possibly 'undefined'.

@@ -23,6 +23,7 @@ import { muteAISdkWarnings } from "@/runtime/shims"
 import { OverlayUI, freezeDefaultOverlayUiSource, type FrozenOverlayUiSource } from "./overlay-ui"
 import { DEFAULT_SERVER_PORT } from "./defaults"
 import { requestID, serverErrorResponse } from "./error-handler"
+import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
 import { Database } from "@/storage/db"
 import { configureCorsOrigins, isAllowedCorsOrigin, isAllowedRequestOrigin } from "./cors"
 import { ServeRuntimeMemoryMetrics } from "@/runtime/memory-metrics"
@@ -340,8 +341,7 @@ export namespace Server {
       reconcileTaskControl =
         taskControlDirectories.length === 0
           ? undefined
-          : () =>
-              taskRootIngressDelivery.reconcileTaskControlAfterRuntimeRollback(taskControlDirectories)
+          : () => taskRootIngressDelivery.reconcileTaskControlAfterRuntimeRollback(taskControlDirectories)
       await runtimeExecutionGate.waitForIdle(["task_control_activation"], settlementInactivityTimeoutMilliseconds)
       const { awaitTaskMessageProtocolBridgeIdle } = await import("../orchestrator/protocol/message-bridge")
       await Database.awaitEffectIdle(settlementInactivityTimeoutMilliseconds)
@@ -827,7 +827,11 @@ export namespace Server {
             })
           }
           try {
-            await next()
+            if (c.req.method === "GET" && c.req.path === "/skill/mounts") {
+              await SkillReadDiagnostics.request(id, next)
+            } else {
+              await next()
+            }
             if (!skipLogging) {
               log.info("request", {
                 requestID: id,

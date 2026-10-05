@@ -1,0 +1,18 @@
+{
+  "qualification": "timing-unqualified",
+  "rawStatus": "passed",
+  "rawExitCode": 0,
+  "httpRequests": 28.0,
+  "actualOccurrences": 6,
+  "diagnosticRows": 0,
+  "httpMaximumMilliseconds": 541.85,
+  "cancelOutcome": "completed before cancellation; no abort qualification",
+  "rootCause": "Print=true Pino multistream sinks omitted level and used their INFO default; configured DEBUG records were filtered",
+  "source": [
+    "src/util/log.ts Log.init print branch",
+    "pino/lib/multistream.js default INFO per sink"
+  ],
+  "physical": "All six source targets and six recorded helpers exited normally, dead_or_reused; port17947 free; returned bootstrap root removed",
+  "remaining": "Original19.675s latency source remains unknown; HTTP200/fast isolated fixtures do not qualify stage timings",
+  "cleanupTimer": "Promise.race delay20s retained a live timer until expiry; process eventually naturally exited0"
+}

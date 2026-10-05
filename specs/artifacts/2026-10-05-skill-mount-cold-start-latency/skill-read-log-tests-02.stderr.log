@@ -1,0 +1,28 @@
+$ bun script/run-tests.ts ./test/log-lifecycle.test.ts ./test/skill-read-diagnostics.test.ts
+
+test\isolated-test-entry.test.ts:
+(pass) Log lifecycle > DEBUG policy reaches the real print-mode file and stderr destinations [473.10ms]
+(pass) Log lifecycle > flush joins the actual in-flight file write with print=%s [52.62ms]
+{"level":"info","time":"2026-10-05T12:38:41.678Z","service":"log-flush-order","logDomain":"non-session","message":"in-flight-file-write-true"}
+(pass) Log lifecycle > flush joins the actual in-flight file write with print=%s [48.58ms]
+(pass) Log lifecycle > cached logger writes survive repeated real asynchronous close and reinitialization [402.97ms]
+{"level":"info","time":"2026-10-05T12:38:42.132Z","service":"log-export-test","logDomain":"non-session","message":"support-export-current-record"}
+(pass) Log lifecycle > support export contains the newly written record in its real raw log entry [91.55ms]
+{"level":"info","time":"2026-10-05T12:38:42.235Z","service":"log-lifecycle-test","logDomain":"non-session","message":"after close"}
+(pass) Log lifecycle > cached loggers remain usable across close and reinitialization [36.67ms]
+
+ 6 pass
+ 0 fail
+ 16 expect() calls
+Ran 6 tests across 1 file. [2.20s]
+
+test\isolated-test-entry.test.ts:
+(pass) startup initialization and late causal work have their actual request lifetime [36.84ms]
+(pass) diagnostics retain actual State promise identity and one creator with distinct join and cache reads [24.12ms]
+(pass) diagnostics preserve the original State rejection and observe its successful new initializer on retry [13.01ms]
+(pass) catalog diagnostics preserve real durable owner results and balanced failure phases [31.69ms]
+
+ 4 pass
+ 0 fail
+ 29 expect() calls
+Ran 4 tests across 1 file. [1073.00ms]

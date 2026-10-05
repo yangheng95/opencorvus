@@ -1,0 +1,130 @@
+{
+  "runnerPID": 40608,
+  "runnerPresent": false,
+  "ownedProcesses": [
+    {
+      "case": "0-serial",
+      "kind": "owner",
+      "recorded": {
+        "pid": 73188,
+        "processInstanceID": "win32:639268007716191302",
+        "occurrenceID": "da13f1f4-5ea5-4538-bea4-2848809e62cc"
+      },
+      "observed": "absent"
+    },
+    {
+      "case": "0-serial",
+      "kind": "helperOwner",
+      "recorded": {
+        "pid": 75868,
+        "processInstanceID": "win32:639268007715708529",
+        "occurrenceID": "4fac2cd9-cb20-4b38-9891-7c930b12e0e9"
+      },
+      "observed": "absent"
+    },
+    {
+      "case": "0-restart-parallel",
+      "kind": "owner",
+      "recorded": {
+        "pid": 76472,
+        "processInstanceID": "win32:639268007768237125",
+        "occurrenceID": "8fd35a0f-9d5c-4a4c-84a8-3aa5cb919b70"
+      },
+      "observed": "absent"
+    },
+    {
+      "case": "0-restart-parallel",
+      "kind": "helperOwner",
+      "recorded": {
+        "pid": 74912,
+        "processInstanceID": "win32:639268007767766741",
+        "occurrenceID": "84ea1b48-efb4-421a-b9af-c07397d24cac"
+      },
+      "observed": "absent"
+    },
+    {
+      "case": "1-serial",
+      "kind": "owner",
+      "recorded": {
+        "pid": 67296,
+        "processInstanceID": "win32:639268007815265752",
+        "occurrenceID": "c56784e2-a2fb-4efa-b9ba-2192dd8da7c2"
+      },
+      "observed": "absent"
+    },
+    {
+      "case": "1-serial",
+      "kind": "helperOwner",
+      "recorded": {
+        "pid": 10664,
+        "processInstanceID": "win32:639268007814771041",
+        "occurrenceID": "8d031ee3-b3f4-4178-b9e3-da96da542e22"
+      },
+      "observed": "absent"
+    },
+    {
+      "case": "1-restart-parallel",
+      "kind": "owner",
+      "recorded": {
+        "pid": 75300,
+        "processInstanceID": "win32:639268007866830917",
+        "occurrenceID": "57d70c61-666e-434d-bc39-7cdca6130564"
+      },
+      "observed": "absent"
+    },
+    {
+      "case": "1-restart-parallel",
+      "kind": "helperOwner",
+      "recorded": {
+        "pid": 71012,
+        "processInstanceID": "win32:639268007866355960",
+        "occurrenceID": "ed939ec3-15dd-4911-8635-8d43c2eb34aa"
+      },
+      "observed": "absent"
+    },
+    {
+      "case": "32-serial",
+      "kind": "owner",
+      "recorded": {
+        "pid": 25396,
+        "processInstanceID": "win32:639268007917648284",
+        "occurrenceID": "5c1ae120-1e22-4df5-b91b-fb59a08edd12"
+      },
+      "observed": "absent"
+    },
+    {
+      "case": "32-serial",
+      "kind": "helperOwner",
+      "recorded": {
+        "pid": 75436,
+        "processInstanceID": "win32:639268007917175517",
+        "occurrenceID": "769efe5d-784a-4e4a-b8f7-8ffd497499d9"
+      },
+      "observed": "absent"
+    },
+    {
+      "case": "32-restart-parallel",
+      "kind": "owner",
+      "recorded": {
+        "pid": 44724,
+        "processInstanceID": "win32:639268007971029534",
+        "occurrenceID": "807a466b-5375-4055-8bc2-85a4cdadec40"
+      },
+      "observed": "absent"
+    },
+    {
+      "case": "32-restart-parallel",
+      "kind": "helperOwner",
+      "recorded": {
+        "pid": 75872,
+        "processInstanceID": "win32:639268007970551962",
+        "occurrenceID": "1201f098-5026-4f6c-8851-8a9a5e0daf62"
+      },
+      "observed": "absent"
+    }
+  ],
+  "port17947Listeners": 0,
+  "bootstrapOwnerRootPresent": false,
+  "exec": 11460,
+  "execExitCode": 0
+}

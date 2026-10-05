@@ -1,0 +1,92 @@
+[
+  {
+    "service": "server",
+    "requestID": "62609fcb-e632-4faa-ad22-4ee063f8067e",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "started",
+    "time": "2026-10-05T12:28:49.541Z"
+  },
+  {
+    "service": "server",
+    "requestID": "62609fcb-e632-4faa-ad22-4ee063f8067e",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2,
+    "time": "2026-10-05T12:28:49.543Z"
+  },
+  {
+    "service": "server",
+    "requestID": "837cc440-4d04-447e-818b-8dc693cdcc37",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "started",
+    "time": "2026-10-05T12:28:49.544Z"
+  },
+  {
+    "service": "server",
+    "requestID": "fc7950e1-92d9-4edf-b7a5-71e66703e3a2",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "started",
+    "time": "2026-10-05T12:28:49.548Z"
+  },
+  {
+    "service": "server",
+    "requestID": "e9e63dd7-2e29-4c19-86d0-9e29aa24c799",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "started",
+    "time": "2026-10-05T12:28:49.548Z"
+  },
+  {
+    "service": "server",
+    "requestID": "e9e63dd7-2e29-4c19-86d0-9e29aa24c799",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 454,
+    "time": "2026-10-05T12:28:50.002Z"
+  },
+  {
+    "service": "server",
+    "requestID": "837cc440-4d04-447e-818b-8dc693cdcc37",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 505,
+    "time": "2026-10-05T12:28:50.049Z"
+  },
+  {
+    "service": "server",
+    "requestID": "fc7950e1-92d9-4edf-b7a5-71e66703e3a2",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 536,
+    "time": "2026-10-05T12:28:50.084Z"
+  },
+  {
+    "service": "server",
+    "requestID": "a8e43eb5-bcaf-4ae9-975d-a48ce020e1dd",
+    "method": "POST",
+    "path": "/shutdown",
+    "status": "started",
+    "time": "2026-10-05T12:28:50.086Z"
+  },
+  {
+    "service": "server",
+    "requestID": "a8e43eb5-bcaf-4ae9-975d-a48ce020e1dd",
+    "method": "POST",
+    "path": "/shutdown",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1,
+    "time": "2026-10-05T12:28:50.087Z"
+  }
+]

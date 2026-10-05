@@ -1,4 +1,5 @@
 import { Log } from "../util/log"
+import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
 import { PackageInstallReceipt } from "@/bun/install-receipt"
 import { CROSS_PROCESS_LOCK_RETRY, withProcessLock, withSharedJsonFactLock } from "@/util/process-lock"
 import path from "path"
@@ -534,12 +535,17 @@ export namespace Config {
 
   async function loadState(options: LoadStateOptions = {}): Promise<LoadedState> {
     while (true) {
-      const loaded = await loadStateOnce(options)
-      if (await sourceRevisionsAreCurrent(loaded.sourceRevisions)) return loaded
+      const loaded = await SkillReadDiagnostics.phase("config.load", () => loadStateOnce(options))
+      if (await SkillReadDiagnostics.phase("config.verify", () => sourceRevisionsAreCurrent(loaded.sourceRevisions)))
+        return loaded
     }
   }
 
-  const stateSource = createInstanceState(async () => loadState(), undefined, "config")
+  const stateSource = createInstanceState(
+    () => SkillReadDiagnostics.initialize("config", () => loadState()),
+    undefined,
+    "config",
+  )
 
   async function resetProjectState(): Promise<void> {
     await using _owner = await Lock.write("config-peer-state-lifecycle")
@@ -556,7 +562,7 @@ export namespace Config {
     () =>
       withConfigGenerationRead(async () => {
         await using _lifecycleOwner = await Lock.read("config-peer-state-lifecycle")
-        return stateSource()
+        return SkillReadDiagnostics.readState("config", stateSource)
       }),
     {
       async reset() {
@@ -571,7 +577,7 @@ export namespace Config {
 
   export async function waitForDependencies() {
     const deps = await state().then((x) => x.deps)
-    const outcomes = await Promise.all(deps)
+    const outcomes = await SkillReadDiagnostics.phase("config.dependencies", () => Promise.all(deps))
     const errors = outcomes.flatMap((outcome) => (outcome.ok ? [] : [outcome.error]))
     if (errors.length === 1) throw errors[0]
     if (errors.length > 1) throw new AggregateError(errors, "Multiple config dependency installations failed")
@@ -2198,7 +2204,7 @@ export namespace Config {
     await using _lifecycleOwner = await Lock.read("config-peer-state-lifecycle")
     const directory = ProjectInstanceContext.use().directory
     await TestHooks.afterProjectConfigAdmission?.({ directory })
-    const cached = await stateSource()
+    const cached = await SkillReadDiagnostics.readState("config", stateSource)
     ensurePeerConvergenceMonitor()
     if (await sourceRevisionsAreCurrent(cached.sourceRevisions)) {
       loadedProjectConfigs.add(Filesystem.resolve(directory))
@@ -2207,7 +2213,7 @@ export namespace Config {
       return cached
     }
     await using _owner = await Lock.write(`config-source-cache:${Filesystem.normalizePath(directory)}`)
-    const owned = await stateSource()
+    const owned = await SkillReadDiagnostics.readState("config", stateSource)
     if (await sourceRevisionsAreCurrent(owned.sourceRevisions)) {
       loadedProjectConfigs.add(Filesystem.resolve(directory))
       queueCurrentConfigAfterPending(directory, owned.config)
@@ -2216,7 +2222,7 @@ export namespace Config {
     }
     const before = structuredClone(owned.config) as Info
     await stateSource.reset()
-    const next = await stateSource()
+    const next = await SkillReadDiagnostics.readState("config", stateSource)
     ensurePeerConvergenceMonitor()
     const transition: RuntimeTransition = {
       directory,

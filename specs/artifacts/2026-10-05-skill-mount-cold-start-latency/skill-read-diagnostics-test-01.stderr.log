@@ -1,0 +1,11 @@
+$ bun script/run-tests.ts ./test/skill-read-diagnostics.test.ts
+
+test\isolated-test-entry.test.ts:
+(pass) diagnostics retain actual State promise identity and one creator with distinct join and cache reads [34.69ms]
+(pass) diagnostics preserve the original State rejection and observe its successful new initializer on retry [15.29ms]
+(pass) catalog diagnostics preserve real durable owner results and balanced failure phases [32.71ms]
+
+ 3 pass
+ 0 fail
+ 24 expect() calls
+Ran 3 tests across 1 file. [1188.00ms]

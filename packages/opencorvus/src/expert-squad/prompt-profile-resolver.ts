@@ -30,6 +30,7 @@ import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { ComputerHostRuntime } from "@/mcp/computer/host-runtime"
 import { bindComputerMcpPermissionKey, computerMcpToolKey } from "@/mcp/computer/permission-plan"
 import { withTaskScopedPluginToolHost } from "@/tool/plugin-tool-host"
+import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
 import {
   bindPackageToolRuntime,
   bindProjectedTaskToolRuntime,
@@ -83,10 +84,7 @@ import {
 } from "./projection-hash"
 import { CAPABILITY_SEARCH_TOOL_ID } from "@/tool/capability-search"
 import { ExpertSquadRegistry } from "./registry"
-import {
-  materializeExpertSquadCapabilities,
-  type MaterializedExpertSquadCapabilities,
-} from "./capability-grants"
+import { materializeExpertSquadCapabilities, type MaterializedExpertSquadCapabilities } from "./capability-grants"
 import { PlatformCapabilitySetRegistry } from "@/agent/platform-capability-sets"
 import { runtimeOverrideLayers } from "@/agent/runtime-override"
 import { sessionRuntimeFromProjectedTemplate, type SessionAgentRuntime } from "@/agent/session-agent-runtime"
@@ -519,9 +517,7 @@ export namespace PromptProfileResolver {
     description: UNIVERSAL_BUILD_DESCRIPTION,
     base_role: "build",
     capability_refs: [
-      CapabilityRefCodec.encode(
-        PlatformCapabilitySetRegistry.baseRef({ kind: "worker", baseRole: "build" }),
-      ),
+      CapabilityRefCodec.encode(PlatformCapabilitySetRegistry.baseRef({ kind: "worker", baseRole: "build" })),
     ],
   })
 
@@ -846,7 +842,10 @@ export namespace PromptProfileResolver {
       if (!input.projectDirectory) return Skill.all()
       return Instance.provide({ directory: input.projectDirectory, fn: () => Skill.all() })
     }
-    const [active, defaultSkills] = await Promise.all([packageForActiveProfile(input), loadDefaultSkills()])
+    const [active, defaultSkills] = await Promise.all([
+      SkillReadDiagnostics.phase("projection.package", () => packageForActiveProfile(input)),
+      SkillReadDiagnostics.phase("projection.skills", loadDefaultSkills),
+    ])
     const projectID =
       !active.builtIn && active.pkg.installationScope === "project"
         ? input.projectDirectory
@@ -1249,10 +1248,7 @@ export namespace PromptProfileResolver {
     return [...toolIDs]
   }
 
-  function expandedSchedulerBuiltInToolIDs(
-    grants: MaterializedExpertSquadCapabilities,
-    config: ConfigLike,
-  ): string[] {
+  function expandedSchedulerBuiltInToolIDs(grants: MaterializedExpertSquadCapabilities, config: ConfigLike): string[] {
     return expandedProjectedBuiltInToolIDs({
       inheritedToolIDs: grants.builtInToolIDs.filter((toolID) => !grants.explicitBuiltInToolIDs.includes(toolID)),
       explicitToolIDs: grants.explicitBuiltInToolIDs,
@@ -2011,7 +2007,6 @@ export namespace PromptProfileResolver {
     return Config.Mcp.parse(config)
   }
 
-
   async function packageMcpToolFromDefinition(input: {
     packageID: string
     cwd: string
@@ -2160,7 +2155,6 @@ export namespace PromptProfileResolver {
     return bindProjectedTaskToolRuntime(runtimeTool, input.binding)
   }
 
-
   async function schedulerPackageMcpTools<T>(
     capability: ResolvedSchedulerCapability,
     input: { taskID: string; projectDirectory: string; connectionOwner: MCP.ScopedConnectionOwner },
@@ -2231,7 +2225,6 @@ export namespace PromptProfileResolver {
     }
     return result
   }
-
 
   /** Materialize one exact non-Registry Task projection leaf. */
   export async function exactProjectedExtensionTool(input: {
@@ -2556,7 +2549,11 @@ export namespace PromptProfileResolver {
     const agentProjectionEntries = ExpertSquadRegistry.agentProjectionEntries(active.pkg.manifest).sort((left, right) =>
       compareCanonicalStrings(left.agentID, right.agentID),
     )
-    const capabilitySet = input.capabilitySet ?? (await resolvePackageCapabilitySet(input.context, input.config))
+    const capabilitySet =
+      input.capabilitySet ??
+      (await SkillReadDiagnostics.phase("projection.capabilities", () =>
+        resolvePackageCapabilitySet(input.context, input.config),
+      ))
     const schedulerCapability = capabilitySet.scheduler
     const workerCapabilities = capabilitySet.workers
     const schedulerOnlyWorkerCapabilities = capabilitySet.schedulerOnlyWorkers
@@ -2570,7 +2567,10 @@ export namespace PromptProfileResolver {
         .filter((pkg) => pkg.id !== active.profileID)
         .map((pkg) => ({ pkg })),
       ...(
-        input.projectSelectorPackages ?? (await loadProjectSelectorPackages(input.projectDirectory, active.profileID))
+        input.projectSelectorPackages ??
+        (await SkillReadDiagnostics.phase("projection.selectors", () =>
+          loadProjectSelectorPackages(input.projectDirectory, active.profileID),
+        ))
       )
         .filter((entry) => entry.pkg.id !== active.profileID)
         .map((entry) => ({ pkg: entry.pkg })),

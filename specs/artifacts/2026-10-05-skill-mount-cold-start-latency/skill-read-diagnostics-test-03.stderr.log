@@ -1,0 +1,12 @@
+$ bun script/run-tests.ts ./test/skill-read-diagnostics.test.ts
+
+test\isolated-test-entry.test.ts:
+(pass) startup initialization and late causal work have their actual request lifetime [37.20ms]
+(pass) diagnostics retain actual State promise identity and one creator with distinct join and cache reads [22.97ms]
+(pass) diagnostics preserve the original State rejection and observe its successful new initializer on retry [11.97ms]
+(pass) catalog diagnostics preserve real durable owner results and balanced failure phases [36.87ms]
+
+ 4 pass
+ 0 fail
+ 29 expect() calls
+Ran 4 tests across 1 file. [1322.00ms]

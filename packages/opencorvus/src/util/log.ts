@@ -131,7 +131,10 @@ export namespace Log {
       try {
         await destinationReady(nextFileDestination)
         const nextDestination = options.print
-          ? pino.multistream([{ stream: nextFileDestination }, { stream: stderrDestination }])
+          ? pino.multistream([
+              { stream: nextFileDestination, level: pinoLevel[nextLevel] },
+              { stream: stderrDestination, level: pinoLevel[nextLevel] },
+            ])
           : nextFileDestination
         const nextRoot = createRootLogger(nextDestination, nextLevel)
         const previousDestination = durableDestination

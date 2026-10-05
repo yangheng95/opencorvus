@@ -1,0 +1,272 @@
+{
+  "count": 0,
+  "mode": "restart-parallel",
+  "occurrenceID": "6f365e2c-ad81-41ea-8602-fc5c15196fa7",
+  "files": 0,
+  "bytes": 0,
+  "root": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n00",
+  "projects": {
+    "a": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n00\\project-a",
+    "b": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n00\\project-b"
+  },
+  "observations": [
+    {
+      "label": "first-parallel-a1",
+      "side": "a",
+      "status": 200,
+      "requestID": "d0a3d2c9-cd6f-4dd0-bcec-b7cef0a7acef",
+      "elapsedMilliseconds": 442.59619999999995,
+      "projection": {
+        "scope": "project",
+        "activeProfile": "base",
+        "fixtureSkills": [],
+        "totalSkills": 7,
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "base-developer",
+          "base-planner",
+          "base-researcher",
+          "base-tester"
+        ],
+        "grants": [
+          {
+            "agent": "orchestrator",
+            "grants": 7
+          },
+          {
+            "agent": "universal-build",
+            "grants": 6
+          },
+          {
+            "agent": "base-developer",
+            "grants": 7
+          },
+          {
+            "agent": "base-planner",
+            "grants": 7
+          },
+          {
+            "agent": "base-researcher",
+            "grants": 7
+          },
+          {
+            "agent": "base-tester",
+            "grants": 7
+          }
+        ]
+      }
+    },
+    {
+      "label": "first-parallel-a2",
+      "side": "a",
+      "status": 200,
+      "requestID": "00a5eadf-95f1-4c88-8142-5cbd3bd85f02",
+      "elapsedMilliseconds": 462.3659000000007,
+      "projection": {
+        "scope": "project",
+        "activeProfile": "base",
+        "fixtureSkills": [],
+        "totalSkills": 7,
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "base-developer",
+          "base-planner",
+          "base-researcher",
+          "base-tester"
+        ],
+        "grants": [
+          {
+            "agent": "orchestrator",
+            "grants": 7
+          },
+          {
+            "agent": "universal-build",
+            "grants": 6
+          },
+          {
+            "agent": "base-developer",
+            "grants": 7
+          },
+          {
+            "agent": "base-planner",
+            "grants": 7
+          },
+          {
+            "agent": "base-researcher",
+            "grants": 7
+          },
+          {
+            "agent": "base-tester",
+            "grants": 7
+          }
+        ]
+      }
+    },
+    {
+      "label": "first-parallel-b",
+      "side": "b",
+      "status": 200,
+      "requestID": "4b531ec7-623d-4426-8d73-92c1b73efa10",
+      "elapsedMilliseconds": 514.7489000000005,
+      "projection": {
+        "scope": "project",
+        "activeProfile": "base",
+        "fixtureSkills": [],
+        "totalSkills": 7,
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "base-developer",
+          "base-planner",
+          "base-researcher",
+          "base-tester"
+        ],
+        "grants": [
+          {
+            "agent": "orchestrator",
+            "grants": 7
+          },
+          {
+            "agent": "universal-build",
+            "grants": 6
+          },
+          {
+            "agent": "base-developer",
+            "grants": 7
+          },
+          {
+            "agent": "base-planner",
+            "grants": 7
+          },
+          {
+            "agent": "base-researcher",
+            "grants": 7
+          },
+          {
+            "agent": "base-tester",
+            "grants": 7
+          }
+        ]
+      }
+    }
+  ],
+  "preflight": "loopback port bind/close succeeded",
+  "command": {
+    "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "args": [
+      "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+      "serve",
+      "--hostname",
+      "127.0.0.1",
+      "--port",
+      "17947",
+      "--startup-receipt",
+      "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\skill-mount-latency-02\\n0-restart-parallel.startup.json",
+      "--startup-occurrence",
+      "6f365e2c-ad81-41ea-8602-fc5c15196fa7",
+      "--parent-pid",
+      "40608",
+      "--parent-process-instance-id",
+      "win32:639268007713102145",
+      "--print-logs",
+      "--log-level",
+      "DEBUG"
+    ],
+    "cwd": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n00\\launch"
+  },
+  "owner": {
+    "pid": 76472,
+    "processInstanceID": "win32:639268007768237125",
+    "occurrenceID": "8fd35a0f-9d5c-4a4c-84a8-3aa5cb919b70"
+  },
+  "actualChild": {
+    "ProcessId": 76472,
+    "ParentProcessId": 74912,
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CreationDate": "/Date(1791203976823)/"
+  },
+  "helperOwner": {
+    "pid": 74912,
+    "processInstanceID": "win32:639268007767766741",
+    "occurrenceID": "84ea1b48-efb4-421a-b9af-c07397d24cac"
+  },
+  "actualHelper": {
+    "ProcessId": 74912,
+    "ParentProcessId": 40608,
+    "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3f665b2bfd616ca5\\debug\\opencorvus-process-supervisor.exe",
+    "CreationDate": "/Date(1791203976776)/"
+  },
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "6f365e2c-ad81-41ea-8602-fc5c15196fa7",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:17947",
+    "pid": 76472
+  },
+  "health": {
+    "status": 200,
+    "requestID": "f87b7e11-5820-4c3e-a6a3-68c2b4795717",
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n00\\data\\opencorvus.db",
+      "data": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\runtime-root\\skill-mount-latency\\n00\\data",
+      "home": "C:\\WINDOWS\\temp\\opencorvus-test-run-76FGtO\\test-40608-vhM0ua\\home"
+    }
+  },
+  "metadataFiles": {
+    "auth.json": {
+      "present": false
+    },
+    "models.json": {
+      "present": false
+    }
+  },
+  "status": "http-completed",
+  "shutdown": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "occurrenceID": "cal_g0VXB7MYp00J056ExuQK"
+    }
+  },
+  "disposal": {
+    "occurrenceID": "6f365e2c-ad81-41ea-8602-fc5c15196fa7",
+    "pid": 76472,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "terminal": {
+    "occurrenceID": "6f365e2c-ad81-41ea-8602-fc5c15196fa7",
+    "pid": 76472,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalOwner": "dead_or_reused",
+  "physicalHelper": "dead_or_reused",
+  "finalPort": "free",
+  "diagnosticRows": 210,
+  "timing": {
+    "diagnosticRows": 200,
+    "initializations": 8,
+    "dispositions": [
+      "creator",
+      "join-pending",
+      "creator",
+      "creator",
+      "cached-settled",
+      "creator",
+      "creator",
+      "cached-settled",
+      "creator",
+      "cached-settled",
+      "creator",
+      "creator"
+    ],
+    "startupInitializations": 0
+  }
+}

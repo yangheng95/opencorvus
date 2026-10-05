@@ -7,6 +7,7 @@ import {
   type DurablePublicationOccurrence,
 } from "@opencorvus-ai/util/durable-publication"
 import { Global } from "@/global"
+import { SkillReadDiagnostics } from "./read-diagnostics"
 
 const KIND = "skill-catalog-replacement"
 const SUBJECT = "catalog"
@@ -96,7 +97,7 @@ export namespace SkillReplacementPublication {
   }
 
   export function withCatalogOwner<T>(run: () => Promise<T>): Promise<T> {
-    return store().withSubjectLock(KIND, SUBJECT, run)
+    return SkillReadDiagnostics.catalogOwner((owned) => store().withSubjectLock(KIND, SUBJECT, owned), run)
   }
 
   export async function open(): Promise<Entry | undefined> {

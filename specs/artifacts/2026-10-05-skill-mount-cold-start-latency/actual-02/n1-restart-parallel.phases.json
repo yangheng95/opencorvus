@@ -1,0 +1,3950 @@
+[
+  {
+    "service": "server",
+    "requestID": "13856b25-6ec7-48c2-8c0b-15ef2928b0f5",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "started",
+    "time": "2026-10-05T12:39:50.655Z"
+  },
+  {
+    "service": "server",
+    "requestID": "13856b25-6ec7-48c2-8c0b-15ef2928b0f5",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2,
+    "time": "2026-10-05T12:39:50.657Z"
+  },
+  {
+    "service": "server",
+    "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "started",
+    "time": "2026-10-05T12:39:50.658Z"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.658Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "request",
+    "spanID": "75300:1",
+    "parentSpanID": "http:8d8605c0-77aa-42a4-a301-7314c4652926",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "service": "server",
+    "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "started",
+    "time": "2026-10-05T12:39:50.662Z"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.662Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "request",
+    "spanID": "75300:2",
+    "parentSpanID": "http:26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "service": "server",
+    "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "started",
+    "time": "2026-10-05T12:39:50.662Z"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.662Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "request",
+    "spanID": "75300:3",
+    "parentSpanID": "http:e5d44fff-2d88-400c-9b73-ec851c543a88",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.824Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.config",
+    "spanID": "75300:4",
+    "parentSpanID": "75300:3",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.825Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "75300:5",
+    "parentSpanID": "75300:4",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.825Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "75300:6",
+    "parentSpanID": "75300:5",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.825Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "config.load",
+    "spanID": "75300:7",
+    "parentSpanID": "75300:6",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.856Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.config",
+    "spanID": "75300:8",
+    "parentSpanID": "75300:1",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.857Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.config",
+    "spanID": "75300:9",
+    "parentSpanID": "75300:2",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.857Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "75300:10",
+    "parentSpanID": "75300:8",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.857Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "75300:11",
+    "parentSpanID": "75300:10",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.857Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "config.load",
+    "spanID": "75300:12",
+    "parentSpanID": "75300:11",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.857Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "75300:13",
+    "parentSpanID": "75300:9",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.871Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 46,
+    "phase": "config.load",
+    "spanID": "75300:7",
+    "parentSpanID": "75300:6",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.871Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "config.verify",
+    "spanID": "75300:14",
+    "parentSpanID": "75300:6",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.871Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "config.verify",
+    "spanID": "75300:14",
+    "parentSpanID": "75300:6",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.871Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 46,
+    "phase": "state.initialize",
+    "spanID": "75300:6",
+    "parentSpanID": "75300:5",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "aggregates": {},
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.871Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 46,
+    "phase": "state.read",
+    "spanID": "75300:5",
+    "parentSpanID": "75300:4",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "disposition": "creator",
+    "initializerID": "75300:6",
+    "creatorRequestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.872Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 48,
+    "phase": "matrix.config",
+    "spanID": "75300:4",
+    "parentSpanID": "75300:3",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.872Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.inventory",
+    "spanID": "75300:15",
+    "parentSpanID": "75300:3",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.872Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.total",
+    "spanID": "75300:16",
+    "parentSpanID": "75300:15",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.873Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.admission",
+    "spanID": "75300:17",
+    "parentSpanID": "75300:16",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.875Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 18,
+    "phase": "config.load",
+    "spanID": "75300:12",
+    "parentSpanID": "75300:11",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.875Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "config.verify",
+    "spanID": "75300:18",
+    "parentSpanID": "75300:11",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.876Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "config.verify",
+    "spanID": "75300:18",
+    "parentSpanID": "75300:11",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.876Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 19,
+    "phase": "state.initialize",
+    "spanID": "75300:11",
+    "parentSpanID": "75300:10",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "aggregates": {},
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.876Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 19,
+    "phase": "state.read",
+    "spanID": "75300:10",
+    "parentSpanID": "75300:8",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "disposition": "creator",
+    "initializerID": "75300:11",
+    "creatorRequestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.876Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 19,
+    "phase": "state.read",
+    "spanID": "75300:13",
+    "parentSpanID": "75300:9",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "disposition": "join-pending",
+    "initializerID": "75300:11",
+    "creatorRequestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.876Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 3,
+    "phase": "catalog.admission",
+    "spanID": "75300:17",
+    "parentSpanID": "75300:16",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.876Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.held",
+    "spanID": "75300:19",
+    "parentSpanID": "75300:16",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.876Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.recovery",
+    "spanID": "75300:20",
+    "parentSpanID": "75300:19",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.877Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 21,
+    "phase": "matrix.config",
+    "spanID": "75300:8",
+    "parentSpanID": "75300:1",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.877Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.inventory",
+    "spanID": "75300:21",
+    "parentSpanID": "75300:1",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.877Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.total",
+    "spanID": "75300:22",
+    "parentSpanID": "75300:21",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.877Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.admission",
+    "spanID": "75300:23",
+    "parentSpanID": "75300:22",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.877Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 21,
+    "phase": "matrix.config",
+    "spanID": "75300:9",
+    "parentSpanID": "75300:2",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.877Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.inventory",
+    "spanID": "75300:24",
+    "parentSpanID": "75300:2",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.877Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.total",
+    "spanID": "75300:25",
+    "parentSpanID": "75300:24",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.877Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.admission",
+    "spanID": "75300:26",
+    "parentSpanID": "75300:25",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.877Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "catalog.recovery",
+    "spanID": "75300:20",
+    "parentSpanID": "75300:19",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.877Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.revision",
+    "spanID": "75300:27",
+    "parentSpanID": "75300:19",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.878Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "catalog.revision",
+    "spanID": "75300:27",
+    "parentSpanID": "75300:19",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.878Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.config-reset",
+    "spanID": "75300:28",
+    "parentSpanID": "75300:19",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.879Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "catalog.config-reset",
+    "spanID": "75300:28",
+    "parentSpanID": "75300:19",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.879Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.inventory-reset",
+    "spanID": "75300:29",
+    "parentSpanID": "75300:19",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.879Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.inventory-reset",
+    "spanID": "75300:29",
+    "parentSpanID": "75300:19",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.880Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "75300:30",
+    "parentSpanID": "75300:19",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "inventory",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.881Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "75300:31",
+    "parentSpanID": "75300:30",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "inventory",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.881Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "inventory.config",
+    "spanID": "75300:32",
+    "parentSpanID": "75300:31",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.885Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 4,
+    "phase": "inventory.config",
+    "spanID": "75300:32",
+    "parentSpanID": "75300:31",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.885Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "inventory.skills",
+    "spanID": "75300:33",
+    "parentSpanID": "75300:31",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.886Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.reentrant",
+    "spanID": "75300:34",
+    "parentSpanID": "75300:33",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.886Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.revision",
+    "spanID": "75300:35",
+    "parentSpanID": "75300:34",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.886Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.revision",
+    "spanID": "75300:35",
+    "parentSpanID": "75300:34",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.886Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "75300:36",
+    "parentSpanID": "75300:34",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "skill",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.886Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "75300:37",
+    "parentSpanID": "75300:36",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "skill",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.887Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.reentrant",
+    "spanID": "75300:38",
+    "parentSpanID": "75300:37",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.887Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.revision",
+    "spanID": "75300:39",
+    "parentSpanID": "75300:38",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.887Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.revision",
+    "spanID": "75300:39",
+    "parentSpanID": "75300:38",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.887Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.reentrant",
+    "spanID": "75300:38",
+    "parentSpanID": "75300:37",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.888Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.builtins",
+    "spanID": "75300:40",
+    "parentSpanID": "75300:37",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.895Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 7,
+    "phase": "skill.builtins",
+    "spanID": "75300:40",
+    "parentSpanID": "75300:37",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.895Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.config-directories",
+    "spanID": "75300:41",
+    "parentSpanID": "75300:37",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.895Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "75300:42",
+    "parentSpanID": "75300:41",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.896Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "75300:43",
+    "parentSpanID": "75300:42",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.896Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "config.load",
+    "spanID": "75300:44",
+    "parentSpanID": "75300:43",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.906Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 10,
+    "phase": "config.load",
+    "spanID": "75300:44",
+    "parentSpanID": "75300:43",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.906Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "config.verify",
+    "spanID": "75300:45",
+    "parentSpanID": "75300:43",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.906Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "config.verify",
+    "spanID": "75300:45",
+    "parentSpanID": "75300:43",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.907Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 10,
+    "phase": "state.initialize",
+    "spanID": "75300:43",
+    "parentSpanID": "75300:42",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "aggregates": {},
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.907Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 12,
+    "phase": "state.read",
+    "spanID": "75300:42",
+    "parentSpanID": "75300:41",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "disposition": "creator",
+    "initializerID": "75300:43",
+    "creatorRequestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.907Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 12,
+    "phase": "skill.config-directories",
+    "spanID": "75300:41",
+    "parentSpanID": "75300:37",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.907Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.explicit-scan",
+    "spanID": "75300:46",
+    "parentSpanID": "75300:37",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.907Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "skill.explicit-scan",
+    "spanID": "75300:46",
+    "parentSpanID": "75300:37",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.907Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.explicit-scan",
+    "spanID": "75300:47",
+    "parentSpanID": "75300:37",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.909Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 2,
+    "phase": "skill.explicit-scan",
+    "spanID": "75300:47",
+    "parentSpanID": "75300:37",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.911Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.config",
+    "spanID": "75300:48",
+    "parentSpanID": "75300:37",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.911Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "75300:49",
+    "parentSpanID": "75300:48",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.911Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "75300:49",
+    "parentSpanID": "75300:48",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "75300:43",
+    "creatorRequestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.911Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "skill.config",
+    "spanID": "75300:48",
+    "parentSpanID": "75300:37",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.912Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 26,
+    "phase": "state.initialize",
+    "spanID": "75300:37",
+    "parentSpanID": "75300:36",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "skill",
+    "aggregates": {
+      "skill.parse": {
+        "count": 1,
+        "items": 0,
+        "duration": 0.5844999999999345,
+        "maximum": 0.5844999999999345,
+        "rejected": 0
+      }
+    },
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.912Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 26,
+    "phase": "state.read",
+    "spanID": "75300:36",
+    "parentSpanID": "75300:34",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "skill",
+    "disposition": "creator",
+    "initializerID": "75300:37",
+    "creatorRequestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.912Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 26,
+    "phase": "catalog.reentrant",
+    "spanID": "75300:34",
+    "parentSpanID": "75300:33",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.912Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 27,
+    "phase": "inventory.skills",
+    "spanID": "75300:33",
+    "parentSpanID": "75300:31",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.912Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "inventory.projection",
+    "spanID": "75300:50",
+    "parentSpanID": "75300:31",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.921Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 9,
+    "phase": "inventory.projection",
+    "spanID": "75300:50",
+    "parentSpanID": "75300:31",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.921Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 40,
+    "phase": "state.initialize",
+    "spanID": "75300:31",
+    "parentSpanID": "75300:30",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "inventory",
+    "aggregates": {
+      "inventory.provenance": {
+        "count": 1,
+        "items": 0,
+        "duration": 0.34869999999955326,
+        "maximum": 0.34869999999955326,
+        "rejected": 0
+      },
+      "inventory.manifest": {
+        "count": 1,
+        "items": 0,
+        "duration": 5.1042999999999665,
+        "maximum": 5.1042999999999665,
+        "rejected": 0
+      },
+      "risk.scripts": {
+        "count": 1,
+        "items": 1,
+        "duration": 2.0214999999998327,
+        "maximum": 2.0214999999998327,
+        "rejected": 0
+      },
+      "risk.agents": {
+        "count": 1,
+        "items": 1,
+        "duration": 1.646600000000035,
+        "maximum": 1.646600000000035,
+        "rejected": 0
+      },
+      "risk.references": {
+        "count": 1,
+        "items": 1,
+        "duration": 1.4241000000001804,
+        "maximum": 1.4241000000001804,
+        "rejected": 0
+      },
+      "risk.templates": {
+        "count": 1,
+        "items": 1,
+        "duration": 1.2080000000005384,
+        "maximum": 1.2080000000005384,
+        "rejected": 0
+      }
+    },
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.921Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 41,
+    "phase": "state.read",
+    "spanID": "75300:30",
+    "parentSpanID": "75300:19",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "inventory",
+    "disposition": "creator",
+    "initializerID": "75300:31",
+    "creatorRequestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.924Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 48,
+    "phase": "catalog.held",
+    "spanID": "75300:19",
+    "parentSpanID": "75300:16",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.924Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.release",
+    "spanID": "75300:51",
+    "parentSpanID": "75300:16",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.924Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.release",
+    "spanID": "75300:51",
+    "parentSpanID": "75300:16",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.924Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 52,
+    "phase": "catalog.total",
+    "spanID": "75300:16",
+    "parentSpanID": "75300:15",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.924Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 52,
+    "phase": "matrix.inventory",
+    "spanID": "75300:15",
+    "parentSpanID": "75300:3",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.925Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.projection",
+    "spanID": "75300:52",
+    "parentSpanID": "75300:3",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.925Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.package",
+    "spanID": "75300:53",
+    "parentSpanID": "75300:52",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.935Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.skills",
+    "spanID": "75300:54",
+    "parentSpanID": "75300:52",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.935Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "projection.skills",
+    "spanID": "75300:54",
+    "parentSpanID": "75300:52",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.942Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 65,
+    "phase": "catalog.admission",
+    "spanID": "75300:23",
+    "parentSpanID": "75300:22",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.943Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.held",
+    "spanID": "75300:55",
+    "parentSpanID": "75300:22",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.943Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.recovery",
+    "spanID": "75300:56",
+    "parentSpanID": "75300:55",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.944Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "catalog.recovery",
+    "spanID": "75300:56",
+    "parentSpanID": "75300:55",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.944Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.revision",
+    "spanID": "75300:57",
+    "parentSpanID": "75300:55",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.944Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.revision",
+    "spanID": "75300:57",
+    "parentSpanID": "75300:55",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.945Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "75300:58",
+    "parentSpanID": "75300:55",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "inventory",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.945Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "75300:59",
+    "parentSpanID": "75300:58",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "inventory",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.945Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "inventory.config",
+    "spanID": "75300:60",
+    "parentSpanID": "75300:59",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.946Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "inventory.config",
+    "spanID": "75300:60",
+    "parentSpanID": "75300:59",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.946Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "inventory.skills",
+    "spanID": "75300:61",
+    "parentSpanID": "75300:59",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.946Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.reentrant",
+    "spanID": "75300:62",
+    "parentSpanID": "75300:61",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.946Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.revision",
+    "spanID": "75300:63",
+    "parentSpanID": "75300:62",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.947Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "catalog.revision",
+    "spanID": "75300:63",
+    "parentSpanID": "75300:62",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.947Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "75300:64",
+    "parentSpanID": "75300:62",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "skill",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.947Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "75300:65",
+    "parentSpanID": "75300:64",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "skill",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.947Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.reentrant",
+    "spanID": "75300:66",
+    "parentSpanID": "75300:65",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.947Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.revision",
+    "spanID": "75300:67",
+    "parentSpanID": "75300:66",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.948Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "catalog.revision",
+    "spanID": "75300:67",
+    "parentSpanID": "75300:66",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.948Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "catalog.reentrant",
+    "spanID": "75300:66",
+    "parentSpanID": "75300:65",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.948Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.builtins",
+    "spanID": "75300:68",
+    "parentSpanID": "75300:65",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.949Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "skill.builtins",
+    "spanID": "75300:68",
+    "parentSpanID": "75300:65",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.950Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.config-directories",
+    "spanID": "75300:69",
+    "parentSpanID": "75300:65",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.950Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "75300:70",
+    "parentSpanID": "75300:69",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.950Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.initialize",
+    "spanID": "75300:71",
+    "parentSpanID": "75300:70",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.950Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "config.load",
+    "spanID": "75300:72",
+    "parentSpanID": "75300:71",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.963Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 13,
+    "phase": "config.load",
+    "spanID": "75300:72",
+    "parentSpanID": "75300:71",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.963Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "config.verify",
+    "spanID": "75300:73",
+    "parentSpanID": "75300:71",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.963Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "config.verify",
+    "spanID": "75300:73",
+    "parentSpanID": "75300:71",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.963Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 13,
+    "phase": "state.initialize",
+    "spanID": "75300:71",
+    "parentSpanID": "75300:70",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "aggregates": {},
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.963Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 13,
+    "phase": "state.read",
+    "spanID": "75300:70",
+    "parentSpanID": "75300:69",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "disposition": "creator",
+    "initializerID": "75300:71",
+    "creatorRequestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.963Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 13,
+    "phase": "skill.config-directories",
+    "spanID": "75300:69",
+    "parentSpanID": "75300:65",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.963Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.explicit-scan",
+    "spanID": "75300:74",
+    "parentSpanID": "75300:65",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.964Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "skill.explicit-scan",
+    "spanID": "75300:74",
+    "parentSpanID": "75300:65",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.964Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.explicit-scan",
+    "spanID": "75300:75",
+    "parentSpanID": "75300:65",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.965Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "skill.explicit-scan",
+    "spanID": "75300:75",
+    "parentSpanID": "75300:65",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.966Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "skill.config",
+    "spanID": "75300:76",
+    "parentSpanID": "75300:65",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.966Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "75300:77",
+    "parentSpanID": "75300:76",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.967Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "75300:77",
+    "parentSpanID": "75300:76",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "config",
+    "disposition": "cached-settled",
+    "initializerID": "75300:71",
+    "creatorRequestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.967Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 1,
+    "phase": "skill.config",
+    "spanID": "75300:76",
+    "parentSpanID": "75300:65",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.967Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 20,
+    "phase": "state.initialize",
+    "spanID": "75300:65",
+    "parentSpanID": "75300:64",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "skill",
+    "aggregates": {
+      "skill.parse": {
+        "count": 1,
+        "items": 0,
+        "duration": 0.37150000000019645,
+        "maximum": 0.37150000000019645,
+        "rejected": 0
+      }
+    },
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.967Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 20,
+    "phase": "state.read",
+    "spanID": "75300:64",
+    "parentSpanID": "75300:62",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "skill",
+    "disposition": "creator",
+    "initializerID": "75300:65",
+    "creatorRequestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.967Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 21,
+    "phase": "catalog.reentrant",
+    "spanID": "75300:62",
+    "parentSpanID": "75300:61",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.967Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 21,
+    "phase": "inventory.skills",
+    "spanID": "75300:61",
+    "parentSpanID": "75300:59",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.967Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "inventory.projection",
+    "spanID": "75300:78",
+    "parentSpanID": "75300:59",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.975Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 8,
+    "phase": "inventory.projection",
+    "spanID": "75300:78",
+    "parentSpanID": "75300:59",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.975Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 30,
+    "phase": "state.initialize",
+    "spanID": "75300:59",
+    "parentSpanID": "75300:58",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "inventory",
+    "aggregates": {
+      "inventory.provenance": {
+        "count": 1,
+        "items": 0,
+        "duration": 0.20460000000002765,
+        "maximum": 0.20460000000002765,
+        "rejected": 0
+      },
+      "inventory.manifest": {
+        "count": 1,
+        "items": 0,
+        "duration": 5.375600000000304,
+        "maximum": 5.375600000000304,
+        "rejected": 0
+      },
+      "risk.scripts": {
+        "count": 1,
+        "items": 1,
+        "duration": 1.574999999999818,
+        "maximum": 1.574999999999818,
+        "rejected": 0
+      },
+      "risk.agents": {
+        "count": 1,
+        "items": 1,
+        "duration": 1.2626000000000204,
+        "maximum": 1.2626000000000204,
+        "rejected": 0
+      },
+      "risk.references": {
+        "count": 1,
+        "items": 1,
+        "duration": 1.1219999999993888,
+        "maximum": 1.1219999999993888,
+        "rejected": 0
+      },
+      "risk.templates": {
+        "count": 1,
+        "items": 1,
+        "duration": 0.9555000000000291,
+        "maximum": 0.9555000000000291,
+        "rejected": 0
+      }
+    },
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.975Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 30,
+    "phase": "state.read",
+    "spanID": "75300:58",
+    "parentSpanID": "75300:55",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "inventory",
+    "disposition": "creator",
+    "initializerID": "75300:59",
+    "creatorRequestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.976Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 33,
+    "phase": "catalog.held",
+    "spanID": "75300:55",
+    "parentSpanID": "75300:22",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.976Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.release",
+    "spanID": "75300:79",
+    "parentSpanID": "75300:22",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.976Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.release",
+    "spanID": "75300:79",
+    "parentSpanID": "75300:22",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.976Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 99,
+    "phase": "catalog.total",
+    "spanID": "75300:22",
+    "parentSpanID": "75300:21",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.976Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 99,
+    "phase": "matrix.inventory",
+    "spanID": "75300:21",
+    "parentSpanID": "75300:1",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.976Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.projection",
+    "spanID": "75300:80",
+    "parentSpanID": "75300:1",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.976Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.package",
+    "spanID": "75300:81",
+    "parentSpanID": "75300:80",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.976Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.skills",
+    "spanID": "75300:82",
+    "parentSpanID": "75300:80",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:50.976Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "projection.skills",
+    "spanID": "75300:82",
+    "parentSpanID": "75300:80",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.037Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 160,
+    "phase": "catalog.admission",
+    "spanID": "75300:26",
+    "parentSpanID": "75300:25",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.037Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.held",
+    "spanID": "75300:83",
+    "parentSpanID": "75300:25",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.037Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.recovery",
+    "spanID": "75300:84",
+    "parentSpanID": "75300:83",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.039Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 2,
+    "phase": "catalog.recovery",
+    "spanID": "75300:84",
+    "parentSpanID": "75300:83",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.039Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.revision",
+    "spanID": "75300:85",
+    "parentSpanID": "75300:83",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.046Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 7,
+    "phase": "catalog.revision",
+    "spanID": "75300:85",
+    "parentSpanID": "75300:83",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.047Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "state.read",
+    "spanID": "75300:86",
+    "parentSpanID": "75300:83",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "inventory",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.047Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "state.read",
+    "spanID": "75300:86",
+    "parentSpanID": "75300:83",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "stateLabel": "inventory",
+    "disposition": "cached-settled",
+    "initializerID": "75300:59",
+    "creatorRequestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.048Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 11,
+    "phase": "catalog.held",
+    "spanID": "75300:83",
+    "parentSpanID": "75300:25",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.048Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "catalog.release",
+    "spanID": "75300:87",
+    "parentSpanID": "75300:25",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.048Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "catalog.release",
+    "spanID": "75300:87",
+    "parentSpanID": "75300:25",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.048Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 171,
+    "phase": "catalog.total",
+    "spanID": "75300:25",
+    "parentSpanID": "75300:24",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.048Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 171,
+    "phase": "matrix.inventory",
+    "spanID": "75300:24",
+    "parentSpanID": "75300:2",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.048Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.projection",
+    "spanID": "75300:88",
+    "parentSpanID": "75300:2",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.048Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.package",
+    "spanID": "75300:89",
+    "parentSpanID": "75300:88",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.048Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.skills",
+    "spanID": "75300:90",
+    "parentSpanID": "75300:88",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.049Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "projection.skills",
+    "spanID": "75300:90",
+    "parentSpanID": "75300:88",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.064Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 139,
+    "phase": "projection.package",
+    "spanID": "75300:53",
+    "parentSpanID": "75300:52",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.065Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.capabilities",
+    "spanID": "75300:91",
+    "parentSpanID": "75300:52",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.080Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 15,
+    "phase": "projection.capabilities",
+    "spanID": "75300:91",
+    "parentSpanID": "75300:52",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.080Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.selectors",
+    "spanID": "75300:92",
+    "parentSpanID": "75300:52",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.087Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 7,
+    "phase": "projection.selectors",
+    "spanID": "75300:92",
+    "parentSpanID": "75300:52",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.088Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 164,
+    "phase": "matrix.projection",
+    "spanID": "75300:52",
+    "parentSpanID": "75300:3",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.088Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.registry",
+    "spanID": "75300:93",
+    "parentSpanID": "75300:3",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.091Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 3,
+    "phase": "matrix.registry",
+    "spanID": "75300:93",
+    "parentSpanID": "75300:3",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.091Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.assembly",
+    "spanID": "75300:94",
+    "parentSpanID": "75300:3",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.099Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 8,
+    "phase": "matrix.assembly",
+    "spanID": "75300:94",
+    "parentSpanID": "75300:3",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.100Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 438,
+    "phase": "request",
+    "spanID": "75300:3",
+    "parentSpanID": "http:e5d44fff-2d88-400c-9b73-ec851c543a88",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "service": "server",
+    "requestID": "e5d44fff-2d88-400c-9b73-ec851c543a88",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 438,
+    "time": "2026-10-05T12:39:51.100Z"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.130Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 154,
+    "phase": "projection.package",
+    "spanID": "75300:81",
+    "parentSpanID": "75300:80",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.130Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.capabilities",
+    "spanID": "75300:95",
+    "parentSpanID": "75300:80",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.141Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 11,
+    "phase": "projection.capabilities",
+    "spanID": "75300:95",
+    "parentSpanID": "75300:80",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.142Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.selectors",
+    "spanID": "75300:96",
+    "parentSpanID": "75300:80",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.147Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 5,
+    "phase": "projection.selectors",
+    "spanID": "75300:96",
+    "parentSpanID": "75300:80",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.148Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 172,
+    "phase": "matrix.projection",
+    "spanID": "75300:80",
+    "parentSpanID": "75300:1",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.148Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.registry",
+    "spanID": "75300:97",
+    "parentSpanID": "75300:1",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.148Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "matrix.registry",
+    "spanID": "75300:97",
+    "parentSpanID": "75300:1",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.148Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.assembly",
+    "spanID": "75300:98",
+    "parentSpanID": "75300:1",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.151Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 3,
+    "phase": "matrix.assembly",
+    "spanID": "75300:98",
+    "parentSpanID": "75300:1",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.152Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 494,
+    "phase": "request",
+    "spanID": "75300:1",
+    "parentSpanID": "http:8d8605c0-77aa-42a4-a301-7314c4652926",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "service": "server",
+    "requestID": "8d8605c0-77aa-42a4-a301-7314c4652926",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 494,
+    "time": "2026-10-05T12:39:51.152Z"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.197Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 149,
+    "phase": "projection.package",
+    "spanID": "75300:89",
+    "parentSpanID": "75300:88",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.197Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.capabilities",
+    "spanID": "75300:99",
+    "parentSpanID": "75300:88",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.205Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 8,
+    "phase": "projection.capabilities",
+    "spanID": "75300:99",
+    "parentSpanID": "75300:88",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.205Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "projection.selectors",
+    "spanID": "75300:100",
+    "parentSpanID": "75300:88",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.211Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 6,
+    "phase": "projection.selectors",
+    "spanID": "75300:100",
+    "parentSpanID": "75300:88",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.212Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 164,
+    "phase": "matrix.projection",
+    "spanID": "75300:88",
+    "parentSpanID": "75300:2",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.212Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.registry",
+    "spanID": "75300:101",
+    "parentSpanID": "75300:2",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.212Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 0,
+    "phase": "matrix.registry",
+    "spanID": "75300:101",
+    "parentSpanID": "75300:2",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.212Z",
+    "service": "skill-read-diagnostics",
+    "status": "started",
+    "phase": "matrix.assembly",
+    "spanID": "75300:102",
+    "parentSpanID": "75300:2",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.216Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 4,
+    "phase": "matrix.assembly",
+    "spanID": "75300:102",
+    "parentSpanID": "75300:2",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-05T12:39:51.216Z",
+    "service": "skill-read-diagnostics",
+    "status": "completed",
+    "duration": 554,
+    "phase": "request",
+    "spanID": "75300:2",
+    "parentSpanID": "http:26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+    "processOccurrenceID": "0809d8c7-bcab-4cc7-b499-068d83783964",
+    "http": {
+      "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+      "requestSettled": false
+    },
+    "origin": "http",
+    "outcome": "fulfilled",
+    "logDomain": "non-session",
+    "message": "phase"
+  },
+  {
+    "service": "server",
+    "requestID": "26f260bb-226a-4bfc-9b17-6b80679e4f6f",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 554,
+    "time": "2026-10-05T12:39:51.216Z"
+  },
+  {
+    "service": "server",
+    "requestID": "c3e26597-32a9-439e-ae8a-bc7f2d89ceb0",
+    "method": "POST",
+    "path": "/shutdown",
+    "status": "started",
+    "time": "2026-10-05T12:39:51.217Z"
+  },
+  {
+    "service": "server",
+    "requestID": "c3e26597-32a9-439e-ae8a-bc7f2d89ceb0",
+    "method": "POST",
+    "path": "/shutdown",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2,
+    "time": "2026-10-05T12:39:51.219Z"
+  }
+]
