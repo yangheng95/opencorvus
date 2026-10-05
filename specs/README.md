@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Release checker operational-source boundary](records/2026-10/2026-10-05-release-topology-source-boundary.md)
+
 - [Composer upload lifetime across Project activation](records/2026-10/2026-10-05-composer-upload-lifetime.md)
 - [Composer upload lifetime evidence](artifacts/2026-10-05-composer-upload-lifetime/README.md)
 

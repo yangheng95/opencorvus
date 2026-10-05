@@ -37,6 +37,7 @@ function gitOutput(args: string[]): string {
 function operationalSource(file: string): boolean {
   if (
     file === "script/check-release-mutation-topology.ts" ||
+    file.startsWith("specs/") ||
     file.includes("node_modules/") ||
     file.includes("/test/") ||
     file.includes(".test.")

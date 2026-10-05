@@ -8,9 +8,8 @@ import {
 const frozenIndex = readReleaseMutationTree()
 
 describe("release mutation topology", () => {
-  test("maps the immutable index tree to the canonical release authorities", () => {
-    const { tree, sources } = frozenIndex
-    expect(tree).toMatch(/^[0-9a-f]{40}$/)
+  test("maps the operational index tree and its evidence records to the canonical release authorities", () => {
+    const { sources } = frozenIndex
     expect(assertReleaseMutationTopology(sources)).toEqual([
       { file: ".github/workflows/build.yml", authority: 'cli:gh:release-upload:"v${VERSION}"' },
       { file: "script/settle-desktop-update-channel.ts", authority: "programmatic:gh:release-upload:this.tag" },

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Release checker operational-source boundary](2026-10-05-release-topology-source-boundary.md)
+
 - [Composer upload lifetime across Project activation](2026-10-05-composer-upload-lifetime.md)
 
 - [Dependency remediation: exact alerts and bounded upgrades](2026-10-05-dependency-remediation.md)
