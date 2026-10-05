@@ -1,0 +1,26 @@
+import { DEFAULT_SETTINGS, applySettings, settingsStore, setSettingsStore } from "../packages/overlay/src/store/settings"
+import { __setHostTransportForTest } from "../packages/overlay/src/services/host-transport-runtime"
+import type { HostTransport } from "../packages/overlay/src/services/host-transport"
+import { configure, getServerUrl } from "../packages/overlay/src/services/api-state"
+import { boardStore, setBoardStore } from "../packages/overlay/src/store/board"
+import { loadMeta } from "../packages/overlay/src/services/meta"
+
+let settle!: () => void
+const pending = new Promise<void>((resolve) => { settle = resolve })
+const starts: {path:string;server:string}[] = []
+__setHostTransportForTest({kind:"browser",async request(input) {
+  const server = getServerUrl()
+  starts.push({path:input.path,server})
+  await pending
+  return {status:200,ok:true,headers:{},body: input.path === "path" ? {directory:"C:/owned-dummy/result-from-a"} : {branch:"branch-from-a"}}
+},async native(){throw new Error("Native forbidden in snapshot")},openStream(){throw new Error("Stream forbidden in snapshot")}} as HostTransport)
+applySettings({...DEFAULT_SETTINGS,serverUrl:"http://backend-a.invalid",directory:"C:/owned-dummy/same-project",password:""})
+setBoardStore({selectedSource:null,board:null,path:null})
+configure({serverUrl:settingsStore.serverUrl,directory:settingsStore.directory,password:""})
+const reading=loadMeta()
+setSettingsStore("serverUrl","http://backend-b.invalid")
+configure({serverUrl:settingsStore.serverUrl})
+settle()
+await reading
+console.log(JSON.stringify({boundary:"pure production loadMeta with controlled in-memory responses; no HTTP/browser/model/filesystem project access",starts,currentServer:getServerUrl(),directoryEpoch:settingsStore.directoryEpoch,projectDirectory:settingsStore.directory,committedPath:boardStore.path,committedVcs:boardStore.vcs},null,2))
+__setHostTransportForTest(undefined)

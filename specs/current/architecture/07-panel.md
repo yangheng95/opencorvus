@@ -312,6 +312,19 @@ applied connection; activation failure is labelled as a saved fact that could
 not be applied. Closing the editor can retire its feedback and optional refresh,
 but cannot suppress the transaction's confirmed connection publication.
 
+Connection address admission belongs to the shared operational base parser,
+not HTML input validity or an online probe. HTTP(S) bases retain their hostname,
+IPv6 and optional encoded path prefix; base query, fragment and embedded
+credentials yield the explicit local ServerBaseUrlError contract. An offline
+valid base is still a saveable intent. Structurally readable historical invalid
+addresses remain visible after hydration so the same Network editor can correct
+them, while request/resource construction reports the local error instead of
+silently selecting a different authority. The existing failure callback restores
+confirmed preference state after rejected admission. Explicit empty usernames
+remain empty across cold load and subsequent saves; password/header semantics
+stay with the existing authentication fields. These local errors do not invent
+a server response status or request ID.
+
 ## Current Surface Ownership
 
 | Surface          | Source                                                                                   | Responsibility                                                                                                                                                                                                                                                                                                                                                                  |

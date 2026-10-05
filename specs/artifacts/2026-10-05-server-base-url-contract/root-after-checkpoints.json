@@ -1,0 +1,102 @@
+[
+  {
+    "step": "initial-new-bundle-with-legacy-seed",
+    "utc": "2026-10-05T11:59:02.758Z",
+    "tab": "15",
+    "observed": "Offline"
+  },
+  {
+    "step": "legacy-setup",
+    "utc": "2026-10-05T11:59:10.074Z"
+  },
+  {
+    "step": "correction-input-empty-username",
+    "utc": "2026-10-05T11:59:24.727Z",
+    "serverUrl": "http://127.0.0.1:17945",
+    "username": "",
+    "password": ""
+  },
+  {
+    "step": "correction-save",
+    "utc": "2026-10-05T11:59:29.758Z"
+  },
+  {
+    "step": "reload-corrected",
+    "utc": "2026-10-05T11:59:37.567Z"
+  },
+  {
+    "step": "corrected-reload-values",
+    "utc": "2026-10-05T12:00:00.053Z",
+    "serverUrl": "http://127.0.0.1:17945",
+    "username": "",
+    "password": "",
+    "previousMainAX": "Online Port 17945"
+  },
+  {
+    "step": "new-invalid-input",
+    "utc": "2026-10-05T12:00:05.349Z",
+    "serverUrl": "not a url"
+  },
+  {
+    "step": "new-invalid-save",
+    "utc": "2026-10-05T12:00:10.917Z"
+  },
+  {
+    "step": "reload-after-invalid-rejection",
+    "utc": "2026-10-05T12:00:18.934Z"
+  },
+  {
+    "step": "rejected-input-reload-values",
+    "utc": "2026-10-05T12:00:58.806Z",
+    "serverUrl": "http://127.0.0.1:17945",
+    "username": "",
+    "observed": "New invalid draft was rejected; cold reload retained A and Online."
+  },
+  {
+    "step": "offline-valid-input",
+    "utc": "2026-10-05T12:01:06.193Z",
+    "serverUrl": "http://127.0.0.1:17946",
+    "precondition": "root-offline-port-precondition.json"
+  },
+  {
+    "step": "offline-valid-save",
+    "utc": "2026-10-05T12:01:11.229Z"
+  },
+  {
+    "step": "reload-offline-valid",
+    "utc": "2026-10-05T12:01:28.261Z"
+  },
+  {
+    "step": "offline-valid-reload-values",
+    "utc": "2026-10-05T12:01:52.705Z",
+    "serverUrl": "http://127.0.0.1:17946",
+    "username": "",
+    "observed": "Offline banner, saved address remains visible after actual reload"
+  },
+  {
+    "step": "restore-original-input",
+    "utc": "2026-10-05T12:01:59.595Z",
+    "serverUrl": "http://127.0.0.1:17945",
+    "username": "opencorvus",
+    "password": ""
+  },
+  {
+    "step": "restore-original-save",
+    "utc": "2026-10-05T12:02:05.813Z"
+  },
+  {
+    "step": "restore-final-reload",
+    "utc": "2026-10-05T12:02:11.426Z"
+  },
+  {
+    "step": "final-restoration-confirmed",
+    "utc": "2026-10-05T12:02:33.099Z",
+    "serverUrl": "http://127.0.0.1:17945",
+    "username": "opencorvus",
+    "password": "",
+    "proxyEnabled": false,
+    "offerGitInit": false,
+    "previousMainAX": "Online Port 17945",
+    "pageClosed": true
+  }
+]

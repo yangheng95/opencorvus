@@ -1,0 +1,12 @@
+{
+  "command": "bun run build",
+  "cwd": "packages/overlay",
+  "session": 17451,
+  "exitCode": 0,
+  "viteSeconds": 48.04,
+  "javascript": "main-Dd5jeSV0.js",
+  "rendererPublicSurface": "passed (1 assignment, 1 declared global)",
+  "log": "root-frontend-build.log",
+  "qualification": "Current frontend compilation and public runtime surface only; actual browser interaction/manual visual review is qualified separately.",
+  "native": "Current Rust settings filtered test binary qualified separately; no newly built Tauri application window is claimed."
+}

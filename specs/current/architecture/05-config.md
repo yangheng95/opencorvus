@@ -73,8 +73,10 @@ EngineInteraction 持久化；进程恢复复用同一 Request 创建时间与�
 - **Browser host**：在 localStorage 的唯一键 `oc_settings` 中存放完整文档。
 - **Tauri host**：在应用配置目录的 `overlay.jsonc` 中存放同一文档，写入使用同目录临时文件原子替换。
 - **加载边界**：Browser 直接使用 TypeScript 严格 parser；Tauri 先用 Rust 的同构严格 schema 拒绝未知或无效字段，返回 Overlay 后再经过 TypeScript parser。文档不存在时，由 TypeScript `DEFAULT_SETTINGS` 唯一提供默认值。
+- **地址读取与使用**：完整偏好文档的结构读取和 server base 的运行资格分开。历史文档中的非空非法地址仍原样可读并完成 settings hydration，供 Network 修正；不会悄悄覆盖为默认服务器。保存与 API/资源目标构造共享唯一运行态 URL parser，先解析 base 再拼接相对路径，保留其 authority、HTTP(S) 路径前缀、IPv6 与编码路径。query、fragment（含空分隔符）和嵌入 user-info 都被明确拒绝；认证仍由独立 username/password 字段拥有。离线但合法的地址允许保存，不以健康探测作为准入条件。ServerBaseUrlError 的五个原因是 malformed、unsupported_protocol、query、fragment、user_info；不携带原始 URL 或包含它的 cause。原生 String IPC 使用同名原因与安全消息。保存值及历史 projectComposerIntents 的 server 身份不被运行态 URL 序列化重写。
 - **保存事务**：所有客户端偏好写入复用唯一串行 `saveSettings` 队列，轮到当前动作时才获取完整文档快照。原生持久化确认后先更新 `confirmedPersistedSettings`，再执行调用者显式提供的同步 `onConfirmed`，最后释放下一次写入；不会默认应用所有 overrides。视图关闭不能取消已持久事实的发布。持久化失败保留既有 `onFailure` 契约；确认回调失败返回带 `persisted=true` 和原始 cause 的 `SettingsActivationError`，表示已保存但客户端激活失败，不回滚或伪称保存失败，错误对象不携带完整偏好文档。后续合法写入仍按原队列继续，此边界不涉及 Task/Mission/Session 执行轮次。
 - **边界**：不同步到 server Config，也不是 LLM prompt 或 agent capability 的配置源。它只拥有当前客户端的连接、呈现、工作区恢复和桌面集成。
+- **拒绝与修正**：结构或地址保存校验都进入既有 saved/failed outcome，使用同一 confirmed snapshot 调用 onFailure 并释放队列；不能跳过调用者的 provisional-state reconciliation。已有非法活动地址在使用时返回明确本地错误，修正后沿原保存事务恢复。username 必须为 string，但显式空字符串可加载、确认和保存，不被冷加载替换为默认用户名；空 password 仍按原契约生成未认证请求。
 
 **字段**：
 

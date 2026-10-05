@@ -1,4 +1,4 @@
-import { routeRequiresProjectDirectory } from "@opencorvus-ai/transport-protocol"
+import { joinServerBaseUrl, routeRequiresProjectDirectory } from "@opencorvus-ai/transport-protocol"
 import { DEFAULT_SERVER } from "./default-server"
 
 let serverUrl = DEFAULT_SERVER
@@ -128,10 +128,9 @@ export function requestTarget(
 }
 
 export function apiUrl(path: string): string {
-  const base = serverUrl.replace(/\/+$/, "")
   const next = path.replace(/^\/+/, "")
   const { pathOnly, query } = splitPathQuery(next)
-  const url = new URL(`${base}/${pathOnly}`)
+  const url = joinServerBaseUrl(serverUrl, pathOnly)
   const nextQuery = queryWithDirectory(pathOnly, query, "GET")
   if (nextQuery) {
     for (const [key, value] of Object.entries(nextQuery)) {

@@ -1331,6 +1331,49 @@ const OVERLAY_PERSISTED_SETTINGS_KEYS = [
   "projectComposerIntents",
 ] as const
 
+const SERVER_BASE_URL_MESSAGES = {
+  malformed: "Server URL is not a valid absolute URL.",
+  unsupported_protocol: "Server URL must use HTTP or HTTPS.",
+  query: "Server URL must not include a query.",
+  fragment: "Server URL must not include a fragment.",
+  user_info: "Use the username and password fields instead of credentials in the server URL.",
+} as const
+
+export class ServerBaseUrlError extends Error {
+  override readonly name = "ServerBaseUrlError"
+
+  constructor(readonly reason: keyof typeof SERVER_BASE_URL_MESSAGES) {
+    super(SERVER_BASE_URL_MESSAGES[reason])
+  }
+}
+
+/** Operational admission; persisted documents retain their original readable identity. */
+export function parseServerBaseUrl(value: string): URL {
+  let url: URL
+  try {
+    url = new URL(value.trim())
+  } catch {
+    throw new ServerBaseUrlError("malformed")
+  }
+  if (url.protocol !== "http:" && url.protocol !== "https:") throw new ServerBaseUrlError("unsupported_protocol")
+  // Empty delimiters are still URL components. Clearing each parsed component
+  // detects their presence without parsing the operator's input a second way.
+  const components = new URL(url)
+  components.search = ""
+  if (components.href !== url.href) throw new ServerBaseUrlError("query")
+  components.hash = ""
+  if (components.href !== url.href) throw new ServerBaseUrlError("fragment")
+  if (url.username || url.password) throw new ServerBaseUrlError("user_info")
+  return url
+}
+
+/** Interpret a server-relative target beneath the parsed base's own authority. */
+export function joinServerBaseUrl(value: string, target: string): URL {
+  const base = parseServerBaseUrl(value)
+  base.pathname = `${base.pathname.replace(/\/+$/, "")}/`
+  return new URL(`./${target.replace(/^\/+/, "")}`, base)
+}
+
 const MAXIMUM_UNSIGNED_32_BIT_INTEGER = 0xffff_ffff
 
 function isOptionalPositiveUnsigned32BitInteger(value: unknown): boolean {
@@ -1448,7 +1491,13 @@ export function isNativeCommand(value: unknown): value is NativeCommand {
     case "clipboard.writeText":
       return typeof obj["text"] === "string" && obj["text"].length > 0
     case "settings.save":
-      return isOverlayPersistedSettings(obj["payload"])
+      if (!isOverlayPersistedSettings(obj["payload"])) return false
+      try {
+        parseServerBaseUrl(obj["payload"].serverUrl)
+        return true
+      } catch {
+        return false
+      }
     case "server.info":
     case "server.restart":
     case "devtools.toggle":

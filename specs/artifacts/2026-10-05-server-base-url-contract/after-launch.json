@@ -1,0 +1,17 @@
+{
+  "time": "2026-10-05T11:57:44.0498403Z",
+  "root": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/server-base-url-after-01",
+  "occurrence": "server-base-url-after-68ae77a6-9b6f-4c08-b105-65ee3154da0e",
+  "startupReceipt": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/server-base-url-after-01/startup.json",
+  "launcher": {
+    "ProcessId": 45808,
+    "ParentProcessId": 8808,
+    "CreationDate": "2026-10-05T19:57:43.725249+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17945 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/server-base-url-after-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/server-base-url-after-01/startup.json --startup-occurrence server-base-url-after-68ae77a6-9b6f-4c08-b105-65ee3154da0e"
+  },
+  "expectedAssets": [
+    "main-Dd5jeSV0.js",
+    "main-Yy88IPFU.css"
+  ]
+}

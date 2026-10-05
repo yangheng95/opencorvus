@@ -3,6 +3,7 @@ import {
   parsePersistedOverlaySettings,
   type PersistedOverlaySettings,
 } from "./persisted-overlay-settings"
+import { parseServerBaseUrl } from "@opencorvus-ai/transport-protocol"
 
 export const BROWSER_OVERLAY_SETTINGS_KEY = OVERLAY_SETTINGS_STORAGE_KEY
 
@@ -20,6 +21,7 @@ export function loadBrowserOverlaySettings(): PersistedOverlaySettings | null {
 
 export function saveBrowserOverlaySettings(input: PersistedOverlaySettings): boolean {
   const settings = parsePersistedOverlaySettings(input)
+  parseServerBaseUrl(settings.serverUrl)
   requireStorage().setItem(BROWSER_OVERLAY_SETTINGS_KEY, JSON.stringify(settings))
   return true
 }

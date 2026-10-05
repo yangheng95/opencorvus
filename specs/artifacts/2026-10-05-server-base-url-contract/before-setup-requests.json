@@ -1,0 +1,42 @@
+[
+  {
+    "time": "2026-10-05T11:42:28.478Z",
+    "service": "server",
+    "requestID": "e80a42c5-d17c-45e3-a586-4e34f7a935f3",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:42:28.479Z",
+    "service": "server",
+    "requestID": "e80a42c5-d17c-45e3-a586-4e34f7a935f3",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1
+  },
+  {
+    "time": "2026-10-05T11:42:28.533Z",
+    "service": "server",
+    "requestID": "94bf015c-e400-41ec-9df9-ba666e46b9bf",
+    "method": "GET",
+    "path": "/ui/",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:42:28.535Z",
+    "service": "server",
+    "requestID": "94bf015c-e400-41ec-9df9-ba666e46b9bf",
+    "method": "GET",
+    "path": "/ui/",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  }
+]

@@ -1,0 +1,14 @@
+   Compiling tauri v2.11.1
+   Compiling tauri-macros v2.6.1
+   Compiling tauri-plugin-fs v2.4.5
+   Compiling tauri-plugin-deep-link v2.4.9
+   Compiling tauri-plugin-notification v2.3.3
+   Compiling tauri-plugin-clipboard-manager v2.3.2
+   Compiling tauri-plugin-updater v2.12.0
+   Compiling tauri-plugin-opener v2.5.3
+   Compiling tauri-plugin-dialog v2.6.0
+   Compiling opencorvus-overlay v0.1.23 (D:\myhexin-local\opencorvus\packages\overlay\src-tauri)
+   Compiling tauri-plugin-single-instance v2.4.3
+    Finished `release` profile [optimized] target(s) in 31.53s
+     Running unittests src\main.rs (target\release\deps\opencorvus_overlay-1657bc366b7da5c7.exe)
+error: test failed, to rerun pass `--bin opencorvus-overlay`

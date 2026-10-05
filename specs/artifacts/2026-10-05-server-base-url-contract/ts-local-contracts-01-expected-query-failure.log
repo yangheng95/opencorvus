@@ -1,0 +1,77 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\project-composer-preferences.test.ts:
+(pass) round-trips each project's explicit intent through the shared persisted settings contract [2.44ms]
+(pass) serializes rapid choices as one current preference per project [0.64ms]
+(pass) restores the confirmed project preference when persistence reports an error [0.71ms]
+
+packages\overlay\test\server-base-url.test.ts:
+16 | test("preserves the selected base authority, prefix and API-owned directory query", () => {
+17 |   configure({serverUrl:"https://EXAMPLE.invalid:443/a%2Fb/",directory:"C:/owned project"})
+18 |   expect(apiUrl("global/health")).toBe("https://example.invalid/a%2Fb/global/health")
+19 |   expect(apiUrl("file/content?path=hello.txt")).toBe("https://example.invalid/a%2Fb/file/content?path=hello.txt&directory=C%3A%2Fowned+project")
+20 |   expect(apiUrl("file/content?path=hello.txt&directory=C%3A%2Fexplicit")).toBe("https://example.invalid/a%2Fb/file/content?path=hello.txt&directory=C%3A%2Fexplicit")
+21 |   expect(apiUrl("http://other.invalid/path")).toBe("https://example.invalid/a%2Fb/http://other.invalid/path")
+                                                   ^
+error: expect(received).toBe(expected)
+
+Expected: "https://example.invalid/a%2Fb/http://other.invalid/path"
+Received: "https://example.invalid/a%2Fb/http://other.invalid/path?directory=C%3A%2Fowned+project"
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\server-base-url.test.ts:21:47)
+(fail) preserves the selected base authority, prefix and API-owned directory query [1.29ms]
+(pass) retains the old applied invalid identity and returns a typed local projection error [0.28ms]
+(pass) projects host resources with their own query and preserves independent absolute and bare resources [0.08ms]
+(pass) Browser storage reads an old invalid base and persists a valid correction with the original identity/history [0.44ms]
+
+packages\overlay\test\settings-save-transaction.test.ts:
+(pass) confirmed connection publication precedes a queued preference snapshot and survives cold read [1.03ms]
+(pass) native failure reports the confirmed A document and a later explicit retry commits B [0.43ms]
+(pass) queued B and C transactions merge the latest unrelated workspace and preference fields [0.46ms]
+(pass) activation failure exposes its durable fact and the queue admits the next explicit transaction [0.46ms]
+(pass) ordinary overrides retain the existing persistence-only action contract [0.25ms]
+(pass) operational admission failure reconciles provisional state before the queued correction commits [0.39ms]
+(pass) structural save admission shares the existing confirmed failure callback and retry contract [0.29ms]
+
+packages\transport-protocol\test\server-base-url.test.ts:
+(pass) operational server base contract > projects the shared authored http-loopback case [0.12ms]
+(pass) operational server base contract > projects the shared authored https-prefix case [0.02ms]
+(pass) operational server base contract > projects the shared authored ipv6-prefix case
+(pass) operational server base contract > projects the shared authored encoded-prefix case [0.02ms]
+(pass) operational server base contract > projects the shared authored outer-whitespace case [0.01ms]
+(pass) operational server base contract > projects the shared authored encoded-delimiters case
+(pass) operational server base contract > projects the shared authored offline-valid case
+(pass) operational server base contract > projects the shared authored empty case [0.10ms]
+(pass) operational server base contract > projects the shared authored blank case [0.03ms]
+(pass) operational server base contract > projects the shared authored malformed-text case [0.02ms]
+(pass) operational server base contract > projects the shared authored incomplete-authority case [0.02ms]
+(pass) operational server base contract > projects the shared authored malformed-ipv6 case [0.02ms]
+(pass) operational server base contract > projects the shared authored relative-authority case [0.01ms]
+(pass) operational server base contract > projects the shared authored unsupported-ftp case [0.02ms]
+(pass) operational server base contract > projects the shared authored unsupported-opaque case [0.02ms]
+(pass) operational server base contract > projects the shared authored query case [0.03ms]
+(pass) operational server base contract > projects the shared authored empty-query case [0.02ms]
+(pass) operational server base contract > projects the shared authored fragment case [0.02ms]
+(pass) operational server base contract > projects the shared authored empty-fragment case [0.02ms]
+(pass) operational server base contract > projects the shared authored fragment-query-text case [0.02ms]
+(pass) operational server base contract > projects the shared authored user-info case [0.03ms]
+(pass) operational server base contract > projects the shared authored username-only case [0.02ms]
+(pass) operational server base contract > projects the shared authored query-before-fragment-userinfo case [0.02ms]
+(pass) operational server base contract > projects the shared authored fragment-before-userinfo case [0.02ms]
+(pass) operational server base contract > projects the shared authored protocol-before-query case [0.01ms]
+(pass) operational server base contract > joins global/health under the base authority [0.08ms]
+(pass) operational server base contract > joins /task/owned?directory=C%3A%2Fowned under the base authority [0.02ms]
+(pass) operational server base contract > joins http://other.invalid/path?x=1 under the base authority [0.02ms]
+(pass) operational server base contract > joins //other.invalid/path under the base authority [0.01ms]
+(pass) operational server base contract > joins \\other.invalid/path under the base authority [0.01ms]
+(pass) operational server base contract > joins a%2Fb?value=%23#part under the base authority [0.01ms]
+(pass) operational server base contract > preserves encoded and IPv6 base paths when joining [0.05ms]
+(pass) operational server base contract > distinguishes readable saved documents from operational save commands [0.17ms]
+
+1 tests failed:
+(fail) preserves the selected base authority, prefix and API-owned directory query [1.29ms]
+
+ 46 pass
+ 1 fail
+ 143 expect() calls
+Ran 47 tests across 4 files. [1497.00ms]

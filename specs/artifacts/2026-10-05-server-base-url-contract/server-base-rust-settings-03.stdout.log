@@ -1,0 +1,18 @@
+
+running 13 tests
+test tests::overlay_settings_atomic_write_failure_preserves_confirmed_file ... ok
+test tests::overlay_settings_filename_is_jsonc ... ok
+test tests::overlay_settings_legacy_address_is_readable_and_correctable_through_writer ... ok
+test tests::overlay_settings_operational_base_cases_use_real_writer ... ok
+test tests::overlay_settings_parser_accepts_complete_jsonc_settings ... ok
+test tests::overlay_settings_parser_reports_required_type_and_value_errors ... ok
+test tests::overlay_settings_parser_reports_unknown_field_errors ... ok
+test tests::overlay_settings_project_composer_intents_invalid_mode_has_explicit_error ... ok
+test tests::overlay_settings_project_composer_intents_round_trip ... ok
+test tests::overlay_settings_round_trips_named_color_palettes ... ok
+test tests::overlay_settings_saved_text_round_trips_through_jsonc_parser ... ok
+test tests::overlay_settings_structurally_invalid_legacy_file_reports_current_error ... ok
+test tests::overlay_settings_writer_round_trips_empty_authentication_fields ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 52 filtered out; finished in 0.23s
+

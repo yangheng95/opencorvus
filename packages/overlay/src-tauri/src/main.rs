@@ -1688,7 +1688,6 @@ fn validate_overlay_settings(settings: OverlaySettings) -> Result<OverlaySetting
     }
     for (name, value) in [
         ("serverUrl", settings.server_url.as_str()),
-        ("username", settings.username.as_str()),
         ("theme", settings.theme.as_str()),
         ("locale", settings.locale.as_str()),
     ] {
@@ -1768,6 +1767,34 @@ fn format_overlay_settings_text(settings: &OverlaySettings) -> Result<String, St
     serde_json::to_string_pretty(settings).map_err(|err| err.to_string())
 }
 
+fn parse_overlay_server_base_url(value: &str) -> Result<tauri::Url, String> {
+    let failure = |reason: &str, message: &str| format!("[ServerBaseUrlError:{reason}] {message}");
+    let url = tauri::Url::parse(value.trim())
+        .map_err(|_| failure("malformed", "Server URL is not a valid absolute URL."))?;
+    if !matches!(url.scheme(), "http" | "https") {
+        return Err(failure(
+            "unsupported_protocol",
+            "Server URL must use HTTP or HTTPS.",
+        ));
+    }
+    if url.query().is_some() {
+        return Err(failure("query", "Server URL must not include a query."));
+    }
+    if url.fragment().is_some() {
+        return Err(failure(
+            "fragment",
+            "Server URL must not include a fragment.",
+        ));
+    }
+    if !url.username().is_empty() || url.password().is_some_and(|password| !password.is_empty()) {
+        return Err(failure(
+            "user_info",
+            "Use the username and password fields instead of credentials in the server URL.",
+        ));
+    }
+    Ok(url)
+}
+
 fn write_overlay_settings_text_with<F>(path: &Path, text: &str, write: F) -> Result<(), String>
 where
     F: FnOnce(&mut fs::File, &[u8]) -> std::io::Result<()>,
@@ -1790,6 +1817,14 @@ where
 
 fn write_overlay_settings_text(path: &Path, text: &str) -> Result<(), String> {
     write_overlay_settings_text_with(path, text, |file, bytes| file.write_all(bytes))
+}
+
+fn save_overlay_settings(path: &Path, settings: OverlaySettings) -> Result<bool, String> {
+    let settings = validate_overlay_settings(settings)?;
+    parse_overlay_server_base_url(&settings.server_url)?;
+    let text = format_overlay_settings_text(&settings)?;
+    write_overlay_settings_text(path, &text)?;
+    Ok(true)
 }
 
 fn overlay_settings_path<R: Runtime>(app: &AppHandle<R>) -> Result<PathBuf, String> {
@@ -1826,10 +1861,7 @@ fn overlay_settings_save<R: Runtime>(
     settings: OverlaySettings,
 ) -> Result<bool, String> {
     let path = overlay_settings_path(&app)?;
-    let settings = validate_overlay_settings(settings)?;
-    let text = format_overlay_settings_text(&settings)?;
-    write_overlay_settings_text(&path, &text)?;
-    Ok(true)
+    save_overlay_settings(&path, settings)
 }
 
 #[tauri::command]
@@ -6590,7 +6622,158 @@ mod tests {
     }
 
     #[test]
-    fn project_composer_intents_round_trip_in_native_settings() {
+    fn overlay_settings_writer_round_trips_empty_authentication_fields() {
+        let directory = tempfile::tempdir().expect("settings test directory");
+        let path = directory.path().join(overlay_settings_filename());
+        let mut settings = overlay_test_settings();
+        settings.username.clear();
+        settings.password.clear();
+        settings.server_url = "https://example.invalid/proxy/%E4%B8%AD/".to_string();
+        assert_eq!(save_overlay_settings(&path, settings.clone()), Ok(true));
+        assert_eq!(
+            parse_overlay_settings_text(&fs::read_to_string(&path).expect("read saved settings")),
+            Ok(settings)
+        );
+    }
+
+    #[test]
+    fn overlay_settings_operational_base_cases_use_real_writer() {
+        #[derive(Deserialize)]
+        struct Cases {
+            schema: String,
+            cases: Vec<Case>,
+        }
+        #[derive(Deserialize)]
+        struct Case {
+            id: String,
+            input: String,
+            expected: serde_json::Value,
+        }
+        let cases: Cases = serde_json::from_str(include_str!(
+            "../../../../specs/artifacts/2026-10-05-server-base-url-contract/operational-base-cases.json"
+        ))
+        .expect("shared authored operational base cases");
+        assert_eq!(cases.schema, "opencorvus.server-base-url-cases.v1");
+        let directory = tempfile::tempdir().expect("settings golden directory");
+        let path = directory.path().join(overlay_settings_filename());
+        let baseline = overlay_test_settings();
+        for case in cases.cases {
+            assert_eq!(save_overlay_settings(&path, baseline.clone()), Ok(true));
+            let mut submitted = baseline.clone();
+            submitted.server_url = case.input.clone();
+            let expected_saved = if let Some(url) = case.expected["url"].as_str() {
+                assert_eq!(
+                    parse_overlay_server_base_url(&case.input).map(|value| value.to_string()),
+                    Ok(url.to_string()),
+                    "{}: mature parser output",
+                    case.id
+                );
+                assert_eq!(
+                    save_overlay_settings(&path, submitted.clone()),
+                    Ok(true),
+                    "{}",
+                    case.id
+                );
+                submitted
+            } else {
+                let reason = case.expected["reason"].as_str().expect("authored reason");
+                let message = case.expected["message"]
+                    .as_str()
+                    .expect("authored safe message");
+                let error = format!("[ServerBaseUrlError:{reason}] {message}");
+                assert_eq!(
+                    parse_overlay_server_base_url(&case.input),
+                    Err(error.clone()),
+                    "{}",
+                    case.id
+                );
+                let save_error = if case.input.trim().is_empty() {
+                    "overlay settings field `serverUrl` must not be blank".to_string()
+                } else {
+                    error
+                };
+                assert_eq!(
+                    save_overlay_settings(&path, submitted),
+                    Err(save_error),
+                    "{}",
+                    case.id
+                );
+                baseline.clone()
+            };
+            assert_eq!(
+                parse_overlay_settings_text(
+                    &fs::read_to_string(&path).expect("read actual saved file")
+                ),
+                Ok(expected_saved),
+                "{}: complete durable document",
+                case.id
+            );
+        }
+    }
+
+    #[test]
+    fn overlay_settings_structurally_invalid_legacy_file_reports_current_error() {
+        let directory = tempfile::tempdir().expect("legacy settings directory");
+        let path = directory.path().join(overlay_settings_filename());
+        let mut settings = overlay_test_settings();
+        settings.zoom = 2.0;
+        fs::write(
+            &path,
+            format_overlay_settings_text(&settings).expect("legacy settings text"),
+        )
+        .expect("seed structurally invalid old settings");
+        assert_eq!(
+            parse_overlay_settings_text(&fs::read_to_string(&path).expect("read old settings")),
+            Err("overlay settings zoom must be finite and between 0.8 and 1.6".to_string())
+        );
+    }
+
+    #[test]
+    fn overlay_settings_legacy_address_is_readable_and_correctable_through_writer() {
+        let directory = tempfile::tempdir().expect("settings test directory");
+        let path = directory.path().join(overlay_settings_filename());
+        let mut legacy = overlay_test_settings();
+        legacy.server_url = "not a url".to_string();
+        legacy.theme = "sage".to_string();
+        legacy.project_composer_intents = Some(vec![ProjectComposerIntent {
+            server_url: "historical invalid address".to_string(),
+            directory: "C:/owned-legacy-project".to_string(),
+            product_pillar: "work".to_string(),
+            conversation_target: "mission".to_string(),
+        }]);
+        fs::write(
+            &path,
+            format_overlay_settings_text(&legacy).expect("legacy document"),
+        )
+        .expect("seed old settings file");
+        let loaded =
+            parse_overlay_settings_text(&fs::read_to_string(&path).expect("read old file"))
+                .expect("structurally valid legacy settings remain readable");
+        assert_eq!(loaded, legacy);
+        assert_eq!(
+            save_overlay_settings(&path, loaded.clone()),
+            Err(
+                "[ServerBaseUrlError:malformed] Server URL is not a valid absolute URL."
+                    .to_string()
+            )
+        );
+        assert_eq!(
+            parse_overlay_settings_text(
+                &fs::read_to_string(&path).expect("read retained legacy file")
+            ),
+            Ok(legacy)
+        );
+        let mut corrected = loaded;
+        corrected.server_url = "http://[::1]:17882/owned/prefix/".to_string();
+        assert_eq!(save_overlay_settings(&path, corrected.clone()), Ok(true));
+        assert_eq!(
+            parse_overlay_settings_text(&fs::read_to_string(&path).expect("read corrected file")),
+            Ok(corrected)
+        );
+    }
+
+    #[test]
+    fn overlay_settings_project_composer_intents_round_trip() {
         let mut settings = overlay_test_settings();
         settings.project_composer_intents = Some(vec![
             ProjectComposerIntent {
@@ -6628,7 +6811,7 @@ mod tests {
     }
 
     #[test]
-    fn project_composer_intents_invalid_mode_has_explicit_error() {
+    fn overlay_settings_project_composer_intents_invalid_mode_has_explicit_error() {
         let mut settings = overlay_test_settings();
         settings.project_composer_intents = Some(vec![ProjectComposerIntent {
             server_url: "http://127.0.0.1:7878".to_string(),
@@ -6696,7 +6879,7 @@ mod tests {
     }
 
     #[test]
-    fn overlay_settings_parser_rejects_retired_or_unknown_fields() {
+    fn overlay_settings_parser_reports_unknown_field_errors() {
         for (field, retired_value) in [
             ("executor", serde_json::json!("opencorvus")),
             ("sectionsWidth", serde_json::json!(320)),
@@ -6714,7 +6897,7 @@ mod tests {
     }
 
     #[test]
-    fn overlay_settings_parser_rejects_missing_invalid_and_null_fields() {
+    fn overlay_settings_parser_reports_required_type_and_value_errors() {
         let baseline = serde_json::to_value(overlay_test_settings()).expect("test settings value");
         for required in [
             "serverUrl",
@@ -6737,40 +6920,79 @@ mod tests {
                 .as_object_mut()
                 .expect("settings object")
                 .remove(required);
+            let error =
+                parse_overlay_settings_text(&value.to_string()).expect_err("required field error");
             assert!(
-                parse_overlay_settings_text(&value.to_string()).is_err(),
-                "missing required field {required} must fail"
+                error.contains(&format!("missing field `{required}`")),
+                "{error}"
             );
         }
-        for optional in [
-            "sidebarWidth",
-            "rightDockWidth",
-            "directory",
-            "workspaceTaskID",
-            "workspaceDirectory",
+        for (optional, expected) in [
+            ("sidebarWidth", "error parsing number"),
+            ("rightDockWidth", "error parsing number"),
+            ("directory", "invalid type: unit value, expected a string"),
+            (
+                "workspaceTaskID",
+                "invalid type: unit value, expected a string",
+            ),
+            (
+                "workspaceDirectory",
+                "invalid type: unit value, expected a string",
+            ),
         ] {
             let mut value = baseline.clone();
             value[optional] = serde_json::Value::Null;
-            assert!(
-                parse_overlay_settings_text(&value.to_string()).is_err(),
-                "explicit null field {optional} must fail"
-            );
+            let error = parse_overlay_settings_text(&value.to_string())
+                .expect_err("explicit null type error");
+            assert_eq!(error, expected, "{optional}");
         }
-        for (field, invalid) in [
-            ("projectEditor", serde_json::json!("unknown")),
-            ("zoom", serde_json::json!(2.0)),
-            ("sidebarWidth", serde_json::json!(0)),
-            ("sidebarWidth", serde_json::json!(4_294_967_296_u64)),
-            ("theme", serde_json::json!("garbage")),
-            ("workLedgerOrganization", serde_json::json!("folders")),
-            ("workLedgerSort", serde_json::json!("alphabetical")),
-            ("workspaceTaskID", serde_json::json!("   ")),
+        for (field, invalid, expected) in [
+            (
+                "projectEditor",
+                serde_json::json!("unknown"),
+                "overlay settings field `projectEditor` contains an invalid editor id",
+            ),
+            (
+                "zoom",
+                serde_json::json!(2.0),
+                "overlay settings zoom must be finite and between 0.8 and 1.6",
+            ),
+            (
+                "sidebarWidth",
+                serde_json::json!(0),
+                "overlay settings field `sidebarWidth` must be a positive unsigned 32-bit integer",
+            ),
+            (
+                "sidebarWidth",
+                serde_json::json!(4_294_967_296_u64),
+                "overlay settings field `sidebarWidth` must be a positive unsigned 32-bit integer",
+            ),
+            (
+                "theme",
+                serde_json::json!("garbage"),
+                "overlay settings theme is invalid",
+            ),
+            (
+                "workLedgerOrganization",
+                serde_json::json!("folders"),
+                "overlay settings workLedgerOrganization is invalid",
+            ),
+            (
+                "workLedgerSort",
+                serde_json::json!("alphabetical"),
+                "overlay settings workLedgerSort is invalid",
+            ),
+            (
+                "workspaceTaskID",
+                serde_json::json!("   "),
+                "overlay settings field `workspaceTaskID` must not be blank",
+            ),
         ] {
             let mut value = baseline.clone();
             value[field] = invalid;
-            assert!(
-                parse_overlay_settings_text(&value.to_string()).is_err(),
-                "invalid field {field} must fail"
+            assert_eq!(
+                parse_overlay_settings_text(&value.to_string()),
+                Err(expected.to_string())
             );
         }
     }

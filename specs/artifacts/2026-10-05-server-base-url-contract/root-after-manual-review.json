@@ -1,0 +1,38 @@
+{
+  "kind": "actual-manual-browser-qualification",
+  "reviewer": "root",
+  "tab": "IAB15",
+  "origin": "http://127.0.0.1:17945",
+  "frontend": "main-Dd5jeSV0.js / main-Yy88IPFU.css",
+  "screenshotsReviewed": [
+    "after-01-legacy-offline.png",
+    "after-02-legacy-network-editable.png",
+    "after-03-corrected-empty-username.png",
+    "after-04-coldload-empty-username.png",
+    "after-05-invalid-rejected.png",
+    "after-06-rejected-reload-valid.png",
+    "after-07-offline-valid-saved.png",
+    "after-08-offline-coldload.png",
+    "after-09-final-restored.png"
+  ],
+  "observations": [
+    "New frontend loads the before-origin's saved not a url intent, shows Offline, and actual Set up opens its editable Network value.",
+    "Actual Save of the working 17945 base and explicit empty username succeeds. Reload reaches Online (17945 in accessibility description), and Network preserves the empty username and password.",
+    "New not a url Save gives the visible safe error Settings could not be saved: Server URL is not a valid absolute URL. The draft remains editable. Reload reaches Online17945 and Network retains the previous valid base and empty username.",
+    "Port17946 was checked immediately before the actual offline case and had no listener. Its syntactically valid URL can be saved and is retained after reload, with the actual unreachable/not-responding banner. Network success is not a save admission requirement.",
+    "Finally, actual editor Save restores the original17945/opencorvus/blank-password connection. Reload reaches Online17945; General Offer Git initialization is still false, and Network shows the original connection and disabled blank proxy settings.",
+    "All nine screenshots were personally viewed. No DOM, component, pixel or screenshot assertion was created or run."
+  ],
+  "cleanup": {
+    "pageClosed": true,
+    "legacyPreferenceSeed": "Corrected and restored through actual UI; no direct storage rewrite",
+    "serverPhysicalSettlement": "Exact owner service agent saves shutdown and physical completion separately"
+  },
+  "limits": [
+    "Cold reload plus visible values provide behavioral persistence evidence; raw localStorage was not independently read.",
+    "Saved accessibility labels were transient; corresponding screenshots show the later Save state. Pixel claims are limited to the actual images.",
+    "No new native application window/IPC, reverse proxy, IPv6 HTTP listener, loaded conversation attachment, Basic credential transmission or model execution is claimed. Native production writer/filesystem and parser/target contracts are separately qualified.",
+    "Offline banner wording varies between unreachable and not responding yet as the existing health cycle changes; no server response status or request ID is fabricated for the unbound offline address.",
+    "Skill latency and cross-server workspace/draft ownership remain separate open investigations."
+  ]
+}

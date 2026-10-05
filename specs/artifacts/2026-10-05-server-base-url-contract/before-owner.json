@@ -1,0 +1,57 @@
+{
+  "time": "2026-10-05T11:42:28.5492351Z",
+  "root": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/server-base-url-before-01",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "server-base-url-before-9bf93613-135d-4691-92ab-0fa13d849b9c",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:17945",
+    "pid": 37008
+  },
+  "listener": {
+    "ProcessId": 37008,
+    "ParentProcessId": 75852,
+    "CreationDate": "2026-10-05T19:41:45.075241+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17945 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/server-base-url-before-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/server-base-url-before-01/startup.json --startup-occurrence server-base-url-before-9bf93613-135d-4691-92ab-0fa13d849b9c"
+  },
+  "parent": {
+    "ProcessId": 75852,
+    "ParentProcessId": 23560,
+    "CreationDate": "2026-10-05T19:41:45.036699+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17945 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/server-base-url-before-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/server-base-url-before-01/startup.json --startup-occurrence server-base-url-before-9bf93613-135d-4691-92ab-0fa13d849b9c"
+  },
+  "launcher": {
+    "ProcessId": 23560,
+    "ParentProcessId": 72964,
+    "CreationDate": "2026-10-05T19:41:44.953714+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17945 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/server-base-url-before-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/server-base-url-before-01/startup.json --startup-occurrence server-base-url-before-9bf93613-135d-4691-92ab-0fa13d849b9c"
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\server-base-url-before-01\\home\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\server-base-url-before-01\\home\\data",
+      "home": "C:\\Users\\hengu"
+    }
+  },
+  "assets": [
+    "main-CYapQrPb.js",
+    "main-Yy88IPFU.css"
+  ],
+  "project": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/server-base-url-before-01/project",
+  "log": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/server-base-url-before-01/home/log/dev.log",
+  "authExists": false,
+  "modelsExists": false,
+  "publicShutdown": {
+    "terminal": "Exact captured chain absent and port free after root page-close permission",
+    "origin": "http://127.0.0.1:17945",
+    "path": "/shutdown",
+    "method": "POST"
+  },
+  "externalSkillsDisabled": true,
+  "provenance": "Current source API process; old frozen actual CYapQrPb/Yy88 client, no frontend build"
+}

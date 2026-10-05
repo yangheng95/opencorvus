@@ -9,6 +9,7 @@ import { runtimeStartupTheme, sanitizeThemeForHost, type OverlayThemeID } from "
 import type { PersistedOverlaySettings } from "../services/persisted-overlay-settings"
 import { parsePersistedOverlaySettings } from "../services/persisted-overlay-settings"
 import type { ProjectComposerIntent, WorkLedgerOrganization, WorkLedgerSort } from "@opencorvus-ai/transport-protocol"
+import { parseServerBaseUrl } from "@opencorvus-ai/transport-protocol"
 import { runtimeLocale, sanitizeLocale } from "../utils/i18n"
 
 // ── Types ──
@@ -183,8 +184,7 @@ export function applySettings(input: Partial<OverlaySettings>): void {
     serverUrl,
     autoServer: sanitizeAutoServer(input?.autoServer, serverUrl),
     password: typeof input?.password === "string" ? input.password : DEFAULT_SETTINGS.password,
-    username:
-      typeof input?.username === "string" && input.username.trim() ? input.username.trim() : DEFAULT_SETTINGS.username,
+    username: typeof input?.username === "string" ? input.username.trim() : DEFAULT_SETTINGS.username,
     projectEditor: sanitizeProjectEditor(input?.projectEditor),
     initGit: typeof input?.initGit === "boolean" ? input.initGit : DEFAULT_SETTINGS.initGit,
     sidebarCollapsed:
@@ -220,9 +220,10 @@ export async function saveSettings(action: SettingsSaveAction = {}): Promise<voi
   await previous
   try {
     const snapshot = { ...settingsStore, ...action.overrides }
-    const payload = bootstrapOverlaySettings(snapshot)
     const outcome: SettingsSaveOutcome = await (async () => {
       try {
+        const payload = bootstrapOverlaySettings(snapshot)
+        parseServerBaseUrl(payload.serverUrl)
         const saved = await getHostTransport().native({ kind: "settings.save", payload })
         if (saved !== true) throw new Error("settings.save did not confirm persistence")
         return { kind: "saved", payload }

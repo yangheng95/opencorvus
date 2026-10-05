@@ -1,0 +1,35 @@
+[
+  {
+    "step": "initial",
+    "utc": "2026-10-05T11:48:07.384Z",
+    "tabId": "14",
+    "url": "http://127.0.0.1:17945/ui/",
+    "serverUrl": "http://127.0.0.1:17945",
+    "username": "opencorvus",
+    "password": "",
+    "proxyEnabled": false
+  },
+  {
+    "step": "bad-input",
+    "utc": "2026-10-05T11:48:12.307Z",
+    "value": "not a url"
+  },
+  {
+    "step": "save-invalid",
+    "utc": "2026-10-05T11:48:18.572Z"
+  },
+  {
+    "step": "reload",
+    "utc": "2026-10-05T11:48:34.913Z"
+  },
+  {
+    "step": "offline-setup",
+    "utc": "2026-10-05T11:48:52.338Z"
+  },
+  {
+    "step": "legacy-invalid-visible-after-reload",
+    "utc": "2026-10-05T11:49:01.244Z",
+    "savedVisibleServerUrl": "not a url",
+    "manualReview": "Network is reachable from offline Set up; bad saved value remains editable; password blank; screenshot reviewed."
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "time": "2026-10-05T11:50:19.0144019Z",
+  "states": [
+    {
+      "role": "listener",
+      "pid": 37008,
+      "expectedCreationDate": "2026-10-05T19:41:45.075241+08:00",
+      "present": false,
+      "current": null
+    },
+    {
+      "role": "parent",
+      "pid": 75852,
+      "expectedCreationDate": "2026-10-05T19:41:45.036699+08:00",
+      "present": false,
+      "current": null
+    },
+    {
+      "role": "launcher",
+      "pid": 23560,
+      "expectedCreationDate": "2026-10-05T19:41:44.953714+08:00",
+      "present": false,
+      "current": null
+    }
+  ],
+  "listeners": [],
+  "physicalCompletion": true,
+  "rootPageClosed": true,
+  "legacyBrowserSeed": "Root intentionally retained bad preference at owned origin for later UI correction"
+}

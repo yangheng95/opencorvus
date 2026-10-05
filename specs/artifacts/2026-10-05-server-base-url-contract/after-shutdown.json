@@ -1,0 +1,30 @@
+{
+  "time": "2026-10-05T12:03:33.5235334Z",
+  "matchedOwners": [
+    {
+      "role": "listener",
+      "ProcessId": 75296,
+      "CreationDate": "2026-10-05T19:57:43.835159+08:00",
+      "matched": true
+    },
+    {
+      "role": "parent",
+      "ProcessId": 75872,
+      "CreationDate": "2026-10-05T19:57:43.797538+08:00",
+      "matched": true
+    },
+    {
+      "role": "launcher",
+      "ProcessId": 45808,
+      "CreationDate": "2026-10-05T19:57:43.725249+08:00",
+      "matched": true
+    }
+  ],
+  "response": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXAyGc800vBkJIhmNE"
+  },
+  "rootPageClosed": true,
+  "legacyBrowserSeedCorrectedByRootUI": true,
+  "note": "Admission is not physical terminal proof"
+}

@@ -1,0 +1,22 @@
+{
+  "boundary": "pure production loadMeta with controlled in-memory responses; no HTTP/browser/model/filesystem project access",
+  "starts": [
+    {
+      "path": "path",
+      "server": "http://backend-a.invalid"
+    },
+    {
+      "path": "vcs",
+      "server": "http://backend-a.invalid"
+    }
+  ],
+  "currentServer": "http://backend-b.invalid",
+  "directoryEpoch": 0,
+  "projectDirectory": "C:/owned-dummy/same-project",
+  "committedPath": {
+    "directory": "C:/owned-dummy/result-from-a"
+  },
+  "committedVcs": {
+    "branch": "branch-from-a"
+  }
+}

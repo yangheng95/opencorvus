@@ -1,8 +1,10 @@
 # 2026-10 Records
 
+- [Connection publication and workspace authority](2026-10-05-connection-workspace-authority.md)
+
 - [Skill mount cold-start latency qualification](2026-10-05-skill-mount-cold-start-latency.md)
 
-- [Server base URL contract and recoverable authoring](2026-10-05-server-base-url-contract.md)
+- [Server base URL contract, recoverable authoring and owned before plan](2026-10-05-server-base-url-contract.md)
 
 - [Public validation error input projection](2026-10-05-validation-error-input-projection.md)
 

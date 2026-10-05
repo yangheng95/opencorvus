@@ -1,0 +1,30 @@
+{
+  "time": "2026-10-05T12:03:52.9996416Z",
+  "states": [
+    {
+      "role": "listener",
+      "pid": 75296,
+      "expectedCreationDate": "2026-10-05T19:57:43.835159+08:00",
+      "present": false,
+      "current": null
+    },
+    {
+      "role": "parent",
+      "pid": 75872,
+      "expectedCreationDate": "2026-10-05T19:57:43.797538+08:00",
+      "present": false,
+      "current": null
+    },
+    {
+      "role": "launcher",
+      "pid": 45808,
+      "expectedCreationDate": "2026-10-05T19:57:43.725249+08:00",
+      "present": false,
+      "current": null
+    }
+  ],
+  "listeners": [],
+  "physicalCompletion": true,
+  "rootPageClosed": true,
+  "legacyBrowserSeed": "Root corrected through real UI; original URL and username restored"
+}

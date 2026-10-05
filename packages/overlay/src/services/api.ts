@@ -7,6 +7,7 @@
 // browser/Vite host. Public callers stay on the same chokepoint.
 
 import { DEFAULT_SERVER } from "./default-server"
+import { joinServerBaseUrl } from "@opencorvus-ai/transport-protocol"
 import { getHostTransport } from "./host-transport-runtime"
 import type { ResponseKind, TransportResponse } from "./host-transport"
 import { bytesToArrayBuffer } from "../utils/binary"
@@ -294,8 +295,7 @@ export function resolveResourceUrl(raw: string): string {
   if (!raw) return raw
   if (/^(?:data|blob|https?|file):/i.test(raw)) return raw
   if (raw.startsWith("/")) {
-    const base = getServerUrl().replace(/\/+$/, "")
-    return `${base}${raw}`
+    return joinServerBaseUrl(getServerUrl(), raw).toString()
   }
   return raw
 }

@@ -1,0 +1,30 @@
+{
+  "kind": "actual-manual-browser-qualification",
+  "reviewer": "root",
+  "tab": "IAB14",
+  "origin": "http://127.0.0.1:17945",
+  "frontend": "main-CYapQrPb.js / main-Yy88IPFU.css",
+  "screenshotsReviewed": [
+    "before-01-network-original.png",
+    "before-02-invalid-saved.png",
+    "before-03-reloaded-offline.png",
+    "before-04-recovery-saved-invalid.png"
+  ],
+  "observations": [
+    "Original Network value is http://127.0.0.1:17945, username opencorvus, password blank, both proxy switches off.",
+    "Actual Connection Save with literal not a url briefly returned accessibility button Saved. The subsequent screenshot shows Save again and the backend-unreachable banner; it does not capture the transient Saved pixels.",
+    "After a real page reload the main view is Offline with a disabled composer and a reachable Set up action.",
+    "Actual Set up opens Network. The saved not a url value remains visible and editable after reload. This is behavioral persistence evidence; raw browser storage was not separately inspected.",
+    "All four screenshots were manually viewed by root. No DOM, screenshot or pixel assertion was created or run."
+  ],
+  "cleanup": {
+    "pageClosed": true,
+    "browserPreferenceSeed": "Deliberately retained only at this owned test origin for the separately authorized new-frontend legacy correction. Restore the original captured values through the real Network editor after qualification.",
+    "serverPhysicalSettlement": "Delegated to the existing exact-owner service agent; consult its shutdown receipt."
+  },
+  "limits": [
+    "Only literal not a url was entered. No credential, model, Task or file-content fixture was used.",
+    "The old frontend was frozen, while the development backend source may include parallel implementation changes.",
+    "No actual request to another authority, native GUI, Basic credential transmission or whole-system configuration isolation is established."
+  ]
+}

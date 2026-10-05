@@ -1,0 +1,321 @@
+[
+  {
+    "rootStep": "initial",
+    "start": "2026-10-05T11:48:07.3840000+00:00",
+    "end": "2026-10-05T11:48:12.3070000+00:00",
+    "rows": [
+      {
+        "time": "2026-10-05T11:48:09.25Z",
+        "service": "server",
+        "requestID": "ac853f87-3387-4946-9fc0-b1f6e646f8f8",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started",
+        "statusCode": null,
+        "duration": null
+      },
+      {
+        "time": "2026-10-05T11:48:09.25Z",
+        "service": "server",
+        "requestID": "ac853f87-3387-4946-9fc0-b1f6e646f8f8",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      }
+    ]
+  },
+  {
+    "rootStep": "bad-input",
+    "start": "2026-10-05T11:48:12.3070000+00:00",
+    "end": "2026-10-05T11:48:18.5720000+00:00",
+    "rows": []
+  },
+  {
+    "rootStep": "save-invalid",
+    "start": "2026-10-05T11:48:18.5720000+00:00",
+    "end": "2026-10-05T11:48:34.9130000+00:00",
+    "rows": []
+  },
+  {
+    "rootStep": "reload",
+    "start": "2026-10-05T11:48:34.9130000+00:00",
+    "end": "2026-10-05T11:48:52.3380000+00:00",
+    "rows": [
+      {
+        "time": "2026-10-05T11:48:34.926Z",
+        "service": "server",
+        "requestID": "a59e6a1f-0d06-4f1c-aa7c-446bd5b4931a",
+        "method": "GET",
+        "path": "/ui/",
+        "status": "started",
+        "statusCode": null,
+        "duration": null
+      },
+      {
+        "time": "2026-10-05T11:48:34.928Z",
+        "service": "server",
+        "requestID": "a59e6a1f-0d06-4f1c-aa7c-446bd5b4931a",
+        "method": "GET",
+        "path": "/ui/",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      {
+        "time": "2026-10-05T11:48:35.07Z",
+        "service": "server",
+        "requestID": "cdb2e166-6fd5-486f-8e37-1fa8cd5bf51a",
+        "method": "GET",
+        "path": "/ui/assets/main-CYapQrPb.js",
+        "status": "started",
+        "statusCode": null,
+        "duration": null
+      },
+      {
+        "time": "2026-10-05T11:48:35.071Z",
+        "service": "server",
+        "requestID": "9b4d65ff-b01c-4042-98aa-73413994aba0",
+        "method": "GET",
+        "path": "/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+        "status": "started",
+        "statusCode": null,
+        "duration": null
+      },
+      {
+        "time": "2026-10-05T11:48:35.071Z",
+        "service": "server",
+        "requestID": "d3dbf50a-c7d3-4188-8324-703dbaab5151",
+        "method": "GET",
+        "path": "/ui/assets/native-menu-surface-contract-BJN6RgnX.js",
+        "status": "started",
+        "statusCode": null,
+        "duration": null
+      },
+      {
+        "time": "2026-10-05T11:48:35.071Z",
+        "service": "server",
+        "requestID": "0505fa8d-afe9-416e-910e-3fa66beadebe",
+        "method": "GET",
+        "path": "/ui/assets/main-Yy88IPFU.css",
+        "status": "started",
+        "statusCode": null,
+        "duration": null
+      },
+      {
+        "time": "2026-10-05T11:48:35.071Z",
+        "service": "server",
+        "requestID": "c0f87469-4b73-40f3-beeb-d9fc1bbed44a",
+        "method": "GET",
+        "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+        "status": "started",
+        "statusCode": null,
+        "duration": null
+      },
+      {
+        "time": "2026-10-05T11:48:35.072Z",
+        "service": "server",
+        "requestID": "b71fa3de-7b15-412f-a027-42e8c78b21fe",
+        "method": "GET",
+        "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+        "status": "started",
+        "statusCode": null,
+        "duration": null
+      },
+      {
+        "time": "2026-10-05T11:48:35.073Z",
+        "service": "server",
+        "requestID": "d3dbf50a-c7d3-4188-8324-703dbaab5151",
+        "method": "GET",
+        "path": "/ui/assets/native-menu-surface-contract-BJN6RgnX.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      {
+        "time": "2026-10-05T11:48:35.073Z",
+        "service": "server",
+        "requestID": "9b4d65ff-b01c-4042-98aa-73413994aba0",
+        "method": "GET",
+        "path": "/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      {
+        "time": "2026-10-05T11:48:35.075Z",
+        "service": "server",
+        "requestID": "c0f87469-4b73-40f3-beeb-d9fc1bbed44a",
+        "method": "GET",
+        "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 4
+      },
+      {
+        "time": "2026-10-05T11:48:35.075Z",
+        "service": "server",
+        "requestID": "0505fa8d-afe9-416e-910e-3fa66beadebe",
+        "method": "GET",
+        "path": "/ui/assets/main-Yy88IPFU.css",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 4
+      },
+      {
+        "time": "2026-10-05T11:48:35.075Z",
+        "service": "server",
+        "requestID": "cdb2e166-6fd5-486f-8e37-1fa8cd5bf51a",
+        "method": "GET",
+        "path": "/ui/assets/main-CYapQrPb.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 5
+      },
+      {
+        "time": "2026-10-05T11:48:35.078Z",
+        "service": "server",
+        "requestID": "b71fa3de-7b15-412f-a027-42e8c78b21fe",
+        "method": "GET",
+        "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 6
+      },
+      {
+        "time": "2026-10-05T11:48:35.103Z",
+        "service": "server",
+        "requestID": "227182b0-c6f9-438d-9a37-31629bedd01c",
+        "method": "GET",
+        "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+        "status": "started",
+        "statusCode": null,
+        "duration": null
+      },
+      {
+        "time": "2026-10-05T11:48:35.104Z",
+        "service": "server",
+        "requestID": "227182b0-c6f9-438d-9a37-31629bedd01c",
+        "method": "GET",
+        "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      {
+        "time": "2026-10-05T11:48:35.146Z",
+        "service": "server",
+        "requestID": "50808971-4b2b-4fef-ad44-b2a1c8dad6e3",
+        "method": "GET",
+        "path": "/ui/i18n/zh-CN.json",
+        "status": "started",
+        "statusCode": null,
+        "duration": null
+      },
+      {
+        "time": "2026-10-05T11:48:35.153Z",
+        "service": "server",
+        "requestID": "37cc0f46-be3b-4898-8765-c4d5550bf64c",
+        "method": "GET",
+        "path": "/ui/i18n/en-US.json",
+        "status": "started",
+        "statusCode": null,
+        "duration": null
+      },
+      {
+        "time": "2026-10-05T11:48:35.153Z",
+        "service": "server",
+        "requestID": "5bd0f31b-6551-439d-a9d4-976050439f1b",
+        "method": "GET",
+        "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+        "status": "started",
+        "statusCode": null,
+        "duration": null
+      },
+      {
+        "time": "2026-10-05T11:48:35.154Z",
+        "service": "server",
+        "requestID": "50808971-4b2b-4fef-ad44-b2a1c8dad6e3",
+        "method": "GET",
+        "path": "/ui/i18n/zh-CN.json",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 8
+      },
+      {
+        "time": "2026-10-05T11:48:35.154Z",
+        "service": "server",
+        "requestID": "37cc0f46-be3b-4898-8765-c4d5550bf64c",
+        "method": "GET",
+        "path": "/ui/i18n/en-US.json",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      {
+        "time": "2026-10-05T11:48:35.155Z",
+        "service": "server",
+        "requestID": "5bd0f31b-6551-439d-a9d4-976050439f1b",
+        "method": "GET",
+        "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      }
+    ]
+  },
+  {
+    "rootStep": "offline-setup",
+    "start": "2026-10-05T11:48:52.3380000+00:00",
+    "end": "2026-10-05T11:49:01.2440000+00:00",
+    "rows": [
+      {
+        "time": "2026-10-05T11:48:52.382Z",
+        "service": "server",
+        "requestID": "b7dbec3d-86fe-41cf-bd08-8c1d08f58d7f",
+        "method": "GET",
+        "path": "/ui/assets/NetworkPanel-B9XpP_p9.js",
+        "status": "started",
+        "statusCode": null,
+        "duration": null
+      },
+      {
+        "time": "2026-10-05T11:48:52.382Z",
+        "service": "server",
+        "requestID": "014845e8-5c05-4384-b0f8-76988be097f3",
+        "method": "GET",
+        "path": "/ui/assets/Switch-D3o6EXLx.js",
+        "status": "started",
+        "statusCode": null,
+        "duration": null
+      },
+      {
+        "time": "2026-10-05T11:48:52.387Z",
+        "service": "server",
+        "requestID": "014845e8-5c05-4384-b0f8-76988be097f3",
+        "method": "GET",
+        "path": "/ui/assets/Switch-D3o6EXLx.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 5
+      },
+      {
+        "time": "2026-10-05T11:48:52.387Z",
+        "service": "server",
+        "requestID": "b7dbec3d-86fe-41cf-bd08-8c1d08f58d7f",
+        "method": "GET",
+        "path": "/ui/assets/NetworkPanel-B9XpP_p9.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 5
+      }
+    ]
+  },
+  {
+    "rootStep": "legacy-invalid-visible-after-reload",
+    "start": "2026-10-05T11:49:01.2440000+00:00",
+    "end": "2026-10-05T11:49:56.9063275+00:00",
+    "rows": []
+  }
+]

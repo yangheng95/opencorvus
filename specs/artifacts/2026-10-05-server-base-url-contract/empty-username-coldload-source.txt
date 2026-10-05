@@ -1,0 +1,10 @@
+import fs from 'node:fs/promises'
+import { DEFAULT_SETTINGS, bootstrapOverlaySettings, loadSettings, settingsStore, confirmedPersistedSettingsSnapshot } from '../packages/overlay/src/store/settings'
+import { __setHostTransportForTest } from '../packages/overlay/src/services/host-transport-runtime'
+import { createTauriTransport } from '../packages/overlay/src/services/tauri-transport'
+const document=bootstrapOverlaySettings({...DEFAULT_SETTINGS,serverUrl:'http://empty-user.example.invalid',username:'',password:''})
+__setHostTransportForTest({...createTauriTransport('browser'),async native(command){if(command.kind==='settings.load')return document;throw new Error(`Unsupported local fixture command ${command.kind}`)}})
+let result
+try{await loadSettings();result={qualification:'Actual loadSettings/structural parser/apply/confirmed with explicit memory-native fixture; no network/GUI/nativeIPC/durable credentials',persistedUsername:document.username,appliedUsername:settingsStore.username,confirmedUsername:confirmedPersistedSettingsSnapshot().username}}finally{__setHostTransportForTest(undefined)}
+await fs.writeFile('.tmp-product-iteration/empty-username-coldload-before.json',JSON.stringify(result,null,2))
+console.log(JSON.stringify(result,null,2))

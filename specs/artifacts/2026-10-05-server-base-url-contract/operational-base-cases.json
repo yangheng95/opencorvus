@@ -1,0 +1,198 @@
+{
+  "schema": "opencorvus.server-base-url-cases.v1",
+  "cases": [
+    {
+      "id": "http-loopback",
+      "input": "http://127.0.0.1:7878",
+      "expected": {
+        "url": "http://127.0.0.1:7878/"
+      }
+    },
+    {
+      "id": "https-prefix",
+      "input": "https://example.invalid/proxy/v1/",
+      "expected": {
+        "url": "https://example.invalid/proxy/v1/"
+      }
+    },
+    {
+      "id": "ipv6-prefix",
+      "input": "http://[::1]:17944/prefix",
+      "expected": {
+        "url": "http://[::1]:17944/prefix"
+      }
+    },
+    {
+      "id": "encoded-prefix",
+      "input": "https://example.invalid/a%2Fb/%E4%B8%AD",
+      "expected": {
+        "url": "https://example.invalid/a%2Fb/%E4%B8%AD"
+      }
+    },
+    {
+      "id": "outer-whitespace",
+      "input": "  https://EXAMPLE.invalid:443/prefix/  ",
+      "expected": {
+        "url": "https://example.invalid/prefix/"
+      }
+    },
+    {
+      "id": "encoded-delimiters",
+      "input": "https://example.invalid/%3F/%23/%40",
+      "expected": {
+        "url": "https://example.invalid/%3F/%23/%40"
+      }
+    },
+    {
+      "id": "offline-valid",
+      "input": "http://offline.example.invalid:17999",
+      "expected": {
+        "url": "http://offline.example.invalid:17999/"
+      }
+    },
+    {
+      "id": "empty",
+      "input": "",
+      "expected": {
+        "reason": "malformed",
+        "message": "Server URL is not a valid absolute URL."
+      }
+    },
+    {
+      "id": "blank",
+      "input": "   ",
+      "expected": {
+        "reason": "malformed",
+        "message": "Server URL is not a valid absolute URL."
+      }
+    },
+    {
+      "id": "malformed-text",
+      "input": "not a url",
+      "expected": {
+        "reason": "malformed",
+        "message": "Server URL is not a valid absolute URL."
+      }
+    },
+    {
+      "id": "incomplete-authority",
+      "input": "http://",
+      "expected": {
+        "reason": "malformed",
+        "message": "Server URL is not a valid absolute URL."
+      }
+    },
+    {
+      "id": "malformed-ipv6",
+      "input": "http://[::1",
+      "expected": {
+        "reason": "malformed",
+        "message": "Server URL is not a valid absolute URL."
+      }
+    },
+    {
+      "id": "relative-authority",
+      "input": "//example.invalid",
+      "expected": {
+        "reason": "malformed",
+        "message": "Server URL is not a valid absolute URL."
+      }
+    },
+    {
+      "id": "unsupported-ftp",
+      "input": "ftp://example.invalid/prefix",
+      "expected": {
+        "reason": "unsupported_protocol",
+        "message": "Server URL must use HTTP or HTTPS."
+      }
+    },
+    {
+      "id": "unsupported-opaque",
+      "input": "localhost:7878",
+      "expected": {
+        "reason": "unsupported_protocol",
+        "message": "Server URL must use HTTP or HTTPS."
+      }
+    },
+    {
+      "id": "query",
+      "input": "https://example.invalid/prefix?mode=DUMMY",
+      "expected": {
+        "reason": "query",
+        "message": "Server URL must not include a query."
+      }
+    },
+    {
+      "id": "empty-query",
+      "input": "https://example.invalid/prefix?",
+      "expected": {
+        "reason": "query",
+        "message": "Server URL must not include a query."
+      }
+    },
+    {
+      "id": "fragment",
+      "input": "https://example.invalid/prefix#DUMMY",
+      "expected": {
+        "reason": "fragment",
+        "message": "Server URL must not include a fragment."
+      }
+    },
+    {
+      "id": "empty-fragment",
+      "input": "https://example.invalid/prefix#",
+      "expected": {
+        "reason": "fragment",
+        "message": "Server URL must not include a fragment."
+      }
+    },
+    {
+      "id": "fragment-query-text",
+      "input": "https://example.invalid/prefix#?DUMMY",
+      "expected": {
+        "reason": "fragment",
+        "message": "Server URL must not include a fragment."
+      }
+    },
+    {
+      "id": "user-info",
+      "input": "http://dummy:DUMMY_NON_CREDENTIAL@example.invalid/prefix",
+      "expected": {
+        "reason": "user_info",
+        "message": "Use the username and password fields instead of credentials in the server URL."
+      }
+    },
+    {
+      "id": "username-only",
+      "input": "https://dummy@example.invalid",
+      "expected": {
+        "reason": "user_info",
+        "message": "Use the username and password fields instead of credentials in the server URL."
+      }
+    },
+    {
+      "id": "query-before-fragment-userinfo",
+      "input": "https://dummy@example.invalid/?#",
+      "expected": {
+        "reason": "query",
+        "message": "Server URL must not include a query."
+      }
+    },
+    {
+      "id": "fragment-before-userinfo",
+      "input": "https://dummy@example.invalid/#",
+      "expected": {
+        "reason": "fragment",
+        "message": "Server URL must not include a fragment."
+      }
+    },
+    {
+      "id": "protocol-before-query",
+      "input": "file:///D:/dummy?mode=DUMMY",
+      "expected": {
+        "reason": "unsupported_protocol",
+        "message": "Server URL must use HTTP or HTTPS."
+      }
+    }
+  ]
+}

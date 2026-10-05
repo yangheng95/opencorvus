@@ -1,0 +1,46 @@
+{
+  "qualification": "Filtered native test binary; actual production URL parser/save writer, owned temporary files; no GUI/IPC/browser/full-pipeline claim",
+  "command": "cargo test --locked --release --bin opencorvus-overlay overlay_settings -- --test-threads=1",
+  "cwd": "packages/overlay/src-tauri",
+  "golden": "operational-base-cases.json",
+  "goldenCaseCount": 25,
+  "safeString": "[ServerBaseUrlError:<reason>] <safe message>",
+  "reasons": [
+    "malformed",
+    "unsupported_protocol",
+    "query",
+    "fragment",
+    "user_info"
+  ],
+  "runs": [
+    {
+      "cause": "Fixture assumed generic serde null error for numeric JSON5 fields; actual output is error parsing number",
+      "id": "01",
+      "passed": 12,
+      "session": 16117,
+      "exitCode": 101,
+      "failed": 1
+    },
+    {
+      "session": 18998,
+      "passed": 13,
+      "id": "02",
+      "exitCode": 0,
+      "failed": 0
+    },
+    {
+      "filteredOut": 52,
+      "session": 95555,
+      "compileSeconds": 15.61,
+      "failed": 0,
+      "passed": 13,
+      "exitCode": 0,
+      "testSeconds": 0.23,
+      "id": "03"
+    }
+  ],
+  "files": [
+    "packages/overlay/src-tauri/src/main.rs"
+  ],
+  "dependencyChanges": []
+}

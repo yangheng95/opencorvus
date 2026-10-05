@@ -2,6 +2,8 @@ import { afterEach, beforeEach, expect, test } from "bun:test"
 import type { HostTransport } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import type { PersistedOverlaySettings } from "../src/services/persisted-overlay-settings"
+import { ServerBaseUrlError } from "@opencorvus-ai/transport-protocol"
+import { apiHeaders, configure } from "../src/services/api-state"
 import {
   applySettings,
   bootstrapOverlaySettings,
@@ -70,6 +72,7 @@ beforeEach(async () => {
 afterEach(() => {
   __setHostTransportForTest(undefined)
   applySettings(DEFAULT_SETTINGS)
+  configure({ username: DEFAULT_SETTINGS.username, password: "" })
 })
 
 test("confirmed connection publication precedes a queued preference snapshot and survives cold read", async () => {
@@ -221,4 +224,133 @@ test("ordinary overrides retain the existing persistence-only action contract", 
     confirmedTheme: confirmedPersistedSettingsSnapshot().theme,
   }).toEqual({ appliedTheme: "light", durableTheme: "dark", confirmedTheme: "dark" })
   expect(persisted).toEqual({ ...initial, theme: "dark" })
+})
+
+test("operational admission failure reconciles provisional state before the queued correction commits", async () => {
+  setSettingsStore({ serverUrl: "http://", theme: "dark" })
+  let failure: unknown
+  let failureFacts: unknown
+  const invalid = saveSettings({
+    onFailure({ error, confirmed }) {
+      failure = error
+      expect(confirmed).toEqual(initial)
+      applySettings(confirmed)
+      failureFacts = { applied: settingsStore.serverUrl, theme: settingsStore.theme, confirmed, durable: persisted }
+      events.push("reconcile:confirmed-a")
+    },
+  })
+  const correction = saveSettings({ overrides: { serverUrl: SERVER_B }, onConfirmed: publishConnection })
+  await expect(invalid).rejects.toBeInstanceOf(ServerBaseUrlError)
+  expect({
+    name: (failure as Error).name,
+    reason: (failure as ServerBaseUrlError).reason,
+    message: (failure as Error).message,
+  }).toEqual({ name: "ServerBaseUrlError", reason: "malformed", message: "Server URL is not a valid absolute URL." })
+  await correction
+  expect(failureFacts).toEqual({ applied: SERVER_A, theme: "light", confirmed: initial, durable: initial })
+  expect(events).toEqual([
+    "reconcile:confirmed-a",
+    `persist:${SERVER_B}`,
+    `confirmed:${SERVER_B}`,
+    `publish:${SERVER_B}`,
+  ])
+  expect({
+    applied: settingsStore.serverUrl,
+    confirmed: confirmedPersistedSettingsSnapshot(),
+    durable: persisted,
+  }).toEqual({
+    applied: SERVER_B,
+    confirmed: { ...initial, serverUrl: SERVER_B },
+    durable: { ...initial, serverUrl: SERVER_B },
+  })
+  expect(settingsStore.theme).toBe("light")
+})
+
+test("structural save admission shares the existing confirmed failure callback and retry contract", async () => {
+  let observed: unknown
+  await expect(
+    saveSettings({
+      overrides: { serverUrl: "" },
+      onFailure(input) {
+        observed = input
+      },
+    }),
+  ).rejects.toThrow("persisted overlay settings payload is invalid")
+  const failure = observed as { error: Error; confirmed: PersistedOverlaySettings }
+  expect({
+    name: failure.error.name,
+    message: failure.error.message,
+    confirmed: failure.confirmed,
+    applied: settingsStore.serverUrl,
+    durable: persisted,
+  }).toEqual({
+    name: "TypeError",
+    message: "persisted overlay settings payload is invalid",
+    confirmed: initial,
+    applied: SERVER_A,
+    durable: initial,
+  })
+  await saveSettings({ overrides: { serverUrl: SERVER_C }, onConfirmed: publishConnection })
+  expect({
+    applied: settingsStore.serverUrl,
+    confirmed: confirmedPersistedSettingsSnapshot().serverUrl,
+    durable: persisted.serverUrl,
+  }).toEqual({ applied: SERVER_C, confirmed: SERVER_C, durable: SERVER_C })
+})
+
+test("an old readable invalid address can be corrected without rewriting historical intent identities", async () => {
+  const projectComposerIntents = [
+    {
+      serverUrl: "historical bad address",
+      directory: "C:/owned-fixture/project-a",
+      productPillar: "code" as const,
+      conversationTarget: "mission" as const,
+    },
+  ]
+  persisted = { ...initial, serverUrl: "not a url", theme: "sage", projectComposerIntents }
+  await loadSettings()
+  expect({
+    applied: settingsStore.serverUrl,
+    confirmed: confirmedPersistedSettingsSnapshot(),
+    durable: persisted,
+  }).toEqual({
+    applied: "not a url",
+    confirmed: { ...initial, serverUrl: "not a url", theme: "sage", projectComposerIntents },
+    durable: { ...initial, serverUrl: "not a url", theme: "sage", projectComposerIntents },
+  })
+  await saveSettings({ overrides: { serverUrl: SERVER_B }, onConfirmed: publishConnection })
+  const expected: PersistedOverlaySettings = { ...initial, serverUrl: SERVER_B, theme: "sage", projectComposerIntents }
+  expect({
+    applied: settingsStore.serverUrl,
+    confirmed: confirmedPersistedSettingsSnapshot(),
+    durable: persisted,
+  }).toEqual({ applied: SERVER_B, confirmed: expected, durable: expected })
+})
+
+test("cold load and a later preference save preserve an explicitly empty Basic username", async () => {
+  persisted = { ...initial, username: "", password: "" }
+  await loadSettings()
+  expect({
+    applied: settingsStore.username,
+    confirmed: confirmedPersistedSettingsSnapshot(),
+    durable: persisted,
+  }).toEqual({
+    applied: "",
+    confirmed: { ...initial, username: "", password: "" },
+    durable: { ...initial, username: "", password: "" },
+  })
+  configure({ username: settingsStore.username, password: settingsStore.password })
+  expect(apiHeaders()).toEqual({ Accept: "application/json" })
+  await saveSettings({ overrides: { theme: "dark" } })
+  expect({
+    applied: settingsStore.username,
+    confirmed: confirmedPersistedSettingsSnapshot(),
+    durable: persisted,
+  }).toEqual({
+    applied: "",
+    confirmed: { ...initial, username: "", password: "", theme: "dark" },
+    durable: { ...initial, username: "", password: "", theme: "dark" },
+  })
+  configure({ username: settingsStore.username, password: "DUMMY_NON_CREDENTIAL" })
+  expect(apiHeaders()).toEqual({ Accept: "application/json", Authorization: "Basic OkRVTU1ZX05PTl9DUkVERU5USUFM" })
 })

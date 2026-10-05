@@ -1,0 +1,1042 @@
+[
+  {
+    "time": "2026-10-05T11:42:28.478Z",
+    "service": "server",
+    "requestID": "e80a42c5-d17c-45e3-a586-4e34f7a935f3",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:42:28.479Z",
+    "service": "server",
+    "requestID": "e80a42c5-d17c-45e3-a586-4e34f7a935f3",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1
+  },
+  {
+    "time": "2026-10-05T11:42:28.533Z",
+    "service": "server",
+    "requestID": "94bf015c-e400-41ec-9df9-ba666e46b9bf",
+    "method": "GET",
+    "path": "/ui/",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:42:28.535Z",
+    "service": "server",
+    "requestID": "94bf015c-e400-41ec-9df9-ba666e46b9bf",
+    "method": "GET",
+    "path": "/ui/",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:47:48.207Z",
+    "service": "server",
+    "requestID": "d9e11619-b3d1-48ee-b923-b11a1f56153a",
+    "method": "GET",
+    "path": "/ui/",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.208Z",
+    "service": "server",
+    "requestID": "d9e11619-b3d1-48ee-b923-b11a1f56153a",
+    "method": "GET",
+    "path": "/ui/",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1
+  },
+  {
+    "time": "2026-10-05T11:47:48.224Z",
+    "service": "server",
+    "requestID": "ef7ab92b-0dc4-437c-9c0e-cf21f7127e2d",
+    "method": "GET",
+    "path": "/ui/assets/main-CYapQrPb.js",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.231Z",
+    "service": "server",
+    "requestID": "866b9607-420b-41d2-bd23-eed60f314c23",
+    "method": "GET",
+    "path": "/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.231Z",
+    "service": "server",
+    "requestID": "48c8236c-ec94-4ad4-8c55-7419e128f943",
+    "method": "GET",
+    "path": "/ui/assets/main-Yy88IPFU.css",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.231Z",
+    "service": "server",
+    "requestID": "f2401b91-007c-4da1-829e-60ea1003b51c",
+    "method": "GET",
+    "path": "/ui/assets/native-menu-surface-contract-BJN6RgnX.js",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.232Z",
+    "service": "server",
+    "requestID": "37ca3262-4564-4aa1-b022-3cf82a6f4f9c",
+    "method": "GET",
+    "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.232Z",
+    "service": "server",
+    "requestID": "73da01c0-a87d-422c-8b68-87435cd2a3e3",
+    "method": "GET",
+    "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.234Z",
+    "service": "server",
+    "requestID": "ef7ab92b-0dc4-437c-9c0e-cf21f7127e2d",
+    "method": "GET",
+    "path": "/ui/assets/main-CYapQrPb.js",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 10
+  },
+  {
+    "time": "2026-10-05T11:47:48.236Z",
+    "service": "server",
+    "requestID": "37ca3262-4564-4aa1-b022-3cf82a6f4f9c",
+    "method": "GET",
+    "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 4
+  },
+  {
+    "time": "2026-10-05T11:47:48.236Z",
+    "service": "server",
+    "requestID": "866b9607-420b-41d2-bd23-eed60f314c23",
+    "method": "GET",
+    "path": "/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 5
+  },
+  {
+    "time": "2026-10-05T11:47:48.236Z",
+    "service": "server",
+    "requestID": "f2401b91-007c-4da1-829e-60ea1003b51c",
+    "method": "GET",
+    "path": "/ui/assets/native-menu-surface-contract-BJN6RgnX.js",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 5
+  },
+  {
+    "time": "2026-10-05T11:47:48.236Z",
+    "service": "server",
+    "requestID": "73da01c0-a87d-422c-8b68-87435cd2a3e3",
+    "method": "GET",
+    "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 4
+  },
+  {
+    "time": "2026-10-05T11:47:48.236Z",
+    "service": "server",
+    "requestID": "48c8236c-ec94-4ad4-8c55-7419e128f943",
+    "method": "GET",
+    "path": "/ui/assets/main-Yy88IPFU.css",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 5
+  },
+  {
+    "time": "2026-10-05T11:47:48.292Z",
+    "service": "server",
+    "requestID": "ea98d912-e713-48b1-b011-ce98825aead4",
+    "method": "GET",
+    "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.294Z",
+    "service": "server",
+    "requestID": "ea98d912-e713-48b1-b011-ce98825aead4",
+    "method": "GET",
+    "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:47:48.355Z",
+    "service": "server",
+    "requestID": "1dc0d068-ceea-46bf-ac69-e33a426562de",
+    "method": "GET",
+    "path": "/ui/i18n/zh-CN.json",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.356Z",
+    "service": "server",
+    "requestID": "b280e8de-a384-4f99-b71e-a5ae131897cb",
+    "method": "GET",
+    "path": "/ui/i18n/en-US.json",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.357Z",
+    "service": "server",
+    "requestID": "1dc0d068-ceea-46bf-ac69-e33a426562de",
+    "method": "GET",
+    "path": "/ui/i18n/zh-CN.json",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:47:48.358Z",
+    "service": "server",
+    "requestID": "b280e8de-a384-4f99-b71e-a5ae131897cb",
+    "method": "GET",
+    "path": "/ui/i18n/en-US.json",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:47:48.505Z",
+    "service": "server",
+    "requestID": "414e1003-7fc6-4b5e-b029-b83f2f56a9df",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.505Z",
+    "service": "server",
+    "requestID": "414e1003-7fc6-4b5e-b029-b83f2f56a9df",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 0
+  },
+  {
+    "time": "2026-10-05T11:47:48.513Z",
+    "service": "server",
+    "requestID": "b6d95006-3ea8-4b60-ac96-91f77f5ee7f4",
+    "method": "GET",
+    "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.515Z",
+    "service": "server",
+    "requestID": "b6d95006-3ea8-4b60-ac96-91f77f5ee7f4",
+    "method": "GET",
+    "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:47:48.516Z",
+    "service": "server",
+    "requestID": "80430f1f-4791-4fe9-ab41-ee83ee59256d",
+    "method": "GET",
+    "path": "/global/composer-references",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.547Z",
+    "service": "server",
+    "requestID": "45432a44-eaf7-48ea-929b-41b49b52c580",
+    "method": "GET",
+    "path": "/work-ledger/events",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.548Z",
+    "service": "server",
+    "requestID": "621b14c7-e1ad-4b12-b487-6ff3fadd0343",
+    "method": "GET",
+    "path": "/global/projects/discover",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.558Z",
+    "service": "server",
+    "requestID": "621b14c7-e1ad-4b12-b487-6ff3fadd0343",
+    "method": "GET",
+    "path": "/global/projects/discover",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 10
+  },
+  {
+    "time": "2026-10-05T11:47:48.667Z",
+    "service": "server",
+    "requestID": "45432a44-eaf7-48ea-929b-41b49b52c580",
+    "method": "GET",
+    "path": "/work-ledger/events",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 120
+  },
+  {
+    "time": "2026-10-05T11:47:48.668Z",
+    "service": "server",
+    "requestID": "518d8619-61b7-472f-ad29-f084c5ec7d30",
+    "method": "GET",
+    "path": "/mailbox",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.673Z",
+    "service": "server",
+    "requestID": "518d8619-61b7-472f-ad29-f084c5ec7d30",
+    "method": "GET",
+    "path": "/mailbox",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 5
+  },
+  {
+    "time": "2026-10-05T11:47:48.673Z",
+    "service": "server",
+    "requestID": "9d4b57d6-c3d4-4a40-9fb0-41c3219558d6",
+    "method": "GET",
+    "path": "/expert-squad/catalog",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.676Z",
+    "service": "server",
+    "requestID": "083386f8-497d-46da-9764-c17e951fc824",
+    "method": "GET",
+    "path": "/expert-squad/search",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.676Z",
+    "service": "server",
+    "requestID": "d9f7ac07-eeb5-4cb9-86d0-748dff35eb2f",
+    "method": "GET",
+    "path": "/mission-skill/catalog",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.681Z",
+    "service": "server",
+    "requestID": "96a3c4f7-3b63-4f6e-a009-e93e0510f5ec",
+    "method": "GET",
+    "path": "/chat/capability",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.731Z",
+    "service": "server",
+    "requestID": "80430f1f-4791-4fe9-ab41-ee83ee59256d",
+    "method": "GET",
+    "path": "/global/composer-references",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 215
+  },
+  {
+    "time": "2026-10-05T11:47:48.735Z",
+    "service": "server",
+    "requestID": "fee81e36-48a0-4aa9-8905-83c0d263bfeb",
+    "method": "GET",
+    "path": "/global/tasks",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:48.738Z",
+    "service": "server",
+    "requestID": "fee81e36-48a0-4aa9-8905-83c0d263bfeb",
+    "method": "GET",
+    "path": "/global/tasks",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 3
+  },
+  {
+    "time": "2026-10-05T11:47:48.766Z",
+    "service": "server",
+    "requestID": "1cccd60a-ccff-4eba-9b9f-1a3ca5e6d8f3",
+    "method": "GET",
+    "path": "/path",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:49.239Z",
+    "service": "server",
+    "requestID": "1cccd60a-ccff-4eba-9b9f-1a3ca5e6d8f3",
+    "method": "GET",
+    "path": "/path",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 473
+  },
+  {
+    "time": "2026-10-05T11:47:49.242Z",
+    "service": "server",
+    "requestID": "0bd8754b-9c79-4a8f-8531-58db0ccaf9a3",
+    "method": "GET",
+    "path": "/vcs",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:49.244Z",
+    "service": "server",
+    "requestID": "0bd8754b-9c79-4a8f-8531-58db0ccaf9a3",
+    "method": "GET",
+    "path": "/vcs",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:47:49.252Z",
+    "service": "server",
+    "requestID": "083386f8-497d-46da-9764-c17e951fc824",
+    "method": "GET",
+    "path": "/expert-squad/search",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 576
+  },
+  {
+    "time": "2026-10-05T11:47:49.252Z",
+    "service": "server",
+    "requestID": "d9f7ac07-eeb5-4cb9-86d0-748dff35eb2f",
+    "method": "GET",
+    "path": "/mission-skill/catalog",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 576
+  },
+  {
+    "time": "2026-10-05T11:47:49.253Z",
+    "service": "server",
+    "requestID": "458ad232-65e1-4e6f-bb52-05570d218864",
+    "method": "GET",
+    "path": "/mailbox",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:49.255Z",
+    "service": "server",
+    "requestID": "458ad232-65e1-4e6f-bb52-05570d218864",
+    "method": "GET",
+    "path": "/mailbox",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:47:49.255Z",
+    "service": "server",
+    "requestID": "97615301-0863-48f6-a8d0-64a136e2b55c",
+    "method": "GET",
+    "path": "/work-ledger",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:49.261Z",
+    "service": "server",
+    "requestID": "97615301-0863-48f6-a8d0-64a136e2b55c",
+    "method": "GET",
+    "path": "/work-ledger",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 6
+  },
+  {
+    "time": "2026-10-05T11:47:49.268Z",
+    "service": "server",
+    "requestID": "8acca1fc-98b1-4362-9047-df7734ec454f",
+    "method": "GET",
+    "path": "/mission",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:49.27Z",
+    "service": "server",
+    "requestID": "8acca1fc-98b1-4362-9047-df7734ec454f",
+    "method": "GET",
+    "path": "/mission",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:47:49.27Z",
+    "service": "server",
+    "requestID": "bcf9a4dc-8913-49fa-9255-5639c89dd3ef",
+    "method": "GET",
+    "path": "/experimental/project-memory",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:49.272Z",
+    "service": "server",
+    "requestID": "bcf9a4dc-8913-49fa-9255-5639c89dd3ef",
+    "method": "GET",
+    "path": "/experimental/project-memory",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:47:49.273Z",
+    "service": "server",
+    "requestID": "39f1b6b2-086e-44d9-bce2-763af847d80c",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:49.275Z",
+    "service": "server",
+    "requestID": "940da572-33c3-4cf1-8d6e-99dd3646ca92",
+    "method": "GET",
+    "path": "/mcp",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:49.276Z",
+    "service": "server",
+    "requestID": "942a0b82-2aa9-4a8b-a825-1872aee5b06c",
+    "method": "GET",
+    "path": "/config",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:49.278Z",
+    "service": "server",
+    "requestID": "940da572-33c3-4cf1-8d6e-99dd3646ca92",
+    "method": "GET",
+    "path": "/mcp",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 3
+  },
+  {
+    "time": "2026-10-05T11:47:49.278Z",
+    "service": "server",
+    "requestID": "942a0b82-2aa9-4a8b-a825-1872aee5b06c",
+    "method": "GET",
+    "path": "/config",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:47:49.28Z",
+    "service": "server",
+    "requestID": "14f08116-07d8-422d-a87c-cd03ac962bd9",
+    "method": "GET",
+    "path": "/channel",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:49.288Z",
+    "service": "server",
+    "requestID": "14f08116-07d8-422d-a87c-cd03ac962bd9",
+    "method": "GET",
+    "path": "/channel",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 8
+  },
+  {
+    "time": "2026-10-05T11:47:49.303Z",
+    "service": "server",
+    "requestID": "96a3c4f7-3b63-4f6e-a009-e93e0510f5ec",
+    "method": "GET",
+    "path": "/chat/capability",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 622
+  },
+  {
+    "time": "2026-10-05T11:47:49.449Z",
+    "service": "server",
+    "requestID": "9d4b57d6-c3d4-4a40-9fb0-41c3219558d6",
+    "method": "GET",
+    "path": "/expert-squad/catalog",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 776
+  },
+  {
+    "time": "2026-10-05T11:47:49.46Z",
+    "service": "server",
+    "requestID": "e1abb94b-dae4-4bc0-ae8a-1da96b8fa817",
+    "method": "GET",
+    "path": "/expert-squad/inspect",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:49.462Z",
+    "service": "server",
+    "requestID": "e1abb94b-dae4-4bc0-ae8a-1da96b8fa817",
+    "method": "GET",
+    "path": "/expert-squad/inspect",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:47:49.477Z",
+    "service": "server",
+    "requestID": "39f1b6b2-086e-44d9-bce2-763af847d80c",
+    "method": "GET",
+    "path": "/skill/mounts",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 204
+  },
+  {
+    "time": "2026-10-05T11:47:53.027Z",
+    "service": "server",
+    "requestID": "8a67394c-c0e1-4bf8-9a1b-c421e30a09d7",
+    "method": "GET",
+    "path": "/ui/assets/GeneralPanel-BMheQxMI.js",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:53.027Z",
+    "service": "server",
+    "requestID": "1b4db547-009a-4757-8aac-db7ad108ec4c",
+    "method": "GET",
+    "path": "/ui/assets/Switch-D3o6EXLx.js",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:53.028Z",
+    "service": "server",
+    "requestID": "8a67394c-c0e1-4bf8-9a1b-c421e30a09d7",
+    "method": "GET",
+    "path": "/ui/assets/GeneralPanel-BMheQxMI.js",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1
+  },
+  {
+    "time": "2026-10-05T11:47:53.028Z",
+    "service": "server",
+    "requestID": "1b4db547-009a-4757-8aac-db7ad108ec4c",
+    "method": "GET",
+    "path": "/ui/assets/Switch-D3o6EXLx.js",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1
+  },
+  {
+    "time": "2026-10-05T11:47:57.309Z",
+    "service": "server",
+    "requestID": "761c2e19-d801-4118-a955-6622f4767337",
+    "method": "GET",
+    "path": "/ui/assets/NetworkPanel-B9XpP_p9.js",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:57.31Z",
+    "service": "server",
+    "requestID": "761c2e19-d801-4118-a955-6622f4767337",
+    "method": "GET",
+    "path": "/ui/assets/NetworkPanel-B9XpP_p9.js",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1
+  },
+  {
+    "time": "2026-10-05T11:47:59.251Z",
+    "service": "server",
+    "requestID": "1e4438b7-dffc-416f-ac1c-5c7b33ae5baf",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:47:59.252Z",
+    "service": "server",
+    "requestID": "1e4438b7-dffc-416f-ac1c-5c7b33ae5baf",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 0
+  },
+  {
+    "time": "2026-10-05T11:48:09.25Z",
+    "service": "server",
+    "requestID": "ac853f87-3387-4946-9fc0-b1f6e646f8f8",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:48:09.25Z",
+    "service": "server",
+    "requestID": "ac853f87-3387-4946-9fc0-b1f6e646f8f8",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 0
+  },
+  {
+    "time": "2026-10-05T11:48:34.926Z",
+    "service": "server",
+    "requestID": "a59e6a1f-0d06-4f1c-aa7c-446bd5b4931a",
+    "method": "GET",
+    "path": "/ui/",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:48:34.928Z",
+    "service": "server",
+    "requestID": "a59e6a1f-0d06-4f1c-aa7c-446bd5b4931a",
+    "method": "GET",
+    "path": "/ui/",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:48:35.07Z",
+    "service": "server",
+    "requestID": "cdb2e166-6fd5-486f-8e37-1fa8cd5bf51a",
+    "method": "GET",
+    "path": "/ui/assets/main-CYapQrPb.js",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:48:35.071Z",
+    "service": "server",
+    "requestID": "9b4d65ff-b01c-4042-98aa-73413994aba0",
+    "method": "GET",
+    "path": "/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:48:35.071Z",
+    "service": "server",
+    "requestID": "d3dbf50a-c7d3-4188-8324-703dbaab5151",
+    "method": "GET",
+    "path": "/ui/assets/native-menu-surface-contract-BJN6RgnX.js",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:48:35.071Z",
+    "service": "server",
+    "requestID": "0505fa8d-afe9-416e-910e-3fa66beadebe",
+    "method": "GET",
+    "path": "/ui/assets/main-Yy88IPFU.css",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:48:35.071Z",
+    "service": "server",
+    "requestID": "c0f87469-4b73-40f3-beeb-d9fc1bbed44a",
+    "method": "GET",
+    "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:48:35.072Z",
+    "service": "server",
+    "requestID": "b71fa3de-7b15-412f-a027-42e8c78b21fe",
+    "method": "GET",
+    "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:48:35.073Z",
+    "service": "server",
+    "requestID": "d3dbf50a-c7d3-4188-8324-703dbaab5151",
+    "method": "GET",
+    "path": "/ui/assets/native-menu-surface-contract-BJN6RgnX.js",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:48:35.073Z",
+    "service": "server",
+    "requestID": "9b4d65ff-b01c-4042-98aa-73413994aba0",
+    "method": "GET",
+    "path": "/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:48:35.075Z",
+    "service": "server",
+    "requestID": "c0f87469-4b73-40f3-beeb-d9fc1bbed44a",
+    "method": "GET",
+    "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 4
+  },
+  {
+    "time": "2026-10-05T11:48:35.075Z",
+    "service": "server",
+    "requestID": "0505fa8d-afe9-416e-910e-3fa66beadebe",
+    "method": "GET",
+    "path": "/ui/assets/main-Yy88IPFU.css",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 4
+  },
+  {
+    "time": "2026-10-05T11:48:35.075Z",
+    "service": "server",
+    "requestID": "cdb2e166-6fd5-486f-8e37-1fa8cd5bf51a",
+    "method": "GET",
+    "path": "/ui/assets/main-CYapQrPb.js",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 5
+  },
+  {
+    "time": "2026-10-05T11:48:35.078Z",
+    "service": "server",
+    "requestID": "b71fa3de-7b15-412f-a027-42e8c78b21fe",
+    "method": "GET",
+    "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 6
+  },
+  {
+    "time": "2026-10-05T11:48:35.103Z",
+    "service": "server",
+    "requestID": "227182b0-c6f9-438d-9a37-31629bedd01c",
+    "method": "GET",
+    "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:48:35.104Z",
+    "service": "server",
+    "requestID": "227182b0-c6f9-438d-9a37-31629bedd01c",
+    "method": "GET",
+    "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1
+  },
+  {
+    "time": "2026-10-05T11:48:35.146Z",
+    "service": "server",
+    "requestID": "50808971-4b2b-4fef-ad44-b2a1c8dad6e3",
+    "method": "GET",
+    "path": "/ui/i18n/zh-CN.json",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:48:35.153Z",
+    "service": "server",
+    "requestID": "37cc0f46-be3b-4898-8765-c4d5550bf64c",
+    "method": "GET",
+    "path": "/ui/i18n/en-US.json",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:48:35.153Z",
+    "service": "server",
+    "requestID": "5bd0f31b-6551-439d-a9d4-976050439f1b",
+    "method": "GET",
+    "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:48:35.154Z",
+    "service": "server",
+    "requestID": "50808971-4b2b-4fef-ad44-b2a1c8dad6e3",
+    "method": "GET",
+    "path": "/ui/i18n/zh-CN.json",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 8
+  },
+  {
+    "time": "2026-10-05T11:48:35.154Z",
+    "service": "server",
+    "requestID": "37cc0f46-be3b-4898-8765-c4d5550bf64c",
+    "method": "GET",
+    "path": "/ui/i18n/en-US.json",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1
+  },
+  {
+    "time": "2026-10-05T11:48:35.155Z",
+    "service": "server",
+    "requestID": "5bd0f31b-6551-439d-a9d4-976050439f1b",
+    "method": "GET",
+    "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T11:48:52.382Z",
+    "service": "server",
+    "requestID": "b7dbec3d-86fe-41cf-bd08-8c1d08f58d7f",
+    "method": "GET",
+    "path": "/ui/assets/NetworkPanel-B9XpP_p9.js",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:48:52.382Z",
+    "service": "server",
+    "requestID": "014845e8-5c05-4384-b0f8-76988be097f3",
+    "method": "GET",
+    "path": "/ui/assets/Switch-D3o6EXLx.js",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T11:48:52.387Z",
+    "service": "server",
+    "requestID": "014845e8-5c05-4384-b0f8-76988be097f3",
+    "method": "GET",
+    "path": "/ui/assets/Switch-D3o6EXLx.js",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 5
+  },
+  {
+    "time": "2026-10-05T11:48:52.387Z",
+    "service": "server",
+    "requestID": "b7dbec3d-86fe-41cf-bd08-8c1d08f58d7f",
+    "method": "GET",
+    "path": "/ui/assets/NetworkPanel-B9XpP_p9.js",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 5
+  }
+]
